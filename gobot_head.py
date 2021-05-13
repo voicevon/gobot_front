@@ -12,8 +12,8 @@ from gogame.chessboard import ChessboardLayout, DiedAreaScanner
 #from mark_scanner import MarkScanner
 #from board_scanner import BoardScanner
 #from layout_scanner import LayoutScanner
-from vision import SingleEye
-from scanner import Scanner
+from vision.single_eye import SingleEye
+from vision.scanner import ArucoScanner
 
 import sys
 sys.path.append('/home/pi/pylib')
@@ -27,9 +27,9 @@ class BotHead():
 
     def __init__(self):
         self.__eye = SingleEye()
-        self.__comand_scanner = Scanner()
-        self.__chessboard_scanner = Scanner()
-        self.__layout_scanner = Scanner()
+        self.__comand_scanner = ArucoScanner()
+        self.__chessboard_scanner = ArucoScanner()
+        #self.__layout_scanner = AruScanner()
         self.__ai_client = AiClient()
         #self.__mark_scanner = MarkScanner()
         #self.__board_scanner = BoardScanner()
@@ -42,8 +42,8 @@ class BotHead():
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__FC_RESET = TerminalFont.Color.Control.reset
-        self.__MARK_STABLE_DEPTH = config.robot_eye.mark_scanner.stable_depth
-        self.__LAYOUT_STABLE_DEPTH = config.robot_eye.layout_scanner.stable_depth
+        self.__MARK_STABLE_DEPTH = 5
+        self.__LAYOUT_STABLE_DEPTH = 5
 
     def __capture_newest_image(self):
         ret, img = self.__capture_device.read()

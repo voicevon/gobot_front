@@ -5,13 +5,13 @@ import sys
 # sys.path.append('/home/xm/gitrepo/gogame_bot/python')
 # sys.path.append('../gogame_board/')
 sys.path.append('/home/pi/pylib')
-sys.path.append('../')
+#sys.path.append('../')
 
 from terminal_font import TerminalFont
-from app_config import app
+# from app_config import app
 
 
-from gogame_board.chessboard_cell import ChessboardCell
+from gogame.chessboard_cell import ChessboardCell
 import logging
 
 
