@@ -2,7 +2,7 @@
 # from typing_extensions import runtime_checkable
 
 
-class Scanner():
+class ArucoScanner():
     def __init__(self, board_type):
         '''   
         Supported board_types:
