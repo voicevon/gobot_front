@@ -7,7 +7,7 @@ from mqtt_helper import g_mqtt
 
 
 class ArucoScanner():
-    def __init__(self, marks_count):
+    def __init__(self, mark_ids):
         '''   
         Supported board_types:
             Warehouse: Four aruco marks
@@ -15,7 +15,7 @@ class ArucoScanner():
             Go_game_board_19x19: Normally two aruco marks
                                  Calibrate mode, Four marks
         '''
-        self.__marks_count = marks_count
+        self.__mark_ids = mark_ids
 
 
     def get_stone_postion(self, img, color):
@@ -34,7 +34,7 @@ class ArucoScanner():
                     return x, y
         return None,None
 
-    def find_corners(self, image, marker_ids):
+    def find_corners(self, image):
         '''
         marker_ids is a list of [top_right, bottom_right, bottome_left, top_left]
         '''
@@ -42,12 +42,12 @@ class ArucoScanner():
         arucoParams = cv2.aruco.DetectorParameters_create()
         corners, ids, rejected = cv2.aruco.detectMarkers(image, arucoDict, parameters=arucoParams)
         result = []
-        print('double check',marker_ids)
+        print('double check',self.__mark_ids)
         # verify *at least* one ArUco marker was detected
         if len(corners) > 0:
             # flatten the ArUco IDs list
             ids = ids.flatten()
-            for target_id in marker_ids:
+            for target_id in self.__mark_ids:
                 print('----------------Searching.... ', target_id)
                 # loop over the detected ArUCo corners
                 for (markerCorner, markerID) in zip(corners, ids):

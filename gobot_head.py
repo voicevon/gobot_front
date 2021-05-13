@@ -12,7 +12,7 @@ from gogame.chessboard import ChessboardLayout, DiedAreaScanner
 #from mark_scanner import MarkScanner
 #from board_scanner import BoardScanner
 #from layout_scanner import LayoutScanner
-from vision.single_eye import SingleEye
+from vision.robot_eye import MonoEye
 from vision.scanner import ArucoScanner
 
 import sys
@@ -23,12 +23,12 @@ class AiClient():
     pass
 
 
-class BotHead():
+class GobotHead():
 
     def __init__(self):
-        self.__eye = SingleEye()
-        self.__comand_scanner = ArucoScanner()
-        self.__chessboard_scanner = ArucoScanner()
+        self.__eye = MonoEye()
+        self.__comand_scanner = ArucoScanner([345])
+        self.__chessboard_scanner = ArucoScanner([22,33])
         #self.__layout_scanner = AruScanner()
         self.__ai_client = AiClient()
         #self.__mark_scanner = MarkScanner()
@@ -118,8 +118,10 @@ class BotHead():
 
     def spin(self):
         # take picture
+        self.__eye.take_picture()
 
         # scan command
+        self.__command_scanner.get_plane()
 
         if user_is_playing:
             # scan chessboard
@@ -132,7 +134,10 @@ class BotHead():
 
 
 if __name__ == '__main__':
-    myrobotEye = BotHead()
+    myrobot = GobotHead()
+    myrobot = spin()
+
+
     while True:
         menu = []
         menu.append('***********************************************************')
@@ -145,44 +150,3 @@ if __name__ == '__main__':
         menu.append('* 7. Died_area_scanner                                    *')
         menu.append('***********************************************************')
 
-        # for m in menu:
-        #     print(m)
-
-        # key = click.getchar()
-        key = '4'
-        if key == '1':
-            pass
-
-        elif key == '2':
-            myrobotEye.show_origin()
-
-        elif key == '3':
-            layout.print_out()
-
-        elif key == '4':
-            layout = myrobotEye.get_stable_layout(app.robot_eye.layout_scanner.stable_depth)
-            layout.print_out()
-
-        elif key == '5':
-            myrobotEye.scan_mark_to_command(mode=3)
-
-        elif key == '6':
-            myrobotEye.get_stable_mark(5)
-
-        elif key == '7':
-            scanner =  DiedAreaScanner()
-            print('1111111111111111111')
-            layout =  myrobotEye.get_stable_layout(5)
-            print('2222222222222')
-            scanner.set_layout_array(layout.get_layout_array())
-            print('3333333333333')
-            scanner.start_scan(app_config.game_rule.cell_color.black)
-            print('444444444444')
-            scanner.print_out_died_area()
-            rospy.sleep(333)
-        
-        elif key == '8':
-            # myrobotEye.get_chessboard_test()
-            # layout = myrobotEye.get_stable_layout(app_config.robot_eye.layout_scanner.stable_depth)
-            # time.sleep(0.1)
-            pass

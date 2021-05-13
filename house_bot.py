@@ -13,15 +13,15 @@ sys.path.append("/home/pi/pylib")
 from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
 from house_motor import Stepper
-from vision.single_eye import SingleEye
-from vision.scanner import Scanner
+from vision.robot_eye import MonoEye
+from vision.scanner import ArucoScanner
 
 
 class WarehouseRobot():
 
     def __init__(self):
-        self.__eye = SingleEye()
-        self.__scanner = Scanner("warehouse")
+        self.__eye = MonoEye()
+        self.__scanner = ArucoScanner([1,2,3,4])
         self.__plane_motor = Stepper()
 
         self.__target_x_position = 100
@@ -34,7 +34,7 @@ class WarehouseRobot():
 
         # Get corners position from detecting aruco marks
         # The sequerence is always [TopLeft, TopRight,bottomRight,BottomLeft]
-        corners = self.__eye.find_corners(image,[1,2,4,3])
+        corners = self.__scanner.find_corners(image)
         print(corners)
         if corners != None:
             if len(corners) == 4:
