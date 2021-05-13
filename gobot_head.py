@@ -1,27 +1,39 @@
-
 import cv2
 import numpy as np
-import threading
-# import click
-import time  # only for sleep
+#import threading
+#import time  # only for sleep
 
 
-from gogame_board.chessboard import ChessboardLayout, DiedAreaScanner
-from config import config, CvDebugger
+from gogame.chessboard import ChessboardLayout, DiedAreaScanner
+# from config import config, CvDebugger
+# from terminal_font import TerminalFont
+
+
+#from mark_scanner import MarkScanner
+#from board_scanner import BoardScanner
+#from layout_scanner import LayoutScanner
+from vision import SingleEye
+from scanner import Scanner
+
+import sys
+sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
 
-
-from mark_scanner import MarkScanner
-from board_scanner import BoardScanner
-from layout_scanner import LayoutScanner
+class AiClient():
+    pass
 
 
 class BotHead():
 
     def __init__(self):
-        self.__mark_scanner = MarkScanner()
-        self.__board_scanner = BoardScanner()
-        self.__layout_scanner = LayoutScanner()
+        self.__eye = SingleEye()
+        self.__comand_scanner = Scanner()
+        self.__chessboard_scanner = Scanner()
+        self.__layout_scanner = Scanner()
+        self.__ai_client = AiClient()
+        #self.__mark_scanner = MarkScanner()
+        #self.__board_scanner = BoardScanner()
+        #self.__layout_scanner = LayoutScanner()
         # self.__capture_device = cv2.VideoCapture(app.robot_eye.camera_index)
 
         # self.windows={'original':'original','candy':'candy','chessboard':'chessboard'}
