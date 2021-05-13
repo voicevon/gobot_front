@@ -135,7 +135,7 @@ class GobotHead():
 
 if __name__ == '__main__':
     myrobot = GobotHead()
-    myrobot = spin()
+    myrobot.spin()
 
 
     while True:
