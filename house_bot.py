@@ -8,18 +8,19 @@ from picamera import PiCamera
 import time
 
 import sys
-sys.path.append("~/pylib")
+sys.path.append("/home/pi/pylib")
 # sys.path.append("../pylib")
 from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
-from house_bot import Stepper
-from scanner import PiEye, Scanner
+from house_motor import Stepper
+from vision.single_eye import SingleEye
+from vision.scanner import Scanner
 
 
 class WarehouseRobot():
 
     def __init__(self):
-        self.__eye = PiEye()
+        self.__eye = SingleEye()
         self.__scanner = Scanner("warehouse")
         self.__plane_motor = Stepper()
 
