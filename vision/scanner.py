@@ -31,6 +31,7 @@ class ArucoFinder():
         corners, ids, rejected = cv2.aruco.detectMarkers(image, arucoDict, parameters=arucoParams)
         # result = []
         print('double check',self.__mark_ids)
+        result = []
         # verify *at least* one ArUco marker was detected
         if len(corners) > 0:
             # flatten the ArUco IDs list
@@ -116,12 +117,12 @@ class ArucoFinder():
     def auto_perspect(self, origin_image):
         # Get corners position from detecting aruco marks
         # The sequerence is always [TopLeft, TopRight,bottomRight,BottomLeft]
-        corners = self.__finder.find_corners(origin_image)
+        corners = self.find_corners(origin_image)
         # print(corners)
         if corners != None:
             if len(corners) == 4:
                 # Get perspectived image
-                perspect_img = self.__eye.get_perspective_view(origin_image,corners)
+                perspect_img = self.get_perspective_view(origin_image,corners)
                 if self.__enable_mqtt:
                     g_mqtt.publish_cv_image('gobot_stonehouse/eye/perspect', perspect_img)
                 return perspect_img

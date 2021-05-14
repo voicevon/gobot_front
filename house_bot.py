@@ -55,7 +55,7 @@ class WarehouseRobot():
         origin_image = self.__eye.take_picture()
         g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', origin_image)
         board_image = self.__finder.auto_perspect(origin_image)
-        if board_image != None:
+        if board_image is None:
             x, y = self.__scanner.get_first_stone_postion(board_image,'BLACK')
             if x != None:
                 # How far is the stone to the target position?
@@ -64,6 +64,7 @@ class WarehouseRobot():
 
                 # Control the plane motor to drive the stone move
                 self.__plane_motor.move_stone(dx, dy)
+        print('---------------------------------------')
         
         
 
