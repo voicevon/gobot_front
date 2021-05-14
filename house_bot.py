@@ -43,7 +43,7 @@ class WarehouseRobot():
 
     def __init__(self):
         self.__eye = MonoEye()
-        self.__finder = ArucoFinder([1,2,3,4], enable_mqtt=True)
+        self.__finder = ArucoFinder(area_size=(200,600), mark_ids= [1,2,3,4], enable_mqtt=True)
         self.__scanner = StoneScanner()
         self.__plane_motor = Stepper()
 

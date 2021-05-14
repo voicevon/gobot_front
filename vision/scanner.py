@@ -8,8 +8,10 @@ from mqtt_helper import g_mqtt
 
 
 class ArucoFinder():
-    def __init__(self, mark_ids, enable_mqtt=False):
+    def __init__(self, area_size, mark_ids, enable_mqtt=False):
         '''   
+        area_size: (width, height), unit is pix
+
         Supported board_types:
             Warehouse: Four aruco marks
             Commander: One aruco mark.
@@ -18,9 +20,16 @@ class ArucoFinder():
         '''
         self.__mark_ids = mark_ids
         self.__enable_mqtt = enable_mqtt
-
+        self.__area_width, self.__area_height  = area_size
+        
     def enable_mqtt(self, enable=True):
         self.__enable_mqtt =  enable
+
+    def __get_rid_of_useless_corners(self):
+        '''
+        For better performance only. But sometimes, this will cause worse performance.
+        '''
+        pass
 
     def find_corners(self, image):
         '''
@@ -33,7 +42,9 @@ class ArucoFinder():
         print('double check',self.__mark_ids)
         result = []
         # verify *at least* one ArUco marker was detected
-        if len(corners) > 0:
+        if len(corners) >= len(self.__mark_ids):
+            # get rid of useless corners
+
             # flatten the ArUco IDs list
             ids = ids.flatten()
             for target_id in self.__mark_ids:
@@ -94,8 +105,8 @@ class ArucoFinder():
 
     def get_perspective_view(self, img, pts):
         # specify desired output size 
-        width = 350
-        height = 350
+        width = self.__area_width
+        height = self.__area_height
 
         # specify conjugate x,y coordinates (not y,x)
         input = np.float32(pts)
@@ -120,7 +131,7 @@ class ArucoFinder():
         corners = self.find_corners(origin_image)
         # print(corners)
         if corners != None:
-            if len(corners) == 4:
+            if len(corners) >= len(self.__mark_ids):
                 # Get perspectived image
                 perspect_img = self.get_perspective_view(origin_image,corners)
                 if self.__enable_mqtt:
