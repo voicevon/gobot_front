@@ -90,7 +90,7 @@ class GobotHead():
     def spin(self):
         oringin_image = self.__eye.take_picture()
         command_image = self.__command_finder.auto_perspect(oringin_image)
-        command = self.__commad_scanner.get_command(command_image)
+        command = self.__command_scanner.get_command(command_image)
 
         if user_is_playing:
             # scan chessboard

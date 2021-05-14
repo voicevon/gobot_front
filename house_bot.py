@@ -14,7 +14,10 @@ from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
 from house_motor import Stepper
 from vision.robot_eye import MonoEye
-from vision.scanner import ArucoFinder, ArucoFinder
+from vision.aruco_finder import ArucoFinder
+from vision.grid_plate import GridPlate
+from vision.cell_scanner import CellScanner
+
 
 
 class StoneScanner():
@@ -44,26 +47,47 @@ class WarehouseRobot():
     def __init__(self):
         self.__eye = MonoEye()
         self.__finder = ArucoFinder(area_size=(200,600), mark_ids= [1,2,3,4], enable_mqtt=True)
-        self.__scanner = StoneScanner()
+        # self.__scanner = StoneScanner()
+        self.__grid_plate = GridPlate(15,50)
+
+        self.__cell_scanner = CellScanner()
         self.__plane_motor = Stepper()
 
         self.__target_x_position = 100
         self.__target_y_position = 30
     
+    def get_cell_image(self, x, y, perspect_image):
+        
+        return perspect_image
+
+    def get_first_stone_postion(self, layout):
+        for y in range(0,10):
+            for x in range(0,10):
+                # cell_image = self.get_cell_image(image, x, y)
+                
+                # color = self.__cell_scanner.scan(cell_image)
+                if color = self.CellScanner.COLOR_BLACK:
+                    return x, y
+        return None, None
 
     def spin_once(self):
         origin_image = self.__eye.take_picture()
         g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', origin_image)
-        board_image = self.__finder.auto_perspect(origin_image)
-        if board_image is None:
-            x, y = self.__scanner.get_first_stone_postion(board_image,'BLACK')
-            if x != None:
-                # How far is the stone to the target position?
-                dx = self.__target_x_position - x
-                dy = self.__target_y_position - y 
+        plate_image = self.__finder.auto_perspect(origin_image)
+        if plate_image is None:
+            return 
+        layout = self.__grid_plate.scan_layout(plate_image, history_length=1, show_processing_image=False, pause_second=0)
+        if layout is None:
+            return
+        x, y = self.get_first_stone_postion(self.__grid_plate.last_layout)
+        if x is None:
+            return
+        # How far is the stone to the target position?
+        dx = self.__target_x_position - x
+        dy = self.__target_y_position - y 
 
-                # Control the plane motor to drive the stone move
-                self.__plane_motor.move_stone(dx, dy)
+        # Control the plane motor to drive the stone move
+        self.__plane_motor.move_stone(dx, dy)
         print('---------------------------------------')
         
         

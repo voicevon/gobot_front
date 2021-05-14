@@ -2,22 +2,23 @@
 import cv2
 import numpy
 
-import sys
 import time
 
-sys.path.append('../')
+import sys
+# sys.path.append('../')
 sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
-from app_config import app
+from config import config
 
-class CellScanner():
+
+class GridCell():
     def __init__(self, board_mean):
         self.__board_mean = board_mean
-        self.__ROWS = app.game_rule.board_size.row
-        self.__COLS = app.game_rule.board_size.col
-        self.__BLANK = app.game_rule.cell_color.blank
-        self.__BLACK = app.game_rule.cell_color.black
-        self.__WHITE = app.game_rule.cell_color.white
+        self.__ROWS = config.game_rule.board_size.row
+        self.__COLS = config.game_rule.board_size.col
+        self.__BLANK = config.game_rule.cell_color.blank
+        self.__BLACK = config.game_rule.cell_color.black
+        self.__WHITE = config.game_rule.cell_color.white
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__FC_RESET = TerminalFont.Color.Control.reset
@@ -177,4 +178,4 @@ class CellScanner():
 
 
 if __name__ == "__main__":
-    test = CellScanner('test')
+    test = GridCell('test')

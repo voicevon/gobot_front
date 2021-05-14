@@ -8,7 +8,7 @@ sys.path.append('/home/pi/pylib')
 #sys.path.append('../')
 
 from terminal_font import TerminalFont
-# from app_config import app
+from config import config
 
 
 from gogame.chessboard_cell import ChessboardCell
@@ -19,16 +19,16 @@ import logging
 
 class ChessboardLayout():
 
-    def __init__(self,name):
+    def __init__(self, name):
         self.name = name
 
-        self._ROWS = app.game_rule.board_size.row
-        self._COLS = app.game_rule.board_size.col
+        self._ROWS = config.game_rule.board_size.row
+        self._COLS = config.game_rule.board_size.col
         
-        self.__BLANK = app.game_rule.cell_color.blank
-        self.__BLANK = app.game_rule.cell_color.blank
-        self._BLACK = app.game_rule.cell_color.black
-        self._WHITE = app.game_rule.cell_color.white
+        self.__BLANK = config.game_rule.cell_color.blank
+        self.__BLANK = config.game_rule.cell_color.blank
+        self._BLACK = config.game_rule.cell_color.black
+        self._WHITE = config.game_rule.cell_color.white
 
 
 
