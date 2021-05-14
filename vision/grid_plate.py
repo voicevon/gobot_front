@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-# sys.path.append('../')
 sys.path.append('/home/pi/pylib')
-from vision.grid_cell import GridCell
+from terminal_font import TerminalFont
+from mqtt_helper import g_mqtt
+
 import cv2
 import numpy
 
 
 from gogame.chessboard import ChessboardLayout, ChessboardCell
-from terminal_font import TerminalFont
+from vision.grid_cell import GridCell
 from config import config
 
 class GridPlate():
@@ -24,14 +25,12 @@ class GridPlate():
             self.__predefined_plate_stonehouse()
 
         self.__detected_layout = ChessboardLayout('Detected layout')
-
-        # history
-        self.__history = []
+        self.__history = []  # history of layout.
         self.__history_length = 0 
         # self.__diffs = []
 
         self.__inspect_cell =  ChessboardCell()
-        self.__inspect_cell.from_name(app.robot_eye.layout_scanner.inspecting.cell_name)
+        self.__inspect_cell.from_name(config.robot_eye.layout_scanner.inspecting.cell_name)
 
         self.__FC_GREEN = TerminalFont.Color.Fore.green
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
@@ -47,21 +46,21 @@ class GridPlate():
         self.__ROWS = 19
         self.__COLS = 19
 
-        self.__BLANK = app.game_rule.cell_color.blank
-        self.__BLACK = app.game_rule.cell_color.black
-        self.__WHITE = app.game_rule.cell_color.white
+        self.__BLANK = config.game_rule.cell_color.blank
+        self.__BLACK = config.game_rule.cell_color.black
+        self.__WHITE = config.game_rule.cell_color.white
 
-        self.__SPACE_X = app.robot_eye.cell_scanner.dimension.cell_space_x
-        self.__SPACE_Y = app.robot_eye.cell_scanner.dimension.cell_space_y
+        self.__SPACE_X = config.robot_eye.grid_cell.dimension.cell_space_x
+        self.__SPACE_Y = config.robot_eye.grid_cell.dimension.cell_space_y
         self.__VIEW_RANGE = 1.6
 
     def __predefined_plate_commander(self):
-        self.__ROWS = 19
-        self.__COLS = 19
+        self.__ROWS = 5
+        self.__COLS = 1
 
     def __predefined_plate_stonehouse(self):
-        self.__ROWS = 19
-        self.__COLS = 19
+        self.__ROWS = 60
+        self.__COLS = 90
 
     def __append_to_history(self, layout):
         '''
@@ -118,11 +117,11 @@ class GridPlate():
         self.__history_length = history_length
         detected_layout = ChessboardLayout('Detected layout')
 
-        board_gray = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
-        board_brightness = numpy.mean(board_gray)
+        plate_gray_image = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
+        plate_brightness = numpy.mean(plate_gray_image)
         # print('board_brightness()= %d' %board_brightness)
 
-        cell_scanner = GridCell(board_brightness)
+        grid_cell = GridCell(plate_brightness)
 
         # Split board_image to 361 samll images. detect circle one by one
         for col in range(0,self.__COLS):
@@ -130,32 +129,12 @@ class GridPlate():
                 # crop to small image, around cell center
                 cell_img_big, cell_img_small = self.get_cell_image(plate_image, col,row)
 
-                # x1 = self.__SPACE_X * col 
-                # y1 = self.__SPACE_Y * row 
-                # x2 = x1 + int(self.__SPACE_X * self.__VIEW_RANGE)
-                # y2 = y1 + int(self.__SPACE_Y * self.__VIEW_RANGE)
-                # cell_img_big = img_board[y1:y2, x1:x2]
-
-                # shrink_size = 6
-                # x1 = self.__SPACE_X * col + shrink_size
-                # y1 = self.__SPACE_Y * row + shrink_size
-                # x2 = x1 + int(self.__SPACE_X * self.__VIEW_RANGE - 2 * shrink_size)
-                # y2 = y1 + int(self.__SPACE_Y * self.__VIEW_RANGE - 2 * shrink_size)
-                # cell_img_small = img_board[y1:y2, x1:x2]
-
-                # is_inspected_cell = False
-                # self.__inspect_cell.from_name(app_config.robot_eye.layout_scanner.inspecting.cell_name)
-                # if (col == 18 - self.__inspect_cell.col_id) and (18- row == self.__inspect_cell.row_id):
-                #     cv2.imshow('bbbb',cell_img_big)
-                #     cv2.imshow('ssss',cell_img_small)
-                #     is_inspected_cell = True
-
-                # color = cell_scanner.scan(cell_img,is_inspected_cell)
-                color = cell_scanner.scan_white(cell_img_big, is_inspected=False)
-                detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
-                if color != self.__WHITE:
-                    color = cell_scanner.scan_black(cell_img_small, is_inspected=False)
-                    detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
+                # color = grid_cell.scan(cell_img,is_inspected_cell)
+                stone_color = grid_cell.scan_white(cell_img_big, is_inspected=False)
+                detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_color)
+                if stone_color != self.__WHITE:
+                    stone_color = grid_cell.scan_black(cell_img_small, is_inspected=False)
+                    detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_color)
 
         stable_depth = self.__append_to_history(detected_layout)
         # target_layout.print_out()

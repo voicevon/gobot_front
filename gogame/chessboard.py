@@ -18,7 +18,10 @@ import logging
 
 
 class ChessboardLayout():
-
+    '''
+    A chessboardLayout object contain a grid cells.
+    
+    '''
     def __init__(self, name):
         self.name = name
 
@@ -44,6 +47,9 @@ class ChessboardLayout():
         self.play(cell.name, color_code)
 
     def play(self, cell_name, color_code):
+        '''
+
+        '''
         # print('[Info] ChessBoard.play(cell_name=%s,color=%s)' %(cell_name,color))
         cell = ChessboardCell()
         cell.from_name(cell_name)
@@ -203,7 +209,7 @@ class ChessboardLayout():
         return None
 
 
-class DiedAreaScanner(ChessboardLayout):
+class Chessboard(ChessboardLayout):
     def __init__(self):
         ChessboardLayout.__init__(self,'Died area scanner')
         self.__died_area_array = [([0] * 19) for i in range(19)]
@@ -288,7 +294,7 @@ class DiedAreaScanner(ChessboardLayout):
                         self.__died_area_array[col][row] = wake_up_type
         return count
 
-    def start_scan(self, target_color):
+    def scan_died_area(self, target_color):
         '''
         return:
             count: How many cells are died

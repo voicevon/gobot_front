@@ -14,11 +14,9 @@ from config import config
 class GridCell():
     def __init__(self, board_mean):
         self.__board_mean = board_mean
-        self.__ROWS = config.game_rule.board_size.row
-        self.__COLS = config.game_rule.board_size.col
-        self.__BLANK = config.game_rule.cell_color.blank
-        self.__BLACK = config.game_rule.cell_color.black
-        self.__WHITE = config.game_rule.cell_color.white
+        self.__BLANK = config.game_rule.stone_color.blank
+        self.__BLACK = config.game_rule.stone_color.black
+        self.__WHITE = config.game_rule.stone_color.white
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__FC_RESET = TerminalFont.Color.Control.reset
@@ -26,15 +24,16 @@ class GridCell():
         # self.__INSPECT_COUNTER = go_game_inspecting_cell.counter
 
 
-    def scan(self, cell_image, is_inspected):
+    # def scan(self, cell_image, is_inspected):
+    def get_stone_color(self, cell_image, is_inspected):
         '''
         parameter: 
             cell_image must be size of 22x22
         return: 
-            detected cell_color
+            detected stone_color
         '''
         # detected_circles = self.__detect_circles(cell_image,show_processing_image=is_inspected)
-        # cell_color = self.__BLANK
+        # stone_color = self.__BLANK
 
         # if detected_circles is None:
         #     if is_inspected:
@@ -54,21 +53,21 @@ class GridCell():
         gray = cv2.cvtColor(cell_image, cv2.COLOR_BGR2GRAY)
         blur = cv2.medianBlur(gray,5)
         average_brightness = numpy.mean(blur)
-        cell_color = self.__BLACK
+        stone_color = self.__BLACK
         if is_inspected:
             # print('average_brightness = %d' %average_brightness)
             cv2.imshow('cell_image',cell_image)
         if average_brightness > 150:
-            cell_color = self.__WHITE
+            stone_color = self.__WHITE
         elif average_brightness > 80:
-            cell_color = self.__BLANK
+            stone_color = self.__BLANK
         # print(self.__PT_RESET + 'average_brightness= %d' %average_brightness)
         # if average_brightness > 30:
-        #     cell_color = self.__WHITE
+        #     stone_color = self.__WHITE
         # else:
         #     # if is_inspected: 
         #     print('detected cell_image,  circles=%d' %len(detected_circles))
-        return cell_color
+        return stone_color
 
     def scan_black(self, cell_image, is_inspected):
         gray = cv2.cvtColor(cell_image, cv2.COLOR_BGR2GRAY)
@@ -76,10 +75,10 @@ class GridCell():
         ret, bin_image = cv2.threshold(blur, 50, 255, cv2.THRESH_BINARY_INV)
 
 
-        cell_color = self.__BLANK
+        stone_color = self.__BLANK
         count = cv2.countNonZero(bin_image)
         if count > 180: 
-            cell_color = self.__BLACK
+            stone_color = self.__BLACK
 
         if is_inspected:
             cv2.imshow('scan black blur', blur)
@@ -89,16 +88,16 @@ class GridCell():
                 img_pub = img_encode.tobytes()
                 app_config.server.mqtt.client.publish(topic='gogame/eye/inspecting/cell/scan_black/blur', payload=img_pub)
             print ('scan_black_counter = %i' %count)
-        return cell_color
+        return stone_color
 
         
     def scan_white(self, cell_image, is_inspected):
         '''
         return: 
-            detected cell_color, only for White. because connected black cells have no circle
+            detected stone_color, only for White. because connected black cells have no circle
         '''
         detected_circles = self.__detect_circles(cell_image,show_processing_image=is_inspected)
-        cell_color = self.__BLANK
+        stone_color = self.__BLANK
         if detected_circles is None:
             if is_inspected:
                 print('Inspected cell, no circles found!')
@@ -122,7 +121,7 @@ class GridCell():
                     if real_raduis < 130:  # 51% of a circle can also be detected!
                         # https://stackoverflow.com/questions/20698613/detect-semicircle-in-opencv
                         # print('Positive')
-                        cell_color = self.__WHITE
+                        stone_color = self.__WHITE
                     # else:
                     #     print('Negtive')
                     #     cv2.waitKey(100000)
@@ -133,7 +132,7 @@ class GridCell():
             if is_inspected: 
                 print('detected cell_image,  circles=%d' %len(detected_circles))
                 cv2.waitKey(10000)
-        return cell_color
+        return stone_color
    
     def __detect_circles(self, cropped_img, show_processing_image=True):
         # detect circles

@@ -13,7 +13,7 @@ from gogame.chessboard import ChessboardLayout, DiedAreaScanner
 #from board_scanner import BoardScanner
 #from layout_scanner import LayoutScanner
 from vision.robot_eye import MonoEye
-from vision.scanner import ArucoFinder
+from vision.aruco_finder import ArucoFinder
 
 import sys
 sys.path.append('/home/pi/pylib')
@@ -29,16 +29,7 @@ class GobotHead():
         self.__eye = MonoEye()
         self.__command_finder = ArucoFinder((500,100), [345])
         self.__chessboard_finder = ArucoFinder((800,800), [22,33])
-        #self.__layout_scanner = AruScanner()
         self.__ai_client = AiClient()
-        #self.__mark_scanner = MarkScanner()
-        #self.__board_scanner = BoardScanner()
-        #self.__layout_scanner = LayoutScanner()
-        # self.__capture_device = cv2.VideoCapture(app.robot_eye.camera_index)
-
-        # self.windows={'original':'original','candy':'candy','chessboard':'chessboard'}
-        # self.__cvWindow = CvWindows()
-        # self.__thread_eyes = {}
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__FC_RESET = TerminalFont.Color.Control.reset
@@ -86,17 +77,17 @@ class GobotHead():
         # this_window = self.__cvWindow.get_window(window_name)
         self.__cvWindow.get_all_windows()[eye_name][0] = False
 
+    def user_playing(self):
+        self.go_agent.send("move c4 B")
+    
+    
 
     def spin(self):
         oringin_image = self.__eye.take_picture()
         command_image = self.__command_finder.auto_perspect(oringin_image)
         command = self.__command_scanner.get_command(command_image)
-
-        if user_is_playing:
-            # scan chessboard
-            if user_dropped:
-                # send step to game server
-                self.go_agent.send("move c4 B")
+        if command: 
+            self.user_playing()
                 
         
 
