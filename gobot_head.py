@@ -27,8 +27,8 @@ class GobotHead():
 
     def __init__(self):
         self.__eye = MonoEye()
-        self.__command_finder = ArucoFinder([345])
-        self.__chessboard_finder = ArucoFinder([22,33])
+        self.__command_finder = ArucoFinder((500,100), [345])
+        self.__chessboard_finder = ArucoFinder((800,800), [22,33])
         #self.__layout_scanner = AruScanner()
         self.__ai_client = AiClient()
         #self.__mark_scanner = MarkScanner()
