@@ -13,7 +13,7 @@ from gogame.chessboard import ChessboardLayout, DiedAreaScanner
 #from board_scanner import BoardScanner
 #from layout_scanner import LayoutScanner
 from vision.robot_eye import MonoEye
-from vision.scanner import ArucoScanner
+from vision.scanner import ArucoFinder
 
 import sys
 sys.path.append('/home/pi/pylib')
@@ -27,8 +27,8 @@ class GobotHead():
 
     def __init__(self):
         self.__eye = MonoEye()
-        self.__comand_scanner = ArucoScanner([345])
-        self.__chessboard_scanner = ArucoScanner([22,33])
+        self.__command_finder = ArucoFinder([345])
+        self.__chessboard_finder = ArucoFinder([22,33])
         #self.__layout_scanner = AruScanner()
         self.__ai_client = AiClient()
         #self.__mark_scanner = MarkScanner()
@@ -45,18 +45,6 @@ class GobotHead():
         self.__MARK_STABLE_DEPTH = 5
         self.__LAYOUT_STABLE_DEPTH = 5
 
-    def __capture_newest_image(self):
-        ret, img = self.__capture_device.read()
- 
-        if app.robot_eye.show_origin:
-            CvDebugger.show_debug_image ('orign',img, ' ')
-            # cp = img.copy()
-            # debug_text = '  ' + datetime.now().strftime('%s')
-            # cv2.putText(cp, debug_text, (10,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 1)
-            # cv2.imshow('origin', cp)
-
-            # cv2.waitKey(1)
-        return ret, img
 
     def get_stable_layout(self,min_stable_depth):
         stable_depth = 0
@@ -98,30 +86,11 @@ class GobotHead():
         # this_window = self.__cvWindow.get_window(window_name)
         self.__cvWindow.get_all_windows()[eye_name][0] = False
 
-    def monitor_all(self):
-        '''
-        Should be in an individual thread. 
-        '''
-        for this_window in self.__cvWindow.get_all_windows():
-            obj_window = self.__cvWindow.from_name(this_window)
-            cv2.namedWindow(obj_window.name)
-            cv2.moveWindow(obj_window.name, obj_window.pos_x, obj_window.pos_y)
-
-        while True:
-            # https://stackoverflow.com/questions/3294889/iterating-over-dictionaries-using-for-loops
-            for name,values in self.__cvWindow.get_all_windows().iteritems():
-                if values[0]:
-                    ret,frame = self.__capture_device.read()
-                    # ret,frame = self.__capture_device.read()
-                    cv2.imshow(name, frame)
-                    cv2.waitKey(1)
 
     def spin(self):
-        # take picture
-        self.__eye.take_picture()
-
-        # scan command
-        self.__command_scanner.get_plane()
+        oringin_image = self.__eye.take_picture()
+        command_image = self.__command_finder.auto_perspect(oringin_image)
+        command = self.__commad_scanner.get_command(command_image)
 
         if user_is_playing:
             # scan chessboard

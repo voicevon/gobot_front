@@ -2,12 +2,13 @@
 # from typing_extensions import runtime_checkable
 import cv2
 import numpy as np
+from math import sin, cos
 
 from mqtt_helper import g_mqtt
 
 
-class ArucoScanner():
-    def __init__(self, mark_ids):
+class ArucoFinder():
+    def __init__(self, mark_ids, enable_mqtt=False):
         '''   
         Supported board_types:
             Warehouse: Four aruco marks
@@ -16,23 +17,10 @@ class ArucoScanner():
                                  Calibrate mode, Four marks
         '''
         self.__mark_ids = mark_ids
+        self.__enable_mqtt = enable_mqtt
 
-
-    def get_stone_postion(self, img, color):
-        '''
-                 y
-                 ^
-                 |
-                 |
-        ---------+---------> x
-        '''
-        color = 'BLACK'
-        for y in range(50,0,-1):
-            for x in range (-50,50):
-                if True:
-                    # Got black stone
-                    return x, y
-        return None,None
+    def enable_mqtt(self, enable=True):
+        self.__enable_mqtt =  enable
 
     def find_corners(self, image):
         '''
@@ -41,7 +29,7 @@ class ArucoScanner():
         arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_100)
         arucoParams = cv2.aruco.DetectorParameters_create()
         corners, ids, rejected = cv2.aruco.detectMarkers(image, arucoDict, parameters=arucoParams)
-        result = []
+        # result = []
         print('double check',self.__mark_ids)
         # verify *at least* one ArUco marker was detected
         if len(corners) > 0:
@@ -52,9 +40,9 @@ class ArucoScanner():
                 # loop over the detected ArUCo corners
                 for (markerCorner, markerID) in zip(corners, ids):
                     if target_id == markerID:
-                        print('got matched id', target_id)
-                        # extract the marker corners (which are always returned in
-                        # top-left, top-right, bottom-right, and bottom-left order)
+                        # print('got matched id', target_id)
+                        # extract the marker corners (which are always returned in order of:
+                        #   [top-left, top-right, bottom-right, and bottom-left]
                         corners2 = markerCorner.reshape((4, 2))
                         topLeft, topRight, bottomRight, bottomLeft = corners2
                         # convert each of the (x, y)-coordinate pairs to integers
@@ -67,7 +55,7 @@ class ArucoScanner():
                         cX = int((topLeft[0] + bottomRight[0]) / 2.0)
                         cY = int((topLeft[1] + bottomRight[1]) / 2.0)
 
-                        print('markid=', markerID, 'center=', (cX, cY),topLeft, bottomRight, bottomLeft, topLeft)
+                        # print('markid=', markerID, 'center=', (cX, cY),topLeft, bottomRight, bottomLeft, topLeft)
                         result.append ([cX,cY])
 
                         # print("[INFO] ArUco marker ID: {}".format(markerID))
@@ -99,7 +87,8 @@ class ArucoScanner():
 
                             # image = cv2.aruco.drawMarker(cv2.aruco.DICT_4X4_1000,)
                             # image = self.draw_axis_2(image, corners)
-                            g_mqtt.publish_cv_image('gobot_stonehouse/eye/marker', image)
+                            if self.__enable_mqtt:
+                                g_mqtt.publish_cv_image('gobot_stonehouse/eye/marker', image)
         return result
 
     def get_perspective_view(self, img, pts):
@@ -108,22 +97,35 @@ class ArucoScanner():
         height = 350
 
         # specify conjugate x,y coordinates (not y,x)
-        # input = np.float32([[62,71], [418,59], [442,443], [29,438]])
         input = np.float32(pts)
         output = np.float32([[0,0], [width-1,0], [width-1,height-1], [0,height-1]])
 
         # compute perspective matrix
         matrix = cv2.getPerspectiveTransform(input,output)
 
-        print(matrix.shape)
-        print(matrix)
+        # print(matrix.shape)
+        # print(matrix)
 
         # do perspective transformation setting area outside input to black
         imgOutput = cv2.warpPerspective(img, matrix, (width,height), cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(0,0,0))
-        print(imgOutput.shape)
+        # print(imgOutput.shape)
 
         # save the warped output
         return imgOutput
+
+    def auto_perspect(self, origin_image):
+        # Get corners position from detecting aruco marks
+        # The sequerence is always [TopLeft, TopRight,bottomRight,BottomLeft]
+        corners = self.__finder.find_corners(origin_image)
+        # print(corners)
+        if corners != None:
+            if len(corners) == 4:
+                # Get perspectived image
+                perspect_img = self.__eye.get_perspective_view(origin_image,corners)
+                if self.__enable_mqtt:
+                    g_mqtt.publish_cv_image('gobot_stonehouse/eye/perspect', perspect_img)
+                return perspect_img
+        return None
 
     def draw_axis(self,img, yaw, pitch, roll, tdx=None, tdy=None, size = 100):
 

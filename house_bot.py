@@ -14,43 +14,56 @@ from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
 from house_motor import Stepper
 from vision.robot_eye import MonoEye
-from vision.scanner import ArucoScanner
+from vision.scanner import ArucoFinder, ArucoFinder
+
+
+class StoneScanner():
+
+    def __init__(self):
+        pass
+
+    def get_first_stone_postion(self, img, color):
+        '''
+                 y
+                 ^
+                 |
+                 |
+        ---------+---------> x
+        '''
+        color = 'BLACK'
+        for y in range(50,0,-1):
+            for x in range (-50,50):
+                if True:
+                    # Got black stone
+                    return x, y
+        return None,None
 
 
 class WarehouseRobot():
 
     def __init__(self):
         self.__eye = MonoEye()
-        self.__scanner = ArucoScanner([1,2,3,4])
+        self.__finder = ArucoFinder([1,2,3,4], enable_mqtt=True)
+        self.__scanner = StoneScanner()
         self.__plane_motor = Stepper()
 
         self.__target_x_position = 100
         self.__target_y_position = 30
+    
 
     def spin_once(self):
-        # Take a picture from camera
-        image = self.__eye.take_picture()
-        g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', image)
+        origin_image = self.__eye.take_picture()
+        g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', origin_image)
+        board_image = self.__finder.auto_perspect(origin_image)
+        if board_image != None:
+            x, y = self.__scanner.get_first_stone_postion(board_image,'BLACK')
+            if x != None:
+                # How far is the stone to the target position?
+                dx = self.__target_x_position - x
+                dy = self.__target_y_position - y 
 
-        # Get corners position from detecting aruco marks
-        # The sequerence is always [TopLeft, TopRight,bottomRight,BottomLeft]
-        corners = self.__scanner.find_corners(image)
-        print(corners)
-        if corners != None:
-            if len(corners) == 4:
-                # Get perspectived image
-                perspect_img = self.__eye.get_perspective_view(image,corners)
-                g_mqtt.publish_cv_image('gobot_stonehouse/eye/perspect', perspect_img)
-        
-                # Get the stone position, will store the position to where? 
-                x, y = self.__scanner.get_stone_postion(perspect_img, 'BLACK') 
-                if x != None:
-                    # How far is the stone to the target position?
-                    dx = self.__target_x_position - x
-                    dy = self.__target_y_position - y 
-
-                    # Control the plane motor to drive the stone move
-                    self.__plane_motor.move_stone(dx, dy)
+                # Control the plane motor to drive the stone move
+                self.__plane_motor.move_stone(dx, dy)
         
         
 
