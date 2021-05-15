@@ -16,7 +16,7 @@ from house_motor import Stepper
 from vision.robot_eye import MonoEye
 from vision.aruco_finder import ArucoFinder
 from vision.grid_plate import GridPlate
-from vision.cell_scanner import CellScanner
+from vision.grid_cell import GridCell
 
 
 
@@ -42,13 +42,17 @@ class StoneScanner():
         return None,None
 
 
+class gridplate_config()
+    pass
+
 class WarehouseRobot():
 
     def __init__(self):
         self.__eye = MonoEye()
         self.__finder = ArucoFinder(area_size=(200,600), mark_ids= [1,2,3,4], enable_mqtt=True)
         # self.__scanner = StoneScanner()
-        self.__grid_plate = GridPlate(15,50)
+
+        self.__grid_plate = GridPlate(gridplate_config)
 
         self.__cell_scanner = CellScanner()
         self.__plane_motor = Stepper()
@@ -63,11 +67,12 @@ class WarehouseRobot():
     def get_first_stone_postion(self, layout):
         for y in range(0,10):
             for x in range(0,10):
+                pass
                 # cell_image = self.get_cell_image(image, x, y)
                 
                 # color = self.__cell_scanner.scan(cell_image)
-                if color = self.CellScanner.COLOR_BLACK:
-                    return x, y
+                #if color = self.CellScanner.COLOR_BLACK:
+                #    return x, y
         return None, None
 
     def spin_once(self):
