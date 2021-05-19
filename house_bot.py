@@ -19,7 +19,11 @@ from vision.grid_plate import GridPlate
 from vision.grid_cell import GridCell
 
 
-
+class house_grid_cell_config:
+    class stonr_color:
+        blank = 1
+        black = 2
+        white = 3
 class StoneScanner():
 
     def __init__(self):
@@ -49,12 +53,14 @@ class house_grid_config:
         real_size = (900,600)    # for pespectived view image.
         aruco_ids = [1, 2, 3, 4]  # [topleft, topright, bottomright, bottomleft]
         mark_scales = [1.1, 1.1, 2.2, 2.2]
+class house_grid_cell_config:
+        pass
 
 class WarehouseRobot():
 
     def __init__(self):
         self.__eye = MonoEye()
-        self.__finder = GridFinder(area_size=(200,600), mark_ids= [1,2,3,4], enable_mqtt=True)
+        self.__finder = GridFinder(house_grid_config)
         # self.__scanner = StoneScanner()
 
         self.__grid_plate = GridPlate(house_grid_config)

@@ -8,15 +8,15 @@ import sys
 # sys.path.append('../')
 sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
-from config import config
+# from config import config
 
 
 class GridCell():
-    def __init__(self, board_mean):
-        self.__board_mean = board_mean
-        self.__BLANK = config.game_rule.stone_color.blank
-        self.__BLACK = config.game_rule.stone_color.black
-        self.__WHITE = config.game_rule.stone_color.white
+    def __init__(self,config):  #, board_mean):
+        # self.__board_mean = board_mean
+        self.__BLANK = config.stone_color.blank
+        self.__BLACK = config.stone_color.black
+        self.__WHITE = config.stone_color.white
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__FC_RESET = TerminalFont.Color.Control.reset

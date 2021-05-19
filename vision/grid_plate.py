@@ -23,7 +23,7 @@ class GridPlate():
         # self.__diffs = []
 
         self.__inspect_cell =  ChessboardCell()
-        self.__inspect_cell.from_name(config.robot_eye.layout_scanner.inspecting.cell_name)
+        # self.__inspect_cell.from_name(config.robot_eye.layout_scanner.inspecting.cell_name)
 
         self.__FC_GREEN = TerminalFont.Color.Fore.green
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
