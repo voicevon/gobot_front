@@ -14,7 +14,7 @@ from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
 from house_motor import Stepper
 from vision.robot_eye import MonoEye
-from vision.aruco_finder import ArucoFinder
+from vision.grid_finder import GridFinder
 from vision.grid_plate import GridPlate
 from vision.grid_cell import GridCell
 
@@ -42,19 +42,24 @@ class StoneScanner():
         return None,None
 
 
-class gridplate_config()
-    pass
+class house_grid_config:
+        name = 'house_grid_plate'
+        ROWS = 90
+        COLS = 60
+        real_size = (900,600)    # for pespectived view image.
+        aruco_ids = [1, 2, 3, 4]  # [topleft, topright, bottomright, bottomleft]
+        mark_scales = [1.1, 1.1, 2.2, 2.2]
 
 class WarehouseRobot():
 
     def __init__(self):
         self.__eye = MonoEye()
-        self.__finder = ArucoFinder(area_size=(200,600), mark_ids= [1,2,3,4], enable_mqtt=True)
+        self.__finder = GridFinder(area_size=(200,600), mark_ids= [1,2,3,4], enable_mqtt=True)
         # self.__scanner = StoneScanner()
 
-        self.__grid_plate = GridPlate(gridplate_config)
+        self.__grid_plate = GridPlate(house_grid_config)
 
-        self.__cell_scanner = CellScanner()
+        self.__cell_scanner = GridCell()
         self.__plane_motor = Stepper()
 
         self.__target_x_position = 100

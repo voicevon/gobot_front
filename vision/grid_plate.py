@@ -11,18 +11,11 @@ import numpy
 
 from gogame.chessboard import ChessboardLayout, ChessboardCell
 from vision.grid_cell import GridCell
-from config import config
 
 class GridPlate():
 
-    def __init__(self, plate_name):
-        self.__plate_name = plate_name
-        if plate_name == 'go_game_board':
-            self.__predefined_plate_go_game_board()
-        if plate_name == 'commander':
-            self.__predefined_plate_commander()
-        if plate_name == 'stone_house':
-            self.__predefined_plate_stonehouse()
+    def __init__(self, config):
+        self.config = config
 
         self.__detected_layout = ChessboardLayout('Detected layout')
         self.__history = []  # history of layout.
@@ -46,12 +39,12 @@ class GridPlate():
         self.__ROWS = 19
         self.__COLS = 19
 
-        self.__BLANK = config.game_rule.cell_color.blank
-        self.__BLACK = config.game_rule.cell_color.black
-        self.__WHITE = config.game_rule.cell_color.white
+        self.__BLANK = self.config.game_rule.cell_color.blank
+        self.__BLACK = self.config.game_rule.cell_color.black
+        self.__WHITE = self.config.game_rule.cell_color.white
 
-        self.__SPACE_X = config.robot_eye.grid_cell.dimension.cell_space_x
-        self.__SPACE_Y = config.robot_eye.grid_cell.dimension.cell_space_y
+        self.__SPACE_X = self.config.robot_eye.grid_cell.dimension.cell_space_x
+        self.__SPACE_Y = self.config.robot_eye.grid_cell.dimension.cell_space_y
         self.__VIEW_RANGE = 1.6
 
     def __predefined_plate_commander(self):
