@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-# sys.path.append('/home/xm/gitrepo/gogame_bot/python')
-# sys.path.append('../gogame_board/')
 sys.path.append('/home/pi/pylib')
 #sys.path.append('../')
 
