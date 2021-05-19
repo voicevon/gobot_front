@@ -8,7 +8,7 @@ from mqtt_helper import g_mqtt
 
 
 class GridFinder():
-    def __init__(self,config):
+    def __init__(self, grid_config, cell_config):
         '''   
         area_size: (width, height), unit is pix
 
@@ -18,7 +18,7 @@ class GridFinder():
             Go_game_board_19x19: Normally two aruco marks
                                  Calibrate mode, Four marks
         '''
-        self.config = config
+        self.config = grid_config
         # self.__mark_ids = mark_ids
         # self.__enable_mqtt = enable_mqtt
         # self.__area_width, self.__area_height  = area_size

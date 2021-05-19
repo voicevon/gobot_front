@@ -12,7 +12,7 @@ from terminal_font import TerminalFont
 
 
 class GridCell():
-    def __init__(self,config):  #, board_mean):
+    def __init__(self, config):  #, board_mean):
         # self.__board_mean = board_mean
         self.__BLANK = config.stone_color.blank
         self.__BLACK = config.stone_color.black

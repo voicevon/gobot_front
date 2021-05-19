@@ -9,7 +9,7 @@ import cv2
 import numpy
 
 
-from gogame.chessboard import ChessboardLayout, ChessboardCell
+from gogame.gird_layout import GridLayout, ChessboardCell
 from vision.grid_cell import GridCell
 
 class GridPlate():
@@ -17,7 +17,7 @@ class GridPlate():
     def __init__(self, config):
         self.config = config
 
-        self.__detected_layout = ChessboardLayout('Detected layout')
+        self.__detected_layout = GridLayout('Detected layout')
         self.__history = []  # history of layout.
         self.__history_length = 0 
         # self.__diffs = []
@@ -35,25 +35,25 @@ class GridPlate():
         self.Min_WhiteColor = numpy.array([0, 0, 200])  # 要识别白子颜色的下限
         self.Max_WhiteColor = numpy.array([180, 100, 255])  # 要识别白子的颜色的上限
 
-    def __predefined_plate_go_game_board(self):
-        self.__ROWS = 19
-        self.__COLS = 19
+    # def __predefined_plate_go_game_board(self):
+    #     self.__ROWS = 19
+    #     self.__COLS = 19
 
-        self.__BLANK = self.config.game_rule.cell_color.blank
-        self.__BLACK = self.config.game_rule.cell_color.black
-        self.__WHITE = self.config.game_rule.cell_color.white
+    #     self.__BLANK = self.config.game_rule.cell_color.blank
+    #     self.__BLACK = self.config.game_rule.cell_color.black
+    #     self.__WHITE = self.config.game_rule.cell_color.white
 
-        self.__SPACE_X = self.config.robot_eye.grid_cell.dimension.cell_space_x
-        self.__SPACE_Y = self.config.robot_eye.grid_cell.dimension.cell_space_y
-        self.__VIEW_RANGE = 1.6
+    #     self.__SPACE_X = self.config.robot_eye.grid_cell.dimension.cell_space_x
+    #     self.__SPACE_Y = self.config.robot_eye.grid_cell.dimension.cell_space_y
+    #     self.__VIEW_RANGE = 1.6
 
-    def __predefined_plate_commander(self):
-        self.__ROWS = 5
-        self.__COLS = 1
+    # def __predefined_plate_commander(self):
+    #     self.__ROWS = 5
+    #     self.__COLS = 1
 
-    def __predefined_plate_stonehouse(self):
-        self.__ROWS = 60
-        self.__COLS = 90
+    # def __predefined_plate_stonehouse(self):
+    #     self.__ROWS = 60
+    #     self.__COLS = 90
 
     def __append_to_history(self, layout):
         '''

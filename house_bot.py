@@ -1,5 +1,6 @@
 
 # from typing_extensions import runtime_checkable
+from vision.grid_helper import Grid_helper
 import cv2
 import numpy as np
 from math import sin, cos
@@ -14,16 +15,14 @@ from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
 from house_motor import Stepper
 from vision.robot_eye import MonoEye
-from vision.grid_finder import GridFinder
-from vision.grid_plate import GridPlate
-from vision.grid_cell import GridCell
+from vision.grid_helper import Grid_Helper
+# from vision.grid_finder import GridFinder
+# from vision.grid_plate import GridPlate
+# from vision.grid_cell import GridCell
 
 
-class house_grid_cell_config:
-    class stonr_color:
-        blank = 1
-        black = 2
-        white = 3
+
+
 class StoneScanner():
 
     def __init__(self):
@@ -53,27 +52,36 @@ class house_grid_config:
         real_size = (900,600)    # for pespectived view image.
         aruco_ids = [1, 2, 3, 4]  # [topleft, topright, bottomright, bottomleft]
         mark_scales = [1.1, 1.1, 2.2, 2.2]
+
 class house_grid_cell_config:
-        pass
+    class stonr_color:
+        blank = 1
+        black = 2
+        white = 3
 
 class WarehouseRobot():
-
+    '''
+    This robot has a mono_eye, 
+        Can take picture
+    The robot also has a GridHelper()
+        Can give us a perspective view from origin picture.
+        Then convert a logical layout.
+    Another part is layout_helper
+        Can detect the first stone position.
+    The target position, can be known from mqtt
+    The robot calculate the path from stone position to target position
+        the motor driver will move the stone to target position 
+    '''
     def __init__(self):
         self.__eye = MonoEye()
-        self.__finder = GridFinder(house_grid_config)
-        # self.__scanner = StoneScanner()
-
-        self.__grid_plate = GridPlate(house_grid_config)
-
-        self.__cell_scanner = GridCell()
+        self.__grid_helper = Grid_Helper(house_grid_config, house_grid_cell_config)
         self.__plane_motor = Stepper()
-
         self.__target_x_position = 100
         self.__target_y_position = 30
     
-    def get_cell_image(self, x, y, perspect_image):
+    # def get_cell_image(self, x, y, perspect_image):
         
-        return perspect_image
+    #     return perspect_image
 
     def get_first_stone_postion(self, layout):
         for y in range(0,10):
@@ -89,10 +97,11 @@ class WarehouseRobot():
     def spin_once(self):
         origin_image = self.__eye.take_picture()
         g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', origin_image)
-        plate_image = self.__finder.auto_perspect(origin_image)
-        if plate_image is None:
-            return 
-        layout = self.__grid_plate.scan_layout(plate_image, history_length=1, show_processing_image=False, pause_second=0)
+
+        # plate_image = self.__finder.auto_perspect(origin_image)
+        # if plate_image is None:
+        #     return 
+        layout = self.__grid_helper.scan_layout(origin_image, history_length=1, show_processing_image=False, pause_second=0)
         if layout is None:
             return
         x, y = self.get_first_stone_postion(self.__grid_plate.last_layout)
