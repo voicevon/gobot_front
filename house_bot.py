@@ -1,7 +1,7 @@
 
 # from typing_extensions import runtime_checkable
 from config import config
-from vision.grid_helper import Grid_helper
+from vision.grid_helper import GridHelper
 import cv2
 import numpy as np
 from math import sin, cos
@@ -16,7 +16,7 @@ from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
 from house_motor import Stepper
 from vision.robot_eye import MonoEye
-from vision.grid_helper import Grid_Helper
+# from vision.grid_helper import Grid_Helper
 # from vision.grid_finder import GridFinder
 # from vision.grid_plate import GridPlate
 # from vision.grid_cell import GridCell
@@ -48,7 +48,7 @@ class StoneScanner():
 class finder_config:
     aruco_ids = [1, 2, 3, 4]  # [topleft, topright, bottomright, bottomleft]
     area_scales = [1.1, 1.1, 2.2, 2.2]
-    real_size = (900,600)    # for pespectived view image.
+    area_size = (900,600)    # for pespectived view image.
 
 class grid_config:
     name = 'house_grid_plate'
@@ -77,7 +77,7 @@ class WarehouseRobot():
     '''
     def __init__(self):
         self.__eye = MonoEye()
-        self.__grid_helper = Grid_Helper(finder_config, grid_config, stone_config)
+        self.__grid_helper = GridHelper(finder_config, grid_config, stone_config)
         self.__plane_motor = Stepper()
         self.__target_x_position = 100
         self.__target_y_position = 30
@@ -95,7 +95,8 @@ class WarehouseRobot():
 
     def spin_once(self):
         origin_image = self.__eye.take_picture()
-        g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', origin_image)
+        if config.publish_mqtt:
+            g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', origin_image)
         layout = self.__grid_helper.scan_layout(origin_image, history_length=1, show_processing_image=False, pause_second=0)
         if layout is None:
             return

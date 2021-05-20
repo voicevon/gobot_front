@@ -3,12 +3,13 @@ from vision.grid_finder import GridFinder
 from vision.grid_layout import GridLayout
 from config import config
 import numpy
+import cv2
 
 import sys
 sys.path.append('/home/pi/pylib')
+from terminal_font import TerminalFont
 
-
-class Grid_Helper():
+class GridHelper():
     '''
     Find grid perspective view from origin image
     split grid image to lot of cell images
@@ -20,7 +21,7 @@ class Grid_Helper():
     def __init__(self, finder_config, grid_config, cell_config):
         self.__grid_finder = GridFinder(finder_config)
         self.__grid_config = grid_config
-        self.__publish_mqtt = grid_config.publish_mqtt
+        #self.__publish_mqtt = grid_config.publish_mqtt
 
         self.__cell_judger = GoGameStone()
 
@@ -43,13 +44,13 @@ class Grid_Helper():
         self.Max_WhiteColor = numpy.array([180, 100, 255])  # 要识别白子的颜色的上限
 
 
-        # self.__BLANK = self.config.game_rule.cell_color.blank
-        # self.__BLACK = self.config.game_rule.cell_color.black
-        # self.__WHITE = self.config.game_rule.cell_color.white
+        self.__BLANK = 0 #self.config.game_rule.cell_color.blank
+        self.__BLACK = 1 #self.config.game_rule.cell_color.black
+        self.__WHITE = 2 #self.config.game_rule.cell_color.white
 
-        # self.__SPACE_X = self.config.robot_eye.grid_cell.dimension.cell_space_x
-        # self.__SPACE_Y = self.config.robot_eye.grid_cell.dimension.cell_space_y
-    #     self.__VIEW_RANGE = 1.6
+        self.__SPACE_X = 3 #self.config.robot_eye.grid_cell.dimension.cell_space_x
+        self.__SPACE_Y = 4 #self.config.robot_eye.grid_cell.dimension.cell_space_y
+        self.__VIEW_RANGE = 1.6
 
     def __append_to_history(self, layout):
         '''
@@ -109,8 +110,8 @@ class Grid_Helper():
         plate_brightness = numpy.mean(plate_gray_image)
         # print('board_brightness()= %d' %board_brightness)
 
-        gogame_stone = GoGameStone(plate_brightness)
-
+        #gogame_stone = GoGameStone(plate_brightness)
+        gogame_stone = GoGameStone()
         # Split board_image to 361 samll images. detect circle one by one
         for col in range(0,self.__grid_config.COLS):
             for row in range(0,self.__grid_config.ROWS):
@@ -119,7 +120,7 @@ class Grid_Helper():
 
                 # color = grid_cell.scan(cell_img,is_inspected_cell)
                 stone_value = gogame_stone.scan_white(cell_img_big, is_inspected=False)
-                detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_color)
+                detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_value)
                 if stone_value != self.__WHITE:
                     stone_value = gogame_stone.scan_black(cell_img_small, is_inspected=False)
                     # detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_value)

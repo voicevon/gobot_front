@@ -9,6 +9,7 @@ class GoGameStone(GridCell):
 
     def __init__(self):
         self.__publish_mqtt = False
+        self.BLANK = 0  # TODO: put this to base class
         self.BLACK = 1
         self.WHITE =2
 
@@ -21,12 +22,15 @@ class GoGameStone(GridCell):
         ret, bin_image = cv2.threshold(blur, 50, 255, cv2.THRESH_BINARY_INV)
 
 
-        self.value = self.BLACK
-        count = cv2.countNonZero(bin_image)
-        if count > 180: 
-            stone_color = self.BLACK
 
-        return stone_color
+       
+        count = cv2.countNonZero(bin_image)
+        
+        self.value = self.BLANK
+        if count > 180: 
+            self.value = self.BLACK
+
+        return self.value
 
 
     def __detect_circles(self, cropped_img, show_processing_image=True):

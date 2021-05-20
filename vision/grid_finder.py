@@ -18,8 +18,8 @@ class GridFinder():
             Go_game_board_19x19: Normally two aruco marks
                                  Calibrate mode, Four marks
         '''
-        self.__mark_ids = config.mark_ids
-        self.__enable_mqtt = config.enable_mqtt
+        self.__mark_ids = config.aruco_ids
+        #self.__enable_mqtt = config.enable_mqtt
         self.__area_width, self.__area_height  = config.area_size
         
     def enable_mqtt(self, enable=True):
