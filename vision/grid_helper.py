@@ -72,6 +72,11 @@ class GridHelper():
         return stable_depth
 
     def get_cell_image(self, plate_image, row, col):
+        '''
+        TODO:  Unifiy stone image, seed image, etc. need an abstract class
+
+        Currently, it's working for go game stone detection.
+        '''
         x1 = self.__SPACE_X * col 
         y1 = self.__SPACE_Y * row 
         x2 = x1 + int(self.__SPACE_X * self.__VIEW_RANGE)
@@ -126,7 +131,7 @@ class GridHelper():
 
                 # color = grid_cell.scan(cell_img,is_inspected_cell)
                 stone_value = gogame_stone.scan_white(cell_img_big, is_inspected=False)
-                detected_layout.update_cell_from_position(col_id=18-col, row_id=18-row, cell_value=stone_value)
+                detected_layout.update_cell_from_position(col, row, cell_value=stone_value)
                 if stone_value != self.__WHITE:
                     stone_value = gogame_stone.scan_black(cell_img_small, is_inspected=False)
                     # detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_value)

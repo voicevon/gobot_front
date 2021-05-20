@@ -1,7 +1,6 @@
 
-# from typing_extensions import runtime_checkable
-from config import config
-from vision.grid_helper import GridHelper
+
+
 import cv2
 import numpy as np
 from math import sin, cos
@@ -11,39 +10,17 @@ import time
 
 import sys
 sys.path.append("/home/pi/pylib")
-# sys.path.append("../pylib")
 from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
+
+from config import config
+from vision.grid_helper import GridHelper
 from house_motor import Stepper
 from vision.robot_eye import MonoEye
-# from vision.grid_helper import Grid_Helper
-# from vision.grid_finder import GridFinder
-# from vision.grid_plate import GridPlate
-# from vision.grid_cell import GridCell
 
 
 
 
-class StoneScanner():
-
-    def __init__(self):
-        pass
-
-    def get_first_stone_postion(self, img, color):
-        '''
-                 y
-                 ^
-                 |
-                 |
-        ---------+---------> x
-        '''
-        color = 'BLACK'
-        for y in range(50,0,-1):
-            for x in range (-50,50):
-                if True:
-                    # Got black stone
-                    return x, y
-        return None,None
 
 class finder_config:
     aruco_ids = [1, 2, 3, 4]  # [topleft, topright, bottomright, bottomleft]
@@ -51,12 +28,27 @@ class finder_config:
     area_size = (900,600)    # for pespectived view image.
 
 class layout_config:
+    '''
+    All the cells has its own logical value.
+    Not involved to phisical size or area.
+
+    y (90)
+    ^
+    |
+    |
+    +---------> x (60)
+    '''
+
     name = 'house_grid_plate'
     rows = 90
     cols = 60
 
 
+
 class stone_config:
+    '''
+
+    '''
     class value:
         blank = 1
         black = 2
@@ -83,6 +75,9 @@ class WarehouseRobot():
         self.__target_y_position = 30
     
     def get_first_stone_postion(self, layout):
+        '''
+        The stone that most closed to target position
+        '''
         for y in range(0,10):
             for x in range(0,10):
                 pass
