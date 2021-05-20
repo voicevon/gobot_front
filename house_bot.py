@@ -6,7 +6,6 @@
 # from math import sin, cos
 # from picamera.array import PiRGBArray
 # from picamera import PiCamera
-# import time
 
 import sys
 sys.path.append("/home/pi/pylib")
@@ -25,7 +24,7 @@ from vision.robot_eye import MonoEye
 class finder_config:
     aruco_ids = [1, 2, 3, 4]  # [topleft, topright, bottomright, bottomleft]
     area_scales = [1.1, 1.1, 2.2, 2.2]
-    area_size = (900,600)    # for pespectived view image.
+    area_size = (200,900)    # for pespectived view image.
 
 class layout_config:
     '''
@@ -111,7 +110,11 @@ class WarehouseRobot():
         self.__plane_motor.move_stone(dx, dy)
         print('---------------------------------------')
         
-        
+
+
+
+import time
+  
 
 if __name__ == '__main__':
     config.publish_mqtt = True
