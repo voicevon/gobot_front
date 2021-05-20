@@ -7,7 +7,7 @@ class config:
     #firmware = 'REPRAP'
     firmware = 'KLIPPER'
 
-    publish_mqtt = False
+    publish_mqtt = True
     
     class mainloop:
         class at_demo_mover:

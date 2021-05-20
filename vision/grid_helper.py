@@ -19,13 +19,13 @@ class GridHelper():
     Orgnize the cell value to layout map
     '''
     def __init__(self, finder_config, cell_config, layout_config):
-        self.__grid_finder = GridFinder(finder_config)
+        self.grid_finder = GridFinder(finder_config)
         self.__layout_config = layout_config
         #self.__publish_mqtt = grid_config.publish_mqtt
 
         self.__cell_judger = GoGameStone()
 
-        self.__detected_layout = GridLayout('Detected layout')
+        self.__detected_layout = GridLayout('Detected layout', layout_config)
         self.__history = []  # history of layout.
         self.__history_length = 0 
         # self.__diffs = []

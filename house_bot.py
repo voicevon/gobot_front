@@ -97,7 +97,7 @@ class WarehouseRobot():
         origin_image = self.__eye.take_picture()
         if config.publish_mqtt:
             g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', origin_image)
-        perspect_image = self.__grid_helper.__grid_finder.auto_perspect(origin_image)
+        perspect_image = self.__grid_helper.grid_finder.auto_perspect(origin_image)
         if perspect_image is None:
                 return
         layout = self.__grid_helper.scan_layout(perspect_image, history_length=1, show_processing_image=False, pause_second=0)

@@ -5,6 +5,7 @@ import numpy as np
 from math import sin, cos
 
 from mqtt_helper import g_mqtt
+from config import config
 
 
 class GridFinder():
@@ -99,7 +100,7 @@ class GridFinder():
 
                             # image = cv2.aruco.drawMarker(cv2.aruco.DICT_4X4_1000,)
                             # image = self.draw_axis_2(image, corners)
-                            if self.__enable_mqtt:
+                            if config.publish_mqtt:
                                 g_mqtt.publish_cv_image('gobot_stonehouse/eye/marker', image)
         return result
 
@@ -134,7 +135,7 @@ class GridFinder():
             if len(corners) >= len(self.__mark_ids):
                 # Get perspectived image
                 perspect_img = self.get_perspective_view(origin_image,corners)
-                if self.__enable_mqtt:
+                if config.publish_mqtt:
                     g_mqtt.publish_cv_image('gobot_stonehouse/eye/perspect', perspect_img)
                 return perspect_img
         return None
