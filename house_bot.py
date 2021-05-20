@@ -1,12 +1,12 @@
 
 
 
-import cv2
-import numpy as np
-from math import sin, cos
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-import time
+# import cv2
+# import numpy as np
+# from math import sin, cos
+# from picamera.array import PiRGBArray
+# from picamera import PiCamera
+# import time
 
 import sys
 sys.path.append("/home/pi/pylib")
