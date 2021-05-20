@@ -4,6 +4,10 @@ import sys
 # sys.path.append('../gogame_board/')
 sys.path.append('/home/pi/pylib')
 from vision.gird_layout import GridLayout
+
+
+
+
 class Chessboard(GridLayout):
     def __init__(self):
         GridLayout.__init__(self,'Died area scanner')

@@ -18,9 +18,9 @@ class GridHelper():
             For sower machine: BLANK, SINGLE, DOUBLE
     Orgnize the cell value to layout map
     '''
-    def __init__(self, finder_config, grid_config, cell_config):
+    def __init__(self, finder_config, cell_config, layout_config):
         self.__grid_finder = GridFinder(finder_config)
-        self.__grid_config = grid_config
+        self.__layout_config = layout_config
         #self.__publish_mqtt = grid_config.publish_mqtt
 
         self.__cell_judger = GoGameStone()
@@ -97,6 +97,12 @@ class GridHelper():
 
     def scan_layout(self, plate_image, history_length=3, show_processing_image=True, pause_second=1):
         '''
+        plate_image:
+            an image from top view, can be a perspective view image.
+
+        history_length:
+            How stable of the output layout.
+
         return A:
             -1,-1: not detected any layout
         return B:
@@ -113,14 +119,14 @@ class GridHelper():
         #gogame_stone = GoGameStone(plate_brightness)
         gogame_stone = GoGameStone()
         # Split board_image to 361 samll images. detect circle one by one
-        for col in range(0,self.__grid_config.COLS):
-            for row in range(0,self.__grid_config.ROWS):
+        for col in range(0,self.__layout_config.cols):
+            for row in range(0,self.__layout_config.rows):
                 # crop to small image, around cell center
                 cell_img_big, cell_img_small = self.get_cell_image(plate_image, col,row)
 
                 # color = grid_cell.scan(cell_img,is_inspected_cell)
                 stone_value = gogame_stone.scan_white(cell_img_big, is_inspected=False)
-                detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_value)
+                detected_layout.update_cell_from_position(col_id=18-col, row_id=18-row, color_code=stone_value)
                 if stone_value != self.__WHITE:
                     stone_value = gogame_stone.scan_black(cell_img_small, is_inspected=False)
                     # detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_value)

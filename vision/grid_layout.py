@@ -17,14 +17,20 @@ import logging
 
 class GridLayout():
     '''
-    A chessboardLayout object contain a grid cells.
+    A GridLayout() object contains many grid cells.
+        each cell has a cell_value
     
+    Known children are: 
+        GoGamebot
+            chessboard_layout, warehouse_layout 
+        SowerMachine
+            Seedplate_layout
     '''
-    def __init__(self, name):
+    def __init__(self, name, config):
         self.name = name
 
-        self._ROWS = config.game_rule.board_size.row
-        self._COLS = config.game_rule.board_size.col
+        self._ROWS = config.rows
+        self._COLS = config.cols
         
         self.__BLANK = config.game_rule.cell_color.blank
         self.__BLANK = config.game_rule.cell_color.blank
@@ -39,12 +45,16 @@ class GridLayout():
 
         self._layout_array = [([0] * self._COLS) for i in range(self._ROWS)]
 
-    def play_col_row(self, col_id, row_id, color_code):
-        cell = ChessboardCell()
-        cell.from_col_row_id(col_id=col_id, row_id=row_id)
-        self.play(cell.name, color_code)
+    # def play_col_row(self, col_id, row_id, color_code):
+    def update_cell_from_position(self, col_id, row_id, cell_value):
+        self._layout_array[col_id][row_id] = cell_value
 
-    def play(self, cell_name, color_code):
+        # cell = ChessboardCell()
+        # cell.from_col_row_id(col_id=col_id, row_id=row_id)
+        # self.play(cell.name, cell_value)
+
+    # def play(self, cell_name, color_code):
+    def update_cell_from_name(self, cell_name, cell_value):
         '''
 
         '''
@@ -58,7 +68,7 @@ class GridLayout():
         #     value = self._WHITE
         # else:
         #     logging.info('ChessBoard.play(cell_name=%s,color=%s)' %(cell_name,color))
-        self._layout_array[cell.col_id][cell.row_id] = color_code
+        self._layout_array[cell.col_id][cell.row_id] = cell_value
 
     def print_out(self):
         int_to_char = {self.__BLANK:'. ',self._BLACK:'X ', self._WHITE:'O ',}

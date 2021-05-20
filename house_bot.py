@@ -50,10 +50,10 @@ class finder_config:
     area_scales = [1.1, 1.1, 2.2, 2.2]
     area_size = (900,600)    # for pespectived view image.
 
-class grid_config:
+class layout_config:
     name = 'house_grid_plate'
-    ROWS = 90
-    COLS = 60
+    rows = 90
+    cols = 60
 
 
 class stone_config:
@@ -77,7 +77,7 @@ class WarehouseRobot():
     '''
     def __init__(self):
         self.__eye = MonoEye()
-        self.__grid_helper = GridHelper(finder_config, grid_config, stone_config)
+        self.__grid_helper = GridHelper(finder_config, stone_config, layout_config)
         self.__plane_motor = Stepper()
         self.__target_x_position = 100
         self.__target_y_position = 30
@@ -97,7 +97,10 @@ class WarehouseRobot():
         origin_image = self.__eye.take_picture()
         if config.publish_mqtt:
             g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', origin_image)
-        layout = self.__grid_helper.scan_layout(origin_image, history_length=1, show_processing_image=False, pause_second=0)
+        perspect_image = self.__grid_helper.__grid_finder.auto_perspect(origin_image)
+        if perspect_image is None:
+                return
+        layout = self.__grid_helper.scan_layout(perspect_image, history_length=1, show_processing_image=False, pause_second=0)
         if layout is None:
             return
         x, y = self.get_first_stone_postion(self.__grid_plate.last_layout)
