@@ -1,6 +1,7 @@
 from vision.go_game_stone import GoGameStone
 from vision.grid_finder import GridFinder
 from vision.grid_layout import GridLayout
+from config import config
 import numpy
 
 import sys
@@ -21,7 +22,7 @@ class Grid_Helper():
         self.__grid_config = grid_config
         self.__publish_mqtt = grid_config.publish_mqtt
 
-        self.__cell_judger = GridCell()
+        self.__cell_judger = GoGameStone()
 
         self.__detected_layout = GridLayout('Detected layout')
         self.__history = []  # history of layout.
@@ -41,8 +42,6 @@ class Grid_Helper():
         self.Min_WhiteColor = numpy.array([0, 0, 200])  # 要识别白子颜色的下限
         self.Max_WhiteColor = numpy.array([180, 100, 255])  # 要识别白子的颜色的上限
 
-    #     self.__ROWS = 19
-    #     self.__COLS = 19
 
         # self.__BLANK = self.config.game_rule.cell_color.blank
         # self.__BLACK = self.config.game_rule.cell_color.black
@@ -119,15 +118,16 @@ class Grid_Helper():
                 cell_img_big, cell_img_small = self.get_cell_image(plate_image, col,row)
 
                 # color = grid_cell.scan(cell_img,is_inspected_cell)
-                stone_color = gogame_stone.scan_white(cell_img_big, is_inspected=False)
+                stone_value = gogame_stone.scan_white(cell_img_big, is_inspected=False)
                 detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_color)
-                if stone_color != self.__WHITE:
-                    stone_color = gogame_stone.scan_black(cell_img_small, is_inspected=False)
-                    detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_color)
+                if stone_value != self.__WHITE:
+                    stone_value = gogame_stone.scan_black(cell_img_small, is_inspected=False)
+                    # detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_value)
 
         stable_depth = self.__append_to_history(detected_layout)
         # target_layout.print_out()
-        g_mqtt.publish_cv_image('test',plate_image)
+        if config.publish_mqtt:
+            g_mqtt.publish_cv_image('test',plate_image)
 
 
         return self.__history[-1], stable_depth

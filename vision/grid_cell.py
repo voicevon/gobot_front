@@ -6,5 +6,7 @@ import sys
 sys.path.append('/home/pi/pylib')
 
 
+
 class GridCell():
-    pass
+    def __init__(self, config):
+        self.value = 0  # BLANK

@@ -4,11 +4,13 @@ import numpy
 
 class GoGameStone(GridCell):
     '''
-    A stone might be White, or Black
+    A stone might be WHITE, BLACK, default is BLANK
     '''
 
     def __init__(self):
         self.__publish_mqtt = False
+        self.BLACK = 1
+        self.WHITE =2
 
     def scan_black(self, cell_image, is_inspected):
         '''
@@ -19,10 +21,10 @@ class GoGameStone(GridCell):
         ret, bin_image = cv2.threshold(blur, 50, 255, cv2.THRESH_BINARY_INV)
 
 
-        stone_color = self.__BLANK
+        self.value = self.BLACK
         count = cv2.countNonZero(bin_image)
         if count > 180: 
-            stone_color = self.__BLACK
+            stone_color = self.BLACK
 
         return stone_color
 
@@ -75,7 +77,6 @@ class GoGameStone(GridCell):
             detected stone_color, only for White. because connected black cells have no circle
         '''
         detected_circles = self.__detect_circles(cell_image,show_processing_image=is_inspected)
-        stone_color = self.__BLANK
         if detected_circles is None:
             if is_inspected:
                 print('Inspected cell, no circles found!')
@@ -99,7 +100,7 @@ class GoGameStone(GridCell):
                     if real_raduis < 130:  # 51% of a circle can also be detected!
                         # https://stackoverflow.com/questions/20698613/detect-semicircle-in-opencv
                         # print('Positive')
-                        stone_color = self.__WHITE
+                        self.value = self.WHITE
                     # else:
                     #     print('Negtive')
                     #     cv2.waitKey(100000)
@@ -107,5 +108,5 @@ class GoGameStone(GridCell):
                     print(self.__FC_RESET + '>>>>average_brightness= %d' %average_brightness)
 
         else:
-           return stone_color
+           return self.value
    
