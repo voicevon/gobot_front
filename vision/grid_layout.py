@@ -47,7 +47,7 @@ class GridLayout():
 
     # def play_col_row(self, col_id, row_id, color_code):
     def update_cell_from_position(self, col_id, row_id, cell_value):
-        self._layout_array[col_id][row_id] = cell_value
+        self._layout_array[row_id][col_id] = cell_value
 
         # cell = ChessboardCell()
         # cell.from_col_row_id(col_id=col_id, row_id=row_id)

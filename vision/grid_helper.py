@@ -8,6 +8,7 @@ import cv2
 import sys
 sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
+from mqtt_helper import g_mqtt
 
 class GridHelper():
     '''
