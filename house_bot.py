@@ -94,9 +94,10 @@ class WarehouseRobot():
         perspect_image = self.__grid_helper.grid_finder.auto_perspect(origin_image)
         if perspect_image is None:
                 return
-        layout = self.__grid_helper.scan_layout(perspect_image, history_length=1, show_processing_image=False, pause_second=0)
+        layout, stable_depth = self.__grid_helper.scan_layout(perspect_image, history_length=1, show_processing_image=False, pause_second=0)
         if layout is None:
             return
+        layout.print_out()
         x, y = self.get_first_stone_postion(layout)
         if x is None:
             return
