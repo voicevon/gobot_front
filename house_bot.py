@@ -98,9 +98,11 @@ class WarehouseRobot():
         layout = self.__grid_helper.scan_layout(perspect_image, history_length=1, show_processing_image=False, pause_second=0)
         if layout is None:
             return
-        x, y = self.get_first_stone_postion(self.__grid_plate.last_layout)
+        x, y = self.get_first_stone_postion(layout)
         if x is None:
             return
+
+        print('Linear motor start to move a stone')
         # How far is the stone to the target position?
         dx = self.__target_x_position - x
         dy = self.__target_y_position - y
@@ -112,6 +114,7 @@ class WarehouseRobot():
         
 
 if __name__ == '__main__':
+    config.publish_mqtt = True
     if config.publish_mqtt:
         g_mqtt.connect_to_broker('123456', 'voicevon.vicp.io', 1883, 'von','von1970')
 

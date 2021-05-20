@@ -126,6 +126,7 @@ class GridHelper():
         gogame_stone = GoGameStone()
         # Split board_image to 361 samll images. detect circle one by one
         for col in range(0,self.__layout_config.cols):
+            #print(col)
             for row in range(0,self.__layout_config.rows):
                 # crop to small image, around cell center
                 cell_img_big, cell_img_small = self.get_cell_image(plate_image, col,row)
