@@ -11,15 +11,16 @@ from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
 
 class GridHelper():
-    '''
-    Find grid perspective view from origin image
-    split grid image to lot of cell images
-        Judge the cell value
-            For go game:  BLANK, BLACK, WHITE
-            For sower machine: BLANK, SINGLE, DOUBLE
-    Orgnize the cell value to layout map
-    '''
+
     def __init__(self, finder_config, cell_config, layout_config):
+        '''
+        Find grid perspective view from origin image
+        split grid image to lot of cell images
+            Judge the cell value
+                For go game:  BLANK, BLACK, WHITE
+                For sower machine: BLANK, SINGLE, DOUBLE
+        Orgnize the cell value to layout map
+        '''
         self.grid_finder = GridFinder(finder_config)
         self.__layout_config = layout_config
         #self.__publish_mqtt = grid_config.publish_mqtt
@@ -133,7 +134,7 @@ class GridHelper():
 
                 # color = grid_cell.scan(cell_img,is_inspected_cell)
                 stone_value = gogame_stone.scan_white(cell_img_big, is_inspected=False)
-                detected_layout.update_cell_from_position(col, row, cell_value=stone_value)
+                detected_layout.update_cell_by_position(col, row, cell_value=stone_value)
                 if stone_value != self.__WHITE:
                     stone_value = gogame_stone.scan_black(cell_img_small, is_inspected=False)
                     # detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_value)

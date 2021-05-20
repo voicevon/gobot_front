@@ -3,12 +3,12 @@ import cv2
 import numpy
 
 class GoGameStone(GridCell):
-    '''
-    A stone might be WHITE, BLACK, default is BLANK
-    '''
 
     def __init__(self):
-        self.__publish_mqtt = False
+        '''
+        A stone value might be WHITE, BLACK, default is BLANK
+        The value comes from cell image.
+        '''
         self.BLANK = 0  # TODO: put this to base class
         self.BLACK = 1
         self.WHITE =2
@@ -34,7 +34,10 @@ class GoGameStone(GridCell):
 
 
     def __detect_circles(self, cropped_img, show_processing_image=True):
-        # detect circles
+        '''
+        Get circle from HoughCircles().
+        For better performance, some preprocess is aplied.
+        '''
         gray = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2GRAY)
         blur = cv2.medianBlur(gray,3)
         canny = cv2.Canny(gray,100,200)

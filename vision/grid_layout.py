@@ -10,23 +10,23 @@ from config import config
 
 
 from gogame.chessboard_cell import ChessboardCell
-import logging
 
 
 
 
 class GridLayout():
-    '''
-    A GridLayout() object contains many grid cells.
-        each cell has a cell_value
-    
-    Known children are: 
-        GoGamebot
-            chessboard_layout, warehouse_layout 
-        SowerMachine
-            Seedplate_layout
-    '''
+
     def __init__(self, name, config):
+        '''
+        A GridLayout() object contains many grid cells.
+            each cell has a cell_value
+        
+        Known children are: 
+            GoGamebot
+                chessboard_layout, warehouse_layout 
+            SowerMachine
+                Seedplate_layout
+        '''
         self.name = name
 
         self._ROWS = config.rows
@@ -46,7 +46,7 @@ class GridLayout():
         self._layout_array = [([0] * self._COLS) for i in range(self._ROWS)]
 
     # def play_col_row(self, col_id, row_id, color_code):
-    def update_cell_from_position(self, col_id, row_id, cell_value):
+    def update_cell_by_position(self, col_id, row_id, cell_value):
         self._layout_array[row_id][col_id] = cell_value
 
         # cell = ChessboardCell()
@@ -54,7 +54,7 @@ class GridLayout():
         # self.play(cell.name, cell_value)
 
     # def play(self, cell_name, color_code):
-    def update_cell_from_name(self, cell_name, cell_value):
+    def update_cell_by_name(self, cell_name, cell_value):
         '''
 
         '''

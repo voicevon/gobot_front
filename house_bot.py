@@ -47,7 +47,6 @@ class layout_config:
 
 class stone_config:
     '''
-
     '''
     class value:
         blank = 1
@@ -55,19 +54,20 @@ class stone_config:
         white = 3
 
 class WarehouseRobot():
-    '''
-    This robot has a mono_eye, 
-        Can take picture
-    The robot also has a GridHelper()
-        Can give us a perspective view from origin picture.
-        Then convert a logical layout.
-    Another part is layout_helper
-        Can detect the first stone position.
-    The target position, can be known from mqtt
-    The robot calculate the path from stone position to target position
-        the motor driver will move the stone to target position 
-    '''
+
     def __init__(self):
+        '''
+        This robot has a mono_eye, 
+            Can take picture
+        The robot also has a GridHelper()
+            Can give us a perspective view from origin picture.
+            Then convert a logical layout.
+        Another part is layout_helper
+            Can detect the first stone position.
+        The target position, can be known from mqtt
+        The robot calculate the path from stone position to target position
+            the motor driver will move the stone to target position 
+        '''
         self.__eye = MonoEye()
         self.__grid_helper = GridHelper(finder_config, stone_config, layout_config)
         self.__plane_motor = Stepper()
