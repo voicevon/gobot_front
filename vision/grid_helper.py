@@ -110,7 +110,7 @@ class GridHelper():
             stable_depth
         '''
         self.__history_length = history_length
-        detected_layout = GridLayout('Detected layout')
+        detected_layout = GridLayout('Detected layout', self.__layout_config )
 
         plate_gray_image = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
         plate_brightness = numpy.mean(plate_gray_image)
@@ -126,7 +126,7 @@ class GridHelper():
 
                 # color = grid_cell.scan(cell_img,is_inspected_cell)
                 stone_value = gogame_stone.scan_white(cell_img_big, is_inspected=False)
-                detected_layout.update_cell_from_position(col_id=18-col, row_id=18-row, color_code=stone_value)
+                detected_layout.update_cell_from_position(col_id=18-col, row_id=18-row, cell_value=stone_value)
                 if stone_value != self.__WHITE:
                     stone_value = gogame_stone.scan_black(cell_img_small, is_inspected=False)
                     # detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=stone_value)
