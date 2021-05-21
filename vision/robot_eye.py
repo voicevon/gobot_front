@@ -7,9 +7,8 @@ from picamera import PiCamera
 
 class MonoEye():
     '''
-        take picture from Pi camera, 
-        Find aruco corners
-        do perspective transforming.
+    take picture from Pi camera, 
+    TODO: Calibration
     '''
 
     def __init__(self):

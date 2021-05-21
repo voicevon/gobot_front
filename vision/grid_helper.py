@@ -50,8 +50,8 @@ class GridHelper():
         self.__BLACK = 1 #self.config.game_rule.cell_color.black
         self.__WHITE = 2 #self.config.game_rule.cell_color.white
 
-        self.__SPACE_X = 3 #self.config.robot_eye.grid_cell.dimension.cell_space_x
-        self.__SPACE_Y = 4 #self.config.robot_eye.grid_cell.dimension.cell_space_y
+        self.__SPACE_X = 22 #self.config.robot_eye.grid_cell.dimension.cell_space_x
+        self.__SPACE_Y = 22 #self.config.robot_eye.grid_cell.dimension.cell_space_y
         self.__VIEW_RANGE = 1.6
 
     def __append_to_history(self, layout):
@@ -77,7 +77,7 @@ class GridHelper():
         '''
         TODO:  Unifiy stone image, seed image, etc. need an abstract class
 
-        Currently, it's working for go game stone detection.
+        Currently, it's working fine for go game stone detection.
         '''
         x1 = self.__SPACE_X * col 
         y1 = self.__SPACE_Y * row 
@@ -131,7 +131,7 @@ class GridHelper():
             for row in range(0,self.__layout_config.rows):
                 # crop to small image, around cell center
                 cell_img_big, cell_img_small = self.get_cell_image(plate_image, col,row)
-
+                
                 # color = grid_cell.scan(cell_img,is_inspected_cell)
                 stone_value = gogame_stone.scan_white(cell_img_big, is_inspected=False)
                 detected_layout.update_cell_by_position(col, row, cell_value=stone_value)
