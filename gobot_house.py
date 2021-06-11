@@ -96,7 +96,7 @@ class WarehouseRobot():
 
         if config.publish_mqtt:
             g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', origin_image)
-        return
+        # return
 
         perspect_image = self.__grid_helper.grid_finder.auto_perspect(origin_image)
         if perspect_image is None:

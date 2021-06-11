@@ -9,7 +9,7 @@ from config import config
 
 
 class GridFinder():
-    def __init__(self, config):
+    def __init__(self, aruco_ids, area_size):
         '''   
         area_size: (width, height), unit is pix
 
@@ -19,13 +19,9 @@ class GridFinder():
             Go_game_board_19x19: Normally two aruco marks
                                  Calibrate mode, Four marks
         '''
-        self.__mark_ids = config.aruco_ids
-        #self.__enable_mqtt = config.enable_mqtt
-        self.__area_width, self.__area_height  = config.area_size
+        self.__mark_ids = aruco_ids
+        self.__area_width, self.__area_height  = area_size
         
-    def enable_mqtt(self, enable=True):
-        self.__enable_mqtt =  enable
-
     def __get_rid_of_useless_corners(self):
         '''
         For better performance only. But sometimes, this will cause worse performance.
@@ -125,6 +121,29 @@ class GridFinder():
 
         # save the warped output
         return imgOutput
+    
+    def get_chessboard_image(self,img):
+        # https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
+        # https://www.geeksforgeeks.org/perspective-transformation-python-opencv/
+
+        # detect edges using gray, then Canny
+        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        canny = cv2.Canny(img_gray, 120,200)
+        # retrieve contours by findCountours
+        contours, hierarchy = cv2.findContours(canny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        # img_contour = cv2.drawContours(img, contours, -1, (0,255,75), 1)
+        # cv2.imshow('contours',img_contour)
+        for con in contours:
+            # rec = cv2.boundingRect(con)
+            area = cv2.contourArea(con)
+            if area > 17000:
+                perspectived = self.get_perspective_from_contour(img, con)
+                if perspectived is not None:
+                    whole_board_image = perspectived[0:self.__CROP_HEIGHT, 0:self.__CROP_WIDTH]
+                    cv2.imshow('whole_board', whole_board_image)
+                    cv2.waitKey(1)
+                    self.__show_detection_line(whole_board_image)
+                    return whole_board_image
 
     def auto_perspect(self, origin_image):
         # Get corners position from detecting aruco marks
@@ -190,3 +209,21 @@ class GridFinder():
         cv2.aruco.drawAxis(frame, mtx, dist, rvec[i, :, :], tvec[i, :, :], 0.03)
         cv2.aruco.drawDetectedMarkers(frame, corners)
         return frame
+
+
+class Commander(GridFinder):
+    def __init__(self):
+        self.__mark_ids = [126, 125]  # [top, bottom]
+        GridFinder.__init__(self,self.__mark_ids, None)
+
+    def get_command_from_image(self, image):
+        centers = self.find_corners(image)
+        for index in range(0,5):
+            # get x,y position of indicator
+            x = index * (center[0][0] - center[1][0]) + 100
+            y = index * (center[0][1] - center[1][1]) + 100
+
+            if True:
+                return 1
+        return None
+ 
