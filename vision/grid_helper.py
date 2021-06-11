@@ -131,7 +131,11 @@ class GridHelper():
             for row in range(0,self.__layout_config.rows):
                 # crop to small image, around cell center
                 cell_img_big, cell_img_small = self.get_cell_image(plate_image, col,row)
-                
+                if config.publish_mqtt:
+                    h,w,channels = cell_img_small.shape
+                    print('going to publish cell image', col, row,h,w,channels )
+                    g_mqtt.publish_cv_image('gobot_stonehouse/eye/cell_small',cell_img_small)
+                    print('mqtt published cell_image', col, row)
                 # color = grid_cell.scan(cell_img,is_inspected_cell)
                 stone_value = gogame_stone.scan_white(cell_img_big, is_inspected=False)
                 detected_layout.update_cell_by_position(col, row, cell_value=stone_value)

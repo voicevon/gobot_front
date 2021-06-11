@@ -72,6 +72,7 @@ class WarehouseRobot():
         self.__plane_motor = Stepper()
         self.__target_x_position = 100
         self.__target_y_position = 30
+        self.__counter = 0
     
     def get_first_stone_postion(self, layout):
         '''
@@ -88,9 +89,15 @@ class WarehouseRobot():
         return None, None
 
     def spin_once(self):
+        print('spin once...', self.__counter)
+        self.__counter += 1
         origin_image = self.__eye.take_picture()
+        # return
+
         if config.publish_mqtt:
             g_mqtt.publish_cv_image('gobot_stonehouse/eye/origin', origin_image)
+        return
+
         perspect_image = self.__grid_helper.grid_finder.auto_perspect(origin_image)
         if perspect_image is None:
                 return

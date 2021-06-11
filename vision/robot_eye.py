@@ -12,8 +12,8 @@ class MonoEye():
     '''
 
     def __init__(self):
-        self.__camera = PiCamera()
-
+        self.__camera = PiCamera(resolution=(1920,1088))
+        #self.__rawCapture = PiRGBArray(self.__camera)
     def take_picture(self):
         rawCapture = PiRGBArray(self.__camera)
         # grab an image from the camera
