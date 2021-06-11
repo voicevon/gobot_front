@@ -3,7 +3,7 @@ import sys
 # sys.path.append('/home/xm/gitrepo/gogame_bot/python')
 # sys.path.append('../gogame_board/')
 sys.path.append('/home/pi/pylib')
-from vision.gird_layout import GridLayout
+from vision.grid_layout import GridLayout
 
 
 

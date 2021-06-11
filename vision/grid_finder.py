@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 from math import sin, cos
 
+import sys
+sys.path.append ("/home/pi/pylib")
 from mqtt_helper import g_mqtt
 from config import config
 
@@ -20,7 +22,8 @@ class GridFinder():
                                  Calibrate mode, Four marks
         '''
         self.__mark_ids = aruco_ids
-        self.__area_width, self.__area_height  = area_size
+        if area_size is not None:
+            self.__area_width, self.__area_height  = area_size
         
     def __get_rid_of_useless_corners(self):
         '''
@@ -32,11 +35,12 @@ class GridFinder():
         '''
         marker_ids is a list of [top_right, bottom_right, bottome_left, top_left]
         '''
-        arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_100)
+        arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_50)
         arucoParams = cv2.aruco.DetectorParameters_create()
         corners, ids, rejected = cv2.aruco.detectMarkers(image, arucoDict, parameters=arucoParams)
         # result = []
-        print('double check',self.__mark_ids)
+        print('double check target ids ',self.__mark_ids)
+        print('found ids ', ids)
         result = []
         # verify *at least* one ArUco marker was detected
         if len(corners) >= len(self.__mark_ids):
@@ -49,7 +53,7 @@ class GridFinder():
                 # loop over the detected ArUCo corners
                 for (markerCorner, markerID) in zip(corners, ids):
                     if target_id == markerID:
-                        # print('got matched id', target_id)
+                        print('got matched id', target_id)
                         # extract the marker corners (which are always returned in order of:
                         #   [top-left, top-right, bottom-right, and bottom-left]
                         corners2 = markerCorner.reshape((4, 2))
@@ -71,7 +75,9 @@ class GridFinder():
 
                         if True:
                             # draw the bounding box of the ArUCo detection
-                            cv2.line(image, topLeft, topRight, (0, 255, 0), 2)
+                            color_green = (0,255,0)
+                            pen_thickness = 2
+                            cv2.line(image, topLeft, topRight, color_green, pen_thickness)
                             cv2.line(image, topRight, bottomRight, (0, 255, 0), 2)
                             cv2.line(image, bottomRight, bottomLeft, (0, 255, 0), 2)
                             cv2.line(image, bottomLeft, topLeft, (0, 255, 0), 2)
@@ -96,8 +102,8 @@ class GridFinder():
 
                             # image = cv2.aruco.drawMarker(cv2.aruco.DICT_4X4_1000,)
                             # image = self.draw_axis_2(image, corners)
-                            if config.publish_mqtt:
-                                g_mqtt.publish_cv_image('gobot_stonehouse/eye/marker', image)
+            if config.publish_mqtt:
+                g_mqtt.publish_cv_image('gobot_stonehouse/eye/marker', image)
         return result
 
     def get_perspective_view(self, img, pts):
@@ -213,15 +219,21 @@ class GridFinder():
 
 class Commander(GridFinder):
     def __init__(self):
-        self.__mark_ids = [126, 125]  # [top, bottom]
+        self.__mark_ids = [1, 2,3,4,5,6,7,8,125,126]  # [top, bottom]
+
         GridFinder.__init__(self,self.__mark_ids, None)
 
     def get_command_from_image(self, image):
         centers = self.find_corners(image)
-        for index in range(0,5):
-            # get x,y position of indicator
-            x = index * (center[0][0] - center[1][0]) + 100
-            y = index * (center[0][1] - center[1][1]) + 100
+        if len(centers)==2:
+            print('centers',centers)
+
+            for index in range(0,5):
+                # get x,y position of indicator
+                top_x,top_y = centers[0]
+                bottom_x,bottom_y = centers[1]
+                x = index * top_x - bottom_x + 30
+                y = index * top_y - bottom_y + 50
 
             if True:
                 return 1

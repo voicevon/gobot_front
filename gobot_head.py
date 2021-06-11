@@ -1,11 +1,11 @@
-from vision.grid_finder import CommandFinder
+# from vision.grid_finder import CommandFinder
 import cv2
 import numpy as np
 #import threading
 #import time  # only for sleep
 
 
-from gogame.chessboard import ChessboardLayout, DiedAreaScanner
+# from gogame.chessboard import ChessboardLayout, DiedAreaScanner
 # from config import config, CvDebugger
 # from terminal_font import TerminalFont
 
@@ -14,12 +14,14 @@ from gogame.chessboard import ChessboardLayout, DiedAreaScanner
 #from board_scanner import BoardScanner
 #from layout_scanner import LayoutScanner
 from vision.robot_eye import MonoEye
-from vision.aruco_finder import ArucoFinder
+# from vision.aruco_finder import ArucoFinder
 from vision.grid_finder import Commander
+from config import config
 
 import sys
-sys.path.append('/home/pi/pylib')
+sys.path.append("/home/pi/pylib")
 from terminal_font import TerminalFont
+from mqtt_helper import g_mqtt
 
 class AiClient():
     pass
@@ -39,8 +41,8 @@ class GobotHead():
         # self.__command_finder = ArucoFinder((500,100), [345])
         self.__command_finder = Commander()
 
-        self.__chessboard_finder = ArucoFinder((800,800), [22,33])
-        self.__ai_client = AiClient()
+        #self.__chessboard_finder = ArucoFinder((800,800), [22,33])
+        #self.__ai_client = AiClient()
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__BG_BLUE = TerminalFont.Color.Background.blue
@@ -145,7 +147,9 @@ class GobotHead():
         # scan the marks, to run markable command
         # command = self.__eye.get_stable_mark(self.__MARK_STABLE_DEPTH)
         image = self.__eye.take_picture()
+        g_mqtt.publish_cv_image('gobot/head/eye/origin',image)
         command = self.__command_finder.get_command_from_image(image)
+        command = 8
 
 
         if command == 0:
@@ -410,8 +414,13 @@ class GobotHead():
 
 
 if __name__ == '__main__':
+    config.publish_mqtt = True
+    if config.publish_mqtt:
+        g_mqtt.connect_to_broker('123457','voicevon.vicp.io',1883,'von','von1970')
+
     myrobot = GobotHead()
-    myrobot.spin()
+    while True:
+        myrobot.spin()
 
 
     while True:
