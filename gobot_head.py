@@ -147,10 +147,10 @@ class GobotHead():
         # scan the marks, to run markable command
         # command = self.__eye.get_stable_mark(self.__MARK_STABLE_DEPTH)
         image = self.__eye.take_picture()
-        g_mqtt.publish_cv_image('gobot/head/eye/origin',image)
-        command = self.__command_finder.get_command_from_image(image)
-        command = 8
+        if config.publish_mqtt:
+            g_mqtt.publish_cv_image('gobot/head/eye/origin',image)
 
+        command = self.__command_finder.get_command_from_image(image)
 
         if command == 0:
             self.__goto = self.at_demo_from_warehouse
@@ -163,7 +163,6 @@ class GobotHead():
   
         elif command == 3:
             self.__goto = self.at_demo_remove_to_trashbin_white
-
 
         elif command == 4:
             self.__goto = self.at_state_begin
@@ -394,7 +393,7 @@ class GobotHead():
         die_helper.start(layout.get_layout_array(),self.__BLACK)
 
 
-    def spin(self):
+    def spin_once(self):
         last_function = self.__goto
         self.__goto()
         if last_function != self.__goto:
@@ -420,7 +419,7 @@ if __name__ == '__main__':
 
     myrobot = GobotHead()
     while True:
-        myrobot.spin()
+        myrobot.spin_once()
 
 
     while True:

@@ -34,7 +34,7 @@ class GridFinder():
     def find_corners(self, image):
         '''
         marker_ids is a list of [top_right, bottom_right, bottome_left, top_left]
-        This code can not find any id which is greater than 50.
+        This code can not find any id which is greater than 250.
         So the maximum id can be used is 249. saying the range is 0 to 249
         '''
         arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_250)
@@ -50,6 +50,7 @@ class GridFinder():
 
             # flatten the ArUco IDs list
             ids = ids.flatten()
+            current_corner_index = 1
             for target_id in self.__mark_ids:
                 print('----------------Searching.... ', target_id)
                 # loop over the detected ArUCo corners
@@ -65,17 +66,40 @@ class GridFinder():
                         bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
                         bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
                         topLeft = (int(topLeft[0]), int(topLeft[1]))    
+                        if len(self.__mark_ids) == 4:
+                            if current_corner_index == 1:
+                                # top right corner of the plate, we take bottom right point of the marker.
+                                result.append(bottomRight)
+                            if current_corner_index == 2:
+                                # bottom right corner of the plate, we take top right point of the marker.
+                                result.append(topRight)
+                            if current_corner_index == 3:
+                                # bottom left corner of the plate, we take top left point of the marker
+                                result.append(topLeft)
+                            if current_corner_index == 4:
+                                # top left corner of the plate, we take top bottom point of the marker
+                                result.append(bottomLeft)
 
-                        # compute and draw the center (x, y)-coordinates of the ArUco marker
-                        cX = int((topLeft[0] + bottomRight[0]) / 2.0)
-                        cY = int((topLeft[1] + bottomRight[1]) / 2.0)
+                        if len(self.__mark_ids) == 2:
+                            # keep the result in anticlockwise.
+                            if current_corner_index == 1:
+                                # top of the plate, we append two bottom points of the marker
+                                result.append(bottomLeft)
+                                result.append(bottomRight)
+                            if current_corner_index == 2:
+                                # bottom of the plate, we append tow top points of the marker
+                                result.append(topRight)
+                                result.append(topLeft)
 
-                        # print('markid=', markerID, 'center=', (cX, cY),topLeft, bottomRight, bottomLeft, topLeft)
-                        result.append ([cX,cY])
 
                         # print("[INFO] ArUco marker ID: {}".format(markerID))
+                        current_corner_index += 1
 
-                        if True:
+                        if config.publish_mqtt:
+                            # compute and draw the center (x, y) - coordinates of the ArUco marker
+                            cX = int((topLeft[0] + bottomRight[0]) / 2.0)
+                            cY = int((topLeft[1] + bottomRight[1]) / 2.0)
+                            # print('markid=', markerID, 'center=', (cX, cY),topLeft, bottomRight, bottomLeft, topLeft)
                             # draw the bounding box of the ArUCo detection
                             color_green = (0,255,0)
                             pen_thickness = 2
