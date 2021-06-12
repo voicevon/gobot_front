@@ -34,8 +34,10 @@ class GridFinder():
     def find_corners(self, image):
         '''
         marker_ids is a list of [top_right, bottom_right, bottome_left, top_left]
+        This code can not find any id which is greater than 50.
+        So the maximum id can be used is 49. saying the range is 0 to 49
         '''
-        arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_50)
+        arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_250)
         arucoParams = cv2.aruco.DetectorParameters_create()
         corners, ids, rejected = cv2.aruco.detectMarkers(image, arucoDict, parameters=arucoParams)
         # result = []
@@ -219,21 +221,30 @@ class GridFinder():
 
 class Commander(GridFinder):
     def __init__(self):
-        self.__mark_ids = [1, 2,3,4,5,6,7,8,125,126]  # [top, bottom]
+        self.__mark_ids = [125,126]  # [top, bottom]
 
         GridFinder.__init__(self,self.__mark_ids, None)
 
     def get_command_from_image(self, image):
         centers = self.find_corners(image)
         if len(centers)==2:
+            
             print('centers',centers)
-
-            for index in range(0,5):
+            top_x, top_y = centers[0]
+            bottom_x, bottom_y = centers[1]
+            delta_x = (top_x - bottom_x) / 6
+            delta_y = (top_y - bottom_y) / 6
+            color_red = (0,0,255)
+            pen_thickness = 3
+            #cv2.line(image,(top_x,top_y),(bottom_x,bottom_y),color_red, pen_thickness)
+            g_mqtt.publish_cv_image('gobot/test/image',image)
+            for index in range(1,6,1):
                 # get x,y position of indicator
-                top_x,top_y = centers[0]
-                bottom_x,bottom_y = centers[1]
-                x = index * top_x - bottom_x + 30
-                y = index * top_y - bottom_y + 50
+                x = int(index * delta_x + bottom_x) 
+                y = int(index * delta_y + bottom_y) 
+                [b,g,r] = image[y, x]
+                print('index=', index,'(x,y)=(',x,y, ')color=', b,g,r)
+                #print('cell_position',index, x, y)
 
             if True:
                 return 1
