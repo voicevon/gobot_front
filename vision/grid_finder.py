@@ -35,7 +35,7 @@ class GridFinder():
         '''
         marker_ids is a list of [top_right, bottom_right, bottome_left, top_left]
         This code can not find any id which is greater than 50.
-        So the maximum id can be used is 49. saying the range is 0 to 49
+        So the maximum id can be used is 249. saying the range is 0 to 249
         '''
         arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_250)
         arucoParams = cv2.aruco.DetectorParameters_create()
@@ -80,9 +80,9 @@ class GridFinder():
                             color_green = (0,255,0)
                             pen_thickness = 2
                             cv2.line(image, topLeft, topRight, color_green, pen_thickness)
-                            cv2.line(image, topRight, bottomRight, (0, 255, 0), 2)
-                            cv2.line(image, bottomRight, bottomLeft, (0, 255, 0), 2)
-                            cv2.line(image, bottomLeft, topLeft, (0, 255, 0), 2)
+                            cv2.line(image, topRight, bottomRight, color_green, pen_thickness)
+                            cv2.line(image, bottomRight, bottomLeft, color_green, pen_thickness)
+                            cv2.line(image, bottomLeft, topLeft, color_green, pen_thickness)
 
                             cv2.circle(image, (cX, cY), 4, (0, 0, 255), -1)
                             # draw the ArUco marker ID on the image
@@ -222,10 +222,15 @@ class GridFinder():
 class Commander(GridFinder):
     def __init__(self):
         self.__mark_ids = [125,126]  # [top, bottom]
-
+        self.__CELLS = 5
+        self.__LOWEST_SCALE = 0.7
         GridFinder.__init__(self,self.__mark_ids, None)
 
     def get_command_from_image(self, image):
+        '''
+        return -1, if found nothing
+        return 1..5 if found avaliable cell in black.
+        '''
         centers = self.find_corners(image)
         if len(centers)==2:
             
@@ -234,19 +239,36 @@ class Commander(GridFinder):
             bottom_x, bottom_y = centers[1]
             delta_x = (top_x - bottom_x) / 6
             delta_y = (top_y - bottom_y) / 6
-            color_red = (0,0,255)
-            pen_thickness = 3
-            #cv2.line(image,(top_x,top_y),(bottom_x,bottom_y),color_red, pen_thickness)
-            g_mqtt.publish_cv_image('gobot/test/image',image)
-            for index in range(1,6,1):
+
+            if False:
+                # publish a debug image
+                color_red = (0,0,255)
+                pen_thickness = 3
+                cv2.line(image,(top_x,top_y),(bottom_x,bottom_y),color_red, pen_thickness)
+                g_mqtt.publish_cv_image('gobot/test/image',image)
+
+            # Get average color
+            sum_color = 0
+            for index in range(1, self.__CELLS + 1,1):
                 # get x,y position of indicator
                 x = int(index * delta_x + bottom_x) 
                 y = int(index * delta_y + bottom_y) 
                 [b,g,r] = image[y, x]
-                print('index=', index,'(x,y)=(',x,y, ')color=', b,g,r)
-                #print('cell_position',index, x, y)
+                sum_color += b
+                sum_color += g
+                sum_color += r
 
-            if True:
-                return 1
-        return None
+                #print('index=', index,'(x,y)=(',x,y, ')color=', b,g,r)
+                #print('cell_position',index, x, y)
+            avg_color = sum_color / 5
+            
+            # Get which cell is black
+            for index in range(1, self.__CELLS + 1, 1):
+                x = int(index * delta_x + bottom_x)
+                y = int(index * delta_y + bottom_y)
+                [b,g,r] = image[y,x]
+                cell_color = b + g + r
+                if cell_color < avg_color * self.__LOWEST_SCALE:
+                    return index
+        return -1
  
