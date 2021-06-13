@@ -4,8 +4,9 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 
 import numpy as np
-import cv2 as cv
+import cv2 
 import glob
+import keyboard   #pip3 install keyboard
 
 
 
@@ -35,10 +36,22 @@ class MonoEye():
         return image
 
     def take_batch_picture_for_calibration(self):
+        file_id = 1
         while True:
-            self.take_picture(do_undistort=False)
-            key = cv2.waitkey(1)
-            if key == 'ESC':
+            image = self.take_picture(do_undistort=False)
+            g_mqtt.publish_cv_image('gobot/test/image', image)
+            #if keyboard.is_pressed(' '):
+            key =  keyboard.read_key() 
+            if key == ' ':
+                # space is pressed
+                filename = 'origin_' + file_id
+                #image = self.take_picture(do_undistort=False)
+                cv2.imwrite(filename, image)
+                file_id += 1
+
+            if key == 'q':
+            #key = cv2.waitkey(1)
+            #if key == 'ESC':
                 return
 
     def calibrate_chessboard(self, dir_path, image_format, square_size, width, height):
@@ -126,6 +139,11 @@ class SteroEye():
 
 
 if __name__ == '__main__':
+    import sys
+    sys.path.append('/home/pi/pylib')
+    from mqtt_helper import g_mqtt
+    g_mqtt.connect_to_broker('2021-0613','voicevon.vicp.io',1883,'von','von1970')
+
     my_eye = MonoEye('2021-0611.yml')
     if True:
         my_eye.take_batch_picture_for_calibration()
