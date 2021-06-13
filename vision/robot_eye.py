@@ -7,7 +7,7 @@ import numpy as np
 import cv2 
 import glob
 #import keyboard   #pip3 install keyboard, Doesn't work on Pi zero
-
+import pathlib
 
 
 class MonoEye():
@@ -44,13 +44,13 @@ class MonoEye():
         # Arrays to store object points and image points from all the images.
         objpoints = [] # 3d point in real world space
         imgpoints = [] # 2d points in image plane.
-
+        print('Start detecting chessboard for camera calibration...')
         while True:
             image = self.take_picture(do_undistort=False)
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
             # Find the chess board corners
-            ret, corners = cv2.findChessboardCorners(gray, (width, height), None)
+            ret, corners = cv2.findChessboardCorners(gray, (WIDTH, HEIGHT), None)
 
             # If found, add object points, image points (after refining them)
             if ret:
@@ -72,6 +72,9 @@ class MonoEye():
                     pass
                 if key == 'q':
                     return
+            else:
+                g_mqtt.publish_vb_image('gobot/test/image',image)
+                print('Can not detect chessboard , trying another time')
 
     def calibrate_chessboard(self, dir_path, image_format, square_size):
         WIDTH = 6
