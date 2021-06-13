@@ -56,27 +56,29 @@ class MonoEye():
             small_frame = cv2.resize(gray,(0,0), fx=0.3, fy=0.3)
             chessboard_flags = cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE
             ret, corners = cv2.findChessboardCorners(small_frame, (WIDTH, HEIGHT), chessboard_flags)
-            #print ('after findChessboardCorners() invoking')
-            # If found, add object points, image points (after refining them)
             if ret:
-                objpoints.append(objp) # Certainly, every loop objp is the same, in 3D.
-                corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
-                imgpoints.append(corners2)
-                # Draw and display the corners
-                covered_image = cv2.drawChessboardCorners(image, (WIDTH,HEIGHT), corners2, ret)
-                g_mqtt.publish_cv_image('gobot/test/image', covered_image)
+                ret, corners = cv2.findChessboardCorners(gray, (WIDTH,HEIGHT), None)
+                #print ('after findChessboardCorners() invoking')
+                # If found, add object points, image points (after refining them)
+                if ret:
+                    objpoints.append(objp) # Certainly, every loop objp is the same, in 3D.
+                    corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
+                    imgpoints.append(corners2)
+                    # Draw and display the corners
+                    covered_image = cv2.drawChessboardCorners(image, (WIDTH,HEIGHT), corners2, ret)
+                    g_mqtt.publish_cv_image('gobot/test/image', covered_image)
 
-                key = input('press space to skip, "s" to save image to file, "q" to quit   >>> ')
-                if key =='s':
-                    # space is pressed
-                    filename = self.__CALIBRATION_IMAGE_PATH + 'origin_' + str(file_id) + '.jpg'
-                    cv2.imwrite(filename, image)
-                    print('file is saved as ', filename)
-                    file_id += 1
-                if key == ' ':
-                    pass
-                if key == 'q':
-                    return
+                    key = input('press "s" to skip, <space> to save image to file, "q" to quit sampling   >>> ')
+                    if key ==' ':
+                        # space is pressed
+                        filename = self.__CALIBRATION_IMAGE_PATH + 'origin_' + str(file_id) + '.jpg'
+                        cv2.imwrite(filename, image)
+                        print('file is saved as ', filename)
+                        file_id += 1
+                    if key == 's':
+                        pass
+                    if key == 'q':
+                        return
             else:
                 g_mqtt.publish_cv_image('gobot/test/image',image)
                 print('Can not detect chessboard , trying another time')
