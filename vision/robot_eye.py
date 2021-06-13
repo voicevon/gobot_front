@@ -22,6 +22,7 @@ class MonoEye():
         mtx, dist = self.load_coefficients(coefficients_file)
         self.__mtx = mtx
         self.__dist = dist
+        self.__CALIBRATION_IMAGE_PATH = './camera_calibration_images/'
 
     def take_picture(self, do_undistort=True):
         rawCapture = PiRGBArray(self.__camera)
@@ -64,7 +65,7 @@ class MonoEye():
                 key = input('press space to skip, "s" to save image to file, "q" to quit   >>> ')
                 if key =='s':
                     # space is pressed
-                    filename = 'origin_' + str(file_id) + '.jpg'
+                    filename = self.__CALIBRATION_IMAGE_PATH + 'origin_' + str(file_id) + '.jpg'
                     cv2.imwrite(filename, image)
                     print('file is saved as ', filename)
                     file_id += 1
@@ -76,7 +77,7 @@ class MonoEye():
                 g_mqtt.publish_vb_image('gobot/test/image',image)
                 print('Can not detect chessboard , trying another time')
 
-    def calibrate_chessboard(self, dir_path, image_format, square_size):
+    def calibrate_chessboard(self, image_format, square_size):
         WIDTH = 6
         HEIGHT = 9
         '''Calibrate a camera using chessboard images.'''
@@ -93,7 +94,7 @@ class MonoEye():
         objpoints = []  # 3d point in real world space
         imgpoints = []  # 2d points in image plane.
 
-        images = pathlib.Path(dir_path).glob(f'*.{image_format}')
+        images = pathlib.Path(self.__CALIBRATION_IMAGE_PATH).glob(f'*.{image_format}')
         # Iterate through all images
         for fname in images:
             img = cv2.imread(str(fname))
@@ -137,14 +138,12 @@ class MonoEye():
 
     def recalibrate_and_save_coefficients(self):
         # Parameters
-        IMAGES_DIR = 'chessboard_samples'
         IMAGES_FORMAT = '.jpg'
         SQUARE_SIZE = 1.6
 
 
         # Calibrate 
         ret, mtx, dist, rvecs, tvecs = self.calibrate_chessboard(
-            IMAGES_DIR, 
             IMAGES_FORMAT, 
             SQUARE_SIZE
         )
