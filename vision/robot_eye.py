@@ -6,7 +6,7 @@ from picamera import PiCamera
 import numpy as np
 import cv2 
 import glob
-import keyboard   #pip3 install keyboard
+#import keyboard   #pip3 install keyboard
 
 
 
@@ -41,14 +41,19 @@ class MonoEye():
             image = self.take_picture(do_undistort=False)
             g_mqtt.publish_cv_image('gobot/test/image', image)
             #if keyboard.is_pressed(' '):
-            key =  keyboard.read_key() 
-            if key == ' ':
+            #key =  keyboard.read_key() 
+            #if key == ' ':
+            key = input('press space to skip, "s" to save image to file, "q" to quit   >>> ')
+            if key =='s':
                 # space is pressed
-                filename = 'origin_' + file_id
+                filename = 'origin_' + str(file_id) + '.jpg'
                 #image = self.take_picture(do_undistort=False)
                 cv2.imwrite(filename, image)
+                print('file is saved as ', filename)
                 file_id += 1
-
+            if key == ' ':
+                pass
+            #if keyboard.is_pressed('q'):
             if key == 'q':
             #key = cv2.waitkey(1)
             #if key == 'ESC':
