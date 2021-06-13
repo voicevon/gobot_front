@@ -51,8 +51,12 @@ class MonoEye():
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
             # Find the chess board corners
-            ret, corners = cv2.findChessboardCorners(gray, (WIDTH, HEIGHT), None)
-
+            #print('before invoking, This might cause a minite watting if the chessboard is out of camera view.')
+            # resize the image can be faster
+            small_frame = cv2.resize(gray,(0,0), fx=0.3, fy=0.3)
+            chessboard_flags = cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE
+            ret, corners = cv2.findChessboardCorners(small_frame, (WIDTH, HEIGHT), chessboard_flags)
+            #print ('after findChessboardCorners() invoking')
             # If found, add object points, image points (after refining them)
             if ret:
                 objpoints.append(objp) # Certainly, every loop objp is the same, in 3D.
@@ -74,7 +78,7 @@ class MonoEye():
                 if key == 'q':
                     return
             else:
-                g_mqtt.publish_vb_image('gobot/test/image',image)
+                g_mqtt.publish_cv_image('gobot/test/image',image)
                 print('Can not detect chessboard , trying another time')
 
     def calibrate_chessboard(self, image_format, square_size):
