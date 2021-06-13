@@ -83,9 +83,11 @@ class MonoEye():
                 g_mqtt.publish_cv_image('gobot/test/image',image)
                 print('Can not detect chessboard , trying another time')
 
-    def calibrate_chessboard(self, image_format, square_size):
+    def calibrate_chessboard(self):
         WIDTH = 6
         HEIGHT = 9
+        SQUARE_SIZE = 1.6
+        image_format = "jpg"
         '''Calibrate a camera using chessboard images.'''
         # termination criteria
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -94,7 +96,7 @@ class MonoEye():
         objp = np.zeros((HEIGHT*WIDTH, 3), np.float32)
         objp[:, :2] = np.mgrid[0:WIDTH, 0:HEIGHT].T.reshape(-1, 2)
 
-        objp = objp * square_size
+        objp = objp * SQUARE_SIZE
 
         # Arrays to store object points and image points from all the images.
         objpoints = []  # 3d point in real world space
@@ -121,13 +123,6 @@ class MonoEye():
 
         return [ret, mtx, dist, rvecs, tvecs]
 
-    def save_coefficients(self, mtx, dist, path):
-        '''Save the camera matrix and the distortion coefficients to given path/file.'''
-        cv_file = cv2.FileStorage(path, cv2.FILE_STORAGE_WRITE)
-        cv_file.write('K', mtx)
-        cv_file.write('D', dist)
-        # note you *release* you don't close() a FileStorage object
-        cv_file.release()
 
     def load_coefficients(self, path):
         '''Loads camera matrix and distortion coefficients.'''
@@ -143,19 +138,20 @@ class MonoEye():
         return [camera_matrix, dist_matrix]
 
     def recalibrate_and_save_coefficients(self):
+        '''Save the camera matrix and the distortion coefficients to given path/file.'''
         # Parameters
         IMAGES_FORMAT = '.jpg'
-        SQUARE_SIZE = 1.6
-
-
         # Calibrate 
         ret, mtx, dist, rvecs, tvecs = self.calibrate_chessboard(
             IMAGES_FORMAT, 
             SQUARE_SIZE
         )
         # Save coefficients into a file
-        self.save_coefficients(mtx, dist, self.__coefficients_file)
-
+        cv_file = cv2.FileStorage(self.coefficients_file, cv2.FILE_STORAGE_WRITE)
+        cv_file.write('K', mtx)
+        cv_file.write('D', dist)
+        # note you *release* you don't close() a FileStorage object
+        cv_file.release()
 
 class SteroEye():
     def __init__(self):
