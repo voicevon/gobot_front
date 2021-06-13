@@ -104,7 +104,9 @@ class MonoEye():
 
         images = pathlib.Path(self.__CALIBRATION_IMAGE_PATH).glob(f'*.{image_format}')
         # Iterate through all images
+        print(images)
         for fname in images:
+            print('fname', fname)
             img = cv2.imread(str(fname))
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -117,7 +119,7 @@ class MonoEye():
 
                 corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
                 imgpoints.append(corners2)
-
+        print('All files are processed')
         # Calibrate camera
         ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
 
@@ -142,16 +144,16 @@ class MonoEye():
         # Parameters
         IMAGES_FORMAT = '.jpg'
         # Calibrate 
-        ret, mtx, dist, rvecs, tvecs = self.calibrate_chessboard(
-            IMAGES_FORMAT, 
-            SQUARE_SIZE
-        )
+        ret, mtx, dist, rvecs, tvecs = self.calibrate_chessboard()
         # Save coefficients into a file
-        cv_file = cv2.FileStorage(self.coefficients_file, cv2.FILE_STORAGE_WRITE)
+        #print('aaaaaaaaaa')
+        cv_file = cv2.FileStorage(self.__coefficients_file, cv2.FILE_STORAGE_WRITE)
+        #print('bbbbbbb')
         cv_file.write('K', mtx)
         cv_file.write('D', dist)
         # note you *release* you don't close() a FileStorage object
         cv_file.release()
+        print('Calibration is done. ')
 
 class SteroEye():
     def __init__(self):
@@ -164,10 +166,10 @@ if __name__ == '__main__':
     import sys
     sys.path.append('/home/pi/pylib')
     from mqtt_helper import g_mqtt
-    g_mqtt.connect_to_broker('2021-0613','voicevon.vicp.io',1883,'von','von1970')
+    g_mqtt.connect_to_broker('camera_2021-0613','voicevon.vicp.io',1883,'von','von1970')
 
     my_eye = MonoEye('2021-0611.yml')
-    if True:
+    if False:
         my_eye.take_batch_picture_for_calibration()
     my_eye.recalibrate_and_save_coefficients()
     
