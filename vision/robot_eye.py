@@ -6,22 +6,19 @@ from picamera import PiCamera
 import numpy as np
 import cv2 
 import glob
-#import keyboard   #pip3 install keyboard
+#import keyboard   #pip3 install keyboard, Doesn't work on Pi zero
 
 
 
 class MonoEye():
     '''
     take picture from Pi camera, 
-    TODO: Calibration
-    https://medium.com/vacatronics/3-ways-to-calibrate-your-camera-using-opencv-and-python-395528a51615
+    Calibration Tutourial  https://medium.com/vacatronics/3-ways-to-calibrate-your-camera-using-opencv-and-python-395528a51615
     '''
 
     def __init__(self, coefficients_file):
         self.__camera = PiCamera(resolution=(1920,1088))
-        #self.__rawCapture = PiRGBArray(self.__camera)
         self.__coefficients_file = coefficients_file
-        # mtx, dist = self.load_coefficients('calibration_chessboard.yml')
         mtx, dist = self.load_coefficients(coefficients_file)
         self.__mtx = mtx
         self.__dist = dist
@@ -37,36 +34,55 @@ class MonoEye():
 
     def take_batch_picture_for_calibration(self):
         file_id = 1
+        WIDTH = 6
+        HEIGHT = 9
+        # termination criteria
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+        # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
+        objp = np.zeros((WIDTH * HEIGHT, 3), np.float32)
+        objp[:,:2] = np.mgrid[0:WIDTH,0:HEIGHT].T.reshape(-1,2)
+        # Arrays to store object points and image points from all the images.
+        objpoints = [] # 3d point in real world space
+        imgpoints = [] # 2d points in image plane.
+
         while True:
             image = self.take_picture(do_undistort=False)
-            g_mqtt.publish_cv_image('gobot/test/image', image)
-            #if keyboard.is_pressed(' '):
-            #key =  keyboard.read_key() 
-            #if key == ' ':
-            key = input('press space to skip, "s" to save image to file, "q" to quit   >>> ')
-            if key =='s':
-                # space is pressed
-                filename = 'origin_' + str(file_id) + '.jpg'
-                #image = self.take_picture(do_undistort=False)
-                cv2.imwrite(filename, image)
-                print('file is saved as ', filename)
-                file_id += 1
-            if key == ' ':
-                pass
-            #if keyboard.is_pressed('q'):
-            if key == 'q':
-            #key = cv2.waitkey(1)
-            #if key == 'ESC':
-                return
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    def calibrate_chessboard(self, dir_path, image_format, square_size, width, height):
+            # Find the chess board corners
+            ret, corners = cv2.findChessboardCorners(gray, (width, height), None)
+
+            # If found, add object points, image points (after refining them)
+            if ret:
+                objpoints.append(objp) # Certainly, every loop objp is the same, in 3D.
+                corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
+                imgpoints.append(corners2)
+                # Draw and display the corners
+                covered_image = cv2.drawChessboardCorners(image, (WIDTH,HEIGHT), corners2, ret)
+                g_mqtt.publish_cv_image('gobot/test/image', covered_image)
+
+                key = input('press space to skip, "s" to save image to file, "q" to quit   >>> ')
+                if key =='s':
+                    # space is pressed
+                    filename = 'origin_' + str(file_id) + '.jpg'
+                    cv2.imwrite(filename, image)
+                    print('file is saved as ', filename)
+                    file_id += 1
+                if key == ' ':
+                    pass
+                if key == 'q':
+                    return
+
+    def calibrate_chessboard(self, dir_path, image_format, square_size):
+        WIDTH = 6
+        HEIGHT = 9
         '''Calibrate a camera using chessboard images.'''
         # termination criteria
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
         
         # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(8,6,0)
-        objp = np.zeros((height*width, 3), np.float32)
-        objp[:, :2] = np.mgrid[0:width, 0:height].T.reshape(-1, 2)
+        objp = np.zeros((HEIGHT*WIDTH, 3), np.float32)
+        objp[:, :2] = np.mgrid[0:WIDTH, 0:HEIGHT].T.reshape(-1, 2)
 
         objp = objp * square_size
 
@@ -81,7 +97,7 @@ class MonoEye():
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             # Find the chess board corners
-            ret, corners = cv2.findChessboardCorners(gray, (width, height), None)
+            ret, corners = cv2.findChessboardCorners(gray, (WIDTH, HEIGHT), None)
 
             # If found, add object points, image points (after refining them)
             if ret:
@@ -121,16 +137,13 @@ class MonoEye():
         IMAGES_DIR = 'chessboard_samples'
         IMAGES_FORMAT = '.jpg'
         SQUARE_SIZE = 1.6
-        WIDTH = 6
-        HEIGHT = 9
+
 
         # Calibrate 
         ret, mtx, dist, rvecs, tvecs = self.calibrate_chessboard(
             IMAGES_DIR, 
             IMAGES_FORMAT, 
-            SQUARE_SIZE, 
-            WIDTH, 
-            HEIGHT
+            SQUARE_SIZE
         )
         # Save coefficients into a file
         self.save_coefficients(mtx, dist, self.__coefficients_file)
