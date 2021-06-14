@@ -15,7 +15,8 @@ import numpy as np
 #from layout_scanner import LayoutScanner
 from vision.robot_eye import MonoEye
 # from vision.aruco_finder import ArucoFinder
-from vision.grid_finder import Commander
+# from vision.grid_finder import Commander
+from gobot_vision.gobot_vision import GobotVision
 from config import config
 
 import sys
@@ -26,23 +27,15 @@ from mqtt_helper import g_mqtt
 class AiClient():
     pass
 
-class config_command_plate:
-    top_aruco_id = 126
-    bottom_aruco_id = 125
-
 
 class GobotHead():
 
     def __init__(self):
         self.__eye = MonoEye()
+        self.__vision = GobotVision()
 
         self.__goto = self.at_state_game_over
 
-        # self.__command_finder = ArucoFinder((500,100), [345])
-        self.__command_finder = Commander()
-
-        #self.__chessboard_finder = ArucoFinder((800,800), [22,33])
-        #self.__ai_client = AiClient()
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__BG_BLUE = TerminalFont.Color.Background.blue
@@ -148,6 +141,12 @@ class GobotHead():
         # command = self.__eye.get_stable_mark(self.__MARK_STABLE_DEPTH)
 
         command = self.__command_finder.get_command_from_image(self.__last_image)
+        image = self.__vision.get_commander_plate(self.__last_image)
+        layout = self.__vision.get_commander_layout(image,min_stable_depth=3,max_trying=5)
+        for i in range(0, layout.count,1):
+            if layout[i]:
+                command = i
+                break
 
         if command == 0:
             self.__goto = self.at_demo_from_warehouse

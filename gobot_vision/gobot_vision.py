@@ -21,29 +21,43 @@ class GobotVision(RobotVision):
         RobotVision.__init__(self)
         self.__chessboard_vision = ChessboardVision()
 
-    def get_commander_plate(self):
-        return 1
-
-
     def get_stable_level (self, layout_history):
         stable_level = 0
         if layout_history[0][0][0] == layout_history[1][0][0]:
             stable_level += 1
         return stable_level
+        
+    
+
+    def get_commander_plate(self, origin_image):
+        return origin_image
+
+    def get_commander_layout(self, image, min_stable_depth=3, max_trying =5):
+        history = []
+        layout = self.__chessboard_vision.get_layout_from_image(image)
+        history.append(layout)
+        stable_count = self.get_stable_level(history)
+        if stable_count >= min_stable_depth:
+            return True,layout
+        
+        return False, -1
+
+
 
     def get_chessboard_plate(self, origin_image):
         config = self.__chessboard_vision.get_4_aruco_marks_config()
         board_image = self.detect_grid_from_aruco_corners(config, origin_image)
         return board_image
 
-    def get_chessboard_layout(self, image, stable_level=3, max_trying = 6):
+    def get_chessboard_layout(self, image, min_stable_depth=3, max_trying = 6):
         history = []
         layout = self.__chessboard_vision.get_layout_from_image(image)
         history.append(layout)
         stable_count = self.get_stable_level(history)
-        if stable_count >= stable_level:
+        if stable_count >= min_stable_depth:
             return True,layout
         
+        return False, -1
             
 
     def get_warehouse_plate(self):

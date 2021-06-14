@@ -7,7 +7,14 @@ class config_2_aruco_marks:
 
 class CommanderVision():
     def __init__(self):
-        self.layout = [(0) * 5]
+        self.layout = self.create_blank_layout()
 
-    def get_2_aruco_marks_config(self):
+    def create_2_aruco_marks_config(self):
         return config_2_aruco_marks
+
+    def create_blank_layout(self):
+        layout = [(0) * 5]
+        return layout
+
+    def scan_command(self, origin_image):
+        return -1
