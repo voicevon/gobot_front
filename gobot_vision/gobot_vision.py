@@ -6,55 +6,18 @@ import cv2
 import numpy as np
 
 
-
-class RobotVision():
-    def __init__(self):
-        self.__grid_finder = GridFinder()
-
-    def get_perspective_view(self, img, pts):
-        # specify desired output size 
-        width = self.__area_width
-        height = self.__area_height
-
-        # specify conjugate x,y coordinates (not y,x)
-        input = np.float32(pts)
-        output = np.float32([[0,0], [width-1,0], [width-1,height-1], [0,height-1]])
-
-        # compute perspective matrix
-        matrix = cv2.getPerspectiveTransform(input,output)
-
-        # print(matrix.shape)
-        # print(matrix)
-
-        # do perspective transformation setting area outside input to black
-        imgOutput = cv2.warpPerspective(img, matrix, (width,height), cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(0,0,0))
-        # print(imgOutput.shape)
-
-        # save the warped output
-        return imgOutput
-
-    def detect_grid_from_aruco_corners(self, config, origin_image):
-        grid_finder = GridFinder(config)
-        # Get corners position from detecting aruco marks
-        corners = grid_finder.find_corners(origin_image)
-        # print(corners)
-        if corners != None:
-            if len(corners) >= len(self.__mark_ids):
-                # Get perspectived image
-                perspect_img = self.get_perspective_view(origin_image,corners)
-                return perspect_img
-        return None
-
-
-
-
-class GobotVision(RobotVision):
+class GobotVision():
     def __init__(self):
         '''
         '''
-        RobotVision.__init__(self)
         self.__chessboard_vision = ChessboardVision()
+        config = self.__chessboard_vision.get_4_aruco_marks_config()
+        self.__chesboard_grid_finder = GridFinder(config)
+
         self.__commander_vision = CommanderVision()
+        config = self.__commander_vision.create_2_aruco_marks_config()
+        self.__commander_grid_finder = GridFinder(config)
+
 
 
     def get_stable_level (self, layout_history):
@@ -65,14 +28,13 @@ class GobotVision(RobotVision):
         
     
 
-    def get_commander_plate(self, origin_image):
-        config = self.__commander_vision.create_2_aruco_marks_config()
-        commander_image = self.detect_grid_from_aruco_corners(config, origin_image)
-        return commander_image
+    def get_commander_plate_image(self, origin_image):
+        commander_grid_image = self.__commander_grid_finder.detect_grid_from_aruco_corners()
+        return commander_grid_image
 
     def get_commander_layout(self, image, min_stable_depth=3, max_trying =5):
         history = []
-        layout = self.__chessboard_vision.get_layout_from_image(image)
+        layout = self.__commander_vision.get_layout_from_image(image)
         history.append(layout)
         stable_count = self.get_stable_level(history)
         if stable_count >= min_stable_depth:
@@ -82,9 +44,8 @@ class GobotVision(RobotVision):
 
 
 
-    def get_chessboard_plate(self, origin_image):
-        config = self.__chessboard_vision.get_4_aruco_marks_config()
-        board_image = self.detect_grid_from_aruco_corners(config, origin_image)
+    def get_chessboard_plate_image(self, origin_image):
+        board_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
         return board_image
 
     def get_chessboard_layout(self, image, min_stable_depth=3, max_trying = 6):

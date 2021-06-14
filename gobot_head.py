@@ -140,13 +140,10 @@ class GobotHead():
         # scan the marks, to run markable command
         # command = self.__eye.get_stable_mark(self.__MARK_STABLE_DEPTH)
 
-        command = self.__command_finder.get_command_from_image(self.__last_image)
-        image = self.__vision.get_commander_plate(self.__last_image)
-        layout = self.__vision.get_commander_layout(image, min_stable_depth=3, max_trying=5)
-        for i in range(0, layout.count,1):
-            if layout[i]:
-                command = i
-                break
+        command = self.__vision.get_commander(self.__last_image)
+        # ).__command_finder.get_command_from_image(self.__last_image)
+        # image = self.__vision.get_commander_plate(self.__last_image)
+
 
         if command == 0:
             self.__goto = self.at_demo_from_warehouse

@@ -7,6 +7,10 @@ class config_2_aruco_marks:
 
 class CommanderVision():
     def __init__(self):
+        '''
+        For the reason: deep decoupling, 
+            We will never put origin_image or GridFinder into this class.
+        '''
         self.layout = self.create_blank_layout()
 
     def create_2_aruco_marks_config(self):
@@ -17,4 +21,8 @@ class CommanderVision():
         return layout
 
     def scan_command(self, origin_image):
-        return -1
+        layout = self.get_commander_layout(origin_image, min_stable_depth=3, max_trying=5)
+        for i in range(0, layout.count,1):
+            if layout[i]:
+                command = i
+                break

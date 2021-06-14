@@ -31,14 +31,9 @@ class GridFinder():
             aruco_ids = [aruco_config.right_id, aruco_config.left_id]
         self.__mark_ids =  aruco_ids
 
-        self.__area_width  = aruco_config.width
-        self.__area_height = aruco_config.height
+        # self.__area_width  = aruco_config.width
+        # self.__area_height = aruco_config.height
 
-    def __get_rid_of_useless_corners(self):
-        '''
-        For better performance only. But sometimes, this will cause worse performance.
-        '''
-        pass
 
     def find_corners(self, image):
         '''
@@ -141,6 +136,39 @@ class GridFinder():
                 g_mqtt.publish_cv_image('gobot_stonehouse/eye/marker', image)
         return result
 
+
+    def get_perspective_view(self, img, pts):
+        # specify desired output size 
+        width = self.__area_width
+        height = self.__area_height
+
+        # specify conjugate x,y coordinates (not y,x)
+        input = np.float32(pts)
+        output = np.float32([[0,0], [width-1,0], [width-1,height-1], [0,height-1]])
+
+        # compute perspective matrix
+        matrix = cv2.getPerspectiveTransform(input,output)
+
+        # print(matrix.shape)
+        # print(matrix)
+
+        # do perspective transformation setting area outside input to black
+        imgOutput = cv2.warpPerspective(img, matrix, (width,height), cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(0,0,0))
+        # print(imgOutput.shape)
+
+        # save the warped output
+        return imgOutput
+
+    def detect_grid_from_aruco_corners(self, origin_image):
+        # Get corners position from detecting aruco marks
+        corners = self.find_corners(origin_image)
+        # print(corners)
+        if corners != None:
+            if len(corners) >= len(self.__mark_ids):
+                # Get perspectived image
+                perspect_img = self.get_perspective_view(origin_image,corners)
+                return perspect_img
+        return None
 
     
     def get_chessboard_image(self,img):
