@@ -142,7 +142,7 @@ class GobotHead():
 
         command = self.__command_finder.get_command_from_image(self.__last_image)
         image = self.__vision.get_commander_plate(self.__last_image)
-        layout = self.__vision.get_commander_layout(image,min_stable_depth=3,max_trying=5)
+        layout = self.__vision.get_commander_layout(image, min_stable_depth=3, max_trying=5)
         for i in range(0, layout.count,1):
             if layout[i]:
                 command = i

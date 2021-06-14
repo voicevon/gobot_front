@@ -1,5 +1,10 @@
+# These two references are really not good !
+# Like lower class is reference higher class !
+# TODO: Reconstruct 
+from gobot_vision.commander_vision import config_2_aruco_marks
+from gobot_vision.chessboard_vision import config_4_aruco_marks
 
-# from typing_extensions import runtime_checkable
+
 import cv2
 import numpy as np
 from math import sin, cos
@@ -11,20 +16,24 @@ from config import config
 
 
 class GridFinder():
-    def __init__(self, aruco_ids, area_size):
+    def __init__(self, aruco_config):
         '''   
-        area_size: (width, height), unit is pix
-
         Supported board_types:
             Warehouse: Four aruco marks
-            Commander: One aruco mark.
-            Go_game_board_19x19: Normally two aruco marks
-                                 Calibrate mode, Four marks
+            Commander: Two aruco marks.
+            Go_game_board_19x19: Normally Two aruco marks ?
+                                 Calibrate mode, Four marks ?
         '''
-        self.__mark_ids = aruco_ids
-        if area_size is not None:
-            self.__area_width, self.__area_height  = area_size
-        
+
+        if config is config_4_aruco_marks:
+            aruco_ids = [aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id, aruco_config.top_left_id]
+        if config is config_2_aruco_marks:
+            aruco_ids = [aruco_config.right_id, aruco_config.left_id]
+        self.__mark_ids =  aruco_ids
+
+        self.__area_width  = aruco_config.width
+        self.__area_height = aruco_config.height
+
     def __get_rid_of_useless_corners(self):
         '''
         For better performance only. But sometimes, this will cause worse performance.
@@ -132,27 +141,7 @@ class GridFinder():
                 g_mqtt.publish_cv_image('gobot_stonehouse/eye/marker', image)
         return result
 
-    def get_perspective_view(self, img, pts):
-        # specify desired output size 
-        width = self.__area_width
-        height = self.__area_height
 
-        # specify conjugate x,y coordinates (not y,x)
-        input = np.float32(pts)
-        output = np.float32([[0,0], [width-1,0], [width-1,height-1], [0,height-1]])
-
-        # compute perspective matrix
-        matrix = cv2.getPerspectiveTransform(input,output)
-
-        # print(matrix.shape)
-        # print(matrix)
-
-        # do perspective transformation setting area outside input to black
-        imgOutput = cv2.warpPerspective(img, matrix, (width,height), cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(0,0,0))
-        # print(imgOutput.shape)
-
-        # save the warped output
-        return imgOutput
     
     def get_chessboard_image(self,img):
         # https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
@@ -177,19 +166,7 @@ class GridFinder():
                     self.__show_detection_line(whole_board_image)
                     return whole_board_image
 
-    def auto_perspect(self, origin_image):
-        # Get corners position from detecting aruco marks
-        # The sequerence is always [TopLeft, TopRight,bottomRight,BottomLeft]
-        corners = self.find_corners(origin_image)
-        # print(corners)
-        if corners != None:
-            if len(corners) >= len(self.__mark_ids):
-                # Get perspectived image
-                perspect_img = self.get_perspective_view(origin_image,corners)
-                if config.publish_mqtt:
-                    g_mqtt.publish_cv_image('gobot_stonehouse/eye/perspect', perspect_img)
-                return perspect_img
-        return None
+
 
     def draw_axis(self,img, yaw, pitch, roll, tdx=None, tdy=None, size = 100):
 

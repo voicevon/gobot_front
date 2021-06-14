@@ -6,14 +6,13 @@ BLACK_STONE = 2
 
 
 class config_4_aruco_marks:
-    class top_right:
-        id = 1
-    class bottom_right:
-        id = 2
-    class bottom_left:
-        id = 3
-    class top_left:
-        id = 4
+    top_right_id =  1
+    bottom_right_id = 2
+    bottom_left_id = 3
+    top_left_id = 3
+    width = 640
+    height = 640
+    
 
 
 class ChessboardVision():
