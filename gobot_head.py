@@ -146,11 +146,8 @@ class GobotHead():
     def at_state_game_over(self):
         # scan the marks, to run markable command
         # command = self.__eye.get_stable_mark(self.__MARK_STABLE_DEPTH)
-        image = self.__eye.take_picture()
-        if config.publish_mqtt:
-            g_mqtt.publish_cv_image('gobot/head/eye/origin',image)
 
-        command = self.__command_finder.get_command_from_image(image)
+        command = self.__command_finder.get_command_from_image(self.__last_image)
 
         if command == 0:
             self.__goto = self.at_demo_from_warehouse
@@ -394,6 +391,14 @@ class GobotHead():
 
 
     def spin_once(self):
+        self.__last_image = self.__eye.take_picture()
+        if config.publish_mqtt:
+            g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
+
+        command_image = 1
+        chessboard_image = 1
+        warehouse_image = 1
+
         last_function = self.__goto
         self.__goto()
         if last_function != self.__goto:
