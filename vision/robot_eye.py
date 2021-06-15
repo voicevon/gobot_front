@@ -65,8 +65,8 @@ class MonoEye():
                     corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
                     imgpoints.append(corners2)
                     # Draw and display the corners
-                    covered_image = cv2.drawChessboardCorners(image, (WIDTH,HEIGHT), corners2, ret)
-                    g_mqtt.publish_cv_image('gobot/test/image', covered_image)
+                    cv2.drawChessboardCorners(gray, (WIDTH,HEIGHT), corners2, ret)
+                    g_mqtt.publish_cv_image('gobot/test/image', gray)
 
                     key = input('press "s" to skip, <space> to save image to file, "q" to quit sampling   >>> ')
                     if key ==' ':
