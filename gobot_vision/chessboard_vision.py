@@ -6,6 +6,7 @@ BLACK_STONE = 2
 
 
 class config_4_aruco_marks:
+    name='CHESSBOARD_ARUCO_CONFIG'
     top_right_id =  1
     bottom_right_id = 2
     bottom_left_id = 3

@@ -31,7 +31,7 @@ class AiClient():
 class GobotHead():
 
     def __init__(self):
-        self.__eye = MonoEye()
+        self.__eye = MonoEye('2021-0611.yml')
         self.__vision = GobotVision()
 
         self.__goto = self.at_state_game_over

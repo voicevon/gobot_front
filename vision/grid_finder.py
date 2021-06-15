@@ -24,11 +24,15 @@ class GridFinder():
             Go_game_board_19x19: Normally Two aruco marks ?
                                  Calibrate mode, Four marks ?
         '''
-
-        if config is config_4_aruco_marks:
+        print(aruco_config.name)
+        if aruco_config.name=='CHESSBOARD_ARUCO_CONFIG':
+            print('44444')
             aruco_ids = [aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id, aruco_config.top_left_id]
-        if config is config_2_aruco_marks:
+        elif aruco_config.name == 'COMMNDER_ARUCO_CONFIG':
+            print('222222222')
             aruco_ids = [aruco_config.right_id, aruco_config.left_id]
+        else:
+            print('Unknown config of aruco_marks', aruco_config)
         self.__mark_ids =  aruco_ids
 
         # self.__area_width  = aruco_config.width

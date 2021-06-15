@@ -1,8 +1,7 @@
 class config_2_aruco_marks:
-    class right:
-        id = 49
-    class left:
-        id = 48
+    name = 'COMMANDER_ARUCO_CONFIG'
+    right_id = 49
+    left_id = 48
 
 
 class CommanderVision():
