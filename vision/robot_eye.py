@@ -86,7 +86,7 @@ class MonoEye():
     def calibrate_chessboard(self):
         WIDTH = 6
         HEIGHT = 9
-        SQUARE_SIZE = 1.6
+        SQUARE_SIZE = 1
         image_format = "jpg"
         '''Calibrate a camera using chessboard images.'''
         # termination criteria
@@ -104,10 +104,11 @@ class MonoEye():
 
         images = pathlib.Path(self.__CALIBRATION_IMAGE_PATH).glob(f'*.{image_format}')
         # Iterate through all images
-        print(images)
+        # print(images)
         for fname in images:
             print('fname', fname)
             img = cv2.imread(str(fname))
+            g_mqtt.publish_cv_image('gobot/test/image', img)
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             # Find the chess board corners
@@ -115,10 +116,14 @@ class MonoEye():
 
             # If found, add object points, image points (after refining them)
             if ret:
+                print('    Found chessbord')
                 objpoints.append(objp)
 
                 corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
                 imgpoints.append(corners2)
+            else:
+                print('    NOT  found chessboard')
+
         print('All files are processed')
         # Calibrate camera
         ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
