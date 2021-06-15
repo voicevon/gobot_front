@@ -19,7 +19,7 @@ class CommanderVision():
         layout = [(0) * 5]
         return layout
 
-    def scan_command(self, origin_image):
+    def convert_to_layout(self, origin_image):
         layout = self.get_commander_layout(origin_image, min_stable_depth=3, max_trying=5)
         for i in range(0, layout.count,1):
             if layout[i]:

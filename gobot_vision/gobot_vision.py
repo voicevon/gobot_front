@@ -1,6 +1,7 @@
 from gobot_vision.commander_vision import CommanderVision
+from gobot_vision.commander import Commander
 from vision.grid_finder import GridFinder
-from gobot_vision.chessboard_vision import ChessboardVision, config_4_aruco_marks
+from gobot_vision.chessboard_vision import BLACK_STONE, ChessboardVision, config_4_aruco_marks
 from gobot_vision.warehouse_vision import WarehouseVision
 import cv2
 import numpy as np
@@ -14,9 +15,18 @@ class GobotVision():
         config = self.__chessboard_vision.get_4_aruco_marks_config()
         self.__chesboard_grid_finder = GridFinder(config)
 
-        self.__commander_vision = CommanderVision()
-        config = self.__commander_vision.create_2_aruco_marks_config()
-        self.__commander_grid_finder = GridFinder(config)
+        self.__commander_solution = 2
+        if self.__commander_solution == 1:
+            # solution A
+            # unified to chessboard_vision, might be slower
+            self.__commander_vision = CommanderVision()
+            config = self.__commander_vision.create_2_aruco_marks_config()
+            self.__commander_grid_finder = GridFinder(config)
+
+        if self.__commander_solution == 2:
+            # solution B
+            # Simpler solution, faster, might be less stable
+            self.__commander = Commander()
 
 
 
@@ -42,6 +52,17 @@ class GobotVision():
         
         return False, -1
 
+    def get_command_index(self, origin_image):
+        if self.__commander_solution == 1:
+            image = self.__commander_grid_finder.detect_grid_from_aruco_corners(origin_image)
+            ret, layout = self.get_commander_layout(image)
+            if ret:
+                for i in range(0,5,1):
+                    if layout[i] == BLACK_STONE:
+                        return i
+            return -1
+        if self.__commander_solution == 2:
+            return self.__commander.get_command_from_image(origin_image)
 
 
     def get_chessboard_plate_image(self, origin_image):
