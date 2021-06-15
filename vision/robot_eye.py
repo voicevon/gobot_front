@@ -86,7 +86,7 @@ class MonoEye():
     def calibrate_chessboard(self):
         WIDTH = 6
         HEIGHT = 9
-        SQUARE_SIZE = 1
+        SQUARE_SIZE = 2.5
         image_format = "jpg"
         '''Calibrate a camera using chessboard images.'''
         # termination criteria
