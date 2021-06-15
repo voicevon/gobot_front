@@ -30,7 +30,9 @@ class MonoEye():
         self.__camera.capture(rawCapture, format="bgr")
         image = rawCapture.array
         if do_undistort:
-            image = cv2.undistort(image, self.__mtx, self.__dist, None, None)
+            print('start undistortion')
+            image22 = cv2.undistort(image, self.__mtx, self.__dist, None, None)
+            print('...... end undistortion')
         return image
 
     def take_batch_picture_for_calibration(self):
@@ -134,7 +136,9 @@ class MonoEye():
     def load_coefficients(self, path):
         '''Loads camera matrix and distortion coefficients.'''
         # FILE_STORAGE_READ
-        cv_file = cv2.FileStorage(path, cv2.FILE_STORAGE_READ)
+        print('path',path)
+        cv_file = cv2.FileStorage('vision/'+path, cv2.FILE_STORAGE_READ)
+        print ('cv_file', cv_file)
 
         # note we also have to specify the type to retrieve other wise we only get a
         # FileNode object back instead of a matrix
@@ -142,6 +146,7 @@ class MonoEye():
         dist_matrix = cv_file.getNode('D').mat()
 
         cv_file.release()
+        print (camera_matrix, dist_matrix)
         return [camera_matrix, dist_matrix]
 
     def recalibrate_and_save_coefficients(self):
