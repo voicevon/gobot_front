@@ -21,11 +21,16 @@ class GridLayout():
         A GridLayout() object contains many grid cells.
             each cell has a cell_value
         
+        Has no relationship with image.
+
         Known children are: 
             GoGamebot
-                chessboard_layout, warehouse_layout 
+                chessboard_layout, warehouse_layout
+                command_layout,
+                -- Cell_value is stone_color
             SowerMachine
                 Seedplate_layout
+                -- Cell_value is seed_count
         '''
         self.name = name
 

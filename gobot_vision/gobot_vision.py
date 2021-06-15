@@ -72,10 +72,10 @@ class GobotVision():
     def get_chessboard_layout(self, image, min_stable_depth=3, max_trying = 6):
         history = []
         layout = self.__chessboard_vision.get_layout_from_image(image)
-        history.append(layout)
-        stable_count = self.get_stable_level(history)
-        if stable_count >= min_stable_depth:
-            return True,layout
+        # history.append(layout)
+        # stable_count = self.get_stable_level(history)
+        # if stable_count >= min_stable_depth:
+        #     return True,layout
         
         return False, -1
             
