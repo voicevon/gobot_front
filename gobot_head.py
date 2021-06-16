@@ -4,7 +4,7 @@ import numpy as np
 
 from vision.robot_eye import MonoEye
 from gobot_vision.gobot_vision import GobotVision
-from config import config
+from config import config as app_config
 
 import sys
 sys.path.append("/home/pi/pylib")
@@ -376,7 +376,7 @@ class GobotHead():
         print('start spin')
         self.__last_image = self.__eye.take_picture()
         print('taken picture')
-        if config.publish_mqtt:
+        if app_config.publish_mqtt:
             g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
 
         command_image = 1
@@ -402,8 +402,8 @@ class GobotHead():
 
 
 if __name__ == '__main__':
-    config.publish_mqtt = True
-    if config.publish_mqtt:
+    app_config.publish_mqtt = True
+    if app_config.publish_mqtt:
         g_mqtt.connect_to_broker('123457','voicevon.vicp.io',1883,'von','von1970')
 
     myrobot = GobotHead()
