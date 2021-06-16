@@ -1,5 +1,11 @@
 from gobot_vision.cell_scanner import CellScanner
 from gogame.chessboard import ChessboardLayout
+from gogame.chessboard_cell import ChessboardCell
+from config import config as app_config
+import sys
+sys.path.append('/home/pi/pylib')
+from terminal_font import TerminalFont
+from mqtt_helper import g_mqtt
 
 BLANK = 0
 WHITE_STONE = 1
@@ -46,10 +52,10 @@ class ChessboardVision():
         self.__inspect_cell =  ChessboardCell()
         self.__inspect_cell.from_name(app_config.robot_eye.layout_scanner.inspecting.cell_name)
 
-        self.__FC_GREEN = CONST.print_color.fore.green
-        self.__FC_YELLOW = CONST.print_color.fore.yellow
-        self.__FC_RESET = CONST.print_color.control.reset
 
+        self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
+        self._BG_GREEN = TerminalFron.Color.background.green
+        self.__FC_RESET = TerminalFont.Color.Control.reset
 
         self.Min_BlackColor = numpy.array([0, 0, 0])  # 要识别黑子颜色的下限
         self.Max_BlackColor = numpy.array([180, 255, 80])  # 要识别黑子的颜色的上限

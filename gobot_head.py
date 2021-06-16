@@ -1,21 +1,8 @@
-# from vision.grid_finder import CommandFinder
 import cv2
 import numpy as np
-#import threading
-#import time  # only for sleep
 
 
-# from gogame.chessboard import ChessboardLayout, DiedAreaScanner
-# from config import config, CvDebugger
-# from terminal_font import TerminalFont
-
-
-#from mark_scanner import MarkScanner
-#from board_scanner import BoardScanner
-#from layout_scanner import LayoutScanner
 from vision.robot_eye import MonoEye
-# from vision.aruco_finder import ArucoFinder
-# from vision.grid_finder import Commander
 from gobot_vision.gobot_vision import GobotVision
 from config import config
 
@@ -308,7 +295,8 @@ class GobotHead():
     #     self.start_mqtt()
 
     def at_demo_from_warehouse(self):
-        layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
+        # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
+        layout = self.__vision.get_chessboard_layout(self.Stable_depth)
         layout.print_out()
         cell = layout.get_first_cell(self.__BLANK)
         self.__arm.action_pickup_chess_from_warehouse()

@@ -6,6 +6,11 @@ from gobot_vision.warehouse_vision import WarehouseVision
 import cv2
 import numpy as np
 
+import sys
+sys.path.append('/home/pi/pylib')
+from terminal_font import TerminalFont
+from mqtt_helper import g_mqtt
+
 
 class GobotVision():
     def __init__(self):

@@ -2,12 +2,14 @@
 import cv2
 import numpy
 
-import sys
 import time
 
-sys.path.append('/home/xm/gitrepo/gogame_bot/python')
-from app_global.color_print import CONST
-from app_global.gogame_config import app_config
+from config import config as app_config
+import sys
+sys.path.append('/home/pi/pylib')
+from terminal_font import TerminalFont
+from mqtt_helper import g_mqtt
+
 
 class CellScanner():
     def __init__(self, board_mean):
