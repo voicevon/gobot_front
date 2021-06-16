@@ -92,13 +92,13 @@ class GridFinder():
                         if len(self.__mark_ids) == 2:
                             # keep the result in anticlockwise.
                             if current_corner_index == 1:
-                                # top of the plate, we append two bottom points of the marker
-                                result.append(bottomLeft)
-                                result.append(bottomRight)
-                            if current_corner_index == 2:
-                                # bottom of the plate, we append tow top points of the marker
-                                result.append(topRight)
+                                # right mark of the plate, we append two left points of the marker
                                 result.append(topLeft)
+                                result.append(bottomLeft)
+                            if current_corner_index == 2:
+                                # left mark of the plate, we append two right points of the marker
+                                result.append(bottomRight)
+                                result.append(topRight)
 
 
                         # print("[INFO] ArUco marker ID: {}".format(markerID))
