@@ -30,7 +30,7 @@ class ChessboardLayout(GridLayout):
 
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
-        self._BG_RED = TerminalFron.Color.background.red
+        self._BG_RED = TerminalFont.Color.Background.red
         self.__FC_RESET = TerminalFont.Color.Control.reset
 
         self._layout_array = [([0] * self._COLS) for i in range(self._ROWS)]

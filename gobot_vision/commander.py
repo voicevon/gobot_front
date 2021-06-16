@@ -1,12 +1,13 @@
 from vision.grid_finder import GridFinder
+from gobot_vision.commander_vision import config_2_aruco_marks
 
 
 class Commander(GridFinder):
     def __init__(self):
-        self.__mark_ids = [125,126]  # [top, bottom]
-        self.__CELLS = 5
-        self.__LOWEST_SCALE = 0.7
-        GridFinder.__init__(self,self.__mark_ids, None)
+        # self.__mark_ids = [125,126]  # [top, bottom]
+        #self.__CELLS = 5
+        #self.__LOWEST_SCALE = 0.7
+        GridFinder.__init__(self, config_2_aruco_marks)
 
     def get_command_from_image(self, image):
         '''

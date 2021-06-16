@@ -2,6 +2,7 @@ from gobot_vision.cell_scanner import CellScanner
 from gogame.chessboard import ChessboardLayout
 from gogame.chessboard_cell import ChessboardCell
 from config import config as app_config
+import numpy
 import sys
 sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
@@ -54,7 +55,7 @@ class ChessboardVision():
 
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
-        self._BG_GREEN = TerminalFron.Color.background.green
+        self._BG_GREEN = TerminalFont.Color.Background.green
         self.__FC_RESET = TerminalFont.Color.Control.reset
 
         self.Min_BlackColor = numpy.array([0, 0, 0])  # 要识别黑子颜色的下限
