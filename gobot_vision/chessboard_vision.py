@@ -53,7 +53,7 @@ class ChessboardVision():
 
         self.__inspect_cell =  ChessboardCell()
         self.__inspect_cell.from_name(app_config.robot_eye.layout_scanner.inspecting.cell_name)
-
+        self.__debug_chessboard_lines = True
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self._BG_GREEN = TerminalFont.Color.Background.green
@@ -117,16 +117,34 @@ class ChessboardVision():
         board_brightness = numpy.mean(board_gray)
         # print('board_brightness()= %d' %board_brightness)
 
+        if self.__debug_chessboard_lines:
+            lined_image = img_board.copy()
+            line_color = cv2.color(255,255,0)
+            pen_width = 2
+            for row in range(0,self.__ROWS):
+                y = row * self.__SPACE_Y
+                x1 = 0
+                x2 = 19 * self.__SPACE_X
+                cv2.line(lined_image, (x1,y),(x2,y), line_color, pen_width)
+            for col in range(0,self.__COLS):
+                x = col * self.__SPACE_X
+                y1 = 0
+                y2 = 19 * self.__SPACE_Y
+                cv2.line(lined_image, (x,y1),(x,y2), line_color, pen_width)
+            g_mqtt.publish_cv_image('gobot/image/chessboard/gridline',lined_image)     
+
         cell_scanner = CellScanner(board_brightness)
-        #print('aaaaaaaaaaaaaa')
         # Split board_image to 361 samll images. detect circle one by one
         for col in range(0,self.__COLS):
             for row in range(0,self.__ROWS):
                 # crop to small image, around cell center
+                # (x1,y1) is the topleft point of the cell
                 x1 = self.__SPACE_X * col 
                 y1 = self.__SPACE_Y * row 
+                # (x2,y2) is the bottomright point of the cell
                 x2 = x1 + int(self.__SPACE_X * self.__VIEW_RANGE)
                 y2 = y1 + int(self.__SPACE_Y * self.__VIEW_RANGE)
+                    
                 cell_img_big = img_board[y1:y2, x1:x2]
 
                 shrink_size = 6
@@ -136,31 +154,21 @@ class ChessboardVision():
                 y2 = y1 + int(self.__SPACE_Y * self.__VIEW_RANGE - 2 * shrink_size)
                 cell_img_small = img_board[y1:y2, x1:x2]
 
-                #print('bbbbbbbbbbbbbbbbbbbbbb')
                 is_inspected_cell = False
                 self.__inspect_cell.from_name(app_config.robot_eye.layout_scanner.inspecting.cell_name)
                 if (col == 18 - self.__inspect_cell.col_id) and (18- row == self.__inspect_cell.row_id):
                     # cv2.imshow('bbbb',cell_img_big)
                     # cv2.imshow('ssss',cell_img_small)
                     is_inspected_cell = True
-                #print('ccccccccccccccccc')
                 # color = cell_scanner.scan(cell_img,is_inspected_cell)
                 color = cell_scanner.scan_white(cell_img_big, is_inspected_cell)
-                #print('ffffffffffffffffff')
                 detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
                 if color != self.__WHITE:
-                    #print('hhhhhhhhhhhhhhhhhhhhh')
                     color = cell_scanner.scan_black(cell_img_small, is_inspected_cell)
-                    #print('mmmmmmmmmmmmmmmmmmmmmm')
                     detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
-        #print('ppppppppppppp')
         stable_depth = self.__append_to_history(detected_layout)
-        # target_layout.print_out()
-        #print('qqqqqqqqqqqqqqqq')
-        if app_config.robot_eye.layout_scanner.show_scan_image:
-            #print ('rrrrrrrrrrrrrrrrr')
-            self.__show_debug(img_board,stable_depth)
-        #print ('tttttttttttttttttt')
+        # if app_config.robot_eye.layout_scanner.show_scan_image:
+        #     self.__show_debug(img_board,stable_depth)
 
         return self.__history[-1], stable_depth
 

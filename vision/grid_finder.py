@@ -57,6 +57,8 @@ class GridFinder():
         result = []
         # verify *at least* one ArUco marker was detected
         if len(corners) >= len(self.__mark_ids):
+            if config.publish_mqtt:
+                debug_image = image.copy()
             # get rid of useless corners
 
             # flatten the ArUco IDs list
@@ -114,14 +116,14 @@ class GridFinder():
                             # draw the bounding box of the ArUCo detection
                             color_green = (0,255,0)
                             pen_thickness = 2
-                            cv2.line(image, topLeft, topRight, color_green, pen_thickness)
-                            cv2.line(image, topRight, bottomRight, color_green, pen_thickness)
-                            cv2.line(image, bottomRight, bottomLeft, color_green, pen_thickness)
-                            cv2.line(image, bottomLeft, topLeft, color_green, pen_thickness)
+                            cv2.line(debug_image, topLeft, topRight, color_green, pen_thickness)
+                            cv2.line(debug_image, topRight, bottomRight, color_green, pen_thickness)
+                            cv2.line(debug_image, bottomRight, bottomLeft, color_green, pen_thickness)
+                            cv2.line(debug_image, bottomLeft, topLeft, color_green, pen_thickness)
 
-                            cv2.circle(image, (cX, cY), 4, (0, 0, 255), -1)
+                            cv2.circle(debug_image, (cX, cY), 4, (0, 0, 255), -1)
                             # draw the ArUco marker ID on the image
-                            cv2.putText(image, str(markerID),
+                            cv2.putText(debug_image, str(markerID),
                                         (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX,
                                         8, (0, 255, 0), 2)
 
@@ -140,7 +142,7 @@ class GridFinder():
                             # image = cv2.aruco.drawMarker(cv2.aruco.DICT_4X4_1000,)
                             # image = self.draw_axis_2(image, corners)
             if config.publish_mqtt:
-                g_mqtt.publish_cv_image('gobot_stonehouse/eye/marker', image)
+                g_mqtt.publish_cv_image('gobot/image/grid/aruco', debug_image)
         return result
 
 
