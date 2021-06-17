@@ -68,11 +68,7 @@ class ChessboardVision():
         layout = [([0] * 19) for i in range(19)]
         return layout
 
-    def get_layout_from_image(self, chessboard_image):
-        '''
-        Descrepted!
-        '''
-        return self.start_scan(chessboard_image)
+
 
     def get_4_aruco_marks_config(self):
         return config_4_aruco_marks
@@ -97,6 +93,13 @@ class ChessboardVision():
                     stable_depth += 1
         return stable_depth
 
+    def get_layout_from_image(self, chessboard_image):
+        '''
+        Descrepted!
+        '''
+        return self.start_scan(chessboard_image)
+
+        
     def start_scan(self, img_board, history_length=3, show_processing_image=True, pause_second=1):
         '''
         Try to get layout from image.

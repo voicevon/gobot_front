@@ -1,3 +1,4 @@
+from gogame.chessboard import ChessboardLayout
 from gobot_vision.commander_vision import CommanderVision
 from gobot_vision.commander import Commander
 from vision.grid_finder import GridFinder
@@ -40,14 +41,18 @@ class GobotVision():
         if layout_history[0][0][0] == layout_history[1][0][0]:
             stable_level += 1
         return stable_level
-        
-    
 
     def get_commander_plate_image(self, origin_image):
+        '''
+        Serve for Solution A, Not completed.
+        '''
         commander_grid_image = self.__commander_grid_finder.detect_grid_from_aruco_corners()
         return commander_grid_image
 
     def get_commander_layout(self, image, min_stable_depth=3, max_trying =5):
+        '''
+        Serve for Solution A, Not completed.
+        '''
         history = []
         layout = self.__commander_vision.get_layout_from_image(image)
         history.append(layout)
@@ -58,6 +63,9 @@ class GobotVision():
         return False, -1
 
     def get_command_index(self, origin_image):
+        '''
+        Unified interface for both Solution A and Solution B.
+        '''
         if self.__commander_solution == 1:
             image = self.__commander_grid_finder.detect_grid_from_aruco_corners(origin_image)
             ret, layout = self.get_commander_layout(image)
@@ -70,25 +78,22 @@ class GobotVision():
             return self.__commander.get_command_from_image(origin_image)
 
 
-    def get_chessboard_plate_image(self, origin_image):
+    def get_chessboard_layout(self, origin_image):
+        '''
+        Top level of get layout.
+        return layout, stable_depth
+        '''
         board_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
-        return board_image
-
-    def get_chessboard_layout(self, image, min_stable_depth=3, max_trying = 6):
-        history = []
-        layout = self.__chessboard_vision.get_layout_from_image(image)
-        # history.append(layout)
-        # stable_count = self.get_stable_level(history)
-        # if stable_count >= min_stable_depth:
-        #     return True,layout
-        
-        return False, -1
-            
+        layout, stable_depth = self.__chessboard_vision.start_scan(board_image,3,True)
+        return layout, stable_depth
 
     def get_warehouse_plate(self):
         return 1
 
-    def get_warehouse_stone_position(self):
+    def get_warehouse_stone_position(self, origin_image):
+        '''
+        Top level interface.
+        '''
         return 1
 
 
