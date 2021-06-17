@@ -6,7 +6,7 @@ from gobot_vision.chessboard_vision import BLACK_STONE, ChessboardVision, config
 from gobot_vision.warehouse_vision import WarehouseVision
 import cv2
 import numpy as np
-
+from config import config as app_config
 import sys
 sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
@@ -84,6 +84,8 @@ class GobotVision():
         return layout, stable_depth
         '''
         board_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
+        if app_config.publish_mqtt:
+            g_mqtt.publish_cv_image('gobot/image/board',board_image)
         if board_image is None:
             print('GobotVision.get_chessboard_layout()  Can NOT detect chessboard grid from origin_image')
             return None, 0

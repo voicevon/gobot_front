@@ -86,12 +86,13 @@ class CellScanner():
             cell_color = self.__BLACK
 
         if is_inspected:
+            g_mqtt.publish_cv_image('gobot/debug/inspect/scan_black',cell_image)
             # cv2.imshow('scan black blur', blur)
             # cv2.imshow('scab bkacj bin', bin_image)
-            is_success, img_encode = cv2.imencode(".jpg", blur)
-            if is_success:
-                img_pub = img_encode.tobytes()
-                app_config.server.mqtt.client.publish(topic='gogame/eye/inspecting/cell/scan_black/blur', payload=img_pub)
+            #is_success, img_encode = cv2.imencode(".jpg", blur)
+            #if is_success:
+                #img_pub = img_encode.tobytes()
+                #app_config.server.mqtt.client.publish(topic='gogame/eye/inspecting/cell/scan_black/blur', payload=img_pub)
             print ('scan_black_counter = %i' %count)
         return cell_color
 

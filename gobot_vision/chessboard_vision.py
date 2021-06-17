@@ -118,7 +118,7 @@ class ChessboardVision():
         # print('board_brightness()= %d' %board_brightness)
 
         cell_scanner = CellScanner(board_brightness)
-        print('aaaaaaaaaaaaaa')
+        #print('aaaaaaaaaaaaaa')
         # Split board_image to 361 samll images. detect circle one by one
         for col in range(0,self.__COLS):
             for row in range(0,self.__ROWS):
@@ -136,31 +136,31 @@ class ChessboardVision():
                 y2 = y1 + int(self.__SPACE_Y * self.__VIEW_RANGE - 2 * shrink_size)
                 cell_img_small = img_board[y1:y2, x1:x2]
 
-                print('bbbbbbbbbbbbbbbbbbbbbb')
+                #print('bbbbbbbbbbbbbbbbbbbbbb')
                 is_inspected_cell = False
                 self.__inspect_cell.from_name(app_config.robot_eye.layout_scanner.inspecting.cell_name)
                 if (col == 18 - self.__inspect_cell.col_id) and (18- row == self.__inspect_cell.row_id):
                     # cv2.imshow('bbbb',cell_img_big)
                     # cv2.imshow('ssss',cell_img_small)
                     is_inspected_cell = True
-                print('ccccccccccccccccc')
+                #print('ccccccccccccccccc')
                 # color = cell_scanner.scan(cell_img,is_inspected_cell)
                 color = cell_scanner.scan_white(cell_img_big, is_inspected_cell)
-                print('ffffffffffffffffff')
+                #print('ffffffffffffffffff')
                 detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
                 if color != self.__WHITE:
-                    print('hhhhhhhhhhhhhhhhhhhhh')
+                    #print('hhhhhhhhhhhhhhhhhhhhh')
                     color = cell_scanner.scan_black(cell_img_small, is_inspected_cell)
-                    print('mmmmmmmmmmmmmmmmmmmmmm')
+                    #print('mmmmmmmmmmmmmmmmmmmmmm')
                     detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
-        print('ppppppppppppp')
+        #print('ppppppppppppp')
         stable_depth = self.__append_to_history(detected_layout)
         # target_layout.print_out()
-        print('qqqqqqqqqqqqqqqq')
+        #print('qqqqqqqqqqqqqqqq')
         if app_config.robot_eye.layout_scanner.show_scan_image:
-            print ('rrrrrrrrrrrrrrrrr')
+            #print ('rrrrrrrrrrrrrrrrr')
             self.__show_debug(img_board,stable_depth)
-        print ('tttttttttttttttttt')
+        #print ('tttttttttttttttttt')
 
         return self.__history[-1], stable_depth
 
@@ -187,8 +187,9 @@ class ChessboardVision():
                 cv2.circle(copy, (x,y),16, (255,0,0), 3)
             cv2.putText(copy, 'diffs= ' + text, (10,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 1)
             # cv2.imshow('layout_scanner', copy)
-            is_success, img_encode = cv2.imencode(".jpg", copy)
-            if is_success:
-                img_pub = img_encode.tobytes()
-                app_config.server.mqtt.client.publish(topic='gogame/eye/layout_scanner/chess_board', payload=img_pub)
+            
+            #is_success, img_encode = cv2.imencode(".jpg", copy)
+            #if is_success:
+            #    img_pub = img_encode.tobytes()
+            #    app_config.server.mqtt.client.publish(topic='gogame/eye/layout_scanner/chess_board', payload=img_pub)
             cv2.waitKey(1)

@@ -29,9 +29,9 @@ class ChessboardLayout(GridLayout):
         self._WHITE = 2
 
 
-        self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
+        self._FC_YELLOW = TerminalFont.Color.Fore.yellow
         self._BG_RED = TerminalFont.Color.Background.red
-        self.__FC_RESET = TerminalFont.Color.Control.reset
+        self._FC_RESET = TerminalFont.Color.Control.reset
 
         self._layout_array = [([0] * self._COLS) for i in range(self._ROWS)]
 
