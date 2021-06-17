@@ -319,7 +319,11 @@ class GobotHead():
 
     def at_demo_mover(self):  # Must be no arguiment function for self.__goto
         do_vision_check = app_config.mainloop.at_demo_mover.do_vision_check
-        layout = self.__eye.get_stable_layout(self.__LAYOUT_STABLE_DEPTH)
+        layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
+        if stable_depth < self.__LAYOUT_STABLE_DEPTH:
+            return 
+
+        # Got dedicate stable layout
         layout.print_out()
         cell = layout.get_first_cell(self.__BLACK)
         if cell is not None:

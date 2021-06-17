@@ -84,6 +84,10 @@ class GobotVision():
         return layout, stable_depth
         '''
         board_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
+        if board_image is None:
+            print('GobotVision.get_chessboard_layout()  Can NOT detect chessboard grid from origin_image')
+            return None, 0
+
         layout, stable_depth = self.__chessboard_vision.start_scan(board_image,3,True)
         return layout, stable_depth
 
