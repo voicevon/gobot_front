@@ -24,8 +24,8 @@ class CellScanner():
         self.__BLACK = app_config.game_rule.cell_color.black
         self.__WHITE = app_config.game_rule.cell_color.white
 
-        self.__FC_YELLOW = CONST.print_color.fore.yellow
-        self.__FC_RESET = CONST.print_color.control.reset
+        self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
+        self.__FC_RESET = TerminalFont.Color.Control.reset
         
         # self.__INSPECT_COUNTER = go_game_inspecting_cell.counter
 

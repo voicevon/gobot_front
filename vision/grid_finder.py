@@ -28,6 +28,8 @@ class GridFinder():
         if aruco_config.name=='CHESSBOARD_ARUCO_CONFIG':
             #print('44444')
             aruco_ids = [aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id, aruco_config.top_left_id]
+            self.__area_width = aruco_config.width
+            self.__area_height = aruco_config.height
         elif aruco_config.name == 'COMMANDER_ARUCO_CONFIG':
             #print('222222222')
             aruco_ids = [aruco_config.right_id, aruco_config.left_id]
