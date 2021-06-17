@@ -60,8 +60,8 @@ class CellScanner():
         average_brightness = numpy.mean(blur)
         cell_color = self.__BLACK
         if is_inspected:
-            # print('average_brightness = %d' %average_brightness)
-            cv2.imshow('cell_image',cell_image)
+            print('average_brightness = %d' %average_brightness)
+            # cv2.imshow('cell_image',cell_image)
         if average_brightness > 150:
             cell_color = self.__WHITE
         elif average_brightness > 80:
@@ -86,8 +86,8 @@ class CellScanner():
             cell_color = self.__BLACK
 
         if is_inspected:
-            cv2.imshow('scan black blur', blur)
-            cv2.imshow('scab bkacj bin', bin_image)
+            # cv2.imshow('scan black blur', blur)
+            # cv2.imshow('scab bkacj bin', bin_image)
             is_success, img_encode = cv2.imencode(".jpg", blur)
             if is_success:
                 img_pub = img_encode.tobytes()
@@ -115,7 +115,7 @@ class CellScanner():
                 cv2.circle(mask_circle, (x,y), radius=r, color=1, thickness=-1)
                 masked_image = cv2.bitwise_and (cell_image, cell_image, mask=mask_circle)
                 if is_inspected:
-                    cv2.imshow('inspecting cell detected circle already', masked_image)
+                    # cv2.imshow('inspecting cell detected circle already', masked_image)
                     cv2.waitKey(1)
                 # What color in this circle? black or white
                 average_brightness = numpy.mean(masked_image)
@@ -149,10 +149,10 @@ class CellScanner():
 
         if circles is None:
             if show_processing_image:
-                cv2.imshow('no circle origin', cropped_img)
-                cv2.imshow('no circle gray', gray)
-                cv2.imshow('no circle blur', blur)
-                cv2.imshow('no circle canny', canny)
+                # cv2.imshow('no circle origin', cropped_img)
+                # cv2.imshow('no circle gray', gray)
+                # cv2.imshow('no circle blur', blur)
+                # cv2.imshow('no circle canny', canny)
                 cv2.waitKey(1)
         else:
             # print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
@@ -168,9 +168,9 @@ class CellScanner():
                     # for showing the center of the circle, is a small , is red color
                     cv2.circle(img,(x,y),3,(0,0,255),1)
                     # print('ttttttttttttttt  x, y, r  ', x,y,r )
-                cv2.imshow('circled: center lines',img)
-                cv2.imshow('circled gray',gray)
-                cv2.imshow('circled blur',blur)
+                # cv2.imshow('circled: center lines',img)
+                # cv2.imshow('circled gray',gray)
+                # cv2.imshow('circled blur',blur)
                 cv2.waitKey(1)
 
             if len(detected_circles) > 1:
