@@ -7,6 +7,7 @@ from gobot_vision.warehouse_vision import WarehouseVision
 import cv2
 import numpy as np
 from config import config as app_config
+from chessboard_vision import config_4_aruco_marks as chessboard_config
 import sys
 sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
@@ -16,6 +17,7 @@ from mqtt_helper import g_mqtt
 class GobotVision():
     def __init__(self):
         '''
+        Overview of origin_image.
         '''
         self.__chessboard_vision = ChessboardVision()
         config = self.__chessboard_vision.get_4_aruco_marks_config()
@@ -83,7 +85,12 @@ class GobotVision():
         Top level of get layout.
         return layout, stable_depth
         '''
-        board_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
+        grid_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
+        x0 = chessboard_config.crop_x0
+        x1 = x0 + chessboard_config.crop_width
+        y0 = chessboard_config.crop_y0
+        y1 = y0 + chessboard_config.crop_height
+        board_image = grid_image[y0:y1, x0:x1]
         if app_config.publish_mqtt:
             g_mqtt.publish_cv_image('gobot/image/board',board_image)
         if board_image is None:

@@ -20,8 +20,12 @@ class config_4_aruco_marks:
     bottom_right_id = 34
     bottom_left_id = 21
     top_left_id = 15
-    width = 428
-    height = 428
+    perspected_width = 428 + 50
+    perspected_height = 428 + 80
+    crop_x0 = 30
+    crop_y0 = 40
+    crop_width = 428
+    crop_height = 428
     
 
 
@@ -31,6 +35,7 @@ class ChessboardVision():
         Main content:
             1. Know Aruco config of chessboard
             2. Generate layout from chessboard_image
+            3. Never touch with origin_image! 
         '''
         self.layout = self.create_blank_layout()
 

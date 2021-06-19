@@ -28,8 +28,8 @@ class GridFinder():
         if aruco_config.name=='CHESSBOARD_ARUCO_CONFIG':
             #print('44444')
             aruco_ids = [aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id, aruco_config.top_left_id]
-            self.__area_width = aruco_config.width
-            self.__area_height = aruco_config.height
+            self.__pespected_width = aruco_config.pespected_width
+            self.__perspected_height = aruco_config.perspected_height
         elif aruco_config.name == 'COMMANDER_ARUCO_CONFIG':
             #print('222222222')
             aruco_ids = [aruco_config.right_id, aruco_config.left_id]
@@ -148,8 +148,8 @@ class GridFinder():
 
     def get_perspective_view(self, img, pts):
         # specify desired output size 
-        width = self.__area_width
-        height = self.__area_height
+        width = self.__perspected_width
+        height = self.__perspected_height
 
         # specify conjugate x,y coordinates (not y,x)
         input = np.float32(pts)
