@@ -20,12 +20,12 @@ class config_4_aruco_marks:
     bottom_right_id = 34
     bottom_left_id = 21
     top_left_id = 15
-    perspected_width = 428 + 12
-    perspected_height = 428 + 22 
-    crop_x0 = 13
-    crop_y0 = 13
-    crop_width = 428
-    crop_height = 428
+    perspected_width = 428 + 12  # Effect the right edge
+    perspected_height = 428 + 22   # effect the bottom edge
+    crop_x0 = 13   # effect the left edge
+    crop_y0 = 13   # effect the top edge.
+    crop_width = 428   # Don't modify this value
+    crop_height = 428  # Don't modify this value.
     
 
 

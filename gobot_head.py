@@ -28,7 +28,7 @@ class GobotHead():
         self.__BG_BLUE = TerminalFont.Color.Background.blue
         self.__FC_RESET = TerminalFont.Color.Control.reset
         self.__MARK_STABLE_DEPTH = 5
-        self.__LAYOUT_STABLE_DEPTH = 5
+        self.__LAYOUT_STABLE_DEPTH = 3
 
 
     def get_stable_layout(self,min_stable_depth):
