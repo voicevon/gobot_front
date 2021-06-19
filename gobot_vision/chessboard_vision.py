@@ -1,6 +1,6 @@
 from gobot_vision.cell_scanner import CellScanner
 from gogame.chessboard import ChessboardLayout
-from gogame.chessboard_cell import ChessboardCell
+from gogame.chessboard_cell import ChessboardCell, Stone
 from config import config as app_config
 import cv2
 import numpy
@@ -9,9 +9,9 @@ sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
 
-BLANK = 0
-WHITE_STONE = 1
-BLACK_STONE = 2
+# BLANK = 0
+# WHITE_STONE = 1
+# BLACK_STONE = 2
 
 
 class config_4_aruco_marks:
@@ -46,14 +46,14 @@ class ChessboardVision():
         self.__history_length = 0 
         # self.__diffs = []
 
-        self.__BLANK = app_config.game_rule.cell_color.blank
-        self.__BLACK = app_config.game_rule.cell_color.black
-        self.__WHITE = app_config.game_rule.cell_color.white
-        self.__ROWS = app_config.game_rule.board_size.row 
-        self.__COLS = app_config.game_rule.board_size.col
+        self.__BLANK = Stone.BLANK
+        self.__BLACK = Stone.BLACK
+        self.__WHITE = Stone.WHITE
+        self.__ROWS = 19
+        self.__COLS = 19
 
-        self.__SPACE_X = app_config.robot_eye.cell_scanner.dimension.cell_space_x
-        self.__SPACE_Y = app_config.robot_eye.cell_scanner.dimension.cell_space_y
+        self.__SPACE_X = 22
+        self.__SPACE_Y = 22
         self.__VIEW_RANGE = 1.6
 
         self.__inspect_cell =  ChessboardCell()

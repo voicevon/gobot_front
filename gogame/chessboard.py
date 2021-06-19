@@ -26,9 +26,9 @@ class ChessboardLayout(GridLayout):
         self._ROWS = 19
         self._COLS = 19
         
-        self._BLANK = Stone.Blank
-        self._BLACK = Stone.Black
-        self._WHITE = Stone.White
+        self._BLANK = Stone.BLANK
+        self._BLACK = Stone.BLACK
+        self._WHITE = Stone.WHITE
 
 
         self._FC_YELLOW = TerminalFont.Color.Fore.yellow
