@@ -23,6 +23,7 @@ class MonoEye():
         self.__mtx = mtx
         self.__dist = dist
         self.__CALIBRATION_IMAGE_PATH = './camera_calibration_images/'
+        self.__show_debug_info = False
 
     def take_picture(self, do_undistort=True):
         rawCapture = PiRGBArray(self.__camera)
@@ -30,9 +31,12 @@ class MonoEye():
         self.__camera.capture(rawCapture, format="bgr")
         image = rawCapture.array
         if do_undistort:
-            print('start undistortion')
-            image22 = cv2.undistort(image, self.__mtx, self.__dist, None, None)
-            print('...... end undistortion')
+            if self.__show_debug_info:
+                print('RobotEye.take_picture()   start undistortion')
+            undistort_image = cv2.undistort(image, self.__mtx, self.__dist, None, None)
+            if self.__show_debug_info:
+                print('...... end undistortion')
+            return undistort_image
         return image
 
     def take_batch_picture_for_calibration(self):
@@ -136,9 +140,9 @@ class MonoEye():
     def load_coefficients(self, path):
         '''Loads camera matrix and distortion coefficients.'''
         # FILE_STORAGE_READ
-        print('path',path)
+        print('RobotEye.load_coefficients()  path=',path)
         cv_file = cv2.FileStorage('vision/'+path, cv2.FILE_STORAGE_READ)
-        print ('cv_file', cv_file)
+        #print ('cv_file', cv_file)
 
         # note we also have to specify the type to retrieve other wise we only get a
         # FileNode object back instead of a matrix
@@ -146,7 +150,7 @@ class MonoEye():
         dist_matrix = cv_file.getNode('D').mat()
 
         cv_file.release()
-        print (camera_matrix, dist_matrix)
+        print ('RobotEye ---- Camera calibration data:', camera_matrix, dist_matrix)
         return [camera_matrix, dist_matrix]
 
     def recalibrate_and_save_coefficients(self):

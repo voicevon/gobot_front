@@ -91,7 +91,7 @@ class GobotVision():
             return None, 0
 
         layout, stable_depth = self.__chessboard_vision.start_scan(board_image,3,True)
-        layout.printout()
+        layout.print_out()
         return layout, stable_depth
 
     def get_warehouse_plate(self):

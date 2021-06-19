@@ -20,8 +20,8 @@ class config_4_aruco_marks:
     bottom_right_id = 34
     bottom_left_id = 21
     top_left_id = 15
-    width = 640
-    height = 640
+    width = 428
+    height = 428
     
 
 
@@ -119,15 +119,15 @@ class ChessboardVision():
 
         if self.__debug_chessboard_lines:
             lined_image = img_board.copy()
-            line_color = cv2.color(255,255,0)
+            line_color = (255,255,0)
             pen_width = 2
             for row in range(0,self.__ROWS):
-                y = row * self.__SPACE_Y + self.__SPACE_Y / 2
+                y = int(row * self.__SPACE_Y + self.__SPACE_Y / 2)
                 x1 = 0
-                x2 = 19 * self.__SPACE_X
+                x2 = int(19 * self.__SPACE_X)
                 cv2.line(lined_image, (x1,y),(x2,y), line_color, pen_width)
             for col in range(0,self.__COLS):
-                x = col * self.__SPACE_X + self.__SPACE_X / 2
+                x = int(col * self.__SPACE_X + self.__SPACE_X / 2)
                 y1 = 0
                 y2 = 19 * self.__SPACE_Y
                 cv2.line(lined_image, (x,y1),(x,y2), line_color, pen_width)

@@ -52,8 +52,8 @@ class GridFinder():
         arucoParams = cv2.aruco.DetectorParameters_create()
         corners, ids, rejected = cv2.aruco.detectMarkers(image, arucoDict, parameters=arucoParams)
         # result = []
-        print('double check target ids ',self.__mark_ids)
-        print('found ids ', ids)
+        print('GridFinder.find_corners()  double check target ids ',self.__mark_ids)
+        print('GridFinder.find_corners()  found ids ', ids)
         result = []
         # verify *at least* one ArUco marker was detected
         if len(corners) >= len(self.__mark_ids):
@@ -65,11 +65,11 @@ class GridFinder():
             ids = ids.flatten()
             current_corner_index = 1
             for target_id in self.__mark_ids:
-                print('----------------Searching.... ', target_id)
+                #print('----------------Searching.... ', target_id)
                 # loop over the detected ArUCo corners
                 for (markerCorner, markerID) in zip(corners, ids):
                     if target_id == markerID:
-                        print('got matched id', target_id)
+                        #print('got matched id', target_id)
                         # extract the marker corners (which are always returned in order of:
                         #   [top-left, top-right, bottom-right, and bottom-left]
                         corners2 = markerCorner.reshape((4, 2))
