@@ -5,7 +5,8 @@ import numpy as np
 from vision.robot_eye import MonoEye
 from gobot_vision.gobot_vision import GobotVision
 from config import config as app_config
-
+from gogame.chessboard_cell import Stone
+from gogame.chessboard import ChessboardLayout
 import sys
 sys.path.append("/home/pi/pylib")
 from terminal_font import TerminalFont
@@ -20,15 +21,15 @@ class GobotHead():
     def __init__(self):
         self.__eye = MonoEye('2021-0611.yml')
         self.__vision = GobotVision()
-
+        self.__arm = 
         self.__goto = self.at_state_game_over
-
+        self.__target_demo_layout = ChessboardLayout('Demo Layout')
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__BG_BLUE = TerminalFont.Color.Background.blue
         self.__FC_RESET = TerminalFont.Color.Control.reset
         self.__MARK_STABLE_DEPTH = 5
-        self.__LAYOUT_STABLE_DEPTH = 3
+        self.__LAYOUT_STABLE_DEPTH = 2
 
 
     def get_stable_layout(self,min_stable_depth):
@@ -330,15 +331,15 @@ class GobotHead():
 
         # Got dedicate stable layout
         layout.print_out()
-        cell = layout.get_first_cell(self.__BLACK)
+        cell = layout.get_first_cell(Stone.BLACK)
         if cell is not None:
             print('First black cell = %s' % cell.name)
             # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, self.__BLACK)
             id_black = cell.id
-            self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, self.__BLACK)
-            cell = layout.get_first_cell(self.__WHITE)
+            self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, Stone.BLACK)
+            cell = layout.get_first_cell(Stone.WHITE)
             if cell is not None:
-                self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, self.__WHITE)
+                self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, Stone.WHITE)
                 print('First white cell = %s' % cell.name)
                 # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, self.__WHITE)
                 id_white = cell.id
@@ -350,7 +351,7 @@ class GobotHead():
                     cell.from_id(i)
                     cell_color = layout.get_cell_color_col_row(cell.col_id, cell.row_id)
                     self.__arm.action_pickup_chess_from_a_cell(cell.name)
-                    self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, self.__BLANK)
+                    self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, Stone.BLANK)
                     cell.from_id(i+2)
                     self.__arm.action_place_chess_to_a_cell(cell.name,auto_park=do_vision_check)
                     self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, cell_color)
@@ -363,10 +364,10 @@ class GobotHead():
                             key = raw_input ('Test failed! Please check')
                 self.__arm.action_pickup_chess_from_a_cell('B19')
                 self.__arm.action_place_chess_to_trash_bin(park_to_view_point=False)
-                self.__target_demo_layout.set_cell_value_from_name('B19',self.__BLANK)
+                self.__target_demo_layout.set_cell_value_from_name('B19',Stone.BLANK)
                 self.__arm.action_pickup_chess_from_a_cell('A19')
                 self.__arm.action_place_chess_to_trash_bin(park_to_view_point=True)
-                self.__target_demo_layout.set_cell_value_from_name('A19',self.__BLANK)
+                self.__target_demo_layout.set_cell_value_from_name('A19',Stone.BLANK)
                 
         self.__goto = self.at_state_game_over
 
