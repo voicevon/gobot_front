@@ -3,7 +3,7 @@ import cv2
 import numpy
 
 import time
-
+from gogame.chessboard_cell import Stone
 from config import config as app_config
 import sys
 sys.path.append('/home/pi/pylib')
@@ -20,9 +20,9 @@ class CellScanner():
         self.__board_mean = board_mean
         self.__ROWS = app_config.game_rule.board_size.row
         self.__COLS = app_config.game_rule.board_size.col
-        self.__BLANK = app_config.game_rule.cell_color.blank
-        self.__BLACK = app_config.game_rule.cell_color.black
-        self.__WHITE = app_config.game_rule.cell_color.white
+        self.__BLANK = Stone.BLANK
+        self.__BLACK = Stone.BLACK
+        self.__WHITE = Stone.WHITE
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__FC_RESET = TerminalFont.Color.Control.reset

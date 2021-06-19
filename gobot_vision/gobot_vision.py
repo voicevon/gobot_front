@@ -2,7 +2,7 @@ from gogame.chessboard import ChessboardLayout
 from gobot_vision.commander_vision import CommanderVision
 from gobot_vision.commander import Commander
 from vision.grid_finder import GridFinder
-from gobot_vision.chessboard_vision import BLACK_STONE, ChessboardVision, config_4_aruco_marks
+from gobot_vision.chessboard_vision import ChessboardVision, config_4_aruco_marks
 from gobot_vision.warehouse_vision import WarehouseVision
 import cv2
 import numpy as np

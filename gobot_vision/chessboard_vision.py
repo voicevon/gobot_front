@@ -117,7 +117,7 @@ class ChessboardVision():
         '''
         self.__history_length = history_length
         detected_layout = ChessboardLayout('Detected layout')
-
+       # detected_layout.print_out()
         board_gray = cv2.cvtColor(img_board, cv2.COLOR_BGR2GRAY)
         board_brightness = numpy.mean(board_gray)
         # print('board_brightness()= %d' %board_brightness)
@@ -174,6 +174,8 @@ class ChessboardVision():
         stable_depth = self.__append_to_history(detected_layout)
         # if app_config.robot_eye.layout_scanner.show_scan_image:
         #     self.__show_debug(img_board,stable_depth)
+
+        #self.__history[-1].print_out()
 
         return self.__history[-1], stable_depth
 

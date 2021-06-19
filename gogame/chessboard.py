@@ -115,9 +115,9 @@ class ChessboardLayout(GridLayout):
         '''
         diffs = []
         cell = ChessboardCell()
-        my_cell_color = target_cell_color = self.__BLANK
+        my_cell_color = target_cell_color = self._BLANK
 
-        int_to_char = {self.__BLANK:'. ',self._BLACK:'X ', self._WHITE:'O '}
+        int_to_char = {self._BLANK:'. ',self._BLACK:'X ', self._WHITE:'O '}
         if do_print_out:
             title = self._FC_RESET + '       ' 
             title += self._BG_RED + self._FC_YELLOW + self.name 
@@ -193,7 +193,7 @@ class ChessboardLayout(GridLayout):
     def print_out(self):
         #print('print_out(),   on debugging....')
         #return 
-        int_to_char = {self.__BLANK:'. ',self._BLACK:'X ', self._WHITE:'O ',}
+        int_to_char = {self._BLANK:'. ',self._BLACK:'X ', self._WHITE:'O ',}
         print(self._FC_YELLOW + self.name)
         cell = ChessboardCell()
         # print column name on table head
@@ -209,6 +209,8 @@ class ChessboardLayout(GridLayout):
             col_string = ''
             for col_id in range(0,self._COLS, 1):
                 #print('------------- col_id, row_id', col_id, row_id)
+                #key = self._layout_array[18 - col_id][18-row_id]
+                #print('key=',key)
                 col_string += int_to_char[self._layout_array[18 - col_id][18 - row_id]]
             row_string = "%02d" % rowNum + '  '
             print(self._FC_YELLOW + row_string + self._FC_RESET + col_string + self._FC_YELLOW + row_string)
