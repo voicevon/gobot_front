@@ -36,6 +36,7 @@ class GobotVision():
             # Simpler solution, faster, might be less stable
             self.__commander = Commander()
 
+        self.__publish_image = False
 
 
     def get_stable_level (self, layout_history):
@@ -83,15 +84,17 @@ class GobotVision():
     def get_chessboard_layout(self, origin_image):
         '''
         Top level of get layout.
-        return layout, stable_depth
+        return layout, stable_depth. if stable_depth <= 0 , is saying can not get board image.
         '''
         perspective_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
+        if perspective_image is None:
+            return None, -1
         x0 = chessboard_config.crop_x0
         x1 = x0 + chessboard_config.crop_width
         y0 = chessboard_config.crop_y0
         y1 = y0 + chessboard_config.crop_height
         board_image = perspective_image[y0:y1, x0:x1]
-        if app_config.publish_mqtt:
+        if self.__publish_image:
             g_mqtt.publish_cv_image('gobot/image/board/pespective', perspective_image)
             g_mqtt.publish_cv_image('gobot/image/board', board_image)
         if board_image is None:
@@ -99,7 +102,8 @@ class GobotVision():
             return None, 0
 
         layout, stable_depth = self.__chessboard_vision.start_scan(board_image,3,True)
-        layout.print_out()
+            #::wqlayout.print_out() 
+        #print ('Stable Depth of the layout ', stable_depth)
         return layout, stable_depth
 
     def get_warehouse_plate(self):

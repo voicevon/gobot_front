@@ -320,6 +320,11 @@ class GobotHead():
     def at_demo_mover(self):  # Must be no arguiment function for self.__goto
         do_vision_check = app_config.mainloop.at_demo_mover.do_vision_check
         layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
+        if stable_depth <=0:
+            print('Can NOT detect chessboard image ')
+            return
+        layout.print_out()
+        print('Stable depth = ',stable_depth)
         if stable_depth < self.__LAYOUT_STABLE_DEPTH:
             return 
 

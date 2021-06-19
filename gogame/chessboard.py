@@ -214,7 +214,7 @@ class ChessboardLayout(GridLayout):
                 col_string += int_to_char[self._layout_array[18 - col_id][18 - row_id]]
             row_string = "%02d" % rowNum + '  '
             print(self._FC_YELLOW + row_string + self._FC_RESET + col_string + self._FC_YELLOW + row_string)
-        print(self._FC_YELLOW + header)
+        print(self._FC_YELLOW + header + self._FC_RESET)
 
 
 
