@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/home/pi/gobot_front')
 
 from vision.grid_layout import GridLayout
 from gogame.chessboard_cell import ChessboardCell
@@ -194,15 +196,16 @@ class ChessboardLayout(GridLayout):
         cell = ChessboardCell()
         # print column name on table head
         header = '    '
-        for col_id in range (self._COLS,-1,-1):
+        for col_id in range (self._COLS, -1, -1):
             cell.from_col_row_id(col_id=col_id, row_id=1)
             header += cell.col_letter + ' '
         print(self._FC_YELLOW + header)
         # print layout row by row
-        for row_id in range(0, self._ROWS):
+        for row_id in range(0, self._ROWS, 1):
             rowNum = self._ROWS - row_id
             col_string = ''
-            for col_id in range(0,self._COLS):
+            for col_id in range(0,self._COLS, 1):
+                # print('------------- col_id, row_id', col_id, row_id)
                 col_string += int_to_char[self._layout_array[18 - col_id][18 - row_id]]
             row_string = "%02d" % rowNum + '  '
             print(self._FC_YELLOW + row_string + self._FC_RESET + col_string + self._FC_YELLOW + row_string)
@@ -217,7 +220,7 @@ if __name__ == "__main__":
     test1.print_out()
     cell = test1.get_first_cell(app.game_rule.cell_color.black) 
     cell = ChessboardCell()
-    # cell.from_col_row_id(x,y)
+    cell.from_col_row_id(x,y)
     print('x=%d, y=%d, name=%s' %(cell.col_id, cell.row_id, cell.name))
 
 

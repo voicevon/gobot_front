@@ -7,7 +7,7 @@ from gobot_vision.warehouse_vision import WarehouseVision
 import cv2
 import numpy as np
 from config import config as app_config
-from chessboard_vision import config_4_aruco_marks as chessboard_config
+from gobot_vision.chessboard_vision import config_4_aruco_marks as chessboard_config
 import sys
 sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
