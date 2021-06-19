@@ -4,9 +4,11 @@ import numpy as np
 
 from vision.robot_eye import MonoEye
 from gobot_vision.gobot_vision import GobotVision
-from config import config as app_config
 from gogame.chessboard_cell import Stone
 from gogame.chessboard import ChessboardLayout
+from gobot_arm.human_level_robot import HumanLevel_RobotArm
+from config import config as app_config
+
 import sys
 sys.path.append("/home/pi/pylib")
 from terminal_font import TerminalFont
@@ -21,7 +23,7 @@ class GobotHead():
     def __init__(self):
         self.__eye = MonoEye('2021-0611.yml')
         self.__vision = GobotVision()
-        self.__arm = 
+        self.__arm = HumanLevel_RobotArm()
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
 
