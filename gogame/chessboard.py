@@ -26,9 +26,9 @@ class ChessboardLayout(GridLayout):
         self._ROWS = 19
         self._COLS = 19
         
-        self.__BLANK = 0
-        self._BLACK = 1
-        self._WHITE = 2
+        self._BLANK = Stone.Blank
+        self._BLACK = Stone.Black
+        self._WHITE = Stone.White
 
 
         self._FC_YELLOW = TerminalFont.Color.Fore.yellow
@@ -191,6 +191,8 @@ class ChessboardLayout(GridLayout):
         # return total,cell.name ,my_cell_color, target_cell_color
     
     def print_out(self):
+        #print('print_out(),   on debugging....')
+        #return 
         int_to_char = {self.__BLANK:'. ',self._BLACK:'X ', self._WHITE:'O ',}
         print(self._FC_YELLOW + self.name)
         cell = ChessboardCell()
@@ -201,11 +203,12 @@ class ChessboardLayout(GridLayout):
             header += cell.col_letter + ' '
         print(self._FC_YELLOW + header)
         # print layout row by row
+        #print (self._layout_array)
         for row_id in range(0, self._ROWS, 1):
             rowNum = self._ROWS - row_id
             col_string = ''
             for col_id in range(0,self._COLS, 1):
-                # print('------------- col_id, row_id', col_id, row_id)
+                #print('------------- col_id, row_id', col_id, row_id)
                 col_string += int_to_char[self._layout_array[18 - col_id][18 - row_id]]
             row_string = "%02d" % rowNum + '  '
             print(self._FC_YELLOW + row_string + self._FC_RESET + col_string + self._FC_YELLOW + row_string)
@@ -220,6 +223,8 @@ if __name__ == "__main__":
     test1.print_out()
     cell = test1.get_first_cell(Stone.BLACK) 
     cell = ChessboardCell()
+    x= 18
+    y= 18
     cell.from_col_row_id(x,y)
     print('x=%d, y=%d, name=%s' %(cell.col_id, cell.row_id, cell.name))
 

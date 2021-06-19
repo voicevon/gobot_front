@@ -27,7 +27,7 @@ class GridFinder():
         print(aruco_config.name)
         if aruco_config.name=='CHESSBOARD_ARUCO_CONFIG':
             #print('44444')
-            aruco_ids = [aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id, aruco_config.top_left_id]
+            aruco_ids = [aruco_config.top_left_id, aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id]
             self.__perspected_width = aruco_config.perspected_width
             self.__perspected_height = aruco_config.perspected_height
         elif aruco_config.name == 'COMMANDER_ARUCO_CONFIG':
@@ -81,17 +81,17 @@ class GridFinder():
                         topLeft = (int(topLeft[0]), int(topLeft[1]))    
                         if len(self.__mark_ids) == 4:
                             if current_corner_index == 1:
-                                # top right corner of the plate, we take bottom right point of the marker.
-                                result.append(bottomRight)
+                                # top left corner of the plate, we take bottom right point of the marker.
+                                result.append(bottomLeft)
                             if current_corner_index == 2:
                                 # bottom right corner of the plate, we take top right point of the marker.
-                                result.append(topRight)
+                                result.append(bottomRight)
                             if current_corner_index == 3:
                                 # bottom left corner of the plate, we take top left point of the marker
-                                result.append(topLeft)
+                                result.append(topRight)
                             if current_corner_index == 4:
                                 # top left corner of the plate, we take top bottom point of the marker
-                                result.append(bottomLeft)
+                                result.append(topLeft)
 
                         if len(self.__mark_ids) == 2:
                             # keep the result in anticlockwise.
@@ -106,7 +106,7 @@ class GridFinder():
 
 
                         # print("[INFO] ArUco marker ID: {}".format(markerID))
-                        current_corner_index += 1
+                        # current_corner_index += 1
 
                         if config.publish_mqtt:
                             # compute and draw the center (x, y) - coordinates of the ArUco marker
@@ -114,12 +114,16 @@ class GridFinder():
                             cY = int((topLeft[1] + bottomRight[1]) / 2.0)
                             # print('markid=', markerID, 'center=', (cX, cY),topLeft, bottomRight, bottomLeft, topLeft)
                             # draw the bounding box of the ArUCo detection
-                            color_green = (0,255,0)
-                            pen_thickness = 2
-                            cv2.line(debug_image, topLeft, topRight, color_green, pen_thickness)
-                            cv2.line(debug_image, topRight, bottomRight, color_green, pen_thickness)
-                            cv2.line(debug_image, bottomRight, bottomLeft, color_green, pen_thickness)
-                            cv2.line(debug_image, bottomLeft, topLeft, color_green, pen_thickness)
+                            if current_corner_index == 1:
+                                color = (0,0,255)
+                                pen_thickness = 5
+                            else:
+                                color = (0,255,0)
+                                pen_thickness = 2
+                            cv2.line(debug_image, topLeft, topRight, color, pen_thickness)
+                            cv2.line(debug_image, topRight, bottomRight, color, pen_thickness)
+                            cv2.line(debug_image, bottomRight, bottomLeft, color, pen_thickness)
+                            cv2.line(debug_image, bottomLeft, topLeft, color, pen_thickness)
 
                             cv2.circle(debug_image, (cX, cY), 4, (0, 0, 255), -1)
                             # draw the ArUco marker ID on the image
@@ -141,6 +145,7 @@ class GridFinder():
 
                             # image = cv2.aruco.drawMarker(cv2.aruco.DICT_4X4_1000,)
                             # image = self.draw_axis_2(image, corners)
+                        current_corner_index += 1
             if config.publish_mqtt:
                 g_mqtt.publish_cv_image('gobot/image/grid/aruco', debug_image)
         return result

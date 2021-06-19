@@ -85,14 +85,15 @@ class GobotVision():
         Top level of get layout.
         return layout, stable_depth
         '''
-        grid_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
+        perspective_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
         x0 = chessboard_config.crop_x0
         x1 = x0 + chessboard_config.crop_width
         y0 = chessboard_config.crop_y0
         y1 = y0 + chessboard_config.crop_height
-        board_image = grid_image[y0:y1, x0:x1]
+        board_image = perspective_image[y0:y1, x0:x1]
         if app_config.publish_mqtt:
-            g_mqtt.publish_cv_image('gobot/image/board',board_image)
+            g_mqtt.publish_cv_image('gobot/image/board/pespective', perspective_image)
+            g_mqtt.publish_cv_image('gobot/image/board', board_image)
         if board_image is None:
             print('GobotVision.get_chessboard_layout()  Can NOT detect chessboard grid from origin_image')
             return None, 0

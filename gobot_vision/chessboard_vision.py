@@ -20,10 +20,10 @@ class config_4_aruco_marks:
     bottom_right_id = 34
     bottom_left_id = 21
     top_left_id = 15
-    perspected_width = 428 + 50
-    perspected_height = 428 + 80
-    crop_x0 = 30
-    crop_y0 = 40
+    perspected_width = 428 + 12
+    perspected_height = 428 + 22 
+    crop_x0 = 13
+    crop_y0 = 13
     crop_width = 428
     crop_height = 428
     
@@ -125,7 +125,7 @@ class ChessboardVision():
         if self.__debug_chessboard_lines:
             lined_image = img_board.copy()
             line_color = (255,255,0)
-            pen_width = 2
+            pen_width = 1
             for row in range(0,self.__ROWS):
                 y = int(row * self.__SPACE_Y + self.__SPACE_Y / 2)
                 x1 = 0
