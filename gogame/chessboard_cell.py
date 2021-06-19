@@ -1,4 +1,11 @@
 
+class Stone:
+    '''
+    descript a cell (of the chessboard_layout) value.
+    '''
+    BLANK = 0
+    WHITE = 1
+    BLACK = 2
 
 class ChessboardCell():
     
@@ -40,6 +47,7 @@ class ChessboardCell():
     
     def from_name(self,name):
         # print('For very rare bug..... cell name = %s' %name)
+        # 'resign' and 'pass' is the cell name from AI_Player( Proofed in 'PoenixGo')
         if name=='resign':
             xx= raw_input ('computer_playing, cell_name="resign", press enter to continue')
             return None
@@ -48,7 +56,7 @@ class ChessboardCell():
             return None
         col_id = 18 - self.__col_name_list.find(name[:1])
         row_id = int(name[1:]) -1    # exeption here:
-        self.from_col_row_id(col_id,row_id)
+        self.from_col_row_id(col_id, row_id)
         return self
     
     def to_diction(self):

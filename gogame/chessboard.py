@@ -2,7 +2,7 @@ import sys
 sys.path.append('/home/pi/gobot_front')
 
 from vision.grid_layout import GridLayout
-from gogame.chessboard_cell import ChessboardCell
+from gogame.chessboard_cell import ChessboardCell, Stone
 import sys
 sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
@@ -19,7 +19,7 @@ class ChessboardLayout(GridLayout):
             3. Calculate died area.
 
         When we deal with a batch of ChessboardLayouts,
-            A name do help.
+            A chessboard.name does help.
         '''
         self.name = name
 
@@ -61,7 +61,7 @@ class ChessboardLayout(GridLayout):
         cell.from_col_row_id(col_id=col_id, row_id=row_id)
         self.play(cell.name, color_code)
 
-    def play(self, cell_name, color_code):
+    def play(self, cell_name, stone_color):
         # print('[Info] ChessBoard.play(cell_name=%s,color=%s)' %(cell_name,color))
         cell = ChessboardCell()
         cell.from_name(cell_name)
@@ -72,7 +72,7 @@ class ChessboardLayout(GridLayout):
         #     value = self._WHITE
         # else:
         #     logging.info('ChessBoard.play(cell_name=%s,color=%s)' %(cell_name,color))
-        self._layout_array[cell.col_id][cell.row_id] = color_code
+        self._layout_array[cell.col_id][cell.row_id] = stone_color
 
 
     def get_cell_color(self, cell):
@@ -83,7 +83,7 @@ class ChessboardLayout(GridLayout):
     def get_cell_color_col_row(self, col_id, row_id):
         return self._layout_array[col_id][row_id]
     
-    def get_first_cell(self, target_color):
+    def get_first_cell(self, target_stone_color):
         '''
         return:
             (x,y) is the target position
@@ -92,8 +92,8 @@ class ChessboardLayout(GridLayout):
         cell = ChessboardCell()
         for row_id in range(0, self._ROWS):
             for col_id in range(0, self._COLS):
-                if self._layout_array[col_id][row_id] == target_color:
-                    cell.from_col_row_id(col_id,row_id)
+                if self._layout_array[col_id][row_id] == target_stone_color:
+                    cell.from_col_row_id(col_id, row_id)
                     return cell
         return None
 
@@ -216,17 +216,17 @@ class ChessboardLayout(GridLayout):
     
 if __name__ == "__main__":
     test1 = ChessboardLayout('Test1')
-    test1.play('T19',app.game_rule.cell_color.black)
+    test1.play('T19',Stone.BLACK)
     test1.print_out()
-    cell = test1.get_first_cell(app.game_rule.cell_color.black) 
+    cell = test1.get_first_cell(Stone.BLACK) 
     cell = ChessboardCell()
     cell.from_col_row_id(x,y)
     print('x=%d, y=%d, name=%s' %(cell.col_id, cell.row_id, cell.name))
 
 
     test2 = ChessboardLayout('Test2')
-    test2.play('T19',app.game_rule.cell_color.black)
-    test2.play('K10',app.game_rule.cell_color.white)
+    test2.play('T19',Stone.BLACK)
+    test2.play('K10',Stone.WHITE)
     x = test2.compare_with(test1,do_print_out=True)
     print (x)  
     
