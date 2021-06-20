@@ -11,30 +11,31 @@ class gobot_arm():
         x = 1
         y = 1
     class placedown_at:
+        lower_release = True
         x = 2
         y = 2
     class park_at:
+        do_parking = True
         x = 3
         y = 3 
-    lower_release = True
-    do_parking = True
-    arm_status = False
 
     def __init__(self):
         self.__last_action = 0
 
-    def do(self, action):
+    def do(self, action_code):
         '''
-        action == 0: do nothing
-        action == 1: pickup and place , and parking 
-        action == 2: pickup and place
-        action == 3: park directly
-        action == 7: home_x
-        action == 8: home_y
-        action == 9: query arm status
+        action == 0: do nothing. 
+                        Setting by head
+                == 1: do nothing
+                        Setting by arm
+        action == 2: pickup and place , and parking
+        action == 4: pickup and place
+        action == 6: park directly
+        action == 8: home_x
+        action == 10: home_y
+        action == 12: query arm status
         '''
 
         # put action command to BLE buffer
-        ble_write(action)
-        # https://www.youtube.com/watch?v=olU8ICQgG94
+        ble_write(action_code)
 
