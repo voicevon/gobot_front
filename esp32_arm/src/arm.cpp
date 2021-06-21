@@ -34,10 +34,20 @@ void Arm::Home(unsigned char axis){
   } while (homed);
 }
 
+motor_position Arm::ik(int x, int y){
+  motor_position pos;
+  pos.alpha = x;
+  pos.beta = y;
+  return pos;
+}
+
+
 void Arm::pick_place_park(ArmAction arm_action){
   long positions[2];
-  positions[0] = arm_action.pickup_x;
-  positions[1] = arm_action.pickup_y;
+  motor_position pos = ik(arm_action.pickup_x, arm_action.pickup_y);
+
+  positions[0] = pos.alpha;
+  positions[1] = pos.beta;
 
   steppers.moveTo(positions);
 }
