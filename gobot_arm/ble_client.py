@@ -1,6 +1,7 @@
 from bluepy import btle
 from bluepy.btle import Scanner
 from bluepy.btle import Peripheral, DefaultDelegate
+import time
 
 class MyDelegate(DefaultDelegate):
     def __init__(self):
@@ -36,9 +37,12 @@ class ble():
         #        self.p = Peripheral(self.__server_mac, addrType=ADDR_TYPE_PUBLIC)
         #self.p = Peripheral(self.__server_mac)
         self.dev.setDelegate(MyDelegate())
-        svc = self.dev.getServicesByUUID('4fafc201-1fb5-459e-8fcc-c5c9c331914b')
-        ch = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')
-        print('Connected') 
+        svc = self.dev.getServiceByUUID('4fafc201-1fb5-459e-8fcc-c5c9c331914b')
+        self.ch = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[0]
+        print('Connected')
+        info = bytes('123\n', encoding='utf8') 
+        self.ch.write(info)
+        print('=====================')
 
 
 
@@ -47,6 +51,10 @@ class ble():
     
     def spin(self):
         while True:
+            xx = self.ch.read()
+            print(xx)
+            self.ch.write(bytes('ppp',encoding='utf8'))
+            time.sleep(1.7)
             pass
 
 if __name__ =='__main__':
