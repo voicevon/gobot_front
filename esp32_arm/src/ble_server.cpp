@@ -48,7 +48,7 @@ void BleServer::UpdateActionCode(unsigned char new_code){
 
 
 void BleServer::SpinOnce() {
-  i=0;
+  int i=0;
   // put your main code here, to run repeatedly:
   std::string value = pCharacteristic->getValue();
   Serial.print("The new characteristic value is: ");
