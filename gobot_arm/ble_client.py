@@ -13,8 +13,7 @@ class MyDelegate(DefaultDelegate):
 class ble():
     def __init__(self):
         self.__server_mac = 'b4:e6:2d:b2:f8:8f'
-        #:w
-        #self.__n
+        self.dev = btle.Peripheral(self.__server_mac)
 
     def scan(self):
         scanner = Scanner()
@@ -25,7 +24,6 @@ class ble():
             print('Address:', dev.addr)
 
     def list_services_on_server(self):
-        self.dev = btle.Peripheral(self.__server_mac)
         print('Services on server  ------------------')
         for svc in self.dev.services:
             print(str(svc))
@@ -33,27 +31,28 @@ class ble():
     
 
     def connect_to_server(self):
-        print('Connect to server--------------------' )
-        #        self.p = Peripheral(self.__server_mac, addrType=ADDR_TYPE_PUBLIC)
-        #self.p = Peripheral(self.__server_mac)
-        self.dev.setDelegate(MyDelegate())
+        self.dev.withDelegate(MyDelegate())
         svc = self.dev.getServiceByUUID('4fafc201-1fb5-459e-8fcc-c5c9c331914b')
-        self.ch = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[0]
-        print('Connected')
-        info = bytes('123\n', encoding='utf8') 
-        self.ch.write(info)
-        print('=====================')
+        self.arm_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[0]
+        self.house_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[1]
 
 
 
-    def update_charactoreristic(self, new_value):
-        pass
+
+    def update_charactoreristic(self, channel, new_value):
+        if channel == 0:
+            ch = self.arm_info
+        if channel == 1:
+            ch = self.house_info
+        
+        ch.write(bytes(new_value))
     
     def spin(self):
         while True:
-            xx = self.ch.read()
-            print(xx)
-            self.ch.write(bytes('ppp',encoding='utf8'))
+            xx = self.arm_info.read()
+            print('arm info: ', xx)
+            yy = self.house_info.read()
+            print('house info: ',yy)
             time.sleep(1.7)
             pass
 
@@ -66,37 +65,6 @@ if __name__ =='__main__':
     runner.spin()
 
 
-
-
-#print ("Connecting...")
-#dev = btle.Peripheral("B0:B4:48:BF:C9:83")
-#dev =  btle.Peripheral('b4:e6:2d:b2:f8:8f')
-
-#print ("Services...")
-
-#for svc in dev.services:
-#    print (str(svc))
-if False:
-    lightSensor = btle.UUID("f000aa70-0451-4000-b000-000000000000")
- 
-    lightService = dev.getServiceByUUID(lightSensor)
-    for ch in lightService.getCharacteristics():
-         print (str(ch))
-
-    import time
-    import binascii
-    uuidConfig = btle.UUID("f000aa72-0451-4000-b000-000000000000")
-    lightSensorConfig = lightService.getCharacteristics(uuidConfig)[0]
-    # Enable the sensor
-    lightSensorConfig.write(bytes("\x01"))
-
-    time.sleep(1.0) # Allow sensor to stabilise
- 
-    uuidValue  = btle.UUID("f000aa71-0451-4000-b000-000000000000")
-    lightSensorValue = lightService.getCharacteristics(uuidValue)[0]
-    # Read the sensor
-    val = lightSensorValue.read()
-    print ("Light sensor raw value", binascii.b2a_hex(val))
 
 
 

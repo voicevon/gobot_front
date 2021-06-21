@@ -49,11 +49,12 @@ void loop() {
   std::string value = pCharacteristic->getValue();
   Serial.print("The new characteristic value is: ");
   Serial.println(value.c_str());
-  delay(2000);
   i++;
   if (i % 2 ==0)
     pCharacteristic->setValue("ABC");
   else
     pCharacteristic->setValue("123");
+    
+  delay(2000);
 
 }
