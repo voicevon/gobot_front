@@ -36,6 +36,8 @@ class ble():
         #        self.p = Peripheral(self.__server_mac, addrType=ADDR_TYPE_PUBLIC)
         #self.p = Peripheral(self.__server_mac)
         self.dev.setDelegate(MyDelegate())
+        svc = self.dev.getServicesByUUID('4fafc201-1fb5-459e-8fcc-c5c9c331914b')
+        ch = svc.getCharacteristics('')
         print('Connected') 
 
 
