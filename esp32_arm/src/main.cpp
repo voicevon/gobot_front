@@ -14,6 +14,10 @@
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
+// BLEServer *pServer;
+// BLEService *pService;
+BLECharacteristic *pCharacteristic;
+
 void setup() {
   Serial.begin(9600);
   Serial.println("Starting BLE work!");
@@ -21,7 +25,7 @@ void setup() {
   BLEDevice::init("gobot_esp_arm");
   BLEServer *pServer = BLEDevice::createServer();
   BLEService *pService = pServer->createService(SERVICE_UUID);
-  BLECharacteristic *pCharacteristic = pService->createCharacteristic(
+  pCharacteristic = pService->createCharacteristic(
                                          CHARACTERISTIC_UUID,
                                          BLECharacteristic::PROPERTY_READ |
                                          BLECharacteristic::PROPERTY_WRITE
@@ -39,7 +43,17 @@ void setup() {
   Serial.println("Characteristic defined! Now you can read it in your phone!");
 }
 
+int i=0;
 void loop() {
   // put your main code here, to run repeatedly:
+  std::string value = pCharacteristic->getValue();
+  Serial.print("The new characteristic value is: ");
+  Serial.println(value.c_str());
   delay(2000);
+  i++;
+  if (i % 2 ==0)
+    pCharacteristic->setValue("ABC");
+  else
+    pCharacteristic->setValue("123");
+
 }
