@@ -24,7 +24,7 @@ class gobot_arm():
 
     def do(self, action_code):
         '''
-        action == 0: do nothing. 
+        action == 0: do nothing. or last job is finished by esp32 
                         Setting by head
                 == 1: do nothing
                         Setting by arm
