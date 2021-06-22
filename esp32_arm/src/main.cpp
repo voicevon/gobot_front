@@ -15,13 +15,8 @@ void setup(){
   house.Init();
 }
 
-
-
-
-
-
-
 void loop(){
+
   ble_server.SpinOnce();
   arm.SpinOnce(ble_server.arm_action);
   house.SpinOnce(ble_server.house_action);

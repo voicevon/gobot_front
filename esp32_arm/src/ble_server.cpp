@@ -4,19 +4,10 @@
     updates by chegewara
 */
 
-#include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEServer.h>
-#include <Arduino.h>
+
 #include "ble_server.h"
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
-
-
-
-// BLEServer *pServer;
-// BLEService *pService;
-BLECharacteristic *pCharacteristic;
 
 
 void BleServer::Init() {
@@ -24,13 +15,15 @@ void BleServer::Init() {
   BLEDevice::init("gobot_esp_arm");
   BLEServer *pServer = BLEDevice::createServer();
   BLEService *pService = pServer->createService(SERVICE_UUID);
-  pCharacteristic = pService->createCharacteristic(
+  __pCharacteristic = pService->createCharacteristic(
                                          CHARACTERISTIC_UUID,
                                          BLECharacteristic::PROPERTY_READ |
                                          BLECharacteristic::PROPERTY_WRITE
                                        );
+    // BLECharacteristic *__pCharacteristic;
 
-  pCharacteristic->setValue("Hello World says Neil");
+
+  __pCharacteristic->setValue("Hello World says Neil");
   pService->start();
   // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -43,21 +36,23 @@ void BleServer::Init() {
 }
 
 void BleServer::UpdateActionCode(unsigned char new_code){
-  // pCharacteristic->setValue(new_code.c_str());
+  ArmAction aaa;
+  size_t len = sizeof(ArmAction);
+  __pCharacteristic->setValue(aaa.bytes,len);
 }
 
 
 void BleServer::SpinOnce() {
   int i=0;
   // put your main code here, to run repeatedly:
-  std::string value = pCharacteristic->getValue();
+  std::string value = __pCharacteristic->getValue();
   Serial.print("The new characteristic value is: ");
   Serial.println(value.c_str());
   i++;
   if (i % 2 ==0)
-    pCharacteristic->setValue("ABC");
+    __pCharacteristic->setValue("ABC");
   else
-    pCharacteristic->setValue("123");
+    __pCharacteristic->setValue("123");
     
 
 }
