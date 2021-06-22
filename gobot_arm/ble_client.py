@@ -13,7 +13,7 @@ class MyDelegate(DefaultDelegate):
 class ble():
     def __init__(self):
         self.__server_mac = 'b4:e6:2d:b2:f8:8f'
-        self.dev = btle.Peripheral(self.__server_mac)
+        ##self.dev = btle.Peripheral(self.__server_mac)
 
     def scan(self):
         scanner = Scanner()
@@ -25,6 +25,7 @@ class ble():
 
     def list_services_on_server(self):
         print('Services on server  ------------------')
+        self.dev = btle.Peripheral(self.__server_mac)
         for svc in self.dev.services:
             print(str(svc))
 
@@ -34,7 +35,7 @@ class ble():
         self.dev.withDelegate(MyDelegate())
         svc = self.dev.getServiceByUUID('4fafc201-1fb5-459e-8fcc-c5c9c331914b')
         self.arm_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[0]
-        self.house_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[1]
+        #self.house_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[1]
 
 
 
@@ -50,9 +51,14 @@ class ble():
     def spin(self):
         while True:
             xx = self.arm_info.read()
+            
             print('arm info: ', xx)
-            yy = self.house_info.read()
-            print('house info: ',yy)
+            code = xx[0]
+            park_x = xx[1] * 256 *256  + xx[2] * 256 + xx[3]
+            print(code, park_x)
+
+            #yy = self.house_info.read()
+            #print('house info: ',yy)
             time.sleep(1.7)
             pass
 
