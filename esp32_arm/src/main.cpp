@@ -18,7 +18,7 @@ int i = 65;
 void loop(){
 
   ble_server.SpinOnce();
-  // arm.SpinOnce(ble_server.arm_action);
+  arm.SpinOnce(ble_server.arm_action);
   // house.SpinOnce(ble_server.house_action);
   ble_server.UpdateActionCode(i);
   delay(2000);
