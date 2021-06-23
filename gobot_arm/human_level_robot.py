@@ -8,8 +8,8 @@ import logging
 import sys
 sys.path.append("pi/home/pylib")
 
-from app_global.color_print import CONST   # do not use  from app_global.color_print,  don't know why! 
-from app_global.gogame_config import app_config
+#from app_global.color_print import CONST   # do not use  from app_global.color_print,  don't know why! 
+#from app_global.gogame_config import app_config
 
 from robot_arm.helper import Robot_pose_helper
 from robot_arm.robot_kinematic import Pose,Pose_FK
@@ -39,6 +39,7 @@ class HumanLevel_RobotArm:
         soft_robot will be always online.
         hard_robot can be online , or offline(for debuging software convenience )
         '''
+        pass
         self.__FC_YELLOW = CONST.print_color.fore.yellow
         self.__FC_RED = CONST.print_color.fore.red
         self.__FC_RESET = CONST.print_color.control.reset

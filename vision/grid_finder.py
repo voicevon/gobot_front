@@ -159,7 +159,7 @@ class GridFinder():
         # specify conjugate x,y coordinates (not y,x)
         input = np.float32(pts)
         output = np.float32([[0,0], [width-1,0], [width-1,height-1], [0,height-1]])
-
+        #output = np.float32([[0,0],[width,0],[width/4*3,height/2],[width/4,height/2]])
         # compute perspective matrix
         matrix = cv2.getPerspectiveTransform(input,output)
 
