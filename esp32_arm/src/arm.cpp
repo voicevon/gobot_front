@@ -1,6 +1,6 @@
 #include<math.h>
 #include "arm.h"
-
+#include<Arduino.h>
 
 Arm::Arm(){
     // Configure each stepper
@@ -87,7 +87,18 @@ void Arm::pick_place_park(ArmAction arm_action){
 
 
 void Arm::SpinOnce(ArmAction action){
-  switch (action.Attr.action_code){
+  // return;
+  int ccc = __ble_server->arm_action.Attr.action_code;
+  // return;
+  Serial.println("The new aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa value is: ");
+  // Serial.println(ccc);
+
+  return;
+
+
+
+  int code = 0;
+  switch (code){
     case 0:
       break;
     case 2:   // pickup and place and park
@@ -102,6 +113,8 @@ void Arm::SpinOnce(ArmAction action){
     case 10:    //home y
       // ble_server.UpdateActionCode(10+1);
       Home(1);
+      break;
+    default:
       break;
     
   }
