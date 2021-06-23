@@ -15,14 +15,23 @@ class BleServer {
   protected:
 
   public:
-    BleServer(){};
-  
+     static BleServer& getInstance()
+        {
+            static BleServer instance; // Guaranteed to be destroyed.
+                                  // Instantiated on first use.
+            return instance;
+        }
     ArmAction arm_action;
     HouseAction house_action;
     void Init(void);
     void SpinOnce(void);
     void UpdateActionCode(unsigned char new_code);
+
   private:
+    BleServer(){};
+    BleServer(BleServer const& copy);            // Not Implemented
+    BleServer& operator=(BleServer const& copy); // Not Implemented
+
     BLECharacteristic *__pCharacteristic;
 
 };

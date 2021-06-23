@@ -4,12 +4,12 @@
 
 Arm::Arm(){
     // Configure each stepper
-    this->stepper1.setMaxSpeed(100);
-    this->stepper2.setMaxSpeed(100);
+    this->stepper_alpha.setMaxSpeed(100);
+    this->stepper_beta.setMaxSpeed(100);
 
     // Then give them to MultiStepper to manage
-    steppers.addStepper(this->stepper1);
-    steppers.addStepper(this->stepper2);
+    steppers.addStepper(this->stepper_alpha);
+    steppers.addStepper(this->stepper_beta);
 }
 
 void Arm::Init(){
@@ -21,11 +21,11 @@ void Arm::Home(unsigned char axis){
   AccelStepper* stepper;
   if (axis == 1 ){
     home_pin = this->alpha_home_pin;
-    stepper = & this->stepper1;
+    stepper = & this->stepper_alpha;
   }
   else if (axis ==2){
     home_pin = this->beta_home_pin;
-    stepper = & this->stepper2;
+    stepper = & this->stepper_beta;
   }
 
   bool homed = false;
@@ -74,17 +74,52 @@ motor_position Arm::ik(int x, int y){
   return pos;
 }
 
-
-void Arm::pick_place_park(ArmAction arm_action){
-  long positions[2];
-  motor_position pos = ik(arm_action.Attr.pickup_x, arm_action.Attr.pickup_y);
-
-  positions[0] = pos.alpha;
-  positions[1] = pos.beta;
-
-  steppers.moveTo(positions);
+void Arm::MoveTo(int x, int y){
+  motor_position pos=ik(x,y);
+  long angles[2];
+  angles[0] = pos.alpha;
+  angles[1] = pos.beta;
+  steppers.moveTo(angles);
 }
 
+void Arm::SetEffector(EEF action){
+  switch (action){
+    case Lower:
+      break;
+    case Higher:
+      break;
+    case Suck:
+      break;
+    case Release:
+      break;
+    case Sleep:
+      break;
+    default:
+      break;
+
+  }
+}
+
+void Arm::pick_place_park(ArmAction* arm_action){
+  long positions[2];
+  if (arm_action->Attr.pickup_type ==1){
+    MoveTo(arm_action->Attr.pickup_x, arm_action->Attr.pickup_y);
+    SetEffector(Lower);
+    SetEffector(Suck);
+    SetEffector(Higher);
+  }
+  if (arm_action->Attr.place_type == 1){
+    MoveTo(arm_action->Attr.place_x, arm_action->Attr.place_y);
+    SetEffector(Lower);
+    SetEffector(Release);
+    SetEffector(Higher);
+    SetEffector(Sleep);
+  }
+  if (arm_action->Attr.do_park == 1){
+    MoveTo(arm_action->Attr.park_x, arm_action->Attr.park_y);
+    SetEffector(Sleep);
+  }
+}
 
 void Arm::SpinOnce(ArmAction action){
   // return;
