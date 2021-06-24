@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Wire.h>
 
 
@@ -14,6 +16,9 @@ class Mcp23018{
 
     private:
         Mcp23018();
+        // Mcp23018(Mcp23018 const& copy);            // Not Implemented
+        // Mcp23018& operator=(Mcp23018 const& copy); // Not Implemented
+
         int __I2cAddress[8];   //Index is logic coil id, value is phical coil id
         int __PhysicalId[55];
 

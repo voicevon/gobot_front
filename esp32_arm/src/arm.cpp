@@ -23,6 +23,8 @@
 
 Arm::Arm(){
 
+  // __Mcp23018 = &Mcp23018::getInstance();
+
   AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::FULL4WIRE, 5,6,7,8,false);
   stepper_alpha = & stepper;
   stepper = AccelStepper(AccelStepper::MotorInterfaceType::FULL4WIRE, 2,3,4,5,false);

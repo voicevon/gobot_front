@@ -26,7 +26,7 @@ class House{
 
         Servo __LeftServo;
         Servo __RightServo;
-        Mcp23018 __Mcp23018;
+        Mcp23018* __Mcp23018;
         // void __EnableSingleCoil(int phisical_pin_id, bool enable_it);
         
 
