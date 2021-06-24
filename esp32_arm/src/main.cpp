@@ -2,17 +2,19 @@
 #include "ble_server.h"
 #include "arm.h"
 #include "house.h" 
+#include "test.h"
+
+
 
 BleServer* ble_server = &BleServer::getInstance();
 Arm* arm = &Arm::getInstance();
 House* house = &House::getInstance();
+Runner runner();
 
 void setup(){
   //BLE setup
   Serial.begin(9600);
   ble_server->Init();
-  arm->Init();
-  house->Init();
 }
 int i = 65;
 void loop(){

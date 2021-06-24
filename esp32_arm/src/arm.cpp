@@ -2,39 +2,67 @@
 #include "arm.h"
 #include<Arduino.h>
 
+
+#define PIN_EEF_SERVO 12
+#define PIN_HOME_ALHPA 13
+#define PIN_HOME_BETA 14
+
+#define STEPS_PER_RAD 123
+#define MOTOR_MAX_SPEED 100  /// unit?
+
+#define PIN_ALPHA_STEP 15
+#define PIN_ALPHA_DIR 16
+#define PIN_ALPHA_ENABLE 17
+#define PIN_BETA_STEP 18
+#define PIN_BETA_DIR 19
+#define PIN_BETA_ENABLE 17
+//  unit is mm
+#define LINK_0 22.3  // Length between origin and the two motors
+#define LINK_1 144.4 // Length from motor to passive joints
+#define LINK_2 255.5 // Length from passive joints to end effector
+
 Arm::Arm(){
-    // Configure each stepper
-    this->stepper_alpha.setMaxSpeed(100);
-    this->stepper_beta.setMaxSpeed(100);
 
-    // Then give them to MultiStepper to manage
-    steppers.addStepper(this->stepper_alpha);
-    steppers.addStepper(this->stepper_beta);
-}
+  AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::FULL4WIRE, 5,6,7,8,false);
+  stepper_alpha = & stepper;
+  stepper = AccelStepper(AccelStepper::MotorInterfaceType::FULL4WIRE, 2,3,4,5,false);
+  stepper_beta = & stepper;
+  stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
+  stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
 
-void Arm::Init(){
+  // Then give them to MultiStepper to manage
+  steppers->addStepper(*stepper_alpha);
+  steppers->addStepper(*stepper_beta);
 
+  Servo sv = Servo();
+  sv.attach(PIN_EEF_SERVO);
+  eefServo = &sv ;
+
+  // link length in mm
+  l0 = LINK_0;
+  l1 = LINK_1;
+  l2 = LINK_2;
 }
 
 void Arm::Home(unsigned char axis){
   unsigned int home_pin =23;
   AccelStepper* stepper;
   if (axis == 1 ){
-    home_pin = this->alpha_home_pin;
-    stepper = & this->stepper_alpha;
+    home_pin = PIN_HOME_ALHPA;
+    stepper = stepper_alpha;
   }
   else if (axis ==2){
-    home_pin = this->beta_home_pin;
-    stepper = & this->stepper_beta;
+    home_pin = PIN_HOME_BETA;
+    stepper = stepper_beta;
   }
 
   bool homed = false;
   do
   {
     stepper->setCurrentPosition(0);
-    stepper->move(100);
+    stepper->move(1);
     homed = digitalRead(home_pin);
-  } while (homed);
+  } while (!homed);
 }
 
 /*
@@ -68,8 +96,8 @@ motor_position Arm::ik(int x, int y){
     float alpha2 = acos(alpha2_calc);
 
     // Angles of left and right shoulders
-    pos.alpha = beta1 + alpha1;
-    pos.beta = 3.14159265 - beta2 - alpha2;
+    pos.alpha = (beta1 + alpha1) * STEPS_PER_RAD;
+    pos.beta = (3.14159265 - beta2 - alpha2) * STEPS_PER_RAD;
     
   return pos;
 }
@@ -79,7 +107,7 @@ void Arm::MoveTo(int x, int y){
   long angles[2];
   angles[0] = pos.alpha;
   angles[1] = pos.beta;
-  steppers.moveTo(angles);
+  steppers->moveTo(angles);
 }
 
 void Arm::SetEffector(EEF action){
@@ -101,7 +129,6 @@ void Arm::SetEffector(EEF action){
 }
 
 void Arm::pick_place_park(ArmAction* arm_action){
-  long positions[2];
   if (arm_action->Attr.pickup_type ==1){
     MoveTo(arm_action->Attr.pickup_x, arm_action->Attr.pickup_y);
     SetEffector(Lower);
