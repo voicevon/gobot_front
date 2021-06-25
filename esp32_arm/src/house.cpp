@@ -7,17 +7,20 @@
 
 House::House(){
   __Mcp23018 = &Mcp23018::getInstance();
+  __Mcp23018->DisableAllCoils();
   __LeftServo.attach(PIN_LEFT_SERVO);
   __RightServo.attach(PIN_RIGHT_SERVO);
 
 }
 
 
-void House::SpinOnce(HouseAction action){
-  switch (action.action_code){
+void House::SpinOnce(BodyAction action){
+  switch (action.House.action_code){
     case 0:
+    // write to 1 for handshaking.
       break;
     case 2:
+      MoveStoneToTarget(3);
       break;
     case 6:
       DrawStone(3);
@@ -38,15 +41,17 @@ void House::DrawStone(int house_id){
   // Bottom mover : move to original position
   __LeftServo.write(0);
   __RightServo.write(180);
+
   // Enable a coil to stick a stone
   __Mcp23018->EnableSingleCoil(house_id, true);
-  // __EnableSingleCoil(house_id, true);
+
   // Bottom mover:  Leave original position
   __LeftServo.write(180);
   __RightServo.write(0);
+
     // Stop the coil
   __Mcp23018->EnableSingleCoil(house_id, false);
-  // __EnableSingleCoil(house_id, false);
+
 
 }
 

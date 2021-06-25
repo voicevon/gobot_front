@@ -130,29 +130,30 @@ void Arm::SetEffector(EEF action){
   }
 }
 
-void Arm::pick_place_park(ArmAction* arm_action){
-  if (arm_action->Attr.pickup_type ==1){
-    MoveTo(arm_action->Attr.pickup_x, arm_action->Attr.pickup_y);
+void Arm::pick_place_park(BodyAction* body_action){
+  uint8_t action_code = body_action->Arm.action_code;
+  if (action_code & 1<<2 == 1){
+    MoveTo(body_action->Arm.pickup_x, body_action->Arm.pickup_y);
     SetEffector(Lower);
     SetEffector(Suck);
     SetEffector(Higher);
   }
-  if (arm_action->Attr.place_type == 1){
-    MoveTo(arm_action->Attr.place_x, arm_action->Attr.place_y);
+  if (action_code & 1<<3 == 1){
+    MoveTo(body_action->Arm.place_x, body_action->Arm.place_y);
     SetEffector(Lower);
     SetEffector(Release);
     SetEffector(Higher);
     SetEffector(Sleep);
   }
-  if (arm_action->Attr.do_park == 1){
-    MoveTo(arm_action->Attr.park_x, arm_action->Attr.park_y);
+  if (action_code & 1<<4 == 1){
+    MoveTo(body_action->Arm.park_x, body_action->Arm.park_y);
     SetEffector(Sleep);
   }
 }
 
-void Arm::SpinOnce(ArmAction action){
+void Arm::SpinOnce(BodyAction* action){
   // return;
-  int ccc = __ble_server->arm_action.Attr.action_code;
+  int ccc = __ble_server->body_action.Arm.action_code;
   // return;
   Serial.println("The new aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa value is: ");
   // Serial.println(ccc);

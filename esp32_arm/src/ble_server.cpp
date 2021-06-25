@@ -36,9 +36,9 @@ void BleServer::Init() {
 }
 
 void BleServer::UpdateActionCode(unsigned char new_code){
-  ArmAction aaa;
-  size_t len = sizeof(ArmAction);
-  aaa.Attr.action_code = new_code;
+  BodyAction aaa;
+  size_t len = sizeof(BodyAction);
+  aaa.Arm.action_code = new_code;
 
   __pCharacteristic->setValue(aaa.bytes, len);
 }

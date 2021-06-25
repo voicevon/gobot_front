@@ -15,7 +15,7 @@ class House{
                                   // Instantiated on first use.
             return instance;
         }
-        void SpinOnce(HouseAction action);
+        void SpinOnce(BodyAction action);
         void DrawStone(int house_id);
         void MoveStoneToTarget(int start_point);
     protected:

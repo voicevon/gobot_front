@@ -38,8 +38,8 @@ class Arm{
             return instance;
         }
         void Home(unsigned char axis);
-        void SpinOnce(ArmAction action);
-        void pick_place_park(ArmAction arm_action);
+        void SpinOnce(BodyAction* action);
+        // void pick_place_park(BodyAction* body_action);
 
     private:
         Arm();
@@ -49,7 +49,7 @@ class Arm{
         motor_position ik(int x, int y);
         void MoveTo(int x, int y);
         void SetEffector(EEF action);
-        void pick_place_park(ArmAction* arm_action);
+        void pick_place_park(BodyAction* body_action);
 
         // link length in mm
         int l0 ;   // Length between origin and the two motors

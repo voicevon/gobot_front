@@ -21,8 +21,7 @@ class BleServer {
                                   // Instantiated on first use.
             return instance;
         }
-    ArmAction arm_action;
-    HouseAction house_action;
+    BodyAction body_action;
     void Init(void);
     void SpinOnce(void);
     void UpdateActionCode(unsigned char new_code);
