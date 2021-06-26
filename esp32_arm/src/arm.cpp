@@ -2,39 +2,69 @@
 #include "arm.h"
 #include<Arduino.h>
 
+
+#define PIN_EEF_SERVO 12
+#define PIN_HOME_ALHPA 13
+#define PIN_HOME_BETA 14
+
+#define STEPS_PER_RAD 123
+#define MOTOR_MAX_SPEED 100  /// unit?
+
+#define PIN_ALPHA_STEP 15
+#define PIN_ALPHA_DIR 16
+#define PIN_ALPHA_ENABLE 17
+#define PIN_BETA_STEP 18
+#define PIN_BETA_DIR 19
+#define PIN_BETA_ENABLE 17
+//  unit is mm
+#define LINK_0 22.3  // Length between origin and the two motors
+#define LINK_1 144.4 // Length from motor to passive joints
+#define LINK_2 255.5 // Length from passive joints to end effector
+
 Arm::Arm(){
-    // Configure each stepper
-    this->stepper1.setMaxSpeed(100);
-    this->stepper2.setMaxSpeed(100);
 
-    // Then give them to MultiStepper to manage
-    steppers.addStepper(this->stepper1);
-    steppers.addStepper(this->stepper2);
-}
+  // __Mcp23018 = &Mcp23018::getInstance();
 
-void Arm::Init(){
+  AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::FULL4WIRE, 5,6,7,8,false);
+  stepper_alpha = & stepper;
+  stepper = AccelStepper(AccelStepper::MotorInterfaceType::FULL4WIRE, 2,3,4,5,false);
+  stepper_beta = & stepper;
+  stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
+  stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
 
+  // Then give them to MultiStepper to manage
+  steppers->addStepper(*stepper_alpha);
+  steppers->addStepper(*stepper_beta);
+
+  Servo sv = Servo();
+  sv.attach(PIN_EEF_SERVO);
+  eefServo = &sv ;
+
+  // link length in mm
+  l0 = LINK_0;
+  l1 = LINK_1;
+  l2 = LINK_2;
 }
 
 void Arm::Home(unsigned char axis){
   unsigned int home_pin =23;
   AccelStepper* stepper;
   if (axis == 1 ){
-    home_pin = this->alpha_home_pin;
-    stepper = & this->stepper1;
+    home_pin = PIN_HOME_ALHPA;
+    stepper = stepper_alpha;
   }
   else if (axis ==2){
-    home_pin = this->beta_home_pin;
-    stepper = & this->stepper2;
+    home_pin = PIN_HOME_BETA;
+    stepper = stepper_beta;
   }
 
   bool homed = false;
   do
   {
     stepper->setCurrentPosition(0);
-    stepper->move(100);
+    stepper->move(1);
     homed = digitalRead(home_pin);
-  } while (homed);
+  } while (!homed);
 }
 
 /*
@@ -68,27 +98,62 @@ motor_position Arm::ik(int x, int y){
     float alpha2 = acos(alpha2_calc);
 
     // Angles of left and right shoulders
-    pos.alpha = beta1 + alpha1;
-    pos.beta = 3.14159265 - beta2 - alpha2;
+    pos.alpha = (beta1 + alpha1) * STEPS_PER_RAD;
+    pos.beta = (3.14159265 - beta2 - alpha2) * STEPS_PER_RAD;
     
   return pos;
 }
 
-
-void Arm::pick_place_park(ArmAction arm_action){
-  long positions[2];
-  motor_position pos = ik(arm_action.Attr.pickup_x, arm_action.Attr.pickup_y);
-
-  positions[0] = pos.alpha;
-  positions[1] = pos.beta;
-
-  steppers.moveTo(positions);
+void Arm::MoveTo(int x, int y){
+  motor_position pos=ik(x,y);
+  long angles[2];
+  angles[0] = pos.alpha;
+  angles[1] = pos.beta;
+  steppers->moveTo(angles);
 }
 
+void Arm::SetEffector(EEF action){
+  switch (action){
+    case Lower:
+      break;
+    case Higher:
+      break;
+    case Suck:
+      break;
+    case Release:
+      break;
+    case Sleep:
+      break;
+    default:
+      break;
 
-void Arm::SpinOnce(ArmAction action){
+  }
+}
+
+void Arm::pick_place_park(BodyAction* body_action){
+  uint8_t action_code = body_action->Arm.action_code;
+  if (action_code & 1<<2 == 1){
+    MoveTo(body_action->Arm.pickup_x, body_action->Arm.pickup_y);
+    SetEffector(Lower);
+    SetEffector(Suck);
+    SetEffector(Higher);
+  }
+  if (action_code & 1<<3 == 1){
+    MoveTo(body_action->Arm.place_x, body_action->Arm.place_y);
+    SetEffector(Lower);
+    SetEffector(Release);
+    SetEffector(Higher);
+    SetEffector(Sleep);
+  }
+  if (action_code & 1<<4 == 1){
+    MoveTo(body_action->Arm.park_x, body_action->Arm.park_y);
+    SetEffector(Sleep);
+  }
+}
+
+void Arm::SpinOnce(BodyAction* action){
   // return;
-  int ccc = __ble_server->arm_action.Attr.action_code;
+  int ccc = __ble_server->body_action.Arm.action_code;
   // return;
   Serial.println("The new aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa value is: ");
   // Serial.println(ccc);

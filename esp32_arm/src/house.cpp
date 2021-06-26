@@ -1,18 +1,26 @@
 #include "house.h"
 
+#define PIN_LEFT_SERVO 22
+#define PIN_RIGHT_SERVO 23
+
+
 
 House::House(){
-  
+  __Mcp23018 = &Mcp23018::getInstance();
+  __Mcp23018->DisableAllCoils();
+  __LeftServo.attach(PIN_LEFT_SERVO);
+  __RightServo.attach(PIN_RIGHT_SERVO);
+
 }
 
-void House::Init(){
 
-}
-void House::SpinOnce(HouseAction action){
-  switch (action.action_code){
+void House::SpinOnce(BodyAction action){
+  switch (action.House.action_code){
     case 0:
+    // write to 1 for handshaking.
       break;
     case 2:
+      MoveStoneToTarget(3);
       break;
     case 6:
       DrawStone(3);
@@ -20,26 +28,29 @@ void House::SpinOnce(HouseAction action){
   }
 }
 
-  void House::EnableExpandPin(int phisical_pin_id){
-    
-  }
+
 
   void House::MoveStoneToTarget(int start_point){
-      int logic_pin = start_point;
-      
-      int out_pin_id = start_point;
+    int logic_pin = start_point;
+    
+    int out_pin_id = start_point;
   }
 
 
 void House::DrawStone(int house_id){
   // Bottom mover : move to original position
-  this->__LeftServo.write(0);
-  this->__RightServo.write(180);
+  __LeftServo.write(0);
+  __RightServo.write(180);
+
   // Enable a coil to stick a stone
+  __Mcp23018->EnableSingleCoil(house_id, true);
 
   // Bottom mover:  Leave original position
+  __LeftServo.write(180);
+  __RightServo.write(0);
 
-  // Stop the coil
+    // Stop the coil
+  __Mcp23018->EnableSingleCoil(house_id, false);
 
 
 }

@@ -1,11 +1,14 @@
-
+import sys
+sys.path.append('pi/home/pylib')
+from mqtt_helper import MqttConfigableItem
 
 class config:
     #platform = 'UBUNTU_GUI'
     host_os = 'PI_ZERO'
 
     #firmware = 'REPRAP'
-    firmware = 'KLIPPER'
+    # firmware = 'KLIPPER'
+    firmware = MqttConfigableItem('gobot/firmware','esp32_body')
 
     publish_mqtt = True
     
