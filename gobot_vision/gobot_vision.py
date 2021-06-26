@@ -106,8 +106,13 @@ class GobotVision():
         #print ('Stable Depth of the layout ', stable_depth)
         return layout, stable_depth
 
-    def get_warehouse_plate(self):
-        return 1
+    def get_warehouse_plate(self,origin_image):
+        config = WarehouseVision.create_finder_config()
+        house_plate_finder = GridFinder(config)
+        perspective_image = house_plate_finder.detect_grid_from_aruco_corners(origin_image)
+
+        g_mqtt.publish_cv_image('gobot/image/house', perspective_image)
+        
 
     def get_warehouse_stone_position(self, origin_image):
         '''

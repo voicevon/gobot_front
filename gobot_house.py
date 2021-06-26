@@ -21,10 +21,6 @@ from vision.robot_eye import MonoEye
 
 
 
-class finder_config:
-    aruco_ids = [1, 2, 3, 4]  # [topleft, topright, bottomright, bottomleft]
-    area_scales = [1.1, 1.1, 2.2, 2.2]
-    area_size = (200,900)    # for pespectived view image.
 
 class layout_config:
     '''

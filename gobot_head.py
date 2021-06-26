@@ -395,6 +395,11 @@ class GobotHead():
         chessboard_image = 1
         warehouse_image = 1
 
+
+        self.__vision.get_warehouse_plate(self.__last_image)
+
+        
+
         last_function = self.__goto
         self.__goto()
         if last_function != self.__goto:
