@@ -416,8 +416,8 @@ class GobotHead():
 if __name__ == '__main__':
     app_config.publish_mqtt = True
     if app_config.publish_mqtt:
+        g_mqtt.append_configable_var(app_config)
         g_mqtt.connect_to_broker('123457','voicevon.vicp.io',1883,'von','von1970')
-
     myrobot = GobotHead()
     while True:
         myrobot.spin_once()

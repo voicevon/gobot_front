@@ -58,7 +58,6 @@ class ChessboardVision():
 
         self.__inspect_cell =  ChessboardCell()
         self.__inspect_cell.from_name(app_config.robot_eye.layout_scanner.inspecting.cell_name)
-        self.__debug_chessboard_lines = True
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self._BG_GREEN = TerminalFont.Color.Background.green
@@ -122,7 +121,7 @@ class ChessboardVision():
         board_brightness = numpy.mean(board_gray)
         # print('board_brightness()= %d' %board_brightness)
 
-        if self.__debug_chessboard_lines:
+        if app_config.publish_image_board_gridline.value:
             lined_image = img_board.copy()
             line_color = (255,255,0)
             pen_width = 1

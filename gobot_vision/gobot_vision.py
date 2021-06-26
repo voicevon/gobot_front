@@ -94,9 +94,9 @@ class GobotVision():
         y0 = chessboard_config.crop_y0
         y1 = y0 + chessboard_config.crop_height
         board_image = perspective_image[y0:y1, x0:x1]
-        if self.__publish_image:
-            g_mqtt.publish_cv_image('gobot/image/board/pespective', perspective_image)
-            g_mqtt.publish_cv_image('gobot/image/board', board_image)
+        if app_config.publish_image_board.value:
+        # if self.__publish_image:
+            g_mqtt.publish_cv_image('gobot/image/board', perspective_image)
         if board_image is None:
             print('GobotVision.get_chessboard_layout()  Can NOT detect chessboard grid from origin_image')
             return None, 0
