@@ -9,6 +9,10 @@ class config:
     #firmware = 'REPRAP'
     # firmware = 'KLIPPER'
     firmware = MqttConfigableItem('gobot/firmware','esp32_body')
+    publish_image_origin = MqttConfigableItem('gobot/image/origin/publish',True)
+    publish_image_board = MqttConfigableItem('gobot/image/board/publish',True)
+    publish_image_board_gridline = MqttConfigableItem('gobot/image/chessboard/gridline/publish',True)
+
 
     publish_mqtt = True
     

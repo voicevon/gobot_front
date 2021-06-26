@@ -388,7 +388,7 @@ class GobotHead():
         print('start spin')
         self.__last_image = self.__eye.take_picture()
         print('taken picture')
-        if app_config.publish_mqtt:
+        if app_config.publish_image_origin.value:
             g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
 
         command_image = 1
