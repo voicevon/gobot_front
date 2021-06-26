@@ -397,7 +397,7 @@ class GobotHead():
 
 
         self.__vision.get_warehouse_plate(self.__last_image)
-
+        return
         
 
         last_function = self.__goto

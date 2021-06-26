@@ -6,11 +6,11 @@ class finder_config:
     bottom_right_id = 34
     bottom_left_id = 21
     top_left_id = 15
-    perspected_width = 400 + 800  # Effect the right edge
+    perspected_width = 400 + 1800  # Effect the right edge
     perspected_height = 400 + 50   # effect the bottom edge
-    crop_x0 = 600   # effect the left edge
+    crop_x0 = 50   # effect the left edge
     crop_y0 = 50   # effect the top edge.
-    crop_width = 428   # Don't modify this value
+    crop_width = 2228   # Don't modify this value
     crop_height = 428  # Don't modify this value.
     
     # aruco_ids = [1, 2, 3, 4]  # [topleft, topright, bottomright, bottomleft]

@@ -107,7 +107,7 @@ class GobotVision():
         return layout, stable_depth
 
     def get_warehouse_plate(self,origin_image):
-        config = WarehouseVision.create_finder_config()
+        config = WarehouseVision().create_finder_config()
         house_plate_finder = GridFinder(config)
         perspective_image = house_plate_finder.detect_grid_from_aruco_corners(origin_image)
 

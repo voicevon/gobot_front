@@ -30,9 +30,15 @@ class GridFinder():
             aruco_ids = [aruco_config.top_left_id, aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id]
             self.__perspected_width = aruco_config.perspected_width
             self.__perspected_height = aruco_config.perspected_height
-        elif aruco_config.name == 'COMMANDER_ARUCO_CONFIG':
-            #print('222222222')
+        
+        elif aruco_config.name == 'COMMANDER_ARUCO_CONFIG':    #print('222222222')
             aruco_ids = [aruco_config.right_id, aruco_config.left_id]
+        
+        elif aruco_config.name == 'WAREHOUSE_ARUCO_CONFIG':
+            aruco_ids = [aruco_config.top_left_id, aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id]
+            self.__perspected_width = aruco_config.perspected_width
+            self.__perspected_height = aruco_config.perspected_height
+
         else:
             print('Unknown config of aruco_marks', aruco_config)
         self.__mark_ids =  aruco_ids
