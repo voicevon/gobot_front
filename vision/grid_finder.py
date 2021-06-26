@@ -24,23 +24,24 @@ class GridFinder():
             Go_game_board_19x19: Normally Two aruco marks ?
                                  Calibrate mode, Four marks ?
         '''
+        self.__aruco_config = aruco_config
+
         print(aruco_config.name)
         if aruco_config.name=='CHESSBOARD_ARUCO_CONFIG':
             #print('44444')
             aruco_ids = [aruco_config.top_left_id, aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id]
-            self.__perspected_width = aruco_config.perspected_width
-            self.__perspected_height = aruco_config.perspected_height
-        
+            # self.__perspected_width = aruco_config.perspected_width
+            # self.__perspected_height = aruco_config.perspected_height
         elif aruco_config.name == 'COMMANDER_ARUCO_CONFIG':    #print('222222222')
             aruco_ids = [aruco_config.right_id, aruco_config.left_id]
         
         elif aruco_config.name == 'WAREHOUSE_ARUCO_CONFIG':
             aruco_ids = [aruco_config.top_left_id, aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id]
-            self.__perspected_width = aruco_config.perspected_width
-            self.__perspected_height = aruco_config.perspected_height
+            # self.__perspected_width = aruco_config.perspected_width
+            # self.__perspected_height = aruco_config.perspected_height
 
         else:
-            print('Unknown config of aruco_marks', aruco_config)
+            print('Unknown config of aruco_marks', aruco_config.name)
         self.__mark_ids =  aruco_ids
         print('GridFinder init is OK')
 
@@ -159,12 +160,23 @@ class GridFinder():
 
     def get_perspective_view(self, img, pts):
         # specify desired output size 
-        width = self.__perspected_width
-        height = self.__perspected_height
 
         # specify conjugate x,y coordinates (not y,x)
         input = np.float32(pts)
-        output = np.float32([[0,0], [width-1,0], [width-1,height-1], [0,height-1]])
+        x1 = 0 + self.__aruco_config.left_extended
+        y1 = 0 + self.__aruco_config.top_extended
+        x2 = x1 + self.__aruco_config.perspective_width 
+        y2 = y1
+        x3 = x2
+        y3 = y1 +self.__aruco_config.perspective_height
+        x4 = x1
+        y4 = y3
+        width = x3 + self.__aruco_config.right_extended
+        height = y3 + self.__aruco_config.bottom_extended
+    
+
+        output = np.float32([[x1,y1],[x2,y2],[x3,y3],[x4,y4]])
+        # output = np.float32([[0 ,0] [width-1 ,0], [width-1,height-1], [0,height-1]])
         #output = np.float32([[0,0],[width,0],[width/4*3,height/2],[width/4,height/2]])
         # compute perspective matrix
         matrix = cv2.getPerspectiveTransform(input,output)
