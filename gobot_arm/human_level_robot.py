@@ -13,10 +13,12 @@ from terminal_font import TerminalFont
 class HumanLevel_RobotArm:
     '''
     This is an abstract robot.
-    It is a  thing that Understood 3 types of commands
-        1. How to play go game on chessboard. 
-        2. Some position is out of the chessboard, like
-            Home, trash, warehouse,viewer point
+    It is a  thing that Understood coordinators, 
+    and can tranlate from chessboard co-ord to robot arm co-ord
+        1. Chessboard coordinator: like 'Q4', 'T19', 
+            Some position is out of the chessboard, like 'Trash','HouseEnd' 
+        2. Robot arm coordinator: (35,126) (258,129)
+
     '''
     def __init__(self):
         '''
