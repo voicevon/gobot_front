@@ -2,8 +2,9 @@ from vision.robot_eye import MonoEye
 from gobot_vision.gobot_vision import GobotVision
 from gogame.chessboard_cell import Stone
 from gogame.chessboard import ChessboardLayout
-from ai_client import GoGameAiClient
+from gogame.died_area_scanner import DiedAreaScanner
 from gobot_arm.human_level_robot import HumanLevel_RobotArm
+from ai_client import GoGameAiClient
 from config import config as app_config
 
 import cv2
@@ -24,7 +25,7 @@ class GobotHead():
         self.__vision = GobotVision()
         self.__ai = GoGameAiClient()
         self.__arm = HumanLevel_RobotArm()
-        self.__died_area_scanner = 
+        self.__died_area_scanner = DiedAreaScanner()
 
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
