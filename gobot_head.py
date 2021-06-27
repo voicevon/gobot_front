@@ -24,6 +24,8 @@ class GobotHead():
         self.__vision = GobotVision()
         self.__ai = GoGameAiClient()
         self.__arm = HumanLevel_RobotArm()
+        self.__died_area_scanner = 
+
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
 
