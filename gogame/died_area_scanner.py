@@ -1,4 +1,5 @@
-
+from gogame.chessboard import ChessboardLayout
+from gogame.chessboard_cell import ChessboardCell
 class DiedAreaScanner(ChessboardLayout):
     def __init__(self):
         ChessboardLayout.__init__(self,'Died area scanner')

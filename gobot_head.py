@@ -11,6 +11,7 @@ import cv2
 import numpy as np
 import logging
 import sys
+import time
 sys.path.append("/home/pi/pylib")
 from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
@@ -208,7 +209,7 @@ class GobotHead():
         self.__goto = self.at_state_withdraw_black
 
     def at_state_scan_died_white(self):
-        self.__died_area_scanner.set_layout_array(self.__ai_go.layout.get_layout_array())
+        self.__died_area_scanner.set_layout_array(self.__ai.layout.get_layout_array())
         count = self.__died_area_scanner.start_scan(self.__WHITE)
         if count > 0:
             self.__died_area_scanner.print_out_died_area()
@@ -224,8 +225,8 @@ class GobotHead():
             time.sleep(10)
 
     def at_state_compare_layout_black(self):
-        layout = self.__eye.get_stable_layout(self.__LAYOUT_STABLE_DEPTH)
-        diffs = self.__ai_go.layout.compare_with(layout)
+        layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
+        diffs = self.__ai.layout.compare_with(layout)
 
         same = False
         if len(diffs) == 0:
@@ -237,34 +238,34 @@ class GobotHead():
                 # And the scanned layout says: it's white color, because it's put by user, He runs so fast! :)
                 same = True
         if same:
-            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Now please place your chess onto the board. ')
+            logging.info('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Now please place your chess onto the board. ')
             self.__goto = self.at_state_user_play
-            self.__mqtt.publish('gogame/smf/status','user_playing',retain=True)
-            self.__mqtt.publish(topic="fishtank/switch/r4/command",payload="ON",retain=True)
+            g_mqtt.publish('gobot/smf/current','user_playing')
+            g_mqtt.publish(topic="fishtank/switch/r4/command",payload="ON",retain=False)
         else:
             # more than one cells are different,  or the only one different cell is black color. 
-            diffs = self.__ai_go.layout.compare_with(layout, do_print_out=True)
+            diffs = self.__ai.layout.compare_with(layout, do_print_out=True)
             time.sleep(10)
 
     def at_state_user_play(self):
         # check mark command, might be game over. 
-        mark = self.__eye.get_stable_mark(self.__MARK_STABLE_DEPTH)
+        mark = self.__vision.get_command_index(self.__last_image)
         
         if mark != 4:
             # Game over: 
-            print(self.__BOLD + self.__FC_YELLOW + self.__BG_RED + 'Game Over!' + self.__FC_RESET)
+            logging.info(self.__BOLD + self.__FC_YELLOW + self.__BG_RED + 'Game Over!' + self.__FC_RESET)
 
             key = raw_input('Please confirm Game over by input "over"  ')
             if key == 'over':
                 self.__ai_go.layout.clear()
                 self.__ai_go.stop_game()
-                self.__mqtt.publish('gogame/smf/status','game_over', retain=True)
+                g_mqtt.publish('gobot/smf/current','game_over', retain=True)
                 self.__goto = self.at_state_game_over
                 return
 
-        stable_layout = self.__eye.get_stable_layout(self.__LAYOUT_STABLE_DEPTH)
+        stable_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
         do_print_diffs = False
-        diffs = self.__ai_go.layout.compare_with(stable_layout)
+        diffs = self.__ai.layout.compare_with(stable_layout)
         if len(diffs) == 0:
             # there is no use move
             pass
