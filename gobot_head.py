@@ -29,12 +29,15 @@ class GobotHead():
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__BG_BLUE = TerminalFont.Color.Background.blue
+        self.__FC_GREEN = TerminalFont.Color.Fore.green
         self.__FC_RESET = TerminalFont.Color.Control.reset
         self.__FC_PINK = TerminalFont.Color.Fore.pink
         self.__MARK_STABLE_DEPTH = 5
         self.__LAYOUT_STABLE_DEPTH = 2
         logging.basicConfig(level=logging.DEBUG)
-
+        self.__BLANK = 0
+        self.__BLACK = 1
+        self.__WHITE = 2
 
     def get_stable_layout(self,min_stable_depth):
         stable_depth = 0
@@ -84,11 +87,11 @@ class GobotHead():
             0 = zero chess has been removed
             1 = one chess has been removed
         '''
-        the_layout = self.__eye.get_stable_layout(self.__LAYOUT_STABLE_DEPTH)
+        the_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
         the_layout.print_out()
         cell = the_layout.get_first_cell(color)
         if cell is not None:
-            print (self.__FC_GREEN + '[INFO]: GoManager.__remove_one_cell_to_trash() ' + cell.name + self.__FC_RESET)
+            logging.info(self.__FC_GREEN + '[INFO]: GoManager.__remove_one_cell_to_trash() ' + cell.name + self.__FC_RESET)
             # move the first chess cell to trash
             # cell = ChessboardCell()
             # cell.from_col_row_id(col_id=col, row_id=row)
@@ -301,7 +304,7 @@ class GobotHead():
 
     def at_demo_from_warehouse(self):
         # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
-        layout = self.__vision.get_chessboard_layout(self.Stable_depth)
+        layout,depth = self.__vision.get_chessboard_layout(self.__last_image)
         layout.print_out()
         cell = layout.get_first_cell(self.__BLANK)
         self.__arm.action_pickup_chess_from_warehouse()
