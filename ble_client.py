@@ -1,4 +1,9 @@
-from bluepy import btle
+from bluepy import btle  
+'''
+sudo apt-get install libglib2.0-dev
+pip3 install bluepy
+sudo blescan # to verify bluepy
+'''
 from bluepy.btle import Scanner
 from bluepy.btle import Peripheral, DefaultDelegate
 import time
@@ -10,7 +15,7 @@ class MyDelegate(DefaultDelegate):
     def handleNotification(self, cHandle, data):
         print('Notification is invoked')
 
-class ble():
+class BleClient():
     def __init__(self):
         self.__server_mac = 'b4:e6:2d:b2:f8:8f'
         ##self.dev = btle.Peripheral(self.__server_mac)
@@ -64,7 +69,7 @@ class ble():
 
 if __name__ =='__main__':
     print('practice BLE')
-    runner = ble()
+    runner = BleClient()
     runner.scan()
     runner.list_services_on_server()
     runner.connect_to_server()
