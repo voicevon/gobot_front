@@ -21,15 +21,15 @@ class config_4_aruco_marks:
     bottom_left_id = 21
     top_left_id = 15
 
-    perspective_width = 450  
-    perspective_height = 450 
-    top_extended = 100
-    right_extended = 100
-    bottom_extended = 100
-    left_extended = 100
+    perspective_width = 428 -6   #effect scale, greater number cause zoom in. 
+    perspective_height = 428 + 5  # effect scale
+    top_extended = -7
+    right_extended = 5   # effect view range
+    bottom_extended = 5   # effect view range
+    left_extended = 0
 
-    crop_x0 = 13   # effect the left edge
-    crop_y0 = 13   # effect the top edge.
+    crop_x0 = 0   # effect the left edge
+    crop_y0 = 0   # effect the top edge.
     crop_width = 428   # Don't modify this value
     crop_height = 428  # Don't modify this value.
     

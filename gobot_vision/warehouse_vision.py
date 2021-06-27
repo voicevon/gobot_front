@@ -9,10 +9,10 @@ class finder_config:
 
     perspective_width = 450  
     perspective_height = 450 
-    top_extended = 100
-    right_extended = 100
-    bottom_extended = 100
-    left_extended = 100
+    top_extended = 330
+    right_extended = -80
+    bottom_extended = -490
+    left_extended = -80
 
     crop_x0 = 50   # effect the left edge
     crop_y0 = 50   # effect the top edge.
