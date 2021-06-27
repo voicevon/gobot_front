@@ -1,5 +1,5 @@
 import sys
-sys.path.append('pi/home/pylib')
+sys.path.append('/home/pi/pylib')
 from mqtt_helper import MqttConfigableItem
 
 class config:
@@ -44,7 +44,8 @@ class config:
 
     class server:
         class AI:
-            ip = '192.168.123.123'
+            ip = 'voicevon.vicp.io'
+            #ip = '192.168.123.72'
             port = 50007
 
         class mqtt:

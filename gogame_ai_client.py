@@ -11,7 +11,7 @@ import logging
 
 
 # from gogame.chessboard_cell import ChessboardCell
-# from gogame.chessboard import ChessboardLayout
+from gogame.chessboard import ChessboardLayout
 from config import config as app_config
 import sys
 sys.path.append('/pi/home/pylib')
