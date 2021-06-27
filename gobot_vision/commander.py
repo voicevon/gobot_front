@@ -1,4 +1,5 @@
 import cv2
+import logging
 from vision.grid_finder import GridFinder
 from gobot_vision.commander_vision import config_2_aruco_marks
 from config import config as app_config
@@ -12,12 +13,16 @@ class Commander(GridFinder):
         self.__LOWEST_SCALE = 0.7
         GridFinder.__init__(self, config_2_aruco_marks)
 
-    def get_command_from_image(self, image):
+    def get_command_from_image(self, origin_image):
         '''
         return -1, if found nothing
         return 1..5 if found avaliable cell in black.
         '''
-        corners = self.find_corners(image)
+        #if config.publish_image_command_soultion2:
+        gray_image = cv2.cvtColor(origin_image,cv2.COLOR_BGR2GRAY)
+        if app_config.publish_image_command:
+            debug_image = origin_image.copy()
+        corners = self.find_corners(gray_image)
         if len(corners) == 4: 
             # Sucessful detection will return 4 corners
             x1, y1 = corners[0]
@@ -33,36 +38,41 @@ class Commander(GridFinder):
             delta_x = (cx2 - cx1) / self.__CELLS 
             delta_y = (cy2 - cy1) / self.__CELLS
 
-            if app_config.publish_mqtt and False:
+            if app_config.publish_image_command:
                 # publish a debug image. Draw a center line. For debug only.
                 # this code will effect image to get correct command_index
                 color_red = (0,0,255)
                 pen_thickness = 3
-                cv2.line(image,(cx1, cy1),(cx2, cy2),color_red, pen_thickness)
-                g_mqtt.publish_cv_image('gobot/test/image',image)
+                cv2.line(debug_image,(cx1, cy1),(cx2, cy2),color_red, pen_thickness)
+                g_mqtt.publish_cv_image('gobot/image/command',debug_image)
 
             # Get average color
-            sum_color = 0
-            for index in range(0, self.__CELLS + 1, 1):
+            sum_brightness = 0
+            for index in range(0, self.__CELLS , 1):
                 # get x,y position of indicator
                 x = int(index * delta_x + cx1 + delta_x / 2)
-                y = int(index * delta_y + cy1 + delta_y / 2) 
-                [b,g,r] = image[y, x]
-                sum_color += b
-                sum_color += g
-                sum_color += r
+                y = int(index * delta_y + cy1 + delta_y / 2)
+                if app_config.publish_image_command:
+                    cv2.circle(debug_image,(x,y),20,(0,255,0),5)
+                    g_mqtt.publish_cv_image('gobot/image/command',debug_image)
+                brightness = gray_image[y, x]
+                #sum_color += b
+                #sum_color += g
+                sum_brightness += brightness
 
                 #print('index=', index,'(x,y)=(',x,y, ')color=', b,g,r)
                 #print('cell_position',index, x, y)
-            avg_color = sum_color / self.__CELLS
-            
+            avg_brightness = sum_brightness / self.__CELLS
+            logging.info('sum_brightness=%d, avg_brightness=%d',sum_brightness,avg_brightness)
+        
             # Get which cell is black
-            for index in range(1, self.__CELLS + 1, 1):
+            for index in range(0, self.__CELLS, 1):
                 x = int(index * delta_x + cx1 + delta_x / 2) 
                 y = int(index * delta_y + cy1 + delta_y / 2)
-                [b,g,r] = image[y,x]
-                cell_color = b + g + r
-                if cell_color < avg_color * self.__LOWEST_SCALE:
+                cell_brightness = gray_image[y,x]
+                #cell_color = b + g + r
+                logging.info('cell[%d] brightness=%d', index, cell_brightness)
+                if cell_brightness < avg_brightness * self.__LOWEST_SCALE:
                     return index
         return -1
  

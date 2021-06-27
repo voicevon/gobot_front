@@ -32,6 +32,7 @@ class GobotHead():
         self.__FC_RESET = TerminalFont.Color.Control.reset
         self.__MARK_STABLE_DEPTH = 5
         self.__LAYOUT_STABLE_DEPTH = 2
+        logging.basicConfig(level=logging.DEBUG)
 
 
     def get_stable_layout(self,min_stable_depth):
@@ -131,7 +132,8 @@ class GobotHead():
         # command = self.__eye.get_stable_mark(self.__MARK_STABLE_DEPTH)
 
         command = self.__vision.get_command_index(self.__last_image)
-
+        logging.info('Commander id = %d', command)
+        return
 
         if command == 0:
             self.__goto = self.at_demo_from_warehouse

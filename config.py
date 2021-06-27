@@ -12,7 +12,7 @@ class config:
     publish_image_origin = MqttConfigableItem('gobot/image/origin/publish',True)
     publish_image_board = MqttConfigableItem('gobot/image/board/publish',True)
     publish_image_board_gridline = MqttConfigableItem('gobot/image/chessboard/gridline/publish',True)
-
+    publish_image_command = MqttConfigableItem('gobot/image/command/publish', True)
 
     publish_mqtt = True
     
