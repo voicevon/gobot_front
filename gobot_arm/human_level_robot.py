@@ -7,7 +7,7 @@ from config import config as  app_config
 import logging
 import sys
 sys.path.append("/home/pi/pylib")
-from terminal_font import TerminalFron
+from terminal_font import TerminalFont
 
 
 class HumanLevel_RobotArm:
@@ -27,12 +27,8 @@ class HumanLevel_RobotArm:
         # self.__robot_eye.start_show('origin')
         self._FC_YELLOW = TerminalFont.Color.Fore.yellow
         self._BG_GREEN = TerminalFont.Color.Background.green
-        self._FC_RESET = TerminalFont.Color.Control.reset
- 
+        self._FC_RESET = TerminalFont.Color.Control.reset 
         self.__at_picked_up = False
-
-
-
 
     def goto_here(self, target_pose):
         '''
@@ -73,55 +69,56 @@ class HumanLevel_RobotArm:
         print ('[Info]: action_pickup_chess_from_a_cell  %s' %cell_name)
         # pose = self.get_target_pose_by_name('VIEW')
         # self.goto_here(pose)
-        pose = self.get_target_pose_by_name(cell_name.lower())
-        self.goto_here(pose)
-        pose = self.get_target_pose_by_name(cell_name.upper())
-        self.goto_here(pose)
-        self.__eef_pick_up()
-        pose = self.get_target_pose_by_name(cell_name.lower())
-        self.goto_here(pose)
+        #pose = self.get_target_pose_by_name(cell_name.lower())
+        #self.goto_here(pose)
+        #pose = self.get_target_pose_by_name(cell_name.upper())
+        #self.goto_here(pose)
+        #self.__eef_pick_up()
+        #pose = self.get_target_pose_by_name(cell_name.lower())
+        #self.goto_here(pose)
 
     def action_pickup_chess_from_warehouse(self):
-        print('[Info]: Action_pickup_chess_from_warehouse')
-        pose_name_list_a = ['warehouse','WAREHOUSE']
-        for pose_name in pose_name_list_a:
-            pose = self.get_target_pose_by_name(pose_name)
-            self.goto_here(pose)
-        self.__eef_pick_up()
+        logging.info('[Info]: Action_pickup_chess_from_warehouse')
+        
+        #pose_name_list_a = ['warehouse','WAREHOUSE']
+        #for pose_name in pose_name_list_a:
+        #    pose = self.get_target_pose_by_name(pose_name)
+        #    self.goto_here(pose)
+        #self.__eef_pick_up()
         # lift up gripper
-        pose = self.get_target_pose_by_name('warehouse')
-        self.goto_here(pose)
+        #pose = self.get_target_pose_by_name('warehouse')
+        #self.goto_here(pose)
 
     def action_place_chess_to_trash_bin(self, park_to_view_point=True):
-        print('[Info]: Action_place_chess_to_trash_bin')
+        logging.info('[Info]: Action_place_chess_to_trash_bin')
 
-        pose = self.get_target_pose_by_name('TRASH')
-        self.goto_here(pose)
-        self.__eef_place_down() 
+        #pose = self.get_target_pose_by_name('TRASH')
+        #self.goto_here(pose)
+        #self.__eef_place_down() 
         # lift up gripper
-        pose = self.get_target_pose_by_name('trash')    # this is a delaying for eef_place_down()  
-        self.goto_here(pose)
-        self.eef_sleep()
+        #pose = self.get_target_pose_by_name('trash')    # this is a delaying for eef_place_down()  
+        #self.goto_here(pose)
+        #self.eef_sleep()
 
-        if park_to_view_point:
-            pose = self.get_target_pose_by_name('VIEW')
-            self.goto_here(pose)
+        #if park_to_view_point:
+        #    pose = self.get_target_pose_by_name('VIEW')
+        #    self.goto_here(pose)
 
     def action_place_chess_to_a_cell(self, cell_name='k10', auto_park=True):
-        print('[Info]: action_place_chess_to_a_cell %s' %cell_name)
+        logging.info('[Info]: action_place_chess_to_a_cell %s' %cell_name)
         # pose = self.get_target_pose_by_name('VIEW')
         # self.goto_here(pose)
-        pose = self.get_target_pose_by_name(cell_name.lower())
-        self.goto_here(pose)
-        pose = self.get_target_pose_by_name(cell_name.upper())
-        self.goto_here(pose)
-        self.__eef_place_down()
-        pose = self.get_target_pose_by_name(cell_name.lower())
-        self.goto_here(pose)
-        self.eef_sleep()
-        if auto_park:
-            pose = self.get_target_pose_by_name('VIEW')
-            self.goto_here(pose)
+        #pose = self.get_target_pose_by_name(cell_name.lower())
+        #self.goto_here(pose)
+        #pose = self.get_target_pose_by_name(cell_name.upper())
+        #self.goto_here(pose)
+        #self.__eef_place_down()
+        #pose = self.get_target_pose_by_name(cell_name.lower())
+        #self.goto_here(pose)
+        #self.eef_sleep()
+        #if auto_park:
+        #    pose = self.get_target_pose_by_name('VIEW')
+        #    self.goto_here(pose)
             
 
 
