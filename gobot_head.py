@@ -1,21 +1,20 @@
-import cv2
-import numpy as np
-
-
 from vision.robot_eye import MonoEye
 from gobot_vision.gobot_vision import GobotVision
 from gogame.chessboard_cell import Stone
 from gogame.chessboard import ChessboardLayout
+from ai_client import GoGameAiClient
 #from gobot_arm.human_level_robot import HumanLevel_RobotArm
 from config import config as app_config
 
+import cv2
+import numpy as np
+import logging
 import sys
 sys.path.append("/home/pi/pylib")
 from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
 
-class AiClient():
-    pass
+
 
 
 class GobotHead():
@@ -23,6 +22,7 @@ class GobotHead():
     def __init__(self):
         self.__eye = MonoEye('2021-0611.yml')
         self.__vision = GobotVision()
+        self.__ai = GoGameAiClient()
         #self.__arm = HumanLevel_RobotArm()
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
@@ -395,10 +395,7 @@ class GobotHead():
         chessboard_image = 1
         warehouse_image = 1
 
-
         #self.__vision.get_warehouse_plate(self.__last_image)
-        #return
-        
 
         last_function = self.__goto
         self.__goto()
@@ -406,16 +403,6 @@ class GobotHead():
             print(self.__BG_BLUE + self.__FC_YELLOW)
             print(self.__goto.__name__)
             print(self.__FC_RESET)
-
-
-        # oringin_image = self.__eye.take_picture()
-        # command_image = self.__command_finder.auto_perspect(oringin_image)
-        # command = self.__command_scanner.get_command(command_image)
-        # if command: 
-        #     self.user_playing()
-                
-        
-
 
 
 if __name__ == '__main__':
