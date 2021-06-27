@@ -30,6 +30,7 @@ class GobotHead():
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__BG_BLUE = TerminalFont.Color.Background.blue
         self.__FC_RESET = TerminalFont.Color.Control.reset
+        self.__FC_PINK = TerminalFont.Color.Fore.pink
         self.__MARK_STABLE_DEPTH = 5
         self.__LAYOUT_STABLE_DEPTH = 2
         logging.basicConfig(level=logging.DEBUG)
@@ -117,11 +118,11 @@ class GobotHead():
 
     def at_state_begin(self):
         # scan the marks, to run markable command
-        command = self.__eye.get_stable_mark(self.__MARK_STABLE_DEPTH)
+        command = self.__vision.get_command_index(self.__last_image)
 
         if command == 4:
-            self.__ai_go.start_new_game()
-            self.__mqtt.publish('gogame/smf/status', 'computer_playing', retain=True)
+            self.__ai.start_new_game()
+            g_mqtt.publish('gobot/smf/current', 'computer_playing')
             self.__goto = self.at_state_computer_play
         else:
             print(self.__FC_YELLOW + '[Warning]: GoManger.at_begining()  scanned command=%d' %command)
@@ -133,7 +134,6 @@ class GobotHead():
 
         command = self.__vision.get_command_index(self.__last_image)
         logging.info('Commander id = %d', command)
-        return
 
         if command == 0:
             self.__goto = self.at_demo_from_warehouse
@@ -149,21 +149,21 @@ class GobotHead():
 
         elif command == 4:
             self.__goto = self.at_state_begin
-            self.__mqtt.publish('gogame/smf/status','begining',retain=True)
+            g_mqtt.publish('gobot/smf/current','play')
         else:
-            print(self.__FC_YELLOW + '[Warning]: GoManger.at_begining()  scanned command=%d' %command)
+            logging.info(self.__FC_YELLOW + '[Warning]: GoManger.at_begining()  scanned command=%d' %command)
 
     def at_state_computer_play(self):
-        self.__ai_go.get_final_score()
+        self.__ai.get_final_score()
         # get command from PhonixGo
-        cell_name = self.__ai_go.get_ai_move()
+        cell_name = self.__ai.get_ai_move()
         if cell_name is not None:
             # some time the ai_player will return a 'resign' as a cell name.
             logging.info(self.__FC_PINK + 'AI step: place black at: %s' %cell_name + self.__FC_RESET)
             # robot arm play a chess, The instruction is from AI.
             self.__arm.action_pickup_chess_from_warehouse()
             self.__arm.action_place_chess_to_a_cell(cell_name=cell_name)
-            self.__ai_go.layout.play(cell_name, self.__BLACK)
+            self.__ai.layout.play(cell_name, self.__BLACK)
 
         self.__goto = self.at_state_scan_died_white
 
