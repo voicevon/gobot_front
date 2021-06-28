@@ -23,15 +23,14 @@
 #define PIN_BETA_DIR 25
 #define PIN_BETA_ENABLE 13
 
-#define PIN_I2C_CLK 23
-#define PIN_I2C_DATA 22
+
 //  unit is mm
-#define LINK_0 22.3  // Length between origin and the two motors
-#define LINK_1 144.4 // Length from motor to passive joints
-#define LINK_2 255.5 // Length from passive joints to end effector
+#define LINK_0 191.0  // Length between origin and the two motors
+#define LINK_1 285.18 // Length from motor to passive joints
+#define LINK_2 384.51 // Length from passive joints to end effector
 
 Arm::Arm(){
-  // __Mcp23018 = &Mcp23018::getInstance();
+  __Mcp23018 = &Mcp23018::getInstance();
   Servo sv = Servo();
   sv.attach(PIN_EEF_SERVO);
   eefServo = &sv ;
