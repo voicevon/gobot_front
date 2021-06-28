@@ -42,8 +42,8 @@ class Controller:
         self._FC_YELLOW = TerminalFont.Color.Fore.yellow
         self._BG_GREEN = TerminalFont.Color.Background.green
         self._FC_RESET = TerminalFont.Color.Control.reset 
-        self.__current_action = bytes(0*13)
-        self.__next_action = bytes(0*13)
+        self.__current_action = bytearray([0]*13)
+        self.__next_action = bytearray([0]*13)
         self.__bleClient = BleClient()
 
     def get_xy_from_pose_name(self, pos_name='origin'):
@@ -61,7 +61,7 @@ class Controller:
             y = 1
         return x, y
 
-    def action_pickup_chess_from_a_cell(self, cell_name='k10'):
+    def action_pickup_stone_from_cell(self, cell_name='k10'):
         print ('[Info]: action_pickup_chess_from_a_cell  %s' %cell_name)
         x,y = self.get_xy_from_pose_name(cell_name)
         self.__next_action[1] = x /256
@@ -70,31 +70,31 @@ class Controller:
         self.__next_action[4] = y % 256
         self.__next_action[0] = 1 << 3
 
-    def action_pickup_chess_from_warehouse(self):
+    def action_pickup_stone_from_warehouse(self):
         logging.info('[Info]: Action_pickup_chess_from_warehouse')
         x,y = self.get_xy_from_pose_name('origin')
-        self.__next_action[1] = x /256
+        self.__next_action[1] = int(x /256)
         self.__next_action[2] = x % 256
-        self.__next_action[3] = y / 256
+        self.__next_action[3] = int(y / 256)
         self.__next_action[4] = y % 256
         self.__next_action[0] = 1 << 3
     
-    def action_place_chess_to_trash_bin(self, park_to_view_point=True):
+    def action_place_stone_to_trash_bin(self, park_to_view_point=True):
         logging.info('[Info]: Action_place_chess_to_trash_bin')
 
         x,y = self.get_xy_from_pose_name('trash')
-        self.__next_action[5] = x /256
+        self.__next_action[5] = int(x /256)
         self.__next_action[6] = x % 256
-        self.__next_action[7] = y / 256
+        self.__next_action[7] = int(y / 256)
         self.__next_action[8] = y % 256
         self.__next_action[0] = 1 << 3
     
-    def action_place_chess_to_a_cell(self, cell_name='k10', auto_park=True):
+    def action_place_stone_to_cell(self, cell_name='k10', auto_park=True):
         logging.info('[Info]: action_place_chess_to_a_cell %s' %cell_name)
         x,y = self.get_xy_from_pose_name(cell_name)
-        self.__next_action[5] = x /256
+        self.__next_action[5] = int(x /256)
         self.__next_action[6] = x % 256
-        self.__next_action[7] = y / 256
+        self.__next_action[7] = int(y / 256)
         self.__next_action[8] = y % 256
         self.__next_action[0] = 1 << 3
                 
@@ -103,9 +103,9 @@ class Controller:
         finish pickup, place, and park
         '''
         x,y = self.get_xy_from_pose_name('origin')
-        self.__next_action[9] = x /256
+        self.__next_action[9] = int(x /256)
         self.__next_action[10] = x % 256
-        self.__next_action[11] = y / 256
+        self.__next_action[11] = int(y / 256)
         self.__next_action[12] = y % 256
         self.__next_action[0] = 1 << 3
 
@@ -117,6 +117,6 @@ class Controller:
         # copy next to current
         self.__current_action = self.__next_action
         self.__next_action[0] == 0
-        self.__bleClient.update_charactoreristic(0, self.__current_action)
+        self.__bleClient.update_charactoreristic(self.__current_action)
 
         

@@ -394,6 +394,8 @@ class GobotHead():
 
 
     def spin_once(self):
+        self.test()
+        pass
         print('start spin')
         self.__last_image = self.__eye.take_picture()
         print('taken picture')
@@ -413,6 +415,11 @@ class GobotHead():
             print(self.__goto.__name__)
             print(self.__FC_RESET)
 
+    def test(self):
+        self.__controller.action_pickup_stone_from_warehouse()
+        self.__controller.action_place_stone_to_cell('Q4')
+        #self.__controller.action_place_stone_to_trash_bin()
+        self.__controller.action_park()
 
 if __name__ == '__main__':
     app_config.publish_mqtt = True
