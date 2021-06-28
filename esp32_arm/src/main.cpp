@@ -8,21 +8,19 @@
 
 BleServer* ble_server = &BleServer::getInstance();
 Arm* arm = &Arm::getInstance();
-House* house = &House::getInstance();
-Runner runner();
+// House* house = &House::getInstance();
 
 void setup(){
-  //BLE setup
-  Serial.begin(9600);
+  Serial.begin(115200);
   ble_server->Init();
 }
 int i = 65;
 void loop(){
-
+  Serial.print(i);
+  Serial.print("   ");
   ble_server->SpinOnce();
-  arm->SpinOnce(&ble_server->body_action);
-  // house.SpinOnce(ble_server.house_action);
-  ble_server->UpdateActionCode(i);
+  // arm->SpinOnce(&ble_server->body_action);
+  // ble_server->UpdateActionCode(i);
   delay(2000);
   i++;
 }

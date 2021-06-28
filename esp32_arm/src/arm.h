@@ -43,8 +43,8 @@ class Arm{
 
     private:
         Arm();
-        // Arm(Arm const& copy);            // Not Implemented
-        // Arm& operator=(Arm const& copy); // Not Implemented
+        Arm(Arm const& copy);            // Not Implemented
+        Arm& operator=(Arm const& copy); // Not Implemented
 
         motor_position ik(int x, int y);
         void MoveTo(int x, int y);
@@ -63,10 +63,13 @@ class Arm{
         int STEPS_PER_RAD;
         AccelStepper* stepper_alpha;
         AccelStepper* stepper_beta;
-        MultiStepper* steppers;
+        MultiStepper steppers;
         Servo* eefServo;
+        Servo* mover_left_Servo;
+        Servo* mover_right_Servo;
+        
         BleServer* __ble_server;
-        // Mcp23018* __Mcp23018;
+        Mcp23018* __Mcp23018;
 
     protected:
 

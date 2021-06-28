@@ -3,43 +3,76 @@
 #include<Arduino.h>
 
 
-#define PIN_EEF_SERVO 12
-#define PIN_HOME_ALHPA 13
-#define PIN_HOME_BETA 14
+#define PIN_EEF_SERVO 21
+#define PIN_EEF_A  18
+#define PIN_EEF_B  19
+#define PIN_HOME_ALHPA 16
+#define PIN_HOME_BETA 17
+
+#define PIN_MOVER_LEFT_SERVO 4
+#define PIN_MOVER_RIGHT_SERVO 5
+
 
 #define STEPS_PER_RAD 123
 #define MOTOR_MAX_SPEED 100  /// unit?
 
-#define PIN_ALPHA_STEP 15
-#define PIN_ALPHA_DIR 16
-#define PIN_ALPHA_ENABLE 17
-#define PIN_BETA_STEP 18
-#define PIN_BETA_DIR 19
-#define PIN_BETA_ENABLE 17
+#define PIN_ALPHA_STEP 12
+#define PIN_ALPHA_DIR 26
+#define PIN_ALPHA_ENABLE 13
+#define PIN_BETA_STEP 14
+#define PIN_BETA_DIR 25
+#define PIN_BETA_ENABLE 13
+
+#define PIN_I2C_CLK 23
+#define PIN_I2C_DATA 22
 //  unit is mm
 #define LINK_0 22.3  // Length between origin and the two motors
 #define LINK_1 144.4 // Length from motor to passive joints
 #define LINK_2 255.5 // Length from passive joints to end effector
 
 Arm::Arm(){
-
   // __Mcp23018 = &Mcp23018::getInstance();
-
-  AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::FULL4WIRE, 5,6,7,8,false);
-  stepper_alpha = & stepper;
-  stepper = AccelStepper(AccelStepper::MotorInterfaceType::FULL4WIRE, 2,3,4,5,false);
-  stepper_beta = & stepper;
-  stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
-  stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
-
-  // Then give them to MultiStepper to manage
-  steppers->addStepper(*stepper_alpha);
-  steppers->addStepper(*stepper_beta);
-
   Servo sv = Servo();
   sv.attach(PIN_EEF_SERVO);
   eefServo = &sv ;
+  
+  sv=Servo();
+  sv.attach(PIN_MOVER_LEFT_SERVO);
+  mover_left_Servo = &sv;
 
+  sv= Servo();
+  sv.attach(PIN_MOVER_RIGHT_SERVO);
+  mover_right_Servo = &sv;
+
+  pinMode(PIN_EEF_A, OUTPUT);
+  digitalWrite(PIN_EEF_A, HIGH);
+  pinMode(PIN_EEF_B,OUTPUT);
+  digitalWrite(PIN_EEF_B, HIGH);
+  pinMode(PIN_BETA_ENABLE, OUTPUT);
+  digitalWrite(PIN_BETA_ENABLE, HIGH);
+
+  pinMode(PIN_HOME_ALHPA,INPUT_PULLUP);
+  pinMode(PIN_HOME_BETA, INPUT_PULLUP);
+
+  AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
+                                      PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+  stepper_alpha = & stepper;
+  steppers.addStepper(stepper);
+
+  stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
+                        PIN_BETA_STEP,PIN_BETA_DIR);
+  stepper_beta = & stepper;
+  steppers.addStepper(stepper);
+
+  stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
+  stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
+
+  // These code cause the ESP32-Core being cracked ??
+  // steppers->addStepper(*stepper_alpha);
+  // steppers->addStepper(*stepper_beta);
+
+
+#define PIN_EEF_B  19
   // link length in mm
   l0 = LINK_0;
   l1 = LINK_1;
@@ -109,7 +142,7 @@ void Arm::MoveTo(int x, int y){
   long angles[2];
   angles[0] = pos.alpha;
   angles[1] = pos.beta;
-  steppers->moveTo(angles);
+  steppers.moveTo(angles);
 }
 
 void Arm::SetEffector(EEF action){
@@ -152,9 +185,9 @@ void Arm::pick_place_park(BodyAction* body_action){
 }
 
 void Arm::SpinOnce(BodyAction* action){
-  // return;
-  int ccc = __ble_server->body_action.Arm.action_code;
-  // return;
+  return;
+  // int ccc = __ble_server->body_action.Arm.action_code;
+  return;
   Serial.println("The new aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa value is: ");
   // Serial.println(ccc);
 
@@ -172,7 +205,7 @@ void Arm::SpinOnce(BodyAction* action){
       break;
     case 8: //home_X
       // ble_server.UpdateActionCode(8+1);
-      __ble_server->UpdateActionCode(8+1);
+      // __ble_server->UpdateActionCode(8+1);
       this->Home(0);
       break;
     case 10:    //home y
