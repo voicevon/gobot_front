@@ -57,8 +57,11 @@ class Controller:
             y = 200
         else:
             # cell name , like 'Q4'
-            x = 1 
-            y = 1
+            col_name_list = 'ABCDEFGHJKLMNOPQRST'
+            col_id = 18 - col_name_list.find(pos_name[:1])
+            row_id = int(pos_name[1:]) -1    # exeption here:
+            x = col_id * 22 + 12
+            y = row_id * 23 + 45
         return x, y
 
     def action_pickup_stone_from_cell(self, cell_name='k10'):

@@ -7,8 +7,7 @@ from controller import Controller
 from ai_client import GoGameAiClient
 from config import config as app_config
 
-import board
-import neopixel
+
 
 import cv2
 import numpy as np
@@ -35,7 +34,6 @@ class GobotHead():
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
 
         logging.basicConfig(level=logging.DEBUG)
-        pixels = neopixel.NeoPixel(board.D18, 30)
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__BG_BLUE = TerminalFont.Color.Background.blue
