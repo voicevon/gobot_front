@@ -422,7 +422,7 @@ class GobotHead():
         self.__controller.action_pickup_stone_from_warehouse()
         self.__controller.action_place_stone_to_cell('Q4')
         #self.__controller.action_place_stone_to_trash_bin()
-        self.__controller.action_park()
+        self.__controller.action_park(blocking_time=1.5)
 
 if __name__ == '__main__':
     app_config.publish_mqtt = True

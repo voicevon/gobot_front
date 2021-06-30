@@ -102,9 +102,12 @@ class Controller:
         self.__next_action[8] = y % 256
         self.__next_action[0] = 1 << 3
                 
-    def action_park(self, park_cell='current'):
+    def action_park(self, park_cell='current', blocking_time= 0):
         '''
         finish pickup, place, and park
+        The function will be blocked , until 
+            (by default)ESP32 finished all actions, or
+            wait blocking_time in second
         '''
         x,y = self.get_xy_from_pose_name('origin')
         self.__next_action[9] = int(x /256)
@@ -115,9 +118,13 @@ class Controller:
 
         # Wait until the current action is finished
         while self.__current_action[0] >= 2:
-            logging.info('Wait current action to be updated from ESP-Controller, self.__current_action[0]=%i', self.__current_action)
-            time.sleep(0.5)
-            pass
+            if blocking_time == 0:
+                print(' current action to be updated from ESP-Controller, self.__current_action[0]=', self.__current_action)
+                # if blocking_time == 0:
+                pass
+            else:
+                time.sleep(blocking_time)
+                return;
 
         # Current action is finsihed, hardware is idle
         # copy next to current
@@ -125,6 +132,8 @@ class Controller:
             self.__current_action[i] = self.__next_action[i]
         # self.__current_action = self.__next_action
         self.__next_action[0] == 0
-        self.__bleClient.update_characteristic(self.__current_action)
+        #self.__bleClient.update_characteristic(self.__current_action)
+        print('ccccccccccccccccccccccccccccccc, bleClient.updated...')
+
 
         
