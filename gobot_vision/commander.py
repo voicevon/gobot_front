@@ -74,5 +74,6 @@ class Commander(GridFinder):
                 logging.info('cell[%d] brightness=%d', index, cell_brightness)
                 if cell_brightness < avg_brightness * self.__LOWEST_SCALE:
                     return index
+        logging.warning('Can NOT find arucos')
         return -1
  
