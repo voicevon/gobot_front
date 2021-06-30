@@ -2,6 +2,7 @@ from config import config as  app_config
 from ble_client import BleClient
 import logging
 import sys
+import time
 sys.path.append("/home/pi/pylib")
 from terminal_font import TerminalFont
 
@@ -114,11 +115,15 @@ class Controller:
 
         # Wait until the current action is finished
         while self.__current_action[0] >= 2:
+            logging.info('Wait current action to be updated from ESP-Controller, self.__current_action[0]=%i', self.__current_action)
+            time.sleep(0.5)
             pass
 
         # Current action is finsihed, hardware is idle
         # copy next to current
-        self.__current_action = self.__next_action
+        for i in range(0,13,1):
+            self.__current_action[i] = self.__next_action[i]
+        # self.__current_action = self.__next_action
         self.__next_action[0] == 0
         self.__bleClient.update_characteristic(self.__current_action)
 
