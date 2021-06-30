@@ -121,33 +121,42 @@ class Controller:
         motor_id == 4: Alpha
         motor_id == 5: Beta
         '''
+        logging.info('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+        print(self.__current_action[0], self.__next_action[0])
         if not(motor_id == 4 or motor_id == 5):
             logging.warn('home papameter is wrong')
             return -1
-        if self.__next_action == 0:
+        if self.__next_action[0] == 0:
             self.__next_action[0] = 1<< motor_id
+            print('hhhhhhhhhhhhhh', self.__next_action[0])
             # self.__bleClient.update_characteristic(self.__current_action)
+        else:
+            logging.warn('BLE message queue is full')
 
     def spin_once(self):
+        logging.info('Controller.spin_once %d,%d',self.__current_action[0], self.__next_action[0] )
         if int(self.__current_action[0] / 2) == 0:
             # hardware robot is idle
             if int(self.__next_action[0] /2 ) == 0:
                 # nothing to do
+                #level.info('nothing to do')
                 return
             else:
                 # from plan to current action
                 # copy next to current
                 for i in range(0,13,1):
                     self.__current_action[i] = self.__next_action[i]
-                    self.__next_action[0] == 0
-                    self.__bleClient.update_characteristic(self.__current_action)
-                    print('ccccccccccccccccccccccccccccccc, bleClient.updated...')
+                self.__next_action[0] = 0
+                self.__bleClient.update_characteristic(self.__current_action)
+                print('ccccccccccccccccccccccccccccccc, bleClient.updated...')
+                print(self.__current_action[0], self.__next_action[0])
         else:
             # Hardware robot is busy for current action
             logging.info('Hardware robot is running task %cd', self.__current_action[0])
             return
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     tester = Controller()
     test_id = 4
     if test_id == 4:
@@ -164,4 +173,6 @@ if __name__ == '__main__':
 
     while True:
         tester.spin_once()
+        time.sleep(1)
+        
 
