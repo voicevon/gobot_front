@@ -53,41 +53,23 @@ class BleClient():
 
 
     def update_characteristic(self, new_value):
-        #ch = self.arm_info
-        #if channel == 1:
-        #    ch = self.house_info
-        
         self.arm_info.write(bytes(new_value))
         logging.info('Updated charactoristic')
 
-
-    def spin(self):
-        i = 32 
-        while True:
-            received = self.arm_info.read()
-            
-            logging.info('arm info: %s', received)
-            #code = xx[0]
-            #park_x = xx[1] * 256 *256  + xx[2] * 256 + xx[3]
-            #print(code, park_x)
-
-            #yy = self.house_info.read()
-            #print('house info: ',yy)
-            time.sleep(1.7)
-            i += 1
-            if i> 128:
-                i = 32
-            self.update_characteristic([i])
-            pass
+    def spin_once(self):
+        received = self.arm_info.read()
+        logging.info('arm info: %s', received)
 
 if __name__ =='__main__':
     logging.basicConfig(level=logging.DEBUG)
     logging.info('practice BLE')
     runner = BleClient()
-    #runner.scan()
-    #runner.list_services_on_server()
-    #runner.connect_to_server()
-    runner.spin()
+    while True:
+        time.sleep(1.7)
+        i += 1
+        if i> 128:
+            i = 32
+        runner.update_characteristic([i])
 
 
 

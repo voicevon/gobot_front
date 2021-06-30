@@ -102,7 +102,7 @@ class Controller:
         self.__next_action[8] = y % 256
         self.__next_action[0] = 1 << 3
                 
-    def action_park(self, park_cell='current', blocking_time= 0):
+    def action_park(self, park_cell='current'):
         '''
         finish pickup, place, and park
         The function will be blocked , until 
@@ -116,24 +116,52 @@ class Controller:
         self.__next_action[12] = y % 256
         self.__next_action[0] = 1 << 3
 
-        # Wait until the current action is finished
-        while self.__current_action[0] >= 2:
-            if blocking_time == 0:
-                print(' current action to be updated from ESP-Controller, self.__current_action[0]=', self.__current_action)
-                # if blocking_time == 0:
-                pass
+    def home_single_arm(self, motor_id):
+        '''
+        motor_id == 4: Alpha
+        motor_id == 5: Beta
+        '''
+        if not(motor_id == 4 or motor_id == 5):
+            logging.warn('home papameter is wrong')
+            return -1
+        if self.__next_action == 0:
+            self.__next_action[0] = 1<< motor_id
+            # self.__bleClient.update_characteristic(self.__current_action)
+
+    def spin_once(self):
+        if int(self.__current_action[0] / 2) == 0:
+            # hardware robot is idle
+            if int(self.__next_action[0] /2 ) == 0:
+                # nothing to do
+                return
             else:
-                time.sleep(blocking_time)
-                return;
+                # from plan to current action
+                # copy next to current
+                for i in range(0,13,1):
+                    self.__current_action[i] = self.__next_action[i]
+                    self.__next_action[0] == 0
+                    self.__bleClient.update_characteristic(self.__current_action)
+                    print('ccccccccccccccccccccccccccccccc, bleClient.updated...')
+        else:
+            # Hardware robot is busy for current action
+            logging.info('Hardware robot is running task %cd', self.__current_action[0])
+            return
 
-        # Current action is finsihed, hardware is idle
-        # copy next to current
-        for i in range(0,13,1):
-            self.__current_action[i] = self.__next_action[i]
-        # self.__current_action = self.__next_action
-        self.__next_action[0] == 0
-        #self.__bleClient.update_characteristic(self.__current_action)
-        print('ccccccccccccccccccccccccccccccc, bleClient.updated...')
+if __name__ == '__main__':
+    tester = Controller()
+    test_id = 4
+    if test_id == 4:
+        #home_alpha
+        tester.home_single_arm(4)
+    if test_id == 5:
+        #home_beta
+        tester.home_single_arm(5)
+    if test_id == 8:
+        tester.action_pickup_stone_from_warehouse()
+        tester.action_place_stone_to_cell('Q4')
+        #self.__controller.action_place_stone_to_trash_bin()
+        tester.action_park(blocking_time=1.5)
 
+    while True:
+        tester.spin_once()
 
-        
