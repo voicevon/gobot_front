@@ -120,6 +120,6 @@ class Controller:
         # copy next to current
         self.__current_action = self.__next_action
         self.__next_action[0] == 0
-        self.__bleClient.update_charactoreristic(self.__current_action)
+        self.__bleClient.update_characteristic(self.__current_action)
 
         
