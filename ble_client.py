@@ -52,10 +52,14 @@ class BleClient():
 
 
 
-    def update_characteristic(self, new_value):
+    def write_characteristic(self, new_value):
         self.arm_info.write(bytes(new_value))
         logging.info('Updated charactoristic')
 
+    def read_characteristic(self):
+        return self.arm_info.read()
+
+        
     def spin_once(self):
         received = self.arm_info.read()
         logging.info('arm info: %s', received)

@@ -140,6 +140,7 @@ class Controller:
 
     def spin_once(self):
         logging.info('Controller.spin_once %d,%d',self.__current_action[0], self.__next_action[0] )
+        self.__current_action =  self.__bleClient.read_characteristic()
         if int(self.__current_action[0] / 2) == 0:
             # hardware robot is idle
             if int(self.__next_action[0] /2 ) == 0:
@@ -151,7 +152,7 @@ class Controller:
                     self.__current_action[i] = self.__next_action[i]
                 self.__next_action[0] = 0
                 print('ble going to update...')
-                self.__bleClient.update_characteristic(self.__current_action)
+                self.__bleClient.write_characteristic(self.__current_action)
         else:
             # Hardware robot is busy for current action
             logging.info('Hardware robot is running task %d', self.__current_action[0])
