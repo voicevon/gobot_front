@@ -55,38 +55,23 @@ void setup(){
   house->Setup(&action);
 }
 
-int i = 65;
-
 void loop(){
-  uint8_t arm_code = 0;
-  uint8_t house_code = 0;
+  uint8_t arm_code;
+  uint8_t house_code;
 
-  // arm->SpinOnce();
-  // arm_code = action.bytes[0];
+  arm->SpinOnce();
+  arm_code = action.bytes[0];
+  house->SpinOnce();
+  house_code = action.bytes[0];
 
-  // house->SpinOnce();
-  // house_code = action.bytes[0];
-
-  // uint8_t code = arm_code + house_code;
-  uint8_t code = i;
-  pCharacteristic->setValue(&code,3);
   if (action.bytes[0] <= 1){
     // Both head side and Esp side are idle. 
-    std::string value = pCharacteristic->getValue();
-    uint8_t* data  = pCharacteristic->getData();
-    Serial.print("The new characteristic value is: ");
-    Serial.println(value.c_str());
-    Serial.print(*data);
-    // uint8_t* p= (uint8_t* )(&value);
-    // Serial.println(*p);
-    // Serial.println(*(p+1));
-    // Serial.println(*(p+2));
+    uint8_t code = arm_code | house_code;
+    pCharacteristic->setValue(&code,1);
+    uint8_t* pData  = pCharacteristic->getData();
+    for (int i=0; i<13; i++){
+      action.bytes[i] = *(pData + i);
+    }
   }
-  // Serial.print(i);
-  // Serial.print("   ");
-  // ble_server->SpinOnce();
-  // arm->SpinOnce(&ble_server->body_action);
-  // ble_server->UpdateActionCode(i);
-  delay(2000);
-  i++;
+  // delay(2000);
 }

@@ -21,6 +21,7 @@ void House::Setup(RobotAction* pAction){
 void House::SpinOnce(){
   switch (__house_action->bytes[0]){
     case 0:
+      __house_action->bytes[0] = 1;
       break;
     case 2:
       MoveStoneToTarget(3);

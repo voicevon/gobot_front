@@ -69,7 +69,7 @@ class Arm{
         Servo* mover_left_Servo;
         Servo* mover_right_Servo;
         
-        BleServer* __ble_server;
+        // BleServer* __ble_server;
         Mcp23018* __Mcp23018;
         RobotAction* __arm_action;
 

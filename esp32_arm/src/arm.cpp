@@ -199,9 +199,11 @@ void Arm::SpinOnce(){
   int code = __arm_action->bytes[0] & 0b11111110;
   switch (code){
     case 0:
+      __arm_action->bytes[0] = 1;
       break;
+
     case 2:   // pickup and place and park
-      __ble_server->SetActionCode(2+1);
+      // __ble_server->SetActionCode(2+1);
       pick_place_park(__arm_action);
       break;
     case 1<<4: //home_X
