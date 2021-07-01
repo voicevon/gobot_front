@@ -26,9 +26,9 @@ void ble_setup(){
                                        );
     // BLECharacteristic *pCharacteristic;
 
-  uint8_t code = 0;
-  // pCharacteristic->setValue(&code,1);
-  pCharacteristic->setValue("A");
+  uint8_t code[13] = {0,1,2,3,4,5,6,7,8,9,10,11,12};
+  pCharacteristic->setValue(code,13);
+  // pCharacteristic->setValue("A");
   pService->start();
   // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -66,12 +66,25 @@ void loop(){
 
   if (action.bytes[0] <= 1){
     // Both head side and Esp side are idle. 
-    uint8_t code = arm_code | house_code;
-    pCharacteristic->setValue(&code,1);
+    uint8_t esp_code = arm_code | house_code;
+    // pCharacteristic->setValue(action.bytes,13);
     uint8_t* pData  = pCharacteristic->getData();
+    Serial.println("    ");
     for (int i=0; i<13; i++){
       action.bytes[i] = *(pData + i);
+      Serial.print(action.bytes[i]);
+      Serial.print(" ");
+    }
+    action.bytes[0] = esp_code;
+    pCharacteristic->setValue(action.bytes,13);
+
+    if (action.bytes[0] >=2){
+      Serial.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa    ");
+      Serial.println(action.bytes[0]);
+    }else{
+      Serial.print(">>>>>>>>>>>>>>>>>>>>>  ");
+      Serial.print(action.bytes[0]);
     }
   }
-  // delay(2000);
+  delay(500);
 }

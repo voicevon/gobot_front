@@ -86,11 +86,13 @@ void Arm::Home(unsigned char axis){
   if (axis == 4 ){
     home_pin = PIN_HOME_ALHPA;
     stepper = stepper_alpha;
+    Serial.println("Home Alpha");
   }
   else {
     // axis == 5
     home_pin = PIN_HOME_BETA;
     stepper = stepper_beta;
+    Serial.println("Home Beta");
   }
 
   bool homed = false;
