@@ -84,6 +84,7 @@ void Arm::Home(unsigned char axis){
   AccelStepper* stepper;
   
   if (axis == 4 ){
+
     home_pin = PIN_HOME_ALHPA;
     stepper = stepper_alpha;
     Serial.println("Home Alpha");
@@ -171,20 +172,20 @@ void Arm::SetEffector(EEF action){
 
 void Arm::pick_place_park(RobotAction* pAction){
   uint8_t action_code = pAction->Arm.action_code;
-  if (action_code & 1<<2 == 1){
+  if (action_code & (1<<2) == 1){
     MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
     SetEffector(Lower);
     SetEffector(Suck);
     SetEffector(Higher);
   }
-  if (action_code & 1<<3 == 1){
+  if (action_code & (1<<3) == 1){
     MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
     SetEffector(Lower);
     SetEffector(Release);
     SetEffector(Higher);
     SetEffector(Sleep);
   }
-  if (action_code & 1<<4 == 1){
+  if (action_code & (1<<4) == 1){
     MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
     SetEffector(Sleep);
   }
@@ -195,10 +196,16 @@ void Arm::Setup(RobotAction* pAction){
 }
 
 void Arm::SpinOnce(){
-  if (steppers.run()) 
-    return;
-
+  // if (steppers.run()) 
+  //   return;
   int code = __arm_action->bytes[0] & 0b11111110;
+  Serial.print("Arm spin once    ");
+  for (int i=0; i<13; i++){
+    Serial.print(__arm_action->bytes[i]);
+    Serial.print(" ");
+  }
+  Serial.println(code);
+  
   switch (code){
     case 0:
       __arm_action->bytes[0] = 1;
@@ -208,10 +215,12 @@ void Arm::SpinOnce(){
       // __ble_server->SetActionCode(2+1);
       pick_place_park(__arm_action);
       break;
-    case 1<<4: //home_X
+    case 16: //1<<4: //home_X
+      Serial.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
       Home(4);
       break;
-    case 1<<5:
+    case 32: //1<<5:
+      Serial.print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
       Home(5);
       break;
     default:

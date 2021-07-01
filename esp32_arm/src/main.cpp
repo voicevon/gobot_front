@@ -61,13 +61,12 @@ void loop(){
 
   arm->SpinOnce();
   arm_code = action.bytes[0];
-  house->SpinOnce();
-  house_code = action.bytes[0];
+  // house->SpinOnce();
+  // house_code = action.bytes[0];
 
   if (action.bytes[0] <= 1){
     // Both head side and Esp side are idle. 
     uint8_t esp_code = arm_code | house_code;
-    // pCharacteristic->setValue(action.bytes,13);
     uint8_t* pData  = pCharacteristic->getData();
     Serial.println("    ");
     for (int i=0; i<13; i++){
@@ -79,7 +78,7 @@ void loop(){
     pCharacteristic->setValue(action.bytes,13);
 
     if (action.bytes[0] >=2){
-      Serial.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa    ");
+      Serial.print("hhhhhhhhhhhhhhhhhhhhhhhhhhh    ");
       Serial.println(action.bytes[0]);
     }else{
       Serial.print(">>>>>>>>>>>>>>>>>>>>>  ");
