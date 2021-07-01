@@ -8,6 +8,9 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 
+#define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
+#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+
 // BleServer* ble_server = &BleServer::getInstance();
 Arm* arm = &Arm::getInstance();
 House* house = &House::getInstance();
@@ -55,18 +58,25 @@ void setup(){
   house->Setup(&action);
 }
 
+int8_t GetTrueBitIndex(uint8_t any){
+  for(int i=0; i<8; i++){
+    if (((any >> i) & 0b00000001) == 1)
+      return i;
+  }
+  return -1;
+}
 void loop(){
-  uint8_t arm_code;
-  uint8_t house_code;
-
+  // uint8_t arm_code;
+  // uint8_t house_code;
+  uint8_t house_id;
   arm->SpinOnce();
-  arm_code = action.bytes[0];
-  // house->SpinOnce();
+  // arm_code = action.bytes[0];
+  house->SpinOnce();
   // house_code = action.bytes[0];
 
   if (action.bytes[0] <= 1){
     // Both head side and Esp side are idle. 
-    uint8_t esp_code = arm_code | house_code;
+    // uint8_t esp_code = arm_code | house_code;
     uint8_t* pData  = pCharacteristic->getData();
     Serial.println("    ");
     for (int i=0; i<13; i++){
@@ -74,16 +84,40 @@ void loop(){
       Serial.print(action.bytes[i]);
       Serial.print(" ");
     }
-    action.bytes[0] = esp_code;
+    int8_t true_bit = GetTrueBitIndex(action.bytes[0]);
+    switch (true_bit){
+      //All the below functions will modify action.bytes[0]
+      case 2:
+        arm->pick_place_park(&action);
+        break;
+      case 4:
+        arm->Home(4);
+        break;
+      case 5:
+        arm->Home(5);
+        break;
+      case 6:
+        house_id = action.House.from_start_house_id;
+        house->DrawStone(house_id);
+        break;
+      case 7:
+        house_id = action.House.from_start_house_id;
+        house->MoveStoneToTarget(house_id);
+        break;
+      default:
+        break;
+    }
+
+    // action.bytes[0] = esp_code;
     pCharacteristic->setValue(action.bytes,13);
 
-    if (action.bytes[0] >=2){
-      Serial.print("hhhhhhhhhhhhhhhhhhhhhhhhhhh    ");
-      Serial.println(action.bytes[0]);
-    }else{
-      Serial.print(">>>>>>>>>>>>>>>>>>>>>  ");
-      Serial.print(action.bytes[0]);
-    }
+    // if (action.bytes[0] >=2){
+    //   Serial.print("hhhhhhhhhhhhhhhhhhhhhhhhhhh    ");
+    //   Serial.println(action.bytes[0]);
+    // }else{
+    //   Serial.print(">>>>>>>>>>>>>>>>>>>>>  ");
+    //   Serial.print(action.bytes[0]);
+    // }
   }
   delay(500);
 }

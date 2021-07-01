@@ -5,7 +5,7 @@
 #include "mcp23018.h"
 #include "actions.h"
 
-#include "ble_server.h"
+// #include "ble_server.h"
 #include <ESP32Servo.h>
 
 
@@ -41,6 +41,9 @@ class Arm{
         void SpinOnce(void);
         void Setup(RobotAction* pAction);
         // void pick_place_park(BodyAction* body_action);
+        void MoveTo(int x, int y);
+        void SetEffector(EEF action);
+        void pick_place_park(RobotAction* pAction);
 
     private:
         Arm();
@@ -48,9 +51,6 @@ class Arm{
         Arm& operator=(Arm const& copy); // Not Implemented
 
         motor_position ik(int x, int y);
-        void MoveTo(int x, int y);
-        void SetEffector(EEF action);
-        void pick_place_park(RobotAction* pAction);
 
         // link length in mm
         int l0 ;   // Length between origin and the two motors
@@ -66,12 +66,13 @@ class Arm{
         AccelStepper* stepper_beta;
         MultiStepper steppers;
         Servo* eefServo;
-        Servo* mover_left_Servo;
-        Servo* mover_right_Servo;
+
         
         // BleServer* __ble_server;
         Mcp23018* __Mcp23018;
         RobotAction* __arm_action;
+
+        void HomeSpin(void);
 
     protected:
 

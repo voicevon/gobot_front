@@ -48,5 +48,4 @@
   //   unsigned char from_to_house_id;  // from_house_id for forwarding .  to_house_id for backwarding.
 
   // };
-  
 

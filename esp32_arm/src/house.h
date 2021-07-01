@@ -17,8 +17,8 @@ class House{
         }
         void SpinOnce(void);
         void Setup(RobotAction* pAction);
-        void DrawStone(int house_id);
-        void MoveStoneToTarget(int start_point);
+        void DrawStone(uint8_t house_id);
+        void MoveStoneToTarget(uint8_t start_point);
     protected:
     private:
         House();

@@ -19,29 +19,19 @@ void House::Setup(RobotAction* pAction){
 
 
 void House::SpinOnce(){
-  switch (__house_action->bytes[0]){
-    case 0:
-      __house_action->bytes[0] = 1;
-      break;
-    case 2:
-      MoveStoneToTarget(3);
-      break;
-    case 6:
-      DrawStone(3);
-      break;
-  }
+
 }
 
 
 
-void House::MoveStoneToTarget(int start_point){
+void House::MoveStoneToTarget(uint8_t start_point){
   int logic_pin = start_point;
   
   int out_pin_id = start_point;
 }
 
 
-void House::DrawStone(int house_id){
+void House::DrawStone(uint8_t house_id){
   // Bottom mover : move to original position
   __LeftServo.write(0);
   __RightServo.write(180);

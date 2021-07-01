@@ -9,8 +9,8 @@
 #define PIN_HOME_ALHPA 16
 #define PIN_HOME_BETA 17
 
-#define PIN_MOVER_LEFT_SERVO 4
-#define PIN_MOVER_RIGHT_SERVO 5
+// #define PIN_MOVER_LEFT_SERVO 4
+// #define PIN_MOVER_RIGHT_SERVO 5
 
 
 #define STEPS_PER_RAD 123
@@ -36,13 +36,13 @@ Arm::Arm(){
   sv.attach(PIN_EEF_SERVO);
   eefServo = &sv ;
   
-  sv=Servo();
-  sv.attach(PIN_MOVER_LEFT_SERVO);
-  mover_left_Servo = &sv;
+  // sv=Servo();
+  // sv.attach(PIN_MOVER_LEFT_SERVO);
+  // mover_left_Servo = &sv;
 
-  sv= Servo();
-  sv.attach(PIN_MOVER_RIGHT_SERVO);
-  mover_right_Servo = &sv;
+  // sv= Servo();
+  // sv.attach(PIN_MOVER_RIGHT_SERVO);
+  // mover_right_Servo = &sv;
 
   pinMode(PIN_EEF_A, OUTPUT);
   digitalWrite(PIN_EEF_A, HIGH);
@@ -78,13 +78,16 @@ Arm::Arm(){
   l1 = LINK_1;
   l2 = LINK_2;
 }
+uint8_t home_pin = 0;
+bool homed = false;
+// bool is_homing = false;
+AccelStepper* stepper;
+uint8_t homing_axis;
 
-void Arm::Home(unsigned char axis){
-  uint8_t home_pin = 0;
-  AccelStepper* stepper;
-  
+void Arm::Home(unsigned char axis){  
+  homing_axis = axis;
+  homed = false;
   if (axis == 4 ){
-
     home_pin = PIN_HOME_ALHPA;
     stepper = stepper_alpha;
     Serial.println("Home Alpha");
@@ -95,15 +98,20 @@ void Arm::Home(unsigned char axis){
     stepper = stepper_beta;
     Serial.println("Home Beta");
   }
+  HomeSpin();
+}
 
-  bool homed = false;
+void Arm::HomeSpin(){
+  if (homed)
+    return;
+
   stepper->setCurrentPosition(0);
   stepper->move(100);
   homed = digitalRead(home_pin);
   if (homed){
     __arm_action->bytes[0] = 0;
   }else{
-    __arm_action->bytes[0] = (1<< axis) + 1;
+    __arm_action->bytes[0] = (1<< homing_axis) + 1;
   }
 }
 
@@ -172,20 +180,20 @@ void Arm::SetEffector(EEF action){
 
 void Arm::pick_place_park(RobotAction* pAction){
   uint8_t action_code = pAction->Arm.action_code;
-  if (action_code & (1<<2) == 1){
+  if ((action_code & (1<<2)) >= 1){
     MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
     SetEffector(Lower);
     SetEffector(Suck);
     SetEffector(Higher);
   }
-  if (action_code & (1<<3) == 1){
+  if ((action_code & (1<<3)) >= 1){
     MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
     SetEffector(Lower);
     SetEffector(Release);
     SetEffector(Higher);
     SetEffector(Sleep);
   }
-  if (action_code & (1<<4) == 1){
+  if ((action_code & (1<<4)) >= 1){
     MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
     SetEffector(Sleep);
   }
@@ -196,35 +204,8 @@ void Arm::Setup(RobotAction* pAction){
 }
 
 void Arm::SpinOnce(){
-  // if (steppers.run()) 
-  //   return;
-  int code = __arm_action->bytes[0] & 0b11111110;
-  Serial.print("Arm spin once    ");
-  for (int i=0; i<13; i++){
-    Serial.print(__arm_action->bytes[i]);
-    Serial.print(" ");
-  }
-  Serial.println(code);
-  
-  switch (code){
-    case 0:
-      __arm_action->bytes[0] = 1;
-      break;
-
-    case 2:   // pickup and place and park
-      // __ble_server->SetActionCode(2+1);
-      pick_place_park(__arm_action);
-      break;
-    case 16: //1<<4: //home_X
-      Serial.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-      Home(4);
-      break;
-    case 32: //1<<5:
-      Serial.print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-      Home(5);
-      break;
-    default:
-      break;
-    
-  }
+  if (!homed)
+    HomeSpin();
+  else if (!steppers.run())
+    __arm_action->bytes[0] = 1;
 }
