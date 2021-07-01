@@ -150,6 +150,7 @@ class Controller:
                 for i in range(0,13,1):
                     self.__current_action[i] = self.__next_action[i]
                 self.__next_action[0] = 0
+                print('ble going to update...')
                 self.__bleClient.update_characteristic(self.__current_action)
         else:
             # Hardware robot is busy for current action
