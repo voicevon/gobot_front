@@ -38,7 +38,8 @@ class Arm{
             return instance;
         }
         void Home(unsigned char axis);
-        void SpinOnce(BodyAction* action);
+        void SpinOnce(void);
+        void Setup(RobotAction* pAction);
         // void pick_place_park(BodyAction* body_action);
 
     private:
@@ -49,7 +50,7 @@ class Arm{
         motor_position ik(int x, int y);
         void MoveTo(int x, int y);
         void SetEffector(EEF action);
-        void pick_place_park(BodyAction* body_action);
+        void pick_place_park(RobotAction* pAction);
 
         // link length in mm
         int l0 ;   // Length between origin and the two motors
@@ -70,6 +71,7 @@ class Arm{
         
         BleServer* __ble_server;
         Mcp23018* __Mcp23018;
+        RobotAction* __arm_action;
 
     protected:
 

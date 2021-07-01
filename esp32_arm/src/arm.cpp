@@ -29,6 +29,7 @@
 #define LINK_1 285.18 // Length from motor to passive joints
 #define LINK_2 384.51 // Length from passive joints to end effector
 
+// RobotAction* arm_action;
 Arm::Arm(){
   __Mcp23018 = &Mcp23018::getInstance();
   Servo sv = Servo();
@@ -79,24 +80,28 @@ Arm::Arm(){
 }
 
 void Arm::Home(unsigned char axis){
-  unsigned int home_pin =23;
+  uint8_t home_pin = 0;
   AccelStepper* stepper;
-  if (axis == 1 ){
+  
+  if (axis == 4 ){
     home_pin = PIN_HOME_ALHPA;
     stepper = stepper_alpha;
   }
-  else if (axis ==2){
+  else {
+    // axis == 5
     home_pin = PIN_HOME_BETA;
     stepper = stepper_beta;
   }
 
   bool homed = false;
-  do
-  {
-    stepper->setCurrentPosition(0);
-    stepper->move(1);
-    homed = digitalRead(home_pin);
-  } while (!homed);
+  stepper->setCurrentPosition(0);
+  stepper->move(100);
+  homed = digitalRead(home_pin);
+  if (homed){
+    __arm_action->bytes[0] = 0;
+  }else{
+    __arm_action->bytes[0] = (1<< axis) + 1;
+  }
 }
 
 /*
@@ -162,58 +167,51 @@ void Arm::SetEffector(EEF action){
   }
 }
 
-void Arm::pick_place_park(BodyAction* body_action){
-  uint8_t action_code = body_action->Arm.action_code;
+void Arm::pick_place_park(RobotAction* pAction){
+  uint8_t action_code = pAction->Arm.action_code;
   if (action_code & 1<<2 == 1){
-    MoveTo(body_action->Arm.pickup_x, body_action->Arm.pickup_y);
+    MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
     SetEffector(Lower);
     SetEffector(Suck);
     SetEffector(Higher);
   }
   if (action_code & 1<<3 == 1){
-    MoveTo(body_action->Arm.place_x, body_action->Arm.place_y);
+    MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
     SetEffector(Lower);
     SetEffector(Release);
     SetEffector(Higher);
     SetEffector(Sleep);
   }
   if (action_code & 1<<4 == 1){
-    MoveTo(body_action->Arm.park_x, body_action->Arm.park_y);
+    MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
     SetEffector(Sleep);
   }
 }
 
-void Arm::SpinOnce(BodyAction* action){
-  return;
-  // int ccc = __ble_server->body_action.Arm.action_code;
-  return;
-  Serial.println("The new aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa value is: ");
-  // Serial.println(ccc);
+void Arm::Setup(RobotAction* pAction){
+  __arm_action = pAction;
+}
 
-  return;
+void Arm::SpinOnce(){
+  if (steppers.run()) 
+    return;
 
-
-
-  int code = 0;
+  int code = __arm_action->bytes[0] & 0b11111110;
   switch (code){
     case 0:
       break;
     case 2:   // pickup and place and park
-      __ble_server->UpdateActionCode(2+1);
-      pick_place_park(action);
+      __ble_server->SetActionCode(2+1);
+      pick_place_park(__arm_action);
       break;
-    case 8: //home_X
-      // ble_server.UpdateActionCode(8+1);
-      // __ble_server->UpdateActionCode(8+1);
-      this->Home(0);
+    case 1<<4: //home_X
+      Home(4);
       break;
-    case 10:    //home y
-      // ble_server.UpdateActionCode(10+1);
-      Home(1);
+    case 1<<5:
+      Home(5);
       break;
     default:
       break;
     
   }
-  __ble_server->UpdateActionCode(1);
 }

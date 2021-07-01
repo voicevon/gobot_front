@@ -21,10 +21,10 @@ class BleServer {
                                   // Instantiated on first use.
             return instance;
         }
-    BodyAction body_action;
+    RobotAction body_action;
     void Init(void);
     void SpinOnce(void);
-    void UpdateActionCode(unsigned char new_code);
+    void SetActionCode(unsigned char new_code);
 
   private:
     BleServer(){};

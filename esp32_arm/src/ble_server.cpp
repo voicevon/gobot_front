@@ -35,13 +35,14 @@ void BleServer::Init() {
   Serial.println("Characteristic defined! Now you can read it in your phone!");
 }
 
-void BleServer::UpdateActionCode(unsigned char new_code){
-  BodyAction aaa;
-  size_t len = sizeof(BodyAction);
-  aaa.Arm.action_code = new_code;
+void BleServer::SetActionCode(unsigned char new_code){
+  RobotAction action;
+  size_t len = sizeof(RobotAction);
+  action.Arm.action_code = new_code;
 
-  __pCharacteristic->setValue(aaa.bytes, len);
+  __pCharacteristic->setValue(action.bytes, len);
 }
+
 
 
 void BleServer::SpinOnce() {

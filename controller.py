@@ -47,6 +47,7 @@ class Controller:
         self.__next_action = bytearray([0]*13)
         self.__bleClient = BleClient()
 
+
     def get_xy_from_pose_name(self, pos_name='origin'):
         # origin point
         x = 0
@@ -61,8 +62,16 @@ class Controller:
             col_name_list = 'ABCDEFGHJKLMNOPQRST'
             col_id = 18 - col_name_list.find(pos_name[:1])
             row_id = int(pos_name[1:]) -1    # exeption here:
-            x = col_id * 22 + 12
-            y = row_id * 23 + 45
+            # position (x,y) of corners of chessboard
+            top_left_x = -200
+            top_left_y = 567
+            bottom_right_x = 200
+            bottom_right_y = 80
+
+            space_x = (bottom_right_x - top_left_x) /18 
+            space_y = (top_left_y - bottom_right_y) /18
+            x = col_id * space_x + bottom_right_x
+            y = row_id * space_y + bottom_right_y
         return x, y
 
     def action_pickup_stone_from_cell(self, cell_name='k10'):
@@ -121,15 +130,11 @@ class Controller:
         motor_id == 4: Alpha
         motor_id == 5: Beta
         '''
-        logging.info('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
-        print(self.__current_action[0], self.__next_action[0])
         if not(motor_id == 4 or motor_id == 5):
             logging.warn('home papameter is wrong')
             return -1
         if self.__next_action[0] == 0:
             self.__next_action[0] = 1<< motor_id
-            print('hhhhhhhhhhhhhh', self.__next_action[0])
-            # self.__bleClient.update_characteristic(self.__current_action)
         else:
             logging.warn('BLE message queue is full')
 
@@ -139,20 +144,16 @@ class Controller:
             # hardware robot is idle
             if int(self.__next_action[0] /2 ) == 0:
                 # nothing to do
-                #level.info('nothing to do')
                 return
             else:
-                # from plan to current action
                 # copy next to current
                 for i in range(0,13,1):
                     self.__current_action[i] = self.__next_action[i]
                 self.__next_action[0] = 0
                 self.__bleClient.update_characteristic(self.__current_action)
-                print('ccccccccccccccccccccccccccccccc, bleClient.updated...')
-                print(self.__current_action[0], self.__next_action[0])
         else:
             # Hardware robot is busy for current action
-            logging.info('Hardware robot is running task %cd', self.__current_action[0])
+            logging.info('Hardware robot is running task %d', self.__current_action[0])
             return
 
 if __name__ == '__main__':

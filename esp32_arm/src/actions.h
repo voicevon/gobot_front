@@ -41,7 +41,7 @@
       uint16_t from_start_house_id;  //From or start house id
     }House;
     byte bytes[13];
-  }BodyAction;
+  }RobotAction;
 
   // struct  HouseAction{
   //   unsigned char action_code;  // 2=forward   4= backward

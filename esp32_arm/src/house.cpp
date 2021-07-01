@@ -4,7 +4,6 @@
 #define PIN_RIGHT_SERVO 23
 
 
-
 House::House(){
   __Mcp23018 = &Mcp23018::getInstance();
   __Mcp23018->DisableAllCoils();
@@ -13,11 +12,15 @@ House::House(){
 
 }
 
+void House::Setup(RobotAction* pAction){
+  __house_action = pAction;
+  __current_coil_index = 0;
+}
 
-void House::SpinOnce(BodyAction action){
-  switch (action.House.action_code){
+
+void House::SpinOnce(){
+  switch (__house_action->bytes[0]){
     case 0:
-    // write to 1 for handshaking.
       break;
     case 2:
       MoveStoneToTarget(3);
@@ -30,11 +33,11 @@ void House::SpinOnce(BodyAction action){
 
 
 
-  void House::MoveStoneToTarget(int start_point){
-    int logic_pin = start_point;
-    
-    int out_pin_id = start_point;
-  }
+void House::MoveStoneToTarget(int start_point){
+  int logic_pin = start_point;
+  
+  int out_pin_id = start_point;
+}
 
 
 void House::DrawStone(int house_id){

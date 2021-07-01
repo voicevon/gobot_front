@@ -15,7 +15,8 @@ class House{
                                   // Instantiated on first use.
             return instance;
         }
-        void SpinOnce(BodyAction action);
+        void SpinOnce(void);
+        void Setup(RobotAction* pAction);
         void DrawStone(int house_id);
         void MoveStoneToTarget(int start_point);
     protected:
@@ -28,7 +29,8 @@ class House{
         Servo __RightServo;
         Mcp23018* __Mcp23018;
         // void __EnableSingleCoil(int phisical_pin_id, bool enable_it);
-        
+        RobotAction* __house_action;
+        uint8_t __current_coil_index;
 
 
 };
