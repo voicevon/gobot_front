@@ -5,14 +5,15 @@
 
 
 House::House(){
+
+}
+
+void House::Setup(RobotAction* pAction){
   __Mcp23018 = &Mcp23018::getInstance();
   __Mcp23018->DisableAllCoils();
   __LeftServo.attach(PIN_LEFT_SERVO);
   __RightServo.attach(PIN_RIGHT_SERVO);
 
-}
-
-void House::Setup(RobotAction* pAction){
   __house_action = pAction;
   __current_coil_index = 0;
 }

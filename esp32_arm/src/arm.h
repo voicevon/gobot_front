@@ -1,5 +1,16 @@
 #pragma once
 
+/*
+Stepper liberys:
+
+    https://github.com/gin66/FastAccelStepper
+    https://github.com/luni64/TeensyStep
+       * Does't support ESP32
+    - https://github.com/RCP1/ESP32Step
+    https://github.com/Stan-Reifel/FlexyStepper
+    - https://github.com/pkerspe/ESP-FlexyStepper
+*/
+
 #include "accel_stepper/AccelStepper.h"
 #include "accel_stepper/MultiStepper.h"
 #include "mcp23018.h"
@@ -67,9 +78,14 @@ class Arm{
         MultiStepper steppers;
         Servo* eefServo;
 
-        
+        uint8_t home_pin = 0;
+        bool homed = false;
+        // bool is_homing = false;
+        AccelStepper* stepper;
+        uint8_t homing_axis;
+
         // BleServer* __ble_server;
-        Mcp23018* __Mcp23018;
+        // Mcp23018* __Mcp23018;
         RobotAction* __arm_action;
 
         void HomeSpin(void);

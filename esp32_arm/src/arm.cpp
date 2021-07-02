@@ -31,7 +31,7 @@
 
 // RobotAction* arm_action;
 Arm::Arm(){
-  __Mcp23018 = &Mcp23018::getInstance();
+  // __Mcp23018 = &Mcp23018::getInstance();
   Servo sv = Servo();
   sv.attach(PIN_EEF_SERVO);
   eefServo = &sv ;
@@ -78,11 +78,6 @@ Arm::Arm(){
   l1 = LINK_1;
   l2 = LINK_2;
 }
-uint8_t home_pin = 0;
-bool homed = false;
-// bool is_homing = false;
-AccelStepper* stepper;
-uint8_t homing_axis;
 
 void Arm::Home(unsigned char axis){  
   homing_axis = axis;
@@ -102,17 +97,13 @@ void Arm::Home(unsigned char axis){
 }
 
 void Arm::HomeSpin(){
-  if (homed)
+  if (homed){
+    __arm_action->bytes[0] = 0;
     return;
-
+  }
   stepper->setCurrentPosition(0);
   stepper->move(100);
   homed = digitalRead(home_pin);
-  if (homed){
-    __arm_action->bytes[0] = 0;
-  }else{
-    __arm_action->bytes[0] = (1<< homing_axis) + 1;
-  }
 }
 
 /*
@@ -201,9 +192,12 @@ void Arm::pick_place_park(RobotAction* pAction){
 
 void Arm::Setup(RobotAction* pAction){
   __arm_action = pAction;
+  homed = true;  //????????????
 }
 
 void Arm::SpinOnce(){
+  // steppers.run();
+  return;
   if (!homed)
     HomeSpin();
   else if (!steppers.run())
