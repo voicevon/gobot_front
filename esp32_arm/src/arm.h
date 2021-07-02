@@ -11,10 +11,11 @@ Stepper liberys:
     - https://github.com/pkerspe/ESP-FlexyStepper
 */
 
-#include "accel_stepper/AccelStepper.h"
-#include "accel_stepper/MultiStepper.h"
+// #include "accel_stepper/AccelStepper.h"
+// #include "accel_stepper/MultiStepper.h"
 #include "mcp23018.h"
 #include "actions.h"
+#include "ESP32Step/src/TeensyStep.h"
 
 // #include "ble_server.h"
 #include <ESP32Servo.h>
@@ -73,19 +74,20 @@ class Arm{
         // Alas its not possible to build an array of these with different pins for each :-(
         // AccelStepper stepper_alpha(AccelStepper::MotorInterfaceType::FULL4WIRE, 6, 7, 8, 9,true);
         int STEPS_PER_RAD;
-        AccelStepper* stepper_alpha;
-        AccelStepper* stepper_beta;
-        MultiStepper steppers;
+        // AccelStepper* stepper_alpha;
+        // AccelStepper* stepper_beta;
+        // MultiStepper steppers;
+        Stepper* stepper_alpha;
+        Stepper* stepper_beta;
+        StepControl steppers;
+
         Servo* eefServo;
 
         uint8_t home_pin = 0;
         bool homed = false;
-        // bool is_homing = false;
-        AccelStepper* stepper;
+        // AccelStepper* stepper;
         uint8_t homing_axis;
 
-        // BleServer* __ble_server;
-        // Mcp23018* __Mcp23018;
         RobotAction* __arm_action;
 
         void HomeSpin(void);
