@@ -86,16 +86,40 @@ class BleClient():
         received = self.arm_info.read()
         logging.info('arm info: %s', received)
 
-if __name__ =='__main__':
+    def disconnect(self):
+        self.dev.disconnect()
+        time.sleep(1)
+
+
+
+if __name__ == '__main__':
+    import signal        
+    import sys
     logging.basicConfig(level=logging.DEBUG)
-    logging.info('practice BLE')
+    logging.info('@@@@@@@@@@@@@@@@@@@@@@@@@')
     runner = BleClient()
+    def signal_handler(sig, frame):
+        print("You pressed Ctrl+C")
+        runner.disconnect()
+        sys.exit(0)
+
+    i = 65
+
+    #if __name__ =='__main__':
+    #print('@@@@@@@@@@@@@@@@@@@@@@@')
+    signal.signal(signal.SIGINT, signal_handler)
+    #signal.pause()
+
+
+    #logging.basicConfig(level=logging.DEBUG)
+    logging.info('practice BLE')
+    #runner = BleClient()
     while True:
         time.sleep(1.7)
         i += 1
         if i> 128:
             i = 32
-        runner.update_characteristic([i])
+        runner.write_characteristic([i])
 
 
 
