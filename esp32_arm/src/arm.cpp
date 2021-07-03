@@ -37,19 +37,20 @@ void Arm::Home(unsigned char axis){
   homing_axis = axis;
   homed = false;
   if (axis == 4 ){
-    home_pin = PIN_HOME_ALHPA;
+    __home_pin = PIN_HOME_ALHPA;
     // stepper = stepper_alpha;
     Serial.print("\nHome Alpha");
   }
   else {
     // axis == 5
-    home_pin = PIN_HOME_BETA;
+    __home_pin = PIN_HOME_BETA;
     // stepper = stepper_beta;
     Serial.print("\nHome Beta");
   }
-  stepper_alpha->setTargetRel(-300);
+  stepper_alpha->setTargetRel(-500);
   steppers.move(*stepper_alpha);
   while (steppers.isRunning()){
+    //Seems alway return false of isRunning()
     Serial.print("r");
   };
 
@@ -58,13 +59,13 @@ void Arm::Home(unsigned char axis){
 
 void Arm::HomeSpin(){
   // homed = !digitalRead(home_pin);
-  homed= false;
+  uint8_t flags=0;
   Serial.print("\nHome spin got started.............\n");
-  while (!homed)
-  {
+  while (flags !=0xff){
     stepper_alpha->setTargetRel(1);
     steppers.move(*stepper_alpha);
-    homed = !digitalRead(home_pin);
+    flags <<= 1;
+    flags |= digitalRead(__home_pin);
   }
   Serial.print("\n###################  Home is done.");
   if (homed){
@@ -210,11 +211,7 @@ void Arm::Setup(RobotAction* pAction){
   digitalWrite(PIN_BETA_ENABLE, LOW);
   Home(4);
 
-  // These code cause the ESP32-Core being cracked ??
-  // steppers->addStepper(*stepper_alpha);
-  // steppers->addStepper(*stepper_beta);
-
-
+  
   // link length in mm
   l0 = LINK_0;
   l1 = LINK_1;

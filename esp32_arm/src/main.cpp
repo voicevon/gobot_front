@@ -54,6 +54,14 @@ void ble_setup(){
 
 void setup(){
   Serial.begin(115200);
+
+  // pinMode(16,INPUT_PULLUP);
+  // while (true){
+  //   int x = digitalRead(16);
+  //   Serial.print(x);
+  //   delay(10);
+  // }
+
   Serial.print("\nsystem is starting....");
   arm = &Arm::getInstance();
   Serial.print("\nGot Arm instance........");

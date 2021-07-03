@@ -83,7 +83,7 @@ class Arm{
 
         Servo* eefServo;
 
-        uint8_t home_pin = 0;
+        uint8_t __home_pin;
         bool homed = false;
         // AccelStepper* stepper;
         uint8_t homing_axis;
