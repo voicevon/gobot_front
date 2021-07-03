@@ -40,6 +40,8 @@ class GobotHead():
         self.__BLACK = 1
         self.__WHITE = 2
         logging.warn("Start init objects......")
+        self.init()
+
     def init(self):
         self.__eye = MonoEye('2021-0611.yml')
         logging.warn('Init eye is done......')
@@ -404,7 +406,7 @@ class GobotHead():
 
     def spin_once(self):
         self.test()
-        pass
+        return
         print('start spin')
         self.__last_image = self.__eye.take_picture()
         print('taken picture')
@@ -425,12 +427,19 @@ class GobotHead():
             print(self.__FC_RESET)
 
     def test(self):
+        self.__controller.home_single_arm(4)
+        for i in range(1,20,1):
+            self.__controller.spin_once()
+            time.sleep(1)
+        #time.sleep(20)
+        return;
         self.__controller.action_pickup_stone_from_warehouse()
         self.__controller.action_place_stone_to_cell('Q4')
-        #self.__controller.action_place_stone_to_trash_bin()
+        self.__controller.action_place_stone_to_trash_bin()
         self.__controller.action_park()
 
 if __name__ == '__main__':
+    print('Prepare MQTT connection......')
     app_config.publish_mqtt = True
     if app_config.publish_mqtt:
         g_mqtt.append_configable_var(app_config)

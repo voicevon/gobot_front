@@ -77,19 +77,19 @@ class Controller:
     def action_pickup_stone_from_cell(self, cell_name='k10'):
         print ('[Info]: action_pickup_chess_from_a_cell  %s' %cell_name)
         x,y = self.get_xy_from_pose_name(cell_name)
-        self.__next_action[1] = x /256
-        self.__next_action[2] = x % 256
-        self.__next_action[3] = y / 256
-        self.__next_action[4] = y % 256
+        self.__next_action[1] = int(x / 256)
+        self.__next_action[2] = int(x % 256)
+        self.__next_action[3] = int(y / 256)
+        self.__next_action[4] = int(y % 256)
         self.__next_action[0] = 1 << 3
 
     def action_pickup_stone_from_warehouse(self):
         logging.info('[Info]: Action_pickup_chess_from_warehouse')
         x,y = self.get_xy_from_pose_name('origin')
         self.__next_action[1] = int(x /256)
-        self.__next_action[2] = x % 256
+        self.__next_action[2] = int(x % 256)
         self.__next_action[3] = int(y / 256)
-        self.__next_action[4] = y % 256
+        self.__next_action[4] = int(y % 256)
         self.__next_action[0] = 1 << 3
     
     def action_place_stone_to_trash_bin(self, park_to_view_point=True):
@@ -97,18 +97,18 @@ class Controller:
 
         x,y = self.get_xy_from_pose_name('trash')
         self.__next_action[5] = int(x /256)
-        self.__next_action[6] = x % 256
+        self.__next_action[6] = int(x % 256)
         self.__next_action[7] = int(y / 256)
-        self.__next_action[8] = y % 256
+        self.__next_action[8] = int(y % 256)
         self.__next_action[0] = 1 << 3
     
     def action_place_stone_to_cell(self, cell_name='k10', auto_park=True):
         logging.info('[Info]: action_place_chess_to_a_cell %s' %cell_name)
         x,y = self.get_xy_from_pose_name(cell_name)
         self.__next_action[5] = int(x /256)
-        self.__next_action[6] = x % 256
+        self.__next_action[6] = int(x % 256)
         self.__next_action[7] = int(y / 256)
-        self.__next_action[8] = y % 256
+        self.__next_action[8] = int(y % 256)
         self.__next_action[0] = 1 << 3
                 
     def action_park(self, park_cell='current'):
@@ -130,6 +130,7 @@ class Controller:
         motor_id == 4: Alpha
         motor_id == 5: Beta
         '''
+        logging.info('home_single_arm  %d',motor_id)
         if not(motor_id == 4 or motor_id == 5):
             logging.warn('home papameter is wrong')
             return -1
@@ -139,17 +140,19 @@ class Controller:
             logging.warn('BLE message queue is full')
 
     def spin_once(self):
-        logging.info('Controller.spin_once %d,%d',self.__current_action[0], self.__next_action[0] )
-        self.__current_action =  self.__bleClient.read_characteristic()
-        if int(self.__current_action[0] / 2) == 0:
+        action_code = self.__bleClient.read_characteristic()
+        logging.info('Controller.spin_once hardware= %d, current=%d,next=%d',action_code[0], self.__current_action[0], self.__next_action[0] )
+        #action_code =  self.__bleClient.read_characteristic()
+        if int(action_code[0] / 2) == 0:
             # hardware robot is idle
             if int(self.__next_action[0] /2 ) == 0:
                 # nothing to do
                 return
             else:
                 # copy next to current
-                for i in range(0,13,1):
-                    self.__current_action[i] = self.__next_action[i]
+                #for i in range(0,13,1):
+                #    self.__current_action[i] = self.__next_action[i]
+                self.__current_action = self.__next_action.copy()
                 self.__next_action[0] = 0
                 print('ble going to update...')
                 self.__bleClient.write_characteristic(self.__current_action)
