@@ -164,7 +164,12 @@ if __name__ == '__main__':
     test_id = 4
     if test_id == 4:
         #home_alpha
-        tester.home_single_arm(4)
+        while True:
+            for i in range(0,20,1):
+                tester.home_single_arm(4)
+                tester.spin_once()
+                time.sleep(1)
+
     if test_id == 5:
         #home_beta
         tester.home_single_arm(5)

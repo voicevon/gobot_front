@@ -58,19 +58,29 @@ class BleClient():
 
 
     def write_characteristic(self, new_value):
-        self.arm_info.write(bytes(new_value))
-        logging.info('Updated charactoristic')
+        try:
+            self.arm_info.write(bytes(new_value))
+            logging.info('Updated charactoristic')
+        #except bluepy.btle.BTLEDisconnectError:
+        except:
+            #self.dev.connect(self.__server_mac)
+            print('ble_Write() Disconnected --> reconnecting')
+            self.list_services_on_server()
+            self.connect_to_server()
+            #print('ble_write() Disconnected --> reconnecting  ')
 
     def read_characteristic(self):
         try:
             action_code = self.arm_info.read()
             return action_code
-        except bluepy.btle.BTLEDisconnectError:
-        # except :
-            print ("Device disconnected-- reconnecting")
-            self.dev.connect()
-            continue
-
+        #except bluepy.btle.BTLEDisconnectError:
+        except:
+            print("ble_read() Device disconnected-- reconnecting")
+            self.list_services_on_server()
+            self.connect_to_server()
+            #continue
+            action_code = self.arm_info.read()
+            return action_code
         
     def spin_once(self):
         received = self.arm_info.read()
