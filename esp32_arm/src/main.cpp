@@ -69,21 +69,21 @@ void setup(){
 }
 
 int8_t GetTrueBitIndex(uint8_t any){
-  if (any % 2 ==1)
+  if (any % 2 ==1){
     // is doing a task.
     return -1;
-
+  }
   for(int i=0; i<8; i++){
-    if (((any >> i) & 0b00000001) == 1)
+    if (((any >> i) & 0b00000001) == 1){
       // will start to do a task
-      action.bytes[0]++;
+      // action.bytes[0]++;   //??????????????
       return i;
+    }
   }
   // No task at all
   return -2;
 }
 void loop(){
-  return;
   uint8_t house_id;
   arm->SpinOnce();
   house->SpinOnce();
