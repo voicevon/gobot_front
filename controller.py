@@ -142,16 +142,13 @@ class Controller:
     def spin_once(self):
         action_code = self.__bleClient.read_characteristic()
         logging.info('Controller.spin_once hardware= %d, current=%d,next=%d',action_code[0], self.__current_action[0], self.__next_action[0] )
-        #action_code =  self.__bleClient.read_characteristic()
         if int(action_code[0] / 2) == 0:
             # hardware robot is idle
             if int(self.__next_action[0] /2 ) == 0:
                 # nothing to do
                 return
             else:
-                # copy next to current
-                #for i in range(0,13,1):
-                #    self.__current_action[i] = self.__next_action[i]
+                # Hardware robot finished last job
                 self.__current_action = self.__next_action.copy()
                 self.__next_action[0] = 0
                 print('ble going to update...')

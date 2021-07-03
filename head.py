@@ -308,15 +308,6 @@ class GobotHead():
             diffs = self.__ai_go.layout.compare_with(stable_layout, do_print_out=True)
             print(self.__BG_RED + self.__FC_YELLOW + 'Too many different the between two layout.' + self.__FC_RESET)
 
-        # print(diff_cell_name,my_color,detected_color)
-        # logging.warn('diff_cell_name=%s, my_color=%d, detected_color=%d' %(diff_cell_name, my_color, detected_color))
-
-
-
-    # def start(self):
-    #     self.start_arm()
-    #     self.start_mqtt()
-
     def at_demo_from_warehouse(self):
         # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
         layout,depth = self.__vision.get_chessboard_layout(self.__last_image)
@@ -405,8 +396,8 @@ class GobotHead():
 
 
     def spin_once(self):
-        self.test()
-        return
+        # self.test()
+        # return
         print('start spin')
         self.__last_image = self.__eye.take_picture()
         print('taken picture')

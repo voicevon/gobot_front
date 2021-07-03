@@ -6,6 +6,10 @@ sudo blescan # to verify bluepy
 '''
 from bluepy.btle import Scanner
 from bluepy.btle import Peripheral, DefaultDelegate
+'''
+Alternative lib is bleak
+https://github.com/hbldh/bleak
+'''
 import time
 import logging
 
@@ -26,6 +30,7 @@ class BleClient():
         ##self.dev = btle.Peripheral(self.__server_mac)
         self.list_services_on_server()
         self.connect_to_server()
+        # self.dev.
 
     def scan(self):
         scanner = Scanner()
@@ -48,7 +53,7 @@ class BleClient():
         svc = self.dev.getServiceByUUID('4fafc201-1fb5-459e-8fcc-c5c9c331914b')
         self.arm_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[0]
         #self.house_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[1]
-        logging.info('connected')
+        logging.info('ble connected to GATT server!')
 
 
 
@@ -57,7 +62,14 @@ class BleClient():
         logging.info('Updated charactoristic')
 
     def read_characteristic(self):
-        return self.arm_info.read()
+        try:
+            action_code = self.arm_info.read()
+            return action_code
+        except bluepy.btle.BTLEDisconnectError:
+        # except :
+            print ("Device disconnected-- reconnecting")
+            self.dev.connect()
+            continue
 
         
     def spin_once(self):
