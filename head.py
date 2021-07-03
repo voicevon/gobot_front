@@ -24,12 +24,6 @@ from mqtt_helper import g_mqtt
 class GobotHead():
 
     def __init__(self):
-        self.__eye = MonoEye('2021-0611.yml')
-        self.__vision = GobotVision()
-        self.__ai = GoGameAiClient()
-        self.__controller = Controller()
-        self.__died_area_scanner = DiedAreaScanner()
-
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
 
@@ -45,6 +39,18 @@ class GobotHead():
         self.__BLANK = 0
         self.__BLACK = 1
         self.__WHITE = 2
+        logging.warn("Start init objects......")
+    def init(self):
+        self.__eye = MonoEye('2021-0611.yml')
+        logging.warn('Init eye is done......')
+        self.__vision = GobotVision()
+        logging.warn('Init vision is done......')
+        self.__ai = GoGameAiClient()
+        logging.warn('Init AI is done......')
+        self.__controller = Controller()
+        logging.warn('Init controller is done......')
+        self.__died_area_scanner = DiedAreaScanner()
+        logging.warn('Init died_area_scanner is done......')
 
     def get_stable_layout(self,min_stable_depth):
         stable_depth = 0

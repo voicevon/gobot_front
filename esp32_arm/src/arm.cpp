@@ -45,12 +45,12 @@ void Arm::Home(unsigned char axis){
     home_pin = PIN_HOME_ALHPA;
     homing_stepper = stepper_alpha;
     // stepper = stepper_alpha;
-    Serial.print("\nHome Alpha");
+    Serial.print("\nStart Homing Alpha");
   }
   else {
     // axis == 5
     // homing_stepper = stepper_beta;
-    Serial.print("\nHome Beta");
+    Serial.print("\nStart Homing Beta");
   }
   homing_stepper->setTargetRel(-500);
   steppers->move(*homing_stepper);
@@ -67,18 +67,19 @@ void Arm::Home(unsigned char axis){
     stepper_beta->setPosition(HOMED_POSITION_BETA);
   }
   __arm_action->bytes[0] = 0;
+  Serial.print("\n Home one axis is Done.......");
 }
 
 void Arm::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
   uint8_t flags=0;
-  Serial.print("\nHome spin got started.............\n");
+  // Serial.print("\nHome spin got started.............\n");
   while (flags !=0xff){
     stepper_alpha->setTargetRel(1);
     steppers->move(*homing_stepper);
     flags <<= 1;
     flags |= digitalRead(home_pin);
   }
-  Serial.print("\n###################  Home is done.");
+  // Serial.print("\n###################  Home is done.");
 }
 
 /*
