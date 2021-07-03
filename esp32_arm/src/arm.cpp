@@ -23,149 +23,14 @@
 #define PIN_BETA_DIR 25
 #define PIN_BETA_ENABLE 13
 
-
 //  unit is mm
 #define LINK_0 191.0  // Length between origin and the two motors
 #define LINK_1 285.18 // Length from motor to passive joints
 #define LINK_2 384.51 // Length from passive joints to end effector
 
 
-/*==========================================================================
- * The sketch shows how to move more than one motor. 
- * 
- * If more than one motor is moved by one controller all motors will arrive at 
- * their targets at the same time. E.g., if the motors are part of a 
- * x/y transport system, the transport move on a straight diagonal line to the
- * target coordinates.
- * 
- * The sketch also shows examples how the motor properties are set up
- *
- * A 1/16 microstep driver is assumed. You probably want to adjust speed, 
- * acceleration and distances if you are using a driver with another microstep 
- * resolution.
- ===========================================================================*/
-
-// #include "ESP32Step/TeensyStep.h"
-
-// Stepper motor_1(2, 3);   //STEP pin =  2, DIR pin = 3
-// Stepper motor_2(9,10);   //STEP pin =  9, DIR pin = 10
-// Stepper motor_3(14,15);  //STEP pin = 14, DIR pin = 15
-
-StepControl controller;
-
-void setup2()
-{
-  // setup the motors 
-  //  motor_1
-  //   .setMaxSpeed(50000)       // steps/s
-  //   .setAcceleration(200000); // steps/s^2 
-  
-  // motor_2
-  //   .setMaxSpeed(50000)       // steps/s
-  //   .setAcceleration(200000); // steps/s^2 
-  // motor_3
-  //   //.setPullInSpeed(300)      // steps/s     currently deactivated...
-  //   .setMaxSpeed(10000)       // steps/s
-  //   .setAcceleration(50000)   // steps/s^2     
-  //   .setStepPinPolarity(LOW); // driver expects active low pulses
-}
-
-void loop2() 
-{  
-  // constexpr int spr = 16*200;  // 3200 steps per revolution
-  
-  // // lets shake    
-  // for(int i = 0; i < 5; i++)
-  // {
-  //   motor_1.setTargetRel(spr/4); // 1/4 revolution
-  //   controller.move(motor_1);  
-
-  //   motor_1.setTargetRel(-spr/4);
-  //   controller.move(motor_1);  
-  // }
-  // delay(500);
-  
-  // // move motor_1 to absolute position (10 revolutions from zero)
-  // // move motor_2 half a revolution forward  
-  // // both motors will arrive their target positions at the same time
-  // motor_1.setTargetAbs(10*spr);
-  // motor_2.setTargetRel(spr/2);
-  // controller.move(motor_1, motor_2);
-
-  // // now move motor_2 together with motor_3
-  // motor_2.setTargetRel(300);
-  // motor_3.setTargetRel(-800);
-  // controller.move(motor_2, motor_3);
-
-  // // move all motors back to their start positions
-  // motor_1.setTargetAbs(0);
-  // motor_2.setTargetAbs(0);
-  // motor_3.setTargetAbs(0);
-  // controller.move(motor_1, motor_2, motor_3);
- 
-  // delay(1000);
-}
-
-
-
-// RobotAction* arm_action;
 Arm::Arm(){
-  // __Mcp23018 = &Mcp23018::getInstance();
-  Servo sv = Servo();
-  sv.attach(PIN_EEF_SERVO);
-  eefServo = &sv ;
-  
-  // sv=Servo();
-  // sv.attach(PIN_MOVER_LEFT_SERVO);
-  // mover_left_Servo = &sv;
 
-  // sv= Servo();
-  // sv.attach(PIN_MOVER_RIGHT_SERVO);
-  // mover_right_Servo = &sv;
-
-  pinMode(PIN_EEF_A, OUTPUT);
-  digitalWrite(PIN_EEF_A, HIGH);
-  pinMode(PIN_EEF_B,OUTPUT);
-  digitalWrite(PIN_EEF_B, HIGH);
-  pinMode(PIN_BETA_ENABLE, OUTPUT);
-  digitalWrite(PIN_BETA_ENABLE, HIGH);
-
-  pinMode(PIN_HOME_ALHPA,INPUT_PULLUP);
-  pinMode(PIN_HOME_BETA, INPUT_PULLUP);
-
-  // AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
-  //                                     PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-  // stepper_alpha = & stepper;
-  // steppers.addStepper(stepper);
-
-  // stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
-  //                       PIN_BETA_STEP,PIN_BETA_DIR);
-  // stepper_beta = & stepper;
-  // steppers.addStepper(stepper);
-
-  Stepper stepper = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-  stepper_alpha = &stepper;
-  stepper_alpha->setTargetRel(3000);
-  steppers.move(stepper_alpha);
-  // steppers.attachStepper(stepper);
-
-  // stepper = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
-  // stepper_beta = & stepper;
-  // steppers.addStepper(stepper);
-
-  // stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
-  // stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
-
-  // These code cause the ESP32-Core being cracked ??
-  // steppers->addStepper(*stepper_alpha);
-  // steppers->addStepper(*stepper_beta);
-
-
-#define PIN_EEF_B  19
-  // link length in mm
-  l0 = LINK_0;
-  l1 = LINK_1;
-  l2 = LINK_2;
 }
 
 void Arm::Home(unsigned char axis){  
@@ -174,25 +39,40 @@ void Arm::Home(unsigned char axis){
   if (axis == 4 ){
     home_pin = PIN_HOME_ALHPA;
     // stepper = stepper_alpha;
-    Serial.println("Home Alpha");
+    Serial.print("\nHome Alpha");
   }
   else {
     // axis == 5
     home_pin = PIN_HOME_BETA;
     // stepper = stepper_beta;
-    Serial.println("Home Beta");
+    Serial.print("\nHome Beta");
   }
+  stepper_alpha->setTargetRel(-300);
+  steppers.move(*stepper_alpha);
+  while (steppers.isRunning()){
+    Serial.print("r");
+  };
+
   HomeSpin();
 }
 
 void Arm::HomeSpin(){
+  // homed = !digitalRead(home_pin);
+  homed= false;
+  Serial.print("\nHome spin got started.............\n");
+  while (!homed)
+  {
+    stepper_alpha->setTargetRel(1);
+    steppers.move(*stepper_alpha);
+    homed = !digitalRead(home_pin);
+  }
+  Serial.print("\n###################  Home is done.");
   if (homed){
     __arm_action->bytes[0] = 0;
     return;
   }
   // stepper->setCurrentPosition(0);
   // stepper->move(100);
-  homed = digitalRead(home_pin);
 }
 
 /*
@@ -281,7 +161,64 @@ void Arm::pick_place_park(RobotAction* pAction){
 
 void Arm::Setup(RobotAction* pAction){
   __arm_action = pAction;
-  homed = true;  //????????????
+  Serial.print("Arm is Initializing.........");
+  // __Mcp23018 = &Mcp23018::getInstance();
+  Servo sv = Servo();
+  sv.attach(PIN_EEF_SERVO);
+  eefServo = &sv ;
+  // sv=Servo();
+  // sv.attach(PIN_MOVER_LEFT_SERVO);
+  // mover_left_Servo = &sv;
+
+  // sv= Servo();
+  // sv.attach(PIN_MOVER_RIGHT_SERVO);
+  // mover_right_Servo = &sv;
+
+  pinMode(PIN_EEF_A, OUTPUT);
+  digitalWrite(PIN_EEF_A, HIGH);
+  pinMode(PIN_EEF_B,OUTPUT);
+  digitalWrite(PIN_EEF_B, HIGH);
+  pinMode(PIN_BETA_ENABLE, OUTPUT);
+  digitalWrite(PIN_BETA_ENABLE, HIGH);
+
+  pinMode(PIN_HOME_ALHPA,INPUT_PULLUP);
+  pinMode(PIN_HOME_BETA, INPUT_PULLUP);
+
+  // With libery AccelStepper
+  // AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
+  //                                     PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+  // stepper_alpha = & stepper;
+  // steppers.addStepper(stepper);
+  // stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
+  //                       PIN_BETA_STEP,PIN_BETA_DIR);
+  // stepper_beta = & stepper;
+  // steppers.addStepper(stepper);
+
+
+  // With liberary ESP32Step
+  Stepper alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+  stepper_alpha = &alpha;
+  stepper_alpha->setTargetRel(3000);
+  // steppers.attachStepper(stepper);
+
+  Stepper beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+  stepper_beta = &beta;
+
+  stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
+  stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
+  // steppers.move(*stepper_alpha, *stepper_beta);
+  digitalWrite(PIN_BETA_ENABLE, LOW);
+  Home(4);
+
+  // These code cause the ESP32-Core being cracked ??
+  // steppers->addStepper(*stepper_alpha);
+  // steppers->addStepper(*stepper_beta);
+
+
+  // link length in mm
+  l0 = LINK_0;
+  l1 = LINK_1;
+  l2 = LINK_2;
 }
 
 void Arm::SpinOnce(){

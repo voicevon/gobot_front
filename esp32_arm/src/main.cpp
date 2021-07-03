@@ -12,8 +12,8 @@
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
 // BleServer* ble_server = &BleServer::getInstance();
-Arm* arm = &Arm::getInstance();
-House* house = &House::getInstance();
+Arm* arm; 
+House* house;
 BLECharacteristic *pCharacteristic;
 RobotAction action;
 
@@ -54,9 +54,14 @@ void ble_setup(){
 
 void setup(){
   Serial.begin(115200);
-  ble_setup();
+  Serial.print("\nsystem is starting....");
+  arm = &Arm::getInstance();
+  Serial.print("\nGot Arm instance........");
   arm->Setup(&action);
-  house->Setup(&action);
+  Serial.print("\nArm setup is done.......");
+  // house = &House::getInstance();
+  // house->Setup(&action);
+  // ble_setup();
 }
 
 int8_t GetTrueBitIndex(uint8_t any){
@@ -74,6 +79,7 @@ int8_t GetTrueBitIndex(uint8_t any){
   return -2;
 }
 void loop(){
+  return;
   // uint8_t arm_code;
   // uint8_t house_code;
   uint8_t house_id;
