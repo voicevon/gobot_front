@@ -29,51 +29,56 @@
 #define LINK_2 384.51 // Length from passive joints to end effector
 
 
+#define HOMED_POSITION_ALPHA 123
+#define HOMED_POSITION_BETA 112
+
 Arm::Arm(){
 
 }
 
 void Arm::Home(unsigned char axis){  
-  homing_axis = axis;
-  homed = false;
+  uint8_t homing_axis = axis;
+  uint8_t home_pin = PIN_HOME_BETA;
+  Stepper* homing_stepper = stepper_beta;
+
   if (axis == 4 ){
-    __home_pin = PIN_HOME_ALHPA;
+    home_pin = PIN_HOME_ALHPA;
+    homing_stepper = stepper_alpha;
     // stepper = stepper_alpha;
     Serial.print("\nHome Alpha");
   }
   else {
     // axis == 5
-    __home_pin = PIN_HOME_BETA;
-    // stepper = stepper_beta;
+    // homing_stepper = stepper_beta;
     Serial.print("\nHome Beta");
   }
-  stepper_alpha->setTargetRel(-500);
-  steppers.move(*stepper_alpha);
-  while (steppers.isRunning()){
+  homing_stepper->setTargetRel(-500);
+  steppers->move(*homing_stepper);
+  while (steppers->isRunning()){
     //Seems alway return false of isRunning()
     Serial.print("r");
   };
 
-  HomeSpin();
+  __HomeSpin(homing_stepper, home_pin);
+  if (homing_axis == 4){
+    stepper_alpha->setPosition(HOMED_POSITION_ALPHA);
+  }
+  else{
+    stepper_beta->setPosition(HOMED_POSITION_BETA);
+  }
+  __arm_action->bytes[0] = 0;
 }
 
-void Arm::HomeSpin(){
-  // homed = !digitalRead(home_pin);
+void Arm::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
   uint8_t flags=0;
   Serial.print("\nHome spin got started.............\n");
   while (flags !=0xff){
     stepper_alpha->setTargetRel(1);
-    steppers.move(*stepper_alpha);
+    steppers->move(*homing_stepper);
     flags <<= 1;
-    flags |= digitalRead(__home_pin);
+    flags |= digitalRead(home_pin);
   }
   Serial.print("\n###################  Home is done.");
-  if (homed){
-    __arm_action->bytes[0] = 0;
-    return;
-  }
-  // stepper->setCurrentPosition(0);
-  // stepper->move(100);
 }
 
 /*
@@ -162,18 +167,12 @@ void Arm::pick_place_park(RobotAction* pAction){
 
 void Arm::Setup(RobotAction* pAction){
   __arm_action = pAction;
-  Serial.print("Arm is Initializing.........");
+  // Serial.print("Arm is Initializing.........");
   // __Mcp23018 = &Mcp23018::getInstance();
   Servo sv = Servo();
   sv.attach(PIN_EEF_SERVO);
   eefServo = &sv ;
-  // sv=Servo();
-  // sv.attach(PIN_MOVER_LEFT_SERVO);
-  // mover_left_Servo = &sv;
 
-  // sv= Servo();
-  // sv.attach(PIN_MOVER_RIGHT_SERVO);
-  // mover_right_Servo = &sv;
 
   pinMode(PIN_EEF_A, OUTPUT);
   digitalWrite(PIN_EEF_A, HIGH);
@@ -197,21 +196,17 @@ void Arm::Setup(RobotAction* pAction){
 
 
   // With liberary ESP32Step
-  Stepper alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-  stepper_alpha = &alpha;
-  stepper_alpha->setTargetRel(3000);
-  // steppers.attachStepper(stepper);
-
-  Stepper beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
-  stepper_beta = &beta;
+  stepper_alpha = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+  // stepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+  stepper_beta = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
 
   stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
   stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
-  // steppers.move(*stepper_alpha, *stepper_beta);
   digitalWrite(PIN_BETA_ENABLE, LOW);
-  Home(4);
-
-  
+  // Serial.print("\n@@@@@@@@@@@@@@@@@@");
+  steppers = new StepControl();
+  // Serial.print("@@@@@@@@@@@@@@@@@@");
+  // steppers = &controller;
   // link length in mm
   l0 = LINK_0;
   l1 = LINK_1;
@@ -221,8 +216,8 @@ void Arm::Setup(RobotAction* pAction){
 void Arm::SpinOnce(){
   // steppers.run();
   return;
-  if (!homed)
-    HomeSpin();
+  // if (!homed)
+  //   HomeSpin();
   // else if (!steppers.run())
   //   __arm_action->bytes[0] = 1;
 }

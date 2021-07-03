@@ -52,7 +52,6 @@ class Arm{
         void Home(unsigned char axis);
         void SpinOnce(void);
         void Setup(RobotAction* pAction);
-        // void pick_place_park(BodyAction* body_action);
         void MoveTo(int x, int y);
         void SetEffector(EEF action);
         void pick_place_park(RobotAction* pAction);
@@ -79,18 +78,15 @@ class Arm{
         // MultiStepper steppers;
         Stepper* stepper_alpha;
         Stepper* stepper_beta;
-        StepControl steppers;
+        StepControl* steppers;
 
         Servo* eefServo;
 
-        uint8_t __home_pin;
-        bool homed = false;
-        // AccelStepper* stepper;
-        uint8_t homing_axis;
+        void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin );
+        bool homed;
 
         RobotAction* __arm_action;
 
-        void HomeSpin(void);
 
     protected:
 

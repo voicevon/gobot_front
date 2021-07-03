@@ -18,7 +18,6 @@ BLECharacteristic *pCharacteristic;
 RobotAction action;
 
 void ble_setup(){
-  Serial.println("Starting BLE work!");
   BLEDevice::init("Pefect_Gobot");
   BLEServer *pServer = BLEDevice::createServer();
   BLEService *pService = pServer->createService(SERVICE_UUID);
@@ -40,7 +39,7 @@ void ble_setup(){
   pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
   pAdvertising->setMinPreferred(0x12);
   BLEDevice::startAdvertising();
-  Serial.println("Characteristic defined! Now you can read it in your phone!");
+  // Serial.println("Characteristic defined! Now you can read it in your phone!");
 }
 
 // void ble_SetActionCode(unsigned char new_code){
@@ -55,21 +54,18 @@ void ble_setup(){
 void setup(){
   Serial.begin(115200);
 
-  // pinMode(16,INPUT_PULLUP);
-  // while (true){
-  //   int x = digitalRead(16);
-  //   Serial.print(x);
-  //   delay(10);
-  // }
-
   Serial.print("\nsystem is starting....");
   arm = &Arm::getInstance();
-  Serial.print("\nGot Arm instance........");
   arm->Setup(&action);
   Serial.print("\nArm setup is done.......");
-  // house = &House::getInstance();
-  // house->Setup(&action);
-  // ble_setup();
+  house = &House::getInstance();
+  house->Setup(&action);
+  Serial.print("\nHouse setup is done..........");
+  ble_setup();
+  Serial.print("\nble setup is done......");
+  arm->Home(4);
+  // arm->Home(5);
+
 }
 
 int8_t GetTrueBitIndex(uint8_t any){
@@ -88,13 +84,9 @@ int8_t GetTrueBitIndex(uint8_t any){
 }
 void loop(){
   return;
-  // uint8_t arm_code;
-  // uint8_t house_code;
   uint8_t house_id;
   arm->SpinOnce();
-  // arm_code = action.bytes[0];
   house->SpinOnce();
-  // house_code = action.bytes[0];
 
   if (action.bytes[0] <= 1){
     // Both head side and Esp side are idle. 
@@ -107,7 +99,7 @@ void loop(){
       Serial.print(" ");
     }
     int8_t true_bit = GetTrueBitIndex(action.bytes[0]);
-    Serial.print("gggggggggggggggggg");
+    Serial.print("true_bit_index=");
     Serial.println(true_bit);
     switch (true_bit){
       //All the below functions will modify action.bytes[0]
