@@ -39,15 +39,9 @@ void ble_setup(){
   pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
   pAdvertising->setMinPreferred(0x12);
   BLEDevice::startAdvertising();
-  // Serial.println("Characteristic defined! Now you can read it in your phone!");
 }
 
-// void ble_SetActionCode(unsigned char new_code){
-//   RobotAction action;
-//   size_t len = sizeof(RobotAction);
-//   action.Arm.action_code = new_code;
-//   pCharacteristic->setValue(action.bytes, len);
-// }
+
 
 
 
@@ -90,17 +84,16 @@ void loop(){
 
   if (action.bytes[0] <= 1){
     // Both head side and Esp side are idle. 
-    // uint8_t esp_code = arm_code | house_code;
     uint8_t* pData  = pCharacteristic->getData();
-    Serial.println("    ");
+    // Serial.println("    ");
     for (int i=0; i<13; i++){
       action.bytes[i] = *(pData + i);
-      Serial.print(action.bytes[i]);
-      Serial.print(" ");
+      // Serial.print(action.bytes[i]);
+      // Serial.print(" ");
     }
     int8_t true_bit = GetTrueBitIndex(action.bytes[0]);
-    Serial.print("true_bit_index=");
-    Serial.println(true_bit);
+    // Serial.print("true_bit_index=");
+    // Serial.println(true_bit);
     switch (true_bit){
       //All the below functions will modify action.bytes[0]
       case 1:

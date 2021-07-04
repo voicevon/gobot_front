@@ -23,10 +23,10 @@
 #define LINK_2 384.51 // Length from passive joints to end effector
 
 
-#define HOMED_POSITION_ALPHA 123
-#define HOMED_POSITION_BETA 112
+#define HOMED_POSITION_ALPHA 123   // unit is step
+#define HOMED_POSITION_BETA 112    // unit is step
 
-#define STEPS_PER_RAD 123
+#define STEPS_PER_RAD 1235
 #define MOTOR_MAX_SPEED 100  /// unit?
 
 Arm::Arm(){
@@ -100,8 +100,8 @@ motor_position Arm::ik(int x, int y){
     // If calculations > 1, will fail acos function
     if (alpha1_calc > 1 or alpha2_calc > 1){
         // print("Unreachable coordinates");
-        pos.alpha = -1;
-        pos.beta = -1 ;
+        pos.alpha = -99999;
+        pos.beta = -99999 ;
         return pos;
     }
 
@@ -117,11 +117,21 @@ motor_position Arm::ik(int x, int y){
 }
 
 void Arm::MoveTo(int x, int y){
-  motor_position pos=ik(x,y);
-  if (pos.alpha ==-1){
+  motor_position pos = ik(x,y);
+  Serial.print(x);
+  Serial.print(", ");
+  Serial.print(y);
+  Serial.print(" (x,y)  <<<<   >>>> (alpah,beta)   ");
+
+  if (pos.alpha ==-99999){
     Serial.println("IK return -1");
     return;
   }
+
+  Serial.print(pos.alpha);
+  Serial.print(", ");
+  Serial.print(pos.beta);
+
   stepper_alpha->setTargetAbs(pos.alpha);
   stepper_beta->setTargetAbs(pos.beta);
   steppers->move(*stepper_alpha, * stepper_beta);
@@ -156,12 +166,14 @@ void Arm::SetEffector(EEF action){
 void Arm::pick_place_park(RobotAction* pAction){
   uint8_t action_code = pAction->Arm.action_code;
   if ((action_code & (1<<1)) > 0){
+    Serial.print("\npicking up ");
     MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
     SetEffector(Lower);
     SetEffector(Suck);
     SetEffector(Higher);
   }
   if ((action_code & (1<<2)) > 0){
+    Serial.print("\nplacing     ");
     MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
     SetEffector(Lower);
     SetEffector(Release);
@@ -169,6 +181,7 @@ void Arm::pick_place_park(RobotAction* pAction){
     SetEffector(Sleep);
   }
   if ((action_code & (1<<3)) > 0){
+    Serial.print("\nparking     ");
     MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
     SetEffector(Sleep);
   }
