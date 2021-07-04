@@ -64,14 +64,16 @@ class Controller:
             row_id = int(pos_name[1:]) -1    # exeption here:
             # position (x,y) of corners of chessboard
             top_left_x = -200
-            top_left_y = 567
+            top_left_y = 588.2
             bottom_right_x = 200
-            bottom_right_y = 80
+            bottom_right_y = 160.68
 
             space_x = (bottom_right_x - top_left_x) /18 
             space_y = (top_left_y - bottom_right_y) /18
-            x = col_id * space_x + bottom_right_x
+            x = col_id * space_x + top_left_x
             y = row_id * space_y + bottom_right_y
+            logging.info('got_xy_from_pose_name() col_id=%d, row_id=',col_id,row_id)
+            logging.info('---------------- x=%d, y=%d',x,y)
         return x, y
 
     def action_pickup_stone_from_cell(self, cell_name='k10'):
@@ -120,9 +122,9 @@ class Controller:
         '''
         x,y = self.get_xy_from_pose_name('origin')
         self.__next_action[9] = int(x /256)
-        self.__next_action[10] = x % 256
+        self.__next_action[10] = int(x % 256)
         self.__next_action[11] = int(y / 256)
-        self.__next_action[12] = y % 256
+        self.__next_action[12] = int(y % 256)
         self.__next_action[0] = 1 << 3
 
     def home_single_arm(self, motor_id):
@@ -172,12 +174,20 @@ if __name__ == '__main__':
 
     if test_id == 5:
         #home_beta
-        tester.home_single_arm(5)
+        while True:
+            for i in range(0,20,1):
+                tester.home_single_arm(5)
+                tester.spin_once()
+                time.sleep(1)
+
     if test_id == 8:
-        tester.action_pickup_stone_from_warehouse()
-        tester.action_place_stone_to_cell('Q4')
-        #self.__controller.action_place_stone_to_trash_bin()
-        tester.action_park(blocking_time=1.5)
+        while True:
+            tester.action_pickup_stone_from_warehouse()
+            tester.action_place_stone_to_cell('Q4')
+            tester.action_place_stone_to_trash_bin()
+            for i in range(0,20,1):
+                tester.spin_once()
+                time.sleep(1)
 
     while True:
         tester.spin_once()
