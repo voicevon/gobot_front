@@ -19,7 +19,7 @@ class Mcp23018{
         // Mcp23018(Mcp23018 const& copy);            // Not Implemented
         // Mcp23018& operator=(Mcp23018 const& copy); // Not Implemented
 
-        uint8_t __I2cAddress[8];   //Index is logic coil id, value is phical coil id
+        uint8_t __I2cAddress[55];   //Index is logic coil id, value is phical coil id
         uint8_t __PhysicalId[55];
         uint8_t __NextCoilId[55];
         uint8_t __UINT8_ZERO = 0;

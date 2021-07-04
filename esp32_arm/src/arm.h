@@ -82,7 +82,7 @@ class Arm{
 
         Servo* eefServo;
 
-        void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin );
+        void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
         bool homed;
 
         RobotAction* __arm_action;

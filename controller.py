@@ -161,7 +161,7 @@ class Controller:
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     tester = Controller()
-    test_id = 4
+    test_id = 8
     if test_id == 4:
         #home_alpha
         while True:

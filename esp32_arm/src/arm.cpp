@@ -6,15 +6,9 @@
 #define PIN_EEF_SERVO 21
 #define PIN_EEF_A  18
 #define PIN_EEF_B  19
+
 #define PIN_HOME_ALHPA 16
 #define PIN_HOME_BETA 17
-
-// #define PIN_MOVER_LEFT_SERVO 4
-// #define PIN_MOVER_RIGHT_SERVO 5
-
-
-#define STEPS_PER_RAD 123
-#define MOTOR_MAX_SPEED 100  /// unit?
 
 #define PIN_ALPHA_STEP 12
 #define PIN_ALPHA_DIR 26
@@ -31,6 +25,9 @@
 
 #define HOMED_POSITION_ALPHA 123
 #define HOMED_POSITION_BETA 112
+
+#define STEPS_PER_RAD 123
+#define MOTOR_MAX_SPEED 100  /// unit?
 
 Arm::Arm(){
 
@@ -121,23 +118,34 @@ motor_position Arm::ik(int x, int y){
 
 void Arm::MoveTo(int x, int y){
   motor_position pos=ik(x,y);
-  long angles[2];
-  angles[0] = pos.alpha;
-  angles[1] = pos.beta;
-  // steppers.moveTo(angles);
+  if (pos.alpha ==-1){
+    Serial.println("IK return -1");
+    return;
+  }
+  stepper_alpha->setTargetAbs(pos.alpha);
+  stepper_beta->setTargetAbs(pos.beta);
+  steppers->move(*stepper_alpha, * stepper_beta);
 }
 
 void Arm::SetEffector(EEF action){
   switch (action){
     case Lower:
+      eefServo->write(180);
       break;
     case Higher:
+      eefServo->write(0);
       break;
     case Suck:
+      digitalWrite(PIN_EEF_A, HIGH);
+      digitalWrite(PIN_EEF_B, LOW);
       break;
     case Release:
+      digitalWrite(PIN_EEF_A,LOW);
+      digitalWrite(PIN_EEF_B,HIGH);
       break;
     case Sleep:
+      digitalWrite(PIN_EEF_A,LOW);
+      digitalWrite(PIN_EEF_B,LOW);
       break;
     default:
       break;
@@ -147,20 +155,20 @@ void Arm::SetEffector(EEF action){
 
 void Arm::pick_place_park(RobotAction* pAction){
   uint8_t action_code = pAction->Arm.action_code;
-  if ((action_code & (1<<2)) >= 1){
+  if ((action_code & (1<<1)) >= 1){
     MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
     SetEffector(Lower);
     SetEffector(Suck);
     SetEffector(Higher);
   }
-  if ((action_code & (1<<3)) >= 1){
+  if ((action_code & (1<<2)) >= 1){
     MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
     SetEffector(Lower);
     SetEffector(Release);
     SetEffector(Higher);
     SetEffector(Sleep);
   }
-  if ((action_code & (1<<4)) >= 1){
+  if ((action_code & (1<<3)) >= 1){
     MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
     SetEffector(Sleep);
   }
@@ -176,9 +184,8 @@ void Arm::Setup(RobotAction* pAction){
 
 
   pinMode(PIN_EEF_A, OUTPUT);
-  digitalWrite(PIN_EEF_A, HIGH);
   pinMode(PIN_EEF_B,OUTPUT);
-  digitalWrite(PIN_EEF_B, HIGH);
+  SetEffector(Sleep);
   pinMode(PIN_BETA_ENABLE, OUTPUT);
   digitalWrite(PIN_BETA_ENABLE, HIGH);
 

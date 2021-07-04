@@ -63,17 +63,19 @@ Mcp23018::Mcp23018(){
     //     0x34,2,2,                                                             //155
     //     }
 
+    //Index is logic coil id, value is next coil logic id 
+    uint8_t next_coil_id[3] = {3,22,76};
+    memcpy(next_coil_id,__NextCoilId,sizeof(next_coil_id));
+    
     //Index is logic coil id, value is I2c address, 
-    uint8_t table_addr[5] = {0x1,0x2,0x3,0x4,0x5};
+    uint8_t table_addr[5] = {0x45,0X45,0X45,0x46,0x5};
     memcpy(table_addr, __I2cAddress, sizeof(table_addr));
 
     //Index is logic coil id, value is phsical coil id inside mcp23018
-    uint8_t table_pin_index[3] = {1,2,3};
+    uint8_t table_pin_index[3] = {0,2,3};
     memcpy(table_pin_index,__PhysicalId,sizeof(table_pin_index));
 
 
-    uint8_t next_coil_id[3] = {1,2,3};
-    memcpy(next_coil_id,__NextCoilId,sizeof(next_coil_id));
 
     __CHIPS_COUNT = 9;
 
