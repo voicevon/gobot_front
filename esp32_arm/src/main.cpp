@@ -103,7 +103,13 @@ void loop(){
     Serial.println(true_bit);
     switch (true_bit){
       //All the below functions will modify action.bytes[0]
+      case 1:
+        arm->pick_place_park(&action);
+        break;
       case 2:
+        arm->pick_place_park(&action);
+        break;
+      case 3:
         arm->pick_place_park(&action);
         break;
       case 4:

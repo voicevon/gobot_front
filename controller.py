@@ -81,7 +81,7 @@ class Controller:
         self.__next_action[2] = int(x % 256)
         self.__next_action[3] = int(y / 256)
         self.__next_action[4] = int(y % 256)
-        self.__next_action[0] = 1 << 3
+        self.__next_action[0] = 1 << 1
 
     def action_pickup_stone_from_warehouse(self):
         logging.info('[Info]: Action_pickup_chess_from_warehouse')
@@ -90,7 +90,7 @@ class Controller:
         self.__next_action[2] = int(x % 256)
         self.__next_action[3] = int(y / 256)
         self.__next_action[4] = int(y % 256)
-        self.__next_action[0] = 1 << 3
+        self.__next_action[0] = 1 << 1
     
     def action_place_stone_to_trash_bin(self, park_to_view_point=True):
         logging.info('[Info]: Action_place_chess_to_trash_bin')
@@ -100,7 +100,7 @@ class Controller:
         self.__next_action[6] = int(x % 256)
         self.__next_action[7] = int(y / 256)
         self.__next_action[8] = int(y % 256)
-        self.__next_action[0] = 1 << 3
+        self.__next_action[0] = 1 << 2
     
     def action_place_stone_to_cell(self, cell_name='k10', auto_park=True):
         logging.info('[Info]: action_place_chess_to_a_cell %s' %cell_name)
@@ -109,7 +109,7 @@ class Controller:
         self.__next_action[6] = int(x % 256)
         self.__next_action[7] = int(y / 256)
         self.__next_action[8] = int(y % 256)
-        self.__next_action[0] = 1 << 3
+        self.__next_action[0] = 1 << 2
                 
     def action_park(self, park_cell='current'):
         '''

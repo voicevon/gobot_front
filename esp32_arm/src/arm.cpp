@@ -155,23 +155,24 @@ void Arm::SetEffector(EEF action){
 
 void Arm::pick_place_park(RobotAction* pAction){
   uint8_t action_code = pAction->Arm.action_code;
-  if ((action_code & (1<<1)) >= 1){
+  if ((action_code & (1<<1)) > 0){
     MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
     SetEffector(Lower);
     SetEffector(Suck);
     SetEffector(Higher);
   }
-  if ((action_code & (1<<2)) >= 1){
+  if ((action_code & (1<<2)) > 0){
     MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
     SetEffector(Lower);
     SetEffector(Release);
     SetEffector(Higher);
     SetEffector(Sleep);
   }
-  if ((action_code & (1<<3)) >= 1){
+  if ((action_code & (1<<3)) > 0){
     MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
     SetEffector(Sleep);
   }
+  pAction->bytes[0] = 1;
 }
 
 void Arm::Setup(RobotAction* pAction){

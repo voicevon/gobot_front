@@ -75,9 +75,7 @@ Mcp23018::Mcp23018(){
     uint8_t table_pin_index[3] = {0,2,3};
     memcpy(table_pin_index,__PhysicalId,sizeof(table_pin_index));
 
-
-
-    __CHIPS_COUNT = 9;
+    __CHIPS_COUNT = 5;
 
 
 }
