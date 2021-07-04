@@ -26,8 +26,8 @@
 #define HOMED_POSITION_ALPHA 123   // unit is step
 #define HOMED_POSITION_BETA 112    // unit is step
 
-#define STEPS_PER_RAD 1235
-#define MOTOR_MAX_SPEED 100  /// unit?
+#define STEPS_PER_RAD 600
+#define MOTOR_MAX_SPEED 1000  /// unit?
 
 Arm::Arm(){
 

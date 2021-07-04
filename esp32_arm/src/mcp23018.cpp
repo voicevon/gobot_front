@@ -85,13 +85,13 @@ Mcp23018::Mcp23018(){
     // Below are three loolup tables
 
     //Index is logic coil id, value is next coil logic id 
-    uint8_t next_coil_id[COIL_COUNT] = {
-        2,4,5,6,8,10,12,14,16,18,20,22,24,26,   //count 14 
-        28,29,1,3,5,7,9,11,13,15,17,19,21,23,25,27,
-        29,29,30,31,32,33,34,35,36,37,38,39,
-        40,41,42,43,44,45,46,47,48,49,50,51,52,
-        53};    //Will never touch this coli. because it is NOT exist!
-    memcpy(next_coil_id,__NextCoilId,sizeof(next_coil_id));
+    // uint8_t next_coil_id[COIL_COUNT] = {
+    //     2,4,5,6,8,10,12,14,16,18,20,22,24,26,   //count 14 
+    //     28,29,1,3,5,7,9,11,13,15,17,19,21,23,25,27,
+    //     29,29,30,31,32,33,34,35,36,37,38,39,
+    //     40,41,42,43,44,45,46,47,48,49,50,
+    //     51,52,53,53};    //Will never touch this coli. because it is NOT exist!
+    // memcpy(next_coil_id,__NextCoilId,sizeof(next_coil_id));
     
     //Index is logic coil id, value is I2c address, 
     uint8_t table_addr[COIL_COUNT] = {

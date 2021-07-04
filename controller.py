@@ -76,14 +76,23 @@ class Controller:
             logging.info('---------------- x=%d, y=%d',x,y)
         return x, y
 
+    def convert_xy_to_4_bytes(self,x,y):
+        bb = x.to_bytes(2,sys.byteorder)
+        xx = bytearray(bb)
+        bb = y.to_bytes(2,sys.byteorder)
+        yy = bytearray(bb)
+        cc = bytearray(xx[0],xx[1],yy[0],yy[1])
+        return cc
+
     def action_pickup_stone_from_cell(self, cell_name='k10'):
         print ('[Info]: action_pickup_chess_from_a_cell  %s' %cell_name)
         x,y = self.get_xy_from_pose_name(cell_name)
-        self.__next_action[1] = int(x / 256)
-        self.__next_action[2] = int(x % 256)
-        self.__next_action[3] = int(y / 256)
-        self.__next_action[4] = int(y % 256)
-        self.__next_action[0] = 1 << 1
+        cc = self.convert_xy_to_4_bytes(x,y)
+        self.__next_action[1] = cc[0]
+        self.__next_action[2] = cc[1]
+        self.__next_action[3] = cc[2]
+        self.__next_action[4] = cc[3]
+        self.__next_action[0] |= 1 << 1
 
     def action_pickup_stone_from_warehouse(self):
         logging.info('[Info]: Action_pickup_chess_from_warehouse')
@@ -92,7 +101,7 @@ class Controller:
         self.__next_action[2] = int(x % 256)
         self.__next_action[3] = int(y / 256)
         self.__next_action[4] = int(y % 256)
-        self.__next_action[0] = 1 << 1
+        self.__next_action[0] |= 1 << 1
     
     def action_place_stone_to_trash_bin(self, park_to_view_point=True):
         logging.info('[Info]: Action_place_chess_to_trash_bin')
@@ -102,7 +111,7 @@ class Controller:
         self.__next_action[6] = int(x % 256)
         self.__next_action[7] = int(y / 256)
         self.__next_action[8] = int(y % 256)
-        self.__next_action[0] = 1 << 2
+        self.__next_action[0] |= 1 << 2
     
     def action_place_stone_to_cell(self, cell_name='k10', auto_park=True):
         logging.info('[Info]: action_place_chess_to_a_cell %s' %cell_name)
@@ -111,7 +120,7 @@ class Controller:
         self.__next_action[6] = int(x % 256)
         self.__next_action[7] = int(y / 256)
         self.__next_action[8] = int(y % 256)
-        self.__next_action[0] = 1 << 2
+        self.__next_action[0] |= 1 << 2
                 
     def action_park(self, park_cell='current'):
         '''
@@ -125,7 +134,7 @@ class Controller:
         self.__next_action[10] = int(x % 256)
         self.__next_action[11] = int(y / 256)
         self.__next_action[12] = int(y % 256)
-        self.__next_action[0] = 1 << 3
+        self.__next_action[0] |= 1 << 3
 
     def home_single_arm(self, motor_id):
         '''
