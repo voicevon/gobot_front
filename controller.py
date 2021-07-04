@@ -72,7 +72,7 @@ class Controller:
             space_y = (top_left_y - bottom_right_y) /18
             x = col_id * space_x + top_left_x
             y = row_id * space_y + bottom_right_y
-            logging.info('got_xy_from_pose_name() col_id=%d, row_id=',col_id,row_id)
+            logging.info('got_xy_from_pose_name() col_id=%d, row_id=%d',col_id,row_id)
             logging.info('---------------- x=%d, y=%d',x,y)
         return x, y
 
