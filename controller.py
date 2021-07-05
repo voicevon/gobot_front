@@ -81,11 +81,10 @@ class Controller:
         x = int(x)
         y= int(y)
         bb = x.to_bytes(2,sys.byteorder,signed=True)
-        #bb=bytes(x)
         xx = bytearray(bb)
-        #bb = y.to_bytes(2,sys.byteorder)
-        bb = bytes(y)
+        bb = y.to_bytes(2,sys.byteorder,signed=True)
         yy = bytearray(bb)
+        
         cc = bytearray([xx[0],xx[1],yy[0],yy[1]])
         return cc
 
