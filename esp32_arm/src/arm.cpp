@@ -124,7 +124,7 @@ void Arm::MoveTo(int x, int y){
   Serial.print(" (x,y)  <<<<   >>>> (alpah,beta)   ");
 
   if (pos.alpha ==-99999){
-    Serial.println("IK return -1");
+    Serial.println("IK return -99999");
     return;
   }
 
