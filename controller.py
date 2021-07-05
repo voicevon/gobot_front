@@ -72,16 +72,21 @@ class Controller:
             space_y = (top_left_y - bottom_right_y) /18
             x = col_id * space_x + top_left_x
             y = row_id * space_y + bottom_right_y
-            logging.info('got_xy_from_pose_name() col_id=%d, row_id=%d',col_id,row_id)
-            logging.info('---------------- x=%d, y=%d',x,y)
+            #logging.info('got_xy_from_pose_name() col_id=%d, row_id=%d',col_id,row_id)
+            #logging.info('---------------- x=%d, y=%d',x,y)
         return x, y
 
     def convert_xy_to_4_bytes(self,x,y):
-        bb = x.to_bytes(2,sys.byteorder)
+        logging.info('convert_xy() x=%d, y=%d', x, y)
+        x = int(x)
+        y= int(y)
+        bb = x.to_bytes(2,sys.byteorder,signed=True)
+        #bb=bytes(x)
         xx = bytearray(bb)
-        bb = y.to_bytes(2,sys.byteorder)
+        #bb = y.to_bytes(2,sys.byteorder)
+        bb = bytes(y)
         yy = bytearray(bb)
-        cc = bytearray(xx[0],xx[1],yy[0],yy[1])
+        cc = bytearray([xx[0],xx[1],yy[0],yy[1]])
         return cc
 
     def action_pickup_stone_from_cell(self, cell_name='k10'):
@@ -116,10 +121,11 @@ class Controller:
     def action_place_stone_to_cell(self, cell_name='k10', auto_park=True):
         logging.info('[Info]: action_place_chess_to_a_cell %s' %cell_name)
         x,y = self.get_xy_from_pose_name(cell_name)
-        self.__next_action[5] = int(x /256)
-        self.__next_action[6] = int(x % 256)
-        self.__next_action[7] = int(y / 256)
-        self.__next_action[8] = int(y % 256)
+        cc= self.convert_xy_to_4_bytes(x,y)
+        self.__next_action[5] = cc[0]
+        self.__next_action[6] = cc[1]
+        self.__next_action[7] = cc[2]
+        self.__next_action[8] = cc[3]
         self.__next_action[0] |= 1 << 2
                 
     def action_park(self, park_cell='current'):
@@ -152,7 +158,7 @@ class Controller:
 
     def spin_once(self):
         action_code = self.__bleClient.read_characteristic()
-        logging.info('Controller.spin_once hardware= %d, current=%d,next=%d',action_code[0], self.__current_action[0], self.__next_action[0] )
+        #logging.info('Controller.spin_once hardware= %d, current=%d,next=%d',action_code[0], self.__current_action[0], self.__next_action[0] )
         if int(action_code[0] / 2) == 0:
             # hardware robot is idle
             if int(self.__next_action[0] /2 ) == 0:
@@ -192,8 +198,8 @@ if __name__ == '__main__':
     if test_id == 8:
         while True:
             tester.action_pickup_stone_from_warehouse()
-            tester.action_place_stone_to_cell('Q4')
-            tester.action_place_stone_to_trash_bin()
+            tester.action_place_stone_to_cell('T1')
+            #tester.action_place_stone_to_trash_bin()
             for i in range(0,20,1):
                 tester.spin_once()
                 time.sleep(1)
