@@ -116,12 +116,13 @@ motor_position Arm::ik(int x, int y){
   return pos;
 }
 
-void Arm::MoveTo(int x, int y){
-  motor_position pos = ik(x,y);
+void Arm::MoveTo(int16_t x, int16_t y){
   Serial.print(x);
   Serial.print(", ");
   Serial.print(y);
   Serial.print(" (x,y)  <<<<   >>>> (alpah,beta)   ");
+
+  motor_position pos = ik(x,y);
 
   if (pos.alpha ==-99999){
     Serial.println("IK return -99999");
@@ -165,8 +166,13 @@ void Arm::SetEffector(EEF action){
 
 void Arm::pick_place_park(RobotAction* pAction){
   uint8_t action_code = pAction->Arm.action_code;
+    for(int i=0;i<13;i++){
+      Serial.print(pAction->bytes[i]);
+      Serial.print(",  ");
+    }
+
   if ((action_code & (1<<1)) > 0){
-    Serial.print("\npicking up ");
+    Serial.print("\npicking up "); 
     MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
     SetEffector(Lower);
     SetEffector(Suck);
@@ -174,6 +180,10 @@ void Arm::pick_place_park(RobotAction* pAction){
   }
   if ((action_code & (1<<2)) > 0){
     Serial.print("\nplacing     ");
+    for(int i=5;i<9;i++){
+      Serial.print(pAction->bytes[i]);
+      Serial.print(",  ");
+    }    
     MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
     SetEffector(Lower);
     SetEffector(Release);

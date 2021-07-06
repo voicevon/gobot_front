@@ -89,28 +89,28 @@ Mcp23018::Mcp23018(){
         // };
     memcpy(table_addr, __I2cAddress, sizeof(table_addr));
 
-    #define A0 0
-    #define A1 1
-    #define A2 2
-    #define A3 3
-    #define A4 4
-    #define A5 5
-    #define A6 6
-    #define A7 7
-    #define B0 8
-    #define B1 9
-    #define B2 10
-    #define B3 11
-    #define B4 12
-    #define B5 13
-    #define B6 14
-    #define B7 15
+    #define MCP_A0 0
+    #define MCP_A1 1
+    #define MCP_A2 2
+    #define MCP_A3 3
+    #define MCP_A4 4
+    #define MCP_A5 5
+    #define MCP_A6 6
+    #define MCP_A7 7
+    #define MCP_B0 8
+    #define MCP_B1 9
+    #define MCP_B2 10
+    #define MCP_B3 11
+    #define MCP_B4 12
+    #define MCP_B5 13
+    #define MCP_B6 14
+    #define MCP_B7 15
     //Index is logic coil id, value is phsical coil id inside mcp23018
     uint8_t table_pin_index[COIL_COUNT] = {
-        B6,B5,B4,B3,B2,B1,B0,A6,A5,A4,A3,A2,A1,A0,      // count 14
-        A0,A1,A2,A3,A4,A5,A6,B0,B1,B2,B3,B4,B5,B6,      // count 14
-        A6,A5,A4,A3,A2,A1,A0,B0,B1,B2,B3,B4,B5,         // count 13
-        A0,A1,A2,A3,A4,A5,A6,B0,B1,B2,B3,B4            // count 12
+        MCP_B6,MCP_B5,MCP_B4,MCP_B3,MCP_B2,MCP_B1,MCP_B0,MCP_A6,MCP_A5,MCP_A4,MCP_A3,MCP_A2,MCP_A1,MCP_A0,      // count 14
+        MCP_A0,MCP_A1,MCP_A2,MCP_A3,MCP_A4,MCP_A5,MCP_A6,MCP_B0,MCP_B1,MCP_B2,MCP_B3,MCP_B4,MCP_B5,MCP_B6,      // count 14
+        MCP_A6,MCP_A5,MCP_A4,MCP_A3,MCP_A2,MCP_A1,MCP_A0,MCP_B0,MCP_B1,MCP_B2,MCP_B3,MCP_B4,MCP_B5,         // count 13
+        MCP_A0,MCP_A1,MCP_A2,MCP_A3,MCP_A4,MCP_A5,MCP_A6,MCP_B0,MCP_B1,MCP_B2,MCP_B3,MCP_B4            // count 12
         };
         // A0,A1,A2,A3,A4,A5,A6,A7,B0,B1,B2,B3,B4,B5,B6,B7
         // };
