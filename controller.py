@@ -111,8 +111,8 @@ class Controller:
     
     def action_place_stone_to_trash_bin(self, park_to_view_point=True):
         logging.info('[Info]: Action_place_chess_to_trash_bin')
-
         x,y = self.get_xy_from_pose_name('trash')
+        cc = self.convert_xy_to_4_bytes(x,y)
         self.__next_action[6] = cc[0]
         self.__next_action[7] = cc[1]
         self.__next_action[8] = cc[2]
@@ -137,6 +137,7 @@ class Controller:
             wait blocking_time in second
         '''
         x,y = self.get_xy_from_pose_name('origin')
+        cc = self.convert_xy_to4_bytes(x,y)
         self.__next_action[10] = cc[0]
         self.__next_action[11] = cc[1]
         self.__next_action[12] = cc[2]
