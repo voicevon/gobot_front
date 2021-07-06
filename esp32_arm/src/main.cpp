@@ -48,6 +48,8 @@ void ble_setup(){
 
 void setup(){
   Serial.begin(115200);
+  //test_action_size()
+
   Serial.print("\nsystem is starting....");
   arm = &Arm::getInstance();
   arm->Setup(&action);
