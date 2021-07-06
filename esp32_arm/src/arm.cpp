@@ -166,10 +166,10 @@ void Arm::SetEffector(EEF action){
 
 void Arm::pick_place_park(RobotAction* pAction){
   uint8_t action_code = pAction->Arm.action_code;
-    for(int i=0;i<13;i++){
-      Serial.print(pAction->bytes[i]);
-      Serial.print(",  ");
-    }
+    // for(int i=0;i<14;i++){
+    //   Serial.print(pAction->bytes[i]);
+    //   Serial.print(",  ");
+    // }
 
   if ((action_code & (1<<1)) > 0){
     Serial.print("\npicking up "); 
