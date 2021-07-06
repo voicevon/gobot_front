@@ -52,7 +52,7 @@ class Arm{
         void Home(unsigned char axis);
         void SpinOnce(void);
         void Setup(RobotAction* pAction);
-        void MoveTo(int x, int y);
+        void MoveTo(int16_t x, int16_t y);
         void SetEffector(EEF action);
         void pick_place_park(RobotAction* pAction);
 

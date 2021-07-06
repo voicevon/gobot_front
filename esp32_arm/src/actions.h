@@ -26,13 +26,11 @@
   typedef union {
     struct {
       uint8_t action_code;
-      // uint8_t pickup_type;   // 0=skip, 1=do it.
+      uint8_t alignment_occupied_by_compiler;   //Assume without this var, the size of the union is 14, not 13!!!
       int16_t pickup_x;
       int16_t pickup_y;
-      // uint8_t place_type;    // 0=skip, 1=lower release, 2=higher release
       int16_t place_x;
       int16_t place_y;
-      // uint8_t do_park;       //0= skip, 1=do it.
       int16_t park_x;
       int16_t park_y;
     }Arm;
@@ -40,7 +38,7 @@
       uint8_t action_code;
       uint16_t from_start_house_id;  //From or start house id
     }House;
-    byte bytes[13];
+    byte bytes[14];
   }RobotAction;
 
   // struct  HouseAction{
@@ -49,3 +47,24 @@
 
   // };
 
+void test_action_size(){
+  RobotAction action;
+  action.Arm.action_code = 0;
+  action.Arm.pickup_x= -1;
+  action.Arm.pickup_y = 2;
+  action.Arm.place_x = -3;
+  action.Arm.place_y = 4;
+  action.Arm.park_x = -5;
+  action.Arm.park_y = 6;
+
+  Serial.print(sizeof(action)) ;
+  Serial.print("?????????        ");
+  for (int i =0 ; i<13; i++){
+    Serial.print(action.bytes[i]);
+    Serial.print("  ");
+  }
+  while (true)
+    {
+
+    }
+}
