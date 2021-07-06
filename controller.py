@@ -200,9 +200,9 @@ if __name__ == '__main__':
 
     if test_id == 8:
         while True:
-            #tester.action_pickup_stone_from_warehouse()
+            tester.action_pickup_stone_from_warehouse()
             tester.action_place_stone_to_cell('T1')
-            #tester.action_place_stone_to_trash_bin()
+            tester.action_place_stone_to_trash_bin()
             for i in range(0,20,1):
                 tester.spin_once()
                 time.sleep(1)
