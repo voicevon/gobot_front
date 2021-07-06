@@ -55,7 +55,7 @@ class Controller:
         if pos_name == 'origin':
             pass
         elif pos_name == 'trash':
-            x = 500
+            x = 400
             y = 200
         else:
             # cell name , like 'Q4'
@@ -77,7 +77,7 @@ class Controller:
         return x, y
 
     def convert_xy_to_4_bytes(self,x,y):
-        logging.info('convert_xy() x=%d, y=%d', x, y)
+        #logging.info('convert_xy() x=%d, y=%d', x, y)
         x = int(x)
         y= int(y)
         bb = x.to_bytes(2,sys.byteorder,signed=True)
@@ -86,7 +86,7 @@ class Controller:
         yy = bytearray(bb)
         
         cc = bytearray([xx[0],xx[1],yy[0],yy[1]])
-        print('cc=%d, %d, %d, %d', cc[0], cc[1], cc[2], cc[3])
+        #print('cc=%d, %d, %d, %d', cc[0], cc[1], cc[2], cc[3])
         return cc
 
     def action_pickup_stone_from_cell(self, cell_name='k10'):
@@ -100,7 +100,7 @@ class Controller:
         self.__next_action[0] |= 1 << 1
 
     def action_pickup_stone_from_warehouse(self):
-        logging.info('[Info]: Action_pickup_chess_from_warehouse')
+        logging.info('  action_pickup_chess_from_warehouse')
         x,y = self.get_xy_from_pose_name('origin')
         cc = self.convert_xy_to_4_bytes(x,y)
         self.__next_action[2] = cc[0]
@@ -110,7 +110,7 @@ class Controller:
         self.__next_action[0] |= 1 << 1
     
     def action_place_stone_to_trash_bin(self, park_to_view_point=True):
-        logging.info('[Info]: Action_place_chess_to_trash_bin')
+        logging.info('   action_place_chess_to_trash_bin')
         x,y = self.get_xy_from_pose_name('trash')
         cc = self.convert_xy_to_4_bytes(x,y)
         self.__next_action[6] = cc[0]
@@ -120,7 +120,7 @@ class Controller:
         self.__next_action[0] |= 1 << 2
     
     def action_place_stone_to_cell(self, cell_name='k10', auto_park=True):
-        logging.info('[Info]: action_place_chess_to_a_cell %s' %cell_name)
+        logging.info('  action_place_chess_to_a_cell %s' %cell_name)
         x,y = self.get_xy_from_pose_name(cell_name)
         cc= self.convert_xy_to_4_bytes(x,y)
         self.__next_action[6] = cc[0]
@@ -136,8 +136,9 @@ class Controller:
             (by default)ESP32 finished all actions, or
             wait blocking_time in second
         '''
+        logging.info('  action_park() To %s', park_cell)
         x,y = self.get_xy_from_pose_name('origin')
-        cc = self.convert_xy_to4_bytes(x,y)
+        cc = self.convert_xy_to_4_bytes(x,y)
         self.__next_action[10] = cc[0]
         self.__next_action[11] = cc[1]
         self.__next_action[12] = cc[2]
@@ -201,9 +202,11 @@ if __name__ == '__main__':
 
     if test_id == 8:
         while True:
-            tester.action_pickup_stone_from_warehouse()
+            #tester.action_pickup_stone_from_warehouse()
+            tester.action_pickup_stone_from_cell('K10')
             tester.action_place_stone_to_cell('T1')
-            tester.action_place_stone_to_trash_bin()
+            #tester.action_place_stone_to_trash_bin()
+            tester.action_park()
             for i in range(0,20,1):
                 tester.spin_once()
                 time.sleep(1)
