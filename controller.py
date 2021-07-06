@@ -171,8 +171,8 @@ class Controller:
                 self.__current_action = self.__next_action.copy()
                 self.__next_action[0] = 0
                 print('ble going to update...')
-                for i in range(0,13,1):
-                    print(self.__next_action[i],' ')
+                #for i in range(0,13,1):
+                #    print(self.__next_action[i],' ')
                 self.__bleClient.write_characteristic(self.__current_action)
         else:
             # Hardware robot is busy for current action
