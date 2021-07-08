@@ -197,6 +197,7 @@ void House::Setup(RobotAction* pAction){
         }
         last_addr = addr;
     }
+    MoveStoneToTarget(16);
 }
 
 
