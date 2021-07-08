@@ -179,11 +179,11 @@ void Arm::pick_place_park(RobotAction* pAction){
     SetEffector(Higher);
   }
   if ((action_code & (1<<2)) > 0){
-    Serial.print("\nplacing     ");
-    for(int i=5;i<9;i++){
-      Serial.print(pAction->bytes[i]);
-      Serial.print(",  ");
-    }    
+    Serial.print("\n  placing     ");
+    // for(int i=5;i<9;i++){
+    //   Serial.print(pAction->bytes[i]);
+    //   Serial.print(",  ");
+    // }    
     MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
     SetEffector(Lower);
     SetEffector(Release);
@@ -191,7 +191,7 @@ void Arm::pick_place_park(RobotAction* pAction){
     SetEffector(Sleep);
   }
   if ((action_code & (1<<3)) > 0){
-    Serial.print("\nparking     ");
+    Serial.print("\n  parking     ");
     MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
     SetEffector(Sleep);
   }

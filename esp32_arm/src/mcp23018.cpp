@@ -1,151 +1,216 @@
+#include <stdio.h>
+
+#include <inttypes.h>
+
+#include <Arduino.h>
+
 #include "mcp23018.h"
-#define PIN_I2C_SCLK 23
-#define PIN_I2C_DATA 22
+#include <Wire.h>
+// #include <../Wire/Wire.h>  //this chip uses wire
+#include <Wire.h>
 
 
-
-
-
-
-Mcp23018::Mcp23018(){
-    Wire.begin(PIN_I2C_DATA, PIN_I2C_SCLK, 400000);
-    /*  The logic coil_id count is 52.
-        The idea is 
-            1. let logic_coil_id as a key.
-            2. We can get chip_I2C_addr, pin_index inside chip, and next logic id
-        Unfortunitely, we can NOT define an const array with greater than 128 bytes
-        So, we define 3 individual ditionaries.
-    */
-    
-    // uint8_t COIL_TABLE[52*3] = {
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //0..4
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //5..9
-        
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //10..14
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //15..19
-        
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //20..24
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //25..29
-
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //30..34
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //35..39
-
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //40..44
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //45..49
-
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //50..54
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //55..59
-
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //60..64
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //65..69
-
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //70..74
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //75..79
-
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //80..84
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //85..89
-
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //90..94
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //95..99
-
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //100..104
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //105..109
-          
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //110..104
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //115..109
-          
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //120..104
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //125..109
-          
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //130..104
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //135..109
-          
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //140..104
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //145..109
-          
-    //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //150..104
-    //     0x34,2,2,                                                             //155
-    //     }
-
-    // Below are three loolup tables
-
-    //Index is logic coil id, value is next coil logic id 
-    uint8_t next_coil_id[COIL_COUNT] = {
-        2,4,5,6,8,10,12,14,16,18,20,22,24,26,   //count 14 
-        28,29,1,3,5,7,9,11,13,15,17,19,21,23,25,27,
-        29,29,30,31,32,33,34,35,36,37,38,39,
-        40,41,42,43,44,45,46,47,48,49,255};
-        // 51,52,53,53};    //Will never touch this coli. because it is NOT exist!
-    memcpy(next_coil_id,__NextCoilId,sizeof(next_coil_id));
-    
-    //Index is logic coil id, value is I2c address, 
-    uint8_t table_addr[COIL_COUNT] = {
-        0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,  // count 14
-        0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,  // count 14
-        0X46,0x16,0x46,0x46,0x46,0X46,0x16,0x46,0x46,0x46,0x46,0x46,0x46,       // count 13
-        0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40, 0x40,0x40,0x40,0x40            // count 12
-        };
-        // 0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42 // count 16
-        // };
-    memcpy(table_addr, __I2cAddress, sizeof(table_addr));
-
-    #define MCP_A0 0
-    #define MCP_A1 1
-    #define MCP_A2 2
-    #define MCP_A3 3
-    #define MCP_A4 4
-    #define MCP_A5 5
-    #define MCP_A6 6
-    #define MCP_A7 7
-    #define MCP_B0 8
-    #define MCP_B1 9
-    #define MCP_B2 10
-    #define MCP_B3 11
-    #define MCP_B4 12
-    #define MCP_B5 13
-    #define MCP_B6 14
-    #define MCP_B7 15
-    //Index is logic coil id, value is phsical coil id inside mcp23018
-    uint8_t table_pin_index[COIL_COUNT] = {
-        MCP_B6,MCP_B5,MCP_B4,MCP_B3,MCP_B2,MCP_B1,MCP_B0,MCP_A6,MCP_A5,MCP_A4,MCP_A3,MCP_A2,MCP_A1,MCP_A0,      // count 14
-        MCP_A0,MCP_A1,MCP_A2,MCP_A3,MCP_A4,MCP_A5,MCP_A6,MCP_B0,MCP_B1,MCP_B2,MCP_B3,MCP_B4,MCP_B5,MCP_B6,      // count 14
-        MCP_A6,MCP_A5,MCP_A4,MCP_A3,MCP_A2,MCP_A1,MCP_A0,MCP_B0,MCP_B1,MCP_B2,MCP_B3,MCP_B4,MCP_B5,         // count 13
-        MCP_A0,MCP_A1,MCP_A2,MCP_A3,MCP_A4,MCP_A5,MCP_A6,MCP_B0,MCP_B1,MCP_B2,MCP_B3,MCP_B4            // count 12
-        };
-        // A0,A1,A2,A3,A4,A5,A6,A7,B0,B1,B2,B3,B4,B5,B6,B7
-        // };
-    memcpy(table_pin_index,__PhysicalId,sizeof(table_pin_index));
-
-    __CHIPS_COUNT = 5;
-
-
+mcp23018::mcp23018(){
+	
 }
 
-void Mcp23018::DisableAllCoils(){
-    for (int i=0;i<__CHIPS_COUNT;i++){
-        uint16_t addr = __I2cAddress[i];
-        Wire.writeTransmission(addr, &__UINT8_ZERO,1,true);
-    }
+
+mcp23018::mcp23018(const uint8_t adrs){
+	postSetup(adrs);
 }
-void Mcp23018::EnableSingleCoil(int logic_coil_id, bool enable_it){
-    static int last_enabled_logic_coil_id;
-    // Prepare the data value of the action.
-    uint8_t last_addr = __I2cAddress[last_enabled_logic_coil_id];
-    uint8_t this_addr = __I2cAddress[logic_coil_id];
-    uint8_t bit_index_inside_chip = __PhysicalId[logic_coil_id];
-    uint8_t value = 0;
-    if (enable_it)
-        value = 1 << bit_index_inside_chip;
-    
-    // Write out the data value to the coils.
-    if (last_addr != this_addr){
-        // Disable last coil
-        Wire.writeTransmission(last_addr, &__UINT8_ZERO,1,true);
-    }
-    // Enable new coil. mean while, disable the last coil if they are at same addr.
-    Wire.writeTransmission(this_addr,&value,1,true);
 
-    // prepair next.
-    last_enabled_logic_coil_id = logic_coil_id;
+void mcp23018::postSetup(const uint8_t adrs){
+	if (adrs >= 0x20 && adrs <= 0x27){//HAEN works between 0x20...0x27
+		_adrs = adrs;
+		_error = false;
+	} else {
+		_error = true;
+	}
+	//setup register values for this chip
+	IOCON = 	0x05;
+	IODIR = 	0x00;
+	GPPU = 		0x06;
+	GPIO = 		0x09;
+	GPINTEN = 	0x02;
+	IPOL = 		0x01;
+	DEFVAL = 	0x03;
+	INTF = 		0x07;
+	INTCAP = 	0x08;
+	OLAT = 		0x0A;
+	INTCON = 	0x04;
+}
 
-  }
+void mcp23018::begin(bool protocolInitOverride) {
+	if (!protocolInitOverride && !_error){
+		Wire.begin();
+		#if ARDUINO >= 157
+			Wire.setClock(400000UL); // Set I2C frequency to 400kHz
+		#else
+			TWBR = ((F_CPU / 400000UL) - 16) / 2; // Set I2C frequency to 400kHz
+		#endif
+	}	
+	delay(100);
+	writeByte(IOCON,0b00100000);//read datasheet for details!
+	_gpioDirection = 0xFFFF;//all in
+	_gpioState = 0x0000;//all low 
+}
+
+
+
+uint16_t mcp23018::readAddress(byte addr){
+	byte low_byte = 0;
+	byte high_byte = 0;
+	if (!_error){
+		Wire.beginTransmission(_adrs);
+		Wire.write(addr);
+		Wire.endTransmission();
+		Wire.requestFrom((uint8_t)_adrs,(uint8_t)2);
+		low_byte = Wire.read();
+		high_byte = Wire.read();
+	}	
+	return byte2word(high_byte,low_byte);
+}
+
+
+
+void mcp23018::gpioPinMode(uint16_t mode){
+	if (mode == INPUT){
+		_gpioDirection = 0xFFFF;
+	} else if (mode == OUTPUT){	
+		_gpioDirection = 0x0000;
+		_gpioState = 0x0000;
+	} else {
+		_gpioDirection = mode;
+	}
+	writeWord(IODIR,_gpioDirection);
+}
+
+void mcp23018::gpioPinMode(uint8_t pin, bool mode){
+	if (pin < 16){//0...15
+		mode == INPUT ? _gpioDirection |= (1 << pin) :_gpioDirection &= ~(1 << pin);
+		writeWord(IODIR,_gpioDirection);
+	}
+}
+
+void mcp23018::gpioPort(uint16_t value){
+	if (value == HIGH){
+		_gpioState = 0xFFFF;
+	} else if (value == LOW){	
+		_gpioState = 0x0000;
+	} else {
+		_gpioState = value;
+	}
+	writeWord(GPIO,_gpioState);
+}
+
+void mcp23018::gpioPort(byte lowByte, byte highByte){
+	_gpioState = byte2word(highByte,lowByte);
+	writeWord(GPIO,_gpioState);
+}
+
+
+uint16_t mcp23018::readGpioPort(){
+	return readAddress(GPIO);
+}
+
+uint16_t mcp23018::readGpioPortFast(){
+	return _gpioState;
+}
+
+int mcp23018::gpioDigitalReadFast(uint8_t pin){
+	int temp = 0;
+	if (pin < 16) temp = bitRead(_gpioState,pin);
+	return temp;
+}
+
+void mcp23018::portPullup(uint16_t data) {
+	if (data == HIGH){
+		_gpioState = 0xFFFF;
+	} else if (data == LOW){	
+		_gpioState = 0x0000;
+	} else {
+		_gpioState = data;
+	}
+	writeWord(GPPU, _gpioState);
+}
+
+
+
+void mcp23018::gpioDigitalWrite(uint8_t pin, bool value){
+	if (pin < 16){//0...15
+		value == HIGH ? _gpioState |= (1 << pin) : _gpioState &= ~(1 << pin);
+		writeWord(GPIO,_gpioState);
+	}
+}
+
+void mcp23018::gpioDigitalWriteFast(uint8_t pin, bool value){
+	if (pin < 16){//0...15
+		value == HIGH ? _gpioState |= (1 << pin) : _gpioState &= ~(1 << pin);
+	}
+}
+
+void mcp23018::gpioPortUpdate(){
+	writeWord(GPIO,_gpioState);
+}
+
+int mcp23018::gpioDigitalRead(uint8_t pin){
+	if (pin < 16) return (int)(readAddress(GPIO) & 1 << pin);
+	return 0;
+}
+
+uint8_t mcp23018::gpioRegisterReadByte(byte reg){
+  uint8_t data = 0;
+	if (!_error){
+		Wire.beginTransmission(_adrs);
+		Wire.write(reg);
+		Wire.endTransmission();
+		Wire.requestFrom((uint8_t)_adrs,(uint8_t)1);
+		data = Wire.read();
+	}
+  return data;
+}
+
+uint16_t mcp23018::gpioRegisterReadWord(byte reg){
+  uint16_t data = 0;
+	if (!_error){
+		Wire.beginTransmission(_adrs);
+		Wire.write(reg);
+		Wire.endTransmission();
+		Wire.requestFrom((uint8_t)_adrs,(uint8_t)1);
+		data = Wire.read();
+		data += Wire.read() << 8;//Ironicster
+	}
+  return data;
+}
+
+
+void mcp23018::gpioRegisterWriteByte(byte reg,byte data){
+	writeByte(reg,data);
+}
+
+void mcp23018::gpioRegisterWriteWord(byte reg,word data){
+	writeWord(reg,data);
+}
+
+/* ------------------------------ Low Level ----------------*/
+
+void mcp23018::writeByte(byte addr, byte data){
+	if (!_error){
+		Wire.beginTransmission(_adrs);
+		Wire.write(addr);
+		Wire.write(data);
+		Wire.endTransmission();
+	}
+}
+
+void mcp23018::writeWord(byte addr, uint16_t data){
+	if (!_error){
+		Wire.beginTransmission(_adrs);
+		Wire.write(addr);
+		//Wire.write(word2lowByte(data));
+		//Wire.write(word2highByte(data));
+		Wire.write(data >> 8);
+		Wire.write(data & 0xFF);
+		Wire.endTransmission();
+	}
+}

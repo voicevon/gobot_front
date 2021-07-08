@@ -6,6 +6,8 @@
 #include <ESP32Servo.h>
 // #include "esp32-hal-ledc.h"
 
+#define COIL_COUNT 53
+
 
 class House{
     public:
@@ -19,6 +21,8 @@ class House{
         void Setup(RobotAction* pAction);
         void DrawStone(uint8_t house_id);
         void MoveStoneToTarget(uint8_t start_point);
+        void EnableSingleCoil(int logic_coil_id, bool enable_it);
+        void DisableAllCoils(void);
     protected:
     private:
         House();
@@ -27,10 +31,16 @@ class House{
 
         Servo __LeftServo;
         Servo __RightServo;
-        Mcp23018* __Mcp23018;
+        mcp23018* __Mcp23018;
         // void __EnableSingleCoil(int phisical_pin_id, bool enable_it);
         RobotAction* __house_action;
         uint8_t __current_coil_index;
+
+        uint8_t __I2cAddress[COIL_COUNT];   //Index is logic coil id, value is phical coil id
+        uint8_t __PhysicalId[COIL_COUNT];
+        uint8_t __NextCoilId[COIL_COUNT];
+        uint8_t __UINT8_ZERO = 0;
+        uint8_t __CHIPS_COUNT;
 
 
 };
