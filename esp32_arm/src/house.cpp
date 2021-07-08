@@ -16,10 +16,13 @@ void House::SpinOnce(){
 
 
 
-void House::MoveStoneToTarget(uint8_t start_point){
-  int logic_pin = start_point;
-  
-  int out_pin_id = start_point;
+void House::MoveStoneToTarget(uint8_t start_coil){
+    // Assume all the coils are disable before invoking.
+    for (int i= start_coil; i< COIL_COUNT; i++){
+        EnableSingleCoil(i,true);
+        delay(500);
+        EnableSingleCoil(i,false);
+    }
 }
 
 
@@ -130,16 +133,30 @@ void House::Setup(RobotAction* pAction){
     memcpy(next_coil_id,__NextCoilId,sizeof(next_coil_id));
     
     //Index is logic coil id, value is I2c address, 
-    uint8_t table_addr[COIL_COUNT] = {
-        0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,  // count 14
-        0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,  // count 14
-        0X46,0x16,0x46,0x46,0x46,0X46,0x16,0x46,0x46,0x46,0x46,0x46,0x46,       // count 13
-        0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40, 0x40,0x40,0x40,0x40            // count 12
-        };
-        // 0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42 // count 16
-        // };
-    memcpy(table_addr, __I2cAddress, sizeof(table_addr));
+    // uint8_t table_addr[COIL_COUNT] = {
+    //     0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,0x48,  // count 14
+    //     0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,  // count 14
+    //     0X46,0x16,0x46,0x46,0x46,0X46,0x16,0x46,0x46,0x46,0x46,0x46,0x46,       // count 13
+    //     0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40, 0x40,0x40,0x40,0x40            // count 12
+    //     };
+    //     // 0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42,0x42 // count 16
+    //     // };
+    // memcpy(table_addr, __I2cAddress, sizeof(table_addr));
 
+    __I2cAddress[0] = 0x48;
+    __I2cAddress[1] = 0x4c;
+    __I2cAddress[2] = 0x46;
+    __I2cAddress[3] = 0x40;
+    __I2cAddress[4] = 0x00;
+
+    uint8_t table_chip_index[COIL_COUNT] = {
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //14
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,    //14
+        2,2,2,2,2,2,2,2,2,2,2,2,2,      //13
+        3,3,3,3,3,3,3,3,3,3,3,3         //12
+    };
+    memcpy(table_chip_index, __Chip_Index, sizeof(table_chip_index));
+    
     #define MCP_A0 0
     #define MCP_A1 1
     #define MCP_A2 2
@@ -165,38 +182,31 @@ void House::Setup(RobotAction* pAction){
         };
         // A0,A1,A2,A3,A4,A5,A6,A7,B0,B1,B2,B3,B4,B5,B6,B7
         // };
-    memcpy(table_pin_index,__PhysicalId,sizeof(table_pin_index));
+    memcpy(table_pin_index,__Pin_in_chip,sizeof(table_pin_index));
 
-    __CHIPS_COUNT = 5;
-
-
-}
-
-void House::DisableAllCoils(){
-    for (int i=0;i<__CHIPS_COUNT;i++){
-        uint16_t addr = __I2cAddress[i];
-        // Wire.writeTransmission(addr, &__UINT8_ZERO,1,true);
+    uint8_t addr = 0;
+    uint8_t last_addr = 0;
+    uint chip_index = 0;
+    for(int i=1;i<COIL_COUNT;i++){
+        chip_index = __Chip_Index[i];
+        addr = __I2cAddress[i];
+        if (addr != last_addr){
+            __Mcp23018[chip_index] = new mcp23018(addr);
+            __Mcp23018[chip_index]->gpioPinMode(OUTPUT);
+            chip_index++;
+        }
+        last_addr = addr;
     }
 }
+
+
 void House::EnableSingleCoil(int logic_coil_id, bool enable_it){
-    static int last_enabled_logic_coil_id;
     // Prepare the data value of the action.
-    uint8_t last_addr = __I2cAddress[last_enabled_logic_coil_id];
-    uint8_t this_addr = __I2cAddress[logic_coil_id];
-    uint8_t bit_index_inside_chip = __PhysicalId[logic_coil_id];
-    uint8_t value = 0;
-    if (enable_it)
-        value = 1 << bit_index_inside_chip;
-    
-    // Write out the data value to the coils.
-    if (last_addr != this_addr){
-        // Disable last coil
-        // Wire.writeTransmission(last_addr, &__UINT8_ZERO,1,true);
-    }
-    // Enable new coil. mean while, disable the last coil if they are at same addr.
-    // Wire.writeTransmission(this_addr,&value,1,true);
+    uint8_t chip_index = __Chip_Index[logic_coil_id]; 
+    uint8_t pin_index = __Pin_in_chip[logic_coil_id];
+    __Mcp23018[chip_index]->gpioDigitalWrite(pin_index,enable_it);
 
-    // prepair next.
+
     last_enabled_logic_coil_id = logic_coil_id;
 
   }
