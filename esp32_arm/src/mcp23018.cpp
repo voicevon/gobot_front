@@ -25,6 +25,7 @@ void mcp23018::postSetup(const uint8_t adrs){
 		_error = false;
 	} else {
 		_error = true;
+		Serial.print("\n\n\n !!!!! MCP23018 postSetup got error   !!! \n\n\n\n");
 	}
 	//setup register values for this chip
 	IOCON = 	0x05;
@@ -203,7 +204,7 @@ void mcp23018::writeByte(byte addr, byte data){
 	}
 }
 
-void mcp23018::writeWord(byte addr, uint16_t data){
+uint8_t mcp23018::writeWord(byte addr, uint16_t data){
 	if (!_error){
 		Wire.beginTransmission(_adrs);
 		Wire.write(addr);
@@ -211,6 +212,15 @@ void mcp23018::writeWord(byte addr, uint16_t data){
 		//Wire.write(word2highByte(data));
 		Wire.write(data >> 8);
 		Wire.write(data & 0xFF);
-		Wire.endTransmission();
+		uint8_t ret = Wire.endTransmission();
+		Serial.print("\n Wire.writeword  result ");
+		Serial.print(ret);
+		return ret;
+// 		 * Output   0 .. success
+//  *          1 .. length to long for buffer
+//  *          2 .. address send, NACK received
+//  *          3 .. data send, NACK received
+//  *          4 .. other twi error (lost bus arbitration, bus error, ..)
+//  *          5 .. timeout
 	}
 }

@@ -118,6 +118,6 @@ private:
 	uint16_t		_gpioState;
 	bool			_error;
 	void			writeByte(byte addr, byte data);	
-	void 			writeWord(byte addr, uint16_t data);
+	uint8_t 			writeWord(byte addr, uint16_t data);
 };
 #endif

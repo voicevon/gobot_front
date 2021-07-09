@@ -25,6 +25,8 @@ class House{
         // void DisableLastCoil(int logic_coli_id);
         void EnableSingleCoil(int logic_coil_id, bool enable_it);
         // void DisableAllCoils(void);
+        void Scanner(void);
+        void Test(void);
     protected:
     private:
         House();
