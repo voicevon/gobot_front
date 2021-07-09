@@ -1,29 +1,20 @@
 #include "house.h"
+#include <Wire.h>
 
-#define PIN_LEFT_SERVO 22
-#define PIN_RIGHT_SERVO 23
+#define PIN_LEFT_SERVO 4
+#define PIN_RIGHT_SERVO 5
 
+#define PIN_I2C_SCLK 23
+#define PIN_I2C_DATA 22
 
 House::House(){
 
 }
 
-
-
 void House::SpinOnce(){
 
 }
 
-
-
-void House::MoveStoneToTarget(uint8_t start_coil){
-    // Assume all the coils are disable before invoking.
-    for (int i= start_coil; i< COIL_COUNT; i++){
-        EnableSingleCoil(i,true);
-        delay(500);
-        EnableSingleCoil(i,false);
-    }
-}
 
 
 void House::DrawStone(uint8_t house_id){
@@ -45,12 +36,6 @@ void House::DrawStone(uint8_t house_id){
 }
 
 
-#define PIN_I2C_SCLK 23
-#define PIN_I2C_DATA 22
-
-
-
-
 
 
 void House::Setup(RobotAction* pAction){
@@ -61,6 +46,7 @@ void House::Setup(RobotAction* pAction){
 
   __house_action = pAction;
   __current_coil_index = 0;
+    {
 
     // Wire.begin(PIN_I2C_DATA, PIN_I2C_SCLK, 400000);
     /*  The logic coil_id count is 52.
@@ -120,9 +106,9 @@ void House::Setup(RobotAction* pAction){
     //     0x34,2,2,  0x34,3,4, 0x35,4,6, 0x35,5,8,  0x35,6,10,  0x35,7,12,      //150..104
     //     0x34,2,2,                                                             //155
     //     }
-
+    }
     // Below are three loolup tables
-
+    {
     //Index is logic coil id, value is next coil logic id 
     uint8_t next_coil_id[COIL_COUNT] = {
         2,4,5,6,8,10,12,14,16,18,20,22,24,26,   //count 14 
@@ -130,7 +116,7 @@ void House::Setup(RobotAction* pAction){
         29,29,30,31,32,33,34,35,36,37,38,39,
         40,41,42,43,44,45,46,47,48,49,255};
         // 51,52,53,53};    //Will never touch this coli. because it is NOT exist!
-    memcpy(next_coil_id,__NextCoilId,sizeof(next_coil_id));
+    memcpy(__NextCoilId, next_coil_id, sizeof(next_coil_id));
     
     //Index is logic coil id, value is I2c address, 
     // uint8_t table_addr[COIL_COUNT] = {
@@ -147,15 +133,17 @@ void House::Setup(RobotAction* pAction){
     __I2cAddress[1] = 0x4c;
     __I2cAddress[2] = 0x46;
     __I2cAddress[3] = 0x40;
-    __I2cAddress[4] = 0x00;
+    // __I2cAddress[4] = 0x00;
 
     uint8_t table_chip_index[COIL_COUNT] = {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //14
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,    //14
         2,2,2,2,2,2,2,2,2,2,2,2,2,      //13
-        3,3,3,3,3,3,3,3,3,3,3,3         //12
+        3,3,3,3,3,3,3,3,3,3,3,3,        //12
+        //4,4,4,4,4,4,4,4                 //8
+
     };
-    memcpy(table_chip_index, __Chip_Index, sizeof(table_chip_index));
+    memcpy(__Chip_Index, table_chip_index, sizeof(table_chip_index));
     
     #define MCP_A0 0
     #define MCP_A1 1
@@ -182,22 +170,38 @@ void House::Setup(RobotAction* pAction){
         };
         // A0,A1,A2,A3,A4,A5,A6,A7,B0,B1,B2,B3,B4,B5,B6,B7
         // };
-    memcpy(table_pin_index,__Pin_in_chip,sizeof(table_pin_index));
+    memcpy(__Pin_in_chip, table_pin_index, sizeof(table_pin_index));
+    }
 
+
+    Wire.begin(PIN_I2C_DATA, PIN_I2C_SCLK, 400000);
     uint8_t addr = 0;
     uint8_t last_addr = 0;
     uint chip_index = 0;
+    Serial.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     for(int i=1;i<COIL_COUNT;i++){
         chip_index = __Chip_Index[i];
-        addr = __I2cAddress[i];
+        addr = __I2cAddress[chip_index];
+        // Serial.print(chip_index);
+        // Serial.print("    >>>>");
+        // Serial.print(addr);
+        // Serial.print("----");
+        // Serial.print(last_addr);
+        // Serial.print("<<<<<<   ");
         if (addr != last_addr){
+            Serial.print("\n    Init MCP23018, Index, Addr   ");
+            Serial.print(chip_index);
+            Serial.print(".......");
+            Serial.print(addr);
             __Mcp23018[chip_index] = new mcp23018(addr);
             __Mcp23018[chip_index]->gpioPinMode(OUTPUT);
             chip_index++;
+            last_addr = addr;
         }
-        last_addr = addr;
     }
+    Serial.println("\nccccccccccccccccccccccccccccccccc");
     MoveStoneToTarget(16);
+    Serial.println("ffffffffffffffffffffffffffffffffffff");
 }
 
 
@@ -205,11 +209,21 @@ void House::EnableSingleCoil(int logic_coil_id, bool enable_it){
     // Prepare the data value of the action.
     uint8_t chip_index = __Chip_Index[logic_coil_id]; 
     uint8_t pin_index = __Pin_in_chip[logic_coil_id];
+    Serial.println("ppppppppppppppppppppp");
     __Mcp23018[chip_index]->gpioDigitalWrite(pin_index,enable_it);
+    Serial.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 
 
     last_enabled_logic_coil_id = logic_coil_id;
 
   }
 
+void House::MoveStoneToTarget(uint8_t start_coil){
+    // Assume all the coils are disable before invoking.
+    for (int i= start_coil; i< COIL_COUNT; i++){
+        EnableSingleCoil(i,true);
+        delay(500);
+        EnableSingleCoil(i,false);
+    }
+}
 

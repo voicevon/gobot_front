@@ -7,7 +7,7 @@
 // #include "esp32-hal-ledc.h"
 
 #define COIL_COUNT 53
-#define CHIPS_COUNT  5
+#define CHIPS_COUNT  4
 
 
 class House{
