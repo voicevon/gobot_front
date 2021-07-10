@@ -237,23 +237,45 @@ void House::Setup(RobotAction *pAction)
     }
     Serial.println("\nccccccccccccccccccccccccccccccccc");
     // MoveStoneToTarget(16);
-    Test();
+    while (true){
+        Test();
+    }
     Serial.println("ffffffffffffffffffffffffffffffffffff");
 }
 
+uint8_t ppp[6];
 
 void House::Test(){
+    ppp [0] = 0;
+    ppp [1] = 2;
+    ppp [2] = 3;
+    ppp [3] = 5;
+    ppp [4] = 4;
+    ppp [5] = 8;
     // uint8_t chip_index = 1
     // __Mcp23018[1]->begin();
-    for (int i=8; i<16; i++){
-        Serial.print("     >>>>>  ");
-        Serial.print(i);        
-        __Mcp23018[1]->gpioDigitalWrite(i, true);
-        delay(2000);
-        __Mcp23018[1]->gpioDigitalWrite(i, false);
-        delay(2000);
+    for(int i=0; i<5;i++){
+        __Mcp23018[1]->gpioDigitalWrite(ppp[i], false);
     }
-    while (true){}
+    for (int i=0; i<5; i++){
+        Serial.print("     >>>>>  ");
+        Serial.print(i);     
+        Serial.print(" == ");
+        Serial.print(ppp[i]);        
+
+        Serial.print("  on");     
+        __Mcp23018[1]->gpioDigitalWrite(ppp[i], true);
+        __Mcp23018[1]->gpioDigitalWrite(ppp[i+1], true);
+        // __Mcp23018[1]->gpioDigitalWrite(5, true);
+        delay(2000);
+        Serial.print("  off\n");        
+
+        __Mcp23018[1]->gpioDigitalWrite(ppp[i], false);
+        // __Mcp23018[1]->gpioDigitalWrite(5, false);
+        delay(300);
+    }
+    Serial.print("  \n");        
+    // while (true){}
 }
 void House::EnableSingleCoil(int logic_coil_id, bool enable_it)
 {

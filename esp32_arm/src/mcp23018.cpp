@@ -213,8 +213,10 @@ uint8_t mcp23018::writeWord(byte addr, uint16_t data){
 		Wire.write(data >> 8);
 		Wire.write(data & 0xFF);
 		uint8_t ret = Wire.endTransmission();
-		Serial.print("\n Wire.writeword  result ");
-		Serial.print(ret);
+		if (ret !=0){
+			Serial.print("\n mcp23018::writeword error: ");
+			Serial.print(ret);
+		}
 		return ret;
 // 		 * Output   0 .. success
 //  *          1 .. length to long for buffer
