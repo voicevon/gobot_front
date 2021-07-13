@@ -214,7 +214,7 @@ void House::Setup(RobotAction *pAction)
             MCP_B7,MCP_B7,MCP_B7,
 
             MCP_A4, MCP_B4, MCP_A5, MCP_B5, MCP_B6,                                                                 // count 14
-            MCP_A6, MCP_A5,   
+            MCP_A6,
         };
         // A0,A1,A2,A3,A4,A5,A6,A7,B0,B1,B2,B3,B4,B5,B6,B7
         // };
