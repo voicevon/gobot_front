@@ -175,22 +175,22 @@ void House::Setup(RobotAction *pAction)
         };
         memcpy(__Chip_Index, table_chip_index, sizeof(table_chip_index));
 
-#define MCP_A0 0
-#define MCP_A1 1
-#define MCP_A2 2
-#define MCP_A3 3
-#define MCP_A4 4
-#define MCP_A5 5
-#define MCP_A6 6
-#define MCP_A7 7
-#define MCP_B0 8
-#define MCP_B1 9
-#define MCP_B2 10
-#define MCP_B3 11
-#define MCP_B4 12
-#define MCP_B5 13
-#define MCP_B6 14
-#define MCP_B7 15
+        #define MCP_A0 0
+        #define MCP_A1 1
+        #define MCP_A2 2
+        #define MCP_A3 3
+        #define MCP_A4 4
+        #define MCP_A5 5
+        #define MCP_A6 6
+        #define MCP_A7 7
+        #define MCP_B0 8
+        #define MCP_B1 9
+        #define MCP_B2 10
+        #define MCP_B3 11
+        #define MCP_B4 12
+        #define MCP_B5 13
+        #define MCP_B6 14
+        #define MCP_B7 15
        
         //Index is logic coil id, value is phsical coil id inside mcp23018
         uint8_t table_pin_index[COIL_COUNT] = {
@@ -243,7 +243,7 @@ void House::Setup(RobotAction *pAction)
             Serial.print(", 0x");
             Serial.print(addr, HEX);
             __Mcp23018[chip_index] = new mcp23018(addr);
-            __Mcp23018[chip_index]->begin();
+            __Mcp23018[chip_index]->begin(true);
             __Mcp23018[chip_index]->gpioPinMode(OUTPUT);
             __Mcp23018[chip_index]->portPullup(HIGH);
             for(int p=0; p<16; p++){
@@ -265,7 +265,7 @@ void House::Test(uint8_t chip_index){
     int start =0;
     int end = 15;
 
-    Serial.print("Testing Chip_id, addr ");
+    Serial.print("\nTesting Chip_id, addr ");
     Serial.print(chip);
     Serial.print("    0x");
     Serial.print(__Mcp23018[chip]->get_chip_addr(), HEX);

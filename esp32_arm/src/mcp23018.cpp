@@ -28,12 +28,16 @@ void mcp23018::postSetup(const uint8_t adrs){
 		Serial.print("\n\n\n !!!!! MCP23018 postSetup got error   !!! \n\n\n\n");
 	}
 	//setup register values for this chip
-	IOCON = 	0x05;
+	// https://www.microchip.com/forums/m906742.aspx
 	IODIR = 	0x00;
-	GPPU = 		0x06;
-	GPIO = 		0x09;
+	IPOL = 		0x02;
+	GPPU = 		0x0c;
+	GPIO = 		0x12;
+
+
+
+	IOCON = 	0x05;
 	GPINTEN = 	0x02;
-	IPOL = 		0x01;
 	DEFVAL = 	0x03;
 	INTF = 		0x07;
 	INTCAP = 	0x08;
@@ -51,8 +55,10 @@ void mcp23018::begin(bool protocolInitOverride) {
 		#endif
 	}	
 	delay(100);
-	//BANK=0, SEQ=1
-	writeByte(IOCON,0b00100000);//read datasheet for details!  
+	//BANK=0, SEQ=1(disabled)
+	// writeByte(IOCON,0b00100000);//read datasheet for details!  
+	writeByte(0x5,0);
+	writeByte(0xa,0);
 	_gpioDirection = 0xFFFF;//all in
 	_gpioState = 0x0000;//all low 
 }
@@ -201,11 +207,17 @@ void mcp23018::writeByte(byte addr, byte data){
 		Wire.beginTransmission(_adrs);
 		Wire.write(addr);
 		Wire.write(data);
-		Wire.endTransmission();
+		uint8_t ret = Wire.endTransmission();
+		Serial.print("        mcp23018::writeByte() return=");
+		Serial.println(ret);
 	}
 }
 
 uint8_t mcp23018::writeWord(byte addr, uint16_t data){
+	writeByte(addr, data>>8);
+	writeByte(addr+1,data & 0xff);
+
+	return 0;
 	if (!_error){
 		Wire.beginTransmission(_adrs);
 		Wire.write(addr);
@@ -213,14 +225,14 @@ uint8_t mcp23018::writeWord(byte addr, uint16_t data){
 		//Wire.write(word2highByte(data));
 		Wire.write(data >> 8);
 		Wire.write(data & 0xFF);
-		Serial.print("\\n mcp23018::writeword()   ");
-		Serial.print(data>>8, HEX);
-		Serial.print("     ");
-		Serial.print(data & 0xFF,HEX) ;
+		// Serial.print("\\n mcp23018::writeword()   ");
+		// Serial.print(data>>8, HEX);
+		// Serial.print("     ");
+		// Serial.print(data & 0xFF,HEX) ;
 
 		uint8_t ret = Wire.endTransmission();
 		if (ret !=0){
-			Serial.print("\n mcp23018::writeword error: ");
+			Serial.print("\nmcp23018::writeword error: ");
 			Serial.print(ret);
 		}
 		return ret;
