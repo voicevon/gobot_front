@@ -212,6 +212,11 @@ uint8_t mcp23018::writeWord(byte addr, uint16_t data){
 		//Wire.write(word2highByte(data));
 		Wire.write(data >> 8);
 		Wire.write(data & 0xFF);
+		Serial.print("\\n mcp23018::writeword()   ");
+		Serial.print(data>>8, HEX);
+		Serial.print("     ");
+		Serial.print(data & 0xFF,HEX) ;
+
 		uint8_t ret = Wire.endTransmission();
 		if (ret !=0){
 			Serial.print("\n mcp23018::writeword error: ");
@@ -224,5 +229,13 @@ uint8_t mcp23018::writeWord(byte addr, uint16_t data){
 //  *          3 .. data send, NACK received
 //  *          4 .. other twi error (lost bus arbitration, bus error, ..)
 //  *          5 .. timeout
+	}else{
+		Serial.print("\n mcp23018::writeWord()  Inside Error, before invoking....\n ");
+		return _error;
 	}
+}
+
+
+uint8_t mcp23018::get_chip_addr(void){
+	return _adrs;
 }

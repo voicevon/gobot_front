@@ -41,12 +41,14 @@ void House::Scanner()
     byte count = 0;
 
     Wire.begin();
-    for (byte i = 8; i < 120; i++)
+    for (byte i = 0; i < 128; i++)
     {
+        // Serial.print("..");
+        // Serial.print(i);
         Wire.beginTransmission(i);       // Begin I2C transmission Address (i)
         if (Wire.endTransmission() == 0) // Receive 0 = success (ACK response)
         {
-            Serial.print("Found address: ");
+            Serial.print(" \nFound address: ");
             Serial.print(i, DEC);
             Serial.print(" (0x");
             Serial.print(i, HEX); // PCF8574 7 bit address
@@ -54,10 +56,13 @@ void House::Scanner()
             count++;
         }
     }
-    Serial.print("Found ");
+    Serial.print("\nFound ");
     Serial.print(count, DEC); // numbers of devices
     Serial.println(" device(s).");
 }
+
+
+uint8_t ppp[12];
 
 void House::Setup(RobotAction *pAction)
 {
@@ -134,9 +139,7 @@ void House::Setup(RobotAction *pAction)
         //Index is logic coil id, value is next coil logic id
         uint8_t next_coil_id[COIL_COUNT] = {
             2, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, //count 14
-            28, 29,
-
-            18, 3, 20, 7, 22, 11, 24,
+            28, 29, 18, 3, 20, 7, 22, 11, 24,
 
             15, 26, 19, 28, 23, 25, 27,
             29, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
@@ -155,10 +158,10 @@ void House::Setup(RobotAction *pAction)
         //     // };
         // memcpy(table_addr, __I2cAddress, sizeof(table_addr));
 
-        __I2cAddress[0] = 0x48;
+        __I2cAddress[0] = 0x26;
         // __I2cAddress[1] = 0x4c;
-        __I2cAddress[1] = 0x26;
-        __I2cAddress[2] = 0x46;
+        __I2cAddress[1] = 0x23;
+        __I2cAddress[2] = 0x20;
         __I2cAddress[3] = 0x40;
         // __I2cAddress[4] = 0x00;
 
@@ -188,16 +191,30 @@ void House::Setup(RobotAction *pAction)
 #define MCP_B5 13
 #define MCP_B6 14
 #define MCP_B7 15
+       
         //Index is logic coil id, value is phsical coil id inside mcp23018
         uint8_t table_pin_index[COIL_COUNT] = {
-            MCP_B6, MCP_B5, MCP_B4, MCP_B3, MCP_B2, MCP_B1, MCP_B0, MCP_A6, MCP_A5, MCP_A4, MCP_A3, MCP_A2, MCP_A1, MCP_A0, // count 14
-            MCP_B6, MCP_A0,
+            // MCP_B6, MCP_B5, MCP_B4, MCP_B3, MCP_B2, MCP_B1, MCP_B0, MCP_A6, MCP_A5, MCP_A4, MCP_A3, MCP_A2, MCP_A1, MCP_A0, // count 14
+            // MCP_B6, MCP_A0,
 
-            MCP_B0, MCP_A1, MCP_B1, MCP_A2, MCP_B2, MCP_A3, MCP_B3,
+            // on ox26, total 14 pins
+            MCP_A0, MCP_A1, MCP_A2, MCP_A3, MCP_A4, MCP_A5, MCP_A6, 
+            MCP_B0, MCP_B1, MCP_B2, MCP_B3, MCP_B4,MCP_B5, MCP_B6, 
+            MCP_B7, MCP_B7,
+
+            // on 0x23, total 13 pins
+            MCP_A1, MCP_A0, MCP_A2, MCP_A3, MCP_A4, MCP_A5, MCP_A6,
+            MCP_B0, MCP_B1, MCP_B2, MCP_B3, MCP_B4, MCP_B5, 
+            MCP_B7, MCP_B7, MCP_B7,
+
+
+            // on 0x20, total 13 pins
+            MCP_A0, MCP_A1, MCP_A2, MCP_A3, MCP_A4, MCP_A5, MCP_A6,
+            MCP_B0, MCP_B1, MCP_B2, MCP_B3, MCP_B4,     
+            MCP_B7,MCP_B7,MCP_B7,
 
             MCP_A4, MCP_B4, MCP_A5, MCP_B5, MCP_B6,                                                                 // count 14
-            MCP_A6, MCP_A5, MCP_A4, MCP_A3, MCP_A2, MCP_A1, MCP_A0, MCP_B0, MCP_B1, MCP_B2, MCP_B3, MCP_B4, MCP_B5, // count 13
-            MCP_A0, MCP_A1, MCP_A2, MCP_A3, MCP_A4, MCP_A5, MCP_A6, MCP_B0, MCP_B1, MCP_B2, MCP_B3, MCP_B4          // count 12
+            MCP_A6, MCP_A5,   
         };
         // A0,A1,A2,A3,A4,A5,A6,A7,B0,B1,B2,B3,B4,B5,B6,B7
         // };
@@ -209,11 +226,9 @@ void House::Setup(RobotAction *pAction)
     uint8_t addr = 0;
     uint8_t last_addr = 0xff;
     uint chip_index = 0;
-    // for (int i = 1; i < COIL_COUNT; i++)
-    int i=1;
-    {
+    // for (int i = 1; i < COIL_COUNT; i++){
+    for (int i = 0; i < 19; i++){
         chip_index = __Chip_Index[i];
-        chip_index = 1;
         addr = __I2cAddress[chip_index];
         // Serial.print(chip_index);
         // Serial.print("    >>>>");
@@ -225,54 +240,55 @@ void House::Setup(RobotAction *pAction)
         {
             Serial.print("\n    Init MCP23018, Index, Addr   ");
             Serial.print(chip_index);
-            Serial.print(".......");
-            Serial.print(addr);
+            Serial.print(", 0x");
+            Serial.print(addr, HEX);
             __Mcp23018[chip_index] = new mcp23018(addr);
             // __Mcp23018[chip_index]->begin()
             __Mcp23018[chip_index]->gpioPinMode(OUTPUT);
             __Mcp23018[chip_index]->portPullup(HIGH);
+            for(int p=0; p<16; p++){
+                __Mcp23018[chip_index]->gpioDigitalWrite(p,false);
+            }
             chip_index++;
             last_addr = addr;
         }
     }
-    Serial.println("\nccccccccccccccccccccccccccccccccc");
-    // MoveStoneToTarget(16);
+    
     while (true){
-        Test();
+        Test(1);
     }
-    Serial.println("ffffffffffffffffffffffffffffffffffff");
 }
 
-uint8_t ppp[6];
 
-void House::Test(){
-    ppp [0] = 0;
-    ppp [1] = 2;
-    ppp [2] = 3;
-    ppp [3] = 5;
-    ppp [4] = 4;
-    ppp [5] = 8;
-    // uint8_t chip_index = 1
-    // __Mcp23018[1]->begin();
-    for(int i=0; i<5;i++){
-        __Mcp23018[1]->gpioDigitalWrite(ppp[i], false);
+void House::Test(uint8_t chip_index){
+    int chip = chip_index;
+    int start =0;
+    int end = 15;
+
+    Serial.print("Testing Chip_id, addr ");
+    Serial.print(chip);
+    Serial.print("    0x");
+    Serial.print(__Mcp23018[chip]->get_chip_addr(), HEX);
+
+    for(int pin=start; pin<end+1; pin++){
+        __Mcp23018[chip]->gpioDigitalWrite(pin, true);
     }
-    for (int i=0; i<5; i++){
-        Serial.print("     >>>>>  ");
-        Serial.print(i);     
+    delay(30000);
+    return;
+
+    for (int pin=start; pin<end+1; pin++){
+        Serial.print("    >>>>>  ");
+        Serial.print(pin);     
         Serial.print(" == ");
-        Serial.print(ppp[i]);        
+        Serial.print(__Pin_in_chip[pin]);        
 
         Serial.print("  on");     
-        __Mcp23018[1]->gpioDigitalWrite(ppp[i], true);
-        __Mcp23018[1]->gpioDigitalWrite(ppp[i+1], true);
-        // __Mcp23018[1]->gpioDigitalWrite(5, true);
-        delay(2000);
-        Serial.print("  off\n");        
+        __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin], true);
+        delay(5000);
 
-        __Mcp23018[1]->gpioDigitalWrite(ppp[i], false);
-        // __Mcp23018[1]->gpioDigitalWrite(5, false);
-        delay(300);
+        Serial.print("  off\n");        
+        __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin], false);
+        delay(8000);
     }
     Serial.print("  \n");        
     // while (true){}

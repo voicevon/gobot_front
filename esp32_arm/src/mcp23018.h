@@ -111,7 +111,7 @@ public:
 	byte			INTCAP;
 	byte			OLAT;
 	byte			INTCON;
-	
+	uint8_t get_chip_addr(void);
 private:
 	uint8_t 		_adrs;
 	uint16_t		_gpioDirection;

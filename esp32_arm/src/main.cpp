@@ -50,7 +50,7 @@ void setup(){
   Serial.begin(115200);
   //test_action_size()
 
-  Serial.print("\nsystem is starting....");
+  Serial.print("\n Gobot system is starting....");
   arm = &Arm::getInstance();
   arm->Setup(&action);
   Serial.print("\nArm setup is done.......");

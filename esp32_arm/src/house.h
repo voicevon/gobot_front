@@ -26,7 +26,8 @@ class House{
         void EnableSingleCoil(int logic_coil_id, bool enable_it);
         // void DisableAllCoils(void);
         void Scanner(void);
-        void Test(void);
+        void Test(uint8_t chip_index);
+        // void Test0(void);
     protected:
     private:
         House();
