@@ -51,7 +51,8 @@ void mcp23018::begin(bool protocolInitOverride) {
 		#endif
 	}	
 	delay(100);
-	writeByte(IOCON,0b00100000);//read datasheet for details!
+	//BANK=0, SEQ=1
+	writeByte(IOCON,0b00100000);//read datasheet for details!  
 	_gpioDirection = 0xFFFF;//all in
 	_gpioState = 0x0000;//all low 
 }

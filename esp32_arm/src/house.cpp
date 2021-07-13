@@ -243,7 +243,7 @@ void House::Setup(RobotAction *pAction)
             Serial.print(", 0x");
             Serial.print(addr, HEX);
             __Mcp23018[chip_index] = new mcp23018(addr);
-            // __Mcp23018[chip_index]->begin()
+            __Mcp23018[chip_index]->begin();
             __Mcp23018[chip_index]->gpioPinMode(OUTPUT);
             __Mcp23018[chip_index]->portPullup(HIGH);
             for(int p=0; p<16; p++){
