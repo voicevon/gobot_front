@@ -159,18 +159,16 @@ void House::Setup(RobotAction *pAction)
         // memcpy(table_addr, __I2cAddress, sizeof(table_addr));
 
         __I2cAddress[0] = 0x26;
-        // __I2cAddress[1] = 0x4c;
         __I2cAddress[1] = 0x23;
         __I2cAddress[2] = 0x20;
         __I2cAddress[3] = 0x40;
         // __I2cAddress[4] = 0x00;
 
         uint8_t table_chip_index[COIL_COUNT] = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //14
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //14
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,    //13
-            3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,       //12
-            //4,4,4,4,4,4,4,4                 //8
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   0,0,  //0x26  14 +2
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,      1,1,1,//0x23  13 +3
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,      2,2,2, //0x20  13 +3
+            3, 3, 3, 3, 3                                    // 
 
         };
         memcpy(__Chip_Index, table_chip_index, sizeof(table_chip_index));
@@ -197,21 +195,21 @@ void House::Setup(RobotAction *pAction)
             // MCP_B6, MCP_B5, MCP_B4, MCP_B3, MCP_B2, MCP_B1, MCP_B0, MCP_A6, MCP_A5, MCP_A4, MCP_A3, MCP_A2, MCP_A1, MCP_A0, // count 14
             // MCP_B6, MCP_A0,
 
-            // on ox26, total 14 pins
+            // on ox26, total 14 pins, plus 2.
             MCP_A0, MCP_A1, MCP_A2, MCP_A3, MCP_A4, MCP_A5, MCP_A6, 
             MCP_B0, MCP_B1, MCP_B2, MCP_B3, MCP_B4,MCP_B5, MCP_B6, 
             MCP_B7, MCP_B7,
 
-            // on 0x23, total 13 pins
+            // on 0x23, total 13 pins, plus 3
             MCP_A1, MCP_A0, MCP_A2, MCP_A3, MCP_A4, MCP_A5, MCP_A6,
             MCP_B0, MCP_B1, MCP_B2, MCP_B3, MCP_B4, MCP_B5, 
             MCP_B7, MCP_B7, MCP_B7,
 
 
-            // on 0x20, total 13 pins
+            // on 0x20, total 13 pins, plus 3
             MCP_A0, MCP_A1, MCP_A2, MCP_A3, MCP_A4, MCP_A5, MCP_A6,
             MCP_B0, MCP_B1, MCP_B2, MCP_B3, MCP_B4,     
-            MCP_B7,MCP_B7,MCP_B7,
+            MCP_B7, MCP_B7, MCP_B7,
 
             MCP_A4, MCP_B4, MCP_A5, MCP_B5, MCP_B6,                                                                 // count 14
             MCP_A6,
@@ -227,7 +225,7 @@ void House::Setup(RobotAction *pAction)
     uint8_t last_addr = 0xff;
     uint chip_index = 0;
     // for (int i = 1; i < COIL_COUNT; i++){
-    for (int i = 0; i < 19; i++){
+    for (int i = 0; i < 16*3; i++){
         chip_index = __Chip_Index[i];
         addr = __I2cAddress[chip_index];
         // Serial.print(chip_index);
@@ -255,28 +253,30 @@ void House::Setup(RobotAction *pAction)
     }
     
     while (true){
-        Test(1);
+        Test(2);
     }
 }
 
 
 void House::Test(uint8_t chip_index){
     int chip = chip_index;
-    int start =0;
-    int end = 15;
-
-    Serial.print("\nTesting Chip_id, addr ");
-    Serial.print(chip);
-    Serial.print("    0x");
-    Serial.print(__Mcp23018[chip]->get_chip_addr(), HEX);
-
-    for(int pin=start; pin<end+1; pin++){
-        __Mcp23018[chip]->gpioDigitalWrite(pin, true);
+    int start = 16 * chip + 7;
+    int end = 16 * chip + 8;
+    {
+        Serial.print("\nTesting Chip_id, addr ");
+        Serial.print(chip);
+        Serial.print("    0x");
+        Serial.println(__Mcp23018[chip]->get_chip_addr(), HEX);
+        if (false){
+        // __Mcp23018[chip]->gpioDigitalWrite(0, true);
+        // __Mcp23018[chip]->gpioDigitalWrite(1, true);
+        // __Mcp23018[chip]->gpioDigitalWrite(8, true);
+        // __Mcp23018[chip]->gpioDigitalWrite(9, true);
+        // delay(30000);
+        // return;
+        }
     }
-    delay(30000);
-    return;
-
-    for (int pin=start; pin<end+1; pin++){
+    for (int pin=start; pin<end; pin++){
         Serial.print("    >>>>>  ");
         Serial.print(pin);     
         Serial.print(" == ");
@@ -284,15 +284,17 @@ void House::Test(uint8_t chip_index){
 
         Serial.print("  on");     
         __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin], true);
-        delay(5000);
+        // __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin+1], true);
+        delay(3000);
 
         Serial.print("  off\n");        
         __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin], false);
-        delay(8000);
+        delay(2000);
     }
     Serial.print("  \n");        
     // while (true){}
 }
+
 void House::EnableSingleCoil(int logic_coil_id, bool enable_it)
 {
     // Prepare the data value of the action.

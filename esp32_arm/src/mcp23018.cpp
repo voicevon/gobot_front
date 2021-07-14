@@ -29,14 +29,15 @@ void mcp23018::postSetup(const uint8_t adrs){
 	}
 	//setup register values for this chip
 	// https://www.microchip.com/forums/m906742.aspx
+	// We are working on BANK=0
 	IODIR = 	0x00;
 	IPOL = 		0x02;
 	GPPU = 		0x0c;
 	GPIO = 		0x12;
 
 
-
-	IOCON = 	0x05;
+	// Below is not verified!!! They are in BANK=1
+	//IOCON = 	0x05;  
 	GPINTEN = 	0x02;
 	DEFVAL = 	0x03;
 	INTF = 		0x07;
@@ -208,16 +209,19 @@ void mcp23018::writeByte(byte addr, byte data){
 		Wire.write(addr);
 		Wire.write(data);
 		uint8_t ret = Wire.endTransmission();
-		Serial.print("        mcp23018::writeByte() return=");
-		Serial.println(ret);
+		if (ret !=0){
+			Serial.print("        mcp23018::writeByte() return=");
+			Serial.println(ret);
+		}
 	}
 }
 
 uint8_t mcp23018::writeWord(byte addr, uint16_t data){
-	writeByte(addr, data>>8);
-	writeByte(addr+1,data & 0xff);
+	writeByte(addr, data & 0xff);
+	writeByte(addr+1, data>>8);
 
 	return 0;
+
 	if (!_error){
 		Wire.beginTransmission(_adrs);
 		Wire.write(addr);
