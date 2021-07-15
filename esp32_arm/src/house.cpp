@@ -260,8 +260,8 @@ void House::Setup(RobotAction *pAction)
 
 void House::Test(uint8_t chip_index){
     int chip = chip_index;
-    int start = 16 * chip + 7;
-    int end = 16 * chip + 8;
+    int start = 16 * chip + 4;
+    int end = 16 * chip + 7;
     {
         Serial.print("\nTesting Chip_id, addr ");
         Serial.print(chip);
@@ -282,6 +282,7 @@ void House::Test(uint8_t chip_index){
         Serial.print(" == ");
         Serial.print(__Pin_in_chip[pin]);        
 
+
         Serial.print("  on");     
         __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin], true);
         // __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin+1], true);
@@ -290,6 +291,22 @@ void House::Test(uint8_t chip_index){
         Serial.print("  off\n");        
         __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin], false);
         delay(2000);
+    }
+        for (int pin=end-1; pin>=start; pin--){
+        Serial.print("    >>>>>  ");
+        Serial.print(pin);     
+        Serial.print(" == ");
+        Serial.print(__Pin_in_chip[pin]);        
+        
+
+        Serial.print("  on");     
+        __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin], true);
+        // __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin+1], true);
+        delay(3000);
+
+        Serial.print("  off\n");        
+        __Mcp23018[chip]->gpioDigitalWrite(__Pin_in_chip[pin], false);
+        delay(20);
     }
     Serial.print("  \n");        
     // while (true){}
