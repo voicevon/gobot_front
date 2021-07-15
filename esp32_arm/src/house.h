@@ -27,7 +27,10 @@ class House{
         // void DisableAllCoils(void);
         void Scanner(void);
         void Test(uint8_t chip_index);
-        // void Test0(void);
+        // void Test0(void);test_h_bridge
+        void test_h_bridge(void);
+        void set_h_coil(int coil_index,int state);
+
     protected:
     private:
         House();

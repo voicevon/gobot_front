@@ -257,6 +257,55 @@ void House::Setup(RobotAction *pAction)
     }
 }
 
+#define TO_UP  1
+#define TO_DOWN 2
+#define TO_FREE 0
+
+void House::set_h_coil(int coil_index,int state){
+
+    uint8_t chip = 2;
+
+    uint8_t coil_pins[12] = {0,1,  2,3,  4,5,  8,9,  10,11,  12,13};
+    uint8_t pin_a = coil_pins [2* coil_index];
+    uint8_t pin_b = coil_pins [2* coil_index+1];
+
+    if (state==TO_UP){
+        __Mcp23018[chip]->gpioDigitalWrite(pin_a, true);
+        __Mcp23018[chip]->gpioDigitalWrite(pin_b, false);
+    }else if (state == TO_DOWN){
+        __Mcp23018[chip]->gpioDigitalWrite(pin_a, false);
+        __Mcp23018[chip]->gpioDigitalWrite(pin_a, true);
+    }else{
+        __Mcp23018[chip]->gpioDigitalWrite(pin_a, false);
+        __Mcp23018[chip]->gpioDigitalWrite(pin_a, false);
+    }
+
+}
+void House::test_h_bridge(){
+   // Set all coils to free. 
+    for(int i=0; i<6; i++){
+        set_h_coil(i, TO_FREE);
+    }
+
+    for (int i=0; i<4; i++){
+        Serial.print("\n H coil index= ");
+        Serial.print(i);
+        Serial.print("  Beat 1 ");
+        set_h_coil(i,TO_UP);
+        set_h_coil(i+1, TO_DOWN);
+        set_h_coil(i+2, TO_DOWN);
+        delay(1000);
+
+        Serial.print("  Beat 2 ");
+        set_h_coil(i+1,TO_UP);
+        delay(1000);
+        
+
+        Serial.print("  Beat 3 ");
+        set_h_coil(i,TO_FREE);
+        delay(1000);
+    }
+}
 
 void House::Test(uint8_t chip_index){
     int chip = chip_index;
