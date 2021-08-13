@@ -9,6 +9,7 @@ struct motor_position{
 
 class RobotArm{
     public:
+        virtual void Home(unsigned char axis);
 
     protected:
         void MoveTo(int16_t x, int16_t y);

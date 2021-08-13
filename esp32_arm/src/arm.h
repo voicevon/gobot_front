@@ -42,7 +42,7 @@ class Arm:RobotArm{
                                   // Instantiated on first use.
             return instance;
         }
-        void Home(unsigned char axis);
+        void Home(unsigned char axis) override;
         void SpinOnce(void);
         void Setup(RobotAction* pAction);
 
@@ -67,8 +67,6 @@ class Arm:RobotArm{
         // Alas its not possible to build an array of these with different pins for each :-(
         // AccelStepper stepper_alpha(AccelStepper::MotorInterfaceType::FULL4WIRE, 6, 7, 8, 9,true);
         int STEPS_PER_RAD;
-        // AccelStepper* stepper_alpha;
-        // AccelStepper* stepper_beta;
         // MultiStepper steppers;
 
 

@@ -41,11 +41,6 @@ void ble_setup(){
   BLEDevice::startAdvertising();
 }
 
-
-
-
-
-
 void setup(){
   Serial.begin(115200);
   //test_action_size()

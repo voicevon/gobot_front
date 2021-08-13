@@ -117,8 +117,6 @@ motor_position Arm::ik(int x, int y){
   return pos;
 }
 
-
-
 void Arm::SetEffector(EEF action){
   switch (action){
     case Lower:
@@ -210,17 +208,13 @@ void Arm::Setup(RobotAction* pAction){
 
   // With liberary ESP32Step
   stepper_alpha = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-  // stepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
   stepper_beta = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
 
   stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
   stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
   digitalWrite(PIN_BETA_ENABLE, LOW);
-  // Serial.print("\n@@@@@@@@@@@@@@@@@@");
   steppers = new StepControl();
-  // Serial.print("@@@@@@@@@@@@@@@@@@");
-  // steppers = &controller;
-  // link length in mm
+
   l0 = LINK_0;
   l1 = LINK_1;
   l2 = LINK_2;
