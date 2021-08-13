@@ -43,8 +43,6 @@ void ble_setup(){
 
 void setup(){
   Serial.begin(115200);
-  //test_action_size()
-
   Serial.print("\n Gobot system is starting....");
   arm = &Arm::getInstance();
   arm->Setup(&action);
@@ -54,9 +52,12 @@ void setup(){
   Serial.print("\nHouse setup is done..........");
   ble_setup();
   Serial.print("\nble setup is done......");
-  arm->Home(4);
-  // arm->Home(5);
-
+  arm->Home(0);
+  arm->Home(1);
+  Serial.print("\nArm Homing is done......");
+  house->Home(0);
+  house->Home(1);
+  Serial.print("\nHouse Homing is done......");
 }
 
 int8_t GetTrueBitIndex(uint8_t any){
@@ -110,11 +111,11 @@ void loop(){
         break;
       case 6:
         house_id = action.House.from_start_house_id;
-        house->DrawStone(house_id);
+        house->MoveStone_FromHouseToHead(house_id);
         break;
       case 7:
         house_id = action.House.from_start_house_id;
-        house->MoveStoneToTarget(house_id);
+        house->MoveStone_FromHeadToHouse(house_id);
         break;
       default:
         break;

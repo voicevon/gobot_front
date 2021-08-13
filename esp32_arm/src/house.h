@@ -19,9 +19,8 @@ class House:RobotArm{
         void SpinOnce(void);
         void Setup(RobotAction* pAction);
         void Home(uint8_t axis) override;
-        void DrawStone(uint8_t house_id);
-        void MoveStoneToTarget(uint8_t start_point);
-
+        void MoveStone_FromHouseToHead(uint8_t house_id);
+        void MoveStone_FromHeadToHouse(uint8_t house_id);
     protected:
     private:
         House();
@@ -29,5 +28,10 @@ class House:RobotArm{
         
         motor_position ik(int x, int y) override;
         void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
+        void __MoveOut_FromHouse(uint8_t house_id);
+        void __MoveIn_ToHouse(uint8_t house_id);
+        void __Move_FromNeck_ToHead();
+        void __Move_FromHead_ToNeck();
+        uint16_t Path[9][2*5];
 
 };

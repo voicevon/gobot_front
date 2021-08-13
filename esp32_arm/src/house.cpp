@@ -21,10 +21,33 @@
 #define HOMED_POSITION_ALPHA 0
 #define HOMED_POSITION_BETA 1
 
+#define ALPHA_AXIS 0
+#define BETA_AXIS 1
+
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
 
 House::House(){
+  // Path from head to neck
+  uint16_t path8[10] = {11,22,  33,44,  55,66, 77,88, 99, 10};
+  for(uint16_t i=0; i< sizeof(path8) /2; i++){
+    Path[8][i] = path8[i];
+  }
+
+  // Path to house of id=0
+  uint16_t path0[10] = {11,22,  33,44,  55,66, 77,88, 99, 10};
+  for(uint16_t i=0; i< sizeof(path0) /2; i++){
+    Path[8][i] = path0[i];
+  }
+  // Path to house of id=1
+  // Path to house of id=2
+  // Path to house of id=3
+  // Path to house of id=4
+  // Path to house of id=5
+  // Path to house of id=6
+  // Path to house of id=7
+  // Path to house of id=8
+
 }
 void House::Setup(RobotAction* pAction){
     __house_action = pAction;
@@ -45,18 +68,18 @@ void House::Setup(RobotAction* pAction){
 }
 
 void House::Home(uint8_t axis){
- uint8_t homing_axis = axis;
+  uint8_t homing_axis = axis;
   uint8_t home_pin = PIN_HOME_BETA;
   Stepper* homing_stepper = stepper_beta;
 
-  if (axis == 4 ){
+  if (axis == ALPHA_AXIS ){
     home_pin = PIN_HOME_ALHPA;
     homing_stepper = stepper_alpha;
     // stepper = stepper_alpha;
     Serial.print("\nStart Homing Alpha");
   }
   else {
-    // axis == 5
+    // axis == 1
     // homing_stepper = stepper_beta;
     Serial.print("\nStart Homing Beta");
   }
@@ -68,7 +91,7 @@ void House::Home(uint8_t axis){
   };
 
   __HomeSpin(homing_stepper, home_pin);
-  if (homing_axis == 4){
+  if (homing_axis == ALPHA_AXIS){
     stepper_alpha->setPosition(HOMED_POSITION_ALPHA);
   }
   else{
@@ -94,14 +117,48 @@ void House::SpinOnce()
 }
 
 motor_position House::ik(int x, int y){
-
+  Serial.println("Error, No IK is avaliable of House object.");
+  motor_position ret;   //is risk here?
+  return ret;
 }
 
-void House::DrawStone(uint8_t house_id)
-{
+
+// Head is a position name, The 5 bar arm will pick up stone from there.
+
+void House::MoveStone_FromHouseToHead(uint8_t house_id){
+  // Move to bottom of house
+  __MoveOut_FromHouse(house_id);
+  Home(BETA_AXIS);
+  // Alpha to Neck.
+  // stepper_alpha->setPosition(123);
+  // Alpha , Beta to Head.
+
+}
+void House::MoveStone_FromHeadToHouse(uint8_t house_id){
+  
 }
 
-void House::MoveStoneToTarget(uint8_t start_coil)
-{
+void House::__MoveOut_FromHouse(uint8_t house_id){
+  for(int i=0; i<5; i++){
+    a = Path[house_id][i];
+    b = Path[house_id][i+1];
+    stepper_alpha->setTargetAbs(a);
+    stepper_beta->setTargetAbs(b);
+    steppers->move();
+  }
+}
 
+void House::__MoveIn_ToHouse(uint8_t house_id){
+  // Move to bottom of house
+
+  // Draw stone out , follow linear way.
+
+  
+}
+
+void House::__Move_FromNeck_ToHead(){
+  
+}
+void House::__Move_FromHead_ToNeck(){
+  
 }

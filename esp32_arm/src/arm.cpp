@@ -39,14 +39,14 @@ void Arm::Home(unsigned char axis){
   uint8_t home_pin = PIN_HOME_BETA;
   Stepper* homing_stepper = stepper_beta;
 
-  if (axis == 4 ){
+  if (axis == 0 ){
     home_pin = PIN_HOME_ALHPA;
     homing_stepper = stepper_alpha;
     // stepper = stepper_alpha;
     Serial.print("\nStart Homing Alpha");
   }
   else {
-    // axis == 5
+    // axis == 1
     // homing_stepper = stepper_beta;
     Serial.print("\nStart Homing Beta");
   }
@@ -58,7 +58,7 @@ void Arm::Home(unsigned char axis){
   };
 
   __HomeSpin(homing_stepper, home_pin);
-  if (homing_axis == 4){
+  if (homing_axis == 0){
     stepper_alpha->setPosition(HOMED_POSITION_ALPHA);
   }
   else{
