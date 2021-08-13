@@ -11,20 +11,17 @@ Stepper liberys:
     - https://github.com/pkerspe/ESP-FlexyStepper
 */
 
+
 // #include "accel_stepper/AccelStepper.h"
 // #include "accel_stepper/MultiStepper.h"
 // #include "mcp23018.h"
 #include "actions.h"
-#include "ESP32Step/src/TeensyStep.h"
 
 // #include "ble_server.h"
 #include <ESP32Servo.h>
+#include "RobotArm.h"
 
 
-struct motor_position{
-    int alpha;
-    int beta;
-};
 
 
 // Up to 10 steppers can be handled as a group by MultiStepper
@@ -37,7 +34,7 @@ enum EEF{
     Sleep = 5
 };
 
-class Arm{
+class Arm:RobotArm{
     public:
         static Arm& getInstance()
         {
@@ -48,7 +45,7 @@ class Arm{
         void Home(unsigned char axis);
         void SpinOnce(void);
         void Setup(RobotAction* pAction);
-        void MoveTo(int16_t x, int16_t y);
+
         void SetEffector(EEF action);
         void pick_place_park(RobotAction* pAction);
 
@@ -57,7 +54,8 @@ class Arm{
         Arm(Arm const& copy);            // Not Implemented
         Arm& operator=(Arm const& copy); // Not Implemented
 
-        motor_position ik(int x, int y);
+        motor_position ik(int x, int y) override;
+
 
         // link length in mm
         int l0 ;   // Length between origin and the two motors
@@ -72,9 +70,7 @@ class Arm{
         // AccelStepper* stepper_alpha;
         // AccelStepper* stepper_beta;
         // MultiStepper steppers;
-        Stepper* stepper_alpha;
-        Stepper* stepper_beta;
-        StepControl* steppers;
+
 
         Servo* eefServo;
 

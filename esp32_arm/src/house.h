@@ -3,6 +3,7 @@
 #include "actions.h"
 // #include "mcp23018.h"
 #include <Arduino.h>
+#include "RobotArm.h"
 // #include <AccelStepper.h>
 // #include <ESP32Servo.h>
 // #include "esp32-hal-ledc.h"
@@ -11,7 +12,7 @@
 #define CHIPS_COUNT  4
 
 
-class House{
+class House:RobotArm{
     public:
         static House& getInstance()
         {
@@ -42,6 +43,7 @@ class House{
         // House& operator=(House const& copy); // Not Implemented
         RobotAction* __house_action;
         
+        motor_position ik(int x, int y) override;
 
         // Servo __LeftServo;
         // Servo __RightServo;
