@@ -108,10 +108,10 @@ void loop(){
         arm->pick_place_park(&action);
         break;
       case 4:
-        arm->Home(4);
+          arm->Home(action.bytes[1]);
         break;
       case 5:
-        arm->Home(5);
+        house->Home(action.bytes[1]);
         break;
       case 6:
         house_id = action.House.from_start_house_id;

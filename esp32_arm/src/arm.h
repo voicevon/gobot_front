@@ -13,7 +13,7 @@ Stepper liberys:
 
 // #include "accel_stepper/AccelStepper.h"
 // #include "accel_stepper/MultiStepper.h"
-#include "mcp23018.h"
+// #include "mcp23018.h"
 #include "actions.h"
 #include "ESP32Step/src/TeensyStep.h"
 
@@ -21,10 +21,6 @@ Stepper liberys:
 #include <ESP32Servo.h>
 
 
-// struct point_position{
-//     int x;
-//     int y;
-// };
 struct motor_position{
     int alpha;
     int beta;

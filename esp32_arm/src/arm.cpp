@@ -3,6 +3,7 @@
 #include<Arduino.h>
 
 
+// Total occupied 10 Pins
 #define PIN_EEF_SERVO 21
 #define PIN_EEF_A  18
 #define PIN_EEF_B  19

@@ -14,10 +14,14 @@
         bit[2] == 1: move to place point
         bit[3] == 0: skip parking.
         bit[3] == 1: move to parking point.
-        bit[4] == 0: skip home_x
-        bit[4] == 1: do home_x
-        bit[5] == 0: skip home_y
-        bit[5] == 1: do home_y
+        bit[4] == 0: skip arm home
+        bit[4] == 1: Arm home
+            Value[4]: Arm_Alpha
+            Value[5]: Arm_Beta
+        bit[5] == 0: skip house home
+        bit[5] == 1: do house home
+            Value[8]: House_Alpha
+            Value[9]: House_Beta
         bit[6] == 0: Don't draw stone from house
         bit[6] == 1: draw stone from house_id
         bit[7] == 0: Don't move stone 
