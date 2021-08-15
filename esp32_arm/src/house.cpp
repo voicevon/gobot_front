@@ -24,31 +24,16 @@
 #define ALPHA_AXIS 0
 #define BETA_AXIS 1
 
+#define LINK_A 75
+#define LINK_B 75
+
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
 
 House::House(){
-  // Path from head to neck
-  uint16_t path8[10] = {11,22,  33,44,  55,66, 77,88, 99, 10};
-  for(uint16_t i=0; i< sizeof(path8) /2; i++){
-    Path[8][i] = path8[i];
+
   }
 
-  // Path to house of id=0
-  uint16_t path0[10] = {11,22,  33,44,  55,66, 77,88, 99, 10};
-  for(uint16_t i=0; i< sizeof(path0) /2; i++){
-    Path[8][i] = path0[i];
-  }
-  // Path to house of id=1
-  // Path to house of id=2
-  // Path to house of id=3
-  // Path to house of id=4
-  // Path to house of id=5
-  // Path to house of id=6
-  // Path to house of id=7
-  // Path to house of id=8
-
-}
 void House::Setup(RobotAction* pAction){
     __house_action = pAction;
     
@@ -116,49 +101,107 @@ void House::SpinOnce()
 {
 }
 
-motor_position House::ik(int x, int y){
-  Serial.println("Error, No IK is avaliable of House object.");
-  motor_position ret;   //is risk here?
-  return ret;
-}
 
 
 // Head is a position name, The 5 bar arm will pick up stone from there.
 
 void House::MoveStone_FromHouseToHead(uint8_t house_id){
-  // Move to bottom of house
-  __MoveOut_FromHouse(house_id);
-  Home(BETA_AXIS);
-  // Alpha to Neck.
-  // stepper_alpha->setPosition(123);
-  // Alpha , Beta to Head.
-
+  __Move_fromNeck_toDoor(house_id,true);
+  __Move_fromDoor_toHouse(house_id,true);
+  __Enable_eefCoil(true);
+  __Move_fromDoor_toHouse(house_id, true);
+  __Move_fromNeck_toDoor(0,true);
+  __Move_fromHead_toNeck(true);
+  __Enable_eefCoil(false);
+  __Move_fromHead_toNeck(false);
 }
+
 void House::MoveStone_FromHeadToHouse(uint8_t house_id){
-  
+  __Move_fromDoor_toHouse(0,true);  // 0 is useless.
+  __Move_fromHead_toNeck(true);
+  __Enable_eefCoil(true);
+  __Move_fromHead_toNeck(house_id);
+  __Move_fromNeck_toDoor(house_id, false);
+  __Move_fromDoor_toHouse(house_id, false);
+  __Enable_eefCoil(false);
+  __Move_fromDoor_toHouse(house_id, true);
 }
 
-void House::__MoveOut_FromHouse(uint8_t house_id){
-  for(int i=0; i<5; i++){
-    a = Path[house_id][i];
-    b = Path[house_id][i+1];
-    stepper_alpha->setTargetAbs(a);
-    stepper_beta->setTargetAbs(b);
-    steppers->move();
+void House::__Enable_eefCoil(bool enable){
+
+}
+
+
+/*
+
+    House
+
+             0
+          1
+        2
+      3                        
+                 (O,0)                   Neck----------Head
+      4
+       5
+         6
+          7
+
+*/
+motor_position House::ik(int x, int y){
+  motor_position ret;   //is risk here?
+  if(x>0){
+    
+  }
+  return ret;
+}
+
+
+void House::__Move_fromHead_toNeck(bool reverse){
+  float pos[4]={80,0,  149,0};   //Neck(x,y),  Head(x,y)
+  float x = pos[0];
+  float y = pos[1];
+  if(reverse){
+    //to head
+    x = pos[2];
+    y = pos [3];
+  }
+  MoveTo(x,y);
+}
+
+void House::__Move_fromDoor_toHouse(uint8_t house_id, bool reverse){
+  float x = 100;
+  float y = 100;
+  int steps_count = 20;
+  int x_step_distance = 50 / steps_count;
+  if (reverse){
+    for(int dY=0; dY<steps_count; dY++){
+      x = x_step_distance * steps_count + x_step_distance * dY;
+      MoveTo(x,y);
+    }
+  }else{
+    for(int dY= steps_count-1 ; dY>=0; dY--){
+      x = x_step_distance * steps_count + x_step_distance * dY;
+      MoveTo(x,y);
+      }
   }
 }
 
-void House::__MoveIn_ToHouse(uint8_t house_id){
-  // Move to bottom of house
+// This is a rotation.
+void House::__Move_fromNeck_toDoor(uint8_t house_id, bool reverse){
+  float ANGLE[8] = {0,1,2,3,4,5,6,7};
+  float pos[16] = {0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7};
 
-  // Draw stone out , follow linear way.
-
-  
-}
-
-void House::__Move_FromNeck_ToHead(){
-  
-}
-void House::__Move_FromHead_ToNeck(){
-  
+  // home beta firstly
+  Home(BETA_AXIS);
+  // do rotation 
+  int angle = ANGLE[house_id];
+  if (reverse){
+    stepper_alpha->setTargetAbs(100);
+  }else{
+    stepper_alpha->setTargetAbs(angle);
+  }
+  // move to door
+  float x = pos[house_id];
+  float y = pos[house_id + 1];
+  MoveTo(x,y);
 }
