@@ -58,9 +58,9 @@ class Arm:RobotArm{
 
 
         // link length in mm
-        int l0 ;   // Length between origin and the two motors
-        int l1 ;   // Length from motor to passive joints
-        int l2 ;  // Length from passive joints to end effector
+        int link_0 ;   // Length between origin and the two motors
+        int link_a ;   // Length from motor to passive joints
+        int link_b ;  // Length from passive joints to end effector
 
 
         // EG X-Y position bed driven by 2 steppers

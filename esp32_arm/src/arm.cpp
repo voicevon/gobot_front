@@ -201,9 +201,9 @@ void Arm::Setup(RobotAction* pAction){
   digitalWrite(PIN_BETA_ENABLE, LOW);
   steppers = new StepControl();
 
-  l0 = LINK_0;
-  l1 = LINK_A;
-  l2 = LINK_B;
+  link_0 = LINK_0;
+  link_a = LINK_A;
+  link_b = LINK_B;
 }
 
 void Arm::SpinOnce(){
