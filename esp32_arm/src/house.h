@@ -26,7 +26,7 @@ class House:RobotArm{
         House();
         RobotAction* __house_action;
         
-        motor_position ik(int x, int y) override;
+        motor_position ik(float x, float y) override;
         void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
         void __Move_fromDoor_toHouse(uint8_t house_id, bool reverse);
         void __Move_fromHead_toNeck(bool reverse);

@@ -27,6 +27,8 @@
 #define LINK_A 75
 #define LINK_B 75
 
+#define STEPS_PER_RAD 2345;
+
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
 
@@ -147,11 +149,17 @@ void House::__Enable_eefCoil(bool enable){
           7
 
 */
-motor_position House::ik(int x, int y){
+motor_position House::ik(float x, float y){
   motor_position ret;   //is risk here?
-  if(x>0){
-    
-  }
+  float rr1= x*x +y*y;
+  
+  float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
+  float r1 = sqrtf(rr1);
+  float alpha_eef = acosf(x/r1);
+  float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
+  float alpha = alpha_eef + alpha_link;
+  ret.alpha = alpha * STEPS_PER_RAD;
+  ret.beta =  beta * STEPS_PER_RAD; 
   return ret;
 }
 

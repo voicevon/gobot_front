@@ -20,8 +20,8 @@
 
 //  unit is mm
 #define LINK_0 191.0  // Length between origin and the two motors
-#define LINK_1 285.18 // Length from motor to passive joints
-#define LINK_2 384.51 // Length from passive joints to end effector
+#define LINK_A 285.18 // Length from motor to passive joints
+#define LINK_B 384.51 // Length from passive joints to end effector
 
 
 #define HOMED_POSITION_ALPHA 123   // unit is step
@@ -83,38 +83,24 @@ void Arm::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
 /*
 https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
 */
-motor_position Arm::ik(int x, int y){
-    motor_position pos;
+motor_position Arm::ik(float x, float y){
+  motor_position ret;   //is risk here?
+  float rr1= (x + LINK_0) * (x + LINK_0) + y * y;
+  
+  // float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
+  float r1 = sqrtf(rr1);
+  float alpha_eef = acosf((x + LINK_0) / r1);
+  float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B) / ( 2*LINK_A * r1));
+  float alpha = alpha_eef + alpha_link;
+  ret.alpha = alpha * STEPS_PER_RAD;
 
-    // Angle from left shoulder to end effector
-    double beta1 = atan2( y, (l0 + x) );
-
-    // Angle from right shoulder to end effector
-    double beta2 = atan2( y, (l0 - x) );
-
-    // Alpha angle pre-calculations
-    // alpha1_calc = (l1**2 + ( (l0 + x)**2 + y**2 ) - l2**2) / (2*l1*math.sqrt( (l0 + x)**2 + y**2 ))  
-    // alpha2_calc = (l1**2 + ( (l0 - x)**2 + y**2 ) - l2**2) / (2*l1*math.sqrt( (l0 - x)**2 + y**2 )) 
-    double alpha1_calc = (l1*l1 + ( (l0 + x)*(l0+x) + y*y ) - l2*l2) / (2*l1*sqrt( (l0 + x)*(l0+x) + y*y)); 
-    double alpha2_calc = (l1*l1 + ( (l0 - x)*(l0-x) + y*y ) - l2*l2) / (2*l1*sqrt( (l0 - x)*(l0-x) + y*y));
-
-    // If calculations > 1, will fail acos function
-    if (alpha1_calc > 1 or alpha2_calc > 1){
-        // print("Unreachable coordinates");
-        pos.alpha = -99999;
-        pos.beta = -99999 ;
-        return pos;
-    }
-
-    // Angle of left shoulder - beta1 and right shoulder - beta2
-    float alpha1 = acos(alpha1_calc);
-    float alpha2 = acos(alpha2_calc);
-
-    // Angles of left and right shoulders
-    pos.alpha = (beta1 + alpha1) * STEPS_PER_RAD;
-    pos.beta = (3.14159265 - beta2 - alpha2) * STEPS_PER_RAD;
-    
-  return pos;
+  float rr2 = (x - LINK_0)* (x - LINK_0) + y * y;
+  float r2 = sqrtf(rr2);
+  float beta_eef = acosf((x - LINK_0) / r2 );
+  float beta_link = acosf((LINK_A * LINK_A + rr2 - LINK_B * LINK_B) / (2 * LINK_A * r2));
+  float beta = beta_eef - beta_link;
+  ret.beta =  beta * STEPS_PER_RAD; 
+  return ret;
 }
 
 void Arm::SetEffector(EEF action){
@@ -216,8 +202,8 @@ void Arm::Setup(RobotAction* pAction){
   steppers = new StepControl();
 
   l0 = LINK_0;
-  l1 = LINK_1;
-  l2 = LINK_2;
+  l1 = LINK_A;
+  l2 = LINK_B;
 }
 
 void Arm::SpinOnce(){

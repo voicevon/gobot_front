@@ -54,7 +54,7 @@ class Arm:RobotArm{
         Arm(Arm const& copy);            // Not Implemented
         Arm& operator=(Arm const& copy); // Not Implemented
 
-        motor_position ik(int x, int y) override;
+        motor_position ik(float x, float y) override;
 
 
         // link length in mm
