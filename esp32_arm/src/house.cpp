@@ -52,6 +52,49 @@ void House::Setup(RobotAction* pAction){
     stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
     digitalWrite(PIN_BETA_ENABLE, LOW);
     steppers = new StepControl();
+
+    __map.setup(20);
+    // __map.neck.y = 0;
+    // __map.neck.x = 60.0;
+    // __map.head.y = 0;
+    // __map.head.x = 148.93;
+
+    // __map.rooms[0].x = -119.51;
+    // __map.rooms[0].y = 126.38;
+    // __map.rooms[1].x = -111.9;
+    // __map.rooms[1].y = 95.34;
+    // __map.rooms[2].x = -98.18;
+    // __map.rooms[2].y = 61.4;
+    // __map.rooms[3].x = -78.79;
+    // __map.rooms[3].y = 25.59;
+
+    // __map.rooms[4].x = __map.rooms[3].x;
+    // __map.rooms[4].y = - __map.rooms[3].y;
+    // __map.rooms[5].x = __map.rooms[2].x;
+    // __map.rooms[5].y = - __map.rooms[2].y;
+    // __map.rooms[6].x = __map.rooms[1].x;
+    // __map.rooms[6].y = - __map.rooms[1].y;
+    // __map.rooms[7].x = __map.rooms[0].x;
+    // __map.rooms[7].y = - __map.rooms[0].y;
+
+    // __map.doors[0].x = -49.46;
+    // __map.doors[0].y = 59.07;
+    // __map.doors[1].x = -81.22;
+    // __map.doors[1].y = 56.12;
+    // __map.doors[2].x = -104.11;
+    // __map.doors[2].y = 40.67;
+    // __map.doors[3].x = -117.25;
+    // __map.doors[3].y = 17.95;
+    // __map.doors[4].x = __map.doors[3].x;
+    // __map.doors[4].y = - __map.doors[3].y;
+    // __map.doors[5].x = __map.doors[2].x;
+    // __map.doors[5].y = - __map.doors[2].y;
+    // __map.doors[6].x = __map.doors[1].x;
+    // __map.doors[6].y = - __map.doors[1].y;
+    // __map.doors[7].x = __map.doors[0].x;
+    // __map.doors[7].y = - __map.doors[0].y;
+
+        
 }
 
 void House::Home(uint8_t axis){
@@ -165,51 +208,56 @@ motor_position House::ik(float x, float y){
 
 
 void House::__Move_fromHead_toNeck(bool reverse){
-  float pos[4]={80,0,  149,0};   //Neck(x,y),  Head(x,y)
-  float x = pos[0];
-  float y = pos[1];
+  float x1 = __map.head.x;
+  float x2 = __map.neck.x;
   if(reverse){
     //to head
-    x = pos[2];
-    y = pos [3];
+    float x2 = __map.head.x;
+    float x1 = __map.neck.x;
   }
-  MoveTo(x,y);
-}
-
-void House::__Move_fromDoor_toHouse(uint8_t house_id, bool reverse){
-  float x = 100;
-  float y = 100;
-  int steps_count = 20;
-  int x_step_distance = 50 / steps_count;
-  if (reverse){
-    for(int dY=0; dY<steps_count; dY++){
-      x = x_step_distance * steps_count + x_step_distance * dY;
-      MoveTo(x,y);
+  float distance = x2 - x1;
+  float dx = distance / __map.get_segments() ;
+  for(int segment= 0; segment < __map.get_segments(); segment++){
+    float x = x1 + dx * segment;
+    MoveTo(x, 0);
     }
-  }else{
-    for(int dY= steps_count-1 ; dY>=0; dY--){
-      x = x_step_distance * steps_count + x_step_distance * dY;
-      MoveTo(x,y);
-      }
   }
 }
 
-// This is a rotation.
-void House::__Move_fromNeck_toDoor(uint8_t house_id, bool reverse){
-  float ANGLE[8] = {0,1,2,3,4,5,6,7};
-  float pos[16] = {0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7};
+void House::__Move_fromDoor_toRoom(uint8_t house_id, bool reverse){
+    //from room to door, now is at room.
+  float x1 = __map.rooms[house_id].x;
+  float y1 = __map.rooms[house_id].y;
+  float x2 = __map.doors[house_id].x;
+  float y2 = __map.doors[house_id].y;
 
-  // home beta firstly
-  Home(BETA_AXIS);
-  // do rotation 
-  int angle = ANGLE[house_id];
   if (reverse){
-    stepper_alpha->setTargetAbs(100);
-  }else{
-    stepper_alpha->setTargetAbs(angle);
+    //from house to door, now is at house.
+    x2 = __map.rooms[house_id].x;
+    y2 = __map.rooms[house_id].y;
+    x1 = __map.doors[house_id].x;
+    y1 = __map.doors[house_id].y;
   }
-  // move to door
-  float x = pos[house_id];
-  float y = pos[house_id + 1];
+
+  float distance = __map.distance_room_to_door[house_id];
+  float dx = __map.get_dx_distance(house_id) ;
+  float dy = __map.get_dy_distance(house_id) ;
+  for(int segment= 0; segment < __map.get_segments(); segment++){
+    float x = x1 + dx * segment;
+    float y = y1 + dy * segment;
+    MoveTo(x,y);
+    }
+  }
+}
+
+// This is almost a  rotation, because beta should be no changing.
+void House::__Move_fromNeck_toDoor(uint8_t house_id, bool reverse){
+  float x = __map.doors[house_id].x;
+  float y = __map.doors[house_id].y;
+  if (reverse){
+    x = __map.neck.x;
+    y = __map.neck.y;    
+  }
+
   MoveTo(x,y);
 }

@@ -3,9 +3,11 @@
 #include "actions.h"
 #include <Arduino.h>
 #include "RobotArm.h"
-
+#include "HouseMap.h"
 #define COIL_COUNT 53
 #define CHIPS_COUNT  4
+
+
 
 
 class House:RobotArm{
@@ -28,9 +30,9 @@ class House:RobotArm{
         
         motor_position ik(float x, float y) override;
         void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
-        void __Move_fromDoor_toHouse(uint8_t house_id, bool reverse);
+        void __Move_fromDoor_toRoom(uint8_t house_id, bool reverse);
         void __Move_fromHead_toNeck(bool reverse);
         void __Move_fromNeck_toDoor(uint8_t house_id, bool reverse);
         void __Enable_eefCoil(bool enable);
-
+        HouseMap __map;
 };
