@@ -1,7 +1,7 @@
 # include "HouseMap.h"
 #include <math.h>
 
-void HouseMap::__init(){
+void HouseMap::setup(){
     this->neck.y = 0;
     this->neck.x = 60.0;
     this->head.y = 0;
@@ -42,24 +42,4 @@ void HouseMap::__init(){
     this->doors[7].x = this->doors[0].x;
     this->doors[7].y = - this->doors[0].y;
 }
-void HouseMap::setup(int segments){
-    __segments = segments;
-    __init();
 
-    distance_head_to_neck = head.x - neck.x ;
-
-    for(int i=0; i<8; i++){
-        float dx = doors[i].x - rooms[i].x;
-        float dy = doors[i].y - rooms[i].y;
-        distance_room_to_door[i] = sqrtf(dx * dx + dy * dy);
-    }
-
-}
-
-float HouseMap::get_dx_distance(int house_id){
-    return (doors[house_id].x - rooms[house_id].x) / __segments;
-}
-float HouseMap::get_dy_distance(int house_id){
-    float distance = abs(doors[house_id].y - rooms[house_id].y);
-    return distance / __segments;
-}

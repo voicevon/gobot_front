@@ -36,8 +36,10 @@ House::House(){
 
   }
 
-void House::Setup(RobotAction* pAction){
+void House::Setup(RobotAction* pAction, int segments){
     __house_action = pAction;
+    __segments = segments;
+    __map.setup();
     
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     digitalWrite(PIN_BETA_ENABLE, HIGH);
@@ -53,46 +55,6 @@ void House::Setup(RobotAction* pAction){
     digitalWrite(PIN_BETA_ENABLE, LOW);
     steppers = new StepControl();
 
-    __map.setup(20);
-    // __map.neck.y = 0;
-    // __map.neck.x = 60.0;
-    // __map.head.y = 0;
-    // __map.head.x = 148.93;
-
-    // __map.rooms[0].x = -119.51;
-    // __map.rooms[0].y = 126.38;
-    // __map.rooms[1].x = -111.9;
-    // __map.rooms[1].y = 95.34;
-    // __map.rooms[2].x = -98.18;
-    // __map.rooms[2].y = 61.4;
-    // __map.rooms[3].x = -78.79;
-    // __map.rooms[3].y = 25.59;
-
-    // __map.rooms[4].x = __map.rooms[3].x;
-    // __map.rooms[4].y = - __map.rooms[3].y;
-    // __map.rooms[5].x = __map.rooms[2].x;
-    // __map.rooms[5].y = - __map.rooms[2].y;
-    // __map.rooms[6].x = __map.rooms[1].x;
-    // __map.rooms[6].y = - __map.rooms[1].y;
-    // __map.rooms[7].x = __map.rooms[0].x;
-    // __map.rooms[7].y = - __map.rooms[0].y;
-
-    // __map.doors[0].x = -49.46;
-    // __map.doors[0].y = 59.07;
-    // __map.doors[1].x = -81.22;
-    // __map.doors[1].y = 56.12;
-    // __map.doors[2].x = -104.11;
-    // __map.doors[2].y = 40.67;
-    // __map.doors[3].x = -117.25;
-    // __map.doors[3].y = 17.95;
-    // __map.doors[4].x = __map.doors[3].x;
-    // __map.doors[4].y = - __map.doors[3].y;
-    // __map.doors[5].x = __map.doors[2].x;
-    // __map.doors[5].y = - __map.doors[2].y;
-    // __map.doors[6].x = __map.doors[1].x;
-    // __map.doors[6].y = - __map.doors[1].y;
-    // __map.doors[7].x = __map.doors[0].x;
-    // __map.doors[7].y = - __map.doors[0].y;
 
         
 }
@@ -149,27 +111,26 @@ void House::SpinOnce()
 
 
 // Head is a position name, The 5 bar arm will pick up stone from there.
-
-void House::MoveStone_FromHouseToHead(uint8_t house_id){
-  __Move_fromNeck_toDoor(house_id,true);
-  __Move_fromDoor_toHouse(house_id,true);
+void House::MoveStone_FromRoomToHead(uint8_t room_id){
+  __Move_fromNeck_toDoor(room_id,true);
+  __Move_fromRoom_toDoor(room_id,false);
   __Enable_eefCoil(true);
-  __Move_fromDoor_toHouse(house_id, true);
-  __Move_fromNeck_toDoor(0,true);
-  __Move_fromHead_toNeck(true);
-  __Enable_eefCoil(false);
+  __Move_fromRoom_toDoor(room_id, true);
+  __Move_fromNeck_toDoor(0, false);
   __Move_fromHead_toNeck(false);
+  __Enable_eefCoil(false);
+  __Move_fromHead_toNeck(true);
 }
 
-void House::MoveStone_FromHeadToHouse(uint8_t house_id){
-  __Move_fromDoor_toHouse(0,true);  // 0 is useless.
-  __Move_fromHead_toNeck(true);
+void House::MoveStone_FromHeadToRoom(uint8_t room_id){
+  __Move_fromNeck_toDoor(0, false);  // 0 is useless.
+  __Move_fromHead_toNeck(false);
   __Enable_eefCoil(true);
-  __Move_fromHead_toNeck(house_id);
-  __Move_fromNeck_toDoor(house_id, false);
-  __Move_fromDoor_toHouse(house_id, false);
+  __Move_fromHead_toNeck(true);
+  __Move_fromNeck_toDoor(room_id, true);
+  __Move_fromRoom_toDoor(room_id, false);
   __Enable_eefCoil(false);
-  __Move_fromDoor_toHouse(house_id, true);
+  __Move_fromRoom_toDoor(room_id, true);
 }
 
 void House::__Enable_eefCoil(bool enable){
@@ -179,17 +140,17 @@ void House::__Enable_eefCoil(bool enable){
 
 /*
 
-    House
-
-             0
-          1
-        2
-      3                        
-                 (O,0)                   Neck----------Head
-      4
-       5
-         6
-          7
+    House                Y+
+                         ^
+             r0          |
+          r1     d0      |
+        r2      d1       |
+      r3       d3  d2    |               
+      -----------------(0,0)------Neck----------Head    --> X+
+      r4      d4  d5     |
+       r5       d6       |
+         r6     d7       |
+          r7             |
 
 */
 motor_position House::ik(float x, float y){
@@ -207,54 +168,52 @@ motor_position House::ik(float x, float y){
 }
 
 
-void House::__Move_fromHead_toNeck(bool reverse){
+void House::__Move_fromHead_toNeck(bool forwarding){
   float x1 = __map.head.x;
   float x2 = __map.neck.x;
-  if(reverse){
-    //to head
-    float x2 = __map.head.x;
-    float x1 = __map.neck.x;
+  if(!forwarding){
+    //from neck to head
+    x1 = __map.neck.x;
+    x2 = __map.head.x;
   }
   float distance = x2 - x1;
-  float dx = distance / __map.get_segments() ;
-  for(int segment= 0; segment < __map.get_segments(); segment++){
+  float dx = distance / __segments ;
+  for(int segment= 0; segment < __segments; segment++){
     float x = x1 + dx * segment;
     MoveTo(x, 0);
-    }
   }
 }
 
-void House::__Move_fromDoor_toRoom(uint8_t house_id, bool reverse){
+void House::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
     //from room to door, now is at room.
-  float x1 = __map.rooms[house_id].x;
-  float y1 = __map.rooms[house_id].y;
-  float x2 = __map.doors[house_id].x;
-  float y2 = __map.doors[house_id].y;
+  float x1 = __map.rooms[room_id].x;
+  float y1 = __map.rooms[room_id].y;
+  float x2 = __map.doors[room_id].x;
+  float y2 = __map.doors[room_id].y;
 
-  if (reverse){
-    //from house to door, now is at house.
-    x2 = __map.rooms[house_id].x;
-    y2 = __map.rooms[house_id].y;
-    x1 = __map.doors[house_id].x;
-    y1 = __map.doors[house_id].y;
+  if (!forwarding){
+    //from door to room, now is at door.
+    x1 = __map.doors[room_id].x;
+    y1 = __map.doors[room_id].y;
+    x2 = __map.rooms[room_id].x;
+    y2 = __map.rooms[room_id].y;
   }
 
-  float distance = __map.distance_room_to_door[house_id];
-  float dx = __map.get_dx_distance(house_id) ;
-  float dy = __map.get_dy_distance(house_id) ;
-  for(int segment= 0; segment < __map.get_segments(); segment++){
+  // float distance = __map.distance_room_to_door[room_id];
+  float dx = (x2 - x1) / __segments;
+  float dy = (y2 - y1) / __segments;
+  for(int segment= 0; segment < __segments; segment++){
     float x = x1 + dx * segment;
     float y = y1 + dy * segment;
     MoveTo(x,y);
-    }
   }
 }
 
 // This is almost a  rotation, because beta should be no changing.
-void House::__Move_fromNeck_toDoor(uint8_t house_id, bool reverse){
-  float x = __map.doors[house_id].x;
-  float y = __map.doors[house_id].y;
-  if (reverse){
+void House::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
+  float x = __map.doors[room_id].x;
+  float y = __map.doors[room_id].y;
+  if (!forwarding){
     x = __map.neck.x;
     y = __map.neck.y;    
   }

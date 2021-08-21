@@ -19,20 +19,21 @@ class House:RobotArm{
             return instance;
         }
         void SpinOnce(void);
-        void Setup(RobotAction* pAction);
+        void Setup(RobotAction* pAction, int segments);
         void Home(uint8_t axis) override;
-        void MoveStone_FromHouseToHead(uint8_t house_id);
-        void MoveStone_FromHeadToHouse(uint8_t house_id);
+        void MoveStone_FromRoomToHead(uint8_t house_id);
+        void MoveStone_FromHeadToRoom(uint8_t house_id);
     protected:
     private:
         House();
         RobotAction* __house_action;
+        int __segments;
         
         motor_position ik(float x, float y) override;
         void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
-        void __Move_fromDoor_toRoom(uint8_t house_id, bool reverse);
-        void __Move_fromHead_toNeck(bool reverse);
-        void __Move_fromNeck_toDoor(uint8_t house_id, bool reverse);
+        void __Move_fromRoom_toDoor(uint8_t house_id, bool forwarding);
+        void __Move_fromHead_toNeck(bool forwarding);
+        void __Move_fromNeck_toDoor(uint8_t house_id, bool forwarding);
         void __Enable_eefCoil(bool enable);
         HouseMap __map;
 };

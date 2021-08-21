@@ -48,7 +48,7 @@ void setup(){
   arm->Setup(&action);
   Serial.print("\nArm setup is done.......");
   house = &House::getInstance();
-  house->Setup(&action);
+  house->Setup(&action, 9);
   Serial.print("\nHouse setup is done..........");
   ble_setup();
   Serial.print("\nble setup is done......");
@@ -111,11 +111,11 @@ void loop(){
         break;
       case 6:
         house_id = action.House.from_start_house_id;
-        house->MoveStone_FromHouseToHead(house_id);
+        house->MoveStone_FromRoomToHead(house_id);
         break;
       case 7:
         house_id = action.House.from_start_house_id;
-        house->MoveStone_FromHeadToHouse(house_id);
+        house->MoveStone_FromHeadToRoom(house_id);
         break;
       default:
         break;
