@@ -7,7 +7,8 @@
 #define COIL_COUNT 53
 #define CHIPS_COUNT  4
 
-
+#define HOUSE_ALPHA_AXIS 10
+#define HOUSE_BETA_AXIS 11
 
 
 class House:RobotArm{

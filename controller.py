@@ -6,25 +6,23 @@ import time
 sys.path.append("/home/pi/pylib")
 from terminal_font import TerminalFont
 
-#   typedef union {
-#     struct {
-#       uint8_t action_code;
-#       // uint8_t pickup_type;   // 0=skip, 1=do it.
-#       int16_t pickup_x;
-#       int16_t pickup_y;
-#       // uint8_t place_type;    // 0=skip, 1=lower release, 2=higher release
-#       int16_t place_x;
-#       int16_t place_y;
-#       // uint8_t do_park;       //0= skip, 1=do it.
-#       int16_t park_x;
-#       int16_t park_y;
-#     }Arm;
-#     struct{
-#       uint8_t action_code;
-#       uint16_t from_start_house_id;  //From or start house id
-#     }House;
-#     byte bytes[13];
-#   }BodyAction;
+
+
+
+
+#                        ^
+#      A1                |            A19
+#     (-200.25, 589.75)  |            (200.25, 589.75)
+#                        |
+#                        |
+#                        |
+#                        |
+#      T1                |            T19
+#     (-200.25, 161.25)  |            (200.25, 161.25)
+#                        Head(0,88)
+#                        |
+#------------O---------(0,0)---------O-------------->X
+
   
 
 class Controller:
@@ -150,12 +148,12 @@ class Controller:
         motor_id == 4: Alpha
         motor_id == 5: Beta
         '''
-        logging.info('home_single_arm  %d',motor_id)
-        if not(motor_id == 4 or motor_id == 5):
+        logging.info('home_single_arm  %d',axis_id)
+        if not(axis_id == 4 or axis_id == 5):
             logging.warn('home papameter is wrong')
             return -1
         if self.__next_action[0] == 0:
-            self.__next_action[0] = 1<< motor_id
+            self.__next_action[1] = 1<< axis_id
         else:
             logging.warn('BLE message queue is full')
 

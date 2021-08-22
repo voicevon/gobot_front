@@ -22,6 +22,8 @@ Stepper liberys:
 #include "RobotArm.h"
 
 
+#define ARM_ALPHA_AXIS 4
+#define ARM_BETA_AXIS 5
 
 
 // Up to 10 steppers can be handled as a group by MultiStepper

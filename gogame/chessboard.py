@@ -11,20 +11,6 @@ from mqtt_helper import g_mqtt
 
 
 
-#                        ^
-#      A1                |            A19
-#     (-200.25, 589.75)  |            (200.25, 589.75)
-#                        |
-#                        |
-#                        |
-#                        |
-#      T1                |            T19
-#     (-200.25, 161.25)  |            (200.25, 161.25)
-#                        Head(0,88)
-#                        |
-#------------O---------(0,0)---------O-------------->X
-
-
 class ChessboardLayout(GridLayout):
 
     def __init__(self,name):

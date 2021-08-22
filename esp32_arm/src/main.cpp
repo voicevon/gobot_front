@@ -52,11 +52,11 @@ void setup(){
   Serial.print("\nHouse setup is done..........");
   ble_setup();
   Serial.print("\nble setup is done......");
-  arm->Home(0);
-  arm->Home(1);
+  arm->Home(ARM_ALPHA_AXIS);
+  arm->Home(ARM_BETA_AXIS);
   Serial.print("\nArm Homing is done......");
-  house->Home(0);
-  house->Home(1);
+  house->Home(HOUSE_ALPHA_AXIS);
+  house->Home(HOUSE_BETA_AXIS);
   Serial.print("\nHouse Homing is done......");
 }
 
@@ -84,7 +84,7 @@ void loop(){
     // Both head side and Esp side are idle. 
     uint8_t* pData  = pCharacteristic->getData();
     // Serial.println("    ");
-    for (int i=0; i<13; i++){
+    for (int i=0; i<14; i++){
       action.bytes[i] = *(pData + i);
       // Serial.print(action.bytes[i]);
       // Serial.print(" ");
@@ -103,12 +103,6 @@ void loop(){
       case 3:
         arm->pick_place_park(&action);
         break;
-      case 4:
-          arm->Home(action.bytes[1]);
-        break;
-      case 5:
-        house->Home(action.bytes[1]);
-        break;
       case 6:
         house_id = action.House.from_start_house_id;
         house->MoveStone_FromRoomToHead(house_id);
@@ -116,6 +110,18 @@ void loop(){
       case 7:
         house_id = action.House.from_start_house_id;
         house->MoveStone_FromHeadToRoom(house_id);
+        break;
+      case ARM_ALPHA_AXIS:
+        arm->Home(ARM_ALPHA_AXIS);
+        break;
+      case ARM_BETA_AXIS:
+        arm->Home(ARM_BETA_AXIS);
+        break;
+      case HOUSE_ALPHA_AXIS:
+        house->Home(HOUSE_ALPHA_AXIS);
+        break;
+      case HOUSE_BETA_AXIS:
+        house->Home(HOUSE_BETA_AXIS);
         break;
       default:
         break;

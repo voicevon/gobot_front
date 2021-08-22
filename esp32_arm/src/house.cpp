@@ -21,13 +21,12 @@
 #define HOMED_POSITION_ALPHA 0
 #define HOMED_POSITION_BETA 1
 
-#define ALPHA_AXIS 0
-#define BETA_AXIS 1
+
 
 #define LINK_A 75
 #define LINK_B 75
 
-#define STEPS_PER_RAD 2345;
+#define STEPS_PER_RAD 326;   //2048 / 2*Pi
 
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
@@ -64,7 +63,7 @@ void House::Home(uint8_t axis){
   uint8_t home_pin = PIN_HOME_BETA;
   Stepper* homing_stepper = stepper_beta;
 
-  if (axis == ALPHA_AXIS ){
+  if (axis == HOUSE_ALPHA_AXIS ){
     home_pin = PIN_HOME_ALHPA;
     homing_stepper = stepper_alpha;
     // stepper = stepper_alpha;
@@ -83,7 +82,7 @@ void House::Home(uint8_t axis){
   };
 
   __HomeSpin(homing_stepper, home_pin);
-  if (homing_axis == ALPHA_AXIS){
+  if (homing_axis == HOUSE_ALPHA_AXIS){
     stepper_alpha->setPosition(HOMED_POSITION_ALPHA);
   }
   else{
