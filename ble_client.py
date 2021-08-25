@@ -15,6 +15,7 @@ import logging
 
 # Instruction:
 #    sudo btmgmt le on
+#    sudo hciconfig hci0 reset
 #    sudo python3 ble_client.py
 #
 #
