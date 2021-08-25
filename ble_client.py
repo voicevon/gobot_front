@@ -1,7 +1,3 @@
-  334  quit
-  335  exit
-  GNU nano 3.2                                                                                                                      ble_client.py                                                                                                                                 
-
 from bluepy import btle  
 '''
 sudo apt-get install libglib2.0-dev
