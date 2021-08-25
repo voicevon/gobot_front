@@ -64,7 +64,8 @@ class BleClient():
             if name == 'ConInt-Arm-' + self.__gobot_id:
                 logging.info('Discoverd Arm !')
                 mac_addr = dev.addr
-                self.__dev_arm = btle.Peripheral(mac_addr, addrType=ADDR_TYPE_RANDOM)
+                self.__dev_arm = btle.Peripheral(mac_addr)
+                # self.__dev_arm = btle.Peripheral(mac_addr, addrType=ADDR_TYPE_RANDOM)
                 logging.info('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 self.connect_to_arm()
 
