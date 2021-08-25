@@ -110,8 +110,8 @@ class GobotHead():
             # move the first chess cell to trash
             # cell = ChessboardCell()
             # cell.from_col_row_id(col_id=col, row_id=row)
-            self.__controller.action_pickup_chess_from_a_cell(cell.name)
-            self.__controller.action_place_chess_to_trash_bin()
+            self.__controller.action_pickup_stone_from_a_cell(cell.name)
+            self.__controller.action_place_stone_to_trash_bin()
             return 1
         return 0
 

@@ -23,7 +23,8 @@ from terminal_font import TerminalFont
 #                        |
 #------------O---------(0,0)---------O-------------->X
 
-  
+        
+
 
 class Controller:
     '''
@@ -38,12 +39,22 @@ class Controller:
     def __init__(self):
         '''
         '''
-        self._FC_YELLOW = TerminalFont.Color.Fore.yellow
-        self._BG_GREEN = TerminalFont.Color.Background.green
-        self._FC_RESET = TerminalFont.Color.Control.reset 
         self.__current_action = bytearray([0]*14)
         self.__next_action = bytearray([0]*14)
         self.__bleClient = BleClient()
+
+        self.Location_A1 = (-200.25, 589.75)
+        self.Location_T19 = (200.25, 161.25)
+        self.Location_Head = (0, 88)
+
+        self.ARM_AXIS_Alpha = 4
+        self.ARM_AXIS_Beta = 5
+        self.HOUSE_AXIS_Alpha = 10
+        self.HOUSE_AXIS_Beta = 11
+
+        self._FC_YELLOW = TerminalFont.Color.Fore.yellow
+        self._BG_GREEN = TerminalFont.Color.Background.green
+        self._FC_RESET = TerminalFont.Color.Control.reset 
 
 
     def get_xy_from_pose_name(self, pos_name='origin'):
@@ -60,11 +71,12 @@ class Controller:
             col_name_list = 'ABCDEFGHJKLMNOPQRST'
             col_id = 18 - col_name_list.find(pos_name[:1])
             row_id = int(pos_name[1:]) -1    # exeption here:
+            logging.info(" col_id =%d, row_id=%d", col_id, row_id)
             # position (x,y) of corners of chessboard
-            top_left_x = -200
-            top_left_y = 588.2
-            bottom_right_x = 200
-            bottom_right_y = 160.68
+            top_left_x = -200.25
+            top_left_y = 589.75
+            bottom_right_x = 200.25
+            bottom_right_y = 161.25
 
             space_x = (bottom_right_x - top_left_x) /18 
             space_y = (top_left_y - bottom_right_y) /18
@@ -143,17 +155,24 @@ class Controller:
         self.__next_action[13] = cc[3]
         self.__next_action[0] |= 1 << 3
 
-    def home_single_arm(self, motor_id):
+    def home_single_axis(self, axis_id):
         '''
-        motor_id == 4: Alpha
-        motor_id == 5: Beta
+        axis_id == 4: Arm.Alpha
+        axid_id == 5: Arm.Beta
+        axis_id == 10: House.Alpha
+        axid_id == 11: House.Beta
         '''
-        logging.info('home_single_arm  %d',axis_id)
-        if not(axis_id == 4 or axis_id == 5):
-            logging.warn('home papameter is wrong')
-            return -1
+        logging.info('home_single_axis  %d', axis_id)
         if self.__next_action[0] == 0:
-            self.__next_action[1] = 1<< axis_id
+            if axis_id == self.ARM_AXIS_Alpha or axis_id == self.ARM_AXIS_Beta:
+                self.__next_action[0] = 1<< axis_id
+                self.__next_action[1] = 0
+            elif axis_id == self.HOUSE_AXIS_Alpha or axis_id == self.HOUSE_AXIS_Beta:
+                self.__next_action[0] = 0
+                self.__next_action[1] = 1<< (axis_id - 8)
+            else:
+                logging.warn('home papameter is wrong')
+                return -1
         else:
             logging.warn('BLE message queue is full')
 
@@ -182,19 +201,13 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     tester = Controller()
     test_id = 8
-    if test_id == 4:
-        #home_alpha
-        while True:
-            for i in range(0,20,1):
-                tester.home_single_arm(4)
-                tester.spin_once()
-                time.sleep(1)
 
-    if test_id == 5:
-        #home_beta
+    if test_id == 4:
+        #home  do this homing repeatly.
+        home_axis = 4 # 4, 5,10, 11
         while True:
-            for i in range(0,20,1):
-                tester.home_single_arm(5)
+            for target_axis in [4,5,10,11]:
+                tester.home_single_axis(target_axis)
                 tester.spin_once()
                 time.sleep(1)
 
@@ -209,8 +222,5 @@ if __name__ == '__main__':
                 tester.spin_once()
                 time.sleep(1)
 
-    while True:
-        tester.spin_once()
-        time.sleep(1)
         
 
