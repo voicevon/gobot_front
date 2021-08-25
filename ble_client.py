@@ -14,6 +14,7 @@ import time
 import logging
 
 # Instruction:
+#    sudo btmgmt le on
 #    sudo python3 ble_client.py
 #
 #
@@ -90,7 +91,8 @@ class BleClient():
         svc = self.__dev_arm.getServiceByUUID('d592c9aa-0594-11ec-9a03-0242ac130003')
         #service = self.__dev_arm.getServiceByUUID('')
         logging.info('------222222222222222222222')
-        self.arm_info = svc.getCharacteristics('178d2e72-0595-11ec-9a03-0242ac130003')[0]
+        # self.arm_info = svc.getCharacteristics('178d2e72-0595-11ec-9a03-0242ac130003')[0]
+        self.arm_info = svc.getCharacteristics('12345')[0]
         #self.house_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[1]
         logging.info('ble connected to GATT server Arm !')
 

@@ -10,7 +10,8 @@
 
 #define BLE_DEV_NAME "ConInt-Arm-213401"
 #define SERVICE_UUID        "d592c9aa-0594-11ec-9a03-0242ac130003"
-#define CHARACTERISTIC_UUID "178d2e72-0595-11ec-9a03-0242ac130003"
+// #define CHARACTERISTIC_UUID "178d2e72-0595-11ec-9a03-0242ac130003"
+#define CHARACTERISTIC_UUID "12345"
 
 // BleServer* ble_server = &BleServer::getInstance();
 Arm* arm; 
