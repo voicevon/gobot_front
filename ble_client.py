@@ -167,7 +167,7 @@ if __name__ == '__main__':
     #logging.basicConfig(level=logging.DEBUG)
     logging.info('practice BLE')
     #runner = BleClient()
-    while False:
+    while True:
         time.sleep(1.7)
         i += 1
         if i> 128:
