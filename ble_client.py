@@ -136,7 +136,7 @@ class BleClient():
         logging.info('arm info: %s', received)
 
     def disconnect(self):
-        self.dev.disconnect()
+        self.__dev_arm.disconnect()
         time.sleep(1)
 
 g_bleClient = BleClient('213401')
