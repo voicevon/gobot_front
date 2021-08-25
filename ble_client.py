@@ -144,11 +144,12 @@ def signal_handler(sig, frame):
     print("You pressed Ctrl+C")
     g_bleClient.disconnect()
     sys.exit(0)
+
+import signal        
 signal.signal(signal.SIGINT, signal_handler)
 
 
 if __name__ == '__main__':
-    import signal        
     import sys
     logging.basicConfig(level=logging.DEBUG)
     logging.info('@@@@@@@@@@@@@@@@@@@@@@@@@')
