@@ -13,6 +13,7 @@ https://github.com/hbldh/bleak
 import time
 import logging
 
+# https://anthonychiu.xyz/2016/04/05/communication-between-raspberry-pi-and-multiple-arduinos-via-bluetooth-low-power-ble/
 
 class MyDelegate(DefaultDelegate):
     def __init__(self):
@@ -23,12 +24,13 @@ class MyDelegate(DefaultDelegate):
         
 
 class BleClient():
-    def __init__(self):
-        self.__server_mac = 'b4:e6:2d:b2:f8:8f'
-        self.scan()
+    def __init__(self, mac_addr):
+        self.__arm_mac = 'b4:e6:2d:b2:f8:8f'
+        self.__house_mac = '12:34:56:78:90:ab'
+        # self.scan()
 
         ##self.dev = btle.Peripheral(self.__server_mac)
-        self.list_services_on_server()
+        # self.list_services_on_server()
         self.connect_to_server()
         # self.dev.
 
@@ -40,21 +42,27 @@ class BleClient():
             print('Name', dev.getValueText(9))
             print('Address:', dev.addr)
 
-    def list_services_on_server(self):
+    def list_services_on_server(self, server_mac):
         logging.info('Services on server  ------------------')
-        self.dev = btle.Peripheral(self.__server_mac)
+        self.dev = btle.Peripheral(server_mac)
         for svc in self.dev.services:
             print(str(svc))
 
     
 
-    def connect_to_server(self):
-        self.dev.withDelegate(MyDelegate())
-        svc = self.dev.getServiceByUUID('4fafc201-1fb5-459e-8fcc-c5c9c331914b')
+    def connect_to_arm(self):
+        self.arm.withDelegate(MyDelegate())
+        svc = self.arm.getServiceByUUID('4fafc201-1fb5-459e-8fcc-c5c9c331914b')
         self.arm_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[0]
         #self.house_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[1]
-        logging.info('ble connected to GATT server!')
+        logging.info('ble connected to GATT server Arm !')
 
+    def connect_to_house(self):
+        self.house.withDelegate(MyDelegate())
+        svc = self.house.getServiceByUUID('4fafc201-1fb5-459e-8fcc-c5c9c331914b')
+        self.house_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[0]
+        #self.house_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[1]
+        logging.info('ble connected to GATT server House !')
 
 
     def write_characteristic(self, new_value):
@@ -90,17 +98,17 @@ class BleClient():
         self.dev.disconnect()
         time.sleep(1)
 
-
+g_bleClient = BleClient()
 
 if __name__ == '__main__':
     import signal        
     import sys
     logging.basicConfig(level=logging.DEBUG)
     logging.info('@@@@@@@@@@@@@@@@@@@@@@@@@')
-    runner = BleClient()
+    # runner = BleClient()
     def signal_handler(sig, frame):
         print("You pressed Ctrl+C")
-        runner.disconnect()
+        g_bleClient.disconnect()
         sys.exit(0)
 
     i = 65
@@ -119,7 +127,7 @@ if __name__ == '__main__':
         i += 1
         if i> 128:
             i = 32
-        runner.write_characteristic([i])
+        g_bleClient.write_characteristic([i])
 
 
 
