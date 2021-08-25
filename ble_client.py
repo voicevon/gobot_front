@@ -140,6 +140,12 @@ class BleClient():
         time.sleep(1)
 
 g_bleClient = BleClient('213401')
+def signal_handler(sig, frame):
+    print("You pressed Ctrl+C")
+    g_bleClient.disconnect()
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+
 
 if __name__ == '__main__':
     import signal        
@@ -148,16 +154,12 @@ if __name__ == '__main__':
     logging.info('@@@@@@@@@@@@@@@@@@@@@@@@@')
     g_bleClient.scan_arm_house()
     # runner = BleClient()
-    def signal_handler(sig, frame):
-        print("You pressed Ctrl+C")
-        g_bleClient.disconnect()
-        sys.exit(0)
+
 
     i = 65
 
     #if __name__ =='__main__':
     #print('@@@@@@@@@@@@@@@@@@@@@@@')
-    signal.signal(signal.SIGINT, signal_handler)
     #signal.pause()
 
 
