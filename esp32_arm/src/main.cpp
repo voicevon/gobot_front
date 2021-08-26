@@ -12,6 +12,7 @@
 #include <BLE2902.h>
 
 #include <esp_log.h>
+#include "MyBleServerCallbacks.h"
 
 #define I_AM_ARM
 // #define I_AM_HOUSE
@@ -39,8 +40,6 @@
 #endif
 
 
-
-// BLECharacteristic *pCharacteristic;
 BLECharacteristic* pCharRobotAction;
 BLECharacteristic* pCharRobotState;
 RobotAction action;
@@ -63,12 +62,10 @@ RobotAction action;
 
 // MyNotifyTask* pMyNotifyTask;
 
-
-bool is_connected = false;
-
+MyBleServerCallbacks* pMyBle;
 
 void NotifyClient(uint8_t state){
-  if (is_connected){
+  if (pMyBle->is_connected){
     // pCharacteristic->setValue(&state, 1);
     // pCharacteristic->notify();
     pCharRobotState->setValue(&state, 1);
@@ -77,28 +74,18 @@ void NotifyClient(uint8_t state){
   else
     ESP_LOGW(LOG_TAG, "Can not notify,  No BLEClient is connected!");
 }
-class MyBleServerCallbacks: public BLEServerCallbacks{
-  void onConnected(BLEServer* pServer){
-    // pMyNotifyTask->start();
-    is_connected = true;
-    ESP_LOGD(LOG_TAG, "Client is connected!");
-  }
-  void onDisconnected(BLEServer* pServer){
-    // pMyNotifyTask->stop();
-    is_connected = false;
-    ESP_LOGD(LOG_TAG, "Client is DIS-connected!");
-  }
-};
+
+
 
 
 void ble_setup(){
   // pMyNotifyTask = new MyNotifyTask();
-
+  pMyBle =  new MyBleServerCallbacks();
   BLEDevice::init(BLE_DEV_NAME);
   // BLE::initServer(BLE_DEV_NAME);
   BLEServer *pServer = BLEDevice::createServer();
   // BLEServer *pServer = new BLEServer();
-  pServer->setCallbacks(new MyBleServerCallbacks);
+  pServer->setCallbacks(pMyBle);
 
 
   BLEService *pService = pServer->createService(SERVICE_UUID);
