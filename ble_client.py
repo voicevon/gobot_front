@@ -45,15 +45,15 @@ class MyDelegate(DefaultDelegate):
 class BleClient():
     def __init__(self,gobot_id):
         self.__gobot_id = gobot_id
-        #self.__arm_mac = 'b4:e6:2d:b2:f8:8f'
-        #self.__house_mac = '12:34:56:78:90:ab'
-        # self.scan()
+        #define BLE_DEV_NAME "ConInt-Arm-213401"
+        self.__ARM_SERVICE_UUID = "d592c9aa-0594-11ec-9a03-0242ac130003"
+        self.__ARM_STATE_UUID  = "b7c65186-0610-11ec-9a03-0242ac130003"
+        self.__ARM_ACTION_UUID = "c21a1596-0610-11ec-9a03-0242ac130003"
 
-        ##self.dev = btle.Peripheral(self.__server_mac)
-        # self.list_services_on_server()
-        #self.connect_to_server()
-        # self.dev.
 
+        self.__HOUS_SERVICE_UUID = "b416890c-062e-11ec-9a03-0242ac130003"
+        self.__HOUSE_STATE_UUID = "bfa35098-062e-11ec-9a03-0242ac130003"
+        self.__HOUSE_ACTION_UUID = "c52ca230-062e-11ec-9a03-0242ac130003"
 
     def scan_arm_house(self):
         scanner = Scanner()
@@ -64,17 +64,15 @@ class BleClient():
             print('Server Name', name)
             print('       Mac Address:', dev.addr)
             if name == 'ConInt-Arm-' + self.__gobot_id:
-                logging.info('Discoverd Arm !')
+                logging.info('      Discoverd Arm !')
                 mac_addr = dev.addr
                 self.__dev_arm = btle.Peripheral(mac_addr)
-                # self.__dev_arm = btle.Peripheral(mac_addr, addrType=ADDR_TYPE_RANDOM)
-                logging.info('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 self.connect_to_arm()
+                logging.info('      Connected Arm !')
 
-                logging.info('Connected Arm !')
             if name == 'ConInt-House-' + self.__gobot_id:
                 self.__house_mac_addr = dev.addr
-                logging.info('Discovered House !')
+                logging.info('      Discovered House !')
 
     def list_services_on_server(self, server_mac):
         logging.info('Services on server  ------------------')
@@ -82,28 +80,21 @@ class BleClient():
         for svc in self.dev.services:
             print(str(svc))
 
-    
-
     def connect_to_arm(self):
-        #define SERVICE_UUID        "d592c9aa-0594-11ec-9a03-0242ac130003"
-        #define CHARACTERISTIC_UUID "178d2e72-0595-11ec-9a03-0242ac130003"
         self.__dev_arm.withDelegate(MyDelegate())
-        logging.info('1111111111111111111111111111111111111111111111111')
-        svc = self.__dev_arm.getServiceByUUID('d592c9aa-0594-11ec-9a03-0242ac130003')
-        #service = self.__dev_arm.getServiceByUUID('')
-        logging.info('------222222222222222222222')
-        self.arm_info = svc.getCharacteristics('178d2e72-0595-11ec-9a03-0242ac130003')[0]
-        # self.arm_info = svc.getCharacteristics('12345')[0]
-        #self.house_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[1]
+        svc = self.__dev_arm.getServiceByUUID(self.__ARM_SERVICE_UUID)
+        self.arm_state = svc.getCharacteristics(self.__ARM_STATE_UUID)[0]
+        self.arm_action = svc.getCharacteristics(self.__ARM_ACTION_UUID)[0]
         logging.info('ble connected to GATT server Arm !')
 
 
 
     def connect_to_house(self):
         self.house.withDelegate(MyDelegate())
-        svc = self.house.getServiceByUUID('4fafc201-1fb5-459e-8fcc-c5c9c331914b')
-        self.house_info = svc.getCharacteristics('178d2e72-0595-11ec-9a03-0242ac130003')[0]
-        #self.house_info = svc.getCharacteristics('beb5483e-36e1-4688-b7f5-ea07361b26a8')[1]
+        self.__dev_house.withDelegate(MyDelegate())
+        svc = self.__dev_house.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
+        self.house_state = svc.getCharacteristics(self.__HOUSE_STATE_UUID)[0]
+        self.house_action = svc.getCharacteristics(self.__HOUSE_ACTION_UUID)[0]
         logging.info('ble connected to GATT server House !')
 
 
