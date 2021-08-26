@@ -122,6 +122,7 @@ void ble_setup(){
                                         BLECharacteristic::PROPERTY_READ |
                                         BLECharacteristic::PROPERTY_NOTIFY
   );
+  pCharRobotState->addDescriptor(new BLE2902());  
   pCharRobotAction = pService->createCharacteristic(
                                         ROBOT_ACTION_UUID,
                                         BLECharacteristic::PROPERTY_WRITE |
