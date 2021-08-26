@@ -96,12 +96,12 @@ class BleClient():
             logging.error('******************', 'connect to Arm got exception!\n')
 
 
-    def connect_to_house(self):
+    def connect_to_house(self, server_mac_addr):
         logging.info('---------------------------------------------')
         logging.info('      Discovered House !')
-        self.__dev_house.withDelegate(MyDelegate())
         try:
-            self.__dev_house = btle.Peripheral(dev.addr)
+            self.__dev_house = btle.Peripheral(server_mac_addr)
+            self.__dev_house.withDelegate(MyDelegate())
             svc = self.__dev_house.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
             self.house_state = svc.getCharacteristics(self.__HOUSE_STATE_UUID)[0]
             self.house_action = svc.getCharacteristics(self.__HOUSE_ACTION_UUID)[0]
