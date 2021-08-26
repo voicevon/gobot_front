@@ -95,13 +95,14 @@ class BleClient():
 
 
     def connect_to_house(self):
-        # self.__dev_house.withDelegate(MyDelegate())
         self.__dev_house.withDelegate(MyDelegate())
-        svc = self.__dev_house.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
-        self.house_state = svc.getCharacteristics(self.__HOUSE_STATE_UUID)[0]
-        self.house_action = svc.getCharacteristics(self.__HOUSE_ACTION_UUID)[0]
-        logging.info('ble connected to GATT server House !')
-
+        try:
+            svc = self.__dev_house.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
+            self.house_state = svc.getCharacteristics(self.__HOUSE_STATE_UUID)[0]
+            self.house_action = svc.getCharacteristics(self.__HOUSE_ACTION_UUID)[0]
+            logging.info('ble connected to GATT server House !')
+        except:
+            logging.error('******************', 'connect to house got exception!')
 
     def write_characteristic(self, new_value):
         try:
@@ -109,10 +110,11 @@ class BleClient():
             logging.info('Updated charactoristic')
         #except bluepy.btle.BTLEDisconnectError:
         except:
+            pass
             #self.dev.connect(self.__server_mac)
-            print('ble_Write() Disconnected --> reconnecting')
-            self.list_services_on_server()
-            self.connect_to_server()
+            # print('ble_Write() Disconnected --> reconnecting')
+            # self.list_services_on_server()
+            # self.connect_to_server()
             #print('ble_write() Disconnected --> reconnecting  ')
 
     def read_characteristic(self):
