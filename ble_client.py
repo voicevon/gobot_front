@@ -132,18 +132,19 @@ class BleClient():
         received = self.arm_info.read()
         logging.info('arm info: %s', received)
 
-    def disconnect(self):
-        self.__dev_arm.disconnect()
-        time.sleep(1)
+    # def disconnect(self):
+    #     self.__dev_arm.disconnect()
+    #     self.__dev_house.disconnect()
+    #     time.sleep(1)
 
 g_bleClient = BleClient('213401')
-def signal_handler(sig, frame):
-    print("You pressed Ctrl+C")
-    g_bleClient.disconnect()
-    sys.exit(0)
+# def signal_handler(sig, frame):
+#     print("You pressed Ctrl+C")
+#     g_bleClient.disconnect()
+#     sys.exit(0)
 
-import signal        
-signal.signal(signal.SIGINT, signal_handler)
+# import signal        
+# signal.signal(signal.SIGINT, signal_handler)
 
 
 if __name__ == '__main__':
