@@ -65,9 +65,9 @@ class BleClient():
             name = dev.getValueText(9)
             print('        Server Name:', name)
             print('        Mac Address:', dev.addr)
-            print('           Services:')
-            for svc in dev.services:
-                print('                ', str(svc))
+            # print('           Services:')
+            # for svc in dev.services:
+            #     print('                ', str(svc))
 
             if name == 'ConInt-Arm-' + self.__gobot_id:
                 self.connect_to_arm(dev.addr)
