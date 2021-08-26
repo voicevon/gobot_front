@@ -10,6 +10,7 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include <BLE2902.h>
+// #include <BLE.h>
 
 #include <esp_log.h>
 #include "MyBleServerCallbacks.h"
@@ -44,30 +45,10 @@ BLECharacteristic* pCharRobotAction;
 BLECharacteristic* pCharRobotState;
 RobotAction action;
 
-
-
-// class MyNotifyTask: public {
-//   void run(void* data){
-//     int value = 0;
-//     while (1){
-//       delay(2000);
-//       ESP_LOGD(LOG_TAG, "*** NOTITY: %d ***", value);
-//       pCharacteristic->setValue(&value, 1);
-//       pCharacteristic->notify();    // <value> will BE PUSHED from BLEServer to BLEClient.
-//       value++;
-//     }  //end of while
-//   }  //end of function
-// }; //end of class
-
-
-// MyNotifyTask* pMyNotifyTask;
-
 MyBleServerCallbacks* pMyBle;
 
 void NotifyClient(uint8_t state){
   if (pMyBle->is_connected){
-    // pCharacteristic->setValue(&state, 1);
-    // pCharacteristic->notify();
     pCharRobotState->setValue(&state, 1);
     pCharRobotState->notify();
   }
@@ -79,41 +60,26 @@ void NotifyClient(uint8_t state){
 
 
 void ble_setup(){
-  // pMyNotifyTask = new MyNotifyTask();
   pMyBle =  new MyBleServerCallbacks();
   BLEDevice::init(BLE_DEV_NAME);
-  // BLE::initServer(BLE_DEV_NAME);
   BLEServer *pServer = BLEDevice::createServer();
-  // BLEServer *pServer = new BLEServer();
   pServer->setCallbacks(pMyBle);
 
 
   BLEService *pService = pServer->createService(SERVICE_UUID);
-  // BLEService *pService = pServer->createService(BLEUUID(SERVICE_UUID));
-  // pCharacteristic = pService->createCharacteristic(
-  //                                        CHARACTERISTIC_UUID,
-  //                                        BLECharacteristic::PROPERTY_READ |
-  //                                        BLECharacteristic::PROPERTY_WRITE |
-  //                                        BLECharacteristic::PROPERTY_NOTIFY
-  //                                      );
-  // BLECharacteristic *pCharacteristic;
-  // pCharacteristic->addDescriptor(new BLE2902());
   pCharRobotState = pService->createCharacteristic(
                                         ROBOT_STATE_UUID,
                                         BLECharacteristic::PROPERTY_READ |
                                         BLECharacteristic::PROPERTY_NOTIFY
   );
-  pCharRobotState->addDescriptor(new BLE2902());  
+  // BLE2902 * pp= new BLE2902();
+  // pp->setNotifications(true);
+  // pCharRobotState->addDescriptor(pp);  
   pCharRobotAction = pService->createCharacteristic(
                                         ROBOT_ACTION_UUID,
                                         BLECharacteristic::PROPERTY_WRITE |
                                         BLECharacteristic::PROPERTY_INDICATE
   );
-
-  // uint8_t code[13] = {0,1,2,3,4,5,6,7,8,9,10,11,12};
-  // pCharacteristic->setValue(code,13);
-  // pCharacteristic->setValue("A");
-
 
   pService->start();
   // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
@@ -127,9 +93,9 @@ void ble_setup(){
 
 void setup(){
   Serial.begin(115200);
-  Serial.print("\n Gobot system is starting....");
+  Serial.print("\nGobot system is starting....");
   ble_setup();
-  Serial.print("\nble setup is done......");
+  Serial.print("\nBLE setup is done......");
 
   #ifdef I_AM_ARM
     pArm = &Arm::getInstance();
@@ -169,11 +135,14 @@ int8_t GetTrueBitIndex(uint8_t any){
 
 void loop(){
 
+  if (! pMyBle->is_connected ){
+    BLEDevice::startAdvertising();
+    delay(5000);
+  }
+
   if (action.bytes[0] <= 1){
     // Both head side and Esp side are idle. 
-    // uint8_t* pData  = pCharacteristic->getData();
     uint8_t* pData  = pCharRobotAction->getData();
-    // Serial.println("    ");
     for (int i=0; i<14; i++){
       action.bytes[i] = *(pData + i);
       // Serial.print(action.bytes[i]);
