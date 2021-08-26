@@ -45,11 +45,13 @@ class MyDelegate(DefaultDelegate):
 class BleClient():
     def __init__(self,gobot_id):
         self.__gobot_id = gobot_id
-        #define BLE_DEV_NAME "ConInt-Arm-213401"
+        self.is_connected_arm = False
+        self.is_connected_house = False
+
+
         self.__ARM_SERVICE_UUID = "d592c9aa-0594-11ec-9a03-0242ac130003"
         self.__ARM_STATE_UUID  = "b7c65186-0610-11ec-9a03-0242ac130003"
         self.__ARM_ACTION_UUID = "c21a1596-0610-11ec-9a03-0242ac130003"
-
 
         self.__HOUSE_SERVICE_UUID = "b416890c-062e-11ec-9a03-0242ac130003"
         self.__HOUSE_STATE_UUID = "bfa35098-062e-11ec-9a03-0242ac130003"
@@ -63,21 +65,15 @@ class BleClient():
             name = dev.getValueText(9)
             print('        Server Name:', name)
             print('        Mac Address:', dev.addr)
+            print('           Services:')
+            for svc in dev.services:
+                print('                ', str(svc))
+
             if name == 'ConInt-Arm-' + self.__gobot_id:
-                logging.info('---------------------------------------------')
-                logging.info('      Discoverd Arm !')
-                mac_addr = dev.addr
-                self.__dev_arm = btle.Peripheral(mac_addr)
-                self.connect_to_arm()
-                logging.info('      Connected Arm !\n')
+                self.connect_to_arm(dev.addr)
 
             if name == 'ConInt-House-' + self.__gobot_id:
-                logging.info('---------------------------------------------')
-                logging.info('      Discovered House !')
-                mac_addr = dev.addr
-                self.__dev_house = btle.Peripheral(mac_addr)
                 self.connect_to_house()
-                logging.info('      Connected House !\n')
 
     def list_services_on_server(self, server_mac):
         logging.info('Services on server  ------------------')
@@ -85,24 +81,34 @@ class BleClient():
         for svc in self.dev.services:
             print(str(svc))
 
-    def connect_to_arm(self):
-        self.__dev_arm.withDelegate(MyDelegate())
-        svc = self.__dev_arm.getServiceByUUID(self.__ARM_SERVICE_UUID)
-        self.arm_state = svc.getCharacteristics(self.__ARM_STATE_UUID)[0]
-        self.arm_action = svc.getCharacteristics(self.__ARM_ACTION_UUID)[0]
-        logging.info('ble connected to GATT server Arm !')
-
+    def connect_to_arm(self, server_mac_addr):
+        logging.info('---------------------------------------------')
+        logging.info('      Discoverd Arm !')
+        try:
+            self.__dev_arm = btle.Peripheral(server_mac_addr)
+            self.__dev_arm.withDelegate(MyDelegate())
+            svc = self.__dev_arm.getServiceByUUID(self.__ARM_SERVICE_UUID)
+            self.arm_state = svc.getCharacteristics(self.__ARM_STATE_UUID)[0]
+            self.arm_action = svc.getCharacteristics(self.__ARM_ACTION_UUID)[0]
+            logging.info('      BLE connected to GATT server Arm !')
+            self.is_connected_arm = True
+        except:
+            logging.error('******************', 'connect to Arm got exception!\n')
 
 
     def connect_to_house(self):
+        logging.info('---------------------------------------------')
+        logging.info('      Discovered House !')
         self.__dev_house.withDelegate(MyDelegate())
         try:
+            self.__dev_house = btle.Peripheral(dev.addr)
             svc = self.__dev_house.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
             self.house_state = svc.getCharacteristics(self.__HOUSE_STATE_UUID)[0]
             self.house_action = svc.getCharacteristics(self.__HOUSE_ACTION_UUID)[0]
-            logging.info('ble connected to GATT server House !')
+            logging.info('      BLE connected to GATT server House !\n')
+            self.is_connected_house = True
         except:
-            logging.error('******************', 'connect to house got exception!')
+            logging.error('******************', 'connect to House got exception!')
 
     def write_characteristic(self, new_value):
         try:
