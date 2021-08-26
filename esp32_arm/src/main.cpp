@@ -13,15 +13,14 @@
 
 #include <esp_log.h>
 
-// #define I_AM_ARM
-#define I_AM_HOUSE
+#define I_AM_ARM
+// #define I_AM_HOUSE
 
 #ifdef I_AM_ARM
   #define BLE_DEV_NAME "ConInt-Arm-213401"
-  #define SERVICE_UUID        "d592c9aa-0594-11ec-9a03-0242ac130003"
-  // #define CHARACTERISTIC_UUID "178d2e72-0595-11ec-9a03-0242ac130003"
-  #define ROBOT_STATE_UUID ""
-  #define ROBOT_ACTION_UUID ""
+  #define SERVICE_UUID "d592c9aa-0594-11ec-9a03-0242ac130003"
+  #define ROBOT_STATE_UUID "b7c65186-0610-11ec-9a03-0242ac130003"
+  #define ROBOT_ACTION_UUID "c21a1596-0610-11ec-9a03-0242ac130003"
 
   #include "arm.h"
   Arm* pArm; 
@@ -30,10 +29,9 @@
 
 #ifdef I_AM_HOUSE
   #define BLE_DEV_NAME "ConInt-House-213401"
-  #define SERVICE_UUID        "b7c65186-0610-11ec-9a03-0242ac130003"
-  // #define CHARACTERISTIC_UUID "c21a1596-0610-11ec-9a03-0242ac130003"
-  #define ROBOT_STATE_UUID ""
-  #define ROBOT_ACTION_UUID ""
+  #define SERVICE_UUID "b416890c-062e-11ec-9a03-0242ac130003"
+  #define ROBOT_STATE_UUID "bfa35098-062e-11ec-9a03-0242ac130003"
+  #define ROBOT_ACTION_UUID "c52ca230-062e-11ec-9a03-0242ac130003"
 
   #include "house.h"   
   House* pHouse; 
@@ -41,11 +39,7 @@
 #endif
 
 
-// #define CHARACTERISTIC_UUID "12345"
 
-// BleServer* ble_server = &BleServer::getInstance();
-
-// House* house;
 // BLECharacteristic *pCharacteristic;
 BLECharacteristic* pCharRobotAction;
 BLECharacteristic* pCharRobotState;
@@ -70,8 +64,6 @@ RobotAction action;
 // MyNotifyTask* pMyNotifyTask;
 
 
-
-
 bool is_connected = false;
 
 
@@ -89,10 +81,12 @@ class MyBleServerCallbacks: public BLEServerCallbacks{
   void onConnected(BLEServer* pServer){
     // pMyNotifyTask->start();
     is_connected = true;
+    ESP_LOGD(LOG_TAG, "Client is connected!");
   }
   void onDisconnected(BLEServer* pServer){
     // pMyNotifyTask->stop();
     is_connected = false;
+    ESP_LOGD(LOG_TAG, "Client is DIS-connected!");
   }
 };
 
