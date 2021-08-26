@@ -51,7 +51,7 @@ class BleClient():
         self.__ARM_ACTION_UUID = "c21a1596-0610-11ec-9a03-0242ac130003"
 
 
-        self.__HOUS_SERVICE_UUID = "b416890c-062e-11ec-9a03-0242ac130003"
+        self.__HOUSE_SERVICE_UUID = "b416890c-062e-11ec-9a03-0242ac130003"
         self.__HOUSE_STATE_UUID = "bfa35098-062e-11ec-9a03-0242ac130003"
         self.__HOUSE_ACTION_UUID = "c52ca230-062e-11ec-9a03-0242ac130003"
 
@@ -69,7 +69,7 @@ class BleClient():
                 mac_addr = dev.addr
                 self.__dev_arm = btle.Peripheral(mac_addr)
                 self.connect_to_arm()
-                logging.info('      Connected Arm !')
+                logging.info('      Connected Arm !\n')
 
             if name == 'ConInt-House-' + self.__gobot_id:
                 logging.info('---------------------------------------------')
@@ -77,7 +77,7 @@ class BleClient():
                 mac_addr = dev.addr
                 self.__dev_house = btle.Peripheral(mac_addr)
                 self.connect_to_house()
-                logging.info('      Connected House !')
+                logging.info('      Connected House !\n')
 
     def list_services_on_server(self, server_mac):
         logging.info('Services on server  ------------------')
