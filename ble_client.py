@@ -73,7 +73,7 @@ class BleClient():
                 self.connect_to_arm(dev.addr)
 
             if name == 'ConInt-House-' + self.__gobot_id:
-                self.connect_to_house()
+                self.connect_to_house(dev.addr)
 
     def list_services_on_server(self, server_mac):
         logging.info('Services on server  ------------------')
