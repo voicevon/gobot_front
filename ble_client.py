@@ -61,9 +61,10 @@ class BleClient():
         print('Scan result:  Found %d devices in %d seconds------------' % (len(devices), 3))
         for dev in devices:
             name = dev.getValueText(9)
-            print('Server Name', name)
-            print('       Mac Address:', dev.addr)
+            print('        Server Name:', name)
+            print('        Mac Address:', dev.addr)
             if name == 'ConInt-Arm-' + self.__gobot_id:
+                logging.info('---------------------------------------------')
                 logging.info('      Discoverd Arm !')
                 mac_addr = dev.addr
                 self.__dev_arm = btle.Peripheral(mac_addr)
@@ -71,8 +72,12 @@ class BleClient():
                 logging.info('      Connected Arm !')
 
             if name == 'ConInt-House-' + self.__gobot_id:
-                self.__house_mac_addr = dev.addr
+                logging.info('---------------------------------------------')
                 logging.info('      Discovered House !')
+                mac_addr = dev.addr
+                self.__dev_house = btle.Peripheral(mac_addr)
+                self.connect_to_house()
+                logging.info('      Connected House !')
 
     def list_services_on_server(self, server_mac):
         logging.info('Services on server  ------------------')
@@ -100,7 +105,7 @@ class BleClient():
 
     def write_characteristic(self, new_value):
         try:
-            self.arm_info.write(bytes(new_value))
+            self.arm_action.write(bytes(new_value))
             logging.info('Updated charactoristic')
         #except bluepy.btle.BTLEDisconnectError:
         except:
