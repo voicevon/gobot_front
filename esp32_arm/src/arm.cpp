@@ -64,7 +64,7 @@ void Arm::Home(unsigned char axis){
   else{
     stepper_beta->setPosition(HOMED_POSITION_BETA);
   }
-  __arm_action->bytes[0] = 0;
+  // __arm_action->bytes[0] = 0;
   Serial.print("\n Home one axis is Done.......");
 }
 
@@ -160,7 +160,7 @@ void Arm::pick_place_park(RobotAction* pAction){
     MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
     SetEffector(Sleep);
   }
-  pAction->bytes[0] = 1;
+  // pAction->bytes[0] = 1;
 }
 
 void Arm::Setup(RobotAction* pAction){
