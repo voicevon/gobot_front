@@ -95,7 +95,7 @@ class BleClient():
 
 
     def connect_to_house(self):
-        self.house.withDelegate(MyDelegate())
+        # self.__dev_house.withDelegate(MyDelegate())
         self.__dev_house.withDelegate(MyDelegate())
         svc = self.__dev_house.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
         self.house_state = svc.getCharacteristics(self.__HOUSE_STATE_UUID)[0]
