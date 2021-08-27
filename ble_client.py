@@ -171,19 +171,24 @@ class BleClient():
     def connect_to_arm(self):
         self.__arm_conn.Connect()
         if self.__arm_conn.state == BleConnState.CONNECTED:
-            svc = self.__arm_conn.dev.getServiceByUUID(self.__ARM_SERVICE_UUID)
-            self.arm_state = svc.getCharacteristics(self.__ARM_STATE_UUID)[0]
-            self.arm_action = svc.getCharacteristics(self.__ARM_ACTION_UUID)[0]
-            logging.info('      BLE connected to GATT server Arm !\n')
-
+            try:
+                svc = self.__arm_conn.dev.getServiceByUUID(self.__ARM_SERVICE_UUID)
+                self.arm_state = svc.getCharacteristics(self.__ARM_STATE_UUID)[0]
+                self.arm_action = svc.getCharacteristics(self.__ARM_ACTION_UUID)[0]
+                logging.info('      BLE connected to GATT server Arm !\n')
+            except:
+                self.__arm_conn.ResetConnection()
     def connect_to_house(self):
         self.__house_conn.Connect()
         if self.__house_conn.state == BleConnState.CONNECTED:
-            svc = self.__house_conn.dev.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
-            self.house_state = svc.getCharacteristics(self.__HOUSE_STATE_UUID)[0]
-            self.house_action = svc.getCharacteristics(self.__HOUSE_ACTION_UUID)[0]
-            logging.info('      BLE connected to GATT server House !\n')
-
+            try:
+                svc = self.__house_conn.dev.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
+                self.house_state = svc.getCharacteristics(self.__HOUSE_STATE_UUID)[0]
+                self.house_action = svc.getCharacteristics(self.__HOUSE_ACTION_UUID)[0]
+                logging.info('      BLE connected to GATT server House !\n')
+            except:
+                self.__house_conn.ResetConnection()
+                
     def write_characteristic(self, new_value):
         try:
             self.arm_action.write(bytes(new_value))
