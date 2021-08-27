@@ -115,6 +115,9 @@ class BleConnection():
                 self.__server_mac_addr = dev.addr
                 self.state = BleConnState.DISCOVERED
                 return
+        
+    def ResetConnection(self):
+        self.state = BleConnState.DISCONNECTED
 
 #scanner = Scanner().withDelegate(MyDelegate())
 #devices = scanner.scan(10.0)
@@ -209,8 +212,12 @@ class BleClient():
         
     def spin_once(self):
         if self.__arm_conn.state == BleConnState.CONNECTED:
-            received = self.arm_state.read()
-            logging.info('arm info: %s', received)
+            try:
+                received = self.arm_state.read()
+                logging.info('arm info: %s', received)
+            except:
+                self.__arm_conn.ResetConnection()
+
         else:
             self.connect_to_arm()
 
