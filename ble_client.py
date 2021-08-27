@@ -145,8 +145,8 @@ class BleConnection():
 class BleClient():
     def __init__(self,gobot_id):
         self.__gobot_id = gobot_id
-        self.__arm_conn = BleConnection("ConInt-Arm" + gobot_id)
-        self.__house_conn = BleConnection("ConInt-House" + gobot_id)
+        self.__arm_conn = BleConnection("ConInt-Arm-" + gobot_id)
+        self.__house_conn = BleConnection("ConInt-House-" + gobot_id)
         # self.is_connected_arm = False
         # self.is_connected_house = False
 
