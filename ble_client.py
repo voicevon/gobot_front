@@ -86,10 +86,6 @@ class BleConnection():
     def onDisconnect(self):
         self.state =  BleConnState.DISCONNECTED
 
-    # def SetMacAddr(self, server_mac_addr):
-    #     self.__server_mac_addr = server_mac_addr
-    #     self.state = BleConnState.DISCOVERED
-
     def Connect(self):
         if self.state == BleConnState.DISCONNECTED or \
             self.state == BleConnState.DISCOVERED:
@@ -102,7 +98,6 @@ class BleConnection():
                 self.state = BleConnState.CONNECTED
             except:
                 logging.error('Connect to BLEServer,  got exception!\n')
-                # self.state = BleConnState.DISCONNECTED
         elif self.state == BleConnState.CORVERD:
             self.Scan()
 
@@ -119,21 +114,7 @@ class BleConnection():
                 logging.info('      Discoverd target !')
                 self.__server_mac_addr = dev.addr
                 self.state = BleConnState.DISCOVERED
-                # self.__arm_conn.SetMacAddr(dev.addr)
                 return
-    # def connect_to_arm(self, server_mac_addr):
-    #     logging.info('---------------------------------------------')
-    #     logging.info('      Discoverd Arm !')
-    #     try:
-    #         self.__dev_arm = btle.Peripheral(server_mac_addr)
-    #         self.__dev_arm.withDelegate(MyDelegate())
-    #         svc = self.__dev_arm.getServiceByUUID(self.__ARM_SERVICE_UUID)
-    #         self.arm_state = svc.getCharacteristics(self.__ARM_STATE_UUID)[0]
-    #         self.arm_action = svc.getCharacteristics(self.__ARM_ACTION_UUID)[0]
-    #         logging.info('      BLE connected to GATT server Arm !\n')
-    #         self.is_connected_arm = True
-    #     except:
-    #         logging.error('******************', 'connect to Arm got exception!\n')
 
 #scanner = Scanner().withDelegate(MyDelegate())
 #devices = scanner.scan(10.0)
@@ -159,30 +140,30 @@ class BleClient():
         self.__HOUSE_STATE_UUID = "bfa35098-062e-11ec-9a03-0242ac130003"
         self.__HOUSE_ACTION_UUID = "c52ca230-062e-11ec-9a03-0242ac130003"
 
-    def scan_arm_house(self):
-        scanner = Scanner()
-        devices = scanner.scan(timeout = 8)
-        print('Scan result:  Found %d devices in %d seconds------------' % (len(devices), 3))
-        for dev in devices:
-            name = dev.getValueText(9)
-            print('\n        Server Name:', name)
-            print('        Mac Address:', dev.addr)
+    # def scan_arm_house(self):
+    #     scanner = Scanner()
+    #     devices = scanner.scan(timeout = 8)
+    #     print('Scan result:  Found %d devices in %d seconds------------' % (len(devices), 3))
+    #     for dev in devices:
+    #         name = dev.getValueText(9)
+    #         print('\n        Server Name:', name)
+    #         print('        Mac Address:', dev.addr)
 
-            if name == 'ConInt-Arm-' + self.__gobot_id:
-                logging.info('---------------------------------------------')
-                logging.info('      Discoverd Arm !')
-                # self.connect_to_arm(dev.addr)
-                self.__arm_conn.SetMacAddr(dev.addr)
+    #         if name == 'ConInt-Arm-' + self.__gobot_id:
+    #             logging.info('---------------------------------------------')
+    #             logging.info('      Discoverd Arm !')
+    #             # self.connect_to_arm(dev.addr)
+    #             self.__arm_conn.SetMacAddr(dev.addr)
 
-            if name == 'ConInt-House-' + self.__gobot_id:
-                self.__house_conn.SetMacAddr(dev.addr)
-                # self.connect_to_house(dev.addr)
+    #         if name == 'ConInt-House-' + self.__gobot_id:
+    #             self.__house_conn.SetMacAddr(dev.addr)
+    #             # self.connect_to_house(dev.addr)
 
-    def list_services_on_server(self, server_mac):
-        logging.info('Services on server  ------------------')
-        self.dev = btle.Peripheral(server_mac)
-        for svc in self.dev.services:
-            print(str(svc))
+    # def list_services_on_server(self, server_mac):
+    #     logging.info('Services on server  ------------------')
+    #     self.dev = btle.Peripheral(server_mac)
+    #     for svc in self.dev.services:
+    #         print(str(svc))
 
     def connect_to_arm(self):
         self.__arm_conn.Connect()
@@ -192,35 +173,13 @@ class BleClient():
             self.arm_action = svc.getCharacteristics(self.__ARM_ACTION_UUID)[0]
             logging.info('      BLE connected to GATT server Arm !\n')
 
-
-
-
-        # logging.info('---------------------------------------------')
-        # logging.info('      Discoverd Arm !')
-        # try:
-        #     self.__dev_arm = btle.Peripheral(server_mac_addr)
-        #     self.__dev_arm.withDelegate(MyDelegate())
-        #     svc = self.__dev_arm.getServiceByUUID(self.__ARM_SERVICE_UUID)
-        #     self.arm_state = svc.getCharacteristics(self.__ARM_STATE_UUID)[0]
-        #     self.arm_action = svc.getCharacteristics(self.__ARM_ACTION_UUID)[0]
-        #     logging.info('      BLE connected to GATT server Arm !\n')
-        #     self.is_connected_arm = True
-        # except:
-        #     logging.error('******************', 'connect to Arm got exception!\n')
-
     def connect_to_house(self, server_mac_addr):
-        logging.info('---------------------------------------------')
-        logging.info('      Discovered House !')
-        try:
-            self.__dev_house = btle.Peripheral(server_mac_addr)
-            self.__dev_house.withDelegate(MyDelegate())
+        self.__house_conn.Connect()
+        if self.__house_conn.state == BleConnState.CONNECTED:
             svc = self.__dev_house.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
             self.house_state = svc.getCharacteristics(self.__HOUSE_STATE_UUID)[0]
             self.house_action = svc.getCharacteristics(self.__HOUSE_ACTION_UUID)[0]
             logging.info('      BLE connected to GATT server House !\n')
-            self.is_connected_house = True
-        except:
-            logging.error('******************', 'connect to House got exception!')
 
     def write_characteristic(self, new_value):
         try:
@@ -255,10 +214,11 @@ class BleClient():
         else:
             self.connect_to_arm()
 
-        # if self.__house_conn.state == CONNECTED:
-        #     pass
-        # else:
-        #     self.__house_conn.Connect()
+
+        if self.__house_conn.state == BleConnState.CONNECTED:
+            received =  self.house_state.read()
+        else:
+            self.connect_to_house()
 
     # def disconnect(self):
     #     self.__dev_arm.disconnect()
