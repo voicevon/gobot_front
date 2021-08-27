@@ -176,7 +176,7 @@ class BleClient():
     def connect_to_house(self):
         self.__house_conn.Connect()
         if self.__house_conn.state == BleConnState.CONNECTED:
-            svc = self.__dev_house.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
+            svc = self.__house_conn.dev.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
             self.house_state = svc.getCharacteristics(self.__HOUSE_STATE_UUID)[0]
             self.house_action = svc.getCharacteristics(self.__HOUSE_ACTION_UUID)[0]
             logging.info('      BLE connected to GATT server House !\n')
