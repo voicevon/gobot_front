@@ -97,7 +97,7 @@ class BleConnection():
                 self.dev.withDelegate(MyDelegate())
                 self.state = BleConnState.CONNECTED
             except:
-                logging.error('Connect to BLEServer,  got exception!\n')
+                logging.error(' %s  Connect to BLEServer,  got exception!\n ' % self.server_name)
         elif self.state == BleConnState.CORVERD:
             self.Scan()
 
