@@ -250,7 +250,7 @@ class BleClient():
         
     def spin_once(self):
         if self.__arm_conn.state == BleConnState.CONNECTED:
-            received = self.arm_info.read()
+            received = self.arm_state.read()
             logging.info('arm info: %s', received)
         else:
             self.connect_to_arm()
