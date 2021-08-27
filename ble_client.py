@@ -94,11 +94,11 @@ class BleConnection():
         if self.state == BleConnState.DISCONNECTED or \
             self.state == BleConnState.DISCOVERED:
             try:
-                self.__dev = btle.Peripheral(self.__server_mac_addr)
+                self.dev = btle.Peripheral(self.__server_mac_addr)
                 # print('           Services:')
                 # for svc in self.__dev.services:
                 #     print('                ', str(svc))
-                self.__dev.withDelegate(MyDelegate())
+                self.dev.withDelegate(MyDelegate())
                 self.state = BleConnState.CONNECTED
             except:
                 logging.error('******************', 'connect to BLEServer,  got exception!\n')
