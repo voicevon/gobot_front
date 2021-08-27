@@ -111,6 +111,8 @@ class BleConnection():
         devices = scanner.scan(timeout = 8)
         for dev in devices:
             name = dev.getValueText(9)
+            print('-----------------Scanning nearby devices..............')
+            print(name, self.server_name)
             # if name == 'ConInt-Arm-' + self.__gobot_id:
             if name == self.server_name:
                 logging.info('---------------------------------------------')
