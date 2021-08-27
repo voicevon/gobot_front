@@ -173,7 +173,7 @@ class BleClient():
             self.arm_action = svc.getCharacteristics(self.__ARM_ACTION_UUID)[0]
             logging.info('      BLE connected to GATT server Arm !\n')
 
-    def connect_to_house(self, server_mac_addr):
+    def connect_to_house(self):
         self.__house_conn.Connect()
         if self.__house_conn.state == BleConnState.CONNECTED:
             svc = self.__dev_house.getServiceByUUID(self.__HOUSE_SERVICE_UUID)
