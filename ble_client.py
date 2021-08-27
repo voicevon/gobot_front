@@ -223,7 +223,10 @@ class BleClient():
 
 
         if self.__house_conn.state == BleConnState.CONNECTED:
-            received =  self.house_state.read()
+            try:
+                received =  self.house_state.read()
+            except:
+                self.__house_conn.ResetConnection()
         else:
             self.connect_to_house()
 
