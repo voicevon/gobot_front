@@ -91,7 +91,8 @@ class BleConnection():
     #     self.state = BleConnState.DISCOVERED
 
     def Connect(self):
-        if self.state == BleConnState.CONNECTED:
+        if self.state == BleConnState.DISCONNECTED or \
+            self.state == BleConnState.DISCOVERED:
             try:
                 self.__dev = btle.Peripheral(self.__server_mac_addr)
                 # print('           Services:')
@@ -100,8 +101,10 @@ class BleConnection():
                 self.__dev.withDelegate(MyDelegate())
                 self.state = BleConnState.CONNECTED
             except:
-                logging.error('******************', 'connect to Arm got exception!\n')
+                logging.error('******************', 'connect to BLEServer,  got exception!\n')
                 self.state = BleConnState.DISCONNECTED
+        elif self.state == BleConnState.CORVERD:
+            self.Scan()
 
     def Scan(self):
         scanner = Scanner()
