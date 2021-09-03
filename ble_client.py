@@ -166,7 +166,7 @@ class BleClient():
     #     logging.info('Services on server  ------------------')
     #     self.dev = btle.Peripheral(server_mac)
     #     for svc in self.dev.services:
-    #         print(str(svc))
+    #         print(str(svc)) 
 
     def connect_to_arm(self):
         self.__arm_conn.Connect()
