@@ -5,7 +5,7 @@
 
 //  Concepts       https://www.youtube.com/watch?v=2mePPqiocUE  
 //  Notification   https://www.youtube.com/watch?v=oCMOYS71NIU
-//   
+//    
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
