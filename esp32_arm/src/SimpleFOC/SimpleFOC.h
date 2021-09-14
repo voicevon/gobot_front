@@ -97,6 +97,8 @@ void loop() {
 #define SIMPLEFOC_H
 
 #include "DcMotor.h"
+#include "drivers/DCDriverHBridge.h"
+
 #include "BLDCMotor.h"
 #include "StepperMotor.h"
 #include "sensors/Encoder.h"

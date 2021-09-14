@@ -1,16 +1,24 @@
 #include "SimpleFOC/SimpleFOC.h"
 
 // Motor instance
-BLDCMotor motor = BLDCMotor(11);
-BLDCDriver3PWM driver = BLDCDriver3PWM(25, 26, 27, 7);
+// BLDCMotor motor = BLDCMotor(11);
+// BLDCDriver3PWM driver = BLDCDriver3PWM(25, 26, 27, 7);
+DCMotor motor = DCMotor();
+DCDriverHBridge driver = DCDriverHBridge(6,7);
+Encoder encoder = Encoder(4, 2, 200);
+
 
 // encoder instance
-Encoder encoder = Encoder(4, 2, 1024);
+// Encoder encoder = Encoder(4, 2, 1024);
 
 // Interrupt routine intialisation
 // channel A and B callbacks
-void doA(){encoder.handleA();}
-void doB(){encoder.handleB();}
+void doA(){
+  encoder.handleA();
+}
+void doB(){
+  encoder.handleB();
+}
 
 // angle set point variable
 float target_angle = 0;
@@ -29,7 +37,7 @@ void setup() {
   
   // driver config
   // power supply voltage [V]
-  driver.voltage_power_supply = 12;
+  // driver.voltage_power_supply = 12;
   driver.init();
   // link the motor and the driver
   motor.linkDriver(&driver);

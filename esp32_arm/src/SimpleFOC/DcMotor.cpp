@@ -1,17 +1,14 @@
 #include "DCMotor.h"
 
 // DCMotor( int pp , float R)
-// - pp            - pole pair number
-// - R             - motor phase resistance
-DCMotor::DCMotor(int pp, float _R)
-: FOCMotor()
+DCMotor::DCMotor():FOCMotor()
 {
   // save pole pairs number
-  pole_pairs = pp;
+  // pole_pairs = 1;
   // save phase resistance number
-  phase_resistance = _R;
+  // phase_resistance = 1;
   // torque control type is voltage by default
-  torque_controller = TorqueControlType::voltage;
+  // torque_controller = TorqueControlType::voltage;
 }
 
 
@@ -33,7 +30,7 @@ void DCMotor::init() {
     voltage_limit = new_voltage_limit < voltage_limit ? new_voltage_limit : voltage_limit;
   }
   // sanity check for the voltage limit configuration
-  if(voltage_limit > driver->voltage_limit) voltage_limit =  driver->voltage_limit;
+  // if(voltage_limit > driver->voltage_limit) voltage_limit =  driver->voltage_limit;
   // constrain voltage for sensor alignment
   if(voltage_sensor_align > voltage_limit) voltage_sensor_align = voltage_limit;
 
@@ -59,27 +56,10 @@ void DCMotor::init() {
 }
 
 
-// disable motor driver
-void DCMotor::disable()
-{
-  // set zero to PWM
-  driver->setPwm(0, 0, 0);
-  // disable the driver
-  driver->disable();
-  // motor status update
-  enabled = 0;
-}
-// enable motor driver
-void DCMotor::enable()
-{
-  // enable the driver
-  driver->enable();
-  // set zero to PWM
-  driver->setPwm(0, 0, 0);
-  // motor status update
-  enabled = 1;
-}
-
+// Must have overide function here, Keep them blank.
+void DCMotor::disable() {}
+void DCMotor::enable() {}
+// 
 /**
   FOC functions
 */
@@ -130,7 +110,8 @@ int DCMotor::alignCurrentSense() {
   if(monitor_port) monitor_port->println(F("MOT: Align current sense."));
 
   // align current sense and the driver
-  exit_flag = current_sense->driverAlign(driver, voltage_sensor_align);
+  // exit_flag = current_sense->driverAlign(driver, voltage_sensor_align);
+  exit_flag = 1;
   if(!exit_flag){
     // error in current sense - phase either not measured or bad connection
     if(monitor_port) monitor_port->println(F("MOT: Align error!"));
@@ -387,23 +368,23 @@ void DCMotor::setPhaseVoltage(float Uq, float Ud, float angle_el) {
       // centering the voltages around either
       // modulation_centered == true > driver.volage_limit/2
       // modulation_centered == false > or Adaptable centering, all phases drawn to 0 when Uq=0
-      center = modulation_centered ? (driver->voltage_limit)/2 : Uq;
+      // center = modulation_centered ? (driver->voltage_limit)/2 : Uq;
 
       if(trap_120_map[sector][0]  == _HIGH_IMPEDANCE){
         Ua= center;
         Ub = trap_120_map[sector][1] * Uq + center;
         Uc = trap_120_map[sector][2] * Uq + center;
-        driver->setPhaseState(_HIGH_IMPEDANCE, _ACTIVE, _ACTIVE); // disable phase if possible
+        // driver->setPhaseState(_HIGH_IMPEDANCE, _ACTIVE, _ACTIVE); // disable phase if possible
       }else if(trap_120_map[sector][1]  == _HIGH_IMPEDANCE){
         Ua = trap_120_map[sector][0] * Uq + center;
         Ub = center;
         Uc = trap_120_map[sector][2] * Uq + center;
-        driver->setPhaseState(_ACTIVE, _HIGH_IMPEDANCE, _ACTIVE);// disable phase if possible
+        // driver->setPhaseState(_ACTIVE, _HIGH_IMPEDANCE, _ACTIVE);// disable phase if possible
       }else{
         Ua = trap_120_map[sector][0] * Uq + center;
         Ub = trap_120_map[sector][1] * Uq + center;
         Uc = center;
-        driver->setPhaseState(_ACTIVE,_ACTIVE, _HIGH_IMPEDANCE);// disable phase if possible
+        // driver->setPhaseState(_ACTIVE,_ACTIVE, _HIGH_IMPEDANCE);// disable phase if possible
       }
 
     break;
@@ -418,23 +399,23 @@ void DCMotor::setPhaseVoltage(float Uq, float Ud, float angle_el) {
       // centering the voltages around either
       // modulation_centered == true > driver.volage_limit/2
       // modulation_centered == false > or Adaptable centering, all phases drawn to 0 when Uq=0
-      center = modulation_centered ? (driver->voltage_limit)/2 : Uq;
+      // center = modulation_centered ? (driver->voltage_limit)/2 : Uq;
 
       if(trap_150_map[sector][0]  == _HIGH_IMPEDANCE){
         Ua= center;
         Ub = trap_150_map[sector][1] * Uq + center;
         Uc = trap_150_map[sector][2] * Uq + center;
-        driver->setPhaseState(_HIGH_IMPEDANCE, _ACTIVE, _ACTIVE); // disable phase if possible
+        // driver->setPhaseState(_HIGH_IMPEDANCE, _ACTIVE, _ACTIVE); // disable phase if possible
       }else if(trap_150_map[sector][1]  == _HIGH_IMPEDANCE){
         Ua = trap_150_map[sector][0] * Uq + center;
         Ub = center;
         Uc = trap_150_map[sector][2] * Uq + center;
-        driver->setPhaseState(_ACTIVE, _HIGH_IMPEDANCE, _ACTIVE);// disable phase if possible
+        // driver->setPhaseState(_ACTIVE, _HIGH_IMPEDANCE, _ACTIVE);// disable phase if possible
       }else{
         Ua = trap_150_map[sector][0] * Uq + center;
         Ub = trap_150_map[sector][1] * Uq + center;
         Uc = center;
-        driver->setPhaseState(_ACTIVE, _ACTIVE, _HIGH_IMPEDANCE);// disable phase if possible
+        // driver->setPhaseState(_ACTIVE, _ACTIVE, _HIGH_IMPEDANCE);// disable phase if possible
       }
 
     break;
@@ -453,7 +434,7 @@ void DCMotor::setPhaseVoltage(float Uq, float Ud, float angle_el) {
       Ubeta =  _sa * Ud + _ca * Uq;    //  cos(angle) * Uq;
 
       // center = modulation_centered ? (driver->voltage_limit)/2 : Uq;
-      center = driver->voltage_limit/2;
+      // center = driver->voltage_limit/2;
       // Clarke transform
       Ua = Ualpha + center;
       Ub = -0.5 * Ualpha  + _SQRT3_2 * Ubeta + center;
@@ -486,12 +467,12 @@ void DCMotor::setPhaseVoltage(float Uq, float Ud, float angle_el) {
       // a bit of optitmisation
       if(Ud){ // only if Ud and Uq set
         // _sqrt is an approx of sqrt (3-4% error)
-        Uout = _sqrt(Ud*Ud + Uq*Uq) / driver->voltage_limit;
+        // Uout = _sqrt(Ud*Ud + Uq*Uq) / driver->voltage_limit;
         // angle normalisation in between 0 and 2pi
         // only necessary if using _sin and _cos - approximation functions
         angle_el = _normalizeAngle(angle_el + atan2(Uq, Ud));
       }else{// only Uq available - no need for atan2 and sqrt
-        Uout = Uq / driver->voltage_limit;
+        // Uout = Uq / driver->voltage_limit;
         // angle normalisation in between 0 and 2pi
         // only necessary if using _sin and _cos - approximation functions
         angle_el = _normalizeAngle(angle_el + _PI_2);
@@ -548,15 +529,15 @@ void DCMotor::setPhaseVoltage(float Uq, float Ud, float angle_el) {
       }
 
       // calculate the phase voltages and center
-      Ua = Ta*driver->voltage_limit;
-      Ub = Tb*driver->voltage_limit;
-      Uc = Tc*driver->voltage_limit;
+      // Ua = Ta*driver->voltage_limit;
+      // Ub = Tb*driver->voltage_limit;
+      // Uc = Tc*driver->voltage_limit;
       break;
 
   }
 
   // set the voltages in driver
-  driver->setPwm(Ua, Ub, Uc);
+  // driver->setPwm(Ua, Ub, Uc);
 }
 
 

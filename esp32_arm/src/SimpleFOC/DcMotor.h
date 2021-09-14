@@ -17,10 +17,8 @@ class DCMotor: public FOCMotor
   public:
     /**
      DCMotor class constructor
-     @param pp pole pairs number
-     @param R  motor phase resistance
      */ 
-    DCMotor(int pp,  float R = NOT_SET);
+    DCMotor();
     
     /**
      * Function linking a motor and a foc driver 
