@@ -2,12 +2,15 @@
 
 #include <Arduino.h>
 #include "FunctionalInterrupt.h"
+#include "SimpleFOC/SimpleFOC.h"
+
 
 // http://www.gammon.com.au/forum/?id=12983     static instances code for attachInterupt()
 
 class SingleAxis{
     public:
         SingleAxis(uint8_t pinA, uint8_t pinB, uint8_t pin_home_sensor);
+        SingleAxis(DCMotor* motor, Encoder* encoder);
         void SetTargetAbs(int targetPosition);
         void Setup(void (*ISR_callback)(void));
 

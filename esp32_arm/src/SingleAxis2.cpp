@@ -1,8 +1,6 @@
 #include "SimpleFOC/SimpleFOC.h"
 
 // Motor instance
-// BLDCMotor motor = BLDCMotor(11);
-// BLDCDriver3PWM driver = BLDCDriver3PWM(25, 26, 27, 7);
 DCMotor motor = DCMotor();
 DCDriverHBridge driver = DCDriverHBridge(6,7);
 Encoder encoder = Encoder(4, 2, 200);
@@ -38,32 +36,35 @@ void setup() {
   // driver config
   // power supply voltage [V]
   // driver.voltage_power_supply = 12;
-  // driver.init();
+  driver.init();
   // link the motor and the driver
-  // motor.linkDriver(&driver);
+  motor.linkDriver(&driver);
 
   // aligning voltage [V]
-  motor.voltage_sensor_align = 3;
+  // motor.voltage_sensor_align = 3;
   // index search velocity [rad/s]
-  motor.velocity_index_search = 3;
+  // motor.velocity_index_search = 3;
 
   // set motion control loop to be used
-  motor.controller = MotionControlType::velocity;
+  motor.controller = MotionControlType::angle;
+  motor.P_angle.P = 1;
+  motor.P_angle.I= 1;
+  motor.P_angle.D = 1;
 
   // contoller configuration 
   // default parameters in defaults.h
 
   // velocity PI controller parameters
-  motor.PID_velocity.P = 0.2;
-  motor.PID_velocity.I = 20;
+  // motor.PID_velocity.P = 0.2;
+  // motor.PID_velocity.I = 20;
   // default voltage_power_supply
-  motor.voltage_limit = 6;
+  // motor.voltage_limit = 6;
   // jerk control using voltage voltage ramp
   // default value is 300 volts per sec  ~ 0.3V per millisecond
-  motor.PID_velocity.output_ramp = 1000;
+  // motor.PID_velocity.output_ramp = 1000;
  
   // velocity low pass filtering time constant
-  motor.LPF_velocity.Tf = 0.01;
+  // motor.LPF_velocity.Tf = 0.01;
 
   // angle P controller
   motor.P_angle.P = 20;
@@ -97,7 +98,7 @@ void loop() {
   // the faster you run this function the better
   // Arduino UNO loop  ~1kHz
   // Bluepill loop ~10kHz 
-  motor.loopFOC();
+  // motor.loopFOC();
 
   // Motion control function
   // velocity, position or voltage (defined in motor.controller)

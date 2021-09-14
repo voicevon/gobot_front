@@ -12,6 +12,11 @@ void SingleAxis::SetTargetAbs(int targetPosition){
 
 }
 
+SingleAxis::SingleAxis(DCMotor* motor, Encoder* encoder){
+  motor->linkSensor(encoder);
+  motor->controller = MotionControlType::angle;
+  
+}
 
 SingleAxis::SingleAxis(uint8_t pinA, uint8_t pinB, uint8_t pin_home_sensor){
     __pinA = pinA;

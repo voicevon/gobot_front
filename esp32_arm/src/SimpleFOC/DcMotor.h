@@ -16,9 +16,7 @@ class DCMotor: public FOCMotor{
   public:
     DCMotor();
     
-    // void linkDriver(DCDriver* driver);
-
-    // DCDriver* driver; 
+    void linkDriver(DCDriver* driver);
     void init() override;
   	void disable() override;
     void enable() override;
@@ -29,6 +27,7 @@ class DCMotor: public FOCMotor{
     void move(float target = NOT_SET) override;
     
   private:
+    DCDriver* driver; 
         
 };
 
