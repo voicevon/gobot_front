@@ -1,15 +1,15 @@
-#ifndef DCDRIVER_H
-#define DCDRIVER_H
+// #ifndef DCDRIVER_H
+// #define DCDRIVER_H
 
-#include "Arduino.h"
+// #include "Arduino.h"
 
-class DCDriver{
-    public:
+// class DCDriver{
+//     public:
        
-        virtual int init() = 0;
+//         virtual int init() = 0;
 
-        long pwm_frequency; //!< pwm frequency value in hertz
-        float duty_cycle; //!< currently set duty cycle on phaseA            
-};
+//         long pwm_frequency; //!< pwm frequency value in hertz
+//         float duty_cycle; //!< currently set duty cycle on phaseA            
+// };
 
-#endif
+// #endif

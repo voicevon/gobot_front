@@ -2,9 +2,9 @@
 
 DCMotor::DCMotor():FOCMotor(){}
 
-void DCMotor::linkDriver(DCDriver* _driver) {
-  driver = _driver;
-}
+// void DCMotor::linkDriver(DCDriver* _driver) {
+//   driver = _driver;
+// }
 
 void DCMotor::init() {
   if(monitor_port) monitor_port->println(F("MOT: Init"));

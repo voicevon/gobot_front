@@ -38,9 +38,9 @@ void setup() {
   // driver config
   // power supply voltage [V]
   // driver.voltage_power_supply = 12;
-  driver.init();
+  // driver.init();
   // link the motor and the driver
-  motor.linkDriver(&driver);
+  // motor.linkDriver(&driver);
 
   // aligning voltage [V]
   motor.voltage_sensor_align = 3;

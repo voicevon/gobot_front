@@ -16,9 +16,9 @@ class DCMotor: public FOCMotor{
   public:
     DCMotor();
     
-    void linkDriver(DCDriver* driver);
+    // void linkDriver(DCDriver* driver);
 
-    DCDriver* driver; 
+    // DCDriver* driver; 
     void init() override;
   	void disable() override;
     void enable() override;

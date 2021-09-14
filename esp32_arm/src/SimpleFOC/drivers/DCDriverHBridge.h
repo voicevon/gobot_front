@@ -10,7 +10,8 @@
 /**
  DC motor H-Bridge driver class
 */
-class DCDriverHBridge: public DCDriver
+// class DCDriverHBridge: public DCDriver
+class DCDriverHBridge
 {
   public:
     /**
@@ -21,7 +22,8 @@ class DCDriverHBridge: public DCDriver
     DCDriverHBridge(int pinA,int pinB);
     
     /**  Motor hardware init function */
-  	int init() override;
+  	// int init() override;
+  	int init();
 
     // hardware variables
   	int __pinA; //!< phase A pwm pin number
