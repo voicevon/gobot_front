@@ -15,10 +15,24 @@
 #include <esp_log.h>
 #include "MyBleServerCallbacks.h"
 
-#define I_AM_ARM
-// #define I_AM_HOUSE
+// #define I_AM_GOBOT_ARM
+#define I_AM_GOBOT_HOUSE
+#define I_AM_CABLE_AXIS
 
-#ifdef I_AM_ARM
+
+ #include "SingleAxis.h"
+
+
+#ifdef I_AM_CABLE_AXIS
+  #include "SingleAxis.h"
+  #define CABLE_AXIS_XPYP
+  // #define CABLE_AXIS_XNYP
+  // #define CABLE_AXIS_XNYN
+  // #define CABLE_AXIS_XPYN
+#endif
+
+
+#ifdef I_AM_GOBOT_ARM
   #define BLE_DEV_NAME "ConInt-Arm-213401"
   #define SERVICE_UUID "d592c9aa-0594-11ec-9a03-0242ac130003"
   #define ROBOT_STATE_UUID "b7c65186-0610-11ec-9a03-0242ac130003"
@@ -27,9 +41,10 @@
   #include "arm.h"
   Arm* pArm; 
   static char LOG_TAG[]= "BLE-ARM";
+
 #endif
 
-#ifdef I_AM_HOUSE
+#ifdef I_AM_GOBOT_HOUSE
   #define BLE_DEV_NAME "ConInt-House-213401"
   #define SERVICE_UUID "b416890c-062e-11ec-9a03-0242ac130003"
   #define ROBOT_STATE_UUID "bfa35098-062e-11ec-9a03-0242ac130003"
@@ -40,6 +55,33 @@
   static char LOG_TAG[]= "BLE-HOUSE";
 #endif
 
+#ifdef I_AM_CABLE_AXIS_XPYP
+  #define BLE_DEV_NAME "ConInt X+Y+"
+  #define SERVICE_UUID      "1fd03a14-1451-11ec-82a8-0242ac130003"
+  #define ROBOT_STATE_UUID  "4b7fbe96-1451-11ec-82a8-0242ac130003"
+  #define ROBOT_ACTION_UUID "50711238-1451-11ec-82a8-0242ac130003"
+#endif
+
+#ifdef I_AM_CABLE_AXIS_XNYP
+  #define BLE_DEV_NAME "ConInt X+Y+"
+  #define SERVICE_UUID      "6909288a-1451-11ec-82a8-0242ac130003"
+  #define ROBOT_STATE_UUID  "6e0d5d7e-1451-11ec-82a8-0242ac130003"
+  #define ROBOT_ACTION_UUID "72838810-1451-11ec-82a8-0242ac130003"
+#endif
+
+#ifdef I_AM_CABLE_AXIS_XNYN
+  #define BLE_DEV_NAME "ConInt X+Y+"
+  #define SERVICE_UUID      "77d37e60-1451-11ec-82a8-0242ac130003"
+  #define ROBOT_STATE_UUID  "8fdb27b0-1451-11ec-82a8-0242ac130003"
+  #define ROBOT_ACTION_UUID "8175103c-1451-11ec-82a8-0242ac130003"
+#endif
+
+#ifdef I_AM_CABLE_AXIS_XPYN
+  #define BLE_DEV_NAME "ConInt X+Y+"
+  #define SERVICE_UUID      "85f5ab94-1451-11ec-82a8-0242ac130003"
+  #define ROBOT_STATE_UUID  "96a1cd38-1451-11ec-82a8-0242ac130003"
+  #define ROBOT_ACTION_UUID "9c43b29c-1451-11ec-82a8-0242ac130003"
+#endif
 
 BLECharacteristic* pCharRobotAction;
 BLECharacteristic* pCharRobotState;
@@ -91,13 +133,56 @@ void ble_setup(){
   BLEDevice::startAdvertising();
 }
 
+void setup_display(){
+    Serial.println("I am House, Testing LED");
+    pinMode(LED_A, OUTPUT);
+    pinMode(LED_B, OUTPUT);
+    pinMode(LED_C, OUTPUT);
+    pinMode(LED_F, OUTPUT);
+    pinMode(LED_H, OUTPUT);
+
+    for(int i=0 ; i<3; i++){
+      digitalWrite(LED_A, HIGH);
+      digitalWrite(LED_B, HIGH);
+      digitalWrite(LED_C, HIGH);
+      digitalWrite(LED_F, HIGH);
+      digitalWrite(LED_H, HIGH);
+      Serial.print (" X ");
+      delay(1000);
+      digitalWrite(LED_A, LOW);
+      digitalWrite(LED_B, LOW);
+      digitalWrite(LED_C, LOW);
+      digitalWrite(LED_F, LOW);
+      digitalWrite(LED_H, HIGH);
+      Serial.print (" o ");
+      delay(1000);
+    }
+}
+
+void test(){
+  SingleAxis  axis_A(6,8,8) ;
+  // axis_A = SingleAxis(2,3,5);
+  SingleAxis* xx= &axis_A;
+  // xx->Setup([]{xx->ISR_Encoder();});
+  // axis_A.Setup([]{axis_A.ISR_Encoder();}); 
+  // std::function<void(void) aa;
+  void (*aa)();
+  // aa = (void(*)()) (axis_A->ISR_Encoder());
+  //axis_A->setup2(aa);  
+  // attachInterrupt(8, axis_A.ISR_Encoder, RISING);
+
+}
 void setup(){
   Serial.begin(115200);
+  setup_display();
+
+
+  
   Serial.print("\nGobot system is starting....");
   ble_setup();
   Serial.print("\nBLE setup is done......");
 
-  #ifdef I_AM_ARM
+  #ifdef I_AM_GOBOT_ARM
     pArm = &Arm::getInstance();
     pArm->Setup(&action);
     Serial.print("\nArm setup is done.......");
@@ -105,8 +190,11 @@ void setup(){
     pArm->Home(ARM_BETA_AXIS);
     Serial.print("\nArm Homing is done......");
   #endif
-  #ifdef I_AM_HOUSE
+  #ifdef I_AM_GOBOT_HOUSE
     pHouse = &House::getInstance();
+    // pHouse->Test_home_sensor();
+
+
     pHouse->Setup(&action, 9);
     Serial.print("\nHouse setup is done..........");
     pHouse->Home(HOUSE_ALPHA_AXIS);
@@ -153,7 +241,7 @@ void loop(){
   
   int8_t true_bit  = GetTrueBitIndex(action.bytes[0]);
 
-  #ifdef I_AM_ARM
+  #ifdef I_AM_GOBOT_ARM
     pArm->SpinOnce();
 
     // Serial.print("true_bit_index=");
@@ -194,7 +282,7 @@ void loop(){
     }
   #endif
 
-  #ifdef I_AM_HOUSE
+  #ifdef I_AM_GOBOT_HOUSE
     uint8_t house_id;
     pHouse->SpinOnce();
     switch (true_bit){

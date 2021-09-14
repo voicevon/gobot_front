@@ -1,3 +1,76 @@
+// class myClass
+//   {
+//   volatile bool switchChanged;
+
+//   static myClass * instances [2];
+ 
+//   static void switchPressedExt0 ()
+//     {
+//     if (myClass::instances [0] != NULL)
+//       myClass::instances [0]->switchPressed ();
+//     }  // end of myClass::switchPressedExt0
+  
+//   static void switchPressedExt1 ()
+//     {
+//     if (myClass::instances [1] != NULL)
+//       myClass::instances [1]->switchPressed ();
+//     }  // end of myClass::switchPressedExt1
+  
+
+//   public:
+
+//   void begin (const byte whichPin)
+//     {
+//     pinMode (whichPin, INPUT_PULLUP);
+//     switch (whichPin)
+//       {
+//       case 2: 
+//         attachInterrupt (0, switchPressedExt0, CHANGE);
+//         instances [0] = this;
+//         break;
+        
+//       case 3: 
+//         attachInterrupt (1, switchPressedExt1, CHANGE);
+//         instances [1] = this;
+//         break;
+        
+//       } // end of switch
+//     }  // end of myClass::begin
+    
+//   void switchPressed ()
+//     {
+//     switchChanged = true; 
+//     }
+    
+//   };  // end of class myClass
+  
+// myClass * myClass::instances [2] = { NULL, NULL };
+
+// // instances of our class  
+// myClass foo; 
+// myClass bar;
+
+// void setup ()
+//   {
+//   foo.begin (2);   // pin D2
+//   bar.begin (3);   // pin D3
+//   }  // end of setup
+
+// void loop ()
+//   {
+//   // whatever    
+//   }  // end of loop
+
+
+
+
+
+
+
+
+
+
+
 class Test{
     public:
         typedef enum

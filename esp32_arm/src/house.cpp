@@ -1,27 +1,32 @@
 #include "house.h"
 
-// Total occupies 5+5 + 2 = 12 Pins
-#define PIN_HOME_ALHPA 12
-#define PIN_ALPHA_DIR 12
-#define PIN_ALPHA_STEP 12
-#define PIN_ALPHA_ENABLE 12
+#define PIN_HOME_ALHPA 35     //??
+#define PIN_ALPHA_DIR 19
+#define PIN_ALPHA_STEP 5
+#define PIN_ALPHA_ENABLE 18
 
-#define PIN_HOME_BETA 12
-#define PIN_BETA_DIR 12
-#define PIN_BETA_STEP 12
-#define PIN_BETA_ENABLE 12
+#define PIN_HOME_BETA 34      //??
+#define PIN_BETA_DIR 17
+#define PIN_BETA_STEP 4
+#define PIN_BETA_ENABLE 16
 
-#define ENDER_COIL 24
-#define EEF_HALL_SENSOR_FRONT 22
-#define EEF_HALL_SENSOR_BACK 22
-#define EEF_HALL_SENSOR_LEFT 22
-#define EEF_HALL_SENSOR_RIGHT 22
+#define ENDER_COIL 32
+#define ENDER_COIL_EXT 33
 
-#define MOTOR_MAX_SPEED 2289
+
+
+#define MICRIO_STEP_2 21
+#define MICRIO_STEP_1 22
+#define MICRIO_STEP_0 23
+
+// #define EEF_HALL_SENSOR_FRONT 22
+// #define EEF_HALL_SENSOR_BACK 22
+// #define EEF_HALL_SENSOR_LEFT 22
+// #define EEF_HALL_SENSOR_RIGHT 22
+
+#define MOTOR_MAX_SPEED 289
 #define HOMED_POSITION_ALPHA 0
 #define HOMED_POSITION_BETA 1
-
-
 
 #define LINK_A 75
 #define LINK_B 75
@@ -32,30 +37,51 @@
 
 
 House::House(){
+  
+  pinMode(MICRIO_STEP_0, OUTPUT);
+  digitalWrite(MICRIO_STEP_0, LOW);
+  pinMode(MICRIO_STEP_1, OUTPUT);
+  digitalWrite(MICRIO_STEP_1, LOW);
+  pinMode(MICRIO_STEP_2, OUTPUT);
+  digitalWrite(MICRIO_STEP_2, LOW);
 
-  }
+
+  // TODO  Duble check!!
+  pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+  digitalWrite(PIN_ALPHA_ENABLE, LOW);
+
+  pinMode(PIN_BETA_ENABLE, OUTPUT);
+  digitalWrite(PIN_BETA_ENABLE, LOW);
+
+  pinMode(PIN_HOME_ALHPA,INPUT_PULLUP);
+  pinMode(PIN_HOME_BETA, INPUT_PULLUP);  
+  
+  Serial.println(" House is constructed !");
+  
+}
 
 void House::Setup(RobotAction* pAction, int segments){
+
     __house_action = pAction;
     __segments = segments;
     __map.setup();
-    
-    pinMode(PIN_BETA_ENABLE, OUTPUT);
-    digitalWrite(PIN_BETA_ENABLE, HIGH);
-
-    pinMode(PIN_HOME_ALHPA,INPUT_PULLUP);
-    pinMode(PIN_HOME_BETA, INPUT_PULLUP);
 
     stepper_alpha = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
     stepper_beta = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
 
     stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
     stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
-    digitalWrite(PIN_BETA_ENABLE, LOW);
-    steppers = new StepControl();
+    steppers = new StepControl();        
+}
 
-
-        
+void House::Test_home_sensor(){
+  while (true){
+    uint8_t state = digitalRead(PIN_HOME_ALHPA);
+    digitalWrite(LED_A, state);    
+    
+    state = digitalRead(PIN_HOME_BETA);
+    digitalWrite(LED_B, state);
+  }
 }
 
 void House::Home(uint8_t axis){
@@ -66,7 +92,6 @@ void House::Home(uint8_t axis){
   if (axis == HOUSE_ALPHA_AXIS ){
     home_pin = PIN_HOME_ALHPA;
     homing_stepper = stepper_alpha;
-    // stepper = stepper_alpha;
     Serial.print("\nStart Homing Alpha");
   }
   else {
@@ -74,7 +99,7 @@ void House::Home(uint8_t axis){
     // homing_stepper = stepper_beta;
     Serial.print("\nStart Homing Beta");
   }
-  homing_stepper->setTargetRel(-500);
+  homing_stepper->setTargetRel(-500);  //Any nagtive number is ok!  ??
   steppers->move(*homing_stepper);
   while (steppers->isRunning()){
     //Seems alway return false of isRunning()
@@ -93,18 +118,18 @@ void House::Home(uint8_t axis){
 }
 
 void House::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
-  uint8_t flags=0;
+  uint8_t flags = 0x0;
   // Serial.print("\nHome spin got started.............\n");
-  while (flags !=0xff){
-    stepper_alpha->setTargetRel(1);
-    steppers->move(*homing_stepper);
+  while (flags != 0xff){    // a filter for 16 times of hall sensor is trigged.
+    homing_stepper->setTargetRel(10000);
+    steppers->move(*homing_stepper);  
     flags <<= 1;
-    flags |= digitalRead(home_pin);
+    // flags |= !digitalRead(home_pin);   // low level is trigged !
+    Serial.print(".");
   }
-  // Serial.print("\n###################  Home is done.");
 }
-void House::SpinOnce()
-{
+
+void House::SpinOnce(){
 }
 
 
