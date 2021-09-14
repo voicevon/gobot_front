@@ -27,18 +27,11 @@ class DCMotor: public FOCMotor
      */
     void linkDriver(DCDriver* driver);
 
-    /** 
-      * DCDriver link:
-      * - 3PWM 
-      * - 6PWM 
-    */
     DCDriver* driver; 
     
     /**  Motor hardware init function */
   	void init() override;
-    /** Motor disable function */
   	void disable() override;
-    /** Motor enable function */
     void enable() override;
 
     /**
@@ -64,27 +57,8 @@ class DCMotor: public FOCMotor
      */
     void move(float target = NOT_SET) override;
     
-    float Ua, Ub, Uc;//!< Current phase voltages Ua,Ub and Uc set to motor
-    float	Ualpha, Ubeta; //!< Phase voltages U alpha and U beta used for inverse Park and Clarke transform
-
 
   private:
-    // FOC methods 
-    /**
-    * Method using FOC to set Uq to the motor at the optimal angle
-    * Heart of the FOC algorithm
-    * 
-    * @param Uq Current voltage in q axis to set to the motor
-    * @param Ud Current voltage in d axis to set to the motor
-    * @param angle_el current electrical angle of the motor
-    */
-    void setPhaseVoltage(float Uq, float Ud, float angle_el);
-    /** Sensor alignment to electrical 0 angle of the motor */
-    int alignSensor();
-    /** Current sense and motor phase alignment */
-    int alignCurrentSense();
-    /** Motor and sensor alignment to the sensors absolute 0 angle  */
-    int absoluteZeroSearch();
 
         
     // Open loop motion control    
