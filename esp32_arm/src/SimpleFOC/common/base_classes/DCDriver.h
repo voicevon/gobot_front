@@ -5,8 +5,7 @@
 
 class DCDriver{
     public:
-        
-        /** Initialise hardware */
+       
         virtual int init() = 0;
 
         long pwm_frequency; //!< pwm frequency value in hertz
