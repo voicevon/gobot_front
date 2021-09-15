@@ -3,6 +3,8 @@
 
 #include "boardbase.h"
 
+class Board_GobotHouse: public BoardBase{
 
+};
 
 #endif

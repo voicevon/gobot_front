@@ -21,11 +21,11 @@
 #define I_AM_CABLE_AXIS
 
 
- #include "SingleAxis.h"
+ #include "RobotJoint/SingleAxis.h"
 
 
 #ifdef I_AM_CABLE_AXIS
-  #include "SingleAxis.h"
+//   #include "SingleAxis.h"
   #define CABLE_AXIS_XPYP
   // #define CABLE_AXIS_XNYP
   // #define CABLE_AXIS_XNYN
