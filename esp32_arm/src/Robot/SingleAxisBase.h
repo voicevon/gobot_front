@@ -1,26 +1,21 @@
 #pragma once
 
 #include <Arduino.h>
-#include "FunctionalInterrupt.h"
-#include "SimpleFOC/SimpleFOC.h"
-#include "MyBoards/board_pipe_bot_corner.h"
+// #include "FunctionalInterrupt.h"
+// #include "SimpleFOC/SimpleFOC.h"
+// #include "MyBoards/board_pipe_bot_corner.h"
 
 // http://www.gammon.com.au/forum/?id=12983     static instances code for attachInterupt()
 
-class SingleAxis{
+class SingleAxisBase{
     public:
         // SingleAxis(uint8_t pinA, uint8_t pinB, uint8_t pin_home_sensor);
         // SingleAxis(DCMotor* motor, Encoder* encoder);
-        SingleAxis(uint8_t axis_id);
+        // SingleAxisBase(uint8_t axis_id);
         uint8_t id;
-        DCMotor* motor;
-        Encoder* encoder;
-        DCDriver* driver;
 
         // uint8_t Pin_home_sensor;
 
-        void Init(DCDriverHBridge* driver, Encoder* encoder, uint8_t pin_home);
-        void Init(uint8_t motor_pinA, uint8_t motor_pinB, uint8_t encoder_pinA, uint8_t encoder_pinB, uint8_t pin_home );
         void Init_scaler(float final_distance_per_encoder_interval);
         void SetTargetAbs(int targetPosition);
         void Move(float distanceRel);
@@ -31,7 +26,7 @@ class SingleAxis{
         // void setup2(std::function<void(void)> callback);
         // void ICACHE_RAM_ATTR ISR_Encoder(void);
         // void(*ISR_callback)();
-    private:
+    protected:
         // static void InteruptPinB();
         // uint8_t __pinA; // Our first hardware interrupt pin is digital pin 2
         // uint8_t __pinB; // Our second hardware interrupt pin is digital pin 3
@@ -39,7 +34,6 @@ class SingleAxis{
         float home_position;
         float final_distance_per_encoder_interval;
 
-        void __Init_motor();
         // static volatile byte aFlag; // let's us know when we're expecting a rising edge on pinA to signal that the encoder has arrived at a detent
         // static volatile byte bFlag; // let's us know when we're expecting a rising edge on pinB to signal that the encoder has arrived at a detent (opposite direction to when aFlag is set)
         // volatile int32_t encoderPos ; //this variable stores our current value of encoder position. Change to int or uin16_t instead of byte if you want to record a larger range than 0-255

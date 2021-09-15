@@ -2,12 +2,12 @@
 #ifdef I_AM_CABLEBOT_CORNER
 
 #include "MyBoards/board_cable_bot_corner.h"
-#include "Robot/SingleAxis.h"
+#include "Robot/Axis_DC_Encoder.h"
 #include "MyApps/Common/BleHelper.h"
 
 Board_CableBotCorner board = Board_CableBotCorner();
 DCMotor motor = DCMotor();
-SingleAxis axis = SingleAxis(0);
+Axis_DC_Encoder axis = Axis_DC_Encoder(0);
 BleHelper bleHelper = BleHelper();
 
 

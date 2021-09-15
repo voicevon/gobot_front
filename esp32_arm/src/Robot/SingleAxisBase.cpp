@@ -1,62 +1,34 @@
-#include "SingleAxis.h"
+#include "SingleAxisBase.h"
 
 
 
 
 
-void SingleAxis::SetTargetAbs(int targetPosition){
+void SingleAxisBase::SetTargetAbs(int targetPosition){
 
 }
 
 
 
-SingleAxis::SingleAxis(uint8_t axis_id){
-  id = axis_id;
-}
+// SingleAxisBase::SingleAxisBase(uint8_t axis_id){
+//   id = axis_id;
+// }
 
-void SingleAxis::Init_scaler(float _final_distance_per_encoder_interval){
+void SingleAxisBase::Init_scaler(float _final_distance_per_encoder_interval){
   final_distance_per_encoder_interval = _final_distance_per_encoder_interval;
 }
 
-void SingleAxis::__Init_motor(){
-  motor = new DCMotor();
-  motor->linkDriver(driver);
-  motor->linkSensor(encoder);
-  motor->controller = MotionControlType::angle;
-  motor->P_angle.P = 1;
-  motor->P_angle.I= 1;
-  motor->P_angle.D = 1;
 
-  // encoder->enableInterrupts(MoveAsync, MoveAsync);
 
-}
-void SingleAxis::Init(DCDriverHBridge* _driver, Encoder* _encoder, uint8_t pin_home){
-  driver = _driver;
-  encoder = _encoder;
-  __Init_motor();
-
-  __pinHomeSensor = pin_home;
+void SingleAxisBase::Move(float distanceRel){
 
 }
 
-void SingleAxis::Init(uint8_t motor_pinA, uint8_t motor_pinB, uint8_t encoder_pinA, uint8_t encoder_pinB, uint8_t pin_home ){
-  driver= new DCDriverHBridge(motor_pinA, motor_pinB);
-  encoder = new Encoder(encoder_pinA,encoder_pinB,200); 
-
-  __Init_motor();
-  __pinHomeSensor = pin_home;
-}
-
-
-void SingleAxis::Move(float distanceRel){
+void SingleAxisBase::MoveAsync(){
 
 }
 
-void SingleAxis::MoveAsync(){
-
-}
-
-void SingleAxis::Home(){
+void SingleAxisBase::Home(){
 
 }
 
