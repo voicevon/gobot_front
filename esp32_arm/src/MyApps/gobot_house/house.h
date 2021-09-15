@@ -13,7 +13,7 @@
 
 
 
-class House:RobotArm{
+class House: public RobotArm{
     public:
         static House& getInstance()
         {
@@ -26,6 +26,7 @@ class House:RobotArm{
         void Home(uint8_t axis) override;
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);
+
     protected:
     private:
         House();

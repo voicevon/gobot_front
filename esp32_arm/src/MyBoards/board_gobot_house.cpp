@@ -21,14 +21,20 @@
 
 
 Board_GobotHouse::Board_GobotHouse(){
-    AppendSingleLed(0, LED_A,HIGH);
-    AppendSingleLed(1, LED_B,HIGH);
-    AppendSingleLed(2, LED_C,HIGH);
-    AppendSingleLed(3, LED_F,HIGH);
-    AppendSingleLed(4, LED_H,HIGH);
+    AppendSingleLed(0, LED_A, HIGH);
+    AppendSingleLed(1, LED_B, HIGH);
+    AppendSingleLed(2, LED_C, HIGH);
+    AppendSingleLed(3, LED_F, HIGH);
+    AppendSingleLed(4, LED_H, HIGH);
 
-    alhpa = new StepperDriver(PIN_ALPHA_STEP, PIN_ALPHA_DIR,PIN_ALPHA_ENABLE);
-    beta = new StepperDriver(PIN_BETA_STEP, PIN_BETA_DIR, PIN_BETA_ENABLE);
+    stepper_alhpa = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+    stepper_beta = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+
+    pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+    pinMode(PIN_BETA_ENABLE, OUTPUT);
+    digitalWrite(PIN_ALPHA_ENABLE, LOW);
+    digitalWrite(PIN_BETA_ENABLE, LOW);
+
 }
 
 void Board_GobotHouse::Test_home_sensor(){

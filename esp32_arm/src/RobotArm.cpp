@@ -1,5 +1,9 @@
 #include "RobotArm.h"
 
+void RobotArm::LinkStepper(Stepper* alpha, Stepper* beta){
+  stepper_alpha = alpha;
+  stepper_beta = beta;
+}
 
 void RobotArm::MoveTo(int16_t x, int16_t y){
   Serial.print(x);

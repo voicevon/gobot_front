@@ -29,6 +29,7 @@ void setup(){
     pHouse = &House::getInstance();
     // pHouse->Test_home_sensor();
     pHouse->Setup(&action, 9);
+    pHouse->LinkStepper(board.stepper_alhpa, board.stepper_beta);
     Serial.print("\nHouse setup is done..........");
 
     pHouse->Home(HOUSE_ALPHA_AXIS);
