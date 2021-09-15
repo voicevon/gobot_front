@@ -9,10 +9,10 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include <BLE2902.h>
+#include "MyBleServerCallbacks.h"
 // #include <BLE.h>
 
 #include <esp_log.h>
-#include "MyBleServerCallbacks.h"
 
 
 // #define I_AM_GOBOT_ARM
@@ -134,29 +134,6 @@ void ble_setup(){
 }
 
 void setup_display(){
-    Serial.println("I am House, Testing LED");
-    pinMode(LED_A, OUTPUT);
-    pinMode(LED_B, OUTPUT);
-    pinMode(LED_C, OUTPUT);
-    pinMode(LED_F, OUTPUT);
-    pinMode(LED_H, OUTPUT);
-
-    for(int i=0 ; i<3; i++){
-      digitalWrite(LED_A, HIGH);
-      digitalWrite(LED_B, HIGH);
-      digitalWrite(LED_C, HIGH);
-      digitalWrite(LED_F, HIGH);
-      digitalWrite(LED_H, HIGH);
-      Serial.print (" X ");
-      delay(1000);
-      digitalWrite(LED_A, LOW);
-      digitalWrite(LED_B, LOW);
-      digitalWrite(LED_C, LOW);
-      digitalWrite(LED_F, LOW);
-      digitalWrite(LED_H, HIGH);
-      Serial.print (" o ");
-      delay(1000);
-    }
 }
 
 Encoder* encoder1;
