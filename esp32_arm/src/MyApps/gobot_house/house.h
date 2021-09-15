@@ -2,7 +2,7 @@
 
 #include "actions.h"
 #include <Arduino.h>
-#include "Robot/RobotArm.h"
+#include "Robot/RobotArmBase.h"
 #include "HouseMap.h"
 #define COIL_COUNT 53
 #define CHIPS_COUNT  4
@@ -13,7 +13,7 @@
 
 
 
-class House: public RobotArm{
+class House: public RobotArmBase{
     public:
         static House& getInstance()
         {

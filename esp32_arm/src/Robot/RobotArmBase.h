@@ -9,7 +9,7 @@ struct motor_position{
 /*
 Currently is a 2D arm.
 */
-class RobotArm{
+class RobotArmBase{
     public:
         virtual void Home(unsigned char axis);
         void LinkStepper(Stepper* alpha, Stepper* beta);
