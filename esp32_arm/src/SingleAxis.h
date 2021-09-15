@@ -37,6 +37,7 @@ class SingleAxis{
         float home_position;
         float distance_per_motor_encoder;
 
+        void __Init_motor();
         // static volatile byte aFlag; // let's us know when we're expecting a rising edge on pinA to signal that the encoder has arrived at a detent
         // static volatile byte bFlag; // let's us know when we're expecting a rising edge on pinB to signal that the encoder has arrived at a detent (opposite direction to when aFlag is set)
         // volatile int32_t encoderPos ; //this variable stores our current value of encoder position. Change to int or uin16_t instead of byte if you want to record a larger range than 0-255
