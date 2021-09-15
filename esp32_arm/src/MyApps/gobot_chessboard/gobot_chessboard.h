@@ -19,7 +19,7 @@ Stepper liberys:
 
 // #include "ble_server.h"
 #include <ESP32Servo.h>
-#include "RobotArm.h"
+#include "Robot/RobotArm.h"
 
 
 #define ARM_ALPHA_AXIS 4
@@ -51,11 +51,11 @@ How to solve the concepts I don't know?
     Don't send me nominal name of go game (either of any other name).
 
 */
-class Arm:RobotArm{
+class GobotChessboard: public RobotArm{
     public:
-        static Arm& getInstance()
+        static GobotChessboard& getInstance()
         {
-            static Arm instance; // Guaranteed to be destroyed.
+            static GobotChessboard instance; // Guaranteed to be destroyed.
                                   // Instantiated on first use.
             return instance;
         }
@@ -67,9 +67,9 @@ class Arm:RobotArm{
         void pick_place_park(RobotAction* pAction);
 
     private:
-        Arm();
-        Arm(Arm const& copy);            // Not Implemented
-        Arm& operator=(Arm const& copy); // Not Implemented
+        GobotChessboard();
+        GobotChessboard(GobotChessboard const& copy);            // Not Implemented
+        GobotChessboard& operator=(GobotChessboard const& copy); // Not Implemented
 
         motor_position ik(float x, float y) override;
 

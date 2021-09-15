@@ -2,7 +2,7 @@
 #ifdef I_AM_CABLEBOT_CORNER
 
 #include "MyBoards/board_cable_bot_corner.h"
-#include "RobotJoint/SingleAxis.h"
+#include "Robot/SingleAxis.h"
 #include "MyApps/Common/BleHelper.h"
 
 Board_CableBotCorner board = Board_CableBotCorner();

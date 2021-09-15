@@ -1,5 +1,5 @@
 #include<math.h>
-#include "arm.h"
+#include "gobot_chessboard.h"
 #include<Arduino.h>
 
 
@@ -30,11 +30,11 @@
 #define STEPS_PER_RAD  3056     // 200 * 16 * 6 / (3.1415927 * 2)
 #define MOTOR_MAX_SPEED 1000    // unit?
 
-Arm::Arm(){
+GobotChessboard::GobotChessboard(){
 
 }
 
-void Arm::Home(unsigned char axis){  
+void GobotChessboard::Home(unsigned char axis){  
   uint8_t homing_axis = axis;
   uint8_t home_pin = PIN_HOME_BETA;
   Stepper* homing_stepper = stepper_beta;
@@ -68,7 +68,7 @@ void Arm::Home(unsigned char axis){
   Serial.print("\n Home one axis is Done.......");
 }
 
-void Arm::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
+void GobotChessboard::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
   uint8_t flags=0;
   // Serial.print("\nHome spin got started.............\n");
   while (flags !=0xff){
@@ -83,7 +83,7 @@ void Arm::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
 /*
 https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
 */
-motor_position Arm::ik(float x, float y){
+motor_position GobotChessboard::ik(float x, float y){
   motor_position ret;   //is risk here?
   float rr1= (x + LINK_0) * (x + LINK_0) + y * y;
   
@@ -103,7 +103,7 @@ motor_position Arm::ik(float x, float y){
   return ret;
 }
 
-void Arm::SetEffector(EEF action){
+void GobotChessboard::SetEffector(EEF action){
   switch (action){
     case Lower:
       eefServo->write(180);
@@ -129,7 +129,7 @@ void Arm::SetEffector(EEF action){
   }
 }
 
-void Arm::pick_place_park(RobotAction* pAction){
+void GobotChessboard::pick_place_park(RobotAction* pAction){
   uint8_t action_code = pAction->Arm.action_code;
     // for(int i=0;i<14;i++){
     //   Serial.print(pAction->bytes[i]);
@@ -163,7 +163,7 @@ void Arm::pick_place_park(RobotAction* pAction){
   // pAction->bytes[0] = 1;
 }
 
-void Arm::Setup(RobotAction* pAction){
+void GobotChessboard::Setup(RobotAction* pAction){
   __arm_action = pAction;
   // Serial.print("Arm is Initializing.........");
   // __Mcp23018 = &Mcp23018::getInstance();
@@ -206,7 +206,7 @@ void Arm::Setup(RobotAction* pAction){
   link_b = LINK_B;
 }
 
-void Arm::SpinOnce(){
+void GobotChessboard::SpinOnce(){
   // steppers.run();
   return;
   // if (!homed)
