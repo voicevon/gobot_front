@@ -4,7 +4,7 @@
 
 #include "MyBoards/board_gobot_house.h"
 // #include "RobotJoint/SingleAxis.h"
-#include "MyApps/Common/BleHelper.h"
+#include "MyLibs/BleHelper.h"
 #include "house.h"   
 static char LOG_TAG[]= "BLE-HOUSE";
 
