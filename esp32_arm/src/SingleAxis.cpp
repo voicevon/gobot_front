@@ -1,11 +1,6 @@
 #include "SingleAxis.h"
 
 
-#define PIN_HOME_SENSOR 5
-#define PIN_ENCODER_A 6
-#define PIN_ENCODER_B 7
-#define PIN_DC_MOTOR_A 8
-#define PIN_DC_MOTOR_B 9
 
 
 
@@ -14,7 +9,13 @@ void SingleAxis::SetTargetAbs(int targetPosition){
 }
 
 
-SingleAxis::SingleAxis(){
+
+SingleAxis::SingleAxis(uint8_t axis_id){
+  id = axis_id;
+}
+
+void SingleAxis::Init_scaler(float _final_distance_per_encoder_interval){
+  final_distance_per_encoder_interval = _final_distance_per_encoder_interval;
 }
 
 void SingleAxis::__Init_motor(){
