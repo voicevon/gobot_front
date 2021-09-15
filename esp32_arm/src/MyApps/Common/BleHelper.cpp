@@ -1,5 +1,11 @@
 #include "BleHelper.h"
-#include "MyApps/All_Devices.h"
+#include "all_devices.h"
+
+
+
+
+//  Concepts       https://www.youtube.com/watch?v=2mePPqiocUE  
+//  Notification   https://www.youtube.com/watch?v=oCMOYS71NIU
 
 
 void BleHelper::InitBle(){

@@ -1,6 +1,9 @@
 #ifndef __ALL_DEVICES_H_
 #define __ALL_DEVICES_H_
 
+#include <Arduino.h>
+
+
 // #define I_AM_GOBOT_ARM_213401
 #ifdef I_AM_GOBOT_ARM_213401
   #define BLE_DEV_NAME "ConInt-Arm-213401"
@@ -12,6 +15,8 @@
 
 #define I_AM_CABLE_AXIS_XPYP
 #ifdef I_AM_CABLE_AXIS_XPYP
+  #define I_AM_CABLEBOT_CORNER
+  // #include "MyApps/cablebot_corner/main.h"
   #define BLE_DEV_NAME "ConInt X+Y+"
   #define SERVICE_UUID      "1fd03a14-1451-11ec-82a8-0242ac130003"
   #define ROBOT_STATE_UUID  "4b7fbe96-1451-11ec-82a8-0242ac130003"
@@ -20,6 +25,7 @@
 
 // #define I_AM_CABLE_AXIS_XNYP
 #ifdef I_AM_CABLE_AXIS_XNYP
+  #define I_AM_CABLEBOT_CORNER
   #define BLE_DEV_NAME "ConInt X+Y+"
   #define SERVICE_UUID      "6909288a-1451-11ec-82a8-0242ac130003"
   #define ROBOT_STATE_UUID  "6e0d5d7e-1451-11ec-82a8-0242ac130003"
@@ -28,6 +34,7 @@
 
 // #define I_AM_CABLE_AXIS_XNYN
 #ifdef I_AM_CABLE_AXIS_XNYN
+  #define I_AM_CABLEBOT_CORNER
   #define BLE_DEV_NAME "ConInt X+Y+"
   #define SERVICE_UUID      "77d37e60-1451-11ec-82a8-0242ac130003"
   #define ROBOT_STATE_UUID  "8fdb27b0-1451-11ec-82a8-0242ac130003"
@@ -36,6 +43,7 @@
 
 // #define I_AM_CABLE_AXIS_XPYN
 #ifdef I_AM_CABLE_AXIS_XPYN
+  #define I_AM_CABLEBOT_CORNER
   #define BLE_DEV_NAME "ConInt X+Y+"
   #define SERVICE_UUID      "85f5ab94-1451-11ec-82a8-0242ac130003"
   #define ROBOT_STATE_UUID  "96a1cd38-1451-11ec-82a8-0242ac130003"

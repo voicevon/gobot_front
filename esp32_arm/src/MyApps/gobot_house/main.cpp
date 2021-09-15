@@ -1,5 +1,6 @@
 #include "all_devices.h"
-#ifdef I_AM_CABLEBOT_CORNER
+
+#ifdef I_AM_GOBOT_HOUSE
 
 #include "MyBoards/board_cable_bot_corner.h"
 #include "RobotJoint/SingleAxis.h"
@@ -15,7 +16,7 @@ void doA(){board.encoder->handleA();}
 void doB(){board.encoder->handleB();}
 
 
-void setup(){
+void app_setup(){
     bleHelper.InitBle();
     board.encoder->enableInterrupts(doA,doB);
     motor.controller = MotionControlType::angle;
@@ -29,9 +30,10 @@ void setup(){
 }
 
 
-void loop(){
+void app_loop(){
     axis.SetTargetAbs(100);
     axis.MoveAsync();
 }
+
 
 #endif
