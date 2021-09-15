@@ -2,37 +2,108 @@
 
 #ifdef I_AM_GOBOT_HOUSE
 
-#include "MyBoards/board_cable_bot_corner.h"
-#include "RobotJoint/SingleAxis.h"
+#include "MyBoards/board_gobot_house.h"
+// #include "RobotJoint/SingleAxis.h"
 #include "MyApps/Common/BleHelper.h"
+#include "house.h"   
+static char LOG_TAG[]= "BLE-HOUSE";
 
-Board_CableBotCorner board = Board_CableBotCorner();
-DCMotor motor = DCMotor();
-SingleAxis axis = SingleAxis(0);
+House* pHouse; 
+
+BLECharacteristic* pCharRobotAction;
+BLECharacteristic* pCharRobotState;
+RobotAction action;
+
+MyBleServerCallbacks* pMyBle;
+
+
+Board_GobotHouse board = Board_GobotHouse();
+// DCMotor motor = DCMotor();
+// SingleAxis axis = SingleAxis(0);
 BleHelper bleHelper = BleHelper();
 
-
-void doA(){board.encoder->handleA();}
-void doB(){board.encoder->handleB();}
-
-
-void app_setup(){
+void setup(){
+    board.Flash_AllLeds(3,500,500);
     bleHelper.InitBle();
-    board.encoder->enableInterrupts(doA,doB);
-    motor.controller = MotionControlType::angle;
-    motor.P_angle.P = 1;
 
-    axis.driver = board.driver;
-    axis.encoder = board.encoder;
-    axis.Init_scaler(1.234) ;
+    pHouse = &House::getInstance();
+    // pHouse->Test_home_sensor();
+    pHouse->Setup(&action, 9);
+    Serial.print("\nHouse setup is done..........");
 
-    axis.Home();
+    pHouse->Home(HOUSE_ALPHA_AXIS);
+    pHouse->Home(HOUSE_BETA_AXIS);
+    Serial.print("\nHouse Homing is done......");
+
 }
 
 
-void app_loop(){
-    axis.SetTargetAbs(100);
-    axis.MoveAsync();
+int8_t GetTrueBitIndex(uint8_t any){
+  if (any % 2 ==1){
+    // is doing a task.
+    return -1;
+  }
+  for(int i=0; i<8; i++){
+    if (((any >> i) & 0b00000001) == 1){
+      // will start to do a task
+      // action.bytes[0]++;   //??????????????
+      return i;
+    }
+  }
+  // No task at all
+  return -2;
+}
+
+void loop(){
+    if (! pMyBle->is_connected ){
+        BLEDevice::startAdvertising();
+        delay(5000);
+    }
+
+    if (action.bytes[0] <= 1){
+        // Both head side and Esp side are idle. 
+        uint8_t* pData  = pCharRobotAction->getData();
+        for (int i=0; i<14; i++){
+        action.bytes[i] = *(pData + i);
+        // Serial.print(action.bytes[i]);
+        // Serial.print(" ");
+        }
+        return;
+    }
+  
+    int8_t true_bit  = GetTrueBitIndex(action.bytes[0]);
+
+    uint8_t house_id;
+    pHouse->SpinOnce();
+    switch (true_bit){
+        //All the below functions will modify action.bytes[0]
+        case 6:
+        house_id = action.House.from_start_house_id;
+        pHouse->MoveStone_FromRoomToHead(house_id);
+        break;
+        case 7:
+        house_id = action.House.from_start_house_id;
+        pHouse->MoveStone_FromHeadToRoom(house_id);
+        break;
+        case HOUSE_ALPHA_AXIS:
+        pHouse->Home(HOUSE_ALPHA_AXIS);
+        break;
+        case HOUSE_BETA_AXIS:
+        pHouse->Home(HOUSE_BETA_AXIS);
+        break;
+        default:
+        break;
+    }
+  // pCharacteristic->setValue(action.bytes,13);
+
+  // if (action.bytes[0] >=2){
+  //   Serial.print("hhhhhhhhhhhhhhhhhhhhhhhhhhh    ");
+  //   Serial.println(action.bytes[0]);
+  // }else{
+  //   Serial.print(">>>>>>>>>>>>>>>>>>>>>  ");
+  //   Serial.print(action.bytes[0]);
+  // }
+  delay(500);
 }
 
 

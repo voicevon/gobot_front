@@ -6,18 +6,27 @@
 
 // #define I_AM_GOBOT_ARM_213401
 #ifdef I_AM_GOBOT_ARM_213401
-  #define BLE_DEV_NAME "ConInt-Arm-213401"
+  #define I_AM_GOBOT_ARM
+  #define BLE_DEV_NAME "Gobot-Arm-213401"
   #define SERVICE_UUID "d592c9aa-0594-11ec-9a03-0242ac130003"
   #define ROBOT_STATE_UUID "b7c65186-0610-11ec-9a03-0242ac130003"
   #define ROBOT_ACTION_UUID "c21a1596-0610-11ec-9a03-0242ac130003"
 #endif
 
+#define I_AM_GOBOT_HOUSE_213401
+#ifdef I_AM_GOBOT_HOUSE_213401
+  #define I_AM_GOBOT_HOUSE
+  #define BLE_DEV_NAME "Gobot-House-213401"
+  #define SERVICE_UUID "b416890c-062e-11ec-9a03-0242ac130003"
+  #define ROBOT_STATE_UUID "bfa35098-062e-11ec-9a03-0242ac130003"
+  #define ROBOT_ACTION_UUID "c52ca230-062e-11ec-9a03-0242ac130003"
+#endif
 
-#define I_AM_CABLE_AXIS_XPYP
+// #define I_AM_CABLE_AXIS_XPYP
 #ifdef I_AM_CABLE_AXIS_XPYP
   #define I_AM_CABLEBOT_CORNER
   // #include "MyApps/cablebot_corner/main.h"
-  #define BLE_DEV_NAME "ConInt X+Y+"
+  #define BLE_DEV_NAME "ConInt XPYP"
   #define SERVICE_UUID      "1fd03a14-1451-11ec-82a8-0242ac130003"
   #define ROBOT_STATE_UUID  "4b7fbe96-1451-11ec-82a8-0242ac130003"
   #define ROBOT_ACTION_UUID "50711238-1451-11ec-82a8-0242ac130003"
@@ -26,7 +35,7 @@
 // #define I_AM_CABLE_AXIS_XNYP
 #ifdef I_AM_CABLE_AXIS_XNYP
   #define I_AM_CABLEBOT_CORNER
-  #define BLE_DEV_NAME "ConInt X+Y+"
+  #define BLE_DEV_NAME "ConInt XNYP"
   #define SERVICE_UUID      "6909288a-1451-11ec-82a8-0242ac130003"
   #define ROBOT_STATE_UUID  "6e0d5d7e-1451-11ec-82a8-0242ac130003"
   #define ROBOT_ACTION_UUID "72838810-1451-11ec-82a8-0242ac130003"
@@ -35,7 +44,7 @@
 // #define I_AM_CABLE_AXIS_XNYN
 #ifdef I_AM_CABLE_AXIS_XNYN
   #define I_AM_CABLEBOT_CORNER
-  #define BLE_DEV_NAME "ConInt X+Y+"
+  #define BLE_DEV_NAME "ConInt XNYN"
   #define SERVICE_UUID      "77d37e60-1451-11ec-82a8-0242ac130003"
   #define ROBOT_STATE_UUID  "8fdb27b0-1451-11ec-82a8-0242ac130003"
   #define ROBOT_ACTION_UUID "8175103c-1451-11ec-82a8-0242ac130003"
@@ -44,7 +53,7 @@
 // #define I_AM_CABLE_AXIS_XPYN
 #ifdef I_AM_CABLE_AXIS_XPYN
   #define I_AM_CABLEBOT_CORNER
-  #define BLE_DEV_NAME "ConInt X+Y+"
+  #define BLE_DEV_NAME "ConInt XPYN"
   #define SERVICE_UUID      "85f5ab94-1451-11ec-82a8-0242ac130003"
   #define ROBOT_STATE_UUID  "96a1cd38-1451-11ec-82a8-0242ac130003"
   #define ROBOT_ACTION_UUID "9c43b29c-1451-11ec-82a8-0242ac130003"

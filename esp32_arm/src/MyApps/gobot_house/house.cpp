@@ -74,15 +74,7 @@ void House::Setup(RobotAction* pAction, int segments){
     steppers = new StepControl();        
 }
 
-void House::Test_home_sensor(){
-  while (true){
-    uint8_t state = digitalRead(PIN_HOME_ALHPA);
-    digitalWrite(LED_A, state);    
-    
-    state = digitalRead(PIN_HOME_BETA);
-    digitalWrite(LED_B, state);
-  }
-}
+
 
 void House::Home(uint8_t axis){
   uint8_t homing_axis = axis;

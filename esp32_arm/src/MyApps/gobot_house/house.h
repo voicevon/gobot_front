@@ -11,11 +11,7 @@
 #define HOUSE_BETA_AXIS 11
 
 
-#define LED_A 12
-#define LED_B 25
-#define LED_C 26
-#define LED_F 27
-#define LED_H 14
+
 
 class House:RobotArm{
     public:
@@ -30,7 +26,6 @@ class House:RobotArm{
         void Home(uint8_t axis) override;
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);
-        void Test_home_sensor();
     protected:
     private:
         House();
