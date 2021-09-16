@@ -1,9 +1,13 @@
 #include "all_devices.h"
 #ifdef I_AM_CABLEBOT_CORNER
 
-#include "MyBoards/board_cable_bot_corner.h"
+#include "board_cable_bot_corner.h"
 #include "Robot/Axis_DC_Encoder.h"
 #include "MyLibs/BleHelper.h"
+#include "MyLibs/Components/Led.h"
+
+Led led_power = Led(0,1,LOW);
+Led led_home_alpha = Led(1,2,LOW);
 
 Board_CableBotCorner board = Board_CableBotCorner();
 DCMotor motor = DCMotor();

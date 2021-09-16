@@ -2,7 +2,7 @@
 
 #ifdef I_AM_GOBOT_HOUSE
 
-#include "MyBoards/board_gobot_house.h"
+#include "board_gobot_house.h"
 // #include "RobotJoint/SingleAxis.h"
 #include "MyLibs/BleHelper.h"
 #include "house.h"   

@@ -2,7 +2,7 @@
 
 #ifdef I_AM_GOBOT_CHESSBOARD
 
-#include "MyBoards/board_gobot_chessboard.h"
+#include "board_gobot_chessboard.h"
 #include "MyLibs/BleHelper.h"
 #include "gobot_chessboard.h"   
 static char LOG_TAG[]= "BLE-CHESSBOARD";
