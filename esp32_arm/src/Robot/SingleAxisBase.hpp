@@ -1,7 +1,7 @@
 #include "SingleAxisBase.h"
 
-
-void SingleAxisBase::SetTargetAbs(int targetPosition){
+template <class Motor_T, class PositionSensor_T>
+void SingleAxisBase<Motor_T,PositionSensor_T>::SetTargetAbs(int targetPosition){
 
 }
 
@@ -11,12 +11,14 @@ void SingleAxisBase::SetTargetAbs(int targetPosition){
 //   id = axis_id;
 // }
 
-void SingleAxisBase::Init_scaler(float _final_distance_per_encoder_interval){
+template <class Motor_T, class PositionSensor_T>
+void SingleAxisBase<Motor_T,PositionSensor_T>::Init_scaler(float _final_distance_per_encoder_interval){
   final_distance_per_encoder_interval = _final_distance_per_encoder_interval;
 }
 
 
-void SingleAxisBase::Test(){
+template <class Motor_T, class PositionSensor_T>
+void SingleAxisBase<Motor_T,PositionSensor_T>::Test(){
 
 }
 // SingleAxis::SingleAxis(DCMotor* motor, Encoder* encoder){
