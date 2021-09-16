@@ -1,7 +1,7 @@
 #ifndef BOARD_GOBOT_HOUSE_H_
 #define BOARD_GOBOT_HOUSE_H_
 
-#include "boardbase.h"
+#include "boardbase.hpp"
 // #include "MyApps/Common/StepperDriver.h"
 #include "ESP32Step/src/TeensyStep.h"
 #define LEDS_COUNT_ON_BOARD 5

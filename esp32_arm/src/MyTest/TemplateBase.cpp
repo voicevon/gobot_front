@@ -1,13 +1,9 @@
 #include "TemplateBase.h"
-
+#include "TemplateBase.hpp"
 
 // http://www.cs.technion.ac.il/users/yechiel/CS/FAQs/c++-faq/nondependent-name-lookup-members.html
 
 
-template <int nnnn>
-void Base<nnnn>::bget(int x){
-    // return N;
-}
 
 Derived::Derived(){
 

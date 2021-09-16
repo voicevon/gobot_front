@@ -6,6 +6,7 @@
 
 //  What do we learned?
 //      DO NOT put below code to any of *.cpp file.
+//      At least for our compiler !!!
 
 template <int nnnn>
 void Base<nnnn>::bget(int x){

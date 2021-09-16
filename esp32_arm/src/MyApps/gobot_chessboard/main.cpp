@@ -28,7 +28,7 @@ void setup(){
     pArm = &GobotChessboard::getInstance();
     // pArm->Test_home_sensor();
     pArm->Setup(&action);
-    pArm->LinkStepper(board.stepper_alhpa, board.stepper_beta);
+    // pArm->LinkStepper(board.stepper_alhpa, board.stepper_beta);
     Serial.print("\nArm setup is done..........");
 
     pArm->Home(6);

@@ -1,7 +1,7 @@
 #ifndef _BOARD_CABLE_BOT_CORNER_H_
 #define _BOARD_CABLE_BOT_CORNER_H_
 
-#include "boardbase.h"
+#include "boardbase.hpp"
 #include "SimpleFOC/drivers/DCDriverHBridge.h"
 #include "SimpleFOC/sensors/Encoder.h"
 
