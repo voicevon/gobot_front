@@ -1,6 +1,0 @@
-#ifndef BOARD_PIPE_BOT_CORNER_H
-#define BOARD_PIPE_BOT_CORNER_H
-
-
-
-#endif

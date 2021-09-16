@@ -1,10 +1,10 @@
 #include "board_gobot_house.h"
 
-#define LED_A 12
-#define LED_B 25
-#define LED_C 26
-#define LED_F 27
-#define LED_H 14
+#define PIN_LED_A 12
+#define PIN_LED_B 25
+#define PIN_LED_C 26
+#define PIN_LED_F 27
+#define PIN_LED_H 14
 
 #define PIN_HOME_ALHPA 35     //??
 #define PIN_ALPHA_DIR 19
@@ -21,11 +21,13 @@
 
 
 Board_GobotHouse::Board_GobotHouse(){
-    AppendSingleLed(0, LED_A, HIGH);
-    AppendSingleLed(1, LED_B, HIGH);
-    AppendSingleLed(2, LED_C, HIGH);
-    AppendSingleLed(3, LED_F, HIGH);
-    AppendSingleLed(4, LED_H, HIGH);
+    // BoardBase<LEDS_COUNT_ON_BOARD>::AppendSingleLed(0, PIN_LED_A, HIGH);
+    // this->AppendSingleLed(0, PIN_LED_A, HIGH);
+    // this->AppendSingleLed(0, PIN_LED_A, HIGH);
+    // this->AppendSingleLed(1, PIN_LED_B, HIGH);
+    // this->AppendSingleLed(2, PIN_LED_C, HIGH);
+    // this->AppendSingleLed(3, PIN_LED_F, HIGH);
+    // this->AppendSingleLed(4, PIN_LED_H, HIGH);
 
     stepper_alhpa = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
     stepper_beta = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
@@ -40,9 +42,9 @@ Board_GobotHouse::Board_GobotHouse(){
 void Board_GobotHouse::Test_home_sensor(){
   while (true){
     uint8_t state = digitalRead(PIN_HOME_ALHPA);
-    digitalWrite(LED_A, state);    
+    digitalWrite(PIN_LED_A, state);    
     
     state = digitalRead(PIN_HOME_BETA);
-    digitalWrite(LED_B, state);
+    digitalWrite(PIN_LED_B, state);
   }
 }

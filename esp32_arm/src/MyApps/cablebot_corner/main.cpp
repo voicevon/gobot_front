@@ -16,6 +16,8 @@ void doB(){board.encoder->handleB();}
 
 
 void setup(){
+    // board.Flash_AllLeds(3,500,500);
+    board.flash();
     bleHelper.InitBle();
     board.encoder->enableInterrupts(doA,doB);
     motor.controller = MotionControlType::angle;

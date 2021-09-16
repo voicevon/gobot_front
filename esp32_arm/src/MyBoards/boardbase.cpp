@@ -1,15 +1,8 @@
 #include "boardbase.h"
 
-template<int LED_COUNT>
-BoardBase<LED_COUNT>::BoardBase(){
-    for(int i =0; i<LED_COUNT; i++){
-        leds_pin[i] = 0;
-    }
-}
-
-template<int LED_COUNT>
-void BoardBase<LED_COUNT>::AppendSingleLed(uint8_t index, uint8_t pinNumber, uint8_t turn_on_level){
-    if (index >=LED_COUNT){
+template<int LEDS_ON_BOARD>
+void BoardBase<LEDS_ON_BOARD>::AppendSingleLed(uint8_t index, uint8_t pinNumber, uint8_t turn_on_level){
+    if (index >=LEDS_ON_BOARD){
         Serial.println("ERR   BoardBase::AppendSingleLed(), Index is out of range");
         return;
     }
@@ -46,8 +39,8 @@ void BoardBase<LED_COUNT>::TurnOff_AllLeds(){
 
 }
 
-template<int LED_COUNT>
-void BoardBase<LED_COUNT>::Flash_AllLeds(uint8_t onoff_count, uint16_t on_ms, uint16_t off_ms){
+template<int I>
+void BoardBase<I>::Flash_AllLeds(uint8_t onoff_count, uint16_t on_ms, uint16_t off_ms){
     for (int i=0; i< onoff_count; i++){
         TurnOn_AllLeds();
         delay(on_ms);

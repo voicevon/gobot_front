@@ -9,7 +9,7 @@
 class Board_GobotChessboard: public BoardBase<2>{
     public:
         Board_GobotChessboard();
-
+        // ~Board_GobotChessboard(){};
         // StepperDriver* stepper_alhpa;
         // StepperDriver* stepper_beta;
         Stepper* stepper_alhpa;

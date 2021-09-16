@@ -4,9 +4,9 @@
 #include "boardbase.h"
 // #include "MyApps/Common/StepperDriver.h"
 #include "ESP32Step/src/TeensyStep.h"
+#define LEDS_COUNT_ON_BOARD 5
 
-
-class Board_GobotHouse: public BoardBase<1>{
+class Board_GobotHouse: public BoardBase<LEDS_COUNT_ON_BOARD>{
     public:
         // StepperDriver* stepper_alhpa;
         // StepperDriver* stepper_beta;

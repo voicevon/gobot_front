@@ -7,13 +7,14 @@
 template<int LED_COUNT>
 class BoardBase{
     public:
-        BoardBase();
         void AppendSingleLed(uint8_t index, uint8_t pinNumber, uint8_t turn_on_level);
         void TurnOn_SingleLed(uint8_t index);
         void TurnOff_SingleLed(uint8_t index);
         void TurnOn_AllLeds();
         void TurnOff_AllLeds();
-        void Flash_AllLeds(uint8_t count, uint16_t on_ms, uint16_t off_ms);
+        void Flash_AllLeds(uint8_t onoff_count, uint16_t on_ms, uint16_t off_ms);
+
+    protected:
 
     private:
         // uint8_t __leds_count;
