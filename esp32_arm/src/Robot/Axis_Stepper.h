@@ -19,6 +19,9 @@ class AxisStepper: public SingleAxisBase{
         // DCDriver* driver;
         // void Init(DCDriverHBridge* driver, Encoder* encoder, uint8_t pin_home);
         // void Init(Ste);
+        void Move(float distanceRel) override;
+        void MoveAsync() override;
+        void Home() override;
 
     private:
         void __Init_motor();

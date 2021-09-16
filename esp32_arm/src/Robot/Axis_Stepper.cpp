@@ -7,6 +7,18 @@ void AxisStepper::LinkMotor(Stepper* _stepper){
     motor = _stepper;
 }
 
+void AxisStepper::Move(float distanceRel) {
+
+}
+
+void AxisStepper::MoveAsync() {
+  
+}
+
+void AxisStepper::Home() {
+
+}
+
 // void AxisStepper::__Init_motor(){
 //   motor = new DCMotor();
 //   motor->linkDriver(driver);

@@ -32,3 +32,15 @@ void Axis_DC_Encoder::Init(uint8_t motor_pinA, uint8_t motor_pinB, uint8_t encod
   __Init_motor();
   __pinHomeSensor = pin_home;
 }
+
+void Axis_DC_Encoder::Move(float distanceRel) {
+
+}
+
+void Axis_DC_Encoder::MoveAsync() {
+  
+}
+
+void Axis_DC_Encoder::Home() {
+
+}

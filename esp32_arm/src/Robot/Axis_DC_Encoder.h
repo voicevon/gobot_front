@@ -16,6 +16,9 @@ class Axis_DC_Encoder: public SingleAxisBase{
         DCDriver* driver;
         void Init(DCDriverHBridge* driver, Encoder* encoder, uint8_t pin_home);
         void Init(uint8_t motor_pinA, uint8_t motor_pinB, uint8_t encoder_pinA, uint8_t encoder_pinB, uint8_t pin_home );
+        void Move(float distanceRel) override;
+        void MoveAsync() override;
+        void Home() override;
 
     private:
         void __Init_motor();

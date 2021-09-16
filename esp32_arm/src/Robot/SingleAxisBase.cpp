@@ -1,9 +1,6 @@
 #include "SingleAxisBase.h"
 
 
-
-
-
 void SingleAxisBase::SetTargetAbs(int targetPosition){
 
 }
@@ -19,19 +16,9 @@ void SingleAxisBase::Init_scaler(float _final_distance_per_encoder_interval){
 }
 
 
-
-void SingleAxisBase::Move(float distanceRel){
-
-}
-
-void SingleAxisBase::MoveAsync(){
+void SingleAxisBase::Test(){
 
 }
-
-void SingleAxisBase::Home(){
-
-}
-
 // SingleAxis::SingleAxis(DCMotor* motor, Encoder* encoder){
 //   motor->linkSensor(encoder);
 //   motor->controller = MotionControlType::angle;

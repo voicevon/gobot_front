@@ -6,7 +6,7 @@
 #include "ESP32Step/src/TeensyStep.h"
 
 
-class Board_GobotChessboard: public BoardBase{
+class Board_GobotChessboard: public BoardBase<2>{
     public:
         Board_GobotChessboard();
 

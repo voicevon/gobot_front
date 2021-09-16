@@ -1,9 +1,9 @@
 #include "RobotArmBase.h"
 
-void RobotArmBase::LinkStepper(Stepper* alpha, Stepper* beta){
-  stepper_alpha = alpha;
-  stepper_beta = beta;
-}
+// void RobotArmBase::LinkStepper(Stepper* alpha, Stepper* beta){
+//   stepper_alpha = alpha;
+//   stepper_beta = beta;
+// }
 
 void RobotArmBase::MoveTo(int16_t x, int16_t y){
   Serial.print(x);
@@ -22,7 +22,7 @@ void RobotArmBase::MoveTo(int16_t x, int16_t y){
   Serial.print(", ");
   Serial.print(pos.beta);
 
-  stepper_alpha->setTargetAbs(pos.alpha);
-  stepper_beta->setTargetAbs(pos.beta);
-  steppers->move(*stepper_alpha, * stepper_beta);
+  // stepper_alpha->setTargetAbs(pos.alpha);
+  // stepper_beta->setTargetAbs(pos.beta);
+  // steppers->move(*stepper_alpha, * stepper_beta);
 }

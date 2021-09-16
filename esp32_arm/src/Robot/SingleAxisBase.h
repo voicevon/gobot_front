@@ -1,43 +1,31 @@
 #pragma once
 
 #include <Arduino.h>
+#include "MotorBase.h"
 // #include "FunctionalInterrupt.h"
 // #include "SimpleFOC/SimpleFOC.h"
 // #include "MyBoards/board_pipe_bot_corner.h"
 
 // http://www.gammon.com.au/forum/?id=12983     static instances code for attachInterupt()
 
+
+// https://www.fluentcpp.com/2018/01/09/strong-templates/
+
+// template <MotorBase Motor>
 class SingleAxisBase{
     public:
-        // SingleAxis(uint8_t pinA, uint8_t pinB, uint8_t pin_home_sensor);
-        // SingleAxis(DCMotor* motor, Encoder* encoder);
-        // SingleAxisBase(uint8_t axis_id);
         uint8_t id;
-
-        // uint8_t Pin_home_sensor;
-
+        // Motor* motor;
+        void Test();
+        // void test(){motor->Move2};};
         void Init_scaler(float final_distance_per_encoder_interval);
         void SetTargetAbs(int targetPosition);
-        void Move(float distanceRel);
-        void MoveAsync();
-        void Home();
-        // void Setup(void (*ISR_callback)(void));
+        virtual void Move(float distanceRel);
+        virtual void MoveAsync();
+        virtual void Home();
 
-        // void setup2(std::function<void(void)> callback);
-        // void ICACHE_RAM_ATTR ISR_Encoder(void);
-        // void(*ISR_callback)();
     protected:
-        // static void InteruptPinB();
-        // uint8_t __pinA; // Our first hardware interrupt pin is digital pin 2
-        // uint8_t __pinB; // Our second hardware interrupt pin is digital pin 3
         uint8_t __pinHomeSensor;
         float home_position;
         float final_distance_per_encoder_interval;
-
-        // static volatile byte aFlag; // let's us know when we're expecting a rising edge on pinA to signal that the encoder has arrived at a detent
-        // static volatile byte bFlag; // let's us know when we're expecting a rising edge on pinB to signal that the encoder has arrived at a detent (opposite direction to when aFlag is set)
-        // volatile int32_t encoderPos ; //this variable stores our current value of encoder position. Change to int or uin16_t instead of byte if you want to record a larger range than 0-255
-        // static volatile byte oldEncPos ; //stores the last encoder position value so we can compare to the current reading and see if it has changed (so we know when to print to the serial monitor)
-        // static volatile byte reading ; //somewhere to store the direct values we read from our interrupt pins before checking to see if we have moved a whole detent
-
 };

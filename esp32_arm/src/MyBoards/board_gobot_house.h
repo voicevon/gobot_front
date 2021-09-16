@@ -6,7 +6,7 @@
 #include "ESP32Step/src/TeensyStep.h"
 
 
-class Board_GobotHouse: public BoardBase{
+class Board_GobotHouse: public BoardBase<1>{
     public:
         // StepperDriver* stepper_alhpa;
         // StepperDriver* stepper_beta;

@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 
+
+template<int LED_COUNT>
 class BoardBase{
     public:
         BoardBase();
@@ -14,8 +16,9 @@ class BoardBase{
         void Flash_AllLeds(uint8_t count, uint16_t on_ms, uint16_t off_ms);
 
     private:
-        uint8_t leds_pin[5];
-        uint8_t leds_on_level[5];
+        // uint8_t __leds_count;
+        uint8_t leds_pin[LED_COUNT];
+        uint8_t leds_on_level[LED_COUNT];
         // uint8_t led_count = 0;
 };
 
