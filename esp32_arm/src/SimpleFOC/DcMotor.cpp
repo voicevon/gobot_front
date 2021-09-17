@@ -2,7 +2,7 @@
 
 DCMotor::DCMotor():FOCMotor(){}
 
-void DCMotor::linkDriver(DCDriver* _driver) {
+void DCMotor::linkDriver(DCDriverHBridge* _driver) {
   driver = _driver;
 }
 

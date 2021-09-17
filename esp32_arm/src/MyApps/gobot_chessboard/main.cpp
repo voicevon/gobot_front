@@ -1,6 +1,7 @@
 #include "all_devices.h"
-
 #ifdef I_AM_GOBOT_CHESSBOARD
+
+#include "hardware.hpp"
 
 #include "board_gobot_chessboard.h"
 #include "MyLibs/BleHelper.h"

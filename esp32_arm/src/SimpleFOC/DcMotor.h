@@ -4,7 +4,8 @@
 #include "Arduino.h"
 #include "common/base_classes/FOCMotor.h"
 #include "common/base_classes/Sensor.h"
-#include "common/base_classes/DCDriver.h"
+// #include "common/base_classes/DCDriver.h"
+#include "drivers/DCDriverHBridge.h"
 #include "common/foc_utils.h"
 #include "common/time_utils.h"
 #include "common/defaults.h"
@@ -16,7 +17,7 @@ class DCMotor: public FOCMotor{
   public:
     DCMotor();
     
-    void linkDriver(DCDriver* driver);
+    void linkDriver(DCDriverHBridge* driver);
     void init() override;
   	void disable() override;
     void enable() override;
@@ -27,7 +28,7 @@ class DCMotor: public FOCMotor{
     void move(float target = NOT_SET) override;
     
   private:
-    DCDriver* driver; 
+    DCDriverHBridge* driver; 
         
 };
 

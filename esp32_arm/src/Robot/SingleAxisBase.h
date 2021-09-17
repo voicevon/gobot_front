@@ -1,7 +1,8 @@
 #pragma once
 
 #include <Arduino.h>
-#include "MotorBase.h"
+#include "MotorBase.h"   //??
+#include "HomeTriger.h"
 // #include "FunctionalInterrupt.h"
 // #include "SimpleFOC/SimpleFOC.h"
 // #include "MyBoards/board_pipe_bot_corner.h"
@@ -11,21 +12,25 @@
 
 // https://www.fluentcpp.com/2018/01/09/strong-templates/
 
-template <class Actuator_T, class PositionSensor_T>
+
+//  An actuator knows its own position, Include an encoder or other position sensor
+template <class Actuator_T>
 class SingleAxisBase{
     public:
         uint8_t id;
         Actuator_T* actuator;
-        PositionSensor_T* sensor;
-        void LinkAcuator(Actuator_T act){};
-        void LinkSensor(PositionSensor_T sensor){};
+        // PositionSensor_T* sensor;
+        HomeTriger* homeTriger;
+        void LinkAcuator(Actuator_T* actuator);
+        // void LinkSensor(PositionSensor_T* sensor);
+        void LinkHomeTriger(HomeTriger* homeTriger);
         // Motor* motor;
         // void test(){motor->Move2};};
 
         void SetTargetAbs(int targetPosition);
-        virtual void Move(float distanceRel){};
-        virtual void MoveAsync(){};
-        virtual void Home(){};
+        virtual void Move(float distanceRel);
+        virtual void MoveAsync();
+        virtual void Home();
 
 
         void Init_scaler(float final_distance_per_encoder_interval);

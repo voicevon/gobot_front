@@ -1,7 +1,7 @@
 #include "SingleAxisBase.h"
 
-template <class Motor_T, class PositionSensor_T>
-void SingleAxisBase<Motor_T,PositionSensor_T>::SetTargetAbs(int targetPosition){
+template <class Actuator_T>
+void SingleAxisBase<Actuator_T>::SetTargetAbs(int targetPosition){
 
 }
 
@@ -11,15 +11,45 @@ void SingleAxisBase<Motor_T,PositionSensor_T>::SetTargetAbs(int targetPosition){
 //   id = axis_id;
 // }
 
-template <class Motor_T, class PositionSensor_T>
-void SingleAxisBase<Motor_T,PositionSensor_T>::Init_scaler(float _final_distance_per_encoder_interval){
+template <class Actuator_T>
+void SingleAxisBase<Actuator_T>::Init_scaler(float _final_distance_per_encoder_interval){
   final_distance_per_encoder_interval = _final_distance_per_encoder_interval;
 }
 
 
-template <class Motor_T, class PositionSensor_T>
-void SingleAxisBase<Motor_T,PositionSensor_T>::Test(){
+template <class Actuator_T>
+void SingleAxisBase<Actuator_T>::Test(){
 
+}
+
+template <class Actuator_T>
+void SingleAxisBase<Actuator_T>::LinkAcuator(Actuator_T* actuator){
+  this->actuator = actuator;
+}
+// template <class Actuator_T>
+// void SingleAxisBase<Actuator_T>::LinkSensor(PositionSensor_T* sensor){
+//   this->sensor = sensor;
+// }
+template <class Actuator_T>
+void SingleAxisBase<Actuator_T>::LinkHomeTriger(HomeTriger* homeTriger){
+  this->homeTriger = homeTriger;
+}
+
+
+template <class Actuator_T>
+void SingleAxisBase<Actuator_T>::Move(float distanceRel){
+
+}
+template <class Actuator_T>
+void SingleAxisBase<Actuator_T>::MoveAsync(){
+
+}
+template <class Actuator_T>
+void SingleAxisBase<Actuator_T>::Home(){
+  while (!homeTriger->IsTriged()){
+    // actuator->SetPositionRel(100);
+    // actuator->Move();
+  }  
 }
 // SingleAxis::SingleAxis(DCMotor* motor, Encoder* encoder){
 //   motor->linkSensor(encoder);

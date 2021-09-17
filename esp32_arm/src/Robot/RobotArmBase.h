@@ -21,6 +21,7 @@ class RobotArmBase{
         void MoveTo(int16_t x, int16_t y);
         virtual motor_position ik(float x, float y);
 
+        // For High perfermance, Is this necessery?
         Stepper* stepper_alpha;
         Stepper* stepper_beta;
         StepControl* steppers;

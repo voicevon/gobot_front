@@ -6,10 +6,11 @@
 
 class HomeTriger{
     public:
-        HomeTriger(uint8_t pinTriger, uint8_t normalState=LOW);
-
+        HomeTriger(uint8_t pinTriger, uint8_t trigeredlState=LOW);
+        bool IsTriged();
     private:
-
+        uint8_t pinTriger;
+        uint8_t trigeredState;
 };
 
 
