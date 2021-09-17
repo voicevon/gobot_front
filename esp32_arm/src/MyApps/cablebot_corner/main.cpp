@@ -4,10 +4,11 @@
 #include "hardware.hpp"
 #include "MyLibs/BleHelper.h"
 #include "Robot/SingleAxisBase.hpp"
+#include "Robot/Actuator/DcMotor.h"
 
-SingleAxisBase<DCMotor> axis = SingleAxisBase<DCMotor>();
 BleHelper bleHelper = BleHelper();
 DCMotor motor = DCMotor();
+SingleAxisBase<DCMotor> axis = SingleAxisBase<DCMotor>();
 
 
 void setup(){

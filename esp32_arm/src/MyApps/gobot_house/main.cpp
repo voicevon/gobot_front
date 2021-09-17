@@ -2,8 +2,9 @@
 
 #ifdef I_AM_GOBOT_HOUSE
 
-#include "board_gobot_house.h"
+// #include "board_gobot_house.h"
 // #include "RobotJoint/SingleAxis.h"
+#include "hardware.hpp"
 #include "MyLibs/BleHelper.h"
 #include "house.h"   
 static char LOG_TAG[]= "BLE-HOUSE";
@@ -17,13 +18,13 @@ RobotAction action;
 MyBleServerCallbacks* pMyBle;
 
 
-Board_GobotHouse board = Board_GobotHouse();
+// Board_GobotHouse board = Board_GobotHouse();
 // DCMotor motor = DCMotor();
 // SingleAxis axis = SingleAxis(0);
 BleHelper bleHelper = BleHelper();
 
 void setup(){
-    board.Flash_AllLeds(3,500,500);
+    // board.Flash_AllLeds(3,500,500);
     // board.flash();
     bleHelper.InitBle();
 

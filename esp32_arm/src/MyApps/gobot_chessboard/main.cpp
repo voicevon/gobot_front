@@ -3,7 +3,8 @@
 
 #include "hardware.hpp"
 
-#include "board_gobot_chessboard.h"
+// #include "board_gobot_chessboard.h"
+#include "hardware.hpp"
 #include "MyLibs/BleHelper.h"
 #include "gobot_chessboard.h"   
 static char LOG_TAG[]= "BLE-CHESSBOARD";
@@ -17,13 +18,13 @@ RobotAction action;
 MyBleServerCallbacks* pMyBle;
 
 
-Board_GobotChessboard board = Board_GobotChessboard();
+// Board_GobotChessboard board = Board_GobotChessboard();
 // DCMotor motor = DCMotor();
 // SingleAxis axis = SingleAxis(0);
 BleHelper bleHelper = BleHelper();
 
 void setup(){
-    board.Flash_AllLeds(3,500,500);
+    // board.Flash_AllLeds(3,500,500);
     bleHelper.InitBle();
 
     pArm = &GobotChessboard::getInstance();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include "MotorBase.h"   //??
+// #include "MotorBase.h"   //??
 #include "HomeTriger.h"
 // #include "FunctionalInterrupt.h"
 // #include "SimpleFOC/SimpleFOC.h"
