@@ -1,4 +1,4 @@
-#include "BleHelper.h"
+#include "BleServerBase.h"
 #include "all_devices.h"
 
 
@@ -8,10 +8,13 @@
 //  Notification   https://www.youtube.com/watch?v=oCMOYS71NIU
 
 
-void BleHelper::InitBle(){
+void BleServerBase::Init(){
   pMyBle =  new MyBleServerCallbacks();
   BLEDevice::init(BLE_DEV_NAME);
 //   BLEDevice::init(device_name);
+
+
+
   BLEServer *pServer = BLEDevice::createServer();
   pServer->setCallbacks(pMyBle);
 
@@ -41,7 +44,27 @@ void BleHelper::InitBle(){
   BLEDevice::startAdvertising();
 }
 
+void BleServerBase::SpinOnce(){
+  if ((__State == 2) &&  (pMyBle->is_connected))
+      return;
 
-void BleHelper::AppendGattChar(uint8_t gattCharId, uint8_t bytesCount){
+  if (__State == 0){
+    BLEDevice::startAdvertising();
+    // delay(5000);
+    __start_at = XTHAL_GET_CCOUNT();
+    __State = 1;
+  }else if (__State == 1){
+    uint32_t __connecting_time = XTHAL_GET_CCOUNT() - __start_at;
+    if(__connecting_time > 2000000){
+      // connecting time out!
+      __State = 0;
+    }
+    if (pMyBle->is_connected ){
+      __State = 2;
+  }
+}
+
+}
+void BleServerBase::AppendGattChar(uint8_t gattCharId, uint8_t bytesCount){
   
 }

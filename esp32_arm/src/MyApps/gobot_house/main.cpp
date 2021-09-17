@@ -2,32 +2,27 @@
 
 #ifdef I_AM_GOBOT_HOUSE
 
-// #include "board_gobot_house.h"
-// #include "RobotJoint/SingleAxis.h"
 #include "hardware.hpp"
-#include "MyLibs/BleHelper.h"
-// #include "Robot/RobotBLE.h"
+#include "MyLibs/BleServerBase.h"
+#include "Robot/RobotBLE.h"
 #include "house.h"   
 static char LOG_TAG[]= "BLE-HOUSE";
 
 House* pHouse; 
 
-BLECharacteristic* pCharRobotAction;
-BLECharacteristic* pCharRobotState;
+// BLECharacteristic* pCharRobotAction;
+// BLECharacteristic* pCharRobotState;
 RobotAction action;
 
-MyBleServerCallbacks* pMyBle;
+// MyBleServerCallbacks* pMyBle;
 
 
-// Board_GobotHouse board = Board_GobotHouse();
-// DCMotor motor = DCMotor();
 // SingleAxis axis = SingleAxis(0);
-BleHelper bleHelper = BleHelper();
+// BleServerBase ble = BleServerBase();
+RobotBle ble= RobotBle();
 
 void setup(){
-    // board.Flash_AllLeds(3,500,500);
-    // board.flash();
-    bleHelper.InitBle();
+    ble.Init();
 
     pHouse = &House::getInstance();
     // pHouse->Test_home_sensor();
@@ -42,31 +37,33 @@ void setup(){
 }
 
 
-int8_t GetTrueBitIndex(uint8_t any){
-  if (any % 2 ==1){
-    // is doing a task.
-    return -1;
-  }
-  for(int i=0; i<8; i++){
-    if (((any >> i) & 0b00000001) == 1){
-      // will start to do a task
-      // action.bytes[0]++;   //??????????????
-      return i;
-    }
-  }
-  // No task at all
-  return -2;
-}
+// int8_t GetTrueBitIndex(uint8_t any){
+//   if (any % 2 ==1){
+//     // is doing a task.
+//     return -1;
+//   }
+//   for(int i=0; i<8; i++){
+//     if (((any >> i) & 0b00000001) == 1){
+//       // will start to do a task
+//       // action.bytes[0]++;   //??????????????
+//       return i;
+//     }
+//   }
+//   // No task at all
+//   return -2;
+// }
 
 void loop(){
-    if (! pMyBle->is_connected ){
-        BLEDevice::startAdvertising();
-        delay(5000);
-    }
+    // if (! pMyBle->is_connected ){
+    //     BLEDevice::startAdvertising();
+    //     delay(5000);
+    // }
+    ble.SpinOnce();
 
     if (action.bytes[0] <= 1){
         // Both head side and Esp side are idle. 
-        uint8_t* pData  = pCharRobotAction->getData();
+        // uint8_t* pData  = pCharRobotAction->getData();
+        uint8_t* pData  = ble.GetBuffer();
         for (int i=0; i<14; i++){
         action.bytes[i] = *(pData + i);
         // Serial.print(action.bytes[i]);
@@ -75,7 +72,8 @@ void loop(){
         return;
     }
   
-    int8_t true_bit  = GetTrueBitIndex(action.bytes[0]);
+    // int8_t true_bit  = GetTrueBitIndex(action.bytes[0]);
+    int8_t true_bit  = 1;
 
     uint8_t house_id;
     pHouse->SpinOnce();

@@ -2,12 +2,12 @@
 #ifdef I_AM_CABLEBOT_CORNER
 
 #include "hardware.hpp"
-#include "MyLibs/BleHelper.h"
+#include "MyLibs/BleServerBase.h"
 #include "Robot/SingleAxisBase.hpp"
+#include "Robot/SingleAxisBLE.h"
 #include "Robot/Actuator/DcMotor.h"
 
 // BleHelper bleHelper = BleHelper();
-#include "Robot/SingleAxisBLE.h"
 
 SingleAxisBLE ble = SingleAxisBLE();
 DCMotor motor = DCMotor();
@@ -17,7 +17,7 @@ SingleAxisBase<DCMotor> axis = SingleAxisBase<DCMotor>();
 void setup(){
     setup_hardware();
 
-    ble.InitBle();
+    ble.Init();
     // ble.AppendGattChar(0,12);
 
     motor.linkDriver(&hBridge);
@@ -27,6 +27,7 @@ void setup(){
 
     axis.Init_scaler(1.234) ;
     axis.LinkAcuator(&motor);
+    
     // axis.LinkSensor(&encoder);
     axis.Home();
 }
@@ -34,10 +35,11 @@ void setup(){
 
 void loop(){
     uint16_t* xx;
-    ble.ReadTargetPosAbs();
+    ble.GetTargetPositionAbs();
     uint16_t pos_X = *(xx+3);
     axis.SetTargetAbs(pos_X);
     axis.MoveAsync();
+    ble.UpdateCurrentPos(100);
 }
 
 #endif
