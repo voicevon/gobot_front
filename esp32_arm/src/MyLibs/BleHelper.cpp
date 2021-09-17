@@ -40,3 +40,8 @@ void BleHelper::InitBle(){
   pAdvertising->setMinPreferred(0x12);
   BLEDevice::startAdvertising();
 }
+
+
+void BleHelper::AppendGattChar(uint8_t gattCharId, uint8_t bytesCount){
+  
+}

@@ -5,21 +5,31 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include <BLE2902.h>
-#include "MyBleServerCallbacks.h"
+#include "BleServerCallbacks.h"
+
+#define MAX_GATT_CHARACTORERISTICS 5
 
 
 class BleHelper{
     public:
         void InitBle();
-        // char[20] device_name; 
+
+    protected:
+        void AppendGattChar(uint8_t gattCharId, uint8_t bytesCount);
+        void ReadGattChar(uint8_t gattCharId, uint16_t* buffer,uint8_t length){};
+        void WriteGattChar(uint8_t gattCharId, uint16_t* buffer,uint8_t length){};
+
 
     private:
+        BLECharacteristic* gattChars[MAX_GATT_CHARACTORERISTICS];
+
         BLECharacteristic* pCharRobotAction;
         BLECharacteristic* pCharRobotState;
         // RobotAction action;
         uint16_t action;
 
         MyBleServerCallbacks* pMyBle;
+
 };
 
 

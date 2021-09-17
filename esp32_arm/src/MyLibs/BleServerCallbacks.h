@@ -1,3 +1,5 @@
+#ifndef __BLE_SERVER_CALLBACKS_H_
+#define __BLE_SERVER_CALLBACKS_H_
 #include <BLEServer.h>
 class MyBleServerCallbacks:public BLEServerCallbacks{
     public:
@@ -7,3 +9,5 @@ class MyBleServerCallbacks:public BLEServerCallbacks{
         void onDisconnect(BLEServer* pServer) override;
         void onConnect(BLEServer* pServer, esp_ble_gatts_cb_param_t *param) override;
 };
+
+#endif

@@ -6,7 +6,10 @@
 #include "Robot/SingleAxisBase.hpp"
 #include "Robot/Actuator/DcMotor.h"
 
-BleHelper bleHelper = BleHelper();
+// BleHelper bleHelper = BleHelper();
+#include "Robot/SingleAxisBLE.h"
+
+SingleAxisBLE ble = SingleAxisBLE();
 DCMotor motor = DCMotor();
 SingleAxisBase<DCMotor> axis = SingleAxisBase<DCMotor>();
 
@@ -14,7 +17,9 @@ SingleAxisBase<DCMotor> axis = SingleAxisBase<DCMotor>();
 void setup(){
     setup_hardware();
 
-    bleHelper.InitBle();
+    ble.InitBle();
+    // ble.AppendGattChar(0,12);
+
     motor.linkDriver(&hBridge);
     motor.linkSensor(&encoder);
     motor.controller = MotionControlType::angle;
@@ -28,7 +33,10 @@ void setup(){
 
 
 void loop(){
-    axis.SetTargetAbs(100);
+    uint16_t* xx;
+    ble.ReadTargetPosAbs();
+    uint16_t pos_X = *(xx+3);
+    axis.SetTargetAbs(pos_X);
     axis.MoveAsync();
 }
 
