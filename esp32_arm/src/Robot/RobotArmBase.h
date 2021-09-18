@@ -23,7 +23,7 @@ class RobotArmBase{
         SingleAxisBase<Actuator_T>* axis_beta;
         void RunGcode(Gcode* gcode);
         bool IsBusy(){return __is_busy;};
-        void OnFinishedGcode(void(*callback)(string message)) {__on_finished_gcode = callback;};
+        void OnOutputMessage_set_callback(void(*callback)(string message)) {__output_message = callback;};
 
     protected:
         void MoveTo(int16_t x, int16_t y);
@@ -34,7 +34,7 @@ class RobotArmBase{
         // Stepper* stepper_beta;
         // StepControl* steppers;
 
-        void (* __on_finished_gcode)(string message);
+        void (* __output_message)(string message);
     private:
         bool __is_busy = false;
 

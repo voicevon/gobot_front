@@ -15,21 +15,31 @@ void SingleAxisRobot<Actuator_T>::RunGcode(Gcode* gcode){
     return;
 
   if(!gcode->has_g){
-    this->__on_finished_gcode(COMMU_UNKNOWN_COMMAND);
+    this->__output_message(COMMU_UNKNOWN_COMMAND);
     return;
   }
+
   float code =  gcode->get_value('G');
   if (code == 28){
+    // G28: Home
     this->__is_busy = true;
     this->Home();
+    this->__output_message(COMMU_OK);
+
   }else if (code ==1){
+    // Move
     this->__is_busy = true;
-    float pos = gcode->get_value('X');
+    float pos = gcode->get_value(this->_Axis_Name);
+
+    //TODO:  1. put position to movement queue. called "plan" in smoothieware? 
+    //       2. send out OK.
+    //       3. Set status to busy.
+    //       4. Start Moving.
     this->Move(pos);
+    this->__output_message(COMMU_OK);
   }else{
-    this->__on_finished_gcode(COMMU_UNKNOWN_COMMAND);
+    this->__output_message(COMMU_UNKNOWN_COMMAND);
   }
-  this->__on_finished_gcode(COMMU_OK);
 
 }
 

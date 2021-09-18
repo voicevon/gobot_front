@@ -4,9 +4,9 @@
 #include "Robot/Actuator/DcMotor.h"
 
 template<class Actuator_T>
-class CableBotCorner:public SingleAxisRobot<Actuator_T>{
+class CableBotCorner: public SingleAxisRobot<Actuator_T>{
     public:
-        CableBotCorner(char aa){};
+        CableBotCorner(char axis_name);
         void Home() override;
 
         // SingleAxis<DCMotor> axis = SingleAxis<DCMotor>(AXIS_NAME);

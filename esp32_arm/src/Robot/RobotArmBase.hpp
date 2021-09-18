@@ -36,7 +36,7 @@ void RobotArmBase<Actuator_T>::RunGcode(Gcode* gcode){
     return;
 
   if(!gcode->has_g){
-    this->__on_finished_gcode(COMMU_UNKNOWN_COMMAND);
+    this->__output_message(COMMU_UNKNOWN_COMMAND);
     return;
   }
   float code =  gcode->get_value('G');
@@ -48,9 +48,9 @@ void RobotArmBase<Actuator_T>::RunGcode(Gcode* gcode){
     float pos = gcode->get_value('X');
     // this->Move(pos);
   }else{
-    this->__on_finished_gcode(COMMU_UNKNOWN_COMMAND);
+    this->__output_message(COMMU_UNKNOWN_COMMAND);
   }
-  this->__on_finished_gcode(COMMU_OK);
+  this->__output_message(COMMU_OK);
 }
 
 
