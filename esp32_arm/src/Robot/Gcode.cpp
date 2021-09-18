@@ -74,7 +74,6 @@ Gcode &Gcode::operator= (const Gcode &to_copy)
 // Whether or not a Gcode has a letter
 bool Gcode::has_letter( char letter ) const
 {
-    auto xx= this->command;
     for (size_t i = 0; i < strlen(this->command); ++i) {
         if( command[i] == letter ) {
             return true;

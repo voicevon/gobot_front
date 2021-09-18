@@ -6,11 +6,13 @@
 */
 
 
-#ifndef GCODE_H
-#define GCODE_H
+#ifndef _GCODE_H_
+#define _GCODE_H_
+
 #include <string>
 #include <map>
 
+#include "GcodeConst.h"
 using std::string;
 
 

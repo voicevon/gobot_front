@@ -33,8 +33,8 @@ void setup(){
     // pArm->LinkStepper(board.stepper_alhpa, board.stepper_beta);
     Serial.print("\nArm setup is done..........");
 
-    pArm->Home(6);
-    pArm->Home(5);
+    // pArm->Home(6);
+    // pArm->Home(5);
     Serial.print("\nArm Homing is done......");
 
 }

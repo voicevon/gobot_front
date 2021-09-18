@@ -1,11 +1,13 @@
+#ifndef __SINGLE_AXIS_BASE_HPP_
+#define __SINGLE_AXIS_BASE_HPP_
+
 #include "SingleAxisBase.h"
 
-#define OK "OK"
-#define UNKNOWN_COMMAND "Unknown Command"
 
 template <class Actuator_T>
 SingleAxisBase<Actuator_T>::SingleAxisBase(char axis_name){
-  this->_Axis_Name =axis_name;
+  this->_Axis_Name = axis_name;
+  // this->_is_homing = false;
 }
 
 
@@ -14,12 +16,6 @@ void SingleAxisBase<Actuator_T>::SetTargetAbs(int targetPosition){
 
 }
 
-
-
-// SingleAxisBase::SingleAxisBase(uint8_t axis_id){
-//   id = axis_id;
-// }
-
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::Init_scaler(float _final_distance_per_encoder_interval){
   final_distance_per_encoder_interval = _final_distance_per_encoder_interval;
@@ -27,45 +23,16 @@ void SingleAxisBase<Actuator_T>::Init_scaler(float _final_distance_per_encoder_i
 
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::SpinOnce(){
-  this->_isRunning = actuator->IsRunning();
-}
-
-template <class Actuator_T>
-void SingleAxisBase<Actuator_T>::RunGcode(Gcode* gcode){
-
-  if ((gcode->get_command() == OK) || (gcode->get_command() == UNKNOWN_COMMAND))
-    return;
-
-  if(!gcode->has_g){
-    this->__on_finished_gcode(UNKNOWN_COMMAND);
-    return;
-  }
-  float code =  gcode->get_value('G');
-  if (code == 28){
-    this->_isRunning = true;
-    this->Home();
-  }else if (code ==1){
-    this->_isRunning = true;
-    float pos = gcode->get_value('X');
-    this->Move(pos);
-  }else{
-    this->__on_finished_gcode(UNKNOWN_COMMAND);
-  }
-}
-
-template <class Actuator_T>
-void SingleAxisBase<Actuator_T>::Test(){
-
+  this->__is_busy = false;
+  if (actuator->IsRunning()) this->__is_busy = true;
+  if (__is_homing) this->__is_busy = true;
 }
 
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::LinkAcuator(Actuator_T* actuator){
   this->actuator = actuator;
 }
-// template <class Actuator_T>
-// void SingleAxisBase<Actuator_T>::LinkSensor(PositionSensor_T* sensor){
-//   this->sensor = sensor;
-// }
+
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::LinkHomeTriger(HomeTriger* homeTriger){
   this->homeTriger = homeTriger;
@@ -78,7 +45,7 @@ void SingleAxisBase<Actuator_T>::Move(float distanceRel){
 }
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::MoveAsync(){
-  this->__on_finished_gcode("OK");
+
 }
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::Home(){
@@ -87,19 +54,7 @@ void SingleAxisBase<Actuator_T>::Home(){
     // actuator->Move();
   }  
 }
-// SingleAxis::SingleAxis(DCMotor* motor, Encoder* encoder){
-//   motor->linkSensor(encoder);
-//   motor->controller = MotionControlType::angle;
 
-// }
-
-// SingleAxis::SingleAxis(uint8_t pinA, uint8_t pinB, uint8_t pin_home_sensor){
-//     __pinA = pinA;
-//     __pinB = pinB;
-//     __pinHomeSensor = pin_home_sensor;
-//     pinMode(pinA, INPUT_PULLUP); // set pinA as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
-//     pinMode(pinB, INPUT_PULLUP); // set pinB as an input, pulled HIGH to the logic voltage (5V or 3.3V for most cases)
-// }
 
 // void SingleAxis::Setup(void (*ISR_callback)(void)){
 //     attachInterrupt(digitalPinToInterrupt(__pinA), ISR_callback, RISING);
@@ -125,3 +80,7 @@ void SingleAxisBase<Actuator_T>::Home(){
 //     encoderPos++;
 //   sei(); //restart interrupts
 // }
+
+
+
+#endif

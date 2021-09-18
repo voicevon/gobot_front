@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 
-
 class HomeTriger{
     public:
         HomeTriger(uint8_t pinTriger, uint8_t trigeredlState=LOW);

@@ -3,99 +3,88 @@
 #ifdef I_AM_GOBOT_HOUSE
 
 #include "hardware.hpp"
-#include "MyLibs/BleServerBase.h"
 #include "Robot/RobotBLE.h"
-#include "house.h"   
+#include "house.h" 
+
 static char LOG_TAG[]= "BLE-HOUSE";
 
-House* pHouse; 
+House* house; 
 
-// BLECharacteristic* pCharRobotAction;
-// BLECharacteristic* pCharRobotState;
 RobotAction action;
 
-// MyBleServerCallbacks* pMyBle;
-
-
-// SingleAxis axis = SingleAxis(0);
-// BleServerBase ble = BleServerBase();
 RobotBle ble= RobotBle();
 
 void setup(){
+    house = &House::getInstance();
     ble.Init();
+    setup_hardware();
+    //couple the components
+    house->axis_alpha->LinkAcuator(&stepper_alpha);
+    house->axis_beta->LinkAcuator(&stepper_beta);
+    house->axis_alpha->LinkHomeTriger(&homeTriger_alpha);
+    house->axis_beta->LinkHomeTriger(&homeTriger_beta);
 
-    pHouse = &House::getInstance();
-    // pHouse->Test_home_sensor();
-    pHouse->Setup(&action, 9);
-    // pHouse->LinkStepper(board.stepper_alhpa, board.stepper_beta);
+    house->Setup(&action, 9);
     Serial.print("\nHouse setup is done..........");
 
-    pHouse->Home(HOUSE_ALPHA_AXIS);
-    pHouse->Home(HOUSE_BETA_AXIS);
+    house->HomeAllAxises();
     Serial.print("\nHouse Homing is done......");
 
 }
 
 
-// int8_t GetTrueBitIndex(uint8_t any){
-//   if (any % 2 ==1){
-//     // is doing a task.
-//     return -1;
-//   }
-//   for(int i=0; i<8; i++){
-//     if (((any >> i) & 0b00000001) == 1){
-//       // will start to do a task
-//       // action.bytes[0]++;   //??????????????
-//       return i;
-//     }
-//   }
-//   // No task at all
-//   return -2;
-// }
-
 void loop(){
-    // if (! pMyBle->is_connected ){
-    //     BLEDevice::startAdvertising();
-    //     delay(5000);
-    // }
     ble.SpinOnce();
+    house->SpinOnce();
 
-    if (action.bytes[0] <= 1){
-        // Both head side and Esp side are idle. 
-        // uint8_t* pData  = pCharRobotAction->getData();
-        uint8_t* pData  = ble.GetBuffer();
-        for (int i=0; i<14; i++){
-        action.bytes[i] = *(pData + i);
-        // Serial.print(action.bytes[i]);
-        // Serial.print(" ");
-        }
+    // Notificate my status.
+    // ble.UpdateCurrentPos(100);
+
+    if (house->IsBusy())
         return;
+    if(ble.HasNewChatting()){
+        // ble got new gcode
+        Gcode gCode = Gcode(ble.ReadChatting());   //Risk for not releasing memory ?
+        house->RunGcode(&gCode);
     }
+
+
+    // if (action.bytes[0] <= 1){
+    //     // Both head side and Esp side are idle. 
+    //     // uint8_t* pData  = pCharRobotAction->getData();
+    //     uint8_t* pData  = ble.GetBuffer();
+    //     for (int i=0; i<14; i++){
+    //     action.bytes[i] = *(pData + i);
+    //     // Serial.print(action.bytes[i]);
+    //     // Serial.print(" ");
+    //     }
+    //     return;
+    // }
   
     // int8_t true_bit  = GetTrueBitIndex(action.bytes[0]);
-    int8_t true_bit  = 1;
+    // int8_t true_bit  = 1;
 
-    uint8_t house_id;
-    pHouse->SpinOnce();
-    switch (true_bit){
-        //All the below functions will modify action.bytes[0]
-        case 6:
-        house_id = action.House.from_start_house_id;
-        pHouse->MoveStone_FromRoomToHead(house_id);
-        break;
-        case 7:
-        house_id = action.House.from_start_house_id;
-        pHouse->MoveStone_FromHeadToRoom(house_id);
-        break;
-        case HOUSE_ALPHA_AXIS:
-        pHouse->Home(HOUSE_ALPHA_AXIS);
-        break;
-        case HOUSE_BETA_AXIS:
-        pHouse->Home(HOUSE_BETA_AXIS);
-        break;
-        default:
-        break;
-    }
+    // uint8_t house_id;
+    // house->SpinOnce();
+    // switch (true_bit){
+    //     //All the below functions will modify action.bytes[0]
+    //     case 6:
+    //     house_id = action.House.from_start_house_id;
+    //     house->MoveStone_FromRoomToHead(house_id);
+    //     break;
+    //     case 7:
+    //     house_id = action.House.from_start_house_id;
+    //     house->MoveStone_FromHeadToRoom(house_id);
+    //     break;
+    //     case HOUSE_ALPHA_AXIS:
+    //     house->Home(HOUSE_ALPHA_AXIS);
+    //     break;
+    //     case HOUSE_BETA_AXIS:
+    //     house->Home(HOUSE_BETA_AXIS);
+    //     break;
+    //     default:
+    //     break;
+    // }
   // pCharacteristic->setValue(action.bytes,13);
 
   // if (action.bytes[0] >=2){

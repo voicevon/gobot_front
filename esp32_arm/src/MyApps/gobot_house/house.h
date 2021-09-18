@@ -2,10 +2,11 @@
 
 #include "actions.h"
 #include <Arduino.h>
-#include "Robot/RobotArmBase.h"
+#include "Robot/RobotArmBase.hpp"
 #include "HouseMap.h"
-#define COIL_COUNT 53
-#define CHIPS_COUNT  4
+#include "ESP32Step/src/TeensyStep.h"
+// #define COIL_COUNT 53
+// #define CHIPS_COUNT  4
 
 #define HOUSE_ALPHA_AXIS 10
 #define HOUSE_BETA_AXIS 11
@@ -13,7 +14,7 @@
 
 
 
-class House: public RobotArmBase{
+class House: public RobotArmBase<Stepper>{
     public:
         static House& getInstance()
         {
@@ -23,10 +24,10 @@ class House: public RobotArmBase{
         }
         void SpinOnce(void);
         void Setup(RobotAction* pAction, int segments);
-        void Home(uint8_t axis) override;
+        void HomeAllAxises() override;
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);
-
+        StepControl steppers;
     protected:
     private:
         House();

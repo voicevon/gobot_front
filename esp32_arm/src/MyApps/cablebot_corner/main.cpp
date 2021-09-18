@@ -3,13 +3,14 @@
 
 #include "hardware.hpp"
 #include "MyLibs/BleServerBase.h"
-#include "Robot/Axis/SingleAxisBase.hpp"
+// #include "Robot/Axis/SingleAxisBase.hpp"
+#include "Robot/Axis/SingleAxis.hpp"
 #include "Robot/Axis/SingleAxisBLE.h"
 #include "Robot/Actuator/DcMotor.h"
 #include "Robot/Gcode.h"
 // Top level component
 SingleAxisBLE ble = SingleAxisBLE();
-SingleAxisBase<DCMotor> axis = SingleAxisBase<DCMotor>(AXIS_NAME);
+SingleAxis<DCMotor> axis = SingleAxis<DCMotor>(AXIS_NAME);
 // Gcode gCode = Gcode("G28 X");
 
 // Sub level component
@@ -42,7 +43,7 @@ void loop(){
     // Notificate my status.
     ble.UpdateCurrentPos(100);
 
-    if (axis.IsMoving())
+    if (axis.IsBusy())
         return;
         // axis is idle, not the first time.
     if(ble.HasNewChatting()){

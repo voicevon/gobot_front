@@ -1,7 +1,7 @@
 #ifndef __GOBOT_HOUSE_HPP_
 #define __GOBOT_HOUSE_HPP_
 
-#define PIN_LED_A 12
+#define PIN_LED_POWER 12
 #define PIN_LED_B 25
 #define PIN_LED_C 26
 #define PIN_LED_F 27
@@ -20,11 +20,37 @@
 #define ENDER_COIL 32
 #define ENDER_COIL_EXT 33
 
+#define PIN_MICRIO_STEP_2 21
+#define PIN_MICRIO_STEP_1 22
+#define PIN_MICRIO_STEP_0 23
+
 
 #include "ESP32Step/src/TeensyStep.h"
+#include "Robot/HomeTriger.h"
+#include "MyLibs/Components/Led.h"
 
+Led led_power = Led(0, PIN_LED_POWER, LOW);
+Led led_home_alpha = Led(1,2,LOW);
+HomeTriger homeTriger_alpha = HomeTriger(PIN_HOME_ALHPA, HIGH);
+HomeTriger homeTriger_beta = HomeTriger(PIN_HOME_BETA, HIGH);
 
+Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+Stepper stepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
 
+void setup_hardware(){
+    pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+    pinMode(PIN_BETA_ENABLE, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_0, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_1, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+
+    digitalWrite(PIN_ALPHA_ENABLE, LOW);
+    digitalWrite(PIN_BETA_ENABLE, LOW);
+    digitalWrite(PIN_MICRIO_STEP_0, LOW);
+    digitalWrite(PIN_MICRIO_STEP_1, LOW);
+    digitalWrite(PIN_MICRIO_STEP_2, LOW);
+
+}
 
 
 
