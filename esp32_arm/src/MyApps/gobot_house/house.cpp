@@ -43,60 +43,13 @@ void House::Setup(RobotAction* pAction, int segments){
     __house_action = pAction;
     __segments = segments;
     __map.setup();
-
-    // stepper_alpha = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-    // stepper_beta = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
-
-    // stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
-    // stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
-    // steppers = new StepControl();        
 }
 
 
 
 void House::HomeAllAxises(){
-  // uint8_t homing_axis = axis;
-  // uint8_t home_pin = PIN_HOME_BETA;
-  // Stepper* homing_stepper = stepper_beta;
-
-  // if (axis == HOUSE_ALPHA_AXIS ){
-  //   home_pin = PIN_HOME_ALHPA;
-  //   homing_stepper = stepper_alpha;
-  //   Serial.print("\nStart Homing Alpha");
-  // }
-  // else {
-  //   // axis == 1
-  //   // homing_stepper = stepper_beta;
-  //   Serial.print("\nStart Homing Beta");
-  // }
-  // homing_stepper->setTargetRel(-500);  //Any nagtive number is ok!  ??
-  // steppers->move(*homing_stepper);
-  // while (steppers->isRunning()){
-  //   //Seems alway return false of isRunning()
-  //   Serial.print("r");
-  // };
-
-  // __HomeSpin(homing_stepper, home_pin);
-  // if (homing_axis == HOUSE_ALPHA_AXIS){
-  //   stepper_alpha->setPosition(HOMED_POSITION_ALPHA);
-  // }
-  // else{
-  //   stepper_beta->setPosition(HOMED_POSITION_BETA);
-  // }
-  // __house_action->bytes[0] = 0;
-  // Serial.print("\n Home one axis is Done.......");
-}
-
-void House::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
-  // uint8_t flags = 0x0;
-  // // Serial.print("\nHome spin got started.............\n");
-  // while (flags != 0xff){    // a filter for 16 times of hall sensor is trigged.
-  //   homing_stepper->setTargetRel(10000);
-  //   steppers->move(*homing_stepper);  
-  //   flags <<= 1;
-  //   // flags |= !digitalRead(home_pin);   // low level is trigged !
-  //   Serial.print(".");
-  // }
+  axis_beta->Home();
+  axis_alpha->Home();
 }
 
 void House::SpinOnce(){

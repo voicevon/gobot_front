@@ -35,7 +35,7 @@ class House: public RobotArmBase<Stepper>{
         int __segments;
         
         motor_position ik(float x, float y) override;
-        void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
+        // void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
         void __Move_fromRoom_toDoor(uint8_t house_id, bool forwarding);
         void __Move_fromHead_toNeck(bool forwarding);
         void __Move_fromNeck_toDoor(uint8_t house_id, bool forwarding);

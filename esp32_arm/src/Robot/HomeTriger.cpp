@@ -1,13 +1,13 @@
 #include "HomeTriger.h"
 
 HomeTriger::HomeTriger(uint8_t pinTriger, uint8_t trigeredState){
-    this->pinTriger = pinTriger;
+    this->pinNumber = pinTriger;
     this->trigeredState = trigeredState;
     pinMode(pinTriger, INPUT_PULLUP);
 }
 
 bool HomeTriger::IsTriged(){
-    if (digitalRead(pinTriger) == trigeredState)
+    if (digitalRead(this->pinNumber) == trigeredState)
         return true;
     return false;
 }

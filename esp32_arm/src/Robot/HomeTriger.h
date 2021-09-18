@@ -2,13 +2,14 @@
 #define _HOME_TRIGER_H_
 
 #include <Arduino.h>
+#include "MyLibs/Components/BinaryInput.h"
 
-class HomeTriger{
+class HomeTriger: public BinaryInput{
     public:
         HomeTriger(uint8_t pinTriger, uint8_t trigeredlState=LOW);
         bool IsTriged();
     private:
-        uint8_t pinTriger;
+        // uint8_t pinTriger;
         uint8_t trigeredState;
 };
 
