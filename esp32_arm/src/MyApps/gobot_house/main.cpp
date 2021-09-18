@@ -8,26 +8,26 @@
 
 static char LOG_TAG[]= "BLE-HOUSE";
 
-House* house; 
+House* robot; 
 
 RobotAction action;
 
 RobotBle ble= RobotBle();
 
 void setup(){
-    house = &House::getInstance();
+    robot = &House::getInstance();
     ble.Init();
     setup_hardware();
     //couple the components
-    house->axis_alpha->LinkAcuator(&stepper_alpha);
-    house->axis_beta->LinkAcuator(&stepper_beta);
-    house->axis_alpha->LinkHomeTriger(&homeTriger_alpha);
-    house->axis_beta->LinkHomeTriger(&homeTriger_beta);
+    robot->axis_alpha->LinkAcuator(&stepper_alpha);
+    robot->axis_beta->LinkAcuator(&stepper_beta);
+    robot->axis_alpha->LinkHomeTriger(&homeTriger_alpha);
+    robot->axis_beta->LinkHomeTriger(&homeTriger_beta);
 
-    house->Setup(&action, 9);
+    robot->Setup(&action, 9);
     Serial.print("\nHouse setup is done..........");
 
-    house->HomeAllAxises();
+    robot->HomeAllAxises();
     Serial.print("\nHouse Homing is done......");
 
 }
@@ -35,17 +35,17 @@ void setup(){
 
 void loop(){
     ble.SpinOnce();
-    house->SpinOnce();
+    robot->SpinOnce();
 
     // Notificate my status.
     // ble.UpdateCurrentPos(100);
 
-    if (house->IsBusy())
+    if (robot->IsBusy())
         return;
     if(ble.HasNewChatting()){
         // ble got new gcode
         Gcode gCode = Gcode(ble.ReadChatting());   //Risk for not releasing memory ?
-        house->RunGcode(&gCode);
+        robot->RunGcode(&gCode);
     }
 
 

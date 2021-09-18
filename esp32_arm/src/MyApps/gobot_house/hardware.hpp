@@ -52,6 +52,11 @@ void setup_hardware(){
 
 }
 
+void Test(){
+    stepper_alpha.setTargetAbs(12);
+    StepControl con;
+    // con.move();
+}
 
 
 #endif

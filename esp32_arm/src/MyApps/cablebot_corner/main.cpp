@@ -4,15 +4,16 @@
 #include "hardware.hpp"
 #include "MyLibs/BleServerBase.h"
 // #include "Robot/Axis/SingleAxisBase.hpp"
-#include "Robot/Axis/SingleAxis.hpp"
+// #include "Robot/Axis/SingleAxis.hpp"
+#include "cablebot_corner.hpp"
 #include "Robot/Axis/SingleAxisBLE.h"
 #include "Robot/Actuator/DcMotor.h"
 #include "Robot/Gcode.h"
+// #include "Robot/SingleAxisRobot.hpp"
 // Top level component
 SingleAxisBLE ble = SingleAxisBLE();
-SingleAxis<DCMotor> axis = SingleAxis<DCMotor>(AXIS_NAME);
-// Gcode gCode = Gcode("G28 X");
-
+CableBotCorner<DCMotor> robot = CableBotCorner<DCMotor>(AXIS_NAME);
+// CableBotCorner<DCMotor> robot = CableBotCorner<DCMotor>(char(65));
 // Sub level component
 DCMotor motor = DCMotor();
 
@@ -21,35 +22,35 @@ void on_Axis_Fininshed_Moving(string message){
 }
 
 void setup(){
+    ble.Init();
     setup_hardware();
     // link and couple the components;
-    axis.LinkAcuator(&motor);
-    axis.LinkHomeTriger(&homeTriger);
+    robot.LinkAcuator(&motor);
+    robot.LinkHomeTriger(&homeTriger);
 
-    motor.linkDriver(&hBridge);
-    motor.linkSensor(&encoder);
-    ble.Init();
+    robot.actuator->linkDriver(&hBridge);
+    robot.actuator->linkSensor(&encoder);
 
-    motor.controller = MotionControlType::angle;
-    motor.P_angle.P = 1;
+    robot.actuator->controller = MotionControlType::angle;
+    robot.actuator->P_angle.P = 1;
 
-    axis.Init_scaler(1.234) ;
-    axis.Home();
+    robot.Init_scaler(1.234) ;
+    robot.Home();
 }
 
 void loop(){
     ble.SpinOnce();
-    axis.SpinOnce();
+    robot.SpinOnce();
     // Notificate my status.
     ble.UpdateCurrentPos(100);
 
-    if (axis.IsBusy())
+    if (robot.IsBusy())
         return;
         // axis is idle, not the first time.
     if(ble.HasNewChatting()){
         // ble got new gcode
         Gcode gCode = Gcode(ble.ReadChatting());   //Risk for not releasing memory ?
-        axis.RunGcode(&gCode);
+        robot.RunGcode(&gCode);
     }
 }
 

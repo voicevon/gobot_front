@@ -47,13 +47,14 @@ template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::MoveAsync(){
 
 }
-template <class Actuator_T>
-void SingleAxisBase<Actuator_T>::Home(){
-  while (!homeTriger->IsTriged()){
-    // actuator->SetPositionRel(100);
-    // actuator->Move();
-  }  
-}
+// template <class Actuator_T>
+// void SingleAxisBase<Actuator_T>::Home(){
+//   while (!homeTriger->IsTriged()){
+//     // actuator->SetPositionRel(100);
+//     actuator->setTargetAbs(100);
+//     actuator->Move();
+//   }  
+// }
 
 
 // void SingleAxis::Setup(void (*ISR_callback)(void)){

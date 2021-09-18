@@ -1,15 +1,15 @@
 #ifndef _SINGLE_AXIS_HPP_
 #define _SINGLE_AXIS_HPP_
 
-#include "SingleAxis.h"
+#include "SingleAxisRobot.h"
 
 template<class Actuator_T>
-SingleAxis<Actuator_T>::SingleAxis(char axisName){
+SingleAxisRobot<Actuator_T>::SingleAxisRobot(char axisName){
     this->_Axis_Name = axisName;
 } 
 
 template <class Actuator_T>
-void SingleAxis<Actuator_T>::RunGcode(Gcode* gcode){
+void SingleAxisRobot<Actuator_T>::RunGcode(Gcode* gcode){
 
   if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND))
     return;
