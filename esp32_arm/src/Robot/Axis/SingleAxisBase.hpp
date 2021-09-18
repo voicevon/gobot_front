@@ -1,5 +1,7 @@
 #include "SingleAxisBase.h"
 
+#define OK "OK"
+#define UNKNOWN_COMMAND "Unknown Command"
 
 template <class Actuator_T>
 SingleAxisBase<Actuator_T>::SingleAxisBase(char axis_name){
@@ -30,8 +32,12 @@ void SingleAxisBase<Actuator_T>::SpinOnce(){
 
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::RunGcode(Gcode* gcode){
+
+  if ((gcode->get_command() == OK) || (gcode->get_command() == UNKNOWN_COMMAND))
+    return;
+
   if(!gcode->has_g){
-    this->__on_finished_gcode("Unknown Command");
+    this->__on_finished_gcode(UNKNOWN_COMMAND);
     return;
   }
   float code =  gcode->get_value('G');
@@ -42,6 +48,8 @@ void SingleAxisBase<Actuator_T>::RunGcode(Gcode* gcode){
     this->_isRunning = true;
     float pos = gcode->get_value('X');
     this->Move(pos);
+  }else{
+    this->__on_finished_gcode(UNKNOWN_COMMAND);
   }
 }
 

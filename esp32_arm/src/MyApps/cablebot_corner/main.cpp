@@ -3,8 +3,8 @@
 
 #include "hardware.hpp"
 #include "MyLibs/BleServerBase.h"
-#include "Robot/SingleAxisBase.hpp"
-#include "Robot/SingleAxisBLE.h"
+#include "Robot/Axis/SingleAxisBase.hpp"
+#include "Robot/Axis/SingleAxisBLE.h"
 #include "Robot/Actuator/DcMotor.h"
 #include "Robot/Gcode.h"
 // Top level component
