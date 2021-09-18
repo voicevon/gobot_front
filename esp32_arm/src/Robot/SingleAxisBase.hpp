@@ -1,5 +1,12 @@
 #include "SingleAxisBase.h"
 
+
+template <class Actuator_T>
+SingleAxisBase<Actuator_T>::SingleAxisBase(char axis_name){
+  this->_Axis_Name =axis_name;
+}
+
+
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::SetTargetAbs(int targetPosition){
 
@@ -16,6 +23,27 @@ void SingleAxisBase<Actuator_T>::Init_scaler(float _final_distance_per_encoder_i
   final_distance_per_encoder_interval = _final_distance_per_encoder_interval;
 }
 
+template <class Actuator_T>
+void SingleAxisBase<Actuator_T>::SpinOnce(){
+  this->_isRunning = actuator->IsRunning();
+}
+
+template <class Actuator_T>
+void SingleAxisBase<Actuator_T>::RunGcode(Gcode* gcode){
+  if(!gcode->has_g){
+    this->__on_finished_gcode("Unknown Command");
+    return;
+  }
+  float code =  gcode->get_value('G');
+  if (code == 28){
+    this->_isRunning = true;
+    this->Home();
+  }else if (code ==1){
+    this->_isRunning = true;
+    float pos = gcode->get_value('X');
+    this->Move(pos);
+  }
+}
 
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::Test(){
@@ -42,7 +70,7 @@ void SingleAxisBase<Actuator_T>::Move(float distanceRel){
 }
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::MoveAsync(){
-
+  this->__on_finished_gcode("OK");
 }
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::Home(){

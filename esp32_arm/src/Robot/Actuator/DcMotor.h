@@ -25,6 +25,7 @@ class DCMotor: public MotorBase{
     
     void linkDriver(DCDriverHBridge* driver);
     void init() override;
+    bool IsRunning(){return __is_running;};
   	// void disable() override;
     // void enable() override;
 
@@ -35,6 +36,7 @@ class DCMotor: public MotorBase{
     
   private:
     DCDriverHBridge* driver; 
+    bool __is_running;
         
 };
 

@@ -27,7 +27,7 @@ Led led_power = Led(0,PIN_LED_POWER,LOW);
 Led led_home_alpha = Led(1,2,LOW);
 Encoder encoder = Encoder(PIN_ENCODER_A, PIN_ENCODER_B, 200);
 DCDriverHBridge hBridge = DCDriverHBridge(PIN_DC_MOTOR_A, PIN_DC_MOTOR_B);
-HomeTriger omeTriger = HomeTriger(PIN_HOME_SENSOR, HIGH);
+HomeTriger homeTriger = HomeTriger(PIN_HOME_SENSOR, HIGH);
 
 void doA(){encoder.handleA();}
 void doB(){encoder.handleB();}

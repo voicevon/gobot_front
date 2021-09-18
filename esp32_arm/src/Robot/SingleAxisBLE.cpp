@@ -2,7 +2,7 @@
 
 
 SingleAxisBLE::SingleAxisBLE(){
-    this->AppendGattChar(1,5);
+    // this->AppendGattChar(1,5);
 }
 
 int16_t SingleAxisBLE::GetTargetPositionAbs(){

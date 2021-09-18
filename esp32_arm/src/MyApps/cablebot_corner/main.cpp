@@ -6,40 +6,50 @@
 #include "Robot/SingleAxisBase.hpp"
 #include "Robot/SingleAxisBLE.h"
 #include "Robot/Actuator/DcMotor.h"
-
-// BleHelper bleHelper = BleHelper();
-
+#include "Robot/Gcode.h"
+// Top level component
 SingleAxisBLE ble = SingleAxisBLE();
-DCMotor motor = DCMotor();
-SingleAxisBase<DCMotor> axis = SingleAxisBase<DCMotor>();
+SingleAxisBase<DCMotor> axis = SingleAxisBase<DCMotor>(AXIS_NAME);
+// Gcode gCode = Gcode("G28 X");
 
+// Sub level component
+DCMotor motor = DCMotor();
+
+void on_Axis_Fininshed_Moving(string message){
+    ble.WriteNotification(message.c_str()); 
+}
 
 void setup(){
     setup_hardware();
-
-    ble.Init();
-    // ble.AppendGattChar(0,12);
+    // link and couple the components;
+    axis.LinkAcuator(&motor);
+    axis.LinkHomeTriger(&homeTriger);
 
     motor.linkDriver(&hBridge);
     motor.linkSensor(&encoder);
+    ble.Init();
+
     motor.controller = MotionControlType::angle;
     motor.P_angle.P = 1;
 
     axis.Init_scaler(1.234) ;
-    axis.LinkAcuator(&motor);
-    
-    // axis.LinkSensor(&encoder);
     axis.Home();
 }
 
-
 void loop(){
-    uint16_t* xx;
-    ble.GetTargetPositionAbs();
-    uint16_t pos_X = *(xx+3);
-    axis.SetTargetAbs(pos_X);
-    axis.MoveAsync();
+    ble.SpinOnce();
+    axis.SpinOnce();
+    // Notificate my status.
     ble.UpdateCurrentPos(100);
+
+    if (axis.IsMoving())
+        return;
+        // axis is idle, not the first time.
+    if(ble.HasNewChatting()){
+        // ble got new gcode
+        Gcode gCode = Gcode(ble.ReadChatting());   //Risk for not releasing memory ?
+        axis.RunGcode(&gCode);
+    }
 }
 
 #endif

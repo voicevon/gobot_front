@@ -19,17 +19,17 @@ void BleServerBase::Init(){
   pServer->setCallbacks(pMyBle);
 
 
-  BLEService *pService = pServer->createService(SERVICE_UUID);
-  pCharRobotState = pService->createCharacteristic(
-                                        ROBOT_STATE_UUID,
+  BLEService *pService = pServer->createService(BLE_SERVICE_UUID);
+  pCharNotification = pService->createCharacteristic(
+                                        BLE_RESPONSE_UUID,
                                         BLECharacteristic::PROPERTY_READ |
                                         BLECharacteristic::PROPERTY_NOTIFY
   );
   // BLE2902 * pp= new BLE2902();
   // pp->setNotifications(true);
-  // pCharRobotState->addDescriptor(pp);  
-  pCharRobotAction = pService->createCharacteristic(
-                                        ROBOT_ACTION_UUID,
+  // pCharResonse->addDescriptor(pp);  
+  pCharChattingroom = pService->createCharacteristic(
+                                        BLE_COMMAND_UUID,
                                         BLECharacteristic::PROPERTY_WRITE |
                                         BLECharacteristic::PROPERTY_INDICATE
   );
@@ -37,7 +37,7 @@ void BleServerBase::Init(){
   pService->start();
   // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
-  pAdvertising->addServiceUUID(SERVICE_UUID);
+  pAdvertising->addServiceUUID(BLE_SERVICE_UUID);
   pAdvertising->setScanResponse(true);
   pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
   pAdvertising->setMinPreferred(0x12);
@@ -65,6 +65,18 @@ void BleServerBase::SpinOnce(){
 }
 
 }
-void BleServerBase::AppendGattChar(uint8_t gattCharId, uint8_t bytesCount){
+// void BleServerBase::AppendGattChar(uint8_t gattCharId, uint8_t bytesCount){
+  
+// }
+
+bool BleServerBase::HasNewChatting(){
+  return this->command_is_new;
+}
+
+char* BleServerBase::ReadChatting(){
+  command_is_new = false;
+}
+
+void BleServerBase::WriteNotification(const char* notification){
   
 }

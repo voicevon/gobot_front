@@ -1,6 +1,8 @@
 #include "DCMotor.h"
 
-DCMotor::DCMotor(){}
+DCMotor::DCMotor(){
+  __is_running = false;
+}
 
 void DCMotor::linkDriver(DCDriverHBridge* _driver) {
   driver = _driver;
