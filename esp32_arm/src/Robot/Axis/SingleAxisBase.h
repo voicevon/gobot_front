@@ -21,9 +21,9 @@ class SingleAxisBase{
         void LinkAcuator(Actuator_T* actuator);
         void LinkHomeTriger(HomeTriger* homeTriger);
         void Init_scaler(float final_distance_per_encoder_interval);
+        Actuator_T* _actuator;
 
     protected:
-        Actuator_T* _actuator;
         HomeTriger* homeTriger;
         SingleAxisBase(){};
         void SetTargetAbs(int targetPosition);

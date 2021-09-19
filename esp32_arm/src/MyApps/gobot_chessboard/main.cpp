@@ -3,14 +3,14 @@
 
 
 #include "hardware.hpp"
-#include "Robot/Commu/RobotBLE.h"
+#include "Robot/Commu/CommuRobotBLE.h"
 #include "gobot_chessboard.h"
 #include "MyLibs/MyFunctions.hpp" 
 
 // static char LOG_TAG[]= "BLE-HOUSE";
 GobotChessboard* robot; 
 RobotAction action;
-RobotBle ble= RobotBle();
+CommuRobotBle ble= CommuRobotBle();
 
 // void output_message(std::string message){
 //     ble.WriteNotification(message.c_str()); 
@@ -18,9 +18,10 @@ RobotBle ble= RobotBle();
 // }
 
 void setup(){
-    robot = &GobotChessboard::getInstance();
-    ble.Init();
     setup_hardware();
+    ble.Init();
+    Serial.println("BLE is ok....");    
+    robot = &GobotChessboard::getInstance();
     //couple the components
     robot->axis_alpha->LinkAcuator(&stepper_alpha);
     robot->axis_beta->LinkAcuator(&stepper_beta);
@@ -30,10 +31,10 @@ void setup(){
     // robot->OnOutputMessage_set_callback(output_message);
 
     // robot->Setup(&action, 9);
-    Serial.print("\nHouse setup is done..........");
 
     robot->HomeAllAxises();
-    Serial.print("\nHouse Homing is done......");
+    // Serial.print("\nGobot-Chessboard Homing is done......");
+    Serial.print("\nGobot-Chessboard setup is done..........");
 
 }
 

@@ -45,7 +45,8 @@ void test(){
 }
 
 void setup_hardware(){
-    test();
+    // test();
+    Serial.begin(115200);
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     digitalWrite(PIN_ALPHA_ENABLE, LOW);

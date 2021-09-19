@@ -2,7 +2,7 @@
 #ifdef I_AM_GOBOT_HOUSE
 
 #include "hardware.hpp"
-#include "Robot/Commu/RobotBLE.h"
+#include "Robot/Commu/CommuRobotBLE.h"
 #include "gobot_house.h"
 #include "MyLibs/MyFunctions.hpp" 
 // #include "Robot/Axis/SingleAxisBase.hpp"
@@ -10,7 +10,7 @@
 // static char LOG_TAG[]= "BLE-HOUSE";
 GobotHouse* robot; 
 RobotAction action;
-RobotBle ble= RobotBle();
+CommuRobotBle ble= CommuRobotBle();
 // SingleAxisBase axis_alpha = SingleAxisBase(char(65));
 // SingleAxisBase axis_beta = SingleAxisBase('B');
 

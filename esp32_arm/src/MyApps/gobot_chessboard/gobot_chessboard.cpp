@@ -31,7 +31,8 @@
 #define MOTOR_MAX_SPEED 1000    // unit?
 
 GobotChessboard::GobotChessboard(){
-
+  this->axis_alpha = &obj_axis_alpha;
+  this->axis_beta = &obj_axis_beta;
 }
 
 void GobotChessboard::HomeAllAxises(){  
@@ -138,7 +139,7 @@ void GobotChessboard::pick_place_park(RobotAction* pAction){
 
   if ((action_code & (1<<1)) > 0){
     Serial.print("\npicking up "); 
-    MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
+    // MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
     SetEffector(Lower);
     SetEffector(Suck);
     SetEffector(Higher);
@@ -149,7 +150,7 @@ void GobotChessboard::pick_place_park(RobotAction* pAction){
     //   Serial.print(pAction->bytes[i]);
     //   Serial.print(",  ");
     // }    
-    MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
+    // MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
     SetEffector(Lower);
     SetEffector(Release);
     SetEffector(Higher);
@@ -157,7 +158,7 @@ void GobotChessboard::pick_place_park(RobotAction* pAction){
   }
   if ((action_code & (1<<3)) > 0){
     Serial.print("\n  parking     ");
-    MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
+    // MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
     SetEffector(Sleep);
   }
   // pAction->bytes[0] = 1;

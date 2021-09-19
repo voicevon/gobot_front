@@ -32,7 +32,10 @@ void doB(){encoder.handleB();}
 
 
 void setup_hardware(){
-    encoder.enableInterrupts(doA,doB);
+    Serial.begin(115200);
+    Serial.println("Hi there, I am your lovely bot,  CableBot-Corner.  Keep smiling :)");
+
+    // encoder.enableInterrupts(doA,doB);
     // board.Flash_AllLeds(3,500,500);
 
 }

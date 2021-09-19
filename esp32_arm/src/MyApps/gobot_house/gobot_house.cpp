@@ -13,7 +13,8 @@
 
 
 GobotHouse::GobotHouse(){
-  
+  this->axis_alpha = &obj_axis_alpha;
+  this->axis_beta = &obj_axis_beta;
 }
 
 void GobotHouse::Setup(RobotAction* pAction, int segments){
@@ -106,7 +107,7 @@ void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
   float dx = distance / __segments ;
   for(int segment= 0; segment < __segments; segment++){
     float x = x1 + dx * segment;
-    MoveTo(x, 0);
+    // MoveTo(x, 0);
   }
 }
 
@@ -131,7 +132,7 @@ void GobotHouse::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
   for(int segment= 0; segment < __segments; segment++){
     float x = x1 + dx * segment;
     float y = y1 + dy * segment;
-    MoveTo(x,y);
+    // MoveTo(x,y);
   }
 }
 
@@ -144,5 +145,5 @@ void GobotHouse::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
     y = __map.neck.y;    
   }
 
-  MoveTo(x,y);
+  // MoveTo(x,y);
 }

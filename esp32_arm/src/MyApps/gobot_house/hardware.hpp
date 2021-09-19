@@ -48,6 +48,10 @@ StepControl stepControl;
 
 void setup_hardware(){
     // test();
+    Serial.begin(115200);
+    delay(500);
+    Serial.println("Hi Xuming, I am your bot,  Gobot-House. ");
+
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     pinMode(PIN_MICRIO_STEP_0, OUTPUT);
@@ -59,6 +63,8 @@ void setup_hardware(){
     digitalWrite(PIN_MICRIO_STEP_0, LOW);
     digitalWrite(PIN_MICRIO_STEP_1, LOW);
     digitalWrite(PIN_MICRIO_STEP_2, LOW);
+
+    Serial.println("setup_hardware() is done.");
 
 }
 
