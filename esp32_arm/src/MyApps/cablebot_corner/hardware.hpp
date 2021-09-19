@@ -13,8 +13,8 @@
 
 
 #define PIN_HOME_SENSOR 5
-#define PIN_ENCODER_A 6
-#define PIN_ENCODER_B 7
+#define PIN_ENCODER_A 16
+#define PIN_ENCODER_B 17
 #define PIN_DC_MOTOR_A 8
 #define PIN_DC_MOTOR_B 9
 #define PIN_LED_POWER 22
@@ -35,7 +35,7 @@ void setup_hardware(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  CableBot-Corner.  Keep smiling :)");
 
-    // encoder.enableInterrupts(doA,doB);
+    encoder.enableInterrupts(doA,doB);
     // board.Flash_AllLeds(3,500,500);
 
 }

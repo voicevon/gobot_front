@@ -33,7 +33,7 @@ void setup(){
     Serial.println(" 222222222 " );
 
     robot._actuator->linkDriver(&hBridge);
-    // robot._actuator->linkSensor(&encoder);
+    robot._actuator->linkSensor(&encoder);
     Serial.println(" 333333333 " );
 
     robot._actuator->controller = MotionControlType::angle;
