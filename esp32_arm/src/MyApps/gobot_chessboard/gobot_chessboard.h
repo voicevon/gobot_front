@@ -51,7 +51,7 @@ How to solve the concepts I don't know?
     Don't send me nominal name of go game (either of any other name).
 
 */
-class GobotChessboard: public RobotArmBase<Stepper>{
+class GobotChessboard: public RobotArmBase<Stepper,StepControl>{
     public:
         static GobotChessboard& getInstance()
         {
@@ -71,7 +71,7 @@ class GobotChessboard: public RobotArmBase<Stepper>{
         GobotChessboard(GobotChessboard const& copy);            // Not Implemented
         GobotChessboard& operator=(GobotChessboard const& copy); // Not Implemented
 
-        motor_position ik(float x, float y) override;
+        ik_position ik(float x, float y) override;
 
 
         // link length in mm

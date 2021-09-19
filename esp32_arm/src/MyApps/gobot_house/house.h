@@ -14,7 +14,7 @@
 
 
 
-class House: public RobotArmBase<Stepper>{
+class House: public RobotArmBase<Stepper,StepControl>{
     public:
         static House& getInstance()
         {
@@ -34,7 +34,7 @@ class House: public RobotArmBase<Stepper>{
         RobotAction* __house_action;
         int __segments;
         
-        motor_position ik(float x, float y) override;
+        ik_position ik(float x, float y) override;
         // void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
         void __Move_fromRoom_toDoor(uint8_t house_id, bool forwarding);
         void __Move_fromHead_toNeck(bool forwarding);

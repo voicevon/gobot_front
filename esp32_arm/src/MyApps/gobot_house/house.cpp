@@ -1,27 +1,5 @@
 #include "house.h"
 
-// #define PIN_HOME_ALHPA 35     //??
-// #define PIN_ALPHA_DIR 19
-// #define PIN_ALPHA_STEP 5
-// #define PIN_ALPHA_ENABLE 18
-
-// #define PIN_HOME_BETA 34      //??
-// #define PIN_BETA_DIR 17
-// #define PIN_BETA_STEP 4
-// #define PIN_BETA_ENABLE 16
-
-// #define ENDER_COIL 32
-// #define ENDER_COIL_EXT 33
-
-
-
-
-
-// #define EEF_HALL_SENSOR_FRONT 22
-// #define EEF_HALL_SENSOR_BACK 22
-// #define EEF_HALL_SENSOR_LEFT 22
-// #define EEF_HALL_SENSOR_RIGHT 22
-
 #define MOTOR_MAX_SPEED 289
 #define HOMED_POSITION_ALPHA 0
 #define HOMED_POSITION_BETA 1
@@ -53,6 +31,7 @@ void House::HomeAllAxises(){
 }
 
 void House::SpinOnce(){
+  
 }
 
 
@@ -100,8 +79,8 @@ void House::__Enable_eefCoil(bool enable){
           r7             |
 
 */
-motor_position House::ik(float x, float y){
-  motor_position ret;   //is risk here?
+ik_position House::ik(float x, float y){
+  ik_position ret;   //is risk here?
   float rr1= x*x +y*y;
   
   float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));

@@ -5,7 +5,7 @@
 
 class RobotBle:public BleServerBase{
     public:
-        uint8_t* GetBuffer(){};
+        uint8_t GetBuffer(){return 1;};
 
     private:
 };

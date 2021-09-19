@@ -4,15 +4,18 @@
 
 #include "hardware.hpp"
 #include "Robot/RobotBLE.h"
-#include "house.h" 
+#include "house.h"
+#include "MyLibs/MyFunctions.hpp" 
 
-static char LOG_TAG[]= "BLE-HOUSE";
-
+// static char LOG_TAG[]= "BLE-HOUSE";
 House* robot; 
-
 RobotAction action;
-
 RobotBle ble= RobotBle();
+
+void output_message(std::string message){
+    ble.WriteNotification(message.c_str()); 
+    SerialPrintString(message);
+}
 
 void setup(){
     robot = &House::getInstance();
@@ -23,6 +26,8 @@ void setup(){
     robot->axis_beta->LinkAcuator(&stepper_beta);
     robot->axis_alpha->LinkHomeTriger(&homeTriger_alpha);
     robot->axis_beta->LinkHomeTriger(&homeTriger_beta);
+    robot->LinkActuatorController(&stepControl);
+    robot->OnOutputMessage_set_callback(output_message);
 
     robot->Setup(&action, 9);
     Serial.print("\nHouse setup is done..........");

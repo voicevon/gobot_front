@@ -23,6 +23,13 @@ MyBleServerCallbacks* pMyBle;
 // SingleAxis axis = SingleAxis(0);
 BleServerBase ble = BleServerBase();
 
+
+void output_message(std::string message){
+    ble.WriteNotification(message.c_str()); 
+    SerialPrintString(message);
+}
+
+
 void setup(){
     // board.Flash_AllLeds(3,500,500);
     ble.Init();

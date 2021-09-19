@@ -30,14 +30,24 @@
 #include "MyLibs/Components/Led.h"
 
 Led led_power = Led(0, PIN_LED_POWER, LOW);
+// led_Robot = Led(2,1,LOW);
 Led led_home_alpha = Led(1,2,LOW);
 HomeTriger homeTriger_alpha = HomeTriger(PIN_HOME_ALHPA, HIGH);
 HomeTriger homeTriger_beta = HomeTriger(PIN_HOME_BETA, HIGH);
 
 Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
 Stepper stepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+StepControl stepControl;
+
+void test(){
+    auto c= &stepControl;
+    auto a= &stepper_alpha;
+    auto b= &stepper_beta;
+    c->move(*a,*b);
+}
 
 void setup_hardware(){
+    test();
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     pinMode(PIN_MICRIO_STEP_0, OUTPUT);

@@ -15,8 +15,6 @@ CableBotCorner<DCMotor> robot = CableBotCorner<DCMotor>(AXIS_NAME);
 // Sub level component
 DCMotor motor = DCMotor();
 
-
-
 void output_message(std::string message){
     ble.WriteNotification(message.c_str()); 
     SerialPrintString(message);

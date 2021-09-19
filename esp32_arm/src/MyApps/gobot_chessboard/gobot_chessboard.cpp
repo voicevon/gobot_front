@@ -83,8 +83,8 @@ void GobotChessboard::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
 /*
 https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
 */
-motor_position GobotChessboard::ik(float x, float y){
-  motor_position ret;   //is risk here?
+ik_position GobotChessboard::ik(float x, float y){
+  ik_position ret;   //is risk here?
   float rr1= (x + LINK_0) * (x + LINK_0) + y * y;
   
   // float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
