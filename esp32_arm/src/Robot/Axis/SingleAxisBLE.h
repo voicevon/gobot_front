@@ -1,7 +1,7 @@
 #ifndef __SINGLE_AXIS_BLE_H_
 #define __SINGLE_AXIS_BLE_H_
 
-#include "MyLibs/BleServerBase.h"
+#include "Robot/Commu/CommuBleGattServer.h"
 
 #define COMMAND_MASK_ENABLE  0b1000000000000000
 #define COMMAND_MASK_HOME    0b0000000000000001
@@ -9,7 +9,7 @@
 
 
 
-class SingleAxisBLE:public BleServerBase{
+class SingleAxisBLE:public CommuBleGattServer{
     public:
         SingleAxisBLE();
         int16_t GetTargetPositionAbs();

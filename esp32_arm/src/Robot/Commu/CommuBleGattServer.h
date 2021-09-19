@@ -1,5 +1,5 @@
-#ifndef _BLE_SERVER_BASE_H_
-#define _BLE_SERVER_BASE_H_
+#ifndef _COMMU_BLE_SERVER_H_
+#define _COMMU_BLE_SERVER_H_
 
 #include <BLEDevice.h>
 #include <BLEUtils.h>
@@ -7,18 +7,19 @@
 #include <BLE2902.h>
 #include "BleServerCallbacks.h"
 #include "xtensa/core-macros.h"
-
+#include "CommuDeviceBase.h"
 
 // #define MAX_GATT_CHARACTORERISTICS 5
 
 
-class BleServerBase{
+class CommuBleGattServer:public CommuDeviceBase {
     public:
         void Init();
-        void SpinOnce();
-        bool HasNewChatting();  //Only New message from BleClient.
-        char* ReadChatting();
-        void WriteNotification(const char* notification);
+        void SpinOnce() override;
+        bool HasNewChatting()override;  //Only New message from BleClient.
+        char* ReadChatting()override;
+        void WriteNotification(const char* notification)override;
+        void OutputMessage(string message) override;
 
     protected:
         // void AppendGattChar(uint8_t gattCharId, uint8_t bytesCount);

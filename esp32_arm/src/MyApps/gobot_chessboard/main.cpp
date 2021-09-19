@@ -3,7 +3,7 @@
 
 
 #include "hardware.hpp"
-#include "Robot/RobotBLE.h"
+#include "Robot/Commu/RobotBLE.h"
 #include "gobot_chessboard.h"
 #include "MyLibs/MyFunctions.hpp" 
 
@@ -12,10 +12,10 @@ GobotChessboard* robot;
 RobotAction action;
 RobotBle ble= RobotBle();
 
-void output_message(std::string message){
-    ble.WriteNotification(message.c_str()); 
-    SerialPrintString(message);
-}
+// void output_message(std::string message){
+//     ble.WriteNotification(message.c_str()); 
+//     SerialPrintString(message);
+// }
 
 void setup(){
     robot = &GobotChessboard::getInstance();
@@ -27,7 +27,7 @@ void setup(){
     robot->axis_alpha->LinkHomeTriger(&homeTriger_alpha);
     robot->axis_beta->LinkHomeTriger(&homeTriger_beta);
     robot->LinkActuatorController(&stepControl);
-    robot->OnOutputMessage_set_callback(output_message);
+    // robot->OnOutputMessage_set_callback(output_message);
 
     // robot->Setup(&action, 9);
     Serial.print("\nHouse setup is done..........");

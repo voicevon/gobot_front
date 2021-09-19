@@ -2,7 +2,7 @@
 #ifdef I_AM_GOBOT_HOUSE
 
 #include "hardware.hpp"
-#include "Robot/RobotBLE.h"
+#include "Robot/Commu/RobotBLE.h"
 #include "gobot_house.h"
 #include "MyLibs/MyFunctions.hpp" 
 
@@ -11,14 +11,15 @@ GobotHouse* robot;
 RobotAction action;
 RobotBle ble= RobotBle();
 
-void output_message(std::string message){
-    ble.WriteNotification(message.c_str()); 
-    SerialPrintString(message);
-}
+// void output_message(std::string message){
+//     ble.WriteNotification(message.c_str()); 
+//     SerialPrintString(message);
+// }
 
 void setup(){
     robot = &GobotHouse::getInstance();
     ble.Init();
+    robot->LinkCommuDevice(&ble);
     setup_hardware();
     //couple the components
     robot->axis_alpha->LinkAcuator(&stepper_alpha);
@@ -26,7 +27,7 @@ void setup(){
     robot->axis_alpha->LinkHomeTriger(&homeTriger_alpha);
     robot->axis_beta->LinkHomeTriger(&homeTriger_beta);
     robot->LinkActuatorController(&stepControl);
-    robot->OnOutputMessage_set_callback(output_message);
+    // robot->OnOutputMessage_set_callback(output_message);
 
     robot->Setup(&action, 9);
     Serial.print("\nHouse setup is done..........");

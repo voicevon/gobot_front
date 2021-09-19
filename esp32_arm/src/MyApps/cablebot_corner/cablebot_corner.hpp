@@ -12,5 +12,5 @@ void CableBotCorner<Actuator_T>::Home(){
     // This robot actually is a joint of the Cable-ROBOT system.
     // And, It's necessary to work with other joint cooperately.
     // So, the function "Home()" should do nothing ! except the response
-    this->__output_message(COMMU_UNKNOWN_COMMAND); 
+    this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND); 
 }

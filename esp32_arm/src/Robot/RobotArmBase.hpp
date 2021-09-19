@@ -3,12 +3,20 @@
 
 #include "RobotArmBase.h"
 
+
+template<class Actuator_T, class ActuatorController_T, class CommuDevice_T>
+void RobotArmBase<Actuator_T, ActuatorController_T, CommuDevice_T>::SpinOnce(){
+
+
+} 
+
+
 // void RobotArmBase::LinkStepper(Stepper* alpha, Stepper* beta){
 //   stepper_alpha = alpha;
 //   stepper_beta = beta;
 // }
-template<class Actuator_T, class ActuatorController_T>
-void RobotArmBase<Actuator_T, ActuatorController_T>::MoveTo(int16_t x, int16_t y){
+template<class Actuator_T, class ActuatorController_T, class CommuDevice_T>
+void RobotArmBase<Actuator_T, ActuatorController_T, CommuDevice_T>::MoveTo(int16_t x, int16_t y){
   Serial.print(x);
   Serial.print(", ");
   Serial.print(y);
@@ -33,13 +41,13 @@ void RobotArmBase<Actuator_T, ActuatorController_T>::MoveTo(int16_t x, int16_t y
   // steppers->move(*stepper_alpha, * stepper_beta);
 }
 
-template<class Actuator_T, class ActuatorController_T>
-void RobotArmBase<Actuator_T, ActuatorController_T>::RunGcode(Gcode* gcode){
+template<class Actuator_T, class ActuatorController_T, class CommuDevice_T>
+void RobotArmBase<Actuator_T, ActuatorController_T, CommuDevice_T>::RunGcode(Gcode* gcode){
    if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND))
     return;
 
   if(!gcode->has_g){
-    this->__output_message(COMMU_UNKNOWN_COMMAND);
+    this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
     return;
   }
   float code =  gcode->get_value('G');
@@ -51,9 +59,9 @@ void RobotArmBase<Actuator_T, ActuatorController_T>::RunGcode(Gcode* gcode){
     // float pos = gcode->get_value('X');
     // this->Move(pos);
   }else{
-    this->__output_message(COMMU_UNKNOWN_COMMAND);
+    this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
   }
-  this->__output_message(COMMU_OK);
+  this->commuDevice->OutputMessage(COMMU_OK);
 }
 
 

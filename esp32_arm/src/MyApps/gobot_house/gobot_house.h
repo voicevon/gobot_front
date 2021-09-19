@@ -5,6 +5,7 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/RobotArmBase.hpp"
 #include "HouseMap.h"
+#include "Robot/Commu/CommuBleGattServer.h"
 // #define COIL_COUNT 53
 // #define CHIPS_COUNT  4
 
@@ -14,7 +15,7 @@
 
 
 
-class GobotHouse: public RobotArmBase<Stepper,StepControl>{
+class GobotHouse: public RobotArmBase<Stepper,StepControl,CommuBleGattServer>{
     public:
         static GobotHouse& getInstance()
         {

@@ -1,4 +1,4 @@
-#include "BleServerBase.h"
+#include "CommuBleGattServer.h"
 #include "all_devices.h"
 
 
@@ -8,7 +8,7 @@
 //  Notification   https://www.youtube.com/watch?v=oCMOYS71NIU
 
 
-void BleServerBase::Init(){
+void CommuBleGattServer::Init(){
   pMyBle =  new MyBleServerCallbacks();
   BLEDevice::init(BLE_DEV_NAME);
 //   BLEDevice::init(device_name);
@@ -44,7 +44,7 @@ void BleServerBase::Init(){
   BLEDevice::startAdvertising();
 }
 
-void BleServerBase::SpinOnce(){
+void CommuBleGattServer::SpinOnce(){
   if ((__State == 2) &&  (pMyBle->is_connected))
       return;
 
@@ -65,18 +65,23 @@ void BleServerBase::SpinOnce(){
 }
 
 }
-// void BleServerBase::AppendGattChar(uint8_t gattCharId, uint8_t bytesCount){
+// void BleServer::AppendGattChar(uint8_t gattCharId, uint8_t bytesCount){
   
 // }
 
-bool BleServerBase::HasNewChatting(){
+bool CommuBleGattServer::HasNewChatting(){
   return this->command_is_new;
 }
 
-char* BleServerBase::ReadChatting(){
+char* CommuBleGattServer::ReadChatting(){
   command_is_new = false;
 }
 
-void BleServerBase::WriteNotification(const char* notification){
+void CommuBleGattServer::WriteNotification(const char* notification){
   
 }
+
+void CommuBleGattServer::OutputMessage(string message){
+  
+}
+
