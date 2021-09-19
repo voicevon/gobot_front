@@ -2,9 +2,9 @@
 
 #include "actions.h"
 #include <Arduino.h>
+#include "ESP32Step/src/TeensyStep.h"
 #include "Robot/RobotArmBase.hpp"
 #include "HouseMap.h"
-#include "ESP32Step/src/TeensyStep.h"
 // #define COIL_COUNT 53
 // #define CHIPS_COUNT  4
 
@@ -14,11 +14,11 @@
 
 
 
-class House: public RobotArmBase<Stepper,StepControl>{
+class GobotHouse: public RobotArmBase<Stepper,StepControl>{
     public:
-        static House& getInstance()
+        static GobotHouse& getInstance()
         {
-            static House instance; // Guaranteed to be destroyed.
+            static GobotHouse instance; // Guaranteed to be destroyed.
                                   // Instantiated on first use.
             return instance;
         }
@@ -27,10 +27,10 @@ class House: public RobotArmBase<Stepper,StepControl>{
         void HomeAllAxises() override;
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);
-        StepControl steppers;
+        // StepControl steppers;   //???
     protected:
     private:
-        House();
+        GobotHouse();
         RobotAction* __house_action;
         int __segments;
         

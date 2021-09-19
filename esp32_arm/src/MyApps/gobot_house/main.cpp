@@ -1,14 +1,13 @@
 #include "all_devices.h"
-
 #ifdef I_AM_GOBOT_HOUSE
 
 #include "hardware.hpp"
 #include "Robot/RobotBLE.h"
-#include "house.h"
+#include "gobot_house.h"
 #include "MyLibs/MyFunctions.hpp" 
 
 // static char LOG_TAG[]= "BLE-HOUSE";
-House* robot; 
+GobotHouse* robot; 
 RobotAction action;
 RobotBle ble= RobotBle();
 
@@ -18,7 +17,7 @@ void output_message(std::string message){
 }
 
 void setup(){
-    robot = &House::getInstance();
+    robot = &GobotHouse::getInstance();
     ble.Init();
     setup_hardware();
     //couple the components

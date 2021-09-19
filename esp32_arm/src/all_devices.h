@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 
-// #define I_AM_GOBOT_CHESSBOARD_213401
+#define I_AM_GOBOT_CHESSBOARD_213401
 #ifdef I_AM_GOBOT_CHESSBOARD_213401
   #define I_AM_GOBOT_CHESSBOARD
   #define BLE_DEV_NAME "Gobot-Arm-213401"
@@ -13,7 +13,7 @@
   #define BLE_COMMAND_UUID "c21a1596-0610-11ec-9a03-0242ac130003"
 #endif
 
-#define I_AM_GOBOT_HOUSE_213401
+// #define I_AM_GOBOT_HOUSE_213401
 #ifdef I_AM_GOBOT_HOUSE_213401
   #define I_AM_GOBOT_HOUSE
   #define BLE_DEV_NAME "Gobot-House-213401"

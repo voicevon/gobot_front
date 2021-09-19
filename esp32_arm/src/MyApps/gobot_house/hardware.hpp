@@ -39,15 +39,15 @@ Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
 Stepper stepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
 StepControl stepControl;
 
-void test(){
-    auto c= &stepControl;
-    auto a= &stepper_alpha;
-    auto b= &stepper_beta;
-    c->move(*a,*b);
-}
+// void test(){
+//     auto c= &stepControl;
+//     auto a= &stepper_alpha;
+//     auto b= &stepper_beta;
+//     c->move(*a,*b);
+// }
 
 void setup_hardware(){
-    test();
+    // test();
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     pinMode(PIN_MICRIO_STEP_0, OUTPUT);
@@ -62,11 +62,6 @@ void setup_hardware(){
 
 }
 
-void Test(){
-    stepper_alpha.setTargetAbs(12);
-    StepControl con;
-    // con.move();
-}
 
 
 #endif

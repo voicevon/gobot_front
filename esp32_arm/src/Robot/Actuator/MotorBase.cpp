@@ -57,15 +57,18 @@ float MotorBase::shaftAngle() {
   // if no sensor linked return previous value ( for open loop )
   if(!sensor) return shaft_angle;
 //   return sensor_direction*LPF_angle(sensor->getAngle()) - sensor_offset;
+  return 0.0f;
 }
 // shaft velocity calculation
 float MotorBase::shaftVelocity() {
   // if no sensor linked return previous value ( for open loop )
   if(!sensor) return shaft_velocity;
 //   return sensor_direction*LPF_velocity(sensor->getVelocity());
+return 0.0f;
 }
 
 float MotorBase::electricalAngle(){
+  return 0.0f;
 //   return _normalizeAngle((shaft_angle + sensor_offset) * pole_pairs - zero_electric_angle);
 }
 

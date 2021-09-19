@@ -1,119 +1,59 @@
 #include "all_devices.h"
 #ifdef I_AM_GOBOT_CHESSBOARD
 
+
 #include "hardware.hpp"
+#include "Robot/RobotBLE.h"
+#include "gobot_chessboard.h"
+#include "MyLibs/MyFunctions.hpp" 
 
-// #include "board_gobot_chessboard.h"
-#include "hardware.hpp"
-#include "MyLibs/BleServerBase.h"
-#include "gobot_chessboard.h"   
-static char LOG_TAG[]= "BLE-CHESSBOARD";
-
-GobotChessboard* pArm; 
-
-BLECharacteristic* pCharRobotAction;
-BLECharacteristic* pCharRobotState;
+// static char LOG_TAG[]= "BLE-HOUSE";
+GobotChessboard* robot; 
 RobotAction action;
-
-MyBleServerCallbacks* pMyBle;
-
-
-// Board_GobotChessboard board = Board_GobotChessboard();
-// DCMotor motor = DCMotor();
-// SingleAxis axis = SingleAxis(0);
-BleServerBase ble = BleServerBase();
-
+RobotBle ble= RobotBle();
 
 void output_message(std::string message){
     ble.WriteNotification(message.c_str()); 
     SerialPrintString(message);
 }
 
-
 void setup(){
-    // board.Flash_AllLeds(3,500,500);
+    robot = &GobotChessboard::getInstance();
     ble.Init();
+    setup_hardware();
+    //couple the components
+    robot->axis_alpha->LinkAcuator(&stepper_alpha);
+    robot->axis_beta->LinkAcuator(&stepper_beta);
+    robot->axis_alpha->LinkHomeTriger(&homeTriger_alpha);
+    robot->axis_beta->LinkHomeTriger(&homeTriger_beta);
+    robot->LinkActuatorController(&stepControl);
+    robot->OnOutputMessage_set_callback(output_message);
 
-    pArm = &GobotChessboard::getInstance();
-    // pArm->Test_home_sensor();
-    pArm->Setup(&action);
-    // pArm->LinkStepper(board.stepper_alhpa, board.stepper_beta);
-    Serial.print("\nArm setup is done..........");
+    // robot->Setup(&action, 9);
+    Serial.print("\nHouse setup is done..........");
 
-    // pArm->Home(6);
-    // pArm->Home(5);
-    Serial.print("\nArm Homing is done......");
+    robot->HomeAllAxises();
+    Serial.print("\nHouse Homing is done......");
 
 }
 
-
-int8_t GetTrueBitIndex(uint8_t any){
-  if (any % 2 ==1){
-    // is doing a task.
-    return -1;
-  }
-  for(int i=0; i<8; i++){
-    if (((any >> i) & 0b00000001) == 1){
-      // will start to do a task
-      // action.bytes[0]++;   //??????????????
-      return i;
-    }
-  }
-  // No task at all
-  return -2;
-}
 
 void loop(){
-    if (! pMyBle->is_connected ){
-        BLEDevice::startAdvertising();
-        delay(5000);
-    }
+    ble.SpinOnce();
+    robot->SpinOnce();
 
-    if (action.bytes[0] <= 1){
-        // Both head side and Esp side are idle. 
-        uint8_t* pData  = pCharRobotAction->getData();
-        for (int i=0; i<14; i++){
-        action.bytes[i] = *(pData + i);
-        // Serial.print(action.bytes[i]);
-        // Serial.print(" ");
-        }
+    // Notificate my status.
+    // ble.UpdateCurrentPos(100);
+
+    if (robot->IsBusy())
         return;
+    if(ble.HasNewChatting()){
+        // ble got new gcode
+        Gcode gCode = Gcode(ble.ReadChatting());   //Risk for not releasing memory ?
+        robot->RunGcode(&gCode);
     }
-  
-    int8_t true_bit  = GetTrueBitIndex(action.bytes[0]);
-
-    uint8_t Arm_id;
-    pArm->SpinOnce();
-    switch (true_bit){
-        //All the below functions will modify action.bytes[0]
-        case 6:
-          // Arm_id = action.Arm.from_start_Arm_id;
-          // pArm->MoveStone_FromRoomToHead(Arm_id);
-        break;
-        case 7:
-          // Arm_id = action.Arm.from_start_Arm_id;
-          // pArm->MoveStone_FromHeadToRoom(Arm_id);
-        break;
-          // case Arm_ALPHA_AXIS:
-          // pArm->Home(Arm_ALPHA_AXIS);
-        break;
-          // case Arm_BETA_AXIS:
-          // pArm->Home(Arm_BETA_AXIS);
-        break;
-        default:
-        break;
-    }
-  // pCharacteristic->setValue(action.bytes,13);
-
-  // if (action.bytes[0] >=2){
-  //   Serial.print("hhhhhhhhhhhhhhhhhhhhhhhhhhh    ");
-  //   Serial.println(action.bytes[0]);
-  // }else{
-  //   Serial.print(">>>>>>>>>>>>>>>>>>>>>  ");
-  //   Serial.print(action.bytes[0]);
-  // }
-  delay(500);
 }
+
 
 
 #endif

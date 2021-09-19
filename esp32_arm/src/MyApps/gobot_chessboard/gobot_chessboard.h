@@ -12,14 +12,9 @@ Stepper liberys:
 */
 
 
-// #include "accel_stepper/AccelStepper.h"
-// #include "accel_stepper/MultiStepper.h"
-// #include "mcp23018.h"
 #include "actions.h"
-
-// #include "ble_server.h"
 #include <ESP32Servo.h>
-#include "Robot/RobotArmBase.h"
+#include "Robot/RobotArmBase.hpp"
 #include "ESP32Step/src/TeensyStep.h"
 
 #define ARM_ALPHA_AXIS 4
@@ -65,7 +60,7 @@ class GobotChessboard: public RobotArmBase<Stepper,StepControl>{
 
         void SetEffector(EEF action);
         void pick_place_park(RobotAction* pAction);
-
+    
     private:
         GobotChessboard();
         GobotChessboard(GobotChessboard const& copy);            // Not Implemented

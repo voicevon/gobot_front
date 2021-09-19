@@ -1,4 +1,4 @@
-#include "house.h"
+#include "gobot_house.h"
 
 #define MOTOR_MAX_SPEED 289
 #define HOMED_POSITION_ALPHA 0
@@ -12,11 +12,11 @@
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
 
-House::House(){
+GobotHouse::GobotHouse(){
   
 }
 
-void House::Setup(RobotAction* pAction, int segments){
+void GobotHouse::Setup(RobotAction* pAction, int segments){
 
     __house_action = pAction;
     __segments = segments;
@@ -25,19 +25,19 @@ void House::Setup(RobotAction* pAction, int segments){
 
 
 
-void House::HomeAllAxises(){
+void GobotHouse::HomeAllAxises(){
   axis_beta->Home();
   axis_alpha->Home();
 }
 
-void House::SpinOnce(){
+void GobotHouse::SpinOnce(){
   
 }
 
 
 
 // Head is a position name, The 5 bar arm will pick up stone from there.
-void House::MoveStone_FromRoomToHead(uint8_t room_id){
+void GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){
   __Move_fromNeck_toDoor(room_id,true);
   __Move_fromRoom_toDoor(room_id,false);
   __Enable_eefCoil(true);
@@ -48,7 +48,7 @@ void House::MoveStone_FromRoomToHead(uint8_t room_id){
   __Move_fromHead_toNeck(true);
 }
 
-void House::MoveStone_FromHeadToRoom(uint8_t room_id){
+void GobotHouse::MoveStone_FromHeadToRoom(uint8_t room_id){
   __Move_fromNeck_toDoor(0, false);  // 0 is useless.
   __Move_fromHead_toNeck(false);
   __Enable_eefCoil(true);
@@ -59,7 +59,7 @@ void House::MoveStone_FromHeadToRoom(uint8_t room_id){
   __Move_fromRoom_toDoor(room_id, true);
 }
 
-void House::__Enable_eefCoil(bool enable){
+void GobotHouse::__Enable_eefCoil(bool enable){
 
 }
 
@@ -79,7 +79,7 @@ void House::__Enable_eefCoil(bool enable){
           r7             |
 
 */
-ik_position House::ik(float x, float y){
+ik_position GobotHouse::ik(float x, float y){
   ik_position ret;   //is risk here?
   float rr1= x*x +y*y;
   
@@ -94,7 +94,7 @@ ik_position House::ik(float x, float y){
 }
 
 
-void House::__Move_fromHead_toNeck(bool forwarding){
+void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
   float x1 = __map.head.x;
   float x2 = __map.neck.x;
   if(!forwarding){
@@ -110,7 +110,7 @@ void House::__Move_fromHead_toNeck(bool forwarding){
   }
 }
 
-void House::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
+void GobotHouse::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
     //from room to door, now is at room.
   float x1 = __map.rooms[room_id].x;
   float y1 = __map.rooms[room_id].y;
@@ -136,7 +136,7 @@ void House::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
 }
 
 // This is almost a  rotation, because beta should be no changing.
-void House::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
+void GobotHouse::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
   float x = __map.doors[room_id].x;
   float y = __map.doors[room_id].y;
   if (!forwarding){
