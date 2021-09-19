@@ -5,29 +5,32 @@
 #include "Robot/Commu/RobotBLE.h"
 #include "gobot_house.h"
 #include "MyLibs/MyFunctions.hpp" 
+// #include "Robot/Axis/SingleAxisBase.hpp"
 
 // static char LOG_TAG[]= "BLE-HOUSE";
 GobotHouse* robot; 
 RobotAction action;
 RobotBle ble= RobotBle();
+// SingleAxisBase axis_alpha = SingleAxisBase(char(65));
+// SingleAxisBase axis_beta = SingleAxisBase('B');
+
+
 
 // void output_message(std::string message){
 //     ble.WriteNotification(message.c_str()); 
 //     SerialPrintString(message);
 // }
-
 void setup(){
+    setup_hardware();
     robot = &GobotHouse::getInstance();
     ble.Init();
-    robot->LinkCommuDevice(&ble);
-    setup_hardware();
     //couple the components
+    robot->LinkCommuDevice(&ble);
     robot->axis_alpha->LinkAcuator(&stepper_alpha);
     robot->axis_beta->LinkAcuator(&stepper_beta);
     robot->axis_alpha->LinkHomeTriger(&homeTriger_alpha);
     robot->axis_beta->LinkHomeTriger(&homeTriger_beta);
     robot->LinkActuatorController(&stepControl);
-    // robot->OnOutputMessage_set_callback(output_message);
 
     robot->Setup(&action, 9);
     Serial.print("\nHouse setup is done..........");
