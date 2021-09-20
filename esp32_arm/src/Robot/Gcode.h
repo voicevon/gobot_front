@@ -13,13 +13,13 @@
 #include <map>
 
 #include "GcodeConst.h"
-using std::string;
+// using std::string;
 
 
 // Object to represent a Gcode command
 class Gcode {
     public:
-        Gcode(const string&, bool strip=true);
+        Gcode(const std::string&, bool strip=true);
         Gcode(const Gcode& to_copy);
         Gcode& operator= (const Gcode& to_copy);
         ~Gcode();
@@ -48,7 +48,7 @@ class Gcode {
         };
 
         // StreamOutput* stream;
-        string txt_after_ok;
+        std::string txt_after_ok;
 
     private:
         void prepare_cached_values(bool strip=true);

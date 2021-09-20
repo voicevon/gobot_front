@@ -17,7 +17,7 @@
 // This is a gcode object. It represents a GCode string/command, and caches some important values about that command for the sake of performance.
 // It gets passed around in events, and attached to the queue ( that'll change )
 // Gcode::Gcode(const string &command, StreamOutput *stream, bool strip)
-Gcode::Gcode(const string &command, bool strip)
+Gcode::Gcode(const std::string &command, bool strip)
 {
     this->command= strdup(command.c_str());
     auto xx=command.c_str();
@@ -217,7 +217,7 @@ void Gcode::strip_parameters()
 {
     if(has_g && g < 4){
         // strip the command of the XYZIJK parameters
-        string newcmd;
+        std::string newcmd;
         char *cn= command;
         // find the start of each parameter
         char *pch= strpbrk(cn, "XYZIJK");

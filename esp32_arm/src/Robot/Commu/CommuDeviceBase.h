@@ -1,11 +1,12 @@
 #ifndef _COMMU_DEVICE_BASE_H_
 #define _COMMU_DEVICE_BASE_H_
 
-using std::string;
+#include <string>
+
 
 class CommuDeviceBase{
     public:
-        virtual void OutputMessage(string message);
+        virtual void OutputMessage(std::string message);
         virtual void SpinOnce();
         virtual bool HasNewChatting();  //Only New message from BleClient.
         virtual char* ReadChatting();

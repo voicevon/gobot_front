@@ -13,8 +13,8 @@
 
 
 GobotHouse::GobotHouse(){
-  this->axis_alpha = &obj_axis_alpha;
-  this->axis_beta = &obj_axis_beta;
+  // this->axis_alpha = &obj_axis_alpha;
+  // this->axis_beta = &obj_axis_beta;
 }
 
 void GobotHouse::Setup(RobotAction* pAction, int segments){
@@ -27,8 +27,8 @@ void GobotHouse::Setup(RobotAction* pAction, int segments){
 
 
 void GobotHouse::HomeAllAxises(){
-  axis_beta->Home();
-  axis_alpha->Home();
+  axis_beta.Home();
+  axis_alpha.Home();
 }
 
 void GobotHouse::SpinOnce(){

@@ -4,11 +4,11 @@
 #include "SingleAxisBase.h"
 
 
-template <class Actuator_T>
-SingleAxisBase<Actuator_T>::SingleAxisBase(char axis_name){
-  this->_Axis_Name = axis_name;
-  // this->_is_homing = false;
-}
+// template <class Actuator_T>
+// SingleAxisBase<Actuator_T>::SingleAxisBase(char axis_name){
+//   this->_Axis_Name = axis_name;
+//   // this->_is_homing = false;
+// }
 
 
 template <class Actuator_T>

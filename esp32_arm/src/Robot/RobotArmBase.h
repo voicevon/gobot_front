@@ -15,8 +15,8 @@ class RobotArmBase{
     public:
         void SpinOnce();
         virtual void HomeAllAxises();
-        SingleAxisBase<Actuator_T>* axis_alpha;
-        SingleAxisBase<Actuator_T>* axis_beta;
+        SingleAxisBase<Actuator_T> axis_alpha;
+        SingleAxisBase<Actuator_T> axis_beta;
         void LinkActuatorController(ActuatorController_T* controller){this->actuatorController = controller;};
         void LinkCommuDevice(CommuDevice_T* commuDevice){this->commuDevice=commuDevice;};
         void RunGcode(Gcode* gcode);

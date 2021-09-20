@@ -81,7 +81,7 @@ void CommuBleGattServer::WriteNotification(const char* notification){
   
 }
 
-void CommuBleGattServer::OutputMessage(string message){
+void CommuBleGattServer::OutputMessage(std::string message){
   
 }
 

@@ -31,8 +31,8 @@
 #define MOTOR_MAX_SPEED 1000    // unit?
 
 GobotChessboard::GobotChessboard(){
-  this->axis_alpha = &obj_axis_alpha;
-  this->axis_beta = &obj_axis_beta;
+  // this->axis_alpha = &obj_axis_alpha;
+  // this->axis_beta = &obj_axis_beta;
 }
 
 void GobotChessboard::HomeAllAxises(){  

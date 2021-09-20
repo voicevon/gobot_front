@@ -68,8 +68,8 @@ class GobotChessboard: public RobotArmBase<Stepper,StepControl,CommuBleGattServe
 
         ik_position ik(float x, float y) override;
 
-        SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
-        SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
+        // SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
+        // SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
 
         // link length in mm
         int link_0 ;   // Length between origin and the two motors

@@ -23,10 +23,10 @@ void setup(){
     Serial.println("BLE is ok....");    
     robot = &GobotChessboard::getInstance();
     //couple the components
-    robot->axis_alpha->LinkAcuator(&stepper_alpha);
-    robot->axis_beta->LinkAcuator(&stepper_beta);
-    robot->axis_alpha->LinkHomeTriger(&homeTriger_alpha);
-    robot->axis_beta->LinkHomeTriger(&homeTriger_beta);
+    robot->axis_alpha.LinkAcuator(&stepper_alpha);
+    robot->axis_beta.LinkAcuator(&stepper_beta);
+    robot->axis_alpha.LinkHomeTriger(&homeTriger_alpha);
+    robot->axis_beta.LinkHomeTriger(&homeTriger_beta);
     robot->LinkActuatorController(&stepControl);
     // robot->OnOutputMessage_set_callback(output_message);
 

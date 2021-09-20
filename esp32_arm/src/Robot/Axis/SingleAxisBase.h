@@ -12,8 +12,9 @@
 template <class Actuator_T>
 class SingleAxisBase{
     public:
-        SingleAxisBase(const char axis_name);
-
+        // SingleAxisBase(const char axis_name);
+        SingleAxisBase(){};
+        char Name;
         void SpinOnce();
 
         virtual void Home(){};
@@ -25,7 +26,6 @@ class SingleAxisBase{
 
     protected:
         HomeTriger* homeTriger;
-        SingleAxisBase(){};
         void SetTargetAbs(int targetPosition);
         virtual void Move(float distanceRel);
         virtual void MoveAsync();

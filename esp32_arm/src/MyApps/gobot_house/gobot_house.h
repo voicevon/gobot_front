@@ -32,8 +32,8 @@ class GobotHouse: public RobotArmBase<Stepper,StepControl,CommuBleGattServer>{
     protected:
     private:
         GobotHouse();
-        SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
-        SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
+        // SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
+        // SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
 
         RobotAction* __house_action;
         int __segments;
