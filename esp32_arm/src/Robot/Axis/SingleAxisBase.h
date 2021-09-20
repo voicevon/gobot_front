@@ -27,8 +27,8 @@ class SingleAxisBase{
     protected:
         HomeTriger* homeTriger;
         void SetTargetAbs(int targetPosition);
-        virtual void Move(float distanceRel);
-        virtual void MoveAsync();
+        // virtual void Move(float distanceRel);
+        // virtual void MoveAsync();
 
         char _Axis_Name;
         float home_position;

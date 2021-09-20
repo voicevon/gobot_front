@@ -1,5 +1,5 @@
-#ifndef __MOTOR_BASE_H_
-#define __MOTOR_BASE_H_
+#ifndef __ACTUATOR_BASE_H_
+#define __ACTUATOR_BASE_H_
 
 #include "Arduino.h"
 // #include "Sensor.h"
@@ -60,13 +60,13 @@ enum MotionControlType{
 /**
  Generic motor class
 */
-class MotorBase
+class ActuatorBase
 {
   public:
     /**
      * Default constructor - setting all variabels to default values
      */
-    MotorBase();
+    ActuatorBase();
 
     /**  Motor hardware init function */
   	virtual void init()=0;

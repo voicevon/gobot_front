@@ -2,24 +2,15 @@
 #define DCMotor_h
 
 #include "Arduino.h"
-#include "MotorBase.h"
-// #include "common/base_classes/FOCMotor.h"
-// #include "common/base_classes/Sensor.h"
+#include "../ActuatorBase.h"
 #include "SimpleFOC/common/base_classes/Sensor.h"
-// #include "Common/base_classes/MotorBase.h"
-#include "MotorBase.h"
-// #include "common/base_classes/DCDriver.h"
-// #include "drivers/DCDriverHBridge.h"
 #include "DCDriverHBridge.h"
 
-// #include "common/foc_utils.h"
-// #include "common/time_utils.h"
-// #include "common/defaults.h"
 
 /**
  DC motor class
 */
-class DCMotor: public MotorBase{
+class DCMotor: public ActuatorBase{
   public:
     DCMotor();
     

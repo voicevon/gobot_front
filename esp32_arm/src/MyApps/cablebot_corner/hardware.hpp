@@ -7,10 +7,10 @@
 
 
 #include "MyLibs/Components/Led.h"
-#include "Robot/Actuator/DCDriverHBridge.h"
+#include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
 #include "SimpleFOC/sensors/Encoder.h"
 #include "Robot/HomeTriger.h"
-#include "Robot/Actuator/DcMotor.h"
+#include "Robot/Actuator/DcMotor/DcMotor.h"
 
 #define PIN_HOME_SENSOR 5
 #define PIN_ENCODER_A 16
@@ -33,8 +33,10 @@
     #define COMMU_T CommuSingleAxisRobotBLE
 #endif
 
+#include "Robot/Actuator/ActuatorControllerBase.h"
+#define ACTUATOR_CONTROLLER_T ActuatorControllerBase
 
-// CommuSingleAxisRobotBLE ble = CommuSingleAxisRobotBLE();
+
 Led led_power = Led(0,PIN_LED_POWER,LOW);
 Led led_home_alpha = Led(1,2,LOW);
 Encoder encoder = Encoder(PIN_ENCODER_A, PIN_ENCODER_B, 200);

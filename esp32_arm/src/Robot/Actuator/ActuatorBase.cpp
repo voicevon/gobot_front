@@ -1,9 +1,9 @@
-#include "MotorBase.h"
+#include "ActuatorBase.h"
 
 /**
  * Default constructor - setting all variabels to default values
  */
-MotorBase::MotorBase()
+ActuatorBase::ActuatorBase()
 {
   // maximum angular velocity to be used for positioning 
   velocity_limit = DEF_VEL_LIM;
@@ -41,7 +41,7 @@ MotorBase::MotorBase()
 /**
 	Sensor linking method
 */
-void MotorBase::linkSensor(Sensor* _sensor) {
+void ActuatorBase::linkSensor(Sensor* _sensor) {
   sensor = _sensor;
 }
 
@@ -53,21 +53,21 @@ void MotorBase::linkSensor(Sensor* _sensor) {
 // }
 
 // shaft angle calculation
-float MotorBase::shaftAngle() {
+float ActuatorBase::shaftAngle() {
   // if no sensor linked return previous value ( for open loop )
   if(!sensor) return shaft_angle;
 //   return sensor_direction*LPF_angle(sensor->getAngle()) - sensor_offset;
   return 0.0f;
 }
 // shaft velocity calculation
-float MotorBase::shaftVelocity() {
+float ActuatorBase::shaftVelocity() {
   // if no sensor linked return previous value ( for open loop )
   if(!sensor) return shaft_velocity;
 //   return sensor_direction*LPF_velocity(sensor->getVelocity());
 return 0.0f;
 }
 
-float MotorBase::electricalAngle(){
+float ActuatorBase::electricalAngle(){
   return 0.0f;
 //   return _normalizeAngle((shaft_angle + sensor_offset) * pole_pairs - zero_electric_angle);
 }
@@ -76,14 +76,14 @@ float MotorBase::electricalAngle(){
  *  Monitoring functions
  */
 // function implementing the monitor_port setter
-void MotorBase::useMonitoring(Print &print){
+void ActuatorBase::useMonitoring(Print &print){
   monitor_port = &print; //operate on the address of print
   if(monitor_port ) monitor_port->println(F("MOT: Monitor enabled!"));
 }
 
 // utility function intended to be used with serial plotter to monitor motor variables
 // significantly slowing the execution down!!!!
-void MotorBase::monitor() {
+void ActuatorBase::monitor() {
   if( !monitor_downsample || monitor_cnt++ < monitor_downsample ) return;
   monitor_cnt = 0;
   if(!monitor_port) return;

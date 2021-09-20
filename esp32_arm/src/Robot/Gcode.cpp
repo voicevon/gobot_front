@@ -13,28 +13,22 @@
 
 #include <stdlib.h>
 #include <algorithm>
-#include <HardwareSerial.h>
-#include <string>
+#include "WString.h"
 
 // This is a gcode object. It represents a GCode string/command, and caches some important values about that command for the sake of performance.
 // It gets passed around in events, and attached to the queue ( that'll change )
 // Gcode::Gcode(const string &command, StreamOutput *stream, bool strip)
 Gcode::Gcode(const std::string &command, bool strip)
 {
-    // Serial.println("------------- aaaaa ");
     this->command= strdup(command.c_str());
-    // auto xx=command.c_str();
     this->m= 0;
     this->g= 0;
     this->subcode= 0;
     this->add_nl= false;
     this->is_error= false;
     // this->stream= stream;
-    Serial.println("------------- bbbbbbbbb ");
     prepare_cached_values(strip);
-    Serial.println("------------- cccccccc ");
     this->stripped= strip;
-    Serial.println("------------- ffffffffff ");
 }
 
 Gcode::~Gcode()
@@ -80,9 +74,7 @@ Gcode &Gcode::operator= (const Gcode &to_copy)
 // Whether or not a Gcode has a letter
 bool Gcode::has_letter( char letter ) const
 {
-    Serial.print(" #########  hhhhhhhh ");
     for (size_t i = 0; i < strlen(this->command); ++i) {
-    Serial.print(" ##########  uuuuuuu ");
         if( command[i] == letter ) {
             return true;
         }
@@ -184,17 +176,13 @@ std::map<char,int> Gcode::get_args_int() const
 void Gcode::prepare_cached_values(bool strip)
 {
     char *p= nullptr;
-    Serial.print("@@@@@@@@  1111111 ");
     if( this->has_letter('G') ) {
-    Serial.print("@@@@@@@@  tttttttt ");
         this->has_g = true;
         this->g = this->get_int('G', &p);
 
     } else {
-    Serial.print("@@@@@@@@  ffffffffff ");
         this->has_g = false;
     }
-    Serial.print("@@@@@@@@  222222222 ");
 
     if( this->has_letter('M') ) {
         this->has_m = true;
@@ -203,7 +191,6 @@ void Gcode::prepare_cached_values(bool strip)
     } else {
         this->has_m = false;
     }
-    Serial.print("@@@@@@@@  555555555 ");
 
     if(has_g || has_m) {
         // look for subcode and extract it
@@ -214,7 +201,6 @@ void Gcode::prepare_cached_values(bool strip)
             this->subcode= 0;
         }
     }
-    Serial.print("@@@@@@@@  8888888888 ");
 
     if(!strip) return;
 
@@ -224,7 +210,6 @@ void Gcode::prepare_cached_values(bool strip)
         free(command);
         command= n;
     }
-    Serial.print("@@@@@@@@  999999999 ");
 
 }
 

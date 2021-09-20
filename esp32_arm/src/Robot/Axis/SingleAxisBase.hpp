@@ -39,14 +39,14 @@ void SingleAxisBase<Actuator_T>::LinkHomeTriger(HomeTriger* homeTriger){
 }
 
 
-template <class Actuator_T>
-void SingleAxisBase<Actuator_T>::Move(float distanceRel){
+// template <class Actuator_T>
+// void SingleAxisBase<Actuator_T>::Move(float distanceRel){
 
-}
-template <class Actuator_T>
-void SingleAxisBase<Actuator_T>::MoveAsync(){
+// }
+// template <class Actuator_T>
+// void SingleAxisBase<Actuator_T>::MoveAsync(){
 
-}
+// }
 // template <class Actuator_T>
 // void SingleAxisBase<Actuator_T>::Home(){
 //   while (!homeTriger->IsTriged()){
