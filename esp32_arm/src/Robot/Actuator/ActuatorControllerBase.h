@@ -8,10 +8,14 @@
  *            Me !
  */
 
+template<class Actuator_T>
 class ActuatorControllerBase{
     public:
         ActuatorControllerBase(){};
-    private:
+        void LinkActuator(Actuator_T* actuator){this->_actuator= actuator;};
+        virtual void Move(float relDistance);
 
+    protected:
+        Actuator_T _actuator;
 };
 

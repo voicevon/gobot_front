@@ -8,26 +8,19 @@
 
 
 /**
- DC motor class
+  Essencially, DCMotor is a Name shelled class, The reasons of we keep this class are: 
+      1.  A better name is easier to interpretered. 
+      2.  In case of some identically property or method comes out in future.
 */
 class DCMotor: public ActuatorBase{
   public:
-    DCMotor();
     
-    void linkDriver(DCDriverHBridge* driver);
-    void init() override;
-    bool IsRunning(){return __is_running;};
-  	// void disable() override;
-    // void enable() override;
-
-    // int initFOC( float zero_electric_offset = NOT_SET , Direction sensor_direction = Direction::CW) override;
-    // void loopFOC() override;
-
-    void move(float target = NOT_SET) override;
+    // void linkDriver(DCDriverHBridge* driver);   //????
+    // bool IsRunning(){return __is_running;};
     
   private:
-    DCDriverHBridge* driver; 
-    bool __is_running;
+    // DCDriverHBridge* driver; 
+    // bool __is_running;
         
 };
 

@@ -11,10 +11,10 @@
 // }
 
 
-template <class Actuator_T>
-void SingleAxisBase<Actuator_T>::SetTargetAbs(int targetPosition){
+// template <class Actuator_T>
+// void SingleAxisBase<Actuator_T>::SetTargetAbs(int targetPosition){
 
-}
+// }
 
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::Init_scaler(float _final_distance_per_encoder_interval){
@@ -24,7 +24,7 @@ void SingleAxisBase<Actuator_T>::Init_scaler(float _final_distance_per_encoder_i
 template <class Actuator_T>
 void SingleAxisBase<Actuator_T>::SpinOnce(){
   this->__is_busy = false;
-  if (_actuator->IsRunning()) this->__is_busy = true;
+  if (_actuator->IsRunning) this->__is_busy = true;
   if (__is_homing) this->__is_busy = true;
 }
 

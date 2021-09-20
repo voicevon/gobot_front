@@ -4,18 +4,15 @@
 #include "SingleAxisRobot.h"
 #include "MyLibs/MyFunctions.hpp"
 
-template<class Actuator_T, class ActuatorController_T, class CommuDevice_T>
-SingleAxisRobot<Actuator_T,ActuatorController_T,CommuDevice_T>::SingleAxisRobot(char axisName){
+template<class Actuator_T, class ActuatorController_T, class ActuatorDriver_T, class CommuDevice_T>
+SingleAxisRobot<Actuator_T,ActuatorController_T,ActuatorDriver_T,CommuDevice_T>::SingleAxisRobot(char axisName){
     this->_Axis_Name = axisName;
 } 
 
-template<class Actuator_T, class ActuatorController_T, class CommuDevice_T>
-void SingleAxisRobot<Actuator_T,ActuatorController_T,CommuDevice_T>::LinkCommuDevice(CommuDevice_T* commuDevice){
-  this->commuDevice = commuDevice;
-}
 
-template <class Actuator_T, class ActuatorController_T, class CommuDevice_T>
-void SingleAxisRobot<Actuator_T,ActuatorController_T,CommuDevice_T>::RunGcode(Gcode* gcode){
+
+template <class Actuator_T, class ActuatorController_T, class ActuatorDriver_T, class CommuDevice_T>
+void SingleAxisRobot<Actuator_T,ActuatorController_T,ActuatorDriver_T, CommuDevice_T>::RunGcode(Gcode* gcode){
 
   if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND))
     return;
@@ -30,21 +27,23 @@ void SingleAxisRobot<Actuator_T,ActuatorController_T,CommuDevice_T>::RunGcode(Gc
   
   if (gcode->g == 28){
     // G28: Home
-    this->__is_busy = true;
+    // this->__is_busy = true;
     this->Home();
     // this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
 
   }else if (gcode->g ==1){
     // G1 Move
-    this->__is_busy = true;
-    float pos = gcode->get_value(this->_Axis_Name);
-    this->commuDevice->OutputMessage("  > Move to " + toString(pos));
+    // this->__is_busy = true;
+    // float pos = gcode->get_value(this->_Axis_Name);
+    // this->commuDevice->OutputMessage("  > Move to " + toString(pos));
     //TODO:  1. put position to movement queue. called "plan" in smoothieware? 
     //       2. send out OK.
     //       3. Set status to busy.
     //       4. Start Moving.
-    this->SetTargetAbs(pos);
+    // this->SetTargetAbs(pos);
     // this->actuatorController.Move();
+    // this->_actuator->SetTargetAbs(pos);
+    // this->actuatorController->Move(relDistance);
 
     this->commuDevice->OutputMessage(COMMU_OK);
   }else{

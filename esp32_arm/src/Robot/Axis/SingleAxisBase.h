@@ -8,7 +8,10 @@
 // https://www.fluentcpp.com/2018/01/09/strong-templates/
 
 
-//  An actuator knows its own position, Include an encoder or other position sensor
+/**
+ *  SingleAxis can NOT move, because it has no ActuatorController.
+ *  Saying: An axis can NOT do home, Home() should be in top level, it is an Robot().
+*/
 template <class Actuator_T>
 class SingleAxisBase{
     public:
@@ -17,16 +20,16 @@ class SingleAxisBase{
         char Name;
         void SpinOnce();
 
-        virtual void Home(){};
         bool IsBusy(){return __is_busy;};
         void LinkAcuator(Actuator_T* actuator);
-        void LinkHomeTriger(HomeTriger* homeTriger);
+        // virtual void Home(){};   //??
+        void LinkHomeTriger(HomeTriger* homeTriger);   //Homer = axis(actuaotr+driver) + controller + trigger 
         void Init_scaler(float final_distance_per_encoder_interval);
         Actuator_T* _actuator;
 
     protected:
         HomeTriger* homeTriger;
-        void SetTargetAbs(int targetPosition);
+        // void SetTargetAbs(int targetPosition);
         // virtual void Move(float distanceRel);
         // virtual void MoveAsync();
 
