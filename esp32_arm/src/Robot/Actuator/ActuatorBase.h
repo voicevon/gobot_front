@@ -58,7 +58,10 @@ enum MotionControlType{
 // };
 
 /**
- Generic motor class
+  1.  An actuator DOES NOT know how to move, it's driven by a driver,
+        but an actuator DOES KNOW what position itself.
+        The position might comes from encoder,   or stepper-driver ? servo-driver?
+  2.  
 */
 class ActuatorBase
 {
