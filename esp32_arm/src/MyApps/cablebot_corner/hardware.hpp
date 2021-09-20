@@ -45,6 +45,7 @@ ACTUATOR_DRIVER_T hBridge = ACTUATOR_DRIVER_T(PIN_DC_MOTOR_A, PIN_DC_MOTOR_B);
 HomeTriger homeTriger = HomeTriger(PIN_HOME_SENSOR, HIGH);
 DCMotor motor = DCMotor();
 
+
 void doA(){encoder.handleA();}
 void doB(){encoder.handleB();}
 

@@ -3,7 +3,7 @@
 
 
 // using std::string;
-
+template<class T>
 void SerialPrintString(std::string str){
     Serial.println();
     Serial.println(str.c_str());
@@ -20,4 +20,10 @@ std::string toString(const T &value) {
     os << value;
     return os.str();
 }
+
+
+
+
+class EmptyClass{};
+
 #endif

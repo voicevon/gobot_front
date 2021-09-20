@@ -14,9 +14,10 @@ Stepper liberys:
 
 #include "actions.h"
 #include <ESP32Servo.h>
-#include "Robot/RobotArmBase.hpp"
+#include "Robot/RobotBase.hpp"
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/Commu/CommuBleGattServer.h"
+#include "MyLibs/MyFunctions.hpp"
 #define ARM_ALPHA_AXIS 4
 #define ARM_BETA_AXIS 5
 
@@ -46,7 +47,7 @@ How to solve the concepts I don't know?
     Don't send me nominal name of go game (either of any other name).
 
 */
-class GobotChessboard: public RobotArmBase<Stepper,StepControl,CommuBleGattServer>{
+class GobotChessboard: public RobotBase<EmptyClass,StepControl,Stepper,CommuBleGattServer>{
     public:
         static GobotChessboard& getInstance()
         {

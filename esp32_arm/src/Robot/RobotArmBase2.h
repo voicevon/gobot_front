@@ -2,10 +2,7 @@
 #include "Axis/SingleAxisBase.hpp"
 #include "Robot/Gcode.h"
 
-struct ik_position{
-    int alpha;
-    int beta;
-};
+
 
 /*
 Currently is a 2D arm.

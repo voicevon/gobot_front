@@ -26,10 +26,10 @@ void setup(){
     ble.Init();
     //couple the components
     robot->LinkCommuDevice(&ble);
-    robot->axis_alpha.LinkAcuator(&stepper_alpha);
-    robot->axis_beta.LinkAcuator(&stepper_beta);
-    robot->axis_alpha.LinkHomeTriger(&homeTriger_alpha);
-    robot->axis_beta.LinkHomeTriger(&homeTriger_beta);
+    // robot->axis_alpha.LinkAcuator(&stepper_alpha);
+    // robot->axis_beta.LinkAcuator(&stepper_beta);
+    // robot->axis_alpha.LinkHomeTriger(&homeTriger_alpha);
+    // robot->axis_beta.LinkHomeTriger(&homeTriger_beta);
     robot->LinkActuatorController(&stepControl);
 
     robot->Setup(&action, 9);

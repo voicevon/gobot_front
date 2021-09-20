@@ -1,18 +1,18 @@
 #ifndef _SINGLE_AXIS_HPP_
 #define _SINGLE_AXIS_HPP_
 
-#include "SingleAxisRobot.h"
+#include "RobotBase.h"
 #include "MyLibs/MyFunctions.hpp"
 
-template<class Actuator_T, class ActuatorController_T, class ActuatorDriver_T, class CommuDevice_T>
-SingleAxisRobot<Actuator_T,ActuatorController_T,ActuatorDriver_T,CommuDevice_T>::SingleAxisRobot(char axisName){
-    this->_Axis_Name = axisName;
-} 
+// template<class Actuator_T, class ActuatorController_T, class ActuatorDriver_T, class CommuDevice_T>
+// RobotBase<Actuator_T,ActuatorController_T,ActuatorDriver_T,CommuDevice_T>::RobotBase(char axisName){
+//     this->_Axis_Name = axisName;
+// } 
 
 
 
 template <class Actuator_T, class ActuatorController_T, class ActuatorDriver_T, class CommuDevice_T>
-void SingleAxisRobot<Actuator_T,ActuatorController_T,ActuatorDriver_T, CommuDevice_T>::RunGcode(Gcode* gcode){
+void RobotBase<Actuator_T,ActuatorController_T,ActuatorDriver_T, CommuDevice_T>::RunGcode(Gcode* gcode){
 
   if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND))
     return;
@@ -28,7 +28,7 @@ void SingleAxisRobot<Actuator_T,ActuatorController_T,ActuatorDriver_T, CommuDevi
   if (gcode->g == 28){
     // G28: Home
     // this->__is_busy = true;
-    this->Home();
+    this->HomeAllAxises();
     // this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
 
   }else if (gcode->g ==1){

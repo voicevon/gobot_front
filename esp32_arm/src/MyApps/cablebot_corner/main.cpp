@@ -13,6 +13,7 @@ void setup(){
     setup_hardware();
     // link and couple the components;
     robot.LinkCommuDevice(&commu);
+    // robot.LinkAxis();
     // robot.LinkAcuator(&motor);
     // robot.LinkHomeTriger(&homeTriger);
     // robot.LinkActuatorDriver(&hBridge);
