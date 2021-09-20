@@ -12,7 +12,7 @@
  *  SingleAxis can NOT move, because it has no ActuatorController.
  *  Saying: An axis can NOT do home, Home() should be in top level, it is an Robot().
 */
-template <class Actuator_T>
+template <class Actuator_T, class Sensor_T>
 class SingleAxisBase{
     public:
         // SingleAxisBase(const char axis_name);
@@ -22,11 +22,12 @@ class SingleAxisBase{
 
         bool IsBusy(){return __is_busy;};
         void LinkAcuator(Actuator_T* actuator);
+        void LinkSensor(Sensor_T* sensor);
         // virtual void Home(){};   //??
-        void LinkHomeTriger(HomeTriger* homeTriger);   //Homer = axis(actuaotr+driver) + controller + trigger 
+        // void LinkHomeTriger(HomeTriger* homeTriger);   //Homer = axis(actuaotr+driver) + controller + trigger 
         void Init_scaler(float final_distance_per_encoder_interval);
         Actuator_T* _actuator;
-
+        Sensor_T* sensor;
     protected:
         HomeTriger* homeTriger;
         // void SetTargetAbs(int targetPosition);

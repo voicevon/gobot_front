@@ -4,51 +4,51 @@
 #include "SingleAxisBase.h"
 
 
-// template <class Actuator_T>
-// SingleAxisBase<Actuator_T>::SingleAxisBase(char axis_name){
+// template <class Actuator_T, class Sensor_T>
+// SingleAxisBase<Actuator_T, Sensor_T>::SingleAxisBase(char axis_name){
 //   this->_Axis_Name = axis_name;
 //   // this->_is_homing = false;
 // }
 
 
-// template <class Actuator_T>
-// void SingleAxisBase<Actuator_T>::SetTargetAbs(int targetPosition){
+// template <class Actuator_T, class Sensor_T>
+// void SingleAxisBase<Actuator_T, Sensor_T>::SetTargetAbs(int targetPosition){
 
 // }
 
-template <class Actuator_T>
-void SingleAxisBase<Actuator_T>::Init_scaler(float _final_distance_per_encoder_interval){
+template <class Actuator_T, class Sensor_T>
+void SingleAxisBase<Actuator_T, Sensor_T>::Init_scaler(float _final_distance_per_encoder_interval){
   final_distance_per_encoder_interval = _final_distance_per_encoder_interval;
 }
 
-template <class Actuator_T>
-void SingleAxisBase<Actuator_T>::SpinOnce(){
+template <class Actuator_T, class Sensor_T>
+void SingleAxisBase<Actuator_T, Sensor_T>::SpinOnce(){
   this->__is_busy = false;
   if (_actuator->IsRunning) this->__is_busy = true;
   if (__is_homing) this->__is_busy = true;
 }
 
-template <class Actuator_T>
-void SingleAxisBase<Actuator_T>::LinkAcuator(Actuator_T* actuator){
+template <class Actuator_T, class Sensor_T>
+void SingleAxisBase<Actuator_T, Sensor_T>::LinkAcuator(Actuator_T* actuator){
   this->_actuator = actuator;
 }
 
-template <class Actuator_T>
-void SingleAxisBase<Actuator_T>::LinkHomeTriger(HomeTriger* homeTriger){
-  this->homeTriger = homeTriger;
-}
+// template <class Actuator_T, class Sensor_T>
+// void SingleAxisBase<Actuator_T, Sensor_T>::LinkHomeTriger(HomeTriger* homeTriger){
+//   this->homeTriger = homeTriger;
+// }
 
 
-// template <class Actuator_T>
-// void SingleAxisBase<Actuator_T>::Move(float distanceRel){
+// template <class Actuator_T, class Sensor_T>
+// void SingleAxisBase<Actuator_T, Sensor_T>::Move(float distanceRel){
 
 // }
-// template <class Actuator_T>
-// void SingleAxisBase<Actuator_T>::MoveAsync(){
+// template <class Actuator_T, class Sensor_T>
+// void SingleAxisBase<Actuator_T, Sensor_T>::MoveAsync(){
 
 // }
-// template <class Actuator_T>
-// void SingleAxisBase<Actuator_T>::Home(){
+// template <class Actuator_T, class Sensor_T>
+// void SingleAxisBase<Actuator_T, Sensor_T>::Home(){
 //   while (!homeTriger->IsTriged()){
 //     // actuator->SetPositionRel(100);
 //     actuator->setTargetAbs(100);
