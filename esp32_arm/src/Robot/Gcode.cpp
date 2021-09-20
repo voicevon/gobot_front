@@ -5,7 +5,7 @@
       You should have received a copy of the GNU General Public License along with Smoothie. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+// https://github.com/Smoothieware/Smoothieware/blob/edge/src/modules/communication/utils/Gcode.h
 #include "Gcode.h"
 // #include "libs/StreamOutput.h"
 // #include "utils."
@@ -13,22 +13,28 @@
 
 #include <stdlib.h>
 #include <algorithm>
+#include <HardwareSerial.h>
+#include <string>
 
 // This is a gcode object. It represents a GCode string/command, and caches some important values about that command for the sake of performance.
 // It gets passed around in events, and attached to the queue ( that'll change )
 // Gcode::Gcode(const string &command, StreamOutput *stream, bool strip)
 Gcode::Gcode(const std::string &command, bool strip)
 {
+    // Serial.println("------------- aaaaa ");
     this->command= strdup(command.c_str());
-    auto xx=command.c_str();
+    // auto xx=command.c_str();
     this->m= 0;
     this->g= 0;
     this->subcode= 0;
     this->add_nl= false;
     this->is_error= false;
     // this->stream= stream;
+    Serial.println("------------- bbbbbbbbb ");
     prepare_cached_values(strip);
+    Serial.println("------------- cccccccc ");
     this->stripped= strip;
+    Serial.println("------------- ffffffffff ");
 }
 
 Gcode::~Gcode()
@@ -74,7 +80,9 @@ Gcode &Gcode::operator= (const Gcode &to_copy)
 // Whether or not a Gcode has a letter
 bool Gcode::has_letter( char letter ) const
 {
+    Serial.print(" #########  hhhhhhhh ");
     for (size_t i = 0; i < strlen(this->command); ++i) {
+    Serial.print(" ##########  uuuuuuu ");
         if( command[i] == letter ) {
             return true;
         }
@@ -176,13 +184,17 @@ std::map<char,int> Gcode::get_args_int() const
 void Gcode::prepare_cached_values(bool strip)
 {
     char *p= nullptr;
+    Serial.print("@@@@@@@@  1111111 ");
     if( this->has_letter('G') ) {
+    Serial.print("@@@@@@@@  tttttttt ");
         this->has_g = true;
         this->g = this->get_int('G', &p);
 
     } else {
+    Serial.print("@@@@@@@@  ffffffffff ");
         this->has_g = false;
     }
+    Serial.print("@@@@@@@@  222222222 ");
 
     if( this->has_letter('M') ) {
         this->has_m = true;
@@ -191,6 +203,7 @@ void Gcode::prepare_cached_values(bool strip)
     } else {
         this->has_m = false;
     }
+    Serial.print("@@@@@@@@  555555555 ");
 
     if(has_g || has_m) {
         // look for subcode and extract it
@@ -201,6 +214,7 @@ void Gcode::prepare_cached_values(bool strip)
             this->subcode= 0;
         }
     }
+    Serial.print("@@@@@@@@  8888888888 ");
 
     if(!strip) return;
 
@@ -210,6 +224,8 @@ void Gcode::prepare_cached_values(bool strip)
         free(command);
         command= n;
     }
+    Serial.print("@@@@@@@@  999999999 ");
+
 }
 
 // strip off X Y Z I J K parameters if G0/1/2/3
@@ -243,4 +259,52 @@ void Gcode::strip_parameters()
         // copy the new shortened one
         command= strdup(newcmd.c_str());
     }
+}
+
+// https://github.com/Smoothieware/Smoothieware/blob/f01177614a495473d4018cb00e06416a6c0194f1/src/libs/nist_float.cpp
+
+
+float Gcode::parse_float(const char* nptr, char** endptr) const
+{
+	const int kStrtofMaxDigits = 8;
+	const char *p = nptr;
+	// Skip leading white space, if any. Not necessary
+	while (isspace(*p) ) ++p;
+
+	// Get sign, if any.
+	bool sign = true;
+	if (*p == '-') {
+		sign = false; ++p;
+	} else if (*p == '+') {
+		++p;
+	}
+
+	// Get digits before decimal point, if any.
+	uint32_t predec;  // to store digits before decimal point
+	for (predec = 0; isdigit(*p); ++p) {
+		predec = predec * 10UL + static_cast<uint32_t>(*p - '0');
+	}
+	float value = static_cast<float>(predec);
+
+	// Get digits after decimal point, if any.
+	if (*p == '.') {
+		uint32_t pow10 = 1;
+		uint32_t val2 = 0;
+		int digit_cnt = 0;
+		++p;
+		while (isdigit(*p)) {
+			if (digit_cnt < kStrtofMaxDigits) {
+				val2 = val2 * 10UL + static_cast<uint32_t>(*p - '0');
+				pow10 *= 10UL;
+			}  // when kStrtofMaxDigits is read, ignored following digits
+			++p;
+			++digit_cnt;
+		}
+		value += static_cast<float>(
+		             static_cast<double>(val2) / static_cast<double>(pow10));
+	}
+
+// #pragma GCC diagnostic ignored "-Wcast-qual"
+	if (endptr) *endptr = (char*)p;  // NOLINT(*)
+	return sign ? value : - value;
 }

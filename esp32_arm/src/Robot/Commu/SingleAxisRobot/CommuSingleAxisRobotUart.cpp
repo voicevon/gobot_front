@@ -14,7 +14,7 @@ bool CommuSingleAxisRobotUart::HasNewChatting(){
 } 
 
 char* CommuSingleAxisRobotUart::ReadChatting(){
-
+    return this->pRxBuffer;
 }
 
 void CommuSingleAxisRobotUart::WriteNotification(const char* notification){

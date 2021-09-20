@@ -10,8 +10,7 @@
 #include "Robot/Actuator/DCDriverHBridge.h"
 #include "SimpleFOC/sensors/Encoder.h"
 #include "Robot/HomeTriger.h"
-#include "Robot/Commu/SingleAxisRobot/CommuSingleAxisRobotBLE.h"
-#include "Robot/Commu/SingleAxisRobot/CommuSingleAxisRobotUart.h"
+#include "Robot/Actuator/DcMotor.h"
 
 #define PIN_HOME_SENSOR 5
 #define PIN_ENCODER_A 16
@@ -20,6 +19,20 @@
 #define PIN_DC_MOTOR_B 9
 #define PIN_LED_POWER 22
 
+#define COMMU_WITH_UART
+#ifdef COMMU_WITH_UART
+    #include "Robot/Commu/SingleAxisRobot/CommuSingleAxisRobotUart.h"
+    CommuSingleAxisRobotUart commu = CommuSingleAxisRobotUart();
+    #define COMMU_T CommuSingleAxisRobotUart
+#endif
+
+// #define COMMU_WITH_BLE
+#ifdef COMMU_WITH_BLE
+    #include "Robot/Commu/SingleAxisRobot/CommuSingleAxisRobotBLE.h"
+    CommuSingleAxisRobotBLE commu = CommuSingleAxisRobotBLE();
+    #define COMMU_T CommuSingleAxisRobotBLE
+#endif
+
 
 // CommuSingleAxisRobotBLE ble = CommuSingleAxisRobotBLE();
 Led led_power = Led(0,PIN_LED_POWER,LOW);
@@ -27,7 +40,7 @@ Led led_home_alpha = Led(1,2,LOW);
 Encoder encoder = Encoder(PIN_ENCODER_A, PIN_ENCODER_B, 200);
 DCDriverHBridge hBridge = DCDriverHBridge(PIN_DC_MOTOR_A, PIN_DC_MOTOR_B);
 HomeTriger homeTriger = HomeTriger(PIN_HOME_SENSOR, HIGH);
-CommuSingleAxisRobotBLE ble = CommuSingleAxisRobotBLE();
+DCMotor motor = DCMotor();
 
 void doA(){encoder.handleA();}
 void doB(){encoder.handleB();}
@@ -36,7 +49,7 @@ void doB(){encoder.handleB();}
 void setup_hardware(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  CableBot-Corner.  Keep smiling :)");
-    ble.Init();
+    commu.Init();
     encoder.enableInterrupts(doA,doB);
     // board.Flash_AllLeds(3,500,500);
 

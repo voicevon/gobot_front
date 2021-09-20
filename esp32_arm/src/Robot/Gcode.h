@@ -55,10 +55,10 @@ class Gcode {
         char *command;
 
         //functions from mBED system.
-        char * xxx;
-        unsigned int strlen(char* var) const {return 5;};
-        char* strdup(const char* var ){return xxx;};
-        float parse_float(const char* v1, char** v2) const {return 1.0f;};
-        char* strpbrk(char* v1,char* v2) {return xxx;};
+        // char * xxx;
+        // unsigned int strlen(char* var) const {return 5;};
+        // char* strdup(const std::string var ){return var.c_str();};
+        float parse_float(const char* v1, char** v2) const;
+        // char* strpbrk(char* v1,char* v2) {return xxx;};
 };
 #endif
