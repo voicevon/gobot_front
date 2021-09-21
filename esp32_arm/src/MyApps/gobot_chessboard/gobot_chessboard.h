@@ -37,8 +37,7 @@ Stepper liberys:
 #include <ESP32Servo.h>
 #include "Robot/RobotBase.h"
 #include "ESP32Step/src/TeensyStep.h"
-// #include "Robot/Commu/CommuBleGattServer.h"
-#include "Robot/Commu/CommuBle.h"
+#include "Robot/Commu/CommuBleGattServer.h"
 #include "Robot/Commu/CommuUart.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "Robot/Gcode.h"
@@ -137,6 +136,6 @@ class GobotChessboard: public RobotBase{
         Stepper objStepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
         StepControl objStepControl;
 
-        CommuBle objCommuBle = CommuBle();
+        CommuBleGattServer objCommuBle = CommuBleGattServer();
         CommuUart objCommuUart = CommuUart();
 };

@@ -7,12 +7,12 @@
 class CommuDeviceBase{
     public:
         CommuDeviceBase();
-        virtual ~CommuDeviceBase(){};
+        // ~CommuDeviceBase(){};
         virtual void Init(){};
         virtual void OutputMessage(std::string message){};
         virtual void OutputMessage(char* message){};
         virtual void SpinOnce(){};
-        virtual bool HasNewChatting(){};  //Only New message from BleClient.
+        virtual bool HasNewChatting(){return false;};  //Only New message from BleClient.
         virtual char* ReadChatting(){};
         virtual void WriteNotification(const char* notification){};
 

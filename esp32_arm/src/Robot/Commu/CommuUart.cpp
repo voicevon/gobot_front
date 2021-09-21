@@ -14,7 +14,7 @@ void CommuUart::SpinOnce(){
 
 }
 bool CommuUart::HasNewChatting(){
-
+    return false;
 } 
 
 char* CommuUart::ReadChatting(){

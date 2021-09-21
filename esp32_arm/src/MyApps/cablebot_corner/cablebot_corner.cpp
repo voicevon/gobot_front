@@ -17,7 +17,7 @@ void CableBotCorner::SpinOnce(){
 }
 
 void CableBotCorner::RunG1(Gcode* gcode){
-    float pos = gcode->get_value(singleAxis._Axis_Name);
+    float pos = gcode->get_value(singleAxis.Name);
     bool dir_forward = true;
     if (pos - this->singleAxis._actuator->GetCurrentPos()){
         dir_forward = false;

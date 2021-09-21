@@ -19,31 +19,19 @@ class SingleAxis{
     public:
         // SingleAxisBase(const char axis_name);
         SingleAxis(){};
-        char Name;
         void SpinOnce();
-
         bool IsBusy(){return __is_busy;};
-        void LinkAcuator(ActuatorBase* actuator){};
-        // void LinkSensor(Sensor* sensor){};
-        // virtual void Home(){};   //??
-        // void LinkHomeTriger(HomeTriger* homeTriger);   //Homer = axis(actuaotr+driver) + controller + trigger 
+        void LinkAcuator(ActuatorBase* actuator){this->_actuator=actuator;};
         void Init_scaler(float final_distance_per_encoder_interval);
         ActuatorBase* _actuator;
-        // Sensor* sensor;
-        char _Axis_Name;
+        char Name;
         void SetCurrentPosition(float position);
+
     protected:
         float from_actuator_position(){return this->_actuator->GetCurrentPos();};
         float to_actuator_position(float position){return position;};
         
-        // HomeTriger* homeTriger;
-        // void SetTargetAbs(int targetPosition);
-        // virtual void Move(float distanceRel);
-        // virtual void MoveAsync();
-
-        // float home_position;
         float final_distance_per_encoder_interval;
         bool __is_busy = false;
-        // bool __is_homing = false;
 
 };

@@ -3,7 +3,7 @@
 
 #include "Robot/RobotBase.h"
 #include "Robot/Commu/CommuUart.h"
-#include "Robot/Commu/CommuBLE.h"
+#include "Robot/Commu/CommuBleGattServer.h"
 #include "Robot/Axis/SingleAxis.h"
 
 
@@ -43,7 +43,7 @@ class CableBotCorner: public RobotBase{
         HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR, HIGH);
         DCMotor objDcMotor = DCMotor();
         CommuUart objCommuUart = CommuUart();
-        CommuBle objCommuBle = CommuBle();
+        CommuBleGattServer objCommuBle = CommuBleGattServer();
         SingleAxis singleAxis = SingleAxis();
         // ActuatorControllerBase objActuatorController = ActuatorControllerBase();
 

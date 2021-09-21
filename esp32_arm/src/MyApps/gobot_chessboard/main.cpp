@@ -1,7 +1,7 @@
 #include "all_devices.h"
 #ifdef I_AM_GOBOT_CHESSBOARD
 
-#include "Robot/Commu/CommuBLE.h"
+#include "Robot/Commu/CommuBleGattServer.h"
 #include "gobot_chessboard.h"
 #include "MyLibs/MyFunctions.hpp" 
 

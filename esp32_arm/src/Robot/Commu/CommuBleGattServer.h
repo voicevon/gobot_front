@@ -16,9 +16,9 @@ class CommuBleGattServer:public CommuDeviceBase {
     public:
         void Init();
         void SpinOnce() override;
-        bool HasNewChatting()override;  //Only New message from BleClient.
-        char* ReadChatting()override;
-        void WriteNotification(const char* notification)override;
+        bool HasNewChatting() override;  //Only New message from BleClient.
+        char* ReadChatting() override;
+        void WriteNotification(const char* notification) override;
         void OutputMessage(std::string message) override;
 
     protected:

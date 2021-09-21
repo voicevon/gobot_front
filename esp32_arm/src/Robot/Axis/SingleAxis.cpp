@@ -10,7 +10,7 @@
 
 
 void SingleAxis::SetCurrentPosition(float position){
-  // this->_actuator->SetCurrentPos(this->to_actuator_position(position));
+  this->_actuator->SetCurrentPos(this->to_actuator_position(position));
 }
 
 

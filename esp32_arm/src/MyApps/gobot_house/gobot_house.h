@@ -8,7 +8,7 @@
 // #include "Robot/Commu/CommuBleGattServer.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "Robot/Commu/CommuUart.h"
-#include "Robot/Commu/CommuBle.h"
+#include "Robot/Commu/CommuBleGattServer.h"
 
 // #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/HomeHelper.h"
@@ -88,7 +88,7 @@ class GobotHouse: public RobotBase{
         StepControl objStepControl;
 
         CommuUart objCommuUart = CommuUart();
-        CommuBle objCommuBle = CommuBle();
+        CommuBleGattServer objCommuBle = CommuBleGattServer();
 
 
 

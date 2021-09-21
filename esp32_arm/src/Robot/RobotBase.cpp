@@ -18,7 +18,7 @@ void RobotBase::RunGcode(Gcode* gcode){
     return;
 
   if(!gcode->has_g){
-    this->commuDevice->OutputMessage("  Does NOT has letter 'G'.");
+    this->commuDevice->OutputMessage("  Has NO letter 'G'.");
     this->commuDevice->OutputMessage(gcode->get_command());
     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
     return;
