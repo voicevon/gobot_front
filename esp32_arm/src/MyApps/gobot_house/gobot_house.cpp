@@ -1,13 +1,21 @@
 #include "gobot_house.h"
 
-#define MOTOR_MAX_SPEED_2109 289
-#define HOMED_POSITION_ALPHA_2109 0
-#define HOMED_POSITION_BETA_2109 1
+#define PIN_ALPHA_ENABLE 18
+#define PIN_BETA_ENABLE 16
+#define PIN_MICRIO_STEP_2 21
+#define PIN_MICRIO_STEP_1 22
+#define PIN_MICRIO_STEP_0 23
 
-#define LINK_A_2109 75
-#define LINK_B_2109 75
 
-#define STEPS_PER_RAD_2109 326;   //2048 / 2*Pi
+
+#define MOTOR_MAX_SPEED 289
+#define HOME_POSITION_ALPHA 0
+#define HOME_POSITION_BETA 1
+
+#define LINK_A 75
+#define LINK_B 75
+
+#define STEPS_PER_RAD 326;   //2048 / 2*Pi
 
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
@@ -25,8 +33,19 @@ void GobotHouse::Setup(RobotAction* pAction, int segments){
 
 
 void GobotHouse::HomeAllAxises(){
-  // axis_beta.Home();
-  // axis_alpha.Home();
+  while(!objHomeHelper_alpha.IsTriged()){
+    objStepper_beta.setTargetRel(100);
+    objStepControl.move(objStepper_beta);
+  }
+  objAxis_Beta.SetCurrentPosition(HOME_POSITION_BETA);
+
+  while(!objHomeHelper_alpha.IsTriged()){
+    objStepper_alpha.setTargetRel(100);
+    objStepControl.move(objStepper_alpha);
+  }
+  objAxis_Alpha.SetCurrentPosition(HOME_POSITION_ALPHA);
+  
+  this->commuDevice->OutputMessage("Home is done.....");
 }
 
 void GobotHouse::SpinOnce(){
@@ -80,13 +99,13 @@ ik_position GobotHouse::ik(float x, float y){
   ik_position ret;   //is risk here?
   float rr1= x*x +y*y;
   
-  float beta = acosf((LINK_A_2109 * LINK_A_2109 + LINK_B_2109 * LINK_B_2109 -  rr1 ) / (2* LINK_A_2109 * LINK_B_2109));
+  float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
   float r1 = sqrtf(rr1);
   float alpha_eef = acosf(x/r1);
-  float alpha_link = acosf((LINK_A_2109 * LINK_A_2109 + rr1 - LINK_B_2109 * LINK_B_2109)/( 2*LINK_A_2109 * r1));
+  float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
   float alpha = alpha_eef + alpha_link;
-  ret.alpha = alpha * STEPS_PER_RAD_2109;
-  ret.beta =  beta * STEPS_PER_RAD_2109; 
+  ret.alpha = alpha * STEPS_PER_RAD;
+  ret.beta =  beta * STEPS_PER_RAD; 
   return ret;
 }
 
@@ -146,24 +165,24 @@ void GobotHouse::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
 }
 
 void GobotHouse::init_gpio(){
-    pinMode(PIN_ALPHA_ENABLE_2109, OUTPUT);
-    pinMode(PIN_BETA_ENABLE_2109, OUTPUT);
-    pinMode(PIN_MICRIO_STEP_0_2109, OUTPUT);
-    pinMode(PIN_MICRIO_STEP_1_2109, OUTPUT);
-    pinMode(PIN_MICRIO_STEP_2_2109, OUTPUT);
+    pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+    pinMode(PIN_BETA_ENABLE, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_0, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_1, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_2, OUTPUT);
 
-    digitalWrite(PIN_ALPHA_ENABLE_2109, LOW);
-    digitalWrite(PIN_BETA_ENABLE_2109, LOW);
-    digitalWrite(PIN_MICRIO_STEP_0_2109, LOW);
-    digitalWrite(PIN_MICRIO_STEP_1_2109, LOW);
-    digitalWrite(PIN_MICRIO_STEP_2_2109, LOW);
+    digitalWrite(PIN_ALPHA_ENABLE, LOW);
+    digitalWrite(PIN_BETA_ENABLE, LOW);
+    digitalWrite(PIN_MICRIO_STEP_0, LOW);
+    digitalWrite(PIN_MICRIO_STEP_1, LOW);
+    digitalWrite(PIN_MICRIO_STEP_2, LOW);
 
 }
 void GobotHouse::Init(){
   init_gpio();
   this->commuDevice = &this->objCommuUart; 
-  // this->objHomeTriger_alpha.LinkAxis(&this->objAxis_Alpha);
-  // this->objHomeTriger_beta.LinkAxis(&this->objAxis_Beta);
+  this->objHomeHelper_alpha.LinkAxis(&this->objAxis_Alpha);
+  this->objHomeHelper_beta.LinkAxis(&this->objAxis_Beta);
 
   this->objAxis_Alpha.LinkAcuator(&this->objActuator_Alpha);
   this->objActuator_Alpha.linkDriver(nullptr);

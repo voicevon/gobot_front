@@ -3,6 +3,26 @@
 #include<Arduino.h>
 
 
+#define HOME_POSITION_ALPHA 3.3
+#define HOME_POSITION_BETA 3.3
+
+#define PIN_EEF_SERVO 21
+#define PIN_EEF_A  18
+#define PIN_EEF_B  19
+#define PIN_ALPHA_ENABLE 18
+#define PIN_BETA_ENABLE 16
+
+
+
+//  unit is mm
+#define LINK_0 191.0  // Length between origin and the two motors
+#define LINK_A 285.18 // Length from motor to passive joints
+#define LINK_B 384.51 // Length from passive joints to end effector
+
+#define STEPS_PER_RAD 3056     // 200 * 16 * 6 / (3.1415927 * 2)
+#define MOTOR_MAX_SPEED 1000    // unit?
+
+
 GobotChessboard::GobotChessboard(){
   // this->axis_alpha = &obj_axis_alpha;
   // this->axis_beta = &obj_axis_beta;
@@ -13,13 +33,13 @@ void GobotChessboard::HomeAllAxises(){
     objStepper_alpha.setTargetRel(100);
     objStepControl.move(objStepper_alpha);
   }
-  objAxis_Alpha.SetCurrentPosition(ALPHA_HOME_POSITION_2112);
+  objAxis_Alpha.SetCurrentPosition(HOME_POSITION_ALPHA);
 
   while(!objHomeHelper_beta.IsTriged()){
     objStepper_beta.setTargetRel(100);
     objStepControl.move(objStepper_beta);
   }
-  objAxis_Beta.SetCurrentPosition(BETA_HOME_POSITION_2112);
+  objAxis_Beta.SetCurrentPosition(HOME_POSITION_BETA);
   this->commuDevice->OutputMessage("Home is done.....");
 }
 
@@ -40,19 +60,19 @@ https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/maste
 */
 ik_position GobotChessboard::ik(float x, float y){
   ik_position ret;   //is risk here?
-  float rr1= (x + LINK_0_2112) * (x + LINK_0_2112) + y * y;
+  float rr1= (x + LINK_0) * (x + LINK_0) + y * y;
   
   // float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
   float r1 = sqrtf(rr1);
-  float alpha_eef = acosf((x + LINK_0_2112) / r1);
-  float alpha_link = acosf((LINK_A_2112 * LINK_A_2112 + rr1 - LINK_B_2112 * LINK_B_2112) / ( 2*LINK_A_2112 * r1));
+  float alpha_eef = acosf((x + LINK_0) / r1);
+  float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B) / ( 2*LINK_A * r1));
   float alpha = alpha_eef + alpha_link;
   ret.alpha = alpha * STEPS_PER_RAD;
 
-  float rr2 = (x - LINK_0_2112)* (x - LINK_0_2112) + y * y;
+  float rr2 = (x - LINK_0)* (x - LINK_0) + y * y;
   float r2 = sqrtf(rr2);
-  float beta_eef = acosf((x - LINK_0_2112) / r2 );
-  float beta_link = acosf((LINK_A_2112 * LINK_A_2112 + rr2 - LINK_B_2112 * LINK_B_2112) / (2 * LINK_A_2112 * r2));
+  float beta_eef = acosf((x - LINK_0) / r2 );
+  float beta_link = acosf((LINK_A * LINK_A + rr2 - LINK_B * LINK_B) / (2 * LINK_A * r2));
   float beta = beta_eef - beta_link;
   ret.beta =  beta * STEPS_PER_RAD; 
   return ret;
@@ -67,16 +87,16 @@ void GobotChessboard::SetEffector(EEF action){
       eefServo->write(0);
       break;
     case Suck:
-      digitalWrite(PIN_EEF_A_2112, HIGH);
-      digitalWrite(PIN_EEF_B_2112, LOW);
+      digitalWrite(PIN_EEF_A, HIGH);
+      digitalWrite(PIN_EEF_B, LOW);
       break;
     case Release:
-      digitalWrite(PIN_EEF_A_2112,LOW);
-      digitalWrite(PIN_EEF_B_2112,HIGH);
+      digitalWrite(PIN_EEF_A,LOW);
+      digitalWrite(PIN_EEF_B,HIGH);
       break;
     case Sleep:
-      digitalWrite(PIN_EEF_A_2112,LOW);
-      digitalWrite(PIN_EEF_B_2112,LOW);
+      digitalWrite(PIN_EEF_A,LOW);
+      digitalWrite(PIN_EEF_B,LOW);
       break;
     default:
       break;
@@ -123,12 +143,12 @@ void GobotChessboard::Setup(RobotAction* pAction){
   // Serial.print("Arm is Initializing.........");
   // __Mcp23018 = &Mcp23018::getInstance();
   Servo sv = Servo();
-  sv.attach(PIN_EEF_SERVO_2112);
+  sv.attach(PIN_EEF_SERVO);
   eefServo = &sv ;
 
 
-  pinMode(PIN_EEF_A_2112, OUTPUT);
-  pinMode(PIN_EEF_B_2112,OUTPUT);
+  pinMode(PIN_EEF_A, OUTPUT);
+  pinMode(PIN_EEF_B,OUTPUT);
   SetEffector(Sleep);
   // With libery AccelStepper
   // AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
@@ -147,11 +167,11 @@ void GobotChessboard::Setup(RobotAction* pAction){
 
   // stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
   // stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
-  digitalWrite(PIN_BETA_ENABLE_2112, LOW);
+  digitalWrite(PIN_BETA_ENABLE, LOW);
 
-  link_0 = LINK_0_2112;
-  link_a = LINK_A_2112;
-  link_b = LINK_B_2112;
+  link_0 = LINK_0;
+  link_a = LINK_A;
+  link_b = LINK_B;
 }
 
 void GobotChessboard::SpinOnce(){
@@ -160,10 +180,10 @@ void GobotChessboard::SpinOnce(){
 
 
 void GobotChessboard::Init(){
-    pinMode(PIN_ALPHA_ENABLE_2112, OUTPUT);
-    pinMode(PIN_BETA_ENABLE_2112, OUTPUT);
-    digitalWrite(PIN_ALPHA_ENABLE_2112, LOW);
-    digitalWrite(PIN_BETA_ENABLE_2112, LOW);
+    pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+    pinMode(PIN_BETA_ENABLE, OUTPUT);
+    digitalWrite(PIN_ALPHA_ENABLE, LOW);
+    digitalWrite(PIN_BETA_ENABLE, LOW);
 
     this->commuDevice = &this->objCommuUart;
     this->objAxis_Alpha.LinkAcuator(&this->objActuator_Alpha);

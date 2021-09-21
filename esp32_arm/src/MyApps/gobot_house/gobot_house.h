@@ -30,19 +30,14 @@
 #define PIN_HOME_ALHPA_2109 35     //??
 #define PIN_ALPHA_DIR_2109 19
 #define PIN_ALPHA_STEP_2109 5
-#define PIN_ALPHA_ENABLE_2109 18
 
 #define PIN_HOME_BETA_2109 34      //??
 #define PIN_BETA_DIR_2109 17
 #define PIN_BETA_STEP_2109 4
-#define PIN_BETA_ENABLE_2109 16
 
 #define ENDER_COIL_2109 32
 #define ENDER_COIL_EXT_2109 33
 
-#define PIN_MICRIO_STEP_2_2109 21
-#define PIN_MICRIO_STEP_1_2109 22
-#define PIN_MICRIO_STEP_0_2109 23
 
 class GobotHouse: public RobotBase{
     public:
@@ -84,8 +79,8 @@ class GobotHouse: public RobotBase{
 
         Led objLedPower = Led(0, PIN_LED_POWER_2109, LOW);
         Led objLedHomeAlpha = Led(1,2,LOW);
-        HomeHelper objHomeTriger_alpha = HomeHelper(PIN_HOME_ALHPA_2109, HIGH);
-        HomeHelper objHomeTriger_beta = HomeHelper(PIN_HOME_BETA_2109, HIGH);
+        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA_2109, HIGH);
+        HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA_2109, HIGH);
 
         Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
         Stepper objStepper_beta = Stepper(PIN_BETA_STEP_2109, PIN_BETA_DIR_2109);

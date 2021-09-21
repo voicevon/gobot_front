@@ -19,38 +19,15 @@ Stepper liberys:
 #define PIN_HOME_ALHPA_2112  35     //??
 #define PIN_ALPHA_DIR_2112 19
 #define PIN_ALPHA_STEP_2112 5
-#define PIN_ALPHA_ENABLE_2112 18
 
 #define PIN_HOME_BETA_2112  34      //??
 #define PIN_BETA_DIR_2112 17
 #define PIN_BETA_STEP_2112 4
-#define PIN_BETA_ENABLE_2112 16
-
-// Total occupied 10 Pins
-#define PIN_EEF_SERVO_2112 21
-#define PIN_EEF_A_2112  18
-#define PIN_EEF_B_2112  19
 
 
 #define PIN_ENDER_COIL_2112 32
 #define PIN_ENDER_COIL_EXT_2112 33
 
-#define ALPHA_HOME_POSITION_2112 2.2
-#define BETA_HOME_POSITION_2112 3.3
-
-
-
-//  unit is mm
-#define LINK_0_2112 191.0  // Length between origin and the two motors
-#define LINK_A_2112 285.18 // Length from motor to passive joints
-#define LINK_B_2112 384.51 // Length from passive joints to end effector
-
-
-#define HOMED_POSITION_ALPHA_2112 123   // unit is step
-#define HOMED_POSITION_BETA_2112 112    // unit is step
-
-#define STEPS_PER_RAD_2112 3056     // 200 * 16 * 6 / (3.1415927 * 2)
-#define MOTOR_MAX_SPEED_2112 1000    // unit?
 
 
 #include "actions.h"
