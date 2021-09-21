@@ -13,21 +13,14 @@
 */
 class DCDriverHBridge: public DCDriver{
   public:
-    /**
-      DCDriverHBridge class constructor
-      @param pinA A phase pwm pin
-      @param pinB B phase pwm pin
-    */
     DCDriverHBridge(int pinA,int pinB);
-    
-    /**  Motor hardware init function */
-  	int init() override;
-
-    // hardware variables
+    void Start(int pwm_speed, bool dir_forward);
+    void Stop();
+    void Break();
+  
+  private:
   	int __pinA; //!< phase A pwm pin number
   	int __pinB; //!< phase B pwm pin number
-
-  private:
         
 };
 

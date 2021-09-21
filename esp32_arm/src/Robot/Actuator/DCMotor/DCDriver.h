@@ -5,9 +5,6 @@
 
 class DCDriver{
     public:
-        
-        /** Initialise hardware */
-        virtual int init() = 0;
 };
 
 #endif

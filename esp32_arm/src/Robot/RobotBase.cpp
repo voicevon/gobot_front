@@ -1,18 +1,20 @@
-#ifndef _SINGLE_AXIS_HPP_
-#define _SINGLE_AXIS_HPP_
-
 #include "RobotBase.h"
 #include "MyLibs/MyFunctions.hpp"
 
-// template<class Actuator_T, class ActuatorController_T, class ActuatorDriver_T, class CommuDevice_T>
-// RobotBase<Actuator_T,ActuatorController_T,ActuatorDriver_T,CommuDevice_T>::RobotBase(char axisName){
-//     this->_Axis_Name = axisName;
-// } 
 
+void RobotBase::_base_spin_once(){
+  commuDevice->SpinOnce();
+  if(commuDevice->HasNewChatting()){
+    std::string command(commuDevice->ReadChatting());
+    // std::string command="G1 A12.345 ";
+    commuDevice->OutputMessage(command);
+    Gcode gCode = Gcode(command);
+    // Gcode gCode = Gcode(commu.ReadChatting());   //Risk for not releasing memory ?
+    this->RunGcode(&gCode);
+  }
+}
 
-
-template <class Actuator_T, class ActuatorController_T, class ActuatorDriver_T, class CommuDevice_T>
-void RobotBase<Actuator_T,ActuatorController_T,ActuatorDriver_T, CommuDevice_T>::RunGcode(Gcode* gcode){
+void RobotBase::RunGcode(Gcode* gcode){
 
   if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND))
     return;
@@ -33,6 +35,7 @@ void RobotBase<Actuator_T,ActuatorController_T,ActuatorDriver_T, CommuDevice_T>:
 
   }else if (gcode->g ==1){
     // G1 Move
+    this->RunG1(gcode);
     // this->__is_busy = true;
     // float pos = gcode->get_value(this->_Axis_Name);
     // this->commuDevice->OutputMessage("  > Move to " + toString(pos));
@@ -52,4 +55,7 @@ void RobotBase<Actuator_T,ActuatorController_T,ActuatorDriver_T, CommuDevice_T>:
 
 }
 
-#endif
+void RobotBase::AppendAxis(SingleAxis* axis){
+  
+}
+

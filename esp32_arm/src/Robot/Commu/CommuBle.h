@@ -4,7 +4,7 @@
 #include "CommuBleGattServer.h"
 // #include "CommuDeviceBase.h"
 
-class CommuRobotBle:public CommuBleGattServer {
+class CommuBle:public CommuBleGattServer {
     public:
         uint8_t GetBuffer(){return 1;};
         // void OutputMessage(string message) override;

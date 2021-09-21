@@ -71,10 +71,15 @@ class ActuatorBase
     float GetCurrentPos(){return 0.0;};
     void linkSensor(Sensor* sensor);
 
-    float shaftVelocity();
+    // float shaftVelocity();
     Sensor* sensor; 
     bool IsRunning=false;
-    
+
+    //Some properties like below: Might be useful in feature.
+    float MaxSpeed = 1;
+    // float Weight = 0;
+    // float MaxAcceleration = 2;
+    // Mass gravity = (1,2,3);
   private:
 
 };

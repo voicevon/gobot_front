@@ -215,3 +215,15 @@ void GobotChessboard::SpinOnce(){
   // else if (!steppers.run())
   //   __arm_action->bytes[0] = 1;
 }
+
+
+void GobotChessboard::Init(){
+    pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+    pinMode(PIN_BETA_ENABLE, OUTPUT);
+    digitalWrite(PIN_ALPHA_ENABLE, LOW);
+    digitalWrite(PIN_BETA_ENABLE, LOW);
+}
+
+void GobotChessboard::RunG1(Gcode* gcode){
+  
+}

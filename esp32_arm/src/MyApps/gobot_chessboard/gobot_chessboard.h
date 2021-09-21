@@ -11,17 +11,39 @@ Stepper liberys:
     - https://github.com/pkerspe/ESP-FlexyStepper
 */
 
+#define PIN_LED_POWER 12
+#define PIN_LED_B 25
+#define PIN_LED_C 26
+#define PIN_LED_F 27
+#define PIN_LED_H 14
+
+#define PIN_HOME_ALHPA 35     //??
+#define PIN_ALPHA_DIR 19
+#define PIN_ALPHA_STEP 5
+#define PIN_ALPHA_ENABLE 18
+
+#define PIN_HOME_BETA 34      //??
+#define PIN_BETA_DIR 17
+#define PIN_BETA_STEP 4
+#define PIN_BETA_ENABLE 16
+
+#define ENDER_COIL 32
+#define ENDER_COIL_EXT 33
 
 #include "actions.h"
 #include <ESP32Servo.h>
-#include "Robot/RobotBase.hpp"
+#include "Robot/RobotBase.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/Commu/CommuBleGattServer.h"
 #include "MyLibs/MyFunctions.hpp"
+#include "Robot/Gcode.h"
 #define ARM_ALPHA_AXIS 4
 #define ARM_BETA_AXIS 5
 
 
+// #include "ESP32Step/src/TeensyStep.h"
+#include "Robot/HomeTriger.h"
+#include "MyLibs/Components/Led.h"
 // Up to 10 steppers can be handled as a group by MultiStepper
 
 enum EEF{
@@ -47,7 +69,7 @@ How to solve the concepts I don't know?
     Don't send me nominal name of go game (either of any other name).
 
 */
-class GobotChessboard: public RobotBase<EmptyClass,StepControl,Stepper,CommuBleGattServer>{
+class GobotChessboard: public RobotBase{
     public:
         static GobotChessboard& getInstance()
         {
@@ -56,6 +78,8 @@ class GobotChessboard: public RobotBase<EmptyClass,StepControl,Stepper,CommuBleG
             return instance;
         }
         void HomeAllAxises() override;
+        void RunG1(Gcode* gcode) override;
+        void Init() override;
         void SpinOnce(void);
         void Setup(RobotAction* pAction);
 
@@ -94,5 +118,14 @@ class GobotChessboard: public RobotBase<EmptyClass,StepControl,Stepper,CommuBleG
 
 
     protected:
+    private:
+        Led led_power = Led(0, PIN_LED_POWER, LOW);
+        // led_Robot = Led(2,1,LOW);
+        Led led_home_alpha = Led(1,2,LOW);
+        HomeTriger homeTriger_alpha = HomeTriger(PIN_HOME_ALHPA, HIGH);
+        HomeTriger homeTriger_beta = HomeTriger(PIN_HOME_BETA, HIGH);
 
+        Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+        Stepper stepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+        StepControl stepControl;
 };

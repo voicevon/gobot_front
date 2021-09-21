@@ -147,3 +147,25 @@ void GobotHouse::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
 
   // MoveTo(x,y);
 }
+
+
+void GobotHouse::Init(){
+  
+    pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+    pinMode(PIN_BETA_ENABLE, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_0, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_1, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+
+    digitalWrite(PIN_ALPHA_ENABLE, LOW);
+    digitalWrite(PIN_BETA_ENABLE, LOW);
+    digitalWrite(PIN_MICRIO_STEP_0, LOW);
+    digitalWrite(PIN_MICRIO_STEP_1, LOW);
+    digitalWrite(PIN_MICRIO_STEP_2, LOW);
+
+    Serial.println("setup_hardware() is done.");
+}
+
+void GobotHouse::RunG1(Gcode* gcode) {
+
+}

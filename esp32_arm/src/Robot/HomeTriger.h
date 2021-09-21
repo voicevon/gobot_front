@@ -3,14 +3,20 @@
 
 #include <Arduino.h>
 #include "MyLibs/Components/BinaryInput.h"
+#include "Robot/Axis/SingleAxis.h"
 
 class HomeTriger: public BinaryInput{
     public:
         HomeTriger(uint8_t pinTriger, uint8_t trigeredlState=LOW);
+        // void SetHomePosition();   //???
         bool IsTriged();
+        void LinkAxis(SingleAxis* axis){this->axis=axis;};
+        void HomeAxis();
+
     private:
         // uint8_t pinTriger;
         uint8_t trigeredState;
+        SingleAxis* axis;
 };
 
 

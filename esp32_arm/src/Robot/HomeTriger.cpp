@@ -11,3 +11,7 @@ bool HomeTriger::IsTriged(){
         return true;
     return false;
 }
+
+void HomeTriger::HomeAxis(){
+    
+}

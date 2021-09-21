@@ -2,30 +2,42 @@
 
 // #include "Axis/SingleAxisBase.hpp"
 #include <Robot/Gcode.h>
+#include "Robot/Commu/CommuDeviceBase.h"
 
+#include "Axis/SingleAxis.h"
+// #include "Robot/Actuator/ActuatorControllerBase.h"
+// #include "Robot/Actuator/ActuatorBase.h"
 struct ik_position{
     int alpha;
     int beta;
 };
 
 /**
- * RobotBase has NO axis!
+ * RobotBase has NO axis! 
+ *      Reasons:
+ *          1. Doesn't know how may axis. 
+ *      ?? Or has at least one axis? 
+ *      ?? Saying has no actuator, driver, sensor ?
+ * RobotBase has NO ActuatorController!
+ *          The ActuatorController might be inside of ActuatorDriver.
+ *                                 might be no ActuatorCotroller in the whole system.
 */
-template <class Actuator_T, class ActuatorController_T, class ActuatorDriver_T, class CommuDevice_T>
 class RobotBase{
     public:
         RobotBase(){};
         void RunGcode(Gcode* gcode);
-        void SpinOnce();
-        virtual void HomeAllAxises();
-        void LinkActuatorController(ActuatorController_T* controller){this->actuatorController = controller;};
-        void LinkCommuDevice(CommuDevice_T* commuDevice){this->commuDevice=commuDevice;};
-        // void RunGcode(Gcode* gcode);
+        virtual void SpinOnce();
+        virtual void HomeAllAxises();   //??
+        virtual void Init();
         bool IsBusy(){return false;};
+        void AppendAxis(SingleAxis* axis);
     protected:
+        void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
         virtual ik_position ik(float x, float y){};
-        ActuatorController_T* actuatorController;
-        CommuDevice_T* commuDevice;
+        virtual void RunG1(Gcode* gcode);
+        void _base_spin_once();
+        CommuDeviceBase* commuDevice;
+
         // Just for fun, don't remove below comment !!
         // void OnFinishedGcode2(void(*callback)()) {__output_message2 = callback;};
         // void OnFinishedGcode3(void(*callback)()) {__output_message2 = callback;};

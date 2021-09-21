@@ -1,8 +1,10 @@
 #pragma once
 
 #include <Arduino.h>
-#include "../HomeTriger.h"
+// #include "../HomeTriger.h"
 #include "ESP32Step/src/Stepper.h"
+#include "SimpleFOC/sensors/Encoder.h"
+#include "Robot/Actuator/ActuatorBase.h"
 
 // http://www.gammon.com.au/forum/?id=12983     static instances code for attachInterupt()
 // https://www.fluentcpp.com/2018/01/09/strong-templates/
@@ -12,29 +14,30 @@
  *  SingleAxis can NOT move, because it has no ActuatorController.
  *  Saying: An axis can NOT do home, Home() should be in top level, it is an Robot().
 */
-template <class Actuator_T, class Sensor_T>
-class SingleAxisBase{
+
+class SingleAxis{
     public:
         // SingleAxisBase(const char axis_name);
-        SingleAxisBase(){};
+        SingleAxis(){};
         char Name;
         void SpinOnce();
 
         bool IsBusy(){return __is_busy;};
-        void LinkAcuator(Actuator_T* actuator);
-        void LinkSensor(Sensor_T* sensor);
+        void LinkAcuator(ActuatorBase* actuator){};
+        void LinkSensor(Sensor* sensor){};
         // virtual void Home(){};   //??
         // void LinkHomeTriger(HomeTriger* homeTriger);   //Homer = axis(actuaotr+driver) + controller + trigger 
         void Init_scaler(float final_distance_per_encoder_interval);
-        Actuator_T* _actuator;
-        Sensor_T* sensor;
+        ActuatorBase* _actuator;
+        Sensor* sensor;
+        char _Axis_Name;
+
     protected:
-        HomeTriger* homeTriger;
+        // HomeTriger* homeTriger;
         // void SetTargetAbs(int targetPosition);
         // virtual void Move(float distanceRel);
         // virtual void MoveAsync();
 
-        char _Axis_Name;
         float home_position;
         float final_distance_per_encoder_interval;
         bool __is_busy = false;

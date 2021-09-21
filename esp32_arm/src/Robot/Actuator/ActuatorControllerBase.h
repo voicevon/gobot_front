@@ -2,20 +2,24 @@
 
 // TODO: StepControl should be a child class.
 
+#include "Robot/Actuator/ActuatorBase.h"
+
 /**
  * How one or a group of actuators move?
  * Who send out the command?
  *            Me !
  */
-
-template<class Actuator_T>
+// template<class Actuator_T>
 class ActuatorControllerBase{
     public:
         ActuatorControllerBase(){};
-        void LinkActuator(Actuator_T* actuator){this->_actuator= actuator;};
-        virtual void Move(float relDistance);
+        // void LinkActuator(ActuatorBase* actuator){this->_actuator= actuator;};
+        // virtual void LinkDriver();  //??
+        virtual void Move(float relDistance){};
+        virtual void MoveTo(float absPosition){};
+        virtual void MoveForward(float speed, bool reverseDir){};  // For DC Motor.
 
     protected:
-        Actuator_T _actuator;
+        ActuatorBase* _actuator;
 };
 
