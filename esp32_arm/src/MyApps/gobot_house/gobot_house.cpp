@@ -1,13 +1,13 @@
 #include "gobot_house.h"
 
-#define MOTOR_MAX_SPEED 289
-#define HOMED_POSITION_ALPHA 0
-#define HOMED_POSITION_BETA 1
+#define MOTOR_MAX_SPEED_2109 289
+#define HOMED_POSITION_ALPHA_2109 0
+#define HOMED_POSITION_BETA_2109 1
 
-#define LINK_A 75
-#define LINK_B 75
+#define LINK_A_2109 75
+#define LINK_B_2109 75
 
-#define STEPS_PER_RAD 326;   //2048 / 2*Pi
+#define STEPS_PER_RAD_2109 326;   //2048 / 2*Pi
 
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
@@ -80,13 +80,13 @@ ik_position GobotHouse::ik(float x, float y){
   ik_position ret;   //is risk here?
   float rr1= x*x +y*y;
   
-  float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
+  float beta = acosf((LINK_A_2109 * LINK_A_2109 + LINK_B_2109 * LINK_B_2109 -  rr1 ) / (2* LINK_A_2109 * LINK_B_2109));
   float r1 = sqrtf(rr1);
   float alpha_eef = acosf(x/r1);
-  float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
+  float alpha_link = acosf((LINK_A_2109 * LINK_A_2109 + rr1 - LINK_B_2109 * LINK_B_2109)/( 2*LINK_A_2109 * r1));
   float alpha = alpha_eef + alpha_link;
-  ret.alpha = alpha * STEPS_PER_RAD;
-  ret.beta =  beta * STEPS_PER_RAD; 
+  ret.alpha = alpha * STEPS_PER_RAD_2109;
+  ret.beta =  beta * STEPS_PER_RAD_2109; 
   return ret;
 }
 

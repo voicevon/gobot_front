@@ -2,15 +2,13 @@
 #ifdef I_AM_GOBOT_HOUSE
 
 // #include "hardware.hpp"
-#include "Robot/Commu/CommuBLE.h"
+#include "Robot/Commu/CommuBleGattServer.h"
 #include "gobot_house.h"
 #include "MyLibs/MyFunctions.hpp" 
-// #include "Robot/Axis/SingleAxisBase.hpp"
 
 // static char LOG_TAG[]= "BLE-HOUSE";
 GobotHouse* robot; 
 RobotAction action;
-// CommuBle ble= CommuBle();
 
 void setup(){
     Serial.begin(115200);

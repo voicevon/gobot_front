@@ -48,7 +48,8 @@ void CableBotCorner::Init(Encoder* encoder){
 }
 
 ik_position CableBotCorner::ik(float x, float y){
-    ik_position ret;
+    ik_position ret;  //TODO: check risk for unreleasing ?
     ret.alpha = x;
     ret.beta = y;   // Will Never useful for me. 
+    return ret;
 } 

@@ -1,7 +1,7 @@
 #ifndef __H_TASK_BASE_H_
 #define __H_TASK_BASE_H_
 
-#include <Arduino.h>>
+#include <Arduino.h>
 
 /*
 HTask is High performanceTask
