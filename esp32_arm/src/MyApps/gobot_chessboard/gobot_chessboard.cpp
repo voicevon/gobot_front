@@ -35,38 +35,19 @@ GobotChessboard::GobotChessboard(){
   // this->axis_beta = &obj_axis_beta;
 }
 
-void GobotChessboard::HomeAllAxises(){  
-  // uint8_t homing_axis = axis;
-  // uint8_t home_pin = PIN_HOME_BETA;
-  // // Stepper* homing_stepper = stepper_beta;
+void GobotChessboard::HomeAllAxises(){ 
+  while(!objHomeHelper_alpha.IsTriged()){
+    objStepper_alpha.setTargetRel(100);
+    objStepControl.move(objStepper_alpha);
+  }
+  objAxis_Alpha.SetCurrentPosition(ALPHA_HOME_POSITION);
 
-  // if (axis == ARM_ALPHA_AXIS ){
-  //   home_pin = PIN_HOME_ALHPA;
-  //   // homing_stepper = stepper_alpha;
-  //   // stepper = stepper_alpha;
-  //   Serial.print("\nStart Homing Alpha");
-  // }
-  // else {
-  //   // axis == 1
-  //   // homing_stepper = stepper_beta;
-  //   Serial.print("\nStart Homing Beta");
-  // }
-  // homing_stepper->setTargetRel(-500);
-  // steppers->move(*homing_stepper);
-  // while (steppers->isRunning()){
-    //Seems alway return false of isRunning()
-    // Serial.print("r");
-  // };
-
-  // __HomeSpin(homing_stepper, home_pin);
-  // if (homing_axis == 0){
-  //   // stepper_alpha->setPosition(HOMED_POSITION_ALPHA);
-  // }
-  // else{
-  //   stepper_beta->setPosition(HOMED_POSITION_BETA);
-  // }
-  // // __arm_action->bytes[0] = 0;
-  // Serial.print("\n Home one axis is Done.......");
+  while(!objHomeHelper_beta.IsTriged()){
+    objStepper_beta.setTargetRel(100);
+    objStepControl.move(objStepper_beta);
+  }
+  objAxis_Beta.SetCurrentPosition(BETA_HOME_POSITION);
+  this->commuDevice->OutputMessage("Home is done.....");
 }
 
 void GobotChessboard::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
@@ -176,12 +157,6 @@ void GobotChessboard::Setup(RobotAction* pAction){
   pinMode(PIN_EEF_A, OUTPUT);
   pinMode(PIN_EEF_B,OUTPUT);
   SetEffector(Sleep);
-  // pinMode(PIN_BETA_ENABLE, OUTPUT);
-  // digitalWrite(PIN_BETA_ENABLE, HIGH);
-
-  // pinMode(PIN_HOME_ALHPA,INPUT_PULLUP);
-  // pinMode(PIN_HOME_BETA, INPUT_PULLUP);
-
   // With libery AccelStepper
   // AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
   //                                     PIN_ALPHA_STEP, PIN_ALPHA_DIR);
@@ -200,7 +175,6 @@ void GobotChessboard::Setup(RobotAction* pAction){
   // stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
   // stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
   digitalWrite(PIN_BETA_ENABLE, LOW);
-  // steppers = new StepControl();
 
   link_0 = LINK_0;
   link_a = LINK_A;
@@ -208,12 +182,7 @@ void GobotChessboard::Setup(RobotAction* pAction){
 }
 
 void GobotChessboard::SpinOnce(){
-  // steppers.run();
-  return;
-  // if (!homed)
-  //   HomeSpin();
-  // else if (!steppers.run())
-  //   __arm_action->bytes[0] = 1;
+  this->_base_spin_once();
 }
 
 
@@ -222,7 +191,18 @@ void GobotChessboard::Init(){
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     digitalWrite(PIN_ALPHA_ENABLE, LOW);
     digitalWrite(PIN_BETA_ENABLE, LOW);
-}
+
+    this->commuDevice = &this->objCommuUart;
+    this->objAxis_Alpha.LinkAcuator(&this->objActuator_Alpha);
+    this->objActuator_Alpha.linkDriver(nullptr);
+    this->objActuator_Alpha.linkSensor(nullptr);
+    this->objAxis_Beta.LinkAcuator(&this->objActuator_Beta);
+    this->objActuator_Beta.linkDriver(nullptr);
+    this->objActuator_Beta.linkSensor(nullptr);
+
+    this->objHomeHelper_alpha.LinkAxis(&this->objAxis_Alpha);
+    this->objHomeHelper_beta.LinkAxis(&this->objAxis_Beta);
+} 
 
 void GobotChessboard::RunG1(Gcode* gcode){
   

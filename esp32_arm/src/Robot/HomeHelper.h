@@ -2,21 +2,20 @@
 #define _HOME_TRIGER_H_
 
 #include <Arduino.h>
-#include "MyLibs/Components/BinaryInput.h"
 #include "Robot/Axis/SingleAxis.h"
 
-class HomeTriger: public BinaryInput{
+class HomeHelper{
     public:
-        HomeTriger(uint8_t pinTriger, uint8_t trigeredlState=LOW);
+        HomeHelper(uint8_t pinTriger, int trigeredlState);
         // void SetHomePosition();   //???
         bool IsTriged();
         void LinkAxis(SingleAxis* axis){this->axis=axis;};
-        void HomeAxis();
-        float home_position;
+        // void HomeAxis();
+        // float home_position;
 
     private:
-        // uint8_t pinTriger;
-        uint8_t trigeredState;
+        uint8_t pinTriger;
+        int trigeredState;
         SingleAxis* axis;
 };
 

@@ -35,9 +35,9 @@ void CableBotCorner::RunG1(Gcode* gcode){
 }
 
 void CableBotCorner::Init(Encoder* encoder){
-    this->LinkCommuDevice(&this->commuUart);
-    this->objHomeTriger.LinkAxis(&this->singleAxis);
-    this->objHomeTriger.home_position=1;
+    this->LinkCommuDevice(&this->objCommuUart);
+    // this->objHomeTriger.LinkAxis(&this->singleAxis);
+    // this->objHomeTriger.home_position=1;
 
     this->singleAxis.LinkAcuator(&this->objDcMotor);
     this->objDcMotor.linkSensor(encoder);

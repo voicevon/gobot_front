@@ -7,9 +7,11 @@
 #include "HouseMap.h"
 // #include "Robot/Commu/CommuBleGattServer.h"
 #include "MyLibs/MyFunctions.hpp"
+#include "Robot/Commu/CommuUart.h"
+#include "Robot/Commu/CommuBle.h"
 
 // #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/HomeTriger.h"
+#include "Robot/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
 
 // #define COIL_COUNT 53
@@ -57,31 +59,38 @@ class GobotHouse: public RobotBase{
         void RunG1(Gcode* gcode) override;
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);
-        // StepControl steppers;   //???
     protected:
     private:
         GobotHouse();
-        // SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
-        // SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
-
         RobotAction* __house_action;
         int __segments;
         
         ik_position ik(float x, float y) override;
-        // void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
         void __Move_fromRoom_toDoor(uint8_t house_id, bool forwarding);
         void __Move_fromHead_toNeck(bool forwarding);
         void __Move_fromNeck_toDoor(uint8_t house_id, bool forwarding);
         void __Enable_eefCoil(bool enable);
         HouseMap __map;
 
-        Led led_power = Led(0, PIN_LED_POWER, LOW);
-        // led_Robot = Led(2,1,LOW);
-        Led led_home_alpha = Led(1,2,LOW);
-        HomeTriger homeTriger_alpha = HomeTriger(PIN_HOME_ALHPA, HIGH);
-        HomeTriger homeTriger_beta = HomeTriger(PIN_HOME_BETA, HIGH);
+        SingleAxis objAxis_Alpha= SingleAxis();
+        SingleAxis objAxis_Beta= SingleAxis();
+        ActuatorBase objActuator_Alpha = ActuatorBase();
+        ActuatorBase objActuator_Beta = ActuatorBase();
 
-        Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-        Stepper stepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
-        StepControl stepControl;
+
+        Led objLedPower = Led(0, PIN_LED_POWER, LOW);
+        Led objLedHomeAlpha = Led(1,2,LOW);
+        HomeHelper objHomeTriger_alpha = HomeHelper(PIN_HOME_ALHPA, HIGH);
+        HomeHelper objHomeTriger_beta = HomeHelper(PIN_HOME_BETA, HIGH);
+
+        Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+        Stepper objStepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+        StepControl objStepControl;
+
+        CommuUart objCommuUart = CommuUart();
+        CommuBle objCommuBle = CommuBle();
+
+
+
+        void init_gpio();
 };

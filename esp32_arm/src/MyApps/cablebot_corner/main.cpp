@@ -23,7 +23,7 @@ void loop(){
     robot.SpinOnce();
 
     //for testing.
-    Gcode gcode=Gcode("G1 X100");
+    Gcode gcode = Gcode("G1 X100");
     robot.RunGcode(&gcode);
 
 }

@@ -31,16 +31,19 @@ class SingleAxis{
         ActuatorBase* _actuator;
         // Sensor* sensor;
         char _Axis_Name;
-
+        void SetCurrentPosition(float position);
     protected:
+        float from_actuator_position(){return this->_actuator->GetCurrentPos();};
+        float to_actuator_position(float position){return position;};
+        
         // HomeTriger* homeTriger;
         // void SetTargetAbs(int targetPosition);
         // virtual void Move(float distanceRel);
         // virtual void MoveAsync();
 
-        float home_position;
+        // float home_position;
         float final_distance_per_encoder_interval;
         bool __is_busy = false;
-        bool __is_homing = false;
+        // bool __is_homing = false;
 
 };

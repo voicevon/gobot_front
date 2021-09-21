@@ -13,8 +13,6 @@
 
 
 GobotHouse::GobotHouse(){
-  // this->axis_alpha = &obj_axis_alpha;
-  // this->axis_beta = &obj_axis_beta;
 }
 
 void GobotHouse::Setup(RobotAction* pAction, int segments){
@@ -34,8 +32,6 @@ void GobotHouse::HomeAllAxises(){
 void GobotHouse::SpinOnce(){
   
 }
-
-
 
 // Head is a position name, The 5 bar arm will pick up stone from there.
 void GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){
@@ -148,9 +144,7 @@ void GobotHouse::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
   // MoveTo(x,y);
 }
 
-
-void GobotHouse::Init(){
-  
+void GobotHouse::init_gpio(){
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     pinMode(PIN_MICRIO_STEP_0, OUTPUT);
@@ -163,7 +157,21 @@ void GobotHouse::Init(){
     digitalWrite(PIN_MICRIO_STEP_1, LOW);
     digitalWrite(PIN_MICRIO_STEP_2, LOW);
 
-    Serial.println("setup_hardware() is done.");
+}
+void GobotHouse::Init(){
+  init_gpio();
+  this->commuDevice = &this->objCommuUart; 
+  // this->objHomeTriger_alpha.LinkAxis(&this->objAxis_Alpha);
+  // this->objHomeTriger_beta.LinkAxis(&this->objAxis_Beta);
+
+  this->objAxis_Alpha.LinkAcuator(&this->objActuator_Alpha);
+  this->objActuator_Alpha.linkDriver(nullptr);
+  this->objActuator_Alpha.linkSensor(nullptr);
+
+  this->objAxis_Beta.LinkAcuator(&this->objActuator_Beta);
+  this->objActuator_Beta.linkDriver(nullptr);
+  this->objActuator_Beta.linkSensor(nullptr);
+
 }
 
 void GobotHouse::RunG1(Gcode* gcode) {

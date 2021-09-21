@@ -21,37 +21,18 @@ void setup(){
     // ble.Init();
     // Serial.println("BLE is ok....");    
     robot = &GobotChessboard::getInstance();
-    //couple the components
-    // robot->axis_alpha.LinkAcuator(&stepper_alpha);
-    // robot->axis_beta.LinkAcuator(&stepper_beta);
-    // robot->axis_alpha.LinkHomeTriger(&homeTriger_alpha);
-    // robot->axis_beta.LinkHomeTriger(&homeTriger_beta);
-    // robot->LinkActuatorController(&stepControl);
-    // robot->OnOutputMessage_set_callback(output_message);
-
-    // robot->Setup(&action, 9);
-
-    // robot->HomeAllAxises();
-    // Serial.print("\nGobot-Chessboard Homing is done......");
+    robot->Init();
     Serial.print("\nGobot-Chessboard setup is done..........");
 
 }
 
 
 void loop(){
-    // ble.SpinOnce();
-    robot->SpinOnce();
+    // robot->SpinOnce();
+    //for testing.
+    Gcode gcode=Gcode("G28 X100");
+    robot->RunGcode(&gcode);
 
-    // Notificate my status.
-    // ble.UpdateCurrentPos(100);
-
-    // if (robot->IsBusy())
-    //     return;
-    // if(ble.HasNewChatting()){
-    //     // ble got new gcode
-    //     Gcode gCode = Gcode(ble.ReadChatting());   //Risk for not releasing memory ?
-    //     robot->RunGcode(&gCode);
-    // }
 }
 
 

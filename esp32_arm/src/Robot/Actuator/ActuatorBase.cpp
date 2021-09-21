@@ -1,12 +1,11 @@
 #include "ActuatorBase.h"
 
-/**
- * Default constructor - setting all variabels to default values
- */
-ActuatorBase::ActuatorBase()
-{
-  this->sensor = nullptr;
-  this->driver = nullptr;
+float ActuatorBase::GetCurrentPos(){
+  return this->current_position;
+}
+
+void ActuatorBase::SetCurrentPos(float position){
+  this->current_position = position;
 }
 
 

@@ -17,12 +17,12 @@ Stepper liberys:
 #define PIN_LED_F 27
 #define PIN_LED_H 14
 
-#define PIN_HOME_ALHPA 35     //??
+#define PIN_HOME_ALHPA  26    //35     //??
 #define PIN_ALPHA_DIR 19
 #define PIN_ALPHA_STEP 5
 #define PIN_ALPHA_ENABLE 18
 
-#define PIN_HOME_BETA 34      //??
+#define PIN_HOME_BETA  27        //34      //??
 #define PIN_BETA_DIR 17
 #define PIN_BETA_STEP 4
 #define PIN_BETA_ENABLE 16
@@ -30,19 +30,23 @@ Stepper liberys:
 #define ENDER_COIL 32
 #define ENDER_COIL_EXT 33
 
+#define ALPHA_HOME_POSITION 2.2
+#define BETA_HOME_POSITION 3.3
+
 #include "actions.h"
 #include <ESP32Servo.h>
 #include "Robot/RobotBase.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/Commu/CommuBleGattServer.h"
+// #include "Robot/Commu/CommuBleGattServer.h"
+#include "Robot/Commu/CommuBle.h"
+#include "Robot/Commu/CommuUart.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "Robot/Gcode.h"
-#define ARM_ALPHA_AXIS 4
-#define ARM_BETA_AXIS 5
+
 
 
 // #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/HomeTriger.h"
+#include "Robot/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
 // Up to 10 steppers can be handled as a group by MultiStepper
 
@@ -119,13 +123,20 @@ class GobotChessboard: public RobotBase{
 
     protected:
     private:
-        Led led_power = Led(0, PIN_LED_POWER, LOW);
-        // led_Robot = Led(2,1,LOW);
-        Led led_home_alpha = Led(1,2,LOW);
-        HomeTriger homeTriger_alpha = HomeTriger(PIN_HOME_ALHPA, HIGH);
-        HomeTriger homeTriger_beta = HomeTriger(PIN_HOME_BETA, HIGH);
+        Led objLedPower = Led(0, PIN_LED_POWER, LOW);
+        Led objLedHome_alpha = Led(1,2,LOW);
+        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA, HIGH);
+        HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA, HIGH);
 
-        Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-        Stepper stepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
-        StepControl stepControl;
+        SingleAxis objAxis_Alpha = SingleAxis();
+        SingleAxis objAxis_Beta = SingleAxis();
+        ActuatorBase objActuator_Alpha = ActuatorBase();
+        ActuatorBase objActuator_Beta = ActuatorBase();
+
+        Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+        Stepper objStepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+        StepControl objStepControl;
+
+        CommuBle objCommuBle = CommuBle();
+        CommuUart objCommuUart = CommuUart();
 };

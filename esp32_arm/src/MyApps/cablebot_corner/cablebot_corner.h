@@ -12,7 +12,7 @@
 #include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
 #include "Robot/Actuator/DCMotor/DCMotorController.h"
 
-#include "Robot/HomeTriger.h"
+#include "Robot/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
 
 #define PIN_HOME_SENSOR 5
@@ -29,7 +29,7 @@ class CableBotCorner: public RobotBase{
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
         void SpinOnce() override;
-        void Init() override {};
+        void Init() override {assert("Must pass me an encoder!");};
         void Init(Encoder* encoder);
         // SingleAxis singleAxis = SingleAxis();
 
@@ -40,10 +40,10 @@ class CableBotCorner: public RobotBase{
         Led objLed_power = Led(0,PIN_LED_POWER,LOW);
         Led objLed_home_alpha = Led(1,2,LOW);
         DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A, PIN_DC_MOTOR_B);
-        HomeTriger objHomeTriger = HomeTriger(PIN_HOME_SENSOR, HIGH);
+        HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR, HIGH);
         DCMotor objDcMotor = DCMotor();
-        CommuUart commuUart = CommuUart();
-        CommuBle commuBle = CommuBle();
+        CommuUart objCommuUart = CommuUart();
+        CommuBle objCommuBle = CommuBle();
         SingleAxis singleAxis = SingleAxis();
         // ActuatorControllerBase objActuatorController = ActuatorControllerBase();
 

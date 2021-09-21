@@ -25,7 +25,10 @@ void RobotBase::RunGcode(Gcode* gcode){
   }
 
   // float code =  gcode->get_value('G');
-  
+  // this->commuDevice->OutputMessage(std::string(gcode->g));
+
+  Serial.println(gcode->g);
+
   if (gcode->g == 28){
     // G28: Home
     // this->__is_busy = true;

@@ -9,10 +9,9 @@
 // }
 
 
-// 
-// void SingleAxis::SetTargetAbs(int targetPosition){
-
-// }
+void SingleAxis::SetCurrentPosition(float position){
+  // this->_actuator->SetCurrentPos(this->to_actuator_position(position));
+}
 
 
 void SingleAxis::Init_scaler(float _final_distance_per_encoder_interval){
@@ -23,18 +22,10 @@ void SingleAxis::Init_scaler(float _final_distance_per_encoder_interval){
 void SingleAxis::SpinOnce(){
   this->__is_busy = false;
   if (_actuator->IsRunning) this->__is_busy = true;
-  if (__is_homing) this->__is_busy = true;
+  // if (__is_homing) this->__is_busy = true;
 }
 
 
-// void SingleAxis::LinkAcuator(ActuatorBase* actuator){
-//   this->_actuator = actuator;
-// }
-
-// 
-// void SingleAxis::LinkHomeTriger(HomeTriger* homeTriger){
-//   this->homeTriger = homeTriger;
-// }
 
 
 // 

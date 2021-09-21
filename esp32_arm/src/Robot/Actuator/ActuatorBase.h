@@ -36,9 +36,10 @@
 class ActuatorBase
 {
   public:
-    ActuatorBase();
+    ActuatorBase(){};
     void SetTargetAbs(float pos);
-    float GetCurrentPos(){return 0.0;};
+    float GetCurrentPos();
+    void SetCurrentPos(float position);
     void linkSensor(Sensor* sensor){this->sensor=sensor;};
     void linkDriver(DriverBase* driver){this->driver=driver;};
 
@@ -52,7 +53,7 @@ class ActuatorBase
     // float MaxAcceleration = 2;
     // Mass gravity = (1,2,3);
   private:
-
+    float current_position = 0.0f;
 };
 
 
