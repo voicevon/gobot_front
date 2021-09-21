@@ -5,10 +5,8 @@
  */
 ActuatorBase::ActuatorBase()
 {
-  sensor = nullptr;
+  this->sensor = nullptr;
+  this->driver = nullptr;
 }
 
 
-void ActuatorBase::linkSensor(Sensor* _sensor) {
-  sensor = _sensor;
-}

@@ -1,8 +1,7 @@
 #include "cablebot_corner.h"
 
 CableBotCorner::CableBotCorner(char axis_name){
-    // SingleAxisRobot<Actuator_T>::_Axis_Name = axis_name;
-    // this->axi_Axis_Name = axis_name;
+    this->singleAxis.Name = axis_name;
 }
         
 
@@ -25,7 +24,7 @@ void CableBotCorner::RunG1(Gcode* gcode){
     }
     //TODO, insert PID here.
     float speed = 100;
-    this->hBridge->Start(speed, dir_forward);
+    this->objHBridge.Start(speed, dir_forward);
 
     //Read the encoder,
     int distance;
@@ -35,15 +34,15 @@ void CableBotCorner::RunG1(Gcode* gcode){
 
 }
 
-void CableBotCorner::Init(){
-        this->LinkCommuDevice(&this->commuUart);
-        this->AppendAxis(&this->singleAxis);
-        // this->singleAxis.LinkAcuator(&this->hBridge);
+void CableBotCorner::Init(Encoder* encoder){
+    this->LinkCommuDevice(&this->commuUart);
+    this->objHomeTriger.LinkAxis(&this->singleAxis);
+    this->objHomeTriger.home_position=1;
 
-
-        Led* ledPower = &objLed_power;
-        Led* ledHomeAlpha = &objLed_home_alpha; 
-        DCDriverHBridge* hBridge =&objBridge;
-        HomeTriger* homeTriger= &objHomeTriger; 
-        DCMotor* motor = &objMotor; 
+    this->singleAxis.LinkAcuator(&this->objDcMotor);
+    this->objDcMotor.linkSensor(encoder);
+    this->objDcMotor.linkDriver(&this->objHBridge);
+    this->objDcMotor.MaxSpeed = 100;
+    this->commuDevice->OutputMessage("Hello world! This is the first message from commuDevice,");
+    this->commuDevice->OutputMessage("    Have a good Day. :) ");
 }

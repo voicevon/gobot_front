@@ -6,12 +6,12 @@
 // #include "../common/time_utils.h"
 // #include "../common/defaults.h"
 // #include "hardware_api.h"
-#include "DCDriver.h"
+#include "../DriverBase.h"
 
 /**
  DC motor H-Bridge driver class
 */
-class DCDriverHBridge: public DCDriver{
+class DCDriverHBridge: public DriverBase{
   public:
     DCDriverHBridge(int pinA,int pinB);
     void Start(int pwm_speed, bool dir_forward);

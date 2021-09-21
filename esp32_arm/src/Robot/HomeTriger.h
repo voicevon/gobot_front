@@ -12,6 +12,7 @@ class HomeTriger: public BinaryInput{
         bool IsTriged();
         void LinkAxis(SingleAxis* axis){this->axis=axis;};
         void HomeAxis();
+        float home_position;
 
     private:
         // uint8_t pinTriger;

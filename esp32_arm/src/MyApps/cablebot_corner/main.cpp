@@ -14,9 +14,9 @@ void doB(){encoder.handleB();}
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  CableBot-Corner.  Keep smiling :)");
-    // commu.Init();
     encoder.enableInterrupts(doA,doB);
-
+    robot.Init(&encoder);
+    Serial.println ("\n\nSetup is done. ------------------------------------ ");
 }
 
 void loop(){

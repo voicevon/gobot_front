@@ -30,7 +30,7 @@ class RobotBase{
         virtual void HomeAllAxises();   //??
         virtual void Init();
         bool IsBusy(){return false;};
-        void AppendAxis(SingleAxis* axis);
+        // void AppendAxis(SingleAxis* axis);
     protected:
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
         virtual ik_position ik(float x, float y){};

@@ -29,18 +29,19 @@ class CableBotCorner: public RobotBase{
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
         void SpinOnce() override;
-        void Init() override;
+        void Init() override {};
+        void Init(Encoder* encoder);
         // SingleAxis singleAxis = SingleAxis();
 
-        void LinkDriver(DCDriverHBridge* hBridge ){this->hBridge=hBridge;};
-        DCDriverHBridge* hBridge;
+        // void LinkDriver(DCDriverHBridge* hBridge ){this->hBridge=hBridge;};
+        // DCDriverHBridge* hBridge;
 
     private:
         Led objLed_power = Led(0,PIN_LED_POWER,LOW);
         Led objLed_home_alpha = Led(1,2,LOW);
-        DCDriverHBridge objBridge = DCDriverHBridge(PIN_DC_MOTOR_A, PIN_DC_MOTOR_B);
+        DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A, PIN_DC_MOTOR_B);
         HomeTriger objHomeTriger = HomeTriger(PIN_HOME_SENSOR, HIGH);
-        DCMotor objMotor = DCMotor();
+        DCMotor objDcMotor = DCMotor();
         CommuUart commuUart = CommuUart();
         CommuBle commuBle = CommuBle();
         SingleAxis singleAxis = SingleAxis();

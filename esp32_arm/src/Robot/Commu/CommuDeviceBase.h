@@ -10,6 +10,7 @@ class CommuDeviceBase{
         virtual ~CommuDeviceBase(){};
         virtual void Init(){};
         virtual void OutputMessage(std::string message){};
+        virtual void OutputMessage(char* message){};
         virtual void SpinOnce(){};
         virtual bool HasNewChatting(){};  //Only New message from BleClient.
         virtual char* ReadChatting(){};

@@ -6,6 +6,10 @@ void CommuUart::OutputMessage(std::string message){
     Serial.print(message.c_str());
 }
 
+void CommuUart::OutputMessage(char* message){
+    Serial.print("\n...   ...   ...");
+    Serial.print(message);
+}
 void CommuUart::SpinOnce(){
 
 }

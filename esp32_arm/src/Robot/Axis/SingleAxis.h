@@ -24,12 +24,12 @@ class SingleAxis{
 
         bool IsBusy(){return __is_busy;};
         void LinkAcuator(ActuatorBase* actuator){};
-        void LinkSensor(Sensor* sensor){};
+        // void LinkSensor(Sensor* sensor){};
         // virtual void Home(){};   //??
         // void LinkHomeTriger(HomeTriger* homeTriger);   //Homer = axis(actuaotr+driver) + controller + trigger 
         void Init_scaler(float final_distance_per_encoder_interval);
         ActuatorBase* _actuator;
-        Sensor* sensor;
+        // Sensor* sensor;
         char _Axis_Name;
 
     protected:

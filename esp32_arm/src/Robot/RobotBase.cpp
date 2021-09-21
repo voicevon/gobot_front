@@ -8,19 +8,18 @@ void RobotBase::_base_spin_once(){
     std::string command(commuDevice->ReadChatting());
     // std::string command="G1 A12.345 ";
     commuDevice->OutputMessage(command);
-    Gcode gCode = Gcode(command);
-    // Gcode gCode = Gcode(commu.ReadChatting());   //Risk for not releasing memory ?
+    Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
     this->RunGcode(&gCode);
   }
 }
 
 void RobotBase::RunGcode(Gcode* gcode){
-
   if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND))
     return;
 
   if(!gcode->has_g){
     this->commuDevice->OutputMessage("  Does NOT has letter 'G'.");
+    this->commuDevice->OutputMessage(gcode->get_command());
     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
     return;
   }
@@ -35,7 +34,6 @@ void RobotBase::RunGcode(Gcode* gcode){
 
   }else if (gcode->g ==1){
     // G1 Move
-    this->RunG1(gcode);
     // this->__is_busy = true;
     // float pos = gcode->get_value(this->_Axis_Name);
     // this->commuDevice->OutputMessage("  > Move to " + toString(pos));
@@ -55,7 +53,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 
 }
 
-void RobotBase::AppendAxis(SingleAxis* axis){
+// void RobotBase::AppendAxis(SingleAxis* axis){
   
-}
+// }
 

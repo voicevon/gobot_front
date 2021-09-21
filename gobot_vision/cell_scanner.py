@@ -156,7 +156,6 @@ class CellScanner():
                 # cv2.imshow('no circle canny', canny)
                 cv2.waitKey(1)
         else:
-            # print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
             detected_circles = numpy.uint16(numpy.around(circles))
             # print ('circles count= ', len(detected_circles))
             # if True:
