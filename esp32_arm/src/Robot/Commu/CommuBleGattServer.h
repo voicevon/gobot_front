@@ -14,7 +14,7 @@
 
 class CommuBleGattServer:public CommuDeviceBase {
     public:
-        void Init();
+        void Init() override;
         void SpinOnce() override;
         bool HasNewChatting() override;  //Only New message from BleClient.
         char* ReadChatting() override;

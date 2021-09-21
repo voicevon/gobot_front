@@ -70,11 +70,15 @@ void CommuBleGattServer::SpinOnce(){
 // }
 
 bool CommuBleGattServer::HasNewChatting(){
+  // TODO: Set command_is_new = true.   When BLE got new GATT message; 
   return this->command_is_new;
 }
 
 char* CommuBleGattServer::ReadChatting(){
   command_is_new = false;
+  uint8_t* p = pCharChattingroom->getData();
+  return (char*)(p);
+
 }
 
 void CommuBleGattServer::WriteNotification(const char* notification){
