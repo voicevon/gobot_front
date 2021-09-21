@@ -7,7 +7,7 @@
 
 
 CableBotCorner robot = CableBotCorner(AXIS_NAME);
-Encoder encoder = Encoder(PIN_ENCODER_A, PIN_ENCODER_B, 200);
+Encoder encoder = Encoder(PIN_ENCODER_A_2130, PIN_ENCODER_B_2130, 200);
 void doA(){encoder.handleA();}
 void doB(){encoder.handleB();}
 

@@ -15,12 +15,12 @@
 #include "Robot/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
 
-#define PIN_HOME_SENSOR 5
-#define PIN_ENCODER_A 16
-#define PIN_ENCODER_B 17
-#define PIN_DC_MOTOR_A 8
-#define PIN_DC_MOTOR_B 9
-#define PIN_LED_POWER 22
+#define PIN_HOME_SENSOR_2130 5
+#define PIN_ENCODER_A_2130 16
+#define PIN_ENCODER_B_2130 17
+#define PIN_DC_MOTOR_A_2130 8
+#define PIN_DC_MOTOR_B_2130 9
+#define PIN_LED_POWER_2130 22
 
 
 class CableBotCorner: public RobotBase{
@@ -35,12 +35,13 @@ class CableBotCorner: public RobotBase{
 
         // void LinkDriver(DCDriverHBridge* hBridge ){this->hBridge=hBridge;};
         // DCDriverHBridge* hBridge;
-
+    protected:
+        ik_position ik(float x, float y) override;
     private:
-        Led objLed_power = Led(0,PIN_LED_POWER,LOW);
+        Led objLed_power = Led(0,PIN_LED_POWER_2130,LOW);
         Led objLed_home_alpha = Led(1,2,LOW);
-        DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A, PIN_DC_MOTOR_B);
-        HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR, HIGH);
+        DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
+        HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, HIGH);
         DCMotor objDcMotor = DCMotor();
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();

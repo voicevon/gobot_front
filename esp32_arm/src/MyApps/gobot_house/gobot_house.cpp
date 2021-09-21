@@ -104,6 +104,7 @@ void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
   for(int segment= 0; segment < __segments; segment++){
     float x = x1 + dx * segment;
     // MoveTo(x, 0);
+    this->ActuatorMoveTo_FK(x,0);
   }
 }
 
@@ -129,6 +130,7 @@ void GobotHouse::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
     float x = x1 + dx * segment;
     float y = y1 + dy * segment;
     // MoveTo(x,y);
+    this->ActuatorMoveTo_FK(x,y);
   }
 }
 
@@ -140,22 +142,21 @@ void GobotHouse::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
     x = __map.neck.x;
     y = __map.neck.y;    
   }
-
-  // MoveTo(x,y);
+  this->ActuatorMoveTo_FK(x,y);
 }
 
 void GobotHouse::init_gpio(){
-    pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-    pinMode(PIN_BETA_ENABLE, OUTPUT);
-    pinMode(PIN_MICRIO_STEP_0, OUTPUT);
-    pinMode(PIN_MICRIO_STEP_1, OUTPUT);
-    pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+    pinMode(PIN_ALPHA_ENABLE_2109, OUTPUT);
+    pinMode(PIN_BETA_ENABLE_2109, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_0_2109, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_1_2109, OUTPUT);
+    pinMode(PIN_MICRIO_STEP_2_2109, OUTPUT);
 
-    digitalWrite(PIN_ALPHA_ENABLE, LOW);
-    digitalWrite(PIN_BETA_ENABLE, LOW);
-    digitalWrite(PIN_MICRIO_STEP_0, LOW);
-    digitalWrite(PIN_MICRIO_STEP_1, LOW);
-    digitalWrite(PIN_MICRIO_STEP_2, LOW);
+    digitalWrite(PIN_ALPHA_ENABLE_2109, LOW);
+    digitalWrite(PIN_BETA_ENABLE_2109, LOW);
+    digitalWrite(PIN_MICRIO_STEP_0_2109, LOW);
+    digitalWrite(PIN_MICRIO_STEP_1_2109, LOW);
+    digitalWrite(PIN_MICRIO_STEP_2_2109, LOW);
 
 }
 void GobotHouse::Init(){
@@ -176,4 +177,12 @@ void GobotHouse::Init(){
 
 void GobotHouse::RunG1(Gcode* gcode) {
 
+}
+
+
+void GobotHouse::ActuatorMoveTo_FK(float x, float y){
+
+}
+void GobotHouse::ActuatorMoveTo_IK(int32_t a, int32_t b){
+  
 }

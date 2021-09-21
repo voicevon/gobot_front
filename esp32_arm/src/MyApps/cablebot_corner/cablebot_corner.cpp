@@ -46,3 +46,9 @@ void CableBotCorner::Init(Encoder* encoder){
     this->commuDevice->OutputMessage("Hello world! This is the first message from commuDevice,");
     this->commuDevice->OutputMessage("    Have a good Day. :) ");
 }
+
+ik_position CableBotCorner::ik(float x, float y){
+    ik_position ret;
+    ret.alpha = x;
+    ret.beta = y;   // Will Never useful for me. 
+} 

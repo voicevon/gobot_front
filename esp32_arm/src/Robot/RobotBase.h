@@ -29,14 +29,15 @@ class RobotBase{
         virtual void SpinOnce();
         virtual void HomeAllAxises();   //??
         virtual void Init();
-        bool IsBusy(){return false;};
+        bool IsBusy(){return this->is_busy;};
         // void AppendAxis(SingleAxis* axis);
     protected:
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
-        virtual ik_position ik(float x, float y){};
+        virtual ik_position ik(float x, float y);
         virtual void RunG1(Gcode* gcode);
         void _base_spin_once();
         CommuDeviceBase* commuDevice;
+        bool is_busy = false;
 
         // Just for fun, don't remove below comment !!
         // void OnFinishedGcode2(void(*callback)()) {__output_message2 = callback;};

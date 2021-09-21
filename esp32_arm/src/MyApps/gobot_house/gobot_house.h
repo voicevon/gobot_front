@@ -21,28 +21,28 @@
 #define HOUSE_BETA_AXIS 11
 
 
-#define PIN_LED_POWER 12
-#define PIN_LED_B 25
-#define PIN_LED_C 26
-#define PIN_LED_F 27
-#define PIN_LED_H 14
+#define PIN_LED_POWER_2109 12
+#define PIN_LED_B_2109 25
+#define PIN_LED_C_2109 26
+#define PIN_LED_F_2019 27
+#define PIN_LED_H_2109 14
 
-#define PIN_HOME_ALHPA 35     //??
-#define PIN_ALPHA_DIR 19
-#define PIN_ALPHA_STEP 5
-#define PIN_ALPHA_ENABLE 18
+#define PIN_HOME_ALHPA_2109 35     //??
+#define PIN_ALPHA_DIR_2109 19
+#define PIN_ALPHA_STEP_2109 5
+#define PIN_ALPHA_ENABLE_2109 18
 
-#define PIN_HOME_BETA 34      //??
-#define PIN_BETA_DIR 17
-#define PIN_BETA_STEP 4
-#define PIN_BETA_ENABLE 16
+#define PIN_HOME_BETA_2109 34      //??
+#define PIN_BETA_DIR_2109 17
+#define PIN_BETA_STEP_2109 4
+#define PIN_BETA_ENABLE_2109 16
 
-#define ENDER_COIL 32
-#define ENDER_COIL_EXT 33
+#define ENDER_COIL_2109 32
+#define ENDER_COIL_EXT_2109 33
 
-#define PIN_MICRIO_STEP_2 21
-#define PIN_MICRIO_STEP_1 22
-#define PIN_MICRIO_STEP_0 23
+#define PIN_MICRIO_STEP_2_2109 21
+#define PIN_MICRIO_STEP_1_2109 22
+#define PIN_MICRIO_STEP_0_2109 23
 
 class GobotHouse: public RobotBase{
     public:
@@ -59,13 +59,17 @@ class GobotHouse: public RobotBase{
         void RunG1(Gcode* gcode) override;
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);
+
     protected:
+        void ActuatorMoveTo_FK(float x, float y);
+        void ActuatorMoveTo_IK(int32_t a, int32_t b);
+
     private:
         GobotHouse();
+        ik_position ik(float x, float y) override;
         RobotAction* __house_action;
         int __segments;
         
-        ik_position ik(float x, float y) override;
         void __Move_fromRoom_toDoor(uint8_t house_id, bool forwarding);
         void __Move_fromHead_toNeck(bool forwarding);
         void __Move_fromNeck_toDoor(uint8_t house_id, bool forwarding);
@@ -78,19 +82,17 @@ class GobotHouse: public RobotBase{
         ActuatorBase objActuator_Beta = ActuatorBase();
 
 
-        Led objLedPower = Led(0, PIN_LED_POWER, LOW);
+        Led objLedPower = Led(0, PIN_LED_POWER_2109, LOW);
         Led objLedHomeAlpha = Led(1,2,LOW);
-        HomeHelper objHomeTriger_alpha = HomeHelper(PIN_HOME_ALHPA, HIGH);
-        HomeHelper objHomeTriger_beta = HomeHelper(PIN_HOME_BETA, HIGH);
+        HomeHelper objHomeTriger_alpha = HomeHelper(PIN_HOME_ALHPA_2109, HIGH);
+        HomeHelper objHomeTriger_beta = HomeHelper(PIN_HOME_BETA_2109, HIGH);
 
-        Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-        Stepper objStepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+        Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
+        Stepper objStepper_beta = Stepper(PIN_BETA_STEP_2109, PIN_BETA_DIR_2109);
         StepControl objStepControl;
 
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
-
-
 
         void init_gpio();
 };
