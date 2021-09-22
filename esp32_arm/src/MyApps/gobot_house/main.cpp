@@ -20,10 +20,10 @@ void setup(){
 }
 
 void loop(){
-    // robot->SpinOnce();
+    robot->SpinOnce();
     //for testing.
     Gcode gcode=Gcode("G28 X100");
-    robot->RunGcode(&gcode);
+    // robot->RunGcode(&gcode);
 }
 
 

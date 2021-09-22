@@ -5,18 +5,18 @@
 
 
 //  Concepts       https://www.youtube.com/watch?v=2mePPqiocUE  
-//  Notification   https://www.youtube.com/watch?v=oCMOYS71NIU
+//  Level 1:  Basic  
+//                https://www.youtube.com/watch?v=2_vlF_02VXk&t=685s
+//  Level 2: Notification
+//               https://www.youtube.com/watch?v=oCMOYS71NIU
 
 
 void CommuBleGattServer::Init(){
-  pMyBle =  new MyBleServerCallbacks();
+
   BLEDevice::init(BLE_DEV_NAME);
-//   BLEDevice::init(device_name);
-
-
 
   BLEServer *pServer = BLEDevice::createServer();
-  pServer->setCallbacks(pMyBle);
+  pServer->setCallbacks(&this->myBleServercallbacks);
 
 
   BLEService *pService = pServer->createService(BLE_SERVICE_UUID);
@@ -25,14 +25,21 @@ void CommuBleGattServer::Init(){
                                         BLECharacteristic::PROPERTY_READ |
                                         BLECharacteristic::PROPERTY_NOTIFY
   );
-  // BLE2902 * pp= new BLE2902();
+  BLE2902 * p2902a= new BLE2902();
   // pp->setNotifications(true);
-  // pCharResonse->addDescriptor(pp);  
+  pCharNotification->addDescriptor(p2902a); 
+
   pCharChattingroom = pService->createCharacteristic(
                                         BLE_COMMAND_UUID,
+                                        BLECharacteristic::PROPERTY_READ |
+                                        BLECharacteristic::PROPERTY_NOTIFY |
                                         BLECharacteristic::PROPERTY_WRITE |
                                         BLECharacteristic::PROPERTY_INDICATE
   );
+  BLE2902 * p2902b= new BLE2902();
+  pCharChattingroom->addDescriptor(p2902b);
+  pCharChattingroom->setCallbacks(&this->myBleCharacteristicCallbacks);
+  
 
   pService->start();
   // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
@@ -42,32 +49,27 @@ void CommuBleGattServer::Init(){
   pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
   pAdvertising->setMinPreferred(0x12);
   BLEDevice::startAdvertising();
+  __start_at = XTHAL_GET_CCOUNT();
+
 }
 
 void CommuBleGattServer::SpinOnce(){
-  if ((__State == 2) &&  (pMyBle->is_connected))
+  if  (this->__is_connected)
       return;
 
-  if (__State == 0){
-    BLEDevice::startAdvertising();
-    // delay(5000);
-    __start_at = XTHAL_GET_CCOUNT();
-    __State = 1;
-  }else if (__State == 1){
+  if (__is_connecting){
     uint32_t __connecting_time = XTHAL_GET_CCOUNT() - __start_at;
-    if(__connecting_time > 2000000){
+    if(__connecting_time > (int32_t)(1900000000)){
       // connecting time out!
-      __State = 0;
+      Serial.println("BLE Connecting time out, do advertize.");
+      __is_connecting =  false;
     }
-    if (pMyBle->is_connected ){
-      __State = 2;
+  }else{
+    BLEDevice::startAdvertising();
+    __start_at = XTHAL_GET_CCOUNT();
+    __is_connecting = true;
   }
 }
-
-}
-// void BleServer::AppendGattChar(uint8_t gattCharId, uint8_t bytesCount){
-  
-// }
 
 bool CommuBleGattServer::HasNewChatting(){
   // TODO: Set command_is_new = true.   When BLE got new GATT message; 

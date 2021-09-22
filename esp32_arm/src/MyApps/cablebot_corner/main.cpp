@@ -24,7 +24,7 @@ void loop(){
 
     //for testing.
     Gcode gcode = Gcode("G1 X100");
-    robot.RunGcode(&gcode);
+    // robot.RunGcode(&gcode);
 
 }
 

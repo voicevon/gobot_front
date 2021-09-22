@@ -49,7 +49,7 @@ void GobotHouse::HomeAllAxises(){
 }
 
 void GobotHouse::SpinOnce(){
-  
+  this->_base_spin_once();
 }
 
 // Head is a position name, The 5 bar arm will pick up stone from there.

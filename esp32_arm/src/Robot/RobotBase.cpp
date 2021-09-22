@@ -5,9 +5,8 @@
 void RobotBase::_base_spin_once(){
   commuDevice->SpinOnce();
   if(commuDevice->HasNewChatting()){
+    Serial.println ("    @@@@@@@@@@@@@@@  new chatting");
     std::string command(commuDevice->ReadChatting());
-    // std::string command="G1 A12.345 ";
-    commuDevice->OutputMessage(command);
     Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
     this->RunGcode(&gCode);
   }
@@ -19,7 +18,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 
   if(!gcode->has_g){
     this->commuDevice->OutputMessage("  Has NO letter 'G'.");
-    this->commuDevice->OutputMessage(gcode->get_command());
+    // this->commuDevice->OutputMessage(gcode->get_command());
     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
     return;
   }
@@ -27,7 +26,7 @@ void RobotBase::RunGcode(Gcode* gcode){
   // float code =  gcode->get_value('G');
   // this->commuDevice->OutputMessage(std::string(gcode->g));
 
-  Serial.println(gcode->g);
+  // Serial.println(gcode->g);
 
   if (gcode->g == 28){
     // G28: Home
