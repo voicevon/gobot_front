@@ -16,6 +16,7 @@ void CableBotCorner::HomeAllAxises(){
 
 void CableBotCorner::RunG1(Gcode* gcode){
     float pos = gcode->get_value(singleAxis.Name);
+    Serial.println("***************  111");
     bool dir_forward = true;
     if (pos - this->singleAxis._actuator->GetCurrentPos()){
         dir_forward = false;
@@ -23,12 +24,14 @@ void CableBotCorner::RunG1(Gcode* gcode){
     //TODO, insert PID here.
     float speed = 100;
     this->objHBridge.Start(speed, dir_forward);
+    Serial.println("***************  222");
 
     //Read the encoder,
     int distance;
     do {
         distance = pos- this->singleAxis._actuator->GetCurrentPos(); 
     }while (distance > 10);
+    Serial.println("***************  3333");
 
 }
 

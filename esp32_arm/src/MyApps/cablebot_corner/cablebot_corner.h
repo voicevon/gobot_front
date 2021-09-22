@@ -8,18 +8,18 @@
 
 
 #include "Robot/Actuator/DCMotor/DcMotor.h"
-#include "SimpleFOC/sensors/Encoder.h"
+// #include "SimpleFOC/sensors/Encoder.h"
+#include "Robot/Sensor/IREncoder.h"
 #include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
 #include "Robot/Actuator/DCMotor/DCMotorController.h"
 
 #include "Robot/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
 
-#define PIN_HOME_SENSOR_2130 5
-#define PIN_ENCODER_A_2130 16
-#define PIN_ENCODER_B_2130 17
-#define PIN_DC_MOTOR_A_2130 8
-#define PIN_DC_MOTOR_B_2130 9
+#define PIN_HOME_SENSOR_2130 15
+
+#define PIN_DC_MOTOR_A_2130 28
+#define PIN_DC_MOTOR_B_2130 29
 #define PIN_LED_POWER_2130 22
 
 

@@ -6,7 +6,8 @@
 
 
 #include "SimpleFOC/common/pid.h"
-#include "SimpleFOC/common/base_classes/Sensor.h"
+// #include "SimpleFOC/common/base_classes/Sensor.h"
+#include "Robot/Sensor/SensorHelper.h"
 #include "SimpleFOC/common/defaults.h"
 #include "Robot/Actuator/DriverBase.h"
 
@@ -40,10 +41,11 @@ class ActuatorBase
     void SetTargetAbs(float pos);
     float GetCurrentPos();
     void SetCurrentPos(float position);
-    void linkSensor(Sensor* sensor){this->sensor=sensor;};
+    void linkSensor(Sensor* sensor){this->sensorHelper.LinkSensor(sensor);};
     void linkDriver(DriverBase* driver){this->driver=driver;};
 
-    Sensor* sensor; 
+    // Sensor* sensor; 
+    SensorHelper sensorHelper = SensorHelper(1.0f);
     DriverBase* driver;
     bool IsRunning=false;
 
@@ -53,7 +55,9 @@ class ActuatorBase
     // float MaxAcceleration = 2;
     // Mass gravity = (1,2,3);
   private:
-    float current_position = 0.0f;
+
+
+
 };
 
 
