@@ -12,9 +12,7 @@ void CableBotCorner::HomeAllAxises(){
     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND); 
 }
 
-void CableBotCorner::SpinOnce(){
-    this->_base_spin_once();
-}
+
 
 void CableBotCorner::RunG1(Gcode* gcode){
     float pos = gcode->get_value(singleAxis.Name);

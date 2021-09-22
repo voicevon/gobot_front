@@ -25,7 +25,7 @@ class MyBleCharacteristicCallbacks: public BLECharacteristicCallbacks{
             this->__rx_buffer = rx_buffer;
         }
         void onWrite(BLECharacteristic* pCharacteristic){
-            Serial.println("Client wrote something.");
+            Serial.println("BLE Client wrote something.");
             *__has_new = true;
             __rx_buffer =  pCharacteristic->getData();
         }

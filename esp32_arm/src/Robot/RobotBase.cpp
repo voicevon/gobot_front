@@ -2,14 +2,16 @@
 #include "MyLibs/MyFunctions.hpp"
 
 
-void RobotBase::_base_spin_once(){
+void RobotBase::SpinOnce(){
   commuDevice->SpinOnce();
+  this->SpinOnce_BaseEnter();
   if(commuDevice->HasNewChatting()){
-    Serial.println ("    @@@@@@@@@@@@@@@  new chatting");
+    Serial.println ("    _base_spin_once()  new chatting");
     std::string command(commuDevice->ReadChatting());
     Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
     this->RunGcode(&gCode);
   }
+  this->SpinOnce_BaseExit();
 }
 
 void RobotBase::RunGcode(Gcode* gcode){

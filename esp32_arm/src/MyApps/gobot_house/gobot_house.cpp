@@ -48,9 +48,7 @@ void GobotHouse::HomeAllAxises(){
   this->commuDevice->OutputMessage("Home is done.....");
 }
 
-void GobotHouse::SpinOnce(){
-  this->_base_spin_once();
-}
+
 
 // Head is a position name, The 5 bar arm will pick up stone from there.
 void GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){

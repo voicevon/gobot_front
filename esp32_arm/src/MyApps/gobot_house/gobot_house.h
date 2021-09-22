@@ -47,7 +47,7 @@ class GobotHouse: public RobotBase{
                                   // Instantiated on first use.
             return instance;
         }
-        void SpinOnce(void);
+        // void SpinOnce(void);
         void Init() override;
         void Setup(RobotAction* pAction, int segments);
         void HomeAllAxises() override;
@@ -58,7 +58,8 @@ class GobotHouse: public RobotBase{
     protected:
         void ActuatorMoveTo_FK(float x, float y);
         void ActuatorMoveTo_IK(int32_t a, int32_t b);
-
+        void SpinOnce_BaseEnter() override {};
+        void SpinOnce_BaseExit() override {};
     private:
         GobotHouse();
         ik_position ik(float x, float y) override;

@@ -80,7 +80,7 @@ class GobotChessboard: public RobotBase{
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
         void Init() override;
-        void SpinOnce(void);
+        // void SpinOnce(void);
         void Setup(RobotAction* pAction);
 
         void SetEffector(EEF action);
@@ -118,6 +118,8 @@ class GobotChessboard: public RobotBase{
 
 
     protected:
+        void SpinOnce_BaseEnter() override {};
+        void SpinOnce_BaseExit() override {};
     private:
         Led objLedPower = Led(0, PIN_LED_POWER_2112, LOW);
         Led objLedHome_alpha = Led(1,2,LOW);

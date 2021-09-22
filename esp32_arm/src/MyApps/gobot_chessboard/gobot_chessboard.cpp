@@ -174,10 +174,6 @@ void GobotChessboard::Setup(RobotAction* pAction){
   link_b = LINK_B;
 }
 
-void GobotChessboard::SpinOnce(){
-  this->_base_spin_once();
-}
-
 
 void GobotChessboard::Init(){
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
