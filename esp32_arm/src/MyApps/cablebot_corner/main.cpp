@@ -15,6 +15,7 @@ void doB(){irEncoder.handleB();}
 
 
 
+
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  CableBot-Corner.  Keep smiling :)");
@@ -31,9 +32,9 @@ void setup(){
 
 void loop(){
     
-    // float a =irEncoder.getAngle() * 180.0f * 22.0f / 7.0f;
-
-    float a = irEncoderHelper.GetMeanValue();
+    float a =irEncoder.getAngle()  / 6.28318530718 ;
+    // long a = irEncoder.Get_countet();
+    // float a = irEncoderHelper.GetMeanValue();
     Serial.println(a);
     delay(500);
     // Sensor s= Encoder();

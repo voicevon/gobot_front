@@ -21,12 +21,24 @@ IrEncoder::IrEncoder(uint8_t _encA, uint8_t _encB , uint16_t _ppr, uint8_t _inde
   pullup = Pullup::USE_EXTERN;
 }
 
+//    https://github.com/espressif/esp-idf/issues/4180
 void IrEncoder::handleB() {
   bool A = digitalRead(pinA);
   bool B = digitalRead(pinB);
+    if (last_state_B == B){
+    // Serial.print("e");
+    return;
+  }
   pulse_timestamp = _micros();
-  if (A == B) pulse_counter++;
-  else pulse_counter--;
+  if (A == B) {
+    pulse_counter++;
+    // Serial.print("+");
+  }else{
+    pulse_counter--;
+    // Serial.print("-");
+  }
+  last_state_B = B;
+
 }
 
 void IrEncoder::handleIndex() {
@@ -49,6 +61,8 @@ void IrEncoder::handleIndex() {
 	Shaft angle calculation
 */
 float IrEncoder::getAngle(){
+  // Serial.println(pulse_counter);
+  // Serial.println(cpr);
   return  _2PI * (pulse_counter) / ((float)cpr);
 }
 /*

@@ -25,6 +25,7 @@ class IrEncoder :public Sensor, public SensorBase{
     void handleA();
     void handleB();
     void handleIndex();
+    long Get_countet(){return this->pulse_counter;};
     
     
     uint8_t pinA; //!< encoder hardware pin A
@@ -49,7 +50,7 @@ class IrEncoder :public Sensor, public SensorBase{
   private:
     int hasIndex(); //!< function returning 1 if encoder has index pin and 0 if not.
 
-    volatile long pulse_counter;//!< current pulse counter
+    volatile long pulse_counter;// current pulse counter
     volatile long pulse_timestamp;//!< last impulse timestamp in us
     // volatile int A_active; //!< current active states of A channel
     // volatile int B_active; //!< current active states of B channel
@@ -59,5 +60,7 @@ class IrEncoder :public Sensor, public SensorBase{
     // velocity calculation variables
     float prev_Th, pulse_per_second;
     volatile long prev_pulse_counter, prev_timestamp_us;
+    // volatile byte last_state_A = HIGH;
+    volatile byte last_state_B = HIGH;
 };
 
