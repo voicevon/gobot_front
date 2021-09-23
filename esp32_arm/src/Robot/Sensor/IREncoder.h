@@ -4,6 +4,7 @@
 #include "SimpleFOC/common/base_classes/Sensor.h"
 #include "SimpleFOC/common/time_utils.h"
 #include "stdint.h"
+#include "SensorBase.h"
 
 /**
  *  Quadrature mode configuration structure
@@ -14,7 +15,7 @@
 // };
 
 
-class IrEncoder :public Sensor{
+class IrEncoder :public Sensor, public SensorBase{
     public:
         IrEncoder(uint8_t pinA, uint8_t pinB , uint16_t ppr, uint8_t pinIndex=0);
 

@@ -3,34 +3,37 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "cablebot_corner.h"
-#include "Robot/Gcode.h"
+#include "Robot/Gcode.h" 
 
 #define PIN_ENCODER_A 19
 #define PIN_ENCODER_B 18
 
 CableBotCorner robot = CableBotCorner(AXIS_NAME);
-// Encoder encoder = Encoder(PIN_ENCODER_A, PIN_ENCODER_B, 8);
-IrEncoder encoder = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 8);
-// void doA(){encoder.handleA();}
-void doB(){encoder.handleB();}
+IrEncoder irEncoder = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 16);
+IrEncoderHelper irEncoderHelper = IrEncoderHelper();
+void doB(){irEncoder.handleB();}
 
 
 
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  CableBot-Corner.  Keep smiling :)");
-    encoder.pullup= Pullup::USE_EXTERN;
-    // encoder.quadrature = Quadrature::OFF;
-    encoder.init();
-    // encoder.enableInterrupts(doA,doB);
-    encoder.enableInterrupts(doB);
-    // robot.Init(&encoder);
+    irEncoder.pullup= Pullup::USE_EXTERN;
+    irEncoder.init();
+    irEncoder.enableInterrupts(doB);
+    irEncoderHelper.LinkIrEncoder(&irEncoder);
+    // irEncoderHelper.InitFormula_LinearEquation(1.0f, 0.0f);
+    irEncoderHelper.InitFormula_LinearEquation(180.0f * 22/ 7, 0.0f);
+
+    robot.Init(&irEncoderHelper);
     Serial.println ("\n\nSetup is done. ------------------------------------ ");
 }
 
 void loop(){
     
-    float a =encoder.getAngle() * 360.0f;
+    // float a =irEncoder.getAngle() * 180.0f * 22.0f / 7.0f;
+
+    float a = irEncoderHelper.GetMeanValue();
     Serial.println(a);
     delay(500);
     // Sensor s= Encoder();

@@ -7,7 +7,8 @@
 
 #include "SimpleFOC/common/pid.h"
 // #include "SimpleFOC/common/base_classes/Sensor.h"
-#include "Robot/Sensor/SensorHelper.h"
+// #include "Robot/Sensor/IREncoderHelper.h"
+#include "Robot/Sensor/SensorHelperBase.h"
 #include "SimpleFOC/common/defaults.h"
 #include "Robot/Actuator/DriverBase.h"
 
@@ -41,11 +42,11 @@ class ActuatorBase
     void SetTargetAbs(float pos);
     float GetCurrentPos();
     void SetCurrentPos(float position);
-    void linkSensor(Sensor* sensor){this->sensorHelper.LinkSensor(sensor);};
-    void linkDriver(DriverBase* driver){this->driver=driver;};
+    void LinkSensorHelper(SensorHelperBase* sensorHelper){this->sensorHelper=sensorHelper;};
+    void LinkDriver(DriverBase* driver){this->driver=driver;};
 
     // Sensor* sensor; 
-    SensorHelper sensorHelper = SensorHelper(1.0f);
+    SensorHelperBase* sensorHelper;
     DriverBase* driver;
     bool IsRunning=false;
 

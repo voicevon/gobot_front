@@ -183,11 +183,11 @@ void GobotChessboard::Init(){
 
     this->commuDevice = &this->objCommuUart;
     this->objAxis_Alpha.LinkAcuator(&this->objActuator_Alpha);
-    this->objActuator_Alpha.linkDriver(nullptr);
-    this->objActuator_Alpha.linkSensor(nullptr);
+    this->objActuator_Alpha.LinkDriver(nullptr);
+    this->objActuator_Alpha.LinkSensorHelper(nullptr);
     this->objAxis_Beta.LinkAcuator(&this->objActuator_Beta);
-    this->objActuator_Beta.linkDriver(nullptr);
-    this->objActuator_Beta.linkSensor(nullptr);
+    this->objActuator_Beta.LinkDriver(nullptr);
+    this->objActuator_Beta.LinkSensorHelper(nullptr);
 
     this->objHomeHelper_alpha.LinkAxis(&this->objAxis_Alpha);
     this->objHomeHelper_beta.LinkAxis(&this->objAxis_Beta);

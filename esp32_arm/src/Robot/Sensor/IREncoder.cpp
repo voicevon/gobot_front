@@ -2,6 +2,7 @@
 
 
 IrEncoder::IrEncoder(uint8_t _encA, uint8_t _encB , uint16_t _ppr, uint8_t _index){
+  this->raw_value_is_absolute = false;
   pinA = _encA;
   pinB = _encB;
   pulse_counter = 0;

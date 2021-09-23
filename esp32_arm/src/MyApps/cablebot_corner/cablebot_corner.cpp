@@ -35,12 +35,13 @@ void CableBotCorner::RunG1(Gcode* gcode){
 
 }
 
-void CableBotCorner::Init(Encoder* encoder){
+void CableBotCorner::Init(IrEncoderHelper* sensorHelperBase){
     this->LinkCommuDevice(&this->objCommuBle);
     this->objCommuBle.Init();
     this->singleAxis.LinkAcuator(&this->objDcMotor);
-    this->objDcMotor.linkSensor(encoder);
-    this->objDcMotor.linkDriver(&this->objHBridge);
+    // this->objDcMotor.LinkSensor(encoder);
+    this->objDcMotor.LinkSensorHelper(sensorHelperBase);
+    this->objDcMotor.LinkDriver(&this->objHBridge);
     this->objDcMotor.MaxSpeed = 100;
     this->commuDevice->OutputMessage("Hello world! This is the first message from commuDevice,");
     this->commuDevice->OutputMessage("    Have a good Day. :) ");

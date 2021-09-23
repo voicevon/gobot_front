@@ -9,7 +9,8 @@
 
 #include "Robot/Actuator/DCMotor/DcMotor.h"
 // #include "SimpleFOC/sensors/Encoder.h"
-#include "Robot/Sensor/IREncoder.h"
+// #include "Robot/Sensor/IREncoder.h"
+#include "Robot/Sensor/IrEncoderHelper.h"
 #include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
 #include "Robot/Actuator/DCMotor/DCMotorController.h"
 
@@ -29,8 +30,8 @@ class CableBotCorner: public RobotBase{
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
         // void SpinOnce() override;
-        void Init() override {assert("Must pass me an encoder!");};
-        void Init(Encoder* encoder);
+        void Init() override {assert("Must pass me an IrEncoderHelper*");};
+        void Init(IrEncoderHelper* sensorHelper);
         // SingleAxis singleAxis = SingleAxis();
 
         // void LinkDriver(DCDriverHBridge* hBridge ){this->hBridge=hBridge;};

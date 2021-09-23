@@ -1,11 +1,11 @@
 #include "ActuatorBase.h"
 
 float ActuatorBase::GetCurrentPos(){
-  return this->sensorHelper.GetPosition();
+  return this->sensorHelper->GetMeanValue();
 }
 
 void ActuatorBase::SetCurrentPos(float position){
-  sensorHelper.SetCurrentAngleAs(position);
+  this->sensorHelper->SetCurrentMeanValueAs(position);
 }
 
 
