@@ -12,7 +12,6 @@
 class IrEncoderHelper: public SensorHelperBase{
     public:
         IrEncoderHelper(){};
-        void LinkIrEncoder(IrEncoder* encoder){};
 
         float GetMeanValue() override{
             return slope * sensor->getAngle() + this->offset;

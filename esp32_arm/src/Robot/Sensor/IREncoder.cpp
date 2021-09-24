@@ -21,11 +21,15 @@ IrEncoder::IrEncoder(uint8_t _encA, uint8_t _encB , uint16_t _ppr, uint8_t _inde
   pullup = Pullup::USE_EXTERN;
 }
 
+//  Interrupt is multi fired!
 //    https://github.com/espressif/esp-idf/issues/4180
+//    https://www.esp32.com/viewtopic.php?t=3608
+//    https://www.esp32.com/viewtopic.php?t=18736#p69578       NO Schmitt Trigger on GPIO!
+
 void IrEncoder::handleB() {
   bool A = digitalRead(pinA);
   bool B = digitalRead(pinB);
-    if (last_state_B == B){
+  if (last_state_B == B){
     // Serial.print("e");
     return;
   }

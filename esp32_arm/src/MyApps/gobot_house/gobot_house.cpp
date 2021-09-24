@@ -93,18 +93,24 @@ void GobotHouse::__Enable_eefCoil(bool enable){
           r7             |
 
 */
-ik_position GobotHouse::ik(float x, float y){
-  ik_position ret;   //is risk here?
-  float rr1= x*x +y*y;
+// ik_position GobotHouse::ik(float x, float y){
+//   ik_position ret;   //is risk here?
+//   float rr1= x*x +y*y;
   
-  float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
-  float r1 = sqrtf(rr1);
-  float alpha_eef = acosf(x/r1);
-  float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
-  float alpha = alpha_eef + alpha_link;
-  ret.alpha = alpha * STEPS_PER_RAD;
-  ret.beta =  beta * STEPS_PER_RAD; 
-  return ret;
+//   float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
+//   float r1 = sqrtf(rr1);
+//   float alpha_eef = acosf(x/r1);
+//   float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
+//   float alpha = alpha_eef + alpha_link;
+//   ret.alpha = alpha * STEPS_PER_RAD;
+//   ret.beta =  beta * STEPS_PER_RAD; 
+//   return ret;
+// }
+IkPositionBase* GobotHouse::IK(FkPositionBase* fk){
+
+}
+FkPositionBase* GobotHouse::FK(IkPositionBase* ik){
+
 }
 
 
@@ -176,7 +182,7 @@ void GobotHouse::init_gpio(){
     digitalWrite(PIN_MICRIO_STEP_2, LOW);
 
 }
-void GobotHouse::Init(){
+void GobotHouse::Init_Linkage(){
   init_gpio();
   this->commuDevice = &this->objCommuUart; 
   this->objHomeHelper_alpha.LinkAxis(&this->objAxis_Alpha);

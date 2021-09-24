@@ -79,7 +79,7 @@ class GobotChessboard: public RobotBase{
         }
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
-        void Init() override;
+        void Init_Linkage() override;
         // void SpinOnce(void);
         void Setup(RobotAction* pAction);
 
@@ -91,7 +91,9 @@ class GobotChessboard: public RobotBase{
         GobotChessboard(GobotChessboard const& copy);            // Not Implemented
         GobotChessboard& operator=(GobotChessboard const& copy); // Not Implemented
 
-        ik_position ik(float x, float y) override;
+        // ik_position ik(float x, float y) override;
+        virtual IkPositionBase* IK(FkPositionBase* fk) override;
+        virtual FkPositionBase* FK(IkPositionBase* ik) override;
 
         // SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
         // SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
@@ -137,6 +139,8 @@ class GobotChessboard: public RobotBase{
 
         CommuBleGattServer objCommuBle = CommuBleGattServer();
         CommuUart objCommuUart = CommuUart();
+        IkPosXY objIkPos;
+        FkPosXY objFkPos;
 };
 
 

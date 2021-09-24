@@ -48,7 +48,7 @@ class GobotHouse: public RobotBase{
             return instance;
         }
         // void SpinOnce(void);
-        void Init() override;
+        void Init_Linkage() override;
         void Setup(RobotAction* pAction, int segments);
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
@@ -62,7 +62,9 @@ class GobotHouse: public RobotBase{
         void SpinOnce_BaseExit() override {};
     private:
         GobotHouse();
-        ik_position ik(float x, float y) override;
+        // ik_position ik(float x, float y) override;
+        virtual IkPositionBase* IK(FkPositionBase* fk) override;
+        virtual FkPositionBase* FK(IkPositionBase* ik) override;
         RobotAction* __house_action;
         int __segments;
         

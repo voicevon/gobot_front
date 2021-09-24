@@ -9,7 +9,7 @@
 #define PIN_ENCODER_B 18
 
 CableBotCorner robot = CableBotCorner(AXIS_NAME);
-IrEncoder irEncoder = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 16);
+IrEncoder irEncoder = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 40);
 IrEncoderHelper irEncoderHelper = IrEncoderHelper();
 void doB(){irEncoder.handleB();}
 
@@ -22,11 +22,11 @@ void setup(){
     irEncoder.pullup= Pullup::USE_EXTERN;
     irEncoder.init();
     irEncoder.enableInterrupts(doB);
-    irEncoderHelper.LinkIrEncoder(&irEncoder);
+    irEncoderHelper.LinkSensor(&irEncoder);
     // irEncoderHelper.InitFormula_LinearEquation(1.0f, 0.0f);
-    irEncoderHelper.InitFormula_LinearEquation(180.0f * 22/ 7, 0.0f);
-
-    robot.Init(&irEncoderHelper);
+    irEncoderHelper.InitFormula_LinearEquation(180.0f * 7 /22 , 0.0f);
+    
+    robot.Init_Linkage(&irEncoderHelper);
     Serial.println ("\n\nSetup is done. ------------------------------------ ");
 }
 

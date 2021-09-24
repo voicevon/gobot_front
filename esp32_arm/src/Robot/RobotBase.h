@@ -7,10 +7,81 @@
 #include "Axis/SingleAxis.h"
 // #include "Robot/Actuator/ActuatorControllerBase.h"
 // #include "Robot/Actuator/ActuatorBase.h"
-struct ik_position{
-    int alpha;
-    int beta;
+// struct ik_position{
+//     int alpha;
+//     int beta;
+// };
+
+
+
+class FkPositionBase{
+
 };
+class FkPosX: public FkPositionBase{
+    public:
+        float x;
+};
+class FkPosXY: public FkPositionBase{
+    public:
+        float x;
+        float y;
+};
+class FkPosXYZ: public FkPositionBase{
+    public:
+        float x;
+        float y;
+        float z;
+};
+
+class fkPosXYZA: public FkPositionBase{
+    public:
+        float x;
+        float y;
+        float z;
+        float a;
+};
+
+class fkPosXYZAB: public FkPositionBase{
+    public:
+        float x;
+        float y;
+        float z;
+        float a;
+        float b;
+};
+class fkPosXYZABC: public FkPositionBase{
+    public:
+        float x;
+        float y;
+        float z;
+        float a;
+        float b;
+        float c;
+};
+
+class fkPosXYUVW: public FkPositionBase{
+    public:
+        float x;
+        float y;
+        float z;
+        float u;
+        float v;
+        float w;
+};
+
+class IkPositionBase{
+
+};
+class IkPosX: public IkPositionBase{
+    public:
+        float alpha;
+};
+class IkPosXY: public IkPositionBase{
+    public:
+        float alpha;
+        float beta;
+};
+
 
 /**
  * RobotBase has NO axis! 
@@ -24,22 +95,27 @@ struct ik_position{
 */
 class RobotBase{
     public:
-        RobotBase(){};
         void RunGcode(Gcode* gcode);
         void SpinOnce();
+        virtual void Init_Linkage();
         virtual void HomeAllAxises();   //??
-        virtual void Init();
         bool IsBusy(){return this->is_busy;};
-        // void AppendAxis(SingleAxis* axis);
+        // virtual void Init();
+
     protected:
+        RobotBase(){};
         virtual void SpinOnce_BaseEnter();
         virtual void SpinOnce_BaseExit();
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
-        virtual ik_position ik(float x, float y);
+        virtual IkPositionBase* IK(FkPositionBase* fk);
+        virtual FkPositionBase* FK(IkPositionBase* ik);
         virtual void RunG1(Gcode* gcode);
+        // virtual void Move(Gcode* gcode);   //??
         CommuDeviceBase* commuDevice;
+        FkPositionBase* currentFkPosition;
+        FkPositionBase* nexkFkPosition;
         bool is_busy = false;
-
+        bool is_absolute_position = true;
         // Just for fun, don't remove below comment !!
         // void OnFinishedGcode2(void(*callback)()) {__output_message2 = callback;};
         // void OnFinishedGcode3(void(*callback)()) {__output_message2 = callback;};

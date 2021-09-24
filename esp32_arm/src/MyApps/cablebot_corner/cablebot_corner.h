@@ -27,13 +27,14 @@ class CableBotCorner: public RobotBase{
         CableBotCorner(char axis_name);
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
-        void Init() override {assert("Must pass me an IrEncoderHelper*");};
-        void Init(IrEncoderHelper* sensorHelper);
+        void Init_Linkage() override {assert("Must pass me an IrEncoderHelper*");};
+        void Init_Linkage(IrEncoderHelper* sensorHelper);
 
     protected:
         
     private:
-        ik_position ik(float x, float y) override;
+        virtual IkPositionBase* IK(FkPositionBase* fk) override;
+        virtual FkPositionBase* FK(IkPositionBase* ik) override;
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
         Led objLed_power = Led(0,PIN_LED_POWER_2130,LOW);
@@ -44,6 +45,7 @@ class CableBotCorner: public RobotBase{
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
         SingleAxis singleAxis = SingleAxis();
-        
+        FkPosX objFkpos;
+        IkPosX objIkPos;
 };
 

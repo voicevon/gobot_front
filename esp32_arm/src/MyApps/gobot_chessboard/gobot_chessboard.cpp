@@ -58,26 +58,48 @@ void GobotChessboard::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
 /*
 https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
 */
-ik_position GobotChessboard::ik(float x, float y){
-  ik_position ret;   //is risk here?
-  float rr1= (x + LINK_0) * (x + LINK_0) + y * y;
+// IkPositionBase GobotChessboard::IK(FkPosXY* fk){
+//   IkPosXY ret;   //is risk here?
+//   float rr1= (fk.x + LINK_0) * (fk.x + LINK_0) + fk.y * fk.y;
   
-  // float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
+//   // float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
+//   float r1 = sqrtf(rr1);
+//   float alpha_eef = acosf((fk.x + LINK_0) / r1);
+//   float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B) / ( 2*LINK_A * r1));
+//   float alpha = alpha_eef + alpha_link;
+//   ret.alpha = alpha * STEPS_PER_RAD;
+
+//   float rr2 = (fk.x - LINK_0)* (fk.x - LINK_0) + fk.y * fk.y;
+//   float r2 = sqrtf(rr2);
+//   float beta_eef = acosf((fk.x - LINK_0) / r2 );
+//   float beta_link = acosf((LINK_A * LINK_A + rr2 - LINK_B * LINK_B) / (2 * LINK_A * r2));
+//   float beta = beta_eef - beta_link;
+//   ret.beta =  beta * STEPS_PER_RAD; 
+//   return ret;
+// }
+
+IkPositionBase* GobotChessboard::IK(FkPositionBase* _fk){
+  // IkPosXY ret;   //is risk here?
+  FkPosXY* fk = (FkPosXY*)(fk);
+  float rr1= (fk->x + LINK_0) * (fk->x + LINK_0) + fk->y * fk->y;
+  
   float r1 = sqrtf(rr1);
-  float alpha_eef = acosf((x + LINK_0) / r1);
+  float alpha_eef = acosf((fk->x + LINK_0) / r1);
   float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B) / ( 2*LINK_A * r1));
   float alpha = alpha_eef + alpha_link;
-  ret.alpha = alpha * STEPS_PER_RAD;
+  this->objIkPos.alpha  = alpha * STEPS_PER_RAD;
 
-  float rr2 = (x - LINK_0)* (x - LINK_0) + y * y;
+  float rr2 = (fk->x - LINK_0)* (fk->x - LINK_0) + fk->y * fk->y;
   float r2 = sqrtf(rr2);
-  float beta_eef = acosf((x - LINK_0) / r2 );
+  float beta_eef = acosf((fk->x - LINK_0) / r2 );
   float beta_link = acosf((LINK_A * LINK_A + rr2 - LINK_B * LINK_B) / (2 * LINK_A * r2));
   float beta = beta_eef - beta_link;
-  ret.beta =  beta * STEPS_PER_RAD; 
-  return ret;
+  this->objIkPos.beta =  beta * STEPS_PER_RAD; 
+  return &this->objIkPos;
 }
+FkPositionBase* GobotChessboard::FK(IkPositionBase* ik){
 
+}
 void GobotChessboard::SetEffector(EEF action){
   switch (action){
     case Lower:
@@ -175,7 +197,7 @@ void GobotChessboard::Setup(RobotAction* pAction){
 }
 
 
-void GobotChessboard::Init(){
+void GobotChessboard::Init_Linkage(){
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     digitalWrite(PIN_ALPHA_ENABLE, LOW);

@@ -35,7 +35,7 @@ void CableBotCorner::RunG1(Gcode* gcode){
 
 }
 
-void CableBotCorner::Init(IrEncoderHelper* sensorHelperBase){
+void CableBotCorner::Init_Linkage(IrEncoderHelper* sensorHelperBase){
     this->LinkCommuDevice(&this->objCommuBle);
     this->objCommuBle.Init();
     this->singleAxis.LinkAcuator(&this->objDcMotor);
@@ -46,11 +46,25 @@ void CableBotCorner::Init(IrEncoderHelper* sensorHelperBase){
     this->commuDevice->OutputMessage("Hello world! This is the first message from commuDevice,");
     this->commuDevice->OutputMessage("    Have a good Day. :) ");
     this->commuDevice->OutputMessage(COMMU_OK);
+
 }
 
-ik_position CableBotCorner::ik(float x, float y){
-    ik_position ret;  //TODO: check risk for unreleasing ?
-    ret.alpha = x;
-    ret.beta = y;   // Will Never useful for me. 
-    return ret;
-} 
+// ik_position CableBotCorner::ik(float x, float y){
+//     ik_position ret;  //TODO: check risk for unreleasing ?
+//     ret.alpha = x;
+//     ret.beta = y;   // Will Never useful for me. 
+//     return ret;
+// } 
+
+
+IkPositionBase* CableBotCorner::IK(FkPositionBase* fk){
+    FkPosX* _fk = (FkPosX*)(fk);
+    this->objIkPos.alpha = _fk->x;
+    return &this->objIkPos;  
+}
+
+FkPositionBase* CableBotCorner::FK(IkPositionBase* ik){
+    IkPosX* _ik = (IkPosX*)(ik);
+    this->objFkpos.x = _ik->alpha;
+    return &this->objFkpos;
+}

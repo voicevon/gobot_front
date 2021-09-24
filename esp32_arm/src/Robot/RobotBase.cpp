@@ -45,6 +45,12 @@ void RobotBase::RunGcode(Gcode* gcode){
     //       4. Start Moving.
     this->RunG1(gcode);
     this->commuDevice->OutputMessage(COMMU_OK);
+  }else if (gcode->g == 91){
+    // Absolute position
+    this->is_absolute_position = true;
+  }else if (gcode->g ==92){
+    // Relative position
+    this->is_absolute_position = false;
   }else{
     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
   }
