@@ -10,7 +10,8 @@ class CableBotCenter:
         self.__bleXNYP = BleClient(1)
         self.__bleXNYN = BleClient(1)
         self.__bleXPYN = BleClient(1)
-        
+        print("Hello world")
+
 
     def SpinOnce(self):
         x, y = self.ReadGravitySensor()
@@ -34,3 +35,5 @@ class CableBotCenter:
         y = 1
         return x,y
 
+if __name__ == "__main__":
+    bot = CableBotCenter()
