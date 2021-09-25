@@ -93,21 +93,22 @@ void GobotHouse::__Enable_eefCoil(bool enable){
           r7             |
 
 */
-// ik_position GobotHouse::ik(float x, float y){
-//   ik_position ret;   //is risk here?
-//   float rr1= x*x +y*y;
-  
-//   float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
-//   float r1 = sqrtf(rr1);
-//   float alpha_eef = acosf(x/r1);
-//   float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
-//   float alpha = alpha_eef + alpha_link;
-//   ret.alpha = alpha * STEPS_PER_RAD;
-//   ret.beta =  beta * STEPS_PER_RAD; 
-//   return ret;
-// }
-IkPositionBase* GobotHouse::IK(FkPositionBase* fk){
 
+// }
+IkPositionBase* GobotHouse::IK(FkPositionBase* _fk){
+  FkPosXY* fk = (FkPosXY*)(_fk);
+// ik_position GobotHouse::ik(float x, float y){
+  // ik_position ret;   //is risk here?
+  float rr1= fk->x * fk->x + fk->y * fk->y;
+  
+  float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
+  float r1 = sqrtf(rr1);
+  float alpha_eef = acosf(fk->x/r1);
+  float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
+  float alpha = alpha_eef + alpha_link;
+  this->objIkXY.alpha = alpha * STEPS_PER_RAD;
+  this->objIkXY.beta =  beta * STEPS_PER_RAD; 
+  return &this->objIkXY;
 }
 FkPositionBase* GobotHouse::FK(IkPositionBase* ik){
 

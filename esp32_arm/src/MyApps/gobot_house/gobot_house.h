@@ -91,6 +91,8 @@ class GobotHouse: public RobotBase{
 
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
+        FkPosXY objFkXY;
+        IkPosXY objIkXY;
 
         void init_gpio();
 };
