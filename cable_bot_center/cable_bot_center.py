@@ -1,10 +1,16 @@
+from ble_client import BleClient
+
 
 
 
 class CableBotCenter:
     def __init__(self) -> None:
         # init ble
-        pass
+        self.__bleXPYP = BleClient(1)
+        self.__bleXNYP = BleClient(1)
+        self.__bleXNYN = BleClient(1)
+        self.__bleXPYN = BleClient(1)
+        
 
     def SpinOnce(self):
         x, y = self.ReadGravitySensor()
