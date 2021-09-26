@@ -1,9 +1,9 @@
 from config import config as  app_config
-from ble_client import BleClient
+from commuDevice.ble_client import BleClient
 import logging
 import sys
 import time
-sys.path.append("/home/pi/pylib")
+# sys.path.append("/home/pi/pylib")
 from terminal_font import TerminalFont
 
 
