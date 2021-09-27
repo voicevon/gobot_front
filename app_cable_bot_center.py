@@ -52,11 +52,12 @@ class CableBotCenter:
             if name == corner.server.BleDeviceName:
                 self.__target_angle_x = txAngle + xAngle
                 self.__target_angle_y = tyAngle + yAngle
+                pos = 1
             else:
                 self.__target_angle_x = txAngle + xAngle
                 self.__target_angle_y = tyAngle + yAngle
-
-        self.SendGcode()
+                pos = 2
+            self.SendGcode(corner,pos)
 
     def HomeAllCorners(self):
         self.HomeSingleCorner(self.__bleXPYP)
