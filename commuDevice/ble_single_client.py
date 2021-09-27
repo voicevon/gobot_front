@@ -48,10 +48,11 @@ class BleConnState(Enum):
 
 
 class BleServerHead:
-        BleDeviceName = ""
-        BleServiceUUID = ""
-        BleCommuUUID = ""
-        BleStateUUID = ""
+        AxisName = ''
+        BleDeviceName = ''
+        BleServiceUUID = ''
+        BleCommuUUID = ''
+        BleStateUUID = ''
 
 
 class BleConnection():

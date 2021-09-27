@@ -20,7 +20,30 @@ class CableBotCenter:
         self.__bleXNYP.SpinOnce()
 
         x, y = self.ReadGravitySensor()
-        
+
+    def ReadGravitySensor(self):
+        x = 0
+        y = 1
+        return x,y
+
+    def SendGcode(self, corner: BleSingleClient, pos: float) -> None:
+        gcode = 'G1 ' + corner.__server.AxisName + str(pos)
+        BleSingleClient.write_characteristic(gcode)
+
+    def IK(self, x, y, z):
+        a = 100 + x
+        b = 200 + y
+        c = 300 + z
+        f = 400
+        return a,b,c,f
+
+    def MoveTo(self, x, y, z):
+        a,b,c,f = self.IK(x,y,z)
+        self.SendGcode(self.__bleXPYP,a)
+        self.SendGcode(self.__bleXPYP,b)
+        self.SendGcode(self.__bleXPYP,c)
+        self.SendGcode(self.__bleXPYP,f)
+
     def HomeSingleCorner(self, corner: BleSingleClient) -> None:
         xAngle,yAngle =self.ReadGravitySensor()
         setting = {("XPYP", 1,1),("XNYP", 1,-1),("XNYN",-1,-1),("XPYN",1,-1)}
@@ -40,18 +63,6 @@ class CableBotCenter:
         self.HomeSingleCorner(self.__bleXPYN)
         self.HomeSingleCorner(self.__bleXNYP)
         self.HomeSingleCorner(self.__bleXNYN)
-
-    def MoveTo(self, x, y, z):
-        a,b,c,f = IK(x,y,z)
-        self.send_gcode(self.__bleXPYP,a)
-        self.send_gcode(self.__bleXPYP,b)
-        self.send_gcode(self.__bleXPYP,c)
-        self.send_gcode(self.__bleXPYP,f)
-
-    def ReadGravitySensor(self):
-        x = 0
-        y = 1
-        return x,y
 
 if __name__ == "__main__":
     bot = CableBotCenter()
