@@ -49,26 +49,21 @@ void CommuBleGattServer::Init(){
   pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
   pAdvertising->setMinPreferred(0x12);
   BLEDevice::startAdvertising();
-  __start_at = XTHAL_GET_CCOUNT();
+  this->start_timestamp = XTHAL_GET_CCOUNT();
 
 }
 
 void CommuBleGattServer::SpinOnce(){
-  if  (this->__is_connected)
-      return;
-
-  if (__is_connecting){
-    uint32_t __connecting_time = XTHAL_GET_CCOUNT() - __start_at;
-    if(__connecting_time > (int32_t)(1900000000)){
-      // connecting time out!
-      Serial.println("BLE Connecting time out, do advertize.");
-      __is_connecting =  false;
-    }
-  }else{
-    BLEDevice::startAdvertising();
-    __start_at = XTHAL_GET_CCOUNT();
-    __is_connecting = true;
+  if  (this->is_connected){
+    return;
   }
+    uint32_t connecting_time = XTHAL_GET_CCOUNT() - start_timestamp;
+    if(connecting_time > (int32_t)(1900000000)){
+      // connecting time out!
+      Serial.println("\nBLE Connecting time out, do advertize.");
+      BLEDevice::startAdvertising();
+      start_timestamp = XTHAL_GET_CCOUNT();
+    }
 }
 
 bool CommuBleGattServer::HasNewChatting(){

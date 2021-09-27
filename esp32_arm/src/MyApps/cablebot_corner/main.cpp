@@ -43,7 +43,7 @@ void loop(){
     // Sensor s= Encoder();
     // Encoder e = Encoder();
     
-    // robot.SpinOnce();
+    robot.SpinOnce();
 
     //for testing.
     // Gcode gcode = Gcode("G1 X100");
