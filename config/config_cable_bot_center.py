@@ -7,7 +7,7 @@ class CornerBotFactory:
     def __init__(self) -> None:
         pass
         
-    def CreateCorner_XPYP(self) -> BleServerHead:
+    def CreateCorner_XPYP() -> BleServerHead:
         head = BleServerHead()
         head.AxisName ='A'
         head.BleDeviceName = "ConInt-XPYP"
@@ -15,7 +15,7 @@ class CornerBotFactory:
         head.BleCommuUUID = "4b7fbe96-1451-11ec-82a8-0242ac130003"
         head.BleStateUUID = "50711238-1451-11ec-82a8-0242ac130003"
 
-    def CreateCorner_XNYP(self) -> BleServerHead:
+    def CreateCorner_XNYP() -> BleServerHead:
         head = BleServerHead()
         head.AxisName='B'
         cBleDeviceName = "ConInt-XNYP"
@@ -24,7 +24,7 @@ class CornerBotFactory:
         head.BleStateUUID = "72838810-1451-11ec-82a8-0242ac130003"
 
     # class XNYN:
-    def CreateCorner_XNYN(self) -> BleServerHead:
+    def CreateCorner_XNYN() -> BleServerHead:
         head = BleServerHead()
         head.AxisName='C'
         head.BleDeviceName = "ConInt-XNYN"
@@ -33,7 +33,7 @@ class CornerBotFactory:
         head.BleStateUUID = "8175103c-1451-11ec-82a8-0242ac130003"
 
     # class XPYN:
-    def CreateCorner_XPYN(self) -> BleServerHead:
+    def CreateCorner_XPYN() -> BleServerHead:
         head = BleServerHead()
         head.AxisName='F'
         head.BleDeviceName = "ConInt-XPYN"
