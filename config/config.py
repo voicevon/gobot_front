@@ -1,10 +1,12 @@
+from config.config_gogame import ConfigGoGame
 import sys
-sys.path.append('/home/pi/pylib')
+# sys.path.append('/home/pi/pylib')
 from mqtt_helper import MqttConfigableItem,g_mqtt
+from config_mqtt import ConfigMqtt
 
 class config:
     #platform = 'UBUNTU_GUI'
-    host_os = 'PI_ZERO'
+    # host_os = 'PI_ZERO'
 
     #firmware = 'REPRAP'
     # firmware = 'KLIPPER'
@@ -32,28 +34,11 @@ class config:
             died_black = 108
 
 
-        class state_machine:
-            class state:
-                begin = 1
-                computer_playing = 2
-                withdraw_white = 3
-                comparing_layout = 4
-                user_playing = 5
-                withdraw_black =6
-                game_over = 7
+
 
     class server:
-        class AI:
-            ip = 'voicevon.vicp.io'
-            #ip = '192.168.123.72'
-            port = 50007
-
-        class mqtt:
-            broker_addr = 'voicevon.vicp.io'
-            port = 1883
-            username = 'von'
-            password = 'von1970'
-            client = None
+        ai = ConfigGoGame()
+        mqtt = ConfigMqtt() 
 
     class robot_arm:
         type = 'GO_SCARA'
@@ -95,5 +80,5 @@ class config:
 if __name__ == "__main__":
     # global_config = app_config
     # s1 = global_config.robot_arm.name
-    app_config.robot_eye.layout_scanner.inspecting.cell_name = 'A1'
-    print(app_config.robot_eye.layout_scanner.inspecting.cell_name)
+    config.robot_eye.layout_scanner.inspecting.cell_name = 'A1'
+    print(config.robot_eye.layout_scanner.inspecting.cell_name)

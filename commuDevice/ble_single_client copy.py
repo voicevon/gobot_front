@@ -48,19 +48,19 @@ class BleConnState(Enum):
 
 class BleConnection():
     '''
-.                 Disconnected <---<---<---<---<---<----
-.                     |     \           ^                ^
-.                     |   Connect()     |                |
-.                     |                 |                |
-.    Covered --->  Discovered  ---> Connecting --->  Connected  ---> GATT ??
-.      \              \         \                        \
-.       \              \       Connect()                  \
-.        \              \                                  \----- Read, Write, Notify, Indicate.
-.         \              \------- Got Server Mac Address
-.          \              \------ Created device, Service, Characteristics,
-.           \              \----- 
-.            \                          
-.             \--- Don't know Server mac address.
+    .                 Disconnected <---<---<---<---<---<----
+    .                     |     \           ^                ^
+    .                     |   Connect()     |                |
+    .                     |                 |                |
+    .    Covered --->  Discovered  ---> Connecting --->  Connected  ---> GATT ??
+    .      \              \         \                        \
+    .       \              \       Connect()                  \
+    .        \              \                                  \----- Read, Write, Notify, Indicate.
+    .         \              \------- Got Server Mac Address
+    .          \              \------ Created device, Service, Characteristics,
+    .           \              \----- 
+    .            \                          
+    .             \--- Don't know Server mac address.
 
     '''
 
@@ -101,20 +101,7 @@ class BleConnection():
         elif self.state == BleConnState.CORVERD:
             self.Scan()
 
-    def Scan(self):
-        scanner = Scanner()
-        devices = scanner.scan(timeout = 8)
-        for dev in devices:
-            name = dev.getValueText(9)
-            print('-----------------Scanning nearby devices..............')
-            print(name, self.server_name)
-            # if name == 'ConInt-Arm-' + self.__gobot_id:
-            if name == self.server_name:
-                logging.info('---------------------------------------------')
-                logging.info('      Discoverd target !')
-                self.__server_mac_addr = dev.addr
-                self.state = BleConnState.DISCOVERED
-                return
+
         
     def ResetConnection(self):
         self.state = BleConnState.DISCONNECTED
@@ -162,11 +149,11 @@ class BleClient():
     #             self.__house_conn.SetMacAddr(dev.addr)
     #             # self.connect_to_house(dev.addr)
 
-    # def list_services_on_server(self, server_mac):
-    #     logging.info('Services on server  ------------------')
-    #     self.dev = btle.Peripheral(server_mac)
-    #     for svc in self.dev.services:
-    #         print(str(svc)) 
+    def list_services_on_server(self, server_mac):
+        logging.info('Services on server  ------------------')
+        self.dev = btle.Peripheral(server_mac)
+        for svc in self.dev.services:
+            print(str(svc)) 
 
     def connect_to_arm(self):
         self.__arm_conn.Connect()
@@ -239,6 +226,21 @@ class BleClient():
     #     self.__dev_arm.disconnect()
     #     self.__dev_house.disconnect()
     #     time.sleep(1)
+
+    def Scan(self):
+        scanner = Scanner()
+        devices = scanner.scan(timeout = 8)
+        for dev in devices:
+            name = dev.getValueText(9)
+            print('-----------------Scanning nearby devices..............')
+            print(name, self.server_name)
+            # if name == 'ConInt-Arm-' + self.__gobot_id:
+            if name == self.server_name:
+                logging.info('---------------------------------------------')
+                logging.info('      Discoverd target !')
+                self.__server_mac_addr = dev.addr
+                self.state = BleConnState.DISCOVERED
+                return
 
 g_bleClient = BleClient('213401')
 # def signal_handler(sig, frame):

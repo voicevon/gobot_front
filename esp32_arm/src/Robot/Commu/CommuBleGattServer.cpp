@@ -21,7 +21,7 @@ void CommuBleGattServer::Init(){
 
   BLEService *pService = pServer->createService(BLE_SERVICE_UUID);
   pCharNotification = pService->createCharacteristic(
-                                        BLE_RESPONSE_UUID,
+                                        BLE_STATE_UUID,
                                         BLECharacteristic::PROPERTY_READ |
                                         BLECharacteristic::PROPERTY_NOTIFY
   );
@@ -30,7 +30,7 @@ void CommuBleGattServer::Init(){
   pCharNotification->addDescriptor(p2902a); 
 
   pCharChattingroom = pService->createCharacteristic(
-                                        BLE_COMMAND_UUID,
+                                        BLE_COMMU_UUID,
                                         BLECharacteristic::PROPERTY_READ |
                                         BLECharacteristic::PROPERTY_NOTIFY |
                                         BLECharacteristic::PROPERTY_WRITE |
