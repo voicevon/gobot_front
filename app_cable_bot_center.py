@@ -28,7 +28,7 @@ class CableBotCenter:
 
     def SendGcode(self, corner: BleSingleClient, pos: float) -> None:
         gcode = 'G1 ' + corner.server.AxisName + str(pos)
-        BleSingleClient.write_characteristic(gcode)
+        corner.write_characteristic(gcode)
 
     def IK(self, x, y, z):
         a = 100 + x
