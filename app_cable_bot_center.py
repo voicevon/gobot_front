@@ -27,7 +27,7 @@ class CableBotCenter:
         return x,y
 
     def SendGcode(self, corner: BleSingleClient, pos: float) -> None:
-        gcode = 'G1 ' + corner.__server.AxisName + str(pos)
+        gcode = 'G1 ' + corner.server.AxisName + str(pos)
         BleSingleClient.write_characteristic(gcode)
 
     def IK(self, x, y, z):
@@ -45,11 +45,11 @@ class CableBotCenter:
         self.SendGcode(self.__bleXPYP,f)
 
     def HomeSingleCorner(self, corner: BleSingleClient) -> None:
-        xAngle,yAngle =self.ReadGravitySensor()
+        xAngle, yAngle =self.ReadGravitySensor()
         setting = {("XPYP", 1,1),("XNYP", 1,-1),("XNYN",-1,-1),("XPYN",1,-1)}
         # Find and set the target angle pair.
-        for (name,txAngle,tyAngle) in setting:
-            if name == corner.__server.BleDeviceName:
+        for (name, txAngle, tyAngle) in setting:
+            if name == corner.server.BleDeviceName:
                 self.__target_angle_x = txAngle + xAngle
                 self.__target_angle_y = tyAngle + yAngle
             else:

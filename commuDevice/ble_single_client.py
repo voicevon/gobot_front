@@ -132,9 +132,9 @@ class BleConnection():
 
 
 class BleSingleClient():
-    def __init__(self, server:BleServerHead):
-        self.__server = server
-        self.__connection = BleConnection(server.name)
+    def __init__(self, _server:BleServerHead):
+        self.server = _server
+        self.__connection = BleConnection(self.server)
         self.__char_state = []
         self.__char_commu = []
 
@@ -142,10 +142,10 @@ class BleSingleClient():
         self.__connection.Connect()
         if self.__connection.state == BleConnState.CONNECTED:
             try:
-                svc = self.__connection.dev.getServiceByUUID(self.__server.BleServiceUUID)
-                self.__char_commu = svc.getCharacteristics(self.__server.BleCommuUUID)[0]
-                self.__char_state = svc.getCharacteristics(self.__server.BleStateUUID)[0]
-                logging.info('      BLE connected to GATT server %s !\n', self.__server.name)
+                svc = self.__connection.dev.getServiceByUUID(self.server.BleServiceUUID)
+                self.__char_commu = svc.getCharacteristics(self.server.BleCommuUUID)[0]
+                self.__char_state = svc.getCharacteristics(self.server.BleStateUUID)[0]
+                logging.info('      BLE connected to GATT server %s !\n', self.server.BleDeviceName)
             except:
                 self.__connection.ResetConnection()
 
