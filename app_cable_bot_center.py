@@ -68,4 +68,6 @@ class CableBotCenter:
 if __name__ == "__main__":
     bot = CableBotCenter()
     bot.HomeAllCorners()
+    while True:
+        bot.SpinOnce()
 
