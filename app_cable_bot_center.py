@@ -21,19 +21,32 @@ class CableBotCenter:
 
         x, y = self.ReadGravitySensor()
         
-    def HomeSingleCorner(self, corner):
+    def HomeSingleCorner(self, corner: BleSingleClient) -> None:
         xAngle,yAngle =self.ReadGravitySensor()
         setting = {("XPYP", 1,1),("XNYP", 1,-1),("XNYN",-1,-1),("XPYN",1,-1)}
         # Find and set the target angle pair.
         for (name,txAngle,tyAngle) in setting:
-            if corner== name:
-                
+            if name == corner.__server.BleDeviceName:
+                self.__target_angle_x = txAngle + xAngle
+                self.__target_angle_y = tyAngle + yAngle
+            else:
                 self.__target_angle_x = txAngle + xAngle
                 self.__target_angle_y = tyAngle + yAngle
 
-        
         self.SendGcode()
 
+    def HomeAllCorners(self):
+        self.HomeSingleCorner(self.__bleXPYP)
+        self.HomeSingleCorner(self.__bleXPYN)
+        self.HomeSingleCorner(self.__bleXNYP)
+        self.HomeSingleCorner(self.__bleXNYN)
+
+    def MoveTo(self, x, y, z):
+        a,b,c,f = IK(x,y,z)
+        self.send_gcode(self.__bleXPYP,a)
+        self.send_gcode(self.__bleXPYP,b)
+        self.send_gcode(self.__bleXPYP,c)
+        self.send_gcode(self.__bleXPYP,f)
 
     def ReadGravitySensor(self):
         x = 0
@@ -42,3 +55,5 @@ class CableBotCenter:
 
 if __name__ == "__main__":
     bot = CableBotCenter()
+    bot.HomeAllCorners()
+
