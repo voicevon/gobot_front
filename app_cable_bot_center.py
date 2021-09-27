@@ -1,19 +1,24 @@
-from ble_client import BleClient
-
+from commuDevice. ble_single_client import BleSingleClient
+from config.config_cable_bot_center import CornerBotFactory
 
 
 
 class CableBotCenter:
     def __init__(self) -> None:
         # init ble
-        self.__bleXPYP = BleClient(1)
-        self.__bleXNYP = BleClient(1)
-        self.__bleXNYN = BleClient(1)
-        self.__bleXPYN = BleClient(1)
-        print("Hello world")
+        self.__bleXPYP = BleSingleClient(CornerBotFactory.CreateCorner_XPYP())
+        self.__bleXNYP = BleSingleClient(CornerBotFactory.CreateCorner_XNYP())
+        self.__bleXNYN = BleSingleClient(CornerBotFactory.CreateCorner_XNYN())
+        self.__bleXPYN = BleSingleClient(CornerBotFactory.CreateCorner_XPYN())
+        print("Hello world, I am CableBotCenter")
 
 
     def SpinOnce(self):
+        self.__bleXPYP.SpinOnce()
+        self.__bleXPYN.SpinOnce()
+        self.__bleXNYN.SpinOnce()
+        self.__bleXNYP.SpinOnce()
+
         x, y = self.ReadGravitySensor()
         
     def HomeSingleCorner(self, corner):

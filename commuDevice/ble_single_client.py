@@ -48,10 +48,10 @@ class BleConnState(Enum):
 
 
 class BleServerHead:
-        name = ""
-        service_uuid = ""
-        char_commu_uuid = ""
-        char_state_uuid = ""
+        BleDeviceName = ""
+        BleServiceUUID = ""
+        BleCommuUUID = ""
+        BleStateUUID = ""
 
 
 class BleConnection():
@@ -105,7 +105,7 @@ class BleConnection():
                 self.dev.withDelegate(MyDelegate())
                 self.state = BleConnState.CONNECTED
             except:
-                logging.error(' %s  Connect to BLEServer,  got exception!\n ' % self.server_name)
+                logging.error(' %s  Connect to BLEServer,  got exception!\n ' % self.__server_head.BleDeviceName)
         elif self.state == BleConnState.CORVERD:
             self.Scan()
 
@@ -120,9 +120,9 @@ class BleConnection():
         for dev in devices:
             name = dev.getValueText(9)
             print('-----------------Scanning nearby devices..............')
-            print(name, self.server_name)
+            print(name, self.__server_head.BleDeviceName)
             # if name == 'ConInt-Arm-' + self.__gobot_id:
-            if name == self.server_name:
+            if name == self.__server_head.BleDeviceName:
                 logging.info('---------------------------------------------')
                 logging.info('      Discoverd target !')
                 self.__server_mac_addr = dev.addr
@@ -141,9 +141,9 @@ class BleSingleClient():
         self.__connection.Connect()
         if self.__connection.state == BleConnState.CONNECTED:
             try:
-                svc = self.__connection.dev.getServiceByUUID(self.__server.service_uuid)
-                self.__char_commu = svc.getCharacteristics(self.__server.char_commu_uuid)[0]
-                self.__char_state = svc.getCharacteristics(self.__server.char_state_uuid)[0]
+                svc = self.__connection.dev.getServiceByUUID(self.__server.BleServiceUUID)
+                self.__char_commu = svc.getCharacteristics(self.__server.BleCommuUUID)[0]
+                self.__char_state = svc.getCharacteristics(self.__server.BleStateUUID)[0]
                 logging.info('      BLE connected to GATT server %s !\n', self.__server.name)
             except:
                 self.__connection.ResetConnection()
@@ -185,7 +185,7 @@ class BleSingleClient():
             state_code = self.__char_state.read()
             return state_code
 
-    def spin_once(self):
+    def SpinOnce(self):
         if self.__connection.state == BleConnState.CONNECTED:
             try:
                 received = self.__char_commu.read()
