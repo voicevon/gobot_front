@@ -105,6 +105,8 @@ class BleConnection():
                 #     print('                ', str(svc))
                 self.dev.withDelegate(MyDelegate())
                 self.state = BleConnState.CONNECTED
+                logging.info("BLE CONNECTED to %s" %self.__server_head.BleDeviceName)
+
             except:
                 logging.error(' %s  Connect to BLEServer,  got exception!\n ' % self.__server_head.BleDeviceName)
         elif self.state == BleConnState.CORVERD:
@@ -121,7 +123,7 @@ class BleConnection():
         for dev in devices:
             name = dev.getValueText(9)
             print('-----------------Scanning nearby devices..............')
-            print(name, self.__server_head.BleDeviceName)
+            print('BleScan() Found: %s  Target:%s' %(name, self.__server_head.BleDeviceName))
             # if name == 'ConInt-Arm-' + self.__gobot_id:
             if name == self.__server_head.BleDeviceName:
                 logging.info('---------------------------------------------')

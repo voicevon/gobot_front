@@ -30,13 +30,16 @@ void setup(){
     Serial.println ("\n\nSetup is done. ------------------------------------ ");
 }
 
+float last_a = 0;
 void loop(){
     
     float a =irEncoder.getAngle()  / 6.28318530718 ;
     // long a = irEncoder.Get_countet();
     // float a = irEncoderHelper.GetMeanValue();
-    Serial.println(a);
-    delay(500);
+    if (last_a != a){
+        Serial.println(a);
+        last_a = a;
+    }
     // Sensor s= Encoder();
     // Encoder e = Encoder();
     
