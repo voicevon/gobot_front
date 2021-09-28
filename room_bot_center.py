@@ -1,9 +1,9 @@
 from commuDevice. ble_single_client import BleSingleClient
 from room_bot.room_bot_solution import RoomBotSolution
 from room_bot.corner_bot_factory import RoomBotFactory
-from mpu6050 import mpu6050   # https://pypi.org/project/mpu6050-raspberrypi/
-# sudo apt install python3-smbus
-# pip3 install mpu6050-raspberrypi
+# from mpu6050 import mpu6050   # https://pypi.org/project/mpu6050-raspberrypi/
+# sudo apt install python3-smbus    # need to reboot?
+# sudo pip3 install mpu6050-raspberrypi
 
 
 class CableBotCenter:
@@ -14,7 +14,7 @@ class CableBotCenter:
         self.__bleXNYN = BleSingleClient(RoomBotFactory.CreateCorner_XNYN())
         self.__bleXPYN = BleSingleClient(RoomBotFactory.CreateCorner_XPYN())
         self.__bot_solution = RoomBotSolution()
-        self.sensor = mpu6050(0x68)
+        # self.sensor = mpu6050(0x68)
         
         print("Hello world, I am CableBotCenter")
 
@@ -25,7 +25,7 @@ class CableBotCenter:
         self.__bleXNYN.SpinOnce()
         self.__bleXNYP.SpinOnce()
 
-        (a, b, g) = self.sensor.get_accel_data()
+        # (a, b, g) = self.sensor.get_accel_data()
 
 
     def SendGcode(self, corner: BleSingleClient, pos: float) -> None:
