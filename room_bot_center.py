@@ -24,6 +24,7 @@ class CableBotCenter:
         self.__bleXPYN.SpinOnce()
         self.__bleXNYN.SpinOnce()
         self.__bleXNYP.SpinOnce()
+        print('.', end='')
 
         # (a, b, g) = self.sensor.get_accel_data()
 

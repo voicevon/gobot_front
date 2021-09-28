@@ -19,7 +19,7 @@ class RoomBotFactory:
     def CreateCorner_XNYP() -> BleServerHead:
         head = BleServerHead()
         head.AxisName='B'
-        cBleDeviceName = "ConInt-XNYP"
+        head.BleDeviceName = "ConInt-XNYP"
         head.BleServiceUUID = "6909288a-1451-11ec-82a8-0242ac130003"
         head.BleCommuUUID = "6e0d5d7e-1451-11ec-82a8-0242ac130003"
         head.BleStateUUID = "72838810-1451-11ec-82a8-0242ac130003"

@@ -122,7 +122,7 @@ class BleConnection():
         devices = scanner.scan(timeout = 8)
         for dev in devices:
             name = dev.getValueText(9)
-            print('-----------------Scanning nearby devices..............')
+            print('-----------------Scanning nearby devices------------------')
             print('BleScan() Found: %s  Target:%s' %(name, self.__server_head.BleDeviceName))
             # if name == 'ConInt-Arm-' + self.__gobot_id:
             if name == self.__server_head.BleDeviceName:
@@ -134,9 +134,9 @@ class BleConnection():
 
 
 class BleSingleClient():
-    def __init__(self, _server:BleServerHead):
-        self.server = _server
-        self.__connection = BleConnection(self.server)
+    def __init__(self, _server_head:BleServerHead):
+        self.server_head = _server_head
+        self.__connection = BleConnection(self.server_head)
         self.__char_state = []
         self.__char_commu = []
 
@@ -144,10 +144,10 @@ class BleSingleClient():
         self.__connection.Connect()
         if self.__connection.state == BleConnState.CONNECTED:
             try:
-                svc = self.__connection.dev.getServiceByUUID(self.server.BleServiceUUID)
-                self.__char_commu = svc.getCharacteristics(self.server.BleCommuUUID)[0]
-                self.__char_state = svc.getCharacteristics(self.server.BleStateUUID)[0]
-                logging.info('      BLE connected to GATT server %s !\n', self.server.BleDeviceName)
+                svc = self.__connection.dev.getServiceByUUID(self.server_head.BleServiceUUID)
+                self.__char_commu = svc.getCharacteristics(self.server_head.BleCommuUUID)[0]
+                self.__char_state = svc.getCharacteristics(self.server_head.BleStateUUID)[0]
+                logging.info('      BLE connected to GATT server %s !\n', self.server_head.BleDeviceName)
             except:
                 self.__connection.ResetConnection()
 
