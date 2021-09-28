@@ -1,15 +1,21 @@
 from commuDevice. ble_single_client import BleSingleClient
-from config.config_cable_bot_center import CornerBotFactory
-
+from room_bot.room_bot_solution import RoomBotSolution
+from room_bot.corner_bot_factory import RoomBotFactory
+from mpu6050 import mpu6050   # https://pypi.org/project/mpu6050-raspberrypi/
+# sudo apt install python3-smbus
+# pip3 install mpu6050-raspberrypi
 
 
 class CableBotCenter:
     def __init__(self) -> None:
         # init ble
-        self.__bleXPYP = BleSingleClient(CornerBotFactory.CreateCorner_XPYP())
-        self.__bleXNYP = BleSingleClient(CornerBotFactory.CreateCorner_XNYP())
-        self.__bleXNYN = BleSingleClient(CornerBotFactory.CreateCorner_XNYN())
-        self.__bleXPYN = BleSingleClient(CornerBotFactory.CreateCorner_XPYN())
+        self.__bleXPYP = BleSingleClient(RoomBotFactory.CreateCorner_XPYP())
+        self.__bleXNYP = BleSingleClient(RoomBotFactory.CreateCorner_XNYP())
+        self.__bleXNYN = BleSingleClient(RoomBotFactory.CreateCorner_XNYN())
+        self.__bleXPYN = BleSingleClient(RoomBotFactory.CreateCorner_XPYN())
+        self.__bot_solution = RoomBotSolution()
+        self.sensor = mpu6050(0x68)
+        
         print("Hello world, I am CableBotCenter")
 
 
@@ -19,26 +25,15 @@ class CableBotCenter:
         self.__bleXNYN.SpinOnce()
         self.__bleXNYP.SpinOnce()
 
-        x, y = self.ReadGravitySensor()
+        (a, b, g) = self.sensor.get_accel_data()
 
-    def ReadGravitySensor(self):
-        x = 0
-        y = 1
-        return x,y
 
     def SendGcode(self, corner: BleSingleClient, pos: float) -> None:
         gcode = 'G1 ' + corner.server.AxisName + str(pos)
         corner.write_characteristic(gcode)
 
-    def IK(self, x, y, z):
-        a = 100 + x
-        b = 200 + y
-        c = 300 + z
-        f = 400
-        return a,b,c,f
-
     def MoveTo(self, x, y, z):
-        a,b,c,f = self.IK(x,y,z)
+        a,b,c,f = self.__bot_solution.IK(x,y,z)
         self.SendGcode(self.__bleXPYP,a)
         self.SendGcode(self.__bleXPYP,b)
         self.SendGcode(self.__bleXPYP,c)

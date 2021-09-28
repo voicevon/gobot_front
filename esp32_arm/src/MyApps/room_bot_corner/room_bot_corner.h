@@ -22,9 +22,9 @@
 #define PIN_LED_POWER_2130 22
 
 
-class CableBotCorner: public RobotBase{
+class RoomBotCorner: public RobotBase{
     public:
-        CableBotCorner(char axis_name);
+        RoomBotCorner(char axis_name);
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
         void Init_Linkage() override {assert("Must pass me an IrEncoderHelper*");};

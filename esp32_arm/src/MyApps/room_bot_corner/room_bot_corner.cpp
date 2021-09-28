@@ -1,11 +1,11 @@
-#include "cablebot_corner.h"
+#include "room_bot_corner.h"
 
-CableBotCorner::CableBotCorner(char axis_name){
+RoomBotCorner::RoomBotCorner(char axis_name){
     this->singleAxis.Name = axis_name;
 }
         
 
-void CableBotCorner::HomeAllAxises(){
+void RoomBotCorner::HomeAllAxises(){
     // This robot actually is a joint of the Cable-ROBOT system.
     // And, It's necessary to work with other joint cooperately.
     // So, the function "Home()" should do nothing ! 
@@ -14,7 +14,7 @@ void CableBotCorner::HomeAllAxises(){
 
 
 
-void CableBotCorner::RunG1(Gcode* gcode){
+void RoomBotCorner::RunG1(Gcode* gcode){
     float pos = gcode->get_value(singleAxis.Name);
     Serial.println("***************  111");
     bool dir_forward = true;
@@ -35,7 +35,7 @@ void CableBotCorner::RunG1(Gcode* gcode){
 
 }
 
-void CableBotCorner::Init_Linkage(IrEncoderHelper* sensorHelperBase){
+void RoomBotCorner::Init_Linkage(IrEncoderHelper* sensorHelperBase){
     this->LinkCommuDevice(&this->objCommuBle);
     this->objCommuBle.Init();
     this->singleAxis.LinkAcuator(&this->objDcMotor);
@@ -49,7 +49,7 @@ void CableBotCorner::Init_Linkage(IrEncoderHelper* sensorHelperBase){
 
 }
 
-// ik_position CableBotCorner::ik(float x, float y){
+// ik_position RoomBotCorner::ik(float x, float y){
 //     ik_position ret;  //TODO: check risk for unreleasing ?
 //     ret.alpha = x;
 //     ret.beta = y;   // Will Never useful for me. 
@@ -57,13 +57,13 @@ void CableBotCorner::Init_Linkage(IrEncoderHelper* sensorHelperBase){
 // } 
 
 
-IkPositionBase* CableBotCorner::IK(FkPositionBase* fk){
+IkPositionBase* RoomBotCorner::IK(FkPositionBase* fk){
     FkPosX* _fk = (FkPosX*)(fk);
     this->objIkPos.alpha = _fk->x;
     return &this->objIkPos;  
 }
 
-FkPositionBase* CableBotCorner::FK(IkPositionBase* ik){
+FkPositionBase* RoomBotCorner::FK(IkPositionBase* ik){
     IkPosX* _ik = (IkPosX*)(ik);
     this->objFkpos.x = _ik->alpha;
     return &this->objFkpos;

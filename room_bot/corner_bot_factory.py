@@ -3,7 +3,7 @@ from commuDevice.ble_single_client import BleServerHead
 
 
 
-class CornerBotFactory:
+class RoomBotFactory:
     def __init__(self) -> None:
         pass
         
