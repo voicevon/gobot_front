@@ -30,7 +30,7 @@ class CableBotCenter:
 
 
     def SendGcode(self, corner: BleSingleClient, pos: float) -> None:
-        gcode = 'G1 ' + corner.server.AxisName + str(pos)
+        gcode = 'G1 ' + corner.server_head.AxisName + str(pos)
         corner.write_characteristic(gcode)
 
     def MoveTo(self, x, y, z):
@@ -47,7 +47,7 @@ class CableBotCenter:
         setting = {("XPYP", 1,1),("XNYP", 1,-1),("XNYN",-1,-1),("XPYN",1,-1)}
         # Find and set the target angle pair.
         for (name, txAngle, tyAngle) in setting:
-            if name == corner.server.BleDeviceName:
+            if name == corner.server_head.BleDeviceName:
                 self.__target_angle_x = txAngle + xAngle
                 self.__target_angle_y = tyAngle + yAngle
                 pos = 1
