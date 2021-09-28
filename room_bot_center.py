@@ -40,7 +40,9 @@ class CableBotCenter:
         self.SendGcode(self.__bleXPYP,f)
 
     def HomeSingleCorner(self, corner: BleSingleClient) -> None:
-        xAngle, yAngle =self.ReadGravitySensor()
+        # xAngle, yAngle =self.ReadGravitySensor()
+        xAngle = 0.1 
+        yAngle = 0.2 
         setting = {("XPYP", 1,1),("XNYP", 1,-1),("XNYN",-1,-1),("XPYN",1,-1)}
         # Find and set the target angle pair.
         for (name, txAngle, tyAngle) in setting:
