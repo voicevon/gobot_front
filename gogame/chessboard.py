@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/pi/gobot_front')
+# sys.path.append('/home/pi/gobot_front')
 
 from vision.grid_layout import GridLayout
 from gogame.chessboard_cell import ChessboardCell, Stone
