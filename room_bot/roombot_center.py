@@ -1,9 +1,12 @@
-from commuDevice. ble_single_client import BleSingleClient
+from commuDevice.ble_single_client import BleSingleClient
 from room_bot.room_bot_solution import RoomBotSolution
 from room_bot.corner_bot_factory import RoomBotFactory
 # from mpu6050 import mpu6050   # https://pypi.org/project/mpu6050-raspberrypi/
 # sudo apt install python3-smbus    # need to reboot?
 # sudo pip3 install mpu6050-raspberrypi
+# Wiring:   https://medium.com/@kalpeshnpatil/raspberry-pi-interfacing-with-mpu6050-motion-sensor-c9608cd5f59c
+
+
 
 
 class CableBotCenter:
