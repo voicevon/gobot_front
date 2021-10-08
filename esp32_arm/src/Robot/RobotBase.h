@@ -99,22 +99,25 @@ class RobotBase{
         void SpinOnce();
         virtual void Init_Linkage();
         virtual void HomeAllAxises();   //??
-        bool IsBusy(){return this->is_busy;};
+        
+        bool IsIdle(){return this->robot_is_idle;};
         // virtual void Init();
 
     protected:
         RobotBase(){};
+        virtual bool MoveToTargetPosition();
         virtual void SpinOnce_BaseEnter();
         virtual void SpinOnce_BaseExit();
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
         virtual IkPositionBase* IK(FkPositionBase* fk);
         virtual FkPositionBase* FK(IkPositionBase* ik);
         virtual void RunG1(Gcode* gcode);
+        virtual const char* GetHomeTrigerStateString();
         // virtual void Move(Gcode* gcode);   //??
         CommuDeviceBase* commuDevice;
-        FkPositionBase* currentFkPosition;
-        FkPositionBase* nexkFkPosition;
-        bool is_busy = false;
+        // FkPositionBase* currentFkPosition;  //??
+        // FkPositionBase* nextFkPosition;   //??
+        bool robot_is_idle = true;    //TODO: Will be instead of commu_buffer_length > 0.
         bool is_absolute_position = true;
         // Just for fun, don't remove below comment !!
         // void OnFinishedGcode2(void(*callback)()) {__output_message2 = callback;};

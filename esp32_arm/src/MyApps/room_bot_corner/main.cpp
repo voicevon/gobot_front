@@ -5,8 +5,8 @@
 #include "room_bot_corner.h"
 #include "Robot/Gcode.h" 
 
-#define PIN_ENCODER_A 19
-#define PIN_ENCODER_B 18
+#define PIN_ENCODER_A 26
+#define PIN_ENCODER_B 25
 
 RoomBotCorner robot = RoomBotCorner(AXIS_NAME);
 IrEncoder irEncoder = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 40);
@@ -23,29 +23,23 @@ void setup(){
     irEncoder.init();
     irEncoder.enableInterrupts(doB);
     irEncoderHelper.LinkSensor(&irEncoder);
-    // irEncoderHelper.InitFormula_LinearEquation(1.0f, 0.0f);
-    irEncoderHelper.InitFormula_LinearEquation(1.0f / 6.28318530718 , 0.0f);
+    irEncoderHelper.InitFormula_LinearEquation(3.613f, 0.0f);
     
     robot.Init_Linkage(&irEncoderHelper);
     Serial.println ("\n\nSetup is done. ------------------------------------ ");
 }
 
-float last_a = 0;
+bool tested = false;
 void loop(){
-    
-    // float a =irEncoder.getAngle()  / 6.28318530718 ;
-    // long a = irEncoder.Get_countet();
-    float a = irEncoderHelper.GetMeanValue();
-    if (last_a != a){
-        Serial.println(a);
-        last_a = a;
-    }
-    
     robot.SpinOnce();
-    //for testing.
-    // Gcode gcode = Gcode("G1 X100");
-    // robot.RunGcode(&gcode);
 
+    if (!tested){
+        // robot.test_home();
+        // tested = true;
+        Gcode gcode = Gcode("M119");
+        robot.RunGcode(&gcode);
+        delay(1000);
+    }
 }
 
 #endif

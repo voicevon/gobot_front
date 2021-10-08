@@ -4,6 +4,33 @@ RoomBotCorner::RoomBotCorner(char axis_name){
     this->singleAxis.Name = axis_name;
 }
         
+void RoomBotCorner::test_hBridge(){
+    for(int i =0 ; i <10; i++){
+        this->objHBridge.Stop();
+        delay(5000);
+
+        this->objHBridge.Start(255, true);
+        delay(5000);
+        this->objHBridge.Start(255, false);
+        delay(5000);
+    }
+}
+
+void RoomBotCorner::test_home(){
+    Gcode gc = Gcode("G91");
+    this->RunGcode(&gc);
+    do{
+       if (this->robot_is_idle){
+        Gcode gcode = Gcode("G1 A-3");
+        this->RunGcode(&gcode);
+       }
+       delay(1000);
+       Serial.print(this->singleAxis._actuator->GetCurrentPos());
+       Serial.print("\n");
+    } while (!objHomeTriger.IsTriged());
+
+    
+}
 
 void RoomBotCorner::HomeAllAxises(){
     // This robot actually is a joint of the Cable-ROBOT system.
@@ -12,37 +39,70 @@ void RoomBotCorner::HomeAllAxises(){
     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND); 
 }
 
+const char* RoomBotCorner::GetHomeTrigerStateString(){
+    std::string result = "Trigger State = ";    // Will be deleted after function run?
+    if (this->objHomeTriger.IsTriged()){
+        result += "Yes\n";
+    }else{
+        result += "No\n";
+    }
+    return result.c_str();
+}
 
+bool RoomBotCorner::MoveToTargetPosition(){
+    static float debug_last_distance = 0.0f;
 
-void RoomBotCorner::RunG1(Gcode* gcode){
-    float pos = gcode->get_value(singleAxis.Name);
-    Serial.println("***************  111");
     bool dir_forward = true;
-    if (pos - this->singleAxis._actuator->GetCurrentPos()){
+    float targetPos = this->nextPosX.x;
+    if (targetPos > this->singleAxis._actuator->GetCurrentPos()){
         dir_forward = false;
     }
     //TODO, insert PID here.
     float speed = 100;
     this->objHBridge.Start(speed, dir_forward);
-    Serial.println("***************  222");
-
     //Read the encoder,
-    int distance;
-    do {
-        distance = pos- this->singleAxis._actuator->GetCurrentPos(); 
-    }while (distance > 10);
-    Serial.println("***************  3333");
+    float distance = targetPos - this->singleAxis._actuator->GetCurrentPos(); 
+    if (distance != debug_last_distance){
+        Serial.print("\nRunning G1  target, current,   distance to target = ");
+        Serial.print(this->nextPosX.x);
+        Serial.print("   ");
+        Serial.print(this->singleAxis._actuator->GetCurrentPos());
+        Serial.print("   ");
+        Serial.print(distance);
+        debug_last_distance = distance;
+    }
+    if (abs(distance) < this->singleAxis._actuator->positionTolerance){
+        this->objHBridge.Stop();
+        return true;  // is idle
+    }
+    return false;   
+}
 
+void RoomBotCorner::RunG1(Gcode* gcode){
+    float pos = gcode->get_value(this->singleAxis.Name);
+    // this->singleAxis._actuator->SetTargetAbs(pos);
+    if (this->is_absolute_position){
+        this->nextPosX.x = pos;
+    }else{
+        this->nextPosX.x = this->nextPosX.x + pos;
+    }
+    this->robot_is_idle =  MoveToTargetPosition();
+}
+
+
+void RoomBotCorner::SpinOnce_BaseExit(){
+    this->MoveToTargetPosition();
 }
 
 void RoomBotCorner::Init_Linkage(IrEncoderHelper* sensorHelperBase){
     this->LinkCommuDevice(&this->objCommuBle);
     this->objCommuBle.Init();
     this->singleAxis.LinkAcuator(&this->objDcMotor);
-    // this->objDcMotor.LinkSensor(encoder);
     this->objDcMotor.LinkSensorHelper(sensorHelperBase);
     this->objDcMotor.LinkDriver(&this->objHBridge);
     this->objDcMotor.MaxSpeed = 100;
+    this->objDcMotor.positionTolerance = 1.5f;
+
     this->commuDevice->OutputMessage("Hello world! This is the first message from commuDevice,");
     this->commuDevice->OutputMessage("    Have a good Day. :) ");
     this->commuDevice->OutputMessage(COMMU_OK);

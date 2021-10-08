@@ -49,12 +49,13 @@ class ActuatorBase
     SensorHelperBase* sensorHelper;
     DriverBase* driver;
     bool IsRunning=false;
-
+    float positionTolerance = 1.0f;
     //Some properties like below: Might be useful in feature.
     float MaxSpeed = 1;
     // float Weight = 0;
     // float MaxAcceleration = 2;
     // Mass gravity = (1,2,3);
+
   private:
 
 

@@ -16,45 +16,63 @@ void RobotBase::SpinOnce(){
 }
 
 void RobotBase::RunGcode(Gcode* gcode){
+  const char* result;
   if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND)){
     Serial.print("RunGcode()   OK or Unknown");
     return;
   }
 
-  if(!gcode->has_g){
-    this->commuDevice->OutputMessage("  Has NO letter 'G'.");
+  if(gcode->has_g){
+    switch (gcode->g){
+      case 28:
+        // G28: Home
+        // this->__is_busy = true;
+        this->HomeAllAxises();
+        // this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
+        break;
+      case 1:
+        // G1 Move
+        // this->__is_busy = true;
+        //TODO:  1. put position to movement queue. called "plan" in smoothieware? 
+        //       2. send out OK.
+        //       3. Set status to busy.
+        //       4. Start Moving.
+        this->RunG1(gcode);
+        this->commuDevice->OutputMessage(COMMU_OK);
+        break;
+      case 90:
+        // Absolute position
+        this->is_absolute_position = true;
+        break;
+      case 91:
+        // Relative position
+        this->is_absolute_position = false;
+        break;
+      case 92:
+        // Set Position     G92 X10 E90
+        break;
+      default:
+        break;
+    }
+  }else if(gcode->has_m){
+    switch (gcode->m){
+      case 119:
+        // Get Endstop Status
+        result = GetHomeTrigerStateString();
+        Serial.print(result);
+        this->commuDevice->OutputMessage(result);
+        break;
+      case 114:
+        // Get Current Position
+        break;
+      default:
+        break;
+    }
+  }else{
+    this->commuDevice->OutputMessage("  Has NO letter 'G' or 'M'. ");
     this->commuDevice->OutputMessage(gcode->get_command());
     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
-    return;
   }
-
-
-
-  if (gcode->g == 28){
-    // G28: Home
-    // this->__is_busy = true;
-    this->HomeAllAxises();
-    // this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
-
-  }else if (gcode->g ==1){
-    // G1 Move
-    // this->__is_busy = true;
-    //TODO:  1. put position to movement queue. called "plan" in smoothieware? 
-    //       2. send out OK.
-    //       3. Set status to busy.
-    //       4. Start Moving.
-    this->RunG1(gcode);
-    this->commuDevice->OutputMessage(COMMU_OK);
-  }else if (gcode->g == 91){
-    // Absolute position
-    this->is_absolute_position = true;
-  }else if (gcode->g ==92){
-    // Relative position
-    this->is_absolute_position = false;
-  }else{
-    this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
-  }
-
 }
 
 

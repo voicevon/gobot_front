@@ -15,10 +15,10 @@
 #include "Robot/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
 
-#define PIN_HOME_SENSOR_2130 15
+#define PIN_HOME_SENSOR_2130 32
 
-#define PIN_DC_MOTOR_A_2130 28
-#define PIN_DC_MOTOR_B_2130 29
+#define PIN_DC_MOTOR_A_2130 27
+#define PIN_DC_MOTOR_B_2130 14
 #define PIN_LED_POWER_2130 22
 
 
@@ -29,23 +29,30 @@ class RoomBotCorner: public RobotBase{
         void RunG1(Gcode* gcode) override;
         void Init_Linkage() override {assert("Must pass me an IrEncoderHelper*");};
         void Init_Linkage(IrEncoderHelper* sensorHelper);
+        void test_hBridge();
+        void test_home();
 
     protected:
         
     private:
         virtual IkPositionBase* IK(FkPositionBase* fk) override;
         virtual FkPositionBase* FK(IkPositionBase* ik) override;
+        const char* GetHomeTrigerStateString() override;
+        bool MoveToTargetPosition() override;
         void SpinOnce_BaseEnter() override {};
-        void SpinOnce_BaseExit() override {};
+        void SpinOnce_BaseExit() override;
         Led objLed_power = Led(0,PIN_LED_POWER_2130,LOW);
         Led objLed_home_alpha = Led(1,2,LOW);
         DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
-        HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, HIGH);
+        HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, LOW);
         DCMotor objDcMotor = DCMotor();
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
         SingleAxis singleAxis = SingleAxis();
         FkPosX objFkpos;
         IkPosX objIkPos;
+
+        // FkPosX currentPosX;
+        FkPosX nextPosX;
 };
 
