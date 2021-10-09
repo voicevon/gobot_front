@@ -27,6 +27,7 @@ class RoomBotCorner: public RobotBase{
         RoomBotCorner(char axis_name);
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
+        void RunG6(Gcode* gcode) override;
         void Init_Linkage() override {assert("Must pass me an IrEncoderHelper*");};
         void Init_Linkage(IrEncoderHelper* sensorHelper);
         void test_hBridge();

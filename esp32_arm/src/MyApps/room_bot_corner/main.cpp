@@ -5,8 +5,8 @@
 #include "room_bot_corner.h"
 #include "Robot/Gcode.h" 
 
-#define PIN_ENCODER_A 26
-#define PIN_ENCODER_B 25
+#define PIN_ENCODER_A 25
+#define PIN_ENCODER_B 26
 
 RoomBotCorner robot = RoomBotCorner(AXIS_NAME);
 IrEncoder irEncoder = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 40);
@@ -36,9 +36,9 @@ void loop(){
     if (!tested){
         // robot.test_home();
         // tested = true;
-        Gcode gcode = Gcode("M119");
-        robot.RunGcode(&gcode);
-        delay(1000);
+        // Gcode gcode = Gcode("M119");
+        // robot.RunGcode(&gcode);
+        // delay(1000);
     }
 }
 

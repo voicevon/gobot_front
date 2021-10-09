@@ -40,6 +40,10 @@ void RobotBase::RunGcode(Gcode* gcode){
         this->RunG1(gcode);
         this->commuDevice->OutputMessage(COMMU_OK);
         break;
+      case 6:
+        this->RunG6(gcode);
+        this->commuDevice->OutputMessage(COMMU_OK);
+        break;
       case 90:
         // Absolute position
         this->is_absolute_position = true;

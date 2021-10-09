@@ -111,7 +111,8 @@ class RobotBase{
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
         virtual IkPositionBase* IK(FkPositionBase* fk);
         virtual FkPositionBase* FK(IkPositionBase* ik);
-        virtual void RunG1(Gcode* gcode);
+        virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.
+        virtual void RunG6(Gcode* gcode);   //Block mode
         virtual const char* GetHomeTrigerStateString();
         // virtual void Move(Gcode* gcode);   //??
         CommuDeviceBase* commuDevice;

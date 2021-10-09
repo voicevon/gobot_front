@@ -88,7 +88,18 @@ void RoomBotCorner::RunG1(Gcode* gcode){
     }
     this->robot_is_idle =  MoveToTargetPosition();
 }
-
+void RoomBotCorner::RunG6(Gcode* gcode){
+    float pos = gcode->get_value(this->singleAxis.Name);
+    // this->singleAxis._actuator->SetTargetAbs(pos);
+    if (this->is_absolute_position){
+        this->nextPosX.x = pos;
+    }else{
+        this->nextPosX.x = this->nextPosX.x + pos;
+    }
+    do{
+        this->robot_is_idle =  MoveToTargetPosition();
+    }while (!this->robot_is_idle);
+}
 
 void RoomBotCorner::SpinOnce_BaseExit(){
     this->MoveToTargetPosition();
