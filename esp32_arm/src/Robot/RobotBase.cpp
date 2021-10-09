@@ -63,8 +63,8 @@ void RobotBase::RunGcode(Gcode* gcode){
       case 119:
         // Get Endstop Status
         result = GetHomeTrigerStateString();
-        Serial.print(result);
-        this->commuDevice->OutputMessage(result);
+        this->commuDevice->OutputMessage(COMMU_OK);
+        this->commuDevice->WriteNotification(result);
         break;
       case 114:
         // Get Current Position

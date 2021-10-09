@@ -79,10 +79,11 @@ char* CommuBleGattServer::ReadChatting(){
 }
 
 void CommuBleGattServer::WriteNotification(const char* notification){
+  this->pCharNotification->setValue(notification);
   
 }
 
 void CommuBleGattServer::OutputMessage(std::string message){
-  
+  this->pCharNotification->setValue(message);
 }
 

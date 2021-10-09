@@ -38,7 +38,7 @@ class RoomBotFactory:
     # class XPYN:
     def CreateCorner_XPYN() -> BleServerHead:
         head = BleServerHead()
-        head.AxisName='F'
+        head.AxisName='H'
         head.BleDeviceName = "ConInt-XPYN"
         head.BleServiceUUID  = "85f5ab94-1451-11ec-82a8-0242ac130003"
         head.BleCommuUUID = "96a1cd38-1451-11ec-82a8-0242ac130003"
