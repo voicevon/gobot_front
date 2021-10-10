@@ -7,7 +7,7 @@
 class CommuDeviceBase{
     public:
         virtual void OutputMessage(std::string message);
-        virtual void WriteNotification(const char* notification);
+        virtual void WriteNotification(std::string notification);
         // virtual void OutputMessage(char* message){};
         virtual void Init();
         virtual void SpinOnce();

@@ -16,7 +16,7 @@ void RobotBase::SpinOnce(){
 }
 
 void RobotBase::RunGcode(Gcode* gcode){
-  const char* result;
+  std::string result;
   if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND)){
     Serial.print("RunGcode()   OK or Unknown");
     return;
@@ -64,6 +64,7 @@ void RobotBase::RunGcode(Gcode* gcode){
         // Get Endstop Status
         result = GetHomeTrigerStateString();
         this->commuDevice->OutputMessage(COMMU_OK);
+        Serial.print(result.c_str());
         this->commuDevice->WriteNotification(result);
         break;
       case 114:

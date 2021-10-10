@@ -38,7 +38,7 @@ class RoomBotCorner: public RobotBase{
     private:
         virtual IkPositionBase* IK(FkPositionBase* fk) override;
         virtual FkPositionBase* FK(IkPositionBase* ik) override;
-        const char* GetHomeTrigerStateString() override;
+        virtual std::string GetHomeTrigerStateString() override;
         bool MoveToTargetPosition() override;
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override;

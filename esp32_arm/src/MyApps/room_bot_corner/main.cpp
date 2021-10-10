@@ -14,7 +14,10 @@ IrEncoderHelper irEncoderHelper = IrEncoderHelper();
 void doB(){irEncoder.handleB();}
 
 
-
+void setup3(){
+    Serial.begin(115200);
+    pinMode(32,INPUT_PULLUP);
+}
 
 void setup(){
     Serial.begin(115200);
@@ -31,14 +34,17 @@ void setup(){
 
 bool tested = false;
 void loop(){
+    // bool x = digitalRead(32);
+    // Serial.print(x);
+    // delay(1000);
     robot.SpinOnce();
 
     if (!tested){
         // robot.test_home();
         // tested = true;
-        // Gcode gcode = Gcode("M119");
-        // robot.RunGcode(&gcode);
-        // delay(1000);
+        Gcode gcode = Gcode("M119");
+        robot.RunGcode(&gcode);
+        delay(100);
     }
 }
 

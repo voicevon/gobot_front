@@ -113,8 +113,7 @@ class RobotBase{
         virtual FkPositionBase* FK(IkPositionBase* ik);
         virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.
         virtual void RunG6(Gcode* gcode);   //Block mode
-        virtual const char* GetHomeTrigerStateString();
-        // virtual void Move(Gcode* gcode);   //??
+        virtual std::string GetHomeTrigerStateString();
         CommuDeviceBase* commuDevice;
         // FkPositionBase* currentFkPosition;  //??
         // FkPositionBase* nextFkPosition;   //??

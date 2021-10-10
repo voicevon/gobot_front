@@ -7,8 +7,11 @@ HomeHelper::HomeHelper(uint8_t pinTriger, int trigeredState){
 }
 
 bool HomeHelper::IsTriged(){
-    if (digitalRead(this->pinTriger) == trigeredState)
+    if (digitalRead(this->pinTriger) == trigeredState){
+    // Serial.print("HomeHelper.IsTriged() = True\n");
         return true;
+    }
+    // Serial.print("HomeHelper.IsTriged() = False\n");
     return false;
 }
 

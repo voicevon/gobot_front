@@ -23,7 +23,9 @@ void CommuBleGattServer::Init(){
   pCharNotification = pService->createCharacteristic(
                                         BLE_STATE_UUID,
                                         BLECharacteristic::PROPERTY_READ |
-                                        BLECharacteristic::PROPERTY_NOTIFY
+                                        BLECharacteristic::PROPERTY_NOTIFY |
+                                        BLECharacteristic::PROPERTY_WRITE |
+                                        BLECharacteristic::PROPERTY_INDICATE
   );
   BLE2902 * p2902a= new BLE2902();
   // pp->setNotifications(true);
@@ -78,12 +80,17 @@ char* CommuBleGattServer::ReadChatting(){
 
 }
 
-void CommuBleGattServer::WriteNotification(const char* notification){
+void CommuBleGattServer::WriteNotification(std::string notification){
   this->pCharNotification->setValue(notification);
+  // this->pCharNotification->indicate();
+  this->pCharNotification->notify();
   
 }
 
 void CommuBleGattServer::OutputMessage(std::string message){
-  this->pCharNotification->setValue(message);
+  this->pCharChattingroom->setValue(message);
+  this->pCharChattingroom->notify();
+  // Serial.print("\nCommuBleGattServer::OutputMessage()  ->setValue");
+  // Serial.print(message.c_str());
 }
 

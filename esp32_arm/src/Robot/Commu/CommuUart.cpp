@@ -5,6 +5,12 @@ void CommuUart::OutputMessage(std::string message){
     Serial.print("\n...   ...   ...");
     Serial.print(message.c_str());
 }
+void CommuUart::WriteNotification(std::string notification){
+    //For UART, will do same thing to OutputMessage()
+    //Reason:  UART has ONLY ONE channel to write out.
+    //         while WriteNotification should output message to a one-way individual channel.
+    this->OutputMessage(notification);
+}
 
 // void CommuUart::OutputMessage(char* message){
 //     Serial.print("\n...   ...   ...");
@@ -27,10 +33,4 @@ void CommuUart::Init(){
     }
     RxBuffer[20] = 0;
     pRxBuffer = &RxBuffer[0];
-}
-void CommuUart::WriteNotification(const char* notification){
-    //For UART, will do same thing to OutputMessage()
-    //Reason:  UART has ONLY ONE channel to write out.
-    //         while WriteNotification should output message to a one-way individual channel.
-    this->OutputMessage(std::string(notification));
 }

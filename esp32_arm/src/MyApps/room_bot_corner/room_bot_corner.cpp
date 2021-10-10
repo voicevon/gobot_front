@@ -28,7 +28,6 @@ void RoomBotCorner::test_home(){
        Serial.print(this->singleAxis._actuator->GetCurrentPos());
        Serial.print("\n");
     } while (!objHomeTriger.IsTriged());
-
     
 }
 
@@ -39,14 +38,14 @@ void RoomBotCorner::HomeAllAxises(){
     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND); 
 }
 
-const char* RoomBotCorner::GetHomeTrigerStateString(){
-    std::string result = "Trigger State = ";    // Will be deleted after function run?
+std::string RoomBotCorner::GetHomeTrigerStateString(){
+    std::string result = "Trigger = ";    // Will be deleted after function run?
     if (this->objHomeTriger.IsTriged()){
-        result += "Yes\n";
+        result += "Yes";
     }else{
-        result += "No\n";
+        result += "No";
     }
-    return result.c_str();
+    return result;
 }
 
 bool RoomBotCorner::MoveToTargetPosition(){
