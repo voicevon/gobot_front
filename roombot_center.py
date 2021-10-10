@@ -80,7 +80,7 @@ class CableBotCenter:
                 relative_pos = 2.0
             self.SendGcode(corner, blocked_movement=True, pos=relative_pos)
         
-    def HomeSingleCorner(self, corner,BleSingleClient) -> None:
+    def HomeSingleCorner(self, corner:BleSingleClient) -> None:
         # enter relative gcode
         corner.write_characteristic('G91')
         # read the home triger of the target corner
