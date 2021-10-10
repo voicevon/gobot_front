@@ -149,6 +149,7 @@ class BleSingleClient():
                 self.__char_state = svc.getCharacteristics(self.server_head.BleStateUUID)[0]
                 logging.info('      BLE connected to GATT server %s !\n', self.server_head.BleDeviceName)
             except:
+                print('ble_single_client.connect_to_server() got exception')
                 self.__connection.ResetConnection()
 
     def write_characteristic(self, new_value:str):
@@ -161,13 +162,13 @@ class BleSingleClient():
             print('ble_Write() Disconnected --> reconnecting')
             # self.list_services_on_server()
             self.connect_to_server()
-            print('ble_write() Disconnected --> reconnecting  ')
+            # print('ble_write() Disconnected --> reconnecting  ')
 
-    def read_characteristic_commu(self, wait_ok=False):
+    def read_characteristic_commu(self, wait_ok=False) ->str:
         try:
             commu_code = self.__char_commu.read()
             if wait_ok:
-                while commu_code != 'OK':
+                while commu_code != b'  > OK':
                     commu_code = self.__char_commu.read()
             return commu_code
         #except bluepy.btle.BTLEDisconnectError:
