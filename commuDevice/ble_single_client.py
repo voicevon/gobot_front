@@ -175,6 +175,7 @@ class BleSingleClient():
         except:
             print("ble_read() Device disconnected-- reconnecting")
             self.connect_to_server()
+            return
             #continue
             commu_code = self.__char_commu.read()
             return commu_code
@@ -187,6 +188,7 @@ class BleSingleClient():
         except:
             print("ble_read() Device disconnected-- reconnecting")
             self.connect_to_server()
+            return
             #continue
             state_code = self.__char_state.read()
             return state_code

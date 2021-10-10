@@ -62,7 +62,7 @@ class CableBotCenter:
             self.__bleXPYP.read_characteristic_commu(True)
             
 
-    def HomeSingleCorner_inching(self, corner: BleSingleClient) -> bool:
+    def HomeSingleCorner_inching(self, corner:BleSingleClient) -> bool:
         # xAngle, yAngle =self.ReadGravitySensor()
         xAngle = 0.1 
         yAngle = 0.2 
@@ -80,7 +80,7 @@ class CableBotCenter:
                 relative_pos = 2.0
             self.SendGcode(corner, blocked_movement=True, pos=relative_pos)
         
-    def HomeSingleCorner(self, corner: BleSingleClient) -> None:
+    def HomeSingleCorner(self, corner,BleSingleClient) -> None:
         # enter relative gcode
         corner.write_characteristic('G91')
         # read the home triger of the target corner
@@ -89,7 +89,7 @@ class CableBotCenter:
 
         trigered = False
         while not trigered:  # Risk to stuck here?
-            response = self.HomeSingleCorner_inching(self, corner)
+            response = self.HomeSingleCorner_inching(corner)
             print('HomeSingleCorner()', response)
             if response(-3.3) == 'Yes':
                 trigered = True
