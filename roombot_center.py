@@ -1,3 +1,4 @@
+import time
 from math import sqrt
 from commuDevice.ble_single_client import BleSingleClient
 from room_bot.room_bot_solution import RoomBotSolution
@@ -94,6 +95,8 @@ class CableBotCenter:
             if response != None:
                 if response(-3,3) == 'Yes':
                     trigered = True
+            else:
+                time.sleep(1)
 
         # enter absolute gcode
         corner.write_characteristic('G90')
