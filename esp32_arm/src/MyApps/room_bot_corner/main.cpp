@@ -42,9 +42,9 @@ void loop(){
     if (!tested){
         // robot.test_home();
         // tested = true;
-        Gcode gcode = Gcode("M119");
-        robot.RunGcode(&gcode);
-        delay(100);
+        // Gcode gcode = Gcode("M119");
+        // robot.RunGcode(&gcode);
+        // delay(100);
     }
 }
 
