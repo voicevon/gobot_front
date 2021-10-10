@@ -91,7 +91,7 @@ class CableBotCenter:
         while not trigered:  # Risk to stuck here?
             response = self.HomeSingleCorner_inching(corner)
             print('HomeSingleCorner()', response)
-            if response(-3.3) == 'Yes':
+            if response(-3,3) == 'Yes':
                 trigered = True
 
         # enter absolute gcode
