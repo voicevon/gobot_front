@@ -48,7 +48,7 @@ std::string RoomBotCorner::GetHomeTrigerStateString(){
     return result;
 }
 
-bool RoomBotCorner::MoveToTargetPosition(){
+void RoomBotCorner::MoveToTargetPosition(){
     static float debug_last_distance = 0.0f;
 
     bool dir_forward = true;
@@ -72,9 +72,10 @@ bool RoomBotCorner::MoveToTargetPosition(){
     }
     if (abs(distance) < this->singleAxis._actuator->positionTolerance){
         this->objHBridge.Stop();
-        return true;  // is idle
+        this->robot_is_idle = true;
+    }else{
+        this->robot_is_idle = false;
     }
-    return false;   
 }
 
 void RoomBotCorner::RunG1(Gcode* gcode){
@@ -85,7 +86,7 @@ void RoomBotCorner::RunG1(Gcode* gcode){
     }else{
         this->nextPosX.x = this->nextPosX.x + pos;
     }
-    this->robot_is_idle =  MoveToTargetPosition();
+    MoveToTargetPosition();
 }
 void RoomBotCorner::RunG6(Gcode* gcode){
     float pos = gcode->get_value(this->singleAxis.Name);
@@ -96,7 +97,7 @@ void RoomBotCorner::RunG6(Gcode* gcode){
         this->nextPosX.x = this->nextPosX.x + pos;
     }
     do{
-        this->robot_is_idle =  MoveToTargetPosition();
+        MoveToTargetPosition();
     }while (!this->robot_is_idle);
 }
 

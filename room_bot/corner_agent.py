@@ -35,7 +35,9 @@ class CornerAgent:
             got_ok = False
             while not got_ok:
                 response = self.commu_device.read_characteristic_commu().decode('utf-8')
-                if response == '  > OK':
+                if response == None:
+                    pass
+                elif response == '  > OK':
                     got_ok = True
                     self.buffer.remove(gcode)
                 else:

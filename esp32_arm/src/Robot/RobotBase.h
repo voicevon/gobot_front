@@ -105,7 +105,7 @@ class RobotBase{
 
     protected:
         RobotBase(){};
-        virtual bool MoveToTargetPosition();
+        virtual void MoveToTargetPosition();
         virtual void SpinOnce_BaseEnter();
         virtual void SpinOnce_BaseExit();
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
