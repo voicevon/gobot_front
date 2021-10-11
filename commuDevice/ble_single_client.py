@@ -154,7 +154,9 @@ class BleSingleClient():
 
     def write_characteristic(self, new_value:str):
         try:
-            logging.info('Updated charactoristic')
+            logging.info('write_characteristic()')
+            if self.__char_commu == None:
+                return
             self.__char_commu.write(bytes(new_value))
         #except bluepy.btle.BTLEDisconnectError:
         except:

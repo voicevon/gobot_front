@@ -3,11 +3,11 @@ from commuDevice.ble_single_client import BleServerHead
 
 
 
-class RoomBotFactory:
+class RoomBot_CornerFactory:
     def __init__(self) -> None:
         pass
         
-    def CreateCorner_XPYP() -> BleServerHead:
+    def CreateServerHead_XPYP() -> BleServerHead:
         head = BleServerHead()
         head.AxisName ='A'
         head.BleDeviceName = "ConInt-XPYP"
@@ -16,7 +16,7 @@ class RoomBotFactory:
         head.BleStateUUID = "50711238-1451-11ec-82a8-0242ac130003"
         return head
 
-    def CreateCorner_XNYP() -> BleServerHead:
+    def CreateServerHead_XNYP() -> BleServerHead:
         head = BleServerHead()
         head.AxisName='B'
         head.BleDeviceName = "ConInt-XNYP"
@@ -26,7 +26,7 @@ class RoomBotFactory:
         return head
 
     # class XNYN:
-    def CreateCorner_XNYN() -> BleServerHead:
+    def CreateServerHead_XNYN() -> BleServerHead:
         head = BleServerHead()
         head.AxisName='C'
         head.BleDeviceName = "ConInt-XNYN"
@@ -36,7 +36,7 @@ class RoomBotFactory:
         return head
 
     # class XPYN:
-    def CreateCorner_XPYN() -> BleServerHead:
+    def CreateServerHead_XPYN() -> BleServerHead:
         head = BleServerHead()
         head.AxisName='H'
         head.BleDeviceName = "ConInt-XPYN"
