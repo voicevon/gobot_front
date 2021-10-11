@@ -112,21 +112,25 @@ class CableBotCenter:
         self.__XNYN.append_gcode_string('G90')
         self.__XNYP.append_gcode_string('G90')
 
+    def ToAllCornersIsConnected(self) -> bool:
+        all_corners_is_connected = False
+        while not all_corners_is_connected:
+            self.SpinOnce()
+            all_corners_is_connected = True
+            if self.__XPYP.commu_device.__connection.Connect != BleConnState.CONNECTED:
+                all_corners_is_connected = False
+            if self.__XPYN.commu_device.__connection.Connect != BleConnState.CONNECTED:
+                all_corners_is_connected = False
+            if self.__XNYP.commu_device.__connection.Connect != BleConnState.CONNECTED:
+                all_corners_is_connected = False
+            if self.__XNYN.commu_device.__connection.Connect != BleConnState.CONNECTED:
+                all_corners_is_connected = False
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     bot = CableBotCenter()
-    all_corners_is_connected = False
-    while not all_corners_is_connected:
-        bot.SpinOnce()
-        all_corners_is_connected = True
-        if bot.__XPYP.commu_device.__connection.Connect != BleConnState.CONNECTED:
-            all_corners_is_connected = False
-        if bot.__XPYN.commu_device.__connection.Connect != BleConnState.CONNECTED:
-            all_corners_is_connected = False
-        if bot.__XNYP.commu_device.__connection.Connect != BleConnState.CONNECTED:
-            all_corners_is_connected = False
-        if bot.__XNYN.commu_device.__connection.Connect != BleConnState.CONNECTED:
-            all_corners_is_connected = False
+
 
     bot.HomeAllCorners()
     while True:
