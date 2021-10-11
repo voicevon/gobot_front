@@ -7,7 +7,7 @@ class CornerAgent:
         self.buffer = []
         self.commu_device = BleSingleClient(server_head)
 
-    def append_gcode(self, gcode:str) -> None:
+    def append_gcode_string(self, gcode:str) -> None:
         self.buffer.append(gcode)
         self.SpinOnce()
 

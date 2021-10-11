@@ -81,9 +81,9 @@ class CableBotCenter:
         
     def HomeSingleCorner(self, corner:CornerAgent) -> None:
         # enter relative gcode
-        corner.append_gcode('G91')
+        corner.append_gcode_string('G91')
         # read the home triger of the target corner
-        corner.append_gcode('M119')
+        corner.append_gcode_string('M119')
         # corner.read_characteristic_commu(True)   # Risk to stuck here?
 
         trigered = False
