@@ -6,8 +6,8 @@ void RobotBase::SpinOnce(){
   commuDevice->SpinOnce();
   this->SpinOnce_BaseEnter();
   if(commuDevice->HasNewChatting()){
-    Serial.println ("    _base_spin_once()  new chatting");
     std::string command(commuDevice->ReadChatting());
+    Serial.println ("    _base_spin_once()  new chatting");
     Serial.println(command.c_str());
     Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
     this->RunGcode(&gCode);

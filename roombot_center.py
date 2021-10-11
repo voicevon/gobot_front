@@ -49,10 +49,10 @@ class CableBotCenter:
             self.SendGcode(self.__bleXPYP, False, c)
             self.SendGcode(self.__bleXPYP, False, h)
             # wait all corners finished movement
-            self.__bleXNYN.read_characteristic_commu(True)
-            self.__bleXNYP.read_characteristic_commu(True)
-            self.__bleXPYN.read_characteristic_commu(True)
-            self.__bleXPYP.read_characteristic_commu(True)
+            # self.__bleXNYN.read_characteristic_commu(True)
+            # self.__bleXNYP.read_characteristic_commu(True)
+            # self.__bleXPYN.read_characteristic_commu(True)
+            # self.__bleXPYP.read_characteristic_commu(True)
             
 
     def HomeSingleCorner_inching(self, corner:CornerAgent) -> bool:

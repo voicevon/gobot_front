@@ -24,6 +24,6 @@ class CornerAgent:
             got_ok = False
             while not got_ok:
                 response = self.commu_device.read_characteristic_commu()
-                if response == b'  < OK':
+                if response == b'  > OK':
                     got_ok = True
                     self.buffer.remove(gcode)
