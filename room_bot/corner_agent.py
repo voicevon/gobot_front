@@ -17,6 +17,15 @@ class CornerAgent:
         gcode_string = gcode.ToString()
         self.append_gcode_string(gcode_string)
 
+    def wait_robot_be_idle(self) ->None:
+        self.append_gcode_string('M280')
+        is_idle = False
+        while not is_idle:
+            self.SpinOnce()
+            response = self.commu_device.read_characteristic_state()
+            if response == 'IDLE':
+                is_idle = True
+
     def SpinOnce(self) -> None:
         self.commu_device.SpinOnce()
         if self.buffer.__len__() > 0:

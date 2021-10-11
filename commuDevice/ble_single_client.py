@@ -165,8 +165,8 @@ class BleSingleClient():
 
     def read_characteristic_commu(self) ->str:
         try:
-            commu_code = self.__char_commu.read()
-            return commu_code
+            commu_code = self.__char_commu.read()  # returned type: bytes
+            return str(commu_code)
         except:
             print("ble_read() Device disconnected-- reconnecting")
             self.connect_to_server()

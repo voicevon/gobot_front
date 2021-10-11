@@ -78,24 +78,27 @@ class CableBotCenter:
             gcode.BlockMovement = True
             gcode.TargetPosision_or_distance = 10.0
             corner.append_gcode(gcode)
-        
-    def HomeSingleCorner(self, corner:CornerAgent) -> None:
-        # enter relative gcode
-        corner.append_gcode_string('G91')
-        # read the home triger of the target corner
-        corner.append_gcode_string('M119')
-        # corner.read_characteristic_commu(True)   # Risk to stuck here?
 
+
+    def HomeSingleCorner(self, corner:CornerAgent) -> None:
+        corner.wait_robot_be_idle()
         trigered = False
         while not trigered:  # Risk to stuck here?
-            response = self.HomeSingleCorner_inching(corner)
-            print('HomeSingleCorner()', response)
-            if response != None:
-                if response(-3,3) == 'Yes':
+            self.HomeSingleCorner_inching(corner)
+            # read the home triger of the target corner
+            got_response = False
+            while not got_response:
+                response = corner.append_gcode_string('M119')
+                print('HomeSingleCorner()', response)
+                if response == None:
+                    pass
+                elif response (-3,3) == 'Yes':
+                    got_response = True
                     trigered = True
-            else:
-                time.sleep(1)
-
+                elif response(-2,2) == 'No':
+                    got_response = True
+                else:
+                    print('Roombot_Center.HomeSingleCorner()   Unexpected response ', response)
 
     def HomeAllCorners(self) -> None:
         self.__XPYP.append_gcode_string('G91')

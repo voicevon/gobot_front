@@ -47,14 +47,16 @@ void RobotBase::RunGcode(Gcode* gcode){
       case 90:
         // Absolute position
         this->is_absolute_position = true;
+        this->commuDevice->OutputMessage(COMMU_OK);
         break;
       case 91:
         // Relative position
         this->is_absolute_position = false;
+        this->commuDevice->OutputMessage(COMMU_OK);
         break;
-      case 92:
+      // case 92:
         // Set Position     G92 X10 E90
-        break;
+        // break;
       default:
         break;
     }
@@ -70,6 +72,13 @@ void RobotBase::RunGcode(Gcode* gcode){
       case 114:
         // Get Current Position
         break;
+      case 280:
+        // Wait for all gcode, mcode is finished
+        while (!this->robot_is_idle){
+          this->SpinOnce();
+        }
+        this->commuDevice->OutputMessage(COMMU_OK);
+        this->commuDevice->WriteNotification("IDLE");
       default:
         break;
     }
