@@ -21,5 +21,9 @@ class CornerAgent:
             gcode = self.buffer[0]
             self.commu_device.write_characteristic(gcode)
             # double check: server side has received the gcode
-            if True:
-                self.buffer.remove(gcode)
+            got_ok = False
+            while not got_ok:
+                response = self.commu_device.read_characteristic_commu()
+                if response == b'  < OK':
+                    got_ok = True
+                    self.buffer.remove(gcode)

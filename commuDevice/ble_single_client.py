@@ -157,7 +157,7 @@ class BleSingleClient():
             logging.info('write_characteristic()')
             if self.__char_commu == None:
                 return
-            self.__char_commu.write(bytes(new_value))
+            self.__char_commu.write(bytes(new_value,encoding='utf8'))
         #except bluepy.btle.BTLEDisconnectError:
         except:
             # self.dev.connect(self.__server_mac)

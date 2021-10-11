@@ -75,7 +75,6 @@ class CableBotCenter:
             gcode.AxisName = corner.commu_device.server_head.AxisName
             gcode.IsAbsolutePosition = False
             gcode.BlockMovement = True
-            gcode.Speed = 1000.0
             gcode.TargetPosision_or_distance = 10.0
             corner.append_gcode(gcode)
         
