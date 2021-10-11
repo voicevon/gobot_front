@@ -130,7 +130,7 @@ class CableBotCenter:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     bot = CableBotCenter()
-
+    bot.ToAllCornersIsConnected()
 
     bot.HomeAllCorners()
     while True:
