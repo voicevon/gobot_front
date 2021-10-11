@@ -4,7 +4,7 @@ from math import sqrt
 from room_bot.corner_agent import CornerAgent
 from room_bot.room_bot_solution import RoomBotSolution
 from room_bot.corner_factory import RoomBot_CornerFactory
-from commuDevice.gcode_sender import GcodeFactory
+from commuDevice.gcode_factory import GcodeFactory
 # from mpu6050 import mpu6050   # https://pypi.org/project/mpu6050-raspberrypi/
 # sudo apt install python3-smbus    # need to reboot?
 # sudo pip3 install mpu6050-raspberrypi
