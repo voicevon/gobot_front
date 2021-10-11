@@ -7,7 +7,7 @@ from room_bot.corner_bot_factory import RoomBotFactory
 # sudo apt install python3-smbus    # need to reboot?
 # sudo pip3 install mpu6050-raspberrypi
 # Wiring:   https://medium.com/@kalpeshnpatil/raspberry-pi-interfacing-with-mpu6050-motion-sensor-c9608cd5f59c
-
+import logging
 
 
 
@@ -111,6 +111,7 @@ class CableBotCenter:
         self.HomeSingleCorner(self.__bleXNYN)
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     bot = CableBotCenter()
     bot.HomeAllCorners()
     while True:

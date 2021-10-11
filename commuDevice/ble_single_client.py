@@ -26,7 +26,7 @@ from enum import Enum
 
 # https://anthonychiu.xyz/2016/04/05/communication-between-raspberry-pi-and-multiple-arduinos-via-bluetooth-low-power-ble/
 
-class MyDelegate(DefaultDelegate):
+class MyDelegate(btle.DefaultDelegate):
     def __init__(self):
         DefaultDelegate.__init__(self)
 
@@ -137,8 +137,8 @@ class BleSingleClient():
     def __init__(self, _server_head:BleServerHead):
         self.server_head = _server_head
         self.__connection = BleConnection(self.server_head)
-        self.__char_state = []
-        self.__char_commu = []
+        self.__char_state = None
+        self.__char_commu = None
 
     def connect_to_server(self):
         self.__connection.Connect()
@@ -206,21 +206,14 @@ class BleSingleClient():
 
 
 
-
-
-
-
 if __name__ == '__main__':
     import sys
     logging.basicConfig(level=logging.DEBUG)
-    logging.info('@@@@@@@@@@@@@@@@@@@@@@@@@')
     # g_bleClient.scan_arm_house()
     g_bleClient = BleClient('213401')
     while True:
         g_bleClient.spin_once()
     # runner = BleClient()
-
-
     i = 65
 
     while True:
