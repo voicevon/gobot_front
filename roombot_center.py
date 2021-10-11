@@ -1,5 +1,6 @@
 import time
 from math import sqrt
+from commuDevice.ble_single_client import BleConnState, BleConnection
 # from commuDevice.ble_single_client import BleServerHead
 from room_bot.corner_agent import CornerAgent
 from room_bot.room_bot_solution import RoomBotSolution
@@ -97,14 +98,36 @@ class CableBotCenter:
 
 
     def HomeAllCorners(self) -> None:
+        self.__XPYP.append_gcode_string('G91')
+        self.__XPYN.append_gcode_string('G91')
+        self.__XNYN.append_gcode_string('G91')
+        self.__XNYP.append_gcode_string('G91')
         self.HomeSingleCorner(self.__XPYP)
         self.HomeSingleCorner(self.__XPYN)
         self.HomeSingleCorner(self.__XNYP)
         self.HomeSingleCorner(self.__XNYN)
 
+        self.__XPYP.append_gcode_string('G90')
+        self.__XPYN.append_gcode_string('G90')
+        self.__XNYN.append_gcode_string('G90')
+        self.__XNYP.append_gcode_string('G90')
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     bot = CableBotCenter()
+    all_corners_is_connected = False
+    while not all_corners_is_connected:
+        bot.SpinOnce()
+        all_corners_is_connected = True
+        if bot.__XPYP.commu_device.__connection.Connect != BleConnState.CONNECTED:
+            all_corners_is_connected = False
+        if bot.__XPYN.commu_device.__connection.Connect != BleConnState.CONNECTED:
+            all_corners_is_connected = False
+        if bot.__XNYP.commu_device.__connection.Connect != BleConnState.CONNECTED:
+            all_corners_is_connected = False
+        if bot.__XNYN.commu_device.__connection.Connect != BleConnState.CONNECTED:
+            all_corners_is_connected = False
+
     bot.HomeAllCorners()
     while True:
         bot.SpinOnce()
