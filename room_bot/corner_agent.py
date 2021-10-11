@@ -1,6 +1,7 @@
 from commuDevice.ble_single_client import BleServerHead, BleSingleClient
 from commuDevice.gcode_factory import GcodeFactory
 import logging
+import time
 
 class CornerAgent:
     def __init__(self, server_head:BleServerHead) -> None:
@@ -9,7 +10,7 @@ class CornerAgent:
 
     def append_gcode_string(self, gcode:str) -> None:
         self.buffer.append(gcode)
-        logging.info('Appending gcode:', gcode)
+        logging.info('Appending gcode:' + gcode)
         self.SpinOnce()
 
     def append_gcode(self, gcode:GcodeFactory) -> None:
@@ -28,3 +29,6 @@ class CornerAgent:
                 if response == b'  > OK':
                     got_ok = True
                     self.buffer.remove(gcode)
+                else:
+                    logging.info("response of sending gcode from buffer  " + gcode + "   " + response)
+                    time.sleep(1)
