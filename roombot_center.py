@@ -117,14 +117,15 @@ class CableBotCenter:
         while not all_corners_is_connected:
             self.SpinOnce()
             all_corners_is_connected = True
-            if self.__XPYP.commu_device.__connection.Connect != BleConnState.CONNECTED:
+            if self.__XPYP.commu_device.connection.Connect != BleConnState.CONNECTED:
                 all_corners_is_connected = False
-            if self.__XPYN.commu_device.__connection.Connect != BleConnState.CONNECTED:
+            if self.__XPYN.commu_device.connection.Connect != BleConnState.CONNECTED:
                 all_corners_is_connected = False
-            if self.__XNYP.commu_device.__connection.Connect != BleConnState.CONNECTED:
+            if self.__XNYP.commu_device.connection.Connect != BleConnState.CONNECTED:
                 all_corners_is_connected = False
-            if self.__XNYN.commu_device.__connection.Connect != BleConnState.CONNECTED:
+            if self.__XNYN.commu_device.connection.Connect != BleConnState.CONNECTED:
                 all_corners_is_connected = False
+        logging.info("All Corners are connected!")
 
 
 if __name__ == "__main__":

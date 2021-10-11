@@ -186,7 +186,7 @@ class BleSingleClient():
         if self.connection.state == BleConnState.CONNECTED:
             try:
                 received = self.__char_commu.read()
-                logging.info('commu Rx: %s', received)
+                # logging.info('commu Rx: %s', received)
             except:
                 self.connection.ResetConnection()
 
