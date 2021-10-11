@@ -112,7 +112,7 @@ class CableBotCenter:
         self.__XNYN.append_gcode_string('G90')
         self.__XNYP.append_gcode_string('G90')
 
-    def ToAllCornersIsConnected(self) -> bool:
+    def ConnectAllCorners(self) -> bool:
         all_corners_is_connected = False
         while not all_corners_is_connected:
             self.SpinOnce()
@@ -130,7 +130,7 @@ class CableBotCenter:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     bot = CableBotCenter()
-    bot.ToAllCornersIsConnected()
+    bot.ConnectAllCorners()
 
     bot.HomeAllCorners()
     while True:

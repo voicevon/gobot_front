@@ -136,21 +136,21 @@ class BleConnection():
 class BleSingleClient():
     def __init__(self, _server_head:BleServerHead):
         self.server_head = _server_head
-        self.__connection = BleConnection(self.server_head)
+        self.connection = BleConnection(self.server_head)
         self.__char_state = None
         self.__char_commu = None
 
     def connect_to_server(self):
-        self.__connection.Connect()
-        if self.__connection.state == BleConnState.CONNECTED:
+        self.connection.Connect()
+        if self.connection.state == BleConnState.CONNECTED:
             try:
-                svc = self.__connection.dev.getServiceByUUID(self.server_head.BleServiceUUID)
+                svc = self.connection.dev.getServiceByUUID(self.server_head.BleServiceUUID)
                 self.__char_commu = svc.getCharacteristics(self.server_head.BleCommuUUID)[0]
                 self.__char_state = svc.getCharacteristics(self.server_head.BleStateUUID)[0]
                 logging.info('      BLE connected to GATT server %s !\n', self.server_head.BleDeviceName)
             except:
                 print('ble_single_client.connect_to_server() got exception')
-                self.__connection.ResetConnection()
+                self.connection.ResetConnection()
 
     def write_characteristic(self, new_value:str):
         try:
@@ -166,6 +166,7 @@ class BleSingleClient():
     def read_characteristic_commu(self) ->str:
         try:
             commu_code = self.__char_commu.read()
+            return commu_code
         except:
             print("ble_read() Device disconnected-- reconnecting")
             self.connect_to_server()
@@ -180,17 +181,14 @@ class BleSingleClient():
             print("ble_read() Device disconnected-- reconnecting")
             self.connect_to_server()
             return
-            #continue
-            state_code = self.__char_state.read()
-            return state_code
 
     def SpinOnce(self):
-        if self.__connection.state == BleConnState.CONNECTED:
+        if self.connection.state == BleConnState.CONNECTED:
             try:
                 received = self.__char_commu.read()
                 logging.info('commu Rx: %s', received)
             except:
-                self.__connection.ResetConnection()
+                self.connection.ResetConnection()
 
         else:
             self.connect_to_server()
