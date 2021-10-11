@@ -1,5 +1,5 @@
 from commuDevice.ble_single_client import BleServerHead, BleSingleClient
-from commuDevice.gcode_sender import GcodeFactory
+from commuDevice.gcode_factory import GcodeFactory
 
 
 class CornerAgent:

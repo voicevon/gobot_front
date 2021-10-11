@@ -1,8 +1,6 @@
 from commuDevice.ble_single_client import BleServerHead
 
 
-
-
 class RoomBot_CornerFactory:
     def __init__(self) -> None:
         pass
