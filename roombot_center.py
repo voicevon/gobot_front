@@ -82,6 +82,7 @@ class CableBotCenter:
 
     def HomeSingleCorner(self, corner:CornerAgent) -> None:
         corner.wait_robot_be_idle()
+        
         trigered = False
         while not trigered:  # Risk to stuck here?
             self.HomeSingleCorner_inching(corner)

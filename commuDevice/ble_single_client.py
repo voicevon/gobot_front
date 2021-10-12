@@ -157,25 +157,26 @@ class BleSingleClient():
             logging.info('write_characteristic()')
             if self.__char_commu == None:
                 return
+            # data = new_value.encode('utf-8')
             self.__char_commu.write(bytes(new_value,encoding='utf8'))
         #except bluepy.btle.BTLEDisconnectError:
         except:
             print('ble_Write() Disconnected --> reconnecting')
             self.connect_to_server()
 
-    def read_characteristic_commu(self) ->bytes:
+    def read_characteristic_commu(self) ->str:
         try:
             commu_code = self.__char_commu.read()  # returned type: bytes
-            return commu_code
+            return commu_code.decode('utf-8')
         except:
             print("ble_read() Device disconnected-- reconnecting")
             self.connect_to_server()
 
     
-    def read_characteristic_state(self):
+    def read_characteristic_state(self)->str:
         try:
             state_code = self.__char_state.read()
-            return state_code
+            return state_code.decode('utf-8')
         #except bluepy.btle.BTLEDisconnectError:
         except:
             print("ble_read() Device disconnected-- reconnecting")

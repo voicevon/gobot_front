@@ -74,11 +74,11 @@ void RobotBase::RunGcode(Gcode* gcode){
         break;
       case 280:
         // Wait for all gcode, mcode is finished
-        Serial.println("M280 Started");
+        // Serial.println("M280 Started");
         while (!this->robot_is_idle){
           this->SpinOnce();
         }
-        Serial.println("M280   ending");
+        // Serial.println("M280   ending");
         this->commuDevice->OutputMessage(COMMU_OK);
         this->commuDevice->WriteNotification("IDLE");
       default:
