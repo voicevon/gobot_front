@@ -62,29 +62,29 @@ class CableBotCenter:
         yAngle = 0.2 
         setting = [("XPYP", 1,1),("XNYP", 1,-1),("XNYN",-1,-1),("XPYN",1,-1)]
         # Find and set the target angle pair.
-        for (name, txAngle, tyAngle) in setting:
-            relative_pos = -10.0
-            if name == corner.commu_device.server_head.AxisName:
-                #  Set distance to be shorter.
-                pass
-            else:
-                # Keep the center plate being horizontal.
-                self.__target_angle_x = txAngle + xAngle
-                self.__target_angle_y = tyAngle + yAngle
+        # for (name, txAngle, tyAngle) in setting:
+            # relative_pos = -10.0
+            # if name == corner.commu_device.server_head.AxisName:
+            #     #  Set distance to be shorter.
+            #     pass
+            # else:
+            #     # Keep the center plate being horizontal.
+            #     self.__target_angle_x = txAngle + xAngle
+            #     self.__target_angle_y = tyAngle + yAngle
 
-            gcode = GcodeFactory()
-            gcode.AxisName = corner.commu_device.server_head.AxisName
-            gcode.IsAbsolutePosition = False
-            gcode.BlockMovement = True
-            gcode.TargetPosision_or_distance = 10.0
-            corner.append_gcode(gcode)
+        gcode = GcodeFactory()
+        gcode.AxisName = corner.commu_device.server_head.AxisName
+        # gcode.IsAbsolutePosition = False
+        gcode.BlockMovement = True
+        gcode.TargetPosision_or_distance = -10.0
+        corner.append_gcode(gcode)
 
 
     def HomeSingleCorner(self, corner:CornerAgent) -> None:
         corner.wait_robot_be_idle_M280()
         
-        trigered = False
-        while not trigered:  # Risk to stuck here?
+        triggered = False
+        while not triggered:  # Risk to stuck here?
             self.HomeSingleCorner_inching(corner)
             # read the home triger of the target corner
             got_response = False
@@ -96,7 +96,7 @@ class CableBotCenter:
                     got_response= False
                 elif response[-3:] == 'Yes':
                     got_response = True
-                    trigered = True
+                    triggered = True
                 elif response[-2:] == 'No':
                     got_response = True
                 else:
@@ -108,6 +108,8 @@ class CableBotCenter:
         self.__XNYN.append_gcode_string('G91')
         self.__XNYP.append_gcode_string('G91')
         self.HomeSingleCorner(self.__XPYP)
+        print("XPYP  is homed")
+
         self.HomeSingleCorner(self.__XPYN)
         self.HomeSingleCorner(self.__XNYP)
         self.HomeSingleCorner(self.__XNYN)
