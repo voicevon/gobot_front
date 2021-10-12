@@ -162,6 +162,7 @@ class BleSingleClient():
         #except bluepy.btle.BTLEDisconnectError:
         except:
             print('ble_Write() Disconnected --> reconnecting')
+            self.connection.ResetConnection()
             self.connect_to_server()
 
     def read_characteristic_commu(self) ->str:
@@ -170,6 +171,7 @@ class BleSingleClient():
             return commu_code.decode('utf-8')
         except:
             print("ble_read() Device disconnected-- reconnecting")
+            self.connection.ResetConnection()
             self.connect_to_server()
 
     
@@ -180,6 +182,7 @@ class BleSingleClient():
         #except bluepy.btle.BTLEDisconnectError:
         except:
             print("ble_read() Device disconnected-- reconnecting")
+            self.connection.ResetConnection()
             self.connect_to_server()
             return
 
