@@ -40,11 +40,13 @@ class CableBotCenter:
         self.__XNYP.SpinOnce()
 
         # (a, b, g) = self.sensor.get_accel_data()
-        print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (self.mpu6050.acceleration))
-        print("Gyro X:%.2f, Y: %.2f, Z: %.2f rad/s" % (self.mpu6050.gyro))
-        print("Temperature: %.2f C" % self.mpu6050.temperature)
-        print(" ")
-        time.sleep(1)
+        # print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (self.mpu6050.acceleration))
+        # print("Gyro X:%.2f, Y: %.2f, Z: %.2f rad/s" % (self.mpu6050.gyro))
+        # print("Temperature: %.2f C" % self.mpu6050.temperature)
+        # print(" ")
+        # a,b,g = self.mpu6050.acceleration()
+        # print(a,b,g)
+        # time.sleep(1)
 
 
     def MoveTo(self, x:float, y:float, z:float):
@@ -68,26 +70,29 @@ class CableBotCenter:
 
     def HomeSingleCorner_inching(self, corner:CornerAgent) -> bool:
         # xAngle, yAngle =self.ReadGravitySensor()
-        xAngle = 0.1 
-        yAngle = 0.2 
+        xa,ya,za = self.mpu6050.acceleration()
+        print('Reading Angle', xa, ya, za)
         setting = [("XPYP", 1,1),("XNYP", 1,-1),("XNYN",-1,-1),("XPYN",1,-1)]
         # Find and set the target angle pair.
-        # for (name, txAngle, tyAngle) in setting:
-            # relative_pos = -10.0
-            # if name == corner.commu_device.server_head.AxisName:
-            #     #  Set distance to be shorter.
-            #     pass
-            # else:
-            #     # Keep the center plate being horizontal.
-            #     self.__target_angle_x = txAngle + xAngle
-            #     self.__target_angle_y = tyAngle + yAngle
+        for (name, xDir, yDir) in setting:
+            gcode = GcodeFactory()
+            gcode.AxisName = corner.commu_device.server_head.AxisName
+            gcode.BlockMovement = True
 
-        gcode = GcodeFactory()
-        gcode.AxisName = corner.commu_device.server_head.AxisName
-        # gcode.IsAbsolutePosition = False
-        gcode.BlockMovement = True
-        gcode.TargetPosision_or_distance = -10.0
-        corner.append_gcode(gcode)
+            if name == corner.commu_device.server_head.AxisName:
+                #  Set distance to be shorter.
+                gcode.TargetPosision_or_distance = -10.0
+            else:
+                # Keep the center plate being horizontal.
+                real_angle = xa*xDir + ya*yDir
+                if real_angle >3:
+                    # Angle is too over much, rope should be shorter
+                    gcode.TargetPosision_or_distance = -10
+                if real_angle < -3:
+                    # Angle is too over less, rope should be longer
+                    gcode.TargetPosision_or_distance = 10
+
+            corner.append_gcode(gcode)
 
 
     def HomeSingleCorner(self, corner:CornerAgent) -> None:
@@ -150,7 +155,7 @@ if __name__ == "__main__":
     bot = CableBotCenter()
     bot.ConnectAllCorners()
 
-    bot.HomeAllCorners()
+    # bot.HomeAllCorners()
     while True:
         bot.SpinOnce()
         x,y,z = int(input("input x,y,z"))
