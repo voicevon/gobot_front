@@ -93,11 +93,11 @@ class CableBotCenter:
                 response = corner.commu_device.read_characteristic_state()
                 print('HomeSingleCorner()', response)
                 if response == None:
-                    pass
-                elif response(-3,3) == 'Yes':
+                    got_response= False
+                elif response[-3:] == 'Yes':
                     got_response = True
                     trigered = True
-                elif response(-2,2) == 'No':
+                elif response[-2:] == 'No':
                     got_response = True
                 else:
                     print('Roombot_Center.HomeSingleCorner()   Unexpected response ', response)
