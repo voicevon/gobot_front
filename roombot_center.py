@@ -1,4 +1,3 @@
-import time
 from math import sqrt
 from commuDevice.ble_single_client import BleConnState, BleConnection
 # from commuDevice.ble_single_client import BleServerHead
@@ -11,6 +10,9 @@ from commuDevice.gcode_factory import GcodeFactory
 # sudo pip3 install mpu6050-raspberrypi
 # Wiring:   https://medium.com/@kalpeshnpatil/raspberry-pi-interfacing-with-mpu6050-motion-sensor-c9608cd5f59c
 import logging
+import time
+import board
+import adafruit_mpu6050
 
 
 
@@ -23,7 +25,11 @@ class CableBotCenter:
         self.__XPYN = CornerAgent(RoomBot_CornerFactory.CreateServerHead_XPYN())
         self.__bot_solution = RoomBotSolution()
         # self.sensor = mpu6050(0x68)
-        
+        # i2c = board.I2C()
+        # mpu = adafruit_mpu6050.MPU6050(i2c)
+
+        i2c = board.I2C()  # uses board.SCL and board.SDA
+        self.mpu6050 = adafruit_mpu6050.MPU6050(i2c)
         print("Hello world, I am CableBotCenter")
 
 
@@ -34,7 +40,11 @@ class CableBotCenter:
         self.__XNYP.SpinOnce()
 
         # (a, b, g) = self.sensor.get_accel_data()
-
+        print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (self.mpu6050.acceleration))
+        print("Gyro X:%.2f, Y: %.2f, Z: %.2f rad/s" % (self.mpu6050.gyro))
+        print("Temperature: %.2f C" % self.mpu6050.temperature)
+        print(" ")
+        time.sleep(1)
 
 
     def MoveTo(self, x:float, y:float, z:float):
