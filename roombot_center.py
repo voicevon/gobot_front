@@ -94,7 +94,7 @@ class CableBotCenter:
                 print('HomeSingleCorner()', response)
                 if response == None:
                     pass
-                elif response (-3,3) == 'Yes':
+                elif response(-3,3) == 'Yes':
                     got_response = True
                     trigered = True
                 elif response(-2,2) == 'No':
