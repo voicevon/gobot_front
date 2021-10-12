@@ -34,7 +34,7 @@ class CornerAgent:
             # double check: server side has received the gcode
             got_ok = False
             while not got_ok:
-                response = self.commu_device.read_characteristic_commu().decode('utf-8')
+                response = self.commu_device.read_characteristic_commu()
                 if response == None:
                     pass
                 elif response == '  > OK':
