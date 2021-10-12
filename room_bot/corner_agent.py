@@ -17,7 +17,7 @@ class CornerAgent:
         gcode_string = gcode.ToString()
         self.append_gcode_string(gcode_string)
 
-    def wait_robot_be_idle(self) ->None:
+    def wait_robot_be_idle_M280(self) ->None:
         self.append_gcode_string('M280')
         is_idle = False
         while not is_idle:

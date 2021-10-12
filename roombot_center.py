@@ -81,7 +81,7 @@ class CableBotCenter:
 
 
     def HomeSingleCorner(self, corner:CornerAgent) -> None:
-        corner.wait_robot_be_idle()
+        corner.wait_robot_be_idle_M280()
         
         trigered = False
         while not trigered:  # Risk to stuck here?
@@ -89,7 +89,8 @@ class CableBotCenter:
             # read the home triger of the target corner
             got_response = False
             while not got_response:
-                response = corner.append_gcode_string('M119')
+                corner.append_gcode_string('M119')
+                response = corner.commu_device.read_characteristic_state()
                 print('HomeSingleCorner()', response)
                 if response == None:
                     pass
