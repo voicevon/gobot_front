@@ -105,10 +105,10 @@ class RobotBase{
 
     protected:
         RobotBase(){};
+        void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
         virtual void MoveToTargetPosition();
         virtual void SpinOnce_BaseEnter();
         virtual void SpinOnce_BaseExit();
-        void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
         virtual IkPositionBase* IK(FkPositionBase* fk);
         virtual FkPositionBase* FK(IkPositionBase* ik);
         virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.

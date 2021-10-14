@@ -22,7 +22,7 @@
   #define BLE_STATE_UUID  "c52ca230-062e-11ec-9a03-0242ac130003"
 #endif
 
-#define I_AM_CABLE_AXIS_XPYP
+// #define I_AM_CABLE_AXIS_XPYP
 #ifdef I_AM_CABLE_AXIS_XPYP
   #define I_AM_CABLEBOT_CORNER
   #define BLE_DEV_NAME "ConInt-XPYP"
@@ -62,7 +62,13 @@
   #define BLE_STATE_UUID   "9c43b29c-1451-11ec-82a8-0242ac130003"
 #endif
 
-
-
+#define SMOKE_MACHINE
+#ifdef SMOKE_MACHINE
+  #define AXIS_NAME 'X'
+  #define BLE_DEV_NAME "SMOKE-MACHINE"
+  #define BLE_SERVICE_UUID   "85f5ab94-1451-11ec-82a8-0242ac130003"
+  #define BLE_COMMU_UUID  "96a1cd38-1451-11ec-82a8-0242ac130003"
+  #define BLE_STATE_UUID   "9c43b29c-1451-11ec-82a8-0242ac130003"
+#endif
 
 #endif
