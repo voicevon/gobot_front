@@ -128,8 +128,8 @@ class GobotChessboard: public RobotBase{
         HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA_2112, HIGH);
         HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA_2112, HIGH);
 
-        SingleAxis objAxis_Alpha = SingleAxis();
-        SingleAxis objAxis_Beta = SingleAxis();
+        // SingleAxis objAxis_Alpha = SingleAxis();
+        // SingleAxis objAxis_Beta = SingleAxis();
         ActuatorBase objActuator_Alpha = ActuatorBase();
         ActuatorBase objActuator_Beta = ActuatorBase();
 

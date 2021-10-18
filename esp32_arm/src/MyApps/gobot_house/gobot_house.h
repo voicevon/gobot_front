@@ -74,8 +74,8 @@ class GobotHouse: public RobotBase{
         void __Enable_eefCoil(bool enable);
         HouseMap __map;
 
-        SingleAxis objAxis_Alpha= SingleAxis();
-        SingleAxis objAxis_Beta= SingleAxis();
+        // SingleAxis objAxis_Alpha= SingleAxis();
+        // SingleAxis objAxis_Beta= SingleAxis();
         ActuatorBase objActuator_Alpha = ActuatorBase();
         ActuatorBase objActuator_Beta = ActuatorBase();
 

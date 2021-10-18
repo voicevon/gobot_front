@@ -14,7 +14,7 @@
 */
 class DCMotor: public ActuatorBase{
   public:
-    
+    DCMotor(char axis_name){this->AxisName = axis_name;};
     // void linkDriver(DCDriverHBridge* driver);   //????
     // bool IsRunning(){return __is_running;};
     

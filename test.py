@@ -1,20 +1,15 @@
+import numpy as np
 
-# sudo pip3 install adafruit-circuitpython-mpu6050
+class Human:
+    def __init__(self) -> None:
+        pass
+    def ShowName(self):
+        print("xxxxxxxxxxxxxxxxx")
 
-import time
-import board
-import adafruit_mpu6050
 
-i2c = board.I2C()
-mpu = adafruit_mpu6050.MPU6050(i2c)
+#define array, with 500 members
+myArray = np.array([Human() for i in range(500)])
 
-i2c = board.I2C()  # uses board.SCL and board.SDA
-mpu = adafruit_mpu6050.MPU6050(i2c)
+#test.
+print(myArray[112].ShowName())
 
-while True:
-    print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (mpu.acceleration))
-    print("Gyro X:%.2f, Y: %.2f, Z: %.2f rad/s" % (mpu.gyro))
-    print("Temperature: %.2f C" % mpu.temperature)
-    print("")
-    time.sleep(1)
-    

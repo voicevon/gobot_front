@@ -4,7 +4,7 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/HomeHelper.h"
 #include "Robot/Commu/CommuUart.h"
-
+#include "Robot/Actuator/ActuatorBase.h"
 
 #define PIN_HOME 22
 #define PIN_STEP 23
@@ -18,8 +18,10 @@ class SmokeBot: RobotBase{
 
     private:
         CommuUart objCommuUart = CommuUart();
-        SingleAxis objAxis_Alpha= SingleAxis();
+        // SingleAxis objAxis_Alpha= SingleAxis();
+        ActuatorBase objActuator = ActuatorBase();
         Stepper objStepper = Stepper(PIN_STEP, PIN_DIR);
+
         StepControl objStepControl;
         HomeHelper objHomeHelper = HomeHelper(PIN_HOME, HIGH);
         
