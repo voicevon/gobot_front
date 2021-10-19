@@ -1,6 +1,7 @@
 #ifndef __MYLIBS_MYFUNCTIONS_HPP_
 #define __MYLIBS_MYFUNCTIONS_HPP_
 
+#include "HardwareSerial.h"
 
 // using std::string;
 template<class T>
@@ -15,7 +16,7 @@ void SerialPrintString(std::string str){
 #include <string>
 #include <sstream>
 template<class T>
-std::string toString(const T &value) {
+std::string ToString(const T &value) {
     std::ostringstream os;
     os << value;
     return os.str();

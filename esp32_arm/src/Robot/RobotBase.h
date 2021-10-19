@@ -4,7 +4,7 @@
 #include <Robot/Gcode.h>
 #include "Robot/Commu/CommuDeviceBase.h"
 
-#include "Axis/SingleAxis.h"
+// #include "Axis/SingleAxis.h"
 // #include "Robot/Actuator/ActuatorControllerBase.h"
 // #include "Robot/Actuator/ActuatorBase.h"
 // struct ik_position{

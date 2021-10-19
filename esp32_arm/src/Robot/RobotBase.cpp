@@ -1,6 +1,6 @@
 #include "RobotBase.h"
 #include "MyLibs/MyFunctions.hpp"
-
+#include "HardwareSerial.h"
 
 void RobotBase::SpinOnce(){
   commuDevice->SpinOnce();

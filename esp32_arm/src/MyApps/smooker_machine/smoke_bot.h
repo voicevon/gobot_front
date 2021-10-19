@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Robot/RobotBase.h"
 
 #include "ESP32Step/src/TeensyStep.h"
@@ -11,9 +12,10 @@
 #define PIN_DIR 24
 
 
-class SmokeBot: RobotBase{
+class SmokeBot: public RobotBase{
     public:
         SmokeBot();
+        void HomeAllAxises() override {};
 
 
     private:
@@ -21,19 +23,18 @@ class SmokeBot: RobotBase{
         // SingleAxis objAxis_Alpha= SingleAxis();
         ActuatorBase objActuator = ActuatorBase();
         Stepper objStepper = Stepper(PIN_STEP, PIN_DIR);
-
         StepControl objStepControl;
+
         HomeHelper objHomeHelper = HomeHelper(PIN_HOME, HIGH);
         
         void Init_Linkage() override;
-        // void HomeAllAxises() {}override;
-        // void MoveToTargetPosition() {} override;
-        // void SpinOnce_BaseEnter() {}override;
-        // void SpinOnce_BaseExit() override;
-        // IkPositionBase* IK(FkPositionBase* fk) override;
-        // FkPositionBase* FK(IkPositionBase* ik) override;
-        // void RunG1(Gcode* gcode) override;   //None blocking, move backgroundly.
-        // void RunG6(Gcode* gcode) override;   //Block mode
-        // std::string GetHomeTrigerStateString() override;
+        void MoveToTargetPosition()  override {};
+        void SpinOnce_BaseEnter() override {};
+        void SpinOnce_BaseExit() override {};
+        IkPositionBase* IK(FkPositionBase* fk) override {};
+        FkPositionBase* FK(IkPositionBase* ik) override {};
+        void RunG1(Gcode* gcode) override {};   //None blocking, move backgroundly.
+        void RunG6(Gcode* gcode) override {};   //Block mode
+        std::string GetHomeTrigerStateString() override {};
 
 };
