@@ -1,3 +1,7 @@
+#include "all_devices.h"
+#ifdef I_AM_CABLEBOT_CORNER
+
+
 #include "room_bot_corner.h"
 
 RoomBotCorner::RoomBotCorner(char axis_name){
@@ -116,6 +120,7 @@ void RoomBotCorner::Init_Linkage(IrEncoderHelper* sensorHelperBase){
     // this->singleAxis.LinkAcuator(&this->objDcMotor);
     this->objDcMotor.LinkSensorHelper(sensorHelperBase);
     this->objDcMotor.LinkDriver(&this->objHBridge);
+    this->objDcMotor.AxisName = AXIS_NAME;
     this->objDcMotor.MaxSpeed = 100;
     this->objDcMotor.positionTolerance = 1.5f;
 
@@ -144,3 +149,5 @@ FkPositionBase* RoomBotCorner::FK(IkPositionBase* ik){
     this->objFkpos.x = _ik->alpha;
     return &this->objFkpos;
 }
+
+#endif

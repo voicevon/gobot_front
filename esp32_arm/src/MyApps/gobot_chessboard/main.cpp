@@ -21,7 +21,7 @@ void setup(){
     // ble.Init();
     // Serial.println("BLE is ok....");    
     robot = &GobotChessboard::getInstance();
-    robot->Init();
+    robot->Init_Linkage();
     Serial.print("\nGobot-Chessboard setup is done..........");
 
 }

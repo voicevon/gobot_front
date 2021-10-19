@@ -46,7 +46,7 @@ class RoomBotCorner: public RobotBase{
         Led objLed_home_alpha = Led(1,2,LOW);
         DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
         HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, LOW);
-        DCMotor objDcMotor = DCMotor(AXIS_NAME);   //parent is ActuatorBase
+        DCMotor objDcMotor = DCMotor();   //parent is ActuatorBase
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
         // SingleAxis singleAxis = SingleAxis();

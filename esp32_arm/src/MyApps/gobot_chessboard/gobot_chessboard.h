@@ -119,10 +119,13 @@ class GobotChessboard: public RobotBase{
         RobotAction* __arm_action;
 
 
-    protected:
+    private:
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
-    private:
+        void RunG6(Gcode* gcode) override {};   //Block mode
+        std::string GetHomeTrigerStateString() override {};
+        void MoveToTargetPosition() {};
+    
         Led objLedPower = Led(0, PIN_LED_POWER_2112, LOW);
         Led objLedHome_alpha = Led(1,2,LOW);
         HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA_2112, HIGH);

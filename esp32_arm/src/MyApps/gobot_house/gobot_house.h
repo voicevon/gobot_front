@@ -55,14 +55,15 @@ class GobotHouse: public RobotBase{
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);
 
-    protected:
+
+
+    private:
+        GobotHouse();
+        // ik_position ik(float x, float y) override;
         void ActuatorMoveTo_FK(float x, float y);
         void ActuatorMoveTo_IK(int32_t a, int32_t b);
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
-    private:
-        GobotHouse();
-        // ik_position ik(float x, float y) override;
         virtual IkPositionBase* IK(FkPositionBase* fk) override;
         virtual FkPositionBase* FK(IkPositionBase* ik) override;
         RobotAction* __house_action;
@@ -72,6 +73,10 @@ class GobotHouse: public RobotBase{
         void __Move_fromHead_toNeck(bool forwarding);
         void __Move_fromNeck_toDoor(uint8_t house_id, bool forwarding);
         void __Enable_eefCoil(bool enable);
+        void RunG6(Gcode* gcode) override {};   //Block mode
+        std::string GetHomeTrigerStateString() override {};
+        void MoveToTargetPosition() {};
+
         HouseMap __map;
 
         // SingleAxis objAxis_Alpha= SingleAxis();

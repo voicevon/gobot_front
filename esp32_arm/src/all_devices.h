@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 
-// #define I_AM_GOBOT_CHESSBOARD_213401
+#define I_AM_GOBOT_CHESSBOARD_213401
 #ifdef I_AM_GOBOT_CHESSBOARD_213401
   #define I_AM_GOBOT_CHESSBOARD
   #define BLE_DEV_NAME "Gobot-Arm-213401"
@@ -62,7 +62,7 @@
   #define BLE_STATE_UUID   "9c43b29c-1451-11ec-82a8-0242ac130003"
 #endif
 
-#define I_AM_SMOKE_MACHINE
+// #define I_AM_SMOKE_MACHINE
 #ifdef I_AM_SMOKE_MACHINE
   #define USING_WIFI_MQTT
   #define AXIS_NAME 'X'
