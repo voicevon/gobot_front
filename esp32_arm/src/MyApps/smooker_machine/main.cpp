@@ -40,14 +40,13 @@ void setup() {
 void loop() {
 
   ss="G1";
-  // ss.append(ToString(distance));
+  ss.append(ToString(distance));
   // Serial.println("  111111111111111 ");
   gcode = Gcode(ss);
   // Serial.print (ss.c_str());
   // Serial.println("  2222222222222 ");
   delay(100);
   mybot.RunGcode(&gcode);
-  return;
   
   ss = "G4";
   ss.append(ToString(pause_second));
