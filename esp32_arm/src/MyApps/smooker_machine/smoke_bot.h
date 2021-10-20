@@ -16,6 +16,7 @@ class SmokeBot: public RobotBase{
     public:
         SmokeBot();
         void HomeAllAxises() override {};
+        void Init_Linkage() override;
 
 
     private:
@@ -27,13 +28,12 @@ class SmokeBot: public RobotBase{
 
         HomeHelper objHomeHelper = HomeHelper(PIN_HOME, HIGH);
         
-        void Init_Linkage() override;
         void MoveToTargetPosition()  override {};
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
         IkPositionBase* IK(FkPositionBase* fk) override {};
         FkPositionBase* FK(IkPositionBase* ik) override {};
-        void RunG1(Gcode* gcode) override {};   //None blocking, move backgroundly.
+        void RunG1(Gcode* gcode) override;   //None blocking, move backgroundly.
         void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {};
 

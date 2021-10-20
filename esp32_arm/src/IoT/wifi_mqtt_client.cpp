@@ -14,6 +14,8 @@ extern "C" {
 #define MQTT_HOST "voicevon.vicp.io"
 #define MQTT_PORT 1883
 
+extern void app_mqtt_subscribe();
+
 AsyncMqttClient mqttClient;
 TimerHandle_t mqttReconnectTimer;
 TimerHandle_t wifiReconnectTimer;
@@ -48,6 +50,8 @@ void WiFiEvent(WiFiEvent_t event) {
 }
 
 void onMqttConnect(bool sessionPresent) {
+
+
   Serial.println("Connected to MQTT.");
   Serial.print("Session present: ");
   Serial.println(sessionPresent);
@@ -62,6 +66,8 @@ void onMqttConnect(bool sessionPresent) {
   uint16_t packetIdPub2 = mqttClient.publish("test/lol", 2, true, "test 3");
   Serial.print("Publishing at QoS 2, packetId: ");
   Serial.println(packetIdPub2);
+  app_mqtt_subscribe();
+
 }
 
 
@@ -91,6 +97,8 @@ void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties 
   Serial.println("Publish received.");
   Serial.print("  topic: ");
   Serial.println(topic);
+  Serial.print("  paylod: ");
+  Serial.println(payload);
   Serial.print("  qos: ");
   Serial.println(properties.qos);
   Serial.print("  dup: ");
