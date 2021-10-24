@@ -7,15 +7,20 @@
 #include "Robot/Commu/CommuUart.h"
 #include "Robot/Actuator/ActuatorBase.h"
 
-#define PIN_HOME 22
-#define PIN_STEP 23
-#define PIN_DIR 24
+#define PIN_HOME 18
+#define PIN_STEP 33
+#define PIN_DIR 32
+#define PIN_ENABLE 14
+#define MICRO_STEP_1 27
+#define MICRO_STEP_2 26
+#define MICRO_STEP_3 25
+
 
 
 class SmokeBot: public RobotBase{
     public:
         SmokeBot();
-        void HomeAllAxises() override {};
+        void HomeAllAxises() override;
         void Init_Linkage() override;
 
 
@@ -36,5 +41,6 @@ class SmokeBot: public RobotBase{
         void RunG1(Gcode* gcode) override;   //None blocking, move backgroundly.
         void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {};
+        void Init_Gpio();
 
 };

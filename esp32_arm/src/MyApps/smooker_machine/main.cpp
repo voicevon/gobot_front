@@ -14,7 +14,7 @@
 std::string topic = "actu/dev001/yongquan"; 
 std::string payload ="OFF";
 
-SmokeBot mybot;
+SmokeBot* mybot;
 int distance = 100;
 int pause_second = 20;
 Gcode gcode("");
@@ -28,10 +28,11 @@ void app_mqtt_subscribe(){
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("Hi there, I am smoke robot, Have a good day");
-  setup_wifi_mqtt();
-  // mybot.HomeAllAxises();
-  mybot.Init_Linkage();
+  // Serial.println("Hi there, I am smoke robot, Have a good day");
+  // setup_wifi_mqtt();
+  mybot = new SmokeBot();
+  mybot->Init_Linkage();
+  // mybot->HomeAllAxises();
   Serial.print("Set up is done .....");
 }
 
@@ -39,23 +40,25 @@ void setup() {
 
 void loop() {
 
-  ss="G1";
-  ss.append(ToString(distance));
+  // ss="G28 X";
+  // ss.append(ToString(distance));
   // Serial.println("  111111111111111 ");
-  gcode = Gcode(ss);
+  // gcode = Gcode(ss);
   // Serial.print (ss.c_str());
   // Serial.println("  2222222222222 ");
-  delay(100);
-  mybot.RunGcode(&gcode);
+  // delay(100);
+  // mybot->RunGcode(&gcode);
+  mybot->HomeAllAxises();
   
-  ss = "G4";
+
+  ss = "G1 X15";
   ss.append(ToString(pause_second));
   gcode = Gcode(ss);
-  mybot.RunGcode(&gcode);
+  mybot->RunGcode(&gcode);
 
-  ss = "G1X0";
-  gcode = Gcode(ss);
-  mybot.RunGcode(&gcode);
+  // ss = "G1X0";
+  // gcode = Gcode(ss);
+  // mybot->RunGcode(&gcode);
 
 }
 #endif
