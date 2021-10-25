@@ -1,5 +1,10 @@
 #include "smoke_bot.h"
 
+#define ACCELERATION 250000
+#define MAX_SPEED 23000   // 1500 is OK
+#define ACCELERATION_HOMIMG  250000
+#define MAX_SPEED_HOMING  22000
+
 SmokeBot::SmokeBot(){
 
 }
@@ -18,13 +23,22 @@ void SmokeBot::RunG1(Gcode* gcode) {
 }
 
 void SmokeBot::HomeAllAxises(){
-  while (!this->objHomeHelper.IsTriged()){
-    this->objStepper.setTargetRel(-50);
-    this->objStepControl.move(this->objStepper);
+  Serial.println("\n================================  " );
+  Serial.print(" Start homing    " );
+  this->objStepper.setAcceleration(ACCELERATION_HOMIMG);
+  this->objStepper.setMaxSpeed(MAX_SPEED_HOMING);
+  this->objStepper.setTargetRel(-50000);
+  this->objStepControl.moveAsync(this->objStepper);
+  while (! this->objHomeHelper.IsTriged()){
+    // Serial.print(".");
+    delay(10);
   }
+  this->objStepControl.stop();
   this->objStepper.setPosition(0);
+  this->objStepper.setAcceleration(ACCELERATION);
+  this->objStepper.setMaxSpeed(MAX_SPEED);
   Serial.print(" Homed postion =    " );
-  Serial.print(this->objStepper.getPosition());
+  Serial.println(this->objStepper.getPosition());
 }
 
 void SmokeBot::Init_Gpio(){
@@ -35,18 +49,14 @@ void SmokeBot::Init_Gpio(){
   pinMode(MICRO_STEP_3, OUTPUT);
 
   digitalWrite(PIN_ENABLE, LOW);
-  pinMode(MICRO_STEP_1, HIGH);
-  pinMode(MICRO_STEP_2, HIGH);
-  pinMode(MICRO_STEP_3, HIGH);
+  digitalWrite(MICRO_STEP_1, HIGH);
+  digitalWrite(MICRO_STEP_2, HIGH);
+  digitalWrite(MICRO_STEP_3, HIGH);
 
-
-  this->objStepper.setAcceleration(25000);
-  this->objStepper.setMaxSpeed(1000);
-  this->objStepper.setStepPinPolarity(LOW);
+  this->objStepper.setStepPinPolarity(HIGH);
 }
 
 void SmokeBot::Init_Linkage(){
-  Init_Gpio();
   this->commuDevice = &this->objCommuUart; 
   // this->objHomeHelper.LinkAxis(&this->objAxis_Alpha);
   this->objHomeHelper.LinkActuator(&this->objActuator);

@@ -22,6 +22,7 @@ class SmokeBot: public RobotBase{
         SmokeBot();
         void HomeAllAxises() override;
         void Init_Linkage() override;
+        void Init_Gpio();
 
 
     private:
@@ -41,6 +42,5 @@ class SmokeBot: public RobotBase{
         void RunG1(Gcode* gcode) override;   //None blocking, move backgroundly.
         void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {};
-        void Init_Gpio();
 
 };

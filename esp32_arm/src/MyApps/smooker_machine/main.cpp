@@ -31,6 +31,7 @@ void setup() {
   // Serial.println("Hi there, I am smoke robot, Have a good day");
   // setup_wifi_mqtt();
   mybot = new SmokeBot();
+  mybot->Init_Gpio();
   mybot->Init_Linkage();
   // mybot->HomeAllAxises();
   Serial.print("Set up is done .....");
@@ -51,7 +52,7 @@ void loop() {
   mybot->HomeAllAxises();
   
 
-  ss = "G1 X15";
+  ss = "G1 X260";
   ss.append(ToString(pause_second));
   gcode = Gcode(ss);
   mybot->RunGcode(&gcode);
