@@ -1,9 +1,9 @@
 #include "smoke_bot.h"
 
 #define ACCELERATION 250000
-#define MAX_SPEED 23000   // 1500 is OK
+#define MAX_SPEED 23000   //  is OK
 #define ACCELERATION_HOMIMG  250000
-#define MAX_SPEED_HOMING  22000
+#define MAX_SPEED_HOMING  2200
 
 SmokeBot::SmokeBot(){
 

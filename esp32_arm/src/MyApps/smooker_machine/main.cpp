@@ -26,40 +26,51 @@ void app_mqtt_subscribe(){
   Serial.println("Subscribed smokebot/*");
 }
 
+void app_mqtt_received_message( char* topic, char* payload){
+  const char * cc = (const char*)(payload);
+
+  if(strcmp(topic, "smokebot/distance") == 0) {   // char len = 17
+    distance = atof(cc);
+  }
+  else if(strcmp(topic, "smokebot/pause_second")==0){    // char len = 21
+    pause_second = atof(cc);
+  }else{
+    Serial.print(" app_mqtt_received_message() Warning   ");
+    Serial.print (topic);
+    Serial.print("   ");
+    Serial.print (payload);
+  }
+
+}
+
 void setup() {
   Serial.begin(115200);
-  // Serial.println("Hi there, I am smoke robot, Have a good day");
-  // setup_wifi_mqtt();
+  Serial.println("Hi there, I am smoke robot, Have a good day");
+  setup_wifi_mqtt();
   mybot = new SmokeBot();
   mybot->Init_Gpio();
   mybot->Init_Linkage();
-  // mybot->HomeAllAxises();
   Serial.print("Set up is done .....");
 }
 
 
 
 void loop() {
+  if (!mqttClient.connected())
+    return;
 
-  // ss="G28 X";
-  // ss.append(ToString(distance));
-  // Serial.println("  111111111111111 ");
-  // gcode = Gcode(ss);
-  // Serial.print (ss.c_str());
-  // Serial.println("  2222222222222 ");
-  // delay(100);
-  // mybot->RunGcode(&gcode);
+
+  delay(1000*pause_second);
+
   mybot->HomeAllAxises();
-  
 
-  ss = "G1 X260";
-  ss.append(ToString(pause_second));
+  ss="G1 X";
+  ss.append(ToString(distance));
   gcode = Gcode(ss);
+  Serial.print (ss.c_str());
+  delay(100);
   mybot->RunGcode(&gcode);
 
-  // ss = "G1X0";
-  // gcode = Gcode(ss);
-  // mybot->RunGcode(&gcode);
 
 }
 #endif
