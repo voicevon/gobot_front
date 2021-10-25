@@ -39,8 +39,9 @@ void SmokeBot::Init_Gpio(){
   pinMode(MICRO_STEP_2, HIGH);
   pinMode(MICRO_STEP_3, HIGH);
 
-  this->objStepper.setAcceleration(50);
-  this->objStepper.setMaxSpeed(500);
+
+  this->objStepper.setAcceleration(25000);
+  this->objStepper.setMaxSpeed(1000);
   this->objStepper.setStepPinPolarity(LOW);
 }
 
