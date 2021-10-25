@@ -45,6 +45,7 @@ class ActuatorBase
     void LinkSensorHelper(SensorHelperBase* sensorHelper){this->sensorHelper=sensorHelper;};
     void LinkDriver(DriverBase* driver){this->driver=driver;};
 
+    char AxisName;
     // Sensor* sensor; 
     SensorHelperBase* sensorHelper;
     DriverBase* driver;
@@ -56,9 +57,9 @@ class ActuatorBase
     // float MaxAcceleration = 2;
     // Mass gravity = (1,2,3);
 
+  protected:
+
   private:
-
-
 
 };
 

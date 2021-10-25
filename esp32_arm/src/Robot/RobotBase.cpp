@@ -1,6 +1,6 @@
 #include "RobotBase.h"
 #include "MyLibs/MyFunctions.hpp"
-
+#include "HardwareSerial.h"
 
 void RobotBase::SpinOnce(){
   commuDevice->SpinOnce();
@@ -13,6 +13,17 @@ void RobotBase::SpinOnce(){
     this->RunGcode(&gCode);
   }
   this->SpinOnce_BaseExit();
+}
+
+void RobotBase::RunG4(Gcode* gcode){
+  long start = micros();
+  // bool pausing = false;
+  long delayed = 0;
+  while  (delayed < 30){
+    delayed = (micros() - start) / 1000 /1000;
+    delay(100);
+    // this->SpinOnce();   //??
+  }
 }
 
 void RobotBase::RunGcode(Gcode* gcode){
@@ -39,6 +50,10 @@ void RobotBase::RunGcode(Gcode* gcode){
         //       4. Start Moving.
         this->RunG1(gcode);
         this->commuDevice->OutputMessage(COMMU_OK);
+        break;
+      case 4:
+        // G4 Dwell, Pause for a period of time.
+        this->RunG4(gcode);
         break;
       case 6:
         this->RunG6(gcode);

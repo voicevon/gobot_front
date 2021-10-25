@@ -1,7 +1,12 @@
+#include "all_devices.h"
+#ifdef I_AM_CABLEBOT_CORNER
+
+
 #include "room_bot_corner.h"
 
 RoomBotCorner::RoomBotCorner(char axis_name){
-    this->singleAxis.Name = axis_name;
+    // this->singleAxis.Name = axis_name;
+    this->objDcMotor.AxisName = axis_name;
 }
         
 void RoomBotCorner::test_hBridge(){
@@ -25,7 +30,8 @@ void RoomBotCorner::test_home(){
         this->RunGcode(&gcode);
        }
        delay(1000);
-       Serial.print(this->singleAxis._actuator->GetCurrentPos());
+    //    Serial.print(this->singleAxis._actuator->GetCurrentPos());
+       Serial.print(this->objDcMotor.GetCurrentPos());
        Serial.print("\n");
     } while (!objHomeTriger.IsTriged());
     
@@ -53,24 +59,27 @@ void RoomBotCorner::MoveToTargetPosition(){
 
     bool dir_forward = true;
     float targetPos = this->nextPosX.x;
-    if (targetPos > this->singleAxis._actuator->GetCurrentPos()){
+    // if (targetPos > this->singleAxis._actuator->GetCurrentPos()){
+    if (targetPos > this->objDcMotor.GetCurrentPos()){
         dir_forward = false;
     }
     //TODO, insert PID here.
     float speed = 100;
     this->objHBridge.Start(speed, dir_forward);
     //Read the encoder,
-    float distance = targetPos - this->singleAxis._actuator->GetCurrentPos(); 
+    // float distance = targetPos - this->singleAxis._actuator->GetCurrentPos(); 
+    float distance = targetPos - this->objDcMotor.GetCurrentPos(); 
     if (distance != debug_last_distance){
         Serial.print("\nRunning G1  target, current,   distance to target = ");
         Serial.print(this->nextPosX.x);
         Serial.print("   ");
-        Serial.print(this->singleAxis._actuator->GetCurrentPos());
+        // Serial.print(this->singleAxis._actuator->GetCurrentPos());
+        Serial.print(this->objDcMotor.GetCurrentPos());
         Serial.print("   ");
         Serial.print(distance);
         debug_last_distance = distance;
     }
-    if (abs(distance) < this->singleAxis._actuator->positionTolerance){
+    if (abs(distance) < this->objDcMotor.positionTolerance){
         this->objHBridge.Stop();
         this->robot_is_idle = true;
     }else{
@@ -79,7 +88,7 @@ void RoomBotCorner::MoveToTargetPosition(){
 }
 
 void RoomBotCorner::RunG1(Gcode* gcode){
-    float pos = gcode->get_value(this->singleAxis.Name);
+    float pos = gcode->get_value(this->objDcMotor.AxisName);
     // this->singleAxis._actuator->SetTargetAbs(pos);
     if (this->is_absolute_position){
         this->nextPosX.x = pos;
@@ -89,7 +98,7 @@ void RoomBotCorner::RunG1(Gcode* gcode){
     MoveToTargetPosition();
 }
 void RoomBotCorner::RunG6(Gcode* gcode){
-    float pos = gcode->get_value(this->singleAxis.Name);
+    float pos = gcode->get_value(this->objDcMotor.AxisName);
     // this->singleAxis._actuator->SetTargetAbs(pos);
     if (this->is_absolute_position){
         this->nextPosX.x = pos;
@@ -108,9 +117,10 @@ void RoomBotCorner::SpinOnce_BaseExit(){
 void RoomBotCorner::Init_Linkage(IrEncoderHelper* sensorHelperBase){
     this->LinkCommuDevice(&this->objCommuBle);
     this->objCommuBle.Init();
-    this->singleAxis.LinkAcuator(&this->objDcMotor);
+    // this->singleAxis.LinkAcuator(&this->objDcMotor);
     this->objDcMotor.LinkSensorHelper(sensorHelperBase);
     this->objDcMotor.LinkDriver(&this->objHBridge);
+    this->objDcMotor.AxisName = AXIS_NAME;
     this->objDcMotor.MaxSpeed = 100;
     this->objDcMotor.positionTolerance = 1.5f;
 
@@ -139,3 +149,5 @@ FkPositionBase* RoomBotCorner::FK(IkPositionBase* ik){
     this->objFkpos.x = _ik->alpha;
     return &this->objFkpos;
 }
+
+#endif

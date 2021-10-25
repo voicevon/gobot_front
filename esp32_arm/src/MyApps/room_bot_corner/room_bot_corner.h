@@ -4,7 +4,7 @@
 #include "Robot/RobotBase.h"
 #include "Robot/Commu/CommuUart.h"
 #include "Robot/Commu/CommuBleGattServer.h"
-#include "Robot/Axis/SingleAxis.h"
+// #include "Robot/Axis/SingleAxis.h"
 
 
 #include "Robot/Actuator/DCMotor/DcMotor.h"
@@ -20,7 +20,7 @@
 #define PIN_DC_MOTOR_A_2130 27
 #define PIN_DC_MOTOR_B_2130 14
 #define PIN_LED_POWER_2130 22
-
+#include "all_devices.h"
 
 class RoomBotCorner: public RobotBase{
     public:
@@ -46,10 +46,11 @@ class RoomBotCorner: public RobotBase{
         Led objLed_home_alpha = Led(1,2,LOW);
         DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
         HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, LOW);
-        DCMotor objDcMotor = DCMotor();
+        DCMotor objDcMotor = DCMotor();   //parent is ActuatorBase
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
-        SingleAxis singleAxis = SingleAxis();
+        // SingleAxis singleAxis = SingleAxis();
+        // DCMotor* objActuator;
         FkPosX objFkpos;
         IkPosX objIkPos;
 

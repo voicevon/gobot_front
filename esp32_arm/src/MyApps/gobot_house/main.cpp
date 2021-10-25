@@ -14,7 +14,7 @@ void setup(){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am your bot,  Gobot-House. ");
     robot = &GobotHouse::getInstance();
-    robot->Init();
+    robot->Init_Linkage();
     robot->Setup(&action, 9);
     Serial.print("\nHouse setup is done..........");
 }

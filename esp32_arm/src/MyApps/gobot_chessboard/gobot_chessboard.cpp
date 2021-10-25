@@ -33,13 +33,15 @@ void GobotChessboard::HomeAllAxises(){
     objStepper_alpha.setTargetRel(100);
     objStepControl.move(objStepper_alpha);
   }
-  objAxis_Alpha.SetCurrentPosition(HOME_POSITION_ALPHA);
+  // objAxis_Alpha.SetCurrentPosition(HOME_POSITION_ALPHA);
+  this->objActuator_Alpha.SetCurrentPos(HOME_POSITION_ALPHA);
 
   while(!objHomeHelper_beta.IsTriged()){
     objStepper_beta.setTargetRel(100);
     objStepControl.move(objStepper_beta);
   }
-  objAxis_Beta.SetCurrentPosition(HOME_POSITION_BETA);
+  // objAxis_Beta.SetCurrentPosition(HOME_POSITION_BETA);
+  this->objActuator_Beta.SetCurrentPos(HOME_POSITION_BETA);
   this->commuDevice->OutputMessage("Home is done.....");
 }
 
@@ -204,15 +206,17 @@ void GobotChessboard::Init_Linkage(){
     digitalWrite(PIN_BETA_ENABLE, LOW);
 
     this->commuDevice = &this->objCommuUart;
-    this->objAxis_Alpha.LinkAcuator(&this->objActuator_Alpha);
-    this->objActuator_Alpha.LinkDriver(nullptr);
-    this->objActuator_Alpha.LinkSensorHelper(nullptr);
-    this->objAxis_Beta.LinkAcuator(&this->objActuator_Beta);
-    this->objActuator_Beta.LinkDriver(nullptr);
-    this->objActuator_Beta.LinkSensorHelper(nullptr);
+    // this->objAxis_Alpha.LinkAcuator(&this->objActuator_Alpha);
+    // this->objActuator_Alpha.LinkDriver(nullptr);
+    // this->objActuator_Alpha.LinkSensorHelper(nullptr);
+    // this->objAxis_Beta.LinkAcuator(&this->objActuator_Beta);
+    // this->objActuator_Beta.LinkDriver(nullptr);
+    // this->objActuator_Beta.LinkSensorHelper(nullptr);
 
-    this->objHomeHelper_alpha.LinkAxis(&this->objAxis_Alpha);
-    this->objHomeHelper_beta.LinkAxis(&this->objAxis_Beta);
+    // this->objHomeHelper_alpha.LinkAxis(&this->objAxis_Alpha);
+    this->objHomeHelper_alpha.LinkActuator(&this->objActuator_Alpha);
+    // this->objHomeHelper_beta.LinkAxis(&this->objAxis_Beta);
+    this->objHomeHelper_beta.LinkActuator(&this->objActuator_Beta);
 } 
 
 void GobotChessboard::RunG1(Gcode* gcode){

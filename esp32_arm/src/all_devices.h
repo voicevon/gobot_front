@@ -62,13 +62,14 @@
   #define BLE_STATE_UUID   "9c43b29c-1451-11ec-82a8-0242ac130003"
 #endif
 
-#define SMOKE_MACHINE
-#ifdef SMOKE_MACHINE
+#define I_AM_SMOKE_MACHINE
+#ifdef I_AM_SMOKE_MACHINE
+  #define USING_WIFI_MQTT
   #define AXIS_NAME 'X'
   #define BLE_DEV_NAME "SMOKE-MACHINE"
-  #define BLE_SERVICE_UUID   "85f5ab94-1451-11ec-82a8-0242ac130003"
-  #define BLE_COMMU_UUID  "96a1cd38-1451-11ec-82a8-0242ac130003"
-  #define BLE_STATE_UUID   "9c43b29c-1451-11ec-82a8-0242ac130003"
+  #define BLE_SERVICE_UUID   "0"
+  #define BLE_COMMU_UUID  "0"
+  #define BLE_STATE_UUID   "0"
 #endif
 
 #endif
