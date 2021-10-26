@@ -27,7 +27,7 @@ void SmokeBot::HomeAllAxises(){
   Serial.print(" Start homing    " );
   this->objStepper.setAcceleration(ACCELERATION_HOMIMG);
   this->objStepper.setMaxSpeed(MAX_SPEED_HOMING);
-  this->objStepper.setTargetRel(-50000);
+  this->objStepper.setTargetRel(-5000);
   this->objStepControl.moveAsync(this->objStepper);
   while (! this->objHomeHelper.IsTriged()){
     // Serial.print(".");

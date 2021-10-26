@@ -51,15 +51,11 @@ void setup() {
   mybot->Init_Gpio();
   mybot->Init_Linkage();
   Serial.print("Set up is done .....");
+  while (!mqttClient.connected())
+      delay(100);
 }
 
-
-
 void loop() {
-  if (!mqttClient.connected())
-    return;
-
-
   delay(1000*pause_second);
 
   mybot->HomeAllAxises();
