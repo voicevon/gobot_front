@@ -15,6 +15,7 @@ extern "C" {
 #define MQTT_PORT 1883
 
 extern void app_mqtt_subscribe();
+extern void app_mqtt_received_message(char* topic, char* payload);
 
 AsyncMqttClient mqttClient;
 TimerHandle_t mqttReconnectTimer;
@@ -111,6 +112,7 @@ void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties 
   Serial.println(index);
   Serial.print("  total: ");
   Serial.println(total);
+  app_mqtt_received_message(topic, payload);
 }
 
 void onMqttPublish(uint16_t packetId) {
