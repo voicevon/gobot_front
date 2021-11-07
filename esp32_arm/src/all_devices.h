@@ -62,7 +62,7 @@
   #define BLE_STATE_UUID   "9c43b29c-1451-11ec-82a8-0242ac130003"
 #endif
 
-#define I_AM_SMOKE_MACHINE
+// #define I_AM_SMOKE_MACHINE
 #ifdef I_AM_SMOKE_MACHINE
   #define USING_WIFI_MQTT
   #define AXIS_NAME 'X'
@@ -71,5 +71,17 @@
   #define BLE_COMMU_UUID  "0"
   #define BLE_STATE_UUID   "0"
 #endif
+
+#define I_AM_AGV_GARMENT
+#ifdef I_AM_AGV_GARMENT
+  #define USING_WIFI_MQTT
+  // #define AXIS_NAME 'X'
+  #define BLE_DEV_NAME "AGV-GARMENT"
+  #define BLE_SERVICE_UUID   "0"
+  #define BLE_COMMU_UUID  "0"
+  #define BLE_STATE_UUID   "0"
+#endif
+
+
 
 #endif
