@@ -6,98 +6,98 @@
 
 AgvGarment::AgvGarment(){
     // this->singleAxis.Name = axis_name;
-    this->objDcMotor.AxisName = 'X';
+    // this->objDcMotor.AxisName = 'X';
 }
         
 void AgvGarment::test_hBridge(){
-    for(int i =0 ; i <10; i++){
-        this->objHBridge.Stop();
-        delay(5000);
+    // for(int i =0 ; i <10; i++){
+    //     this->objHBridge.Stop();
+    //     delay(5000);
 
-        this->objHBridge.Start(255, true);
-        delay(5000);
-        this->objHBridge.Start(255, false);
-        delay(5000);
-    }
+    //     this->objHBridge.Start(255, true);
+    //     delay(5000);
+    //     this->objHBridge.Start(255, false);
+    //     delay(5000);
+    // }
 }
 
 void AgvGarment::test_home(){
-    Gcode gc = Gcode("G91");
-    this->RunGcode(&gc);
-    do{
-       if (this->robot_is_idle){
-        Gcode gcode = Gcode("G1 A-3");
-        this->RunGcode(&gcode);
-       }
-       delay(1000);
-    //    Serial.print(this->singleAxis._actuator->GetCurrentPos());
-       Serial.print(this->objDcMotor.GetCurrentPos());
-       Serial.print("\n");
-    } while (!objHomeTriger.IsTriged());
+    // Gcode gc = Gcode("G91");
+    // this->RunGcode(&gc);
+    // do{
+    //    if (this->robot_is_idle){
+    //     Gcode gcode = Gcode("G1 A-3");
+    //     this->RunGcode(&gcode);
+    //    }
+    //    delay(1000);
+    // //    Serial.print(this->singleAxis._actuator->GetCurrentPos());
+    //    Serial.print(this->objDcMotor.GetCurrentPos());
+    //    Serial.print("\n");
+    // } while (!objHomeTriger.IsTriged());
     
 }
 
-void AgvGarment::HomeAllAxises(){
-    // This robot actually is a joint of the Cable-ROBOT system.
-    // And, It's necessary to work with other joint cooperately.
-    // So, the function "Home()" should do nothing ! 
-    this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND); 
-}
+// void AgvGarment::HomeAllAxises(){
+//     // This robot actually is a joint of the Cable-ROBOT system.
+//     // And, It's necessary to work with other joint cooperately.
+//     // So, the function "Home()" should do nothing ! 
+//     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND); 
+// }
 
-std::string AgvGarment::GetHomeTrigerStateString(){
-    std::string result = "Trigger = ";    // Will be deleted after function run?
-    if (this->objHomeTriger.IsTriged()){
-        result += "Yes";
-    }else{
-        result += "No";
-    }
-    return result;
-}
+// std::string AgvGarment::GetHomeTrigerStateString(){
+//     std::string result = "Trigger = ";    // Will be deleted after function run?
+//     if (this->objHomeTriger.IsTriged()){
+//         result += "Yes";
+//     }else{
+//         result += "No";
+//     }
+//     return result;
+// }
 
-void AgvGarment::MoveToTargetPosition(){
-    static float debug_last_distance = 0.0f;
+// void AgvGarment::MoveToTargetPosition(){
+//     static float debug_last_distance = 0.0f;
 
-    bool dir_forward = true;
-    float targetPos = this->nextPosX.x;
-    // if (targetPos > this->singleAxis._actuator->GetCurrentPos()){
-    if (targetPos > this->objDcMotor.GetCurrentPos()){
-        dir_forward = false;
-    }
-    //TODO, insert PID here.
-    float speed = 100;
-    this->objHBridge.Start(speed, dir_forward);
-    //Read the encoder,
-    // float distance = targetPos - this->singleAxis._actuator->GetCurrentPos(); 
-    float distance = targetPos - this->objDcMotor.GetCurrentPos(); 
-    if (distance != debug_last_distance){
-        Serial.print("\nRunning G1  target, current,   distance to target = ");
-        Serial.print(this->nextPosX.x);
-        Serial.print("   ");
-        // Serial.print(this->singleAxis._actuator->GetCurrentPos());
-        Serial.print(this->objDcMotor.GetCurrentPos());
-        Serial.print("   ");
-        Serial.print(distance);
-        debug_last_distance = distance;
-    }
-    if (abs(distance) < this->objDcMotor.positionTolerance){
-        this->objHBridge.Stop();
-        this->robot_is_idle = true;
-    }else{
-        this->robot_is_idle = false;
-    }
-}
+//     bool dir_forward = true;
+//     float targetPos = this->nextPosX.x;
+//     // if (targetPos > this->singleAxis._actuator->GetCurrentPos()){
+//     if (targetPos > this->objDcMotor.GetCurrentPos()){
+//         dir_forward = false;
+//     }
+//     //TODO, insert PID here.
+//     float speed = 100;
+//     this->objHBridge.Start(speed, dir_forward);
+//     //Read the encoder,
+//     // float distance = targetPos - this->singleAxis._actuator->GetCurrentPos(); 
+//     float distance = targetPos - this->objDcMotor.GetCurrentPos(); 
+//     if (distance != debug_last_distance){
+//         Serial.print("\nRunning G1  target, current,   distance to target = ");
+//         Serial.print(this->nextPosX.x);
+//         Serial.print("   ");
+//         // Serial.print(this->singleAxis._actuator->GetCurrentPos());
+//         Serial.print(this->objDcMotor.GetCurrentPos());
+//         Serial.print("   ");
+//         Serial.print(distance);
+//         debug_last_distance = distance;
+//     }
+//     if (abs(distance) < this->objDcMotor.positionTolerance){
+//         this->objHBridge.Stop();
+//         this->robot_is_idle = true;
+//     }else{
+//         this->robot_is_idle = false;
+//     }
+// }
 
-void AgvGarment::RunG1(Gcode* gcode){
-    float pos = gcode->get_value(this->objDcMotor.AxisName);
-    // this->singleAxis._actuator->SetTargetAbs(pos);
-    if (this->is_absolute_position){
-        this->nextPosX.x = pos;
-    }else{
-        this->nextPosX.x = this->nextPosX.x + pos;
-    }
-    MoveToTargetPosition();
-}
-void AgvGarment::RunG6(Gcode* gcode){
+// void AgvGarment::RunG1(Gcode* gcode){
+//     float pos = gcode->get_value(this->objDcMotor.AxisName);
+//     // this->singleAxis._actuator->SetTargetAbs(pos);
+//     if (this->is_absolute_position){
+//         this->nextPosX.x = pos;
+//     }else{
+//         this->nextPosX.x = this->nextPosX.x + pos;
+//     }
+//     MoveToTargetPosition();
+// }
+// void AgvGarment::RunG6(Gcode* gcode){
     float pos = gcode->get_value(this->objDcMotor.AxisName);
     // this->singleAxis._actuator->SetTargetAbs(pos);
     if (this->is_absolute_position){
