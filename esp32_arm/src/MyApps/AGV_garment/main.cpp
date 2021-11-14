@@ -2,13 +2,13 @@
 #ifdef I_AM_AGV_GARMENT
 
 #include "MyLibs/MyFunctions.hpp"
-#include "AgvGarment.h"
+#include "garment_bot.h"
 #include "Robot/Gcode.h" 
 
 #define PIN_ENCODER_A 25
 #define PIN_ENCODER_B 26
 
-AgvGarment robot = AgvGarment();
+GarmentBot robot = GarmentBot();
 IrEncoder irEncoder = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 40);
 IrEncoderHelper irEncoderHelper = IrEncoderHelper();
 void doB(){irEncoder.handleB();}
@@ -33,7 +33,7 @@ void loop(){
     // bool x = digitalRead(32);
     // Serial.print(x);
     // delay(1000);
-    robot.SpinOnce();
+    // robot.SpinOnce();
 
     if (!tested){
         // robot.test_home();

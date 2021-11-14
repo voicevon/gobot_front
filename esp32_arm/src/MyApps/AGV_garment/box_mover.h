@@ -22,9 +22,9 @@
 #define PIN_LED_POWER_2130 22
 #include "all_devices.h"
 
-class BoxRobot: public RobotBase{
+class BoxMover: public RobotBase{
     public:
-        BoxRobot();
+        BoxMover();
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
         void RunG6(Gcode* gcode) override;
