@@ -3,13 +3,14 @@
 
 #include "Robot/RobotBase.h"
 #include "Robot/Commu/CommuUart.h"
-#include "Robot/Commu/CommuBleGattServer.h"
+// #include "Robot/Commu/CommuBleGattServer.h"
 // #include "Robot/Axis/SingleAxis.h"
 
 
 #include "Robot/Actuator/DCMotor/DcMotor.h"
 #include "Robot/Sensor/IrEncoderHelper.h"
-#include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
+// #include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
+#include "Robot/Actuator/DCMotor/h_bridge_l298n.h"
 #include "Robot/Actuator/DCMotor/DCMotorController.h"
 
 #include "Robot/HomeHelper.h"
@@ -25,6 +26,10 @@
 class BoxMover: public RobotBase{
     public:
         BoxMover();
+        void Stop(){};
+        void LoadBox(){};
+        void UnloadBox(){};
+
         void HomeAllAxises() override;
         void RunG1(Gcode* gcode) override;
         void RunG6(Gcode* gcode) override;
@@ -44,11 +49,14 @@ class BoxMover: public RobotBase{
         void SpinOnce_BaseExit() override;
         Led objLed_power = Led(0,PIN_LED_POWER_2130,LOW);
         Led objLed_home_alpha = Led(1,2,LOW);
-        DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
+        // DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
+        L298N* verticalAxis;
+        L298N* angleAxis;
+
         HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, LOW);
         DCMotor objDcMotor = DCMotor();   //parent is ActuatorBase
         CommuUart objCommuUart = CommuUart();
-        CommuBleGattServer objCommuBle = CommuBleGattServer();
+        // CommuBleGattServer objCommuBle = CommuBleGattServer();
         // SingleAxis singleAxis = SingleAxis();
         // DCMotor* objActuator;
         FkPosX objFkpos;

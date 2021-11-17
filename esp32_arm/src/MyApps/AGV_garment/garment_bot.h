@@ -1,38 +1,47 @@
 #pragma once
 #include "all_devices.h"
-#ifdef I_AM_AGV_GARMENT
+#ifdef I_AM_GARMENT_BOT
 
 #include "Robot/RobotBase.h"
 #include "Robot/Commu/CommuUart.h"
-#include "Robot/Commu/CommuBleGattServer.h"
+// #include "Robot/Commu/CommuBleGattServer.h"
 // #include "Robot/Axis/SingleAxis.h"
 
 
 #include "Robot/Actuator/DCMotor/DcMotor.h"
 #include "Robot/Sensor/IrEncoderHelper.h"
-#include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
+// #include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
+#include "Robot/Actuator/DCMotor/h_bridge_l298n.h"
 #include "Robot/Actuator/DCMotor/DCMotorController.h"
 
 #include "Robot/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
 
-#define PIN_HOME_SENSOR_2130 32
-
-#define PIN_LEFT_WHEEL_DC_MOTOR_A 27
-#define PIN_LEFT_WHEEL_DC_MOTOR_B 14
-#define PIN_RIGHT_WHEEL_DC_MOTOR_A 27
-#define PIN_RIGHT_WHEEL_DC_MOTOR_B 14
-
-#define PIN_Z_DC_MOTOR_A 11
-#define PIN_Z_DC_MOTOR_B 11
-
-#define PIN_ANGLE_DC_MOTOR_A 11
-#define PIN_ANGLE_DC_MOTORB 11
 
 #define PIN_LED_POWER_2130 22
 
 #include "Agv.h"
 #include "box_mover.h"
+
+
+
+/*
+.     |<-----------^    |<-----------------------------
+.     |            ^    |                             ^
+.   Sleeping  --> Agv_Moving  --> Robot_Loading  -----|  
+.                       |                             ^
+.                       |---------> Robot_Unloading --|
+.                       |                             ^
+.                       |---------> Charging ---------|
+.                       |                             ^
+.                       |---------> Stopping ---------|
+*/
+
+enum GARMENTBOT_MODE{
+    SLEEP = 0,
+    CHARGING = 1,
+    WORKING = 2,
+};
 
 class GarmentBot{
     public:
@@ -47,14 +56,16 @@ class GarmentBot{
         void test_hBridge();
         void test_home();
         void SpinOnce();
+        void SetMode(GARMENTBOT_MODE mode);
 
     protected:
-        
+        GARMENTBOT_MODE _mode;
+        void SpinOnce_Working();
     private:
-        DCDriverHBridge objLeftWheelBridge = DCDriverHBridge(PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
-        DCDriverHBridge objRightWheelBridge = DCDriverHBridge(PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
-        DCDriverHBridge objZAxisBridge = DCDriverHBridge(PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
-        DCDriverHBridge objAngleBridge = DCDriverHBridge(PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
+        L298N objLeftWheelBridge = L298N();
+        L298N objRightWheelBridge = L298N();
+        L298N objZAxisBridge = L298N();
+        L298N objAngleBridge = L298N();
         DCMotor objLeftWheel = DCMotor();   //parent is ActuatorBase
         DCMotor obRightWheel = DCMotor();   //parent is ActuatorBase
         DCMotor objZMotor = DCMotor();   //parent is ActuatorBase
@@ -62,7 +73,7 @@ class GarmentBot{
 
         HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, LOW);
         CommuUart objCommuUart = CommuUart();
-        CommuBleGattServer objCommuBle = CommuBleGattServer();
+        // CommuBleGattServer objCommuBle = CommuBleGattServer();
 };
 
 

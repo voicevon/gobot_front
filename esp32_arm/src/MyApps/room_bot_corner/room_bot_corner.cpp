@@ -7,6 +7,7 @@
 RoomBotCorner::RoomBotCorner(char axis_name){
     // this->singleAxis.Name = axis_name;
     this->objDcMotor.AxisName = axis_name;
+    this->objHBridge.Init(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
 }
         
 void RoomBotCorner::test_hBridge(){

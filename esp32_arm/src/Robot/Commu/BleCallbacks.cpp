@@ -1,4 +1,5 @@
-
+#include "all_devices.h"
+#ifdef USING_BLE
 #include "BleCallbacks.h"
 #include <esp_log.h>
 #include <HardwareSerial.h>
@@ -21,3 +22,4 @@ void MyBleServerCallbacks::onDisconnect(BLEServer* pServer){
     Serial.print("\nBLE Client is DIS-connected!");
 }
 
+#endif

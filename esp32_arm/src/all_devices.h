@@ -7,6 +7,7 @@
 // #define I_AM_GOBOT_CHESSBOARD_213401
 #ifdef I_AM_GOBOT_CHESSBOARD_213401
   #define I_AM_GOBOT_CHESSBOARD
+  #define USING_BLE
   #define BLE_DEV_NAME "Gobot-Arm-213401"
   #define BLE_SERVICE_UUID "d592c9aa-0594-11ec-9a03-0242ac130003"
   #define BLE_COMMU_UUID "b7c65186-0610-11ec-9a03-0242ac130003"
@@ -16,6 +17,7 @@
 // #define I_AM_GOBOT_HOUSE_213401
 #ifdef I_AM_GOBOT_HOUSE_213401
   #define I_AM_GOBOT_HOUSE
+  #define USING_BLE
   #define BLE_DEV_NAME "Gobot-House-213401"
   #define BLE_SERVICE_UUID  "b416890c-062e-11ec-9a03-0242ac130003"
   #define BLE_COMMU_UUID "bfa35098-062e-11ec-9a03-0242ac130003"
@@ -25,6 +27,7 @@
 // #define I_AM_CABLE_AXIS_XPYP
 #ifdef I_AM_CABLE_AXIS_XPYP
   #define I_AM_CABLEBOT_CORNER
+  #define USING_BLE
   #define BLE_DEV_NAME "ConInt-XPYP"
   #define AXIS_NAME  'A'
   #define BLE_SERVICE_UUID  "1fd03a14-1451-11ec-82a8-0242ac130003"
@@ -35,6 +38,7 @@
 // #define I_AM_CABLE_AXIS_XNYP
 #ifdef I_AM_CABLE_AXIS_XNYP
   #define I_AM_CABLEBOT_CORNER
+  #define USING_BLE
   #define AXIS_NAME 'B'
   #define BLE_DEV_NAME "ConInt-XNYP"
   #define BLE_SERVICE_UUID  "6909288a-1451-11ec-82a8-0242ac130003"
@@ -45,6 +49,7 @@
 // #define I_AM_CABLE_AXIS_XNYN
 #ifdef I_AM_CABLE_AXIS_XNYN
   #define I_AM_CABLEBOT_CORNER
+  #define USING_BLE
   #define AXIS_NAME 'C'
   #define BLE_DEV_NAME "ConInt-XNYN"
   #define BLE_SERVICE_UUID  "77d37e60-1451-11ec-82a8-0242ac130003"
@@ -55,6 +60,7 @@
 // #define I_AM_CABLE_AXIS_XPYN
 #ifdef I_AM_CABLE_AXIS_XPYN
   #define I_AM_CABLEBOT_CORNER
+  #define USING_BLE
   #define AXIS_NAME 'F'
   #define BLE_DEV_NAME "ConInt-XPYN"
   #define BLE_SERVICE_UUID   "85f5ab94-1451-11ec-82a8-0242ac130003"
@@ -66,20 +72,11 @@
 #ifdef I_AM_SMOKE_MACHINE
   #define USING_WIFI_MQTT
   #define AXIS_NAME 'X'
-  #define BLE_DEV_NAME "SMOKE-MACHINE"
-  #define BLE_SERVICE_UUID   "0"
-  #define BLE_COMMU_UUID  "0"
-  #define BLE_STATE_UUID   "0"
 #endif
 
-#define I_AM_AGV_GARMENT
-#ifdef I_AM_AGV_GARMENT
+#define I_AM_GARMENT_BOT
+#ifdef I_AM_GARMENT_BOT
   #define USING_WIFI_MQTT
-  // #define AXIS_NAME 'X'
-  #define BLE_DEV_NAME "AGV-GARMENT"
-  #define BLE_SERVICE_UUID   "0"
-  #define BLE_COMMU_UUID  "0"
-  #define BLE_STATE_UUID   "0"
 #endif
 
 

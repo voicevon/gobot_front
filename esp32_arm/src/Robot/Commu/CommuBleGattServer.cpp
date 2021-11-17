@@ -1,8 +1,6 @@
-#include "CommuBleGattServer.h"
 #include "all_devices.h"
-
-
-
+#ifdef USING_BLE
+#include "CommuBleGattServer.h"
 
 //  Concepts       https://www.youtube.com/watch?v=2mePPqiocUE  
 //  Level 1:  Basic  
@@ -94,3 +92,4 @@ void CommuBleGattServer::OutputMessage(std::string message){
   // Serial.print(message.c_str());
 }
 
+#endif

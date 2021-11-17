@@ -9,7 +9,8 @@
 
 #include "Robot/Actuator/DCMotor/DcMotor.h"
 #include "Robot/Sensor/IrEncoderHelper.h"
-#include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
+// #include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
+#include "Robot/Actuator/DCMotor/h_bridge_yuxin.h"
 #include "Robot/Actuator/DCMotor/DCMotorController.h"
 
 #include "Robot/HomeHelper.h"
@@ -44,7 +45,8 @@ class RoomBotCorner: public RobotBase{
         void SpinOnce_BaseExit() override;
         Led objLed_power = Led(0,PIN_LED_POWER_2130,LOW);
         Led objLed_home_alpha = Led(1,2,LOW);
-        DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
+        // DCDriverHBridge objHBridge = YuXin_HBridge(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
+        YuXin_HBridge objHBridge = YuXin_HBridge();
         HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, LOW);
         DCMotor objDcMotor = DCMotor();   //parent is ActuatorBase
         CommuUart objCommuUart = CommuUart();

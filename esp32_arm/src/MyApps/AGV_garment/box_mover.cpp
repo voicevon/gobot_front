@@ -1,5 +1,5 @@
 #include "all_devices.h"
-// #ifdef I_AM_AGV_GARMENT
+#ifdef I_AM_GARMENT_BOT
 
 
 #include "box_mover.h"
@@ -10,15 +10,15 @@ BoxMover::BoxMover(){
 }
         
 void BoxMover::test_hBridge(){
-    for(int i =0 ; i <10; i++){
-        this->objHBridge.Stop();
-        delay(5000);
+    // for(int i =0 ; i <10; i++){
+    //     this->objHBridge.Stop();
+    //     delay(5000);
 
-        this->objHBridge.Start(255, true);
-        delay(5000);
-        this->objHBridge.Start(255, false);
-        delay(5000);
-    }
+    //     this->objHBridge.Start(255, true);
+    //     delay(5000);
+    //     this->objHBridge.Start(255, false);
+    //     delay(5000);
+    // }
 }
 
 void BoxMover::test_home(){
@@ -65,7 +65,8 @@ void BoxMover::MoveToTargetPosition(){
     }
     //TODO, insert PID here.
     float speed = 100;
-    this->objHBridge.Start(speed, dir_forward);
+    // this->objHBridge.Start(speed, dir_forward);
+    this->verticalAxis->Start(speed, dir_forward);
     //Read the encoder,
     // float distance = targetPos - this->singleAxis._actuator->GetCurrentPos(); 
     float distance = targetPos - this->objDcMotor.GetCurrentPos(); 
@@ -80,7 +81,8 @@ void BoxMover::MoveToTargetPosition(){
         debug_last_distance = distance;
     }
     if (abs(distance) < this->objDcMotor.positionTolerance){
-        this->objHBridge.Stop();
+        // this->objHBridge.Stop();
+        this->verticalAxis->Stop();
         this->robot_is_idle = true;
     }else{
         this->robot_is_idle = false;
@@ -115,11 +117,12 @@ void BoxMover::SpinOnce_BaseExit(){
 }
 
 void BoxMover::Init_Linkage(IrEncoderHelper* sensorHelperBase){
-    this->LinkCommuDevice(&this->objCommuBle);
-    this->objCommuBle.Init();
+    // this->LinkCommuDevice(&this->objCommuBle);
+    // this->objCommuBle.Init();
     // this->singleAxis.LinkAcuator(&this->objDcMotor);
     this->objDcMotor.LinkSensorHelper(sensorHelperBase);
-    this->objDcMotor.LinkDriver(&this->objHBridge);
+    // this->objDcMotor.LinkDriver(&this->objHBridge);
+    this->objDcMotor.LinkDriver(this->verticalAxis);
     this->objDcMotor.AxisName = 'X';
     this->objDcMotor.MaxSpeed = 100;
     this->objDcMotor.positionTolerance = 1.5f;
@@ -150,4 +153,4 @@ FkPositionBase* BoxMover::FK(IkPositionBase* ik){
     return &this->objFkpos;
 }
 
-// #endif
+#endif

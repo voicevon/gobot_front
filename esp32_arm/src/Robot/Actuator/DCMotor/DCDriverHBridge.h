@@ -13,14 +13,18 @@
 */
 class DCDriverHBridge: public DriverBase{
   public:
-    DCDriverHBridge(int pinA,int pinB);
-    void Start(int pwm_speed, bool dir_forward);
-    void Stop();
-    void Break();
+    DCDriverHBridge();
+    virtual void Start(int pwm_speed, bool dir_forward);
+    virtual void Stop();
+    virtual void Break();
   
+  protected:
+    void _Init(int pinA,int pinB);
+  	int _pinA; //!< phase A pwm pin number
+  	int _pinB; //!< phase B pwm pin number 
+       
   private:
-  	int __pinA; //!< phase A pwm pin number
-  	int __pinB; //!< phase B pwm pin number
+
         
 };
 
