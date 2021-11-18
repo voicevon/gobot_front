@@ -7,6 +7,8 @@ void YuXin_HBridge::Init(uint8_t pin_a, uint8_t pin_b){
     // digitalWrite(pin_enable, LOW);
 }
 
+
+
 void YuXin_HBridge::Start(int pwm_speed, bool dir_forward){
     if (dir_forward){
         digitalWrite(_pinA, HIGH);

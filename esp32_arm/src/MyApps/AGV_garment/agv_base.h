@@ -14,18 +14,19 @@ class AgvBase{
     public:
         AgvBase();
         // void Init(PIDController* wheel_pid, L298N* left_wheel, L298N* right_wheel);
-        virtual void Move(AGV_DIRECTION direction, int speed_in_percent){};
+        // virtual void Move(AGV_DIRECTION direction, int speed_in_percent){};
         virtual void Stop(){};
+        void SetTargetSpeed(float speed){this->_TargetSpeed = speed;};
         // virtual int ReadTrackSensor();
-        void SpinOnce();
-        float common_speed = 0.0f;
+        // void SpinOnce();
         PIDController* speed_pid;
-        void LinkLineSensor(TrackSensorBase* lineSensor){this->lineSensor = lineSensor;};
+        void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor = trackSensor;};
 
-        TrackSensorBase* lineSensor;
     protected:
-        virtual void _SpinOnce_Enter(){};
-        virtual void _SpinOnce_Exit(){};
+        // virtual void _SpinOnce_Enter(){};
+        // virtual void _SpinOnce_Exit(){};
+        float _TargetSpeed = 0.0f;
+        TrackSensorBase* trackSensor;
 
     private:
 

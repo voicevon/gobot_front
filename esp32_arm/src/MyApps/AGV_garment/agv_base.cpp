@@ -14,8 +14,11 @@ AgvBase::AgvBase(){
 
 
 
-void AgvBase::SpinOnce(){
-    // Read sensor, then adjust speed of left wheel and right wheel.
-    this->lineSensor->ReadError_ToRight();
+// void AgvBase::SpinOnce(){
+//     // Read sensor, then adjust speed of left wheel and right wheel.
+//     // this->trackSensor->ReadError_ToRight();//
+//     this->_SpinOnce_Enter();
+//     // do something
+//     this->_SpinOnce_Exit();
 
-}
+// }

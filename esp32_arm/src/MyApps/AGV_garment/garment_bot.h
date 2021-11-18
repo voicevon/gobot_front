@@ -47,12 +47,8 @@ enum GARMENTBOT_MODE{
 class GarmentBot{
     public:
         GarmentBot();
-        AgvGarment_2110 agv = AgvGarment_2110();
+        AgvGarment_2110 agv_2110 = AgvGarment_2110();
         BoxMover robot = BoxMover();
-        // void HomeAllAxises() override;
-        // void RunG1(Gcode* gcode) override;
-        // void RunG6(Gcode* gcode) override;
-        // void Init_Linkage() override {assert("Must pass me an IrEncoderHelper*");};
         void Init_Linkage(IrEncoderHelper* sensorHelper);
         void test_hBridge();
         void test_home();
@@ -72,11 +68,10 @@ class GarmentBot{
         DCMotor objRightWheel = DCMotor();   //parent is ActuatorBase
         DCMotor objZMotor = DCMotor();   //parent is ActuatorBase
         DCMotor objAngleMotor = DCMotor();   //parent is ActuatorBase
-        TrackSensor_I2C objLineSensor = TrackSensor_I2C();
+        TrackSensor_I2C objTrackSensor_i2c = TrackSensor_I2C();
 
         HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, LOW);
         CommuUart objCommuUart = CommuUart();
-        // CommuBleGattServer objCommuBle = CommuBleGattServer();
 };
 
 

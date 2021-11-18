@@ -4,7 +4,8 @@
 
 class DriverBase{
     public:
-
+        virtual void Start(int pwm_speed, bool dir_forward);
+        virtual void Stop();
     private:
 
 };

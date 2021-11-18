@@ -37,32 +37,32 @@
 */
 class ActuatorBase
 {
-  public:
-    ActuatorBase(){};
-    void SetTargetAbs(float pos);
-    void SetTargetSpeed(float speed);
-    float GetCurrentPos();
-    void SetCurrentPos(float position);
-  
-    void LinkSensorHelper(SensorHelperBase* sensorHelper){this->sensorHelper=sensorHelper;};
-    void LinkDriver(DriverBase* driver){this->driver=driver;};
+    public:
+        ActuatorBase(){};
+        void SetTargetAbs(float pos);
+        void SetTargetSpeed(float speed);
+        float GetCurrentPos();
+        void SetCurrentPos(float position);
 
-    char AxisName;
-    // Sensor* sensor; 
-    SensorHelperBase* sensorHelper;
-    DriverBase* driver;
-    bool IsRunning=false;
-    float positionTolerance = 1.0f;
-    //Some properties like below: Might be useful in feature.
-    float MaxSpeed = 1;
-    // float Weight = 0;
-    // float MaxAcceleration = 2;
-    // Mass gravity = (1,2,3);
-    float TargetSpeed;
+        void LinkSensorHelper(SensorHelperBase* sensorHelper){this->sensorHelper=sensorHelper;};
+        void LinkDriver(DriverBase* driver){this->driver=driver;};
 
-  protected:
+        char AxisName;
+        // Sensor* sensor; 
+        SensorHelperBase* sensorHelper;
+        DriverBase* driver;
+        bool IsRunning=false;
+        float positionTolerance = 1.0f;
+        //Some properties like below: Might be useful in feature.
+        float MaxSpeed = 1;
+        // float Weight = 0;
+        // float MaxAcceleration = 2;
+        // Mass gravity = (1,2,3);
+        float TargetSpeed;
 
-  private:
+    protected:
+
+    private:
 
 };
 

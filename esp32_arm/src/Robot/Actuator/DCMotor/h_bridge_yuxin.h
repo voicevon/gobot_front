@@ -14,5 +14,6 @@ class YuXin_HBridge:public DCDriverHBridge{
 
     protected:
         // uint8_t _pin_enable;
+        
 
 };

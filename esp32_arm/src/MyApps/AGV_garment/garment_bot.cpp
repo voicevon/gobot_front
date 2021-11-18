@@ -21,32 +21,33 @@
 
 
 GarmentBot::GarmentBot(){
-   this->_mode = SLEEP;
+   // Init AGV
    objLeftWheelBridge.Init(PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
    objRightWheelBridge.Init(PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
+   this->agv_2110.leftWheel->LinkDriver(&objLeftWheelBridge);
+   // this->agv.leftWheel->LinkSensorHelper();
+   this->agv_2110.rightWheel->LinkDriver(&objRightWheelBridge);
+   PIDController* wheel_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
+   this->agv_2110.LinkTrackSensor(&objTrackSensor_i2c);
+   this->agv_2110.Init(wheel_pid, &this->objLeftWheel, &this->objRightWheel);
+   this->SetMode(SLEEP);
+
+   // Init Robot
    objZAxisBridge.Init(PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);
    objAngleBridge.Init(PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
 
-   PIDController* wheel_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
-   this->agv.Init(wheel_pid, &this->objLeftWheel, &this->objRightWheel);
-   this->agv.leftWheel->LinkDriver(&objLeftWheelBridge);
-   // this->agv.leftWheel->LinkSensorHelper();
-   this->agv.rightWheel->LinkDriver(&objRightWheelBridge);
-
-   // this->agv.LinkLineSensor(obj)
-
-   this->robot.Init_Linkage();
+   // this->robot.Init_Linkage();
 }
 
 
 void GarmentBot::Init_Linkage(IrEncoderHelper* sensorHelper){
-   this->agv.leftWheel->LinkDriver(&this->objLeftWheelBridge);
+   this->agv_2110.leftWheel->LinkDriver(&this->objLeftWheelBridge);
 }
 
 void GarmentBot::SpinOnce_Working(){
    if (false){
 		// Found Obstacle !
-		this->agv.Stop();
+		this->agv_2110.Stop();
 	
 	}else if (false){
 		// on loading
@@ -54,17 +55,17 @@ void GarmentBot::SpinOnce_Working(){
 		// on unloading
 	}else{
 		// Moving follow the track.
-		this->agv.Move(FORWARD,50);
+		// this->agv_2110.Move(FORWARD,50);
 	}
 }
 
 void GarmentBot::SpinOnce(){
-   this->agv.SpinOnce();
+   this->agv_2110.SpinOnce();
    this->robot.SpinOnce();
 
    switch  (this->_mode){
       case SLEEP:
-         this->agv.Stop();
+         this->agv_2110.Stop();
          this->robot.Stop();
          break;
       case WORKING:
@@ -76,6 +77,9 @@ void GarmentBot::SpinOnce(){
 
 void GarmentBot::SetMode(GARMENTBOT_MODE mode){
    this->_mode = mode;
+   if (mode == WORKING){
+      this->agv_2110.SetTargetSpeed(50);
+   }
 }
 
 
