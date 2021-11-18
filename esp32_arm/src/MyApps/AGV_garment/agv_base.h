@@ -13,18 +13,12 @@ enum AGV_DIRECTION{
 class AgvBase{
     public:
         AgvBase();
-        // void Init(PIDController* wheel_pid, L298N* left_wheel, L298N* right_wheel);
-        // virtual void Move(AGV_DIRECTION direction, int speed_in_percent){};
         virtual void Stop(){};
         void SetTargetSpeed(float speed){this->_TargetSpeed = speed;};
-        // virtual int ReadTrackSensor();
-        // void SpinOnce();
         PIDController* speed_pid;
         void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor = trackSensor;};
 
     protected:
-        // virtual void _SpinOnce_Enter(){};
-        // virtual void _SpinOnce_Exit(){};
         float _TargetSpeed = 0.0f;
         TrackSensorBase* trackSensor;
 

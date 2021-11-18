@@ -14,6 +14,7 @@ class YuXin_HBridge:public DCDriverHBridge{
 
     protected:
         // uint8_t _pin_enable;
-        
+      	uint8_t _pinA; //!< phase A pwm pin number
+  	    uint8_t _pinB; //!< phase B pwm pin number 
 
 };

@@ -11,7 +11,8 @@
 class AgvGarment_2110: public AgvBase{
 
     public:
-        void Init(PIDController* wheel_pid, ActuatorBase* left_wheel, ActuatorBase* right_wheel);
+        void LinkWheels(ActuatorBase* left_wheel, ActuatorBase* right_wheel);
+        void LinkPid(PIDController* wheel_pid);
         // void Move(AGV_DIRECTION direction, int speed_in_percent) override;
         void SpinOnce();
 

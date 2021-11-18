@@ -27,9 +27,10 @@ GarmentBot::GarmentBot(){
    this->agv_2110.leftWheel->LinkDriver(&objLeftWheelBridge);
    // this->agv.leftWheel->LinkSensorHelper();
    this->agv_2110.rightWheel->LinkDriver(&objRightWheelBridge);
-   PIDController* wheel_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
+   PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
    this->agv_2110.LinkTrackSensor(&objTrackSensor_i2c);
-   this->agv_2110.Init(wheel_pid, &this->objLeftWheel, &this->objRightWheel);
+   this->agv_2110.LinkWheels(&this->objLeftWheel, &this->objRightWheel);
+   this->agv_2110.LinkPid(speed_pid);
    this->SetMode(SLEEP);
 
    // Init Robot
@@ -78,7 +79,7 @@ void GarmentBot::SpinOnce(){
 void GarmentBot::SetMode(GARMENTBOT_MODE mode){
    this->_mode = mode;
    if (mode == WORKING){
-      this->agv_2110.SetTargetSpeed(50);
+      this->agv_2110.SetTargetSpeed(200);
    }
 }
 

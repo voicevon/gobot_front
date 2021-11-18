@@ -2,10 +2,14 @@
 #include "agv_garment_2110.h"
 
 
-void AgvGarment_2110::Init(PIDController* speed_pid, ActuatorBase* left_wheel, ActuatorBase* right_wheel){
-    this->speed_pid =  speed_pid;
+void AgvGarment_2110::LinkWheels(ActuatorBase* left_wheel, ActuatorBase* right_wheel){
     this->leftWheel = left_wheel;
     this->rightWheel = right_wheel;
+}
+
+void AgvGarment_2110::LinkPid(PIDController* speed_pid){
+    this->speed_pid =  speed_pid;
+
 }
 
 // void Move(AGV_DIRECTION direction, int speed_in_percent) override;
