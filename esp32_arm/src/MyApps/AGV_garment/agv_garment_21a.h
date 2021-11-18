@@ -5,8 +5,8 @@
     Track sensor is 8 bit in front of veheical frame.
         The bot connect sensor with I2C bus.
 */
-#include "agv_base.h"
-#include "track_sensor_i2c.h"
+#include "AGV/agv_base.h"
+#include "AGV/track_sensor_i2c.h"
 
 class AgvGarment_21a: public AgvBase{
 

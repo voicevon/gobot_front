@@ -95,7 +95,7 @@ void loop(){
 		// delay(5000);
 
 
-    if (--!tested){
+    if (!tested){
 
       // robot.test_home();
       tested = true;
