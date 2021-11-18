@@ -20,7 +20,7 @@
 
 #define PIN_LED_POWER_2130 22
 
-#include "Agv.h"
+#include "agv_garment2110.h"
 #include "box_mover.h"
 
 
@@ -46,7 +46,7 @@ enum GARMENTBOT_MODE{
 class GarmentBot{
     public:
         GarmentBot();
-        AGV agv = AGV();
+        AgvGarment agv = AgvGarment();
         BoxMover robot = BoxMover();
         // void HomeAllAxises() override;
         // void RunG1(Gcode* gcode) override;
@@ -61,6 +61,7 @@ class GarmentBot{
     protected:
         GARMENTBOT_MODE _mode;
         void SpinOnce_Working();
+        
     private:
         L298N objLeftWheelBridge = L298N();
         L298N objRightWheelBridge = L298N();

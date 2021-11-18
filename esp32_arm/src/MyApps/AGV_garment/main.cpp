@@ -11,9 +11,9 @@
 #define PIN_ENCODER_B 26
 
 GarmentBot mybot = GarmentBot();
-IrEncoder irEncoder = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 40);
+IrEncoder irEncoder_leftWheel = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 40);
 IrEncoderHelper irEncoderHelper = IrEncoderHelper();
-void doB(){irEncoder.handleB();}
+void doB(){irEncoder_leftWheel.handleB();}
 
 void app_mqtt_subscribe(){
   mqttClient.subscribe("garmentbot/mode", 3);
@@ -42,10 +42,10 @@ void app_mqtt_received_message( char* topic, char* payload){
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  CableBot-Corner.  Keep smiling :)");
-    irEncoder.pullup= Pullup::USE_EXTERN;
-    irEncoder.init();
-    irEncoder.enableInterrupts(doB);
-    irEncoderHelper.LinkSensor(&irEncoder);
+    irEncoder_leftWheel.pullup= Pullup::USE_EXTERN;
+    irEncoder_leftWheel.init();
+    irEncoder_leftWheel.enableInterrupts(doB);
+    irEncoderHelper.LinkSensor(&irEncoder_leftWheel);
     irEncoderHelper.InitFormula_LinearEquation(3.613f, 0.0f);
     
     mybot.Init_Linkage(&irEncoderHelper);

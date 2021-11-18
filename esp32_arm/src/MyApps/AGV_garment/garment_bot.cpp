@@ -28,13 +28,13 @@ GarmentBot::GarmentBot(){
    objAngleBridge.Init(PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
 
    PIDController* wheel_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
-   this->agv.Init(wheel_pid, &this->objLeftWheelBridge, &this->objRightWheelBridge);
+   // this->agv.Init(wheel_pid, &this->objLeftWheelBridge, &this->objRightWheelBridge);
    this->robot.Init_Linkage();
 }
 
 
 void GarmentBot::Init_Linkage(IrEncoderHelper* sensorHelper){
-
+   this->agv.leftWheel->LinkDriver(&this->objLeftWheelBridge);
 }
 
 void GarmentBot::SpinOnce_Working(){
@@ -53,10 +53,13 @@ void GarmentBot::SpinOnce_Working(){
 }
 
 void GarmentBot::SpinOnce(){
+   this->agv.SpinOnce();
+   this->robot.SpinOnce();
+
    switch  (this->_mode){
       case SLEEP:
-	  	this->agv.Stop();
-		this->robot.Stop();
+         this->agv.Stop();
+         this->robot.Stop();
          break;
       case WORKING:
          this->SpinOnce_Working();
