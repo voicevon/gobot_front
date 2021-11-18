@@ -13,9 +13,9 @@
 class DCDriverHBridge: public DriverBase{
   public:
     // DCDriverHBridge(){};
-    virtual void Start(int pwm_speed, bool dir_forward);
-    virtual void Stop();
-    virtual void Break(){};
+    virtual void Start(int pwm_speed, bool dir_forward) override;
+    virtual void Stop() override;
+    virtual void Break() override;
   
   protected:
        

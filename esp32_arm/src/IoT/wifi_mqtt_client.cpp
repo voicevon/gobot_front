@@ -120,7 +120,6 @@ void onMqttPublish(uint16_t packetId) {
 }
 
 void setup_wifi_mqtt() {
-  Serial.begin(115200);
   Serial.println();
   Serial.println();
 

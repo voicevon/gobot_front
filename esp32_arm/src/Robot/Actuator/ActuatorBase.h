@@ -46,9 +46,9 @@ class ActuatorBase
 
         void LinkSensorHelper(SensorHelperBase* sensorHelper){this->sensorHelper=sensorHelper;};
         void LinkDriver(DriverBase* driver){
-            Serial.println("  aaaaaaaaaaaaaaaaaaaa ");
+            // Serial.println("  aaaaaaaaaaaaaaaaaaaa ");
             this->driver = driver;
-            Serial.println("  bbbbbbbbbbbbbbbb ");
+            // Serial.println("  bbbbbbbbbbbbbbbb ");
         };
         void SayHello(){
             Serial.println(" Hello world, I am an instance of  Class ActuatorBase ");

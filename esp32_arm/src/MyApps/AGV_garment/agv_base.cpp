@@ -1,8 +1,8 @@
 #include "agv_base.h"
 
 
-AgvBase::AgvBase(){
-}
+// AgvBase::AgvBase(){
+// }
 
 // void AgvBase::Init(PIDController* wheel_pid, L298N* left_wheel, L298N* right_wheel){
 

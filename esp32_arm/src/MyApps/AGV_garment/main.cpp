@@ -16,7 +16,7 @@ IrEncoderHelper irEncoderHelper = IrEncoderHelper();
 void doB(){irEncoder_leftWheel.handleB();}
 
 void app_mqtt_subscribe(){
-  mqttClient.subscribe("garmentbot/mode", 3);
+  mqttClient.subscribe("garmentbot/mode", 2);
   Serial.println("Subscribed garmentbot/*");
 }
 
@@ -63,14 +63,40 @@ void loop(){
     // bool x = digitalRead(32);
     // Serial.print(x);
     // delay(1000);
+    // mybot.agv_21a.SetTargetSpeed(250);
     // mybot.SpinOnce();
-    
+	// delay(5000);
+
+    // mybot.agv_21a.leftWheel.driver->Start(200, FORWARD);
+		// Serial.println("******************************************");
+    	// mybot.objLeftWheelBridge.Start(250, FORWARD);
+		// delay(5000);
+
+		// mybot.objRightWheelBridge.Start(250, FORWARD);
+		// delay(5000);
+
+		// mybot.objLeftWheelBridge.Stop();
+		// mybot.objRightWheelBridge.Stop();
+		// delay(5000);
+
+		// Serial.println(" ########################################## ");
+
+		// mybot.agv_21a.leftWheel.driver->Start(250,FORWARD);
+		// delay(5000);
+		// mybot.agv_21a.rightWheel.driver->Start(250,FORWARD);
+		// delay(5000);
+		// mybot.objLeftWheelBridge.Stop();
+		// mybot.objRightWheelBridge.Stop();
+		// delay(5000);
+
+
     if (!tested){
-        // robot.test_home();
-        // tested = true;
-        // Gcode gcode = Gcode("M119");
-        // robot.RunGcode(&gcode);
-        // delay(100);
+
+      // robot.test_home();
+      tested = true;
+      // Gcode gcode = Gcode("M119");
+      // robot.RunGcode(&gcode);
+      // delay(100);
     }
 }
 

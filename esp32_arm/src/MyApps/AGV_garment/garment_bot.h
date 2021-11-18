@@ -50,14 +50,14 @@ class GarmentBot{
         void test_home();
         void SpinOnce();
         void SetMode(GARMENTBOT_MODE mode);
+        L298N objLeftWheelBridge = L298N();
+        L298N objRightWheelBridge = L298N();
 
     protected:
         GARMENTBOT_MODE _mode;
         void SpinOnce_Working();
         
     private:
-        L298N objLeftWheelBridge = L298N();
-        L298N objRightWheelBridge = L298N();
         L298N objZAxisBridge = L298N();
         L298N objAngleBridge = L298N();
         // DCMotor objLeftWheel = DCMotor();   //parent is ActuatorBase

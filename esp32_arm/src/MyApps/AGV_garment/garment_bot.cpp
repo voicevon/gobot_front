@@ -7,8 +7,8 @@
 #define PIN_LEFT_WHEEL_DC_MOTOR_A 12
 #define PIN_LEFT_WHEEL_DC_MOTOR_B 14
 #define PIN_LEFT_WHEEL_DC_MOTOR_ENABLE 25
-#define PIN_RIGHT_WHEEL_DC_MOTOR_A 27
-#define PIN_RIGHT_WHEEL_DC_MOTOR_B 26
+#define PIN_RIGHT_WHEEL_DC_MOTOR_A 26
+#define PIN_RIGHT_WHEEL_DC_MOTOR_B 27
 #define PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE 33
 
 #define PIN_Z_DC_MOTOR_A 4
@@ -28,6 +28,7 @@ void GarmentBot::Init(){
    const int freq = 30000;
    const int pwmChannel = 0;
    const int resolution = 8;   // so max pwm speed is 255
+   
    ledcSetup(pwmChannel, freq, resolution); // configure LED PWM functionalitites ,  should be outside?
    // Init AGV
    objLeftWheelBridge.Init(pwmChannel, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
@@ -70,8 +71,11 @@ void GarmentBot::SpinOnce_Working(){
 }
 
 void GarmentBot::SpinOnce(){
-   this->agv_21a.SpinOnce();
-   this->robot_21a.SpinOnce();
+   // Serial.println(" 1111111111111 ");
+   // this->agv_21a.SpinOnce();
+   // Serial.println(" 222222222222222222 ");
+   // this->robot_21a.SpinOnce();
+   // Serial.println(" 3333333333 ");
 
    switch  (this->_mode){
       case SLEEP:
@@ -87,9 +91,22 @@ void GarmentBot::SpinOnce(){
 
 void GarmentBot::SetMode(GARMENTBOT_MODE mode){
    this->_mode = mode;
-   if (mode == WORKING){
-      this->agv_21a.SetTargetSpeed(200);
+   Serial.print("\n GarmentBot::SetMode()" );
+   Serial.println(mode);
+   switch( mode){
+      case SLEEP:
+         this->agv_21a.Stop();
+         this->agv_21a.SpinOnce();
+         break;
+      case  WORKING:
+         this->agv_21a.SetTargetSpeed(250);
+         this->agv_21a.SpinOnce();
+         break;
+      default:
+         break;
    }
+
+   
 }
 
 

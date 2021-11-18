@@ -14,7 +14,17 @@ void AgvGarment_21a::LinkPid(PIDController* speed_pid){
 
 
 void AgvGarment_21a::SpinOnce() {
+    Serial.println(" BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB ");
+    Serial.println (this->_TargetSpeed);
     int error = this->lineSensor->ReadError_ToRight();
     this->leftWheel.driver->Start(this->_TargetSpeed + error, FORWARD);
     this->rightWheel.driver->Start(this->_TargetSpeed - error, FORWARD);
 }
+
+void AgvGarment_21a::Stop(){
+    this->_TargetSpeed = 0;
+    this->leftWheel.driver->Stop();
+    this->rightWheel.driver->Stop();
+}
+
+

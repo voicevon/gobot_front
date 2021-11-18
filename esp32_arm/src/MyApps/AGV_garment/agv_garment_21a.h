@@ -15,13 +15,15 @@ class AgvGarment_21a: public AgvBase{
         void LinkPid(PIDController* wheel_pid);
         // void Move(AGV_DIRECTION direction, int speed_in_percent) override;
         void SpinOnce();
-
+        void Stop() override;
+   
 
         ActuatorBase leftWheel = ActuatorBase();
         ActuatorBase rightWheel = ActuatorBase();
         TrackSensor_I2C* lineSensor;
 
     protected:
+        // void _UpdateSpeed(float new_speed) override;
 
     private:
 
