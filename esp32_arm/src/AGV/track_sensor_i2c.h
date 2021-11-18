@@ -10,6 +10,6 @@ class TrackSensor_I2C: public TrackSensorBase{
 
     private:
         uint8_t slave_address = 3;
-        char RxBuffer[1];
+        uint8_t RxBuffer[1];
 
 };

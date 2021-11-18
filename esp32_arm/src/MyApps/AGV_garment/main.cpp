@@ -64,7 +64,7 @@ void loop(){
     Serial.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%% ");
     int error = mybot.agv_21a.trackSensor->ReadError_ToRight();
     Serial.print(error);
-    delay(3000);
+    delay(300);
     // bool x = digitalRead(32);
     // Serial.print(x);
     // delay(1000);
@@ -95,7 +95,7 @@ void loop(){
 		// delay(5000);
 
 
-    if (!tested){
+    if (--!tested){
 
       // robot.test_home();
       tested = true;

@@ -13,7 +13,6 @@ int TrackSensor_I2C::ReadError_ToRight(){
     Serial.print(slave_address);
     // uint8_t slave_addr = cell->Address;
     uint8_t n_bytes = 1;
-    // cell->Address = 3;
     Wire.beginTransmission(slave_address);
     Wire.endTransmission(false);
     Wire.requestFrom(slave_address, n_bytes);    // request data from slave device

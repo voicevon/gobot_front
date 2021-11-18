@@ -14,7 +14,6 @@ void AgvGarment_21a::LinkPid(PIDController* speed_pid){
 
 
 void AgvGarment_21a::SpinOnce() {
-    return;
     Serial.println(" BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB ");
     int error = this->trackSensor->ReadError_ToRight();
     Serial.println (error);
