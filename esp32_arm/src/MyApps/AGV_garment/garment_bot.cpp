@@ -28,7 +28,13 @@ GarmentBot::GarmentBot(){
    objAngleBridge.Init(PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
 
    PIDController* wheel_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
-   // this->agv.Init(wheel_pid, &this->objLeftWheelBridge, &this->objRightWheelBridge);
+   this->agv.Init(wheel_pid, &this->objLeftWheel, &this->objRightWheel);
+   this->agv.leftWheel->LinkDriver(&objLeftWheelBridge);
+   // this->agv.leftWheel->LinkSensorHelper();
+   this->agv.rightWheel->LinkDriver(&objRightWheelBridge);
+
+   // this->agv.LinkLineSensor(obj)
+
    this->robot.Init_Linkage();
 }
 

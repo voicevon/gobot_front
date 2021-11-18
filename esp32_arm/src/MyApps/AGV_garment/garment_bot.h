@@ -10,6 +10,7 @@
 
 #include "Robot/Actuator/DCMotor/DcMotor.h"
 #include "Robot/Sensor/IrEncoderHelper.h"
+// #include "track_sensor_i2c.h"
 // #include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
 #include "Robot/Actuator/DCMotor/h_bridge_l298n.h"
 #include "Robot/Actuator/DCMotor/DCMotorController.h"
@@ -20,7 +21,7 @@
 
 #define PIN_LED_POWER_2130 22
 
-#include "agv_garment2110.h"
+#include "agv_garment_2110.h"
 #include "box_mover.h"
 
 
@@ -46,7 +47,7 @@ enum GARMENTBOT_MODE{
 class GarmentBot{
     public:
         GarmentBot();
-        AgvGarment agv = AgvGarment();
+        AgvGarment_2110 agv = AgvGarment_2110();
         BoxMover robot = BoxMover();
         // void HomeAllAxises() override;
         // void RunG1(Gcode* gcode) override;
@@ -68,9 +69,10 @@ class GarmentBot{
         L298N objZAxisBridge = L298N();
         L298N objAngleBridge = L298N();
         DCMotor objLeftWheel = DCMotor();   //parent is ActuatorBase
-        DCMotor obRightWheel = DCMotor();   //parent is ActuatorBase
+        DCMotor objRightWheel = DCMotor();   //parent is ActuatorBase
         DCMotor objZMotor = DCMotor();   //parent is ActuatorBase
         DCMotor objAngleMotor = DCMotor();   //parent is ActuatorBase
+        TrackSensor_I2C objLineSensor = TrackSensor_I2C();
 
         HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, LOW);
         CommuUart objCommuUart = CommuUart();
