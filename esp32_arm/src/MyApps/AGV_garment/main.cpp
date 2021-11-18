@@ -7,8 +7,8 @@
 #include "garment_bot.h"
 #include "Robot/Gcode.h" 
 
-#define PIN_ENCODER_A 25
-#define PIN_ENCODER_B 26
+#define PIN_ENCODER_A 12
+#define PIN_ENCODER_B 13
 
 GarmentBot mybot = GarmentBot();
 IrEncoder irEncoder_leftWheel = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 40);
@@ -42,13 +42,14 @@ void app_mqtt_received_message( char* topic, char* payload){
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  CableBot-Corner.  Keep smiling :)");
-    irEncoder_leftWheel.pullup= Pullup::USE_EXTERN;
-    irEncoder_leftWheel.init();
-    irEncoder_leftWheel.enableInterrupts(doB);
-    irEncoderHelper.LinkSensor(&irEncoder_leftWheel);
-    irEncoderHelper.InitFormula_LinearEquation(3.613f, 0.0f);
+    // irEncoder_leftWheel.pullup= Pullup::USE_EXTERN;
+    // irEncoder_leftWheel.init();
+    // irEncoder_leftWheel.enableInterrupts(doB);
+    // irEncoderHelper.LinkSensor(&irEncoder_leftWheel);
+    // irEncoderHelper.InitFormula_LinearEquation(3.613f, 0.0f);
     
-    mybot.Init_Linkage(&irEncoderHelper);
+    mybot.Init();
+    // mybot.Init_Linkage(&irEncoderHelper);
     setup_wifi_mqtt();
     Serial.println ("\n\nSetup is done. ------------------------------------ ");
 
@@ -62,7 +63,7 @@ void loop(){
     // bool x = digitalRead(32);
     // Serial.print(x);
     // delay(1000);
-    mybot.SpinOnce();
+    // mybot.SpinOnce();
     
     if (!tested){
         // robot.test_home();

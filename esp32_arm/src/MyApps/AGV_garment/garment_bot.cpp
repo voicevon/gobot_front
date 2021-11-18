@@ -21,34 +21,43 @@
 
 
 GarmentBot::GarmentBot(){
+}
+
+void GarmentBot::Init(){
+   // Setting PWM properties
+   const int freq = 30000;
+   const int pwmChannel = 0;
+   const int resolution = 8;   // so max pwm speed is 255
+   ledcSetup(pwmChannel, freq, resolution); // configure LED PWM functionalitites ,  should be outside?
    // Init AGV
-   objLeftWheelBridge.Init(PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
-   objRightWheelBridge.Init(PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
-   this->agv_2110.leftWheel->LinkDriver(&objLeftWheelBridge);
+   objLeftWheelBridge.Init(pwmChannel, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
+   // this->agv_21a.leftWheel.SayHello();
+   this->agv_21a.leftWheel.LinkDriver(&this->objLeftWheelBridge);
+
+   objRightWheelBridge.Init(pwmChannel, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
    // this->agv.leftWheel->LinkSensorHelper();
-   this->agv_2110.rightWheel->LinkDriver(&objRightWheelBridge);
+   this->agv_21a.rightWheel.LinkDriver(&this->objRightWheelBridge);
    PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
-   this->agv_2110.LinkTrackSensor(&objTrackSensor_i2c);
-   this->agv_2110.LinkWheels(&this->objLeftWheel, &this->objRightWheel);
-   this->agv_2110.LinkPid(speed_pid);
+   this->agv_21a.LinkTrackSensor(&objTrackSensor_i2c);
+   this->agv_21a.LinkPid(speed_pid);
    this->SetMode(SLEEP);
 
    // Init Robot
-   objZAxisBridge.Init(PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);
-   objAngleBridge.Init(PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
+   objZAxisBridge.Init(pwmChannel, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);
+   objAngleBridge.Init(pwmChannel, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
 
-   // this->robot.Init_Linkage();
+   // this->robot_21a.Init_Linkage();
 }
 
 
 void GarmentBot::Init_Linkage(IrEncoderHelper* sensorHelper){
-   this->agv_2110.leftWheel->LinkDriver(&this->objLeftWheelBridge);
+   // this->agv_21a.leftWheel->LinkDriver(&this->objLeftWheelBridge);
 }
 
 void GarmentBot::SpinOnce_Working(){
    if (false){
 		// Found Obstacle !
-		this->agv_2110.Stop();
+		this->agv_21a.Stop();
 	
 	}else if (false){
 		// on loading
@@ -56,18 +65,18 @@ void GarmentBot::SpinOnce_Working(){
 		// on unloading
 	}else{
 		// Moving follow the track.
-		// this->agv_2110.Move(FORWARD,50);
+		// this->agv_21a.Move(FORWARD,50);
 	}
 }
 
 void GarmentBot::SpinOnce(){
-   this->agv_2110.SpinOnce();
-   this->robot.SpinOnce();
+   this->agv_21a.SpinOnce();
+   this->robot_21a.SpinOnce();
 
    switch  (this->_mode){
       case SLEEP:
-         this->agv_2110.Stop();
-         this->robot.Stop();
+         this->agv_21a.Stop();
+         this->robot_21a.Stop();
          break;
       case WORKING:
          this->SpinOnce_Working();
@@ -79,7 +88,7 @@ void GarmentBot::SpinOnce(){
 void GarmentBot::SetMode(GARMENTBOT_MODE mode){
    this->_mode = mode;
    if (mode == WORKING){
-      this->agv_2110.SetTargetSpeed(200);
+      this->agv_21a.SetTargetSpeed(200);
    }
 }
 

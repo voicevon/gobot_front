@@ -2,14 +2,14 @@
 #ifdef I_AM_GARMENT_BOT
 
 
-#include "box_mover.h"
+#include "box_mover_21a.h"
 
-BoxMover::BoxMover(){
+BoxMover_21a::BoxMover_21a(){
     // this->singleAxis.Name = axis_name;
     this->objDcMotor.AxisName = 'X';
 }
         
-void BoxMover::test_hBridge(){
+void BoxMover_21a::test_hBridge(){
     // for(int i =0 ; i <10; i++){
     //     this->objHBridge.Stop();
     //     delay(5000);
@@ -21,7 +21,7 @@ void BoxMover::test_hBridge(){
     // }
 }
 
-void BoxMover::test_home(){
+void BoxMover_21a::test_home(){
     Gcode gc = Gcode("G91");
     this->RunGcode(&gc);
     do{
@@ -37,14 +37,14 @@ void BoxMover::test_home(){
     
 }
 
-void BoxMover::HomeAllAxises(){
+void BoxMover_21a::HomeAllAxises(){
     // This robot actually is a joint of the Cable-ROBOT system.
     // And, It's necessary to work with other joint cooperately.
     // So, the function "Home()" should do nothing ! 
     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND); 
 }
 
-std::string BoxMover::GetHomeTrigerStateString(){
+std::string BoxMover_21a::GetHomeTrigerStateString(){
     std::string result = "Trigger = ";    // Will be deleted after function run?
     if (this->objHomeTriger.IsTriged()){
         result += "Yes";
@@ -54,7 +54,7 @@ std::string BoxMover::GetHomeTrigerStateString(){
     return result;
 }
 
-void BoxMover::MoveToTargetPosition(){
+void BoxMover_21a::MoveToTargetPosition(){
     static float debug_last_distance = 0.0f;
 
     bool dir_forward = true;
@@ -66,7 +66,7 @@ void BoxMover::MoveToTargetPosition(){
     //TODO, insert PID here.
     float speed = 100;
     // this->objHBridge.Start(speed, dir_forward);
-    this->verticalAxis->Start(speed, dir_forward);
+    // this->verticalAxis->Start(speed, dir_forward);
     //Read the encoder,
     // float distance = targetPos - this->singleAxis._actuator->GetCurrentPos(); 
     float distance = targetPos - this->objDcMotor.GetCurrentPos(); 
@@ -82,14 +82,14 @@ void BoxMover::MoveToTargetPosition(){
     }
     if (abs(distance) < this->objDcMotor.positionTolerance){
         // this->objHBridge.Stop();
-        this->verticalAxis->Stop();
+        // this->verticalAxis->Stop();
         this->robot_is_idle = true;
     }else{
         this->robot_is_idle = false;
     }
 }
 
-void BoxMover::RunG1(Gcode* gcode){
+void BoxMover_21a::RunG1(Gcode* gcode){
     float pos = gcode->get_value(this->objDcMotor.AxisName);
     // this->singleAxis._actuator->SetTargetAbs(pos);
     if (this->is_absolute_position){
@@ -99,7 +99,7 @@ void BoxMover::RunG1(Gcode* gcode){
     }
     MoveToTargetPosition();
 }
-void BoxMover::RunG6(Gcode* gcode){
+void BoxMover_21a::RunG6(Gcode* gcode){
     float pos = gcode->get_value(this->objDcMotor.AxisName);
     // this->singleAxis._actuator->SetTargetAbs(pos);
     if (this->is_absolute_position){
@@ -112,17 +112,17 @@ void BoxMover::RunG6(Gcode* gcode){
     }while (!this->robot_is_idle);
 }
 
-void BoxMover::SpinOnce_BaseExit(){
+void BoxMover_21a::SpinOnce_BaseExit(){
     this->MoveToTargetPosition();
 }
 
-void BoxMover::Init_Linkage(IrEncoderHelper* sensorHelperBase){
+void BoxMover_21a::Init_Linkage(IrEncoderHelper* sensorHelperBase){
     // this->LinkCommuDevice(&this->objCommuBle);
     // this->objCommuBle.Init();
     // this->singleAxis.LinkAcuator(&this->objDcMotor);
     this->objDcMotor.LinkSensorHelper(sensorHelperBase);
     // this->objDcMotor.LinkDriver(&this->objHBridge);
-    this->objDcMotor.LinkDriver(this->verticalAxis);
+    // this->objDcMotor.LinkDriver(this->verticalAxis);
     this->objDcMotor.AxisName = 'X';
     this->objDcMotor.MaxSpeed = 100;
     this->objDcMotor.positionTolerance = 1.5f;
@@ -133,7 +133,7 @@ void BoxMover::Init_Linkage(IrEncoderHelper* sensorHelperBase){
 
 }
 
-// ik_position BoxMover::ik(float x, float y){
+// ik_position BoxMover_21a::ik(float x, float y){
 //     ik_position ret;  //TODO: check risk for unreleasing ?
 //     ret.alpha = x;
 //     ret.beta = y;   // Will Never useful for me. 
@@ -141,13 +141,13 @@ void BoxMover::Init_Linkage(IrEncoderHelper* sensorHelperBase){
 // } 
 
 
-IkPositionBase* BoxMover::IK(FkPositionBase* fk){
+IkPositionBase* BoxMover_21a::IK(FkPositionBase* fk){
     FkPosX* _fk = (FkPosX*)(fk);
     this->objIkPos.alpha = _fk->x;
     return &this->objIkPos;  
 }
 
-FkPositionBase* BoxMover::FK(IkPositionBase* ik){
+FkPositionBase* BoxMover_21a::FK(IkPositionBase* ik){
     IkPosX* _ik = (IkPosX*)(ik);
     this->objFkpos.x = _ik->alpha;
     return &this->objFkpos;

@@ -4,26 +4,21 @@
 
 #include "Robot/RobotBase.h"
 #include "Robot/Commu/CommuUart.h"
-// #include "Robot/Commu/CommuBleGattServer.h"
-// #include "Robot/Axis/SingleAxis.h"
 
 
 #include "Robot/Actuator/DCMotor/DcMotor.h"
 #include "Robot/Sensor/IrEncoderHelper.h"
 // #include "track_sensor_i2c.h"
-// #include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
 #include "Robot/Actuator/DCMotor/h_bridge_l298n.h"
 #include "Robot/Actuator/DCMotor/DCMotorController.h"
 
 #include "Robot/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
 
+#include "agv_garment_21a.h"
+#include "box_mover_21a.h"
 
-#define PIN_LED_POWER_2130 22
-
-#include "agv_garment_2110.h"
-#include "box_mover.h"
-
+#define PIN_LED_POWER_2130 23
 
 
 /*
@@ -47,8 +42,9 @@ enum GARMENTBOT_MODE{
 class GarmentBot{
     public:
         GarmentBot();
-        AgvGarment_2110 agv_2110 = AgvGarment_2110();
-        BoxMover robot = BoxMover();
+        void Init();
+        AgvGarment_21a agv_21a = AgvGarment_21a();
+        BoxMover_21a robot_21a = BoxMover_21a();
         void Init_Linkage(IrEncoderHelper* sensorHelper);
         void test_hBridge();
         void test_home();
@@ -64,8 +60,8 @@ class GarmentBot{
         L298N objRightWheelBridge = L298N();
         L298N objZAxisBridge = L298N();
         L298N objAngleBridge = L298N();
-        DCMotor objLeftWheel = DCMotor();   //parent is ActuatorBase
-        DCMotor objRightWheel = DCMotor();   //parent is ActuatorBase
+        // DCMotor objLeftWheel = DCMotor();   //parent is ActuatorBase
+        // DCMotor objRightWheel = DCMotor();   //parent is ActuatorBase
         DCMotor objZMotor = DCMotor();   //parent is ActuatorBase
         DCMotor objAngleMotor = DCMotor();   //parent is ActuatorBase
         TrackSensor_I2C objTrackSensor_i2c = TrackSensor_I2C();

@@ -8,17 +8,17 @@
 #include "agv_base.h"
 #include "track_sensor_i2c.h"
 
-class AgvGarment_2110: public AgvBase{
+class AgvGarment_21a: public AgvBase{
 
     public:
-        void LinkWheels(ActuatorBase* left_wheel, ActuatorBase* right_wheel);
+        // void LinkWheels(ActuatorBase* left_wheel, ActuatorBase* right_wheel);
         void LinkPid(PIDController* wheel_pid);
         // void Move(AGV_DIRECTION direction, int speed_in_percent) override;
         void SpinOnce();
 
 
-        ActuatorBase* leftWheel;
-        ActuatorBase* rightWheel;
+        ActuatorBase leftWheel = ActuatorBase();
+        ActuatorBase rightWheel = ActuatorBase();
         TrackSensor_I2C* lineSensor;
 
     protected:

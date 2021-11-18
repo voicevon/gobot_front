@@ -45,7 +45,14 @@ class ActuatorBase
         void SetCurrentPos(float position);
 
         void LinkSensorHelper(SensorHelperBase* sensorHelper){this->sensorHelper=sensorHelper;};
-        void LinkDriver(DriverBase* driver){this->driver=driver;};
+        void LinkDriver(DriverBase* driver){
+            Serial.println("  aaaaaaaaaaaaaaaaaaaa ");
+            this->driver = driver;
+            Serial.println("  bbbbbbbbbbbbbbbb ");
+        };
+        void SayHello(){
+            Serial.println(" Hello world, I am an instance of  Class ActuatorBase ");
+        };
 
         char AxisName;
         // Sensor* sensor; 

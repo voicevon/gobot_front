@@ -23,9 +23,9 @@
 #define PIN_LED_POWER_2130 22
 #include "all_devices.h"
 
-class BoxMover: public RobotBase{
+class BoxMover_21a: public RobotBase{
     public:
-        BoxMover();
+        BoxMover_21a();
         void Stop(){};
         void LoadBox(){};
         void UnloadBox(){};
@@ -35,12 +35,19 @@ class BoxMover: public RobotBase{
         void RunG6(Gcode* gcode) override;
         void Init_Linkage() override {assert("Must pass me an IrEncoderHelper*");};
         void Init_Linkage(IrEncoderHelper* sensorHelper);
+        // void LinkDriver(L298N* verticalDriver, L298N* angleDriver);
+        void LinkActuators(ActuatorBase* verticalMover, ActuatorBase* angleMover){
+            this->verticalMover = verticalMover;
+            this->angleMover = angleMover;
+        };
         void test_hBridge();
         void test_home();
 
     protected:
         
     private:
+        ActuatorBase* verticalMover;
+        ActuatorBase* angleMover;
         virtual IkPositionBase* IK(FkPositionBase* fk) override;
         virtual FkPositionBase* FK(IkPositionBase* ik) override;
         virtual std::string GetHomeTrigerStateString() override;
@@ -50,8 +57,8 @@ class BoxMover: public RobotBase{
         Led objLed_power = Led(0,PIN_LED_POWER_2130,LOW);
         Led objLed_home_alpha = Led(1,2,LOW);
         // DCDriverHBridge objHBridge = DCDriverHBridge(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
-        L298N* verticalAxis;
-        L298N* angleAxis;
+        // L298N* verticalAxis;
+        // L298N* angleAxis;
 
         HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, LOW);
         DCMotor objDcMotor = DCMotor();   //parent is ActuatorBase
