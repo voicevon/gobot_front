@@ -17,11 +17,11 @@ class AgvBase{
         void SetTargetSpeed(float speed){this->_TargetSpeed = speed;};
         PIDController* speed_pid;
         void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor = trackSensor;};
+        TrackSensorBase* trackSensor;
 
     protected:
         // virtual void _UpdateSpeed(float new_speed);
         float _TargetSpeed = 0.0f;
-        TrackSensorBase* trackSensor;
 
     private:
 

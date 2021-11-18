@@ -1,8 +1,11 @@
 #pragma once
 
+#include "Wire.h"
+
 class TrackSensorBase{
     public:
-        int ReadError_ToRight(){return 0;};
+
+        virtual int ReadError_ToRight();
 
     private:
 };

@@ -20,7 +20,7 @@ class AgvGarment_21a: public AgvBase{
 
         ActuatorBase leftWheel = ActuatorBase();
         ActuatorBase rightWheel = ActuatorBase();
-        TrackSensor_I2C* lineSensor;
+        // TrackSensor_I2C* trackSensor;
 
     protected:
         // void _UpdateSpeed(float new_speed) override;

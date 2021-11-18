@@ -25,7 +25,7 @@ void app_mqtt_received_message( char* topic, char* payload){
 
   if(strcmp(topic, "garmentbot/mode") == 0) {   // char len = 17
     GARMENTBOT_MODE mode = (GARMENTBOT_MODE)(atoi(cc));
-    mybot.SetMode(mode);
+    // mybot.SetMode(mode);
   }
   else if(strcmp(topic, "smokebot/pause_second")==0){    // char len = 21
     
@@ -41,7 +41,7 @@ void app_mqtt_received_message( char* topic, char* payload){
 
 void setup(){
     Serial.begin(115200);
-    Serial.println("Hi there, I am your lovely bot,  CableBot-Corner.  Keep smiling :)");
+    Serial.println("Hi there, I am your lovely bot,  Garmentbot AGV + BoxMover.  Keep smiling :)");
     // irEncoder_leftWheel.pullup= Pullup::USE_EXTERN;
     // irEncoder_leftWheel.init();
     // irEncoder_leftWheel.enableInterrupts(doB);
@@ -49,9 +49,10 @@ void setup(){
     // irEncoderHelper.InitFormula_LinearEquation(3.613f, 0.0f);
     
     mybot.Init();
+    Serial.println ("\n\nSetup mybot is done. ------------------------------------ ");
     // mybot.Init_Linkage(&irEncoderHelper);
     setup_wifi_mqtt();
-    Serial.println ("\n\nSetup is done. ------------------------------------ ");
+    Serial.println ("\n\nSetup_wifi_mqtt is done. ------------------------------------ ");
 
     while (!mqttClient.connected())
         delay(100);
@@ -60,6 +61,10 @@ void setup(){
 
 bool tested = false;
 void loop(){
+    Serial.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%% ");
+    int error = mybot.agv_21a.trackSensor->ReadError_ToRight();
+    Serial.print(error);
+    delay(3000);
     // bool x = digitalRead(32);
     // Serial.print(x);
     // delay(1000);
