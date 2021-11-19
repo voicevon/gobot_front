@@ -30,35 +30,29 @@ GarmentBot::GarmentBot(){
 void GarmentBot::Init(){
    // Setting PWM properties
    const int freq = 30000;
-
    const int resolution = 8;   // so max pwm speed is 255
-   
    ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites ,  should be outside?
    // Init AGV
    objLeftWheelBridge.Init(PWM_CHANNEL_1, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
-   // this->agv_21a.leftWheel.SayHello();
-   this->agv_21a.leftWheel.LinkDriver(&this->objLeftWheelBridge);
-
    objRightWheelBridge.Init(PWM_CHANNEL_2, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
-   // this->agv.leftWheel->LinkSensorHelper();
-   this->agv_21a.rightWheel.LinkDriver(&this->objRightWheelBridge);
    PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
+   this->agv_21a.leftWheel.LinkDriver(&this->objLeftWheelBridge);
+   this->agv_21a.rightWheel.LinkDriver(&this->objRightWheelBridge);
    this->agv_21a.LinkTrackSensor(&this->objTrackSensor_i2c);
    this->agv_21a.LinkPid(speed_pid);
 
    // Init Robot
-   objZAxisBridge.Init(PWM_CHANNEL_2, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);
+   objVerticalBridge.Init(PWM_CHANNEL_2, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);
    objAngleBridge.Init(PWM_CHANNEL_3, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
 
    // this->robot_21a.Init_Linkage();
    this->SetMode(SLEEP);
-   Serial.print(" zzzzzzzzzzzzzzzzzz  ");
 }
 
 
-void GarmentBot::Init_Linkage(IrEncoderHelper* sensorHelper){
+// void GarmentBot::Init_Linkage(IrEncoderHelper* sensorHelper){
    // this->agv_21a.leftWheel->LinkDriver(&this->objLeftWheelBridge);
-}
+// }
 
 void GarmentBot::SpinOnce_Working(){
    if (false){
@@ -76,29 +70,33 @@ void GarmentBot::SpinOnce_Working(){
 }
 
 void GarmentBot::SpinOnce(){
-   switch  (this->_mode){
-      case SLEEP:
-         this->agv_21a.Stop();
-         // this->robot_21a.Stop();
-         break;
-      case WORKING:
+   switch  (this->_State){
+      case MOVING:
          this->SpinOnce_Working();
       default:
          break;
    }
 }
 
+//
+//  The Command comes from MQTT, Buttons, MarkSensor, etc.
+void GarmentBot::ExecuteCommand(int topic, int payload){
+   
+}
+
+
 void GarmentBot::SetMode(GARMENTBOT_MODE mode){
-   this->_mode = mode;
+   this->_State = mode;
    Serial.print("\n GarmentBot::SetMode()" );
    Serial.println(mode);
    switch( mode){
       case SLEEP:
          this->agv_21a.Stop();
          break;
-      case  WORKING:
+      case  MOVING:
          this->agv_21a.SetTargetSpeed(220);
          this->agv_21a.MoveForward();
+         this->_State = MOVING;
          break;
       default:
          break;

@@ -11,9 +11,9 @@
 #define PIN_ENCODER_B 13
 
 GarmentBot mybot = GarmentBot();
-IrEncoder irEncoder_leftWheel = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 40);
-IrEncoderHelper irEncoderHelper = IrEncoderHelper();
-void doB(){irEncoder_leftWheel.handleB();}
+// IrEncoder irEncoder_leftWheel = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 40);
+// IrEncoderHelper irEncoderHelper = IrEncoderHelper();
+// void doB(){irEncoder_leftWheel.handleB();}
 
 void app_mqtt_subscribe(){
   mqttClient.subscribe("garmentbot/mode", 2);
@@ -24,7 +24,7 @@ void app_mqtt_received_message( char* topic, char* payload){
   const char * cc = (const char*)(payload);
 
   if(strcmp(topic, "garmentbot/mode") == 0) {   // char len = 17
-    GARMENTBOT_MODE mode = (GARMENTBOT_MODE)(atoi(cc));
+    GarmentBot::GARMENTBOT_MODE mode = (GarmentBot::GARMENTBOT_MODE)(atoi(cc));
     mybot.SetMode(mode);
   }
   else if(strcmp(topic, "smokebot/pause_second")==0){    // char len = 21
