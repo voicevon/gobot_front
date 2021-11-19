@@ -7,7 +7,6 @@ TrackSensor_I2C::TrackSensor_I2C(){
 }
 
 int TrackSensor_I2C::ReadError_ToRight(){
-    Serial.print("ReadError_ToRight()");
     uint8_t n_bytes = 1;
     Wire.beginTransmission(slave_address);
     Wire.endTransmission(false);

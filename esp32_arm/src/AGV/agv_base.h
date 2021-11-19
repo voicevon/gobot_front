@@ -12,13 +12,13 @@ enum AGV_DIRECTION{
 class AgvBase{
     public:
         virtual void Stop();
-        void SetTargetSpeed(float speed){this->_TargetSpeed = speed;};
+        void SetTargetSpeed(int speed){this->_TargetSpeed = speed;};
         PIDController* speed_pid;
         void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor = trackSensor;};
         TrackSensorBase* trackSensor;
 
     protected:
-        float _TargetSpeed = 0.0f;
+        int _TargetSpeed =0;
 
     private:
 

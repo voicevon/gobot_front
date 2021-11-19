@@ -18,7 +18,7 @@
 #include "agv_garment_21a.h"
 #include "box_mover_21a.h"
 
-#define PIN_LED_POWER_2130 23
+// #define PIN_LED_POWER_2130 23
 
 
 /*

@@ -18,6 +18,10 @@
 #define PIN_ANGLE_DC_MOTORB 5
 #define PIN_ANGLE_DC_MOTOR_ENABLE 15
 
+#define PWM_CHANNEL_0 0
+#define PWM_CHANNEL_1 1
+#define PWM_CHANNEL_2 2
+#define PWM_CHANNEL_3 3
 
 
 GarmentBot::GarmentBot(){
@@ -26,16 +30,16 @@ GarmentBot::GarmentBot(){
 void GarmentBot::Init(){
    // Setting PWM properties
    const int freq = 30000;
-   const int pwmChannel = 0;
+
    const int resolution = 8;   // so max pwm speed is 255
    
-   ledcSetup(pwmChannel, freq, resolution); // configure LED PWM functionalitites ,  should be outside?
+   ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites ,  should be outside?
    // Init AGV
-   objLeftWheelBridge.Init(pwmChannel, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
+   objLeftWheelBridge.Init(PWM_CHANNEL_1, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
    // this->agv_21a.leftWheel.SayHello();
    this->agv_21a.leftWheel.LinkDriver(&this->objLeftWheelBridge);
 
-   objRightWheelBridge.Init(pwmChannel, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
+   objRightWheelBridge.Init(PWM_CHANNEL_2, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
    // this->agv.leftWheel->LinkSensorHelper();
    this->agv_21a.rightWheel.LinkDriver(&this->objRightWheelBridge);
    PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
@@ -46,8 +50,8 @@ void GarmentBot::Init(){
    Serial.print(" yyyyyyyyyyyyyyyyyy  ");
 
    // Init Robot
-   objZAxisBridge.Init(pwmChannel, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);
-   objAngleBridge.Init(pwmChannel, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
+   objZAxisBridge.Init(PWM_CHANNEL_2, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);
+   objAngleBridge.Init(PWM_CHANNEL_3, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
 
    // this->robot_21a.Init_Linkage();
    this->SetMode(SLEEP);
@@ -70,17 +74,11 @@ void GarmentBot::SpinOnce_Working(){
 		// on unloading
 	}else{
 		// Moving follow the track.
-		// this->agv_21a.Move(FORWARD,50);
+		this->agv_21a.MoveForward();
 	}
 }
 
 void GarmentBot::SpinOnce(){
-   // Serial.println(" 1111111111111 ");
-   // this->agv_21a.SpinOnce();
-   // Serial.println(" 222222222222222222 ");
-   // this->robot_21a.SpinOnce();
-   // Serial.println(" 3333333333 ");
-
    switch  (this->_mode){
       case SLEEP:
          this->agv_21a.Stop();
@@ -100,11 +98,10 @@ void GarmentBot::SetMode(GARMENTBOT_MODE mode){
    switch( mode){
       case SLEEP:
          this->agv_21a.Stop();
-         this->agv_21a.SpinOnce();
          break;
       case  WORKING:
-         this->agv_21a.SetTargetSpeed(250);
-         this->agv_21a.SpinOnce();
+         this->agv_21a.SetTargetSpeed(220);
+         this->agv_21a.MoveForward();
          break;
       default:
          break;

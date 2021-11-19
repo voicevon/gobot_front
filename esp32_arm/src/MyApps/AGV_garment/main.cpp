@@ -59,11 +59,43 @@ void setup(){
 
 }
 
+
+void test_l298n(int delay_ms, int speed){
+    // mybot.agv_21a.leftWheel.driver->Start(200, FORWARD);
+		// Serial.println("******************************************");
+    // 	mybot.objLeftWheelBridge.Start(speed, FORWARD);
+		// delay(delay_ms);
+
+		// mybot.objRightWheelBridge.Start(speed, FORWARD);
+		// delay(delay_ms);
+
+		// mybot.objLeftWheelBridge.Stop();
+		// mybot.objRightWheelBridge.Stop();
+		// delay(delay_ms);
+
+		Serial.println(" ########################################## ");
+
+		mybot.agv_21a.leftWheel.driver->Start(200+speed,FORWARD);
+		delay(delay_ms);
+		// mybot.agv_21a.leftWheel.driver->Stop();
+		mybot.agv_21a.rightWheel.driver->Start(250-speed,FORWARD);
+		delay(delay_ms);
+		// mybot.agv_21a.rightWheel.driver->Stop();
+		delay(delay_ms);
+}
 bool tested = false;
+
 void loop(){
-    int error = mybot.agv_21a.trackSensor->ReadError_ToRight();
-    Serial.print(error);
-    delay(300);
+  for(int speed = 0; speed<50; speed+=10){
+    Serial.println(speed);
+    test_l298n(5000,speed);
+
+  }
+    // mybot.SpinOnce();
+    // delay(50);
+    // int error = mybot.agv_21a.trackSensor->ReadError_ToRight();
+    // Serial.println(error);
+    // delay(300);
     // bool x = digitalRead(32);
     // Serial.print(x);
     // delay(1000);
@@ -71,27 +103,7 @@ void loop(){
     // mybot.SpinOnce();
 	// delay(5000);
 
-    // mybot.agv_21a.leftWheel.driver->Start(200, FORWARD);
-		// Serial.println("******************************************");
-    	// mybot.objLeftWheelBridge.Start(250, FORWARD);
-		// delay(5000);
 
-		// mybot.objRightWheelBridge.Start(250, FORWARD);
-		// delay(5000);
-
-		// mybot.objLeftWheelBridge.Stop();
-		// mybot.objRightWheelBridge.Stop();
-		// delay(5000);
-
-		// Serial.println(" ########################################## ");
-
-		// mybot.agv_21a.leftWheel.driver->Start(250,FORWARD);
-		// delay(5000);
-		// mybot.agv_21a.rightWheel.driver->Start(250,FORWARD);
-		// delay(5000);
-		// mybot.objLeftWheelBridge.Stop();
-		// mybot.objRightWheelBridge.Stop();
-		// delay(5000);
 
 
     if (!tested){

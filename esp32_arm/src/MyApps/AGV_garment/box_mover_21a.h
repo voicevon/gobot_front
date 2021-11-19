@@ -20,7 +20,7 @@
 
 #define PIN_DC_MOTOR_A_2130 27
 #define PIN_DC_MOTOR_B_2130 14
-#define PIN_LED_POWER_2130 22
+#define PIN_LED_POWER_2130 28
 #include "all_devices.h"
 
 class BoxMover_21a: public RobotBase{
