@@ -21,8 +21,11 @@ int TrackSensor_I2C::ReadError_ToRight(){
     Wire.endTransmission(true);
     // delay(1000);
 
-    int error =0;
     this->_Convert_fromOrigin_toPositionError(&RxBuffer[0]);
+    if (this->_TrackStartBit== -1) return 999; // Not found black mark
+    if (this->_TrackWidth == 8) return 888;     //Whole black
+    
+    int error=0;
     if (this->_TrackStartBit == 0 && this->_TrackWidth == 1) error = 10;
     else if (this->_TrackStartBit == 0 && this->_TrackWidth == 1) error = 10;
     else if (this->_TrackStartBit == 0 && this->_TrackWidth == 2) error = 8;

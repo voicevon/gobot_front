@@ -43,11 +43,8 @@ void GarmentBot::Init(){
    // this->agv.leftWheel->LinkSensorHelper();
    this->agv_21a.rightWheel.LinkDriver(&this->objRightWheelBridge);
    PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
-   Serial.print(" iiiiiiiiiiiiiiiiiiiiiiiiiiiii  ");
    this->agv_21a.LinkTrackSensor(&this->objTrackSensor_i2c);
-   Serial.print(" kkkkkkkkkkkkkkkkkkkkk  ");
    this->agv_21a.LinkPid(speed_pid);
-   Serial.print(" yyyyyyyyyyyyyyyyyy  ");
 
    // Init Robot
    objZAxisBridge.Init(PWM_CHANNEL_2, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);

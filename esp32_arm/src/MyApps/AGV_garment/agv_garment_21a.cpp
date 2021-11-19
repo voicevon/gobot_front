@@ -15,10 +15,17 @@ void AgvGarment_21a::LinkPid(PIDController* speed_pid){
 
 void AgvGarment_21a::MoveForward() {
     int error = this->trackSensor->ReadError_ToRight();
-    // Serial.print("  mmmmmmmmmmmmmmmmmm  ");
-    // Serial.println(error);
-    // Serial.println(this->_TargetSpeed);
-    int p =3;
+    if (error == 888) {
+        // this->Stop();
+        // return;
+    }
+
+    if (error == 999) {
+        error = this->_LastError;
+    }else{
+        this->_LastError = error;
+    }
+    float p = 3.4;
     this->leftWheel.driver->Start(this->_TargetSpeed + p * error, FORWARD);
     this->rightWheel.driver->Start(this->_TargetSpeed - p * error, FORWARD);
 }

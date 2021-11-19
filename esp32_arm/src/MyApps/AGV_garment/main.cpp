@@ -86,13 +86,13 @@ void test_l298n(int delay_ms, int speed){
 bool tested = false;
 
 void loop(){
-  for(int speed = 0; speed<50; speed+=10){
-    Serial.println(speed);
-    test_l298n(5000,speed);
+  // for(int speed = 0; speed<50; speed+=10){
+  //   Serial.println(speed);
+  //   test_l298n(5000,speed);
 
-  }
-    // mybot.SpinOnce();
-    // delay(50);
+  // }
+    mybot.SpinOnce();
+    delay(50);
     // int error = mybot.agv_21a.trackSensor->ReadError_ToRight();
     // Serial.println(error);
     // delay(300);

@@ -12,7 +12,7 @@ class AgvGarment_21a: public AgvBase{
 
     public:
         void LinkPid(PIDController* wheel_pid);
-        void MoveForward();
+        void MoveForward() override;
         void Stop() override;
    
 
