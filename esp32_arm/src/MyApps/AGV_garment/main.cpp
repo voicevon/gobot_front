@@ -25,7 +25,7 @@ void app_mqtt_received_message( char* topic, char* payload){
 
   if(strcmp(topic, "garmentbot/mode") == 0) {   // char len = 17
     GARMENTBOT_MODE mode = (GARMENTBOT_MODE)(atoi(cc));
-    // mybot.SetMode(mode);
+    mybot.SetMode(mode);
   }
   else if(strcmp(topic, "smokebot/pause_second")==0){    // char len = 21
     

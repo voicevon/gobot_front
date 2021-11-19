@@ -2,7 +2,6 @@
 
 #include "SimpleFOC/common/pid.h"
 #include "Robot/Actuator/ActuatorBase.h"
-// #include "Robot/Actuator/DCMotor/h_bridge_l298n.h"
 #include "track_sensor_base.h"
 
 enum AGV_DIRECTION{
@@ -12,7 +11,6 @@ enum AGV_DIRECTION{
 
 class AgvBase{
     public:
-        // AgvBase();
         virtual void Stop();
         void SetTargetSpeed(float speed){this->_TargetSpeed = speed;};
         PIDController* speed_pid;
@@ -20,7 +18,6 @@ class AgvBase{
         TrackSensorBase* trackSensor;
 
     protected:
-        // virtual void _UpdateSpeed(float new_speed);
         float _TargetSpeed = 0.0f;
 
     private:
