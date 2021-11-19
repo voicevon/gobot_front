@@ -10,4 +10,5 @@ class TrackSensorBase{
         int Convert_fromOrigin_toPositionError(uint8_t* origin_bits);
 
     private:
+        int FindTrackFromRightEnd(uint8_t the_byte, uint8_t start_bit_from_right);
 };

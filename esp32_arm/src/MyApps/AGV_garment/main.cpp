@@ -61,7 +61,6 @@ void setup(){
 
 bool tested = false;
 void loop(){
-    Serial.println(" %%%%%%%%%%%%%%%%%%%%%%%%%%% ");
     int error = mybot.agv_21a.trackSensor->ReadError_ToRight();
     Serial.print(error);
     delay(300);

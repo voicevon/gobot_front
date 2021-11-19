@@ -7,11 +7,7 @@ TrackSensor_I2C::TrackSensor_I2C(){
 }
 
 int TrackSensor_I2C::ReadError_ToRight(){
-    // void I2c_commu::ReadSingleSlave(uint8_t slave_address){
-
-    Serial.print("    ");
-    Serial.print(slave_address);
-    // uint8_t slave_addr = cell->Address;
+    Serial.print("ReadError_ToRight()");
     uint8_t n_bytes = 1;
     Wire.beginTransmission(slave_address);
     Wire.endTransmission(false);
@@ -21,9 +17,7 @@ int TrackSensor_I2C::ReadError_ToRight(){
         uint8_t c = Wire.read();         // receive a byte as character
         RxBuffer[0] = c;
         i++;
-        Serial.print(".");
-        // Serial.print(c, BIN);
-        // Serial.print("   ");
+        Serial.println(c,BIN);
     }
     Wire.endTransmission(true);
     // delay(1000);

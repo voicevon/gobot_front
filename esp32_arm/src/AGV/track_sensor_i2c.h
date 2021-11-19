@@ -9,7 +9,7 @@ class TrackSensor_I2C: public TrackSensorBase{
         int ReadError_ToRight() override;
 
     private:
-        uint8_t slave_address = 3;
+        uint8_t slave_address = 0x3f;
         uint8_t RxBuffer[1];
 
 };
