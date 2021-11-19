@@ -12,7 +12,7 @@ void YuXin_HBridge::Init(uint8_t pinA, uint8_t pinB){
 
 
 
-void YuXin_HBridge::Start(int pwm_speed, bool dir_forward){
+void YuXin_HBridge::MoveAtSpeed(int pwm_speed, bool dir_forward){
     if (dir_forward){
         digitalWrite(_pinA, HIGH);
         digitalWrite(_pinB, LOW);

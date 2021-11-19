@@ -6,11 +6,11 @@ void DualEndActuator::SpinOnce(){
 }
 
 void DualEndActuator::MoveToNorth(){
-    this->driver->Start(100, true);
+    this->driver->MoveAtSpeed(100, true);
 }
 
 void DualEndActuator::MoveToSouth(){
-    this->driver->Start(100, false);
+    this->driver->MoveAtSpeed(100, false);
 
 }
 

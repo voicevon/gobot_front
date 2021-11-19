@@ -17,7 +17,7 @@ void L298N::Init(uint8_t pwm_channel, uint8_t pin_enable, uint8_t pinA, uint8_t 
     ledcWrite(pwm_channel, 0); 
 }
 
-void L298N::Start(int pwm_speed, bool dir_forward){
+void L298N::MoveAtSpeed(int pwm_speed, bool dir_forward){
     if (dir_forward){
         digitalWrite(_pinA, HIGH);
         digitalWrite(_pinB, LOW);

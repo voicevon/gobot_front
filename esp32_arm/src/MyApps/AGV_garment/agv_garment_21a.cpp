@@ -26,8 +26,8 @@ void AgvGarment_21a::MoveForward() {
         this->_LastError = error;
     }
     float p = 3.4;
-    this->leftWheel.driver->Start(this->_TargetSpeed + p * error, FORWARD);
-    this->rightWheel.driver->Start(this->_TargetSpeed - p * error, FORWARD);
+    this->leftWheel.driver->MoveAtSpeed(this->_TargetSpeed + p * error, FORWARD);
+    this->rightWheel.driver->MoveAtSpeed(this->_TargetSpeed - p * error, FORWARD);
 }
 
 void AgvGarment_21a::Stop(){
