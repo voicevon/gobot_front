@@ -79,7 +79,7 @@ void GarmentBot::SpinOnce(){
    switch  (this->_mode){
       case SLEEP:
          this->agv_21a.Stop();
-         this->robot_21a.Stop();
+         // this->robot_21a.Stop();
          break;
       case WORKING:
          this->SpinOnce_Working();
