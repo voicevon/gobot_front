@@ -1,6 +1,10 @@
 #include "dual_end_actuator.h"
 
 
+DualEndActuator::DualEndActuator(){
+    State = this->START;
+}
+
 void DualEndActuator::SpinOnce(){
     int pin_level;
     switch (this->State){
@@ -10,7 +14,7 @@ void DualEndActuator::SpinOnce(){
             break;
         case MOVING_TO_NORTH:
             pin_level = digitalRead(this->__pin_endstop_north);
-            if (pin_level && this->__north_triger_on_low){
+            if (pin_level ^ this->__north_normal_is_high){
                 this->State = AT_NORTH;
                 driver->Stop();
             }
@@ -18,7 +22,7 @@ void DualEndActuator::SpinOnce(){
             
         case MOVING_TO_SOUTH:
             pin_level = digitalRead(this->__pin_endstop_south);
-            if (pin_level && this->__south_triger_on_low){
+            if (pin_level ^ this->__south_normal_is_high){
                 this->State = AT_SOUTH;
                 driver->Stop();
             }
@@ -28,23 +32,41 @@ void DualEndActuator::SpinOnce(){
 }
 
 void DualEndActuator::MoveToNorth(){
-    this->driver->MoveAtSpeed(this->TargetSpeed, true);
-    this->State = MOVING_TO_NORTH;
+    if (this->State != AT_NORTH){
+        this->driver->MoveAtSpeed(this->TargetSpeed, true);
+        this->State = MOVING_TO_NORTH;
+    }
 }
 
 void DualEndActuator::MoveToSouth(){
-    this->driver->MoveAtSpeed(this->TargetSpeed, false);
-    this->State = MOVING_TO_SOUTH;
+    Serial.print("   fffffffff  ");
+    if (this->State != AT_SOUTH){
+    Serial.print( this->TargetSpeed );
+        this->driver->MoveAtSpeed(this->TargetSpeed, false);
+        this->State = MOVING_TO_SOUTH;
+    }
 }
 
-void DualEndActuator::Init_NorthEndstop(uint8_t pin, bool triger_on_low){
+void DualEndActuator::Init_NorthEndstop(uint8_t pin, bool normal_is_high){
     pinMode(pin,INPUT_PULLUP);
     this->__pin_endstop_north = pin;
-    this->__north_triger_on_low = triger_on_low;
+    this->__north_normal_is_high = normal_is_high;
 }
 
-void DualEndActuator::Init_SouthEndstop(uint8_t pin, bool triger_on_low){
+void DualEndActuator::Init_SouthEndstop(uint8_t pin, bool normal_is_high){
     pinMode(pin,INPUT_PULLUP);
     this->__pin_endstop_south = pin;
-    this->__south_triger_on_low = triger_on_low;
+    this->__south_normal_is_high = normal_is_high;
+}
+
+void DualEndActuator::Report(){
+    bool n = digitalRead(this->__pin_endstop_north);
+    bool s = digitalRead(this->__pin_endstop_south);
+    Serial.print("\n  State = ");
+    Serial.print(this->State);
+    Serial.print("  Endstops (n,s)   (");
+    Serial.print(n);
+    Serial.print(",");
+    Serial.print(s);
+    Serial.println(")");
 }

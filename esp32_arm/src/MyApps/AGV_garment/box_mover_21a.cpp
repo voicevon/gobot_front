@@ -9,16 +9,18 @@
 
 void BoxMover_21a::Init_VerticalMover(DualEndActuator* actuator, uint8_t pin_endstop_north, uint8_t pin_endstop_south, DriverBase* driver){
     this->verticalMover = actuator;
-    this->verticalMover->Init_NorthEndstop(pin_endstop_north,false);
-    this->verticalMover->Init_SouthEndstop(pin_endstop_south, false);
-    this->verticalMover->LinkDriver(driver);
+    actuator->TargetSpeed = 250;
+    actuator->Init_NorthEndstop(pin_endstop_north,false);
+    actuator->Init_SouthEndstop(pin_endstop_south, false);
+    actuator->LinkDriver(driver);
 }
 
 void BoxMover_21a::Init_AngleMover(DualEndActuator* actuator, uint8_t pin_endstop_north, uint8_t pin_endstop_south, DriverBase* driver){
     this->angleMover = actuator;
-    this->angleMover->Init_NorthEndstop(pin_endstop_north, false);
-    this->angleMover->Init_SouthEndstop(pin_endstop_south, false);
-    this->angleMover->LinkDriver(driver);
+    actuator->TargetSpeed = 220;
+    actuator->Init_NorthEndstop(pin_endstop_north,false);
+    actuator->Init_SouthEndstop(pin_endstop_south, false);
+    actuator->LinkDriver(driver);
 }
 
 void BoxMover_21a::SpinOnce(){

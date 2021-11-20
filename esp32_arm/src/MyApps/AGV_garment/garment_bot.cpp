@@ -11,12 +11,12 @@
 #define PIN_RIGHT_WHEEL_DC_MOTOR_B 27
 #define PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE 33
 
-#define PIN_Z_DC_MOTOR_A 4
-#define PIN_Z_DC_MOTOR_B 16
-#define PIN_Z_DC_MOTOR_ENABLE 2
-#define PIN_ANGLE_DC_MOTOR_A 17
-#define PIN_ANGLE_DC_MOTORB 5
-#define PIN_ANGLE_DC_MOTOR_ENABLE 15
+#define PIN_VERTICAL_DC_MOTOR_A 17 //16
+#define PIN_VERTICAL_DC_MOTOR_B 5  //4
+#define PIN_VERTICAL_DC_MOTOR_ENABLE 15  //2
+#define PIN_ANGLE_DC_MOTOR_A 16  // 17
+#define PIN_ANGLE_DC_MOTORB 4    //5 
+#define PIN_ANGLE_DC_MOTOR_ENABLE 2  //15
 
 #define VERTICAL_ENDSTOP_NORTH 23
 #define VERTICAL_ENDSTOP_SOUTH 13
@@ -34,10 +34,13 @@ void GarmentBot::Init(){
    // Setting PWM properties
    const int freq = 30000;
    const int resolution = 8;   // so max pwm speed is 255
-   ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites ,  should be outside?
+   ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites
+   ledcSetup(PWM_CHANNEL_1, freq, resolution); 
+   ledcSetup(PWM_CHANNEL_2, freq, resolution); 
+   ledcSetup(PWM_CHANNEL_3, freq, resolution); 
    // Init AGV
-   objLeftWheelBridge.Init(PWM_CHANNEL_1, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
-   objRightWheelBridge.Init(PWM_CHANNEL_2, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
+   objLeftWheelBridge.Init(PWM_CHANNEL_0, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
+   objRightWheelBridge.Init(PWM_CHANNEL_1, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
    PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
    this->agv_21a.leftWheel.LinkDriver(&this->objLeftWheelBridge);
    this->agv_21a.rightWheel.LinkDriver(&this->objRightWheelBridge);
@@ -45,7 +48,7 @@ void GarmentBot::Init(){
    this->agv_21a.LinkPid(speed_pid);
 
    // Init Robot
-   this->objVerticalBridge.Init(PWM_CHANNEL_2, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);
+   this->objVerticalBridge.Init(PWM_CHANNEL_2, PIN_VERTICAL_DC_MOTOR_ENABLE, PIN_VERTICAL_DC_MOTOR_A, PIN_VERTICAL_DC_MOTOR_B);
    this->objAngleBridge.Init(PWM_CHANNEL_3, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
    this->boxMover_21a.Init_VerticalMover(&this->objVerticalMover, VERTICAL_ENDSTOP_NORTH, VERTICAL_ENDSTOP_SOUTH, &this->objVerticalBridge);
    this->boxMover_21a.Init_AngleMover(&this->objAngleMover, ANGLE_ENDSTOP_NORTH, ANGLE_ENDSTOP_SOUTH, &this->objAngleBridge);

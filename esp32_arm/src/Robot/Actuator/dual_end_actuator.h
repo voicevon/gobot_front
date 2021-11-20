@@ -20,24 +20,23 @@ class DualEndActuator: public ActuatorBase {
         };
         machine_state State;
 
-        DualEndActuator(){ State = this->START;};
+        DualEndActuator();
         void SpinOnce();
-        void Init_NorthEndstop( uint8_t pin, bool triger_on_low);
-        void Init_SouthEndstop(uint8_t pin, bool triger_on_low);
+        void Init_NorthEndstop( uint8_t pin, bool normal_is_high);
+        void Init_SouthEndstop(uint8_t pin, bool normal_is_high);
         void MoveToNorth();
         void MoveToSouth();
-
-
+        void Report();
         
     protected:
         
 
     private:
         uint8_t __pin_endstop_north;
-        bool __north_triger_on_low;
+        bool __north_normal_is_high;
 
         uint8_t __pin_endstop_south;
-        bool __south_triger_on_low;
+        bool __south_normal_is_high;
 
 
 };

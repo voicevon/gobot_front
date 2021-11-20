@@ -87,13 +87,25 @@ bool tested = false;
 
 void test_actuator(){
   // mybot.boxMover_21a.verticalMover->SayHello();
+  // Serial.println(" vvvv ");
+
+  // mybot.boxMover_21a.verticalMover->Report();
+  // Serial.println(" aaaa ");
+  // mybot.boxMover_21a.angleMover->Report();
+  // delay(200);
+  // return;
+
+  // // mybot.boxMover_21a.verticalMover->MoveToNorth();
+  // // mybot.boxMover_21a.verticalMover->driver->MoveAtSpeed(250,true);
+  // delay(1000);
   // mybot.boxMover_21a.verticalMover->driver->Stop();
+  // delay(1000);
+  // return;
   // mybot.boxMover_21a.angleMover->SayHello();
-  mybot.boxMover_21a.LoadBox();
-  while (true){
-    mybot.boxMover_21a.SpinOnce();
-    delay(500);
-  }
+  // mybot.boxMover_21a.verticalMover->MoveToNorth();
+  // while (true){
+  //   mybot.boxMover_21a.verticalMover->SpinOnce();
+  // }
 }
 
 void loop(){
