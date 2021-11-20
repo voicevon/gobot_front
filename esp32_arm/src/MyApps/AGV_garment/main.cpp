@@ -95,12 +95,13 @@ void test_actuator(){
   // delay(200);
   // return;
 
-  // // mybot.boxMover_21a.verticalMover->MoveToNorth();
-  // // mybot.boxMover_21a.verticalMover->driver->MoveAtSpeed(250,true);
+  // mybot.boxMover_21a.verticalMover->MoveToNorth();
+  // mybot.boxMover_21a.verticalMover->driver->MoveAtSpeed(250,true);
   // delay(1000);
-  // mybot.boxMover_21a.verticalMover->driver->Stop();
+  // mybot.boxMover_21a.angleMover->driver->Stop();
   // delay(1000);
-  // return;
+    mybot.boxMaster_21a.verticalMover->swing_test();
+  return;
   // mybot.boxMover_21a.angleMover->SayHello();
   // mybot.boxMover_21a.verticalMover->MoveToNorth();
   // while (true){

@@ -59,6 +59,30 @@ void DualEndActuator::Init_SouthEndstop(uint8_t pin, bool normal_is_high){
     this->__south_normal_is_high = normal_is_high;
 }
 
+void DualEndActuator::swing_test(){
+    while (true){
+        switch (this->State)
+        {
+        case MOVING_TO_NORTH:
+        case MOVING_TO_SOUTH:
+            break;
+        case AT_NORTH:
+            Serial.println("Swing_test()  Moving to North");
+            this->MoveToSouth();
+            break;
+        case AT_SOUTH:
+            Serial.println("Swing_test()  Moving to South");
+            this->MoveToNorth();
+            break;
+
+        default:
+            this->MoveToNorth();
+            break;
+        }
+        this->SpinOnce();
+    }
+}
+
 void DualEndActuator::Report(){
     bool n = digitalRead(this->__pin_endstop_north);
     bool s = digitalRead(this->__pin_endstop_south);

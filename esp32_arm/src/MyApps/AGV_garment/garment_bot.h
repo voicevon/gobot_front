@@ -49,7 +49,7 @@ class GarmentBot{
         GarmentBot(){};
         void Init();
         AgvGarment_21a agv_21a = AgvGarment_21a();
-        BoxMover_21a boxMover_21a = BoxMover_21a();
+        BoxMover_21a boxMaster_21a = BoxMover_21a();
         // void Init_Linkage(IrEncoderHelper* sensorHelper);
         void test_hBridge();
         void test_home();

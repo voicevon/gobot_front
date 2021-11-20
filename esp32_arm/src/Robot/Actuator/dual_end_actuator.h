@@ -27,7 +27,7 @@ class DualEndActuator: public ActuatorBase {
         void MoveToNorth();
         void MoveToSouth();
         void Report();
-        
+        void swing_test();
     protected:
         
 

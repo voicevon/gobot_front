@@ -36,10 +36,10 @@ class BoxMover_21a{
         void LoadBox();
         void UnloadBox();
         void SpinOnce();
+        DualEndActuator* angleMover;
+        DualEndActuator* verticalMover;
 
     protected:
         
     private:
-        DualEndActuator* verticalMover;
-        DualEndActuator* angleMover;
 };

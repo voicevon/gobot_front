@@ -50,8 +50,8 @@ void GarmentBot::Init(){
    // Init Robot
    this->objVerticalBridge.Init(PWM_CHANNEL_2, PIN_VERTICAL_DC_MOTOR_ENABLE, PIN_VERTICAL_DC_MOTOR_A, PIN_VERTICAL_DC_MOTOR_B);
    this->objAngleBridge.Init(PWM_CHANNEL_3, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
-   this->boxMover_21a.Init_VerticalMover(&this->objVerticalMover, VERTICAL_ENDSTOP_NORTH, VERTICAL_ENDSTOP_SOUTH, &this->objVerticalBridge);
-   this->boxMover_21a.Init_AngleMover(&this->objAngleMover, ANGLE_ENDSTOP_NORTH, ANGLE_ENDSTOP_SOUTH, &this->objAngleBridge);
+   this->boxMaster_21a.Init_VerticalMover(&this->objVerticalMover, VERTICAL_ENDSTOP_NORTH, VERTICAL_ENDSTOP_SOUTH, &this->objVerticalBridge);
+   this->boxMaster_21a.Init_AngleMover(&this->objAngleMover, ANGLE_ENDSTOP_NORTH, ANGLE_ENDSTOP_SOUTH, &this->objAngleBridge);
 
    this->SetMode(SLEEP);
 }
