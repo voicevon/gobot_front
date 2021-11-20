@@ -11,7 +11,7 @@
 */
 class DualEndActuator: public ActuatorBase {
     public:
-        typedef enum machine_state{
+        enum machine_state{
             START,
             MOVING_TO_NORTH,
             AT_NORTH,

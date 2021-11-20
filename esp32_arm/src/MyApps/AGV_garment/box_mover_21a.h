@@ -16,7 +16,7 @@
 */
 class BoxMover_21a{
     public:
-        typedef enum EnumState{ START, 
+        enum EnumState{ START, 
                                 RESETTING, 
                                 READY_TO_LOAD, 
                                 LOADING, 
@@ -27,7 +27,10 @@ class BoxMover_21a{
                                 UNLOADED
                                 };
         EnumState State;
-        BoxMover_21a();
+        BoxMover_21a(){};
+        void Init_VerticalMover(DualEndActuator* actuator, uint8_t pin_endstop_north, uint8_t pin_endstop_south, DriverBase* driver);
+        void Init_AngleMover(DualEndActuator* actuator, uint8_t pin_endstop_north, uint8_t pin_endstop_south, DriverBase* driver);
+
         void ResetToLoad();
         void LoadBox();
         void UnloadBox();

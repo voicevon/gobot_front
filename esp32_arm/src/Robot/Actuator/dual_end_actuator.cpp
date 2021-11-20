@@ -24,12 +24,12 @@ void DualEndActuator::SpinOnce(){
 }
 
 void DualEndActuator::MoveToNorth(){
-    this->driver->MoveAtSpeed(100, true);
+    this->driver->MoveAtSpeed(this->TargetSpeed, true);
     this->State = MOVING_TO_NORTH;
 }
 
 void DualEndActuator::MoveToSouth(){
-    this->driver->MoveAtSpeed(100, false);
+    this->driver->MoveAtSpeed(this->TargetSpeed, false);
     this->State = MOVING_TO_SOURTH;
 }
 

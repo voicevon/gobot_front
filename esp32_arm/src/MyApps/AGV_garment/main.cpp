@@ -85,14 +85,23 @@ void test_l298n(int delay_ms, int speed){
 }
 bool tested = false;
 
+void test_actuator(){
+  mybot.boxMover_21a.LoadBox();
+  while (true){
+    mybot.boxMover_21a.SpinOnce();
+    delay(500);
+  }
+}
+
 void loop(){
   // for(int speed = 0; speed<50; speed+=10){
   //   Serial.println(speed);
   //   test_l298n(5000,speed);
 
   // }
-    mybot.SpinOnce();
-    delay(50);
+    // mybot.SpinOnce();
+    // delay(50);
+    test_actuator();
     // int error = mybot.agv_21a.trackSensor->ReadError_ToRight();
     // Serial.println(error);
     // delay(300);

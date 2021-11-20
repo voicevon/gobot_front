@@ -37,7 +37,7 @@
 
 class GarmentBot{
     public:
-        typedef enum GARMENTBOT_MODE{
+        enum GARMENTBOT_MODE{
             SLEEP = 0,
             MOVING = 2,
             EMERGENCY_STOPING,
@@ -46,10 +46,10 @@ class GarmentBot{
             LOADING,
             UNLOADING,
         };
-        GarmentBot();
+        GarmentBot(){};
         void Init();
         AgvGarment_21a agv_21a = AgvGarment_21a();
-        BoxMover_21a robot_21a = BoxMover_21a();
+        BoxMover_21a boxMover_21a = BoxMover_21a();
         // void Init_Linkage(IrEncoderHelper* sensorHelper);
         void test_hBridge();
         void test_home();
@@ -63,11 +63,14 @@ class GarmentBot{
     private:
         L298N objLeftWheelBridge = L298N();
         L298N objRightWheelBridge = L298N();
+        TrackSensor_I2C objTrackSensor_i2c = TrackSensor_I2C();
+        int objObstacleDetector;
+
 
         L298N objVerticalBridge = L298N();
         L298N objAngleBridge = L298N();
-        TrackSensor_I2C objTrackSensor_i2c = TrackSensor_I2C();
-        int objObstacleDetector;
+        DualEndActuator objVerticalMover = DualEndActuator();
+        DualEndActuator objAngleMover = DualEndActuator();
 };
 
 

@@ -18,14 +18,17 @@
 #define PIN_ANGLE_DC_MOTORB 5
 #define PIN_ANGLE_DC_MOTOR_ENABLE 15
 
+#define VERTICAL_ENDSTOP_NORTH 23
+#define VERTICAL_ENDSTOP_SOUTH 13
+
+#define ANGLE_ENDSTOP_NORTH 19
+#define ANGLE_ENDSTOP_SOUTH 18
+
 #define PWM_CHANNEL_0 0
 #define PWM_CHANNEL_1 1
 #define PWM_CHANNEL_2 2
 #define PWM_CHANNEL_3 3
 
-
-GarmentBot::GarmentBot(){
-}
 
 void GarmentBot::Init(){
    // Setting PWM properties
@@ -42,10 +45,11 @@ void GarmentBot::Init(){
    this->agv_21a.LinkPid(speed_pid);
 
    // Init Robot
-   objVerticalBridge.Init(PWM_CHANNEL_2, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);
-   objAngleBridge.Init(PWM_CHANNEL_3, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
+   this->objVerticalBridge.Init(PWM_CHANNEL_2, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_Z_DC_MOTOR_A, PIN_Z_DC_MOTOR_B);
+   this->objAngleBridge.Init(PWM_CHANNEL_3, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
+   this->boxMover_21a.Init_VerticalMover(&this->objVerticalMover, VERTICAL_ENDSTOP_NORTH, VERTICAL_ENDSTOP_SOUTH, &this->objVerticalBridge);
+   this->boxMover_21a.Init_AngleMover(&this->objAngleMover, ANGLE_ENDSTOP_NORTH, ANGLE_ENDSTOP_SOUTH, &this->objAngleBridge);
 
-   // this->robot_21a.Init_Linkage();
    this->SetMode(SLEEP);
 }
 

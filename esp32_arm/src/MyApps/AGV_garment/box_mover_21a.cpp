@@ -4,8 +4,19 @@
 
 #include "box_mover_21a.h"
 
-BoxMover_21a::BoxMover_21a(){
 
+
+
+void BoxMover_21a::Init_VerticalMover(DualEndActuator* actuator, uint8_t pin_endstop_north, uint8_t pin_endstop_south, DriverBase* driver){
+    this->verticalMover = actuator;
+    this->verticalMover->Init_NorthEndstop(pin_endstop_north,false);
+    this->verticalMover->Init_SouthEndstop(pin_endstop_south, false);
+}
+
+void BoxMover_21a::Init_AngleMover(DualEndActuator* actuator, uint8_t pin_endstop_north, uint8_t pin_endstop_south, DriverBase* driver){
+    this->verticalMover = actuator;
+    this->angleMover->Init_NorthEndstop(pin_endstop_north, false);
+    this->angleMover->Init_SouthEndstop(pin_endstop_south, false);
 }
 
 void BoxMover_21a::SpinOnce(){
