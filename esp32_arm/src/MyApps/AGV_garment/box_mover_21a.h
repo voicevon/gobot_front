@@ -28,6 +28,7 @@ class BoxMover_21a{
                                 };
         EnumState State;
         BoxMover_21a(){};
+        
         void Init_VerticalMover(DualEndActuator* actuator, uint8_t pin_endstop_north, uint8_t pin_endstop_south, DriverBase* driver);
         void Init_AngleMover(DualEndActuator* actuator, uint8_t pin_endstop_north, uint8_t pin_endstop_south, DriverBase* driver);
 

@@ -86,6 +86,9 @@ void test_l298n(int delay_ms, int speed){
 bool tested = false;
 
 void test_actuator(){
+  // mybot.boxMover_21a.verticalMover->SayHello();
+  // mybot.boxMover_21a.verticalMover->driver->Stop();
+  // mybot.boxMover_21a.angleMover->SayHello();
   mybot.boxMover_21a.LoadBox();
   while (true){
     mybot.boxMover_21a.SpinOnce();

@@ -4,6 +4,10 @@
 void DualEndActuator::SpinOnce(){
     int pin_level;
     switch (this->State){
+        case START:
+        case AT_NORTH:
+        case AT_SOUTH:
+            break;
         case MOVING_TO_NORTH:
             pin_level = digitalRead(this->__pin_endstop_north);
             if (pin_level && this->__north_triger_on_low){
@@ -12,10 +16,10 @@ void DualEndActuator::SpinOnce(){
             }
             break;
             
-        case MOVING_TO_SOURTH:
+        case MOVING_TO_SOUTH:
             pin_level = digitalRead(this->__pin_endstop_south);
             if (pin_level && this->__south_triger_on_low){
-                this->State = AT_SOURTH;
+                this->State = AT_SOUTH;
                 driver->Stop();
             }
             break;
@@ -30,7 +34,7 @@ void DualEndActuator::MoveToNorth(){
 
 void DualEndActuator::MoveToSouth(){
     this->driver->MoveAtSpeed(this->TargetSpeed, false);
-    this->State = MOVING_TO_SOURTH;
+    this->State = MOVING_TO_SOUTH;
 }
 
 void DualEndActuator::Init_NorthEndstop(uint8_t pin, bool triger_on_low){
