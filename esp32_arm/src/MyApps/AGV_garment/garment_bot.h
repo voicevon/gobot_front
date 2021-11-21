@@ -63,7 +63,7 @@ class GarmentBot{
     private:
         L298N objLeftWheelBridge = L298N();
         L298N objRightWheelBridge = L298N();
-        TrackSensor_I2C objTrackSensor_i2c = TrackSensor_I2C();
+        TrackSensor_Shengteng objTrackSensor = TrackSensor_Shengteng();
         int objObstacleDetector;
 
 

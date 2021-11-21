@@ -75,10 +75,10 @@ void test_l298n(int delay_ms, int speed){
 
 		Serial.println(" ########################################## ");
 
-		mybot.agv_21a.leftWheel.driver->MoveAtSpeed(200+speed,FORWARD);
+		mybot.agv_21a.leftWheel.driver->MoveAtSpeed(200+speed, AgvBase::FORWARD);
 		delay(delay_ms);
 		// mybot.agv_21a.leftWheel.driver->Stop();
-		mybot.agv_21a.rightWheel.driver->MoveAtSpeed(250-speed,FORWARD);
+		mybot.agv_21a.rightWheel.driver->MoveAtSpeed(250-speed, AgvBase::FORWARD);
 		delay(delay_ms);
 		// mybot.agv_21a.rightWheel.driver->Stop();
 		delay(delay_ms);

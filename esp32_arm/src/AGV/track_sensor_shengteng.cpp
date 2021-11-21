@@ -1,27 +1,13 @@
-#include "track_sensor_i2c.h"
+#include "track_sensor_shengteng.h"
 #include "HardwareSerial.h"
 
 
-TrackSensor_I2C::TrackSensor_I2C(){
-    Wire.begin();
-}
 
-int TrackSensor_I2C::ReadError_ToRight(){
-    uint8_t n_bytes = 1;
-    Wire.beginTransmission(slave_address);
-    Wire.endTransmission(false);
-    Wire.requestFrom(slave_address, n_bytes);    // request data from slave device
-    int i=0;
-    while (Wire.available() > 0) {  // slave may send less than requested
-        uint8_t c = Wire.read();         // receive a byte as character
-        RxBuffer[0] = c;
-        i++;
-        // Serial.println(c,BIN);
-    }
-    Wire.endTransmission(true);
-    // delay(1000);
 
-    this->_Convert_fromOrigin_toPositionError(&RxBuffer[0]);
+int TrackSensor_Shengteng::ReadError_FromRight(uint8_t* rxBuffer){
+
+
+    this->_Convert_fromOrigin_toPositionError(rxBuffer);
     if (this->_TrackStartBit== -1) return 999; // Not found black mark
     if (this->_TrackWidth == 8) return 888;     //Whole black
     
@@ -44,7 +30,7 @@ int TrackSensor_I2C::ReadError_ToRight(){
     else if (this->_TrackStartBit == 7 && this->_TrackWidth == 1) error = -10;
     else{
         Serial.print("\n\n [ERROR] TrackSensor_I2C::ReadError_ToRight()     ");
-        Serial.print(RxBuffer[0]);
+        Serial.print(*rxBuffer);
         Serial.print("   ");
         Serial.print(this->_TrackStartBit);
         Serial.print("   ");

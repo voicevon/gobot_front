@@ -13,21 +13,21 @@ void AgvGarment_21a::LinkPid(PIDController* speed_pid){
 }
 
 
-void AgvGarment_21a::MoveForward() {
-    int error = this->trackSensor->ReadError_ToRight();
-    if (error == 888) {
+void AgvGarment_21a::MoveForward(int track_error) {
+    // int error = this->trackSensor->ReadError_ToRight();
+    if (track_error == 888) {
         // this->Stop();
         // return;
     }
 
-    if (error == 999) {
-        error = this->_LastError;
+    if (track_error == 999) {
+        track_error = this->_LastError;
     }else{
-        this->_LastError = error;
+        this->_LastError = track_error;
     }
     float p = 3.4;
-    this->leftWheel.driver->MoveAtSpeed(this->_TargetSpeed + p * error, FORWARD);
-    this->rightWheel.driver->MoveAtSpeed(this->_TargetSpeed - p * error, FORWARD);
+    this->leftWheel.driver->MoveAtSpeed(this->_TargetSpeed + p * track_error, FORWARD);
+    this->rightWheel.driver->MoveAtSpeed(this->_TargetSpeed - p * track_error, FORWARD);
 }
 
 void AgvGarment_21a::Stop(){

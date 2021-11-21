@@ -4,19 +4,20 @@
 #include "Robot/Actuator/ActuatorBase.h"
 #include "track_sensor_base.h"
 
-enum AGV_DIRECTION{
-    FORWARD = 1,
-    BACKWARD = 2,
-};
+
 
 class AgvBase{
-    public:
+        public:
+            enum AGV_DIRECTION{
+                FORWARD = 1,
+                BACKWARD = 2,
+            };
         virtual void Stop();
-        virtual void MoveForward();
+        virtual void MoveForward(int track_error);
         void SetTargetSpeed(int speed){this->_TargetSpeed = speed;};
         PIDController* speed_pid;
-        void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor = trackSensor;};
-        TrackSensorBase* trackSensor;
+        // void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor = trackSensor;};
+        // TrackSensorBase* trackSensor;
 
     protected:
         int _TargetSpeed =0;

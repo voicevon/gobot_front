@@ -6,13 +6,13 @@
         The bot connect sensor with I2C bus.
 */
 #include "AGV/agv_base.h"
-#include "AGV/track_sensor_i2c.h"
+#include "AGV/track_sensor_shengteng.h"
 
 class AgvGarment_21a: public AgvBase{
 
     public:
         void LinkPid(PIDController* wheel_pid);
-        void MoveForward() override;
+        void MoveForward(int track_error) override;
         void Stop() override;
    
 

@@ -30,21 +30,41 @@
 #define PWM_CHANNEL_3 3
 
 
+void GarmentBot::SpinOnce(){
+   // Read battery
+
+
+    // delay(1000);
+   // Read RFID
+   // Deal with MQTT
+   switch  (this->_State){
+      case MOVING:
+         this->SpinOnce_Working();
+      default:
+         break;
+   }
+}
+
+
 void GarmentBot::Init(){
-   // Setting PWM properties
+   // Setting PWM channels properties, Totally Esp32 has 16 channels
    const int freq = 30000;
    const int resolution = 8;   // so max pwm speed is 255
    ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites
    ledcSetup(PWM_CHANNEL_1, freq, resolution); 
    ledcSetup(PWM_CHANNEL_2, freq, resolution); 
    ledcSetup(PWM_CHANNEL_3, freq, resolution); 
+
+   // Init I2C bus
+   Wire.begin();
+
    // Init AGV
    objLeftWheelBridge.Init(PWM_CHANNEL_0, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
    objRightWheelBridge.Init(PWM_CHANNEL_1, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
    PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
    this->agv_21a.leftWheel.LinkDriver(&this->objLeftWheelBridge);
    this->agv_21a.rightWheel.LinkDriver(&this->objRightWheelBridge);
-   this->agv_21a.LinkTrackSensor(&this->objTrackSensor_i2c);
+//    this->agv_21a.LinkTrackSensor(&this->objTrackSensor_i2c);
    this->agv_21a.LinkPid(speed_pid);
 
    // Init Robot
@@ -72,17 +92,30 @@ void GarmentBot::SpinOnce_Working(){
 		// on unloading
 	}else{
 		// Moving follow the track.
-		this->agv_21a.MoveForward();
-	}
-}
+		// Read I2C sensor, and obstacle 
+		uint8_t slave_address = 0x3f;
+		uint8_t RxBuffer[1];
+		uint8_t n_bytes = 2;
+		Wire.beginTransmission(slave_address);
+		Wire.endTransmission(false);
+		Wire.requestFrom(slave_address, n_bytes);    // request data from slave device
+		int i=0;
+		while (Wire.available() > 0) {  // slave may send less than requested
+			uint8_t c = Wire.read();         // receive a byte as character
+			RxBuffer[0] = c;
+			i++;
+			// Serial.println(c,BIN);
+		}
+		Wire.endTransmission(true);
 
-void GarmentBot::SpinOnce(){
-   switch  (this->_State){
-      case MOVING:
-         this->SpinOnce_Working();
-      default:
-         break;
-   }
+		if (RxBuffer[1] > 0){
+			// Got an obstacle, agv should be stop
+			this->agv_21a.Stop();
+		}
+
+		int track_error = this->objTrackSensor.ReadError_FromRight(&RxBuffer[0]);
+		this->agv_21a.MoveForward(track_error);
+	}
 }
 
 //
@@ -102,7 +135,7 @@ void GarmentBot::SetMode(GARMENTBOT_MODE mode){
          break;
       case  MOVING:
          this->agv_21a.SetTargetSpeed(220);
-         this->agv_21a.MoveForward();
+        //  this->agv_21a.MoveForward();
          this->_State = MOVING;
          break;
       default:

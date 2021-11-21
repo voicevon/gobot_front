@@ -4,7 +4,7 @@
 
 class TrackSensorBase{
     public:
-        virtual int ReadError_ToRight();
+        virtual int ReadError_FromRight(uint8_t* rxBuffer);
         bool FollowRightTrack = true;
 
     protected:
