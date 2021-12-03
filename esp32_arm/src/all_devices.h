@@ -68,13 +68,13 @@
   #define BLE_STATE_UUID   "9c43b29c-1451-11ec-82a8-0242ac130003"
 #endif
 
-// #define I_AM_SMOKE_MACHINE
+#define I_AM_SMOKE_MACHINE
 #ifdef I_AM_SMOKE_MACHINE
   #define USING_WIFI_MQTT
   #define AXIS_NAME 'X'
 #endif
 
-#define I_AM_GARMENT_BOT
+// #define I_AM_GARMENT_BOT
 #ifdef I_AM_GARMENT_BOT
   #define USING_WIFI_MQTT
 #endif
