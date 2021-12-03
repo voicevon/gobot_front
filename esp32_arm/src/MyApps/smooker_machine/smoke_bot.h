@@ -43,4 +43,8 @@ class SmokeBot: public RobotBase{
         void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {};
 
+        void _running_G1() override;
+        void _running_G28() override;
+
+
 };

@@ -22,6 +22,20 @@ void SmokeBot::RunG1(Gcode* gcode) {
   // this->objStepControl.move(this->objStepper);
 }
 
+void SmokeBot:: _running_G1(){
+    if (abs(this->objStepper.getPosition() - 0.5) < 1){
+      this->State = IDLE;
+      return;
+    }
+}
+
+void SmokeBot:: _running_G28(){
+    if (true){
+      // End stop is trigered
+      this->State = IDLE;
+      return;
+    }
+}
 void SmokeBot::HomeAllAxises(){
   Serial.println("\n================================  " );
   Serial.print(" Start homing    " );

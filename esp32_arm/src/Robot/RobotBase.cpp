@@ -5,6 +5,21 @@
 void RobotBase::SpinOnce(){
   commuDevice->SpinOnce();
   this->SpinOnce_BaseEnter();
+  switch (this->State){
+    case IDLE:
+      break;
+    case RUNNING_G4:
+      this->__running_G4();
+      break;
+    case RUNNING_G1:
+      this->_running_G1();
+      break;
+    case RUNNING_G28:
+      this->_running_G28();
+      break;
+    default:
+      break;
+  }
   if(commuDevice->HasNewChatting()){
     std::string command(commuDevice->ReadChatting());
     Serial.println ("    _base_spin_once()  new chatting");
@@ -16,13 +31,22 @@ void RobotBase::SpinOnce(){
 }
 
 void RobotBase::RunG4(Gcode* gcode){
-  long start = micros();
+  __g4_start_timestamp = micros();
+  this->State = RUNNING_G4;
   // bool pausing = false;
-  long delayed = 0;
-  while  (delayed < 30){
-    delayed = (micros() - start) / 1000 /1000;
-    delay(100);
-    // this->SpinOnce();   //??
+  // long delayed = 0;
+  // while  (delayed < 30){
+  //   delayed = (micros() - start) / 1000 /1000;
+  //   delay(100);
+  //   // this->SpinOnce();   //??
+  // }
+}
+
+void RobotBase::__running_G4(){
+  long delayed = (micros() - __g4_start_timestamp) / 1000 /1000;
+  if (delayed >= __g4_time_second * 1000){
+    this->State = IDLE;
+    return;
   }
 }
 

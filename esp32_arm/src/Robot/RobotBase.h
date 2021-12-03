@@ -132,10 +132,15 @@ class RobotBase{
         // void OnFinishedGcode5(void(*callback)()) {__output_message3 = callback;};
         // void * __output_message2;
         // void (* __output_message3);
+        virtual void _running_G1();
+        virtual void _running_G28();
     
     private:
         int test_int;
         void _base_spin_once();
+        void __running_G4();
+        long __g4_start_timestamp;
+        int __g4_time_second;
 
 
 
