@@ -63,6 +63,7 @@ void RobotBase::RunGcode(Gcode* gcode){
         // G28: Home
         // this->__is_busy = true;
         this->HomeAllAxises();
+        this->State = RUNNING_G28;
         // this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
         break;
       case 1:
@@ -74,6 +75,7 @@ void RobotBase::RunGcode(Gcode* gcode){
         //       4. Start Moving.
         this->RunG1(gcode);
         this->commuDevice->OutputMessage(COMMU_OK);
+        this->State = RUNNING_G1;
         break;
       case 4:
         // G4 Dwell, Pause for a period of time.

@@ -23,36 +23,34 @@ void SmokeBot::RunG1(Gcode* gcode) {
 }
 
 void SmokeBot:: _running_G1(){
-    if (abs(this->objStepper.getPosition() - 0.5) < 1){
+    if (this->objStepper.getDistanceToTarget() < 20){
       this->State = IDLE;
-      return;
     }
 }
 
-void SmokeBot:: _running_G28(){
-    if (true){
-      // End stop is trigered
-      this->State = IDLE;
-      return;
-    }
-}
 void SmokeBot::HomeAllAxises(){
-  Serial.println("\n================================  " );
-  Serial.print(" Start homing    " );
-  this->objStepper.setAcceleration(ACCELERATION_HOMIMG);
-  this->objStepper.setMaxSpeed(MAX_SPEED_HOMING);
-  this->objStepper.setTargetRel(-5000);
-  this->objStepControl.moveAsync(this->objStepper);
-  while (! this->objHomeHelper.IsTriged()){
-    // Serial.print(".");
-    delay(10);
-  }
-  this->objStepControl.stop();
-  this->objStepper.setPosition(0);
-  this->objStepper.setAcceleration(ACCELERATION);
-  this->objStepper.setMaxSpeed(MAX_SPEED);
-  Serial.print(" Homed postion =    " );
-  Serial.println(this->objStepper.getPosition());
+	Serial.println("\n================================  " );
+	Serial.print(" Start homing    " );
+	this->objStepper.setAcceleration(ACCELERATION_HOMIMG);
+	this->objStepper.setMaxSpeed(MAX_SPEED_HOMING);
+}
+
+void SmokeBot:: _running_G28(){
+	if (this->objHomeHelper.IsTriged()){
+		// End stop is trigered
+		this->objStepControl.stop();
+		this->objStepper.setPosition(0);
+		this->objStepper.setAcceleration(ACCELERATION);
+		this->objStepper.setMaxSpeed(MAX_SPEED);
+		Serial.print(" Homed postion =    " );
+		Serial.println(this->objStepper.getPosition());
+		this->State = IDLE;
+	}else{
+		this->objStepper.setTargetRel(-5000);
+		this->objStepControl.moveAsync(this->objStepper);
+		delay(10); 
+	}
+    
 }
 
 void SmokeBot::Init_Gpio(){

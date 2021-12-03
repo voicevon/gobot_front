@@ -28,6 +28,7 @@ class Stepper
     inline int32_t getPosition() const { return current; }
     inline void setPosition(int32_t pos) { current = pos; }
     int32_t dir;
+    int32_t getDistanceToTarget(){return abs(target-current);};
 
   protected:
     inline void doStep();
