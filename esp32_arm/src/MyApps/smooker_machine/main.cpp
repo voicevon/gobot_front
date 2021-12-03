@@ -19,7 +19,7 @@ SmokeBot* mybot;
 // int distance = 100;
 // int pause_second = 20;
 Gcode gcode("");
-std::string ss;
+std::string strGcode;
 
 // void app_mqtt_subscribe(){
 //   mqttClient.subscribe("smokebot/distance", 2);
@@ -49,27 +49,32 @@ void setup() {
   Serial.println("Hi there, I am smoke robot, Have a good day");
   setup_webcommu();
   // setup_wifi_mqtt();
-  // mybot = new SmokeBot();
-  // mybot->Init_Gpio();
-  // mybot->Init_Linkage();
+  mybot = new SmokeBot();
+  mybot->Init_Gpio();
+  mybot->Init_Linkage();
   Serial.print("Set up is done .....");
   // while (!mqttClient.connected())
   //     delay(100);
+  // mybot->HomeAllAxises();
 }
 
 void loop() {
   loop_webcommu();
-  // delay(1000 * var_sleep_time);
   float distance = float(var_volume) / 200.0;
 
-  // mybot->HomeAllAxises();
 
-  // ss="G1 X";
-  // ss.append(ToString(distance));
-  // gcode = Gcode(ss);
+  strGcode="G1 X";
+  strGcode.append(ToString(distance));
+  gcode = Gcode(strGcode);
   // Serial.print (ss.c_str());
   // delay(100);
-  // mybot->RunGcode(&gcode);
+  mybot->RunGcode(&gcode);
+  strGcode = "G4 ";
+  strGcode.append(ToString(var_sleep_time));
+  gcode = Gcode(strGcode);
+  mybot->RunGcode(&gcode);
+  strGcode = "G1 X0";
+  gcode = Gcode(strGcode); 
 
 }
 #endif

@@ -11,11 +11,11 @@ SmokeBot::SmokeBot(){
 
 void SmokeBot::RunG1(Gcode* gcode) {
   //None blocking, move backgroundly.
-  Serial.println("---------  Running G1   ");
+  // Serial.println("---------  Running G1   ");
   float distance = gcode->get_value('X');
   
-  Serial.print("  ");
-  Serial.print(distance);
+  // Serial.print("  ");
+  // Serial.print(distance);
 
   this->objStepper.setTargetAbs(distance);
   this->objStepControl.move(this->objStepper);
