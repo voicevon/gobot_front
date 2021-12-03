@@ -90,7 +90,7 @@ void RobotBase::RunGcode(Gcode* gcode){
       case 280:
         // Wait for all gcode, mcode is finished
         // Serial.println("M280 Started");
-        while (!this->robot_is_idle){
+        while (!this->State == IDLE){
           this->SpinOnce();
         }
         // Serial.println("M280   ending");

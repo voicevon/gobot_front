@@ -95,12 +95,19 @@ class IkPosXY: public IkPositionBase{
 */
 class RobotBase{
     public:
+        enum STATE{
+            IDLE,
+            RUNNING_G1,
+            RUNNING_G4,
+            RUNNING_G28
+        };
+        STATE State;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void Init_Linkage();
         virtual void HomeAllAxises();   //??
         
-        bool IsIdle(){return this->robot_is_idle;};
+        // bool IsIdle(){return this->robot_is_idle;};
         // virtual void Init();
 
     protected:
@@ -116,9 +123,7 @@ class RobotBase{
         void RunG4(Gcode* gcode);
         virtual std::string GetHomeTrigerStateString();
         CommuDeviceBase* commuDevice;
-        // FkPositionBase* currentFkPosition;  //??
-        // FkPositionBase* nextFkPosition;   //??
-        bool robot_is_idle = true;    //TODO: Will be instead of commu_buffer_length > 0.
+        // bool robot_is_idle = true;    //TODO: Will be instead of commu_buffer_length > 0.
         bool is_absolute_position = true;
         // Just for fun, don't remove below comment !!
         // void OnFinishedGcode2(void(*callback)()) {__output_message2 = callback;};

@@ -15,9 +15,9 @@ void RoomBotCorner::test_hBridge(){
         this->objHBridge.Stop();
         delay(5000);
 
-        this->objHBridge.Start(255, true);
+        this->objHBridge.MoveAtSpeed(255, true);
         delay(5000);
-        this->objHBridge.Start(255, false);
+        this->objHBridge.MoveAtSpeed(255, false);
         delay(5000);
     }
 }
@@ -26,7 +26,7 @@ void RoomBotCorner::test_home(){
     Gcode gc = Gcode("G91");
     this->RunGcode(&gc);
     do{
-       if (this->robot_is_idle){
+       if (this->State == IDLE){
         Gcode gcode = Gcode("G1 A-3");
         this->RunGcode(&gcode);
        }
@@ -66,7 +66,7 @@ void RoomBotCorner::MoveToTargetPosition(){
     }
     //TODO, insert PID here.
     float speed = 100;
-    this->objHBridge.Start(speed, dir_forward);
+    this->objHBridge.MoveAtSpeed(speed, dir_forward);
     //Read the encoder,
     // float distance = targetPos - this->singleAxis._actuator->GetCurrentPos(); 
     float distance = targetPos - this->objDcMotor.GetCurrentPos(); 
@@ -82,9 +82,9 @@ void RoomBotCorner::MoveToTargetPosition(){
     }
     if (abs(distance) < this->objDcMotor.positionTolerance){
         this->objHBridge.Stop();
-        this->robot_is_idle = true;
+        this->State = RUNNING_G1;
     }else{
-        this->robot_is_idle = false;
+        this->State = IDLE;
     }
 }
 
@@ -108,7 +108,7 @@ void RoomBotCorner::RunG6(Gcode* gcode){
     }
     do{
         MoveToTargetPosition();
-    }while (!this->robot_is_idle);
+    }while (!this->State==IDLE);
 }
 
 void RoomBotCorner::SpinOnce_BaseExit(){
