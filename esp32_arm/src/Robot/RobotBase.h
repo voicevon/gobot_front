@@ -101,7 +101,7 @@ class RobotBase{
             RUNNING_G4,
             RUNNING_G28
         };
-        STATE State;
+        STATE State = IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void Init_Linkage();

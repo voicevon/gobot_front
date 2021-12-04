@@ -21,7 +21,7 @@ boolean varPause=false;
 boolean varReset=false;
 int var_total_volume = 0;
 int var_total_count = 0;
-int var_volume = 0;
+int var_volume = 90;
 int var_push_time = 3;
 int var_sleep_time = 50;
 //-----------------------------------------------
