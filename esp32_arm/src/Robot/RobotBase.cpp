@@ -20,19 +20,19 @@ void RobotBase::SpinOnce(){
     default:
       break;
   }
-  if(commuDevice->HasNewChatting()){
-    std::string command(commuDevice->ReadChatting());
-    Serial.println ("    _base_spin_once()  new chatting");
-    Serial.println(command.c_str());
-    Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
-    this->RunGcode(&gCode);
-  }
+  // if(commuDevice->HasNewChatting()){
+  //   std::string command(commuDevice->ReadChatting());
+  //   Serial.println ("    _base_spin_once()  new chatting");
+  //   Serial.println(command.c_str());
+  //   Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
+  //   this->RunGcode(&gCode);
+  // }
   this->SpinOnce_BaseExit();
 }
 
 void RobotBase::RunG4(Gcode* gcode){
   __g4_start_timestamp = micros();
-  this->State = RUNNING_G4;
+  __g4_time_second = gcode->get_value('S');
   // bool pausing = false;
   // long delayed = 0;
   // while  (delayed < 30){
@@ -52,12 +52,14 @@ void RobotBase::__running_G4(){
 
 void RobotBase::RunGcode(Gcode* gcode){
   std::string result;
-  if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND)){
-    Serial.print("RunGcode()   OK or Unknown");
-    return;
-  }
+  // if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND)){
+  //   Serial.print("RunGcode()   OK or Unknown");
+  //   return;
+  // }
 
   if(gcode->has_g){
+    // Serial.println("ffffffffffffffffffffffffffffffff");
+    // Serial.println(gcode->g);
     switch (gcode->g){
       case 28:
         // G28: Home
@@ -80,6 +82,8 @@ void RobotBase::RunGcode(Gcode* gcode){
       case 4:
         // G4 Dwell, Pause for a period of time.
         this->RunG4(gcode);
+        this->State = RUNNING_G4;
+        Serial.println("11111111111111111111111111");
         break;
       case 6:
         this->RunG6(gcode);

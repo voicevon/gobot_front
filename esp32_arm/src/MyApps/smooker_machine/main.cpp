@@ -8,7 +8,7 @@
 
 #include <HardwareSerial.h>
 #include "smoke_bot.h"
-#include "Robot/Gcode.h"
+#include "Robot/gcode_dispacher.h"
 // #include <Arduino.h>
 #include "webCommu.h"
 
@@ -16,10 +16,12 @@
 // std::string payload ="OFF";
 
 SmokeBot* mybot;
+GcodeDispacher myDispacher = GcodeDispacher();
 // int distance = 100;
 // int pause_second = 20;
-Gcode gcode("");
-std::string strGcode;
+// Gcode gcode("");
+// std::string strGcode;
+// String strGcode;
 
 // void app_mqtt_subscribe(){
 //   mqttClient.subscribe("smokebot/distance", 2);
@@ -44,37 +46,60 @@ std::string strGcode;
 
 // }
 
+int get_int(){
+  return 123;
+}
+void test_string(){
+  int x= 123;
+  String strG4 = "G4S";
+  String sg = strG4 + x;
+  Serial.println(sg);
+  while (true){
+
+  } 
+}
 void setup() {
   Serial.begin(115200);
   Serial.println("Hi there, I am smoke robot, Have a good day");
+  // test_string();
+
+
   setup_webcommu();
   // setup_wifi_mqtt();
   mybot = new SmokeBot();
+  myDispacher.LinkRobot(mybot);
   mybot->Init_Gpio();
   mybot->Init_Linkage();
-  Serial.print("Set up is done .....");
+  Serial.println("\nSet up is done .....");
   // while (!mqttClient.connected())
   //     delay(100);
   // mybot->HomeAllAxises();
 }
 
+
 void loop() {
+  String strG4 = "G4S";
+  String strG1 = "G1X";
+  String strG28 = "G28";
   loop_webcommu();
-  float distance = float(var_volume) / 200.0;
+  mybot->SpinOnce();
+  float distance = float(var_volume) / 1.0;
+  if (mybot->State == RobotBase::IDLE){
+    // strGcode="G1 X";
+    // strGcode.append(ToString(distance));
+    // gcode = Gcode(strGcode);
+    // myDispacher.AppendGcode(&gcode);
 
+    // strGcode = "G4S";
+    String sg = strG4 + var_sleep_time;
+	bool result = myDispacher.AppendGcodeCommand(sg);
 
-  strGcode="G1 X";
-  strGcode.append(ToString(distance));
-  gcode = Gcode(strGcode);
-  // Serial.print (ss.c_str());
-  // delay(100);
-  mybot->RunGcode(&gcode);
-  strGcode = "G4 ";
-  strGcode.append(ToString(var_sleep_time));
-  gcode = Gcode(strGcode);
-  mybot->RunGcode(&gcode);
-  strGcode = "G1 X0";
-  gcode = Gcode(strGcode); 
+    // strGcode = "G1 X0";
+    // gcode = Gcode(strGcode); 
+    // myDispacher.AppendGcode(&gcode);
+	delay(100);
+  }
+  myDispacher.SpinOnce();
 
 }
 #endif

@@ -14,13 +14,21 @@
 #include <stdlib.h>
 #include <algorithm>
 #include "WString.h"
+#include "HardwareSerial.h"
 
 // This is a gcode object. It represents a GCode string/command, and caches some important values about that command for the sake of performance.
 // It gets passed around in events, and attached to the queue ( that'll change )
 // Gcode::Gcode(const string &command, StreamOutput *stream, bool strip)
 Gcode::Gcode(const std::string &command, bool strip)
+// Gcode::Gcode(String command, bool strip)
 {
     this->command= strdup(command.c_str());
+    Serial.print(command.c_str());
+    Serial.print("-----------");
+    Serial.print(this->command);
+    Serial.print("-----------");
+    Serial.println(this->get_command());
+
     this->m= 0;
     this->g= 0;
     this->subcode= 0;
@@ -29,6 +37,12 @@ Gcode::Gcode(const std::string &command, bool strip)
     // this->stream= stream;
     prepare_cached_values(strip);
     this->stripped= strip;
+
+    Serial.print(command.c_str());
+    Serial.print(" ================= ");
+    Serial.print(this->command);
+    Serial.print(" ================= ");
+    Serial.println(this->get_command());
 }
 
 Gcode::~Gcode()

@@ -11,15 +11,15 @@
 
 #include <string>
 #include <map>
-
+#include <Arduino.h>
 #include "GcodeConst.h"
-// using std::string;
 
 
 // Object to represent a Gcode command
 class Gcode {
     public:
         Gcode(const std::string&, bool strip=true);
+        // Gcode(const String command, bool strip=true);
         Gcode(const Gcode& to_copy);
         Gcode& operator= (const Gcode& to_copy);
         ~Gcode();
