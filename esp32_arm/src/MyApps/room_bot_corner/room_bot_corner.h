@@ -58,5 +58,7 @@ class RoomBotCorner: public RobotBase{
 
         // FkPosX currentPosX;
         FkPosX nextPosX;
+        void _running_G1() override{};
+        void _running_G28() override{};
 };
 

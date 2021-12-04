@@ -125,6 +125,8 @@ class GobotChessboard: public RobotBase{
         void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {};
         void MoveToTargetPosition() {};
+        void _running_G1() override;
+        void _running_G28() override;
     
         Led objLedPower = Led(0, PIN_LED_POWER_2112, LOW);
         Led objLedHome_alpha = Led(1,2,LOW);

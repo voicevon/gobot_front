@@ -45,6 +45,10 @@ void GobotChessboard::HomeAllAxises(){
   this->commuDevice->OutputMessage("Home is done.....");
 }
 
+void GobotChessboard::_running_G28(){
+
+}
+
 void GobotChessboard::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
   // uint8_t flags=0;
   // // Serial.print("\nHome spin got started.............\n");
@@ -220,5 +224,9 @@ void GobotChessboard::Init_Linkage(){
 } 
 
 void GobotChessboard::RunG1(Gcode* gcode){
+  
+}
+
+void GobotChessboard::_running_G1(){
   
 }
