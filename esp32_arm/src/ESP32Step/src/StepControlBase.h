@@ -135,6 +135,7 @@ void StepControlBase<a, t>::stopAsync()
 template <typename a, typename t>
 void StepControlBase<a, t>::stop()
 {
+    if (! this->isRunning()) return;
     stopAsync();
     while (this->isRunning())
     {

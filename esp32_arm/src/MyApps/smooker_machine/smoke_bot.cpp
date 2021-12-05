@@ -38,7 +38,7 @@ void SmokeBot::HomeAllAxises(){
 void SmokeBot:: _running_G28(){
 	if (this->objHomeHelper.IsTriged()){
 		// End stop is trigered
-		this->objStepControl.stop();
+    this->objStepControl.stop();
 		this->objStepper.setPosition(0);
 		this->objStepper.setAcceleration(ACCELERATION);
 		this->objStepper.setMaxSpeed(MAX_SPEED);
