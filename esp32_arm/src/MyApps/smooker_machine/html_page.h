@@ -7,6 +7,7 @@ R"=====(
 <html>
 <head>
   <title>Convolution Integral PTE.LTD.</title>
+  <meta charset="utf-8"> 
 </head>
 <!-------------------------------C S S------------------------------>
 <style>
@@ -34,23 +35,27 @@ R"=====(
 </style>
 <!------------------------------H T M L----------------------------->
 <body>
-   <h1>Convolution Integral PTE.LTD.  <br>Smooking Machine  2021</h1>
-   <h2>Done counter: <span id = "done_count">0</span><p>
-    Total counter: <span id = "total_count">0</span><p></p></p></h2>
+   <h1>生物实验室=吸烟机</h1>
+   <h2>完成次数: <span id = "done_count">0</span><p>
+    设定次数: <span id = "total_count">0</span><p></p></p></h2>
 
-   Volume  <span id="volume_output">50</span> (ml) 
-        <input type="range" min="0" max="100" value="50" class="slider" id="volume" onchange="onVolume()">
+   抽吸体积  <span id="volume_output">50</span> (ml) 
+        <input type="range"  width="100%" min="0" max="100" value="50" class="slider" id="volume" onchange="onVolume()">
         <br><p>
-   Push time <span id="push_output">3</span> (s) 
-        <input type="range" min="3" max="8" value="3" class="slider" id="push_time" onchange="onPush()">
+   抽吸时间 <span id="push_output">3</span> (s) 
+        <input type="range"  width="100%" min="3" max="8" value="3" class="slider" id="push_time" onchange="onPush()">
         <br><p>
-   sleep_time <span id="sleep_output">50</span> (s) 
-        <input type="range" min="0" max="100" value="50" class="slider" id="sleep_time" onchange="onSleep()">
+   等待时间 <span id="sleep_output">50</span> (s) 
+        <input type="range" width="100%" min="0" max="100" value="50" class="slider" id="sleep_time" onchange="onSleep()">
         <br><p><p>
     <br><p><p>
     <a href="#" id="btnOnOff" ONCLICK='btn_OnOff()'> On-Off</a>
     <a href="#" id="btnPause" ONCLICK='btn_Pause()'> Pause </a>
     <a href="#" id="btnReset" ONCLICK='btn_Reset()'> Reset </a>
+    <p><p><p>
+    设计和制造：<br>
+    山东卷积分公司 2021<br>
+    冯旭明, 电话：133-0640-0990<br> 
 
 <!-----------------------------JavaScript--------------------------->
   <script>
