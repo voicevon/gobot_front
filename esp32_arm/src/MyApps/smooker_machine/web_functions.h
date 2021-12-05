@@ -30,12 +30,12 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t welengt
       if(val == "ON") varOnOff = true;
     }
     if(var == "varPause"){
-      varPause = false;
-      if(val == "Paused") varPause = true;
+      varPaused = false;
+      if(val == "Paused") varPaused = true;
     }
     if(var == "varReset"){
       var_total_count = 0;
-      var_total_volume = 0;
+      var_done_count = 0;
     }
     if(var == "var_volume"){
       var_volume = val.toInt();
@@ -46,9 +46,5 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t welengt
     if(var == "var_sleep_time"){
       var_sleep_time = val.toInt();
     }
-    
-    var_total_volume+=3;
-    var_total_count++;
-
   }
 }

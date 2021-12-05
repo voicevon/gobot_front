@@ -16,14 +16,14 @@ WebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
 //-----------------------------------------------
 String JSONtxt;
-boolean varOnOff=false; 
-boolean varPause=false;
-boolean varReset=false;
-int var_total_volume = 0;
+boolean varOnOff = false; 
+bool varPaused = true;
+boolean varReset = false;
+int var_done_count = 0;
 int var_total_count = 0;
 int var_volume = 90;
 int var_push_time = 3;
-int var_sleep_time = 50;
+int var_sleep_time = 5;
 //-----------------------------------------------
 #include "html_page.h"
 #include "web_functions.h"
@@ -52,10 +52,10 @@ void send_to_client(){
   String strPause = "Going";
   String strReset = "Reset";
   if(varOnOff) strOnOff = "ON";
-  if(varPause) strPause = "Paused";
+  if(varPaused) strPause = "Paused";
   JSONtxt = "{\"varOnOff\":\""+strOnOff+"\","
             + "\"varPause\":\""+strPause+"\","
-            + "\"var_total_volume\"" +":\"" + var_total_volume + "\","
+            + "\"var_done_count\"" +":\"" + var_done_count + "\","
             + "\"var_total_count\"" +":\"" + var_total_count + "\","
             + "\"var_volume\"" +":\"" + var_volume + "\","
             + "\"var_push_time\"" +":\"" + var_push_time + "\","
@@ -64,7 +64,7 @@ void send_to_client(){
   webSocket.broadcastTXT(JSONtxt);
 }
 //====================================================================
-void loop_webcommu()
+void WebCommu_SpinOnce()
 {
   webSocket.loop(); server.handleClient();
   //-----------------------------------------------

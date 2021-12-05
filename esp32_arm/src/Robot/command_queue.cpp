@@ -1,16 +1,16 @@
-#include "gcode_dispacher.h"
+#include "command_queue.h"
 #include "HardwareSerial.h"
 
-GcodeDispacher::GcodeDispacher(){
+CommandQueue::CommandQueue(){
 }
 
-void GcodeDispacher::LinkRobot(RobotBase* mybot){
+void CommandQueue::LinkRobot(RobotBase* mybot){
     this->_myBot = mybot;
     this->head = 0;
     this->tail = 0;
 }
 
-void GcodeDispacher::SpinOnce(){
+void CommandQueue::SpinOnce(){
     if (_myBot->State == RobotBase::IDLE){
         // Serial.println("Dispacher, Got robot idle.");
         if(this->head != this->tail){
@@ -20,16 +20,20 @@ void GcodeDispacher::SpinOnce(){
             p += 20 * this->tail;
             std::string str = std::string(p);
             Serial.println(str.c_str());
-            // Gcode gcode = Gcode(str);
-            // this->_myBot->RunGcode(&gcode);
+            Gcode gcode = Gcode(str);
+            this->_myBot->RunGcode(&gcode);
             this->tail++;
             if (this->tail == 5) this->tail = 0;
         }
     }
-    _myBot->SpinOnce();
 }
 
-bool GcodeDispacher::AppendGcodeCommand(String command){
+bool CommandQueue::BufferIsEmpty(){
+    if (head==tail) return true;
+    return false;
+}
+
+bool CommandQueue::AppendGcodeCommand(String command){
     int pre_head = this->head;
     pre_head++;
     if (pre_head == 5) pre_head =0;
@@ -39,7 +43,7 @@ bool GcodeDispacher::AppendGcodeCommand(String command){
     }
     // Serial.print("\n\n\n");
     // Serial.println(command);
-    this->head = pre_head;
+    // this->head = pre_head;
     char* pSourceByte = (char*)(&command);
     char* pTargetByte = &gCodeCommands[0];
     pTargetByte += 20 * this->head;
@@ -51,10 +55,10 @@ bool GcodeDispacher::AppendGcodeCommand(String command){
     } 
     Serial.print(" Gcode command added  ");
     char* p = &gCodeCommands[0];
-    p += 20 * pre_head;
+    p += 20 * this->head;
     std::string ss=std::string(p);
-    // std::string ss=std::string(&gCodeCommands[pre_head][0]);
     Serial.println(ss.c_str());
+    this->head = pre_head;
     return true;  
 }
 

@@ -2,13 +2,14 @@
 #include "Gcode.h"
 #include "RobotBase.h"
 
-class GcodeDispacher{
+class CommandQueue{
     public:
-        GcodeDispacher();
+        CommandQueue();
         void LinkRobot(RobotBase* mybot);
         void SpinOnce();
         // bool AppendGcode(Gcode* gcode);
         bool AppendGcodeCommand(String command);
+        bool BufferIsEmpty();
         
     private:
         // Gcode* _buffer[5];

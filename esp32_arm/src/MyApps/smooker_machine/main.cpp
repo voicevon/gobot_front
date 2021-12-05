@@ -8,7 +8,7 @@
 
 #include <HardwareSerial.h>
 #include "smoke_bot.h"
-#include "Robot/gcode_dispacher.h"
+#include "Robot/command_queue.h"
 // #include <Arduino.h>
 #include "webCommu.h"
 
@@ -16,7 +16,7 @@
 // std::string payload ="OFF";
 
 SmokeBot* mybot;
-GcodeDispacher myDispacher = GcodeDispacher();
+CommandQueue myCommandQueue = CommandQueue();
 // int distance = 100;
 // int pause_second = 20;
 // Gcode gcode("");
@@ -59,47 +59,48 @@ void test_string(){
   } 
 }
 void setup() {
-  Serial.begin(115200);
-  Serial.println("Hi there, I am smoke robot, Have a good day");
-  // test_string();
+	Serial.begin(115200);
+	Serial.println("Hi there, I am smoke robot, Have a good day");
+	// test_string();
 
 
-  setup_webcommu();
-  // setup_wifi_mqtt();
-  mybot = new SmokeBot();
-  myDispacher.LinkRobot(mybot);
-  mybot->Init_Gpio();
-  mybot->Init_Linkage();
-  Serial.println("\nSet up is done .....");
-  // while (!mqttClient.connected())
-  //     delay(100);
-  // mybot->HomeAllAxises();
+	setup_webcommu();
+	// setup_wifi_mqtt();
+	mybot = new SmokeBot();
+	myCommandQueue.LinkRobot(mybot);
+	mybot->Init_Gpio();
+	mybot->Init_Linkage();
+	Serial.println("\nSet up is done .....");
+	String strG28 = "G28";
+	bool result = myCommandQueue.AppendGcodeCommand(strG28);
+	myCommandQueue.SpinOnce();
+	
+	// while (!mqttClient.connected())
+	//     delay(100);
+	// mybot->HomeAllAxises();
 }
 
 
 void loop() {
-  String strG4 = "G4S";
-  String strG1 = "G1X";
-  String strG28 = "G28";
-  loop_webcommu();
-  mybot->SpinOnce();
-  float distance = float(var_volume) / 1.0;
-  if (mybot->State == RobotBase::IDLE){
-    // strGcode="G1 X";
-    // strGcode.append(ToString(distance));
-    // gcode = Gcode(strGcode);
-    // myDispacher.AppendGcode(&gcode);
+	String strG4 = "G4S";
+	String strG1 = "G1X";
+	WebCommu_SpinOnce();
+	mybot->SpinOnce();
+	myCommandQueue.SpinOnce();
+	if (varPaused) return;
 
-    // strGcode = "G4S";
-    String sg = strG4 + var_sleep_time;
-	bool result = myDispacher.AppendGcodeCommand(sg);
+	if ((mybot->State == RobotBase::IDLE) && (myCommandQueue.BufferIsEmpty())){
+		int distance = float(var_volume) * 90.0;
+		String sg = strG1 + distance;
+		bool result = myCommandQueue.AppendGcodeCommand(sg);
 
-    // strGcode = "G1 X0";
-    // gcode = Gcode(strGcode); 
-    // myDispacher.AppendGcode(&gcode);
-	delay(100);
-  }
-  myDispacher.SpinOnce();
+		sg = strG4 + var_sleep_time;
+		result = myCommandQueue.AppendGcodeCommand(sg);
+
+		sg = strG1 + 0.1;
+		result = myCommandQueue.AppendGcodeCommand(sg);
+		var_done_count++;
+	}
 
 }
 #endif

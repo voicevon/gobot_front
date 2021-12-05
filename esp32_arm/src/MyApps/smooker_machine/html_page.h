@@ -35,7 +35,7 @@ R"=====(
 <!------------------------------H T M L----------------------------->
 <body>
    <h1>Convolution Integral PTE.LTD.  <br>Smooking Machine  2021</h1>
-   <h2>Total Volume: <span id = "total_volume">0</span><p>
+   <h2>Done counter: <span id = "done_count">0</span><p>
     Total counter: <span id = "total_count">0</span><p></p></p></h2>
 
    Volume  <span id="volume_output">50</span> (ml) 
@@ -89,7 +89,7 @@ R"=====(
             document.getElementById('btnOnOff').style["boxShadow"] = "0px 0px 0px 8px #111111";
           }
           
-          document.getElementById('total_volume').innerHTML = JSONobj.var_total_volume;
+          document.getElementById('done_count').innerHTML = JSONobj.var_done_count;
           document.getElementById('total_count').innerHTML = JSONobj.var_total_count;
           if (first_load){
             first_load = false;

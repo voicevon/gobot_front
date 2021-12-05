@@ -3,51 +3,49 @@
 #include "HardwareSerial.h"
 
 void RobotBase::SpinOnce(){
-  commuDevice->SpinOnce();
-  this->SpinOnce_BaseEnter();
-  switch (this->State){
-    case IDLE:
-      break;
-    case RUNNING_G4:
-      this->__running_G4();
-      break;
-    case RUNNING_G1:
-      this->_running_G1();
-      break;
-    case RUNNING_G28:
-      this->_running_G28();
-      break;
-    default:
-      break;
-  }
-  // if(commuDevice->HasNewChatting()){
-  //   std::string command(commuDevice->ReadChatting());
-  //   Serial.println ("    _base_spin_once()  new chatting");
-  //   Serial.println(command.c_str());
-  //   Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
-  //   this->RunGcode(&gCode);
-  // }
-  this->SpinOnce_BaseExit();
+  // commuDevice->SpinOnce();
+//   Serial.print("RRRRRRRRRRRRRRRRRRRRRR RobotBase::SpinOnce()  ");
+	// Serial.print(this->State);
+	this->SpinOnce_BaseEnter();
+	switch (this->State){
+	case IDLE:
+		break;
+	case RUNNING_G4:
+		this->__running_G4();
+		break;
+	case RUNNING_G1:
+		this->_running_G1();
+		break;
+	case RUNNING_G28:
+		this->_running_G28();
+		break;
+	default:
+		Serial.print("RRRRRRRRRRRRRRRRRRRRRR RobotBase::SpinOnce()  ");
+		Serial.print(this->State);
+
+		break;
+	}
+	// if(commuDevice->HasNewChatting()){
+	//   std::string command(commuDevice->ReadChatting());
+	//   Serial.println ("    _base_spin_once()  new chatting");
+	//   Serial.println(command.c_str());
+	//   Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
+	//   this->RunGcode(&gCode);
+	// }
+	this->SpinOnce_BaseExit();
 }
 
 void RobotBase::RunG4(Gcode* gcode){
-  __g4_start_timestamp = micros();
-  __g4_time_second = gcode->get_value('S');
-  // bool pausing = false;
-  // long delayed = 0;
-  // while  (delayed < 30){
-  //   delayed = (micros() - start) / 1000 /1000;
-  //   delay(100);
-  //   // this->SpinOnce();   //??
-  // }
+	__g4_start_timestamp = micros();
+	__g4_time_second = gcode->get_value('S');
 }
 
 void RobotBase::__running_G4(){
-  long delayed = (micros() - __g4_start_timestamp) / 1000 /1000;
-  if (delayed >= __g4_time_second * 1000){
-    this->State = IDLE;
-    return;
-  }
+	long delayed = (micros() - __g4_start_timestamp) / 1000 /1000;
+	if (delayed >= __g4_time_second ){
+		this->State = IDLE;
+		return;
+	}
 }
 
 void RobotBase::RunGcode(Gcode* gcode){
@@ -58,32 +56,28 @@ void RobotBase::RunGcode(Gcode* gcode){
   // }
 
   if(gcode->has_g){
-    // Serial.println("ffffffffffffffffffffffffffffffff");
-    // Serial.println(gcode->g);
     switch (gcode->g){
       case 28:
         // G28: Home
         // this->__is_busy = true;
-        this->HomeAllAxises();
         this->State = RUNNING_G28;
+        this->HomeAllAxises();
         // this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
         break;
       case 1:
         // G1 Move
-        // this->__is_busy = true;
         //TODO:  1. put position to movement queue. called "plan" in smoothieware? 
         //       2. send out OK.
         //       3. Set status to busy.
         //       4. Start Moving.
+        this->State = RUNNING_G1;
         this->RunG1(gcode);
         this->commuDevice->OutputMessage(COMMU_OK);
-        this->State = RUNNING_G1;
         break;
       case 4:
         // G4 Dwell, Pause for a period of time.
-        this->RunG4(gcode);
         this->State = RUNNING_G4;
-        Serial.println("11111111111111111111111111");
+        this->RunG4(gcode);
         break;
       case 6:
         this->RunG6(gcode);
