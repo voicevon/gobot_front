@@ -32,8 +32,10 @@
 <body>
    <h1>生物实验室-吸烟机</h1>
    <h2>完成次数: <span id = "done_count">0</span><p>
-    设定次数: <span id = "total_count">0</span><p></p></p></h2>
-
+  <!-- 设定次数: <span id = "total_count">0</span>   <p></p></p></h2> -->
+  设定次数: <span id = "total_count_output">0</span>
+  <input type="range"  width="100%" min="0" max="100" value="50" class="slider" id="total_count" onchange="onTotalCount()">
+        <br><p>
    抽吸体积  <span id="volume_output">50</span> (ml) 
         <input type="range"  width="100%" min="0" max="100" value="50" class="slider" id="volume" onchange="onVolume()">
         <br><p>
@@ -104,7 +106,12 @@
      }
      //-------------------------------------------------------------
 
-
+     function onTotalCount(){
+        output = document.getElementById("total_count_output");
+        output.innerHTML = document.getElementById("total_count").value;
+        payload = "total_count=" + output.innerHTML;
+        websock.send(payload);
+    }
     function onVolume(){
         output = document.getElementById("volume_output");
         output.innerHTML = document.getElementById("volume").value;
