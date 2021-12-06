@@ -3,9 +3,9 @@
 #include "Robot/RobotBase.h"
 
 #include "ESP32Step/src/TeensyStep.h"
+#include "Robot/Actuator/ActuatorBase.h"
 #include "Robot/HomeHelper.h"
 #include "Robot/Commu/CommuUart.h"
-#include "Robot/Actuator/ActuatorBase.h"
 
 #define PIN_HOME 18
 #define PIN_STEP 33
