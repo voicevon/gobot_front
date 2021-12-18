@@ -5,6 +5,16 @@
 
 
 // #define I_AM_GOBOT_CHESSBOARD_213401
+// #define I_AM_GOBOT_HOUSE_213401
+// #define I_AM_CABLE_AXIS_XPYP
+// #define I_AM_CABLE_AXIS_XNYP
+// #define I_AM_CABLE_AXIS_XNYN
+// #define I_AM_CABLE_AXIS_XPYN
+#define I_AM_SMOKE_MACHINE_WEB_SERVER
+// #define I_AM_SMOKE_MACHINE_MQTT
+// #define I_AM_GARMENT_BOT
+
+
 #ifdef I_AM_GOBOT_CHESSBOARD_213401
   #define I_AM_GOBOT_CHESSBOARD
   #define USING_BLE
@@ -14,7 +24,6 @@
   #define BLE_STATE_UUID "c21a1596-0610-11ec-9a03-0242ac130003"
 #endif
 
-// #define I_AM_GOBOT_HOUSE_213401
 #ifdef I_AM_GOBOT_HOUSE_213401
   #define I_AM_GOBOT_HOUSE
   #define USING_BLE
@@ -24,7 +33,6 @@
   #define BLE_STATE_UUID  "c52ca230-062e-11ec-9a03-0242ac130003"
 #endif
 
-// #define I_AM_CABLE_AXIS_XPYP
 #ifdef I_AM_CABLE_AXIS_XPYP
   #define I_AM_CABLEBOT_CORNER
   #define USING_BLE
@@ -35,7 +43,6 @@
   #define BLE_STATE_UUID  "50711238-1451-11ec-82a8-0242ac130003"
 #endif
 
-// #define I_AM_CABLE_AXIS_XNYP
 #ifdef I_AM_CABLE_AXIS_XNYP
   #define I_AM_CABLEBOT_CORNER
   #define USING_BLE
@@ -46,7 +53,6 @@
   #define BLE_STATE_UUID "72838810-1451-11ec-82a8-0242ac130003"
 #endif
 
-// #define I_AM_CABLE_AXIS_XNYN
 #ifdef I_AM_CABLE_AXIS_XNYN
   #define I_AM_CABLEBOT_CORNER
   #define USING_BLE
@@ -57,7 +63,6 @@
   #define BLE_STATE_UUID  "8175103c-1451-11ec-82a8-0242ac130003"
 #endif
 
-// #define I_AM_CABLE_AXIS_XPYN
 #ifdef I_AM_CABLE_AXIS_XPYN
   #define I_AM_CABLEBOT_CORNER
   #define USING_BLE
@@ -68,13 +73,11 @@
   #define BLE_STATE_UUID   "9c43b29c-1451-11ec-82a8-0242ac130003"
 #endif
 
-#define I_AM_SMOKE_MACHINE
-#ifdef I_AM_SMOKE_MACHINE
+#ifdef I_AM_SMOKE_MACHINE_WEB_SERVER
   #define USING_WIFI_MQTT
   #define AXIS_NAME 'X'
 #endif
 
-// #define I_AM_GARMENT_BOT
 #ifdef I_AM_GARMENT_BOT
   #define USING_WIFI_MQTT
 #endif

@@ -35,25 +35,36 @@ R"=====(
 </style>
 <!------------------------------H T M L----------------------------->
 <body>
-   <h1>生物实验室-吸烟机</h1>
-   <h2>完成次数: <span id = "done_count">0</span><p>
+   <h1 id="title">生物实验室-模拟呼吸机</h1>
+   <h2>已执行次数(次)： <span id = "done_count">0</span> 
+   <button onclick="onReset()">复位</button></h2>
   <!-- 设定次数: <span id = "total_count">0</span>   <p></p></p></h2> -->
-  设定次数: <span id = "total_count_output">0</span>
-  <input type="range"  width="100%" min="0" max="100" value="50" class="slider" id="total_count" onchange="onTotalCount()">
-        <br><p>
-   抽吸体积  <span id="volume_output">50</span> (ml) 
-        <input type="range"  width="100%" min="0" max="100" value="50" class="slider" id="volume" onchange="onVolume()">
-        <br><p>
-   抽吸时间 <span id="push_output">3</span> (s) 
-        <input type="range"  width="100%" min="3" max="8" value="3" class="slider" id="push_time" onchange="onPush()">
-        <br><p>
-   等待时间 <span id="sleep_output">50</span> (s) 
-        <input type="range" width="100%" min="0" max="100" value="50" class="slider" id="sleep_time" onchange="onSleep()">
-        <br><p><p>
+  <table align="center">
+    <tr>
+      <td align="right">设定总次数(次)：</td>
+      <td><input type="text" maxlength="3" size ="3" value="300" id="total_count"></td>
+      <td> <button onclick="onTotalCount()">提交</button></td>
+    </tr>
+    <tr>
+      <td align="right">单次抽吸体积(ml)：</td>
+      <td><input type="text" maxlength="3" size ="3" value="55" id="per_volume"></td>
+      <td><button onclick="onPerVolume()">提交</button></td>
+    </tr>
+    <tr>
+      <td align="right">单次抽吸时间(s)：</td>
+      <td><input type="text" maxlength="3" size ="3" value="3" id="per_pull_in_second"></td>
+      <td><button onclick="onPerPullTime()">提交</button></td>
+    </tr>
+    <tr>
+      <td align="right">单次等待时间(s)：</td>
+      <td><input type="text" maxlength="3" size ="3" value="30" id="per_sleep_in_second"></td>
+      <td><button onclick="onPerSleepTime()">提交</button></td>
+    </tr>
+  </table>
+  <hr>
+
     <br><p><p>
     <a href="#" id="btnOnOff" ONCLICK='btn_OnOff()'> On-Off</a>
-    <a href="#" id="btnPause" ONCLICK='btn_Pause()'> Pause </a>
-    <a href="#" id="btnReset" ONCLICK='btn_Reset()'> Reset </a>
     <p><p><p>
     设计和制造：<br>
     山东卷积分公司 2021<br>
@@ -69,6 +80,10 @@ R"=====(
        websock.onmessage = function(evt)
        {
           JSONobj = JSON.parse(evt.data);
+          message = JSONobj
+          document.getElementById("title").innerHTML = message;
+
+
           document.getElementById('btnOnOff').innerHTML = JSONobj.varOnOff;
           if(JSONobj.varOnOff == 'ON'){
             document.getElementById('btnOnOff').style.background='#FF0000';
@@ -78,28 +93,12 @@ R"=====(
             document.getElementById('btnOnOff').style["boxShadow"] = "0px 0px 0px 8px #111111";
           }
 
-          document.getElementById('btnPause').innerHTML = JSONobj.varPause;
-          if(JSONobj.varPause == 'ON'){
-            document.getElementById('btnPause').style.background='#FF0000';
-            document.getElementById('btnPause').style["boxShadow"] = "0px 0px 0px 8px #FF0000";
-          }else{
-            document.getElementById('btnPause').style.background='#111111';
-            document.getElementById('btnPause').style["boxShadow"] = "0px 0px 0px 8px #111111";
-          }
 
-          document.getElementById('btnReset').innerHTML = JSONobj.varReset;
-          if(JSONobj.varReset == 'ON'){
-            document.getElementById('btnReset').style.background='#FF0000';
-            document.getElementById('btnReset').style["boxShadow"] = "0px 0px 0px 8px #FF0000";
-          }else{
-            document.getElementById('btnReset').style.background='#111111';
-            document.getElementById('btnOnOff').style["boxShadow"] = "0px 0px 0px 8px #111111";
-          }
           
           document.getElementById('done_count').innerHTML = JSONobj.var_done_count;
-          document.getElementById('total_count').innerHTML = JSONobj.var_total_count;
           if (first_load){
             first_load = false;
+            total_count.value = JSONobj.var_total_count;
             document.getElementById('volume').value = JSONobj.var_volume;
             document.getElementById('volume_output').innerHTML = JSONobj.var_volume;
             document.getElementById('push_time').value = JSONobj.var_push_time;
@@ -110,30 +109,31 @@ R"=====(
        }
      }
      //-------------------------------------------------------------
+     function onReset(){
+       payload = "total_count=0";
+       document.getElementById("title").innerHTML = payload;
+       websock.send(payload);
+     }
 
      function onTotalCount(){
-        output = document.getElementById("total_count_output");
-        output.innerHTML = document.getElementById("total_count").value;
-        payload = "total_count=" + output.innerHTML;
-        websock.send(payload);
+       payload = "total_count=" + document.getElementById("total_count").value;
+       document.getElementById("title").innerHTML = payload;
+       websock.send(payload);
     }
-    function onVolume(){
-        output = document.getElementById("volume_output");
-        output.innerHTML = document.getElementById("volume").value;
-        payload = "var_volume=" + output.innerHTML;
-        websock.send(payload);
+    function onPerVolume(){
+       payload = "per_volume=" + document.getElementById("per_volume").value;
+       document.getElementById("title").innerHTML = payload;
+       websock.send(payload);
     }
-    function onPush(){
-        output = document.getElementById("push_output");
-        output.innerHTML = document.getElementById("push_time").value;
-        payload = "var_push_time=" + output.innerHTML;
-        websock.send(payload);
+    function onPerPullTime(){
+       payload = "per_pull_in_second=" + document.getElementById("per_pull_in_second").value;
+       document.getElementById("title").innerHTML = payload;
+       websock.send(payload);
     }
-    function onSleep(){
-        output = document.getElementById("sleep_output");
-        output.innerHTML = document.getElementById("sleep_time").value;
-        payload = "var_sleep_time=" + output.innerHTML;
-        websock.send(payload);
+    function onPerSleepTime(){
+       payload = "per_sleep_in_second=" + document.getElementById("per_sleep_in_second").value;
+       document.getElementById("title").innerHTML = payload;
+       websock.send(payload);
     }
      function btn_OnOff()
      {
@@ -144,21 +144,7 @@ R"=====(
         websock.send(payload);
      }
 
-     function btn_Pause()
-     {
-        payload = 'varPause=Paused';
-        if(document.getElementById('btnPause').innerHTML == 'Paused')
-        {
-            payload = 'varPause=Going';
-        }
-        websock.send(payload);
-     }
 
-     function btn_Reset()
-     {
-        payload = 'varReset=Reset';
-        websock.send(payload);
-     }
   </script>
 </body>
 </html>
