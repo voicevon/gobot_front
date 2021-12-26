@@ -75,8 +75,6 @@
        websock.onmessage = function(evt)
        {
           JSONobj = JSON.parse(evt.data);
-
-
           document.getElementById('btnOnOff').innerHTML = JSONobj.varOnOff;
           if(JSONobj.varOnOff == 'ON'){
             document.getElementById('btnOnOff').style.background='#FF0000';
@@ -97,7 +95,7 @@
      }
      //-------------------------------------------------------------
      function onReset(){
-       payload = "total_count=0";
+       payload = "done_count=0";
        websock.send(payload);
      }
 

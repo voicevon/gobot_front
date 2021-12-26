@@ -88,7 +88,8 @@ void loop() {
 	mybot->SpinOnce();
 	myCommandQueue.SpinOnce();
 	if (!varOnOff) return;
-
+	if (var_done_count >= var_total_count) return;
+	
 	if ((mybot->State == RobotBase::IDLE) && (myCommandQueue.BufferIsEmpty())){
 		int distance = float(var_per_volume) * 90.0;
 		String sg = strG1 + distance;

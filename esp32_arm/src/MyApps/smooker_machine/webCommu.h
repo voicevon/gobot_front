@@ -19,7 +19,7 @@ String JSONtxt;
 boolean varOnOff = false; 
 boolean varReset = false;
 int var_done_count = 0;
-int var_total_count = 0;
+int var_total_count = 300;
 int var_per_volume = 90;
 int var_pull_in_second = 3;
 int var_sleep_in_second = 5;

@@ -29,6 +29,9 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t welengt
       varOnOff = false;
       if(val == "ON") varOnOff = true;
     }
+    if(var == "done_count"){
+      var_done_count = val.toInt();
+    }
     if(var == "total_count"){
       var_total_count = val.toInt();
     }
