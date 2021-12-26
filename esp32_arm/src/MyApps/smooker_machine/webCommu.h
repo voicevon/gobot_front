@@ -17,13 +17,12 @@ WebSocketsServer webSocket = WebSocketsServer(81);
 //-----------------------------------------------
 String JSONtxt;
 boolean varOnOff = false; 
-bool varPaused = true;
 boolean varReset = false;
 int var_done_count = 0;
 int var_total_count = 0;
-int var_volume = 90;
-int var_push_time = 3;
-int var_sleep_time = 5;
+int var_per_volume = 90;
+int var_pull_in_second = 3;
+int var_sleep_in_second = 5;
 //-----------------------------------------------
 #include "html_page.h"
 #include "web_functions.h"
@@ -49,28 +48,32 @@ void setup_webcommu()
 
 void send_to_client(){
   String strOnOff = "OFF";
-  String strPause = "Going";
-  String strReset = "Reset";
   if(varOnOff) strOnOff = "ON";
-  if(varPaused) strPause = "Paused";
   JSONtxt = "{\"varOnOff\":\""+strOnOff+"\","
-            + "\"varPause\":\""+strPause+"\","
             + "\"var_done_count\"" +":\"" + var_done_count + "\","
             + "\"var_total_count\"" +":\"" + var_total_count + "\","
-            + "\"var_volume\"" +":\"" + var_volume + "\","
-            + "\"var_push_time\"" +":\"" + var_push_time + "\","
-            + "\"var_sleep_time\"" +":\"" + var_sleep_time + "\""
+            + "\"var_per_volume\"" +":\"" + var_per_volume + "\","            
+            + "\"var_pull_in_second\"" +":\"" + var_pull_in_second + "\","
+            + "\"var_sleep_in_second\"" +":\"" + var_sleep_in_second + "\""
               +"}";
+  // Serial.print("------------------------------------------\n");
+  // Serial.print(JSONtxt);
+  // Serial.print("------------------------------------------\n");
   webSocket.broadcastTXT(JSONtxt);
 }
 //====================================================================
 void WebCommu_SpinOnce()
 {
-  webSocket.loop(); server.handleClient();
+  webSocket.loop(); 
+  server.handleClient();
   //-----------------------------------------------
-  if(varOnOff == false) digitalWrite(LED, LOW);
-  else digitalWrite(LED, HIGH);
+  if(varOnOff == false) 
+    digitalWrite(LED, LOW);
+  else 
+    digitalWrite(LED, HIGH);
   //-----------------------------------------------
-  send_to_client();
-
+  if (true){
+    // Some var  updated, need to tell the client to sync those data.
+    send_to_client();
+  }
 }
