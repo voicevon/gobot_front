@@ -21,7 +21,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t welengt
     Serial.print("var= ");
     Serial.println(var);
     String val = payloadString.substring(separator+1);
-    Serial.print("val= ");
+    Serial.print("value= ");
     Serial.println(val);
     Serial.println(" ");
 
@@ -29,22 +29,17 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t welengt
       varOnOff = false;
       if(val == "ON") varOnOff = true;
     }
-    if(var == "varPause"){
-      varPaused = false;
-      if(val == "Paused") varPaused = true;
+    if(var == "total_count"){
+      var_total_count = val.toInt();
     }
-    if(var == "varReset"){
-      var_total_count = 0;
-      var_done_count = 0;
+    if(var == "per_volume"){
+      var_per_volume = val.toInt();
     }
-    if(var == "var_volume"){
-      var_volume = val.toInt();
+    if(var == "per_pull_in_second"){
+      var_pull_in_second = val.toInt();
     }
-    if(var == "var_push_time"){
-      var_push_time = val.toInt();
-    }
-    if(var == "var_sleep_time"){
-      var_sleep_time = val.toInt();
+    if(var == "per_sleep_in_second"){
+      var_sleep_in_second = val.toInt();
     }
   }
 }

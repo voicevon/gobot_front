@@ -75,8 +75,6 @@
        websock.onmessage = function(evt)
        {
           JSONobj = JSON.parse(evt.data);
-          message = JSONobj
-          document.getElementById("title").innerHTML = message;
 
 
           document.getElementById('btnOnOff').innerHTML = JSONobj.varOnOff;
@@ -87,47 +85,36 @@
             document.getElementById('btnOnOff').style.background='#111111';
             document.getElementById('btnOnOff').style["boxShadow"] = "0px 0px 0px 8px #111111";
           }
-
-
-          
           document.getElementById('done_count').innerHTML = JSONobj.var_done_count;
           if (first_load){
             first_load = false;
             total_count.value = JSONobj.var_total_count;
-            document.getElementById('volume').value = JSONobj.var_volume;
-            document.getElementById('volume_output').innerHTML = JSONobj.var_volume;
-            document.getElementById('push_time').value = JSONobj.var_push_time;
-            document.getElementById('push_output').innerHTML = JSONobj.var_push_time;
-            document.getElementById('sleep_time').value = JSONobj.var_sleep_time;
-            docement.getElementById('sleep_output').innerHTML = JSONobj.var_sleep_time;
+            per_volume.value = JSONobj.var_per_volume;
+            per_pull_in_second.value = JSONobj.var_pull_in_second;
+            per_sleep_in_second.value = JSONobj.var_sleep_in_second;
           }
        }
      }
      //-------------------------------------------------------------
      function onReset(){
        payload = "total_count=0";
-       document.getElementById("title").innerHTML = payload;
        websock.send(payload);
      }
 
      function onTotalCount(){
        payload = "total_count=" + document.getElementById("total_count").value;
-       document.getElementById("title").innerHTML = payload;
        websock.send(payload);
     }
     function onPerVolume(){
        payload = "per_volume=" + document.getElementById("per_volume").value;
-       document.getElementById("title").innerHTML = payload;
        websock.send(payload);
     }
     function onPerPullTime(){
        payload = "per_pull_in_second=" + document.getElementById("per_pull_in_second").value;
-       document.getElementById("title").innerHTML = payload;
        websock.send(payload);
     }
     function onPerSleepTime(){
        payload = "per_sleep_in_second=" + document.getElementById("per_sleep_in_second").value;
-       document.getElementById("title").innerHTML = payload;
        websock.send(payload);
     }
      function btn_OnOff()
