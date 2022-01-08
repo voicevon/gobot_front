@@ -89,7 +89,7 @@ void loop() {
 	
 	if ((mybot->State == RobotBase::IDLE) && (myCommandQueue.BufferIsEmpty())){
 		int distance = float(var_per_volume) * 538.9;
-		int speed = float(var_per_volume) / float(var_pull_in_second) * 3600;
+		int speed = float(var_per_volume) / float(var_pull_in_second) * 540;
 		if (speed <100) speed=100;
 		String sg = strG1;
 		sg.concat(distance);
