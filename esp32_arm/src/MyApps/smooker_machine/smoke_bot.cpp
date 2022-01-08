@@ -3,7 +3,7 @@
 #define ACCELERATION 250000
 #define MAX_SPEED 23000   //  is OK
 #define ACCELERATION_HOMIMG  250000
-#define MAX_SPEED_HOMING  2200
+#define MAX_SPEED_HOMING  5200
 
 SmokeBot::SmokeBot(){
 
@@ -13,9 +13,10 @@ void SmokeBot::RunG1(Gcode* gcode) {
   //None blocking, move backgroundly.
   // Serial.println("---------  Running G1   ");
   float distance = gcode->get_value('X');
-  
-  // Serial.print("  ");
-  // Serial.print(distance);
+  if (gcode->has_letter('F')){
+    int speed = gcode->get_value('F');
+    this->objStepper.setMaxSpeed(speed);
+    }
 
   this->objStepper.setTargetAbs(distance);
   this->objStepControl.move(this->objStepper);

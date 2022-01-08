@@ -9,6 +9,7 @@ class CommandQueue{
         void SpinOnce();
         // bool AppendGcode(Gcode* gcode);
         bool AppendGcodeCommand(String command);
+        // bool AppendGcodeCommand(char* command, int length);
         bool BufferIsEmpty();
         
     private:

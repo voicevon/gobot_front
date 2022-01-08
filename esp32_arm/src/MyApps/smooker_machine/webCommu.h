@@ -7,8 +7,8 @@
 #include <WebServer.h>
 #include <WebSocketsServer.h>
 //-----------------------------------------------
-const char* ssid = "FuckGFW";
-const char* password = "refuckgfw";
+const char* ssid = "CentOS";
+const char* password = "1234567890";
 //-----------------------------------------------
 #define LED 2
 //-----------------------------------------------
@@ -20,7 +20,7 @@ boolean varOnOff = false;
 boolean varReset = false;
 int var_done_count = 0;
 int var_total_count = 300;
-int var_per_volume = 90;
+int var_per_volume = 20;
 int var_pull_in_second = 3;
 int var_sleep_in_second = 5;
 //-----------------------------------------------

@@ -34,6 +34,7 @@ bool CommandQueue::BufferIsEmpty(){
 }
 
 bool CommandQueue::AppendGcodeCommand(String command){
+// bool CommandQueue::AppendGcodeCommand(char* command, int length){
     int pre_head = this->head;
     pre_head++;
     if (pre_head == 5) pre_head =0;
@@ -41,20 +42,23 @@ bool CommandQueue::AppendGcodeCommand(String command){
         // Buffer is full
         return false;
     }
-    // Serial.print("\n\n\n");
-    // Serial.println(command);
-    // this->head = pre_head;
-    char* pSourceByte = (char*)(&command);
-    char* pTargetByte = &gCodeCommands[0];
+    Serial.print("\n\n\n");
+    Serial.print(command.length());
+    Serial.print(">>> ");
+    Serial.println(command);
+    unsigned char* pTargetByte = (unsigned char*) (&gCodeCommands[0]);
     pTargetByte += 20 * this->head;
-    for(int i=0; i< command.length() +1; i++){  // The extra one byte is 0x00, the string ender.
-        Serial.print(*pSourceByte);
-        *pTargetByte = *pSourceByte;
-        pSourceByte++;
-        pTargetByte++;
-    } 
+    // This doens't work, Don't knwo how Arduino String is orgnized with bytes.
+    // for(int i=0; i< command.length() +1; i++){  // The extra one byte is 0x00, the string ender.
+    // // for(int i=0; i< length +1; i++){  // The extra one byte is 0x00, the string ender.
+    //     Serial.print(*pSourceByte);
+    //     *pTargetByte = *pSourceByte;
+    //     pSourceByte++;
+    //     pTargetByte++;
+    // } 
+    command.getBytes(pTargetByte, command.length() + 1);
     Serial.print(" Gcode command added  ");
-    char* p = &gCodeCommands[0];
+    char* p = (char*)&gCodeCommands[0];
     p += 20 * this->head;
     std::string ss=std::string(p);
     Serial.println(ss.c_str());

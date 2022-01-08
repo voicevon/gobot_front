@@ -61,8 +61,6 @@ void test_string(){
 void setup() {
 	Serial.begin(115200);
 	Serial.println("Hi there, I am smoke robot, Have a good day");
-	// test_string();
-
 
 	setup_webcommu();
 	// setup_wifi_mqtt();
@@ -80,7 +78,6 @@ void setup() {
 	// mybot->HomeAllAxises();
 }
 
-
 void loop() {
 	String strG4 = "G4S";
 	String strG1 = "G1X";
@@ -91,15 +88,21 @@ void loop() {
 	if (var_done_count >= var_total_count) return;
 	
 	if ((mybot->State == RobotBase::IDLE) && (myCommandQueue.BufferIsEmpty())){
-		int distance = float(var_per_volume) * 90.0;
-		String sg = strG1 + distance;
+		int distance = float(var_per_volume) * 538.9;
+		int speed = float(var_per_volume) / float(var_pull_in_second) * 3600;
+		if (speed <100) speed=100;
+		String sg = strG1;
+		sg.concat(distance);
+		sg.concat("F");
+		sg.concat(speed);
 		bool result = myCommandQueue.AppendGcodeCommand(sg);
+		// sleep a while 
+		String sg2 = strG4 + var_sleep_in_second;
+		result = myCommandQueue.AppendGcodeCommand(sg2);
 
-		sg = strG4 + var_sleep_in_second;
-		result = myCommandQueue.AppendGcodeCommand(sg);
-
-		sg = strG1 + 0.1;
-		result = myCommandQueue.AppendGcodeCommand(sg);
+		// Go back to home position, keep a 0.1mm position
+		String sg3 = strG1 + 0.1;
+		result = myCommandQueue.AppendGcodeCommand(sg3);
 		var_done_count++;
 	}
 
