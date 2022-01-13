@@ -77,7 +77,10 @@ void setup() {
 	//     delay(100);
 	// mybot->HomeAllAxises();
 }
-
+int get_gcode_distance(float distance_in_ml){
+	int result = float(distance_in_ml) * 538.9;
+	return result;
+} 
 void loop() {
 	String strG4 = "G4S";
 	String strG1 = "G1X";
@@ -87,23 +90,31 @@ void loop() {
 	if (!varOnOff) return;
 	if (var_done_count >= var_total_count) return;
 	
+
 	if ((mybot->State == RobotBase::IDLE) && (myCommandQueue.BufferIsEmpty())){
-		int distance = float(var_per_volume) * 538.9;
+
+		// Go back to home position, keep a 0.1mm position
 		int speed = float(var_per_volume) / float(var_pull_in_second) * 540;
-		if (speed <100) speed=100;
+		if (speed < 100) speed=100;
+		if (speed > 400000) speed=400000;  
+		String sg3 = strG1 + get_gcode_distance(53.0f - var_per_volume);
+		sg3.concat("F");
+		sg3.concat(speed);
+		bool result = myCommandQueue.AppendGcodeCommand(sg3);
+
+		// Push to the end position, might stop here.
+		int distance = get_gcode_distance(float(var_per_volume));
 		String sg = strG1;
-		sg.concat(distance);
-		sg.concat("F");
-		sg.concat(speed);
-		bool result = myCommandQueue.AppendGcodeCommand(sg);
+		sg.concat(get_gcode_distance(53));
+		result = myCommandQueue.AppendGcodeCommand(sg);
+
 		// sleep a while 
 		String sg2 = strG4 + var_sleep_in_second;
 		result = myCommandQueue.AppendGcodeCommand(sg2);
 
-		// Go back to home position, keep a 0.1mm position
-		String sg3 = strG1 + 0.1;
-		result = myCommandQueue.AppendGcodeCommand(sg3);
 		var_done_count++;
+
+
 	}
 
 }
