@@ -4,7 +4,7 @@
 
 void RobotBase::SpinOnce(){
   // commuDevice->SpinOnce();
-//   Serial.print("RRRRRRRRRRRRRRRRRRRRRR RobotBase::SpinOnce()  ");
+  // Serial.print("[Debug] RobotBase::SpinOnce() is entering \n");
 	// Serial.print(this->State);
 	this->SpinOnce_BaseEnter();
 	switch (this->State){
@@ -20,7 +20,7 @@ void RobotBase::SpinOnce(){
 		this->_running_G28();
 		break;
 	default:
-		Serial.print("RRRRRRRRRRRRRRRRRRRRRR RobotBase::SpinOnce()  ");
+		Serial.print("[Warning] RobotBase::SpinOnce() Unknown current state: ");
 		Serial.print(this->State);
 
 		break;

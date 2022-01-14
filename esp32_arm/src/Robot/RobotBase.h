@@ -105,10 +105,8 @@ class RobotBase{
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void Init_Linkage();
-        virtual void HomeSingleAxis(char axis);   //??
-        
-        // bool IsIdle(){return this->robot_is_idle;};
-        // virtual void Init();
+        virtual void HomeSingleAxis(char axis);
+        // FkPositionBase CurrentPosition;
 
     protected:
         RobotBase(){};
@@ -136,6 +134,7 @@ class RobotBase{
 
         virtual void _running_G1();
         virtual void _running_G28();
+        char _homing_axis;
     
     private:
         int test_int;

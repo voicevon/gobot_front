@@ -15,7 +15,9 @@
 #define LINK_A 75
 #define LINK_B 75
 
-#define STEPS_PER_RAD 326;   //2048 / 2*Pi
+#define STEPS_PER_RAD 326   //2048 / 2*Pi
+#define ACCELERATION_HOMIMG 2000
+#define MAX_SPEED_HOMING 2000
 
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
@@ -25,55 +27,52 @@ GobotHouse::GobotHouse(){
 
 void GobotHouse::Setup(RobotAction* pAction, int segments){
 
-    __house_action = pAction;
-    __segments = segments;
-    __map.setup();
+	__house_action = pAction;
+	__segments = segments;
+	__map.setup();
 }
 
 
 
 void GobotHouse::HomeSingleAxis(char axis){
-	Serial.println("\n================================  " );
-	Serial.print(" Start homing    " );
+  Serial.print("[Debug] GobotHouse::HomeSingleAxis() is entering\n" );
   Serial.print(axis);
-	// this->objStepper.setAcceleration(ACCELERATION_HOMIMG);
-	// this->objStepper.setMaxSpeed(MAX_SPEED_HOMING);
-
-//   while(!objHomeHelper_alpha.IsTriged()){
-//     objStepper_beta.setTargetRel(100);
-//     objStepControl.move(objStepper_beta);
-    
-//   }
-//   // objAxis_Beta.SetCurrentPosition(HOME_POSITION_BETA);
-//   this->objActuator_Beta.SetCurrentPos(HOME_POSITION_BETA);
-
-//   while(!objHomeHelper_alpha.IsTriged()){
-//     objStepper_alpha.setTargetRel(100);
-//     objStepControl.move(objStepper_alpha);
-//   }
-//   // objAxis_Alpha.SetCurrentPosition(HOME_POSITION_ALPHA);
-//   objActuator_Alpha.SetCurrentPos(HOME_POSITION_ALPHA);
-  
-//   this->commuDevice->OutputMessage("Home is done.....");
+  this->_homing_axis = axis;
+  if (axis=='A'){
+	this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG);
+	this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING);
+	this->__homing_stepper = &this->objStepper_alpha;
+	this->__homing_helper = &this->objHomeHelper_alpha;
+  }else if (axis=='B'){
+	this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG);
+	this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING);
+	this->__homing_stepper = &this->objStepper_beta;
+	this->__homing_helper = &this->objHomeHelper_beta;
+  }
 }
 
 
 
 void GobotHouse::_running_G28(){
-	// if (this->objHomeHelper.IsTriged()){
-	// 	// End stop is trigered
-  //   this->objStepControl.stop();
-	// 	this->objStepper.setPosition(0);
-	// 	this->objStepper.setAcceleration(ACCELERATION);
-	// 	this->objStepper.setMaxSpeed(MAX_SPEED);
-	// 	Serial.print(" Homed postion =    " );
-	// 	Serial.println(this->objStepper.getPosition());
-	// 	this->State = IDLE;
-	// }else{
-	// 	this->objStepper.setTargetRel(-5000);
-	// 	this->objStepControl.moveAsync(this->objStepper);
-	// 	delay(10); 
-	// }
+	Serial.print("[Debug] GobotHouse::running_G28() is entering \n");
+	if (this->__homing_helper->IsTriged()){
+		// End stop is trigered
+		Serial.print(" Homed postion =    " );
+		this->objStepControl.stop();
+		this->__homing_stepper->setPosition(0);
+		Serial.println(this->__homing_stepper->getPosition());
+		// if (this->_homing_axis == 'A')
+		// 	this->objActuator_Alpha.SetCurrentPos(HOME_POSITION_ALPHA);
+		// 	// this->
+		// else if (this->_homing_axis == 'B')
+		// 	this->objActuator_Beta.SetCurrentPos(HOME_POSITION_BETA);
+		this->State = IDLE;
+	}else{
+		Serial.print("Still homing\n");
+		// Endstop is not trigered
+		this->__homing_stepper->setTargetRel(-5000);
+		this->objStepControl.moveAsync(*this->__homing_stepper);
+	}
 }
 
 // Head is a position name, The 5 bar arm will pick up stone from there.
@@ -106,17 +105,17 @@ void GobotHouse::__Enable_eefCoil(bool enable){
 
 /*
 
-    House                Y+
-                         ^
-             r0          |
-          r1     d0      |
-        r2      d1       |
-      r3       d3  d2    |               
-      -----------------(0,0)------Neck----------Head    --> X+
-      r4      d4  d5     |
-       r5       d6       |
-         r6     d7       |
-          r7             |
+	House                Y+
+						 ^
+			 r0          |
+		  r1     d0      |
+		r2      d1       |
+	  r3       d3  d2    |               
+	  -----------------(0,0)------Neck----------Head    --> X+
+	  r4      d4  d5     |
+	   r5       d6       |
+		 r6     d7       |
+		  r7             |
 
 */
 
@@ -145,42 +144,42 @@ void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
   float x1 = __map.head.x;
   float x2 = __map.neck.x;
   if(!forwarding){
-    //from neck to head
-    x1 = __map.neck.x;
-    x2 = __map.head.x;
+	//from neck to head
+	x1 = __map.neck.x;
+	x2 = __map.head.x;
   }
   float distance = x2 - x1;
   float dx = distance / __segments ;
   for(int segment= 0; segment < __segments; segment++){
-    float x = x1 + dx * segment;
-    // MoveTo(x, 0);
-    this->ActuatorMoveTo_FK(x,0);
+	float x = x1 + dx * segment;
+	// MoveTo(x, 0);
+	this->ActuatorMoveTo_FK(x,0);
   }
 }
 
 void GobotHouse::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
-    //from room to door, now is at room.
+	//from room to door, now is at room.
   float x1 = __map.rooms[room_id].x;
   float y1 = __map.rooms[room_id].y;
   float x2 = __map.doors[room_id].x;
   float y2 = __map.doors[room_id].y;
 
   if (!forwarding){
-    //from door to room, now is at door.
-    x1 = __map.doors[room_id].x;
-    y1 = __map.doors[room_id].y;
-    x2 = __map.rooms[room_id].x;
-    y2 = __map.rooms[room_id].y;
+	//from door to room, now is at door.
+	x1 = __map.doors[room_id].x;
+	y1 = __map.doors[room_id].y;
+	x2 = __map.rooms[room_id].x;
+	y2 = __map.rooms[room_id].y;
   }
 
   // float distance = __map.distance_room_to_door[room_id];
   float dx = (x2 - x1) / __segments;
   float dy = (y2 - y1) / __segments;
   for(int segment= 0; segment < __segments; segment++){
-    float x = x1 + dx * segment;
-    float y = y1 + dy * segment;
-    // MoveTo(x,y);
-    this->ActuatorMoveTo_FK(x,y);
+	float x = x1 + dx * segment;
+	float y = y1 + dy * segment;
+	// MoveTo(x,y);
+	this->ActuatorMoveTo_FK(x,y);
   }
 }
 
@@ -189,24 +188,24 @@ void GobotHouse::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
   float x = __map.doors[room_id].x;
   float y = __map.doors[room_id].y;
   if (!forwarding){
-    x = __map.neck.x;
-    y = __map.neck.y;    
+	x = __map.neck.x;
+	y = __map.neck.y;    
   }
   this->ActuatorMoveTo_FK(x,y);
 }
 
 void GobotHouse::init_gpio(){
-    pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-    pinMode(PIN_BETA_ENABLE, OUTPUT);
-    pinMode(PIN_MICRIO_STEP_0, OUTPUT);
-    pinMode(PIN_MICRIO_STEP_1, OUTPUT);
-    pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+	pinMode(PIN_BETA_ENABLE, OUTPUT);
+	pinMode(PIN_MICRIO_STEP_0, OUTPUT);
+	pinMode(PIN_MICRIO_STEP_1, OUTPUT);
+	pinMode(PIN_MICRIO_STEP_2, OUTPUT);
 
-    digitalWrite(PIN_ALPHA_ENABLE, LOW);
-    digitalWrite(PIN_BETA_ENABLE, LOW);
-    digitalWrite(PIN_MICRIO_STEP_0, LOW);
-    digitalWrite(PIN_MICRIO_STEP_1, LOW);
-    digitalWrite(PIN_MICRIO_STEP_2, LOW);
+	digitalWrite(PIN_ALPHA_ENABLE, LOW);
+	digitalWrite(PIN_BETA_ENABLE, LOW);
+	digitalWrite(PIN_MICRIO_STEP_0, LOW);
+	digitalWrite(PIN_MICRIO_STEP_1, LOW);
+	digitalWrite(PIN_MICRIO_STEP_2, LOW);
 
 }
 void GobotHouse::Init_Linkage(){

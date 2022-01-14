@@ -19,9 +19,11 @@ void setup(){
     mybot->Init_Linkage();
     // mybot->Setup(&action, 9);
 	myCommandQueue.LinkRobot(mybot);
-    String strG28 = "G28";
+    String strG28 = "G28A";
 	bool result = myCommandQueue.AppendGcodeCommand(strG28);
-    // Serial.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+	strG28 = "G28B";
+	result = myCommandQueue.AppendGcodeCommand(strG28);
+
 	myCommandQueue.SpinOnce();
     Serial.print("\nHouse setup is done..........");
 }

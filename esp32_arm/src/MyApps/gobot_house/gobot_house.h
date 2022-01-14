@@ -102,4 +102,7 @@ class GobotHouse: public RobotBase{
         IkPosXY objIkXY;
 
         void init_gpio();
+
+        Stepper* __homing_stepper;
+        HomeHelper* __homing_helper;
 };
