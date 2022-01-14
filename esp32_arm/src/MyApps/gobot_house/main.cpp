@@ -26,14 +26,14 @@ void setup(){
 
 	myCommandQueue.SpinOnce();
     Serial.print("\nHouse setup is done..........");
-	String strG1 = "G1X10";
+	String strG1 = "G1A1000";
 	result = myCommandQueue.AppendGcodeCommand(strG1);
 
 }
 
 void loop(){
 	String strG4 = "G4S";
-	String strG1 = "G1X";
+	String strG1 = "G1";
 	// WebCommu_SpinOnce();
 	mybot->SpinOnce();
 	myCommandQueue.SpinOnce();

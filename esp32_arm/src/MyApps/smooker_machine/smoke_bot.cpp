@@ -20,7 +20,6 @@ void SmokeBot::RunG1(Gcode* gcode) {
 
   this->objStepper.setTargetAbs(distance);
   this->objStepControl.move(this->objStepper);
-  // this->objStepControl.move(this->objStepper);
 }
 
 void SmokeBot:: _running_G1(){

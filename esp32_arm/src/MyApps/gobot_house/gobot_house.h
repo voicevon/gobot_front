@@ -78,7 +78,7 @@ class GobotHouse: public RobotBase{
         void __Move_fromNeck_toDoor(uint8_t house_id, bool forwarding);
         void __Enable_eefCoil(bool enable);
         void RunG6(Gcode* gcode) override {};   //Block mode
-        void _running_G1() override{};
+        void _running_G1() override;
         void _running_G28() override;
         std::string GetHomeTrigerStateString() override {};
         void MoveToTargetPosition() {};

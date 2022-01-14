@@ -229,11 +229,29 @@ float GobotHouse::GetDistanceToTarget(){
 }
 
 void GobotHouse::RunG1(Gcode* gcode) {
+	//None blocking, move backgroundly.
+	Serial.println("[Debug] GobotHouse::RunG1()   \n");
+	if (gcode->has_letter('F')){
+		int speed = gcode->get_value('F');
+		// this->objStepper.setMaxSpeed(speed);
+	}
+	float target_alpha = this->objStepper_alpha.getPosition();
+	float target_beta = this->objStepper_beta.getPosition();
+	Serial.print(target_alpha);
+	if (gcode->has_letter('A')) target_alpha = gcode->get_value('A');
+	if (gcode->has_letter('B')) target_beta = gcode->get_value('B');
+	Serial.print(" <-- from   alpha-stepper   to --> ");
+	Serial.println(target_alpha);
+
+	this->objStepper_alpha.setTargetAbs(target_alpha);
+	this->objStepper_beta.setTargetAbs(target_beta);
+	this->objStepControl.move(this->objStepper_alpha, this->objStepper_beta);
+}
+void GobotHouse:: _running_G1(){
     if (this->GetDistanceToTarget() < 20){
-      this->State = IDLE;
+      	this->State = IDLE;
     }
 }
-
 
 void GobotHouse::ActuatorMoveTo_FK(float x, float y){
 
