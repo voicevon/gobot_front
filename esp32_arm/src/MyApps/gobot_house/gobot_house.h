@@ -89,8 +89,8 @@ class GobotHouse: public RobotBase{
 
         Led objLedPower = Led(0, PIN_LED_POWER_2109, LOW);
         Led objLedHomeAlpha = Led(1,2,LOW);
-        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA_2109, HIGH);
-        HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA_2109, HIGH);
+        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA_2109, LOW);
+        HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA_2109, LOW);
 
         Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
         Stepper objStepper_beta = Stepper(PIN_BETA_STEP_2109, PIN_BETA_DIR_2109);
@@ -98,8 +98,8 @@ class GobotHouse: public RobotBase{
 
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
-        FkPosXY objFkXY;
-        IkPosAB objIkXY;
+        // FkPosXY objFkXY;
+        // IkPosAB objIkXY;
 
         void init_gpio();
 

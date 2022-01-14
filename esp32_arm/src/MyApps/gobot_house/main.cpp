@@ -26,7 +26,7 @@ void setup(){
 
 	myCommandQueue.SpinOnce();
     Serial.print("\nHouse setup is done..........");
-	String strG1 = "G1A1000";
+	String strG1 = "G1A54321B12345";
 	result = myCommandQueue.AppendGcodeCommand(strG1);
 
 }
