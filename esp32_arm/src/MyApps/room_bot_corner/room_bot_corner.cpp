@@ -38,7 +38,7 @@ void RoomBotCorner::test_home(){
     
 }
 
-void RoomBotCorner::HomeAllAxises(){
+void RoomBotCorner::HomeSingleAxis(char axis){
     // This robot actually is a joint of the Cable-ROBOT system.
     // And, It's necessary to work with other joint cooperately.
     // So, the function "Home()" should do nothing ! 

@@ -15,7 +15,7 @@ void CommandQueue::SpinOnce(){
         // Serial.println("Dispacher, Got robot idle.");
         if(this->head != this->tail){
             //Run next gcode
-            Serial.print("         Start to run next gcode  ");
+            Serial.print("\n\n         Start to run next gcode  ");
             char* p = &gCodeCommands[0];
             p += 20 * this->tail;
             std::string str = std::string(p);
@@ -34,7 +34,6 @@ bool CommandQueue::BufferIsEmpty(){
 }
 
 bool CommandQueue::AppendGcodeCommand(String command){
-// bool CommandQueue::AppendGcodeCommand(char* command, int length){
     int pre_head = this->head;
     pre_head++;
     if (pre_head == 5) pre_head =0;
@@ -42,10 +41,10 @@ bool CommandQueue::AppendGcodeCommand(String command){
         // Buffer is full
         return false;
     }
-    Serial.print("\n\n\n");
-    Serial.print(command.length());
-    Serial.print(">>> ");
-    Serial.println(command);
+    // Serial.print("Adding gcode to command queue   ");
+    // Serial.print(command.length());
+    // Serial.print(">>> ");
+    // Serial.println(command);
     unsigned char* pTargetByte = (unsigned char*) (&gCodeCommands[0]);
     pTargetByte += 20 * this->head;
     // This doens't work, Don't knwo how Arduino String is orgnized with bytes.
@@ -57,7 +56,7 @@ bool CommandQueue::AppendGcodeCommand(String command){
     //     pTargetByte++;
     // } 
     command.getBytes(pTargetByte, command.length() + 1);
-    Serial.print(" Gcode command added  ");
+    Serial.print("\nGcode added to command queue  >>> ");
     char* p = (char*)&gCodeCommands[0];
     p += 20 * this->head;
     std::string ss=std::string(p);
@@ -67,18 +66,3 @@ bool CommandQueue::AppendGcodeCommand(String command){
 }
 
 
-// bool GcodeDispacher::AppendGcode(Gcode* gcode){
-//     int pre_head = this->head;
-//     pre_head++;
-//     if (pre_head == 5) pre_head =0;
-//     if (pre_head == this->tail){
-//         // Buffer is full
-//         return false;
-//     }
-
-//     this->head = pre_head;
-//     this->_buffer[this->head] = gcode;
-//     Serial.print("Gcode added  ");
-//     Serial.println(gcode->get_command());
-//     return true;
-// }

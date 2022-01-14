@@ -29,7 +29,7 @@ void SmokeBot:: _running_G1(){
     }
 }
 
-void SmokeBot::HomeAllAxises(){
+void SmokeBot::HomeSingleAxis(char axis){
 	Serial.println("\n================================  " );
 	Serial.print(" Start homing    " );
 	this->objStepper.setAcceleration(ACCELERATION_HOMIMG);

@@ -32,26 +32,48 @@ void GobotHouse::Setup(RobotAction* pAction, int segments){
 
 
 
-void GobotHouse::HomeAllAxises(){
-  while(!objHomeHelper_alpha.IsTriged()){
-    objStepper_beta.setTargetRel(100);
-    objStepControl.move(objStepper_beta);
-  }
-  // objAxis_Beta.SetCurrentPosition(HOME_POSITION_BETA);
-  this->objActuator_Beta.SetCurrentPos(HOME_POSITION_BETA);
+void GobotHouse::HomeSingleAxis(char axis){
+	Serial.println("\n================================  " );
+	Serial.print(" Start homing    " );
+  Serial.print(axis);
+	// this->objStepper.setAcceleration(ACCELERATION_HOMIMG);
+	// this->objStepper.setMaxSpeed(MAX_SPEED_HOMING);
 
-  while(!objHomeHelper_alpha.IsTriged()){
-    objStepper_alpha.setTargetRel(100);
-    objStepControl.move(objStepper_alpha);
-  }
-  // objAxis_Alpha.SetCurrentPosition(HOME_POSITION_ALPHA);
-  objActuator_Alpha.SetCurrentPos(HOME_POSITION_ALPHA);
+//   while(!objHomeHelper_alpha.IsTriged()){
+//     objStepper_beta.setTargetRel(100);
+//     objStepControl.move(objStepper_beta);
+    
+//   }
+//   // objAxis_Beta.SetCurrentPosition(HOME_POSITION_BETA);
+//   this->objActuator_Beta.SetCurrentPos(HOME_POSITION_BETA);
+
+//   while(!objHomeHelper_alpha.IsTriged()){
+//     objStepper_alpha.setTargetRel(100);
+//     objStepControl.move(objStepper_alpha);
+//   }
+//   // objAxis_Alpha.SetCurrentPosition(HOME_POSITION_ALPHA);
+//   objActuator_Alpha.SetCurrentPos(HOME_POSITION_ALPHA);
   
-  this->commuDevice->OutputMessage("Home is done.....");
+//   this->commuDevice->OutputMessage("Home is done.....");
 }
 
+
+
 void GobotHouse::_running_G28(){
-  
+	// if (this->objHomeHelper.IsTriged()){
+	// 	// End stop is trigered
+  //   this->objStepControl.stop();
+	// 	this->objStepper.setPosition(0);
+	// 	this->objStepper.setAcceleration(ACCELERATION);
+	// 	this->objStepper.setMaxSpeed(MAX_SPEED);
+	// 	Serial.print(" Homed postion =    " );
+	// 	Serial.println(this->objStepper.getPosition());
+	// 	this->State = IDLE;
+	// }else{
+	// 	this->objStepper.setTargetRel(-5000);
+	// 	this->objStepControl.moveAsync(this->objStepper);
+	// 	delay(10); 
+	// }
 }
 
 // Head is a position name, The 5 bar arm will pick up stone from there.

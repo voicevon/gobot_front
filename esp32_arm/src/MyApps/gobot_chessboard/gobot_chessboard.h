@@ -77,7 +77,7 @@ class GobotChessboard: public RobotBase{
                                   // Instantiated on first use.
             return instance;
         }
-        void HomeAllAxises() override;
+        void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
         void Init_Linkage() override;
         // void SpinOnce(void);

@@ -56,14 +56,20 @@ void RobotBase::RunGcode(Gcode* gcode){
   // }
 
   if(gcode->has_g){
+    char home_axis = 'X';
     switch (gcode->g){
       case 28:
         // G28: Home
-        // this->__is_busy = true;
         this->State = RUNNING_G28;
-        this->HomeAllAxises();
+        if (gcode->has_letter('Y')) home_axis='Y';
+        if (gcode->has_letter('Z')) home_axis='Z';
+        if (gcode->has_letter('A')) home_axis='A';
+        if (gcode->has_letter('B')) home_axis='B';
+        if (gcode->has_letter('C')) home_axis='C';
+        this->HomeSingleAxis(home_axis);
         // this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
         break;
+
       case 1:
         // G1 Move
         //TODO:  1. put position to movement queue. called "plan" in smoothieware? 

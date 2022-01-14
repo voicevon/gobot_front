@@ -28,7 +28,7 @@ GobotChessboard::GobotChessboard(){
   // this->axis_beta = &obj_axis_beta;
 }
 
-void GobotChessboard::HomeAllAxises(){ 
+void GobotChessboard::HomeSingleAxis(char axis){ 
   while(!objHomeHelper_alpha.IsTriged()){
     objStepper_alpha.setTargetRel(100);
     objStepControl.move(objStepper_alpha);

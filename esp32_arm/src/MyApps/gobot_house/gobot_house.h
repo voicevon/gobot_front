@@ -50,7 +50,7 @@ class GobotHouse: public RobotBase{
         // void SpinOnce(void);
         void Init_Linkage() override;
         void Setup(RobotAction* pAction, int segments);
-        void HomeAllAxises() override;
+        void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);

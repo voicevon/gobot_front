@@ -20,7 +20,7 @@
 class SmokeBot: public RobotBase{
     public:
         SmokeBot();
-        void HomeAllAxises() override;
+        void HomeSingleAxis(char axis) override;
         void Init_Linkage() override;
         void Init_Gpio();
 

@@ -87,14 +87,14 @@ void loop() {
 	WebCommu_SpinOnce();
 	mybot->SpinOnce();
 	myCommandQueue.SpinOnce();
-	if (varPaused) return;
+	if (!varOnOff) return;
 
 	if ((mybot->State == RobotBase::IDLE) && (myCommandQueue.BufferIsEmpty())){
-		int distance = float(var_volume) * 90.0;
+		int distance = float(var_per_volume) * 90.0;
 		String sg = strG1 + distance;
 		bool result = myCommandQueue.AppendGcodeCommand(sg);
 
-		sg = strG4 + var_sleep_time;
+		sg = strG4 + var_sleep_in_second;
 		result = myCommandQueue.AppendGcodeCommand(sg);
 
 		sg = strG1 + 0.1;

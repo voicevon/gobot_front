@@ -105,7 +105,7 @@ class RobotBase{
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void Init_Linkage();
-        virtual void HomeAllAxises();   //??
+        virtual void HomeSingleAxis(char axis);   //??
         
         // bool IsIdle(){return this->robot_is_idle;};
         // virtual void Init();
@@ -125,13 +125,15 @@ class RobotBase{
         CommuDeviceBase* commuDevice;
         // bool robot_is_idle = true;    //TODO: Will be instead of commu_buffer_length > 0.
         bool is_absolute_position = true;
-        // Just for fun, don't remove below comment !!
-        // void OnFinishedGcode2(void(*callback)()) {__output_message2 = callback;};
-        // void OnFinishedGcode3(void(*callback)()) {__output_message2 = callback;};
-        // void OnFinishedGcode4(void(*callback())) {__output_message3 = callback;};
-        // void OnFinishedGcode5(void(*callback)()) {__output_message3 = callback;};
-        // void * __output_message2;
-        // void (* __output_message3);
+        /* Just for fun, don't remove below comment.
+        void * __output_message2;
+        void (* __output_message3); 
+        void OnFinishedGcode2(void(*callback)()) {__output_message2 = callback;};
+        void OnFinishedGcode3(void(*callback)()) {__output_message2 = callback;};
+        void OnFinishedGcode4(void(*callback())) {__output_message3 = callback;};
+        void OnFinishedGcode5(void(*callback)()) {__output_message3 = callback;};
+        */
+
         virtual void _running_G1();
         virtual void _running_G28();
     
