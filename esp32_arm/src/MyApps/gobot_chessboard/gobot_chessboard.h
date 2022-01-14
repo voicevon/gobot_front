@@ -93,8 +93,8 @@ class GobotChessboard: public RobotBase{
         GobotChessboard& operator=(GobotChessboard const& copy); // Not Implemented
 
         // ik_position ik(float x, float y) override;
-        virtual IkPositionBase* IK(FkPositionBase* fk) override;
-        virtual FkPositionBase* FK(IkPositionBase* ik) override;
+        virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override;
+        virtual void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override;
 
         // SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
         // SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
@@ -134,10 +134,6 @@ class GobotChessboard: public RobotBase{
         HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA_2112, HIGH);
         HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA_2112, HIGH);
 
-        // SingleAxis objAxis_Alpha = SingleAxis();
-        // SingleAxis objAxis_Beta = SingleAxis();
-        ActuatorBase objActuator_Alpha = ActuatorBase();
-        ActuatorBase objActuator_Beta = ActuatorBase();
 
         Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP_2112, PIN_ALPHA_DIR_2112);
         Stepper objStepper_beta = Stepper(PIN_BETA_STEP_2112, PIN_BETA_DIR_2112);
@@ -145,8 +141,6 @@ class GobotChessboard: public RobotBase{
 
         CommuBleGattServer objCommuBle = CommuBleGattServer();
         CommuUart objCommuUart = CommuUart();
-        IkPosXY objIkPos;
-        FkPosXY objFkPos;
 };
 
 

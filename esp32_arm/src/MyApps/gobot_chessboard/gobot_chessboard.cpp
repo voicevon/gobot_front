@@ -34,14 +34,11 @@ void GobotChessboard::HomeSingleAxis(char axis){
     objStepControl.move(objStepper_alpha);
   }
   // objAxis_Alpha.SetCurrentPosition(HOME_POSITION_ALPHA);
-  this->objActuator_Alpha.SetCurrentPos(HOME_POSITION_ALPHA);
 
   while(!objHomeHelper_beta.IsTriged()){
     objStepper_beta.setTargetRel(100);
     objStepControl.move(objStepper_beta);
   }
-  // objAxis_Beta.SetCurrentPosition(HOME_POSITION_BETA);
-  this->objActuator_Beta.SetCurrentPos(HOME_POSITION_BETA);
   this->commuDevice->OutputMessage("Home is done.....");
 }
 
@@ -50,15 +47,6 @@ void GobotChessboard::_running_G28(){
 }
 
 void GobotChessboard::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
-  // uint8_t flags=0;
-  // // Serial.print("\nHome spin got started.............\n");
-  // while (flags !=0xff){
-  //   stepper_alpha->setTargetRel(1);
-  //   steppers->move(*homing_stepper);
-  //   flags <<= 1;
-  //   flags |= digitalRead(home_pin);
-  // }
-  // Serial.print("\n###################  Home is done.");
 }
 
 /*
@@ -84,28 +72,30 @@ https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/maste
 //   return ret;
 // }
 
-IkPositionBase* GobotChessboard::IK(FkPositionBase* _fk){
-  // IkPosXY ret;   //is risk here?
-  FkPosXY* fk = (FkPosXY*)(fk);
-  float rr1= (fk->x + LINK_0) * (fk->x + LINK_0) + fk->y * fk->y;
+void GobotChessboard::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
+  FkPosXY* fk = (FkPosXY*)(from_fk);
+  IkPosAB* ik = (IkPosAB*)(to_ik);
+
+  float rr1= (fk->X + LINK_0) * (fk->X + LINK_0) + fk->Y * fk->Y;
   
   float r1 = sqrtf(rr1);
-  float alpha_eef = acosf((fk->x + LINK_0) / r1);
+  float alpha_eef = acosf((fk->X + LINK_0) / r1);
   float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B) / ( 2*LINK_A * r1));
   float alpha = alpha_eef + alpha_link;
-  this->objIkPos.alpha  = alpha * STEPS_PER_RAD;
+  ik->alpha  = alpha * STEPS_PER_RAD;
 
-  float rr2 = (fk->x - LINK_0)* (fk->x - LINK_0) + fk->y * fk->y;
+  float rr2 = (fk->X - LINK_0)* (fk->X - LINK_0) + fk->Y * fk->Y;
   float r2 = sqrtf(rr2);
-  float beta_eef = acosf((fk->x - LINK_0) / r2 );
+  float beta_eef = acosf((fk->X - LINK_0) / r2 );
   float beta_link = acosf((LINK_A * LINK_A + rr2 - LINK_B * LINK_B) / (2 * LINK_A * r2));
   float beta = beta_eef - beta_link;
-  this->objIkPos.beta =  beta * STEPS_PER_RAD; 
-  return &this->objIkPos;
+  ik->beta =  beta * STEPS_PER_RAD; 
 }
-FkPositionBase* GobotChessboard::FK(IkPositionBase* ik){
+
+void GobotChessboard::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 
 }
+
 void GobotChessboard::SetEffector(EEF action){
   switch (action){
     case Lower:

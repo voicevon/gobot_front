@@ -73,11 +73,11 @@ class fkPosXYUVW: public FkPositionBase{
 class IkPositionBase{
 
 };
-class IkPosX: public IkPositionBase{
+class IkPosA: public IkPositionBase{
     public:
         float alpha;
 };
-class IkPosXY: public IkPositionBase{
+class IkPosAB: public IkPositionBase{
     public:
         float alpha;
         float beta;
@@ -115,8 +115,8 @@ class RobotBase{
         virtual void MoveToTargetPosition();
         virtual void SpinOnce_BaseEnter();
         virtual void SpinOnce_BaseExit();
-        virtual IkPositionBase* IK(FkPositionBase* fk);
-        virtual FkPositionBase* FK(IkPositionBase* ik);
+        virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
+        virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
         virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.
         virtual void RunG6(Gcode* gcode);   //Block mode
         void RunG4(Gcode* gcode);

@@ -38,8 +38,8 @@ class RoomBotCorner: public RobotBase{
     protected:
         
     private:
-        virtual IkPositionBase* IK(FkPositionBase* fk) override;
-        virtual FkPositionBase* FK(IkPositionBase* ik) override;
+        virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override;
+        virtual void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override;
         virtual std::string GetHomeTrigerStateString() override;
         void MoveToTargetPosition() override;
         void SpinOnce_BaseEnter() override {};
@@ -52,10 +52,6 @@ class RoomBotCorner: public RobotBase{
         DCMotor objDcMotor = DCMotor();   //parent is ActuatorBase
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
-        // SingleAxis singleAxis = SingleAxis();
-        // DCMotor* objActuator;
-        FkPosX objFkpos;
-        IkPosX objIkPos;
 
         // FkPosX currentPosX;
         FkPosX nextPosX;

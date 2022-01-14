@@ -36,8 +36,8 @@ class SmokeBot: public RobotBase{
         void MoveToTargetPosition()  override {};
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
-        IkPositionBase* IK(FkPositionBase* fk) override {};
-        FkPositionBase* FK(IkPositionBase* ik) override {};
+        void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override {};
+        void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override {};
         void RunG1(Gcode* gcode) override;   //None blocking, move backgroundly.
         void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {};

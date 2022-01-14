@@ -139,16 +139,16 @@ void RoomBotCorner::Init_Linkage(IrEncoderHelper* sensorHelperBase){
 // } 
 
 
-IkPositionBase* RoomBotCorner::IK(FkPositionBase* fk){
-    FkPosX* _fk = (FkPosX*)(fk);
-    this->objIkPos.alpha = _fk->x;
-    return &this->objIkPos;  
+void RoomBotCorner::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
+    FkPosX* fk = (FkPosX*)(from_fk);
+    IkPosA* ik = (IkPosA*)(to_ik);
+    ik->alpha = fk->x;
 }
 
-FkPositionBase* RoomBotCorner::FK(IkPositionBase* ik){
-    IkPosX* _ik = (IkPosX*)(ik);
-    this->objFkpos.x = _ik->alpha;
-    return &this->objFkpos;
+void RoomBotCorner::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
+    IkPosA* ik = (IkPosA*)(from_ik);
+    FkPosX* fk = (FkPosX*)(to_fk);
+    fk->x = ik->alpha;
 }
 
 #endif

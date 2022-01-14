@@ -56,6 +56,7 @@ class GobotHouse: public RobotBase{
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);
         FkPositionBase GetCurrentPosition() override;
+        float GetDistanceToTarget();
         
 
 
@@ -67,8 +68,8 @@ class GobotHouse: public RobotBase{
         void ActuatorMoveTo_IK(int32_t a, int32_t b);
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
-        virtual IkPositionBase* IK(FkPositionBase* fk) override;
-        virtual FkPositionBase* FK(IkPositionBase* ik) override;
+        virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
+        virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
         RobotAction* __house_action;
         int __segments;
         
@@ -84,10 +85,6 @@ class GobotHouse: public RobotBase{
 
         HouseMap __map;
 
-        // SingleAxis objAxis_Alpha= SingleAxis();
-        // SingleAxis objAxis_Beta= SingleAxis();
-        // ActuatorBase objActuator_Alpha = ActuatorBase();
-        // ActuatorBase objActuator_Beta = ActuatorBase();
 
 
         Led objLedPower = Led(0, PIN_LED_POWER_2109, LOW);
@@ -102,11 +99,13 @@ class GobotHouse: public RobotBase{
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
         FkPosXY objFkXY;
-        IkPosXY objIkXY;
+        IkPosAB objIkXY;
 
         void init_gpio();
 
         Stepper* __homing_stepper;
         HomeHelper* __homing_helper;
-        FkPosXY __current_position;
+        FkPosXY __current_fk_position;
+        FkPosXY __target_fk_position;
+        
 };

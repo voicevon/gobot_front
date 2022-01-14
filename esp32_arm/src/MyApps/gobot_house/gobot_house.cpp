@@ -33,7 +33,7 @@ void GobotHouse::Setup(RobotAction* pAction, int segments){
 }
 
 FkPositionBase GobotHouse::GetCurrentPosition(){
-	return this->__current_position; 
+	return this->__current_fk_position; 
 }
 
 
@@ -123,37 +123,36 @@ void GobotHouse::__Enable_eefCoil(bool enable){
 */
 
 // }
-IkPositionBase* GobotHouse::IK(FkPositionBase* _fk){
-  FkPosXY* fk = (FkPosXY*)(_fk);
-// ik_position GobotHouse::ik(float x, float y){
-  // ik_position ret;   //is risk here?
-  float rr1= fk->x * fk->x + fk->y * fk->y;
-  
-  float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
-  float r1 = sqrtf(rr1);
-  float alpha_eef = acosf(fk->x/r1);
-  float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
-  float alpha = alpha_eef + alpha_link;
-  this->objIkXY.alpha = alpha * STEPS_PER_RAD;
-  this->objIkXY.beta =  beta * STEPS_PER_RAD; 
-  return &this->objIkXY;
+void GobotHouse::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
+	FkPosXY* fk = (FkPosXY*)(from_fk);
+	IkPosAB* ik = (IkPosAB*)(to_ik);
+	float rr1= fk->X * fk->X + fk->Y * fk->Y;
+
+	float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
+	float r1 = sqrtf(rr1);
+	float alpha_eef = acosf(fk->X/r1);
+	float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
+	float alpha = alpha_eef + alpha_link;
+	ik->alpha = alpha * STEPS_PER_RAD;
+	ik->beta =  beta * STEPS_PER_RAD; 
 }
-FkPositionBase* GobotHouse::FK(IkPositionBase* ik){
+
+void GobotHouse::FK(IkPositionBase* ik, FkPositionBase*  to_fk){
 
 }
 
 
 void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
-  float x1 = __map.head.x;
-  float x2 = __map.neck.x;
+  float x1 = this->__map.head.x;
+  float x2 = this->__map.neck.x;
   if(!forwarding){
 	//from neck to head
-	x1 = __map.neck.x;
-	x2 = __map.head.x;
+	x1 = this->__map.neck.x;
+	x2 = this->__map.head.x;
   }
   float distance = x2 - x1;
-  float dx = distance / __segments ;
-  for(int segment= 0; segment < __segments; segment++){
+  float dx = distance / this->__segments ;
+  for(int segment= 0; segment < this->__segments; segment++){
 	float x = x1 + dx * segment;
 	// MoveTo(x, 0);
 	this->ActuatorMoveTo_FK(x,0);
@@ -217,8 +216,22 @@ void GobotHouse::Init_Linkage(){
 
 }
 
-void GobotHouse::RunG1(Gcode* gcode) {
+float GobotHouse::GetDistanceToTarget(){
+	IkPosAB current_ik;
+	current_ik.alpha = (float)this->objStepper_alpha.getPosition();
+	current_ik.alpha = (float)this->objStepper_beta.getPosition();
+	FK(&current_ik, &this->__current_fk_position);
+	
+	float dx = this->__current_fk_position.X - this->__target_fk_position.X;
+	float dy = this->__current_fk_position.Y - this->__target_fk_position.Y;
+	float distance = sqrt(dx * dx + dy * dy);
+	return distance;
+}
 
+void GobotHouse::RunG1(Gcode* gcode) {
+    if (this->GetDistanceToTarget() < 20){
+      this->State = IDLE;
+    }
 }
 
 
