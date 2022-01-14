@@ -39,6 +39,7 @@
 #define ENDER_COIL_EXT_2109 33
 
 
+
 class GobotHouse: public RobotBase{
     public:
         static GobotHouse& getInstance()
@@ -54,6 +55,8 @@ class GobotHouse: public RobotBase{
         void RunG1(Gcode* gcode) override;
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);
+        FkPositionBase GetCurrentPosition() override;
+        
 
 
 
@@ -83,8 +86,8 @@ class GobotHouse: public RobotBase{
 
         // SingleAxis objAxis_Alpha= SingleAxis();
         // SingleAxis objAxis_Beta= SingleAxis();
-        ActuatorBase objActuator_Alpha = ActuatorBase();
-        ActuatorBase objActuator_Beta = ActuatorBase();
+        // ActuatorBase objActuator_Alpha = ActuatorBase();
+        // ActuatorBase objActuator_Beta = ActuatorBase();
 
 
         Led objLedPower = Led(0, PIN_LED_POWER_2109, LOW);
@@ -105,4 +108,5 @@ class GobotHouse: public RobotBase{
 
         Stepper* __homing_stepper;
         HomeHelper* __homing_helper;
+        FkPosXY __current_position;
 };

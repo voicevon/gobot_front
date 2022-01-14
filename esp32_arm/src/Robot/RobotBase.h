@@ -21,10 +21,11 @@ class FkPosX: public FkPositionBase{
     public:
         float x;
 };
+
 class FkPosXY: public FkPositionBase{
     public:
-        float x;
-        float y;
+        float X;
+        float Y;
 };
 class FkPosXYZ: public FkPositionBase{
     public:
@@ -106,7 +107,7 @@ class RobotBase{
         void SpinOnce();
         virtual void Init_Linkage();
         virtual void HomeSingleAxis(char axis);
-        // FkPositionBase CurrentPosition;
+        virtual FkPositionBase GetCurrentPosition();
 
     protected:
         RobotBase(){};

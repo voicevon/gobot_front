@@ -82,6 +82,7 @@ class GobotChessboard: public RobotBase{
         void Init_Linkage() override;
         // void SpinOnce(void);
         void Setup(RobotAction* pAction);
+        FkPositionBase GetCurrentPosition() override {};
 
         void SetEffector(EEF action);
         void pick_place_park(RobotAction* pAction);

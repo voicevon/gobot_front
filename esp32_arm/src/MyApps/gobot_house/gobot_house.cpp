@@ -32,6 +32,9 @@ void GobotHouse::Setup(RobotAction* pAction, int segments){
 	__map.setup();
 }
 
+FkPositionBase GobotHouse::GetCurrentPosition(){
+	return this->__current_position; 
+}
 
 
 void GobotHouse::HomeSingleAxis(char axis){
@@ -211,18 +214,6 @@ void GobotHouse::init_gpio(){
 void GobotHouse::Init_Linkage(){
   init_gpio();
   this->commuDevice = &this->objCommuUart; 
-  // this->objHomeHelper_alpha.LinkAxis(&this->objAxis_Alpha);
-  this->objHomeHelper_alpha.LinkActuator(&this->objActuator_Alpha);
-  // this->objHomeHelper_beta.LinkAxis(&this->objAxis_Beta);
-  this->objHomeHelper_beta.LinkActuator(&this->objActuator_Beta);
-
-  // this->objAxis_Alpha.LinkAcuator(&this->objActuator_Alpha);
-  this->objActuator_Alpha.LinkDriver(nullptr);
-  this->objActuator_Alpha.LinkSensorHelper(nullptr);
-
-  // this->objAxis_Beta.LinkAcuator(&this->objActuator_Beta);
-  this->objActuator_Beta.LinkDriver(nullptr);
-  this->objActuator_Beta.LinkSensorHelper(nullptr);
 
 }
 

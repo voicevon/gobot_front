@@ -33,6 +33,7 @@ class RoomBotCorner: public RobotBase{
         void Init_Linkage(IrEncoderHelper* sensorHelper);
         void test_hBridge();
         void test_home();
+        FkPositionBase GetCurrentPosition() override {};
 
     protected:
         

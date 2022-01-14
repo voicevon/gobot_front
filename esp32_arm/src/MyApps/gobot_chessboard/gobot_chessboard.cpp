@@ -218,9 +218,9 @@ void GobotChessboard::Init_Linkage(){
     // this->objActuator_Beta.LinkSensorHelper(nullptr);
 
     // this->objHomeHelper_alpha.LinkAxis(&this->objAxis_Alpha);
-    this->objHomeHelper_alpha.LinkActuator(&this->objActuator_Alpha);
+    // this->objHomeHelper_alpha.LinkActuator(&this->objActuator_Alpha);
     // this->objHomeHelper_beta.LinkAxis(&this->objAxis_Beta);
-    this->objHomeHelper_beta.LinkActuator(&this->objActuator_Beta);
+    // this->objHomeHelper_beta.LinkActuator(&this->objActuator_Beta);
 } 
 
 void GobotChessboard::RunG1(Gcode* gcode){

@@ -23,12 +23,11 @@ class SmokeBot: public RobotBase{
         void HomeSingleAxis(char axis) override;
         void Init_Linkage() override;
         void Init_Gpio();
+        FkPositionBase GetCurrentPosition() override {};
 
 
     private:
         CommuUart objCommuUart = CommuUart();
-        // SingleAxis objAxis_Alpha= SingleAxis();
-        ActuatorBase objActuator = ActuatorBase();
         Stepper objStepper = Stepper(PIN_STEP, PIN_DIR);
         StepControl objStepControl;
 
