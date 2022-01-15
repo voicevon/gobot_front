@@ -9,7 +9,9 @@ void GobotHouse::Setup(RobotAction* pAction, int segments){
 
 	this->__robot_hardware = &GobotHouseHardware::getInstance();
     this->__robot_hardware->Init_Linkage();
+	this->__commandQueue = new CommandQueue();
 	this->__commandQueue->LinkRobot(this->__robot_hardware);
+    Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
 }
 
 void GobotHouse::SpinOnce(){
@@ -17,6 +19,15 @@ void GobotHouse::SpinOnce(){
 	this->__commandQueue->SpinOnce();
 }
 void GobotHouse::ParkArms(bool do_homing){
+	Serial.print("\n[Debug] GobotHouse::ParkArms() is entering");
+	int free_buffer_count = 0;
+	while (free_buffer_count < 3){
+		this->SpinOnce();
+		free_buffer_count = this->__commandQueue->GetFreeBuffersCount();
+		Serial.print(free_buffer_count);
+		Serial.print(" ");
+	}
+
 	if (do_homing){
 		String strG28 = "G28A";
 		bool result = this->__commandQueue->AppendGcodeCommand(strG28);

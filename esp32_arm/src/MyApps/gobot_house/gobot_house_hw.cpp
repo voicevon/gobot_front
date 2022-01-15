@@ -51,22 +51,18 @@ void GobotHouseHardware::HomeSingleAxis(char axis){
 
 
 void GobotHouseHardware::_running_G28(){
-	Serial.print("[Debug] GobotHouseHardware::running_G28() is entering \n");
+	// Serial.print("[Debug] GobotHouseHardware::running_G28() is entering \n");
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
-		Serial.print(" Homed postion =    " );
+		Serial.print("[Info] Homed postion =  " );
 		this->objStepControl.stop();
 		this->__homing_stepper->setPosition(0);
 		Serial.println(this->__homing_stepper->getPosition());
-		// if (this->_homing_axis == 'A')
-		// 	this->objActuator_Alpha.SetCurrentPos(HOME_POSITION_ALPHA);
-		// 	// this->
-		// else if (this->_homing_axis == 'B')
-		// 	this->objActuator_Beta.SetCurrentPos(HOME_POSITION_BETA);
 		this->State = IDLE;
 	}else{
-		Serial.print("Still homing\n");
 		// Endstop is not trigered
+		// Serial.print("[Debug] Still homing\n");
+		// Serial.print("<");
 		this->__homing_stepper->setTargetRel(-5000);
 		this->objStepControl.moveAsync(*this->__homing_stepper);
 	}

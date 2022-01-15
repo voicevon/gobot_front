@@ -11,7 +11,7 @@ class CommandQueue{
         // bool AppendGcode(Gcode* gcode);
         bool AppendGcodeCommand(String command);
         bool BufferIsEmpty();
-        
+        int GetFreeBuffersCount();
     private:
         // Gcode* _buffer[5];
         char gCodeCommands[20*5];  // or [20][5]?

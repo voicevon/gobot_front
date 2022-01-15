@@ -33,6 +33,14 @@ bool CommandQueue::BufferIsEmpty(){
     return false;
 }
 
+int CommandQueue::GetFreeBuffersCount(){
+    int count = this->head - this->tail;
+    if (count >= 0)
+        return 5-count;
+    else
+        return 0-count;
+}
+
 bool CommandQueue::AppendGcodeCommand(String command){
     int pre_head = this->head;
     pre_head++;
