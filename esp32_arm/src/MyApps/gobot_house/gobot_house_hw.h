@@ -48,7 +48,6 @@ class GobotHouseHardware: public RobotBase{
         }
         // void SpinOnce(void);
         void Init_Linkage() override;
-        // void Setup(RobotAction* pAction, int segments);
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 
@@ -58,8 +57,6 @@ class GobotHouseHardware: public RobotBase{
 
     private:
         GobotHouseHardware();
-        // void ActuatorMoveTo_FK(float x, float y);
-        // void ActuatorMoveTo_IK(int32_t a, int32_t b);
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;

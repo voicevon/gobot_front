@@ -4,6 +4,7 @@
 // #include "Robot/Commu/CommuBleGattServer.h"
 #include "actions.h"
 #include "Robot/command_queue.h"
+#include "gobot_house_hw.h"
 
 class GobotHouse{
     public:
@@ -14,6 +15,8 @@ class GobotHouse{
             return instance;
         }    
         void Setup(RobotAction* pAction, int segments);
+        void SpinOnce();
+        void ParkArms(bool do_homing);
         void MoveStone_FromRoomToHead(uint8_t house_id);
         void MoveStone_FromHeadToRoom(uint8_t house_id);
 
@@ -24,9 +27,10 @@ class GobotHouse{
         void __Move_fromNeck_toDoor(uint8_t house_id, bool forwarding);
         void __Enable_eefCoil(bool enable);
 
+        GobotHouseHardware* __robot_hardware;
         HouseMap __map;
         RobotAction* __house_action;
         int __segments;
-        CommandQueue* _commandQueue;
+        CommandQueue* __commandQueue;
 
 };
