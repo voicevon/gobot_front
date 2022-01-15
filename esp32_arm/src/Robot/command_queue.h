@@ -1,3 +1,4 @@
+#pragma once
 
 #include "Gcode.h"
 #include "RobotBase.h"

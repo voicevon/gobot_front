@@ -1,18 +1,7 @@
 #pragma once
 
-// #include "Axis/SingleAxisBase.hpp"
 #include <Robot/Gcode.h>
 #include "Robot/Commu/CommuDeviceBase.h"
-#include "Robot/command_queue.h"
-// #include "Axis/SingleAxis.h"
-// #include "Robot/Actuator/ActuatorControllerBase.h"
-// #include "Robot/Actuator/ActuatorBase.h"
-// struct ik_position{
-//     int alpha;
-//     int beta;
-// };
-
-
 
 class FkPositionBase{
 
@@ -106,14 +95,11 @@ class RobotBase{
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void Init_Linkage();
-        void InitCommandQueue(CommandQueue* pcommandQueue)
-            {this->_commandQueue = pcommandQueue;};
         virtual void HomeSingleAxis(char axis);
         virtual FkPositionBase GetCurrentPosition();
 
     protected:
         RobotBase(){};
-        CommandQueue* _commandQueue;
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
         virtual void MoveToTargetPosition();
         virtual void SpinOnce_BaseEnter();
@@ -125,7 +111,6 @@ class RobotBase{
         void RunG4(Gcode* gcode);
         virtual std::string GetHomeTrigerStateString();
         CommuDeviceBase* commuDevice;
-        // bool robot_is_idle = true;    //TODO: Will be instead of commu_buffer_length > 0.
         bool is_absolute_position = true;
         /* Just for fun, don't remove below comment.
         void * __output_message2;

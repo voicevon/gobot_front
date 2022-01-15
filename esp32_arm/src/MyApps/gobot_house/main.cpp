@@ -4,18 +4,19 @@
 // #include "hardware.hpp"
 #include "Robot/Commu/CommuBleGattServer.h"
 #include "gobot_house.h"
+#include "gobot_house_hw.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "Robot/command_queue.h"
 
 // static char LOG_TAG[]= "BLE-HOUSE";
-GobotHouse* mybot; 
+GobotHouseHardware* mybot; 
 RobotAction action;
 CommandQueue myCommandQueue = CommandQueue();
 
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am your bot,  Gobot-House. ");
-    mybot = &GobotHouse::getInstance();
+    mybot = &GobotHouseHardware::getInstance();
     mybot->Init_Linkage();
     // mybot->Setup(&action, 9);
 	myCommandQueue.LinkRobot(mybot);
