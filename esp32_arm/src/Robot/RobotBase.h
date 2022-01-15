@@ -3,7 +3,7 @@
 // #include "Axis/SingleAxisBase.hpp"
 #include <Robot/Gcode.h>
 #include "Robot/Commu/CommuDeviceBase.h"
-
+#include "Robot/command_queue.h"
 // #include "Axis/SingleAxis.h"
 // #include "Robot/Actuator/ActuatorControllerBase.h"
 // #include "Robot/Actuator/ActuatorBase.h"
@@ -106,11 +106,14 @@ class RobotBase{
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void Init_Linkage();
+        void InitCommandQueue(CommandQueue* pcommandQueue)
+            {this->_commandQueue = pcommandQueue;};
         virtual void HomeSingleAxis(char axis);
         virtual FkPositionBase GetCurrentPosition();
 
     protected:
         RobotBase(){};
+        CommandQueue* _commandQueue;
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
         virtual void MoveToTargetPosition();
         virtual void SpinOnce_BaseEnter();

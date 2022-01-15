@@ -57,15 +57,12 @@ class GobotHouse: public RobotBase{
         void MoveStone_FromHeadToRoom(uint8_t house_id);
         FkPositionBase GetCurrentPosition() override;
         float GetDistanceToTarget();
-        
-
 
 
     private:
         GobotHouse();
-        // ik_position ik(float x, float y) override;
-        void ActuatorMoveTo_FK(float x, float y);
-        void ActuatorMoveTo_IK(int32_t a, int32_t b);
+        // void ActuatorMoveTo_FK(float x, float y);
+        // void ActuatorMoveTo_IK(int32_t a, int32_t b);
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
