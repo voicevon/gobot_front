@@ -55,7 +55,7 @@ bool CommandQueue::AppendGcodeCommand(String command){
     // Serial.println(command);
     unsigned char* pTargetByte = (unsigned char*) (&gCodeCommands[0]);
     pTargetByte += 20 * this->head;
-    // This doens't work, Don't knwo how Arduino String is orgnized with bytes.
+    // This doens't work, Don't know how Arduino String is orgnized with bytes.
     // for(int i=0; i< command.length() +1; i++){  // The extra one byte is 0x00, the string ender.
     // // for(int i=0; i< length +1; i++){  // The extra one byte is 0x00, the string ender.
     //     Serial.print(*pSourceByte);
