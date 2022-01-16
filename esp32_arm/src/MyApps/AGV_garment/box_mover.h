@@ -18,10 +18,11 @@ class BoxMover{
         EnumState State;
 
         BoxMover();
-        void ResetToLoad();
+        void ParkArms(bool do_homing);
         void LoadBox();
         void UnloadBox();
-        void SpinOnce();  
+        void SpinOnce(); 
+
     
     private:
         CommandQueue* __commandQueue;

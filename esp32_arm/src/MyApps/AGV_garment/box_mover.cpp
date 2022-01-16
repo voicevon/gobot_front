@@ -46,8 +46,25 @@ void BoxMover::SpinOnce(){
 }
 
 
-void BoxMover::ResetToLoad(){
+void BoxMover::ParkArms(bool do_homing){
+	Serial.print("\n[Debug] BoxMover::ParkArms() is entering");
+	int free_buffer_count = 0;
+	while (free_buffer_count < 3){
+		this->SpinOnce();
+		free_buffer_count = this->__commandQueue->GetFreeBuffersCount();
+		Serial.print(free_buffer_count);
+		Serial.print(" ");
+	}
 
+	if (do_homing){
+		String strG28 = "G28Z";
+		bool result = this->__commandQueue->AppendGcodeCommand(strG28);
+		strG28 = "G28A";
+		result = this->__commandQueue->AppendGcodeCommand(strG28);
+	}
+	this->__commandQueue->SpinOnce();
+	String strG1 = "G1 Z5421 A1345";
+	this->__commandQueue->AppendGcodeCommand(strG1);
 }
 void BoxMover::LoadBox(){
     // Vertical down.  Angle down, Triger gate

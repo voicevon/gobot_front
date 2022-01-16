@@ -50,6 +50,7 @@ void setup(){
 
     while (!mqttClient.connected())
         delay(100);
+    
 
 }
 
@@ -59,8 +60,8 @@ void loop(){
 	//      Pickup from station:  123, and Drop box to station:  234
 	//      Move to Charge station
 
-	mybot.boxMover.LoadBox();
-	mybot.boxMover.UnloadBox();
+  mybot.Test(1);
+  mybot.Test(2);
 
 
 

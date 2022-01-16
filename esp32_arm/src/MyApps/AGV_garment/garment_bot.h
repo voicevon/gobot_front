@@ -48,17 +48,20 @@ class GarmentBot{
             UNLOADING,
         };
         GarmentBot(){};
+
         void Init();
-        AgvSlimHardware agv = AgvSlimHardware();
-        BoxMover boxMover = BoxMover();
         void SpinOnce();
         void SetMode(GARMENTBOT_MODE mode);
         void ExecuteCommand(int topic, int payload);
+        void Test(int test_id);
+
     protected:
         GARMENTBOT_MODE _State;
         void SpinOnce_Working();
         
     private:
+        AgvSlimHardware agv = AgvSlimHardware();
+        BoxMover boxMover = BoxMover();
         TrackSensor_Shengteng objTrackSensor = TrackSensor_Shengteng();
         int objObstacleDetector;
 

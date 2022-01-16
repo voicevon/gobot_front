@@ -57,23 +57,9 @@ void GarmentBot::Init(){
 
    // Init I2C bus
    Wire.begin();
-
-   // Init AGV
-   // objLeftWheelBridge.Init(PWM_CHANNEL_0, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
-   // objRightWheelBridge.Init(PWM_CHANNEL_1, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
-   // PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
-   // this->agv.leftWheel.LinkDriver(&this->objLeftWheelBridge);
-   // this->agv.rightWheel.LinkDriver(&this->objRightWheelBridge);
-//    this->agv.LinkTrackSensor(&this->objTrackSensor_i2c);
-   // this->agv.LinkPid(speed_pid);
-
-   // Init Robot
-   // this->objVerticalBridge.Init(PWM_CHANNEL_2, PIN_VERTICAL_DC_MOTOR_ENABLE, PIN_VERTICAL_DC_MOTOR_A, PIN_VERTICAL_DC_MOTOR_B);
-   // this->objAngleBridge.Init(PWM_CHANNEL_3, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
-   // this->boxMaster_21a.Init_VerticalMover(&this->objVerticalMover, VERTICAL_ENDSTOP_NORTH, VERTICAL_ENDSTOP_SOUTH, &this->objVerticalBridge);
-   // this->boxMaster_21a.Init_AngleMover(&this->objAngleMover, ANGLE_ENDSTOP_NORTH, ANGLE_ENDSTOP_SOUTH, &this->objAngleBridge);
-
+   
    this->SetMode(SLEEP);
+   this->boxMover.ParkArms(true);
 }
 
 
@@ -145,7 +131,10 @@ void GarmentBot::SetMode(GARMENTBOT_MODE mode){
    
 }
 
-
+void GarmentBot::Test(int test_id){
+   if (test_id == 1) this->boxMover.LoadBox();
+	if (test_id == 2) this->boxMover.UnloadBox();
+}
 
 
 
