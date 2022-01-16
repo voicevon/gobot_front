@@ -28,7 +28,6 @@ void AgvSlimHardware::Init(){
     PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
     this->leftWheel.LinkDriver(&this->objLeftWheelBridge);
     this->rightWheel.LinkDriver(&this->objRightWheelBridge);
-    //    this->agv_21a.LinkTrackSensor(&this->objTrackSensor_i2c);
     this->LinkPid(speed_pid);
 
 }
