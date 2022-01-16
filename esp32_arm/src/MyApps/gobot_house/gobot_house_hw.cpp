@@ -19,54 +19,14 @@
 #define ACCELERATION_HOMIMG 2000
 #define MAX_SPEED_HOMING 2000
 
+#define MAX_STEPS_PER_SECOND_ALPHA 500
+#define MAX_STEPS_PER_SECOND_BETA 500
+#define MAX_ACCELERATION_ALPHPA 20
+#define MAX_ACCELERATION_BETA 20
+
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
 
-GobotHouseHardware::GobotHouseHardware(){
-}
-
-
-FkPositionBase GobotHouseHardware::GetCurrentPosition(){
-	return this->__current_fk_position; 
-}
-
-
-void GobotHouseHardware::HomeSingleAxis(char axis){
-  Serial.print("[Debug] GobotHouseHardware::HomeSingleAxis() is entering\n" );
-  Serial.print(axis);
-  this->_homing_axis = axis;
-  if (axis=='A'){
-	this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG);
-	this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING);
-	this->__homing_stepper = &this->objStepper_alpha;
-	this->__homing_helper = &this->objHomeHelper_alpha;
-  }else if (axis=='B'){
-	this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG);
-	this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING);
-	this->__homing_stepper = &this->objStepper_beta;
-	this->__homing_helper = &this->objHomeHelper_beta;
-  }
-}
-
-
-
-void GobotHouseHardware::_running_G28(){
-	// Serial.print("[Debug] GobotHouseHardware::running_G28() is entering \n");
-	if (this->__homing_helper->IsTriged()){
-		// End stop is trigered
-		Serial.print("[Info] Homed postion =  " );
-		this->objStepControl.stop();
-		this->__homing_stepper->setPosition(0);
-		Serial.println(this->__homing_stepper->getPosition());
-		this->State = IDLE;
-	}else{
-		// Endstop is not trigered
-		// Serial.print("[Debug] Still homing\n");
-		// Serial.print("<");
-		this->__homing_stepper->setTargetRel(-5000);
-		this->objStepControl.moveAsync(*this->__homing_stepper);
-	}
-}
 
 
 
@@ -106,6 +66,13 @@ void GobotHouseHardware::FK(IkPositionBase* ik, FkPositionBase*  to_fk){
 
 }
 
+GobotHouseHardware::GobotHouseHardware(){
+}
+
+
+FkPositionBase GobotHouseHardware::GetCurrentPosition(){
+	return this->__current_fk_position; 
+}
 
 
 void GobotHouseHardware::init_gpio(){
@@ -125,10 +92,14 @@ void GobotHouseHardware::init_gpio(){
 void GobotHouseHardware::Init_Linkage(){
 	init_gpio();
 	this->commuDevice = &this->objCommuUart; 
+	this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
+	this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
+	this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
+	this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
 
 }
 
-float GobotHouseHardware::GetDistanceToTarget(){
+float GobotHouseHardware::GetDistanceToTarget_FK(){
 	IkPosAB current_ik;
 	current_ik.alpha = (float)this->objStepper_alpha.getPosition();
 	current_ik.alpha = (float)this->objStepper_beta.getPosition();
@@ -137,6 +108,13 @@ float GobotHouseHardware::GetDistanceToTarget(){
 	float dx = this->__current_fk_position.X - this->__target_fk_position.X;
 	float dy = this->__current_fk_position.Y - this->__target_fk_position.Y;
 	float distance = sqrt(dx * dx + dy * dy);
+	return distance;
+}
+
+float GobotHouseHardware::GetDistanceToTarget_IK(){
+	int32_t da = this->objStepper_alpha.getDistanceToTarget();
+	int32_t db = this->objStepper_beta.getDistanceToTarget();
+	float distance = sqrt(da * da + db * db);
 	return distance;
 }
 
@@ -161,14 +139,56 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 
 	this->objStepper_alpha.setTargetAbs(target_alpha);
 	this->objStepper_beta.setTargetAbs(target_beta);
-	this->objStepControl.move(this->objStepper_alpha, this->objStepper_beta);
+	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 }
 void GobotHouseHardware:: _running_G1(){
-    if (this->GetDistanceToTarget() < 20){
+    if (this->GetDistanceToTarget_IK() < MAX_ACCELERATION_ALPHPA + MAX_ACCELERATION_BETA){
       	this->State = IDLE;
+		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
     }
-	Serial.print(".");
-	delay(100);
+	// Serial.println(this->GetDistanceToTarget_IK());
+	// delay(100);
+}
+void GobotHouseHardware::HomeSingleAxis(char axis){
+  Serial.print("[Debug] GobotHouseHardware::HomeSingleAxis() is entering\n" );
+  Serial.print(axis);
+  this->_homing_axis = axis;
+  if (axis=='A'){
+	this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG);
+	this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING);
+	this->__homing_stepper = &this->objStepper_alpha;
+	this->__homing_helper = &this->objHomeHelper_alpha;
+  }else if (axis=='B'){
+	this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG);
+	this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING);
+	this->__homing_stepper = &this->objStepper_beta;
+	this->__homing_helper = &this->objHomeHelper_beta;
+  }
 }
 
+void GobotHouseHardware::_running_G28(){
+	// Serial.print("[Debug] GobotHouseHardware::running_G28() is entering \n");
+	if (this->__homing_helper->IsTriged()){
+		// End stop is trigered
+		Serial.print("\n[Info] Homed postion =  " );
+		this->objStepControl.stop();
+		this->__homing_stepper->setPosition(0);
+		Serial.println(this->__homing_stepper->getPosition());
+		this->State = IDLE;
+		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA);
+		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
+		this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
+		this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
+
+	}else{
+		// Endstop is not trigered
+		// Serial.print("[Debug] Still homing\n");
+		// Serial.print("<");
+
+		// We are going to move a long long distance with async mode(None blocking).
+		// When endstop is trigered, must stop the moving. 
+		this->__homing_stepper->setTargetRel(-5000);
+		this->objStepControl.moveAsync(*this->__homing_stepper);
+	}
+}
 
