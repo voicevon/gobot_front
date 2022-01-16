@@ -70,8 +70,9 @@ GobotHouseHardware::GobotHouseHardware(){
 }
 
 
-FkPositionBase GobotHouseHardware::GetCurrentPosition(){
-	return this->__current_fk_position; 
+bool GobotHouseHardware::GetCurrentPosition(FkPositionBase* position_fk){
+	position_fk = & this->__current_fk_position;
+	return true;
 }
 
 

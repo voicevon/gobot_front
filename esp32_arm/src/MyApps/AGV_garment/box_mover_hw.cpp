@@ -10,6 +10,13 @@
 #define MAX_ACCELERATION_ALPHPA 20
 #define MAX_ACCELERATION_BETA 20
 
+void BoxMoverHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
+    
+}
+bool BoxMoverHardware::GetCurrentPosition(FkPositionBase* position_fk){
+    return true;
+}  
+
 
 BoxMoverHardware::BoxMoverHardware(){
 
@@ -26,20 +33,23 @@ void BoxMoverHardware::RunG1(Gcode* gcode) {
 		int speed = gcode->get_value('F');
 		this->objStepper_alpha.setMaxSpeed(800);
 	}
-	float target_alpha = this->objStepper_alpha.getPosition();
-	float target_beta = this->objStepper_beta.getPosition();
-	Serial.print(target_alpha);
-	Serial.print(",");
-	Serial.print(target_beta);
-	if (gcode->has_letter('A')) target_alpha = gcode->get_value('A');
-	if (gcode->has_letter('B')) target_beta = gcode->get_value('B');
-	Serial.print(" <-- from   alpha,beta   to --> ");
-	Serial.print(target_alpha);
-	Serial.print(",");
-	Serial.println(target_beta);
 
-	this->objStepper_alpha.setTargetAbs(target_alpha);
-	this->objStepper_beta.setTargetAbs(target_beta);
+    FKPosition_ZA target_fk;
+    GetCurrentPosition(&target_fk);
+
+	if (gcode->has_letter('A')) 
+        target_fk.a = gcode->get_value('A');
+	if (gcode->has_letter('Z')) 
+        target_fk.z = gcode->get_value('Z');
+	Serial.print(" <-- from   FK(Z, alpha)   to --> ");
+	Serial.print(target_fk.z);
+	Serial.print(",");
+	Serial.println(target_fk.a);
+    IkPosAB target_ik;
+    this->IK(&target_fk, &target_ik);
+
+	this->objStepper_alpha.setTargetAbs(target_ik.alpha);
+	this->objStepper_beta.setTargetAbs(target_ik.beta);
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 
 }

@@ -51,7 +51,7 @@ class GobotHouseHardware: public RobotBase{
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 
-        FkPositionBase GetCurrentPosition() override;
+        bool GetCurrentPosition(FkPositionBase* position_fk) override;
         float GetDistanceToTarget_FK() override;
         float GetDistanceToTarget_IK() override;
 

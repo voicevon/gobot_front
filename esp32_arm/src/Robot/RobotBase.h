@@ -59,6 +59,12 @@ class fkPosXYUVW: public FkPositionBase{
         float w;
 };
 
+class FKPosition_ZA: public FkPositionBase{
+    public:
+        float z;
+        float a;
+};
+
 class IkPositionBase{
 
 };
@@ -96,7 +102,7 @@ class RobotBase{
         void SpinOnce();
         virtual void Init_Linkage();
         virtual void HomeSingleAxis(char axis);
-        virtual FkPositionBase GetCurrentPosition();
+        virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
         virtual float GetDistanceToTarget_IK();
     protected:

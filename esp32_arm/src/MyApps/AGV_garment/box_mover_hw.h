@@ -18,7 +18,7 @@ class BoxMoverHardware:public RobotBase{
         void HomeSingleAxis(char axis) override{};
         void RunG1(Gcode* gcode) override;
 
-        FkPositionBase GetCurrentPosition() override{};  
+        bool GetCurrentPosition(FkPositionBase* position_fk) override;  
         void MoveToTargetPosition() override{};
         float GetDistanceToTarget_FK() override{};
         float GetDistanceToTarget_IK() override{};
@@ -31,7 +31,7 @@ class BoxMoverHardware:public RobotBase{
         //Override private
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
-        virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override{};
+        virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override{};
 
         void RunG6(Gcode* gcode) override{} ; 
