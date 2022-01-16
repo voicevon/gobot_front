@@ -101,13 +101,16 @@ void GobotHouseHardware::Init_Linkage(){
 }
 
 float GobotHouseHardware::GetDistanceToTarget_FK(){
+	// because in this arm solution,  FK is equal to IK. so never mind the logic error.
+	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
+	// TODO: Rewrite this function.
 	IkPosAB current_ik;
 	current_ik.alpha = (float)this->objStepper_alpha.getPosition();
-	current_ik.alpha = (float)this->objStepper_beta.getPosition();
+	current_ik.beta = (float)this->objStepper_beta.getPosition();
 	FK(&current_ik, &this->__current_fk_position);
 	
-	float dx = this->__current_fk_position.X - this->__target_fk_position.X;
-	float dy = this->__current_fk_position.Y - this->__target_fk_position.Y;
+	float dx = this->__current_fk_position.X - this->__next_fk_position.X;
+	float dy = this->__current_fk_position.Y - this->__next_fk_position.Y;
 	float distance = sqrt(dx * dx + dy * dy);
 	return distance;
 }

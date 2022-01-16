@@ -18,7 +18,7 @@ class BoxMoverHardware:public RobotBase{
         void HomeSingleAxis(char axis) override{};
         void RunG1(Gcode* gcode) override;
 
-        bool GetCurrentPosition(FkPositionBase* position_fk) override;  
+        bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
         void MoveToTargetPosition() override{};
         float GetDistanceToTarget_FK() override{};
         float GetDistanceToTarget_IK() override{};
@@ -38,4 +38,7 @@ class BoxMoverHardware:public RobotBase{
         void _running_G1() override;
         void _running_G28() override{};
         std::string GetHomeTrigerStateString() override {};
+
+        FKPosition_ZA __current_fk_position;
+
 };

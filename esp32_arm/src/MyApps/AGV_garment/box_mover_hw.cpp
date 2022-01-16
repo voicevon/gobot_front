@@ -13,9 +13,7 @@
 void BoxMoverHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
     
 }
-bool BoxMoverHardware::GetCurrentPosition(FkPositionBase* position_fk){
-    return true;
-}  
+
 
 
 BoxMoverHardware::BoxMoverHardware(){
@@ -35,16 +33,22 @@ void BoxMoverHardware::RunG1(Gcode* gcode) {
 	}
 
     FKPosition_ZA target_fk;
-    GetCurrentPosition(&target_fk);
+    target_fk.z = this->__current_fk_position.z;
+    target_fk.a = this->__current_fk_position.a;
 
 	if (gcode->has_letter('A')) 
         target_fk.a = gcode->get_value('A');
 	if (gcode->has_letter('Z')) 
         target_fk.z = gcode->get_value('Z');
+
+    Serial.print(this->__current_fk_position.z);
+	Serial.print(",");
+	Serial.println(this->__current_fk_position.a);
 	Serial.print(" <-- from   FK(Z, alpha)   to --> ");
 	Serial.print(target_fk.z);
 	Serial.print(",");
 	Serial.println(target_fk.a);
+    
     IkPosAB target_ik;
     this->IK(&target_fk, &target_ik);
 
