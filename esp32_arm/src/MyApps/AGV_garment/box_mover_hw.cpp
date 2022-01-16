@@ -32,13 +32,16 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 	if (axis=='A'){
 		this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG);
 		this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING);
+		//todo :  process with IK()
 		this->objStepper_alpha.setTargetRel(500000);
 		this->objStepper_beta.setTargetRel(500000);
+		this->__homing_helper = &this->objHomeHelper_angle;
 	}else if (axis=='Z'){
 		this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG);
 		this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING);
 		this->objStepper_alpha.setTargetRel(500000);
 		this->objStepper_beta.setTargetRel(-500000);	
+		this->__homing_helper = &this->objHomeHelper_vertical;
 	}
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 }

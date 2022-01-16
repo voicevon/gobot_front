@@ -2,20 +2,7 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT
 
-// #include "Robot/RobotBase.h"
-// #include "Robot/Commu/CommuUart.h"
 
-
-// #include "Robot/Actuator/DCMotor/DcMotor.h"
-// #include "Robot/Sensor/IrEncoderHelper.h"
-// #include "track_sensor_i2c.h"
-// #include "Robot/Actuator/DCMotor/h_bridge_l298n.h"
-// #include "Robot/Actuator/DCMotor/DCMotorController.h"
-
-// #include "Robot/HomeHelper.h"
-// #include "MyLibs/Components/Led.h"
-
-// #include "agv_garment_21a.h"
 #include "agv_slim_hw.h"
 #include "box_mover.h"
 
@@ -23,18 +10,14 @@
 
 
 /*
-.     |<-----------^    |<-----------------------------
-.     |            ^    |                             ^
-.   Sleeping  --> Agv_Moving  --> Robot_Loading  -----|  
-.                       |                             ^
-.                       |---------> Robot_Unloading --|
-.                       |                             ^
-.                       |---------> Charging ---------|
-.                       |                             ^
-.                       |---------> Stopping ---------|
+.     |<-----------^   <------------   <---------------------------
+.     |            ^  |            ^  |                           ^
+.   Sleeping  --> Agv_Moving  -->  Parked --> Robot_Loading  -----^  
+.                                   |                             ^
+.                                   |---------> Robot_Unloading --^
+.                                   |                             ^
+.                                   |---------> Charging ---------^
 */
-
-
 
 class GarmentBot{
     public:

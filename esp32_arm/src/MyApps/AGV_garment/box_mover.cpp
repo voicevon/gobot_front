@@ -68,8 +68,8 @@ void BoxMover::ParkArms(bool do_homing){
 }
 void BoxMover::LoadBox(){
     // Vertical down.  Angle down, Triger gate
-    this->__commandQueue->AppendGcodeCommand("G1Z100");
-    this->__commandQueue->AppendGcodeCommand("G1A123");
+    this->__commandQueue->AppendGcodeCommand("G1 Z100");
+    this->__commandQueue->AppendGcodeCommand("G1 A123");
     this->__commandQueue->AppendGcodeCommand("M123");
 
 }

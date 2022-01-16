@@ -11,7 +11,27 @@ void AgvSlimHardware::LinkPid(PIDController* speed_pid){
     this->speed_pid =  speed_pid;
 
 }
+void AgvSlimHardware::Init(){
+    // Setting PWM channels properties, Totally Esp32 has 16 channels
+    const int freq = 30000;
+    const int resolution = 8;   // so max pwm speed is 255
+    ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites
+    ledcSetup(PWM_CHANNEL_1, freq, resolution); 
 
+
+    // Init I2C bus
+    Wire.begin();
+
+    // Init AGV
+    objLeftWheelBridge.Init(PWM_CHANNEL_0, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
+    objRightWheelBridge.Init(PWM_CHANNEL_1, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
+    PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
+    this->leftWheel.LinkDriver(&this->objLeftWheelBridge);
+    this->rightWheel.LinkDriver(&this->objRightWheelBridge);
+    //    this->agv_21a.LinkTrackSensor(&this->objTrackSensor_i2c);
+    this->LinkPid(speed_pid);
+
+}
 
 void AgvSlimHardware::MoveForward(int track_error) {
     // int error = this->trackSensor->ReadError_ToRight();

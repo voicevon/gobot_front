@@ -2,32 +2,7 @@
 #ifdef I_AM_GARMENT_BOT
 #include "garment_bot.h"
 
-#define PIN_HOME_SENSOR_2130 32
 
-#define PIN_LEFT_WHEEL_DC_MOTOR_A 12
-#define PIN_LEFT_WHEEL_DC_MOTOR_B 14
-#define PIN_LEFT_WHEEL_DC_MOTOR_ENABLE 25
-#define PIN_RIGHT_WHEEL_DC_MOTOR_A 26
-#define PIN_RIGHT_WHEEL_DC_MOTOR_B 27
-#define PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE 33
-
-#define PIN_VERTICAL_DC_MOTOR_A 17 //16
-#define PIN_VERTICAL_DC_MOTOR_B 5  //4
-#define PIN_VERTICAL_DC_MOTOR_ENABLE 15  //2
-#define PIN_ANGLE_DC_MOTOR_A 16  // 17
-#define PIN_ANGLE_DC_MOTORB 4    //5 
-#define PIN_ANGLE_DC_MOTOR_ENABLE 2  //15
-
-#define VERTICAL_ENDSTOP_NORTH 23
-#define VERTICAL_ENDSTOP_SOUTH 13
-
-#define ANGLE_ENDSTOP_NORTH 19
-#define ANGLE_ENDSTOP_SOUTH 18
-
-#define PWM_CHANNEL_0 0
-#define PWM_CHANNEL_1 1
-#define PWM_CHANNEL_2 2
-#define PWM_CHANNEL_3 3
 
 
 void GarmentBot::SpinOnce(){
@@ -52,8 +27,8 @@ void GarmentBot::Init(){
    const int resolution = 8;   // so max pwm speed is 255
    ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites
    ledcSetup(PWM_CHANNEL_1, freq, resolution); 
-   ledcSetup(PWM_CHANNEL_2, freq, resolution); 
-   ledcSetup(PWM_CHANNEL_3, freq, resolution); 
+   // ledcSetup(PWM_CHANNEL_2, freq, resolution); 
+   // ledcSetup(PWM_CHANNEL_3, freq, resolution); 
 
    // Init I2C bus
    Wire.begin();
@@ -87,10 +62,10 @@ void GarmentBot::SpinOnce_Working(){
 		Wire.requestFrom(slave_address, n_bytes);    // request data from slave device
 		int i=0;
 		while (Wire.available() > 0) {  // slave may send less than requested
-			uint8_t c = Wire.read();         // receive a byte as character
-			RxBuffer[0] = c;
-			i++;
-			// Serial.println(c,BIN);
+            uint8_t c = Wire.read();         // receive a byte as character
+            RxBuffer[0] = c;
+            i++;
+            // Serial.println(c,BIN);
 		}
 		Wire.endTransmission(true);
 
@@ -132,8 +107,12 @@ void GarmentBot::SetMode(GARMENTBOT_MODE mode){
 }
 
 void GarmentBot::Test(int test_id){
-   if (test_id == 1) this->boxMover.LoadBox();
-	if (test_id == 2) this->boxMover.UnloadBox();
+    if (test_id == 1) this->boxMover.LoadBox();
+    if (test_id == 2) this->boxMover.UnloadBox();
+    if (test_id==10) {
+        int track_error = 0;
+        this->agv.MoveForward(track_error);
+    }
 }
 
 

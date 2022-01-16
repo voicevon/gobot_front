@@ -5,13 +5,14 @@
 #include "Robot/HomeHelper.h"
 
 
+#define VERTICAL_ENDSTOP 13
+#define ANGLE_ENDSTOP 19
+
 #define PIN_STEP_ALPHA 22
 #define PIN_DIR_ALPHA 22
 #define PIN_STEP_BETA 22
 #define PIN_DIR_BETA 22
 
-#define PIN_HOME_ALHPA_2201 35     //??
-#define PIN_HOME_BETA_2201 35     //??
 
 
 class BoxMoverHardware:public RobotBase{
@@ -46,7 +47,7 @@ class BoxMoverHardware:public RobotBase{
         FKPosition_ZA __current_fk_position;
 
         HomeHelper* __homing_helper;
-        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA_2201, LOW);
-        HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA_2201, LOW);        
+        HomeHelper objHomeHelper_vertical = HomeHelper(VERTICAL_ENDSTOP, LOW);
+        HomeHelper objHomeHelper_angle = HomeHelper(ANGLE_ENDSTOP, LOW);        
 
 };

@@ -16,25 +16,25 @@ GarmentBot mybot = GarmentBot();
 // void doB(){irEncoder_leftWheel.handleB();}
 
 void app_mqtt_subscribe(){
-  mqttClient.subscribe("garmentbot/mode", 2);
-  Serial.println("Subscribed garmentbot/*");
+    mqttClient.subscribe("garmentbot/mode", 2);
+    Serial.println("Subscribed garmentbot/*");
 }
 
 void app_mqtt_received_message( char* topic, char* payload){
-  const char * cc = (const char*)(payload);
+    const char * cc = (const char*)(payload);
 
-  if(strcmp(topic, "garmentbot/mode") == 0) {   // char len = 17
-    GarmentBot::GARMENTBOT_MODE mode = (GarmentBot::GARMENTBOT_MODE)(atoi(cc));
-    mybot.SetMode(mode);
-  }
-  else if(strcmp(topic, "smokebot/pause_second")==0){    // char len = 21
-    
-  }else{
-    Serial.print(" app_mqtt_received_message() Warning   ");
-    Serial.print (topic);
-    Serial.print("   ");
-    Serial.print (payload);
-  }
+    if(strcmp(topic, "garmentbot/mode") == 0) {   // char len = 17
+        GarmentBot::GARMENTBOT_MODE mode = (GarmentBot::GARMENTBOT_MODE)(atoi(cc));
+        mybot.SetMode(mode);
+    }
+    else if(strcmp(topic, "smokebot/pause_second")==0){    // char len = 21
+
+    }else{
+        Serial.print(" app_mqtt_received_message() Warning   ");
+        Serial.print (topic);
+        Serial.print("   ");
+        Serial.print (payload);
+    }
 
 }
 
@@ -60,8 +60,8 @@ void loop(){
 	//      Pickup from station:  123, and Drop box to station:  234
 	//      Move to Charge station
 
-  mybot.Test(1);
-  mybot.Test(2);
+    mybot.Test(1);
+    mybot.Test(2);
 
 
 
