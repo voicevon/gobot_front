@@ -1,6 +1,15 @@
 
 #include "box_mover.h"
 
+BoxMover::BoxMover(){
+    this->__robot_hardware = new BoxMoverHardware();
+    // this->__robot_hardware = &GobotHouseHardware::getInstance();
+    this->__robot_hardware->Init_Linkage();
+	this->__commandQueue = new CommandQueue();
+	this->__commandQueue->LinkRobot(this->__robot_hardware);
+    Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
+}
+
 void BoxMover::SpinOnce(){
     // this->verticalMover->SpinOnce();
     // this->angleMover->SpinOnce();
@@ -41,6 +50,10 @@ void BoxMover::ResetToLoad(){
 
 }
 void BoxMover::LoadBox(){
+    // Vertical down.  Angle down, Triger gate
+    this->__commandQueue->AppendGcodeCommand("G1Z100");
+    this->__commandQueue->AppendGcodeCommand("G1A123");
+    this->__commandQueue->AppendGcodeCommand("M123");
 
 }
 void BoxMover::UnloadBox(){

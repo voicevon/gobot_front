@@ -42,15 +42,9 @@ void app_mqtt_received_message( char* topic, char* payload){
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Garmentbot AGV + BoxMover.  Keep smiling :)");
-    // irEncoder_leftWheel.pullup= Pullup::USE_EXTERN;
-    // irEncoder_leftWheel.init();
-    // irEncoder_leftWheel.enableInterrupts(doB);
-    // irEncoderHelper.LinkSensor(&irEncoder_leftWheel);
-    // irEncoderHelper.InitFormula_LinearEquation(3.613f, 0.0f);
     
     mybot.Init();
     Serial.println ("\n\nSetup mybot is done. ------------------------------------ ");
-    // mybot.Init_Linkage(&irEncoderHelper);
     setup_wifi_mqtt();
     Serial.println ("\n\nSetup_wifi_mqtt is done. ------------------------------------ ");
 
@@ -60,85 +54,16 @@ void setup(){
 }
 
 
-void test_l298n(int delay_ms, int speed){
-    // mybot.agv_21a.leftWheel.driver->Start(200, FORWARD);
-		// Serial.println("******************************************");
-    // 	mybot.objLeftWheelBridge.Start(speed, FORWARD);
-		// delay(delay_ms);
-
-		// mybot.objRightWheelBridge.Start(speed, FORWARD);
-		// delay(delay_ms);
-
-		// mybot.objLeftWheelBridge.Stop();
-		// mybot.objRightWheelBridge.Stop();
-		// delay(delay_ms);
-
-		Serial.println(" ########################################## ");
-
-		// mybot.agv_21a.leftWheel.driver->MoveAtSpeed(200+speed, AgvBase::FORWARD);
-		// delay(delay_ms);
-		// // mybot.agv_21a.leftWheel.driver->Stop();
-		// mybot.agv_21a.rightWheel.driver->MoveAtSpeed(250-speed, AgvBase::FORWARD);
-		delay(delay_ms);
-		// mybot.agv_21a.rightWheel.driver->Stop();
-		delay(delay_ms);
-}
-bool tested = false;
-
-void test_actuator(){
-  // mybot.boxMover_21a.verticalMover->SayHello();
-  // Serial.println(" vvvv ");
-
-  // mybot.boxMover_21a.verticalMover->Report();
-  // Serial.println(" aaaa ");
-  // mybot.boxMover_21a.angleMover->Report();
-  // delay(200);
-  // return;
-
-  // mybot.boxMover_21a.verticalMover->MoveToNorth();
-  // mybot.boxMover_21a.verticalMover->driver->MoveAtSpeed(250,true);
-  // delay(1000);
-  // mybot.boxMover_21a.angleMover->driver->Stop();
-  // delay(1000);
-    // mybot.boxMaster_21a.verticalMover->swing_test();
-  return;
-  // mybot.boxMover_21a.angleMover->SayHello();
-  // mybot.boxMover_21a.verticalMover->MoveToNorth();
-  // while (true){
-  //   mybot.boxMover_21a.verticalMover->SpinOnce();
-  // }
-}
-
 void loop(){
-  // for(int speed = 0; speed<50; speed+=10){
-  //   Serial.println(speed);
-  //   test_l298n(5000,speed);
+	// Will execute top level commands , use cases are:
+	//      Pickup from station:  123, and Drop box to station:  234
+	//      Move to Charge station
 
-  // }
-    // mybot.SpinOnce();
-    // delay(50);
-    test_actuator();
-    // int error = mybot.agv_21a.trackSensor->ReadError_ToRight();
-    // Serial.println(error);
-    // delay(300);
-    // bool x = digitalRead(32);
-    // Serial.print(x);
-    // delay(1000);
-    // mybot.agv_21a.SetTargetSpeed(250);
-    // mybot.SpinOnce();
-	// delay(5000);
+	mybot.boxMover.LoadBox();
+	mybot.boxMover.UnloadBox();
 
 
 
-
-    if (!tested){
-
-      // robot.test_home();
-      tested = true;
-      // Gcode gcode = Gcode("M119");
-      // robot.RunGcode(&gcode);
-      // delay(100);
-    }
 }
 
 #endif

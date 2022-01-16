@@ -95,7 +95,8 @@ class GobotChessboard: public RobotBase{
         // ik_position ik(float x, float y) override;
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override;
-
+        float GetDistanceToTarget_FK() override{};
+        float GetDistanceToTarget_IK() override{};
         // SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
         // SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
 

@@ -97,7 +97,8 @@ class RobotBase{
         virtual void Init_Linkage();
         virtual void HomeSingleAxis(char axis);
         virtual FkPositionBase GetCurrentPosition();
-
+        virtual float GetDistanceToTarget_FK();
+        virtual float GetDistanceToTarget_IK();
     protected:
         RobotBase(){};
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};

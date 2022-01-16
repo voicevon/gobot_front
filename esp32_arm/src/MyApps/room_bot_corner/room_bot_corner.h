@@ -34,7 +34,8 @@ class RoomBotCorner: public RobotBase{
         void test_hBridge();
         void test_home();
         FkPositionBase GetCurrentPosition() override {};
-
+        float GetDistanceToTarget_FK() override{};
+        float GetDistanceToTarget_IK() override{};
     protected:
         
     private:

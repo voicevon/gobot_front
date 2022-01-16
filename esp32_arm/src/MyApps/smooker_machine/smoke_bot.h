@@ -24,7 +24,8 @@ class SmokeBot: public RobotBase{
         void Init_Linkage() override;
         void Init_Gpio();
         FkPositionBase GetCurrentPosition() override {};
-
+        float GetDistanceToTarget_FK() override{};
+        float GetDistanceToTarget_IK() override{};
 
     private:
         CommuUart objCommuUart = CommuUart();

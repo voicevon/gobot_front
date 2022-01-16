@@ -52,26 +52,25 @@ class GobotHouseHardware: public RobotBase{
         void RunG1(Gcode* gcode) override;
 
         FkPositionBase GetCurrentPosition() override;
-        float GetDistanceToTarget_FK();
-        float GetDistanceToTarget_IK();
+        float GetDistanceToTarget_FK() override;
+        float GetDistanceToTarget_IK() override;
 
 
     private:
         GobotHouseHardware();
+
+        //Overrid functions
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
-        
 
         void RunG6(Gcode* gcode) override {};   //Block mode
         void _running_G1() override;
         void _running_G28() override;
         std::string GetHomeTrigerStateString() override {};
-        void MoveToTargetPosition() {};
 
-
-
+        void MoveToTargetPosition() override {};
 
         Led objLedPower = Led(0, PIN_LED_POWER_2109, LOW);
         Led objLedHomeAlpha = Led(1,2,LOW);
@@ -84,8 +83,6 @@ class GobotHouseHardware: public RobotBase{
 
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
-        // FkPosXY objFkXY;
-        // IkPosAB objIkXY;
 
         void init_gpio();
 

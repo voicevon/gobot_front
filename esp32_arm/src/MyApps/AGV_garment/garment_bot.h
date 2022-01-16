@@ -50,10 +50,7 @@ class GarmentBot{
         GarmentBot(){};
         void Init();
         AgvSlimHardware agv = AgvSlimHardware();
-        BoxMover boxMaster = BoxMover();
-        // void Init_Linkage(IrEncoderHelper* sensorHelper);
-        void test_hBridge();
-        void test_home();
+        BoxMover boxMover = BoxMover();
         void SpinOnce();
         void SetMode(GARMENTBOT_MODE mode);
         void ExecuteCommand(int topic, int payload);
@@ -62,16 +59,9 @@ class GarmentBot{
         void SpinOnce_Working();
         
     private:
-        // L298N objLeftWheelBridge = L298N();
-        // L298N objRightWheelBridge = L298N();
         TrackSensor_Shengteng objTrackSensor = TrackSensor_Shengteng();
         int objObstacleDetector;
 
-
-        // L298N objVerticalBridge = L298N();
-        // L298N objAngleBridge = L298N();
-        // DualEndActuator objVerticalMover = DualEndActuator();
-        // DualEndActuator objAngleMover = DualEndActuator();
 };
 
 
