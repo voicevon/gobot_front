@@ -75,10 +75,10 @@ void test_l298n(int delay_ms, int speed){
 
 		Serial.println(" ########################################## ");
 
-		mybot.agv_21a.leftWheel.driver->MoveAtSpeed(200+speed, AgvBase::FORWARD);
-		delay(delay_ms);
-		// mybot.agv_21a.leftWheel.driver->Stop();
-		mybot.agv_21a.rightWheel.driver->MoveAtSpeed(250-speed, AgvBase::FORWARD);
+		// mybot.agv_21a.leftWheel.driver->MoveAtSpeed(200+speed, AgvBase::FORWARD);
+		// delay(delay_ms);
+		// // mybot.agv_21a.leftWheel.driver->Stop();
+		// mybot.agv_21a.rightWheel.driver->MoveAtSpeed(250-speed, AgvBase::FORWARD);
 		delay(delay_ms);
 		// mybot.agv_21a.rightWheel.driver->Stop();
 		delay(delay_ms);
@@ -100,7 +100,7 @@ void test_actuator(){
   // delay(1000);
   // mybot.boxMover_21a.angleMover->driver->Stop();
   // delay(1000);
-    mybot.boxMaster_21a.verticalMover->swing_test();
+    // mybot.boxMaster_21a.verticalMover->swing_test();
   return;
   // mybot.boxMover_21a.angleMover->SayHello();
   // mybot.boxMover_21a.verticalMover->MoveToNorth();

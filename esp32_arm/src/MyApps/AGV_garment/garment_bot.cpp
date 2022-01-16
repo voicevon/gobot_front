@@ -59,32 +59,32 @@ void GarmentBot::Init(){
    Wire.begin();
 
    // Init AGV
-   objLeftWheelBridge.Init(PWM_CHANNEL_0, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
-   objRightWheelBridge.Init(PWM_CHANNEL_1, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
-   PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
-   this->agv_21a.leftWheel.LinkDriver(&this->objLeftWheelBridge);
-   this->agv_21a.rightWheel.LinkDriver(&this->objRightWheelBridge);
-//    this->agv_21a.LinkTrackSensor(&this->objTrackSensor_i2c);
-   this->agv_21a.LinkPid(speed_pid);
+   // objLeftWheelBridge.Init(PWM_CHANNEL_0, PIN_LEFT_WHEEL_DC_MOTOR_ENABLE, PIN_LEFT_WHEEL_DC_MOTOR_A, PIN_LEFT_WHEEL_DC_MOTOR_B);
+   // objRightWheelBridge.Init(PWM_CHANNEL_1, PIN_RIGHT_WHEEL_DC_MOTOR_ENABLE, PIN_RIGHT_WHEEL_DC_MOTOR_A, PIN_RIGHT_WHEEL_DC_MOTOR_B);
+   // PIDController* speed_pid = new PIDController(1.0f, 1.0f, 0.0f ,80.0f, 100.0f);
+   // this->agv.leftWheel.LinkDriver(&this->objLeftWheelBridge);
+   // this->agv.rightWheel.LinkDriver(&this->objRightWheelBridge);
+//    this->agv.LinkTrackSensor(&this->objTrackSensor_i2c);
+   // this->agv.LinkPid(speed_pid);
 
    // Init Robot
-   this->objVerticalBridge.Init(PWM_CHANNEL_2, PIN_VERTICAL_DC_MOTOR_ENABLE, PIN_VERTICAL_DC_MOTOR_A, PIN_VERTICAL_DC_MOTOR_B);
-   this->objAngleBridge.Init(PWM_CHANNEL_3, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
-   this->boxMaster_21a.Init_VerticalMover(&this->objVerticalMover, VERTICAL_ENDSTOP_NORTH, VERTICAL_ENDSTOP_SOUTH, &this->objVerticalBridge);
-   this->boxMaster_21a.Init_AngleMover(&this->objAngleMover, ANGLE_ENDSTOP_NORTH, ANGLE_ENDSTOP_SOUTH, &this->objAngleBridge);
+   // this->objVerticalBridge.Init(PWM_CHANNEL_2, PIN_VERTICAL_DC_MOTOR_ENABLE, PIN_VERTICAL_DC_MOTOR_A, PIN_VERTICAL_DC_MOTOR_B);
+   // this->objAngleBridge.Init(PWM_CHANNEL_3, PIN_ANGLE_DC_MOTOR_ENABLE, PIN_ANGLE_DC_MOTOR_A, PIN_ANGLE_DC_MOTORB);
+   // this->boxMaster_21a.Init_VerticalMover(&this->objVerticalMover, VERTICAL_ENDSTOP_NORTH, VERTICAL_ENDSTOP_SOUTH, &this->objVerticalBridge);
+   // this->boxMaster_21a.Init_AngleMover(&this->objAngleMover, ANGLE_ENDSTOP_NORTH, ANGLE_ENDSTOP_SOUTH, &this->objAngleBridge);
 
    this->SetMode(SLEEP);
 }
 
 
 // void GarmentBot::Init_Linkage(IrEncoderHelper* sensorHelper){
-   // this->agv_21a.leftWheel->LinkDriver(&this->objLeftWheelBridge);
+   // this->agv.leftWheel->LinkDriver(&this->objLeftWheelBridge);
 // }
 
 void GarmentBot::SpinOnce_Working(){
    if (false){
 		// Found Obstacle !
-		this->agv_21a.Stop();
+		this->agv.Stop();
 	
 	}else if (false){
 		// on loading
@@ -110,11 +110,11 @@ void GarmentBot::SpinOnce_Working(){
 
 		if (RxBuffer[1] > 0){
 			// Got an obstacle, agv should be stop
-			this->agv_21a.Stop();
+			this->agv.Stop();
 		}
 
 		int track_error = this->objTrackSensor.ReadError_FromRight(&RxBuffer[0]);
-		this->agv_21a.MoveForward(track_error);
+		this->agv.MoveForward(track_error);
 	}
 }
 
@@ -131,11 +131,11 @@ void GarmentBot::SetMode(GARMENTBOT_MODE mode){
    Serial.println(mode);
    switch( mode){
       case SLEEP:
-         this->agv_21a.Stop();
+         this->agv.Stop();
          break;
       case  MOVING:
-         this->agv_21a.SetTargetSpeed(220);
-        //  this->agv_21a.MoveForward();
+         this->agv.SetTargetSpeed(220);
+        //  this->agv.MoveForward();
          this->_State = MOVING;
          break;
       default:

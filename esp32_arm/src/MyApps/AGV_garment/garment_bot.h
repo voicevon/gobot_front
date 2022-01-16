@@ -6,17 +6,18 @@
 // #include "Robot/Commu/CommuUart.h"
 
 
-#include "Robot/Actuator/DCMotor/DcMotor.h"
+// #include "Robot/Actuator/DCMotor/DcMotor.h"
 // #include "Robot/Sensor/IrEncoderHelper.h"
 // #include "track_sensor_i2c.h"
-#include "Robot/Actuator/DCMotor/h_bridge_l298n.h"
-#include "Robot/Actuator/DCMotor/DCMotorController.h"
+// #include "Robot/Actuator/DCMotor/h_bridge_l298n.h"
+// #include "Robot/Actuator/DCMotor/DCMotorController.h"
 
 // #include "Robot/HomeHelper.h"
 // #include "MyLibs/Components/Led.h"
 
-#include "agv_garment_21a.h"
-#include "box_mover_21a.h"
+// #include "agv_garment_21a.h"
+#include "agv_slim_hw.h"
+#include "box_mover.h"
 
 // #define PIN_LED_POWER_2130 23
 
@@ -48,8 +49,8 @@ class GarmentBot{
         };
         GarmentBot(){};
         void Init();
-        AgvGarment_21a agv_21a = AgvGarment_21a();
-        BoxMover_21a boxMaster_21a = BoxMover_21a();
+        AgvSlimHardware agv = AgvSlimHardware();
+        BoxMover boxMaster = BoxMover();
         // void Init_Linkage(IrEncoderHelper* sensorHelper);
         void test_hBridge();
         void test_home();
@@ -61,16 +62,16 @@ class GarmentBot{
         void SpinOnce_Working();
         
     private:
-        L298N objLeftWheelBridge = L298N();
-        L298N objRightWheelBridge = L298N();
+        // L298N objLeftWheelBridge = L298N();
+        // L298N objRightWheelBridge = L298N();
         TrackSensor_Shengteng objTrackSensor = TrackSensor_Shengteng();
         int objObstacleDetector;
 
 
-        L298N objVerticalBridge = L298N();
-        L298N objAngleBridge = L298N();
-        DualEndActuator objVerticalMover = DualEndActuator();
-        DualEndActuator objAngleMover = DualEndActuator();
+        // L298N objVerticalBridge = L298N();
+        // L298N objAngleBridge = L298N();
+        // DualEndActuator objVerticalMover = DualEndActuator();
+        // DualEndActuator objAngleMover = DualEndActuator();
 };
 
 
