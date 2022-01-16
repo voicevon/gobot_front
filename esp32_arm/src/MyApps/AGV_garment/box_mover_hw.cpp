@@ -24,6 +24,41 @@ void BoxMoverHardware::Init_Linkage(){
     
 }
 
+void BoxMoverHardware::HomeSingleAxis(char axis){
+	Serial.print("[Debug] BoxMoverHardware::HomeSingleAxis() is entering\n" );
+	Serial.print(axis);
+	this->_homing_axis = axis;
+
+	if (axis=='A'){
+		this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG);
+		this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING);
+		this->objStepper_alpha.setTargetRel(500000);
+		this->objStepper_beta.setTargetRel(500000);
+	}else if (axis=='Z'){
+		this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG);
+		this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING);
+		this->objStepper_alpha.setTargetRel(500000);
+		this->objStepper_beta.setTargetRel(-500000);	
+	}
+	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
+}
+
+void BoxMoverHardware::_running_G28(){
+	// Serial.print("[Debug] BoxMoverHardware::running_G28() is entering \n");
+	if (this->__homing_helper->IsTriged()){
+		// End stop is trigered
+		Serial.print("\n[Info] Homed postion =  " );
+		this->objStepControl.stop();
+		// this->__homing_stepper->setPosition(0);
+		// Serial.println(this->__homing_stepper->getPosition());
+		this->State = IDLE;
+		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA);
+		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
+		this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
+		this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
+	}
+}
+
 void BoxMoverHardware::RunG1(Gcode* gcode) {
 	//None blocking, move backgroundly.
 	Serial.println("[Debug] GobotHouseHardware::RunG1()   \n");
