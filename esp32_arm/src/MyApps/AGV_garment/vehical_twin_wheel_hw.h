@@ -5,7 +5,7 @@
     Track sensor is 8 bit in front of veheical frame.
         The bot connect sensor with I2C bus.
 */
-#include "AGV/agv_base.h"
+#include "AGV/vehical_base.h"
 #include "AGV/track_sensor_shengteng.h"
 #include "Robot/Actuator/DCMotor/h_bridge_l298n.h"
 #include "Robot/Actuator/DCMotor/DCMotorController.h"
@@ -22,7 +22,14 @@
 // #define PWM_CHANNEL_2 2
 // #define PWM_CHANNEL_3 3
 
-class AgvSlimHardware: public AgvBase{
+
+/*
+G1 Y?? F1   Forward slow moving 
+G1 Y?? F9   Forward fast moving 
+M301 P1 I1 D1    //Set PID
+*/
+
+class TwinWheelHardware: public VehicalBase{
 
     public:
         void Init();

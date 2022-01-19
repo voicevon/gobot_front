@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 /*
-HTask is High performanceTask
+HTask is High performance Task
 */
 class HTaskBase{
     public:

@@ -3,24 +3,6 @@
 #include "garment_bot.h"
 
 
-
-
-void GarmentBot::SpinOnce(){
-   // Read battery
-
-
-    // delay(1000);
-   // Read RFID
-   // Deal with MQTT
-   switch  (this->_State){
-      case MOVING:
-         this->SpinOnce_Working();
-      default:
-         break;
-   }
-}
-
-
 void GarmentBot::Init(){
    // Setting PWM channels properties, Totally Esp32 has 16 channels
    const int freq = 30000;
@@ -32,20 +14,89 @@ void GarmentBot::Init(){
 
    // Init I2C bus
    Wire.begin();
-   
-   this->SetMode(SLEEP);
+   this->_last_state = PARKING;
+   this->ToState(SLEEPING);
    this->boxMover.ParkArms(true);
 }
 
 
 // void GarmentBot::Init_Linkage(IrEncoderHelper* sensorHelper){
-   // this->agv.leftWheel->LinkDriver(&this->objLeftWheelBridge);
+   // this->objTwinWheel.leftWheel->LinkDriver(&this->objLeftWheelBridge);
 // }
 
-void GarmentBot::SpinOnce_Working(){
+void GarmentBot::SpinOnce(){
+   int distance_to_full_park = 100;
+   bool loading_finished = true;
+   bool unloading_finished = true;
+   switch (this->_State)
+   {
+   case FAST_MOVING:
+      if (true)
+         this->ToState(FAST_MOVING_PAUSED);
+      // check if see the mark of slow-down.
+      else if (true)
+         this->ToState(SLOW_MOVING);
+      break;
+   case FAST_MOVING_PAUSED:
+      if (true)
+         this->ToState(FAST_MOVING);
+      break;
+   case SLOW_MOVING:
+      if (true)
+         this->ToState(SLOW_MOVING_PAUSED);
+      //try to read RFID
+      else if (true)
+         // got the mark
+         if (true)
+            // should  park to this station (working station or battery chariging station)
+            this->ToState(PARKING);
+         else
+            // should move to next site.
+            this->ToState(FAST_MOVING);
+      break;
+   case SLOW_MOVING_PAUSED:
+      if (true)
+         this->ToState(SLOW_MOVING);
+      break;
+   case PARKING:
+      // try to finish parking
+      if (distance_to_full_park == 0)
+         this->ToState(PARKED);
+      break;
+   case PARKING_PAUSED:
+      if (true)
+         this->ToState(PARKING);
+         break;
+   case PARKED:
+      if (true)
+         this->ToState(LOADING);
+      else if (true)
+         this->ToState(UNLOADING);
+      else if (true)
+         this->ToState(SLEEPING);
+      else if (true)
+         this->ToState(CHARGING);
+      break;
+   case LOADING:
+      if (loading_finished)
+         this->ToState(FAST_MOVING);
+      break;
+   case UNLOADING:
+      if (unloading_finished)
+         this->ToState(FAST_MOVING);
+      break;
+   case SLEEPING:
+      /* code */
+      break;
+   
+   default:
+      break;
+   }
+
+
    if (false){
 		// Found Obstacle !
-		this->agv.Stop();
+		this->objTwinWheel.Stop();
 	
 	}else if (false){
 		// on loading
@@ -71,11 +122,11 @@ void GarmentBot::SpinOnce_Working(){
 
 		if (RxBuffer[1] > 0){
 			// Got an obstacle, agv should be stop
-			this->agv.Stop();
+			this->objTwinWheel.Stop();
 		}
 
 		int track_error = this->objTrackSensor.ReadError_FromRight(&RxBuffer[0]);
-		this->agv.MoveForward(track_error);
+		this->objTwinWheel.MoveForward(track_error);
 	}
 }
 
@@ -86,22 +137,37 @@ void GarmentBot::ExecuteCommand(int topic, int payload){
 }
 
 
-void GarmentBot::SetMode(GARMENTBOT_MODE mode){
-   this->_State = mode;
-   Serial.print("\n GarmentBot::SetMode()" );
-   Serial.println(mode);
-   switch( mode){
-      case SLEEP:
-         this->agv.Stop();
+void GarmentBot::ToState(GARMENTBOT_STATE state){
+   if (state == this->_State) return;
+   switch(state){
+      case SLEEPING:
+         this->objTwinWheel.Stop();
          break;
-      case  MOVING:
-         this->agv.SetTargetSpeed(220);
-        //  this->agv.MoveForward();
-         this->_State = MOVING;
+      case  FAST_MOVING:
+         this->objTwinWheel.SetTargetSpeed(220);
          break;
+      case SLOW_MOVING:
+         this->objTwinWheel.SetTargetSpeed(100);
+         break;
+      case PARKING:
+         this->objTwinWheel.SetTargetSpeed(20);
+         break;
+      case LOADING:
+         this->boxMover.LoadBox();
+         break;
+      case UNLOADING:
+         this->boxMover.UnloadBox();
+         break;
+      case CHARGING:
+         break;
+      
+
       default:
          break;
    }
+   this->_State = state;
+   Serial.print("\n GarmentBot::SetMode()" );
+   Serial.println(state);
 
    
 }
@@ -111,7 +177,7 @@ void GarmentBot::Test(int test_id){
     if (test_id == 2) this->boxMover.UnloadBox();
     if (test_id==10) {
         int track_error = 0;
-        this->agv.MoveForward(track_error);
+        this->objTwinWheel.MoveForward(track_error);
     }
 }
 

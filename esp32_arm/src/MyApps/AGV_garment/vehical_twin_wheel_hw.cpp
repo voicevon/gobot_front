@@ -1,5 +1,5 @@
 
-#include "agv_slim_hw.h"
+#include "vehical_twin_wheel_hw.h"
 
 
 // void AgvSlimHardware::LinkWheels(ActuatorBase* left_wheel, ActuatorBase* right_wheel){
@@ -7,11 +7,11 @@
 //     this->rightWheel = right_wheel;
 // }
 
-void AgvSlimHardware::LinkPid(PIDController* speed_pid){
+void TwinWheelHardware::LinkPid(PIDController* speed_pid){
     this->speed_pid =  speed_pid;
 
 }
-void AgvSlimHardware::Init(){
+void TwinWheelHardware::Init(){
     // Setting PWM channels properties, Totally Esp32 has 16 channels
     const int freq = 30000;
     const int resolution = 8;   // so max pwm speed is 255
@@ -32,7 +32,7 @@ void AgvSlimHardware::Init(){
 
 }
 
-void AgvSlimHardware::MoveForward(int track_error) {
+void TwinWheelHardware::MoveForward(int track_error) {
     // int error = this->trackSensor->ReadError_ToRight();
     if (track_error == 888) {
         // this->Stop();
@@ -49,7 +49,7 @@ void AgvSlimHardware::MoveForward(int track_error) {
     this->rightWheel.driver->MoveAtSpeed(this->_TargetSpeed - p * track_error, FORWARD);
 }
 
-void AgvSlimHardware::Stop(){
+void TwinWheelHardware::Stop(){
     this->_TargetSpeed = 0;
     this->leftWheel.driver->Stop();
     this->rightWheel.driver->Stop();

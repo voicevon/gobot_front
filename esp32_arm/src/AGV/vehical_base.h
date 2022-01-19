@@ -6,9 +6,9 @@
 
 
 
-class AgvBase{
+class VehicalBase{
         public:
-            enum AGV_DIRECTION{
+            enum VEHICAL_DIRECTION{
                 FORWARD = 1,
                 BACKWARD = 2,
             };
