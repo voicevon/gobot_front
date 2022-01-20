@@ -1,0 +1,31 @@
+# include "map_navigator.h"
+
+MapNavigator::MapNavigator(){
+
+}
+bool MapNavigator::AddSite(uint16_t site_id, bool follow_left, bool should_park){
+    for(int i=0; i<20; i++){
+        if (this->__all_sites[i].SiteId == 0){
+            this->__all_sites[i].SiteId = site_id;
+            this->__all_sites[i].FollowLeft = follow_left;
+            this->__all_sites[i].ShouldPark = should_park;
+            return true;
+        }
+    }
+    return false;   
+}
+
+bool MapNavigator::RemoveSite(uint16_t site_id){
+    for(int i=0; i<20; i++){
+        if (this->__all_sites[i].SiteId == site_id){
+            this->__all_sites[i].SiteId = 0;
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool MapNavigator::FetchSite(uint16_t site_id, MapSite* the_site ){
+
+}
