@@ -43,10 +43,12 @@ void ReadI2C(){
 		}
 }
 void GarmentBot::CommuWithUppper(){
-   this->objMapNavigator.AddSite(1,MapSite::TASK::FOLLOW_LEFT);
-   this->objMapNavigator.AddSite(2,MapSite::TASK::LOADING);
-   this->objMapNavigator.AddSite(3,MapSite::TASK::UNLOADING);
-   this->objMapNavigator.AddSite(4,MapSite::TASK::SLEEPING);
+   // Currently is for testing, 
+   // Normally this function will be callback via a MQTT client.
+   this->objMapNavigator.AddSite(1, MapSite::TASK::FOLLOW_LEFT);
+   this->objMapNavigator.AddSite(2, MapSite::TASK::LOADING);
+   this->objMapNavigator.AddSite(3, MapSite::TASK::UNLOADING);
+   this->objMapNavigator.AddSite(4, MapSite::TASK::SLEEPING);
 
 }
 
@@ -57,30 +59,30 @@ void GarmentBot::onDetectedMark(uint16_t mapsite_id){
       switch (current_mapsite.task)
       {
       case MapSite::TASK::FOLLOW_LEFT:
-         this->objTrackSensor.FollowRightTrack = false;
+         this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = false;
          this->ToState(FAST_MOVING);
          break;
       case MapSite::TASK::FOLLLOW_RIGHT:
-         this->objTrackSensor.FollowRightTrack = true;
+         this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
          this->ToState(FAST_MOVING);
          break;
       case MapSite::TASK::LOADING:
-         this->objTrackSensor.FollowRightTrack = true;
+         this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
          this->__current_mapsite.task = MapSite::TASK::LOADING;
          this->ToState(PARKING);
          break;
       case MapSite::TASK::UNLOADING:
-         this->objTrackSensor.FollowRightTrack = true;
+         this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
          this->__current_mapsite.task = MapSite::TASK::UNLOADING;
          this->ToState(PARKING);
          break;
       case MapSite::TASK::SLEEPING:
-         this->objTrackSensor.FollowRightTrack = true;
+         this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
          this->__current_mapsite.task = MapSite::TASK::SLEEPING;
          this->ToState(PARKING);
          break;
       case MapSite::TASK::CHARGING:
-         this->objTrackSensor.FollowRightTrack = true;
+         this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
          this->__current_mapsite.task = MapSite::TASK::CHARGING;
          this->ToState(PARKING);         
       default:
@@ -121,7 +123,7 @@ void GarmentBot::SpinOnce(){
             this->ToState(SLOW_MOVING_PAUSED);
         else {
             //try to read RFID
-            mapsite_id = this->objRemoteRfidReader; 
+            mapsite_id = this->objRemoteSensor.ObjRfidReader.last_card_id; 
             if (mapsite_id > 0){
                 // got the mark
                 this->onDetectedMark(mapsite_id);

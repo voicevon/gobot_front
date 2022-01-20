@@ -6,6 +6,7 @@
 #include "vehical_twin_wheel_hw.h"
 #include "box_mover.h"
 #include "AGV/map_navigator.h"
+#include "remote_sensor.h"
 
 // #define PIN_LED_POWER_2130 23
 
@@ -61,10 +62,11 @@ class GarmentBot{
     private:
         TwinWheelHardware objTwinWheel = TwinWheelHardware();
         BoxMover boxMover = BoxMover();
-        TrackSensor_Shengteng objTrackSensor = TrackSensor_Shengteng();
-        TrackSensor_Shengteng objPositionSensor = TrackSensor_Shengteng();
-        int objObstacleDetector;
-        uint16_t objRemoteRfidReader;
+        // TrackSensor_Shengteng objTrackSensor = TrackSensor_Shengteng();
+        // TrackSensor_Shengteng objPositionSensor = TrackSensor_Shengteng();
+        // int objObstacleDetector;
+        // uint16_t objRemoteRfidReader;
+        RemoteSensor objRemoteSensor;
         MapNavigator objMapNavigator;
         
         void onDetectedMark(uint16_t mapsite_id);
