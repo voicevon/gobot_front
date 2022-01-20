@@ -5,6 +5,7 @@
 
 #include "vehical_twin_wheel_hw.h"
 #include "box_mover.h"
+#include "AGV/map_navigator.h"
 
 // #define PIN_LED_POWER_2130 23
 
@@ -61,6 +62,9 @@ class GarmentBot{
         TrackSensor_Shengteng objTrackSensor = TrackSensor_Shengteng();
         TrackSensor_Shengteng objPositionSensor = TrackSensor_Shengteng();
         int objObstacleDetector;
+        uint16_t objRemoteRfidReader;
+        MapNavigator objMapNavigator;
+
 
 };
 

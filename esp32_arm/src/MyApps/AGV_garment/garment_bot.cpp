@@ -28,6 +28,8 @@ void GarmentBot::SpinOnce(){
    int distance_to_full_park = 100;
    bool loading_finished = true;
    bool unloading_finished = true;
+   uint16_t mapsite_id = 0;
+   MapSite current_mapsite;
    switch (this->_State)
    {
    case FAST_MOVING:
@@ -44,15 +46,27 @@ void GarmentBot::SpinOnce(){
    case SLOW_MOVING:
       if (true)
          this->ToState(SLOW_MOVING_PAUSED);
-      //try to read RFID
-      else if (true)
-         // got the mark
-         if (true)
-            // should  park to this station (working station or battery chariging station)
-            this->ToState(PARKING);
-         else
-            // should move to next site.
-            this->ToState(FAST_MOVING);
+      else {
+        //try to read RFID
+        mapsite_id = this->objRemoteRfidReader; 
+        if (mapsite_id > 0){
+            // got the mark
+            if (this->objMapNavigator.FetchSite(mapsite_id, &current_mapsite)){
+                // the mark is being managered via map navigator.
+                this->objTrackSensor.FollowRightTrack = current_mapsite.FollowLeft;   //TODO: unify direction.
+                if (current_mapsite.ShouldPark)
+                    // should  park to this station (working station or battery chariging station)
+                    this->ToState(PARKING);
+                else
+                    // should not park here, track following direction has been set. so start fast moving.
+                    this->ToState(FAST_MOVING);
+            }
+            else
+                // the mark is NOT being managered via map navigator. 
+                // should move to next site.
+                this->ToState(FAST_MOVING);
+        }
+      }
       break;
    case SLOW_MOVING_PAUSED:
       if (true)

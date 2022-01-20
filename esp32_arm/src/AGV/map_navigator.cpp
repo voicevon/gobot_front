@@ -1,7 +1,10 @@
 # include "map_navigator.h"
 
 MapNavigator::MapNavigator(){
-
+    for(int i=0; i<20; i++){
+        this->__all_sites[i].SiteId = 0;
+        }
+    }
 }
 bool MapNavigator::AddSite(uint16_t site_id, bool follow_left, bool should_park){
     for(int i=0; i<20; i++){

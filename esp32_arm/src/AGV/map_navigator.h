@@ -5,8 +5,6 @@ class MapSite{
     public:
         MapSite(){
             this->SiteId = 0;
-            this->FollowLeft = false;
-            this->ShouldPark = true;
         }
         MapSite(uint16_t site_id, bool follow_left, bool should_park){
             this->SiteId= site_id;
