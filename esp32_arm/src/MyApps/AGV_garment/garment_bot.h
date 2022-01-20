@@ -55,7 +55,7 @@ class GarmentBot{
         GARMENTBOT_STATE _State;
         GARMENTBOT_STATE _last_state;
         void SpinOnce_Working();
-        
+        void CommuWithUppper();
     private:
         TwinWheelHardware objTwinWheel = TwinWheelHardware();
         BoxMover boxMover = BoxMover();
@@ -64,6 +64,7 @@ class GarmentBot{
         int objObstacleDetector;
         uint16_t objRemoteRfidReader;
         MapNavigator objMapNavigator;
+        
 
 
 };

@@ -19,10 +19,36 @@ void GarmentBot::Init(){
    this->boxMover.ParkArms(true);
 }
 
+void ReadI2C(){
+   		// Moving follow the track.
+		// Read I2C sensor, and obstacle 
+		uint8_t slave_address = 0x3f;
+		uint8_t RxBuffer[1];
+		uint8_t n_bytes = 2;
+		Wire.beginTransmission(slave_address);
+		Wire.endTransmission(false);
+		Wire.requestFrom(slave_address, n_bytes);    // request data from slave device
+		int i=0;
+		while (Wire.available() > 0) {  // slave may send less than requested
+            uint8_t c = Wire.read();         // receive a byte as character
+            RxBuffer[0] = c;
+            i++;
+            // Serial.println(c,BIN);
+		}
+		Wire.endTransmission(true);
 
+		if (RxBuffer[1] > 0){
+			// Got an obstacle, agv should be stop
+			// this->objTwinWheel.Stop();s
+		}
+}
 // void GarmentBot::Init_Linkage(IrEncoderHelper* sensorHelper){
    // this->objTwinWheel.leftWheel->LinkDriver(&this->objLeftWheelBridge);
 // }
+void GarmentBot::CommuWithUppper(){
+   this->objMapNavigator.AddSite(1,true,false);
+   this->objMapNavigator.AddSite(2,true,true);
+}
 
 void GarmentBot::SpinOnce(){
    int distance_to_full_park = 100;
@@ -30,14 +56,19 @@ void GarmentBot::SpinOnce(){
    bool unloading_finished = true;
    uint16_t mapsite_id = 0;
    MapSite current_mapsite;
+   bool found_obstacle = false;
+   bool found_slowdown_mark = false;
+   int track_error = 0; // this->objTrackSensor.ReadError_FromRight(&RxBuffer[0]);
    switch (this->_State)
    {
    case FAST_MOVING:
-      if (true)
+      if (found_obstacle)
          this->ToState(FAST_MOVING_PAUSED);
       // check if see the mark of slow-down.
-      else if (true)
+      else if (found_slowdown_mark)
          this->ToState(SLOW_MOVING);
+      else
+         this->objTwinWheel.MoveForward(track_error);
       break;
    case FAST_MOVING_PAUSED:
       if (true)
@@ -106,42 +137,6 @@ void GarmentBot::SpinOnce(){
    default:
       break;
    }
-
-
-   if (false){
-		// Found Obstacle !
-		this->objTwinWheel.Stop();
-	
-	}else if (false){
-		// on loading
-	}else if (false){
-		// on unloading
-	}else{
-		// Moving follow the track.
-		// Read I2C sensor, and obstacle 
-		uint8_t slave_address = 0x3f;
-		uint8_t RxBuffer[1];
-		uint8_t n_bytes = 2;
-		Wire.beginTransmission(slave_address);
-		Wire.endTransmission(false);
-		Wire.requestFrom(slave_address, n_bytes);    // request data from slave device
-		int i=0;
-		while (Wire.available() > 0) {  // slave may send less than requested
-            uint8_t c = Wire.read();         // receive a byte as character
-            RxBuffer[0] = c;
-            i++;
-            // Serial.println(c,BIN);
-		}
-		Wire.endTransmission(true);
-
-		if (RxBuffer[1] > 0){
-			// Got an obstacle, agv should be stop
-			this->objTwinWheel.Stop();
-		}
-
-		int track_error = this->objTrackSensor.ReadError_FromRight(&RxBuffer[0]);
-		this->objTwinWheel.MoveForward(track_error);
-	}
 }
 
 //
