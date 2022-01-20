@@ -42,12 +42,51 @@ void ReadI2C(){
 			// this->objTwinWheel.Stop();s
 		}
 }
-// void GarmentBot::Init_Linkage(IrEncoderHelper* sensorHelper){
-   // this->objTwinWheel.leftWheel->LinkDriver(&this->objLeftWheelBridge);
-// }
 void GarmentBot::CommuWithUppper(){
-   this->objMapNavigator.AddSite(1,true,false);
-   this->objMapNavigator.AddSite(2,true,true);
+   this->objMapNavigator.AddSite(1,MapSite::TASK::FOLLOW_LEFT);
+   this->objMapNavigator.AddSite(2,MapSite::TASK::LOADING);
+   this->objMapNavigator.AddSite(3,MapSite::TASK::UNLOADING);
+   this->objMapNavigator.AddSite(4,MapSite::TASK::SLEEPING);
+
+}
+
+void GarmentBot::onDetectedMark(uint16_t mapsite_id){
+   MapSite current_mapsite;
+   if (this->objMapNavigator.FetchSite(mapsite_id, &current_mapsite)){
+         // the mark is being managered via map navigator.
+      switch (current_mapsite.task)
+      {
+      case MapSite::TASK::FOLLOW_LEFT:
+         this->objTrackSensor.FollowRightTrack = false;
+         this->ToState(FAST_MOVING);
+         break;
+      case MapSite::TASK::FOLLLOW_RIGHT:
+         this->objTrackSensor.FollowRightTrack = true;
+         this->ToState(FAST_MOVING);
+         break;
+      case MapSite::TASK::LOADING:
+         this->objTrackSensor.FollowRightTrack = true;
+         this->__current_mapsite.task = MapSite::TASK::LOADING;
+         this->ToState(PARKING);
+         break;
+      case MapSite::TASK::UNLOADING:
+         this->objTrackSensor.FollowRightTrack = true;
+         this->__current_mapsite.task = MapSite::TASK::UNLOADING;
+         this->ToState(PARKING);
+         break;
+      case MapSite::TASK::SLEEPING:
+         this->objTrackSensor.FollowRightTrack = true;
+         this->__current_mapsite.task = MapSite::TASK::SLEEPING;
+         this->ToState(PARKING);
+         break;
+      case MapSite::TASK::CHARGING:
+         this->objTrackSensor.FollowRightTrack = true;
+         this->__current_mapsite.task = MapSite::TASK::CHARGING;
+         this->ToState(PARKING);         
+      default:
+         break;
+      }
+   }
 }
 
 void GarmentBot::SpinOnce(){
@@ -55,77 +94,71 @@ void GarmentBot::SpinOnce(){
    bool loading_finished = true;
    bool unloading_finished = true;
    uint16_t mapsite_id = 0;
-   MapSite current_mapsite;
    bool found_obstacle = false;
    bool found_slowdown_mark = false;
    int track_error = 0; // this->objTrackSensor.ReadError_FromRight(&RxBuffer[0]);
+   int position_error = 100;
+
+   this->CommuWithUppper();
+   
    switch (this->_State)
    {
    case FAST_MOVING:
-      if (found_obstacle)
-         this->ToState(FAST_MOVING_PAUSED);
-      // check if see the mark of slow-down.
-      else if (found_slowdown_mark)
-         this->ToState(SLOW_MOVING);
-      else
-         this->objTwinWheel.MoveForward(track_error);
-      break;
-   case FAST_MOVING_PAUSED:
-      if (true)
-         this->ToState(FAST_MOVING);
-      break;
-   case SLOW_MOVING:
-      if (true)
-         this->ToState(SLOW_MOVING_PAUSED);
-      else {
-        //try to read RFID
-        mapsite_id = this->objRemoteRfidReader; 
-        if (mapsite_id > 0){
-            // got the mark
-            if (this->objMapNavigator.FetchSite(mapsite_id, &current_mapsite)){
-                // the mark is being managered via map navigator.
-                this->objTrackSensor.FollowRightTrack = current_mapsite.FollowLeft;   //TODO: unify direction.
-                if (current_mapsite.ShouldPark)
-                    // should  park to this station (working station or battery chariging station)
-                    this->ToState(PARKING);
-                else
-                    // should not park here, track following direction has been set. so start fast moving.
-                    this->ToState(FAST_MOVING);
+        if (found_obstacle)
+            this->ToState(FAST_MOVING_PAUSED);
+        // check if see the mark of slow-down.
+        else if (found_slowdown_mark)
+            this->ToState(SLOW_MOVING);
+        else
+            this->objTwinWheel.MoveForward(track_error);
+        break;
+    case FAST_MOVING_PAUSED:
+        if (!found_obstacle)
+            this->ToState(FAST_MOVING);
+        break;
+    case SLOW_MOVING:
+        if (found_obstacle)
+            this->ToState(SLOW_MOVING_PAUSED);
+        else {
+            //try to read RFID
+            mapsite_id = this->objRemoteRfidReader; 
+            if (mapsite_id > 0){
+                // got the mark
+                this->onDetectedMark(mapsite_id);
             }
-            else
-                // the mark is NOT being managered via map navigator. 
-                // should move to next site.
-                this->ToState(FAST_MOVING);
         }
-      }
-      break;
+        break;
    case SLOW_MOVING_PAUSED:
-      if (true)
+      if (!found_obstacle)
          this->ToState(SLOW_MOVING);
       break;
    case PARKING:
-      // try to finish parking
-      if (distance_to_full_park == 0)
-         this->ToState(PARKED);
-      break;
+        // try to finish parking
+        if (distance_to_full_park == 0)
+            this->ToState(PARKED);
+        else{
+            // position_error = this->objPositionSensor.ReadError_FromRight();
+            this->objTwinWheel.SetTargetSpeed(position_error);
+        }
+        break;
    case PARKING_PAUSED:
-      if (true)
-         this->ToState(PARKING);
-         break;
+        if (!found_obstacle)
+            this->ToState(PARKING);
+            break;
    case PARKED:
-      if (true)
-         this->ToState(LOADING);
-      else if (true)
-         this->ToState(UNLOADING);
-      else if (true)
-         this->ToState(SLEEPING);
-      else if (true)
-         this->ToState(CHARGING);
-      break;
+        if (this->__current_mapsite.LOADING)
+            this->ToState(LOADING);
+        else if (this->__current_mapsite.UNLOADING)
+            this->ToState(UNLOADING);
+        else if (this->__current_mapsite.SLEEPING)
+            this->ToState(SLEEPING);
+        else if (this->__current_mapsite.CHARGING)
+            this->ToState(CHARGING);
+        break;
    case LOADING:
-      if (loading_finished)
-         this->ToState(FAST_MOVING);
-      break;
+        if (loading_finished)
+            this->ToState(FAST_MOVING);
+        break;
    case UNLOADING:
       if (unloading_finished)
          this->ToState(FAST_MOVING);
@@ -139,34 +172,27 @@ void GarmentBot::SpinOnce(){
    }
 }
 
-//
-//  The Command comes from MQTT, Buttons, MarkSensor, etc.
-void GarmentBot::ExecuteCommand(int topic, int payload){
-   
-}
-
-
 void GarmentBot::ToState(GARMENTBOT_STATE state){
    if (state == this->_State) return;
    switch(state){
       case SLEEPING:
-         this->objTwinWheel.Stop();
-         break;
-      case  FAST_MOVING:
-         this->objTwinWheel.SetTargetSpeed(220);
-         break;
+            this->objTwinWheel.Stop();
+            break;
+      case FAST_MOVING:
+            this->objTwinWheel.SetTargetSpeed(220);
+            break;
       case SLOW_MOVING:
-         this->objTwinWheel.SetTargetSpeed(100);
-         break;
+            this->objTwinWheel.SetTargetSpeed(100);
+            break;
       case PARKING:
-         this->objTwinWheel.SetTargetSpeed(20);
-         break;
+            this->objTwinWheel.SetTargetSpeed(20);
+            break;
       case LOADING:
-         this->boxMover.LoadBox();
-         break;
+            this->boxMover.LoadBox();
+            break;
       case UNLOADING:
-         this->boxMover.UnloadBox();
-         break;
+            this->boxMover.UnloadBox();
+            break;
       case CHARGING:
          break;
       
@@ -182,12 +208,12 @@ void GarmentBot::ToState(GARMENTBOT_STATE state){
 }
 
 void GarmentBot::Test(int test_id){
-    if (test_id == 1) this->boxMover.LoadBox();
-    if (test_id == 2) this->boxMover.UnloadBox();
-    if (test_id==10) {
+   if (test_id == 1) this->boxMover.LoadBox();
+   if (test_id == 2) this->boxMover.UnloadBox();
+   if (test_id==10) {
         int track_error = 0;
         this->objTwinWheel.MoveForward(track_error);
-    }
+   }
 }
 
 

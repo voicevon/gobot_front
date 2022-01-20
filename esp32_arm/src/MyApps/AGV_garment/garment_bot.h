@@ -24,7 +24,9 @@
 .                                                                        |                           |
 .                                                                        |-------> Charging ---------^
 .                                                                        |                           |
-.                                                                         --------> Sleeping ---------^
+.                                                                         --------> Sleeping --------^
+.                                                                        |                           |
+.                                                                         --------> Charging --------^
 */
 
 class GarmentBot{
@@ -65,6 +67,8 @@ class GarmentBot{
         uint16_t objRemoteRfidReader;
         MapNavigator objMapNavigator;
         
+        void onDetectedMark(uint16_t mapsite_id);
+        MapSite __current_mapsite;
 
 
 };
