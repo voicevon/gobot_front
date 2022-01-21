@@ -42,15 +42,7 @@ void ReadI2C(){
 			// this->objTwinWheel.Stop();s
 		}
 }
-void GarmentBot::CommuWithUppper(){
-   // Currently is for testing, 
-   // Normally this function will be callback via a MQTT client.
-   this->objMapNavigator.AddSite(1, MapSite::TASK::FOLLOW_LEFT);
-   this->objMapNavigator.AddSite(2, MapSite::TASK::LOADING);
-   this->objMapNavigator.AddSite(3, MapSite::TASK::UNLOADING);
-   this->objMapNavigator.AddSite(4, MapSite::TASK::SLEEPING);
 
-}
 
 void GarmentBot::onDetectedMark(uint16_t mapsite_id){
    MapSite current_mapsite;
@@ -101,7 +93,7 @@ void GarmentBot::SpinOnce(){
    int track_error = 0; // this->objTrackSensor.ReadError_FromRight(&RxBuffer[0]);
    int position_error = 100;
 
-   this->CommuWithUppper();
+//    this->onMqttReceived();
    
    switch (this->_State)
    {
@@ -218,6 +210,30 @@ void GarmentBot::Test(int test_id){
    }
 }
 
+uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
+    // a json string,, constructed by state,battery_volt,last_site_id
+    String payload = "agv_id:" + this->_ID;
+    payload.concat(",state:");
+    payload.concat(this->_State);
+    payload.concat(",battery:");
+    payload.concat(123);
+    payload.concat(",site:");
+    payload.concat(this->_last_state);
+    // uint8_t length = payload.length();
+    // uint8_t* dest = (uint8_t *)chars;
+    payload.getBytes(chars, payload.length());
+    return payload.length();
+}
 
+//void GarmentBot::CommuWithUppper(){
+void GarmentBot::onMqttReceived(uint8_t* payload){
+   // Currently is for testing, 
+   // Normally this function will be callback via a MQTT client.
+   this->objMapNavigator.AddSite(1, MapSite::TASK::FOLLOW_LEFT);
+   this->objMapNavigator.AddSite(2, MapSite::TASK::LOADING);
+   this->objMapNavigator.AddSite(3, MapSite::TASK::UNLOADING);
+   this->objMapNavigator.AddSite(4, MapSite::TASK::SLEEPING);
+
+}
 
 #endif

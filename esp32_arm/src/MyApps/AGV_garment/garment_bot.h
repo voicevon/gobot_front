@@ -51,27 +51,22 @@ class GarmentBot{
         void Init();
         void SpinOnce();
         void ToState(GARMENTBOT_STATE state);
-        void ExecuteCommand(int topic, int payload);
         void Test(int test_id);
-
+        uint8_t GetMqtt_PubPayload(uint8_t* chars);
+        void onMqttReceived(uint8_t* payload);
     protected:
         GARMENTBOT_STATE _State;
         GARMENTBOT_STATE _last_state;
         void SpinOnce_Working();
-        void CommuWithUppper();
     private:
         TwinWheelHardware objTwinWheel = TwinWheelHardware();
         BoxMover boxMover = BoxMover();
-        // TrackSensor_Shengteng objTrackSensor = TrackSensor_Shengteng();
-        // TrackSensor_Shengteng objPositionSensor = TrackSensor_Shengteng();
-        // int objObstacleDetector;
-        // uint16_t objRemoteRfidReader;
         RemoteSensor objRemoteSensor;
         MapNavigator objMapNavigator;
         
         void onDetectedMark(uint16_t mapsite_id);
         MapSite __current_mapsite;
-
+        uint16_t _ID = 0;
 
 };
 
