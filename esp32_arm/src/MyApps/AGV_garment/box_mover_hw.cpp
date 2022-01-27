@@ -1,9 +1,12 @@
 #include "box_mover_hw.h"
 
 
-#define STEPS_PER_RAD 326   //2048 / 2*Pi
-#define ACCELERATION_HOMIMG 2000
-#define MAX_SPEED_HOMING 2000
+#define STEPS_PER_RAD_A 326   //2048 / 2*Pi
+#define STEPS_PER_MM_Z 326   //2048 / 2*Pi
+#define ACCELERATION_HOMIMG_A 2000
+#define ACCELERATION_HOMIMG_Z 2000
+#define MAX_SPEED_HOMING_Z 2000
+#define MAX_SPEED_HOMING_A 2000
 
 #define MAX_STEPS_PER_SECOND_ALPHA 500
 #define MAX_STEPS_PER_SECOND_BETA 500
@@ -11,8 +14,7 @@
 #define MAX_ACCELERATION_BETA 20
 
 void BoxMoverHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
-    
-}
+    }
 
 
 
@@ -30,15 +32,15 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 	this->_homing_axis = axis;
 
 	if (axis=='A'){
-		this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG);
-		this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING);
+		this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG_A);
+		this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING_A);
 		//todo :  process with IK()
 		this->objStepper_alpha.setTargetRel(500000);
 		this->objStepper_beta.setTargetRel(500000);
 		this->__homing_helper = &this->objHomeHelper_angle;
 	}else if (axis=='Z'){
-		this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG);
-		this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING);
+		this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG_Z);
+		this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING_Z);
 		this->objStepper_alpha.setTargetRel(500000);
 		this->objStepper_beta.setTargetRel(-500000);	
 		this->__homing_helper = &this->objHomeHelper_vertical;
