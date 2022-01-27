@@ -7,22 +7,24 @@
 #define PIN_MICRIO_STEP_0 23
 
 
-
-#define MOTOR_MAX_SPEED 289
-#define HOME_POSITION_ALPHA 0
-#define HOME_POSITION_BETA 1
-
 #define LINK_A 75
 #define LINK_B 75
 
-#define STEPS_PER_RAD 326   //2048 / 2*Pi
-#define ACCELERATION_HOMIMG 2000
-#define MAX_SPEED_HOMING 2000
-
+#define STEPS_PER_RAD_ALPHA 326   //2048 / 2*Pi
+#define MOTOR_MAX_SPEED_ALPHA 289
 #define MAX_STEPS_PER_SECOND_ALPHA 500
-#define MAX_STEPS_PER_SECOND_BETA 500
 #define MAX_ACCELERATION_ALPHPA 200
+#define ACCELERATION_HOMIMG_ALPHA 2000
+#define MAX_SPEED_HOMING_ALPHA 2000
+#define HOME_POSITION_ALPHA 0
+
+#define STEPS_PER_RAD_BETA 326   //2048 / 2*Pi
+#define MOTOR_MAX_SPEED_BETA 289
+#define MAX_STEPS_PER_SECOND_BETA 500
 #define MAX_ACCELERATION_BETA 200
+#define ACCELERATION_HOMIMG_BETA 2000
+#define MAX_SPEED_HOMING_BETA 2000
+#define HOME_POSITION_BETA 1
 
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
@@ -58,8 +60,8 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	float alpha_eef = acosf(fk->X/r1);
 	float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
 	float alpha = alpha_eef + alpha_link;
-	ik->alpha = alpha * STEPS_PER_RAD;
-	ik->beta =  beta * STEPS_PER_RAD; 
+	ik->alpha = alpha * STEPS_PER_RAD_ALPHA;
+	ik->beta =  beta * STEPS_PER_RAD_BETA; 
 }
 
 void GobotHouseHardware::FK(IkPositionBase* ik, FkPositionBase*  to_fk){
@@ -105,7 +107,7 @@ float GobotHouseHardware::GetDistanceToTarget_FK(){
 	// because in this arm solution,  FK is equal to IK. so never mind the logic error.
 	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
 	// TODO: Rewrite this function.
-	IkPosAB current_ik;
+	IkPosition_AB current_ik;
 	current_ik.alpha = (float)this->objStepper_alpha.getPosition();
 	current_ik.beta = (float)this->objStepper_beta.getPosition();
 	FK(&current_ik, &this->__current_fk_position);
@@ -159,13 +161,13 @@ void GobotHouseHardware::HomeSingleAxis(char axis){
   Serial.print(axis);
   this->_homing_axis = axis;
   if (axis=='A'){
-	this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG);
-	this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING);
+	this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG_ALPHA);
+	this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING_BETA);
 	this->__homing_stepper = &this->objStepper_alpha;
 	this->__homing_helper = &this->objHomeHelper_alpha;
   }else if (axis=='B'){
-	this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG);
-	this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING);
+	this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG_ALPHA);
+	this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING_BETA);
 	this->__homing_stepper = &this->objStepper_beta;
 	this->__homing_helper = &this->objHomeHelper_beta;
   }

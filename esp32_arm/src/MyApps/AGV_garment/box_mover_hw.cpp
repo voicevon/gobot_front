@@ -87,7 +87,7 @@ void BoxMoverHardware::RunG1(Gcode* gcode) {
 	Serial.print(",");
 	Serial.println(target_fk.a);
     
-    IkPosAB target_ik;
+    IkPosition_AB target_ik;
     this->IK(&target_fk, &target_ik);
 
 	this->objStepper_alpha.setTargetAbs(target_ik.alpha);

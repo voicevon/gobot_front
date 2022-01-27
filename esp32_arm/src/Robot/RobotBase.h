@@ -65,17 +65,16 @@ class FKPosition_ZA: public FkPositionBase{
         float a;
 };
 
-class FkPosition_AB: public IkPositionBase{
+class IkPositionBase{
+
+};
+
+class FkPosition_AB: public FkPositionBase{
     public:
         float alpha;
         float beta;
 };
 
-
-
-class IkPositionBase{
-
-};
 class IkPosition_A: public IkPositionBase{
     public:
         float alpha;

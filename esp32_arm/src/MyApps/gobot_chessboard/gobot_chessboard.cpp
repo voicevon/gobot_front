@@ -74,7 +74,7 @@ https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/maste
 
 void GobotChessboard::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
   FkPosXY* fk = (FkPosXY*)(from_fk);
-  IkPosAB* ik = (IkPosAB*)(to_ik);
+  IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
   float rr1= (fk->X + LINK_0) * (fk->X + LINK_0) + fk->Y * fk->Y;
   
