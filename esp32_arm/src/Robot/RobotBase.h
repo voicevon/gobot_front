@@ -4,7 +4,7 @@
 #include "Robot/Commu/CommuDeviceBase.h"
 
 class FkPositionBase{
-
+    
 };
 class FkPosX: public FkPositionBase{
     public:
@@ -23,7 +23,7 @@ class FkPosXYZ: public FkPositionBase{
         float z;
 };
 
-class fkPosXYZA: public FkPositionBase{
+class FkPosXYZA: public FkPositionBase{
     public:
         float x;
         float y;
@@ -31,7 +31,7 @@ class fkPosXYZA: public FkPositionBase{
         float a;
 };
 
-class fkPosXYZAB: public FkPositionBase{
+class FkPosXYZAB: public FkPositionBase{
     public:
         float x;
         float y;
@@ -39,7 +39,7 @@ class fkPosXYZAB: public FkPositionBase{
         float a;
         float b;
 };
-class fkPosXYZABC: public FkPositionBase{
+class FPosXYZABC: public FkPositionBase{
     public:
         float x;
         float y;
@@ -49,7 +49,7 @@ class fkPosXYZABC: public FkPositionBase{
         float c;
 };
 
-class fkPosXYUVW: public FkPositionBase{
+class FkPosXYUVW: public FkPositionBase{
     public:
         float x;
         float y;
@@ -65,14 +65,22 @@ class FKPosition_ZA: public FkPositionBase{
         float a;
 };
 
+class FkPosition_AB: public IkPositionBase{
+    public:
+        float alpha;
+        float beta;
+};
+
+
+
 class IkPositionBase{
 
 };
-class IkPosA: public IkPositionBase{
+class IkPosition_A: public IkPositionBase{
     public:
         float alpha;
 };
-class IkPosAB: public IkPositionBase{
+class IkPosition_AB: public IkPositionBase{
     public:
         float alpha;
         float beta;

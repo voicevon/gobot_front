@@ -21,8 +21,8 @@
 
 #define MAX_STEPS_PER_SECOND_ALPHA 500
 #define MAX_STEPS_PER_SECOND_BETA 500
-#define MAX_ACCELERATION_ALPHPA 20
-#define MAX_ACCELERATION_BETA 20
+#define MAX_ACCELERATION_ALPHPA 200
+#define MAX_ACCELERATION_BETA 200
 
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
@@ -50,7 +50,7 @@
 // }
 void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosXY* fk = (FkPosXY*)(from_fk);
-	IkPosAB* ik = (IkPosAB*)(to_ik);
+	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 	float rr1= fk->X * fk->X + fk->Y * fk->Y;
 
 	float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
@@ -97,6 +97,7 @@ void GobotHouseHardware::Init_Linkage(){
 	this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
 	this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
 	this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
+	this->objStepper_beta.setInverseRotation(true);
 
 }
 
@@ -127,7 +128,7 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	Serial.println("[Debug] GobotHouseHardware::RunG1()   \n");
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
-		this->objStepper_alpha.setMaxSpeed(800);
+		this->objStepper_alpha.setMaxSpeed(speed);
 	}
 	float target_alpha = this->objStepper_alpha.getPosition();
 	float target_beta = this->objStepper_beta.getPosition();

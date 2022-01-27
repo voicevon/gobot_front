@@ -25,11 +25,11 @@
 #define PIN_LED_F_2019 27
 #define PIN_LED_H_2109 14
 
-#define PIN_HOME_ALHPA_2109 35     //??
+#define PIN_HOME_ALHPA_2109 15     //??
 #define PIN_ALPHA_DIR_2109 19
 #define PIN_ALPHA_STEP_2109 5
 
-#define PIN_HOME_BETA_2109 34      //??
+#define PIN_HOME_BETA_2109 2      //??
 #define PIN_BETA_DIR_2109 17
 #define PIN_BETA_STEP_2109 4
 
