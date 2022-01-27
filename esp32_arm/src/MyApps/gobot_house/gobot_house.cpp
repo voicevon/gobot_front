@@ -35,7 +35,7 @@ void GobotHouse::ParkArms(bool do_homing){
 		this->__commandQueue->AppendGcodeCommand(strG28);
 	}
 	this->__commandQueue->SpinOnce();
-	String strG1 = "G1A3.1416 B3.1416 F2800";
+	String strG1 = "G1A1.07 B1.07 F2800";
 	this->__commandQueue->AppendGcodeCommand(strG1);
 }
 // Head is a position name, The 5 bar arm will pick up stone from there.

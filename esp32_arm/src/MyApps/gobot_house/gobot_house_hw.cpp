@@ -10,15 +10,15 @@
 #define LINK_A 75
 #define LINK_B 75
 
-#define STEPS_PER_RAD_ALPHA 326   //2048 / 2*Pi
+#define STEPS_PER_RAD_ALPHA 750   //2048 / 2*Pi
 #define MOTOR_MAX_SPEED_ALPHA 289
 #define MAX_STEPS_PER_SECOND_ALPHA 500
 #define MAX_ACCELERATION_ALPHPA 200
 #define ACCELERATION_HOMIMG_ALPHA 2000
-#define MAX_SPEED_HOMING_ALPHA 2000
+#define MAX_SPEED_HOMING_ALPHA 20000
 #define HOME_POSITION_ALPHA 0
 
-#define STEPS_PER_RAD_BETA 326   //2048 / 2*Pi
+#define STEPS_PER_RAD_BETA 220   //2048 / 2*Pi
 #define MOTOR_MAX_SPEED_BETA 289
 #define MAX_STEPS_PER_SECOND_BETA 500
 #define MAX_ACCELERATION_BETA 200
@@ -127,6 +127,7 @@ float GobotHouseHardware::GetDistanceToTarget_IK(){
 
 void GobotHouseHardware::RunG1(Gcode* gcode) {
 	//None blocking, move backgroundly.
+	// TODO:  G1 X123 Y123, will use IK()
 	Serial.println("[Debug] GobotHouseHardware::RunG1()   \n");
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
@@ -144,8 +145,8 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	Serial.print(",");
 	Serial.println(target_beta);
 
-	this->objStepper_alpha.setTargetAbs(target_alpha);
-	this->objStepper_beta.setTargetAbs(target_beta);
+	this->objStepper_alpha.setTargetAbs(target_alpha  * STEPS_PER_RAD_ALPHA);
+	this->objStepper_beta.setTargetAbs(target_beta * STEPS_PER_RAD_BETA);
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 }
 void GobotHouseHardware:: _running_G1(){
@@ -162,11 +163,11 @@ void GobotHouseHardware::HomeSingleAxis(char axis){
   this->_homing_axis = axis;
   if (axis=='A'){
 	this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG_ALPHA);
-	this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING_BETA);
+	this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING_ALPHA);
 	this->__homing_stepper = &this->objStepper_alpha;
 	this->__homing_helper = &this->objHomeHelper_alpha;
   }else if (axis=='B'){
-	this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG_ALPHA);
+	this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG_BETA);
 	this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING_BETA);
 	this->__homing_stepper = &this->objStepper_beta;
 	this->__homing_helper = &this->objHomeHelper_beta;
