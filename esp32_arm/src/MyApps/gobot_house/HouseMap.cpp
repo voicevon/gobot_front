@@ -19,7 +19,7 @@
 
 void HouseMap::setup(){
     this->neck.y = 0;
-    this->neck.x = 60.0;
+    this->neck.x = 55.0;
     this->head.y = 0;
     this->head.x = 148.93;
 

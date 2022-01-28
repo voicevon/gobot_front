@@ -63,10 +63,10 @@ bool GobotHouse::ParkForCalibration(int step){
 	}
 	if (step==5){
 		// test alpha=0, beta=0
-		String strG1 = "G1A-1.7";
+		String strG1 = "G1A-0.9";
 		this->__commandQueue->AppendGcodeCommand(strG1);
-		float x1 = this->__map.head.x;
-		float x2 = this->__map.neck.x;
+		float x1 = this->__map.neck.x;
+		float x2 = this->__map.head.x;
 
 		float distance = x2 - x1;
 		float dx = distance / this->__segments ;
