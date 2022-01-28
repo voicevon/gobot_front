@@ -37,14 +37,14 @@ class BoxMoverHardware:public RobotBase{
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
-        virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override{};
+        virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 
         void RunG6(Gcode* gcode) override{} ; 
         void _running_G1() override;
         void _running_G28() override;
         std::string GetHomeTrigerStateString() override {return " ";};
 
-        FKPosition_ZA __current_fk_position;
+        FkPosition_ZW __current_fk_position;
 
         HomeHelper* __homing_helper;
         HomeHelper objHomeHelper_vertical = HomeHelper(VERTICAL_ENDSTOP, LOW);

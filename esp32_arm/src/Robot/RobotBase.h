@@ -50,21 +50,12 @@ class FPosition_XYZABC: public FkPositionBase{
         float c;
 };
 
-class FkPosition_XYUVW: public FkPositionBase{
+class FkPosition_ZW: public FkPositionBase{
     public:
-        float x;
-        float y;
-        float z;
-        float u;
-        float v;
-        float w;
+        float Z;
+        float W;
 };
 
-class FKPosition_ZA: public FkPositionBase{
-    public:
-        float z;
-        float a;
-};
 
 class IkPositionBase{
 

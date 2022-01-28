@@ -55,20 +55,22 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	if (fk->X < 0)  alpha = 2 * PI - alpha;
 	if (alpha > PI /2) alpha -= 2 * PI;
 
-	ik->alpha = alpha ;
-	ik->beta =  beta ; 
+	ik->alpha = alpha * STEPS_PER_RAD_ALPHA;
+	ik->beta =  beta * STEPS_PER_RAD_BETA;
+
 	Serial.print("\n[Debug] Inverse Kinematic result in angle degree alpha, beta:   ");
-	Serial.print(ik->alpha * 180 / PI);
+	Serial.print(alpha * 180 / PI);
 	Serial.print(" , ");
-	Serial.print(ik->beta * 180 / PI);
+	Serial.print(beta * 180 / PI);
 }
 
 void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
-	float new_beta = ik->beta + ik->alpha;
-	fk->X = LINK_A * cosf(ik->alpha) + LINK_B * cosf(new_beta);
-	fk->Y = LINK_A * sinf(ik->alpha) + LINK_B * sinf(new_beta);
+	float rad_beta = ik->beta / STEPS_PER_RAD_BETA + ik->alpha /STEPS_PER_RAD_ALPHA;
+	float rad_alpha = ik->alpha /STEPS_PER_RAD_ALPHA;
+	fk->X = LINK_A * cosf(rad_alpha) + LINK_B * cosf(rad_beta);
+	fk->Y = LINK_A * sinf(rad_alpha) + LINK_B * sinf(rad_beta);
 	Serial.print("\n[Debug] GobotHouseHardware::FK()  Forward Kinematic result:   ");
 	Serial.print(fk->X);
 	Serial.print(" , ");
@@ -145,8 +147,8 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	IkPosition_AB target_ik_ab;
 	target_fk_xy.X = this->__current_fk_position.X;
 	target_fk_xy.Y = this->__current_fk_position.Y;
-	target_ik_ab.alpha = float(this->objStepper_alpha.getPosition()) / STEPS_PER_RAD_ALPHA;
-	target_ik_ab.beta = float(this->objStepper_beta.getPosition()) / STEPS_PER_RAD_BETA;
+	target_ik_ab.alpha = this->objStepper_alpha.getPosition();
+	target_ik_ab.beta = this->objStepper_beta.getPosition();
 	bool do_ik=false;
 	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A');
 	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B');
@@ -163,8 +165,8 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
 
 	//Prepare actuator/driver to move to next point
-	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha  * STEPS_PER_RAD_ALPHA);
-	this->objStepper_beta.setTargetAbs(target_ik_ab.beta * STEPS_PER_RAD_BETA);
+	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha );
+	this->objStepper_beta.setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 
@@ -176,9 +178,9 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 		Serial.print(" <-- from   alpha,beta   to --> ");
 		Serial.print(target_ik_ab.alpha);
 		Serial.print(">>");
-		Serial.print(target_ik_ab.alpha * STEPS_PER_RAD_ALPHA );
+		Serial.print(target_ik_ab.alpha);
 		Serial.print(" , ");
-		Serial.println(target_ik_ab.beta * STEPS_PER_RAD_BETA);
+		Serial.println(target_ik_ab.beta);
 	}
 
 
