@@ -104,8 +104,8 @@ void GobotHouse::ParkArms(bool do_homing){
 	}
 	this->__commandQueue->SpinOnce();
 	// Park Arms
-	// String strG1 = "G1A-1.1 F2800";
-	// this->__commandQueue->AppendGcodeCommand(strG1);
+	String strG1 = "G1A-1.1 F2800";
+	this->__commandQueue->AppendGcodeCommand(strG1);
 }
 // Head is a position name, The 5 bar arm will pick up stone from there.
 bool GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){

@@ -15,17 +15,17 @@ void setup(){
     mybot = &GobotHouse::getInstance();
     mybot->Setup(&action);
 	mybot->ParkArms(true);
-    mybot->ParkForCalibration(5);
+    // mybot->ParkForCalibration(5);
 }
 
 bool done= false;
 void loop(){
 	// WebCommu_SpinOnce();
 	mybot->SpinOnce();
-    // done = mybot->MoveStone_FromRoomToHead(0);
-    // if(done) Serial.print("Done to 0");
-    // done = mybot->MoveStone_FromHeadToRoom(0);
-    // if(done) Serial.print("Done to head");
+    done = mybot->MoveStone_FromRoomToHead(0);
+    if(done) Serial.print("Done to 0");
+    done = mybot->MoveStone_FromHeadToRoom(0);
+    if(done) Serial.print("Done to head");
     // mybot->MoveStone_FromRoomToHead(2);
     // mybot->MoveStone_FromRoomToHead(3);
     // mybot->MoveStone_FromRoomToHead(4);
