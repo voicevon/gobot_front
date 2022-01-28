@@ -3,7 +3,6 @@
 #include <Robot/Gcode.h>
 #include "Robot/Commu/CommuDeviceBase.h"
 
-#define PI 3.14159267
 
 class FkPositionBase{
     

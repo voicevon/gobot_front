@@ -69,7 +69,7 @@ void BoxMoverHardware::RunG1(Gcode* gcode) {
 	Serial.println("[Debug] BoxMoverHardware::RunG1()   \n");
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
-		this->objStepper_alpha.setMaxSpeed(800);
+		this->objStepper_alpha.setMaxSpeed(speed);
 	}
 
     FKPosition_ZA target_fk;

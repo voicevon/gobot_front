@@ -25,8 +25,8 @@ class BoxMoverHardware:public RobotBase{
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
         void MoveToTargetPosition() override{};
-        float GetDistanceToTarget_FK() override{};
-        float GetDistanceToTarget_IK() override{};
+        float GetDistanceToTarget_FK() override{return 0.0;};
+        float GetDistanceToTarget_IK() override{return 0.0;};
 
     private:
         Stepper objStepper_alpha = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
@@ -42,7 +42,7 @@ class BoxMoverHardware:public RobotBase{
         void RunG6(Gcode* gcode) override{} ; 
         void _running_G1() override;
         void _running_G28() override;
-        std::string GetHomeTrigerStateString() override {};
+        std::string GetHomeTrigerStateString() override {return " ";};
 
         FKPosition_ZA __current_fk_position;
 

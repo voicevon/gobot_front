@@ -58,9 +58,9 @@ void BoxMover::ParkArms(bool do_homing){
 
 	if (do_homing){
 		String strG28 = "G28Z";
-		bool result = this->__commandQueue->AppendGcodeCommand(strG28);
+		this->__commandQueue->AppendGcodeCommand(strG28);
 		strG28 = "G28A";
-		result = this->__commandQueue->AppendGcodeCommand(strG28);
+		this->__commandQueue->AppendGcodeCommand(strG28);
 	}
 	this->__commandQueue->SpinOnce();
 	String strG1 = "G1 Z5421 A1345";

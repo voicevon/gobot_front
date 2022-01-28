@@ -23,9 +23,9 @@ class SmokeBot: public RobotBase{
         void HomeSingleAxis(char axis) override;
         void Init_Linkage() override;
         void Init_Gpio();
-        bool GetCurrentPosition(FkPositionBase* position_fk) override {};
-        float GetDistanceToTarget_FK() override{};
-        float GetDistanceToTarget_IK() override{};
+        bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
+        float GetDistanceToTarget_FK() override{return 0.0;};
+        float GetDistanceToTarget_IK() override{return 0.0;};
 
     private:
         CommuUart objCommuUart = CommuUart();
@@ -41,7 +41,7 @@ class SmokeBot: public RobotBase{
         void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override {};
         void RunG1(Gcode* gcode) override;   //None blocking, move backgroundly.
         void RunG6(Gcode* gcode) override {};   //Block mode
-        std::string GetHomeTrigerStateString() override {};
+        std::string GetHomeTrigerStateString() override {return " ";};
 
         void _running_G1() override;
         void _running_G28() override;

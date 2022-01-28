@@ -22,16 +22,17 @@ void GobotHouse::SpinOnce(){
 	this->__robot_hardware->SpinOnce();
 	this->__commandQueue->SpinOnce();
 }
-bool GobotHouse::ParkForCalibration(int step){
+void GobotHouse::ParkForCalibration(int step){
 	// if (this->__commandQueue->GetFreeBuffersCount() < 16)  return false;
 	if (step ==1){
 		// we do nothing, after homing, just want to get the home position in angle of degree.
-
+		// alpha = 2.20
+		// beta = 132.7
 	}
 	if (step==2){
 		// Our goal is to determin the value of STEPS_PER_RAD_ALPHA
 		// alpha = ??? -  PI 
-		float homed_alpha_in_degree = 2.93;   //copy this number from homing report
+		float homed_alpha_in_degree = 2.20;   //copy this number from homing report
 		float a = (homed_alpha_in_degree-180.0f) * PI / 180;
 		String sss = String(a,3);
 		String g1 = "G1A";
@@ -44,7 +45,7 @@ bool GobotHouse::ParkForCalibration(int step){
 		String g1 = "G1A-3.14";
 		this->__commandQueue->AppendGcodeCommand(g1);
 
-		float homed_beta_in_degree = 131;   //copy this number from homing report
+		float homed_beta_in_degree = 132.7;   //copy this number from homing report
 		float b = (homed_beta_in_degree-180.0f) * PI / 180;
 		String sss = String(b,3);
 
@@ -82,8 +83,7 @@ bool GobotHouse::ParkForCalibration(int step){
 		}
 		strG1 = "G1A0B0";
 		this->__commandQueue->AppendGcodeCommand(strG1);
-		return true;
-		}
+	}
 }
 
 void GobotHouse::ParkArms(bool do_homing){

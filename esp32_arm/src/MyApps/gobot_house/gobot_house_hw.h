@@ -68,7 +68,7 @@ class GobotHouseHardware: public RobotBase{
         void RunG6(Gcode* gcode) override {};   //Block mode
         void _running_G1() override;
         void _running_G28() override;
-        std::string GetHomeTrigerStateString() override {};
+        std::string GetHomeTrigerStateString() override {return " ";};
 
         void MoveToTargetPosition() override {};
 
