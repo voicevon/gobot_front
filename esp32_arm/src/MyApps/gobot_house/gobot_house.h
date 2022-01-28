@@ -21,7 +21,7 @@ class GobotHouse{
                                   // Instantiated on first use.
             return instance;
         }    
-        void Setup(RobotAction* pAction, int segments);
+        void Setup(RobotAction* pAction);
         void SpinOnce();
         void ParkArms(bool do_homing);
         bool MoveStone_FromRoomToHead(uint8_t house_id);

@@ -23,11 +23,12 @@ Gcode::Gcode(const std::string &command, bool strip)
 // Gcode::Gcode(String command, bool strip)
 {
     this->command= strdup(command.c_str());
-    Serial.print(command.c_str());
-    Serial.print("-----------");
-    Serial.print(this->command);
-    Serial.print("-----------");
-    Serial.println(this->get_command());
+    // Serial.print("\n[Debug]Gcode::Gcode()")
+    // Serial.print(command.c_str());
+    // Serial.print("-----------");
+    // Serial.print(this->command);
+    // Serial.print("-----------");
+    // Serial.println(this->get_command());
 
     this->m= 0;
     this->g= 0;
@@ -38,11 +39,11 @@ Gcode::Gcode(const std::string &command, bool strip)
     prepare_cached_values(strip);
     this->stripped= strip;
 
-    Serial.print(command.c_str());
-    Serial.print(" ================= ");
-    Serial.print(this->command);
-    Serial.print(" ================= ");
-    Serial.println(this->get_command());
+    // Serial.print(command.c_str());
+    // Serial.print(" ================= ");
+    // Serial.print(this->command);
+    // Serial.print(" ================= ");
+    // Serial.println(this->get_command());
 }
 
 Gcode::~Gcode()

@@ -2,7 +2,7 @@
 #include <HardwareSerial.h>
 
 void CommuUart::OutputMessage(std::string message){
-    Serial.print("\n...   ...   ...");
+    Serial.print("[Info] CommuUart::OutputMessage() ...   ...   ...");
     Serial.print(message.c_str());
 }
 void CommuUart::WriteNotification(std::string notification){

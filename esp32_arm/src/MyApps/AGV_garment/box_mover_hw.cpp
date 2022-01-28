@@ -66,7 +66,7 @@ void BoxMoverHardware::_running_G28(){
 
 void BoxMoverHardware::RunG1(Gcode* gcode) {
 	//None blocking, move backgroundly.
-	Serial.println("[Debug] GobotHouseHardware::RunG1()   \n");
+	Serial.println("[Debug] BoxMoverHardware::RunG1()   \n");
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
 		this->objStepper_alpha.setMaxSpeed(800);

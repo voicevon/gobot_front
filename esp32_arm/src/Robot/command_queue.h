@@ -5,7 +5,7 @@
 
 
 #define MAX_BYTES_PER_COMMAND 20
-#define COMMANDS_COUNT_IN_QUEUE 5
+#define COMMANDS_COUNT_IN_QUEUE 22
 
 class CommandQueue{
     public:

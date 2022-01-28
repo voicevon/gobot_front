@@ -3,26 +3,12 @@
 #include "Arduino.h"
 
 
-/*
-
-	House                Y+
-						 ^
-			 r0          |
-		  r1     d0      |
-		r2      d1       |
-	  r3       d3  d2    |               
-	  -----------------(0,0)------Neck----------Head    --> X+
-	  r4      d4  d5     |
-	   r5       d6       |
-		 r6     d7       |
-		  r7             |
-
-*/
 
 
-void GobotHouse::Setup(RobotAction* pAction, int segments){
+
+void GobotHouse::Setup(RobotAction* pAction){
 	this->__house_action = pAction;
-	__segments = segments;
+	__segments = 8;
 	__map.setup();
 
 	this->__robot_hardware = &GobotHouseHardware::getInstance();
@@ -60,7 +46,7 @@ void GobotHouse::ParkArms(bool do_homing){
 }
 // Head is a position name, The 5 bar arm will pick up stone from there.
 bool GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){
-	if (this->__commandQueue->GetFreeBuffersCount()<9)  return false;
+	if (this->__commandQueue->GetFreeBuffersCount() < 16)  return false;
 
 	__Move_fromNeck_toDoor(room_id,true);
 	__Move_fromRoom_toDoor(room_id,false);
@@ -74,8 +60,7 @@ bool GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){
 }
 
 bool GobotHouse::MoveStone_FromHeadToRoom(uint8_t room_id){
-	if (this->__commandQueue->GetFreeBuffersCount()<9) return false;
-
+	if (this->__commandQueue->GetFreeBuffersCount() < 16) return false;
 	__Move_fromNeck_toDoor(0, false);  // 0 is useless.
 	__Move_fromHead_toNeck(false);
 	__Enable_eefCoil(true);
@@ -103,9 +88,14 @@ void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
 	float dx = distance / this->__segments ;
 	for(int segment= 0; segment < this->__segments; segment++){
 		float x = x1 + dx * segment;
-		// MoveTo(x, 0);
-		String strMoveToZero="G1X0";
-		this->__commandQueue->AppendGcodeCommand(strMoveToZero);
+		String gcode="G1X";
+		String sx= String(x,2);
+		gcode.concat(sx);
+		// gcode.concat(x);
+		// gcode.concat("Y");
+		// gcode.concat(0);
+
+		this->__commandQueue->AppendGcodeCommand(gcode);
 	}
 }
 

@@ -15,7 +15,7 @@ void CommandQueue::SpinOnce(){
         // Serial.println("Dispacher, Got robot idle.");
         if(this->head != this->tail){
             //Run next gcode
-            Serial.print("\n\n         Start to run next gcode  ");
+            Serial.print("\n[Info] CommandQueue::SpinOnce() Start to run next gcode  ");
             char* p = &gCodeCommands[0];
             p += MAX_BYTES_PER_COMMAND * this->tail;
             std::string str = std::string(p);

@@ -13,7 +13,7 @@ void setup(){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am your lovely bot,  GobotHouse. ");
     mybot = &GobotHouse::getInstance();
-    mybot->Setup(&action, 1);
+    mybot->Setup(&action);
 	mybot->ParkArms(true);
 }
 
@@ -23,7 +23,7 @@ void loop(){
 	mybot->SpinOnce();
     done = mybot->MoveStone_FromRoomToHead(0);
     if(done) Serial.print("Done to 0");
-    done = mybot->mov(1);
+    done = mybot->MoveStone_FromHeadToRoom(0);
     if(done) Serial.print("Done to head");
     // mybot->MoveStone_FromRoomToHead(2);
     // mybot->MoveStone_FromRoomToHead(3);

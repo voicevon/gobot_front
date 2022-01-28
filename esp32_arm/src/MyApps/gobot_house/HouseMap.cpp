@@ -1,19 +1,35 @@
 # include "HouseMap.h"
 #include <math.h>
 
+/*
+
+	House                Y+
+						 ^
+			 r0          |
+		  r1     d0      |
+		r2      d1       |
+	  r3       d3  d2    |               
+	  -----------------(0,0)------Neck----------Head    --> X+
+	  r4      d4  d5     |
+	   r5       d6       |
+		 r6     d7       |
+		  r7             |
+
+*/
+
 void HouseMap::setup(){
     this->neck.y = 0;
     this->neck.x = 60.0;
     this->head.y = 0;
     this->head.x = 148.93;
 
-    this->rooms[0].x = -119.51;
+    this->rooms[0].x = -78.79;
     this->rooms[0].y = 126.38;
-    this->rooms[1].x = -111.9;
+    this->rooms[1].x = -98.18;
     this->rooms[1].y = 95.34;
-    this->rooms[2].x = -98.18;
+    this->rooms[2].x = -111.9;
     this->rooms[2].y = 61.4;
-    this->rooms[3].x = -78.79;
+    this->rooms[3].x = -119.51;
     this->rooms[3].y = 25.59;
 
     this->rooms[4].x = this->rooms[3].x;

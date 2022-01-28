@@ -47,7 +47,7 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	float alpha = alpha_eef + alpha_link;
 	ik->alpha = alpha ;
 	ik->beta =  beta ; 
-	Serial.print("IK result:");
+	Serial.print("[Debug] GobotHouseHardware::IK()  IK result:");
 	Serial.print(ik->alpha * 180 / 3.14);
 	Serial.print(" , ");
 	Serial.print(ik->beta * 180 / 3.14);
@@ -117,7 +117,7 @@ float GobotHouseHardware::GetDistanceToTarget_IK(){
 void GobotHouseHardware::RunG1(Gcode* gcode) {
 	//None blocking, move backgroundly.
 	// TODO:  G1 X123 Y123, will use IK()
-	Serial.println("[Debug] GobotHouseHardware::RunG1()   \n");
+	Serial.println("\n[Debug] GobotHouseHardware::RunG1()");
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
 		this->objStepper_alpha.setMaxSpeed(speed);
@@ -144,6 +144,7 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 		IK(&target_fk_xy,&target_ik_ab);
 	}
 	if (true){
+		Serial.print("\n[Debug] GobotHouseHardware::RunG1() ");
 		Serial.print(this->objStepper_alpha.getPosition());
 		Serial.print(",");
 		Serial.print(this->objStepper_beta.getPosition());
