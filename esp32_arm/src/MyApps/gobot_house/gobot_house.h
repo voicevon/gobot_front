@@ -6,8 +6,15 @@
 #include "Robot/command_queue.h"
 #include "gobot_house_hw.h"
 
+
 class GobotHouse{
     public:
+        enum SITE_TYPE{
+            HEAD,
+            NECK,
+            DOOR,
+            ROOM,
+        };
         static GobotHouse& getInstance()
         {
             static GobotHouse instance; // Guaranteed to be destroyed.
@@ -17,8 +24,8 @@ class GobotHouse{
         void Setup(RobotAction* pAction, int segments);
         void SpinOnce();
         void ParkArms(bool do_homing);
-        void MoveStone_FromRoomToHead(uint8_t house_id);
-        void MoveStone_FromHeadToRoom(uint8_t house_id);
+        bool MoveStone_FromRoomToHead(uint8_t house_id);
+        bool MoveStone_FromHeadToRoom(uint8_t house_id);
 
 
     private:

@@ -6,24 +6,24 @@
 class FkPositionBase{
     
 };
-class FkPosX: public FkPositionBase{
+class FkPosition_X: public FkPositionBase{
     public:
         float x;
 };
 
-class FkPosXY: public FkPositionBase{
+class FkPosition_XY: public FkPositionBase{
     public:
         float X;
         float Y;
 };
-class FkPosXYZ: public FkPositionBase{
+class FkPosition_XYZ: public FkPositionBase{
     public:
         float x;
         float y;
         float z;
 };
 
-class FkPosXYZA: public FkPositionBase{
+class FkPosition_XYZA: public FkPositionBase{
     public:
         float x;
         float y;
@@ -31,7 +31,7 @@ class FkPosXYZA: public FkPositionBase{
         float a;
 };
 
-class FkPosXYZAB: public FkPositionBase{
+class FkPosition_XYZAB: public FkPositionBase{
     public:
         float x;
         float y;
@@ -39,7 +39,7 @@ class FkPosXYZAB: public FkPositionBase{
         float a;
         float b;
 };
-class FPosXYZABC: public FkPositionBase{
+class FPosition_XYZABC: public FkPositionBase{
     public:
         float x;
         float y;
@@ -49,7 +49,7 @@ class FPosXYZABC: public FkPositionBase{
         float c;
 };
 
-class FkPosXYUVW: public FkPositionBase{
+class FkPosition_XYUVW: public FkPositionBase{
     public:
         float x;
         float y;
@@ -69,11 +69,11 @@ class IkPositionBase{
 
 };
 
-class FkPosition_AB: public FkPositionBase{
-    public:
-        float alpha;
-        float beta;
-};
+// class FkPosition_AB: public FkPositionBase{
+//     public:
+//         float alpha;
+//         float beta;
+// };
 
 class IkPosition_A: public IkPositionBase{
     public:

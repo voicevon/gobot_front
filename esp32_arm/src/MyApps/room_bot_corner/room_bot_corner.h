@@ -55,7 +55,7 @@ class RoomBotCorner: public RobotBase{
         CommuBleGattServer objCommuBle = CommuBleGattServer();
 
         // FkPosX currentPosX;
-        FkPosX nextPosX;
+        FkPosition_X nextPosX;
         void _running_G1() override{};
         void _running_G28() override{};
 };

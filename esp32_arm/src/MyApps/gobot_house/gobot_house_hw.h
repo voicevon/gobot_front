@@ -88,7 +88,7 @@ class GobotHouseHardware: public RobotBase{
 
         Stepper* __homing_stepper;
         HomeHelper* __homing_helper;
-        FkPosXY __current_fk_position;
-        FkPosXY __next_fk_position;
+        FkPosition_XY __current_fk_position;
+        FkPosition_XY __next_fk_position;
         
 };

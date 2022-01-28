@@ -17,10 +17,20 @@ void setup(){
 	mybot->ParkArms(true);
 }
 
+bool done= false;
 void loop(){
 	// WebCommu_SpinOnce();
 	mybot->SpinOnce();
-
+    done = mybot->MoveStone_FromRoomToHead(0);
+    if(done) Serial.print("Done to 0");
+    done = mybot->mov(1);
+    if(done) Serial.print("Done to head");
+    // mybot->MoveStone_FromRoomToHead(2);
+    // mybot->MoveStone_FromRoomToHead(3);
+    // mybot->MoveStone_FromRoomToHead(4);
+    // mybot->MoveStone_FromRoomToHead(5);
+    // mybot->MoveStone_FromRoomToHead(6);
+    // mybot->MoveStone_FromRoomToHead(7);
 }
 
 
