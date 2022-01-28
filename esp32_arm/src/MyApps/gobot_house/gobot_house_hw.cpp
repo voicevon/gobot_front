@@ -134,14 +134,13 @@ float GobotHouseHardware::GetDistanceToTarget_IK(){
 }
 
 void GobotHouseHardware::RunG1(Gcode* gcode) {
-	//None blocking, move backgroundly.
-	// TODO:  G1 X123 Y123, will use IK()
 	Serial.print("\n[Debug] GobotHouseHardware::RunG1()   ");
 	Serial.print(gcode->get_command());
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
 		this->objStepper_alpha.setMaxSpeed(speed);
 	}
+	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
 	target_fk_xy.X = this->__current_fk_position.X;
@@ -151,6 +150,8 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	bool do_ik=false;
 	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A');
 	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B');
+
+	// If need IK, do it now.
 	if (gcode->has_letter('X')) {
 		do_ik=true;
 		target_fk_xy.X = gcode->get_value('X');
@@ -159,12 +160,12 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 		do_ik=true;
 		target_fk_xy.Y = gcode->get_value('Y');
 	}
-	if (do_ik){
+	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
 
-		IK(&target_fk_xy,&target_ik_ab);
-	}
+	//Prepare actuator/driver to move to next point
 	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha  * STEPS_PER_RAD_ALPHA);
 	this->objStepper_beta.setTargetAbs(target_ik_ab.beta * STEPS_PER_RAD_BETA);
+	//None blocking, move backgroundly.
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 
 	if (true){
@@ -226,13 +227,11 @@ void GobotHouseHardware::_running_G28(){
 		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha * STEPS_PER_RAD_ALPHA);
 		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta * STEPS_PER_RAD_BETA);
 		
-		
-		Serial.println(this->__homing_stepper->getPosition());
-		this->State = IDLE;
 		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA);
 		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
 		this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
 		this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
+		this->State = IDLE;
 
 	}else{
 		// Endstop is not trigered

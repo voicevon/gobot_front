@@ -14,7 +14,8 @@
 #define MAX_ACCELERATION_BETA 20
 
 void BoxMoverHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
-    }
+	
+}
 
 
 

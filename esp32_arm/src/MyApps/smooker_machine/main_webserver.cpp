@@ -70,7 +70,7 @@ void setup() {
 	mybot->Init_Linkage();
 	Serial.println("\nSet up is done .....");
 	String strG28 = "G28";
-	bool result = myCommandQueue.AppendGcodeCommand(strG28);
+	myCommandQueue.AppendGcodeCommand(strG28);
 	myCommandQueue.SpinOnce();
 	
 	// while (!mqttClient.connected())
@@ -100,17 +100,17 @@ void loop() {
 		String sg3 = strG1 + get_gcode_distance(53.0f - var_per_volume);
 		sg3.concat("F");
 		sg3.concat(speed);
-		bool result = myCommandQueue.AppendGcodeCommand(sg3);
+		myCommandQueue.AppendGcodeCommand(sg3);
 
 		// Push to the end position, might stop here.
-		int distance = get_gcode_distance(float(var_per_volume));
+		// int distance = get_gcode_distance(float(var_per_volume));
 		String sg = strG1;
 		sg.concat(get_gcode_distance(53));
-		result = myCommandQueue.AppendGcodeCommand(sg);
+		myCommandQueue.AppendGcodeCommand(sg);
 
 		// sleep a while 
 		String sg2 = strG4 + var_sleep_in_second;
-		result = myCommandQueue.AppendGcodeCommand(sg2);
+		myCommandQueue.AppendGcodeCommand(sg2);
 
 		var_done_count++;
 

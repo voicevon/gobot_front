@@ -47,6 +47,8 @@ void WiFiEvent(WiFiEvent_t event) {
         xTimerStop(mqttReconnectTimer, 0); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
         xTimerStart(wifiReconnectTimer, 0);
         break;
+    default:
+      break;
     }
 }
 

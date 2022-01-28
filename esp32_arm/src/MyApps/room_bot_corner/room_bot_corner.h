@@ -33,9 +33,9 @@ class RoomBotCorner: public RobotBase{
         void Init_Linkage(IrEncoderHelper* sensorHelper);
         void test_hBridge();
         void test_home();
-        bool GetCurrentPosition(FkPositionBase* position_fk) override {assert("Do not invoke me()");};
-        float GetDistanceToTarget_FK() override{assert("Do not invoke me()");};
-        float GetDistanceToTarget_IK() override{assert("Do not invoke me()");};
+        bool GetCurrentPosition(FkPositionBase* position_fk) override {assert("Do not invoke me()"); return false;};
+        float GetDistanceToTarget_FK() override{assert("Do not invoke me()"); return 0.0;};
+        float GetDistanceToTarget_IK() override{assert("Do not invoke me()"); return 0.0;};
     protected:
         
     private:

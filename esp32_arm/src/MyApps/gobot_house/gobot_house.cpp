@@ -23,6 +23,10 @@ void GobotHouse::SpinOnce(){
 	this->__commandQueue->SpinOnce();
 }
 void GobotHouse::ParkForCalibration(int step){
+	String strG28 = "G28B";
+	this->__commandQueue->AppendGcodeCommand(strG28);
+	strG28 = "G28A";
+	this->__commandQueue->AppendGcodeCommand(strG28);
 	// if (this->__commandQueue->GetFreeBuffersCount() < 16)  return false;
 	if (step ==1){
 		// we do nothing, after homing, just want to get the home position in angle of degree.
