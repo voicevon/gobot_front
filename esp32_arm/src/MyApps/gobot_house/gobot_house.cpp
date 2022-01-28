@@ -8,7 +8,7 @@
 
 void GobotHouse::Setup(RobotAction* pAction){
 	this->__house_action = pAction;
-	__segments = 8;
+	__segments = 5;
 	__map.setup();
 
 	this->__robot_hardware = &GobotHouseHardware::getInstance();
@@ -39,9 +39,7 @@ void GobotHouse::ParkArms(bool do_homing){
 		this->__commandQueue->AppendGcodeCommand(strG28);
 	}
 	this->__commandQueue->SpinOnce();
-	String strG1 = "G1A3.14 B0 F2800";
-	this->__commandQueue->AppendGcodeCommand(strG1);
-	strG1 = "G1A3.14 B0 F2800";
+	String strG1 = "G1A-3.14 F2800";
 	this->__commandQueue->AppendGcodeCommand(strG1);
 }
 // Head is a position name, The 5 bar arm will pick up stone from there.
@@ -91,9 +89,8 @@ void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
 		String gcode="G1X";
 		String sx= String(x,2);
 		gcode.concat(sx);
-		// gcode.concat(x);
-		// gcode.concat("Y");
-		// gcode.concat(0);
+		gcode.concat("Y");
+		gcode.concat(0);
 
 		this->__commandQueue->AppendGcodeCommand(gcode);
 	}

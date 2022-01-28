@@ -5,11 +5,11 @@
 
 	House                Y+
 						 ^
-			 r0          |
-		  r1     d0      |
-		r2      d1       |
-	  r3       d3  d2    |               
-	  -----------------(0,0)------Neck----------Head    --> X+
+			 r0          |                                                                     \ beta  
+		  r1     d0      |                                                                    \  /
+		r2      d1       |                                                                     \/      
+	  r3       d3  d2    |                                                                   /  alpha
+	  -----------------(0,0)------Neck----------Head    --> X+                               --------------------------------->  Alpha,Beta (0,0)
 	  r4      d4  d5     |
 	   r5       d6       |
 		 r6     d7       |
@@ -41,13 +41,13 @@ void HouseMap::setup(){
     this->rooms[7].x = this->rooms[0].x;
     this->rooms[7].y = - this->rooms[0].y;
 
-    this->doors[0].x = -49.46;
+    this->doors[0].x = 10.37;
     this->doors[0].y = 59.07;
-    this->doors[1].x = -81.22;
+    this->doors[1].x = -21.39;
     this->doors[1].y = 56.12;
-    this->doors[2].x = -104.11;
+    this->doors[2].x = -44.28;
     this->doors[2].y = 40.67;
-    this->doors[3].x = -117.25;
+    this->doors[3].x = -57.42;
     this->doors[3].y = 17.95;
     this->doors[4].x = this->doors[3].x;
     this->doors[4].y = - this->doors[3].y;

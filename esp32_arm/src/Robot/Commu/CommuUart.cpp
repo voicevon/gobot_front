@@ -3,7 +3,7 @@
 
 void CommuUart::OutputMessage(std::string message){
     Serial.print("[Info] CommuUart::OutputMessage() ...   ...   ...");
-    Serial.print(message.c_str());
+    Serial.println(message.c_str());
 }
 void CommuUart::WriteNotification(std::string notification){
     //For UART, will do same thing to OutputMessage()
