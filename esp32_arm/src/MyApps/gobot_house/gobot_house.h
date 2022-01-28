@@ -24,6 +24,7 @@ class GobotHouse{
         void Setup(RobotAction* pAction);
         void SpinOnce();
         void ParkArms(bool do_homing);
+        bool ParkToZero();
         bool MoveStone_FromRoomToHead(uint8_t house_id);
         bool MoveStone_FromHeadToRoom(uint8_t house_id);
 

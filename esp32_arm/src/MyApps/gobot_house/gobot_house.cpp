@@ -22,6 +22,31 @@ void GobotHouse::SpinOnce(){
 	this->__robot_hardware->SpinOnce();
 	this->__commandQueue->SpinOnce();
 }
+bool GobotHouse::ParkToZero(){
+	// if (this->__commandQueue->GetFreeBuffersCount() < 16)  return false;
+
+	String strG1 = "G1A-1.7";
+	this->__commandQueue->AppendGcodeCommand(strG1);
+	float x1 = this->__map.head.x;
+	float x2 = this->__map.neck.x;
+
+	float distance = x2 - x1;
+	float dx = distance / this->__segments ;
+	for(int segment= 0; segment < this->__segments; segment++){
+		float x = x1 + dx * segment;
+		String gcode="G1X";
+		String sx= String(x,2);
+		gcode.concat(sx);
+		gcode.concat("Y");
+		gcode.concat(0);
+
+		this->__commandQueue->AppendGcodeCommand(gcode);
+	}
+	strG1 = "G1A0B0";
+	this->__commandQueue->AppendGcodeCommand(strG1);
+	return true;
+}
+
 void GobotHouse::ParkArms(bool do_homing){
 	Serial.print("\n[Debug] GobotHouse::ParkArms() is entering");
 	int free_buffer_count = 0;
@@ -39,7 +64,8 @@ void GobotHouse::ParkArms(bool do_homing){
 		this->__commandQueue->AppendGcodeCommand(strG28);
 	}
 	this->__commandQueue->SpinOnce();
-	String strG1 = "G1A-3.14 F2800";
+	// Park Arms
+	String strG1 = "G1A-1.1 F2800";
 	this->__commandQueue->AppendGcodeCommand(strG1);
 }
 // Head is a position name, The 5 bar arm will pick up stone from there.

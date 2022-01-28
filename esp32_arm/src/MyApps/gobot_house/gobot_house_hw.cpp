@@ -53,7 +53,7 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 
 	ik->alpha = alpha ;
 	ik->beta =  beta ; 
-	Serial.print("\n[Debug]   Inverse Kinematic result:");
+	Serial.print("\n[Debug] Inverse Kinematic result in angle degree alpha, beta:");
 	Serial.print(ik->alpha * 180 / PI);
 	Serial.print(" , ");
 	Serial.print(ik->beta * 180 / PI);
