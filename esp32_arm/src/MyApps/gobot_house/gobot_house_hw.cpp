@@ -10,22 +10,22 @@
 #define LINK_A 75
 #define LINK_B 75
 
-#define STEPS_PER_RAD_ALPHA 750   //2048 / 2*Pi
+#define STEPS_PER_RAD_ALPHA 580   //2048 / 2*Pi
 #define MAX_STEPS_PER_SECOND_ALPHA 200
 #define MAX_ACCELERATION_ALPHPA 200
 
 #define ACCELERATION_HOMIMG_ALPHA 200
 #define MAX_SPEED_HOMING_ALPHA 200
 
-#define STEPS_PER_RAD_BETA 220   //2048 / 2*Pi
+#define STEPS_PER_RAD_BETA 280   //2048 / 2*Pi
 #define MAX_STEPS_PER_SECOND_BETA 500
 #define MAX_ACCELERATION_BETA 200
 
 #define ACCELERATION_HOMIMG_BETA 200
 #define MAX_SPEED_HOMING_BETA 200
 
-#define HOMED_POSITION_X 20
-#define HOMED_POSITION_Y 56
+#define HOMED_POSITION_X 22
+#define HOMED_POSITION_Y 57
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
 

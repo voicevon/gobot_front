@@ -22,29 +22,68 @@ void GobotHouse::SpinOnce(){
 	this->__robot_hardware->SpinOnce();
 	this->__commandQueue->SpinOnce();
 }
-bool GobotHouse::ParkToZero(){
+bool GobotHouse::ParkForCalibration(int step){
 	// if (this->__commandQueue->GetFreeBuffersCount() < 16)  return false;
+	if (step ==1){
+		// we do nothing, after homing, just want to get the home position in angle of degree.
 
-	String strG1 = "G1A-1.7";
-	this->__commandQueue->AppendGcodeCommand(strG1);
-	float x1 = this->__map.head.x;
-	float x2 = this->__map.neck.x;
-
-	float distance = x2 - x1;
-	float dx = distance / this->__segments ;
-	for(int segment= 0; segment < this->__segments; segment++){
-		float x = x1 + dx * segment;
-		String gcode="G1X";
-		String sx= String(x,2);
-		gcode.concat(sx);
-		gcode.concat("Y");
-		gcode.concat(0);
-
-		this->__commandQueue->AppendGcodeCommand(gcode);
 	}
-	strG1 = "G1A0B0";
-	this->__commandQueue->AppendGcodeCommand(strG1);
-	return true;
+	if (step==2){
+		// Our goal is to determin the value of STEPS_PER_RAD_ALPHA
+		// alpha = ??? -  PI 
+		float homed_alpha_in_degree = 2.93;   //copy this number from homing report
+		float a = (homed_alpha_in_degree-180.0f) * PI / 180;
+		String sss = String(a,3);
+		String g1 = "G1A";
+		g1.concat(sss);
+		this->__commandQueue->AppendGcodeCommand(g1);
+
+	}
+	if (step==3){
+		// Our goal is preparing to determin the value of STEPS_PER_RAD_BETA
+		String g1 = "G1A-3.14";
+		this->__commandQueue->AppendGcodeCommand(g1);
+
+		float homed_beta_in_degree = 131;   //copy this number from homing report
+		float b = (homed_beta_in_degree-180.0f) * PI / 180;
+		String sss = String(b,3);
+
+	}
+	if (step==4){
+		// Our goal is to determin the value of STEPS_PER_RAD_BETA
+		String g1 = "G1A-3.14";
+		this->__commandQueue->AppendGcodeCommand(g1);
+
+		float homed_beta_in_degree = 131;   //copy this number from homing report
+		float b = (homed_beta_in_degree-180.0f) * PI / 180;
+		String sss = String(b,3);
+		g1 = "G1B";
+		g1.concat(sss);
+		this->__commandQueue->AppendGcodeCommand(g1);
+	}
+	if (step==5){
+		// test alpha=0, beta=0
+		String strG1 = "G1A-1.7";
+		this->__commandQueue->AppendGcodeCommand(strG1);
+		float x1 = this->__map.head.x;
+		float x2 = this->__map.neck.x;
+
+		float distance = x2 - x1;
+		float dx = distance / this->__segments ;
+		for(int segment= 0; segment < this->__segments; segment++){
+			float x = x1 + dx * segment;
+			String gcode="G1X";
+			String sx= String(x,2);
+			gcode.concat(sx);
+			gcode.concat("Y");
+			gcode.concat(0);
+
+			this->__commandQueue->AppendGcodeCommand(gcode);
+		}
+		strG1 = "G1A0B0";
+		this->__commandQueue->AppendGcodeCommand(strG1);
+		return true;
+		}
 }
 
 void GobotHouse::ParkArms(bool do_homing){
@@ -65,8 +104,8 @@ void GobotHouse::ParkArms(bool do_homing){
 	}
 	this->__commandQueue->SpinOnce();
 	// Park Arms
-	String strG1 = "G1A-1.1 F2800";
-	this->__commandQueue->AppendGcodeCommand(strG1);
+	// String strG1 = "G1A-1.1 F2800";
+	// this->__commandQueue->AppendGcodeCommand(strG1);
 }
 // Head is a position name, The 5 bar arm will pick up stone from there.
 bool GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){

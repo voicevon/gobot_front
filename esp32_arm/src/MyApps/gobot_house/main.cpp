@@ -15,7 +15,7 @@ void setup(){
     mybot = &GobotHouse::getInstance();
     mybot->Setup(&action);
 	mybot->ParkArms(true);
-    // mybot->ParkToZero();
+    mybot->ParkForCalibration(5);
 }
 
 bool done= false;
