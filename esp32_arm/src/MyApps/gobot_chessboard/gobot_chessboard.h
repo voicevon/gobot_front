@@ -82,7 +82,7 @@ class GobotChessboard: public RobotBase{
         void Init_Linkage() override;
         // void SpinOnce(void);
         void Setup(RobotAction* pAction);
-        bool GetCurrentPosition(FkPositionBase* position_fk) override {};
+        bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
 
         void SetEffector(EEF action);
         void pick_place_park(RobotAction* pAction);
@@ -95,8 +95,8 @@ class GobotChessboard: public RobotBase{
         // ik_position ik(float x, float y) override;
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override;
-        float GetDistanceToTarget_FK() override{};
-        float GetDistanceToTarget_IK() override{};
+        float GetDistanceToTarget_FK() override{return 0.0;};
+        float GetDistanceToTarget_IK() override{return 0.0;};
         // SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
         // SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
 
@@ -125,7 +125,7 @@ class GobotChessboard: public RobotBase{
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
         void RunG6(Gcode* gcode) override {};   //Block mode
-        std::string GetHomeTrigerStateString() override {};
+        std::string GetHomeTrigerStateString() override {return " ";};
         void MoveToTargetPosition() {};
         void _running_G1() override;
         void _running_G28() override;

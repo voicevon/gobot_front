@@ -24,7 +24,7 @@ class GobotHouse{
         void Setup(RobotAction* pAction);
         void SpinOnce();
         void ParkArms(bool do_homing);
-        void ParkForCalibration(int step);
+        void Calibrate(int step);
         bool MoveStone_FromRoomToHead(uint8_t house_id);
         bool MoveStone_FromHeadToRoom(uint8_t house_id);
 
@@ -34,6 +34,7 @@ class GobotHouse{
         void __Move_fromHead_toNeck(bool forwarding);
         void __Move_fromNeck_toDoor(uint8_t house_id, bool forwarding);
         void __Enable_eefCoil(bool enable);
+        void __Home(bool via_inverse_kinematic=false);
 
         GobotHouseHardware* __robot_hardware;
         HouseMap __map;

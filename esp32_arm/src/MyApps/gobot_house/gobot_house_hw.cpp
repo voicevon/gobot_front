@@ -9,23 +9,29 @@
 
 #define LINK_A 75
 #define LINK_B 75
+#define MICRO_STEPS 1
+#define STEPS_PER_ROUND_MOTOR 514 * MICRO_STEPS  //Can be calibrated at step=1
+#define GEARBOX_RATIAO_ALPHA 9.0   // big_gear_teeth ==90 / small_gear_teeth ==10
+#define GEARBOX_RATIAO_BETA 2.6     // big_gear_teeth ==26/ small_gear_teeth == 10
 
-#define STEPS_PER_RAD_ALPHA 730   //2048 / 2*Pi
-#define MAX_STEPS_PER_SECOND_ALPHA 200
-#define MAX_ACCELERATION_ALPHPA 200
+#define STEPS_PER_RAD_ALPHA PI*STEPS_PER_ROUND_MOTOR*GEARBOX_RATIAO_ALPHA/180   //730 
+#define MAX_STEPS_PER_SECOND_ALPHA 200 * MICRO_STEPS
+#define MAX_ACCELERATION_ALPHPA 200 * MICRO_STEPS
 
-#define ACCELERATION_HOMIMG_ALPHA 200
-#define MAX_SPEED_HOMING_ALPHA 200
+#define ACCELERATION_HOMIMG_ALPHA 200 * MICRO_STEPS
+#define MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS
 
-#define STEPS_PER_RAD_BETA 230   //2048 / 2*Pi
-#define MAX_STEPS_PER_SECOND_BETA 500
-#define MAX_ACCELERATION_BETA 200
+#define STEPS_PER_RAD_BETA PI*STEPS_PER_ROUND_MOTOR*GEARBOX_RATIAO_BETA/180   // 230 
+#define MAX_STEPS_PER_SECOND_BETA 500 * MICRO_STEPS
+#define MAX_ACCELERATION_BETA 200 * MICRO_STEPS
 
-#define ACCELERATION_HOMIMG_BETA 200
-#define MAX_SPEED_HOMING_BETA 200
+#define ACCELERATION_HOMIMG_BETA 200 * MICRO_STEPS
+#define MAX_SPEED_HOMING_BETA 200 * MICRO_STEPS
 
 #define HOMED_POSITION_X 22
 #define HOMED_POSITION_Y 56
+#define HOMED_POSITION_ALPHA_IN_DEGREE 2.93
+#define HOMED_POSITION_BETA_IN_DEGREE 130.0
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
 
@@ -79,6 +85,7 @@ void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 GobotHouseHardware::GobotHouseHardware(){
 }
+
 
 
 bool GobotHouseHardware::GetCurrentPosition(FkPositionBase* position_fk){
@@ -163,7 +170,7 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 		target_fk_xy.Y = gcode->get_value('Y');
 	}
 	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
-
+	if(gcode->has_letter('R')) target_ik_ab.alpha = STEPS_PER_ROUND_MOTOR * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
 	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha );
 	this->objStepper_beta.setTargetAbs(target_ik_ab.beta);
@@ -216,15 +223,31 @@ void GobotHouseHardware::_running_G28(){
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
 		Serial.print("\n[Info] GobotHouseHardware::_running_G28() Home sensor is trigger.  " );
+		Serial.print (this->_homing_axis);
 		this->objStepControl.stop();
+
 		//Set current position to HomePosition
-		this->__current_fk_position.X = HOMED_POSITION_X;
-		this->__current_fk_position.Y = HOMED_POSITION_Y;
 		IkPosition_AB ik_position;
-		this->IK(&this->__current_fk_position, &ik_position);
-		// verify IK
-		FkPosition_XY verifying_fk;
-		this->FK(&ik_position, &verifying_fk);
+		if (this->_home_as_inverse_kinematic){
+			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
+			ik_position.alpha = PI * HOMED_POSITION_ALPHA_IN_DEGREE /180;
+			ik_position.beta = PI * HOMED_POSITION_BETA_IN_DEGREE /180;
+			this->FK(&ik_position, &this->__current_fk_position);
+			// verify FK by IK()
+			IkPosition_AB verifying_ik;
+			Serial.print("\n   [Info] Please verify the below output ======================  ");
+			this->IK(&this->__current_fk_position, &verifying_ik);
+		}
+		else{
+			Serial.print("\n [Info] Trying to get home position with EEF position  ");
+			this->__current_fk_position.X = HOMED_POSITION_X;
+			this->__current_fk_position.Y = HOMED_POSITION_Y;
+			this->IK(&this->__current_fk_position, &ik_position);
+			// verify IK by FK()
+			FkPosition_XY verifying_fk;
+			Serial.print("\n   [Info] Please verify the below output ======================  ");
+			this->FK(&ik_position, &verifying_fk);
+		}
 
 		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha * STEPS_PER_RAD_ALPHA);
 		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta * STEPS_PER_RAD_BETA);

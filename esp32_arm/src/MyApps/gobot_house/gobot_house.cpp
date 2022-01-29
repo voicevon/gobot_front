@@ -22,26 +22,41 @@ void GobotHouse::SpinOnce(){
 	this->__robot_hardware->SpinOnce();
 	this->__commandQueue->SpinOnce();
 }
-void GobotHouse::ParkForCalibration(int step){
+
+void GobotHouse::__Home(bool via_inverse_kinematic){
 	String strG28 = "G28B";
+	if (via_inverse_kinematic) strG28.concat("I");
 	this->__commandQueue->AppendGcodeCommand(strG28);
 	strG28 = "G28A";
+	if (via_inverse_kinematic) strG28.concat("I");
 	this->__commandQueue->AppendGcodeCommand(strG28);
-	// if (this->__commandQueue->GetFreeBuffersCount() < 16)  return false;
+}
+void GobotHouse::Calibrate(int step){
+
 	if (step ==1){
-		// we do nothing, after homing, just want to get the home position in angle of degree.
-		// alpha = 2.20
-		// beta = 132.7
+		// STEPS_PER_ROUND_MOTOR, this variable should be calculated by electronic designer,
+		// Here, we want to verify the value is correct.
+		// Our idea is:
+		//		Route the motor-shaft to run 10/20/50/100 rounds.
+		String strG = "G1R-5F6000";
+		this->__commandQueue->AppendGcodeCommand(strG);
+		strG = "G4S5";
+		this->__commandQueue->AppendGcodeCommand(strG);
+		strG = "G1R0";
+		this->__commandQueue->AppendGcodeCommand(strG);
 	}
+
 	if (step==2){
-		// Our goal is to determin the value of STEPS_PER_RAD_ALPHA
-		// alpha = ??? -  PI 
-		float homed_alpha_in_degree = 2.20;   //copy this number from homing report
-		float a = (homed_alpha_in_degree-180.0f) * PI / 180;
-		String sss = String(a,3);
-		String g1 = "G1A";
-		g1.concat(sss);
-		this->__commandQueue->AppendGcodeCommand(g1);
+		// HOMED_POSITION_ALPHA_RAD, this variable should be calculated.
+		// Our idea is:
+		//		after home, move alpha actuator to zero angle. because it's easy to make a mark there.
+		//		calibrate homed angle (alpha, beta).
+		//      use FK to get homed position(X,Y)
+		this->__Home(true);
+		String strG = "G1A0";
+		this->__commandQueue->AppendGcodeCommand(strG);
+		strG = "G4S5";
+		this->__commandQueue->AppendGcodeCommand(strG);
 
 	}
 	if (step==3){
@@ -87,6 +102,9 @@ void GobotHouse::ParkForCalibration(int step){
 		}
 		strG1 = "G1A0B0";
 		this->__commandQueue->AppendGcodeCommand(strG1);
+	}
+	while (true){
+		this->SpinOnce();
 	}
 }
 

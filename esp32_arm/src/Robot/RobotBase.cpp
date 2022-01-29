@@ -66,6 +66,8 @@ void RobotBase::RunGcode(Gcode* gcode){
         if (gcode->has_letter('A')) home_axis='A';
         if (gcode->has_letter('B')) home_axis='B';
         if (gcode->has_letter('C')) home_axis='C';
+        this->_home_as_inverse_kinematic = false;
+        if (gcode->has_letter('I')) this->_home_as_inverse_kinematic = true;
         this->HomeSingleAxis(home_axis);
         // this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
         break;
