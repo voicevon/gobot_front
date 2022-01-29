@@ -2,7 +2,7 @@
 #include "WiFi.h"
 #include "esp_now.h"
 
-typedef struct EspNowPayload{
+struct EspNowPayload{
     int test;
 };
 

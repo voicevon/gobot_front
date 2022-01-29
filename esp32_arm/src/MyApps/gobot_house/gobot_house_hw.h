@@ -11,6 +11,7 @@
 // #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
+#include "gobot_house_hw_config.h"
 
 // #define COIL_COUNT 53
 // #define CHIPS_COUNT  4
@@ -90,5 +91,6 @@ class GobotHouseHardware: public RobotBase{
         HomeHelper* __homing_helper;
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;
+        GobotHouseHardwareConfig __config;
         
 };
