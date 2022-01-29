@@ -47,60 +47,57 @@ void GobotHouse::Calibrate(int step){
 	}
 
 	if (step==2){
-		// HOMED_POSITION_ALPHA_RAD, this variable should be calculated.
+		// config.Homed_position_alpha_in_degree, this variable should be calculated.
 		// Our idea is:
-		//		after home, move alpha actuator to zero angle. because it's easy to make a mark there.
-		//		calibrate homed angle (alpha, beta).
-		//      use FK to get homed position(X,Y)
+		//		after home, move alpha actuator to zero angle, and PI angle.
+		//      because it's easy to make a mark there.
 		this->__Home(true);
 		String strG = "G1A0";
 		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G4S5";
 		this->__commandQueue->AppendGcodeCommand(strG);
+		strG = "G1A-180";
+		this->__commandQueue->AppendGcodeCommand(strG);
+		strG = "G4S5";
+		this->__commandQueue->AppendGcodeCommand(strG);
+		strG = "G1A0";
+		this->__commandQueue->AppendGcodeCommand(strG);
 
 	}
-	if (step==3){
-		// Our goal is preparing to determin the value of STEPS_PER_RAD_BETA
-		String g1 = "G1A-3.14";
-		this->__commandQueue->AppendGcodeCommand(g1);
-
-		float homed_beta_in_degree = 132.7;   //copy this number from homing report
-		float b = (homed_beta_in_degree-180.0f) * PI / 180;
-		String sss = String(b,3);
-
-	}
-	if (step==4){
-		// Our goal is to determin the value of STEPS_PER_RAD_BETA
-		String g1 = "G1A-3.14";
-		this->__commandQueue->AppendGcodeCommand(g1);
-
-		float homed_beta_in_degree = 131;   //copy this number from homing report
-		float b = (homed_beta_in_degree-180.0f) * PI / 180;
-		String sss = String(b,3);
-		g1 = "G1B";
-		g1.concat(sss);
-		this->__commandQueue->AppendGcodeCommand(g1);
+	if(step==3){
+		//Continued from step2,  go on with:   config.Homed_position_beta_in_degree
+		this->__Home(true);
+		String strG = "G1A-180";
+		this->__commandQueue->AppendGcodeCommand(strG);
+		strG = "G1B0";
+		this->__commandQueue->AppendGcodeCommand(strG);
+		strG = "G4S5";
+		this->__commandQueue->AppendGcodeCommand(strG);
+		strG = "G1B133";
+		this->__commandQueue->AppendGcodeCommand(strG);
+		strG = "G1A0";
+		this->__commandQueue->AppendGcodeCommand(strG);
 	}
 	if (step==5){
-		// test alpha=0, beta=0
-		String strG1 = "G1A-0.9";
+
+	}
+	if (step>=9){
+		this->__Home(true);
+		String strG1 = "G1A-60";
 		this->__commandQueue->AppendGcodeCommand(strG1);
-		float x1 = this->__map.neck.x;
-		float x2 = this->__map.head.x;
-
-		float distance = x2 - x1;
-		float dx = distance / this->__segments ;
-		for(int segment= 0; segment < this->__segments; segment++){
-			float x = x1 + dx * segment;
-			String gcode="G1X";
-			String sx= String(x,2);
-			gcode.concat(sx);
-			gcode.concat("Y");
-			gcode.concat(0);
-
-			this->__commandQueue->AppendGcodeCommand(gcode);
-		}
-		strG1 = "G1A0B0";
+		if (step ==9 ) 
+			this->__Move_fromHead_toNeck(false);
+		else
+			this->MoveStone_FromHeadToRoom(step-10);
+		strG1 = "G4S5";
+		this->__commandQueue->AppendGcodeCommand(strG1);
+		if (step==9)
+			this->__Move_fromHead_toNeck(true);
+		else
+			this->MoveStone_FromRoomToHead(step-10);
+		strG1 = "G1A-60";
+		this->__commandQueue->AppendGcodeCommand(strG1);
+		strG1 = "G1A0B133";
 		this->__commandQueue->AppendGcodeCommand(strG1);
 	}
 	while (true){
@@ -171,7 +168,7 @@ void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
 	}
 	float distance = x2 - x1;
 	float dx = distance / this->__segments ;
-	for(int segment= 0; segment < this->__segments; segment++){
+	for(int segment= 0; segment <= this->__segments; segment++){
 		float x = x1 + dx * segment;
 		String gcode="G1X";
 		String sx= String(x,2);

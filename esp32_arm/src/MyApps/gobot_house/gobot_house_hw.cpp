@@ -21,35 +21,48 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
 	float alpha = alpha_eef - alpha_link;
 
-	Serial.print("\n[Debug] GobotHouseHardware::IK() Inverse kinematic angle degree of origin alpha_eef, alpha_link, ik->alpha  ");
+	Serial.print("\n[Debug] GobotHouseHardware::IK() from (X,Y)=(");
+	Serial.print(fk->X);
+	Serial.print(" , ");
+	Serial.print(fk->Y);
+	Serial.print(")\n    Inverse kinematic angle degree of origin (alpha_eef, alpha_link, ik->alpha)=( ");
 	Serial.print(alpha_eef * 180 / PI);
 	Serial.print(" , ");
 	Serial.print(alpha_link * 180 / PI);
 	Serial.print(" , ");
 	Serial.print(alpha * 180 / PI);
+	Serial.print(")");
 	if (fk->X < 0)  alpha = 2 * PI - alpha;
 	if (alpha > PI /2) alpha -= 2 * PI;
 
 	ik->alpha = alpha * STEPS_PER_RAD_ALPHA;
 	ik->beta =  beta * STEPS_PER_RAD_BETA;
 
-	Serial.print("\n[Debug] Inverse Kinematic result in angle degree alpha, beta:   ");
+	Serial.print("\n    Inverse Kinematic result in angle degree (alpha, beta)= ");
 	Serial.print(alpha * 180 / PI);
 	Serial.print(" , ");
 	Serial.print(beta * 180 / PI);
+	Serial.print(")");
 }
 
 void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
-	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
-	float rad_beta = ik->beta / STEPS_PER_RAD_BETA + ik->alpha /STEPS_PER_RAD_ALPHA;
+	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
+	float rad_beta = ik->beta / STEPS_PER_RAD_BETA;
+	float rad_eef = rad_beta + ik->alpha /STEPS_PER_RAD_ALPHA;
 	float rad_alpha = ik->alpha /STEPS_PER_RAD_ALPHA;
-	fk->X = LINK_A * cosf(rad_alpha) + LINK_B * cosf(rad_beta);
-	fk->Y = LINK_A * sinf(rad_alpha) + LINK_B * sinf(rad_beta);
-	Serial.print("\n[Debug] GobotHouseHardware::FK()  Forward Kinematic result:   ");
+	fk->X = LINK_A * cosf(rad_alpha) + LINK_B * cosf(rad_eef);
+	fk->Y = LINK_A * sinf(rad_alpha) + LINK_B * sinf(rad_eef);
+	
+	Serial.print("\n\n[Debug] GobotHouseHardware::FK()  in degree from (alpha,beta) =(");
+	Serial.print(rad_alpha * 180 / PI);
+	Serial.print(" , ");
+	Serial.print(rad_beta * 180 / PI);
+	Serial.print(") \n     Forward Kinematic result:  (X,Y)= (");
 	Serial.print(fk->X);
 	Serial.print(" , ");
 	Serial.print(fk->Y);
+	Serial.print(")");
 }
 
 GobotHouseHardware::GobotHouseHardware(){
@@ -127,8 +140,8 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	target_ik_ab.alpha = this->objStepper_alpha.getPosition();
 	target_ik_ab.beta = this->objStepper_beta.getPosition();
 	bool do_ik=false;
-	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A');
-	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B');
+	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A') * STEPS_PER_RAD_ALPHA * PI/ 180;
+	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B') * STEPS_PER_RAD_BETA * PI / 180;
 
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {
@@ -175,8 +188,8 @@ void GobotHouseHardware::HomeSingleAxis(char axis){
 	Serial.print(axis);
 	this->_homing_axis = axis;
 	if (axis=='A'){
-		this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG_ALPHA);
-		this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING_ALPHA);
+		this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha);
+		this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha);
 		this->__homing_stepper = &this->objStepper_alpha;
 		this->__homing_helper = &this->objHomeHelper_alpha;
 	}else if (axis=='B'){
@@ -200,12 +213,12 @@ void GobotHouseHardware::_running_G28(){
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
-			ik_position.alpha = PI * this->__config.Homed_position_alpha_in_degree /180;
-			ik_position.beta = PI * this->__config.Homed_position_beta_in_degree /180;
+			ik_position.alpha = PI * this->__config.Homed_position_alpha_in_degree * STEPS_PER_RAD_ALPHA /180;
+			ik_position.beta = PI * this->__config.Homed_position_beta_in_degree * STEPS_PER_RAD_BETA /180;
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik;
-			Serial.print("\n   [Info] Please verify the below output ======================  ");
+			Serial.print("\n\n[Info] Please verify the below output ======================  ");
 			this->IK(&this->__current_fk_position, &verifying_ik);
 		}
 		else{
@@ -218,9 +231,9 @@ void GobotHouseHardware::_running_G28(){
 			Serial.print("\n   [Info] Please verify the below output ======================  ");
 			this->FK(&ik_position, &verifying_fk);
 		}
-
-		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha * STEPS_PER_RAD_ALPHA);
-		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta * STEPS_PER_RAD_BETA);
+		//Copy current ik-position to motor-position.
+		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha);
+		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta);
 		
 		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA);
 		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);

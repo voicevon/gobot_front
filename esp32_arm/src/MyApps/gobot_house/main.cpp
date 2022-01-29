@@ -14,8 +14,8 @@ void setup(){
     Serial.println("Hi Xuming, I am your lovely bot,  GobotHouse. ");
     mybot = &GobotHouse::getInstance();
     mybot->Setup(&action);
-    mybot->Calibrate(2);
-    
+    mybot->Calibrate(9);
+
 	mybot->ParkArms(true);
 }
 
