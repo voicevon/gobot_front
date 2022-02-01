@@ -51,6 +51,7 @@ void GobotHouse::Calibrate(int step){
 		// Our idea is:
 		//		after home, move alpha actuator to zero angle, and PI angle.
 		//      because it's easy to make a mark there.
+		this->__Enable_eefCoil(true);
 		this->__Home(true);
 		String strG = "G1A0";
 		this->__commandQueue->AppendGcodeCommand(strG);
@@ -62,27 +63,42 @@ void GobotHouse::Calibrate(int step){
 		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G1A0";
 		this->__commandQueue->AppendGcodeCommand(strG);
+		this->__Enable_eefCoil(false);
 
 	}
 	if(step==3){
 		//Continued from step2,  go on with:   config.Homed_position_beta_in_degree
 		this->__Home(true);
+		this->__Enable_eefCoil(true);
 		String strG = "G1A-180";
 		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G1B0";
 		this->__commandQueue->AppendGcodeCommand(strG);
+		this->__Enable_eefCoil(false);
+		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G4S5";
+		this->__commandQueue->AppendGcodeCommand(strG);
+		this->__Enable_eefCoil(true);
 		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G1B133";
 		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G1A0";
 		this->__commandQueue->AppendGcodeCommand(strG);
+		this->__Enable_eefCoil(false);
 	}
 	if (step==5){
-
+		// #define ENDER_COIL_2109 32
+		// #define ENDER_COIL_EXT_2109 33
+		String strM = "M42 P33 S1";
+		this->__commandQueue->AppendGcodeCommand(strM);
+		strM = "G4S5";
+		this->__commandQueue->AppendGcodeCommand(strM);
+		strM = "M42 P33 S0";
+		this->__commandQueue->AppendGcodeCommand(strM);
 	}
 	if (step>=9){
 		this->__Home(true);
+		this->__Enable_eefCoil(true);
 		String strG1 = "G1A-60";
 		this->__commandQueue->AppendGcodeCommand(strG1);
 		if (step ==9 ) 
@@ -99,7 +115,9 @@ void GobotHouse::Calibrate(int step){
 		this->__commandQueue->AppendGcodeCommand(strG1);
 		strG1 = "G1A0B133";
 		this->__commandQueue->AppendGcodeCommand(strG1);
+		this->__Enable_eefCoil(false);
 	}
+
 	while (true){
 		this->SpinOnce();
 	}
@@ -155,6 +173,9 @@ bool GobotHouse::MoveStone_FromHeadToRoom(uint8_t room_id){
 }
 
 void GobotHouse::__Enable_eefCoil(bool enable){
+	String strM = "M42 P33 S1";
+	if (!enable) strM = "M42 P33 S0";
+	this->__commandQueue->AppendGcodeCommand(strM);
 
 }
 

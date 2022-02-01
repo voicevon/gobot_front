@@ -34,8 +34,7 @@
 #define PIN_BETA_DIR_2109 17
 #define PIN_BETA_STEP_2109 4
 
-#define ENDER_COIL_2109 32
-#define ENDER_COIL_EXT_2109 33
+
 
 
 

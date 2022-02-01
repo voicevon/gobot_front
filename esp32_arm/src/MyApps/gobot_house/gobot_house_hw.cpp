@@ -7,6 +7,8 @@
 #define PIN_MICRIO_STEP_0 23
 
 
+#define PIN_ENDER_COIL_2109 32
+#define PIN_ENDER_COIL_EXT_2109 33
 // https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
 // }
@@ -53,7 +55,7 @@ void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	float rad_alpha = ik->alpha /STEPS_PER_RAD_ALPHA;
 	fk->X = LINK_A * cosf(rad_alpha) + LINK_B * cosf(rad_eef);
 	fk->Y = LINK_A * sinf(rad_alpha) + LINK_B * sinf(rad_eef);
-	
+
 	Serial.print("\n\n[Debug] GobotHouseHardware::FK()  in degree from (alpha,beta) =(");
 	Serial.print(rad_alpha * 180 / PI);
 	Serial.print(" , ");
@@ -83,12 +85,16 @@ void GobotHouseHardware::init_gpio(){
 	pinMode(PIN_MICRIO_STEP_0, OUTPUT);
 	pinMode(PIN_MICRIO_STEP_1, OUTPUT);
 	pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+	pinMode(PIN_ENDER_COIL_2109, OUTPUT);
+	pinMode(PIN_ENDER_COIL_EXT_2109, OUTPUT);
 
 	digitalWrite(PIN_ALPHA_ENABLE, LOW);
 	digitalWrite(PIN_BETA_ENABLE, LOW);
 	digitalWrite(PIN_MICRIO_STEP_0, LOW);
 	digitalWrite(PIN_MICRIO_STEP_1, LOW);
 	digitalWrite(PIN_MICRIO_STEP_2, LOW);
+	digitalWrite(PIN_ENDER_COIL_2109, LOW);
+	digitalWrite(PIN_ENDER_COIL_EXT_2109, LOW);
 
 }
 void GobotHouseHardware::Init_Linkage(){
@@ -252,4 +258,5 @@ void GobotHouseHardware::_running_G28(){
 
 	}
 }
+
 

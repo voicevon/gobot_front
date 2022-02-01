@@ -116,6 +116,7 @@ class RobotBase{
         virtual void RunG6(Gcode* gcode);   //Block mode
         void RunG4(Gcode* gcode);
         virtual std::string GetHomeTrigerStateString();
+        void RunM42(uint8_t pin_number, uint8_t pin_value);
         CommuDeviceBase* commuDevice;
         bool is_absolute_position = true;
         /* Just for fun, don't remove below comment.
