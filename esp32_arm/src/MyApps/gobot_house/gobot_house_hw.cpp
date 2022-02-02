@@ -19,9 +19,11 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 
 	float beta = PI - acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
 	float r1 = sqrtf(rr1);
-	float alpha_eef = acosf(fk->X / r1);
-	float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));
-	float alpha = alpha_eef - alpha_link;
+	float alpha_eef = acosf(fk->X / r1);    // [0..PI]
+	if (fk->Y < 0)  alpha_eef = 2 * PI - alpha_eef;  // [0..2*PI]
+	float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));  //[0..PI]
+	float alpha = alpha_eef - alpha_link;  //[-PI.. + 2*PI]?
+	if (alpha > PI * 10 /180) alpha -= 2 * PI;   // [-330..+10 ] in degree
 
 	Serial.print("\n[Debug] GobotHouseHardware::IK() from (X,Y)=(");
 	Serial.print(fk->X);
@@ -34,8 +36,8 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	Serial.print(" , ");
 	Serial.print(alpha * 180 / PI);
 	Serial.print(")");
-	if (fk->X < 0)  alpha = 2 * PI - alpha;
-	if (alpha > PI /2) alpha -= 2 * PI;
+
+	// if (alpha < 0) alpha +=
 
 	ik->alpha = alpha * STEPS_PER_RAD_ALPHA;
 	ik->beta =  beta * STEPS_PER_RAD_BETA;

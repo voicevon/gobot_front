@@ -26,6 +26,7 @@ void CommandQueue::SpinOnce(){
             if (this->tail == COMMANDS_COUNT_IN_QUEUE) this->tail = 0;
         }
     }
+    this->_myBot->SpinOnce();
 }
 
 bool CommandQueue::BufferIsEmpty(){
@@ -45,9 +46,10 @@ bool CommandQueue::AppendGcodeCommand(String command){
     int pre_head = this->head;
     pre_head++;
     if (pre_head == COMMANDS_COUNT_IN_QUEUE) pre_head =0;
-    if (pre_head == this->tail){
+    while (pre_head == this->tail){
         // Buffer is full
-        return false;
+        // Serial.println("\n\n\n\n [Warning] CommandQueue::AppendGcodeCommand()   Buffer is full \n\n\n");
+        this->SpinOnce();
     }
     // Serial.print("Adding gcode to command queue   ");
     // Serial.print(command.length());

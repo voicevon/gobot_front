@@ -17,7 +17,7 @@
 
 */
 
-void HouseMap::setup(){
+void HouseMap::Init(){
     this->neck.y = 0;
     this->neck.x = 55.0;
     this->head.y = 0;
@@ -41,7 +41,7 @@ void HouseMap::setup(){
     this->rooms[7].x = this->rooms[0].x;
     this->rooms[7].y = - this->rooms[0].y;
 
-    this->doors[0].x = 10.37;
+    this->doors[0].x = -10.37;
     this->doors[0].y = 59.07;
     this->doors[1].x = -21.39;
     this->doors[1].y = 56.12;

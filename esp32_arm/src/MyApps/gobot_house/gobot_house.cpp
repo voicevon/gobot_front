@@ -9,7 +9,7 @@
 void GobotHouse::Setup(RobotAction* pAction){
 	this->__house_action = pAction;
 	__segments = 5;
-	__map.setup();
+	this->__map.Init();
 
 	this->__robot_hardware = &GobotHouseHardware::getInstance();
     this->__robot_hardware->Init_Linkage();
@@ -31,7 +31,7 @@ void GobotHouse::__Home(bool via_inverse_kinematic){
 	if (via_inverse_kinematic) strG28.concat("I");
 	this->__commandQueue->AppendGcodeCommand(strG28);
 }
-void GobotHouse::Calibrate(int step){
+void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 
 	if (step ==1){
 		// STEPS_PER_ROUND_MOTOR, this variable should be calculated by electronic designer,
@@ -51,8 +51,8 @@ void GobotHouse::Calibrate(int step){
 		// Our idea is:
 		//		after home, move alpha actuator to zero angle, and PI angle.
 		//      because it's easy to make a mark there.
-		this->__Enable_eefCoil(true);
 		this->__Home(true);
+		this->__Enable_eefCoil(enable_eef_coil);
 		String strG = "G1A0";
 		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G4S5";
@@ -69,22 +69,27 @@ void GobotHouse::Calibrate(int step){
 	if(step==3){
 		//Continued from step2,  go on with:   config.Homed_position_beta_in_degree
 		this->__Home(true);
-		this->__Enable_eefCoil(true);
+		this->__Enable_eefCoil(enable_eef_coil);
 		String strG = "G1A-180";
 		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G1B0";
 		this->__commandQueue->AppendGcodeCommand(strG);
 		this->__Enable_eefCoil(false);
 		this->__commandQueue->AppendGcodeCommand(strG);
-		strG = "G4S5";
-		this->__commandQueue->AppendGcodeCommand(strG);
-		this->__Enable_eefCoil(true);
+		this->__Pause(5);
+		this->__Enable_eefCoil(enable_eef_coil);
 		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G1B133";
 		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G1A0";
 		this->__commandQueue->AppendGcodeCommand(strG);
 		this->__Enable_eefCoil(false);
+	}
+	if (step==4){
+		// Calbrate Parking position with (alpha, beta)
+		this->ParkArms(true);
+		this->__Pause(5);
+		this->__PreHome();
 	}
 	if (step==5){
 		// #define ENDER_COIL_2109 32
@@ -97,25 +102,22 @@ void GobotHouse::Calibrate(int step){
 		this->__commandQueue->AppendGcodeCommand(strM);
 	}
 	if (step>=9){
-		this->__Home(true);
-		this->__Enable_eefCoil(true);
-		String strG1 = "G1A-60";
-		this->__commandQueue->AppendGcodeCommand(strG1);
-		if (step ==9 ) 
+		this->__Home();
+		this->__Enable_eefCoil(enable_eef_coil);
+		if (step == 9 ) 
 			this->__Move_fromHead_toNeck(false);
 		else
-			this->MoveStone_FromHeadToRoom(step-10);
-		strG1 = "G4S5";
-		this->__commandQueue->AppendGcodeCommand(strG1);
+			this->__Move_fromParking_toDoor(step-10);
+		this->__Enable_eefCoil(false);
+		this->__Pause(5);
+		this->__Enable_eefCoil(enable_eef_coil);
 		if (step==9)
 			this->__Move_fromHead_toNeck(true);
 		else
-			this->MoveStone_FromRoomToHead(step-10);
-		strG1 = "G1A-60";
-		this->__commandQueue->AppendGcodeCommand(strG1);
-		strG1 = "G1A0B133";
-		this->__commandQueue->AppendGcodeCommand(strG1);
+			this->__Move_fromParking_toDoor(step-10);
+		// this->ParkArms(false);
 		this->__Enable_eefCoil(false);
+		this->__PreHome();
 	}
 
 	while (true){
@@ -141,7 +143,9 @@ void GobotHouse::ParkArms(bool do_homing){
 	}
 	this->__commandQueue->SpinOnce();
 	// Park Arms
-	String strG1 = "G1A-1.1 F2800";
+	String strG1 = "G1B133 F2800";
+	this->__commandQueue->AppendGcodeCommand(strG1);
+	strG1 = "G1A-60 F2800";
 	this->__commandQueue->AppendGcodeCommand(strG1);
 }
 // Head is a position name, The 5 bar arm will pick up stone from there.
@@ -244,4 +248,29 @@ void GobotHouse::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
 	strGcode.concat("Y");
 	strGcode.concat(y);
 	this->__commandQueue->AppendGcodeCommand(strGcode);
+}
+void GobotHouse::__Move_fromParking_toDoor(uint8_t door_id){
+	String strGcode="G1X";
+	strGcode.concat(this->__map.doors[door_id].x);
+	strGcode.concat("Y");
+	strGcode.concat(this->__map.doors[door_id].y);
+	Serial.println(strGcode);
+	this->__commandQueue->AppendGcodeCommand(strGcode);
+}
+void GobotHouse::__Move_fromParking_toNeck(){
+	String strGcode="G1X";
+	strGcode.concat(this->__map.neck.x);
+	strGcode.concat("Y");
+	strGcode.concat(this->__map.neck.y);
+	this->__commandQueue->AppendGcodeCommand(strGcode);
+}
+
+void GobotHouse::__Pause(uint8_t second){
+		String strG1 = "G4S5";
+		this->__commandQueue->AppendGcodeCommand(strG1);
+}
+
+void GobotHouse::__PreHome(){
+	String strG1 = "G1A0";
+	this->__commandQueue->AppendGcodeCommand(strG1);
 }

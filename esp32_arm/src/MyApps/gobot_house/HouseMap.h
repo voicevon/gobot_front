@@ -12,6 +12,6 @@ class HouseMap{
         Point doors[8];
         Point neck;
         Point head;
-        void setup();
+        void Init();
 
 };
