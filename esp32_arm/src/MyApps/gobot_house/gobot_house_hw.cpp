@@ -15,6 +15,11 @@
 void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
+	// bool beta_reverse = false;
+	// if (fk->X <0 && fk->Y >0) {
+	// 	fk->Y = 0- fk->Y;
+	// 	beta_reverse = true;
+	// }
 	float rr1= fk->X * fk->X + fk->Y * fk->Y;
 
 	float beta = PI - acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
@@ -24,7 +29,12 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));  //[0..PI]
 	float alpha = alpha_eef - alpha_link;  //[-PI.. + 2*PI]?
 	if (alpha > PI * 10 /180) alpha -= 2 * PI;   // [-330..+10 ] in degree
-
+	// if (beta_reverse){
+	// 	beta = 0.0 - beta;
+	// 	float d_alpha =  PI * 3 - alpha;
+	// }
+	#define MACHENIC_LIMIT PI * -300 / 180
+	if (alpha <  MACHENIC_LIMIT) alpha = MACHENIC_LIMIT ;  // Machnic limitation
 	Serial.print("\n[Debug] GobotHouseHardware::IK() from (X,Y)=(");
 	Serial.print(fk->X);
 	Serial.print(" , ");
