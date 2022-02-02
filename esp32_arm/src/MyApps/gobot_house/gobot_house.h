@@ -36,7 +36,7 @@ class GobotHouse{
         void __Move_fromParking_toNeck();
         void __Move_fromParking_toDoor(uint8_t door_id);
         void __Enable_eefCoil(bool enable);
-        void __Home(bool via_inverse_kinematic=false);
+        void __Home();
         void __Pause(uint8_t second);
         void __PreHome();
 

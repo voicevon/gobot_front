@@ -7,14 +7,14 @@
 #define GEARBOX_RATIAO_ALPHA 9.0   // big_gear_teeth ==90 / small_gear_teeth ==10
 #define GEARBOX_RATIAO_BETA 2.6     // big_gear_teeth ==26/ small_gear_teeth == 10
 
-#define STEPS_PER_RAD_ALPHA 736.25 // PI*STEPS_PER_ROUND_MOTOR*GEARBOX_RATIAO_ALPHA/180   //730 
+#define STEPS_PER_RAD_ALPHA 736.25 // STEPS_PER_ROUND_MOTOR*GEARBOX_RATIAO_ALPHA/2/PI   //730 
 #define MAX_STEPS_PER_SECOND_ALPHA 1200 * MICRO_STEPS
 #define MAX_ACCELERATION_ALPHPA 600 * MICRO_STEPS
 
 // #define ACCELERATION_HOMIMG_ALPHA 200 * MICRO_STEPS
 // #define MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS
 
-#define STEPS_PER_RAD_BETA 212.7 //PI*STEPS_PER_ROUND_MOTOR*GEARBOX_RATIAO_BETA/180   // 230 
+#define STEPS_PER_RAD_BETA 212.7 // STEPS_PER_ROUND_MOTOR * GEARBOX_RATIAO_BETA/2/PI   // 230 
 #define MAX_STEPS_PER_SECOND_BETA 500 * MICRO_STEPS
 #define MAX_ACCELERATION_BETA 200 * MICRO_STEPS
 
@@ -36,7 +36,6 @@ class GobotHouseHardwareConfig{
      
         float Homed_position_alpha_in_degree = 6;
         float Homed_position_beta_in_degree = 138;
-        ;
         float Homed_position_x = 22;
         float Homed_position_y = 56;
         int Homing_acceleration_alpha; // ACCELERATION_HOMIMG_ALPHA 200 * MICRO_STEPS

@@ -31,5 +31,5 @@ bool MapNavigator::RemoveSite(uint16_t site_id){
 
 
 bool MapNavigator::FetchSite(uint16_t site_id, MapSite* the_site ){
-
+    return false;
 }

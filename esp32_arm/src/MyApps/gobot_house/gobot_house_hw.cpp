@@ -118,6 +118,7 @@ void GobotHouseHardware::Init_Linkage(){
 	this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
 	this->objStepper_alpha.setInverseRotation(true);
 	this->objStepper_beta.setInverseRotation(false);
+	this->_home_as_inverse_kinematic = true;
 
 }
 

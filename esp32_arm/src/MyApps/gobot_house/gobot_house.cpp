@@ -18,12 +18,13 @@ void GobotHouse::Setup(RobotAction* pAction){
     Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
 }
 
-void GobotHouse::SpinOnce(){
+void GobotHouse::SpinOnce(){	
 	this->__robot_hardware->SpinOnce();
 	this->__commandQueue->SpinOnce();
 }
 
-void GobotHouse::__Home(bool via_inverse_kinematic){
+void GobotHouse::__Home(){
+	bool via_inverse_kinematic = true;
 	String strG28 = "G28B";
 	if (via_inverse_kinematic) strG28.concat("I");
 	this->__commandQueue->AppendGcodeCommand(strG28);
@@ -51,7 +52,7 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 		// Our idea is:
 		//		after home, move alpha actuator to zero angle, and PI angle.
 		//      because it's easy to make a mark there.
-		this->__Home(true);
+		this->__Home();
 		this->__Enable_eefCoil(enable_eef_coil);
 		String strG = "G1A0";
 		this->__commandQueue->AppendGcodeCommand(strG);
@@ -68,21 +69,20 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 	}
 	if(step==3){
 		//Continued from step2,  go on with:   config.Homed_position_beta_in_degree
-		this->__Home(true);
+		this->__Home();
 		this->__Enable_eefCoil(enable_eef_coil);
 		String strG = "G1A-180";
 		this->__commandQueue->AppendGcodeCommand(strG);
 		strG = "G1B0";
 		this->__commandQueue->AppendGcodeCommand(strG);
-		this->__Enable_eefCoil(false);
+		this->__Pause(5);
+		strG = "G1B90";
 		this->__commandQueue->AppendGcodeCommand(strG);
+		this->__Enable_eefCoil(false);
 		this->__Pause(5);
 		this->__Enable_eefCoil(enable_eef_coil);
-		this->__commandQueue->AppendGcodeCommand(strG);
-		strG = "G1B133";
-		this->__commandQueue->AppendGcodeCommand(strG);
-		strG = "G1A0";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		// this->ParkArms(false);
+		this->__PreHome();
 		this->__Enable_eefCoil(false);
 	}
 	if (step==4){
@@ -113,16 +113,19 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 		this->__Enable_eefCoil(enable_eef_coil);
 		if (step==9)
 			this->__Move_fromHead_toNeck(true);
-		else
-			this->__Move_fromParking_toDoor(step-10);
-		// this->ParkArms(false);
+		else{
+			this->__Move_fromRoom_toDoor(step-10,false);
+			this->__Pause(5);
+			this->__Move_fromRoom_toDoor(step-10,true);
+			this->ParkArms(false);
+		}
 		this->__Enable_eefCoil(false);
 		this->__PreHome();
 	}
 
-	while (true){
-		this->SpinOnce();
-	}
+	// while (true){
+	// 	this->SpinOnce();
+	// }
 }
 
 void GobotHouse::ParkArms(bool do_homing){
@@ -143,14 +146,14 @@ void GobotHouse::ParkArms(bool do_homing){
 	}
 	this->__commandQueue->SpinOnce();
 	// Park Arms
-	String strG1 = "G1B133 F2800";
+	String strG1 = "G1B120 F2800";
 	this->__commandQueue->AppendGcodeCommand(strG1);
 	strG1 = "G1A-60 F2800";
 	this->__commandQueue->AppendGcodeCommand(strG1);
 }
 // Head is a position name, The 5 bar arm will pick up stone from there.
 bool GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){
-	if (this->__commandQueue->GetFreeBuffersCount() < 16)  return false;
+	// if (this->__commandQueue->GetFreeBuffersCount() < 16)  return false;
 
 	__Move_fromNeck_toDoor(room_id,true);
 	__Move_fromRoom_toDoor(room_id,false);
@@ -164,7 +167,7 @@ bool GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){
 }
 
 bool GobotHouse::MoveStone_FromHeadToRoom(uint8_t room_id){
-	if (this->__commandQueue->GetFreeBuffersCount() < 16) return false;
+	// if (this->__commandQueue->GetFreeBuffersCount() < 16) return false;
 	__Move_fromNeck_toDoor(0, false);  // 0 is useless.
 	__Move_fromHead_toNeck(false);
 	__Enable_eefCoil(true);
@@ -223,7 +226,7 @@ void GobotHouse::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
 	// float distance = __map.distance_room_to_door[room_id];
 	float dx = (x2 - x1) / __segments;
 	float dy = (y2 - y1) / __segments;
-	for(int segment= 0; segment < __segments; segment++){
+	for(int segment= 0; segment <= __segments; segment++){
 		float x = x1 + dx * segment;
 		float y = y1 + dy * segment;
 		// MoveTo(x,y);
@@ -271,6 +274,8 @@ void GobotHouse::__Pause(uint8_t second){
 }
 
 void GobotHouse::__PreHome(){
-	String strG1 = "G1A0";
+	String strG1 = "G1B130";
+	this->__commandQueue->AppendGcodeCommand(strG1);
+	strG1 = "G1A0";
 	this->__commandQueue->AppendGcodeCommand(strG1);
 }

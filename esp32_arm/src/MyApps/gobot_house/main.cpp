@@ -14,8 +14,10 @@ void setup(){
     Serial.println("Hi Xuming, I am your lovely bot,  GobotHouse. ");
     mybot = &GobotHouse::getInstance();
     mybot->Setup(&action);
-    mybot->Calibrate(11, false);
-
+    mybot->Calibrate(3,false);
+    for (int i=17; i>=10;i--){
+        mybot->Calibrate(i, false);
+    }
 	mybot->ParkArms(true);
 }
 
