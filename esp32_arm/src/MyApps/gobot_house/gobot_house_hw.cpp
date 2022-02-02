@@ -33,7 +33,7 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	// 	beta = 0.0 - beta;
 	// 	float d_alpha =  PI * 3 - alpha;
 	// }
-	#define MACHENIC_LIMIT PI * -300 / 180
+	#define MACHENIC_LIMIT PI * -290 / 180
 	if (alpha <  MACHENIC_LIMIT) alpha = MACHENIC_LIMIT ;  // Machnic limitation
 	Serial.print("\n[Debug] GobotHouseHardware::IK() from (X,Y)=(");
 	Serial.print(fk->X);

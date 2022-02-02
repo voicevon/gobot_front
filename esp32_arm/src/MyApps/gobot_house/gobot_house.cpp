@@ -8,7 +8,7 @@
 
 void GobotHouse::Setup(RobotAction* pAction){
 	this->__house_action = pAction;
-	__segments = 5;
+	__segments = 3;
 	this->__map.Init();
 
 	this->__robot_hardware = &GobotHouseHardware::getInstance();
@@ -100,6 +100,18 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 		this->__commandQueue->AppendGcodeCommand(strM);
 		strM = "M42 P33 S0";
 		this->__commandQueue->AppendGcodeCommand(strM);
+	}
+	if (step==6){
+		this->__Home();
+		for(int i=7; i>=0;i--){
+			this->__Enable_eefCoil(enable_eef_coil);
+			this->__Move_fromRoom_toDoor(i,false);
+			this->__Enable_eefCoil(false);
+			this->__Pause(1);
+			this->__Enable_eefCoil(enable_eef_coil);
+			this->__Move_fromRoom_toDoor(i, true);
+		}
+		this->__PreHome();
 	}
 	if (step>=9){
 		this->__Home();
@@ -270,7 +282,8 @@ void GobotHouse::__Move_fromParking_toNeck(){
 }
 
 void GobotHouse::__Pause(uint8_t second){
-		String strG1 = "G4S5";
+		String strG1 = "G4S";
+		strG1.concat(second);
 		this->__commandQueue->AppendGcodeCommand(strG1);
 }
 
