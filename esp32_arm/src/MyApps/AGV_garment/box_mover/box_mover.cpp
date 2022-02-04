@@ -59,18 +59,18 @@ void BoxMover::ParkArms(bool do_homing){
 	if (do_homing){
 		String strG28 = "G28Z";
 		this->__commandQueue->AppendGcodeCommand(strG28);
-		strG28 = "G28A";
+		strG28 = "G28W";
 		this->__commandQueue->AppendGcodeCommand(strG28);
 	}
 	this->__commandQueue->SpinOnce();
-	String strG1 = "G1 Z5421 A1345";
+	String strG1 = "G1 Z5421 W5";
 	this->__commandQueue->AppendGcodeCommand(strG1);
 }
 void BoxMover::LoadBox(){
     // Vertical down.  Angle down, Triger gate
-    this->__commandQueue->AppendGcodeCommand("G1 Z100");
-    this->__commandQueue->AppendGcodeCommand("G1 A123");
-    this->__commandQueue->AppendGcodeCommand("M123");
+    this->__commandQueue->AppendGcodeCommand("G1 Z100");  // Lift the box-track.
+    this->__commandQueue->AppendGcodeCommand("G1 W1");  // Rotate the box-track. will load the box.
+    // this->__commandQueue->AppendGcodeCommand("M123");   //???
 
 }
 void BoxMover::UnloadBox(){

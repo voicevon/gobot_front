@@ -8,10 +8,10 @@
 
 #define STEPS_PER_RAD 123   //2048 / 2*Pi
 #define STEPS_PER_MM 345   //2048 / 2*Pi
-#define ACCELERATION_HOMIMG_A 2000
+#define ACCELERATION_HOMIMG_W 2000
 #define ACCELERATION_HOMIMG_Z 2000
 #define MAX_SPEED_HOMING_Z 2000
-#define MAX_SPEED_HOMING_A 2000
+#define MAX_SPEED_HOMING_W 2000
 
 // #define MAX_STEPS_PER_SECOND_ALPHA 5000
 // #define MAX_STEPS_PER_SECOND_BETA 5000
@@ -104,9 +104,9 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 	Serial.print(axis);
 	this->_homing_axis = axis;
 
-	if (axis=='A'){
-		this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG_A);
-		this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING_A);
+	if (axis=='W'){
+		this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG_W);
+		this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING_W);
 		//todo :  process with IK()
 		// this->objStepper_alpha.setTargetRel(500000);
 		// this->objStepper_beta.setTargetRel(500000);
@@ -149,7 +149,7 @@ void BoxMoverHardware::_running_G28(){
 		}
 		//Copy current ik-position to motor-position.
 		if (this->_homing_axis == 'Z') this->objStepper_alpha.setPosition(ik_position.alpha);
-		if (this->_homing_axis == 'A') this->objStepper_beta.setPosition(ik_position.beta);
+		if (this->_homing_axis == 'W') this->objStepper_beta.setPosition(ik_position.beta);
 		
 		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA);
 		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
@@ -163,7 +163,7 @@ void BoxMoverHardware::_running_G28(){
 		// Serial.print("<");
 		// We are going to move a long long distance with async mode(None blocking).
 		// When endstop is trigered, must stop the moving. 
-		if (this->_homing_axis == 'A'){
+		if (this->_homing_axis == 'W'){
 			//todo :  process with IK()
 			this->objStepper_alpha.setTargetRel(500000);
 			this->objStepper_beta.setTargetRel(500000);
@@ -174,7 +174,6 @@ void BoxMoverHardware::_running_G28(){
 			this->__homing_helper = &this->objHomeHelper_vertical;
 	}
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
-
 	}	
 }
 

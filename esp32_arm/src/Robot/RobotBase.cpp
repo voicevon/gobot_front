@@ -1,54 +1,54 @@
-	#include "RobotBase.h"
-	#include "MyLibs/MyFunctions.hpp"
-	#include "HardwareSerial.h"
+#include "RobotBase.h"
+#include "MyLibs/MyFunctions.hpp"
+#include "HardwareSerial.h"
 
-	void RobotBase::SpinOnce(){
-	// commuDevice->SpinOnce();
-	// Serial.print("[Debug] RobotBase::SpinOnce() is entering \n");
-		// Serial.print(this->State);
-		this->SpinOnce_BaseEnter();
-		switch (this->State){
-		case IDLE:
-			break;
-		case RUNNING_G4:
-			this->__running_G4();
-			break;
-		case RUNNING_G1:
-			this->_running_G1();
-			break;
-		case RUNNING_G28:
-			this->_running_G28();
-			break;
-		default:
-			Serial.print("[Warning] RobotBase::SpinOnce() Unknown current state: ");
-			Serial.print(this->State);
+void RobotBase::SpinOnce(){
+// commuDevice->SpinOnce();
+// Serial.print("[Debug] RobotBase::SpinOnce() is entering \n");
+	// Serial.print(this->State);
+	this->SpinOnce_BaseEnter();
+	switch (this->State){
+	case IDLE:
+		break;
+	case RUNNING_G4:
+		this->__running_G4();
+		break;
+	case RUNNING_G1:
+		this->_running_G1();
+		break;
+	case RUNNING_G28:
+		this->_running_G28();
+		break;
+	default:
+		Serial.print("[Warning] RobotBase::SpinOnce() Unknown current state: ");
+		Serial.print(this->State);
 
-			break;
-		}
-		// if(commuDevice->HasNewChatting()){
-		//   std::string command(commuDevice->ReadChatting());
-		//   Serial.println ("    _base_spin_once()  new chatting");
-		//   Serial.println(command.c_str());
-		//   Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
-		//   this->RunGcode(&gCode);
-		// }
-		this->SpinOnce_BaseExit();
+		break;
 	}
+	// if(commuDevice->HasNewChatting()){
+	//   std::string command(commuDevice->ReadChatting());
+	//   Serial.println ("    _base_spin_once()  new chatting");
+	//   Serial.println(command.c_str());
+	//   Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
+	//   this->RunGcode(&gCode);
+	// }
+	this->SpinOnce_BaseExit();
+}
 
-	void RobotBase::RunG4(Gcode* gcode){
-		__g4_start_timestamp = micros();
-		__g4_time_second = gcode->get_value('S');
+void RobotBase::RunG4(Gcode* gcode){
+	__g4_start_timestamp = micros();
+	__g4_time_second = gcode->get_value('S');
+}
+
+void RobotBase::__running_G4(){
+	long delayed = (micros() - __g4_start_timestamp) / 1000 /1000;
+	if (delayed >= __g4_time_second ){
+		this->State = IDLE;
+		return;
 	}
+}
 
-	void RobotBase::__running_G4(){
-		long delayed = (micros() - __g4_start_timestamp) / 1000 /1000;
-		if (delayed >= __g4_time_second ){
-			this->State = IDLE;
-			return;
-		}
-	}
-
-	void RobotBase::RunGcode(Gcode* gcode){
+void RobotBase::RunGcode(Gcode* gcode){
 	std::string result;
 	// if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND)){
 	//   Serial.print("RunGcode()   OK or Unknown");
@@ -56,18 +56,25 @@
 	// }
 
 	if(gcode->has_g){
-		char home_axis = 'X';
+		char home_axis = '+';
 		switch (gcode->g){
 		case 28:
 			// G28: Home
 			this->State = RUNNING_G28;
+			if (gcode->has_letter('X')) home_axis='X';
 			if (gcode->has_letter('Y')) home_axis='Y';
 			if (gcode->has_letter('Z')) home_axis='Z';
 			if (gcode->has_letter('A')) home_axis='A';
 			if (gcode->has_letter('B')) home_axis='B';
 			if (gcode->has_letter('C')) home_axis='C';
+			if (gcode->has_letter('W')) home_axis='W';
 			this->_home_as_inverse_kinematic = false;
 			if (gcode->has_letter('I')) this->_home_as_inverse_kinematic = true;
+			if (home_axis == '+'){
+				Serial.print("\n\n\n\n[Error] RobotBase::RunGcode()  :");
+				Serial.print(home_axis);
+
+			}
 			this->HomeSingleAxis(home_axis);
 			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
 			break;
