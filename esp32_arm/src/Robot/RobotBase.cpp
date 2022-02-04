@@ -108,8 +108,8 @@
 			break;
 		}
 	}else if(gcode->has_m){
-		uint8_t pin_id;
-		uint8_t pin_value;
+		uint8_t pin_id = 33;   //TODO: Make sure this is no harmful!
+		uint8_t pin_value = 0;
 		switch (gcode->m){
 		case 42:
 			pin_id =  gcode->get_value('P');

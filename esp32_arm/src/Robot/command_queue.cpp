@@ -66,7 +66,7 @@ bool CommandQueue::AppendGcodeCommand(String command){
     //     pTargetByte++;
     // } 
     command.getBytes(pTargetByte, command.length() + 1);
-    Serial.print("\nGcode added to command queue  >>> ");
+    Serial.print("\n[Info] CommandQueue::AppendGcodeCommand() Gcode added to command queue:  ");
     char* p = (char*)&gCodeCommands[0];
     p += MAX_BYTES_PER_COMMAND * this->head;
     std::string ss=std::string(p);

@@ -245,11 +245,11 @@ void GobotHouseHardware::_running_G28(){
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik;
-			Serial.print("\n\n[Info] Please verify the below output ======================  ");
+			Serial.print("\n\n  [Info] Please verify the below output ======================  ");
 			this->IK(&this->__current_fk_position, &verifying_ik);
 		}
 		else{
-			Serial.print("\n [Info] Trying to get home position with EEF position  ");
+			Serial.print("\n  [Info] Trying to get home position with EEF position  ");
 			this->__current_fk_position.X = this->__config.Homed_position_x;
 			this->__current_fk_position.Y = this->__config.Homed_position_y;
 			this->IK(&this->__current_fk_position, &ik_position);
@@ -276,7 +276,6 @@ void GobotHouseHardware::_running_G28(){
 		// When endstop is trigered, must stop the moving. 
 		this->__homing_stepper->setTargetRel(50000);
 		this->objStepControl.moveAsync(*this->__homing_stepper);
-
 	}
 }
 

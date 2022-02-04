@@ -11,15 +11,15 @@ void GobotHouse::Setup(RobotAction* pAction){
 	__segments = 3;
 	this->__map.Init();
 
-	this->__robot_hardware = &GobotHouseHardware::getInstance();
-    this->__robot_hardware->Init_Linkage();
+	GobotHouseHardware* objRobot_hardware = &GobotHouseHardware::getInstance();
+    objRobot_hardware->Init_Linkage();
 	this->__commandQueue = new CommandQueue();
-	this->__commandQueue->LinkRobot(this->__robot_hardware);
+	this->__commandQueue->LinkRobot(objRobot_hardware);
     Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
 }
 
 void GobotHouse::SpinOnce(){	
-	this->__robot_hardware->SpinOnce();
+	// this->__robot_hardware->SpinOnce();
 	this->__commandQueue->SpinOnce();
 }
 
