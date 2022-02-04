@@ -1,5 +1,10 @@
 #include "box_mover_hw.h"
 
+#define PIN_ALPHA_ENABLE 18
+#define PIN_BETA_ENABLE 16
+#define PIN_MICRIO_STEP_2 21
+#define PIN_MICRIO_STEP_1 22
+#define PIN_MICRIO_STEP_0 23
 
 #define STEPS_PER_RAD 326   //2048 / 2*Pi
 #define STEPS_PER_MM 326   //2048 / 2*Pi
@@ -8,11 +13,27 @@
 #define MAX_SPEED_HOMING_Z 2000
 #define MAX_SPEED_HOMING_A 2000
 
-#define MAX_STEPS_PER_SECOND_ALPHA 500
-#define MAX_STEPS_PER_SECOND_BETA 500
-#define MAX_ACCELERATION_ALPHPA 20
-#define MAX_ACCELERATION_BETA 20
+#define MAX_STEPS_PER_SECOND_ALPHA 5000
+#define MAX_STEPS_PER_SECOND_BETA 5000
+#define MAX_ACCELERATION_ALPHPA 200
+#define MAX_ACCELERATION_BETA 200
 
+
+/*
+.				--------------
+.				|            |
+.				|            |
+.				|            |
+.				|            |
+.				|            |
+.				|            |
+.				|            |
+.				|            |
+.				|            |
+.			  <-            <-       this is direction of positive
+.            Alpha         Beta
+.              ->           ->       this is direction of positive
+*/
 
 void BoxMoverHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_ZW* fk = (FkPosition_ZW*)(from_fk);
@@ -36,7 +57,18 @@ BoxMoverHardware::BoxMoverHardware(){
 }
 
 void BoxMoverHardware::Init_Linkage(){
-    
+	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+	pinMode(PIN_BETA_ENABLE, OUTPUT);
+	pinMode(PIN_MICRIO_STEP_0, OUTPUT);
+	pinMode(PIN_MICRIO_STEP_1, OUTPUT);
+	pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+
+	digitalWrite(PIN_ALPHA_ENABLE, LOW);
+	digitalWrite(PIN_BETA_ENABLE, LOW);
+	digitalWrite(PIN_MICRIO_STEP_0, LOW);
+	digitalWrite(PIN_MICRIO_STEP_1, LOW);
+	digitalWrite(PIN_MICRIO_STEP_2, LOW);
+	
 }
 
 void BoxMoverHardware::HomeSingleAxis(char axis){

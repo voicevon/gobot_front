@@ -126,19 +126,24 @@
 			// Get Current Position
 			break;
 		case 280:
+			// Set servo position  
+			//	 	Pnnn Servo index
+			// 		Snnn Angle or microseconds
 			// Wait for all gcode, mcode is finished
 			// Serial.println("M280 Started");
 			while (!this->State == IDLE){
 			this->SpinOnce();
 			}
-			// Serial.println("M280   ending");
+			if (gcode->has_letter('P')) pin_id = gcode->get_value('P');
+			if (gcode->has_letter('S')) pin_value = gcode->get_value('S');
+			ledcWrite(pin_id, pin_value);   // from ledcWrite(ledChannel, dutyCycle);
 			this->commuDevice->OutputMessage(COMMU_OK);
 			this->commuDevice->WriteNotification("IDLE");
 		default:
 			break;
 		}
 	}else{
-		this->commuDevice->OutputMessage("  Has NO letter 'G' or 'M'. ");
+		this->commuDevice->OutputMessage("\n[Warning] RobotBase::RunGcode()  Has NO letter 'G' or 'M'. ");
 		this->commuDevice->OutputMessage(gcode->get_command());
 		this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
 	}

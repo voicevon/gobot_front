@@ -84,7 +84,7 @@ class GobotHouseHardware: public RobotBase{
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
 
-        void init_gpio();
+        void __Init_gpio();
 
         Stepper* __homing_stepper;
         HomeHelper* __homing_helper;

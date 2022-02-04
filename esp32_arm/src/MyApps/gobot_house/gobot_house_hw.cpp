@@ -33,7 +33,7 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	// 	beta = 0.0 - beta;
 	// 	float d_alpha =  PI * 3 - alpha;
 	// }
-	#define MACHENIC_LIMIT PI * -290 / 180
+	#define MACHENIC_LIMIT PI * -330 / 180
 	if (alpha <  MACHENIC_LIMIT) alpha = MACHENIC_LIMIT ;  // Machnic limitation
 	Serial.print("\n[Debug] GobotHouseHardware::IK() from (X,Y)=(");
 	Serial.print(fk->X);
@@ -91,26 +91,33 @@ bool GobotHouseHardware::GetCurrentPosition(FkPositionBase* position_fk){
 }
 
 
-void GobotHouseHardware::init_gpio(){
+void GobotHouseHardware::__Init_gpio(){
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	pinMode(PIN_BETA_ENABLE, OUTPUT);
 	pinMode(PIN_MICRIO_STEP_0, OUTPUT);
 	pinMode(PIN_MICRIO_STEP_1, OUTPUT);
 	pinMode(PIN_MICRIO_STEP_2, OUTPUT);
-	pinMode(PIN_ENDER_COIL_2109, OUTPUT);
-	pinMode(PIN_ENDER_COIL_EXT_2109, OUTPUT);
+	// pinMode(PIN_ENDER_COIL_2109, OUTPUT);
+	// pinMode(PIN_ENDER_COIL_EXT_2109, OUTPUT);
 
 	digitalWrite(PIN_ALPHA_ENABLE, LOW);
 	digitalWrite(PIN_BETA_ENABLE, LOW);
 	digitalWrite(PIN_MICRIO_STEP_0, LOW);
 	digitalWrite(PIN_MICRIO_STEP_1, LOW);
 	digitalWrite(PIN_MICRIO_STEP_2, LOW);
-	digitalWrite(PIN_ENDER_COIL_2109, LOW);
-	digitalWrite(PIN_ENDER_COIL_EXT_2109, LOW);
-
+	// digitalWrite(PIN_ENDER_COIL_2109, LOW);
+	// digitalWrite(PIN_ENDER_COIL_EXT_2109, LOW);
+	  // configure LED PWM functionalitites
+	ledcSetup(1, 200, 8);  //ledcSetup(ledChannel, freq, resolution);
+	ledcSetup(2, 200, 8);  //ledcSetup(ledChannel, freq, resolution);
+	// attach the channel to the GPIO to be controlled
+	ledcAttachPin(PIN_ENDER_COIL_2109, 1); // ledcAttachPin(ledPin, ledChannel);
+	ledcAttachPin(PIN_ENDER_COIL_EXT_2109, 2); // ledcAttachPin(ledPin, ledChannel);
+	ledcWrite(1, 0);
+	ledcWrite(2, 0);
 }
 void GobotHouseHardware::Init_Linkage(){
-	init_gpio();
+	__Init_gpio();
 	this->commuDevice = &this->objCommuUart; 
 	this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
 	this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
@@ -118,6 +125,7 @@ void GobotHouseHardware::Init_Linkage(){
 	this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
 	this->objStepper_alpha.setInverseRotation(true);
 	this->objStepper_beta.setInverseRotation(false);
+
 	this->_home_as_inverse_kinematic = true;
 
 }

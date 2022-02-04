@@ -13,6 +13,7 @@ BoxMover::BoxMover(){
 void BoxMover::SpinOnce(){
     // this->verticalMover->SpinOnce();
     // this->angleMover->SpinOnce();
+    this->__commandQueue->SpinOnce();
     switch (this->State){
         case RESETTING:
             // if (verticalMover->AT_NORTH && angleMover->AT_SOUTH){

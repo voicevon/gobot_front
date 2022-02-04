@@ -60,7 +60,7 @@ class GarmentBot{
         void SpinOnce_Working();
     private:
         TwinWheelHardware objTwinWheel = TwinWheelHardware();
-        BoxMover boxMover = BoxMover();
+        BoxMover objBoxMover = BoxMover();
         RemoteSensor objRemoteSensor;
         MapNavigator objMapNavigator;
         

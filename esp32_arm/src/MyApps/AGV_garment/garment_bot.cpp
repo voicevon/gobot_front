@@ -16,7 +16,7 @@ void GarmentBot::Init(){
    Wire.begin();
    this->_last_state = PARKING;
    this->ToState(SLEEPING);
-   this->boxMover.ParkArms(true);
+   this->objBoxMover.ParkArms(true);
 }
 
 void ReadI2C(){
@@ -94,7 +94,8 @@ void GarmentBot::SpinOnce(){
    int position_error = 100;
 
 //    this->onMqttReceived();
-   
+   this->objBoxMover.SpinOnce();
+
    switch (this->_State)
    {
    case FAST_MOVING:
@@ -182,10 +183,10 @@ void GarmentBot::ToState(GARMENTBOT_STATE state){
             this->objTwinWheel.SetTargetSpeed(20);
             break;
       case LOADING:
-            this->boxMover.LoadBox();
+            this->objBoxMover.LoadBox();
             break;
       case UNLOADING:
-            this->boxMover.UnloadBox();
+            this->objBoxMover.UnloadBox();
             break;
       case CHARGING:
          break;
@@ -202,8 +203,8 @@ void GarmentBot::ToState(GARMENTBOT_STATE state){
 }
 
 void GarmentBot::Test(int test_id){
-   if (test_id == 1) this->boxMover.LoadBox();
-   if (test_id == 2) this->boxMover.UnloadBox();
+   if (test_id == 1) this->objBoxMover.LoadBox();
+   if (test_id == 2) this->objBoxMover.UnloadBox();
    if (test_id==10) {
         int track_error = 0;
         this->objTwinWheel.MoveForward(track_error);

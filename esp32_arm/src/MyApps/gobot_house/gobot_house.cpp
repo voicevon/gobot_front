@@ -111,6 +111,7 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 			this->__Enable_eefCoil(enable_eef_coil);
 			this->__Move_fromRoom_toDoor(i, true);
 		}
+		this->__Enable_eefCoil(false);
 		this->__PreHome();
 	}
 	if (step>=9){
@@ -193,8 +194,10 @@ bool GobotHouse::MoveStone_FromHeadToRoom(uint8_t room_id){
 }
 
 void GobotHouse::__Enable_eefCoil(bool enable){
-	String strM = "M42 P33 S1";
-	if (!enable) strM = "M42 P33 S0";
+	// String strM = "M42 P33 S1";
+	// if (!enable) strM = "M42 P33 S0";
+	String strM = "M280 P2S0";
+	if (enable) strM = "M280 P2S128";
 	this->__commandQueue->AppendGcodeCommand(strM);
 
 }

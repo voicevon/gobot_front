@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 
-// #define I_AM_GARMENT_BOT
-#define I_AM_GOBOT_HOUSE_213401
+#define I_AM_GARMENT_BOT
+// #define I_AM_GOBOT_HOUSE_213401
 
 // #define I_AM_GOBOT_CHESSBOARD_213401
 // #define I_AM_SMOKE_MACHINE_WEB_SERVER
