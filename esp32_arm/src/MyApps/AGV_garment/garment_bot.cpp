@@ -5,6 +5,7 @@
 
 void GarmentBot::Init(){
    // Setting PWM channels properties, Totally Esp32 has 16 channels
+   Serial.print("\n[Info] GarmentBot::Init() is entering");
    const int freq = 30000;
    const int resolution = 8;   // so max pwm speed is 255
    ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites
@@ -16,7 +17,10 @@ void GarmentBot::Init(){
    Wire.begin();
    this->_last_state = PARKING;
    this->ToState(SLEEPING);
+   Serial.print("################################################");
    this->objBoxMover.ParkArms(true);
+   Serial.print("\n[Info] GarmentBot::Init() is done.");
+
 }
 
 void ReadI2C(){

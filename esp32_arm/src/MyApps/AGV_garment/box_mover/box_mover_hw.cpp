@@ -6,8 +6,8 @@
 #define PIN_MICRIO_STEP_1 22
 #define PIN_MICRIO_STEP_0 23
 
-#define STEPS_PER_RAD 326   //2048 / 2*Pi
-#define STEPS_PER_MM 326   //2048 / 2*Pi
+#define STEPS_PER_RAD 123   //2048 / 2*Pi
+#define STEPS_PER_MM 345   //2048 / 2*Pi
 #define ACCELERATION_HOMIMG_A 2000
 #define ACCELERATION_HOMIMG_Z 2000
 #define MAX_SPEED_HOMING_Z 2000
@@ -20,15 +20,17 @@
 
 
 /*
-.				--------------
-.				|            |
-.				|            |
-.				|            |
-.				|            |
-.				|            |
-.				|            |
-.				|            |
-.				|            |
+.                look from rear side.
+.
+.				--------------   45 degree
+.				|            |  /
+.				|            | /
+.				|            |/
+.				|      ------+------->  0 degree
+.				|            |\
+.				|            | \ 
+.				|            |  \
+.				|            |   -45 degree
 .				|            |
 .			  <-            <-       this is direction of positive
 .            Alpha         Beta
@@ -36,19 +38,33 @@
 */
 
 void BoxMoverHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
+	Serial.print("\n[Info] BoxMoverHardware::IK() is entering. ");
 	FkPosition_ZW* fk = (FkPosition_ZW*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
-	ik->alpha = 2 * (fk->Z * STEPS_PER_MM + fk->W * STEPS_PER_RAD);
-	ik->beta = 2 * (fk->Z * STEPS_PER_MM -fk->W * STEPS_PER_RAD);
+	ik->alpha = (fk->Z * STEPS_PER_MM + fk->W * STEPS_PER_RAD);
+	ik->beta = (fk->Z * STEPS_PER_MM - fk->W * STEPS_PER_RAD);
+
+	Serial.print("\n[Debug] BoxMoverHardware::IK() output (alpha, beta) = ");
+	Serial.print(ik->alpha);
+	Serial.print(" , ");
+	Serial.print(ik->beta);
+	Serial.print(")");
 }
 
 void BoxMoverHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+	Serial.print("\n[Debug] BoxMoverHardware::FK() is entering ");
 	FkPosition_ZW* fk = (FkPosition_ZW*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
-	fk->Z = (ik->alpha - ik->beta) / 2 / STEPS_PER_MM;
-	fk->W = (ik->alpha + ik->beta) / 2 / STEPS_PER_RAD;
+	fk->Z = (ik->alpha + ik->beta) / 2 / STEPS_PER_MM;
+	fk->W = (ik->alpha - ik->beta) / 2 / STEPS_PER_RAD;
+
+	Serial.print("\n[Debug] BoxMoverHardware::FK() output (Z, W) = ");
+	Serial.print(fk->Z);
+	Serial.print(" , ");
+	Serial.print(fk->W);
+	Serial.print(")");
 }
 
 
@@ -106,19 +122,7 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 }
 
 void BoxMoverHardware::_running_G28(){
-	// Serial.print("[Debug] BoxMoverHardware::running_G28() is entering \n");
-	// if (this->__homing_helper->IsTriged()){
-	// 	// End stop is trigered
-	// 	Serial.print("\n[Info] Homed postion =  " );
-	// 	this->objStepControl.stop();
-	// 	// this->__homing_stepper->setPosition(0);
-	// 	// Serial.println(this->__homing_stepper->getPosition());
-	// 	this->State = IDLE;
-	// 	this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA);
-	// 	this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
-	// 	this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
-	// 	this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
-	// }
+
 
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
@@ -129,23 +133,18 @@ void BoxMoverHardware::_running_G28(){
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
-			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
-			ik_position.alpha = PI * this->__config.Homed_position_alpha_in_degree * STEPS_PER_RAD_ALPHA /180;
-			ik_position.beta = PI * this->__config.Homed_position_beta_in_degree * STEPS_PER_RAD_BETA /180;
-			this->FK(&ik_position, &this->__current_fk_position);
-			// verify FK by IK()
-			IkPosition_AB verifying_ik;
-			Serial.print("\n\n  [Info] Please verify the below output ======================  ");
-			this->IK(&this->__current_fk_position, &verifying_ik);
+			// We know homed position via IK.
+			Serial.print("\n[Error] BoxMoverHardware::_running_G28() This robot does NOT impliment this function.");
 		}
 		else{
-			Serial.print("\n  [Info] Trying to get home position with EEF position  ");
+			// We know homed position via FK
+			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
 			this->__current_fk_position.Z = this->__config.Homed_position_z;
 			this->__current_fk_position.W = this->__config.Homed_position_w;
 			this->IK(&this->__current_fk_position, &ik_position);
 			// verify IK by FK()
 			FkPosition_XY verifying_fk;
-			Serial.print("\n   [Info] Please verify the below output ======================  ");
+			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.

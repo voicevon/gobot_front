@@ -36,8 +36,8 @@ class BoxMoverHardwareConfig{
      
         float Homed_position_alpha_in_degree = 6;
         float Homed_position_beta_in_degree = 138;
-        float Homed_position_z = 22;
-        float Homed_position_w = 56;
+        float Homed_position_z = 12;
+        float Homed_position_w = 34;
         int Homing_acceleration_alpha; // ACCELERATION_HOMIMG_ALPHA 200 * MICRO_STEPS
         int Homing_speed_alpha; // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
         int Homing_acceleration_beta ;
