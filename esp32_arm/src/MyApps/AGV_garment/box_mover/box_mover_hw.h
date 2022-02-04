@@ -3,6 +3,7 @@
 #include "Robot/RobotBase.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/HomeHelper.h"
+#include "box_mover_hw_config.h"
 
 
 #define VERTICAL_ENDSTOP 15
@@ -49,5 +50,5 @@ class BoxMoverHardware:public RobotBase{
         HomeHelper* __homing_helper;
         HomeHelper objHomeHelper_vertical = HomeHelper(VERTICAL_ENDSTOP, LOW);
         HomeHelper objHomeHelper_angle = HomeHelper(ANGLE_ENDSTOP, LOW);        
-
+        BoxMoverHardwareConfig  __config;
 };

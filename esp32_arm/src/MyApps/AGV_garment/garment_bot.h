@@ -3,8 +3,8 @@
 #ifdef I_AM_GARMENT_BOT
 
 
-#include "vehical_twin_wheel_hw.h"
-#include "box_mover.h"
+#include "twin_wheels/vehical_twin_wheel_hw.h"
+#include "box_mover/box_mover.h"
 #include "AGV/map_navigator.h"
 #include "remote_sensor.h"
 

@@ -13,10 +13,10 @@
 #define MAX_SPEED_HOMING_Z 2000
 #define MAX_SPEED_HOMING_A 2000
 
-#define MAX_STEPS_PER_SECOND_ALPHA 5000
-#define MAX_STEPS_PER_SECOND_BETA 5000
-#define MAX_ACCELERATION_ALPHPA 200
-#define MAX_ACCELERATION_BETA 200
+// #define MAX_STEPS_PER_SECOND_ALPHA 5000
+// #define MAX_STEPS_PER_SECOND_BETA 5000
+// #define MAX_ACCELERATION_ALPHPA 200
+// #define MAX_ACCELERATION_BETA 200
 
 
 /*
@@ -57,6 +57,7 @@ BoxMoverHardware::BoxMoverHardware(){
 }
 
 void BoxMoverHardware::Init_Linkage(){
+	Serial.print("\n[Info] BoxMoverHardware::Init_Linkage() is entering.");
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	pinMode(PIN_BETA_ENABLE, OUTPUT);
 	pinMode(PIN_MICRIO_STEP_0, OUTPUT);
@@ -69,10 +70,21 @@ void BoxMoverHardware::Init_Linkage(){
 	digitalWrite(PIN_MICRIO_STEP_1, LOW);
 	digitalWrite(PIN_MICRIO_STEP_2, LOW);
 	
+
+
+	// this->commuDevice = &this->objCommuUart; 
+	this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
+	this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
+	this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
+	this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
+	this->objStepper_alpha.setInverseRotation(true);
+	this->objStepper_beta.setInverseRotation(true);
+
+	this->_home_as_inverse_kinematic = false;
 }
 
 void BoxMoverHardware::HomeSingleAxis(char axis){
-	Serial.print("[Debug] BoxMoverHardware::HomeSingleAxis() is entering\n" );
+	Serial.print("[Debug] BoxMoverHardware::HomeSingleAxis() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis = axis;
 
@@ -80,14 +92,14 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 		this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG_A);
 		this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING_A);
 		//todo :  process with IK()
-		this->objStepper_alpha.setTargetRel(500000);
-		this->objStepper_beta.setTargetRel(500000);
+		// this->objStepper_alpha.setTargetRel(500000);
+		// this->objStepper_beta.setTargetRel(500000);
 		this->__homing_helper = &this->objHomeHelper_angle;
 	}else if (axis=='Z'){
 		this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG_Z);
 		this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING_Z);
-		this->objStepper_alpha.setTargetRel(500000);
-		this->objStepper_beta.setTargetRel(-500000);	
+		// this->objStepper_alpha.setTargetRel(500000);
+		// this->objStepper_beta.setTargetRel(-500000);	
 		this->__homing_helper = &this->objHomeHelper_vertical;
 	}
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
@@ -95,18 +107,76 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 
 void BoxMoverHardware::_running_G28(){
 	// Serial.print("[Debug] BoxMoverHardware::running_G28() is entering \n");
+	// if (this->__homing_helper->IsTriged()){
+	// 	// End stop is trigered
+	// 	Serial.print("\n[Info] Homed postion =  " );
+	// 	this->objStepControl.stop();
+	// 	// this->__homing_stepper->setPosition(0);
+	// 	// Serial.println(this->__homing_stepper->getPosition());
+	// 	this->State = IDLE;
+	// 	this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA);
+	// 	this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
+	// 	this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
+	// 	this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
+	// }
+
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
-		Serial.print("\n[Info] Homed postion =  " );
+		Serial.print("\n[Info] BoxMoverHardware::_running_G28() Home sensor is trigger.  " );
+		Serial.print (this->_homing_axis);
 		this->objStepControl.stop();
-		// this->__homing_stepper->setPosition(0);
-		// Serial.println(this->__homing_stepper->getPosition());
-		this->State = IDLE;
+
+		//Set current position to HomePosition
+		IkPosition_AB ik_position;
+		if (this->_home_as_inverse_kinematic){
+			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
+			ik_position.alpha = PI * this->__config.Homed_position_alpha_in_degree * STEPS_PER_RAD_ALPHA /180;
+			ik_position.beta = PI * this->__config.Homed_position_beta_in_degree * STEPS_PER_RAD_BETA /180;
+			this->FK(&ik_position, &this->__current_fk_position);
+			// verify FK by IK()
+			IkPosition_AB verifying_ik;
+			Serial.print("\n\n  [Info] Please verify the below output ======================  ");
+			this->IK(&this->__current_fk_position, &verifying_ik);
+		}
+		else{
+			Serial.print("\n  [Info] Trying to get home position with EEF position  ");
+			this->__current_fk_position.Z = this->__config.Homed_position_z;
+			this->__current_fk_position.W = this->__config.Homed_position_w;
+			this->IK(&this->__current_fk_position, &ik_position);
+			// verify IK by FK()
+			FkPosition_XY verifying_fk;
+			Serial.print("\n   [Info] Please verify the below output ======================  ");
+			this->FK(&ik_position, &verifying_fk);
+		}
+		//Copy current ik-position to motor-position.
+		if (this->_homing_axis == 'Z') this->objStepper_alpha.setPosition(ik_position.alpha);
+		if (this->_homing_axis == 'A') this->objStepper_beta.setPosition(ik_position.beta);
+		
 		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA);
 		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
 		this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
 		this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
+		this->State = IDLE;
+
+	}else{
+		// Endstop is not trigered
+		// Serial.print("[Debug] Still homing\n");
+		// Serial.print("<");
+		// We are going to move a long long distance with async mode(None blocking).
+		// When endstop is trigered, must stop the moving. 
+		if (this->_homing_axis == 'A'){
+			//todo :  process with IK()
+			this->objStepper_alpha.setTargetRel(500000);
+			this->objStepper_beta.setTargetRel(500000);
+			this->__homing_helper = &this->objHomeHelper_angle;
+		}else if (this->_homing_axis == 'Z'){
+			this->objStepper_alpha.setTargetRel(500000);
+			this->objStepper_beta.setTargetRel(-500000);	
+			this->__homing_helper = &this->objHomeHelper_vertical;
 	}
+	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
+
+	}	
 }
 
 void BoxMoverHardware::RunG1(Gcode* gcode) {
