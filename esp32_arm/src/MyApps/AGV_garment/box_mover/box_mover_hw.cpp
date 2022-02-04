@@ -87,8 +87,9 @@ void BoxMoverHardware::Init_Linkage(){
 	digitalWrite(PIN_MICRIO_STEP_2, LOW);
 	
 
-
-	this->commuDevice = &this->objCommuUart; 
+	CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
+	this->commuDevice = commuUart; 
+	
 	this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
 	this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
 	this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
@@ -235,5 +236,5 @@ void BoxMoverHardware::_running_G1(){
 }
 
 float BoxMoverHardware::GetDistanceToTarget_IK(){
-	TODO NOW!
+	return this->objStepper_alpha.getDistanceToTarget() + this->objStepper_beta.getDistanceToTarget();
 }

@@ -53,6 +53,5 @@ class BoxMoverHardware:public RobotBase{
         HomeHelper objHomeHelper_vertical = HomeHelper(VERTICAL_ENDSTOP, LOW);
         HomeHelper objHomeHelper_angle = HomeHelper(ANGLE_ENDSTOP, LOW);        
         BoxMoverHardwareConfig  __config;
-        CommuUart objCommuUart = CommuUart();   //TODO:  remove or rename to: OutputDevice.
 
 };

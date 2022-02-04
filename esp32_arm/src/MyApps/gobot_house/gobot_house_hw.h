@@ -81,8 +81,7 @@ class GobotHouseHardware: public RobotBase{
         Stepper objStepper_beta = Stepper(PIN_BETA_STEP_2109, PIN_BETA_DIR_2109);
         StepControl objStepControl;
 
-        CommuUart objCommuUart = CommuUart();
-        CommuBleGattServer objCommuBle = CommuBleGattServer();
+        // CommuBleGattServer objCommuBle = CommuBleGattServer();
 
         void __Init_gpio();
 

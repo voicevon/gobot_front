@@ -118,7 +118,9 @@ void GobotHouseHardware::__Init_gpio(){
 }
 void GobotHouseHardware::Init_Linkage(){
 	__Init_gpio();
-	this->commuDevice = &this->objCommuUart; 
+	CommuUart* commuUart = new CommuUart();
+
+	this->commuDevice = commuUart; 
 	this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
 	this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
 	this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
