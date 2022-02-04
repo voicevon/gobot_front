@@ -26,6 +26,6 @@ class BoxMover{
     
     private:
         CommandQueue* __commandQueue;
-        BoxMoverHardware* __robot_hardware;
+        // BoxMoverHardware* __objBoxMoverHardware;
    
 };

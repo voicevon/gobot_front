@@ -2,12 +2,11 @@
 #include "box_mover.h"
 
 BoxMover::BoxMover(){
-    this->__robot_hardware = new BoxMoverHardware();
-    // this->__robot_hardware = &GobotHouseHardware::getInstance();
-    this->__robot_hardware->Init_Linkage();
+    BoxMoverHardware* objBoxMoverHardware = new BoxMoverHardware();
+    objBoxMoverHardware->Init_Linkage();
 	this->__commandQueue = new CommandQueue();
-	this->__commandQueue->LinkRobot(this->__robot_hardware);
-    Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
+	this->__commandQueue->LinkRobot(objBoxMoverHardware);
+    Serial.print("\n[Info] BoxMover::BoxMover() is done..........");
 }
 
 void BoxMover::SpinOnce(){

@@ -5,8 +5,8 @@
 #include "Robot/HomeHelper.h"
 
 
-#define VERTICAL_ENDSTOP 13
-#define ANGLE_ENDSTOP 19
+#define VERTICAL_ENDSTOP 15
+#define ANGLE_ENDSTOP 2
 
 #define PIN_STEP_ALPHA 22
 #define PIN_DIR_ALPHA 22
