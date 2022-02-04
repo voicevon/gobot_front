@@ -116,7 +116,7 @@ void GobotHouseHardware::__Init_gpio(){
 	ledcWrite(1, 0);
 	ledcWrite(2, 0);
 }
-void GobotHouseHardware::Init_Linkage(){
+void GobotHouseHardware::Init(){
 	__Init_gpio();
 	CommuUart* commuUart = new CommuUart();
 

@@ -67,7 +67,7 @@ void setup() {
 	mybot = new SmokeBot();
 	myCommandQueue.LinkRobot(mybot);
 	mybot->Init_Gpio();
-	mybot->Init_Linkage();
+	mybot->Init();
 	Serial.println("\nSet up is done .....");
 	String strG28 = "G28";
 	myCommandQueue.AppendGcodeCommand(strG28);

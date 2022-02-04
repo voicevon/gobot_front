@@ -79,7 +79,7 @@ class GobotChessboard: public RobotBase{
         }
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
-        void Init_Linkage() override;
+        void Init() override;
         // void SpinOnce(void);
         void Setup(RobotAction* pAction);
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};

@@ -72,7 +72,7 @@ BoxMoverHardware::BoxMoverHardware(){
 
 }
 
-void BoxMoverHardware::Init_Linkage(){
+void BoxMoverHardware::Init(){
 	Serial.print("\n[Info] BoxMoverHardware::Init_Linkage() is entering.");
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	pinMode(PIN_BETA_ENABLE, OUTPUT);
@@ -89,7 +89,7 @@ void BoxMoverHardware::Init_Linkage(){
 
 	CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
 	this->commuDevice = commuUart; 
-	
+
 	this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
 	this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
 	this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);

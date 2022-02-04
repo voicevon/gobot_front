@@ -32,7 +32,7 @@ M301 P1 I1 D1    //Set PID
 class TwinWheelHardware: public VehicalBase{
 
     public:
-        void Init();
+        void Init() override;
         void LinkPid(PIDController* wheel_pid);
         void MoveForward(int track_error) override;
         void Stop() override;

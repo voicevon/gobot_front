@@ -51,9 +51,9 @@ void setup(){
     // commu_esp_now.InitMaster(&slave_mac_addr[0],1);
     mybot = new GarmentBot();
     mybot->Init();
-    Serial.println ("\n\nSetup mybot is done. ------------------------------------ ");
+    Serial.println ("\n\n  Setup mybot is done. ------------------------------------ ");
     // setup_wifi_mqtt();
-    Serial.println ("\n\nSetup_wifi_mqtt is done. ------------------------------------ ");
+    Serial.println ("\n\n  Setup_wifi_mqtt is done. ------------------------------------ ");
 
     // while (!mqttClient.connected())
     //     delay(100);

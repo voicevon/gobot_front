@@ -2,10 +2,12 @@
 #ifdef I_AM_GARMENT_BOT
 #include "garment_bot.h"
 
+GarmentBot::GarmentBot(){
+}
 
 void GarmentBot::Init(){
-   // Setting PWM channels properties, Totally Esp32 has 16 channels
    Serial.print("\n[Info] GarmentBot::Init() is entering");
+   // Setting PWM channels properties, Totally Esp32 has 16 channels
    const int freq = 30000;
    const int resolution = 8;   // so max pwm speed is 255
    ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites
@@ -15,9 +17,11 @@ void GarmentBot::Init(){
 
    // Init I2C bus
    Wire.begin();
+   this->objTwinWheelHardware.Init();
+   this->objBoxMover.ParkArms(true);
+
    this->_last_state = PARKING;
    this->ToState(SLEEPING);
-   this->objBoxMover.ParkArms(true);
    Serial.print("\n[Info] GarmentBot::Init() is done.");
 
 }
@@ -108,7 +112,7 @@ void GarmentBot::SpinOnce(){
         else if (found_slowdown_mark)
             this->ToState(SLOW_MOVING);
         else
-            this->objTwinWheel.MoveForward(track_error);
+            this->objTwinWheelHardware.MoveForward(track_error);
         break;
     case FAST_MOVING_PAUSED:
         if (!found_obstacle)
@@ -136,7 +140,7 @@ void GarmentBot::SpinOnce(){
             this->ToState(PARKED);
         else{
             // position_error = this->objPositionSensor.ReadError_FromRight();
-            this->objTwinWheel.SetTargetSpeed(position_error);
+            this->objTwinWheelHardware.SetTargetSpeed(position_error);
         }
         break;
    case PARKING_PAUSED:
@@ -174,16 +178,16 @@ void GarmentBot::ToState(GARMENTBOT_STATE state){
    if (state == this->_State) return;
    switch(state){
       case SLEEPING:
-            this->objTwinWheel.Stop();
+            this->objTwinWheelHardware.Stop();
             break;
       case FAST_MOVING:
-            this->objTwinWheel.SetTargetSpeed(220);
+            this->objTwinWheelHardware.SetTargetSpeed(220);
             break;
       case SLOW_MOVING:
-            this->objTwinWheel.SetTargetSpeed(100);
+            this->objTwinWheelHardware.SetTargetSpeed(100);
             break;
       case PARKING:
-            this->objTwinWheel.SetTargetSpeed(20);
+            this->objTwinWheelHardware.SetTargetSpeed(20);
             break;
       case LOADING:
             this->objBoxMover.LoadBox();
@@ -210,7 +214,7 @@ void GarmentBot::Test(int test_id){
    if (test_id == 2) this->objBoxMover.UnloadBox();
    if (test_id==10) {
         int track_error = 0;
-        this->objTwinWheel.MoveForward(track_error);
+        this->objTwinWheelHardware.MoveForward(track_error);
    }
 }
 

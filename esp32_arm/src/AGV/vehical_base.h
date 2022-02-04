@@ -12,6 +12,7 @@ class VehicalBase{
                 FORWARD = 1,
                 BACKWARD = 2,
             };
+        virtual void Init();
         virtual void Stop();
         virtual void MoveForward(int track_error);
         void SetTargetSpeed(int speed){this->_TargetSpeed = speed;};

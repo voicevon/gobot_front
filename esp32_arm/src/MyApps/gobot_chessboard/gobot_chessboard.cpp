@@ -193,7 +193,7 @@ void GobotChessboard::Setup(RobotAction* pAction){
 }
 
 
-void GobotChessboard::Init_Linkage(){
+void GobotChessboard::Init(){
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     digitalWrite(PIN_ALPHA_ENABLE, LOW);

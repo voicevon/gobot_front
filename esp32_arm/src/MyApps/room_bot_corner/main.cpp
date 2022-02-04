@@ -28,7 +28,7 @@ void setup(){
     irEncoderHelper.LinkSensor(&irEncoder);
     irEncoderHelper.InitFormula_LinearEquation(3.613f, 0.0f);
     
-    robot.Init_Linkage(&irEncoderHelper);
+    robot.Init(&irEncoderHelper);
     Serial.println ("\n\nSetup is done. ------------------------------------ ");
 }
 

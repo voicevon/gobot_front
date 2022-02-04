@@ -12,7 +12,7 @@ void GobotHouse::Setup(RobotAction* pAction){
 	this->__map.Init();
 
 	GobotHouseHardware* objRobot_hardware = &GobotHouseHardware::getInstance();
-    objRobot_hardware->Init_Linkage();
+    objRobot_hardware->Init();
 	this->__commandQueue = new CommandQueue();
 	this->__commandQueue->LinkRobot(objRobot_hardware);
     Serial.print("\n[Debug] GobotHouse::Setup() is done..........");

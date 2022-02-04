@@ -115,7 +115,7 @@ void RoomBotCorner::SpinOnce_BaseExit(){
     this->MoveToTargetPosition();
 }
 
-void RoomBotCorner::Init_Linkage(IrEncoderHelper* sensorHelperBase){
+void RoomBotCorner::Init(IrEncoderHelper* sensorHelperBase){
     this->LinkCommuDevice(&this->objCommuBle);
     this->objCommuBle.Init();
     // this->singleAxis.LinkAcuator(&this->objDcMotor);

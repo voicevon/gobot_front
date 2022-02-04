@@ -21,7 +21,7 @@ class SmokeBot: public RobotBase{
     public:
         SmokeBot();
         void HomeSingleAxis(char axis) override;
-        void Init_Linkage() override;
+        void Init() override;
         void Init_Gpio();
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
         float GetDistanceToTarget_FK() override{return 0.0;};
