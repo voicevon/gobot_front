@@ -88,7 +88,7 @@ void BoxMoverHardware::Init_Linkage(){
 	
 
 
-	// this->commuDevice = &this->objCommuUart; 
+	this->commuDevice = &this->objCommuUart; 
 	this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
 	this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
 	this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
@@ -178,8 +178,7 @@ void BoxMoverHardware::_running_G28(){
 }
 
 void BoxMoverHardware::RunG1(Gcode* gcode) {
-
-	Serial.print("\n[Debug] BoxMoverHardware::RunG1()   ");
+	Serial.print("\n[Debug] BoxMoverHardware::RunG1() is entering");
 	Serial.print(gcode->get_command());
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
@@ -215,55 +214,16 @@ void BoxMoverHardware::RunG1(Gcode* gcode) {
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 
 	if (true){
-		Serial.print("\n[Debug] GobotHouseHardware::RunG1() ");
+		Serial.print("\n    [Debug] BoxMoverHardware::RunG1()     (");
 		Serial.print(this->objStepper_alpha.getPosition());
 		Serial.print(",");
 		Serial.print(this->objStepper_beta.getPosition());
-		Serial.print(" <-- from   alpha,beta   to --> ");
-		Serial.print(target_ik_ab.alpha);
-		Serial.print(">>");
+		Serial.print(")   <-- from   alpha,beta   to -->  (");
 		Serial.print(target_ik_ab.alpha  );
 		Serial.print(" , ");
-		Serial.println(target_ik_ab.beta);
+		Serial.print(target_ik_ab.beta);
+		Serial.print(")");
 	}
-
-
-
-
-
-
-
-	// //None blocking, move backgroundly.
-	// Serial.println("[Debug] BoxMoverHardware::RunG1()   \n");
-	// if (gcode->has_letter('F')){
-	// 	int speed = gcode->get_value('F');
-	// 	this->objStepper_alpha.setMaxSpeed(speed);
-	// }
-
-    // FkPosition_ZW target_fk;
-    // target_fk.Z = this->__current_fk_position.Z;
-    // target_fk.W = this->__current_fk_position.W;
-
-	// if (gcode->has_letter('A')) 
-    //     target_fk.a = gcode->get_value('A');
-	// if (gcode->has_letter('B')) 
-    //     target_fk.z = gcode->get_value('Z');
-
-    // Serial.print(this->__current_fk_position.z);
-	// Serial.print(",");
-	// Serial.println(this->__current_fk_position.a);
-	// Serial.print(" <-- from   FK(Z, alpha)   to --> ");
-	// Serial.print(target_fk.z);
-	// Serial.print(",");
-	// Serial.println(target_fk.a);
-    
-    // IkPosition_AB target_ik;
-    // this->IK(&target_fk, &target_ik);
-
-	// this->objStepper_alpha.setTargetAbs(target_ik.alpha);
-	// this->objStepper_beta.setTargetAbs(target_ik.beta);
-	// this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
-
 }
 void BoxMoverHardware::_running_G1(){
     if (this->GetDistanceToTarget_IK() < MAX_ACCELERATION_ALPHPA + MAX_ACCELERATION_BETA){
@@ -272,4 +232,8 @@ void BoxMoverHardware::_running_G1(){
     }
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);
+}
+
+float BoxMoverHardware::GetDistanceToTarget_IK(){
+	TODO NOW!
 }

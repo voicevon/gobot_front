@@ -17,7 +17,6 @@ void GarmentBot::Init(){
    Wire.begin();
    this->_last_state = PARKING;
    this->ToState(SLEEPING);
-   Serial.print("################################################");
    this->objBoxMover.ParkArms(true);
    Serial.print("\n[Info] GarmentBot::Init() is done.");
 

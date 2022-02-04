@@ -5,6 +5,8 @@
 #include "Robot/HomeHelper.h"
 #include "box_mover_hw_config.h"
 
+#include "Robot/Commu/CommuUart.h"
+
 
 #define VERTICAL_ENDSTOP 15
 #define ANGLE_ENDSTOP 2
@@ -27,7 +29,7 @@ class BoxMoverHardware:public RobotBase{
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
         void MoveToTargetPosition() override{};
         float GetDistanceToTarget_FK() override{return 0.0;};
-        float GetDistanceToTarget_IK() override{return 0.0;};
+        float GetDistanceToTarget_IK() override;
 
     private:
         Stepper objStepper_alpha = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
@@ -51,4 +53,6 @@ class BoxMoverHardware:public RobotBase{
         HomeHelper objHomeHelper_vertical = HomeHelper(VERTICAL_ENDSTOP, LOW);
         HomeHelper objHomeHelper_angle = HomeHelper(ANGLE_ENDSTOP, LOW);        
         BoxMoverHardwareConfig  __config;
+        CommuUart objCommuUart = CommuUart();   //TODO:  remove or rename to: OutputDevice.
+
 };
