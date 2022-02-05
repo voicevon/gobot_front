@@ -40,7 +40,6 @@ class GobotHouse{
         void __Pause(uint8_t second);
         void __PreHome();
 
-        // GobotHouseHardware* __robot_hardware;
         HouseMap __map;
         RobotAction* __house_action;
         int __segments;

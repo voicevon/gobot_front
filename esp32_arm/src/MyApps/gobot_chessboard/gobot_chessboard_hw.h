@@ -14,11 +14,10 @@ Stepper liberys:
 
 
 
-#include "actions.h"
 #include <ESP32Servo.h>
 #include "Robot/RobotBase.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/Commu/CommuBleGattServer.h"
+// #include "Robot/Commu/CommuBleGattServer.h"
 #include "Robot/Commu/CommuUart.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "Robot/Gcode.h"
@@ -55,52 +54,32 @@ How to solve the concepts I don't know?
 */
 class GobotChessboardHardware: public RobotBase{
     public:
-        static GobotChessboardHardware& getInstance()
-        {
-            static GobotChessboardHardware instance; // Guaranteed to be destroyed.
-                                  // Instantiated on first use.
-            return instance;
-        }
+        // static GobotChessboardHardware& getInstance()
+        // {
+        //     static GobotChessboardHardware instance; // Guaranteed to be destroyed.
+        //                           // Instantiated on first use.
+        //     return instance;
+        // }
+        GobotChessboardHardware();
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
         void Init() override;
-        // void SpinOnce(void);
-        void Setup(RobotAction* pAction);
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
 
         void SetEffector(EEF action);
-        void pick_place_park(RobotAction* pAction);
+
     
     private:
-        GobotChessboardHardware();
-        GobotChessboardHardware(GobotChessboardHardware const& copy);            // Not Implemented
-        GobotChessboardHardware& operator=(GobotChessboardHardware const& copy); // Not Implemented
+        // GobotChessboardHardware(GobotChessboardHardware const& copy);            // Not Implemented
+        // GobotChessboardHardware& operator=(GobotChessboardHardware const& copy); // Not Implemented
 
-        // ik_position ik(float x, float y) override;
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override;
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override{return 0.0;};
-        // SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
-        // SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
-
-
-
-
-        // EG X-Y position bed driven by 2 steppers
-        // Alas its not possible to build an array of these with different pins for each :-(
-        // AccelStepper stepper_alpha(AccelStepper::MotorInterfaceType::FULL4WIRE, 6, 7, 8, 9,true);
-        // int STEPS_PER_RAD;
-        // MultiStepper steppers;
-
 
         Servo* eefServo;
-
-        // void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
         bool homed;
-
-        RobotAction* __arm_action;
-
 
     private:
         void SpinOnce_BaseEnter() override {};
@@ -121,7 +100,7 @@ class GobotChessboardHardware: public RobotBase{
         Stepper objStepper_beta = Stepper(PIN_BETA_STEP_2112, PIN_BETA_DIR_2112);
         StepControl objStepControl;
 
-        CommuBleGattServer objCommuBle = CommuBleGattServer();
+        // CommuBleGattServer objCommuBle = CommuBleGattServer();
         CommuUart objCommuUart = CommuUart();
         GobotChessboardHardwareConfig __config;
 };

@@ -9,17 +9,17 @@ GobotChessboardHardware::GobotChessboardHardware(){
 }
 
 void GobotChessboardHardware::HomeSingleAxis(char axis){ 
-  while(!objHomeHelper_alpha.IsTriged()){
-    objStepper_alpha.setTargetRel(100);
-    objStepControl.move(objStepper_alpha);
-  }
-  // objAxis_Alpha.SetCurrentPosition(HOME_POSITION_ALPHA);
+	while(!objHomeHelper_alpha.IsTriged()){
+		this->objStepper_alpha.setTargetRel(100);
+		this->objStepControl.move(this->objStepper_alpha);
+	}
+	// objAxis_Alpha.SetCurrentPosition(HOME_POSITION_ALPHA);
 
-  while(!objHomeHelper_beta.IsTriged()){
-    objStepper_beta.setTargetRel(100);
-    objStepControl.move(objStepper_beta);
-  }
-  this->commuDevice->OutputMessage("Home is done.....");
+	while(!objHomeHelper_beta.IsTriged()){
+		objStepper_beta.setTargetRel(100);
+		objStepControl.move(objStepper_beta);
+	}
+	this->commuDevice->OutputMessage("Home is done.....");
 }
 
 void GobotChessboardHardware::_running_G28(){
@@ -102,75 +102,42 @@ void GobotChessboardHardware::SetEffector(EEF action){
   }
 }
 
-void GobotChessboardHardware::pick_place_park(RobotAction* pAction){
-  uint8_t action_code = pAction->Arm.action_code;
-    // for(int i=0;i<14;i++){
-    //   Serial.print(pAction->bytes[i]);
-    //   Serial.print(",  ");
-    // }
 
-  if ((action_code & (1<<1)) > 0){
-    Serial.print("\npicking up "); 
-    // MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
-    SetEffector(Lower);
-    SetEffector(Suck);
-    SetEffector(Higher);
-  }
-  if ((action_code & (1<<2)) > 0){
-    Serial.print("\n  placing     ");
-    // for(int i=5;i<9;i++){
-    //   Serial.print(pAction->bytes[i]);
-    //   Serial.print(",  ");
-    // }    
-    // MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
-    SetEffector(Lower);
-    SetEffector(Release);
-    SetEffector(Higher);
-    SetEffector(Sleep);
-  }
-  if ((action_code & (1<<3)) > 0){
-    Serial.print("\n  parking     ");
-    // MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
-    SetEffector(Sleep);
-  }
-  // pAction->bytes[0] = 1;
-}
-
-void GobotChessboardHardware::Setup(RobotAction* pAction){
-  __arm_action = pAction;
-  // Serial.print("Arm is Initializing.........");
-  // __Mcp23018 = &Mcp23018::getInstance();
-  Servo sv = Servo();
-  sv.attach(PIN_EEF_SERVO);
-  eefServo = &sv ;
+// void GobotChessboardHardware::Setup(RobotAction* pAction){
+//   __arm_action = pAction;
+//   // Serial.print("Arm is Initializing.........");
+//   // __Mcp23018 = &Mcp23018::getInstance();
+//   Servo sv = Servo();
+//   sv.attach(PIN_EEF_SERVO);
+//   eefServo = &sv ;
 
 
-  pinMode(PIN_EEF_A, OUTPUT);
-  pinMode(PIN_EEF_B,OUTPUT);
-  SetEffector(Sleep);
-  // With libery AccelStepper
-  // AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
-  //                                     PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-  // stepper_alpha = & stepper;
-  // steppers.addStepper(stepper);
-  // stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
-  //                       PIN_BETA_STEP,PIN_BETA_DIR);
-  // stepper_beta = & stepper;
-  // steppers.addStepper(stepper);
+//   pinMode(PIN_EEF_A, OUTPUT);
+//   pinMode(PIN_EEF_B,OUTPUT);
+//   SetEffector(Sleep);
+//   // With libery AccelStepper
+//   // AccelStepper stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
+//   //                                     PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+//   // stepper_alpha = & stepper;
+//   // steppers.addStepper(stepper);
+//   // stepper = AccelStepper(AccelStepper::MotorInterfaceType::DRIVER, 
+//   //                       PIN_BETA_STEP,PIN_BETA_DIR);
+//   // stepper_beta = & stepper;
+//   // steppers.addStepper(stepper);
 
 
-  // With liberary ESP32Step
-  // stepper_alpha = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-  // stepper_beta = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+//   // With liberary ESP32Step
+//   // stepper_alpha = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+//   // stepper_beta = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
 
-  // stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
-  // stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
-  digitalWrite(PIN_BETA_ENABLE, LOW);
+//   // stepper_alpha->setMaxSpeed(MOTOR_MAX_SPEED);
+//   // stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
+//   digitalWrite(PIN_BETA_ENABLE, LOW);
 
-  // this->__config. = LINK_0;
-  // link_a = LINK_A;
-  // link_b = LINK_B;
-}
+//   // this->__config. = LINK_0;
+//   // link_a = LINK_A;
+//   // link_b = LINK_B;
+// }
 
 
 void GobotChessboardHardware::Init(){
