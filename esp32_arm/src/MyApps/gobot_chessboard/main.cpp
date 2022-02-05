@@ -1,12 +1,13 @@
 #include "all_devices.h"
 #ifdef I_AM_GOBOT_CHESSBOARD
 
+#include "gobot_chessboard_hw.h"
+
 #include "Robot/Commu/CommuBleGattServer.h"
-#include "gobot_chessboard.h"
 #include "MyLibs/MyFunctions.hpp" 
 
 // static char LOG_TAG[]= "BLE-HOUSE";
-GobotChessboard* robot; 
+GobotChessboardHardware* mybot; 
 RobotAction action;
 // CommuRobotBle ble= CommuRobotBle();
 
@@ -20,8 +21,8 @@ void setup(){
     // setup_hardware();
     // ble.Init();
     // Serial.println("BLE is ok....");    
-    robot = &GobotChessboard::getInstance();
-    robot->Init();
+    mybot = &GobotChessboardHardware::getInstance();
+    mybot->Init();
     Serial.print("\nGobot-Chessboard setup is done..........");
 
 }
@@ -31,7 +32,7 @@ void loop(){
     // robot->SpinOnce();
     //for testing.
     Gcode gcode=Gcode("G28 X100");
-    robot->RunGcode(&gcode);
+    mybot->RunGcode(&gcode);
 
 }
 

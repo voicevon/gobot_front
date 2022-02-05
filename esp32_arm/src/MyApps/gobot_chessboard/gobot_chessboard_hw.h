@@ -10,23 +10,7 @@ Stepper liberys:
     - https://github.com/pkerspe/ESP-FlexyStepper
 */
 
-#define PIN_LED_POWER_2112 12
-#define PIN_LED_B_2112 25
-#define PIN_LED_C_2112 26
-#define PIN_LED_F_2112 27
-#define PIN_LED_H_2112 14
 
-#define PIN_HOME_ALHPA_2112  35     //??
-#define PIN_ALPHA_DIR_2112 19
-#define PIN_ALPHA_STEP_2112 5
-
-#define PIN_HOME_BETA_2112  34      //??
-#define PIN_BETA_DIR_2112 17
-#define PIN_BETA_STEP_2112 4
-
-
-#define PIN_ENDER_COIL_2112 32
-#define PIN_ENDER_COIL_EXT_2112 33
 
 
 
@@ -39,7 +23,7 @@ Stepper liberys:
 #include "MyLibs/MyFunctions.hpp"
 #include "Robot/Gcode.h"
 
-
+#include "gobot_chessboard_hw_config.h"
 
 // #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/HomeHelper.h"
@@ -69,11 +53,11 @@ How to solve the concepts I don't know?
     Don't send me nominal name of go game (either of any other name).
 
 */
-class GobotChessboard: public RobotBase{
+class GobotChessboardHardware: public RobotBase{
     public:
-        static GobotChessboard& getInstance()
+        static GobotChessboardHardware& getInstance()
         {
-            static GobotChessboard instance; // Guaranteed to be destroyed.
+            static GobotChessboardHardware instance; // Guaranteed to be destroyed.
                                   // Instantiated on first use.
             return instance;
         }
@@ -88,9 +72,9 @@ class GobotChessboard: public RobotBase{
         void pick_place_park(RobotAction* pAction);
     
     private:
-        GobotChessboard();
-        GobotChessboard(GobotChessboard const& copy);            // Not Implemented
-        GobotChessboard& operator=(GobotChessboard const& copy); // Not Implemented
+        GobotChessboardHardware();
+        GobotChessboardHardware(GobotChessboardHardware const& copy);            // Not Implemented
+        GobotChessboardHardware& operator=(GobotChessboardHardware const& copy); // Not Implemented
 
         // ik_position ik(float x, float y) override;
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override;
@@ -100,22 +84,19 @@ class GobotChessboard: public RobotBase{
         // SingleAxisBase<Stepper> obj_axis_alpha = SingleAxisBase<Stepper>('A');
         // SingleAxisBase<Stepper> obj_axis_beta = SingleAxisBase<Stepper>('B');
 
-        // link length in mm
-        int link_0 ;   // Length between origin and the two motors
-        int link_a ;   // Length from motor to passive joints
-        int link_b ;  // Length from passive joints to end effector
+
 
 
         // EG X-Y position bed driven by 2 steppers
         // Alas its not possible to build an array of these with different pins for each :-(
         // AccelStepper stepper_alpha(AccelStepper::MotorInterfaceType::FULL4WIRE, 6, 7, 8, 9,true);
-        int STEPS_PER_RAD;
+        // int STEPS_PER_RAD;
         // MultiStepper steppers;
 
 
         Servo* eefServo;
 
-        void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
+        // void __HomeSpin(Stepper* homing_stepper, uint8_t home_pin);
         bool homed;
 
         RobotAction* __arm_action;
@@ -142,6 +123,7 @@ class GobotChessboard: public RobotBase{
 
         CommuBleGattServer objCommuBle = CommuBleGattServer();
         CommuUart objCommuUart = CommuUart();
+        GobotChessboardHardwareConfig __config;
 };
 
 

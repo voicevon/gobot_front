@@ -1,34 +1,14 @@
 #include<math.h>
-#include "gobot_chessboard.h"
+#include "gobot_chessboard_hw.h"
 #include<Arduino.h>
 
 
-#define HOME_POSITION_ALPHA 3.3
-#define HOME_POSITION_BETA 3.3
-
-#define PIN_EEF_SERVO 21
-#define PIN_EEF_A  18
-#define PIN_EEF_B  19
-#define PIN_ALPHA_ENABLE 18
-#define PIN_BETA_ENABLE 16
-
-
-
-//  unit is mm
-#define LINK_0 191.0  // Length between origin and the two motors
-#define LINK_A 285.18 // Length from motor to passive joints
-#define LINK_B 384.51 // Length from passive joints to end effector
-
-#define STEPS_PER_RAD 3056     // 200 * 16 * 6 / (3.1415927 * 2)
-#define MOTOR_MAX_SPEED 1000    // unit?
-
-
-GobotChessboard::GobotChessboard(){
+GobotChessboardHardware::GobotChessboardHardware(){
   // this->axis_alpha = &obj_axis_alpha;
   // this->axis_beta = &obj_axis_beta;
 }
 
-void GobotChessboard::HomeSingleAxis(char axis){ 
+void GobotChessboardHardware::HomeSingleAxis(char axis){ 
   while(!objHomeHelper_alpha.IsTriged()){
     objStepper_alpha.setTargetRel(100);
     objStepControl.move(objStepper_alpha);
@@ -42,17 +22,17 @@ void GobotChessboard::HomeSingleAxis(char axis){
   this->commuDevice->OutputMessage("Home is done.....");
 }
 
-void GobotChessboard::_running_G28(){
+void GobotChessboardHardware::_running_G28(){
 
 }
 
-void GobotChessboard::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
-}
+// void GobotChessboardHardware::__HomeSpin(Stepper* homing_stepper, uint8_t home_pin ){
+// }
 
 /*
 https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
 */
-// IkPositionBase GobotChessboard::IK(FkPosXY* fk){
+// IkPositionBase GobotChessboardHardware::IK(FkPosXY* fk){
 //   IkPosXY ret;   //is risk here?
 //   float rr1= (fk.x + LINK_0) * (fk.x + LINK_0) + fk.y * fk.y;
   
@@ -72,31 +52,31 @@ https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/maste
 //   return ret;
 // }
 
-void GobotChessboard::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
+void GobotChessboardHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
   FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
   IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
-  float rr1= (fk->X + LINK_0) * (fk->X + LINK_0) + fk->Y * fk->Y;
+  float rr1= (fk->X + this->__config.LINK_0) * (fk->X + this->__config.LINK_0) + fk->Y * fk->Y;
   
   float r1 = sqrtf(rr1);
-  float alpha_eef = acosf((fk->X + LINK_0) / r1);
-  float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B) / ( 2*LINK_A * r1));
+  float alpha_eef = acosf((fk->X + this->__config.LINK_0) / r1);
+  float alpha_link = acosf((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B) / ( 2*this->__config.LINK_A * r1));
   float alpha = alpha_eef + alpha_link;
-  ik->alpha  = alpha * STEPS_PER_RAD;
+  ik->alpha  = alpha * this->__config.steps_per_rad;
 
-  float rr2 = (fk->X - LINK_0)* (fk->X - LINK_0) + fk->Y * fk->Y;
+  float rr2 = (fk->X - this->__config.LINK_0)* (fk->X - this->__config.LINK_0) + fk->Y * fk->Y;
   float r2 = sqrtf(rr2);
-  float beta_eef = acosf((fk->X - LINK_0) / r2 );
-  float beta_link = acosf((LINK_A * LINK_A + rr2 - LINK_B * LINK_B) / (2 * LINK_A * r2));
+  float beta_eef = acosf((fk->X - this->__config.LINK_0) / r2 );
+  float beta_link = acosf((this->__config.LINK_A * this->__config.LINK_A + rr2 - this->__config.LINK_B *this->__config. LINK_B) / (2 * this->__config.LINK_A * r2));
   float beta = beta_eef - beta_link;
-  ik->beta =  beta * STEPS_PER_RAD; 
+  ik->beta =  beta * this->__config.steps_per_rad; 
 }
 
-void GobotChessboard::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
+void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 
 }
 
-void GobotChessboard::SetEffector(EEF action){
+void GobotChessboardHardware::SetEffector(EEF action){
   switch (action){
     case Lower:
       eefServo->write(180);
@@ -122,7 +102,7 @@ void GobotChessboard::SetEffector(EEF action){
   }
 }
 
-void GobotChessboard::pick_place_park(RobotAction* pAction){
+void GobotChessboardHardware::pick_place_park(RobotAction* pAction){
   uint8_t action_code = pAction->Arm.action_code;
     // for(int i=0;i<14;i++){
     //   Serial.print(pAction->bytes[i]);
@@ -156,7 +136,7 @@ void GobotChessboard::pick_place_park(RobotAction* pAction){
   // pAction->bytes[0] = 1;
 }
 
-void GobotChessboard::Setup(RobotAction* pAction){
+void GobotChessboardHardware::Setup(RobotAction* pAction){
   __arm_action = pAction;
   // Serial.print("Arm is Initializing.........");
   // __Mcp23018 = &Mcp23018::getInstance();
@@ -187,13 +167,13 @@ void GobotChessboard::Setup(RobotAction* pAction){
   // stepper_beta->setMaxSpeed(MOTOR_MAX_SPEED);
   digitalWrite(PIN_BETA_ENABLE, LOW);
 
-  link_0 = LINK_0;
-  link_a = LINK_A;
-  link_b = LINK_B;
+  // this->__config. = LINK_0;
+  // link_a = LINK_A;
+  // link_b = LINK_B;
 }
 
 
-void GobotChessboard::Init(){
+void GobotChessboardHardware::Init(){
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     digitalWrite(PIN_ALPHA_ENABLE, LOW);
@@ -213,10 +193,10 @@ void GobotChessboard::Init(){
     // this->objHomeHelper_beta.LinkActuator(&this->objActuator_Beta);
 } 
 
-void GobotChessboard::RunG1(Gcode* gcode){
+void GobotChessboardHardware::RunG1(Gcode* gcode){
   
 }
 
-void GobotChessboard::_running_G1(){
+void GobotChessboardHardware::_running_G1(){
   
 }
