@@ -4,9 +4,9 @@
 #include <Arduino.h>
 
 // #define I_AM_GARMENT_BOT
-// #define I_AM_GOBOT_HOUSE_213401
+// #define I_AM_GOBOT_HOUSE_2134
+#define I_AM_GOBOT_CHESSBOARD_2134
 
-#define I_AM_GOBOT_CHESSBOARD_213401
 // #define I_AM_SMOKE_MACHINE_WEB_SERVER
 // #define I_AM_CABLE_AXIS_XPYP
 // #define I_AM_CABLE_AXIS_XNYP
@@ -16,7 +16,7 @@
 
 // #define I_AM_SMOKE_MACHINE_MQTT
 
-#ifdef I_AM_GOBOT_CHESSBOARD_213401
+#ifdef I_AM_GOBOT_CHESSBOARD_2134
   #define I_AM_GOBOT_CHESSBOARD
   #define USING_BLE
   #define BLE_DEV_NAME "Gobot-Arm-213401"
@@ -25,7 +25,7 @@
   #define BLE_STATE_UUID "c21a1596-0610-11ec-9a03-0242ac130003"
 #endif
 
-#ifdef I_AM_GOBOT_HOUSE_213401
+#ifdef I_AM_GOBOT_HOUSE_2134
   #define I_AM_GOBOT_HOUSE
   #define USING_BLE
   #define BLE_DEV_NAME "Gobot-House-213401"

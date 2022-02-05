@@ -17,7 +17,7 @@ class CommandQueue{
         bool BufferIsEmpty();
         int GetFreeBuffersCount();
     private:
-        // Gcode* _buffer[5];
+        // This is a buffer , can contain 20 bytes per command, and 22 commands in the queue.
         char gCodeCommands[MAX_BYTES_PER_COMMAND * COMMANDS_COUNT_IN_QUEUE];  // or [20][5]?
         int head;
         int tail;

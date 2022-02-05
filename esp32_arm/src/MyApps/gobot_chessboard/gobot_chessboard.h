@@ -2,7 +2,6 @@
 
 #include "actions.h"
 #include "Robot/command_queue.h"
-#include "gobot_chessboard_hw.h"
 
 class GobotChessboard{
     public:
@@ -21,7 +20,4 @@ class GobotChessboard{
         GobotChessboard(){};
         RobotAction* __arm_action;
         CommandQueue* __commandQueue;
-
-
-
 };

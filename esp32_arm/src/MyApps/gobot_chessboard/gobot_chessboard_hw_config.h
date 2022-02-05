@@ -26,19 +26,19 @@
 #define PIN_LED_F_2112 27
 #define PIN_LED_H_2112 14
 
-#define PIN_HOME_ALHPA_2112  35     //??
-#define PIN_ALPHA_DIR_2112 19
-#define PIN_ALPHA_STEP_2112 5
 
-#define PIN_HOME_BETA_2112  34      //??
-#define PIN_BETA_DIR_2112 17
-#define PIN_BETA_STEP_2112 4
+
+#define PIN_HOME_ALHPA  15     //??
+#define PIN_ALPHA_DIR 19
+#define PIN_ALPHA_STEP 5
+
+#define PIN_HOME_BETA  2      //??
+#define PIN_BETA_DIR 17
+#define PIN_BETA_STEP 4
 
 
 #define PIN_ENDER_COIL_2112 32
 #define PIN_ENDER_COIL_EXT_2112 33
-
-
 
 #define HOME_POSITION_ALPHA 3.3
 #define HOME_POSITION_BETA 3.3

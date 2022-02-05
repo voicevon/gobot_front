@@ -5,9 +5,11 @@ CommandQueue::CommandQueue(){
 }
 
 void CommandQueue::LinkRobot(RobotBase* mybot){
+    Serial.print("\n[Info] CommmandQueue::LinkRobot() is entering");
     this->_myBot = mybot;
     this->head = 0;
     this->tail = 0;
+    Serial.print("\n[Info] CommmandQueue::LinkRobot() is done.");
 }
 
 void CommandQueue::SpinOnce(){

@@ -3,17 +3,17 @@
 #include<Arduino.h>
 
 
-GobotChessboardHardware::GobotChessboardHardware(){
-
-}
 
 void GobotChessboardHardware::Init(){
+	Serial.print("\n[Info] GobotChessboardHardware::Init() is entering.");
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
     digitalWrite(PIN_ALPHA_ENABLE, LOW);
     digitalWrite(PIN_BETA_ENABLE, LOW);
 
-    this->commuDevice = &this->objCommuUart;
+	CommuUart* objCommuUart = new CommuUart();
+    this->commuDevice = objCommuUart;
+	Serial.print("\n[Info] GobotChessboardHardware::Init() is done.");
 } 
 void GobotChessboardHardware::HomeSingleAxis(char axis){ 
 	Serial.print("[Debug] GobotChessboardHardware::HomeSingleAxis() is entering\n" );
@@ -29,14 +29,17 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 		this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_beta);
 		this->__homing_stepper = &this->objStepper_beta;
 		this->__homing_helper = &this->objHomeHelper_beta;
+	}else{
+		Serial.print("\n[Error] GobotChessboardHardware::HomeSingleAxis() ");
 	}
+	Serial.print("[Debug] GobotChessboardHardware::HomeSingleAxis() is done\n" );
 }
 
 void GobotChessboardHardware::_running_G28(){
-	// Serial.print("[Debug] GobotHouseHardware::running_G28() is entering \n");
+	Serial.print("[Debug] GobotHouseHardware::running_G28() is entering \n");
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
-		Serial.print("\n[Info] GobotChessboardHardware::_running_G28() Home sensor is trigger.  " );
+		Serial.print("\n[Info] GobotChessboardHardware::_running_G28() Home sensor is trigered.  " );
 		Serial.print (this->_homing_axis);
 		this->objStepControl.stop();
 
@@ -74,12 +77,13 @@ void GobotChessboardHardware::_running_G28(){
 
 	}else{
 		// Endstop is not trigered
-		// Serial.print("[Debug] Still homing\n");
-		// Serial.print("<");
+		Serial.print("\n[Debug] GobotChessboardHardware::_running_G28()  Still homing\n");
 		// We are going to move a long long distance with async mode(None blocking).
 		// When endstop is trigered, must stop the moving. 
 		this->__homing_stepper->setTargetRel(50000);
+		Serial.print("11111111111111111111111");
 		this->objStepControl.moveAsync(*this->__homing_stepper);
+		Serial.print("222222222222222222");
 	}
 }
 

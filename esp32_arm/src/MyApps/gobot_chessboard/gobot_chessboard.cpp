@@ -1,10 +1,15 @@
 #include "gobot_chessboard.h"
+#include <HardwareSerial.h>
+#include "gobot_chessboard_hw.h"
 
 
 void GobotChessboard::Init(){
+	Serial.print("\n[Info] GobotChessboard::Init() is entering.");
 	GobotChessboardHardware* objGobotHardware = new GobotChessboardHardware();
 	objGobotHardware->Init();
+	this->__commandQueue = new CommandQueue();
 	this->__commandQueue->LinkRobot(objGobotHardware);
+	Serial.print("\n[Info] GobotChessboard::Init() is done.");
 
 }
 
@@ -13,7 +18,18 @@ void GobotChessboard::SpinOnce(){
 }
 
 void GobotChessboard::ParkArms(bool do_home){
-
+	Serial.print("\n[Debug] GobotChessboard::ParkArms() is entering");
+	if (do_home){
+		String strG28 = "G28A";
+		this->__commandQueue->AppendGcodeCommand(strG28);
+		strG28 = "G28B";
+		this->__commandQueue->AppendGcodeCommand(strG28);
+	}
+	// Park Arms
+	String strG1 = "G1B0 F2800";
+	this->__commandQueue->AppendGcodeCommand(strG1);
+	strG1 = "G1A-180 F2800";
+	this->__commandQueue->AppendGcodeCommand(strG1);
 }
 
 void GobotChessboard::pick_place_park(RobotAction* pAction){

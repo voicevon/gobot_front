@@ -60,7 +60,7 @@ class GobotChessboardHardware: public RobotBase{
         //                           // Instantiated on first use.
         //     return instance;
         // }
-        GobotChessboardHardware();
+        GobotChessboardHardware(){};
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
         void Init() override;
@@ -92,16 +92,15 @@ class GobotChessboardHardware: public RobotBase{
     
         Led objLedPower = Led(0, PIN_LED_POWER_2112, LOW);
         Led objLedHome_alpha = Led(1,2,LOW);
-        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA_2112, HIGH);
-        HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA_2112, HIGH);
+        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA, LOW);
+        HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA, LOW);
 
 
-        Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP_2112, PIN_ALPHA_DIR_2112);
-        Stepper objStepper_beta = Stepper(PIN_BETA_STEP_2112, PIN_BETA_DIR_2112);
+        Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+        Stepper objStepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
         StepControl objStepControl;
 
         // CommuBleGattServer objCommuBle = CommuBleGattServer();
-        CommuUart objCommuUart = CommuUart();
         
         GobotChessboardHardwareConfig __config;
         Stepper* __homing_stepper;

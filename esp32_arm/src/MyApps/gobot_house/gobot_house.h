@@ -4,7 +4,6 @@
 // #include "Robot/Commu/CommuBleGattServer.h"
 #include "actions.h"
 #include "Robot/command_queue.h"
-#include "gobot_house_hw.h"
 
 
 class GobotHouse{

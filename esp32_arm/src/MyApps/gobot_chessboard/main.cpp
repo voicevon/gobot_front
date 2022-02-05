@@ -18,6 +18,7 @@ RobotAction action;
 
 void setup(){
     Serial.begin(115200);
+    Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
     // setup_hardware();
     // ble.Init();
     // Serial.println("BLE is ok....");    
