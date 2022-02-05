@@ -227,7 +227,6 @@ void GobotHouseHardware::HomeSingleAxis(char axis){
 		this->__homing_stepper = &this->objStepper_beta;
 		this->__homing_helper = &this->objHomeHelper_beta;
 	}
-
 }
 
 void GobotHouseHardware::_running_G28(){

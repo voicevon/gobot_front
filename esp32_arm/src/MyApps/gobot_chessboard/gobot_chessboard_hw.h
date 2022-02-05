@@ -102,7 +102,11 @@ class GobotChessboardHardware: public RobotBase{
 
         // CommuBleGattServer objCommuBle = CommuBleGattServer();
         CommuUart objCommuUart = CommuUart();
+        
         GobotChessboardHardwareConfig __config;
+        Stepper* __homing_stepper;
+        HomeHelper* __homing_helper;
+        FkPosition_XY __current_fk_position;
 };
 
 

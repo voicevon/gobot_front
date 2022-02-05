@@ -3,6 +3,7 @@
 
 void GobotChessboard::Init(){
 	GobotChessboardHardware* objGobotHardware = new GobotChessboardHardware();
+	objGobotHardware->Init();
 	this->__commandQueue->LinkRobot(objGobotHardware);
 
 }
