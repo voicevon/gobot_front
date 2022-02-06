@@ -29,11 +29,11 @@ Stepper liberys:
 #include "MyLibs/Components/Led.h"
 // Up to 10 steppers can be handled as a group by MultiStepper
 
-enum EEF{
+enum class EefAction{
     Lower = 1,
-    Higher = 2,
-    Suck = 3,
-    Release = 4,
+    Higher = 2, 
+    Suck = 3,  //Load
+    Release = 4,  //Unload
     Sleep = 5
 };
 
@@ -66,7 +66,7 @@ class GobotChessboardHardware: public RobotBase{
         void Init() override;
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
 
-        void SetEffector(EEF action);
+        // void SetEffector(EefAction action);
 
     
     private:
@@ -82,6 +82,7 @@ class GobotChessboardHardware: public RobotBase{
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
         void RunG6(Gcode* gcode) override {};   //Block mode
+        void RunM123(uint8_t eef_channel, uint8_t eef_action) override;
         std::string GetHomeTrigerStateString() override {return " ";};
         // void MoveToTargetPosition() {};
         void _running_G1() override;

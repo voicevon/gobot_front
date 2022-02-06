@@ -115,13 +115,17 @@ void RobotBase::RunGcode(Gcode* gcode){
 			break;
 		}
 	}else if(gcode->has_m){
-		uint8_t pin_id = 33;   //TODO: Make sure this is no harmful!
-		uint8_t pin_value = 0;
+		uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
+		uint8_t s_value = 0;
 		switch (gcode->m){
 		case 42:
-			pin_id =  gcode->get_value('P');
-			pin_value = gcode->get_value('S');
-			this->RunM42(pin_id, pin_value);
+			p_value =  gcode->get_value('P');
+			s_value = gcode->get_value('S');
+			this->RunM42(p_value, s_value);
+		case 114:
+			// Get Current Position
+			break;
+
 		case 119:
 			// Get Endstop Status
 			result = GetHomeTrigerStateString();
@@ -129,9 +133,14 @@ void RobotBase::RunGcode(Gcode* gcode){
 			Serial.print(result.c_str());
 			this->commuDevice->WriteNotification(result);
 			break;
-		case 114:
-			// Get Current Position
+
+		case 123:   
+			//M123 P=channel_index, S=Set EEF 			
+			p_value =  gcode->get_value('P');
+			s_value = gcode->get_value('S');
+			this->RunM123(p_value, s_value);
 			break;
+
 		case 280:
 			// Set servo position  
 			//	 	Pnnn Servo index
@@ -141,9 +150,9 @@ void RobotBase::RunGcode(Gcode* gcode){
 			while (!this->State == IDLE){
 			this->SpinOnce();
 			}
-			if (gcode->has_letter('P')) pin_id = gcode->get_value('P');
-			if (gcode->has_letter('S')) pin_value = gcode->get_value('S');
-			ledcWrite(pin_id, pin_value);   // from ledcWrite(ledChannel, dutyCycle);
+			if (gcode->has_letter('P')) p_value = gcode->get_value('P');
+			if (gcode->has_letter('S')) s_value = gcode->get_value('S');
+			ledcWrite(p_value, s_value);   // from ledcWrite(ledChannel, dutyCycle);
 			this->commuDevice->OutputMessage(COMMU_OK);
 			this->commuDevice->WriteNotification("IDLE");
 		default:

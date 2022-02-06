@@ -190,30 +190,31 @@ void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk)
 	Serial.print(")");
 }
 
-void GobotChessboardHardware::SetEffector(EEF action){
-  switch (action){
-    case Lower:
-      eefServo->write(180);
-      break;
-    case Higher:
-      eefServo->write(0);
-      break;
-    case Suck:
-      digitalWrite(PIN_EEF_A, HIGH);
-      digitalWrite(PIN_EEF_B, LOW);
-      break;
-    case Release:
-      digitalWrite(PIN_EEF_A,LOW);
-      digitalWrite(PIN_EEF_B,HIGH);
-      break;
-    case Sleep:
-      digitalWrite(PIN_EEF_A,LOW);
-      digitalWrite(PIN_EEF_B,LOW);
-      break;
-    default:
-      break;
+void GobotChessboardHardware::RunM123(uint8_t eef_channel, uint8_t eef_action){
+	EefAction action = (EefAction)(eef_action);
+	switch (action){
+		case EefAction::Lower:
+			eefServo->write(180);
+			break;
+		case EefAction::Higher:
+			eefServo->write(0);
+			break;
+		case EefAction::Suck:
+			digitalWrite(PIN_EEF_A, HIGH);
+			digitalWrite(PIN_EEF_B, LOW);
+			break;
+		case EefAction::Release:
+			digitalWrite(PIN_EEF_A,LOW);
+			digitalWrite(PIN_EEF_B,HIGH);
+			break;
+		case EefAction::Sleep:
+			digitalWrite(PIN_EEF_A,LOW);
+			digitalWrite(PIN_EEF_B,LOW);
+			break;
+		default:
+			break;
 
-  }
+	}
 }
 
 void GobotChessboardHardware::RunG1(Gcode* gcode){

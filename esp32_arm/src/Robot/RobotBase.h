@@ -116,6 +116,7 @@ class RobotBase{
         void RunG4(Gcode* gcode);
         virtual std::string GetHomeTrigerStateString();
         void RunM42(uint8_t pin_number, uint8_t pin_value);
+        virtual void RunM123(uint8_t eef_channel, uint8_t eef_action){};
         // TODO:  Should I remove this? 
         //  This commuDevice will only output message , for debugging perpose, Right?
         //  If is right, Then, HardSerial is sufficient to do that.
