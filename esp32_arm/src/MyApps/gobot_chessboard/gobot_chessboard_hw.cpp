@@ -58,13 +58,13 @@ void GobotChessboardHardware::_running_G28(){
 			Serial.print("\n  [Error] Trying to get home position with EEF-FK position  ");
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha);
-		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta);
+		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha * this->__config.steps_per_rad);
+		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta * this->__config.steps_per_rad);
 		
-		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA);
-		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
-		this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
-		this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
+		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA_BETA);
+		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHA_BETA);
+		this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA_BETA);
+		this->objStepper_beta.setAcceleration(MAX_ACCELERATION_ALPHA_BETA);
 		this->State = IDLE;
 
 	}else{
@@ -79,25 +79,6 @@ void GobotChessboardHardware::_running_G28(){
 
 
 
-// IkPositionBase GobotChessboardHardware::IK(FkPosXY* fk){
-//   IkPosXY ret;   //is risk here?
-//   float rr1= (fk.x + LINK_0) * (fk.x + LINK_0) + fk.y * fk.y;
-  
-//   // float beta = acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
-//   float r1 = sqrtf(rr1);
-//   float alpha_eef = acosf((fk.x + LINK_0) / r1);
-//   float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B) / ( 2*LINK_A * r1));
-//   float alpha = alpha_eef + alpha_link;
-//   ret.alpha = alpha * STEPS_PER_RAD;
-
-//   float rr2 = (fk.x - LINK_0)* (fk.x - LINK_0) + fk.y * fk.y;
-//   float r2 = sqrtf(rr2);
-//   float beta_eef = acosf((fk.x - LINK_0) / r2 );
-//   float beta_link = acosf((LINK_A * LINK_A + rr2 - LINK_B * LINK_B) / (2 * LINK_A * r2));
-//   float beta = beta_eef - beta_link;
-//   ret.beta =  beta * STEPS_PER_RAD; 
-//   return ret;
-// }
 
 
 
@@ -111,11 +92,14 @@ void GobotChessboardHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik)
 	// alpha , beta are in unit of RAD.
 	float r1 = sqrtf(rr1);
 	float alpha_eef = acosf((fk->X + this->__config.LINK_0) / r1);
-	Serial.println(this->__config.LINK_0);
-	Serial.println(this->__config.LINK_A);
-	Serial.println(this->__config.LINK_B);
-	Serial.println(r1);
-	Serial.println((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B) / ( this->__config.LINK_A * r1 * 2));
+	bool output_debug = false;
+	if (output_debug){
+		Serial.println(this->__config.LINK_0);
+		Serial.println(this->__config.LINK_A);
+		Serial.println(this->__config.LINK_B);
+		Serial.println(r1);
+		Serial.println((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B) / ( this->__config.LINK_A * r1 * 2));
+	}
 	float alpha_link = acosf((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B) / ( this->__config.LINK_A * r1 * 2));
 	ik->alpha = alpha_eef + alpha_link;
 
@@ -144,55 +128,65 @@ void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk)
 	float elbow_alpha_y = this->__config.LINK_A * sinf(ik->alpha);   // TODO:: When alpha > 90 degree
 	float elbow_beta_x = this->__config.LINK_A * cosf(ik->beta) + this->__config.LINK_0;   //TODO: when alpha < 0 degree. 
 	float elbow_beta_y = this->__config.LINK_A * sinf(ik->beta);     //TODO: When beta < -90 degree.
-	Serial.print("\nelbow_alpja(x,y) = ( ");
-	Serial.print(elbow_alpha_x);
-	Serial.print(" , ");
-	Serial.print(elbow_alpha_y);
-	Serial.print(" )");
+	
+	bool output_debug = false;
+	if (output_debug){
+		Serial.print("\nelbow_alpja(x,y) = ( ");
+		Serial.print(elbow_alpha_x);
+		Serial.print(" , ");
+		Serial.print(elbow_alpha_y);
+		Serial.print(" )");
 
-	Serial.print("\nelbow_beta(x,y) = ( ");
-	Serial.print(elbow_beta_x);
-	Serial.print(" , ");
-	Serial.print(elbow_beta_y);
-	Serial.print(" )");
+		Serial.print("\nelbow_beta(x,y) = ( ");
+		Serial.print(elbow_beta_x);
+		Serial.print(" , ");
+		Serial.print(elbow_beta_y);
+		Serial.print(" )");
+	}
 
 
 	float center_x = (elbow_alpha_x + elbow_beta_x) / 2;
 	float center_y = (elbow_alpha_y + elbow_beta_y) / 2;
-	Serial.print("\n segment_center(x,y) = ( ");
-	Serial.print(center_x);
-	Serial.print(" , ");
-	Serial.print(center_y);
-	Serial.print(" )");
-
+	if (output_debug){
+		Serial.print("\nsegment_center(x,y) = ( ");
+		Serial.print(center_x);
+		Serial.print(" , ");
+		Serial.print(center_y);
+		Serial.print(" )");
+	}
 	// float slope = center_y /center_x;
 	float delta_x = elbow_beta_x - elbow_alpha_x;
 	float delta_y = elbow_beta_y - elbow_alpha_y;
-	float slope = delta_y / delta_x;
-	float angle = atanf(- 1.0f / slope);   // range in degree [-90..+90]
-	if (angle <0) angle += PI / 2;       // range in degree [0..180]
-	Serial.print("\ndelta(x,y) = ( ");
-	Serial.print(delta_x);
-	Serial.print(" , ");
-	Serial.print(delta_y);
-	Serial.print(" )");
-	Serial.print("\nslope and angle = ( ");
-	Serial.print(slope);
-	Serial.print(" , ");
-	Serial.print(PI * angle /180);
-	Serial.print(" )");
+	float origin_slope = delta_y / delta_x;
+	float origin_angle = atanf(origin_slope);   // range in degree [-90..+90]
+	float rotated_angle = origin_angle + PI / 2; // range in degree [0..180]
+	if (output_debug){
+		Serial.print("\ndelta(x,y) = ( ");
+		Serial.print(delta_x);
+		Serial.print(" , ");
+		Serial.print(delta_y);
+		Serial.print(" )");
+		Serial.print("\norigin_slope , orign_angle, rotated_angle  = ( ");
+		Serial.print(origin_slope);
+		Serial.print(" , ");
+		Serial.print(origin_angle * 180/ PI);	
+		Serial.print(" , ");
+		Serial.print(rotated_angle * 180/ PI);
+		Serial.print(" )");
+	}
 
 
 	float elbows_distance_sqr = delta_x * delta_x + delta_y * delta_y;
 	float lenth_from_center_to_eef = sqrtf(this->__config.LINK_B * this->__config.LINK_B - elbows_distance_sqr / 4);
-	Serial.print("\nelbow_distance and lenth_from_center_to_eef = ( ");
-	Serial.print(sqrtf(elbows_distance_sqr));
-	Serial.print(" , ");
-	Serial.print(lenth_from_center_to_eef);
-	Serial.print(" )");
-
-	fk->X = center_x + lenth_from_center_to_eef * cosf(angle);
-	fk->Y = center_y + lenth_from_center_to_eef * sinf(angle);
+	if (output_debug){
+		Serial.print("\nelbow_distance and lenth_from_center_to_eef = ( ");
+		Serial.print(sqrtf(elbows_distance_sqr));
+		Serial.print(" , ");
+		Serial.print(lenth_from_center_to_eef);
+		Serial.print(" )");
+	}
+	fk->X = center_x + lenth_from_center_to_eef * cosf(rotated_angle);
+	fk->Y = center_y + lenth_from_center_to_eef * sinf(rotated_angle);
 
 	Serial.print("\n\n[Debug] GobotHouseHardware::FK()  in degree from (alpha,beta) =(");
 	Serial.print(ik->alpha * 180 / PI);

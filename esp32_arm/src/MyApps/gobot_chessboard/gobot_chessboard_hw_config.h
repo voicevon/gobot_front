@@ -49,13 +49,9 @@
 #define PIN_ALPHA_ENABLE 18
 #define PIN_BETA_ENABLE 16
 
-#define MAX_STEPS_PER_SECOND_BETA 500 * 16 // MICRO_STEPS
-#define MAX_ACCELERATION_BETA 200 * 16 //MICRO_STEPS
-#define MAX_STEPS_PER_SECOND_ALPHA 1200 * 16 //MICRO_STEPS
-#define MAX_ACCELERATION_ALPHPA 600 * 16 //MICRO_STEPS
+#define MAX_STEPS_PER_SECOND_ALPHA_BETA 1200 * 16 //MICRO_STEPS
+#define MAX_ACCELERATION_ALPHA_BETA 600 * 16 //MICRO_STEPS
 
-// #define STEPS_PER_RAD 3056     // 200 * 16 * 6 / (3.1415927 * 2)
-// #define  1000    // unit?
 
 class GobotChessboardHardwareConfig{
     public:
@@ -68,10 +64,9 @@ class GobotChessboardHardwareConfig{
         int MOTOR_MAX_SPEED = 1000;
 
 
-        float Homed_position_alpha_in_degree = 180 - 12;
-        float Homed_position_beta_in_degree = 13;
-        // float Homed_position_x = 22;
-        // float Homed_position_y = 56;
+        float Homed_position_alpha_in_degree = 180+2;
+        float Homed_position_beta_in_degree = 46;
+
         int Homing_acceleration_alpha; // ACCELERATION_HOMIMG_ALPHA 200 * MICRO_STEPS
         int Homing_speed_alpha; // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
         int Homing_acceleration_beta ;
