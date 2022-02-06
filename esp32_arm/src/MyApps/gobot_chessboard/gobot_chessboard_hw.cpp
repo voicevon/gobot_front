@@ -6,8 +6,8 @@ void GobotChessboardHardware::Init(){
 	Serial.print("\n[Info] GobotChessboardHardware::Init() is entering.");
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
-    digitalWrite(PIN_ALPHA_ENABLE, LOW);
-    digitalWrite(PIN_BETA_ENABLE, LOW);
+	this->__EnableMotor('A', false);
+	this->__EnableMotor('B', false);
 
 	CommuUart* objCommuUart = new CommuUart();
     this->commuDevice = objCommuUart;
@@ -19,11 +19,13 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 	Serial.print(axis);
 	this->_homing_axis = axis;
 	if (axis=='A'){
+		this->__EnableMotor('A', true);
 		this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = &this->objStepper_alpha;
 		this->__homing_helper = &this->objHomeHelper_alpha;
 	}else if (axis=='B'){
+		this->__EnableMotor('B',true);
 		this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = &this->objStepper_beta;
@@ -34,8 +36,11 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 	Serial.print("[Debug] GobotChessboardHardware::HomeSingleAxis() is done\n" );
 }
 
+
+// When first axis is homed, should it park to somewhere? For the reason, LINK_B might not long enouth to park the second arm.
 void GobotChessboardHardware::_running_G28(){
 	// Serial.print("[Info] GobotHouseHardware::running_G28() is entering \n");
+
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
 		Serial.print("\n[Info] GobotChessboardHardware::_running_G28() Home sensor is trigered.  " );
@@ -278,3 +283,9 @@ float GobotChessboardHardware::GetDistanceToTarget_IK(){
 	return this->objStepper_alpha.getDistanceToTarget() + this->objStepper_beta.getDistanceToTarget();
 }
 
+void GobotChessboardHardware::__EnableMotor(char actuator, bool enable_it){
+	if (actuator == 'A')
+		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
+	if (actuator == 'B')
+		digitalWrite(PIN_BETA_ENABLE, !enable_it);
+}

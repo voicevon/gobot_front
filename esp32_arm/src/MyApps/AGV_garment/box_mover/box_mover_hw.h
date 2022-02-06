@@ -44,7 +44,9 @@ class BoxMoverHardware:public RobotBase{
         void RunG6(Gcode* gcode) override{} ; 
         void _running_G1() override;
         void _running_G28() override;
+        void RunM123(uint8_t eef_channel, EefAction eef_action) override;
         std::string GetHomeTrigerStateString() override {return " ";};
+        void __EnableMotor(char actuator, bool enable_it) override;
 
         FkPosition_ZW __current_fk_position;
 

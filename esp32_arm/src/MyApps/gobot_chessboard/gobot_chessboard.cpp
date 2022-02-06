@@ -66,8 +66,42 @@ void GobotChessboard::pick_place_park(RobotAction* pAction){
 	// pAction->bytes[0] = 1;
 }
 
-void GobotChessboard::Calibrate(int step,bool enable_eef_coil){
-	if(step==1){
-		
+void GobotChessboard::Calibrate(int step){
+	if(step == 1){
+		// Goal:
+		//		To calibrate home_position_alpha.
+		//		Please pay attention:  The most outside angle value is 180 in degree 
+		// Process:
+		// 		1, Home alpha motor, 
+		// 		2, Then move to 180 degree , stand by for 5 seconds for observer.
+		// 		3, Then move to 90 degree 
+		String g = "G28AI";
+		this->__commandQueue->AppendGcodeCommand(g);
+		g = "G1A180";
+		this->__commandQueue->AppendGcodeCommand(g);
+		g = "G4S5";
+		this->__commandQueue->AppendGcodeCommand(g);
+		g = "G1A90";
+		this->__commandQueue->AppendGcodeCommand(g);
+	}
+	if (step == 2){
+		// Goal:
+		//		To calibrate home_position_beta.
+		//		Please pay attention:  The most outside angle value is 0 in degree 
+		// Process:
+		// 		1, Home beta motor, 
+		// 		2, Then move to 0 degree , stand by for 5 seconds for observer.
+		// 		3, Then move to 90 degree 
+		String g = "G28BI";
+		this->__commandQueue->AppendGcodeCommand(g);
+		g = "G1B0";
+		this->__commandQueue->AppendGcodeCommand(g);
+		g = "G4S5";
+		this->__commandQueue->AppendGcodeCommand(g);
+		g = "G1B180";
+		this->__commandQueue->AppendGcodeCommand(g);
+	}
+	if (step == 3){
+
 	}
 }

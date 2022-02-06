@@ -234,7 +234,18 @@ void BoxMoverHardware::_running_G1(){
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);
 }
+void BoxMoverHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
+	
+}
 
 float BoxMoverHardware::GetDistanceToTarget_IK(){
 	return this->objStepper_alpha.getDistanceToTarget() + this->objStepper_beta.getDistanceToTarget();
 }
+
+void BoxMoverHardware::__EnableMotor(char actuator, bool enable_it){
+	if (actuator == 'A')
+		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
+	if (actuator == 'B')
+		digitalWrite(PIN_BETA_ENABLE, !enable_it);
+}
+

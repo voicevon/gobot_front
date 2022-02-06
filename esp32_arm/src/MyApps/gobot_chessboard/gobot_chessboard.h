@@ -15,7 +15,7 @@ class GobotChessboard{
         void SpinOnce();
         void ParkArms(bool do_home);
         void pick_place_park(RobotAction* pAction);
-        void Calibrate(int step,EefAction enable_eef_coil);
+        void Calibrate(int step);
 
     private:
         GobotChessboard(){};

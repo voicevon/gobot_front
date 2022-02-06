@@ -287,3 +287,10 @@ void GobotHouseHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 		break;
 	}
 }
+
+void GobotHouseHardware::__EnableMotor(char actuator, bool enable_it){
+	if (actuator == 'A')
+		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
+	if (actuator == 'B')
+		digitalWrite(PIN_BETA_ENABLE, !enable_it);
+}
