@@ -2,7 +2,6 @@
 #ifdef I_AM_GOBOT_CHESSBOARD
 
 #include "gobot_chessboard.h"
-
 #include "Robot/Commu/CommuBleGattServer.h"
 #include "MyLibs/MyFunctions.hpp" 
 
@@ -24,19 +23,14 @@ void setup(){
     // Serial.println("BLE is ok....");    
     mybot = &GobotChessboard::getInstance();
     mybot->Init();
-    mybot->ParkArms(true);
-    
-    Serial.print("\nGobot-Chessboard setup is done..........");
-
     mybot->Calibrate(1);
-}
 
+    mybot->ParkArms(true);
+    Serial.print("\nGobot-Chessboard setup is done..........");
+}
 
 void loop(){
     mybot->SpinOnce();
     
 }
-
-
-
 #endif

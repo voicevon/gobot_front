@@ -66,6 +66,53 @@ void GobotChessboard::pick_place_park(RobotAction* pAction){
 	// pAction->bytes[0] = 1;
 }
 
+String GobotChessboard::__GetGcode_for_eef_action(EefAction eef_action){
+	switch (eef_action)
+	{
+	case EefAction::Sleep:
+		/* code */
+		break;
+
+	case EefAction::Load:
+		break;
+
+	case EefAction::Unload:
+		break;
+
+	case EefAction::Lower:
+		break;
+
+	case EefAction::Higher:
+		break;
+
+
+	default:
+		break;
+	}
+}
+
+void GobotChessboard::__Pickup(ChessboardCell* cell){
+	// Move to that cell, Lower, Load stone, Up
+	String gc = cell->GetG1Code();
+	this->__commandQueue->AppendGcodeCommand(gc);
+	gc = this->__GetGcode_for_eef_action(EefAction::Lower);
+	this->__commandQueue->AppendGcodeCommand(gc);
+	gc = this->__GetGcode_for_eef_action(EefAction::Load);
+	this->__commandQueue->AppendGcodeCommand(gc);
+	gc = this->__GetGcode_for_eef_action(EefAction::Higher);
+	this->__commandQueue->AppendGcodeCommand(gc);
+
+}
+
+void GobotChessboard::__Place(ChessboardCell* cell){
+	// Move to that cell, Lower, Unload, Up, Sleep
+
+}
+
+void GobotChessboard::__Park(){
+	// Move to park point.
+}
+
 void GobotChessboard::Calibrate(int step){
 	if(step == 1){
 		// Goal:
@@ -103,5 +150,9 @@ void GobotChessboard::Calibrate(int step){
 	}
 	if (step == 3){
 
+	}
+	if (step == 99){
+		// Demo movement in a loop
+		// this->pick_place_park()
 	}
 }

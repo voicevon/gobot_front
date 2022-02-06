@@ -1,11 +1,11 @@
 #ifndef __ALL_DEVICES_H_
 #define __ALL_DEVICES_H_
 
-#include <Arduino.h>
+#include <Arduino.h>  // Only want to use const PI
 
 // #define I_AM_GARMENT_BOT
-#define I_AM_GOBOT_HOUSE_2134
-// #define I_AM_GOBOT_CHESSBOARD_2134
+// #define I_AM_GOBOT_HOUSE_2134
+#define I_AM_GOBOT_CHESSBOARD_2134
 
 // #define I_AM_SMOKE_MACHINE_WEB_SERVER
 // #define I_AM_CABLE_AXIS_XPYP

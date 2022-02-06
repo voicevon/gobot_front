@@ -1,4 +1,16 @@
 #pragma once
+
+/*
+.
+.           \ beta /
+.            \    /
+.             \  /
+.              \/      
+.              /  
+.             /  alpha  
+. ----------(0,0)---------------> X
+.
+*/
 #include <Arduino.h>
 
 #define PIN_ALPHA_ENABLE 18

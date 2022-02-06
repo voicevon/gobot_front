@@ -2,6 +2,7 @@
 
 #include "actions.h"
 #include "Robot/command_queue.h"
+#include "chessboard_map.h"
 
 class GobotChessboard{
     public:
@@ -21,4 +22,8 @@ class GobotChessboard{
         GobotChessboard(){};
         RobotAction* __arm_action;
         CommandQueue* __commandQueue;
+        void __Pickup(ChessboardCell* cell);
+        void __Place(ChessboardCell* cell);
+        void __Park();
+        String __GetGcode_for_eef_action(EefAction eef_action);
 };
