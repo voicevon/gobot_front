@@ -20,9 +20,9 @@ void GobotChessboard::SpinOnce(){
 void GobotChessboard::ParkArms(bool do_home){
 	Serial.print("\n[Debug] GobotChessboard::ParkArms() is entering");
 	if (do_home){
-		String strG28 = "G28A";
+		String strG28 = "G28AI";
 		this->__commandQueue->AppendGcodeCommand(strG28);
-		strG28 = "G28B";
+		strG28 = "G28BI";
 		this->__commandQueue->AppendGcodeCommand(strG28);
 	}
 	// Park Arms

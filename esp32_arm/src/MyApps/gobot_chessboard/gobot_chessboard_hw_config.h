@@ -61,20 +61,17 @@ class GobotChessboardHardwareConfig{
     public:
         // link length in mm
         //  unit is mm
-        // #define LINK_0 191.0  // Length between origin and the two motors
-        // #define LINK_A 285.18 // Length from motor to passive joints
-        // #define LINK_B 384.51 // Length from passive joints to end effector
-        int LINK_0 = 191.0;   // Length between origin and the two motors
+        int LINK_0 = 191.0 /2 ;   // 191.0 is the Length between the centers of two motors 
         int LINK_A = 285.18;   // Length from motor to passive joints
         int LINK_B = 384.51;  // Length from passive joints to end effector
         float steps_per_rad = 3056;
         int MOTOR_MAX_SPEED = 1000;
 
 
-        float Homed_position_alpha_in_degree = 6;
-        float Homed_position_beta_in_degree = 138;
-        float Homed_position_x = 22;
-        float Homed_position_y = 56;
+        float Homed_position_alpha_in_degree = 180 - 12;
+        float Homed_position_beta_in_degree = 13;
+        // float Homed_position_x = 22;
+        // float Homed_position_y = 56;
         int Homing_acceleration_alpha; // ACCELERATION_HOMIMG_ALPHA 200 * MICRO_STEPS
         int Homing_speed_alpha; // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
         int Homing_acceleration_beta ;
