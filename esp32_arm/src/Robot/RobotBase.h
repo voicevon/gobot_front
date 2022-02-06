@@ -107,7 +107,6 @@ class RobotBase{
     protected:
         RobotBase(){};
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
-        virtual void MoveToTargetPosition();
         virtual void SpinOnce_BaseEnter();
         virtual void SpinOnce_BaseExit();
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);

@@ -27,7 +27,6 @@ class BoxMoverHardware:public RobotBase{
         void RunG1(Gcode* gcode) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
-        void MoveToTargetPosition() override{};
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
 

@@ -2,8 +2,6 @@
 #include "gobot_chessboard_hw.h"
 #include<Arduino.h>
 
-
-
 void GobotChessboardHardware::Init(){
 	Serial.print("\n[Info] GobotChessboardHardware::Init() is entering.");
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
@@ -15,18 +13,19 @@ void GobotChessboardHardware::Init(){
     this->commuDevice = objCommuUart;
 	Serial.print("\n[Info] GobotChessboardHardware::Init() is done.");
 } 
+
 void GobotChessboardHardware::HomeSingleAxis(char axis){ 
 	Serial.print("[Debug] GobotChessboardHardware::HomeSingleAxis() is entering\n" );
 	Serial.print(axis);
 	this->_homing_axis = axis;
 	if (axis=='A'){
-		this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha);
-		this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha);
+		this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
+		this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = &this->objStepper_alpha;
 		this->__homing_helper = &this->objHomeHelper_alpha;
 	}else if (axis=='B'){
-		this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_beta);
-		this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_beta);
+		this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
+		this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = &this->objStepper_beta;
 		this->__homing_helper = &this->objHomeHelper_beta;
 	}else{
@@ -77,13 +76,7 @@ void GobotChessboardHardware::_running_G28(){
 	}
 }
 
-
-
-
-
-
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
-
 void GobotChessboardHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
@@ -174,8 +167,6 @@ void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk)
 		Serial.print(rotated_angle * 180/ PI);
 		Serial.print(" )");
 	}
-
-
 	float elbows_distance_sqr = delta_x * delta_x + delta_y * delta_y;
 	float lenth_from_center_to_eef = sqrtf(this->__config.LINK_B * this->__config.LINK_B - elbows_distance_sqr / 4);
 	if (output_debug){
@@ -225,14 +216,65 @@ void GobotChessboardHardware::SetEffector(EEF action){
   }
 }
 
-
-
-
-
 void GobotChessboardHardware::RunG1(Gcode* gcode){
-  
+	Serial.print("\n[Debug] GobotChessboardHardware::RunG1()   ");
+	Serial.print(gcode->get_command());
+	if (gcode->has_letter('F')){
+		int speed = gcode->get_value('F');
+		this->objStepper_alpha.setMaxSpeed(speed);
+	}
+	// Assume G1-code want to update actuator directly, no need to do IK.
+	FkPosition_XY target_fk_xy;
+	IkPosition_AB target_ik_ab;
+	target_fk_xy.X = this->__current_fk_position.X;
+	target_fk_xy.Y = this->__current_fk_position.Y;
+	target_ik_ab.alpha = this->objStepper_alpha.getPosition();
+	target_ik_ab.beta = this->objStepper_beta.getPosition();
+	bool do_ik=false;
+	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A') * this->__config.steps_per_rad * PI/ 180;
+	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B') * this->__config.steps_per_rad * PI / 180;
+
+	// If need IK, do it now.
+	if (gcode->has_letter('X')) {
+		do_ik=true;
+		target_fk_xy.X = gcode->get_value('X');
+	}
+	if (gcode->has_letter('Y')){
+		do_ik=true;
+		target_fk_xy.Y = gcode->get_value('Y');
+	}
+	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
+	if(gcode->has_letter('R')) 
+		target_ik_ab.alpha = STEPS_PER_ROUND_MOTOR * gcode->get_value('R');
+	//Prepare actuator/driver to move to next point
+	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha );
+	this->objStepper_beta.setTargetAbs(target_ik_ab.beta);
+	//None blocking, move backgroundly.
+	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
+
+	if (true){
+		Serial.print("\n[Debug] GobotChessboardHardware::RunG1() ");
+		Serial.print(this->objStepper_alpha.getPosition());
+		Serial.print(",");
+		Serial.print(this->objStepper_beta.getPosition());
+		Serial.print(" <-- from   alpha,beta   to --> ");
+		Serial.print(target_ik_ab.alpha);
+		Serial.print(">>");
+		Serial.print(target_ik_ab.alpha);
+		Serial.print(" , ");
+		Serial.println(target_ik_ab.beta);
+	}  
 }
 
 void GobotChessboardHardware::_running_G1(){
-  
+    if (this->GetDistanceToTarget_IK() < (MAX_ACCELERATION_ALPHA_BETA)/32){
+      	this->State = IDLE;
+		Serial.print("\n[Info] GobotChessboardHardware::_running_G1() is finished. ");
+    }
+	// Serial.println(this->GetDistanceToTarget_IK());
+	// delay(100);  
 }
+float GobotChessboardHardware::GetDistanceToTarget_IK(){
+	return this->objStepper_alpha.getDistanceToTarget() + this->objStepper_beta.getDistanceToTarget();
+}
+

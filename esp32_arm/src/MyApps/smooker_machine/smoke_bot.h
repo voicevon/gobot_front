@@ -34,7 +34,6 @@ class SmokeBot: public RobotBase{
 
         HomeHelper objHomeHelper = HomeHelper(PIN_HOME, HIGH);
         
-        void MoveToTargetPosition()  override {};
         void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override {};
         void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override {};

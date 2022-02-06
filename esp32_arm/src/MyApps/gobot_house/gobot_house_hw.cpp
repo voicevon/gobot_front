@@ -201,8 +201,6 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 		Serial.print(" , ");
 		Serial.println(target_ik_ab.beta);
 	}
-
-
 }
 void GobotHouseHardware:: _running_G1(){
     if (this->GetDistanceToTarget_IK() < (MAX_ACCELERATION_ALPHPA + MAX_ACCELERATION_BETA)/64){

@@ -70,13 +70,10 @@ class GobotChessboardHardware: public RobotBase{
 
     
     private:
-        // GobotChessboardHardware(GobotChessboardHardware const& copy);            // Not Implemented
-        // GobotChessboardHardware& operator=(GobotChessboardHardware const& copy); // Not Implemented
-
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override;
         float GetDistanceToTarget_FK() override{return 0.0;};
-        float GetDistanceToTarget_IK() override{return 0.0;};
+        float GetDistanceToTarget_IK() override;
 
         Servo* eefServo;
         bool homed;
@@ -86,22 +83,19 @@ class GobotChessboardHardware: public RobotBase{
         void SpinOnce_BaseExit() override {};
         void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {return " ";};
-        void MoveToTargetPosition() {};
+        // void MoveToTargetPosition() {};
         void _running_G1() override;
         void _running_G28() override;
     
-        Led objLedPower = Led(0, PIN_LED_POWER_2112, LOW);
-        Led objLedHome_alpha = Led(1,2,LOW);
+        // Led objLedPower = Led(0, PIN_LED_POWER_2112, LOW);
+        // Led objLedHome_alpha = Led(1,2,LOW);
         HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA, LOW);
         HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA, LOW);
-
 
         Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
         Stepper objStepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
         StepControl objStepControl;
 
-        // CommuBleGattServer objCommuBle = CommuBleGattServer();
-        
         GobotChessboardHardwareConfig __config;
         Stepper* __homing_stepper;
         HomeHelper* __homing_helper;

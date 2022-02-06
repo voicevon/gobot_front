@@ -70,7 +70,6 @@ class GobotHouseHardware: public RobotBase{
         void _running_G28() override;
         std::string GetHomeTrigerStateString() override {return " ";};
 
-        void MoveToTargetPosition() override {};
 
         Led objLedPower = Led(0, PIN_LED_POWER_2109, LOW);
         Led objLedHomeAlpha = Led(1,2,LOW);
