@@ -44,17 +44,19 @@ class GobotChessboardHardwareConfig{
         //  unit is mm
 
         float MOTOR_STEPS_PER_ROUND = 360 / this->MOTOR_STEP_ANGLE * this->MOTOR_MICRO_STEPS;
-        float steps_per_rad = this->MOTOR_STEPS_PER_ROUND * this->GEAR_BOX_RATIO / PI / 2;
-
-        int LINK_0 = 191.0 / 2 ;   // 191.0 is the Length between the centers of two motors 
-        int LINK_A = 285.18;   // Length from motor to passive joints
-        int LINK_B = 384.51;  // Length from passive joints to end effector
+        float STEPS_PER_RAD = this->MOTOR_STEPS_PER_ROUND * this->GEAR_BOX_RATIO / TWO_PI;
+        // 191.0 is the Length between the centers of two motors 
+        int LINK_0 = 191.0 / 2 ;
+        // Length from motor to passive joints   
+        int LINK_A = 285.18;  
+        // Length from passive joints to end effector 
+        int LINK_B = 384.51;  
 
         int MOTOR_MAX_SPEED = 1000;
         float Homed_position_alpha_in_degree = 180+2;
         float Homed_position_beta_in_degree = 46;
-        int Homing_acceleration_alpha_beta; // ACCELERATION_HOMIMG_ALPHA 200 * MICRO_STEPS
-        int Homing_speed_alpha_beta; // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
+        int Homing_acceleration_alpha_beta = 200 * this->MOTOR_MICRO_STEPS; 
+        int Homing_speed_alpha_beta = 200 * this->MOTOR_MICRO_STEPS; 
         
         void Init(){};
         void PrintOut(){};

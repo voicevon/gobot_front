@@ -17,10 +17,10 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	float beta = PI - acosf((this->__config.LINK_A * this->__config.LINK_A + this->__config.LINK_B * this->__config.LINK_B -  rr1 ) / (this->__config.LINK_A * this->__config.LINK_B * 2));
 	float r1 = sqrtf(rr1);
 	float alpha_eef = acosf(fk->X / r1);    // [0..PI]
-	if (fk->Y < 0)  alpha_eef =  PI * 2 - alpha_eef;  // [0..2*PI]
+	if (fk->Y < 0)  alpha_eef =  TWO_PI - alpha_eef;  // [0..2*PI]
 	float alpha_link = acosf((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B)/( this->__config.LINK_A * r1 * 2));  //[0..PI]
 	float alpha = alpha_eef - alpha_link;  //[-PI.. + 2*PI]?
-	if (alpha > PI * 10 /180) alpha -= PI * 2;   // [-330..+10 ] in degree
+	if (alpha >  10 * DEG_TO_RAD) alpha -= TWO_PI;   // [-330..+10 ] in degree
 	// if (beta_reverse){
 	// 	beta = 0.0 - beta;
 	// 	float d_alpha =  PI * 3 - alpha;
@@ -61,9 +61,9 @@ void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	fk->Y = this->__config.LINK_A * sinf(rad_alpha) + this->__config.LINK_B * sinf(rad_eef);
 
 	Serial.print("\n\n[Debug] GobotHouseHardware::FK()  in degree from (alpha,beta) =(");
-	Serial.print(rad_alpha * 180 / PI);
+	Serial.print(rad_alpha * RAD_TO_DEG);
 	Serial.print(" , ");
-	Serial.print(rad_beta * 180 / PI);
+	Serial.print(rad_beta * RAD_TO_DEG);
 	Serial.print(") \n     Forward Kinematic result:  (X,Y)= (");
 	Serial.print(fk->X);
 	Serial.print(" , ");
@@ -165,9 +165,9 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	// if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A') * STEPS_PER_RAD_ALPHA * PI/ 180;
 	// if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B') * STEPS_PER_RAD_BETA * PI / 180;	
 	if (gcode->has_letter('A')) 
-		target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD_ALPHA * PI/ 180;
+		target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD_ALPHA * DEG_TO_RAD;
 	if (gcode->has_letter('B')) 
-		target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD_BETA * PI / 180;
+		target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD_BETA * DEG_TO_RAD;
 
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {

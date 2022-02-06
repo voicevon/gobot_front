@@ -46,8 +46,8 @@ void GobotChessboardHardware::_running_G28(){
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
-			ik_position.alpha = PI * this->__config.Homed_position_alpha_in_degree /180;
-			ik_position.beta = PI * this->__config.Homed_position_beta_in_degree /180;
+			ik_position.alpha =  this->__config.Homed_position_alpha_in_degree * DEG_TO_RAD;
+			ik_position.beta =  this->__config.Homed_position_beta_in_degree * DEG_TO_RAD;
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik;
@@ -57,8 +57,8 @@ void GobotChessboardHardware::_running_G28(){
 			Serial.print("\n  [Error] Trying to get home position with EEF-FK position  ");
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha * this->__config.steps_per_rad);
-		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta * this->__config.steps_per_rad);
+		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha * this->__config.STEPS_PER_RAD);
+		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta * this->__config.STEPS_PER_RAD);
 		
 		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA_BETA);
 		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHA_BETA);
@@ -107,9 +107,9 @@ void GobotChessboardHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik)
 	Serial.print(" , ");
 	Serial.print(fk->Y);
 	Serial.print(")\n    Inverse kinematic angle degree of origin (ik->alpha, ik->beta)=( ");
-	Serial.print(ik->alpha * 180 / PI);
+	Serial.print(ik->alpha * RAD_TO_DEG);
 	Serial.print(" , ");
-	Serial.print(ik->beta * 180 / PI);
+	Serial.print(ik->beta * RAD_TO_DEG);
 	Serial.print(")");
 }
 
@@ -162,9 +162,9 @@ void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk)
 		Serial.print("\norigin_slope , orign_angle, rotated_angle  = ( ");
 		Serial.print(origin_slope);
 		Serial.print(" , ");
-		Serial.print(origin_angle * 180/ PI);	
+		Serial.print(origin_angle * RAD_TO_DEG);	
 		Serial.print(" , ");
-		Serial.print(rotated_angle * 180/ PI);
+		Serial.print(rotated_angle * RAD_TO_DEG);
 		Serial.print(" )");
 	}
 	float elbows_distance_sqr = delta_x * delta_x + delta_y * delta_y;
@@ -180,9 +180,9 @@ void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk)
 	fk->Y = center_y + lenth_from_center_to_eef * sinf(rotated_angle);
 
 	Serial.print("\n\n[Debug] GobotHouseHardware::FK()  in degree from (alpha,beta) =(");
-	Serial.print(ik->alpha * 180 / PI);
+	Serial.print(ik->alpha * RAD_TO_DEG);
 	Serial.print(" , ");
-	Serial.print(ik->beta * 180 / PI);
+	Serial.print(ik->beta * RAD_TO_DEG);
 	Serial.print(") \n     Forward Kinematic result:  (X,Y)= (");
 	Serial.print(fk->X);
 	Serial.print(" , ");
@@ -231,8 +231,8 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 	target_ik_ab.alpha = this->objStepper_alpha.getPosition();
 	target_ik_ab.beta = this->objStepper_beta.getPosition();
 	bool do_ik=false;
-	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A') * this->__config.steps_per_rad * PI/ 180;
-	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B') * this->__config.steps_per_rad * PI / 180;
+	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
+	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
 
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {

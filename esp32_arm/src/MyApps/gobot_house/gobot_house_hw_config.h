@@ -15,6 +15,12 @@
 
 class GobotHouseHardwareConfig{
     public:
+        // value is vary for each robot.
+        float Homed_position_alpha_in_degree = 6;
+        // value is vary for each robot.
+        float Homed_position_beta_in_degree = 138;
+
+
         // The value 514.0 is measured/Calibrated from running 10 rounds, Not calculated from anywhere.
         // This value should be calculated from motor's datasheet.  But can not get datasheet for 28-BGY motor.
         float motor_steps_per_round = 514.0;
@@ -26,24 +32,23 @@ class GobotHouseHardwareConfig{
 
         // Should be 736.25, validated.
         float STEPS_PER_RAD_ALPHA = this->motor_steps_per_round * this->GEAR_BOX_RATIO_ALPHA / TWO_PI;  
-
         float MAX_ACCELERATION_ALPHPA = 600 * this->MOTOR_MICRO_STEPS;
         float MAX_STEPS_PER_SECOND_ALPHA = 1200 * this->MOTOR_MICRO_STEPS;
 
-        float MAX_STEPS_PER_SECOND_BETA =  500 * this->MOTOR_MICRO_STEPS;
-        float MAX_ACCELERATION_BETA = 200 * this->MOTOR_MICRO_STEPS;
         // Should be 212.7, validated. 
         float STEPS_PER_RAD_BETA =  this->motor_steps_per_round * this->GEAR_BOX_RATIO_BETA / TWO_PI;    
+        float MAX_STEPS_PER_SECOND_BETA =  500 * this->MOTOR_MICRO_STEPS;
+        float MAX_ACCELERATION_BETA = 200 * this->MOTOR_MICRO_STEPS;
 
-        float Homed_position_alpha_in_degree = 6;
-        float Homed_position_beta_in_degree = 138;
-        int Homing_acceleration_alpha; // ACCELERATION_HOMIMG_ALPHA 200 * MICRO_STEPS
-        int Homing_speed_alpha; // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
+
+        int Homing_acceleration_alpha; 
+        int Homing_speed_alpha;    
         int Homing_acceleration_beta ;
         int Homing_speed_beta;
         void Init();
         void PrintOut();
     private:
+        // Fixed by electronic wiring.
         float MOTOR_MICRO_STEPS = 1;
         // big_gear_teeth == 90 / small_gear_teeth == 10
         float GEAR_BOX_RATIO_ALPHA = 9.0;
