@@ -13,7 +13,7 @@ void CommandQueue::LinkRobot(RobotBase* mybot){
 }
 
 void CommandQueue::SpinOnce(){
-    if (_myBot->State == RobotBase::IDLE){
+    if (_myBot->State == RobotState::IDLE){
         // Serial.println("Dispacher, Got robot idle.");
         if(this->head != this->tail){
             //Run next gcode

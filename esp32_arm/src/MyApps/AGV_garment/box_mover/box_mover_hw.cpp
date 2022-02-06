@@ -156,7 +156,7 @@ void BoxMoverHardware::_running_G28(){
 		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
 		this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
 		this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
-		this->State = IDLE;
+		this->State = RobotState::IDLE;
 
 	}else{
 		// Endstop is not trigered
@@ -228,7 +228,7 @@ void BoxMoverHardware::RunG1(Gcode* gcode) {
 }
 void BoxMoverHardware::_running_G1(){
     if (this->GetDistanceToTarget_IK() < MAX_ACCELERATION_ALPHPA + MAX_ACCELERATION_BETA){
-      	this->State = IDLE;
+      	this->State = RobotState::IDLE;
 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());

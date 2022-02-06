@@ -88,15 +88,17 @@ class IkPosition_AB: public IkPositionBase{
  *          The ActuatorController might be inside of ActuatorDriver.
  *                                 might be no ActuatorCotroller in the whole system.
 */
+
+enum class RobotState{
+    IDLE,
+    RUNNING_G1,
+    RUNNING_G4,
+    RUNNING_G28
+};
 class RobotBase{
     public:
-        enum STATE{
-            IDLE,
-            RUNNING_G1,
-            RUNNING_G4,
-            RUNNING_G28
-        };
-        STATE State = IDLE;
+
+        RobotState State = RobotState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void Init();

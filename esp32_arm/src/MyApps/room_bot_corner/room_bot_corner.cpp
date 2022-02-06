@@ -26,7 +26,7 @@ void RoomBotCorner::test_home(){
     Gcode gc = Gcode("G91");
     this->RunGcode(&gc);
     do{
-       if (this->State == IDLE){
+       if (this->State == RobotState::IDLE){
         Gcode gcode = Gcode("G1 A-3");
         this->RunGcode(&gcode);
        }
@@ -82,9 +82,9 @@ void RoomBotCorner::MoveToTargetPosition(){
     }
     if (abs(distance) < this->objDcMotor.positionTolerance){
         this->objHBridge.Stop();
-        this->State = RUNNING_G1;
+        this->State = RobotState::RUNNING_G1;
     }else{
-        this->State = IDLE;
+        this->State = RobotState::IDLE;
     }
 }
 
@@ -108,7 +108,7 @@ void RoomBotCorner::RunG6(Gcode* gcode){
     }
     do{
         MoveToTargetPosition();
-    }while (!this->State==IDLE);
+    }while (this->State != RobotState::IDLE);
 }
 
 void RoomBotCorner::SpinOnce_BaseExit(){

@@ -91,7 +91,7 @@ void loop() {
 	if (var_done_count >= var_total_count) return;
 	
 
-	if ((mybot->State == RobotBase::IDLE) && (myCommandQueue.BufferIsEmpty())){
+	if ((mybot->State == RobotState::IDLE) && (myCommandQueue.BufferIsEmpty())){
 
 		// Go back to home position, keep a 0.1mm position
 		int speed = float(var_per_volume) / float(var_pull_in_second) * 540;

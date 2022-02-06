@@ -8,20 +8,20 @@ void RobotBase::SpinOnce(){
 	// Serial.print(this->State);
 	this->SpinOnce_BaseEnter();
 	switch (this->State){
-	case IDLE:
+	case RobotState::IDLE:
 		break;
-	case RUNNING_G4:
+	case RobotState::RUNNING_G4:
 		this->__running_G4();
 		break;
-	case RUNNING_G1:
+	case RobotState::RUNNING_G1:
 		this->_running_G1();
 		break;
-	case RUNNING_G28:
+	case RobotState::RUNNING_G28:
 		this->_running_G28();
 		break;
 	default:
 		Serial.print("[Warning] RobotBase::SpinOnce() Unknown current state: ");
-		Serial.print(this->State);
+		// Serial.print(this->State);
 
 		break;
 	}
@@ -43,7 +43,7 @@ void RobotBase::RunG4(Gcode* gcode){
 void RobotBase::__running_G4(){
 	long delayed = (micros() - __g4_start_timestamp) / 1000 /1000;
 	if (delayed >= __g4_time_second ){
-		this->State = IDLE;
+		this->State = RobotState::IDLE;
 		return;
 	}
 }
@@ -60,7 +60,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 		switch (gcode->g){
 		case 28:
 			// G28: Home
-			this->State = RUNNING_G28;
+			this->State = RobotState::RUNNING_G28;
 			if (gcode->has_letter('X')) home_axis='X';
 			if (gcode->has_letter('Y')) home_axis='Y';
 			if (gcode->has_letter('Z')) home_axis='Z';
@@ -85,13 +85,13 @@ void RobotBase::RunGcode(Gcode* gcode){
 			//       2. send out OK.
 			//       3. Set status to busy.
 			//       4. Start Moving.
-			this->State = RUNNING_G1;
+			this->State = RobotState::RUNNING_G1;
 			this->RunG1(gcode);
 			this->commuDevice->OutputMessage(COMMU_OK);
 			break;
 		case 4:
 			// G4 Dwell, Pause for a period of time.
-			this->State = RUNNING_G4;
+			this->State = RobotState::RUNNING_G4;
 			this->RunG4(gcode);
 			break;
 		case 6:
@@ -147,7 +147,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 			// 		Snnn Angle or microseconds
 			// Wait for all gcode, mcode is finished
 			// Serial.println("M280 Started");
-			while (!this->State == IDLE){
+			while (this->State != RobotState::IDLE){
 			this->SpinOnce();
 			}
 			if (gcode->has_letter('P')) p_value = gcode->get_value('P');

@@ -24,7 +24,7 @@ void SmokeBot::RunG1(Gcode* gcode) {
 
 void SmokeBot:: _running_G1(){
     if (this->objStepper.getDistanceToTarget() < 20){
-      this->State = IDLE;
+      this->State = RobotState::IDLE;
     }
 }
 
@@ -44,7 +44,7 @@ void SmokeBot:: _running_G28(){
 		this->objStepper.setMaxSpeed(MAX_SPEED);
 		Serial.print(" Homed postion =    " );
 		Serial.println(this->objStepper.getPosition());
-		this->State = IDLE;
+		this->State = RobotState::IDLE;
 	}else{
 		this->objStepper.setTargetRel(-5000);
 		this->objStepControl.moveAsync(this->objStepper);

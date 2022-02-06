@@ -64,7 +64,7 @@ void GobotChessboardHardware::_running_G28(){
 		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHA_BETA);
 		this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA_BETA);
 		this->objStepper_beta.setAcceleration(MAX_ACCELERATION_ALPHA_BETA);
-		this->State = IDLE;
+		this->State = RobotState::IDLE;
 
 	}else{
 		// Endstop is not trigered
@@ -191,6 +191,9 @@ void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk)
 }
 
 void GobotChessboardHardware::RunM123(uint8_t eef_channel, uint8_t eef_action){
+	while (this->State != RobotState::IDLE){
+		this->SpinOnce();
+	}
 	EefAction action = (EefAction)(eef_action);
 	switch (action){
 		case EefAction::Lower:
@@ -269,7 +272,7 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 
 void GobotChessboardHardware::_running_G1(){
     if (this->GetDistanceToTarget_IK() < (MAX_ACCELERATION_ALPHA_BETA)/32){
-      	this->State = IDLE;
+      	this->State = RobotState::IDLE;
 		Serial.print("\n[Info] GobotChessboardHardware::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());
