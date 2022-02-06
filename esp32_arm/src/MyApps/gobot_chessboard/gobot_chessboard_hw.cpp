@@ -245,7 +245,7 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 	}
 	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
 	if(gcode->has_letter('R')) 
-		target_ik_ab.alpha = STEPS_PER_ROUND_MOTOR * gcode->get_value('R');
+		target_ik_ab.alpha = this->__config.MOTOR_STEPS_PER_ROUND * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
 	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha );
 	this->objStepper_beta.setTargetAbs(target_ik_ab.beta);

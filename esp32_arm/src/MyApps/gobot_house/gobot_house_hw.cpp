@@ -22,13 +22,13 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	// }
 	float rr1= fk->X * fk->X + fk->Y * fk->Y;
 
-	float beta = PI - acosf((LINK_A * LINK_A + LINK_B * LINK_B -  rr1 ) / (2* LINK_A * LINK_B));
+	float beta = PI - acosf((this->__config.LINK_A * this->__config.LINK_A + this->__config.LINK_B * this->__config.LINK_B -  rr1 ) / (this->__config.LINK_A * this->__config.LINK_B * 2));
 	float r1 = sqrtf(rr1);
 	float alpha_eef = acosf(fk->X / r1);    // [0..PI]
-	if (fk->Y < 0)  alpha_eef = 2 * PI - alpha_eef;  // [0..2*PI]
-	float alpha_link = acosf((LINK_A * LINK_A + rr1 - LINK_B * LINK_B)/( 2*LINK_A * r1));  //[0..PI]
+	if (fk->Y < 0)  alpha_eef =  PI * 2 - alpha_eef;  // [0..2*PI]
+	float alpha_link = acosf((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B)/( this->__config.LINK_A * r1 * 2));  //[0..PI]
 	float alpha = alpha_eef - alpha_link;  //[-PI.. + 2*PI]?
-	if (alpha > PI * 10 /180) alpha -= 2 * PI;   // [-330..+10 ] in degree
+	if (alpha > PI * 10 /180) alpha -= PI * 2;   // [-330..+10 ] in degree
 	// if (beta_reverse){
 	// 	beta = 0.0 - beta;
 	// 	float d_alpha =  PI * 3 - alpha;
@@ -63,10 +63,10 @@ void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 	float rad_beta = ik->beta / STEPS_PER_RAD_BETA;
-	float rad_eef = rad_beta + ik->alpha /STEPS_PER_RAD_ALPHA;
+	float rad_eef = rad_beta + ik->alpha / STEPS_PER_RAD_ALPHA;
 	float rad_alpha = ik->alpha /STEPS_PER_RAD_ALPHA;
-	fk->X = LINK_A * cosf(rad_alpha) + LINK_B * cosf(rad_eef);
-	fk->Y = LINK_A * sinf(rad_alpha) + LINK_B * sinf(rad_eef);
+	fk->X = this->__config.LINK_A * cosf(rad_alpha) + this->__config.LINK_B * cosf(rad_eef);
+	fk->Y = this->__config.LINK_A * sinf(rad_alpha) + this->__config.LINK_B * sinf(rad_eef);
 
 	Serial.print("\n\n[Debug] GobotHouseHardware::FK()  in degree from (alpha,beta) =(");
 	Serial.print(rad_alpha * 180 / PI);

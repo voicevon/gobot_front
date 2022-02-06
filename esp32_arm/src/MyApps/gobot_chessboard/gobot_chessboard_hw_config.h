@@ -37,14 +37,14 @@
 #define MAX_STEPS_PER_SECOND_ALPHA_BETA 1200 * 16 //MICRO_STEPS
 #define MAX_ACCELERATION_ALPHA_BETA 600 * 16 //MICRO_STEPS
 
-#define STEPS_PER_ROUND_MOTOR 123
+// #define STEPS_PER_ROUND_MOTOR 123
 class GobotChessboardHardwareConfig{
     public:
         // link length in mm
         //  unit is mm
 
-        float STEPS_PER_MOTOR_ROUND = 360 / this->MOTOR_STEP_ANGLE * this->MOTOR_MICRO_STEPS;
-        float steps_per_rad = this->STEPS_PER_MOTOR_ROUND * this->GEAR_BOX_RATIO / PI / 2;
+        float MOTOR_STEPS_PER_ROUND = 360 / this->MOTOR_STEP_ANGLE * this->MOTOR_MICRO_STEPS;
+        float steps_per_rad = this->MOTOR_STEPS_PER_ROUND * this->GEAR_BOX_RATIO / PI / 2;
 
         int LINK_0 = 191.0 / 2 ;   // 191.0 is the Length between the centers of two motors 
         int LINK_A = 285.18;   // Length from motor to passive joints
