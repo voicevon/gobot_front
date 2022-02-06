@@ -273,3 +273,17 @@ void GobotHouseHardware::_running_G28(){
 }
 
 
+void GobotHouseHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
+	switch (eef_action)
+	{
+	case EefAction::Suck:
+		break;
+	case EefAction::Release:
+		break;
+	case EefAction::Sleep:
+		break;
+	default:
+		Serial.print("\n [Warning] GobotHouseHardware::RunM123()  ");
+		break;
+	}
+}

@@ -190,12 +190,8 @@ void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk)
 	Serial.print(")");
 }
 
-void GobotChessboardHardware::RunM123(uint8_t eef_channel, uint8_t eef_action){
-	while (this->State != RobotState::IDLE){
-		this->SpinOnce();
-	}
-	EefAction action = (EefAction)(eef_action);
-	switch (action){
+void GobotChessboardHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
+	switch (eef_action){
 		case EefAction::Lower:
 			eefServo->write(180);
 			break;

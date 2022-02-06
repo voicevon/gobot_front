@@ -65,3 +65,9 @@ void GobotChessboard::pick_place_park(RobotAction* pAction){
 	}
 	// pAction->bytes[0] = 1;
 }
+
+void GobotChessboard::Calibrate(int step,bool enable_eef_coil){
+	if(step==1){
+		
+	}
+}

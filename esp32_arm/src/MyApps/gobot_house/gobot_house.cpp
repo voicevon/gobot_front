@@ -106,7 +106,7 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 		this->__Home();
 		for(int i=7; i>=0;i--){
 			this->__Enable_eefCoil(enable_eef_coil);
-			this->__Move_fromRoom_toDoor(i,false);
+			this->__Move_fromRoom_toDoor(i, false);
 			this->__Enable_eefCoil(false);
 			this->__Pause(1);
 			this->__Enable_eefCoil(enable_eef_coil);

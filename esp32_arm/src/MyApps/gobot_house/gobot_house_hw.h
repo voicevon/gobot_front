@@ -12,9 +12,7 @@
 #include "Robot/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
 #include "gobot_house_hw_config.h"
-
-// #define COIL_COUNT 53
-// #define CHIPS_COUNT  4
+#include "Robot/eef_standard_code.h"
 
 #define HOUSE_ALPHA_AXIS 10
 #define HOUSE_BETA_AXIS 11
@@ -69,6 +67,7 @@ class GobotHouseHardware: public RobotBase{
         void _running_G1() override;
         void _running_G28() override;
         std::string GetHomeTrigerStateString() override {return " ";};
+        void RunM123(uint8_t eef_channel, EefAction eef_action);
 
 
         Led objLedPower = Led(0, PIN_LED_POWER_2109, LOW);

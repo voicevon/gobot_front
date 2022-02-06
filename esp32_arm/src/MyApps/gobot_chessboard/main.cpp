@@ -28,11 +28,13 @@ void setup(){
     
     Serial.print("\nGobot-Chessboard setup is done..........");
 
+    mybot->Calibrate(1, false);
 }
 
 
 void loop(){
     mybot->SpinOnce();
+    
 }
 
 

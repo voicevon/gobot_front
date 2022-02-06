@@ -117,6 +117,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 	}else if(gcode->has_m){
 		uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
 		uint8_t s_value = 0;
+		EefAction action;
 		switch (gcode->m){
 		case 42:
 			p_value =  gcode->get_value('P');
@@ -134,11 +135,15 @@ void RobotBase::RunGcode(Gcode* gcode){
 			this->commuDevice->WriteNotification(result);
 			break;
 
-		case 123:   
+		case 123:
 			//M123 P=channel_index, S=Set EEF 			
+			while (this->State != RobotState::IDLE){
+				this->SpinOnce();
+			}
 			p_value =  gcode->get_value('P');
 			s_value = gcode->get_value('S');
-			this->RunM123(p_value, s_value);
+			action = (EefAction)s_value;
+			this->RunM123(p_value, action);
 			break;
 
 		case 280:
@@ -148,13 +153,15 @@ void RobotBase::RunGcode(Gcode* gcode){
 			// Wait for all gcode, mcode is finished
 			// Serial.println("M280 Started");
 			while (this->State != RobotState::IDLE){
-			this->SpinOnce();
+				this->SpinOnce();
 			}
 			if (gcode->has_letter('P')) p_value = gcode->get_value('P');
 			if (gcode->has_letter('S')) s_value = gcode->get_value('S');
 			ledcWrite(p_value, s_value);   // from ledcWrite(ledChannel, dutyCycle);
 			this->commuDevice->OutputMessage(COMMU_OK);
 			this->commuDevice->WriteNotification("IDLE");
+			break;
+
 		default:
 			break;
 		}
