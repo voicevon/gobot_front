@@ -25,5 +25,7 @@ class GobotChessboard{
         void __Pickup(ChessboardCell* cell);
         void __Place(ChessboardCell* cell);
         void __Park();
+        void __Home();
+        void __Calibrate_99();
         String __GetGcode_for_eef_action(EefAction eef_action);
 };

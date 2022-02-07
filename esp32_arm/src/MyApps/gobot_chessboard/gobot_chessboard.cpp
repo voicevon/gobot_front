@@ -111,6 +111,28 @@ void GobotChessboard::__Place(ChessboardCell* cell){
 
 void GobotChessboard::__Park(){
 	// Move to park point.
+	ChessboardCell park_point = ChessboardCell('W',0);
+	String gc = park_point.GetG1Code();
+	this->__commandQueue->AppendGcodeCommand(gc);
+}
+
+void GobotChessboard::__Home(){
+	String g = "G28AI";
+	this->__commandQueue->AppendGcodeCommand(g);
+	g = "G28BI";
+	this->__commandQueue->AppendGcodeCommand(g);
+
+}
+
+void GobotChessboard::__Calibrate_99(){
+	this->__Home();
+	for (uint8_t x =0; x<=19;x++){
+		for (uint8_t y=0; y<=19; y++){
+			ChessboardCell cell = ChessboardCell(x,y);
+			String gc = cell.GetG1Code();
+			this->__commandQueue->AppendGcodeCommand(gc);
+		}
+	}
 }
 
 void GobotChessboard::Calibrate(int step){
@@ -149,10 +171,12 @@ void GobotChessboard::Calibrate(int step){
 		this->__commandQueue->AppendGcodeCommand(g);
 	}
 	if (step == 3){
-
+		// Move to Park point.
+		this->__Home();
+		this->__Park();
 	}
 	if (step == 99){
 		// Demo movement in a loop
-		// this->pick_place_park()
+		this->__Calibrate_99();
 	}
 }

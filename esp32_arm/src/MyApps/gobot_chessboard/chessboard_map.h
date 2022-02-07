@@ -23,16 +23,17 @@
 
 class ChessboardCell{
     public:
-        ChessboardCell(char row_name, uint8_t col_index);
-        ChessboardCell(String go_cell_name);
-        String GetG1Code();  //TODO: Can return arduino string or pointer?
+        ChessboardCell(char row_name, uint8_t col_index){};
+        ChessboardCell(uint8_t row_index, uint8_t col_index){};
+        ChessboardCell(String go_cell_name){};
+        String GetG1Code(){};  //TODO: Can return arduino string or pointer?
 
     private:
-        void __GetXY(FkPosition_XY* to_xy);
+        void __GetXY(FkPosition_XY* to_xy){};
 
 };
 
 class ChessboardMap{
-    String GetG1Code(ChessboardCell* cell);  //TODO: Can return arduino string or pointer?
+    String GetG1Code(ChessboardCell* cell){};  //TODO: Can return arduino string or pointer?
 
 };
