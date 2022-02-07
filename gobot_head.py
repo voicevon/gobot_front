@@ -4,7 +4,7 @@ from gogame.chessboard_cell import Stone
 from gogame.chessboard import ChessboardLayout
 from gogame.died_area_scanner import DiedAreaScanner
 from controller import Controller
-from ai_client import GoGameAiClient
+from gobot_ai_client import GoGameAiClient
 from config import config as app_config
 
 
@@ -98,7 +98,7 @@ class GobotHead():
     
     def __remove_one_cell_to_trash(self, color):
         '''
-        return: how many chesses have benn removed
+        return: how many stones have benn removed
             0 = zero chess has been removed
             1 = one chess has been removed
         '''
@@ -141,7 +141,7 @@ class GobotHead():
         if command == 4:
             self.__ai.start_new_game()
             g_mqtt.publish('gobot/smf/current', 'computer_playing')
-            self.__goto = self.at_state_computer_play
+            self.__goto = self.at_state_user_play
         else:
             print(self.__FC_YELLOW + '[Warning]: GoManger.at_begining()  scanned command=%d' %command)
             self.__goto = self.at_state_game_over
@@ -179,8 +179,8 @@ class GobotHead():
             # some time the ai_player will return a 'resign' as a cell name.
             logging.info(self.__FC_PINK + 'AI step: place black at: %s' %cell_name + self.__FC_RESET)
             # robot arm play a chess, The instruction is from AI.
-            self.__controller.action_pickup_chess_from_warehouse()
-            self.__controller.action_place_chess_to_a_cell(cell_name=cell_name)
+            self.__controller.action_pickup_stone_from_warehouse()
+            self.__controller.action_place_stone_to_cell(cell_name=cell_name)
             self.__ai.layout.play(cell_name, self.__BLACK)
 
         self.__goto = self.at_state_scan_died_white
@@ -278,7 +278,7 @@ class GobotHead():
         do_print_diffs = False
         diffs = self.__ai.layout.compare_with(stable_layout)
         if len(diffs) == 0:
-            # there is no use move
+            # there is no user move
             pass
         elif len(diffs) == 1:
             # detected user move, and only one move, need to check color
@@ -395,10 +395,10 @@ class GobotHead():
         die_helper.start(layout.get_layout_array(),self.__BLACK)
 
 
-    def spin_once(self):
+    def SpinOnce(self):
         # self.test()
         # return
-        print('start spin')
+        print('[Info] GobotHead.SpinOnce() is entering.')
         self.__last_image = self.__eye.take_picture()
         print('taken picture')
         if app_config.publish_image_origin.value:
@@ -423,7 +423,7 @@ class GobotHead():
             self.__controller.spin_once()
             time.sleep(1)
         #time.sleep(20)
-        return;
+        return
         self.__controller.action_pickup_stone_from_warehouse()
         self.__controller.action_place_stone_to_cell('Q4')
         self.__controller.action_place_stone_to_trash_bin()
@@ -437,7 +437,7 @@ if __name__ == '__main__':
         g_mqtt.connect_to_broker('123457','voicevon.vicp.io',1883,'von','von1970')
     myrobot = GobotHead()
     while True:
-        myrobot.spin_once()
+        myrobot.SpinOnce()
 
 
     while True:

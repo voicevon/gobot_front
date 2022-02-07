@@ -24,5 +24,6 @@ pip3 install paho-mqtt
 
 # Tasks and Functions
 - [] Recognize go game chessboard and stone position.
-- [] Send layout to MQTT broker.
+- [] Send layout (or layout image) to MQTT broker.
 - [] Simple GPIO to turn on/off some LED lights to indicate status or progress
+- [] BLE communication to Gobot-Chessboard and Gobot-House.
