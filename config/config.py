@@ -3,6 +3,7 @@ import sys
 # sys.path.append('/home/pi/pylib')
 from mqtt_helper import MqttConfigableItem,g_mqtt
 from config.config_mqtt import ConfigMqtt
+from config.config import config
 
 
 class config:

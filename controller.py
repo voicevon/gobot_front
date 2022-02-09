@@ -42,7 +42,7 @@ class Controller:
         '''
         self.__current_action = bytearray([0]*14)
         self.__next_action = bytearray([0]*14)
-        BleServerHead the_head= BleServerHead()
+        the_head= BleServerHead()
         self.__bleClient = BleSingleClient(the_head)
 
         self.Location_A1 = (-200.25, 589.75)
