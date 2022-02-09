@@ -1,5 +1,6 @@
-from config import config as  app_config
-from commuDevice.ble_single_client import BleSingleClient
+from config.config import config as  app_config
+
+from commuDevice.ble_single_client import BleSingleClient, BleServerHead
 import logging
 import sys
 import time
@@ -41,7 +42,8 @@ class Controller:
         '''
         self.__current_action = bytearray([0]*14)
         self.__next_action = bytearray([0]*14)
-        self.__bleClient = BleSingleClient()
+        BleServerHead the_head= BleServerHead()
+        self.__bleClient = BleSingleClient(the_head)
 
         self.Location_A1 = (-200.25, 589.75)
         self.Location_T19 = (200.25, 161.25)
