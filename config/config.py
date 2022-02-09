@@ -2,7 +2,8 @@ from config.config_gogame_ai_server import ConfigGoGame
 import sys
 # sys.path.append('/home/pi/pylib')
 from mqtt_helper import MqttConfigableItem,g_mqtt
-from config_mqtt import ConfigMqtt
+from config.config_mqtt import ConfigMqtt
+
 
 class config:
     #platform = 'UBUNTU_GUI'

@@ -63,7 +63,7 @@ class ChessboardVision():
         self.__VIEW_RANGE = 1.6
 
         self.__inspect_cell =  ChessboardCell()
-        self.__inspect_cell.from_name(app_config.robot_eye.layout_scanner.inspecting.cell_name)
+        # self.__inspect_cell.from_name(app_config.robot_eye.layout_scanner.inspecting.cell_name)
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self._BG_GREEN = TerminalFont.Color.Background.green
