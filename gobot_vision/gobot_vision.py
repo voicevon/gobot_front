@@ -81,7 +81,7 @@ class GobotVision():
             return self.__commander.get_command_from_image(origin_image)
 
 
-    def get_chessboard_layout(self, origin_image) -> tuple(ChessboardLayout, int):
+    def get_chessboard_layout(self, origin_image):
         '''
         Top level of get layout.
         return layout, stable_depth. if stable_depth <= 0 , is saying can not get board image.

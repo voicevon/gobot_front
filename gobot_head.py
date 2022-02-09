@@ -130,8 +130,8 @@ class GobotHead():
                 if area[col][row] == 0:
                     cell = ChessboardCell()
                     cell.from_col_row_id(col,row)
-                    # self.__controller.action_pickup_chess_from_a_cell(cell.name)
-                    # self.__controller.action_place_chess_to_trash_bin()
+                    # self.__controller.action_pickup_stone_from_cell(cell.name)
+                    # self.__controller.action_place_stone_to_trash_bin()
                     self.__ai_go.layout.play_col_row(col,row,self.__BLANK)
 
     def at_state_begin(self):
@@ -193,8 +193,8 @@ class GobotHead():
         else:
             # only remove one cell of the died area.
             # will go on to remove other cells on the next invoking
-            self.__controller.action_pickup_chess_from_a_cell(cell.name)
-            self.__controller.action_place_chess_to_trash_bin()
+            self.__controller.action_pickup_stone_from_cell(cell.name)
+            self.__controller.action_place_stone_to_trash_bin()
             self.__ai_go.layout.play(cell.name, self.__BLANK)
             self.__died_area_scanner.died_cell_removed_first_one()
 
@@ -206,8 +206,8 @@ class GobotHead():
         else:
             # only remove one cell of the died area.
             # will go on to remove other cells on the next invoking
-            self.__controller.action_pickup_chess_from_a_cell(cell.name)
-            self.__controller.action_place_chess_to_trash_bin()
+            self.__controller.action_pickup_stone_from_cell(cell.name)
+            self.__controller.action_place_stone_to_trash_bin()
             self.__ai_go.layout.play(cell.name, self.__BLANK)
             self.__died_area_scanner.died_cell_removed_first_one()
 
@@ -313,8 +313,8 @@ class GobotHead():
         layout,depth = self.__vision.get_chessboard_layout(self.__last_image)
         layout.print_out()
         cell = layout.get_first_cell(self.__BLANK)
-        self.__controller.action_pickup_chess_from_warehouse()
-        self.__controller.action_place_chess_to_a_cell(cell.name)
+        self.__controller.action_pickup_stone_from_warehouse()
+        self.__controller.action_place_stone_to_cell(cell.name)
         # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
         # layout.print_out()
         self.__goto = self.at_state_game_over
@@ -363,10 +363,10 @@ class GobotHead():
                 for i in range(id,359):
                     cell.from_id(i)
                     cell_color = layout.get_cell_color_col_row(cell.col_id, cell.row_id)
-                    self.__controller.action_pickup_chess_from_a_cell(cell.name)
+                    self.__controller.action_pickup_stone_from_cell(cell.name)
                     self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, Stone.BLANK)
                     cell.from_id(i+2)
-                    self.__controller.action_place_chess_to_a_cell(cell.name,auto_park=do_vision_check)
+                    self.__controller.action_place_stone_to_cell(cell.name,auto_park=do_vision_check)
                     self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, cell_color)
                     if do_vision_check:
                         layout = self.__eye.get_stable_layout(self.__LAYOUT_STABLE_DEPTH)
@@ -375,11 +375,11 @@ class GobotHead():
                             cell_name, source_cell_color, target_cell_color = diffs[0]
                             config.robot_eye.layout_scanner.inspecting.cell_name = cell_name
                             key = raw_input ('Test failed! Please check')
-                self.__controller.action_pickup_chess_from_a_cell('B19')
-                self.__controller.action_place_chess_to_trash_bin(park_to_view_point=False)
+                self.__controller.action_pickup_stone_from_cell('B19')
+                self.__controller.action_place_stone_to_trash_bin(park_to_view_point=False)
                 self.__target_demo_layout.set_cell_value_from_name('B19',Stone.BLANK)
-                self.__controller.action_pickup_chess_from_a_cell('A19')
-                self.__controller.action_place_chess_to_trash_bin(park_to_view_point=True)
+                self.__controller.action_pickup_stone_from_cell('A19')
+                self.__controller.action_place_stone_to_trash_bin(park_to_view_point=True)
                 self.__target_demo_layout.set_cell_value_from_name('A19',Stone.BLANK)
                 
         self.__goto = self.at_state_game_over

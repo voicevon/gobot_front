@@ -85,7 +85,7 @@ class ChessboardVision():
         return config_4_aruco_marks
 
  
-    def __append_to_history(self, layout):
+    def __append_to_history(self, layout) -> int:
         '''
         return:
             stable_depth, minimum number is 1.
@@ -111,7 +111,7 @@ class ChessboardVision():
         return self.start_scan(chessboard_image)
 
         
-    def start_scan(self, img_board, history_length=3, show_processing_image=True, pause_second=1) -> tuple(ChessboardLayout,int):
+    def start_scan(self, img_board, history_length=3, show_processing_image=True, pause_second=1) -> tuple[ChessboardLayout,int]:
         '''
         Try to get layout from image.
         return A:
@@ -182,7 +182,8 @@ class ChessboardVision():
 
         #self.__history[-1].print_out()
 
-        return self.__history[-1], stable_depth
+        # return self.__history[-1], stable_depth
+        return detected_layout, stable_depth
 
 
     def __show_debug(self, img_board,stable_depth):
