@@ -1,7 +1,7 @@
 from gobot_vision.cell_scanner import CellScanner
 from gogame.chessboard import ChessboardLayout
 from gogame.chessboard_cell import ChessboardCell, Stone
-from config import config as app_config
+from config.config import config as app_config
 import cv2
 import numpy
 import sys
@@ -111,7 +111,7 @@ class ChessboardVision():
         return self.start_scan(chessboard_image)
 
         
-    def start_scan(self, img_board, history_length=3, show_processing_image=True, pause_second=1):
+    def start_scan(self, img_board, history_length=3, show_processing_image=True, pause_second=1) -> tuple(ChessboardLayout,int):
         '''
         Try to get layout from image.
         return A:

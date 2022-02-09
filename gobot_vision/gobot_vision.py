@@ -6,7 +6,7 @@ from gobot_vision.chessboard_vision import ChessboardVision, config_4_aruco_mark
 from gobot_vision.warehouse_vision import WarehouseVision
 import cv2
 import numpy as np
-from config import config as app_config
+from config.config import config as app_config
 from gobot_vision.chessboard_vision import config_4_aruco_marks as chessboard_config
 import sys
 sys.path.append('/home/pi/pylib')
@@ -81,7 +81,7 @@ class GobotVision():
             return self.__commander.get_command_from_image(origin_image)
 
 
-    def get_chessboard_layout(self, origin_image):
+    def get_chessboard_layout(self, origin_image) -> tuple(ChessboardLayout, int):
         '''
         Top level of get layout.
         return layout, stable_depth. if stable_depth <= 0 , is saying can not get board image.
@@ -104,7 +104,7 @@ class GobotVision():
         layout, stable_depth = self.__chessboard_vision.start_scan(board_image,3,True)
             #::wqlayout.print_out() 
         #print ('Stable Depth of the layout ', stable_depth)
-        return layout, stable_depth
+        return (layout, stable_depth)
 
     def get_warehouse_plate(self,origin_image):
         config = WarehouseVision().create_finder_config()

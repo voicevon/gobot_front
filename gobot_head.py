@@ -102,7 +102,7 @@ class GobotHead():
             0 = zero chess has been removed
             1 = one chess has been removed
         '''
-        the_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
+        (the_layout, stable_depth) = self.__vision.get_chessboard_layout(self.__last_image)
         the_layout.print_out()
         cell = the_layout.get_first_cell(color)
         if cell is not None:
@@ -110,7 +110,7 @@ class GobotHead():
             # move the first chess cell to trash
             # cell = ChessboardCell()
             # cell.from_col_row_id(col_id=col, row_id=row)
-            self.__controller.action_pickup_stone_from_a_cell(cell.name)
+            self.__controller.action_pickup_stone_from_cell(cell.name)
             self.__controller.action_place_stone_to_trash_bin()
             return 1
         return 0

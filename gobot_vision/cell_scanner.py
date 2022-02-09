@@ -4,7 +4,7 @@ import numpy
 
 import time
 from gogame.chessboard_cell import Stone
-from config import config as app_config
+from config.config import config as app_config
 import sys
 sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont

@@ -1,5 +1,25 @@
 # These two references are really not good !
 # Like lower class is reference higher class !
+
+
+
+#                           
+#
+#                     The number and position of arucodes
+#            
+#                           34 ---------- 21
+#                           |             |
+#                           |             |
+#                           |  Chessboard |
+#                           |             |
+#                           13 --------- 15
+#                             \          /
+#                              \ House  /
+#                               --------
+#                             
+
+
+
 # TODO: Reconstruct 
 from gobot_vision.commander_vision import config_2_aruco_marks
 from gobot_vision.chessboard_vision import config_4_aruco_marks
@@ -12,7 +32,7 @@ from math import sin, cos
 import sys
 sys.path.append ("/home/pi/pylib")
 from mqtt_helper import g_mqtt
-from config import config
+from config.config import config
 
 
 class GridFinder():
