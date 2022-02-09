@@ -12,7 +12,7 @@ import logging
 
 # from gogame.chessboard_cell import ChessboardCell
 from gogame.chessboard import ChessboardLayout
-from config import config as app_config
+from config.config import config
 import sys
 sys.path.append('/pi/home/pylib')
 # import os
@@ -32,11 +32,11 @@ class GoGameAiClient(object):
         self.__is_connected = False
         self.__socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)      # 定义socket类型，网络通信，TCP
 
-        self.__BLANK = app_config.game_rule.cell_color.blank
-        self.__BLACK = app_config.game_rule.cell_color.black
-        self.__WHITE = app_config.game_rule.cell_color.white
+        self.__BLANK = config.game_rule.cell_color.blank
+        self.__BLACK = config.game_rule.cell_color.black
+        self.__WHITE = config.game_rule.cell_color.white
 
-        self.__FC_BLACK = app_config.game_rule.cell_color.black
+        self.__FC_BLACK = config.game_rule.cell_color.black
 
 
 
@@ -75,8 +75,8 @@ class GoGameAiClient(object):
             logging.warn('GoGameAiCient: connect() is invoked when connected')
             return
 
-        server = app_config.server.AI.ip
-        port = app_config.server.AI.port
+        server = config.server.AI.ip
+        port = config.server.AI.port
         # try:
         print('>>>>>>>>>>>>>>>>>>>>>>>>>> server: %s Port: %d'%(server, port))
         self.__socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)      # 定义socket类型，网络通信，TCP
@@ -94,7 +94,7 @@ class GoGameAiClient(object):
         if(ret.count("=") > 0):
             print("AI棋盘: 清空成功\r\n")
             self.layout.clear()
-            app_config.current_game.lastest_move_cell_name = None
+            config.current_game.lastest_move_cell_name = None
         else:
             logging.error('Start ai player error! ')
 
@@ -111,7 +111,7 @@ class GoGameAiClient(object):
         ret = self.__to_ai('genmove b')
         cell_name = ret.replace("= ", "")
         self.layout.play(cell_name, self.__FC_BLACK)
-        app_config.current_game.lastest_move_cell_name = cell_name
+        config.current_game.lastest_move_cell_name = cell_name
         return cell_name
 
     def feed_user_move(self, cell_name):
@@ -119,7 +119,7 @@ class GoGameAiClient(object):
         command = "play w " + cell_name
         ret = self.__to_ai(command)
         if ret.decode().count("=") > 0:
-            app_config.current_game.lastest_move_cell_name = cell_name
+            config.current_game.lastest_move_cell_name = cell_name
             return
         else:
             logging.warn('feed_user_move() ret=%s' %ret)
