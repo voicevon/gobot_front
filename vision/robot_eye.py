@@ -1,10 +1,10 @@
 
 from math import sin, cos
-from picamera.array import PiRGBArray
 from picamera import PiCamera
+from picamera.array import PiRGBArray  # sudo apt-get install python3-picamera
 
 import numpy as np
-import cv2 
+import cv2  # pip3 install opencv-python  #sudo apt-get install python3-pip
 import glob
 #import keyboard   #pip3 install keyboard, Doesn't work on Pi zero
 import pathlib
