@@ -1,6 +1,6 @@
 from config.config import Config as  app_config
 
-from commuDevice.ble_single_client import BleSingleClient, BleServerHead
+# from commuDevice.ble_single_client import BleSingleClient, BleServerHead
 import logging
 import sys
 import time
@@ -42,8 +42,8 @@ class Controller:
         '''
         self.__current_action = bytearray([0]*14)
         self.__next_action = bytearray([0]*14)
-        the_head= BleServerHead()
-        self.__bleClient = BleSingleClient(the_head)
+        # the_head= BleServerHead()
+        # self.__bleClient = BleSingleClient(the_head)
 
         self.Location_A1 = (-200.25, 589.75)
         self.Location_T19 = (200.25, 161.25)
@@ -180,7 +180,8 @@ class Controller:
             logging.warn('BLE message queue is full')
 
     def spin_once(self):
-        action_code = self.__bleClient.read_characteristic()
+        # action_code = self.__bleClient.read_characteristic()
+        action_code = [1,2,3,3,4,5,6,7,8,9,11]
         #logging.info('Controller.spin_once hardware= %d, current=%d,next=%d',action_code[0], self.__current_action[0], self.__next_action[0] )
         if int(action_code[0] / 2) == 0:
             # hardware robot is idle
@@ -194,7 +195,7 @@ class Controller:
                 print('ble going to update...')
                 #for i in range(0,13,1):
                 #    print(self.__next_action[i],' ')
-                self.__bleClient.write_characteristic(self.__current_action)
+                # self.__bleClient.write_characteristic(self.__current_action)
         else:
             # Hardware robot is busy for current action
             logging.info('Hardware robot is running task %d', self.__current_action[0])

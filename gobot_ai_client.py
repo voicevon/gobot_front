@@ -12,7 +12,7 @@ import logging
 
 # from gogame.chessboard_cell import ChessboardCell
 from gogame.chessboard import ChessboardLayout
-from config.config import config
+from config.config import Config
 from config.config_gogame import ConfigGoGame
 
 # from terminal_font import TerminalFont
@@ -29,11 +29,11 @@ class GoGameAiClient(object):
         self.__is_connected = False
         self.__socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)      # 定义socket类型，网络通信，TCP
 
-        self.__BLANK = config.game_rule.cell_color.blank
-        self.__BLACK = config.game_rule.cell_color.black
-        self.__WHITE = config.game_rule.cell_color.white
+        self.__BLANK = Config.game_rule.cell_color.blank
+        self.__BLACK = Config.game_rule.cell_color.black
+        self.__WHITE = Config.game_rule.cell_color.white
 
-        self.__FC_BLACK = config.game_rule.cell_color.black
+        self.__FC_BLACK = Config.game_rule.cell_color.black
         logging.warn('Init AI is done......')
 
     def __to_ai(self, command):
@@ -90,7 +90,7 @@ class GoGameAiClient(object):
         if(ret.count("=") > 0):
             print("AI棋盘: 清空成功\r\n")
             self.layout.clear()
-            config.current_game.lastest_move_cell_name = None
+            Config.current_game.lastest_move_cell_name = None
         else:
             logging.error('Start ai player error! ')
 
@@ -107,7 +107,7 @@ class GoGameAiClient(object):
         ret = self.__to_ai('genmove b')
         cell_name = ret.replace("= ", "")
         self.layout.play(cell_name, self.__FC_BLACK)
-        config.current_game.lastest_move_cell_name = cell_name
+        Config.current_game.lastest_move_cell_name = cell_name
         return cell_name
 
     def feed_user_move(self, cell_name):
@@ -115,7 +115,7 @@ class GoGameAiClient(object):
         command = "play w " + cell_name
         ret = self.__to_ai(command)
         if ret.decode().count("=") > 0:
-            config.current_game.lastest_move_cell_name = cell_name
+            Config.current_game.lastest_move_cell_name = cell_name
             return
         else:
             logging.warn('feed_user_move() ret=%s' %ret)
