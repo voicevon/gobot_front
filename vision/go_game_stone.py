@@ -1,17 +1,22 @@
-from vision.grid_cell import GridCell
 import cv2
 import numpy
 
-class GoGameStone(GridCell):
+class StoneColor:
+    BLANK = 0
+    BLACK = 1
+    WHITE = 2
+
+class GoGameStone():
 
     def __init__(self):
         '''
         A stone value might be WHITE, BLACK, default is BLANK
         The value comes from cell image.
+        TODO staticmethod
         '''
         self.BLANK = 0  # TODO: put this to base class
         self.BLACK = 1
-        self.WHITE =2
+        self.WHITE = 2
 
     def scan_black(self, cell_image, is_inspected):
         '''
@@ -31,7 +36,6 @@ class GoGameStone(GridCell):
             self.value = self.BLACK
 
         return self.value
-
 
     def __detect_circles(self, cropped_img, show_processing_image=True):
         '''
@@ -75,7 +79,6 @@ class GoGameStone(GridCell):
                 cv2.waitKey(1000000)
             return detected_circles
         return None
-
 
     def scan_white(self, cell_image, is_inspected):
         '''

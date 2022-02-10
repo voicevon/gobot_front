@@ -20,7 +20,7 @@ class Config:
     publish_mqtt = True
     
     class Internet:
-        ai = ConfigInternet.AiServer
+        ai = ConfigInternet.AppServer
         mqtt = ConfigInternet.MqttBroker
         wifi = ConfigInternet.Wifi
 

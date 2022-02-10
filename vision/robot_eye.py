@@ -1,23 +1,25 @@
 
 from math import sin, cos
-from picamera import PiCamera
-from picamera.array import PiRGBArray  # sudo apt-get install python3-picamera
+
 
 import numpy as np
 import cv2  # pip3 install opencv-python  #sudo apt-get install python3-pip
-import glob
-#import keyboard   #pip3 install keyboard, Doesn't work on Pi zero
+import glob  #import keyboard   #pip3 install keyboard, Doesn't work on Pi zero
 import pathlib
 import logging
+from abc import ABC, abstractmethod
 
-class MonoEye():
+
+class MonoEyeBase(ABC):
     '''
     take picture from Pi camera, 
     Calibration Tutourial  https://medium.com/vacatronics/3-ways-to-calibrate-your-camera-using-opencv-and-python-395528a51615
+
+    TODO Make an abstract hardware robotEye, So can debug software on any computer.
     '''
 
     def __init__(self, coefficients_file):
-        self.__camera = PiCamera(resolution=(1920,1088))
+        self.LinkCamera()
         self.__coefficients_file = coefficients_file
         mtx, dist = self.load_coefficients(coefficients_file)
         self.__mtx = mtx
@@ -26,20 +28,15 @@ class MonoEye():
         self.__show_debug_info = False
         logging.warn('Init eye is done......')
 
-    def take_picture(self, do_undistort=True):
-        rawCapture = PiRGBArray(self.__camera)
-        # grab an image from the camera
-        self.__camera.capture(rawCapture, format="bgr")
-        image = rawCapture.array
-        if do_undistort:
-            if self.__show_debug_info:
-                print('RobotEye.take_picture()   start undistortion')
-            undistort_image = cv2.undistort(image, self.__mtx, self.__dist, None, None)
-            if self.__show_debug_info:
-                print('...... end undistortion')
-            return undistort_image
-        return image
+    @abstractmethod
+    def LinkCamera():
+        pass
 
+    @abstractmethod
+    def take_picture(self, do_undistort=True):
+        pass
+    
+    @abstractmethod
     def take_batch_picture_for_calibration(self):
         file_id = 1
         WIDTH = 6
@@ -137,7 +134,6 @@ class MonoEye():
 
         return [ret, mtx, dist, rvecs, tvecs]
 
-
     def load_coefficients(self, path):
         '''Loads camera matrix and distortion coefficients.'''
         # FILE_STORAGE_READ
@@ -170,22 +166,25 @@ class MonoEye():
         cv_file.release()
         print('Calibration is done. ')
 
+
+
 class SteroEye():
     def __init__(self):
-        self.left = MonoEye('left_coefficients.yml')
-        self.right = MonoEye('right_coefficients.yml')
+        self.left = MonoEyeBase('left_coefficients.yml')
+        self.right = MonoEyeBase('right_coefficients.yml')
 
 
 
 if __name__ == '__main__':
     import sys
     sys.path.append('/home/pi/pylib')
-    from mqtt_helper import g_mqtt
+    from von.mqtt_helper import g_mqtt
     g_mqtt.connect_to_broker('camera_2021-0613','voicevon.vicp.io',1883,'von','von1970')
 
-    my_eye = MonoEye('2021-0611.yml')
+    my_eye = MonoEyePiCamera('2021-0611.yml')
     if False:
-        my_eye.take_batch_picture_for_calibration()
+        # my_eye.take_batch_picture_for_calibration()
+        my_eye.
     my_eye.recalibrate_and_save_coefficients()
     
 

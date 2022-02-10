@@ -1,9 +1,12 @@
+
+
 from gogame.chessboard import ChessboardLayout
 from gogame.chessboard_cell import ChessboardCell
 import logging
 
 
 class DiedAreaScanner(ChessboardLayout):
+
     def __init__(self):
         ChessboardLayout.__init__(self,'Died area scanner')
         self.__died_area_array = [([0] * 19) for i in range(19)]

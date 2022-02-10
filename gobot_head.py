@@ -1,3 +1,4 @@
+
 from vision.robot_eye import MonoEye
 from gobot_vision.gobot_vision import GobotVision
 from gogame.chessboard_cell import Stone
@@ -8,12 +9,8 @@ from gobot_ai_client import GoGameAiClient
 from config.config import Config
 
 
-
-import cv2
-import numpy as np
 import logging
 import time
-import sys
 
 from von.terminal_font import TerminalFont
 from von.mqtt_helper import g_mqtt

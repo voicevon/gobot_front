@@ -1,10 +1,8 @@
 import sys
-# sys.path.append('/home/pi/gobot_front')
+sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 
-from vision.grid_layout import GridLayout
 from gogame.chessboard_cell import ChessboardCell, Stone
-import sys
-sys.path.append('/home/pi/pylib')
+from vision.grid_layout import GridLayout
 from von.terminal_font import TerminalFont
 from von.mqtt_helper import g_mqtt
 
@@ -12,7 +10,9 @@ from von.mqtt_helper import g_mqtt
 
 
 class ChessboardLayout(GridLayout):
-
+    '''
+    
+    '''
     def __init__(self,name):
         '''
         We can play go game with ChessboardLayout() ?
@@ -56,8 +56,6 @@ class ChessboardLayout(GridLayout):
     def get_layout_array(self):
         return self._layout_array
 
-
-
     def play_col_row(self, col_id, row_id, color_code):
         cell = ChessboardCell()
         cell.from_col_row_id(col_id=col_id, row_id=row_id)
@@ -75,7 +73,6 @@ class ChessboardLayout(GridLayout):
         # else:
         #     logging.info('ChessBoard.play(cell_name=%s,color=%s)' %(cell_name,color))
         self._layout_array[cell.col_id][cell.row_id] = stone_color
-
 
     def get_cell_color(self, cell):
         col = cell.col

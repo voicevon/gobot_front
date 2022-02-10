@@ -1,20 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
-# sys.path.append('/home/pi/pylib')
-#sys.path.append('../')
-
-f
-
-from terminal_font import TerminalFont
-from config import config
-
-
+from von.terminal_font import TerminalFont
+from config.config import Config
 from gogame.chessboard_cell import ChessboardCell
-
-
-
 
 class GridLayout():
 
