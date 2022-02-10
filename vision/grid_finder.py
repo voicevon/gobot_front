@@ -31,8 +31,8 @@ from math import sin, cos
 
 import sys
 sys.path.append ("/home/pi/pylib")
-from mqtt_helper import g_mqtt
-from config.config import config
+from von.mqtt_helper import g_mqtt
+from config.config import Config
 
 
 class GridFinder():

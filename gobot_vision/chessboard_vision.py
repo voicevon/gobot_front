@@ -1,7 +1,7 @@
 from gobot_vision.cell_scanner import CellScanner
 from gogame.chessboard import ChessboardLayout
 from gogame.chessboard_cell import ChessboardCell, Stone
-from config.config import config as app_config
+from config.config import Config as app_config
 import cv2
 import numpy
 import sys

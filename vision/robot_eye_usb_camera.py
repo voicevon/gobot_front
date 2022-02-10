@@ -1,14 +1,13 @@
-from robot_eye import MonoEyeBase
+
+from vision.robot_eye_base import MonoEyeBase
 import cv2
 
 class MonoEyeUsbCamera(MonoEyeBase):
     def __init__(self, coefficients_file):
-        super().__init__(coefficients_file)
+        self.__camera = cv2.VideoCapture(0)
 
     def take_picture(self, do_undistort=True):
-        # grab an image from the camera
-        # self.__camera.capture(rawCapture, format="bgr")
-        image = None
+        return_value, image = self.__camera.read()
         if do_undistort:
             if self.__show_debug_info:
                 print('RobotEye.take_picture()   start undistortion')
@@ -20,12 +19,17 @@ class MonoEyeUsbCamera(MonoEyeBase):
 
     def LinkCamera():
         pass
+
+    def take_batch_picture_for_calibration(self):
+        pass
         
         
 if __name__ == '__main__':
 
     my_eye = MonoEyeUsbCamera('2021-0611.yml')
-    my_eye.take_picture(do_undistort=False)
+    image = my_eye.take_picture(do_undistort=False)
+    cv2.imshow("Captured", image)
+    cv2.waitKey(5000)
     if False:
         my_eye.take_batch_picture_for_calibration()
-    my_eye.recalibrate_and_save_coefficients()
+        my_eye.recalibrate_and_save_coefficients()

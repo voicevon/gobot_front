@@ -2,7 +2,7 @@ import cv2
 import logging
 from vision.grid_finder import GridFinder
 from gobot_vision.commander_vision import config_2_aruco_marks
-from config.config import config as app_config
+from config.config import Config as app_config
 import sys
 sys.path.append('/home/pi/pylib')
 from von.mqtt_helper import g_mqtt

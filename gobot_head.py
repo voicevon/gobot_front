@@ -1,5 +1,8 @@
 
-from vision.robot_eye import MonoEye
+# from vision.robot_eye_pi_camera import MonoEyePiCamera
+from vision.robot_eye_usb_camera import MonoEyeUsbCamera
+
+
 from gobot_vision.gobot_vision import GobotVision
 from gogame.chessboard_cell import Stone
 from gogame.chessboard import ChessboardLayout
@@ -55,7 +58,8 @@ class GobotHead():
         self.init()
 
     def init(self):
-        self.__eye = MonoEye('2021-0611.yml')
+        # self.__eye = MonoEyePiCamera('2021-0611.yml')
+        self.__eye = MonoEyeUsbCamera('2021-0611.yml')
         self.__vision = GobotVision()
         self.__ai = GoGameAiClient()
         self.__controller = Controller()

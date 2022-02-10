@@ -166,8 +166,6 @@ class MonoEyeBase(ABC):
         cv_file.release()
         print('Calibration is done. ')
 
-
-
 class SteroEye():
     def __init__(self):
         self.left = MonoEyeBase('left_coefficients.yml')

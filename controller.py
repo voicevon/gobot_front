@@ -1,4 +1,4 @@
-from config.config import config as  app_config
+from config.config import Config as  app_config
 
 from commuDevice.ble_single_client import BleSingleClient, BleServerHead
 import logging

@@ -14,11 +14,7 @@ import logging
 from gogame.chessboard import ChessboardLayout
 from config.config import config
 from config.config_gogame import ConfigGoGame
-import sys
-sys.path.append('/pi/home/pylib')
-# import os
-# sys.path.append(os.path.join('c:/','gitlib','pylib'))
-# os.path.join('c:\\gitlib\\pylib')
+
 # from terminal_font import TerminalFont
 # from mqtt_helper import g_mqtt
 
