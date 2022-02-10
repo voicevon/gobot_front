@@ -1,11 +1,11 @@
 import sys
 # sys.path.append('/home/pi/pylib')
 from mqtt_helper import MqttConfigableItem,g_mqtt
-from config.config_mqtt import ConfigMqtt
+from config.config_Internet import ConfigInternet
 
 
 
-class config:
+class Config:
     #platform = 'UBUNTU_GUI'
     # host_os = 'PI_ZERO'
 
@@ -19,6 +19,11 @@ class config:
 
     publish_mqtt = True
     
+    class Internet:
+        ai = ConfigInternet.AiServer
+        mqtt = ConfigInternet.MqttBroker
+        wifi = ConfigInternet.Wifi
+
     class mainloop:
         class at_demo_mover:
             do_vision_check = True
@@ -37,9 +42,7 @@ class config:
 
 
 
-    class server:
-        ai = ConfigGoGame()
-        mqtt = ConfigMqtt() 
+
 
     class robot_arm:
         type = 'GO_SCARA'
@@ -81,5 +84,5 @@ class config:
 if __name__ == "__main__":
     # global_config = app_config
     # s1 = global_config.robot_arm.name
-    config.robot_eye.layout_scanner.inspecting.cell_name = 'A1'
-    print(config.robot_eye.layout_scanner.inspecting.cell_name)
+    Config.robot_eye.layout_scanner.inspecting.cell_name = 'A1'
+    print(Config.robot_eye.layout_scanner.inspecting.cell_name)

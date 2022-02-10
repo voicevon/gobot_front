@@ -5,7 +5,7 @@ from gogame.chessboard import ChessboardLayout
 from gogame.died_area_scanner import DiedAreaScanner
 from controller import Controller
 from gobot_ai_client import GoGameAiClient
-from config.config import config
+from config.config import Config
 
 
 
@@ -345,7 +345,7 @@ class GobotHead():
         self.__goto = self.at_state_game_over
 
     def at_demo_mover(self):  # Must be no arguiment function for self.__goto
-        do_vision_check = config.mainloop.at_demo_mover.do_vision_check
+        do_vision_check = Config.mainloop.at_demo_mover.do_vision_check
         layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
         if stable_depth <=0:
             print('Can NOT detect chessboard image ')
@@ -386,7 +386,7 @@ class GobotHead():
                         diffs = layout.compare_with(self.__target_demo_layout, do_print_out = True)
                         if len(diffs) > 0:
                             cell_name, source_cell_color, target_cell_color = diffs[0]
-                            config.robot_eye.layout_scanner.inspecting.cell_name = cell_name
+                            Config.robot_eye.layout_scanner.inspecting.cell_name = cell_name
                             key = raw_input ('Test failed! Please check')
                 self.__controller.action_pickup_stone_from_cell('B19')
                 self.__controller.action_place_stone_to_trash_bin(park_to_view_point=False)
@@ -414,7 +414,7 @@ class GobotHead():
         print('[Info] GobotHead.SpinOnce() is entering.')
         self.__last_image = self.__eye.take_picture()
         print('taken picture')
-        if config.publish_image_origin.value:
+        if Config.publish_image_origin.value:
            g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
 
         command_image = 1
@@ -444,9 +444,9 @@ class GobotHead():
 
 if __name__ == '__main__':
     print('Prepare MQTT connection......')
-    config.publish_mqtt = True
-    if config.publish_mqtt:
-        g_mqtt.append_configable_var(config)
+    Config.publish_mqtt = True
+    if Config.publish_mqtt:
+        g_mqtt.append_configable_var(Config)
         g_mqtt.connect_to_broker('123457','voicevon.vicp.io',1883,'von','von1970')
     myrobot = GobotHead()
     while True:
