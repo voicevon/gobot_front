@@ -12,7 +12,7 @@ from config.config import Config
 import logging
 import time
 
-from von.terminal_font import TerminalFont
+from von.terminal_font import TerminalFont  # pip3 install VonPylib
 from von.mqtt_helper import g_mqtt
 
 

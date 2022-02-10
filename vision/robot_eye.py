@@ -175,16 +175,6 @@ class SteroEye():
 
 
 
-if __name__ == '__main__':
-    import sys
-    sys.path.append('/home/pi/pylib')
-    from von.mqtt_helper import g_mqtt
-    g_mqtt.connect_to_broker('camera_2021-0613','voicevon.vicp.io',1883,'von','von1970')
 
-    my_eye = MonoEyePiCamera('2021-0611.yml')
-    if False:
-        # my_eye.take_batch_picture_for_calibration()
-        my_eye.
-    my_eye.recalibrate_and_save_coefficients()
     
 
