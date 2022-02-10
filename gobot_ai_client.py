@@ -13,6 +13,7 @@ import logging
 # from gogame.chessboard_cell import ChessboardCell
 from gogame.chessboard import ChessboardLayout
 from config.config import config
+from config.config_gogame import ConfigGoGame
 import sys
 sys.path.append('/pi/home/pylib')
 # import os
@@ -39,11 +40,10 @@ class GoGameAiClient(object):
         self.__FC_BLACK = config.game_rule.cell_color.black
         logging.warn('Init AI is done......')
 
-
-
-
-
     def __to_ai(self, command):
+        '''
+        TODO:  rename to:  talk_to_ai()  ??
+        '''
         command += '\n'
         self.__socket_client.sendall(command.encode())      # 把命令发送给对端
         data = self.__socket_client.recv(1024)     # 把接收的数据定义为变量'
@@ -57,7 +57,6 @@ class GoGameAiClient(object):
         text = data.decode().replace("\n\n", "")
         return text
     
-
     def list_commands(self):
         the_list = self.__to_ai('list_commands')
         print(the_list)
@@ -76,8 +75,8 @@ class GoGameAiClient(object):
             logging.warn('GoGameAiCient: connect() is invoked when connected')
             return
 
-        server = config.server.AI.ip
-        port = config.server.AI.port
+        server = ConfigGoGame.AiServer.ip
+        port = ConfigGoGame.AiServer.port
         # try:
         print('>>>>>>>>>>>>>>>>>>>>>>>>>> server: %s Port: %d'%(server, port))
         self.__socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)      # 定义socket类型，网络通信，TCP
