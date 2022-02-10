@@ -107,7 +107,7 @@ class ChessboardLayout(GridLayout):
     def set_cell_value(self, col_id, row_id, new_value):
         self._layout_array[col_id][row_id] = new_value
         
-    def compare_with(self, target_layout, do_print_out=False):
+    def compare_with(self, target_layout, do_print_out=False) -> list:
         '''
         return: 
             total_diff_cells: the number of different cells.

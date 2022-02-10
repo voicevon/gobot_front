@@ -8,7 +8,7 @@ import cv2  # pip3 install opencv-python  #sudo apt-get install python3-pip
 import glob
 #import keyboard   #pip3 install keyboard, Doesn't work on Pi zero
 import pathlib
-
+import logging
 
 class MonoEye():
     '''
@@ -24,6 +24,7 @@ class MonoEye():
         self.__dist = dist
         self.__CALIBRATION_IMAGE_PATH = './camera_calibration_images/'
         self.__show_debug_info = False
+        logging.warn('Init eye is done......')
 
     def take_picture(self, do_undistort=True):
         rawCapture = PiRGBArray(self.__camera)

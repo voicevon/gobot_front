@@ -57,6 +57,7 @@ class Controller:
         self._FC_YELLOW = TerminalFont.Color.Fore.yellow
         self._BG_GREEN = TerminalFont.Color.Background.green
         self._FC_RESET = TerminalFont.Color.Control.reset 
+        logging.warn('Init controller is done......')
 
 
     def get_xy_from_pose_name(self, pos_name='origin'):

@@ -36,6 +36,8 @@ from config.config import config
 
 
 class GridFinder():
+    '''
+    '''
     def __init__(self, aruco_config):
         '''   
         Supported board_types:
@@ -69,10 +71,10 @@ class GridFinder():
         # self.__area_height = aruco_config.height
 
 
-    def find_corners(self, image):
+    def find_corners(self, image) -> list:
         '''
         marker_ids is a list of [top_right, bottom_right, bottome_left, top_left]
-        This code can not find any id which is greater than 250.
+        This encoding can not find any id which is greater than 250.
         So the maximum id can be used is 249. saying the range is 0 to 249
         '''
         arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_250)

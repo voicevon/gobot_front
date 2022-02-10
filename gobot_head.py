@@ -22,7 +22,22 @@ from mqtt_helper import g_mqtt
 
 
 class GobotHead():
-
+    '''
+    GobotHead is the main and starter of this application.
+    GobotHead is composed by:
+        1 eye, it read camera
+        2 vision, will recognize some components.
+            2.1  chessboard_vision, can get ChessboardLayout.
+            2.2  command_vision, can get mark on command bar.
+            2.4  house_vision, cam get park_point is empty or not.
+        3 talker_xxx, will communicate with out side.
+            3.1 talker_ai, can talk to ai-go-game-player
+            3.2 talker_mqtt, can talk to mqtt broker
+                3.2.1  subscribe topics for parameter, functions
+                3.2.2  public images, states, etc for debugging.
+            3.3 talker_arm, can talk to chessboard robot arm.
+            3.4 talker_house, can talk to house robot arm.
+    '''
     def __init__(self):
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
@@ -44,15 +59,10 @@ class GobotHead():
 
     def init(self):
         self.__eye = MonoEye('2021-0611.yml')
-        logging.warn('Init eye is done......')
         self.__vision = GobotVision()
-        logging.warn('Init vision is done......')
         self.__ai = GoGameAiClient()
-        logging.warn('Init AI is done......')
         self.__controller = Controller()
-        logging.warn('Init controller is done......')
         self.__died_area_scanner = DiedAreaScanner()
-        logging.warn('Init died_area_scanner is done......')
 
     def get_stable_layout(self,min_stable_depth):
         stable_depth = 0
@@ -124,7 +134,7 @@ class GobotHead():
             3. remove cells phisically with robot arm
         '''
         died_area_helper = DiedAreaDetector()
-        area = died_area_helper.start(self.__ai_go.layout.get_layout_array(), target_color_code)
+        area = died_area_helper.start(self.__ai.layout.get_layout_array(), target_color_code)
         for col in range(0,19):
             for row in range(0,19):
                 if area[col][row] == 0:
@@ -132,24 +142,25 @@ class GobotHead():
                     cell.from_col_row_id(col,row)
                     # self.__controller.action_pickup_stone_from_cell(cell.name)
                     # self.__controller.action_place_stone_to_trash_bin()
-                    self.__ai_go.layout.play_col_row(col,row,self.__BLANK)
+                    self.__ai.layout.play_col_row(col,row,self.__BLANK)
 
     def at_state_begin(self):
-        # scan the marks, to run markable command
+        '''
+        scan the marks, to run markable command
+        '''
         command = self.__vision.get_command_index(self.__last_image)
-
         if command == 4:
             self.__ai.start_new_game()
             g_mqtt.publish('gobot/smf/current', 'computer_playing')
             self.__goto = self.at_state_user_play
         else:
-            print(self.__FC_YELLOW + '[Warning]: GoManger.at_begining()  scanned command=%d' %command)
+            print(self.__FC_YELLOW + '[Warning]: GobotHead.at_state_begining()  scanned command=%d' %command)
             self.__goto = self.at_state_game_over
 
     def at_state_game_over(self):
-        # scan the marks, to run markable command
-        # command = self.__eye.get_stable_mark(self.__MARK_STABLE_DEPTH)
-
+        '''
+        scan the marks, to run markable command
+        '''
         command = self.__vision.get_command_index(self.__last_image)
         logging.info('Commander id = %d', command)
 
@@ -195,7 +206,7 @@ class GobotHead():
             # will go on to remove other cells on the next invoking
             self.__controller.action_pickup_stone_from_cell(cell.name)
             self.__controller.action_place_stone_to_trash_bin()
-            self.__ai_go.layout.play(cell.name, self.__BLANK)
+            self.__ai.layout.play(cell.name, self.__BLANK)
             self.__died_area_scanner.died_cell_removed_first_one()
 
     def at_state_withdraw_black(self):
@@ -208,31 +219,31 @@ class GobotHead():
             # will go on to remove other cells on the next invoking
             self.__controller.action_pickup_stone_from_cell(cell.name)
             self.__controller.action_place_stone_to_trash_bin()
-            self.__ai_go.layout.play(cell.name, self.__BLANK)
+            self.__ai.layout.play(cell.name, self.__BLANK)
             self.__died_area_scanner.died_cell_removed_first_one()
 
-    def at_state_scan_died_black(self):
-        self.__died_area_scanner.set_layout_array(self.__ai_go.layout.get_layout_array())
+    def at_state_scan_died_white(self):
+        self.__died_area_scanner.set_layout_array(self.__ai.layout.get_layout_array())
         count = self.__died_area_scanner.start_scan(self.__BLACK)
         if count > 0:
             self.__died_area_scanner.print_out_died_area()
 
-        self.__goto = self.at_state_withdraw_black
+        self.__goto = self.at_state_withdraw_white
 
-    def at_state_scan_died_white(self):
+    def at_state_scan_died_black(self):
         self.__died_area_scanner.set_layout_array(self.__ai.layout.get_layout_array())
         count = self.__died_area_scanner.start_scan(self.__WHITE)
         if count > 0:
             self.__died_area_scanner.print_out_died_area()
         self.__goto = self.at_state_withdraw_white
 
-    def at_state_compare_layout_white(self):
+    def at_state_compare_layout_black(self):
         layout = self.__eye.get_stable_layout(self.__LAYOUT_STABLE_DEPTH)
-        diffs = self.__ai_go.layout.compare_with(layout)
+        diffs = self.__ai.layout.compare_with(layout)
         if len(diffs) == 0:
             self.__goto = self.at_state_computer_play
         else: 
-            diffs = self.__ai_go.layout.compare_with(layout, do_print_out=True)
+            diffs = self.__ai.layout.compare_with(layout, do_print_out=True)
             time.sleep(10)
 
     def at_state_compare_layout_black(self):
@@ -259,7 +270,9 @@ class GobotHead():
             time.sleep(10)
 
     def at_state_user_play(self):
-        # check mark command, might be game over. 
+        '''
+        check mark command, might be game over.
+        ''' 
         mark = self.__vision.get_command_index(self.__last_image)
         
         if mark != 4:
@@ -268,8 +281,8 @@ class GobotHead():
 
             key = raw_input('Please confirm Game over by input "over"  ')
             if key == 'over':
-                self.__ai_go.layout.clear()
-                self.__ai_go.stop_game()
+                self.__ai.layout.clear()
+                self.__ai.stop_game()
                 g_mqtt.publish('gobot/smf/current','game_over', retain=True)
                 self.__goto = self.at_state_game_over
                 return
@@ -281,31 +294,31 @@ class GobotHead():
             # there is no user move
             pass
         elif len(diffs) == 1:
-            # detected user move, and only one move, need to check color
-            for cell_name, ai_color,detected_color in diffs:
-                if ai_color==self.__BLANK and detected_color==self.__WHITE:
-                    # detected cell is  White color. Means user put in a cell
-                    print(self.__FC_PINK + 'detected: user has placed to cell: ' + cell_name)
+            # detected one stone is placed, and only one stone is placed, need to check color
+            for cell_name, ai_color, detected_color in diffs:
+                if ai_color==self.__BLANK and detected_color==self.__BLACK:
+                    # detected the placed stone is black color. Means user put a stone onto a cell
+                    print(self.__FC_PINK + 'detected: user has placed stone onto cell: ' + cell_name)
                     # send command to PhonixGo
-                    self.__ai_go.feed_user_move(cell_name)
-                    self.__ai_go.layout.print_out()
+                    self.__ai.feed_user_move(cell_name)
+                    self.__ai.layout.print_out()
                     self.__mqtt.publish('gogame/smf/status', 'computer_playing', retain=True)
                     self.__mqtt.publish(topic="fishtank/switch/r4/command", payload="OFF", retain=True)
-                    self.__goto = self.at_state_scan_died_black
+                    self.__goto = self.at_state_scan_died_white
                     return
                 else:
                     do_print_diffs = True
-                    # self.__ai_go.layout.print_out()
+                    # self.__ai.layout.print_out()
                     # stable_layout.print_out()
         else:
             # more than one different, 
             # reason A: died area has not been entirely removed
-            # reason B: detection is wrong
+            # reason B: vision recognization is wrong.
             # reason C: layout has benn disterbed by user. Like children playing bad with angry.
             do_print_diffs = True
 
         if do_print_diffs:
-            diffs = self.__ai_go.layout.compare_with(stable_layout, do_print_out=True)
+            diffs = self.__ai.layout.compare_with(stable_layout, do_print_out=True)
             print(self.__BG_RED + self.__FC_YELLOW + 'Too many different the between two layout.' + self.__FC_RESET)
 
     def at_demo_from_warehouse(self):

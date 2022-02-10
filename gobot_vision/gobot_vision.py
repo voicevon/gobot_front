@@ -12,6 +12,7 @@ import sys
 sys.path.append('/home/pi/pylib')
 from terminal_font import TerminalFont
 from mqtt_helper import g_mqtt
+import logging
 
 
 class GobotVision():
@@ -37,6 +38,7 @@ class GobotVision():
             self.__commander = Commander()
 
         self.__publish_image = False
+        logging.warn('Init vision is done......')
 
 
     def get_stable_level (self, layout_history):

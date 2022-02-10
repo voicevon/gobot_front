@@ -1,5 +1,8 @@
 from gogame.chessboard import ChessboardLayout
 from gogame.chessboard_cell import ChessboardCell
+import logging
+
+
 class DiedAreaScanner(ChessboardLayout):
     def __init__(self):
         ChessboardLayout.__init__(self,'Died area scanner')
@@ -7,6 +10,7 @@ class DiedAreaScanner(ChessboardLayout):
 
         # self.__DIED_BLACK = self._BLACK + 100
         # self.__DIED_WHITE = self._WHITE + 100
+        logging.warn('Init died_area_scanner is done......')
 
     def __is_around_alived(self, col, row):
         '''

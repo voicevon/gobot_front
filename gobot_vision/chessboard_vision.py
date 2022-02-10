@@ -111,7 +111,7 @@ class ChessboardVision():
         return self.start_scan(chessboard_image)
 
         
-    def start_scan(self, img_board, history_length=3, show_processing_image=True, pause_second=1) -> tuple[ChessboardLayout,int]:
+    def start_scan(self, img_board, history_length=3, show_processing_image=True, pause_second=1):
         '''
         Try to get layout from image.
         return A:

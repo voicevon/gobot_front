@@ -37,6 +37,7 @@ class GoGameAiClient(object):
         self.__WHITE = config.game_rule.cell_color.white
 
         self.__FC_BLACK = config.game_rule.cell_color.black
+        logging.warn('Init AI is done......')
 
 
 
