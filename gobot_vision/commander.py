@@ -5,7 +5,7 @@ from gobot_vision.commander_vision import config_2_aruco_marks
 from config.config import config as app_config
 import sys
 sys.path.append('/home/pi/pylib')
-from mqtt_helper import g_mqtt
+from von.mqtt_helper import g_mqtt
 
 class Commander(GridFinder):
     def __init__(self):

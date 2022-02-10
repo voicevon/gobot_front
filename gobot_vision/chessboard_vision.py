@@ -6,8 +6,8 @@ import cv2
 import numpy
 import sys
 sys.path.append('/home/pi/pylib')
-from terminal_font import TerminalFont
-from mqtt_helper import g_mqtt
+from von.terminal_font import TerminalFont
+from von.mqtt_helper import g_mqtt
 
 # BLANK = 0
 # WHITE_STONE = 1

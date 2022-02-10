@@ -5,7 +5,7 @@ import logging
 import sys
 import time
 # sys.path.append("/home/pi/pylib")
-from terminal_font import TerminalFont
+from von.terminal_font import TerminalFont
 
 
 

@@ -12,11 +12,11 @@ from config.config import Config
 import cv2
 import numpy as np
 import logging
-import sys
 import time
-# sys.path.append("/home/pi/pylib")
-from terminal_font import TerminalFont
-from mqtt_helper import g_mqtt
+import sys
+
+from von.terminal_font import TerminalFont
+from von.mqtt_helper import g_mqtt
 
 
 

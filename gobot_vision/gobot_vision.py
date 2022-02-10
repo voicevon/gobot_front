@@ -10,8 +10,8 @@ from config.config import config as app_config
 from gobot_vision.chessboard_vision import config_4_aruco_marks as chessboard_config
 import sys
 sys.path.append('/home/pi/pylib')
-from terminal_font import TerminalFont
-from mqtt_helper import g_mqtt
+from von.terminal_font import TerminalFont
+from von.mqtt_helper import g_mqtt
 import logging
 
 

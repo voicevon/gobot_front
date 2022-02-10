@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import sys
-sys.path.append('/home/pi/pylib')
+# sys.path.append('/home/pi/pylib')
 #sys.path.append('../')
+
+f
 
 from terminal_font import TerminalFont
 from config import config

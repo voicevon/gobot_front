@@ -7,8 +7,8 @@ from gogame.chessboard_cell import Stone
 from config.config import config as app_config
 import sys
 sys.path.append('/home/pi/pylib')
-from terminal_font import TerminalFont
-from mqtt_helper import g_mqtt
+from von.terminal_font import TerminalFont
+from von.mqtt_helper import g_mqtt
 
 
 class CellScanner():
