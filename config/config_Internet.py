@@ -1,4 +1,5 @@
 
+
 class ConfigInternet:
     '''
     TODO  Use ConfigParser with *.INI file?
@@ -19,4 +20,6 @@ class ConfigInternet:
     class Wifi:
         ssid = "FuckGFW"
         password = "refuckgfw"
+
+
 

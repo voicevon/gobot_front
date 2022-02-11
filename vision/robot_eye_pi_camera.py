@@ -3,8 +3,21 @@ from picamera import PiCamera
 from picamera.array import PiRGBArray  # sudo apt-get install python3-picamera
 from vision.robot_eye_base import MonoEyeBase
 import cv2
+import logging
+
 
 class MonoEyePiCamera(MonoEyeBase):
+
+ def __init__(self, coefficients_file):
+        self.__camera = PiCamera(resolution=(1920,1088))
+        self.__coefficients_file = coefficients_file
+        mtx, dist = self.load_coefficients(coefficients_file)
+        self.__mtx = mtx
+        self.__dist = dist
+        self.__CALIBRATION_IMAGE_PATH = './camera_calibration_images/'
+        self.__show_debug_info = False
+        logging.warn('MonoEyePiCamera.__Init() is done......')
+
     def take_picture(self, do_undistort=True):
         rawCapture = PiRGBArray(self.__camera)
         # grab an image from the camera
@@ -19,8 +32,6 @@ class MonoEyePiCamera(MonoEyeBase):
             return undistort_image
         return image
 
-    def LinkCamera():
-        super.__camera = PiCamera(resolution=(1920,1088))
         
 if __name__ == '__main__':
     import sys

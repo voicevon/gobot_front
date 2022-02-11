@@ -3,11 +3,12 @@ from math import sin, cos
 
 
 import numpy as np
-import cv2  # pip3 install opencv-python  #sudo apt-get install python3-pip
+import cv2  # pip3 install opencv-python  #sudo apt-get install python3-pip 
+            # for windows-10, pip3 install opencv-contrib-python
 import glob  #import keyboard   #pip3 install keyboard, Doesn't work on Pi zero
 import pathlib
 import logging
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, abstractproperty
 
 
 class MonoEyeBase(ABC):
@@ -17,26 +18,15 @@ class MonoEyeBase(ABC):
 
     TODO Make an abstract hardware robotEye, So can debug software on any computer.
     '''
+    
+    @property
+    def show_debug_info(self): bool
 
-    def __init__(self, coefficients_file):
-        self.LinkCamera()
-        self.__coefficients_file = coefficients_file
-        mtx, dist = self.load_coefficients(coefficients_file)
-        self.__mtx = mtx
-        self.__dist = dist
-        self.__CALIBRATION_IMAGE_PATH = './camera_calibration_images/'
-        self.__show_debug_info = False
-        logging.warn('Init eye is done......')
-
-    @abstractmethod
-    def LinkCamera():
-        pass
 
     @abstractmethod
     def take_picture(self, do_undistort=True):
         pass
     
-    @abstractmethod
     def take_batch_picture_for_calibration(self):
         file_id = 1
         WIDTH = 6

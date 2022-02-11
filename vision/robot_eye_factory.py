@@ -2,10 +2,20 @@
 import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 
+
+from vision.robot_eye_emulator import MonoEyeEmulator
+from vision.robot_eye_usb_camera import MonoEyeUsbCamera
+sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
+
 import cv2
+from enum import Enum
 
+class RobotEye_Product(Enum):
+    PaspberryPiCamera = 1
+    UsbCamera = 2
+    CameraEmulator = 3
 
-class RobotEyeFactory():
+class RobotEye_Factory():
 
     @staticmethod
     def CreatePiCameraEye():
@@ -17,11 +27,28 @@ class RobotEyeFactory():
         from vision.robot_eye_usb_camera import MonoEyeUsbCamera
         return MonoEyeUsbCamera('2021-0611.yml')
 
+    @staticmethod
+    def CreateCameraEmulator():
+        from vision.robot_eye_emulator import MonoEyeEmulator
+        obj = MonoEyeEmulator()
+        return obj
+        
+    @staticmethod
+    def CreateMonoEye(eye: RobotEye_Product):
+        if eye == RobotEye_Product.UsbCamera:
+            return RobotEye_Factory.CreateUsbCameraEye()
+
+        if eye == RobotEye_Product.CameraEmulator:
+            return RobotEye_Factory.CreateCameraEmulator()
+
+        if eye == RobotEye_Product.PaspberryPiCamera:
+            return RobotEye_Factory.CreatePiCameraEye()
+
 
         
 if __name__ == '__main__':
 
-    my_eye = RobotEyeFactory.CreateUsbCameraEye()
+    my_eye = RobotEye_Factory.CreateMonoEye(RobotEye_Product.UsbCamera)
     image = my_eye.take_picture(do_undistort=False)
     cv2.imshow("Captured", image)
     cv2.waitKey(5000)

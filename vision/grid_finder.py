@@ -77,7 +77,7 @@ class GridFinder():
         This encoding can not find any id which is greater than 250.
         So the maximum id can be used is 249. saying the range is 0 to 249
         '''
-        arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_250)
+        arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_250)  # pip3 install opencv-contrib-python
         arucoParams = cv2.aruco.DetectorParameters_create()
         corners, ids, rejected = cv2.aruco.detectMarkers(image, arucoDict, parameters=arucoParams)
         # result = []

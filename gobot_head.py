@@ -1,6 +1,8 @@
 
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
-from vision.robot_eye_usb_camera import MonoEyeUsbCamera
+# from vision.robot_eye_usb_camera import MonoEyeUsbCamera
+# from vision.robot_eye_emulator import MonoEyeEmulator
+from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 
 from gobot_vision.gobot_vision import GobotVision
@@ -16,7 +18,9 @@ import logging
 import time
 
 from von.terminal_font import TerminalFont  # pip3 install VonPylib
-from von.mqtt_helper import g_mqtt
+# from von.mqtt_helper import g_mqtt
+from config.image_logger import ImageLogger,ImageLoggerToWhere
+import cv2
 
 
 
@@ -54,16 +58,19 @@ class GobotHead():
         self.__BLANK = 0
         self.__BLACK = 1
         self.__WHITE = 2
-        logging.warn("Start init objects......")
+        logging.warning("Start init objects......")
         self.init()
 
     def init(self):
         # self.__eye = MonoEyePiCamera('2021-0611.yml')
-        self.__eye = MonoEyeUsbCamera('2021-0611.yml')
+        # self.__eye = MonoEyeUsbCamera('2021-0611.yml')
+        # self.__eye = MonoEyeEmulator()
+        self.__eye = RobotEye_Factory.CreateMonoEye(RobotEye_Product.CameraEmulator)
         self.__vision = GobotVision()
         self.__ai = GoGameAiClient()
         self.__controller = Controller()
         self.__died_area_scanner = DiedAreaScanner()
+        ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
 
     def get_stable_layout(self,min_stable_depth):
         stable_depth = 0
@@ -413,10 +420,13 @@ class GobotHead():
         # self.test()
         # return
         print('[Info] GobotHead.SpinOnce() is entering.')
-        self.__last_image = self.__eye.take_picture()
+        self.__last_image = self.__eye.take_picture(do_undistort=True)
         print('taken picture')
-        if Config.publish_image_origin.value:
-           g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
+        ImageLogger.Output("eye/origin", self.__last_image)
+        cv2.waitKey(5000)
+        
+        # if Config.publish_image_origin.value:
+        #    g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
 
         command_image = 1
         chessboard_image = 1
@@ -444,11 +454,7 @@ class GobotHead():
         self.__controller.action_park()
 
 if __name__ == '__main__':
-    print('Prepare MQTT connection......')
-    Config.publish_mqtt = True
-    if Config.publish_mqtt:
-        g_mqtt.append_configable_var(Config)
-        g_mqtt.connect_to_broker('123457','voicevon.vicp.io',1883,'von','von1970')
+
     myrobot = GobotHead()
     while True:
         myrobot.SpinOnce()
