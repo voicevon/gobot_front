@@ -76,6 +76,11 @@ class CellScanner():
         return cell_color
 
     def scan_black(self, cell_image, is_inspected):
+        '''
+        image process = cell image -> gray -> blur -> bin_image \n
+        count bin_image pixels in black
+        '''
+        minimum_black_pixed_count = 170
         gray = cv2.cvtColor(cell_image, cv2.COLOR_BGR2GRAY)
         blur = cv2.medianBlur(gray,7)
         ret, bin_image = cv2.threshold(blur, 50, 255, cv2.THRESH_BINARY_INV)
@@ -83,14 +88,13 @@ class CellScanner():
 
         cell_color = self.__BLANK
         count = cv2.countNonZero(bin_image)
-        if count > 180: 
+        if count > minimum_black_pixed_count: 
             cell_color = self.__BLACK
 
         if is_inspected:
-            # g_mqtt.publish_cv_image('gobot/debug/inspect/scan_black',cell_image)
             ImageLogger.Output('gobot/debug/inspect/scan_black',cell_image)
-            # cv2.imshow('scan black blur', blur)
-            # cv2.imshow('scab bkacj bin', bin_image)
+            cv2.imshow('scan black blur', blur)
+            cv2.imshow('scan black bin', bin_image)
             #is_success, img_encode = cv2.imencode(".jpg", blur)
             #if is_success:
                 #img_pub = img_encode.tobytes()
@@ -108,7 +112,7 @@ class CellScanner():
         cell_color = self.__BLANK
         if detected_circles is None:
             if is_inspected:
-                print('Inspected cell, no circles found!')
+                MessageLogger.Output('CellScanner.scan_white()','Inspected cell, no circles found!')
         elif len(detected_circles) == 1:
             # detected one circle. 
             height, width, depth = cell_image.shape

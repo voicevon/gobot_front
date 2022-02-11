@@ -28,6 +28,7 @@ class ImageLogger():
 
         if ImageLogger.to_where == ImageLoggerToWhere.TO_SCREEN:
             cv2.imshow(topic_or_title, cv_image)
+            cv2.waitKey(1)
         else:
             print("ImageLogger:Output", "to_where is not understandable.....", ImageLogger.to_where)
 

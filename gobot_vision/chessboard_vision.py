@@ -161,7 +161,7 @@ class ChessboardVision():
                 x2 = x1 + int(self.__SPACE_X * self.__VIEW_RANGE)
                 y2 = y1 + int(self.__SPACE_Y * self.__VIEW_RANGE)
                     
-                cell_img_big = img_board[y1:y2, x1:x2]
+                cell_img_big_for_white = img_board[y1:y2, x1:x2]
                 # filename = 'big_cell_'+ str(col) + '_' + str(row) + ".jpg"
                 # cv2.imwrite(filename,cell_img_big)
                 shrink_size = 6
@@ -169,20 +169,20 @@ class ChessboardVision():
                 y1 += shrink_size
                 x2 -= shrink_size
                 y2 -= shrink_size
-                cell_img_small = img_board[y1:y2, x1:x2]
+                cell_img_small_for_black = img_board[y1:y2, x1:x2]
 
 
                 is_inspected_cell = False
                 self.__inspect_cell.from_name(app_config.robot_eye.layout_scanner.inspecting.cell_name)
                 if (col == 18 - self.__inspect_cell.col_id) and (18- row == self.__inspect_cell.row_id):
                     is_inspected_cell = True
-                    cv2.imshow('bbbb',cell_img_big)
-                    cv2.imshow('ssss',cell_img_small)
+                    # cv2.imshow('bbbb',cell_img_big_for_white)
+                    # cv2.imshow('ssss',cell_img_small_for_black)
                 # color = cell_scanner.scan(cell_img,is_inspected_cell)
-                color = cell_scanner.scan_white(cell_img_big, is_inspected_cell)
+                color = cell_scanner.scan_white(cell_img_big_for_white, is_inspected_cell)
                 detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
                 if color != self.__WHITE:
-                    color = cell_scanner.scan_black(cell_img_small, is_inspected_cell)
+                    color = cell_scanner.scan_black(cell_img_small_for_black, is_inspected_cell)
                     detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
         stable_depth = self.__append_to_history(detected_layout)
         # if app_config.robot_eye.layout_scanner.show_scan_image:

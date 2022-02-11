@@ -1,5 +1,7 @@
+from enum import Enum
 
-class Stone:
+
+class Stone():
     '''
     descript a cell (of the chessboard_layout) value.
     '''
