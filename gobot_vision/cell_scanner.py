@@ -8,7 +8,8 @@ from config.config import Config as app_config
 import sys
 sys.path.append('/home/pi/pylib')
 from von.terminal_font import TerminalFont
-from von.mqtt_helper import g_mqtt
+# from von.mqtt_helper import g_mqtt
+from config.image_logger import ImageLogger
 
 
 class CellScanner():
@@ -86,7 +87,8 @@ class CellScanner():
             cell_color = self.__BLACK
 
         if is_inspected:
-            g_mqtt.publish_cv_image('gobot/debug/inspect/scan_black',cell_image)
+            # g_mqtt.publish_cv_image('gobot/debug/inspect/scan_black',cell_image)
+            ImageLogger.Output('gobot/debug/inspect/scan_black',cell_image)
             # cv2.imshow('scan black blur', blur)
             # cv2.imshow('scab bkacj bin', bin_image)
             #is_success, img_encode = cv2.imencode(".jpg", blur)

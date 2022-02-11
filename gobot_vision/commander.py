@@ -1,3 +1,4 @@
+from config.image_logger import ImageLogger
 import cv2
 import logging
 
@@ -49,7 +50,8 @@ class Commander(GridFinder):
                 color_red = (0,0,255)
                 pen_thickness = 3
                 cv2.line(debug_image,(cx1, cy1),(cx2, cy2),color_red, pen_thickness)
-                g_mqtt.publish_cv_image('gobot/image/command',debug_image)
+                ImageLogger.Output('command',debug_image)
+                # g_mqtt.publish_cv_image('gobot/image/command',debug_image)
 
             # Get average color
             sum_brightness = 0
@@ -59,7 +61,8 @@ class Commander(GridFinder):
                 y = int(index * delta_y + cy1 + delta_y / 2)
                 if app_config.publish_image_command:
                     cv2.circle(debug_image,(x,y),20,(0,255,0),5)
-                    g_mqtt.publish_cv_image('gobot/image/command',debug_image)
+                    # g_mqtt.publish_cv_image('gobot/image/command',debug_image)
+                    ImageLogger.Output('command',debug_image)
                 brightness = gray_image[y, x]
                 #sum_color += b
                 #sum_color += g

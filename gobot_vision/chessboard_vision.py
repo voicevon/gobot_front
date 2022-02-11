@@ -1,3 +1,4 @@
+from config.image_logger import ImageLogger
 from gobot_vision.cell_scanner import CellScanner
 from gogame.chessboard import ChessboardLayout
 from gogame.chessboard_cell import ChessboardCell, Stone
@@ -7,7 +8,7 @@ import numpy
 import sys
 sys.path.append('/home/pi/pylib')
 from von.terminal_font import TerminalFont
-from von.mqtt_helper import g_mqtt
+# from von.mqtt_helper import g_mqtt
 
 # BLANK = 0
 # WHITE_STONE = 1
@@ -141,7 +142,8 @@ class ChessboardVision():
                 y1 = 0
                 y2 = 19 * self.__SPACE_Y
                 cv2.line(lined_image, (x,y1),(x,y2), line_color, pen_width)
-            g_mqtt.publish_cv_image('gobot/image/chessboard/gridline',lined_image)     
+            # g_mqtt.publish_cv_image('gobot/image/chessboard/gridline',lined_image)     
+            ImageLogger.Output('gobot/image/chessboard/gridline',lined_image)     
 
         cell_scanner = CellScanner(board_brightness)
         # Split board_image to 361 samll images. detect circle one by one

@@ -423,7 +423,7 @@ class GobotHead():
         self.__last_image = self.__eye.take_picture(do_undistort=True)
         print('taken picture')
         ImageLogger.Output("eye/origin", self.__last_image)
-        cv2.waitKey(5000)
+        cv2.waitKey(1)
         
         # if Config.publish_image_origin.value:
         #    g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)

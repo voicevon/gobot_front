@@ -11,8 +11,9 @@ from gobot_vision.chessboard_vision import config_4_aruco_marks as chessboard_co
 import sys
 sys.path.append('/home/pi/pylib')
 from von.terminal_font import TerminalFont
-from von.mqtt_helper import g_mqtt
+# from von.mqtt_helper import g_mqtt
 import logging
+from config.image_logger import ImageLogger
 
 
 class GobotVision():
@@ -98,7 +99,8 @@ class GobotVision():
         board_image = perspective_image[y0:y1, x0:x1]
         if app_config.publish_image_board.value:
         # if self.__publish_image:
-            g_mqtt.publish_cv_image('gobot/image/board', perspective_image)
+            # g_mqtt.publish_cv_image('gobot/image/board', perspective_image)
+            ImageLogger.Output('gobot/image/board', perspective_image)
         if board_image is None:
             print('GobotVision.get_chessboard_layout()  Can NOT detect chessboard grid from origin_image')
             return None, 0

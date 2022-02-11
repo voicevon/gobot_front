@@ -29,10 +29,10 @@ import cv2
 import numpy as np
 from math import sin, cos
 
-import sys
-sys.path.append ("/home/pi/pylib")
-from von.mqtt_helper import g_mqtt
+# sys.path.append ("/home/pi/pylib")
+# from von.mqtt_helper import g_mqtt
 from config.config import Config
+from config.image_logger import ImageLogger,ImageLoggerToWhere
 
 
 class GridFinder():
@@ -86,7 +86,8 @@ class GridFinder():
         result = []
         # verify *at least* one ArUco marker was detected
         if len(corners) >= len(self.__mark_ids):
-            if config.publish_mqtt:
+            # if Config.publish_mqtt:
+            if True:
                 debug_image = image.copy()
             # get rid of useless corners
 
@@ -137,7 +138,8 @@ class GridFinder():
                         # print("[INFO] ArUco marker ID: {}".format(markerID))
                         # current_corner_index += 1
 
-                        if config.publish_mqtt:
+                        # if Config.publish_mqtt:
+                        if True:
                             # compute and draw the center (x, y) - coordinates of the ArUco marker
                             cX = int((topLeft[0] + bottomRight[0]) / 2.0)
                             cY = int((topLeft[1] + bottomRight[1]) / 2.0)
@@ -175,8 +177,9 @@ class GridFinder():
                             # image = cv2.aruco.drawMarker(cv2.aruco.DICT_4X4_1000,)
                             # image = self.draw_axis_2(image, corners)
                         current_corner_index += 1
-            if config.publish_mqtt:
-                g_mqtt.publish_cv_image('gobot/image/grid/aruco', debug_image)
+            ImageLogger.Output('grid/aruco', debug_image)
+            # if Config.publish_mqtt:
+            #     g_mqtt.publish_cv_image('gobot/image/grid/aruco', debug_image)
         return result
 
 

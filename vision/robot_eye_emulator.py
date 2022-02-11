@@ -22,8 +22,6 @@ class MonoEyeEmulator(MonoEyeBase):
         filename = "c:\\gitlab\\gobot_front\\vision\\emulator_pictures\\" + str(self.file_id) + ".jpg"
         self.file_id += 1
 
-        print("111111111111111111111111111111111111111111111111111111111111111")
-        print(filename)
         image = cv2.imread(filename)
         return image
 
