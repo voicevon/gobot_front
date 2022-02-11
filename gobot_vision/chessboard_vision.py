@@ -1,7 +1,7 @@
 from config.image_logger import ImageLogger
 from gobot_vision.cell_scanner import CellScanner
 from gogame.chessboard import ChessboardLayout
-from gogame.chessboard_cell import ChessboardCell, Stone
+from gogame.chessboard_cell import ChessboardCell, StoneColor
 from config.config import Config as app_config
 import cv2
 import numpy
@@ -53,9 +53,6 @@ class ChessboardVision():
         self.__history_length = 0 
         # self.__diffs = []
 
-        self.__BLANK = Stone.BLANK
-        self.__BLACK = Stone.BLACK
-        self.__WHITE = Stone.WHITE
         self.__ROWS = 19
         self.__COLS = 19
 
@@ -181,7 +178,7 @@ class ChessboardVision():
                 # color = cell_scanner.scan(cell_img,is_inspected_cell)
                 color = cell_scanner.scan_white(cell_img_big_for_white, is_inspected_cell)
                 detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
-                if color != self.__WHITE:
+                if color != StoneColor.WHITE:
                     color = cell_scanner.scan_black(cell_img_small_for_black, is_inspected_cell)
                     detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
         stable_depth = self.__append_to_history(detected_layout)

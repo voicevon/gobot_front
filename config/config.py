@@ -33,9 +33,9 @@ class Config:
             row = 19
             col = 19
         class cell_color:
-            blank = 0
-            white = 3
-            black = 8
+            # blank = 0
+            # white = 3
+            # black = 8
             died_white = 103
             died_black = 108
 

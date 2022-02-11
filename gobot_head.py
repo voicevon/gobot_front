@@ -2,12 +2,11 @@
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
-from email import message
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 
 from gobot_vision.gobot_vision import GobotVision
-from gogame.chessboard_cell import Stone
+from gogame.chessboard_cell import StoneColor
 from gogame.chessboard import ChessboardLayout
 from gogame.died_area_scanner import DiedAreaScanner
 from controller import Controller
@@ -52,14 +51,12 @@ class GobotHead():
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__BG_BLUE = TerminalFont.Color.Background.blue
+        self.__BG_RED = TerminalFont.Color.Background.red
         self.__FC_GREEN = TerminalFont.Color.Fore.green
         self.__FC_RESET = TerminalFont.Color.Control.reset
         self.__FC_PINK = TerminalFont.Color.Fore.pink
         self.__MARK_STABLE_DEPTH = 5
         self.__LAYOUT_STABLE_DEPTH = 2
-        self.__BLANK = 0
-        self.__BLACK = 1
-        self.__WHITE = 2
         logging.warning("Start init objects......")
         self.init()
 
@@ -217,20 +214,23 @@ class GobotHead():
         stable_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
         do_print_diffs = False
         diffs = self.__ai.layout.compare_with(stable_layout)
-        if len(diffs) == 0:
+        diffs_len = len(diffs)
+        # MessageLogger.Output("Gobot_Head().at_state_user_play()", diffs_len)
+        # MessageLogger.Output("Gobot_Head().at_state_user_play()", diffs)
+        if diffs_len == 0:
             # there is no user move
             pass
-        elif len(diffs) == 1:
+        elif diffs_len == 1:
             # detected one stone is placed, and only one stone is placed, need to check color
             for cell_name, ai_color, detected_color in diffs:
-                if ai_color==self.__BLANK and detected_color==self.__BLACK:
+                if ai_color==StoneColor.BLANK and detected_color==StoneColor.BLACK:
                     # detected the placed stone is black color. Means user put a stone onto a cell
                     print(self.__FC_PINK + 'detected: user has placed stone onto cell: ' + cell_name)
                     # send command to PhonixGo
                     self.__ai.feed_user_move(cell_name)
                     self.__ai.layout.print_out()
-                    self.__mqtt.publish('gogame/smf/status', 'computer_playing', retain=True)
-                    self.__mqtt.publish(topic="fishtank/switch/r4/command", payload="OFF", retain=True)
+                    MessageLogger.Output('gogame/smf/status', 'computer_playing')
+                    MessageLogger.Output("fishtank/switch/r4/command", "OFF")
                     self.__goto = self.at_state_scan_died_white
                     return
                 else:
@@ -246,7 +246,7 @@ class GobotHead():
 
         if do_print_diffs:
             diffs = self.__ai.layout.compare_with(stable_layout, do_print_out=True)
-            print(self.__BG_RED + self.__FC_YELLOW + 'Too many different the between two layout.' + self.__FC_RESET)
+            print(self.__BG_RED + self.__FC_YELLOW + 'Too many different the between two layout.' +  str(len(diffs)) + self.__FC_RESET)
 
 
     def at_state_computer_play(self):
@@ -372,15 +372,15 @@ class GobotHead():
 
         # Got dedicate stable layout
         layout.print_out()
-        cell = layout.get_first_cell(Stone.BLACK)
+        cell = layout.get_first_cell(StoneColor.BLACK)
         if cell is not None:
             print('First black cell = %s' % cell.name)
             # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, self.__BLACK)
             id_black = cell.id
-            self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, Stone.BLACK)
-            cell = layout.get_first_cell(Stone.WHITE)
+            self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.BLACK)
+            cell = layout.get_first_cell(StoneColor.WHITE)
             if cell is not None:
-                self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, Stone.WHITE)
+                self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.WHITE)
                 print('First white cell = %s' % cell.name)
                 # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, self.__WHITE)
                 id_white = cell.id
@@ -392,7 +392,7 @@ class GobotHead():
                     cell.from_id(i)
                     cell_color = layout.get_cell_color_col_row(cell.col_id, cell.row_id)
                     self.__controller.action_pickup_stone_from_cell(cell.name)
-                    self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, Stone.BLANK)
+                    self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.BLANK)
                     cell.from_id(i+2)
                     self.__controller.action_place_stone_to_cell(cell.name,auto_park=do_vision_check)
                     self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, cell_color)
@@ -405,10 +405,10 @@ class GobotHead():
                             key = raw_input ('Test failed! Please check')
                 self.__controller.action_pickup_stone_from_cell('B19')
                 self.__controller.action_place_stone_to_trash_bin(park_to_view_point=False)
-                self.__target_demo_layout.set_cell_value_from_name('B19',Stone.BLANK)
+                self.__target_demo_layout.set_cell_value_from_name('B19',StoneColor.BLANK)
                 self.__controller.action_pickup_stone_from_cell('A19')
                 self.__controller.action_place_stone_to_trash_bin(park_to_view_point=True)
-                self.__target_demo_layout.set_cell_value_from_name('A19',Stone.BLANK)
+                self.__target_demo_layout.set_cell_value_from_name('A19',StoneColor.BLANK)
                 
         self.__goto = self.at_state_game_over
 

@@ -11,10 +11,10 @@ import logging
 
 
 from gogame.chessboard import ChessboardLayout
+from gogame.chessboard_cell import StoneColor
 from config.config import Config
-from config.config_gogame import ConfigGoGame
 
-# from terminal_font import TerminalFont
+from von.terminal_font import TerminalFont
 
 class GoGameAiClient(object):
     '''
@@ -27,14 +27,11 @@ class GoGameAiClient(object):
         self.__is_connected = False
         self.__socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)      # 定义socket类型，网络通信，TCP
 
-        self.__BLANK = Config.game_rule.cell_color.blank
-        self.__BLACK = Config.game_rule.cell_color.black
-        self.__WHITE = Config.game_rule.cell_color.white
 
-        self.__FC_BLACK = Config.game_rule.cell_color.black
-        logging.warn('Init AI is done......')
+        self.__FC_BLACK = TerminalFont.Color.Fore.black
+        logging.warning('Init AI is done......')
 
-    def __to_ai(self, command):
+    def __to_ai(self, command:str) -> str:
         '''
         TODO:  rename to:  talk_to_ai()  ??
         '''
@@ -101,17 +98,22 @@ class GoGameAiClient(object):
         print('GO AI_client is closed')
 
     def get_ai_move(self):
-        # AI computing
-        ret = self.__to_ai('genmove b')
+        # AI computing to move White
+        ret = self.__to_ai('genmove w')
         cell_name = ret.replace("= ", "")
         self.layout.play(cell_name, self.__FC_BLACK)
         Config.current_game.lastest_move_cell_name = cell_name
         return cell_name
 
-    def feed_user_move(self, cell_name):
-        self.layout.play(cell_name,self.__WHITE)
-        command = "play w " + cell_name
+    def feed_user_move(self, cell_name:str):
+        '''
+        Tell AI where user has played a stone of Black.
+        '''
+        self.layout.play(cell_name,StoneColor.BLACK)
+        command = "play b " + cell_name
         ret = self.__to_ai(command)
+        print(command, ret)
+
         if ret.decode().count("=") > 0:
             Config.current_game.lastest_move_cell_name = cell_name
             return
@@ -126,14 +128,12 @@ if __name__ == "__main__":
 
     runner = GoGameAiClient()
     runner.start_new_game()
-    # runner.list_commands()
-    # runner.feed_user_move('Q4')
-    # cell_name = runner.get_ai_move()
-    # print(cell_name)
-    # runner.start_new_game()
+    runner.list_commands()
+    runner.feed_user_move('Q4')
+    cell_name = runner.get_ai_move()
+    print(cell_name)
     runner.stop_game()
-    runner.start_new_game()
-    runner.stop_game()
+
 
 
     # while True:

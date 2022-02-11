@@ -1,13 +1,13 @@
 from enum import Enum
 
 
-class Stone():
+class StoneColor(Enum):
     '''
     descript a cell (of the chessboard_layout) value.
     '''
     BLANK = 0
-    WHITE = 1
-    BLACK = 2
+    WHITE = 3
+    BLACK = 8
 
 class ChessboardCell():
     

@@ -1,10 +1,10 @@
 import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 
-from gogame.chessboard_cell import ChessboardCell, Stone
+from gogame.chessboard_cell import ChessboardCell, StoneColor
 from vision.grid_layout import GridLayout
 from von.terminal_font import TerminalFont
-from von.mqtt_helper import g_mqtt
+# from von.mqtt_helper import g_mqtt
 
 
 
@@ -27,17 +27,15 @@ class ChessboardLayout(GridLayout):
 
         self._ROWS = 19
         self._COLS = 19
-        
-        self._BLANK = Stone.BLANK
-        self._BLACK = Stone.BLACK
-        self._WHITE = Stone.WHITE
+
 
 
         self._FC_YELLOW = TerminalFont.Color.Fore.yellow
         self._BG_RED = TerminalFont.Color.Background.red
         self._FC_RESET = TerminalFont.Color.Control.reset
 
-        self._layout_array = [([0] * self._COLS) for i in range(self._ROWS)]
+        self.create_blank_layout()
+        # self._layout_array = [([0] * self._COLS) for i in range(self._ROWS)]
 
     def rename_to(self, new_name):
         self.name = new_name
@@ -46,22 +44,23 @@ class ChessboardLayout(GridLayout):
         '''
         Note: return nothing
         '''
-        self._layout_array = [([0] * self._COLS) for i in range(self._ROWS)]
+        # self._layout_array = [([0] * self._COLS) for i in range(self._ROWS)]
+        self._layout_array = [([StoneColor.BLANK] * self._COLS) for i in range(self._ROWS)]
 
     def clear(self):
         for i in range(19):
             for j in range(19):
-                self._layout_array[i][j] = 0
+                self._layout_array[i][j] = StoneColor.BLANK
 
     def get_layout_array(self):
         return self._layout_array
 
-    def play_col_row(self, col_id, row_id, color_code):
+    def play_col_row(self, col_id, row_id, color_code:StoneColor):
         cell = ChessboardCell()
         cell.from_col_row_id(col_id=col_id, row_id=row_id)
         self.play(cell.name, color_code)
 
-    def play(self, cell_name, stone_color):
+    def play(self, cell_name, stone_color:StoneColor):
         # print('[Info] ChessBoard.play(cell_name=%s,color=%s)' %(cell_name,color))
         cell = ChessboardCell()
         cell.from_name(cell_name)
@@ -69,7 +68,7 @@ class ChessboardLayout(GridLayout):
         # if color =='Black':
         #     value = self._BLACK
         # elif color == 'White':
-        #     value = self._WHITE
+        #     value = StoneColor.WHITE
         # else:
         #     logging.info('ChessBoard.play(cell_name=%s,color=%s)' %(cell_name,color))
         self._layout_array[cell.col_id][cell.row_id] = stone_color
@@ -79,10 +78,10 @@ class ChessboardLayout(GridLayout):
         row = cell.row
         return self.get_cell_color_col_row(col,row)
 
-    def get_cell_color_col_row(self, col_id, row_id):
+    def get_cell_color_col_row(self, col_id, row_id) -> StoneColor:
         return self._layout_array[col_id][row_id]
     
-    def get_first_cell(self, target_stone_color):
+    def get_first_cell(self, target_stone_color:StoneColor) -> ChessboardCell:
         '''
         return:
             (x,y) is the target position
@@ -101,7 +100,7 @@ class ChessboardLayout(GridLayout):
         cell.from_name(cell_name)
         self.set_cell_value(cell.col_id, cell.row_id, new_value)
 
-    def set_cell_value(self, col_id, row_id, new_value):
+    def set_cell_value(self, col_id, row_id, new_value:StoneColor):
         self._layout_array[col_id][row_id] = new_value
         
     def compare_with(self, target_layout, do_print_out=False) -> list:
@@ -114,9 +113,12 @@ class ChessboardLayout(GridLayout):
         '''
         diffs = []
         cell = ChessboardCell()
-        my_cell_color = target_cell_color = self._BLANK
+        my_cell_color = target_cell_color = StoneColor.BLANK
 
-        int_to_char = {self._BLANK:'. ',self._BLACK:'X ', self._WHITE:'O '}
+        int_to_char = {StoneColor.BLANK:'. ',
+                        StoneColor.BLACK:'X ', 
+                        StoneColor.WHITE:'O '}
+
         if do_print_out:
             title = self._FC_RESET + '       ' 
             title += self._BG_RED + self._FC_YELLOW + self.name 
@@ -147,7 +149,10 @@ class ChessboardLayout(GridLayout):
                     diffs.append((cell.name, my_cell_color, target_cell_color))
                 
                 if do_print_out:
-                    my_col_string += print_color + int_to_char[self._layout_array[col_id][row_id]] + self._FC_RESET
+                    key = self._layout_array[col_id][row_id]
+                    # print(key, type(key))
+                    char = int_to_char[key]
+                    my_col_string += print_color + char + self._FC_RESET
                     k = target_layout.get_cell_color_col_row(col_id, row_id)
                     target_col_string += print_color + int_to_char[k] + self._FC_RESET
             if do_print_out:
@@ -192,7 +197,7 @@ class ChessboardLayout(GridLayout):
     def print_out(self):
         #print('print_out(),   on debugging....')
         #return 
-        int_to_char = {self._BLANK:'. ',self._BLACK:'X ', self._WHITE:'O ',}
+        int_to_char = {StoneColor.BLANK:'. ',self._BLACK:'X ', StoneColor.WHITE:'O ',}
         print(self._FC_YELLOW + self.name)
         cell = ChessboardCell()
         # print column name on table head
@@ -220,9 +225,9 @@ class ChessboardLayout(GridLayout):
     
 if __name__ == "__main__":
     test1 = ChessboardLayout('Test1')
-    test1.play('T19',Stone.BLACK)
+    test1.play('T19',StoneColor.BLACK)
     test1.print_out()
-    cell = test1.get_first_cell(Stone.BLACK) 
+    cell = test1.get_first_cell(StoneColor.BLACK) 
     cell = ChessboardCell()
     x= 18
     y= 18
@@ -231,8 +236,8 @@ if __name__ == "__main__":
 
 
     test2 = ChessboardLayout('Test2')
-    test2.play('T19',Stone.BLACK)
-    test2.play('K10',Stone.WHITE)
+    test2.play('T19',StoneColor.BLACK)
+    test2.play('K10',StoneColor.WHITE)
     x = test2.compare_with(test1,do_print_out=True)
     print (x)  
     

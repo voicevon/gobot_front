@@ -4,7 +4,7 @@ import numpy
 
 import time
 from config.message_logger import MessageLogger
-from gogame.chessboard_cell import Stone
+from gogame.chessboard_cell import StoneColor
 from config.config import Config as app_config
 
 from von.terminal_font import TerminalFont
@@ -21,9 +21,6 @@ class CellScanner():
         self.__board_mean = board_mean
         self.__ROWS = app_config.game_rule.board_size.row
         self.__COLS = app_config.game_rule.board_size.col
-        self.__BLANK = Stone.BLANK
-        self.__BLACK = Stone.BLACK
-        self.__WHITE = Stone.WHITE
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__FC_RESET = TerminalFont.Color.Control.reset
@@ -39,7 +36,7 @@ class CellScanner():
             detected cell_color
         '''
         # detected_circles = self.__detect_circles(cell_image,show_processing_image=is_inspected)
-        # cell_color = self.__BLANK
+        # cell_color = StoneColor.BLANK
 
         # if detected_circles is None:
         #     if is_inspected:
@@ -59,14 +56,14 @@ class CellScanner():
         gray = cv2.cvtColor(cell_image, cv2.COLOR_BGR2GRAY)
         blur = cv2.medianBlur(gray,5)
         average_brightness = numpy.mean(blur)
-        cell_color = self.__BLACK
+        cell_color = StoneColor.BLACK
         if is_inspected:
             print('average_brightness = %d' %average_brightness)
             # cv2.imshow('cell_image',cell_image)
         if average_brightness > 150:
             cell_color = self.__WHITE
         elif average_brightness > 80:
-            cell_color = self.__BLANK
+            cell_color = StoneColor.BLANK
         # print(self.__PT_RESET + 'average_brightness= %d' %average_brightness)
         # if average_brightness > 30:
         #     cell_color = self.__WHITE
@@ -77,8 +74,12 @@ class CellScanner():
 
     def scan_black(self, cell_image, is_inspected):
         '''
-        image process = cell image -> gray -> blur -> bin_image \n
-        count bin_image pixels in black
+        Two steps for scanning a black stone.
+        1. image process = cell image -> gray -> blur -> bin_image \n
+        2. count bin_image pixels in black \n
+        We have to make dicision of the treshold \n
+        1. How dark of a pixel is black in bin_image \n 
+        2. minimum_black_pixed_count
         '''
         minimum_black_pixed_count = 170
         gray = cv2.cvtColor(cell_image, cv2.COLOR_BGR2GRAY)
@@ -86,10 +87,10 @@ class CellScanner():
         ret, bin_image = cv2.threshold(blur, 50, 255, cv2.THRESH_BINARY_INV)
 
 
-        cell_color = self.__BLANK
+        cell_color = StoneColor.BLANK
         count = cv2.countNonZero(bin_image)
         if count > minimum_black_pixed_count: 
-            cell_color = self.__BLACK
+            cell_color = StoneColor.BLACK
 
         if is_inspected:
             ImageLogger.Output('gobot/debug/inspect/scan_black',cell_image)
@@ -103,13 +104,13 @@ class CellScanner():
         return cell_color
 
         
-    def scan_white(self, cell_image, is_inspected):
+    def scan_white(self, cell_image, is_inspected) -> StoneColor:
         '''
         return: 
             detected cell_color, only for White. because connected black cells have no circle
         '''
         detected_circles = self.__detect_circles(cell_image,show_processing_image=is_inspected)
-        cell_color = self.__BLANK
+        cell_color = StoneColor.BLANK
         if detected_circles is None:
             if is_inspected:
                 MessageLogger.Output('CellScanner.scan_white()','Inspected cell, no circles found!')
@@ -133,7 +134,7 @@ class CellScanner():
                     if real_raduis < 130:  # 51% of a circle can also be detected!
                         # https://stackoverflow.com/questions/20698613/detect-semicircle-in-opencv
                         # print('Positive')
-                        cell_color = self.__WHITE
+                        cell_color = StoneColor.WHITE
                     # else:
                     #     print('Negtive')
                     #     cv2.waitKey(100000)
