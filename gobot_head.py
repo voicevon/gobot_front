@@ -214,9 +214,8 @@ class GobotHead():
                 return
 
         stable_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
-        stable_layout.print_out()
         do_print_diffs = False
-        diffs = self.__ai.layout.compare_with(stable_layout)
+        diffs = self.__ai.layout.compare_with(stable_layout,do_print_out=True)
         diffs_len = len(diffs)
         # MessageLogger.Output("Gobot_Head().at_state_user_play()", diffs_len)
         # MessageLogger.Output("Gobot_Head().at_state_user_play()", diffs)
@@ -265,9 +264,9 @@ class GobotHead():
             # robot arm play a chess, The instruction is from AI.
             self.__controller.action_pickup_stone_from_warehouse()
             self.__controller.action_place_stone_to_cell(cell_name=cell_name)
-            self.__ai.layout.play(cell_name, StoneColor.BLACK)
+            self.__ai.layout.play(cell_name, StoneColor.WHITE)
 
-        self.__goto = self.at_state_scan_died_white
+        self.__goto = self.at_state_scan_died_black
 
     def at_state_withdraw_white(self):
         cell = self.__died_area_scanner.get_first_died_cell()
@@ -287,7 +286,8 @@ class GobotHead():
         cell = self.__died_area_scanner.get_first_died_cell()
         if cell is None:
             # There is no died area to be removed
-            self.__goto = self.at_state_compare_layout_white
+            # self.__goto = self.at_state_compare_layout_white
+            self.__goto = self.at_state_user_play
         else:
             # only remove one cell of the died area.
             # will go on to remove other cells on the next invoking
@@ -312,7 +312,7 @@ class GobotHead():
         count = self.__died_area_scanner.start_scan(StoneColor.BLACK)
         if count > 0:
             self.__died_area_scanner.print_out_died_area()
-        self.__goto = self.at_state_withdraw_white
+        self.__goto = self.at_state_withdraw_black
 
     def at_state_compare_layout_black_old(self):
         '''

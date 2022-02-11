@@ -2,27 +2,35 @@
 
 from gogame.chessboard import ChessboardLayout
 from gogame.chessboard_cell import ChessboardCell, StoneColor
+
 import logging
 
+# sfrom enum import Enum
+
+# class StoneAliveDeath(Enum):
+#     DIED = 0
+#     OPPSITE_COLOR = 1
+#     ALIVE = 15
 
 class DiedAreaScanner(ChessboardLayout):
 
     def __init__(self):
         ChessboardLayout.__init__(self,'Died area scanner')
         self.__died_area_array = [([StoneColor.BLANK] * 19) for i in range(19)]
-
         # self.__DIED_BLACK = self._BLACK + 100
         # self.__DIED_WHITE = self._WHITE + 100
-        logging.warn('Init died_area_scanner is done......')
+        logging.warning('Init died_area_scanner is done......')
 
     def __is_around_alived(self, col, row):
         '''
-        # look neibours is alive or not.
-        #       A cell might have 4 neibours,  TODO: 3 neibours, or 2 neibours
-        # return:
-        #       15 = has been waken up, because this cell is blank 
-        #       16 = has been waken up, because this cell is connected to #15
-        #       17 = has benn waken up, because this cell is connected to #16
+        look neibours is alive or not.
+        * A cell might have 4 neibours,  
+        * TODO: 3 neibours, or 2 neibours
+
+        return:
+        * 15 = has been waken up, because this cell is blank 
+        * 16 = has been waken up, because this cell is connected to #15
+        * 17 = has benn waken up, because this cell is connected to #16
         '''
 
         # look up,down,left,right. 
@@ -50,12 +58,13 @@ class DiedAreaScanner(ChessboardLayout):
 
     def __try_to_make_alive(self, col, row):
         '''
-        # based on neighbor's value:
-        #       15 = has been waken up, because this cell is blank 
-        #       16 = has been waken up, because this cell is connected to #15
-        # my value will be:
-        #       16 = has been waken up, because this cell is connected to #15
-        #       17 = has benn waken up, because this cell is connected to #16
+        based on neighbor's value:
+        * 15 = has been waken up, because this cell is blank 
+        * 16 = has been waken up, because this cell is connected to #15
+
+        my value will be:
+        * 16 = has been waken up, because this cell is connected to #15
+        * 17 = has benn waken up, because this cell is connected to #16
         '''
         connecting_type = self.__is_around_alived(col,row)
         if connecting_type > 11:
@@ -92,7 +101,7 @@ class DiedAreaScanner(ChessboardLayout):
                         self.__died_area_array[col][row] = wake_up_type
         return count
 
-    def start_scan(self, target_color:StoneColor):
+    def start_scan(self, target_color:StoneColor) -> int:
         '''
         return:
             count: How many cells are died
@@ -165,26 +174,20 @@ class DiedAreaScanner(ChessboardLayout):
 
     def __init_died_area_array(self, origin_array,target_color_code:StoneColor):
         '''
-        # Based on origin_array
-        #       0 = Blank
-        #       3 = White
-        #       8 = Black
-        # init self.__died_area_array
-        #       0 = assume cell is died
-        #       1 = No need to be waken up, because this cell is opposit color
-        #       15 = has been wakup up, because this cell is blank
+        Value in a cell and meaning
+        * 0 = assume cell is died
+        * 1 = No need to be waken up, because this cell is opposit color
+        * 15 = has been wakup up, because this cell is blank
         '''
         # assume all target_color on the board is died.
         for col in range(0,19):
             for row in range(0,19):
-                value = origin_array[col][row]
-                if value == 0:
-                    # blank cell
+                stoneColor = origin_array[col][row]
+                if stoneColor == StoneColor.BLANK:
                     self.__died_area_array[col][row] = 15
-                elif value == target_color_code:
+                elif stoneColor == target_color_code:
                     self.__died_area_array[col][row] = 0
                 else:
-                    # oppsite color
                     self.__died_area_array[col][row] = 1
 
     def set_layout_array(self,layout_array):

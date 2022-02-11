@@ -16,19 +16,17 @@ class ChessboardLayout(GridLayout):
     def __init__(self,name):
         '''
         We can play go game with ChessboardLayout() ?
-            1. Place/Remove a stone onto a cell.
-            2. Compare two layout, return the differencial.
-            3. Calculate died area.
+        1. Place/Remove a stone onto a cell.
+        2. Compare two layout, return the differencial.
+        3. Calculate died area.
 
         When we deal with a batch of ChessboardLayouts,
-            A chessboard.name does help.
+        1. chessboard.name does help.
         '''
         self.name = name
 
         self._ROWS = 19
         self._COLS = 19
-
-
 
         self._FC_YELLOW = TerminalFont.Color.Fore.yellow
         self._BG_RED = TerminalFont.Color.Background.red
