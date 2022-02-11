@@ -214,6 +214,7 @@ class GobotHead():
                 return
 
         stable_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
+        stable_layout.print_out()
         do_print_diffs = False
         diffs = self.__ai.layout.compare_with(stable_layout)
         diffs_len = len(diffs)
@@ -296,8 +297,11 @@ class GobotHead():
             self.__died_area_scanner.died_cell_removed_first_one()
 
     def at_state_scan_died_white(self):
+        '''
+        * This is involked after user playing.
+        '''
         self.__died_area_scanner.set_layout_array(self.__ai.layout.get_layout_array())
-        count = self.__died_area_scanner.start_scan(StoneColor.BLACK)
+        count = self.__died_area_scanner.start_scan(StoneColor.WHITE)
         if count > 0:
             self.__died_area_scanner.print_out_died_area()
 
@@ -305,7 +309,7 @@ class GobotHead():
 
     def at_state_scan_died_black(self):
         self.__died_area_scanner.set_layout_array(self.__ai.layout.get_layout_array())
-        count = self.__died_area_scanner.start_scan(StoneColor.WHITE)
+        count = self.__died_area_scanner.start_scan(StoneColor.BLACK)
         if count > 0:
             self.__died_area_scanner.print_out_died_area()
         self.__goto = self.at_state_withdraw_white

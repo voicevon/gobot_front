@@ -3,17 +3,15 @@
 import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 
-from gogame.chessboard import ChessboardLayout
-from gobot_vision.commander_vision import CommanderVision
-from gobot_vision.commander import Commander
-from vision.grid_finder import GridFinder
-from gobot_vision.chessboard_vision import ChessboardVision, config_4_aruco_marks
-from gobot_vision.warehouse_vision import WarehouseVision
+# from gogame.chessboard import ChessboardLayout
 from config.config import Config as app_config
-from gobot_vision.chessboard_vision import config_4_aruco_marks as chessboard_config
+from gobot_vision.commander import Commander
+from gobot_vision.commander_vision import CommanderVision
+from gobot_vision.chessboard_vision import ChessboardVision, config_4_aruco_marks as chessboard_config
+from gobot_vision.warehouse_vision import WarehouseVision
+from vision.grid_finder import GridFinder
 
-from von.terminal_font import TerminalFont
-# from von.mqtt_helper import g_mqtt
+# from von.terminal_font import TerminalFont
 import logging
 from config.image_logger import ImageLogger
 
@@ -90,8 +88,10 @@ class GobotVision():
 
     def get_chessboard_layout(self, origin_image):
         '''
-        Top level of get layout.
-        return layout, stable_depth. if stable_depth <= 0 , is saying can not get board image.
+        * Top level of getting layout.
+        return 
+        * layout, stable_depth. 
+        * if stable_depth <= 0 , is saying can not get board image.
         '''
         perspective_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
         if perspective_image is None:
