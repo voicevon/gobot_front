@@ -2,6 +2,7 @@
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
+from email import message
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 
@@ -20,6 +21,7 @@ import time
 from von.terminal_font import TerminalFont  # pip3 install VonPylib
 # from von.mqtt_helper import g_mqtt
 from config.image_logger import ImageLogger,ImageLoggerToWhere
+from config.message_logger import MessageLoggerToWhere,MessageLogger
 import cv2
 
 
@@ -159,7 +161,7 @@ class GobotHead():
         command = self.__vision.get_command_index(self.__last_image)
         if command == 4:
             self.__ai.start_new_game()
-            g_mqtt.publish('gobot/smf/current', 'computer_playing')
+            MessageLogger.Output('gobot/smf/current', 'user_playing')
             self.__goto = self.at_state_user_play
         else:
             print(self.__FC_YELLOW + '[Warning]: GobotHead.at_state_begining()  scanned command=%d' %command)
@@ -186,7 +188,7 @@ class GobotHead():
 
         elif command == 4:
             self.__goto = self.at_state_begin
-            g_mqtt.publish('gobot/smf/current','play')
+            MessageLogger.Output('gobot/smf/current','play')
         else:
             logging.info(self.__FC_YELLOW + '[Warning]: GoManger.at_begining()  scanned command=%d' %command)
 

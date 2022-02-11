@@ -10,13 +10,11 @@ import socket
 import logging
 
 
-# from gogame.chessboard_cell import ChessboardCell
 from gogame.chessboard import ChessboardLayout
 from config.config import Config
 from config.config_gogame import ConfigGoGame
 
 # from terminal_font import TerminalFont
-# from mqtt_helper import g_mqtt
 
 class GoGameAiClient(object):
     '''
@@ -71,8 +69,8 @@ class GoGameAiClient(object):
             logging.warn('GoGameAiCient: connect() is invoked when connected')
             return
 
-        server = ConfigGoGame.AiServer.ip
-        port = ConfigGoGame.AiServer.port
+        server = Config.Internet.ai.ip
+        port = Config.Internet.ai.port
         # try:
         print('>>>>>>>>>>>>>>>>>>>>>>>>>> server: %s Port: %d'%(server, port))
         self.__socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)      # 定义socket类型，网络通信，TCP
