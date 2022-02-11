@@ -1,15 +1,17 @@
+
+
+import sys
+sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
+
 from gogame.chessboard import ChessboardLayout
 from gobot_vision.commander_vision import CommanderVision
 from gobot_vision.commander import Commander
 from vision.grid_finder import GridFinder
 from gobot_vision.chessboard_vision import ChessboardVision, config_4_aruco_marks
 from gobot_vision.warehouse_vision import WarehouseVision
-import cv2
-import numpy as np
 from config.config import Config as app_config
 from gobot_vision.chessboard_vision import config_4_aruco_marks as chessboard_config
-import sys
-sys.path.append('/home/pi/pylib')
+
 from von.terminal_font import TerminalFont
 # from von.mqtt_helper import g_mqtt
 import logging
@@ -17,6 +19,7 @@ from config.image_logger import ImageLogger
 
 
 class GobotVision():
+
     def __init__(self):
         '''
         Overview of origin_image.
@@ -41,7 +44,9 @@ class GobotVision():
         self.__publish_image = False
         logging.warn('Init vision is done......')
 
-
+    def init_chessboard_layout(self):
+        self.__chessboard_vision.create_blank_layout()
+        
     def get_stable_level (self, layout_history):
         stable_level = 0
         if layout_history[0][0][0] == layout_history[1][0][0]:
@@ -83,7 +88,6 @@ class GobotVision():
         if self.__commander_solution == 2:
             return self.__commander.get_command_from_image(origin_image)
 
-
     def get_chessboard_layout(self, origin_image):
         '''
         Top level of get layout.
@@ -116,7 +120,6 @@ class GobotVision():
         perspective_image = house_plate_finder.detect_grid_from_aruco_corners(origin_image)
 
         g_mqtt.publish_cv_image('gobot/image/house', perspective_image)
-        
 
     def get_warehouse_stone_position(self, origin_image):
         '''

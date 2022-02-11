@@ -1,6 +1,8 @@
 import cv2
 import numpy
 
+from config.message_logger import MessageLogger
+
 class StoneColor:
     BLANK = 0
     BLACK = 1
@@ -89,7 +91,7 @@ class GoGameStone():
         detected_circles = self.__detect_circles(cell_image,show_processing_image=is_inspected)
         if detected_circles is None:
             if is_inspected:
-                print('Inspected cell, no circles found!')
+                MessageLogger.Output('Inspected cell, no circles found!',"")
         elif len(detected_circles) == 1:
             # detected one circle. 
             height, width, depth = cell_image.shape

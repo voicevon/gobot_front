@@ -3,10 +3,10 @@ import cv2
 import numpy
 
 import time
+from config.message_logger import MessageLogger
 from gogame.chessboard_cell import Stone
 from config.config import Config as app_config
-import sys
-sys.path.append('/home/pi/pylib')
+
 from von.terminal_font import TerminalFont
 # from von.mqtt_helper import g_mqtt
 from config.image_logger import ImageLogger
@@ -95,7 +95,7 @@ class CellScanner():
             #if is_success:
                 #img_pub = img_encode.tobytes()
                 #app_config.server.mqtt.client.publish(topic='gogame/eye/inspecting/cell/scan_black/blur', payload=img_pub)
-            print ('scan_black_counter = %i' %count)
+            MessageLogger.Output ('CellScanner.scan_black()  scan_black_counter =' ,count)
         return cell_color
 
         

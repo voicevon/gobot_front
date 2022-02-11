@@ -73,6 +73,7 @@ class GobotHead():
         self.__controller = Controller()
         self.__died_area_scanner = DiedAreaScanner()
         ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
+        MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
 
     def get_stable_layout(self,min_stable_depth):
         stable_depth = 0
@@ -154,19 +155,6 @@ class GobotHead():
                     # self.__controller.action_place_stone_to_trash_bin()
                     self.__ai.layout.play_col_row(col,row,self.__BLANK)
 
-    def at_state_begin(self):
-        '''
-        scan the marks, to run markable command
-        '''
-        command = self.__vision.get_command_index(self.__last_image)
-        if command == 4:
-            self.__ai.start_new_game()
-            MessageLogger.Output('gobot/smf/current', 'user_playing')
-            self.__goto = self.at_state_user_play
-        else:
-            print(self.__FC_YELLOW + '[Warning]: GobotHead.at_state_begining()  scanned command=%d' %command)
-            self.__goto = self.at_state_game_over
-
     def at_state_game_over(self):
         '''
         scan the marks, to run markable command
@@ -191,6 +179,75 @@ class GobotHead():
             MessageLogger.Output('gobot/smf/current','play')
         else:
             logging.info(self.__FC_YELLOW + '[Warning]: GoManger.at_begining()  scanned command=%d' %command)
+
+    def at_state_begin(self):
+        '''
+        scan the marks, to run markable command
+        '''
+        command = self.__vision.get_command_index(self.__last_image)
+        if command == 4:
+            self.__ai.start_new_game()
+            self.__vision.init_chessboard_layout()
+            MessageLogger.Output('gobot/smf/current', 'user_playing')
+
+            self.__goto = self.at_state_user_play
+        else:
+            print(self.__FC_YELLOW + '[Warning]: GobotHead.at_state_begining()  scanned command=%d' %command)
+            self.__goto = self.at_state_game_over
+
+
+    def at_state_user_play(self):
+        '''
+        check mark command, might be game over.
+        ''' 
+        mark = self.__vision.get_command_index(self.__last_image)
+        
+        if mark != 4:
+            # Game over: 
+            logging.info(self.__BOLD + self.__FC_YELLOW + self.__BG_RED + 'Game Over!' + self.__FC_RESET)
+
+            key = raw_input('Please confirm Game over by input "over"  ')
+            if key == 'over':
+                self.__ai.layout.clear()
+                self.__ai.stop_game()
+                MessageLogger.Output('gobot/smf/current','game_over')
+                self.__goto = self.at_state_game_over
+                return
+
+        stable_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
+        do_print_diffs = False
+        diffs = self.__ai.layout.compare_with(stable_layout)
+        if len(diffs) == 0:
+            # there is no user move
+            pass
+        elif len(diffs) == 1:
+            # detected one stone is placed, and only one stone is placed, need to check color
+            for cell_name, ai_color, detected_color in diffs:
+                if ai_color==self.__BLANK and detected_color==self.__BLACK:
+                    # detected the placed stone is black color. Means user put a stone onto a cell
+                    print(self.__FC_PINK + 'detected: user has placed stone onto cell: ' + cell_name)
+                    # send command to PhonixGo
+                    self.__ai.feed_user_move(cell_name)
+                    self.__ai.layout.print_out()
+                    self.__mqtt.publish('gogame/smf/status', 'computer_playing', retain=True)
+                    self.__mqtt.publish(topic="fishtank/switch/r4/command", payload="OFF", retain=True)
+                    self.__goto = self.at_state_scan_died_white
+                    return
+                else:
+                    do_print_diffs = True
+                    # self.__ai.layout.print_out()
+                    # stable_layout.print_out()
+        else:
+            # more than one different, 
+            # reason A: died area has not been entirely removed
+            # reason B: vision recognization is wrong.
+            # reason C: layout has benn disterbed by user. Like children playing bad with angry.
+            do_print_diffs = True
+
+        if do_print_diffs:
+            diffs = self.__ai.layout.compare_with(stable_layout, do_print_out=True)
+            print(self.__BG_RED + self.__FC_YELLOW + 'Too many different the between two layout.' + self.__FC_RESET)
+
 
     def at_state_computer_play(self):
         self.__ai.get_final_score()
@@ -278,58 +335,6 @@ class GobotHead():
             # more than one cells are different,  or the only one different cell is black color. 
             diffs = self.__ai.layout.compare_with(layout, do_print_out=True)
             time.sleep(10)
-
-    def at_state_user_play(self):
-        '''
-        check mark command, might be game over.
-        ''' 
-        mark = self.__vision.get_command_index(self.__last_image)
-        
-        if mark != 4:
-            # Game over: 
-            logging.info(self.__BOLD + self.__FC_YELLOW + self.__BG_RED + 'Game Over!' + self.__FC_RESET)
-
-            key = raw_input('Please confirm Game over by input "over"  ')
-            if key == 'over':
-                self.__ai.layout.clear()
-                self.__ai.stop_game()
-                g_mqtt.publish('gobot/smf/current','game_over', retain=True)
-                self.__goto = self.at_state_game_over
-                return
-
-        stable_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
-        do_print_diffs = False
-        diffs = self.__ai.layout.compare_with(stable_layout)
-        if len(diffs) == 0:
-            # there is no user move
-            pass
-        elif len(diffs) == 1:
-            # detected one stone is placed, and only one stone is placed, need to check color
-            for cell_name, ai_color, detected_color in diffs:
-                if ai_color==self.__BLANK and detected_color==self.__BLACK:
-                    # detected the placed stone is black color. Means user put a stone onto a cell
-                    print(self.__FC_PINK + 'detected: user has placed stone onto cell: ' + cell_name)
-                    # send command to PhonixGo
-                    self.__ai.feed_user_move(cell_name)
-                    self.__ai.layout.print_out()
-                    self.__mqtt.publish('gogame/smf/status', 'computer_playing', retain=True)
-                    self.__mqtt.publish(topic="fishtank/switch/r4/command", payload="OFF", retain=True)
-                    self.__goto = self.at_state_scan_died_white
-                    return
-                else:
-                    do_print_diffs = True
-                    # self.__ai.layout.print_out()
-                    # stable_layout.print_out()
-        else:
-            # more than one different, 
-            # reason A: died area has not been entirely removed
-            # reason B: vision recognization is wrong.
-            # reason C: layout has benn disterbed by user. Like children playing bad with angry.
-            do_print_diffs = True
-
-        if do_print_diffs:
-            diffs = self.__ai.layout.compare_with(stable_layout, do_print_out=True)
-            print(self.__BG_RED + self.__FC_YELLOW + 'Too many different the between two layout.' + self.__FC_RESET)
 
     def at_demo_from_warehouse(self):
         # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)

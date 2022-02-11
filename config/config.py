@@ -70,7 +70,7 @@ class Config:
             show_scan_image = True 
             
             class inspecting:
-                cell_name = 'T14'
+                cell_name = 'Q4'
                 counter = 100
         class mark_scanner:
             stable_depth = 5

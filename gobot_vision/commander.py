@@ -71,7 +71,7 @@ class Commander(GridFinder):
                 #print('index=', index,'(x,y)=(',x,y, ')color=', b,g,r)
                 #print('cell_position',index, x, y)
             avg_brightness = sum_brightness / self.__CELLS
-            logging.info('sum_brightness=%d, avg_brightness=%d',sum_brightness,avg_brightness)
+            # logging.info('sum_brightness=%d, avg_brightness=%d',sum_brightness,avg_brightness)
         
             # Get which cell is black
             for index in range(0, self.__CELLS, 1):
@@ -79,7 +79,7 @@ class Commander(GridFinder):
                 y = int(index * delta_y + cy1 + delta_y / 2)
                 cell_brightness = gray_image[y,x]
                 #cell_color = b + g + r
-                logging.info('cell[%d] brightness=%d', index, cell_brightness)
+                # logging.info('cell[%d] brightness=%d', index, cell_brightness)
                 if cell_brightness < avg_brightness * self.__LOWEST_SCALE:
                     return index
         logging.warning('Can NOT find arucos')

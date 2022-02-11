@@ -21,6 +21,7 @@
 
 
 # TODO: Reconstruct 
+from config.message_logger import MessageLogger
 from gobot_vision.commander_vision import config_2_aruco_marks
 from gobot_vision.chessboard_vision import config_4_aruco_marks
 
@@ -81,8 +82,8 @@ class GridFinder():
         arucoParams = cv2.aruco.DetectorParameters_create()
         corners, ids, rejected = cv2.aruco.detectMarkers(image, arucoDict, parameters=arucoParams)
         # result = []
-        print('GridFinder.find_corners()  double check target ids ',self.__mark_ids)
-        print('GridFinder.find_corners()  found ids ', ids)
+        MessageLogger.Output('GridFinder.find_corners()  double check target ids',self.__mark_ids)
+        MessageLogger.Output('GridFinder.find_corners()  found ids', ids)
         result = []
         # verify *at least* one ArUco marker was detected
         if len(corners) >= len(self.__mark_ids):

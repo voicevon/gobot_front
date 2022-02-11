@@ -114,7 +114,7 @@ class ChessboardVision():
         
     def start_scan(self, img_board, history_length=3, show_processing_image=True, pause_second=1):
         '''
-        Try to get layout from image.
+        Try to get layout from perspectived board image.
         return A:
             -1,-1: not detected any layout
         return B:
@@ -123,26 +123,27 @@ class ChessboardVision():
         '''
         self.__history_length = history_length
         detected_layout = ChessboardLayout('Detected layout')
-       # detected_layout.print_out()
         board_gray = cv2.cvtColor(img_board, cv2.COLOR_BGR2GRAY)
         board_brightness = numpy.mean(board_gray)
-        # print('board_brightness()= %d' %board_brightness)
 
         if app_config.publish_image_board_gridline.value:
             lined_image = img_board.copy()
             line_color = (255,255,0)
             pen_width = 1
+            # draw horizontal lines
             for row in range(0,self.__ROWS):
                 y = int(row * self.__SPACE_Y + self.__SPACE_Y / 2)
+                # y = int(row * self.__SPACE_Y)
                 x1 = 0
                 x2 = int(19 * self.__SPACE_X)
                 cv2.line(lined_image, (x1,y),(x2,y), line_color, pen_width)
+            # draw vertical lines
             for col in range(0,self.__COLS):
                 x = int(col * self.__SPACE_X + self.__SPACE_X / 2)
+                # x = int(col * self.__SPACE_X )
                 y1 = 0
                 y2 = 19 * self.__SPACE_Y
                 cv2.line(lined_image, (x,y1),(x,y2), line_color, pen_width)
-            # g_mqtt.publish_cv_image('gobot/image/chessboard/gridline',lined_image)     
             ImageLogger.Output('gobot/image/chessboard/gridline',lined_image)     
 
         cell_scanner = CellScanner(board_brightness)
@@ -151,27 +152,32 @@ class ChessboardVision():
             for row in range(0,self.__ROWS):
                 # crop to small image, around cell center
                 # (x1,y1) is the topleft point of the cell
-                x1 = self.__SPACE_X * col 
-                y1 = self.__SPACE_Y * row 
+                delta = int(self.__SPACE_X * (self.__VIEW_RANGE - 1) / 2)
+                x1 = self.__SPACE_X * col - delta
+                y1 = self.__SPACE_Y * row - delta
+                if x1<0: x1=0
+                if y1<0: y1=0
                 # (x2,y2) is the bottomright point of the cell
                 x2 = x1 + int(self.__SPACE_X * self.__VIEW_RANGE)
                 y2 = y1 + int(self.__SPACE_Y * self.__VIEW_RANGE)
                     
                 cell_img_big = img_board[y1:y2, x1:x2]
-
+                # filename = 'big_cell_'+ str(col) + '_' + str(row) + ".jpg"
+                # cv2.imwrite(filename,cell_img_big)
                 shrink_size = 6
-                x1 = self.__SPACE_X * col + shrink_size
-                y1 = self.__SPACE_Y * row + shrink_size
-                x2 = x1 + int(self.__SPACE_X * self.__VIEW_RANGE - 2 * shrink_size)
-                y2 = y1 + int(self.__SPACE_Y * self.__VIEW_RANGE - 2 * shrink_size)
+                x1 += shrink_size
+                y1 += shrink_size
+                x2 -= shrink_size
+                y2 -= shrink_size
                 cell_img_small = img_board[y1:y2, x1:x2]
+
 
                 is_inspected_cell = False
                 self.__inspect_cell.from_name(app_config.robot_eye.layout_scanner.inspecting.cell_name)
                 if (col == 18 - self.__inspect_cell.col_id) and (18- row == self.__inspect_cell.row_id):
-                    # cv2.imshow('bbbb',cell_img_big)
-                    # cv2.imshow('ssss',cell_img_small)
                     is_inspected_cell = True
+                    cv2.imshow('bbbb',cell_img_big)
+                    cv2.imshow('ssss',cell_img_small)
                 # color = cell_scanner.scan(cell_img,is_inspected_cell)
                 color = cell_scanner.scan_white(cell_img_big, is_inspected_cell)
                 detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)

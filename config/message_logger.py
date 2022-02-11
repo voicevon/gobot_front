@@ -17,11 +17,17 @@ class MessageLogger():
         MessageLogger.to_where = to_somewhere
 
     @staticmethod
-    def Output(topic_or_title: str, message :str):
+    def Output(topic_or_title: str, message):
+        mute_list = ['GridFinder.find_corners()  double check target ids',
+                    'GridFinder.find_corners()  found ids',
+                    ]
+        if topic_or_title in mute_list: 
+            return
+
         if MessageLogger.to_where == MessageLoggerToWhere.TO_SCREEN:
             print(topic_or_title, message)
         else:
-            logging.error("to_where is not understandable.....")
+            print("MessageLogger:Output", "to_where is not understandable.....", MessageLogger.to_where)
 
 
     # print('Prepare MQTT connection......')
