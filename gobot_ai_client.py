@@ -46,6 +46,7 @@ class GoGameAiClient(object):
             else:
                 data = data + self.__socket_client.recv(1024)
         text = data.decode().replace("\n\n", "")
+        # print(data,text)
         return text
     
     def list_commands(self):
@@ -114,7 +115,8 @@ class GoGameAiClient(object):
         ret = self.__to_ai(command)
         print(command, ret)
 
-        if ret.decode().count("=") > 0:
+        # if ret.decode().count("=") > 0:
+        if ret.count("=") > 0:
             Config.current_game.lastest_move_cell_name = cell_name
             return
         else:
@@ -131,7 +133,7 @@ if __name__ == "__main__":
     runner.list_commands()
     runner.feed_user_move('Q4')
     cell_name = runner.get_ai_move()
-    print(cell_name)
+    print("Computer played at  ", cell_name)
     runner.stop_game()
 
 

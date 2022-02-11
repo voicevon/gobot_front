@@ -197,7 +197,7 @@ class ChessboardLayout(GridLayout):
     def print_out(self):
         #print('print_out(),   on debugging....')
         #return 
-        int_to_char = {StoneColor.BLANK:'. ',self._BLACK:'X ', StoneColor.WHITE:'O ',}
+        int_to_char = {StoneColor.BLANK:'. ', StoneColor.BLACK:'X ', StoneColor.WHITE:'O ',}
         print(self._FC_YELLOW + self.name)
         cell = ChessboardCell()
         # print column name on table head

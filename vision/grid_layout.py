@@ -3,7 +3,7 @@
 
 from von.terminal_font import TerminalFont
 from config.config import Config
-from gogame.chessboard_cell import ChessboardCell
+from gogame.chessboard_cell import ChessboardCell,StoneColor
 
 class GridLayout():
 
@@ -28,10 +28,6 @@ class GridLayout():
         self._ROWS = config.rows
         self._COLS = config.cols
         
-        #self.__BLANK = config.game_rule.cell_color.blank
-        self.__BLANK = 0 
-        self._BLACK = 1  #config.game_rule.cell_color.black
-        self._WHITE = 2 #config.game_rule.cell_color.white
 
 
 

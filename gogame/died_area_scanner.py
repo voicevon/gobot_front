@@ -1,7 +1,7 @@
 
 
 from gogame.chessboard import ChessboardLayout
-from gogame.chessboard_cell import ChessboardCell
+from gogame.chessboard_cell import ChessboardCell, StoneColor
 import logging
 
 
@@ -9,7 +9,7 @@ class DiedAreaScanner(ChessboardLayout):
 
     def __init__(self):
         ChessboardLayout.__init__(self,'Died area scanner')
-        self.__died_area_array = [([0] * 19) for i in range(19)]
+        self.__died_area_array = [([StoneColor.BLANK] * 19) for i in range(19)]
 
         # self.__DIED_BLACK = self._BLACK + 100
         # self.__DIED_WHITE = self._WHITE + 100
@@ -92,7 +92,7 @@ class DiedAreaScanner(ChessboardLayout):
                         self.__died_area_array[col][row] = wake_up_type
         return count
 
-    def start_scan(self, target_color):
+    def start_scan(self, target_color:StoneColor):
         '''
         return:
             count: How many cells are died
@@ -163,7 +163,7 @@ class DiedAreaScanner(ChessboardLayout):
         cell = self.get_first_died_cell()
         self.__died_area_array[cell.col_id][cell.row_id] = 15
 
-    def __init_died_area_array(self, origin_array,target_color_code):
+    def __init_died_area_array(self, origin_array,target_color_code:StoneColor):
         '''
         # Based on origin_array
         #       0 = Blank

@@ -150,7 +150,7 @@ class GobotHead():
                     cell.from_col_row_id(col,row)
                     # self.__controller.action_pickup_stone_from_cell(cell.name)
                     # self.__controller.action_place_stone_to_trash_bin()
-                    self.__ai.layout.play_col_row(col,row,self.__BLANK)
+                    self.__ai.layout.play_col_row(col,row,StoneColor.BLANK)
 
     def at_state_game_over(self):
         '''
@@ -273,7 +273,7 @@ class GobotHead():
             # will go on to remove other cells on the next invoking
             self.__controller.action_pickup_stone_from_cell(cell.name)
             self.__controller.action_place_stone_to_trash_bin()
-            self.__ai.layout.play(cell.name, self.__BLANK)
+            self.__ai.layout.play(cell.name, StoneColor.BLANK)
             self.__died_area_scanner.died_cell_removed_first_one()
 
     def at_state_withdraw_black(self):
@@ -286,12 +286,12 @@ class GobotHead():
             # will go on to remove other cells on the next invoking
             self.__controller.action_pickup_stone_from_cell(cell.name)
             self.__controller.action_place_stone_to_trash_bin()
-            self.__ai.layout.play(cell.name, self.__BLANK)
+            self.__ai.layout.play(cell.name, StoneColor.BLANK)
             self.__died_area_scanner.died_cell_removed_first_one()
 
     def at_state_scan_died_white(self):
         self.__died_area_scanner.set_layout_array(self.__ai.layout.get_layout_array())
-        count = self.__died_area_scanner.start_scan(self.__BLACK)
+        count = self.__died_area_scanner.start_scan(StoneColor.BLACK)
         if count > 0:
             self.__died_area_scanner.print_out_died_area()
 
@@ -299,7 +299,7 @@ class GobotHead():
 
     def at_state_scan_died_black(self):
         self.__died_area_scanner.set_layout_array(self.__ai.layout.get_layout_array())
-        count = self.__died_area_scanner.start_scan(self.__WHITE)
+        count = self.__died_area_scanner.start_scan(StoneColor.WHITE)
         if count > 0:
             self.__died_area_scanner.print_out_died_area()
         self.__goto = self.at_state_withdraw_white
@@ -323,7 +323,7 @@ class GobotHead():
         elif len(diffs) == 1:
             # Only one cell is different.
             cell_name, ai_color, scanned_color = diffs[0]
-            if scanned_color == self.__WHITE:
+            if scanned_color == StoneColor.WHITE:
                 # And the scanned layout says: it's white color, because it's put by user, He runs so fast! :)
                 same = True
         if same:
@@ -340,7 +340,7 @@ class GobotHead():
         # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
         layout,depth = self.__vision.get_chessboard_layout(self.__last_image)
         layout.print_out()
-        cell = layout.get_first_cell(self.__BLANK)
+        cell = layout.get_first_cell(StoneColor.BLANK)
         self.__controller.action_pickup_stone_from_warehouse()
         self.__controller.action_place_stone_to_cell(cell.name)
         # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
@@ -350,11 +350,11 @@ class GobotHead():
     def at_demo_remove_to_trashbin_black(self):
         count = self.__remove_one_cell_to_trash(self.__BLACK)
         if count == 0:
-            self.__remove_one_cell_to_trash(self.__WHITE)  
+            self.__remove_one_cell_to_trash(StoneColor.WHITE)  
         self.__goto = self.at_state_game_over
 
     def at_demo_remove_to_trashbin_white(self):
-        count = self.__remove_one_cell_to_trash(self.__WHITE)
+        count = self.__remove_one_cell_to_trash(StoneColor.WHITE)
         if count == 0:
             self.__remove_one_cell_to_trash(self.__BLACK)
         self.__goto = self.at_state_game_over
@@ -382,7 +382,7 @@ class GobotHead():
             if cell is not None:
                 self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.WHITE)
                 print('First white cell = %s' % cell.name)
-                # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, self.__WHITE)
+                # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.WHITE)
                 id_white = cell.id
                 id = id_black
                 if id_white < id_black:
