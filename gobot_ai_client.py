@@ -110,10 +110,10 @@ class GoGameAiClient(object):
         '''
         Tell AI where user has played a stone of Black.
         '''
-        self.layout.play(cell_name,StoneColor.BLACK)
+        self.layout.play(cell_name, StoneColor.BLACK)
         command = "play b " + cell_name
         ret = self.__to_ai(command)
-        print(command, ret)
+        # print(command, ret)
 
         # if ret.decode().count("=") > 0:
         if ret.count("=") > 0:

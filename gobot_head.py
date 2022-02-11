@@ -2,6 +2,7 @@
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
+from email.message import Message
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 
@@ -195,7 +196,8 @@ class GobotHead():
 
     def at_state_user_play(self):
         '''
-        check mark command, might be game over.
+        * User is always play BLACK stone.
+        * check mark command, might be game over.
         ''' 
         mark = self.__vision.get_command_index(self.__last_image)
         
@@ -250,6 +252,9 @@ class GobotHead():
 
 
     def at_state_computer_play(self):
+        '''
+        Computer is always play White
+        '''
         self.__ai.get_final_score()
         # get command from PhonixGo
         cell_name = self.__ai.get_ai_move()
@@ -259,7 +264,7 @@ class GobotHead():
             # robot arm play a chess, The instruction is from AI.
             self.__controller.action_pickup_stone_from_warehouse()
             self.__controller.action_place_stone_to_cell(cell_name=cell_name)
-            self.__ai.layout.play(cell_name, self.__BLACK)
+            self.__ai.layout.play(cell_name, StoneColor.BLACK)
 
         self.__goto = self.at_state_scan_died_white
 
@@ -267,9 +272,10 @@ class GobotHead():
         cell = self.__died_area_scanner.get_first_died_cell()
         if cell is None:
             # There is no died area to be removed
-            self.__goto = self.at_state_compare_layout_black
+            # self.__goto = self.at_state_compare_layout_white
+            self.__goto = self.at_state_computer_play
         else:
-            # only remove one cell of the died area.
+            # only remove one cell inside the died area.
             # will go on to remove other cells on the next invoking
             self.__controller.action_pickup_stone_from_cell(cell.name)
             self.__controller.action_place_stone_to_trash_bin()
@@ -304,16 +310,24 @@ class GobotHead():
             self.__died_area_scanner.print_out_died_area()
         self.__goto = self.at_state_withdraw_white
 
-    def at_state_compare_layout_black(self):
+    def at_state_compare_layout_black_old(self):
+        '''
+        * Doing withdraw black stones.
+        '''
         layout = self.__eye.get_stable_layout(self.__LAYOUT_STABLE_DEPTH)
         diffs = self.__ai.layout.compare_with(layout)
         if len(diffs) == 0:
+            # Withdraw the black is finished.
             self.__goto = self.at_state_computer_play
         else: 
+            # Withdraw is not finished.
             diffs = self.__ai.layout.compare_with(layout, do_print_out=True)
             time.sleep(10)
 
     def at_state_compare_layout_black(self):
+        '''
+        * Doing withdraw black stones.
+        '''
         layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
         diffs = self.__ai.layout.compare_with(layout)
 
@@ -327,10 +341,10 @@ class GobotHead():
                 # And the scanned layout says: it's white color, because it's put by user, He runs so fast! :)
                 same = True
         if same:
-            logging.info('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Now please place your chess onto the board. ')
+            logging.info('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Now please place your Stone onto the board. ')
             self.__goto = self.at_state_user_play
-            g_mqtt.publish('gobot/smf/current','user_playing')
-            g_mqtt.publish(topic="fishtank/switch/r4/command",payload="ON",retain=False)
+            MessageLogger.Output('gobot/smf/current','user_playing')
+            MessageLogger.Output("fishtank/switch/r4/command","ON")
         else:
             # more than one cells are different,  or the only one different cell is black color. 
             diffs = self.__ai.layout.compare_with(layout, do_print_out=True)
@@ -348,7 +362,7 @@ class GobotHead():
         self.__goto = self.at_state_game_over
 
     def at_demo_remove_to_trashbin_black(self):
-        count = self.__remove_one_cell_to_trash(self.__BLACK)
+        count = self.__remove_one_cell_to_trash(StoneColor.BLACK)
         if count == 0:
             self.__remove_one_cell_to_trash(StoneColor.WHITE)  
         self.__goto = self.at_state_game_over
@@ -356,7 +370,7 @@ class GobotHead():
     def at_demo_remove_to_trashbin_white(self):
         count = self.__remove_one_cell_to_trash(StoneColor.WHITE)
         if count == 0:
-            self.__remove_one_cell_to_trash(self.__BLACK)
+            self.__remove_one_cell_to_trash(StoneColor.BLACK)
         self.__goto = self.at_state_game_over
 
     def at_demo_mover(self):  # Must be no arguiment function for self.__goto
@@ -375,7 +389,7 @@ class GobotHead():
         cell = layout.get_first_cell(StoneColor.BLACK)
         if cell is not None:
             print('First black cell = %s' % cell.name)
-            # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, self.__BLACK)
+            # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.BLACK)
             id_black = cell.id
             self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.BLACK)
             cell = layout.get_first_cell(StoneColor.WHITE)
@@ -420,7 +434,7 @@ class GobotHead():
         layout.print_out()
         
         die_helper = DiedAreaDetector()
-        die_helper.start(layout.get_layout_array(),self.__BLACK)
+        die_helper.start(layout.get_layout_array(),StoneColor.BLACK)
 
 
     def SpinOnce(self):
