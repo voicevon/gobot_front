@@ -47,6 +47,7 @@ class GobotHead():
     def __init__(self):
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
+        self.__last_detected_layout = ChessboardLayout('Last_detected')
 
         logging.basicConfig(level=logging.DEBUG)
 
@@ -214,6 +215,13 @@ class GobotHead():
                 return
 
         stable_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
+        update = self.__last_detected_layout.compare_with(stable_layout)
+        if len(update) == 0:
+        # if self.__last_detected_layout == stable_layout:
+            return
+        # self.__last_detected_layout.compare_with(stable_layout, do_print_out=True)
+        self.__last_detected_layout = stable_layout  # should be a copy
+
         do_print_diffs = False
         diffs = self.__ai.layout.compare_with(stable_layout,do_print_out=True)
         diffs_len = len(diffs)
@@ -265,6 +273,7 @@ class GobotHead():
             self.__controller.action_pickup_stone_from_warehouse()
             self.__controller.action_place_stone_to_cell(cell_name=cell_name)
             self.__ai.layout.play(cell_name, StoneColor.WHITE)
+            self.__ai.layout.print_out()
 
         self.__goto = self.at_state_scan_died_black
 
