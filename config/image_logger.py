@@ -1,8 +1,8 @@
 
 from enum import Enum
 import logging
-from tkinter import Image
-from types import ClassMethodDescriptorType
+# from tkinter import Image
+# from types import ClassMethodDescriptorType
 # from tkinter import Image
 import cv2
 from von.mqtt_helper import g_mqtt
