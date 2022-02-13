@@ -44,13 +44,25 @@ class GobotHead():
             3.3 talker_arm, can talk to chessboard robot arm.
             3.4 talker_house, can talk to house robot arm.
     '''
-    def __init__(self):
+    def __init__(self, eye_type: RobotEye_Product):
+        self.__eye = RobotEye_Factory.CreateMonoEye(eye_type)
+        self.__vision = GobotVision()
+        self.__ai = GoGameAiClient()
+        self.__controller = Controller()
+        self.__died_area_scanner = DiedAreaScanner()
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
         self.__last_detected_layout = ChessboardLayout('Last_detected')
 
         logging.basicConfig(level=logging.DEBUG)
 
+
+        logging.warning("Start init objects......")
+        self.__InitOthers()
+
+    def __InitOthers(self):
+        ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
+        MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__BG_BLUE = TerminalFont.Color.Background.blue
         self.__BG_RED = TerminalFont.Color.Background.red
@@ -59,20 +71,6 @@ class GobotHead():
         self.__FC_PINK = TerminalFont.Color.Fore.pink
         self.__MARK_STABLE_DEPTH = 5
         self.__LAYOUT_STABLE_DEPTH = 2
-        logging.warning("Start init objects......")
-        self.init()
-
-    def init(self):
-        # self.__eye = MonoEyePiCamera('2021-0611.yml')
-        # self.__eye = MonoEyeUsbCamera('2021-0611.yml')
-        # self.__eye = MonoEyeEmulator()
-        self.__eye = RobotEye_Factory.CreateMonoEye(RobotEye_Product.CameraEmulator)
-        self.__vision = GobotVision()
-        self.__ai = GoGameAiClient()
-        self.__controller = Controller()
-        self.__died_area_scanner = DiedAreaScanner()
-        ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
-        MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
 
     def get_stable_layout(self,min_stable_depth):
         stable_depth = 0
@@ -439,17 +437,6 @@ class GobotHead():
                 
         self.__goto = self.at_state_game_over
 
-    def at_ending_demo(self):
-        self.__goto = self.at_ending_demo
-
-    def test_die_area_detector(self):
-        layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
-        layout.print_out()
-        
-        die_helper = DiedAreaDetector()
-        die_helper.start(layout.get_layout_array(),StoneColor.BLACK)
-
-
     def SpinOnce(self):
         self.__last_image = self.__eye.take_picture(do_undistort=True)
         ImageLogger.Output("eye/origin", self.__last_image)
@@ -485,7 +472,12 @@ class GobotHead():
 
 if __name__ == '__main__':
 
-    myrobot = GobotHead()
+    # eye_type = RobotEye_Product.CameraEmulator
+    eye_type = RobotEye_Product.PaspberryPiCamera
+    # eye_type = RobotEye_Product.UsbCamera
+
+    myrobot = GobotHead(eye_type)
+    # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
     while True:
         myrobot.SpinOnce()
 

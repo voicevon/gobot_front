@@ -20,7 +20,7 @@ class MessageLogger():
     def Output(topic_or_title: str, message):
         mute_list = ['GridFinder.find_corners()  double check target ids',
                     'GridFinder.find_corners()  found ids',
-                    'xx CellScanner.scan_black()  scan_black_counter =',
+                    'CellScanner.scan_black()  scan_black_counter =',
                     'CellScanner.scan_white()',
                     ]
         if topic_or_title in mute_list: 
