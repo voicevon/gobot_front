@@ -94,8 +94,8 @@ class CellScanner():
 
         if is_inspected:
             ImageLogger.Output('gobot/debug/inspect/scan_black',cell_image)
-            MessageLogger.Output('scan black blur', blur)
-            MessageLogger.Output('scan black bin', bin_image)
+            ImageLogger.Output('scan black blur', blur)
+            ImageLogger.Output('scan black bin', bin_image)
             #is_success, img_encode = cv2.imencode(".jpg", blur)
             #if is_success:
                 #img_pub = img_encode.tobytes()
