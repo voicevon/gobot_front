@@ -77,6 +77,7 @@ class GobotHead():
         self.__FC_GREEN = TerminalFont.Color.Fore.green
         self.__FC_RESET = TerminalFont.Color.Control.reset
         self.__FC_PINK = TerminalFont.Color.Fore.pink
+        self.__BOLD = TerminalFont.Color.Control.bold
         self.__MARK_STABLE_DEPTH = 5
         self.__LAYOUT_STABLE_DEPTH = 2
 
