@@ -18,9 +18,18 @@ class MonoEyeBase(ABC):
 
     TODO Make an abstract hardware robotEye, So can debug software on any computer.
     '''
-    
+    __show_debug_info = True
+
     @property
-    def show_debug_info(self): bool
+    @classmethod
+    def show_debug_info(cls) ->bool:
+        return cls.__show_debug_info
+
+    @show_debug_info.setter
+    def show_debug_info(cls, value):
+        cls.__show_debug_info = value
+
+
 
 
     @abstractmethod

@@ -27,10 +27,10 @@ class MonoEyeUsbCamera(MonoEyeBase):
     def take_picture(self, do_undistort=True):
         return_value, image = self.__camera.read()
         if do_undistort:
-            if self.show_debug_info:
+            if self.__show_debug_info:
                 print('RobotEye.take_picture()   start undistortion')
             undistort_image = cv2.undistort(image, self.__mtx, self.__dist, None, None)
-            if self.show_debug_info:
+            if self.__show_debug_info:
                 print('...... end undistortion')
             return undistort_image
         return image

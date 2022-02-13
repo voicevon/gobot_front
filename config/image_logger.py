@@ -13,20 +13,26 @@ class ImageLoggerToWhere(Enum):
     TO_FILE = 3
 
 class ImageLogger():
-    _to_where: ImageLoggerToWhere
+    __to_where: ImageLoggerToWhere
 
     @property
     @classmethod
     def to_where(cls) ->ImageLoggerToWhere:
-        return cls._to_where
+        return cls.__to_where
 
     @classmethod
-    def set_to_where(cls, value: ImageLoggerToWhere):
+    @to_where.setter
+    def to_where(cls, value: ImageLoggerToWhere):
+        cls.__to_where = value
+        # Below is nerver worked!  a python bug?
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         if value == ImageLoggerToWhere.TO_MQTT:
             logging.info("Connecting to MQTT broker......")
             g_mqtt.connect_to_broker("T22-0213",'voicevon.vicp.io',1883,'von','von1970')
-            cls._to_where = value
-
+    
+    @staticmethod
+    def connect_to_mqtt_broker():
+        g_mqtt.connect_to_broker("T22-0213",'voicevon.vicp.io',1883,'von','von1970')
 
 
 
@@ -48,10 +54,10 @@ class ImageLogger():
         if topic_or_title in mute_topic:
             return
 
-        if ImageLogger._to_where == ImageLoggerToWhere.TO_SCREEN:
+        if ImageLogger.to_where == ImageLoggerToWhere.TO_SCREEN:
             cv2.imshow(topic_or_title, cv_image)
             cv2.waitKey(1)
-        if ImageLogger._to_where == ImageLoggerToWhere.TO_MQTT:
+        if ImageLogger.to_where == ImageLoggerToWhere.TO_MQTT:
             print(topic_or_title)
             g_mqtt.publish_cv_image(topic=topic_or_title,cv_image=cv_image, retain=True )
 

@@ -30,27 +30,33 @@ class GobotHead():
     '''
     GobotHead is the main and starter of this application.
     GobotHead is composed by:
-        1 eye, it read camera
-        2 vision, will recognize some components.
-            2.1  chessboard_vision, can get ChessboardLayout.
-            2.2  command_vision, can get mark on command bar.
-            2.4  house_vision, cam get park_point is empty or not.
-        3 talker_xxx, will communicate with out side.
-            3.1 talker_ai, can talk to ai-go-game-player
-            3.2 talker_mqtt, can talk to mqtt broker
-                3.2.1  subscribe topics for parameter, functions
-                3.2.2  public images, states, etc for debugging.
-            3.3 talker_arm, can talk to chessboard robot arm.
-            3.4 talker_house, can talk to house robot arm.
+    1. eye, it read camera
+    2. vision, will recognize some components.
+    *  chessboard_vision, can get ChessboardLayout.
+    *  command_vision, can get mark on command bar.
+    *  house_vision, cam get park_point is empty or not.
+    3. talker_xxx, will communicate with out side.
+    3.1 talker_ai, can talk to ai-go-game-player
+    3.2 talker_mqtt, can talk to mqtt broker
+        3.2.1  subscribe topics for parameter, functions
+        3.2.2  public images, states, etc for debugging.
+    3.3 talker_arm, can talk to chessboard robot arm.
+    3.4 talker_house, can talk to house robot arm.
     '''
     def __init__(self, eye_type: RobotEye_Product):
         self.__eye = RobotEye_Factory.CreateMonoEye(eye_type)
         if eye_type == RobotEye_Product.PaspberryPiCamera:
             ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+            ImageLogger.connect_to_mqtt_broker()
+
         elif eye_type == RobotEye_Product.CameraEmulator:
-            ImageLogger.set_to_where(ImageLoggerToWhere.TO_MQTT)
-        else:
             ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
+            # ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+            # ImageLogger.connect_to_mqtt_broker()
+            
+        elif eye_type == RobotEye_Product.UsbCamera:
+            ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
+
 
         self.__vision = GobotVision()
         self.__ai = GoGameAiClient()
@@ -64,6 +70,7 @@ class GobotHead():
         logging.info("Start init objects......")
         self.__InitOthers()
         MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
+
     def __InitOthers(self):
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
@@ -475,9 +482,9 @@ class GobotHead():
 
 if __name__ == '__main__':
 
-    eye_type = RobotEye_Product.CameraEmulator
+    # eye_type = RobotEye_Product.CameraEmulator
     # eye_type = RobotEye_Product.PaspberryPiCamera
-    # eye_type = RobotEye_Product.UsbCamera
+    eye_type = RobotEye_Product.UsbCamera
 
     myrobot = GobotHead(eye_type)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
