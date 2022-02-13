@@ -19,7 +19,7 @@ class RobotEye_Factory():
 
     @staticmethod
     def CreatePiCameraEye():
-        from robot_eye_pi_camera import MonoEyePiCamera
+        from vision.robot_eye_pi_camera import MonoEyePiCamera
         return MonoEyePiCamera('2021-0611.yml')
 
     @staticmethod

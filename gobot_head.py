@@ -19,7 +19,6 @@ import logging
 import time
 
 from von.terminal_font import TerminalFont  # pip3 install VonPylib
-# from von.mqtt_helper import g_mqtt
 from config.image_logger import ImageLogger,ImageLoggerToWhere
 from config.message_logger import MessageLoggerToWhere,MessageLogger
 import cv2
@@ -46,6 +45,13 @@ class GobotHead():
     '''
     def __init__(self, eye_type: RobotEye_Product):
         self.__eye = RobotEye_Factory.CreateMonoEye(eye_type)
+        if eye_type == RobotEye_Product.PaspberryPiCamera:
+            ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+        elif eye_type == RobotEye_Product.CameraEmulator:
+            ImageLogger.set_to_where(ImageLoggerToWhere.TO_MQTT)
+        else:
+            ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
+
         self.__vision = GobotVision()
         self.__ai = GoGameAiClient()
         self.__controller = Controller()
@@ -55,14 +61,11 @@ class GobotHead():
         self.__last_detected_layout = ChessboardLayout('Last_detected')
 
         logging.basicConfig(level=logging.DEBUG)
-
-
-        logging.warning("Start init objects......")
+        logging.info("Start init objects......")
         self.__InitOthers()
-
-    def __InitOthers(self):
-        ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
         MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
+    def __InitOthers(self):
+
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__BG_BLUE = TerminalFont.Color.Background.blue
         self.__BG_RED = TerminalFont.Color.Background.red
@@ -439,7 +442,7 @@ class GobotHead():
 
     def SpinOnce(self):
         self.__last_image = self.__eye.take_picture(do_undistort=True)
-        ImageLogger.Output("eye/origin", self.__last_image)
+        ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
         # cv2.waitKey(1)
         
         # if Config.publish_image_origin.value:
@@ -472,8 +475,8 @@ class GobotHead():
 
 if __name__ == '__main__':
 
-    # eye_type = RobotEye_Product.CameraEmulator
-    eye_type = RobotEye_Product.PaspberryPiCamera
+    eye_type = RobotEye_Product.CameraEmulator
+    # eye_type = RobotEye_Product.PaspberryPiCamera
     # eye_type = RobotEye_Product.UsbCamera
 
     myrobot = GobotHead(eye_type)

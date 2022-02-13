@@ -8,7 +8,7 @@ import logging
 
 class MonoEyePiCamera(MonoEyeBase):
 
- def __init__(self, coefficients_file):
+    def __init__(self, coefficients_file):
         self.__camera = PiCamera(resolution=(1920,1088))
         self.__coefficients_file = coefficients_file
         mtx, dist = self.load_coefficients(coefficients_file)

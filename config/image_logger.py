@@ -1,7 +1,11 @@
 
 from enum import Enum
+import logging
 from tkinter import Image
+from types import ClassMethodDescriptorType
+# from tkinter import Image
 import cv2
+from von.mqtt_helper import g_mqtt
 
 class ImageLoggerToWhere(Enum):
     TO_MQTT = 1
@@ -9,8 +13,22 @@ class ImageLoggerToWhere(Enum):
     TO_FILE = 3
 
 class ImageLogger():
+    _to_where: ImageLoggerToWhere
+
     @property
-    def to_where() :ImageLoggerToWhere
+    @classmethod
+    def to_where(cls) ->ImageLoggerToWhere:
+        return cls._to_where
+
+    @classmethod
+    def set_to_where(cls, value: ImageLoggerToWhere):
+        if value == ImageLoggerToWhere.TO_MQTT:
+            logging.info("Connecting to MQTT broker......")
+            g_mqtt.connect_to_broker("T22-0213",'voicevon.vicp.io',1883,'von','von1970')
+            cls._to_where = value
+
+
+
 
     @staticmethod
     def SetOutputToWhere(to_somewhere : ImageLoggerToWhere):
@@ -22,13 +40,21 @@ class ImageLogger():
     @staticmethod
     def Output(topic_or_title: str, cv_image):
         # if topic_or_title in ImageLogger.mute_image_list:
-        mute_topic = ['eye/origin', 'command','grid/aruco','gobot/image/board']
+        # mute_topic = []
+        mute_topic = ['xx eye/origin'
+                        , 'command'
+                        ,'grid/aruco'
+                        ,'gobot/image/board']
         if topic_or_title in mute_topic:
             return
 
-        if ImageLogger.to_where == ImageLoggerToWhere.TO_SCREEN:
+        if ImageLogger._to_where == ImageLoggerToWhere.TO_SCREEN:
             cv2.imshow(topic_or_title, cv_image)
             cv2.waitKey(1)
+        if ImageLogger._to_where == ImageLoggerToWhere.TO_MQTT:
+            print(topic_or_title)
+            g_mqtt.publish_cv_image(topic=topic_or_title,cv_image=cv_image, retain=True )
+
         else:
             print("ImageLogger:Output", "to_where is not understandable.....", ImageLogger.to_where)
 
