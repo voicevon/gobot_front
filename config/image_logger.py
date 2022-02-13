@@ -47,17 +47,18 @@ class ImageLogger():
     def Output(topic_or_title: str, cv_image):
         # if topic_or_title in ImageLogger.mute_image_list:
         # mute_topic = []
-        mute_topic = ['xx eye/origin'
-                        , 'command'
+        mute_topic = ['gobot/head/eye/origin'
+                        ,'command'
                         ,'grid/aruco'
-                        ,'gobot/image/board']
+                        ,'gobot/image/board'
+                        ]
         if topic_or_title in mute_topic:
             return
 
         if ImageLogger.to_where == ImageLoggerToWhere.TO_SCREEN:
             cv2.imshow(topic_or_title, cv_image)
             cv2.waitKey(1)
-        if ImageLogger.to_where == ImageLoggerToWhere.TO_MQTT:
+        elif ImageLogger.to_where == ImageLoggerToWhere.TO_MQTT:
             g_mqtt.publish_cv_image(topic=topic_or_title,cv_image=cv_image, retain=True )
 
         else:

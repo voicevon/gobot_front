@@ -72,16 +72,16 @@ class CellScanner():
         #     print('detected cell_image,  circles=%d' %len(detected_circles))
         return cell_color
 
-    def scan_black(self, cell_image, is_inspected):
+    def scan_black(self, cell_image, is_inspected:bool):
         '''
         Two steps for scanning a black stone.
         1. image process = cell image -> gray -> blur -> bin_image \n
         2. count bin_image pixels in black \n
         We have to make dicision of the treshold \n
         1. How dark of a pixel is black in bin_image \n 
-        2. minimum_black_pixed_count
+        2. MIN_BLACK_PIXED_COUNT
         '''
-        minimum_black_pixed_count = 170
+        MIN_BLACK_PIXED_COUNT = 90   #170
         gray = cv2.cvtColor(cell_image, cv2.COLOR_BGR2GRAY)
         blur = cv2.medianBlur(gray,7)
         ret, bin_image = cv2.threshold(blur, 50, 255, cv2.THRESH_BINARY_INV)
@@ -89,7 +89,7 @@ class CellScanner():
 
         cell_color = StoneColor.BLANK
         count = cv2.countNonZero(bin_image)
-        if count > minimum_black_pixed_count: 
+        if count > MIN_BLACK_PIXED_COUNT: 
             cell_color = StoneColor.BLACK
 
         if is_inspected:
@@ -139,7 +139,7 @@ class CellScanner():
                     #     print('Negtive')
                     #     cv2.waitKey(100000)
                 else:
-                    print(self.__FC_RESET + '>>>>average_brightness= %d' %average_brightness)
+                    MessageLogger.Output('>>>>average_brightness=',average_brightness)
 
         else:
             if is_inspected: 

@@ -23,6 +23,7 @@ class MessageLogger():
                     'CellScanner.scan_black()  scan_black_counter =',
                     'CellScanner.scan_white()',
                     'scan black bin',
+                    '>>>>average_brightness=',
                     ]
         if topic_or_title in mute_list: 
             return
