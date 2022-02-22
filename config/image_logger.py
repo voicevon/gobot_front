@@ -20,7 +20,7 @@ class ImageLogger():
     def to_where(cls) ->ImageLoggerToWhere:
         return cls.__to_where
 
-    @classmethod
+    @property
     @to_where.setter
     def to_where(cls, value: ImageLoggerToWhere):
         cls.__to_where = value
@@ -58,6 +58,7 @@ class ImageLogger():
         if ImageLogger.to_where == ImageLoggerToWhere.TO_SCREEN:
             cv2.imshow(topic_or_title, cv_image)
             cv2.waitKey(1)
+
         elif ImageLogger.to_where == ImageLoggerToWhere.TO_MQTT:
             g_mqtt.publish_cv_image(topic=topic_or_title,cv_image=cv_image, retain=True )
 

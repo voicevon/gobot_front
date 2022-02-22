@@ -22,8 +22,8 @@
 
 # TODO: Reconstruct 
 from config.message_logger import MessageLogger
-from gobot_vision.commander_vision import config_2_aruco_marks
-from gobot_vision.chessboard_vision import config_4_aruco_marks
+# from gobot_vision.commander_vision import config_2_aruco_marks
+# from gobot_vision.chessboard_vision import config_4_aruco_marks
 
 
 import cv2
@@ -33,7 +33,7 @@ from math import sin, cos
 # sys.path.append ("/home/pi/pylib")
 # from von.mqtt_helper import g_mqtt
 from config.config import Config
-from config.image_logger import ImageLogger,ImageLoggerToWhere
+from config.image_logger import ImageLogger
 
 
 class GridFinder():
@@ -226,6 +226,7 @@ class GridFinder():
                 # Get perspectived image
                 perspect_img = self.get_perspective_view(origin_image,corners)
                 return perspect_img
+        ImageLogger.Output("eye/vision/no_corner", origin_image)
         return None
 
     

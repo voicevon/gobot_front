@@ -43,7 +43,7 @@ class GobotHead():
     3.3 talker_arm, can talk to chessboard robot arm.
     3.4 talker_house, can talk to house robot arm.
     '''
-    def __init__(self, eye_type: RobotEye_Product):
+    def __init__(self, eye_type:RobotEye_Product):
         self.__eye = RobotEye_Factory.CreateMonoEye(eye_type)
         if eye_type == RobotEye_Product.PaspberryPiCamera:
             ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
@@ -209,11 +209,11 @@ class GobotHead():
         ''' 
         mark = self.__vision.get_command_index(self.__last_image)
         
-        if mark != 4:
+        if (mark != 4) and (mark !=-1):
             # Game over: 
             logging.info(self.__BOLD + self.__FC_YELLOW + self.__BG_RED + 'Game Over!' + self.__FC_RESET)
 
-            key = raw_input('Please confirm Game over by input "over"  ')
+            key = input('Please confirm Game over by input "over"  ')
             if key == 'over':
                 self.__ai.layout.clear()
                 self.__ai.stop_game()
@@ -222,7 +222,10 @@ class GobotHead():
                 return
 
         stable_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
-        update = self.__last_detected_layout.compare_with(stable_layout)
+        if stable_depth < 3: return
+        
+        MessageLogger.Output("Stable_depth", stable_depth)
+        update = self.__last_detected_layout.compare_with(stable_layout, do_print_out=False)
         if len(update) == 0:
         # if self.__last_detected_layout == stable_layout:
             return
@@ -447,7 +450,8 @@ class GobotHead():
         self.__goto = self.at_state_game_over
 
     def SpinOnce(self):
-        self.__last_image = self.__eye.take_picture(do_undistort=True)
+        # self.__last_image = self.__eye.take_picture(do_undistort=True)
+        self.__last_image = self.__eye.take_picture(do_undistort=False)
         ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
         # cv2.waitKey(1)
         
@@ -482,8 +486,8 @@ class GobotHead():
 if __name__ == '__main__':
 
     # eye_type = RobotEye_Product.CameraEmulator
-    eye_type = RobotEye_Product.PaspberryPiCamera
-    # eye_type = RobotEye_Product.UsbCamera
+    # eye_type = RobotEye_Product.PaspberryPiCamera
+    eye_type = RobotEye_Product.UsbCamera
 
     myrobot = GobotHead(eye_type)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)

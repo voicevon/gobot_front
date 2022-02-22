@@ -40,14 +40,16 @@ class C(object):
         print("deleter of x called")
         del self._x
 
+def main():
+    c = C()
+    c.x = 'foo'  # setter called
+    foo = c.x    # getter called
+    del c.x      # deleter called
 
-c = C()
-c.x = 'foo'  # setter called
-foo = c.x    # getter called
-del c.x      # deleter called
 
+    MyClass.xx = 222
+    print (MyClass.xx)
+    MyClass.Test()
+    print(MyClass.xx)
 
-MyClass.xx = 222
-print (MyClass.xx)
-MyClass.Test()
-print(MyClass.xx)
+main()

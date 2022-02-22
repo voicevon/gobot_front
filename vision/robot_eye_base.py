@@ -10,6 +10,9 @@ import pathlib
 import logging
 from abc import ABC, abstractmethod, abstractproperty
 
+from config.image_logger import ImageLogger
+from config.message_logger import MessageLogger
+
 
 class MonoEyeBase(ABC):
     '''
@@ -20,6 +23,8 @@ class MonoEyeBase(ABC):
     '''
     __show_debug_info = True
 
+    
+
     @property
     @classmethod
     def show_debug_info(cls) ->bool:
@@ -28,8 +33,6 @@ class MonoEyeBase(ABC):
     @show_debug_info.setter
     def show_debug_info(cls, value):
         cls.__show_debug_info = value
-
-
 
 
     @abstractmethod
@@ -51,6 +54,9 @@ class MonoEyeBase(ABC):
         print('Start detecting chessboard for camera calibration...')
         while True:
             image = self.take_picture(do_undistort=False)
+            if image is None:
+                MessageLogger.Output("take_batch_picture_for_calibration","origin image is none")
+                break
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
             # Find the chess board corners
@@ -69,7 +75,7 @@ class MonoEyeBase(ABC):
                     imgpoints.append(corners2)
                     # Draw and display the corners
                     cv2.drawChessboardCorners(gray, (WIDTH,HEIGHT), corners2, ret)
-                    g_mqtt.publish_cv_image('gobot/test/image', gray)
+                    ImageLogger.Output('gobot/chessboard/image',gray)
 
                     key = input('press "s" to skip, <space> to save image to file, "q" to quit sampling   >>> ')
                     if key ==' ':
@@ -83,7 +89,8 @@ class MonoEyeBase(ABC):
                     if key == 'q':
                         return
             else:
-                g_mqtt.publish_cv_image('gobot/test/image',image)
+                # g_mqtt.publish_cv_image('gobot/test/image',image)
+                ImageLogger.Output('gobot/test/image',image)
                 print('Can not detect chessboard , trying another time')
 
     def calibrate_chessboard(self):
