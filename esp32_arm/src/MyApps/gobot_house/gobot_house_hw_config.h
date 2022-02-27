@@ -43,13 +43,13 @@ class GobotHouseHardwareConfig{
 
         // when microstep==1 Should be 736.25 , validated.
         float STEPS_PER_RAD_ALPHA;  
-        float MAX_ACCELERATION_ALPHPA = 600 * this->MOTOR_MICRO_STEPS;
-        float MAX_STEPS_PER_SECOND_ALPHA = 12000 * this->MOTOR_MICRO_STEPS;    // tested 1200
+        float MAX_ACCELERATION_ALPHPA; // = 600 * this->MOTOR_MICRO_STEPS;
+        float MAX_STEPS_PER_SECOND_ALPHA; // = 1200 * this->MOTOR_MICRO_STEPS;    // tested 1200
 
         // [when microstep==1] Should be 212.7, validated. 
         float STEPS_PER_RAD_BETA; // =  this->motor_steps_per_round * this->GEAR_BOX_RATIO_BETA / TWO_PI;    
-        float MAX_ACCELERATION_BETA = 200 * this->MOTOR_MICRO_STEPS;
-        float MAX_STEPS_PER_SECOND_BETA =  500 * this->MOTOR_MICRO_STEPS; 
+        float MAX_ACCELERATION_BETA; // = 200 * this->MOTOR_MICRO_STEPS;
+        float MAX_STEPS_PER_SECOND_BETA; // =  500 * this->MOTOR_MICRO_STEPS; 
 
 
         int Homing_acceleration_alpha; 
