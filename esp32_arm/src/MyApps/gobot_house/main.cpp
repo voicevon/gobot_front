@@ -7,7 +7,6 @@
 // static char LOG_TAG[]= "BLE-HOUSE";
 GobotHouse* mybot; 
 RobotAction action;
-CommandQueue myCommandQueue = CommandQueue();
 
 void setup(){
     Serial.begin(115200);

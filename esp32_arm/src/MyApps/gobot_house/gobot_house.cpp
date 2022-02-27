@@ -16,6 +16,8 @@ void GobotHouse::Setup(RobotAction* pAction){
     objRobot_hardware->Init();
 	this->__commandQueue = new CommandQueue();
 	this->__commandQueue->LinkRobot(objRobot_hardware);
+	this->__commandQueueRabbit = new CommandQueueRabbit();
+	this->__commandQueueRabbit->Init(this->__commandQueue, "gobot/12345/house");
     Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
 }
 

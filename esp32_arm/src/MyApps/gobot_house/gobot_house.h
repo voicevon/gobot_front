@@ -4,6 +4,7 @@
 // #include "Robot/Commu/CommuBleGattServer.h"
 #include "actions.h"
 #include "Robot/command_queue.h"
+#include "Robot/command_queue_rabbit.h"
 
 
 class GobotHouse{
@@ -43,5 +44,6 @@ class GobotHouse{
         RobotAction* __house_action;
         int __segments;
         CommandQueue* __commandQueue;
+        CommandQueueRabbit* __commandQueueRabbit;
 
 };
