@@ -3,9 +3,6 @@ import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 
 
-from vision.robot_eye_emulator import MonoEyeEmulator
-from vision.robot_eye_usb_camera import MonoEyeUsbCamera
-sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 
 import cv2
 from enum import Enum

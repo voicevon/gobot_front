@@ -51,6 +51,9 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	Serial.print(")");
 }
 
+// from_ik: Alpha, Beta
+//          represents  actuator's current position. unit is step
+// to_fk: x,y.  unit is mm.
 void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
@@ -86,17 +89,17 @@ bool GobotHouseHardware::GetCurrentPosition(FkPositionBase* position_fk){
 void GobotHouseHardware::__Init_gpio(){
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	pinMode(PIN_BETA_ENABLE, OUTPUT);
-	pinMode(PIN_MICRIO_STEP_0, OUTPUT);
-	pinMode(PIN_MICRIO_STEP_1, OUTPUT);
-	pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
+	// pinMode(PIN_MICRIO_STEP_1, OUTPUT);
+	// pinMode(PIN_MICRIO_STEP_2, OUTPUT);
 	// pinMode(PIN_ENDER_COIL_2109, OUTPUT);
 	// pinMode(PIN_ENDER_COIL_EXT_2109, OUTPUT);
 
 	digitalWrite(PIN_ALPHA_ENABLE, LOW);
 	digitalWrite(PIN_BETA_ENABLE, LOW);
-	digitalWrite(PIN_MICRIO_STEP_0, LOW);
-	digitalWrite(PIN_MICRIO_STEP_1, LOW);
-	digitalWrite(PIN_MICRIO_STEP_2, LOW);
+	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
+	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
+	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
 	// digitalWrite(PIN_ENDER_COIL_2109, LOW);
 	// digitalWrite(PIN_ENDER_COIL_EXT_2109, LOW);
 	  // configure LED PWM functionalitites
@@ -162,8 +165,6 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	target_ik_ab.beta = this->objStepper_beta.getPosition();
 	bool do_ik=false;
 
-	// if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A') * STEPS_PER_RAD_ALPHA * PI/ 180;
-	// if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B') * STEPS_PER_RAD_BETA * PI / 180;	
 	if (gcode->has_letter('A')) 
 		target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD_ALPHA * DEG_TO_RAD;
 	if (gcode->has_letter('B')) 
@@ -240,8 +241,8 @@ void GobotHouseHardware::_running_G28(){
 			// ik_position.alpha = PI * this->__config.Homed_position_alpha_in_degree * STEPS_PER_RAD_ALPHA /180;
 			// ik_position.beta = PI * this->__config.Homed_position_beta_in_degree * STEPS_PER_RAD_BETA /180;
 
-			ik_position.alpha = DEG_TO_RAD * this->__config.Homed_position_alpha_in_degree;   // TODO: Double check
-			ik_position.beta =  DEG_TO_RAD * this->__config.Homed_position_beta_in_degree;
+			ik_position.alpha = DEG_TO_RAD * this->__config.Homed_position_alpha_in_degree * this->__config.STEPS_PER_RAD_ALPHA;
+			ik_position.beta =  DEG_TO_RAD * this->__config.Homed_position_beta_in_degree * this->__config.STEPS_PER_RAD_BETA;
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik;

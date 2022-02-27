@@ -1,14 +1,9 @@
-from config.config import Config as  app_config
 
 # from commuDevice.ble_single_client import BleSingleClient, BleServerHead
 import logging
 import sys
 import time
-# sys.path.append("/home/pi/pylib")
 from von.terminal_font import TerminalFont
-
-
-
 
 
 #                        ^
@@ -36,6 +31,10 @@ class Controller:
             Some position is out of the chessboard, like 'Trash','HouseEnd' 
         2. Robot arm coordinator: (35,126) (258,129)
 
+    This class will orgnize data, then send data to 
+    1. MQTT broker or
+    2. TCP client or
+    3. BLE peripheral
     '''
     def __init__(self):
         '''
@@ -47,17 +46,17 @@ class Controller:
 
         self.Location_A1 = (-200.25, 589.75)
         self.Location_T19 = (200.25, 161.25)
-        self.Location_Head = (0, 88)
+        self.Location_origin = (0, 88)
 
-        self.ARM_AXIS_Alpha = 4
-        self.ARM_AXIS_Beta = 5
-        self.HOUSE_AXIS_Alpha = 10
-        self.HOUSE_AXIS_Beta = 11
+        # self.ARM_AXIS_Alpha = 4
+        # self.ARM_AXIS_Beta = 5
+        # self.HOUSE_AXIS_Alpha = 10
+        # self.HOUSE_AXIS_Beta = 11
 
         self._FC_YELLOW = TerminalFont.Color.Fore.yellow
         self._BG_GREEN = TerminalFont.Color.Background.green
         self._FC_RESET = TerminalFont.Color.Control.reset 
-        logging.warn('Init controller is done......')
+        logging.info('Init controller is done......')
 
 
     def get_xy_from_pose_name(self, pos_name='origin'):
