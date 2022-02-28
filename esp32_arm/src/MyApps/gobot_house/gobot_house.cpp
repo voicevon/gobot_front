@@ -16,8 +16,7 @@ void GobotHouse::Setup(RobotAction* pAction){
     objRobot_hardware->Init();
 	this->__commandQueue = new CommandQueue();
 	this->__commandQueue->LinkRobot(objRobot_hardware);
-	this->__commandQueueRabbit = new CommandQueueRabbit();
-	this->__commandQueueRabbit->Init(this->__commandQueue, "gobot/12345/house");
+
     Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
 }
 
@@ -29,6 +28,7 @@ void GobotHouse::SpinOnce(){
 void GobotHouse::__Home(){
 	bool via_inverse_kinematic = true;
 	String strG28 = "G28B";
+	strG28 = "G28A";
 	if (via_inverse_kinematic) strG28.concat("I");
 	this->__commandQueue->AppendGcodeCommand(strG28);
 	strG28 = "G28A";

@@ -1,6 +1,6 @@
 #include "all_devices.h"
 #ifdef USING_WIFI_MQTT
-#include "wifi_mqtt_client.h"
+#include <AsyncMqttClient.h>
 
 #include <WiFi.h>
 extern "C" {
@@ -67,7 +67,7 @@ void onMqttConnect(bool sessionPresent) {
   // uint16_t packetIdPub2 = mqttClient.publish("test/lol", 2, true, "test 3");
   // Serial.print("Publishing at QoS 2, packetId: ");
   // Serial.println(packetIdPub2);
-  app_mqtt_subscribe();
+  // app_mqtt_subscribe();
 
 }
 
@@ -112,7 +112,8 @@ void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties 
   Serial.println(index);
   Serial.print("  total: ");
   Serial.println(total);
-  app_mqtt_received_message(topic, payload);
+  // app_mqtt_received_message(topic, payload);
+  // tttt();
 }
 
 void onMqttPublish(uint16_t packetId) {
@@ -130,11 +131,11 @@ void setup_wifi_mqtt() {
 
   WiFi.onEvent(WiFiEvent);
 
-  mqttClient.onConnect(onMqttConnect);
+  // mqttClient.onConnect(onMqttConnect);
   mqttClient.onDisconnect(onMqttDisconnect);
   mqttClient.onSubscribe(onMqttSubscribe);
   mqttClient.onUnsubscribe(onMqttUnsubscribe);
-  mqttClient.onMessage(onMqttMessage);
+  // mqttClient.onMessage(onMqttMessage);
   mqttClient.onPublish(onMqttPublish);
   mqttClient.setServer(MQTT_HOST, MQTT_PORT);
 

@@ -4,7 +4,6 @@
 // #include "Robot/Commu/CommuBleGattServer.h"
 #include "actions.h"
 #include "Robot/command_queue.h"
-#include "Robot/command_queue_rabbit.h"
 
 
 class GobotHouse{
@@ -27,6 +26,7 @@ class GobotHouse{
         void Calibrate(int step, bool enable_eef_coil);
         bool MoveStone_FromRoomToHead(uint8_t house_id);
         bool MoveStone_FromHeadToRoom(uint8_t house_id);
+        CommandQueue* GetCommandQueue(){return this->__commandQueue;};
 
 
     private:
@@ -44,6 +44,5 @@ class GobotHouse{
         RobotAction* __house_action;
         int __segments;
         CommandQueue* __commandQueue;
-        CommandQueueRabbit* __commandQueueRabbit;
 
 };

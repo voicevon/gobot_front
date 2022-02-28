@@ -27,11 +27,15 @@
 
 #ifdef I_AM_GOBOT_HOUSE_2134
   #define I_AM_GOBOT_HOUSE
-  #define USING_BLE
-  #define BLE_DEV_NAME "Gobot-House-213401"
-  #define BLE_SERVICE_UUID  "b416890c-062e-11ec-9a03-0242ac130003"
-  #define BLE_COMMU_UUID "bfa35098-062e-11ec-9a03-0242ac130003"
-  #define BLE_STATE_UUID  "c52ca230-062e-11ec-9a03-0242ac130003"
+  #define USING_WIFI_MQTT
+
+  // #define USING_BLE
+  #ifdef USING_BLE
+    #define BLE_DEV_NAME "Gobot-House-213401"
+    #define BLE_SERVICE_UUID  "b416890c-062e-11ec-9a03-0242ac130003"
+    #define BLE_COMMU_UUID "bfa35098-062e-11ec-9a03-0242ac130003"
+    #define BLE_STATE_UUID  "c52ca230-062e-11ec-9a03-0242ac130003"
+  #endif
 #endif
 
 #ifdef I_AM_CABLE_AXIS_XPYP
