@@ -7,6 +7,7 @@ void CommandQueueRabbit::LinkLocalCommandQueue(CommandQueue* loacalMQ){
 void CommandQueueRabbit::SubscribeMqtt(AsyncMqttClient* mqttClient){
     this->__mqttClient = mqttClient;
     mqttClient->subscribe("gobot/x2134/house/", 2);
+    this->topic_feedback = "gobot/x2134/house/fb";
 }
 
 // void CommandQueueRabbit::LinkMqttClinet(AsyncMqttClient* mqttClient){
