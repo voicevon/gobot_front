@@ -1,4 +1,5 @@
 import pika 
+from pika import BlockingConnection
 import time
 from von.mqtt_helper import g_mqtt,MQTT_ConnectionConfig
 
@@ -17,15 +18,17 @@ class AgentQueueTopicConfig:
 
 class RabbitMQAgent:
 
-    def __init__(self, config:AgentQueueTopicConfig) -> None:
+    def __init__(self, config:AgentQueueTopicConfig, connection:BlockingConnection) -> None:
         self.main = None
         self.feedback = None
+        self.connection = connection
         self.message_config = config
 
         '''
         Only for goboy_x2134_house
         '''
         self.consuming_message_in_queue = True
+        
 
 
     def callback_main(self, ch, method, properties, body):
@@ -59,31 +62,38 @@ class RabbitMQAgent:
             self.channel_main.queue_declare(queue=self.message_config.main_queue)
             self.channel_main.basic_consume(queue=self.message_config.main_queue, on_message_callback=self.callback_main, auto_ack=False )
  
+
+
     def SubsribeRabbitMQ(self, config:RabbitMQConfig):
-        credentials = pika.PlainCredentials(config.uid, config.password)
-        parameters = pika.ConnectionParameters(host=config.host,
-                                        port= config.port,
-                                        virtual_host= config.virtual_host,
-                                        credentials= credentials)
-        self.connection = pika.BlockingConnection(parameters)
+
+
         self.channel_main = self.connection.channel()
         self.channel_main.queue_declare(queue=self.message_config.main_queue)
         self.channel_main.basic_consume(queue=self.message_config.main_queue, on_message_callback=self.callback_main, auto_ack=False )
+
         self.channel_feedback =  self.connection.channel()
         self.channel_feedback.queue_declare(queue=self.message_config.feedback_queue)
         self.channel_feedback.basic_consume(queue=self.message_config.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
         # self.channel_main.start_consuming()  
 
+    def SpinOnce(self):
+        # if self.consuming_message_in_queue:
+        if self.channel_main._consumer_infos:
+            self.channel_main.connection.process_data_events(time_limit=1)
+                # sprint(".")
+        if self.channel_feedback._consumer_infos:
+            self.channel_feedback.connection.process_data_events(time_limit=1)
+        # while True:
+        #     pass
 
-        while True:
-            # if self.consuming_message_in_queue:
-            if self.channel_main._consumer_infos:
-                self.channel_main.connection.process_data_events(time_limit=1)
-                    # sprint(".")
-            if self.channel_feedback._consumer_infos:
-                self.channel_feedback.connection.process_data_events(time_limit=1)
-        while True:
-            pass
+def Connect(config:RabbitMQConfig) -> BlockingConnection:
+    credentials = pika.PlainCredentials(config.uid, config.password)
+    parameters = pika.ConnectionParameters(host=config.host,
+                                    port= config.port,
+                                    virtual_host= config.virtual_host,
+                                    credentials= credentials)
+    connection = pika.BlockingConnection(parameters)
+    return connection
 
 if __name__ == '__main__':
     config_mqtt = MQTT_ConnectionConfig()
@@ -94,6 +104,8 @@ if __name__ == '__main__':
     config_rabbit = RabbitMQConfig()
     config_rabbit.uid = 'agent'
     config_rabbit.password = 'agent'
+    connection = Connect(config_rabbit)
+
 
     config_house = AgentQueueTopicConfig()
     config_house.main_mqtt_topic = 'gobot/x2134/house'
@@ -106,8 +118,16 @@ if __name__ == '__main__':
     config_arm.feedback_queue = 'gobot_x2134_arm_fb'
 
 
-    runner_house = RabbitMQAgent(config_house)
+    runner_house = RabbitMQAgent(config_house,connection)
     runner_house.SubsribeRabbitMQ(config_rabbit)
+    
+    runner_arm = RabbitMQAgent(config_arm,connection)
+    runner_arm.SubsribeRabbitMQ(config_rabbit)
 
-    # runner_arm = RabbitMQAgent(config_arm)
-    # runner_arm.SubsribeRabbitMQ(config_rabbit)
+
+
+
+
+    while True:
+        runner_house.SpinOnce()
+        runner_arm.SpinOnce()

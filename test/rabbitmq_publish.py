@@ -19,11 +19,15 @@ def test_RabbitMQ(config:RabbitMQConfig):
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
     channel.queue_declare(queue='gobot_x2134_house')
+    channel.queue_declare(queue='gobot_x2134_arm')
 
     i = 0
     while True:
         channel.basic_publish(exchange='',
                         routing_key='gobot_x2134_house',
+                        body = str(i))
+        channel.basic_publish(exchange='',
+                        routing_key='gobot_x2134_arm',
                         body = str(i))
         print(" [x] Sent ",i)
         i += 1  
