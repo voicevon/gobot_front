@@ -18,25 +18,25 @@ void dispatch_MqttConnected(bool sessionPresent){
 }
 // void onMqttConnect(bool sessionPresent) {
 void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-    Serial.println("Publish received.");
-    Serial.print("  topic: ");
-    Serial.println(topic);
-    Serial.print("  paylod: ");
-    Serial.println(payload);
-    Serial.print("  qos: ");
-    Serial.println(properties.qos);
-    Serial.print("  dup: ");
-    Serial.println(properties.dup);
-    Serial.print("  retain: ");
-    Serial.println(properties.retain);
-    Serial.print("  len: ");
-    Serial.println(len);
-    Serial.print("  index: ");
-    Serial.println(index);
-    Serial.print("  total: ");
-    Serial.println(total);
+    // Serial.println("Publish received.");
+    // Serial.print("  topic: ");
+    // Serial.println(topic);
+    // Serial.print("  paylod: ");
+    // Serial.println(payload);
+    // Serial.print("  qos: ");
+    // Serial.println(properties.qos);
+    // Serial.print("  dup: ");
+    // Serial.println(properties.dup);
+    // Serial.print("  retain: ");
+    // Serial.println(properties.retain);
+    // Serial.print("  len: ");
+    // Serial.println(len);
+    // Serial.print("  index: ");
+    // Serial.println(index);
+    // Serial.print("  total: ");
+    // Serial.println(total);
 
-    commandQueueRabbit->OnReceived(payload,20);
+    commandQueueRabbit->OnReceived(payload, len);
 }
 
 void setup(){
@@ -44,11 +44,12 @@ void setup(){
     Serial.println("Hi Xuming, I am your lovely bot,  GobotHouse. ");
     mybot = &GobotHouse::getInstance();
     mybot->Setup(&action);
+
     // mybot->Calibrate(6,true);
     // for (int i=17; i>=10;i--){
     //     mybot->Calibrate(i, false);
     // }
-	mybot->ParkArms(true);
+	// mybot->ParkArms(true);
 
     setup_wifi_mqtt();
     commandQueueRabbit = new CommandQueueRabbit();
