@@ -17,10 +17,10 @@ RobotAction action;
 CommandQueueRabbit* commandQueueRabbit;
 extern AsyncMqttClient mqttClient;
 void dispatch_MqttConnected(bool sessionPresent){
-    commandQueueRabbit->SubscribeMqtt(&mqttClient,"gobot/x2134/arm","gobot/x2134/arm/fb");
+    commandQueueRabbit->SubscribeMqtt(&mqttClient, "gobot/x2134/arm", "gobot/x2134/arm/fb");
 }
 void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-    bool debug = true;
+    bool debug = false;
     if(debug){
         Serial.println("Publish received.");
         Serial.print("  topic: ");

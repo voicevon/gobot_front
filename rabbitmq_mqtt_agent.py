@@ -1,6 +1,5 @@
 import pika 
 from pika import BlockingConnection
-import time
 from von.mqtt_helper import g_mqtt,MQTT_ConnectionConfig
 
 class RabbitMQConfig:
@@ -123,9 +122,6 @@ if __name__ == '__main__':
     
     runner_arm = RabbitMQAgent(config_arm,connection)
     runner_arm.SubsribeRabbitMQ(config_rabbit)
-
-
-
 
 
     while True:

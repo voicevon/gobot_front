@@ -2,42 +2,57 @@
 #ifdef I_AM_GOBOT_HOUSE
 
 // #include "Robot/Commu/CommuBleGattServer.h"
+
 #include "gobot_house.h"
 #include "MyLibs/MyFunctions.hpp" 
-#include "Robot/command_queue_rabbit.h"
-#include "IoT/wifi_mqtt_client.h"
-// static char LOG_TAG[]= "BLE-HOUSE";
 GobotHouse* mybot; 
 RobotAction action;
+
+// static char LOG_TAG[]= "BLE-HOUSE";
+
+
+//********************************************************************************************
+//    MQTT and RabbitMQ
+//********************************************************************************************
+#include "Robot/command_queue_rabbit.h"
 CommandQueueRabbit* commandQueueRabbit;
-
-
 extern AsyncMqttClient mqttClient;
 void dispatch_MqttConnected(bool sessionPresent){
-    commandQueueRabbit->SubscribeMqtt(&mqttClient);
+    commandQueueRabbit->SubscribeMqtt(&mqttClient, "gobot/x2134/house", "gobot/x2134/house/fb");
 }
-// void onMqttConnect(bool sessionPresent) {
 void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-    // Serial.println("Publish received.");
-    // Serial.print("  topic: ");
-    // Serial.println(topic);
-    // Serial.print("  paylod: ");
-    // Serial.println(payload);
-    // Serial.print("  qos: ");
-    // Serial.println(properties.qos);
-    // Serial.print("  dup: ");
-    // Serial.println(properties.dup);
-    // Serial.print("  retain: ");
-    // Serial.println(properties.retain);
-    // Serial.print("  len: ");
-    // Serial.println(len);
-    // Serial.print("  index: ");
-    // Serial.println(index);
-    // Serial.print("  total: ");
-    // Serial.println(total);
-
+    bool debug = false;
+    if(debug){
+        Serial.println("Publish received.");
+        Serial.print("  topic: ");
+        Serial.println(topic);
+        Serial.print("  paylod: ");
+        Serial.println(payload);
+        Serial.print("  qos: ");
+        Serial.println(properties.qos);
+        Serial.print("  dup: ");
+        Serial.println(properties.dup);
+        Serial.print("  retain: ");
+        Serial.println(properties.retain);
+        Serial.print("  len: ");
+        Serial.println(len);
+        Serial.print("  index: ");
+        Serial.println(index);
+        Serial.print("  total: ");
+        Serial.println(total);
+    }
     commandQueueRabbit->OnReceived(payload, len);
 }
+void Begin_WifiRabbitMqtt(){
+    setup_wifi_mqtt();
+    commandQueueRabbit = new CommandQueueRabbit();
+    commandQueueRabbit->LinkLocalCommandQueue(mybot->GetCommandQueue());
+    mqttClient.onConnect(dispatch_MqttConnected);
+    mqttClient.onMessage(dispatch_MqttMessage);
+}
+//*********************  end of MQTT and RabbitMQ  *******************************************
+
+
 
 void setup(){
     Serial.begin(115200);
@@ -50,21 +65,13 @@ void setup(){
     //     mybot->Calibrate(i, false);
     // }
 	// mybot->ParkArms(true);
-
-    setup_wifi_mqtt();
-    commandQueueRabbit = new CommandQueueRabbit();
-	commandQueueRabbit->LinkLocalCommandQueue(mybot->GetCommandQueue());
-    mqttClient.onConnect(dispatch_MqttConnected);
-    mqttClient.onMessage(dispatch_MqttMessage);
-    // AsyncMqttClient* pMqttClient = &mqttClient;
-    // mqttClient.onMessage(commandQueueRabbit->onMqttMessage);
-    // commandQueueRabbit->LinkMqttClinet(pMqttClient);
+    Begin_WifiRabbitMqtt();
 }
 
 bool done= false;
 void loop(){
 	// WebCommu_SpinOnce();
-	mybot->SpinOnce();
+	// mybot->SpinOnce();
     // done = mybot->MoveStone_FromRoomToHead(0);
     // if(done) Serial.print("Done to 0");
     // done = mybot->MoveStone_FromHeadToRoom(0);

@@ -1,3 +1,4 @@
+#pragma once
 /*
 .                                      |----------  MyLastedMessage <-----|
 GobotHead -------> HouseQueue -----> Agent  -------> HouseMQTT -------> HouseBot
@@ -21,10 +22,9 @@ class CommandQueueRabbit{
         String topic_feedback;
         byte* payload;
         void LinkLocalCommandQueue(CommandQueue* loacalMQ);  //, String mqtt_topic);
-        // void LinkMqttClinet(AsyncMqttClient* mqttClient);
-        void SubscribeMqtt(AsyncMqttClient* mqttClient);
+        void SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic);
+
         void OnReceived(char* payload, int length);
-        // void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total);
 
 
     private:

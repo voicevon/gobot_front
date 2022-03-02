@@ -45,12 +45,13 @@ int CommandQueue::GetFreeBuffersCount(){
 }
 
 bool CommandQueue::AppendGcodeCommand(String command){
+    // Serial.print("\n CommandQueue::AppendGcodeCommand()  is entering..... ");
     int pre_head = this->head;
     pre_head++;
-    if (pre_head == COMMANDS_COUNT_IN_QUEUE) pre_head =0;
+    if (pre_head == COMMANDS_COUNT_IN_QUEUE)   pre_head =0;
     while (pre_head == this->tail){
         // Buffer is full
-        // Serial.println("\n\n\n\n [Warning] CommandQueue::AppendGcodeCommand()   Buffer is full \n\n\n");
+        Serial.println("\n\n\n\n [Warning] CommandQueue::AppendGcodeCommand()   Buffer is full \n\n\n");
         this->SpinOnce();
     }
     // Serial.print("Adding gcode to command queue   ");
@@ -77,4 +78,14 @@ bool CommandQueue::AppendGcodeCommand(String command){
     return true;  
 }
 
+void CommandQueue::SayHello(){
+    Serial.println("\n\n CommandQueue::SayHello()");
+    Serial.println("    Hello, I am instance of  CommandQueue, normally I am local Message queue... ");
+    Serial.print("\n     this->head= ");
+    Serial.println(this->head);
+    Serial.print("\n     this->tail= ");
+    Serial.println(this->tail);
+    // Serial.print("\n     &this->_mybot->State= ");
+    // Serial.println(this->_myBot->);    
+}
 
