@@ -9,12 +9,18 @@ class RabbitMQConfig:
     uid = ''
     password = ''
 
+class AgentQueueTopicConfig:
+    main_queue = 'gobot_x2134_house'
+    main_mqtt_topic = 'gobot/x2134/house'
+    feedback_queue = 'gobot_x2134_house_fb'
+
 
 class RabbitMQAgent:
 
-    def __init__(self) -> None:
+    def __init__(self, config:AgentQueueTopicConfig) -> None:
         self.main = None
         self.feedback = None
+        self.message_config = config
 
         '''
         Only for goboy_x2134_house
@@ -31,15 +37,14 @@ class RabbitMQAgent:
             return
 
         # a new command from gobot_head is received
-        g_mqtt.publish('gobot/x2134/house/', body)
+        g_mqtt.publish(self.message_config.main_mqtt_topic, body)
         self.channel_main.basic_ack(delivery_tag=method.delivery_tag)
         #stop consume a
-        print("                       Stop consuming now..")
+        print("                       Stop consuming now..", self.message_config.main_mqtt_topic, body)
         self.channel_main.stop_consuming()  # this will break all callbacks
         self.consuming_message_in_queue = False
-        self.channel_feedback.queue_declare(queue='gobot_x2134_house_fb')
-        self.channel_feedback.basic_consume(queue='gobot_x2134_house_fb', on_message_callback=self.callback_feedback, auto_ack=True )
-
+        self.channel_feedback.queue_declare(queue=self.message_config.feedback_queue)
+        self.channel_feedback.basic_consume(queue=self.message_config.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
 
     def callback_feedback(self, ch, method, properties, body):
         # if method.routing_key == 'gobot.x2134.house.fb':
@@ -51,8 +56,8 @@ class RabbitMQAgent:
             # go on to comsume a
             self.consuming_message_in_queue = True
             print(self.main, self.feedback, "Start consuming now..")
-            self.channel_main.queue_declare(queue='gobot_x2134_house')
-            self.channel_main.basic_consume(queue='gobot_x2134_house', on_message_callback=self.callback_main, auto_ack=False )
+            self.channel_main.queue_declare(queue=self.message_config.main_queue)
+            self.channel_main.basic_consume(queue=self.message_config.main_queue, on_message_callback=self.callback_main, auto_ack=False )
  
     def SubsribeRabbitMQ(self, config:RabbitMQConfig):
         credentials = pika.PlainCredentials(config.uid, config.password)
@@ -62,12 +67,13 @@ class RabbitMQAgent:
                                         credentials= credentials)
         self.connection = pika.BlockingConnection(parameters)
         self.channel_main = self.connection.channel()
-        self.channel_main.queue_declare(queue='gobot_x2134_house')
-        self.channel_main.basic_consume(queue='gobot_x2134_house', on_message_callback=self.callback_main, auto_ack=False )
+        self.channel_main.queue_declare(queue=self.message_config.main_queue)
+        self.channel_main.basic_consume(queue=self.message_config.main_queue, on_message_callback=self.callback_main, auto_ack=False )
         self.channel_feedback =  self.connection.channel()
-        self.channel_feedback.queue_declare(queue='gobot_x2134_house_fb')
-        self.channel_feedback.basic_consume(queue='gobot_x2134_house_fb', on_message_callback=self.callback_feedback, auto_ack=True )
+        self.channel_feedback.queue_declare(queue=self.message_config.feedback_queue)
+        self.channel_feedback.basic_consume(queue=self.message_config.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
         # self.channel_main.start_consuming()  
+
 
         while True:
             # if self.consuming_message_in_queue:
@@ -89,5 +95,19 @@ if __name__ == '__main__':
     config_rabbit.uid = 'agent'
     config_rabbit.password = 'agent'
 
-    runner = RabbitMQAgent()
-    runner.SubsribeRabbitMQ(config_rabbit)
+    config_house = AgentQueueTopicConfig()
+    config_house.main_mqtt_topic = 'gobot/x2134/house'
+    config_house.main_queue = "gobot_x2134_house"
+    config_house.feedback_queue = 'gobot_x2134_house_fb'
+
+    config_arm = AgentQueueTopicConfig()
+    config_arm.main_mqtt_topic = 'gobot/x2134/arm'
+    config_arm.main_queue = "gobot_x2134_arm"
+    config_arm.feedback_queue = 'gobot_x2134_arm_fb'
+
+
+    runner_house = RabbitMQAgent(config_house)
+    runner_house.SubsribeRabbitMQ(config_rabbit)
+
+    # runner_arm = RabbitMQAgent(config_arm)
+    # runner_arm.SubsribeRabbitMQ(config_rabbit)
