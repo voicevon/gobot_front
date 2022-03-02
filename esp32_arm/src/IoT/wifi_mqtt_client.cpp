@@ -117,9 +117,12 @@ void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties 
 }
 
 void onMqttPublish(uint16_t packetId) {
-  Serial.println("Publish acknowledged.");
-  Serial.print("  packetId: ");
-  Serial.println(packetId);
+	bool debug=false;
+	if (debug){
+		Serial.print("Publish acknowledged.");
+		Serial.print("  packetId: ");
+		Serial.println(packetId);
+	}
 }
 
 void setup_wifi_mqtt() {

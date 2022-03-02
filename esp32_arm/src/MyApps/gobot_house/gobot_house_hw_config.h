@@ -15,9 +15,7 @@
 
 #define PIN_ALPHA_ENABLE 18
 #define PIN_BETA_ENABLE 16
-// #define PIN_MICRIO_STEP_2 21
-// #define PIN_MICRIO_STEP_1 22
-// #define PIN_MICRIO_STEP_0 23
+
 
 
 #define PIN_ENDER_COIL_2109 32

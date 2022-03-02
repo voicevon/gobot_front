@@ -17,6 +17,7 @@ class GobotChessboard{
         void ParkArms(bool do_home);
         void pick_place_park(RobotAction* pAction);
         void Calibrate(int step);
+        CommandQueue* GetCommandQueue(){return this->__commandQueue;};
 
     private:
         GobotChessboard(){};

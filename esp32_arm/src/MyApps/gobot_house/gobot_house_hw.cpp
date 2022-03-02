@@ -89,17 +89,24 @@ bool GobotHouseHardware::GetCurrentPosition(FkPositionBase* position_fk){
 void GobotHouseHardware::__Init_gpio(){
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	pinMode(PIN_BETA_ENABLE, OUTPUT);
-	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
-	// pinMode(PIN_MICRIO_STEP_1, OUTPUT);
-	// pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+
 	// pinMode(PIN_ENDER_COIL_2109, OUTPUT);
 	// pinMode(PIN_ENDER_COIL_EXT_2109, OUTPUT);
 
 	digitalWrite(PIN_ALPHA_ENABLE, LOW);
 	digitalWrite(PIN_BETA_ENABLE, LOW);
-	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
-	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
-	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
+
+	#define PIN_MICRIO_STEP_2 21
+	#define PIN_MICRIO_STEP_1 22
+	#define PIN_MICRIO_STEP_0 23	
+	pinMode(PIN_MICRIO_STEP_0, OUTPUT);
+	pinMode(PIN_MICRIO_STEP_1, OUTPUT);
+	pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+	digitalWrite(PIN_MICRIO_STEP_0, LOW);
+	digitalWrite(PIN_MICRIO_STEP_1, LOW);
+	digitalWrite(PIN_MICRIO_STEP_2, LOW);
+
+	
 	// digitalWrite(PIN_ENDER_COIL_2109, LOW);
 	// digitalWrite(PIN_ENDER_COIL_EXT_2109, LOW);
 	  // configure LED PWM functionalitites
