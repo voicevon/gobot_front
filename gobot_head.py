@@ -451,6 +451,7 @@ class GobotHead():
 
     def SpinOnce(self):
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
+        self.__controller.rabbitMqClient.SpinOnce()
         self.__last_image = self.__eye.take_picture(do_undistort=False)
         ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
         # cv2.waitKey(1)
@@ -485,11 +486,11 @@ class GobotHead():
 
 if __name__ == '__main__':
 
-    # eye_type = RobotEye_Product.CameraEmulator
-    # eye_type = RobotEye_Product.PaspberryPiCamera
-    eye_type = RobotEye_Product.UsbCamera
+    robot_eye= RobotEye_Product.CameraEmulator
+    # robot_eye = RobotEye_Product.PaspberryPiCamera
+    # robot_eye = RobotEye_Product.UsbCamera
 
-    myrobot = GobotHead(eye_type)
+    myrobot = GobotHead(robot_eye)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
     while True:
         myrobot.SpinOnce()

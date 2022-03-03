@@ -9,19 +9,20 @@ class RabbitMQConfig:
     uid = ''
     password = ''
 
-class AgentQueueTopicConfig:
+class SyncQueueTopicConfig:
     main_queue = 'gobot_x2134_house'
     main_mqtt_topic = 'gobot/x2134/house'
     feedback_queue = 'gobot_x2134_house_fb'
 
 
-class RabbitMQAgent:
+class RabbitMQSync:
 
-    def __init__(self, config:AgentQueueTopicConfig, connection:BlockingConnection) -> None:
+    def __init__(self, connection:BlockingConnection, config:SyncQueueTopicConfig) -> None:
         self.main = None
         self.feedback = None
         self.connection = connection
         self.message_config = config
+        self.SubsribeRabbitMQ()
 
         '''
         Only for goboy_x2134_house
@@ -63,9 +64,7 @@ class RabbitMQAgent:
  
 
 
-    def SubsribeRabbitMQ(self, config:RabbitMQConfig):
-
-
+    def SubsribeRabbitMQ(self):
         self.channel_main = self.connection.channel()
         self.channel_main.queue_declare(queue=self.message_config.main_queue)
         self.channel_main.basic_consume(queue=self.message_config.main_queue, on_message_callback=self.callback_main, auto_ack=False )
@@ -78,10 +77,10 @@ class RabbitMQAgent:
     def SpinOnce(self):
         # if self.consuming_message_in_queue:
         if self.channel_main._consumer_infos:
-            self.channel_main.connection.process_data_events(time_limit=1)
+            self.channel_main.connection.process_data_events(time_limit=0.1)  # will blocking 1 second
                 # sprint(".")
         if self.channel_feedback._consumer_infos:
-            self.channel_feedback.connection.process_data_events(time_limit=1)
+            self.channel_feedback.connection.process_data_events(time_limit=0.1)
         # while True:
         #     pass
 
@@ -106,22 +105,22 @@ if __name__ == '__main__':
     connection = Connect(config_rabbit)
 
 
-    config_house = AgentQueueTopicConfig()
+    config_house = SyncQueueTopicConfig()
     config_house.main_mqtt_topic = 'gobot/x2134/house'
     config_house.main_queue = "gobot_x2134_house"
     config_house.feedback_queue = 'gobot_x2134_house_fb'
 
-    config_arm = AgentQueueTopicConfig()
+    config_arm = SyncQueueTopicConfig()
     config_arm.main_mqtt_topic = 'gobot/x2134/arm'
     config_arm.main_queue = "gobot_x2134_arm"
     config_arm.feedback_queue = 'gobot_x2134_arm_fb'
 
 
-    runner_house = RabbitMQAgent(config_house,connection)
-    runner_house.SubsribeRabbitMQ(config_rabbit)
+    runner_house = RabbitMQSync(connection,config= config_house)
+    # runner_house.SubsribeRabbitMQ()
     
-    runner_arm = RabbitMQAgent(config_arm,connection)
-    runner_arm.SubsribeRabbitMQ(config_rabbit)
+    runner_arm = RabbitMQSync(connection, config= config_arm)
+    # runner_arm.SubsribeRabbitMQ()
 
 
     while True:

@@ -4,6 +4,7 @@ import logging
 import sys
 import time
 from von.terminal_font import TerminalFont
+from rabbitmq_publish import RabbitMqClient_Helper
 
 
 #                        ^
@@ -47,6 +48,7 @@ class Controller:
         self.Location_A1 = (-200.25, 589.75)
         self.Location_T19 = (200.25, 161.25)
         self.Location_origin = (0, 88)
+        self.rabbitMqClient = RabbitMqClient_Helper.MakeClient()
 
         # self.ARM_AXIS_Alpha = 4
         # self.ARM_AXIS_Beta = 5
@@ -104,42 +106,53 @@ class Controller:
     def action_pickup_stone_from_cell(self, cell_name='k10'):
         print ('[Info]: action_pickup_chess_from_a_cell  %s' %cell_name)
         x,y = self.get_xy_from_pose_name(cell_name)
-        cc = self.convert_xy_to_4_bytes(x,y)
-        self.__next_action[2] = cc[0]
-        self.__next_action[3] = cc[1]
-        self.__next_action[4] = cc[2]
-        self.__next_action[5] = cc[3]
-        self.__next_action[0] |= 1 << 1
+        gcode = "G1X" + str(x) + "Y" + str(y)
+        self.rabbitMqClient.PublishToArm(gcode=gcode)
+
+        # cc = self.convert_xy_to_4_bytes(x,y)
+        # self.__next_action[2] = cc[0]
+        # self.__next_action[3] = cc[1]
+        # self.__next_action[4] = cc[2]
+        # self.__next_action[5] = cc[3]
+        # self.__next_action[0] |= 1 << 1
 
     def action_pickup_stone_from_warehouse(self):
         logging.info('  action_pickup_chess_from_warehouse')
         x,y = self.get_xy_from_pose_name('origin')
-        cc = self.convert_xy_to_4_bytes(x,y)
-        self.__next_action[2] = cc[0]
-        self.__next_action[3] = cc[1]
-        self.__next_action[4] = cc[2]
-        self.__next_action[5] = cc[3]
-        self.__next_action[0] |= 1 << 1
+        gcode = "G1X" + str(x) + "Y" + str(y)
+        self.rabbitMqClient.PublishToArm(gcode=gcode)
+        # cc = self.convert_xy_to_4_bytes(x,y)
+        # self.__next_action[2] = cc[0]
+        # self.__next_action[3] = cc[1]
+        # self.__next_action[4] = cc[2]
+        # self.__next_action[5] = cc[3]
+        # self.__next_action[0] |= 1 << 1
     
     def action_place_stone_to_trash_bin(self, park_to_view_point=True):
         logging.info('   action_place_chess_to_trash_bin')
         x,y = self.get_xy_from_pose_name('trash')
-        cc = self.convert_xy_to_4_bytes(x,y)
-        self.__next_action[6] = cc[0]
-        self.__next_action[7] = cc[1]
-        self.__next_action[8] = cc[2]
-        self.__next_action[9] = cc[3]
-        self.__next_action[0] |= 1 << 2
+        gcode = "G1X" + str(x) + "Y" + str(y)
+        self.rabbitMqClient.PublishToArm(gcode=gcode)
+
+        # cc = self.convert_xy_to_4_bytes(x,y)
+        # self.__next_action[6] = cc[0]
+        # self.__next_action[7] = cc[1]
+        # self.__next_action[8] = cc[2]
+        # self.__next_action[9] = cc[3]
+        # self.__next_action[0] |= 1 << 2
     
     def action_place_stone_to_cell(self, cell_name='k10', auto_park=True):
         logging.info('  action_place_chess_to_a_cell %s' %cell_name)
         x,y = self.get_xy_from_pose_name(cell_name)
-        cc= self.convert_xy_to_4_bytes(x,y)
-        self.__next_action[6] = cc[0]
-        self.__next_action[7] = cc[1]
-        self.__next_action[8] = cc[2]
-        self.__next_action[9] = cc[3]
-        self.__next_action[0] |= 1 << 2
+        gcode = "G1X" + str(x) + "Y" + str(y)
+        self.rabbitMqClient.PublishToArm(gcode=gcode)
+
+        # cc= self.convert_xy_to_4_bytes(x,y)
+        # self.__next_action[6] = cc[0]
+        # self.__next_action[7] = cc[1]
+        # self.__next_action[8] = cc[2]
+        # self.__next_action[9] = cc[3]
+        # self.__next_action[0] |= 1 << 2
                 
     def action_park(self, park_cell='current'):
         '''
@@ -179,26 +192,29 @@ class Controller:
             logging.warn('BLE message queue is full')
 
     def spin_once(self):
-        # action_code = self.__bleClient.read_characteristic()
-        action_code = [1,2,3,3,4,5,6,7,8,9,11]
-        #logging.info('Controller.spin_once hardware= %d, current=%d,next=%d',action_code[0], self.__current_action[0], self.__next_action[0] )
-        if int(action_code[0] / 2) == 0:
-            # hardware robot is idle
-            if int(self.__next_action[0] /2 ) == 0:
-                # nothing to do
-                return
-            else:
-                # Hardware robot finished last job
-                self.__current_action = self.__next_action.copy()
-                self.__next_action[0] = 0
-                print('ble going to update...')
-                #for i in range(0,13,1):
-                #    print(self.__next_action[i],' ')
-                # self.__bleClient.write_characteristic(self.__current_action)
-        else:
-            # Hardware robot is busy for current action
-            logging.info('Hardware robot is running task %d', self.__current_action[0])
-            return
+        self.rabbitMqClient.SpinOnce()
+        return
+
+        # # action_code = self.__bleClient.read_characteristic()
+        # action_code = [1,2,3,3,4,5,6,7,8,9,11]
+        # #logging.info('Controller.spin_once hardware= %d, current=%d,next=%d',action_code[0], self.__current_action[0], self.__next_action[0] )
+        # if int(action_code[0] / 2) == 0:
+        #     # hardware robot is idle
+        #     if int(self.__next_action[0] /2 ) == 0:
+        #         # nothing to do
+        #         return
+        #     else:
+        #         # Hardware robot finished last job
+        #         self.__current_action = self.__next_action.copy()
+        #         self.__next_action[0] = 0
+        #         print('ble going to update...')
+        #         #for i in range(0,13,1):
+        #         #    print(self.__next_action[i],' ')
+        #         # self.__bleClient.write_characteristic(self.__current_action)
+        # else:
+        #     # Hardware robot is busy for current action
+        #     logging.info('Hardware robot is running task %d', self.__current_action[0])
+        #     return
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
