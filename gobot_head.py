@@ -3,6 +3,7 @@
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
 from email.message import Message
+from turtle import towards
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 
@@ -10,7 +11,7 @@ from gobot_vision.gobot_vision import GobotVision
 from gogame.chessboard_cell import StoneColor
 from gogame.chessboard import ChessboardLayout
 from gogame.died_area_scanner import DiedAreaScanner
-from controller import Controller
+# from controller import Controller
 from gobot_ai_client import GoGameAiClient
 from config.config import Config
 
@@ -58,7 +59,9 @@ class GobotHead():
 
         self.__vision = GobotVision()
         self.__ai = GoGameAiClient()
-        self.__controller = Controller()
+        # self.__controller = Controller()
+        self.__arm = HumanLevelGobotArm()
+        self.__house = HumanLevelGobotHouse()
         self.__died_area_scanner = DiedAreaScanner()
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
@@ -137,8 +140,9 @@ class GobotHead():
             # move the first chess cell to trash
             # cell = ChessboardCell()
             # cell.from_col_row_id(col_id=col, row_id=row)
-            self.__controller.action_pickup_stone_from_cell(cell.name)
-            self.__controller.action_place_stone_to_trash_bin()
+            # self.__controller.action_pickup_stone_from_cell(cell.name)
+            # self.__controller.action_place_stone_to_trash_bin()
+            self.__house.Pickup_Place(from_where=cell.name, to_where='trash_bin')
             return 1
         return 0
 
@@ -224,7 +228,7 @@ class GobotHead():
         stable_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
         if stable_depth < 3: return
         
-        MessageLogger.Output("Stable_depth", stable_depth)
+        MessageLogger.Output("user_play_Stable_depth", stable_depth)
         update = self.__last_detected_layout.compare_with(stable_layout, do_print_out=False)
         if len(update) == 0:
         # if self.__last_detected_layout == stable_layout:
@@ -280,8 +284,9 @@ class GobotHead():
             # some time the ai_player will return a 'resign' as a cell name.
             logging.info(self.__FC_PINK + 'AI step: place black at: %s' %cell_name + self.__FC_RESET)
             # robot arm play a chess, The instruction is from AI.
-            self.__controller.action_pickup_stone_from_warehouse()
-            self.__controller.action_place_stone_to_cell(cell_name=cell_name)
+            # self.__controller.action_pickup_stone_from_warehouse()
+            # self.__controller.action_place_stone_to_cell(cell_name=cell_name)
+            self.__arm.Pickup_Place(from_where='house', to_where=cell_name)
             self.__ai.layout.play(cell_name, StoneColor.WHITE)
             self.__ai.layout.print_out()
 
@@ -296,8 +301,9 @@ class GobotHead():
         else:
             # only remove one cell inside the died area.
             # will go on to remove other cells on the next invoking
-            self.__controller.action_pickup_stone_from_cell(cell.name)
-            self.__controller.action_place_stone_to_trash_bin()
+            # self.__controller.action_pickup_stone_from_cell(cell.name)
+            # self.__controller.action_place_stone_to_trash_bin()
+            self.__arm.Pickup_Place(from_where=cell.name, to_where='trash_bin')
             self.__ai.layout.play(cell.name, StoneColor.BLANK)
             self.__died_area_scanner.died_cell_removed_first_one()
 
@@ -310,8 +316,9 @@ class GobotHead():
         else:
             # only remove one cell of the died area.
             # will go on to remove other cells on the next invoking
-            self.__controller.action_pickup_stone_from_cell(cell.name)
-            self.__controller.action_place_stone_to_trash_bin()
+            # self.__controller.action_pickup_stone_from_cell(cell.name)
+            # self.__controller.action_place_stone_to_trash_bin()
+            self.__arm.Pickup_Place(from_where=cell.name, to_where='trash_bin')
             self.__ai.layout.play(cell.name, StoneColor.BLANK)
             self.__died_area_scanner.died_cell_removed_first_one()
 
@@ -378,8 +385,9 @@ class GobotHead():
         layout,depth = self.__vision.get_chessboard_layout(self.__last_image)
         layout.print_out()
         cell = layout.get_first_cell(StoneColor.BLANK)
-        self.__controller.action_pickup_stone_from_warehouse()
-        self.__controller.action_place_stone_to_cell(cell.name)
+        # self.__controller.action_pickup_stone_from_warehouse()
+        # self.__controller.action_place_stone_to_cell(cell.name)
+        self.__arm.Pickup_Place(from_where='house', to_where=cell.name)
         # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
         # layout.print_out()
         self.__goto = self.at_state_game_over
@@ -440,18 +448,23 @@ class GobotHead():
                             cell_name, source_cell_color, target_cell_color = diffs[0]
                             Config.robot_eye.layout_scanner.inspecting.cell_name = cell_name
                             key = raw_input ('Test failed! Please check')
-                self.__controller.action_pickup_stone_from_cell('B19')
-                self.__controller.action_place_stone_to_trash_bin(park_to_view_point=False)
+                # self.__controller.action_pickup_stone_from_cell('B19')
+                # self.__controller.action_place_stone_to_trash_bin(park_to_view_point=False)
+                self.__arm.Pickup_Place(from_where='B19', to_where='trash_bin')
                 self.__target_demo_layout.set_cell_value_from_name('B19',StoneColor.BLANK)
-                self.__controller.action_pickup_stone_from_cell('A19')
-                self.__controller.action_place_stone_to_trash_bin(park_to_view_point=True)
+                # self.__controller.action_pickup_stone_from_cell('A19')
+                # self.__controller.action_place_stone_to_trash_bin(park_to_view_point=True)
+                self.__arm.Pickup_Place(from_where="A19", to_where='trash_bin')
                 self.__target_demo_layout.set_cell_value_from_name('A19',StoneColor.BLANK)
                 
         self.__goto = self.at_state_game_over
 
     def SpinOnce(self):
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
-        self.__controller.rabbitMqClient.SpinOnce()
+        # self.__controller.rabbitMqClient.SpinOnce()
+        self.__arm.SpinOnce()
+        self.__house.SpinOnce()
+
         self.__last_image = self.__eye.take_picture(do_undistort=False)
         ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
         # cv2.waitKey(1)

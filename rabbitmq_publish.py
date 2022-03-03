@@ -45,7 +45,7 @@ class RabbitClient():
                         body = gcode)
 
     def SpinOnce(self):
-        print('[info] rabbitmq_publish.py  RabbitClient::SpinOnce() ')
+        # print('[info] rabbitmq_publish.py  RabbitClient::SpinOnce() ')
         self.arm_sync.SpinOnce()
         self.house_sync.SpinOnce()
 

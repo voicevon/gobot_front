@@ -161,7 +161,10 @@ void RobotBase::RunGcode(Gcode* gcode){
 			this->commuDevice->OutputMessage(COMMU_OK);
 			this->commuDevice->WriteNotification("IDLE");
 			break;
-
+		case 996:
+			// Do nothing. this should be the last gcode of a movement in transaction.
+			// after MCU reset, This should be the first gcode it received, even the message queue is nothing.
+			break;
 		default:
 			break;
 		}
