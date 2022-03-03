@@ -1,14 +1,11 @@
 
 # from commuDevice.ble_single_client import BleSingleClient, BleServerHead
 import enum
-import logging
-import sys
 import time
-from turtle import towards
-from von.terminal_font import TerminalFont
 from config.message_logger import MessageLogger
 from rabbitmq_publish import RabbitMqClient_Helper
 from abc import ABC, abstractmethod
+from gogame.chessboard_cell import ChessboardCell
 
 #                        ^
 #      A1                |            A19
@@ -57,23 +54,23 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
     def __init__(self) -> None:
         super().__init__()
 
-    def GetXY(self, position_or_site):
+    def SencePoint_ToXY(self, position_or_site):
         return 1,5
     
     def PickupFrom(self, position_or_site):
-        x,y = self.GetXY(position_or_site)
+        x,y = self.SencePoint_ToXY(position_or_site)
         gcode ="G1X" + str(x) + 'Y' + str(y)
         self.rabbitMqClient.PublishToHouse(gcode=gcode)
         gcode = "M996"
         self.rabbitMqClient.PublishToHouse(gcode=gcode)
     
     def PlaceTo(self, position_or_site):
-        x,y = self.GetXY(position_or_site)
+        x,y = self.SencePoint_ToXY(position_or_site)
         gcode ="G1X" + str(x) + 'Y' + str(y)
         self.rabbitMqClient.PublishToHouse(gcode=gcode)
 
     def move_to(self, position_name):
-        x,y = self.GetXY(position_name)
+        x,y = self.SencePoint_ToXY(position_name)
         gcode ="G1X" + str(x) + 'Y' + str(y)
         self.rabbitMqClient.PublishToHouse(gcode=gcode)
 
@@ -96,6 +93,8 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
 
     def __init__(self) -> None:
         super().__init__()
+        self.test_cell=ChessboardCell()
+        self.test_cell.from_name("A1")
     
     def Pickup_Place(self, from_where, to_where, auto_park=False):
         self.MoveTo(from_where)
@@ -116,7 +115,7 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         return super().PlaceTo(position_or_site)
 
     def MoveTo(self, position):
-        x,y = self.GetXY(position)
+        x,y = self.SencePoint_ToXY(position)
         gcode = 'G1X' + str(x) + 'Y' + str(y)
         self.rabbitMqClient.PublishToArm(gcode=gcode)
 
@@ -129,18 +128,60 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         gcode = "M996"
         self.rabbitMqClient.PublishToHouse(gcode=gcode)
 
-    def GetXY(self, position):
-        x = 12
-        y = 34
+    def Convert_to_world_position(self, cell_name):
+        '''
+        Go_position instance: "Q4" as position on 2D Chessboard.
+        XY_position instance: "[0.015,0.02,-0.01]" as [x,y,z] in 3D world coordinator.
+        '''
+        ss = "ABCDEFGHIJKLMNOPQRST"
+
+        print(cell_name)
+        iCol = ss.find(cell_name[:1])
+        iRow = 19 - int(cell_name[1:])
+        zero_in_world_x = -215
+        zero_in_world_y = 155
+        cell_width_x = 22
+        cell_width_y = 23
+        world_x = zero_in_world_x +  cell_width_x * iCol
+        world_y = zero_in_world_y + iRow * cell_width_y
+        return world_x, world_y
+
+    def SencePoint_ToXY(self, position):
+        if position=='trash_bin':
+            x = 123
+            y = 125
+        elif position=='house':
+            x= 11.2
+            y=22.3
+        else:
+            MessageLogger.Output('convert_to_world_position', position)
+            x, y = self.Convert_to_world_position(position)
         MessageLogger.Output('getxy', position + '  ' + str(x) + '  ' + str(y))
 
         return x,y
 
+    def get_next(self)->str:
+        row = self.test_cell.row_id
+        col = self.test_cell.col_id
+        col += 1
+        if col >=19:
+            col = 0
+            row += 1
+            if row >= 19:
+                row = 0
+
+        self.test_cell.from_col_row_id(col_id=col, row_id=row)
+        return self.test_cell.name
+
+
 if __name__ == '__main__':
     arm = HumanLevelGobotArm()
-    house = HumanLevelGobotHouse()
-    arm.SpinOnce()
-    house.SpinOnce()
+    # house = HumanLevelGobotHouse()
+    while True:
+        arm.SpinOnce()
+        # house.SpinOnce()
+        arm.MoveTo(arm.get_next())
+        # time.sleep(1)
 
 # class Controller:
 #     '''

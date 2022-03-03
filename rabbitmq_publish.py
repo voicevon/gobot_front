@@ -1,5 +1,6 @@
 from asyncio.log import logger
 import pika 
+
 import time
 from rabbitmq_mqtt_sync import RabbitMQSync, SyncQueueTopicConfig
 
@@ -13,23 +14,11 @@ class RabbitMQBrokeConfig:
 
 
 class RabbitClient():
-    def __init__(self, config:RabbitMQBrokeConfig) -> None:
-        self.config = config
-        self.ConnectToBroker()
+    def __init__(self, connection:pika.BlockingConnection) -> None:
+        self.connection = connection
+        self.MakeChannel()
 
-        config = SyncConfigFactory.MakeHouseConfig()
-        self.house_sync = RabbitMQSync(self.connection, config=config)
-
-        config = SyncConfigFactory.MakeArmConfig()
-        self.arm_sync = RabbitMQSync(self.connection, config=config)
-
-    def ConnectToBroker(self):
-        credentials = pika.PlainCredentials(self.config.uid, self.config.password)
-        parameters = pika.ConnectionParameters(host=self.config.host,
-                                        port= self.config.port,
-                                        virtual_host= self.config.virtual_host,
-                                        credentials= credentials)
-        self.connection = pika.BlockingConnection(parameters)
+    def MakeChannel(self):
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='gobot_x2134_house')
         self.channel.queue_declare(queue='gobot_x2134_arm')
@@ -43,11 +32,6 @@ class RabbitClient():
         self.channel.basic_publish(exchange='',
                         routing_key='gobot_x2134_house',
                         body = gcode)
-
-    def SpinOnce(self):
-        # print('[info] rabbitmq_publish.py  RabbitClient::SpinOnce() ')
-        self.arm_sync.SpinOnce()
-        self.house_sync.SpinOnce()
 
     def RabbitMQ_publish_tester(self):
         i = 0
@@ -84,30 +68,58 @@ class SyncConfigFactory:
 
 
 class RabbitMqClient_Helper():
+    '''
+    top level interface  of MQTT and RabbitMQ
 
-    @staticmethod
-    def MakeClient()->RabbitClient:
+    '''
+    def __init__(self) -> None:
+        self.__ConnectBroker_MQTT()
+        self.__ConnectBroker_RabbitMQ()
+        self.__MakeSyncer()
+
+    def SpinOnece(self):
+        self.arm_sync.SpinOnce()
+        self.house_sync.SpinOnce()
+
+    def __MakeSyncer(self):
+        config = SyncConfigFactory.MakeHouseConfig()
+        self.house_sync = RabbitMQSync(self.connection, config=config)
+
+        config = SyncConfigFactory.MakeArmConfig()
+        self.arm_sync = RabbitMQSync(self.connection, config=config)
+
+    def MakeClient(self)->RabbitClient:
+        self.client = RabbitClient(self.connection)
+        return self.client
+
+    def __ConnectBroker_MQTT(self):
         from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
         config_mqtt = MQTT_ConnectionConfig()
         config_mqtt.uid = 'gobot_head'
         config_mqtt.password = 'gobot_head'
         g_mqtt.connect_to_broker(config_mqtt)
 
+    def __ConnectBroker_RabbitMQ(self):
         config = RabbitMQBrokeConfig()
         config.uid = 'gobot_head'
         config.password = 'gobot_head'
-        client = RabbitClient(config)
-        client.SpinOnce()
-        return client
+        credentials = pika.PlainCredentials(config.uid, config.password)
+        parameters = pika.ConnectionParameters(host=config.host,
+                                        port= config.port,
+                                        virtual_host= config.virtual_host,
+                                        credentials= credentials)
+        self.connection = pika.BlockingConnection(parameters)
 
 
 if __name__ == '__main__':
-    client = RabbitMqClient_Helper.MakeClient()
+    helper = RabbitMqClient_Helper()
+    client = helper.MakeClient()
     i=0
     while True:
         gcode = 'G1X' + str(i)
-        client.PublishToHouse(gcode=gcode)
+        # client.PublishToHouse(gcode=gcode)
+        client.PublishToArm(gcode=gcode)
         print(gcode)
         i+=1
         # time.sleep(0.5)
-        client.SpinOnce()
+        helper.SpinOnece()

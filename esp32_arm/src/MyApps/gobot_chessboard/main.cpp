@@ -59,9 +59,9 @@ void setup(){
     // Serial.println("BLE is ok....");    
     mybot = &GobotChessboard::getInstance();
     mybot->Init();
-    mybot->Calibrate(1);
+    // mybot->Calibrate(1);
 
-    mybot->ParkArms(true);
+    // mybot->ParkArms(true);
     Begin_WifiRabbitMqtt();
     Serial.print("\nGobot-Chessboard setup is done..........");
 }

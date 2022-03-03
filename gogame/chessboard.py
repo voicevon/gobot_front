@@ -1,12 +1,6 @@
-import sys
-sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
-
 from gogame.chessboard_cell import ChessboardCell, StoneColor
 from vision.grid_layout import GridLayout
 from von.terminal_font import TerminalFont
-# from von.mqtt_helper import g_mqtt
-
-
 
 
 class ChessboardLayout(GridLayout):
@@ -162,9 +156,6 @@ class ChessboardLayout(GridLayout):
             print(self._BG_RED + self._FC_YELLOW + '%s' %diffs + self._FC_RESET)
         return diffs
         # return total,cell.name ,my_cell_color, target_cell_color
-
-
-
 
         # for row in range(0, 19):
         #     for col in range(0, 19):
