@@ -2,7 +2,7 @@
 #include "HouseMap.h"
 // #include "Robot/Commu/CommuUart.h"
 // #include "Robot/Commu/CommuBleGattServer.h"
-#include "actions.h"
+// #include "actions.h"
 #include "Robot/command_queue.h"
 
 
@@ -20,7 +20,8 @@ class GobotHouse{
                                   // Instantiated on first use.
             return instance;
         }    
-        void Setup(RobotAction* pAction);
+        // void Setup(RobotAction* pAction);
+        void Setup();
         void SpinOnce();
         void ParkArms(bool do_homing);
         void Calibrate(int step, bool enable_eef_coil);
@@ -41,7 +42,7 @@ class GobotHouse{
         void __PreHome();
 
         HouseMap __map;
-        RobotAction* __house_action;
+        // RobotAction* __house_action;
         int __segments;
         CommandQueue* __commandQueue;
 

@@ -1,3 +1,4 @@
+from asyncio.log import logger
 import pika 
 import time
 from rabbitmq_mqtt_sync import RabbitMQSync, SyncQueueTopicConfig
@@ -44,6 +45,7 @@ class RabbitClient():
                         body = gcode)
 
     def SpinOnce(self):
+        print('[info] rabbitmq_publish.py  RabbitClient::SpinOnce() ')
         self.arm_sync.SpinOnce()
         self.house_sync.SpinOnce()
 

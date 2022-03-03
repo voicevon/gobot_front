@@ -7,8 +7,9 @@
 
 
 
-void GobotHouse::Setup(RobotAction* pAction){
-	this->__house_action = pAction;
+// void GobotHouse::Setup(RobotAction* pAction){
+void GobotHouse::Setup(){
+	// this->__house_action = pAction;
 	__segments = 3;
 	this->__map.Init();
 

@@ -6,7 +6,7 @@
 #include "gobot_house.h"
 #include "MyLibs/MyFunctions.hpp" 
 GobotHouse* mybot; 
-RobotAction action;
+// RobotAction action;
 
 // static char LOG_TAG[]= "BLE-HOUSE";
 
@@ -58,7 +58,8 @@ void setup(){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am your lovely bot,  GobotHouse. ");
     mybot = &GobotHouse::getInstance();
-    mybot->Setup(&action);
+    // mybot->Setup(&action);
+    mybot->Setup();
 
     // mybot->Calibrate(6,true);
     // for (int i=17; i>=10;i--){
