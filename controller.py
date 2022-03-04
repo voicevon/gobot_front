@@ -3,9 +3,9 @@
 import enum
 import time
 from config.message_logger import MessageLogger
-from rabbitmq_all_in_one import RabbitMqClient_Helper
 from abc import ABC, abstractmethod
 from gogame.chessboard_cell import ChessboardCell
+from rabbitmq_all_in_one import RabbitClient
 
 #                        ^
 #      A1                |            A19
@@ -30,11 +30,8 @@ class EEF_ACTIONS(enum.Enum):
 
 
 class HumanLevelRobotBase(ABC):
-    def __init__(self) -> None:
-        self.rabbitMqClient = RabbitMqClient_Helper.MakeClient()
-
-    def SpinOnce(self):
-        self.rabbitMqClient.SpinOnce()
+    def __init__(self, rabbit_client:RabbitClient) -> None:
+        self.rabbit_client = rabbit_client
 
     @abstractmethod
     def PickupFrom(self, position_or_site):
@@ -51,12 +48,17 @@ class HumanLevelRobotBase(ABC):
 
 class HumanLevelGobotHouse(HumanLevelRobotBase):
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, rabbit_client:RabbitClient) -> None:
+        super().__init__(rabbit_client=rabbit_client)
 
     def SencePoint_ToXY(self, position_or_site):
         return 1,5
     
+    def Home(self):
+        self.rabbit_client.PublishToHouse('G28BI')
+        self.rabbit_client.PublishToHouse('G28AI')
+        self.rabbit_client.PublishToHouse('M996')
+        
     def PickupFrom(self, position_or_site):
         x,y = self.SencePoint_ToXY(position_or_site)
         gcode ="G1X" + str(x) + 'Y' + str(y)
@@ -91,10 +93,8 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
 
 class HumanLevelGobotArm(HumanLevelRobotBase):
 
-    def __init__(self) -> None:
-        super().__init__()
-        self.test_cell=ChessboardCell()
-        self.test_cell.from_name("A1")
+    def __init__(self, rabbit_client:RabbitClient) -> None:
+        super().__init__(rabbit_client=rabbit_client)
     
     def Pickup_Place(self, from_where, to_where, auto_park=False):
         self.MoveTo(from_where)
@@ -175,12 +175,17 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
 
 
 if __name__ == '__main__':
-    arm = HumanLevelGobotArm()
-    # house = HumanLevelGobotHouse()
+    from rabbitmq_all_in_one import RabbitMqClient_Helper
+    helper = RabbitMqClient_Helper()
+    client = helper.MakeClient()
+    arm = HumanLevelGobotArm(client)
+    house = HumanLevelGobotHouse(client)
+    house.Home()
+
     while True:
-        arm.SpinOnce()
+        helper.SpinOnce()
         # house.SpinOnce()
-        arm.MoveTo(arm.get_next())
+        # arm.MoveTo(arm.get_next())
         # time.sleep(1)
 
 # class Controller:
