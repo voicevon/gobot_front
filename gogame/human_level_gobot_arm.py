@@ -31,6 +31,13 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
 
     def __init__(self, rabbit_client:RabbitClient) -> None:
         super().__init__(rabbit_client=rabbit_client)
+        self.Home()
+
+    def Home(self):
+        self.rabbit_client.PublishToArm('G28AI')
+        self.rabbit_client.PublishToArm('G28BI')
+        self.rabbit_client.PublishToArm('M996')
+
     
     def Pickup_Place(self, from_where, to_where, auto_park=False):
         self.MoveTo(from_where)

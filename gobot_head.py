@@ -60,8 +60,8 @@ class GobotHead():
         # self.__controller = Controller()
         self.mqHelper = RabbitMqClient_Helper()
         self.mqClient = self.mqHelper.MakeClient()
-        self.__arm = HumanLevelGobotArm(self.mqClient)
-        self.__house = HumanLevelGobotHouse(self.mqClient)
+        self.arm = HumanLevelGobotArm(self.mqClient)
+        self.house = HumanLevelGobotHouse(self.mqClient)
         self.__died_area_scanner = DiedAreaScanner()
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
@@ -71,6 +71,8 @@ class GobotHead():
         logging.info("Start init objects......")
         self.__InitOthers()
         MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
+
+
 
     def __InitOthers(self):
 
@@ -142,7 +144,7 @@ class GobotHead():
             # cell.from_col_row_id(col_id=col, row_id=row)
             # self.__controller.action_pickup_stone_from_cell(cell.name)
             # self.__controller.action_place_stone_to_trash_bin()
-            self.__house.Pickup_Place(from_where=cell.name, to_where='trash_bin')
+            self.house.Pickup_Place(from_where=cell.name, to_where='trash_bin')
             return 1
         return 0
 
@@ -286,7 +288,7 @@ class GobotHead():
             # robot arm play a chess, The instruction is from AI.
             # self.__controller.action_pickup_stone_from_warehouse()
             # self.__controller.action_place_stone_to_cell(cell_name=cell_name)
-            self.__arm.Pickup_Place(from_where='house', to_where=cell_name)
+            self.arm.Pickup_Place(from_where='house', to_where=cell_name)
             self.__ai.layout.play(cell_name, StoneColor.WHITE)
             self.__ai.layout.print_out()
 
@@ -503,6 +505,7 @@ if __name__ == '__main__':
 
     myrobot = GobotHead(robot_eye)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
+    myrobot.house.demo()
     while True:
         myrobot.SpinOnce()
 
