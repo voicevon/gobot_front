@@ -20,7 +20,8 @@ import time
 from von.terminal_font import TerminalFont  # pip3 install VonPylib
 from config.image_logger import ImageLogger,ImageLoggerToWhere
 from config.message_logger import MessageLoggerToWhere,MessageLogger
-from controller import HumanLevelGobotHouse,HumanLevelGobotArm
+from gogame.human_level_gobot_arm import HumanLevelGobotArm
+from gogame.human_level_gobot_house import HumanLevelGobotHouse
 from rabbitmq_all_in_one import RabbitMqClient_Helper, RabbitClient
 
 
@@ -59,8 +60,8 @@ class GobotHead():
         # self.__controller = Controller()
         self.mqHelper = RabbitMqClient_Helper()
         self.mqClient = self.mqHelper.MakeClient()
-        self.__arm = HumanLevelGobotArm()
-        self.__house = HumanLevelGobotHouse()
+        self.__arm = HumanLevelGobotArm(self.mqClient)
+        self.__house = HumanLevelGobotHouse(self.mqClient)
         self.__died_area_scanner = DiedAreaScanner()
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
