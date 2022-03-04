@@ -77,7 +77,7 @@ class RabbitMqClient_Helper():
         self.__ConnectBroker_RabbitMQ()
         self.__MakeSyncer()
 
-    def SpinOnece(self):
+    def SpinOnce(self):
         self.arm_sync.SpinOnce()
         self.house_sync.SpinOnce()
 
@@ -116,10 +116,16 @@ if __name__ == '__main__':
     client = helper.MakeClient()
     i=0
     while True:
-        gcode = 'G1X' + str(i)
+        helper.SpinOnce()
+        helper.SpinOnce()
+        helper.SpinOnce()
+
+
+        # gcode = 'G1X0'
         # client.PublishToHouse(gcode=gcode)
-        client.PublishToArm(gcode=gcode)
-        print(gcode)
-        i+=1
+        # client.PublishToArm(gcode=gcode)
+        # gcode = 'G1X100'
+        # client.PublishToHouse(gcode=gcode)
+        # client.PublishToArm(gcode=gcode)
         # time.sleep(0.5)
-        helper.SpinOnece()
+
