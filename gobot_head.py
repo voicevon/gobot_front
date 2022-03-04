@@ -20,7 +20,8 @@ import time
 from von.terminal_font import TerminalFont  # pip3 install VonPylib
 from config.image_logger import ImageLogger,ImageLoggerToWhere
 from config.message_logger import MessageLoggerToWhere,MessageLogger
-from controller import HumanLevelGobotArm, HumanLevelGobotHouse
+from controller import HumanLevelGobotHouse,HumanLevelGobotArm
+from rabbitmq_all_in_one import RabbitMqClient_Helper, RabbitClient
 
 
 class GobotHead():
@@ -56,6 +57,8 @@ class GobotHead():
         self.__vision = GobotVision()
         self.__ai = GoGameAiClient()
         # self.__controller = Controller()
+        self.mqHelper = RabbitMqClient_Helper()
+        self.mqClient = self.mqHelper.MakeClient()
         self.__arm = HumanLevelGobotArm()
         self.__house = HumanLevelGobotHouse()
         self.__died_area_scanner = DiedAreaScanner()
@@ -457,9 +460,7 @@ class GobotHead():
 
     def SpinOnce(self):
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
-        # self.__controller.rabbitMqClient.SpinOnce()
-        self.__arm.SpinOnce()
-        self.__house.SpinOnce()
+        self.mqHelper.SpinOnce()
 
         self.__last_image = self.__eye.take_picture(do_undistort=False)
         ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
