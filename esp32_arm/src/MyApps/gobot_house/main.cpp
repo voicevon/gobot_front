@@ -72,7 +72,7 @@ void setup(){
 bool done= false;
 void loop(){
 	// WebCommu_SpinOnce();
-	// mybot->SpinOnce();
+	mybot->SpinOnce();
     // done = mybot->MoveStone_FromRoomToHead(0);
     // if(done) Serial.print("Done to 0");
     // done = mybot->MoveStone_FromHeadToRoom(0);

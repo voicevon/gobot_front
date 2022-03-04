@@ -3,7 +3,7 @@
 import enum
 import time
 from config.message_logger import MessageLogger
-from rabbitmq_publish import RabbitMqClient_Helper
+from rabbitmq_all_in_one import RabbitMqClient_Helper
 from abc import ABC, abstractmethod
 from gogame.chessboard_cell import ChessboardCell
 

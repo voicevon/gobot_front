@@ -48,7 +48,9 @@ bool CommandQueue::AppendGcodeCommand(String command){
     // Serial.print("\n CommandQueue::AppendGcodeCommand()  is entering..... ");
     int pre_head = this->head;
     pre_head++;
-    if (pre_head == COMMANDS_COUNT_IN_QUEUE)   pre_head =0;
+    if (pre_head == COMMANDS_COUNT_IN_QUEUE)   
+        pre_head =0;
+        
     while (pre_head == this->tail){
         // Buffer is full
         Serial.println("\n\n\n\n [Warning] CommandQueue::AppendGcodeCommand()   Buffer is full \n\n\n");
