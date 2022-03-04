@@ -1,9 +1,6 @@
 
-from distutils.file_util import copy_file
 import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
-
-from numpy import true_divide
 from vision.robot_eye_base import MonoEyeBase
 import cv2
 import logging
