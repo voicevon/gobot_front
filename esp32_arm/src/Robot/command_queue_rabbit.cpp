@@ -24,8 +24,15 @@ void CommandQueueRabbit::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* 
 void CommandQueueRabbit::OnReceived(char* payload, int length){
     // Serial.println("CommandQueueRabbit::OnReceived() is entering...");
     // Put message to local MQ
+    *(payload+length) = 0x00;
+    // *(payload+length) = '\n';
     String strPayload = payload;
     // this->__localMQ->SayHello();
+    // Serial.print("ggggggggggggggggggggggggggggggggggggggggggggggg   ");
+    // Serial.print(length);
+    // Serial.print("    ");
+
+    Serial.println(strPayload);
     this->__localMQ->AppendGcodeCommand(strPayload); 
     // send message to feedback topic
     this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, payload, length);

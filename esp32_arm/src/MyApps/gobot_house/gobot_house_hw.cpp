@@ -99,12 +99,12 @@ void GobotHouseHardware::__Init_gpio(){
 	#define PIN_MICRIO_STEP_2 21
 	#define PIN_MICRIO_STEP_1 22
 	#define PIN_MICRIO_STEP_0 23	
-	pinMode(PIN_MICRIO_STEP_0, OUTPUT);
-	pinMode(PIN_MICRIO_STEP_1, OUTPUT);
-	pinMode(PIN_MICRIO_STEP_2, OUTPUT);
-	digitalWrite(PIN_MICRIO_STEP_0, LOW);
-	digitalWrite(PIN_MICRIO_STEP_1, LOW);
-	digitalWrite(PIN_MICRIO_STEP_2, LOW);
+	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
+	// pinMode(PIN_MICRIO_STEP_1, OUTPUT);
+	// pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
+	// digitalWrite(PIN_MICRIO_STEP_1, LOW);s
+	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
 
 	
 	// digitalWrite(PIN_ENDER_COIL_2109, LOW);
@@ -280,15 +280,21 @@ void GobotHouseHardware::_running_G28(){
 	}
 }
 
-
+// We want to fix pin_number in firmware, 
+// So eef_channel takes no effection.
 void GobotHouseHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 	switch (eef_action)
 	{
 	case EefAction::Suck:
+		ledcWrite(1, 128);
 		break;
 	case EefAction::Release:
+		// This will drive the extend coil to create a reversed magnetic field. 
+		// ledcWrite(PIN_ENDER_COIL_2109, 128);
+
 		break;
 	case EefAction::Sleep:
+		ledcWrite(1,0);
 		break;
 	default:
 		Serial.print("\n [Warning] GobotHouseHardware::RunM123()  ");

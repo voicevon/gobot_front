@@ -21,22 +21,17 @@
 
 import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
-# from gogame.chessboard_cell import ChessboardCell
 from gogame.human_level_robot_base import HumanLevelRobotBase
 from rabbitmq_all_in_one import RabbitClient
 import enum
 
 
-class HumanLeve_HouseEEF_ACTIONS(enum.Enum):
-    SLEEP = 0
-    LOAD = 1
-    UNLOAD = 2
-    MOVE_Z_TOP = 3
-    MOVE_Z_MIDDLE = 4
-    MOVE_Z_BOTTOM = 5
+class HumanLevelHouse_EEF_ACTIONS(enum.Enum):
+    LOAD = 3,
+    SLEEP = 5,
 
 
-class HouseSenceSite():
+class HouseMapDiction():
 
     def __init__(self) -> None:
         self.NECK = (55.0, 0)
@@ -62,18 +57,7 @@ class HouseSenceSite():
                 (-98.18, -95.2),             #6
                 (-78.79, -126.38)            #7
                 ]
-        # self.x, self.y = self.NECK
 
-
-    # def from_site_name(self, site_name):
-    #     return self.DOORS[1]
-
-    # def from_type_index(self,site_type:str, index=0 ):
-    #     return self.HEAD
-
-    # def to_gcode(self)->str:
-    #     gcode = 'G1X' + str(self.x) + 'Y' + str(self.y)
-    #     return gcode
 
 class HumanLevelGobotHouse(HumanLevelRobotBase):
 
@@ -86,11 +70,11 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         self.rabbit_client.PublishToHouse('G28AI')
         self.rabbit_client.PublishToHouse('M996')
         
-    def Pickup_Place(self, from_where:HouseSenceSite, to_where:HouseSenceSite, auto_park=False):
+    def Pickup_Place(self, from_where:HouseMapDiction, to_where:HouseMapDiction, auto_park=False):
         self.PickupFrom(from_where)
         self.PlaceTo(to_where)
         if auto_park:
-            site = HouseSenceSite()
+            site = HouseMapDiction()
             x,y = site.PARKING
             self.MoveTo(x,y)
         self.rabbit_client.PublishToHouse('M996')
@@ -105,14 +89,31 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
     def PlaceTo(self, position_or_site):
         return super().PlaceTo(position_or_site)
 
+    def EefAction(self, eef: HumanLevelHouse_EEF_ACTIONS):
+        if eef==HumanLevelHouse_EEF_ACTIONS.LOAD:
+            self.rabbit_client.PublishToHouse('M123P1S128')
+        elif eef==HumanLevelHouse_EEF_ACTIONS.SLEEP:
+            self.rabbit_client.PublishToHouse('M123P1S0')
+
+    def Test_Eef(self):
+        self.rabbit_client.PublishToHouse('M123P1S128')
+        self.rabbit_client.PublishToHouse('G4S5')
+        self.rabbit_client.PublishToHouse('M123P1S0')
+        self.rabbit_client.PublishToHouse('G4S5')
+        self.rabbit_client.PublishToHouse('M996')
+        
+
     def demo(self):
-        site = HouseSenceSite()
+        site = HouseMapDiction()
+        x,y = site.DOORS[0]
+        self.MoveTo(x,y)
         for index in range(8):
-            x,y = site.DOORS[index]
-            self.MoveTo(x,y)
             x,y = site.ROOMS[index]
             self.MoveTo(x,y)
-
+            self.EefAction(HumanLevelHouse_EEF_ACTIONS.LOAD)
+            x,y = site.DOORS[index]
+            self.MoveTo(x,y)
+            self.EefAction(HumanLevelHouse_EEF_ACTIONS.SLEEP)
         x,y = site.DOORS[7]
         self.MoveTo(x,y)
         # Park Arms at a point, nearby homed position
@@ -124,4 +125,12 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
 
 
 if __name__ == '__main__':
-    pass
+    from rabbitmq_all_in_one import RabbitMqClient_Helper
+    helper = RabbitMqClient_Helper()
+    client = helper.MakeClient()
+    house = HumanLevelGobotHouse(client)
+    for i in range(80):
+        house.Test_Eef()
+
+    while True:
+        helper.SpinOnce()

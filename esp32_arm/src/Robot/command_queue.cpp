@@ -53,7 +53,7 @@ bool CommandQueue::AppendGcodeCommand(String command){
         
     while (pre_head == this->tail){
         // Buffer is full
-        Serial.println("\n\n\n\n [Warning] CommandQueue::AppendGcodeCommand()   Buffer is full \n\n\n");
+        // Serial.println("\n\n\n\n [Warning] CommandQueue::AppendGcodeCommand()   Buffer is full \n\n\n");
         this->SpinOnce();
     }
     // Serial.print("Adding gcode to command queue   ");
