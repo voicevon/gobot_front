@@ -97,11 +97,16 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
 
     def Test_Eef(self):
         self.rabbit_client.PublishToHouse('M123P1S128')
-        self.rabbit_client.PublishToHouse('G4S5')
+        self.rabbit_client.PublishToHouse('G4S1')
         self.rabbit_client.PublishToHouse('M123P1S0')
         self.rabbit_client.PublishToHouse('G4S5')
         self.rabbit_client.PublishToHouse('M996')
         
+        # self.rabbit_client.PublishToArm('M123P1S128')
+        # self.rabbit_client.PublishToArm('G4S1')
+        # self.rabbit_client.PublishToArm('M123P1S0')
+        # self.rabbit_client.PublishToArm('G4S5')
+        # self.rabbit_client.PublishToArm('M996')
 
     def demo(self):
         site = HouseMapDiction()

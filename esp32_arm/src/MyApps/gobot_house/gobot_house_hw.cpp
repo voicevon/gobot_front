@@ -90,11 +90,10 @@ void GobotHouseHardware::__Init_gpio(){
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	pinMode(PIN_BETA_ENABLE, OUTPUT);
 
-	// pinMode(PIN_ENDER_COIL_2109, OUTPUT);
-	// pinMode(PIN_ENDER_COIL_EXT_2109, OUTPUT);
 
-	digitalWrite(PIN_ALPHA_ENABLE, LOW);
-	digitalWrite(PIN_BETA_ENABLE, LOW);
+	//Disable MOTOR
+	digitalWrite(PIN_ALPHA_ENABLE, HIGH);
+	digitalWrite(PIN_BETA_ENABLE, HIGH);
 
 	#define PIN_MICRIO_STEP_2 21
 	#define PIN_MICRIO_STEP_1 22
@@ -106,6 +105,9 @@ void GobotHouseHardware::__Init_gpio(){
 	// digitalWrite(PIN_MICRIO_STEP_1, LOW);s
 	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
 
+	// TODO:  shoud do this? double check document
+	// pinMode(PIN_ENDER_COIL_2109, OUTPUT);
+	// pinMode(PIN_ENDER_COIL_EXT_2109, OUTPUT);
 	
 	// digitalWrite(PIN_ENDER_COIL_2109, LOW);
 	// digitalWrite(PIN_ENDER_COIL_EXT_2109, LOW);
