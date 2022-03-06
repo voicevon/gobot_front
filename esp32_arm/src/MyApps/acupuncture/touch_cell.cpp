@@ -36,14 +36,11 @@ const char* TouchCell::GetName(int point_id){
                 return "foot/qita";
                 break;
             default:
+                return "foot/2_x";
                 break;
             }
         case 3:
-            switch (point_id)
-            {
-            case PPA3:  //解溪穴
-                return "foot/jiexi";
-                break;
+            switch (point_id){
             case PPD2:  //太溪穴
                 return "foot/taixi";
                 break;
@@ -83,33 +80,32 @@ const char* TouchCell::GetName(int point_id){
             case PPA2:  //商丘穴
                 return "foot/shangqiu";
                 break;
-            
+            case PPA3:  //解溪穴
+                return "foot/jiexi";
+                break;
             default:
+                return "foot/3_x";
                 break;
             }
         case 4:
-            switch (point_id)
-            {
-            case PPA3:  //仆参穴
-                return "foot/pushen";
+            switch (point_id){
+            case PPD2:
+                return "foot/4_D2";
+                break;
+            case PPD3:  // 
+                return "foot/4_D3";
+                break;        
+            case PPD4:   //
+                return "foot/4_D4";
+                break;
+            case PPD5:  // 大都穴
+                return "foot/dadu";
                 break;
             case PPD6:  //
                 return "foot/4_A1";
                 break;
             case PPD7:  //
                 return "foot/4_A2";
-                break;
-            case PPD11:  //
-                return "foot/4_A3";
-                break;
-            case PPD5:  // 大都穴
-                return "foot/dadu";
-                break;
-            case PPD3:  // 
-                return "foot/4_D3";
-                break;
-            case PPD4:   //
-                return "foot/4_D4";
                 break;
             case PPD8:   // 独阴穴
                 return "foot/duyin";
@@ -120,14 +116,23 @@ const char* TouchCell::GetName(int point_id){
             case PPD10:   // 地五汇
                 return "foot/diwuhui";
                 break;
+            case PPD11:  //
+                return "foot/4_A3";
+                break;
+            case PPA0:  // 
+                return "foot/4_A0";
+                break;
             case PPA1:  // 束骨穴
                 return "foot/shugu";
                 break;
             case PPA2:  // 涌泉穴
                 return "foot/yongquan";
                 break;
-            
+            case PPA3:  //仆参穴
+                return "foot/pushen";
+                break;            
             default:
+                return "foot/4_x";
                 break;
             }
     }
@@ -171,4 +176,13 @@ const char* TouchCell::GetMqttPayload(int bit_index){
     if (CurrentFlags[byte_index] & (1<<bit_index))
         return "ON";
     return "OFF";
+}
+
+void TouchCell::PrintOut(const char* title){
+    return;
+    Serial.print("\n======================= TouchCell::PrintOut()===================\n");
+    Serial.println(title);
+    Serial.print("\n    Addr = ");
+    Serial.print(this->Address);
+
 }

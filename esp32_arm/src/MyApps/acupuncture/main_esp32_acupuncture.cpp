@@ -37,38 +37,44 @@ void Begin_WifiRabbitMqtt(){
 
 void setup() {
     Serial.begin(115200);
-    Serial.print("\n Hello, I am the main controller of actupuncture.  Commu with MQTT");
-    setup_wifi_mqtt();
-
+    Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
     obj_i2c_bus.Init();
-//   obj_mqtt.Init();
 
+    Begin_WifiRabbitMqtt();
+    while (!mqtt_is_connected){
+        delay(100);
+    }
 }
-// void mqtt_publish(const char* topic, const char* payload){
-//   if (mqttClient.connected()){
-//     mqttClient.publish(topic, 2, true, payload);
-//   }
-// }
+
 std::string topic = "actu/foot/yongquanxue"; 
 std::string payload ="123456";
 
 void loop() {
+
     obj_i2c_bus.SpinOnce();
-    if (! mqtt_is_connected)
-        return;
+    // Serial.println("hhhhhhhhh");
 
     for(int i = 0; i<CELLS; i++){
         TouchCell* cell = &obj_i2c_bus.Cells[i];
+        // Serial.println("jjjjjjjjjjjjjj");
         if (cell->HasUpdate()){
             // Touch pin changed
+            // Serial.println("kkkkkkkkkkkk");
             topic = "actp/";
             topic.append(BODY_ID);
             topic.append("/");
-            for (int j=0; j<15; j++){
+            // Serial.println("mmmmmmmmmmmmm");
+            for (int j=0; j<14; j++){
                 if (cell->IsBitUpdated(j)){
+                    // Serial.println("pppppppppppppppppppppppp  ");
+                    Serial.println(j);
+                    Serial.print(cell->GetName(j));
                     topic.append(cell->GetName(j));
+                    // Serial.println("qqqqqqqqqqqqqqqqqq");
                     payload = cell->GetMqttPayload(j);
+                    // Serial.println("rrrrrrrrrrrrrrrrrrr");
                     mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
+                    // Serial.println("sssssssssssssssssss");
                     
                     Serial.print(topic.c_str());
                     Serial.print("  ");
@@ -81,6 +87,11 @@ void loop() {
 
                 }
             }
+            // Serial.print("Topic=");
+            // Serial.print(topic.c_str());
+            // Serial.print("  payload");
+            // Serial.print(payload.c_str());
+
             mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
         }
     }  

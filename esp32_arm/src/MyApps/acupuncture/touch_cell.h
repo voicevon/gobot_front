@@ -14,6 +14,7 @@ class TouchCell{
         const char* GetName(int point_id);
         bool IsBitUpdated(int bit_index);
         const char* GetMqttPayload(int bit_index);
+        void PrintOut(const char* title);
 
     private:
         bool _has_update;
