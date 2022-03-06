@@ -5,8 +5,8 @@
 
 // #define I_AM_GARMENT_BOT
 // #define I_AM_GOBOT_HOUSE_2134
-#define I_AM_GOBOT_CHESSBOARD_2134
-// #define I_AM_ACTUPUNCTURE_MAIN
+// #define I_AM_GOBOT_CHESSBOARD_2134
+#define I_AM_ACUPUCTURE_MAIN_ESP32
 
 // #define I_AM_SMOKE_MACHINE_WEB_SERVER
 // #define I_AM_CABLE_AXIS_XPYP
@@ -43,7 +43,12 @@
 	#endif
 #endif
 
-	#ifdef I_AM_CABLE_AXIS_XPYP
+#ifdef I_AM_ACUPUCTURE_MAIN_ESP32
+	#define USING_WIFI_MQTT
+    #define BODY_ID "001"
+#endif
+
+#ifdef I_AM_CABLE_AXIS_XPYP
 	#define I_AM_CABLEBOT_CORNER
 	#define USING_BLE
 	#define BLE_DEV_NAME "ConInt-XPYP"
@@ -51,7 +56,7 @@
 	#define BLE_SERVICE_UUID  "1fd03a14-1451-11ec-82a8-0242ac130003"
 	#define BLE_COMMU_UUID "4b7fbe96-1451-11ec-82a8-0242ac130003"
 	#define BLE_STATE_UUID  "50711238-1451-11ec-82a8-0242ac130003"
-	#endif
+#endif
 
 #ifdef I_AM_CABLE_AXIS_XNYP
 	#define I_AM_CABLEBOT_CORNER
