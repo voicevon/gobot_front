@@ -26,7 +26,6 @@ class CommandQueueRabbit{
 
         void OnReceived(char* payload, int length);
 
-
     private:
         CommandQueue* __localMQ;
         AsyncMqttClient* __mqttClient;

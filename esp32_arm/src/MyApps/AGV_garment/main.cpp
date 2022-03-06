@@ -22,13 +22,14 @@ GarmentBot *mybot; // = GarmentBot();
 //    MQTT and RabbitMQ
 //********************************************************************************************
 #include "Robot/command_queue_rabbit.h"
-CommandQueueRabbit* commandQueueRabbit;
+CommandQueueRabbit* mq_box_mover;
+CommandQueueRabbit* mq_twin_wheels;
 extern AsyncMqttClient mqttClient;
 bool mqtt_is_connected = false;
 void dispatch_MqttConnected(bool sessionPresent){
     Serial.println("\n\n     MQTT is connected !!!!\n\n");
     mqtt_is_connected = true;
-    commandQueueRabbit->SubscribeMqtt(&mqttClient, "agv/x2206", "agv/x2206/fb");
+    mq_box_mover->SubscribeMqtt(&mqttClient, "agv/x2206", "agv/x2206/fb");
 }
 void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
     bool debug = false;
@@ -51,12 +52,18 @@ void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProp
         Serial.print("  total: ");
         Serial.println(total);
     }
-    commandQueueRabbit->OnReceived(payload, len);
+    if (1==1){
+        mq_box_mover->OnReceived(payload, len);
+    }else{
+        mq_twin_wheels->OnReceived(payload, len);
+    }
 }
 void Begin_WifiRabbitMqtt(){
     setup_wifi_mqtt();
-    commandQueueRabbit = new CommandQueueRabbit();
-    commandQueueRabbit->LinkLocalCommandQueue(mybot->objBoxMover.GetCommandQueue());
+    mq_box_mover = new CommandQueueRabbit();
+    mq_box_mover->LinkLocalCommandQueue(mybot->objBoxMover.GetCommandQueue());
+    mq_twin_wheels = new CommandQueueRabbit();
+    mq_twin_wheels->LinkLocalCommandQueue(mybot->objTwinWheel.GetCommandQueue());
     mqttClient.onConnect(dispatch_MqttConnected);
     mqttClient.onMessage(dispatch_MqttMessage);
 }
@@ -78,7 +85,7 @@ void setup(){
 
 
 void loop(){
-    mybot->SpinOnce();
+    // mybot->SpinOnce();
 }
 
 #endif

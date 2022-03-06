@@ -4,6 +4,7 @@
 
 
 #include "twin_wheels/vehical_twin_wheel_hw.h"
+#include "twin_wheels/vehical_twin_wheel.h"
 #include "box_mover/box_mover.h"
 #include "AGV/map_navigator.h"
 #include "remote_sensor.h"
@@ -48,6 +49,8 @@ class GarmentBot{
         };
         GarmentBot();
         BoxMover objBoxMover = BoxMover();
+        VehicalTwinWheel objTwinWheel = VehicalTwinWheel();
+        TwinWheelHardware objTwinWheelHardware = TwinWheelHardware();
 
         void Init();
         void SpinOnce();
@@ -60,7 +63,6 @@ class GarmentBot{
         GARMENTBOT_STATE _last_state;
         void SpinOnce_Working();
     private:
-        TwinWheelHardware objTwinWheelHardware = TwinWheelHardware();
         RemoteSensor objRemoteSensor;
         MapNavigator objMapNavigator;
         

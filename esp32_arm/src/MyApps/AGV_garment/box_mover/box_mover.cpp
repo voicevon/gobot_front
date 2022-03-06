@@ -45,7 +45,6 @@ void BoxMover::SpinOnce(){
     }
 }
 
-
 void BoxMover::ParkArms(bool do_homing){
 	Serial.print("\n[Debug] BoxMover::ParkArms() is entering");
 	int free_buffer_count = 0;
@@ -66,6 +65,7 @@ void BoxMover::ParkArms(bool do_homing){
 	String strG1 = "G1 Z5421 W5";
 	this->__commandQueue->AppendGcodeCommand(strG1);
 }
+
 void BoxMover::LoadBox(){
     // Vertical down.  Angle down, Triger gate
     this->__commandQueue->AppendGcodeCommand("G1 Z100");  // Lift the box-track.
@@ -73,6 +73,7 @@ void BoxMover::LoadBox(){
     // this->__commandQueue->AppendGcodeCommand("M123");   //???
 
 }
+
 void BoxMover::UnloadBox(){
 
 }

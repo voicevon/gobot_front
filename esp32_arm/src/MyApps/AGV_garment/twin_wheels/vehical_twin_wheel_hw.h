@@ -10,6 +10,8 @@
 #include "Robot/Actuator/DCMotor/h_bridge_l298n.h"
 #include "Robot/Actuator/DCMotor/DCMotorController.h"
 
+#include "Robot/RobotBase.h"
+
 #define PIN_LEFT_WHEEL_DC_MOTOR_A 12
 #define PIN_LEFT_WHEEL_DC_MOTOR_B 14
 #define PIN_LEFT_WHEEL_DC_MOTOR_ENABLE 25
@@ -29,7 +31,7 @@ G1 Y?? F9   Forward fast moving
 M301 P1 I1 D1    //Set PID
 */
 
-class TwinWheelHardware: public VehicalBase{
+class TwinWheelHardware: public VehicalBase, public RobotBase{
 
     public:
         void Init() override;
