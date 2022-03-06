@@ -8,15 +8,7 @@
 
 #define STEPS_PER_RAD 123   //2048 / 2*Pi
 #define STEPS_PER_MM 345   //2048 / 2*Pi
-#define ACCELERATION_HOMIMG_W 2000
-#define ACCELERATION_HOMIMG_Z 2000
-#define MAX_SPEED_HOMING_Z 2000
-#define MAX_SPEED_HOMING_W 2000
 
-// #define MAX_STEPS_PER_SECOND_ALPHA 5000
-// #define MAX_STEPS_PER_SECOND_BETA 5000
-// #define MAX_ACCELERATION_ALPHPA 200
-// #define MAX_ACCELERATION_BETA 200
 
 
 /*
@@ -74,6 +66,7 @@ BoxMoverHardware::BoxMoverHardware(){
 
 void BoxMoverHardware::Init(){
 	Serial.print("\n[Info] BoxMoverHardware::Init_Linkage() is entering.");
+	this->__config.Init();
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	pinMode(PIN_BETA_ENABLE, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
@@ -91,10 +84,10 @@ void BoxMoverHardware::Init(){
 	CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
 	this->commuDevice = commuUart; 
 
-	this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
-	this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
-	this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
-	this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
+	// this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
+	// this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
+	// this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
+	// this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
 	this->objStepper_alpha.setInverseRotation(true);
 	this->objStepper_beta.setInverseRotation(true);
 
@@ -105,23 +98,25 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 	Serial.print("[Debug] BoxMoverHardware::HomeSingleAxis() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis = axis;
+
+	this->__config.PrintOut();
+	this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
+	this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
+	this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
+	this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
+
+	if (axis=='W'){
+		//todo :  process with IK()
+		this->__homing_helper = &this->objHomeHelper_angle;
+		this->objStepper_alpha.setTargetRel(500000);
+		this->objStepper_beta.setTargetRel(500000);
+	}else if (axis=='Z'){
+		this->__homing_helper = &this->objHomeHelper_vertical;
+		this->objStepper_alpha.setTargetRel(500000);
+		this->objStepper_beta.setTargetRel(-500000);	
+	}
 	this->__EnableMotor('A', true);
 	this->__EnableMotor('B', true);
-	if (axis=='W'){
-		this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG_W);
-		this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING_W);
-		//todo :  process with IK()
-		// this->objStepper_alpha.setTargetRel(500000);
-		// this->objStepper_beta.setTargetRel(500000);
-		this->__homing_helper = &this->objHomeHelper_angle;
-	}else if (axis=='Z'){
-		this->objStepper_beta.setAcceleration(ACCELERATION_HOMIMG_Z);
-		this->objStepper_beta.setMaxSpeed(MAX_SPEED_HOMING_Z);
-		// this->objStepper_alpha.setTargetRel(500000);
-		// this->objStepper_beta.setTargetRel(-500000);	
-		this->__homing_helper = &this->objHomeHelper_vertical;
-	}
-	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 }
 
 void BoxMoverHardware::_running_G28(){
@@ -152,10 +147,10 @@ void BoxMoverHardware::_running_G28(){
 		if (this->_homing_axis == 'Z') this->objStepper_alpha.setPosition(ik_position.alpha);
 		if (this->_homing_axis == 'W') this->objStepper_beta.setPosition(ik_position.beta);
 		
-		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA);
-		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
-		this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
-		this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
+		this->objStepper_alpha.setMaxSpeed(this->__config.max_speed_alpha_beta);
+		this->objStepper_alpha.setAcceleration(this->__config.max_acceleration_alpha_beta);
+		this->objStepper_beta.setMaxSpeed(this->__config.max_speed_alpha_beta);
+		this->objStepper_beta.setAcceleration(this->__config.max_acceleration_alpha_beta);
 		this->State = RobotState::IDLE;
 
 	}else{
@@ -164,17 +159,18 @@ void BoxMoverHardware::_running_G28(){
 		// Serial.print("<");
 		// We are going to move a long long distance with async mode(None blocking).
 		// When endstop is trigered, must stop the moving. 
-		if (this->_homing_axis == 'W'){
-			//todo :  process with IK()
-			this->objStepper_alpha.setTargetRel(500000);
-			this->objStepper_beta.setTargetRel(500000);
-			this->__homing_helper = &this->objHomeHelper_angle;
-		}else if (this->_homing_axis == 'Z'){
-			this->objStepper_alpha.setTargetRel(500000);
-			this->objStepper_beta.setTargetRel(-500000);	
-			this->__homing_helper = &this->objHomeHelper_vertical;
-	}
-	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
+		// if (this->_homing_axis == 'W'){
+		// 	//todo :  process with IK()
+		// 	this->objStepper_alpha.setTargetRel(500000);
+		// 	this->objStepper_beta.setTargetRel(500000);
+		// 	this->__homing_helper = &this->objHomeHelper_angle;
+		// }else if (this->_homing_axis == 'Z'){
+		// 	// Serial.print("-");
+		// 	this->objStepper_alpha.setTargetRel(500000);
+		// 	this->objStepper_beta.setTargetRel(-500000);	
+		// 	this->__homing_helper = &this->objHomeHelper_vertical;
+		// }
+	// this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 	}	
 }
 
@@ -229,7 +225,7 @@ void BoxMoverHardware::RunG1(Gcode* gcode) {
 	}
 }
 void BoxMoverHardware::_running_G1(){
-    if (this->GetDistanceToTarget_IK() < MAX_ACCELERATION_ALPHPA + MAX_ACCELERATION_BETA){
+    if (this->GetDistanceToTarget_IK() < this->__config.max_acceleration_alpha_beta){
       	this->State = RobotState::IDLE;
 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
     }
