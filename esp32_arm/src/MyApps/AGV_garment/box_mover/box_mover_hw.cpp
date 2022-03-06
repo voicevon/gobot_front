@@ -2,9 +2,9 @@
 
 #define PIN_ALPHA_ENABLE 18
 #define PIN_BETA_ENABLE 16
-#define PIN_MICRIO_STEP_2 21
-#define PIN_MICRIO_STEP_1 22
-#define PIN_MICRIO_STEP_0 23
+// #define PIN_MICRIO_STEP_2 21
+// #define PIN_MICRIO_STEP_1 22
+// #define PIN_MICRIO_STEP_0 23
 
 #define STEPS_PER_RAD 123   //2048 / 2*Pi
 #define STEPS_PER_MM 345   //2048 / 2*Pi
@@ -76,15 +76,16 @@ void BoxMoverHardware::Init(){
 	Serial.print("\n[Info] BoxMoverHardware::Init_Linkage() is entering.");
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	pinMode(PIN_BETA_ENABLE, OUTPUT);
-	pinMode(PIN_MICRIO_STEP_0, OUTPUT);
-	pinMode(PIN_MICRIO_STEP_1, OUTPUT);
-	pinMode(PIN_MICRIO_STEP_2, OUTPUT);
+	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
+	// pinMode(PIN_MICRIO_STEP_1, OUTPUT);
+	// pinMode(PIN_MICRIO_STEP_2, OUTPUT);
 
-	digitalWrite(PIN_ALPHA_ENABLE, LOW);
-	digitalWrite(PIN_BETA_ENABLE, LOW);
-	digitalWrite(PIN_MICRIO_STEP_0, LOW);
-	digitalWrite(PIN_MICRIO_STEP_1, LOW);
-	digitalWrite(PIN_MICRIO_STEP_2, LOW);
+	this->__EnableMotor('A', false);
+	this->__EnableMotor('B', false);
+
+	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
+	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
+	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
 	
 
 	CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
@@ -104,7 +105,8 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 	Serial.print("[Debug] BoxMoverHardware::HomeSingleAxis() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis = axis;
-
+	this->__EnableMotor('A', true);
+	this->__EnableMotor('B', true);
 	if (axis=='W'){
 		this->objStepper_alpha.setAcceleration(ACCELERATION_HOMIMG_W);
 		this->objStepper_alpha.setMaxSpeed(MAX_SPEED_HOMING_W);
@@ -123,8 +125,6 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 }
 
 void BoxMoverHardware::_running_G28(){
-
-
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
 		Serial.print("\n[Info] BoxMoverHardware::_running_G28() Home sensor is trigger.  " );
@@ -181,6 +181,8 @@ void BoxMoverHardware::_running_G28(){
 void BoxMoverHardware::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] BoxMoverHardware::RunG1() is entering");
 	Serial.print(gcode->get_command());
+	this->__EnableMotor('A', true);
+	this->__EnableMotor('B', true);
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
 		this->objStepper_alpha.setMaxSpeed(speed);
