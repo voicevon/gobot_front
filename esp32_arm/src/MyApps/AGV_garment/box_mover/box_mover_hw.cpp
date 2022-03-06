@@ -238,6 +238,11 @@ void BoxMoverHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 	
 }
 
+void BoxMoverHardware::RunM84(){
+	this->__EnableMotor('A',false);
+	this->__EnableMotor('B',false);
+}
+
 float BoxMoverHardware::GetDistanceToTarget_IK(){
 	return this->objStepper_alpha.getDistanceToTarget() + this->objStepper_beta.getDistanceToTarget();
 }

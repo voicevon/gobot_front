@@ -102,9 +102,8 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         elif do_load==ArmEEF.LOAD:
             self.rabbit_client.PublishToArm('M123S200')
 
-
-
-
+    def DisableMotor(self):
+        self.rabbit_client.PublishToArm('M84')
 
     def Test_Eef(self):
         # self.rabbit_client.PublishToHouse('M123P1S128')
@@ -125,6 +124,12 @@ if __name__ == '__main__':
     helper = RabbitMqClient_Helper()
     client = helper.MakeClient()
     arm = HumanLevelGobotArm(client)
+    arm.MoveTo(0, 60)
+    arm.DisableMotor()
+
+    while True:
+        helper.SpinOnce()
+
 
     if True:
         while True:

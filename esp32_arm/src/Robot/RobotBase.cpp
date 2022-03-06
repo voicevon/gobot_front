@@ -138,12 +138,16 @@ void RobotBase::RunGcode(Gcode* gcode){
 			break;
 
 		case 123:
-			//M123 P=channel_index, S=Set EEF 			
+			//M123 P=channel_index, S=Set EEF action			
 			while (this->State != RobotState::IDLE){
 				this->SpinOnce();
 			}
 			p_value =  gcode->get_value('P');
 			s_value = gcode->get_value('S');
+			Serial.print("RobotBase::RunGcode() For EEF_ACTION  M123 P= ");
+			Serial.print(p_value);
+			Serial.print("  S= ");
+			Serial.print(s_value);
 			action = (EefAction)s_value;
 			this->RunM123(p_value, action);
 			break;

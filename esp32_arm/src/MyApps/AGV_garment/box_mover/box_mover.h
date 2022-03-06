@@ -22,7 +22,7 @@ class BoxMover{
         void LoadBox();
         void UnloadBox();
         void SpinOnce(); 
-
+        CommandQueue* GetCommandQueue(){return this->__commandQueue;};
     
     private:
         CommandQueue* __commandQueue;
