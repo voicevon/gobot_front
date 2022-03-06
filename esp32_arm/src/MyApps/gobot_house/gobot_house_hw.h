@@ -68,6 +68,8 @@ class GobotHouseHardware: public RobotBase{
         void _running_G28() override;
         std::string GetHomeTrigerStateString() override {return " ";};
         void RunM123(uint8_t eef_channel, EefAction eef_action) override;
+        void RunM84() override;
+        
         void __EnableMotor(char actuator, bool enable_it) override;
 
 

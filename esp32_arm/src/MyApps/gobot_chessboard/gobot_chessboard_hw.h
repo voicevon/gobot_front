@@ -52,6 +52,7 @@ class GobotChessboardHardware: public RobotBase{
         void Init() override;
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
         void Calibrate(int step,bool enable_eef_coil);
+        void RunM84() override;
 
         // void SetEffector(EefAction action);
 

@@ -120,6 +120,7 @@ class RobotBase{
         void RunG4(Gcode* gcode);
         virtual std::string GetHomeTrigerStateString();
         void RunM42(uint8_t pin_number, uint8_t pin_value);
+        virtual void RunM84();
         virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
         // TODO:  Should I remove this? 
         //  This commuDevice will only output message , for debugging perpose, Right?

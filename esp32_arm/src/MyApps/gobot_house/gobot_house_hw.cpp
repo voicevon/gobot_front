@@ -91,13 +91,11 @@ void GobotHouseHardware::__Init_gpio(){
 	pinMode(PIN_BETA_ENABLE, OUTPUT);
 
 
-	//Disable MOTOR
-	digitalWrite(PIN_ALPHA_ENABLE, HIGH);
-	digitalWrite(PIN_BETA_ENABLE, HIGH);
 
-	#define PIN_MICRIO_STEP_2 21
-	#define PIN_MICRIO_STEP_1 22
-	#define PIN_MICRIO_STEP_0 23	
+
+	// #define PIN_MICRIO_STEP_2 21
+	// #define PIN_MICRIO_STEP_1 22
+	// #define PIN_MICRIO_STEP_0 23	
 	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_1, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_2, OUTPUT);
@@ -122,6 +120,9 @@ void GobotHouseHardware::__Init_gpio(){
 }
 void GobotHouseHardware::Init(){
 	__Init_gpio();
+	this->__EnableMotor('A', false);
+	this->__EnableMotor('B', false);
+
 	CommuUart* commuUart = new CommuUart();
 
 	this->commuDevice = commuUart; 
@@ -191,6 +192,8 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
 	if(gcode->has_letter('R')) target_ik_ab.alpha = this->__config.motor_steps_per_round * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
+	this->__EnableMotor('A', true);
+	this->__EnableMotor('B',true);
 	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha );
 	this->objStepper_beta.setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
@@ -221,6 +224,7 @@ void GobotHouseHardware::HomeSingleAxis(char axis){
 	Serial.print("[Debug] GobotHouseHardware::HomeSingleAxis() is entering\n" );
 	Serial.print(axis);
 	this->_homing_axis = axis;
+	this->__EnableMotor(axis, true);
 	if (axis=='A'){
 		this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha);
 		this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha);
@@ -302,6 +306,11 @@ void GobotHouseHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 		Serial.print("\n [Warning] GobotHouseHardware::RunM123()  ");
 		break;
 	}
+}
+
+void GobotHouseHardware::RunM84(){
+	this->__EnableMotor('A',false);
+	this->__EnableMotor('B',false);
 }
 
 void GobotHouseHardware::__EnableMotor(char actuator, bool enable_it){

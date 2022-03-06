@@ -6,7 +6,7 @@ from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 
 from gobot_vision.gobot_vision import GobotVision
-from gogame.chessboard_cell import StoneColor
+from gogame.chessboard_cell import ChessboardCell, StoneColor
 from gogame.chessboard import ChessboardLayout
 from gogame.died_area_scanner import DiedAreaScanner
 # from controller import Controller
@@ -20,7 +20,7 @@ import time
 from von.terminal_font import TerminalFont  # pip3 install VonPylib
 from config.image_logger import ImageLogger,ImageLoggerToWhere
 from config.message_logger import MessageLoggerToWhere,MessageLogger
-from gogame.human_level_gobot_arm import HumanLevelGobotArm
+from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
 from rabbitmq_all_in_one import RabbitMqClient_Helper, RabbitClient
 
@@ -288,7 +288,12 @@ class GobotHead():
             # robot arm play a chess, The instruction is from AI.
             # self.__controller.action_pickup_stone_from_warehouse()
             # self.__controller.action_place_stone_to_cell(cell_name=cell_name)
-            self.arm.Pickup_Place(from_where='house', to_where=cell_name)
+            from_where = ArmMap.VENDER
+            cell = ChessboardCell()
+            cell.from_name(cell_name)
+            to_where = ArmMap.CELLS(cell)
+
+            self.arm.Pickup_Place(from_where, to_where=to_where)
             self.__ai.layout.play(cell_name, StoneColor.WHITE)
             self.__ai.layout.print_out()
 
@@ -462,9 +467,8 @@ class GobotHead():
         self.__goto = self.at_state_game_over
 
     def SpinOnce(self):
-        # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.mqHelper.SpinOnce()
-
+        # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
         ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
         # cv2.waitKey(1)

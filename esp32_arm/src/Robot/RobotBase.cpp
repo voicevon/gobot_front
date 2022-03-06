@@ -123,6 +123,8 @@ void RobotBase::RunGcode(Gcode* gcode){
 			p_value =  gcode->get_value('P');
 			s_value = gcode->get_value('S');
 			this->RunM42(p_value, s_value);
+		case 84:
+			this->RunM84();
 		case 114:
 			// Get Current Position
 			break;

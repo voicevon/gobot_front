@@ -3,7 +3,7 @@
 #include<Arduino.h>
 
 void GobotChessboardHardware::Init(){
-	Serial.print("\n[Info] GobotChessboardHardware::Init() is entering.");
+	// Serial.print("\n[Info] GobotChessboardHardware::Init() is entering.");
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
 	this->__EnableMotor('A', false);
@@ -47,7 +47,7 @@ void GobotChessboardHardware::_running_G28(){
 		Serial.print (this->_homing_axis);
 		this->objStepControl.stop();
 
-		//Set current position to HomePosition
+		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
@@ -236,9 +236,14 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 	target_ik_ab.alpha = this->objStepper_alpha.getPosition();
 	target_ik_ab.beta = this->objStepper_beta.getPosition();
 	bool do_ik=false;
-	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
-	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
-
+	if (gcode->has_letter('A')){
+		this->__EnableMotor('A', true); 
+		target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
+	}
+	if (gcode->has_letter('B')){
+		this->__EnableMotor('B', true);
+		target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
+	}
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {
 		do_ik=true;
@@ -279,8 +284,14 @@ void GobotChessboardHardware::_running_G1(){
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);  
 }
+
 float GobotChessboardHardware::GetDistanceToTarget_IK(){
 	return this->objStepper_alpha.getDistanceToTarget() + this->objStepper_beta.getDistanceToTarget();
+}
+
+void GobotChessboardHardware::RunM84(){
+	this->__EnableMotor('A',false);
+	this->__EnableMotor('B',false);
 }
 
 void GobotChessboardHardware::__EnableMotor(char actuator, bool enable_it){

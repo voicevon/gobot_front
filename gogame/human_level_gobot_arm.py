@@ -36,12 +36,14 @@ class ArmMap():
     PARKING = (0,25)
     TRASH_WHITE = (-230, 30)
     TRASH_BLACK = (230, 30)
-    def CELLS(self, cell:ChessboardCell):
+
+    @classmethod
+    def CELLS(cls, cell:ChessboardCell):
         '''
         Go_position instance: "Q4" as position on 2D Chessboard.
         XY_position instance: "[0.015,0.02,-0.01]" as [x,y,z] in 3D world coordinator.
         '''
-        ss = "ABCDEFGHIJKLMNOPQRST"
+        # ss = "ABCDEFGHIJKLMNOPQRST"
 
         # print(cell.name)
         # iCol = ss.find(cell_name[:1])
@@ -65,6 +67,7 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         self.Home()
 
     def Home(self):
+        print('[Info] HumanLevelGobotArm::Home() ')
         self.rabbit_client.PublishToArm('G28AI')
         self.rabbit_client.PublishToArm('G28BI')
         self.rabbit_client.PublishToArm('M996')
@@ -76,6 +79,7 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         self.EEF_Does(ArmEEF.MOVE_Z_BOTTOM)
         self.EEF_Does(do_load=ArmEEF.LOAD)
         self.EEF_Does(do_load=ArmEEF.MOVE_Z_TOP)
+
         x, y = to_where
         self.MoveTo(x, y)
         self.EEF_Does(do_load=ArmEEF.UNLOAD)
@@ -85,49 +89,22 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
             self.MoveTo(x, y)
         self.rabbit_client.PublishToArm('M996')
 
-    # def PickupFrom(self, position_or_site):
-    #     return super().PickupFrom(position_or_site)
-
-    # def PlaceTo(self, position_or_site):
-    #     return super().PlaceTo(position_or_site)
 
     def MoveTo(self, x:float, y:float):
         gcode = 'G1X' + str(x) + 'Y' + str(y)
         self.rabbit_client.PublishToArm(gcode=gcode)
+        print(gcode)
 
     
     def EEF_Does(self, do_load:ArmEEF):
-        # Load, Unload, Sleep
-        pass
+        if do_load==ArmEEF.SLEEP:
+            self.rabbit_client.PublishToArm('M123S0')
+        elif do_load==ArmEEF.LOAD:
+            self.rabbit_client.PublishToArm('M123S200')
 
 
 
-    # def SencePoint_ToXY(self, position):
-    #     if position=='trash_bin':
-    #         x = 123
-    #         y = 125
-    #     elif position=='house':
-    #         x= 11.2
-    #         y=22.3
-    #     else:
-    #         MessageLogger.Output('convert_to_world_position', position)
-    #         x, y = self.Convert_to_world_position(position)
-    #     MessageLogger.Output('getxy', position + '  ' + str(x) + '  ' + str(y))
 
-    #     return x,y
-
-    # def get_next(self)->str:
-    #     row = self.test_cell.row_id
-    #     col = self.test_cell.col_id
-    #     col += 1
-    #     if col >=19:
-    #         col = 0
-    #         row += 1
-    #         if row >= 19:
-    #             row = 0
-
-    #     self.test_cell.from_col_row_id(col_id=col, row_id=row)
-    #     return self.test_cell.name
 
     def Test_Eef(self):
         # self.rabbit_client.PublishToHouse('M123P1S128')
@@ -150,12 +127,16 @@ if __name__ == '__main__':
     arm = HumanLevelGobotArm(client)
 
     if True:
+        while True:
+            pass
+
+    if False:
         # Test Map
         from_where = ArmMap.VENDER
         to_cell = ChessboardCell()
         to_cell.from_name("A1")
         to_where = ArmMap.CELLS(to_cell)
-        arm.Pickup_Place(from_where=from_where, to_where=to_cell)
+        arm.Pickup_Place(from_where=from_where, to_where=to_where)
 
     if False:
         # Test rabbitMQ
