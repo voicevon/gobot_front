@@ -22,6 +22,7 @@ class RabbitClient():
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='gobot_x2134_house')
         self.channel.queue_declare(queue='gobot_x2134_arm')
+        self.channel.queue_declare(queue='agv_x2206')
 
     def PublishToArm(self, gcode:str):
         self.channel.basic_publish(exchange='',
@@ -31,6 +32,11 @@ class RabbitClient():
     def PublishToHouse(self, gcode:str):
         self.channel.basic_publish(exchange='',
                         routing_key='gobot_x2134_house',
+                        body = gcode)
+
+    def PublishToAgv(self, gcode:str):
+        self.channel.basic_publish(exchange='',
+                        routing_key='agv_x2206',
                         body = gcode)
 
     def RabbitMQ_publish_tester(self):
@@ -66,6 +72,13 @@ class SyncConfigFactory:
         config.feedback_queue = 'gobot_x2134_arm_fb'
         return config
 
+    @staticmethod
+    def MakeAgvConfig() -> SyncQueueTopicConfig:
+        config = SyncQueueTopicConfig()
+        config.main_mqtt_topic = 'agv/x2206'
+        config.main_queue = "agv_x2206"
+        config.feedback_queue = 'agv_x2206_fb'
+        return config
 
 class RabbitMqClient_Helper():
     '''
@@ -80,6 +93,7 @@ class RabbitMqClient_Helper():
     def SpinOnce(self):
         self.arm_sync.SpinOnce()
         self.house_sync.SpinOnce()
+        self.agv_sync.SpinOnce()
 
     def __MakeSyncer(self):
         config = SyncConfigFactory.MakeHouseConfig()
@@ -87,6 +101,9 @@ class RabbitMqClient_Helper():
 
         config = SyncConfigFactory.MakeArmConfig()
         self.arm_sync = RabbitMQSync(self.connection, config=config)
+
+        config = SyncConfigFactory.MakeAgvConfig()
+        self.agv_sync = RabbitMQSync(self.connection, config=config)
 
     def MakeClient(self)->RabbitClient:
         self.client = RabbitClient(self.connection)
