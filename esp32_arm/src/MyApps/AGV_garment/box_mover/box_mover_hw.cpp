@@ -6,8 +6,8 @@
 // #define PIN_MICRIO_STEP_1 22
 // #define PIN_MICRIO_STEP_0 23
 
-#define STEPS_PER_RAD 123   //2048 / 2*Pi
-#define STEPS_PER_MM 345   //2048 / 2*Pi
+// #define STEPS_PER_RAD 123   //2048 / 2*Pi
+// #define STEPS_PER_MM 345   //2048 / 2*Pi
 
 
 
@@ -34,8 +34,8 @@ void BoxMoverHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_ZW* fk = (FkPosition_ZW*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
-	ik->alpha = (fk->Z * STEPS_PER_MM + fk->W * STEPS_PER_RAD);
-	ik->beta = (fk->Z * STEPS_PER_MM - fk->W * STEPS_PER_RAD);
+	ik->alpha = (fk->Z * this->__config.steps_per_mm_for_z + fk->W * this->__config.steps_per_rad_for_w);
+	ik->beta = (fk->Z * this->__config.steps_per_mm_for_z - fk->W * this->__config.steps_per_rad_for_w);
 
 	Serial.print("\n[Debug] BoxMoverHardware::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
@@ -49,8 +49,8 @@ void BoxMoverHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_ZW* fk = (FkPosition_ZW*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
-	fk->Z = (ik->alpha + ik->beta) / 2 / STEPS_PER_MM;
-	fk->W = (ik->alpha - ik->beta) / 2 / STEPS_PER_RAD;
+	fk->Z = (ik->alpha + ik->beta) / 2 / this->__config.steps_per_mm_for_z;
+	fk->W = (ik->alpha - ik->beta) / 2 / this->__config.steps_per_rad_for_w;
 
 	Serial.print("\n[Debug] BoxMoverHardware::FK() output (Z, W) = ");
 	Serial.print(fk->Z);
@@ -112,8 +112,8 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 		this->objStepper_beta.setTargetRel(5000000);
 	}else if (axis=='Z'){
 		this->__homing_helper = &this->objHomeHelper_vertical;
-		this->objStepper_alpha.setTargetRel(5000000);
-		this->objStepper_beta.setTargetRel(-5000000);	
+		this->objStepper_alpha.setTargetRel(-5000000);
+		this->objStepper_beta.setTargetRel(5000000);	
 	}
 	this->__EnableMotor('A', true);
 	this->__EnableMotor('B', true);
