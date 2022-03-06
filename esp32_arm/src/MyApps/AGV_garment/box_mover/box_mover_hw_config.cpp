@@ -10,8 +10,8 @@ void BoxMoverHardwareConfig::Init(){
         this->max_speed_alpha_beta = 6000;
 
         this->motor_steps_per_round = 514.0 * this->STEPPER_DRIVER_MICRO_STEPS;
-        this->Homing_speed_alpha_beta = 50000;
-        this->Homing_acceleration_alpha_beta = 500;
+        this->Homing_speed_alpha_beta = 20000;
+        this->Homing_acceleration_alpha_beta = 8000;
 }
 
 void BoxMoverHardwareConfig::PrintOut(){
@@ -22,7 +22,7 @@ void BoxMoverHardwareConfig::PrintOut(){
     Serial.print("\n   MOTOR_GEARBOX_RATIO_ALPHA_BETA = ");
     Serial.print(this->MOTOR_GEARBOX_RATIO_ALPHA_BETA);
 
-    Serial.print("\n    Home_position (z,w) = (");
+    Serial.print("\n     Home_position (z,w) = (");
     Serial.print(this->Homed_position_z);
     Serial.print(" , ");
     Serial.print(this->Homed_position_w);

@@ -108,15 +108,16 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 	if (axis=='W'){
 		//todo :  process with IK()
 		this->__homing_helper = &this->objHomeHelper_angle;
-		this->objStepper_alpha.setTargetRel(500000);
-		this->objStepper_beta.setTargetRel(500000);
+		this->objStepper_alpha.setTargetRel(5000000);
+		this->objStepper_beta.setTargetRel(5000000);
 	}else if (axis=='Z'){
 		this->__homing_helper = &this->objHomeHelper_vertical;
-		this->objStepper_alpha.setTargetRel(500000);
-		this->objStepper_beta.setTargetRel(-500000);	
+		this->objStepper_alpha.setTargetRel(5000000);
+		this->objStepper_beta.setTargetRel(-5000000);	
 	}
 	this->__EnableMotor('A', true);
 	this->__EnableMotor('B', true);
+	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 }
 
 void BoxMoverHardware::_running_G28(){
