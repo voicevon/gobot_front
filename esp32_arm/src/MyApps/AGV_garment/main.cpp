@@ -1,13 +1,9 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT
 
-#include "Iot/wifi_mqtt_client.h"
 
 #include "MyLibs/MyFunctions.hpp"
 #include "garment_bot.h"
-#include <WiFi.h>
-
-// #include "Robot/Commu/commu_esp_now.h"
 
 
 
@@ -28,8 +24,11 @@ GarmentBot *mybot; // = GarmentBot();
 #include "Robot/command_queue_rabbit.h"
 CommandQueueRabbit* commandQueueRabbit;
 extern AsyncMqttClient mqttClient;
+bool mqtt_is_connected = false;
 void dispatch_MqttConnected(bool sessionPresent){
-    commandQueueRabbit->SubscribeMqtt(&mqttClient, "gobot/x2134/house", "gobot/x2134/house/fb");
+    Serial.println("\n\n     MQTT is connected !!!!\n\n");
+    mqtt_is_connected = true;
+    commandQueueRabbit->SubscribeMqtt(&mqttClient, "agv/x2206", "agv/x2206/fb");
 }
 void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
     bool debug = false;
@@ -63,29 +62,6 @@ void Begin_WifiRabbitMqtt(){
 }
 //*********************  end of MQTT and RabbitMQ  *******************************************
 
-// void app_mqtt_subscribe(){
-//     mqttClient.subscribe("garmentbot/mode", 2);
-//     Serial.println("Subscribed garmentbot/*");
-// }
-
-// void app_mqtt_received_message( char* topic, char* payload){
-//     const char * cc = (const char*)(payload);
-
-//     if(strcmp(topic, "garmentbot/mode") == 0) {   // char len = 17
-//         GarmentBot::GARMENTBOT_STATE mode = (GarmentBot::GARMENTBOT_STATE)(atoi(cc));
-//         mybot->ToState(mode);
-//     }
-//     else if(strcmp(topic, "smokebot/pause_second")==0){    // char len = 21
-
-//     }else{
-//         Serial.print(" app_mqtt_received_message() Warning   ");
-//         Serial.print (topic);
-//         Serial.print("   ");
-//         Serial.print (payload);
-//     }
-
-// }
-
 
 void setup(){
     Serial.begin(115200);
@@ -93,7 +69,9 @@ void setup(){
     mybot = new GarmentBot();
     mybot->Init();
     Begin_WifiRabbitMqtt();
-
+    while (! mqtt_is_connected){
+        delay(100);
+    }
     Serial.println ("\n\n  Setup_wifi_mqtt is done. ------------------------------------ ");
 
 }
@@ -101,8 +79,6 @@ void setup(){
 
 void loop(){
     mybot->SpinOnce();
-
-
 }
 
 #endif

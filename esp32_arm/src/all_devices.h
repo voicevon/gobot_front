@@ -1,7 +1,6 @@
 #ifndef __ALL_DEVICES_H_
 #define __ALL_DEVICES_H_
 
-#include <Arduino.h>  // Only want to use const PI
 
 #define I_AM_GARMENT_BOT
 // #define I_AM_GOBOT_HOUSE_2134
@@ -43,6 +42,10 @@
 	#endif
 #endif
 
+#ifdef I_AM_GARMENT_BOT
+	#define USING_WIFI_MQTT
+#endif
+
 #ifdef I_AM_ACUPUCTURE_MAIN_ESP32
 	#define USING_WIFI_MQTT
     #define BODY_ID "001"
@@ -66,7 +69,7 @@
 	#define BLE_SERVICE_UUID  "6909288a-1451-11ec-82a8-0242ac130003"
 	#define BLE_COMMU_UUID "6e0d5d7e-1451-11ec-82a8-0242ac130003"
 	#define BLE_STATE_UUID "72838810-1451-11ec-82a8-0242ac130003"
-	#endif
+#endif
 
 #ifdef I_AM_CABLE_AXIS_XNYN
 	#define I_AM_CABLEBOT_CORNER
@@ -76,7 +79,7 @@
 	#define BLE_SERVICE_UUID  "77d37e60-1451-11ec-82a8-0242ac130003"
 	#define BLE_COMMU_UUID "8fdb27b0-1451-11ec-82a8-0242ac130003"
 	#define BLE_STATE_UUID  "8175103c-1451-11ec-82a8-0242ac130003"
-	#endif
+#endif
 
 #ifdef I_AM_CABLE_AXIS_XPYN
 	#define I_AM_CABLEBOT_CORNER
@@ -86,17 +89,15 @@
 	#define BLE_SERVICE_UUID   "85f5ab94-1451-11ec-82a8-0242ac130003"
 	#define BLE_COMMU_UUID  "96a1cd38-1451-11ec-82a8-0242ac130003"
 	#define BLE_STATE_UUID   "9c43b29c-1451-11ec-82a8-0242ac130003"
-	#endif
+#endif
 
 #ifdef I_AM_SMOKE_MACHINE_WEB_SERVER
 	#define USING_WIFI_MQTT
 	#define AXIS_NAME 'X'
-	#endif
-
-#ifdef I_AM_GARMENT_BOT
-	#define USING_WIFI_MQTT
-	#endif
+#endif
 
 
 
-	#endif
+
+
+#endif

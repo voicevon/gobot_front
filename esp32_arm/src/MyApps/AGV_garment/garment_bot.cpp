@@ -12,13 +12,11 @@ void GarmentBot::Init(){
    const int resolution = 8;   // so max pwm speed is 255
    ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites
    ledcSetup(PWM_CHANNEL_1, freq, resolution); 
-   // ledcSetup(PWM_CHANNEL_2, freq, resolution); 
-   // ledcSetup(PWM_CHANNEL_3, freq, resolution); 
 
    // Init I2C bus
    Wire.begin();
    this->objTwinWheelHardware.Init();
-   this->objBoxMover.ParkArms(true);
+   // this->objBoxMover.ParkArms(true);
 
    this->_last_state = PARKING;
    this->ToState(SLEEPING);

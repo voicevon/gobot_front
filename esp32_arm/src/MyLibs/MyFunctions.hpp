@@ -4,6 +4,7 @@
 #include "HardwareSerial.h"
 
 // using std::string;
+#include <Arduino.h>   //?? why std::string in arduino.h?
 template<class T>
 void SerialPrintString(std::string str){
     Serial.println();

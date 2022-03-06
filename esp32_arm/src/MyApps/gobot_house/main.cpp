@@ -17,7 +17,10 @@ GobotHouse* mybot;
 #include "Robot/command_queue_rabbit.h"
 CommandQueueRabbit* commandQueueRabbit;
 extern AsyncMqttClient mqttClient;
+bool mqtt_is_connected = false;
 void dispatch_MqttConnected(bool sessionPresent){
+    Serial.println("\n\n     MQTT is connected !!!!\n\n");
+    mqtt_is_connected = true;
     commandQueueRabbit->SubscribeMqtt(&mqttClient, "gobot/x2134/house", "gobot/x2134/house/fb");
 }
 void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
@@ -61,12 +64,10 @@ void setup(){
     // mybot->Setup(&action);
     mybot->Setup();
 
-    // mybot->Calibrate(6,true);
-    // for (int i=17; i>=10;i--){
-    //     mybot->Calibrate(i, false);
-    // }
-	// mybot->ParkArms(true);
     Begin_WifiRabbitMqtt();
+    while (! mqtt_is_connected){
+        delay(100);
+    }
 }
 
 bool done= false;

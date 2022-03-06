@@ -1,7 +1,7 @@
 #include "all_devices.h"
 #ifdef USING_WIFI_MQTT
-#include <AsyncMqttClient.h>
 
+#include <AsyncMqttClient.h>
 #include <WiFi.h>
 extern "C" {
 	#include "freertos/FreeRTOS.h"
@@ -126,23 +126,23 @@ void onMqttPublish(uint16_t packetId) {
 }
 
 void setup_wifi_mqtt() {
-  Serial.println();
-  Serial.println();
+	Serial.println("\n IoT/wifi_mqtt_client.cpp   setup_wifi_mqtt()  is entering");
+	Serial.println();
 
-  mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
-  wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
+	mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
+	wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
 
-  WiFi.onEvent(WiFiEvent);
+	WiFi.onEvent(WiFiEvent);
 
-  // mqttClient.onConnect(onMqttConnect);
-  mqttClient.onDisconnect(onMqttDisconnect);
-  mqttClient.onSubscribe(onMqttSubscribe);
-  mqttClient.onUnsubscribe(onMqttUnsubscribe);
-  // mqttClient.onMessage(onMqttMessage);
-  mqttClient.onPublish(onMqttPublish);
-  mqttClient.setServer(MQTT_HOST, MQTT_PORT);
+	// mqttClient.onConnect(onMqttConnect);
+	mqttClient.onDisconnect(onMqttDisconnect);
+	mqttClient.onSubscribe(onMqttSubscribe);
+	mqttClient.onUnsubscribe(onMqttUnsubscribe);
+	// mqttClient.onMessage(onMqttMessage);
+	mqttClient.onPublish(onMqttPublish);
+	mqttClient.setServer(MQTT_HOST, MQTT_PORT);
 
-  connectToWifi();
+	connectToWifi();
 }
 
 #endif
