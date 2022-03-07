@@ -1,6 +1,6 @@
 #include "command_queue_rabbit.h"
 
-void CommandQueueRabbit::LinkLocalCommandQueue(CommandQueue* loacalMQ){
+void CommandQueueRabbit::LinkLocalCommandQueue(GcodeQueue* loacalMQ){
     this->__localMQ = loacalMQ;
 }
 

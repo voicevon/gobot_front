@@ -1,7 +1,7 @@
 #pragma once
 
 #include "box_mover_hw.h"
-#include "Robot/command_queue.h"
+#include "Robot/gcode_queue.h"
 
 class BoxMover{
     public:
@@ -22,10 +22,10 @@ class BoxMover{
         void LoadBox();
         void UnloadBox();
         void SpinOnce(); 
-        CommandQueue* GetCommandQueue(){return this->__commandQueue;};
+        GcodeQueue* GetCommandQueue(){return this->__commandQueue;};
     
     private:
-        CommandQueue* __commandQueue;
+        GcodeQueue* __commandQueue;
         // BoxMoverHardware* __objBoxMoverHardware;
    
 };

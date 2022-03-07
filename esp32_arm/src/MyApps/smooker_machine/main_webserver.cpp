@@ -8,7 +8,7 @@
 
 #include <HardwareSerial.h>
 #include "smoke_bot.h"
-#include "Robot/command_queue.h"
+#include "Robot/gcode_queue.h"
 // #include <Arduino.h>
 #include "webCommu.h"
 
@@ -16,7 +16,7 @@
 // std::string payload ="OFF";
 
 SmokeBot* mybot;
-CommandQueue myCommandQueue = CommandQueue();
+GcodeQueue myCommandQueue = GcodeQueue();
 // int distance = 100;
 // int pause_second = 20;
 // Gcode gcode("");

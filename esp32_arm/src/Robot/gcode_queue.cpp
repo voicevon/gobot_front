@@ -1,10 +1,10 @@
-#include "command_queue.h"
+#include "gcode_queue.h"
 #include "HardwareSerial.h"
 
-CommandQueue::CommandQueue(){
+GcodeQueue::GcodeQueue(){
 }
 
-void CommandQueue::LinkRobot(RobotBase* mybot){
+void GcodeQueue::LinkRobot(RobotBase* mybot){
     Serial.print("\n[Info] CommmandQueue::LinkRobot() is entering");
     this->_myBot = mybot;
     this->head = 0;
@@ -12,12 +12,12 @@ void CommandQueue::LinkRobot(RobotBase* mybot){
     Serial.print("\n[Info] CommmandQueue::LinkRobot() is done.");
 }
 
-void CommandQueue::SpinOnce(){
+void GcodeQueue::SpinOnce(){
     if (_myBot->State == RobotState::IDLE){
         // Serial.println("Dispacher, Got robot idle.");
         if(this->head != this->tail){
             //Run next gcode
-            Serial.print("\n[Info] CommandQueue::SpinOnce() Start to run next gcode  ");
+            Serial.print("\n[Info] GcodeQueue::SpinOnce() Start to run next gcode  ");
             char* p = &gCodeCommands[0];
             p += MAX_BYTES_PER_COMMAND * this->tail;
             std::string str = std::string(p);
@@ -31,12 +31,12 @@ void CommandQueue::SpinOnce(){
     this->_myBot->SpinOnce();
 }
 
-bool CommandQueue::BufferIsEmpty(){
+bool GcodeQueue::BufferIsEmpty(){
     if (head==tail) return true;
     return false;
 }
 
-int CommandQueue::GetFreeBuffersCount(){
+int GcodeQueue::GetFreeBuffersCount(){
     int count = this->head - this->tail;
     if (count >= 0)
         return COMMANDS_COUNT_IN_QUEUE - count;
@@ -44,8 +44,8 @@ int CommandQueue::GetFreeBuffersCount(){
         return 0-count;
 }
 
-bool CommandQueue::AppendGcodeCommand(String command){
-    // Serial.print("\n CommandQueue::AppendGcodeCommand()  is entering..... ");
+bool GcodeQueue::AppendGcodeCommand(String command){
+    // Serial.print("\n GcodeQueue::AppendGcodeCommand()  is entering..... ");
     int pre_head = this->head;
     pre_head++;
     if (pre_head == COMMANDS_COUNT_IN_QUEUE)   
@@ -53,7 +53,7 @@ bool CommandQueue::AppendGcodeCommand(String command){
         
     while (pre_head == this->tail){
         // Buffer is full
-        // Serial.println("\n\n\n\n [Warning] CommandQueue::AppendGcodeCommand()   Buffer is full \n\n\n");
+        // Serial.println("\n\n\n\n [Warning] GcodeQueue::AppendGcodeCommand()   Buffer is full \n\n\n");
         this->SpinOnce();
     }
     // Serial.print("Adding gcode to command queue   ");
@@ -71,7 +71,7 @@ bool CommandQueue::AppendGcodeCommand(String command){
     //     pTargetByte++;
     // } 
     command.getBytes(pTargetByte, command.length() + 1);
-    Serial.print("\n[Info] CommandQueue::AppendGcodeCommand() Gcode added to command queue:  ");
+    Serial.print("\n[Info] GcodeQueue::AppendGcodeCommand() Gcode added to command queue:  ");
     char* p = (char*)&gCodeCommands[0];
     p += MAX_BYTES_PER_COMMAND * this->head;
     std::string ss=std::string(p);
@@ -80,9 +80,9 @@ bool CommandQueue::AppendGcodeCommand(String command){
     return true;  
 }
 
-void CommandQueue::SayHello(){
-    Serial.println("\n\n CommandQueue::SayHello()");
-    Serial.println("    Hello, I am instance of  CommandQueue, normally I am local Message queue... ");
+void GcodeQueue::SayHello(){
+    Serial.println("\n\n GcodeQueue::SayHello()");
+    Serial.println("    Hello, I am instance of  GcodeQueue, normally I am local Message queue... ");
     Serial.print("\n     this->head= ");
     Serial.println(this->head);
     Serial.print("\n     this->tail= ");

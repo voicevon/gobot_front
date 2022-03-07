@@ -4,7 +4,7 @@
 BoxMover::BoxMover(){
     BoxMoverHardware* objBoxMoverHardware = new BoxMoverHardware();
     objBoxMoverHardware->InitRobot();
-	this->__commandQueue = new CommandQueue();
+	this->__commandQueue = new GcodeQueue();
 	this->__commandQueue->LinkRobot(objBoxMoverHardware);
     Serial.print("\n[Info] BoxMover::BoxMover() is done..........");
 }

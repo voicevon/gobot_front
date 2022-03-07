@@ -3,7 +3,7 @@
 #include <Robot/Gcode.h>
 #include <Robot/eef_standard_code.h>
 #include "Robot/Commu/CommuDeviceBase.h"
-
+#include "MyLibs/message_consumer.h"
 
 class FkPositionBase{
     
@@ -96,12 +96,13 @@ enum class RobotState{
     RUNNING_G4,
     RUNNING_G28
 };
-class RobotBase{
+class RobotBase: public MessageConsumer{
     public:
 
         RobotState State = RobotState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
+        void FeedMessage(char* message, int length) override;
         virtual void InitRobot();
         virtual void HomeSingleAxis(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);

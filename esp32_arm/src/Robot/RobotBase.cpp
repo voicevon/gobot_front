@@ -2,6 +2,11 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "HardwareSerial.h"
 
+void RobotBase::FeedMessage(char* message, int length){
+	Gcode gcode = Gcode(message);
+	this->RunGcode(&gcode);
+}
+
 void RobotBase::SpinOnce(){
 // commuDevice->SpinOnce();
 // Serial.print("[Debug] RobotBase::SpinOnce() is entering \n");

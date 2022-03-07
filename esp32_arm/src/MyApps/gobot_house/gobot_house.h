@@ -3,7 +3,7 @@
 // #include "Robot/Commu/CommuUart.h"
 // #include "Robot/Commu/CommuBleGattServer.h"
 // #include "actions.h"
-#include "Robot/command_queue.h"
+#include "Robot/gcode_queue.h"
 
 
 class GobotHouse{
@@ -27,7 +27,7 @@ class GobotHouse{
         void Calibrate(int step, bool enable_eef_coil);
         bool MoveStone_FromRoomToHead(uint8_t house_id);
         bool MoveStone_FromHeadToRoom(uint8_t house_id);
-        CommandQueue* GetCommandQueue(){return this->__commandQueue;};
+        GcodeQueue* GetCommandQueue(){return this->__commandQueue;};
 
 
     private:
@@ -44,6 +44,6 @@ class GobotHouse{
         HouseMap __map;
         // RobotAction* __house_action;
         int __segments;
-        CommandQueue* __commandQueue;
+        GcodeQueue* __commandQueue;
 
 };

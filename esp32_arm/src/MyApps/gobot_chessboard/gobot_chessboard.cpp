@@ -7,7 +7,7 @@ void GobotChessboard::Init(){
 	Serial.print("\n[Info] GobotChessboard::Init() is entering.");
 	GobotChessboardHardware* objGobotHardware = new GobotChessboardHardware();
 	objGobotHardware->InitRobot();
-	this->__commandQueue = new CommandQueue();
+	this->__commandQueue = new GcodeQueue();
 	this->__commandQueue->LinkRobot(objGobotHardware);
 	Serial.print("\n[Info] GobotChessboard::Init() is done.");
 

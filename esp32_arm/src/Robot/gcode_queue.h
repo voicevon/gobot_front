@@ -7,9 +7,9 @@
 #define MAX_BYTES_PER_COMMAND 20
 #define COMMANDS_COUNT_IN_QUEUE 22
 
-class CommandQueue{
+class GcodeQueue{
     public:
-        CommandQueue();
+        GcodeQueue();
         void LinkRobot(RobotBase* mybot);
         void LinkMessageCosumer(RobotBase* mybot);
         void SpinOnce();
