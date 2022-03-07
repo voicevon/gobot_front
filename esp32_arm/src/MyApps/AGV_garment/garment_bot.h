@@ -58,10 +58,12 @@ class GarmentBot{
         void Test(int test_id);
         uint8_t GetMqtt_PubPayload(uint8_t* chars);
         void onMqttReceived(uint8_t* payload);
+        
     protected:
         GARMENTBOT_STATE _State;
         GARMENTBOT_STATE _last_state;
         void SpinOnce_Working();
+        
     private:
         RemoteSensor objRemoteSensor;
         MapNavigator objMapNavigator;

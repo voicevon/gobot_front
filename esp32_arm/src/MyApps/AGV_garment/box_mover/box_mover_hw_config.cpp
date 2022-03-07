@@ -10,8 +10,8 @@ void BoxMoverHardwareConfig::Init(){
         this->max_speed_alpha_beta = 20000;
 
         this->motor_steps_per_round = 514.0 * this->STEPPER_DRIVER_MICRO_STEPS;
-        this->Homing_speed_alpha_beta = 20000;
-        this->Homing_acceleration_alpha_beta = 5000;
+        this->Homing_speed_alpha_beta = 1300;
+        this->Homing_acceleration_alpha_beta = 500;
 
         this->steps_per_mm_for_z = 200;
         this->steps_per_rad_for_w = 33;

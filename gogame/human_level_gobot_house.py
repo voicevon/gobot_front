@@ -94,9 +94,9 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
 
     def EefAction(self, eef: HumanLevelHouse_EEF_ACTIONS):
         if eef==HumanLevelHouse_EEF_ACTIONS.LOAD:
-            self.rabbit_client.PublishToHouse('M123P1S128')
+            self.rabbit_client.PublishToHouse('M123P1S3')
         elif eef==HumanLevelHouse_EEF_ACTIONS.SLEEP:
-            self.rabbit_client.PublishToHouse('M123P1S0')
+            self.rabbit_client.PublishToHouse('M123P1S5')
 
     def Test_Eef(self):
         self.rabbit_client.PublishToHouse('M123P1S3')   #load
@@ -124,10 +124,15 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
             self.EefAction(HumanLevelHouse_EEF_ACTIONS.SLEEP)
         x,y = site.DOORS[7]
         self.MoveTo(x,y)
+        self.PreHome()
+        self.rabbit_client.PublishToHouse("M84")
+
+    def PreHome(self):
         # Park Arms at a point, nearby homed position
         self.rabbit_client.PublishToHouse('G1B120F2800')
         self.rabbit_client.PublishToHouse('G1A-1F2800')
         self.rabbit_client.PublishToHouse('M996')
+        self.rabbit_client.PublishToHouse("M84")
 
 
 
@@ -139,8 +144,9 @@ if __name__ == '__main__':
     house = HumanLevelGobotHouse(client)
     # for i in range(30):
     #     house.Test_Eef()
-    house.MoveTo(35,60)
-    house.DisableMotor()
+    house.demo()
+    house.PreHome()
+   
 
     while True:
         helper.SpinOnce()
