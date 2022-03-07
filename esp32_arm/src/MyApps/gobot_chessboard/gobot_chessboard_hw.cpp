@@ -2,7 +2,7 @@
 #include "gobot_chessboard_hw.h"
 #include<Arduino.h>
 
-void GobotChessboardHardware::Init(){
+void GobotChessboardHardware::InitRobot(){
 	// Serial.print("\n[Info] GobotChessboardHardware::Init() is entering.");
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);

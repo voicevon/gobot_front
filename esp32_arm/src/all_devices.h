@@ -2,13 +2,13 @@
 #define __ALL_DEVICES_H_
 
 
-#define I_AM_GARMENT_BOT
+// #define I_AM_GARMENT_BOT
 // #define I_AM_GOBOT_HOUSE_2134
 // #define I_AM_GOBOT_CHESSBOARD_2134
 // #define I_AM_ACUPUCTURE_MAIN_ESP32
 
 // #define I_AM_SMOKE_MACHINE_WEB_SERVER
-// #define I_AM_CABLE_AXIS_XPYP
+#define I_AM_CABLE_AXIS_XPYP
 // #define I_AM_CABLE_AXIS_XNYP
 // #define I_AM_CABLE_AXIS_XNYN
 // #define I_AM_CABLE_AXIS_XPYN

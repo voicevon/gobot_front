@@ -64,7 +64,7 @@ BoxMoverHardware::BoxMoverHardware(){
 
 }
 
-void BoxMoverHardware::Init(){
+void BoxMoverHardware::InitRobot(){
 	Serial.print("\n[Info] BoxMoverHardware::Init_Linkage() is entering.");
 	this->__config.Init();
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);

@@ -29,7 +29,7 @@ class RoomBotCorner: public RobotBase{
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
         void RunG6(Gcode* gcode) override;
-        void Init() override {assert("Must pass me an IrEncoderHelper*");};
+        void InitRobot() override {assert("Must pass me an IrEncoderHelper*");};
         void Init(IrEncoderHelper* sensorHelper);
         void test_hBridge();
         void test_home();
@@ -59,6 +59,7 @@ class RoomBotCorner: public RobotBase{
         void _running_G1() override{};
         void _running_G28() override{};
         void RunM123(uint8_t eef_channel, EefAction eef_action) override {};
+        void RunM84() override{};
         void __EnableMotor(char actuator, bool enable_it) override {};   
 };
 

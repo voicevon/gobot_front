@@ -14,7 +14,7 @@ void GobotHouse::Setup(){
 	this->__map.Init();
 
 	GobotHouseHardware* objRobot_hardware = &GobotHouseHardware::getInstance();
-    objRobot_hardware->Init();
+    objRobot_hardware->InitRobot();
 	this->__commandQueue = new CommandQueue();
 	this->__commandQueue->LinkRobot(objRobot_hardware);
 

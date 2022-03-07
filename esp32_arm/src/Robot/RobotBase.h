@@ -102,7 +102,7 @@ class RobotBase{
         RobotState State = RobotState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
-        virtual void Init();
+        virtual void InitRobot();
         virtual void HomeSingleAxis(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();

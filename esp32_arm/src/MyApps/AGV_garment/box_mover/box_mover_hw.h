@@ -22,7 +22,7 @@ class BoxMoverHardware:public RobotBase{
     public:
         BoxMoverHardware();
 
-        void Init() override;
+        void InitRobot() override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 

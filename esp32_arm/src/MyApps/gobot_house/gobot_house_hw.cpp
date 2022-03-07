@@ -105,7 +105,7 @@ void GobotHouseHardware::__Init_gpio(){
 	ledcWrite(1, 0);
 	ledcWrite(2, 0);
 }
-void GobotHouseHardware::Init(){
+void GobotHouseHardware::InitRobot(){
 	__Init_gpio();
 	this->__EnableMotor('A', false);
 	this->__EnableMotor('B', false);

@@ -29,7 +29,8 @@ bool mqtt_is_connected = false;
 void dispatch_MqttConnected(bool sessionPresent){
     Serial.println("\n\n     MQTT is connected !!!!\n\n");
     mqtt_is_connected = true;
-    mq_box_mover->SubscribeMqtt(&mqttClient, "agv/x2206", "agv/x2206/fb");
+    mq_box_mover->SubscribeMqtt(&mqttClient, "agv/x2206/box", "agv/x2206/box/fb");
+    mq_twin_wheels->SubscribeMqtt(&mqttClient, "agv/x2206/agv", "agv/x2206/agv/fb");
 }
 void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
     bool debug = false;
@@ -80,12 +81,11 @@ void setup(){
         delay(100);
     }
     Serial.println ("\n\n  Setup_wifi_mqtt is done. ------------------------------------ ");
-
 }
 
 
 void loop(){
-    // mybot->SpinOnce();
+    mybot->SpinOnce();
 }
 
 #endif

@@ -68,7 +68,7 @@ void SmokeBot::Init_Gpio(){
 	this->objStepper.setStepPinPolarity(HIGH);
 }
 
-void SmokeBot::Init(){
+void SmokeBot::InitRobot(){
 	this->commuDevice = &this->objCommuUart; 
 	// this->objHomeHelper.LinkActuator(&this->objActuator);
 	this->objCommuUart.OutputMessage("Hoddy, I am commmunicator UART ....");

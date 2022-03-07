@@ -11,6 +11,7 @@ class CommandQueue{
     public:
         CommandQueue();
         void LinkRobot(RobotBase* mybot);
+        void LinkMessageCosumer(RobotBase* mybot);
         void SpinOnce();
         // bool AppendGcode(Gcode* gcode);
         bool AppendGcodeCommand(String command);

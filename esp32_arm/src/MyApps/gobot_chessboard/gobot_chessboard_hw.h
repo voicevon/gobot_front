@@ -49,7 +49,7 @@ class GobotChessboardHardware: public RobotBase{
         GobotChessboardHardware(){};
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
-        void Init() override;
+        void InitRobot() override;
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
         void Calibrate(int step,bool enable_eef_coil);
         void RunM84() override;
