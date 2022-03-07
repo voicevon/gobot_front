@@ -14,6 +14,6 @@ class GcodeQueue: public MessageQueue{
         void SpinOnce() override;
 
     private:
-
         RobotBase* _myBot;
+        
 };

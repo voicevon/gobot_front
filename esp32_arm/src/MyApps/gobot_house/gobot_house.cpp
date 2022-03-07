@@ -15,15 +15,15 @@ void GobotHouse::Setup(){
 
 	GobotHouseHardware* objRobot_hardware = &GobotHouseHardware::getInstance();
     objRobot_hardware->InitRobot();
-	this->__commandQueue = new GcodeQueue();
-	this->__commandQueue->LinkRobot(objRobot_hardware);
+	this->_gcode_queue = new GcodeQueue();
+	this->_gcode_queue->LinkRobot(objRobot_hardware);
 
     Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
 }
 
 void GobotHouse::SpinOnce(){	
 	// this->__robot_hardware->SpinOnce();
-	this->__commandQueue->SpinOnce();
+	this->_gcode_queue->SpinOnce();
 }
 
 void GobotHouse::__Home(){
@@ -31,10 +31,10 @@ void GobotHouse::__Home(){
 	String strG28 = "G28B";
 	strG28 = "G28A";
 	if (via_inverse_kinematic) strG28.concat("I");
-	this->__commandQueue->AppendGcodeCommand(strG28);
+	this->_gcode_queue->AppendGcodeCommand(strG28);
 	strG28 = "G28A";
 	if (via_inverse_kinematic) strG28.concat("I");
-	this->__commandQueue->AppendGcodeCommand(strG28);
+	this->_gcode_queue->AppendGcodeCommand(strG28);
 }
 void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 
@@ -44,11 +44,11 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 		// Our idea is:
 		//		Route the motor-shaft to run 10/20/50/100 rounds.
 		String strG = "G1R-5F6000";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 		strG = "G4S5";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 		strG = "G1R0";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 	}
 
 	if (step==2){
@@ -59,15 +59,15 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 		this->__Home();
 		this->__Enable_eefCoil(enable_eef_coil);
 		String strG = "G1A0";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 		strG = "G4S5";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 		strG = "G1A-180";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 		strG = "G4S5";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 		strG = "G1A0";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 		this->__Enable_eefCoil(false);
 
 	}
@@ -76,12 +76,12 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 		this->__Home();
 		this->__Enable_eefCoil(enable_eef_coil);
 		String strG = "G1A-180";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 		strG = "G1B0";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 		this->__Pause(5);
 		strG = "G1B90";
-		this->__commandQueue->AppendGcodeCommand(strG);
+		this->_gcode_queue->AppendGcodeCommand(strG);
 		this->__Enable_eefCoil(false);
 		this->__Pause(5);
 		this->__Enable_eefCoil(enable_eef_coil);
@@ -99,11 +99,11 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 		// #define ENDER_COIL_2109 32
 		// #define ENDER_COIL_EXT_2109 33
 		String strM = "M42 P33 S1";
-		this->__commandQueue->AppendGcodeCommand(strM);
+		this->_gcode_queue->AppendGcodeCommand(strM);
 		strM = "G4S5";
-		this->__commandQueue->AppendGcodeCommand(strM);
+		this->_gcode_queue->AppendGcodeCommand(strM);
 		strM = "M42 P33 S0";
-		this->__commandQueue->AppendGcodeCommand(strM);
+		this->_gcode_queue->AppendGcodeCommand(strM);
 	}
 	if (step==6){
 		this->__Home();
@@ -151,27 +151,27 @@ void GobotHouse::ParkArms(bool do_homing){
 	int free_buffer_count = 0;
 	while (free_buffer_count < 3){
 		this->SpinOnce();
-		free_buffer_count = this->__commandQueue->GetFreeBuffersCount();
+		free_buffer_count = this->_gcode_queue->GetFreeBuffersCount();
 		Serial.print(free_buffer_count);
 		Serial.print(" ");
 	}
 
 	if (do_homing){
 		String strG28 = "G28B";
-		this->__commandQueue->AppendGcodeCommand(strG28);
+		this->_gcode_queue->AppendGcodeCommand(strG28);
 		strG28 = "G28A";
-		this->__commandQueue->AppendGcodeCommand(strG28);
+		this->_gcode_queue->AppendGcodeCommand(strG28);
 	}
-	this->__commandQueue->SpinOnce();
+	this->_gcode_queue->SpinOnce();
 	// Park Arms
 	String strG1 = "G1B120 F2800";
-	this->__commandQueue->AppendGcodeCommand(strG1);
+	this->_gcode_queue->AppendGcodeCommand(strG1);
 	strG1 = "G1A-60 F2800";
-	this->__commandQueue->AppendGcodeCommand(strG1);
+	this->_gcode_queue->AppendGcodeCommand(strG1);
 }
 // Head is a position name, The 5 bar arm will pick up stone from there.
 bool GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){
-	// if (this->__commandQueue->GetFreeBuffersCount() < 16)  return false;
+	// if (this->_gcode_queue->GetFreeBuffersCount() < 16)  return false;
 
 	__Move_fromNeck_toDoor(room_id,true);
 	__Move_fromRoom_toDoor(room_id,false);
@@ -185,7 +185,7 @@ bool GobotHouse::MoveStone_FromRoomToHead(uint8_t room_id){
 }
 
 bool GobotHouse::MoveStone_FromHeadToRoom(uint8_t room_id){
-	// if (this->__commandQueue->GetFreeBuffersCount() < 16) return false;
+	// if (this->_gcode_queue->GetFreeBuffersCount() < 16) return false;
 	__Move_fromNeck_toDoor(0, false);  // 0 is useless.
 	__Move_fromHead_toNeck(false);
 	__Enable_eefCoil(true);
@@ -202,7 +202,7 @@ void GobotHouse::__Enable_eefCoil(bool enable){
 	// if (!enable) strM = "M42 P33 S0";
 	String strM = "M280 P2S0";
 	if (enable) strM = "M280 P2S128";
-	this->__commandQueue->AppendGcodeCommand(strM);
+	this->_gcode_queue->AppendGcodeCommand(strM);
 
 }
 
@@ -224,7 +224,7 @@ void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
 		gcode.concat("Y");
 		gcode.concat(0);
 
-		this->__commandQueue->AppendGcodeCommand(gcode);
+		this->_gcode_queue->AppendGcodeCommand(gcode);
 	}
 }
 
@@ -254,7 +254,7 @@ void GobotHouse::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
 		strGcode.concat(x);
 		strGcode.concat("Y");
 		strGcode.concat(y);
-		this->__commandQueue->AppendGcodeCommand(strGcode);
+		this->_gcode_queue->AppendGcodeCommand(strGcode);
 	}
 }
 
@@ -270,7 +270,7 @@ void GobotHouse::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
 	strGcode.concat(x);
 	strGcode.concat("Y");
 	strGcode.concat(y);
-	this->__commandQueue->AppendGcodeCommand(strGcode);
+	this->_gcode_queue->AppendGcodeCommand(strGcode);
 }
 void GobotHouse::__Move_fromParking_toDoor(uint8_t door_id){
 	String strGcode="G1X";
@@ -278,25 +278,25 @@ void GobotHouse::__Move_fromParking_toDoor(uint8_t door_id){
 	strGcode.concat("Y");
 	strGcode.concat(this->__map.doors[door_id].y);
 	Serial.println(strGcode);
-	this->__commandQueue->AppendGcodeCommand(strGcode);
+	this->_gcode_queue->AppendGcodeCommand(strGcode);
 }
 void GobotHouse::__Move_fromParking_toNeck(){
 	String strGcode="G1X";
 	strGcode.concat(this->__map.neck.x);
 	strGcode.concat("Y");
 	strGcode.concat(this->__map.neck.y);
-	this->__commandQueue->AppendGcodeCommand(strGcode);
+	this->_gcode_queue->AppendGcodeCommand(strGcode);
 }
 
 void GobotHouse::__Pause(uint8_t second){
 		String strG1 = "G4S";
 		strG1.concat(second);
-		this->__commandQueue->AppendGcodeCommand(strG1);
+		this->_gcode_queue->AppendGcodeCommand(strG1);
 }
 
 void GobotHouse::__PreHome(){
 	String strG1 = "G1B130";
-	this->__commandQueue->AppendGcodeCommand(strG1);
+	this->_gcode_queue->AppendGcodeCommand(strG1);
 	strG1 = "G1A0";
-	this->__commandQueue->AppendGcodeCommand(strG1);
+	this->_gcode_queue->AppendGcodeCommand(strG1);
 }

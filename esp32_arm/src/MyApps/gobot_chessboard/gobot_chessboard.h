@@ -3,8 +3,9 @@
 #include "actions.h"
 #include "Robot/gcode_queue.h"
 #include "chessboard_map.h"
+#include "Robot/gcode_producer.h"
 
-class GobotChessboard{
+class GobotChessboard: public GcodeProducer{
     public:
         static GobotChessboard& getInstance()
         {
@@ -17,12 +18,12 @@ class GobotChessboard{
         void ParkArms(bool do_home);
         void pick_place_park(RobotAction* pAction);
         void Calibrate(int step);
-        GcodeQueue* GetCommandQueue(){return this->__commandQueue;};
+        // GcodeQueue* GetCommandQueue(){return this->__commandQueue;};
 
     private:
         GobotChessboard(){};
         RobotAction* __arm_action;
-        GcodeQueue* __commandQueue;
+        // GcodeQueue* __commandQueue;
         void __Pickup(ChessboardCell* cell);
         void __Place(ChessboardCell* cell);
         void __Park();

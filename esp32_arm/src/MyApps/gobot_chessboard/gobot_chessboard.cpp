@@ -7,29 +7,29 @@ void GobotChessboard::Init(){
 	Serial.print("\n[Info] GobotChessboard::Init() is entering.");
 	GobotChessboardHardware* objGobotHardware = new GobotChessboardHardware();
 	objGobotHardware->InitRobot();
-	this->__commandQueue = new GcodeQueue();
-	this->__commandQueue->LinkRobot(objGobotHardware);
+	this->_gcode_queue = new GcodeQueue();
+	this->_gcode_queue->LinkRobot(objGobotHardware);
 	Serial.print("\n[Info] GobotChessboard::Init() is done.");
 
 }
 
 void GobotChessboard::SpinOnce(){
-	this->__commandQueue->SpinOnce();
+	this->_gcode_queue->SpinOnce();
 }
 
 void GobotChessboard::ParkArms(bool do_home){
 	Serial.print("\n[Debug] GobotChessboard::ParkArms() is entering");
 	if (do_home){
 		String strG28 = "G28AI";
-		this->__commandQueue->AppendGcodeCommand(strG28);
+		this->_gcode_queue->AppendGcodeCommand(strG28);
 		strG28 = "G28BI";
-		this->__commandQueue->AppendGcodeCommand(strG28);
+		this->_gcode_queue->AppendGcodeCommand(strG28);
 	}
 	// Park Arms
 	String strG1 = "G1B0 F2800";
-	this->__commandQueue->AppendGcodeCommand(strG1);
+	this->_gcode_queue->AppendGcodeCommand(strG1);
 	strG1 = "G1A-180 F2800";
-	this->__commandQueue->AppendGcodeCommand(strG1);
+	this->_gcode_queue->AppendGcodeCommand(strG1);
 }
 
 void GobotChessboard::pick_place_park(RobotAction* pAction){
@@ -94,13 +94,13 @@ String GobotChessboard::__GetGcode_for_eef_action(EefAction eef_action){
 void GobotChessboard::__Pickup(ChessboardCell* cell){
 	// Move to that cell, Lower, Load stone, Up
 	String gc = cell->GetG1Code();
-	this->__commandQueue->AppendGcodeCommand(gc);
+	this->_gcode_queue->AppendGcodeCommand(gc);
 	gc = this->__GetGcode_for_eef_action(EefAction::Lower);
-	this->__commandQueue->AppendGcodeCommand(gc);
+	this->_gcode_queue->AppendGcodeCommand(gc);
 	gc = this->__GetGcode_for_eef_action(EefAction::Load);
-	this->__commandQueue->AppendGcodeCommand(gc);
+	this->_gcode_queue->AppendGcodeCommand(gc);
 	gc = this->__GetGcode_for_eef_action(EefAction::Higher);
-	this->__commandQueue->AppendGcodeCommand(gc);
+	this->_gcode_queue->AppendGcodeCommand(gc);
 
 }
 
@@ -113,14 +113,14 @@ void GobotChessboard::__Park(){
 	// Move to park point.
 	ChessboardCell park_point = ChessboardCell('W',0);
 	String gc = park_point.GetG1Code();
-	this->__commandQueue->AppendGcodeCommand(gc);
+	this->_gcode_queue->AppendGcodeCommand(gc);
 }
 
 void GobotChessboard::__Home(){
 	String g = "G28AI";
-	this->__commandQueue->AppendGcodeCommand(g);
+	this->_gcode_queue->AppendGcodeCommand(g);
 	g = "G28BI";
-	this->__commandQueue->AppendGcodeCommand(g);
+	this->_gcode_queue->AppendGcodeCommand(g);
 
 }
 
@@ -130,7 +130,7 @@ void GobotChessboard::__Calibrate_99(){
 		for (uint8_t y=0; y<=19; y++){
 			ChessboardCell cell = ChessboardCell(x,y);
 			String gc = cell.GetG1Code();
-			this->__commandQueue->AppendGcodeCommand(gc);
+			this->_gcode_queue->AppendGcodeCommand(gc);
 		}
 	}
 }
@@ -145,13 +145,13 @@ void GobotChessboard::Calibrate(int step){
 		// 		2, Then move to 180 degree , stand by for 5 seconds for observer.
 		// 		3, Then move to 90 degree 
 		String g = "G28AI";
-		this->__commandQueue->AppendGcodeCommand(g);
+		this->_gcode_queue->AppendGcodeCommand(g);
 		g = "G1A180";
-		this->__commandQueue->AppendGcodeCommand(g);
+		this->_gcode_queue->AppendGcodeCommand(g);
 		g = "G4S5";
-		this->__commandQueue->AppendGcodeCommand(g);
+		this->_gcode_queue->AppendGcodeCommand(g);
 		g = "G1A90";
-		this->__commandQueue->AppendGcodeCommand(g);
+		this->_gcode_queue->AppendGcodeCommand(g);
 	}
 	if (step == 2){
 		// Goal:
@@ -162,13 +162,13 @@ void GobotChessboard::Calibrate(int step){
 		// 		2, Then move to 0 degree , stand by for 5 seconds for observer.
 		// 		3, Then move to 90 degree 
 		String g = "G28BI";
-		this->__commandQueue->AppendGcodeCommand(g);
+		this->_gcode_queue->AppendGcodeCommand(g);
 		g = "G1B0";
-		this->__commandQueue->AppendGcodeCommand(g);
+		this->_gcode_queue->AppendGcodeCommand(g);
 		g = "G4S5";
-		this->__commandQueue->AppendGcodeCommand(g);
+		this->_gcode_queue->AppendGcodeCommand(g);
 		g = "G1B180";
-		this->__commandQueue->AppendGcodeCommand(g);
+		this->_gcode_queue->AppendGcodeCommand(g);
 	}
 	if (step == 3){
 		// Move to Park point.

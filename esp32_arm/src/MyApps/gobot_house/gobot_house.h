@@ -4,9 +4,10 @@
 // #include "Robot/Commu/CommuBleGattServer.h"
 // #include "actions.h"
 #include "Robot/gcode_queue.h"
+#include "Robot/gcode_producer.h"
+// #include "MyLibs/message_producer.h"
 
-
-class GobotHouse{
+class GobotHouse: public GcodeProducer{
     public:
         enum SITE_TYPE{
             HEAD,
@@ -27,7 +28,6 @@ class GobotHouse{
         void Calibrate(int step, bool enable_eef_coil);
         bool MoveStone_FromRoomToHead(uint8_t house_id);
         bool MoveStone_FromHeadToRoom(uint8_t house_id);
-        GcodeQueue* GetCommandQueue(){return this->__commandQueue;};
 
 
     private:
@@ -44,6 +44,6 @@ class GobotHouse{
         HouseMap __map;
         // RobotAction* __house_action;
         int __segments;
-        GcodeQueue* __commandQueue;
+
 
 };

@@ -2,8 +2,9 @@
 
 #include "box_mover_hw.h"
 #include "Robot/gcode_queue.h"
+#include "Robot/gcode_producer.h"
 
-class BoxMover{
+class BoxMover: public GcodeProducer{
     public:
         enum EnumState{ START, 
                                 RESETTING, 
@@ -22,10 +23,10 @@ class BoxMover{
         void LoadBox();
         void UnloadBox();
         void SpinOnce(); 
-        GcodeQueue* GetCommandQueue(){return this->__commandQueue;};
+        // GcodeQueue* GetCommandQueue(){return this->__commandQueue;};
     
     private:
-        GcodeQueue* __commandQueue;
+        // GcodeQueue* __commandQueue;
         // BoxMoverHardware* __objBoxMoverHardware;
    
 };
