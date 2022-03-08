@@ -3,10 +3,10 @@
 #include "SimpleFOC/common/pid.h"
 #include "Robot/Actuator/ActuatorBase.h"
 #include "track_sensor_base.h"
+#include "MyLibs/message_consumer.h"
 
 
-
-class VehicalBase{
+class VehicalBase: public MessageConsumer{
         public:
             enum VEHICAL_DIRECTION{
                 FORWARD = 1,

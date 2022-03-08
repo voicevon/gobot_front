@@ -17,14 +17,14 @@ GcodeQueue* gcode_queue;
 //********************************************************************************************
 //    MQTT and RabbitMQ
 //********************************************************************************************
-#include "Robot/command_queue_rabbit.h"
-CommandQueueRabbit* commandQueueRabbit;
+#include "Robot/mqtt_syncer.h"
+MqttSyncer* mqtt_syncer;
 extern AsyncMqttClient mqttClient;
 bool mqtt_is_connected = false;
 void dispatch_MqttConnected(bool sessionPresent){
     Serial.println("\n\n     MQTT is connected !!!!\n\n");
     mqtt_is_connected = true;
-    commandQueueRabbit->SubscribeMqtt(&mqttClient, "gobot/x2134/house", "gobot/x2134/house/fb");
+    mqtt_syncer->SubscribeMqtt(&mqttClient, "gobot/x2134/house", "gobot/x2134/house/fb");
 }
 void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
     bool debug = false;
@@ -47,12 +47,12 @@ void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProp
         Serial.print("  total: ");
         Serial.println(total);
     }
-    commandQueueRabbit->OnReceived(payload, len);
+    mqtt_syncer->OnReceived(payload, len);
 }
-void Begin_WifiRabbitMqtt(){
+void Begin_WifiMqttSync(){
     setup_wifi_mqtt();
-    commandQueueRabbit = new CommandQueueRabbit();
-    commandQueueRabbit->LinkLocalCommandQueue(gcode_queue);
+    mqtt_syncer = new MqttSyncer();
+    mqtt_syncer->LinkLocalCommandQueue(gcode_queue);
     // commandQueueRabbit->LinkLocalCommandQueue(mybot->GetCommandQueue());
     mqttClient.onConnect(dispatch_MqttConnected);
     mqttClient.onMessage(dispatch_MqttMessage);
@@ -72,17 +72,17 @@ void setup(){
     mybot->Setup();
     mybot->LinkLocalMessageQueue(gcode_queue);
     mybot_hardware->LinkLocalMessageQueue(gcode_queue);
-    Begin_WifiRabbitMqtt();
+    Begin_WifiMqttSync();
     while (! mqtt_is_connected){
         delay(100);
     }
 }
 
-bool done= false;
+// bool done= false;
 void loop(){
 	mybot->SpinOnce();
     mybot_hardware->SpinOnce();
-    commandQueueRabbit->SpinOnce();
+    mqtt_syncer->SpinOnce();
 }
 
 

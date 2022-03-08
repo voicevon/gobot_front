@@ -16,7 +16,7 @@ GobotHead -------> HouseQueue -----> Agent  -------> HouseMQTT -------> HouseBot
 #include "IoT/wifi_mqtt_client.h"
 
 
-class CommandQueueRabbit{
+class MqttSyncer{
     public:
         String topic;
         String topic_feedback;

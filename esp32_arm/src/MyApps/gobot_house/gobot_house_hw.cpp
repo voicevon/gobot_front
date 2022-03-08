@@ -229,6 +229,8 @@ void GobotHouseHardware::HomeSingleAxis(char axis){
 		this->__homing_stepper = &this->objStepper_beta;
 		this->__homing_helper = &this->objHomeHelper_beta;
 	}
+	this->__homing_stepper->setTargetRel(500000);
+	this->objStepControl.moveAsync(*this->__homing_stepper);
 }
 
 void GobotHouseHardware::_running_G28(){
@@ -274,8 +276,8 @@ void GobotHouseHardware::_running_G28(){
 		// Serial.print("<");
 		// We are going to move a long long distance with async mode(None blocking).
 		// When endstop is trigered, must stop the moving. 
-		this->__homing_stepper->setTargetRel(50000);
-		this->objStepControl.moveAsync(*this->__homing_stepper);
+		// this->__homing_stepper->setTargetRel(50000);
+		// this->objStepControl.moveAsync(*this->__homing_stepper);
 	}
 }
 
@@ -286,7 +288,7 @@ void GobotHouseHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 
 		case EefAction::Suck:
 			// Serial.print("\nGobotHouseHardware::RunM123()  Suck ");
-			ledcWrite(1, 128);
+			ledcWrite(1, this->__config.EEF_Suck_PWM);
 			break;
 		case EefAction::Release:
 			// Serial.print("\nGobotHouseHardware::RunM123()  Release ");

@@ -54,12 +54,13 @@ class GobotHouseHardwareConfig{
         int Homing_speed_alpha;    
         int Homing_acceleration_beta ;
         int Homing_speed_beta;
+        uint8_t EEF_Suck_PWM;
         void Init();
         void PrintOut();
         
     private:
         // Fixed by electronic wiring.
-        float MOTOR_MICRO_STEPS = 1;
+        float MOTOR_MICRO_STEPS = 16;
         // big_gear_teeth == 90 / small_gear_teeth == 10
         float GEAR_BOX_RATIO_ALPHA = 9.0;
         // big_gear_teeth == 26 / small_gear_teeth == 10

@@ -1,10 +1,10 @@
-#include "command_queue_rabbit.h"
+#include "mqtt_syncer.h"
 
-void CommandQueueRabbit::LinkLocalCommandQueue(GcodeQueue* loacalMQ){
+void MqttSyncer::LinkLocalCommandQueue(GcodeQueue* loacalMQ){
     this->__localMQ = loacalMQ;
 }
 
-void CommandQueueRabbit::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic){
+void MqttSyncer::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic){
     this->__mqttClient = mqttClient;
     mqttClient->subscribe(main_topic, 2);
     // mqttClient->subscribe("gobot/x2134/house", 2);
@@ -13,7 +13,7 @@ void CommandQueueRabbit::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* 
 
     bool debug=true;
     if(debug){
-        Serial.print("\nCommandQueueRabbit::SubscribeMqtt() is done    ");
+        Serial.print("\nMqttSyncer::SubscribeMqtt() is done    ");
         Serial.print(main_topic);
         Serial.print("      ");
         Serial.println(feedback_topic);
@@ -21,7 +21,7 @@ void CommandQueueRabbit::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* 
 }
 
 
-void CommandQueueRabbit::OnReceived(const char* payload, int length){
+void MqttSyncer::OnReceived(const char* payload, int length){
     // Put message to local MQ   
     // TODO:: Is this necessary??
     char* p = (char*)(payload) + length;
@@ -31,17 +31,17 @@ void CommandQueueRabbit::OnReceived(const char* payload, int length){
 
     // send message to feedback topic
     if (this->__local_mq_is_full){
-        Serial.print("\nCommandQueueRabbit::OnReceived() is full");
+        Serial.print("\nMqttSyncer::OnReceived() is full");
         return;
     }
     this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, payload, length);
 }
 
 // This function will be invoked on master thread.
-void CommandQueueRabbit::SpinOnce(){
+void MqttSyncer::SpinOnce(){
     if (this->__local_mq_is_full)
         if (! this->__localMQ->BufferIsFull()){
-            Serial.println("\n                  CommandQueueRabbit::SpinOnce() local mq got a free room");
+            Serial.println("\n                  MqttSyncer::SpinOnce() local mq got a free room");
             MessageQueue::SingleMessage* pMessage = this->__localMQ->GetHeadMessage();
             this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, pMessage->payload, pMessage->length);
             this->__local_mq_is_full = false;
