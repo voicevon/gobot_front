@@ -3,15 +3,15 @@
 #include "gobot_chessboard_hw.h"
 
 
-void GobotChessboard::Init(){
-	Serial.print("\n[Info] GobotChessboard::Init() is entering.");
-	GobotChessboardHardware* objGobotHardware = new GobotChessboardHardware();
-	objGobotHardware->InitRobot();
-	this->_gcode_queue = new GcodeQueue();
-	// this->_gcode_queue->LinkRobot(objGobotHardware);
-	Serial.print("\n[Info] GobotChessboard::Init() is done.");
+// void GobotChessboard::Lin(GcodeQueue* gcode_queue){
+// 	Serial.print("\n[Info] GobotChessboard::Init() is entering.");
+// 	// GobotChessboardHardware* objGobotHardware = new GobotChessboardHardware();
+// 	// objGobotHardware->InitRobot();
+// 	this->_gcode_queue =  gcode_queue;
+// 	// this->_gcode_queue->LinkRobot(objGobotHardware);
+// 	Serial.print("\n[Info] GobotChessboard::Init() is done.");
 
-}
+// }
 
 void GobotChessboard::SpinOnce(){
 	// this->_gcode_queue->SpinOnce();

@@ -5,7 +5,7 @@
 
 class GcodeProducer: public MessageProducer{
     public:
-        GcodeQueue* GetCommandQueue(){return this->_gcode_queue;};
+        // GcodeQueue* GetGcodeQueue(){return this->_gcode_queue;};
 
     protected:
         GcodeQueue* _gcode_queue;

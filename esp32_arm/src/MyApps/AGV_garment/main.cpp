@@ -30,7 +30,7 @@ bool mqtt_is_connected = false;
 void dispatch_MqttConnected(bool sessionPresent){
     Serial.println("\n\n     MQTT is connected !!!!\n\n");
     mqtt_is_connected = true;
-    mq_sync_box_mover->SubscribeMqtt(&mqttClient, "agv/x2206", "agv/x2206/fb");
+    // mq_sync_box_mover->SubscribeMqtt(&mqttClient, "agv/x2206", "agv/x2206/fb");
     mq_sync_box_mover->SubscribeMqtt(&mqttClient, "agv/x2206/box", "agv/x2206/box/fb");
     mq_sync_twin_wheels->SubscribeMqtt(&mqttClient, "agv/x2206/agv", "agv/x2206/agv/fb");
 }
@@ -64,7 +64,7 @@ void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProp
 void Begin_WifiRabbitMqtt(){
     setup_wifi_mqtt();
     mq_sync_box_mover = new MqttSyncer();
-    mq_sync_box_mover->LinkLocalCommandQueue(mybot->objBoxMover.GetCommandQueue());
+    mq_sync_box_mover->LinkLocalCommandQueue(gcode_queue);
     mq_sync_twin_wheels = new MqttSyncer();
     mq_sync_twin_wheels->LinkLocalCommandQueue(mybot->objTwinWheel.GetCommandQueue());
     mqttClient.onConnect(dispatch_MqttConnected);

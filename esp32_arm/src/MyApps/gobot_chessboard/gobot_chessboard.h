@@ -13,7 +13,7 @@ class GobotChessboard: public GcodeProducer{
                                   // Instantiated on first use.
             return instance;
         }
-        void Init();
+        // void Init(GcodeQueue* gcode_queue);
         void SpinOnce();
         void ParkArms(bool do_home);
         void pick_place_park(RobotAction* pAction);
