@@ -22,10 +22,12 @@ void CommandQueueRabbit::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* 
 
 
 void CommandQueueRabbit::OnReceived(const char* payload, int length){
-    // Put message to local MQ
+    // Put message to local MQ   
+    // TODO:: Is this necessary??
     char* p = (char*)(payload) + length;
     *p = 0x00;
-    this->__local_mq_is_full = this->__localMQ->AppendGcodeCommand(payload,length); 
+
+    this->__local_mq_is_full = this->__localMQ->AppendGcodeCommand(payload, length); 
     // send message to feedback topic
     if (this->__local_mq_is_full){
         Serial.print("\n\n\n ==============================================");

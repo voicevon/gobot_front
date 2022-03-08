@@ -7,10 +7,15 @@ bool MessageQueue::AppendMessage(String strPayload){
     this->AppendMessage(payload, length);
 }
 
+// return true: buffer is full , before or after appending.
+// return false:  buffer is not full, after appending.
 bool MessageQueue::AppendMessage(const char* payload, int length){
-    // Serial.print("\n MessageQueue::AppendMessage()  is entering..... ");
-    // this->SayHello("MessageQueue::AppendMessage()");
     int pre_head = this->__get_pointer_next_index(this->_head);
+    if(pre_head == this->_tail){
+        Serial.print("\n\n\n  [Error] MessageQueue::AppendMessage() ");
+        Serial.print("\n   Buffer is full");
+        return true;
+    }
     this->_all_messages[pre_head].length = length;
     char* target = &(this->_all_messages[pre_head].payload[0]);
     //Copy byte to byte.  There is a 0x00 ender , so lenth should be +1.
@@ -20,20 +25,14 @@ bool MessageQueue::AppendMessage(const char* payload, int length){
         payload++;
     }
     this->_head = pre_head;
-    if (this->_head == this->_tail)
+    pre_head = this->__get_pointer_next_index(this->_head);
+    if (pre_head == this->_tail)
         // buffer is full, after copying.
         return true;
     // buffer is NOT full. 
     return false;  
 
-    // // Serial.print("Adding gcode to command queue   ");
-    // // Serial.print(command.length());
-    // // Serial.print(">>> ");
-    // // Serial.println(command);
-    // // unsigned char* pTargetByte = (unsigned char*) (&gCodeCommands[0]);
-    // unsigned char* pTargetByte = (unsigned char*) (&_all_messages[0]);
-    // pTargetByte += MAX_BYTES_PER_MESSAGE * this->_head;
-
+ 
 
     // // This doens't work, Don't know how Arduino String is orgnized with bytes.
     // // for(int i=0; i< command.length() +1; i++){  // The extra one byte is 0x00, the string ender.
@@ -43,14 +42,7 @@ bool MessageQueue::AppendMessage(const char* payload, int length){
     // //     pSourceByte++;
     // //     pTargetByte++;
     // // } 
-    // command.getBytes(pTargetByte, command.length() + 1);
-    // Serial.print("\n[Info] GcodeQueue::AppendGcodeCommand() Gcode added to command queue:  ");
-    // // char* p = (char*)&gCodeCommands[0];
-    // char* p = & (this->_all_messages[0].payload[0]);
 
-    // p += MAX_BYTES_PER_MESSAGE * this->_head;
-    // std::string ss=std::string(p);
-    // Serial.println(ss.c_str());
 
 
 
