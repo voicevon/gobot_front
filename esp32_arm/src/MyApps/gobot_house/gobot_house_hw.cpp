@@ -208,7 +208,7 @@ void GobotHouseHardware:: _running_G1(){
 	// delay(100);
 }
 void GobotHouseHardware::HomeSingleAxis(char axis){
-	Serial.print("[Debug] GobotHouseHardware::HomeSingleAxis() is entering\n" );
+	Serial.print("[Debug] GobotHouseHardware::HomeSingleAxis() is entering   AXIS = " );
 	Serial.print(axis);
 	this->_homing_axis = axis;
 	this->__EnableMotor(axis, true);
@@ -260,6 +260,7 @@ void GobotHouseHardware::_running_G28(){
 		this->objStepper_alpha.setAcceleration(this->__config.MAX_ACCELERATION_ALPHPA);
 		this->objStepper_beta.setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_BETA);
 		this->objStepper_beta.setAcceleration(this->__config.MAX_ACCELERATION_BETA);
+		Serial.print("\n======================================= End of Homing, State to be IDLE\n");
 		this->State = RobotState::IDLE;
 
 	}else{

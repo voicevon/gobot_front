@@ -102,7 +102,6 @@ class RobotBase: public MessageConsumer{
         RobotState State = RobotState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
-        // void FeedMessage(char* message, int length) override;
         virtual void InitRobot();
         virtual void HomeSingleAxis(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
@@ -113,7 +112,7 @@ class RobotBase: public MessageConsumer{
         RobotBase(){};
         void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
         virtual void SpinOnce_BaseEnter();
-        virtual void SpinOnce_BaseExit();
+        void SpinOnce_BaseExit();
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
         virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.

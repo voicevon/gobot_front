@@ -40,6 +40,25 @@ void RobotBase::SpinOnce(){
 	this->SpinOnce_BaseExit();
 }
 
+// Check gcode queue, if there is gcode to be run.
+void RobotBase::SpinOnce_BaseExit(){
+
+	if (this->State == RobotState::IDLE){
+		MessageQueue::SingleMessage* message = this->_mq->FetchTailMessage();
+		if (message != NULL){
+			Serial.print("\nRobotBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
+			Serial.print(message->payload);
+			Serial.println("");
+			// char* to std::string
+			char* p = &message->payload[0];
+			std::string str = std::string(p);
+			// feed std::string to Gcode constructor.
+            Gcode gcode = Gcode(str);
+			this->RunGcode(&gcode);
+		}
+	}
+}
+
 void RobotBase::RunG4(Gcode* gcode){
 	__g4_start_timestamp = micros();
 	__g4_time_second = gcode->get_value('S');

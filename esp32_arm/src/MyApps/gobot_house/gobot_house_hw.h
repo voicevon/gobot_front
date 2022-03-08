@@ -59,7 +59,7 @@ class GobotHouseHardware: public RobotBase{
 
         //Overrid functions
         void SpinOnce_BaseEnter() override {};
-        void SpinOnce_BaseExit() override {};
+        // void SpinOnce_BaseExit() override {};
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 

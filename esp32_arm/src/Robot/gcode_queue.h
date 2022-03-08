@@ -7,13 +7,9 @@
 class GcodeQueue: public MessageQueue{
     public:
         GcodeQueue();
-        void LinkRobot(RobotBase* mybot);
-        void LinkMessageConsumer(RobotBase* mybot);
-        // bool AppendGcode(Gcode* gcode);
         bool AppendGcodeCommand(String command);
-        // void SpinOnce() override;
+        bool AppendGcodeCommand(const char* payload, int length);
 
     private:
-        RobotBase* _myBot;
         
 };

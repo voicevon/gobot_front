@@ -27,7 +27,7 @@ void dispatch_MqttConnected(bool sessionPresent){
     commandQueueRabbit->SubscribeMqtt(&mqttClient, "gobot/x2134/house", "gobot/x2134/house/fb");
 }
 void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-    bool debug = true;
+    bool debug = false;
     if(debug){
         Serial.println("Publish received.");
         Serial.print("  topic: ");
@@ -80,18 +80,9 @@ void setup(){
 
 bool done= false;
 void loop(){
-	// WebCommu_SpinOnce();
-	// mybot->SpinOnce();
-    // done = mybot->MoveStone_FromRoomToHead(0);
-    // if(done) Serial.print("Done to 0");
-    // done = mybot->MoveStone_FromHeadToRoom(0);
-    // if(done) Serial.print("Done to head");
-    // mybot->MoveStone_FromRoomToHead(2);
-    // mybot->MoveStone_FromRoomToHead(3);
-    // mybot->MoveStone_FromRoomToHead(4);
-    // mybot->MoveStone_FromRoomToHead(5);
-    // mybot->MoveStone_FromRoomToHead(6);
-    // mybot->MoveStone_FromRoomToHead(7);
+	mybot->SpinOnce();
+    mybot_hardware->SpinOnce();
+    commandQueueRabbit->SpinOnce();
 }
 
 

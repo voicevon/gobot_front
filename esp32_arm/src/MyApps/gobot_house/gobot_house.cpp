@@ -16,7 +16,7 @@ void GobotHouse::Setup(){
 	GobotHouseHardware* objRobot_hardware = &GobotHouseHardware::getInstance();
     objRobot_hardware->InitRobot();
 	this->_gcode_queue = new GcodeQueue();
-	this->_gcode_queue->LinkRobot(objRobot_hardware);
+	// this->_gcode_queue->LinkRobot(objRobot_hardware);
 
     Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
 }

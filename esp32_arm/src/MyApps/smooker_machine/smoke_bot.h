@@ -35,7 +35,7 @@ class SmokeBot: public RobotBase{
         HomeHelper objHomeHelper = HomeHelper(PIN_HOME, HIGH);
         
         void SpinOnce_BaseEnter() override {};
-        void SpinOnce_BaseExit() override {};
+        // void SpinOnce_BaseExit() override {};
         void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override {};
         void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override {};
         void RunG1(Gcode* gcode) override;   //None blocking, move backgroundly.
