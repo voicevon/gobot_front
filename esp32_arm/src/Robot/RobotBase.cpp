@@ -42,23 +42,30 @@ void RobotBase::SpinOnce(){
 
 // Check gcode queue, if there is gcode to be run.
 void RobotBase::SpinOnce_BaseExit(){
+	if (this->State != RobotState::IDLE)
+		return;
+	if (this->_mq->BufferIsEmpty())
+		return;
 
-	if (this->State == RobotState::IDLE){
-		MessageQueue::SingleMessage* message = this->_mq->FetchTailMessage();
-		if (message != NULL){
-			if (true){
-				Serial.print("\nRobotBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
-				Serial.print(message->payload);
-				Serial.print(" ");
-			}
-			// type convert   from char* to std::string
-			char* p = &message->payload[0];
-			std::string str = std::string(p);
-			// feed std::string to Gcode constructor.
-            Gcode gcode = Gcode(str);
-			this->RunGcode(&gcode);
-		}
+	MessageQueue::SingleMessage* message = this->_mq->FetchTailMessage();
+	if (message == NULL){
+		Serial.println("\n\n\n [Error] RobotBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
+		return;
 	}
+
+	// this->_mq->SayHello("RobotBase::SpinOnce_BaseExit()");
+	if (true){
+		Serial.print("\nRobotBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
+		Serial.print(message->payload);
+		Serial.print(" ");
+	}
+	
+	// type convert   from char* to std::string
+	char* p = &message->payload[0];
+	std::string str = std::string(p);
+	// feed std::string to Gcode constructor.
+	Gcode gcode = Gcode(str);
+	this->RunGcode(&gcode);
 }
 
 void RobotBase::RunG4(Gcode* gcode){

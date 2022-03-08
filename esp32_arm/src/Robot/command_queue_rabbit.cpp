@@ -28,9 +28,9 @@ void CommandQueueRabbit::OnReceived(const char* payload, int length){
     *p = 0x00;
 
     this->__local_mq_is_full = this->__localMQ->AppendGcodeCommand(payload, length); 
+
     // send message to feedback topic
     if (this->__local_mq_is_full){
-        Serial.print("\n\n\n ==============================================");
         Serial.print("\nCommandQueueRabbit::OnReceived() is full");
         return;
     }

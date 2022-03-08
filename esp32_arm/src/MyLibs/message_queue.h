@@ -28,5 +28,6 @@ class MessageQueue{
 
     private:
         int __get_pointer_next_index(int current_index);
+        int __get_pointer_previous_index(int current_index);
 
 };
