@@ -46,10 +46,12 @@ void RobotBase::SpinOnce_BaseExit(){
 	if (this->State == RobotState::IDLE){
 		MessageQueue::SingleMessage* message = this->_mq->FetchTailMessage();
 		if (message != NULL){
-			Serial.print("\nRobotBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
-			Serial.print(message->payload);
-			Serial.println("");
-			// char* to std::string
+			if (true){
+				Serial.print("\nRobotBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
+				Serial.print(message->payload);
+				Serial.print(" ");
+			}
+			// type convert   from char* to std::string
 			char* p = &message->payload[0];
 			std::string str = std::string(p);
 			// feed std::string to Gcode constructor.
@@ -168,10 +170,12 @@ void RobotBase::RunGcode(Gcode* gcode){
 			}
 			p_value =  gcode->get_value('P');
 			s_value = gcode->get_value('S');
-			Serial.print("RobotBase::RunGcode() For EEF_ACTION  M123 P= ");
-			Serial.print(p_value);
-			Serial.print("  S= ");
-			Serial.print(s_value);
+			if (false){
+				Serial.print("RobotBase::RunGcode() For EEF_ACTION  M123 P= ");
+				Serial.print(p_value);
+				Serial.print("  S= ");
+				Serial.print(s_value);
+			}
 			action = (EefAction)s_value;
 			this->RunM123(p_value, action);
 			break;

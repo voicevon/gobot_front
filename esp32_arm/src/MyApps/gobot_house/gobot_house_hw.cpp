@@ -27,28 +27,31 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	// }
 	#define MACHENIC_LIMIT PI * -330 / 180
 	if (alpha <  MACHENIC_LIMIT) alpha = MACHENIC_LIMIT ;  // Machnic limitation
-	Serial.print("\n[Debug] GobotHouseHardware::IK() from (X,Y)=(");
-	Serial.print(fk->X);
-	Serial.print(" , ");
-	Serial.print(fk->Y);
-	Serial.print(")\n    Inverse kinematic angle degree of origin (alpha_eef, alpha_link, ik->alpha)=( ");
-	Serial.print(alpha_eef * RAD_TO_DEG);
-	Serial.print(" , ");
-	Serial.print(alpha_link * RAD_TO_DEG);
-	Serial.print(" , ");
-	Serial.print(alpha * RAD_TO_DEG);
-	Serial.print(")");
-
+	if (false){
+		Serial.print("\n[Debug] GobotHouseHardware::IK() from (X,Y)=(");
+		Serial.print(fk->X);
+		Serial.print(" , ");
+		Serial.print(fk->Y);
+		Serial.print(")\n    Inverse kinematic angle degree of origin (alpha_eef, alpha_link, ik->alpha)=( ");
+		Serial.print(alpha_eef * RAD_TO_DEG);
+		Serial.print(" , ");
+		Serial.print(alpha_link * RAD_TO_DEG);
+		Serial.print(" , ");
+		Serial.print(alpha * RAD_TO_DEG);
+		Serial.print(")");
+	}
 	// if (alpha < 0) alpha +=
 
 	ik->alpha = alpha * this->__config.STEPS_PER_RAD_ALPHA;
 	ik->beta =  beta * this->__config.STEPS_PER_RAD_BETA;
 
-	Serial.print("\n    Inverse Kinematic result in angle degree (alpha, beta)= ");
-	Serial.print(alpha * RAD_TO_DEG);
-	Serial.print(" , ");
-	Serial.print(beta * RAD_TO_DEG);
-	Serial.print(")");
+	if (false){
+		Serial.print("\n    Inverse Kinematic result in angle degree (alpha, beta)= ");
+		Serial.print(alpha * RAD_TO_DEG);
+		Serial.print(" , ");
+		Serial.print(beta * RAD_TO_DEG);
+		Serial.print(")");
+	}
 }
 
 // from_ik: Alpha, Beta
@@ -62,16 +65,17 @@ void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	float rad_alpha = ik->alpha / this->__config.STEPS_PER_RAD_ALPHA;
 	fk->X = this->__config.LINK_A * cosf(rad_alpha) + this->__config.LINK_B * cosf(rad_eef);
 	fk->Y = this->__config.LINK_A * sinf(rad_alpha) + this->__config.LINK_B * sinf(rad_eef);
-
-	Serial.print("\n\n[Debug] GobotHouseHardware::FK()  in degree from (alpha,beta) =(");
-	Serial.print(rad_alpha * RAD_TO_DEG);
-	Serial.print(" , ");
-	Serial.print(rad_beta * RAD_TO_DEG);
-	Serial.print(") \n     Forward Kinematic result:  (X,Y)= (");
-	Serial.print(fk->X);
-	Serial.print(" , ");
-	Serial.print(fk->Y);
-	Serial.print(")");
+	if (false){
+		Serial.print("\n\n[Debug] GobotHouseHardware::FK()  in degree from (alpha,beta) =(");
+		Serial.print(rad_alpha * RAD_TO_DEG);
+		Serial.print(" , ");
+		Serial.print(rad_beta * RAD_TO_DEG);
+		Serial.print(") \n     Forward Kinematic result:  (X,Y)= (");
+		Serial.print(fk->X);
+		Serial.print(" , ");
+		Serial.print(fk->Y);
+		Serial.print(")");
+	}
 }
 
 GobotHouseHardware::GobotHouseHardware(){
@@ -147,8 +151,8 @@ float GobotHouseHardware::GetDistanceToTarget_IK(){
 }
 
 void GobotHouseHardware::RunG1(Gcode* gcode) {
-	Serial.print("\n[Debug] GobotHouseHardware::RunG1()   ");
-	Serial.print(gcode->get_command());
+	// Serial.print("\n[Debug] GobotHouseHardware::RunG1()   ");
+	// Serial.print(gcode->get_command());
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
 		this->objStepper_alpha.setMaxSpeed(speed);
@@ -186,7 +190,7 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	//None blocking, move backgroundly.
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 
-	if (true){
+	if (false){
 		Serial.print("\n[Debug] GobotHouseHardware::RunG1() ");
 		Serial.print(this->objStepper_alpha.getPosition());
 		Serial.print(",");
@@ -202,14 +206,16 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 void GobotHouseHardware:: _running_G1(){
     if (this->GetDistanceToTarget_IK() < (this->__config.MAX_ACCELERATION_ALPHPA + this->__config.MAX_ACCELERATION_BETA)/64){
       	this->State = RobotState::IDLE;
-		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
+		// Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);
 }
 void GobotHouseHardware::HomeSingleAxis(char axis){
-	Serial.print("[Debug] GobotHouseHardware::HomeSingleAxis() is entering   AXIS = " );
-	Serial.print(axis);
+	if (false){
+		Serial.print("\n[Debug] GobotHouseHardware::HomeSingleAxis() is entering   AXIS = " );
+		Serial.print(axis);
+	}
 	this->_homing_axis = axis;
 	this->__EnableMotor(axis, true);
 	if (axis=='A'){
@@ -229,25 +235,24 @@ void GobotHouseHardware::_running_G28(){
 	// Serial.print("[Debug] GobotHouseHardware::running_G28() is entering \n");
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
-		Serial.print("\n[Info] GobotHouseHardware::_running_G28() Home sensor is trigger.  " );
-		Serial.print (this->_homing_axis);
+		if (false){
+			Serial.print("\n[Info] GobotHouseHardware::_running_G28() Home sensor is trigger.  " );
+			Serial.print (this->_homing_axis);
+		}
 		this->objStepControl.stop();
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
-			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
-			// Below two lines has been validated !
-			// ik_position.alpha = PI * this->__config.Homed_position_alpha_in_degree * STEPS_PER_RAD_ALPHA /180;
-			// ik_position.beta = PI * this->__config.Homed_position_beta_in_degree * STEPS_PER_RAD_BETA /180;
+			// Serial.print("\n   [Info] Trying to get home position from actuator position  ");
 
 			ik_position.alpha = DEG_TO_RAD * this->__config.Homed_position_alpha_in_degree * this->__config.STEPS_PER_RAD_ALPHA;
 			ik_position.beta =  DEG_TO_RAD * this->__config.Homed_position_beta_in_degree * this->__config.STEPS_PER_RAD_BETA;
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
-			IkPosition_AB verifying_ik;
-			Serial.print("\n\n  [Info] Please verify the below output ======================  ");
-			this->IK(&this->__current_fk_position, &verifying_ik);
+			IkPosition_AB verifying_ik_for_debug;
+			// Serial.print("\n\n  [Info] Please verify the below output ======================  ");
+			this->IK(&this->__current_fk_position, &verifying_ik_for_debug);
 		}
 		else{
 			Serial.print("\n\n\n\n\n  [Error] Trying to get home position with EEF position  ");
@@ -260,7 +265,7 @@ void GobotHouseHardware::_running_G28(){
 		this->objStepper_alpha.setAcceleration(this->__config.MAX_ACCELERATION_ALPHPA);
 		this->objStepper_beta.setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_BETA);
 		this->objStepper_beta.setAcceleration(this->__config.MAX_ACCELERATION_BETA);
-		Serial.print("\n======================================= End of Homing, State to be IDLE\n");
+		// Serial.print("\n======================================= End of Homing, State to be IDLE\n");
 		this->State = RobotState::IDLE;
 
 	}else{
@@ -280,17 +285,17 @@ void GobotHouseHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 	switch (eef_action){
 
 		case EefAction::Suck:
-			Serial.print("\nGobotHouseHardware::RunM123()  Suck ");
+			// Serial.print("\nGobotHouseHardware::RunM123()  Suck ");
 			ledcWrite(1, 128);
 			break;
 		case EefAction::Release:
-			Serial.print("\nGobotHouseHardware::RunM123()  Release ");
+			// Serial.print("\nGobotHouseHardware::RunM123()  Release ");
 			// This will drive the extend coil to create a reversed magnetic field. 
 			// ledcWrite(PIN_ENDER_COIL_2109, 128);
 
 			break;
 		case EefAction::Sleep:
-			Serial.print("\nGobotHouseHardware::RunM123()  Sleep ");
+			// Serial.print("\nGobotHouseHardware::RunM123()  Sleep ");
 			ledcWrite(1,0);
 			break;
 		default:
