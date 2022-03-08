@@ -28,13 +28,25 @@ void CommandQueueRabbit::OnReceived(char* payload, int length){
     // *(payload+length) = '\n';
     String strPayload = payload;
     // this->__localMQ->SayHello();
-    // Serial.print("ggggggggggggggggggggggggggggggggggggggggggggggg   ");
     // Serial.print(length);
     // Serial.print("    ");
 
     Serial.println(strPayload);
-    this->__localMQ->AppendGcodeCommand(strPayload); 
+    this->__local_mq_is_full = this->__localMQ->AppendGcodeCommand(strPayload); 
     // send message to feedback topic
+    if (this->__local_mq_is_full)
+        return;
     this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, payload, length);
     // Serial.println("CommandQueueRabbit::OnReceived() is exiting...");
+}
+
+// This function will be invoked on master thread.
+void CommandQueueRabbit::SpinOnce(){
+    if (this->__local_mq_is_full)
+        if (!this->__localMQ->BufferIsFull()){
+            char* payload;
+            int length = this->__localMQ->GetHeadMessage(payload);
+            this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, payload, length);
+        }
+
 }

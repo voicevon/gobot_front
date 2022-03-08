@@ -126,7 +126,7 @@ void onMqttPublish(uint16_t packetId) {
 }
 
 void setup_wifi_mqtt() {
-	Serial.println("\n IoT/wifi_mqtt_client.cpp   setup_wifi_mqtt()  is entering");
+	Serial.println("\n[Info] IoT/wifi_mqtt_client.cpp   setup_wifi_mqtt()  is entering");
 	Serial.println();
 
 	mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));

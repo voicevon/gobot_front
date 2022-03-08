@@ -14,7 +14,7 @@ void GobotChessboard::Init(){
 }
 
 void GobotChessboard::SpinOnce(){
-	this->_gcode_queue->SpinOnce();
+	// this->_gcode_queue->SpinOnce();
 }
 
 void GobotChessboard::ParkArms(bool do_home){

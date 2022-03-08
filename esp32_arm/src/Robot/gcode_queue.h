@@ -11,7 +11,7 @@ class GcodeQueue: public MessageQueue{
         void LinkMessageConsumer(RobotBase* mybot);
         // bool AppendGcode(Gcode* gcode);
         bool AppendGcodeCommand(String command);
-        void SpinOnce() override;
+        // void SpinOnce() override;
 
     private:
         RobotBase* _myBot;

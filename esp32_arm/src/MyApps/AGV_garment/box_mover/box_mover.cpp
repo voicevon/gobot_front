@@ -12,7 +12,7 @@ BoxMover::BoxMover(){
 void BoxMover::SpinOnce(){
     // this->verticalMover->SpinOnce();
     // this->angleMover->SpinOnce();
-    this->_gcode_queue->SpinOnce();
+    // this->_gcode_queue->SpinOnce();
     switch (this->State){
         case RESETTING:
             // if (verticalMover->AT_NORTH && angleMover->AT_SOUTH){
@@ -61,7 +61,7 @@ void BoxMover::ParkArms(bool do_homing){
 		strG28 = "G28W";
 		this->_gcode_queue->AppendGcodeCommand(strG28);
 	}
-	this->_gcode_queue->SpinOnce();
+	// this->_gcode_queue->SpinOnce();
 	String strG1 = "G1 Z5421 W5";
 	this->_gcode_queue->AppendGcodeCommand(strG1);
 }

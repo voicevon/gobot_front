@@ -102,7 +102,7 @@ class RobotBase: public MessageConsumer{
         RobotState State = RobotState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
-        void FeedMessage(char* message, int length) override;
+        // void FeedMessage(char* message, int length) override;
         virtual void InitRobot();
         virtual void HomeSingleAxis(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);

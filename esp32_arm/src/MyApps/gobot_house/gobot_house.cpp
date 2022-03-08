@@ -23,7 +23,7 @@ void GobotHouse::Setup(){
 
 void GobotHouse::SpinOnce(){	
 	// this->__robot_hardware->SpinOnce();
-	this->_gcode_queue->SpinOnce();
+	// this->_gcode_queue->SpinOnce();
 }
 
 void GobotHouse::__Home(){
@@ -162,7 +162,7 @@ void GobotHouse::ParkArms(bool do_homing){
 		strG28 = "G28A";
 		this->_gcode_queue->AppendGcodeCommand(strG28);
 	}
-	this->_gcode_queue->SpinOnce();
+	// this->_gcode_queue->SpinOnce();
 	// Park Arms
 	String strG1 = "G1B120 F2800";
 	this->_gcode_queue->AppendGcodeCommand(strG1);

@@ -25,8 +25,9 @@ class CommandQueueRabbit{
         void SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic);
 
         void OnReceived(char* payload, int length);
-
+        void SpinOnce();
     private:
         GcodeQueue* __localMQ;
         AsyncMqttClient* __mqttClient;
+        bool __local_mq_is_full = false;
 };
