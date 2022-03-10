@@ -4,21 +4,36 @@
 
 GobotChessboardHardwareConfig::GobotChessboardHardwareConfig(){
     this->Init();
-    this->PrintOut();
+    this->PrintOut("Init()");
 }
 
 void GobotChessboardHardwareConfig::Init(){
+    this->LINK_0 = 191.0f / 2;
+    this->LINK_A = 285.18;
+    this->LINK_B = 384.51;
     this->STEPPER_DRIVER_MICRO_STEPS = 16;
-    this->GEAR_BOX_RATIO = 5.8;
+    this->MOTOR_STEP_ANGLE = 1.8;
+    this->GEAR_BOX_RATIO = 90.0f / 20.0f;   // Big gear = 90 teeth, small gear = 20 teeth
     this->MOTOR_STEPS_PER_ROUND = 360.0 / this->MOTOR_STEP_ANGLE * this->STEPPER_DRIVER_MICRO_STEPS;
     this->STEPS_PER_RAD = this->MOTOR_STEPS_PER_ROUND * this->GEAR_BOX_RATIO / TWO_PI;
 
+
+    // this->MOTOR_MAX_SPEED = 8000;   //steps per second.
+    this->MAX_STEPS_PER_SECOND_ALPHA_BETA = 8000;
+    this->MAX_ACCELERATION_ALPHA_BETA = 800;
+
+    this->Homing_acceleration_alpha_beta = 2000;
+    this->Homing_speed_alpha_beta = 1000;
+    this->Homed_position_alpha_in_degree = 180 + 3;
+    this->Homed_position_beta_in_degree = -3;
+
+
 }
 
-void GobotChessboardHardwareConfig::PrintOut(){
+void GobotChessboardHardwareConfig::PrintOut(const char* title){
     Serial.print("\n=========================================================");
-    Serial.print("\n      GobotChessboardHardwareConfig::Printout()\n");
-    Serial.print("\n=========================================================");
+    Serial.print("\n      GobotChessboardHardwareConfig::Printout()    "); 
+    Serial.print(title);
 
     Serial.print("\n Lenth of LINK_0, LINK_A, LINK_B = (");
     Serial.print(this->LINK_0);

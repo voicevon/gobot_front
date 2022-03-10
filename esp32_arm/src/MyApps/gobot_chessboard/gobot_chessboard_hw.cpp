@@ -65,10 +65,10 @@ void GobotChessboardHardware::_running_G28(){
 		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha * this->__config.STEPS_PER_RAD);
 		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta * this->__config.STEPS_PER_RAD);
 		
-		this->objStepper_alpha.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA_BETA);
-		this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHA_BETA);
-		this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_ALPHA_BETA);
-		this->objStepper_beta.setAcceleration(MAX_ACCELERATION_ALPHA_BETA);
+		this->objStepper_alpha.setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA);
+		this->objStepper_alpha.setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
+		this->objStepper_beta.setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA);
+		this->objStepper_beta.setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
 		this->State = RobotState::IDLE;
 
 	}else{
@@ -277,7 +277,7 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 }
 
 void GobotChessboardHardware::_running_G1(){
-    if (this->GetDistanceToTarget_IK() < (MAX_ACCELERATION_ALPHA_BETA)/32){
+    if (this->GetDistanceToTarget_IK() < (this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA)/32){
       	this->State = RobotState::IDLE;
 		Serial.print("\n[Info] GobotChessboardHardware::_running_G1() is finished. ");
     }

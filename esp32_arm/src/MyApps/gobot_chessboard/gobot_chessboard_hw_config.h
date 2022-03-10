@@ -34,10 +34,9 @@
 #define PIN_EEF_B  19
 
 
-#define MAX_STEPS_PER_SECOND_ALPHA_BETA 1200 * 16 //MICRO_STEPS
-#define MAX_ACCELERATION_ALPHA_BETA 600 * 16 //MICRO_STEPS
+// #define  1200 * 16 //MICRO_STEPS
+// #define MAX_ACCELERATION_ALPHA_BETA 600 * 16 //MICRO_STEPS
 
-// #define STEPS_PER_ROUND_MOTOR 123
 class GobotChessboardHardwareConfig{
     public:
         // link length in mm
@@ -46,23 +45,25 @@ class GobotChessboardHardwareConfig{
         float MOTOR_STEPS_PER_ROUND;
         float STEPS_PER_RAD; 
         // 191.0 is the Length between the centers of two motors 
-        int LINK_0 = 191.0 / 2 ;
+        int LINK_0;  //  = 191.0 / 2 ;
         // Length from motor to passive joints   
-        int LINK_A = 285.18;  
+        int LINK_A; // = 285.18;  
         // Length from passive joints to end effector 
-        int LINK_B = 384.51;  
+        int LINK_B; // 384.51;  
 
-        int MOTOR_MAX_SPEED = 1000;
-        float Homed_position_alpha_in_degree = 180+2;
-        float Homed_position_beta_in_degree = 46;
-        int Homing_acceleration_alpha_beta = 200 * this->STEPPER_DRIVER_MICRO_STEPS; 
-        int Homing_speed_alpha_beta = 200 * this->STEPPER_DRIVER_MICRO_STEPS; 
+        // int MOTOR_MAX_SPEED;
+        int MAX_STEPS_PER_SECOND_ALPHA_BETA;
+        float MAX_ACCELERATION_ALPHA_BETA;
+        float Homed_position_alpha_in_degree;
+        float Homed_position_beta_in_degree;
+        int Homing_acceleration_alpha_beta;
+        int Homing_speed_alpha_beta;
         
         void Init();
-        void PrintOut();
+        void PrintOut(const char* title);
 
     private:
-        int STEPPER_DRIVER_MICRO_STEPS = 16;
-        float MOTOR_STEP_ANGLE = 1.8;
-        float GEAR_BOX_RATIO = 6.5;
+        int STEPPER_DRIVER_MICRO_STEPS;
+        float MOTOR_STEP_ANGLE;
+        float GEAR_BOX_RATIO;
 };
