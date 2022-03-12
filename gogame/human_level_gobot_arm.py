@@ -64,7 +64,7 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
 
     def __init__(self, rabbit_client:RabbitClient) -> None:
         super().__init__(rabbit_client=rabbit_client)
-        self.Home()
+        # self.Home()
 
     def Home(self):
         print('[Info] HumanLevelGobotArm::Home() ')
@@ -124,8 +124,14 @@ if __name__ == '__main__':
     helper = RabbitMqClient_Helper()
     client = helper.MakeClient()
     arm = HumanLevelGobotArm(client)
-    arm.MoveTo(0, 60)
-    arm.DisableMotor()
+    arm.rabbit_client.PublishToArm("G28AI")
+    arm.rabbit_client.PublishToArm("G1A90")
+    arm.rabbit_client.PublishToArm("G28BI")
+    arm.rabbit_client.PublishToArm("G1A135B90")
+    arm.rabbit_client.PublishToArm("G4S5")
+    arm.rabbit_client.PublishToArm("M84")
+    # arm.MoveTo(0, 60)
+    # arm.DisableMotor()
 
     while True:
         helper.SpinOnce()

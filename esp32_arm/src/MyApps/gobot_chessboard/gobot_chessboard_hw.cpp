@@ -24,15 +24,18 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 		this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = &this->objStepper_alpha;
 		this->__homing_helper = &this->objHomeHelper_alpha;
+		this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
 	}else if (axis=='B'){
 		this->__EnableMotor('B',true);
 		this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = &this->objStepper_beta;
 		this->__homing_helper = &this->objHomeHelper_beta;
+		this->__homing_stepper->setTargetRel(-500000);    //angle to be smaller.
 	}else{
 		Serial.print("\n[Error] GobotChessboardHardware::HomeSingleAxis() ");
 	}
+	this->objStepControl.moveAsync(*this->__homing_stepper);
 	Serial.print("[Debug] GobotChessboardHardware::HomeSingleAxis() is done\n" );
 }
 
@@ -62,8 +65,10 @@ void GobotChessboardHardware::_running_G28(){
 			Serial.print("\n  [Error] Trying to get home position with EEF-FK position  ");
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha * this->__config.STEPS_PER_RAD);
-		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta * this->__config.STEPS_PER_RAD);
+		if (this->_homing_axis == 'A') 
+			this->objStepper_alpha.setPosition(ik_position.alpha * this->__config.STEPS_PER_RAD);
+		if (this->_homing_axis == 'B') 
+			this->objStepper_beta.setPosition(ik_position.beta * this->__config.STEPS_PER_RAD);
 		
 		this->objStepper_alpha.setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA);
 		this->objStepper_alpha.setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
@@ -76,8 +81,7 @@ void GobotChessboardHardware::_running_G28(){
 		// Serial.print("\n[Debug] GobotChessboardHardware::_running_G28()  Still homing\n");
 		// We are going to move a long long distance with async mode(None blocking).
 		// When endstop is trigered, must stop the moving. 
-		this->__homing_stepper->setTargetRel(50000);
-		this->objStepControl.moveAsync(*this->__homing_stepper);
+
 	}
 }
 

@@ -144,9 +144,9 @@ if __name__ == '__main__':
     house = HumanLevelGobotHouse(client)
     # for i in range(30):
     #     house.Test_Eef()
-    house.demo()
-    house.PreHome()
-   
+    # house.demo()
+    # house.PreHome()
+
 
     while True:
         helper.SpinOnce()
