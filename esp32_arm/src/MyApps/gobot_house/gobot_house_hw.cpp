@@ -101,13 +101,14 @@ void GobotHouseHardware::__Init_gpio(){
 	// digitalWrite(PIN_ENDER_COIL_2109, LOW);
 	// digitalWrite(PIN_ENDER_COIL_EXT_2109, LOW);
 	  // configure LED PWM functionalitites
-	ledcSetup(1, 200, 8);  //ledcSetup(ledChannel, freq, resolution);
-	ledcSetup(2, 200, 8);  //ledcSetup(ledChannel, freq, resolution);
+	ledcSetup(1, 50, 12);  //ledcSetup(ledChannel, freq, resolution);
+	// ledcSetup(2, 200, 8);  //ledcSetup(ledChannel, freq, resolution);
 	// attach the channel to the GPIO to be controlled
-	ledcAttachPin(PIN_ENDER_COIL_2109, 1); // ledcAttachPin(ledPin, ledChannel);
-	ledcAttachPin(PIN_ENDER_COIL_EXT_2109, 2); // ledcAttachPin(ledPin, ledChannel);
+	// ledcAttachPin(PIN_ENDER_COIL_2109, 1); // ledcAttachPin(ledPin, ledChannel);
+	ledcAttachPin(PIN_ENDER_COIL_EXT_2109, 1); // ledcAttachPin(ledPin, ledChannel);
+	// ledcAttachPin(PIN_ENDER_COIL_EXT_2109, 2); // ledcAttachPin(ledPin, ledChannel);
 	ledcWrite(1, 0);
-	ledcWrite(2, 0);
+	// ledcWrite(2, 0);
 }
 void GobotHouseHardware::InitRobot(){
 	__Init_gpio();
@@ -288,12 +289,12 @@ void GobotHouseHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 
 		case EefAction::Suck:
 			// Serial.print("\nGobotHouseHardware::RunM123()  Suck ");
-			ledcWrite(1, this->__config.EEF_Suck_PWM);
+			ledcWrite(1, this->__config.EEF_Suck_Angle);
 			break;
 		case EefAction::Release:
 			// Serial.print("\nGobotHouseHardware::RunM123()  Release ");
 			// This will drive the extend coil to create a reversed magnetic field. 
-			// ledcWrite(PIN_ENDER_COIL_2109, 128);
+			ledcWrite(1, this->__config.EEF_Release_Angle);
 
 			break;
 		case EefAction::Sleep:

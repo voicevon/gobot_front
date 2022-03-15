@@ -19,7 +19,8 @@ void GobotHouseHardwareConfig::Init(){
         this->Homing_acceleration_beta = 200 * this->MOTOR_MICRO_STEPS;
         this->Homing_speed_beta = 200 * this->MOTOR_MICRO_STEPS; 
 
-        this->EEF_Suck_PWM = 255;   // Max is 255
+        this->EEF_Suck_Angle = 160;   // Max is 4096
+        this->EEF_Release_Angle = 360;   // Max is 4096
         this->PrintOut();
 }
 

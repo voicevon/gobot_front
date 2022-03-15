@@ -54,7 +54,8 @@ class GobotHouseHardwareConfig{
         int Homing_speed_alpha;    
         int Homing_acceleration_beta ;
         int Homing_speed_beta;
-        uint8_t EEF_Suck_PWM;
+        uint16_t EEF_Suck_Angle;
+        uint16_t EEF_Release_Angle;
         void Init();
         void PrintOut();
         

@@ -28,6 +28,7 @@ import enum
 
 class HumanLevelHouse_EEF_ACTIONS(enum.Enum):
     LOAD = 3,
+    UNLOAD = 4,
     SLEEP = 5,
 
 
@@ -61,9 +62,10 @@ class HouseMapDiction():
 
 class HumanLevelGobotHouse(HumanLevelRobotBase):
 
-    def __init__(self, rabbit_client:RabbitClient) -> None:
+    def __init__(self, rabbit_client:RabbitClient, do_home=True) -> None:
         super().__init__(rabbit_client=rabbit_client)
-        self.Home()
+        if do_home:
+            self.Home()
     
     def Home(self):
         self.rabbit_client.PublishToHouse('G28BI')
@@ -95,13 +97,15 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
     def EefAction(self, eef: HumanLevelHouse_EEF_ACTIONS):
         if eef==HumanLevelHouse_EEF_ACTIONS.LOAD:
             self.rabbit_client.PublishToHouse('M123P1S3')
+        elif eef==HumanLevelHouse_EEF_ACTIONS.UNLOAD:
+            self.rabbit_client.PublishToHouse('M123P1S4')
         elif eef==HumanLevelHouse_EEF_ACTIONS.SLEEP:
             self.rabbit_client.PublishToHouse('M123P1S5')
 
     def Test_Eef(self):
         self.rabbit_client.PublishToHouse('M123P1S3')   #load
         self.rabbit_client.PublishToHouse('G4S5')
-        self.rabbit_client.PublishToHouse('M123P1S5')   #sleep
+        self.rabbit_client.PublishToHouse('M123P1S4')   #Release
         self.rabbit_client.PublishToHouse('G4S5')
         self.rabbit_client.PublishToHouse('M996')
         
@@ -121,7 +125,7 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
             self.EefAction(HumanLevelHouse_EEF_ACTIONS.LOAD)
             x,y = site.DOORS[index]
             self.MoveTo(x,y)
-            self.EefAction(HumanLevelHouse_EEF_ACTIONS.SLEEP)
+            # self.EefAction(HumanLevelHouse_EEF_ACTIONS.UNLOAD)
         x,y = site.DOORS[7]
         self.MoveTo(x,y)
         self.PreHome()
@@ -141,11 +145,13 @@ if __name__ == '__main__':
     from rabbitmq_all_in_one import RabbitMqClient_Helper
     helper = RabbitMqClient_Helper()
     client = helper.MakeClient()
-    house = HumanLevelGobotHouse(client)
-    # for i in range(30):
-    #     house.Test_Eef()
+
+    house = HumanLevelGobotHouse(client,False)
+    for i in range(5):
+        house.Test_Eef()
+    
+    # house = HumanLevelGobotHouse(client,True)
     # house.demo()
-    # house.PreHome()
 
 
     while True:

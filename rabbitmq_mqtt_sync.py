@@ -36,8 +36,8 @@ class RabbitMQSync:
         # if method.routing_key == 'gobot_x2134_house':
         self.main = body
         if self.main == self.feedback:
-            print('repeated...... return')
-            return
+            print('repeated...... return')    #????
+            # return
 
         # a new command from gobot_head is received
         g_mqtt.publish(self.message_config.main_mqtt_topic, body)
