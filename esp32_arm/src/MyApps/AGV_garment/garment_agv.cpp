@@ -1,37 +1,37 @@
 #include "garment_agv.h"
 
 GarmentAgv::GarmentAgv(){
-
+    this->trackSensor = new TrackSensor_Dual9960(1,2,3,4);
+    this->obstacleSensor = new UltraSonicDistanceSensor(1,2);
+    this->rfidReader = new MFRC522(1,2);
 }
 
 void GarmentAgv::SpinOnce(){
     int distance_to_full_park = 100;      //???
     bool loading_finished = true;         // From mqtt
     bool unloading_finished = true;       // from mqtt
-    uint16_t mapsite_id = 0;              // read from RFID
+    uint16_t mapsite_id = 0;               // read from RFID
 
     // Obstacle detection
     this->found_obstacle = false;
-    float distance =  this->objHS04.measureDistanceCm(); 
+    float distance =  this->obstacleSensor->measureDistanceCm(); 
     if (distance >0 && distance <50) 
         this->found_obstacle = true;
 
 
-    bool found_slowdown_mark = false;     // from track sensor
-    int track_error = 0;                  // from track sensor
-    // this->objTrackSensor.ReadError_FromRight(&RxBuffer[0]);
-    int position_error = 100;
+    // bool found_slowdown_mark = false;     // from track sensor
+    int track_error = this->trackSensor->ReadError_LeftRight();
+    int position_error = this->trackSensor->ReadError_FrontRear();
 
     //    this->onMqttReceived();
     //    this->objBoxMover.SpinOnce();
 
-   switch (this->_State)
-   {
+   switch (this->_State) {
    case FAST_MOVING:
         if (found_obstacle)
             this->ToState(FAST_MOVING_PAUSED);
         // check if see the mark of slow-down.
-        else if (found_slowdown_mark)
+        else if (track_error)
             this->ToState(SLOW_MOVING);
         else
             this->MoveForward(track_error);
@@ -44,8 +44,8 @@ void GarmentAgv::SpinOnce(){
         if (found_obstacle)
             this->ToState(SLOW_MOVING_PAUSED);
         else {
-            //try to read RFID
-            mapsite_id = 1;  //this->objRfidReader.PICC_ReadCardSerial(); 
+            //try to read RFID, have read already.
+            mapsite_id = this->rfidReader->PICC_ReadCardSerial(); 
             if (mapsite_id > 0){
                 // got the mark
                 // this->onDetectedMark(mapsite_id);

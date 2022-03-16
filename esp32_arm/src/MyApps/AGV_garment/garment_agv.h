@@ -68,8 +68,9 @@ class GarmentAgv: public TwinWheelHardware{
         // Adafruit_APDS9960 apds;
 
 
-        UltraSonicDistanceSensor objHS04 = UltraSonicDistanceSensor(HS04_PIN_ECHO,HS04_PIN_TRIG); //initialisation class HCSR04 (trig pin , echo pin)
-        MFRC522 objRfidReader = MFRC522(10, 9);  // Create MFRC522 instance
+        UltraSonicDistanceSensor *obstacleSensor; // = UltraSonicDistanceSensor(HS04_PIN_ECHO,HS04_PIN_TRIG); //initialisation class HCSR04 (trig pin , echo pin)
+        MFRC522* rfidReader;   // = MFRC522(10, 9);  // Create MFRC522 instance
+        TrackSensor_Dual9960* trackSensor;
         void SpinOnce();
         void ToState(GarmentAgv::GARMENTAGV_STATE state);
         bool found_obstacle = true;

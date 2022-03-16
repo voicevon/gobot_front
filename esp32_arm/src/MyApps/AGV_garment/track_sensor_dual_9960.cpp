@@ -1,14 +1,6 @@
 #include "track_sensor_dual_9960.h"
 
 TrackSensor_Dual9960::TrackSensor_Dual9960(uint8_t left_sensor_pin_sda, uint8_t left_sensor_pin_sclk, uint8_t right_sensor_pin_sda, uint8_t right_sensor_pin_sclk){
-    // this->__position = position;
-    // this->__i2c_bus_at_left = new TwoWire(0);
-    // this->__i2c_bus_at_right = new TwoWire(1);
-
-    // this->__i2c_bus_at_left->begin(left_sensor_pin_sda, left_sensor_pin_sclk, 400000);
-    // this->__i2c_bus_at_right->begin(right_sensor_pin_sda, right_sensor_pin_sclk);
-
-
     this->__apds_left = new Adafruit_APDS9960();
     TwoWire* theWire = new TwoWire(0);
     theWire->begin(left_sensor_pin_sda, left_sensor_pin_sclk, 400000);
@@ -22,7 +14,7 @@ TrackSensor_Dual9960::TrackSensor_Dual9960(uint8_t left_sensor_pin_sda, uint8_t 
     this->__apds_right->enableColor(true);
 
 }
-
+// when move from left to right, erro is from nagtive to positive.
 float TrackSensor_Dual9960::ReadError_LeftRight(){
     uint16_t r,g,b,c;
     float track_error;
@@ -39,6 +31,23 @@ float TrackSensor_Dual9960::ReadError_LeftRight(){
 
     return track_error;
 }
+
+// when move forward, error is from negtive to positive.
 float TrackSensor_Dual9960::ReadError_FrontRear(){
-    return 1.0f;
+    uint16_t rr,rg,rb,rc;
+    uint16_t lr,lg,lb,lc;
+    this->__apds_left->getColorData(&lr, &lg, &lb, &lc);
+    this->__apds_right->getColorData(&rr, &rg, &rb, &rc);
+
+    float track_error;
+    track_error = rr - rg;
+
+    return track_error;
+}
+
+void TrackSensor_Dual9960::ClearFlag_Slowdown(){
+    this->__flag_slow_down++;
+}
+void TrackSensor_Dual9960::ClearFlag_SpeedUp(){
+    this->__flag_spped_up++;
 }
