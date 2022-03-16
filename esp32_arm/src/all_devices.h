@@ -2,8 +2,8 @@
 #define __ALL_DEVICES_H_
 
 
-// #define I_AM_GARMENT_BOT
-#define I_AM_GOBOT_HOUSE_2134
+#define I_AM_GARMENT_BOT
+// #define I_AM_GOBOT_HOUSE_2134
 // #define I_AM_GOBOT_CHESSBOARD_2134
 
 // #define I_AM_ACUPUCTURE_MAIN_ESP32

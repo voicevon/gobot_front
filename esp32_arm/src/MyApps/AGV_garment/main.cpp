@@ -12,6 +12,10 @@ MessageQueue* message_queue;
 #define PIN_ENCODER_B 13
 
 GarmentBot *mybot; // = GarmentBot();
+
+#include "garment_agv.h"
+GarmentAgv agv;
+
 // CommuEspNow_Master commu_esp_now;
 // IrEncoder irEncoder_leftWheel = IrEncoder(PIN_ENCODER_A, PIN_ENCODER_B, 40);
 // IrEncoderHelper irEncoderHelper = IrEncoderHelper();

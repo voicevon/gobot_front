@@ -18,8 +18,8 @@ void GarmentBot::Init(){
    this->objTwinWheelHardware.Init();
    // this->objBoxMover.ParkArms(true);
 
-   this->_last_state = PARKING;
-   this->ToState(SLEEPING);
+   this->_last_state = GarmentAgv::PARKING;
+   this->ToState(GarmentAgv::SLEEPING);
    Serial.print("\n[Info] GarmentBot::Init() is done.");
 
 }
@@ -57,31 +57,31 @@ void GarmentBot::onDetectedMark(uint16_t mapsite_id){
       {
       case MapSite::TASK::FOLLOW_LEFT:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = false;
-         this->ToState(FAST_MOVING);
+         this->ToState(GarmentAgv::FAST_MOVING);
          break;
       case MapSite::TASK::FOLLLOW_RIGHT:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
-         this->ToState(FAST_MOVING);
+         this->ToState(GarmentAgv::FAST_MOVING);
          break;
       case MapSite::TASK::LOADING:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
          this->__current_mapsite.task = MapSite::TASK::LOADING;
-         this->ToState(PARKING);
+         this->ToState(GarmentAgv::PARKING);
          break;
       case MapSite::TASK::UNLOADING:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
          this->__current_mapsite.task = MapSite::TASK::UNLOADING;
-         this->ToState(PARKING);
+         this->ToState(GarmentAgv::PARKING);
          break;
       case MapSite::TASK::SLEEPING:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
          this->__current_mapsite.task = MapSite::TASK::SLEEPING;
-         this->ToState(PARKING);
+         this->ToState(GarmentAgv::PARKING);
          break;
       case MapSite::TASK::CHARGING:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
          this->__current_mapsite.task = MapSite::TASK::CHARGING;
-         this->ToState(PARKING);         
+         this->ToState(GarmentAgv::PARKING);         
       default:
          break;
       }
@@ -103,22 +103,22 @@ void GarmentBot::SpinOnce(){
 
    switch (this->_State)
    {
-   case FAST_MOVING:
+   case GarmentAgv::FAST_MOVING:
         if (found_obstacle)
-            this->ToState(FAST_MOVING_PAUSED);
+            this->ToState(GarmentAgv::FAST_MOVING_PAUSED);
         // check if see the mark of slow-down.
         else if (found_slowdown_mark)
-            this->ToState(SLOW_MOVING);
+            this->ToState(GarmentAgv::SLOW_MOVING);
         else
             this->objTwinWheelHardware.MoveForward(track_error);
         break;
-    case FAST_MOVING_PAUSED:
+    case GarmentAgv::FAST_MOVING_PAUSED:
         if (!found_obstacle)
-            this->ToState(FAST_MOVING);
+            this->ToState(GarmentAgv::FAST_MOVING);
         break;
-    case SLOW_MOVING:
+    case GarmentAgv::SLOW_MOVING:
         if (found_obstacle)
-            this->ToState(SLOW_MOVING_PAUSED);
+            this->ToState(GarmentAgv::SLOW_MOVING_PAUSED);
         else {
             //try to read RFID
             mapsite_id = this->objRemoteSensor.ObjRfidReader.last_card_id; 
@@ -128,42 +128,42 @@ void GarmentBot::SpinOnce(){
             }
         }
         break;
-   case SLOW_MOVING_PAUSED:
+   case GarmentAgv::SLOW_MOVING_PAUSED:
       if (!found_obstacle)
-         this->ToState(SLOW_MOVING);
+         this->ToState(GarmentAgv::SLOW_MOVING);
       break;
-   case PARKING:
+   case GarmentAgv::PARKING:
         // try to finish parking
         if (distance_to_full_park == 0)
-            this->ToState(PARKED);
+            this->ToState(GarmentAgv::PARKED);
         else{
             // position_error = this->objPositionSensor.ReadError_FromRight();
             this->objTwinWheelHardware.SetTargetSpeed(position_error);
         }
         break;
-   case PARKING_PAUSED:
+   case GarmentAgv::PARKING_PAUSED:
         if (!found_obstacle)
-            this->ToState(PARKING);
+            this->ToState(GarmentAgv::PARKING);
             break;
-   case PARKED:
+   case GarmentAgv::PARKED:
         if (this->__current_mapsite.LOADING)
-            this->ToState(LOADING);
+            this->ToState(GarmentAgv::LOADING);
         else if (this->__current_mapsite.UNLOADING)
-            this->ToState(UNLOADING);
+            this->ToState(GarmentAgv::UNLOADING);
         else if (this->__current_mapsite.SLEEPING)
-            this->ToState(SLEEPING);
+            this->ToState(GarmentAgv::SLEEPING);
         else if (this->__current_mapsite.CHARGING)
-            this->ToState(CHARGING);
+            this->ToState(GarmentAgv::CHARGING);
         break;
-   case LOADING:
+   case GarmentAgv::LOADING:
         if (loading_finished)
-            this->ToState(FAST_MOVING);
+            this->ToState(GarmentAgv::FAST_MOVING);
         break;
-   case UNLOADING:
+   case GarmentAgv::UNLOADING:
       if (unloading_finished)
-         this->ToState(FAST_MOVING);
+         this->ToState(GarmentAgv::FAST_MOVING);
       break;
-   case SLEEPING:
+   case GarmentAgv::SLEEPING:
       /* code */
       break;
    
@@ -172,28 +172,28 @@ void GarmentBot::SpinOnce(){
    }
 }
 
-void GarmentBot::ToState(GARMENTBOT_STATE state){
+void GarmentBot::ToState(GarmentAgv::GARMENTAGV_STATE state){
    if (state == this->_State) return;
    switch(state){
-      case SLEEPING:
+      case GarmentAgv::SLEEPING:
             this->objTwinWheelHardware.Stop();
             break;
-      case FAST_MOVING:
+      case GarmentAgv::FAST_MOVING:
             this->objTwinWheelHardware.SetTargetSpeed(220);
             break;
-      case SLOW_MOVING:
+      case GarmentAgv::SLOW_MOVING:
             this->objTwinWheelHardware.SetTargetSpeed(100);
             break;
-      case PARKING:
+      case GarmentAgv::PARKING:
             this->objTwinWheelHardware.SetTargetSpeed(20);
             break;
-      case LOADING:
+      case GarmentAgv::LOADING:
             this->objBoxMover.LoadBox();
             break;
-      case UNLOADING:
+      case GarmentAgv::UNLOADING:
             this->objBoxMover.UnloadBox();
             break;
-      case CHARGING:
+      case GarmentAgv::CHARGING:
          break;
       
 

@@ -8,45 +8,18 @@
 #include "box_mover/box_mover.h"
 #include "AGV/map_navigator.h"
 #include "remote_sensor.h"
+#include "garment_agv.h"
 
 // #define PIN_LED_POWER_2130 23
 
 
-/*    
-.     
-.     
-.      <--------------------------------------------------------------------------------------------\
-,     |                                                                                              | 
-,    F_Paused          S_Paused                       P_Paused                                       |
-.     |  ^             |     ^                         |    ^                                        ^                             
-.     |  |             |     |                         |    |                                        |                           
-.   Fast Moving  --> Slow_Moving ----------------->   Parking  --->   Parked --> Robot_Loading  -----^  
-.                    (Read Mark RFID)                 (Super slow)       |                           |
-.                                                                        |-------> Robot_Unloading --^
-.                                                                        |                           |
-.                                                                        |-------> Charging ---------^
-.                                                                        |                           |
-.                                                                         --------> Sleeping --------^
-.                                                                        |                           |
-.                                                                         --------> Charging --------^
-*/
+
+
+
 
 class GarmentBot{
     public:
-        enum GARMENTBOT_STATE{
-            SLEEPING = 0,
-            FAST_MOVING,
-            FAST_MOVING_PAUSED,
-            SLOW_MOVING,
-            SLOW_MOVING_PAUSED,
-            PARKING,
-            PARKING_PAUSED,
-            PARKED,
-            CHARGING,
-            LOADING,
-            UNLOADING,
-            // EMERGENCY_STOPING,
-        };
+
         GarmentBot();
         BoxMover objBoxMover = BoxMover();
         VehicalTwinWheel objTwinWheel = VehicalTwinWheel();
@@ -54,14 +27,14 @@ class GarmentBot{
 
         void Init();
         void SpinOnce();
-        void ToState(GARMENTBOT_STATE state);
+        void ToState(GarmentAgv::GARMENTAGV_STATE state);
         void Test(int test_id);
         uint8_t GetMqtt_PubPayload(uint8_t* chars);
         void onMqttReceived(uint8_t* payload);
         
     protected:
-        GARMENTBOT_STATE _State;
-        GARMENTBOT_STATE _last_state;
+        GarmentAgv::GARMENTAGV_STATE _State;
+        GarmentAgv::GARMENTAGV_STATE _last_state;
         void SpinOnce_Working();
         
     private:
