@@ -16,12 +16,12 @@
 /*    
 .     
 .     
-.      <--------------------------------------------------------------------------------------------\
-,     |                                                                                              | 
-,    F_Paused          S_Paused                       P_Paused                                       |
-.     |  ^             |     ^                         |    ^                                        ^                             
-.     |  |             |     |                         |    |                                        |                           
-.   Fast Moving  --> Slow_Moving ----------------->   Parking  --->   Parked --> Robot_Loading  -----^  
+.      <---------------------------------------------------------------------------------------------\
+,     |                               ^                                                               | 
+,    F_Paused          S_Paused       |                P_Paused                                       |
+.     |  ^             |     ^        |                 |    ^                                        ^                             
+.     |  |             |     |        |                 |    |                                        |                           
+.   Fast Moving  --> Slow_Moving ------------------>   Parking  --->   Parked --> Robot_Loading  -----^  
 .                    (Read Mark RFID)                 (Super slow)       |                           |
 .                                                                        |-------> Robot_Unloading --^
 .                                                                        |                           |
@@ -80,9 +80,11 @@ class GarmentAgv: public TwinWheelHardware{
         GARMENTAGV_STATE _State;
         GARMENTAGV_STATE _last_state;
         void SpinOnce_Working();
-        MapNavigator objMapNavigator;
+        TrackGraph objTrackGraph;
 
     private:
-        MapSite __current_mapsite;
+        BranchNode __current_navigator_point;
+        // void DoParking(int track_error, int position_error){};
+        bool DoParking();
 
 };

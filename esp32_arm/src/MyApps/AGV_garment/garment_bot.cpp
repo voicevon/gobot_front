@@ -49,38 +49,38 @@ void ReadI2C(){
 }
 
 
-void GarmentBot::onDetectedMark(uint16_t mapsite_id){
-   MapSite current_mapsite;
-   if (this->objMapNavigator.FetchSite(mapsite_id, &current_mapsite)){
+void GarmentBot::onDetectedMark(uint16_t BranchNode_id){
+   BranchNode current_BranchNode;
+   if (this->objMapNavigator.FetchNode(BranchNode_id, &current_BranchNode)){
          // the mark is being managered via map navigator.
-      switch (current_mapsite.task)
+      switch (current_BranchNode.task)
       {
-      case MapSite::TASK::FOLLOW_LEFT:
+      case BranchNode::TASK::FOLLOW_LEFT:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = false;
          this->ToState(GarmentAgv::FAST_MOVING);
          break;
-      case MapSite::TASK::FOLLLOW_RIGHT:
+      case BranchNode::TASK::FOLLLOW_RIGHT:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
          this->ToState(GarmentAgv::FAST_MOVING);
          break;
-      case MapSite::TASK::LOADING:
+      case BranchNode::TASK::LOADING:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
-         this->__current_mapsite.task = MapSite::TASK::LOADING;
+         this->__current_BranchNode.task = BranchNode::TASK::LOADING;
          this->ToState(GarmentAgv::PARKING);
          break;
-      case MapSite::TASK::UNLOADING:
+      case BranchNode::TASK::UNLOADING:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
-         this->__current_mapsite.task = MapSite::TASK::UNLOADING;
+         this->__current_BranchNode.task = BranchNode::TASK::UNLOADING;
          this->ToState(GarmentAgv::PARKING);
          break;
-      case MapSite::TASK::SLEEPING:
+      case BranchNode::TASK::SLEEPING:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
-         this->__current_mapsite.task = MapSite::TASK::SLEEPING;
+         this->__current_BranchNode.task = BranchNode::TASK::SLEEPING;
          this->ToState(GarmentAgv::PARKING);
          break;
-      case MapSite::TASK::CHARGING:
+      case BranchNode::TASK::CHARGING:
          this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
-         this->__current_mapsite.task = MapSite::TASK::CHARGING;
+         this->__current_BranchNode.task = BranchNode::TASK::CHARGING;
          this->ToState(GarmentAgv::PARKING);         
       default:
          break;
@@ -92,7 +92,7 @@ void GarmentBot::SpinOnce(){
    int distance_to_full_park = 100;
    bool loading_finished = true;
    bool unloading_finished = true;
-   uint16_t mapsite_id = 0;
+   uint16_t BranchNode_id = 0;
    bool found_obstacle = false;
    bool found_slowdown_mark = false;
    int track_error = 0; // this->objTrackSensor.ReadError_FromRight(&RxBuffer[0]);
@@ -121,10 +121,10 @@ void GarmentBot::SpinOnce(){
             this->ToState(GarmentAgv::SLOW_MOVING_PAUSED);
         else {
             //try to read RFID
-            mapsite_id = this->objRemoteSensor.ObjRfidReader.last_card_id; 
-            if (mapsite_id > 0){
+            BranchNode_id = this->objRemoteSensor.ObjRfidReader.last_card_id; 
+            if (BranchNode_id > 0){
                 // got the mark
-                this->onDetectedMark(mapsite_id);
+                this->onDetectedMark(BranchNode_id);
             }
         }
         break;
@@ -146,13 +146,13 @@ void GarmentBot::SpinOnce(){
             this->ToState(GarmentAgv::PARKING);
             break;
    case GarmentAgv::PARKED:
-        if (this->__current_mapsite.LOADING)
+        if (this->__current_BranchNode.LOADING)
             this->ToState(GarmentAgv::LOADING);
-        else if (this->__current_mapsite.UNLOADING)
+        else if (this->__current_BranchNode.UNLOADING)
             this->ToState(GarmentAgv::UNLOADING);
-        else if (this->__current_mapsite.SLEEPING)
+        else if (this->__current_BranchNode.SLEEPING)
             this->ToState(GarmentAgv::SLEEPING);
-        else if (this->__current_mapsite.CHARGING)
+        else if (this->__current_BranchNode.CHARGING)
             this->ToState(GarmentAgv::CHARGING);
         break;
    case GarmentAgv::LOADING:
@@ -235,10 +235,10 @@ uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
 void GarmentBot::onMqttReceived(uint8_t* payload){
    // Currently is for testing, 
    // Normally this function will be callback via a MQTT client.
-   this->objMapNavigator.AddSite(1, MapSite::TASK::FOLLOW_LEFT);
-   this->objMapNavigator.AddSite(2, MapSite::TASK::LOADING);
-   this->objMapNavigator.AddSite(3, MapSite::TASK::UNLOADING);
-   this->objMapNavigator.AddSite(4, MapSite::TASK::SLEEPING);
+   this->objMapNavigator.AddNode(1, BranchNode::TASK::FOLLOW_LEFT);
+   this->objMapNavigator.AddNode(2, BranchNode::TASK::LOADING);
+   this->objMapNavigator.AddNode(3, BranchNode::TASK::UNLOADING);
+   this->objMapNavigator.AddNode(4, BranchNode::TASK::SLEEPING);
 
 }
 

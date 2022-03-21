@@ -4,13 +4,13 @@ GarmentAgv::GarmentAgv(){
     this->trackSensor = new TrackSensor_Dual9960(1,2,3,4);
     this->obstacleSensor = new UltraSonicDistanceSensor(1,2);
     this->rfidReader = new MFRC522(1,2);
-}
+} 
 
 void GarmentAgv::SpinOnce(){
-    int distance_to_full_park = 100;      //???
+    // int distance_to_full_park = 100;      //???
     bool loading_finished = true;         // From mqtt
     bool unloading_finished = true;       // from mqtt
-    uint16_t mapsite_id = 0;               // read from RFID
+    uint16_t track_node_id = 0;               // read from RFID
 
     // Obstacle detection
     this->found_obstacle = false;
@@ -22,7 +22,8 @@ void GarmentAgv::SpinOnce(){
     // bool found_slowdown_mark = false;     // from track sensor
     int track_error = this->trackSensor->ReadError_LeftRight();
     int position_error = this->trackSensor->ReadError_FrontRear();
-
+    // bool follow_left = true;
+    // bool going_on_fast_moving = true;
     //    this->onMqttReceived();
     //    this->objBoxMover.SpinOnce();
 
@@ -45,10 +46,18 @@ void GarmentAgv::SpinOnce(){
             this->ToState(SLOW_MOVING_PAUSED);
         else {
             //try to read RFID, have read already.
-            mapsite_id = this->rfidReader->PICC_ReadCardSerial(); 
-            if (mapsite_id > 0){
-                // got the mark
-                // this->onDetectedMark(mapsite_id);
+            track_node_id = this->rfidReader->PICC_ReadCardSerial(); 
+            // got the site_id, we will know should follow left or follow right.
+            // this->__current_navigator_point = this->objMapNavigator.FetchSite(mapsite_id);
+            if (this->__current_navigator_point.GoingOnFollowLeft()){
+                this->trackSensor->__folking = TrackSensor_Dual9960::FOLKING::FOLLOWING_LEFT;
+            }else{
+                this->trackSensor->__folking = TrackSensor_Dual9960::FOLKING::FOLLOWING_RIGHT;
+            }
+            if (this->__current_navigator_point.GoingOnFastMoving()){
+                this->ToState(FAST_MOVING);
+            }else{
+                this->ToState(PARKING);
             }
         }
         break;
@@ -58,11 +67,8 @@ void GarmentAgv::SpinOnce(){
       break;
    case PARKING:
         // try to finish parking
-        if (distance_to_full_park == 0)
+        if(this->DoParking()){
             this->ToState(PARKED);
-        else{
-            // position_error = this->objPositionSensor.ReadError_FromRight();
-            this->SetTargetSpeed(position_error);
         }
         break;
    case PARKING_PAUSED:
@@ -70,13 +76,13 @@ void GarmentAgv::SpinOnce(){
             this->ToState(PARKING);
             break;
    case PARKED:
-        if (this->__current_mapsite.LOADING)
+        if (this->__current_navigator_point.LOADING)
             this->ToState(LOADING);
-        else if (this->__current_mapsite.UNLOADING)
+        else if (this->__current_navigator_point.UNLOADING)
             this->ToState(UNLOADING);
-        else if (this->__current_mapsite.SLEEPING)
+        else if (this->__current_navigator_point.SLEEPING)
             this->ToState(SLEEPING);
-        else if (this->__current_mapsite.CHARGING)
+        else if (this->__current_navigator_point.CHARGING)
             this->ToState(CHARGING);
         break;
    case LOADING:
@@ -129,4 +135,16 @@ void GarmentAgv::ToState(GARMENTAGV_STATE state){
    Serial.println(state);
 
    
+}
+
+// return true:   parked
+// return false:  still parking
+bool GarmentAgv::DoParking(){
+    int track_error = this->trackSensor->ReadError_LeftRight();
+    int position_error = this->trackSensor->ReadError_FrontRear();
+
+    this->SetTargetSpeed(1);
+    if (track_error < 10 && position_error < 10)
+        return true;
+    return false;
 }

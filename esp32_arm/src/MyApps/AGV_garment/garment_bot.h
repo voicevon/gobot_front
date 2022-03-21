@@ -39,10 +39,10 @@ class GarmentBot{
         
     private:
         RemoteSensor objRemoteSensor;
-        MapNavigator objMapNavigator;
+        TrackGraph objMapNavigator;
         
         void onDetectedMark(uint16_t mapsite_id);
-        MapSite __current_mapsite;
+        BranchNode __current_BranchNode;
         uint16_t _ID = 0;
 
 };

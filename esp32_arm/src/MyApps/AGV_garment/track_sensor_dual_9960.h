@@ -44,9 +44,9 @@ class TrackSensor_Dual9960{
         void ClearFlag_SpeedUp();
         bool GetFlag_Slowdown(){if (this->__flag_slow_down == 1) return true; return false;};
         bool GetFlag_Speedup(){if (this->__flag_spped_up == 1) return true; return false;};;
+        FOLKING __folking;
 
     private:
-        FOLKING __folking;
         // TwoWire* __i2c_bus_at_left;
         // TwoWire* __i2c_bus_at_right;
         Adafruit_APDS9960* __apds_left;

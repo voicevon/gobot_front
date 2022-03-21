@@ -1,41 +1,50 @@
 #pragma once
 #include <stdint.h>
 
-class MapSite{
+ 
+class BranchNode{
     public:
-        MapSite(){
-            this->SiteId = 0;
+        BranchNode(){
+            this->NodeId = 0;
         }
         enum TASK{
             FOLLOW_LEFT,
             FOLLLOW_RIGHT,
+            TURN_LEFT,
+            TURN_RIGHT,
             LOADING,
             UNLOADING,
             SLEEPING,
             CHARGING,
         };
-        MapSite(uint16_t site_id, TASK task ){
-            this->SiteId = site_id;
+        BranchNode(uint16_t NodeId, TASK task ){
+            this->NodeId = NodeId;
             this->task = task;
             // this->FollowLeft = follow_left;
             // this->ShouldPark = should_park;
             };
-        uint16_t SiteId; 
+        uint16_t NodeId; 
         TASK task;
-        // bool FollowLeft = true;
-
-
-        // bool ShouldPark = false;
+        bool GoingOnFollowLeft(){
+            if (this->task == FOLLOW_LEFT || this->task == TURN_LEFT)
+                return true;
+            return false;
+        };
+        bool GoingOnFastMoving(){
+            if (this->task == FOLLOW_LEFT || this->task == FOLLLOW_RIGHT)
+                return true;
+            return false;
+        };
 };
 
 
-class MapNavigator{
+class TrackGraph{
     public:
-        MapNavigator();
-        bool AddSite(uint16_t site_id, MapSite::TASK task);
-        bool RemoveSite(uint16_t site_id);
-        bool FetchSite(uint16_t site_id, MapSite* the_site );
+        TrackGraph();
+        bool AddNode(uint16_t NodeId, BranchNode::TASK task);
+        bool RemoveNode(uint16_t NodeId);
+        bool FetchNode(uint16_t NodeId, BranchNode* the_node );
 
     private:
-        MapSite __all_sites[20];
+        BranchNode __all_branch_nodes[20];
 };
