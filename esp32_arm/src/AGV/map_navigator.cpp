@@ -1,5 +1,12 @@
 # include "map_navigator.h"
 
+BranchNode::BranchNode(){
+    this->NodeId = 0;
+}
+BranchNode::BranchNode(uint16_t NodeId, TASK task ){
+    this->NodeId = NodeId;
+    this->task = task;
+}
 TrackGraph::TrackGraph(){
     for(int i=0; i<20; i++){
         this->__all_branch_nodes[i].NodeId = 0;

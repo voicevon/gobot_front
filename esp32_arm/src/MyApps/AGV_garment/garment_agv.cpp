@@ -20,8 +20,8 @@ void GarmentAgv::SpinOnce(){
 
 
     // bool found_slowdown_mark = false;     // from track sensor
-    int track_error = this->trackSensor->ReadError_LeftRight();
-    int position_error = this->trackSensor->ReadError_FrontRear();
+    int16_t x_error = 0;
+    int16_t y_error = 0;
     // bool follow_left = true;
     // bool going_on_fast_moving = true;
     //    this->onMqttReceived();
@@ -32,10 +32,14 @@ void GarmentAgv::SpinOnce(){
         if (found_obstacle)
             this->ToState(FAST_MOVING_PAUSED);
         // check if see the mark of slow-down.
-        else if (track_error)
+        else if (this->trackSensor->GetFlag_Slowdown()){
             this->ToState(SLOW_MOVING);
-        else
-            this->MoveForward(track_error);
+            this->trackSensor->ClearFlag_Slowdown();
+        }else{
+            //going on with fast_moving.
+            x_error = this->trackSensor->SpinOnce_Forwarding();
+            this->MoveForward(x_error);
+        }
         break;
     case FAST_MOVING_PAUSED:
         if (!found_obstacle)
@@ -49,16 +53,16 @@ void GarmentAgv::SpinOnce(){
             track_node_id = this->rfidReader->PICC_ReadCardSerial(); 
             // got the site_id, we will know should follow left or follow right.
             // this->__current_navigator_point = this->objMapNavigator.FetchSite(mapsite_id);
-            if (this->__current_navigator_point.GoingOnFollowLeft()){
-                this->trackSensor->__folking = TrackSensor_Dual9960::FOLKING::FOLLOWING_LEFT;
-            }else{
-                this->trackSensor->__folking = TrackSensor_Dual9960::FOLKING::FOLLOWING_RIGHT;
-            }
-            if (this->__current_navigator_point.GoingOnFastMoving()){
-                this->ToState(FAST_MOVING);
-            }else{
-                this->ToState(PARKING);
-            }
+            // if (this->__current_navigator_point.GoingOnFollowLeft()){
+            //     this->trackSensor->__folking = TrackSensor_Dual9960::FOLKING::FOLLOWING_LEFT;
+            // }else{
+            //     this->trackSensor->__folking = TrackSensor_Dual9960::FOLKING::FOLLOWING_RIGHT;
+            // }
+            // if (this->__current_navigator_point.GoingOnFastMoving()){
+            //     this->ToState(FAST_MOVING);
+            // }else{
+            //     this->ToState(PARKING);
+            // }
         }
         break;
    case SLOW_MOVING_PAUSED:
@@ -137,14 +141,15 @@ void GarmentAgv::ToState(GARMENTAGV_STATE state){
    
 }
 
-// return true:   parked
+// return true:   reach parked position
 // return false:  still parking
 bool GarmentAgv::DoParking(){
-    int track_error = this->trackSensor->ReadError_LeftRight();
-    int position_error = this->trackSensor->ReadError_FrontRear();
+    int16_t x_error ;
+    int16_t y_error ;
+    this->trackSensor->SpinOnce_Parking(&x_error, &y_error);
 
     this->SetTargetSpeed(1);
-    if (track_error < 10 && position_error < 10)
+    if (x_error < 10 && y_error < 10)
         return true;
     return false;
 }

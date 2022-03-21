@@ -3,19 +3,34 @@
 /*
 .             TRACK                                    TRACK
 .(WHITE)     (BLACK)      (WHITE)
+.         |**********|                              |green green| 
+.         |**********|                              |green green| 
+.         |**********|                              |green green| 
+.         |**********|                              |green green| 
+.         |**********|                              |red    red | 
 .         |**********|                              |red    red | 
 .         |**********|                              |red    red | 
 .         |**********|                          |-- |red    red |--|
-.         |**********|                          |   |green green|  |
-.         |**********|                          |   |green green|  |
-.         |**********|                          |   |green green|  | 
 .     |-------|  |-------|                      |   |black black|  |    
 .     |       |  |       |                      |       |  |       |
-.     |  left |  | right |                      |-------|  |-------|
-.     | sensor|  | sensor|  
-.     | window|  | window|  
+.     |  left |  | right |                      |       |  |       |
+.     | sensor|  | sensor|                      |       |  |       |
+.     | window|  | window|                      |-------|  |-------|
 .     |-------|  |-------|  
-
+.
+.
+.
+.
+.             Forward to.  Y   
+.                          ^                  
+.                          |                  
+.                          |                  
+.                          |                  
+.                          |                  
+.                          |                  
+.                   --------------> X
+.
+.
 */
 
 #include "stdint.h"
@@ -24,34 +39,20 @@
 
 class TrackSensor_Dual9960{
     public:
-        enum FOLKING{
-            // left is white, right is black.
-            FOLLOWING_LEFT = 1,
-            // left is black, right is white.
-            FOLLOWING_RIGHT = 2,
-        };
-        enum MODE{
-            PARKING = 1,
-            SLOW_MOVING = 2,
-            FAST_MOVING = 3, 
-            PARKED = 4,
-        };
-
         TrackSensor_Dual9960(uint8_t left_sensor_pin_sda, uint8_t left_sensor_pin_sclk, uint8_t right_sensor_pin_sda, uint8_t right_sensor_pin_sclk);
-        float ReadError_LeftRight();
-        float ReadError_FrontRear();
+        int16_t SpinOnce_Forwarding();
+        void SpinOnce_Parking(int16_t* x_error, int16_t* y_error);
+        // float ReadError_X();
+        // float ReadError_Y();
         void ClearFlag_Slowdown();
         void ClearFlag_SpeedUp();
         bool GetFlag_Slowdown(){if (this->__flag_slow_down == 1) return true; return false;};
         bool GetFlag_Speedup(){if (this->__flag_spped_up == 1) return true; return false;};;
-        FOLKING __folking;
 
     private:
-        // TwoWire* __i2c_bus_at_left;
-        // TwoWire* __i2c_bus_at_right;
         Adafruit_APDS9960* __apds_left;
         Adafruit_APDS9960* __apds_right;
-
+        Adafruit_APDS9960* __current_sensor;
         /*
         0:  begin with setting flag to 0.
         1:  sensor set flag to 1 , when sensor detected mark.
@@ -61,7 +62,6 @@ class TrackSensor_Dual9960{
         */
         uint8_t __flag_spped_up;
         uint8_t __flag_slow_down;
-
 
         
         

@@ -4,9 +4,7 @@
  
 class BranchNode{
     public:
-        BranchNode(){
-            this->NodeId = 0;
-        }
+
         enum TASK{
             FOLLOW_LEFT,
             FOLLLOW_RIGHT,
@@ -17,24 +15,12 @@ class BranchNode{
             SLEEPING,
             CHARGING,
         };
-        BranchNode(uint16_t NodeId, TASK task ){
-            this->NodeId = NodeId;
-            this->task = task;
-            // this->FollowLeft = follow_left;
-            // this->ShouldPark = should_park;
-            };
+        BranchNode();
+        BranchNode(uint16_t NodeId, TASK task);
         uint16_t NodeId; 
         TASK task;
-        bool GoingOnFollowLeft(){
-            if (this->task == FOLLOW_LEFT || this->task == TURN_LEFT)
-                return true;
-            return false;
-        };
-        bool GoingOnFastMoving(){
-            if (this->task == FOLLOW_LEFT || this->task == FOLLLOW_RIGHT)
-                return true;
-            return false;
-        };
+        // bool GoingOnFollowLeft();
+        // bool GoingOnFastMoving();
 };
 
 
