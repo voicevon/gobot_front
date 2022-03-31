@@ -1,6 +1,7 @@
 #pragma once
 // #include "SimpleFOC/sensors/Encoder.h"
-#include "SimpleFOC/common/base_classes/Sensor.h"
+// #include "SimpleFOC/common/base_classes/Sensor.h"
+#include <SimpleFOC.h>
 
 enum Formula {
     LinearEquation = 1,   // Out = Slope * ( Raw_value + offset)

@@ -3,7 +3,8 @@
 
 #include "Arduino.h"
 #include "../ActuatorBase.h"
-#include "SimpleFOC/common/base_classes/Sensor.h"
+// #include "SimpleFOC/common/base_classes/Sensor.h"
+#include <SimpleFOC.h>
 #include "DCDriverHBridge.h"
 
 

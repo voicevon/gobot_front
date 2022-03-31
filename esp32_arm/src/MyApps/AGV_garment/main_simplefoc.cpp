@@ -108,7 +108,7 @@ void setup_simplefoc() {
 	_delay(1000);
 }
 
-void loop_useless() {
+void loop_simplefoc() {
 
   // main FOC algorithm function
   // the faster you run this function the better

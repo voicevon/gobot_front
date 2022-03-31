@@ -1,8 +1,9 @@
 #pragma once
 
 
-#include "SimpleFOC/common/base_classes/Sensor.h"
-#include "SimpleFOC/common/time_utils.h"
+// #include "SimpleFOC/common/base_classes/Sensor.h"
+// #include "SimpleFOC/common/time_utils.h"
+#include <SimpleFOC.h>
 #include "stdint.h"
 #include "SensorBase.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SimpleFOC/common/pid.h"
+#include <SimpleFOC.h>
 #include "Robot/Actuator/ActuatorBase.h"
 #include "track_sensor_base.h"
 #include "MyLibs/message_consumer.h"
