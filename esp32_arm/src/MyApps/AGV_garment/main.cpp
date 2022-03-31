@@ -98,6 +98,11 @@ void loop(){
     mybot->SpinOnce();
     mq_sync_box_mover->SpinOnce();
     mq_sync_twin_wheels->SpinOnce();
+
+    // motor.loopFOC();
+    // motor.move(target_angle);
+    // motor.monitor();
+    // commander.run();
 }
 
 #endif
