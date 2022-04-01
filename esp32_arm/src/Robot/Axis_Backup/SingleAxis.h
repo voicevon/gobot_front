@@ -3,7 +3,8 @@
 #include <Arduino.h>
 // #include "../HomeTriger.h"
 #include "ESP32Step/src/Stepper.h"
-#include "SimpleFOC/sensors/Encoder.h"
+// #include "SimpleFOC/sensors/Encoder.h"
+#include <SimpleFOC.h>
 #include "Robot/Actuator/ActuatorBase.h"
 
 // http://www.gammon.com.au/forum/?id=12983     static instances code for attachInterupt()

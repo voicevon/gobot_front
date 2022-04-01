@@ -18,7 +18,7 @@ I2c_commu obj_i2c_bus = I2c_commu();
 //********************************************************************************************
 //    MQTT publish only, will not subscribe and topic
 //********************************************************************************************
-#include "Robot/command_queue_rabbit.h"
+#include "Robot/mqtt_syncer.h"
 extern AsyncMqttClient mqttClient;
 bool mqtt_is_connected = false;
 void dispatch_MqttConnected(bool sessionPresent){

@@ -34,9 +34,10 @@ class RabbitClient():
                         routing_key='gobot_x2134_house',
                         body = gcode)
 
-    def PublishToAgv(self, gcode:str):
+    def PublishToAgv(self, routing_key:str, gcode:str):
         self.channel.basic_publish(exchange='',
-                        routing_key='agv_x2206',
+                        # routing_key='agv_x2206',
+                        routing_key=routing_key,
                         body = gcode)
 
     def RabbitMQ_publish_tester(self):

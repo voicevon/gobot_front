@@ -29,7 +29,7 @@ class TaskQueue():
                 return task
         return None
 
-    def AppendTask(cls, task_id:int, source_station: int, target_station:int)->bool:
+    def AppendTask(cls, task_id:int, source_station:int, target_station:int)->bool:
         task = BotTask(task_id)
         task.SourceSite_id = source_station
         task.TargetSite_id = target_station

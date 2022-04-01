@@ -8,42 +8,75 @@
 #include "box_mover/box_mover.h"
 #include "AGV/map_navigator.h"
 #include "remote_sensor.h"
-#include "garment_agv.h"
+#include "twin_wheels_agv.h"
+#include <MFRC522.h>
 
 // #define PIN_LED_POWER_2130 23
 
 
+/*    
+.     
+.     
+.      <---------------------------------------------------------------------------------------------\
+,     |                                                                                              | 
+.   Agv Moving --> Agv Parked ---------> Robot_Loading  -----^  
+.      (Read Mark RFID)           |
+.                                 |-------> Robot_Unloading --^
+.                                 |                           |
+.                                 |-------> Charging ---------^
+.                                 |                           |
+.                                 |--------> Sleeping --------^
+.                                 |                           |
+.                                 |--------> Charging --------^
+*/
 
 
 
-
+// What I know:
+//      1. mqtt command, and message queue of map and navigation. 
+//      2. read RFID, determin vehical speed or parking.
+//      3. Battery voltage.
+//      4. Distance sensor, to detect obstacle.
+// What I don't know:
+//      1. track sensor, and position-Y error, PID controller 
+//      2. motor and speed control .
 class GarmentBot{
     public:
 
         GarmentBot();
         BoxMover objBoxMover = BoxMover();
-        VehicalTwinWheel objTwinWheel = VehicalTwinWheel();
-        TwinWheelHardware objTwinWheelHardware = TwinWheelHardware();
-
+        TwinWheelsAgv objAgv = TwinWheelsAgv();
+        // VehicalTwinWheel objTwinWheel = VehicalTwinWheel();
+        // TwinWheelHardware objTwinWheelHardware = TwinWheelHardware();
+        enum BOT_STATE{
+            BOT_SLEEPING = 0,
+            AGV_MOVING_TO_SOURCE,
+            AGV_PARKED_AT_SOURCE,
+            ROBOT_LOADING,
+            AGV_MOVING_TO_DESTINATION,
+            AGV_PARKED_AT_DESTINATION,
+            ROBOT_UNLOADING,
+            BOT_CHARGING,
+            BOT_EMERGENCY_STOPING,
+        };
         void Init();
         void SpinOnce();
-        void ToState(GarmentAgv::GARMENTAGV_STATE state);
+        void ToState(GarmentBot::BOT_STATE state);
         void Test(int test_id);
         uint8_t GetMqtt_PubPayload(uint8_t* chars);
         void onMqttReceived(uint8_t* payload);
         
     protected:
-        GarmentAgv::GARMENTAGV_STATE _State;
-        GarmentAgv::GARMENTAGV_STATE _last_state;
-        void SpinOnce_Working();
         
     private:
-        RemoteSensor objRemoteSensor;
         TrackGraph objMapNavigator;
+        MFRC522* rfidReader;   // = MFRC522(10, 9);  // Create MFRC522 instance
+        UltraSonicDistanceSensor *obstacleSensor; // = UltraSonicDistanceSensor(HS04_PIN_ECHO,HS04_PIN_TRIG); //initialisation class HCSR04 (trig pin , echo pin)
         
         void onDetectedMark(uint16_t mapsite_id);
         BranchNode __current_BranchNode;
         uint16_t _ID = 0;
+        GarmentBot::BOT_STATE __state;
 
 };
 

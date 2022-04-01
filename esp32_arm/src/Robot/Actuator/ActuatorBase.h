@@ -4,12 +4,12 @@
 #include "Arduino.h"
 
 
-
-#include "SimpleFOC/common/pid.h"
+#include <SimpleFOC.h>
+// #include "SimpleFOC/common/pid.h"
 // #include "SimpleFOC/common/base_classes/Sensor.h"
 // #include "Robot/Sensor/IREncoderHelper.h"
 #include "Robot/Sensor/SensorHelperBase.h"
-#include "SimpleFOC/common/defaults.h"
+// #include "SimpleFOC/common/defaults.h"
 #include "Robot/Actuator/DriverBase.h"
 
 /**
