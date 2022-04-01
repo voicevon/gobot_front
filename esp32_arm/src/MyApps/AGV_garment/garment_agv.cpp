@@ -3,7 +3,7 @@
 
 GarmentAgv::GarmentAgv(){
     this->trackSensor = new TrackSensor_Dual9960(1,2,3,4);
-    this->sensor_left_wheel = new HallSensor(2, 3, 4, 11);
+    // this->sensor_left_wheel = new HallSensor(2, 3, 4, 11);
     // this->sensor_left_wheel.pullup = Pullup::USE_INTERN;
     // this->leftWheel.sen
 } 

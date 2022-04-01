@@ -16,16 +16,38 @@ GarmentBot *mybot; // = GarmentBot();
 GcodeQueue* gcode_queue;
 MessageQueue* message_queue;
 
-HallSensor sensor_left = HallSensor(21,22,23,24);
-HallSensor sensor_right = HallSensor(21,22,23,24);
-
+HallSensor sensor_left = HallSensor(21,22,23,15);
 void doA_left(){sensor_left.handleA();}
 void doB_left(){sensor_left.handleB();}
 void doC_left(){sensor_left.handleC();}
 
+HallSensor sensor_right = HallSensor(21,22,23,15);
 void doA_right(){sensor_right.handleA();}
 void doB_right(){sensor_right.handleB();}
 void doC_right(){sensor_right.handleC();}
+
+
+void setup_agv_motors(){
+    SingleWheel_config* config = &mybot->objGarmentAgv.objLeftWheel.config;
+    config->hall_sensor = &sensor_left;
+    config->hall_do_A = &doA_left;
+    config->hall_do_B = &doB_left;
+    config->hall_do_C = &doC_left;
+    config->driver_pin_a = 1;
+    config->driver_pin_b = 2;
+    config->driver_pin_c = 3;
+    config->driver_pin_enable = 4;
+
+    config = &mybot->objGarmentAgv.objLeftWheel.config;
+    config->hall_sensor = &sensor_right;
+    config->hall_do_A = &doA_right;
+    config->hall_do_B = &doB_right;
+    config->hall_do_C = &doC_right;  
+    config->driver_pin_a = 1;
+    config->driver_pin_b = 2;
+    config->driver_pin_c = 3;
+    config->driver_pin_enable = 4;  
+}
 
 void setup(){
     Serial.begin(115200);
@@ -33,6 +55,7 @@ void setup(){
     gcode_queue = new GcodeQueue();
     message_queue = new MessageQueue();
     mybot = new GarmentBot();
+    setup_agv_motors();
     mybot->Init();
     // mybot->objBoxMover.LinkLocalMessageQueue(gcode_queue);
     // mybot->objTwinWheelHardware.LinkLocalMessageQueue(message_queue);

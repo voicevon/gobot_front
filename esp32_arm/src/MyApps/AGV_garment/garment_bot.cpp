@@ -3,15 +3,16 @@
 #include "garment_bot.h"
 
 GarmentBot::GarmentBot(){
+   
 }
 
 void GarmentBot::Init(){
    Serial.print("\n[Info] GarmentBot::Init() is entering");
    // Setting PWM channels properties, Totally Esp32 has 16 channels
-   const int freq = 30000;
-   const int resolution = 8;   // so max pwm speed is 255
-   ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites
-   ledcSetup(PWM_CHANNEL_1, freq, resolution); 
+   // const int freq = 30000;
+   // const int resolution = 8;   // so max pwm speed is 255
+   // ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites
+   // ledcSetup(PWM_CHANNEL_1, freq, resolution); 
 
 
    // Init I2C bus
@@ -135,6 +136,7 @@ void GarmentBot::SpinOnce(){
       	break;
    }
 }
+
 void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 	if (state == this->__state) {
 		Serial.print("[Warning] GarmentBot::ToState()  Repeated! \n\n");

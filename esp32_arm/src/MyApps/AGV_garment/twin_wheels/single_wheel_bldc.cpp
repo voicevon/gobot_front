@@ -1,26 +1,26 @@
 #include "single_wheel_bldc.h"
 
 SingleWheel_BLDC::SingleWheel_BLDC(SingleWheel_config config){
-    this->__config = config;
+    this->config = config;
 
-    this->sensor = new HallSensor(config.hall_sensor_pin_a, config.hall_sensor_pin_b, config.driver_pin_c, config.hall_sensor_pp);
-	this->sensor->pullup = Pullup::USE_INTERN;
+    // this->__sensor = new HallSensor(config.hall_sensor_pin_a, config.hall_sensor_pin_b, config.driver_pin_c, config.hall_sensor_pp);
+	this->__sensor->pullup = Pullup::USE_INTERN;
 	// void* (*)(void *) cc;
 	// void (*foo)();
-	// void (HallSensor::* xx)() = & HallSensor::init; 
-	// HallSensor hhh = HallSensor(1,2,3,4);
+	// void (Hall__sensor::* xx)() = & Hall__sensor::init; 
+	// Hall__sensor hhh = Hall__sensor(1,2,3,4);
 	// (hhh.*xx)();
-	// foo= 	void (HallSensor::* xx)() = & HallSensor::init;
-	// xx= &sensor->attachSectorCallback;
-	this->sensor->enableInterrupts(config.hall_do_A, config.hall_do_B, config.hall_do_C);
-	this->sensor->init();
-	motor.linkSensor(sensor);
+	// foo= 	void (Hall__sensor::* xx)() = & Hall__sensor::init;
+	// xx= &__sensor->attachSectorCallback;
+	this->__sensor->init();
+	this->__sensor->enableInterrupts(config.hall_do_A, config.hall_do_B, config.hall_do_C);
+	this->motor.linkSensor(this->__sensor);
 
-    this->driver = new BLDCDriver3PWM(config.driver_pin_a, config.driver_pin_b, config.driver_pin_c, config.driver_pin_enable);
-	this->driver->voltage_power_supply = 6;
-	this->driver->voltage_limit = 6;
-	this->driver->init();
-	motor.linkDriver(this->driver);
+    this->__driver = new BLDCDriver3PWM(config.driver_pin_a, config.driver_pin_b, config.driver_pin_c, config.driver_pin_enable);
+	this->__driver->voltage_power_supply = 6;
+	this->__driver->voltage_limit = 6;
+	this->__driver->init();
+	this->motor.linkDriver(this->__driver);
 
 	// motor.foc_modulation = FOCModulationType::SpaceVectorPWM;
 
@@ -63,7 +63,7 @@ SingleWheel_BLDC::SingleWheel_BLDC(SingleWheel_config config){
 	_delay(1000);
 }
 
-void SingleWheel_BLDC::loop_simplefoc() {
+void SingleWheel_BLDC::SpinOnce() {
     motor.loopFOC();
     // Motion control function
     // velocity, position or voltage (defined in motor.controller)

@@ -11,11 +11,12 @@ A wheel is composed with:
 
 class SingleWheel_config{
 	public:
-		uint8_t hall_sensor_pin_a;
-		uint8_t hall_sensor_pin_b;
-		uint8_t hall_sensor_pin_c;
+		char name;
+		// uint8_t hall_sensor_pin_a;
+		// uint8_t hall_sensor_pin_b;
+		// uint8_t hall_sensor_pin_c;
 		uint8_t hall_sensor_pp = 15;
-
+		HallSensor* hall_sensor;
 		void (*hall_do_A)();
 		void (*hall_do_B)();
 		void (*hall_do_C)();
@@ -29,19 +30,19 @@ class SingleWheel_config{
 
 class SingleWheel_BLDC{
 	public:
+		SingleWheel_BLDC(){};
 		SingleWheel_BLDC(SingleWheel_config config);
-		HallSensor* sensor;  // = HallSensor() ;// = HallSensor(21,22,23,24);
+		SingleWheel_config config;
 		float target_angle = 2;
-		PIDController pid = motor.PID_velocity;
-		BLDCMotor motor = BLDCMotor(15);
-		BLDCDriver3PWM* driver;  // = BLDCDriver3PWM();
-		Commander commander = Commander(Serial);
-
-		void loop_simplefoc();
+		void SpinOnce();
 		void Test(){
 			// __config.do_A = 11;
 		};
 	private:
-		SingleWheel_config __config;
+		HallSensor* __sensor;  // = HallSensor() ;// = HallSensor(21,22,23,24);
+		BLDCDriver3PWM* __driver;  // = BLDCDriver3PWM();
+		BLDCMotor motor = BLDCMotor(15);
+		PIDController pid = motor.PID_velocity;
+		Commander commander = Commander(Serial);
 
 };
