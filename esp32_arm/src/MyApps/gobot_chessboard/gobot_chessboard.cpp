@@ -89,6 +89,8 @@ String GobotChessboard::__GetGcode_for_eef_action(EefAction eef_action){
 	default:
 		break;
 	}
+	String xx = "";
+	return xx;
 }
 
 void GobotChessboard::__Pickup(ChessboardCell* cell){

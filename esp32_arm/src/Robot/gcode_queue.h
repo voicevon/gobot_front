@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Gcode.h"
-#include "RobotBase.h"
 #include "MyLibs/message_queue.h"
 
 class GcodeQueue: public MessageQueue{

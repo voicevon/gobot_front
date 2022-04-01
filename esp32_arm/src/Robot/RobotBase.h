@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Robot/Gcode.h>
+// #include <Robot/Gcode.h>
 #include <Robot/eef_standard_code.h>
 #include "Robot/Commu/CommuDeviceBase.h"
-#include "MyLibs/message_consumer.h"
+#include "Robot/gcode_consumer.h"
 
 class FkPositionBase{
     
@@ -96,9 +96,8 @@ enum class RobotState{
     RUNNING_G4,
     RUNNING_G28
 };
-class RobotBase: public MessageConsumer{
+class RobotBase: public GcodeConsumer{
     public:
-
         RobotState State = RobotState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
