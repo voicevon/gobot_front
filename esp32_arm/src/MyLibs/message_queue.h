@@ -3,6 +3,8 @@
 #define MESSAGE_COUNT_IN_QUEUE 22
 // #include <Arduino.h>  //for String only
 #include <WString.h>
+
+
 class MessageQueue{
     public:
         struct SingleMessage{
@@ -10,14 +12,18 @@ class MessageQueue{
             char payload[MAX_BYTES_PER_MESSAGE];
             int length;
         };
-    
+        // For Producer:    
         bool AppendMessage(String payload);
         bool AppendMessage(const char* payload, int length);
-        bool BufferIsEmpty();  //TODO: remove this function?
         bool BufferIsFull();
         int GetFreeBuffersCount();
-        SingleMessage* GetHeadMessage();
+
+        // For Consumer:
+        bool BufferIsEmpty();  //TODO: remove this function?
         SingleMessage* FetchTailMessage();
+
+        // For both Producer and Consumer:
+        SingleMessage* GetHeadMessage();
         void SayHello(String title);
 
     protected:
