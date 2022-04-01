@@ -44,7 +44,11 @@ void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProp
         Serial.print("  total: ");
         Serial.println(total);
     }
-    if (1==1){
+    
+    return;
+
+
+    if (topic=="boxmover/*"){
         mq_sync_box_mover->OnReceived(payload, len);
     }else{
         mq_sync_twin_wheels->OnReceived(payload, len);
@@ -57,7 +61,7 @@ void setup_mqtt(GcodeQueue* gcode_queue, MessageQueue* message_queue){
     mq_sync_box_mover = new MqttSyncer();
     mq_sync_box_mover->LinkLocalCommandQueue(gcode_queue);
     mq_sync_twin_wheels = new MqttSyncer();
-    mq_sync_twin_wheels->LinkLocalCommandQueue(message_queue);
+    // mq_sync_twin_wheels->LinkLocalCommandQueue(message_queue);
     mqttClient.onConnect(dispatch_MqttConnected);
     mqttClient.onMessage(dispatch_MqttMessage);
     while (! mqtt_is_connected){

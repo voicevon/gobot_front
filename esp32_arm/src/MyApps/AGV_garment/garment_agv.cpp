@@ -1,21 +1,29 @@
 #include "garment_agv.h"
 
+
 GarmentAgv::GarmentAgv(){
     this->trackSensor = new TrackSensor_Dual9960(1,2,3,4);
-    this->obstacleSensor = new UltraSonicDistanceSensor(1,2);
-    this->rfidReader = new MFRC522(1,2);
+    this->sensor_left_wheel = new HallSensor(2, 3, 4, 11);
+    // this->sensor_left_wheel.pullup = Pullup::USE_INTERN;
+    // this->leftWheel.sen
 } 
+
+// void GarmentAgv::LinkTrackSensor(AgvTrackSensor* tracksensor){
+//     this->trackSensor = tracksensor;
+// }
+
 
 void GarmentAgv::SpinOnce(){
     // int distance_to_full_park = 100;      //???
-    bool loading_finished = true;         // From mqtt
-    bool unloading_finished = true;       // from mqtt
-    uint16_t track_node_id = 0;               // read from RFID
+    // bool loading_finished = true;         // From mqtt
+    // bool unloading_finished = true;       // from mqtt
+    // uint16_t track_node_id = 0;               // read from RFID
 
     // Obstacle detection
     this->found_obstacle = false;
-    float distance =  this->obstacleSensor->measureDistanceCm(); 
-    if (distance >0 && distance <50) 
+    // float distance =  this->obstacleSensor->measureDistanceCm(); 
+    float distance_to_obstacle =  22; 
+    if (distance_to_obstacle >0 && distance_to_obstacle <50) 
         this->found_obstacle = true;
 
 
@@ -50,7 +58,7 @@ void GarmentAgv::SpinOnce(){
             this->ToState(SLOW_MOVING_PAUSED);
         else {
             //try to read RFID, have read already.
-            track_node_id = this->rfidReader->PICC_ReadCardSerial(); 
+            // track_node_id = this->rfidReader->PICC_ReadCardSerial(); 
             // got the site_id, we will know should follow left or follow right.
             // this->__current_navigator_point = this->objMapNavigator.FetchSite(mapsite_id);
             // if (this->__current_navigator_point.GoingOnFollowLeft()){
@@ -80,55 +88,55 @@ void GarmentAgv::SpinOnce(){
             this->ToState(PARKING);
             break;
    case PARKED:
-        if (this->__current_navigator_point.LOADING)
-            this->ToState(LOADING);
-        else if (this->__current_navigator_point.UNLOADING)
-            this->ToState(UNLOADING);
-        else if (this->__current_navigator_point.SLEEPING)
-            this->ToState(SLEEPING);
-        else if (this->__current_navigator_point.CHARGING)
-            this->ToState(CHARGING);
+        // if (this->__current_navigator_point.LOADING)
+        //     this->ToState(LOADING);
+        // else if (this->__current_navigator_point.UNLOADING)
+        //     this->ToState(UNLOADING);
+        // else if (this->__current_navigator_point.SLEEPING)
+        //     this->ToState(SLEEPING);
+        // else if (this->__current_navigator_point.CHARGING)
+        //     this->ToState(CHARGING);
         break;
-   case LOADING:
-        if (loading_finished)
-            this->ToState(FAST_MOVING);
-        break;
-   case UNLOADING:
-      if (unloading_finished)
-         this->ToState(FAST_MOVING);
-      break;
-   case SLEEPING:
-      /* code */
-      break;
+//    case LOADING:
+//         if (loading_finished)
+//             this->ToState(FAST_MOVING);
+//         break;
+//    case UNLOADING:
+//       if (unloading_finished)
+//          this->ToState(FAST_MOVING);
+//       break;
+//    case SLEEPING:
+//       /* code */
+//       break;
    
    default:
       break;
    }
 }
 
-void GarmentAgv::ToState(GARMENTAGV_STATE state){
+void GarmentAgv::ToState(AGV_STATE state){
    if (state == this->_State) return;
    switch(state){
-      case SLEEPING:
-            this->Stop();
-            break;
+    //   case SLEEPING:
+    //         this->Stop();
+    //         break;
       case FAST_MOVING:
-            this->SetTargetSpeed(220);
+            this->SetForwardSpeed(220);
             break;
       case SLOW_MOVING:
-            this->SetTargetSpeed(100);
+            this->SetForwardSpeed(100);
             break;
       case PARKING:
-            this->SetTargetSpeed(20);
+            this->SetForwardSpeed(20);
             break;
-      case LOADING:
-            // this->LoadBox();
-            break;
-      case UNLOADING:
-            // this->objBoxMover.UnloadBox();
-            break;
-      case CHARGING:
-         break;
+    //   case LOADING:
+    //         // this->LoadBox();
+    //         break;
+    //   case UNLOADING:
+    //         // this->objBoxMover.UnloadBox();
+    //         break;
+    //   case CHARGING:
+    //      break;
       
 
       default:
@@ -148,7 +156,7 @@ bool GarmentAgv::DoParking(){
     int16_t y_error ;
     this->trackSensor->SpinOnce_Parking(&x_error, &y_error);
 
-    this->SetTargetSpeed(1);
+    this->SetForwardSpeed(1);
     if (x_error < 10 && y_error < 10)
         return true;
     return false;

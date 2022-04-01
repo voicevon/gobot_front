@@ -13,10 +13,19 @@
 #define PIN_ENCODER_B 13
 
 GarmentBot *mybot; // = GarmentBot();
-GarmentAgv agv;
-
 GcodeQueue* gcode_queue;
 MessageQueue* message_queue;
+
+HallSensor sensor_left = HallSensor(21,22,23,24);
+HallSensor sensor_right = HallSensor(21,22,23,24);
+
+void doA_left(){sensor_left.handleA();}
+void doB_left(){sensor_left.handleB();}
+void doC_left(){sensor_left.handleC();}
+
+void doA_right(){sensor_right.handleA();}
+void doB_right(){sensor_right.handleB();}
+void doC_right(){sensor_right.handleC();}
 
 void setup(){
     Serial.begin(115200);
@@ -25,20 +34,19 @@ void setup(){
     message_queue = new MessageQueue();
     mybot = new GarmentBot();
     mybot->Init();
-    mybot->objBoxMover.LinkLocalMessageQueue(gcode_queue);
-    mybot->objTwinWheelHardware.LinkLocalMessageQueue(message_queue);
-    setup_mqtt(gcode_queue, message_queue);
+    // mybot->objBoxMover.LinkLocalMessageQueue(gcode_queue);
+    // mybot->objTwinWheelHardware.LinkLocalMessageQueue(message_queue);
+    // setup_mqtt(gcode_queue, message_queue);
 
-    setup_simplefoc();
-    Serial.println ("\n\n  Setup_wifi_mqtt is done. ------------------------------------ ");
+    // setup_simplefoc();
+    Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
 }
 
 
 void loop(){
     mybot->SpinOnce();
-
-    loop_simplefoc();
-    loop_mqtt();
+    // loop_simplefoc();
+    // loop_mqtt();
 }
 
 #endif

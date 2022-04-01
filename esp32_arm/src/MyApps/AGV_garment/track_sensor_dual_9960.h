@@ -36,8 +36,9 @@
 #include "stdint.h"
 #include "Wire.h"
 #include "Adafruit_APDS9960.h"
+#include "AGV/agv_sensor_base.h"
 
-class TrackSensor_Dual9960{
+class TrackSensor_Dual9960: public AgvTrackSensor{
     public:
         TrackSensor_Dual9960(uint8_t left_sensor_pin_sda, uint8_t left_sensor_pin_sclk, uint8_t right_sensor_pin_sda, uint8_t right_sensor_pin_sclk);
         int16_t SpinOnce_Forwarding();

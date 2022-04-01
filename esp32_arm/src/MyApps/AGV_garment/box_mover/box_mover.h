@@ -6,7 +6,7 @@
 
 class BoxMover: public GcodeProducer{
     public:
-        enum EnumState{ START, 
+        enum BoxMoverState{ START, 
                                 RESETTING, 
                                 READY_TO_LOAD, 
                                 LOADING, 
@@ -16,13 +16,14 @@ class BoxMover: public GcodeProducer{
                                 UNLOADING, 
                                 UNLOADED
                                 };
-        EnumState State;
+        BoxMover::BoxMoverState State;
 
         BoxMover();
         void ParkArms(bool do_homing);
         void LoadBox();
         void UnloadBox();
         void SpinOnce(); 
+        BoxMover::BoxMoverState GetState(){return this->State;};
         // GcodeQueue* GetCommandQueue(){return this->__commandQueue;};
     
     private:
