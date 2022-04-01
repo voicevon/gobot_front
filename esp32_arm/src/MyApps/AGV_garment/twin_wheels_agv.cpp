@@ -24,8 +24,13 @@ void TwinWheelsAgv::Init(){
 void TwinWheelsAgv::Forwarding(){
     int16_t x_error = this->trackSensor->ReadForwardingError();
     // pid controller to set common_speed, diff_speed
-    this->leftWheel_commu->write("T100");
-    this->rightWheel_commu->write("T100");
+
+    float left_speed = this->common_speed + x_error;
+    float right_speed = this->common_speed - x_error;
+    String command = "T" + String(left_speed);
+    this->leftWheel_commu->write(command.c_str());
+    command = "T" + String(right_speed);
+    this->rightWheel_commu->write(command.c_str());
 }
 
 void TwinWheelsAgv::SpinOnce(){
