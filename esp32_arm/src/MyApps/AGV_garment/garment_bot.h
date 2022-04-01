@@ -8,7 +8,7 @@
 #include "box_mover/box_mover.h"
 #include "AGV/map_navigator.h"
 #include "remote_sensor.h"
-#include "garment_agv.h"
+#include "twin_wheels_agv.h"
 #include <MFRC522.h>
 
 // #define PIN_LED_POWER_2130 23
@@ -45,7 +45,7 @@ class GarmentBot{
 
         GarmentBot();
         BoxMover objBoxMover = BoxMover();
-        GarmentAgv objGarmentAgv = GarmentAgv();
+        TwinWheelsAgv objAgv = TwinWheelsAgv();
         // VehicalTwinWheel objTwinWheel = VehicalTwinWheel();
         // TwinWheelHardware objTwinWheelHardware = TwinWheelHardware();
         enum BOT_STATE{

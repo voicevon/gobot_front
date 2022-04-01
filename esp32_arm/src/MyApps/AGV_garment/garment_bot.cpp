@@ -3,7 +3,7 @@
 #include "garment_bot.h"
 
 GarmentBot::GarmentBot(){
-   
+
 }
 
 void GarmentBot::Init(){
@@ -104,7 +104,7 @@ void GarmentBot::SpinOnce(){
 
 //    this->onMqttReceived();
    this->objBoxMover.SpinOnce();
-   this->objGarmentAgv.SpinOnce();
+   this->objAgv.SpinOnce();
 
    switch (this->__state)
    	{
@@ -115,7 +115,7 @@ void GarmentBot::SpinOnce(){
    	case GarmentBot::BOT_STATE::BOT_EMERGENCY_STOPING:
       	break;
    	case GarmentBot::BOT_STATE::AGV_MOVING_TO_SOURCE:
-		if(this->objGarmentAgv.GetState() == GarmentAgv::AGV_STATE::PARKED)
+		if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
 			this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE);
 		break;
 	case GarmentBot::BOT_STATE::ROBOT_LOADING:
@@ -123,7 +123,7 @@ void GarmentBot::SpinOnce(){
 			this->ToState(GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION);
 		break;
 	case GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION:
-		if(this->objGarmentAgv.GetState() == GarmentAgv::AGV_STATE::PARKED)
+		if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
 			this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION:
@@ -146,17 +146,17 @@ void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 	switch(state){
 	case GarmentBot::BOT_STATE::BOT_SLEEPING:
 		// Keep reporting battery voltage.
-		this->objGarmentAgv.Stop();
+		this->objAgv.Stop();
 		break;
 	case GarmentBot::BOT_STATE::AGV_MOVING_TO_SOURCE:
-		this->objGarmentAgv.ToState(GarmentAgv::AGV_STATE::FAST_MOVING);
+		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE:
 		this->objBoxMover.LoadBox();
 		new_state = GarmentBot::BOT_STATE::ROBOT_LOADING;
 		break;
 	case GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION:
-		this->objGarmentAgv.ToState(GarmentAgv::AGV_STATE::FAST_MOVING);
+		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION:
 		this->objBoxMover.UnloadBox();

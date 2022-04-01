@@ -51,7 +51,7 @@
 
 
 
-class GarmentAgv: public TwinWheels_BLDC{
+class TwinWheelsAgv: public TwinWheels_BLDC{
     
     public:
         enum AGV_STATE{
@@ -63,11 +63,11 @@ class GarmentAgv: public TwinWheels_BLDC{
             PARKING_PAUSED,
             PARKED,
         };
-        GarmentAgv();
+        TwinWheelsAgv();
         void SpinOnce();
-        void ToState(GarmentAgv::AGV_STATE state);
+        void ToState(TwinWheelsAgv::AGV_STATE state);
         bool found_obstacle = true;
-        GarmentAgv::AGV_STATE GetState(){return this->_State;};
+        TwinWheelsAgv::AGV_STATE GetState(){return this->_State;};
     protected:
         AGV_STATE _State;
         AGV_STATE _last_state;

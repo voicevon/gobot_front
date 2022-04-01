@@ -28,7 +28,7 @@ void doC_right(){sensor_right.handleC();}
 
 
 void setup_agv_motors(){
-    SingleWheel_config* config = &mybot->objGarmentAgv.objLeftWheel.config;
+    SingleWheel_config* config = &mybot->objAgv.objLeftWheel.config;
     config->hall_sensor = &sensor_left;
     config->hall_do_A = &doA_left;
     config->hall_do_B = &doB_left;
@@ -38,7 +38,7 @@ void setup_agv_motors(){
     config->driver_pin_c = 3;
     config->driver_pin_enable = 4;
 
-    config = &mybot->objGarmentAgv.objLeftWheel.config;
+    config = &mybot->objAgv.objLeftWheel.config;
     config->hall_sensor = &sensor_right;
     config->hall_do_A = &doA_right;
     config->hall_do_B = &doB_right;

@@ -1,19 +1,19 @@
-#include "garment_agv.h"
+#include "twin_wheels_agv.h"
 
 
-GarmentAgv::GarmentAgv(){
+TwinWheelsAgv::TwinWheelsAgv(){
     this->trackSensor = new TrackSensor_Dual9960(1,2,3,4);
     // this->sensor_left_wheel = new HallSensor(2, 3, 4, 11);
     // this->sensor_left_wheel.pullup = Pullup::USE_INTERN;
     // this->leftWheel.sen
 } 
 
-// void GarmentAgv::LinkTrackSensor(AgvTrackSensor* tracksensor){
+// void TwinWheelsAgv::LinkTrackSensor(AgvTrackSensor* tracksensor){
 //     this->trackSensor = tracksensor;
 // }
 
 
-void GarmentAgv::SpinOnce(){
+void TwinWheelsAgv::SpinOnce(){
     // int distance_to_full_park = 100;      //???
     // bool loading_finished = true;         // From mqtt
     // bool unloading_finished = true;       // from mqtt
@@ -114,7 +114,7 @@ void GarmentAgv::SpinOnce(){
    }
 }
 
-void GarmentAgv::ToState(AGV_STATE state){
+void TwinWheelsAgv::ToState(AGV_STATE state){
    if (state == this->_State) return;
    switch(state){
     //   case SLEEPING:
@@ -151,7 +151,7 @@ void GarmentAgv::ToState(AGV_STATE state){
 
 // return true:   reach parked position
 // return false:  still parking
-bool GarmentAgv::DoParking(){
+bool TwinWheelsAgv::DoParking(){
     int16_t x_error ;
     int16_t y_error ;
     this->trackSensor->SpinOnce_Parking(&x_error, &y_error);
