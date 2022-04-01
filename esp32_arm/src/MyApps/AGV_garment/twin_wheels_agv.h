@@ -25,46 +25,47 @@
 
 
 #pragma once
-#include "HCSR04.h"            //https://github.com/gamegine/HCSR04-ultrasonic-sensor-lib
-#include "track_sensor_dual_9960.h"
-#define HS04_PIN_ECHO 2
-#define HS04_PIN_TRIG 3
+#include <HCSR04.h> 
 
+
+
+#include "track_sensor_dual_9960.h"
 #include "SimpleFOC.h"
 
 class TwinWheelsAgv{
     public:
         enum AGV_STATE{
-            FAST_MOVING,
-            FAST_MOVING_PAUSED,
-            SLOW_MOVING,
-            SLOW_MOVING_PAUSED,
-            PARKING,
-            PARKING_PAUSED,
-            PARKED,
+            FAST_MOVING = 1,
+            FAST_MOVING_PAUSED = 2,
+            SLOW_MOVING = 3,
+            SLOW_MOVING_PAUSED = 4,
+            PARKING = 5,
+            PARKING_PAUSED = 6,
+            PARKED = 7,
         };
+
         TwinWheelsAgv();
-        void Init(){};
+        void Init();
         void SpinOnce();
         TwinWheelsAgv::AGV_STATE GetState(){return this->_State;};
         void ToState(TwinWheelsAgv::AGV_STATE state);
 
     protected:
         AGV_STATE _State;
-        void SetForwardSpeed(float target_speed){};
         void MovingLoop(int track_error){};
-        void SetWheelSpeed(float left_speed, float right_speed){};
 
     private:
         float __fast_velocity = 100;
         float __slow_velocity = 60;
         float __parking_velocity = 10;
+        float common_speed;
+        float diff_speed;  //left faster is positive.
 
         TrackSensor_Dual9960* trackSensor;
         UltraSonicDistanceSensor *obstacleSensor; // = UltraSonicDistanceSensor(HS04_PIN_ECHO,HS04_PIN_TRIG); //initialisation class HCSR04 (trig pin , echo pin)
+        HardwareSerial * leftWheel_commu;
+        HardwareSerial * rightWheel_commu;
 
-        float common_speed;
-        float diff_speed;  //left faster is positive.
         bool DoParking();
 
 };

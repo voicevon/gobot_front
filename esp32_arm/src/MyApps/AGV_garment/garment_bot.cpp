@@ -8,10 +8,13 @@ GarmentBot::GarmentBot(){
 
 void GarmentBot::Init(){
 	Serial.print("\n[Info] GarmentBot::Init() is entering");
-	this->rfidReader = new MFRC522(1,2);
+	this->rfidReader = new MFRC522(17,18);
+	this->objAgv.Init();
 
 	// Init I2C bus
 	Wire.begin();
+
+	this->ToState(GarmentBot::BOT_STATE::BOT_SLEEPING);
 	Serial.print("\n[Info] GarmentBot::Init() is done.\n");
 }
 

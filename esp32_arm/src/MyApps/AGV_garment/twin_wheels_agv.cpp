@@ -1,22 +1,34 @@
 #include "twin_wheels_agv.h"
 
+
+#define HCSR04_PIN_ECHO 27
+#define HCSR04_PIN_TRIG 28
+
+#define LEFT_APDS_9960_SDA 21
+#define LEFT_APDS_9960_SCL 22
+#define RIGHT_APDS_9960_SDA 23
+#define RIGHT_APDS_9960_SCL 15
+
+
 TwinWheelsAgv::TwinWheelsAgv(){
-    this->trackSensor = new TrackSensor_Dual9960(1,2,3,4);
-	this->obstacleSensor = new UltraSonicDistanceSensor(1,2);
+
 } 
+
+void TwinWheelsAgv::Init(){
+    this->trackSensor = new TrackSensor_Dual9960(LEFT_APDS_9960_SDA, LEFT_APDS_9960_SCL, RIGHT_APDS_9960_SDA, RIGHT_APDS_9960_SCL);
+	this->obstacleSensor = new UltraSonicDistanceSensor(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
+    this->leftWheel_commu = &Serial1;
+    this->rightWheel_commu = &Serial2;
+}
 
 void TwinWheelsAgv::SpinOnce(){
     // int distance_to_full_park = 100;      //???
-    // bool loading_finished = true;         // From mqtt
-    // bool unloading_finished = true;       // from mqtt
-    // uint16_t track_node_id = 0;               // read from RFID
 
     // Obstacle detection
     bool found_obstacle = false;
     float distance_to_obstacle =  this->obstacleSensor->measureDistanceCm(); 
     if (distance_to_obstacle >0 && distance_to_obstacle <50) 
         found_obstacle = true;
-
 
     // bool found_slowdown_mark = false;     // from track sensor
     int16_t x_error = 0;
@@ -79,26 +91,7 @@ void TwinWheelsAgv::SpinOnce(){
             this->ToState(PARKING);
             break;
    case PARKED:
-        // if (this->__current_navigator_point.LOADING)
-        //     this->ToState(LOADING);
-        // else if (this->__current_navigator_point.UNLOADING)
-        //     this->ToState(UNLOADING);
-        // else if (this->__current_navigator_point.SLEEPING)
-        //     this->ToState(SLEEPING);
-        // else if (this->__current_navigator_point.CHARGING)
-        //     this->ToState(CHARGING);
         break;
-//    case LOADING:
-//         if (loading_finished)
-//             this->ToState(FAST_MOVING);
-//         break;
-//    case UNLOADING:
-//       if (unloading_finished)
-//          this->ToState(FAST_MOVING);
-//       break;
-//    case SLEEPING:
-//       /* code */
-//       break;
    
    default:
       break;
@@ -106,36 +99,38 @@ void TwinWheelsAgv::SpinOnce(){
 }
 
 void TwinWheelsAgv::ToState(AGV_STATE state){
-   if (state == this->_State) return;
-   switch(state){
-    //   case SLEEPING:
-    //         this->Stop();
-    //         break;
-      case FAST_MOVING:
-            this->SetForwardSpeed(220);
-            break;
-      case SLOW_MOVING:
-            this->SetForwardSpeed(100);
-            break;
-      case PARKING:
-            this->SetForwardSpeed(20);
-            break;
-    //   case LOADING:
-    //         // this->LoadBox();
-    //         break;
-    //   case UNLOADING:
-    //         // this->objBoxMover.UnloadBox();
-    //         break;
-    //   case CHARGING:
-    //      break;
-      
-
-      default:
-         break;
-   }
-   this->_State = state;
-   Serial.print("\n GarmentBot::SetMode()" );
-   Serial.println(state);
+    if (state == this->_State) return;
+    switch(state){
+    case FAST_MOVING:
+        this->common_speed = this->__fast_velocity;
+        break;
+    case SLOW_MOVING:
+        this->common_speed = this->__slow_velocity;
+        break;
+    case PARKING:
+        this->common_speed = this->__parking_velocity;
+        break;
+    case FAST_MOVING_PAUSED:
+        this->leftWheel_commu->write("T0");
+        this->rightWheel_commu->write("T0");
+        break;
+    case SLOW_MOVING_PAUSED:
+        this->leftWheel_commu->write("T0");
+        this->rightWheel_commu->write("T0");
+        break;
+    case PARKED:
+        this->leftWheel_commu->write("T0");
+        this->rightWheel_commu->write("T0");
+        break;
+        
+    default:
+        Serial.print("[Warn] TwinWheelsAgv::ToState()  switch without case ");
+        Serial.println(state);
+        break;
+    }
+    this->_State = state;
+    Serial.print("\n GarmentBot::SetMode()  " );
+    Serial.println(state);
 
    
 }
@@ -147,7 +142,7 @@ bool TwinWheelsAgv::DoParking(){
     int16_t y_error ;
     this->trackSensor->SpinOnce_Parking(&x_error, &y_error);
 
-    this->SetForwardSpeed(1);
+    this->common_speed =  this->__parking_velocity;
     if (x_error < 10 && y_error < 10)
         return true;
     return false;
