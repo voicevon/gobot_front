@@ -22,7 +22,12 @@ void TwinWheelsAgv::Init(){
 }
 
 void TwinWheelsAgv::SpinOnce(){
-    // int distance_to_full_park = 100;      //???
+    // Test sensor
+    if (true){
+        this->trackSensor->IsFollowingLeft = ! this->trackSensor->IsFollowingLeft;
+        float xx_error = this->trackSensor->ReadForwardingError();
+        Serial.println(xx_error);
+    }
 
     // Obstacle detection
     bool found_obstacle = false;
@@ -48,7 +53,7 @@ void TwinWheelsAgv::SpinOnce(){
             this->trackSensor->ClearFlag_Slowdown();
         }else{
             //going on with fast_moving.
-            x_error = this->trackSensor->SpinOnce_Forwarding();
+            x_error = this->trackSensor->ReadForwardingError();
             this->MovingLoop(x_error);
         }
         break;
@@ -140,7 +145,7 @@ void TwinWheelsAgv::ToState(AGV_STATE state){
 bool TwinWheelsAgv::DoParking(){
     int16_t x_error ;
     int16_t y_error ;
-    this->trackSensor->SpinOnce_Parking(&x_error, &y_error);
+    this->trackSensor->ReadParkingError(&x_error, &y_error);
 
     this->common_speed =  this->__parking_velocity;
     if (x_error < 10 && y_error < 10)

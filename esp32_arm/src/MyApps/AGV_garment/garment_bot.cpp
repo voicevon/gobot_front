@@ -42,7 +42,6 @@ void ReadI2C(){
 		}
 }
 
-
 void GarmentBot::onDetectedMark(uint16_t BranchNode_id){
    BranchNode current_BranchNode;
    if (this->objMapNavigator.FetchNode(BranchNode_id, &current_BranchNode)){

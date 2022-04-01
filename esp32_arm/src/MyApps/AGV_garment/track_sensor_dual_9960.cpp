@@ -13,42 +13,59 @@ TrackSensor_Dual9960::TrackSensor_Dual9960(uint8_t left_sensor_pin_sda, uint8_t 
     this->__apds_right->begin(10, APDS9960_AGAIN_4X, APDS9960_ADDRESS, theWire);
     this->__apds_right->enableColor(true);
 
+    // this->__current_sensor =  this->__apds_left;
+    this->__current_sensor =  this->__apds_right;
+
 }
 
-int16_t TrackSensor_Dual9960::SpinOnce_Forwarding(){
+void TrackSensor_Dual9960::ReadSensor(){
+    Adafruit_APDS9960* sensor = this->__apds_right;
+    if (this->IsFollowingLeft) 
+        sensor = this->__apds_left;
+    while(!sensor->colorDataReady()){
+        delay(5);
+    }
+
+    sensor->getColorData(&this->color_r, &this->color_g, &this->color_b, &this->color_c);
+    if (true){
+        Serial.print(r);
+        Serial.print("   ");
+        Serial.print(g);
+        Serial.print("   ");
+        Serial.print(b);
+        Serial.print("   ");
+        Serial.print(c);
+        Serial.print("             ");
+        if (! this->IsFollowingLeft)
+            Serial.println("");
+    }
+}
+
+int16_t TrackSensor_Dual9960::ReadForwardingError(){
     //check slowdown, speedup, change following.
     // return x_error
-    uint16_t r,g,b,c;
+    // uint16_t r,g,b,c;
     int16_t x_error;
-    this->__current_sensor->getColorData(&r, &g, &b, &c);
-    if (r > g + b){
+
+    if (this->color_r > this->color_b + this->color_g){
         // got red mark
-        this->__current_sensor =  this->__apds_left;
         if (this->__flag_slow_down == 0){
             this->__flag_slow_down = 1 ;
         }
     }
-    if (b > r + g){
+    if (this->color_b > this->color_r + this->color_g){
         // got blue mark
-        this->__current_sensor = this->__apds_right;
-    }
-    if (g > r + b){
-        // got green mark
         if (this->__flag_spped_up == 0){
             this->__flag_spped_up  = 1;
         }
     }
-    x_error = -32768 + c;
-    if (this->__current_sensor == this->__apds_right){
-        // if following right sensor
-        x_error = 32768 - c;
-    }
+    
     return x_error;
 }
 
 // when move from left to right, erro is from nagtive to positive.
 // when move forward, error is from negtive to positive.
-void TrackSensor_Dual9960::SpinOnce_Parking(int16_t* x_error, int16_t* y_error){
+void TrackSensor_Dual9960::ReadParkingError(int16_t* x_error, int16_t* y_error){
     // return x_error, y_error
     uint16_t rr,rg,rb,rc;
     uint16_t lr,lg,lb,lc;
@@ -70,4 +87,8 @@ void TrackSensor_Dual9960::ClearFlag_Slowdown(){
 }
 void TrackSensor_Dual9960::ClearFlag_SpeedUp(){
     this->__flag_spped_up++;
+}
+
+void TrackSensor_Dual9960::SayHello(){
+    Serial.println("[Hello]  TrackSensor_Dual9960::SayHello()     ");
 }

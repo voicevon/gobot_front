@@ -41,19 +41,24 @@
 class TrackSensor_Dual9960: public AgvTrackSensor{
     public:
         TrackSensor_Dual9960(uint8_t left_sensor_pin_sda, uint8_t left_sensor_pin_sclk, uint8_t right_sensor_pin_sda, uint8_t right_sensor_pin_sclk);
-        int16_t SpinOnce_Forwarding();
-        void SpinOnce_Parking(int16_t* x_error, int16_t* y_error);
+        int16_t ReadForwardingError();
+        void ReadParkingError(int16_t* x_error, int16_t* y_error);
         // float ReadError_X();
         // float ReadError_Y();
         void ClearFlag_Slowdown();
         void ClearFlag_SpeedUp();
         bool GetFlag_Slowdown(){if (this->__flag_slow_down == 1) return true; return false;};
-        bool GetFlag_Speedup(){if (this->__flag_spped_up == 1) return true; return false;};;
+        bool GetFlag_Speedup(){if (this->__flag_spped_up == 1) return true; return false;};
+        bool IsFollowingLeft = true;
+        void SayHello();
 
     private:
+        uint16_t color_r, color_g, color_b, color_c;
+        void ReadSensor();
+
         Adafruit_APDS9960* __apds_left;
         Adafruit_APDS9960* __apds_right;
-        Adafruit_APDS9960* __current_sensor;
+        // Adafruit_APDS9960* __current_sensor;
         /*
         0:  begin with setting flag to 0.
         1:  sensor set flag to 1 , when sensor detected mark.
