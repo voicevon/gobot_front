@@ -133,7 +133,7 @@ void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 	switch(state){
 	case GarmentBot::BOT_STATE::BOT_SLEEPING:
 		// Keep reporting battery voltage.
-		this->objAgv.SetForwardSpeed(0);
+		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::PARKED);
 		break;
 	case GarmentBot::BOT_STATE::AGV_MOVING_TO_SOURCE:
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);

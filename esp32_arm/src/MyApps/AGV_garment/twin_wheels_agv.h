@@ -17,8 +17,8 @@
 ,    F_Paused          S_Paused       |                P_Paused                      |
 .     |  ^             |     ^        |[Fast mark]      |    ^                       | [Command Move]                      ^                             
 .     |  |             |     |        |                 |    |                       |                           
-.   Fast Moving  --> Slow_Moving ------------------>   Parking  --->   Parked -------^  
-.    [slow mark]                       [Park command]   (Super slow) 
+.   Fast Moving  --> Slow_Moving ------------------>   Parking  ---------> Parked ---^  
+.    [slow mark]                       [Park command]   (Super slow)[Sleep command] 
 .   from track sensor                                                    
 .                                                                        
 */
@@ -49,15 +49,17 @@ class TwinWheelsAgv{
         TwinWheelsAgv::AGV_STATE GetState(){return this->_State;};
         void ToState(TwinWheelsAgv::AGV_STATE state);
 
-        void LinkPid(PIDController* wheel_pid){};
-        void MoveForward(int track_error){};
-        void SetForwardSpeed(float target_speed){};
-
     protected:
         AGV_STATE _State;
+        void SetForwardSpeed(float target_speed){};
+        void MovingLoop(int track_error){};
         void SetWheelSpeed(float left_speed, float right_speed){};
 
     private:
+        float __fast_velocity = 100;
+        float __slow_velocity = 60;
+        float __parking_velocity = 10;
+
         TrackSensor_Dual9960* trackSensor;
         UltraSonicDistanceSensor *obstacleSensor; // = UltraSonicDistanceSensor(HS04_PIN_ECHO,HS04_PIN_TRIG); //initialisation class HCSR04 (trig pin , echo pin)
 

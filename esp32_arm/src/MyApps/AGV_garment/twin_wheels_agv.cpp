@@ -37,7 +37,7 @@ void TwinWheelsAgv::SpinOnce(){
         }else{
             //going on with fast_moving.
             x_error = this->trackSensor->SpinOnce_Forwarding();
-            this->MoveForward(x_error);
+            this->MovingLoop(x_error);
         }
         break;
     case FAST_MOVING_PAUSED:
