@@ -1,6 +1,9 @@
 
-#include <HardwareSerial.h>
+#include "all_devices.h"
+#ifdef I_AM_GARMENT_BOT
 
+
+#include <HardwareSerial.h>
 
 //********************************************************************************************
 //    MQTT and RabbitMQ
@@ -74,3 +77,6 @@ void loop_mqtt(){
     mq_sync_box_mover->SpinOnce();
     mq_sync_twin_wheels->SpinOnce();
 }
+
+
+#endif

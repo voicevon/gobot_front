@@ -199,7 +199,6 @@ uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
     return payload.length();
 }
 
-//void GarmentBot::CommuWithUppper(){
 void GarmentBot::onMqttReceived(uint8_t* payload){
    // Currently is for testing, 
    // Normally this function will be callback via a MQTT client.

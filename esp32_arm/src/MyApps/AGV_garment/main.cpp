@@ -4,13 +4,8 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "garment_bot.h"
-#include "main_simplefoc.h"
 #include "main_mqtt.h"
 
-
-
-#define PIN_ENCODER_A 12
-#define PIN_ENCODER_B 13
 
 GarmentBot *mybot; // = GarmentBot();
 GcodeQueue* gcode_queue;
@@ -61,7 +56,6 @@ void setup(){
     // mybot->objTwinWheelHardware.LinkLocalMessageQueue(message_queue);
     // setup_mqtt(gcode_queue, message_queue);
 
-    // setup_simplefoc();
     Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
 }
 
