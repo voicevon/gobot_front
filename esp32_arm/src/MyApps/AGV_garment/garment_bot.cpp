@@ -26,6 +26,7 @@ void GarmentBot::Init(){
 
     this->obstacleSensor = new UltraSonicDistanceSensor(1,2);
     this->rfidReader = new MFRC522(1,2);
+
 }
 
 void ReadI2C(){
@@ -146,7 +147,7 @@ void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 	switch(state){
 	case GarmentBot::BOT_STATE::BOT_SLEEPING:
 		// Keep reporting battery voltage.
-		this->objAgv.Stop();
+		this->objAgv.SetForwardSpeed(0);
 		break;
 	case GarmentBot::BOT_STATE::AGV_MOVING_TO_SOURCE:
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);

@@ -34,6 +34,7 @@ class SingleWheel_BLDC{
 		SingleWheel_BLDC(SingleWheel_config config);
 		SingleWheel_config config;
 		float target_angle = 2;
+		void Init();
 		void SpinOnce();
 		void Test(){
 			// __config.do_A = 11;

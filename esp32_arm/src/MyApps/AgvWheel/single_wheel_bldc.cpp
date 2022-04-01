@@ -2,7 +2,9 @@
 
 SingleWheel_BLDC::SingleWheel_BLDC(SingleWheel_config config){
     this->config = config;
+}
 
+void SingleWheel_BLDC::Init(){
     // this->__sensor = new HallSensor(config.hall_sensor_pin_a, config.hall_sensor_pin_b, config.driver_pin_c, config.hall_sensor_pp);
 	this->__sensor->pullup = Pullup::USE_INTERN;
 	// void* (*)(void *) cc;

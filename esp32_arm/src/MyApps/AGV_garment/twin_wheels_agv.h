@@ -36,23 +36,15 @@
 
 #pragma once
 #include "AGV/map_navigator.h"
-// #include "twin_wheels/vehical_twin_wheel_hw.h"
-// #include "twin_wheels/twin_wheels_base.h"
-#include "twin_wheels/twin_wheels_bldc.h"
-// #include "AGV/agv_sensor_base.h"
 #include "HCSR04.h"            //https://github.com/gamegine/HCSR04-ultrasonic-sensor-lib
-// #include "Adafruit_APDS9960.h"  //https://github.com/adafruit/Adafruit_APDS9960/blob/master/examples/color_sensor/color_sensor.ino
 #include <SPI.h>
-// #define RST_PIN 9       // Configurable, see typical pin layout above
-// #define SS_PIN 10      // Configurable, see typical pin layout above
 #include "track_sensor_dual_9960.h"
 #define HS04_PIN_ECHO 2
 #define HS04_PIN_TRIG 3
 
+#include "SimpleFOC.h"
 
-
-class TwinWheelsAgv: public TwinWheels_BLDC{
-    
+class TwinWheelsAgv{
     public:
         enum AGV_STATE{
             FAST_MOVING,
@@ -68,17 +60,24 @@ class TwinWheelsAgv: public TwinWheels_BLDC{
         void ToState(TwinWheelsAgv::AGV_STATE state);
         bool found_obstacle = true;
         TwinWheelsAgv::AGV_STATE GetState(){return this->_State;};
+        void SetWheelSpeed(float left_speed, float right_speed){};
+
+        void Init(){};
+        void LinkPid(PIDController* wheel_pid){};
+        void MoveForward(int track_error){};
+        void SetForwardSpeed(float target_speed){};
+
     protected:
         AGV_STATE _State;
         AGV_STATE _last_state;
         void SpinOnce_Working();
-        // TrackGraph objTrackGraph;
 
     private:
         TrackSensor_Dual9960* trackSensor;
-        HallSensor* sensor_left_wheel;
 
         BranchNode __current_navigator_point;
+        float common_speed;
+        float diff_speed;  //left faster is positive.
         bool DoParking();
 
 };
