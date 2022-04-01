@@ -1,17 +1,9 @@
 #include "twin_wheels_agv.h"
 
-
 TwinWheelsAgv::TwinWheelsAgv(){
     this->trackSensor = new TrackSensor_Dual9960(1,2,3,4);
-    // this->sensor_left_wheel = new HallSensor(2, 3, 4, 11);
-    // this->sensor_left_wheel.pullup = Pullup::USE_INTERN;
-    // this->leftWheel.sen
+	this->obstacleSensor = new UltraSonicDistanceSensor(1,2);
 } 
-
-// void TwinWheelsAgv::LinkTrackSensor(AgvTrackSensor* tracksensor){
-//     this->trackSensor = tracksensor;
-// }
-
 
 void TwinWheelsAgv::SpinOnce(){
     // int distance_to_full_park = 100;      //???
@@ -20,11 +12,10 @@ void TwinWheelsAgv::SpinOnce(){
     // uint16_t track_node_id = 0;               // read from RFID
 
     // Obstacle detection
-    this->found_obstacle = false;
-    // float distance =  this->obstacleSensor->measureDistanceCm(); 
-    float distance_to_obstacle =  22; 
+    bool found_obstacle = false;
+    float distance_to_obstacle =  this->obstacleSensor->measureDistanceCm(); 
     if (distance_to_obstacle >0 && distance_to_obstacle <50) 
-        this->found_obstacle = true;
+        found_obstacle = true;
 
 
     // bool found_slowdown_mark = false;     // from track sensor

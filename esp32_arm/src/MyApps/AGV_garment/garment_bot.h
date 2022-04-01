@@ -3,11 +3,10 @@
 #ifdef I_AM_GARMENT_BOT
 
 
-#include "twin_wheels/vehical_twin_wheel_hw.h"
-#include "twin_wheels/vehical_twin_wheel.h"
+// #include "twin_wheels/vehical_twin_wheel_hw.h"
+// #include "twin_wheels/vehical_twin_wheel.h"
 #include "box_mover/box_mover.h"
 #include "AGV/map_navigator.h"
-#include "remote_sensor.h"
 #include "twin_wheels_agv.h"
 #include <MFRC522.h>
 
@@ -36,10 +35,10 @@
 //      1. mqtt command, and message queue of map and navigation. 
 //      2. read RFID, determin vehical speed or parking.
 //      3. Battery voltage.
-//      4. Distance sensor, to detect obstacle.
 // What I don't know:
 //      1. track sensor, and position-Y error, PID controller 
-//      2. motor and speed control .
+//      4. Distance sensor, to detect obstacle.
+//      2. Vehical speed, motor control.
 class GarmentBot{
     public:
 
@@ -71,7 +70,6 @@ class GarmentBot{
     private:
         TrackGraph objMapNavigator;
         MFRC522* rfidReader;   // = MFRC522(10, 9);  // Create MFRC522 instance
-        UltraSonicDistanceSensor *obstacleSensor; // = UltraSonicDistanceSensor(HS04_PIN_ECHO,HS04_PIN_TRIG); //initialisation class HCSR04 (trig pin , echo pin)
         
         void onDetectedMark(uint16_t mapsite_id);
         BranchNode __current_BranchNode;

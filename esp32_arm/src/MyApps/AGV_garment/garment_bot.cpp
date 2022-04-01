@@ -7,26 +7,12 @@ GarmentBot::GarmentBot(){
 }
 
 void GarmentBot::Init(){
-   Serial.print("\n[Info] GarmentBot::Init() is entering");
-   // Setting PWM channels properties, Totally Esp32 has 16 channels
-   // const int freq = 30000;
-   // const int resolution = 8;   // so max pwm speed is 255
-   // ledcSetup(PWM_CHANNEL_0, freq, resolution); // configure LED PWM functionalitites
-   // ledcSetup(PWM_CHANNEL_1, freq, resolution); 
+	Serial.print("\n[Info] GarmentBot::Init() is entering");
+	this->rfidReader = new MFRC522(1,2);
 
-
-   // Init I2C bus
-   Wire.begin();
-   // this->objTwinWheelHardware.Init();
-   // this->objBoxMover.ParkArms(true);
-
-   // this->_last_state = GarmentAgv::PARKING;
-   // this->ToState(GarmentAgv::SLEEPING);
-   Serial.print("\n[Info] GarmentBot::Init() is done.\n");
-
-    this->obstacleSensor = new UltraSonicDistanceSensor(1,2);
-    this->rfidReader = new MFRC522(1,2);
-
+	// Init I2C bus
+	Wire.begin();
+	Serial.print("\n[Info] GarmentBot::Init() is done.\n");
 }
 
 void ReadI2C(){
