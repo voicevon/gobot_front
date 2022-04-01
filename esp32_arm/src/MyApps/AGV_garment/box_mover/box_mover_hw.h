@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Robot/RobotBase.h"
+#include "Robot/robot_hardware_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/HomeHelper.h"
 #include "box_mover_hw_config.h"

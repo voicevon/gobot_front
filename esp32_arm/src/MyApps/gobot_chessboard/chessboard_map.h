@@ -19,7 +19,7 @@
 
 #include <stdint.h>
 #include <string>
-#include <Robot/RobotBase.h>
+#include <Robot/robot_hardware_base.h>
 
 class ChessboardCell{
     public:

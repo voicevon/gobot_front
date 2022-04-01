@@ -11,11 +11,11 @@ Stepper liberys:
 */
 
 #include <ESP32Servo.h>
-#include "Robot/RobotBase.h"
+#include "Robot/robot_hardware_base.h""
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/Commu/CommuUart.h"
 #include "MyLibs/MyFunctions.hpp"
-#include "Robot/Gcode.h"
+// #include "Robot/Gcode.h"
 
 #include "gobot_chessboard_hw_config.h"
 #include "Robot/HomeHelper.h"
