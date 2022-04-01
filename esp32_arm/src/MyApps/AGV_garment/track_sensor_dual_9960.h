@@ -49,12 +49,12 @@ class TrackSensor_Dual9960: public AgvTrackSensor{
         void ClearFlag_SpeedUp();
         bool GetFlag_Slowdown(){if (this->__flag_slow_down == 1) return true; return false;};
         bool GetFlag_Speedup(){if (this->__flag_spped_up == 1) return true; return false;};
-        bool IsFollowingLeft = true;
+        bool IsFollowingLeft;
         void SayHello();
 
     private:
         uint16_t color_r, color_g, color_b, color_c;
-        void ReadSensor();
+        void __ReadSensor();
 
         Adafruit_APDS9960* __apds_left;
         Adafruit_APDS9960* __apds_right;

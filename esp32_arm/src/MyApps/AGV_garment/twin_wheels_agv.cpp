@@ -21,9 +21,16 @@ void TwinWheelsAgv::Init(){
     this->rightWheel_commu = &Serial2;
 }
 
+void TwinWheelsAgv::Forwarding(){
+    int16_t x_error = this->trackSensor->ReadForwardingError();
+    // pid controller to set common_speed, diff_speed
+    this->leftWheel_commu->write("T100");
+    this->rightWheel_commu->write("T100");
+}
+
 void TwinWheelsAgv::SpinOnce(){
     // Test sensor
-    if (true){
+    if (false){
         this->trackSensor->IsFollowingLeft = ! this->trackSensor->IsFollowingLeft;
         float xx_error = this->trackSensor->ReadForwardingError();
         Serial.println(xx_error);
@@ -35,26 +42,17 @@ void TwinWheelsAgv::SpinOnce(){
     if (distance_to_obstacle >0 && distance_to_obstacle <50) 
         found_obstacle = true;
 
-    // bool found_slowdown_mark = false;     // from track sensor
-    int16_t x_error = 0;
-    int16_t y_error = 0;
-    // bool follow_left = true;
-    // bool going_on_fast_moving = true;
-    //    this->onMqttReceived();
-    //    this->objBoxMover.SpinOnce();
-
-   switch (this->_State) {
-   case FAST_MOVING:
-        if (found_obstacle)
+    switch (this->_State) {
+    case FAST_MOVING:
+        if (found_obstacle){
             this->ToState(FAST_MOVING_PAUSED);
         // check if see the mark of slow-down.
-        else if (this->trackSensor->GetFlag_Slowdown()){
+        }else if (this->trackSensor->GetFlag_Slowdown()){
             this->ToState(SLOW_MOVING);
             this->trackSensor->ClearFlag_Slowdown();
         }else{
             //going on with fast_moving.
-            x_error = this->trackSensor->ReadForwardingError();
-            this->MovingLoop(x_error);
+            this->Forwarding();
         }
         break;
     case FAST_MOVING_PAUSED:
@@ -62,23 +60,12 @@ void TwinWheelsAgv::SpinOnce(){
             this->ToState(FAST_MOVING);
         break;
     case SLOW_MOVING:
-        if (found_obstacle)
+        if (found_obstacle){
             this->ToState(SLOW_MOVING_PAUSED);
-        else {
-            //try to read RFID, have read already.
-            // track_node_id = this->rfidReader->PICC_ReadCardSerial(); 
-            // got the site_id, we will know should follow left or follow right.
-            // this->__current_navigator_point = this->objMapNavigator.FetchSite(mapsite_id);
-            // if (this->__current_navigator_point.GoingOnFollowLeft()){
-            //     this->trackSensor->__folking = TrackSensor_Dual9960::FOLKING::FOLLOWING_LEFT;
-            // }else{
-            //     this->trackSensor->__folking = TrackSensor_Dual9960::FOLKING::FOLLOWING_RIGHT;
-            // }
-            // if (this->__current_navigator_point.GoingOnFastMoving()){
-            //     this->ToState(FAST_MOVING);
-            // }else{
-            //     this->ToState(PARKING);
-            // }
+        }else if(this->trackSensor->GetFlag_Speedup()){
+                this->ToState(FAST_MOVING);
+        }else{
+            this->Forwarding();
         }
         break;
    case SLOW_MOVING_PAUSED:
@@ -94,7 +81,7 @@ void TwinWheelsAgv::SpinOnce(){
    case PARKING_PAUSED:
         if (!found_obstacle)
             this->ToState(PARKING);
-            break;
+        break;
    case PARKED:
         break;
    

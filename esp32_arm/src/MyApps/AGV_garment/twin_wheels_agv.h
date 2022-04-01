@@ -52,7 +52,7 @@ class TwinWheelsAgv{
 
     protected:
         AGV_STATE _State;
-        void MovingLoop(int track_error){};
+        void Forwarding();
 
     private:
         float __fast_velocity = 100;
