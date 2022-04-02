@@ -13,9 +13,9 @@ void MqttSyncer::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_top
 
     bool debug=true;
     if(debug){
-        Serial.print("\nMqttSyncer::SubscribeMqtt() is done    ");
+        Serial.print("\nMqttSyncer::SubscribeMqtt() is done  Subsribe_topic= ");
         Serial.print(main_topic);
-        Serial.print("      ");
+        Serial.print(" feedback_topic= ");
         Serial.println(feedback_topic);
     }
 }
@@ -38,6 +38,7 @@ void MqttSyncer::OnReceived(const char* payload, int length){
 }
 
 // This function will be invoked on master thread.
+// Trying to do what?
 void MqttSyncer::SpinOnce(){
     if (this->__local_mq_is_full)
         if (! this->__localMQ->BufferIsFull()){

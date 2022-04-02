@@ -41,12 +41,6 @@
 //      2. Vehical speed, motor control.
 class GarmentBot{
     public:
-
-        GarmentBot();
-        BoxMover objBoxMover = BoxMover();
-        TwinWheelsAgv objAgv = TwinWheelsAgv();
-        // VehicalTwinWheel objTwinWheel = VehicalTwinWheel();
-        // TwinWheelHardware objTwinWheelHardware = TwinWheelHardware();
         enum BOT_STATE{
             BOT_LOCATING = 0,
             BOT_SLEEPING = 1,
@@ -59,6 +53,11 @@ class GarmentBot{
             BOT_CHARGING = 8,
             BOT_EMERGENCY_STOPING = 9,
         };
+
+        GarmentBot();
+        BoxMover objBoxMover = BoxMover();
+        TwinWheelsAgv objAgv = TwinWheelsAgv();
+
         void Init();
         void SpinOnce();
         void ToState(GarmentBot::BOT_STATE state);
@@ -70,7 +69,7 @@ class GarmentBot{
         
     private:
         TrackGraph objMapNavigator;
-        MFRC522* rfidReader;   // = MFRC522(10, 9);  // Create MFRC522 instance
+        MFRC522* __rfidReader;   // = MFRC522(10, 9);  // Create MFRC522 instance
         
         void onDetectedMark(uint16_t mapsite_id);
         BranchNode __current_BranchNode;

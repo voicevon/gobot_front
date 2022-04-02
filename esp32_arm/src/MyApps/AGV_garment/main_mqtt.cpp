@@ -16,7 +16,7 @@ bool mqtt_is_connected = false;
 
 
 
-//This function will be invoked in slave thread.
+// Please Notice: This function will be invoked in slave thread.
 void dispatch_MqttConnected(bool sessionPresent){
     Serial.println("\n\n     MQTT is connected !!!!\n\n");
     mqtt_is_connected = true;
@@ -25,7 +25,7 @@ void dispatch_MqttConnected(bool sessionPresent){
     mq_sync_twin_wheels->SubscribeMqtt(&mqttClient, "agv/x2206/agv", "agv/x2206/agv/fb");
 }
 
-//This function will be invoked in slave thread.
+//Please Notice: This function will be invoked in slave thread.
 void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
     bool debug = false;
     if(debug){
@@ -57,6 +57,7 @@ void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProp
         mq_sync_twin_wheels->OnReceived(payload, len);
     }
 }
+
 void setup_mqtt(GcodeQueue* gcode_queue, MessageQueue* message_queue){
     setup_wifi_mqtt();
     gcode_queue = new GcodeQueue();

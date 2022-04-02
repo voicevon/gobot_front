@@ -8,7 +8,7 @@ GarmentBot::GarmentBot(){
 
 void GarmentBot::Init(){
 	Serial.print("\n[Info] GarmentBot::Init() is entering");
-	this->rfidReader = new MFRC522(17,18);
+	this->__rfidReader = new MFRC522(17,18);
 	this->objAgv.Init();
 
 	// Init I2C bus
@@ -98,7 +98,7 @@ void GarmentBot::SpinOnce(){
 	switch (this->__state){
 	case GarmentBot::BOT_STATE::BOT_LOCATING:
 		//Trying to read RFID.
-		if (this->rfidReader->PICC_ReadCardSerial() == 123){
+		if (this->__rfidReader->PICC_ReadCardSerial() == 123){
 			this->ToState(GarmentBot::BOT_STATE::BOT_SLEEPING);
 		}
 		break;
