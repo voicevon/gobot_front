@@ -10,10 +10,10 @@ class SmartLightSensor{
         void ReadSensor();
         float light_percent;
     private:
-        // void Learn();
         Adafruit_APDS9960* sensor;
-        // Adafruit_APDS9960* __apds_right;
         float c_min, c_max;
+        uint16_t c_min_idle_counter = 0;
+        uint16_t c_max_idle_counter =0;
         float r_min, r_max, g_min, g_max, b_min, b_max;
 
 };

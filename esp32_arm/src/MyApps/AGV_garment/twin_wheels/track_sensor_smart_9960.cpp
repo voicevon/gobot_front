@@ -44,10 +44,27 @@ void SmartLightSensor::ReadSensor(){
     }
 
     //Step2: Learn environment
-    if (this->c_max < this->color_c)
+    if (this->c_max < this->color_c){
         this->c_max ++;
-    if(this->c_min > this->color_c)
+        this->c_max_idle_counter = 0;
+    }else{
+        this->c_max_idle_counter++;
+        if(this->c_max_idle_counter > 999){
+            this->c_max--;
+            this->c_max_idle_counter = 0;
+        }
+    }
+    if(this->c_min > this->color_c){
         this->c_min--;
+        this->c_min_idle_counter = 0;
+    }else{
+        this->c_min_idle_counter++;
+        if (this->c_min_idle_counter > 999){
+            this->c_min++;
+            this->c_min_idle_counter = 0;
+        }
+    }
+
 
     //Step3: Calibrate result.
     this->light_percent = (this->color_c - this->c_min) / (this->c_max - this->c_min);

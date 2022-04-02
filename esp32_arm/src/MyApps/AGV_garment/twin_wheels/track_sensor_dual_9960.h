@@ -64,8 +64,6 @@ class TrackSensor_Dual9960: public AgvTrackSensor{
         */
         uint8_t __flag_spped_up;
         uint8_t __flag_slow_down;
-        // float left_percent;
-        // float right_percent;
 
         
         

@@ -11,7 +11,19 @@ TrackSensor_Dual9960::TrackSensor_Dual9960(uint8_t left_sensor_pin_sda, uint8_t 
 int16_t TrackSensor_Dual9960::ReadForwardingError(){
     this->left_sensor->ReadSensor();
     this->right_sensor->ReadSensor();
-    int16_t x_error = 100.9f * (this->left_sensor->light_percent - this->right_sensor->light_percent);
+    Serial.print(this->left_sensor->light_percent);
+    Serial.print("   ");
+    Serial.print(this->right_sensor->light_percent);
+    Serial.print("   ");
+    int common_light_percent = 0;
+    int16_t x_error = 100.0f * (this->left_sensor->light_percent - this->right_sensor->light_percent);
+    if(this->left_sensor->light_percent > 0.2 && this->right_sensor->light_percent > 0.2){
+        common_light_percent = 100.0f * min(this->left_sensor->light_percent, this->right_sensor->light_percent);
+        if (x_error > 0)
+            x_error += common_light_percent;
+        else
+            x_error -= common_light_percent;
+    }
     return x_error;
 }
 
