@@ -7,7 +7,7 @@
 // #include "twin_wheels/vehical_twin_wheel.h"
 #include "box_mover/box_mover.h"
 #include "AGV/map_navigator.h"
-#include "twin_wheels_agv.h"
+#include "twin_Wheels/twin_wheels_agv.h"
 #include <MFRC522.h>
 
 // #define PIN_LED_POWER_2130 23
@@ -16,10 +16,10 @@
 /*    
 .     
 .     
-.      <---------------------------------------------------------------------------------------------\
-,     |                                                                                              | 
-.   Agv Moving --> Agv Parked ---------> Robot_Loading  -----^  
-.      (Read Mark RFID)           |
+.                              <-------------------------------------------------------\
+,                              |                                                       | 
+.   Locating ------------>   Agv Moving ----> Agv Parked ---------> Robot_Loading  -----^  
+.    (Slow)   [Got RFID]           (Read Mark RFID)           |
 .                                 |-------> Robot_Unloading --^
 .                                 |                           |
 .                                 |-------> Charging ---------^
@@ -48,15 +48,16 @@ class GarmentBot{
         // VehicalTwinWheel objTwinWheel = VehicalTwinWheel();
         // TwinWheelHardware objTwinWheelHardware = TwinWheelHardware();
         enum BOT_STATE{
-            BOT_SLEEPING = 0,
-            AGV_MOVING_TO_SOURCE,
-            AGV_PARKED_AT_SOURCE,
-            ROBOT_LOADING,
-            AGV_MOVING_TO_DESTINATION,
-            AGV_PARKED_AT_DESTINATION,
-            ROBOT_UNLOADING,
-            BOT_CHARGING,
-            BOT_EMERGENCY_STOPING,
+            BOT_LOCATING = 0,
+            BOT_SLEEPING = 1,
+            AGV_MOVING_TO_SOURCE = 2,
+            AGV_PARKED_AT_SOURCE = 3,
+            ROBOT_LOADING = 4,
+            AGV_MOVING_TO_DESTINATION = 5,
+            AGV_PARKED_AT_DESTINATION = 6,
+            ROBOT_UNLOADING = 7,
+            BOT_CHARGING = 8,
+            BOT_EMERGENCY_STOPING = 9,
         };
         void Init();
         void SpinOnce();

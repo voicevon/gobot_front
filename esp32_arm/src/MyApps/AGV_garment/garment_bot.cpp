@@ -14,7 +14,7 @@ void GarmentBot::Init(){
 	// Init I2C bus
 	Wire.begin();
 
-	this->ToState(GarmentBot::BOT_STATE::BOT_SLEEPING);
+	this->ToState(GarmentBot::BOT_STATE::BOT_LOCATING);
 	Serial.print("\n[Info] GarmentBot::Init() is done.\n");
 }
 
@@ -133,6 +133,9 @@ void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 	}
  	GarmentBot::BOT_STATE new_state = state;
 	switch(state){
+	case GarmentBot::BOT_STATE::BOT_LOCATING:
+		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::SLOW_MOVING);
+		break;
 	case GarmentBot::BOT_STATE::BOT_SLEEPING:
 		// Keep reporting battery voltage.
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::PARKED);
