@@ -1,12 +1,22 @@
 #include "track_sensor_dual_9960.h"
 
-TrackSensor_Dual9960::TrackSensor_Dual9960(uint8_t left_sensor_pin_sda, uint8_t left_sensor_pin_sclk, uint8_t right_sensor_pin_sda, uint8_t right_sensor_pin_sclk){
-    this->left_sensor = new SmartLightSensor(0, left_sensor_pin_sda,left_sensor_pin_sclk);
-    this->right_sensor = new SmartLightSensor(1, right_sensor_pin_sda, right_sensor_pin_sclk);
+TrackSensor_Dual9960::TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config){
+    this->__config = config;
+    this->left_sensor = new SmartLightSensor(0, config->pin_left_sensor_sda ,config->pin_left_sensor_sclk);
+    this->right_sensor = new SmartLightSensor(1, config->pin_right_sensor_sda, config->pin_right_sensor_sclk);
+    pinMode(config->pin_led, OUTPUT);
+    digitalWrite(config->pin_led, LOW);
+    
     this->IsFollowingLeft = true;
 
 }
 
+void TrackSensor_Dual9960::TurnOnLed(bool turn_on){
+    if (turn_on)
+        digitalWrite(this->__config->pin_led, HIGH);
+    else
+        digitalWrite(this->__config->pin_led, LOW);
+}
 
 int16_t TrackSensor_Dual9960::ReadForwardingError(){
     this->left_sensor->ReadSensor();

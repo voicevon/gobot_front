@@ -9,6 +9,7 @@ class SmartLightSensor{
         uint16_t color_r, color_g, color_b, color_c;
         void ReadSensor();
         float light_percent;
+        
     private:
         Adafruit_APDS9960* sensor;
         float c_min, c_max;

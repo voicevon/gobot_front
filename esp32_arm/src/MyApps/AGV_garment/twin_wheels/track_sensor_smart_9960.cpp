@@ -7,10 +7,10 @@ SmartLightSensor::SmartLightSensor(uint8_t i2c_bus_id, uint8_t pin_sda, uint8_t 
     this->sensor->begin(10, APDS9960_AGAIN_4X, APDS9960_ADDRESS, i2c_bus);
     this->sensor->enableColor(true);
 
-    this->c_min = 999;
-    this->c_max = 0;
-    this->r_min = this->g_min = this->b_min = this->c_min;
-    this->r_max = this->g_max = this->b_max = this->c_max;
+    this->c_min = 500;
+    this->c_max = 800;
+    this->r_min = this->g_min = this->b_min = this->c_min;  //?
+    this->r_max = this->g_max = this->b_max = this->c_max;  //?
 
 }
 
@@ -55,7 +55,7 @@ void SmartLightSensor::ReadSensor(){
         }
     }
     if(this->c_min > this->color_c){
-        this->c_min--;
+        this->c_min = this->color_c;
         this->c_min_idle_counter = 0;
     }else{
         this->c_min_idle_counter++;
@@ -64,6 +64,9 @@ void SmartLightSensor::ReadSensor(){
             this->c_min_idle_counter = 0;
         }
     }
+    
+    if(this->c_max < this->c_min * 1.40)
+        this->c_max = this->c_min * 1.40;
 
 
     //Step3: Calibrate result.

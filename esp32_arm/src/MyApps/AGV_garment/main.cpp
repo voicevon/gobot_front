@@ -11,6 +11,7 @@ GarmentBot *mybot;
 // Producer: box_mover
 // Consumer: box_mover_hardware
 GcodeQueue* box_mover_gcode_queue;
+
 MessageQueue* message_queue;
 
 

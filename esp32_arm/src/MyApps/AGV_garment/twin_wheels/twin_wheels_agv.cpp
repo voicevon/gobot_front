@@ -8,6 +8,7 @@
 #define LEFT_APDS_9960_SCL 22
 #define RIGHT_APDS_9960_SDA 23
 #define RIGHT_APDS_9960_SCL 15
+#define PIN_LED  19
 
 
 TwinWheelsAgv::TwinWheelsAgv(){
@@ -15,10 +16,20 @@ TwinWheelsAgv::TwinWheelsAgv(){
 } 
 
 void TwinWheelsAgv::Init(){
-    this->trackSensor = new TrackSensor_Dual9960(LEFT_APDS_9960_SDA, LEFT_APDS_9960_SCL, RIGHT_APDS_9960_SDA, RIGHT_APDS_9960_SCL);
+    TrackSensor_Dual9960_Config* config = new TrackSensor_Dual9960_Config();
+    config->pin_led = PIN_LED;
+    config->pin_left_sensor_sda = LEFT_APDS_9960_SDA;
+    config->pin_left_sensor_sclk = LEFT_APDS_9960_SCL;
+    config->pin_right_sensor_sda = RIGHT_APDS_9960_SDA;
+    config->pin_right_sensor_sclk = RIGHT_APDS_9960_SCL;
+    this->trackSensor = new TrackSensor_Dual9960(config);
+
 	this->obstacleSensor = new UltraSonicDistanceSensor(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
+    // Serial1.begin(115200, );
+    // Serial2.begin(115200, )
     this->leftWheel_commu = &Serial1;
     this->rightWheel_commu = &Serial2;
+    this->ToState(PARKED);
 }
 
 void TwinWheelsAgv::Forwarding(){
@@ -119,6 +130,7 @@ void TwinWheelsAgv::ToState(AGV_STATE state){
     case PARKED:
         this->leftWheel_commu->write("T0");
         this->rightWheel_commu->write("T0");
+        this->trackSensor->TurnOnLed(false);
         break;
         
     default:
