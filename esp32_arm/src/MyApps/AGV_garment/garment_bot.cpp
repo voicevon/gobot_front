@@ -92,11 +92,16 @@ void GarmentBot::SpinOnce(){
 //    int position_error = 100;
 
 //    this->onMqttReceived();
-   this->objBoxMover.SpinOnce();
-   this->objAgv.SpinOnce();
+	this->objBoxMover.SpinOnce();
+	this->objAgv.SpinOnce();
 
-   switch (this->__state)
-   	{
+	switch (this->__state){
+	case GarmentBot::BOT_STATE::BOT_LOCATING:
+		//Trying to read RFID.
+		if (this->rfidReader->PICC_ReadCardSerial() == 123){
+			this->ToState(GarmentBot::BOT_STATE::BOT_SLEEPING);
+		}
+		break;
    	case GarmentBot::BOT_STATE::BOT_CHARGING:
       	break;
    	case GarmentBot::BOT_STATE::BOT_SLEEPING:

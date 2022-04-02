@@ -81,7 +81,7 @@ void TimerField::setStepFrequency(unsigned f)
 
 bool TimerField::begin()
 {
-  Serial.println("begin");
+  Serial.println("[Info] TimerField::begin");
   return true;
 }
 

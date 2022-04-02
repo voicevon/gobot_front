@@ -44,6 +44,7 @@ void TwinWheelsAgv::SpinOnce(){
     // Obstacle detection
     bool found_obstacle = false;
     float distance_to_obstacle =  this->obstacleSensor->measureDistanceCm(); 
+    distance_to_obstacle = -1;
     if (distance_to_obstacle >0 && distance_to_obstacle <50) 
         found_obstacle = true;
 
@@ -126,7 +127,7 @@ void TwinWheelsAgv::ToState(AGV_STATE state){
         break;
     }
     this->_State = state;
-    Serial.print("\n GarmentBot::SetMode()  " );
+    Serial.print("\n[Info] GarmentBot::ToState()  NewState= " );
     Serial.println(state);
 
    
