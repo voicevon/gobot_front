@@ -50,7 +50,7 @@ void SmartLightSensor::ReadSensor(){
     }else{
         this->c_max_idle_counter++;
         if(this->c_max_idle_counter > 999){
-            this->c_max--;
+            this->c_max *= 0.99f;
             this->c_max_idle_counter = 0;
         }
     }
@@ -60,7 +60,7 @@ void SmartLightSensor::ReadSensor(){
     }else{
         this->c_min_idle_counter++;
         if (this->c_min_idle_counter > 999){
-            this->c_min++;
+            this->c_min*=1.01f;
             this->c_min_idle_counter = 0;
         }
     }
