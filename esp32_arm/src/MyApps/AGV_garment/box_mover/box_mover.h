@@ -4,6 +4,7 @@
 #include "Robot/gcode_queue.h"
 #include "Robot/gcode_producer.h"
 
+//I am a GcodeProducer, NOT CONSUMER !
 class BoxMover: public GcodeProducer{
     public:
         enum BoxMoverState{ START, 

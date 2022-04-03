@@ -1,6 +1,6 @@
 #include "mqtt_syncer.h"
 
-void MqttSyncer::LinkLocalCommandQueue(GcodeQueue* loacalMQ){
+void MqttSyncer::LinkLocalCommandQueue_AsProducer(GcodeQueue* loacalMQ){
     this->__localMQ = loacalMQ;
 }
 

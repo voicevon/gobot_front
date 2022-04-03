@@ -22,15 +22,15 @@ TimerHandle_t mqttReconnectTimer;
 TimerHandle_t wifiReconnectTimer;
 
 void connectToWifi() {
-  Serial.println("Connecting to Wi-Fi...");
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+	Serial.println("Connecting to Wi-Fi...");
+	WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 }
 
 void connectToMqtt() {
-  Serial.println("Connecting to MQTT...");
+	Serial.println("Connecting to MQTT...");
 
-  mqttClient.setCredentials("von","von1970");
-  mqttClient.connect();
+	mqttClient.setCredentials("von","von1970");
+	mqttClient.connect();
 }
 
 void WiFiEvent(WiFiEvent_t event) {
@@ -73,47 +73,47 @@ void onMqttConnect(bool sessionPresent) {
 
 
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
-  Serial.println("Disconnected from MQTT.");
+	Serial.println("Disconnected from MQTT.");
 
-  if (WiFi.isConnected()) {
-    xTimerStart(mqttReconnectTimer, 0);
-  }
+	if (WiFi.isConnected()) {
+		xTimerStart(mqttReconnectTimer, 0);
+	}
 }
 
 void onMqttSubscribe(uint16_t packetId, uint8_t qos) {
-  Serial.println("Subscribe acknowledged.");
-  Serial.print("  packetId: ");
-  Serial.println(packetId);
-  Serial.print("  qos: ");
-  Serial.println(qos);
+	Serial.println("Subscribe acknowledged.");
+	Serial.print("  packetId: ");
+	Serial.println(packetId);
+	Serial.print("  qos: ");
+	Serial.println(qos);
 }
 
 void onMqttUnsubscribe(uint16_t packetId) {
-  Serial.println("Unsubscribe acknowledged.");
-  Serial.print("  packetId: ");
-  Serial.println(packetId);
+	Serial.println("Unsubscribe acknowledged.");
+	Serial.print("  packetId: ");
+	Serial.println(packetId);
 }
 
 void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-  Serial.println("Publish received.");
-  Serial.print("  topic: ");
-  Serial.println(topic);
-  Serial.print("  paylod: ");
-  Serial.println(payload);
-  Serial.print("  qos: ");
-  Serial.println(properties.qos);
-  Serial.print("  dup: ");
-  Serial.println(properties.dup);
-  Serial.print("  retain: ");
-  Serial.println(properties.retain);
-  Serial.print("  len: ");
-  Serial.println(len);
-  Serial.print("  index: ");
-  Serial.println(index);
-  Serial.print("  total: ");
-  Serial.println(total);
-  // app_mqtt_received_message(topic, payload);
-  // tttt();
+	Serial.println("Publish received.");
+	Serial.print("  topic: ");
+	Serial.println(topic);
+	Serial.print("  paylod: ");
+	Serial.println(payload);
+	Serial.print("  qos: ");
+	Serial.println(properties.qos);
+	Serial.print("  dup: ");
+	Serial.println(properties.dup);
+	Serial.print("  retain: ");
+	Serial.println(properties.retain);
+	Serial.print("  len: ");
+	Serial.println(len);
+	Serial.print("  index: ");
+	Serial.println(index);
+	Serial.print("  total: ");
+	Serial.println(total);
+	// app_mqtt_received_message(topic, payload);
+	// tttt();
 }
 
 void onMqttPublish(uint16_t packetId) {
@@ -126,23 +126,23 @@ void onMqttPublish(uint16_t packetId) {
 }
 
 void setup_wifi_mqtt() {
-	Serial.println("\n[Info] IoT/wifi_mqtt_client.cpp   setup_wifi_mqtt()  is entering");
-	Serial.println();
+    Serial.println("\n[Info] IoT/wifi_mqtt_client.cpp   setup_wifi_mqtt()  is entering");
+    Serial.println();
 
-	mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
-	wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
+    mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
+    wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
 
-	WiFi.onEvent(WiFiEvent);
+    WiFi.onEvent(WiFiEvent);
 
-	// mqttClient.onConnect(onMqttConnect);
-	mqttClient.onDisconnect(onMqttDisconnect);
-	mqttClient.onSubscribe(onMqttSubscribe);
-	mqttClient.onUnsubscribe(onMqttUnsubscribe);
-	// mqttClient.onMessage(onMqttMessage);
-	mqttClient.onPublish(onMqttPublish);
-	mqttClient.setServer(MQTT_HOST, MQTT_PORT);
+    // mqttClient.onConnect(onMqttConnect);
+    mqttClient.onDisconnect(onMqttDisconnect);
+    mqttClient.onSubscribe(onMqttSubscribe);
+    mqttClient.onUnsubscribe(onMqttUnsubscribe);
+    // mqttClient.onMessage(onMqttMessage);
+    mqttClient.onPublish(onMqttPublish);
+    mqttClient.setServer(MQTT_HOST, MQTT_PORT);
 
-	connectToWifi();
+    connectToWifi();
 }
 
 #endif
