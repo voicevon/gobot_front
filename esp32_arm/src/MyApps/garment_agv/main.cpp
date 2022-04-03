@@ -24,7 +24,7 @@ void setup(){
     mybot->Init();
 
     setup_mqtt_block_connect();
-    // append_mqtt_link("garment/2212/bm", box_mover_gcode_queue, &mybot->objBoxMover);
+    append_mqtt_link("garment/2212/bm", box_mover_gcode_queue, &mybot->objBoxMover);
     // mybot->objBoxMover.LinkLocalGcodeQueue_AsProducer(box_mover_gcode_queue);  // Local mq Consumer !!!
     // mqtt_box_mover_link_gcode_queue("garment/2212/bm", box_mover_gcode_queue);  // local mq Producer.
     // // mybot->objAgv.LinkLocalMessageQueue(message_queue);
