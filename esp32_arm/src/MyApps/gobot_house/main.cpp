@@ -1,23 +1,13 @@
 #include "all_devices.h"
 #ifdef I_AM_GOBOT_HOUSE
 
-// #include "Robot/Commu/CommuBleGattServer.h"
-
 #include "gobot_house.h"
 #include "gobot_house_hw.h"
 #include "MyLibs/MyFunctions.hpp" 
 GobotHouse* mybot; 
 GobotHouseHardware* mybot_hardware;
 GcodeQueue* gcode_queue;
-// RobotAction action;
-
-// static char LOG_TAG[]= "BLE-HOUSE";
-
-
-//********************************************************************************************
-//    MQTT and RabbitMQ
-//********************************************************************************************
-#include "Robot/mqtt_syncer.h"
+#include "IoT/mqtt_syncer.h"
 MqttSyncer* mqtt_syncer;
 extern AsyncMqttClient mqttClient;
 bool mqtt_is_connected = false;
@@ -52,7 +42,7 @@ void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProp
 void Begin_WifiMqttSync(){
     setup_wifi_mqtt();
     mqtt_syncer = new MqttSyncer();
-    mqtt_syncer->LinkLocalCommandQueue_AsProducer(gcode_queue);
+    // mqtt_syncer->LinkLocalCommandQueue_AsMqttMessageProducer(gcode_queue);
     // commandQueueRabbit->LinkLocalCommandQueue(mybot->GetCommandQueue());
     mqttClient.onConnect(dispatch_MqttConnected);
     mqttClient.onMessage(dispatch_MqttMessage);

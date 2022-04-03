@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Robot/gcode_consumer.h"
-#include "mqtt_message_consumer.h"
+#include "IoT/mqtt_message_consumer.h"
 
 void setup_mqtt_block_connect();
 void append_mqtt_link(const char* topic, MessageQueue* local_gcode_queue, MqttMessageConsumer* local_gcode_consumer);

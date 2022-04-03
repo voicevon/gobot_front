@@ -3,9 +3,8 @@
 #ifdef I_AM_GARMENT_BOT
 
 #include <HardwareSerial.h>
-#include "Robot/mqtt_syncer.h"
-// #include "Robot/gcode_consumer.h"
-#include "mqtt_message_consumer.h"
+#include "IoT/mqtt_syncer.h"
+#include "IoT/mqtt_message_consumer.h"
 
 extern AsyncMqttClient mqttClient;
 bool mqtt_is_connected = false;
@@ -15,7 +14,7 @@ uint8_t mqtt_syncer_index = 0;
 struct mqtt_localMQ_pair{
     char mqtt_topic[20];
     MqttSyncer* mqtt_syncer;
-    GcodeQueue* gcode_queue;
+    MessageQueue* local_message_queue;
 };
 // MqttSyncer* all_syncers[SYNCERS_COUNT];
 mqtt_localMQ_pair all_mqtt_syncer[2];
@@ -57,7 +56,7 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
     for (int i=0; i<2;i++){
         // todo:  topic is equal and copy payload, char by char
         if (all_mqtt_syncer[i].mqtt_topic == topic){
-            all_mqtt_syncer[i].gcode_queue->AppendGcodeCommand(payload);
+            all_mqtt_syncer[i].local_message_queue->AppendMessage(payload);
         }
     }
 }
@@ -71,17 +70,17 @@ void setup_mqtt_block_connect(){
     }
 }
 
-void append_mqtt_link(const char* topic, MessageQueue* local_gcode_queue, GcodeConsumer* local_gcode_consumer){
+void append_mqtt_link(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* local_gcode_consumer){
     MqttSyncer* syncer = new MqttSyncer();
     all_mqtt_syncer[mqtt_syncer_index].mqtt_syncer = syncer;
-    all_mqtt_syncer[mqtt_syncer_index].gcode_queue = local_gcode_queue;
+    all_mqtt_syncer[mqtt_syncer_index].local_message_queue = local_message_queue;
     // all_mqtt_syncer[mqtt_syncer_index].mqtt_topic = "1234567890123456789";  // todo copy
     mqtt_syncer_index++;
 
     String topic_feedback =String(topic) + "/fb";
     syncer->SubscribeMqtt(&mqttClient, topic, topic_feedback.c_str());
-    syncer->LinkLocalCommandQueue_AsProducer(local_gcode_queue);
-    local_gcode_consumer->LinkLocalGcodeQueue_AsConsumer(local_gcode_queue);
+    syncer->LinkLocalCommandQueue_AsMqttMessageProducer(local_message_queue);
+    local_gcode_consumer->LinkLocalMq_AsMqttMessageConsumer(local_message_queue);
 }
 
 
