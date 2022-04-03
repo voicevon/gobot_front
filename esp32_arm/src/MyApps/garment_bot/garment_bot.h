@@ -10,6 +10,7 @@
 #include "AGV/map_navigator.h"
 #include "twin_Wheels/twin_wheels_agv.h"
 #include <MFRC522.h>
+#include "IoT/mqtt_message_consumer.h"
 
 // #define PIN_LED_POWER_2130 23
 
@@ -40,7 +41,7 @@
 //      1. track sensor, and position-Y error, PID controller 
 //      4. Distance sensor, to detect obstacle.
 //      2. Vehical speed, motor control.
-class GarmentBot{
+class GarmentBot: public MqttMessageConsumer{
     public:
         enum BOT_STATE{
             BOT_LOCATING = 0,
@@ -77,7 +78,6 @@ class GarmentBot{
         BranchNode __current_BranchNode;
         uint16_t _ID = 0;
         GarmentBot::BOT_STATE __state;
-
 };
 
 

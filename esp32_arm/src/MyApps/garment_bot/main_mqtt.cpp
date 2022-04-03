@@ -70,7 +70,7 @@ void setup_mqtt_block_connect(){
     }
 }
 
-void append_mqtt_link(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* local_gcode_consumer){
+void append_mqtt_link(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
     MqttSyncer* syncer = new MqttSyncer();
     all_mqtt_syncer[mqtt_syncer_index].mqtt_syncer = syncer;
     all_mqtt_syncer[mqtt_syncer_index].local_message_queue = local_message_queue;
@@ -80,7 +80,7 @@ void append_mqtt_link(const char* topic, MessageQueue* local_message_queue, Mqtt
     String topic_feedback =String(topic) + "/fb";
     syncer->SubscribeMqtt(&mqttClient, topic, topic_feedback.c_str());
     syncer->LinkLocalCommandQueue_AsMqttMessageProducer(local_message_queue);
-    local_gcode_consumer->LinkLocalMq_AsMqttMessageConsumer(local_message_queue);
+    mqtt_consumer->LinkLocalMq_AsMqttMessageConsumer(local_message_queue);
 }
 
 

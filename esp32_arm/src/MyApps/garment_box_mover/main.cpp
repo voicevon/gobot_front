@@ -8,7 +8,7 @@
 #include "main_mqtt.h"
 
 // Local gcode Producer: box_mover
-BoxMover *mybot;
+BoxMover *robot;
 // Local gcode Consumer: box_mover_hardware
 BoxMoverHardware* robot_hw;
 GcodeQueue* gcode_queue;
@@ -22,19 +22,19 @@ void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Garment-BoxMover.  Keep smiling :)");
     gcode_queue = new GcodeQueue();
-    mybot = new BoxMover();
+    robot = new BoxMover();
     robot_hw = new BoxMoverHardware();
-    mybot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
+    robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
     robot_hw->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
 
     setup_mqtt_block_connect();
-    append_mqtt_link("garment/2212/bm", mqtt_command_queue, mybot);   // NO NEED MQTT, PURE LOCALLY!!!
+    append_mqtt_link("garment/2212/bm", mqtt_command_queue, robot);   // NO NEED MQTT, PURE LOCALLY!!!
     Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
 }
 
 
 void loop(){
-    mybot->SpinOnce();
+    robot->SpinOnce();
     robot_hw->SpinOnce();
     loop_mqtt();
 }

@@ -7,12 +7,8 @@
 #include "main_mqtt.h"
 
 
-GarmentBot *mybot;
-// Producer: box_mover
-// Consumer: box_mover_hardware
-// GcodeQueue* box_mover_gcode_queue;
-
-// MessageQueue* agv_message_queue;
+GarmentBot *garment_robot;
+MessageQueue* garment_bot_message_queue;
 
 
 void setup(){
@@ -20,22 +16,18 @@ void setup(){
     Serial.println("Hi there, I am your lovely bot,  Garmentbot AGV + BoxMover.  Keep smiling :)");
     // box_mover_gcode_queue = new GcodeQueue();
     // agv_message_queue = new MessageQueue();
-    mybot = new GarmentBot();
-    mybot->Init();
+    garment_robot = new GarmentBot();
+    garment_robot->Init();
 
+    garment_bot_message_queue =  new MessageQueue();
     setup_mqtt_block_connect();
-    // append_mqtt_link("garment/2212/bm", box_mover_gcode_queue, &mybot->objBoxMover);
-    // mybot->objBoxMover.LinkLocalGcodeQueue_AsProducer(box_mover_gcode_queue);  // Local mq Consumer !!!
-    // mqtt_box_mover_link_gcode_queue("garment/2212/bm", box_mover_gcode_queue);  // local mq Producer.
-    // // mybot->objAgv.LinkLocalMessageQueue(message_queue);
-    // mqtt_agv_link_message_queue("garment/2212/agv",agv_message_queue);  // local mq Producer.
-
+    append_mqtt_link("garment/2212/bot", garment_bot_message_queue, garment_robot);
     Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
 }
 
 
 void loop(){
-    mybot->SpinOnce();
+    garment_robot->SpinOnce();
     loop_mqtt();
 }
 
