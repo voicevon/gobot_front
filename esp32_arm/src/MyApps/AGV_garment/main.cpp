@@ -24,10 +24,11 @@ void setup(){
     mybot->Init();
 
     setup_mqtt_block_connect();
-    mybot->objBoxMover.LinkLocalGcodeQueue_AsProducer(box_mover_gcode_queue);  // Local mq Consumer !!!
-    mqtt_box_mover_link_gcode_queue("garment/2212/bm", box_mover_gcode_queue);  // local mq Producer.
-    // mybot->objAgv.LinkLocalMessageQueue(message_queue);
-    mqtt_agv_link_message_queue("garment/2212/agv",agv_message_queue);  // local mq Producer.
+    // append_mqtt_link("garment/2212/bm", box_mover_gcode_queue, &mybot->objBoxMover);
+    // mybot->objBoxMover.LinkLocalGcodeQueue_AsProducer(box_mover_gcode_queue);  // Local mq Consumer !!!
+    // mqtt_box_mover_link_gcode_queue("garment/2212/bm", box_mover_gcode_queue);  // local mq Producer.
+    // // mybot->objAgv.LinkLocalMessageQueue(message_queue);
+    // mqtt_agv_link_message_queue("garment/2212/agv",agv_message_queue);  // local mq Producer.
 
     Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
 }
