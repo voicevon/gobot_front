@@ -3,39 +3,38 @@
 
 
 #include "MyLibs/MyFunctions.hpp"
-#include "garment_bot.h"
+#include "box_mover.h"
+#include "box_mover_hw.h"
 #include "main_mqtt.h"
 
+// Local gcode Producer: box_mover
+BoxMover *mybot;
+// Local gcode Consumer: box_mover_hardware
+BoxMoverHardware* robot_hw;
+GcodeQueue* gcode_queue;
 
-GarmentBot *mybot;
-// Producer: box_mover
-// Consumer: box_mover_hardware
-GcodeQueue* box_mover_gcode_queue;
 
-MessageQueue* agv_message_queue;
-
+// Remote message to local
+MessageQueue* action_message;
 
 void setup(){
     Serial.begin(115200);
-    Serial.println("Hi there, I am your lovely bot,  Garmentbot AGV + BoxMover.  Keep smiling :)");
-    box_mover_gcode_queue = new GcodeQueue();
-    agv_message_queue = new MessageQueue();
-    mybot = new GarmentBot();
-    mybot->Init();
+    Serial.println("Hi there, I am your lovely bot,  Garment-BoxMover.  Keep smiling :)");
+    gcode_queue = new GcodeQueue();
+    mybot = new BoxMover();
+    robot_hw = new BoxMoverHardware();
+    mybot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
+    robot_hw->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
 
     setup_mqtt_block_connect();
-    append_mqtt_link("garment/2212/bm", box_mover_gcode_queue, &mybot->objBoxMover);
-    // mybot->objBoxMover.LinkLocalGcodeQueue_AsProducer(box_mover_gcode_queue);  // Local mq Consumer !!!
-    // mqtt_box_mover_link_gcode_queue("garment/2212/bm", box_mover_gcode_queue);  // local mq Producer.
-    // // mybot->objAgv.LinkLocalMessageQueue(message_queue);
-    // mqtt_agv_link_message_queue("garment/2212/agv",agv_message_queue);  // local mq Producer.
-
+    append_mqtt_link("garment/2212/bm", action_message, mybot);   // NO NEED MQTT, PURE LOCALLY!!!
     Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
 }
 
 
 void loop(){
     mybot->SpinOnce();
+    robot_hw->SpinOnce();
     loop_mqtt();
 }
 

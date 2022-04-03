@@ -25,10 +25,7 @@ class BoxMover: public GcodeProducer{
         void UnloadBox();
         void SpinOnce(); 
         BoxMover::BoxMoverState GetState(){return this->State;};
-        // GcodeQueue* GetCommandQueue(){return this->__commandQueue;};
     
     private:
-        // GcodeQueue* __commandQueue;
-        // BoxMoverHardware* __objBoxMoverHardware;
    
 };

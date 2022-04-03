@@ -13,8 +13,9 @@ class GarmentBoxMoverAgent{
                             UNLOADING, 
                             UNLOADED
                             };
-        BoxMoverState ReadState(){};
+        BoxMoverState ReadState(){return START;};
         void ToState(BoxMoverState state){};
         void LoadBox(){};
         void UnloadBox(){};
+        void SpinOnce(){};
 };

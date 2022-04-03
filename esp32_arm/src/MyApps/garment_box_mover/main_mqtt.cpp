@@ -1,8 +1,12 @@
 
 #include "all_devices.h"
-#ifdef I_AM_GARMENT_BOT
+#ifdef I_AM_GARMENT_BOX_MOVER
 
 #include <HardwareSerial.h>
+
+//********************************************************************************************
+//    MQTT and RabbitMQ
+//********************************************************************************************
 #include "Robot/mqtt_syncer.h"
 #include "Robot/gcode_consumer.h"
 
@@ -83,8 +87,22 @@ void append_mqtt_link(const char* topic, GcodeQueue* local_gcode_queue, GcodeCon
     local_gcode_consumer->LinkLocalGcodeQueue_AsConsumer(local_gcode_queue);
 }
 
+// void mqtt_box_mover_link_gcode_queue(const char* mqtt_topic, GcodeQueue* gcode_queue){
+//     mq_sync_box_mover.SubscribeMqtt(&mqttClient, "garment/x2206/box", "garment/x2206/box/fb");
+//     mq_sync_box_mover.LinkLocalCommandQueue_AsProducer(gcode_queue);
+// }
+
+// void mqtt_agv_link_message_queue(const char* mqtt_topic, MessageQueue* message_queue){
+//     mq_sync_agv.SubscribeMqtt(&mqttClient, "garment/x2206/agv", "garment/x2206/agv/fb");
+//     // mq_sync_agv.LinkLocalCommandQueue(message_queue);
+// }
+
+
+//*********************  end of MQTT and RabbitMQ  *******************************************
 
 void loop_mqtt(){
+    // mq_sync_box_mover.SpinOnce();
+    // mq_sync_agv.SpinOnce();
     MqttSyncer* syncer;
     for (int i=0; i< SYNCERS_COUNT; i++){
         syncer = all_mqtt_syncer[i].mqtt_syncer;
