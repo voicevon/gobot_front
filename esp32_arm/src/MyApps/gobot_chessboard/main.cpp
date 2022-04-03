@@ -48,7 +48,7 @@ void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProp
 void Begin_WifiRabbitMqtt(){
     setup_wifi_mqtt();
     mqtt_syncer = new MqttSyncer();
-    mqtt_syncer->LinkLocalCommandQueue(gcode_queue);
+    mqtt_syncer->LinkLocalCommandQueue_AsProducer(gcode_queue);
     mqttClient.onConnect(dispatch_MqttConnected);
     mqttClient.onMessage(dispatch_MqttMessage);
 }
@@ -63,10 +63,10 @@ void setup(){
     // Serial.println("BLE is ok....");    
     mybot = &GobotChessboard::getInstance();
     // mybot->Init(gcode_queue);
-    mybot->LinkLocalMessageQueue(gcode_queue);
+    mybot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
     mybot_hardware = new GobotChessboardHardware();
     mybot_hardware->InitRobot();
-    mybot_hardware->LinkLocalMessageQueue(gcode_queue);
+    mybot_hardware->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
     // mybot->Calibrate(1);
     // mybot->ParkArms(true);
     Begin_WifiRabbitMqtt();

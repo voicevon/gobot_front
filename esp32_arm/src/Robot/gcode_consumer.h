@@ -3,6 +3,8 @@
 
 class GcodeConsumer{
     public:
+        void LinkLocalGcodeQueue_AsConsumer(GcodeQueue* gcode_queue) {this->_gcode_queue =gcode_queue;};
+
     // protected:
-        GcodeQueue* _mq;
+        GcodeQueue* _gcode_queue;
 };

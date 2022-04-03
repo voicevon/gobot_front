@@ -52,7 +52,7 @@ void dispatch_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProp
 void Begin_WifiMqttSync(){
     setup_wifi_mqtt();
     mqtt_syncer = new MqttSyncer();
-    mqtt_syncer->LinkLocalCommandQueue(gcode_queue);
+    mqtt_syncer->LinkLocalCommandQueue_AsProducer(gcode_queue);
     // commandQueueRabbit->LinkLocalCommandQueue(mybot->GetCommandQueue());
     mqttClient.onConnect(dispatch_MqttConnected);
     mqttClient.onMessage(dispatch_MqttMessage);
@@ -70,8 +70,9 @@ void setup(){
     gcode_queue = new GcodeQueue();
     // mybot->Setup(&action);
     mybot->Setup();
-    mybot->LinkLocalMessageQueue(gcode_queue);
-    mybot_hardware->LinkLocalMessageQueue(gcode_queue);
+    mybot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
+    // TODO: Link as consumer()
+    mybot_hardware->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
     Begin_WifiMqttSync();
     while (! mqtt_is_connected){
         delay(100);

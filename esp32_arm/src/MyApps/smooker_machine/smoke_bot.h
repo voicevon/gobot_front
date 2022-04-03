@@ -17,9 +17,9 @@
 
 
 
-class SmokeBot: public RobotBase{
+class SmokeBotHardware: public RobotBase{
     public:
-        SmokeBot();
+        SmokeBotHardware();
         void HomeSingleAxis(char axis) override;
         void InitRobot() override;
         void Init_Gpio();

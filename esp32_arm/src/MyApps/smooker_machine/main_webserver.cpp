@@ -15,7 +15,7 @@
 // std::string topic = "actu/dev001/yongquan"; 
 // std::string payload ="OFF";
 
-SmokeBot* mybot;
+SmokeBotHardware* mybot;
 GcodeQueue myCommandQueue = GcodeQueue();
 // int distance = 100;
 // int pause_second = 20;
@@ -64,14 +64,16 @@ void setup() {
 
 	setup_webcommu();
 	// setup_wifi_mqtt();
-	mybot = new SmokeBot();
-	myCommandQueue.LinkRobot(mybot);
+	mybot = new SmokeBotHardware();
+	// myCommandQueue.LinkRobot(mybot);
+	mybot->LinkLocalGcodeQueue_AsConsumer(&myCommandQueue);
 	mybot->Init_Gpio();
 	mybot->InitRobot();
 	Serial.println("\nSet up is done .....");
 	String strG28 = "G28";
 	myCommandQueue.AppendGcodeCommand(strG28);
-	myCommandQueue.SpinOnce();
+	// myCommandQueue.SpinOnce();
+	mybot->SpinOnce();
 	
 	// while (!mqttClient.connected())
 	//     delay(100);
@@ -86,7 +88,7 @@ void loop() {
 	String strG1 = "G1X";
 	WebCommu_SpinOnce();
 	mybot->SpinOnce();
-	myCommandQueue.SpinOnce();
+	// myCommandQueue.SpinOnce();
 	if (!varOnOff) return;
 	if (var_done_count >= var_total_count) return;
 	

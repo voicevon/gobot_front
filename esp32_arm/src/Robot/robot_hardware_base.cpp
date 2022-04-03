@@ -44,10 +44,10 @@ void RobotBase::SpinOnce(){
 void RobotBase::SpinOnce_BaseExit(){
 	if (this->State != RobotState::IDLE)
 		return;
-	if (this->_mq->BufferIsEmpty())
+	if (this->_gcode_queue->BufferIsEmpty())
 		return;
 
-	MessageQueue::SingleMessage* message = this->_mq->FetchTailMessage();
+	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
 	if (message == NULL){
 		Serial.println("\n\n\n [Error] RobotBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
 		return;

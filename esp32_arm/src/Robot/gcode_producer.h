@@ -11,7 +11,8 @@
 class GcodeProducer{
     public:
         // GcodeQueue* GetGcodeQueue(){return this->_gcode_queue;};
-        void LinkLocalMessageQueue_AsProducer(MessageQueue* mq) {this->_gcode_queue = (GcodeQueue*) mq;};
+        void LinkLocalGcodeQueue_AsProducer(GcodeQueue* gcode_queue) 
+            {this->_gcode_queue = gcode_queue;};
 
     protected:
         GcodeQueue* _gcode_queue;

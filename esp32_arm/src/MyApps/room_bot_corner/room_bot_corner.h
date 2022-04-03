@@ -1,7 +1,9 @@
 #pragma once
+#include "all_devices.h"
+#ifdef I_AM_CABLEBOT_CORNER
 
 
-#include "Robot/RobotBase.h"
+#include "Robot/robot_hardware_base.h"
 #include "Robot/Commu/CommuUart.h"
 #include "Robot/Commu/CommuBleGattServer.h"
 // #include "Robot/Axis/SingleAxis.h"
@@ -63,3 +65,5 @@ class RoomBotCorner: public RobotBase{
         void __EnableMotor(char actuator, bool enable_it) override {};   
 };
 
+
+#endif

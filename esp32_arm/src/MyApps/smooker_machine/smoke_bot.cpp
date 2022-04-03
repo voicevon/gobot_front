@@ -5,11 +5,11 @@
 #define ACCELERATION_HOMIMG  250000
 #define MAX_SPEED_HOMING  5200
 
-SmokeBot::SmokeBot(){
+SmokeBotHardware::SmokeBotHardware(){
 
 }
 
-void SmokeBot::RunG1(Gcode* gcode) {
+void SmokeBotHardware::RunG1(Gcode* gcode) {
 	//None blocking, move backgroundly.
 	// Serial.println("---------  Running G1   ");
 	float distance = gcode->get_value('X');
@@ -22,20 +22,20 @@ void SmokeBot::RunG1(Gcode* gcode) {
 	this->objStepControl.move(this->objStepper);
 }
 
-void SmokeBot:: _running_G1(){
+void SmokeBotHardware:: _running_G1(){
 	if (this->objStepper.getDistanceToTarget() < 20){
 	this->State = RobotState::IDLE;
 	}
 }
 
-void SmokeBot::HomeSingleAxis(char axis){
+void SmokeBotHardware::HomeSingleAxis(char axis){
 	Serial.println("\n================================  " );
 	Serial.print(" Start homing    " );
 	this->objStepper.setAcceleration(ACCELERATION_HOMIMG);
 	this->objStepper.setMaxSpeed(MAX_SPEED_HOMING);
 }
 
-void SmokeBot:: _running_G28(){
+void SmokeBotHardware:: _running_G28(){
 	if (this->objHomeHelper.IsTriged()){
 		// End stop is trigered
 	this->objStepControl.stop();
@@ -53,7 +53,7 @@ void SmokeBot:: _running_G28(){
 	
 }
 
-void SmokeBot::Init_Gpio(){
+void SmokeBotHardware::Init_Gpio(){
 	Serial.println("Smoke bot is initializing GPIO ...");
 	pinMode(PIN_ENABLE, OUTPUT);
 	pinMode(MICRO_STEP_1, OUTPUT);
@@ -68,14 +68,14 @@ void SmokeBot::Init_Gpio(){
 	this->objStepper.setStepPinPolarity(HIGH);
 }
 
-void SmokeBot::InitRobot(){
+void SmokeBotHardware::InitRobot(){
 	this->commuDevice = &this->objCommuUart; 
 	// this->objHomeHelper.LinkActuator(&this->objActuator);
 	this->objCommuUart.OutputMessage("Hoddy, I am commmunicator UART ....");
 
 }
 
-void SmokeBot::__EnableMotor(char actuator, bool enable_it){
+void SmokeBotHardware::__EnableMotor(char actuator, bool enable_it){
 	// Only one stepper motor here.
 	digitalWrite(PIN_ENABLE, !enable_it);
 }
