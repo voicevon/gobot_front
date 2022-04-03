@@ -1,6 +1,6 @@
 
 #include "all_devices.h"
-#ifdef I_AM_GARMENT_BOT
+#ifdef USING_WIFI_MQTT
 
 #include <HardwareSerial.h>
 #include "IoT/mqtt_syncer.h"
@@ -16,16 +16,12 @@ struct mqtt_localMQ_pair{
     MqttSyncer* mqtt_syncer;
     MessageQueue* local_message_queue;
 };
-// MqttSyncer* all_syncers[SYNCERS_COUNT];
 mqtt_localMQ_pair all_mqtt_syncer[2];
-
-
 
 // Please Notice: This function will be invoked in slave thread.
 void on_MqttConnected(bool sessionPresent){
     Serial.println("\n\n     MQTT is connected !!!!\n\n");
     mqtt_is_connected = true;
-
 }
 
 //Please Notice: This function will be invoked in slave thread.
@@ -82,7 +78,6 @@ void append_mqtt_link(const char* topic, MessageQueue* local_message_queue, Mqtt
     syncer->LinkLocalCommandQueue_AsMqttMessageProducer(local_message_queue);
     mqtt_consumer->LinkLocalMq_AsMqttMessageConsumer(local_message_queue);
 }
-
 
 void loop_mqtt(){
     MqttSyncer* syncer;

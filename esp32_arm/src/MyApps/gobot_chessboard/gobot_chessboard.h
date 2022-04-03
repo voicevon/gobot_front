@@ -4,8 +4,9 @@
 #include "Robot/gcode_queue.h"
 #include "chessboard_map.h"
 #include "Robot/gcode_producer.h"
+#include "IoT/mqtt_message_consumer.h"
 
-class GobotChessboard: public GcodeProducer{
+class GobotChessboard: public GcodeProducer, public MqttMessageConsumer{
     public:
         static GobotChessboard& getInstance()
         {
@@ -13,17 +14,14 @@ class GobotChessboard: public GcodeProducer{
                                   // Instantiated on first use.
             return instance;
         }
-        // void Init(GcodeQueue* gcode_queue);
         void SpinOnce();
         void ParkArms(bool do_home);
         void pick_place_park(RobotAction* pAction);
         void Calibrate(int step);
-        // GcodeQueue* GetCommandQueue(){return this->__commandQueue;};
 
     private:
         GobotChessboard(){};
         RobotAction* __arm_action;
-        // GcodeQueue* __commandQueue;
         void __Pickup(ChessboardCell* cell);
         void __Place(ChessboardCell* cell);
         void __Park();

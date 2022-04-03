@@ -4,7 +4,7 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "garment_bot.h"
-#include "main_mqtt.h"
+#include "IoT/main_mqtt.h"
 
 
 GarmentBot *garment_robot;
@@ -13,7 +13,7 @@ MessageQueue* garment_bot_message_queue;
 
 void setup(){
     Serial.begin(115200);
-    Serial.println("Hi there, I am your lovely bot,  Garmentbot AGV + BoxMover.  Keep smiling :)");
+    Serial.println("Hi there, I am your lovely bot,  Garmentbot, include AGV.  Keep smiling :)");
     // box_mover_gcode_queue = new GcodeQueue();
     // agv_message_queue = new MessageQueue();
     garment_robot = new GarmentBot();

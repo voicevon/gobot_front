@@ -5,9 +5,9 @@
 // #include "actions.h"
 #include "Robot/gcode_queue.h"
 #include "Robot/gcode_producer.h"
-// #include "MyLibs/message_producer.h"
+#include "IoT/mqtt_message_consumer.h"
 
-class GobotHouse: public GcodeProducer{
+class GobotHouse: public GcodeProducer, public MqttMessageConsumer{
     public:
         enum SITE_TYPE{
             HEAD,
