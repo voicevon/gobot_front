@@ -12,7 +12,8 @@ GobotHead -------> HouseQueue -----> Agent  -------> HouseMQTT -------> HouseBot
 */
 
 #include <Arduino.h>
-#include "gcode_queue.h"
+// #include "gcode_queue.h"
+#include "MyLibs/message_queue.h"
 #include "IoT/wifi_mqtt_client.h"
 
 
@@ -21,13 +22,13 @@ class MqttSyncer{
         String topic;
         String topic_feedback;
         byte* payload;
-        void LinkLocalCommandQueue_AsProducer(GcodeQueue* loacalMQ);  //, String mqtt_topic);
+        void LinkLocalCommandQueue_AsMqttMessageProducer(MessageQueue* loacalMQ);  //, String mqtt_topic);
         void SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic);
 
         void OnReceived(const char* payload, int length);
         void SpinOnce();
     private:
-        GcodeQueue* __localMQ;
+        MessageQueue* __localMQ;
         AsyncMqttClient* __mqttClient;
         bool __local_mq_is_full = false;
 };

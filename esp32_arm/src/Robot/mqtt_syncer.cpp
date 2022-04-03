@@ -1,6 +1,6 @@
 #include "mqtt_syncer.h"
 
-void MqttSyncer::LinkLocalCommandQueue_AsProducer(GcodeQueue* loacalMQ){
+void MqttSyncer::LinkLocalCommandQueue_AsMqttMessageProducer(MessageQueue* loacalMQ){
     this->__localMQ = loacalMQ;
 }
 
@@ -27,7 +27,7 @@ void MqttSyncer::OnReceived(const char* payload, int length){
     char* p = (char*)(payload) + length;
     *p = 0x00;
 
-    this->__local_mq_is_full = this->__localMQ->AppendGcodeCommand(payload, length); 
+    this->__local_mq_is_full = this->__localMQ->AppendMessage(payload, length); 
 
     // send message to feedback topic
     if (this->__local_mq_is_full){

@@ -14,8 +14,9 @@ BoxMoverHardware* robot_hw;
 GcodeQueue* gcode_queue;
 
 
+
 // Remote message to local
-MessageQueue* action_message;
+MessageQueue* mqtt_command_queue;
 
 void setup(){
     Serial.begin(115200);
@@ -27,7 +28,7 @@ void setup(){
     robot_hw->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
 
     setup_mqtt_block_connect();
-    append_mqtt_link("garment/2212/bm", action_message, mybot);   // NO NEED MQTT, PURE LOCALLY!!!
+    append_mqtt_link("garment/2212/bm", mqtt_command_queue, mybot);   // NO NEED MQTT, PURE LOCALLY!!!
     Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
 }
 

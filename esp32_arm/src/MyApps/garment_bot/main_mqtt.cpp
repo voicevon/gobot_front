@@ -4,7 +4,8 @@
 
 #include <HardwareSerial.h>
 #include "Robot/mqtt_syncer.h"
-#include "Robot/gcode_consumer.h"
+// #include "Robot/gcode_consumer.h"
+#include "mqtt_message_consumer.h"
 
 extern AsyncMqttClient mqttClient;
 bool mqtt_is_connected = false;
@@ -70,7 +71,7 @@ void setup_mqtt_block_connect(){
     }
 }
 
-void append_mqtt_link(const char* topic, GcodeQueue* local_gcode_queue, GcodeConsumer* local_gcode_consumer){
+void append_mqtt_link(const char* topic, MessageQueue* local_gcode_queue, GcodeConsumer* local_gcode_consumer){
     MqttSyncer* syncer = new MqttSyncer();
     all_mqtt_syncer[mqtt_syncer_index].mqtt_syncer = syncer;
     all_mqtt_syncer[mqtt_syncer_index].gcode_queue = local_gcode_queue;

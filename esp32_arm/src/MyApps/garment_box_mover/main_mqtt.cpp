@@ -4,11 +4,8 @@
 
 #include <HardwareSerial.h>
 
-//********************************************************************************************
-//    MQTT and RabbitMQ
-//********************************************************************************************
 #include "Robot/mqtt_syncer.h"
-#include "Robot/gcode_consumer.h"
+#include "mqtt_message_consumer.h"
 
 extern AsyncMqttClient mqttClient;
 bool mqtt_is_connected = false;
@@ -18,18 +15,15 @@ uint8_t mqtt_syncer_index = 0;
 struct mqtt_localMQ_pair{
     char mqtt_topic[20];
     MqttSyncer* mqtt_syncer;
-    GcodeQueue* gcode_queue;
+    MessageQueue* local_message_queue;
+    // MqttMessageConsumer* mqtt_message_consumer;
 };
-// MqttSyncer* all_syncers[SYNCERS_COUNT];
 mqtt_localMQ_pair all_mqtt_syncer[2];
-
-
 
 // Please Notice: This function will be invoked in slave thread.
 void on_MqttConnected(bool sessionPresent){
     Serial.println("\n\n     MQTT is connected !!!!\n\n");
     mqtt_is_connected = true;
-
 }
 
 //Please Notice: This function will be invoked in slave thread.
@@ -54,13 +48,11 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
         Serial.print("  total: ");
         Serial.println(total);
     }
-    
-
     // dispatch topic
     for (int i=0; i<2;i++){
         // todo:  topic is equal and copy payload, char by char
         if (all_mqtt_syncer[i].mqtt_topic == topic){
-            all_mqtt_syncer[i].gcode_queue->AppendGcodeCommand(payload);
+            all_mqtt_syncer[i].local_message_queue->AppendMessage(payload);
         }
     }
 }
@@ -74,35 +66,20 @@ void setup_mqtt_block_connect(){
     }
 }
 
-void append_mqtt_link(const char* topic, GcodeQueue* local_gcode_queue, GcodeConsumer* local_gcode_consumer){
+void append_mqtt_link(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_message_consumer){
     MqttSyncer* syncer = new MqttSyncer();
     all_mqtt_syncer[mqtt_syncer_index].mqtt_syncer = syncer;
-    all_mqtt_syncer[mqtt_syncer_index].gcode_queue = local_gcode_queue;
+    all_mqtt_syncer[mqtt_syncer_index].local_message_queue = local_message_queue;
     // all_mqtt_syncer[mqtt_syncer_index].mqtt_topic = "1234567890123456789";  // todo copy
     mqtt_syncer_index++;
 
     String topic_feedback =String(topic) + "/fb";
     syncer->SubscribeMqtt(&mqttClient, topic, topic_feedback.c_str());
-    syncer->LinkLocalCommandQueue_AsProducer(local_gcode_queue);
-    local_gcode_consumer->LinkLocalGcodeQueue_AsConsumer(local_gcode_queue);
+    syncer->LinkLocalCommandQueue_AsMqttMessageProducer(local_message_queue);
+    mqtt_message_consumer->LinkLocalMq_AsMqttMessageConsumer(local_message_queue);
 }
 
-// void mqtt_box_mover_link_gcode_queue(const char* mqtt_topic, GcodeQueue* gcode_queue){
-//     mq_sync_box_mover.SubscribeMqtt(&mqttClient, "garment/x2206/box", "garment/x2206/box/fb");
-//     mq_sync_box_mover.LinkLocalCommandQueue_AsProducer(gcode_queue);
-// }
-
-// void mqtt_agv_link_message_queue(const char* mqtt_topic, MessageQueue* message_queue){
-//     mq_sync_agv.SubscribeMqtt(&mqttClient, "garment/x2206/agv", "garment/x2206/agv/fb");
-//     // mq_sync_agv.LinkLocalCommandQueue(message_queue);
-// }
-
-
-//*********************  end of MQTT and RabbitMQ  *******************************************
-
 void loop_mqtt(){
-    // mq_sync_box_mover.SpinOnce();
-    // mq_sync_agv.SpinOnce();
     MqttSyncer* syncer;
     for (int i=0; i< SYNCERS_COUNT; i++){
         syncer = all_mqtt_syncer[i].mqtt_syncer;
