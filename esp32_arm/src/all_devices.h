@@ -3,6 +3,7 @@
 
 // #define I_AM_AGV_WHEEL
 #define I_AM_GARMENT_BOT
+// #define I_AM_GARMENT_BOX_MOVER
 // #define I_AM_GOBOT_HOUSE_2134
 // #define I_AM_GOBOT_CHESSBOARD_2134
 

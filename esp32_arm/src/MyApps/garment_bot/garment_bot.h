@@ -5,7 +5,8 @@
 
 // #include "twin_wheels/vehical_twin_wheel_hw.h"
 // #include "twin_wheels/vehical_twin_wheel.h"
-#include "box_mover/box_mover.h"
+// #include "box_mover/box_mover.h"
+#include "box_mover_agent.h"
 #include "AGV/map_navigator.h"
 #include "twin_Wheels/twin_wheels_agv.h"
 #include <MFRC522.h>
@@ -55,7 +56,8 @@ class GarmentBot{
         };
 
         GarmentBot();
-        BoxMover objBoxMover = BoxMover();
+        // BoxMover objBoxMover = BoxMover();
+        GarmentBoxMoverAgent objBoxMoverAgent = GarmentBoxMoverAgent();
         TwinWheelsAgv objAgv = TwinWheelsAgv();
 
         void Init();

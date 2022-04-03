@@ -1,5 +1,5 @@
 #include "all_devices.h"
-#ifdef I_AM_GARMENT_BOT
+#ifdef I_AM_GARMENT_BOX_MOVER
 
 
 #include "MyLibs/MyFunctions.hpp"

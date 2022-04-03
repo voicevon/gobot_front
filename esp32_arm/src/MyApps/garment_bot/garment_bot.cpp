@@ -92,7 +92,7 @@ void GarmentBot::SpinOnce(){
 //    int position_error = 100;
 
 //    this->onMqttReceived();
-	this->objBoxMover.SpinOnce();
+	this->objBoxMoverAgent.SpinOnce();
 	this->objAgv.SpinOnce();
 
 	switch (this->__state){
@@ -113,7 +113,7 @@ void GarmentBot::SpinOnce(){
 			this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE);
 		break;
 	case GarmentBot::BOT_STATE::ROBOT_LOADING:
-		if(this->objBoxMover.GetState() == BoxMover::BoxMoverState::LOADED)
+		if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::LOADED)
 			this->ToState(GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION);
 		break;
 	case GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION:
@@ -121,7 +121,7 @@ void GarmentBot::SpinOnce(){
 			this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION:
-		if(this->objBoxMover.GetState() == BoxMover::BoxMoverState::UNLOADED)
+		if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::UNLOADED)
 			// Check battery voltage.
 			this->ToState(GarmentBot::BOT_STATE::BOT_SLEEPING);
 		break;
@@ -149,14 +149,14 @@ void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE:
-		this->objBoxMover.LoadBox();
+		this->objBoxMoverAgent.LoadBox();
 		new_state = GarmentBot::BOT_STATE::ROBOT_LOADING;
 		break;
 	case GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION:
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION:
-		this->objBoxMover.UnloadBox();
+		this->objBoxMoverAgent.UnloadBox();
 		new_state = GarmentBot::BOT_STATE::ROBOT_UNLOADING;
 		break;
 	
@@ -173,8 +173,8 @@ void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 }
 
 void GarmentBot::Test(int test_id){
-   if (test_id == 1) this->objBoxMover.LoadBox();
-   if (test_id == 2) this->objBoxMover.UnloadBox();
+   if (test_id == 1) this->objBoxMoverAgent.LoadBox();
+   if (test_id == 2) this->objBoxMoverAgent.UnloadBox();
    if (test_id==10) {
         // int track_error = 0;
       //   this->objTwinWheelHardware.MoveForward(track_error);
