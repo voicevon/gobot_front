@@ -17,16 +17,24 @@ void GarmentBot::Init(){
 }
 
 void GarmentBot::ExecuteMqttCommand(const char* command){
-	if (command == "move"){
-		//move 23 load      == move to point 23, loading 
-		//move 25 unloads   == move to point 25, unloading
-		//move 55 charge
-		//move 66 sleep
+	// command examples
+	// "99,short_cut" == leave main road.
+	// "11,load"      == move to point 23, loading 
+	// "22,unloads"   == move to point 25, unloading
+	// "33,charge"
+	// "44,sleep"
+	int16_t node_id;
+	String str_command;
 
-	} else if (command == "load"){
-		this->objBoxMoverAgent.LoadBox();
-	} else if (command == "unload"){
-		this->objBoxMoverAgent.UnloadBox();
+	if (str_command == "short_cut"){
+
+	} else if (str_command == "load"){
+		this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
+	} else if (str_command == "unload"){
+	} else if (str_command == "charge"){
+
+	} else if (str_command == "sleep"){
+
 	}
 }
 
@@ -65,6 +73,7 @@ void GarmentBot::onDetectedMark(uint16_t BranchNode_id){
 void GarmentBot::SpinOnce(){
 	this->objBoxMoverAgent.SpinOnce();
 	this->objAgv.SpinOnce();
+	this->CheckMqttCommand();
 	
 	if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::SLOW_MOVING ){
 		if (this->objRfid.ReadCard()){
@@ -129,14 +138,14 @@ void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE:
-		this->objBoxMoverAgent.LoadBox();
+		this->objBoxMoverAgent.ToPresetState();
 		new_state = GarmentBot::BOT_STATE::ROBOT_LOADING;
 		break;
 	case GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION:
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION:
-		this->objBoxMoverAgent.UnloadBox();
+		this->objBoxMoverAgent.ToPresetState();
 		new_state = GarmentBot::BOT_STATE::ROBOT_UNLOADING;
 		break;
 	
@@ -153,8 +162,10 @@ void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 }
 
 void GarmentBot::Test(int test_id){
-   if (test_id == 1) this->objBoxMoverAgent.LoadBox();
-   if (test_id == 2) this->objBoxMoverAgent.UnloadBox();
+   	if (test_id == 1) {
+		this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
+		this->objBoxMoverAgent.ToPresetState();
+	   }
    if (test_id==10) {
         // int track_error = 0;
       //   this->objTwinWheelHardware.MoveForward(track_error);
@@ -176,14 +187,14 @@ uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
     return payload.length();
 }
 
-void GarmentBot::onMqttReceived(uint8_t* payload){
-   // Currently is for testing, 
-   // Normally this function will be callback via a MQTT client.
-//    this->objMapNavigator.AddNode(1, BranchNode::TASK::FOLLOW_LEFT);
-   this->objMapNavigator.AddNode(2, RoadBranchNode::TASK::LOAD);
-   this->objMapNavigator.AddNode(3, RoadBranchNode::TASK::UNLOAD);
-   this->objMapNavigator.AddNode(4, RoadBranchNode::TASK::SLEEP);
+// void GarmentBot::onMqttReceived(uint8_t* payload){
+//    // Currently is for testing, 
+//    // Normally this function will be callback via a MQTT client.
+// //    this->objMapNavigator.AddNode(1, BranchNode::TASK::FOLLOW_LEFT);
+//    this->objMapNavigator.AddNode(2, RoadBranchNode::TASK::LOAD);
+//    this->objMapNavigator.AddNode(3, RoadBranchNode::TASK::UNLOAD);
+//    this->objMapNavigator.AddNode(4, RoadBranchNode::TASK::SLEEP);
 
-}
+// }
 
 #endif

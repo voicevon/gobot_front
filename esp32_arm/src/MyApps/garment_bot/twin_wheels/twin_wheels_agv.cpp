@@ -49,8 +49,8 @@ void TwinWheelsAgv::Forwarding(){
 }
 
 void TwinWheelsAgv::SpinOnce(){
-    bool testing = true;
-    while (testing){
+    bool test_track_sensor_only = false;
+    while (test_track_sensor_only){
         this->trackSensor->IsFollowingLeft = !this->trackSensor->IsFollowingLeft;
         int16_t xx_error = this->trackSensor->ReadForwardingError();
         Serial.println (xx_error);
@@ -59,7 +59,7 @@ void TwinWheelsAgv::SpinOnce(){
     // Obstacle detection
     bool found_obstacle = false;
     float distance_to_obstacle =  this->obstacleSensor->measureDistanceCm(); 
-    distance_to_obstacle = -1;
+    distance_to_obstacle = -1;   // For test.
     if (distance_to_obstacle >0 && distance_to_obstacle <50) 
         found_obstacle = true;
 

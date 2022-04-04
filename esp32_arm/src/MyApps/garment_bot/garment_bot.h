@@ -54,7 +54,6 @@ class GarmentBot: public MqttMessageConsumer{
         };
 
         GarmentBot();
-        // BoxMover objBoxMover = BoxMover();
         GarmentBoxMoverAgent objBoxMoverAgent = GarmentBoxMoverAgent();
         TwinWheelsAgv objAgv = TwinWheelsAgv();
 
@@ -63,7 +62,7 @@ class GarmentBot: public MqttMessageConsumer{
         void ToState(GarmentBot::BOT_STATE state);
         void Test(int test_id);
         uint8_t GetMqtt_PubPayload(uint8_t* chars);
-        void onMqttReceived(uint8_t* payload);
+        // void onMqttReceived(uint8_t* payload);
         
     protected:
         
