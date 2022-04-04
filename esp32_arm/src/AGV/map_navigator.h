@@ -6,10 +6,11 @@ class BranchNode{
     public:
 
         enum TASK{
-            FOLLOW_LEFT,
-            FOLLLOW_RIGHT,
-            TURN_LEFT,
-            TURN_RIGHT,
+            // FOLLOW_LEFT,
+            // FOLLLOW_RIGHT,
+            // TURN_LEFT,
+            // TURN_RIGHT,
+            SHORT_CUT,
             LOADING,
             UNLOADING,
             SLEEPING,

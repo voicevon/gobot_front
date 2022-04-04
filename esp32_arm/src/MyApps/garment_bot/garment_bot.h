@@ -9,8 +9,8 @@
 #include "box_mover_agent.h"
 #include "AGV/map_navigator.h"
 #include "twin_Wheels/twin_wheels_agv.h"
-#include <MFRC522.h>
 #include "IoT/mqtt_message_consumer.h"
+#include "smart_rfid_reader.h"
 
 // #define PIN_LED_POWER_2130 23
 
@@ -62,7 +62,7 @@ class GarmentBot: public MqttMessageConsumer{
         TwinWheelsAgv objAgv = TwinWheelsAgv();
 
         void Init();
-        void SpinOnce();
+        void SpinOnce() override;
         void ToState(GarmentBot::BOT_STATE state);
         void Test(int test_id);
         uint8_t GetMqtt_PubPayload(uint8_t* chars);
@@ -71,8 +71,9 @@ class GarmentBot: public MqttMessageConsumer{
     protected:
         
     private:
+        void ExecuteMqttCommand(const char* command) override;
         TrackGraph objMapNavigator;
-        MFRC522* __rfidReader;   // = MFRC522(10, 9);  // Create MFRC522 instance
+        SmartRfidReader objRfid;
         
         void onDetectedMark(uint16_t mapsite_id);
         BranchNode __current_BranchNode;

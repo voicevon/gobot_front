@@ -49,6 +49,7 @@ class TwinWheelsAgv{
         void SpinOnce();
         TwinWheelsAgv::AGV_STATE GetState(){return this->_State;};
         void ToState(TwinWheelsAgv::AGV_STATE state);
+        void SetFollowMainRoad(bool next_branch_is_on_left, bool follow_main_road);
 
     protected:
         AGV_STATE _State;

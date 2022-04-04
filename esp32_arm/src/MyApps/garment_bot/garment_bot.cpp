@@ -8,97 +8,76 @@ GarmentBot::GarmentBot(){
 
 void GarmentBot::Init(){
 	Serial.print("\n[Info] GarmentBot::Init() is entering");
-	this->__rfidReader = new MFRC522(17,18);
+	this->objRfid.Init(17,18,19);
+	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
-
-	// Init I2C bus
-	Wire.begin();
 
 	this->ToState(GarmentBot::BOT_STATE::BOT_LOCATING);
 	Serial.print("\n[Info] GarmentBot::Init() is done.\n");
 }
 
-void ReadI2C(){
-   		// Moving follow the track.
-		// Read I2C sensor, and obstacle 
-		uint8_t slave_address = 0x3f;
-		uint8_t RxBuffer[1];
-		uint8_t n_bytes = 2;
-		Wire.beginTransmission(slave_address);
-		Wire.endTransmission(false);
-		Wire.requestFrom(slave_address, n_bytes);    // request data from slave device
-		int i=0;
-		while (Wire.available() > 0) {  // slave may send less than requested
-            uint8_t c = Wire.read();         // receive a byte as character
-            RxBuffer[0] = c;
-            i++;
-            // Serial.println(c,BIN);
-		}
-		Wire.endTransmission(true);
+void GarmentBot::ExecuteMqttCommand(const char* command){
+	if (command == "move"){
+		//move 23 load      == move to point 23, loading 
+		//move 25 unloads   == move to point 25, unloading
+		//move 55 charge
+		//move 66 sleep
 
-		if (RxBuffer[1] > 0){
-			// Got an obstacle, agv should be stop
-			// this->objTwinWheel.Stop();s
-		}
+	} else if (command == "load"){
+		this->objBoxMoverAgent.LoadBox();
+	} else if (command == "unload"){
+		this->objBoxMoverAgent.UnloadBox();
+	}
 }
 
 void GarmentBot::onDetectedMark(uint16_t BranchNode_id){
    BranchNode current_BranchNode;
    if (this->objMapNavigator.FetchNode(BranchNode_id, &current_BranchNode)){
          // the mark is being managered via map navigator.
-      switch (current_BranchNode.task)
-      {
-      case BranchNode::TASK::FOLLOW_LEFT:
-         // this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = false;
-         this->ToState(GarmentBot::BOT_STATE::AGV_MOVING_TO_SOURCE);
-         break;
-      case BranchNode::TASK::FOLLLOW_RIGHT:
-         // this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
-         this->ToState(GarmentBot::BOT_STATE::AGV_MOVING_TO_SOURCE);
-         break;
-      case BranchNode::TASK::LOADING:
-         // this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
+	switch (current_BranchNode.task){
+	case BranchNode::TASK::SHORT_CUT:
+		// Follow branch road, not main road.
+		this->objAgv.SetFollowMainRoad(this->objRfid.MainRoad_IsOn_LeftSide , false);
+		break;
+	case BranchNode::TASK::LOADING:
+	  	// ???  This is invoked when agv is SLOW_MOVING, should to loading, after parking.
          this->__current_BranchNode.task = BranchNode::TASK::LOADING;
          this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE);
          break;
-      case BranchNode::TASK::UNLOADING:
-         // this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
+	case BranchNode::TASK::UNLOADING:
          this->__current_BranchNode.task = BranchNode::TASK::UNLOADING;
          this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE);
          break;
-      case BranchNode::TASK::SLEEPING:
-         // this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
+	case BranchNode::TASK::SLEEPING:
          this->__current_BranchNode.task = BranchNode::TASK::SLEEPING;
          this->ToState(GarmentBot::AGV_PARKED_AT_SOURCE);
          break;
-      case BranchNode::TASK::CHARGING:
-         // this->objRemoteSensor.ObjTrackSensor.FollowRightTrack = true;
+	case BranchNode::TASK::CHARGING:
          this->__current_BranchNode.task = BranchNode::TASK::CHARGING;
-         this->ToState(GarmentBot::AGV_PARKED_AT_SOURCE);         
-      default:
+         this->ToState(GarmentBot::AGV_PARKED_AT_SOURCE);
+		 break;         
+	default:
          break;
       }
    }
 }
 
 void GarmentBot::SpinOnce(){
-//    int distance_to_full_park = 100;
-//    bool loading_finished = true;
-//    bool unloading_finished = true;
-//    uint16_t BranchNode_id = 0;
-//    bool found_obstacle = false;
-//    bool found_slowdown_mark = false;
-//    // int track_error = 0; // this->objTrackSensor.ReadError_FromRight(&RxBuffer[0]);
-//    int position_error = 100;
-
-//    this->onMqttReceived();
 	this->objBoxMoverAgent.SpinOnce();
 	this->objAgv.SpinOnce();
+	
+	if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::SLOW_MOVING ){
+		if (this->objRfid.ReadCard()){
+			this->onDetectedMark(this->objRfid.CardId);
+			return;
+		}
+	}
 
 	switch (this->__state){
 	case GarmentBot::BOT_STATE::BOT_LOCATING:
 		//Trying to read RFID.
-		if (this->__rfidReader->PICC_ReadCardSerial() == 123){
+		// if (this->__rfidReader->PICC_ReadCardSerial() == 123){
+		if (this->objRfid.CardId == 123){
 			this->ToState(GarmentBot::BOT_STATE::BOT_SLEEPING);
 		}
 		break;
@@ -111,6 +90,7 @@ void GarmentBot::SpinOnce(){
    	case GarmentBot::BOT_STATE::AGV_MOVING_TO_SOURCE:
 		if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
 			this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE);
+
 		break;
 	case GarmentBot::BOT_STATE::ROBOT_LOADING:
 		if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::LOADED)
@@ -199,7 +179,7 @@ uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
 void GarmentBot::onMqttReceived(uint8_t* payload){
    // Currently is for testing, 
    // Normally this function will be callback via a MQTT client.
-   this->objMapNavigator.AddNode(1, BranchNode::TASK::FOLLOW_LEFT);
+//    this->objMapNavigator.AddNode(1, BranchNode::TASK::FOLLOW_LEFT);
    this->objMapNavigator.AddNode(2, BranchNode::TASK::LOADING);
    this->objMapNavigator.AddNode(3, BranchNode::TASK::UNLOADING);
    this->objMapNavigator.AddNode(4, BranchNode::TASK::SLEEPING);

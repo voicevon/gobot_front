@@ -32,6 +32,10 @@ void TwinWheelsAgv::Init(){
     this->ToState(PARKED);
 }
 
+void TwinWheelsAgv::SetFollowMainRoad(bool next_branch_is_on_left, bool follow_main_road){
+    this->trackSensor->IsFollowingLeft = !(next_branch_is_on_left ^ follow_main_road);
+}
+
 void TwinWheelsAgv::Forwarding(){
     int16_t x_error = this->trackSensor->ReadForwardingError();
     // pid controller to set common_speed, diff_speed
