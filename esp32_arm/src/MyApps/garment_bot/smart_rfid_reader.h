@@ -1,7 +1,7 @@
 #pragma once
 
 #include <MFRC522.h>
-
+#include "AGV/map_road_station/map_road_station.h"
 /*
     There are appplication information inside RFID, after we formated it.
     Those data are:
@@ -15,13 +15,13 @@ class SmartRfidReader{
     public:
         int CardId;
         bool MainRoad_IsOn_LeftSide;
-        int NextStationType;  //todo: type is enum StationTypeOnMap.
+        WorkStation::TYPE_ON_MAP NextStationType;  
         void Init(int8_t pin_clk, int8_t pin_miso, int8_t pin_mosi);
         // void LinkCallback(void(* callback)(uint16_t card_id)){this->__onDetectCard = callback;};
         bool ReadCard();
 
     private:
-        MFRC522* __rfidReader;   // = MFRC522(10, 9);  // Create MFRC522 instance
+        MFRC522* __rfidReader;
         // void(* __onDetectCard)(uint16_t card_id);
 
 

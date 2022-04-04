@@ -9,7 +9,7 @@ bool SmartRfidReader::ReadCard(){
     if (ok){
         this->CardId = 1;
         this->MainRoad_IsOn_LeftSide = true;
-        this->NextStationType = 3;
+        this->NextStationType = WorkStation::TYPE_ON_MAP::LOAD_UNLOAD;
     }
     return ok;
     // if(ok){
