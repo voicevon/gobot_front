@@ -62,14 +62,21 @@ class AgvBot:
         self.battery_voltate = battery_voltage
         self.State =  state
 
-'''
-Receive message from queue='garment/puma/mes',
-    The message include FromNode, ToNode
-publish message to queue='garment/puma/agv/v123'
-The agv will dispatch loading/unloading to box_mover.
-'''
-class GarmentTop:
+
+class AgvManager:
+    '''
+    Receive message from queue topic='puma/mes',
+        The message include LoadFromStation, UnloadToStation
+    publish message to queue topic ='puma/agv/v123' \n
+    The agv will dispatch loading/unloading to box_mover.
+    '''
     def __init__(self) -> None:
+        '''
+        First, We initialize our resources: 
+        1. Map:  RoadNode, branch-side.
+        2. Workstations. Where can do loading, unloading, charging, parking.
+        3. Agvs. All Agvs we can schedule.
+        '''
         self.mq_top_level = TaskQueue()
         self.agvs=[]
         for i in range(5):
@@ -79,7 +86,14 @@ class GarmentTop:
         self.second_routing = []
         helper = RabbitMqClient_Helper()
         self.rabbitmq_client = helper.MakeClient()
+        self.LoadMap()
 
+    def LoadMap(self)->None:
+        '''
+        Map include many RodeNode.
+        
+        '''
+        self.RoadNode
 
     def GetFreeAgvBot(self) -> AgvBot:
         for agvbot in self.agvs:
@@ -111,4 +125,4 @@ class GarmentTop:
 
 
 if __name__ == '__main__':
-    aa = GarmentTop()
+    aa = AgvManager()
