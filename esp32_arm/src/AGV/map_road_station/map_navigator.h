@@ -4,14 +4,7 @@
  
 class RoadBranchNode{
     public:
-
         enum TASK{
-            // FOLLOW_LEFT,
-            // FOLLLOW_RIGHT,
-            // TURN_LEFT,
-            // TURN_RIGHT,
-
-            
             SHORT_CUT_ONLY,  // No load, unload, sleep, charge.  
             LOAD,
             UNLOAD,
@@ -22,8 +15,6 @@ class RoadBranchNode{
         RoadBranchNode(uint16_t NodeId, TASK task);
         uint16_t NodeId; 
         TASK task;
-        // bool GoingOnFollowLeft();
-        // bool GoingOnFastMoving();
 };
 
 
