@@ -1,19 +1,21 @@
 # include "map_navigator.h"
 
-BranchNode::BranchNode(){
+RoadBranchNode::RoadBranchNode(){
     this->NodeId = 0;
 }
-BranchNode::BranchNode(uint16_t NodeId, TASK task ){
+RoadBranchNode::RoadBranchNode(uint16_t NodeId, TASK task ){
     this->NodeId = NodeId;
     this->task = task;
 }
-TrackGraph::TrackGraph(){
+
+
+RoadGraph::RoadGraph(){
     for(int i=0; i<20; i++){
         this->__all_branch_nodes[i].NodeId = 0;
     }
 }
 
-bool TrackGraph::AddNode(uint16_t NodeId, BranchNode::TASK task){
+bool RoadGraph::AddNode(uint16_t NodeId, RoadBranchNode::TASK task){
     for(int i=0; i<20; i++){
         if (this->__all_branch_nodes[i].NodeId == 0){
             this->__all_branch_nodes[i].NodeId = NodeId;
@@ -26,7 +28,7 @@ bool TrackGraph::AddNode(uint16_t NodeId, BranchNode::TASK task){
     return false;   
 }
 
-bool TrackGraph::RemoveNode(uint16_t NodeId){
+bool RoadGraph::RemoveNode(uint16_t NodeId){
     for(int i=0; i<20; i++){
         if (this->__all_branch_nodes[i].NodeId == NodeId){
             this->__all_branch_nodes[i].NodeId = 0;
@@ -37,6 +39,6 @@ bool TrackGraph::RemoveNode(uint16_t NodeId){
 }
 
 
-bool TrackGraph::FetchNode(uint16_t NodeId, BranchNode* the_node ){
+bool RoadGraph::FetchNode(uint16_t NodeId, RoadBranchNode* the_node ){
     return false;
 }

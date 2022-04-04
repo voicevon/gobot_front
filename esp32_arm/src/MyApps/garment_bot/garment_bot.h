@@ -3,13 +3,10 @@
 #ifdef I_AM_GARMENT_BOT
 
 
-// #include "twin_wheels/vehical_twin_wheel_hw.h"
-// #include "twin_wheels/vehical_twin_wheel.h"
-// #include "box_mover/box_mover.h"
-#include "box_mover_agent.h"
-#include "AGV/map_navigator.h"
 #include "twin_Wheels/twin_wheels_agv.h"
+#include "box_mover_agent.h"
 #include "IoT/mqtt_message_consumer.h"
+#include "AGV/map_navigator.h"
 #include "smart_rfid_reader.h"
 
 // #define PIN_LED_POWER_2130 23
@@ -72,11 +69,11 @@ class GarmentBot: public MqttMessageConsumer{
         
     private:
         void ExecuteMqttCommand(const char* command) override;
-        TrackGraph objMapNavigator;
+        RoadGraph objMapNavigator;
         SmartRfidReader objRfid;
         
         void onDetectedMark(uint16_t mapsite_id);
-        BranchNode __current_BranchNode;
+        RoadBranchNode __current_BranchNode;
         uint16_t _ID = 0;
         GarmentBot::BOT_STATE __state;
 };

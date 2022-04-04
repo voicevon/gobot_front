@@ -31,29 +31,29 @@ void GarmentBot::ExecuteMqttCommand(const char* command){
 }
 
 void GarmentBot::onDetectedMark(uint16_t BranchNode_id){
-   BranchNode current_BranchNode;
+   RoadBranchNode current_BranchNode;
    if (this->objMapNavigator.FetchNode(BranchNode_id, &current_BranchNode)){
          // the mark is being managered via map navigator.
 	switch (current_BranchNode.task){
-	case BranchNode::TASK::SHORT_CUT:
+	case RoadBranchNode::TASK::SHORT_CUT_ONLY:
 		// Follow branch road, not main road.
 		this->objAgv.SetFollowMainRoad(this->objRfid.MainRoad_IsOn_LeftSide , false);
 		break;
-	case BranchNode::TASK::LOADING:
+	case RoadBranchNode::TASK::LOAD:
 	  	// ???  This is invoked when agv is SLOW_MOVING, should to loading, after parking.
-         this->__current_BranchNode.task = BranchNode::TASK::LOADING;
+         this->__current_BranchNode.task = RoadBranchNode::TASK::LOAD;
          this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE);
          break;
-	case BranchNode::TASK::UNLOADING:
-         this->__current_BranchNode.task = BranchNode::TASK::UNLOADING;
+	case RoadBranchNode::TASK::UNLOAD:
+         this->__current_BranchNode.task = RoadBranchNode::TASK::UNLOAD;
          this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE);
          break;
-	case BranchNode::TASK::SLEEPING:
-         this->__current_BranchNode.task = BranchNode::TASK::SLEEPING;
+	case RoadBranchNode::TASK::SLEEP:
+         this->__current_BranchNode.task = RoadBranchNode::TASK::SLEEP;
          this->ToState(GarmentBot::AGV_PARKED_AT_SOURCE);
          break;
-	case BranchNode::TASK::CHARGING:
-         this->__current_BranchNode.task = BranchNode::TASK::CHARGING;
+	case RoadBranchNode::TASK::CHARGE:
+         this->__current_BranchNode.task = RoadBranchNode::TASK::CHARGE;
          this->ToState(GarmentBot::AGV_PARKED_AT_SOURCE);
 		 break;         
 	default:
@@ -180,9 +180,9 @@ void GarmentBot::onMqttReceived(uint8_t* payload){
    // Currently is for testing, 
    // Normally this function will be callback via a MQTT client.
 //    this->objMapNavigator.AddNode(1, BranchNode::TASK::FOLLOW_LEFT);
-   this->objMapNavigator.AddNode(2, BranchNode::TASK::LOADING);
-   this->objMapNavigator.AddNode(3, BranchNode::TASK::UNLOADING);
-   this->objMapNavigator.AddNode(4, BranchNode::TASK::SLEEPING);
+   this->objMapNavigator.AddNode(2, RoadBranchNode::TASK::LOAD);
+   this->objMapNavigator.AddNode(3, RoadBranchNode::TASK::UNLOAD);
+   this->objMapNavigator.AddNode(4, RoadBranchNode::TASK::SLEEP);
 
 }
 

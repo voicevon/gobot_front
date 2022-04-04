@@ -2,7 +2,7 @@
 #include <stdint.h>
 
  
-class BranchNode{
+class RoadBranchNode{
     public:
 
         enum TASK{
@@ -10,14 +10,16 @@ class BranchNode{
             // FOLLLOW_RIGHT,
             // TURN_LEFT,
             // TURN_RIGHT,
-            SHORT_CUT,
-            LOADING,
-            UNLOADING,
-            SLEEPING,
-            CHARGING,
+
+            
+            SHORT_CUT_ONLY,  // No load, unload, sleep, charge.  
+            LOAD,
+            UNLOAD,
+            SLEEP,
+            CHARGE,
         };
-        BranchNode();
-        BranchNode(uint16_t NodeId, TASK task);
+        RoadBranchNode();
+        RoadBranchNode(uint16_t NodeId, TASK task);
         uint16_t NodeId; 
         TASK task;
         // bool GoingOnFollowLeft();
@@ -25,13 +27,13 @@ class BranchNode{
 };
 
 
-class TrackGraph{
+class RoadGraph{
     public:
-        TrackGraph();
-        bool AddNode(uint16_t NodeId, BranchNode::TASK task);
+        RoadGraph();
+        bool AddNode(uint16_t NodeId, RoadBranchNode::TASK task);
         bool RemoveNode(uint16_t NodeId);
-        bool FetchNode(uint16_t NodeId, BranchNode* the_node );
+        bool FetchNode(uint16_t NodeId, RoadBranchNode* the_node );
 
     private:
-        BranchNode __all_branch_nodes[20];
+        RoadBranchNode __all_branch_nodes[20];
 };
