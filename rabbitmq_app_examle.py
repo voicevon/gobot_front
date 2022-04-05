@@ -13,7 +13,8 @@ class RabbitMqClient_App_Example():
     '''
     def __init__(self) -> None:
         self.__ConnectBroker_MQTT()
-        self.__ConnectBroker_RabbitMQ()
+        # self.__ConnectBroker_RabbitMQ()
+        self.connection = RabbitClient().ConnectToRabbitMq()
         self.__MakeSyncer()
 
     def SpinOnce(self):
@@ -31,23 +32,18 @@ class RabbitMqClient_App_Example():
     #     self.client = RabbitClient(self.connection)
     #     return self.client
 
-    def __ConnectBroker_MQTT(self):
-        from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
-        config_mqtt = MQTT_ConnectionConfig()
-        config_mqtt.uid = 'gobot_head'
-        config_mqtt.password = 'gobot_head'
-        g_mqtt.connect_to_broker(config_mqtt)
 
-    def __ConnectBroker_RabbitMQ(self):
-        config = RabbitMQBrokeConfig()
-        config.uid = 'gobot_head'
-        config.password = 'gobot_head'
-        credentials = pika.PlainCredentials(config.uid, config.password)
-        parameters = pika.ConnectionParameters(host=config.host,
-                                        port= config.port,
-                                        virtual_host= config.virtual_host,
-                                        credentials= credentials)
-        self.connection = pika.BlockingConnection(parameters)
+
+    # def __ConnectBroker_RabbitMQ(self):
+    #     config = RabbitMQBrokeConfig()
+    #     config.uid = 'gobot_head'
+    #     config.password = 'gobot_head'
+    #     credentials = pika.PlainCredentials(config.uid, config.password)
+    #     parameters = pika.ConnectionParameters(host=config.host,
+    #                                     port= config.port,
+    #                                     virtual_host= config.virtual_host,
+    #                                     credentials= credentials)
+    #     self.connection = pika.BlockingConnection(parameters)
 
 
 if __name__ == '__main__':

@@ -1,17 +1,25 @@
 import json
-from tokenize import Single
-from robot_tasks_scheduler.bot_tasks_queue import TaskQueue
 
-from rabbitmq_app_examle import RabbitClient, RabbitMqClient_Helper
-from rabbitmq_mqtt_sync import Connect
-
+# from pika import BlockingConnection
+from rabbit_mq_basic import RabbitClient, RabbitMQBrokeConfig
 from AGV.mes_resources import MapElement_AGV,MapElement_Node, MES_Resources, MyJsonEncoder
+
+
+from enum import Enum
+
+class BotTaskState(Enum):
+    NoPlan = 0
+    Planed = 1
+    Executing = 2
+    Done = 3
+
+
 
 class Single_MesTask:
     def __init__(self) -> None:
         self.load_from = MapElement_Node()
         self.unload_to = MapElement_Node()
-
+        self.stated = 0
 
 
 class MesManager:
@@ -20,6 +28,9 @@ class MesManager:
         The message include LoadFromStation, UnloadToStation
     publish message to queue topic ='puma/agv/v123' \n
     The agv will dispatch loading/unloading to box_mover.
+
+    TODO:  Current mes_task is callbacked when message queue got a task. Means running not in main thread.
+            We want to check mq, when got free AGV
     '''
     def __init__(self) -> None:
         '''
@@ -27,33 +38,19 @@ class MesManager:
         1. Map:  RoadNode, branch-side.
         2. Workstations. Where can do loading, unloading, charging, parking.
         3. Agvs. All Agvs we can schedule.
+        Second, Connect to RabbitMQ, In future, We can:
+        1. Receive Message from Mes Manager.
+        2. Publish Message to AGVs
         '''
-        self.mq_top_level = TaskQueue()
         self.mes_resources = MES_Resources()
-        helper = RabbitMqClient_Helper()
-        self.mq_client = helper.MakeClient()
-        self.mq_client.Publish()
+        self.mes_task = Single_MesTask()
+
+        config = RabbitMQBrokeConfig()
+        self.connection = RabbitClient(config).ConnectToRabbitMq()
         self.mq_rx_channel = self.connection.channel()
-        self.mq_rx_channel.queue_declare(queue=self.message_config.main_queue)
-        self.mq_rx_channel.basic_consume(queue=self.message_config.main_queue, on_message_callback=self.callback_main, auto_ack=False )
-
-    def callback_main(self, ch, method, properties, body):
-        print('                        [main] Received ' ,  method.routing_key, body)
-        # if method.routing_key == 'gobot_x2134_house':
-        self.main = body
-        if self.main == self.feedback:
-            print('repeated...... return')    #????
-            # return
-
-        # a new command from gobot_head is received
-        g_mqtt.publish(self.message_config.main_mqtt_topic, body)
-        self.channel_main.basic_ack(delivery_tag=method.delivery_tag)
-        #stop consume a
-        print("                       Stop consuming now..", self.message_config.main_mqtt_topic, body)
-        self.channel_main.stop_consuming()  # this will break all callbacks
-        self.consuming_message_in_queue = False
-        self.channel_feedback.queue_declare(queue=self.message_config.feedback_queue)
-        self.channel_feedback.basic_consume(queue=self.message_config.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
+        self.mes_task_queue_name = 'puma_mes_task'
+        self.mq_rx_channel.queue_declare(queue=self.mes_task_queue_name)
+        self.mq_rx_channel.basic_consume(queue=self.mes_task_queue_name, on_message_callback=self.mes_task_rx_callback, auto_ack=False )
 
     def SpinOnce(self) -> None:
         '''
@@ -62,15 +59,39 @@ class MesManager:
         3. Calculate routing for that AGV
         3. Publish routing message to that AGV
         '''
-        mes_task = self.Check_MES_Task()
-        if mes_task == None:
-            # there is no task from MES
-            return
-        agv = self.GetFreeAgvBot()
-        path_a = self.AppendRoutingNode()
-        path_b = self.AppendRoutingNode()
-        self.DispatchTask()
+        if self.mes_task.stated == BotTaskState.NoPlan:
+            # Try to get a free agv.
+            agv = self.GetFreeAgvBot()
+            if agv is None:
+                return
+            #Calculate path
+            path_a = int[]
+            path_b = int[]
 
+            # send the path to the free agv.
+
+            # empty mes_task
+            self.mes_task.stated = BotTaskState.Planed
+
+
+        if self.mes_task.stated != BotTaskState.NoPlan:
+            # path_a = self.AppendRoutingNode()
+            # path_b = self.AppendRoutingNode()
+            # self.DispatchTask(path_a, path_b)
+            if self.mq_rx_channel._consumer_infos:
+                self.mq_rx_channel.connection.process_data_events(time_limit=0.1)  # will blocking 0.1 second
+
+    def mes_task_rx_callback(self, ch, method, properties, body):
+        print(' mes_task_rx_callback()  Received ' ,  method.routing_key, body)
+        if self.mes_task.stated != BotTaskState.NoPlan:
+            # from json to mes_task
+            xx = json.loads(body)
+            self.mes_task.load_from = xx["load_from"]
+            self.mes_task.unload_to = xx['unload_to']
+            self.mes_task.stated = BotTaskState.NoPlan
+        
+            self.mq_rx_channel.basic_ack(delivery_tag=method.delivery_tag)
+            # without ack, will rabbit mq cause this callback hannpend again?   should be yes, but how long ?
 
     def AppendRoutingNode(self, routing_num:int, node_id:int, subsequence_task:int):
         if routing_num == 1:
@@ -78,18 +99,11 @@ class MesManager:
         if routing_num == 2:
             self.second_routing.append(node_id,subsequence_task)
 
-    def Check_MES_Task(self) -> Single_MesTask:
-        mes_task = None
-        # Check message queue from MES
-        return mes_task
-
-
     def GetFreeAgvBot(self) -> MapElement_AGV:
         for agvbot in self.mes_resources.all_agvs:
             if agvbot.state == 0:
                 return agvbot
         return None
-
 
     def DispatchTask(self, load_node_id, unload_node_id):
         '''
@@ -108,14 +122,18 @@ class MesManager:
 
 class Mes_emulator:
     def __init__(self) -> None:
-        helper = RabbitMqClient_Helper()
-        self.rabbit_client = helper.MakeClient()
+        config = RabbitMQBrokeConfig()
+        config.uid = "von"
+        config.password = "von1970"
+        self.client=RabbitClient(config)
+        self.connection = self.client.ConnectToRabbitMq()
         self.message_queue = 'puma_mes_task'
 
-    def PublishTask(self, new_task: Single_MesTask):
-        # payload = json.encoder(new_task)
+    def PublishTask(self, new_task:Single_MesTask):
         JSONData = json.dumps(new_task, indent=4, cls=MyJsonEncoder)
-        self.rabbit_client.Publish(self.message_queue, payload=JSONData)
+        # JSONData = json.dumps(self.all_map_elements, indent=4, cls=MyJsonEncoder)
+        print(JSONData)
+        self.client.Publish(self.message_queue, payload=JSONData)
 
     def PublishBatchTask_ForTest(self):
         for i in range(100):
@@ -127,12 +145,14 @@ class Mes_emulator:
 
 
 if __name__ == '__main__':
-    # emulator = Mes_emulator()
-    # emulator.PublishBatchTask_ForTest()
+    todo = 2
+    if todo==1:
+        emulator = Mes_emulator()
+        emulator.PublishBatchTask_ForTest()
     
-    
-    mm = MesManager()
-    while True:
-        mm.SpinOnce()
+    if todo == 2:    
+        mm = MesManager()
+        while True:
+            mm.SpinOnce()
 
 

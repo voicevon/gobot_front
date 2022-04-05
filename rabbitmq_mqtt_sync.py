@@ -63,7 +63,7 @@ class RabbitMQSync:
         self.channel_main.queue_declare(queue=self.queue_config.main_queue)
         self.channel_main.basic_consume(queue=self.queue_config.main_queue, on_message_callback=self.callback_main, auto_ack=False )
 
-        self.channel_feedback =  self.connection.channel()
+        self.channel_feedback = self.connection.channel()
         self.channel_feedback.queue_declare(queue=self.queue_config.feedback_queue)
         self.channel_feedback.basic_consume(queue=self.queue_config.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
         # self.channel_main.start_consuming()  

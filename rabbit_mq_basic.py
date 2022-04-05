@@ -1,5 +1,6 @@
 import pika 
 from pika import BlockingConnection
+from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
 
 import time
 
@@ -10,18 +11,22 @@ class RabbitMQBrokeConfig:
     uid = 'gobot_head'
     password = 'gobot_head'
 
+
 class RabbitClient():
-    # def __init__(self, connection:pika.BlockingConnection) -> None:
+    '''
+    To learn:  What is channel indeed ?
+    '''
     def __init__(self, brokerConfig: RabbitMQBrokeConfig) -> None:
-        self.connection = self.ConnectToRabbitMq(brokerConfig)
+        self.broker_config = brokerConfig
+        self.connection = self.ConnectToRabbitMq()
         self.channel = self.connection.channel()
         self.declaed_queues=[]
 
-    def ConnectToRabbitMq(self, config:RabbitMQBrokeConfig )-> BlockingConnection:
-        credentials = pika.PlainCredentials(config.uid, config.password)
-        parameters = pika.ConnectionParameters(host=config.host,
-                                    port= config.port,
-                                    virtual_host= config.virtual_host,
+    def ConnectToRabbitMq(self)-> BlockingConnection:
+        credentials = pika.PlainCredentials(self.broker_config.uid, self.broker_config.password)
+        parameters = pika.ConnectionParameters(host=self.broker_config.host,
+                                    port= self.broker_config.port,
+                                    virtual_host= self.broker_config.virtual_host,
                                     credentials= credentials)
         connection = pika.BlockingConnection(parameters)
         return connection
@@ -35,8 +40,23 @@ class RabbitClient():
                         routing_key = queue_name,
                         body = payload)
 
-    def Subscribe(self):
-        pass
+    def callback_example(self, ch, method, properties, body):
+        print('RabbitClient::callback_example()  mq Received ' ,  method.routing_key, body)
+        self.channel.basic_ack(delivery_tag=method.delivery_tag)
+
+    def Subscribe(self, queue_name:str, callback):
+        '''
+        call back examole def callback_main(self, ch, method, properties, body):
+        '''
+        if not (queue_name in self.declaed_queues):
+            self.channel.queue_declare(queue=queue_name)
+            self.declaed_queues.append(queue_name)
+        if callback is None:
+            callback = self.callback_example
+        # self.channel_main = self.connection.channel()
+        # self.channel_main.queue_declare(queue=self.queue_config.main_queue)
+        self.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=False )
+
     
 
     def RabbitMQ_publish_tester(self):
@@ -52,11 +72,10 @@ class RabbitClient():
             i += 1  
             time.sleep(2)
 
-# def Connect(config:RabbitMQBrokeConfig) -> BlockingConnection:
-#     credentials = pika.PlainCredentials(config.uid, config.password)
-#     parameters = pika.ConnectionParameters(host=config.host,
-#                                     port= config.port,
-#                                     virtual_host= config.virtual_host,
-#                                     credentials= credentials)
-#     connection = pika.BlockingConnection(parameters)
-#     return connection
+
+
+def ConnectBroker_MQTT(self):
+    config_mqtt = MQTT_ConnectionConfig()
+    config_mqtt.uid = 'gobot_head'
+    config_mqtt.password = 'gobot_head'
+    g_mqtt.connect_to_broker(config_mqtt)

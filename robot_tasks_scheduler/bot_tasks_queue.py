@@ -19,32 +19,32 @@ class BotTask:
     
 
     
-class TaskQueue():
-    tasks = []
+# class TaskQueue():
+#     tasks = []
     
-    @classmethod
-    def FetchSingleTask(cls) -> BotTask:
-        for task in cls.tasks:
-            if task.State == BotTaskState:
-                return task
-        return None
+#     @classmethod
+#     def FetchSingleTask(cls) -> BotTask:
+#         for task in cls.tasks:
+#             if task.State == BotTaskState:
+#                 return task
+#         return None
 
-    def AppendTask(cls, task_id:int, source_station:int, target_station:int)->bool:
-        task = BotTask(task_id)
-        task.SourceSite_id = source_station
-        task.TargetSite_id = target_station
-        cls.tasks.append(task)
+#     def AppendTask(cls, task_id:int, source_station:int, target_station:int)->bool:
+#         task = BotTask(task_id)
+#         task.SourceSite_id = source_station
+#         task.TargetSite_id = target_station
+#         cls.tasks.append(task)
 
-    @classmethod
-    def SpinOnce(cls):
-        '''
-        Try to tell targetbot its task
-        '''
+#     @classmethod
+#     def SpinOnce(cls):
+#         '''
+#         Try to tell targetbot its task
+#         '''
 
 
-    @classmethod
-    def __str__(cls):
-        return 'tasks len() =' + str(cls.tasks.__len__())
+#     @classmethod
+#     def __str__(cls):
+#         return 'tasks len() =' + str(cls.tasks.__len__())
 
-    __repr__ = __str__
-    show = __str__
+#     __repr__ = __str__
+#     show = __str__
