@@ -3,7 +3,7 @@
 import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 from gogame.human_level_robot_base import HumanLevelRobotBase
-from rabbitmq_all_in_one import RabbitClient
+from rabbitmq_app_examle import RabbitClient
 import enum
 
 
@@ -73,7 +73,7 @@ class HumanLevel_GarmentAgv(HumanLevelRobotBase):
 
 
 if __name__ == '__main__':
-    from rabbitmq_all_in_one import RabbitMqClient_Helper
+    from rabbitmq_app_examle import RabbitMqClient_Helper
     helper = RabbitMqClient_Helper()
     client = helper.MakeClient()
     agv_box_mover = HumanLevel_GarmentAgv(client)

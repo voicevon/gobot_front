@@ -22,7 +22,7 @@ from config.image_logger import ImageLogger,ImageLoggerToWhere
 from config.message_logger import MessageLoggerToWhere,MessageLogger
 from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
-from rabbitmq_all_in_one import RabbitMqClient_Helper, RabbitClient
+from rabbitmq_app_examle import RabbitMqClient_Helper, RabbitClient
 
 
 class GobotHead():

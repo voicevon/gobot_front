@@ -4,7 +4,7 @@ import time
 
 
 if __name__ == '__main__':
-    from rabbitmq_all_in_one import RabbitMqClient_Helper
+    from rabbitmq_app_examle import RabbitMqClient_Helper
     from gogame.human_level_gobot_house import HumanLevelGobotHouse
     from gogame.human_level_gobot_arm import HumanLevelGobotArm
 
