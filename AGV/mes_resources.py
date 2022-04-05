@@ -4,6 +4,14 @@ import json
 from json import JSONEncoder
 from collections import namedtuple
 
+
+class Single_MesTask:
+    def __init__(self) -> None:
+        self.load_from = MapElement_Node()
+        self.unload_to = MapElement_Node()
+        self.state = 0
+
+
 class MapElement_AGV:
     # after hardware reseting,  AGV will move forward, 
     # after detecting the first location mark, will go to branch and goto idle.
@@ -44,7 +52,7 @@ def customStudentDecoder(studentDict):
     '''
     return namedtuple('X', studentDict.keys())(*studentDict.values())
 
-class MES_Resources:
+class MES_ResourcesHelper:
     '''
     RfCard_id      MainRoad_OnLeft    StationType,   Station_id
     1                   True            SHORT_CUT_ONLY   NULL
@@ -54,8 +62,8 @@ class MES_Resources:
     5                   True            CHARGE           908
     '''
     def __init__(self) -> None:
-        self.all_map_elements=[]
-        self.all_agvs=[]
+        self.all_map_nodes=[MapElement_Node]
+        self.all_agvs=[MapElement_AGV]
 
         self.file_name_map = 'config_map_nodes.json'
         self.file_name_agvs = 'config_agvs.json'
@@ -63,6 +71,9 @@ class MES_Resources:
 
 
     def LoadFromJsonFile(self) -> None:
+        '''
+        TODO:  Load AGV when that agv is online.
+        '''
         # read file to string
         file = open(self.file_name_map, "r") 
         data = file.read() 
@@ -74,7 +85,7 @@ class MES_Resources:
             new_node = MapElement_Node()
             new_node.Node_id = node["RfCard_id"]
             # TODO: more members
-            self.all_map_elements.append(new_node)
+            self.all_map_nodes.append(new_node)
             print (new_node.Node_id)
 
         # Do every steps again for agv
@@ -93,8 +104,8 @@ class MES_Resources:
         return self.data
 
     def AppendMapElement(self, new_node:MapElement_Node) ->None:
-        self.all_map_elements.append(new_node)
-        JSONData = json.dumps(self.all_map_elements, indent=4, cls=MyJsonEncoder)
+        self.all_map_nodes.append(new_node)
+        JSONData = json.dumps(self.all_map_nodes, indent=4, cls=MyJsonEncoder)
         print(JSONData)
         textfile = open(self.file_name_map, "w")
         textfile.write(JSONData)
@@ -110,13 +121,13 @@ class MES_Resources:
 
 def init_json_files():
     nn = MapElement_Node()
-    nn.RfCard_id = 111
+    nn.Node_id = 111
     nn.SationType = 222
     nn.Station_id = 333
     nn.MainRoad_IsonLeft = True
 
     resources.AppendMapElement(nn)
-    nn.RfCard_id = 123
+    nn.Node_id = 123
     resources.AppendMapElement(nn)
 
     agv=MapElement_AGV(4444)
@@ -124,7 +135,7 @@ def init_json_files():
 
 
 if __name__ == '__main__':
-    resources = MES_Resources()
+    resources = MES_ResourcesHelper()
     # init_json_files()
 
 

@@ -40,6 +40,15 @@ class RabbitClient():
                         routing_key = queue_name,
                         body = payload)
 
+    def PublishBatch(self, queue_name:str, payload:list):
+        if not (queue_name in self.declaed_queues):
+            self.channel.queue_declare(queue=queue_name)
+            self.declaed_queues.append(queue_name)
+
+        self.channel.basic_publish(exchange = '',
+                        routing_key = queue_name,
+                        body = payload)
+
     def callback_example(self, ch, method, properties, body):
         print('RabbitClient::callback_example()  mq Received ' ,  method.routing_key, body)
         self.channel.basic_ack(delivery_tag=method.delivery_tag)
