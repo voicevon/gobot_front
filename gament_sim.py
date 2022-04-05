@@ -48,19 +48,7 @@ class GarmentMap:
         return routing
 
 
-class AgvBot:
-    # after hardware reseting,  AGV will move forward, 
-    # after detecting the first location mark, will go to branch and goto idle.
-    def __init__(self, id:int) -> None:
-        self.id = id
-        self.location = -1   # means unknown.
-        self.State = -1   # Charging, moving to load, loading, moving to unload, unloading, idle.
-        self.battery_voltate = 12.0
 
-    def on_mqtt_message(self, location_id, battery_voltage, state):
-        self.location =  location_id
-        self.battery_voltate = battery_voltage
-        self.State =  state
 
 
 class AgvManager:

@@ -1,0 +1,14 @@
+[
+    {
+        "RfCard_id": 123,
+        "SationType": 222,
+        "Station_id": 333,
+        "MainRoad_IsonLeft": true
+    },
+    {
+        "RfCard_id": 123,
+        "SationType": 222,
+        "Station_id": 333,
+        "MainRoad_IsonLeft": true
+    }
+]
