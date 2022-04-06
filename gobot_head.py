@@ -2,6 +2,7 @@
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
+from this import d
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 
@@ -22,7 +23,7 @@ from config.image_logger import ImageLogger,ImageLoggerToWhere
 from config.message_logger import MessageLoggerToWhere,MessageLogger
 from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
-from rabbitmq_mqtt_sync import SyncerHelper_ForGobort
+from rabbitmq_mqtt_sync import SyncerHelper_ForGobot
 
 
 class GobotHead():
@@ -43,6 +44,28 @@ class GobotHead():
     3.4 talker_house, can talk to house robot arm.
     '''
     def __init__(self, eye_type:RobotEye_Product):
+        self.__InitServers()
+        self.__InitEyeVisions(eye_type)
+
+        self.arm = HumanLevelGobotArm(self.mqClient)
+        self.house = HumanLevelGobotHouse(self.mqClient)
+
+        self.__died_area_scanner = DiedAreaScanner()
+        self.__goto = self.at_state_game_over
+        self.__target_demo_layout = ChessboardLayout('Demo Layout')
+        self.__last_detected_layout = ChessboardLayout('Last_detected')
+
+        self.__InitOthers()
+        MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
+        print("[Info] GobotHead::__init__()  is done.")
+
+    def __InitServers(self):
+        self.mqHelper = SyncerHelper_ForGobot()
+        self.mqClient = self.mqHelper.MqClient
+
+        self.__ai = GoGameAiClient()
+    
+    def __InitEyeVisions(self,eye_type:RobotEye_Product ):
         self.__eye = RobotEye_Factory.CreateMonoEye(eye_type)
         if eye_type == RobotEye_Product.PaspberryPiCamera:
             ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
@@ -53,27 +76,7 @@ class GobotHead():
 
         elif eye_type == RobotEye_Product.UsbCamera:
             ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
-
-
         self.__vision = GobotVision()
-        self.__ai = GoGameAiClient()
-        # self.__controller = Controller()
-        # self.mqHelper = RabbitMqClient_Helper()
-        # self.mqClient = self.mqHelper.MakeClient()
-        self.mqhelper = SyncerHelper_ForGobort()
-        self.mqClient = self.mqhelper.MqClient
-        self.arm = HumanLevelGobotArm(self.mqClient)
-        self.house = HumanLevelGobotHouse(self.mqClient)
-        self.__died_area_scanner = DiedAreaScanner()
-        self.__goto = self.at_state_game_over
-        self.__target_demo_layout = ChessboardLayout('Demo Layout')
-        self.__last_detected_layout = ChessboardLayout('Last_detected')
-
-        logging.basicConfig(level=logging.DEBUG)
-        self.__InitOthers()
-        MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
-        print("[Info] GobotHead::__init__()  is done.")
-
 
     def __InitOthers(self):
         logging.info("[Info] GobotHead Start init objects......")
@@ -128,7 +131,7 @@ class GobotHead():
         self.__cvWindow.get_all_windows()[eye_name][0] = False
 
     def user_playing(self):
-        self.go_agent.send("move c4 B")
+        self.__ai.send("move c4 B")
     
     def __remove_one_cell_to_trash(self, color):
         '''
@@ -467,8 +470,7 @@ class GobotHead():
         self.__goto = self.at_state_game_over
 
     def SpinOnce(self):
-        print('======================================================')
-        self.mqhelper.SpinOnce()
+        self.mqHelper.SpinOnce()
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
@@ -504,6 +506,8 @@ class GobotHead():
         self.__controller.action_park()
 
 if __name__ == '__main__':
+    # logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.CRITICAL)
 
     robot_eye= RobotEye_Product.CameraEmulator
     # robot_eye = RobotEye_Product.PaspberryPiCamera
@@ -513,7 +517,6 @@ if __name__ == '__main__':
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
     # myrobot.house.demo()
     while True:
-        print("---")
         myrobot.SpinOnce()
 
 

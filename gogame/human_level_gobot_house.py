@@ -24,7 +24,7 @@ sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10
 from gogame.human_level_robot_base import HumanLevelRobotBase
 # from rabbitmq_app_examle_uselss import RabbitClient
 from rabbit_mq_basic import RabbitClient
-from rabbitmq_mqtt_sync import SyncerHelper_ForGobort
+from rabbitmq_mqtt_sync import SyncerHelper_ForGobot
 import enum
 
 
@@ -153,7 +153,7 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
 
 
 if __name__ == '__main__':
-    helper = SyncerHelper_ForGobort()
+    helper = SyncerHelper_ForGobot()
     client = helper.MqClient
 
     house = HumanLevelGobotHouse(client,False)

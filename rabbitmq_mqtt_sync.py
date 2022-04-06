@@ -25,8 +25,7 @@ class RabbitMQSyncer:
         self.consuming_message_in_queue = True
         
     def callback_main(self, ch, method, properties, body):
-        print('                       [RabbitMQSyncer] callback_main ' ,  method.routing_key, body)
-        # if method.routing_key == 'gobot_x2134_house':
+        # print('                       [RabbitMQSyncer] callback_main ' ,  method.routing_key, body)
         self.main = body
         if self.main == self.feedback:
             print('repeated...... not return')    #????
@@ -36,24 +35,23 @@ class RabbitMQSyncer:
         g_mqtt.publish(self.queues.mqtt_publish_topic, body)
         self.channel_main.basic_ack(delivery_tag=method.delivery_tag)
         #stop consume a
-        print("                       Stop consuming now..", self.queues.mqtt_publish_topic, body)
+        # print("                       Stop consuming now, Will continue when got feedback ...", self.queues.mqtt_publish_topic, body)
         self.channel_main.stop_consuming()  # this will break all callbacks
         self.consuming_message_in_queue = False
         self.channel_feedback.queue_declare(queue=self.queues.feedback_queue)
         self.channel_feedback.basic_consume(queue=self.queues.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
-        print("                       End of callback()")
-
+        # print("                       End of callback()")
 
     def callback_feedback(self, ch, method, properties, body):
         # if method.routing_key == 'gobot.x2134.house.fb':
-        print('[feedback] Received ' ,  method.routing_key, body)
+        # print('                             [feedback] Received ' ,  method.routing_key, body)
         self.feedback = body
         if self.main == self.feedback:
             # feedback is equal to last command.
             # gobot-house has received last message in the gobot_head command queue.
             # go on to comsume a
             self.consuming_message_in_queue = True
-            print(self.main, self.feedback, "Start consuming now..")
+            # print(self.main, self.feedback, "      Start consuming now..")
             self.channel_main.queue_declare(queue=self.queues.main_queue)
             self.channel_main.basic_consume(queue=self.queues.main_queue, on_message_callback=self.callback_main, auto_ack=False )
  
@@ -65,10 +63,9 @@ class RabbitMQSyncer:
         self.channel_feedback = self.connection.channel()
         self.channel_feedback.queue_declare(queue=self.queues.feedback_queue)
         self.channel_feedback.basic_consume(queue=self.queues.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
-        # self.channel_main.start_consuming()  
+        # self.channel_main.start_consuming()    // Will always block thread.
 
     def SpinOnce(self):
-        # if self.consuming_message_in_queue:
         if self.channel_main._consumer_infos:
             self.channel_main.connection.process_data_events(time_limit=0.1)  # will blocking 0.1 second
 
@@ -94,10 +91,11 @@ class SyncerHelper:
 
     def SpinOnce(self) -> None:
         for syncer in self.all_syncers:
+            # print(syncer.queues.main_queue)
             syncer.SpinOnce()
 
 
-class SyncerHelper_ForGobort:
+class SyncerHelper_ForGobot:
     def __init__(self) -> None:
         config_mqtt = MQTT_ConnectionConfig()
         config_mqtt.uid = 'agent'
@@ -118,3 +116,8 @@ class SyncerHelper_ForGobort:
     # runner_arm = RabbitMQSyncer(connection, 'gobot_x2134_arm')
     def SpinOnce(self):
         self.helper.SpinOnce()
+
+if __name__ == '__main__':
+    app = SyncerHelper_ForGobot()
+    while True:
+        app.SpinOnce()

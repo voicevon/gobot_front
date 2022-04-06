@@ -64,8 +64,8 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
 
     def __init__(self, rabbit_client:RabbitClient) -> None:
         super().__init__(rabbit_client=rabbit_client)
-        # self.Home()
         self.mq_name = 'gobot_x2134_arm'
+        self.Home()
 
     def Home(self):
         print('[Info] HumanLevelGobotArm::Home() ')
@@ -127,19 +127,14 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         # self.rabbit_client.PublishToArm('G4S5')
         # self.rabbit_client.PublishToArm('M996')
 
-
+from rabbitmq_mqtt_sync import SyncerHelper_ForGobot
 if __name__ == '__main__':
-    helper = RabbitMqClient_Helper()
-    client = helper.MakeClient()
-    arm = HumanLevelGobotArm(client)
-    arm.rabbit_client.PublishToArm("G28AI")
-    arm.rabbit_client.PublishToArm("G1A90")
-    arm.rabbit_client.PublishToArm("G28BI")
-    arm.rabbit_client.PublishToArm("G1A135B90")
-    arm.rabbit_client.PublishToArm("G4S5")
-    arm.rabbit_client.PublishToArm("M84")
-    # arm.MoveTo(0, 60)
-    # arm.DisableMotor()
+    helper = SyncerHelper_ForGobot()
+    arm = HumanLevelGobotArm(helper.MqClient)
+    # arm.Home()
+    # commands = ["G28AI", "G1A90", "G28BI", "G1A135B90", "G4S5", "M84"]
+    # helper.MqClient.PublishBatch(arm.mq_name, commands)
+    helper.MqClient.Publish(arm.mq_name, 'G1A135B90')
 
     while True:
         helper.SpinOnce()
