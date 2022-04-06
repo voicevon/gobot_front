@@ -15,6 +15,12 @@
 
 void GobotChessboard::SpinOnce(){
 	// this->_gcode_queue->SpinOnce();
+	if (!this->_gcode_queue->BufferIsFull())
+		// My Input mq is from MQTT, My output mq is this->_gcode_queue.
+		this->CheckMqttCommand();
+}
+void GobotChessboard::ExecuteMqttCommand(const char* command){
+	this->_gcode_queue->AppendGcodeCommand(command);
 }
 
 void GobotChessboard::ParkArms(bool do_home){

@@ -9,7 +9,7 @@
 extern AsyncMqttClient mqttClient;
 bool mqtt_is_connected = false;
 
-#define SYNCERS_COUNT  2
+#define SYNCERS_COUNT  1   // TODO:  more than one syncer
 uint8_t mqtt_syncer_index = 0;
 struct mqtt_localMQ_pair{
     char mqtt_topic[20];
@@ -66,6 +66,9 @@ void setup_mqtt_block_connect(){
     }
 }
 
+/*
+     Will invoke ExecMattCommand() when got mqtt message
+*/
 void append_mqtt_link(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
     MqttSyncer* syncer = new MqttSyncer();
     all_mqtt_syncer[mqtt_syncer_index].mqtt_syncer = syncer;

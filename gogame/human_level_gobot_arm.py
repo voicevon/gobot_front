@@ -137,6 +137,8 @@ if __name__ == '__main__':
     helper.MqClient.Publish(arm.mq_name, 'G1A135B90')
 
     while True:
+        # helper.MqClient.Publish(arm.mq_name, 'G1A135B90')
+        # arm.Home()
         helper.SpinOnce()
 
 

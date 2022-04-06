@@ -18,10 +18,11 @@ MessageQueue* mqtt_message_queue;
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
-    gcode_queue = new GcodeQueue();
+    setup_mqtt_block_connect();
+
     // ble.Init();
     // Serial.println("BLE is ok....");   
-
+    gcode_queue = new GcodeQueue();
 
     robot = &GobotChessboard::getInstance();
     robot_hardware = new GobotChessboardHardware();
@@ -30,7 +31,7 @@ void setup(){
     robot_hardware->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
 
     mqtt_message_queue = new MessageQueue();
-    append_mqtt_link("gobot/123/arm", mqtt_message_queue, robot);
+    append_mqtt_link("gobot/x2134/arm", mqtt_message_queue, robot);  
 
     // mybot->Calibrate(1);
     // mybot->ParkArms(true);

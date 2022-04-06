@@ -21,7 +21,9 @@ class GobotChessboard: public GcodeProducer, public MqttMessageConsumer{
 
     private:
         GobotChessboard(){};
-        RobotAction* __arm_action;
+        // RobotAction* __arm_action;
+        void ExecuteMqttCommand(const char* command) override;
+
         void __Pickup(ChessboardCell* cell);
         void __Place(ChessboardCell* cell);
         void __Park();

@@ -41,8 +41,9 @@ void MqttSyncer::OnReceived(const char* payload, int length){
 // This function will be invoked on master thread.
 // Check if local mq is:  from full to not.
 void MqttSyncer::SpinOnce(){
-    if (this->__local_mq_is_full)
+    if (this->__local_mq_is_full){
         // double check whether local mq is still full or not.
+        Serial.println("[Info] MqttSyncer::SpinOnce()  __local_mq_is_full");
         if (! this->__localMQ->BufferIsFull()){
             // the local mq is not full right now. publish a feedback.
             Serial.println("\n                  MqttSyncer::SpinOnce() local mq got a free room");
@@ -50,5 +51,5 @@ void MqttSyncer::SpinOnce(){
             this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, pMessage->payload, pMessage->length);
             this->__local_mq_is_full = false;
         }
-
+    }
 }
