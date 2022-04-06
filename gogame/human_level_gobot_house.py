@@ -22,7 +22,9 @@
 import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 from gogame.human_level_robot_base import HumanLevelRobotBase
-from rabbitmq_app_examle import RabbitClient
+# from rabbitmq_app_examle_uselss import RabbitClient
+from rabbit_mq_basic import RabbitClient
+from rabbitmq_mqtt_sync import SyncerHelper_ForGobort
 import enum
 
 
@@ -64,13 +66,13 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
 
     def __init__(self, rabbit_client:RabbitClient, do_home=True) -> None:
         super().__init__(rabbit_client=rabbit_client)
+        self.mq_name = 'gobot_x2134_house'
         if do_home:
             self.Home()
     
     def Home(self):
-        self.rabbit_client.PublishToHouse('G28BI')
-        self.rabbit_client.PublishToHouse('G28AI')
-        self.rabbit_client.PublishToHouse('M996')
+        commands = ['G28BI', 'G28AI', 'M996']
+        self.rabbit_client.PublishBatch(self.mq_name, commands)
         
     def Pickup_Place(self, from_where:HouseMapDiction, to_where:HouseMapDiction, auto_park=False):
         self.PickupFrom(from_where)
@@ -79,14 +81,14 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
             site = HouseMapDiction()
             x,y = site.PARKING
             self.MoveTo(x,y)
-        self.rabbit_client.PublishToHouse('M996')
+        self.rabbit_client.Publish(self.mq_name, 'M996')
 
     def MoveTo(self, x:float, y:float):
         gcode = 'G1X' + str(x) + 'Y' + str(y)
-        self.rabbit_client.PublishToHouse(gcode)
+        self.rabbit_client.Publish(self.mq_name, gcode)
 
     def DisableMotor(self):
-        self.rabbit_client.PublishToHouse('M84')
+        self.rabbit_client.Publish(self.mq_name, 'M84')
 
     def PickupFrom(self, position_or_site):
         pass
@@ -96,18 +98,25 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
 
     def EefAction(self, eef: HumanLevelHouse_EEF_ACTIONS):
         if eef==HumanLevelHouse_EEF_ACTIONS.LOAD:
-            self.rabbit_client.PublishToHouse('M123P1S3')
+            self.rabbit_client.Publish(self.mq_name, 'M123P1S3')
         elif eef==HumanLevelHouse_EEF_ACTIONS.UNLOAD:
-            self.rabbit_client.PublishToHouse('M123P1S4')
+            self.rabbit_client.Publish(self.mq_name, 'M123P1S4')
         elif eef==HumanLevelHouse_EEF_ACTIONS.SLEEP:
-            self.rabbit_client.PublishToHouse('M123P1S5')
+            self.rabbit_client.Publish(self.mq_name, 'M123P1S5')
 
     def Test_Eef(self):
-        self.rabbit_client.PublishToHouse('M123P1S3')   #load
-        self.rabbit_client.PublishToHouse('G4S5')
-        self.rabbit_client.PublishToHouse('M123P1S4')   #Release
-        self.rabbit_client.PublishToHouse('G4S5')
-        self.rabbit_client.PublishToHouse('M996')
+        # ('M123P1S3')   #load
+        # ('M123P1S4')   #Release
+        commands = ['M123P1S3','G4S5','M123P1S4','G4S5','M996' ]
+        self.rabbit_client.PublishBatch(self.mq_name, commands)
+
+
+
+        # self.rabbit_client.PublishToHouse('M123P1S3')   #load
+        # self.rabbit_client.PublishToHouse('G4S5')
+        # self.rabbit_client.PublishToHouse('M123P1S4')   #Release
+        # self.rabbit_client.PublishToHouse('G4S5')
+        # self.rabbit_client.PublishToHouse('M996')
         
         # self.rabbit_client.PublishToArm('M123P1S128')
         # self.rabbit_client.PublishToArm('G4S1')
@@ -129,22 +138,23 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         x,y = site.DOORS[7]
         self.MoveTo(x,y)
         self.PreHome()
-        self.rabbit_client.PublishToHouse("M84")
+        self.rabbit_client.Publish(self.mq_name, "M84")
 
     def PreHome(self):
         # Park Arms at a point, nearby homed position
-        self.rabbit_client.PublishToHouse('G1B120F2800')
-        self.rabbit_client.PublishToHouse('G1A-1F2800')
-        self.rabbit_client.PublishToHouse('M996')
-        self.rabbit_client.PublishToHouse("M84")
+        commands = ['G1B120F2800', 'G1A-1F2800', 'M996', "M84"]
+        self.rabbit_client.PublishBatch(self.mq_name, commands)
+        # self.rabbit_client.PublishToHouse('G1B120F2800')
+        # self.rabbit_client.PublishToHouse('G1A-1F2800')
+        # self.rabbit_client.PublishToHouse('M996')
+        # self.rabbit_client.PublishToHouse("M84")
 
 
 
 
 if __name__ == '__main__':
-    from rabbitmq_app_examle import RabbitMqClient_Helper
-    helper = RabbitMqClient_Helper()
-    client = helper.MakeClient()
+    helper = SyncerHelper_ForGobort()
+    client = helper.MqClient
 
     house = HumanLevelGobotHouse(client,False)
     for i in range(5):

@@ -22,7 +22,7 @@ from config.image_logger import ImageLogger,ImageLoggerToWhere
 from config.message_logger import MessageLoggerToWhere,MessageLogger
 from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
-from rabbitmq_app_examle import RabbitMqClient_Helper, RabbitClient
+from rabbitmq_mqtt_sync import SyncerHelper_ForGobort
 
 
 class GobotHead():
@@ -58,8 +58,10 @@ class GobotHead():
         self.__vision = GobotVision()
         self.__ai = GoGameAiClient()
         # self.__controller = Controller()
-        self.mqHelper = RabbitMqClient_Helper()
-        self.mqClient = self.mqHelper.MakeClient()
+        # self.mqHelper = RabbitMqClient_Helper()
+        # self.mqClient = self.mqHelper.MakeClient()
+        self.mqhelper = SyncerHelper_ForGobort()
+        self.mqClient = self.mqhelper.MqClient
         self.arm = HumanLevelGobotArm(self.mqClient)
         self.house = HumanLevelGobotHouse(self.mqClient)
         self.__died_area_scanner = DiedAreaScanner()
@@ -71,8 +73,6 @@ class GobotHead():
         logging.info("Start init objects......")
         self.__InitOthers()
         MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
-
-
 
     def __InitOthers(self):
 
@@ -467,7 +467,7 @@ class GobotHead():
         self.__goto = self.at_state_game_over
 
     def SpinOnce(self):
-        self.mqHelper.SpinOnce()
+        self.mqhelper.SpinOnce()
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
         ImageLogger.Output("gobot/head/eye/origin", self.__last_image)

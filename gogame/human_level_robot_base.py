@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-from rabbitmq_app_examle import RabbitClient
+# from rabbitmq_app_examle_uselss import RabbitClient
+from rabbit_mq_basic import RabbitClient
 
 
 class HumanLevelRobotBase(ABC):

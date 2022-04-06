@@ -3,7 +3,7 @@ sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10
 
 
 from rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
-from AGV.mes_resources import MyJsonEncoder, Single_MesTask
+from AGV.mes_elements import MyJsonEncoder, Single_MesTask
 import json
 
 

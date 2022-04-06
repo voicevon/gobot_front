@@ -1,11 +1,9 @@
 import json
-import queue
-from xml.dom.expatbuilder import ElementInfo
-
 # from pika import BlockingConnection
 from rabbit_mq_basic import RabbitClient, RabbitMQBrokeConfig
+from AGV.mes_elements import FileNames, MyJsonEncoder, Single_MesTask, MapElement_AGV, MapElement_Node
 from rabbitmq_mqtt_sync import RabbitMQSync
-from AGV.mes_resources import MES_ResourcesHelper, MapElement_AGV, MapElement_Node, MES_Resources, MyJsonEncoder, Single_MesTask
+from AGV.mes_resources_init_files import MES_ResourcesHelper
 
 
 from enum import Enum
@@ -22,7 +20,14 @@ class BotTaskState(Enum):
 
 class MqNames:
     mes_task = 'puma_mes_task'
-    agv_mqtt_topic_base = 'puma_agv_xxx_'
+    agv_mqtt_topic_base = 'puma_agv_xxx'
+
+    def ForThisAgv(self, agv:MapElement_AGV) -> str:
+        print(agv.id)
+        queue_name = self.agv_mqtt_topic_base.replace('xxx', str(agv.id))
+        return queue_name
+
+
 
 
 class MesManager:
@@ -45,27 +50,72 @@ class MesManager:
         1. Receive Message from Mes Manager.
         2. Publish Message to AGVs
         '''
-        mes_resources = MES_ResourcesHelper()
-        self.all_agvs = mes_resources.all_agvs
-        self.all_map_nodes = mes_resources.all_map_nodes
+        self.Init_MessageQueue()
+        self.Init_Elements()
 
         self.mes_task = Single_MesTask()
-        self.all_syncers=[RabbitMQSync]
-        for agv in self.all_agvs:
-            self.MakeAgvMqSyncer(agv)
+        self.path_to_load = [] 
+        self.path_to_unload = []
 
-        self.path_to_load = [MapElement_Node] 
-        self.path_to_unload = [MapElement_Node]
+    def Init_MessageQueue(self):
+        self.all_syncers=[]
         config = RabbitMQBrokeConfig()
         self.mq_client = RabbitClient(config)
         self.mq_connection = self.mq_client.ConnectToRabbitMq()
         self.mq_rx_channel = self.mq_connection.channel()
         self.mq_rx_channel.queue_declare(queue=MqNames.mes_task)
         self.mq_rx_channel.basic_consume(queue=MqNames.mes_task, on_message_callback=self.mes_task_rx_callback, auto_ack=False )
+    
+    def Init_Elements(self):
+        self.all_map_nodes=[]
+        self.LoadMapNodes_FromJsonFile(FileNames.MapNodes)
+
+        self.all_agvs = []
+        self.__LoadAgvs_FromJsonFile(FileNames.MapAgvs)
+        # aa = MapElement_AGV(22)
+        # print(aa.id)
+        for aa in self.all_agvs:
+            print(aa.id)
+            self.MakeAgvMqSyncer(aa)
+        # mes_resources = MES_ResourcesHelper()
+        # self.all_map_nodes = mes_resources.all_map_nodes
+
+    def __LoadAgvs_FromJsonFile(self, filename:str):
+        # Do every steps again for agv
+        file = open(filename,"r")
+        data = file.read()
+        file.close()
+        str_json = json.loads(data)
+        # all_agvs=[MapElement_AGV]
+        for agv_json in str_json:
+            new_agv = MapElement_AGV(0)
+            new_agv.id = agv_json["id"]
+            # TODO: more members
+            self.all_agvs.append(new_agv)
+            print (new_agv.id)
+        # return all_agvs
+    
+    def LoadMapNodes_FromJsonFile(self, filename:str) -> None:
+        '''
+        TODO:  Load AGV when that agv is online.
+        '''
+        # read file to string
+        file = open(filename, "r") 
+        data = file.read() 
+        file.close()
+        # Get json object from string
+        str_json = json.loads(data)
+        # Copy from json object to my objects
+        for node in str_json:
+            new_node = MapElement_Node()
+            new_node.Node_id = node["RfCard_id"]
+            # TODO: more members
+            self.all_map_nodes.append(new_node)
+            print (new_node.Node_id)
 
     def MakeAgvMqSyncer(self, agv:MapElement_AGV) -> None:
-        queue_name = MqNames.agv_mqtt_topic_base.replace('xxx', str(agv.id))
-        sync = RabbitMQSync(self.mq_connection,queue_name)
+        queue_name = MqNames().ForThisAgv(agv)
+        sync = RabbitMQSync(self.mq_connection, queue_name)
         self.all_syncers.append(sync)
 
     def SpinOnce(self) -> None:
@@ -93,19 +143,18 @@ class MesManager:
             # empty mes_task
             self.mes_task.state = BotTaskState.Planed
 
-
         if self.mes_task.state != BotTaskState.NoPlan:
             if self.mq_rx_channel._consumer_infos:
                 self.mq_rx_channel.connection.process_data_events(time_limit=0.1)  # will blocking 0.1 second
 
     def mes_task_rx_callback(self, ch, method, properties, body):
         print(' mes_task_rx_callback()  Received ' ,  method.routing_key, body)
-        if self.mes_task.stated != BotTaskState.NoPlan:
+        if self.mes_task.state != BotTaskState.NoPlan:
             # from json to mes_task
             xx = json.loads(body)
             self.mes_task.load_from = xx["load_from"]
             self.mes_task.unload_to = xx['unload_to']
-            self.mes_task.stated = BotTaskState.NoPlan
+            self.mes_task.state = BotTaskState.NoPlan
         
             self.mq_rx_channel.basic_ack(delivery_tag=method.delivery_tag)
             # without ack, will rabbit mq cause this callback hannpend again?   should be yes, but how long ?
@@ -120,7 +169,7 @@ class MesManager:
         self.path_to_unload.append(node_id_to_unload)  
 
     def GetFreeAgvBot(self) -> MapElement_AGV:
-        for agv in self.mes_resources.all_agvs:
+        for agv in self.all_agvs:
             if agv.state == 0:
                 return agv
         return None
@@ -140,7 +189,7 @@ class MesManager:
             payload.append(node.Node_id)
         payload.append('unload')
 
-        queue_name = MqNames.agv_mqtt_topic_base.replace("xxx", str(agv.id))
+        queue_name = MqNames.ForThisAgv(agv)
         self.mq_client.PublishBatch(queue_name,  payload)  # Load at node 123 
 
 

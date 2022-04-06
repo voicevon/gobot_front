@@ -1,10 +1,9 @@
-import queue
 from pika import BlockingConnection
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
-from rabbit_mq_basic import RabbitMQBrokeConfig
-from rabbit_mq_basic import Connect
+from rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
+# from rabbit_mq_basic import Connect
 
-class SyncQueueTopicConfig:
+class SyncQueue_MqttTopic:
     def __init__(self, queue_name:str) -> None:
         '''
         standard queue_name = 'gobot_x2134_house'
@@ -13,15 +12,15 @@ class SyncQueueTopicConfig:
         '''
         self.main_queue = queue_name
         self.feedback_queue = queue_name + "_fb"
-        self.main_mqtt_topic =queue_name.replace('_', '/')
+        self.mqtt_publish_topic =queue_name.replace('_', '/')
 
 
-class RabbitMQSync:
+class RabbitMQSyncer:
     def __init__(self, connection:BlockingConnection, queue_name:str) -> None:
         self.main = None
         self.feedback = None
         self.connection = connection
-        self.queue_config = SyncQueueTopicConfig(queue_name)
+        self.queues = SyncQueue_MqttTopic(queue_name)
         self.SubsribeRabbitMQ()
         self.consuming_message_in_queue = True
         
@@ -36,14 +35,14 @@ class RabbitMQSync:
             # return
 
         # a new command from gobot_head is received
-        g_mqtt.publish(self.message_config.main_mqtt_topic, body)
+        g_mqtt.publish(self.queues.mqtt_publish_topic, body)
         self.channel_main.basic_ack(delivery_tag=method.delivery_tag)
         #stop consume a
-        print("                       Stop consuming now..", self.queue_config.main_mqtt_topic, body)
+        print("                       Stop consuming now..", self.queues.mqtt_publish_topic, body)
         self.channel_main.stop_consuming()  # this will break all callbacks
         self.consuming_message_in_queue = False
-        self.channel_feedback.queue_declare(queue=self.queue_config.feedback_queue)
-        self.channel_feedback.basic_consume(queue=self.queue_config.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
+        self.channel_feedback.queue_declare(queue=self.queues.feedback_queue)
+        self.channel_feedback.basic_consume(queue=self.queues.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
 
     def callback_feedback(self, ch, method, properties, body):
         # if method.routing_key == 'gobot.x2134.house.fb':
@@ -55,17 +54,17 @@ class RabbitMQSync:
             # go on to comsume a
             self.consuming_message_in_queue = True
             print(self.main, self.feedback, "Start consuming now..")
-            self.channel_main.queue_declare(queue=self.queue_config.main_queue)
-            self.channel_main.basic_consume(queue=self.queue_config.main_queue, on_message_callback=self.callback_main, auto_ack=False )
+            self.channel_main.queue_declare(queue=self.queues.main_queue)
+            self.channel_main.basic_consume(queue=self.queues.main_queue, on_message_callback=self.callback_main, auto_ack=False )
  
     def SubsribeRabbitMQ(self):
         self.channel_main = self.connection.channel()
-        self.channel_main.queue_declare(queue=self.queue_config.main_queue)
-        self.channel_main.basic_consume(queue=self.queue_config.main_queue, on_message_callback=self.callback_main, auto_ack=False )
+        self.channel_main.queue_declare(queue=self.queues.main_queue)
+        self.channel_main.basic_consume(queue=self.queues.main_queue, on_message_callback=self.callback_main, auto_ack=False )
 
         self.channel_feedback = self.connection.channel()
-        self.channel_feedback.queue_declare(queue=self.queue_config.feedback_queue)
-        self.channel_feedback.basic_consume(queue=self.queue_config.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
+        self.channel_feedback.queue_declare(queue=self.queues.feedback_queue)
+        self.channel_feedback.basic_consume(queue=self.queues.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
         # self.channel_main.start_consuming()  
 
     def SpinOnce(self):
@@ -77,21 +76,46 @@ class RabbitMQSync:
             self.channel_feedback.connection.process_data_events(time_limit=0.1)
 
 
+class SyncerHelper:
+    def __init__(self, connection:BlockingConnection ) -> None:
+        self.connection = connection
+        self.all_syncers=[]
+        
+    def MakeSyncer(self, main_queue_name:str) -> None:
+        sync = RabbitMQSyncer(self.connection, main_queue_name)
+        self.all_syncers.append(sync)
+    
+    @staticmethod
+    def ConnectMqttBroker(config:MQTT_ConnectionConfig):
+        g_mqtt.connect_to_broker(config)
 
-if __name__ == '__main__':
-    config_mqtt = MQTT_ConnectionConfig()
-    config_mqtt.uid = 'agent'
-    config_mqtt.password = 'agent'
-    g_mqtt.connect_to_broker(config_mqtt)
+    # @staticmethod
+    # def ConnectRabbitMqServer(config:RabbitMQBrokeConfig):
 
-    config_rabbit = RabbitMQBrokeConfig()
-    config_rabbit.uid = 'agent'
-    config_rabbit.password = 'agent'
-    connection = Connect(config_rabbit)
+    def SpinOnce(self) -> None:
+        for syncer in self.all_syncers:
+            syncer.SpinOnce()
 
-    runner_house = RabbitMQSync(connection,'gobot_x2134_house')
-    runner_arm = RabbitMQSync(connection, 'gobot_x2134_arm')
 
-    while True:
-        runner_house.SpinOnce()
-        runner_arm.SpinOnce()
+class SyncerHelper_ForGobort:
+    def __init__(self) -> None:
+        config_mqtt = MQTT_ConnectionConfig()
+        config_mqtt.uid = 'agent'
+        config_mqtt.password = 'agent'
+
+
+        config_rabbit = RabbitMQBrokeConfig()
+        config_rabbit.uid = 'agent'
+        config_rabbit.password = 'agent'
+        self.MqClient = RabbitClient(config_rabbit)
+        self.MqConnection = self.MqClient.connection
+
+        self.helper = SyncerHelper(self.MqConnection)
+        self.helper.ConnectMqttBroker(config_mqtt)
+        self.helper.MakeSyncer('gobot_x2134_house')
+        self.helper.MakeSyncer('gobot_x2134_arm')
+    # runner_house = RabbitMQSyncer(connection,'gobot_x2134_house')
+    # runner_arm = RabbitMQSyncer(connection, 'gobot_x2134_arm')
+    def SpinOnce(self):
+        while True:
+            self.helper.SpinOnce()

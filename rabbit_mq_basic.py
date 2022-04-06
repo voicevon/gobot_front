@@ -4,6 +4,9 @@ from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
 
 import time
 
+
+
+
 class RabbitMQBrokeConfig:
     host = 'voicevon.vicp.io'
     port = 5672
@@ -44,10 +47,10 @@ class RabbitClient():
         if not (queue_name in self.declaed_queues):
             self.channel.queue_declare(queue=queue_name)
             self.declaed_queues.append(queue_name)
-
-        self.channel.basic_publish(exchange = '',
-                        routing_key = queue_name,
-                        body = payload)
+        for pp in payload:
+            self.channel.basic_publish(exchange = '',
+                            routing_key = queue_name,
+                            body = pp)
 
     def callback_example(self, ch, method, properties, body):
         print('RabbitClient::callback_example()  mq Received ' ,  method.routing_key, body)
