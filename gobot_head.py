@@ -70,11 +70,13 @@ class GobotHead():
         self.__last_detected_layout = ChessboardLayout('Last_detected')
 
         logging.basicConfig(level=logging.DEBUG)
-        logging.info("Start init objects......")
         self.__InitOthers()
         MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
+        print("[Info] GobotHead::__init__()  is done.")
+
 
     def __InitOthers(self):
+        logging.info("[Info] GobotHead Start init objects......")
 
         self.__FC_YELLOW = TerminalFont.Color.Fore.yellow
         self.__BG_BLUE = TerminalFont.Color.Background.blue
@@ -207,7 +209,6 @@ class GobotHead():
             print(self.__FC_YELLOW + '[Warning]: GobotHead.at_state_begining()  scanned command=%d' %command)
             self.__goto = self.at_state_game_over
 
-
     def at_state_user_play(self):
         '''
         * User is always play BLACK stone.
@@ -273,7 +274,6 @@ class GobotHead():
         if do_print_diffs:
             diffs = self.__ai.layout.compare_with(stable_layout, do_print_out=True)
             print(self.__BG_RED + self.__FC_YELLOW + 'Too many different the between two layout.' +  str(len(diffs)) + self.__FC_RESET)
-
 
     def at_state_computer_play(self):
         '''
@@ -467,7 +467,9 @@ class GobotHead():
         self.__goto = self.at_state_game_over
 
     def SpinOnce(self):
+        print('======================================================')
         self.mqhelper.SpinOnce()
+
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
         ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
@@ -509,8 +511,9 @@ if __name__ == '__main__':
 
     myrobot = GobotHead(robot_eye)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
-    myrobot.house.demo()
+    # myrobot.house.demo()
     while True:
+        print("---")
         myrobot.SpinOnce()
 
 

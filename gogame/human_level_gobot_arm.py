@@ -65,12 +65,16 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
     def __init__(self, rabbit_client:RabbitClient) -> None:
         super().__init__(rabbit_client=rabbit_client)
         # self.Home()
+        self.mq_name = 'gobot_x2134_arm'
 
     def Home(self):
         print('[Info] HumanLevelGobotArm::Home() ')
-        self.rabbit_client.PublishToArm('G28AI')
-        self.rabbit_client.PublishToArm('G28BI')
-        self.rabbit_client.PublishToArm('M996')
+        commands = ['G28AI','G28BI', 'M996']
+        self.rabbit_client.PublishBatch(self.mq_name, commands)
+
+        # self.rabbit_client.PublishToArm('G28AI')
+        # self.rabbit_client.PublishToArm('G28BI')
+        # self.rabbit_client.PublishToArm('M996')
 
     
     def Pickup_Place(self, from_where, to_where, auto_park=False):
@@ -87,23 +91,27 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         if auto_park:
             x,y = ArmMap.PARKING
             self.MoveTo(x, y)
-        self.rabbit_client.PublishToArm('M996')
+        # self.rabbit_client.PublishToArm('M996')
+        self.rabbit_client.Publish(self.mq_name, 'M996')
 
 
     def MoveTo(self, x:float, y:float):
         gcode = 'G1X' + str(x) + 'Y' + str(y)
-        self.rabbit_client.PublishToArm(gcode=gcode)
+        # self.rabbit_client.PublishToArm(gcode=gcode)
+        self.rabbit_client.Publish(self.mq_name, gcode)
         print(gcode)
 
     
     def EEF_Does(self, do_load:ArmEEF):
         if do_load==ArmEEF.SLEEP:
-            self.rabbit_client.PublishToArm('M123S0')
+            # self.rabbit_client.PublishToArm('M123S0')
+            self.rabbit_client.Publish(self.mq_name, 'M123S0')
         elif do_load==ArmEEF.LOAD:
-            self.rabbit_client.PublishToArm('M123S200')
+            # self.rabbit_client.publish(self.mq_name, 'M123S200')
+            self.rabbit_client.Publish(self.mq_name, 'M123S200')
 
     def DisableMotor(self):
-        self.rabbit_client.PublishToArm('M84')
+        self.rabbit_client.Publish(self.mq_name, 'M84')
 
     def Test_Eef(self):
         # self.rabbit_client.PublishToHouse('M123P1S128')
@@ -111,12 +119,13 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         # self.rabbit_client.PublishToHouse('M123P1S0')
         # self.rabbit_client.PublishToHouse('G4S5')
         # self.rabbit_client.PublishToHouse('M996')
-        
-        self.rabbit_client.PublishToArm('M123P1S128')
-        self.rabbit_client.PublishToArm('G4S1')
-        self.rabbit_client.PublishToArm('M123P1S0')
-        self.rabbit_client.PublishToArm('G4S5')
-        self.rabbit_client.PublishToArm('M996')
+        commands = ['M123P1S128', 'G4S1', 'M123P1S0', 'G4S5', 'M996']
+        self.rabbit_client.PublishBatch(self.mq_name, commands)
+        # self.rabbit_client.PublishToArm('M123P1S128')
+        # self.rabbit_client.PublishToArm('G4S1')
+        # self.rabbit_client.PublishToArm('M123P1S0')
+        # self.rabbit_client.PublishToArm('G4S5')
+        # self.rabbit_client.PublishToArm('M996')
 
 
 if __name__ == '__main__':

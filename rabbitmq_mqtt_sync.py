@@ -24,14 +24,12 @@ class RabbitMQSyncer:
         self.SubsribeRabbitMQ()
         self.consuming_message_in_queue = True
         
-
-
     def callback_main(self, ch, method, properties, body):
-        print('                        [main] Received ' ,  method.routing_key, body)
+        print('                       [RabbitMQSyncer] callback_main ' ,  method.routing_key, body)
         # if method.routing_key == 'gobot_x2134_house':
         self.main = body
         if self.main == self.feedback:
-            print('repeated...... return')    #????
+            print('repeated...... not return')    #????
             # return
 
         # a new command from gobot_head is received
@@ -43,6 +41,8 @@ class RabbitMQSyncer:
         self.consuming_message_in_queue = False
         self.channel_feedback.queue_declare(queue=self.queues.feedback_queue)
         self.channel_feedback.basic_consume(queue=self.queues.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
+        print("                       End of callback()")
+
 
     def callback_feedback(self, ch, method, properties, body):
         # if method.routing_key == 'gobot.x2134.house.fb':
@@ -117,5 +117,4 @@ class SyncerHelper_ForGobort:
     # runner_house = RabbitMQSyncer(connection,'gobot_x2134_house')
     # runner_arm = RabbitMQSyncer(connection, 'gobot_x2134_arm')
     def SpinOnce(self):
-        while True:
-            self.helper.SpinOnce()
+        self.helper.SpinOnce()
