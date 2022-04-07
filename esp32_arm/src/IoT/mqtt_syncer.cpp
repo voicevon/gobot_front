@@ -24,6 +24,7 @@ void MqttSyncer::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_top
 void MqttSyncer::OnReceived(const char* payload, int length){
     // Put message to local MQ   
     // TODO:: Is this necessary??
+    Serial.println("[Info] MqttSyncer::OnReceived() Starting a huge process...");
     char* p = (char*)(payload) + length;
     *p = 0x00;
 

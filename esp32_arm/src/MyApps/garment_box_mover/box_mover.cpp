@@ -9,7 +9,16 @@ BoxMover::BoxMover(){
     Serial.print("\n[Info] BoxMover::BoxMover() is done..........");
 }
 
+void BoxMover::ExecuteMqttCommand(const char* command){
+	this->_gcode_queue->AppendGcodeCommand(command);
+
+}
+
 void BoxMover::SpinOnce(){
+    if (!this->_gcode_queue->BufferIsFull()){
+        this->CheckMqttCommand();
+    }
+    this->CheckMqttCommand();
     // this->verticalMover->SpinOnce();
     // this->angleMover->SpinOnce();
     // this->_gcode_queue->SpinOnce();

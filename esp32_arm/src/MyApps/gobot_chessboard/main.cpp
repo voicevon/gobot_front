@@ -43,6 +43,5 @@ void loop(){
     robot->SpinOnce();
     robot_hardware->SpinOnce();
     loop_mqtt();
-    // mqtt_syncer->SpinOnce();
 }
 #endif

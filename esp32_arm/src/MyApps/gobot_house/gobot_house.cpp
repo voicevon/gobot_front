@@ -21,10 +21,16 @@ void GobotHouse::Setup(){
     Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
 }
 
-void GobotHouse::SpinOnce(){	
-	// this->__robot_hardware->SpinOnce();
+void GobotHouse::SpinOnce(){
 	// this->_gcode_queue->SpinOnce();
+	if (!this->_gcode_queue->BufferIsFull())
+		// My Input mq is from MQTT, My output mq is this->_gcode_queue.
+		this->CheckMqttCommand();
 }
+void GobotHouse::ExecuteMqttCommand(const char* command){
+	this->_gcode_queue->AppendGcodeCommand(command);
+}
+
 
 void GobotHouse::__Home(){
 	bool via_inverse_kinematic = true;

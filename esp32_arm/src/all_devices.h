@@ -20,6 +20,7 @@
 #ifdef I_AM_GOBOT_CHESSBOARD_2134
 	#define I_AM_GOBOT_CHESSBOARD
 	#define USING_WIFI_MQTT
+	#define MQTT_SYNCERS_COUNT  1
 
 	// #define USING_BLE
 	#ifdef USING_BLE
@@ -33,6 +34,7 @@
 #ifdef I_AM_GOBOT_HOUSE_2134
 	#define I_AM_GOBOT_HOUSE
 	#define USING_WIFI_MQTT
+	#define MQTT_SYNCERS_COUNT  1   
 
 	// #define USING_BLE
 	#ifdef USING_BLE
@@ -45,14 +47,17 @@
 
 #ifdef I_AM_GARMENT_BOT
 	#define USING_WIFI_MQTT
+	#define MQTT_SYNCERS_COUNT  1   
 #endif
 
 #ifdef I_AM_GARMENT_BOX_MOVER
 	#define USING_WIFI_MQTT
+	#define MQTT_SYNCERS_COUNT  1   
 #endif
 
 #ifdef I_AM_ACUPUCTURE_MAIN_ESP32
 	#define USING_WIFI_MQTT
+	#define MQTT_SYNCERS_COUNT  0   
     #define BODY_ID "001"
 #endif
 
