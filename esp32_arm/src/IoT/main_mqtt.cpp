@@ -11,22 +11,13 @@
 #include "IoT/mqtt_syncer.h"
 #include "IoT/mqtt_message_consumer.h"
 
-// extern AsyncMqttClient mqttClient;
-// bool mqtt_is_connected = false;
-
-uint8_t mqtt_syncer_index = 0;
-struct mqtt_localMQ_pair{
+uint8_t mqtt_bridge_index = 0;
+struct MqttBridge{
     char mqtt_topic[20];
     MqttSyncer* mqtt_syncer;
-    MessageQueue* local_message_queue;
+    // MessageQueue* local_message_queue;
 };
-mqtt_localMQ_pair all_mqtt_syncer[MQTT_SYNCERS_COUNT];
-
-// Please Notice: This function will be invoked in slave thread.
-// void on_MqttConnected(bool sessionPresent){
-//     Serial.println("\n\n     MQTT is connected !!!!\n\n");
-//     mqtt_is_connected = true;
-// }
+MqttBridge all_mqtt_bridges[MQTT_SYNCERS_COUNT];
 
 //Please Notice: This function will be invoked in slave thread.
 void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
@@ -54,15 +45,15 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
     // dispatch topic
     if (MQTT_SYNCERS_COUNT == 1){
             Serial.println("[Info] on_MqttMessage()  Putting remote message to local consumer." );
-            all_mqtt_syncer[0].local_message_queue->AppendMessage(payload);
+            all_mqtt_bridges[0].mqtt_syncer->OnReceived((const char*)payload, len);
+            Serial.println("[Info] on_MqttMessage()  Appened to mqtt_consumer.");
     }else{
         // todo: more than one syncers.
         for (int i=0; i<MQTT_SYNCERS_COUNT;i++){
             // todo:  topic is equal and copy payload, char by char
             Serial.println("[Info] on_MqttMessage()   todo: topic is equal and copy payload, char by char");
-            if (all_mqtt_syncer[i].mqtt_topic == topic){
+            if (all_mqtt_bridges[i].mqtt_topic == topic){
                 Serial.println("[Info] on_MqttMessage()  Putting remote message to local consumer." );
-                all_mqtt_syncer[i].local_message_queue->AppendMessage(payload);
             }
         }
     }
@@ -79,21 +70,21 @@ void setup_mqtt_block_connect(){
 }
 
 /*
-     Will invoke(callback) ExecMattCommand(payload) when got mqtt message
+     Will finnally invoke(callback) ExecMattCommand(payload) when got mqtt message
 */
 void append_mqtt_link(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
-    MqttSyncer* syncer = new MqttSyncer();
-    all_mqtt_syncer[mqtt_syncer_index].mqtt_syncer = syncer;
-    all_mqtt_syncer[mqtt_syncer_index].local_message_queue = local_message_queue;
-    // all_mqtt_syncer[mqtt_syncer_index].mqtt_topic = "1234567890123456789";  // todo copy
-
-    String topic_feedback = String(topic) + "/fb";
-    syncer->SubscribeMqtt(&mqttClient, topic, topic_feedback.c_str());
-    syncer->LinkLocalCommandQueue_AsMqttMessageProducer(local_message_queue);
     mqtt_consumer->LinkLocalMq_AsMqttMessageConsumer(local_message_queue);
+    
+    MqttSyncer* syncer = new MqttSyncer();
+    all_mqtt_bridges[mqtt_bridge_index].mqtt_syncer = syncer;
+    syncer->LinkLocalCommandQueue_AsMqttMessageProducer(local_message_queue);
+    String topic_feedback = String(topic) + "/fb";
+    //Important: During this line, after subsribe_mqtt() is called, will invoke on_mqtt_message immediately.
+    // This is happened because on_mqtt_message is in anther thread.
+    syncer->SubscribeMqtt(&mqttClient, topic, topic_feedback.c_str());
 
-    mqtt_syncer_index++;
-    if (mqtt_syncer_index > MQTT_SYNCERS_COUNT){
+    mqtt_bridge_index++;
+    if (mqtt_bridge_index > MQTT_SYNCERS_COUNT){
         Serial.println("\n\n\n\n\n");
         Serial.println("[Error] append_mqtt_link()  append too many syncers...  Not implamented more than one syncer.");
         Serial.println("\n\n\n\n\n");
@@ -103,7 +94,7 @@ void append_mqtt_link(const char* topic, MessageQueue* local_message_queue, Mqtt
 void loop_mqtt(){
     MqttSyncer* syncer;
     for (int i=0; i< MQTT_SYNCERS_COUNT; i++){
-        syncer = all_mqtt_syncer[i].mqtt_syncer;
+        syncer = all_mqtt_bridges[i].mqtt_syncer;
         syncer->SpinOnce();
     }
 }

@@ -4,6 +4,8 @@
 bool MessageQueue::AppendMessage(String strPayload){
     const char* payload = strPayload.c_str();
     int length = strPayload.length();
+    Serial.print("[Info] MessageQueue::AppendMessage(String strPayload)   ");
+    Serial.println(strPayload);
     this->AppendMessage(payload, length);
 }
 
@@ -56,19 +58,18 @@ MessageQueue::SingleMessage* MessageQueue::FetchTailMessage(){
     return tail_message;
 }
 
-
 bool MessageQueue::BufferIsEmpty(){
     if (this->_head == this->_tail) 
         return true;
     return false;
 }
+
 bool MessageQueue::BufferIsFull(){
     int next_head = this->__get_pointer_next_index(this->_head);
     if (next_head == this->_tail)
         return true;
     return false;
 }
-
 
 int MessageQueue::GetFreeBuffersCount(){
     int count = this->_head - this->_tail;
@@ -77,7 +78,6 @@ int MessageQueue::GetFreeBuffersCount(){
     else
         return 0-count;
 }
-
 
 int MessageQueue::__get_pointer_next_index(int current_index){
     int next_index = current_index;
@@ -96,7 +96,6 @@ int MessageQueue::__get_pointer_previous_index(int current_index){
         next_index = MESSAGE_COUNT_IN_QUEUE - 1;
     return next_index;
 }
-
 
 void MessageQueue::SayHello(String title){
     Serial.print("\n\n ========================================================");

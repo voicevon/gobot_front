@@ -27,6 +27,7 @@ class MqttSyncer{
 
         void OnReceived(const char* payload, int length);
         void SpinOnce();
+        
     private:
         MessageQueue* __localMQ;
         AsyncMqttClient* __mqttClient;

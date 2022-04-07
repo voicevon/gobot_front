@@ -12,6 +12,7 @@ class MessageQueue{
             char payload[MAX_BYTES_PER_MESSAGE];
             int length;
         };
+        
         // For Producer:    
         bool AppendMessage(String payload);
         bool AppendMessage(const char* payload, int length);
@@ -23,6 +24,7 @@ class MessageQueue{
         SingleMessage* FetchTailMessage();
 
         // For both Producer and Consumer:
+        MessageQueue(){};
         SingleMessage* GetHeadMessage();
         void SayHello(String title);
 

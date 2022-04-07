@@ -32,10 +32,11 @@ void MqttSyncer::OnReceived(const char* payload, int length){
 
     // send message to feedback topic
     if (this->__local_mq_is_full){
-        Serial.print("\nMqttSyncer::OnReceived() is appended to local mq, will not publish a feedback via mqtt.");
+        Serial.print("\n[Info] MqttSyncer::OnReceived() is appended to local mq, will not publish a feedback via mqtt.");
         return;
     }
     //  local message queue is not full [after appending current message], publish mqtt feedback now.
+    Serial.print("[Info] MqttSyncer::OnReceived() sending feedback.");
     this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, payload, length);
 }
 
