@@ -12,6 +12,7 @@
 #include "IoT/mqtt_message_consumer.h"
 
 uint8_t mqtt_bridge_index = 0;
+
 struct MqttBridge{
     char mqtt_topic[20];
     MqttSyncer* mqtt_syncer;
@@ -61,18 +62,19 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
 
 void setup_mqtt_block_connect(){
     setup_wifi_mqtt();
-    // mqttClient.onConnect(on_MqttConnected);
-    mqttClient.onMessage(on_MqttMessage);
     while (! mqtt_is_connected){
         delay(100);
         Serial.print(".");
     }
 }
+void setup_mqtt_on_message_receive(){
+    mqttClient.onMessage(on_MqttMessage);
+}
 
 /*
      Will finnally invoke(callback) ExecMattCommand(payload) when got mqtt message
 */
-void append_mqtt_link(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
+void append_mqtt_bridge(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
     mqtt_consumer->LinkLocalMq_AsMqttMessageConsumer(local_message_queue);
     
     MqttSyncer* syncer = new MqttSyncer();

@@ -67,9 +67,11 @@ void setup(){
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
     robot_hardware->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
 
+    // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
     mqtt_message_queue = new MessageQueue();
-    append_mqtt_link("gobot/123/house", mqtt_message_queue, robot);
+    append_mqtt_bridge("gobot/x2134/house", mqtt_message_queue, robot); 
+    setup_mqtt_on_message_receive(); 
 
     // Begin_WifiMqttSync();
     // while (! mqtt_is_connected){

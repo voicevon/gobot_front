@@ -22,8 +22,6 @@ void setup(){
     robot = &GobotChessboard::getInstance();
     robot_hardware = new GobotChessboardHardware();
     robot_hardware->InitRobot();
-    // Network environment
-    setup_mqtt_block_connect();
 
     // ble.Init();
     // Serial.println("BLE is ok....");   
@@ -31,8 +29,13 @@ void setup(){
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
     robot_hardware->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
 
+
+    // mqtt, bridge, receiver.
     mqtt_message_queue = new MessageQueue();
-    append_mqtt_link("gobot/x2134/arm", mqtt_message_queue, robot);  
+    setup_mqtt_block_connect();
+    append_mqtt_bridge("gobot/x2134/arm", mqtt_message_queue, robot); 
+    setup_mqtt_on_message_receive(); 
+
 
     // mybot->Calibrate(1);
     // mybot->ParkArms(true);

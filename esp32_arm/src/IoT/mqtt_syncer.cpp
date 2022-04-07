@@ -32,11 +32,11 @@ void MqttSyncer::OnReceived(const char* payload, int length){
 
     // send message to feedback topic
     if (this->__local_mq_is_full){
-        Serial.print("\n[Info] MqttSyncer::OnReceived() is appended to local mq, will not publish a feedback via mqtt.");
+        Serial.println("\n[Info] MqttSyncer::OnReceived() is appended to local mq, will not publish a feedback via mqtt.");
         return;
     }
     //  local message queue is not full [after appending current message], publish mqtt feedback now.
-    Serial.print("[Info] MqttSyncer::OnReceived() sending feedback.");
+    Serial.println("[Info] MqttSyncer::OnReceived() sending feedback.");
     this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, payload, length);
 }
 
@@ -45,7 +45,7 @@ void MqttSyncer::OnReceived(const char* payload, int length){
 void MqttSyncer::SpinOnce(){
     if (this->__local_mq_is_full){
         // double check whether local mq is still full or not.
-        Serial.println("[Info] MqttSyncer::SpinOnce()  __local_mq_is_full");
+        // Serial.println("[Info] MqttSyncer::SpinOnce()  __local_mq_is_full");
         if (! this->__localMQ->BufferIsFull()){
             // the local mq is not full right now. publish a feedback.
             Serial.println("\n                  MqttSyncer::SpinOnce() local mq got a free room");
