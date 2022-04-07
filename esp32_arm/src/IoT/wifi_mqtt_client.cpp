@@ -8,12 +8,12 @@ extern "C" {
 	#include "freertos/timers.h"
 }
 
-#define WIFI_SSID "FuckGFW"
-#define WIFI_PASSWORD "refuckgfw"
+#define WIFI_SSID "Perfect"
+#define WIFI_PASSWORD "1234567890"
 
 #define MQTT_HOST "voicevon.vicp.io"
 #define MQTT_PORT 1883
-
+bool mqtt_is_connected = false;
 extern void app_mqtt_subscribe();
 extern void app_mqtt_received_message(char* topic, char* payload);
 
@@ -52,25 +52,24 @@ void WiFiEvent(WiFiEvent_t event) {
     }
 }
 
-// void onMqttConnect(bool sessionPresent) {
-  // Serial.println("Connected to MQTT.");
-  // Serial.print("Session present: ");
-  // Serial.println(sessionPresent);
-  // uint16_t packetIdSub = mqttClient.subscribe("test/lol", 2);
-  // Serial.print("Subscribing at QoS 2, packetId: ");
-  // Serial.println(packetIdSub);
-  // mqttClient.publish("test/lol", 0, true, "test 1");
-  // Serial.println("Publishing at QoS 0");
-  // uint16_t packetIdPub1 = mqttClient.publish("test/lol", 1, true, "test 2");
-  // Serial.print("Publishing at QoS 1, packetId: ");
-  // Serial.println(packetIdPub1);
-  // uint16_t packetIdPub2 = mqttClient.publish("test/lol", 2, true, "test 3");
-  // Serial.print("Publishing at QoS 2, packetId: ");
-  // Serial.println(packetIdPub2);
-  // app_mqtt_subscribe();
-
-// }
-
+void onMqttConnect(bool sessionPresent) {
+    Serial.println("Connected to MQTT.");
+    Serial.print("Session present: ");
+    Serial.println(sessionPresent);
+    uint16_t packetIdSub = mqttClient.subscribe("test/lol", 2);
+    Serial.print("Subscribing at QoS 2, packetId: ");
+    Serial.println(packetIdSub);
+    mqttClient.publish("test/lol", 0, true, "test 1");
+    Serial.println("Publishing at QoS 0");
+    uint16_t packetIdPub1 = mqttClient.publish("test/lol", 1, true, "test 2");
+    Serial.print("Publishing at QoS 1, packetId: ");
+    Serial.println(packetIdPub1);
+    uint16_t packetIdPub2 = mqttClient.publish("test/lol", 2, true, "test 3");
+    Serial.print("Publishing at QoS 2, packetId: ");
+    Serial.println(packetIdPub2);
+    // app_mqtt_subscribe();
+    mqtt_is_connected = true;
+}
 
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
 	Serial.println("Disconnected from MQTT.");
@@ -134,7 +133,7 @@ void setup_wifi_mqtt() {
 
     WiFi.onEvent(WiFiEvent);
 
-    // mqttClient.onConnect(onMqttConnect);
+    mqttClient.onConnect(onMqttConnect);
     mqttClient.onDisconnect(onMqttDisconnect);
     mqttClient.onSubscribe(onMqttSubscribe);
     mqttClient.onUnsubscribe(onMqttUnsubscribe);

@@ -11,8 +11,8 @@
 #include "IoT/mqtt_syncer.h"
 #include "IoT/mqtt_message_consumer.h"
 
-extern AsyncMqttClient mqttClient;
-bool mqtt_is_connected = false;
+// extern AsyncMqttClient mqttClient;
+// bool mqtt_is_connected = false;
 
 uint8_t mqtt_syncer_index = 0;
 struct mqtt_localMQ_pair{
@@ -23,10 +23,10 @@ struct mqtt_localMQ_pair{
 mqtt_localMQ_pair all_mqtt_syncer[MQTT_SYNCERS_COUNT];
 
 // Please Notice: This function will be invoked in slave thread.
-void on_MqttConnected(bool sessionPresent){
-    Serial.println("\n\n     MQTT is connected !!!!\n\n");
-    mqtt_is_connected = true;
-}
+// void on_MqttConnected(bool sessionPresent){
+//     Serial.println("\n\n     MQTT is connected !!!!\n\n");
+//     mqtt_is_connected = true;
+// }
 
 //Please Notice: This function will be invoked in slave thread.
 void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
@@ -70,10 +70,11 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
 
 void setup_mqtt_block_connect(){
     setup_wifi_mqtt();
-    mqttClient.onConnect(on_MqttConnected);
+    // mqttClient.onConnect(on_MqttConnected);
     mqttClient.onMessage(on_MqttMessage);
     while (! mqtt_is_connected){
         delay(100);
+        Serial.print(".");
     }
 }
 
