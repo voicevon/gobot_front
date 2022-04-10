@@ -27,10 +27,15 @@
 #pragma once
 #include <HCSR04.h> 
 
-
-
 #include "track_sensor_dual_9960.h"
 #include "SimpleFOC.h"
+#include "SoftwareSerial.h"
+
+#define PIN_SERIAL_RX_LEFT_WHEEL 11
+#define PIN_SERIAL_TX_LEFT_WHEEL 11
+
+#define PIN_SERIAL_RX_RIGHT_WHEEL 11
+#define PIN_SERIAL_TX_RIGHT_WHEEL 11
 
 class TwinWheelsAgv{
     public:
@@ -64,8 +69,8 @@ class TwinWheelsAgv{
 
         TrackSensor_Dual9960* trackSensor;
         UltraSonicDistanceSensor *obstacleSensor; // = UltraSonicDistanceSensor(HS04_PIN_ECHO,HS04_PIN_TRIG); //initialisation class HCSR04 (trig pin , echo pin)
-        HardwareSerial * leftWheel_commu;
-        HardwareSerial * rightWheel_commu;
+        SoftwareSerial * leftWheel_serial;
+        SoftwareSerial * rightWheel_serial;
 
         bool DoParking();
 

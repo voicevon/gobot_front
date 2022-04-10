@@ -27,8 +27,22 @@ void TwinWheelsAgv::Init(){
 	this->obstacleSensor = new UltraSonicDistanceSensor(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
     // Serial1.begin(115200, );
     // Serial2.begin(115200, )
-    this->leftWheel_commu = &Serial1;
-    this->rightWheel_commu = &Serial2;
+    this->leftWheel_serial = new SoftwareSerial();
+    this->leftWheel_serial->begin(115200, SWSERIAL_8N1, PIN_SERIAL_RX_LEFT_WHEEL, PIN_SERIAL_TX_LEFT_WHEEL,false);
+    if (!this->leftWheel_serial) { // If the object did not initialize, then its configuration is invalid
+        Serial.println("[Error] TwinWheelsAgv::Init()  left serial configuration !!!"); 
+        while (1) { // Don't continue with invalid configuration
+            delay (1000);
+        }
+    }
+    this->rightWheel_serial = new SoftwareSerial();
+    this->rightWheel_serial->begin(115200, SWSERIAL_8N1, PIN_SERIAL_RX_RIGHT_WHEEL, PIN_SERIAL_TX_RIGHT_WHEEL,false);
+    if (!this->rightWheel_serial) { // If the object did not initialize, then its configuration is invalid
+        Serial.println("[Error] TwinWheelsAgv::Init()  right serial configuration !!!"); 
+        while (1) { // Don't continue with invalid configuration
+            delay (1000);
+        }
+    }
     this->ToState(PARKED);
 }
 
@@ -43,9 +57,9 @@ void TwinWheelsAgv::Forwarding(){
     float left_speed = this->common_speed + x_error;
     float right_speed = this->common_speed - x_error;
     String command = "T" + String(left_speed);
-    this->leftWheel_commu->write(command.c_str());
+    this->leftWheel_serial->write(command.c_str());
     command = "T" + String(right_speed);
-    this->rightWheel_commu->write(command.c_str());
+    this->rightWheel_serial->write(command.c_str());
 }
 
 void TwinWheelsAgv::SpinOnce(){
@@ -124,16 +138,16 @@ void TwinWheelsAgv::ToState(AGV_STATE state){
         this->common_speed = this->__parking_velocity;
         break;
     case FAST_MOVING_PAUSED:
-        this->leftWheel_commu->write("T0");
-        this->rightWheel_commu->write("T0");
+        this->leftWheel_serial->write("T0");
+        this->rightWheel_serial->write("T0");
         break;
     case SLOW_MOVING_PAUSED:
-        this->leftWheel_commu->write("T0");
-        this->rightWheel_commu->write("T0");
+        this->leftWheel_serial->write("T0");
+        this->rightWheel_serial->write("T0");
         break;
     case PARKED:
-        this->leftWheel_commu->write("T0");
-        this->rightWheel_commu->write("T0");
+        this->leftWheel_serial->write("T0");
+        this->rightWheel_serial->write("T0");
         this->trackSensor->TurnOnLed(false);
         break;
         
