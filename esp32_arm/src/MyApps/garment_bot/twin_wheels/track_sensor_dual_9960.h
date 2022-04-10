@@ -37,6 +37,8 @@
 #include "Wire.h"
 #include "AGV/agv_sensor_base.h"
 #include "track_sensor_smart_9960.h"
+#include <Adafruit_NeoPixel.h>
+
 
 class TrackSensor_Dual9960_Config{
     public:
@@ -45,6 +47,7 @@ class TrackSensor_Dual9960_Config{
         uint8_t pin_right_sensor_sda = 23;
         uint8_t pin_right_sensor_sclk = 15;
         uint8_t pin_led = 19;
+        uint8_t LedWs2812B_counts = 10; // Popular NeoPixel ring size
 };
 
 class TrackSensor_Dual9960: public AgvTrackSensor{
@@ -73,8 +76,5 @@ class TrackSensor_Dual9960: public AgvTrackSensor{
         */
         uint8_t __flag_spped_up;
         uint8_t __flag_slow_down;
-
-        
-        
-
+        Adafruit_NeoPixel* pixels;
 };

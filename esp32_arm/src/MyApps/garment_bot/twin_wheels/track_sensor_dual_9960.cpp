@@ -8,14 +8,24 @@ TrackSensor_Dual9960::TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config){
     digitalWrite(config->pin_led, LOW);
     
     this->IsFollowingLeft = true;
-
+    this->pixels = new Adafruit_NeoPixel(config->LedWs2812B_counts, config->pin_led, NEO_GRB + NEO_KHZ800);
+    this->pixels->begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
 }
 
 void TrackSensor_Dual9960::TurnOnLed(bool turn_on){
     if (turn_on)
-        digitalWrite(this->__config->pin_led, HIGH);
+        // digitalWrite(this->__config->pin_led, HIGH);
+        // The first NeoPixel in a strand is #0, second is 1, all the way up
+        // to the count of pixels minus one.
+        for(int i=0; i< this->__config->LedWs2812B_counts; i++) { // For each pixel...
+            // pixels.Color() takes RGB values, from 0,0,0 up to 255,255,255
+            // Here we're using a moderately bright green color:
+            this->pixels->setPixelColor(i, pixels->Color(255, 255, 255));
+            this->pixels->show();   // Send the updated pixel colors to the hardware.
+        }
     else
-        digitalWrite(this->__config->pin_led, LOW);
+        // digitalWrite(this->__config->pin_led, LOW);
+          this->pixels->clear(); // Set all pixel colors to 'off'
 }
 
 int16_t TrackSensor_Dual9960::ReadForwardingError(){
