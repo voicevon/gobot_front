@@ -11,6 +11,7 @@ void GarmentBot::Init(){
 	this->objRfid.Init(17,18,19);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
+	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 
 	this->ToState(GarmentBot::BOT_STATE::BOT_LOCATING);
 	Serial.print("\n[Info] GarmentBot::Init() is done.\n");
@@ -71,9 +72,13 @@ void GarmentBot::onDetectedMark(uint16_t BranchNode_id){
 }
 
 void GarmentBot::SpinOnce(){
+	uint16_t battery_voltage =  analogRead(PIN_BATTERY_VOLTAGE_ADC) ;
+	this->__battery_voltage = 1.0 * battery_voltage + 0.0;
+
 	this->objBoxMoverAgent.SpinOnce();
 	this->objAgv.SpinOnce();
 	this->CheckMqttCommand();
+
 	
 	if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::SLOW_MOVING ){
 		if (this->objRfid.ReadCard()){

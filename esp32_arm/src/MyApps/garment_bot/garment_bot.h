@@ -9,26 +9,30 @@
 #include "AGV/map_road_station/map_navigator.h"
 #include "smart_rfid_reader.h"
 
-// #define PIN_LED_POWER_2130 23
+#define  PIN_BATTERY_VOLTAGE_ADC  11
+
 
 
 /*    
 .     
 .     
-.                              <-------------------------------------------------------\
-,                              |                                                       | 
-.   Locating ------------>   Agv Moving ----> Agv Parked ---------> Robot_Loading  -----^  
-.    (Slow)   [Got RFID]           (Read Mark RFID)           |
-.                                 |-------> Robot_Unloading --^
-.                                 |                           |
-.                                 |-------> Charging ---------^
-.                                 |                           |
-.                                 |--------> Sleeping --------^
-.                                 |                           |
-.                                 |--------> Charging --------^
+.                              <---------------------------------------------------------\
+,                              |                                                          | 
+.   Locating ------------>   Agv Moving ----> Agv Parked ---------> Robot_Loading  -------^  
+.    (Slow)   [Got RFID]           (Read Mark RFID)           |                           | 
+.                                                             |-------> Robot_Unloading --^
+.                                                             |                           |
+.                                                             |-------> Charging ---------^
+.                                                             |                           |
+.                                                             |--------> Sleeping --------^
+.                                                             |                           |
+.                                                             |--------> Charging --------^
 */
 
-
+class MqttReportData{
+    float battery_voltage;
+    char bot_state;
+};
 
 // What I know:
 //      1. mqtt command, and message queue of map and navigation. 
@@ -70,7 +74,7 @@ class GarmentBot: public MqttMessageConsumer{
         void ExecuteMqttCommand(const char* command) override;
         RoadGraph objMapNavigator;
         SmartRfidReader objRfid;
-        
+        float __battery_voltage;
         void onDetectedMark(uint16_t mapsite_id);
         RoadBranchNode __current_BranchNode;
         uint16_t _ID = 0;

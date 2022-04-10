@@ -16,6 +16,7 @@ class SmartRfidReader{
         int CardId;
         bool MainRoad_IsOn_LeftSide;
         WorkStation::TYPE_ON_MAP NextStationType;  
+        
         void Init(int8_t pin_clk, int8_t pin_miso, int8_t pin_mosi);
         // void LinkCallback(void(* callback)(uint16_t card_id)){this->__onDetectCard = callback;};
         bool ReadCard();
