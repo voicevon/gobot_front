@@ -127,6 +127,10 @@ void TwinWheelsAgv::SpinOnce(){
 
 void TwinWheelsAgv::ToState(AGV_STATE state){
     if (state == this->_State) return;
+    if (this->_State == PARKED){
+        // leaving parked state
+        this->trackSensor->TurnOnLed(true);
+    }
     switch(state){
     case FAST_MOVING:
         this->common_speed = this->__fast_velocity;
