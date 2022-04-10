@@ -31,9 +31,11 @@ void setup(){
 
 
     // mqtt, bridge, receiver.
-    mqtt_message_queue = new MessageQueue();
     setup_mqtt_block_connect();
-    append_mqtt_bridge("gobot/x2134/arm", mqtt_message_queue, robot); 
+    mqtt_message_queue = new MessageQueue();
+    String mqtt_topic = "gobot/xROBOT_SERIAL_ID/arm";
+    mqtt_topic.replace("SERIAL_ID",ROBOT_SERIAL_ID);
+    append_mqtt_bridge(mqtt_topic.c_str(), mqtt_message_queue, robot); 
     setup_mqtt_on_message_receive(); 
 
 

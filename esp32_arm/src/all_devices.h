@@ -2,10 +2,10 @@
 #define __ALL_DEVICES_H_
 
 // #define I_AM_AGV_WHEEL
-// #define I_AM_GARMENT_BOT
+#define I_AM_GARMENT_BOT
 // #define I_AM_GARMENT_BOX_MOVER
-// #define I_AM_GOBOT_HOUSE_2134
-#define I_AM_GOBOT_CHESSBOARD_2134
+// #define I_AM_GOBOT_HOUSE
+// #define I_AM_GOBOT_CHESSBOARD
 
 // #define I_AM_ACUPUCTURE_MAIN_ESP32
 // #define I_AM_SMOKE_MACHINE_WEB_SERVER
@@ -17,8 +17,8 @@
 
 	// #define I_AM_SMOKE_MACHINE_MQTT
 
-#ifdef I_AM_GOBOT_CHESSBOARD_2134
-	#define I_AM_GOBOT_CHESSBOARD
+#ifdef I_AM_GOBOT_CHESSBOARD
+    #define ROBOT_SERIAL_ID "2134"
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1
 
@@ -31,8 +31,9 @@
 	#endif
 #endif
 
-#ifdef I_AM_GOBOT_HOUSE_2134
-	#define I_AM_GOBOT_HOUSE
+#ifdef I_AM_GOBOT_HOUSE
+    #define ROBOT_SERIAL_ID "2134"
+	// #define I_AM_GOBOT_HOUSE
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   
 
@@ -46,6 +47,7 @@
 #endif
 
 #ifdef I_AM_GARMENT_BOT
+    #define ROBOT_SERIAL_ID "2206"
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   
 #endif

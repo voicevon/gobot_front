@@ -17,9 +17,14 @@ void setup(){
     garment_robot = new GarmentBot();
     garment_robot->Init();
 
-    garment_bot_message_queue =  new MessageQueue();
+   // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
-    append_mqtt_link("garment/2212/bot", garment_bot_message_queue, garment_robot);
+    garment_bot_message_queue = new MessageQueue();
+    String mqtt_topic = "puma/xROBOT_SERIAL_ID/bot";
+    mqtt_topic.replace("SERIAL_ID",ROBOT_SERIAL_ID);
+    append_mqtt_bridge(mqtt_topic.c_str(), garment_bot_message_queue, garment_robot); 
+    setup_mqtt_on_message_receive(); 
+
     Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
 }
 
