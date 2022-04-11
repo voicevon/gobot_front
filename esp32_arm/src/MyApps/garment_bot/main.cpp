@@ -31,8 +31,10 @@ int64_t last_report_timestamp = 0;
 
 void mqtt_report_states(){
     String topic = "puma/bot/states";
-    String payload = "id:1234, bv:13.2,st:1";
-    mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
+    uint8_t payload[30]; 
+    garment_robot->GetMqtt_PubPayload(&payload[0]);
+    const char * pp = (const char*)(&payload[0]);
+    mqttClient.publish(topic.c_str(), 2, true, pp);
 }
 
 void loop(){

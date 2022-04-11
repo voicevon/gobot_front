@@ -179,10 +179,10 @@ void GarmentBot::Test(int test_id){
 
 uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
     // a json string,, constructed by state,battery_volt,last_site_id
-    String payload = "agv_id:" + this->_ID;
-    payload.concat(",state:");
+    String payload = "id:" + this->_ID;
+    payload.concat(",sta:");
     payload.concat(this->__state);
-    payload.concat(",battery:");
+    payload.concat(",bat:");
     payload.concat(123);
     payload.concat(",site:");
     // payload.concat(this->__last_state);

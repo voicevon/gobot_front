@@ -34,7 +34,7 @@ void doC() { sensor.handleC(); }
 // shunt resistor value
 // gain value
 // pins phase A,B
-// LowsideCurrentSense current_sense = LowsideCurrentSense(0.01, 50.0, 1, 2);
+LowsideCurrentSense current_sense = LowsideCurrentSense(0.01, 10.0, PIN_CURRENT_SENSOR_A, PIN_CURRENT_SENSOR_B);
 
 BLDCDriver6PWM driver = BLDCDriver6PWM(PIN_PHASE_A_HIGH, PIN_PHASE_A_LOW,
                                        PIN_PHASE_B_HIGH, PIN_PHASE_B_LOW,
@@ -72,7 +72,7 @@ void setup_sensor(){
     Serial.println("Sensor ready");
 
     // initialise the current sensing
-    // current_sense.init();
+    current_sense.init();
 }
 
 void setup_driver(){
@@ -117,13 +117,13 @@ void setup()
     setup_sensor();
     setup_driver();
     motor.linkSensor(&sensor);
-    // motor.linkCurrentSense(&current_sense);
+    motor.linkCurrentSense(&current_sense);
     motor.linkDriver(&driver);
     setup_motor();
 
     commander.add('T', onScalar, "target velocity");
 	// commander.add('T', doTarget, "target speed input here");
-	commander.add('C', onPid,"velocity pid");
+	commander.add('C', onPid, "velocity pid");
     _delay(1000);
 }
 
