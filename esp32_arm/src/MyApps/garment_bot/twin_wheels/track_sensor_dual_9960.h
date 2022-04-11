@@ -42,11 +42,11 @@
 
 class TrackSensor_Dual9960_Config{
     public:
-        uint8_t pin_left_sensor_sda = 21;
-        uint8_t pin_left_sensor_sclk = 22;
-        uint8_t pin_right_sensor_sda = 23;
-        uint8_t pin_right_sensor_sclk = 15;
-        uint8_t pin_led = 19;
+        uint8_t pin_left_sensor_sda = 26;
+        uint8_t pin_left_sensor_sclk = 25;
+        uint8_t pin_right_sensor_sda = 33;
+        uint8_t pin_right_sensor_sclk = 32;
+        uint8_t pin_WS2812_LED = 5;
         uint8_t LedWs2812B_counts = 10; // Popular NeoPixel ring size
 };
 

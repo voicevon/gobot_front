@@ -9,7 +9,8 @@
 #include "AGV/map_road_station/map_navigator.h"
 #include "smart_rfid_reader.h"
 
-#define  PIN_BATTERY_VOLTAGE_ADC  11
+#define  PIN_BATTERY_VOLTAGE_ADC  34
+#define  PIN_CHARGER_VOLTAGE_ADC  35
 
 
 

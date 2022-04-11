@@ -31,11 +31,11 @@
 #include "SimpleFOC.h"
 #include "SoftwareSerial.h"
 
-#define PIN_SERIAL_RX_LEFT_WHEEL 11
-#define PIN_SERIAL_TX_LEFT_WHEEL 11
+#define PIN_SERIAL_RX_LEFT_WHEEL 21
+#define PIN_SERIAL_TX_LEFT_WHEEL 22
 
-#define PIN_SERIAL_RX_RIGHT_WHEEL 11
-#define PIN_SERIAL_TX_RIGHT_WHEEL 11
+#define PIN_SERIAL_RX_RIGHT_WHEEL 23
+#define PIN_SERIAL_TX_RIGHT_WHEEL 27
 
 class TwinWheelsAgv{
     public:

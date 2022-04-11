@@ -1,14 +1,13 @@
 #include "twin_wheels_agv.h"
 
 
-#define HCSR04_PIN_ECHO 27
-#define HCSR04_PIN_TRIG 28
+#define HCSR04_PIN_ECHO 18
+#define HCSR04_PIN_TRIG 19
 
 #define LEFT_APDS_9960_SDA 21
 #define LEFT_APDS_9960_SCL 22
 #define RIGHT_APDS_9960_SDA 23
 #define RIGHT_APDS_9960_SCL 15
-#define PIN_LED  19
 
 
 TwinWheelsAgv::TwinWheelsAgv(){
@@ -17,16 +16,13 @@ TwinWheelsAgv::TwinWheelsAgv(){
 
 void TwinWheelsAgv::Init(){
     TrackSensor_Dual9960_Config* config = new TrackSensor_Dual9960_Config();
-    config->pin_led = PIN_LED;
     config->pin_left_sensor_sda = LEFT_APDS_9960_SDA;
     config->pin_left_sensor_sclk = LEFT_APDS_9960_SCL;
     config->pin_right_sensor_sda = RIGHT_APDS_9960_SDA;
     config->pin_right_sensor_sclk = RIGHT_APDS_9960_SCL;
-    this->trackSensor = new TrackSensor_Dual9960(config);
+    this->trackSensor = new TrackSensor_Dual9960(config); 
 
 	this->obstacleSensor = new UltraSonicDistanceSensor(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
-    // Serial1.begin(115200, );
-    // Serial2.begin(115200, )
     this->leftWheel_serial = new SoftwareSerial();
     this->leftWheel_serial->begin(115200, SWSERIAL_8N1, PIN_SERIAL_RX_LEFT_WHEEL, PIN_SERIAL_TX_LEFT_WHEEL,false);
     if (!this->leftWheel_serial) { // If the object did not initialize, then its configuration is invalid
@@ -64,10 +60,14 @@ void TwinWheelsAgv::Forwarding(){
 
 void TwinWheelsAgv::SpinOnce(){
     bool test_track_sensor_only = false;
+    bool test_led_on = true;
     while (test_track_sensor_only){
         this->trackSensor->IsFollowingLeft = !this->trackSensor->IsFollowingLeft;
         int16_t xx_error = this->trackSensor->ReadForwardingError();
         Serial.println (xx_error);
+        this->trackSensor->TurnOnLed(test_led_on);
+        test_led_on = !test_led_on;
+        delay(10000);
     }
 
     // Obstacle detection
