@@ -14,7 +14,7 @@ class Single_MesTask:
         self.state = 0
 
 
-class MapElement_AGV:
+class MapElement_Robot:
     # after hardware reseting,  AGV will move forward, 
     # after detecting the first location mark, will go to branch and goto idle.
     def __init__(self, id:int) -> None:

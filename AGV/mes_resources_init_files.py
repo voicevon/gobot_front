@@ -1,7 +1,7 @@
 
 # import numpy
 import json
-from mes_elements import MapElement_AGV, MapElement_Node, MyJsonEncoder
+from mes_elements import MapElement_Robot, MapElement_Node, MyJsonEncoder
 
 class MES_ResourcesHelper:
     '''
@@ -26,9 +26,9 @@ class MES_ResourcesHelper:
         textfile.write(JSONData)
         textfile.close()
 
-    def AppendAgv(self, new_agv:MapElement_AGV) ->None:
-        self.all_agvs.append(new_agv)
-        JSONData = json.dumps(self.all_agvs, indent=4, cls=MyJsonEncoder)
+    def AppendRobot(self, new_robot:MapElement_Robot) ->None:
+        self.all_robots.append(new_robot)
+        JSONData = json.dumps(self.all_robots, indent=4, cls=MyJsonEncoder)
         print(JSONData)
         textfile = open(self.file_name_agvs, "w")
         textfile.write(JSONData)
@@ -45,8 +45,8 @@ def init_json_files():
     nn.Node_id = 123
     resources.AppendMapElement(nn)
 
-    agv=MapElement_AGV(4444)
-    resources.AppendAgv(agv)
+    robot = MapElement_Robot(4444)
+    resources.AppendRobot(robot)
 
 
 if __name__ == '__main__':
