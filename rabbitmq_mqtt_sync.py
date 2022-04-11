@@ -57,10 +57,12 @@ class RabbitMQSyncer:
  
     def SubsribeRabbitMQ(self):
         self.channel_main = self.connection.channel()
+        self.channel_main.basic_qos(prefetch_count=1)
         self.channel_main.queue_declare(queue=self.queues.main_queue)
         self.channel_main.basic_consume(queue=self.queues.main_queue, on_message_callback=self.callback_main, auto_ack=False )
 
         self.channel_feedback = self.connection.channel()
+        self.channel_feedback.basic_qos(prefetch_count=1)
         self.channel_feedback.queue_declare(queue=self.queues.feedback_queue)
         self.channel_feedback.basic_consume(queue=self.queues.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
         # self.channel_main.start_consuming()    // Will always block thread.

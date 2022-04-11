@@ -1,7 +1,7 @@
 
 # import numpy
 import json
-from mes_elements import MapElement_Robot, MapElement_Node, MyJsonEncoder
+from AGV.mes_elements import MapElement_Robot, MapElement_Node, MyJsonEncoder
 
 class MES_ResourcesHelper:
     '''

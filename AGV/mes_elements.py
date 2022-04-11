@@ -1,3 +1,6 @@
+import sys
+sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
+
 
 import json
 from json import JSONEncoder
