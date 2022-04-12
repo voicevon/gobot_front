@@ -12,7 +12,7 @@ class SyncQueue_MqttTopic:
         '''
         self.main_queue = queue_name
         self.feedback_queue = queue_name + "_fb"
-        self.mqtt_publish_topic =queue_name.replace('_', '/')
+        self.mqtt_publish_topic = queue_name.replace('_', '/')
 
 
 class RabbitMQSyncer:
@@ -21,6 +21,7 @@ class RabbitMQSyncer:
         self.feedback = None
         self.connection = connection
         self.queues = SyncQueue_MqttTopic(queue_name)
+        print('[Info] RabbitMQSyncer.__init__()   feedback_queue_name =', self.queues.feedback_queue)
         self.SubsribeRabbitMQ()
         self.consuming_message_in_queue = True
         
@@ -32,6 +33,8 @@ class RabbitMQSyncer:
             # return
 
         # a new command from gobot_head is received
+        print('[Info] RabbitMQSyncer.callback_main()   mqtt is publishing ', self.queues.main_queue, "  ", body)
+        # print(self.queues.mqtt_publish_topic,body)
         g_mqtt.publish(self.queues.mqtt_publish_topic, body)
         self.channel_main.basic_ack(delivery_tag=method.delivery_tag)
         #stop consume a
@@ -44,7 +47,7 @@ class RabbitMQSyncer:
 
     def callback_feedback(self, ch, method, properties, body):
         # if method.routing_key == 'gobot.x2134.house.fb':
-        # print('                             [feedback] Received ' ,  method.routing_key, body)
+        print('                             [Info] RabbitMQSyncer.callback_feedback()  ' ,  method.routing_key, body)
         self.feedback = body
         if self.main == self.feedback:
             # feedback is equal to last command.
@@ -69,9 +72,11 @@ class RabbitMQSyncer:
 
     def SpinOnce(self):
         if self.channel_main._consumer_infos:
+            print("[Info] RabbitMQSyncer.SpinOnce() :: channel_main ", self.queues.main_queue)
             self.channel_main.connection.process_data_events(time_limit=0.1)  # will blocking 0.1 second
 
         if self.channel_feedback._consumer_infos:
+            # print("[Info] RabbitMQSyncer.SpinOnce() :: channel_feedback ", self.queues.feedback_queue)
             self.channel_feedback.connection.process_data_events(time_limit=0.1)
 
 

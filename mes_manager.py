@@ -26,7 +26,6 @@ class MqNames:
 
 
     def ForThisRobot(self, robot:MapElement_Robot) -> str:
-        print(robot.id)
         queue_name = self.to_robot_topic_base.replace('nnnn', str(robot.id))
         return queue_name
 
@@ -141,9 +140,9 @@ class MesManager:
 
         # Check battery voltage
         self.DealwithRobot_LowBattery()
-        # TODO: Let agv to charging/sleeping/Wakeingup
-        # for syncer in self.all_syncers:
-        #     syncer.SpinOnce()
+        # TODO: Let robot to charging/sleeping/Wakeingup
+        for syncer in self.all_syncers:
+            syncer.SpinOnce()
         if self.mes_task.state == BotTaskState.NoPlan:
             # Try to get a free agv.
             robot = self.GetRobot_FirstIdle()
@@ -235,13 +234,14 @@ class MesManager:
         payloads.append('unload')
 
         queue_name = MqNames().ForThisRobot(robot)
-        print(payloads)
         self.mq_client.PublishBatch(queue_name,  payloads)  # Load at node 123 
 
 
 if __name__ == '__main__':
         from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
         config = MQTT_ConnectionConfig()
+        config.uid='von'
+        config.password = 'von1970'
         g_mqtt.connect_to_broker(config)
 
         mm = MesManager()
