@@ -21,8 +21,8 @@ class BotTaskState(Enum):
 class MqNames:
     def __init__(self) -> None:
         self.mes_task = 'puma_mes_task'
-        self.robot_state = 'puma/bot/state'
-        self.to_robot_topic_base = 'puma_agv_xnnnn'
+        self.robot_state = 'puma_bot_state'
+        self.to_robot_topic_base = 'puma_bot_xnnnn'
 
 
     def ForThisRobot(self, robot:MapElement_Robot) -> str:
