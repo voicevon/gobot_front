@@ -60,7 +60,7 @@ void TwinWheelsAgv::Forwarding(){
 
 void TwinWheelsAgv::SpinOnce(){
     bool test_track_sensor_only = false;
-    bool test_led_on = true;
+    bool test_led_on = false;
     while (test_track_sensor_only){
         this->trackSensor->IsFollowingLeft = !this->trackSensor->IsFollowingLeft;
         int16_t xx_error = this->trackSensor->ReadForwardingError();
@@ -103,26 +103,28 @@ void TwinWheelsAgv::SpinOnce(){
             this->Forwarding();
         }
         break;
-   case SLOW_MOVING_PAUSED:
-      if (!found_obstacle)
-         this->ToState(SLOW_MOVING);
-      break;
-   case PARKING:
-        // try to finish parking
-        if(this->DoParking()){
-            this->ToState(PARKED);
-        }
-        break;
-   case PARKING_PAUSED:
+    case SLOW_MOVING_PAUSED:
         if (!found_obstacle)
-            this->ToState(PARKING);
+            this->ToState(SLOW_MOVING);
         break;
-   case PARKED:
+    case PARKING:
+            // try to finish parking
+            if(this->DoParking()){
+                this->ToState(PARKED);
+            }
+            break;
+    case PARKING_PAUSED:
+            if (!found_obstacle)
+                this->ToState(PARKING);
+            break;
+    case PARKED:
+            break;
+
+    default:
+        Serial.print("[Warn] TwinWheelsAgv::SpinOnce()   Unhandld state= ");
+        Serial.println(this->_State);
         break;
-   
-   default:
-      break;
-   }
+    }
 }
 
 void TwinWheelsAgv::ToState(AGV_STATE state){

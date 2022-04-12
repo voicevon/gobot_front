@@ -47,7 +47,7 @@
 #endif
 
 #ifdef I_AM_GARMENT_BOT
-    #define ROBOT_SERIAL_ID "2206"
+    #define ROBOT_SERIAL_ID "4444"
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   
 #endif

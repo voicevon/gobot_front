@@ -24,9 +24,9 @@ void SmartLightSensor::ReadSensor(){
     }
 
     sensor->getColorData(&this->color_r, &this->color_g, &this->color_b, &this->color_c);
-    bool debug= true;
+    bool debug= false;
     if (debug){
-
+        Serial.print("[Debug] SmartLightSensor::ReadSensor()  r,g,b,c,min,max= ");
         Serial.print(this->color_r);
         Serial.print("   ");
         Serial.print(this->color_g);
@@ -39,8 +39,7 @@ void SmartLightSensor::ReadSensor(){
         Serial.print("   ");
         Serial.print(this->c_max);
         Serial.print("   ");
-        // if (! this->IsFollowingLeft)
-        //     Serial.println("");
+        Serial.println("");
     }
 
     //Step2: Learn environment

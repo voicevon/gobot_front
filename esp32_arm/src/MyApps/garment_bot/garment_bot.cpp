@@ -74,7 +74,7 @@ void GarmentBot::onDetectedMark(uint16_t BranchNode_id){
 void GarmentBot::SpinOnce(){
 	uint16_t battery_voltage =  analogRead(PIN_BATTERY_VOLTAGE_ADC) ;
 	this->__battery_voltage = 1.0 * battery_voltage + 0.0;
-
+	
 	this->objBoxMoverAgent.SpinOnce();
 	this->objAgv.SpinOnce();
 	this->CheckMqttCommand();

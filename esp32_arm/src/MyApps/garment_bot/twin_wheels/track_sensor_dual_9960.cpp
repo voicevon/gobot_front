@@ -23,10 +23,14 @@ void TrackSensor_Dual9960::TurnOnLed(bool turn_on){
 int16_t TrackSensor_Dual9960::ReadForwardingError(){
     this->left_sensor->ReadSensor();
     this->right_sensor->ReadSensor();
-    Serial.print(this->left_sensor->light_percent);
-    Serial.print("   ");
-    Serial.print(this->right_sensor->light_percent);
-    Serial.print("   ");
+    bool debug = false;
+    if(debug){
+        Serial.print("[Info] TrackSensor_Dual9960::ReadForwardingError()  left_sensor_light_percent= ");
+        Serial.print(this->left_sensor->light_percent);
+        Serial.print("   Right_sensor_light_percent= ");
+        Serial.print(this->right_sensor->light_percent);
+        Serial.print("   ");
+    }
     int common_light_percent = 0;
     int16_t x_error = 100.0f * (this->left_sensor->light_percent - this->right_sensor->light_percent);
     if(this->left_sensor->light_percent > 0.2 && this->right_sensor->light_percent > 0.2){
