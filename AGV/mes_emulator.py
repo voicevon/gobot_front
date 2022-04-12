@@ -24,11 +24,11 @@ class Mes_emulator:
     def PublishTask(self, new_task:Single_MesTask):
         JSONData = json.dumps(new_task, indent=4, cls=MyJsonEncoder)
         # JSONData = json.dumps(self.all_map_elements, indent=4, cls=MyJsonEncoder)
-        print(JSONData)
+        # print(JSONData)
         self.client.Publish(self.message_queue, payload=JSONData)
 
     def PublishBatchTask_ForTest(self):
-        for i in range(100):
+        for i in range(12345):
             task = Single_MesTask()
             task.load_from = i+3
             task.unload_to = i+5

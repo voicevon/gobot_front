@@ -117,7 +117,7 @@ void setup()
     setup_sensor();
     setup_driver();
     motor.linkSensor(&sensor);
-    motor.linkCurrentSense(&current_sense);
+    // motor.linkCurrentSense(&current_sense);
     motor.linkDriver(&driver);
     setup_motor();
 

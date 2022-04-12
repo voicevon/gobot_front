@@ -54,6 +54,8 @@ class MesManager:
         self.Init_MessageQueue_RxTx()
 
         self.mes_task = Single_MesTask()
+        self.mes_task.state = BotTaskState.NoPlan
+        self.mes_task_ack_tag = ""
         self.path_to_load = [] 
         self.path_to_unload = []
         self.all_map_nodes=[]
@@ -126,53 +128,62 @@ class MesManager:
         3. Publish routing message to that AGV
         '''
 
-        test = True
+        test = False
         if test:
             if self.mes_task.state==BotTaskState.NoPlan:
                 print("NoPlan")
                 self.mes_task.state = BotTaskState.Planed
-            else:
-                print("Planed")
-                if self.mq_rx_channel_mes_task._consumer_infos:
-                    self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
+            if self.mq_rx_channel_mes_task._consumer_infos:
+                self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.001)  # will blocking 0.1 second
             
             return
 
         # TODO: Check robot is online/offline
 
         # Check battery voltage
-        self.DealwithRobot_LowBattery()
+        # self.DealwithRobot_LowBattery()
         # TODO: Let agv to charging/sleeping/Wakeingup
-        for syncer in self.all_syncers:
-            syncer.SpinOnce()
-
+        # for syncer in self.all_syncers:
+        #     syncer.SpinOnce()
+        print("aaaaaaaaaaaaa")
         if self.mes_task.state == BotTaskState.NoPlan:
             # Try to get a free agv.
             agv = self.GetFreeAgvRobot()
             if agv is None:
+                print("xxxxxxxxxxxxxxxxxxxxxxxxxx")
                 return
+            print("Making  Plan")
             #Calculate path to load, and unload.
-            self.CalculatePath(self.mes_task.load_from.Node_id, self.mes_task.unload_to.Node_id)
+            # self.CalculatePath(self.mes_task.load_from, self.mes_task.unload_to)
             # send the path to that agv.
-            self.DispatchTask(agv)
+            # self.DispatchTask(agv)
             # empty mes_task
             self.mes_task.state = BotTaskState.Planed
+            # self.mq_rx_channel_mes_task.start_consuming()
+            # self.mq_rx_channel_mes_task.basic_ack(delivery_tag=method.delivery_tag)
+            # self.mq_rx_channel_mes_task.basic_ack(delivery_tag=self.mes_task_ack_tag)
 
-        if self.mes_task.state != BotTaskState.NoPlan:
+        if self.mes_task.state == BotTaskState.Planed:
             if self.mq_rx_channel_mes_task._consumer_infos:
-                self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.1)  # will blocking 0.1 second
+                print("consuming")
+                self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
 
     def mes_task_rx_callback(self, ch, method, properties, body):
-        # print(' mes_task_rx_callback()  Received ' ,  method.routing_key, body)
+        print(' mes_task_rx_callback()  Received ' ,  method.routing_key, body)
         if self.mes_task.state == BotTaskState.NoPlan:
+            # Last task is blocking.
+            print("nnnnnnpppppppppppppp")
             return
         # from json to mes_task
         xx = json.loads(body)
         self.mes_task.load_from = xx["load_from"]
         self.mes_task.unload_to = xx['unload_to']
         self.mes_task.state = BotTaskState.NoPlan
+        self.mes_task_ack_tag = method.delivery_tag
         print("new mes_task")        
         self.mq_rx_channel_mes_task.basic_ack(delivery_tag=method.delivery_tag)
+        # self.mq_rx_channel_mes_task.stop_consuming()
+        # self.mq_rx_channel_mes_task.basic_consume(queue=MqNames().mes_task, on_message_callback=self.mes_task_rx_callback, auto_ack=False )
 
     def robot_state_rx_callback(self, ch, method, properties, body):
         xx = json.loads(body)
@@ -191,6 +202,8 @@ class MesManager:
         self.path_to_unload.append(node_id_to_unload)  
 
     def GetFreeAgvRobot(self) -> MapElement_Robot:
+        return self.all_robots[0]
+
         for agv in self.all_robots:
             if agv.state == 0:
                 return agv
@@ -231,14 +244,14 @@ class MesManager:
         '''
         payload = [str]
         for node in self.path_to_load: 
-            payload.append(node.Node_id)
+            payload.append(str(node))
         payload.append('load')
 
         for node in self.path_to_unload:
-            payload.append(node.Node_id)
+            payload.append(str(node))
         payload.append('unload')
 
-        queue_name = MqNames.ForThisRobot(robot)
+        queue_name = MqNames().ForThisRobot(robot)
         self.mq_client.PublishBatch(queue_name,  payload)  # Load at node 123 
 
 
