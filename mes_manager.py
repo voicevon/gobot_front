@@ -22,12 +22,12 @@ class MqNames:
     def __init__(self) -> None:
         self.mes_task = 'puma_mes_task'
         self.robot_state = 'puma/bot/state'
-        self.to_robot_topic_base = 'puma_agv_xxx'
+        self.to_robot_topic_base = 'puma_agv_xnnnn'
 
 
     def ForThisRobot(self, robot:MapElement_Robot) -> str:
         print(robot.id)
-        queue_name = self.to_robot_topic_base.replace('xxx', str(robot.id))
+        queue_name = self.to_robot_topic_base.replace('nnnn', str(robot.id))
         return queue_name
 
 
@@ -55,7 +55,6 @@ class MesManager:
 
         self.mes_task = Single_MesTask()
         self.mes_task.state = BotTaskState.NoPlan
-        self.mes_task_ack_tag = ""
         self.path_to_load = [] 
         self.path_to_unload = []
         self.all_map_nodes=[]
@@ -95,7 +94,6 @@ class MesManager:
             # TODO: more members
             self.all_robots.append(new_robot)
             print (new_robot.id)
-        # return all_robots
     
     def LoadMapNodes_FromJsonFile(self, filename:str) -> None:
         '''
@@ -117,8 +115,9 @@ class MesManager:
 
     def MakeRobotMqSyncer(self, robot:MapElement_Robot) -> None:
         queue_name = MqNames().ForThisRobot(robot)
-        sync = RabbitMQSyncer(self.mq_connection, queue_name)
-        self.all_syncers.append(sync)
+        print(queue_name)
+        syncer = RabbitMQSyncer(self.mq_connection, queue_name)
+        self.all_syncers.append(syncer)
 
     def SpinOnce(self) -> None:
         '''
@@ -131,7 +130,7 @@ class MesManager:
         test = False
         if test:
             if self.mes_task.state==BotTaskState.NoPlan:
-                print("NoPlan")
+                print("NoPlan", self.mes_task.load_from_node_id)
                 self.mes_task.state = BotTaskState.Planed
             if self.mq_rx_channel_mes_task._consumer_infos:
                 self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.001)  # will blocking 0.1 second
@@ -141,49 +140,34 @@ class MesManager:
         # TODO: Check robot is online/offline
 
         # Check battery voltage
-        # self.DealwithRobot_LowBattery()
+        self.DealwithRobot_LowBattery()
         # TODO: Let agv to charging/sleeping/Wakeingup
         # for syncer in self.all_syncers:
         #     syncer.SpinOnce()
-        print("aaaaaaaaaaaaa")
         if self.mes_task.state == BotTaskState.NoPlan:
             # Try to get a free agv.
-            agv = self.GetFreeAgvRobot()
-            if agv is None:
-                print("xxxxxxxxxxxxxxxxxxxxxxxxxx")
+            robot = self.GetRobot_FirstIdle()
+            if robot is None:
                 return
-            print("Making  Plan")
             #Calculate path to load, and unload.
-            # self.CalculatePath(self.mes_task.load_from, self.mes_task.unload_to)
+            # print(self.mes_task.load_from_node_id)
+            self.CalculatePath(self.mes_task.load_from_node_id, self.mes_task.unload_to_node_id)
             # send the path to that agv.
-            # self.DispatchTask(agv)
+            self.DispatchTaskTo(robot)
             # empty mes_task
             self.mes_task.state = BotTaskState.Planed
-            # self.mq_rx_channel_mes_task.start_consuming()
-            # self.mq_rx_channel_mes_task.basic_ack(delivery_tag=method.delivery_tag)
-            # self.mq_rx_channel_mes_task.basic_ack(delivery_tag=self.mes_task_ack_tag)
 
         if self.mes_task.state == BotTaskState.Planed:
             if self.mq_rx_channel_mes_task._consumer_infos:
-                print("consuming")
                 self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
 
     def mes_task_rx_callback(self, ch, method, properties, body):
-        print(' mes_task_rx_callback()  Received ' ,  method.routing_key, body)
-        if self.mes_task.state == BotTaskState.NoPlan:
-            # Last task is blocking.
-            print("nnnnnnpppppppppppppp")
-            return
         # from json to mes_task
-        xx = json.loads(body)
-        self.mes_task.load_from = xx["load_from"]
-        self.mes_task.unload_to = xx['unload_to']
+        jj = json.loads(body)
+        self.mes_task.load_from_node_id = jj["load_from"]
+        self.mes_task.unload_to_node_id = jj['unload_to']
         self.mes_task.state = BotTaskState.NoPlan
-        self.mes_task_ack_tag = method.delivery_tag
-        print("new mes_task")        
         self.mq_rx_channel_mes_task.basic_ack(delivery_tag=method.delivery_tag)
-        # self.mq_rx_channel_mes_task.stop_consuming()
-        # self.mq_rx_channel_mes_task.basic_consume(queue=MqNames().mes_task, on_message_callback=self.mes_task_rx_callback, auto_ack=False )
 
     def robot_state_rx_callback(self, ch, method, properties, body):
         xx = json.loads(body)
@@ -192,16 +176,16 @@ class MesManager:
         the_agv.location = xx["location"]
         the_agv.battery_voltate = xx["bat"]
 
-    def CalculatePath(self, node_id_to_load:MapElement_Node, node_id_to_unload:MapElement_Node) -> None:
+    def CalculatePath(self, node_to_load:int, node_to_unload:int) -> None:
         # check from map_node
         # self.mes_resources.all_map_nodes[]
-        self.path_to_load=[MapElement_Node]
-        self.path_to_load.append(node_id_to_load)  # might be shorter path
+        self.path_to_load=[]
+        self.path_to_load.append(node_to_load)  # might be shorter path
 
-        self.path_to_unload=[MapElement_Node]
-        self.path_to_unload.append(node_id_to_unload)  
+        self.path_to_unload=[]
+        self.path_to_unload.append(node_to_unload)  
 
-    def GetFreeAgvRobot(self) -> MapElement_Robot:
+    def GetRobot_FirstIdle(self) -> MapElement_Robot:
         return self.all_robots[0]
 
         for agv in self.all_robots:
@@ -235,27 +219,31 @@ class MesManager:
         queue_name = MqNames.ForThisRobot(robot)
         self.mq_client.PublishBatch(queue_name,  payload)  # Load at node 123 
 
-
-    def DispatchTask(self, robot:MapElement_Robot):
+    def DispatchTaskTo(self, robot:MapElement_Robot):
         '''
         Calulate two routings on the map(determin all branch nodes)
         Find a AGV, and first routing, move from current location to source location,
         second routing: move from source location to target location.
         '''
-        payload = [str]
-        for node in self.path_to_load: 
-            payload.append(str(node))
-        payload.append('load')
+        payloads = []
+        for node_id in self.path_to_load: 
+            payloads.append(str(node_id))
+        payloads.append('load')
 
-        for node in self.path_to_unload:
-            payload.append(str(node))
-        payload.append('unload')
+        for node_id in self.path_to_unload:
+            payloads.append(str(node_id))
+        payloads.append('unload')
 
         queue_name = MqNames().ForThisRobot(robot)
-        self.mq_client.PublishBatch(queue_name,  payload)  # Load at node 123 
+        print(payloads)
+        self.mq_client.PublishBatch(queue_name,  payloads)  # Load at node 123 
 
 
 if __name__ == '__main__':
+        from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
+        config = MQTT_ConnectionConfig()
+        g_mqtt.connect_to_broker(config)
+
         mm = MesManager()
         while True:
             mm.SpinOnce()

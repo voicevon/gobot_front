@@ -12,8 +12,8 @@ class FileNames:
 
 class Single_MesTask:
     def __init__(self) -> None:
-        self.load_from = MapElement_Node()
-        self.unload_to = MapElement_Node()
+        self.load_from_node_id = 0
+        self.unload_to_node_id = 0
         self.state = 0
 
 
