@@ -19,7 +19,7 @@ void setup(){
    // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
     garment_bot_message_queue = new MessageQueue();
-    String mqtt_topic = "puma/xROBOT_SERIAL_ID/bot";
+    String mqtt_topic = "puma/bot/xROBOT_SERIAL_ID";
     mqtt_topic.replace("ROBOT_SERIAL_ID",ROBOT_SERIAL_ID);
     append_mqtt_bridge(mqtt_topic.c_str(), garment_bot_message_queue, garment_robot); 
     setup_mqtt_on_message_receive(); 
