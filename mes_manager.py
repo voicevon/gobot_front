@@ -52,14 +52,16 @@ class MesManager:
         '''
         self.Init_MessageQueue_RxTx()
 
-        self.mes_task = Single_MesTask()
-        self.mes_task.state = BotTaskState.NoPlan
+        # self.mes_task = Single_MesTask()
+        # self.mes_task.state = BotTaskState.Planed
+        self.mes_task_json = None
+        self.mes_task_ack = None
         self.path_to_load = [] 
         self.path_to_unload = []
         self.all_map_nodes=[]
         self.all_robots = []
+        self.all_syncers=[]
         self.LoadMapNodes_FromJsonFile(FileNames.MapNodes)
-     
 
     def Init_MessageQueue_RxTx(self):
         config = RabbitMQBrokeConfig()
@@ -76,8 +78,6 @@ class MesManager:
         self.mq_rx_channel_robot_state.queue_declare(queue=MqNames().robot_state)
         self.mq_rx_channel_robot_state.basic_consume(queue=MqNames().robot_state, on_message_callback=self.robot_state_rx_callback, auto_ack=False)
 
-
-    
     def LoadMapNodes_FromJsonFile(self, filename:str) -> None:
         '''
         TODO:  Load AGV when that agv is online.
@@ -100,7 +100,7 @@ class MesManager:
         queue_name = MqNames().ForThisRobot(robot)
         print(queue_name)
         syncer = RabbitMQSyncer(self.mq_connection, queue_name)
-        # self.all_syncers.append(syncer)
+        self.all_syncers.append(syncer)
 
     def SpinOnce(self) -> None:
         '''
@@ -110,42 +110,60 @@ class MesManager:
         3. Publish routing message to that AGV
         '''
         self.DealwithRobot_LowBattery()
-        if self.mq_rx_channel_mes_task._consumer_infos:
+
+        # if self.mq_rx_channel_mes_task._consumer_infos:
             #TODO:  solve problem: Sometime, after this line, there is no callback. And will be recoverd after paused for 5 to 100 seconds 
-            self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
+        self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
+        if self.mes_task_ack is  None:
+            return
+        robot = self.GetRobot_FirstIdle()
+        if robot is None:
+            return
+        print('[Info] MesManager.SpinOnce()    Got task and idle robot...')
+        self.mq_rx_channel_mes_task.basic_ack(delivery_tag=self.mes_task_ack)
+        self.mes_task_ack = None
+        task_json = json.loads(self.mes_task_json)
+        mes_task = Single_MesTask()
+        mes_task.load_from_node_id = task_json["load_from"]
+
+        #Calculate path to load, and unload.
+        print("Trying to calculate path")
+        # print(self.mes_task.load_from_node_id)
+        self.CalculatePath(mes_task.load_from_node_id, mes_task.unload_to_node_id)
+        # send the path to that agv.
+        print("Trying to dispatch task to robot")
+        self.DispatchTaskTo(robot)
+        # empty mes_task
 
         # TODO: Let robot to charging/sleeping/Wakeingup
 
-        if self.mes_task.state == BotTaskState.NoPlan:
             # Try to get a free agv.
-            robot = self.GetRobot_FirstIdle()
-            if robot is None:
-                return
-            #Calculate path to load, and unload.
-            # print(self.mes_task.load_from_node_id)
-            self.CalculatePath(self.mes_task.load_from_node_id, self.mes_task.unload_to_node_id)
-            # send the path to that agv.
-            self.DispatchTaskTo(robot)
-            # empty mes_task
-            self.mes_task.state = BotTaskState.Planed
+            # print("Trying to find idle robot")
+
+
 
 
     def mes_task_rx_callback(self, ch, method, properties, body):
         # from json to mes_task
-        print('[Info] MesManager. mes_task_rx_callback()' )
-        jj = json.loads(body)
-        self.mes_task.load_from_node_id = jj["load_from"]
-        self.mes_task.unload_to_node_id = jj['unload_to']
-        self.mes_task.state = BotTaskState.NoPlan
-        self.mq_rx_channel_mes_task.basic_ack(delivery_tag=method.delivery_tag)
+        print('[Info] MesManager. mes_task_rx_callback()  ' )
+        if self.mes_task_ack is None:
+            self.mes_task_json = body
+            self.mes_task_ack = method.delivery_tag
+        else:
+            print('[Info] MesManager. mes_task_rx_callback()    How can this happened? ')
+        # self.mes_task.load_from_node_id = jj["load_from"]
+        # self.mes_task.unload_to_node_id = jj['unload_to']
+        # self.mes_task.state = BotTaskState.NoPlan
+        # self.mq_rx_channel_mes_task.basic_ack(delivery_tag=method.delivery_tag)
 
     def robot_state_rx_callback(self, ch, method, properties, body):
-        print('[Info] MesManager.robot_state_rx_callback()       ')
+        print('[Info] MesManager.robot_state_rx_callback()      body= ', body)
         robot_id = 4444
         robot = self.GetRobot_FromId(robot_id)
         if robot is None:
             print("[Info] MesManager.robot_state_rx_callback()   Making new syncer.", robot_id)
             new_robot = MapElement_Robot(robot_id)
+            new_robot.state = 0    # idle
             self.all_robots.append(new_robot)
             self.MakeRobotMqSyncer(new_robot)
         self.mq_rx_channel_robot_state.basic_ack(delivery_tag=method.delivery_tag)
