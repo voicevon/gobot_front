@@ -158,22 +158,21 @@ class MesManager:
 
     def robot_state_rx_callback(self, ch, method, properties, body):
         print('[Info] MesManager.robot_state_rx_callback()      body= ', body)
-        robot_id = 4444
-        robot = self.GetRobot_FromId(robot_id)
-        if robot is None:
+        xx = json.loads(body)
+        robot_id = xx["id"]
+        the_robot = self.GetRobot_FromId(robot_id)
+        if the_robot is None:
             print("[Info] MesManager.robot_state_rx_callback()   Making new syncer.", robot_id)
             new_robot = MapElement_Robot(robot_id)
-            new_robot.state = 0    # idle
             self.all_robots.append(new_robot)
             self.MakeRobotMqSyncer(new_robot)
+            the_robot = new_robot
+        the_robot.location = xx["nd"]
+        the_robot.battery_voltate = xx["bat"]
+        the_robot.state = xx["sta"]
         self.mq_rx_channel_robot_state.basic_ack(delivery_tag=method.delivery_tag)
 
         return
-        xx = json.loads(body)
-        the_agv = self.GetRobot_FromId(xx["id"])
-        the_agv.id = xx["id"]
-        the_agv.location = xx["location"]
-        the_agv.battery_voltate = xx["bat"]
 
     def CalculatePath(self, node_to_load:int, node_to_unload:int) -> None:
         # check from map_node
@@ -208,13 +207,13 @@ class MesManager:
             return
         # Got a robot with low battery.  Shold move to charge station
         # Calculate path to charge station, 
-        payload = [str]
+        payloads = []
         for node in self.path_to_unload:
-            payload.append(node.Node_id)
-        payload.append('charge')
+            payloads.append(node.Node_id)
+        payloads.append('charge')
 
-        queue_name = MqNames.ForThisRobot(robot)
-        self.mq_client.PublishBatch(queue_name,  payload)  # Load at node 123 
+        queue_name = MqNames().ForThisRobot( robot)
+        self.mq_client.PublishBatch(queue_name,  payloads)  # Load at node 123 
 
     def DispatchTaskTo(self, robot:MapElement_Robot):
         '''

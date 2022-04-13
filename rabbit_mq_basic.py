@@ -43,11 +43,12 @@ class RabbitClient():
                         routing_key = queue_name,
                         body = payload)
 
-    def PublishBatch(self, queue_name:str, payload:list):
+    def PublishBatch(self, queue_name:str, payloads:list):
+        print("[Info] RabbitClient.PublishBatch(), queue_name=, payload= ", queue_name, payloads)
         if not (queue_name in self.declaed_queues):
             self.channel.queue_declare(queue=queue_name)
             self.declaed_queues.append(queue_name)
-        for pp in payload:
+        for pp in payloads:
             self.channel.basic_publish(exchange = '',
                             routing_key = queue_name,
                             body = pp)
