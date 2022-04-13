@@ -71,13 +71,16 @@ class RabbitMQSyncer:
         # self.channel_main.start_consuming()    // Will always block thread.
 
     def SpinOnce(self):
+        # Only one process_data_events, will cauase all callback invoked.  !!!
+        # Not involved to which channel !!!
         if self.channel_main._consumer_infos:
             print("[Info] RabbitMQSyncer.SpinOnce() :: channel_main ", self.queues.main_queue)
             self.channel_main.connection.process_data_events(time_limit=0.1)  # will blocking 0.1 second
 
-        if self.channel_feedback._consumer_infos:
-            # print("[Info] RabbitMQSyncer.SpinOnce() :: channel_feedback ", self.queues.feedback_queue)
-            self.channel_feedback.connection.process_data_events(time_limit=0.1)
+        # if self.channel_feedback._consumer_infos:
+        #     print("[Info] RabbitMQSyncer.SpinOnce() :: channel_feedback ", self.queues.feedback_queue)
+        #     self.channel_feedback.connection.process_data_events(time_limit=0.1)
+        pass
 
 
 class SyncerHelper:

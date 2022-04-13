@@ -125,24 +125,11 @@ class MesManager:
         3. Calculate routing for that AGV
         3. Publish routing message to that AGV
         '''
-
-        test = False
-        if test:
-            if self.mes_task.state==BotTaskState.NoPlan:
-                print("NoPlan", self.mes_task.load_from_node_id)
-                self.mes_task.state = BotTaskState.Planed
-            if self.mq_rx_channel_mes_task._consumer_infos:
-                self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.001)  # will blocking 0.1 second
-            
-            return
-
         # TODO: Check robot is online/offline
 
         # Check battery voltage
         self.DealwithRobot_LowBattery()
         # TODO: Let robot to charging/sleeping/Wakeingup
-        for syncer in self.all_syncers:
-            syncer.SpinOnce()
         if self.mes_task.state == BotTaskState.NoPlan:
             # Try to get a free agv.
             robot = self.GetRobot_FirstIdle()
@@ -156,12 +143,12 @@ class MesManager:
             # empty mes_task
             self.mes_task.state = BotTaskState.Planed
 
-        if self.mes_task.state == BotTaskState.Planed:
-            if self.mq_rx_channel_mes_task._consumer_infos:
-                self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
+        if self.mq_rx_channel_mes_task._consumer_infos:
+            self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
 
     def mes_task_rx_callback(self, ch, method, properties, body):
         # from json to mes_task
+        print('[Info] MesManager. mes_task_rx_callback()' )
         jj = json.loads(body)
         self.mes_task.load_from_node_id = jj["load_from"]
         self.mes_task.unload_to_node_id = jj['unload_to']
@@ -169,6 +156,8 @@ class MesManager:
         self.mq_rx_channel_mes_task.basic_ack(delivery_tag=method.delivery_tag)
 
     def robot_state_rx_callback(self, ch, method, properties, body):
+        print('[Info] MesManager.robot_state_rx_callback()       ')
+        return
         xx = json.loads(body)
         the_agv = self.GetRobot_FromId(xx["id"])
         the_agv.id = xx["id"]
