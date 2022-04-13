@@ -27,8 +27,7 @@ class RabbitMQSyncer:
         
     def callback_main(self, ch, method, properties, body):
         # print('                       [RabbitMQSyncer] callback_main ' ,  method.routing_key, body)
-        self.main = body
-        if self.main == self.feedback:
+        if body == self.feedback:
             print('repeated...... not return')    #????
             # return
 
@@ -38,18 +37,19 @@ class RabbitMQSyncer:
         g_mqtt.publish(self.queues.mqtt_publish_topic, body)
         self.channel_main.basic_ack(delivery_tag=method.delivery_tag)
         #stop consume a
-        # print("                       Stop consuming now, Will continue when got feedback ...", self.queues.mqtt_publish_topic, body)
+        print("                       Stop consuming now, Will continue when got feedback ...", self.queues.mqtt_publish_topic, body)
         self.channel_main.stop_consuming()  # this will break all callbacks
         self.consuming_message_in_queue = False
         self.channel_feedback.queue_declare(queue=self.queues.feedback_queue)
         self.channel_feedback.basic_consume(queue=self.queues.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
-        # print("                       End of callback()")
+        print("                       End of callback()")
+        self.main = body   # Then main_thread and other thread is sharing self.main
 
     def callback_feedback(self, ch, method, properties, body):
         # if method.routing_key == 'gobot.x2134.house.fb':
         print('                             [Info] RabbitMQSyncer.callback_feedback()  ' ,  method.routing_key, body)
-        self.feedback = body
-        if self.main == self.feedback:
+        if self.main == body:
+            print("main == body")
             # feedback is equal to last command.
             # gobot-house has received last message in the gobot_head command queue.
             # go on to comsume a
@@ -57,6 +57,8 @@ class RabbitMQSyncer:
             # print(self.main, self.feedback, "      Start consuming now..")
             self.channel_main.queue_declare(queue=self.queues.main_queue)
             self.channel_main.basic_consume(queue=self.queues.main_queue, on_message_callback=self.callback_main, auto_ack=False )
+        self.feedback = body   # The main-thread is sharing self.feedback
+        print("going to exit")
  
     def SubsribeRabbitMQ(self):
         self.channel_main = self.connection.channel()

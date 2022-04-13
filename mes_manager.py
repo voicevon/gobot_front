@@ -114,6 +114,7 @@ class MesManager:
         # Check battery voltage
         self.DealwithRobot_LowBattery()
         if self.mq_rx_channel_mes_task._consumer_infos:
+            #TODO:  solve problem: Sometime, after this line, there is no callback. And will be recoverd after paused for 5 to 100 seconds 
             self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
 
         # TODO: Let robot to charging/sleeping/Wakeingup
