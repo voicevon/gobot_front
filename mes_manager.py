@@ -109,15 +109,13 @@ class MesManager:
         3. Calculate routing for that AGV
         3. Publish routing message to that AGV
         '''
-        # TODO: Check robot is online/offline
-
-        # Check battery voltage
         self.DealwithRobot_LowBattery()
         if self.mq_rx_channel_mes_task._consumer_infos:
             #TODO:  solve problem: Sometime, after this line, there is no callback. And will be recoverd after paused for 5 to 100 seconds 
             self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
 
         # TODO: Let robot to charging/sleeping/Wakeingup
+
         if self.mes_task.state == BotTaskState.NoPlan:
             # Try to get a free agv.
             robot = self.GetRobot_FirstIdle()
@@ -146,7 +144,9 @@ class MesManager:
         robot_id = 4444
         robot = self.GetRobot_FromId(robot_id)
         if robot is None:
+            print("[Info] MesManager.robot_state_rx_callback()   Making new syncer.", robot_id)
             new_robot = MapElement_Robot(robot_id)
+            self.all_robots.append(new_robot)
             self.MakeRobotMqSyncer(new_robot)
         self.mq_rx_channel_robot_state.basic_ack(delivery_tag=method.delivery_tag)
 

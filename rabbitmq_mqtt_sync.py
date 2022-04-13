@@ -1,6 +1,7 @@
 from pika import BlockingConnection
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
 from rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
+import copy
 # from rabbit_mq_basic import Connect
 
 class SyncQueue_MqttTopic:
@@ -17,8 +18,8 @@ class SyncQueue_MqttTopic:
 
 class RabbitMQSyncer:
     def __init__(self, connection:BlockingConnection, queue_name:str) -> None:
-        self.main = None
-        self.feedback = None
+        self.main_body = None
+        self.feedback_body = None
         self.connection = connection
         self.queues = SyncQueue_MqttTopic(queue_name)
         print('[Info] RabbitMQSyncer.__init__()   feedback_queue_name =', self.queues.feedback_queue)
@@ -27,7 +28,7 @@ class RabbitMQSyncer:
         
     def callback_main(self, ch, method, properties, body):
         # print('                       [RabbitMQSyncer] callback_main ' ,  method.routing_key, body)
-        if body == self.feedback:
+        if body == self.feedback_body:
             print('repeated...... not return')    #????
             # return
 
@@ -43,21 +44,24 @@ class RabbitMQSyncer:
         self.channel_feedback.queue_declare(queue=self.queues.feedback_queue)
         self.channel_feedback.basic_consume(queue=self.queues.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
         print("                       End of callback()")
-        self.main = body   # Then main_thread and other thread is sharing self.main
+        self.main_body = copy.copy(body)   # The main_thread and other thread is sharing self.main_body
 
     def callback_feedback(self, ch, method, properties, body):
         # if method.routing_key == 'gobot.x2134.house.fb':
         print('                             [Info] RabbitMQSyncer.callback_feedback()  ' ,  method.routing_key, body)
-        if self.main == body:
+        if self.main_body == body:
             print("main == body")
             # feedback is equal to last command.
             # gobot-house has received last message in the gobot_head command queue.
             # go on to comsume a
             self.consuming_message_in_queue = True
-            # print(self.main, self.feedback, "      Start consuming now..")
+            # print(self.main_body, self.feedback_body, "      Start consuming now..")
             self.channel_main.queue_declare(queue=self.queues.main_queue)
             self.channel_main.basic_consume(queue=self.queues.main_queue, on_message_callback=self.callback_main, auto_ack=False )
-        self.feedback = body   # The main-thread is sharing self.feedback
+        else:
+            print("main != feedback_body", self.main_body,  body)
+
+        self.feedback_body = body   # The main-thread is sharing self.feedback_body
         print("going to exit")
  
     def SubsribeRabbitMQ(self):
