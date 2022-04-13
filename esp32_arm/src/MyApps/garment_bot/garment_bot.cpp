@@ -2,8 +2,8 @@
 #ifdef I_AM_GARMENT_BOT
 #include "garment_bot.h"
 
-GarmentBot::GarmentBot(){
-
+GarmentBot::GarmentBot(uint16_t id){
+	this->_ID = id;
 }
 
 void GarmentBot::Init(){
@@ -179,15 +179,22 @@ void GarmentBot::Test(int test_id){
 
 uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
     // a json string,, constructed by state,battery_volt,last_site_id
-    String payload = "id:" + this->_ID;
-    payload.concat(",sta:");
-    payload.concat(this->__state);
-    payload.concat(",bat:");
-    payload.concat(123);
-    payload.concat(",site:");
-    // payload.concat(this->__last_state);
+    String payload = "{\"id\":";
+	payload.concat(String(this->_ID));
+    payload.concat(",\"sta\":");
+    payload.concat(String(this->__state));
+    payload.concat(",\"bat\":");
+    payload.concat(String(1.8));
+    payload.concat(",\"nd\":");
+    payload.concat(String(45));
+	payload.concat("} ");   //Space is important !! for length =+1
     // uint8_t length = payload.length();
     // uint8_t* dest = (uint8_t *)chars;
+	bool debug = false;
+	if (debug){
+		Serial.print("[Debug] GarmentBot::GetMqtt_PubPayload()    length= ");
+		Serial.println(payload.length());
+	}
     payload.getBytes(chars, payload.length());
     return payload.length();
 }

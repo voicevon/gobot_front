@@ -58,7 +58,7 @@ class GarmentBot: public MqttMessageConsumer{
             BOT_EMERGENCY_STOPING = 9,
         };
 
-        GarmentBot();
+        GarmentBot(uint16_t id);
         GarmentBoxMoverAgent objBoxMoverAgent = GarmentBoxMoverAgent();
         TwinWheelsAgv objAgv = TwinWheelsAgv();
 

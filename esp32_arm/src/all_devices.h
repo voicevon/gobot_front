@@ -18,7 +18,7 @@
 	// #define I_AM_SMOKE_MACHINE_MQTT
 
 #ifdef I_AM_GOBOT_CHESSBOARD
-    #define ROBOT_SERIAL_ID "2134"
+    #define ROBOT_SERIAL_ID 2134
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1
 
@@ -32,7 +32,7 @@
 #endif
 
 #ifdef I_AM_GOBOT_HOUSE
-    #define ROBOT_SERIAL_ID "2134"
+    #define ROBOT_SERIAL_ID 2134
 	// #define I_AM_GOBOT_HOUSE
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   
@@ -47,7 +47,7 @@
 #endif
 
 #ifdef I_AM_GARMENT_BOT
-    #define ROBOT_SERIAL_ID "4444"
+    #define ROBOT_SERIAL_ID 4444
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   
 #endif
