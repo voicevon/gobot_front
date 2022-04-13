@@ -58,12 +58,8 @@ class MesManager:
         self.path_to_unload = []
         self.all_map_nodes=[]
         self.all_robots = []
-        self.all_syncers=[]
         self.LoadMapNodes_FromJsonFile(FileNames.MapNodes)
-        self.__LoadRobots_FromJsonFile(FileNames.MapAgvs)
-        for robot in self.all_robots:
-            print(robot.id)
-            self.MakeRobotMqSyncer(robot)
+     
 
     def Init_MessageQueue_RxTx(self):
         config = RabbitMQBrokeConfig()
@@ -80,19 +76,7 @@ class MesManager:
         self.mq_rx_channel_robot_state.queue_declare(queue=MqNames().robot_state)
         self.mq_rx_channel_robot_state.basic_consume(queue=MqNames().robot_state, on_message_callback=self.robot_state_rx_callback, auto_ack=False)
 
-    def __LoadRobots_FromJsonFile(self, filename:str):
-        # Do every steps again for agv
-        file = open(filename,"r")
-        data = file.read()
-        file.close()
-        str_json = json.loads(data)
-        # all_robots=[MapElement_Robot]
-        for bot_json in str_json:
-            new_robot = MapElement_Robot(0)
-            new_robot.id = bot_json["id"]
-            # TODO: more members
-            self.all_robots.append(new_robot)
-            print (new_robot.id)
+
     
     def LoadMapNodes_FromJsonFile(self, filename:str) -> None:
         '''
@@ -116,7 +100,7 @@ class MesManager:
         queue_name = MqNames().ForThisRobot(robot)
         print(queue_name)
         syncer = RabbitMQSyncer(self.mq_connection, queue_name)
-        self.all_syncers.append(syncer)
+        # self.all_syncers.append(syncer)
 
     def SpinOnce(self) -> None:
         '''
@@ -129,6 +113,9 @@ class MesManager:
 
         # Check battery voltage
         self.DealwithRobot_LowBattery()
+        if self.mq_rx_channel_mes_task._consumer_infos:
+            self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
+
         # TODO: Let robot to charging/sleeping/Wakeingup
         if self.mes_task.state == BotTaskState.NoPlan:
             # Try to get a free agv.
@@ -143,8 +130,6 @@ class MesManager:
             # empty mes_task
             self.mes_task.state = BotTaskState.Planed
 
-        if self.mq_rx_channel_mes_task._consumer_infos:
-            self.mq_rx_channel_mes_task.connection.process_data_events(time_limit=0.01)  # will blocking 0.1 second
 
     def mes_task_rx_callback(self, ch, method, properties, body):
         # from json to mes_task
@@ -157,6 +142,13 @@ class MesManager:
 
     def robot_state_rx_callback(self, ch, method, properties, body):
         print('[Info] MesManager.robot_state_rx_callback()       ')
+        robot_id = 4444
+        robot = self.GetRobot_FromId(robot_id)
+        if robot is None:
+            new_robot = MapElement_Robot(robot_id)
+            self.MakeRobotMqSyncer(new_robot)
+        self.mq_rx_channel_robot_state.basic_ack(delivery_tag=method.delivery_tag)
+
         return
         xx = json.loads(body)
         the_agv = self.GetRobot_FromId(xx["id"])
@@ -174,11 +166,9 @@ class MesManager:
         self.path_to_unload.append(node_to_unload)  
 
     def GetRobot_FirstIdle(self) -> MapElement_Robot:
-        return self.all_robots[0]
-
-        for agv in self.all_robots:
-            if agv.state == 0:
-                return agv
+        for robot in self.all_robots:
+            if robot.state == 0:
+                return robot
         return None
 
     def GetRobot_FromId(self, robot_id:int) -> MapElement_Robot:
