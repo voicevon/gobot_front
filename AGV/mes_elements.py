@@ -22,8 +22,10 @@ class MapElement_Robot:
     # after detecting the first location mark, will go to branch and goto idle.
     def __init__(self, id:int) -> None:
         self.id = id
-        self.location = -1   # means unknown.
-        self.state = -1   # Charging, moving to load, loading, moving to unload, unloading, idle.
+        self.location = -1
+        ''' means unknown.'''   
+        self.state = 0
+        ''' Idle =0, syncing=1, Charging=2, moving to load=3, loading=4, moving to unload=5, unloading=6.'''   
         self.battery_voltate = 12.0
 
     def on_mqtt_message(self, location_id, battery_voltage, state):

@@ -29,7 +29,7 @@ class RabbitMQSyncer:
     def callback_main(self, ch, method, properties, body):
         # print('                       [RabbitMQSyncer] callback_main ' ,  method.routing_key, body)
         if body == self.feedback_body:
-            print('repeated...... not return')    #????
+            print('repeated...... not return   ' ,body, method.delivery_tag)    #????
             # return
 
         # a new command from gobot_head is received

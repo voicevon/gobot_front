@@ -184,7 +184,7 @@ uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
     payload.concat(",\"sta\":");
     payload.concat(String(this->__state));
     payload.concat(",\"bat\":");
-    payload.concat(String(1.8));
+    payload.concat(String(12.8));
     payload.concat(",\"nd\":");
     payload.concat(String(45));
 	payload.concat("} ");   //Space is important !! for length =+1
@@ -206,7 +206,6 @@ uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
 //    this->objMapNavigator.AddNode(2, RoadBranchNode::TASK::LOAD);
 //    this->objMapNavigator.AddNode(3, RoadBranchNode::TASK::UNLOAD);
 //    this->objMapNavigator.AddNode(4, RoadBranchNode::TASK::SLEEP);
-
 // }
 
 #endif

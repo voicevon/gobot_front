@@ -83,7 +83,8 @@ void setup_driver(){
     // daad_zone [0,1] - default 0.02 - 2%
     driver.dead_zone = 0.05;
     driver.init();
-    driver.enable();
+    Serial.println("driver is initilized,  not enabled.");
+    delay(5000);
 }
 
 void setup_motor(){
@@ -107,7 +108,10 @@ void setup_motor(){
     motor.voltage_limit = 10; // Volts - default driver.voltage_limit
     // of current
     motor.current_limit = 2; // Amps - default 0.2Amps
-    motor.initFOC();
+	// initialize motor
+	motor.init();
+	// align sensor and start FOC
+	motor.initFOC();
 }
 
 void setup()
@@ -124,34 +128,48 @@ void setup()
     commander.add('T', onScalar, "target velocity");
 	// commander.add('T', doTarget, "target speed input here");
 	commander.add('C', onPid, "velocity pid");
+    Serial.println("Hello , setup() is done...");
     _delay(1000);
 }
 
-
+int counter_high=0;
+int counter_low =0;
 void debug(){
-    Serial.print(sensor.getAngle());
-    Serial.print("\t");
-    Serial.print(sensor.getVelocity());
-    Serial.print("\t");
-    Serial.print(digitalRead(PIN_POWER_IS_GOOD));
-    Serial.print("\t");
-    Serial.print(digitalRead(PIN_FAULT));
-    Serial.print("\t");
-    Serial.print(digitalRead(PIN_OverCurrentTermperatureWarning));
-    Serial.print("\t");
-    // Serial.print(digitalRead(PIN_GAIN));
-    // Serial.print("\t");
-    Serial.println();
+    int power_good = digitalRead(PIN_POWER_IS_GOOD);
+    if (power_good == HIGH)
+        counter_high ++;
+    else{
+        counter_low++;
+        Serial.print(counter_high);
+        Serial.print("\t");
+        Serial.print(counter_low);
+        Serial.print("\t");
+        Serial.print(float(counter_high) /  float(counter_low));
+        Serial.print("\t\t");
+        Serial.print(sensor.getAngle());
+        Serial.print("\t");
+        Serial.print(sensor.getVelocity());
+        Serial.print("\t");
+        Serial.print(digitalRead(PIN_POWER_IS_GOOD));
+        Serial.print("\t");
+        Serial.print(digitalRead(PIN_FAULT));
+        Serial.print("\t");
+        Serial.print(digitalRead(PIN_OverCurrentTermperatureWarning));
+        Serial.print("\t");
+        // Serial.print(digitalRead(PIN_GAIN));
+        // Serial.print("\t");
+        Serial.println();
+    }
 }
 
 void loop()
 {
     // sensor.update();
-    motor.loopFOC();
-    motor.move(target_velocity);
+    // motor.loopFOC();
+    // motor.move(target_velocity);
 
     // motor.monitor();
-    commander.run();
+    // commander.run();
 
     debug();
 

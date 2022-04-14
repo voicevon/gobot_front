@@ -28,7 +28,7 @@ class Mes_emulator:
         self.client.Publish(self.message_queue, payload=JSONData)
 
     def PublishBatchTask_ForTest(self):
-        for i in range(12345):
+        for i in range(3):
             task = Single_MesTask()
             task.load_from = i+3
             task.unload_to = i+5

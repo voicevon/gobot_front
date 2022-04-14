@@ -174,14 +174,14 @@ class MesManager:
 
         return
 
-    def CalculatePath(self, node_to_load:int, node_to_unload:int) -> None:
+    def CalculatePath(self, node_id_to_load:int, node_id_to_unload:int) -> None:
         # check from map_node
         # self.mes_resources.all_map_nodes[]
         self.path_to_load=[]
-        self.path_to_load.append(node_to_load)  # might be shorter path
+        self.path_to_load.append(node_id_to_load)  # might be shorter path
 
         self.path_to_unload=[]
-        self.path_to_unload.append(node_to_unload)  
+        self.path_to_unload.append(node_id_to_unload)  
 
     def GetRobot_FirstIdle(self) -> MapElement_Robot:
         for robot in self.all_robots:
@@ -205,15 +205,21 @@ class MesManager:
         robot = self.GetRobot_LowBattery()
         if robot is None:
             return
+        if robot.state != 0:
+            # Not idle
+            return 
+        robot.state = 1   # Syncing command
+
         # Got a robot with low battery.  Shold move to charge station
         # Calculate path to charge station, 
         payloads = []
-        for node in self.path_to_unload:
-            payloads.append(node.Node_id)
+        for node_id in self.path_to_unload:
+            payloads.append(str(node_id))
         payloads.append('charge')
 
         queue_name = MqNames().ForThisRobot( robot)
-        self.mq_client.PublishBatch(queue_name,  payloads)  # Load at node 123 
+        self.mq_client.PublishBatch(queue_name,  payloads)  # Load at node 123
+
 
     def DispatchTaskTo(self, robot:MapElement_Robot):
         '''
