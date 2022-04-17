@@ -29,7 +29,7 @@ void SpringMakerHardwareConfig::PrintOut(){
     Serial.print("\n    steps_per_rad_for_a = ");
     Serial.print(this->steps_per_rad_for_a);
     Serial.print("\n     Home_position (a) = (");
-    Serial.print(this->Homed_position_a);
+    Serial.print(this->Homed_position_fk_A);
     Serial.print(" , ");
 
     Serial.print("\n     Homing_speed_alpha = ");

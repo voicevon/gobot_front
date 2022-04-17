@@ -75,7 +75,7 @@ void SpringMakerHardware::_running_G28(){
 		else{
 			// We know homed position via FK
 			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
-			this->__current_fk_position.A = this->__config.Homed_position_a;
+			this->__current_fk_position.A = this->__config.Homed_position_fk_A;
 			// this->__current_fk_position.W = this->__config.Homed_position_w;
 			this->IK(&this->__current_fk_position, &ik_position);
 			// verify IK by FK()
