@@ -6,7 +6,6 @@
 #include "IoT/mqtt_message_consumer.h"
 
 
-//I am a GcodeProducer, NOT CONSUMER !
 class BoxMover: public GcodeProducer, public MqttMessageConsumer{
     public:
         enum BoxMoverState{ START, 

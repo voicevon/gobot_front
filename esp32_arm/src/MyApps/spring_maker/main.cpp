@@ -1,22 +1,22 @@
 #include "all_devices.h"
-#ifdef I_AM_GARMENT_BOX_MOVER
-
+#ifdef I_AM_SPRING_MAKER
 
 #include "MyLibs/MyFunctions.hpp"
-#include "box_mover.h"
-#include "box_mover_hw.h"
 #include "IoT/main_mqtt.h"
+#include "spring_maker.h"
+#include "spring_maker_hw.h"
 
-BoxMover *robot;
-BoxMoverHardware* robot_hw;
+
+SpringMaker *robot;
+SpringMakerHardware* robot_hw;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_command_queue;
 
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Garment-BoxMover.  Keep smiling :)");
-    robot_hw = new BoxMoverHardware();
-    robot = new BoxMover();
+    robot_hw = new SpringMakerHardware();
+    robot = new SpringMaker();
     gcode_queue = new GcodeQueue();
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
     robot_hw->LinkLocalGcodeQueue_AsConsumer(gcode_queue);

@@ -5,6 +5,9 @@
 #include <SoftwareSerial.h>
 #include "main_hw.h"
 
+// https://github.com/simplefoc/Arduino-FOC/blob/master/examples/hardware_specific_examples/DRV8302_driver/6pwm_example/encoder/full_control_serial/full_control_serial.ino
+// https://docs.simplefoc.com/drv8302_example
+
 SoftwareSerial mySerial; // RX, TX
 Commander commander = Commander(mySerial);
 float target_velocity = 2; // 2Rad/s ~ 20rpm
@@ -34,14 +37,17 @@ void doC() { sensor.handleC(); }
 // shunt resistor value
 // gain value
 // pins phase A,B
-LowsideCurrentSense current_sense = LowsideCurrentSense(0.01, 10.0, PIN_CURRENT_SENSOR_A, PIN_CURRENT_SENSOR_B);
+// LowsideCurrentSense current_sense = LowsideCurrentSense(0.01, 10.0, PIN_CURRENT_SENSOR_A, PIN_CURRENT_SENSOR_B);
 
-BLDCDriver6PWM driver = BLDCDriver6PWM(PIN_PHASE_A_HIGH, PIN_PHASE_A_LOW,
-                                       PIN_PHASE_B_HIGH, PIN_PHASE_B_LOW,
-                                       PIN_PHASE_C_HIGH, PIN_PHASE_C_LOW,
+// BLDCDriver6PWM driver = BLDCDriver6PWM(PIN_PHASE_A_HIGH, PIN_PHASE_A_LOW,
+//                                        PIN_PHASE_B_HIGH, PIN_PHASE_B_LOW,
+//                                        PIN_PHASE_C_HIGH, PIN_PHASE_C_LOW,
+//                                        PIN_DRV8302_ENABLE);
+
+BLDCDriver3PWM driver = BLDCDriver3PWM(PIN_PHASE_A_HIGH, 
+                                       PIN_PHASE_B_HIGH, 
+                                       PIN_PHASE_C_HIGH, 
                                        PIN_DRV8302_ENABLE);
-
-
 
 void setup_gpio(){
     // For output
@@ -72,7 +78,7 @@ void setup_sensor(){
     Serial.println("Sensor ready");
 
     // initialise the current sensing
-    current_sense.init();
+    // current_sense.init();
 }
 
 void setup_driver(){
@@ -81,10 +87,18 @@ void setup_driver(){
     // Max DC voltage allowed - default voltage_power_supply
     driver.voltage_limit = 6;
     // daad_zone [0,1] - default 0.02 - 2%
-    driver.dead_zone = 0.05;
-    driver.init();
-    Serial.println("driver is initilized,  not enabled.");
-    delay(5000);
+    // driver.dead_zone = 0.05;
+    int rrr = driver.init();
+    // Serial.print("driver.init() result =  ");
+    // Serial.println(rrr);
+    // driver.enable();
+    // Serial.println("driver is initilized,  not enabled.");
+    // delay(5000);
+
+    // BLDCDriver3PWM xxx= BLDCDriver3PWM(15,16,16);
+    // int xx=xxx.init();
+    // Serial.print(xx);
+    // Serial.println(xxx.initialized);
 }
 
 void setup_motor(){
@@ -97,6 +111,7 @@ void setup_motor(){
     // jerk control using voltage voltage ramp
     // default value is 300 volts per sec  ~ 0.3V per millisecond
     motor.PID_velocity.output_ramp = 1000;
+	motor.voltage_limit = 12;    //设置电机的电压极限
 
     // velocity low pass filtering
     // default 5ms - try different values to see what is the best.
@@ -108,9 +123,13 @@ void setup_motor(){
     motor.voltage_limit = 10; // Volts - default driver.voltage_limit
     // of current
     motor.current_limit = 2; // Amps - default 0.2Amps
+	motor.useMonitoring(Serial);
+    motor.monitor_downsample = 1000000;
+
 	// initialize motor
 	motor.init();
 	// align sensor and start FOC
+    Serial.println(" --------------------------------------- ");
 	motor.initFOC();
 }
 
@@ -119,10 +138,15 @@ void setup()
     Serial.begin(115200);
     setup_gpio();
     setup_sensor();
-    setup_driver();
     motor.linkSensor(&sensor);
+    setup_driver();
     // motor.linkCurrentSense(&current_sense);
     motor.linkDriver(&driver);
+
+    // bool instance = driver;
+    // Serial.print(" driver.initialized =  ");
+    // Serial.println(motor.driver->initialized);
+	motor.controller = MotionControlType::velocity;   //电机控制方式：位置闭环控制
     setup_motor();
 
     commander.add('T', onScalar, "target velocity");
@@ -164,14 +188,14 @@ void debug(){
 
 void loop()
 {
-    // sensor.update();
-    // motor.loopFOC();
-    // motor.move(target_velocity);
+    sensor.update();
+    motor.loopFOC();
+    motor.move(target_velocity);
 
-    // motor.monitor();
-    // commander.run();
+    motor.monitor();
+    commander.run();
 
-    debug();
+    // debug();
 
 }
 

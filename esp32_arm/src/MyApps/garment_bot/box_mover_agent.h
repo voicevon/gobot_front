@@ -3,6 +3,7 @@
 
 class GarmentBoxMoverAgent{
     public:
+        // TODO: This declaration shold be unified for:  BoxMover, and BoxMoverAgent
         enum BoxMoverState{ START, 
                             RESETTING, 
                             READY_TO_LOAD, 

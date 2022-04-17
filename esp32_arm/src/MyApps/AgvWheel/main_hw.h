@@ -33,12 +33,15 @@
 #define PIN_OverCurrentTermperatureWarning 2
 
 
+// They provide output offset up to 3 V to support bidirectional current sensing. 
+//  The offset is set to half the voltage on the reference pin (REF).
+
 #define PIN_HALL_SENSOR_U 19
 #define PIN_HALL_SENSOR_V 18
 #define PIN_HALL_SENSOR_W 5
 
 #define PIN_PHASE_A_HIGH 12
-#define PIN_PHASE_A_LOW 14
+#define PIN_PHASE_A_LOW 22  //14  https://www.electrorules.com/esp32-pinout-reference/
 
 #define PIN_PHASE_B_HIGH 27
 #define PIN_PHASE_B_LOW 26
