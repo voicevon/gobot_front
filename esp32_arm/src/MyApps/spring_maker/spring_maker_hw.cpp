@@ -1,60 +1,43 @@
 #include "spring_maker_hw.h"
 
 #define PIN_ALPHA_ENABLE 18
-#define PIN_BETA_ENABLE 16
 
 
 
 void SpringMakerHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	Serial.print("\n[Info] SpringMakerHardware::IK() is entering. ");
-	FkPosition_ZW* fk = (FkPosition_ZW*)(from_fk);
-	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
+	FkPosition_A* fk = (FkPosition_A*)(from_fk);
+	IkPosition_A* ik = (IkPosition_A*)(to_ik);
 
-	ik->alpha = (fk->Z * this->__config.steps_per_rad_for_a + fk->W * this->__config.steps_per_rad_for_a);
-	// ik->beta = (fk->Z * this->__config.steps_per_mm_for_z - fk->W * this->__config.steps_per_rad_for_w);
-
-	Serial.print("\n[Debug] SpringMakerHardware::IK() output (alpha, beta) = ");
+	ik->alpha = fk->A;
+	Serial.print("\n[Debug] SpringMakerHardware::IK() output  = ");
 	Serial.print(ik->alpha);
-	Serial.print(" , ");
-	Serial.print(ik->beta);
-	Serial.print(")");
 }
 
 void SpringMakerHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	Serial.print("\n[Debug] SpringMakerHardware::FK() is entering ");
-	FkPosition_ZW* fk = (FkPosition_ZW*)(to_fk);
-	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
+	FkPosition_A* fk = (FkPosition_A*)(to_fk);
+	IkPosition_A* ik = (IkPosition_A*)(from_ik);
 	
-	fk->Z = (ik->alpha + ik->beta) / 2 / this->__config.steps_per_rad_for_a;
-
-	Serial.print("\n[Debug] SpringMakerHardware::FK() output (Z, W) = ");
-	Serial.print(fk->Z);
-	Serial.print(" , ");
-	Serial.print(fk->W);
-	Serial.print(")");
+	fk->A = ik->alpha;
+	Serial.print("\n[Debug] SpringMakerHardware::FK() output A = ");
+	Serial.print(fk->A);
 }
 
 
 SpringMakerHardware::SpringMakerHardware(){
-
+	this->InitRobot();
 }
 
 void SpringMakerHardware::InitRobot(){
-	Serial.print("\n[Info] SpringMakerHardware::Init_Linkage() is entering.");
+	Serial.print("\n[Info] SpringMakerHardware::InitRobot() is entering.");
 	this->__config.Init();
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-	pinMode(PIN_BETA_ENABLE, OUTPUT);
-
 	this->__EnableMotor('A', false);
-	this->__EnableMotor('B', false);
-
-	
 
 	CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
 	this->commuDevice = commuUart; 
-
 	this->objStepper_alpha.setInverseRotation(true);
-
 	this->_home_as_inverse_kinematic = false;
 }
 
@@ -66,18 +49,11 @@ void SpringMakerHardware::HomeSingleAxis(char axis){
 	this->__config.PrintOut();
 	this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha);
 	this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha);
-	// this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
-	// this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 
 	if (axis=='A'){
 		//todo :  process with IK()
 		this->__homing_helper = &this->objHomeHelper_alpha;
 		this->objStepper_alpha.setTargetRel(5000000);
-		// this->objStepper_beta.setTargetRel(5000000);
-	// }else if (axis=='Z'){
-	// 	this->__homing_helper = &this->objHomeHelper_vertical;
-	// 	this->objStepper_alpha.setTargetRel(-5000000);
-	// 	this->objStepper_beta.setTargetRel(5000000);	
 	}
 	this->__EnableMotor('A', true);
 	this->objStepControl.moveAsync(this->objStepper_alpha);
@@ -91,7 +67,7 @@ void SpringMakerHardware::_running_G28(){
 		this->objStepControl.stop();
 
 		//Set current position to HomePosition
-		IkPosition_AB ik_position;
+		IkPosition_A ik_position;
 		if (this->_home_as_inverse_kinematic){
 			// We know homed position via IK.
 			Serial.print("\n[Error] SpringMakerHardware::_running_G28() This robot does NOT impliment this function.");
@@ -103,7 +79,7 @@ void SpringMakerHardware::_running_G28(){
 			// this->__current_fk_position.W = this->__config.Homed_position_w;
 			this->IK(&this->__current_fk_position, &ik_position);
 			// verify IK by FK()
-			FkPosition_XY verifying_fk;
+			FkPosition_A verifying_fk;
 			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
 			this->FK(&ik_position, &verifying_fk);
 		}
@@ -125,45 +101,33 @@ void SpringMakerHardware::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] SpringMakerHardware::RunG1() is entering");
 	Serial.print(gcode->get_command());
 	this->__EnableMotor('A', true);
-	this->__EnableMotor('B', true);
+	// this->__EnableMotor('B', true);
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
 		this->objStepper_alpha.setMaxSpeed(speed);
-		// this->objStepper_beta.setMaxSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_A target_fk_a;
 	IkPosition_A target_ik_a;
 	target_fk_a.A = this->__current_fk_position.A;
-	// target_fk_zw.W = this->__current_fk_position.W;
 	target_ik_a.alpha = float(this->objStepper_alpha.getPosition()) ;
-	// target_ik_a.beta = float(this->objStepper_beta.getPosition());
 	bool do_ik=false;
 	if (gcode->has_letter('A')) target_ik_a.alpha = gcode->get_value('A');
-	// if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B');
-
 	// If need IK, do it now.
 	if (gcode->has_letter('A')) {
 		do_ik=true;
 		target_fk_a.A = gcode->get_value('A');
 	}
-	// if (gcode->has_letter('W')){
-	// 	do_ik=true;
-	// 	target_fk_zw.W = gcode->get_value('W');
-	// }
 	if (do_ik) IK(&target_fk_a,&target_ik_a);
 
 	//Prepare actuator/driver to move to next point
 	this->objStepper_alpha.setTargetAbs(target_ik_a.alpha);
-	// this->objStepper_beta.setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
 	this->objStepControl.moveAsync(this->objStepper_alpha);
 
 	if (true){
 		Serial.print("\n    [Debug] SpringMakerHardware::RunG1()     (");
 		Serial.print(this->objStepper_alpha.getPosition());
-		Serial.print(",");
-		// Serial.print(this->objStepper_beta.getPosition());
 		Serial.print(")   <-- from   alpha   to -->  (");
 		Serial.print(target_ik_a.alpha  );
 		// Serial.print(" , ");
@@ -185,7 +149,7 @@ void SpringMakerHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 
 void SpringMakerHardware::RunM84(){
 	this->__EnableMotor('A',false);
-	this->__EnableMotor('B',false);
+	// this->__EnableMotor('B',false);
 }
 
 float SpringMakerHardware::GetDistanceToTarget_IK(){
@@ -195,7 +159,7 @@ float SpringMakerHardware::GetDistanceToTarget_IK(){
 void SpringMakerHardware::__EnableMotor(char actuator, bool enable_it){
 	if (actuator == 'A')
 		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
-	if (actuator == 'B')
-		digitalWrite(PIN_BETA_ENABLE, !enable_it);
+	// if (actuator == 'B')
+	// 	digitalWrite(PIN_BETA_ENABLE, !enable_it);
 }
 

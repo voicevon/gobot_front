@@ -57,7 +57,7 @@ void RobotBase::SpinOnce_BaseExit(){
 	if (true){
 		Serial.print("\nRobotBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
 		Serial.print(message->payload);
-		Serial.print(" ");
+		Serial.println(" ");
 	}
 	
 	// type convert   from char* to std::string
