@@ -53,6 +53,12 @@
 	#define MQTT_SYNCERS_COUNT  1   
 #endif
 
+#ifdef I_AM_SPRING_MAKER
+    // #define ROBOT_SERIAL_ID 4444
+	#define USING_WIFI_MQTT
+	#define MQTT_SYNCERS_COUNT  1   
+#endif
+
 #ifdef I_AM_GARMENT_BOX_MOVER
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   
