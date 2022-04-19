@@ -14,17 +14,19 @@ void SpringMaker::ExecuteMqttCommand(const char* command){
         String gcode = "G28A";
         this->_gcode_queue->AppendGcodeCommand(gcode);
     }else if(str_command.equals("reset")){
-        String gcode = "G1 A23";
+        String gcode = "G28A";
+        this->_gcode_queue->AppendGcodeCommand(gcode);
+        gcode = "G1 A-3";
         this->_gcode_queue->AppendGcodeCommand(gcode);
     }else if(str_command.equals("big")){
         Serial.println("                        Start to make big spring....  ");
-        String gcode = "G1 A100";
+        String gcode = "G1 A-75.36";       // 1.0mm   D ?? 12 turns.    
         this->_gcode_queue->AppendGcodeCommand(gcode);
     }else if(str_command.equals("mid")){
-        String gcode = "G1 A200";
+        String gcode = "G1 A-50.24";    // 8 turns
         this->_gcode_queue->AppendGcodeCommand(gcode);
     }else if(str_command.equals("small")){
-        String gcode = "G1 A300";
+        String gcode = "G1 A-300";     // 50 turns
         this->_gcode_queue->AppendGcodeCommand(gcode);
     }else{
         Serial.print("[Warn] SpringMaker::ExecuteMqttCommand()  = ");

@@ -98,7 +98,7 @@ class SyncerHelper:
             # print(syncer.queues.main_queue)
             syncer.SpinOnce()
 
-
+# TODO:  remove this
 class SyncerHelper_ForGobot:
     def __init__(self) -> None:
         config_mqtt = MQTT_ConnectionConfig()
@@ -116,6 +116,7 @@ class SyncerHelper_ForGobot:
         self.helper.ConnectMqttBroker(config_mqtt)
         self.helper.MakeSyncer('gobot_x2134_house')
         self.helper.MakeSyncer('gobot_x2134_arm')
+
     def SpinOnce(self):
         self.helper.SpinOnce()
 

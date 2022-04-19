@@ -9,7 +9,7 @@ void SpringMakerHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_A* fk = (FkPosition_A*)(from_fk);
 	IkPosition_A* ik = (IkPosition_A*)(to_ik);
 
-	ik->alpha = fk->A;
+	ik->alpha = fk->A * this->__config.steps_per_rad_for_a;
 	Serial.print("\n[Debug] SpringMakerHardware::IK() output  = ");
 	Serial.print(ik->alpha);
 }
@@ -19,7 +19,7 @@ void SpringMakerHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_A* fk = (FkPosition_A*)(to_fk);
 	IkPosition_A* ik = (IkPosition_A*)(from_ik);
 	
-	fk->A = ik->alpha;
+	fk->A = ik->alpha / this->__config.steps_per_rad_for_a;
 	Serial.print("\n[Debug] SpringMakerHardware::FK() output A = ");
 	Serial.print(fk->A);
 }
@@ -45,7 +45,6 @@ void SpringMakerHardware::HomeSingleAxis(char axis){
 	Serial.print("[Debug] SpringMakerHardware::HomeSingleAxis() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis = axis;
-
 	this->__config.PrintOut();
 	this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha);
 	this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha);
@@ -53,7 +52,7 @@ void SpringMakerHardware::HomeSingleAxis(char axis){
 	if (axis=='A'){
 		//todo :  process with IK()
 		this->__homing_helper = &this->objHomeHelper_alpha;
-		this->objStepper_alpha.setTargetRel(5000000);
+		this->objStepper_alpha.setTargetRel(-5000000);
 	}
 	this->__EnableMotor('A', true);
 	this->objStepControl.moveAsync(this->objStepper_alpha);

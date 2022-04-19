@@ -2,9 +2,7 @@
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
-from this import d
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
-
 
 from gobot_vision.gobot_vision import GobotVision
 from gogame.chessboard_cell import ChessboardCell, StoneColor
@@ -13,6 +11,10 @@ from gogame.died_area_scanner import DiedAreaScanner
 # from controller import Controller
 from gobot_ai_client import GoGameAiClient
 from config.config import Config
+
+from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
+from rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
+from rabbitmq_mqtt_sync import SyncerHelper
 
 
 import logging
@@ -23,7 +25,7 @@ from config.image_logger import ImageLogger,ImageLoggerToWhere
 from config.message_logger import MessageLoggerToWhere,MessageLogger
 from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
-from rabbitmq_mqtt_sync import SyncerHelper_ForGobot
+from rabbitmq_mqtt_sync import SyncerHelper
 
 
 class GobotHead():
@@ -43,12 +45,13 @@ class GobotHead():
     3.3 talker_arm, can talk to chessboard robot arm.
     3.4 talker_house, can talk to house robot arm.
     '''
-    def __init__(self, eye_type:RobotEye_Product):
+    def __init__(self, serial_id:int, eye_type:RobotEye_Product):
+        self.Serial_id = serial_id
         self.__InitServers()
         self.__InitEyeVisions(eye_type)
 
-        self.arm = HumanLevelGobotArm(self.mqClient)
-        self.house = HumanLevelGobotHouse(self.mqClient)
+        self.arm = HumanLevelGobotArm(self.AmqClient)
+        self.house = HumanLevelGobotHouse(self.AmqClient)
 
         self.__died_area_scanner = DiedAreaScanner()
         self.__goto = self.at_state_game_over
@@ -60,8 +63,21 @@ class GobotHead():
         print("[Info] GobotHead::__init__()  is done.")
 
     def __InitServers(self):
-        self.mqHelper = SyncerHelper_ForGobot()
-        self.mqClient = self.mqHelper.MqClient
+        config_mqtt = MQTT_ConnectionConfig()
+        config_mqtt.uid = 'agent'
+        config_mqtt.password = 'agent'
+
+        config_rabbit = RabbitMQBrokeConfig()
+        config_rabbit.uid = 'agent'
+        config_rabbit.password = 'agent'
+        self.AmqClient = RabbitClient(config_rabbit)
+        self.AmqConnection = self.AmqClient.connection
+
+        self.SyncHelper = SyncerHelper(self.AmqConnection)
+        self.SyncHelper.ConnectMqttBroker(config_mqtt)
+
+        self.SyncHelper.MakeSyncer('gobot_x2134_house')
+        self.SyncHelper.MakeSyncer('gobot_x2134_arm')
 
         self.__ai = GoGameAiClient()
     
@@ -470,7 +486,7 @@ class GobotHead():
         self.__goto = self.at_state_game_over
 
     def SpinOnce(self):
-        self.mqHelper.SpinOnce()
+        self.SyncHelper.SpinOnce()
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
@@ -513,7 +529,7 @@ if __name__ == '__main__':
     # robot_eye = RobotEye_Product.PaspberryPiCamera
     # robot_eye = RobotEye_Product.UsbCamera
 
-    myrobot = GobotHead(robot_eye)
+    myrobot = GobotHead(2134,robot_eye)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
     # myrobot.house.demo()
     while True:

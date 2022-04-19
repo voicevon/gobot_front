@@ -3,7 +3,6 @@
 class SpringMakerHardwareConfig{
     public:
         float steps_per_rad_for_a;
-
         float max_speed_alpha;
         float max_acceleration_alpha;
      
