@@ -76,8 +76,8 @@ class GobotHead():
         self.SyncHelper = SyncerHelper(self.AmqConnection)
         self.SyncHelper.ConnectMqttBroker(config_mqtt)
 
-        self.SyncHelper.MakeSyncer('gobot_x2134_house')
-        self.SyncHelper.MakeSyncer('gobot_x2134_arm')
+        self.SyncHelper.MakeSyncer('gobot_x' + str(self.Serial_id) + '_house')
+        self.SyncHelper.MakeSyncer('gobot_x' + str(self.Serial_id) + '_arm')
 
         self.__ai = GoGameAiClient()
     

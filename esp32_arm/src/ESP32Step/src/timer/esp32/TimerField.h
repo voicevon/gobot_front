@@ -81,7 +81,7 @@ void TimerField::setStepFrequency(unsigned f)
 
 bool TimerField::begin()
 {
-  Serial.println("[Info] TimerField::begin");
+  Serial.println("[Info] ESP32Step::TimerField::begin");
   return true;
 }
 

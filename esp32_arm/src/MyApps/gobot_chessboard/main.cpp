@@ -34,7 +34,7 @@ void setup(){
     setup_mqtt_block_connect();
     mqtt_message_queue = new MessageQueue();
     String mqtt_topic = "gobot/xROBOT_SERIAL_ID/arm";
-    mqtt_topic.replace("SERIAL_ID", String(ROBOT_SERIAL_ID));
+    mqtt_topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
     append_mqtt_bridge(mqtt_topic.c_str(), mqtt_message_queue, robot); 
     setup_mqtt_on_message_receive(); 
 

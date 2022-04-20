@@ -17,7 +17,8 @@ class SyncQueue_MqttTopic:
 
 
 class RabbitMQSyncer:
-    def __init__(self, connection:BlockingConnection, queue_name:str) -> None:
+    def __init__(self, connection:BlockingConnection, queue_name:str, index:int) -> None:
+        self.index = index
         self.main_body = None
         self.feedback_body = None
         self.connection = connection
@@ -69,9 +70,10 @@ class RabbitMQSyncer:
     def SpinOnce(self):
         # Only one process_data_events, will cauase all callback invoked.  !!!
         # Not involved to which channel !!!
-        if self.channel_main._consumer_infos:
+        # if self.channel_main._consumer_infos:
+        if self.index !=0:
             print("[Warn] RabbitMQSyncer.SpinOnce(), Skip call me is better,  channel_main ", self.queues.main_queue)
-            self.channel_main.connection.process_data_events(time_limit=0.1)  # will blocking 0.1 second
+        self.channel_main.connection.process_data_events(time_limit=0.001)  # will blocking 0.1 second
 
         # if self.channel_feedback._consumer_infos:
         #     print("[Info] RabbitMQSyncer.SpinOnce() :: channel_feedback ", self.queues.feedback_queue)
@@ -85,7 +87,8 @@ class SyncerHelper:
         self.all_syncers=[]
         
     def MakeSyncer(self, main_queue_name:str) -> None:
-        sync = RabbitMQSyncer(self.connection, main_queue_name)
+        index = len(self.all_syncers)
+        sync = RabbitMQSyncer(self.connection, main_queue_name, index)
         self.all_syncers.append(sync)
     
     @staticmethod
@@ -97,6 +100,7 @@ class SyncerHelper:
         for syncer in self.all_syncers:
             # print(syncer.queues.main_queue)
             syncer.SpinOnce()
+            return   # Only the first syncer runs, all other syncers should invoke callback.
 
 # TODO:  remove this
 class SyncerHelper_ForGobot:
