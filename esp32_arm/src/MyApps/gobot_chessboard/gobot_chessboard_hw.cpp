@@ -36,7 +36,7 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 		Serial.print("\n[Error] GobotChessboardHardware::HomeSingleAxis() ");
 	}
 	this->objStepControl.moveAsync(*this->__homing_stepper);
-	Serial.print("[Debug] GobotChessboardHardware::HomeSingleAxis() is done\n" );
+	Serial.print("[Debug] GobotChessboardHardware::HomeSingleAxis() is Starting to run...\n" );
 }
 
 
@@ -294,8 +294,8 @@ float GobotChessboardHardware::GetDistanceToTarget_IK(){
 }
 
 void GobotChessboardHardware::RunM84(){
-	this->__EnableMotor('A',false);
-	this->__EnableMotor('B',false);
+	this->__EnableMotor('A', false);
+	this->__EnableMotor('B', false);
 }
 
 void GobotChessboardHardware::__EnableMotor(char actuator, bool enable_it){
