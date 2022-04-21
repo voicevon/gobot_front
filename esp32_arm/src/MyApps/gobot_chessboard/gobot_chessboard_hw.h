@@ -79,7 +79,7 @@ class GobotChessboardHardware: public RobotBase{
     
         // Led objLedPower = Led(0, PIN_LED_POWER_2112, LOW);
         // Led objLedHome_alpha = Led(1,2,LOW);
-        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA, LOW);
+        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALPHA, LOW);
         HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA, LOW);
 
         Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
