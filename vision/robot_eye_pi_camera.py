@@ -36,8 +36,15 @@ class MonoEyePiCamera(MonoEyeBase):
 if __name__ == '__main__':
     import sys
     sys.path.append('/home/pi/pylib')
-    from von.mqtt_helper import g_mqtt
-    g_mqtt.connect_to_broker('camera_2021-0613','voicevon.vicp.io',1883,'von','von1970')
+    from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
+    
+    config = MQTT_ConnectionConfig()
+    config.broker="voicevon.vicp.io"
+    config.port = 1883
+    config.client_id = "Y22-0422"
+    config.uid = 'von'
+    config.password = 'von1970'
+    g_mqtt.connect_to_broker(config)
 
     my_eye = MonoEyePiCamera('2021-0611.yml')
     if False:

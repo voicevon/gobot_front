@@ -5,7 +5,7 @@ import logging
 # from types import ClassMethodDescriptorType
 # from tkinter import Image
 import cv2
-from von.mqtt_helper import g_mqtt
+from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
 
 class ImageLoggerToWhere(Enum):
     TO_MQTT = 1
@@ -28,11 +28,23 @@ class ImageLogger():
         print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         if value == ImageLoggerToWhere.TO_MQTT:
             logging.info("Connecting to MQTT broker......")
-            g_mqtt.connect_to_broker("T22-0213",'voicevon.vicp.io',1883,'von','von1970')
+            config = MQTT_ConnectionConfig()
+            config.broker="voicevon.vicp.io"
+            config.port = 1883
+            config.client_id = "Y22-0422"
+            config.uid = 'von'
+            config.password = 'von1970'
+            g_mqtt.connect_to_broker(config)
     
     @staticmethod
     def connect_to_mqtt_broker():
-        g_mqtt.connect_to_broker("T22-0213",'voicevon.vicp.io',1883,'von','von1970')
+        config = MQTT_ConnectionConfig()
+        config.broker="voicevon.vicp.io"
+        config.port = 1883
+        config.client_id = "Y22-0422"
+        config.uid = 'von'
+        config.password = 'von1970'
+        g_mqtt.connect_to_broker(config)
 
 
 
