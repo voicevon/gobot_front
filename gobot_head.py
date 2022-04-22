@@ -196,7 +196,7 @@ class GobotHead():
         print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         command = self.__vision.get_command_index(self.__last_image)
         print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbt")
-        logging.info('Commander id = %d', command)
+        print('Commander id = %d', command)
 
         if command == 0:
             self.__goto = self.at_demo_from_warehouse
@@ -209,12 +209,12 @@ class GobotHead():
   
         elif command == 3:
             self.__goto = self.at_demo_remove_to_trashbin_white
-
+c
         elif command == 4:
             self.__goto = self.at_state_begin
             MessageLogger.Output('gobot/smf/current','play')
         else:
-            logging.info(self.__FC_YELLOW + '[Warning]: GoManger.at_begining()  scanned command=%d' %command)
+            logging.warning(self.__FC_YELLOW + '[Warning]: GoManger.at_begining()  scanned command=%d' %command)
 
     def at_state_begin(self):
         '''
@@ -494,10 +494,8 @@ class GobotHead():
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
         ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
-        print('88888888888888888888888888')
         time.sleep(0.01)
-        print('7777777777777777777777777777')
-        return
+        # return
         
         # if Config.publish_image_origin.value:
         #    g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
@@ -531,7 +529,7 @@ if __name__ == '__main__':
     # logging.basicConfig(level=logging.DEBUG)
     logging.basicConfig(level=logging.CRITICAL)
 
-    robot_eye= RobotEye_Product.PaspberryPiCamera
+    robot_eye= RobotEye_Product.CameraEmulator
     # robot_eye = RobotEye_Product.PaspberryPiCamera
     # robot_eye = RobotEye_Product.UsbCamera
 

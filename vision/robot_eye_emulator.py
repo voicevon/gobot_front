@@ -8,8 +8,8 @@ from vision.robot_eye_base import MonoEyeBase
 
 
 class MonoEyeEmulator(MonoEyeBase):
-    MIN_FILE_ID = 1
-    MAX_FILE_ID = 1
+    MIN_FILE_ID = 2001
+    MAX_FILE_ID = 2001
 
     def __init__(self) -> None:
         self.file_id = MonoEyeEmulator.MIN_FILE_ID
