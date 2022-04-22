@@ -1,11 +1,15 @@
-from xml.dom.expatbuilder import DOCUMENT_NODE
 from picamera import PiCamera
 from picamera.array import PiRGBArray  # sudo apt-get install python3-picamera
-from vision.robot_eye_base import MonoEyeBase
+
 import cv2
 import logging
+
+import sys
+sys.path.append('/home/pi/gobot_front')  # For runing in VsCode on Raspberry Pi
+from vision.robot_eye_base import MonoEyeBase
 from config.message_logger import MessageLoggerToWhere,MessageLogger
-from config.image_logger import ImageLogger
+from config.image_logger import ImageLogger, ImageLoggerToWhere
+
 
 class MonoEyePiCamera(MonoEyeBase):
 
@@ -17,7 +21,7 @@ class MonoEyePiCamera(MonoEyeBase):
         self.__dist = dist
         self.__CALIBRATION_IMAGE_PATH = './camera_calibration_images/'
         self.__show_debug_info = False
-        logging.warn('MonoEyePiCamera.__Init() is done......')
+        logging.warning('MonoEyePiCamera.__Init() is done......')
 
     def take_picture(self, do_undistort=True):
         # print("[Info] robot_eye.pi_camera.py  take_picture()", "entering")
@@ -25,7 +29,6 @@ class MonoEyePiCamera(MonoEyeBase):
         # grab an image from the camera
         self.__camera.capture(rawCapture, format="bgr")
         image = rawCapture.array
-        ImageLogger.Output("gobot/head/eye/origin", image)
         if do_undistort:
             if self.__show_debug_info:
                 print('RobotEye.take_picture()   start undistortion')
@@ -53,7 +56,9 @@ if __name__ == '__main__':
     if test_id == 1:
         # test camera hardware, picture will be saved to file
         img = my_eye.take_picture(False)
-        cv2.imwrite("test_camera.jpg")
+        cv2.imwrite("test_camera.jpg", img)
+        ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+        ImageLogger.Output("gobot/head/eye/origin", img)
         cv2.waitKey(5000)
         
     if False:

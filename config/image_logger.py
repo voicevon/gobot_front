@@ -59,7 +59,7 @@ class ImageLogger():
     def Output(topic_or_title: str, cv_image):
         # if topic_or_title in ImageLogger.mute_image_list:
         # mute_topic = []
-        mute_topic = ['gobot/head/eye/origin'
+        mute_topic = ['ggg_gobot/head/eye/origin'
                         ,'command'
                         ,'grid/aruco'
                         ,'gobot/image/board'
