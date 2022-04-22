@@ -88,7 +88,7 @@ class GobotHead():
             ImageLogger.connect_to_mqtt_broker()
 
         elif eye_type == RobotEye_Product.CameraEmulator:
-            ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
+            ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
 
         elif eye_type == RobotEye_Product.UsbCamera:
             ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
@@ -525,7 +525,7 @@ if __name__ == '__main__':
     # logging.basicConfig(level=logging.DEBUG)
     logging.basicConfig(level=logging.CRITICAL)
 
-    robot_eye= RobotEye_Product.CameraEmulator
+    robot_eye= RobotEye_Product.PaspberryPiCamera
     # robot_eye = RobotEye_Product.PaspberryPiCamera
     # robot_eye = RobotEye_Product.UsbCamera
 

@@ -20,10 +20,12 @@ class MonoEyeEmulator(MonoEyeBase):
         # On winodows 10
         filename = "d:\\XumingSource\\gobot_front\\vision\\emulator_pictures\\" + str(self.file_id) + ".jpg"
         # On Rasp Pi Zero
-        # filename = "~/gobot_front"
+        filename = "./vision/emulator_pictures/" + str(self.file_id) + ".jpg" 
         self.file_id += 1
 
         image = cv2.imread(filename)
+        if image is None:
+            print("[Error] robot_eye_emulator.py   take_picture() read from file, ", filename)
         # print("file_id= ", self.file_id)
         # cv2.imshow("ttttttttttt", image)
         dimention = (1920,1088)
