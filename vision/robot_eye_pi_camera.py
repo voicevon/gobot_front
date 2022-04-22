@@ -4,7 +4,8 @@ from picamera.array import PiRGBArray  # sudo apt-get install python3-picamera
 from vision.robot_eye_base import MonoEyeBase
 import cv2
 import logging
-
+from config.message_logger import MessageLoggerToWhere,MessageLogger
+from config.image_logger import ImageLogger
 
 class MonoEyePiCamera(MonoEyeBase):
 
@@ -19,10 +20,12 @@ class MonoEyePiCamera(MonoEyeBase):
         logging.warn('MonoEyePiCamera.__Init() is done......')
 
     def take_picture(self, do_undistort=True):
+        # print("[Info] robot_eye.pi_camera.py  take_picture()", "entering")
         rawCapture = PiRGBArray(self.__camera)
         # grab an image from the camera
         self.__camera.capture(rawCapture, format="bgr")
         image = rawCapture.array
+        ImageLogger.Output("gobot/head/eye/origin", image)
         if do_undistort:
             if self.__show_debug_info:
                 print('RobotEye.take_picture()   start undistortion')

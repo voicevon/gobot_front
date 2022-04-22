@@ -490,7 +490,7 @@ class GobotHead():
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
-        ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
+        # ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
         # cv2.waitKey(1)
         
         # if Config.publish_image_origin.value:
