@@ -492,7 +492,7 @@ class GobotHead():
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
         ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
-        time.sleep(1)
+        time.sleep(0.01)
 
         
         # if Config.publish_image_origin.value:
@@ -515,7 +515,7 @@ class GobotHead():
         self.__controller.home_single_arm(4)
         for i in range(1,20,1):
             self.__controller.spin_once()
-            time.sleep(1)
+            # time.sleep(1)
         #time.sleep(20)
         return
         self.__controller.action_pickup_stone_from_warehouse()
