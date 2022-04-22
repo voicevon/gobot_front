@@ -11,7 +11,7 @@ class BaseClass():
     @xx.setter
     @classmethod
     def xx(cls, value:int):
-        print("Should print setter.")  # Nothing print out.
+        print("Should print setter.")  # Nothing print out.  
         cls.x = value
 
 class MyClass(BaseClass):
