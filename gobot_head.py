@@ -193,7 +193,9 @@ class GobotHead():
         '''
         scan the marks, to run markable command
         '''
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         command = self.__vision.get_command_index(self.__last_image)
+        print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbt")
         logging.info('Commander id = %d', command)
 
         if command == 0:
@@ -492,8 +494,10 @@ class GobotHead():
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
         ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
+        print('88888888888888888888888888')
         time.sleep(0.01)
-
+        print('7777777777777777777777777777')
+        return
         
         # if Config.publish_image_origin.value:
         #    g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
@@ -503,8 +507,8 @@ class GobotHead():
         warehouse_image = 1
 
         #self.__vision.get_warehouse_plate(self.__last_image)
-        
         last_function = self.__goto
+        print(self.__goto)
         self.__goto()
         if last_function != self.__goto:
             print(self.__BG_BLUE + self.__FC_YELLOW)

@@ -73,7 +73,9 @@ class ImageLogger():
 
         elif ImageLogger.to_where == ImageLoggerToWhere.TO_MQTT:
             print("toooooooooooooooooo  mqttttttttttttttttttttttt", topic_or_title)
+            cv2.imwrite("nocommand.jpg", cv_image)
             g_mqtt.publish_cv_image(topic=topic_or_title,cv_image=cv_image, retain=True )
+            print("999999999999999999999999999999999999999999999999")
 
         else:
             print("ImageLogger:Output", "to_where is not understandable.....", ImageLogger.to_where)
