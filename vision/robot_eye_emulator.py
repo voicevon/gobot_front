@@ -17,10 +17,15 @@ class MonoEyeEmulator(MonoEyeBase):
     def take_picture(self, do_undistort=True):
         if self.file_id > MonoEyeEmulator.MAX_FILE_ID:
             self.file_id = MonoEyeEmulator.MIN_FILE_ID
-        filename = "c:\\gitlab\\gobot_front\\vision\\emulator_pictures\\" + str(self.file_id) + ".jpg"
+        # On winodows 10
+        filename = "d:\\XumingSource\\gobot_front\\vision\\emulator_pictures\\" + str(self.file_id) + ".jpg"
+        # On Rasp Pi Zero
+        # filename = "~/gobot_front"
         self.file_id += 1
 
         image = cv2.imread(filename)
+        # print("file_id= ", self.file_id)
+        # cv2.imshow("ttttttttttt", image)
         dimention = (1920,1088)
         resized = cv2.resize(image, dimention, interpolation = cv2.INTER_AREA)
         return resized
