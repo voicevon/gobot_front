@@ -72,6 +72,7 @@ class ImageLogger():
             cv2.waitKey(1)
 
         elif ImageLogger.to_where == ImageLoggerToWhere.TO_MQTT:
+            print("toooooooooooooooooo  mqttttttttttttttttttttttt", topic_or_title)
             g_mqtt.publish_cv_image(topic=topic_or_title,cv_image=cv_image, retain=True )
 
         else:

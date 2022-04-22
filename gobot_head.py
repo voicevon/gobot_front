@@ -59,7 +59,6 @@ class GobotHead():
         self.__last_detected_layout = ChessboardLayout('Last_detected')
 
         self.__InitOthers()
-        MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
         print("[Info] GobotHead::__init__()  is done.")
 
     def __InitServers(self):
@@ -490,8 +489,9 @@ class GobotHead():
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
-        # ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
-        # cv2.waitKey(1)
+        ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
+        time.sleep(1)
+
         
         # if Config.publish_image_origin.value:
         #    g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
@@ -501,7 +501,7 @@ class GobotHead():
         warehouse_image = 1
 
         #self.__vision.get_warehouse_plate(self.__last_image)
-
+        
         last_function = self.__goto
         self.__goto()
         if last_function != self.__goto:
