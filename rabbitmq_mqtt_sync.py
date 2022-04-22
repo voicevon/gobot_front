@@ -94,6 +94,8 @@ class SyncerHelper:
     @staticmethod
     def ConnectMqttBroker(config:MQTT_ConnectionConfig):
         g_mqtt.connect_to_broker(config)
+        while not g_mqtt.__is_connected:
+            pass
 
 
     def SpinOnce(self) -> None:
