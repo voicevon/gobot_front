@@ -2,6 +2,7 @@
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
+from math import gamma
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 from gobot_vision.gobot_vision import GobotVision
@@ -14,7 +15,7 @@ from config.config import Config
 
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
 from rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
-from rabbitmq_mqtt_sync import SyncerHelper
+# from rabbitmq_mqtt_sync import SyncerHelper
 
 
 import logging
@@ -65,6 +66,7 @@ class GobotHead():
         config_mqtt = MQTT_ConnectionConfig()
         config_mqtt.uid = 'agent'
         config_mqtt.password = 'agent'
+        g_mqtt.connect_to_broker(config_mqtt)
 
         config_rabbit = RabbitMQBrokeConfig()
         config_rabbit.uid = 'agent'
@@ -72,11 +74,11 @@ class GobotHead():
         self.AmqClient = RabbitClient(config_rabbit)
         self.AmqConnection = self.AmqClient.connection
 
-        self.SyncHelper = SyncerHelper(self.AmqConnection)
-        self.SyncHelper.ConnectMqttBroker(config_mqtt)
+        # self.SyncHelper = SyncerHelper(self.AmqConnection)
+        # self.SyncHelper.ConnectMqttBroker(config_mqtt)
 
-        self.SyncHelper.MakeSyncer('gobot_x' + str(self.Serial_id) + '_house')
-        self.SyncHelper.MakeSyncer('gobot_x' + str(self.Serial_id) + '_arm')
+        # self.SyncHelper.MakeSyncer('gobot_x' + str(self.Serial_id) + '_house')
+        # self.SyncHelper.MakeSyncer('gobot_x' + str(self.Serial_id) + '_arm')
 
         self.__ai = GoGameAiClient()
     
@@ -485,7 +487,7 @@ class GobotHead():
         self.__goto = self.at_state_game_over
 
     def SpinOnce(self):
-        self.SyncHelper.SpinOnce()
+        # self.SyncHelper.SpinOnce()
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
