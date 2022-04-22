@@ -38,7 +38,6 @@ class MonoEyePiCamera(MonoEyeBase):
         
 if __name__ == '__main__':
     import sys
-    sys.path.append('/home/pi/pylib')
     from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
     
     config = MQTT_ConnectionConfig()
@@ -50,7 +49,15 @@ if __name__ == '__main__':
     g_mqtt.connect_to_broker(config)
 
     my_eye = MonoEyePiCamera('2021-0611.yml')
+    test_id = 1
+    if test_id == 1:
+        # test camera hardware, picture will be saved to file
+        img = my_eye.take_picture(False)
+        cv2.imwrite("test_camera.jpg")
+        cv2.waitKey(5000)
+        
     if False:
         # my_eye.take_batch_picture_for_calibration()
         my_eye.take_picture(do_undistort=true)
-    my_eye.recalibrate_and_save_coefficients()
+    if test_id==3:
+        my_eye.recalibrate_and_save_coefficients()
