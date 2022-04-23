@@ -114,8 +114,10 @@ def ConnectBroker_MQTT(self):
     g_mqtt.connect_to_broker(config_mqtt)
     
 g_amq = RabbitClient()
+
+
 if __name__ == '__main__':
-    config = RabbitMQBrokeConfig()
+    config = AMQ_ConnectionConfig()
     mq_client = RabbitClient(config)
     img = cv2.imread("nocommand.jpg")
     mq_client.publish_cv_image("test" , img)

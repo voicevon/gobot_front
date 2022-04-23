@@ -1,11 +1,12 @@
 from pika import BlockingConnection
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
-from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
 # from Pylib.rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
 import copy
 
 import sys
-sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
+sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
+from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
+
 
 class SyncQueue_MqttTopic:
     def __init__(self, queue_name:str) -> None:
@@ -89,8 +90,8 @@ class RabbitMQSyncer:
 
 
 class SyncerFactory:
-    def __init__(self, connection:BlockingConnection ) -> None:
-        self.connection = connection
+    def __init__(self) -> None:
+        self.connection = g_amq.connection
         self.all_syncers=[]
         
     def MakeSyncer(self, main_queue_name:str, forward_to_mqtt_only_without_feedback:bool) -> None:
@@ -98,15 +99,15 @@ class SyncerFactory:
         sync = RabbitMQSyncer(self.connection, main_queue_name, forward_to_mqtt_only_without_feedback, index)
         self.all_syncers.append(sync)
 
-    @staticmethod
-    def ConnectAmqServer(config:AMQ_ConnectionConfig):
-        pass
+    # @staticmethod
+    # def ConnectAmqServer(config:AMQ_ConnectionConfig):
+    #     pass
 
-    @staticmethod
-    def ConnectMqttBroker(config:MQTT_ConnectionConfig):
-        g_mqtt.connect_to_broker(config)
-        while not g_mqtt.client.is_connected:
-            pass
+    # @staticmethod
+    # def ConnectMqttBroker(config:MQTT_ConnectionConfig):
+    #     g_mqtt.connect_to_broker(config)
+    #     while not g_mqtt.client.is_connected:
+    #         pass
 
 
     def SpinOnce(self) -> None:
@@ -121,18 +122,19 @@ class SyncerHelper_ForGobot:
         config_mqtt = MQTT_ConnectionConfig()
         config_mqtt.uid = 'agent'
         config_mqtt.password = 'agent'
+        g_mqtt.connect_to_broker(config_mqtt)
 
-
-        config_rabbit = RabbitMQBrokeConfig()
+        config_rabbit = AMQ_ConnectionConfig()
         config_rabbit.uid = 'agent'
         config_rabbit.password = 'agent'
-        self.MqClient = RabbitClient(config_rabbit)
-        self.MqConnection = self.MqClient.connection
+        # self.MqClient = RabbitClient(config_rabbit)
+        # self.MqConnection = self.MqClient.connection
+        g_amq.ConnectToRabbitMq(config_rabbit)
 
-        self.helper = SyncerFactory(self.MqConnection)
-        self.helper.ConnectMqttBroker(config_mqtt)
-        self.helper.MakeSyncer('gobot_x2134_house')
-        self.helper.MakeSyncer('gobot_x2134_arm')
+        self.helper = SyncerFactory()
+        self.helper.MakeSyncer('gobot_x2134_eye_origin', True)
+        self.helper.MakeSyncer('gobot_x2134_house', False)
+        self.helper.MakeSyncer('gobot_x2134_arm', False)
 
     def SpinOnce(self):
         self.helper.SpinOnce()

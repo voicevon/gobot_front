@@ -3,12 +3,14 @@ from enum import Enum
 import logging
 import cv2
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
+from Pylib.rabbit_mq_helper import g_amq
 
 class ImageLoggerToWhere(Enum):
     TO_MQTT = 1
     TO_AMQ = 2
     TO_SCREEN = 3
     TO_FILE = 4
+    FOLLOW_SETTING = 99
 
 class ImageLogger():
     __to_where: ImageLoggerToWhere
@@ -54,7 +56,7 @@ class ImageLogger():
     # def mute_image_list(): ['eye/origin', 'command','grid/aruco','gobot/image/board']
 
     @staticmethod
-    def Output(topic_or_title: str, cv_image):
+    def Output(topic_or_title: str, cv_image, to_where = ImageLoggerToWhere.FOLLOW_SETTING):
         # if topic_or_title in ImageLogger.mute_image_list:
         # mute_topic = []
         mute_topic = ['ggg_gobot/head/eye/origin'
@@ -64,17 +66,19 @@ class ImageLogger():
                         ]
         if topic_or_title in mute_topic:
             return
-
-        if ImageLogger.to_where == ImageLoggerToWhere.TO_SCREEN:
+        if to_where == ImageLoggerToWhere.FOLLOW_SETTING:
+            to_where = ImageLogger.to_where
+            
+        if to_where == ImageLoggerToWhere.TO_SCREEN:
             cv2.imshow(topic_or_title, cv_image)
             cv2.waitKey(1)
 
-        elif ImageLogger.to_where == ImageLoggerToWhere.TO_MQTT:
+        elif to_where == ImageLoggerToWhere.TO_MQTT:
             print("[Warn] ImageLogger::Output() TO_MQTT is out of service.")
             return
             g_mqtt.publish_cv_image(topic=topic_or_title,cv_image=cv_image, retain=True )
-        elif ImageLogger.to_where == ImageLoggerToWhere.TO_AMQ:
-            pass
+        elif to_where == ImageLoggerToWhere.TO_AMQ:
+            g_amq.publish_cv_image("gobot_x2134_eye_origin", cv_image)
         
         else:
             print("[Error] ImageLogger::Output()", "to_where is not understandable.....", ImageLogger.to_where)

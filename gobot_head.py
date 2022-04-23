@@ -184,10 +184,8 @@ class GobotHead():
         '''
         scan the marks, to run markable command
         '''
-        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         command = self.__vision.get_command_index(self.__last_image)
-        print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbt")
-        print('Commander id = %d', command)
+        # print('Commander id = %d', command)
 
         if command == 0:
             self.__goto = self.at_demo_from_warehouse
@@ -484,8 +482,7 @@ class GobotHead():
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
-        ImageLogger.Output("gobot/head/eye/origin", self.__last_image)
-        time.sleep(0.01)
+        ImageLogger.Output("gobot/head/eye/origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
         # return
         
         # if Config.publish_image_origin.value:
@@ -497,7 +494,7 @@ class GobotHead():
 
         #self.__vision.get_warehouse_plate(self.__last_image)
         last_function = self.__goto
-        print(self.__goto)
+        # print(self.__goto)
         self.__goto()
         if last_function != self.__goto:
             print(self.__BG_BLUE + self.__FC_YELLOW)
@@ -530,19 +527,25 @@ def Init_Global():
         config_rabbit.password = 'agent'
         g_amq.ConnectToRabbitMq(config_rabbit)
 
+        
+
 if __name__ == '__main__':
 
     Init_Global()
 
-    robot_eye= RobotEye_Product.CameraEmulator
+    # robot_eye= RobotEye_Product.CameraEmulator
     # robot_eye = RobotEye_Product.PaspberryPiCamera
-    # robot_eye = RobotEye_Product.UsbCamera
+    robot_eye = RobotEye_Product.UsbCamera
 
     myrobot = GobotHead(2134,robot_eye)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
     # myrobot.house.demo()
+    i = 0
     while True:
         myrobot.SpinOnce()
+        print(i)
+        i += 1
+
 
 
     while True:
