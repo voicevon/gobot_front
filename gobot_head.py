@@ -15,7 +15,7 @@ from gobot_ai_client import GoGameAiClient
 from config.config import Config
 
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
-from Pylib.rabbit_mq_basic import g_amq, AMQ_ConnectionConfig
+from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
 from Pylib.rabbitmq_mqtt_sync import SyncerFactory
 from Pylib.image_logger import ImageLogger,ImageLoggerToWhere
 from Pylib.message_logger import MessageLoggerToWhere,MessageLogger

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 # from rabbitmq_app_examle_uselss import RabbitClient
-from Pylib.rabbit_mq_basic import g_amq
+from Pylib.rabbit_mq_helper import g_amq
 
 
 class HumanLevelRobotBase(ABC):

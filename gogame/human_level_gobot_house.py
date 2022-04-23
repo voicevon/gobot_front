@@ -23,7 +23,7 @@ import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 from gogame.human_level_robot_base import HumanLevelRobotBase
 # from rabbitmq_app_examle_uselss import RabbitClient
-from Pylib.rabbit_mq_basic import RabbitClient
+from Pylib.rabbit_mq_helper import RabbitClient
 from Pylib.rabbitmq_mqtt_sync import SyncerHelper_ForGobot
 import enum
 

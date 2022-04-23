@@ -1,6 +1,6 @@
 from pika import BlockingConnection
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
-from Pylib.rabbit_mq_basic import g_amq, AMQ_ConnectionConfig
+from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
 # from Pylib.rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
 import copy
 
