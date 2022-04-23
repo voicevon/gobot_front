@@ -13,7 +13,7 @@ from vision.grid_finder import GridFinder
 
 # from von.terminal_font import TerminalFont
 import logging
-from config.image_logger import ImageLogger
+from Pylib.image_logger import ImageLogger
 
 
 class GobotVision():

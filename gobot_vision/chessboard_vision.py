@@ -1,4 +1,4 @@
-from config.image_logger import ImageLogger
+from Pylib.image_logger import ImageLogger
 from gobot_vision.cell_scanner import CellScanner
 from gogame.chessboard import ChessboardLayout
 from gogame.chessboard_cell import ChessboardCell, StoneColor

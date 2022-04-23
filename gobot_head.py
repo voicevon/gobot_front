@@ -2,6 +2,7 @@
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
+import configparser
 from math import gamma
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
@@ -14,19 +15,18 @@ from gobot_ai_client import GoGameAiClient
 from config.config import Config
 
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
-from rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
-# from rabbitmq_mqtt_sync import SyncerHelper
+from Pylib.rabbit_mq_basic import g_amq, AMQ_ConnectionConfig
+from Pylib.rabbitmq_mqtt_sync import SyncerFactory
+from Pylib.image_logger import ImageLogger,ImageLoggerToWhere
+from Pylib.message_logger import MessageLoggerToWhere,MessageLogger
 
 
 import logging
 import time
 
 from von.terminal_font import TerminalFont  # pip3 install VonPylib
-from config.image_logger import ImageLogger,ImageLoggerToWhere
-from config.message_logger import MessageLoggerToWhere,MessageLogger
 from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
-from rabbitmq_mqtt_sync import SyncerHelper
 
 
 class GobotHead():
@@ -51,8 +51,8 @@ class GobotHead():
         self.__InitServers()
         self.__InitEyeVisions(eye_type)
 
-        self.arm = HumanLevelGobotArm(self.AmqClient)
-        self.house = HumanLevelGobotHouse(self.AmqClient)
+        self.arm = HumanLevelGobotArm()
+        self.house = HumanLevelGobotHouse()
 
         self.__died_area_scanner = DiedAreaScanner()
         self.__goto = self.at_state_game_over
@@ -63,16 +63,7 @@ class GobotHead():
         print("[Info] GobotHead::__init__()  is done.")
 
     def __InitServers(self):
-        config_mqtt = MQTT_ConnectionConfig()
-        config_mqtt.uid = 'agent'
-        config_mqtt.password = 'agent'
-        g_mqtt.connect_to_broker(config_mqtt)
 
-        config_rabbit = RabbitMQBrokeConfig()
-        config_rabbit.uid = 'agent'
-        config_rabbit.password = 'agent'
-        self.AmqClient = RabbitClient(config_rabbit)
-        self.AmqConnection = self.AmqClient.connection
 
         # self.SyncHelper = SyncerHelper(self.AmqConnection)
         # self.SyncHelper.ConnectMqttBroker(config_mqtt)
@@ -209,7 +200,7 @@ class GobotHead():
   
         elif command == 3:
             self.__goto = self.at_demo_remove_to_trashbin_white
-c
+
         elif command == 4:
             self.__goto = self.at_state_begin
             MessageLogger.Output('gobot/smf/current','play')
@@ -525,9 +516,23 @@ c
         self.__controller.action_place_stone_to_trash_bin()
         self.__controller.action_park()
 
+def Init_Global():
+        # logging.basicConfig(level=logging.DEBUG)
+        logging.basicConfig(level=logging.CRITICAL)
+
+        config_mqtt = MQTT_ConnectionConfig()
+        config_mqtt.uid = 'agent'
+        config_mqtt.password = 'agent'
+        g_mqtt.connect_to_broker(config_mqtt)
+
+        config_rabbit = AMQ_ConnectionConfig()
+        config_rabbit.uid = 'agent'
+        config_rabbit.password = 'agent'
+        g_amq.ConnectToRabbitMq(config_rabbit)
+
 if __name__ == '__main__':
-    # logging.basicConfig(level=logging.DEBUG)
-    logging.basicConfig(level=logging.CRITICAL)
+
+    Init_Global()
 
     robot_eye= RobotEye_Product.CameraEmulator
     # robot_eye = RobotEye_Product.PaspberryPiCamera

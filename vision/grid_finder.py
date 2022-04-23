@@ -21,7 +21,7 @@
 
 
 # TODO: Reconstruct 
-from config.message_logger import MessageLogger
+from Pylib.message_logger import MessageLogger
 # from gobot_vision.commander_vision import config_2_aruco_marks
 # from gobot_vision.chessboard_vision import config_4_aruco_marks
 
@@ -33,7 +33,7 @@ from math import sin, cos
 # sys.path.append ("/home/pi/pylib")
 # from von.mqtt_helper import g_mqtt
 from config.config import Config
-from config.image_logger import ImageLogger
+from Pylib.image_logger import ImageLogger
 
 
 class GridFinder():

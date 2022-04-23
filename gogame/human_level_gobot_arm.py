@@ -19,7 +19,7 @@ sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10
 
 from gogame.chessboard_cell import ChessboardCell
 from gogame.human_level_robot_base import HumanLevelRobotBase
-from rabbit_mq_basic import RabbitClient
+from Pylib.rabbit_mq_basic import RabbitClient
 import enum
 
 
@@ -62,8 +62,9 @@ class ArmMap():
 
 class HumanLevelGobotArm(HumanLevelRobotBase):
 
-    def __init__(self, rabbit_client:RabbitClient) -> None:
-        super().__init__(rabbit_client=rabbit_client)
+    def __init__(self) -> None:
+        # super().__init__(rabbit_client=rabbit_client)
+        super().__init__()
         self.mq_name = 'gobot_x2134_arm'
         self.Home()
 
@@ -127,7 +128,7 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         # self.rabbit_client.PublishToArm('G4S5')
         # self.rabbit_client.PublishToArm('M996')
 
-from rabbitmq_mqtt_sync import SyncerHelper_ForGobot
+from Pylib.rabbitmq_mqtt_sync import SyncerHelper_ForGobot
 if __name__ == '__main__':
     helper = SyncerHelper_ForGobot()
     arm = HumanLevelGobotArm(helper.MqClient)

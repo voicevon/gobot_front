@@ -1,15 +1,20 @@
 from pika import BlockingConnection
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
-from rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
+from Pylib.rabbit_mq_basic import g_amq, AMQ_ConnectionConfig
+# from Pylib.rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
 import copy
-# from rabbit_mq_basic import Connect
+
+import sys
+sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 
 class SyncQueue_MqttTopic:
     def __init__(self, queue_name:str) -> None:
         '''
-        standard queue_name = 'gobot_x2134_house'
-        feedback_queue = 'gobot_x2134_house_fb'
-        main_mqtt_topic = 'gobot/x2134/house'
+        An example:
+        standard queue_name = 'gobot_x2134_house' # app -> mq -> syncer.main
+        main_mqtt_topic = 'gobot/x2134/house'     # syncer -> mqtt broker -> device
+        feedback_topic = 'gobot/x2134/house/fb'   # device -> mqtt broker -> exchange.amq
+        feedback_queue = 'gobot_x2134_house_fb'   # exchange.amq -> syncer.feedback
         '''
         self.main_queue = queue_name
         self.feedback_queue = queue_name + "_fb"
@@ -17,13 +22,15 @@ class SyncQueue_MqttTopic:
 
 
 class RabbitMQSyncer:
-    def __init__(self, connection:BlockingConnection, queue_name:str, index:int) -> None:
-        self.index = index
-        self.main_body = None
-        self.feedback_body = None
+    def __init__(self, connection:BlockingConnection, queue_name:str, mode_bridge_only:bool, index:int) -> None:
         self.connection = connection
+        self.mode_bridge_only = mode_bridge_only
         self.queues = SyncQueue_MqttTopic(queue_name)
         print('[Info] RabbitMQSyncer.__init__()   feedback_queue_name =', self.queues.feedback_queue)
+        self.index = index
+
+        self.main_body = None
+        self.feedback_body = None
         self.SubsribeRabbitMQ()
         self.main_delivery_tag = None
         
@@ -59,7 +66,7 @@ class RabbitMQSyncer:
         self.channel_main = self.connection.channel()
         self.channel_main.basic_qos(prefetch_count=1)
         self.channel_main.queue_declare(queue=self.queues.main_queue)
-        self.channel_main.basic_consume(queue=self.queues.main_queue, on_message_callback=self.callback_main, auto_ack=False )
+        self.channel_main.basic_consume(queue=self.queues.main_queue, on_message_callback=self.callback_main, auto_ack=self.mode_bridge_only)
 
         self.channel_feedback = self.connection.channel()
         self.channel_feedback.basic_qos(prefetch_count=1)
@@ -81,16 +88,20 @@ class RabbitMQSyncer:
         pass
 
 
-class SyncerHelper:
+class SyncerFactory:
     def __init__(self, connection:BlockingConnection ) -> None:
         self.connection = connection
         self.all_syncers=[]
         
-    def MakeSyncer(self, main_queue_name:str) -> None:
+    def MakeSyncer(self, main_queue_name:str, forward_to_mqtt_only_without_feedback:bool) -> None:
         index = len(self.all_syncers)
-        sync = RabbitMQSyncer(self.connection, main_queue_name, index)
+        sync = RabbitMQSyncer(self.connection, main_queue_name, forward_to_mqtt_only_without_feedback, index)
         self.all_syncers.append(sync)
-    
+
+    @staticmethod
+    def ConnectAmqServer(config:AMQ_ConnectionConfig):
+        pass
+
     @staticmethod
     def ConnectMqttBroker(config:MQTT_ConnectionConfig):
         g_mqtt.connect_to_broker(config)
@@ -118,7 +129,7 @@ class SyncerHelper_ForGobot:
         self.MqClient = RabbitClient(config_rabbit)
         self.MqConnection = self.MqClient.connection
 
-        self.helper = SyncerHelper(self.MqConnection)
+        self.helper = SyncerFactory(self.MqConnection)
         self.helper.ConnectMqttBroker(config_mqtt)
         self.helper.MakeSyncer('gobot_x2134_house')
         self.helper.MakeSyncer('gobot_x2134_arm')

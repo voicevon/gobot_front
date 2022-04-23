@@ -3,13 +3,13 @@ import cv2
 import numpy
 
 import time
-from config.message_logger import MessageLogger
 from gogame.chessboard_cell import StoneColor
 from config.config import Config as app_config
 
 from von.terminal_font import TerminalFont
 # from von.mqtt_helper import g_mqtt
-from config.image_logger import ImageLogger
+from Pylib.image_logger import ImageLogger
+from Pylib.message_logger import MessageLogger
 
 
 class CellScanner():

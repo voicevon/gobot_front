@@ -1,16 +1,14 @@
 
 from enum import Enum
 import logging
-# from tkinter import Image
-# from types import ClassMethodDescriptorType
-# from tkinter import Image
 import cv2
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
 
 class ImageLoggerToWhere(Enum):
     TO_MQTT = 1
-    TO_SCREEN = 2
-    TO_FILE = 3
+    TO_AMQ = 2
+    TO_SCREEN = 3
+    TO_FILE = 4
 
 class ImageLogger():
     __to_where: ImageLoggerToWhere
@@ -72,11 +70,14 @@ class ImageLogger():
             cv2.waitKey(1)
 
         elif ImageLogger.to_where == ImageLoggerToWhere.TO_MQTT:
-            # cv2.imwrite("nocommand.jpg", cv_image)
+            print("[Warn] ImageLogger::Output() TO_MQTT is out of service.")
+            return
             g_mqtt.publish_cv_image(topic=topic_or_title,cv_image=cv_image, retain=True )
-
+        elif ImageLogger.to_where == ImageLoggerToWhere.TO_AMQ:
+            pass
+        
         else:
-            print("ImageLogger:Output", "to_where is not understandable.....", ImageLogger.to_where)
+            print("[Error] ImageLogger::Output()", "to_where is not understandable.....", ImageLogger.to_where)
 
 
     # print('Prepare MQTT connection......')

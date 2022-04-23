@@ -10,8 +10,10 @@ import pathlib
 import logging
 from abc import ABC, abstractmethod, abstractproperty
 
-from config.image_logger import ImageLogger
-from config.message_logger import MessageLogger
+import sys
+sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
+from Pylib.image_logger import ImageLogger
+from Pylib.message_logger import MessageLogger
 
 
 class MonoEyeBase(ABC):

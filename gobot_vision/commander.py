@@ -1,4 +1,4 @@
-from config.image_logger import ImageLogger
+from Pylib.image_logger import ImageLogger
 import cv2
 import logging
 

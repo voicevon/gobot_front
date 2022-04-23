@@ -23,8 +23,8 @@ import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 from gogame.human_level_robot_base import HumanLevelRobotBase
 # from rabbitmq_app_examle_uselss import RabbitClient
-from rabbit_mq_basic import RabbitClient
-from rabbitmq_mqtt_sync import SyncerHelper_ForGobot
+from Pylib.rabbit_mq_basic import RabbitClient
+from Pylib.rabbitmq_mqtt_sync import SyncerHelper_ForGobot
 import enum
 
 
@@ -64,8 +64,9 @@ class HouseMapDiction():
 
 class HumanLevelGobotHouse(HumanLevelRobotBase):
 
-    def __init__(self, rabbit_client:RabbitClient, do_home=True) -> None:
-        super().__init__(rabbit_client=rabbit_client)
+    def __init__(self, do_home=True) -> None:
+        # super().__init__(rabbit_client=rabbit_client)
+        super().__init__()
         self.mq_name = 'gobot_x2134_house'
         if do_home:
             self.Home()

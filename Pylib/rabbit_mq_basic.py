@@ -1,3 +1,5 @@
+import cv2
+import numpy
 import pika 
 from pika import BlockingConnection
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
@@ -7,7 +9,7 @@ import time
 
 
 
-class RabbitMQBrokeConfig:
+class AMQ_ConnectionConfig:
     host = 'voicevon.vicp.io'
     port = 5672
     virtual_host = '/'
@@ -19,20 +21,20 @@ class RabbitClient():
     '''
     To learn:  What is channel indeed ?
     '''
-    def __init__(self, brokerConfig: RabbitMQBrokeConfig) -> None:
-        self.broker_config = brokerConfig
-        self.connection = self.ConnectToRabbitMq()
-        self.channel = self.connection.channel()
+    def __init__(self) -> None:
         self.declaed_queues=[]
 
-    def ConnectToRabbitMq(self)-> BlockingConnection:
-        credentials = pika.PlainCredentials(self.broker_config.uid, self.broker_config.password)
-        parameters = pika.ConnectionParameters(host=self.broker_config.host,
-                                    port= self.broker_config.port,
-                                    virtual_host= self.broker_config.virtual_host,
+    def ConnectToRabbitMq(self,serverConfig: AMQ_ConnectionConfig)-> BlockingConnection:
+        self.serverConfig = serverConfig
+
+        credentials = pika.PlainCredentials(serverConfig.uid, serverConfig.password)
+        parameters = pika.ConnectionParameters(host=serverConfig.host,
+                                    port= serverConfig.port,
+                                    virtual_host= serverConfig.virtual_host,
                                     credentials= credentials)
-        connection = pika.BlockingConnection(parameters)
-        return connection
+        self.connection = pika.BlockingConnection(parameters)
+        self.channel = self.connection.channel()
+        return self.connection
 
     def Publish(self, queue_name:str, payload:str):
         if not (queue_name in self.declaed_queues):
@@ -52,6 +54,24 @@ class RabbitClient():
             self.channel.basic_publish(exchange = '',
                             routing_key = queue_name,
                             body = pp)
+
+    def publish_cv_image(self, queue_name:str, cv_image):
+        # Convert received message into Numpy array
+        # jpg = np.frombuffer(RECEIVEDMESSAGE, dtype=np.uint8)
+
+        # # JPEG-decode back into original frame - which is actually a Numpy array
+        # im = cv2.imdecode(jpg, cv2.IMREAD_UNCHANGED)
+        if not (queue_name in self.declaed_queues):
+            self.channel.queue_declare(queue=queue_name)
+            self.declaed_queues.append(queue_name)
+
+        is_success, img_encode = cv2.imencode(".jpg", cv_image)
+        if is_success:
+            img_pub = img_encode.tobytes()
+            # self.client.publish(topic, img_pub, retain=retain)
+            self.channel.basic_publish(exchange = '',
+                        routing_key = queue_name,
+                        body = img_pub)
 
     def callback_example(self, ch, method, properties, body):
         print('RabbitClient::callback_example()  mq Received ' ,  method.routing_key, body)
@@ -92,3 +112,10 @@ def ConnectBroker_MQTT(self):
     config_mqtt.uid = 'gobot_head'
     config_mqtt.password = 'gobot_head'
     g_mqtt.connect_to_broker(config_mqtt)
+    
+g_amq = RabbitClient()
+if __name__ == '__main__':
+    config = RabbitMQBrokeConfig()
+    mq_client = RabbitClient(config)
+    img = cv2.imread("nocommand.jpg")
+    mq_client.publish_cv_image("test" , img)

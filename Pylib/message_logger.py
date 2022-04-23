@@ -18,6 +18,7 @@ class MessageLogger():
 
     @staticmethod
     def Output(topic_or_title: str, message):
+        return
         mute_list = ['GridFinder.find_corners()  double check target ids',
                     'GridFinder.find_corners()  found ids',
                     'CellScanner.scan_black()  scan_black_counter =',
