@@ -482,8 +482,9 @@ class GobotHead():
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
-        ImageLogger.Output("gobot/head/eye/origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
+        ImageLogger.Output("gobot/x2134/eye/origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
         # return
+        # time.sleep(1)
         
         # if Config.publish_image_origin.value:
         #    g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
@@ -534,8 +535,8 @@ if __name__ == '__main__':
     Init_Global()
 
     # robot_eye= RobotEye_Product.CameraEmulator
-    # robot_eye = RobotEye_Product.PaspberryPiCamera
-    robot_eye = RobotEye_Product.UsbCamera
+    robot_eye = RobotEye_Product.PaspberryPiCamera
+    # robot_eye = RobotEye_Product.UsbCamera
 
     myrobot = GobotHead(2134,robot_eye)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
