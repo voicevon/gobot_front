@@ -81,14 +81,14 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
     
     def Pickup_Place(self, from_where:ArmMap, to_where:ArmMap, auto_park=False):
         x, y = from_where
-        print("[Info] HumanLevelGobotArm::Pickup_Place from = (", x, "," y + ")")
+        print("[Info] HumanLevelGobotArm::Pickup_Place from = (", str(x), "," + str(y) + ")")
         self.MoveTo(x,y)
         self.EEF_Does(ArmEEF.MOVE_Z_BOTTOM)
         self.EEF_Does(do_load=ArmEEF.LOAD)
         self.EEF_Does(do_load=ArmEEF.MOVE_Z_TOP)
 
         x, y = to_where
-        print("[Info] HumanLevelGobotArm::Pickup_Place to = (", x, "," y + ")")
+        print("[Info] HumanLevelGobotArm::Pickup_Place to = (", str(x), "," + str(y) + ")")
         self.MoveTo(x, y)
         self.EEF_Does(do_load=ArmEEF.UNLOAD)
         self.EEF_Does(do_load=ArmEEF.SLEEP)

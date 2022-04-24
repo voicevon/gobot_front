@@ -28,6 +28,92 @@ from von.terminal_font import TerminalFont  # pip3 install VonPylib
 from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
 
+class GobotBody():
+
+    def __init__(self, eye_type:RobotEye_Product) -> None:
+        self.arm = HumanLevelGobotArm()
+        self.house = HumanLevelGobotHouse()
+        self.vision = GobotVision()
+
+        self.eye = RobotEye_Factory.CreateMonoEye(eye_type)
+        
+        if eye_type == RobotEye_Product.PaspberryPiCamera:
+            ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+            ImageLogger.connect_to_mqtt_broker()
+
+        elif eye_type == RobotEye_Product.CameraEmulator:
+            ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+
+        elif eye_type == RobotEye_Product.UsbCamera:
+            ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
+
+
+class GobotHead_Demo():
+    def init(self):
+        self.__LAYOUT_STABLE_DEPTH = 3
+
+
+    def mover(self):
+        do_vision_check = Config.mainloop.at_demo_mover.do_vision_check
+        layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
+        if stable_depth <=0:
+            print('Can NOT detect chessboard image ')
+            return
+        layout.print_out()
+        print('Stable depth = ',stable_depth)
+        if stable_depth < self.__LAYOUT_STABLE_DEPTH:
+            return 
+
+        # Got dedicate stable layout
+        layout.print_out()
+        cell = layout.get_first_cell(StoneColor.BLACK)
+        if cell is not None:
+            print('First black cell = %s' % cell.name)
+            # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.BLACK)
+            id_black = cell.id
+            self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.BLACK)
+            cell = layout.get_first_cell(StoneColor.WHITE)
+            if cell is not None:
+                self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.WHITE)
+                print('First white cell = %s' % cell.name)
+                # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.WHITE)
+                id_white = cell.id
+                id = id_black
+                if id_white < id_black:
+                    id = id_white
+                
+                for i in range(id,359):
+                    cell.from_id(i)
+                    cell_color = layout.get_cell_color_col_row(cell.col_id, cell.row_id)
+                    self.__controller.action_pickup_stone_from_cell(cell.name)
+                    self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.BLANK)
+                    cell.from_id(i+2)
+                    self.__controller.action_place_stone_to_cell(cell.name,auto_park=do_vision_check)
+                    self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, cell_color)
+                    if do_vision_check:
+                        layout = self.__eye.get_stable_layout(self.__LAYOUT_STABLE_DEPTH)
+                        diffs = layout.compare_with(self.__target_demo_layout, do_print_out = True)
+                        if len(diffs) > 0:
+                            cell_name, source_cell_color, target_cell_color = diffs[0]
+                            Config.robot_eye.layout_scanner.inspecting.cell_name = cell_name
+                            key = raw_input ('Test failed! Please check')
+                # self.__controller.action_pickup_stone_from_cell('B19')
+                # self.__controller.action_place_stone_to_trash_bin(park_to_view_point=False)
+                self.__arm.Pickup_Place(from_where='B19', to_where='trash_bin')
+                self.__target_demo_layout.set_cell_value_from_name('B19',StoneColor.BLANK)
+                # self.__controller.action_pickup_stone_from_cell('A19')
+                # self.__controller.action_place_stone_to_trash_bin(park_to_view_point=True)
+                self.__arm.Pickup_Place(from_where="A19", to_where='trash_bin')
+                self.__target_demo_layout.set_cell_value_from_name('A19',StoneColor.BLANK)
+
+            pass
+
+
+# class GobotPlayer():
+#     def __init__(self) -> None:
+#         pass
+
+        
 
 class GobotHead():
     '''
@@ -48,12 +134,13 @@ class GobotHead():
     '''
     def __init__(self, serial_id:int, eye_type:RobotEye_Product):
         self.Serial_id = serial_id
-        self.__InitServers()
-        self.__InitEyeVisions(eye_type)
+        self.__ai = GoGameAiClient()
+        self.body = GobotBody(eye_type=eye_type)
 
-        self.arm = HumanLevelGobotArm()
-        self.house = HumanLevelGobotHouse()
+        # self.arm = HumanLevelGobotArm()
+        # self.house = HumanLevelGobotHouse()
 
+        self.demor = GobotHead_Demo()
         self.__died_area_scanner = DiedAreaScanner()
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
@@ -62,29 +149,6 @@ class GobotHead():
         self.__InitOthers()
         print("[Info] GobotHead::__init__()  is done.")
 
-    def __InitServers(self):
-
-
-        # self.SyncHelper = SyncerHelper(self.AmqConnection)
-        # self.SyncHelper.ConnectMqttBroker(config_mqtt)
-
-        # self.SyncHelper.MakeSyncer('gobot_x' + str(self.Serial_id) + '_house')
-        # self.SyncHelper.MakeSyncer('gobot_x' + str(self.Serial_id) + '_arm')
-
-        self.__ai = GoGameAiClient()
-    
-    def __InitEyeVisions(self,eye_type:RobotEye_Product ):
-        self.__eye = RobotEye_Factory.CreateMonoEye(eye_type)
-        if eye_type == RobotEye_Product.PaspberryPiCamera:
-            ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
-            ImageLogger.connect_to_mqtt_broker()
-
-        elif eye_type == RobotEye_Product.CameraEmulator:
-            ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
-
-        elif eye_type == RobotEye_Product.UsbCamera:
-            ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
-        self.__vision = GobotVision()
 
     def __InitOthers(self):
         logging.info("[Info] GobotHead Start init objects......")
@@ -126,20 +190,6 @@ class GobotHead():
                 mark_index, stable_depth = self.__mark_scanner.detect_mark(img, min_stable_depth)
         return mark_index
         
-    def start_show(self,eye_name):
-        xx = self.__cvWindow.get_all_windows()[eye_name]
-        xx[0] = True
-        # self.__thread_eye = threading.Thread(target=self.__robot_eye.monitor)
-        if self.__thread_eyes.get(eye_name) == None:
-            self.__thread_eyes[eye_name] = threading.Thread(target=self.__start_show, args=[eye_name])
-            self.__thread_eyes[eye_name].start()
-            
-    def stop_show(self, eye_name):
-        # this_window = self.__cvWindow.get_window(window_name)
-        self.__cvWindow.get_all_windows()[eye_name][0] = False
-
-    def user_playing(self):
-        self.__ai.send("move c4 B")
     
     def __remove_one_cell_to_trash(self, color):
         '''
@@ -189,7 +239,7 @@ class GobotHead():
         '''
         scan the marks, to run markable command
         '''
-        command = self.__vision.get_command_index(self.__last_image)
+        command = self.body.vision.get_command_index(self.__last_image)
         # print('Commander id = %d', command)
 
         if command == 0:
@@ -214,10 +264,10 @@ class GobotHead():
         '''
         scan the marks, to run markable command
         '''
-        command = self.__vision.get_command_index(self.__last_image)
+        command = self.body.vision.get_command_index(self.__last_image)
         if command == 4:
             self.__ai.start_new_game()
-            self.__vision.init_chessboard_layout()
+            self.body.vision.init_chessboard_layout()
             MessageLogger.Output('gobot/smf/current', 'user_playing')
 
             self.__goto = self.at_state_user_play
@@ -230,7 +280,7 @@ class GobotHead():
         * User is always play BLACK stone.
         * check mark command, might be game over.
         ''' 
-        mark = self.__vision.get_command_index(self.__last_image)
+        mark = self.body.vision.get_command_index(self.__last_image)
         
         if (mark != 4) and (mark !=-1):
             # Game over: 
@@ -244,7 +294,7 @@ class GobotHead():
                 self.__goto = self.at_state_game_over
                 return
 
-        stable_layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
+        stable_layout, stable_depth = self.body.vision.get_chessboard_layout(self.__last_image)
         if stable_depth < 3: return
         
         MessageLogger.Output("user_play_Stable_depth", stable_depth)
@@ -309,7 +359,7 @@ class GobotHead():
             cell.from_name(cell_name)
             to_where = ArmMap.CELLS(cell)
 
-            self.arm.Pickup_Place(from_where, to_where=to_where)
+            self.body.arm.Pickup_Place(from_where, to_where=to_where)
             self.__ai.layout.play(cell_name, StoneColor.WHITE)
             self.__ai.layout.print_out()
 
@@ -408,8 +458,6 @@ class GobotHead():
         layout,depth = self.__vision.get_chessboard_layout(self.__last_image)
         layout.print_out()
         cell = layout.get_first_cell(StoneColor.BLANK)
-        # self.__controller.action_pickup_stone_from_warehouse()
-        # self.__controller.action_place_stone_to_cell(cell.name)
         self.__arm.Pickup_Place(from_where='house', to_where=cell.name)
         # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
         # layout.print_out()
@@ -428,65 +476,14 @@ class GobotHead():
         self.__goto = self.at_state_game_over
 
     def at_demo_mover(self):  # Must be no arguiment function for self.__goto
-        do_vision_check = Config.mainloop.at_demo_mover.do_vision_check
-        layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
-        if stable_depth <=0:
-            print('Can NOT detect chessboard image ')
-            return
-        layout.print_out()
-        print('Stable depth = ',stable_depth)
-        if stable_depth < self.__LAYOUT_STABLE_DEPTH:
-            return 
-
-        # Got dedicate stable layout
-        layout.print_out()
-        cell = layout.get_first_cell(StoneColor.BLACK)
-        if cell is not None:
-            print('First black cell = %s' % cell.name)
-            # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.BLACK)
-            id_black = cell.id
-            self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.BLACK)
-            cell = layout.get_first_cell(StoneColor.WHITE)
-            if cell is not None:
-                self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.WHITE)
-                print('First white cell = %s' % cell.name)
-                # self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.WHITE)
-                id_white = cell.id
-                id = id_black
-                if id_white < id_black:
-                    id = id_white
-                
-                for i in range(id,359):
-                    cell.from_id(i)
-                    cell_color = layout.get_cell_color_col_row(cell.col_id, cell.row_id)
-                    self.__controller.action_pickup_stone_from_cell(cell.name)
-                    self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, StoneColor.BLANK)
-                    cell.from_id(i+2)
-                    self.__controller.action_place_stone_to_cell(cell.name,auto_park=do_vision_check)
-                    self.__target_demo_layout.set_cell_value(cell.col_id, cell.row_id, cell_color)
-                    if do_vision_check:
-                        layout = self.__eye.get_stable_layout(self.__LAYOUT_STABLE_DEPTH)
-                        diffs = layout.compare_with(self.__target_demo_layout, do_print_out = True)
-                        if len(diffs) > 0:
-                            cell_name, source_cell_color, target_cell_color = diffs[0]
-                            Config.robot_eye.layout_scanner.inspecting.cell_name = cell_name
-                            key = raw_input ('Test failed! Please check')
-                # self.__controller.action_pickup_stone_from_cell('B19')
-                # self.__controller.action_place_stone_to_trash_bin(park_to_view_point=False)
-                self.__arm.Pickup_Place(from_where='B19', to_where='trash_bin')
-                self.__target_demo_layout.set_cell_value_from_name('B19',StoneColor.BLANK)
-                # self.__controller.action_pickup_stone_from_cell('A19')
-                # self.__controller.action_place_stone_to_trash_bin(park_to_view_point=True)
-                self.__arm.Pickup_Place(from_where="A19", to_where='trash_bin')
-                self.__target_demo_layout.set_cell_value_from_name('A19',StoneColor.BLANK)
-                
+        self.demor.mover()                
         self.__goto = self.at_state_game_over
 
     def SpinOnce(self):
         # self.SyncHelper.SpinOnce()
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
-        self.__last_image = self.__eye.take_picture(do_undistort=False)
+        self.__last_image = self.body.eye.take_picture(do_undistort=False)
         # ImageLogger.Output("gobot/x2134/eye/origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
         # return
 
@@ -502,6 +499,9 @@ class GobotHead():
             print(self.__BG_BLUE + self.__FC_YELLOW)
             print(self.__goto.__name__)
             print(self.__FC_RESET)
+
+    def test_user_playing(self):
+        self.__ai.send("move c4 B")
 
     def test(self):
         self.__controller.home_single_arm(4)
@@ -535,11 +535,11 @@ if __name__ == '__main__':
 
     Init_Global()
 
-    # robot_eye= RobotEye_Product.CameraEmulator
     # robot_eye = RobotEye_Product.PaspberryPiCamera
-    robot_eye = RobotEye_Product.UsbCamera
+    robot_eye_type = RobotEye_Product.UsbCamera
+    robot_eye_type= RobotEye_Product.CameraEmulator
 
-    myrobot = GobotHead(2134,robot_eye)
+    myrobot = GobotHead(2134,robot_eye_type)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
     # myrobot.house.demo()
     i = 0
