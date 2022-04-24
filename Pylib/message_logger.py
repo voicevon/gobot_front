@@ -1,4 +1,5 @@
 
+from email.message import Message
 from enum import Enum
 import logging
 
@@ -18,7 +19,6 @@ class MessageLogger():
 
     @staticmethod
     def Output(topic_or_title: str, message):
-        return
         mute_list = ['GridFinder.find_corners()  double check target ids',
                     'GridFinder.find_corners()  found ids',
                     'CellScanner.scan_black()  scan_black_counter =',
@@ -32,6 +32,8 @@ class MessageLogger():
 
         if MessageLogger.to_where == MessageLoggerToWhere.TO_SCREEN:
             print(topic_or_title, message)
+        if MessageLogger.to_where == MessageLoggerToWhere.TO_NONE:
+            pass
         else:
             print("MessageLogger:Output", "to_where is not understandable.....", MessageLogger.to_where)
 

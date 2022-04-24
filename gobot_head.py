@@ -148,16 +148,21 @@ class GobotHead():
             1 = one chess has been removed
         '''
         (the_layout, stable_depth) = self.__vision.get_chessboard_layout(self.__last_image)
+        if the_layout is None:
+            print("[Warn] GobotHead::__remove_one_cell_to_trash()   the_layout is None")
+            return
         the_layout.print_out()
-        cell = the_layout.get_first_cell(color)
-        if cell is not None:
-            logging.info(self.__FC_GREEN + '[INFO]: GoManager.__remove_one_cell_to_trash() ' + cell.name + self.__FC_RESET)
-            # move the first chess cell to trash
+        from_cell = the_layout.get_first_cell(color)
+        if from_cell is not None:
+            logging.info(self.__FC_GREEN + '[INFO]: GoManager.__remove_one_cell_to_trash() ' + from_cell.name + self.__FC_RESET)
+            # move the first found stone to trash
+            # self.arm.Pickup_Place()
             # cell = ChessboardCell()
             # cell.from_col_row_id(col_id=col, row_id=row)
             # self.__controller.action_pickup_stone_from_cell(cell.name)
             # self.__controller.action_place_stone_to_trash_bin()
-            self.house.Pickup_Place(from_where=cell.name, to_where='trash_bin')
+            to_cell = ChessboardCell().from_name('trash_bin')
+            self.arm.Pickup_Place(from_where=from_cell, to_where=to_cell)
             return 1
         return 0
 
@@ -482,12 +487,8 @@ class GobotHead():
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = self.__eye.take_picture(do_undistort=False)
-        ImageLogger.Output("gobot/x2134/eye/origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
+        # ImageLogger.Output("gobot/x2134/eye/origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
         # return
-        # time.sleep(1)
-        
-        # if Config.publish_image_origin.value:
-        #    g_mqtt.publish_cv_image('gobot/head/eye/origin',self.__last_image)
 
         command_image = 1
         chessboard_image = 1
@@ -518,10 +519,10 @@ def Init_Global():
         # logging.basicConfig(level=logging.DEBUG)
         logging.basicConfig(level=logging.CRITICAL)
 
-        config_mqtt = MQTT_ConnectionConfig()
-        config_mqtt.uid = 'agent'
-        config_mqtt.password = 'agent'
-        g_mqtt.connect_to_broker(config_mqtt)
+        # config_mqtt = MQTT_ConnectionConfig()
+        # config_mqtt.uid = 'agent'
+        # config_mqtt.password = 'agent'
+        # g_mqtt.connect_to_broker(config_mqtt)
 
         config_rabbit = AMQ_ConnectionConfig()
         config_rabbit.uid = 'agent'
@@ -535,8 +536,8 @@ if __name__ == '__main__':
     Init_Global()
 
     # robot_eye= RobotEye_Product.CameraEmulator
-    robot_eye = RobotEye_Product.PaspberryPiCamera
-    # robot_eye = RobotEye_Product.UsbCamera
+    # robot_eye = RobotEye_Product.PaspberryPiCamera
+    robot_eye = RobotEye_Product.UsbCamera
 
     myrobot = GobotHead(2134,robot_eye)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
@@ -544,7 +545,7 @@ if __name__ == '__main__':
     i = 0
     while True:
         myrobot.SpinOnce()
-        print(i)
+        # print(i)
         i += 1
 
 

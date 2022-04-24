@@ -15,6 +15,7 @@
 # from config.message_logger import MessageLogger
 
 import sys
+from turtle import towards
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
 
 from gogame.chessboard_cell import ChessboardCell
@@ -78,14 +79,16 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         # self.rabbit_client.PublishToArm('M996')
 
     
-    def Pickup_Place(self, from_where, to_where, auto_park=False):
+    def Pickup_Place(self, from_where:ArmMap, to_where:ArmMap, auto_park=False):
         x, y = from_where
+        print("[Info] HumanLevelGobotArm::Pickup_Place from = (", x, "," y + ")")
         self.MoveTo(x,y)
         self.EEF_Does(ArmEEF.MOVE_Z_BOTTOM)
         self.EEF_Does(do_load=ArmEEF.LOAD)
         self.EEF_Does(do_load=ArmEEF.MOVE_Z_TOP)
 
         x, y = to_where
+        print("[Info] HumanLevelGobotArm::Pickup_Place to = (", x, "," y + ")")
         self.MoveTo(x, y)
         self.EEF_Does(do_load=ArmEEF.UNLOAD)
         self.EEF_Does(do_load=ArmEEF.SLEEP)

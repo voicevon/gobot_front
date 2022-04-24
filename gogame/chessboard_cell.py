@@ -10,7 +10,10 @@ class StoneColor(Enum):
     BLACK = 8
 
 class ChessboardCell():
-    
+    '''
+    * col_id is in range(0,25), align to X (to be double check) axis of gobot_arm
+    * row_id is in range(0,25), align to Y (to be double check) axis of gobot_arm
+    '''
     def __init__(self):
         self.__col_name_list = 'ABCDEFGHJKLMNOPQRST'
         self.name = 'A1'
