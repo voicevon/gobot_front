@@ -78,8 +78,15 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         # self.rabbit_client.PublishToArm('G28BI')
         # self.rabbit_client.PublishToArm('M996')
 
-    
+    def action_pickup_stone_from_cell(self, cell:ChessboardCell):
+        pass
+    def action_place_stone_to_trash_bin(self):
+        pass
+
+    # TODO:  Base robot can understand RobotMap, and ArmMap, HouseMap are the subclass
     def Pickup_Place(self, from_where:ArmMap, to_where:ArmMap, auto_park=False):
+        print("[Error]  human_level_gobot_arm.py Pickup_Place(), Not implicated. ")
+        return
         x, y = from_where
         print("[Info] HumanLevelGobotArm::Pickup_Place from = (", str(x), "," + str(y) + ")")
         self.MoveTo(x,y)

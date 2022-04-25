@@ -1,3 +1,5 @@
+from vision.robot_eye_base import MonoEyeBase
+
 
 import sys
 sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
@@ -15,23 +17,23 @@ class RobotEye_Product(Enum):
 class RobotEye_Factory():
 
     @staticmethod
-    def CreatePiCameraEye():
+    def CreatePiCameraEye() -> MonoEyeBase:
         from vision.robot_eye_pi_camera import MonoEyePiCamera
         return MonoEyePiCamera('2021-0611.yml')
 
     @staticmethod
-    def CreateUsbCameraEye():
+    def CreateUsbCameraEye() -> MonoEyeBase:
         from vision.robot_eye_usb_camera import MonoEyeUsbCamera
         return MonoEyeUsbCamera('2021-0611.yml')
 
     @staticmethod
-    def CreateCameraEmulator():
+    def CreateCameraEmulator() -> MonoEyeBase:
         from vision.robot_eye_emulator import MonoEyeEmulator
         obj = MonoEyeEmulator()
         return obj
         
     @staticmethod
-    def CreateMonoEye(eye: RobotEye_Product):
+    def CreateMonoEye(eye: RobotEye_Product) -> MonoEyeBase:
         if eye == RobotEye_Product.UsbCamera:
             return RobotEye_Factory.CreateUsbCameraEye()
 

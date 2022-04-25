@@ -2,8 +2,6 @@
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
-import configparser
-from math import gamma
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 from gobot_vision.gobot_vision import GobotVision
@@ -27,35 +25,64 @@ import time
 from von.terminal_font import TerminalFont  # pip3 install VonPylib
 from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
+from vision.robot_eye_base import MonoEyeBase
 
-class GobotBody():
+def Init_Global():
+        # logging.basicConfig(level=logging.DEBUG)
+        logging.basicConfig(level=logging.CRITICAL)
 
-    def __init__(self, eye_type:RobotEye_Product) -> None:
-        self.arm = HumanLevelGobotArm()
-        self.house = HumanLevelGobotHouse()
-        self.vision = GobotVision()
+        # config_mqtt = MQTT_ConnectionConfig()
+        # config_mqtt.uid = 'agent'
+        # config_mqtt.password = 'agent'
+        # g_mqtt.connect_to_broker(config_mqtt)
 
-        self.eye = RobotEye_Factory.CreateMonoEye(eye_type)
-        
-        if eye_type == RobotEye_Product.PaspberryPiCamera:
-            ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
-            ImageLogger.connect_to_mqtt_broker()
+        config_rabbit = AMQ_ConnectionConfig()
+        config_rabbit.uid = 'agent'
+        config_rabbit.password = 'agent'
+        g_amq.ConnectToRabbitMq(config_rabbit)
 
-        elif eye_type == RobotEye_Product.CameraEmulator:
-            ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+def MakeEye(eye_type:RobotEye_Product) -> MonoEyeBase:
+    eye = RobotEye_Factory.CreateMonoEye(eye_type)
+    
+    if eye_type == RobotEye_Product.PaspberryPiCamera:
+        ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+        ImageLogger.connect_to_mqtt_broker()
 
-        elif eye_type == RobotEye_Product.UsbCamera:
-            ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
+    elif eye_type == RobotEye_Product.CameraEmulator:
+        ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+
+    elif eye_type == RobotEye_Product.UsbCamera:
+        ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
+    return eye
+
+Init_Global()
+g_eye = MakeEye(eye_type=RobotEye_Product.UsbCamera)
+g_arm = HumanLevelGobotArm()
+g_house = HumanLevelGobotHouse()
+g_vision = GobotVision()
 
 
 class GobotHead_Demo():
     def init(self):
         self.__LAYOUT_STABLE_DEPTH = 3
 
+    def at_demo_from_warehouse(self, origin_image) -> bool:
+        global g_vision
+        global g_arm
+        # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
+        layout,depth = g_vision.get_chessboard_layout(origin_image)
+        if layout is None:
+            return False
 
-    def mover(self):
+        layout.print_out()
+        cell = layout.get_first_cell(StoneColor.BLANK)
+        g_arm.Pickup_Place(from_where='house', to_where=cell.name)
+        return True
+
+    def mover(self, origin_image):
+        global g_vision
         do_vision_check = Config.mainloop.at_demo_mover.do_vision_check
-        layout, stable_depth = self.__vision.get_chessboard_layout(self.__last_image)
+        layout, stable_depth = g_vision.get_chessboard_layout(origin_image)
         if stable_depth <=0:
             print('Can NOT detect chessboard image ')
             return
@@ -108,12 +135,36 @@ class GobotHead_Demo():
 
             pass
 
+    def at_demo_remove_to_trashbin_white(self):
+        return
+        count = self.__remove_one_cell_to_trash(StoneColor.WHITE)
+        if count == 0:
+            self.__remove_one_cell_to_trash(StoneColor.BLACK)
+        # self.__goto = self.at_state_game_over
 
+    def at_demo_remove_to_trashbin_black(self):
+        return
+        count = self.__remove_one_cell_to_trash(StoneColor.BLACK)
+        if count == 0:
+            self.__remove_one_cell_to_trash(StoneColor.WHITE)  
+        self.__goto = self.at_state_game_over
 # class GobotPlayer():
 #     def __init__(self) -> None:
 #         pass
 
-        
+
+
+'''
+.                      |<------------------------------------------------------<
+.                      |                                                       ^
+.   gameover  -->  user_play --> draw_white --> computer_play --> draw_black --|
+.       |        |---------> gameover
+.       | 
+.       |->  clear_board -----> demo_over  --> game_over                      
+.       |->  demo_mover  ---------->|
+.       |->  demo_place  ---------->|
+.             
+'''
 
 class GobotHead():
     '''
@@ -132,10 +183,10 @@ class GobotHead():
     3.3 talker_arm, can talk to chessboard robot arm.
     3.4 talker_house, can talk to house robot arm.
     '''
-    def __init__(self, serial_id:int, eye_type:RobotEye_Product):
+    def __init__(self, serial_id:int):
         self.Serial_id = serial_id
         self.__ai = GoGameAiClient()
-        self.body = GobotBody(eye_type=eye_type)
+        # self.body = GobotBody(eye_type=eye_type)
 
         # self.arm = HumanLevelGobotArm()
         # self.house = HumanLevelGobotHouse()
@@ -182,13 +233,13 @@ class GobotHead():
         if ret:
             self.new_idea(img)
 
-    def get_stable_mark(self,min_stable_depth):
-        stable_depth = 0
-        while stable_depth < min_stable_depth:
-            ret, img = self.__capture_device.read()
-            if ret:
-                mark_index, stable_depth = self.__mark_scanner.detect_mark(img, min_stable_depth)
-        return mark_index
+    # def get_stable_mark(self,min_stable_depth):
+    #     stable_depth = 0
+    #     while stable_depth < min_stable_depth:
+    #         ret, img = self.__capture_device.read()
+    #         if ret:
+    #             mark_index, stable_depth = self.__mark_scanner.detect_mark(img, min_stable_depth)
+    #     return mark_index
         
     
     def __remove_one_cell_to_trash(self, color):
@@ -197,7 +248,7 @@ class GobotHead():
             0 = zero chess has been removed
             1 = one chess has been removed
         '''
-        (the_layout, stable_depth) = self.__vision.get_chessboard_layout(self.__last_image)
+        (the_layout, stable_depth) = self.body.vision.get_chessboard_layout(self.__last_image)
         if the_layout is None:
             print("[Warn] GobotHead::__remove_one_cell_to_trash()   the_layout is None")
             return
@@ -205,14 +256,8 @@ class GobotHead():
         from_cell = the_layout.get_first_cell(color)
         if from_cell is not None:
             logging.info(self.__FC_GREEN + '[INFO]: GoManager.__remove_one_cell_to_trash() ' + from_cell.name + self.__FC_RESET)
-            # move the first found stone to trash
-            # self.arm.Pickup_Place()
-            # cell = ChessboardCell()
-            # cell.from_col_row_id(col_id=col, row_id=row)
-            # self.__controller.action_pickup_stone_from_cell(cell.name)
-            # self.__controller.action_place_stone_to_trash_bin()
-            to_cell = ChessboardCell().from_name('trash_bin')
-            self.arm.Pickup_Place(from_where=from_cell, to_where=to_cell)
+            self.body.arm.action_pickup_stone_from_cell(from_cell)
+            self.body.arm.action_place_stone_to_trash_bin()
             return 1
         return 0
 
@@ -235,24 +280,38 @@ class GobotHead():
                     # self.__controller.action_place_stone_to_trash_bin()
                     self.__ai.layout.play_col_row(col,row,StoneColor.BLANK)
 
+    def at_state_demo_over(self):
+        global g_vision
+        print("Demo is over. Please give me a new command via placing CommandStone,  last_command is  ", self.last_command)
+        new_command = g_vision.get_command_index(self.__last_image)
+        if new_command != self.last_command:
+            print("Got new command, new command is  ", new_command )
+            self.__goto = self.at_state_game_over
+        time.sleep(5)
+
     def at_state_game_over(self):
         '''
         scan the marks, to run markable command
         '''
-        command = self.body.vision.get_command_index(self.__last_image)
+        global g_vision
+        command = g_vision.get_command_index(self.__last_image)
         # print('Commander id = %d', command)
 
         if command == 0:
-            self.__goto = self.at_demo_from_warehouse
-        
+            if self.demor.at_demo_from_warehouse(self.__last_image):
+                self.__goto = self.at_state_demo_over
+
         if command == 1:
-            self.__goto = self.at_demo_mover
+            self.demor.mover(self.__last_image)
+            self.__goto = self.at_state_demo_over
 
         if command == 2:
-            self.__goto = self.at_demo_remove_to_trashbin_black
+            self.demor.at_demo_remove_to_trashbin_black()
+            self.__goto = self.at_state_demo_over
   
         elif command == 3:
-            self.__goto = self.at_demo_remove_to_trashbin_white
+            self.demor.at_demo_remove_to_trashbin_white()
+            self.__goto = self.at_state_demo_over
 
         elif command == 4:
             self.__goto = self.at_state_begin
@@ -260,14 +319,17 @@ class GobotHead():
         else:
             logging.warning(self.__FC_YELLOW + '[Warning]: GoManger.at_begining()  scanned command=%d' %command)
 
+        self.last_command = command
+
     def at_state_begin(self):
         '''
         scan the marks, to run markable command
         '''
-        command = self.body.vision.get_command_index(self.__last_image)
+        global g_vision
+        command = g_vision.get_command_index(self.__last_image)
         if command == 4:
             self.__ai.start_new_game()
-            self.body.vision.init_chessboard_layout()
+            g_vision.init_chessboard_layout()
             MessageLogger.Output('gobot/smf/current', 'user_playing')
 
             self.__goto = self.at_state_user_play
@@ -280,7 +342,8 @@ class GobotHead():
         * User is always play BLACK stone.
         * check mark command, might be game over.
         ''' 
-        mark = self.body.vision.get_command_index(self.__last_image)
+        global g_vision
+        mark = g_vision.get_command_index(self.__last_image)
         
         if (mark != 4) and (mark !=-1):
             # Game over: 
@@ -294,7 +357,7 @@ class GobotHead():
                 self.__goto = self.at_state_game_over
                 return
 
-        stable_layout, stable_depth = self.body.vision.get_chessboard_layout(self.__last_image)
+        stable_layout, stable_depth = g_vision.get_chessboard_layout(self.__last_image)
         if stable_depth < 3: return
         
         MessageLogger.Output("user_play_Stable_depth", stable_depth)
@@ -345,6 +408,7 @@ class GobotHead():
         '''
         Computer is always play White
         '''
+        global g_arm
         self.__ai.get_final_score()
         # get command from PhonixGo
         cell_name = self.__ai.get_ai_move()
@@ -359,7 +423,7 @@ class GobotHead():
             cell.from_name(cell_name)
             to_where = ArmMap.CELLS(cell)
 
-            self.body.arm.Pickup_Place(from_where, to_where=to_where)
+            g_arm.Pickup_Place(from_where, to_where=to_where)
             self.__ai.layout.play(cell_name, StoneColor.WHITE)
             self.__ai.layout.print_out()
 
@@ -453,37 +517,14 @@ class GobotHead():
             diffs = self.__ai.layout.compare_with(layout, do_print_out=True)
             time.sleep(10)
 
-    def at_demo_from_warehouse(self):
-        # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
-        layout,depth = self.__vision.get_chessboard_layout(self.__last_image)
-        layout.print_out()
-        cell = layout.get_first_cell(StoneColor.BLANK)
-        self.__arm.Pickup_Place(from_where='house', to_where=cell.name)
-        # layout = self.__eye.get_stable_layout(self.__MARK_STABLE_DEPTH)
-        # layout.print_out()
-        self.__goto = self.at_state_game_over
 
-    def at_demo_remove_to_trashbin_black(self):
-        count = self.__remove_one_cell_to_trash(StoneColor.BLACK)
-        if count == 0:
-            self.__remove_one_cell_to_trash(StoneColor.WHITE)  
-        self.__goto = self.at_state_game_over
-
-    def at_demo_remove_to_trashbin_white(self):
-        count = self.__remove_one_cell_to_trash(StoneColor.WHITE)
-        if count == 0:
-            self.__remove_one_cell_to_trash(StoneColor.BLACK)
-        self.__goto = self.at_state_game_over
-
-    def at_demo_mover(self):  # Must be no arguiment function for self.__goto
-        self.demor.mover()                
-        self.__goto = self.at_state_game_over
 
     def SpinOnce(self):
+        global g_eye
         # self.SyncHelper.SpinOnce()
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
-        self.__last_image = self.body.eye.take_picture(do_undistort=False)
+        self.__last_image = g_eye.take_picture(do_undistort=False)
         # ImageLogger.Output("gobot/x2134/eye/origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
         # return
 
@@ -515,19 +556,6 @@ class GobotHead():
         self.__controller.action_place_stone_to_trash_bin()
         self.__controller.action_park()
 
-def Init_Global():
-        # logging.basicConfig(level=logging.DEBUG)
-        logging.basicConfig(level=logging.CRITICAL)
-
-        # config_mqtt = MQTT_ConnectionConfig()
-        # config_mqtt.uid = 'agent'
-        # config_mqtt.password = 'agent'
-        # g_mqtt.connect_to_broker(config_mqtt)
-
-        config_rabbit = AMQ_ConnectionConfig()
-        config_rabbit.uid = 'agent'
-        config_rabbit.password = 'agent'
-        g_amq.ConnectToRabbitMq(config_rabbit)
 
         
 
@@ -536,10 +564,10 @@ if __name__ == '__main__':
     Init_Global()
 
     # robot_eye = RobotEye_Product.PaspberryPiCamera
-    robot_eye_type = RobotEye_Product.UsbCamera
-    robot_eye_type= RobotEye_Product.CameraEmulator
+    # robot_eye_type = RobotEye_Product.UsbCamera
+    # robot_eye_type= RobotEye_Product.CameraEmulator
 
-    myrobot = GobotHead(2134,robot_eye_type)
+    myrobot = GobotHead(2134)
     # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
     # myrobot.house.demo()
     i = 0

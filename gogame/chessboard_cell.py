@@ -49,7 +49,7 @@ class ChessboardCell():
         self.col_letter = self.__col_name_list[18-col_id:19-col_id]
         self.name = self.col_letter + str(self.row_id + 1)
         return self
-    
+
     def from_name(self,name):
         # print('For very rare bug..... cell name = %s' %name)
         # 'resign' and 'pass' is the cell name from AI_Player( Proofed in 'PoenixGo')
