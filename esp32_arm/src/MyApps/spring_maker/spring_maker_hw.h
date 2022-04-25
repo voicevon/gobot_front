@@ -8,13 +8,10 @@
 #include "spring_maker_hw_config.h"
 
 
-#define VERTICAL_ENDSTOP 15
-#define ANGLE_ENDSTOP 2
+#define PIN_ANGLE_ENDSTOP 15
 
 #define PIN_STEP_ALPHA 5
 #define PIN_DIR_ALPHA 19
-#define PIN_STEP_BETA 4
-#define PIN_DIR_BETA 17
 
 
 
@@ -50,7 +47,7 @@ class SpringMakerHardware:public RobotBase{
         FkPosition_A __current_fk_position;
 
         HomeHelper* __homing_helper;
-        HomeHelper objHomeHelper_alpha = HomeHelper(VERTICAL_ENDSTOP, LOW);
+        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_ANGLE_ENDSTOP, LOW);
         SpringMakerHardwareConfig  __config;
 
 };

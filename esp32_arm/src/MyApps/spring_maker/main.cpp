@@ -12,9 +12,14 @@ SpringMakerHardware* robot_hw;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_command_queue;
 
+long high_count =1;
+long low_count =1;
+
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
+    // pinMode(15,INPUT_PULLUP);
+    // return;
     robot_hw = new SpringMakerHardware();
     robot = new SpringMaker();
     gcode_queue = new GcodeQueue();
@@ -29,6 +34,19 @@ void setup(){
 }
 
 void loop(){
+    // if (digitalRead(15) == HIGH)
+    //     high_count++;
+    // else{
+    //     low_count++;
+    //     Serial.print(high_count);
+    //     Serial.print("\t");
+    //     Serial.print(low_count);
+    //     Serial.print("\t");
+    //     Serial.print(high_count/low_count);
+    //     Serial.print("\t");
+    // }
+
+    // return;
     robot->SpinOnce();
     robot_hw->SpinOnce();
     loop_mqtt();
