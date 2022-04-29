@@ -9,8 +9,8 @@ GobotChessboardHardwareConfig::GobotChessboardHardwareConfig(){
 
 void GobotChessboardHardwareConfig::Init(){
     this->LINK_0 = 191.0f / 2;
-    this->LINK_A = 285.18;
-    this->LINK_B = 384.51;
+    this->LINK_A = 278.1;  //285.18;    // 278.1
+    this->LINK_B = 392.1; //  384.51;    // 500-107.8
     this->STEPPER_DRIVER_MICRO_STEPS = 16;
     this->MOTOR_STEP_ANGLE = 1.8;
     // this->GEAR_BOX_RATIO = 90.0f / 20.0f;   // Big gear = 90 teeth, small gear = 20 teeth

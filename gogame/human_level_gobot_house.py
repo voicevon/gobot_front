@@ -20,11 +20,12 @@
 
 
 import sys
-sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
+sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 from gogame.human_level_robot_base import HumanLevelRobotBase
 # from rabbitmq_app_examle_uselss import RabbitClient
-from Pylib.rabbit_mq_helper import RabbitClient
-from Pylib.rabbitmq_mqtt_sync import SyncerHelper_ForGobot
+from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
+# from Pylib.rabbitmq_mqtt_sync import SyncerHelper_ForGobot
+
 import enum
 
 
@@ -64,10 +65,11 @@ class HouseMapDiction():
 
 class HumanLevelGobotHouse(HumanLevelRobotBase):
 
-    def __init__(self, do_home=True) -> None:
+    def __init__(self, robot_serial_id:int, do_home=True) -> None:
         # super().__init__(rabbit_client=rabbit_client)
         super().__init__()
-        self.mq_name = 'gobot_x2134_house'
+        mq_name = 'gobot_xnnnn_house'
+        self.mq_name = mq_name.replace('nnnn', str(robot_serial_id))
         if do_home:
             self.Home()
     
@@ -150,20 +152,26 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         # self.rabbit_client.PublishToHouse('M996')
         # self.rabbit_client.PublishToHouse("M84")
 
+    def Calibrate_home_position_alpha(self):
+        self.Home()
+        command = "G1A180"
+        g_amq.Publish(self.mq_name, payload=command)
 
+    def Calibrate_home_position_beta(self):
+        self.Home()
+        command = "G1A180"
+        g_amq.Publish(self.mq_name, payload=command)
+        command = "G1B180"
+        self.rabbit_client.Publish(command)
 
 
 if __name__ == '__main__':
-    helper = SyncerHelper_ForGobot()
-    client = helper.MqClient
+    config_rabbit = AMQ_ConnectionConfig()
+    config_rabbit.uid = 'agent'
+    config_rabbit.password = 'agent'
+    # self.MqClient = RabbitClient(config_rabbit)
+    # self.MqConnection = self.MqClient.connection
+    g_amq.ConnectToRabbitMq(config_rabbit)
 
-    house = HumanLevelGobotHouse(client,False)
-    for i in range(5):
-        house.Test_Eef()
-    
-    # house = HumanLevelGobotHouse(client,True)
-    # house.demo()
-
-
-    while True:
-        helper.SpinOnce()
+    house = HumanLevelGobotHouse(robot_serial_id=2134, do_home=False)
+    house.Calibrate_home_position_alpha()

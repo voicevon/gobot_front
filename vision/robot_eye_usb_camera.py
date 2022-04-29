@@ -11,8 +11,8 @@ class MonoEyeUsbCamera(MonoEyeBase):
         # return super().show_debug_info
 
     def __init__(self, coefficients_file=None):
-        # self.__camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-        self.__camera = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+        self.__camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        # self.__camera = cv2.VideoCapture(1, cv2.CAP_DSHOW)
         self.show_debug_info = True
 
         if coefficients_file is not None:

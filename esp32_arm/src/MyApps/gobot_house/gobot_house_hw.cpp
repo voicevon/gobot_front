@@ -82,13 +82,10 @@ GobotHouseHardware::GobotHouseHardware(){
 	this->__config.Init();
 }
 
-
-
 bool GobotHouseHardware::GetCurrentPosition(FkPositionBase* position_fk){
 	position_fk = & this->__current_fk_position;
 	return true;
 }
-
 
 void GobotHouseHardware::__Init_gpio(){
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
@@ -110,6 +107,7 @@ void GobotHouseHardware::__Init_gpio(){
 	ledcWrite(1, 0);
 	// ledcWrite(2, 0);
 }
+
 void GobotHouseHardware::InitRobot(){
 	__Init_gpio();
 	this->__EnableMotor('A', false);
@@ -182,7 +180,8 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 		target_fk_xy.Y = gcode->get_value('Y');
 	}
 	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
-	if(gcode->has_letter('R')) target_ik_ab.alpha = this->__config.motor_steps_per_round * gcode->get_value('R');
+	if(gcode->has_letter('R')) 
+		target_ik_ab.alpha = this->__config.motor_steps_per_round * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
 	this->__EnableMotor('A', true);
 	this->__EnableMotor('B',true);
@@ -191,19 +190,18 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	//None blocking, move backgroundly.
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 
-	if (false){
-		Serial.print("\n[Debug] GobotHouseHardware::RunG1() ");
+	if (true){
+		Serial.print("\n[Debug] GobotHouseHardware::RunG1()  from,to  alpha=");
 		Serial.print(this->objStepper_alpha.getPosition());
-		Serial.print(",");
+		Serial.print(" , ");
+		Serial.print(target_ik_ab.alpha);
+		Serial.print("    beta = ");
 		Serial.print(this->objStepper_beta.getPosition());
-		Serial.print(" <-- from   alpha,beta   to --> ");
-		Serial.print(target_ik_ab.alpha);
-		Serial.print(">>");
-		Serial.print(target_ik_ab.alpha);
 		Serial.print(" , ");
 		Serial.println(target_ik_ab.beta);
 	}
 }
+
 void GobotHouseHardware:: _running_G1(){
     if (this->GetDistanceToTarget_IK() < (this->__config.MAX_ACCELERATION_ALPHPA + this->__config.MAX_ACCELERATION_BETA)/64){
       	this->State = RobotState::IDLE;
@@ -212,6 +210,7 @@ void GobotHouseHardware:: _running_G1(){
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);
 }
+
 void GobotHouseHardware::HomeSingleAxis(char axis){
 	if (false){
 		Serial.print("\n[Debug] GobotHouseHardware::HomeSingleAxis() is entering   AXIS = " );

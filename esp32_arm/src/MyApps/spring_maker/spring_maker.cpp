@@ -22,9 +22,11 @@ void SpringMaker::ExecuteMqttCommand(const char* command){
         Serial.println("                        Start to make big spring....  ");
         String gcode = "G1 A-75.36";       // 1.0mm   D ?? 12 turns.    
         this->_gcode_queue->AppendGcodeCommand(gcode);
+        
     }else if(str_command.equals("mid")){
         String gcode = "G1 A-50.24";    // 8 turns
         this->_gcode_queue->AppendGcodeCommand(gcode);
+
     }else if(str_command.equals("small")){
         String gcode = "G1 A-300";     // 50 turns
         this->_gcode_queue->AppendGcodeCommand(gcode);

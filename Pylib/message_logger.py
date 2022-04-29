@@ -6,8 +6,9 @@ import logging
 class MessageLoggerToWhere(Enum):
     TO_NONE = 0
     TO_MQTT = 1
-    TO_SCREEN = 2
-    TO_FILE = 3
+    TO_AMQ = 2
+    TO_SCREEN = 3
+    TO_FILE = 4
 
 class MessageLogger():
     @property
@@ -32,7 +33,11 @@ class MessageLogger():
 
         if MessageLogger.to_where == MessageLoggerToWhere.TO_SCREEN:
             print(topic_or_title, message)
-        if MessageLogger.to_where == MessageLoggerToWhere.TO_NONE:
+        elif MessageLogger.to_where == MessageLoggerToWhere.TO_NONE:
+            pass
+        elif MessageLogger.to_where == MessageLoggerToWhere.TO_MQTT:
+            pass
+        elif MessageLogger.to_where == MessageLoggerToWhere.TO_AMQ:
             pass
         else:
             print("MessageLogger:Output", "to_where is not understandable.....", MessageLogger.to_where)

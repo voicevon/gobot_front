@@ -48,12 +48,15 @@ def MakeEye(eye_type:RobotEye_Product) -> MonoEyeBase:
     if eye_type == RobotEye_Product.PaspberryPiCamera:
         ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
         ImageLogger.connect_to_mqtt_broker()
+        MessageLogger.to_where = MessageLoggerToWhere.TO_MQTT
 
     elif eye_type == RobotEye_Product.CameraEmulator:
         ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+        MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
 
     elif eye_type == RobotEye_Product.UsbCamera:
         ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
+        MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
     return eye
 
 Init_Global()
@@ -65,7 +68,7 @@ g_ai = GoGameAiClient()
 print("[Info] Global vars init is done........\n\n\n\n")
 
 class GobotHead_Demo():
-    def init(self):
+    def __init__(self):
         self.__LAYOUT_STABLE_DEPTH = 3
 
     def at_demo_from_warehouse(self, origin_image) -> bool:
@@ -535,7 +538,7 @@ class GobotHead():
 
         # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = g_eye.take_picture(do_undistort=False)
-        # ImageLogger.Output("gobot/x2134/eye/origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
+        ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
         # return
 
         command_image = 1
