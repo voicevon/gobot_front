@@ -16,11 +16,13 @@ void GobotHouseHardwareConfig::Init(){
 
         this->Homing_acceleration_alpha = 200 * this->MOTOR_MICRO_STEPS;
         this->Homing_speed_alpha = 200 * this->MOTOR_MICRO_STEPS;   //tested 200 * 1
-        this->Homing_acceleration_beta = 200 * this->MOTOR_MICRO_STEPS;
-        this->Homing_speed_beta = 200 * this->MOTOR_MICRO_STEPS; 
+        this->Homing_acceleration_beta = 500 * this->MOTOR_MICRO_STEPS;
+        this->Homing_speed_beta = 60 * this->MOTOR_MICRO_STEPS; 
 
         this->EEF_Suck_Angle = 164;   // Max is 4096
         this->EEF_Release_Angle = 355;   // Max is 4096
+
+        this->Homed_position_alpha_in_degree = 13.6;
         this->PrintOut();
 }
 

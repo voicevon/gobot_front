@@ -22,6 +22,7 @@ class SyncQueue_MqttTopic:
         self.main_queue = queue_name
         self.feedback_queue = queue_name + "_fb"
         self.mqtt_publish_topic = queue_name.replace('_', '/')
+        self.feedback_routing_key = self.feedback_queue.replace("_", ".")
 
 
 class RabbitMQSyncer:
@@ -35,7 +36,9 @@ class RabbitMQSyncer:
         self.feedback_body = None
         self.SubsribeRabbitMQ()
         self.main_delivery_tag = None
-        
+        if not mode_bridge_only:
+            self.channel_main.queue_bind(exchange='amq.topic', queue=self.queues.feedback_queue,routing_key=self.queues.feedback_routing_key)
+         
     def callback_main(self, ch, method, properties, body):
         print(method.routing_key,"              ", method.delivery_tag)
         if (method.routing_key == 'gobot_x2134_house'):

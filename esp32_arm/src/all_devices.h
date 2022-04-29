@@ -2,6 +2,7 @@
 #define __ALL_DEVICES_H_
 
 // #define I_AM_AGV_WHEEL
+// #define I_AM_DRV8302
 // #define I_AM_GARMENT_BOT
 // #define I_AM_GARMENT_BOX_MOVER
 #define I_AM_GOBOT_HOUSE

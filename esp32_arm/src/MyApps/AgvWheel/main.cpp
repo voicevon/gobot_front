@@ -89,9 +89,9 @@ void setup_driver(){
     // daad_zone [0,1] - default 0.02 - 2%
     // driver.dead_zone = 0.05;
     int rrr = driver.init();
-    // Serial.print("driver.init() result =  ");
-    // Serial.println(rrr);
-    // driver.enable();
+    Serial.print("driver.init() result =  ");
+    Serial.println(rrr);
+    driver.enable();
     // Serial.println("driver is initilized,  not enabled.");
     // delay(5000);
 
@@ -111,7 +111,7 @@ void setup_motor(){
     // jerk control using voltage voltage ramp
     // default value is 300 volts per sec  ~ 0.3V per millisecond
     motor.PID_velocity.output_ramp = 1000;
-	motor.voltage_limit = 12;    //设置电机的电压极限
+	motor.voltage_limit = 6;    //设置电机的电压极限
 
     // velocity low pass filtering
     // default 5ms - try different values to see what is the best.
@@ -124,7 +124,7 @@ void setup_motor(){
     // of current
     motor.current_limit = 2; // Amps - default 0.2Amps
 	motor.useMonitoring(Serial);
-    motor.monitor_downsample = 1000000;
+    motor.monitor_downsample = 10000;
 
 	// initialize motor
 	motor.init();
@@ -154,6 +154,7 @@ void setup()
 	commander.add('C', onPid, "velocity pid");
     Serial.println("Hello , setup() is done...");
     _delay(1000);
+    driver.enable();
 }
 
 int counter_high=0;

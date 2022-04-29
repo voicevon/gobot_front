@@ -153,16 +153,15 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         # self.rabbit_client.PublishToHouse("M84")
 
     def Calibrate_home_position_alpha(self):
-        self.Home()
-        command = "G1A180"
-        g_amq.Publish(self.mq_name, payload=command)
+        commands = ["G28AI", "G1A-180"]
+        self.rabbit_client.PublishBatch(self.mq_name, commands)
 
     def Calibrate_home_position_beta(self):
-        self.Home()
-        command = "G1A180"
-        g_amq.Publish(self.mq_name, payload=command)
-        command = "G1B180"
-        self.rabbit_client.Publish(command)
+        commands = ["G28BI", "G1B15"]
+        g_amq.PublishBatch(self.mq_name, payloads=commands)
+
+        # prehome for next run.
+        # house.PreHome()
 
 
 if __name__ == '__main__':
@@ -174,4 +173,5 @@ if __name__ == '__main__':
     g_amq.ConnectToRabbitMq(config_rabbit)
 
     house = HumanLevelGobotHouse(robot_serial_id=2134, do_home=False)
-    house.Calibrate_home_position_alpha()
+    # house.Calibrate_home_position_alpha()
+    house.Calibrate_home_position_beta()
