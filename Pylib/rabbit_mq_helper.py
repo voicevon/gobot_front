@@ -32,9 +32,9 @@ class RabbitClient():
                                     port= serverConfig.port,
                                     virtual_host= serverConfig.virtual_host,
                                     credentials= credentials)
-        self.connection = pika.BlockingConnection(parameters)
-        self.channel = self.connection.channel()
-        return self.connection
+        self.blocking_connection = pika.BlockingConnection(parameters)
+        self.channel = self.blocking_connection.channel()
+        return self.blocking_connection
 
     def Publish(self, queue_name:str, payload:str):
         if not (queue_name in self.declaed_queues):

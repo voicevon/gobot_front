@@ -9,6 +9,7 @@ sys.path.append('/home/xm/gobot_front')    #for linux
 from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
 
 
+
 class SyncQueue_MqttTopic:
     def __init__(self, queue_name:str) -> None:
         '''
@@ -24,8 +25,7 @@ class SyncQueue_MqttTopic:
 
 
 class RabbitMQSyncer:
-    def __init__(self, connection:BlockingConnection, queue_name:str, mode_bridge_only:bool, index:int) -> None:
-        self.connection = connection
+    def __init__(self, queue_name:str, mode_bridge_only:bool, index:int) -> None:
         self.mode_bridge_only = mode_bridge_only
         self.queues = SyncQueue_MqttTopic(queue_name)
         print('[Info] RabbitMQSyncer.__init__()   feedback_queue_name =', self.queues.feedback_queue)
@@ -37,7 +37,10 @@ class RabbitMQSyncer:
         self.main_delivery_tag = None
         
     def callback_main(self, ch, method, properties, body):
-        # print('                       [RabbitMQSyncer] callback_main ' ,  method.routing_key, body)
+        print(method.routing_key,"              ", method.delivery_tag)
+        if (method.routing_key == 'gobot_x2134_house'):
+            print('[Info] [RabbitMQSyncer] callback_main ' ,  method.routing_key, body)
+
         if body == self.feedback_body:
             print('repeated...... not return   ' ,body, method.delivery_tag)    #????
             # return
@@ -49,7 +52,7 @@ class RabbitMQSyncer:
         self.main_body = copy.copy(body)   # The main_thread and other thread is sharing self.main_body
 
     def callback_feedback(self, ch, method, properties, body):
-        # print('                             [Info] RabbitMQSyncer.callback_feedback()  ' ,  method.routing_key, body)
+        print('                             [Info] RabbitMQSyncer.callback_feedback()  ' ,  method.routing_key, body)
         self.feedback_body = body   # The main-thread is sharing self.feedback_body
         if self.main_body == self.feedback_body:
             if self.main_delivery_tag is None:
@@ -65,12 +68,12 @@ class RabbitMQSyncer:
 
  
     def SubsribeRabbitMQ(self):
-        self.channel_main = self.connection.channel()
+        self.channel_main = g_amq.blocking_connection.channel()
         self.channel_main.basic_qos(prefetch_count=1)
         self.channel_main.queue_declare(queue=self.queues.main_queue)
         self.channel_main.basic_consume(queue=self.queues.main_queue, on_message_callback=self.callback_main, auto_ack=self.mode_bridge_only)
 
-        self.channel_feedback = self.connection.channel()
+        self.channel_feedback = g_amq.blocking_connection.channel()
         self.channel_feedback.basic_qos(prefetch_count=1)
         self.channel_feedback.queue_declare(queue=self.queues.feedback_queue)
         self.channel_feedback.basic_consume(queue=self.queues.feedback_queue, on_message_callback=self.callback_feedback, auto_ack=True )
@@ -86,29 +89,19 @@ class RabbitMQSyncer:
 
         # if self.channel_feedback._consumer_infos:
         #     print("[Info] RabbitMQSyncer.SpinOnce() :: channel_feedback ", self.queues.feedback_queue)
-        #     self.channel_feedback.connection.process_data_events(time_limit=0.1)
+        # self.channel_feedback.connection.process_data_events(time_limit=0.1)
         pass
 
 
 class SyncerFactory:
     def __init__(self) -> None:
-        self.connection = g_amq.connection
+        g_amq.blocking_connection
         self.all_syncers=[]
         
     def MakeSyncer(self, main_queue_name:str, forward_to_mqtt_only_without_feedback:bool) -> None:
         index = len(self.all_syncers)
-        sync = RabbitMQSyncer(self.connection, main_queue_name, forward_to_mqtt_only_without_feedback, index)
+        sync = RabbitMQSyncer(main_queue_name, forward_to_mqtt_only_without_feedback, index)
         self.all_syncers.append(sync)
-
-    # @staticmethod
-    # def ConnectAmqServer(config:AMQ_ConnectionConfig):
-    #     pass
-
-    # @staticmethod
-    # def ConnectMqttBroker(config:MQTT_ConnectionConfig):
-    #     g_mqtt.connect_to_broker(config)
-    #     while not g_mqtt.client.is_connected:
-    #         pass
 
 
     def SpinOnce(self) -> None:
