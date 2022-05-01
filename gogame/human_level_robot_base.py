@@ -1,13 +1,12 @@
 from abc import ABC, abstractmethod
 
-# from rabbitmq_app_examle_uselss import RabbitClient
-from Pylib.rabbit_mq_helper import g_amq
 
 
+# TODO:  remove this class
 class HumanLevelRobotBase(ABC):
     def __init__(self) -> None:
+        pass
         #TODO:  remove this line
-        self.rabbit_client = g_amq
 
     # @abstractmethod
     # def PickupFrom(self, position_or_site):

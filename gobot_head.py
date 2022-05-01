@@ -60,9 +60,10 @@ def MakeEye(eye_type:RobotEye_Product) -> MonoEyeBase:
     return eye
 
 Init_Global()
+robot_serial_id = 2134
 g_eye = MakeEye(eye_type=RobotEye_Product.UsbCamera)
-g_arm = HumanLevelGobotArm()
-g_house = HumanLevelGobotHouse()
+g_arm = HumanLevelGobotArm(robot_serial_id=robot_serial_id, do_home=True)
+g_house = HumanLevelGobotHouse(robot_serial_id=robot_serial_id, do_home=True)
 g_vision = GobotVision()
 g_ai = GoGameAiClient()
 print("[Info] Global vars init is done........\n\n\n\n")
@@ -190,11 +191,6 @@ class GobotHead():
     '''
     def __init__(self, serial_id:int):
         self.Serial_id = serial_id
-        # self.body = GobotBody(eye_type=eye_type)
-
-        # self.arm = HumanLevelGobotArm()
-        # self.house = HumanLevelGobotHouse()
-
         self.demor = GobotHead_Demo()
         self.__died_area_scanner = DiedAreaScanner()
         self.__goto = self.at_state_game_over
@@ -368,12 +364,12 @@ class GobotHead():
         stable_layout, stable_depth = g_vision.get_chessboard_layout(self.__last_image)
         if stable_depth < 3: return
         
-        MessageLogger.Output("user_play_Stable_depth", stable_depth)
-        update = self.__last_detected_layout.compare_with(stable_layout, do_print_out=False)
-        if len(update) == 0:
-        # if self.__last_detected_layout == stable_layout:
+        # MessageLogger.Output("user_play_Stable_depth", stable_depth)
+        total_different_cells_count = self.__last_detected_layout.compare_with(stable_layout, do_print_out=False)
+        if len(total_different_cells_count) == 0:
+            # Wait for robot to place a cell onto chessboard.
+            # MessageLogger.Output("[Info] Wait for robot to place a cell onto chessboard", "total_different_cells_count = 0 " );
             return
-        # self.__last_detected_layout.compare_with(stable_layout, do_print_out=True)
         self.__last_detected_layout = stable_layout  # should be a copy
 
         do_print_diffs = False

@@ -71,11 +71,11 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         mq_name = 'gobot_xnnnn_house'
         self.mq_name = mq_name.replace('nnnn', str(robot_serial_id))
         if do_home:
-            self.Home()
+            self.HomeBetaAlpha()
     
-    def Home(self):
+    def HomeBetaAlpha(self):
         commands = ['G28BI', 'G28AI', 'M996']
-        self.rabbit_client.PublishBatch(self.mq_name, commands)
+        g_amq.PublishBatch(self.mq_name, commands)
         
     def Pickup_Place(self, from_where:HouseMapDiction, to_where:HouseMapDiction, auto_park=False):
         self.PickupFrom(from_where)
@@ -84,14 +84,14 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
             site = HouseMapDiction()
             x,y = site.PARKING
             self.MoveTo(x,y)
-        self.rabbit_client.Publish(self.mq_name, 'M996')
+        g_amq.Publish(self.mq_name, 'M996')
 
     def MoveTo(self, x:float, y:float):
         gcode = 'G1X' + str(x) + 'Y' + str(y)
-        self.rabbit_client.Publish(self.mq_name, gcode)
+        g_amq.Publish(self.mq_name, gcode)
 
     def DisableMotor(self):
-        self.rabbit_client.Publish(self.mq_name, 'M84')
+        g_amq.Publish(self.mq_name, 'M84')
 
     def PickupFrom(self, position_or_site):
         pass
@@ -101,17 +101,17 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
 
     def EefAction(self, eef: HumanLevelHouse_EEF_ACTIONS):
         if eef==HumanLevelHouse_EEF_ACTIONS.LOAD:
-            self.rabbit_client.Publish(self.mq_name, 'M123P1S3')
+            g_amq.Publish(self.mq_name, 'M123P1S3')
         elif eef==HumanLevelHouse_EEF_ACTIONS.UNLOAD:
-            self.rabbit_client.Publish(self.mq_name, 'M123P1S4')
+            g_amq.Publish(self.mq_name, 'M123P1S4')
         elif eef==HumanLevelHouse_EEF_ACTIONS.SLEEP:
-            self.rabbit_client.Publish(self.mq_name, 'M123P1S5')
+            g_amq.Publish(self.mq_name, 'M123P1S5')
 
     def Test_Eef(self):
         # ('M123P1S3')   #load
         # ('M123P1S4')   #Release
         commands = ['M123P1S3','G4S5','M123P1S4','G4S5','M996' ]
-        self.rabbit_client.PublishBatch(self.mq_name, commands)
+        g_amq.PublishBatch(self.mq_name, commands)
 
 
 
@@ -141,21 +141,17 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         x,y = site.DOORS[7]
         self.MoveTo(x,y)
         self.PreHome()
-        self.rabbit_client.Publish(self.mq_name, "M84")
+        g_amq.Publish(self.mq_name, "M84")
 
     def PreHome(self):
         # Park Arms at a point, nearby homed position
         commands = ['G1B120F2800', 'G1A-1F2800', 'M996', "M84"]
-        self.rabbit_client.PublishBatch(self.mq_name, commands)
-        # self.rabbit_client.PublishToHouse('G1B120F2800')
-        # self.rabbit_client.PublishToHouse('G1A-1F2800')
-        # self.rabbit_client.PublishToHouse('M996')
-        # self.rabbit_client.PublishToHouse("M84")
+        g_amq.PublishBatch(self.mq_name, commands)
 
     def Calibrate_home_position_alpha(self):
         pause = 'G4S3'
         commands = ["G28AI", "G1A0",pause,'G1A-30',pause,'G1A-330','M996']
-        self.rabbit_client.PublishBatch(self.mq_name, commands)
+        g_amq.PublishBatch(self.mq_name, commands)
 
     def Calibrate_home_position_beta(self):
         pause = 'G4S3'
@@ -170,8 +166,6 @@ if __name__ == '__main__':
     config_rabbit = AMQ_ConnectionConfig()
     config_rabbit.uid = 'agent'
     config_rabbit.password = 'agent'
-    # self.MqClient = RabbitClient(config_rabbit)
-    # self.MqConnection = self.MqClient.connection
     g_amq.ConnectToRabbitMq(config_rabbit)
 
     house = HumanLevelGobotHouse(robot_serial_id=2134, do_home=False)

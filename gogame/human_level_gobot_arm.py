@@ -15,12 +15,11 @@
 # from config.message_logger import MessageLogger
 
 import sys
-from turtle import towards
-sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
+sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 
 from gogame.chessboard_cell import ChessboardCell
 from gogame.human_level_robot_base import HumanLevelRobotBase
-from Pylib.rabbit_mq_helper import RabbitClient
+from Pylib.rabbit_mq_helper import g_amq
 import enum
 
 
@@ -63,16 +62,17 @@ class ArmMap():
 
 class HumanLevelGobotArm(HumanLevelRobotBase):
 
-    def __init__(self) -> None:
-        # super().__init__(rabbit_client=rabbit_client)
+    def __init__(self,robot_serial_id:int, do_home=True) -> None:
         super().__init__()
-        self.mq_name = 'gobot_x2134_arm'
-        self.Home()
+        mq_name = 'gobot_xnnnn_arm'
+        self.mq_name = mq_name.replace('nnnn', str(robot_serial_id))
+        if do_home:
+            self.HomeAaphaBeta()
 
-    def Home(self):
+    def HomeAaphaBeta(self):
         print('[Info] HumanLevelGobotArm::Home() ')
         commands = ['G28AI','G28BI', 'M996']
-        self.rabbit_client.PublishBatch(self.mq_name, commands)
+        g_amq.PublishBatch(self.mq_name, commands)
 
         # self.rabbit_client.PublishToArm('G28AI')
         # self.rabbit_client.PublishToArm('G28BI')
@@ -115,47 +115,31 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
     
     def EEF_Does(self, do_load:ArmEEF):
         if do_load==ArmEEF.SLEEP:
-            # self.rabbit_client.PublishToArm('M123S0')
-            self.rabbit_client.Publish(self.mq_name, 'M123S0')
+            g_amq.Publish(self.mq_name, 'M123S0')
         elif do_load==ArmEEF.LOAD:
-            # self.rabbit_client.publish(self.mq_name, 'M123S200')
-            self.rabbit_client.Publish(self.mq_name, 'M123S200')
+            g_amq.Publish(self.mq_name, 'M123S200')
 
     def DisableMotor(self):
         self.rabbit_client.Publish(self.mq_name, 'M84')
 
     def Test_Eef(self):
-        # self.rabbit_client.PublishToHouse('M123P1S128')
-        # self.rabbit_client.PublishToHouse('G4S1')
-        # self.rabbit_client.PublishToHouse('M123P1S0')
-        # self.rabbit_client.PublishToHouse('G4S5')
-        # self.rabbit_client.PublishToHouse('M996')
         commands = ['M123P1S128', 'G4S1', 'M123P1S0', 'G4S5', 'M996']
-        self.rabbit_client.PublishBatch(self.mq_name, commands)
-        # self.rabbit_client.PublishToArm('M123P1S128')
-        # self.rabbit_client.PublishToArm('G4S1')
-        # self.rabbit_client.PublishToArm('M123P1S0')
-        # self.rabbit_client.PublishToArm('G4S5')
-        # self.rabbit_client.PublishToArm('M996')
+        g_amq.PublishBatch(self.mq_name, commands)
 
-from Pylib.rabbitmq_mqtt_sync import SyncerHelper_ForGobot
+    def Calibrate_HomeAlpha(self):
+        pause = "G4S5"
+        commands = ['G28AI', 'G1A-6.283', pause, 'G1A-1.571', pause, 'M996']
+        g_amq.PublishBatch(self.mq_name, commands)
+
+    def Calibrate_HomeBeta(self):
+        pause = "G4S5"
+        commands = ['G28BI', 'G1B3.142', pause, 'G1B1.571', pause, 'M996']
+        g_amq.PublishBatch(self.mq_name, commands)
+
 if __name__ == '__main__':
-    helper = SyncerHelper_ForGobot()
-    arm = HumanLevelGobotArm(helper.MqClient)
-    # arm.Home()
-    # commands = ["G28AI", "G1A90", "G28BI", "G1A135B90", "G4S5", "M84"]
-    # helper.MqClient.PublishBatch(arm.mq_name, commands)
-    helper.MqClient.Publish(arm.mq_name, 'G1A135B90')
-
-    while True:
-        # helper.MqClient.Publish(arm.mq_name, 'G1A135B90')
-        # arm.Home()
-        helper.SpinOnce()
-
-
-    if True:
-        while True:
-            pass
+    arm = HumanLevelGobotArm(robot_serial_id=2134, do_home=False)
+    arm.Calibrate_HomeAlpha()
+    arm.Calibrate_HomeBeta()
 
     if False:
         # Test Map
