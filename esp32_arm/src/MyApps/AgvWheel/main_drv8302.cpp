@@ -20,6 +20,9 @@ void setup() {
     pinMode(PIN_GAIN, OUTPUT);
     digitalWrite(PIN_GAIN, LOW);
 
+    pinMode(PIN_FAULT,INPUT_PULLUP);
+    pinMode(PIN_OverCurrentTermperatureWarning, INPUT_PULLUP);
+
     
   // pwm frequency to be used [Hz]
   driver.pwm_frequency = 40000;
@@ -54,28 +57,33 @@ void loop_a() {
     }
 }
 void loop_b(){
-
+    int ddd= 10000;
         // phase (A: 3V, B: 6V, C: high impedance )  
     // set the phase C in high impedance mode - disabled or open
     driver.setPhaseState(_ACTIVE , _ACTIVE , _HIGH_Z); // _HIGH_Z or _HIGH_IMPEDANCE
-    driver.setPwm(3, 6, 0); 
-    _delay(1000);
+    driver.setPwm(6, 3, 0); 
+    _delay(ddd);
+
+    // phase (A: high impedance, B: 3V, C: 6V )  
+    // set the phase A in high impedance mode - disabled or open
+    driver.setPhaseState(_HIGH_IMPEDANCE, _ACTIVE, _ACTIVE);
+    driver.setPwm(0, 6, 3);
+    _delay(ddd);
 
     // phase (A: 3V, B: high impedance, C: 6V )  
     // set the phase B in high impedance mode - disabled or open
     driver.setPhaseState(_ACTIVE , _HIGH_IMPEDANCE, _ACTIVE);
     driver.setPwm(3, 0, 6);
-    _delay(1000);
+    _delay(ddd);
 
-    // phase (A: high impedance, B: 3V, C: 6V )  
-    // set the phase A in high impedance mode - disabled or open
-    driver.setPhaseState(_HIGH_IMPEDANCE, _ACTIVE, _ACTIVE);
-    driver.setPwm(0, 3, 6);
-    _delay(1000);
 
 }
 
 void loop(){
-  loop_a();
+  loop_b();
+  if(digitalRead(PIN_FAULT) == LOW)
+    Serial.println("PIN_FAULT");
+  if(digitalRead(PIN_OverCurrentTermperatureWarning)==LOW)
+    Serial.println("OverCurrent");
 }
 #endif

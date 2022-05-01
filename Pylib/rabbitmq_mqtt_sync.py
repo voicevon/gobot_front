@@ -1,3 +1,4 @@
+from shutil import ExecError
 from pika import BlockingConnection
 from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
 # from Pylib.rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
@@ -86,14 +87,27 @@ class RabbitMQSyncer:
         # Only one process_data_events, will cauase all callback invoked.  !!!
         # Not involved to which channel !!!
         # if self.channel_main._consumer_infos:
-        if self.index !=0:
-            print("[Warn] RabbitMQSyncer.SpinOnce(), Skip call me is better,  channel_main ", self.queues.main_queue)
-        self.channel_main.connection.process_data_events(time_limit=0.001)  # will blocking 0.1 second
-
+        if g_amq.blocking_connection.is_closed:
+            try:
+                g_amq.ReconnectToRabbitMq()
+            except ExecError as e:
+                print('[Error] RabbitMQSyncer.SpinOnce()  blocking_connection is closed reconnecting error ', e)
+                return
+        try:
+            if self.index !=0:
+                print("[Warn] RabbitMQSyncer.SpinOnce(), Skip call me is better,  channel_main ", self.queues.main_queue)
+            self.channel_main.connection.process_data_events(time_limit=0.001)  # will blocking 0.1 second
+        except Exception as e:
+            print('[Error] RabbitMQSyncer.SpinOnce()  process_data_events got some error', e)
+            if g_amq.blocking_connection.is_open:
+                print('Closing')
+                g_amq.blocking_connection.close()
+        finally:
+            return
         # if self.channel_feedback._consumer_infos:
         #     print("[Info] RabbitMQSyncer.SpinOnce() :: channel_feedback ", self.queues.feedback_queue)
         # self.channel_feedback.connection.process_data_events(time_limit=0.1)
-        pass
+
 
 
 class SyncerFactory:

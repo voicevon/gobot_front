@@ -1,3 +1,4 @@
+from math import gamma
 import cv2
 import numpy
 import pika 
@@ -24,17 +25,24 @@ class RabbitClient():
     def __init__(self) -> None:
         self.declaed_queues=[]
 
-    def ConnectToRabbitMq(self,serverConfig: AMQ_ConnectionConfig)-> BlockingConnection:
+    def ConnectToRabbitMq(self,serverConfig: AMQ_ConnectionConfig) -> None:
         self.serverConfig = serverConfig
+        self.ReconnectToRabbitMq()
 
+    def ReconnectToRabbitMq(self):
+        serverConfig = self.serverConfig
         credentials = pika.PlainCredentials(serverConfig.uid, serverConfig.password)
         parameters = pika.ConnectionParameters(host=serverConfig.host,
                                     port= serverConfig.port,
                                     virtual_host= serverConfig.virtual_host,
                                     credentials= credentials)
-        self.blocking_connection = pika.BlockingConnection(parameters)
-        self.channel = self.blocking_connection.channel()
-        return self.blocking_connection
+        try:
+            self.blocking_connection = pika.BlockingConnection(parameters)
+            self.channel = self.blocking_connection.channel()
+        except Exception as e:
+            print(e)
+
+
 
     def Publish(self, queue_name:str, payload:str):
         if not (queue_name in self.declaed_queues):
@@ -118,6 +126,6 @@ g_amq = RabbitClient()
 
 if __name__ == '__main__':
     config = AMQ_ConnectionConfig()
-    mq_client = RabbitClient(config)
+    g_amq.ConnectToRabbitMq(config)
     img = cv2.imread("nocommand.jpg")
-    mq_client.publish_cv_image("test" , img)
+    g_amq.publish_cv_image("test" , img)

@@ -10,7 +10,7 @@ void GobotHouseHardwareConfig::Init(){
         this->STEPS_PER_RAD_ALPHA = this->motor_steps_per_round * this->GEAR_BOX_RATIO_ALPHA / TWO_PI;  
         this->STEPS_PER_RAD_BETA =  this->motor_steps_per_round * this->GEAR_BOX_RATIO_BETA / TWO_PI; 
         this->MAX_ACCELERATION_ALPHPA = 600 * this->MOTOR_MICRO_STEPS;
-        this->MAX_STEPS_PER_SECOND_ALPHA = 5000 * this->MOTOR_MICRO_STEPS;    // tested 1200          
+        this->MAX_STEPS_PER_SECOND_ALPHA = 4000 * this->MOTOR_MICRO_STEPS;    // tested 1200          
         this->MAX_ACCELERATION_BETA = 200 * this->MOTOR_MICRO_STEPS;
         this->MAX_STEPS_PER_SECOND_BETA =  500 * this->MOTOR_MICRO_STEPS; 
 
@@ -23,6 +23,7 @@ void GobotHouseHardwareConfig::Init(){
         this->EEF_Release_Angle = 355;   // Max is 4096
 
         this->Homed_position_alpha_in_degree = 13.6;
+        this->Homed_position_beta_in_degree = 138.0;
         this->PrintOut();
 }
 

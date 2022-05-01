@@ -28,7 +28,7 @@ class GobotHouseHardwareConfig{
         // value is vary for each gobot-house robot.
         float Homed_position_alpha_in_degree;
         // value is vary for each gobot-house robot.
-        float Homed_position_beta_in_degree = 138;
+        float Homed_position_beta_in_degree;
 
 
 

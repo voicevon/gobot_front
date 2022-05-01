@@ -13,8 +13,6 @@ class RabbitMqClient_App_Example():
     '''
     def __init__(self) -> None:
         self.__ConnectBroker_MQTT()
-        # self.__ConnectBroker_RabbitMQ()
-        self.connection = RabbitClient().ConnectToRabbitMq()
         self.__MakeSyncer()
 
     def SpinOnce(self):
