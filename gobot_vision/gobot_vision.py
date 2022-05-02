@@ -72,15 +72,20 @@ class GobotVision():
         perspective_image = self.__chessboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
         if perspective_image is None:
             return None, -1
+        
+        # We got 4 corners. So we can do two (maybe 3 )things here
+        # 1. Get pespectived image of chessboard
+        # 2. Get house vender position(and house vender perspectived image)
+        
         x0 = chessboard_config.crop_x0
         x1 = x0 + chessboard_config.crop_width
         y0 = chessboard_config.crop_y0
         y1 = y0 + chessboard_config.crop_height
         board_image = perspective_image[y0:y1, x0:x1]
+        self.house_vendor_image = perspective_image[1:2,  3:4]
+
         if app_config.publish_image_board.value:
-        # if self.__publish_image:
-            # g_mqtt.publish_cv_image('gobot/image/board', perspective_image)
-            ImageLogger.Output('gobot/image/board', perspective_image)
+            ImageLogger.Output('gobot_image_board', perspective_image)
         if board_image is None:
             print('GobotVision.get_chessboard_layout()  Can NOT detect chessboard grid from origin_image')
             return None, 0

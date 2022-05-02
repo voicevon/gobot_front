@@ -23,23 +23,19 @@
 # TODO: Reconstruct 
 from Pylib.message_logger import MessageLogger
 # from gobot_vision.commander_vision import config_2_aruco_marks
-# from gobot_vision.chessboard_vision import config_4_aruco_marks
-
+from gobot_vision.chessboard_scanner import config_4_aruco_marks
 
 import cv2
 import numpy as np
 from math import sin, cos
 
-# sys.path.append ("/home/pi/pylib")
-# from von.mqtt_helper import g_mqtt
-from config.config import Config
 from Pylib.image_logger import ImageLogger
 
 
 class GridFinder():
     '''
     '''
-    def __init__(self, aruco_config):
+    def __init__(self, aruco_config:config_4_aruco_marks):
         '''   
         Supported board_types:
             Warehouse: Four aruco marks
@@ -51,7 +47,6 @@ class GridFinder():
 
         print(aruco_config.name)
         if aruco_config.name=='CHESSBOARD_ARUCO_CONFIG':
-            #print('44444')
             aruco_ids = [aruco_config.top_left_id, aruco_config.top_right_id, aruco_config.bottom_right_id, aruco_config.bottom_left_id]
             # self.__perspected_width = aruco_config.perspected_width
             # self.__perspected_height = aruco_config.perspected_height
@@ -183,7 +178,6 @@ class GridFinder():
             #     g_mqtt.publish_cv_image('gobot/image/grid/aruco', debug_image)
         return result
 
-
     def get_perspective_view(self, img, pts):
         # specify desired output size 
 
@@ -228,7 +222,6 @@ class GridFinder():
                 return perspect_img
         ImageLogger.Output("eye/vision/no_corner", origin_image)
         return None
-
     
     def get_chessboard_image(self,img):
         # https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
@@ -252,8 +245,6 @@ class GridFinder():
                     cv2.waitKey(1)
                     self.__show_detection_line(whole_board_image)
                     return whole_board_image
-
-
 
     def draw_axis(self,img, yaw, pitch, roll, tdx=None, tdy=None, size = 100):
 

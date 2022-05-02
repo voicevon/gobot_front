@@ -76,7 +76,7 @@ class ChessboardScanner():
         layout = [([0] * 19) for i in range(19)]
         return layout
 
-    def get_4_aruco_marks_config(self):
+    def get_4_aruco_marks_config(self) -> config_4_aruco_marks:
         return config_4_aruco_marks
 
     def __append_to_history(self, layout) -> int:

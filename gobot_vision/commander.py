@@ -14,6 +14,7 @@ class Commander(GridFinder):
         self.__CELLS = 5
         self.__LOWEST_SCALE = 0.7
         GridFinder.__init__(self, config_2_aruco_marks)
+        print("There is no error...................xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,  How does Python work?")
 
     def get_command_from_image(self, origin_image) -> int:
         '''
@@ -47,7 +48,6 @@ class Commander(GridFinder):
                 pen_thickness = 3
                 cv2.line(debug_image,(cx1, cy1),(cx2, cy2),color_red, pen_thickness)
                 ImageLogger.Output('command',debug_image)
-                # g_mqtt.publish_cv_image('gobot/image/command',debug_image)
 
             # Get average color
             sum_brightness = 0
@@ -57,7 +57,6 @@ class Commander(GridFinder):
                 y = int(index * delta_y + cy1 + delta_y / 2)
                 if app_config.publish_image_command:
                     cv2.circle(debug_image,(x,y),20,(0,255,0),5)
-                    # g_mqtt.publish_cv_image('gobot/image/command',debug_image)
                     ImageLogger.Output('command',debug_image)
                 brightness = gray_image[y, x]
                 #sum_color += b

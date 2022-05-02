@@ -12,7 +12,7 @@ class CommanderVision():
         '''
         self.layout = self.create_blank_layout()
 
-    def create_2_aruco_marks_config(self):
+    def create_2_aruco_marks_config(self) -> config_2_aruco_marks:
         return config_2_aruco_marks
 
     def create_blank_layout(self):
