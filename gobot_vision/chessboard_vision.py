@@ -40,8 +40,8 @@ class ChessboardVision():
     def __init__(self):
         '''
         Main content:
-            1. Know Aruco config of chessboard
-            2. Generate layout from chessboard_image
+            1. Know Aruco config of chessboard.
+            2. Generate layout from chessboard_image(is a pespective image).
             3. Never touch with origin_image! 
         '''
         self.layout = self.create_blank_layout()
@@ -72,17 +72,13 @@ class ChessboardVision():
         self.Min_WhiteColor = numpy.array([0, 0, 200])  # 要识别白子颜色的下限
         self.Max_WhiteColor = numpy.array([180, 100, 255])  # 要识别白子的颜色的上限
 
-
-    def create_blank_layout(self):
+    def create_blank_layout(self)->list[list[int]]:
         layout = [([0] * 19) for i in range(19)]
         return layout
-
-
 
     def get_4_aruco_marks_config(self):
         return config_4_aruco_marks
 
- 
     def __append_to_history(self, layout) -> int:
         '''
         return:
@@ -104,11 +100,11 @@ class ChessboardVision():
 
     def get_layout_from_image(self, chessboard_image):
         '''
-        Descrepted!
+        Depricated!
         '''
+        print("[Warn]  ChessboardVision.get_layout_from_image()   is Depricated! ")
         return self.start_scan(chessboard_image)
 
-        
     def start_scan(self, img_board, history_length=3, show_processing_image=True, pause_second=1):
         '''
         Try to get layout from perspectived board image.
@@ -189,7 +185,6 @@ class ChessboardVision():
 
         # return self.__history[-1], stable_depth
         return detected_layout, stable_depth
-
 
     def __show_debug(self, img_board,stable_depth):
         copy = img_board.copy()

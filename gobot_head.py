@@ -362,7 +362,8 @@ class GobotHead():
                 return
 
         stable_layout, stable_depth = g_vision.get_chessboard_layout(self.__last_image)
-        if stable_depth < 3: return
+        if stable_depth < 3: 
+            return
         
         # MessageLogger.Output("user_play_Stable_depth", stable_depth)
         total_different_cells_count = self.__last_detected_layout.compare_with(stable_layout, do_print_out=False)

@@ -4,14 +4,10 @@ import logging
 
 
 import sys
-sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
-
+sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 from vision.grid_finder import GridFinder
 from gobot_vision.commander_vision import config_2_aruco_marks
 from config.config import Config as app_config
-import sys
-# sys.path.append('/home/pi/pylib')
-# from von.mqtt_helper import g_mqtt
 
 class Commander(GridFinder):
     def __init__(self):
@@ -19,7 +15,7 @@ class Commander(GridFinder):
         self.__LOWEST_SCALE = 0.7
         GridFinder.__init__(self, config_2_aruco_marks)
 
-    def get_command_from_image(self, origin_image):
+    def get_command_from_image(self, origin_image) -> int:
         '''
         return -1, if found nothing
         return 1..5 if found avaliable cell in black.
