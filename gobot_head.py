@@ -29,6 +29,7 @@ from gogame.human_level_gobot_house import HumanLevelGobotHouse
 from vision.robot_eye_base import MonoEyeBase
 
 from vision.arucoc_finder import ArucoFinder
+from vision.pespective import TransformPespective
 
 def Init_Global():
         # logging.basicConfig(level=logging.DEBUG)
@@ -524,8 +525,26 @@ class GobotHead():
 
         ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
         all_marks = self.aruco_finder.ScanMarks(origin_image=self.__last_image,print_report=True)
-        return     
+        
+        # if len(all_marks) !=6:
+        #     print("[Warn] ScanMarks() did not get 6 marks.")
+        #     return   
+        # top left corner of the plate, we take bottom right point of the marker.
 
+        # # bottom right corner of the plate, we take top right point of the marker.
+        # result.append(bottomRight)
+        # # bottom left corner of the plate, we take top left point of the marker
+        # result.append(topRight)
+        # # top left corner of the plate, we take top bottom point of the marker
+        # result.append(topLeft)
+        try:
+            corners = self.aruco_finder.GetPoints_For_PespectiveInput()
+            ttt = TransformPespective()
+            img = ttt.get_perspective_view(self.__last_image, corners)
+            ImageLogger.Output("ppppppppppppppppppppppppppp",img)
+        except:
+            pass
+        return
         command_image = 1
         chessboard_image = 1
         warehouse_image = 1

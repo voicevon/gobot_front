@@ -31,7 +31,7 @@ class ArucoMarkAdvanced():
 
 class ArucoFinder():
     def __init__(self, predefined_marks) -> None:
-        self.all_marks = []
+        self.all_marks = [ArucoMarkAdvanced]
         self.predefined_marks = predefined_marks
     
     def ScanMarks(self, origin_image, print_report=False) -> list:
@@ -174,3 +174,25 @@ class ArucoFinder():
             # if Config.publish_mqtt:
             #     g_mqtt.publish_cv_image('gobot/image/grid/aruco', debug_image)
         return result
+
+    def FindMarkById(self, id:int)->ArucoMarkAdvanced:
+        for mark in self.all_marks:
+            if mark.mark_id == id:
+                return mark
+        return self.all_marks[0]
+
+
+    def GetPoints_For_PespectiveInput(self):
+        '''
+        The return is for input parameters of cv2.getPerspectiveTransform(input,output)
+        '''
+        # extract the marker corners (which are always returned in order of:
+        #   [top-left, top-right, bottom-right, and bottom-left]
+        points = []
+        mark_ids = [21,34,13,15]
+        for mm in mark_ids:
+            xx = self.FindMarkById(mm)
+            point = (int(xx.center.X), int(xx.center.Y))
+            print(point)
+            points.append(point)
+        return points

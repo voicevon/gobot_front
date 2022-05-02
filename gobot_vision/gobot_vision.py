@@ -80,6 +80,9 @@ class GobotVision():
         * if stable_depth <= 0 , is saying can not get board image.
         '''
         perspective_image = self.__chessboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
+        ImageLogger.Output("perspectived image", perspective_image)
+        
+
         if perspective_image is None:
             return None, -1
         
