@@ -7,7 +7,7 @@ sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Wind
 from config.config import Config as app_config
 from gobot_vision.commander import Commander
 from gobot_vision.commander_vision import CommanderVision
-from gobot_vision.chessboard_vision import ChessboardVision, config_4_aruco_marks as chessboard_config
+from gobot_vision.chessboard_scanner import ChessboardScanner, config_4_aruco_marks as chessboard_config
 from gobot_vision.warehouse_vision import WarehouseVision
 from vision.grid_finder import GridFinder
 
@@ -20,11 +20,12 @@ class GobotVision():
 
     def __init__(self):
         '''
-        Overview of origin_image.
+        1. Overview of origin_image.
+        2. grid_finders are:  commandFinder, chessboard_finder.
         '''
-        self.__chessboard_vision = ChessboardVision()
-        config = self.__chessboard_vision.get_4_aruco_marks_config()
-        self.__chesboard_grid_finder = GridFinder(config)
+        self.__chessboard_scanner = ChessboardScanner()
+        config = self.__chessboard_scanner.get_4_aruco_marks_config()
+        self.__chessboard_grid_finder = GridFinder(config)
 
         self.__commander_solution = 2
         if self.__commander_solution == 1:
@@ -43,7 +44,7 @@ class GobotVision():
         logging.warn('Init vision is done......')
 
     def init_chessboard_layout(self):
-        self.__chessboard_vision.create_blank_layout()
+        self.__chessboard_scanner.create_blank_layout()
         
     def get_stable_level (self, layout_history):
         stable_level = 0
@@ -68,7 +69,7 @@ class GobotVision():
         * layout, stable_depth. 
         * if stable_depth <= 0 , is saying can not get board image.
         '''
-        perspective_image = self.__chesboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
+        perspective_image = self.__chessboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
         if perspective_image is None:
             return None, -1
         x0 = chessboard_config.crop_x0
@@ -84,7 +85,7 @@ class GobotVision():
             print('GobotVision.get_chessboard_layout()  Can NOT detect chessboard grid from origin_image')
             return None, 0
 
-        layout, stable_depth = self.__chessboard_vision.start_scan(board_image,3,True)
+        layout, stable_depth = self.__chessboard_scanner.start_scan(board_image,3,True)
             #::wqlayout.print_out() 
         #print ('Stable Depth of the layout ', stable_depth)
         return (layout, stable_depth)
@@ -134,7 +135,7 @@ if __name__ == '__main__':
     my_vision = GobotVision()
     history = []
     for i in range(0,6,1):
-        layout = ChessboardVision().create_blank_layout()
+        layout = ChessboardScanner().create_blank_layout()
         history.append(layout)
     is_same = my_vision.is_same_layout(history)
     print(is_same)

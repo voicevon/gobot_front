@@ -36,13 +36,13 @@ class config_4_aruco_marks:
     
 
 
-class ChessboardVision():
+class ChessboardScanner():
     def __init__(self):
         '''
         Main content:
-            1. Know Aruco config of chessboard.
-            2. Generate layout from chessboard_image(is a pespective image).
-            3. Never touch with origin_image! 
+            * Know Aruco config of chessboard(Four corners).
+            * Generate layout from chessboard_image(is a pespective image).
+            * Never touch with origin_image! 
         '''
         self.layout = self.create_blank_layout()
 
