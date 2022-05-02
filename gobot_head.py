@@ -28,6 +28,8 @@ from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
 from vision.robot_eye_base import MonoEyeBase
 
+from gobot_vision.gobot_vision import ArucoFinder
+
 def Init_Global():
         # logging.basicConfig(level=logging.DEBUG)
         logging.basicConfig(level=logging.CRITICAL)
@@ -531,12 +533,12 @@ class GobotHead():
 
     def SpinOnce(self):
         global g_eye
-        # self.SyncHelper.SpinOnce()
-
-        # self.__last_image = self.__eye.take_picture(do_undistort=True)
         self.__last_image = g_eye.take_picture(do_undistort=False)
-        ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
-        # return
+
+        ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
+        aruco_finder = ArucoFinder()
+        aruco_finder.ScanMarks(origin_image=self.__last_image)
+        return     
 
         command_image = 1
         chessboard_image = 1
