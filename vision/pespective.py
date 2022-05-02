@@ -1,0 +1,39 @@
+import cv2, numpy as np
+
+class TransformPespective():
+
+    def __init__(self) -> None:
+        pass
+
+    def get_perspective_view(self, img, pts):
+        # specify desired output size 
+
+        # specify conjugate x,y coordinates (not y,x)
+        input = np.float32(pts)
+        x1 = 0 + self.__aruco_config.left_extended
+        y1 = 0 + self.__aruco_config.top_extended
+        x2 = x1 + self.__aruco_config.perspective_width 
+        y2 = y1
+        x3 = x2
+        y3 = y1 +self.__aruco_config.perspective_height
+        x4 = x1
+        y4 = y3
+        width = x3 + self.__aruco_config.right_extended
+        height = y3 + self.__aruco_config.bottom_extended
+    
+
+        output = np.float32([[x1,y1],[x2,y2],[x3,y3],[x4,y4]])
+        # output = np.float32([[0 ,0] [width-1 ,0], [width-1,height-1], [0,height-1]])
+        #output = np.float32([[0,0],[width,0],[width/4*3,height/2],[width/4,height/2]])
+        # compute perspective matrix
+        matrix = cv2.getPerspectiveTransform(input,output)
+
+        # print(matrix.shape)
+        # print(matrix)
+
+        # do perspective transformation setting area outside input to black
+        imgOutput = cv2.warpPerspective(img, matrix, (width,height), cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(0,0,0))
+        # print(imgOutput.shape)
+
+        # save the warped output
+        return imgOutput

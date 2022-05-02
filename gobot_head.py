@@ -28,7 +28,7 @@ from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
 from vision.robot_eye_base import MonoEyeBase
 
-from gobot_vision.gobot_vision import ArucoFinder
+from vision.arucoc_finder import ArucoFinder
 
 def Init_Global():
         # logging.basicConfig(level=logging.DEBUG)
@@ -156,10 +156,6 @@ class GobotHead_Demo():
         if count == 0:
             self.__remove_one_cell_to_trash(StoneColor.WHITE)  
         self.__goto = self.at_state_game_over
-# class GobotPlayer():
-#     def __init__(self) -> None:
-#         pass
-
 
 
 '''
@@ -198,10 +194,10 @@ class GobotHead():
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
         self.__last_detected_layout = ChessboardLayout('Last_detected')
+        self.aruco_finder = ArucoFinder([21,49,48,15,13,34])
 
         self.__InitOthers()
         print("[Info] GobotHead::__init__()  is done.")
-
 
     def __InitOthers(self):
         logging.info("[Info] GobotHead Start init objects......")
@@ -234,15 +230,6 @@ class GobotHead():
         ret, img = self.__capture_newest_image()
         if ret:
             self.new_idea(img)
-
-    # def get_stable_mark(self,min_stable_depth):
-    #     stable_depth = 0
-    #     while stable_depth < min_stable_depth:
-    #         ret, img = self.__capture_device.read()
-    #         if ret:
-    #             mark_index, stable_depth = self.__mark_scanner.detect_mark(img, min_stable_depth)
-    #     return mark_index
-        
     
     def __remove_one_cell_to_trash(self, color):
         '''
@@ -536,8 +523,7 @@ class GobotHead():
         self.__last_image = g_eye.take_picture(do_undistort=False)
 
         ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
-        aruco_finder = ArucoFinder()
-        aruco_finder.ScanMarks(origin_image=self.__last_image)
+        all_marks = self.aruco_finder.ScanMarks(origin_image=self.__last_image,print_report=True)
         return     
 
         command_image = 1
@@ -568,27 +554,12 @@ class GobotHead():
         self.__controller.action_place_stone_to_trash_bin()
         self.__controller.action_park()
 
-
-        
-
 if __name__ == '__main__':
 
     Init_Global()
-
-    # robot_eye = RobotEye_Product.PaspberryPiCamera
-    # robot_eye_type = RobotEye_Product.UsbCamera
-    # robot_eye_type= RobotEye_Product.CameraEmulator
-
     myrobot = GobotHead(2134)
-    # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
-    # myrobot.house.demo()
-    i = 0
     while True:
         myrobot.SpinOnce()
-        # print(i)
-        i += 1
-
-
 
     while True:
         menu = []
