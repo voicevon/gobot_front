@@ -179,10 +179,10 @@ class ArucoFinder():
         for mark in self.all_marks:
             if mark.mark_id == id:
                 return mark
-        return self.all_marks[0]
+        return None
 
 
-    def GetPoints_For_PespectiveInput(self):
+    def GetPoints_For_PespectiveInput(self)->list:
         '''
         The return is for input parameters of cv2.getPerspectiveTransform(input,output)
         '''
@@ -192,6 +192,8 @@ class ArucoFinder():
         mark_ids = [21,34,13,15]
         for mm in mark_ids:
             xx = self.FindMarkById(mm)
+            if xx is None:
+                return None
             point = (int(xx.center.X), int(xx.center.Y))
             print(point)
             points.append(point)

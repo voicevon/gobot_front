@@ -537,11 +537,26 @@ class GobotHead():
         # result.append(topRight)
         # # top left corner of the plate, we take top bottom point of the marker
         # result.append(topLeft)
+        ttt = TransformPespective()
         try:
             corners = self.aruco_finder.GetPoints_For_PespectiveInput()
-            ttt = TransformPespective()
-            img = ttt.get_perspective_view(self.__last_image, corners)
-            ImageLogger.Output("ppppppppppppppppppppppppppp",img)
+            if corners is None:
+                return
+            pespectived_image = ttt.get_perspective_view(self.__last_image, corners)
+            ImageLogger.Output("ppppppppppppppppppppppppppp",pespectived_image)
+            y1= 550
+            y2= y1+30
+            x1= 200
+            x2= x1+30
+            house_vender_image = pespectived_image[y1:y2, x1:x2]
+            ImageLogger.Output("vvvvvvvvvvvvvvvvvvvvvv", house_vender_image)
+            y1= 0
+            y2= y1+428
+            x1= 0
+            x2= x1+428
+            board_image = pespectived_image[y1:y2, x1:x2]
+            ImageLogger.Output("bbbbbbbbbbbbbbbbbbbbbbbb", board_image)
+            
         except:
             pass
         return

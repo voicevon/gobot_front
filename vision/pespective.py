@@ -14,12 +14,12 @@ class config_4_aruco_marks:
     # bottom_extended = 5   # effect view range
     # left_extended = 0
 
-    perspective_width = 1024   #effect scale, greater number cause zoom in. 
-    perspective_height =1024  # effect scale
-    top_extended = 222
-    right_extended = 333   # effect view range
-    bottom_extended = 111   # effect view range
-    left_extended = 111
+    perspective_width = 428-6   #effect scale, greater number cause zoom in. 
+    perspective_height = 428 + 111  # effect scale
+    top_extended = -22
+    right_extended = 5   # effect view range
+    bottom_extended = 77   # effect view range
+    left_extended = 5
 
     crop_x0 = 0   # effect the left edge
     crop_y0 = 0   # effect the top edge.
