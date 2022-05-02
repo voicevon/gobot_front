@@ -1,6 +1,7 @@
 
 
 import sys
+
 sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 
 # from gogame.chessboard import ChessboardLayout
@@ -17,6 +18,8 @@ from Pylib.image_logger import ImageLogger
 from Pylib.message_logger import MessageLogger
 from vision.pespective_transfomer import PespectiveTransformer
 from vision.arucoc_finder import ArucoFinder
+from gobot_vision.cell_scanner import CellScanner
+import cv2, numpy
 
 
 class GobotVision():
@@ -62,22 +65,38 @@ class GobotVision():
         self.all_marks = self.aruco_finder.ScanMarks(origin_image=origin_image,print_report=True)
         if self.all_marks is None:
             return False
-        corners = self.aruco_finder.GetPoints_For_PespectiveInput()
-        if corners is None:
+        mark_points = self.aruco_finder.GetPoints_For_PespectiveInput()
+        if mark_points is None:
             return False
+
         transformer = PespectiveTransformer()
-        self.pespectived_image = transformer.get_perspective_view(origin_image, corners)
-        y1= 550
-        y2= y1+30
-        x1= 200
-        x2= x1+30
-        self.house_vender_image = self.pespectived_image[y1:y2, x1:x2]
-        y1= 0
-        y2= y1+428
-        x1= 0
-        x2= x1+428
-        self.board_image = self.pespectived_image[y1:y2, x1:x2]
+        self.pespectived_image = transformer.get_perspective_view(origin_image, mark_points)
         return True
+
+    def GetChessboardLayout(self):
+        # is_ok = self.ProcessOriginImage(origin_image)
+        # if not is_ok:
+        #     return None, -1
+        y1= 0
+        y2= y1 + 428
+        x1= 0
+        x2= x1 + 428
+        board_image = self.pespectived_image[y1:y2, x1:x2]
+
+        layout, stable_depth = self.__chessboard_scanner.start_scan(board_image,history_length=3,show_processing_image=True)
+        return layout, stable_depth
+        
+    def GetHouseVenderStone(self):
+        y1= 550
+        y2= y1 + 30
+        x1= 200
+        x2= x1 + 30
+        house_vender_image = self.pespectived_image[y1:y2, x1:x2]
+        board_gray = cv2.cvtColor(self.board_image, cv2.COLOR_BGR2GRAY)
+        board_brightness = numpy.mean(board_gray)
+        cell_scanner = CellScanner(board_brightness)
+        house_vendor_stone_color = cell_scanner.ScanWhite(house_vender_image, is_inspected=False)
+        return house_vendor_stone_color 
 
     def get_stable_level (self, layout_history):
         stable_level = 0
@@ -85,15 +104,10 @@ class GobotVision():
             stable_level += 1
         return stable_level
 
-    def get_commander_plate_image(self, origin_image):
-        '''
-        Serve for Solution A, Not completed.
-        '''
-        commander_grid_image = self.__commander_grid_finder.detect_grid_from_aruco_corners()
-        return commander_grid_image
 
     def get_command_index(self, origin_image):
         return self.__commander.get_command_from_image(origin_image)
+
 
     def get_chessboard_layout(self, origin_image):
         '''
@@ -102,6 +116,9 @@ class GobotVision():
         * layout, stable_depth. 
         * if stable_depth <= 0 , is saying can not get board image.
         '''
+        print("[Error] get_chessboard_layout() is Deprecated! ")
+        return
+
         perspective_image = self.__chessboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
         ImageLogger.Output("perspectived image", perspective_image)
         
@@ -118,7 +135,7 @@ class GobotVision():
         y0 = chessboard_config.crop_y0
         y1 = y0 + chessboard_config.crop_height
         board_image = perspective_image[y0:y1, x0:x1]
-        self.house_vendor_image = perspective_image[1:2,  3:4]
+        # self.house_vendor_image = perspective_image[1:2,  3:4]
 
         if app_config.publish_image_board.value:
             ImageLogger.Output('gobot_image_board', perspective_image)

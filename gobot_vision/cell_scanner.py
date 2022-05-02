@@ -72,7 +72,7 @@ class CellScanner():
         #     print('detected cell_image,  circles=%d' %len(detected_circles))
         return cell_color
 
-    def scan_black(self, cell_image, is_inspected:bool):
+    def ScanBlack(self, cell_image, is_inspected:bool):
         '''
         Two steps for scanning a black stone.
         1. image process = cell image -> gray -> blur -> bin_image \n
@@ -104,7 +104,7 @@ class CellScanner():
         return cell_color
 
         
-    def scan_white(self, cell_image, is_inspected) -> StoneColor:
+    def ScanWhite(self, cell_image, is_inspected:bool) -> StoneColor:
         '''
         return: 
             detected cell_color, only for White. because connected black cells have no circle
