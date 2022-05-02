@@ -9,17 +9,14 @@ from gobot_vision.commander import Commander
 from gobot_vision.commander_vision import CommanderVision
 from gobot_vision.chessboard_scanner import ChessboardScanner, config_4_aruco_marks as chessboard_config
 from gobot_vision.warehouse_vision import WarehouseVision
-from vision.grid_finder import GridFinder
+from vision.grid_finder import GridFinder   # TODO: remove this
 
 # from von.terminal_font import TerminalFont
 import logging
 from Pylib.image_logger import ImageLogger
-
-
-import cv2
 from Pylib.message_logger import MessageLogger
-
-
+from vision.pespective_transfomer import PespectiveTransformer
+from vision.arucoc_finder import ArucoFinder
 
 
 class GobotVision():
@@ -32,11 +29,10 @@ class GobotVision():
            * Get perspectived veiws of command_image, board_image, house_vendor_image
            * Scan the segmented images, To get command, board_layout, house_vender_stone.
         '''
-
+        self.aruco_finder = ArucoFinder([21,49,48,15,13,34])
         self.__chessboard_scanner = ChessboardScanner()
         config = self.__chessboard_scanner.get_4_aruco_marks_config()
         self.__chessboard_grid_finder = GridFinder(config)
-
         self.__commander_solution = 2
         if self.__commander_solution == 1:
             # solution A
@@ -50,12 +46,39 @@ class GobotVision():
             # Simpler solution, faster, might be less stable
             self.__commander = Commander()
 
-        self.__publish_image = False
         logging.warn('Init vision is done......')
 
     def init_chessboard_layout(self):
         self.__chessboard_scanner.create_blank_layout()
         
+    def ProcessOriginImage(self, origin_image) ->bool:
+        '''
+        After this processing,  Below properties will be set
+        * self.all_marks
+        * self.pespectived_image
+        * self.house_vender_image (is perspectived, and cropped)
+        * self.board_image(is perspectived, and cropped)
+        '''
+        self.all_marks = self.aruco_finder.ScanMarks(origin_image=origin_image,print_report=True)
+        if self.all_marks is None:
+            return False
+        corners = self.aruco_finder.GetPoints_For_PespectiveInput()
+        if corners is None:
+            return False
+        transformer = PespectiveTransformer()
+        self.pespectived_image = transformer.get_perspective_view(origin_image, corners)
+        y1= 550
+        y2= y1+30
+        x1= 200
+        x2= x1+30
+        self.house_vender_image = self.pespectived_image[y1:y2, x1:x2]
+        y1= 0
+        y2= y1+428
+        x1= 0
+        x2= x1+428
+        self.board_image = self.pespectived_image[y1:y2, x1:x2]
+        return True
+
     def get_stable_level (self, layout_history):
         stable_level = 0
         if layout_history[0][0][0] == layout_history[1][0][0]:

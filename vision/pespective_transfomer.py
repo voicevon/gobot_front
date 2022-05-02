@@ -27,7 +27,7 @@ class config_4_aruco_marks:
     crop_height = 428  # Don't modify this value.
 
 
-class TransformPespective():
+class PespectiveTransformer():
 
     def __init__(self) -> None:
         self.__aruco_config = config_4_aruco_marks()

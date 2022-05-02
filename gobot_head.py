@@ -2,7 +2,7 @@
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
-from gc import garbage
+
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 from gobot_vision.gobot_vision import GobotVision
@@ -28,8 +28,6 @@ from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
 from vision.robot_eye_base import MonoEyeBase
 
-from vision.arucoc_finder import ArucoFinder
-from vision.pespective import TransformPespective
 
 def Init_Global():
         # logging.basicConfig(level=logging.DEBUG)
@@ -195,7 +193,6 @@ class GobotHead():
         self.__goto = self.at_state_game_over
         self.__target_demo_layout = ChessboardLayout('Demo Layout')
         self.__last_detected_layout = ChessboardLayout('Last_detected')
-        self.aruco_finder = ArucoFinder([21,49,48,15,13,34])
 
         self.__InitOthers()
         print("[Info] GobotHead::__init__()  is done.")
@@ -519,50 +516,14 @@ class GobotHead():
             diffs = g_ai.layout.compare_with(layout, do_print_out=True)
             time.sleep(10)
 
+    
     def SpinOnce(self):
         global g_eye
         self.__last_image = g_eye.take_picture(do_undistort=False)
-
+        if self.__last_image is None:
+            return
         ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
-        all_marks = self.aruco_finder.ScanMarks(origin_image=self.__last_image,print_report=True)
-        
-        # if len(all_marks) !=6:
-        #     print("[Warn] ScanMarks() did not get 6 marks.")
-        #     return   
-        # top left corner of the plate, we take bottom right point of the marker.
 
-        # # bottom right corner of the plate, we take top right point of the marker.
-        # result.append(bottomRight)
-        # # bottom left corner of the plate, we take top left point of the marker
-        # result.append(topRight)
-        # # top left corner of the plate, we take top bottom point of the marker
-        # result.append(topLeft)
-        ttt = TransformPespective()
-        try:
-            corners = self.aruco_finder.GetPoints_For_PespectiveInput()
-            if corners is None:
-                return
-            pespectived_image = ttt.get_perspective_view(self.__last_image, corners)
-            ImageLogger.Output("ppppppppppppppppppppppppppp",pespectived_image)
-            y1= 550
-            y2= y1+30
-            x1= 200
-            x2= x1+30
-            house_vender_image = pespectived_image[y1:y2, x1:x2]
-            ImageLogger.Output("vvvvvvvvvvvvvvvvvvvvvv", house_vender_image)
-            y1= 0
-            y2= y1+428
-            x1= 0
-            x2= x1+428
-            board_image = pespectived_image[y1:y2, x1:x2]
-            ImageLogger.Output("bbbbbbbbbbbbbbbbbbbbbbbb", board_image)
-            
-        except:
-            pass
-        return
-        command_image = 1
-        chessboard_image = 1
-        warehouse_image = 1
 
         #self.__vision.get_warehouse_plate(self.__last_image)
         last_function = self.__goto
