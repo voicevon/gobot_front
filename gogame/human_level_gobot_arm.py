@@ -18,7 +18,7 @@ import sys
 sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 
 from Pylib.robot_map import MapSite
-from gogame.arm_map import ArmMapSite_Catalog, ArmMapSites
+from gogame.arm_map import ArmMapSite_Catalog, ArmMapSiteFactory
 from gogame.chessboard_cell import ChessboardCell
 from gogame.human_level_robot_base import HumanLevelRobotBase
 from Pylib.rabbit_mq_helper import AMQ_ConnectionConfig, g_amq
@@ -143,11 +143,11 @@ if __name__ == '__main__':
 
     if True:
         # Test Map
-        from_where = ArmMapSites().GetSingleSite(ArmMapSite_Catalog.HOUSE_VENDOR)
+        from_where = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.HOUSE_VENDOR)
         to_cell = ChessboardCell()
         to_cell.from_name("A1")
 
-        to_site = ArmMapSites().GetSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL,to_cell)
+        to_site = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL,to_cell)
         arm.Pickup_Place(from_where=from_where, to_where=to_site)
 
     if False:

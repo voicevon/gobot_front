@@ -30,7 +30,7 @@ from gogame.human_level_robot_base import HumanLevelRobotBase
 from gogame.chessboard_cell import StoneColor
 from Pylib.rabbit_mq_helper import g_amq,AMQ_ConnectionConfig
 from datetime import datetime
-from gogame.house_map import HouseMapSite_Catalog, HouseMapSites, MapSite
+from gogame.house_map import HouseMapSite_Catalog, HouseMapSiteFactory, MapSite
 
 import enum
 
@@ -106,13 +106,13 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         self.__PickupFrom(from_where)
         self.__PlaceTo(to_where)
         if auto_park:
-            parking_at = HouseMapSites.GetSingleSite(HouseMapSite_Catalog.PARKING)
+            parking_at = HouseMapSiteFactory().MakeSingleSite(HouseMapSite_Catalog.PARKING)
             self.__MoveTo(parking_at)
         g_amq.Publish(self.mq_name, 'M996')
 
     def Pickup_Place(self, from_cat:HouseMapSite_Catalog, from_index:int, to_cat:HouseMapSite_Catalog, to_index:int=0):
-        from_site = HouseMapSites().GetSingleSite(from_cat, from_index)
-        to_site = HouseMapSites().GetSingleSite(to_cat, to_index)
+        from_site = HouseMapSiteFactory().MakeSingleSite(from_cat, from_index)
+        to_site = HouseMapSiteFactory().MakeSingleSite(to_cat, to_index)
         self.__Pickup_Place(from_site, to_site)
 
 
@@ -121,7 +121,7 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         g_amq.Publish(self.mq_name, gcode)
 
     def MoveTo(self, cat:HouseMapSite_Catalog, index:int=0):
-        the_site = HouseMapSites().GetSingleSite(cat, index)
+        the_site = HouseMapSiteFactory().MakeSingleSite(cat, index)
         self.__MoveTo(the_site)
 
     def DisableMotor(self):
@@ -132,14 +132,14 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         self.EefAction(HumanLevelHouse_EEF_ACTIONS.LOAD)
 
     def PickupFrom(self, cat:HouseMapSite_Catalog, index:int=0):
-        the_site = HouseMapSites().GetSingleSite(cat, index)
+        the_site = HouseMapSiteFactory().MakeSingleSite(cat, index)
         self.__PickupFrom(the_site)
 
     def __PlaceTo(self, site:MapSite):
         self.__MoveTo(site)
     
     def PlaceTo(self, cat:HouseMapSite_Catalog, index:int=0):
-        the_site = HouseMapSites().GetSingleSite(cat, index)
+        the_site = HouseMapSiteFactory().MakeSingleSite(cat, index)
         self.__PlaceTo(the_site)
 
 
@@ -216,7 +216,7 @@ if __name__ == '__main__':
     #     house.Calibrate_home_position_beta()
 
     # Test top level movemnet
-    from_site = HouseMapSites().GetSingleSite(HouseMapSite_Catalog.ROOM, 1)
-    to_site = HouseMapSites().GetSingleSite(HouseMapSite_Catalog.HEAD, 0)
+    from_site = HouseMapSiteFactory().MakeSingleSite(HouseMapSite_Catalog.ROOM, 1)
+    to_site = HouseMapSiteFactory().MakeSingleSite(HouseMapSite_Catalog.HEAD, 0)
     # house.__Pickup_Place(from_site, to_site)
     house.Pickup_Place(HouseMapSite_Catalog.ROOM,1, HouseMapSite_Catalog.HEAD)

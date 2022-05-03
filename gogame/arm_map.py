@@ -11,16 +11,16 @@ class ArmMapSite_Catalog(enum.Enum):
     CHESSBOARD_CELL = 4,
     PARKING = 5
 
-class ArmMapSites():
+class ArmMapSiteFactory():
     def __init__(self) -> None:
         self.house_vendor = MapSite('house_vendor', 0, 25)
         self.trash_bin_white = MapSite('trash_bin_white', -230, 0)
         self.trash_bin_black = MapSite('trash_bin_black', 230, 0)
         self.parking = MapSite('Parking', 0, 25)
         self.CELL_A1 = MapSite("CELL_A1", -215, 155 + 23 * 18)
-        self.CELL_T19 = MapSite("CELL_T19", 215 + 155)
+        self.CELL_T19 = MapSite("CELL_T19", 215 , 155)
 
-    def GetSingleSite(self, cat:ArmMapSite_Catalog, cell:ChessboardCell=None) -> MapSite:
+    def MakeSingleSite(self, cat:ArmMapSite_Catalog, cell:ChessboardCell=None) -> MapSite:
         '''
         TODO:  static or class method.  What different?
         '''

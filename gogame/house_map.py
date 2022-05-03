@@ -1,5 +1,4 @@
 import enum
-
 from Pylib.robot_map import MapSite
 
 class HouseMapSite_Catalog(enum.Enum):
@@ -9,7 +8,7 @@ class HouseMapSite_Catalog(enum.Enum):
     NECK = 4,
     PARKING = 5, 
 
-class HouseMapSites():
+class HouseMapSiteFactory():
     def __init__(self) -> None:
         self.head = MapSite('Head', 148.93, 0)
         self.neck = MapSite('Neck', 55.0, 0)
@@ -35,7 +34,7 @@ class HouseMapSites():
         self.rooms.append(MapSite('Room_6', -98.18, -95.2))
         self.rooms.append(MapSite('Room_7', -78.79, -126.38))
 
-    def GetSingleSite(self, cat:HouseMapSite_Catalog, index:int) -> MapSite:
+    def MakeSingleSite(self, cat:HouseMapSite_Catalog, index:int) -> MapSite:
         if cat == HouseMapSite_Catalog.HEAD:
             return self.head
         elif cat == HouseMapSite_Catalog.NECK:
