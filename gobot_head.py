@@ -347,9 +347,6 @@ class GobotHead():
                 self.__goto = self.at_state_game_over
                 return
 
-        is_ok = g_vision.ProcessOriginImage(self.__last_image, print_report=False)
-        if not is_ok:
-            return
 
         stable_layout, stable_depth = g_vision.GetChessboardLayout()
         if stable_depth < 3: 
@@ -520,6 +517,8 @@ class GobotHead():
             time.sleep(10)
 
     def Debug(self):
+        ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
+
         fast_calibration_g_vision = False
         if fast_calibration_g_vision:
             is_ok = g_vision.ProcessOriginImage(self.__last_image, print_report=False)
@@ -537,12 +536,18 @@ class GobotHead():
 
     def SpinOnce(self):
         global g_eye
+        global g_vision
+        global g_house
         self.__last_image = g_eye.take_picture(do_undistort=False)
         if self.__last_image is None:
             return
-        ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
         # self.Debug()
         # return
+        is_ok = g_vision.ProcessOriginImage(self.__last_image, print_report=False)
+        if not is_ok:
+            return
+        stone = g_vision.GetHouseVenderStone()
+        g_house.FeedVenderVision(stone)
 
         last_function = self.__goto
         # print(self.__goto)

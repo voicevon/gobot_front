@@ -15,6 +15,17 @@
 
 
 
+#   House_Vendor_State
+#                <----------------------------- FAILED
+#               |                                 ^
+#               |                                 |
+#  UNKNOWN--> BLANK  --> SHIPPING --> I_AM_READY  --> CONFIRMED_READY
+#               ^                                          ^  
+#               |                                          |
+#
+
+
+
 
 
 
@@ -22,9 +33,9 @@
 import sys
 sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 from gogame.human_level_robot_base import HumanLevelRobotBase
-# from rabbitmq_app_examle_uselss import RabbitClient
+from gogame.chessboard_cell import StoneColor
 from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
-# from Pylib.rabbitmq_mqtt_sync import SyncerHelper_ForGobot
+from datetime import datetime
 
 import enum
 
@@ -34,6 +45,13 @@ class HumanLevelHouse_EEF_ACTIONS(enum.Enum):
     UNLOAD = 4,
     SLEEP = 5,
 
+class HumanLevelHouseState(enum.Enum):
+    UNKNOWN = 1
+    EMPTY = 2
+    SHIPPING = 3
+    I_AM_READY = 4
+    FAILED = 5
+    CONFIRMED_READY = 6
 
 class HouseMapDiction():
 
@@ -72,7 +90,34 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         self.mq_name = mq_name.replace('nnnn', str(robot_serial_id))
         if do_home:
             self.HomeBetaAlpha()
-    
+        self.State = HumanLevelHouseState.UNKNOWN
+        self.shipping_begin_timestamp = datetime.now()
+
+    def FeedVenderVision(self, stone_color: StoneColor):
+        if self.State == HumanLevelHouseState.UNKNOWN:
+            if stone_color == StoneColor.BLANK:
+                self.state == HumanLevelHouseState.EMPTY
+            if stone_color == stone_color.WHITE:
+                self.state = HumanLevelHouseState.CONFIRMED_READY
+        elif self.state == HumanLevelHouseState.EMPTY:
+            self.PickupFrom(1)
+            self.MoveTo(2)
+            self.State = HumanLevelHouseState.SHIPPING
+            self.shipping_begin_timestamp = datetime.now()
+        elif self.state == HumanLevelHouseState.SHIPPING:
+            how_long = datetime.now() - self.shipping_begin_timestamp
+            if how_long.total_seconds() > 30:
+                self.state = HumanLevelHouseState.I_AM_READY
+        elif self.state == HumanLevelHouseState.I_AM_READY:
+            if stone_color == StoneColor.BLANK:
+                self.state = HumanLevelHouseState.FAILED
+            if stone_color == StoneColor.WHITE:
+                self.state = HumanLevelHouseState.CONFIRMED_READY
+        elif self.state == HumanLevelHouseState.CONFIRMED_READY:
+            if stone_color == StoneColor.BLANK:
+                self.state = HumanLevelHouseState.EMPTY
+            
+
     def HomeBetaAlpha(self):
         commands = ['G28BI', 'G28AI', 'M996']
         g_amq.PublishBatch(self.mq_name, commands)
