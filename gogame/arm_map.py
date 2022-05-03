@@ -17,6 +17,8 @@ class ArmMapSites():
         self.trash_bin_white = MapSite('trash_bin_white', -230, 0)
         self.trash_bin_black = MapSite('trash_bin_black', 230, 0)
         self.parking = MapSite('Parking', 0, 25)
+        self.CELL_A1 = MapSite("CELL_A1", -215, 155 + 23 * 18)
+        self.CELL_T19 = MapSite("CELL_T19", 215 + 155)
 
     def GetSingleSite(self, cat:ArmMapSite_Catalog, cell:ChessboardCell=None) -> MapSite:
         '''

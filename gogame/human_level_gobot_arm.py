@@ -111,11 +111,30 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         pause = "G4S5"
         commands = ['G28BI', 'G1B3.142', pause, 'G1B1.571', pause, 'M996']
         g_amq.PublishBatch(self.mq_name, commands)
+        
+    def Calibrate_3_A1_T19(self):
+        'Home, Move to A1, pause, Move to T19, pause'
+        pause = "G4S5"
+        self.HomeAaphaBeta()
+
+        cell_a1 = ChessboardCell()
+        cell_a1.from_name("A1")
+        a1_site = ArmMapSites().GetSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell_a1)
+        cell_t19 =  ChessboardCell()
+        cell_t19.from_name("T19")
+        t19_site = ArmMapSites().GetSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell_t19)
+        
+        for i in range(5):
+            commands = [ 'G1X' + str(a1_site.X) + "Y" + str(a1_site.Y)
+                        ,pause
+                        ,'G1X' + str(t19_site.X) + "Y" + str(t19_site.Y)
+                        ,pause
+                        ]  
+            g_amq.PublishBatch(self.mq_name, commands)
 
 if __name__ == '__main__':
     config = AMQ_ConnectionConfig()
     g_amq.ConnectToRabbitMq(config)
-
 
     arm = HumanLevelGobotArm(robot_serial_id=2134, do_home=False)
 
