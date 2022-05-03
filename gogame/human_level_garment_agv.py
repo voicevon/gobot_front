@@ -1,8 +1,9 @@
 
 
 import sys
-sys.path.append('C:\\gitlab\\gobot_front')  # For runing in VsCode on Windows-10 
+sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 from gogame.human_level_robot_base import HumanLevelRobotBase
+from Pylib.rabbit_mq_helper import AMQ_ConnectionConfig, g_amq, MQTT_ConnectionConfig
 # from rabbitmq_app_examle_uselss import RabbitClient
 import enum
 
@@ -14,14 +15,14 @@ class HumanLevelHouse_EEF_ACTIONS(enum.Enum):
 
 class HumanLevel_GarmentAgv(HumanLevelRobotBase):
 
-    def __init__(self, rabbit_client:RabbitClient) -> None:
-        super().__init__(rabbit_client=rabbit_client)
+    def __init__(self) -> None:
+        super().__init__()
         self.Home()
+        self.mq_name = 'puma/agv/2134'
     
     def Home(self):
-        self.rabbit_client.PublishToAgv('G28Z')
-        self.rabbit_client.PublishToAgv('G28W')
-        self.rabbit_client.PublishToAgv('M996')
+        commands = ['G28Z', 'G28W', 'M996']
+        g_amq.PublishBatch(self.mq_name, commands)
         
     def Pickup_Place(self, from_where, to_where, auto_park=False):
         self.PickupFrom(from_where)
@@ -30,14 +31,14 @@ class HumanLevel_GarmentAgv(HumanLevelRobotBase):
             site = (2.0, 3,0)
             x,y = site.PARKING
             self.MoveTo(x,y)
-        self.rabbit_client.PublishToAgv('M996')
+        g_amq.PublishToAgv('M996')
 
     def MoveTo(self, height:float, angle:float):
         gcode = 'G1Z' + str(height) + 'R' + str(angle)
-        self.rabbit_client.PublishToAgv(gcode)
+        g_amq.PublishToAgv(gcode)
 
     def DisableMotor(self):
-        self.rabbit_client.PublishToAgv('M84')
+        g_amq.PublishToAgv('M84')
 
     def PickupFrom(self, position_or_site):
         pass
@@ -47,17 +48,17 @@ class HumanLevel_GarmentAgv(HumanLevelRobotBase):
 
     def EefAction(self, eef: HumanLevelHouse_EEF_ACTIONS):
         if eef==HumanLevelHouse_EEF_ACTIONS.LOAD:
-            self.rabbit_client.PublishToAgv('M123P1S128')
+            g_amq.PublishToAgv('M123P1S128')
         elif eef==HumanLevelHouse_EEF_ACTIONS.SLEEP:
-            self.rabbit_client.PublishToAgv('M123P1S0')
+            g_amq.PublishToAgv('M123P1S0')
 
     def Test_Eef(self):
-        self.rabbit_client.PublishToAgv('M123P1S3')   #load
-        self.rabbit_client.PublishToAgv('G4S5')
-        self.rabbit_client.PublishToAgv('M123P1S5')   #sleep
-        self.rabbit_client.PublishToAgv('G4S5')
-        self.rabbit_client.PublishToAgv('M996')
-        
+        pause = 'G4S5'
+        load = 'M123P1S3' 
+        sleep = 'M123P1S5'
+        commands = [load, pause, sleep, pause, 'M996']
+        g_amq.PublishBatch(self.mq_name, commands)
+
 
     def demo(self):
         site = (1,2)
@@ -65,22 +66,22 @@ class HumanLevel_GarmentAgv(HumanLevelRobotBase):
         self.MoveTo(x,y)
 
         # Park Arms at a point, nearby homed position
-        self.rabbit_client.PublishToAgv('G1B120F2800')
-        self.rabbit_client.PublishToAgv('G1A-1F2800')
-        self.rabbit_client.PublishToAgv('M996')
+        g_amq.PublishToAgv('G1B120F2800')
+        g_amq.PublishToAgv('G1A-1F2800')
+        g_amq.PublishToAgv('M996')
 
 
 
 
 if __name__ == '__main__':
-    from rabbitmq_app_examle_uselss import RabbitMqClient_Helper
-    helper = RabbitMqClient_Helper()
-    client = helper.MakeClient()
-    agv_box_mover = HumanLevel_GarmentAgv(client)
+    c = AMQ_ConnectionConfig()
+    g_amq.ConnectToRabbitMq(c)
+
+    agv_box_mover = HumanLevel_GarmentAgv()
     for i in range(20):
         agv_box_mover.Home()
     # agv.MoveTo(350, 60)
     # agv.DisableMotor()
 
     while True:
-        helper.SpinOnce()
+        agv_box_mover.SpinOnce()
