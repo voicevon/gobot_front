@@ -73,7 +73,8 @@ class ImageLogger():
             try:
                 cv2.imshow(topic_or_title, cv_image)
                 cv2.waitKey(1)
-            except:
+            except Exception as e:
+                print("[Error] ImageLogger. Output(TO_SCREEN)  ",e)
                 pass
 
         elif to_where == ImageLoggerToWhere.TO_MQTT:

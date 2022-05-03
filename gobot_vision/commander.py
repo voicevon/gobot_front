@@ -14,7 +14,7 @@ class Commander(GridFinder):
         self.__CELLS = 5
         self.__LOWEST_SCALE = 0.7
         GridFinder.__init__(self, config_2_aruco_marks)
-        print("There is no error...................xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,  How does Python work?")
+        # print("There is no error...................xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,  How does Python work?")
 
     def get_command_from_image(self, origin_image) -> int:
         '''

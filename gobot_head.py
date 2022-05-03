@@ -329,14 +329,13 @@ class GobotHead():
     def at_state_user_play(self):
         '''
         * User is always play BLACK stone.
-        * check mark command, might be game over.
+        * check command mark firstly, might be game over.
         ''' 
         global g_vision
         global g_ai
 
-        mark = g_vision.get_command_index(self.__last_image)
-        
-        if (mark != 4) and (mark !=-1):
+        command_index = g_vision.get_command_index(self.__last_image)
+        if (command_index != 4) and (command_index !=-1):
             # Game over: 
             logging.info(self.__BOLD + self.__FC_YELLOW + self.__BG_RED + 'Game Over!' + self.__FC_RESET)
 
@@ -348,7 +347,11 @@ class GobotHead():
                 self.__goto = self.at_state_game_over
                 return
 
-        stable_layout, stable_depth = g_vision.get_chessboard_layout(self.__last_image)
+        is_ok = g_vision.ProcessOriginImage(self.__last_image)
+        if not is_ok:
+            return
+
+        stable_layout, stable_depth = g_vision.GetChessboardLayout()
         if stable_depth < 3: 
             return
         
@@ -378,7 +381,7 @@ class GobotHead():
                     g_ai.feed_user_move(cell_name)
                     g_ai.layout.print_out()
                     MessageLogger.Output('gogame/smf/status', 'computer_playing')
-                    MessageLogger.Output("fishtank/switch/r4/command", "OFF")
+                    # MessageLogger.Output("fishtank/switch/r4/command", "OFF")
                     self.__goto = self.at_state_scan_died_white
                     return
                 else:

@@ -1,7 +1,6 @@
 
 
 import sys
-
 sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 
 # from gogame.chessboard import ChessboardLayout
@@ -14,7 +13,7 @@ from vision.grid_finder import GridFinder   # TODO: remove this
 
 # from von.terminal_font import TerminalFont
 import logging
-from Pylib.image_logger import ImageLogger
+from Pylib.image_logger import ImageLogger, ImageLoggerToWhere
 from Pylib.message_logger import MessageLogger
 from vision.pespective_transfomer import PespectiveTransformer
 from vision.arucoc_finder import ArucoFinder
@@ -32,7 +31,11 @@ class GobotVision():
            * Get perspectived veiws of command_image, board_image, house_vendor_image
            * Scan the segmented images, To get command, board_layout, house_vender_stone.
         '''
+
         self.aruco_finder = ArucoFinder([21,49,48,15,13,34])
+        '''
+        TODO:  update 15 to 10
+        '''
         self.__chessboard_scanner = ChessboardScanner()
         config = self.__chessboard_scanner.get_4_aruco_marks_config()
         self.__chessboard_grid_finder = GridFinder(config)
@@ -56,7 +59,8 @@ class GobotVision():
         
     def ProcessOriginImage(self, origin_image) ->bool:
         '''
-        After this processing,  Below properties will be set
+        * Return false, If could not detect all known aruco marks. 
+        ### After this processing,  Below properties will be set.
         * self.all_marks
         * self.pespectived_image
         * self.house_vender_image (is perspectived, and cropped)
@@ -64,13 +68,15 @@ class GobotVision():
         '''
         self.all_marks = self.aruco_finder.ScanMarks(origin_image=origin_image,print_report=True)
         if self.all_marks is None:
+            print('[Warn] GobotVision  ProcessOriginImage(), ScanMarks() returns bad')
             return False
         mark_points = self.aruco_finder.GetPoints_For_PespectiveInput()
         if mark_points is None:
+            print('[Warn] GobotVision  ProcessOriginImage(), GetPoints_For_PespectiveInput() returns bad')
             return False
-
         transformer = PespectiveTransformer()
         self.pespectived_image = transformer.get_perspective_view(origin_image, mark_points)
+        ImageLogger.Output("pppppppppppppppp", self.pespectived_image, to_where=ImageLoggerToWhere.TO_SCREEN)
         return True
 
     def GetChessboardLayout(self):
@@ -82,8 +88,10 @@ class GobotVision():
         x1= 0
         x2= x1 + 428
         board_image = self.pespectived_image[y1:y2, x1:x2]
-
-        layout, stable_depth = self.__chessboard_scanner.start_scan(board_image,history_length=3,show_processing_image=True)
+        # rotated_board_image = Img_RotateScale(board_image, angle_in_degree=180)
+        finnal_board_image = cv2.flip(board_image, flipCode=0)
+        ImageLogger.Output("ppppppppppppppppppppppppppppppp", finnal_board_image)
+        layout, stable_depth = self.__chessboard_scanner.start_scan(finnal_board_image, history_length=3, show_processing_image=True)
         return layout, stable_depth
         
     def GetHouseVenderStone(self):
@@ -116,8 +124,8 @@ class GobotVision():
         * layout, stable_depth. 
         * if stable_depth <= 0 , is saying can not get board image.
         '''
-        print("[Error] get_chessboard_layout() is Deprecated! ")
-        return
+        print("[Error] get_chessboard_layout() is Deprecated!   new method:  ProcessOrginImage(),  GetBoardImage() ")
+        return None, -1
 
         perspective_image = self.__chessboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
         ImageLogger.Output("perspectived image", perspective_image)

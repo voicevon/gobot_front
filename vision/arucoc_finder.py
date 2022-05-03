@@ -60,10 +60,11 @@ class ArucoFinder():
                 else:
                     print("[Error]  ScanMarks() got unknown id {id} " )
 
-            print('Known id can not detected:  ', end=' ')
-            for mark in known_marks:
-                print(mark, end = '  ')
-            print()
+            if len(known_marks) >0:
+                print('Known id can not detected:  ', end=' ')
+                for mark in known_marks:
+                    print(mark, end = '  ')
+                print()
 
         ids = ids.flatten()
         self.all_marks=[]
@@ -195,6 +196,6 @@ class ArucoFinder():
             if xx is None:
                 return None
             point = (int(xx.center.X), int(xx.center.Y))
-            print(point)
+            # print(point)
             points.append(point)
         return points

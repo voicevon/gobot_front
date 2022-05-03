@@ -172,10 +172,10 @@ class ChessboardScanner():
                     # cv2.imshow('bbbb',cell_img_big_for_white)
                     # cv2.imshow('ssss',cell_img_small_for_black)
                 # color = cell_scanner.scan(cell_img,is_inspected_cell)
-                color = cell_scanner.scan_white(cell_img_big_for_white, is_inspected_cell)
+                color = cell_scanner.ScanWhite(cell_img_big_for_white, is_inspected_cell)
                 detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
                 if color != StoneColor.WHITE:
-                    color = cell_scanner.scan_black(cell_img_small_for_black, is_inspected_cell)
+                    color = cell_scanner.ScanBlack(cell_img_small_for_black, is_inspected_cell)
                     detected_layout.play_col_row(col_id=18-col, row_id=18-row, color_code=color)
         stable_depth = self.__append_to_history(detected_layout)
         # if app_config.robot_eye.layout_scanner.show_scan_image:
