@@ -105,7 +105,7 @@ class ChessboardScanner():
         print("[Warn]  ChessboardVision.get_layout_from_image()   is Depricated! ")
         return self.start_scan(chessboard_image)
 
-    def start_scan(self, img_board, history_length=3, show_processing_image=True, pause_second=1):
+    def StartScan(self, img_board, history_length=3, show_processing_image=True, pause_second=1):
         '''
         Try to get layout from perspectived board image.
         return A:

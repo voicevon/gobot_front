@@ -63,6 +63,7 @@ class ImageLogger():
                         ,'command'
                         ,'grid/aruco'
                         ,'gobot/image/board'
+                        ,'final_board_image'
                         ]
         if topic_or_title in mute_topic:
             return

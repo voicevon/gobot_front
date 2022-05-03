@@ -347,7 +347,7 @@ class GobotHead():
                 self.__goto = self.at_state_game_over
                 return
 
-        is_ok = g_vision.ProcessOriginImage(self.__last_image)
+        is_ok = g_vision.ProcessOriginImage(self.__last_image, print_report=False)
         if not is_ok:
             return
 
@@ -528,7 +528,6 @@ class GobotHead():
         ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
 
 
-        #self.__vision.get_warehouse_plate(self.__last_image)
         last_function = self.__goto
         # print(self.__goto)
         self.__goto()
