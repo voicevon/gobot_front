@@ -526,7 +526,13 @@ class GobotHead():
         if self.__last_image is None:
             return
         ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
-
+        fast_calibration_g_vision = False
+        if fast_calibration_g_vision:
+            is_ok = g_vision.ProcessOriginImage(self.__last_image, print_report=False)
+            if not is_ok:
+                return
+            stable_layout, stable_depth = g_vision.GetChessboardLayout()
+            return
 
         last_function = self.__goto
         # print(self.__goto)

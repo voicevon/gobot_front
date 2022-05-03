@@ -74,7 +74,7 @@ class GobotVision():
         if mark_points is None:
             print('[Warn] GobotVision  ProcessOriginImage(), GetPoints_For_PespectiveInput() returns bad')
             return False
-        transformer = PespectiveTransformer()
+        transformer = PerspectiveTransformer()
         self.perspectived_image = transformer.get_perspective_view(origin_image, mark_points)
         ImageLogger.Output("perspectived_image", self.perspectived_image, to_where=ImageLoggerToWhere.TO_SCREEN)
         return True
@@ -84,7 +84,7 @@ class GobotVision():
         # if not is_ok:
         #     return None, -1
         width = 450
-        height = 440
+        height = 428
         y1= 0
         y2= y1 + height
         x1= 0
