@@ -97,15 +97,24 @@ class GobotVision():
         return layout, stable_depth
         
     def GetHouseVenderStone(self):
-        y1= 550
+        y1= 490
         y2= y1 + 30
-        x1= 200
+        x1= 195
         x2= x1 + 30
         house_vender_image = self.perspectived_image[y1:y2, x1:x2]
-        board_gray = cv2.cvtColor(self.board_image, cv2.COLOR_BGR2GRAY)
+        width = 450
+        height = 428
+        y1= 0
+        y2= y1 + height
+        x1= 0
+        x2= x1 + width
+        board_image = self.perspectived_image[y1:y2, x1:x2]
+        board_gray = cv2.cvtColor(board_image, cv2.COLOR_BGR2GRAY)
         board_brightness = numpy.mean(board_gray)
         cell_scanner = CellScanner(board_brightness)
         house_vendor_stone_color = cell_scanner.ScanWhite(house_vender_image, is_inspected=False)
+        # ImageLogger.Output('hhhhhhhhhhhhhhhhhhhhhhh', house_vender_image,to_where=ImageLoggerToWhere.TO_SCREEN)
+        # print("house_vendor_stone_color= ", house_vendor_stone_color)
         return house_vendor_stone_color 
 
     def get_stable_level (self, layout_history):

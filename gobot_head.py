@@ -519,13 +519,7 @@ class GobotHead():
             diffs = g_ai.layout.compare_with(layout, do_print_out=True)
             time.sleep(10)
 
-    
-    def SpinOnce(self):
-        global g_eye
-        self.__last_image = g_eye.take_picture(do_undistort=False)
-        if self.__last_image is None:
-            return
-        ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
+    def Debug(self):
         fast_calibration_g_vision = False
         if fast_calibration_g_vision:
             is_ok = g_vision.ProcessOriginImage(self.__last_image, print_report=False)
@@ -533,6 +527,22 @@ class GobotHead():
                 return
             stable_layout, stable_depth = g_vision.GetChessboardLayout()
             return
+
+        debug_house_vender_stone_color = True
+        if debug_house_vender_stone_color:
+            is_ok = g_vision.ProcessOriginImage(self.__last_image, print_report=False)
+            if not is_ok:
+                return
+            img = g_vision.GetHouseVenderStone()
+
+    def SpinOnce(self):
+        global g_eye
+        self.__last_image = g_eye.take_picture(do_undistort=False)
+        if self.__last_image is None:
+            return
+        ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
+        # self.Debug()
+        # return
 
         last_function = self.__goto
         # print(self.__goto)
