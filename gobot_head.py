@@ -2,7 +2,7 @@
 # from vision.robot_eye_pi_camera import MonoEyePiCamera
 # from vision.robot_eye_usb_camera import MonoEyeUsbCamera
 # from vision.robot_eye_emulator import MonoEyeEmulator
-from gc import garbage
+
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 
 from gobot_vision.gobot_vision import GobotVision
@@ -27,6 +27,7 @@ from von.terminal_font import TerminalFont  # pip3 install VonPylib
 from gogame.human_level_gobot_arm import ArmMap, HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
 from vision.robot_eye_base import MonoEyeBase
+
 
 def Init_Global():
         # logging.basicConfig(level=logging.DEBUG)
@@ -154,10 +155,6 @@ class GobotHead_Demo():
         if count == 0:
             self.__remove_one_cell_to_trash(StoneColor.WHITE)  
         self.__goto = self.at_state_game_over
-# class GobotPlayer():
-#     def __init__(self) -> None:
-#         pass
-
 
 
 '''
@@ -200,7 +197,6 @@ class GobotHead():
         self.__InitOthers()
         print("[Info] GobotHead::__init__()  is done.")
 
-
     def __InitOthers(self):
         logging.info("[Info] GobotHead Start init objects......")
 
@@ -232,15 +228,6 @@ class GobotHead():
         ret, img = self.__capture_newest_image()
         if ret:
             self.new_idea(img)
-
-    # def get_stable_mark(self,min_stable_depth):
-    #     stable_depth = 0
-    #     while stable_depth < min_stable_depth:
-    #         ret, img = self.__capture_device.read()
-    #         if ret:
-    #             mark_index, stable_depth = self.__mark_scanner.detect_mark(img, min_stable_depth)
-    #     return mark_index
-        
     
     def __remove_one_cell_to_trash(self, color):
         '''
@@ -342,14 +329,13 @@ class GobotHead():
     def at_state_user_play(self):
         '''
         * User is always play BLACK stone.
-        * check mark command, might be game over.
+        * check command mark firstly, might be game over.
         ''' 
         global g_vision
         global g_ai
 
-        mark = g_vision.get_command_index(self.__last_image)
-        
-        if (mark != 4) and (mark !=-1):
+        command_index = g_vision.get_command_index(self.__last_image)
+        if (command_index != 4) and (command_index !=-1):
             # Game over: 
             logging.info(self.__BOLD + self.__FC_YELLOW + self.__BG_RED + 'Game Over!' + self.__FC_RESET)
 
@@ -361,7 +347,8 @@ class GobotHead():
                 self.__goto = self.at_state_game_over
                 return
 
-        stable_layout, stable_depth = g_vision.get_chessboard_layout(self.__last_image)
+
+        stable_layout, stable_depth = g_vision.GetChessboardLayout()
         if stable_depth < 3: 
             return
         
@@ -391,7 +378,7 @@ class GobotHead():
                     g_ai.feed_user_move(cell_name)
                     g_ai.layout.print_out()
                     MessageLogger.Output('gogame/smf/status', 'computer_playing')
-                    MessageLogger.Output("fishtank/switch/r4/command", "OFF")
+                    # MessageLogger.Output("fishtank/switch/r4/command", "OFF")
                     self.__goto = self.at_state_scan_died_white
                     return
                 else:
@@ -529,20 +516,39 @@ class GobotHead():
             diffs = g_ai.layout.compare_with(layout, do_print_out=True)
             time.sleep(10)
 
+    def Debug(self):
+        ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_SCREEN)
+
+        fast_calibration_g_vision = False
+        if fast_calibration_g_vision:
+            is_ok = g_vision.ProcessOriginImage(self.__last_image, print_report=False)
+            if not is_ok:
+                return
+            stable_layout, stable_depth = g_vision.GetChessboardLayout()
+            return
+
+        debug_house_vender_stone_color = True
+        if debug_house_vender_stone_color:
+            is_ok = g_vision.ProcessOriginImage(self.__last_image, print_report=False)
+            if not is_ok:
+                return
+            img = g_vision.GetHouseVenderStone()
+
     def SpinOnce(self):
         global g_eye
-        # self.SyncHelper.SpinOnce()
-
-        # self.__last_image = self.__eye.take_picture(do_undistort=True)
+        global g_vision
+        global g_house
         self.__last_image = g_eye.take_picture(do_undistort=False)
-        ImageLogger.Output("gobot_x2134_eye_origin", self.__last_image, to_where=ImageLoggerToWhere.TO_AMQ)
+        if self.__last_image is None:
+            return
+        # self.Debug()
         # return
+        is_ok = g_vision.ProcessOriginImage(self.__last_image, print_report=False)
+        if not is_ok:
+            return
+        stone = g_vision.GetHouseVenderStone()
+        g_house.FeedVenderVision(stone)
 
-        command_image = 1
-        chessboard_image = 1
-        warehouse_image = 1
-
-        #self.__vision.get_warehouse_plate(self.__last_image)
         last_function = self.__goto
         # print(self.__goto)
         self.__goto()
@@ -566,27 +572,12 @@ class GobotHead():
         self.__controller.action_place_stone_to_trash_bin()
         self.__controller.action_park()
 
-
-        
-
 if __name__ == '__main__':
 
     Init_Global()
-
-    # robot_eye = RobotEye_Product.PaspberryPiCamera
-    # robot_eye_type = RobotEye_Product.UsbCamera
-    # robot_eye_type= RobotEye_Product.CameraEmulator
-
     myrobot = GobotHead(2134)
-    # myrobot = GobotHead(RobotEye_Product.PaspberryPiCamera)
-    # myrobot.house.demo()
-    i = 0
     while True:
         myrobot.SpinOnce()
-        # print(i)
-        i += 1
-
-
 
     while True:
         menu = []

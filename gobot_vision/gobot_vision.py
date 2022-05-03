@@ -9,11 +9,16 @@ from gobot_vision.commander import Commander
 from gobot_vision.commander_vision import CommanderVision
 from gobot_vision.chessboard_scanner import ChessboardScanner, config_4_aruco_marks as chessboard_config
 from gobot_vision.warehouse_vision import WarehouseVision
-from vision.grid_finder import GridFinder
+from vision.grid_finder import GridFinder   # TODO: remove this
 
 # from von.terminal_font import TerminalFont
 import logging
-from Pylib.image_logger import ImageLogger
+from Pylib.image_logger import ImageLogger, ImageLoggerToWhere
+from Pylib.message_logger import MessageLogger
+from vision.perspective_transfomer import PerspectiveTransformer
+from vision.arucoc_finder import ArucoFinder
+from gobot_vision.cell_scanner import CellScanner
+import cv2, numpy
 
 
 class GobotVision():
@@ -21,12 +26,19 @@ class GobotVision():
     def __init__(self):
         '''
         1. Overview of origin_image.
-        2. grid_finders are:  commandFinder, chessboard_finder.
+        2. Process:
+           * Find all aruco marks, and there position
+           * Get perspectived veiws of command_image, board_image, house_vendor_image
+           * Scan the segmented images, To get command, board_layout, house_vender_stone.
+        '''
+
+        self.aruco_finder = ArucoFinder([21,49,48,15,13,34])
+        '''
+        TODO:  update 15 to 10
         '''
         self.__chessboard_scanner = ChessboardScanner()
         config = self.__chessboard_scanner.get_4_aruco_marks_config()
         self.__chessboard_grid_finder = GridFinder(config)
-
         self.__commander_solution = 2
         if self.__commander_solution == 1:
             # solution A
@@ -40,74 +52,72 @@ class GobotVision():
             # Simpler solution, faster, might be less stable
             self.__commander = Commander()
 
-        self.__publish_image = False
         logging.warn('Init vision is done......')
 
     def init_chessboard_layout(self):
         self.__chessboard_scanner.create_blank_layout()
         
+    def ProcessOriginImage(self, origin_image, print_report:bool) ->bool:
+        '''
+        * Return false, If could not detect all known aruco marks. 
+        ### After this processing,  Below properties will be set.
+        * self.all_marks
+        * self.perspectived_image
+        * self.house_vender_image (is perspectived, and cropped)
+        * self.board_image(is perspectived, and cropped)
+        '''
+        self.all_marks = self.aruco_finder.ScanMarks(origin_image=origin_image,print_report=print_report)
+        if self.all_marks is None:
+            print('[Warn] GobotVision  ProcessOriginImage(), ScanMarks() returns bad')
+            return False
+        mark_points = self.aruco_finder.GetPoints_For_PespectiveInput()
+        if mark_points is None:
+            print('[Warn] GobotVision  ProcessOriginImage(), GetPoints_For_PespectiveInput() returns bad')
+            return False
+        transformer = PerspectiveTransformer()
+        self.perspectived_image = transformer.get_perspective_view(origin_image, mark_points)
+        ImageLogger.Output("perspectived_image", self.perspectived_image, to_where=ImageLoggerToWhere.TO_SCREEN)
+        
+        
+        width = 450
+        height = 428
+        y1= 0
+        y2= y1 + height
+        x1= 0
+        x2= x1 + width
+        self.base_board_image = self.perspectived_image[y1:y2, x1:x2]
+        board_gray = cv2.cvtColor(self.base_board_image, cv2.COLOR_BGR2GRAY)
+        self.board_brightness = numpy.mean(board_gray)
+        
+        y1= 490
+        y2= y1 + 30
+        x1= 195
+        x2= x1 + 30
+        self.base_house_vender_image = self.perspectived_image[y1:y2, x1:x2]
+        
+        return True
+
+    def GetChessboardLayout(self):
+        finnal_board_image = cv2.flip(self.base_board_image, flipCode=0)
+        ImageLogger.Output("final_board_image", finnal_board_image)
+        layout, stable_depth = self.__chessboard_scanner.StartScan(finnal_board_image, history_length=3, show_processing_image=True)
+        return layout, stable_depth
+        
+    def GetHouseVenderStone(self):
+        cell_scanner = CellScanner(self.board_brightness)
+        house_vendor_stone_color = cell_scanner.ScanWhite(self.base_house_vender_image, is_inspected=False)
+        # ImageLogger.Output('hhhhhhhhhhhhhhhhhhhhhhh', house_vender_image,to_where=ImageLoggerToWhere.TO_SCREEN)
+        # print("house_vendor_stone_color= ", house_vendor_stone_color)
+        return house_vendor_stone_color 
+
     def get_stable_level (self, layout_history):
         stable_level = 0
         if layout_history[0][0][0] == layout_history[1][0][0]:
             stable_level += 1
         return stable_level
 
-    def get_commander_plate_image(self, origin_image):
-        '''
-        Serve for Solution A, Not completed.
-        '''
-        commander_grid_image = self.__commander_grid_finder.detect_grid_from_aruco_corners()
-        return commander_grid_image
-
     def get_command_index(self, origin_image):
         return self.__commander.get_command_from_image(origin_image)
-
-    def get_chessboard_layout(self, origin_image):
-        '''
-        * Top level of getting layout.
-        return 
-        * layout, stable_depth. 
-        * if stable_depth <= 0 , is saying can not get board image.
-        '''
-        perspective_image = self.__chessboard_grid_finder.detect_grid_from_aruco_corners(origin_image)
-        if perspective_image is None:
-            return None, -1
-        
-        # We got 4 corners. So we can do two (maybe 3 )things here
-        # 1. Get pespectived image of chessboard
-        # 2. Get house vender position(and house vender perspectived image)
-        
-        x0 = chessboard_config.crop_x0
-        x1 = x0 + chessboard_config.crop_width
-        y0 = chessboard_config.crop_y0
-        y1 = y0 + chessboard_config.crop_height
-        board_image = perspective_image[y0:y1, x0:x1]
-        self.house_vendor_image = perspective_image[1:2,  3:4]
-
-        if app_config.publish_image_board.value:
-            ImageLogger.Output('gobot_image_board', perspective_image)
-        if board_image is None:
-            print('GobotVision.get_chessboard_layout()  Can NOT detect chessboard grid from origin_image')
-            return None, 0
-
-        layout, stable_depth = self.__chessboard_scanner.start_scan(board_image,3,True)
-            #::wqlayout.print_out() 
-        #print ('Stable Depth of the layout ', stable_depth)
-        return (layout, stable_depth)
-
-    def get_warehouse_plate(self,origin_image):
-        config = WarehouseVision().create_finder_config()
-        house_plate_finder = GridFinder(config)
-        perspective_image = house_plate_finder.detect_grid_from_aruco_corners(origin_image)
-
-        ImageLogger.Output("gobot_vision_perspective", perspective_image)
-
-    def get_warehouse_stone_position(self, origin_image):
-        '''
-        Top level interface.
-        '''
-        return 1
-
 
 
     def get_commander_layout_for_solution_A_only(self, image, min_stable_depth=3, max_trying =5):

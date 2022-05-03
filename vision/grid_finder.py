@@ -1,28 +1,6 @@
-# These two references are really not good !
-# Like lower class is reference higher class !
-
-
-
-#                           
-#
-#                     The number and position of arucodes
-#            
-#                           34 ---------- 21
-#                           |             |
-#                           |             |
-#                           |  Chessboard |
-#                           |             |
-#                           13 --------- 15
-#                             \          /
-#                              \ House  /
-#                               --------
-#                             
-
-
 
 # TODO: Reconstruct 
 from Pylib.message_logger import MessageLogger
-# from gobot_vision.commander_vision import config_2_aruco_marks
 from gobot_vision.chessboard_scanner import config_4_aruco_marks
 
 import cv2

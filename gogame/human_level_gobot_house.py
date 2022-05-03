@@ -15,16 +15,22 @@
 
 
 
-
-
-
+#   House_Vendor_State
+#                <----------------------------- FAILED
+#               |                                 ^
+#               |                                 |
+#  UNKNOWN--> BLANK  --> SHIPPING --> I_AM_READY  --> CONFIRMED_READY
+#               ^                                          ^  
+#               |                                          |
+#
 
 import sys
 sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 from gogame.human_level_robot_base import HumanLevelRobotBase
-# from rabbitmq_app_examle_uselss import RabbitClient
-from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
-# from Pylib.rabbitmq_mqtt_sync import SyncerHelper_ForGobot
+from gogame.chessboard_cell import StoneColor
+from Pylib.rabbit_mq_helper import g_amq,AMQ_ConnectionConfig
+from datetime import datetime
+from gogame.house_map import HouseMapSite_Catalog, HouseMapSites, MapSite
 
 import enum
 
@@ -34,34 +40,13 @@ class HumanLevelHouse_EEF_ACTIONS(enum.Enum):
     UNLOAD = 4,
     SLEEP = 5,
 
-
-class HouseMapDiction():
-
-    def __init__(self) -> None:
-        self.NECK = (55.0, 0)
-        self.HEAD = (148.93, 0)
-        self.PARKING = (55.0, -2)
-
-        self.DOORS = [(-10.37,  59.07),
-                (-21.39, 56.12),
-                (-44.28, 40.67),
-                (-57.42, 17.95),
-                (-57.42, -17.95),
-                (-44.28, -40.67),
-                (-21.39, -56.12),
-                (-10.37, -59.07),
-                ]
-
-        self.ROOMS  = [(-78.79,  126.38),  #0
-                (-98.18, 95.3),              #1
-                (-111.9, 61.4),              #2
-                (-119.51, 25.59),            #3
-                (-119.51, -25.59),           #4
-                (-111.9, -61.4),             #5
-                (-98.18, -95.2),             #6
-                (-78.79, -126.38)            #7
-                ]
-
+class HumanLevelHouseState(enum.Enum):
+    UNKNOWN = 1
+    EMPTY = 2
+    SHIPPING = 3
+    I_AM_READY = 4
+    FAILED = 5
+    CONFIRMED_READY = 6
 
 class HumanLevelGobotHouse(HumanLevelRobotBase):
 
@@ -72,32 +57,91 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         self.mq_name = mq_name.replace('nnnn', str(robot_serial_id))
         if do_home:
             self.HomeBetaAlpha()
-    
+        self.State = HumanLevelHouseState.UNKNOWN
+        self.shipping_begin_timestamp = datetime.now()
+
+    def FeedVenderVision(self, stone_color: StoneColor):
+        if self.State == HumanLevelHouseState.UNKNOWN:
+            if stone_color == StoneColor.BLANK:
+                self.State = HumanLevelHouseState.EMPTY
+                print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
+            if stone_color == stone_color.WHITE:
+                self.State = HumanLevelHouseState.CONFIRMED_READY
+                print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
+
+        elif self.State == HumanLevelHouseState.EMPTY:
+            index = 0
+            self.PickupFrom(HouseMapSite_Catalog.ROOM, index)
+            self.MoveTo(HouseMapSite_Catalog.DOOR,index)
+            self.MoveTo(HouseMapSite_Catalog.NECK)
+            self.PlaceTo(HouseMapSite_Catalog.HEAD)
+            self.State = HumanLevelHouseState.SHIPPING
+            print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
+            self.shipping_begin_timestamp = datetime.now()
+
+        elif self.State == HumanLevelHouseState.SHIPPING:
+            how_long = datetime.now() - self.shipping_begin_timestamp
+            if how_long.total_seconds() > 30:
+                self.State = HumanLevelHouseState.I_AM_READY
+                print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
+
+        elif self.State == HumanLevelHouseState.I_AM_READY:
+            if stone_color == StoneColor.BLANK:
+                self.State = HumanLevelHouseState.FAILED
+                print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
+            if stone_color == StoneColor.WHITE:
+                self.State = HumanLevelHouseState.CONFIRMED_READY
+                print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
+
+        elif self.State == HumanLevelHouseState.CONFIRMED_READY:
+            if stone_color == StoneColor.BLANK:
+                self.State = HumanLevelHouseState.EMPTY
+                print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
+            
     def HomeBetaAlpha(self):
         commands = ['G28BI', 'G28AI', 'M996']
         g_amq.PublishBatch(self.mq_name, commands)
         
-    def Pickup_Place(self, from_where:HouseMapDiction, to_where:HouseMapDiction, auto_park=False):
-        self.PickupFrom(from_where)
-        self.PlaceTo(to_where)
+    def __Pickup_Place(self, from_where:MapSite, to_where:MapSite, auto_park=False):
+        self.__PickupFrom(from_where)
+        self.__PlaceTo(to_where)
         if auto_park:
-            site = HouseMapDiction()
-            x,y = site.PARKING
-            self.MoveTo(x,y)
+            parking_at = HouseMapSites.GetSingleSite(HouseMapSite_Catalog.PARKING)
+            self.__MoveTo(parking_at)
         g_amq.Publish(self.mq_name, 'M996')
 
-    def MoveTo(self, x:float, y:float):
-        gcode = 'G1X' + str(x) + 'Y' + str(y)
+    def Pickup_Place(self, from_cat:HouseMapSite_Catalog, from_index:int, to_cat:HouseMapSite_Catalog, to_index:int=0):
+        from_site = HouseMapSites().GetSingleSite(from_cat, from_index)
+        to_site = HouseMapSites().GetSingleSite(to_cat, to_index)
+        self.__Pickup_Place(from_site, to_site)
+
+
+    def __MoveTo(self, the_site:MapSite):
+        gcode = 'G1X' + str(the_site.X) + 'Y' + str(the_site.Y)
         g_amq.Publish(self.mq_name, gcode)
+
+    def MoveTo(self, cat:HouseMapSite_Catalog, index:int=0):
+        the_site = HouseMapSites().GetSingleSite(cat, index)
+        self.__MoveTo(the_site)
 
     def DisableMotor(self):
         g_amq.Publish(self.mq_name, 'M84')
 
-    def PickupFrom(self, position_or_site):
-        pass
+    def __PickupFrom(self, the_site: MapSite):
+        self.__MoveTo(the_site)
+        self.EefAction(HumanLevelHouse_EEF_ACTIONS.LOAD)
 
-    def PlaceTo(self, position_or_site):
-        return super().PlaceTo(position_or_site)
+    def PickupFrom(self, cat:HouseMapSite_Catalog, index:int=0):
+        the_site = HouseMapSites().GetSingleSite(cat, index)
+        self.__PickupFrom(the_site)
+
+    def __PlaceTo(self, site:MapSite):
+        self.__MoveTo(site)
+    
+    def PlaceTo(self, cat:HouseMapSite_Catalog, index:int=0):
+        the_site = HouseMapSites().GetSingleSite(cat, index)
+        self.__PlaceTo(the_site)
+
 
     def EefAction(self, eef: HumanLevelHouse_EEF_ACTIONS):
         if eef==HumanLevelHouse_EEF_ACTIONS.LOAD:
@@ -163,12 +207,16 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
 
 
 if __name__ == '__main__':
-    config_rabbit = AMQ_ConnectionConfig()
-    config_rabbit.uid = 'agent'
-    config_rabbit.password = 'agent'
-    g_amq.ConnectToRabbitMq(config_rabbit)
+    config = AMQ_ConnectionConfig()
+    g_amq.ConnectToRabbitMq(config)
 
     house = HumanLevelGobotHouse(robot_serial_id=2134, do_home=False)
     house.Calibrate_home_position_alpha()
     # for i in range(10):
     #     house.Calibrate_home_position_beta()
+
+    # Test top level movemnet
+    from_site = HouseMapSites().GetSingleSite(HouseMapSite_Catalog.ROOM, 1)
+    to_site = HouseMapSites().GetSingleSite(HouseMapSite_Catalog.HEAD, 0)
+    # house.__Pickup_Place(from_site, to_site)
+    house.Pickup_Place(HouseMapSite_Catalog.ROOM,1, HouseMapSite_Catalog.HEAD)

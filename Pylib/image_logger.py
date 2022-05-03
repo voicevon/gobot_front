@@ -63,6 +63,7 @@ class ImageLogger():
                         ,'command'
                         ,'grid/aruco'
                         ,'gobot/image/board'
+                        ,'final_board_image'
                         ]
         if topic_or_title in mute_topic:
             return
@@ -70,8 +71,12 @@ class ImageLogger():
             to_where = ImageLogger.to_where
             
         if to_where == ImageLoggerToWhere.TO_SCREEN:
-            cv2.imshow(topic_or_title, cv_image)
-            cv2.waitKey(1)
+            try:
+                cv2.imshow(topic_or_title, cv_image)
+                cv2.waitKey(1)
+            except Exception as e:
+                print("[Error] ImageLogger. Output(TO_SCREEN)  ",e)
+                pass
 
         elif to_where == ImageLoggerToWhere.TO_MQTT:
             print("[Warn] ImageLogger::Output() TO_MQTT is out of service.")
