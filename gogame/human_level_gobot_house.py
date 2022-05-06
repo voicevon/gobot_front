@@ -192,29 +192,35 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         commands = ['G1B120F2800', 'G1A-1F2800', 'M996', "M84"]
         g_amq.PublishBatch(self.mq_name, commands)
 
-    def Calibrate_home_position_alpha(self):
+    def Calibrate_1_home_position_alpha(self):
         pause = 'G4S3'
         commands = ["G28AI", "G1A0",pause,'G1A-30',pause,'G1A-330','M996']
         g_amq.PublishBatch(self.mq_name, commands)
 
-    def Calibrate_home_position_beta(self):
+    def Calibrate_2_home_position_beta(self):
         pause = 'G4S3'
-        commands = ['G28AI', 'G1A0',"G28BI", "G1B20",pause,'G1A-30B120','M996']
+        commands = ['G28AI', 'G1A0',"G28BI", "G1B20", pause, 'G1A-30B120', 'M996']
         g_amq.PublishBatch(self.mq_name, payloads=commands)
 
         # prehome for next run.
         # house.PreHome()
-
+    def Calibrate_3_EEF(self):
+        pause = "G4S3"
+        load = "M123P1S3"
+        unload = "M123P1S4"
+        commands = [load, pause, unload,pause, 'M996' ]
+        g_amq.PublishBatch(self.mq_name, commands)
 
 if __name__ == '__main__':
     config = AMQ_ConnectionConfig()
     g_amq.ConnectToRabbitMq(config)
 
     house = HumanLevelGobotHouse(robot_serial_id=2134, do_home=False)
-    house.Calibrate_home_position_alpha()
-    # for i in range(10):
-    #     house.Calibrate_home_position_beta()
+    # house.Calibrate_1_home_position_alpha()
 
+    # for i in range(10):
+    #     house.Calibrate_2_home_position_beta()
+    house.ca
     # Test top level movemnet
     from_site = HouseMapSiteFactory().MakeSingleSite(HouseMapSite_Catalog.ROOM, 1)
     to_site = HouseMapSiteFactory().MakeSingleSite(HouseMapSite_Catalog.HEAD, 0)

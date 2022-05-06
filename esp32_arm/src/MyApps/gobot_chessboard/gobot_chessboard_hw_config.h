@@ -43,7 +43,7 @@ class GobotChessboardHardwareConfig{
         // link length in mm
         //  unit is mm
         GobotChessboardHardwareConfig();
-        float MOTOR_STEPS_PER_ROUND;
+        float MOTOR_STEPS_PER_SHAFT_ROUND;
         float STEPS_PER_RAD; 
         // 191.0 is the Length between the centers of two motors 
         int LINK_0;  //  = 191.0 / 2 ;

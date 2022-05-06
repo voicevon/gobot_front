@@ -70,7 +70,7 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         self.EEF_Does(do_load=ArmEEF.UNLOAD)
         self.EEF_Does(do_load=ArmEEF.SLEEP)
         if auto_park:
-            parking_at = ArmMapSites().GetSingleSite(ArmMapSite_Catalog.PARKING)
+            parking_at = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.PARKING)
             self.MoveTo(parking_at)
         g_amq.Publish(self.mq_name, 'M996')
 
@@ -101,7 +101,7 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         Home, (AntiClockwise)-180, pause, -90, pause
         '''
         pause = "G4S5"
-        commands = ['G28AI', 'G1A-6.283', pause, 'G1A-1.571', pause, 'M996']
+        commands = ['G28AI', 'G1A180', pause, 'G1A90', pause, 'G1A150','M996']
         g_amq.PublishBatch(self.mq_name, commands)
 
     def Calibrate_2_HomeBeta(self):
@@ -109,7 +109,7 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         Home, (Clockwise) 180, pause, 90, pause 
         '''
         pause = "G4S5"
-        commands = ['G28BI', 'G1B3.142', pause, 'G1B1.571', pause, 'M996']
+        commands = ['G28BI', 'G1B0', pause, 'G1B90', pause, 'M996']
         g_amq.PublishBatch(self.mq_name, commands)
         
     def Calibrate_3_A1_T19(self):
@@ -117,12 +117,13 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         pause = "G4S5"
         self.HomeAaphaBeta()
 
+
         cell_a1 = ChessboardCell()
         cell_a1.from_name("A1")
-        a1_site = ArmMapSites().GetSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell_a1)
+        a1_site = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell_a1)
         cell_t19 =  ChessboardCell()
         cell_t19.from_name("T19")
-        t19_site = ArmMapSites().GetSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell_t19)
+        t19_site = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell_t19)
         
         for i in range(5):
             commands = [ 'G1X' + str(a1_site.X) + "Y" + str(a1_site.Y)
@@ -132,16 +133,32 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
                         ]  
             g_amq.PublishBatch(self.mq_name, commands)
 
+    def Calibrate_98_Locak_Alpha(self):
+        g_amq.Publish(self.mq_name, "G28AI")
+
+    def Calibrate_99_Motor_gear_ratio(self):
+        pause = "G4S1"
+        g_amq.Publish(self.mq_name, "G28BI")
+        g_amq.Publish(self.mq_name, "G4S10")
+
+        for i in range(20):
+            a = 360 * i
+            g_amq.Publish(self.mq_name, "G1B" + str(a))
+            g_amq.Publish(self.mq_name, pause)
+
 if __name__ == '__main__':
     config = AMQ_ConnectionConfig()
     g_amq.ConnectToRabbitMq(config)
 
     arm = HumanLevelGobotArm(robot_serial_id=2134, do_home=False)
+    # arm.Calibrate_99_Motor_gear_ratio()
+    # arm.Calibrate_98_Locak_Alpha()
 
-    arm.Calibrate_1_HomeAlpha()
-    arm.Calibrate_2_HomeBeta()
+    # arm.Calibrate_1_HomeAlpha()
+    # arm.Calibrate_2_HomeBeta()
+    arm.Calibrate_3_A1_T19()
 
-    if True:
+    if False:
         # Test Map
         from_where = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.HOUSE_VENDOR)
         to_cell = ChessboardCell()

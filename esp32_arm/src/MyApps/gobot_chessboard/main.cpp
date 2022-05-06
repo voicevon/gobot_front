@@ -15,6 +15,35 @@ GcodeQueue* gcode_queue;
 // RobotAction action;
 MessageQueue* mqtt_message_queue;
 
+
+#define PIN_SENSOR_ROOM_0 11
+#define PIN_SENSOR_ROOM_1 11
+#define PIN_SENSOR_ROOM_2 11
+#define PIN_SENSOR_ROOM_3 11
+#define PIN_SENSOR_ROOM_4 11
+#define PIN_SENSOR_ROOM_5 11
+#define PIN_SENSOR_ROOM_6 11
+#define PIN_SENSOR_ROOM_7 11
+
+uint8_t PIN_ROOMS[] = {PIN_SENSOR_ROOM_0,
+                        PIN_SENSOR_ROOM_1,
+                        PIN_SENSOR_ROOM_2,
+                        PIN_SENSOR_ROOM_3,
+                        PIN_SENSOR_ROOM_4,
+                        PIN_SENSOR_ROOM_5,
+                        PIN_SENSOR_ROOM_6,
+                        PIN_SENSOR_ROOM_7
+                        };
+char ReadRoomsSensor(){
+    char result = 0;
+    uint8_t p;
+    for (int i; i<8; i++){
+        p = digitalRead(PIN_ROOMS[i]);
+        result += (p<<i);
+    }
+    return result;
+}
+
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
@@ -45,9 +74,16 @@ void setup(){
     Serial.print("\nGobot-Chessboard setup is done..........");
 }
 
+char last_rooms_sensor;
 void loop(){
     robot->SpinOnce();
     robot_hardware->SpinOnce();
     loop_mqtt();
+
+    char rooms_sensor = ReadRoomsSensor();
+    if (last_rooms_sensor != rooms_sensor){
+        mqttClient.publish("gobot/x2134/rooms",2,true, &rooms_sensor);
+        last_rooms_sensor = rooms_sensor;
+    }
 }
 #endif

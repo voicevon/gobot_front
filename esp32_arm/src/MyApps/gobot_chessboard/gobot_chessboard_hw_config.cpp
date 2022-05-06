@@ -15,8 +15,8 @@ void GobotChessboardHardwareConfig::Init(){
     this->MOTOR_STEP_ANGLE = 1.8;
     // this->GEAR_BOX_RATIO = 90.0f / 20.0f;   // Big gear = 90 teeth, small gear = 20 teeth
     this->GEAR_BOX_RATIO = 27.0f / 1.0f;   // Big gear = 90 teeth, small gear = 20 teeth
-    this->MOTOR_STEPS_PER_ROUND = 360.0 / this->MOTOR_STEP_ANGLE * this->STEPPER_DRIVER_MICRO_STEPS;
-    this->STEPS_PER_RAD = this->MOTOR_STEPS_PER_ROUND * this->GEAR_BOX_RATIO / TWO_PI;
+    this->MOTOR_STEPS_PER_SHAFT_ROUND = 360.0 / this->MOTOR_STEP_ANGLE * this->STEPPER_DRIVER_MICRO_STEPS;
+    this->STEPS_PER_RAD = this->MOTOR_STEPS_PER_SHAFT_ROUND * this->GEAR_BOX_RATIO / TWO_PI;
 
 
     // this->MOTOR_MAX_SPEED = 8000;   //steps per second.
@@ -25,7 +25,7 @@ void GobotChessboardHardwareConfig::Init(){
 
     this->Homing_acceleration_alpha_beta = 2000;
     this->Homing_speed_alpha_beta = 1000;
-    this->Homed_position_alpha_in_degree = 180 + 4;
+    this->Homed_position_alpha_in_degree = 180 +2;
     this->Homed_position_beta_in_degree = 2;
 
 
