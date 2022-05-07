@@ -263,19 +263,26 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 		// Bug now, the unit in G1A,G1B is RAD
 		target_ik_ab.alpha = this->__config.MOTOR_STEPS_PER_SHAFT_ROUND * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
-	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha );
-	this->objStepper_beta.setTargetAbs(target_ik_ab.beta);
+	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha * this->__config.STEPS_PER_RAD );
+	this->objStepper_beta.setTargetAbs(target_ik_ab.beta * this->__config.STEPS_PER_RAD );
 	//None blocking, move backgroundly.
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 
 	if (true){
+		FkPosition_XY verified_fk;
+		FK(&target_ik_ab, &verified_fk);
+		Serial.print("-----------------------------------------------");
+		Serial.print("\n Please Verify FK angin to confirm IK() is correct.");
+		Serial.print(" FK.X= ");
+		Serial.print(verified_fk.X);
+		Serial.print(" FK.Y= ");
+		Serial.print(verified_fk.Y);
+
 		Serial.print("\n[Debug] GobotChessboardHardware::RunG1() ");
 		Serial.print(this->objStepper_alpha.getPosition());
 		Serial.print(",");
 		Serial.print(this->objStepper_beta.getPosition());
 		Serial.print(" <-- from   alpha,beta   to --> ");
-		Serial.print(target_ik_ab.alpha);
-		Serial.print(">>");
 		Serial.print(target_ik_ab.alpha);
 		Serial.print(" , ");
 		Serial.println(target_ik_ab.beta);

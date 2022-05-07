@@ -48,7 +48,6 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         commands = ['G28AI','G28BI', 'M996']
         g_amq.PublishBatch(self.mq_name, commands)
 
-
     def action_pickup_stone_from_cell(self, cell:ChessboardCell):
         pass
 
@@ -101,23 +100,21 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         Home, (AntiClockwise)-180, pause, -90, pause
         '''
         pause = "G4S5"
-        commands = ['G28AI', 'G1A180', pause, 'G1A90', pause, 'G1A150','M996']
+        commands = ['G28Bi','G28AI', 'G1A180', pause, 'G1A90', pause, 'G1A150','M996']
         g_amq.PublishBatch(self.mq_name, commands)
 
     def Calibrate_2_HomeBeta(self):
         '''
         Home, (Clockwise) 180, pause, 90, pause 
         '''
-        pause = "G4S5"
-        commands = ['G28BI', 'G1B0', pause, 'G1B90', pause, 'M996']
+        pause = "G4S1"
+        commands = ['G28AI','G1A180','G28BI', 'G1B0', pause, 'G1B90', pause, 'G1B30', 'M996']
         g_amq.PublishBatch(self.mq_name, commands)
         
     def Calibrate_3_A1_T19(self):
         'Home, Move to A1, pause, Move to T19, pause'
         pause = "G4S5"
         self.HomeAaphaBeta()
-
-
         cell_a1 = ChessboardCell()
         cell_a1.from_name("A1")
         a1_site = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell_a1)
@@ -125,16 +122,21 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         cell_t19.from_name("T19")
         t19_site = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell_t19)
         
-        for i in range(5):
+        for i in range(1):
             commands = [ 'G1X' + str(a1_site.X) + "Y" + str(a1_site.Y)
                         ,pause
                         ,'G1X' + str(t19_site.X) + "Y" + str(t19_site.Y)
                         ,pause
                         ]  
+            print(commands)
             g_amq.PublishBatch(self.mq_name, commands)
+        g_amq.Publish(self.mq_name, 'M996')
 
-    def Calibrate_98_Locak_Alpha(self):
+    def Calibrate_98_Lock_Alpha(self):
         g_amq.Publish(self.mq_name, "G28AI")
+
+    def Calibrate_98_Lock_Beta(self):
+        g_amq.Publish(self.mq_name, "G28BI")
 
     def Calibrate_99_Motor_gear_ratio(self):
         pause = "G4S1"
@@ -152,7 +154,9 @@ if __name__ == '__main__':
 
     arm = HumanLevelGobotArm(robot_serial_id=2134, do_home=False)
     # arm.Calibrate_99_Motor_gear_ratio()
-    # arm.Calibrate_98_Locak_Alpha()
+    # arm.Calibrate_98_Lock_Alpha()
+    # arm.Calibrate_98_Lock_Beta()
+
 
     # arm.Calibrate_1_HomeAlpha()
     # arm.Calibrate_2_HomeBeta()

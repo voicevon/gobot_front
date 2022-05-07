@@ -25,8 +25,8 @@ void GobotChessboardHardwareConfig::Init(){
 
     this->Homing_acceleration_alpha_beta = 2000;
     this->Homing_speed_alpha_beta = 1000;
-    this->Homed_position_alpha_in_degree = 180 +2;
-    this->Homed_position_beta_in_degree = 2;
+    this->Homed_position_alpha_in_degree = 180 - 1;
+    this->Homed_position_beta_in_degree = 0.5;
 
 
 }

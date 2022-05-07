@@ -34,10 +34,11 @@ uint8_t PIN_ROOMS[] = {PIN_SENSOR_ROOM_0,
                         PIN_SENSOR_ROOM_6,
                         PIN_SENSOR_ROOM_7
                         };
+
 char ReadRoomsSensor(){
     char result = 0;
     uint8_t p;
-    for (int i; i<8; i++){
+    for (int i=0; i<8; i++){
         p = digitalRead(PIN_ROOMS[i]);
         result += (p<<i);
     }
@@ -79,10 +80,13 @@ void loop(){
     robot->SpinOnce();
     robot_hardware->SpinOnce();
     loop_mqtt();
+    return;
 
     char rooms_sensor = ReadRoomsSensor();
     if (last_rooms_sensor != rooms_sensor){
-        mqttClient.publish("gobot/x2134/rooms",2,true, &rooms_sensor);
+        String topic = "gobot/xROBOT_SERIAL_ID/rooms";
+        topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
+        mqttClient.publish(topic.c_str(),2,true, &rooms_sensor);
         last_rooms_sensor = rooms_sensor;
     }
 }
