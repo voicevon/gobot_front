@@ -111,27 +111,71 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         commands = ['G28AI','G1A180','G28BI', 'G1B0', pause, 'G1B90', pause, 'G1B30', 'M996']
         g_amq.PublishBatch(self.mq_name, commands)
         
-    def Calibrate_3_A1_T19(self):
-        'Home, Move to A1, pause, Move to T19, pause'
-        pause = "G4S5"
+    def Calibrate_3_HomeAlphaBeta(self):
+        pause = "G4S3"
+        commands = ['G28AI','G1A180','G28BI', 'G1B0', pause, 'G1A180B90', pause, 'G1A90B0',pause, 'G1A150B30', 'M996']
+        g_amq.PublishBatch(self.mq_name, commands) 
+
+
+    def Calibrate_4_ARM_LINE(self):
+        pause = "G4S10"
+        commands = ['G28AI','G1A180','G28BI', 'G1B0', pause, 'G1A150B30', 'M996']
+        g_amq.PublishBatch(self.mq_name, commands) 
+
+    def Calibrate_12_ZigZag_X(self):
+        # 'Home, Move to A1, pause, Move to T19, pause'
+        pause = "G4S2"
         self.HomeAaphaBeta()
-        cell_a1 = ChessboardCell()
-        cell_a1.from_name("A1")
-        a1_site = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell_a1)
-        cell_t19 =  ChessboardCell()
-        cell_t19.from_name("T19")
-        t19_site = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell_t19)
-        
+        cell_names=['A1', 'K1', 'T1', 'A10','K10','T10','A19','K19','T19','K1']
         for i in range(1):
-            commands = [ 'G1X' + str(a1_site.X) + "Y" + str(a1_site.Y)
+            for cell_name in cell_names:
+                cell = ChessboardCell()
+                cell.from_name(cell_name)
+                cell_site = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell)
+                commands = [ 'G1X' + str(cell_site.X) + "Y" + str(cell_site.Y)
                         ,pause
-                        ,'G1X' + str(t19_site.X) + "Y" + str(t19_site.Y)
-                        ,pause
-                        ]  
-            print(commands)
-            g_amq.PublishBatch(self.mq_name, commands)
+                        ]
+                print(commands)
+                g_amq.PublishBatch(self.mq_name, commands)
         g_amq.Publish(self.mq_name, 'M996')
 
+    def Calibrate_19_A1_only(self):
+        # 'Home, Move to A1, pause, Move to T19, pause'
+        pause = "G4S2"
+        self.HomeAaphaBeta()
+        cell_names=['A1']
+        for i in range(1):
+            for cell_name in cell_names:
+                cell = ChessboardCell()
+                cell.from_name(cell_name)
+                cell_site = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell)
+                commands = [ 'G1X' + str(cell_site.X) + "Y" + str(cell_site.Y)
+                        ,pause
+                        ]
+                print(commands)
+                g_amq.PublishBatch(self.mq_name, commands)
+        g_amq.Publish(self.mq_name, 'M996')
+
+    def Calibrate_11_ZigZag_Y(self):
+        'Home, Move to A1, pause, Move to T19, pause'
+        pause = "G4S2"
+        self.HomeAaphaBeta()
+        vender = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.HOUSE_VENDOR)
+        commands = [ 'G1X' + str(vender.X) + "Y" + str(vender.Y) , pause]
+        g_amq.PublishBatch(self.mq_name, commands)
+        cell_names=['A1', 'A10', 'A19', 'K19','K10','K1','T1','T10','T19','K1']
+        for i in range(1):
+            for cell_name in cell_names:
+                cell = ChessboardCell()
+                cell.from_name(cell_name)
+                cell_site = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell)
+                commands = [ 'G1X' + str(cell_site.X) + "Y" + str(cell_site.Y) + "F6000"
+                        ,pause
+                        ]
+                print(commands)
+                g_amq.PublishBatch(self.mq_name, commands)
+        g_amq.Publish(self.mq_name, 'M996')
+    
     def Calibrate_98_Lock_Alpha(self):
         g_amq.Publish(self.mq_name, "G28AI")
 
@@ -160,7 +204,11 @@ if __name__ == '__main__':
 
     # arm.Calibrate_1_HomeAlpha()
     # arm.Calibrate_2_HomeBeta()
-    arm.Calibrate_3_A1_T19()
+    # arm.Calibrate_3_HomeAlphaBeta()
+    # arm.Calibrate_4_ARM_LINE()
+    arm.Calibrate_11_ZigZag_Y()
+    # arm.Calibrate_12_ZigZag_X()
+    # arm.Calibrate_19_A1_only()
 
     if False:
         # Test Map

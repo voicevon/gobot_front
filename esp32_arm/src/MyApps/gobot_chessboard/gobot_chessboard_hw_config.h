@@ -46,11 +46,11 @@ class GobotChessboardHardwareConfig{
         float MOTOR_STEPS_PER_SHAFT_ROUND;
         float STEPS_PER_RAD; 
         // 191.0 is the Length between the centers of two motors 
-        int LINK_0;  //  = 191.0 / 2 ;
+        float LINK_0;  //  = 191.0 / 2 ;
         // Length from motor to passive joints   
-        int LINK_A; // = 285.18;  
+        float LINK_A; // = 285.18;  
         // Length from passive joints to end effector 
-        int LINK_B; // 384.51;  
+        float LINK_B; // 384.51;  
 
         // int MOTOR_MAX_SPEED;
         int MAX_STEPS_PER_SECOND_ALPHA_BETA;

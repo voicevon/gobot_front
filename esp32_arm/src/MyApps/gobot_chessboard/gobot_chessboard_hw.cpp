@@ -94,22 +94,54 @@ void GobotChessboardHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik)
 	// alpha , beta are in unit of RAD.
 	float r1 = sqrtf(rr1);
 	float alpha_eef = acosf((fk->X + this->__config.LINK_0) / r1);
-	bool output_debug = false;
-	if (output_debug){
-		Serial.println(this->__config.LINK_0);
-		Serial.println(this->__config.LINK_A);
-		Serial.println(this->__config.LINK_B);
-		Serial.println(r1);
-		Serial.println((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B) / ( this->__config.LINK_A * r1 * 2));
-	}
+
 	float alpha_link = acosf((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B) / ( this->__config.LINK_A * r1 * 2));
 	ik->alpha = alpha_eef + alpha_link;
+
+	bool output_debug = false;
+	if (output_debug){
+		Serial.print("\nLink0= ");
+		Serial.print(this->__config.LINK_0);
+		Serial.print(" LinkA= ");
+		Serial.print(this->__config.LINK_A);
+		Serial.print(" LinkB= ");
+		Serial.print(this->__config.LINK_B);
+		Serial.print(" r1= ");
+		Serial.print(r1);
+		Serial.print(" cos (EEF triangle) = ");
+		Serial.print((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B) / ( this->__config.LINK_A * r1 * 2));
+		Serial.print(" angle EEF in degree = ");
+		Serial.print(alpha_eef * RAD_TO_DEG);
+		Serial.print(" angle link in degree = ");
+		Serial.print(alpha_link * RAD_TO_DEG);
+		Serial.print(" alpha motor angle in degree = ");
+		Serial.print(ik->alpha * RAD_TO_DEG);
+	}
 
 	float rr2 = (fk->X - this->__config.LINK_0)* (fk->X - this->__config.LINK_0) + fk->Y * fk->Y;
 	float r2 = sqrtf(rr2);
 	float beta_eef = acosf((fk->X - this->__config.LINK_0) / r2 );
 	float beta_link = acosf((this->__config.LINK_A * this->__config.LINK_A + rr2 - this->__config.LINK_B *this->__config. LINK_B) / (this->__config.LINK_A * r2 * 2));
 	ik->beta = beta_eef - beta_link;
+
+	if (output_debug){
+		Serial.print("\nLink0= ");
+		Serial.print(this->__config.LINK_0);
+		Serial.print(" LinkA= ");
+		Serial.print(this->__config.LINK_A);
+		Serial.print(" LinkB= ");
+		Serial.print(this->__config.LINK_B);
+		Serial.print(" r2= ");
+		Serial.print(r2);
+		Serial.print(" cos (EEF triangle) = ");
+		Serial.print((this->__config.LINK_A * this->__config.LINK_A + rr2 - this->__config.LINK_B * this->__config.LINK_B) / ( this->__config.LINK_A * r2 * 2));
+		Serial.print(" angle EEF in degree = ");
+		Serial.print(beta_eef * RAD_TO_DEG);
+		Serial.print(" angle link in degree = ");
+		Serial.print(beta_link * RAD_TO_DEG);
+		Serial.print(" beta motor angle in degree = ");
+		Serial.print(ik->beta * RAD_TO_DEG);
+	}
 
   	Serial.print("\n[Debug] GobotHouseHardware::IK() from (X,Y)=(");
 	Serial.print(fk->X);
@@ -188,7 +220,7 @@ void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk)
 	fk->X = center_x + lenth_from_center_to_eef * cosf(rotated_angle);
 	fk->Y = center_y + lenth_from_center_to_eef * sinf(rotated_angle);
 
-	Serial.print("\n\n[Debug] GobotHouseHardware::FK()  in degree from (alpha,beta) =(");
+	Serial.print("\n\n[Debug] GobotChessboard_Hardware::FK()  in degree from (alpha,beta) =(");
 	Serial.print(ik->alpha * RAD_TO_DEG);
 	Serial.print(" , ");
 	Serial.print(ik->beta * RAD_TO_DEG);
@@ -237,16 +269,21 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 	IkPosition_AB target_ik_ab;
 	target_fk_xy.X = this->__current_fk_position.X;
 	target_fk_xy.Y = this->__current_fk_position.Y;
-	target_ik_ab.alpha = this->objStepper_alpha.getPosition();
-	target_ik_ab.beta = this->objStepper_beta.getPosition();
+
+	// Sometimes, the current position of stepper is NOT the last target position. Since it's moving.
+	// But, The initialized values will effect nothing. They will be over writen. 
+	target_ik_ab.alpha = this->objStepper_alpha.getPosition() / this->__config.STEPS_PER_RAD;
+	target_ik_ab.beta = this->objStepper_beta.getPosition() / this->__config.STEPS_PER_RAD;
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
 		this->__EnableMotor('A', true); 
-		target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
+		// target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
+		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;
 	}
 	if (gcode->has_letter('B')){
 		this->__EnableMotor('B', true);
-		target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
+		// target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
+		target_ik_ab.beta = gcode->get_value('B') *  DEG_TO_RAD;
 	}
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {

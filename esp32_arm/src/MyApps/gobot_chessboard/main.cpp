@@ -34,7 +34,11 @@ uint8_t PIN_ROOMS[] = {PIN_SENSOR_ROOM_0,
                         PIN_SENSOR_ROOM_6,
                         PIN_SENSOR_ROOM_7
                         };
-
+void Setup_RoomsSensor(){
+    for(int i=0;i<8;i++){
+        pinMode(PIN_ROOMS[i],INPUT_PULLUP);
+    }
+}
 char ReadRoomsSensor(){
     char result = 0;
     uint8_t p;
@@ -48,17 +52,15 @@ char ReadRoomsSensor(){
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
+    // Setup_RoomsSensor();
     // Always init hardware first
     robot = &GobotChessboard::getInstance();
     robot_hardware = new GobotChessboardHardware();
     robot_hardware->InitRobot();
 
-    // ble.Init();
-    // Serial.println("BLE is ok....");   
     gcode_queue = new GcodeQueue();
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
     robot_hardware->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
-
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
@@ -68,10 +70,6 @@ void setup(){
     append_mqtt_bridge(mqtt_topic.c_str(), mqtt_message_queue, robot); 
     setup_mqtt_on_message_receive(); 
 
-
-    // mybot->Calibrate(1);
-    // mybot->ParkArms(true);
-    // Begin_WifiRabbitMqtt();
     Serial.print("\nGobot-Chessboard setup is done..........");
 }
 
@@ -81,7 +79,6 @@ void loop(){
     robot_hardware->SpinOnce();
     loop_mqtt();
     return;
-
     char rooms_sensor = ReadRoomsSensor();
     if (last_rooms_sensor != rooms_sensor){
         String topic = "gobot/xROBOT_SERIAL_ID/rooms";

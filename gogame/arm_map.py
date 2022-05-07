@@ -13,12 +13,12 @@ class ArmMapSite_Catalog(enum.Enum):
 
 class ArmMapSiteFactory():
     def __init__(self) -> None:
-        self.house_vendor = MapSite('house_vendor', 0, 25)
+        self.house_vendor = MapSite('house_vendor', 0, 80)
         self.trash_bin_white = MapSite('trash_bin_white', -230, 0)
         self.trash_bin_black = MapSite('trash_bin_black', 230, 0)
-        self.parking = MapSite('Parking', 0, 25)
-        self.CELL_A1 = MapSite("CELL_A1", -215, 155 + 23 * 18)
-        self.CELL_T19 = MapSite("CELL_T19", 215 , 155)
+        self.parking = MapSite('Parking', 0, 80)
+        # self.CELL_A1 = MapSite("CELL_A1", -28 * 9, 155 + 23.8 * 18)
+        # self.CELL_T19 = MapSite("CELL_T19", 28 * 9 , 155)
 
     def MakeSingleSite(self, cat:ArmMapSite_Catalog, cell:ChessboardCell=None) -> MapSite:
         '''
@@ -47,10 +47,10 @@ class ArmMapSiteFactory():
         # print(cell.name)
         # iCol = ss.find(cell_name[:1])
         # iRow = 19 - int(cell_name[1:])
-        zero_in_world_x = -215
+        zero_in_world_x = - 404.0 / 18 * 9
         zero_in_world_y = 155
-        cell_width_x = 22
-        cell_width_y = 23
+        cell_width_x = 404.0 / 18
+        cell_width_y = 430.0 / 18
         x = zero_in_world_x +  cell_width_x * cell.col_id
         y = zero_in_world_y +  cell_width_y * cell.row_id
         return x, y
