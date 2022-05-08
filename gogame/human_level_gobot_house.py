@@ -19,9 +19,9 @@
 #                <----------------------------- FAILED
 #               |                                 ^
 #               |                                 |
-#  UNKNOWN--> BLANK  --> SHIPPING --> I_AM_READY  --> CONFIRMED_READY
-#               ^                                          ^  
-#               |                                          |
+#  UNKNOWN  --> BLANK  --> SHIPPING --> I_AM_READY  --> CONFIRMED_READY
+#    |          ^                                          ^  
+#  TOSHIPPING   |                                          |
 #
 
 import sys
@@ -33,6 +33,7 @@ from datetime import datetime
 from gogame.house_map import HouseMapSite_Catalog, HouseMapSiteFactory, MapSite
 
 import enum
+from shutil import ExecError
 
 
 class HumanLevelHouse_EEF_ACTIONS(enum.Enum):
@@ -58,10 +59,36 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         if do_home:
             self.HomeBetaAlpha()
         self.State = HumanLevelHouseState.UNKNOWN
+        self.ready_room_index = 0
         self.shipping_begin_timestamp = datetime.now()
+        self.SubsribeRabbitMQ()
 
-    def FeedVenderVision(self, stone_color: StoneColor):
+    def callback_main(self, ch, method, properties, body):
+        print("[Info] HumanlevelGobotHouse  call_back_main()] method.routing_key= ", method.delivery_tag)
+        print("[Info] HumanlevelGobotHouse  call_back_main() body=", body)
+        self.ready_room_index = 0
+        for i in range(8):
+            if i % 2 == 1:
+                return
+            else:
+                self.ready_room_index += 1
+
+    def SubsribeRabbitMQ(self):
+        mq_rooms = self.mq_name + "_rooms"
+        mq_key = mq_rooms.replace("_",".")
+        print("AMQ   binding_key= ", mq_key)
+        self.amq_channel = g_amq.blocking_connection.channel()
+        self.amq_channel.queue_declare(queue=mq_rooms)
+        self.amq_channel.queue_bind(exchange='amq.topic', queue=mq_rooms,routing_key=mq_key)
+        self.amq_channel.basic_qos(prefetch_count=1)
+        self.amq_channel.basic_consume(queue=mq_rooms, on_message_callback=self.callback_main, auto_ack=True)
+
+    def SpinOnce_FeedVenderVision(self, stone_color: StoneColor):
+        # Read rooms status from g_amq
+        self.amq_channel.connection.process_data_events(time_limit=0.001)  # will blocking 0.1 second
+
         if self.State == HumanLevelHouseState.UNKNOWN:
+            self.State = HumanLevelHouseState.SHIPPING
             if stone_color == StoneColor.BLANK:
                 self.State = HumanLevelHouseState.EMPTY
                 print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
@@ -70,7 +97,8 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
                 print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
 
         elif self.State == HumanLevelHouseState.EMPTY:
-            index = 0
+            index = self.ready_room_index
+            print("Pickup and place. room index= ", self.ready_room_index)
             self.PickupFrom(HouseMapSite_Catalog.ROOM, index)
             self.MoveTo(HouseMapSite_Catalog.DOOR,index)
             self.MoveTo(HouseMapSite_Catalog.NECK)
@@ -97,6 +125,12 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
             if stone_color == StoneColor.BLANK:
                 self.State = HumanLevelHouseState.EMPTY
                 print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
+        elif self.State == HumanLevelHouseState.FAILED:
+                self.State = HumanLevelHouseState.EMPTY
+                print('[Info] HumanLevelGobotHouse  FeedVenderVision() to ', self.State)
+
+        else:
+            print('[Warn] HumanLevelGobotHouse  FeedVenderVision() at ', self.State)
             
     def HomeBetaAlpha(self):
         commands = ['G28BI', 'G28AI', 'M996']
@@ -211,16 +245,27 @@ class HumanLevelGobotHouse(HumanLevelRobotBase):
         commands = [load, pause, unload,pause, 'M996' ]
         g_amq.PublishBatch(self.mq_name, commands)
 
+
+import time
 if __name__ == '__main__':
     config = AMQ_ConnectionConfig()
     g_amq.ConnectToRabbitMq(config)
 
     house = HumanLevelGobotHouse(robot_serial_id=2134, do_home=False)
+    seconds = 0
+    while True:
+        house.SpinOnce_FeedVenderVision(StoneColor.BLANK)
+        time.sleep(1)
+        print(seconds, end='  ', flush=True)
+        seconds += 1
+
     # house.Calibrate_1_home_position_alpha()
 
     # for i in range(10):
     #     house.Calibrate_2_home_position_beta()
-    house.ca
+    house.Calibrate_3_EEF()
+
+
     # Test top level movemnet
     from_site = HouseMapSiteFactory().MakeSingleSite(HouseMapSite_Catalog.ROOM, 1)
     to_site = HouseMapSiteFactory().MakeSingleSite(HouseMapSite_Catalog.HEAD, 0)

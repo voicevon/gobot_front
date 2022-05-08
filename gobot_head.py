@@ -1,30 +1,25 @@
 
-# from vision.robot_eye_pi_camera import MonoEyePiCamera
-# from vision.robot_eye_usb_camera import MonoEyeUsbCamera
-# from vision.robot_eye_emulator import MonoEyeEmulator
-
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
+from vision.robot_eye_base import MonoEyeBase
+
+from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
+from Pylib.image_logger import ImageLogger,ImageLoggerToWhere
+from Pylib.message_logger import MessageLoggerToWhere,MessageLogger
+from von.terminal_font import TerminalFont  # pip3 install VonPylib
+from config.config import Config
+
+
+import logging
+import time
+from gobot_ai_client import GoGameAiClient
 
 from gobot_vision.gobot_vision import GobotVision
 from gogame.chessboard_cell import ChessboardCell, StoneColor
 from gogame.chessboard import ChessboardLayout
 from gogame.died_area_scanner import DiedAreaScanner
-# from controller import Controller
-from gobot_ai_client import GoGameAiClient
-from config.config import Config
-
-from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
-from Pylib.image_logger import ImageLogger,ImageLoggerToWhere
-from Pylib.message_logger import MessageLoggerToWhere,MessageLogger
-
-
-import logging
-import time
-
-from von.terminal_font import TerminalFont  # pip3 install VonPylib
+from gogame.arm_map import ArmMapSite_Catalog, ArmMapSiteFactory
 from gogame.human_level_gobot_arm import HumanLevelGobotArm
 from gogame.human_level_gobot_house import HumanLevelGobotHouse
-from vision.robot_eye_base import MonoEyeBase
 
 
 def Init_Global():
@@ -45,13 +40,13 @@ def MakeEye(eye_type:RobotEye_Product) -> MonoEyeBase:
     eye = RobotEye_Factory.CreateMonoEye(eye_type)
     
     if eye_type == RobotEye_Product.PaspberryPiCamera:
-        ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
+        ImageLogger.to_where = ImageLoggerToWhere.TO_AMQ
         ImageLogger.connect_to_mqtt_broker()
-        MessageLogger.to_where = MessageLoggerToWhere.TO_MQTT
+        MessageLogger.to_where = MessageLoggerToWhere.TO_AMQ
 
     elif eye_type == RobotEye_Product.CameraEmulator:
-        ImageLogger.to_where = ImageLoggerToWhere.TO_MQTT
-        MessageLogger.to_where = MessageLoggerToWhere.TO_SCREEN
+        ImageLogger.to_where = ImageLoggerToWhere.TO_AMQ
+        MessageLogger.to_where = MessageLoggerToWhere.TO_AMQ
 
     elif eye_type == RobotEye_Product.UsbCamera:
         ImageLogger.to_where = ImageLoggerToWhere.TO_SCREEN
@@ -60,7 +55,8 @@ def MakeEye(eye_type:RobotEye_Product) -> MonoEyeBase:
 
 Init_Global()
 robot_serial_id = 2134
-g_eye = MakeEye(eye_type=RobotEye_Product.UsbCamera)
+# g_eye = MakeEye(eye_type=RobotEye_Product.UsbCamera)
+g_eye = MakeEye(eye_type=RobotEye_Product.CameraEmulator)
 g_arm = HumanLevelGobotArm(robot_serial_id=robot_serial_id, do_home=True)
 g_house = HumanLevelGobotHouse(robot_serial_id=robot_serial_id, do_home=True)
 g_vision = GobotVision()
@@ -410,11 +406,10 @@ class GobotHead():
             # robot arm play a chess, The instruction is from AI.
             # self.__controller.action_pickup_stone_from_warehouse()
             # self.__controller.action_place_stone_to_cell(cell_name=cell_name)
-            from_where = ArmMap.VENDER
+            from_where = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.HOUSE_VENDOR)
             cell = ChessboardCell()
             cell.from_name(cell_name)
-            to_where = ArmMap.CELLS(cell)
-
+            to_where = ArmMapSiteFactory().MakeSingleSite(ArmMapSite_Catalog.CHESSBOARD_CELL, cell)
             g_arm.Pickup_Place(from_where, to_where=to_where)
             g_ai.layout.play(cell_name, StoneColor.WHITE)
             g_ai.layout.print_out()
