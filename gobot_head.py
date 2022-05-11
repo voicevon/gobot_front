@@ -540,7 +540,7 @@ class GobotHead():
         if not is_ok:
             return
         stone = g_vision.GetHouseVenderStone()
-        g_house.FeedVenderVision(stone)
+        g_house.SpinOnce_FeedVenderVision(stone)
 
         last_function = self.__goto
         # print(self.__goto)
@@ -551,19 +551,9 @@ class GobotHead():
             print(self.__FC_RESET)
 
     def test_user_playing(self):
-        self.__ai.send("move c4 B")
+        global g_ai
+        g_ai.feed_user_move("Q4")
 
-    def test(self):
-        self.__controller.home_single_arm(4)
-        for i in range(1,20,1):
-            self.__controller.spin_once()
-            # time.sleep(1)
-        #time.sleep(20)
-        return
-        self.__controller.action_pickup_stone_from_warehouse()
-        self.__controller.action_place_stone_to_cell('Q4')
-        self.__controller.action_place_stone_to_trash_bin()
-        self.__controller.action_park()
 
 if __name__ == '__main__':
 
