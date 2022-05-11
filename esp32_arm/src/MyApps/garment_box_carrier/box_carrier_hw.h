@@ -9,7 +9,7 @@
 
 
 #define VERTICAL_ENDSTOP 15
-#define ANGLE_ENDSTOP 2
+#define Y_ENDSTOP 2
 
 #define PIN_STEP_ALPHA 5
 #define PIN_DIR_ALPHA 19
@@ -49,11 +49,11 @@ class BoxCarrierHardware:public RobotBase{
         std::string GetHomeTrigerStateString() override {return " ";};
         void __EnableMotor(char actuator, bool enable_it) override;
 
-        FkPosition_ZW __current_fk_position;
+        FkPosition_YZ __current_fk_position;
 
         HomeHelper* __homing_helper;
         HomeHelper objHomeHelper_vertical = HomeHelper(VERTICAL_ENDSTOP, LOW);
-        HomeHelper objHomeHelper_angle = HomeHelper(ANGLE_ENDSTOP, LOW);        
+        HomeHelper objHomeHelper_y = HomeHelper(Y_ENDSTOP, LOW);        
         BoxCarrierHardwareConfig  __config;
 
 };

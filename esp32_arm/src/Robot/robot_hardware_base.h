@@ -59,6 +59,12 @@ class FkPosition_ZW: public FkPositionBase{
         float W;
 };
 
+class FkPosition_YZ: public FkPositionBase{
+    public:
+        float Y;
+        float Z;
+};
+
 class FkPosition_A: public FkPositionBase{
     public:
         float A;

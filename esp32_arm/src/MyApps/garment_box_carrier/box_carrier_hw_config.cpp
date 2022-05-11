@@ -14,7 +14,7 @@ void BoxCarrierHardwareConfig::Init(){
         this->Homing_acceleration_alpha_beta = 500;
 
         this->steps_per_mm_for_z = 200;
-        this->steps_per_rad_for_w = 33;
+        this->steps_per_mm_for_y = 33;
 }
 
 void BoxCarrierHardwareConfig::PrintOut(){
@@ -27,12 +27,12 @@ void BoxCarrierHardwareConfig::PrintOut(){
 
     Serial.print("\n    steps_per_mm_for_z = ");
     Serial.print(this->steps_per_mm_for_z);
-    Serial.print("\n    steps_per_rad_for_w = ");
-    Serial.print(this->steps_per_rad_for_w);
-    Serial.print("\n     Home_position (z,w) = (");
+    Serial.print("\n    steps_per_rad_for_y = ");
+    Serial.print(this->steps_per_mm_for_y);
+    Serial.print("\n     Home_position (z,y) = (");
     Serial.print(this->Homed_position_z);
     Serial.print(" , ");
-    Serial.print(this->Homed_position_w);
+    Serial.print(this->Homed_position_y);
     Serial.print(" )");
 
     Serial.print("\n     Homing_speed_alpha_beta = ");

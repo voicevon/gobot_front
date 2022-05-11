@@ -31,11 +31,11 @@
 
 void BoxCarrierHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	Serial.print("\n[Info] BoxCarrierHardware::IK() is entering. ");
-	FkPosition_ZW* fk = (FkPosition_ZW*)(from_fk);
+	FkPosition_YZ* fk = (FkPosition_YZ*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
-	ik->alpha = (fk->Z * this->__config.steps_per_mm_for_z + fk->W * this->__config.steps_per_rad_for_w);
-	ik->beta = (fk->Z * this->__config.steps_per_mm_for_z - fk->W * this->__config.steps_per_rad_for_w);
+	ik->alpha = (fk->Z * this->__config.steps_per_mm_for_z + fk->Y * this->__config.steps_per_mm_for_y);
+	ik->beta = (fk->Z * this->__config.steps_per_mm_for_z - fk->Y * this->__config.steps_per_mm_for_y);
 
 	Serial.print("\n[Debug] BoxCarrierHardware::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
@@ -46,16 +46,16 @@ void BoxCarrierHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 
 void BoxCarrierHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	Serial.print("\n[Debug] BoxCarrierHardware::FK() is entering ");
-	FkPosition_ZW* fk = (FkPosition_ZW*)(to_fk);
+	FkPosition_YZ* fk = (FkPosition_YZ*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
 	fk->Z = (ik->alpha + ik->beta) / 2 / this->__config.steps_per_mm_for_z;
-	fk->W = (ik->alpha - ik->beta) / 2 / this->__config.steps_per_rad_for_w;
+	fk->Y = (ik->alpha - ik->beta) / 2 / this->__config.steps_per_mm_for_y;
 
-	Serial.print("\n[Debug] BoxCarrierHardware::FK() output (Z, W) = ");
+	Serial.print("\n[Debug] BoxCarrierHardware::FK() output (Z, Y) = ");
 	Serial.print(fk->Z);
 	Serial.print(" , ");
-	Serial.print(fk->W);
+	Serial.print(fk->Y);
 	Serial.print(")");
 }
 
@@ -105,9 +105,9 @@ void BoxCarrierHardware::HomeSingleAxis(char axis){
 	this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 	this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 
-	if (axis=='W'){
+	if (axis=='Y'){
 		//todo :  process with IK()
-		this->__homing_helper = &this->objHomeHelper_angle;
+		this->__homing_helper = &this->objHomeHelper_y;
 		this->objStepper_alpha.setTargetRel(5000000);
 		this->objStepper_beta.setTargetRel(5000000);
 	}else if (axis=='Z'){
@@ -137,16 +137,16 @@ void BoxCarrierHardware::_running_G28(){
 			// We know homed position via FK
 			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
 			this->__current_fk_position.Z = this->__config.Homed_position_z;
-			this->__current_fk_position.W = this->__config.Homed_position_w;
+			this->__current_fk_position.Y = this->__config.Homed_position_y;
 			this->IK(&this->__current_fk_position, &ik_position);
 			// verify IK by FK()
-			FkPosition_XY verifying_fk;
+			FkPosition_YZ verifying_fk;
 			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.
 		if (this->_homing_axis == 'Z') this->objStepper_alpha.setPosition(ik_position.alpha);
-		if (this->_homing_axis == 'W') this->objStepper_beta.setPosition(ik_position.beta);
+		if (this->_homing_axis == 'Y') this->objStepper_beta.setPosition(ik_position.beta);
 		
 		this->objStepper_alpha.setMaxSpeed(this->__config.max_speed_alpha_beta);
 		this->objStepper_alpha.setAcceleration(this->__config.max_acceleration_alpha_beta);
@@ -186,10 +186,10 @@ void BoxCarrierHardware::RunG1(Gcode* gcode) {
 		this->objStepper_beta.setMaxSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
-	FkPosition_ZW target_fk_zw;
+	FkPosition_YZ target_fk_yz;
 	IkPosition_AB target_ik_ab;
-	target_fk_zw.Z = this->__current_fk_position.Z;
-	target_fk_zw.W = this->__current_fk_position.W;
+	target_fk_yz.Z = this->__current_fk_position.Z;
+	target_fk_yz.Y = this->__current_fk_position.Y;
 	target_ik_ab.alpha = float(this->objStepper_alpha.getPosition()) ;
 	target_ik_ab.beta = float(this->objStepper_beta.getPosition());
 	bool do_ik=false;
@@ -199,13 +199,13 @@ void BoxCarrierHardware::RunG1(Gcode* gcode) {
 	// If need IK, do it now.
 	if (gcode->has_letter('Z')) {
 		do_ik=true;
-		target_fk_zw.Z = gcode->get_value('Z');
+		target_fk_yz.Z = gcode->get_value('Z');
 	}
-	if (gcode->has_letter('W')){
+	if (gcode->has_letter('Y')){
 		do_ik=true;
-		target_fk_zw.W = gcode->get_value('W');
+		target_fk_yz.Y = gcode->get_value('Y');
 	}
-	if (do_ik) IK(&target_fk_zw,&target_ik_ab);
+	if (do_ik) IK(&target_fk_yz,&target_ik_ab);
 
 	//Prepare actuator/driver to move to next point
 	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha);
