@@ -19,7 +19,7 @@ class BoxCarrierHardwareConfig{
         int STEPPER_DRIVER_MICRO_STEPS;
         float MOTOR_DEGREE_PER_STEP;
         float MOTOR_GEARBOX_RATIO_ALPHA_BETA;
-        float motor_steps_per_round;
+        float steps_per_motor_round;
 
 };
 

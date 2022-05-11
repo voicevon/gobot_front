@@ -4,7 +4,6 @@ class BoxMoverHardwareConfig{
     public:
         float steps_per_rad_for_w;
         float steps_per_mm_for_z;
-
         float max_speed_alpha_beta;
         float max_acceleration_alpha_beta;
      

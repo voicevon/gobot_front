@@ -4,17 +4,19 @@
 
 void BoxCarrierHardwareConfig::Init(){
         this->STEPPER_DRIVER_MICRO_STEPS = 16;
-        this->MOTOR_GEARBOX_RATIO_ALPHA_BETA = 21;
+        this->MOTOR_GEARBOX_RATIO_ALPHA_BETA = 27;
         this->MOTOR_DEGREE_PER_STEP = 1.8;
-        this->max_acceleration_alpha_beta = 6000;
-        this->max_speed_alpha_beta = 20000;
 
-        this->motor_steps_per_round = 514.0 * this->STEPPER_DRIVER_MICRO_STEPS;
+        this->steps_per_motor_round = 360.0f / this->MOTOR_DEGREE_PER_STEP * this->STEPPER_DRIVER_MICRO_STEPS;
+        this->steps_per_mm_for_z = 200;
+        this->steps_per_mm_for_y = 200;
+
         this->Homing_speed_alpha_beta = 1300;
         this->Homing_acceleration_alpha_beta = 500;
 
-        this->steps_per_mm_for_z = 200;
-        this->steps_per_mm_for_y = 33;
+        this->max_acceleration_alpha_beta = 6000;
+        this->max_speed_alpha_beta = 20000;
+
 }
 
 void BoxCarrierHardwareConfig::PrintOut(){
