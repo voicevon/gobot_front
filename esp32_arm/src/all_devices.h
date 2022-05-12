@@ -3,7 +3,8 @@
 
 // #define I_AM_AGV_WHEEL
 // #define I_AM_DRV8302
-#define I_AM_GARMENT_BOT
+// #define I_AM_GARMENT_BOT
+#define I_AM_GARMENT_BOT_SINGLE_MCU
 // #define I_AM_GARMENT_BOX_MOVER
 // #define I_AM_GARMENT_BOX_CARRIER
 // #define I_AM_GOBOT_HOUSE
@@ -50,6 +51,12 @@
 #endif
 
 #ifdef I_AM_GARMENT_BOT
+    #define ROBOT_SERIAL_ID 4444
+	#define USING_WIFI_MQTT
+	#define MQTT_SYNCERS_COUNT  1   
+#endif
+
+#ifdef I_AM_GARMENT_BOT_SINGLE_MCU
     #define ROBOT_SERIAL_ID 4444
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   

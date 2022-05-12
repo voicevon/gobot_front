@@ -1,6 +1,6 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
-#include "garment_bot.h"
+#include "bot_single_mcu.h"
 
 GarmentBot::GarmentBot(uint16_t id){
 	this->_ID = id;
@@ -30,7 +30,7 @@ void GarmentBot::ExecuteMqttCommand(const char* command){
 	if (str_command == "short_cut"){
 
 	} else if (str_command == "load"){
-		this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
+		// this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
 	} else if (str_command == "unload"){
 	} else if (str_command == "charge"){
 
@@ -75,7 +75,7 @@ void GarmentBot::SpinOnce(){
 	uint16_t battery_voltage =  analogRead(PIN_BATTERY_VOLTAGE_ADC) ;
 	this->__battery_voltage = 1.0 * battery_voltage + 0.0;
 	
-	this->objBoxMoverAgent.SpinOnce();
+	// this->objBoxMoverAgent.SpinOnce();
 	this->objAgv.SpinOnce();
 	this->CheckMqttCommand();
 
@@ -107,17 +107,17 @@ void GarmentBot::SpinOnce(){
 
 		break;
 	case GarmentBot::BOT_STATE::ROBOT_LOADING:
-		if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::LOADED)
-			this->ToState(GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION);
+		// if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::LOADED)
+		// 	this->ToState(GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION);
 		break;
 	case GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION:
-		if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
-			this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION);
+		// if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
+		// 	this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION:
-		if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::UNLOADED)
-			// Check battery voltage.
-			this->ToState(GarmentBot::BOT_STATE::BOT_SLEEPING);
+		// if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::UNLOADED)
+		// 	// Check battery voltage.
+		// 	this->ToState(GarmentBot::BOT_STATE::BOT_SLEEPING);
 		break;
    default:
 		Serial.print("\n [Warning] GarmentBot::SpinOnce()  A state with out dealer.! \n\n");
@@ -143,14 +143,14 @@ void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE:
-		this->objBoxMoverAgent.ToPresetState();
+		// this->objBoxMoverAgent.ToPresetState();
 		new_state = GarmentBot::BOT_STATE::ROBOT_LOADING;
 		break;
 	case GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION:
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
 		break;
 	case GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION:
-		this->objBoxMoverAgent.ToPresetState();
+		// this->objBoxMoverAgent.ToPresetState();
 		new_state = GarmentBot::BOT_STATE::ROBOT_UNLOADING;
 		break;
 	
@@ -168,8 +168,8 @@ void GarmentBot::ToState(GarmentBot::BOT_STATE state){
 
 void GarmentBot::Test(int test_id){
    	if (test_id == 1) {
-		this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
-		this->objBoxMoverAgent.ToPresetState();
+		// this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
+		// this->objBoxMoverAgent.ToPresetState();
 	   }
    if (test_id==10) {
         // int track_error = 0;
