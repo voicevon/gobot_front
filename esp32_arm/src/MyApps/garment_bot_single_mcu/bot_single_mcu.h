@@ -1,6 +1,6 @@
 #pragma once
 #include "all_devices.h"
-#ifdef I_AM_GARMENT_BOT
+#ifdef I_AM_GARMENT_BOT_SINGLE_MCU
 
 
 #include "AGV/twin_Wheels/twin_wheels_agv.h"
