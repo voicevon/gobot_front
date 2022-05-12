@@ -6,14 +6,14 @@
 #include "bot_single_mcu.h"
 #include "IoT/main_mqtt.h"
 
-GarmentBot *garment_robot;
+BotSingleMcu *garment_robot;
 MessageQueue* garment_bot_message_queue;
 
 
 void setup(){
     Serial.begin(115200);
-    Serial.println("Hi there, I am your lovely bot,  Garmentbot, include AGV.  Keep smiling :)");
-    garment_robot = new GarmentBot(ROBOT_SERIAL_ID);
+    Serial.println("Hi there, I am your lovely bot,  BotSingleMcu, include AGV.  Keep smiling :)");
+    garment_robot = new BotSingleMcu(ROBOT_SERIAL_ID);
     garment_robot->Init();
 
    // mqtt, bridge, receiver.

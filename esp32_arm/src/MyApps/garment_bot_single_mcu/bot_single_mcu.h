@@ -4,6 +4,7 @@
 
 
 #include "AGV/twin_Wheels/twin_wheels_agv.h"
+#include "MyApps/garment_box_carrier/box_carrier_hw.h"
 // #include "box_mover_agent.h"
 #include "IoT/mqtt_message_consumer.h"
 #include "AGV/map_road_station/map_navigator.h"
@@ -43,7 +44,7 @@ class MqttReportData{
 //      1. track sensor, and position-Y error, PID controller 
 //      4. Distance sensor, to detect obstacle.
 //      2. Vehical speed, motor control.
-class GarmentBot: public MqttMessageConsumer{
+class BotSingleMcu: public MqttMessageConsumer{
     public:
         enum BOT_STATE{
             BOT_LOCATING = 0,
@@ -58,13 +59,14 @@ class GarmentBot: public MqttMessageConsumer{
             BOT_EMERGENCY_STOPING = 9,
         };
 
-        GarmentBot(uint16_t id);
+        BotSingleMcu(uint16_t id);
         // GarmentBoxMoverAgent objBoxMoverAgent = GarmentBoxMoverAgent();
         TwinWheelsAgv objAgv = TwinWheelsAgv();
+        BoxCarrierHardware* objBoxCarrier;
 
         void Init();
         void SpinOnce() override;
-        void ToState(GarmentBot::BOT_STATE state);
+        void ToState(BotSingleMcu::BOT_STATE state);
         void Test(int test_id);
         uint8_t GetMqtt_PubPayload(uint8_t* chars);
         // void onMqttReceived(uint8_t* payload);
@@ -79,7 +81,7 @@ class GarmentBot: public MqttMessageConsumer{
         void onDetectedMark(uint16_t mapsite_id);
         RoadBranchNode __current_BranchNode;
         uint16_t _ID = 0;
-        GarmentBot::BOT_STATE __state;
+        BotSingleMcu::BOT_STATE __state;
 };
 
 

@@ -2,22 +2,23 @@
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
 #include "bot_single_mcu.h"
 
-GarmentBot::GarmentBot(uint16_t id){
+BotSingleMcu::BotSingleMcu(uint16_t id){
 	this->_ID = id;
+	this->objBoxCarrier = new BoxCarrierHardware();
 }
 
-void GarmentBot::Init(){
-	Serial.print("\n[Info] GarmentBot::Init() is entering");
+void BotSingleMcu::Init(){
+	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
 	this->objRfid.Init(17,18,19);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
 	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 
-	this->ToState(GarmentBot::BOT_STATE::BOT_LOCATING);
-	Serial.print("\n[Info] GarmentBot::Init() is done.\n");
+	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
+	Serial.print("\n[Info] BotSingleMcu::Init() is done.\n");
 }
 
-void GarmentBot::ExecuteMqttCommand(const char* command){
+void BotSingleMcu::ExecuteMqttCommand(const char* command){
 	// command examples
 	// "99,short_cut" == leave main road.
 	// "11,load"      == move to point 23, loading 
@@ -39,7 +40,7 @@ void GarmentBot::ExecuteMqttCommand(const char* command){
 	}
 }
 
-void GarmentBot::onDetectedMark(uint16_t BranchNode_id){
+void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
    RoadBranchNode current_BranchNode;
    if (this->objMapNavigator.FetchNode(BranchNode_id, &current_BranchNode)){
          // the mark is being managered via map navigator.
@@ -51,19 +52,19 @@ void GarmentBot::onDetectedMark(uint16_t BranchNode_id){
 	case RoadBranchNode::TASK::LOAD:
 	  	// ???  This is invoked when agv is SLOW_MOVING, should to loading, after parking.
          this->__current_BranchNode.task = RoadBranchNode::TASK::LOAD;
-         this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE);
+         this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE);
          break;
 	case RoadBranchNode::TASK::UNLOAD:
          this->__current_BranchNode.task = RoadBranchNode::TASK::UNLOAD;
-         this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE);
+         this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE);
          break;
 	case RoadBranchNode::TASK::SLEEP:
          this->__current_BranchNode.task = RoadBranchNode::TASK::SLEEP;
-         this->ToState(GarmentBot::AGV_PARKED_AT_SOURCE);
+         this->ToState(BotSingleMcu::AGV_PARKED_AT_SOURCE);
          break;
 	case RoadBranchNode::TASK::CHARGE:
          this->__current_BranchNode.task = RoadBranchNode::TASK::CHARGE;
-         this->ToState(GarmentBot::AGV_PARKED_AT_SOURCE);
+         this->ToState(BotSingleMcu::AGV_PARKED_AT_SOURCE);
 		 break;         
 	default:
          break;
@@ -71,11 +72,11 @@ void GarmentBot::onDetectedMark(uint16_t BranchNode_id){
    }
 }
 
-void GarmentBot::SpinOnce(){
+void BotSingleMcu::SpinOnce(){
 	uint16_t battery_voltage =  analogRead(PIN_BATTERY_VOLTAGE_ADC) ;
 	this->__battery_voltage = 1.0 * battery_voltage + 0.0;
 	
-	// this->objBoxMoverAgent.SpinOnce();
+	this->objBoxCarrier->SpinOnce();
 	this->objAgv.SpinOnce();
 	this->CheckMqttCommand();
 
@@ -88,85 +89,85 @@ void GarmentBot::SpinOnce(){
 	}
 
 	switch (this->__state){
-	case GarmentBot::BOT_STATE::BOT_LOCATING:
+	case BotSingleMcu::BOT_STATE::BOT_LOCATING:
 		//Trying to read RFID.
 		// if (this->__rfidReader->PICC_ReadCardSerial() == 123){
 		if (this->objRfid.CardId == 123){
-			this->ToState(GarmentBot::BOT_STATE::BOT_SLEEPING);
+			this->ToState(BotSingleMcu::BOT_STATE::BOT_SLEEPING);
 		}
 		break;
-   	case GarmentBot::BOT_STATE::BOT_CHARGING:
+   	case BotSingleMcu::BOT_STATE::BOT_CHARGING:
       	break;
-   	case GarmentBot::BOT_STATE::BOT_SLEEPING:
+   	case BotSingleMcu::BOT_STATE::BOT_SLEEPING:
       	break;
-   	case GarmentBot::BOT_STATE::BOT_EMERGENCY_STOPING:
+   	case BotSingleMcu::BOT_STATE::BOT_EMERGENCY_STOPING:
       	break;
-   	case GarmentBot::BOT_STATE::AGV_MOVING_TO_SOURCE:
+   	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_SOURCE:
 		if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
-			this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE);
+			this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE);
 
 		break;
-	case GarmentBot::BOT_STATE::ROBOT_LOADING:
+	case BotSingleMcu::BOT_STATE::ROBOT_LOADING:
 		// if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::LOADED)
-		// 	this->ToState(GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION);
+		// 	this->ToState(BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION);
 		break;
-	case GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION:
+	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION:
 		// if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
-		// 	this->ToState(GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION);
+		// 	this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_DESTINATION);
 		break;
-	case GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION:
+	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_DESTINATION:
 		// if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::UNLOADED)
 		// 	// Check battery voltage.
-		// 	this->ToState(GarmentBot::BOT_STATE::BOT_SLEEPING);
+		// 	this->ToState(BotSingleMcu::BOT_STATE::BOT_SLEEPING);
 		break;
    default:
-		Serial.print("\n [Warning] GarmentBot::SpinOnce()  A state with out dealer.! \n\n");
+		Serial.print("\n [Warning] BotSingleMcu::SpinOnce()  A state with out dealer.! \n\n");
       	break;
    }
 }
 
-void GarmentBot::ToState(GarmentBot::BOT_STATE state){
+void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
 	if (state == this->__state) {
-		Serial.print("[Warning] GarmentBot::ToState()  Repeated! \n\n");
+		Serial.print("[Warning] BotSingleMcu::ToState()  Repeated! \n\n");
 		return;
 	}
- 	GarmentBot::BOT_STATE new_state = state;
+ 	BotSingleMcu::BOT_STATE new_state = state;
 	switch(state){
-	case GarmentBot::BOT_STATE::BOT_LOCATING:
+	case BotSingleMcu::BOT_STATE::BOT_LOCATING:
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::SLOW_MOVING);
 		break;
-	case GarmentBot::BOT_STATE::BOT_SLEEPING:
+	case BotSingleMcu::BOT_STATE::BOT_SLEEPING:
 		// Keep reporting battery voltage.
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::PARKED);
 		break;
-	case GarmentBot::BOT_STATE::AGV_MOVING_TO_SOURCE:
+	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_SOURCE:
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
 		break;
-	case GarmentBot::BOT_STATE::AGV_PARKED_AT_SOURCE:
+	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE:
 		// this->objBoxMoverAgent.ToPresetState();
-		new_state = GarmentBot::BOT_STATE::ROBOT_LOADING;
+		new_state = BotSingleMcu::BOT_STATE::ROBOT_LOADING;
 		break;
-	case GarmentBot::BOT_STATE::AGV_MOVING_TO_DESTINATION:
+	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION:
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
 		break;
-	case GarmentBot::BOT_STATE::AGV_PARKED_AT_DESTINATION:
+	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_DESTINATION:
 		// this->objBoxMoverAgent.ToPresetState();
-		new_state = GarmentBot::BOT_STATE::ROBOT_UNLOADING;
+		new_state = BotSingleMcu::BOT_STATE::ROBOT_UNLOADING;
 		break;
 	
-	case GarmentBot::BOT_STATE::ROBOT_LOADING:
+	case BotSingleMcu::BOT_STATE::ROBOT_LOADING:
 		break;
-	case GarmentBot::BOT_STATE::ROBOT_UNLOADING:
+	case BotSingleMcu::BOT_STATE::ROBOT_UNLOADING:
 		break;
 
 	default:
-		Serial.print("\n\n [Warn]  GarmentBot::ToState()   Case Else...");
+		Serial.print("\n\n [Warn]  BotSingleMcu::ToState()   Case Else...");
 		break;
    }
    this->__state = new_state;
 }
 
-void GarmentBot::Test(int test_id){
+void BotSingleMcu::Test(int test_id){
    	if (test_id == 1) {
 		// this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
 		// this->objBoxMoverAgent.ToPresetState();
@@ -177,7 +178,7 @@ void GarmentBot::Test(int test_id){
    }
 }
 
-uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
+uint8_t BotSingleMcu::GetMqtt_PubPayload(uint8_t* chars){
     // a json string,, constructed by state,battery_volt,last_site_id
     String payload = "{\"id\":";
 	payload.concat(String(this->_ID));
@@ -192,14 +193,14 @@ uint8_t GarmentBot::GetMqtt_PubPayload(uint8_t* chars){
     // uint8_t* dest = (uint8_t *)chars;
 	bool debug = false;
 	if (debug){
-		Serial.print("[Debug] GarmentBot::GetMqtt_PubPayload()    length= ");
+		Serial.print("[Debug] BotSingleMcu::GetMqtt_PubPayload()    length= ");
 		Serial.println(payload.length());
 	}
     payload.getBytes(chars, payload.length());
     return payload.length();
 }
 
-// void GarmentBot::onMqttReceived(uint8_t* payload){
+// void BotSingleMcu::onMqttReceived(uint8_t* payload){
 //    // Currently is for testing, 
 //    // Normally this function will be callback via a MQTT client.
 // //    this->objMapNavigator.AddNode(1, BranchNode::TASK::FOLLOW_LEFT);

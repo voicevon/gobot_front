@@ -3,7 +3,7 @@
 * Right side = 12 Pins
 * Bottom side = 3 Pins
 
-# Analog Input x2 Pins
+# Analog Input x6 Pins or x2 Pins (or zero pins ) with ADS1115
 * ADC (Voltage Sensor) x2
   * GPIO-36, GPIO-39
 
