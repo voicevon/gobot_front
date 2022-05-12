@@ -2,10 +2,9 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT
 
-
+#include "IoT/mqtt_message_consumer.h"
 #include "AGV/twin_Wheels/twin_wheels_agv.h"
 #include "box_mover_agent.h"
-#include "IoT/mqtt_message_consumer.h"
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/smart_rfid_reader.h"
 

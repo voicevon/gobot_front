@@ -2,11 +2,12 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
 
-
-#include "AGV/twin_Wheels/twin_wheels_agv.h"
-#include "MyApps/garment_box_carrier/box_carrier_hw.h"
-// #include "box_mover_agent.h"
 #include "IoT/mqtt_message_consumer.h"
+#include "Robot/gcode_queue.h"
+
+#include "MyApps/garment_box_carrier/box_carrier.h"
+#include "MyApps/garment_box_carrier/box_carrier_hw.h"
+#include "AGV/twin_Wheels/twin_wheels_agv.h"
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/smart_rfid_reader.h"
 
@@ -21,12 +22,12 @@
 .                              <---------------------------------------------------------\
 ,                              |                                                          | 
 .   Locating ------------>   Agv Moving ----> Agv Parked ---------> Robot_Loading  -------^  
-.    (Slow)   [Got RFID]           (Read Mark RFID)           |                           | 
-.                                                             |-------> Robot_Unloading --^
-.                                                             |                           |
-.                                                             |-------> Charging ---------^
-.                                                             |                           |
-.                                                             |--------> Sleeping --------^
+.    (Slow)   [Got RFID]        |  (Read Mark RFID)           |                           | 
+.                               |                             |-------> Robot_Unloading --^
+.                             (Fast)                          |                           |
+.                             (Slow)                          |-------> Charging ---------^
+.                             (SuperSlow)                     |                           |
+.                             (Paused)                        |--------> Sleeping --------^
 .                                                             |                           |
 .                                                             |--------> Charging --------^
 */
@@ -55,15 +56,17 @@ class BotSingleMcu: public MqttMessageConsumer{
             AGV_MOVING_TO_DESTINATION = 5,
             AGV_PARKED_AT_DESTINATION = 6,
             ROBOT_UNLOADING = 7,
-            BOT_CHARGING = 8,
+            BOT_CHARGING = 8,    //After AGV_MOVING_TO_SOURCE-->AGV_PARKED_AT_SOURCE
             BOT_EMERGENCY_STOPING = 9,
         };
 
         BotSingleMcu(uint16_t id);
         // GarmentBoxMoverAgent objBoxMoverAgent = GarmentBoxMoverAgent();
         TwinWheelsAgv objAgv = TwinWheelsAgv();
-        BoxCarrierHardware* objBoxCarrier;
 
+        GcodeQueue* _gcode_queue;
+        BoxCarrier objBoxCarrier = BoxCarrier();
+        BoxCarrierHardware* objBoxCarrierHardware;
         void Init();
         void SpinOnce() override;
         void ToState(BotSingleMcu::BOT_STATE state);

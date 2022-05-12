@@ -4,7 +4,7 @@
 
 BotSingleMcu::BotSingleMcu(uint16_t id){
 	this->_ID = id;
-	this->objBoxCarrier = new BoxCarrierHardware();
+	// this->objBoxCarrier_hardware = new BoxCarrierHardware();
 }
 
 void BotSingleMcu::Init(){
@@ -16,6 +16,11 @@ void BotSingleMcu::Init(){
 
 	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
 	Serial.print("\n[Info] BotSingleMcu::Init() is done.\n");
+	
+	this->_gcode_queue = new GcodeQueue();
+	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware();
+    objBoxCarrierHardware->InitRobot();
+    objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 }
 
 void BotSingleMcu::ExecuteMqttCommand(const char* command){
@@ -43,7 +48,7 @@ void BotSingleMcu::ExecuteMqttCommand(const char* command){
 void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
    RoadBranchNode current_BranchNode;
    if (this->objMapNavigator.FetchNode(BranchNode_id, &current_BranchNode)){
-         // the mark is being managered via map navigator.
+		// the mark is being managered via map navigator.
 	switch (current_BranchNode.task){
 	case RoadBranchNode::TASK::SHORT_CUT_ONLY:
 		// Follow branch road, not main road.
@@ -51,23 +56,23 @@ void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
 		break;
 	case RoadBranchNode::TASK::LOAD:
 	  	// ???  This is invoked when agv is SLOW_MOVING, should to loading, after parking.
-         this->__current_BranchNode.task = RoadBranchNode::TASK::LOAD;
-         this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE);
-         break;
+		this->__current_BranchNode.task = RoadBranchNode::TASK::LOAD;
+		this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE);
+		break;
 	case RoadBranchNode::TASK::UNLOAD:
-         this->__current_BranchNode.task = RoadBranchNode::TASK::UNLOAD;
-         this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE);
-         break;
+		this->__current_BranchNode.task = RoadBranchNode::TASK::UNLOAD;
+		this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE);
+		break;
 	case RoadBranchNode::TASK::SLEEP:
-         this->__current_BranchNode.task = RoadBranchNode::TASK::SLEEP;
-         this->ToState(BotSingleMcu::AGV_PARKED_AT_SOURCE);
-         break;
+		this->__current_BranchNode.task = RoadBranchNode::TASK::SLEEP;
+		this->ToState(BotSingleMcu::AGV_PARKED_AT_SOURCE);
+		break;
 	case RoadBranchNode::TASK::CHARGE:
-         this->__current_BranchNode.task = RoadBranchNode::TASK::CHARGE;
-         this->ToState(BotSingleMcu::AGV_PARKED_AT_SOURCE);
-		 break;         
+		this->__current_BranchNode.task = RoadBranchNode::TASK::CHARGE;
+		this->ToState(BotSingleMcu::AGV_PARKED_AT_SOURCE);
+		break;         
 	default:
-         break;
+		break;
       }
    }
 }
@@ -75,9 +80,11 @@ void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
 void BotSingleMcu::SpinOnce(){
 	uint16_t battery_voltage =  analogRead(PIN_BATTERY_VOLTAGE_ADC) ;
 	this->__battery_voltage = 1.0 * battery_voltage + 0.0;
-	
-	this->objBoxCarrier->SpinOnce();
+	// this->objBoxMoverAgent.SpinOnce();
+	// this->objBoxCarrier_hardware->SpinOnce();
 	this->objAgv.SpinOnce();
+	this->objBoxCarrierHardware->SpinOnce();
+	this->objBoxCarrier.SpinOnce();
 	this->CheckMqttCommand();
 
 	
@@ -105,20 +112,24 @@ void BotSingleMcu::SpinOnce(){
    	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_SOURCE:
 		if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
 			this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE);
-
+		break;
+	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE:
+		this->objBoxCarrier.LoadBox();
+		this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOADING:
 		// if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::LOADED)
-		// 	this->ToState(BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION);
+		if (this->objBoxCarrier.GetState()== BoxCarrier::BoxMoverState::LOADED)
+			this->ToState(BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION);
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION:
-		// if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
-		// 	this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_DESTINATION);
+		if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
+			this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_DESTINATION);
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_DESTINATION:
 		// if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::UNLOADED)
-		// 	// Check battery voltage.
-		// 	this->ToState(BotSingleMcu::BOT_STATE::BOT_SLEEPING);
+			// Check battery voltage.
+			this->ToState(BotSingleMcu::BOT_STATE::BOT_SLEEPING);
 		break;
    default:
 		Serial.print("\n [Warning] BotSingleMcu::SpinOnce()  A state with out dealer.! \n\n");
@@ -145,6 +156,7 @@ void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE:
 		// this->objBoxMoverAgent.ToPresetState();
+		// this->obj
 		new_state = BotSingleMcu::BOT_STATE::ROBOT_LOADING;
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION:
@@ -174,7 +186,8 @@ void BotSingleMcu::Test(int test_id){
 	   }
    if (test_id==10) {
         // int track_error = 0;
-      //   this->objTwinWheelHardware.MoveForward(track_error);
+        // this->objTwinWheelHardware.MoveForward(track_error);
+		// this->objAgv.
    }
 }
 

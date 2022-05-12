@@ -2,10 +2,6 @@
 #include "box_carrier.h"
 
 BoxCarrier::BoxCarrier(){
-    BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware();
-    objBoxCarrierHardware->InitRobot();
-	this->_gcode_queue = new GcodeQueue();
-	// this->_gcode_queue->LinkRobot(objBoxCarrierHardware);
     Serial.print("\n[Info] BoxCarrier::BoxCarrier() is done..........");
 }
 

@@ -225,6 +225,7 @@ void BoxCarrierHardware::RunG1(Gcode* gcode) {
 		Serial.print(")");
 	}
 }
+
 void BoxCarrierHardware::_running_G1(){
     if (this->GetDistanceToTarget_IK() < this->__config.max_acceleration_alpha_beta){
       	this->State = RobotState::IDLE;
@@ -233,6 +234,7 @@ void BoxCarrierHardware::_running_G1(){
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);
 }
+
 void BoxCarrierHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 	
 }

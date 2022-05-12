@@ -12,14 +12,16 @@
 
 # BUS           x12 Pins
 * SPI for RFID Reader   x4
+  * Better to use I2C , need to test.
   * GPIO-5, GPIO-18, GPIO-19, GPIO-23
 * Serial Port           x2
   * GPIO-1, GPIO-3
 * Dual I2C for APDS9960 x4 
 
-# High speed    x4 Pins
-* HCSR04       x2
-* Stepper step x2 
+# High speed    x5 Pins
+* HCSR04         x2
+* Stepper step   x2 
+* LED (WS2812B)  x1
 
 # Low speed     x11 Pins  or x2 (or x0) with MCP23018
 * Input
@@ -30,7 +32,7 @@
   * H-Bridges Dir     x2
   * Stepper Enable    x2
   * Stepper DIr       x2
-  * LED               X2
+  
 
 
 
