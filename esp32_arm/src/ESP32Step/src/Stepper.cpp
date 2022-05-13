@@ -16,6 +16,21 @@ Stepper::Stepper(const int _stepPin, const int _dirPin)
     setInverseRotation(false);
     setAcceleration(aDefault);
     setMaxSpeed(vMaxDefault);
+    this->__mcp23018 = nullptr;
+}
+
+Stepper::Stepper(Adafruit_MCP23X17* mcp23018_dir_pin_only, const int _stepPin, const int _dirPin)
+    : current(0),  stepPin(_stepPin), dirPin(_dirPin)
+{
+
+    pinMode(stepPin, OUTPUT);
+    mcp23018_dir_pin_only->pinMode(dirPin, OUTPUT);
+
+    setStepPinPolarity(HIGH);
+    setInverseRotation(false);
+    setAcceleration(aDefault);
+    setMaxSpeed(vMaxDefault);
+    this->__mcp23018 = mcp23018_dir_pin_only;
 }
 
 Stepper &Stepper::setStepPinPolarity(int polarity)

@@ -5,6 +5,7 @@
 #endif
 #include <cstdint>
 #include <algorithm>
+#include <Adafruit_MCP23X17.h>
 
 class Stepper
 {
@@ -15,6 +16,7 @@ class Stepper
 
   public:
     Stepper(const int StepPin, const int DirPin);
+    Stepper(Adafruit_MCP23X17* mcp23018_dir_pin_only, const int StepPin, const int DirPin);
 
     Stepper &setMaxSpeed(int32_t speed);   // steps/s
     Stepper &setAcceleration(uint32_t _a); // steps/s^2
@@ -62,6 +64,7 @@ class Stepper
     volatile uint32_t *dirPinCcwReg;
     #endif
     const int stepPin, dirPin;
+    Adafruit_MCP23X17* __mcp23018;
 
     // Friends
     template <typename a, typename t>
@@ -91,7 +94,10 @@ void Stepper::clearStepPin() const
 void Stepper::setDir(int d)
 {
     dir = d;
-    digitalWrite(dirPin, dir == 1 ? reverse : !reverse);
+    if (this->__mcp23018 == nullptr)
+        digitalWrite(dirPin, dir == 1 ? reverse : !reverse);
+    else
+        this->__mcp23018->digitalWrite(dirPin, dir == 1 ? reverse : !reverse);
 }
 #elif
 void Stepper::doStep()

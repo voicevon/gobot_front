@@ -12,6 +12,12 @@ BotSingleMcu::BotSingleMcu(uint16_t id){
 
 void BotSingleMcu::Init(){
 	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
+	TwoWire* i2c_bus_a;
+	i2c_bus_a = new TwoWire(0);
+	i2c_bus_a->begin(22,23);
+	Adafruit_MCP23X17* mcp_23018 = new Adafruit_MCP23X17();
+	mcp_23018->begin_I2C(0x20, i2c_bus_a);
+
 	this->objRfid.Init(17,18,19);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
@@ -21,7 +27,7 @@ void BotSingleMcu::Init(){
 	Serial.print("\n[Info] BotSingleMcu::Init() is done.\n");
 	
 	this->_gcode_queue = new GcodeQueue();
-	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware();
+	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018);
     objBoxCarrierHardware->InitRobot();
     objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 

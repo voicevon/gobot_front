@@ -20,6 +20,7 @@
 class BoxCarrierHardware:public RobotBase{
     public:
         BoxCarrierHardware();
+        BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018);
 
         void InitRobot() override;
         void HomeSingleAxis(char axis) override;
@@ -54,5 +55,6 @@ class BoxCarrierHardware:public RobotBase{
         HomeHelper* objHomeHelper_vertical;
         HomeHelper* objHomeHelper_y;
         BoxCarrierHardwareConfig  __config;
+        Adafruit_MCP23X17* __mcp23018;
 
 };

@@ -61,33 +61,41 @@ void BoxCarrierHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 
 BoxCarrierHardware::BoxCarrierHardware(){
+	this->__mcp23018 = nullptr;
+}
 
+BoxCarrierHardware::BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018){
+	this->__mcp23018 = mcp_23018;
 }
 
 void BoxCarrierHardware::InitRobot(){
 	Serial.print("\n[Info] BoxCarrierHardware::Init_Linkage() is entering.");
 	this->__config.Init();
-	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-	pinMode(PIN_BETA_ENABLE, OUTPUT);
+	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+	// pinMode(PIN_BETA_ENABLE, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_1, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_2, OUTPUT);
 
-	this->__EnableMotor('A', false);
-	this->__EnableMotor('B', false);
 
 	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
 	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
 	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
+	if (this->__mcp23018 == nullptr){
+		pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+		pinMode(PIN_BETA_ENABLE, OUTPUT);
+		// Serial.print("[Error]  BoxCarrierHardware::InitRobot()   mcp23018 is null");
+	}else{
 
-	TwoWire* i2c_bus_a;
-	i2c_bus_a = new TwoWire(0);
-	i2c_bus_a->begin(22,23);
-	Adafruit_MCP23X17* mcp_23018 = new Adafruit_MCP23X17();
-	mcp_23018->begin_I2C(0x20, i2c_bus_a);
-	this->objHomeHelper_vertical = new HomeHelper(mcp_23018, 12, LOW);
-	this->objHomeHelper_y = new HomeHelper(mcp_23018, 22, LOW);
+	
+		this->objHomeHelper_vertical = new HomeHelper(this->__mcp23018, 12, LOW);
+		this->objHomeHelper_y = new HomeHelper(this->__mcp23018, 22, LOW);
 
+		this->__mcp23018->pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+		this->__mcp23018->pinMode(PIN_BETA_ENABLE, OUTPUT);
+	}
+	this->__EnableMotor('A', false);
+	this->__EnableMotor('B', false);
 
 
 	
@@ -260,9 +268,16 @@ float BoxCarrierHardware::GetDistanceToTarget_IK(){
 }
 
 void BoxCarrierHardware::__EnableMotor(char actuator, bool enable_it){
-	if (actuator == 'A')
-		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
-	if (actuator == 'B')
-		digitalWrite(PIN_BETA_ENABLE, !enable_it);
+	if (this->__mcp23018 == nullptr){
+		if (actuator == 'A')
+			digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
+		if (actuator == 'B')
+			digitalWrite(PIN_BETA_ENABLE, !enable_it);
+	}else{
+		if (actuator == 'A')
+			this->__mcp23018->digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
+		if (actuator == 'B')
+			this->__mcp23018->digitalWrite(PIN_BETA_ENABLE, !enable_it);	
+	}
 }
 
