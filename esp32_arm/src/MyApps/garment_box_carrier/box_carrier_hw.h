@@ -17,7 +17,6 @@
 #define PIN_DIR_BETA 17
 
 
-
 class BoxCarrierHardware:public RobotBase{
     public:
         BoxCarrierHardware();
@@ -52,8 +51,8 @@ class BoxCarrierHardware:public RobotBase{
         FkPosition_YZ __current_fk_position;
 
         HomeHelper* __homing_helper;
-        HomeHelper objHomeHelper_vertical = HomeHelper(VERTICAL_ENDSTOP, LOW);
-        HomeHelper objHomeHelper_y = HomeHelper(Y_ENDSTOP, LOW);        
+        HomeHelper* objHomeHelper_vertical;
+        HomeHelper* objHomeHelper_y;
         BoxCarrierHardwareConfig  __config;
 
 };

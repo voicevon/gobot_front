@@ -79,6 +79,17 @@ void BoxCarrierHardware::InitRobot(){
 	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
 	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
 	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
+
+	TwoWire* i2c_bus_a;
+	i2c_bus_a = new TwoWire(0);
+	i2c_bus_a->begin(22,23);
+	Adafruit_MCP23X17* mcp_23018 = new Adafruit_MCP23X17();
+	mcp_23018->begin_I2C(0x20, i2c_bus_a);
+	this->objHomeHelper_vertical = new HomeHelper(mcp_23018, 12, LOW);
+	this->objHomeHelper_y = new HomeHelper(mcp_23018, 22, LOW);
+
+
+
 	
 
 	CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
@@ -107,11 +118,11 @@ void BoxCarrierHardware::HomeSingleAxis(char axis){
 
 	if (axis=='Y'){
 		//todo :  process with IK()
-		this->__homing_helper = &this->objHomeHelper_y;
+		this->__homing_helper = this->objHomeHelper_y;
 		this->objStepper_alpha.setTargetRel(5000000);
 		this->objStepper_beta.setTargetRel(5000000);
 	}else if (axis=='Z'){
-		this->__homing_helper = &this->objHomeHelper_vertical;
+		this->__homing_helper = this->objHomeHelper_vertical;
 		this->objStepper_alpha.setTargetRel(-5000000);
 		this->objStepper_beta.setTargetRel(5000000);	
 	}

@@ -2,6 +2,9 @@
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
 #include "bot_single_mcu.h"
 
+#define PIN_IR_FRONT  35
+#define PIN_IR_REAR  36
+
 BotSingleMcu::BotSingleMcu(uint16_t id){
 	this->_ID = id;
 	// this->objBoxCarrier_hardware = new BoxCarrierHardware();
@@ -21,6 +24,23 @@ void BotSingleMcu::Init(){
 	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware();
     objBoxCarrierHardware->InitRobot();
     objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
+
+	// #define I2C1_SDA_PIN 1
+	// #define I2C1_SCL_PIN 3	
+	// #define I2C2_SDA_PIN 1
+	// #define I2C2_SCL_PIN 3
+	// initialize ADS1115 on I2C bus 1 with default address 0x48
+	// TwoWire* i2c_bus_a;
+	// TwoWire* i2c_bus_b;
+	// i2c_bus_a = new TwoWire(1);
+	// i2c_bus_b = new TwoWire(1);
+	// i2c_bus_a->begin(I2C1_SDA_PIN, I2C1_SCL_PIN, 100000); // Start I2C1 on pins 21 and 22
+    // i2c_bus_b->begin(I2C2_SDA_PIN, I2C2_SCL_PIN, 100000); // Start I2C2 on pins 0 and 23
+
+	// this->objAds1115 = new ADS1115(0x48, i2c_bus_a);
+	// if (!this->objAds1115->isConnected()) {
+	// 	// error ADS1115 not connected
+	// }
 }
 
 void BotSingleMcu::ExecuteMqttCommand(const char* command){
@@ -77,7 +97,20 @@ void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
    }
 }
 
+int BotSingleMcu::ReadAlignment_sensors(){
+	// Read 4-channels adc from ADS1115
+	// this->Alignment_value_top = this->objAds1115->readADC(0);
+	// this->Alignment_value_bottom = this->objAds1115->readADC(1);
+	// this->Alignment_value_front = this->objAds1115->readADC(2);
+	// this->Alignment_value_rear = this->objAds1115->readADC(3);
+	int front = analogRead(PIN_IR_FRONT);
+	int rear = analogRead(PIN_IR_REAR);
+	return front-rear;
+}
+
 void BotSingleMcu::SpinOnce(){
+	String gcode = "G1";
+	int align_error=0;
 	uint16_t battery_voltage =  analogRead(PIN_BATTERY_VOLTAGE_ADC) ;
 	this->__battery_voltage = 1.0 * battery_voltage + 0.0;
 	// this->objBoxMoverAgent.SpinOnce();
@@ -115,7 +148,21 @@ void BotSingleMcu::SpinOnce(){
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE:
 		this->objBoxCarrier.LoadBox();
-		this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
+		this->ToState(BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN);
+
+		break;
+	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
+		if (this->objBoxCarrierHardware->State == RobotState::IDLE){
+			// Last movement is done.
+			align_error = this->ReadAlignment_sensors();
+			if (align_error < 100){
+				this->ToState(BotSingleMcu::BOT_STATE::ROBOT_LOADING);
+			}else{
+				gcode.concat("Y");
+				gcode.concat(align_error);
+				this->_gcode_queue->AppendGcodeCommand(gcode);
+			}
+		}
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOADING:
 		// if(this->objBoxMoverAgent.ReadState() == GarmentBoxMoverAgent::BoxMoverState::LOADED)
@@ -138,6 +185,8 @@ void BotSingleMcu::SpinOnce(){
 }
 
 void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
+	String gcode ="G1";
+
 	if (state == this->__state) {
 		Serial.print("[Warning] BotSingleMcu::ToState()  Repeated! \n\n");
 		return;
@@ -157,7 +206,19 @@ void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
 	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE:
 		// this->objBoxMoverAgent.ToPresetState();
 		// this->obj
-		new_state = BotSingleMcu::BOT_STATE::ROBOT_LOADING;
+		new_state = BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN;
+		break;
+	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
+		if (this->objBoxCarrierHardware->State == RobotState::IDLE){
+			gcode.concat("Z50");
+			this->_gcode_queue->AppendGcodeCommand(gcode);
+			new_state = BotSingleMcu::BOT_STATE::ROBOT_LOADING;
+		}
+		break;
+	case BotSingleMcu::BOT_STATE::ROBOT_LOADING:
+		if (this->objBoxCarrierHardware->State == RobotState::IDLE){
+			new_state = BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION;
+		}
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION:
 		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
@@ -166,9 +227,7 @@ void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
 		// this->objBoxMoverAgent.ToPresetState();
 		new_state = BotSingleMcu::BOT_STATE::ROBOT_UNLOADING;
 		break;
-	
-	case BotSingleMcu::BOT_STATE::ROBOT_LOADING:
-		break;
+
 	case BotSingleMcu::BOT_STATE::ROBOT_UNLOADING:
 		break;
 

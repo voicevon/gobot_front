@@ -21,9 +21,9 @@
 .     
 .                              <---------------------------------------------------------\
 ,                              |                                                          | 
-.   Locating ------------>   Agv Moving ----> Agv Parked ---------> Robot_Loading  -------^  
+.   Locating ------------>   Agv Moving ----> Agv Parked ------->align--> Robot_Loading ---^  
 .    (Slow)   [Got RFID]        |  (Read Mark RFID)           |                           | 
-.                               |                             |-------> Robot_Unloading --^
+.                               |                             |-->align--> Robot_Unloading-^
 .                             (Fast)                          |                           |
 .                             (Slow)                          |-------> Charging ---------^
 .                             (SuperSlow)                     |                           |
@@ -41,6 +41,8 @@ class MqttReportData{
 //      1. mqtt command, and message queue of map and navigation. 
 //      2. read RFID, determin vehical speed or parking.
 //      3. Battery voltage.
+//      4. Alignment sensors (2-channels IR sensor) 
+//
 // What I don't know:
 //      1. track sensor, and position-Y error, PID controller 
 //      4. Distance sensor, to detect obstacle.
@@ -52,12 +54,14 @@ class BotSingleMcu: public MqttMessageConsumer{
             BOT_SLEEPING = 1,
             AGV_MOVING_TO_SOURCE = 2,
             AGV_PARKED_AT_SOURCE = 3,
-            ROBOT_LOADING = 4,
-            AGV_MOVING_TO_DESTINATION = 5,
-            AGV_PARKED_AT_DESTINATION = 6,
-            ROBOT_UNLOADING = 7,
-            BOT_CHARGING = 8,    //After AGV_MOVING_TO_SOURCE-->AGV_PARKED_AT_SOURCE
-            BOT_EMERGENCY_STOPING = 9,
+            ROBOT_LOAD_ALIGN = 4,
+            ROBOT_LOADING = 5,
+            AGV_MOVING_TO_DESTINATION = 6,
+            AGV_PARKED_AT_DESTINATION = 7,
+            ROBOT_UNLOAD_ALIGN = 8,
+            ROBOT_UNLOADING = 9,
+            BOT_CHARGING = 10,    //After AGV_MOVING_TO_SOURCE-->AGV_PARKED_AT_SOURCE
+            BOT_EMERGENCY_STOPING = 11,
         };
 
         BotSingleMcu(uint16_t id);
@@ -80,6 +84,7 @@ class BotSingleMcu: public MqttMessageConsumer{
         void ExecuteMqttCommand(const char* command) override;
         RoadGraph objMapNavigator;
         SmartRfidReader objRfid;
+        int ReadAlignment_sensors();
         float __battery_voltage;
         void onDetectedMark(uint16_t mapsite_id);
         RoadBranchNode __current_BranchNode;
