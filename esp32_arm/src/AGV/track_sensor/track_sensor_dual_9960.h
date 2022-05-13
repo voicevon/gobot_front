@@ -35,7 +35,7 @@
 
 #include "stdint.h"
 #include "Wire.h"
-// #include "AGV/agv_sensor_base.h"
+#include "AGV/track_sensor/track_sensor_base.h"
 #include "track_sensor_smart_9960.h"
 #include <Adafruit_NeoPixel.h>
 
@@ -50,17 +50,16 @@ class TrackSensor_Dual9960_Config{
         uint8_t LedWs2812B_counts = 10; // Popular NeoPixel ring size
 };
 
-class TrackSensor_Dual9960{
+class TrackSensor_Dual9960:public TrackSensorBase{
     public:
         TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config);
-        int16_t ReadForwardingError();
-        void ReadParkingError(int16_t* x_error, int16_t* y_error);
-        void ClearFlag_Slowdown();
+        int16_t ReadForwardingError() override;
+        void ReadParkingError(int16_t* x_error, int16_t* y_error) override;
+        void ClearFlag_Slowdown() override;
         void ClearFlag_SpeedUp();
-        bool GetFlag_Slowdown(){if (this->__flag_slow_down == 1) return true; return false;};
-        bool GetFlag_Speedup(){if (this->__flag_spped_up == 1) return true; return false;};
-        bool IsFollowingLeft;
-        void TurnOnLed(bool turn_on);
+        bool GetFlag_Slowdown() override;
+        bool GetFlag_Speedup()override;
+        void TurnOnLed(bool turn_on) override;
         void SayHello();
 
     private:

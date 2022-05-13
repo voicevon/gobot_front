@@ -4,8 +4,15 @@
 
 class TrackSensorBase{
     public:
-        virtual int ReadError_FromRight(uint8_t* rxBuffer);
+        virtual int ReadError_FromRight(uint8_t* rxBuffer){};
         bool FollowRightTrack = true;
+        virtual bool GetFlag_Slowdown();
+        virtual bool GetFlag_Speedup();
+        virtual void ClearFlag_Slowdown();
+        virtual void TurnOnLed(bool turn_on);
+        virtual int16_t ReadForwardingError();
+        virtual void ReadParkingError(int16_t* x_error, int16_t* y_error);
+        bool IsFollowingLeft;
 
     protected:
         int _Convert_fromOrigin_toPositionError(uint8_t* origin_bits);

@@ -11,6 +11,7 @@
 #include "AGV/agv_base.h"
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/sensor/smart_rfid_reader.h"
+#include "AGV/track_sensor/track_sensor_dual_9960.h"
 
 #define  PIN_BATTERY_VOLTAGE_ADC  34
 #define  PIN_CHARGER_VOLTAGE_ADC  35

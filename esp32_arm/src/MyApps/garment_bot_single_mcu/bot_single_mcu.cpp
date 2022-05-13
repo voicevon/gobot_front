@@ -1,6 +1,7 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
 #include "bot_single_mcu.h"
+#include "AGV/wheel_driver/dual_wheels_pwm.h"
 
 #define PIN_IR_FRONT  35
 #define PIN_IR_REAR  36
@@ -13,14 +14,20 @@ BotSingleMcu::BotSingleMcu(uint16_t id){
 void BotSingleMcu::Init(){
 	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
 	TwoWire* i2c_bus_a;
+	TwoWire* i2c_bus_b;
 	i2c_bus_a = new TwoWire(0);
 	i2c_bus_a->begin(22,23);
+	i2c_bus_b = new TwoWire(1);
+	i2c_bus_b->begin(24,25);
+
 	Adafruit_MCP23X17* mcp_23018 = new Adafruit_MCP23X17();
 	mcp_23018->begin_I2C(0x20, i2c_bus_a);
 
-	this->objRfid.Init(17,18,19);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
+	DualWheelsPwmDriver* dual_pwm = new DualWheelsPwmDriver(mcp_23018, 12,23);
+	this->objAgv.LinkWheelDriver(dual_pwm);
+
 	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 
 	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
@@ -30,6 +37,20 @@ void BotSingleMcu::Init(){
 	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018);
     objBoxCarrierHardware->InitRobot();
     objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
+	this->objRfid.Init(17,18,19);
+
+	#define LEFT_APDS_9960_SDA 21
+	#define LEFT_APDS_9960_SCL 22
+	#define RIGHT_APDS_9960_SDA 23
+	#define RIGHT_APDS_9960_SCL 15
+	
+    TrackSensor_Dual9960_Config* config = new TrackSensor_Dual9960_Config();
+    config->pin_left_sensor_sda = LEFT_APDS_9960_SDA;
+    config->pin_left_sensor_sclk = LEFT_APDS_9960_SCL;
+    config->pin_right_sensor_sda = RIGHT_APDS_9960_SDA;
+    config->pin_right_sensor_sclk = RIGHT_APDS_9960_SCL;
+    TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(config);
+	this->objAgv.LinkTrackSensor(trackSensor); 
 
 	// #define I2C1_SDA_PIN 1
 	// #define I2C1_SCL_PIN 3	

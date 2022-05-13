@@ -4,19 +4,10 @@
 #define HCSR04_PIN_ECHO 18
 #define HCSR04_PIN_TRIG 19
 
-#define LEFT_APDS_9960_SDA 21
-#define LEFT_APDS_9960_SCL 22
-#define RIGHT_APDS_9960_SDA 23
-#define RIGHT_APDS_9960_SCL 15
+
 
 
 void AgvBase::_InitBase(){
-    TrackSensor_Dual9960_Config* config = new TrackSensor_Dual9960_Config();
-    config->pin_left_sensor_sda = LEFT_APDS_9960_SDA;
-    config->pin_left_sensor_sclk = LEFT_APDS_9960_SCL;
-    config->pin_right_sensor_sda = RIGHT_APDS_9960_SDA;
-    config->pin_right_sensor_sclk = RIGHT_APDS_9960_SCL;
-    this->trackSensor = new TrackSensor_Dual9960(config); 
 
 	this->obstacleSensor = new UltraSonicDistanceSensor(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
 

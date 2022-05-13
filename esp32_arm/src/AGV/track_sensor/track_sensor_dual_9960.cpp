@@ -10,6 +10,18 @@ TrackSensor_Dual9960::TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config){
     this->pixels->begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
 }
 
+bool TrackSensor_Dual9960::GetFlag_Slowdown(){
+    if (this->__flag_slow_down == 1) 
+        return true; 
+    return false;
+}
+bool TrackSensor_Dual9960::GetFlag_Speedup(){
+    if (this->__flag_spped_up == 1) 
+        return true; 
+    return false;
+}
+
+
 void TrackSensor_Dual9960::TurnOnLed(bool turn_on){
     uint8_t c = 0;
     if (turn_on)

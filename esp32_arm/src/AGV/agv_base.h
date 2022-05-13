@@ -27,7 +27,8 @@
 #pragma once
 #include <HCSR04.h> 
 
-#include "AGV/track_sensor/track_sensor_dual_9960.h"
+// #include "AGV/track_sensor/track_sensor_dual_9960.h"
+#include "AGV/track_sensor/track_sensor_base.h"
 #include "wheel_driver/wheel_driver_base.h"
 // #include "SimpleFOC.h"
 // #include "SoftwareSerial.h"
@@ -47,6 +48,7 @@ class AgvBase{
         };
 
         void Init(){};
+        void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor=trackSensor;};
         void LinkWheelDriver(WheelDriver* driver){this->wheelDriver=driver;};
         void SpinOnce();
         AgvBase::AGV_STATE GetState(){return this->_State;};
@@ -65,7 +67,8 @@ class AgvBase{
         float __parking_velocity = 10;
         float diff_speed;  //left faster is positive.
 
-        TrackSensor_Dual9960* trackSensor;
+        // TrackSensor_Dual9960* trackSensor;
+        TrackSensorBase* trackSensor;
         UltraSonicDistanceSensor *obstacleSensor; // = UltraSonicDistanceSensor(HS04_PIN_ECHO,HS04_PIN_TRIG); //initialisation class HCSR04 (trig pin , echo pin)
         WheelDriver* wheelDriver;
 

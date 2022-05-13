@@ -18,6 +18,10 @@
   * GPIO-1, GPIO-3
 * I2C 
 * Dual I2C for APDS9960 x4 
+  * i2c_bus_a:
+    * mcp_23018 + apds9960_left
+  * i2c_bus_b:
+    * apds9960_right  
 
 # High speed    x5 Pins
 * HCSR04         x2
