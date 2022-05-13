@@ -10,11 +10,7 @@
 #define RIGHT_APDS_9960_SCL 15
 
 
-AgvBase::AgvBase(){
-
-} 
-
-void AgvBase::Init(){
+void AgvBase::_InitBase(){
     TrackSensor_Dual9960_Config* config = new TrackSensor_Dual9960_Config();
     config->pin_left_sensor_sda = LEFT_APDS_9960_SDA;
     config->pin_left_sensor_sclk = LEFT_APDS_9960_SCL;
@@ -23,22 +19,7 @@ void AgvBase::Init(){
     this->trackSensor = new TrackSensor_Dual9960(config); 
 
 	this->obstacleSensor = new UltraSonicDistanceSensor(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
-    this->leftWheel_serial = new SoftwareSerial();
-    this->leftWheel_serial->begin(115200, SWSERIAL_8N1, PIN_SERIAL_RX_LEFT_WHEEL, PIN_SERIAL_TX_LEFT_WHEEL,false);
-    if (!this->leftWheel_serial) { // If the object did not initialize, then its configuration is invalid
-        Serial.println("[Error] AgvBase::Init()  left serial configuration !!!"); 
-        while (1) { // Don't continue with invalid configuration
-            delay (1000);
-        }
-    }
-    this->rightWheel_serial = new SoftwareSerial();
-    this->rightWheel_serial->begin(115200, SWSERIAL_8N1, PIN_SERIAL_RX_RIGHT_WHEEL, PIN_SERIAL_TX_RIGHT_WHEEL,false);
-    if (!this->rightWheel_serial) { // If the object did not initialize, then its configuration is invalid
-        Serial.println("[Error] AgvBase::Init()  right serial configuration !!!"); 
-        while (1) { // Don't continue with invalid configuration
-            delay (1000);
-        }
-    }
+
     this->ToState(PARKED);
 }
 
@@ -52,10 +33,7 @@ void AgvBase::Forwarding(){
 
     float left_speed = this->common_speed + x_error;
     float right_speed = this->common_speed - x_error;
-    String command = "T" + String(left_speed);
-    this->leftWheel_serial->write(command.c_str());
-    command = "T" + String(right_speed);
-    this->rightWheel_serial->write(command.c_str());
+
 }
 
 void AgvBase::SpinOnce(){
@@ -144,17 +122,17 @@ void AgvBase::ToState(AGV_STATE state){
         this->common_speed = this->__parking_velocity;
         break;
     case FAST_MOVING_PAUSED:
-        this->leftWheel_serial->write("T0");
-        this->rightWheel_serial->write("T0");
+        // this->leftWheel_serial->write("T0");
+        // this->rightWheel_serial->write("T0");
         break;
     case SLOW_MOVING_PAUSED:
-        this->leftWheel_serial->write("T0");
-        this->rightWheel_serial->write("T0");
+        // this->leftWheel_serial->write("T0");
+        // this->rightWheel_serial->write("T0");
         break;
     case PARKED:
-        this->leftWheel_serial->write("T0");
-        this->rightWheel_serial->write("T0");
-        this->trackSensor->TurnOnLed(false);
+        // this->leftWheel_serial->write("T0");
+        // this->rightWheel_serial->write("T0");
+        // this->trackSensor->TurnOnLed(false);
         break;
         
     default:

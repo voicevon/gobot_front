@@ -35,7 +35,7 @@
 
 #include "stdint.h"
 #include "Wire.h"
-#include "AGV/agv_sensor_base.h"
+// #include "AGV/agv_sensor_base.h"
 #include "track_sensor_smart_9960.h"
 #include <Adafruit_NeoPixel.h>
 
@@ -50,7 +50,7 @@ class TrackSensor_Dual9960_Config{
         uint8_t LedWs2812B_counts = 10; // Popular NeoPixel ring size
 };
 
-class TrackSensor_Dual9960: public AgvTrackSensor{
+class TrackSensor_Dual9960{
     public:
         TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config);
         int16_t ReadForwardingError();

@@ -31,11 +31,7 @@
 #include "SimpleFOC.h"
 #include "SoftwareSerial.h"
 
-#define PIN_SERIAL_RX_LEFT_WHEEL 21
-#define PIN_SERIAL_TX_LEFT_WHEEL 22
 
-#define PIN_SERIAL_RX_RIGHT_WHEEL 23
-#define PIN_SERIAL_TX_RIGHT_WHEEL 27
 
 class AgvBase{
     public:
@@ -49,28 +45,27 @@ class AgvBase{
             PARKED = 7,
         };
 
-        AgvBase();
-        void Init();
+        void Init(){};
         void SpinOnce();
         AgvBase::AGV_STATE GetState(){return this->_State;};
         void ToState(AgvBase::AGV_STATE state);
         void SetFollowMainRoad(bool next_branch_is_on_left, bool follow_main_road);
 
     protected:
+        void _InitBase();
         AGV_STATE _State;
         void Forwarding();
+        float common_speed;
 
     private:
         float __fast_velocity = 100;
         float __slow_velocity = 60;
         float __parking_velocity = 10;
-        float common_speed;
         float diff_speed;  //left faster is positive.
 
         TrackSensor_Dual9960* trackSensor;
         UltraSonicDistanceSensor *obstacleSensor; // = UltraSonicDistanceSensor(HS04_PIN_ECHO,HS04_PIN_TRIG); //initialisation class HCSR04 (trig pin , echo pin)
-        SoftwareSerial * leftWheel_serial;
-        SoftwareSerial * rightWheel_serial;
+
 
         bool DoParking();
 
