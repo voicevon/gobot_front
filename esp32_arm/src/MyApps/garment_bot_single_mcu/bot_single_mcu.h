@@ -71,7 +71,7 @@ class BotSingleMcu: public MqttMessageConsumer{
 
         GcodeQueue* _gcode_queue;
         BoxCarrier objBoxCarrier = BoxCarrier();
-        BoxCarrierHardware* objBoxCarrierHardware;
+        BoxCarrierHardware* boxCarrierHardware;
         void Init();
         void SpinOnce() override;
         void ToState(BotSingleMcu::BOT_STATE state);

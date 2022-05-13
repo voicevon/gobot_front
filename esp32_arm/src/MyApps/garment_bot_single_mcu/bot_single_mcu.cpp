@@ -122,7 +122,7 @@ void BotSingleMcu::SpinOnce(){
 	// this->objBoxMoverAgent.SpinOnce();
 	// this->objBoxCarrier_hardware->SpinOnce();
 	this->objAgv.SpinOnce();
-	this->objBoxCarrierHardware->SpinOnce();
+	this->boxCarrierHardware->SpinOnce();
 	this->objBoxCarrier.SpinOnce();
 	this->CheckMqttCommand();
 
@@ -158,7 +158,7 @@ void BotSingleMcu::SpinOnce(){
 
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
-		if (this->objBoxCarrierHardware->State == RobotState::IDLE){
+		if (this->boxCarrierHardware->State == RobotState::IDLE){
 			// Last movement is done.
 			align_error = this->ReadAlignment_sensors();
 			if (align_error < 100){
@@ -215,14 +215,14 @@ void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
 		new_state = BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN;
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
-		if (this->objBoxCarrierHardware->State == RobotState::IDLE){
+		if (this->boxCarrierHardware->State == RobotState::IDLE){
 			gcode.concat("Z50");
 			this->_gcode_queue->AppendGcodeCommand(gcode);
 			new_state = BotSingleMcu::BOT_STATE::ROBOT_LOADING;
 		}
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOADING:
-		if (this->objBoxCarrierHardware->State == RobotState::IDLE){
+		if (this->boxCarrierHardware->State == RobotState::IDLE){
 			new_state = BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION;
 		}
 		break;

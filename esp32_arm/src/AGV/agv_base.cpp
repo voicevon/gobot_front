@@ -33,6 +33,7 @@ void AgvBase::Forwarding(){
 
     float left_speed = this->common_speed + x_error;
     float right_speed = this->common_speed - x_error;
+    this->wheelDriver->SetDualSpeed(left_speed, right_speed);
 
 }
 
