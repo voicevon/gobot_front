@@ -1,4 +1,4 @@
-#include "twin_wheels_agv.h"
+#include "agv_base.h"
 
 
 #define HCSR04_PIN_ECHO 18
@@ -10,11 +10,11 @@
 #define RIGHT_APDS_9960_SCL 15
 
 
-TwinWheelsAgv::TwinWheelsAgv(){
+AgvBase::AgvBase(){
 
 } 
 
-void TwinWheelsAgv::Init(){
+void AgvBase::Init(){
     TrackSensor_Dual9960_Config* config = new TrackSensor_Dual9960_Config();
     config->pin_left_sensor_sda = LEFT_APDS_9960_SDA;
     config->pin_left_sensor_sclk = LEFT_APDS_9960_SCL;
@@ -26,7 +26,7 @@ void TwinWheelsAgv::Init(){
     this->leftWheel_serial = new SoftwareSerial();
     this->leftWheel_serial->begin(115200, SWSERIAL_8N1, PIN_SERIAL_RX_LEFT_WHEEL, PIN_SERIAL_TX_LEFT_WHEEL,false);
     if (!this->leftWheel_serial) { // If the object did not initialize, then its configuration is invalid
-        Serial.println("[Error] TwinWheelsAgv::Init()  left serial configuration !!!"); 
+        Serial.println("[Error] AgvBase::Init()  left serial configuration !!!"); 
         while (1) { // Don't continue with invalid configuration
             delay (1000);
         }
@@ -34,7 +34,7 @@ void TwinWheelsAgv::Init(){
     this->rightWheel_serial = new SoftwareSerial();
     this->rightWheel_serial->begin(115200, SWSERIAL_8N1, PIN_SERIAL_RX_RIGHT_WHEEL, PIN_SERIAL_TX_RIGHT_WHEEL,false);
     if (!this->rightWheel_serial) { // If the object did not initialize, then its configuration is invalid
-        Serial.println("[Error] TwinWheelsAgv::Init()  right serial configuration !!!"); 
+        Serial.println("[Error] AgvBase::Init()  right serial configuration !!!"); 
         while (1) { // Don't continue with invalid configuration
             delay (1000);
         }
@@ -42,11 +42,11 @@ void TwinWheelsAgv::Init(){
     this->ToState(PARKED);
 }
 
-void TwinWheelsAgv::SetFollowMainRoad(bool next_branch_is_on_left, bool follow_main_road){
+void AgvBase::SetFollowMainRoad(bool next_branch_is_on_left, bool follow_main_road){
     this->trackSensor->IsFollowingLeft = !(next_branch_is_on_left ^ follow_main_road);
 }
 
-void TwinWheelsAgv::Forwarding(){
+void AgvBase::Forwarding(){
     int16_t x_error = this->trackSensor->ReadForwardingError();
     // pid controller to set common_speed, diff_speed
 
@@ -58,7 +58,7 @@ void TwinWheelsAgv::Forwarding(){
     this->rightWheel_serial->write(command.c_str());
 }
 
-void TwinWheelsAgv::SpinOnce(){
+void AgvBase::SpinOnce(){
     bool test_track_sensor_only = false;
     bool test_led_on = false;
     while (test_track_sensor_only){
@@ -121,13 +121,13 @@ void TwinWheelsAgv::SpinOnce(){
             break;
 
     default:
-        Serial.print("[Warn] TwinWheelsAgv::SpinOnce()   Unhandld state= ");
+        Serial.print("[Warn] AgvBase::SpinOnce()   Unhandld state= ");
         Serial.println(this->_State);
         break;
     }
 }
 
-void TwinWheelsAgv::ToState(AGV_STATE state){
+void AgvBase::ToState(AGV_STATE state){
     if (state == this->_State) return;
     if (this->_State == PARKED){
         // leaving parked state
@@ -158,7 +158,7 @@ void TwinWheelsAgv::ToState(AGV_STATE state){
         break;
         
     default:
-        Serial.print("[Warn] TwinWheelsAgv::ToState()  switch without case ");
+        Serial.print("[Warn] AgvBase::ToState()  switch without case ");
         Serial.println(state);
         break;
     }
@@ -171,7 +171,7 @@ void TwinWheelsAgv::ToState(AGV_STATE state){
 
 // return true:   reach parked position
 // return false:  still parking
-bool TwinWheelsAgv::DoParking(){
+bool AgvBase::DoParking(){
     int16_t x_error ;
     int16_t y_error ;
     this->trackSensor->ReadParkingError(&x_error, &y_error);

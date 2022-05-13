@@ -37,7 +37,7 @@
 #define PIN_SERIAL_RX_RIGHT_WHEEL 23
 #define PIN_SERIAL_TX_RIGHT_WHEEL 27
 
-class TwinWheelsAgv{
+class AgvBase{
     public:
         enum AGV_STATE{
             FAST_MOVING = 1,
@@ -49,11 +49,11 @@ class TwinWheelsAgv{
             PARKED = 7,
         };
 
-        TwinWheelsAgv();
+        AgvBase();
         void Init();
         void SpinOnce();
-        TwinWheelsAgv::AGV_STATE GetState(){return this->_State;};
-        void ToState(TwinWheelsAgv::AGV_STATE state);
+        AgvBase::AGV_STATE GetState(){return this->_State;};
+        void ToState(AgvBase::AGV_STATE state);
         void SetFollowMainRoad(bool next_branch_is_on_left, bool follow_main_road);
 
     protected:

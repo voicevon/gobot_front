@@ -127,7 +127,7 @@ void BotSingleMcu::SpinOnce(){
 	this->CheckMqttCommand();
 
 	
-	if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::SLOW_MOVING ){
+	if(this->objAgv.GetState() == AgvBase::AGV_STATE::SLOW_MOVING ){
 		if (this->objRfid.ReadCard()){
 			this->onDetectedMark(this->objRfid.CardId);
 			return;
@@ -149,7 +149,7 @@ void BotSingleMcu::SpinOnce(){
    	case BotSingleMcu::BOT_STATE::BOT_EMERGENCY_STOPING:
       	break;
    	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_SOURCE:
-		if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
+		if(this->objAgv.GetState() == AgvBase::AGV_STATE::PARKED)
 			this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE);
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE:
@@ -176,7 +176,7 @@ void BotSingleMcu::SpinOnce(){
 			this->ToState(BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION);
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION:
-		if(this->objAgv.GetState() == TwinWheelsAgv::AGV_STATE::PARKED)
+		if(this->objAgv.GetState() == AgvBase::AGV_STATE::PARKED)
 			this->ToState(BotSingleMcu::BOT_STATE::AGV_PARKED_AT_DESTINATION);
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_DESTINATION:
@@ -200,14 +200,14 @@ void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
  	BotSingleMcu::BOT_STATE new_state = state;
 	switch(state){
 	case BotSingleMcu::BOT_STATE::BOT_LOCATING:
-		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::SLOW_MOVING);
+		this->objAgv.ToState(AgvBase::AGV_STATE::SLOW_MOVING);
 		break;
 	case BotSingleMcu::BOT_STATE::BOT_SLEEPING:
 		// Keep reporting battery voltage.
-		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::PARKED);
+		this->objAgv.ToState(AgvBase::AGV_STATE::PARKED);
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_SOURCE:
-		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
+		this->objAgv.ToState(AgvBase::AGV_STATE::FAST_MOVING);
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_SOURCE:
 		// this->objBoxMoverAgent.ToPresetState();
@@ -227,7 +227,7 @@ void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
 		}
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION:
-		this->objAgv.ToState(TwinWheelsAgv::AGV_STATE::FAST_MOVING);
+		this->objAgv.ToState(AgvBase::AGV_STATE::FAST_MOVING);
 		break;
 	case BotSingleMcu::BOT_STATE::AGV_PARKED_AT_DESTINATION:
 		// this->objBoxMoverAgent.ToPresetState();
