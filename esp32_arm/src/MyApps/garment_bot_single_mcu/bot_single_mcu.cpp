@@ -3,6 +3,7 @@
 #include "bot_single_mcu.h"
 #include "AGV/sensor/obstacle_sensor_hcsr04.h"
 #include "AGV/light/light_ws2812b.h"
+#include "AGV/track_sensor/track_sensor_dual_9960.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
 
 #define PIN_IR_FRONT  35
@@ -17,6 +18,9 @@
 #define RIGHT_APDS_9960_SDA 23
 #define RIGHT_APDS_9960_SCL 15
 
+#define  PIN_BATTERY_VOLTAGE_ADC  34
+#define  PIN_CHARGER_VOLTAGE_ADC  35
+
 BotSingleMcu::BotSingleMcu(uint16_t id){
 	this->_ID = id;
 	// this->objBoxCarrier_hardware = new BoxCarrierHardware();
@@ -24,7 +28,8 @@ BotSingleMcu::BotSingleMcu(uint16_t id){
 
 void BotSingleMcu::Init(){
 	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
-
+	
+	//Init BUS, MCP23018,
 	TwoWire* i2c_bus_a;
 	TwoWire* i2c_bus_b;
 	i2c_bus_a = new TwoWire(0);
@@ -34,62 +39,37 @@ void BotSingleMcu::Init(){
 
 	Adafruit_MCP23X17* mcp_23018 = new Adafruit_MCP23X17();
 	mcp_23018->begin_I2C(0x20, i2c_bus_a);
-
-	// this->objRfid.LinkCallback(&onDetectedMark);
-	this->objAgv.Init();
+	
+	// Init PWM driver
 	SingleWheel_HBridgePwmDriver* left_wheel_pwm = new SingleWheel_HBridgePwmDriver(12, mcp_23018, 23);
 	SingleWheel_HBridgePwmDriver* right_wheel_pwm = new SingleWheel_HBridgePwmDriver(15, mcp_23018, 25);
-	// DualWheelsPwmDriver* dual_pwm = new DualWheelsPwmDriver();
-	// dual_pwm.li
 	MoverDualWheel* mover = new MoverDualWheel();
 	mover->LinkLeftDriver(left_wheel_pwm);
 	mover->LinkRightDriver(right_wheel_pwm);
 	this->objAgv.LinkMover(mover);
 
-	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
-
-	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
-	Serial.print("\n[Info] BotSingleMcu::Init() is done.\n");
-	
-	this->_gcode_queue = new GcodeQueue();
-	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018);
-    objBoxCarrierHardware->InitRobot();
-    objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
-	this->objRfid.Init(17,18,19);
-
-
-
-    // TrackSensor_Dual9960_Config* config = new TrackSensor_Dual9960_Config();
-    // config->pin_left_sensor_sda = LEFT_APDS_9960_SDA;
-    // config->pin_left_sensor_sclk = LEFT_APDS_9960_SCL;
-    // config->pin_right_sensor_sda = RIGHT_APDS_9960_SDA;
-    // config->pin_right_sensor_sclk = RIGHT_APDS_9960_SCL;
-    // TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(config);
+	// Init track sensor
 	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(i2c_bus_a, i2c_bus_b);
 	Light_WS2812B* led=new Light_WS2812B(16,PIN_WS2812B);
 	trackSensor->LinkLight(led);
 	this->objAgv.LinkTrackSensor(trackSensor); 
 
+	// Init Obstacle sensor, rfid sensor, battery voltage sensor.
 	ObstacleSensor_Hcsr04* hcsr04= new ObstacleSensor_Hcsr04(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
 	this->objAgv.LinkObstacleSensor(hcsr04);
+	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
+	this->objRfid.Init(17,18,19);
+	// this->objRfid.LinkCallback(&onDetectedMark);
+	this->objAgv.Init();
 
-	// #define I2C1_SDA_PIN 1
-	// #define I2C1_SCL_PIN 3	
-	// #define I2C2_SDA_PIN 1
-	// #define I2C2_SCL_PIN 3
-	// initialize ADS1115 on I2C bus 1 with default address 0x48
-	// TwoWire* i2c_bus_a;
-	// TwoWire* i2c_bus_b;
-	// i2c_bus_a = new TwoWire(1);
-	// i2c_bus_b = new TwoWire(1);
-	// i2c_bus_a->begin(I2C1_SDA_PIN, I2C1_SCL_PIN, 100000); // Start I2C1 on pins 21 and 22
-    // i2c_bus_b->begin(I2C2_SDA_PIN, I2C2_SCL_PIN, 100000); // Start I2C2 on pins 0 and 23
+	// Init box carrier robot.
+	this->_gcode_queue = new GcodeQueue();
+	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018);
+	objBoxCarrierHardware->InitRobot();
+    objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 
-	// this->objAds1115 = new ADS1115(0x48, i2c_bus_a);
-	// if (!this->objAds1115->isConnected()) {
-	// 	// error ADS1115 not connected
-	// }
-
+	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
+	Serial.print("\n[Info] BotSingleMcu::Init() is done.\n");
 }
 
 void BotSingleMcu::ExecuteMqttCommand(const char* command){

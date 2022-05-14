@@ -7,14 +7,10 @@
 
 #include "MyApps/garment_box_carrier/box_carrier.h"
 #include "MyApps/garment_box_carrier/box_carrier_hw.h"
-// #include "AGV/twin_wheels/twin_wheels_pwm.h"
-#include "AGV/agv_base.h"
+
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/sensor/smart_rfid_reader.h"
-#include "AGV/track_sensor/track_sensor_dual_9960.h"
-
-#define  PIN_BATTERY_VOLTAGE_ADC  34
-#define  PIN_CHARGER_VOLTAGE_ADC  35
+#include "AGV/agv_base.h"
 
 
 
@@ -67,7 +63,6 @@ class BotSingleMcu: public MqttMessageConsumer{
         };
 
         BotSingleMcu(uint16_t id);
-        // GarmentBoxMoverAgent objBoxMoverAgent = GarmentBoxMoverAgent();
         AgvBase objAgv = AgvBase();
 
         GcodeQueue* _gcode_queue;
