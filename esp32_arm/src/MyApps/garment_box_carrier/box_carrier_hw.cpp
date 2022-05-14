@@ -60,12 +60,33 @@ void BoxCarrierHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 }
 
 
-BoxCarrierHardware::BoxCarrierHardware(){
+BoxCarrierHardware::BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
+	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+	pinMode(PIN_BETA_ENABLE, OUTPUT);
+
 	this->__mcp23018 = nullptr;
+	this->__EnableMotor('A', false);
+	this->__EnableMotor('B', false);
 }
 
-BoxCarrierHardware::BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018){
+BoxCarrierHardware::BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
 	this->__mcp23018 = mcp_23018;
+	this->__mcp23018->pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+	this->__mcp23018->pinMode(PIN_BETA_ENABLE, OUTPUT);
+	this->__EnableMotor('A', false);
+	this->__EnableMotor('B', false);
+
+
+}
+
+void BoxCarrierHardware::LinkStepper(Stepper* alpha, Stepper* beta){
+	this->objStepper_alpha = alpha;
+	this->objStepper_beta = beta;
+}
+
+void BoxCarrierHardware::LinkHomer(HomeHelper* homer_z, HomeHelper* homer_y){
+	this->objHomeHelper_vertical = homer_z;
+	this->objHomeHelper_y = homer_y;
 }
 
 void BoxCarrierHardware::InitRobot(){
@@ -82,20 +103,14 @@ void BoxCarrierHardware::InitRobot(){
 	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
 	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
 	if (this->__mcp23018 == nullptr){
-		pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-		pinMode(PIN_BETA_ENABLE, OUTPUT);
+
 		// Serial.print("[Error]  BoxCarrierHardware::InitRobot()   mcp23018 is null");
 	}else{
 
-	
-		this->objHomeHelper_vertical = new HomeHelper(this->__mcp23018, 12, LOW);
-		this->objHomeHelper_y = new HomeHelper(this->__mcp23018, 22, LOW);
 
-		this->__mcp23018->pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-		this->__mcp23018->pinMode(PIN_BETA_ENABLE, OUTPUT);
+
 	}
-	this->__EnableMotor('A', false);
-	this->__EnableMotor('B', false);
+
 
 
 	
@@ -107,8 +122,8 @@ void BoxCarrierHardware::InitRobot(){
 	// this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
 	// this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
 	// this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
-	this->objStepper_alpha.setInverseRotation(true);
-	this->objStepper_beta.setInverseRotation(true);
+	this->objStepper_alpha->setInverseRotation(true);
+	this->objStepper_beta->setInverseRotation(true);
 
 	this->_home_as_inverse_kinematic = false;
 }
@@ -119,24 +134,24 @@ void BoxCarrierHardware::HomeSingleAxis(char axis){
 	this->_homing_axis = axis;
 
 	this->__config.PrintOut();
-	this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
-	this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
-	this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
-	this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
+	this->objStepper_alpha->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
+	this->objStepper_alpha->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
+	this->objStepper_beta->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
+	this->objStepper_beta->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 
 	if (axis=='Y'){
 		//todo :  process with IK()
 		this->__homing_helper = this->objHomeHelper_y;
-		this->objStepper_alpha.setTargetRel(5000000);
-		this->objStepper_beta.setTargetRel(5000000);
+		this->objStepper_alpha->setTargetRel(5000000);
+		this->objStepper_beta->setTargetRel(5000000);
 	}else if (axis=='Z'){
 		this->__homing_helper = this->objHomeHelper_vertical;
-		this->objStepper_alpha.setTargetRel(-5000000);
-		this->objStepper_beta.setTargetRel(5000000);	
+		this->objStepper_alpha->setTargetRel(-5000000);
+		this->objStepper_beta->setTargetRel(5000000);	
 	}
 	this->__EnableMotor('A', true);
 	this->__EnableMotor('B', true);
-	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
+	this->objStepControl.moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
 }
 
 void BoxCarrierHardware::_running_G28(){
@@ -164,13 +179,13 @@ void BoxCarrierHardware::_running_G28(){
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis == 'Z') this->objStepper_alpha.setPosition(ik_position.alpha);
-		if (this->_homing_axis == 'Y') this->objStepper_beta.setPosition(ik_position.beta);
+		if (this->_homing_axis == 'Z') this->objStepper_alpha->setPosition(ik_position.alpha);
+		if (this->_homing_axis == 'Y') this->objStepper_beta->setPosition(ik_position.beta);
 		
-		this->objStepper_alpha.setMaxSpeed(this->__config.max_speed_alpha_beta);
-		this->objStepper_alpha.setAcceleration(this->__config.max_acceleration_alpha_beta);
-		this->objStepper_beta.setMaxSpeed(this->__config.max_speed_alpha_beta);
-		this->objStepper_beta.setAcceleration(this->__config.max_acceleration_alpha_beta);
+		this->objStepper_alpha->setMaxSpeed(this->__config.max_speed_alpha_beta);
+		this->objStepper_alpha->setAcceleration(this->__config.max_acceleration_alpha_beta);
+		this->objStepper_beta->setMaxSpeed(this->__config.max_speed_alpha_beta);
+		this->objStepper_beta->setAcceleration(this->__config.max_acceleration_alpha_beta);
 		this->State = RobotState::IDLE;
 
 	}else{
@@ -201,16 +216,16 @@ void BoxCarrierHardware::RunG1(Gcode* gcode) {
 	this->__EnableMotor('B', true);
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
-		this->objStepper_alpha.setMaxSpeed(speed);
-		this->objStepper_beta.setMaxSpeed(speed);
+		this->objStepper_alpha->setMaxSpeed(speed);
+		this->objStepper_beta->setMaxSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_YZ target_fk_yz;
 	IkPosition_AB target_ik_ab;
 	target_fk_yz.Z = this->__current_fk_position.Z;
 	target_fk_yz.Y = this->__current_fk_position.Y;
-	target_ik_ab.alpha = float(this->objStepper_alpha.getPosition()) ;
-	target_ik_ab.beta = float(this->objStepper_beta.getPosition());
+	target_ik_ab.alpha = float(this->objStepper_alpha->getPosition()) ;
+	target_ik_ab.beta = float(this->objStepper_beta->getPosition());
 	bool do_ik=false;
 	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A');
 	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B');
@@ -227,16 +242,16 @@ void BoxCarrierHardware::RunG1(Gcode* gcode) {
 	if (do_ik) IK(&target_fk_yz,&target_ik_ab);
 
 	//Prepare actuator/driver to move to next point
-	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha);
-	this->objStepper_beta.setTargetAbs(target_ik_ab.beta);
+	this->objStepper_alpha->setTargetAbs(target_ik_ab.alpha);
+	this->objStepper_beta->setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
-	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
+	this->objStepControl.moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
 
 	if (true){
 		Serial.print("\n    [Debug] BoxCarrierHardware::RunG1()     (");
-		Serial.print(this->objStepper_alpha.getPosition());
+		Serial.print(this->objStepper_alpha->getPosition());
 		Serial.print(",");
-		Serial.print(this->objStepper_beta.getPosition());
+		Serial.print(this->objStepper_beta->getPosition());
 		Serial.print(")   <-- from   alpha,beta   to -->  (");
 		Serial.print(target_ik_ab.alpha  );
 		Serial.print(" , ");
@@ -264,7 +279,7 @@ void BoxCarrierHardware::RunM84(){
 }
 
 float BoxCarrierHardware::GetDistanceToTarget_IK(){
-	return this->objStepper_alpha.getDistanceToTarget() + this->objStepper_beta.getDistanceToTarget();
+	return this->objStepper_alpha->getDistanceToTarget() + this->objStepper_beta->getDistanceToTarget();
 }
 
 void BoxCarrierHardware::__EnableMotor(char actuator, bool enable_it){

@@ -8,19 +8,21 @@
 #include "Robot/Commu/CommuUart.h"
 
 
-#define VERTICAL_ENDSTOP 15
-#define Y_ENDSTOP 2
+// #define VERTICAL_ENDSTOP 15
+// #define Y_ENDSTOP 2
 
-#define PIN_STEP_ALPHA 5
-#define PIN_DIR_ALPHA 19
-#define PIN_STEP_BETA 4
-#define PIN_DIR_BETA 17
+// #define PIN_STEP_ALPHA 5
+// #define PIN_DIR_ALPHA 19
+// #define PIN_STEP_BETA 4
+// #define PIN_DIR_BETA 17
 
 
 class BoxCarrierHardware:public RobotBase{
     public:
-        BoxCarrierHardware();
-        BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018);
+        BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_beta_enable);
+        BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable);
+        void LinkStepper(Stepper* alpha, Stepper* beta);
+        void LinkHomer(HomeHelper* homer_z, HomeHelper* homer_y);
 
         void InitRobot() override;
         void HomeSingleAxis(char axis) override;
@@ -31,8 +33,8 @@ class BoxCarrierHardware:public RobotBase{
         float GetDistanceToTarget_IK() override;
 
     private:
-        Stepper objStepper_alpha = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
-        Stepper objStepper_beta = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
+        Stepper* objStepper_alpha; // = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
+        Stepper* objStepper_beta; // = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
         StepControl objStepControl;
 
         //Override private

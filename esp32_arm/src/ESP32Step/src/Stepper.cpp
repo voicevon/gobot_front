@@ -19,7 +19,7 @@ Stepper::Stepper(const int _stepPin, const int _dirPin)
     this->__mcp23018 = nullptr;
 }
 
-Stepper::Stepper(Adafruit_MCP23X17* mcp23018_dir_pin_only, const int _stepPin, const int _dirPin)
+Stepper::Stepper(const int _stepPin, Adafruit_MCP23X17* mcp23018_dir_pin_only, const int _dirPin)
     : current(0),  stepPin(_stepPin), dirPin(_dirPin)
 {
 
