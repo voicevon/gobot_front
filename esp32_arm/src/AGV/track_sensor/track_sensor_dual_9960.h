@@ -55,7 +55,7 @@ class TrackSensor_Dual9960:public TrackSensorBase{
         TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config);
         TrackSensor_Dual9960(TwoWire* i2c_bus_left, TwoWire* i2c_bus_right);
         void LinkLight(LightBase* light){this->__led_light=light;};
-        int16_t ReadForwardingError() override;
+        int16_t ReadAlignmentError() override;
         void ReadParkingError(int16_t* x_error, int16_t* y_error) override;
         void ClearFlag_Slowdown() override;
         void ClearFlag_SpeedUp();

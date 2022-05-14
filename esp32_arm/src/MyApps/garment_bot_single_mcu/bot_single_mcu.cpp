@@ -6,7 +6,7 @@
 #include "AGV/light/light_ws2812b.h"
 #include "AGV/track_sensor/track_sensor_dual_9960.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
-
+#include "AGV/track_sensor/track_sensor_dual_ir.h"
 
 
 BotSingleMcu::BotSingleMcu(uint16_t id){
@@ -51,7 +51,9 @@ void BotSingleMcu::Init(){
 	this->objAgv.Init();
 
 	// Init box carrier robot.
-	this->_gcode_queue = new GcodeQueue();
+	TrackSensor_DualIR* irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
+	irSensor = nullptr;
+
 	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018, MC23018_PIN_ALPHA_ENABLE,MC23018_PIN_BETA_ENABLE);
 	Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);
 	Stepper* beta = new Stepper(PIN_BETA_STEP, mcp_23018, MC23018_PIN_BETA_DIR);
@@ -60,6 +62,7 @@ void BotSingleMcu::Init(){
 	HomeHelper* homer_z = new HomeHelper(mcp_23018, MC23018_PIN_HOME_Z, LOW);
 	objBoxCarrierHardware->LinkHomer(homer_z, homer_y);
 	objBoxCarrierHardware->InitRobot();
+	this->_gcode_queue = new GcodeQueue();
     objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 
 	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);

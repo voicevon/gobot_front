@@ -6,7 +6,8 @@
 class TrackSensor_Shengteng: public TrackSensorBase{
     public:
         TrackSensor_Shengteng(){};
-        int ReadError_FromRight(uint8_t* rxBuffer) override;
+        int ReadError_FromRight(uint8_t* rxBuffer);
+        int16_t ReadAlignmentError() override {return 0;};
 
     private:
         // uint8_t slave_address = 0x3f;
