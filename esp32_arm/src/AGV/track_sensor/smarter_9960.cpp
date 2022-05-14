@@ -1,6 +1,6 @@
-#include "track_sensor_smart_9960.h"
+#include "smarter_9960.h"
 
-SmartLightSensor::SmartLightSensor(uint8_t i2c_bus_id, uint8_t pin_sda, uint8_t pin_sclk){
+Smarter9960::Smarter9960(uint8_t i2c_bus_id, uint8_t pin_sda, uint8_t pin_sclk){
     TwoWire* i2c_bus = new TwoWire(i2c_bus_id);
     i2c_bus->begin(pin_sda, pin_sclk, 400000);
     this->sensor = new Adafruit_APDS9960();
@@ -17,7 +17,7 @@ SmartLightSensor::SmartLightSensor(uint8_t i2c_bus_id, uint8_t pin_sda, uint8_t 
 
 
 
-void SmartLightSensor::ReadSensor(){
+void Smarter9960::ReadSensor(){
     //Step1:  Read raw value from hardware sehnsor
     while(!this->sensor->colorDataReady()){
         delay(5);
@@ -26,7 +26,7 @@ void SmartLightSensor::ReadSensor(){
     sensor->getColorData(&this->color_r, &this->color_g, &this->color_b, &this->color_c);
     bool debug= false;
     if (debug){
-        Serial.print("[Debug] SmartLightSensor::ReadSensor()  r,g,b,c,min,max= ");
+        Serial.print("[Debug] Smarter9960::ReadSensor()  r,g,b,c,min,max= ");
         Serial.print(this->color_r);
         Serial.print("   ");
         Serial.print(this->color_g);

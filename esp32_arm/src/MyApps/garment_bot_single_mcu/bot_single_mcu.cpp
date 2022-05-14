@@ -57,6 +57,8 @@ void BotSingleMcu::Init(){
     TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(config);
 	this->objAgv.LinkTrackSensor(trackSensor); 
 
+	ObstacleSensor_Hcsr04* hcsr04= new ObstacleSensor_Hcsr04(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
+	this->objAgv.LinkObstacleSensor(hcsr04);
 
 	// #define I2C1_SDA_PIN 1
 	// #define I2C1_SCL_PIN 3	
@@ -75,8 +77,6 @@ void BotSingleMcu::Init(){
 	// 	// error ADS1115 not connected
 	// }
 
-	ObstacleSensor_Hcsr04* hcsr04= new ObstacleSensor_Hcsr04(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
-	this->objAgv.LinkObstacleSensor(hcsr04);
 }
 
 void BotSingleMcu::ExecuteMqttCommand(const char* command){

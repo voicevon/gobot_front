@@ -2,8 +2,8 @@
 
 TrackSensor_Dual9960::TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config){
     this->__config = config;
-    this->left_sensor = new SmartLightSensor(0, config->pin_left_sensor_sda ,config->pin_left_sensor_sclk);
-    this->right_sensor = new SmartLightSensor(1, config->pin_right_sensor_sda, config->pin_right_sensor_sclk);
+    this->left_sensor = new Smarter9960(0, config->pin_left_sensor_sda ,config->pin_left_sensor_sclk);
+    this->right_sensor = new Smarter9960(1, config->pin_right_sensor_sda, config->pin_right_sensor_sclk);
     
     this->IsFollowingLeft = true;
     this->pixels = new Adafruit_NeoPixel(config->LedWs2812B_counts, config->pin_WS2812_LED, NEO_GRB + NEO_KHZ800);

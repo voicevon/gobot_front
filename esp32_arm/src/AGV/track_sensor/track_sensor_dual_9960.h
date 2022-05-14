@@ -36,7 +36,7 @@
 #include "stdint.h"
 #include "Wire.h"
 #include "AGV/track_sensor/track_sensor_base.h"
-#include "track_sensor_smart_9960.h"
+#include "smarter_9960.h"
 #include <Adafruit_NeoPixel.h>
 
 
@@ -64,8 +64,8 @@ class TrackSensor_Dual9960:public TrackSensorBase{
 
     private:
         TrackSensor_Dual9960_Config* __config;
-        SmartLightSensor* left_sensor;
-        SmartLightSensor* right_sensor;
+        Smarter9960* left_sensor;
+        Smarter9960* right_sensor;
         /*
         0:  begin with setting flag to 0.
         1:  sensor set flag to 1 , when sensor detected mark.

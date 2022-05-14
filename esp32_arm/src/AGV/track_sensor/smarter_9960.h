@@ -2,9 +2,10 @@
 #include <stdint.h>
 #include "Adafruit_APDS9960.h"
 
-class SmartLightSensor{
+class Smarter9960{
     public:
-        SmartLightSensor(uint8_t i2c_bus_id, uint8_t pin_sda, uint8_t pin_sclk);
+        Smarter9960(uint8_t i2c_bus_id, uint8_t pin_sda, uint8_t pin_sclk);
+        Smarter9960(uint8_t* i2c_bus){};
         uint16_t color_r, color_g, color_b, color_c;
         void ReadSensor();
         float light_percent;
