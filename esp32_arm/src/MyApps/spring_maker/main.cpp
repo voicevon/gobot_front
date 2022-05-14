@@ -1,5 +1,6 @@
 #include "all_devices.h"
 #ifdef I_AM_SPRING_MAKER
+#include "spring_maker_board.h"
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"

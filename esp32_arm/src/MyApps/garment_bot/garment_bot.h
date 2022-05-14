@@ -3,10 +3,10 @@
 #ifdef I_AM_GARMENT_BOT
 
 #include "IoT/mqtt_message_consumer.h"
-#include "AGV/twin_Wheels/twin_wheels_agv.h"
+#include "AGV/agv_base.h"
 #include "box_mover_agent.h"
 #include "AGV/map_road_station/map_navigator.h"
-#include "AGV/smart_rfid_reader.h"
+#include "AGV/sensor/smart_rfid_reader.h"
 
 #define  PIN_BATTERY_VOLTAGE_ADC  34
 #define  PIN_CHARGER_VOLTAGE_ADC  35
@@ -59,7 +59,7 @@ class GarmentBot: public MqttMessageConsumer{
 
         GarmentBot(uint16_t id);
         GarmentBoxMoverAgent objBoxMoverAgent = GarmentBoxMoverAgent();
-        TwinWheelsAgv objAgv = TwinWheelsAgv();
+        AgvBase objAgv = AgvBase();
 
         void Init();
         void SpinOnce() override;

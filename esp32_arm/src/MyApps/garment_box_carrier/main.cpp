@@ -1,7 +1,7 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOX_CARRIER
 
-
+#include "box_carrier_board.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_carrier.h"
 #include "box_carrier_hw.h"
@@ -15,7 +15,7 @@ MessageQueue* mqtt_command_queue;
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Garment-BoxMover.  Keep smiling :)");
-    robot_hw = new BoxCarrierHardware();
+    robot_hw = new BoxCarrierHardware(PIN_ALPHA_ENABLE, PIN_BETA_ENABLE);
     robot = new BoxCarrier();
     gcode_queue = new GcodeQueue();
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
