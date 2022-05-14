@@ -18,19 +18,23 @@ BotSingleMcu::BotSingleMcu(uint16_t id){
 
 void BotSingleMcu::Init(){
 	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
+	#define LEFT_APDS_9960_SDA 21
+	#define LEFT_APDS_9960_SCL 22
+	#define RIGHT_APDS_9960_SDA 23
+	#define RIGHT_APDS_9960_SCL 15
 	TwoWire* i2c_bus_a;
 	TwoWire* i2c_bus_b;
 	i2c_bus_a = new TwoWire(0);
-	i2c_bus_a->begin(22,23);
+	i2c_bus_a->begin(LEFT_APDS_9960_SDA, LEFT_APDS_9960_SCL);
 	i2c_bus_b = new TwoWire(1);
-	i2c_bus_b->begin(24,25);
+	i2c_bus_b->begin(RIGHT_APDS_9960_SDA,RIGHT_APDS_9960_SCL);
 
 	Adafruit_MCP23X17* mcp_23018 = new Adafruit_MCP23X17();
 	mcp_23018->begin_I2C(0x20, i2c_bus_a);
 
 	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
-	DualWheelsPwmDriver* dual_pwm = new DualWheelsPwmDriver(mcp_23018, 12,23);
+	DualWheelsPwmDriver* dual_pwm = new DualWheelsPwmDriver(12,mcp_23018, 12);
 	this->objAgv.LinkWheelDriver(dual_pwm);
 
 	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
@@ -44,17 +48,15 @@ void BotSingleMcu::Init(){
     objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 	this->objRfid.Init(17,18,19);
 
-	#define LEFT_APDS_9960_SDA 21
-	#define LEFT_APDS_9960_SCL 22
-	#define RIGHT_APDS_9960_SDA 23
-	#define RIGHT_APDS_9960_SCL 15
 
-    TrackSensor_Dual9960_Config* config = new TrackSensor_Dual9960_Config();
-    config->pin_left_sensor_sda = LEFT_APDS_9960_SDA;
-    config->pin_left_sensor_sclk = LEFT_APDS_9960_SCL;
-    config->pin_right_sensor_sda = RIGHT_APDS_9960_SDA;
-    config->pin_right_sensor_sclk = RIGHT_APDS_9960_SCL;
-    TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(config);
+
+    // TrackSensor_Dual9960_Config* config = new TrackSensor_Dual9960_Config();
+    // config->pin_left_sensor_sda = LEFT_APDS_9960_SDA;
+    // config->pin_left_sensor_sclk = LEFT_APDS_9960_SCL;
+    // config->pin_right_sensor_sda = RIGHT_APDS_9960_SDA;
+    // config->pin_right_sensor_sclk = RIGHT_APDS_9960_SCL;
+    // TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(config);
+	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(i2c_bus_a, i2c_bus_b);
 	this->objAgv.LinkTrackSensor(trackSensor); 
 
 	ObstacleSensor_Hcsr04* hcsr04= new ObstacleSensor_Hcsr04(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);

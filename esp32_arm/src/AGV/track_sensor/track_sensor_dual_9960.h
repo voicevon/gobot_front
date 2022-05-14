@@ -37,7 +37,7 @@
 #include "Wire.h"
 #include "AGV/track_sensor/track_sensor_base.h"
 #include "smarter_9960.h"
-#include <Adafruit_NeoPixel.h>
+#include "AGV/light/light_base.h"
 
 
 class TrackSensor_Dual9960_Config{
@@ -53,6 +53,8 @@ class TrackSensor_Dual9960_Config{
 class TrackSensor_Dual9960:public TrackSensorBase{
     public:
         TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config);
+        TrackSensor_Dual9960(TwoWire* i2c_bus_left, TwoWire* i2c_bus_right);
+        void LinkLight(LightBase* light){this->__led_light=light;};
         int16_t ReadForwardingError() override;
         void ReadParkingError(int16_t* x_error, int16_t* y_error) override;
         void ClearFlag_Slowdown() override;
@@ -61,6 +63,9 @@ class TrackSensor_Dual9960:public TrackSensorBase{
         bool GetFlag_Speedup()override;
         void TurnOnLed(bool turn_on) override;
         void SayHello();
+        
+    protected:
+        void _Init();
 
     private:
         TrackSensor_Dual9960_Config* __config;
@@ -75,5 +80,6 @@ class TrackSensor_Dual9960:public TrackSensorBase{
         */
         uint8_t __flag_spped_up;
         uint8_t __flag_slow_down;
-        Adafruit_NeoPixel* pixels;
+        // Adafruit_NeoPixel* pixels;
+        LightBase* __led_light;
 };

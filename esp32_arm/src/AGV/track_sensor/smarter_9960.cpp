@@ -3,6 +3,14 @@
 Smarter9960::Smarter9960(uint8_t i2c_bus_id, uint8_t pin_sda, uint8_t pin_sclk){
     TwoWire* i2c_bus = new TwoWire(i2c_bus_id);
     i2c_bus->begin(pin_sda, pin_sclk, 400000);
+    this->_Init(i2c_bus);
+}
+
+Smarter9960::Smarter9960(TwoWire* i2c_bus){
+    this->_Init(i2c_bus);
+}
+
+void Smarter9960::_Init(TwoWire* i2c_bus){
     this->sensor = new Adafruit_APDS9960();
     this->sensor->begin(10, APDS9960_AGAIN_4X, APDS9960_ADDRESS, i2c_bus);
     this->sensor->enableColor(true);
@@ -11,8 +19,8 @@ Smarter9960::Smarter9960(uint8_t i2c_bus_id, uint8_t pin_sda, uint8_t pin_sclk){
     this->c_max = 800;
     this->r_min = this->g_min = this->b_min = this->c_min;  //?
     this->r_max = this->g_max = this->b_max = this->c_max;  //?
-
 }
+
 
 
 

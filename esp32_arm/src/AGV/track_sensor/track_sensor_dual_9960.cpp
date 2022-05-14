@@ -4,11 +4,20 @@ TrackSensor_Dual9960::TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config){
     this->__config = config;
     this->left_sensor = new Smarter9960(0, config->pin_left_sensor_sda ,config->pin_left_sensor_sclk);
     this->right_sensor = new Smarter9960(1, config->pin_right_sensor_sda, config->pin_right_sensor_sclk);
-    
-    this->IsFollowingLeft = true;
-    this->pixels = new Adafruit_NeoPixel(config->LedWs2812B_counts, config->pin_WS2812_LED, NEO_GRB + NEO_KHZ800);
-    this->pixels->begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
+
+    this->_Init();
 }
+
+TrackSensor_Dual9960::TrackSensor_Dual9960(TwoWire* i2c_bus_left, TwoWire* i2c_bus_right){
+    this->left_sensor = new Smarter9960(i2c_bus_left);
+    this->right_sensor = new Smarter9960(i2c_bus_right);
+    this->_Init(); 
+}
+
+void TrackSensor_Dual9960::_Init(){
+    this->IsFollowingLeft = true;
+}
+
 
 bool TrackSensor_Dual9960::GetFlag_Slowdown(){
     if (this->__flag_slow_down == 1) 
@@ -23,13 +32,7 @@ bool TrackSensor_Dual9960::GetFlag_Speedup(){
 
 
 void TrackSensor_Dual9960::TurnOnLed(bool turn_on){
-    uint8_t c = 0;
-    if (turn_on)
-        c = 255;
-    for(int i=0; i< this->__config->LedWs2812B_counts; i++) { // For each pixel...
-        this->pixels->setPixelColor(i, pixels->Color(c,c,c));
-        this->pixels->show();   // Send the updated pixel colors to the hardware.
-    }
+    this->__led_light->TurnOn(turn_on);
 }
 
 int16_t TrackSensor_Dual9960::ReadForwardingError(){
