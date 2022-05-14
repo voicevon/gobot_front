@@ -13,9 +13,9 @@ void AgvBase::Forwarding(){
     int16_t x_error = this->trackSensor->ReadForwardingError();
     // pid controller to set common_speed, diff_speed
 
-    float left_speed = this->common_speed + x_error;
-    float right_speed = this->common_speed - x_error;
-    this->wheelDriver->SetDualSpeed(left_speed, right_speed);
+    // float left_speed = this->common_speed + x_error;
+    // float right_speed = this->common_speed - x_error;
+    this->__mover->SetForwdingSpeed(this->common_speed, x_error);
 
 }
 

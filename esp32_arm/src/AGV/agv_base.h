@@ -22,8 +22,8 @@
 #pragma once
 #include "AGV/sensor/obstacle_sensor_base.h"
 #include "AGV/track_sensor/track_sensor_base.h"
-#include "wheel_driver/wheel_driver_base.h"
-
+#include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
+#include "AGV/mover_driver/mover_dual_wheel.h"
 
 
 class AgvBase{
@@ -41,7 +41,7 @@ class AgvBase{
         void Init(){};
         void LinkObstacleSensor(ObstacleSensorBase* obstacle_sensor){this->obstacleSensor=obstacle_sensor;};
         void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor=trackSensor;};
-        void LinkWheelDriver(WheelDriver* driver){this->wheelDriver=driver;};
+        void LinkMover(MoverBase* mover){this->__mover=mover;};
         void SpinOnce();
         AgvBase::AGV_STATE GetState(){return this->_State;};
         void ToState(AgvBase::AGV_STATE state);
@@ -61,7 +61,7 @@ class AgvBase{
 
         TrackSensorBase* trackSensor;
         ObstacleSensorBase *obstacleSensor;
-        WheelDriver* wheelDriver;
+        MoverBase* __mover;
 
         bool DoParking();
 
