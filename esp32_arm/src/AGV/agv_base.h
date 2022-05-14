@@ -2,11 +2,6 @@
 .   Objects:
 .       BoxMover
 .       TwinWheels
-.
-.   Sensors:
-.       I2C-A:  APDS9960  left
-.       i2C-B:  APDS9960 right
-.       GPIO:   HS04
 */
 
 
@@ -25,13 +20,9 @@
 
 
 #pragma once
-#include <HCSR04.h> 
-
-// #include "AGV/track_sensor/track_sensor_dual_9960.h"
+#include "AGV/sensor/obstacle_sensor_base.h"
 #include "AGV/track_sensor/track_sensor_base.h"
 #include "wheel_driver/wheel_driver_base.h"
-// #include "SimpleFOC.h"
-// #include "SoftwareSerial.h"
 
 
 
@@ -48,6 +39,7 @@ class AgvBase{
         };
 
         void Init(){};
+        void LinkObstacleSensor(ObstacleSensorBase* obstacle_sensor){this->obstacleSensor=obstacle_sensor;};
         void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor=trackSensor;};
         void LinkWheelDriver(WheelDriver* driver){this->wheelDriver=driver;};
         void SpinOnce();
@@ -65,11 +57,10 @@ class AgvBase{
         float __fast_velocity = 100;
         float __slow_velocity = 60;
         float __parking_velocity = 10;
-        float diff_speed;  //left faster is positive.
+        float diff_speed;  //left faster is positive.  //TODO:   should be dir?
 
-        // TrackSensor_Dual9960* trackSensor;
         TrackSensorBase* trackSensor;
-        UltraSonicDistanceSensor *obstacleSensor; // = UltraSonicDistanceSensor(HS04_PIN_ECHO,HS04_PIN_TRIG); //initialisation class HCSR04 (trig pin , echo pin)
+        ObstacleSensorBase *obstacleSensor;
         WheelDriver* wheelDriver;
 
         bool DoParking();

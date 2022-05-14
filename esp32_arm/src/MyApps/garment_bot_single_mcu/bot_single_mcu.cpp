@@ -2,9 +2,14 @@
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
 #include "bot_single_mcu.h"
 #include "AGV/wheel_driver/dual_wheels_pwm.h"
+#include "AGV/sensor/obstacle_sensor_hcsr04.h"
 
 #define PIN_IR_FRONT  35
 #define PIN_IR_REAR  36
+
+#define HCSR04_PIN_ECHO 18
+#define HCSR04_PIN_TRIG 19
+
 
 BotSingleMcu::BotSingleMcu(uint16_t id){
 	this->_ID = id;
@@ -43,7 +48,7 @@ void BotSingleMcu::Init(){
 	#define LEFT_APDS_9960_SCL 22
 	#define RIGHT_APDS_9960_SDA 23
 	#define RIGHT_APDS_9960_SCL 15
-	
+
     TrackSensor_Dual9960_Config* config = new TrackSensor_Dual9960_Config();
     config->pin_left_sensor_sda = LEFT_APDS_9960_SDA;
     config->pin_left_sensor_sclk = LEFT_APDS_9960_SCL;
@@ -51,6 +56,7 @@ void BotSingleMcu::Init(){
     config->pin_right_sensor_sclk = RIGHT_APDS_9960_SCL;
     TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(config);
 	this->objAgv.LinkTrackSensor(trackSensor); 
+
 
 	// #define I2C1_SDA_PIN 1
 	// #define I2C1_SCL_PIN 3	
@@ -68,6 +74,9 @@ void BotSingleMcu::Init(){
 	// if (!this->objAds1115->isConnected()) {
 	// 	// error ADS1115 not connected
 	// }
+
+	ObstacleSensor_Hcsr04* hcsr04= new ObstacleSensor_Hcsr04(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
+	this->objAgv.LinkObstacleSensor(hcsr04);
 }
 
 void BotSingleMcu::ExecuteMqttCommand(const char* command){

@@ -1,16 +1,7 @@
 #include "agv_base.h"
-
-
-#define HCSR04_PIN_ECHO 18
-#define HCSR04_PIN_TRIG 19
-
-
-
+#include <HardwareSerial.h>
 
 void AgvBase::_InitBase(){
-
-	this->obstacleSensor = new UltraSonicDistanceSensor(HCSR04_PIN_TRIG, HCSR04_PIN_ECHO);
-
     this->ToState(PARKED);
 }
 
@@ -41,11 +32,8 @@ void AgvBase::SpinOnce(){
     }
 
     // Obstacle detection
-    bool found_obstacle = false;
-    float distance_to_obstacle =  this->obstacleSensor->measureDistanceCm(); 
-    distance_to_obstacle = -1;   // For test.
-    if (distance_to_obstacle >0 && distance_to_obstacle <50) 
-        found_obstacle = true;
+    bool found_obstacle= this->obstacleSensor->DetectObstacle();
+
 
     switch (this->_State) {
     case FAST_MOVING:
