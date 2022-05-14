@@ -6,7 +6,6 @@
 #include "AGV/light/light_ws2812b.h"
 #include "AGV/track_sensor/track_sensor_dual_9960.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
-#include "AGV/track_sensor/track_sensor_dual_ir.h"
 
 
 BotSingleMcu::BotSingleMcu(uint16_t id){
@@ -51,8 +50,7 @@ void BotSingleMcu::Init(){
 	this->objAgv.Init();
 
 	// Init box carrier robot.
-	TrackSensor_DualIR* irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
-	irSensor = nullptr;
+	this->irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 
 	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018, MC23018_PIN_ALPHA_ENABLE,MC23018_PIN_BETA_ENABLE);
 	Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);
@@ -123,16 +121,6 @@ void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
    }
 }
 
-int BotSingleMcu::ReadAlignment_sensors(){
-	// Read 4-channels adc from ADS1115
-	// this->Alignment_value_top = this->objAds1115->readADC(0);
-	// this->Alignment_value_bottom = this->objAds1115->readADC(1);
-	// this->Alignment_value_front = this->objAds1115->readADC(2);
-	// this->Alignment_value_rear = this->objAds1115->readADC(3);
-	int front = analogRead(PIN_IR_FRONT);
-	int rear = analogRead(PIN_IR_REAR);
-	return front-rear;
-}
 
 void BotSingleMcu::SpinOnce(){
 	String gcode = "G1";
@@ -180,7 +168,7 @@ void BotSingleMcu::SpinOnce(){
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
 		if (this->boxCarrierHardware->State == RobotState::IDLE){
 			// Last movement is done.
-			align_error = this->ReadAlignment_sensors();
+			align_error = this->irSensor->ReadAlignmentError();
 			if (align_error < 100){
 				this->ToState(BotSingleMcu::BOT_STATE::ROBOT_LOADING);
 			}else{

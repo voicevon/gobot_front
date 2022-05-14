@@ -8,6 +8,7 @@
 #include "MyApps/garment_box_carrier/box_carrier.h"
 #include "MyApps/garment_box_carrier/box_carrier_hw.h"
 
+#include "AGV/track_sensor/track_sensor_dual_ir.h"
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/sensor/smart_rfid_reader.h"
 #include "AGV/agv_base.h"
@@ -81,12 +82,12 @@ class BotSingleMcu: public MqttMessageConsumer{
         void ExecuteMqttCommand(const char* command) override;
         RoadGraph objMapNavigator;
         SmartRfidReader objRfid;
-        int ReadAlignment_sensors();
         float __battery_voltage;
         void onDetectedMark(uint16_t mapsite_id);
         RoadBranchNode __current_BranchNode;
         uint16_t _ID = 0;
         BotSingleMcu::BOT_STATE __state;
+        TrackSensor_DualIR* irSensor;
 };
 
 
