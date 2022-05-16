@@ -22,10 +22,16 @@ void setup(){
     // pinMode(15,INPUT_PULLUP);
     // return;
     robot_hw = new SpringMakerHardware();
+    robot_hw->InitRobot();
+    Serial.println("11111111");
     robot = new SpringMaker();
+    Serial.println("2222222222");
     gcode_queue = new GcodeQueue();
+    Serial.println("333333333");
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
+    Serial.println("4444444444444");
     robot_hw->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
+    Serial.println("5555555555");
 
     setup_mqtt_block_connect();
     mqtt_command_queue = new MessageQueue();

@@ -6,6 +6,8 @@
 #include "AGV/light/light_ws2812b.h"
 #include "AGV/track_sensor/track_sensor_dual_9960.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
+#include "Seeed_vl53l0x.h"
+
 
 
 BotSingleMcu::BotSingleMcu(uint16_t id){
@@ -51,6 +53,25 @@ void BotSingleMcu::Init(){
 
 	// Init box carrier robot.
 	this->irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
+
+	Seeed_vl53l0x* vl53L0X = new Seeed_vl53l0x();
+	VL53L0X_Error Status = VL53L0X_ERROR_NONE;
+    Status = VL53L0X.VL53L0X_common_init();
+    if (VL53L0X_ERROR_NONE != Status) {
+        Serial.println("start vl53l0x mesurement failed!");
+        vl53L0X.print_pal_error(Status);
+        while (1);
+    }
+
+    VL53L0X.VL53L0X_high_accuracy_ranging_init();
+
+    if (VL53L0X_ERROR_NONE != Status) {
+        Serial.println("start vl53l0x mesurement failed!");
+        vl53L0X.print_pal_error(Status);
+        while (1);
+    }
+
+	
 
 	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018, MC23018_PIN_ALPHA_ENABLE,MC23018_PIN_BETA_ENABLE);
 	Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);

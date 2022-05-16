@@ -31,7 +31,7 @@ void SpringMaker::ExecuteMqttCommand(const char* command){
         String gcode = "G1 A-300";     // 50 turns
         this->_gcode_queue->AppendGcodeCommand(gcode);
     }else if(str_command.equals("coil")){
-        String gcode = "G1 A86.25 F3000";     // 700 turns without gearbox reducer
+        String gcode = "G1 A86.25 F5000";     // 700 turns without gearbox reducer
         this->_gcode_queue->AppendGcodeCommand(gcode);
     }else{
         Serial.print("[Warn] SpringMaker::ExecuteMqttCommand()  = ");

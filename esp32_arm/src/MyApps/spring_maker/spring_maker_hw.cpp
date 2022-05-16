@@ -26,7 +26,7 @@ void SpringMakerHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 
 SpringMakerHardware::SpringMakerHardware(){
-	this->InitRobot();
+	// this->InitRobot();
 }
 
 void SpringMakerHardware::InitRobot(){

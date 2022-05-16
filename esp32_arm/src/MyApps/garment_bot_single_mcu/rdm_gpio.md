@@ -3,8 +3,8 @@
 * Right side = 12 Pins
 * Bottom side = 3 Pins
 
-## Analog Input x4 Pins or x2 Pins (or zero pins ) with ADS1115
-* ADC (Voltage Sensor) x4
+## Analog Input x2 Pins or x2 Pins 
+* ADC (Voltage Sensor) x2
   * GPIO-36, GPIO-39,GPIO-34,GPIO-35
 
 ## PWM Output    x2 Pins
@@ -14,18 +14,18 @@
 * SPI for RFID Reader   x4
   * Better to use I2C , need to test.
   * GPIO-5, GPIO-18, GPIO-19, GPIO-23
-* Serial Port           x2
+* Serial Port  for ISP programmer    x2
   * GPIO-1, GPIO-3
 * I2C 
-* Dual I2C for APDS9960 x4 
+* Dual I2C for Bus
   * i2c_bus_a:
-    * mcp_23018 + apds9960_left
+    * mcp_23018 + apds9960_left 
   * i2c_bus_b:
-    * apds9960_right  
+    * apds9960_right + 4 x VL53L0x
 
-## High speed    x5 Pins
-* HCSR04         x2
-* Stepper step   x2 
+## High speed    x7 Pins
+* Stepper step   x2
+* H-Bridge(PWM)  x4 
 * LED (WS2812B)  x1
 
 ## Low speed     x11 Pins  or x2 (or x0) with MCP23018
@@ -34,11 +34,10 @@
   * Box_Carrier Home  x2
 
 * Output
-  * H-Bridges Dir     x2
   * Stepper Enable    x2
   * Stepper Dir       x2
   
-
+ 
 # Hardware summry
 * Esp32 + MCP23018 + 2x4988  + 2xHBridge
 * 2x Hall sensor
