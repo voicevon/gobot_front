@@ -18,7 +18,8 @@ Stepper liberys:
 // #include "Robot/Gcode.h"
 
 #include "gobot_chessboard_hw_config.h"
-#include "Robot/HomeHelper.h"
+// #include "Robot/HomeHelper.h"
+#include "Robot/single_axis_homer.h"
 #include "MyLibs/Components/Led.h"
 #include "Robot/eef_standard_code.h"
 
@@ -50,6 +51,7 @@ class GobotChessboardHardware: public RobotBase{
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
         void InitRobot() override;
+        void LinkHomer(SingleAxisHomer* alpha_homer, SingleAxisHomer* beta_homer){this->alpha_homer=alpha_homer; this->beta_homer=beta_homer;};
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
         void Calibrate(int step,bool enable_eef_coil);
         void RunM84() override;
@@ -66,7 +68,6 @@ class GobotChessboardHardware: public RobotBase{
         Servo* eefServo;
         bool homed;
 
-    private:
         void SpinOnce_BaseEnter() override {};
         // void SpinOnce_BaseExit() override {};
         void RunG6(Gcode* gcode) override {};   //Block mode
@@ -79,8 +80,10 @@ class GobotChessboardHardware: public RobotBase{
     
         // Led objLedPower = Led(0, PIN_LED_POWER_2112, LOW);
         // Led objLedHome_alpha = Led(1,2,LOW);
-        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALPHA, LOW);
-        HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA, LOW);
+        // HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALPHA, LOW);
+        // HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA, LOW);
+        SingleAxisHomer* alpha_homer;
+        SingleAxisHomer* beta_homer;
 
         Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
         Stepper objStepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
@@ -88,7 +91,7 @@ class GobotChessboardHardware: public RobotBase{
 
         GobotChessboardHardwareConfig __config;
         Stepper* __homing_stepper;
-        HomeHelper* __homing_helper;
+        SingleAxisHomer* __homing_helper;
         FkPosition_XY __current_fk_position;
 };
 

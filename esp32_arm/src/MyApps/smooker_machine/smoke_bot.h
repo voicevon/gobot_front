@@ -4,7 +4,8 @@
 
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/Actuator/ActuatorBase.h"
-#include "Robot/HomeHelper.h"
+// #include "Robot/HomeHelper.h"
+#include "Robot/single_axis_homer.h"
 #include "Robot/Commu/CommuUart.h"
 
 #define PIN_HOME 18
@@ -32,7 +33,7 @@ class SmokeBotHardware: public RobotBase{
         Stepper objStepper = Stepper(PIN_STEP, PIN_DIR);
         StepControl objStepControl;
 
-        HomeHelper objHomeHelper = HomeHelper(PIN_HOME, HIGH);
+        SingleAxisHomer objHomeHelper = SingleAxisHomer(PIN_HOME, HIGH);
         
         void SpinOnce_BaseEnter() override {};
         // void SpinOnce_BaseExit() override {};

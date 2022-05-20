@@ -84,7 +84,7 @@ void BoxCarrierHardware::LinkStepper(Stepper* alpha, Stepper* beta){
 	this->objStepper_beta = beta;
 }
 
-void BoxCarrierHardware::LinkHomer(HomeHelper* homer_z, HomeHelper* homer_y){
+void BoxCarrierHardware::LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y){
 	this->objHomeHelper_vertical = homer_z;
 	this->objHomeHelper_y = homer_y;
 }

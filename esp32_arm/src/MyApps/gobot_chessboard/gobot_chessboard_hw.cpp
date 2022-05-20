@@ -3,7 +3,7 @@
 #include<Arduino.h>
 
 void GobotChessboardHardware::InitRobot(){
-	// Serial.print("\n[Info] GobotChessboardHardware::Init() is entering.");
+	Serial.print("\n[Info] GobotChessboardHardware::Init() is entering.");
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
 	this->__EnableMotor('A', false);
@@ -23,14 +23,14 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 		this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = &this->objStepper_alpha;
-		this->__homing_helper = &this->objHomeHelper_alpha;
+		this->__homing_helper = this->alpha_homer;
 		this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
 	}else if (axis=='B'){
 		this->__EnableMotor('B',true);
 		this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = &this->objStepper_beta;
-		this->__homing_helper = &this->objHomeHelper_beta;
+		this->__homing_helper = this->beta_homer;
 		this->__homing_stepper->setTargetRel(-500000);    //angle to be smaller.
 	}else{
 		Serial.print("\n[Error] GobotChessboardHardware::HomeSingleAxis() ");

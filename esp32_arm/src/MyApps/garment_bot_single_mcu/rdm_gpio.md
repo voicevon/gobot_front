@@ -14,7 +14,6 @@
   * GPIO-5, GPIO-18, GPIO-19, GPIO-23
 * Serial Port  for ISP programmer    x2
   * GPIO-1, GPIO-3
-* I2C 
 * Dual I2C for Bus
   * i2c_bus_a:
     * mcp_23018 + apds9960_left 
@@ -41,7 +40,6 @@
 * 2x Hall sensor
 * 2x APDS9960
 * 4x VL53LoX
-
 * 1X Rfid Reader
 * 16x WS2812B
 

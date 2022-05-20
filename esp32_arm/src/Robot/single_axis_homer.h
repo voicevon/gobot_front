@@ -5,11 +5,11 @@
 #include <Adafruit_MCP23X17.h>
 
 
-class HomeHelper{
+class SingleAxisHomer{
     public:
         // For OC output sensor, trigeredState should be LOW
-        HomeHelper(uint8_t pinTriger, int trigeredState);
-        HomeHelper(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger, int trigeredState);
+        SingleAxisHomer(uint8_t pinTriger, int trigeredState);
+        SingleAxisHomer(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger, int trigeredState);
         // void SetHomePosition();   //???
         bool IsTriged();
         void SetTrigeredCountMax(int new_value){this->trigered_counter_max = new_value;};

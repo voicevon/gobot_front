@@ -2,7 +2,8 @@
 
 #include "Robot/robot_hardware_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/HomeHelper.h"
+// #include "Robot/HomeHelper.h"
+#include "robot/single_axis_homer.h"
 #include "box_carrier_hw_config.h"
 
 #include "Robot/Commu/CommuUart.h"
@@ -22,7 +23,7 @@ class BoxCarrierHardware:public RobotBase{
         BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_beta_enable);
         BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable);
         void LinkStepper(Stepper* alpha, Stepper* beta);
-        void LinkHomer(HomeHelper* homer_z, HomeHelper* homer_y);
+        void LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y);
 
         void InitRobot() override;
         void HomeSingleAxis(char axis) override;
@@ -53,9 +54,9 @@ class BoxCarrierHardware:public RobotBase{
 
         FkPosition_YZ __current_fk_position;
 
-        HomeHelper* __homing_helper;
-        HomeHelper* objHomeHelper_vertical;
-        HomeHelper* objHomeHelper_y;
+        SingleAxisHomer* __homing_helper;
+        SingleAxisHomer* objHomeHelper_vertical;
+        SingleAxisHomer* objHomeHelper_y;
         BoxCarrierHardwareConfig  __config;
         Adafruit_MCP23X17* __mcp23018;
 

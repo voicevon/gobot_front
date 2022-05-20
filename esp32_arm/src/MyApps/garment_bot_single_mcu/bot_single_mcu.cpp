@@ -56,20 +56,20 @@ void BotSingleMcu::Init(){
 
 	Seeed_vl53l0x* vl53L0X = new Seeed_vl53l0x();
 	VL53L0X_Error Status = VL53L0X_ERROR_NONE;
-    Status = VL53L0X.VL53L0X_common_init();
-    if (VL53L0X_ERROR_NONE != Status) {
-        Serial.println("start vl53l0x mesurement failed!");
-        vl53L0X.print_pal_error(Status);
-        while (1);
-    }
+    // Status = VL53L0X.VL53L0X_common_init();
+    // if (VL53L0X_ERROR_NONE != Status) {
+    //     Serial.println("start vl53l0x mesurement failed!");
+    //     vl53L0X.print_pal_error(Status);
+    //     while (1);
+    // }
 
-    VL53L0X.VL53L0X_high_accuracy_ranging_init();
+    // VL53L0X.VL53L0X_high_accuracy_ranging_init();
 
-    if (VL53L0X_ERROR_NONE != Status) {
-        Serial.println("start vl53l0x mesurement failed!");
-        vl53L0X.print_pal_error(Status);
-        while (1);
-    }
+    // if (VL53L0X_ERROR_NONE != Status) {
+    //     Serial.println("start vl53l0x mesurement failed!");
+    //     vl53L0X.print_pal_error(Status);
+    //     while (1);
+    // }
 
 	
 
@@ -77,8 +77,8 @@ void BotSingleMcu::Init(){
 	Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);
 	Stepper* beta = new Stepper(PIN_BETA_STEP, mcp_23018, MC23018_PIN_BETA_DIR);
 	objBoxCarrierHardware->LinkStepper(alpha, beta);
-	HomeHelper* homer_y = new HomeHelper(mcp_23018, MC23018_PIN_HOME_Y, LOW);
-	HomeHelper* homer_z = new HomeHelper(mcp_23018, MC23018_PIN_HOME_Z, LOW);
+	SingleAxisHomer* homer_y = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Y, LOW);
+	SingleAxisHomer* homer_z = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Z, LOW);
 	objBoxCarrierHardware->LinkHomer(homer_z, homer_y);
 	objBoxCarrierHardware->InitRobot();
 	this->_gcode_queue = new GcodeQueue();

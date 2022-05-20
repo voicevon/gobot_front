@@ -6,10 +6,9 @@
 // #include "Robot/Commu/CommuBleGattServer.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "Robot/Commu/CommuUart.h"
-// #include "Robot/Commu/CommuBleGattServer.h"
 
-// #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/HomeHelper.h"
+// #include "Robot/HomeHelper.h"
+#include "Robot/single_axis_homer.h"
 #include "MyLibs/Components/Led.h"
 #include "gobot_house_hw_config.h"
 #include "Robot/eef_standard_code.h"
@@ -75,8 +74,8 @@ class GobotHouseHardware: public RobotBase{
 
         Led objLedPower = Led(0, PIN_LED_POWER_2109, LOW);
         Led objLedHomeAlpha = Led(1,2,LOW);
-        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_HOME_ALHPA_2109, LOW);
-        HomeHelper objHomeHelper_beta = HomeHelper(PIN_HOME_BETA_2109, LOW);
+        SingleAxisHomer* objHomeHelper_alpha;  // = SingleAxisHomer(PIN_HOME_ALHPA_2109, LOW);
+        SingleAxisHomer* objHomeHelper_beta;  // = SingleAxisHomer(PIN_HOME_BETA_2109, LOW);
 
         Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
         Stepper objStepper_beta = Stepper(PIN_BETA_STEP_2109, PIN_BETA_DIR_2109);
@@ -87,7 +86,7 @@ class GobotHouseHardware: public RobotBase{
         void __Init_gpio();
 
         Stepper* __homing_stepper;
-        HomeHelper* __homing_helper;
+        SingleAxisHomer* __homing_helper;
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;
         GobotHouseHardwareConfig __config;

@@ -2,7 +2,8 @@
 
 #include "Robot/robot_hardware_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/HomeHelper.h"
+// #include "Robot/HomeHelper.h"
+#include "Robot/single_axis_homer.h"
 #include "box_mover_hw_config.h"
 
 #include "Robot/Commu/CommuUart.h"
@@ -51,9 +52,9 @@ class BoxMoverHardware:public RobotBase{
 
         FkPosition_ZW __current_fk_position;
 
-        HomeHelper* __homing_helper;
-        HomeHelper objHomeHelper_vertical = HomeHelper(VERTICAL_ENDSTOP, LOW);
-        HomeHelper objHomeHelper_angle = HomeHelper(ANGLE_ENDSTOP, LOW);        
+        SingleAxisHomer* __homing_helper;
+        SingleAxisHomer objHomeHelper_vertical = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
+        SingleAxisHomer objHomeHelper_angle = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
         BoxMoverHardwareConfig  __config;
 
 };

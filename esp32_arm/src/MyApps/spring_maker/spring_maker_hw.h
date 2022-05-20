@@ -2,7 +2,8 @@
 
 #include "Robot/robot_hardware_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/HomeHelper.h"
+// #include "Robot/HomeHelper.h"
+#include "Robot/single_axis_homer.h"
 
 #include "Robot/Commu/CommuUart.h"
 #include "spring_maker_hw_config.h"
@@ -46,8 +47,8 @@ class SpringMakerHardware:public RobotBase{
 
         FkPosition_A __current_fk_position;
 
-        HomeHelper* __homing_helper;
-        HomeHelper objHomeHelper_alpha = HomeHelper(PIN_ANGLE_ENDSTOP, LOW);
+        SingleAxisHomer* __homing_helper;
+        SingleAxisHomer objHomeHelper_alpha = SingleAxisHomer(PIN_ANGLE_ENDSTOP, LOW);
         SpringMakerHardwareConfig  __config;
 
 };

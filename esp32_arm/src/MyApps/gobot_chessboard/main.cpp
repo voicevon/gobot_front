@@ -6,7 +6,8 @@
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
 // #include "Robot/Commu/CommuBleGattServer.h"
-
+#include "board_ver1.2.h"
+#include "Robot/single_axis_homer.h"
 
 // static char LOG_TAG[]= "BLE-HOUSE";
 GobotChessboard* robot; 
@@ -16,14 +17,6 @@ GcodeQueue* gcode_queue;
 MessageQueue* mqtt_message_queue;
 
 
-#define PIN_SENSOR_ROOM_0 11
-#define PIN_SENSOR_ROOM_1 11
-#define PIN_SENSOR_ROOM_2 11
-#define PIN_SENSOR_ROOM_3 11
-#define PIN_SENSOR_ROOM_4 11
-#define PIN_SENSOR_ROOM_5 11
-#define PIN_SENSOR_ROOM_6 11
-#define PIN_SENSOR_ROOM_7 11
 
 uint8_t PIN_ROOMS[] = {PIN_SENSOR_ROOM_0,
                         PIN_SENSOR_ROOM_1,
@@ -54,9 +47,17 @@ void setup(){
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
     // Setup_RoomsSensor();
     // Always init hardware first
+    delay(200);
     robot = &GobotChessboard::getInstance();
+    Serial.println("[Info] setup()  is  11111111111111111111111111111");
+    SingleAxisHomer* alpha_homer = new SingleAxisHomer(PIN_HOME_ALPHA, LOW);
+    SingleAxisHomer* beta_homer = new SingleAxisHomer(PIN_HOME_BETA, LOW);
     robot_hardware = new GobotChessboardHardware();
+    robot_hardware->LinkHomer(alpha_homer, beta_homer);
+    // robot_hardware.LinkStepper();
+    Serial.println("[Info] setup()  is  222222222222222222222222222");
     robot_hardware->InitRobot();
+    Serial.println("[Info] setup()  is  3333333333333333333333333");
 
     gcode_queue = new GcodeQueue();
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);

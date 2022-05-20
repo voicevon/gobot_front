@@ -222,12 +222,12 @@ void GobotHouseHardware::HomeSingleAxis(char axis){
 		this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha);
 		this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha);
 		this->__homing_stepper = &this->objStepper_alpha;
-		this->__homing_helper = &this->objHomeHelper_alpha;
+		this->__homing_helper = this->objHomeHelper_alpha;
 	}else if (axis=='B'){
 		this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_beta);
 		this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_beta);
 		this->__homing_stepper = &this->objStepper_beta;
-		this->__homing_helper = &this->objHomeHelper_beta;
+		this->__homing_helper = this->objHomeHelper_beta;
 	}
 	this->__homing_stepper->setTargetRel(500000);
 	this->objStepControl.moveAsync(*this->__homing_stepper);
