@@ -13,13 +13,7 @@
 */
 #include <Arduino.h>
 
-#define PIN_ALPHA_ENABLE 18
-#define PIN_BETA_ENABLE 16
 
-
-
-#define PIN_ENDER_COIL_2109 32
-#define PIN_ENDER_COIL_EXT_2109 33
 
 
 

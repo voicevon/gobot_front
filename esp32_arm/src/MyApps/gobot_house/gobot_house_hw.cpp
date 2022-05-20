@@ -116,12 +116,12 @@ void GobotHouseHardware::InitRobot(){
 	CommuUart* commuUart = new CommuUart();
 
 	this->commuDevice = commuUart; 
-	this->objStepper_alpha.setAcceleration(this->__config.MAX_ACCELERATION_ALPHPA);
-	this->objStepper_alpha.setMaxSpeed(this->__config.MAX_ACCELERATION_ALPHPA);
-	this->objStepper_beta.setAcceleration(this->__config.MAX_ACCELERATION_BETA);
-	this->objStepper_beta.setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_BETA);
-	this->objStepper_alpha.setInverseRotation(true);
-	this->objStepper_beta.setInverseRotation(false);
+	this->alpha_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHPA);
+	this->alpha_stepper->setMaxSpeed(this->__config.MAX_ACCELERATION_ALPHPA);
+	this->beta_stepper->setAcceleration(this->__config.MAX_ACCELERATION_BETA);
+	this->beta_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_BETA);
+	this->alpha_stepper->setInverseRotation(true);
+	this->beta_stepper->setInverseRotation(false);
 
 	this->_home_as_inverse_kinematic = true;
 
@@ -132,8 +132,8 @@ float GobotHouseHardware::GetDistanceToTarget_FK(){
 	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
 	// TODO: Rewrite this function.
 	IkPosition_AB current_ik;
-	current_ik.alpha = (float)this->objStepper_alpha.getPosition();
-	current_ik.beta = (float)this->objStepper_beta.getPosition();
+	current_ik.alpha = (float)this->alpha_stepper->getPosition();
+	current_ik.beta = (float)this->beta_stepper->getPosition();
 	FK(&current_ik, &this->__current_fk_position);
 	
 	float dx = this->__current_fk_position.X - this->__next_fk_position.X;
@@ -143,8 +143,8 @@ float GobotHouseHardware::GetDistanceToTarget_FK(){
 }
 
 float GobotHouseHardware::GetDistanceToTarget_IK(){
-	int32_t da = this->objStepper_alpha.getDistanceToTarget();
-	int32_t db = this->objStepper_beta.getDistanceToTarget();
+	int32_t da = this->alpha_stepper->getDistanceToTarget();
+	int32_t db = this->beta_stepper->getDistanceToTarget();
 	float distance = sqrt(da * da + db * db);
 	return distance;
 }
@@ -154,15 +154,15 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	// Serial.print(gcode->get_command());
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
-		this->objStepper_alpha.setMaxSpeed(speed);
+		this->alpha_stepper->setMaxSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
 	target_fk_xy.X = this->__current_fk_position.X;
 	target_fk_xy.Y = this->__current_fk_position.Y;
-	target_ik_ab.alpha = this->objStepper_alpha.getPosition();
-	target_ik_ab.beta = this->objStepper_beta.getPosition();
+	target_ik_ab.alpha = this->alpha_stepper->getPosition();
+	target_ik_ab.beta = this->beta_stepper->getPosition();
 	bool do_ik=false;
 
 	if (gcode->has_letter('A')) 
@@ -185,18 +185,18 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	//Prepare actuator/driver to move to next point
 	this->__EnableMotor('A', true);
 	this->__EnableMotor('B',true);
-	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha );
-	this->objStepper_beta.setTargetAbs(target_ik_ab.beta);
+	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha );
+	this->beta_stepper->setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
-	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
+	this->objStepControl.moveAsync(*this->alpha_stepper, *this->beta_stepper);
 
 	if (true){
 		Serial.print("\n[Debug] GobotHouseHardware::RunG1()  from,to  alpha=");
-		Serial.print(this->objStepper_alpha.getPosition());
+		Serial.print(this->alpha_stepper->getPosition());
 		Serial.print(" , ");
 		Serial.print(target_ik_ab.alpha);
 		Serial.print("    beta = ");
-		Serial.print(this->objStepper_beta.getPosition());
+		Serial.print(this->beta_stepper->getPosition());
 		Serial.print(" , ");
 		Serial.println(target_ik_ab.beta);
 	}
@@ -219,15 +219,15 @@ void GobotHouseHardware::HomeSingleAxis(char axis){
 	this->_homing_axis = axis;
 	this->__EnableMotor(axis, true);
 	if (axis=='A'){
-		this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha);
-		this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha);
-		this->__homing_stepper = &this->objStepper_alpha;
-		this->__homing_helper = this->objHomeHelper_alpha;
+		this->alpha_stepper->setAcceleration(this->__config.Homing_acceleration_alpha);
+		this->alpha_stepper->setMaxSpeed(this->__config.Homing_speed_alpha);
+		this->__homing_stepper = this->alpha_stepper;
+		this->__homing_helper = this->alpha_homer;
 	}else if (axis=='B'){
-		this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_beta);
-		this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_beta);
-		this->__homing_stepper = &this->objStepper_beta;
-		this->__homing_helper = this->objHomeHelper_beta;
+		this->beta_stepper->setAcceleration(this->__config.Homing_acceleration_beta);
+		this->beta_stepper->setMaxSpeed(this->__config.Homing_speed_beta);
+		this->__homing_stepper = this->beta_stepper;
+		this->__homing_helper = this->beta_homer;
 	}
 	this->__homing_stepper->setTargetRel(500000);
 	this->objStepControl.moveAsync(*this->__homing_stepper);
@@ -260,13 +260,13 @@ void GobotHouseHardware::_running_G28(){
 			Serial.print("\n\n\n\n\n  [Error] Trying to get home position with EEF position  ");
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis == 'A') this->objStepper_alpha.setPosition(ik_position.alpha);
-		if (this->_homing_axis == 'B') this->objStepper_beta.setPosition(ik_position.beta);
+		if (this->_homing_axis == 'A') this->alpha_stepper->setPosition(ik_position.alpha);
+		if (this->_homing_axis == 'B') this->beta_stepper->setPosition(ik_position.beta);
 		
-		this->objStepper_alpha.setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA);
-		this->objStepper_alpha.setAcceleration(this->__config.MAX_ACCELERATION_ALPHPA);
-		this->objStepper_beta.setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_BETA);
-		this->objStepper_beta.setAcceleration(this->__config.MAX_ACCELERATION_BETA);
+		this->alpha_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA);
+		this->alpha_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHPA);
+		this->beta_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_BETA);
+		this->beta_stepper->setAcceleration(this->__config.MAX_ACCELERATION_BETA);
 		// Serial.print("\n======================================= End of Homing, State to be IDLE\n");
 		this->State = RobotState::IDLE;
 

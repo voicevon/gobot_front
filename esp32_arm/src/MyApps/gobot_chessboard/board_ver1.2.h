@@ -1,6 +1,7 @@
 #pragma once
 
-
+//  Board Ver1.2.   Made in May 2022
+//       Previous version==Ver3.8,   Next Version==? 
 
 #define PIN_ALPHA_DIR 4     // Ver0.x   19
 #define PIN_ALPHA_STEP 16    //Ver0.x    5

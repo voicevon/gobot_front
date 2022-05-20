@@ -52,6 +52,7 @@ class GobotChessboardHardware: public RobotBase{
         void RunG1(Gcode* gcode) override;
         void InitRobot() override;
         void LinkHomer(SingleAxisHomer* alpha_homer, SingleAxisHomer* beta_homer){this->alpha_homer=alpha_homer; this->beta_homer=beta_homer;};
+        void LinkStepper(Stepper* alpha, Stepper* beta){this->alpha_stepper=alpha; this->beta_stepper=beta;};
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
         void Calibrate(int step,bool enable_eef_coil);
         void RunM84() override;
@@ -85,8 +86,10 @@ class GobotChessboardHardware: public RobotBase{
         SingleAxisHomer* alpha_homer;
         SingleAxisHomer* beta_homer;
 
-        Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-        Stepper objStepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+        // Stepper objStepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
+        // Stepper objStepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+        Stepper* alpha_stepper;
+        Stepper* beta_stepper;
         StepControl objStepControl;
 
         GobotChessboardHardwareConfig __config;

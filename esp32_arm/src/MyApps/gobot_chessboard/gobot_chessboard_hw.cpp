@@ -20,16 +20,17 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 	this->_homing_axis = axis;
 	if (axis=='A'){
 		this->__EnableMotor('A', true);
-		this->objStepper_alpha.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
-		this->objStepper_alpha.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
-		this->__homing_stepper = &this->objStepper_alpha;
+		this->alpha_stepper->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
+		this->alpha_stepper->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
+		this->__homing_stepper = this->beta_stepper;
+
 		this->__homing_helper = this->alpha_homer;
 		this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
 	}else if (axis=='B'){
 		this->__EnableMotor('B',true);
-		this->objStepper_beta.setAcceleration(this->__config.Homing_acceleration_alpha_beta);
-		this->objStepper_beta.setMaxSpeed(this->__config.Homing_speed_alpha_beta);
-		this->__homing_stepper = &this->objStepper_beta;
+		this->beta_stepper->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
+		this->beta_stepper->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
+		this->__homing_stepper = this->beta_stepper;
 		this->__homing_helper = this->beta_homer;
 		this->__homing_stepper->setTargetRel(-500000);    //angle to be smaller.
 	}else{
@@ -66,14 +67,14 @@ void GobotChessboardHardware::_running_G28(){
 		}
 		//Copy current ik-position to motor-position.
 		if (this->_homing_axis == 'A') 
-			this->objStepper_alpha.setPosition(ik_position.alpha * this->__config.STEPS_PER_RAD);
+			this->alpha_stepper->setPosition(ik_position.alpha * this->__config.STEPS_PER_RAD);
 		if (this->_homing_axis == 'B') 
-			this->objStepper_beta.setPosition(ik_position.beta * this->__config.STEPS_PER_RAD);
+			this->beta_stepper->setPosition(ik_position.beta * this->__config.STEPS_PER_RAD);
 		
-		this->objStepper_alpha.setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA);
-		this->objStepper_alpha.setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
-		this->objStepper_beta.setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA);
-		this->objStepper_beta.setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
+		this->alpha_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA);
+		this->alpha_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
+		this->beta_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA);
+		this->beta_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
 		this->State = RobotState::IDLE;
 
 	}else{
@@ -262,7 +263,7 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 	Serial.print(gcode->get_command());
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
-		this->objStepper_alpha.setMaxSpeed(speed);
+		this->beta_stepper->setMaxSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
@@ -272,8 +273,8 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 
 	// Sometimes, the current position of stepper is NOT the last target position. Since it's moving.
 	// But, The initialized values will effect nothing. They will be over writen. 
-	target_ik_ab.alpha = this->objStepper_alpha.getPosition() / this->__config.STEPS_PER_RAD;
-	target_ik_ab.beta = this->objStepper_beta.getPosition() / this->__config.STEPS_PER_RAD;
+	target_ik_ab.alpha = this->alpha_stepper->getPosition() / this->__config.STEPS_PER_RAD;
+	target_ik_ab.beta = this->beta_stepper->getPosition() / this->__config.STEPS_PER_RAD;
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
 		this->__EnableMotor('A', true); 
@@ -300,10 +301,10 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 		// Bug now, the unit in G1A,G1B is RAD
 		target_ik_ab.alpha = this->__config.MOTOR_STEPS_PER_SHAFT_ROUND * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
-	this->objStepper_alpha.setTargetAbs(target_ik_ab.alpha * this->__config.STEPS_PER_RAD );
-	this->objStepper_beta.setTargetAbs(target_ik_ab.beta * this->__config.STEPS_PER_RAD );
+	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha * this->__config.STEPS_PER_RAD );
+	this->beta_stepper->setTargetAbs(target_ik_ab.beta * this->__config.STEPS_PER_RAD );
 	//None blocking, move backgroundly.
-	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
+	this->objStepControl.moveAsync(*this->alpha_stepper, *this->beta_stepper);
 
 	if (true){
 		FkPosition_XY verified_fk;
@@ -316,9 +317,9 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 		Serial.print(verified_fk.Y);
 
 		Serial.print("\n[Debug] GobotChessboardHardware::RunG1() ");
-		Serial.print(this->objStepper_alpha.getPosition());
+		Serial.print(this->alpha_stepper->getPosition());
 		Serial.print(",");
-		Serial.print(this->objStepper_beta.getPosition());
+		Serial.print(this->beta_stepper->getPosition());
 		Serial.print(" <-- from   alpha,beta   to --> ");
 		Serial.print(target_ik_ab.alpha);
 		Serial.print(" , ");
@@ -336,7 +337,7 @@ void GobotChessboardHardware::_running_G1(){
 }
 
 float GobotChessboardHardware::GetDistanceToTarget_IK(){
-	return this->objStepper_alpha.getDistanceToTarget() + this->objStepper_beta.getDistanceToTarget();
+	return this->alpha_stepper->getDistanceToTarget() + this->beta_stepper->getDistanceToTarget();
 }
 
 void GobotChessboardHardware::RunM84(){
