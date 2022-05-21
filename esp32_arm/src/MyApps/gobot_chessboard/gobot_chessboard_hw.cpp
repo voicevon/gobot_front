@@ -22,16 +22,15 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 		this->__EnableMotor('A', true);
 		this->alpha_stepper->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->alpha_stepper->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
-		this->__homing_stepper = this->beta_stepper;
-
-		this->__homing_helper = this->alpha_homer;
+		this->__homing_stepper = this->alpha_stepper;
+		this->__current_homer = this->alpha_homer;
 		this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
 	}else if (axis=='B'){
 		this->__EnableMotor('B',true);
 		this->beta_stepper->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->beta_stepper->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = this->beta_stepper;
-		this->__homing_helper = this->beta_homer;
+		this->__current_homer = this->beta_homer;
 		this->__homing_stepper->setTargetRel(-500000);    //angle to be smaller.
 	}else{
 		Serial.print("\n[Error] GobotChessboardHardware::HomeSingleAxis() ");
@@ -45,7 +44,7 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 void GobotChessboardHardware::_running_G28(){
 	// Serial.print("[Info] GobotHouseHardware::running_G28() is entering \n");
 
-	if (this->__homing_helper->IsTriged()){
+	if (this->__current_homer->IsTriged()){
 		// End stop is trigered
 		Serial.print("\n[Info] GobotChessboardHardware::_running_G28() Home sensor is trigered.  " );
 		Serial.print (this->_homing_axis);

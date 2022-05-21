@@ -94,7 +94,7 @@ class GobotChessboardHardware: public RobotBase{
 
         GobotChessboardHardwareConfig __config;
         Stepper* __homing_stepper;
-        SingleAxisHomer* __homing_helper;
+        SingleAxisHomer* __current_homer;
         FkPosition_XY __current_fk_position;
 };
 

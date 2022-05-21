@@ -42,12 +42,7 @@ char ReadRoomsSensor(){
     return result;
 }
 
-void setup(){
-    Serial.begin(115200);
-    Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
-    // Setup_RoomsSensor();
-    // Always init hardware first
-    delay(200);
+void setup_robot_hardware(){
     robot = &GobotChessboard::getInstance();
     Serial.println("[Info] setup()  is  111111111111111");
     SingleAxisHomer* alpha_homer = new SingleAxisHomer(PIN_HOME_ALPHA, LOW);
@@ -66,6 +61,18 @@ void setup(){
     // robot_hardware.LinkStepper();
     robot_hardware->InitRobot();
     Serial.println("[Info] setup()  is  8888888888888888");
+}
+
+
+void setup(){
+    Serial.begin(115200);
+    Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
+    // pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+    // digitalWrite(PIN_ALPHA_ENABLE,HIGH);
+    // return;
+    // Always init hardware first
+    // Setup_RoomsSensor();
+    setup_robot_hardware();
 
     gcode_queue = new GcodeQueue();
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
@@ -83,7 +90,12 @@ void setup(){
 }
 
 char last_rooms_sensor;
+bool xx=true;
 void loop(){
+    // digitalWrite(PIN_ALPHA_ENABLE, xx);
+    // delay(3000);
+    // xx=!xx;
+    // return;
     robot->SpinOnce();
     robot_hardware->SpinOnce();
     loop_mqtt();
