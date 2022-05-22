@@ -1,12 +1,14 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
-#include "bot_single_mcu_board.h"
+#include "board_ver1.0.h"
 #include "bot_single_mcu.h"
-#include "AGV/sensor/obstacle_sensor_hcsr04.h"
 #include "AGV/light/light_ws2812b.h"
 #include "AGV/track_sensor/track_sensor_dual_9960.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
-#include "Seeed_vl53l0x.h"
+// #include "Seeed_vl53l0x.h"
+#include "AGV/sensor/obstacle_sensor_vl53l0x.h"
+#include "AGV/sensor/obstacle_sensor_hcsr04.h"
+
 
 
 
@@ -54,8 +56,8 @@ void BotSingleMcu::Init(){
 	// Init box carrier robot.
 	this->irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 
-	Seeed_vl53l0x* vl53L0X = new Seeed_vl53l0x();
-	VL53L0X_Error Status = VL53L0X_ERROR_NONE;
+	// Seeed_vl53l0x* vl53L0X = new Seeed_vl53l0x();
+	// VL53L0X_Error Status = VL53L0X_ERROR_NONE;
     // Status = VL53L0X.VL53L0X_common_init();
     // if (VL53L0X_ERROR_NONE != Status) {
     //     Serial.println("start vl53l0x mesurement failed!");
