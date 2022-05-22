@@ -2,10 +2,13 @@
 #define __ALL_DEVICES_H_
 
 // #define I_AM_UINIT_TEST
+// #define I_AM_I2C_SCANNER
+#define I_AM_VL53L0X_SINGLE
+
 // #define I_AM_AGV_WHEEL
 // #define I_AM_DRV8302
 // #define I_AM_GARMENT_BOT
-#define I_AM_GARMENT_BOT_SINGLE_MCU
+// #define I_AM_GARMENT_BOT_SINGLE_MCU
 // #define I_AM_GARMENT_BOX_MOVER
 // #define I_AM_GARMENT_BOX_CARRIER
 // #define I_AM_GOBOT_HOUSE

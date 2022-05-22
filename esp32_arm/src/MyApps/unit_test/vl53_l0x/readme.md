@@ -1,3 +1,6 @@
+# How to Use
+* This is for testing a whole new chip or modular.
+
 # Hardware  Do NOT buy it!
 * [This guy has no I2C bus essencially](https://detail.tmall.com/item.htm?id=613840837292&spm=a1z09.2.0.0.62f62e8dNZLN8k&_u=g2023p00mpc18a)
 

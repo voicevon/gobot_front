@@ -7,7 +7,7 @@
 #include "AGV/mover_driver/mover_dual_wheel.h"
 // #include "Seeed_vl53l0x.h"
 #include "AGV/sensor/obstacle_sensor_vl53l0x.h"
-#include "AGV/sensor/obstacle_sensor_hcsr04.h"
+// #include "AGV/sensor/obstacle_sensor_hcsr04.h"
 
 
 
@@ -46,8 +46,9 @@ void BotSingleMcu::Init(){
 	this->objAgv.LinkTrackSensor(trackSensor); 
 
 	// Init Obstacle sensor, rfid sensor, battery voltage sensor.
-	ObstacleSensor_Hcsr04* hcsr04= new ObstacleSensor_Hcsr04(PIN_HCSR04_TRIG, PIN_HCSR04_ECHO);
-	this->objAgv.LinkObstacleSensor(hcsr04);
+	// ObstacleSensor_Hcsr04* obstacle_sensor = new ObstacleSensor_Hcsr04(PIN_HCSR04_TRIG, PIN_HCSR04_ECHO);
+	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(i2c_bus_main, 0x23);
+	this->objAgv.LinkObstacleSensor(obstacle_sensor);
 	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 	this->objRfid.Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);

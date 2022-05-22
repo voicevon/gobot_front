@@ -11,7 +11,11 @@ MessageQueue* garment_bot_message_queue;
 
 
 void setup(){
+    // wait until serial port opens for native USB devices
     Serial.begin(115200);
+    while (! Serial) {
+        delay(1);
+    }
     Serial.println("Hi there, I am your lovely bot,  BotSingleMcu, include AGV.  Keep smiling :)");
     garment_robot = new BotSingleMcu(ROBOT_SERIAL_ID);
     garment_robot->Init();
