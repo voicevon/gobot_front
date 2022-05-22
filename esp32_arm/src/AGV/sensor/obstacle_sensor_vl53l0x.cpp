@@ -24,6 +24,4 @@ bool ObstacleSensor_VL53l0x::DetectObstacle(){
         Serial.println(" out of range ");
         return false;   // Not found obstacle
     }
-
-
 }
