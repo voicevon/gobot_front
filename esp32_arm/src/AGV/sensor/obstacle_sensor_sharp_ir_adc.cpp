@@ -1,4 +1,4 @@
-#include "obstacle_sensor_sharp_ir.h"
+#include "obstacle_sensor_sharp_ir_adc.h"
 
 ObstacleSensor_SharpIr::ObstacleSensor_SharpIr(uint8_t pin_adc){
 

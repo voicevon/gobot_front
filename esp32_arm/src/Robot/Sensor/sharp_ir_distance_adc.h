@@ -18,17 +18,17 @@
 #define NB_SAMPLE 25
 #define USE_MEDOFMEDIANS false
 
-#ifdef ARDUINO
-  #include "Arduino.h"
-#elif defined(SPARK)
-  #include "Particle.h"
-#endif
+// #ifdef ARDUINO
+//   #include "Arduino.h"
+// #elif defined(SPARK)
+//   #include "Particle.h"
+// #endif
 
-class SharpIR
+class SharpIrAdc
 {
   public:
 
-    SharpIR (int irPin, long sensorModel);
+    SharpIrAdc (int irPin, long sensorModel);
     int distance();
 
   private:

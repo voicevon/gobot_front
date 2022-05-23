@@ -1,5 +1,5 @@
 /*
-	SharpIR
+	SharpIrAdc
 
 	Arduino library for retrieving distance (in cm) from the analog GP2Y0A21Y and GP2Y0A02YK
 
@@ -16,7 +16,7 @@
     Version : 1.2 : Archery2000
     + Add Median of Medians algorithm to speed up sensor reading computation
 
-	https://github.com/guillaume-rico/SharpIR
+	https://github.com/guillaume-rico/SharpIrAdc
     
     Original comment from Dr. Marcal Casas-Cartagena :
    The Sahrp IR sensors are cheap but somehow unreliable. I've found that when doing continous readings to a
@@ -36,14 +36,15 @@
    other sensors is easy enough.
 */
 
-#ifdef Arduino
-  #include "Arduino.h"
-#elif defined(SPARK)
-  #include "Particle.h"
-  #include "math.h"
-#endif
-#include "sharp_ir_distance.h"
-
+// #ifdef Arduino
+//   #include "Arduino.h"
+// #elif defined(SPARK)
+//   #include "Particle.h"
+//   #include "math.h"
+// #endif
+#include "sharp_ir_distance_adc.h"
+// #include "math.h"
+#include "Arduino.h"
 // Initialisation function
 //  + irPin : is obviously the pin where the IR sensor is attached
 //  + sensorModel is a int to differentiate the two sensor models this library currently supports:
@@ -51,7 +52,7 @@
 //    > 20150 is the int for GP2Y0A02YK and 
 //    > 100500 is the long for GP2Y0A710K0F
 //    The numbers reflect the distance range they are designed for (in cm)
-SharpIR::SharpIR(int irPin, long sensorModel) {
+SharpIrAdc::SharpIrAdc(int irPin, long sensorModel) {
   
     _irPin=irPin;
     _model=sensorModel;
@@ -65,7 +66,7 @@ SharpIR::SharpIR(int irPin, long sensorModel) {
 }
 
 // Sort an array
-void SharpIR::sort(int a[], int size) {
+void SharpIrAdc::sort(int a[], int size) {
     for(int i=0; i<(size-1); i++) {
         bool flag = true;
         for(int o=0; o<(size-(i+1)); o++) {
@@ -81,7 +82,7 @@ void SharpIR::sort(int a[], int size) {
 }
 
 // Read distance and compute it
-int SharpIR::distance() {
+int SharpIrAdc::distance() {
 
     int ir_val[NB_SAMPLE] = {};
     int distanceCM;
@@ -110,9 +111,8 @@ int SharpIR::distance() {
         #elif defined(SPARK)
           distanceCM = 29.988 * pow(map(median, 0, 4095, 0, 5000)/1000.0, -1.173);
         #endif
-
+        
     } else if (_model==20150){
-
         // Previous formula used by  Dr. Marcal Casas-Cartagena
         // puntualDistance=61.573*pow(voltFromRaw/1000, -1.1068);
         
@@ -164,7 +164,7 @@ int SharpIR::distance() {
     return distanceCM;
 }
 
-int SharpIR::medianOfMedians(int a[], int size){
+int SharpIrAdc::medianOfMedians(int a[], int size){
   int ans;
   int numMedians = size / 5;
   int* medians = new int[numMedians];
@@ -184,7 +184,7 @@ int SharpIR::medianOfMedians(int a[], int size){
 }
 
 // Sort a partial array
-void SharpIR::partialSort(int a[], int min, int max) {
+void SharpIrAdc::partialSort(int a[], int min, int max) {
     int t;
     bool flag;
     for(int i=min; i<max; i++) {

@@ -10,7 +10,8 @@
 #pragma once
 
 #include "obstacle_sensor_base.h"
-#include "Robot/Sensor/sharp_ir_distance.h"
+#include "Robot/Sensor/sharp_ir_distance_adc.h"
+#include "stdint.h"
 
 class ObstacleSensor_SharpIr:public ObstacleSensorBase{
     public:
@@ -20,5 +21,5 @@ class ObstacleSensor_SharpIr:public ObstacleSensorBase{
         bool DetectObstacle() override;
 
     private:
-        SharpIR* __sharp_ir;
+        SharpIrAdc* __sharp_ir;
 };
