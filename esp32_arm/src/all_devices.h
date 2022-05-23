@@ -4,7 +4,7 @@
 // #define I_AM_UINIT_TEST
 // #define I_AM_I2C_SCANNER
 // #define I_AM_VL53L0X_SINGLE
-#define I_AM_GP2Y0E03_SINGLE
+#define I_AM_SHARP_IR_DISTANCE_SENSOR
 
 // #define I_AM_AGV_WHEEL
 // #define I_AM_DRV8302
