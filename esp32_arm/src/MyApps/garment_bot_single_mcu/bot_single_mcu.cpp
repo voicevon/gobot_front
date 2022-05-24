@@ -1,6 +1,6 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
-#include "board_ver1.0.h"
+#include "board_ver2.0.h"
 #include "bot_single_mcu.h"
 #include "AGV/light/light_ws2812b.h"
 #include "AGV/track_sensor/track_sensor_dual_9960.h"
