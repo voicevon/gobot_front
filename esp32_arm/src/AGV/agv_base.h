@@ -20,8 +20,8 @@
 
 
 #pragma once
-#include "AGV/sensor/obstacle_sensor_base.h"
-#include "AGV/track_sensor/track_sensor_base.h"
+#include "AGV/sensor_obstacle/obstacle_sensor_base.h"
+#include "AGV/sensor_moving_track/track_sensor_base.h"
 #include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
 

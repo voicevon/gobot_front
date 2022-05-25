@@ -3,12 +3,9 @@
 #include "board_ver2.0.h"
 #include "bot_single_mcu.h"
 #include "AGV/light/light_ws2812b.h"
-#include "AGV/track_sensor/track_sensor_dual_9960.h"
+#include "AGV/sensor_moving_track/track_sensor_dual_9960.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
-// #include "Seeed_vl53l0x.h"
-#include "AGV/sensor/obstacle_sensor_vl53l0x.h"
-// #include "AGV/sensor/obstacle_sensor_hcsr04.h"
-
+#include "AGV/sensor_obstacle/obstacle_sensor_vl53l0x.h"
 
 
 

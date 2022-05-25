@@ -35,7 +35,7 @@
 
 #include "stdint.h"
 #include "Wire.h"
-#include "AGV/track_sensor/track_sensor_base.h"
+#include "AGV/sensor_moving_track/track_sensor_base.h"
 #include "smarter_9960.h"
 #include "AGV/light/light_base.h"
 
