@@ -44,20 +44,13 @@ char ReadRoomsSensor(){
 
 void setup_robot_hardware(){
     robot = &GobotChessboard::getInstance();
-    Serial.println("[Info] setup()  is  111111111111111");
     SingleAxisHomer* alpha_homer = new SingleAxisHomer(PIN_HOME_ALPHA, LOW);
-    Serial.println("[Info] setup()  is  222222222222222");
     SingleAxisHomer* beta_homer = new SingleAxisHomer(PIN_HOME_BETA, LOW);
-    Serial.println("[Info] setup()  is  333333333333333");
     Stepper* alpha_stepper = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR); 
-    Serial.println("[Info] setup()  is  444444444444444");
     Stepper* beta_stepper = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
-    Serial.println("[Info] setup()  is  555555555555555");
     robot_hardware = new GobotChessboardHardware();
-    Serial.println("[Info] setup()  is  666666666666666");
     robot_hardware->LinkHomer(alpha_homer, beta_homer);
     robot_hardware->LinkStepper(alpha_stepper, beta_stepper);
-    Serial.println("[Info] setup()  is  777777777777777");
     // robot_hardware.LinkStepper();
     robot_hardware->InitRobot();
     Serial.println("[Info] setup()  is  8888888888888888");
