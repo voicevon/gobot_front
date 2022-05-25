@@ -11,8 +11,8 @@
 #define PIN_BETA_STEP 18    //Ver 0.x  4
 #define PIN_BETA_ENABLE 19    // Ver0.1  16
 
-#define PIN_HOME_ALPHA  27     //??
-#define PIN_HOME_BETA  2      //??
+#define PIN_HOME_ALPHA  2  
+#define PIN_HOME_BETA  27     
 
 
 #define PIN_EEF_SERVO 21

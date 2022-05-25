@@ -9,8 +9,8 @@
 
 void RobotBase::SpinOnce(){
 // commuDevice->SpinOnce();
-// Serial.print("[Debug] RobotBase::SpinOnce() is entering \n");
-	// Serial.print(this->State);
+	// Serial.print("[Debug] RobotBase::SpinOnce() is entering.  Current state= ");
+	// Serial.println(this->State);
 	this->SpinOnce_BaseEnter();
 	switch (this->State){
 	case RobotState::IDLE:
@@ -37,6 +37,7 @@ void RobotBase::SpinOnce(){
 	//   Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
 	//   this->RunGcode(&gCode);
 	// }
+	Serial.println('[Debug]( RobotBase::SpinOnce() is finished.)');
 	this->SpinOnce_BaseExit();
 }
 

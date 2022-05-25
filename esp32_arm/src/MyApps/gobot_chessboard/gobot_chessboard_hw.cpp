@@ -6,6 +6,14 @@ void GobotChessboardHardware::InitRobot(){
 	Serial.print("\n[Info] GobotChessboardHardware::Init() is entering.");
     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     pinMode(PIN_BETA_ENABLE, OUTPUT);
+	// pinMode(PIN_EEF_SERVO, OUTPUT);
+
+	this->eefServo = new Servo();
+	this->eefServo->attach(PIN_EEF_SERVO);
+
+	pinMode(PIN_EEF_A, OUTPUT);
+	pinMode(PIN_EEF_B, OUTPUT);
+
 	this->__EnableMotor('A', false);
 	this->__EnableMotor('B', false);
 
@@ -232,12 +240,14 @@ void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk)
 }
 
 void GobotChessboardHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
+	Serial.print("[Debug] GobotChessboardHardware::RunM123()  eef_action= ");
+	// Serial.println(eef_action);
 	switch (eef_action){
 		case EefAction::Lower:
-			eefServo->write(180);
+			this->eefServo->write(180);
 			break;
 		case EefAction::Higher:
-			eefServo->write(0);
+			this->eefServo->write(0);
 			break;
 		case EefAction::Suck:
 			digitalWrite(PIN_EEF_A, HIGH);

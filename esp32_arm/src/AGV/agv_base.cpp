@@ -123,8 +123,6 @@ void AgvBase::ToState(AGV_STATE state){
     this->_State = state;
     Serial.print("\n[Info] GarmentBot::ToState()  NewState= " );
     Serial.println(state);
-
-   
 }
 
 // return true:   reach parked position

@@ -44,7 +44,7 @@ void BotSingleMcu::Init(){
 	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(i2c_bus_ext, I2C_ADDR_VL53L0X);
 	this->objAgv.LinkObstacleSensor(obstacle_sensor);
 	Serial.println("33333333333333");
-	
+
 	// Init track sensor
 	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(i2c_bus_main, i2c_bus_ext);
 	Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
@@ -60,11 +60,11 @@ void BotSingleMcu::Init(){
 	this->objRfid.Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
-	Serial.println("66666666666666");
+	Serial.println("5555555555");
 
 	// Init box carrier robot.
 	this->irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
-	Serial.println("5555555555555");
+	Serial.println("666666666666");
 
 	// Seeed_vl53l0x* vl53L0X = new Seeed_vl53l0x();
 	// VL53L0X_Error Status = VL53L0X_ERROR_NONE;
