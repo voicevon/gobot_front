@@ -12,6 +12,7 @@
 #define I_AM_GARMENT_BOT_SINGLE_MCU
 // #define I_AM_GARMENT_BOX_MOVER
 // #define I_AM_GARMENT_BOX_CARRIER
+
 // #define I_AM_GOBOT_HOUSE
 // #define I_AM_GOBOT_CHESSBOARD
 // #define I_AM_SPRING_MAKER

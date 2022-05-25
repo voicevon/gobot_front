@@ -9,7 +9,14 @@
 #define I2C_Freq 400000
 #define SDA_0 21
 #define SCL_0 22
+
+// #define SDA_0 27
+// #define SCL_0 26
  
+
+#define SDA_0 16
+#define SCL_0 17 
+
 TwoWire I2C_0 = TwoWire(0);
  
 void setup()

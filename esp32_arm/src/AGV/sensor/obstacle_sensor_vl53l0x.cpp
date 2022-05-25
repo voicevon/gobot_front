@@ -3,12 +3,12 @@
 
 ObstacleSensor_VL53l0x::ObstacleSensor_VL53l0x(TwoWire* i2c_bus, uint8_t i2c_address){
     Serial.println("Adafruit VL53L0X test");
-    if (!this->__vl53lox->begin()) {
+    this->__vl53lox=new Adafruit_VL53L0X();
+    if(!this->__vl53lox->begin(i2c_address, true, i2c_bus)){
         Serial.println(F("Failed to boot VL53L0X"));
         while(1);
     }
-    // power 
-    Serial.println(F("VL53L0X API Simple Ranging example\n\n")); 
+    Serial.println(F("ObstacleSensor-VL53L0X is started.\n\n")); 
 }
 
 bool ObstacleSensor_VL53l0x::DetectObstacle(){

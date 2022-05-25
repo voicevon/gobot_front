@@ -1,1 +1,0 @@
-[Lesson 84: How to change the I2C address for VL53L0X laser distance sensor](https://www.youtube.com/watch?v=RRQASevYK3g)

@@ -26,11 +26,12 @@ void BotSingleMcu::Init(){
 	i2c_bus_main = new TwoWire(0);
 	i2c_bus_main->begin(PIN_COMMON_I2C_SDA, PIN_COMMON_I2C_SCL);
 	i2c_bus_ext = new TwoWire(1);
-	i2c_bus_ext->begin(PIN_RIGHT_APDS_9960_SDA, PIN_RIGHT_APDS_9960_SCL);
+	i2c_bus_ext->begin(PIN_EXT_I2C_SDA, PIN_EXT_I2C_SCL);
 
 	Adafruit_MCP23X17* mcp_23018 = new Adafruit_MCP23X17();
-	mcp_23018->begin_I2C(0x20, i2c_bus_main);
-	
+	mcp_23018->begin_I2C(I2C_ADDR_MCP23018, i2c_bus_main);
+	Serial.println("111111111111");
+
 	// Init PWM driver
 	SingleWheel_HBridgePwmDriver* left_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_LEFT, mcp_23018, MC23018_PIN_WHEEL_DIR_LEFT);
 	SingleWheel_HBridgePwmDriver* right_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_RIGHT, mcp_23018, MC23018_PIN_WHEEL_DIR_RIGHT);
@@ -38,24 +39,32 @@ void BotSingleMcu::Init(){
 	mover->LinkLeftDriver(left_wheel_pwm);
 	mover->LinkRightDriver(right_wheel_pwm);
 	this->objAgv.LinkMover(mover);
+	Serial.println("2222222");
 
+	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(i2c_bus_ext, I2C_ADDR_VL53L0X);
+	this->objAgv.LinkObstacleSensor(obstacle_sensor);
+	Serial.println("33333333333333");
+	
 	// Init track sensor
-	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(i2c_bus_main, i2c_bus_main);
+	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(i2c_bus_main, i2c_bus_ext);
 	Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
 	trackSensor->LinkLight(led);
 	this->objAgv.LinkTrackSensor(trackSensor); 
+	Serial.println("4444444444");
 
 	// Init Obstacle sensor, rfid sensor, battery voltage sensor.
 	// ObstacleSensor_Hcsr04* obstacle_sensor = new ObstacleSensor_Hcsr04(PIN_HCSR04_TRIG, PIN_HCSR04_ECHO);
-	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(i2c_bus_main, 0x23);
-	this->objAgv.LinkObstacleSensor(obstacle_sensor);
+
+
 	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 	this->objRfid.Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
+	Serial.println("66666666666666");
 
 	// Init box carrier robot.
 	this->irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
+	Serial.println("5555555555555");
 
 	// Seeed_vl53l0x* vl53L0X = new Seeed_vl53l0x();
 	// VL53L0X_Error Status = VL53L0X_ERROR_NONE;
@@ -86,6 +95,7 @@ void BotSingleMcu::Init(){
 	objBoxCarrierHardware->InitRobot();
 	this->_gcode_queue = new GcodeQueue();
     objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
+	Serial.println("99999999999999");
 
 	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
 	Serial.print("\n[Info] BotSingleMcu::Init() is done.\n");

@@ -12,8 +12,8 @@
 // Common I2C bus is Connected to MCp23018
 #define PIN_COMMON_I2C_SDA 27
 #define PIN_COMMON_I2C_SCL 26
-#define PIN_RIGHT_APDS_9960_SDA 17
-#define PIN_RIGHT_APDS_9960_SCL 16
+#define PIN_EXT_I2C_SDA 16
+#define PIN_EXT_I2C_SCL 17 
 
 #define PIN_WHEEL_PWM_LEFT 4
 #define PIN_WHEEL_PWM_RIGHT 33
@@ -33,6 +33,7 @@
 #define PIN_RFID_SPI_CLK 18
 #define PIN_RFID_SPI_MISO 19
 #define PIN_RFID_SPI_MOSI 23
+#define PIN_RFID_SS 5
 
 #define PIN_BATTERY_VOLTAGE_ADC  34
 #define PIN_CHARGER_VOLTAGE_ADC  35
@@ -43,5 +44,11 @@
 // #define MCP23018_PIN_INPUT_BUTTON  11
 
 #define WS2812B_COUNT 16
+
+#define I2C_ADDR_MCP23018 0x23
+#define I2C_ADDR_VL53L0X 0x29
+#define I2C_ADDR_APDS9960 0x39  // Not changable.
+
+
 
 #endif

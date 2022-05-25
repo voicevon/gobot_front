@@ -5,9 +5,18 @@
 
 
 
+// #define PIN_SCL 26
+// #define PIN_SDA 27
+
+// #define PIN_SCL 22
+// #define PIN_SDA 21
 
 
-Adafruit_VL53L0X lox = Adafruit_VL53L0X();
+#define PIN_SDA 16
+#define PIN_SCL 17 
+
+Adafruit_VL53L0X* lox; //= Adafruit_VL53L0X();
+// Adafruit_VL53L0X lox = Adafruit_VL53L0X();
 
 void setup() {
 	Serial.begin(115200);
@@ -15,9 +24,11 @@ void setup() {
 	while (! Serial) {
 		delay(1);
 	}
-
+	TwoWire* bus = new TwoWire(1);
+	bus->begin(PIN_SDA ,PIN_SCL);
 	// Will update the chip to new address, and stop here. 
-	// #define NEW_I2C_ADDRESS  0x32
+	// #define NEW_I2C_ADDRESS  0x29
+	lox = new Adafruit_VL53L0X();
 	#ifdef NEW_I2C_ADDRESS
 		lox.begin(NEW_I2C_ADDRESS);
 		Serial.println("\n\n\n\n Address is updated, please reboot, verify it with  i2c_scanner");
@@ -26,7 +37,8 @@ void setup() {
 
 
 	Serial.println("Adafruit VL53L0X test");
-	if (!lox.begin(0x31, true)) {
+	if (!lox->begin(0x29, true, bus)) {
+	// if (!lox.begin(0x29, true, bus)) {
 		Serial.println(F("Failed to boot VL53L0X"));
 		while(1);
 	}
@@ -38,7 +50,8 @@ void loop() {
 	VL53L0X_RangingMeasurementData_t measure;
 		
 	Serial.print("Reading a measurement... ");
-	lox.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
+	lox->rangingTest(&measure, false); // pass in 'true' to get debug data printout!
+	// lox.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
 
 	if (measure.RangeStatus != 4) {  // phase failures have incorrect data
 		Serial.print("Distance (mm): "); Serial.println(measure.RangeMilliMeter);

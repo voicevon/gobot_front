@@ -12,4 +12,5 @@
 * Pololu  https://forum.pololu.com/t/error-in-using-vl53l0x-library/19903/3
   * https://www.youtube.com/watch?v=QEiNbTB8nNE
 
-
+# Change I2C address
+* [Lesson 84: How to change the I2C address for VL53L0X laser distance sensor](https://www.youtube.com/watch?v=RRQASevYK3g)
