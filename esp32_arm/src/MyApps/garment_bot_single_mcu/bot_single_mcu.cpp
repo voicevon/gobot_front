@@ -17,20 +17,9 @@ BotSingleMcu::BotSingleMcu(uint16_t id){
 void BotSingleMcu::Init(){
 	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
 
-	//Init BUS, MCP23018,
-	// TwoWire* i2c_bus_main;
-	// TwoWire* i2c_bus_ext;
-	// i2c_bus_main = new TwoWire(0);
-	// i2c_bus_main->begin(PIN_COMMON_I2C_SDA, PIN_COMMON_I2C_SCL);
-	// i2c_bus_ext = new TwoWire(1);
-	// i2c_bus_ext->begin(PIN_EXT_I2C_SDA, PIN_EXT_I2C_SCL);
 	BoardSingleMcu_ver2_0* cnc_board = new BoardSingleMcu_ver2_0();
 	cnc_board->Init();
-
-
 	Adafruit_MCP23X17* mcp_23018 = cnc_board->Get_Mcp23018();
-	// mcp_23018->begin_I2C(I2C_ADDR_MCP23018, i2c_bus_main);
-
 	// Init PWM driver
 	SingleWheel_HBridgePwmDriver* left_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_LEFT, mcp_23018, MC23018_PIN_WHEEL_DIR_LEFT);
 	SingleWheel_HBridgePwmDriver* right_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_RIGHT, mcp_23018, MC23018_PIN_WHEEL_DIR_RIGHT);
@@ -44,18 +33,13 @@ void BotSingleMcu::Init(){
 	Serial.println("33333333333333");
 
 	// Init track sensor
-	// TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(i2c_bus_main, i2c_bus_ext);
 	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(cnc_board->Get_Apds9960_left(), cnc_board->Get_Apds9960_right());
-	Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
-	trackSensor->LinkLight(led);
 	this->objAgv.LinkTrackSensor(trackSensor); 
 	Serial.println("4444444444");
 
 	// Init Obstacle sensor, rfid sensor, battery voltage sensor.
 	// ObstacleSensor_Hcsr04* obstacle_sensor = new ObstacleSensor_Hcsr04(PIN_HCSR04_TRIG, PIN_HCSR04_ECHO);
 
-
-	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 	this->objRfid.Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
@@ -85,16 +69,16 @@ void BotSingleMcu::Init(){
 	
 
 	// BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018, MC23018_PIN_ALPHA_ENABLE,MC23018_PIN_BETA_ENABLE);
-	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(cnc_board);
+	BoxCarrierHardware* box_carrier_hw = new BoxCarrierHardware(cnc_board);
 	Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);
 	Stepper* beta = new Stepper(PIN_BETA_STEP, mcp_23018, MC23018_PIN_BETA_DIR);
-	objBoxCarrierHardware->LinkStepper(alpha, beta);
+	box_carrier_hw->LinkStepper(alpha, beta);
 	SingleAxisHomer* homer_y = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Y, LOW);
 	SingleAxisHomer* homer_z = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Z, LOW);
-	objBoxCarrierHardware->LinkHomer(homer_z, homer_y);
-	objBoxCarrierHardware->InitRobot();
+	box_carrier_hw->LinkHomer(homer_z, homer_y);
+	box_carrier_hw->InitRobot();
 	this->_gcode_queue = new GcodeQueue();
-    objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
+    box_carrier_hw->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 	Serial.println("99999999999999");
 
 	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
@@ -159,8 +143,8 @@ void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
 void BotSingleMcu::SpinOnce(){
 	String gcode = "G1";
 	int align_error=0;
-	uint16_t battery_voltage =  analogRead(PIN_BATTERY_VOLTAGE_ADC) ;
-	this->__battery_voltage = 1.0 * battery_voltage + 0.0;
+	// uint16_t battery_voltage =  analogRead(PIN_BATTERY_VOLTAGE_ADC) ;
+	// this->__battery_voltage = 1.0 * battery_voltage + 0.0;
 	// this->objBoxMoverAgent.SpinOnce();
 	// this->objBoxCarrier_hardware->SpinOnce();
 	this->objAgv.SpinOnce();

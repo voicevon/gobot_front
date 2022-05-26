@@ -76,3 +76,10 @@ Adafruit_APDS9960* BoardBase::_Make_Apds9960(uint8_t i2c_address, TwoWire* i2c_b
 
 }
 
+Adafruit_NeoPixel* BoardBase::_Make_Ws2812b(uint8_t pin_ws2812b){
+    Serial.println("[Error] BoardBase::_Make_Ws2812b()  ");
+    Adafruit_NeoPixel* ws2812b=new Adafruit_NeoPixel();
+    return ws2812b;
+}
+
+

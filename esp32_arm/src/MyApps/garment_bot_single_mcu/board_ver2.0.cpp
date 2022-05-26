@@ -20,6 +20,8 @@ void BoardSingleMcu_ver2_0::Init(){
     this->EnableMotor_alpha(false);
     this->EnableMotor_beta(false);
 
+    pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
+
     // while(1)
     //     this->BlinkTest();
 
@@ -39,6 +41,17 @@ void BoardSingleMcu_ver2_0::EnableMotor_alpha(bool enable_it){
 
 void BoardSingleMcu_ver2_0::EnableMotor_beta(bool enable_it){
     this->__mcp23018->digitalWrite(MC23018_PIN_BETA_ENABLE, !enable_it);   // LOW is enable
+}
+
+float BoardSingleMcu_ver2_0::Get_Battery_volt(){
+    int16_t adc = analogRead(PIN_BATTERY_VOLTAGE_ADC);
+    // translate adc to voltage
+    float volt = adc / 12345;
+    return volt;
+}
+
+void BoardSingleMcu_ver2_0::TurnLedOn(bool turn_on){
+	// Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
 }
 
 

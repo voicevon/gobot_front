@@ -52,17 +52,13 @@ class TrackSensor_Dual9960_Config{
 
 class TrackSensor_Dual9960:public TrackSensorBase{
     public:
-        // TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config);
-        // TrackSensor_Dual9960(TwoWire* i2c_bus_left, TwoWire* i2c_bus_right);
         TrackSensor_Dual9960(Adafruit_APDS9960* left_apds9960, Adafruit_APDS9960* right_apds9960);
-        void LinkLight(LightBase* light){this->__led_light=light;};
         int16_t ReadAlignmentError() override;
         void ReadParkingError(int16_t* x_error, int16_t* y_error) override;
         void ClearFlag_Slowdown() override;
         void ClearFlag_SpeedUp();
         bool GetFlag_Slowdown() override;
         bool GetFlag_Speedup()override;
-        void TurnOnLed(bool turn_on) override;
         void SayHello();
         
     protected:
@@ -82,5 +78,4 @@ class TrackSensor_Dual9960:public TrackSensorBase{
         uint8_t __flag_spped_up;
         uint8_t __flag_slow_down;
         // Adafruit_NeoPixel* pixels;
-        LightBase* __led_light;
 };

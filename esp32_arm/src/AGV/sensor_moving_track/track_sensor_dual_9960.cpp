@@ -36,10 +36,6 @@ bool TrackSensor_Dual9960::GetFlag_Speedup(){
 }
 
 
-void TrackSensor_Dual9960::TurnOnLed(bool turn_on){
-    this->__led_light->TurnOn(turn_on);
-}
-
 int16_t TrackSensor_Dual9960::ReadAlignmentError(){
     this->left_sensor->ReadSensor();
     this->right_sensor->ReadSensor();

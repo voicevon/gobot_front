@@ -14,23 +14,6 @@
 #include "AGV/agv_base.h"
 
 
-
-/*    
-.     
-.     
-.                              <---------------------------------------------------------\
-,                              |                                                          | 
-.   Locating ------------>   Agv Moving ----> Agv Parked ------->align--> Robot_Loading ---^  
-.    (Slow)   [Got RFID]        |  (Read Mark RFID)           |                           | 
-.                               |                             |-->align--> Robot_Unloading-^
-.                             (Fast)                          |                           |
-.                             (Slow)                          |-------> Charging ---------^
-.                             (SuperSlow)                     |                           |
-.                             (Paused)                        |--------> Sleeping --------^
-.                                                             |                           |
-.                                                             |--------> Charging --------^
-*/
-
 class MqttReportData{
     float battery_voltage;
     char bot_state;
@@ -46,6 +29,7 @@ class MqttReportData{
 //      1. track sensor, and position-Y error, PID controller 
 //      4. Distance sensor, to detect obstacle.
 //      2. Vehical speed, motor control.
+
 class BotSingleMcu: public MqttMessageConsumer{
     public:
         enum BOT_STATE{
@@ -82,7 +66,7 @@ class BotSingleMcu: public MqttMessageConsumer{
         void ExecuteMqttCommand(const char* command) override;
         RoadGraph objMapNavigator;
         SmartRfidReader objRfid;
-        float __battery_voltage;
+        // float __battery_voltage;
         void onDetectedMark(uint16_t mapsite_id);
         RoadBranchNode __current_BranchNode;
         uint16_t _ID = 0;

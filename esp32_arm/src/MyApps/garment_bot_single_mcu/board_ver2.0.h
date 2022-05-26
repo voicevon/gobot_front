@@ -63,6 +63,8 @@ class BoardSingleMcu_ver2_0: public BoardbaseCnc{
         Adafruit_VL53L0X* Get_Vl53l0x(){return this->__vl53l0x;};
         Adafruit_APDS9960* Get_Apds9960_left(){return this->__left_aps9960;};
         Adafruit_APDS9960* Get_Apds9960_right(){return this->__right_aps9960;};
+        void TurnLedOn(bool turn_on);
+        float Get_Battery_volt();
 
 
     private:
