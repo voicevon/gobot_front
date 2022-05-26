@@ -13,14 +13,14 @@ void BoardSingleMcu_ver2_0::Init(){
         this->ScanI2cBus(&__i2c_bus_ext, "bus_extended");
         delay(3000);           // wait 5 seconds for next scan
     }
-    this->_Make_Mcp23018(&this->__mcp23018, I2C_ADDR_MCP23018, &this->__i2c_bus_main);
+    this->_Begin_Mcp23018(&this->__mcp23018, I2C_ADDR_MCP23018, &this->__i2c_bus_main);
     this->__mcp23018.pinMode(MC23018_PIN_ALPHA_ENABLE, OUTPUT);
     this->__mcp23018.pinMode(MC23018_PIN_BETA_ENABLE, OUTPUT);
     this->__mcp23018.pinMode(PIN_MCP23018_TEST, OUTPUT);
 
-    this->_Make_Vl531l0x(&this->__vl53l0x, I2C_ADDR_VL53L0X, &this->__i2c_bus_ext);
-    this->_Make_Apds9960(&this->__left_aps9960, I2C_ADDR_APDS9960, &this->__i2c_bus_main);
-    this->_Make_Apds9960(&this->__right_aps9960, I2C_ADDR_APDS9960, &this->__i2c_bus_ext);
+    this->_Begin_Vl531l0x(&this->__vl53l0x, I2C_ADDR_VL53L0X, &this->__i2c_bus_ext);
+    this->_Begin_Apds9960(&this->__left_aps9960, I2C_ADDR_APDS9960, &this->__i2c_bus_main);
+    this->_Begin_Apds9960(&this->__right_aps9960, I2C_ADDR_APDS9960, &this->__i2c_bus_ext);
 
 
     this->EnableMotor_alpha(false);

@@ -73,6 +73,7 @@ void BotSingleMcu::Init(){
 	Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);
 	Stepper* beta = new Stepper(PIN_BETA_STEP, mcp_23018, MC23018_PIN_BETA_DIR);
 	box_carrier_hw->LinkStepper(alpha, beta);
+	// box_carrier_hw->LinkStepper(cnc_board)
 	SingleAxisHomer* homer_y = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Y, LOW);
 	SingleAxisHomer* homer_z = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Z, LOW);
 	box_carrier_hw->LinkHomer(homer_z, homer_y);

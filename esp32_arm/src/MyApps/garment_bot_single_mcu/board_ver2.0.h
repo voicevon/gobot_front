@@ -50,14 +50,35 @@
 #define I2C_ADDR_APDS9960 0x39  // Not changable.
 
 #include <MyLibs/board_base.h>
+#include "ESP32Step/src/TeensyStep.h"
 
-class BoardSingleMcu_ver2_0: public BoardbaseCnc{
+class BoardPart_Cnc: public BoardbaseCnc{
+    public:
+        void EnableMotor_alpha(bool enable_it) override;
+        void EnableMotor_beta(bool enable_it) override;
+    
+};
+
+
+class BoardPart_Agv: public BoardbaseAgv{
+    public:
+        BoardPart_Agv(Adafruit_MCP23X17* mcp_23018){this->__mcp23018=mcp_23018;};
+
+    private:
+        Adafruit_MCP23X17* __mcp23018;
+        Stepper __stepper_alpha = Stepper(PIN_ALPHA_STEP, &this->__mcp23018, MC23018_PIN_ALPHA_DIR);
+        Stepper __stepper_beta = Stepper(PIN_BETA_STEP, &this->__mcp23018, MC23018_PIN_BETA_DIR);
+
+};
+
+class BoardSingleMcu_ver2_0: public BoardBase{
     public:
         BoardSingleMcu_ver2_0(){};
         void Init();
+        BoardPart_Cnc cnc = BoardPart_Cnc();
+        BoardPart_Agv agv = BoardPart_Agv(&this->Get_Mcp23018);
         void BlinkTest();
-        void EnableMotor_alpha(bool enable_it) override;
-        void EnableMotor_beta(bool enable_it) override;
+
 
         Adafruit_MCP23X17* Get_Mcp23018(){return &this->__mcp23018;};
         Adafruit_VL53L0X* Get_Vl53l0x(){return &this->__vl53l0x;};

@@ -9,7 +9,7 @@
 #include "board_ver2.0.h"
 
 BotSingleMcu garment_robot = BotSingleMcu(ROBOT_SERIAL_ID);
-MessageQueue* garment_bot_message_queue;
+MessageQueue garment_bot_message_queue = MessageQueue();
 BoardSingleMcu_ver2_0 board = BoardSingleMcu_ver2_0();
 
 void setup(){
@@ -25,13 +25,13 @@ void setup(){
 
    // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
-    garment_bot_message_queue = new MessageQueue();
+    // garment_bot_message_queue = new MessageQueue();
     String mqtt_topic = "puma/bot/xROBOT_SERIAL_ID";
     mqtt_topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
-    append_mqtt_bridge(mqtt_topic.c_str(), garment_bot_message_queue, &garment_robot); 
+    append_mqtt_bridge(mqtt_topic.c_str(), &garment_bot_message_queue, &garment_robot); 
     setup_mqtt_on_message_receive(); 
 
-    Serial.print ("\n  main.cpp  setup() is done. ------------------------------------  ");
+    Serial.println ("\n  main.cpp  setup() is done. ------------------------------------  ");
     ReportRam();
 }
 
