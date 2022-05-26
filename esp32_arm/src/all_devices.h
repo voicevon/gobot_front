@@ -3,8 +3,6 @@
 
 #define USING_BOARD_AGV_SINGLE_BOARD_VER_2_0
 
-
-
 // #define I_AM_UINIT_TEST
 // #define I_AM_I2C_SCANNER
 // #define I_AM_VL53L0X_SINGLE

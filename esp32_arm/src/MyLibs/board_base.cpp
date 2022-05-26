@@ -1,6 +1,6 @@
 #include "board_base.h"
 
-TwoWire* BoardBase::_MakeI2cBus(uint8_t pin_sda, uint8_t pin_scl, uint32_t frequency){
+TwoWire* BoardBase::_Make_I2cBus(uint8_t pin_sda, uint8_t pin_scl, uint32_t frequency){
     TwoWire* new_bus = new TwoWire(this->__i2c_bus_index);
     new_bus->begin(pin_sda, pin_scl, frequency);
     this->__i2c_bus_index++;
@@ -44,7 +44,7 @@ void BoardBase::ScanI2cBus(TwoWire* i2c_bus, const char* printing_topic){
 }
 
 
-Adafruit_MCP23X17* BoardBase::_MakeMcp23018(uint8_t i2c_address,TwoWire* i2c_bus){
+Adafruit_MCP23X17* BoardBase::_Make_Mcp23018(uint8_t i2c_address,TwoWire* i2c_bus){
     Adafruit_MCP23X17* mcp23018 = new Adafruit_MCP23X17();
     if(! mcp23018->begin_I2C(i2c_address, i2c_bus)){
         Serial.print("[Error] BoardBase::_MakeMcp23018() is failed! ");

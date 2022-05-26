@@ -7,7 +7,6 @@ BoxCarrier::BoxCarrier(){
 
 void BoxCarrier::ExecuteMqttCommand(const char* command){
 	this->_gcode_queue->AppendGcodeCommand(command);
-
 }
 
 void BoxCarrier::SpinOnce(){

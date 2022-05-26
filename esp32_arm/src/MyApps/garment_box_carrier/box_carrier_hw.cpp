@@ -77,28 +77,6 @@ void BoxCarrierHardware::InitRobot(){
 	Serial.print("\n[Info] BoxCarrierHardware::Init_Linkage() is entering.");
 	this->__config.Init();
 
-	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-	// pinMode(PIN_BETA_ENABLE, OUTPUT);
-	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
-	// pinMode(PIN_MICRIO_STEP_1, OUTPUT);
-	// pinMode(PIN_MICRIO_STEP_2, OUTPUT);
-
-
-	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
-	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
-	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
-	// if (this->__mcp23018 == nullptr){
-
-	// 	// Serial.print("[Error]  BoxCarrierHardware::InitRobot()   mcp23018 is null");
-	// }else{
-
-
-
-	// }
-
-
-
-	
 
 	// CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
 	// this->commuDevice = commuUart; 
@@ -268,18 +246,13 @@ float BoxCarrierHardware::GetDistanceToTarget_IK(){
 }
 
 void BoxCarrierHardware::__EnableMotor(char actuator, bool enable_it){
-	// if (this->__mcp23018 == nullptr){
 		if (actuator == 'A')
-			// digitalWrite(this->__pin_alpha_enable, !enable_it);
 			this->__board->EnableMotor_alpha(enable_it);
-		if (actuator == 'B')
-			// digitalWrite(this->__pin_beta_enable, !enable_it);
+		else if (actuator == 'B')
 			this->__board->EnableMotor_beta(enable_it);
-	// }else{
-	// 	if (actuator == 'A')
-	// 		this->__mcp23018->digitalWrite(this->__pin_alpha_enable, !enable_it);
-	// 	if (actuator == 'B')
-	// 		this->__mcp23018->digitalWrite(this->__pin_beta_enable, !enable_it);	
-	// }
+		else{
+			Serial.print("[Warn] BoxCarrierHardware::__EnableMotor()   unkown actuator = ");
+			Serial.println(actuator);
+		}
 }
 

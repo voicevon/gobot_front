@@ -38,6 +38,8 @@
 #define PIN_IR_FRONT 36
 #define PIN_IR_REAR 39
 
+#define PIN_MCP23018_TEST 13
+
 // #define MCP23018_PIN_EMERGENCY_STOP_BUTTON  11
 // #define MCP23018_PIN_INPUT_BUTTON  11
 
@@ -53,6 +55,7 @@ class BoardSingleMcu_ver2_0: public BoardbaseCnc{
     public:
         BoardSingleMcu_ver2_0(){};
         void Init();
+        void BlinkTest();
         void EnableMotor_alpha(bool enable_it) override;
         void EnableMotor_beta(bool enable_it) override;
 
@@ -62,6 +65,7 @@ class BoardSingleMcu_ver2_0: public BoardbaseCnc{
         TwoWire* __i2c_bus_main;
         TwoWire* __i2c_bus_ext;
         Adafruit_MCP23X17* __mcp23018;
+        bool blink_flag;
 
 };
 
