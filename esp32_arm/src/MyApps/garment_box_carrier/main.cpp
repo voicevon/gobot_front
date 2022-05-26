@@ -15,16 +15,42 @@ BoxCarrierHardware* robot_hw;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_command_queue;
 
-void setup(){
-    Serial.begin(115200);
-    Serial.println("Hi there, I am your lovely bot,  Garment-BoxMover.  Keep smiling :)");
-    // robot_hw = new BoxCarrierHardware(PIN_ALPHA_ENABLE, PIN_BETA_ENABLE);
+
+void setup_robot_hardware(){
     BoardSingleMcu_ver2_0* board = new BoardSingleMcu_ver2_0();
     board->Init();
-    // robot_hw = new BoxCarrierHardware(board->GetMcp23018(), MC23018_PIN_ALPHA_ENABLE, MC23018_PIN_BETA_ENABLE);
     robot_hw = new BoxCarrierHardware(board);
-    // robot_hw->LinkBoard(board);
+    Serial.println("11111111111");
+
+    Adafruit_MCP23X17* mm = board->GetMcp23018();
+    Serial.println("444444444444");
+    mm->pinMode(5, INPUT);
+    Serial.println("\n\n5555555555555");
+
+    SingleAxisHomer* z_homer = new SingleAxisHomer(board->GetMcp23018(), MC23018_PIN_HOME_Z, LOW);
+    Serial.println("666666666666");
+    SingleAxisHomer* y_homer = new SingleAxisHomer(board->GetMcp23018(), MC23018_PIN_HOME_Y, LOW);
+    Serial.println("777777777777");
+    robot_hw->LinkHomer(z_homer, y_homer);
+    Serial.println("888888888888");
+
+    Stepper* alpha_stepper = new Stepper(PIN_ALPHA_STEP, board->GetMcp23018(),MC23018_PIN_ALPHA_DIR);
+    Stepper* beta_stepper = new Stepper(PIN_BETA_STEP, board->GetMcp23018(), MC23018_PIN_BETA_DIR);
+    robot_hw->LinkStepper(alpha_stepper, beta_stepper);
+    Serial.println("99999999");
+
+}
+
+
+void setup(){
+    Serial.begin(115200);
+    Serial.println("Hi there, I am your lovely bot,  Garment box-Carrier for Jetty .  Keep smiling :)");
+
+    setup_robot_hardware();
+    Serial.println("aaaaaaaaaaaaa");
+
     robot = new BoxCarrier();
+    Serial.println("bbbbbbbbbbb");
     gcode_queue = new GcodeQueue();
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
     robot_hw->LinkLocalGcodeQueue_AsConsumer(gcode_queue);

@@ -9,16 +9,18 @@
 
 class BoardBase{
     public:
-        void ScanI2cBus(TwoWire* i2c_bus);
+        void ScanI2cBus(TwoWire* i2c_bus, const char* printing_topic);
 
     protected:
-        Adafruit_MCP23X17* _MakeMcp23018(TwoWire* i2c_bus);
+        Adafruit_MCP23X17* _MakeMcp23018(uint8_t i2c_address, TwoWire* i2c_bus);
         TwoWire* _MakeI2cBus(uint8_t pin_sda, uint8_t pin_scl, uint32_t frequency);
 
     private:
         uint8_t __i2c_bus_index = 0;
-
+        Adafruit_MCP23X17* __mcp23018;
 };
+
+
 
 class BoardbaseCnc: public BoardBase{
     public:

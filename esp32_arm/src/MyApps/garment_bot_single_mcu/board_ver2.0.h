@@ -8,8 +8,8 @@
 
 
 // Common I2C bus is Connected to MCp23018
-#define PIN_COMMON_I2C_SDA 27
-#define PIN_COMMON_I2C_SCL 26
+#define PIN_MAIN_I2C_SDA 27
+#define PIN_MAIN_I2C_SCL 26
 #define PIN_EXT_I2C_SDA 16
 #define PIN_EXT_I2C_SCL 17 
 
