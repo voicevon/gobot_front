@@ -2,11 +2,10 @@
 
 #include "Robot/robot_hardware_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-// #include "Robot/HomeHelper.h"
 #include "robot/single_axis_homer.h"
 #include "box_carrier_hw_config.h"
 
-#include "Robot/Commu/CommuUart.h"
+// #include "Robot/Commu/CommuUart.h"
 
 
 // #define VERTICAL_ENDSTOP 15
@@ -58,6 +57,9 @@ class BoxCarrierHardware:public RobotBase{
         SingleAxisHomer* objHomeHelper_vertical;
         SingleAxisHomer* objHomeHelper_y;
         BoxCarrierHardwareConfig  __config;
+
         Adafruit_MCP23X17* __mcp23018;
+        uint8_t __pin_alpha_enable;
+        uint8_t __pin_beta_enable;
 
 };

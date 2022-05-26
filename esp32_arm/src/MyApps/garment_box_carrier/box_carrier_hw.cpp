@@ -1,7 +1,7 @@
 #include "box_carrier_hw.h"
 
-#define PIN_ALPHA_ENABLE 18
-#define PIN_BETA_ENABLE 16
+// #define PIN_ALPHA_ENABLE 18
+// #define PIN_BETA_ENABLE 16
 // #define PIN_MICRIO_STEP_2 21
 // #define PIN_MICRIO_STEP_1 22
 // #define PIN_MICRIO_STEP_0 23
@@ -11,23 +11,6 @@
 
 
 
-/*
-.                look from right(X+) side.
-.
-.				--------------   
-.				|            |  
-.				|            | 
-.				|            |
-.				|            |
-.				|    ++++++  |
-.				|            |  
-.				|            |  
-.				|            |   
-.				|            |
-.		   <-- Y-            --> Y+       this is direction of positive
-.            Alpha         Beta
-.       Motor wheel        Idle wheel
-*/
 
 void BoxCarrierHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	Serial.print("\n[Info] BoxCarrierHardware::IK() is entering. ");
@@ -60,9 +43,12 @@ void BoxCarrierHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 }
 
 
+
 BoxCarrierHardware::BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
-	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-	pinMode(PIN_BETA_ENABLE, OUTPUT);
+	pinMode(pin_alpha_enable, OUTPUT);
+	pinMode(pin_beta_enable, OUTPUT);
+	this->__pin_alpha_enable = pin_alpha_enable;
+	this->__pin_beta_enable = pin_beta_enable;
 
 	this->__mcp23018 = nullptr;
 	this->__EnableMotor('A', false);
@@ -71,12 +57,10 @@ BoxCarrierHardware::BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_bet
 
 BoxCarrierHardware::BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
 	this->__mcp23018 = mcp_23018;
-	this->__mcp23018->pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-	this->__mcp23018->pinMode(PIN_BETA_ENABLE, OUTPUT);
+	this->__mcp23018->pinMode(pin_alpha_enable, OUTPUT);
+	this->__mcp23018->pinMode(pin_beta_enable, OUTPUT);
 	this->__EnableMotor('A', false);
 	this->__EnableMotor('B', false);
-
-
 }
 
 void BoxCarrierHardware::LinkStepper(Stepper* alpha, Stepper* beta){
@@ -92,6 +76,7 @@ void BoxCarrierHardware::LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* ho
 void BoxCarrierHardware::InitRobot(){
 	Serial.print("\n[Info] BoxCarrierHardware::Init_Linkage() is entering.");
 	this->__config.Init();
+
 	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	// pinMode(PIN_BETA_ENABLE, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
@@ -102,21 +87,21 @@ void BoxCarrierHardware::InitRobot(){
 	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
 	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
 	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
-	if (this->__mcp23018 == nullptr){
+	// if (this->__mcp23018 == nullptr){
 
-		// Serial.print("[Error]  BoxCarrierHardware::InitRobot()   mcp23018 is null");
-	}else{
+	// 	// Serial.print("[Error]  BoxCarrierHardware::InitRobot()   mcp23018 is null");
+	// }else{
 
 
 
-	}
+	// }
 
 
 
 	
 
-	CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
-	this->commuDevice = commuUart; 
+	// CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
+	// this->commuDevice = commuUart; 
 
 	// this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
 	// this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
@@ -285,14 +270,14 @@ float BoxCarrierHardware::GetDistanceToTarget_IK(){
 void BoxCarrierHardware::__EnableMotor(char actuator, bool enable_it){
 	if (this->__mcp23018 == nullptr){
 		if (actuator == 'A')
-			digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
+			digitalWrite(this->__pin_alpha_enable, !enable_it);
 		if (actuator == 'B')
-			digitalWrite(PIN_BETA_ENABLE, !enable_it);
+			digitalWrite(this->__pin_beta_enable, !enable_it);
 	}else{
 		if (actuator == 'A')
-			this->__mcp23018->digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
+			this->__mcp23018->digitalWrite(this->__pin_alpha_enable, !enable_it);
 		if (actuator == 'B')
-			this->__mcp23018->digitalWrite(PIN_BETA_ENABLE, !enable_it);	
+			this->__mcp23018->digitalWrite(this->__pin_beta_enable, !enable_it);	
 	}
 }
 

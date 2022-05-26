@@ -49,6 +49,13 @@
 #define I2C_ADDR_VL53L0X 0x29
 #define I2C_ADDR_APDS9960 0x39  // Not changable.
 
+#include <MyLibs/board_base.h>
 
+class BoardSingleMcu_ver2_0: public PcbaBoardBase{
+    public:
+        
+    private:
+
+}
 
 #endif
