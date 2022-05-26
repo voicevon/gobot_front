@@ -5,6 +5,8 @@
 #include "robot/single_axis_homer.h"
 #include "box_carrier_hw_config.h"
 
+#include "MyLibs/board_base.h"
+
 // #include "Robot/Commu/CommuUart.h"
 
 
@@ -19,8 +21,10 @@
 
 class BoxCarrierHardware:public RobotBase{
     public:
-        BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_beta_enable);
-        BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable);
+        // BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_beta_enable);
+        // BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable);
+        BoxCarrierHardware(BoardbaseCnc* board){this->__board=board;};
+        // void LinkBoard(BoardbaseCnc* board){this->__board=board;};
         void LinkStepper(Stepper* alpha, Stepper* beta);
         void LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y);
 
@@ -58,8 +62,10 @@ class BoxCarrierHardware:public RobotBase{
         SingleAxisHomer* objHomeHelper_y;
         BoxCarrierHardwareConfig  __config;
 
-        Adafruit_MCP23X17* __mcp23018;
-        uint8_t __pin_alpha_enable;
-        uint8_t __pin_beta_enable;
+        // Adafruit_MCP23X17* __mcp23018;
+        // uint8_t __pin_alpha_enable;
+        // uint8_t __pin_beta_enable;
+
+        BoardbaseCnc* __board;
 
 };

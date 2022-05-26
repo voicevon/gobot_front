@@ -1,7 +1,5 @@
 #pragma once
-#ifdef I_AM_GARMENT_BOT_SINGLE_MCU
-
-
+#ifdef USING_BOARD_AGV_SINGLE_BOARD_VER_2_0
 
 
 // #define PIN_HCSR04_ECHO 18
@@ -51,11 +49,20 @@
 
 #include <MyLibs/board_base.h>
 
-class BoardSingleMcu_ver2_0: public PcbaBoardBase{
+class BoardSingleMcu_ver2_0: public BoardbaseCnc{
     public:
-        
-    private:
+        BoardSingleMcu_ver2_0(){};
+        void Init();
+        void EnableMotor_alpha(bool enable_it) override;
+        void EnableMotor_beta(bool enable_it) override;
 
-}
+        // TwoWire* GetI2c_mian(){return this->i2c_bus_main;};
+        // TwoWire* GetI2c_ext(){return this->i2c_bus_ext;};
+        Adafruit_MCP23X17* GetMcp23018(){return this->__mcp_23018;};
+    private:
+        TwoWire* __i2c_bus_main;
+        TwoWire* __i2c_bus_ext;
+        Adafruit_MCP23X17* __mcp_23018;
+};
 
 #endif

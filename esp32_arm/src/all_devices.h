@@ -1,6 +1,10 @@
 #ifndef __ALL_DEVICES_H_
 #define __ALL_DEVICES_H_
 
+#define USING_BOARD_AGV_SINGLE_BOARD_VER_2_0
+
+
+
 // #define I_AM_UINIT_TEST
 // #define I_AM_I2C_SCANNER
 // #define I_AM_VL53L0X_SINGLE
@@ -11,7 +15,7 @@
 
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
-#define I_AM_GARMENT_BOT_SINGLE_MCU
+// #define I_AM_GARMENT_BOT_SINGLE_MCU
 // #define I_AM_GARMENT_BOT_SINGLE_MCU_UNIT_CORE_YZ
 // #define I_AM_GARMENT_BOX_MOVER
 #define I_AM_GARMENT_BOX_CARRIER

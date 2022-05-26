@@ -44,24 +44,24 @@ void BoxCarrierHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 
 
-BoxCarrierHardware::BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
-	pinMode(pin_alpha_enable, OUTPUT);
-	pinMode(pin_beta_enable, OUTPUT);
-	this->__pin_alpha_enable = pin_alpha_enable;
-	this->__pin_beta_enable = pin_beta_enable;
+// BoxCarrierHardware::BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
+// 	pinMode(pin_alpha_enable, OUTPUT);
+// 	pinMode(pin_beta_enable, OUTPUT);
+// 	this->__pin_alpha_enable = pin_alpha_enable;
+// 	this->__pin_beta_enable = pin_beta_enable;
 
-	this->__mcp23018 = nullptr;
-	this->__EnableMotor('A', false);
-	this->__EnableMotor('B', false);
-}
+// 	this->__mcp23018 = nullptr;
+// 	this->__EnableMotor('A', false);
+// 	this->__EnableMotor('B', false);
+// }
 
-BoxCarrierHardware::BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
-	this->__mcp23018 = mcp_23018;
-	this->__mcp23018->pinMode(pin_alpha_enable, OUTPUT);
-	this->__mcp23018->pinMode(pin_beta_enable, OUTPUT);
-	this->__EnableMotor('A', false);
-	this->__EnableMotor('B', false);
-}
+// BoxCarrierHardware::BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
+// 	this->__mcp23018 = mcp_23018;
+// 	this->__mcp23018->pinMode(pin_alpha_enable, OUTPUT);
+// 	this->__mcp23018->pinMode(pin_beta_enable, OUTPUT);
+// 	this->__EnableMotor('A', false);
+// 	this->__EnableMotor('B', false);
+// }
 
 void BoxCarrierHardware::LinkStepper(Stepper* alpha, Stepper* beta){
 	this->objStepper_alpha = alpha;
@@ -268,16 +268,18 @@ float BoxCarrierHardware::GetDistanceToTarget_IK(){
 }
 
 void BoxCarrierHardware::__EnableMotor(char actuator, bool enable_it){
-	if (this->__mcp23018 == nullptr){
+	// if (this->__mcp23018 == nullptr){
 		if (actuator == 'A')
-			digitalWrite(this->__pin_alpha_enable, !enable_it);
+			// digitalWrite(this->__pin_alpha_enable, !enable_it);
+			this->__board->EnableMotor_alpha(enable_it);
 		if (actuator == 'B')
-			digitalWrite(this->__pin_beta_enable, !enable_it);
-	}else{
-		if (actuator == 'A')
-			this->__mcp23018->digitalWrite(this->__pin_alpha_enable, !enable_it);
-		if (actuator == 'B')
-			this->__mcp23018->digitalWrite(this->__pin_beta_enable, !enable_it);	
-	}
+			// digitalWrite(this->__pin_beta_enable, !enable_it);
+			this->__board->EnableMotor_beta(enable_it);
+	// }else{
+	// 	if (actuator == 'A')
+	// 		this->__mcp23018->digitalWrite(this->__pin_alpha_enable, !enable_it);
+	// 	if (actuator == 'B')
+	// 		this->__mcp23018->digitalWrite(this->__pin_beta_enable, !enable_it);	
+	// }
 }
 
