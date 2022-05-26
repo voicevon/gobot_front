@@ -7,7 +7,7 @@
 #include "AGV/mover_driver/mover_dual_wheel.h"
 #include "AGV/sensor_obstacle/obstacle_sensor_vl53l0x.h"
 
-
+#include "board_ver2.0.h"
 
 BotSingleMcu::BotSingleMcu(uint16_t id){
 	this->_ID = id;
@@ -18,16 +18,18 @@ void BotSingleMcu::Init(){
 	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
 
 	//Init BUS, MCP23018,
-	TwoWire* i2c_bus_main;
-	TwoWire* i2c_bus_ext;
-	i2c_bus_main = new TwoWire(0);
-	i2c_bus_main->begin(PIN_COMMON_I2C_SDA, PIN_COMMON_I2C_SCL);
-	i2c_bus_ext = new TwoWire(1);
-	i2c_bus_ext->begin(PIN_EXT_I2C_SDA, PIN_EXT_I2C_SCL);
+	// TwoWire* i2c_bus_main;
+	// TwoWire* i2c_bus_ext;
+	// i2c_bus_main = new TwoWire(0);
+	// i2c_bus_main->begin(PIN_COMMON_I2C_SDA, PIN_COMMON_I2C_SCL);
+	// i2c_bus_ext = new TwoWire(1);
+	// i2c_bus_ext->begin(PIN_EXT_I2C_SDA, PIN_EXT_I2C_SCL);
+	BoardSingleMcu_ver2_0* cnc_board = new BoardSingleMcu_ver2_0();
+	cnc_board->Init();
 
-	Adafruit_MCP23X17* mcp_23018 = new Adafruit_MCP23X17();
-	mcp_23018->begin_I2C(I2C_ADDR_MCP23018, i2c_bus_main);
-	Serial.println("111111111111");
+
+	Adafruit_MCP23X17* mcp_23018 = cnc_board->Get_Mcp23018();
+	// mcp_23018->begin_I2C(I2C_ADDR_MCP23018, i2c_bus_main);
 
 	// Init PWM driver
 	SingleWheel_HBridgePwmDriver* left_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_LEFT, mcp_23018, MC23018_PIN_WHEEL_DIR_LEFT);
@@ -38,16 +40,16 @@ void BotSingleMcu::Init(){
 	this->objAgv.LinkMover(mover);
 	Serial.println("2222222");
 
-	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(i2c_bus_ext, I2C_ADDR_VL53L0X);
+	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(cnc_board->Get_Vl53l0x());
 	this->objAgv.LinkObstacleSensor(obstacle_sensor);
 	Serial.println("33333333333333");
 
 	// Init track sensor
-	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(i2c_bus_main, i2c_bus_ext);
-	Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
-	trackSensor->LinkLight(led);
-	this->objAgv.LinkTrackSensor(trackSensor); 
-	Serial.println("4444444444");
+	// TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(i2c_bus_main, i2c_bus_ext);
+	// Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
+	// trackSensor->LinkLight(led);
+	// this->objAgv.LinkTrackSensor(trackSensor); 
+	// Serial.println("4444444444");
 
 	// Init Obstacle sensor, rfid sensor, battery voltage sensor.
 	// ObstacleSensor_Hcsr04* obstacle_sensor = new ObstacleSensor_Hcsr04(PIN_HCSR04_TRIG, PIN_HCSR04_ECHO);
@@ -82,7 +84,8 @@ void BotSingleMcu::Init(){
 
 	
 
-	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018, MC23018_PIN_ALPHA_ENABLE,MC23018_PIN_BETA_ENABLE);
+	// BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018, MC23018_PIN_ALPHA_ENABLE,MC23018_PIN_BETA_ENABLE);
+	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(cnc_board);
 	Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);
 	Stepper* beta = new Stepper(PIN_BETA_STEP, mcp_23018, MC23018_PIN_BETA_DIR);
 	objBoxCarrierHardware->LinkStepper(alpha, beta);

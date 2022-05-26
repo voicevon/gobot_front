@@ -59,12 +59,15 @@ class BoardSingleMcu_ver2_0: public BoardbaseCnc{
         void EnableMotor_alpha(bool enable_it) override;
         void EnableMotor_beta(bool enable_it) override;
 
-        Adafruit_MCP23X17* GetMcp23018(){return this->__mcp23018;};
+        Adafruit_MCP23X17* Get_Mcp23018(){return this->__mcp23018;};
+        Adafruit_VL53L0X* Get_Vl53l0x(){return this->__vl53l0x;};
 
     private:
         TwoWire* __i2c_bus_main;
         TwoWire* __i2c_bus_ext;
         Adafruit_MCP23X17* __mcp23018;
+        Adafruit_VL53L0X* __vl53l0x;
+
         bool blink_flag;
 
 };

@@ -1,14 +1,17 @@
 #include "obstacle_sensor_vl53l0x.h"
 
 
-ObstacleSensor_VL53l0x::ObstacleSensor_VL53l0x(TwoWire* i2c_bus, uint8_t i2c_address){
-    Serial.println("Adafruit VL53L0X test");
-    this->__vl53lox=new Adafruit_VL53L0X();
-    if(!this->__vl53lox->begin(i2c_address, true, i2c_bus)){
-        Serial.println(F("Failed to boot VL53L0X"));
-        while(1);
-    }
-    Serial.println(F("ObstacleSensor-VL53L0X is started.\n\n")); 
+// ObstacleSensor_VL53l0x::ObstacleSensor_VL53l0x(TwoWire* i2c_bus, uint8_t i2c_address){
+//     Serial.println("Adafruit VL53L0X test");
+//     this->__vl53lox=new Adafruit_VL53L0X();
+//     if(!this->__vl53lox->begin(i2c_address, true, i2c_bus)){
+//         Serial.println(F("Failed to boot VL53L0X"));
+//         while(1);
+//     }
+//     Serial.println(F("ObstacleSensor-VL53L0X is started.\n\n")); 
+// }
+ObstacleSensor_VL53l0x::ObstacleSensor_VL53l0x(Adafruit_VL53L0X* vl53l0x){
+    this->__vl53lox = vl53l0x;
 }
 
 bool ObstacleSensor_VL53l0x::DetectObstacle(){

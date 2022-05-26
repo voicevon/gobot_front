@@ -1,5 +1,5 @@
 #include "all_devices.h"
-#ifdef I_AM_GARMENT_BOT_SINGLE_MCU || I_AM_GARMENT_BOT_SINGLE_MCU_UNIT_CORE_YZ
+#ifdef I_AM_GARMENT_BOT_SINGLE_MCU
 
 
 #include "MyLibs/MyFunctions.hpp"

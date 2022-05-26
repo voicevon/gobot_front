@@ -21,15 +21,15 @@ void setup_robot_hardware(){
     board->Init();
     robot_hw = new BoxCarrierHardware(board);
 
-    Adafruit_MCP23X17* mcp = board->GetMcp23018();
-    SingleAxisHomer* z_homer = new SingleAxisHomer(mcp, MC23018_PIN_HOME_Z, LOW);
-    SingleAxisHomer* y_homer = new SingleAxisHomer(mcp, MC23018_PIN_HOME_Y, LOW);
+    Adafruit_MCP23X17* board_mcp = board->GetMcp23018();
+    SingleAxisHomer* z_homer = new SingleAxisHomer(board_mcp, MC23018_PIN_HOME_Z, LOW);
+    SingleAxisHomer* y_homer = new SingleAxisHomer(board_mcp, MC23018_PIN_HOME_Y, LOW);
     robot_hw->LinkHomer(z_homer, y_homer);
 
-    Stepper* alpha_stepper = new Stepper(PIN_ALPHA_STEP, board->GetMcp23018(),MC23018_PIN_ALPHA_DIR);
-    Stepper* beta_stepper = new Stepper(PIN_BETA_STEP, board->GetMcp23018(), MC23018_PIN_BETA_DIR);
+    Stepper* alpha_stepper = new Stepper(PIN_ALPHA_STEP, board_mcp, MC23018_PIN_ALPHA_DIR);
+    Stepper* beta_stepper = new Stepper(PIN_BETA_STEP, board_mcp, MC23018_PIN_BETA_DIR);
     robot_hw->LinkStepper(alpha_stepper, beta_stepper);
-
+    robot_hw->InitRobot();
 }
 
 
@@ -49,7 +49,7 @@ void setup(){
     setup_mqtt_on_message_receive(); 
     Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
 
-    // robot->ExecuteMqttCommand("G28Z");
+    robot->ExecuteMqttCommand("G28Y");
 }
 
 void loop(){

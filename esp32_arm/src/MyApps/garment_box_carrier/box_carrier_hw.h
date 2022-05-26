@@ -34,8 +34,8 @@ class BoxCarrierHardware:public RobotBase{
         float GetDistanceToTarget_IK() override;
 
     private:
-        Stepper* objStepper_alpha; // = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
-        Stepper* objStepper_beta; // = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
+        Stepper* stepper_alpha; // = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
+        Stepper* stepper_beta; // = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
         StepControl objStepControl;
 
         //Override private

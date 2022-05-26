@@ -6,6 +6,7 @@
 // #endif
 
 #include <Adafruit_MCP23X17.h>
+#include <Adafruit_VL53L0X.h>
 
 class BoardBase{
     public:
@@ -14,6 +15,8 @@ class BoardBase{
     protected:
         TwoWire* _Make_I2cBus(uint8_t pin_sda, uint8_t pin_scl, uint32_t frequency);
         Adafruit_MCP23X17* _Make_Mcp23018(uint8_t i2c_address, TwoWire* i2c_bus);
+        Adafruit_VL53L0X* _Make_Vl531l0x(uint8_t i2c_address, TwoWire* i2c_bus);
+
 
     private:
         uint8_t __i2c_bus_index = 0;
