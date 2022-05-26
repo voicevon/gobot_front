@@ -45,7 +45,7 @@ class RoomBotCorner: public RobotBase{
         virtual void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override;
         virtual std::string GetHomeTrigerStateString() override;
         void MoveToTargetPosition();
-        void SpinOnce_BaseEnter() override {};
+        // void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override;
         Led objLed_power = Led(0,PIN_LED_POWER_2130,LOW);
         Led objLed_home_alpha = Led(1,2,LOW);

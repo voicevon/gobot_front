@@ -143,14 +143,15 @@ void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
 void BotSingleMcu::SpinOnce(){
 	String gcode = "G1";
 	int align_error=0;
-	// uint16_t battery_voltage =  analogRead(PIN_BATTERY_VOLTAGE_ADC) ;
-	// this->__battery_voltage = 1.0 * battery_voltage + 0.0;
-	// this->objBoxMoverAgent.SpinOnce();
-	// this->objBoxCarrier_hardware->SpinOnce();
 	this->objAgv.SpinOnce();
+		Serial.println("11111111111111111111");
+
 	this->boxCarrierHardware->SpinOnce();
+		Serial.println("2222222222222222222");
 	this->objBoxCarrier.SpinOnce();
+		Serial.println("33333333333333333333");
 	this->CheckMqttCommand();
+		Serial.println("444444444444444444");
 
 	
 	if(this->objAgv.GetState() == AgvBase::AGV_STATE::SLOW_MOVING ){
@@ -159,7 +160,8 @@ void BotSingleMcu::SpinOnce(){
 			return;
 		}
 	}
-
+		Serial.println("555555555555555555");
+	Serial.println(this->__state);
 	switch (this->__state){
 	case BotSingleMcu::BOT_STATE::BOT_LOCATING:
 		//Trying to read RFID.
@@ -214,6 +216,7 @@ void BotSingleMcu::SpinOnce(){
 		Serial.print("\n [Warning] BotSingleMcu::SpinOnce()  A state with out dealer.! \n\n");
       	break;
    }
+		Serial.println("66666666666666666666666");
 }
 
 void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){

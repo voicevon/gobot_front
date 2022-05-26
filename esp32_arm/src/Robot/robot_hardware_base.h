@@ -118,11 +118,12 @@ class RobotBase: public GcodeConsumer{
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
         virtual float GetDistanceToTarget_IK();
+        void SayHello();
 
     protected:
         RobotBase(){};
-        void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
-        virtual void SpinOnce_BaseEnter();
+        // void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
+        // virtual void SpinOnce_BaseEnter();
         void SpinOnce_BaseExit();
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
@@ -136,7 +137,7 @@ class RobotBase: public GcodeConsumer{
         // TODO:  Should I remove this? 
         //  This commuDevice will only output message , for debugging perpose, Right?
         //  If is right, Then, HardSerial is sufficient to do that.
-        CommuDeviceBase* commuDevice;     
+        // CommuDeviceBase* commuDevice;     
         bool is_absolute_position = true;
 
         /* Just for fun, don't remove below comment.

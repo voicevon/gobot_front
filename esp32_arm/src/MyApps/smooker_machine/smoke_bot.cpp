@@ -69,9 +69,9 @@ void SmokeBotHardware::Init_Gpio(){
 }
 
 void SmokeBotHardware::InitRobot(){
-	this->commuDevice = &this->objCommuUart; 
+	// this->commuDevice = &this->objCommuUart; 
 	// this->objHomeHelper.LinkActuator(&this->objActuator);
-	this->objCommuUart.OutputMessage("Hoddy, I am commmunicator UART ....");
+	// this->objCommuUart.OutputMessage("Hoddy, I am commmunicator UART ....");
 
 }
 

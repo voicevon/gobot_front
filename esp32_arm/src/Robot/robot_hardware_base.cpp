@@ -6,14 +6,18 @@
 // 	Gcode gcode = Gcode(message);
 // 	this->RunGcode(&gcode);
 // }
+void RobotBase::SayHello(){
+	Serial.println("Hello world, This is RobotBase::SayHello()");
+}
 
 void RobotBase::SpinOnce(){
 	// commuDevice->SpinOnce();
-	// Serial.print("[Debug] RobotBase::SpinOnce() is entering.  Current state= ");
+	Serial.print("[Debug] RobotBase::SpinOnce() is entering.  Current state= ");
 	// Serial.println(this->State);
+	this->SayHello();
 
-
-	this->SpinOnce_BaseEnter();
+	// this->SpinOnce_BaseEnter();
+	Serial.print("[Debug] RobotBase::SpinOnce()  going to state machine... ");
 	switch (this->State){
 	case RobotState::IDLE:
 		break;
@@ -40,7 +44,7 @@ void RobotBase::SpinOnce(){
 	//   Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
 	//   this->RunGcode(&gCode);
 	// }
-	// Serial.println("[Debug]( RobotBase::SpinOnce() is finished.)");
+	Serial.println("[Debug]( RobotBase::SpinOnce() is finished.)");
 	this->SpinOnce_BaseExit();
 }
 
@@ -124,7 +128,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 			//       4. Start Moving.
 			this->State = RobotState::RUNNING_G1;
 			this->RunG1(gcode);
-			this->commuDevice->OutputMessage(COMMU_OK);
+			// this->commuDevice->OutputMessage(COMMU_OK);
 			break;
 		case 4:
 			// G4 Dwell, Pause for a period of time.
@@ -133,17 +137,17 @@ void RobotBase::RunGcode(Gcode* gcode){
 			break;
 		case 6:
 			this->RunG6(gcode);
-			this->commuDevice->OutputMessage(COMMU_OK);
+			// this->commuDevice->OutputMessage(COMMU_OK);
 			break;
 		case 90:
 			// Absolute position
 			this->is_absolute_position = true;
-			this->commuDevice->OutputMessage(COMMU_OK);
+			// this->commuDevice->OutputMessage(COMMU_OK);
 			break;
 		case 91:
 			// Relative position
 			this->is_absolute_position = false;
-			this->commuDevice->OutputMessage(COMMU_OK);
+			// this->commuDevice->OutputMessage(COMMU_OK);
 			break;
 		// case 92:
 			// Set Position     G92 X10 E90
@@ -169,9 +173,9 @@ void RobotBase::RunGcode(Gcode* gcode){
 		case 119:
 			// Get Endstop Status
 			result = GetHomeTrigerStateString();
-			this->commuDevice->OutputMessage(COMMU_OK);
+			// this->commuDevice->OutputMessage(COMMU_OK);
 			Serial.print(result.c_str());
-			this->commuDevice->WriteNotification(result);
+			// this->commuDevice->WriteNotification(result);
 			break;
 
 		case 123:
@@ -203,8 +207,8 @@ void RobotBase::RunGcode(Gcode* gcode){
 			if (gcode->has_letter('P')) p_value = gcode->get_value('P');
 			if (gcode->has_letter('S')) s_value = gcode->get_value('S');
 			ledcWrite(p_value, s_value);   // from ledcWrite(ledChannel, dutyCycle);
-			this->commuDevice->OutputMessage(COMMU_OK);
-			this->commuDevice->WriteNotification("IDLE");
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			// this->commuDevice->WriteNotification("IDLE");
 			break;
 		case 996:
 			// Do nothing. this should be the last gcode of a movement in transaction.
@@ -214,9 +218,9 @@ void RobotBase::RunGcode(Gcode* gcode){
 			break;
 		}
 	}else{
-		this->commuDevice->OutputMessage("\n[Warning] RobotBase::RunGcode()  Has NO letter 'G' or 'M'. ");
-		this->commuDevice->OutputMessage(gcode->get_command());
-		this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
+		// this->commuDevice->OutputMessage("\n[Warning] RobotBase::RunGcode()  Has NO letter 'G' or 'M'. ");
+		// this->commuDevice->OutputMessage(gcode->get_command());
+		// this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
 	}
 }
 

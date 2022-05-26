@@ -6,7 +6,7 @@
 #include "Robot/Actuator/ActuatorBase.h"
 // #include "Robot/HomeHelper.h"
 #include "Robot/single_axis_homer.h"
-#include "Robot/Commu/CommuUart.h"
+// #include "Robot/Commu/CommuUart.h"
 
 #define PIN_HOME 18
 #define PIN_STEP 33
@@ -29,13 +29,13 @@ class SmokeBotHardware: public RobotBase{
         float GetDistanceToTarget_IK() override{return 0.0;};
 
     private:
-        CommuUart objCommuUart = CommuUart();
+        // CommuUart objCommuUart = CommuUart();
         Stepper objStepper = Stepper(PIN_STEP, PIN_DIR);
         StepControl objStepControl;
 
         SingleAxisHomer objHomeHelper = SingleAxisHomer(PIN_HOME, HIGH);
         
-        void SpinOnce_BaseEnter() override {};
+        // void SpinOnce_BaseEnter() override {};
         // void SpinOnce_BaseExit() override {};
         void IK(FkPositionBase* from_fk, IkPositionBase* to_ik) override {};
         void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override {};

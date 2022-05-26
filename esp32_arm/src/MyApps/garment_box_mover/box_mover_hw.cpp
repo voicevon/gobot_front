@@ -81,8 +81,8 @@ void BoxMoverHardware::InitRobot(){
 	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
 	
 
-	CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
-	this->commuDevice = commuUart; 
+	// CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
+	// this->commuDevice = commuUart; 
 
 	// this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
 	// this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);

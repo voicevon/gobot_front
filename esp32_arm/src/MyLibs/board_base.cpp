@@ -55,23 +55,21 @@ Adafruit_MCP23X17* BoardBase::_Make_Mcp23018(uint8_t i2c_address,TwoWire* i2c_bu
 }
 
 Adafruit_VL53L0X* BoardBase::_Make_Vl531l0x(uint8_t i2c_address, TwoWire* i2c_bus){
-    Serial.println("[Error] BoardBase::_Make_Vl531l0x()");
-    //     this->__vl53lox=new Adafruit_VL53L0X();
-//     if(!this->__vl53lox->begin(i2c_address, true, i2c_bus)){
-//         Serial.println(F("Failed to boot VL53L0X"));
-//         while(1);
-//     }
-//     Serial.println(F("ObstacleSensor-VL53L0X is started.\n\n")); 
+    Serial.println("[Info] BoardBase::_Make_Vl531l0x()");
     Adafruit_VL53L0X* vl53l0x = new Adafruit_VL53L0X();
+    if(! vl53l0x->begin(i2c_address, true, i2c_bus)){
+        Serial.println(F("Failed to boot VL53L0X"));
+        while(1);
+    }
+    Serial.println(F("ObstacleSensor-VL53L0X is started.\n\n")); 
     return vl53l0x;
 }
 
 Adafruit_APDS9960* BoardBase::_Make_Apds9960(uint8_t i2c_address, TwoWire* i2c_bus){
-    Serial.println("[Error] BoardBase::_Make_Apds9960()  ");
-    //     this->sensor = new Adafruit_APDS9960();
-    // this->sensor->begin(10, APDS9960_AGAIN_4X, APDS9960_ADDRESS, i2c_bus);
-    // this->sensor->enableColor(true);
+    Serial.println("[Info] BoardBase::_Make_Apds9960()  ");
     Adafruit_APDS9960* apds9960 = new Adafruit_APDS9960();
+    apds9960->begin(10, APDS9960_AGAIN_4X, APDS9960_ADDRESS, i2c_bus);
+    apds9960->enableColor(true);
     return apds9960;
 
 }

@@ -20,7 +20,7 @@ bool ObstacleSensor_VL53l0x::DetectObstacle(){
     this->__vl53lox->rangingTest(&measure, false); // pass in 'true' to get debug data printout!
 
     if (measure.RangeStatus != 4) {  // phase failures have incorrect data
-        Serial.print("Distance (mm): ");
+        Serial.print("[Info] ObstacleSensor_VL53l0x::DetectObstacle()  Measured Distance (mm): ");
         Serial.println(measure.RangeMilliMeter);
         return true;  // Found obstacle
     } else {

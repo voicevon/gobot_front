@@ -39,7 +39,7 @@ class BoxCarrierHardware:public RobotBase{
         StepControl objStepControl;
 
         //Override private
-        void SpinOnce_BaseEnter() override {};
+        // void SpinOnce_BaseEnter() override {};
         // void SpinOnce_BaseExit() override {};
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
