@@ -4,23 +4,23 @@
 
 
 void BoardSingleMcu_ver2_0::Init(){
-    this->__i2c_bus_main = this->_Make_I2cBus(PIN_MAIN_I2C_SDA, PIN_MAIN_I2C_SCL, 400000);
-    this->__i2c_bus_ext = this->_Make_I2cBus(PIN_EXT_I2C_SDA, PIN_EXT_I2C_SCL, 400000);
+    this->_Begin_I2cBus(&this->__i2c_bus_main, PIN_MAIN_I2C_SDA, PIN_MAIN_I2C_SCL, 400000);
+    this->_Begin_I2cBus(&this->__i2c_bus_ext, PIN_EXT_I2C_SDA, PIN_EXT_I2C_SCL, 400000);
 
     bool scan_buses = false;
     if (scan_buses){
-        this->ScanI2cBus(__i2c_bus_main, "bus_main");
-        this->ScanI2cBus(__i2c_bus_ext, "bus_extended");
+        this->ScanI2cBus(&__i2c_bus_main, "bus_main");
+        this->ScanI2cBus(&__i2c_bus_ext, "bus_extended");
         delay(3000);           // wait 5 seconds for next scan
     }
-    this->__mcp23018 = this->_Make_Mcp23018(I2C_ADDR_MCP23018, this->__i2c_bus_main);
-    this->__mcp23018->pinMode(MC23018_PIN_ALPHA_ENABLE, OUTPUT);
-    this->__mcp23018->pinMode(MC23018_PIN_BETA_ENABLE, OUTPUT);
-    this->__mcp23018->pinMode(PIN_MCP23018_TEST, OUTPUT);
+    this->_Make_Mcp23018(&this->__mcp23018, I2C_ADDR_MCP23018, &this->__i2c_bus_main);
+    this->__mcp23018.pinMode(MC23018_PIN_ALPHA_ENABLE, OUTPUT);
+    this->__mcp23018.pinMode(MC23018_PIN_BETA_ENABLE, OUTPUT);
+    this->__mcp23018.pinMode(PIN_MCP23018_TEST, OUTPUT);
 
-    this->__vl53l0x = this->_Make_Vl531l0x(I2C_ADDR_VL53L0X, this->__i2c_bus_ext);
-    this->__left_aps9960 = this->_Make_Apds9960(I2C_ADDR_APDS9960, this->__i2c_bus_main);
-    this->__right_aps9960 = this->_Make_Apds9960(I2C_ADDR_APDS9960, this->__i2c_bus_ext);
+    this->_Make_Vl531l0x(&this->__vl53l0x, I2C_ADDR_VL53L0X, &this->__i2c_bus_ext);
+    this->_Make_Apds9960(&this->__left_aps9960, I2C_ADDR_APDS9960, &this->__i2c_bus_main);
+    this->_Make_Apds9960(&this->__right_aps9960, I2C_ADDR_APDS9960, &this->__i2c_bus_ext);
 
 
     this->EnableMotor_alpha(false);
@@ -36,17 +36,17 @@ void BoardSingleMcu_ver2_0::Init(){
 void BoardSingleMcu_ver2_0::BlinkTest(){
     Serial.print("Blinking...    >> ");
     Serial.println(blink_flag);
-    this->__mcp23018->digitalWrite(PIN_MCP23018_TEST, this->blink_flag);
+    this->__mcp23018.digitalWrite(PIN_MCP23018_TEST, this->blink_flag);
     this->blink_flag = ! this->blink_flag;
     delay(2000);
 }
 
 void BoardSingleMcu_ver2_0::EnableMotor_alpha(bool enable_it){
-    this->__mcp23018->digitalWrite(MC23018_PIN_ALPHA_ENABLE, !enable_it);   // LOW is enable
+    this->__mcp23018.digitalWrite(MC23018_PIN_ALPHA_ENABLE, !enable_it);   // LOW is enable
 }
 
 void BoardSingleMcu_ver2_0::EnableMotor_beta(bool enable_it){
-    this->__mcp23018->digitalWrite(MC23018_PIN_BETA_ENABLE, !enable_it);   // LOW is enable
+    this->__mcp23018.digitalWrite(MC23018_PIN_BETA_ENABLE, !enable_it);   // LOW is enable
 }
 
 float BoardSingleMcu_ver2_0::Get_Battery_volt(){
