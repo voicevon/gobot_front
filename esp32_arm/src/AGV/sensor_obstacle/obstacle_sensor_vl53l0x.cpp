@@ -16,7 +16,8 @@ ObstacleSensor_VL53l0x::ObstacleSensor_VL53l0x(Adafruit_VL53L0X* vl53l0x){
 
 bool ObstacleSensor_VL53l0x::DetectObstacle(){
     VL53L0X_RangingMeasurementData_t measure;
-        Serial.print("Reading a measurement... ");
+    Serial.print("[Warn] ObstacleSensor_VL53l0x::DetectObstacle() ");
+
     this->__vl53lox->rangingTest(&measure, false); // pass in 'true' to get debug data printout!
 
     if (measure.RangeStatus != 4) {  // phase failures have incorrect data

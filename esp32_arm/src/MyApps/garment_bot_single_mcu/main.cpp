@@ -5,6 +5,8 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "bot_single_mcu.h"
 #include "IoT/main_mqtt.h"
+#include "MyLibs/board_static.h"
+
 
 BotSingleMcu *garment_robot;
 MessageQueue* garment_bot_message_queue;
@@ -16,7 +18,8 @@ void setup(){
     while (! Serial) {
         delay(1);
     }
-    Serial.println("Hi there, I am your lovely bot,  BotSingleMcu, include AGV.  Keep smiling :)");
+    Serial.println("Hi there, I am your lovely bot,  BotSingleMcu, include AGV.  Keep smiling :) ");
+    ReportRam();
     garment_robot = new BotSingleMcu(ROBOT_SERIAL_ID);
     garment_robot->Init();
 
@@ -28,7 +31,8 @@ void setup(){
     append_mqtt_bridge(mqtt_topic.c_str(), garment_bot_message_queue, garment_robot); 
     setup_mqtt_on_message_receive(); 
 
-    Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
+    Serial.print ("\n  main.cpp  setup() is done. ------------------------------------  ");
+    ReportRam();
 }
 
 int64_t last_report_timestamp = 0;
