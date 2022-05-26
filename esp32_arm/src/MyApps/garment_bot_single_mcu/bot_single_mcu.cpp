@@ -38,7 +38,6 @@ void BotSingleMcu::Init(){
 	mover->LinkLeftDriver(left_wheel_pwm);
 	mover->LinkRightDriver(right_wheel_pwm);
 	this->objAgv.LinkMover(mover);
-	Serial.println("2222222");
 
 	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(cnc_board->Get_Vl53l0x());
 	this->objAgv.LinkObstacleSensor(obstacle_sensor);
@@ -46,10 +45,11 @@ void BotSingleMcu::Init(){
 
 	// Init track sensor
 	// TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(i2c_bus_main, i2c_bus_ext);
-	// Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
-	// trackSensor->LinkLight(led);
-	// this->objAgv.LinkTrackSensor(trackSensor); 
-	// Serial.println("4444444444");
+	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(cnc_board->Get_Apds9960_left(), cnc_board->Get_Apds9960_right());
+	Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
+	trackSensor->LinkLight(led);
+	this->objAgv.LinkTrackSensor(trackSensor); 
+	Serial.println("4444444444");
 
 	// Init Obstacle sensor, rfid sensor, battery voltage sensor.
 	// ObstacleSensor_Hcsr04* obstacle_sensor = new ObstacleSensor_Hcsr04(PIN_HCSR04_TRIG, PIN_HCSR04_ECHO);

@@ -61,12 +61,17 @@ class BoardSingleMcu_ver2_0: public BoardbaseCnc{
 
         Adafruit_MCP23X17* Get_Mcp23018(){return this->__mcp23018;};
         Adafruit_VL53L0X* Get_Vl53l0x(){return this->__vl53l0x;};
+        Adafruit_APDS9960* Get_Apds9960_left(){return this->__left_aps9960;};
+        Adafruit_APDS9960* Get_Apds9960_right(){return this->__right_aps9960;};
+
 
     private:
         TwoWire* __i2c_bus_main;
         TwoWire* __i2c_bus_ext;
         Adafruit_MCP23X17* __mcp23018;
         Adafruit_VL53L0X* __vl53l0x;
+        Adafruit_APDS9960* __left_aps9960;
+        Adafruit_APDS9960* __right_aps9960;
 
         bool blink_flag;
 
