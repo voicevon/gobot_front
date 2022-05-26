@@ -45,12 +45,13 @@ void BoardBase::ScanI2cBus(TwoWire* i2c_bus, const char* printing_topic){
 
 
 Adafruit_MCP23X17* BoardBase::_MakeMcp23018(uint8_t i2c_address,TwoWire* i2c_bus){
-    this->__mcp23018 = new Adafruit_MCP23X17();
-    if(!this->__mcp23018->begin_I2C(i2c_address, i2c_bus)){
+    Adafruit_MCP23X17* mcp23018 = new Adafruit_MCP23X17();
+    if(! mcp23018->begin_I2C(i2c_address, i2c_bus)){
         Serial.print("[Error] BoardBase::_MakeMcp23018() is failed! ");
         while (1);
     }
     Serial.println("[Info] BoardBase::_MakeMcp23018() is OK.");
+    return mcp23018;
 }
 
 

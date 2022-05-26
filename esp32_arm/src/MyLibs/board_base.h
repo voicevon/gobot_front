@@ -17,12 +17,11 @@ class BoardBase{
 
     private:
         uint8_t __i2c_bus_index = 0;
-        Adafruit_MCP23X17* __mcp23018;
 };
 
 
 
-class BoardbaseCnc: public BoardBase{
+class BoardbaseCnc: protected BoardBase{
     public:
         virtual void EnableMotor_alpha(bool enable_it);
         virtual void EnableMotor_beta(bool enable_it);
