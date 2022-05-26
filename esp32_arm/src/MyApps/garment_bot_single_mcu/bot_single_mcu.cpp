@@ -16,9 +16,9 @@ BotSingleMcu::BotSingleMcu(uint16_t id, BoardAllInOne* board){
 void BotSingleMcu::Init(){
 	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
 
-	BoardAllInOne* cnc_board = this->board->cnc;
-	cnc_board->Init();
-	Adafruit_MCP23X17* mcp_23018 = cnc_board->Get_Mcp23018();
+	// BoardAllInOne* cnc_board = this->board->cnc;
+	// cnc_board->Init();
+	Adafruit_MCP23X17* mcp_23018 = this->board->Get_Mcp23018();
 	// Init PWM driver
 	SingleWheel_HBridgePwmDriver* left_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_LEFT, mcp_23018, MC23018_PIN_WHEEL_DIR_LEFT);
 	SingleWheel_HBridgePwmDriver* right_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_RIGHT, mcp_23018, MC23018_PIN_WHEEL_DIR_RIGHT);
@@ -27,12 +27,12 @@ void BotSingleMcu::Init(){
 	mover->LinkRightDriver(right_wheel_pwm);
 	this->objAgv.LinkMover(mover);
 
-	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(cnc_board->Get_Vl53l0x());
+	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(this->board->Get_Vl53l0x());
 	this->objAgv.LinkObstacleSensor(obstacle_sensor);
 	Serial.println("33333333333333");
 
 	// Init track sensor
-	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(cnc_board->Get_Apds9960_left(), cnc_board->Get_Apds9960_right());
+	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(this->board->Get_Apds9960_left(), this->board->Get_Apds9960_right());
 	this->objAgv.LinkTrackSensor(trackSensor); 
 	Serial.println("4444444444");
 
@@ -72,7 +72,7 @@ void BotSingleMcu::Init(){
 	// Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);
 	// Stepper* beta = new Stepper(PIN_BETA_STEP, mcp_23018, MC23018_PIN_BETA_DIR);
 	// box_carrier_hw->LinkStepper(alpha, beta);
-	box_carrier_hw->LinkStepper(this->board->cnc.EnableMotor_alpha)
+	box_carrier_hw->LinkStepper(&this->board->cnc.stepper_alpha, &this->board->cnc.stepper_beta);
 	SingleAxisHomer* homer_y = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Y, LOW);
 	SingleAxisHomer* homer_z = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Z, LOW);
 	box_carrier_hw->LinkHomer(homer_z, homer_y);

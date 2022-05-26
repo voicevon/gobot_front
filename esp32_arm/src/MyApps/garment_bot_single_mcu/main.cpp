@@ -6,11 +6,12 @@
 #include "bot_single_mcu.h"
 #include "IoT/main_mqtt.h"
 #include "MyLibs/board_static.h"
-#include "board_ver2.0.h"
+// #include "board_all_in_one.h"
 
-BotSingleMcu garment_robot = BotSingleMcu(ROBOT_SERIAL_ID);
+BoardAllInOne board = BoardAllInOne();
+BotSingleMcu garment_robot = BotSingleMcu(ROBOT_SERIAL_ID, &board);
 MessageQueue garment_bot_message_queue = MessageQueue();
-BoardSingleMcu_ver2_0 board = BoardSingleMcu_ver2_0();
+
 
 void setup(){
     // wait until serial port opens for native USB devices

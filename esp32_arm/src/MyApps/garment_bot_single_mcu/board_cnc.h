@@ -6,7 +6,7 @@
 
 class BoardPart_Cnc: public BoardbaseCnc{
     public:
-        BoardPart_Cnc();
+        BoardPart_Cnc(){};
         void Init(Adafruit_MCP23X17* mcp_23018){this->__mcp23018=mcp_23018;};
         void EnableMotor_alpha(bool enable_it) override;
         void EnableMotor_beta(bool enable_it) override;
