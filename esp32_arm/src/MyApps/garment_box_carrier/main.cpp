@@ -21,7 +21,7 @@ void setup_robot_hardware(){
     board->Init();
     robot_hw = new BoxCarrierHardware(board);
 
-    Adafruit_MCP23X17* board_mcp = board->GetMcp23018();
+    Adafruit_MCP23X17* board_mcp = board->Get_Mcp23018();
     SingleAxisHomer* z_homer = new SingleAxisHomer(board_mcp, MC23018_PIN_HOME_Z, LOW);
     SingleAxisHomer* y_homer = new SingleAxisHomer(board_mcp, MC23018_PIN_HOME_Y, LOW);
     robot_hw->LinkHomer(z_homer, y_homer);
