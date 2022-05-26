@@ -1,16 +1,13 @@
 #pragma once
-#include "all_devices.h"
-#ifdef USING_BOARD_AGV_SINGLE_BOARD_VER_2_0
-
 
 #include <MyLibs/board_base.h>
 #include "board_agv.h"
 #include "board_cnc.h"
 
 
-class BoardSingleMcu_ver2_0: public BoardBase{
+class BoardAllInOne: public BoardBase{
     public:
-        BoardSingleMcu_ver2_0(){};
+        BoardAllInOne(){};
         void Init();
         BoardPart_Cnc cnc = BoardPart_Cnc();
         BoardPart_Agv agv = BoardPart_Agv();
@@ -36,5 +33,3 @@ class BoardSingleMcu_ver2_0: public BoardBase{
         bool blink_flag;
 
 };
-
-#endif

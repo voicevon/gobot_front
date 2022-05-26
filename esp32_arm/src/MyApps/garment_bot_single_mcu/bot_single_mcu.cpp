@@ -1,23 +1,22 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
-#include "board_ver2.0.h"
+#include "board_pins_ver_2_0.h"
 #include "bot_single_mcu.h"
 #include "AGV/light/light_ws2812b.h"
 #include "AGV/sensor_moving_track/track_sensor_dual_9960.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
 #include "AGV/sensor_obstacle/obstacle_sensor_vl53l0x.h"
 
-#include "board_ver2.0.h"
-
-BotSingleMcu::BotSingleMcu(uint16_t id){
+BotSingleMcu::BotSingleMcu(uint16_t id, BoardAllInOne* board){
 	this->_ID = id;
+	this->board = board;
 	// this->objBoxCarrier_hardware = new BoxCarrierHardware();
 }
 
 void BotSingleMcu::Init(){
 	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
 
-	BoardSingleMcu_ver2_0* cnc_board = new BoardSingleMcu_ver2_0();
+	BoardAllInOne* cnc_board = this->board->cnc;
 	cnc_board->Init();
 	Adafruit_MCP23X17* mcp_23018 = cnc_board->Get_Mcp23018();
 	// Init PWM driver
@@ -69,11 +68,11 @@ void BotSingleMcu::Init(){
 	
 
 	// BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018, MC23018_PIN_ALPHA_ENABLE,MC23018_PIN_BETA_ENABLE);
-	BoxCarrierHardware* box_carrier_hw = new BoxCarrierHardware(cnc_board);
-	Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);
-	Stepper* beta = new Stepper(PIN_BETA_STEP, mcp_23018, MC23018_PIN_BETA_DIR);
-	box_carrier_hw->LinkStepper(alpha, beta);
-	// box_carrier_hw->LinkStepper(cnc_board)
+	BoxCarrierHardware* box_carrier_hw;
+	// Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);
+	// Stepper* beta = new Stepper(PIN_BETA_STEP, mcp_23018, MC23018_PIN_BETA_DIR);
+	// box_carrier_hw->LinkStepper(alpha, beta);
+	box_carrier_hw->LinkStepper(this->board->cnc.EnableMotor_alpha)
 	SingleAxisHomer* homer_y = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Y, LOW);
 	SingleAxisHomer* homer_z = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Z, LOW);
 	box_carrier_hw->LinkHomer(homer_z, homer_y);

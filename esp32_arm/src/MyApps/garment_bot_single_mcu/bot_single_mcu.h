@@ -12,6 +12,7 @@
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/sensor_map_site/smart_rfid_reader.h"
 #include "AGV/agv_base.h"
+#include "board_all_in_one.h"
 
 
 class MqttReportData{
@@ -47,7 +48,7 @@ class BotSingleMcu: public MqttMessageConsumer{
             BOT_EMERGENCY_STOPING = 11,
         };
 
-        BotSingleMcu(uint16_t id);
+        BotSingleMcu(uint16_t id, BoardAllInOne* board);
         AgvBase objAgv = AgvBase();
 
         GcodeQueue* _gcode_queue;
@@ -72,6 +73,7 @@ class BotSingleMcu: public MqttMessageConsumer{
         uint16_t _ID = 0;
         BotSingleMcu::BOT_STATE __state;
         TrackSensor_DualIR* irSensor;
+        BoardAllInOne* board;
 };
 
 
