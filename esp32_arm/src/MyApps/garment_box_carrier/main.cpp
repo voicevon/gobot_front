@@ -7,28 +7,22 @@
 #include "box_carrier.h"
 #include "box_carrier_hw.h"
 #include "IoT/main_mqtt.h"
-#include "Myapps/garment_bot_single_mcu/board_ver2.0.h"
+#include "MyApps/garment_bot_single_mcu/board_all_in_one.h"
 
 
 BoxCarrier *robot;
 BoxCarrierHardware* robot_hw;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_command_queue;
-
+StepControl objStepControl;
 
 void setup_robot_hardware(){
-    BoardSingleMcu_ver2_0* board = new BoardSingleMcu_ver2_0();
-    board->Init();
-    robot_hw = new BoxCarrierHardware(board);
-
-    Adafruit_MCP23X17* board_mcp = board->Get_Mcp23018();
-    SingleAxisHomer* z_homer = new SingleAxisHomer(board_mcp, MC23018_PIN_HOME_Z, LOW);
-    SingleAxisHomer* y_homer = new SingleAxisHomer(board_mcp, MC23018_PIN_HOME_Y, LOW);
-    robot_hw->LinkHomer(z_homer, y_homer);
-
-    Stepper* alpha_stepper = new Stepper(PIN_ALPHA_STEP, board_mcp, MC23018_PIN_ALPHA_DIR);
-    Stepper* beta_stepper = new Stepper(PIN_BETA_STEP, board_mcp, MC23018_PIN_BETA_DIR);
-    robot_hw->LinkStepper(alpha_stepper, beta_stepper);
+    BoardAllInOne board = BoardAllInOne();
+    board.Init();
+    robot_hw = new BoxCarrierHardware();
+    robot_hw->InitMe(&board.cnc, &objStepControl);
+    robot_hw->LinkHomer(&board.cnc.homer_z, &board.cnc.homer_y);
+    robot_hw->LinkStepper(&board.cnc.stepper_alpha, &board.cnc.stepper_beta);
     robot_hw->InitRobot();
 }
 

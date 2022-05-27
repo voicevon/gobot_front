@@ -6,25 +6,31 @@ void BoardAllInOne::Init(){
 
     bool scan_buses = false;
     if (scan_buses){
-        this->ScanI2cBus(&__i2c_bus_main, "bus_main");
-        this->ScanI2cBus(&__i2c_bus_ext, "bus_extended");
+        this->ScanI2cBus(&this->__i2c_bus_main, "bus_main");
+        this->ScanI2cBus(&this->__i2c_bus_ext, "bus_extended");
         delay(3000);           // wait 5 seconds for next scan
     }
     this->_Begin_Mcp23018(&this->__mcp23018, I2C_ADDR_MCP23018, &this->__i2c_bus_main);
     this->__mcp23018.pinMode(MC23018_PIN_ALPHA_ENABLE, OUTPUT);
     this->__mcp23018.pinMode(MC23018_PIN_BETA_ENABLE, OUTPUT);
     this->__mcp23018.pinMode(PIN_MCP23018_TEST, OUTPUT);
-
-
+    Serial.println("ddddddddddddddddddddddddddddddddddd");
+    // Init cnc components 
+    this->cnc.Init(&this->__mcp23018);
+    Serial.println("eeeeeeeeeeeeeee");
     this->cnc.EnableMotor_alpha(false);
     this->cnc.EnableMotor_beta(false);
+    Serial.println("    [Info] BoardAllInOne::Init() CNC components is OK.");
 
+    //Init agv components
     this->agv.Init(&this->__i2c_bus_main, &this->__i2c_bus_ext);
+    Serial.println("    [Info] BoardAllInOne::Init() AGV components is OK.");
 
     pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 
     // while(1)
     //     this->BlinkTest();
+    Serial.println("[Info] BoardAllInOne::Init() ALL components is OK.");
 
 }
 

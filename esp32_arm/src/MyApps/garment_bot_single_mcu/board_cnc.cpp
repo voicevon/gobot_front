@@ -2,9 +2,14 @@
 
 void BoardPart_Cnc::Init(Adafruit_MCP23X17* mcp_23018){
     this->__mcp23018 = mcp_23018;
+    Serial.println("aaaaaaaaaa");
     this->stepper_alpha.Init_mcp23018(mcp_23018, MC23018_PIN_ALPHA_DIR);
+    Serial.println("bbbbbbbbbb");
+
     this->stepper_beta.Init_mcp23018(mcp_23018, MC23018_PIN_BETA_DIR);
+    Serial.println("cccccccc");
     this->homer_y.Init_mcp23018(mcp_23018, MC23018_PIN_HOME_Y);
+    Serial.println("kkkkkkkkkkkkkkk");
     this->homer_z.Init_mcp23018(mcp_23018, MC23018_PIN_HOME_Z);
 }
 
