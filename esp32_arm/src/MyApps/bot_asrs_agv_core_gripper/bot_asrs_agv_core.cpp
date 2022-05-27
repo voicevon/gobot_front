@@ -14,7 +14,7 @@ void BotSingleMcu::Init(BoardAllInOne* board, StepControl* stepControl){
 	this->objAgv.LinkTrackSensor(board->agv.Get_Dual9960()); 
 	this->objAgv.Init();
 
-	this->objRfid.Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
+	this->objAsrs.RfidReader->Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 
 	// Init box carrier robot.
@@ -60,7 +60,8 @@ void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
 	switch (current_BranchNode.task){
 	case RoadBranchNode::TASK::SHORT_CUT_ONLY:
 		// Follow branch road, not main road.
-		this->objAgv.SetFollowMainRoad(this->objRfid.MainRoad_IsOn_LeftSide , false);
+		// this->objAgv.SetFollowMainRoad(this->objRfid.MainRoad_IsOn_LeftSide , false);
+		this->objAgv.SetFollowMainRoad(this->objAsrs.RfidReader->MainRoad_IsOn_LeftSide , false);
 		break;
 	case RoadBranchNode::TASK::LOAD:
 	  	// ???  This is invoked when agv is SLOW_MOVING, should to loading, after parking.
@@ -97,19 +98,19 @@ void BotSingleMcu::SpinOnce(){
 	return;
 
 
-	if(this->objAgv.GetState() == AgvBase::AGV_STATE::SLOW_MOVING ){
-		if (this->objRfid.ReadCard()){
-			this->onDetectedMark(this->objRfid.CardId);
-			return;
-		}
-	}
+	// if(this->objAgv.GetState() == AgvBase::AGV_STATE::SLOW_MOVING ){
+	// 	if (this->objRfid.ReadCard()){
+	// 		this->onDetectedMark(this->objRfid.CardId);
+	// 		return;
+	// 	}
+	// }
 		Serial.println("555555555555555555");
 	Serial.println(this->__state);
 	switch (this->__state){
 	case BotSingleMcu::BOT_STATE::BOT_LOCATING:
 		//Trying to read RFID.
 		// if (this->__rfidReader->PICC_ReadCardSerial() == 123){
-		if (this->objRfid.CardId == 123){
+		if (this->objAsrs.RfidReader->CardId == 123){
 			this->ToState(BotSingleMcu::BOT_STATE::BOT_SLEEPING);
 		}
 		break;
@@ -131,7 +132,7 @@ void BotSingleMcu::SpinOnce(){
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
 		if (this->cnc.State == RobotState::IDLE){
 			// Last movement is done.
-			align_error = this->jettySensor->ReadAlignmentError();
+			align_error = this->objAsrs.jettySensor->ReadAlignmentError();
 			if (align_error < 100){
 				this->ToState(BotSingleMcu::BOT_STATE::ROBOT_LOADING);
 			}else{

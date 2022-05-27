@@ -5,14 +5,12 @@
 #include "IoT/mqtt_message_consumer.h"
 #include "Robot/gcode_queue.h"
 
-#include "MyApps/bot_asrs_agv_core_gripper/bot_asrs_agv_core.h"
-// #include "MyApps/garment_box_carrier/box_carrier_hw.h"
 #include "MyApps/bot_core_yz/box_carrier_hw.h"
 #include "MyApps/bot_core_yz/box_carrier.h"
 
-// #include "AGV/sensor_moving_track/track_sensor_dual_ir.h"
-#include "ASRS/sensor_jetty/jetty_sensor_base.h"
-#include "ASRS/sensor_map_site/smart_rfid_reader.h"
+#include "ASRS/asrs_base.h"
+// #include "ASRS/sensor_jetty/jetty_sensor_base.h"
+// #include "ASRS/sensor_map_site/smart_rfid_reader.h"
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/agv_base.h"
 #include "board_all_in_one.h"
@@ -54,9 +52,11 @@ class BotSingleMcu: public MqttMessageConsumer{
         BotSingleMcu(uint16_t id);
         void Init(BoardAllInOne* board, StepControl* stepControl);
 
+        AsrsBase objAsrs = AsrsBase();
         AgvBase objAgv = AgvBase();
-        BoxCarrier objBoxCarrier = BoxCarrier();  //??
         BoxCarrierHardware cnc = BoxCarrierHardware();
+
+        BoxCarrier objBoxCarrier = BoxCarrier();  //??
 
         GcodeQueue* _gcode_queue;
         void SpinOnce() override;
@@ -70,12 +70,10 @@ class BotSingleMcu: public MqttMessageConsumer{
     private:
         void ExecuteMqttCommand(const char* command) override;
         RoadGraph objMapNavigator;
-        SmartRfidReader objRfid;
         void onDetectedMark(uint16_t mapsite_id);
         RoadBranchNode __current_BranchNode;
         uint16_t _ID = 0;
         BotSingleMcu::BOT_STATE __state;
-        JettySensorBase* jettySensor;
         BoardAllInOne* board;
 };
 

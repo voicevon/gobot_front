@@ -13,21 +13,6 @@
 
 
 
-/*    
-.     
-.     
-.                              <---------------------------------------------------------\
-,                              |                                                          | 
-.   Locating ------------>   Agv Moving ----> Agv Parked ---------> Robot_Loading  -------^  
-.    (Slow)   [Got RFID]           (Read Mark RFID)           |                           | 
-.                                                             |-------> Robot_Unloading --^
-.                                                             |                           |
-.                                                             |-------> Charging ---------^
-.                                                             |                           |
-.                                                             |--------> Sleeping --------^
-.                                                             |                           |
-.                                                             |--------> Charging --------^
-*/
 
 class MqttReportData{
     float battery_voltage;
