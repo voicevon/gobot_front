@@ -99,9 +99,11 @@ void AgvBase::ToState(AGV_STATE state){
     switch(state){
     case FAST_MOVING:
         this->common_speed = this->__fast_velocity;
+        this->__mover->SetForwdingSpeed(80, 0.0f);
         break;
     case SLOW_MOVING:
         this->common_speed = this->__slow_velocity;
+        this->__mover->SetForwdingSpeed(20, 0.0f);
         break;
     case PARKING:
         this->common_speed = this->__parking_velocity;
@@ -112,6 +114,7 @@ void AgvBase::ToState(AGV_STATE state){
         // this->rightWheel_serial->write("T0");
         break;
     case SLOW_MOVING_PAUSED:
+        this->__mover->SetForwdingSpeed(0, 0.0f);
         // this->leftWheel_serial->write("T0");
         // this->rightWheel_serial->write("T0");
         break;

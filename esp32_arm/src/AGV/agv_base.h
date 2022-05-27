@@ -27,7 +27,7 @@ class AgvBase{
             PARKED = 7,
         };
 
-        void Init(){this->ToState(SLOW_MOVING_PAUSED);};
+        void Init(){this->_State=SLOW_MOVING_PAUSED;};
         void LinkObstacleSensor(ObstacleSensorBase* obstacle_sensor){this->obstacleSensor=obstacle_sensor;};
         void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor=trackSensor;};
         void LinkMover(MoverBase* mover){this->__mover=mover;};

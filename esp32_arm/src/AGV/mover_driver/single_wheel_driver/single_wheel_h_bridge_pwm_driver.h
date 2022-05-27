@@ -14,4 +14,5 @@ class SingleWheel_HBridgePwmDriver: public SingleWheelDriverBase{
         Adafruit_MCP23X17* __mcp23018;
         uint8_t __pin_pwm;
         uint8_t __pin_dir;
+        uint8_t __ledc_channel;
 };

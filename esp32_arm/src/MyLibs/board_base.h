@@ -13,6 +13,8 @@
 class BoardBase{
     public:
         void ScanI2cBus(TwoWire* i2c_bus, const char* printing_topic);
+        static uint8_t Assign_ledc_channel(){return __ledc_channel_index; __ledc_channel_index++;};
+        static uint8_t Assign_i2c_bus_id(){return __i2c_bus_index; __i2c_bus_index++;};
 
     protected:
         bool _Begin_I2cBus(TwoWire* i2c_bus, uint8_t pin_sda, uint8_t pin_scl, uint32_t frequency);
@@ -22,7 +24,8 @@ class BoardBase{
         // bool _Make_Ws2812b(uint8_t pin_ws2812b);
 
     private:
-        uint8_t __i2c_bus_index = 0;
+        static uint8_t __i2c_bus_index;
+        static uint8_t __ledc_channel_index;
 };
 
 
