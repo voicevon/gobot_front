@@ -10,7 +10,8 @@
 //     }
 //     Serial.println(F("ObstacleSensor-VL53L0X is started.\n\n")); 
 // }
-ObstacleSensor_VL53l0x::ObstacleSensor_VL53l0x(Adafruit_VL53L0X* vl53l0x){
+
+void ObstacleSensor_VL53l0x::Init(Adafruit_VL53L0X* vl53l0x){
     this->__vl53lox = vl53l0x;
 }
 

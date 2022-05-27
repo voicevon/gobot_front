@@ -52,7 +52,8 @@ class TrackSensor_Dual9960_Config{
 
 class TrackSensor_Dual9960:public TrackSensorBase{
     public:
-        TrackSensor_Dual9960(Adafruit_APDS9960* left_apds9960, Adafruit_APDS9960* right_apds9960);
+        TrackSensor_Dual9960();
+        void Init(Adafruit_APDS9960* left_apds9960, Adafruit_APDS9960* right_apds9960);
         int16_t ReadAlignmentError() override;
         void ReadParkingError(int16_t* x_error, int16_t* y_error) override;
         void ClearFlag_Slowdown() override;
@@ -62,7 +63,6 @@ class TrackSensor_Dual9960:public TrackSensorBase{
         void SayHello();
         
     protected:
-        void _Init();
 
     private:
         TrackSensor_Dual9960_Config* __config;

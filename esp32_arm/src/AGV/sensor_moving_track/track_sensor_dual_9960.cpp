@@ -13,13 +13,14 @@
 //     this->right_sensor = new Smarter9960(i2c_bus_right);
 //     this->_Init(); 
 // }
-TrackSensor_Dual9960::TrackSensor_Dual9960(Adafruit_APDS9960* left_apds9960, Adafruit_APDS9960* right_apds9960){
-    this->left_sensor = new Smarter9960(left_apds9960);
-    this->right_sensor = new Smarter9960(right_apds9960);
+TrackSensor_Dual9960::TrackSensor_Dual9960(){
+
 }
 
 
-void TrackSensor_Dual9960::_Init(){
+void TrackSensor_Dual9960::Init(Adafruit_APDS9960* left_apds9960, Adafruit_APDS9960* right_apds9960){
+    this->left_sensor = new Smarter9960(left_apds9960);
+    this->right_sensor = new Smarter9960(right_apds9960);
     this->IsFollowingLeft = true;
 }
 

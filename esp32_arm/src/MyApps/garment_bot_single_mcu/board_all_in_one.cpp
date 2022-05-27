@@ -15,15 +15,11 @@ void BoardAllInOne::Init(){
     this->__mcp23018.pinMode(MC23018_PIN_BETA_ENABLE, OUTPUT);
     this->__mcp23018.pinMode(PIN_MCP23018_TEST, OUTPUT);
 
-    this->_Begin_Vl531l0x(&this->__vl53l0x, I2C_ADDR_VL53L0X, &this->__i2c_bus_ext);
-    this->_Begin_Apds9960(&this->__left_aps9960, I2C_ADDR_APDS9960, &this->__i2c_bus_main);
-    this->_Begin_Apds9960(&this->__right_aps9960, I2C_ADDR_APDS9960, &this->__i2c_bus_ext);
 
-
-    // this->EnableMotor_alpha(false);
-    // this->EnableMotor_beta(false);
     this->cnc.EnableMotor_alpha(false);
     this->cnc.EnableMotor_beta(false);
+
+    this->agv.Init(&this->__i2c_bus_main, &this->__i2c_bus_ext);
 
     pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 

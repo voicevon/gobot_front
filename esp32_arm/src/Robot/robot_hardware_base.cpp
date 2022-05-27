@@ -11,16 +11,8 @@ void RobotBase::SayHello(){
 }
 
 void RobotBase::SpinOnce(){
-	// commuDevice->SpinOnce();
 	// Serial.print("[Debug] RobotBase::SpinOnce() is entering.  Current state= ");
 	// Serial.println(this->State);
-	this->SayHello();
-
-	// this->SpinOnce_BaseEnter();
-	// Serial.print("[Debug] RobotBase::SpinOnce()  going to state machine... ");
-	// return;
-
-	
 	switch (this->State){
 	case RobotState::IDLE:
 		break;
@@ -36,12 +28,10 @@ void RobotBase::SpinOnce(){
 	default:
 		Serial.print("[Warning] RobotBase::SpinOnce() Unknown current state: ");
 		// Serial.print(this->State);
-
 		break;
 	}
 
-
-	Serial.println("[Debug]( RobotBase::SpinOnce() is finished.)");
+	// Serial.println("[Debug]( RobotBase::SpinOnce() is finished.)");
 	this->SpinOnce_BaseExit();
 }
 
