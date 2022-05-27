@@ -11,12 +11,10 @@ void AgvBase::SetFollowMainRoad(bool next_branch_is_on_left, bool follow_main_ro
 
 void AgvBase::Forwarding(){
     int16_t x_error = this->trackSensor->ReadForwardingError();
-    // pid controller to set common_speed, diff_speed
-
-    // float left_speed = this->common_speed + x_error;
-    // float right_speed = this->common_speed - x_error;
-    this->__mover->SetForwdingSpeed(this->common_speed, x_error);
-
+    // pid controller ,follow target_speed, diff_speed
+    float left_speed = this->_AutoTargetSpeed_in_kmph + 50.0f * x_error;
+    float right_speed = this->_AutoTargetSpeed_in_kmph - 50.0f * x_error;
+    this->__mover->SetForwdingSpeed(this->_AutoTargetSpeed_in_kmph, x_error);
 }
 
 void AgvBase::SpinOnce(){
@@ -98,15 +96,15 @@ void AgvBase::ToState(AGV_STATE state){
     }
     switch(state){
     case FAST_MOVING:
-        this->common_speed = this->__fast_velocity;
-        this->__mover->SetForwdingSpeed(80, 0.0f);
+        this->_AutoTargetSpeed_in_kmph = this->__full_speed * this->__fast_in_percent / 100;
+        this->__mover->SetForwdingSpeed(40, 0.0f);
         break;
     case SLOW_MOVING:
-        this->common_speed = this->__slow_velocity;
+        this->_AutoTargetSpeed_in_kmph = this->__full_speed * this->__slow_in_percent / 100;
         this->__mover->SetForwdingSpeed(20, 0.0f);
         break;
     case PARKING:
-        this->common_speed = this->__parking_velocity;
+        this->_AutoTargetSpeed_in_kmph = this->__full_speed * this->__parking_in_percent / 100;
         break;
     case FAST_MOVING_PAUSED:
         this->__mover->SetForwdingSpeed(0, 0.0f);
@@ -141,7 +139,7 @@ bool AgvBase::DoParking(){
     int16_t y_error ;
     this->trackSensor->ReadParkingError(&x_error, &y_error);
 
-    this->common_speed =  this->__parking_velocity;
+    this->_AutoTargetSpeed_in_kmph =  this->__full_speed * this->__parking_in_percent / 100;
     if (x_error < 10 && y_error < 10)
         return true;
     return false;

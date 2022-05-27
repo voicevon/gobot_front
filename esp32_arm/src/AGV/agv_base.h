@@ -37,15 +37,16 @@ class AgvBase{
         void SetFollowMainRoad(bool next_branch_is_on_left, bool follow_main_road);
 
     protected:
-        void _InitBase();
         AGV_STATE _State;
+        float _AutoTargetSpeed_in_kmph;
+        void _InitBase();
         void Forwarding();
-        float common_speed;
 
     private:
-        float __fast_velocity = 100;
-        float __slow_velocity = 60;
-        float __parking_velocity = 10;
+        float __full_speed = 100;
+        uint8_t __fast_in_percent = 100;
+        uint8_t __slow_in_percent = 60;
+        uint8_t __parking_in_percent = 10;
         float diff_speed;  //left faster is positive.  //TODO:   should be dir?
 
         TrackSensorBase* trackSensor;
