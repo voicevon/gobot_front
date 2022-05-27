@@ -17,7 +17,8 @@ class Stepper
   public:
     Stepper(const int StepPin, const int DirPin);
     Stepper(const int StepPin, Adafruit_MCP23X17* mcp23018_dir_pin_only, const int DirPin);
-
+    Stepper(const int StepPin);
+    void Init_mcp23018(Adafruit_MCP23X17* mcp23018_dir_pin_only, const int DirPin);
     Stepper &setMaxSpeed(int32_t speed);   // steps/s
     Stepper &setAcceleration(uint32_t _a); // steps/s^2
 
@@ -63,7 +64,8 @@ class Stepper
     volatile uint32_t *dirPinCwReg;
     volatile uint32_t *dirPinCcwReg;
     #endif
-    const int stepPin, dirPin;
+    const int stepPin;
+    int dirPin;
     Adafruit_MCP23X17* __mcp23018;
 
     // Friends
