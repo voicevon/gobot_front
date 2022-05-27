@@ -23,6 +23,7 @@ void setup(){
     ReportRam();
 
     // garment_robot = new BotSingleMcu(ROBOT_SERIAL_ID);
+    board.Init();
     garment_robot.Init(&board, &objStepControl);
 
    // mqtt, bridge, receiver.

@@ -20,8 +20,9 @@ void AgvBase::Forwarding(){
 }
 
 void AgvBase::SpinOnce(){
-    bool test_track_sensor_only = false;
     bool test_led_on = false;
+    Serial.println("[Debug]  AgvBase::SpinOnce()  is entering");
+    bool test_track_sensor_only = false;
     while (test_track_sensor_only){
         this->trackSensor->IsFollowingLeft = !this->trackSensor->IsFollowingLeft;
         int16_t xx_error = this->trackSensor->ReadForwardingError();
@@ -33,7 +34,7 @@ void AgvBase::SpinOnce(){
 
     // Obstacle detection
     bool found_obstacle= this->obstacleSensor->DetectObstacle();
-
+    Serial.print("1111111111111111111");
 
     switch (this->_State) {
     case FAST_MOVING:
@@ -55,7 +56,6 @@ void AgvBase::SpinOnce(){
     case SLOW_MOVING:
         if (found_obstacle){
             this->ToState(SLOW_MOVING_PAUSED);
-            Serial.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqq");
         }else if(this->trackSensor->GetFlag_Speedup()){
                 this->ToState(FAST_MOVING);
         }else{
@@ -67,7 +67,6 @@ void AgvBase::SpinOnce(){
             this->ToState(SLOW_MOVING);
         }
         else{
-            Serial.println("ttttttttttttttttttttttttt");
         }
         break;
     case PARKING:
@@ -88,9 +87,11 @@ void AgvBase::SpinOnce(){
         Serial.println(this->_State);
         break;
     }
+
 }
 
 void AgvBase::ToState(AGV_STATE state){
+
     if (state == this->_State) return;
     if (this->_State == PARKED){
         // leaving parked state

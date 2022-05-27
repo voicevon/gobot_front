@@ -93,13 +93,12 @@ void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
 void BotSingleMcu::SpinOnce(){
 	String gcode = "G1";
 	int align_error=0;
-	this->cnc.SpinOnce();
 	this->objAgv.SpinOnce();
+	
 	return;
+	this->cnc.SpinOnce();
 	this->objBoxCarrier.SpinOnce();   // something wrong inside ?
-	Serial.println("33333333333333333333");
 	this->CheckMqttCommand();  //??
-	Serial.println("444444444444444444");
 	return;
 
 
