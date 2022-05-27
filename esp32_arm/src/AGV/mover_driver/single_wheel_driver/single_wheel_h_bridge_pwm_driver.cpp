@@ -13,3 +13,7 @@ SingleWheel_HBridgePwmDriver::SingleWheel_HBridgePwmDriver(uint8_t pin_pwm, Adaf
     this->__pin_dir = pin_dir;
     this->__pin_pwm = pin_pwm;                                                                                                                                                                                                                                                                                                                                                                                                          
 }
+
+void SingleWheel_HBridgePwmDriver::SetVelocity_in_percent(int8_t velocity){
+    
+}

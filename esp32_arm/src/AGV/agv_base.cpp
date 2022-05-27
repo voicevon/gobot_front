@@ -107,6 +107,7 @@ void AgvBase::ToState(AGV_STATE state){
         this->common_speed = this->__parking_velocity;
         break;
     case FAST_MOVING_PAUSED:
+        this->__mover->SetForwdingSpeed(0, 0.0f);
         // this->leftWheel_serial->write("T0");
         // this->rightWheel_serial->write("T0");
         break;
