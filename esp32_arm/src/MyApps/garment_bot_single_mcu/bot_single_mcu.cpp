@@ -13,28 +13,16 @@ BotSingleMcu::BotSingleMcu(uint16_t id){
 
 void BotSingleMcu::Init(BoardAllInOne* board, StepControl* stepControl){
 	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
-
-	Adafruit_MCP23X17* mcp_23018 = board->Get_Mcp23018();
-	// Init PWM driver
-	SingleWheel_HBridgePwmDriver* left_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_LEFT, mcp_23018, MC23018_PIN_WHEEL_DIR_LEFT);
-	SingleWheel_HBridgePwmDriver* right_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_RIGHT, mcp_23018, MC23018_PIN_WHEEL_DIR_RIGHT);
-	MoverDualWheel* mover = new MoverDualWheel();
-	mover->LinkLeftDriver(left_wheel_pwm);
-	mover->LinkRightDriver(right_wheel_pwm);
-	this->objAgv.LinkMover(mover);
-
+	this->objAgv.LinkMover(board->agv.Get_DualWheelDriver());
 	this->objAgv.LinkObstacleSensor(board->agv.Get_Obstacle_Vl53l0x());
-
 	this->objAgv.LinkTrackSensor(board->agv.Get_Dual9960()); 
-	Serial.println("4444444444");
+	this->objAgv.Init();
 
 	this->objRfid.Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);
-	this->objAgv.Init();
 
 	// Init box carrier robot.
 	this->irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
-	Serial.println("666666666666");
 
 	this->cnc.InitMe(&board->cnc,stepControl);
 	this->cnc.LinkStepper(&board->cnc.stepper_alpha, &board->cnc.stepper_beta);
@@ -42,7 +30,6 @@ void BotSingleMcu::Init(BoardAllInOne* board, StepControl* stepControl){
 	this->cnc.InitRobot();
 	this->_gcode_queue = new GcodeQueue();
     this->cnc.LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
-	Serial.println("99999999999999");
 
 	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
 	Serial.print("\n[Info] BotSingleMcu::Init() is done.\n");

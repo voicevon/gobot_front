@@ -11,5 +11,10 @@ void BoardPart_Agv::Init(TwoWire* i2c_bus_main, TwoWire* i2c_bus_ext){
     // Convert vl53l0x chip to obstacle sensor
     this->_Begin_Vl531l0x(&this->__vl53l0x, I2C_ADDR_VL53L0X, i2c_bus_ext);
     this->__obstacle_vl53l0x.Init(&this->__vl53l0x);
+
+    // Dual-wheel pwm dc motor Driver
+    this->__dual_wheel.LinkLeftDriver(&this->__left_wheel);
+    this->__dual_wheel.LinkRightDriver(&this->__right_wheel);
+
 }
 
