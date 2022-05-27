@@ -1,11 +1,7 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
 #include "board_pins_ver_2_0.h"
-#include "bot_single_mcu.h"
-#include "AGV/light/light_ws2812b.h"
-#include "AGV/sensor_moving_track/track_sensor_dual_9960.h"
-#include "AGV/mover_driver/mover_dual_wheel.h"
-#include "AGV/sensor_obstacle/obstacle_sensor_vl53l0x.h"
+#include "bot_asrs_agv_core.h"
 
 BotSingleMcu::BotSingleMcu(uint16_t id){
 	this->_ID = id;
@@ -22,7 +18,7 @@ void BotSingleMcu::Init(BoardAllInOne* board, StepControl* stepControl){
 	// this->objRfid.LinkCallback(&onDetectedMark);
 
 	// Init box carrier robot.
-	this->irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
+	// this->jettySensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 
 	this->cnc.InitMe(&board->cnc,stepControl);
 	this->cnc.LinkStepper(&board->cnc.stepper_alpha, &board->cnc.stepper_beta);
@@ -135,7 +131,7 @@ void BotSingleMcu::SpinOnce(){
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
 		if (this->cnc.State == RobotState::IDLE){
 			// Last movement is done.
-			align_error = this->irSensor->ReadAlignmentError();
+			align_error = this->jettySensor->ReadAlignmentError();
 			if (align_error < 100){
 				this->ToState(BotSingleMcu::BOT_STATE::ROBOT_LOADING);
 			}else{
