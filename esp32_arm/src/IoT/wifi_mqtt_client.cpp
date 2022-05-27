@@ -22,7 +22,7 @@ TimerHandle_t mqttReconnectTimer;
 TimerHandle_t wifiReconnectTimer;
 
 void connectToWifi() {
-	Serial.println("Connecting to Wi-Fi...");
+	Serial.println("[Info] Connecting to Wi-Fi...");
 	WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 }
 
@@ -34,7 +34,7 @@ void connectToMqtt() {
 }
 
 void WiFiEvent(WiFiEvent_t event) {
-    Serial.printf("[WiFi-event] event: %d\n", event);
+    Serial.printf("\n[Info] [WiFi-event] event: %d\n", event);
     switch(event) {
     case SYSTEM_EVENT_STA_GOT_IP:
         Serial.println("WiFi connected");

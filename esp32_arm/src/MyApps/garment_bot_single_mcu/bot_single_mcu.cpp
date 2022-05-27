@@ -94,9 +94,8 @@ void BotSingleMcu::SpinOnce(){
 	String gcode = "G1";
 	int align_error=0;
 	this->objAgv.SpinOnce();
-	
-	return;
 	this->cnc.SpinOnce();
+	return;
 	this->objBoxCarrier.SpinOnce();   // something wrong inside ?
 	this->CheckMqttCommand();  //??
 	return;

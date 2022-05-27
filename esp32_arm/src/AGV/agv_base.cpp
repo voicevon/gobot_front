@@ -21,7 +21,7 @@ void AgvBase::Forwarding(){
 
 void AgvBase::SpinOnce(){
     bool test_led_on = false;
-    Serial.println("[Debug]  AgvBase::SpinOnce()  is entering");
+    // Serial.println("[Debug]  AgvBase::SpinOnce()  is entering");
     bool test_track_sensor_only = false;
     while (test_track_sensor_only){
         this->trackSensor->IsFollowingLeft = !this->trackSensor->IsFollowingLeft;
@@ -34,7 +34,6 @@ void AgvBase::SpinOnce(){
 
     // Obstacle detection
     bool found_obstacle= this->obstacleSensor->DetectObstacle();
-    Serial.print("1111111111111111111");
 
     switch (this->_State) {
     case FAST_MOVING:

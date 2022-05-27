@@ -31,8 +31,8 @@ SingleWheel_HBridgePwmDriver::SingleWheel_HBridgePwmDriver(uint8_t pin_pwm, Adaf
 }
 
 void SingleWheel_HBridgePwmDriver::SetVelocity_in_percent(int8_t velocity){
-    Serial.print("SingleWheel_HBridgePwmDriver::SetVelocity_in_percent()  velocity = ");
-    Serial.println(velocity);
+    // Serial.print("[debug] SingleWheel_HBridgePwmDriver::SetVelocity_in_percent()  velocity = ");
+    // Serial.println(velocity);
     
     uint32_t dutycycle = 2.55f * velocity;
     if (velocity == 0){

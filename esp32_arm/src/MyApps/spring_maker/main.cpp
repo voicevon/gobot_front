@@ -37,7 +37,7 @@ void setup(){
     mqtt_command_queue = new MessageQueue();
     append_mqtt_bridge("spring/maker", mqtt_command_queue, robot); 
     setup_mqtt_on_message_receive(); 
-    Serial.println ("\n  main.cpp  setup() is done. ------------------------------------ \n");
+    Serial.println ("\n[Info] main.cpp  setup() is done. ------------------------------------ \n");
 }
 
 void loop(){

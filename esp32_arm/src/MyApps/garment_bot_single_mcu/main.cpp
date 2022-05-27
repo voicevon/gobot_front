@@ -33,7 +33,7 @@ void setup(){
     append_mqtt_bridge(mqtt_topic.c_str(), &garment_bot_message_queue, &garment_robot); 
     setup_mqtt_on_message_receive(); 
 
-    Serial.println ("\n  main.cpp  setup() is done. ------------------------------------  ");
+    Serial.println ("\n[Info] main.cpp  setup() is done. ------------------------------------  ");
     ReportRam();
 }
 
