@@ -23,30 +23,19 @@ void BotSingleMcu::Init(BoardAllInOne* board, StepControl* stepControl){
 	mover->LinkRightDriver(right_wheel_pwm);
 	this->objAgv.LinkMover(mover);
 
-	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(board->Get_Vl53l0x());
-	this->objAgv.LinkObstacleSensor(obstacle_sensor);
-	Serial.println("33333333333333");
+	this->objAgv.LinkObstacleSensor(board->agv.Get_Obstacle_Vl53l0x());
 
-	// Init track sensor
-	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(board->Get_Apds9960_left(), board->Get_Apds9960_right());
-	this->objAgv.LinkTrackSensor(trackSensor); 
+	this->objAgv.LinkTrackSensor(board->agv.Get_Dual9960()); 
 	Serial.println("4444444444");
-
-	// Init Obstacle sensor, rfid sensor, battery voltage sensor.
-	// ObstacleSensor_Hcsr04* obstacle_sensor = new ObstacleSensor_Hcsr04(PIN_HCSR04_TRIG, PIN_HCSR04_ECHO);
 
 	this->objRfid.Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
-	Serial.println("5555555555");
 
 	// Init box carrier robot.
 	this->irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 	Serial.println("666666666666");
 
-
-	// BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018, MC23018_PIN_ALPHA_ENABLE,MC23018_PIN_BETA_ENABLE);
-	// BoxCarrierHardware* box_carrier_hw = new BoxCarrierHardware(&board->cnc,stepControl);
 	this->cnc.InitMe(&board->cnc,stepControl);
 	this->cnc.LinkStepper(&board->cnc.stepper_alpha, &board->cnc.stepper_beta);
 	this->cnc.LinkHomer(&board->cnc.homer_z, &board->cnc.homer_y);
@@ -118,13 +107,11 @@ void BotSingleMcu::SpinOnce(){
 	String gcode = "G1";
 	int align_error=0;
 	this->cnc.SpinOnce();
-	Serial.println("11111111111111111");
 	this->objAgv.SpinOnce();
 	return;
-
 	this->objBoxCarrier.SpinOnce();   // something wrong inside ?
 	Serial.println("33333333333333333333");
-	this->CheckMqttCommand();
+	this->CheckMqttCommand();  //??
 	Serial.println("444444444444444444");
 	return;
 

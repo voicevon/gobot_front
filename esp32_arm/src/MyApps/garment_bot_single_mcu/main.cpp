@@ -17,19 +17,16 @@ StepControl objStepControl;
 
 
 void setup(){
-    // wait until serial port opens for native USB devices
     Serial.begin(115200);
-    while (! Serial) {
-        delay(1);
-    }
+    while (! Serial) {delay(1);}
     Serial.println("Hi there, I am your lovely bot,  BotSingleMcu, include AGV.  Keep smiling :) ");
     ReportRam();
+
     // garment_robot = new BotSingleMcu(ROBOT_SERIAL_ID);
     garment_robot.Init(&board, &objStepControl);
 
    // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
-    // garment_bot_message_queue = new MessageQueue();
     String mqtt_topic = "puma/bot/xROBOT_SERIAL_ID";
     mqtt_topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
     append_mqtt_bridge(mqtt_topic.c_str(), &garment_bot_message_queue, &garment_robot); 

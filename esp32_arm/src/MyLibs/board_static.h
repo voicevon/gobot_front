@@ -11,9 +11,9 @@ void ReportRam(){
     Serial.print("available heap = ");
     Serial.println(ESP.getFreeHeap()); //available heap
 
-    Serial.print("lowest level of free heap since boot");
+    Serial.print("lowest level of free heap since boot = ");
     Serial.println (ESP.getMinFreeHeap()); //lowest level of free heap since boot
 
-    Serial.print("largest block of heap that can be allocated at once");
+    Serial.print("largest block of heap that can be allocated at once = ");
     Serial.println(ESP.getMaxAllocHeap()); //largest block of heap that can be allocated at once
 }

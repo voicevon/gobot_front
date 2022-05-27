@@ -5,18 +5,7 @@
 */
 
 
-/*    
-.     
-.      <-----------------------------------------------------------------------------\
-,     |                               ^                                              | 
-,    F_Paused          S_Paused       |                P_Paused                      |
-.     |  ^             |     ^        |[Fast mark]      |    ^                       | [Command Move]                      ^                             
-.     |  |             |     |        |                 |    |                       |                           
-.   Fast Moving  --> Slow_Moving ------------------>   Parking  ---------> Parked ---^  
-.    [slow mark]                       [Park command]   (Super slow)[Sleep command] 
-.   from track sensor                                                    
-.                                                                        
-*/
+
 
 
 #pragma once
@@ -38,7 +27,7 @@ class AgvBase{
             PARKED = 7,
         };
 
-        void Init(){};
+        void Init(){this->ToState(SLOW_MOVING_PAUSED);};
         void LinkObstacleSensor(ObstacleSensorBase* obstacle_sensor){this->obstacleSensor=obstacle_sensor;};
         void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor=trackSensor;};
         void LinkMover(MoverBase* mover){this->__mover=mover;};
