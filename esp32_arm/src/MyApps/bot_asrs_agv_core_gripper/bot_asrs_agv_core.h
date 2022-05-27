@@ -5,12 +5,12 @@
 #include "IoT/mqtt_message_consumer.h"
 #include "Robot/gcode_queue.h"
 
-#include "MyApps/bot_core_yz/box_carrier_hw.h"
+// #include "MyApps/bot_core_yz/box_carrier_hw.h"
 #include "MyApps/bot_core_yz/box_carrier.h"
 
+#include "Robot/cnc_core_yz/cnc_core_yz.h"
+
 #include "ASRS/asrs_base.h"
-// #include "ASRS/sensor_jetty/jetty_sensor_base.h"
-// #include "ASRS/sensor_map_site/smart_rfid_reader.h"
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/agv_base.h"
 #include "board_all_in_one.h"
