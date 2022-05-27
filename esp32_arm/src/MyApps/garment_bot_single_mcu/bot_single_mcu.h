@@ -48,13 +48,15 @@ class BotSingleMcu: public MqttMessageConsumer{
             BOT_EMERGENCY_STOPING = 11,
         };
 
-        BotSingleMcu(uint16_t id, BoardAllInOne* board);
+        BotSingleMcu(uint16_t id);
+        void Init(BoardAllInOne* board, StepControl* stepControl);
+
         AgvBase objAgv = AgvBase();
+        BoxCarrier objBoxCarrier = BoxCarrier();
+        BoxCarrierHardware boxCarrierHardware = BoxCarrierHardware();
+        // BoxCarrierHardware *boxCarrierHardware;
 
         GcodeQueue* _gcode_queue;
-        BoxCarrier objBoxCarrier = BoxCarrier();
-        BoxCarrierHardware* boxCarrierHardware;
-        void Init();
         void SpinOnce() override;
         void ToState(BotSingleMcu::BOT_STATE state);
         void Test(int test_id);

@@ -9,8 +9,11 @@
 // #include "board_all_in_one.h"
 
 BoardAllInOne board = BoardAllInOne();
-BotSingleMcu garment_robot = BotSingleMcu(ROBOT_SERIAL_ID, &board);
+BotSingleMcu garment_robot = BotSingleMcu(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
+StepControl objStepControl;
+
+// BoxCarrierHardware box_carrier = BoxCarrierHardware();
 
 
 void setup(){
@@ -22,7 +25,7 @@ void setup(){
     Serial.println("Hi there, I am your lovely bot,  BotSingleMcu, include AGV.  Keep smiling :) ");
     ReportRam();
     // garment_robot = new BotSingleMcu(ROBOT_SERIAL_ID);
-    garment_robot.Init();
+    garment_robot.Init(&board, &objStepControl);
 
    // mqtt, bridge, receiver.
     setup_mqtt_block_connect();

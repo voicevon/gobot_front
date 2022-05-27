@@ -121,7 +121,7 @@ class RobotBase: public GcodeConsumer{
         void SayHello();
 
     protected:
-        RobotBase(){};
+        // RobotBase(){};
         // void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
         // virtual void SpinOnce_BaseEnter();
         void SpinOnce_BaseExit();

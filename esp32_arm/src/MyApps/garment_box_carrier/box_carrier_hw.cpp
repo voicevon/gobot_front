@@ -1,15 +1,5 @@
 #include "box_carrier_hw.h"
 
-// #define PIN_ALPHA_ENABLE 18
-// #define PIN_BETA_ENABLE 16
-// #define PIN_MICRIO_STEP_2 21
-// #define PIN_MICRIO_STEP_1 22
-// #define PIN_MICRIO_STEP_0 23
-
-// #define STEPS_PER_RAD 123   //2048 / 2*Pi
-// #define STEPS_PER_MM 345   //2048 / 2*Pi
-
-
 
 
 void BoxCarrierHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
@@ -110,7 +100,7 @@ void BoxCarrierHardware::HomeSingleAxis(char axis){
 	}
 	this->__EnableMotor('A', true);
 	this->__EnableMotor('B', true);
-	this->objStepControl.moveAsync(*this->stepper_alpha, *this->stepper_beta);
+	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 }
 
 void BoxCarrierHardware::_running_G28(){
@@ -118,7 +108,7 @@ void BoxCarrierHardware::_running_G28(){
 		// End stop is trigered
 		Serial.print("\n[Info] BoxCarrierHardware::_running_G28() Home sensor is trigger.  " );
 		Serial.print (this->_homing_axis);
-		this->objStepControl.stop();
+		this->objStepControl->stop();
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
@@ -204,7 +194,7 @@ void BoxCarrierHardware::RunG1(Gcode* gcode) {
 	this->stepper_alpha->setTargetAbs(target_ik_ab.alpha);
 	this->stepper_beta->setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
-	this->objStepControl.moveAsync(*this->stepper_alpha, *this->stepper_beta);
+	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 
 	if (true){
 		Serial.print("\n    [Debug] BoxCarrierHardware::RunG1()     (");

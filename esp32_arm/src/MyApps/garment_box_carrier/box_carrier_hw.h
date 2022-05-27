@@ -4,28 +4,17 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "robot/single_axis_homer.h"
 #include "box_carrier_hw_config.h"
-
 #include "MyLibs/board_base.h"
-
-// #include "Robot/Commu/CommuUart.h"
-
-
-// #define VERTICAL_ENDSTOP 15
-// #define Y_ENDSTOP 2
-
-// #define PIN_STEP_ALPHA 5
-// #define PIN_DIR_ALPHA 19
-// #define PIN_STEP_BETA 4
-// #define PIN_DIR_BETA 17
 
 
 class BoxCarrierHardware:public RobotBase{
     public:
-        BoxCarrierHardware(BoardbaseCnc* board){this->__board=board;};
+        BoxCarrierHardware(){};
+        BoxCarrierHardware(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
+        void InitRobot() override;
         void LinkStepper(Stepper* alpha, Stepper* beta);
         void LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y);
 
-        void InitRobot() override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 
@@ -36,7 +25,7 @@ class BoxCarrierHardware:public RobotBase{
     private:
         Stepper* stepper_alpha; // = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
         Stepper* stepper_beta; // = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
-        StepControl objStepControl;
+        StepControl* objStepControl;
 
         //Override private
         // void SpinOnce_BaseEnter() override {};
