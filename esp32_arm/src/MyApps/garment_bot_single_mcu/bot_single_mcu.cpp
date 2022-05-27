@@ -46,12 +46,13 @@ void BotSingleMcu::Init(BoardAllInOne* board, StepControl* stepControl){
 
 
 	// BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018, MC23018_PIN_ALPHA_ENABLE,MC23018_PIN_BETA_ENABLE);
-	BoxCarrierHardware* box_carrier_hw = new BoxCarrierHardware(&board->cnc,stepControl);
-	box_carrier_hw->LinkStepper(&board->cnc.stepper_alpha, &board->cnc.stepper_beta);
-	box_carrier_hw->LinkHomer(&board->cnc.homer_z, &board->cnc.homer_y);
-	box_carrier_hw->InitRobot();
+	// BoxCarrierHardware* box_carrier_hw = new BoxCarrierHardware(&board->cnc,stepControl);
+	this->cnc.InitMe(&board->cnc,stepControl);
+	this->cnc.LinkStepper(&board->cnc.stepper_alpha, &board->cnc.stepper_beta);
+	this->cnc.LinkHomer(&board->cnc.homer_z, &board->cnc.homer_y);
+	this->cnc.InitRobot();
 	this->_gcode_queue = new GcodeQueue();
-    box_carrier_hw->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
+    this->cnc.LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 	Serial.println("99999999999999");
 
 	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
@@ -116,17 +117,18 @@ void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
 void BotSingleMcu::SpinOnce(){
 	String gcode = "G1";
 	int align_error=0;
+	this->cnc.SpinOnce();
+	Serial.println("11111111111111111");
 	this->objAgv.SpinOnce();
-		Serial.println("11111111111111111111");
+	return;
 
-	this->boxCarrierHardware.SpinOnce();
-		Serial.println("2222222222222222222");
-	this->objBoxCarrier.SpinOnce();
-		Serial.println("33333333333333333333");
+	this->objBoxCarrier.SpinOnce();   // something wrong inside ?
+	Serial.println("33333333333333333333");
 	this->CheckMqttCommand();
-		Serial.println("444444444444444444");
+	Serial.println("444444444444444444");
+	return;
 
-	
+
 	if(this->objAgv.GetState() == AgvBase::AGV_STATE::SLOW_MOVING ){
 		if (this->objRfid.ReadCard()){
 			this->onDetectedMark(this->objRfid.CardId);
@@ -159,7 +161,7 @@ void BotSingleMcu::SpinOnce(){
 
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
-		if (this->boxCarrierHardware.State == RobotState::IDLE){
+		if (this->cnc.State == RobotState::IDLE){
 			// Last movement is done.
 			align_error = this->irSensor->ReadAlignmentError();
 			if (align_error < 100){
@@ -217,14 +219,14 @@ void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
 		new_state = BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN;
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
-		if (this->boxCarrierHardware.State == RobotState::IDLE){
+		if (this->cnc.State == RobotState::IDLE){
 			gcode.concat("Z50");
 			this->_gcode_queue->AppendGcodeCommand(gcode);
 			new_state = BotSingleMcu::BOT_STATE::ROBOT_LOADING;
 		}
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOADING:
-		if (this->boxCarrierHardware.State == RobotState::IDLE){
+		if (this->cnc.State == RobotState::IDLE){
 			new_state = BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION;
 		}
 		break;

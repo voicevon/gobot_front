@@ -12,6 +12,7 @@ class BoxCarrierHardware:public RobotBase{
         BoxCarrierHardware(){};
         BoxCarrierHardware(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
         void InitRobot() override;
+        void InitMe(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
         void LinkStepper(Stepper* alpha, Stepper* beta);
         void LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y);
 

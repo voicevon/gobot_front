@@ -53,7 +53,7 @@ class BotSingleMcu: public MqttMessageConsumer{
 
         AgvBase objAgv = AgvBase();
         BoxCarrier objBoxCarrier = BoxCarrier();
-        BoxCarrierHardware boxCarrierHardware = BoxCarrierHardware();
+        BoxCarrierHardware cnc = BoxCarrierHardware();
         // BoxCarrierHardware *boxCarrierHardware;
 
         GcodeQueue* _gcode_queue;

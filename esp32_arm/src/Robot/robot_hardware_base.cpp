@@ -7,17 +7,20 @@
 // 	this->RunGcode(&gcode);
 // }
 void RobotBase::SayHello(){
-	Serial.println("Hello world, This is RobotBase::SayHello()");
+	Serial.println("[Debug] RobotBase::SayHello()");
 }
 
 void RobotBase::SpinOnce(){
 	// commuDevice->SpinOnce();
-	Serial.print("[Debug] RobotBase::SpinOnce() is entering.  Current state= ");
+	// Serial.print("[Debug] RobotBase::SpinOnce() is entering.  Current state= ");
 	// Serial.println(this->State);
 	this->SayHello();
 
 	// this->SpinOnce_BaseEnter();
-	Serial.print("[Debug] RobotBase::SpinOnce()  going to state machine... ");
+	// Serial.print("[Debug] RobotBase::SpinOnce()  going to state machine... ");
+	// return;
+
+	
 	switch (this->State){
 	case RobotState::IDLE:
 		break;
@@ -37,13 +40,7 @@ void RobotBase::SpinOnce(){
 		break;
 	}
 
-	// if(commuDevice->HasNewChatting()){
-	//   std::string command(commuDevice->ReadChatting());
-	//   Serial.println ("    _base_spin_once()  new chatting");
-	//   Serial.println(command.c_str());
-	//   Gcode gCode = Gcode(command);   //Risk for not releasing memory ?
-	//   this->RunGcode(&gCode);
-	// }
+
 	Serial.println("[Debug]( RobotBase::SpinOnce() is finished.)");
 	this->SpinOnce_BaseExit();
 }
