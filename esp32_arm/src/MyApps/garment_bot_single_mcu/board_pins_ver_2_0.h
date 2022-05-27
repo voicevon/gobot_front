@@ -1,8 +1,7 @@
 #pragma once
-#ifdef I_AM_GARMENT_BOT_SINGLE_MCU
 
-
-
+#include "all_devices.h"
+#ifdef USING_BOARD_AGV_SINGLE_BOARD_VER_2_0
 
 // #define PIN_HCSR04_ECHO 18
 // #define PIN_HCSR04_TRIG 19
@@ -10,8 +9,8 @@
 
 
 // Common I2C bus is Connected to MCp23018
-#define PIN_COMMON_I2C_SDA 27
-#define PIN_COMMON_I2C_SCL 26
+#define PIN_MAIN_I2C_SDA 27
+#define PIN_MAIN_I2C_SCL 26
 #define PIN_EXT_I2C_SDA 16
 #define PIN_EXT_I2C_SCL 17 
 
@@ -40,6 +39,8 @@
 #define PIN_IR_FRONT 36
 #define PIN_IR_REAR 39
 
+#define PIN_MCP23018_TEST 13
+
 // #define MCP23018_PIN_EMERGENCY_STOP_BUTTON  11
 // #define MCP23018_PIN_INPUT_BUTTON  11
 
@@ -48,7 +49,5 @@
 #define I2C_ADDR_MCP23018 0x23
 #define I2C_ADDR_VL53L0X 0x29
 #define I2C_ADDR_APDS9960 0x39  // Not changable.
-
-
 
 #endif

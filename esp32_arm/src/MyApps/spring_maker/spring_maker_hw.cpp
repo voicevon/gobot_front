@@ -35,8 +35,8 @@ void SpringMakerHardware::InitRobot(){
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	this->__EnableMotor('A', false);
 
-	CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
-	this->commuDevice = commuUart; 
+	// CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
+	// this->commuDevice = commuUart; 
 	this->objStepper_alpha.setInverseRotation(true);
 	this->_home_as_inverse_kinematic = false;
 }

@@ -1,20 +1,24 @@
 #ifndef __ALL_DEVICES_H_
 #define __ALL_DEVICES_H_
 
+#define USING_BOARD_AGV_SINGLE_BOARD_VER_2_0
+
 // #define I_AM_UINIT_TEST
 // #define I_AM_I2C_SCANNER
 // #define I_AM_VL53L0X_SINGLE
+// #define I_AM_ADS1115_SINGLE
 // #define I_AM_SHARP_IR_DISTANCE_SENSOR
+// #define I_AM_DRV8302
+
 
 // #define I_AM_AGV_WHEEL
-// #define I_AM_DRV8302
 // #define I_AM_GARMENT_BOT
 // #define I_AM_GARMENT_BOT_SINGLE_MCU
 // #define I_AM_GARMENT_BOX_MOVER
-// #define I_AM_GARMENT_BOX_CARRIER
+#define I_AM_GARMENT_BOX_CARRIER
 
 // #define I_AM_GOBOT_HOUSE
-#define I_AM_GOBOT_CHESSBOARD
+// #define I_AM_GOBOT_CHESSBOARD
 // #define I_AM_SPRING_MAKER
 
 // #define I_AM_ACUPUCTURE_MAIN_ESP32

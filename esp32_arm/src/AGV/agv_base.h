@@ -5,23 +5,12 @@
 */
 
 
-/*    
-.     
-.      <-----------------------------------------------------------------------------\
-,     |                               ^                                              | 
-,    F_Paused          S_Paused       |                P_Paused                      |
-.     |  ^             |     ^        |[Fast mark]      |    ^                       | [Command Move]                      ^                             
-.     |  |             |     |        |                 |    |                       |                           
-.   Fast Moving  --> Slow_Moving ------------------>   Parking  ---------> Parked ---^  
-.    [slow mark]                       [Park command]   (Super slow)[Sleep command] 
-.   from track sensor                                                    
-.                                                                        
-*/
+
 
 
 #pragma once
-#include "AGV/sensor/obstacle_sensor_base.h"
-#include "AGV/track_sensor/track_sensor_base.h"
+#include "AGV/sensor_obstacle/obstacle_sensor_base.h"
+#include "AGV/sensor_moving_track/track_sensor_base.h"
 #include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
 
@@ -38,7 +27,7 @@ class AgvBase{
             PARKED = 7,
         };
 
-        void Init(){};
+        void Init(){this->ToState(SLOW_MOVING_PAUSED);};
         void LinkObstacleSensor(ObstacleSensorBase* obstacle_sensor){this->obstacleSensor=obstacle_sensor;};
         void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor=trackSensor;};
         void LinkMover(MoverBase* mover){this->__mover=mover;};

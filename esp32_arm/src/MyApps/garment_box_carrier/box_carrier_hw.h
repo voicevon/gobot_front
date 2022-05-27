@@ -2,30 +2,20 @@
 
 #include "Robot/robot_hardware_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-// #include "Robot/HomeHelper.h"
 #include "robot/single_axis_homer.h"
 #include "box_carrier_hw_config.h"
-
-#include "Robot/Commu/CommuUart.h"
-
-
-// #define VERTICAL_ENDSTOP 15
-// #define Y_ENDSTOP 2
-
-// #define PIN_STEP_ALPHA 5
-// #define PIN_DIR_ALPHA 19
-// #define PIN_STEP_BETA 4
-// #define PIN_DIR_BETA 17
+#include "MyLibs/board_base.h"
 
 
 class BoxCarrierHardware:public RobotBase{
     public:
-        BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_beta_enable);
-        BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable);
+        BoxCarrierHardware(){};
+        BoxCarrierHardware(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
+        void InitRobot() override;
+        void InitMe(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
         void LinkStepper(Stepper* alpha, Stepper* beta);
         void LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y);
 
-        void InitRobot() override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 
@@ -34,12 +24,12 @@ class BoxCarrierHardware:public RobotBase{
         float GetDistanceToTarget_IK() override;
 
     private:
-        Stepper* objStepper_alpha; // = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
-        Stepper* objStepper_beta; // = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
-        StepControl objStepControl;
+        Stepper* stepper_alpha; // = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
+        Stepper* stepper_beta; // = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
+        StepControl* objStepControl;
 
         //Override private
-        void SpinOnce_BaseEnter() override {};
+        // void SpinOnce_BaseEnter() override {};
         // void SpinOnce_BaseExit() override {};
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
@@ -58,6 +48,6 @@ class BoxCarrierHardware:public RobotBase{
         SingleAxisHomer* objHomeHelper_vertical;
         SingleAxisHomer* objHomeHelper_y;
         BoxCarrierHardwareConfig  __config;
-        Adafruit_MCP23X17* __mcp23018;
+        BoardbaseCnc* __board;
 
 };

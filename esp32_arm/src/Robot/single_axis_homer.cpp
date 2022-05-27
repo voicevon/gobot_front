@@ -12,9 +12,18 @@ SingleAxisHomer::SingleAxisHomer(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_
     this->pinTriger = expanded_pinTriger;
     this->trigeredState = trigeredState;
     // Init expaned pin
-    this->__mcp23018->pinMode(pinTriger,INPUT_PULLUP);
+    this->__mcp23018->pinMode(pinTriger, INPUT_PULLUP);
 }
 
+SingleAxisHomer::SingleAxisHomer(int trigeredState){
+    this->trigeredState = trigeredState;
+}
+
+void SingleAxisHomer::Init_mcp23018(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger){
+    this->__mcp23018->pinMode(pinTriger, INPUT_PULLUP);
+    this->pinTriger = expanded_pinTriger;
+    this->__mcp23018 = mcp_23018;
+}
 
 bool SingleAxisHomer::IsTriged(){
     // Read sensor pin

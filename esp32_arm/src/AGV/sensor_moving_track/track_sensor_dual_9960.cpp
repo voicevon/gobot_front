@@ -1,20 +1,26 @@
 #include "track_sensor_dual_9960.h"
 
-TrackSensor_Dual9960::TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config){
-    this->__config = config;
-    this->left_sensor = new Smarter9960(0, config->pin_left_sensor_sda ,config->pin_left_sensor_sclk);
-    this->right_sensor = new Smarter9960(1, config->pin_right_sensor_sda, config->pin_right_sensor_sclk);
+// TrackSensor_Dual9960::TrackSensor_Dual9960(TrackSensor_Dual9960_Config* config){
+//     this->__config = config;
+//     this->left_sensor = new Smarter9960(0, config->pin_left_sensor_sda ,config->pin_left_sensor_sclk);
+//     this->right_sensor = new Smarter9960(1, config->pin_right_sensor_sda, config->pin_right_sensor_sclk);
 
-    this->_Init();
+//     this->_Init();
+// }
+
+// TrackSensor_Dual9960::TrackSensor_Dual9960(TwoWire* i2c_bus_left, TwoWire* i2c_bus_right){
+//     this->left_sensor = new Smarter9960(i2c_bus_left);
+//     this->right_sensor = new Smarter9960(i2c_bus_right);
+//     this->_Init(); 
+// }
+TrackSensor_Dual9960::TrackSensor_Dual9960(){
+
 }
 
-TrackSensor_Dual9960::TrackSensor_Dual9960(TwoWire* i2c_bus_left, TwoWire* i2c_bus_right){
-    this->left_sensor = new Smarter9960(i2c_bus_left);
-    this->right_sensor = new Smarter9960(i2c_bus_right);
-    this->_Init(); 
-}
 
-void TrackSensor_Dual9960::_Init(){
+void TrackSensor_Dual9960::Init(Adafruit_APDS9960* left_apds9960, Adafruit_APDS9960* right_apds9960){
+    this->left_sensor = new Smarter9960(left_apds9960);
+    this->right_sensor = new Smarter9960(right_apds9960);
     this->IsFollowingLeft = true;
 }
 
@@ -30,10 +36,6 @@ bool TrackSensor_Dual9960::GetFlag_Speedup(){
     return false;
 }
 
-
-void TrackSensor_Dual9960::TurnOnLed(bool turn_on){
-    this->__led_light->TurnOn(turn_on);
-}
 
 int16_t TrackSensor_Dual9960::ReadAlignmentError(){
     this->left_sensor->ReadSensor();

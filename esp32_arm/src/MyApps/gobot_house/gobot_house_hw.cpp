@@ -113,9 +113,9 @@ void GobotHouseHardware::InitRobot(){
 	this->__EnableMotor('A', false);
 	this->__EnableMotor('B', false);
 
-	CommuUart* commuUart = new CommuUart();
+	// CommuUart* commuUart = new CommuUart();
 
-	this->commuDevice = commuUart; 
+	// this->commuDevice = commuUart; 
 	this->alpha_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHPA);
 	this->alpha_stepper->setMaxSpeed(this->__config.MAX_ACCELERATION_ALPHPA);
 	this->beta_stepper->setAcceleration(this->__config.MAX_ACCELERATION_BETA);

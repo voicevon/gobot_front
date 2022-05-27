@@ -17,8 +17,8 @@ void GobotChessboardHardware::InitRobot(){
 	this->__EnableMotor('A', false);
 	this->__EnableMotor('B', false);
 
-	CommuUart* objCommuUart = new CommuUart();
-    this->commuDevice = objCommuUart;
+	// CommuUart* objCommuUart = new CommuUart();
+    // this->commuDevice = objCommuUart;
 	Serial.print("\n[Info] GobotChessboardHardware::Init() is done.");
 } 
 

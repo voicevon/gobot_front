@@ -69,7 +69,7 @@ class GobotChessboardHardware: public RobotBase{
         Servo* eefServo;
         bool homed;
 
-        void SpinOnce_BaseEnter() override {};
+        // void SpinOnce_BaseEnter() override {};
         // void SpinOnce_BaseExit() override {};
         void RunG6(Gcode* gcode) override {};   //Block mode
         void RunM123(uint8_t eef_channel, EefAction eef_action) override;

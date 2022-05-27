@@ -1,37 +1,20 @@
 #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT_SINGLE_MCU
-#include "board_ver2.0.h"
+#include "board_pins_ver_2_0.h"
 #include "bot_single_mcu.h"
 #include "AGV/light/light_ws2812b.h"
-#include "AGV/track_sensor/track_sensor_dual_9960.h"
+#include "AGV/sensor_moving_track/track_sensor_dual_9960.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
-// #include "Seeed_vl53l0x.h"
-#include "AGV/sensor/obstacle_sensor_vl53l0x.h"
-// #include "AGV/sensor/obstacle_sensor_hcsr04.h"
-
-
-
+#include "AGV/sensor_obstacle/obstacle_sensor_vl53l0x.h"
 
 BotSingleMcu::BotSingleMcu(uint16_t id){
 	this->_ID = id;
-	// this->objBoxCarrier_hardware = new BoxCarrierHardware();
 }
 
-void BotSingleMcu::Init(){
+void BotSingleMcu::Init(BoardAllInOne* board, StepControl* stepControl){
 	Serial.print("\n[Info] BotSingleMcu::Init() is entering");
 
-	//Init BUS, MCP23018,
-	TwoWire* i2c_bus_main;
-	TwoWire* i2c_bus_ext;
-	i2c_bus_main = new TwoWire(0);
-	i2c_bus_main->begin(PIN_COMMON_I2C_SDA, PIN_COMMON_I2C_SCL);
-	i2c_bus_ext = new TwoWire(1);
-	i2c_bus_ext->begin(PIN_EXT_I2C_SDA, PIN_EXT_I2C_SCL);
-
-	Adafruit_MCP23X17* mcp_23018 = new Adafruit_MCP23X17();
-	mcp_23018->begin_I2C(I2C_ADDR_MCP23018, i2c_bus_main);
-	Serial.println("111111111111");
-
+	Adafruit_MCP23X17* mcp_23018 = board->Get_Mcp23018();
 	// Init PWM driver
 	SingleWheel_HBridgePwmDriver* left_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_LEFT, mcp_23018, MC23018_PIN_WHEEL_DIR_LEFT);
 	SingleWheel_HBridgePwmDriver* right_wheel_pwm = new SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_RIGHT, mcp_23018, MC23018_PIN_WHEEL_DIR_RIGHT);
@@ -39,62 +22,26 @@ void BotSingleMcu::Init(){
 	mover->LinkLeftDriver(left_wheel_pwm);
 	mover->LinkRightDriver(right_wheel_pwm);
 	this->objAgv.LinkMover(mover);
-	Serial.println("2222222");
 
-	ObstacleSensor_VL53l0x* obstacle_sensor = new ObstacleSensor_VL53l0x(i2c_bus_ext, I2C_ADDR_VL53L0X);
-	this->objAgv.LinkObstacleSensor(obstacle_sensor);
-	Serial.println("33333333333333");
+	this->objAgv.LinkObstacleSensor(board->agv.Get_Obstacle_Vl53l0x());
 
-	// Init track sensor
-	TrackSensor_Dual9960* trackSensor = new TrackSensor_Dual9960(i2c_bus_main, i2c_bus_ext);
-	Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
-	trackSensor->LinkLight(led);
-	this->objAgv.LinkTrackSensor(trackSensor); 
+	this->objAgv.LinkTrackSensor(board->agv.Get_Dual9960()); 
 	Serial.println("4444444444");
 
-	// Init Obstacle sensor, rfid sensor, battery voltage sensor.
-	// ObstacleSensor_Hcsr04* obstacle_sensor = new ObstacleSensor_Hcsr04(PIN_HCSR04_TRIG, PIN_HCSR04_ECHO);
-
-
-	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 	this->objRfid.Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 	this->objAgv.Init();
-	Serial.println("5555555555");
 
 	// Init box carrier robot.
 	this->irSensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 	Serial.println("666666666666");
 
-	// Seeed_vl53l0x* vl53L0X = new Seeed_vl53l0x();
-	// VL53L0X_Error Status = VL53L0X_ERROR_NONE;
-    // Status = VL53L0X.VL53L0X_common_init();
-    // if (VL53L0X_ERROR_NONE != Status) {
-    //     Serial.println("start vl53l0x mesurement failed!");
-    //     vl53L0X.print_pal_error(Status);
-    //     while (1);
-    // }
-
-    // VL53L0X.VL53L0X_high_accuracy_ranging_init();
-
-    // if (VL53L0X_ERROR_NONE != Status) {
-    //     Serial.println("start vl53l0x mesurement failed!");
-    //     vl53L0X.print_pal_error(Status);
-    //     while (1);
-    // }
-
-	
-
-	BoxCarrierHardware* objBoxCarrierHardware = new BoxCarrierHardware(mcp_23018, MC23018_PIN_ALPHA_ENABLE,MC23018_PIN_BETA_ENABLE);
-	Stepper* alpha = new Stepper(PIN_ALPHA_STEP, mcp_23018, MC23018_PIN_ALPHA_DIR);
-	Stepper* beta = new Stepper(PIN_BETA_STEP, mcp_23018, MC23018_PIN_BETA_DIR);
-	objBoxCarrierHardware->LinkStepper(alpha, beta);
-	SingleAxisHomer* homer_y = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Y, LOW);
-	SingleAxisHomer* homer_z = new SingleAxisHomer(mcp_23018, MC23018_PIN_HOME_Z, LOW);
-	objBoxCarrierHardware->LinkHomer(homer_z, homer_y);
-	objBoxCarrierHardware->InitRobot();
+	this->cnc.InitMe(&board->cnc,stepControl);
+	this->cnc.LinkStepper(&board->cnc.stepper_alpha, &board->cnc.stepper_beta);
+	this->cnc.LinkHomer(&board->cnc.homer_z, &board->cnc.homer_y);
+	this->cnc.InitRobot();
 	this->_gcode_queue = new GcodeQueue();
-    objBoxCarrierHardware->LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
+    this->cnc.LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 	Serial.println("99999999999999");
 
 	this->ToState(BotSingleMcu::BOT_STATE::BOT_LOCATING);
@@ -159,23 +106,24 @@ void BotSingleMcu::onDetectedMark(uint16_t BranchNode_id){
 void BotSingleMcu::SpinOnce(){
 	String gcode = "G1";
 	int align_error=0;
-	uint16_t battery_voltage =  analogRead(PIN_BATTERY_VOLTAGE_ADC) ;
-	this->__battery_voltage = 1.0 * battery_voltage + 0.0;
-	// this->objBoxMoverAgent.SpinOnce();
-	// this->objBoxCarrier_hardware->SpinOnce();
+	this->cnc.SpinOnce();
 	this->objAgv.SpinOnce();
-	this->boxCarrierHardware->SpinOnce();
-	this->objBoxCarrier.SpinOnce();
-	this->CheckMqttCommand();
+	return;
+	this->objBoxCarrier.SpinOnce();   // something wrong inside ?
+	Serial.println("33333333333333333333");
+	this->CheckMqttCommand();  //??
+	Serial.println("444444444444444444");
+	return;
 
-	
+
 	if(this->objAgv.GetState() == AgvBase::AGV_STATE::SLOW_MOVING ){
 		if (this->objRfid.ReadCard()){
 			this->onDetectedMark(this->objRfid.CardId);
 			return;
 		}
 	}
-
+		Serial.println("555555555555555555");
+	Serial.println(this->__state);
 	switch (this->__state){
 	case BotSingleMcu::BOT_STATE::BOT_LOCATING:
 		//Trying to read RFID.
@@ -200,7 +148,7 @@ void BotSingleMcu::SpinOnce(){
 
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
-		if (this->boxCarrierHardware->State == RobotState::IDLE){
+		if (this->cnc.State == RobotState::IDLE){
 			// Last movement is done.
 			align_error = this->irSensor->ReadAlignmentError();
 			if (align_error < 100){
@@ -230,6 +178,7 @@ void BotSingleMcu::SpinOnce(){
 		Serial.print("\n [Warning] BotSingleMcu::SpinOnce()  A state with out dealer.! \n\n");
       	break;
    }
+		Serial.println("66666666666666666666666");
 }
 
 void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
@@ -257,14 +206,14 @@ void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
 		new_state = BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN;
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
-		if (this->boxCarrierHardware->State == RobotState::IDLE){
+		if (this->cnc.State == RobotState::IDLE){
 			gcode.concat("Z50");
 			this->_gcode_queue->AppendGcodeCommand(gcode);
 			new_state = BotSingleMcu::BOT_STATE::ROBOT_LOADING;
 		}
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOADING:
-		if (this->boxCarrierHardware->State == RobotState::IDLE){
+		if (this->cnc.State == RobotState::IDLE){
 			new_state = BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION;
 		}
 		break;

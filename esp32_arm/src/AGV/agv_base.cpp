@@ -55,6 +55,7 @@ void AgvBase::SpinOnce(){
     case SLOW_MOVING:
         if (found_obstacle){
             this->ToState(SLOW_MOVING_PAUSED);
+            Serial.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqq");
         }else if(this->trackSensor->GetFlag_Speedup()){
                 this->ToState(FAST_MOVING);
         }else{
@@ -62,8 +63,12 @@ void AgvBase::SpinOnce(){
         }
         break;
     case SLOW_MOVING_PAUSED:
-        if (!found_obstacle)
+        if (!found_obstacle){
             this->ToState(SLOW_MOVING);
+        }
+        else{
+            Serial.println("ttttttttttttttttttttttttt");
+        }
         break;
     case PARKING:
             // try to finish parking
