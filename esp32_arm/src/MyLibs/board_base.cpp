@@ -87,3 +87,6 @@ bool BoardBase::_Begin_Apds9960(Adafruit_APDS9960* apds9960, uint8_t i2c_address
 // }
 
 
+void BoardbaseCnc::SayHello(){
+    Serial.println("[Debug] BoardPart_Cnc::SayHello() ");
+}

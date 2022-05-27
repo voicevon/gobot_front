@@ -9,6 +9,7 @@ class BoardPart_Cnc: public BoardbaseCnc{
     public:
         BoardPart_Cnc(){};
         void Init(Adafruit_MCP23X17* mcp_23018);
+        void SayHello();
         void EnableMotor_alpha(bool enable_it) override;
         void EnableMotor_beta(bool enable_it) override;
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP);

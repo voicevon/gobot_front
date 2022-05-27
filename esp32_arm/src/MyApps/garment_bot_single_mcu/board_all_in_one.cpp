@@ -14,17 +14,15 @@ void BoardAllInOne::Init(){
     this->__mcp23018.pinMode(MC23018_PIN_ALPHA_ENABLE, OUTPUT);
     this->__mcp23018.pinMode(MC23018_PIN_BETA_ENABLE, OUTPUT);
     this->__mcp23018.pinMode(PIN_MCP23018_TEST, OUTPUT);
-    Serial.println("ddddddddddddddddddddddddddddddddddd");
     // Init cnc components 
     this->cnc.Init(&this->__mcp23018);
-    Serial.println("eeeeeeeeeeeeeee");
     this->cnc.EnableMotor_alpha(false);
     this->cnc.EnableMotor_beta(false);
-    Serial.println("    [Info] BoardAllInOne::Init() CNC components is OK.");
+    Serial.println("[Info] BoardAllInOne::Init() CNC components is OK.");
 
     //Init agv components
     this->agv.Init(&this->__i2c_bus_main, &this->__i2c_bus_ext);
-    Serial.println("    [Info] BoardAllInOne::Init() AGV components is OK.");
+    Serial.println("[Info] BoardAllInOne::Init() AGV components is OK.");
 
     pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 

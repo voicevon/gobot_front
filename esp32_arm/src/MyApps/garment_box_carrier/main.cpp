@@ -15,9 +15,9 @@ BoxCarrierHardware* robot_hw;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_command_queue;
 StepControl objStepControl;
+BoardAllInOne board = BoardAllInOne();
 
 void setup_robot_hardware(){
-    BoardAllInOne board = BoardAllInOne();
     board.Init();
     robot_hw = new BoxCarrierHardware();
     robot_hw->InitMe(&board.cnc, &objStepControl);

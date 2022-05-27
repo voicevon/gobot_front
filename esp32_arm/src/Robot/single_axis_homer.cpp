@@ -20,7 +20,7 @@ SingleAxisHomer::SingleAxisHomer(int trigeredState){
 }
 
 void SingleAxisHomer::Init_mcp23018(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger){
-    this->__mcp23018->pinMode(pinTriger, INPUT_PULLUP);
+    mcp_23018->pinMode(pinTriger, INPUT_PULLUP);
     this->pinTriger = expanded_pinTriger;
     this->__mcp23018 = mcp_23018;
 }

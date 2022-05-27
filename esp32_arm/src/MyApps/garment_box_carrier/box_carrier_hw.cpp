@@ -98,6 +98,7 @@ void BoxCarrierHardware::HomeSingleAxis(char axis){
 		this->stepper_alpha->setTargetRel(-5000000);
 		this->stepper_beta->setTargetRel(5000000);	
 	}
+
 	this->__EnableMotor('A', true);
 	this->__EnableMotor('B', true);
 	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
@@ -232,10 +233,12 @@ float BoxCarrierHardware::GetDistanceToTarget_IK(){
 }
 
 void BoxCarrierHardware::__EnableMotor(char actuator, bool enable_it){
-		if (actuator == 'A')
+		if (actuator == 'A'){
 			this->__board->EnableMotor_alpha(enable_it);
-		else if (actuator == 'B')
+		}
+		else if (actuator == 'B'){
 			this->__board->EnableMotor_beta(enable_it);
+		}
 		else{
 			Serial.print("[Warn] BoxCarrierHardware::__EnableMotor()   unkown actuator = ");
 			Serial.println(actuator);

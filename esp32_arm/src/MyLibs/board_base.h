@@ -31,7 +31,7 @@ class BoardbaseCnc: public BoardBase{
     public:
         virtual void EnableMotor_alpha(bool enable_it);
         virtual void EnableMotor_beta(bool enable_it);
-        
+        void SayHello();
     protected:
 
     private:
