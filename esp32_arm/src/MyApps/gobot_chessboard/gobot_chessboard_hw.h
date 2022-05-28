@@ -1,17 +1,9 @@
 #pragma once
-/*
-Stepper liberys:
 
-    https://github.com/gin66/FastAccelStepper
-    https://github.com/luni64/TeensyStep
-       * Does't support ESP32
-    - https://github.com/RCP1/ESP32Step
-    https://github.com/Stan-Reifel/FlexyStepper
-    - https://github.com/pkerspe/ESP-FlexyStepper
-*/
 
 #include <ESP32Servo.h>
-#include "Robot/robot_hardware_base.h"
+// #include "Robot/robot_hardware_base.h"
+#include "Robot/cnc_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/Commu/CommuUart.h"
 #include "MyLibs/MyFunctions.hpp"

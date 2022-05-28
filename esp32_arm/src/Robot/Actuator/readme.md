@@ -32,3 +32,15 @@ The instance is possible to use multi hirachy from other parent class.
 * An actuator is a phasical movement component, 
  * Knows: Inverse kinematic values, like: position, axis name
  * Unknows: Forword kinematic position, axis name,
+
+
+/*
+Stepper liberys:
+
+    https://github.com/gin66/FastAccelStepper
+    https://github.com/luni64/TeensyStep
+       * Does't support ESP32
+    - https://github.com/RCP1/ESP32Step
+    https://github.com/Stan-Reifel/FlexyStepper
+    - https://github.com/pkerspe/ESP-FlexyStepper
+*/
