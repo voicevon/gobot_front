@@ -1,10 +1,9 @@
-#include "gobot_house_hw.h"
+// #include "gobot_house_hw.h"
+#include "cnc_scara.h"
 
-
-// https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 
 // }
-void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
+void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 	// bool beta_reverse = false;
@@ -28,7 +27,7 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	#define MACHENIC_LIMIT PI * -330 / 180
 	if (alpha <  MACHENIC_LIMIT) alpha = MACHENIC_LIMIT ;  // Machnic limitation
 	if (false){
-		Serial.print("\n[Debug] GobotHouseHardware::IK() from (X,Y)=(");
+		Serial.print("\n[Debug] CncScara::IK() from (X,Y)=(");
 		Serial.print(fk->X);
 		Serial.print(" , ");
 		Serial.print(fk->Y);
@@ -57,7 +56,7 @@ void GobotHouseHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 // from_ik: Alpha, Beta
 //          represents  actuator's current position. unit is step
 // to_fk: x,y.  unit is mm.
-void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+void CncScara::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 	float rad_beta = ik->beta / this->__config.STEPS_PER_RAD_BETA;
@@ -66,7 +65,7 @@ void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	fk->X = this->__config.LINK_A * cosf(rad_alpha) + this->__config.LINK_B * cosf(rad_eef);
 	fk->Y = this->__config.LINK_A * sinf(rad_alpha) + this->__config.LINK_B * sinf(rad_eef);
 	if (false){
-		Serial.print("\n\n[Debug] GobotHouseHardware::FK()  in degree from (alpha,beta) =(");
+		Serial.print("\n\n[Debug] CncScara::FK()  in degree from (alpha,beta) =(");
 		Serial.print(rad_alpha * RAD_TO_DEG);
 		Serial.print(" , ");
 		Serial.print(rad_beta * RAD_TO_DEG);
@@ -78,16 +77,16 @@ void GobotHouseHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	}
 }
 
-GobotHouseHardware::GobotHouseHardware(){
+CncScara::CncScara(){
 	this->__config.Init();
 }
 
-bool GobotHouseHardware::GetCurrentPosition(FkPositionBase* position_fk){
+bool CncScara::GetCurrentPosition(FkPositionBase* position_fk){
 	position_fk = & this->__current_fk_position;
 	return true;
 }
 
-void GobotHouseHardware::__Init_gpio(){
+void CncScara::__Init_gpio(){
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	pinMode(PIN_BETA_ENABLE, OUTPUT);
 
@@ -108,7 +107,7 @@ void GobotHouseHardware::__Init_gpio(){
 	// ledcWrite(2, 0);
 }
 
-void GobotHouseHardware::InitRobot(){
+void CncScara::InitRobot(){
 	__Init_gpio();
 	this->__EnableMotor('A', false);
 	this->__EnableMotor('B', false);
@@ -127,7 +126,7 @@ void GobotHouseHardware::InitRobot(){
 
 }
 
-float GobotHouseHardware::GetDistanceToTarget_FK(){
+float CncScara::GetDistanceToTarget_FK(){
 	// because in this arm solution,  FK is equal to IK. so never mind the logic error.
 	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
 	// TODO: Rewrite this function.
@@ -142,15 +141,15 @@ float GobotHouseHardware::GetDistanceToTarget_FK(){
 	return distance;
 }
 
-float GobotHouseHardware::GetDistanceToTarget_IK(){
+float CncScara::GetDistanceToTarget_IK(){
 	int32_t da = this->alpha_stepper->getDistanceToTarget();
 	int32_t db = this->beta_stepper->getDistanceToTarget();
 	float distance = sqrt(da * da + db * db);
 	return distance;
 }
 
-void GobotHouseHardware::RunG1(Gcode* gcode) {
-	// Serial.print("\n[Debug] GobotHouseHardware::RunG1()   ");
+void CncScara::RunG1(Gcode* gcode) {
+	// Serial.print("\n[Debug] CncScara::RunG1()   ");
 	// Serial.print(gcode->get_command());
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
@@ -191,7 +190,7 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	this->objStepControl.moveAsync(*this->alpha_stepper, *this->beta_stepper);
 
 	if (true){
-		Serial.print("\n[Debug] GobotHouseHardware::RunG1()  from,to  alpha=");
+		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
 		Serial.print(this->alpha_stepper->getPosition());
 		Serial.print(" , ");
 		Serial.print(target_ik_ab.alpha);
@@ -202,18 +201,18 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 	}
 }
 
-void GobotHouseHardware:: _running_G1(){
+void CncScara:: _running_G1(){
     if (this->GetDistanceToTarget_IK() < (this->__config.MAX_ACCELERATION_ALPHPA + this->__config.MAX_ACCELERATION_BETA)/64){
       	this->State = CncState::IDLE;
-		// Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
+		// Serial.print("\n[Info] CncScara::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);
 }
 
-void GobotHouseHardware::HomeSingleAxis(char axis){
+void CncScara::HomeSingleAxis(char axis){
 	if (false){
-		Serial.print("\n[Debug] GobotHouseHardware::HomeSingleAxis() is entering   AXIS = " );
+		Serial.print("\n[Debug] CncScara::HomeSingleAxis() is entering   AXIS = " );
 		Serial.print(axis);
 	}
 	this->_homing_axis = axis;
@@ -233,12 +232,12 @@ void GobotHouseHardware::HomeSingleAxis(char axis){
 	this->objStepControl.moveAsync(*this->__homing_stepper);
 }
 
-void GobotHouseHardware::_running_G28(){
-	// Serial.print("[Debug] GobotHouseHardware::running_G28() is entering \n");
+void CncScara::_running_G28(){
+	// Serial.print("[Debug] CncScara::running_G28() is entering \n");
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
 		if (false){
-			Serial.print("\n[Info] GobotHouseHardware::_running_G28() Home sensor is trigger.  " );
+			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
 			Serial.print (this->_homing_axis);
 		}
 		this->objStepControl.stop();
@@ -283,35 +282,35 @@ void GobotHouseHardware::_running_G28(){
 
 // We want to fix pin_number in firmware, 
 // So eef_channel takes no effection.
-void GobotHouseHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
+void CncScara::RunM123(uint8_t eef_channel, EefAction eef_action){
 	switch (eef_action){
 
 		case EefAction::Suck:
-			// Serial.print("\nGobotHouseHardware::RunM123()  Suck ");
+			// Serial.print("\nCncScara::RunM123()  Suck ");
 			ledcWrite(1, this->__config.EEF_Suck_Angle);
 			break;
 		case EefAction::Release:
-			// Serial.print("\nGobotHouseHardware::RunM123()  Release ");
+			// Serial.print("\nCncScara::RunM123()  Release ");
 			// This will drive the extend coil to create a reversed magnetic field. 
 			ledcWrite(1, this->__config.EEF_Release_Angle);
 
 			break;
 		case EefAction::Sleep:
-			// Serial.print("\nGobotHouseHardware::RunM123()  Sleep ");
+			// Serial.print("\nCncScara::RunM123()  Sleep ");
 			ledcWrite(1,0);
 			break;
 		default:
-			Serial.print("\n [Warning] GobotHouseHardware::RunM123()  Others ");
+			Serial.print("\n [Warning] CncScara::RunM123()  Others ");
 			break;
 	}
 }
 
-void GobotHouseHardware::RunM84(){
+void CncScara::RunM84(){
 	this->__EnableMotor('A',false);
 	this->__EnableMotor('B',false);
 }
 
-void GobotHouseHardware::__EnableMotor(char actuator, bool enable_it){
+void CncScara::__EnableMotor(char actuator, bool enable_it){
 	if (actuator == 'A')
 		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
 	if (actuator == 'B')

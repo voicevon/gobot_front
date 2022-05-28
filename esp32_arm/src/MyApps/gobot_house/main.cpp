@@ -3,13 +3,14 @@
 
 #include "gobot_house.h"
 // #include "gobot_house_hw.h"
-#include "CNC/cnc_scara/gobot_house_hw.h"
+// #include "CNC/cnc_scara/gobot_house_hw.h"
+#include "CNC/cnc_scara/cnc_scara.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
 
 GobotHouse* robot; 
-GobotHouseHardware* robot_hardware;
+CncScara* robot_hardware;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_message_queue;
 
@@ -36,7 +37,7 @@ void setup_robot_hardware(){
     Stepper* alpha_stepper = new Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
     Stepper* beta_stepper = new Stepper(PIN_BETA_STEP_2109, PIN_BETA_DIR_2109);
     
-    robot_hardware = &GobotHouseHardware::getInstance();
+    robot_hardware = &CncScara::getInstance();
     robot_hardware->LinkHomer(alpha_homer, beta_homer);
     robot_hardware->LinkStepper(alpha_stepper, beta_stepper);
     

@@ -2,27 +2,23 @@
 
 #include <Arduino.h>
 #include "ESP32Step/src/TeensyStep.h"
-// #include "CNC/robot_hardware_base.h"
 #include "CNC/cnc_base.h"
-// #include "CNC/Commu/CommuBleGattServer.h"
 #include "MyLibs/MyFunctions.hpp"
-#include "CNC/Commu/CommuUart.h"
 
-// #include "CNC/HomeHelper.h"
 #include "CNC/single_axis_homer.h"
 #include "MyLibs/Components/Led.h"
-#include "gobot_house_hw_config.h"
+#include "cnc_scara_config.h"
 #include "CNC/eef_standard_code.h"
-#include "board_ver3.11.h"
+#include "MyBoards/cnc/gobot_house_ver3.11.h"
 
 
 
 
-class GobotHouseHardware: public CncBase{
+class CncScara: public CncBase{
     public:
-        static GobotHouseHardware& getInstance()
+        static CncScara& getInstance()
         {
-            static GobotHouseHardware instance; // Guaranteed to be destroyed.
+            static CncScara instance; // Guaranteed to be destroyed.
                                   // Instantiated on first use.
             return instance;
         }
@@ -39,7 +35,7 @@ class GobotHouseHardware: public CncBase{
 
 
     private:
-        GobotHouseHardware();
+        CncScara();
 
         //Overrid functions
         // void SpinOnce_BaseEnter() override {};

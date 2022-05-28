@@ -2,7 +2,8 @@
 #include "gobot_house.h"
 #include "Arduino.h"
 // #include "gobot_house_hw.h"
-#include "CNC/cnc_scara/gobot_house_hw.h"
+// #include "CNC/cnc_scara/gobot_house_hw.h"
+#include "CNC/cnc_scara/cnc_scara.h"
 
 
 
@@ -14,10 +15,10 @@ void GobotHouse::Setup(){
 	__segments = 3;
 	this->__map.Init();
 
-	GobotHouseHardware* objRobot_hardware = &GobotHouseHardware::getInstance();
-    objRobot_hardware->InitRobot();
+	CncScara* cncScara = &CncScara::getInstance();
+    cncScara->InitRobot();
 	this->_gcode_queue = new GcodeQueue();
-	// this->_gcode_queue->LinkRobot(objRobot_hardware);
+	// this->_gcode_queue->LinkRobot(CncScara);
 
     Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
 }
