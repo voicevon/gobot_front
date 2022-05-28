@@ -14,7 +14,7 @@ void BotAsrsAgvCoreYZ::Init(BoardAllInOne* board, StepControl* stepControl){
 	this->objAgv.LinkTrackSensor(board->agv.Get_Dual9960()); 
 	this->objAgv.Init();
 
-	this->objAsrs.RfidReader->Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
+	// this->objAsrs.RfidReader->Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 
 	// Init box carrier robot.
@@ -24,6 +24,7 @@ void BotAsrsAgvCoreYZ::Init(BoardAllInOne* board, StepControl* stepControl){
 	this->cnc.LinkStepper(&board->cnc.stepper_alpha, &board->cnc.stepper_beta);
 	this->cnc.LinkHomer(&board->cnc.homer_z, &board->cnc.homer_y);
 	this->cnc.InitRobot();
+
 	this->_gcode_queue = new GcodeQueue();
     this->cnc.LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 

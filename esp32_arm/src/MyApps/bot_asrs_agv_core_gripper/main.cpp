@@ -10,7 +10,7 @@
 BoardAllInOne board = BoardAllInOne();
 BotAsrsAgvCoreYZ garment_robot = BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
-StepControl objStepControl;
+StepControl objStepControl;  // This object can not inside any object?
 // BoxCarrierHardware box_carrier = BoxCarrierHardware();
 
 
@@ -20,7 +20,6 @@ void setup(){
     Serial.println("Hi there, I am your lovely bot,  BotAsrsAgvCoreYZ, include ASRS AGV CNC.  Keep smiling :) ");
     ReportRam();
 
-    // garment_robot = new BotSingleMcu(ROBOT_SERIAL_ID);
     board.Init();
     garment_robot.Init(&board, &objStepControl);
 
