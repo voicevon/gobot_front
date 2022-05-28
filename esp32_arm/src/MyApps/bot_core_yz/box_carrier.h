@@ -2,8 +2,8 @@
 
 // #include "box_carrier_hw.h"
 #include "CNC/cnc_core_yz/cnc_core_yz.h"
-#include "CNC/gcode_queue.h"
-#include "CNC/gcode_producer.h"
+#include "CNC/gcode/gcode_queue.h"
+#include "CNC/gcode/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
 
 

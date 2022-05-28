@@ -3,7 +3,7 @@
 // #ifdef I_AM_ROBOT_ASRS_AGV
 
 #include "IoT/mqtt_message_consumer.h"
-#include "CNC/gcode_queue.h"
+#include "CNC/gcode/gcode_queue.h"
 #include "CNC/cnc_core_yz/cnc_core_yz.h"
 #include "ASRS/asrs_base.h"
 #include "AGV/map_road_station/map_navigator.h"

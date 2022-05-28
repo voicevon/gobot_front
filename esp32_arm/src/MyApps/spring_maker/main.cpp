@@ -1,12 +1,11 @@
 #include "all_devices.h"
 #ifdef I_AM_SPRING_MAKER
-#include "spring_maker_board.h"
+#include "CNC/cnc_single_axis/spring_maker_board.h"
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "spring_maker.h"
-#include "spring_maker_hw.h"
-
+#include "CNC/cnc_single_axis/cnc_single_axis.h"
 
 SpringMaker *robot;
 SpringMakerHardware* robot_hw;

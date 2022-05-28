@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CNC/eef_standard_code.h"
-#include "CNC/Commu/CommuDeviceBase.h"
-#include "CNC/gcode_consumer.h"
+// #include "CNC/Commu/CommuDeviceBase.h"
+#include "CNC/gcode/gcode_consumer.h"
 
 class FkPositionBase{
     

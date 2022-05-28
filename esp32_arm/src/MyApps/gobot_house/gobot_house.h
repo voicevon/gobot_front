@@ -3,8 +3,8 @@
 // #include "CNC/Commu/CommuUart.h"
 // #include "CNC/Commu/CommuBleGattServer.h"
 // #include "actions.h"
-#include "CNC/gcode_queue.h"
-#include "CNC/gcode_producer.h"
+#include "CNC/gcode/gcode_queue.h"
+#include "CNC/gcode/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
 
 class GobotHouse: public GcodeProducer, public MqttMessageConsumer{

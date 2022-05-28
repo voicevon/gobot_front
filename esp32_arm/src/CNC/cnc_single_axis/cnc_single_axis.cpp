@@ -1,4 +1,4 @@
-#include "spring_maker_hw.h"
+#include "cnc_single_axis.h"
 
 #define PIN_ALPHA_ENABLE 18
 

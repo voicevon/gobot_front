@@ -1,12 +1,9 @@
 #pragma once
 
-// #include "CNC/robot_hardware_base.h"
 #include "CNC/cnc_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-// #include "CNC/HomeHelper.h"
 #include "CNC/single_axis_homer.h"
 
-#include "CNC/Commu/CommuUart.h"
 #include "spring_maker_hw_config.h"
 
 

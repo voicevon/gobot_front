@@ -8,7 +8,7 @@
 
 #include <HardwareSerial.h>
 #include "smoke_bot.h"
-#include "CNC/gcode_queue.h"
+#include "CNC/gcode/gcode_queue.h"
 // #include <Arduino.h>
 #include "webCommu.h"
 
