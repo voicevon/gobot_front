@@ -4,16 +4,12 @@
 
 #include "IoT/mqtt_message_consumer.h"
 #include "Robot/gcode_queue.h"
-
-// #include "MyApps/bot_core_yz/box_carrier_hw.h"
-#include "MyApps/bot_core_yz/box_carrier.h"
-
 #include "Robot/cnc_core_yz/cnc_core_yz.h"
-
 #include "ASRS/asrs_base.h"
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/agv_base.h"
 #include "board_all_in_one.h"
+#include "MyApps/bot_core_yz/box_carrier.h"
 
 
 class MqttReportData{
@@ -32,7 +28,7 @@ class MqttReportData{
 //      4. Distance sensor, to detect obstacle.
 //      2. Vehical speed, motor control.
 
-class BotSingleMcu: public MqttMessageConsumer{
+class BotAsrsAgvCoreYZ: public MqttMessageConsumer{
     public:
         enum BOT_STATE{
             BOT_LOCATING = 0,
@@ -49,7 +45,7 @@ class BotSingleMcu: public MqttMessageConsumer{
             BOT_EMERGENCY_STOPING = 11,
         };
 
-        BotSingleMcu(uint16_t id);
+        BotAsrsAgvCoreYZ(uint16_t id);
         void Init(BoardAllInOne* board, StepControl* stepControl);
 
         AsrsBase objAsrs = AsrsBase();
@@ -60,7 +56,7 @@ class BotSingleMcu: public MqttMessageConsumer{
 
         GcodeQueue* _gcode_queue;
         void SpinOnce() override;
-        void ToState(BotSingleMcu::BOT_STATE state);
+        void ToState(BotAsrsAgvCoreYZ::BOT_STATE state);
         void Test(int test_id);
         uint8_t GetMqtt_PubPayload(uint8_t* chars);
         // void onMqttReceived(uint8_t* payload);
@@ -73,7 +69,7 @@ class BotSingleMcu: public MqttMessageConsumer{
         void onDetectedMark(uint16_t mapsite_id);
         RoadBranchNode __current_BranchNode;
         uint16_t _ID = 0;
-        BotSingleMcu::BOT_STATE __state;
+        BotAsrsAgvCoreYZ::BOT_STATE __state;
         BoardAllInOne* board;
 };
 

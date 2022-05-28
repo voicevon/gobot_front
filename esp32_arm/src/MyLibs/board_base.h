@@ -10,6 +10,7 @@
 #include <Adafruit_APDS9960.h>
 #include <Adafruit_NeoPixel.h>
 
+
 class BoardBase{
     public:
         void ScanI2cBus(TwoWire* i2c_bus, const char* printing_topic);
@@ -29,13 +30,19 @@ class BoardBase{
 };
 
 
+// #include "ESP32Step/src/Stepper.h"
+#include "ESP32Step/src/TeensyStep.h"
 
 class BoardbaseCnc: public BoardBase{
     public:
         virtual void EnableMotor_alpha(bool enable_it);
         virtual void EnableMotor_beta(bool enable_it);
         void SayHello();
+
     protected:
+        // use of deleted function 'StepControlBase<a, t>::StepControlBase(const StepControlBase<a, t>&) [with Accelerator = LinStepAccelerator; TimerField = TimerField]'
+        // StepControl* GetStepControl(){return &this->_objStepControl;};
+        // StepControl _objStepControl;
 
     private:
 

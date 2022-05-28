@@ -3,24 +3,21 @@
 
 
 #include "MyLibs/MyFunctions.hpp"
-// #include "bot_asrs_agv.h"
-#include "bot_asrs_agv_core.h"
+#include "bot_asrs_agv_core_yz.h"
 #include "IoT/main_mqtt.h"
 #include "MyLibs/board_static.h"
-// #include "board_all_in_one.h"
 
 BoardAllInOne board = BoardAllInOne();
-BotSingleMcu garment_robot = BotSingleMcu(ROBOT_SERIAL_ID);
+BotAsrsAgvCoreYZ garment_robot = BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
 StepControl objStepControl;
-
 // BoxCarrierHardware box_carrier = BoxCarrierHardware();
 
 
 void setup(){
     Serial.begin(115200);
     while (! Serial) {delay(1);}
-    Serial.println("Hi there, I am your lovely bot,  BotSingleMcu, include AGV.  Keep smiling :) ");
+    Serial.println("Hi there, I am your lovely bot,  BotAsrsAgvCoreYZ, include ASRS AGV CNC.  Keep smiling :) ");
     ReportRam();
 
     // garment_robot = new BotSingleMcu(ROBOT_SERIAL_ID);
