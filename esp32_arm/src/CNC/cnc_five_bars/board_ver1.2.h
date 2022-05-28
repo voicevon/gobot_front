@@ -14,7 +14,6 @@
 #define PIN_HOME_ALPHA  2  
 #define PIN_HOME_BETA  27     
 
-
 #define PIN_EEF_SERVO 21
 #define PIN_EEF_A  22
 #define PIN_EEF_B  23

@@ -2,7 +2,8 @@
 #ifdef I_AM_GOBOT_CHESSBOARD
 
 #include "gobot_chessboard.h"
-#include "gobot_chessboard_hw.h"
+// #include "gobot_chessboard_hw.h"
+#include "CNC/cnc_five_bars/gobot_chessboard_hw.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
 // #include "CNC/Commu/CommuBleGattServer.h"
