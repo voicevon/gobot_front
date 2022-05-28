@@ -7,7 +7,8 @@
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
 // #include "CNC/Commu/CommuBleGattServer.h"
-#include "board_ver1.2.h"
+// #include "board_ver1.2.h"
+#include "CNC/cnc_five_bars/board_ver1.2.h"
 #include "CNC/single_axis_homer.h"
 
 // static char LOG_TAG[]= "BLE-HOUSE";
