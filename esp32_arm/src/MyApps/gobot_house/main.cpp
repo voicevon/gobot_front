@@ -2,7 +2,8 @@
 #ifdef I_AM_GOBOT_HOUSE
 
 #include "gobot_house.h"
-#include "gobot_house_hw.h"
+// #include "gobot_house_hw.h"
+#include "CNC/cnc_scara/gobot_house_hw.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
