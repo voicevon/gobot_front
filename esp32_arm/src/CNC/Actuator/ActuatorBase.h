@@ -7,10 +7,10 @@
 #include <SimpleFOC.h>
 // #include "SimpleFOC/common/pid.h"
 // #include "SimpleFOC/common/base_classes/Sensor.h"
-// #include "Robot/Sensor/IREncoderHelper.h"
-#include "Robot/Sensor/SensorHelperBase.h"
+// #include "CNC/Sensor/IREncoderHelper.h"
+#include "CNC/Sensor/SensorHelperBase.h"
 // #include "SimpleFOC/common/defaults.h"
-#include "Robot/Actuator/DriverBase.h"
+#include "CNC/Actuator/DriverBase.h"
 
 /**
  *  Motiron control type

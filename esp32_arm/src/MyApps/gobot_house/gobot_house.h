@@ -1,10 +1,10 @@
 #include <stdint.h>
 #include "HouseMap.h"
-// #include "Robot/Commu/CommuUart.h"
-// #include "Robot/Commu/CommuBleGattServer.h"
+// #include "CNC/Commu/CommuUart.h"
+// #include "CNC/Commu/CommuBleGattServer.h"
 // #include "actions.h"
-#include "Robot/gcode_queue.h"
-#include "Robot/gcode_producer.h"
+#include "CNC/gcode_queue.h"
+#include "CNC/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
 
 class GobotHouse: public GcodeProducer, public MqttMessageConsumer{

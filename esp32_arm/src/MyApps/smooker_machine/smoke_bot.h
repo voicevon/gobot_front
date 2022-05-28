@@ -1,12 +1,12 @@
 #pragma once
 
-// #include "Robot/robot_hardware_base.h"
-#include "Robot/cnc_base.h"
+// #include "CNC/robot_hardware_base.h"
+#include "CNC/cnc_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/Actuator/ActuatorBase.h"
-// #include "Robot/HomeHelper.h"
-#include "Robot/single_axis_homer.h"
-// #include "Robot/Commu/CommuUart.h"
+#include "CNC/Actuator/ActuatorBase.h"
+// #include "CNC/HomeHelper.h"
+#include "CNC/single_axis_homer.h"
+// #include "CNC/Commu/CommuUart.h"
 
 #define PIN_HOME 18
 #define PIN_STEP 33

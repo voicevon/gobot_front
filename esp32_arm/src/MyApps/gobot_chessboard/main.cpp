@@ -5,9 +5,9 @@
 #include "gobot_chessboard_hw.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
-// #include "Robot/Commu/CommuBleGattServer.h"
+// #include "CNC/Commu/CommuBleGattServer.h"
 #include "board_ver1.2.h"
-#include "Robot/single_axis_homer.h"
+#include "CNC/single_axis_homer.h"
 
 // static char LOG_TAG[]= "BLE-HOUSE";
 GobotChessboard* robot; 

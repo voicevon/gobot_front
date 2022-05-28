@@ -3,7 +3,7 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "room_bot_corner.h"
-#include "Robot/Gcode.h" 
+#include "CNC/Gcode.h" 
 
 #define PIN_ENCODER_A 25
 #define PIN_ENCODER_B 26

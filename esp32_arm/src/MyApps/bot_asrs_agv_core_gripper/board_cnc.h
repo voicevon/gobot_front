@@ -3,7 +3,7 @@
 #include "MyLibs/board_base.h"
 // #include "ESP32Step/src/TeensyStep.h"
 #include "ESP32Step/src/Stepper.h"
-#include "Robot/single_axis_homer.h"
+#include "CNC/single_axis_homer.h"
 
 class BoardPart_Cnc: public BoardbaseCnc{
     public:

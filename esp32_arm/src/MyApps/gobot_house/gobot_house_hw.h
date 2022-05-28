@@ -2,17 +2,17 @@
 
 #include <Arduino.h>
 #include "ESP32Step/src/TeensyStep.h"
-// #include "Robot/robot_hardware_base.h"
-#include "Robot/cnc_base.h"
-// #include "Robot/Commu/CommuBleGattServer.h"
+// #include "CNC/robot_hardware_base.h"
+#include "CNC/cnc_base.h"
+// #include "CNC/Commu/CommuBleGattServer.h"
 #include "MyLibs/MyFunctions.hpp"
-#include "Robot/Commu/CommuUart.h"
+#include "CNC/Commu/CommuUart.h"
 
-// #include "Robot/HomeHelper.h"
-#include "Robot/single_axis_homer.h"
+// #include "CNC/HomeHelper.h"
+#include "CNC/single_axis_homer.h"
 #include "MyLibs/Components/Led.h"
 #include "gobot_house_hw_config.h"
-#include "Robot/eef_standard_code.h"
+#include "CNC/eef_standard_code.h"
 #include "board_ver3.11.h"
 
 

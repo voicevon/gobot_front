@@ -1,8 +1,8 @@
 #pragma once
 
 #include "box_mover_hw.h"
-#include "Robot/gcode_queue.h"
-#include "Robot/gcode_producer.h"
+#include "CNC/gcode_queue.h"
+#include "CNC/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
 
 

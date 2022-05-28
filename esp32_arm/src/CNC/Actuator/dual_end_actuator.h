@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ActuatorBase.h"
-#include "Robot/Actuator/DriverBase.h"
+#include "CNC/Actuator/DriverBase.h"
 
 
 /*

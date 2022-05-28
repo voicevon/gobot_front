@@ -1,6 +1,6 @@
 #include "all_devices.h"
 #ifdef I_AM_SHARP_IR_DISTANCE_SENSOR
-#include "Robot/Sensor/sharp_ir_distance_adc.h"
+#include "CNC/Sensor/sharp_ir_distance_adc.h"
 #include <HardwareSerial.h>
 
 

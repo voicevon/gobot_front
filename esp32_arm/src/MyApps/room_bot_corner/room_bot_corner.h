@@ -3,19 +3,19 @@
 #ifdef I_AM_CABLEBOT_CORNER
 
 
-#include "Robot/robot_hardware_base.h"
-#include "Robot/Commu/CommuUart.h"
-#include "Robot/Commu/CommuBleGattServer.h"
-// #include "Robot/Axis/SingleAxis.h"
+#include "CNC/robot_hardware_base.h"
+#include "CNC/Commu/CommuUart.h"
+#include "CNC/Commu/CommuBleGattServer.h"
+// #include "CNC/Axis/SingleAxis.h"
 
 
-#include "Robot/Actuator/DCMotor/DcMotor.h"
-#include "Robot/Sensor/IrEncoderHelper.h"
-// #include "Robot/Actuator/DCMotor/DCDriverHBridge.h"
-#include "Robot/Actuator/DCMotor/h_bridge_yuxin.h"
-#include "Robot/Actuator/DCMotor/DCMotorController.h"
+#include "CNC/Actuator/DCMotor/DcMotor.h"
+#include "CNC/Sensor/IrEncoderHelper.h"
+// #include "CNC/Actuator/DCMotor/DCDriverHBridge.h"
+#include "CNC/Actuator/DCMotor/h_bridge_yuxin.h"
+#include "CNC/Actuator/DCMotor/DCMotorController.h"
 
-#include "Robot/HomeHelper.h"
+#include "CNC/HomeHelper.h"
 #include "MyLibs/Components/Led.h"
 
 #define PIN_HOME_SENSOR_2130 32

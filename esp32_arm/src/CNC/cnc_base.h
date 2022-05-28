@@ -1,9 +1,8 @@
 #pragma once
 
-// #include <Robot/Gcode.h>
-#include <Robot/eef_standard_code.h>
-#include "Robot/Commu/CommuDeviceBase.h"
-#include "Robot/gcode_consumer.h"
+#include "CNC/eef_standard_code.h"
+#include "CNC/Commu/CommuDeviceBase.h"
+#include "CNC/gcode_consumer.h"
 
 class FkPositionBase{
     

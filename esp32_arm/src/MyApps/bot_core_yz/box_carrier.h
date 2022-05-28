@@ -1,9 +1,9 @@
 #pragma once
 
 // #include "box_carrier_hw.h"
-#include "Robot/cnc_core_yz/cnc_core_yz.h"
-#include "Robot/gcode_queue.h"
-#include "Robot/gcode_producer.h"
+#include "CNC/cnc_core_yz/cnc_core_yz.h"
+#include "CNC/gcode_queue.h"
+#include "CNC/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
 
 

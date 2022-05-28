@@ -1,9 +1,9 @@
 #pragma once
 
 #include "actions.h"
-#include "Robot/gcode_queue.h"
+#include "CNC/gcode_queue.h"
 #include "chessboard_map.h"
-#include "Robot/gcode_producer.h"
+#include "CNC/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
 
 class GobotChessboard: public GcodeProducer, public MqttMessageConsumer{

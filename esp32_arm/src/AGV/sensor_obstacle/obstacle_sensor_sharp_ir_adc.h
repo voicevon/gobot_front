@@ -10,7 +10,8 @@
 #pragma once
 
 #include "obstacle_sensor_base.h"
-#include "Robot/Sensor/sharp_ir_distance_adc.h"
+// #include "CNC/Sensor/sharp_ir_distance_adc.h"
+#include "CNC/Sensor/sharp_ir_distance_adc.h"
 #include "stdint.h"
 
 class ObstacleSensor_SharpIr:public ObstacleSensorBase{

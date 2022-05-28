@@ -5,7 +5,7 @@
 #include "ESP32Step/src/Stepper.h"
 // #include "SimpleFOC/sensors/Encoder.h"
 #include <SimpleFOC.h>
-#include "Robot/Actuator/ActuatorBase.h"
+#include "CNC/Actuator/ActuatorBase.h"
 
 // http://www.gammon.com.au/forum/?id=12983     static instances code for attachInterupt()
 // https://www.fluentcpp.com/2018/01/09/strong-templates/

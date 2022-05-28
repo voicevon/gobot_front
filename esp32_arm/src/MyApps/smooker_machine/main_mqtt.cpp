@@ -8,7 +8,7 @@
 
 #include <HardwareSerial.h>
 #include "smoke_bot.h"
-#include "Robot/command_queue.h"
+#include "CNC/command_queue.h"
 // #include <Arduino.h>
 #include "webCommu.h"
 

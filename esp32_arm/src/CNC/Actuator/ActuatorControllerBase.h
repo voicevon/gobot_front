@@ -2,7 +2,7 @@
 
 // TODO: StepControl should be a child class.
 
-#include "Robot/Actuator/ActuatorBase.h"
+#include "CNC/Actuator/ActuatorBase.h"
 
 /**
  * How one or a group of actuators move?

@@ -5,7 +5,7 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "box_carrier.h"
-#include "Robot/cnc_core_yz/cnc_core_yz.h"
+#include "CNC/cnc_core_yz/cnc_core_yz.h"
 #include "IoT/main_mqtt.h"
 #include "MyApps/bot_asrs_agv_core_gripper/board_all_in_one.h"
 

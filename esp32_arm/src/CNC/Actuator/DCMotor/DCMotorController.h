@@ -2,7 +2,7 @@
 
 
 #include "../ActuatorControllerBase.h"
-#include "Robot/Actuator/DCMotor/DcMotor.h"
+#include "CNC/Actuator/DCMotor/DcMotor.h"
 #include "DCDriverHBridge.h"
 
 class DCMotorController: public ActuatorControllerBase{
