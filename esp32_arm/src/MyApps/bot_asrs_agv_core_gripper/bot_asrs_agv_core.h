@@ -1,6 +1,6 @@
 #pragma once
 #include "all_devices.h"
-#ifdef I_AM_GARMENT_BOT_SINGLE_MCU
+// #ifdef I_AM_ROBOT_ASRS_AGV
 
 #include "IoT/mqtt_message_consumer.h"
 #include "Robot/gcode_queue.h"
@@ -54,7 +54,7 @@ class BotSingleMcu: public MqttMessageConsumer{
 
         AsrsBase objAsrs = AsrsBase();
         AgvBase objAgv = AgvBase();
-        BoxCarrierHardware cnc = BoxCarrierHardware();
+        Cnc_CoreYZ cnc = Cnc_CoreYZ();
 
         BoxCarrier objBoxCarrier = BoxCarrier();  //??
 
@@ -79,4 +79,4 @@ class BotSingleMcu: public MqttMessageConsumer{
 
 
 
-#endif
+// #endif

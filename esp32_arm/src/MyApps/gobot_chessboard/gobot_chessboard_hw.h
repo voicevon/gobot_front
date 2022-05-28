@@ -31,7 +31,7 @@ How to solve the concepts I don't know?
     Don't send me nominal name of go game (either of any other name).
 
 */
-class GobotChessboardHardware: public RobotBase{
+class GobotChessboardHardware: public CncBase{
     public:
         // static GobotChessboardHardware& getInstance()
         // {

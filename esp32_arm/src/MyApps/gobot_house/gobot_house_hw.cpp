@@ -204,7 +204,7 @@ void GobotHouseHardware::RunG1(Gcode* gcode) {
 
 void GobotHouseHardware:: _running_G1(){
     if (this->GetDistanceToTarget_IK() < (this->__config.MAX_ACCELERATION_ALPHPA + this->__config.MAX_ACCELERATION_BETA)/64){
-      	this->State = RobotState::IDLE;
+      	this->State = CncState::IDLE;
 		// Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());
@@ -268,7 +268,7 @@ void GobotHouseHardware::_running_G28(){
 		this->beta_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_BETA);
 		this->beta_stepper->setAcceleration(this->__config.MAX_ACCELERATION_BETA);
 		// Serial.print("\n======================================= End of Homing, State to be IDLE\n");
-		this->State = RobotState::IDLE;
+		this->State = CncState::IDLE;
 
 	}else{
 		// Endstop is not trigered

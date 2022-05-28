@@ -18,7 +18,7 @@
 
 
 
-class GobotHouseHardware: public RobotBase{
+class GobotHouseHardware: public CncBase{
     public:
         static GobotHouseHardware& getInstance()
         {

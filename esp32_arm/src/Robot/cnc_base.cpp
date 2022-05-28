@@ -3,55 +3,55 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "HardwareSerial.h"
 #include "MyLibs/message_queue.h"
-// void RobotBase::FeedMessage(char* message, int length){
+// void CncBase::FeedMessage(char* message, int length){
 // 	Gcode gcode = Gcode(message);
 // 	this->RunGcode(&gcode);
 // }
-void RobotBase::SayHello(){
-	Serial.println("[Debug] RobotBase::SayHello()");
+void CncBase::SayHello(){
+	Serial.println("[Debug] CncBase::SayHello()");
 }
 
-void RobotBase::SpinOnce(){
-	// Serial.print("[Debug] RobotBase::SpinOnce() is entering.  Current state= ");
+void CncBase::SpinOnce(){
+	// Serial.print("[Debug] CncBase::SpinOnce() is entering.  Current state= ");
 	// Serial.println(this->State);
 	switch (this->State){
-	case RobotState::IDLE:
+	case CncState::IDLE:
 		break;
-	case RobotState::RUNNING_G4:
+	case CncState::RUNNING_G4:
 		this->__running_G4();
 		break;
-	case RobotState::RUNNING_G1:
+	case CncState::RUNNING_G1:
 		this->_running_G1();
 		break;
-	case RobotState::RUNNING_G28:
+	case CncState::RUNNING_G28:
 		this->_running_G28();
 		break;
 	default:
-		Serial.print("[Warning] RobotBase::SpinOnce() Unknown current state: ");
+		Serial.print("[Warning] CncBase::SpinOnce() Unknown current state: ");
 		// Serial.print(this->State);
 		break;
 	}
 
-	// Serial.println("[Debug]( RobotBase::SpinOnce() is finished.)");
+	// Serial.println("[Debug]( CncBase::SpinOnce() is finished.)");
 	this->SpinOnce_BaseExit();
 }
 
 // Check gcode queue, if there is gcode to be run.
-void RobotBase::SpinOnce_BaseExit(){
-	if (this->State != RobotState::IDLE)
+void CncBase::SpinOnce_BaseExit(){
+	if (this->State != CncState::IDLE)
 		return;
 	if (this->_gcode_queue->BufferIsEmpty())
 		return;
 
 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
 	if (message == NULL){
-		Serial.println("\n\n\n [Error] RobotBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
+		Serial.println("\n\n\n [Error] CncBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
 		return;
 	}
 
-	// this->_mq->SayHello("RobotBase::SpinOnce_BaseExit()");
+	// this->_mq->SayHello("CncBase::SpinOnce_BaseExit()");
 	if (true){
-		Serial.print("\nRobotBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
+		Serial.print("\nCncBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
 		Serial.print(message->payload);
 		Serial.println(" ");
 	}
@@ -64,20 +64,20 @@ void RobotBase::SpinOnce_BaseExit(){
 	this->RunGcode(&gcode);
 }
 
-void RobotBase::RunG4(Gcode* gcode){
+void CncBase::RunG4(Gcode* gcode){
 	__g4_start_timestamp = micros();
 	__g4_time_second = gcode->get_value('S');
 }
 
-void RobotBase::__running_G4(){
+void CncBase::__running_G4(){
 	long delayed = (micros() - __g4_start_timestamp) / 1000 /1000;
 	if (delayed >= __g4_time_second ){
-		this->State = RobotState::IDLE;
+		this->State = CncState::IDLE;
 		return;
 	}
 }
 
-void RobotBase::RunGcode(Gcode* gcode){
+void CncBase::RunGcode(Gcode* gcode){
 	std::string result;
 	// if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND)){
 	//   Serial.print("RunGcode()   OK or Unknown");
@@ -89,7 +89,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 		switch (gcode->g){
 		case 28:
 			// G28: Home
-			this->State = RobotState::RUNNING_G28;
+			this->State = CncState::RUNNING_G28;
 			if (gcode->has_letter('X')) home_axis='X';
 			if (gcode->has_letter('Y')) home_axis='Y';
 			if (gcode->has_letter('Z')) home_axis='Z';
@@ -100,7 +100,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 			this->_home_as_inverse_kinematic = false;
 			if (gcode->has_letter('I')) this->_home_as_inverse_kinematic = true;
 			if (home_axis == '+'){
-				Serial.print("\n\n\n\n[Error] RobotBase::RunGcode()  :");
+				Serial.print("\n\n\n\n[Error] CncBase::RunGcode()  :");
 				Serial.print(home_axis);
 
 			}
@@ -114,13 +114,13 @@ void RobotBase::RunGcode(Gcode* gcode){
 			//       2. send out OK.
 			//       3. Set status to busy.
 			//       4. Start Moving.
-			this->State = RobotState::RUNNING_G1;
+			this->State = CncState::RUNNING_G1;
 			this->RunG1(gcode);
 			// this->commuDevice->OutputMessage(COMMU_OK);
 			break;
 		case 4:
 			// G4 Dwell, Pause for a period of time.
-			this->State = RobotState::RUNNING_G4;
+			this->State = CncState::RUNNING_G4;
 			this->RunG4(gcode);
 			break;
 		case 6:
@@ -168,13 +168,13 @@ void RobotBase::RunGcode(Gcode* gcode){
 
 		case 123:
 			//M123 P=channel_index, S=Set EEF action			
-			while (this->State != RobotState::IDLE){
+			while (this->State != CncState::IDLE){
 				this->SpinOnce();
 			}
 			p_value =  gcode->get_value('P');
 			s_value = gcode->get_value('S');
 			if (false){
-				Serial.print("RobotBase::RunGcode() For EEF_ACTION  M123 P= ");
+				Serial.print("CncBase::RunGcode() For EEF_ACTION  M123 P= ");
 				Serial.print(p_value);
 				Serial.print("  S= ");
 				Serial.print(s_value);
@@ -189,7 +189,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 			// 		Snnn Angle or microseconds
 			// Wait for all gcode, mcode is finished
 			// Serial.println("M280 Started");
-			while (this->State != RobotState::IDLE){
+			while (this->State != CncState::IDLE){
 				this->SpinOnce();
 			}
 			if (gcode->has_letter('P')) p_value = gcode->get_value('P');
@@ -206,13 +206,13 @@ void RobotBase::RunGcode(Gcode* gcode){
 			break;
 		}
 	}else{
-		// this->commuDevice->OutputMessage("\n[Warning] RobotBase::RunGcode()  Has NO letter 'G' or 'M'. ");
+		// this->commuDevice->OutputMessage("\n[Warning] CncBase::RunGcode()  Has NO letter 'G' or 'M'. ");
 		// this->commuDevice->OutputMessage(gcode->get_command());
 		// this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
 	}
 }
 
 
-void RobotBase::RunM42(uint8_t pin_number, uint8_t pin_value){
+void CncBase::RunM42(uint8_t pin_number, uint8_t pin_value){
 	digitalWrite(pin_number, pin_value);
 }

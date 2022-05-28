@@ -1,5 +1,5 @@
 #include "all_devices.h"
-#ifdef I_AM_GARMENT_BOT_SINGLE_MCU
+#ifdef I_AM_ROBOT_ASRS_AGV
 #include "board_pins_ver_2_0.h"
 #include "bot_asrs_agv_core.h"
 
@@ -130,7 +130,7 @@ void BotSingleMcu::SpinOnce(){
 
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
-		if (this->cnc.State == RobotState::IDLE){
+		if (this->cnc.State == CncState::IDLE){
 			// Last movement is done.
 			align_error = this->objAsrs.jettySensor->ReadAlignmentError();
 			if (align_error < 100){
@@ -188,14 +188,14 @@ void BotSingleMcu::ToState(BotSingleMcu::BOT_STATE state){
 		new_state = BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN;
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOAD_ALIGN:
-		if (this->cnc.State == RobotState::IDLE){
+		if (this->cnc.State == CncState::IDLE){
 			gcode.concat("Z50");
 			this->_gcode_queue->AppendGcodeCommand(gcode);
 			new_state = BotSingleMcu::BOT_STATE::ROBOT_LOADING;
 		}
 		break;
 	case BotSingleMcu::BOT_STATE::ROBOT_LOADING:
-		if (this->cnc.State == RobotState::IDLE){
+		if (this->cnc.State == CncState::IDLE){
 			new_state = BotSingleMcu::BOT_STATE::AGV_MOVING_TO_DESTINATION;
 		}
 		break;

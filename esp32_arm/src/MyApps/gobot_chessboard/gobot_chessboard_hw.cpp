@@ -82,7 +82,7 @@ void GobotChessboardHardware::_running_G28(){
 		this->alpha_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
 		this->beta_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA);
 		this->beta_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
-		this->State = RobotState::IDLE;
+		this->State = CncState::IDLE;
 
 	}else{
 		// Endstop is not trigered
@@ -338,7 +338,7 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 
 void GobotChessboardHardware::_running_G1(){
     if (this->GetDistanceToTarget_IK() < (this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA)/32){
-      	this->State = RobotState::IDLE;
+      	this->State = CncState::IDLE;
 		Serial.print("\n[Info] GobotChessboardHardware::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());

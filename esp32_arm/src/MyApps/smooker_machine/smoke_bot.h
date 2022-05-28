@@ -18,7 +18,7 @@
 
 
 
-class SmokeBotHardware: public RobotBase{
+class SmokeBotHardware: public CncBase{
     public:
         SmokeBotHardware();
         void HomeSingleAxis(char axis) override;

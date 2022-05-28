@@ -19,7 +19,7 @@
 
 
 
-class BoxMoverHardware:public RobotBase{
+class BoxMoverHardware:public CncBase{
     public:
         BoxMoverHardware();
 

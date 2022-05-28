@@ -11,7 +11,7 @@
 
 
 BoxCarrier *robot;
-BoxCarrierHardware* robot_hw;
+Cnc_CoreYZ* robot_hw;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_command_queue;
 StepControl objStepControl;
@@ -19,7 +19,7 @@ BoardAllInOne board = BoardAllInOne();
 
 void setup_robot_hardware(){
     board.Init();
-    robot_hw = new BoxCarrierHardware();
+    robot_hw = new Cnc_CoreYZ();
     robot_hw->InitMe(&board.cnc, &objStepControl);
     robot_hw->LinkHomer(&board.cnc.homer_z, &board.cnc.homer_y);
     robot_hw->LinkStepper(&board.cnc.stepper_alpha, &board.cnc.stepper_beta);

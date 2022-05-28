@@ -2,30 +2,30 @@
 #include "cnc_core_yz.h"
 
 
-void BoxCarrierHardware::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
-	Serial.print("\n[Info] BoxCarrierHardware::IK() is entering. ");
+void Cnc_CoreYZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
+	Serial.print("\n[Info] Cnc_CoreYZ::IK() is entering. ");
 	FkPosition_YZ* fk = (FkPosition_YZ*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
 	ik->alpha = (fk->Z * this->__config.steps_per_mm_for_z + fk->Y * this->__config.steps_per_mm_for_y);
 	ik->beta = (fk->Z * this->__config.steps_per_mm_for_z - fk->Y * this->__config.steps_per_mm_for_y);
 
-	Serial.print("\n[Debug] BoxCarrierHardware::IK() output (alpha, beta) = ");
+	Serial.print("\n[Debug] Cnc_CoreYZ::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
 	Serial.print(" , ");
 	Serial.print(ik->beta);
 	Serial.print(")");
 }
 
-void BoxCarrierHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
-	Serial.print("\n[Debug] BoxCarrierHardware::FK() is entering ");
+void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+	Serial.print("\n[Debug] Cnc_CoreYZ::FK() is entering ");
 	FkPosition_YZ* fk = (FkPosition_YZ*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
 	fk->Z = (ik->alpha + ik->beta) / 2 / this->__config.steps_per_mm_for_z;
 	fk->Y = (ik->alpha - ik->beta) / 2 / this->__config.steps_per_mm_for_y;
 
-	Serial.print("\n[Debug] BoxCarrierHardware::FK() output (Z, Y) = ");
+	Serial.print("\n[Debug] Cnc_CoreYZ::FK() output (Z, Y) = ");
 	Serial.print(fk->Z);
 	Serial.print(" , ");
 	Serial.print(fk->Y);
@@ -34,7 +34,7 @@ void BoxCarrierHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 
 
-// BoxCarrierHardware::BoxCarrierHardware(uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
+// Cnc_CoreYZ::Cnc_CoreYZ(uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
 // 	pinMode(pin_alpha_enable, OUTPUT);
 // 	pinMode(pin_beta_enable, OUTPUT);
 // 	this->__pin_alpha_enable = pin_alpha_enable;
@@ -45,7 +45,7 @@ void BoxCarrierHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 // 	this->__EnableMotor('B', false);
 // }
 
-// BoxCarrierHardware::BoxCarrierHardware(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
+// Cnc_CoreYZ::Cnc_CoreYZ(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
 // 	this->__mcp23018 = mcp_23018;
 // 	this->__mcp23018->pinMode(pin_alpha_enable, OUTPUT);
 // 	this->__mcp23018->pinMode(pin_beta_enable, OUTPUT);
@@ -53,18 +53,18 @@ void BoxCarrierHardware::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 // 	this->__EnableMotor('B', false);
 // }
 
-void BoxCarrierHardware::LinkStepper(Stepper* alpha, Stepper* beta){
+void Cnc_CoreYZ::LinkStepper(Stepper* alpha, Stepper* beta){
 	this->stepper_alpha = alpha;
 	this->stepper_beta = beta;
 }
 
-void BoxCarrierHardware::LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y){
+void Cnc_CoreYZ::LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y){
 	this->objHomeHelper_vertical = homer_z;
 	this->objHomeHelper_y = homer_y;
 }
 
-void BoxCarrierHardware::InitRobot(){
-	Serial.print("\n[Info] BoxCarrierHardware::Init_Linkage() is entering.");
+void Cnc_CoreYZ::InitRobot(){
+	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
 	this->__config.Init();
 
 
@@ -77,8 +77,8 @@ void BoxCarrierHardware::InitRobot(){
 	this->_home_as_inverse_kinematic = false;
 }
 
-void BoxCarrierHardware::HomeSingleAxis(char axis){
-	Serial.print("[Debug] BoxCarrierHardware::HomeSingleAxis() is entering:   " );
+void Cnc_CoreYZ::HomeSingleAxis(char axis){
+	Serial.print("[Debug] Cnc_CoreYZ::HomeSingleAxis() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis = axis;
 
@@ -104,10 +104,10 @@ void BoxCarrierHardware::HomeSingleAxis(char axis){
 	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 }
 
-void BoxCarrierHardware::_running_G28(){
+void Cnc_CoreYZ::_running_G28(){
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
-		Serial.print("\n[Info] BoxCarrierHardware::_running_G28() Home sensor is trigger.  " );
+		Serial.print("\n[Info] Cnc_CoreYZ::_running_G28() Home sensor is trigger.  " );
 		Serial.print (this->_homing_axis);
 		this->objStepControl->stop();
 
@@ -115,7 +115,7 @@ void BoxCarrierHardware::_running_G28(){
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
 			// We know homed position via IK.
-			Serial.print("\n[Error] BoxCarrierHardware::_running_G28() This robot does NOT impliment this function.");
+			Serial.print("\n[Error] Cnc_CoreYZ::_running_G28() This robot does NOT impliment this function.");
 		}
 		else{
 			// We know homed position via FK
@@ -136,7 +136,7 @@ void BoxCarrierHardware::_running_G28(){
 		this->stepper_alpha->setAcceleration(this->__config.max_acceleration_alpha_beta);
 		this->stepper_beta->setMaxSpeed(this->__config.max_speed_alpha_beta);
 		this->stepper_beta->setAcceleration(this->__config.max_acceleration_alpha_beta);
-		this->State = RobotState::IDLE;
+		this->State = CncState::IDLE;
 
 	}else{
 		// Endstop is not trigered
@@ -159,8 +159,8 @@ void BoxCarrierHardware::_running_G28(){
 	}	
 }
 
-void BoxCarrierHardware::RunG1(Gcode* gcode) {
-	Serial.print("\n[Debug] BoxCarrierHardware::RunG1() is entering");
+void Cnc_CoreYZ::RunG1(Gcode* gcode) {
+	Serial.print("\n[Debug] Cnc_CoreYZ::RunG1() is entering");
 	Serial.print(gcode->get_command());
 	this->__EnableMotor('A', true);
 	this->__EnableMotor('B', true);
@@ -198,7 +198,7 @@ void BoxCarrierHardware::RunG1(Gcode* gcode) {
 	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 
 	if (true){
-		Serial.print("\n    [Debug] BoxCarrierHardware::RunG1()     (");
+		Serial.print("\n    [Debug] Cnc_CoreYZ::RunG1()     (");
 		Serial.print(this->stepper_alpha->getPosition());
 		Serial.print(",");
 		Serial.print(this->stepper_beta->getPosition());
@@ -210,29 +210,29 @@ void BoxCarrierHardware::RunG1(Gcode* gcode) {
 	}
 }
 
-void BoxCarrierHardware::_running_G1(){
+void Cnc_CoreYZ::_running_G1(){
     if (this->GetDistanceToTarget_IK() < this->__config.max_acceleration_alpha_beta){
-      	this->State = RobotState::IDLE;
+      	this->State = CncState::IDLE;
 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);
 }
 
-void BoxCarrierHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
+void Cnc_CoreYZ::RunM123(uint8_t eef_channel, EefAction eef_action){
 	
 }
 
-void BoxCarrierHardware::RunM84(){
+void Cnc_CoreYZ::RunM84(){
 	this->__EnableMotor('A',false);
 	this->__EnableMotor('B',false);
 }
 
-float BoxCarrierHardware::GetDistanceToTarget_IK(){
+float Cnc_CoreYZ::GetDistanceToTarget_IK(){
 	return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
 }
 
-void BoxCarrierHardware::__EnableMotor(char actuator, bool enable_it){
+void Cnc_CoreYZ::__EnableMotor(char actuator, bool enable_it){
 		if (actuator == 'A'){
 			this->__board->EnableMotor_alpha(enable_it);
 		}
@@ -240,7 +240,7 @@ void BoxCarrierHardware::__EnableMotor(char actuator, bool enable_it){
 			this->__board->EnableMotor_beta(enable_it);
 		}
 		else{
-			Serial.print("[Warn] BoxCarrierHardware::__EnableMotor()   unkown actuator = ");
+			Serial.print("[Warn] Cnc_CoreYZ::__EnableMotor()   unkown actuator = ");
 			Serial.println(actuator);
 		}
 }

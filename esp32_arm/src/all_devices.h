@@ -13,7 +13,7 @@
 
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
-#define I_AM_GARMENT_BOT_SINGLE_MCU
+#define I_AM_ROBOT_ASRS_AGV
 // #define I_AM_GARMENT_BOX_MOVER
 // #define I_AM_GARMENT_BOX_CARRIER
 
@@ -66,7 +66,7 @@
 	#define MQTT_SYNCERS_COUNT  1   
 #endif
 
-#ifdef I_AM_GARMENT_BOT_SINGLE_MCU
+#ifdef I_AM_ROBOT_ASRS_AGV
     #define ROBOT_SERIAL_ID 4444
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   

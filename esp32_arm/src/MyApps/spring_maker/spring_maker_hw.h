@@ -17,7 +17,7 @@
 
 
 
-class SpringMakerHardware:public RobotBase{
+class SpringMakerHardware:public CncBase{
     public:
         SpringMakerHardware();
 

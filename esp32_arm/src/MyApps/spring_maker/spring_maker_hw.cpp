@@ -90,7 +90,7 @@ void SpringMakerHardware::_running_G28(){
 		this->objStepper_alpha.setAcceleration(this->__config.max_acceleration_alpha);
 		// this->objStepper_beta.setMaxSpeed(this->__config.max_speed_alpha_beta);
 		// this->objStepper_beta.setAcceleration(this->__config.max_acceleration_alpha_beta);
-		this->State = RobotState::IDLE;
+		this->State = CncState::IDLE;
 
 	}else{
 	}	
@@ -136,7 +136,7 @@ void SpringMakerHardware::RunG1(Gcode* gcode) {
 }
 void SpringMakerHardware::_running_G1(){
     if (this->GetDistanceToTarget_IK() < this->__config.max_acceleration_alpha){
-      	this->State = RobotState::IDLE;
+      	this->State = CncState::IDLE;
 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());

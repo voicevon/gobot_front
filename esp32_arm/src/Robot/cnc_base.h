@@ -102,15 +102,15 @@ class IkPosition_AB: public IkPositionBase{
  *                                 might be no ActuatorCotroller in the whole system.
 */
 
-enum class RobotState{
+enum class CncState{
     IDLE,
     RUNNING_G1,
     RUNNING_G4,
     RUNNING_G28
 };
-class RobotBase: public GcodeConsumer{
+class CncBase: public GcodeConsumer{
     public:
-        RobotState State = RobotState::IDLE;
+        CncState State = CncState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void InitRobot();

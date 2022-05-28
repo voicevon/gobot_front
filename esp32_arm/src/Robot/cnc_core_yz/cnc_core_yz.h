@@ -8,10 +8,10 @@
 #include "MyLibs/board_base.h"
 
 
-class BoxCarrierHardware:public RobotBase{
+class Cnc_CoreYZ:public CncBase{
     public:
-        BoxCarrierHardware(){};
-        BoxCarrierHardware(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
+        Cnc_CoreYZ(){};
+        Cnc_CoreYZ(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
         void InitRobot() override;
         void InitMe(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
         void LinkStepper(Stepper* alpha, Stepper* beta);
