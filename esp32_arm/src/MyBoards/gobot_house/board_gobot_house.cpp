@@ -14,7 +14,6 @@ Stepper* Board_GobotHouse::GetStepper(char axis_name) {
         Serial.print("['Error']  Board_GobotHouse::GetStepper()   axis_name= ");
         Serial.println(axis_name);
     }
-
 }
 
 SingleAxisHomer* Board_GobotHouse::GetHomer(char axis_name) {
