@@ -1,34 +1,38 @@
-#include "cnc_board_gobot_house.h"
+#include "board_gobot_house.h"
 
 
-void CncBoard_AB_AlphaBeta::Init(){
+void Board_GobotHouse::Init(){
     
 }
 
-Stepper* CncBoard_AB_AlphaBeta::GetStepper(char axis_name) {
+Stepper* Board_GobotHouse::GetStepper(char axis_name) {
     if (axis_name=='A'){
         return &this->stepper_alpha;
     }else if (axis_name=='B'){
         return &this->stepper_beta;
     }else{
-        Serial.print("['Error']  CncBoard_AB_AlphaBeta::GetStepper()   axis_name= ");
+        Serial.print("['Error']  Board_GobotHouse::GetStepper()   axis_name= ");
         Serial.println(axis_name);
     }
 
 }
 
-SingleAxisHomer* CncBoard_AB_AlphaBeta::GetHomer(char axis_name) {
+SingleAxisHomer* Board_GobotHouse::GetHomer(char axis_name) {
     if (axis_name=='A'){
         return &this->homer_alpha;
     }else if (axis_name=='B'){
         return &this->homer_beta;
     }else{
-        Serial.print("['Error']  CncBoard_AB_AlphaBeta::GetHomer()   axis_name= ");
+        Serial.print("['Error']  Board_GobotHouse::GetHomer()   axis_name= ");
         Serial.println(axis_name);
     }
 }
 
-void CncBoard_AB_AlphaBeta::EnableMotor(char axis_name, bool enable_it) {
+RobotEef_GobotHouse* Board_GobotHouse::GetEef(){
+    return &this->eef;
+}
+
+void Board_GobotHouse::EnableMotor(char axis_name, bool enable_it) {
     if (axis_name == 'A'){
         digitalWrite(PIN_ALPHA_ENABLE_2109, !enable_it);   // LOW is enable
     } else if (axis_name == 'B'){

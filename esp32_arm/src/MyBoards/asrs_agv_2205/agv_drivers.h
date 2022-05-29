@@ -7,8 +7,6 @@
 #include "AGV/mover_driver/mover_dual_wheel.h"
 #include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
 #include "board_pins_ver_2_0.h"
-// #include "board.h"
-
 
 class BoardPart_Agv: public BoardbaseAgv{
     public:

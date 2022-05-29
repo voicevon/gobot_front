@@ -2,17 +2,17 @@
 
 #include <Arduino.h>
 #include "ESP32Step/src/TeensyStep.h"
-#include "CNC/cnc_base.h"
 #include "MyLibs/MyFunctions.hpp"
 
+#include "CNC/cnc_base.h"
 #include "CNC/single_axis_homer.h"
+#include "CNC/eef_standard_code.h"
 #include "MyLibs/Components/Led.h"
 #include "cnc_scara_config.h"
-#include "CNC/eef_standard_code.h"
 // #include "MyBoards/cnc/gobot_house_ver3.11.h"
 // #include "MyBoards/cnc/board_gobot_house_ver3.11.h"
 // #include "MyBoards/cnc_2109/board_gobot_house_ver3.11.h"
-#include "MyBoards/cnc_dual_stepper_2109/board_gobot_house_ver3.11.h"
+// #include "MyBoards/cnc_dual_stepper_2109/board_gobot_house_ver3.11.h"
 #include "MyBoards/board_base.h"
 
 

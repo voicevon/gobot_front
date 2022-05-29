@@ -1,15 +1,13 @@
 #include "all_devices.h"
 #ifdef I_AM_GOBOT_HOUSE
 
-#include "gobot_house.h"
-// #include "gobot_house_hw.h"
-// #include "CNC/cnc_scara/gobot_house_hw.h"
+#include "MyBoards/gobot_house/board_gobot_house.h"
 #include "CNC/cnc_scara/cnc_scara.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
-// #include "MyBoards/cnc_2109/cnc_board_gobot_house.h"
-#include "MyBoards/cnc_dual_stepper_2109/cnc_board_gobot_house.h"
+#include "gobot_house.h"
+
 
 GobotHouse* robot; 
 CncScara* cncScara;
@@ -18,7 +16,7 @@ MessageQueue* mqtt_message_queue;
 
 // Stepper motor(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);       // STEP pin: 2, DIR pin: 3
 StepControl controller;    // Use default settings 
-CncBoard_AB_AlphaBeta board = CncBoard_AB_AlphaBeta();
+Board_GobotHouse board = Board_GobotHouse();
 
 // void loop_motor() 
 // {
