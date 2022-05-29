@@ -20,13 +20,13 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepContr
 	// Init box carrier robot.
 	// this->jettySensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 
-	this->cnc.InitRobot(&board->cnc);
+	this->cnc.Init(&board->cnc);
 
 	this->_gcode_queue = new GcodeQueue();
     this->cnc.LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 
 	this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING);
-	Serial.print("\n[Info] BotAsrsAgvCoreYZ::InitRobot() is done.\n");
+	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is done.\n");
 }
 
 void BotAsrsAgvCoreYZ::ExecuteMqttCommand(const char* command){

@@ -68,7 +68,7 @@ void setup() {
 	// myCommandQueue.LinkRobot(mybot);
 	mybot->LinkLocalGcodeQueue_AsConsumer(&myCommandQueue);
 	mybot->Init_Gpio();
-	mybot->InitRobot();
+	mybot->Init();
 	Serial.println("\nSet up is done .....");
 	String strG28 = "G28";
 	myCommandQueue.AppendGcodeCommand(strG28);

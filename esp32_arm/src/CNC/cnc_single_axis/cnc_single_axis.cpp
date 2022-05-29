@@ -23,11 +23,11 @@ void CncSingleAxis::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 
 CncSingleAxis::CncSingleAxis(){
-	// this->InitRobot();
+
 }
 
-void CncSingleAxis::InitRobot(BoardbaseCnc* board){
-	Serial.print("\n[Info] CncSingleAxis::InitRobot() is entering.");
+void CncSingleAxis::Init(BoardbaseCnc* board){
+	Serial.print("\n[Info] CncSingleAxis::Init() is entering.");
 	this->__config.Init();
 	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	// this->__EnableMotor('A', false);

@@ -21,7 +21,7 @@ void setup(){
     Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
     board.Init();
     
-    cnc.InitRobot(&board);
+    cnc.Init(&board);
     robot = new SpringMaker();
     gcode_queue = new GcodeQueue();
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);

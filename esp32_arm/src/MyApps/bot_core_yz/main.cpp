@@ -23,7 +23,7 @@ void setup_robot_hardware(){
     // robot_hw->InitMe(&board.cnc, &objStepControl);
     // robot_hw->LinkHomer(board.cnc.GetHomer('Z'), board.cnc.GetHomer('Y'));
     // robot_hw->LinkStepper(board.cnc.GetStepper('A'), board.cnc.GetStepper('B'));
-    robot_hw->InitRobot(&board.cnc);
+    robot_hw->Init(&board.cnc);
 }
 
 

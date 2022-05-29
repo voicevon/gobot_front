@@ -3,7 +3,7 @@
 #include "cnc_five_bars.h"
 #include<Arduino.h>
 
-void CncFiveBars::InitRobot(BoardbaseCnc* board){
+void CncFiveBars::Init(BoardbaseCnc* board){
 	Serial.print("\n[Info] CncFiveBars::Init() is entering.");
     // pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     // pinMode(PIN_BETA_ENABLE, OUTPUT);

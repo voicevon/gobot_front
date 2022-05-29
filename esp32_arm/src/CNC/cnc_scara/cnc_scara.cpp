@@ -107,7 +107,7 @@ void CncScara::__Init_gpio(){
 	// ledcWrite(2, 0);
 }
 
-void CncScara::InitRobot(BoardbaseCnc* board){
+void CncScara::Init(BoardbaseCnc* board){
 	__Init_gpio();
 	this->alpha_stepper = board->GetStepper('A');
 	this->beta_stepper = board->GetStepper('B');

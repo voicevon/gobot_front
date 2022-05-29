@@ -24,7 +24,7 @@ class BoxMoverHardware:public CncBase{
     public:
         BoxMoverHardware();
 
-        void InitRobot(BoardbaseCnc* board) override;
+        void Init(BoardbaseCnc* board) override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 

@@ -44,7 +44,7 @@ void setup_robot_hardware(){
     // robot_hardware->LinkHomer(board.GetHomer('A'), board.GetHomer('B'));
     // robot_hardware->LinkStepper(board.GetStepper('A'), board.GetStepper('B'));
     // robot_hardware->LinkEef(board.GetEef());
-    robot_hardware->InitRobot(&board);
+    robot_hardware->Init(&board);
     Serial.println("[Info] setup()  is done. \n\n\n");
 }
 

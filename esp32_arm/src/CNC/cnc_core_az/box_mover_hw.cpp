@@ -47,7 +47,7 @@ BoxMoverHardware::BoxMoverHardware(){
 
 }
 
-void BoxMoverHardware::InitRobot(BoardbaseCnc* board){
+void BoxMoverHardware::Init(BoardbaseCnc* board){
 	Serial.print("\n[Info] BoxMoverHardware::Init_Linkage() is entering.");
 	this->__config.Init();
 	this->objStepper_alpha = board->GetStepper('A');
