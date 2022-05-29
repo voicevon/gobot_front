@@ -7,7 +7,7 @@ BotAsrsAgvCoreYZ::BotAsrsAgvCoreYZ(uint16_t id){
 	this->_ID = id;
 }
 
-void BotAsrsAgvCoreYZ::Init(BoardAllInOne* board, StepControl* stepControl){
+void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepControl){
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is entering");
 	this->objAgv.LinkMover(board->agv.Get_DualWheelDriver());
 	this->objAgv.LinkObstacleSensor(board->agv.Get_Obstacle_Vl53l0x());
@@ -20,18 +20,13 @@ void BotAsrsAgvCoreYZ::Init(BoardAllInOne* board, StepControl* stepControl){
 	// Init box carrier robot.
 	// this->jettySensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 
-	this->cnc.InitMe(&board->cnc,stepControl);
-	// this->cnc.LinkStepper(&board->cnc.stepper_alpha, &board->cnc.stepper_beta);
-	this->cnc.LinkStepper(board->cnc.GetStepper('A'), board->cnc.GetStepper('B'));
-	// this->cnc.LinkHomer(&board->cnc.homer_z, &board->cnc.homer_y);
-	this->cnc.LinkHomer(board->cnc.GetHomer('Z'), board->cnc.GetHomer('Y'));
-	this->cnc.InitRobot();
+	this->cnc.InitRobot(&board->cnc);
 
 	this->_gcode_queue = new GcodeQueue();
     this->cnc.LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
 
 	this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING);
-	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is done.\n");
+	Serial.print("\n[Info] BotAsrsAgvCoreYZ::InitRobot() is done.\n");
 }
 
 void BotAsrsAgvCoreYZ::ExecuteMqttCommand(const char* command){

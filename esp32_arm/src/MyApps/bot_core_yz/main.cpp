@@ -7,24 +7,23 @@
 #include "box_carrier.h"
 #include "CNC/cnc_core_yz/cnc_core_yz.h"
 #include "IoT/main_mqtt.h"
-// #include "MyApps/bot_asrs_agv_core_gripper/board_all_in_one.h"
-// #include "MyBoards/board_base.h"
-#include "MyBoards/asrs_agv_2205/board_all_in_one.h"
+#include "MyBoards/asrs_agv_2205/board_asrs_agv.h"
 
+
+BoardAllInOne board = BoardAllInOne();
 BoxCarrier *robot;
 Cnc_CoreYZ* robot_hw;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_command_queue;
 StepControl objStepControl;
-BoardAllInOne board = BoardAllInOne();
 
 void setup_robot_hardware(){
     board.Init();
     robot_hw = new Cnc_CoreYZ();
-    robot_hw->InitMe(&board.cnc, &objStepControl);
-    robot_hw->LinkHomer(board.cnc.GetHomer('Z'), board.cnc.GetHomer('Y'));
-    robot_hw->LinkStepper(board.cnc.GetStepper('A'), board.cnc.GetStepper('B'));
-    robot_hw->InitRobot();
+    // robot_hw->InitMe(&board.cnc, &objStepControl);
+    // robot_hw->LinkHomer(board.cnc.GetHomer('Z'), board.cnc.GetHomer('Y'));
+    // robot_hw->LinkStepper(board.cnc.GetStepper('A'), board.cnc.GetStepper('B'));
+    robot_hw->InitRobot(&board.cnc);
 }
 
 

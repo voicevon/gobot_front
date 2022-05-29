@@ -38,8 +38,8 @@ void setup(){
     Serial.println("Hi Xuming, I am your lovely bot,  GobotHouse. ");
     board.Init();
     cncScara = &CncScara::getInstance();
-    cncScara->LinkHomer(board.GetHomer('A'), board.GetHomer('B'));
-    cncScara->LinkStepper(board.GetStepper('A'), board.GetStepper('B'));
+    // cncScara->LinkHomer(board.GetHomer('A'), board.GetHomer('B'));
+    // cncScara->LinkStepper(board.GetStepper('A'), board.GetStepper('B'));
     robot = &GobotHouse::getInstance();
     gcode_queue = new GcodeQueue();
     robot->Setup();

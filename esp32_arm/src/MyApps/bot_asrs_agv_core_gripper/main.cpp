@@ -5,7 +5,7 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "bot_asrs_agv_core_yz.h"
 #include "IoT/main_mqtt.h"
-#include "MyLibs/board_static.h"
+// #include "MyLibs/board_static.h"
 
 BoardAllInOne board = BoardAllInOne();
 BotAsrsAgvCoreYZ garment_robot = BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
@@ -15,13 +15,8 @@ StepControl objStepControl;  // This object can not inside any object?
 
 
 void setup(){
-    Serial.begin(115200);
-    while (! Serial) {delay(1);}
-    Serial.println("Hi there, I am your lovely bot,  BotAsrsAgvCoreYZ, include ASRS AGV CNC.  Keep smiling :) ");
-    ReportRam();
-
     board.Init();
-    garment_robot.Init(&board, &objStepControl);
+    garment_robot.InitAllinOne(&board, &objStepControl);
 
    // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
@@ -31,7 +26,7 @@ void setup(){
     setup_mqtt_on_message_receive(); 
 
     Serial.println ("\n[Info] main.cpp  setup() is done. ------------------------------------  ");
-    ReportRam();
+    board.RepportRamUsage();
 }
 
 int64_t last_report_timestamp = 0;

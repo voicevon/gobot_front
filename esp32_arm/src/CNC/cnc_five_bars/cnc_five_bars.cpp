@@ -18,6 +18,12 @@ void CncFiveBars::InitRobot(BoardbaseCnc* board){
 
 	// this->__EnableMotor('A', false);
 	// this->__EnableMotor('B', false);
+	this->alpha_stepper = board->GetStepper('A');
+	this->beta_stepper = board->GetStepper('B');
+	// this->LinkHomer();
+	this->alpha_homer = board->GetHomer('A');
+	this->beta_homer = board->GetHomer('B');
+
 	this->_board->EnableMotor('A', false);
 	this->_board->EnableMotor('B', false);
 

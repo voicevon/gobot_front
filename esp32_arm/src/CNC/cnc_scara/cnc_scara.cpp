@@ -109,6 +109,11 @@ void CncScara::__Init_gpio(){
 
 void CncScara::InitRobot(BoardbaseCnc* board){
 	__Init_gpio();
+	this->alpha_stepper = board->GetStepper('A');
+	this->beta_stepper = board->GetStepper('B');
+	this->alpha_homer = board->GetHomer('A');
+	this->beta_homer = board->GetHomer('B');
+	
 	// this->__EnableMotor('A', false);
 	// this->__EnableMotor('B', false);
 	this->_board->EnableMotor('A', false);

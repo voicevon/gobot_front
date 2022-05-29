@@ -3,6 +3,22 @@
 uint8_t BoardBase::__ledc_channel_index = 0;
 uint8_t BoardBase::__i2c_bus_index = 0;
 
+
+void BoardBase::RepportRamUsage(){
+    Serial.println("-----------------  RAM usage report -----------------");
+    Serial.print("\t\ttotal heap size = ");
+    Serial.println(ESP.getHeapSize()); //total heap size
+
+    Serial.print("\t\tavailable heap = ");
+    Serial.println(ESP.getFreeHeap()); //available heap
+
+    Serial.print("\t\tlowest level of free heap since boot = ");
+    Serial.println (ESP.getMinFreeHeap()); //lowest level of free heap since boot
+
+    Serial.print("\t\tlargest block of heap that can be allocated at once = ");
+    Serial.println(ESP.getMaxAllocHeap()); //largest block of heap that can be allocated at once
+}
+
 bool BoardBase::_Begin_I2cBus(TwoWire* i2c_bus, uint8_t pin_sda, uint8_t pin_scl, uint32_t frequency){
     // TwoWire* new_bus = new TwoWire(this->__i2c_bus_index);
     if (!i2c_bus->begin(pin_sda, pin_scl, frequency)){

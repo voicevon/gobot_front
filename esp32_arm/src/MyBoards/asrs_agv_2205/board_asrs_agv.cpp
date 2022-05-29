@@ -2,6 +2,11 @@
 
 
 void BoardAllInOne::Init(){
+    Serial.begin(115200);
+    while (! Serial) {delay(1);}
+    Serial.println("[Info] BoardAllInOne::Init()  Hi there, I am your lovely bot,  BotAsrsAgvCoreYZ, include ASRS AGV CNC.  Keep smiling :) ");
+    this->RepportRamUsage();
+
     this->_Begin_I2cBus(&this->__i2c_bus_main, PIN_MAIN_I2C_SDA_2205, PIN_MAIN_I2C_SCL_2205, 400000);
     this->_Begin_I2cBus(&this->__i2c_bus_ext, PIN_EXT_I2C_SDA_2205, PIN_EXT_I2C_SCL_2205, 400000);
 

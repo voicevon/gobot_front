@@ -18,8 +18,8 @@ class CncFiveBars: public CncBase{
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
         void InitRobot(BoardbaseCnc* board) override;
-        void LinkHomer(SingleAxisHomer* alpha_homer, SingleAxisHomer* beta_homer){this->alpha_homer=alpha_homer; this->beta_homer=beta_homer;};
-        void LinkStepper(Stepper* alpha, Stepper* beta){this->alpha_stepper=alpha; this->beta_stepper=beta;};
+        // void LinkHomer(SingleAxisHomer* alpha_homer, SingleAxisHomer* beta_homer){this->alpha_homer=alpha_homer; this->beta_homer=beta_homer;};
+        // void LinkStepper(Stepper* alpha, Stepper* beta){this->alpha_stepper=alpha; this->beta_stepper=beta;};
         void LinkEef(RobotEefBase* eef){this->__eef=eef;};
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};

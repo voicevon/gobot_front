@@ -12,10 +12,11 @@ class Cnc_CoreYZ: public CncBase{
     public:
         Cnc_CoreYZ(){};
         Cnc_CoreYZ(BoardbaseCnc* board, StepControl* stepControl){this->_board=board; this->objStepControl=stepControl;};
+        void LinkStepControl(StepControl* stepControl){this->objStepControl=stepControl;};
         void InitRobot(BoardbaseCnc* board) override;
-        void InitMe(BoardbaseCnc* board, StepControl* stepControl){this->_board=board; this->objStepControl=stepControl;};
-        void LinkStepper(Stepper* alpha, Stepper* beta);
-        void LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y);
+        // void InitMe(BoardbaseCnc* board, StepControl* stepControl){this->_board=board; this->objStepControl=stepControl;};
+        // void LinkStepper(Stepper* alpha, Stepper* beta);
+        // void LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y);
 
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
@@ -27,7 +28,6 @@ class Cnc_CoreYZ: public CncBase{
     private:
         Stepper* stepper_alpha; // = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
         Stepper* stepper_beta; // = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
-        StepControl* objStepControl;
 
         //Override private
         // void SpinOnce_BaseEnter() override {};

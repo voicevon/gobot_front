@@ -53,15 +53,15 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 // 	this->__EnableMotor('B', false);
 // }
 
-void Cnc_CoreYZ::LinkStepper(Stepper* alpha, Stepper* beta){
-	this->stepper_alpha = alpha;
-	this->stepper_beta = beta;
-}
+// void Cnc_CoreYZ::LinkStepper(Stepper* alpha, Stepper* beta){
+// 	this->stepper_alpha = alpha;
+// 	this->stepper_beta = beta;
+// }
 
-void Cnc_CoreYZ::LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y){
-	this->objHomeHelper_vertical = homer_z;
-	this->objHomeHelper_y = homer_y;
-}
+// void Cnc_CoreYZ::LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y){
+// 	this->objHomeHelper_vertical = homer_z;
+// 	this->objHomeHelper_y = homer_y;
+// }
 
 void Cnc_CoreYZ::InitRobot(BoardbaseCnc* board){
 	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
@@ -70,6 +70,10 @@ void Cnc_CoreYZ::InitRobot(BoardbaseCnc* board){
 
 	// CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
 	// this->commuDevice = commuUart; 
+	this->stepper_alpha = board->GetStepper('A');
+	this->stepper_beta = board->GetStepper('B');
+	this->objHomeHelper_y = board->GetHomer('Y');
+	this->objHomeHelper_vertical = board->GetHomer('Z');
 
 	this->stepper_alpha->setInverseRotation(true);
 	this->stepper_beta->setInverseRotation(true);

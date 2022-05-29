@@ -33,9 +33,9 @@ class BoxMoverHardware:public CncBase{
         float GetDistanceToTarget_IK() override;
 
     private:
-        Stepper objStepper_alpha = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
-        Stepper objStepper_beta = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
-        StepControl objStepControl;
+        Stepper* objStepper_alpha;//  Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
+        Stepper* objStepper_beta;//  Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
+        // StepControl objStepControl;
 
         //Override private
         // void SpinOnce_BaseEnter() override {};
@@ -54,8 +54,8 @@ class BoxMoverHardware:public CncBase{
         FkPosition_ZW __current_fk_position;
 
         SingleAxisHomer* __homing_helper;
-        SingleAxisHomer objHomeHelper_vertical = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
-        SingleAxisHomer objHomeHelper_angle = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
+        SingleAxisHomer* objHomeHelper_vertical; // = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
+        SingleAxisHomer* objHomeHelper_angle; // = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
         BoxMoverHardwareConfig  __config;
         // BoardbaseCnc* __board;
 

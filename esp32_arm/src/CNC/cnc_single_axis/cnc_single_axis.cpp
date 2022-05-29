@@ -1,8 +1,5 @@
 #include "cnc_single_axis.h"
 
-// #define PIN_ALPHA_ENABLE 18
-
-
 
 void CncSingleAxis::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	Serial.print("\n[Info] CncSingleAxis::IK() is entering. ");
@@ -34,6 +31,8 @@ void CncSingleAxis::InitRobot(BoardbaseCnc* board){
 	this->__config.Init();
 	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	// this->__EnableMotor('A', false);
+	this->objStepper_alpha = board->GetStepper('A');
+	this->objHomeHelper_alpha = board->GetHomer('A');
 	this->_board->EnableMotor('A', false);
 
 	// CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.

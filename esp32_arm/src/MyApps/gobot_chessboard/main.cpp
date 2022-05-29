@@ -6,14 +6,13 @@
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
 #include "MyBoards/gobot_main/board_gobot_main.h"
+
+
 Board_GobotMain board = Board_GobotMain();
 GobotChessboard* robot; 
 CncFiveBars* robot_hardware;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_message_queue;
-
-
-
 
 uint8_t PIN_ROOMS[] = {PIN_SENSOR_ROOM_0,
                         PIN_SENSOR_ROOM_1,
@@ -41,19 +40,12 @@ char ReadRoomsSensor(){
 
 void setup_robot_hardware(){
     robot = &GobotChessboard::getInstance();
-    // SingleAxisHomer* alpha_homer = new SingleAxisHomer(PIN_HOME_ALPHA, LOW);
-    // SingleAxisHomer* beta_homer = new SingleAxisHomer(PIN_HOME_BETA, LOW);
-    // Stepper* alpha_stepper = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR); 
-    // Stepper* beta_stepper = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
     robot_hardware = new CncFiveBars();
-    // robot_hardware->LinkHomer(alpha_homer, beta_homer);
-    // robot_hardware->LinkStepper(alpha_stepper, beta_stepper);
-    robot_hardware->LinkHomer(board.GetHomer('A'), board.GetHomer('B'));
-    robot_hardware->LinkStepper(board.GetStepper('A'), board.GetStepper('B'));
-    robot_hardware->LinkEef(board.GetEef());
-    // robot_hardware.LinkStepper();
-    robot_hardware->InitRobot();
-    Serial.println("[Info] setup()  is  8888888888888888");
+    // robot_hardware->LinkHomer(board.GetHomer('A'), board.GetHomer('B'));
+    // robot_hardware->LinkStepper(board.GetStepper('A'), board.GetStepper('B'));
+    // robot_hardware->LinkEef(board.GetEef());
+    robot_hardware->InitRobot(&board);
+    Serial.println("[Info] setup()  is done. \n\n\n");
 }
 
 

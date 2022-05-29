@@ -138,6 +138,7 @@ class CncBase: public GcodeConsumer{
         char _homing_axis;
         bool _home_as_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
         BoardbaseCnc* _board;
+        StepControl* objStepControl;
     
     private:
         int test_int;
