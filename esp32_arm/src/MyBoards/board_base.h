@@ -32,15 +32,12 @@ class BoardBase{
 };
 
 
-// #include "ESP32Step/src/Stepper.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "cnc/single_axis_homer.h"
-#include "cnc/RobotEef/eef_base.h"
+#include "cnc/robot_eef_base.h"
 
 class BoardbaseCnc: public BoardBase{
     public:
-        // virtual void EnableMotor_alpha(bool enable_it);
-        // virtual void EnableMotor_beta(bool enable_it);
         virtual void Init();
         void SayHello();
         virtual Stepper* GetStepper(char axis_name);

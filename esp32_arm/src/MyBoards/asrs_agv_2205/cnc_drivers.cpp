@@ -18,7 +18,7 @@ Stepper* CncDriver_CoreYZ_2205::GetStepper(char axis_name){
     }else if (axis_name=='B'){
         return &this->stepper_beta;
     }else{
-        Serial.print("['Error']  Board_GobotHouse::GetStepper()   axis_name= ");
+        Serial.print("['Error']  CncDriver_CoreYZ_2205::GetStepper()   axis_name= ");
         Serial.println(axis_name);
     }
 }
@@ -29,7 +29,7 @@ SingleAxisHomer* CncDriver_CoreYZ_2205::GetHomer(char axis_name){
     }else if (axis_name=='Y'){
         return &this->homer_y;
     }else{
-        Serial.print("['Error']  Board_GobotHouse::GetHomer()   axis_name= ");
+        Serial.print("['Error']  CncDriver_CoreYZ_2205::GetHomer()   axis_name= ");
         Serial.println(axis_name);
     }
 }

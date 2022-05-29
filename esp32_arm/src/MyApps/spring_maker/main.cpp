@@ -1,14 +1,15 @@
 #include "all_devices.h"
 #ifdef I_AM_SPRING_MAKER
-#include "CNC/cnc_single_axis/spring_maker_board.h"
+#include "MyBoards/sping_maker/board_spring_maker.h"
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "spring_maker.h"
 #include "CNC/cnc_single_axis/cnc_single_axis.h"
 
+Board_SpringMaker board = Board_SpringMaker();
 SpringMaker *robot;
-SpringMakerHardware* robot_hw;
+CncSingleAxis cnc = CncSingleAxis();
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_command_queue;
 
@@ -18,19 +19,13 @@ long low_count =1;
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
-    // pinMode(15,INPUT_PULLUP);
-    // return;
-    robot_hw = new SpringMakerHardware();
-    robot_hw->InitRobot();
-    Serial.println("11111111");
+    board.Init();
+    
+    cnc.InitRobot(&board);
     robot = new SpringMaker();
-    Serial.println("2222222222");
     gcode_queue = new GcodeQueue();
-    Serial.println("333333333");
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
-    Serial.println("4444444444444");
-    robot_hw->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
-    Serial.println("5555555555");
+    cnc.LinkLocalGcodeQueue_AsConsumer(gcode_queue);
 
     setup_mqtt_block_connect();
     mqtt_command_queue = new MessageQueue();
@@ -54,7 +49,7 @@ void loop(){
 
     // return;
     robot->SpinOnce();
-    robot_hw->SpinOnce();
+    cnc.SpinOnce();
     loop_mqtt();
 }
 

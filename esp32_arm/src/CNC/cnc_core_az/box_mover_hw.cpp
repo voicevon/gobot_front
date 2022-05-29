@@ -64,7 +64,7 @@ BoxMoverHardware::BoxMoverHardware(){
 
 }
 
-void BoxMoverHardware::InitRobot(){
+void BoxMoverHardware::InitRobot(BoardbaseCnc* board){
 	Serial.print("\n[Info] BoxMoverHardware::Init_Linkage() is entering.");
 	this->__config.Init();
 	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
@@ -75,8 +75,8 @@ void BoxMoverHardware::InitRobot(){
 
 	// this->__EnableMotor('A', false);
 	// this->__EnableMotor('B', false);
-	this->__board->EnableMotor('A', false);
-	this->__board->EnableMotor('B', false);
+	this->_board->EnableMotor('A', false);
+	this->_board->EnableMotor('B', false);
 
 	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
 	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
@@ -119,8 +119,8 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 	}
 	// this->__EnableMotor('A', true);
 	// this->__EnableMotor('B', true);
-	this->__board->EnableMotor('A', true);
-	this->__board->EnableMotor('B', true);
+	this->_board->EnableMotor('A', true);
+	this->_board->EnableMotor('B', true);
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 }
 
@@ -184,8 +184,8 @@ void BoxMoverHardware::RunG1(Gcode* gcode) {
 	Serial.print(gcode->get_command());
 	// this->__EnableMotor('A', true);
 	// this->__EnableMotor('B', true);
-	this->__board->EnableMotor('A', true);
-	this->__board->EnableMotor('B', true);
+	this->_board->EnableMotor('A', true);
+	this->_board->EnableMotor('B', true);
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
 		this->objStepper_alpha.setMaxSpeed(speed);
@@ -246,8 +246,8 @@ void BoxMoverHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 void BoxMoverHardware::RunM84(){
 	// this->__EnableMotor('A',false);
 	// this->__EnableMotor('B',false);
-	this->__board->EnableMotor('A', false);
-	this->__board->EnableMotor('B', false);
+	this->_board->EnableMotor('A', false);
+	this->_board->EnableMotor('B', false);
 }
 
 float BoxMoverHardware::GetDistanceToTarget_IK(){

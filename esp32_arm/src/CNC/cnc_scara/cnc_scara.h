@@ -9,10 +9,6 @@
 #include "CNC/eef_standard_code.h"
 #include "MyLibs/Components/Led.h"
 #include "cnc_scara_config.h"
-// #include "MyBoards/cnc/gobot_house_ver3.11.h"
-// #include "MyBoards/cnc/board_gobot_house_ver3.11.h"
-// #include "MyBoards/cnc_2109/board_gobot_house_ver3.11.h"
-// #include "MyBoards/cnc_dual_stepper_2109/board_gobot_house_ver3.11.h"
 #include "MyBoards/board_base.h"
 
 
@@ -27,7 +23,7 @@ class CncScara: public CncBase{
         // void SpinOnce(void);
         void LinkHomer(SingleAxisHomer* alpha_homer, SingleAxisHomer* beta_homer){this->alpha_homer=alpha_homer; this->beta_homer=beta_homer;};
         void LinkStepper(Stepper* alpha, Stepper* beta){this->alpha_stepper=alpha; this->beta_stepper=beta;};
-        void InitRobot() override;
+        void InitRobot(BoardbaseCnc* board) override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 
@@ -75,6 +71,6 @@ class CncScara: public CncBase{
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;
         GobotHouseHardwareConfig __config;
-        BoardbaseCnc* __board;
+        // BoardbaseCnc* __board;
         
 };

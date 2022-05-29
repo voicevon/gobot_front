@@ -11,9 +11,9 @@
 class Cnc_CoreYZ: public CncBase{
     public:
         Cnc_CoreYZ(){};
-        Cnc_CoreYZ(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
-        void InitRobot() override;
-        void InitMe(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
+        Cnc_CoreYZ(BoardbaseCnc* board, StepControl* stepControl){this->_board=board; this->objStepControl=stepControl;};
+        void InitRobot(BoardbaseCnc* board) override;
+        void InitMe(BoardbaseCnc* board, StepControl* stepControl){this->_board=board; this->objStepControl=stepControl;};
         void LinkStepper(Stepper* alpha, Stepper* beta);
         void LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y);
 
@@ -49,6 +49,6 @@ class Cnc_CoreYZ: public CncBase{
         SingleAxisHomer* objHomeHelper_vertical;
         SingleAxisHomer* objHomeHelper_y;
         BoxCarrierHardwareConfig  __config;
-        BoardbaseCnc* __board;
+        // BoardbaseCnc* __board;
 
 };

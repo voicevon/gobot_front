@@ -15,8 +15,8 @@ void GobotHouse::Setup(){
 	__segments = 3;
 	this->__map.Init();
 
-	CncScara* cncScara = &CncScara::getInstance();
-    cncScara->InitRobot();
+	// CncScara* cncScara = &CncScara::getInstance();
+    // cncScara->InitRobot();
 	this->_gcode_queue = new GcodeQueue();
 	// this->_gcode_queue->LinkRobot(CncScara);
 

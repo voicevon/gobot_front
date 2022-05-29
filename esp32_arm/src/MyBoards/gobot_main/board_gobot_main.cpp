@@ -28,7 +28,7 @@ SingleAxisHomer* Board_GobotMain::GetHomer(char axis_name) {
     }
 }
 
-RobotEefBase* Board_GobotMain::GetEef() {
+RobotEef_GobotMain* Board_GobotMain::GetEef() {
     return &this->eef;
 }
 

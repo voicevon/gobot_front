@@ -4,7 +4,7 @@
 #include "ESP32Step/src/TeensyStep.h"
 
 #include "CNC/single_axis_homer.h"
-#include "CNC/RobotEef/gobot_house/gobot_house.h"
+#include "robot_eef/gobot_house_eef.h"
 
 class Board_GobotHouse: public BoardbaseCnc{
     public:

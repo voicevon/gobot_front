@@ -24,7 +24,7 @@ class BoxMoverHardware:public CncBase{
     public:
         BoxMoverHardware();
 
-        void InitRobot() override;
+        void InitRobot(BoardbaseCnc* board) override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 
@@ -57,7 +57,7 @@ class BoxMoverHardware:public CncBase{
         SingleAxisHomer objHomeHelper_vertical = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
         SingleAxisHomer objHomeHelper_angle = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
         BoxMoverHardwareConfig  __config;
-        BoardbaseCnc* __board;
+        // BoardbaseCnc* __board;
 
 
 };

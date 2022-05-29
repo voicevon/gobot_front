@@ -90,16 +90,8 @@ class IkPosition_AB: public IkPositionBase{
 };
 
 
-/**
- * RobotBase has NO axis! 
- *      Reasons:
- *          1. Doesn't know how may axis. 
- *      ?? Or has at least one axis? 
- *      ?? Saying has no actuator, driver, sensor ?
- * RobotBase has NO ActuatorController!
- *          The ActuatorController might be inside of ActuatorDriver.
- *                                 might be no ActuatorCotroller in the whole system.
-*/
+
+#include "MyBoards/board_base.h"
 
 enum class CncState{
     IDLE,
@@ -112,7 +104,7 @@ class CncBase: public GcodeConsumer{
         CncState State = CncState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
-        virtual void InitRobot();
+        virtual void InitRobot(BoardbaseCnc* board);
         virtual void HomeSingleAxis(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
@@ -120,9 +112,6 @@ class CncBase: public GcodeConsumer{
         void SayHello();
 
     protected:
-        // RobotBase(){};
-        // void LinkCommuDevice(CommuDeviceBase* commuDevice){this->commuDevice=commuDevice;};
-        // virtual void SpinOnce_BaseEnter();
         void SpinOnce_BaseExit();
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
@@ -133,10 +122,6 @@ class CncBase: public GcodeConsumer{
         void RunM42(uint8_t pin_number, uint8_t pin_value);
         virtual void RunM84();
         virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
-        // TODO:  Should I remove this? 
-        //  This commuDevice will only output message , for debugging perpose, Right?
-        //  If is right, Then, HardSerial is sufficient to do that.
-        // CommuDeviceBase* commuDevice;     
         bool is_absolute_position = true;
 
         /* Just for fun, don't remove below comment.
@@ -152,6 +137,7 @@ class CncBase: public GcodeConsumer{
         virtual void _running_G28();
         char _homing_axis;
         bool _home_as_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
+        BoardbaseCnc* _board;
     
     private:
         int test_int;

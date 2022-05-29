@@ -3,22 +3,15 @@
 #include "CNC/cnc_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
-
 #include "spring_maker_hw_config.h"
 #include "MyBoards/board_base.h"
 
-#define PIN_ANGLE_ENDSTOP 15
 
-#define PIN_STEP_ALPHA 5
-#define PIN_DIR_ALPHA 19
-
-
-
-class SpringMakerHardware:public CncBase{
+class CncSingleAxis: public CncBase{
     public:
-        SpringMakerHardware();
+        CncSingleAxis();
 
-        void InitRobot() override;
+        void InitRobot(BoardbaseCnc* board) override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 
@@ -27,8 +20,8 @@ class SpringMakerHardware:public CncBase{
         float GetDistanceToTarget_IK() override;
 
     private:
-        Stepper objStepper_alpha = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
-        StepControl objStepControl;
+        Stepper* objStepper_alpha;
+        StepControl* objStepControl;
 
         //Override private
         // void SpinOnce_BaseEnter() override {};
@@ -46,8 +39,7 @@ class SpringMakerHardware:public CncBase{
         FkPosition_A __current_fk_position;
 
         SingleAxisHomer* __homing_helper;
-        SingleAxisHomer objHomeHelper_alpha = SingleAxisHomer(PIN_ANGLE_ENDSTOP, LOW);
+        SingleAxisHomer* objHomeHelper_alpha;
         SpringMakerHardwareConfig  __config;
-        BoardbaseCnc* __board;
 
 };

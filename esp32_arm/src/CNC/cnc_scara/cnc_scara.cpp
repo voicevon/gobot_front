@@ -107,12 +107,12 @@ void CncScara::__Init_gpio(){
 	// ledcWrite(2, 0);
 }
 
-void CncScara::InitRobot(){
+void CncScara::InitRobot(BoardbaseCnc* board){
 	__Init_gpio();
 	// this->__EnableMotor('A', false);
 	// this->__EnableMotor('B', false);
-	this->__board->EnableMotor('A', false);
-	this->__board->EnableMotor('B', false);
+	this->_board->EnableMotor('A', false);
+	this->_board->EnableMotor('B', false);
 
 	// CommuUart* commuUart = new CommuUart();
 
@@ -186,8 +186,8 @@ void CncScara::RunG1(Gcode* gcode) {
 	//Prepare actuator/driver to move to next point
 	// this->__EnableMotor('A', true);
 	// this->__EnableMotor('B',true);
-	this->__board->EnableMotor('A', true);
-	this->__board->EnableMotor('B', true);
+	this->_board->EnableMotor('A', true);
+	this->_board->EnableMotor('B', true);
 	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha );
 	this->beta_stepper->setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
@@ -221,7 +221,7 @@ void CncScara::HomeSingleAxis(char axis){
 	}
 	this->_homing_axis = axis;
 	// this->__EnableMotor(axis, true);
-	this->__board->EnableMotor(axis, true);
+	this->_board->EnableMotor(axis, true);
 	if (axis=='A'){
 		this->alpha_stepper->setAcceleration(this->__config.Homing_acceleration_alpha);
 		this->alpha_stepper->setMaxSpeed(this->__config.Homing_speed_alpha);
@@ -313,8 +313,8 @@ void CncScara::RunM123(uint8_t eef_channel, EefAction eef_action){
 void CncScara::RunM84(){
 	// this->__EnableMotor('A',false);
 	// this->__EnableMotor('B',false);
-	this->__board->EnableMotor('A', false);
-	this->__board->EnableMotor('B', false);
+	this->_board->EnableMotor('A', false);
+	this->_board->EnableMotor('B', false);
 }
 
 // void CncScara::__EnableMotor(char actuator, bool enable_it){

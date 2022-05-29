@@ -1,4 +1,4 @@
-#include "gobot_main.h"
+#include "gobot_main_eef.h"
 
 RobotEef_GobotMain::RobotEef_GobotMain(){
 	

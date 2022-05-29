@@ -3,7 +3,7 @@
 #include "board_pins_ver_2_0.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
-#include "CNC/RobotEef/garment_asrs_agv/garment_asar.h"
+#include "robot_eef/garment_asar_eef.h"
 
 
 class CncDriver_CoreYZ_2205: public BoardbaseCnc{

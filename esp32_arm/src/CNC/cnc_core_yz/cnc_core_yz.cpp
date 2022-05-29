@@ -63,7 +63,7 @@ void Cnc_CoreYZ::LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y){
 	this->objHomeHelper_y = homer_y;
 }
 
-void Cnc_CoreYZ::InitRobot(){
+void Cnc_CoreYZ::InitRobot(BoardbaseCnc* board){
 	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
 	this->__config.Init();
 
@@ -101,8 +101,8 @@ void Cnc_CoreYZ::HomeSingleAxis(char axis){
 
 	// this->__EnableMotor('A', true);
 	// this->__EnableMotor('B', true);
-	this->__board->EnableMotor('A', true);
-	this->__board->EnableMotor('B',true);
+	this->_board->EnableMotor('A', true);
+	this->_board->EnableMotor('B',true);
 	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 }
 
@@ -166,8 +166,8 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	Serial.print(gcode->get_command());
 	// this->__EnableMotor('A', true);
 	// this->__EnableMotor('B', true);
-	this->__board->EnableMotor('A', true);
-	this->__board->EnableMotor('B', true);
+	this->_board->EnableMotor('A', true);
+	this->_board->EnableMotor('B', true);
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
 		this->stepper_alpha->setMaxSpeed(speed);
@@ -230,8 +230,8 @@ void Cnc_CoreYZ::RunM123(uint8_t eef_channel, EefAction eef_action){
 void Cnc_CoreYZ::RunM84(){
 	// this->__EnableMotor('A',false);
 	// this->__EnableMotor('B',false);
-	this->__board->EnableMotor('A', false);
-	this->__board->EnableMotor('B', false);
+	this->_board->EnableMotor('A', false);
+	this->_board->EnableMotor('B', false);
 }
 
 float Cnc_CoreYZ::GetDistanceToTarget_IK(){

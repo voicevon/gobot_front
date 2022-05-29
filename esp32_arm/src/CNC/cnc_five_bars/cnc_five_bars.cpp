@@ -3,7 +3,7 @@
 #include "cnc_five_bars.h"
 #include<Arduino.h>
 
-void CncFiveBars::InitRobot(){
+void CncFiveBars::InitRobot(BoardbaseCnc* board){
 	Serial.print("\n[Info] CncFiveBars::Init() is entering.");
     // pinMode(PIN_ALPHA_ENABLE, OUTPUT);
     // pinMode(PIN_BETA_ENABLE, OUTPUT);
@@ -18,8 +18,8 @@ void CncFiveBars::InitRobot(){
 
 	// this->__EnableMotor('A', false);
 	// this->__EnableMotor('B', false);
-	this->__board->EnableMotor('A', false);
-	this->__board->EnableMotor('B', false);
+	this->_board->EnableMotor('A', false);
+	this->_board->EnableMotor('B', false);
 
 	// CommuUart* objCommuUart = new CommuUart();
     // this->commuDevice = objCommuUart;
@@ -31,7 +31,7 @@ void CncFiveBars::HomeSingleAxis(char axis){
 	Serial.print(axis);
 	this->_homing_axis = axis;
 	if (axis=='A'){
-		this->__board->EnableMotor('A', false);
+		this->_board->EnableMotor('A', false);
 		// this->__EnableMotor('A', false);
 		this->alpha_stepper->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->alpha_stepper->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
@@ -40,7 +40,7 @@ void CncFiveBars::HomeSingleAxis(char axis){
 		this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
 	}else if (axis=='B'){
 		// this->__EnableMotor('B',true);
-		this->__board->EnableMotor('B', true);
+		this->_board->EnableMotor('B', true);
 		this->beta_stepper->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->beta_stepper->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = this->beta_stepper;
@@ -272,13 +272,13 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
 		// this->__EnableMotor('A', true); 
-		this->__board->EnableMotor('A', true);
+		this->_board->EnableMotor('A', true);
 		// target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
 		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;
 	}
 	if (gcode->has_letter('B')){
 		// this->__EnableMotor('B', true);
-		this->__board->EnableMotor('B', true);
+		this->_board->EnableMotor('B', true);
 		// target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
 		target_ik_ab.beta = gcode->get_value('B') *  DEG_TO_RAD;
 	}
@@ -339,8 +339,8 @@ float CncFiveBars::GetDistanceToTarget_IK(){
 void CncFiveBars::RunM84(){
 	// this->__EnableMotor('A', false);
 	// this->__EnableMotor('B', false);
-	this->__board->EnableMotor('A', false);
-	this->__board->EnableMotor('B', false);
+	this->_board->EnableMotor('A', false);
+	this->_board->EnableMotor('B', false);
 }
 
 // void CncFiveBars::__EnableMotor(char actuator, bool enable_it){

@@ -2,8 +2,8 @@
 #include "box_mover.h"
 
 BoxMover::BoxMover(){
-    BoxMoverHardware* objBoxMoverHardware = new BoxMoverHardware();
-    objBoxMoverHardware->InitRobot();
+    // BoxMoverHardware* objBoxMoverHardware = new BoxMoverHardware();
+    // objBoxMoverHardware->InitRobot();
 	this->_gcode_queue = new GcodeQueue();
 	// this->_gcode_queue->LinkRobot(objBoxMoverHardware);
     Serial.print("\n[Info] BoxMover::BoxMover() is done..........");
