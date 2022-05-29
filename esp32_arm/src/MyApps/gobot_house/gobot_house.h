@@ -1,8 +1,4 @@
-#include <stdint.h>
 #include "HouseMap.h"
-// #include "CNC/Commu/CommuUart.h"
-// #include "CNC/Commu/CommuBleGattServer.h"
-// #include "actions.h"
 #include "CNC/gcode/gcode_queue.h"
 #include "CNC/gcode/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"

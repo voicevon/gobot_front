@@ -9,56 +9,36 @@
 #include "gobot_house.h"
 
 
-GobotHouse* robot; 
-CncScara* cncScara;
-GcodeQueue* gcode_queue;
-MessageQueue* mqtt_message_queue;
-
-// Stepper motor(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);       // STEP pin: 2, DIR pin: 3
 StepControl controller;    // Use default settings 
 Board_GobotHouse board = Board_GobotHouse();
+CncScara cncScara = CncScara();
+GcodeQueue gcode_queue = GcodeQueue();
+MessageQueue mqtt_message_queue = MessageQueue();
 
-// void loop_motor() 
-// {
-//   motor.setTargetRel(1000);  // Set target position to 1000 steps from current position
-//   controller.move(motor);    // Do the move
-//   delay(500);
-// }
-// void setup_enable_motor(){
-//     pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-//     pinMode(PIN_BETA_ENABLE, OUTPUT);
-//     digitalWrite(PIN_ALPHA_ENABLE, LOW);
-//     digitalWrite(PIN_BETA_ENABLE, LOW);
-// }
-
-
+GobotHouse* robot; 
 
 void setup(){
-    Serial.begin(115200);
-    Serial.println("Hi Xuming, I am your lovely bot,  GobotHouse. ");
     board.Init();
-    cncScara = &CncScara::getInstance();
-    // cncScara->LinkHomer(board.GetHomer('A'), board.GetHomer('B'));
-    // cncScara->LinkStepper(board.GetStepper('A'), board.GetStepper('B'));
+    cncScara.Init(&board);
+    
     robot = &GobotHouse::getInstance();
-    gcode_queue = new GcodeQueue();
     robot->Setup();
-    robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
-    cncScara->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
+    robot->LinkLocalGcodeQueue_AsProducer(&gcode_queue);
+    cncScara.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
-    mqtt_message_queue = new MessageQueue();
+    // mqtt_message_queue = new MessageQueue();
     String mqtt_topic = "gobot/xROBOT_SERIAL_ID/house";
     mqtt_topic.replace("ROBOT_SERIAL_ID",String(ROBOT_SERIAL_ID));
-    append_mqtt_bridge(mqtt_topic.c_str(), mqtt_message_queue, robot); 
+    append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, robot); 
     setup_mqtt_on_message_receive(); 
     Serial.println("lovely bot,  GobotHouse.  setup() is done.  Good luck!");
 }
 
 void loop(){
 	robot->SpinOnce();
-    cncScara->SpinOnce();
+    cncScara.SpinOnce();
     loop_mqtt();
 }
 

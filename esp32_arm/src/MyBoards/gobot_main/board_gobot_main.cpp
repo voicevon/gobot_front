@@ -2,7 +2,9 @@
 
 
 void Board_GobotMain::Init(){
-    
+    Serial.begin(115200);
+    Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
+ 
 }
 
 Stepper* Board_GobotMain::GetStepper(char axis_name) {

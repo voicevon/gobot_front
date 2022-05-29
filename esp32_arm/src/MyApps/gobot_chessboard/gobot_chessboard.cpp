@@ -5,16 +5,6 @@
 #include "CNC/cnc_five_bars/cnc_five_bars.h"
 
 
-// void GobotChessboard::Lin(GcodeQueue* gcode_queue){
-// 	Serial.print("\n[Info] GobotChessboard::Init() is entering.");
-// 	// GobotChessboardHardware* objGobotHardware = new GobotChessboardHardware();
-// 	// objGobotHardware->InitRobot();
-// 	this->_gcode_queue =  gcode_queue;
-// 	// this->_gcode_queue->LinkRobot(objGobotHardware);
-// 	Serial.print("\n[Info] GobotChessboard::Init() is done.");
-
-// }
-
 void GobotChessboard::SpinOnce(){
 	// this->_gcode_queue->SpinOnce();
 	if (!this->_gcode_queue->BufferIsFull())

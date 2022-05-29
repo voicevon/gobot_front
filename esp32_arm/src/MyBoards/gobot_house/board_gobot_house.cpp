@@ -2,7 +2,8 @@
 
 
 void Board_GobotHouse::Init(){
-    
+    Serial.begin(115200);
+    Serial.println("[Info] Board_GobotHouse::Init()  Hi Xuming, I am your lovely bot,  GobotHouse. ");
 }
 
 Stepper* Board_GobotHouse::GetStepper(char axis_name) {
@@ -37,7 +38,7 @@ void Board_GobotHouse::EnableMotor(char axis_name, bool enable_it) {
     } else if (axis_name == 'B'){
         digitalWrite(PIN_BETA_ENABLE_2109, !enable_it);   // LOW is enable
     } else {
-        Serial.println("[Warn] CncDriver_CoreYZ_2205::EnableMotor()  ");
+        Serial.println("[Warn] Board_GobotHouse::EnableMotor()  wrong parameter");
     }
 }
 

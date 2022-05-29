@@ -2,7 +2,9 @@
 
 
 void Board_SpringMaker::Init(){
-    
+    Serial.begin(115200);
+    Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
+   
 }
 
 Stepper* Board_SpringMaker::GetStepper(char axis_name) {

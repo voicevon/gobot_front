@@ -1,6 +1,5 @@
 #include "all_devices.h"
 #ifdef I_AM_ROBOT_ASRS_AGV
-// #include "board_pins_ver_2_0.h"
 #include "bot_asrs_agv_core_yz.h"
 
 BotAsrsAgvCoreYZ::BotAsrsAgvCoreYZ(uint16_t id){
@@ -9,10 +8,10 @@ BotAsrsAgvCoreYZ::BotAsrsAgvCoreYZ(uint16_t id){
 
 void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepControl){
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is entering");
-	this->objAgv.LinkMover(board->agv.Get_DualWheelDriver());
-	this->objAgv.LinkObstacleSensor(board->agv.Get_Obstacle_Vl53l0x());
-	this->objAgv.LinkTrackSensor(board->agv.Get_Dual9960()); 
-	this->objAgv.Init();
+	this->agv.LinkMover(board->agv.Get_DualWheelDriver());
+	this->agv.LinkObstacleSensor(board->agv.Get_Obstacle_Vl53l0x());
+	this->agv.LinkTrackSensor(board->agv.Get_Dual9960()); 
+	this->agv.Init();
 
 	// this->objAsrs.RfidReader->Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);
@@ -21,9 +20,8 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepContr
 	// this->jettySensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 
 	this->cnc.Init(&board->cnc);
-
-	this->_gcode_queue = new GcodeQueue();
-    this->cnc.LinkLocalGcodeQueue_AsConsumer(this->_gcode_queue);
+	// this->_gcode_queue = new GcodeQueue();
+    this->cnc.LinkLocalGcodeQueue_AsConsumer(&this->_gcode_queue);
 
 	this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING);
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is done.\n");
@@ -58,8 +56,8 @@ void BotAsrsAgvCoreYZ::onDetectedMark(uint16_t BranchNode_id){
 	switch (current_BranchNode.task){
 	case RoadBranchNode::TASK::SHORT_CUT_ONLY:
 		// Follow branch road, not main road.
-		// this->objAgv.SetFollowMainRoad(this->objRfid.MainRoad_IsOn_LeftSide , false);
-		this->objAgv.SetFollowMainRoad(this->objAsrs.RfidReader->MainRoad_IsOn_LeftSide , false);
+		// this->agv.SetFollowMainRoad(this->objRfid.MainRoad_IsOn_LeftSide , false);
+		this->agv.SetFollowMainRoad(this->asrs.RfidReader->MainRoad_IsOn_LeftSide , false);
 		break;
 	case RoadBranchNode::TASK::LOAD:
 	  	// ???  This is invoked when agv is SLOW_MOVING, should to loading, after parking.
@@ -88,7 +86,7 @@ void BotAsrsAgvCoreYZ::onDetectedMark(uint16_t BranchNode_id){
 void BotAsrsAgvCoreYZ::SpinOnce(){
 	String gcode = "G1";
 	int align_error=0;
-	this->objAgv.SpinOnce();
+	this->agv.SpinOnce();
 	this->cnc.SpinOnce();
 	return;
 	this->objBoxCarrier.SpinOnce();   // something wrong inside ?
@@ -96,7 +94,7 @@ void BotAsrsAgvCoreYZ::SpinOnce(){
 	return;
 
 
-	// if(this->objAgv.GetState() == AgvBase::AGV_STATE::SLOW_MOVING ){
+	// if(this->agv.GetState() == AgvBase::AGV_STATE::SLOW_MOVING ){
 	// 	if (this->objRfid.ReadCard()){
 	// 		this->onDetectedMark(this->objRfid.CardId);
 	// 		return;
@@ -108,7 +106,7 @@ void BotAsrsAgvCoreYZ::SpinOnce(){
 	case BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING:
 		//Trying to read RFID.
 		// if (this->__rfidReader->PICC_ReadCardSerial() == 123){
-		if (this->objAsrs.RfidReader->CardId == 123){
+		if (this->asrs.RfidReader->CardId == 123){
 			this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::BOT_SLEEPING);
 		}
 		break;
@@ -119,7 +117,7 @@ void BotAsrsAgvCoreYZ::SpinOnce(){
    	case BotAsrsAgvCoreYZ::BOT_STATE::BOT_EMERGENCY_STOPING:
       	break;
    	case BotAsrsAgvCoreYZ::BOT_STATE::AGV_MOVING_TO_SOURCE:
-		if(this->objAgv.GetState() == AgvBase::AGV_STATE::PARKED)
+		if(this->agv.GetState() == AgvBase::AGV_STATE::PARKED)
 			this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::AGV_PARKED_AT_SOURCE);
 		break;
 	case BotAsrsAgvCoreYZ::BOT_STATE::AGV_PARKED_AT_SOURCE:
@@ -130,13 +128,13 @@ void BotAsrsAgvCoreYZ::SpinOnce(){
 	case BotAsrsAgvCoreYZ::BOT_STATE::ROBOT_LOAD_ALIGN:
 		if (this->cnc.State == CncState::IDLE){
 			// Last movement is done.
-			align_error = this->objAsrs.jettySensor->ReadAlignmentError();
+			align_error = this->asrs.jettySensor->ReadAlignmentError();
 			if (align_error < 100){
 				this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::ROBOT_LOADING);
 			}else{
 				gcode.concat("Y");
 				gcode.concat(align_error);
-				this->_gcode_queue->AppendGcodeCommand(gcode);
+				this->_gcode_queue.AppendGcodeCommand(gcode);
 			}
 		}
 		break;
@@ -146,7 +144,7 @@ void BotAsrsAgvCoreYZ::SpinOnce(){
 			this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::AGV_MOVING_TO_DESTINATION);
 		break;
 	case BotAsrsAgvCoreYZ::BOT_STATE::AGV_MOVING_TO_DESTINATION:
-		if(this->objAgv.GetState() == AgvBase::AGV_STATE::PARKED)
+		if(this->agv.GetState() == AgvBase::AGV_STATE::PARKED)
 			this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::AGV_PARKED_AT_DESTINATION);
 		break;
 	case BotAsrsAgvCoreYZ::BOT_STATE::AGV_PARKED_AT_DESTINATION:
@@ -171,14 +169,14 @@ void BotAsrsAgvCoreYZ::ToState(BotAsrsAgvCoreYZ::BOT_STATE state){
  	BotAsrsAgvCoreYZ::BOT_STATE new_state = state;
 	switch(state){
 	case BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING:
-		this->objAgv.ToState(AgvBase::AGV_STATE::SLOW_MOVING);
+		this->agv.ToState(AgvBase::AGV_STATE::SLOW_MOVING);
 		break;
 	case BotAsrsAgvCoreYZ::BOT_STATE::BOT_SLEEPING:
 		// Keep reporting battery voltage.
-		this->objAgv.ToState(AgvBase::AGV_STATE::PARKED);
+		this->agv.ToState(AgvBase::AGV_STATE::PARKED);
 		break;
 	case BotAsrsAgvCoreYZ::BOT_STATE::AGV_MOVING_TO_SOURCE:
-		this->objAgv.ToState(AgvBase::AGV_STATE::FAST_MOVING);
+		this->agv.ToState(AgvBase::AGV_STATE::FAST_MOVING);
 		break;
 	case BotAsrsAgvCoreYZ::BOT_STATE::AGV_PARKED_AT_SOURCE:
 		// this->objBoxMoverAgent.ToPresetState();
@@ -188,7 +186,7 @@ void BotAsrsAgvCoreYZ::ToState(BotAsrsAgvCoreYZ::BOT_STATE state){
 	case BotAsrsAgvCoreYZ::BOT_STATE::ROBOT_LOAD_ALIGN:
 		if (this->cnc.State == CncState::IDLE){
 			gcode.concat("Z50");
-			this->_gcode_queue->AppendGcodeCommand(gcode);
+			this->_gcode_queue.AppendGcodeCommand(gcode);
 			new_state = BotAsrsAgvCoreYZ::BOT_STATE::ROBOT_LOADING;
 		}
 		break;
@@ -198,7 +196,7 @@ void BotAsrsAgvCoreYZ::ToState(BotAsrsAgvCoreYZ::BOT_STATE state){
 		}
 		break;
 	case BotAsrsAgvCoreYZ::BOT_STATE::AGV_MOVING_TO_DESTINATION:
-		this->objAgv.ToState(AgvBase::AGV_STATE::FAST_MOVING);
+		this->agv.ToState(AgvBase::AGV_STATE::FAST_MOVING);
 		break;
 	case BotAsrsAgvCoreYZ::BOT_STATE::AGV_PARKED_AT_DESTINATION:
 		// this->objBoxMoverAgent.ToPresetState();
@@ -223,7 +221,7 @@ void BotAsrsAgvCoreYZ::Test(int test_id){
    if (test_id==10) {
         // int track_error = 0;
         // this->objTwinWheelHardware.MoveForward(track_error);
-		// this->objAgv.
+		// this->agv.
    }
 }
 

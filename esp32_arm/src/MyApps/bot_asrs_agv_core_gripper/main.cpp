@@ -7,11 +7,10 @@
 #include "IoT/main_mqtt.h"
 // #include "MyLibs/board_static.h"
 
+StepControl objStepControl;  // This object can not inside any object?
 BoardAllInOne board = BoardAllInOne();
 BotAsrsAgvCoreYZ garment_robot = BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
-StepControl objStepControl;  // This object can not inside any object?
-// BoxCarrierHardware box_carrier = BoxCarrierHardware();
 
 
 void setup(){

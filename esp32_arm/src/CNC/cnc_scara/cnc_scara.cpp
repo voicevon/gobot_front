@@ -78,7 +78,6 @@ void CncScara::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 }
 
 CncScara::CncScara(){
-	this->__config.Init();
 }
 
 bool CncScara::GetCurrentPosition(FkPositionBase* position_fk){
@@ -86,42 +85,15 @@ bool CncScara::GetCurrentPosition(FkPositionBase* position_fk){
 	return true;
 }
 
-void CncScara::__Init_gpio(){
-	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-	// pinMode(PIN_BETA_ENABLE, OUTPUT);
-
-	// TODO:  shoud do this? double check document
-	// pinMode(PIN_ENDER_COIL_2109, OUTPUT);
-	// pinMode(PIN_ENDER_COIL_EXT_2109, OUTPUT);
-	
-	// digitalWrite(PIN_ENDER_COIL_2109, LOW);
-	// digitalWrite(PIN_ENDER_COIL_EXT_2109, LOW);
-	  // configure LED PWM functionalitites
-	ledcSetup(1, 50, 12);  //ledcSetup(ledChannel, freq, resolution);
-	// ledcSetup(2, 200, 8);  //ledcSetup(ledChannel, freq, resolution);
-	// attach the channel to the GPIO to be controlled
-	// ledcAttachPin(PIN_ENDER_COIL_2109, 1); // ledcAttachPin(ledPin, ledChannel);
-	// ledcAttachPin(PIN_ENDER_COIL_EXT_2109, 1); // ledcAttachPin(ledPin, ledChannel);
-	// ledcAttachPin(PIN_ENDER_COIL_EXT_2109, 2); // ledcAttachPin(ledPin, ledChannel);
-	ledcWrite(1, 0);
-	// ledcWrite(2, 0);
-}
-
 void CncScara::Init(BoardbaseCnc* board){
-	__Init_gpio();
 	this->alpha_stepper = board->GetStepper('A');
 	this->beta_stepper = board->GetStepper('B');
 	this->alpha_homer = board->GetHomer('A');
 	this->beta_homer = board->GetHomer('B');
 	
-	// this->__EnableMotor('A', false);
-	// this->__EnableMotor('B', false);
 	this->_board->EnableMotor('A', false);
 	this->_board->EnableMotor('B', false);
 
-	// CommuUart* commuUart = new CommuUart();
-
-	// this->commuDevice = commuUart; 
 	this->alpha_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHPA);
 	this->alpha_stepper->setMaxSpeed(this->__config.MAX_ACCELERATION_ALPHPA);
 	this->beta_stepper->setAcceleration(this->__config.MAX_ACCELERATION_BETA);
@@ -129,6 +101,7 @@ void CncScara::Init(BoardbaseCnc* board){
 	this->alpha_stepper->setInverseRotation(true);
 	this->beta_stepper->setInverseRotation(false);
 
+	this->__config.Init();
 	this->_home_as_inverse_kinematic = true;
 
 }
@@ -189,14 +162,12 @@ void CncScara::RunG1(Gcode* gcode) {
 	if(gcode->has_letter('R')) 
 		target_ik_ab.alpha = this->__config.motor_steps_per_round * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
-	// this->__EnableMotor('A', true);
-	// this->__EnableMotor('B',true);
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B', true);
 	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha );
 	this->beta_stepper->setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
-	this->objStepControl.moveAsync(*this->alpha_stepper, *this->beta_stepper);
+	this->objStepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
 
 	if (true){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
@@ -225,7 +196,6 @@ void CncScara::HomeSingleAxis(char axis){
 		Serial.print(axis);
 	}
 	this->_homing_axis = axis;
-	// this->__EnableMotor(axis, true);
 	this->_board->EnableMotor(axis, true);
 	if (axis=='A'){
 		this->alpha_stepper->setAcceleration(this->__config.Homing_acceleration_alpha);
@@ -239,7 +209,7 @@ void CncScara::HomeSingleAxis(char axis){
 		this->__homing_helper = this->beta_homer;
 	}
 	this->__homing_stepper->setTargetRel(500000);
-	this->objStepControl.moveAsync(*this->__homing_stepper);
+	this->objStepControl->moveAsync(*this->__homing_stepper);
 }
 
 void CncScara::_running_G28(){
@@ -250,7 +220,7 @@ void CncScara::_running_G28(){
 			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
 			Serial.print (this->_homing_axis);
 		}
-		this->objStepControl.stop();
+		this->objStepControl->stop();
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;

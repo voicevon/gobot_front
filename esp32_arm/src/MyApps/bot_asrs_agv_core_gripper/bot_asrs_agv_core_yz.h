@@ -48,13 +48,13 @@ class BotAsrsAgvCoreYZ: public MqttMessageConsumer{
         BotAsrsAgvCoreYZ(uint16_t id);
         void InitAllinOne(BoardAllInOne* board, StepControl* stepControl);
 
-        AsrsBase objAsrs = AsrsBase();
-        AgvBase objAgv = AgvBase();
+        AsrsBase asrs = AsrsBase();
+        AgvBase agv = AgvBase();
         Cnc_CoreYZ cnc = Cnc_CoreYZ();
 
         BoxCarrier objBoxCarrier = BoxCarrier();  //??
 
-        GcodeQueue* _gcode_queue;
+        GcodeQueue _gcode_queue;
         void SpinOnce() override;
         void ToState(BotAsrsAgvCoreYZ::BOT_STATE state);
         void Test(int test_id);

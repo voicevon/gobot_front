@@ -1,24 +1,10 @@
 
 #include "gobot_house.h"
-#include "Arduino.h"
-// #include "gobot_house_hw.h"
-// #include "CNC/cnc_scara/gobot_house_hw.h"
-#include "CNC/cnc_scara/cnc_scara.h"
 
-
-
-
-
-// void GobotHouse::Setup(RobotAction* pAction){
 void GobotHouse::Setup(){
-	// this->__house_action = pAction;
-	__segments = 3;
+	this->__segments = 3;
 	this->__map.Init();
-
-	// CncScara* cncScara = &CncScara::getInstance();
-    // cncScara->InitRobot();
 	this->_gcode_queue = new GcodeQueue();
-	// this->_gcode_queue->LinkRobot(CncScara);
 
     Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
 }

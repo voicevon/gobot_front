@@ -9,8 +9,9 @@
 
 
 Board_GobotMain board = Board_GobotMain();
+CncFiveBars cncFiveBar;
+
 GobotChessboard* robot; 
-CncFiveBars* robot_hardware;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_message_queue;
 
@@ -38,30 +39,14 @@ char ReadRoomsSensor(){
     return result;
 }
 
-void setup_robot_hardware(){
-    robot = &GobotChessboard::getInstance();
-    robot_hardware = new CncFiveBars();
-    // robot_hardware->LinkHomer(board.GetHomer('A'), board.GetHomer('B'));
-    // robot_hardware->LinkStepper(board.GetStepper('A'), board.GetStepper('B'));
-    // robot_hardware->LinkEef(board.GetEef());
-    robot_hardware->Init(&board);
-    Serial.println("[Info] setup()  is done. \n\n\n");
-}
-
-
 void setup(){
-    Serial.begin(115200);
-    Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
-    // pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-    // digitalWrite(PIN_ALPHA_ENABLE,HIGH);
-    // return;
-    // Always init hardware first
-    // Setup_RoomsSensor();
-    setup_robot_hardware();
+    board.Init();
+    cncFiveBar.Init(&board);
 
+    robot = &GobotChessboard::getInstance();
     gcode_queue = new GcodeQueue();
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
-    robot_hardware->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
+    cncFiveBar.LinkLocalGcodeQueue_AsConsumer(gcode_queue);
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
@@ -76,13 +61,10 @@ void setup(){
 
 char last_rooms_sensor;
 bool xx=true;
+
 void loop(){
-    // digitalWrite(PIN_ALPHA_ENABLE, xx);
-    // delay(3000);
-    // xx=!xx;
-    // return;
     robot->SpinOnce();
-    robot_hardware->SpinOnce();
+    cncFiveBar.SpinOnce();
     loop_mqtt();
     return;
     char rooms_sensor = ReadRoomsSensor();
