@@ -1,5 +1,4 @@
 #pragma once
-#ifdef I_AM_GOBOT_HOUSE_PCB_VER_3_11
 
 // #define HOUSE_ALPHA_AXIS 10
 // #define HOUSE_BETA_AXIS 11
@@ -27,5 +26,3 @@
 
 #define PIN_ENDER_COIL_2109 32
 #define PIN_ENDER_COIL_EXT_2109 33
-
-#endif

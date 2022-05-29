@@ -2,18 +2,16 @@
 #ifdef I_AM_GOBOT_CHESSBOARD
 
 #include "gobot_chessboard.h"
-// #include "gobot_chessboard_hw.h"
-#include "CNC/cnc_five_bars/gobot_chessboard_hw.h"
+#include "CNC/cnc_five_bars/cnc_five_bars.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
-// #include "CNC/Commu/CommuBleGattServer.h"
-// #include "board_ver1.2.h"
-#include "CNC/cnc_five_bars/board_ver1.2.h"
-#include "CNC/single_axis_homer.h"
+// #include "CNC/cnc_five_bars/board_ver1.2.h"
+#include "MyBoards/cnc_dual_stepper_2201/board_ver1.2.h"
+// #include "CNC/single_axis_homer.h"
 
 // static char LOG_TAG[]= "BLE-HOUSE";
 GobotChessboard* robot; 
-GobotChessboardHardware* robot_hardware;
+CncFiveBars* robot_hardware;
 GcodeQueue* gcode_queue;
 // RobotAction action;
 MessageQueue* mqtt_message_queue;
@@ -50,7 +48,7 @@ void setup_robot_hardware(){
     SingleAxisHomer* beta_homer = new SingleAxisHomer(PIN_HOME_BETA, LOW);
     Stepper* alpha_stepper = new Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR); 
     Stepper* beta_stepper = new Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
-    robot_hardware = new GobotChessboardHardware();
+    robot_hardware = new CncFiveBars();
     robot_hardware->LinkHomer(alpha_homer, beta_homer);
     robot_hardware->LinkStepper(alpha_stepper, beta_stepper);
     // robot_hardware.LinkStepper();

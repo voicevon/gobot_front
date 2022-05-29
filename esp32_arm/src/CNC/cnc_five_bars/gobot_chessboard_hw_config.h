@@ -1,27 +1,11 @@
 #pragma once
 
-/*
-.                                          Y
-.                              /           ^            \
-.                             /            |             \  LINK2
-.                            /             |              \
-.                           /              |               \
-.                           \              |               /
-.                            \             |              /  LINK1
-.                             \            |             /
-.                              \  alpha    |            /  beta
-.         ----------------------o---------(0,0)--------o-----------------> X
-.                               |          |
-.                               |<-LINK0 ->|
-
-
-
-*/  
 
 
 
 
-#include "board_ver1.2.h"
+// #include "board_ver1.2.h"
+#include "MyBoards/cnc_dual_stepper_2201/board_ver1.2.h"
 class GobotChessboardHardwareConfig{
     public:
         // link length in mm

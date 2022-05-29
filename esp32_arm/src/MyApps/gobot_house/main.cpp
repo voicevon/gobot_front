@@ -8,15 +8,17 @@
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
+// #include "MyBoards/cnc_2109/cnc_board_gobot_house.h"
+#include "MyBoards/cnc_dual_stepper_2109/cnc_board_gobot_house.h"
 
 GobotHouse* robot; 
-CncScara* robot_hardware;
+CncScara* cncScara;
 GcodeQueue* gcode_queue;
 MessageQueue* mqtt_message_queue;
 
-Stepper motor(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);       // STEP pin: 2, DIR pin: 3
+// Stepper motor(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);       // STEP pin: 2, DIR pin: 3
 StepControl controller;    // Use default settings 
-
+CncBoard_AB_AlphaBeta board = CncBoard_AB_AlphaBeta();
 
 // void loop_motor() 
 // {
@@ -31,28 +33,20 @@ StepControl controller;    // Use default settings
 //     digitalWrite(PIN_BETA_ENABLE, LOW);
 // }
 
-void setup_robot_hardware(){
-    SingleAxisHomer* alpha_homer = new SingleAxisHomer(PIN_HOME_ALHPA_2109, LOW);
-    SingleAxisHomer* beta_homer = new SingleAxisHomer(PIN_HOME_BETA_2109, LOW);
-    Stepper* alpha_stepper = new Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
-    Stepper* beta_stepper = new Stepper(PIN_BETA_STEP_2109, PIN_BETA_DIR_2109);
-    
-    robot_hardware = &CncScara::getInstance();
-    robot_hardware->LinkHomer(alpha_homer, beta_homer);
-    robot_hardware->LinkStepper(alpha_stepper, beta_stepper);
-    
-}
+
 
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am your lovely bot,  GobotHouse. ");
-
-    setup_robot_hardware();
+    board.Init();
+    cncScara = &CncScara::getInstance();
+    cncScara->LinkHomer(board.GetHomer('A'), board.GetHomer('B'));
+    cncScara->LinkStepper(board.GetStepper('A'), board.GetStepper('B'));
     robot = &GobotHouse::getInstance();
     gcode_queue = new GcodeQueue();
     robot->Setup();
     robot->LinkLocalGcodeQueue_AsProducer(gcode_queue);
-    robot_hardware->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
+    cncScara->LinkLocalGcodeQueue_AsConsumer(gcode_queue);
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
@@ -66,7 +60,7 @@ void setup(){
 
 void loop(){
 	robot->SpinOnce();
-    robot_hardware->SpinOnce();
+    cncScara->SpinOnce();
     loop_mqtt();
 }
 

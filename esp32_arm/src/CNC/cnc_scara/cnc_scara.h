@@ -11,7 +11,8 @@
 #include "CNC/eef_standard_code.h"
 // #include "MyBoards/cnc/gobot_house_ver3.11.h"
 // #include "MyBoards/cnc/board_gobot_house_ver3.11.h"
-#include "MyBoards/cnc_2109/board_gobot_house_ver3.11.h"
+// #include "MyBoards/cnc_2109/board_gobot_house_ver3.11.h"
+#include "MyBoards/cnc_dual_stepper_2109/board_gobot_house_ver3.11.h"
 #include "MyBoards/board_base.h"
 
 

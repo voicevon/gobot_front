@@ -1,18 +1,20 @@
 #include<math.h>
-#include "gobot_chessboard_hw.h"
+// #include "gobot_chessboard_hw.h"
+#include "cnc_five_bars.h"
 #include<Arduino.h>
 
-void GobotChessboardHardware::InitRobot(){
-	Serial.print("\n[Info] GobotChessboardHardware::Init() is entering.");
-    pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-    pinMode(PIN_BETA_ENABLE, OUTPUT);
+void CncFiveBars::InitRobot(){
+	Serial.print("\n[Info] CncFiveBars::Init() is entering.");
+    // pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+    // pinMode(PIN_BETA_ENABLE, OUTPUT);
 	// pinMode(PIN_EEF_SERVO, OUTPUT);
 
-	this->eefServo = new Servo();
-	this->eefServo->attach(PIN_EEF_SERVO);
+	
+	// this->eefServo = new Servo();
+	// this->eefServo->attach(PIN_EEF_SERVO);
 
-	pinMode(PIN_EEF_A, OUTPUT);
-	pinMode(PIN_EEF_B, OUTPUT);
+	// pinMode(PIN_EEF_A, OUTPUT);
+	// pinMode(PIN_EEF_B, OUTPUT);
 
 	// this->__EnableMotor('A', false);
 	// this->__EnableMotor('B', false);
@@ -21,11 +23,11 @@ void GobotChessboardHardware::InitRobot(){
 
 	// CommuUart* objCommuUart = new CommuUart();
     // this->commuDevice = objCommuUart;
-	Serial.print("\n[Info] GobotChessboardHardware::Init() is done.");
+	Serial.print("\n[Info] CncFiveBars::Init() is done.");
 } 
 
-void GobotChessboardHardware::HomeSingleAxis(char axis){ 
-	Serial.print("[Debug] GobotChessboardHardware::HomeSingleAxis() is entering\n" );
+void CncFiveBars::HomeSingleAxis(char axis){ 
+	Serial.print("[Debug] CncFiveBars::HomeSingleAxis() is entering\n" );
 	Serial.print(axis);
 	this->_homing_axis = axis;
 	if (axis=='A'){
@@ -45,20 +47,20 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 		this->__current_homer = this->beta_homer;
 		this->__homing_stepper->setTargetRel(-500000);    //angle to be smaller.
 	}else{
-		Serial.print("\n[Error] GobotChessboardHardware::HomeSingleAxis() ");
+		Serial.print("\n[Error] CncFiveBars::HomeSingleAxis() ");
 	}
 	this->objStepControl.moveAsync(*this->__homing_stepper);
-	Serial.print("[Debug] GobotChessboardHardware::HomeSingleAxis() is Starting to run...\n" );
+	Serial.print("[Debug] CncFiveBars::HomeSingleAxis() is Starting to run...\n" );
 }
 
 
 // When first axis is homed, should it park to somewhere? For the reason, LINK_B might not long enouth to park the second arm.
-void GobotChessboardHardware::_running_G28(){
+void CncFiveBars::_running_G28(){
 	// Serial.print("[Info] GobotHouseHardware::running_G28() is entering \n");
 
 	if (this->__current_homer->IsTriged()){
 		// End stop is trigered
-		Serial.print("\n[Info] GobotChessboardHardware::_running_G28() Home sensor is trigered.  " );
+		Serial.print("\n[Info] CncFiveBars::_running_G28() Home sensor is trigered.  " );
 		Serial.print (this->_homing_axis);
 		this->objStepControl.stop();
 
@@ -90,7 +92,7 @@ void GobotChessboardHardware::_running_G28(){
 
 	}else{
 		// Endstop is not trigered
-		// Serial.print("\n[Debug] GobotChessboardHardware::_running_G28()  Still homing\n");
+		// Serial.print("\n[Debug] CncFiveBars::_running_G28()  Still homing\n");
 		// We are going to move a long long distance with async mode(None blocking).
 		// When endstop is trigered, must stop the moving. 
 
@@ -98,7 +100,7 @@ void GobotChessboardHardware::_running_G28(){
 }
 
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
-void GobotChessboardHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
+void CncFiveBars::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
@@ -166,7 +168,7 @@ void GobotChessboardHardware::IK(FkPositionBase* from_fk, IkPositionBase* to_ik)
 	Serial.print(")");
 }
 
-void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
+void CncFiveBars::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 
@@ -243,36 +245,15 @@ void GobotChessboardHardware::FK(IkPositionBase* from_ik, FkPositionBase* to_fk)
 	Serial.print(")");
 }
 
-void GobotChessboardHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
-	Serial.print("[Debug] GobotChessboardHardware::RunM123()  eef_action= ");
-	// Serial.println(eef_action);
-	switch (eef_action){
-		case EefAction::Lower:
-			this->eefServo->write(180);
-			break;
-		case EefAction::Higher:
-			this->eefServo->write(0);
-			break;
-		case EefAction::Suck:
-			digitalWrite(PIN_EEF_A, HIGH);
-			digitalWrite(PIN_EEF_B, LOW);
-			break;
-		case EefAction::Release:
-			digitalWrite(PIN_EEF_A,LOW);
-			digitalWrite(PIN_EEF_B,HIGH);
-			break;
-		case EefAction::Sleep:
-			digitalWrite(PIN_EEF_A,LOW);
-			digitalWrite(PIN_EEF_B,LOW);
-			break;
-		default:
-			break;
+void CncFiveBars::RunM123(uint8_t eef_channel, EefAction eef_action){
+	Serial.print("[Debug] CncFiveBars::RunM123()  eef_action= ");
+	uint8_t action_code = 1;
+	this->__eef->Run(action_code);
 
-	}
 }
 
-void GobotChessboardHardware::RunG1(Gcode* gcode){
-	Serial.print("\n[Debug] GobotChessboardHardware::RunG1()   ");
+void CncFiveBars::RunG1(Gcode* gcode){
+	Serial.print("\n[Debug] CncFiveBars::RunG1()   ");
 	Serial.print(gcode->get_command());
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
@@ -331,7 +312,7 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 		Serial.print(" FK.Y= ");
 		Serial.print(verified_fk.Y);
 
-		Serial.print("\n[Debug] GobotChessboardHardware::RunG1() ");
+		Serial.print("\n[Debug] CncFiveBars::RunG1() ");
 		Serial.print(this->alpha_stepper->getPosition());
 		Serial.print(",");
 		Serial.print(this->beta_stepper->getPosition());
@@ -342,27 +323,27 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 	}  
 }
 
-void GobotChessboardHardware::_running_G1(){
+void CncFiveBars::_running_G1(){
     if (this->GetDistanceToTarget_IK() < (this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA)/32){
       	this->State = CncState::IDLE;
-		Serial.print("\n[Info] GobotChessboardHardware::_running_G1() is finished. ");
+		Serial.print("\n[Info] CncFiveBars::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);  
 }
 
-float GobotChessboardHardware::GetDistanceToTarget_IK(){
+float CncFiveBars::GetDistanceToTarget_IK(){
 	return this->alpha_stepper->getDistanceToTarget() + this->beta_stepper->getDistanceToTarget();
 }
 
-void GobotChessboardHardware::RunM84(){
+void CncFiveBars::RunM84(){
 	// this->__EnableMotor('A', false);
 	// this->__EnableMotor('B', false);
 	this->__board->EnableMotor('A', false);
 	this->__board->EnableMotor('B', false);
 }
 
-// void GobotChessboardHardware::__EnableMotor(char actuator, bool enable_it){
+// void CncFiveBars::__EnableMotor(char actuator, bool enable_it){
 // 	if (actuator == 'A')
 // 		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
 // 	if (actuator == 'B')

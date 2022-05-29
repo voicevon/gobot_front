@@ -1,7 +1,8 @@
 #include "gobot_chessboard.h"
 #include <HardwareSerial.h>
 // #include "gobot_chessboard_hw.h"
-#include "CNC/cnc_five_bars/gobot_chessboard_hw.h"
+// #include "CNC/cnc_five_bars/gobot_chessboard_hw.h"
+#include "CNC/cnc_five_bars/cnc_five_bars.h"
 
 
 // void GobotChessboard::Lin(GcodeQueue* gcode_queue){
