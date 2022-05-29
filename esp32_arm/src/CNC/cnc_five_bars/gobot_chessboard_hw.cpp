@@ -14,8 +14,10 @@ void GobotChessboardHardware::InitRobot(){
 	pinMode(PIN_EEF_A, OUTPUT);
 	pinMode(PIN_EEF_B, OUTPUT);
 
-	this->__EnableMotor('A', false);
-	this->__EnableMotor('B', false);
+	// this->__EnableMotor('A', false);
+	// this->__EnableMotor('B', false);
+	this->__board->EnableMotor('A', false);
+	this->__board->EnableMotor('B', false);
 
 	// CommuUart* objCommuUart = new CommuUart();
     // this->commuDevice = objCommuUart;
@@ -27,14 +29,16 @@ void GobotChessboardHardware::HomeSingleAxis(char axis){
 	Serial.print(axis);
 	this->_homing_axis = axis;
 	if (axis=='A'){
-		this->__EnableMotor('A', true);
+		this->__board->EnableMotor('A', false);
+		// this->__EnableMotor('A', false);
 		this->alpha_stepper->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->alpha_stepper->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = this->alpha_stepper;
 		this->__current_homer = this->alpha_homer;
 		this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
 	}else if (axis=='B'){
-		this->__EnableMotor('B',true);
+		// this->__EnableMotor('B',true);
+		this->__board->EnableMotor('B', true);
 		this->beta_stepper->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
 		this->beta_stepper->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
 		this->__homing_stepper = this->beta_stepper;
@@ -286,12 +290,14 @@ void GobotChessboardHardware::RunG1(Gcode* gcode){
 	target_ik_ab.beta = this->beta_stepper->getPosition() / this->__config.STEPS_PER_RAD;
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
-		this->__EnableMotor('A', true); 
+		// this->__EnableMotor('A', true); 
+		this->__board->EnableMotor('A', true);
 		// target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
 		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;
 	}
 	if (gcode->has_letter('B')){
-		this->__EnableMotor('B', true);
+		// this->__EnableMotor('B', true);
+		this->__board->EnableMotor('B', true);
 		// target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
 		target_ik_ab.beta = gcode->get_value('B') *  DEG_TO_RAD;
 	}
@@ -350,13 +356,15 @@ float GobotChessboardHardware::GetDistanceToTarget_IK(){
 }
 
 void GobotChessboardHardware::RunM84(){
-	this->__EnableMotor('A', false);
-	this->__EnableMotor('B', false);
+	// this->__EnableMotor('A', false);
+	// this->__EnableMotor('B', false);
+	this->__board->EnableMotor('A', false);
+	this->__board->EnableMotor('B', false);
 }
 
-void GobotChessboardHardware::__EnableMotor(char actuator, bool enable_it){
-	if (actuator == 'A')
-		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
-	if (actuator == 'B')
-		digitalWrite(PIN_BETA_ENABLE, !enable_it);
-}
+// void GobotChessboardHardware::__EnableMotor(char actuator, bool enable_it){
+// 	if (actuator == 'A')
+// 		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
+// 	if (actuator == 'B')
+// 		digitalWrite(PIN_BETA_ENABLE, !enable_it);
+// }

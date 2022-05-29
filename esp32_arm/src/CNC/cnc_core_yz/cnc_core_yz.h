@@ -5,10 +5,10 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
 #include "box_carrier_hw_config.h"
-#include "MyLibs/board_base.h"
+// #include "MyLibs/board_base.h"
+#include "MyBoards/board_base.h"
 
-
-class Cnc_CoreYZ:public CncBase{
+class Cnc_CoreYZ: public CncBase{
     public:
         Cnc_CoreYZ(){};
         Cnc_CoreYZ(BoardbaseCnc* board, StepControl* stepControl){this->__board=board; this->objStepControl=stepControl;};
@@ -41,7 +41,7 @@ class Cnc_CoreYZ:public CncBase{
         void RunM123(uint8_t eef_channel, EefAction eef_action) override;
         void RunM84() override;
         std::string GetHomeTrigerStateString() override {return " ";};
-        void __EnableMotor(char actuator, bool enable_it) override;
+        // void __EnableMotor(char actuator, bool enable_it) override;
 
         FkPosition_YZ __current_fk_position;
 

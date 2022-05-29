@@ -75,7 +75,7 @@ void SmokeBotHardware::InitRobot(){
 
 }
 
-void SmokeBotHardware::__EnableMotor(char actuator, bool enable_it){
-	// Only one stepper motor here.
-	digitalWrite(PIN_ENABLE, !enable_it);
-}
+// void SmokeBotHardware::__EnableMotor(char actuator, bool enable_it){
+// 	// Only one stepper motor here.
+// 	digitalWrite(PIN_ENABLE, !enable_it);
+// }

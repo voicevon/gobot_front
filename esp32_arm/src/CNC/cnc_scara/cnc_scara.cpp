@@ -1,6 +1,6 @@
 // #include "gobot_house_hw.h"
 #include "cnc_scara.h"
-
+// #include "board.h"
 
 // }
 void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
@@ -87,8 +87,8 @@ bool CncScara::GetCurrentPosition(FkPositionBase* position_fk){
 }
 
 void CncScara::__Init_gpio(){
-	pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-	pinMode(PIN_BETA_ENABLE, OUTPUT);
+	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
+	// pinMode(PIN_BETA_ENABLE, OUTPUT);
 
 	// TODO:  shoud do this? double check document
 	// pinMode(PIN_ENDER_COIL_2109, OUTPUT);
@@ -101,7 +101,7 @@ void CncScara::__Init_gpio(){
 	// ledcSetup(2, 200, 8);  //ledcSetup(ledChannel, freq, resolution);
 	// attach the channel to the GPIO to be controlled
 	// ledcAttachPin(PIN_ENDER_COIL_2109, 1); // ledcAttachPin(ledPin, ledChannel);
-	ledcAttachPin(PIN_ENDER_COIL_EXT_2109, 1); // ledcAttachPin(ledPin, ledChannel);
+	// ledcAttachPin(PIN_ENDER_COIL_EXT_2109, 1); // ledcAttachPin(ledPin, ledChannel);
 	// ledcAttachPin(PIN_ENDER_COIL_EXT_2109, 2); // ledcAttachPin(ledPin, ledChannel);
 	ledcWrite(1, 0);
 	// ledcWrite(2, 0);
@@ -109,8 +109,10 @@ void CncScara::__Init_gpio(){
 
 void CncScara::InitRobot(){
 	__Init_gpio();
-	this->__EnableMotor('A', false);
-	this->__EnableMotor('B', false);
+	// this->__EnableMotor('A', false);
+	// this->__EnableMotor('B', false);
+	this->__board->EnableMotor('A', false);
+	this->__board->EnableMotor('B', false);
 
 	// CommuUart* commuUart = new CommuUart();
 
@@ -182,8 +184,10 @@ void CncScara::RunG1(Gcode* gcode) {
 	if(gcode->has_letter('R')) 
 		target_ik_ab.alpha = this->__config.motor_steps_per_round * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
-	this->__EnableMotor('A', true);
-	this->__EnableMotor('B',true);
+	// this->__EnableMotor('A', true);
+	// this->__EnableMotor('B',true);
+	this->__board->EnableMotor('A', true);
+	this->__board->EnableMotor('B', true);
 	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha );
 	this->beta_stepper->setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
@@ -216,7 +220,8 @@ void CncScara::HomeSingleAxis(char axis){
 		Serial.print(axis);
 	}
 	this->_homing_axis = axis;
-	this->__EnableMotor(axis, true);
+	// this->__EnableMotor(axis, true);
+	this->__board->EnableMotor(axis, true);
 	if (axis=='A'){
 		this->alpha_stepper->setAcceleration(this->__config.Homing_acceleration_alpha);
 		this->alpha_stepper->setMaxSpeed(this->__config.Homing_speed_alpha);
@@ -306,13 +311,15 @@ void CncScara::RunM123(uint8_t eef_channel, EefAction eef_action){
 }
 
 void CncScara::RunM84(){
-	this->__EnableMotor('A',false);
-	this->__EnableMotor('B',false);
+	// this->__EnableMotor('A',false);
+	// this->__EnableMotor('B',false);
+	this->__board->EnableMotor('A', false);
+	this->__board->EnableMotor('B', false);
 }
 
-void CncScara::__EnableMotor(char actuator, bool enable_it){
-	if (actuator == 'A')
-		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
-	if (actuator == 'B')
-		digitalWrite(PIN_BETA_ENABLE, !enable_it);
-}
+// void CncScara::__EnableMotor(char actuator, bool enable_it){
+// 	// if (actuator == 'A')
+// 	// 	digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
+// 	// if (actuator == 'B')
+// 	// 	digitalWrite(PIN_BETA_ENABLE, !enable_it);
+// }

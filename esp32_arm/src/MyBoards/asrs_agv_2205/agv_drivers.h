@@ -1,15 +1,19 @@
 #pragma once
 
-#include "MyLibs/board_base.h"
+// #include "MyLibs/board_base.h"
+#include "MyBoards/board_base.h"
 #include "AGV/sensor_moving_track/track_sensor_dual_9960.h"
 #include "AGV/sensor_obstacle/obstacle_sensor_vl53l0x.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
 #include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
 #include "board_pins_ver_2_0.h"
+// #include "board.h"
+
 
 class BoardPart_Agv: public BoardbaseAgv{
     public:
         BoardPart_Agv(){};
+        void Init();
         void Init(TwoWire* i2c_bus_main, TwoWire* i2c_bus_ext);
         TrackSensor_Dual9960* Get_Dual9960(){return &this->__dual_9960;};
         ObstacleSensor_VL53l0x* Get_Obstacle_Vl53l0x(){return &this->__obstacle_vl53l0x;};
@@ -25,7 +29,7 @@ class BoardPart_Agv: public BoardbaseAgv{
 
         TrackSensor_Dual9960 __dual_9960;
         ObstacleSensor_VL53l0x __obstacle_vl53l0x;
-	    SingleWheel_HBridgePwmDriver __left_wheel = SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_LEFT, PIN_WHEEL_DIR_LEFT);
-	    SingleWheel_HBridgePwmDriver __right_wheel = SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_RIGHT, PIN_WHEEL_DIR_RIGHT);
+	    SingleWheel_HBridgePwmDriver __left_wheel = SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_LEFT_2205, PIN_WHEEL_DIR_LEFT_2205);
+	    SingleWheel_HBridgePwmDriver __right_wheel = SingleWheel_HBridgePwmDriver(PIN_WHEEL_PWM_RIGHT_2205, PIN_WHEEL_DIR_RIGHT_2205);
         MoverDualWheel __dual_wheel;
 };

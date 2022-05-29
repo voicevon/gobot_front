@@ -9,9 +9,10 @@
 #include "MyLibs/Components/Led.h"
 #include "cnc_scara_config.h"
 #include "CNC/eef_standard_code.h"
-#include "MyBoards/cnc/gobot_house_ver3.11.h"
-
-
+// #include "MyBoards/cnc/gobot_house_ver3.11.h"
+// #include "MyBoards/cnc/board_gobot_house_ver3.11.h"
+#include "MyBoards/cnc_2109/board_gobot_house_ver3.11.h"
+#include "MyBoards/board_base.h"
 
 
 class CncScara: public CncBase{
@@ -50,7 +51,7 @@ class CncScara: public CncBase{
         void RunM123(uint8_t eef_channel, EefAction eef_action) override;
         void RunM84() override;
         
-        void __EnableMotor(char actuator, bool enable_it) override;
+        // void __EnableMotor(char actuator, bool enable_it) override;
 
 
         // Led objLedPower = Led(0, PIN_LED_POWER_2109, LOW);
@@ -73,5 +74,6 @@ class CncScara: public CncBase{
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;
         GobotHouseHardwareConfig __config;
+        BoardbaseCnc* __board;
         
 };

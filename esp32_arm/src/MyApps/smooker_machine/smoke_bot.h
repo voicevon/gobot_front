@@ -47,7 +47,7 @@ class SmokeBotHardware: public CncBase{
         void _running_G28() override;
         void RunM123(uint8_t eef_channel, EefAction eef_action) override {};
         void RunM84() override{};
-        void __EnableMotor(char actuator, bool enable_it) override;        
+        // void __EnableMotor(char actuator, bool enable_it) override;        
 
 
 };

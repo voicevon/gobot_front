@@ -7,6 +7,7 @@
 #include "CNC/single_axis_homer.h"
 #include "box_mover_hw_config.h"
 // #include "CNC/Commu/CommuUart.h"
+#include "MyBoards/board_base.h"
 
 
 #define VERTICAL_ENDSTOP 15
@@ -48,7 +49,7 @@ class BoxMoverHardware:public CncBase{
         void RunM123(uint8_t eef_channel, EefAction eef_action) override;
         void RunM84() override;
         std::string GetHomeTrigerStateString() override {return " ";};
-        void __EnableMotor(char actuator, bool enable_it) override;
+        // void __EnableMotor(char actuator, bool enable_it) override;
 
         FkPosition_ZW __current_fk_position;
 
@@ -56,5 +57,7 @@ class BoxMoverHardware:public CncBase{
         SingleAxisHomer objHomeHelper_vertical = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
         SingleAxisHomer objHomeHelper_angle = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
         BoxMoverHardwareConfig  __config;
+        BoardbaseCnc* __board;
+
 
 };

@@ -13,9 +13,11 @@
 
 class BoardBase{
     public:
+        virtual void Init();
         void ScanI2cBus(TwoWire* i2c_bus, const char* printing_topic);
         static uint8_t Assign_ledc_channel(){return __ledc_channel_index; __ledc_channel_index++;};
         static uint8_t Assign_i2c_bus_id(){return __i2c_bus_index; __i2c_bus_index++;};
+
 
     protected:
         bool _Begin_I2cBus(TwoWire* i2c_bus, uint8_t pin_sda, uint8_t pin_scl, uint32_t frequency);
@@ -32,12 +34,17 @@ class BoardBase{
 
 // #include "ESP32Step/src/Stepper.h"
 #include "ESP32Step/src/TeensyStep.h"
+#include "cnc/single_axis_homer.h"
 
 class BoardbaseCnc: public BoardBase{
     public:
-        virtual void EnableMotor_alpha(bool enable_it);
-        virtual void EnableMotor_beta(bool enable_it);
+        // virtual void EnableMotor_alpha(bool enable_it);
+        // virtual void EnableMotor_beta(bool enable_it);
+        virtual void Init();
         void SayHello();
+        virtual Stepper* GetStepper(char axis_name);
+        virtual SingleAxisHomer* GetHomer(char axis_name);
+        virtual void EnableMotor(char axis_name, bool enable_it);
 
     protected:
         // use of deleted function 'StepControlBase<a, t>::StepControlBase(const StepControlBase<a, t>&) [with Accelerator = LinStepAccelerator; TimerField = TimerField]'
@@ -51,6 +58,7 @@ class BoardbaseCnc: public BoardBase{
 
 class BoardbaseAgv: public BoardBase{
     public:
+        virtual void Init();
 
     protected:
 

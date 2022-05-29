@@ -73,8 +73,10 @@ void BoxMoverHardware::InitRobot(){
 	// pinMode(PIN_MICRIO_STEP_1, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_2, OUTPUT);
 
-	this->__EnableMotor('A', false);
-	this->__EnableMotor('B', false);
+	// this->__EnableMotor('A', false);
+	// this->__EnableMotor('B', false);
+	this->__board->EnableMotor('A', false);
+	this->__board->EnableMotor('B', false);
 
 	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
 	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
@@ -115,8 +117,10 @@ void BoxMoverHardware::HomeSingleAxis(char axis){
 		this->objStepper_alpha.setTargetRel(-5000000);
 		this->objStepper_beta.setTargetRel(5000000);	
 	}
-	this->__EnableMotor('A', true);
-	this->__EnableMotor('B', true);
+	// this->__EnableMotor('A', true);
+	// this->__EnableMotor('B', true);
+	this->__board->EnableMotor('A', true);
+	this->__board->EnableMotor('B', true);
 	this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
 }
 
@@ -178,8 +182,10 @@ void BoxMoverHardware::_running_G28(){
 void BoxMoverHardware::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] BoxMoverHardware::RunG1() is entering");
 	Serial.print(gcode->get_command());
-	this->__EnableMotor('A', true);
-	this->__EnableMotor('B', true);
+	// this->__EnableMotor('A', true);
+	// this->__EnableMotor('B', true);
+	this->__board->EnableMotor('A', true);
+	this->__board->EnableMotor('B', true);
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
 		this->objStepper_alpha.setMaxSpeed(speed);
@@ -238,18 +244,20 @@ void BoxMoverHardware::RunM123(uint8_t eef_channel, EefAction eef_action){
 }
 
 void BoxMoverHardware::RunM84(){
-	this->__EnableMotor('A',false);
-	this->__EnableMotor('B',false);
+	// this->__EnableMotor('A',false);
+	// this->__EnableMotor('B',false);
+	this->__board->EnableMotor('A', false);
+	this->__board->EnableMotor('B', false);
 }
 
 float BoxMoverHardware::GetDistanceToTarget_IK(){
 	return this->objStepper_alpha.getDistanceToTarget() + this->objStepper_beta.getDistanceToTarget();
 }
 
-void BoxMoverHardware::__EnableMotor(char actuator, bool enable_it){
-	if (actuator == 'A')
-		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
-	if (actuator == 'B')
-		digitalWrite(PIN_BETA_ENABLE, !enable_it);
-}
+// void BoxMoverHardware::__EnableMotor(char actuator, bool enable_it){
+// 	if (actuator == 'A')
+// 		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
+// 	if (actuator == 'B')
+// 		digitalWrite(PIN_BETA_ENABLE, !enable_it);
+// }
 

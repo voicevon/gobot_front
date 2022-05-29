@@ -1,6 +1,6 @@
 #include "all_devices.h"
 #ifdef I_AM_ROBOT_ASRS_AGV
-#include "board_pins_ver_2_0.h"
+// #include "board_pins_ver_2_0.h"
 #include "bot_asrs_agv_core_yz.h"
 
 BotAsrsAgvCoreYZ::BotAsrsAgvCoreYZ(uint16_t id){
@@ -21,8 +21,10 @@ void BotAsrsAgvCoreYZ::Init(BoardAllInOne* board, StepControl* stepControl){
 	// this->jettySensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 
 	this->cnc.InitMe(&board->cnc,stepControl);
-	this->cnc.LinkStepper(&board->cnc.stepper_alpha, &board->cnc.stepper_beta);
-	this->cnc.LinkHomer(&board->cnc.homer_z, &board->cnc.homer_y);
+	// this->cnc.LinkStepper(&board->cnc.stepper_alpha, &board->cnc.stepper_beta);
+	this->cnc.LinkStepper(board->cnc.GetStepper('A'), board->cnc.GetStepper('B'));
+	// this->cnc.LinkHomer(&board->cnc.homer_z, &board->cnc.homer_y);
+	this->cnc.LinkHomer(board->cnc.GetHomer('Z'), board->cnc.GetHomer('Y'));
 	this->cnc.InitRobot();
 
 	this->_gcode_queue = new GcodeQueue();

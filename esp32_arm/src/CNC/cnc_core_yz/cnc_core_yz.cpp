@@ -99,8 +99,10 @@ void Cnc_CoreYZ::HomeSingleAxis(char axis){
 		this->stepper_beta->setTargetRel(5000000);	
 	}
 
-	this->__EnableMotor('A', true);
-	this->__EnableMotor('B', true);
+	// this->__EnableMotor('A', true);
+	// this->__EnableMotor('B', true);
+	this->__board->EnableMotor('A', true);
+	this->__board->EnableMotor('B',true);
 	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 }
 
@@ -162,8 +164,10 @@ void Cnc_CoreYZ::_running_G28(){
 void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] Cnc_CoreYZ::RunG1() is entering");
 	Serial.print(gcode->get_command());
-	this->__EnableMotor('A', true);
-	this->__EnableMotor('B', true);
+	// this->__EnableMotor('A', true);
+	// this->__EnableMotor('B', true);
+	this->__board->EnableMotor('A', true);
+	this->__board->EnableMotor('B', true);
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
 		this->stepper_alpha->setMaxSpeed(speed);
@@ -224,24 +228,27 @@ void Cnc_CoreYZ::RunM123(uint8_t eef_channel, EefAction eef_action){
 }
 
 void Cnc_CoreYZ::RunM84(){
-	this->__EnableMotor('A',false);
-	this->__EnableMotor('B',false);
+	// this->__EnableMotor('A',false);
+	// this->__EnableMotor('B',false);
+	this->__board->EnableMotor('A', false);
+	this->__board->EnableMotor('B', false);
 }
 
 float Cnc_CoreYZ::GetDistanceToTarget_IK(){
 	return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
 }
 
-void Cnc_CoreYZ::__EnableMotor(char actuator, bool enable_it){
-		if (actuator == 'A'){
-			this->__board->EnableMotor_alpha(enable_it);
-		}
-		else if (actuator == 'B'){
-			this->__board->EnableMotor_beta(enable_it);
-		}
-		else{
-			Serial.print("[Warn] Cnc_CoreYZ::__EnableMotor()   unkown actuator = ");
-			Serial.println(actuator);
-		}
-}
+// void Cnc_CoreYZ::__EnableMotor(char actuator, bool enable_it){
+// // 		this->__board->EnableMotor(actuator, enable_it);
+// // 		// if (actuator == 'A'){
+// // 		// 	this->__board->EnableMotor_alpha(enable_it);
+// // 		// }
+// // 		// else if (actuator == 'B'){
+// // 		// 	this->__board->EnableMotor_beta(enable_it);
+// // 		// }
+// // 		// else{
+// // 		// 	Serial.print("[Warn] Cnc_CoreYZ::__EnableMotor()   unkown actuator = ");
+// // 		// 	Serial.println(actuator);
+// // 		// }
+// }
 

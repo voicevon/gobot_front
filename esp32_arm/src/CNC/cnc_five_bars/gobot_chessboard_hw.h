@@ -14,7 +14,7 @@
 #include "CNC/single_axis_homer.h"
 #include "MyLibs/Components/Led.h"
 #include "CNC/eef_standard_code.h"
-
+#include "MyBoards/board_base.h"
 
 
 /*
@@ -69,7 +69,7 @@ class GobotChessboardHardware: public CncBase{
         // void MoveToTargetPosition() {};
         void _running_G1() override;
         void _running_G28() override;
-        void __EnableMotor(char actuator, bool enable_it) override;
+        // void __EnableMotor(char actuator, bool enable_it) override;
     
         // Led objLedPower = Led(0, PIN_LED_POWER_2112, LOW);
         // Led objLedHome_alpha = Led(1,2,LOW);
@@ -88,6 +88,8 @@ class GobotChessboardHardware: public CncBase{
         Stepper* __homing_stepper;
         SingleAxisHomer* __current_homer;
         FkPosition_XY __current_fk_position;
+        BoardbaseCnc* __board;
+
 };
 
 

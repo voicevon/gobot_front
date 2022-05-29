@@ -5,7 +5,7 @@
 #include "CNC/single_axis_homer.h"
 
 #include "spring_maker_hw_config.h"
-
+#include "MyBoards/board_base.h"
 
 #define PIN_ANGLE_ENDSTOP 15
 
@@ -41,12 +41,13 @@ class SpringMakerHardware:public CncBase{
         void RunM123(uint8_t eef_channel, EefAction eef_action) override;
         void RunM84() override;
         std::string GetHomeTrigerStateString() override {return " ";};
-        void __EnableMotor(char actuator, bool enable_it) override;
+        // void __EnableMotor(char actuator, bool enable_it) override;
 
         FkPosition_A __current_fk_position;
 
         SingleAxisHomer* __homing_helper;
         SingleAxisHomer objHomeHelper_alpha = SingleAxisHomer(PIN_ANGLE_ENDSTOP, LOW);
         SpringMakerHardwareConfig  __config;
+        BoardbaseCnc* __board;
 
 };
