@@ -1,14 +1,15 @@
 #pragma once
-#include "MyBoards/board_base.h"
+// #include "MyBoards/board_base.h"
+#include "MyBoards/cnc_board_base.h"
 #include "board_pins_ver_2_0.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
 #include "robot_eef/garment_asar_eef.h"
 
 
-class CncDriver_CoreYZ_2205: public BoardbaseCnc{
+class Board2205Cnc: public BoardbaseCnc{
     public:
-        CncDriver_CoreYZ_2205(){};
+        Board2205Cnc(){};
         void Init() override;
         void Init(Adafruit_MCP23X17* mcp_23018);
         void SayHello();

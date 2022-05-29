@@ -1,5 +1,6 @@
 #pragma once
-#include "../board_base.h"
+// #include "../board_base.h"
+#include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
 #include "board_ver1.2.h"

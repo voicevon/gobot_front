@@ -91,7 +91,7 @@ class IkPosition_AB: public IkPositionBase{
 
 
 
-#include "MyBoards/board_base.h"
+#include "MyBoards/cnc_board_base.h"
 
 enum class CncState{
     IDLE,

@@ -8,16 +8,19 @@
 #include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
 #include "board_pins_ver_2_0.h"
 
-class BoardPart_Agv: public BoardbaseAgv{
+class Board2205Agv: public BoardbaseAgv{
     public:
-        BoardPart_Agv(){};
+        Board2205Agv(){};
         void Init();
         void Init(TwoWire* i2c_bus_main, TwoWire* i2c_bus_ext);
         TrackSensor_Dual9960* Get_Dual9960(){return &this->__dual_9960;};
         ObstacleSensor_VL53l0x* Get_Obstacle_Vl53l0x(){return &this->__obstacle_vl53l0x;};
-        
         MoverDualWheel* Get_DualWheelDriver(){return &this->__dual_wheel;};
-
+        
+        ObstacleSensorBase* GetObstacleSensor() override{return &this->__obstacle_vl53l0x;};
+        TrackSensorBase* GetTrackSensor() override {return &this->__dual_9960;};
+        MoverBase* GetMover() override {return &this->__dual_wheel;};
+        
     private:
         // Adafruit_MCP23X17* __mcp23018;
         // TwoWire* __i2c_bus;

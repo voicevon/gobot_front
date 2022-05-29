@@ -1,7 +1,13 @@
 #include "agv_base.h"
-#include <HardwareSerial.h>
 
-void AgvBase::_InitBase(){
+void AgvBase::Init(BoardbaseAgv* board){
+    // this->__move = board->Get_DualWheelDriver();
+	// this->agv.LinkObstacleSensor(board->agv.Get_Obstacle_Vl53l0x());
+	// this->agv.LinkTrackSensor(board->agv.Get_Dual9960()); 
+    this->obstacleSensor = board->GetObstacleSensor();
+    this->trackSensor = board->GetTrackSensor();
+    this->__mover = board->GetMover();
+    this->_State=SLOW_MOVING_PAUSED;
     this->ToState(PARKED);
 }
 

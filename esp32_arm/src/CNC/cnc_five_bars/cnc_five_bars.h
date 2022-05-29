@@ -2,7 +2,8 @@
 
 
 #include <ESP32Servo.h>
-#include "MyBoards/board_base.h"
+// #include "MyBoards/board_base.h"
+#include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_base.h"
 #include "CNC/eef_standard_code.h"
 #include "CNC/single_axis_homer.h"

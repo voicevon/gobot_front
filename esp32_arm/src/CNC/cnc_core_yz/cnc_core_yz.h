@@ -1,17 +1,19 @@
 #pragma once
 
 // #include "CNC/robot_hardware_base.h"
+// #include "MyBoards/board_base.h"
+#include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_base.h"
+#include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
 #include "box_carrier_hw_config.h"
 // #include "MyLibs/board_base.h"
-#include "MyBoards/board_base.h"
 
 class Cnc_CoreYZ: public CncBase{
     public:
         Cnc_CoreYZ(){};
-        Cnc_CoreYZ(BoardbaseCnc* board, StepControl* stepControl){this->_board=board; this->objStepControl=stepControl;};
+        // Cnc_CoreYZ(BoardbaseCnc* board, StepControl* stepControl){this->_board=board; this->objStepControl=stepControl;};
         void LinkStepControl(StepControl* stepControl){this->objStepControl=stepControl;};
         void Init(BoardbaseCnc* board) override;
         // void InitMe(BoardbaseCnc* board, StepControl* stepControl){this->_board=board; this->objStepControl=stepControl;};

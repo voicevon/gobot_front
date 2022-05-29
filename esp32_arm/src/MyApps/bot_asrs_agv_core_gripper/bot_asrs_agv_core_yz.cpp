@@ -8,10 +8,7 @@ BotAsrsAgvCoreYZ::BotAsrsAgvCoreYZ(uint16_t id){
 
 void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepControl){
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is entering");
-	this->agv.LinkMover(board->agv.Get_DualWheelDriver());
-	this->agv.LinkObstacleSensor(board->agv.Get_Obstacle_Vl53l0x());
-	this->agv.LinkTrackSensor(board->agv.Get_Dual9960()); 
-	this->agv.Init();
+	this->agv.Init(&board->agv);
 
 	// this->objAsrs.RfidReader->Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);

@@ -1,15 +1,16 @@
 #pragma once
 
-#include <Arduino.h>
-#include "ESP32Step/src/TeensyStep.h"
+// #include <Arduino.h>
+// #include "ESP32Step/src/TeensyStep.h"
 #include "MyLibs/MyFunctions.hpp"
 
+// #include "MyBoards/board_base.h"
+#include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_base.h"
 #include "CNC/single_axis_homer.h"
 #include "CNC/eef_standard_code.h"
 #include "MyLibs/Components/Led.h"
 #include "cnc_scara_config.h"
-#include "MyBoards/board_base.h"
 
 
 class CncScara: public CncBase{

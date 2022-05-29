@@ -38,30 +38,22 @@ class BoardBase{
 #include "cnc/single_axis_homer.h"
 #include "cnc/robot_eef_base.h"
 
-class BoardbaseCnc: public BoardBase{
-    public:
-        virtual void Init();
-        void SayHello();
-        virtual Stepper* GetStepper(char axis_name);
-        virtual SingleAxisHomer* GetHomer(char axis_name);
-        virtual RobotEefBase* GetEef();
-        virtual void EnableMotor(char axis_name, bool enable_it);
 
-    protected:
-        // use of deleted function 'StepControlBase<a, t>::StepControlBase(const StepControlBase<a, t>&) [with Accelerator = LinStepAccelerator; TimerField = TimerField]'
-        // StepControl* GetStepControl(){return &this->_objStepControl;};
-        // StepControl _objStepControl;
-
-    private:
-
-};
-
+#include "AGV/mover_driver/mover_base.h"
+#include "AGV/sensor_obstacle/obstacle_sensor_base.h"
+#include "AGV/sensor_moving_track/track_sensor_base.h"
 
 class BoardbaseAgv: public BoardBase{
     public:
         virtual void Init();
+        virtual ObstacleSensorBase* GetObstacleSensor();
+        virtual TrackSensorBase* GetTrackSensor();
+        virtual MoverBase* GetMover();
 
     protected:
+        // ObstacleSensorBase* _obstacleSensor;
+        // TrackSensorBase* _trackSensor;
+        // MoverBase* _mover;
 
     private:
 

@@ -1,10 +1,11 @@
 #pragma once
 
+// #include "MyBoards/board_base.h"
+#include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
 #include "spring_maker_hw_config.h"
-#include "MyBoards/board_base.h"
 
 
 class CncSingleAxis: public CncBase{

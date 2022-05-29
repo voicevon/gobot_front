@@ -1,5 +1,7 @@
 #pragma once
 #include "../board_base.h"
+#include "MyBoards/cnc_board_base.h"
+
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
 // #include "MyBoards/gobot_house/board_gobot_house_ver3.11.h"

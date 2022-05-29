@@ -1,11 +1,10 @@
-// #include "board_agv.h"
-#include "agv_drivers.h"
+#include "board_2205_agv.h"
 
-void BoardPart_Agv::Init(){
-    Serial.println("[Error] BoardPart_Agv::Init()");
+void Board2205Agv::Init(){
+    Serial.println("[Error] Board2205Agv::Init()");
 }
 
-void BoardPart_Agv::Init(TwoWire* i2c_bus_main, TwoWire* i2c_bus_ext){
+void Board2205Agv::Init(TwoWire* i2c_bus_main, TwoWire* i2c_bus_ext){
     // Convert Dual apds9960 on dual i2c bus, to one track sensor
     this->_Begin_Apds9960(&this->__left_aps9960, I2C_ADDR_APDS9960_2205, i2c_bus_main);
     this->_Begin_Apds9960(&this->__right_aps9960, I2C_ADDR_APDS9960_2205, i2c_bus_ext);
