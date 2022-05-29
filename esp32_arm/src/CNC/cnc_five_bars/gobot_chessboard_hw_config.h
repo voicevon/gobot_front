@@ -5,7 +5,8 @@
 
 
 // #include "board_ver1.2.h"
-#include "MyBoards/cnc_dual_stepper_2201/board_ver1.2.h"
+// #include "MyBoards/cnc_dual_stepper_2201/board_ver1.2.h"
+#include "MyBoards/gobot_main/board_ver1.2.h"
 class GobotChessboardHardwareConfig{
     public:
         // link length in mm

@@ -1,5 +1,8 @@
 #include "gobot_main.h"
 
+RobotEef_GobotMain::RobotEef_GobotMain(){
+	
+}
 
 void RobotEef_GobotMain::Run(uint8_t eef_code) {
     	// Serial.println(eef_action);

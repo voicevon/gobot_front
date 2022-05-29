@@ -10,7 +10,7 @@
 #include "MyLibs/MyFunctions.hpp"
 
 #include "gobot_chessboard_hw_config.h"
-#include "MyBoards/RobotEef/eef_base.h"
+#include "CNC/RobotEef/eef_base.h"
 
 class CncFiveBars: public CncBase{
     public:
