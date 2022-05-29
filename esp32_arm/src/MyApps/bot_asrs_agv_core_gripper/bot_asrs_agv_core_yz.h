@@ -8,10 +8,7 @@
 #include "ASRS/asrs_base.h"
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/agv_base.h"
-// #include "board_all_in_one.h"
-// #include "MyBoards/board_all_in_one.h"
-// #include "MyBoards/asrs_agv_cnc/board_all_in_one.h"
-#include "MyBoards/asrs_agv_2205/board_all_in_one.h"
+#include "MyBoards/asrs_agv_2205/board_asrs_agv.h"
 #include "MyApps/bot_core_yz/box_carrier.h"
 
 

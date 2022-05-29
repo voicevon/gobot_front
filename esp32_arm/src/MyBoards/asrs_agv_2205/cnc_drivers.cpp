@@ -22,6 +22,10 @@ SingleAxisHomer* CncDriver_CoreYZ_2205::GetHomer(char axis_name){
 
 }
 
+RobotEef_GarmentAsar* CncDriver_CoreYZ_2205::GetEef(){
+    return &this->eef;
+}
+
 void CncDriver_CoreYZ_2205::EnableMotor(char axis_name, bool enable_it){
     if (axis_name == 'A'){
         this->__mcp23018->digitalWrite(MC23018_PIN_ALPHA_ENABLE_2205, !enable_it);   // LOW is enable

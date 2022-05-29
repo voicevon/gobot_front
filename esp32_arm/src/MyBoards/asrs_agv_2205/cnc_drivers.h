@@ -3,6 +3,8 @@
 #include "board_pins_ver_2_0.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
+#include "CNC/RobotEef/garment_asrs_agv/garment_asar.h"
+
 
 class CncDriver_CoreYZ_2205: public BoardbaseCnc{
     public:
@@ -12,6 +14,7 @@ class CncDriver_CoreYZ_2205: public BoardbaseCnc{
         void SayHello();
         Stepper* GetStepper(char axis_name) override;
         SingleAxisHomer* GetHomer(char axis_name) override;
+        RobotEef_GarmentAsar* GetEef() override;
         void EnableMotor(char axis_name, bool enable_it) override;
 
         
@@ -21,6 +24,7 @@ class CncDriver_CoreYZ_2205: public BoardbaseCnc{
         Stepper stepper_beta = Stepper(PIN_BETA_STEP_2205);
         SingleAxisHomer homer_z = SingleAxisHomer(LOW);
         SingleAxisHomer homer_y = SingleAxisHomer(LOW);
+        RobotEef_GarmentAsar eef = RobotEef_GarmentAsar();
 
 };
 
