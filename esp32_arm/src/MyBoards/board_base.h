@@ -45,7 +45,7 @@ class BoardBase{
 
 class BoardbaseAgv: public BoardBase{
     public:
-        virtual void Init();
+        virtual void Init(bool is_on_reset);
         virtual ObstacleSensorBase* GetObstacleSensor();
         virtual TrackSensorBase* GetTrackSensor();
         virtual MoverBase* GetMover();

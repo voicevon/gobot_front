@@ -11,7 +11,7 @@
 class Board2205Agv: public BoardbaseAgv{
     public:
         Board2205Agv(){};
-        void Init();
+        void Init(bool is_on_reset);
         void Init(TwoWire* i2c_bus_main, TwoWire* i2c_bus_ext);
         TrackSensor_Dual9960* Get_Dual9960(){return &this->__dual_9960;};
         ObstacleSensor_VL53l0x* Get_Obstacle_Vl53l0x(){return &this->__obstacle_vl53l0x;};

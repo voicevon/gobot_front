@@ -21,6 +21,7 @@ void BoardAllInOne::Init(bool is_on_reset){
     this->__mcp23018.pinMode(MC23018_PIN_BETA_ENABLE_2205, OUTPUT);
     this->__mcp23018.pinMode(PIN_MCP23018_TEST_2205, OUTPUT);
     // Init cnc components 
+    this->cnc.Init(false);
     this->cnc.Init(&this->__mcp23018);
     // this->cnc.EnableMotor_alpha(false);
     // this->cnc.EnableMotor_beta(false);
@@ -29,6 +30,7 @@ void BoardAllInOne::Init(bool is_on_reset){
     Serial.println("[Info] BoardAllInOne::Init() CNC components is OK.");
 
     //Init agv components
+    this->agv.Init(false);
     this->agv.Init(&this->__i2c_bus_main, &this->__i2c_bus_ext);
     Serial.println("[Info] BoardAllInOne::Init() AGV components is OK.");
 
