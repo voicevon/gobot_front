@@ -4,7 +4,7 @@
 #include <ESP32Servo.h>
 #include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_base.h"
-#include "cnc_five_bars_config.h"
+#include "cnc_five_bar_machine.h"
 #include "CNC/eef_standard_code.h"
 #include "CNC/single_axis_homer.h"
 #include "MyLibs/MyFunctions.hpp"
@@ -16,8 +16,6 @@ class CncFiveBars: public CncBase{
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
         void Init(CncBoardBase* board, CncMachineBase* config) override;
-        // void LinkHomer(SingleAxisHomer* alpha_homer, SingleAxisHomer* beta_homer){this->alpha_homer=alpha_homer; this->beta_homer=beta_homer;};
-        // void LinkStepper(Stepper* alpha, Stepper* beta){this->alpha_stepper=alpha; this->beta_stepper=beta;};
         void LinkEef(RobotEefBase* eef){this->__eef=eef;};
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
@@ -25,7 +23,7 @@ class CncFiveBars: public CncBase{
         void RunM84() override;
 
     protected:
-        CncFiveBarConfig* _fivebarConfig;
+        CncFiveBarMachine* _fivebarMachine;
 
     
     private:

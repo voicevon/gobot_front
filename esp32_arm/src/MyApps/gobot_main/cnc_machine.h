@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CNC/cnc_five_bars/cnc_five_bars_config.h"
+#include "CNC/cnc_five_bars/cnc_five_bar_machine.h"
 
-class GobotChessboardHardwareConfig: public CncFiveBarConfig{
+class GobotMainMachine: public CncFiveBarMachine{
     public:
         void Init();
         void PrintOut(const char* title);

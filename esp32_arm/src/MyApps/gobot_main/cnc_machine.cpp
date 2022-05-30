@@ -1,10 +1,10 @@
-#include "cnc_config.h"
+#include "cnc_machine.h"
 
-int32_t GobotChessboardHardwareConfig::GetStepsPerUnit(char axis_name) {
+int32_t GobotMainMachine::GetStepsPerUnit(char axis_name) {
     return 100;
 }
 
-void GobotChessboardHardwareConfig::Init(){
+void GobotMainMachine::Init(){
     this->LINK_0 = 191.0f / 2;
     this->LINK_A = 278.1;  //285.18;    // 278.1
     this->LINK_B = 392.1; //  384.51;    // 500-107.8
@@ -27,9 +27,9 @@ void GobotChessboardHardwareConfig::Init(){
 
 }
 
-void GobotChessboardHardwareConfig::PrintOut(const char* title){
+void GobotMainMachine::PrintOut(const char* title){
     Serial.print("\n=========================================================");
-    Serial.print("\n      GobotChessboardHardwareConfig::Printout()    "); 
+    Serial.print("\n      GobotMainMachine::Printout()    "); 
     Serial.print(title);
 
     Serial.print("\n Lenth of LINK_0, LINK_A, LINK_B = (");

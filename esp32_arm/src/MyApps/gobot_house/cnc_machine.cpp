@@ -1,8 +1,8 @@
 
-#include "cnc_config.h"
+#include "cnc_machine.h"
 
 
-void GobotHouseHardwareConfig::Init(){
+void GobotHouseMachine::Init(){
         // [when microstep==1] The value 514.0 is measured/Calibrated from running 10 rounds, Not calculated from anywhere.
         // This value should be calculated from motor's datasheet.  But can not get datasheet for 28-BGY motor.
         this->motor_steps_per_round = 514 * this->MOTOR_MICRO_STEPS;
@@ -27,9 +27,9 @@ void GobotHouseHardwareConfig::Init(){
         this->PrintOut();
 }
 
-void GobotHouseHardwareConfig::PrintOut(){
+void GobotHouseMachine::PrintOut(){
     Serial.print("\n\n===============================================");
-    Serial.print("\n   GobotHouseHardwareConfig::PrintOut()");
+    Serial.print("\n   GobotHouseMachine::PrintOut()");
     Serial.print("\n       Homed_position_alpha_in_degree= ");
     Serial.print(this->Homed_position_alpha_in_degree);
     Serial.print("\n       Homed_position_beta_in_degree= "); 
@@ -53,6 +53,6 @@ void GobotHouseHardwareConfig::PrintOut(){
     Serial.print("\n\n===============================================");
 }
 
-int32_t GobotHouseHardwareConfig::GetStepsPerUnit(char axis_name) {
+int32_t GobotHouseMachine::GetStepsPerUnit(char axis_name) {
     return 100;
 }

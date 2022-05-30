@@ -6,7 +6,7 @@
 #include "CNC/single_axis_homer.h"
 #include "CNC/eef_standard_code.h"
 #include "MyLibs/Components/Led.h"
-#include "cnc_scara_config.h"
+#include "cnc_scara_machine.h"
 
 
 class CncScara: public CncBase{
@@ -49,5 +49,5 @@ class CncScara: public CncBase{
         SingleAxisHomer* __homing_helper;
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;
-        CncScaraConfig* _scara_config;
+        CncScaraMachine* _scara_machine;
 };

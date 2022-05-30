@@ -2,11 +2,11 @@
 #include "CNC/cnc_machine_base.h"
 // #include "CNC/cnc_config_base.h"
 
-class CncFiveBarConfig: public CncMachineBase{
+class CncFiveBarMachine: public CncMachineBase{
     public:
         // link length in mm
         //  unit is mm
-        CncFiveBarConfig(){};
+        CncFiveBarMachine(){};
         float MOTOR_STEPS_PER_SHAFT_ROUND;
         float STEPS_PER_RAD; 
         // 191.0 is the Length between the centers of two motors 
