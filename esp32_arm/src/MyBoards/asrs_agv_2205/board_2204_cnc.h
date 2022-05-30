@@ -7,7 +7,7 @@
 #include "robot_eef/garment_asar_eef.h"
 
 // For Core_AZ cnc application
-class Board2204Cnc: public BoardbaseCnc{
+class Board2204Cnc: public CncBoardBase{
     public:
         Board2204Cnc(){};
         void Init(bool is_on_reset) override;

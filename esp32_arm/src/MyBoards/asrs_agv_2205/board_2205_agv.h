@@ -1,14 +1,13 @@
 #pragma once
 
-// #include "MyLibs/board_base.h"
-#include "MyBoards/board_base.h"
+#include "MyBoards/agv_board_base.h"
 #include "AGV/sensor_moving_track/track_sensor_dual_9960.h"
 #include "AGV/sensor_obstacle/obstacle_sensor_vl53l0x.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
 #include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
 #include "board_pins_ver_2_0.h"
 
-class Board2205Agv: public BoardbaseAgv{
+class Board2205Agv: public AgvBoardbase{
     public:
         Board2205Agv(){};
         void Init(bool is_on_reset);

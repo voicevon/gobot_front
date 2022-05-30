@@ -85,7 +85,7 @@ bool CncScara::GetCurrentPosition(FkPositionBase* position_fk){
 	return true;
 }
 
-void CncScara::Init(BoardbaseCnc* board){
+void CncScara::Init(CncBoardBase* board){
 	this->alpha_stepper = board->GetStepper('A');
 	this->beta_stepper = board->GetStepper('B');
 	this->alpha_homer = board->GetHomer('A');

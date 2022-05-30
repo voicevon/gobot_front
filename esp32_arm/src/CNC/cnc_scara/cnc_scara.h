@@ -22,7 +22,7 @@ class CncScara: public CncBase{
         //                           // Instantiated on first use.
         //     return instance;
         // }
-        void Init(BoardbaseCnc* board) override;
+        void Init(CncBoardBase* board) override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 

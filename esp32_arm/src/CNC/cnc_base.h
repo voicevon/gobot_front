@@ -104,7 +104,7 @@ class CncBase: public GcodeConsumer{
         CncState State = CncState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
-        virtual void Init(BoardbaseCnc* board);
+        virtual void Init(CncBoardBase* board);
         virtual void HomeSingleAxis(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
@@ -137,7 +137,7 @@ class CncBase: public GcodeConsumer{
         virtual void _running_G28();
         char _homing_axis;
         bool _home_as_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
-        BoardbaseCnc* _board;
+        CncBoardBase* _board;
         StepControl* objStepControl;
     
     private:

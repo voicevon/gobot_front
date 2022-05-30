@@ -4,7 +4,7 @@
 #include "AGV/sensor_moving_track/track_sensor_base.h"
 #include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
-#include "MyBoards/board_base.h"
+#include "MyBoards/agv_board_base.h"
 
 class AgvBase{
     public:
@@ -18,10 +18,7 @@ class AgvBase{
             PARKED = 7,
         };
 
-        void Init(BoardbaseAgv* board);
-        // void LinkObstacleSensor(ObstacleSensorBase* obstacle_sensor){this->obstacleSensor=obstacle_sensor;};
-        // void LinkTrackSensor(TrackSensorBase* trackSensor){this->trackSensor=trackSensor;};
-        // void LinkMover(MoverBase* mover){this->__mover=mover;};
+        void Init(AgvBoardbase* board);
         void SpinOnce();
         AgvBase::AGV_STATE GetState(){return this->_State;};
         void ToState(AgvBase::AGV_STATE state);
@@ -30,7 +27,6 @@ class AgvBase{
     protected:
         AGV_STATE _State;
         float _AutoTargetSpeed_in_kmph;
-        // void _InitBase();
         void Forwarding();
 
     private:
@@ -43,7 +39,6 @@ class AgvBase{
         TrackSensorBase* trackSensor;
         ObstacleSensorBase *obstacleSensor;
         MoverBase* __mover;
-        // BoardbaseAgv* __board;
 
         bool DoParking();
 

@@ -1,6 +1,6 @@
 #include "agv_base.h"
 
-void AgvBase::Init(BoardbaseAgv* board){
+void AgvBase::Init(AgvBoardbase* board){
     // this->__move = board->Get_DualWheelDriver();
 	// this->agv.LinkObstacleSensor(board->agv.Get_Obstacle_Vl53l0x());
 	// this->agv.LinkTrackSensor(board->agv.Get_Dual9960()); 

@@ -6,7 +6,7 @@
 #include "board_ver1.2.h"
 #include "robot_eef/gobot_main_eef.h"
 
-class Board_GobotMain: public BoardbaseCnc{
+class Board_GobotMain: public CncBoardBase{
     public:
         Board_GobotMain(){};
         void Init(bool is_on_reset) override;

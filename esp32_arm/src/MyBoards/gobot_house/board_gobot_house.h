@@ -2,12 +2,10 @@
 // #include "../board_base.h"
 #include "MyBoards/cnc_board_base.h"
 #include "board_gobot_house_ver3.11.h"
-#include "ESP32Step/src/TeensyStep.h"
-
 #include "CNC/single_axis_homer.h"
 #include "robot_eef/gobot_house_eef.h"
 
-class Board_GobotHouse: public BoardbaseCnc{
+class Board_GobotHouse: public CncBoardBase{
     public:
         Board_GobotHouse(){};
         void Init(bool is_on_reset) override;

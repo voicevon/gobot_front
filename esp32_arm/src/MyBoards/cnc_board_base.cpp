@@ -1,6 +1,6 @@
 #include "cnc_board_base.h"
 
 
-void BoardbaseCnc::SayHello(){
+void CncBoardBase::SayHello(){
     Serial.println("[Debug] BoardPart_Cnc::SayHello() ");
 }

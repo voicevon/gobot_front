@@ -1,8 +1,12 @@
 #pragma once
 
 #include "board_base.h"
+#include "ESP32Step/src/TeensyStep.h"
+#include "cnc/single_axis_homer.h"
+#include "cnc/robot_eef_base.h"
 
-class BoardbaseCnc: public BoardBase{
+
+class CncBoardBase: public BoardBase{
     public:
         virtual void Init(bool is_on_reset);
         void SayHello();
