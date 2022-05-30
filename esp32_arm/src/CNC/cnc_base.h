@@ -90,7 +90,7 @@ class IkPosition_AB: public IkPositionBase{
 };
 
 #include "MyBoards/cnc_board_base.h"
-#include "CNC/cnc_config_base.h"
+#include "CNC/cnc_machine_base.h"
 #include "CNC/single_axis_homer.h"
 
 enum class CncState{
@@ -104,7 +104,7 @@ class CncBase: public GcodeConsumer{
         CncState State = CncState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
-        virtual void Init(CncBoardBase* board, CncConfigBase* config);
+        virtual void Init(CncBoardBase* board, CncMachineBase* config);
         virtual void HomeSingleAxis(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
@@ -140,7 +140,7 @@ class CncBase: public GcodeConsumer{
         CncBoardBase* _board;
         StepControl* objStepControl;
         // GobotHouseHardwareConfig __config;
-        CncConfigBase* _config;
+        CncMachineBase* _config;
     
     private:
         int test_int;

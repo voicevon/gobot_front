@@ -26,7 +26,7 @@ CncSingleAxis::CncSingleAxis(){
 
 }
 
-void CncSingleAxis::Init(CncBoardBase* board, CncConfigBase* config){
+void CncSingleAxis::Init(CncBoardBase* board, CncMachineBase* config){
 	Serial.print("\n[Info] CncSingleAxis::Init() is entering.");
 	this->_singleAxisConfig->Init();
 	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);

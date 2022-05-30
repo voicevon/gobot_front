@@ -16,7 +16,7 @@ class Cnc_CoreYZ: public CncBase{
         Cnc_CoreYZ(){};
         // Cnc_CoreYZ(BoardbaseCnc* board, StepControl* stepControl){this->_board=board; this->objStepControl=stepControl;};
         void LinkStepControl(StepControl* stepControl){this->objStepControl=stepControl;};
-        void Init(CncBoardBase* board, CncConfigBase* config) override;
+        void Init(CncBoardBase* board, CncMachineBase* config) override;
 
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;

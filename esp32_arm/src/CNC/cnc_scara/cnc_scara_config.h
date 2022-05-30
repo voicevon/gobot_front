@@ -1,9 +1,10 @@
 #pragma once
 
 
-#include "CNC/cnc_config_base.h"
+#include "CNC/cnc_machine_base.h"
+// #include "CNC/cnc_config_base.h"
 
-class CncScaraConfig: public CncConfigBase{
+class CncScaraConfig: public CncMachineBase{
     public:
         // value is vary for each gobot-house robot.
         float Homed_position_alpha_in_degree;

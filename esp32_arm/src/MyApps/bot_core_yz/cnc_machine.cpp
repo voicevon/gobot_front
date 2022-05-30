@@ -1,8 +1,8 @@
-#include "box_carrier_hw_config.h"
+#include "cnc_machine.h"
 #include "HardwareSerial.h"
 
 
-void BoxCarrierHardwareConfig::Init(){
+void BoxCarrierMachine::Init(){
         this->STEPPER_DRIVER_MICRO_STEPS = 16;
         this->MOTOR_GEARBOX_RATIO_ALPHA_BETA = 27;
         this->MOTOR_DEGREE_PER_STEP = 1.8;
@@ -19,7 +19,7 @@ void BoxCarrierHardwareConfig::Init(){
 
 }
 
-void BoxCarrierHardwareConfig::PrintOut(){
+void BoxCarrierMachine::PrintOut(){
     Serial.print("\n\n===============================================");
     Serial.print("\nBoxMoverHardwareConfig::PrintOut()");
     Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");
@@ -52,6 +52,6 @@ void BoxCarrierHardwareConfig::PrintOut(){
 }
 
 
-int32_t BoxCarrierHardwareConfig::GetStepsPerUnit(char axis_name) {
+int32_t BoxCarrierMachine::GetStepsPerUnit(char axis_name) {
     return 123;
 }

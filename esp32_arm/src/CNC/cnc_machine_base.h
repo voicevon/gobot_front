@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 
-class CncConfigBase{
+class CncMachineBase{
     public:
         virtual int32_t GetStepsPerUnit(char axis_name);
         

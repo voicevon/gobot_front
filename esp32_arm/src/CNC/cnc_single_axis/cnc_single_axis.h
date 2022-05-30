@@ -9,7 +9,7 @@ class CncSingleAxis: public CncBase{
     public:
         CncSingleAxis();
 
-        void Init(CncBoardBase* board, CncConfigBase* config) override;
+        void Init(CncBoardBase* board, CncMachineBase* config) override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 

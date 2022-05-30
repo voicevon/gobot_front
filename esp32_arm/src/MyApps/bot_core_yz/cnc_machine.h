@@ -2,7 +2,7 @@
 // #include "cnc_core_yz_config.h"
 #include "CNC/cnc_core_yz/cnc_core_yz_config.h"
 
-class BoxCarrierHardwareConfig: public CncCoreYZConfig{
+class BoxCarrierMachine: public CncCoreYZConfig{
     public:
         void Init();
         void PrintOut();

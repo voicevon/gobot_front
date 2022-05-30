@@ -63,7 +63,7 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 // 	this->objHomeHelper_y = homer_y;
 // }
 
-void Cnc_CoreYZ::Init(CncBoardBase* board, CncConfigBase* config){
+void Cnc_CoreYZ::Init(CncBoardBase* board, CncMachineBase* config){
 	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
 	this->_cncMachine->Init();
 
