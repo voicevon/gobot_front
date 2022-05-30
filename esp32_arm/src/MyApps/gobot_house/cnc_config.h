@@ -1,10 +1,6 @@
 #pragma once
 
-#include "cnc_scara_config.h"
-
-class GobotHouseCncConfig{
-
-};
+#include "CNC/cnc_scara/cnc_scara_config.h"
 
 
 class GobotHouseHardwareConfig: public CncScaraConfig{

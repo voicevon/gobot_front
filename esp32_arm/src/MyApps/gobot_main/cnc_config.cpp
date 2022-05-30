@@ -1,10 +1,7 @@
-#include "gobot_chessboard_hw_config.h"
-#include "HardwareSerial.h"
-#include "Arduino.h"  // for TWO_PI, PI only
+#include "cnc_config.h"
 
-GobotChessboardHardwareConfig::GobotChessboardHardwareConfig(){
-    this->Init();
-    this->PrintOut("Init()");
+int32_t GobotChessboardHardwareConfig::GetStepsPerUnit(char axis_name) {
+    return 100;
 }
 
 void GobotChessboardHardwareConfig::Init(){

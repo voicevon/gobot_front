@@ -1,11 +1,8 @@
 #pragma once
 
-// #include "MyBoards/board_base.h"
 #include "MyBoards/cnc_board_base.h"
-#include "spring_maker_cnc_config.h"
 #include "CNC/cnc_base.h"
-#include "ESP32Step/src/TeensyStep.h"
-#include "CNC/single_axis_homer.h"
+#include "cnc_single_axis_config.h"
 
 
 class CncSingleAxis: public CncBase{
@@ -19,6 +16,9 @@ class CncSingleAxis: public CncBase{
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
+
+    protected:
+        CncSingleAxis_Config* _singleAxisConfig;  //TODO:  uinify name:  cncConfig??
 
     private:
         Stepper* objStepper_alpha;
@@ -41,6 +41,6 @@ class CncSingleAxis: public CncBase{
 
         SingleAxisHomer* __homing_helper;
         SingleAxisHomer* objHomeHelper_alpha;
-        SpringMakerHardwareConfig  __config;
+        // SpringMakerHardwareConfig  __config;
 
 };

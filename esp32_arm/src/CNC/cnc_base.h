@@ -91,6 +91,7 @@ class IkPosition_AB: public IkPositionBase{
 
 #include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_config_base.h"
+#include "CNC/single_axis_homer.h"
 
 enum class CncState{
     IDLE,

@@ -1,5 +1,5 @@
 
-#include "gobot_house_cnc_config.h"
+#include "cnc_config.h"
 
 
 void GobotHouseHardwareConfig::Init(){

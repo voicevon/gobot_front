@@ -1,17 +1,11 @@
 #pragma once
+#include "CNC/cnc_config_base.h"
 
-
-
-
-
-// #include "board_ver1.2.h"
-// #include "MyBoards/cnc_dual_stepper_2201/board_ver1.2.h"
-#include "MyBoards/gobot_main/board_ver1.2.h"
-class GobotChessboardHardwareConfig{
+class CncFiveBarConfig: public CncConfigBase{
     public:
         // link length in mm
         //  unit is mm
-        GobotChessboardHardwareConfig();
+        CncFiveBarConfig(){};
         float MOTOR_STEPS_PER_SHAFT_ROUND;
         float STEPS_PER_RAD; 
         // 191.0 is the Length between the centers of two motors 
@@ -28,11 +22,8 @@ class GobotChessboardHardwareConfig{
         float Homed_position_beta_in_degree;
         int Homing_acceleration_alpha_beta;
         int Homing_speed_alpha_beta;
-        
-        void Init();
-        void PrintOut(const char* title);
 
-    private:
+    protected:
         int STEPPER_DRIVER_MICRO_STEPS;
         float MOTOR_STEP_ANGLE;
         float GEAR_BOX_RATIO;

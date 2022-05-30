@@ -4,12 +4,14 @@
 
 #include "gobot_chessboard.h"
 #include "CNC/cnc_five_bars/cnc_five_bars.h"
+#include "cnc_config.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
 #include "MyBoards/gobot_main/board_gobot_main.h"
 
 
-Board_GobotMain board = Board_GobotMain();
+Board_GobotMain board;
+GobotChessboardHardwareConfig cncConfig;
 CncFiveBars cncFiveBar;
 GobotChessboard robot; 
 GcodeQueue gcode_queue;
@@ -18,7 +20,8 @@ MessageQueue mqtt_message_queue;
 
 void setup(){
     board.Init(true);
-    cncFiveBar.Init(&board);
+    cncConfig.Init();
+    cncFiveBar.Init(&board, &cncConfig);
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cncFiveBar.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);

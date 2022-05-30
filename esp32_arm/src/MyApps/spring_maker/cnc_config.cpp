@@ -1,4 +1,4 @@
-#include "spring_maker_cnc_config.h"
+#include "cnc_config.h"
 
 
 int32_t SpringMakerHardwareConfig::GetStepsPerUnit(char axis_name) {

@@ -6,7 +6,7 @@ void CncSingleAxis::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_A* fk = (FkPosition_A*)(from_fk);
 	IkPosition_A* ik = (IkPosition_A*)(to_ik);
 
-	ik->alpha = fk->A * this->__config.steps_per_rad_for_a;
+	ik->alpha = fk->A * this->_singleAxisConfig->steps_per_rad_for_a;
 	Serial.print("\n[Debug] CncSingleAxis::IK() output  = ");
 	Serial.print(ik->alpha);
 }
@@ -16,7 +16,7 @@ void CncSingleAxis::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_A* fk = (FkPosition_A*)(to_fk);
 	IkPosition_A* ik = (IkPosition_A*)(from_ik);
 	
-	fk->A = ik->alpha / this->__config.steps_per_rad_for_a;
+	fk->A = ik->alpha / this->_singleAxisConfig->steps_per_rad_for_a;
 	Serial.print("\n[Debug] CncSingleAxis::FK() output A = ");
 	Serial.print(fk->A);
 }
@@ -28,7 +28,7 @@ CncSingleAxis::CncSingleAxis(){
 
 void CncSingleAxis::Init(CncBoardBase* board, CncConfigBase* config){
 	Serial.print("\n[Info] CncSingleAxis::Init() is entering.");
-	this->__config.Init();
+	this->_singleAxisConfig->Init();
 	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	// this->__EnableMotor('A', false);
 	this->objStepper_alpha = board->GetStepper('A');
@@ -45,9 +45,9 @@ void CncSingleAxis::HomeSingleAxis(char axis){
 	Serial.print("[Debug] CncSingleAxis::HomeSingleAxis() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis = axis;
-	this->__config.PrintOut();
-	this->objStepper_alpha->setAcceleration(this->__config.Homing_acceleration_alpha);
-	this->objStepper_alpha->setMaxSpeed(this->__config.Homing_speed_alpha);
+	this->_singleAxisConfig->PrintOut();
+	this->objStepper_alpha->setAcceleration(this->_singleAxisConfig->Homing_acceleration_alpha);
+	this->objStepper_alpha->setMaxSpeed(this->_singleAxisConfig->Homing_speed_alpha);
 
 	if (axis=='A'){
 		//todo :  process with IK()
@@ -76,8 +76,8 @@ void CncSingleAxis::_running_G28(){
 		else{
 			// We know homed position via FK
 			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
-			this->__current_fk_position.A = this->__config.Homed_position_fk_A;
-			// this->__current_fk_position.W = this->__config.Homed_position_w;
+			this->__current_fk_position.A = this->_singleAxisConfig->Homed_position_fk_A;
+			// this->__current_fk_position.W = this->_singleAxisConfig->Homed_position_w;
 			this->IK(&this->__current_fk_position, &ik_position);
 			// verify IK by FK()
 			FkPosition_A verifying_fk;
@@ -88,10 +88,10 @@ void CncSingleAxis::_running_G28(){
 		if (this->_homing_axis == 'A') this->objStepper_alpha->setPosition(ik_position.alpha);
 		// if (this->_homing_axis == 'W') this->objStepper_beta.setPosition(ik_position.beta);
 		
-		this->objStepper_alpha->setMaxSpeed(this->__config.max_speed_alpha);
-		this->objStepper_alpha->setAcceleration(this->__config.max_acceleration_alpha);
-		// this->objStepper_beta.setMaxSpeed(this->__config.max_speed_alpha_beta);
-		// this->objStepper_beta.setAcceleration(this->__config.max_acceleration_alpha_beta);
+		this->objStepper_alpha->setMaxSpeed(this->_singleAxisConfig->max_speed_alpha);
+		this->objStepper_alpha->setAcceleration(this->_singleAxisConfig->max_acceleration_alpha);
+		// this->objStepper_beta.setMaxSpeed(this->_singleAxisConfig->max_speed_alpha_beta);
+		// this->objStepper_beta.setAcceleration(this->_singleAxisConfig->max_acceleration_alpha_beta);
 		this->State = CncState::IDLE;
 
 	}else{
@@ -138,7 +138,7 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 	}
 }
 void CncSingleAxis::_running_G1(){
-    if (this->GetDistanceToTarget_IK() < this->__config.max_acceleration_alpha){
+    if (this->GetDistanceToTarget_IK() < this->_singleAxisConfig->max_acceleration_alpha){
       	this->State = CncState::IDLE;
 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
     }

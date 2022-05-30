@@ -1,4 +1,4 @@
-#include "cnc_single_axis_config.h"
+#include "CNC/cnc_single_axis/cnc_single_axis_config.h"
 
 class SpringMakerHardwareConfig: public CncSingleAxis_Config{
     public:

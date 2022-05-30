@@ -2,15 +2,12 @@
 
 
 #include <ESP32Servo.h>
-// #include "MyBoards/board_base.h"
 #include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_base.h"
+#include "cnc_five_bars_config.h"
 #include "CNC/eef_standard_code.h"
 #include "CNC/single_axis_homer.h"
-#include "ESP32Step/src/TeensyStep.h"
 #include "MyLibs/MyFunctions.hpp"
-
-#include "gobot_chessboard_hw_config.h"
 #include "CNC/Robot_eef_base.h"
 
 class CncFiveBars: public CncBase{
@@ -27,6 +24,8 @@ class CncFiveBars: public CncBase{
         void Calibrate(int step,bool enable_eef_coil);
         void RunM84() override;
 
+    protected:
+        CncFiveBarConfig* _fivebarConfig;
 
     
     private:
@@ -51,7 +50,6 @@ class CncFiveBars: public CncBase{
         Stepper* beta_stepper;
         StepControl objStepControl;
 
-        GobotChessboardHardwareConfig __config;
         Stepper* __homing_stepper;
         SingleAxisHomer* __current_homer;
         FkPosition_XY __current_fk_position;

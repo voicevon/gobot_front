@@ -39,16 +39,16 @@ void CncFiveBars::HomeSingleAxis(char axis){
 	if (axis=='A'){
 		this->_board->EnableMotor('A', false);
 		// this->__EnableMotor('A', false);
-		this->alpha_stepper->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
-		this->alpha_stepper->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
+		this->alpha_stepper->setAcceleration(this->_fivebarConfig->Homing_acceleration_alpha_beta);
+		this->alpha_stepper->setMaxSpeed(this->_fivebarConfig->Homing_speed_alpha_beta);
 		this->__homing_stepper = this->alpha_stepper;
 		this->__current_homer = this->alpha_homer;
 		this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
 	}else if (axis=='B'){
 		// this->__EnableMotor('B',true);
 		this->_board->EnableMotor('B', true);
-		this->beta_stepper->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
-		this->beta_stepper->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
+		this->beta_stepper->setAcceleration(this->_fivebarConfig->Homing_acceleration_alpha_beta);
+		this->beta_stepper->setMaxSpeed(this->_fivebarConfig->Homing_speed_alpha_beta);
 		this->__homing_stepper = this->beta_stepper;
 		this->__current_homer = this->beta_homer;
 		this->__homing_stepper->setTargetRel(-500000);    //angle to be smaller.
@@ -74,8 +74,8 @@ void CncFiveBars::_running_G28(){
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
-			ik_position.alpha =  this->__config.Homed_position_alpha_in_degree * DEG_TO_RAD;
-			ik_position.beta =  this->__config.Homed_position_beta_in_degree * DEG_TO_RAD;
+			ik_position.alpha =  this->_fivebarConfig->Homed_position_alpha_in_degree * DEG_TO_RAD;
+			ik_position.beta =  this->_fivebarConfig->Homed_position_beta_in_degree * DEG_TO_RAD;
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik;
@@ -86,14 +86,14 @@ void CncFiveBars::_running_G28(){
 		}
 		//Copy current ik-position to motor-position.
 		if (this->_homing_axis == 'A') 
-			this->alpha_stepper->setPosition(ik_position.alpha * this->__config.STEPS_PER_RAD);
+			this->alpha_stepper->setPosition(ik_position.alpha * this->_fivebarConfig->STEPS_PER_RAD);
 		if (this->_homing_axis == 'B') 
-			this->beta_stepper->setPosition(ik_position.beta * this->__config.STEPS_PER_RAD);
+			this->beta_stepper->setPosition(ik_position.beta * this->_fivebarConfig->STEPS_PER_RAD);
 		
-		this->alpha_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA);
-		this->alpha_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
-		this->beta_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA);
-		this->beta_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHA_BETA);
+		this->alpha_stepper->setMaxSpeed(this->_fivebarConfig->MAX_STEPS_PER_SECOND_ALPHA_BETA);
+		this->alpha_stepper->setAcceleration(this->_fivebarConfig->MAX_ACCELERATION_ALPHA_BETA);
+		this->beta_stepper->setMaxSpeed(this->_fivebarConfig->MAX_STEPS_PER_SECOND_ALPHA_BETA);
+		this->beta_stepper->setAcceleration(this->_fivebarConfig->MAX_ACCELERATION_ALPHA_BETA);
 		this->State = CncState::IDLE;
 
 	}else{
@@ -110,26 +110,26 @@ void CncFiveBars::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
-	float rr1= (fk->X + this->__config.LINK_0) * (fk->X + this->__config.LINK_0) + fk->Y * fk->Y;
+	float rr1= (fk->X + this->_fivebarConfig->LINK_0) * (fk->X + this->_fivebarConfig->LINK_0) + fk->Y * fk->Y;
 	// alpha , beta are in unit of RAD.
 	float r1 = sqrtf(rr1);
-	float alpha_eef = acosf((fk->X + this->__config.LINK_0) / r1);
+	float alpha_eef = acosf((fk->X + this->_fivebarConfig->LINK_0) / r1);
 
-	float alpha_link = acosf((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B) / ( this->__config.LINK_A * r1 * 2));
+	float alpha_link = acosf((this->_fivebarConfig->LINK_A * this->_fivebarConfig->LINK_A + rr1 - this->_fivebarConfig->LINK_B * this->_fivebarConfig->LINK_B) / ( this->_fivebarConfig->LINK_A * r1 * 2));
 	ik->alpha = alpha_eef + alpha_link;
 
 	bool output_debug = false;
 	if (output_debug){
 		Serial.print("\nLink0= ");
-		Serial.print(this->__config.LINK_0);
+		Serial.print(this->_fivebarConfig->LINK_0);
 		Serial.print(" LinkA= ");
-		Serial.print(this->__config.LINK_A);
+		Serial.print(this->_fivebarConfig->LINK_A);
 		Serial.print(" LinkB= ");
-		Serial.print(this->__config.LINK_B);
+		Serial.print(this->_fivebarConfig->LINK_B);
 		Serial.print(" r1= ");
 		Serial.print(r1);
 		Serial.print(" cos (EEF triangle) = ");
-		Serial.print((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B) / ( this->__config.LINK_A * r1 * 2));
+		Serial.print((this->_fivebarConfig->LINK_A * this->_fivebarConfig->LINK_A + rr1 - this->_fivebarConfig->LINK_B * this->_fivebarConfig->LINK_B) / ( this->_fivebarConfig->LINK_A * r1 * 2));
 		Serial.print(" angle EEF in degree = ");
 		Serial.print(alpha_eef * RAD_TO_DEG);
 		Serial.print(" angle link in degree = ");
@@ -138,23 +138,23 @@ void CncFiveBars::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 		Serial.print(ik->alpha * RAD_TO_DEG);
 	}
 
-	float rr2 = (fk->X - this->__config.LINK_0)* (fk->X - this->__config.LINK_0) + fk->Y * fk->Y;
+	float rr2 = (fk->X - this->_fivebarConfig->LINK_0)* (fk->X - this->_fivebarConfig->LINK_0) + fk->Y * fk->Y;
 	float r2 = sqrtf(rr2);
-	float beta_eef = acosf((fk->X - this->__config.LINK_0) / r2 );
-	float beta_link = acosf((this->__config.LINK_A * this->__config.LINK_A + rr2 - this->__config.LINK_B *this->__config. LINK_B) / (this->__config.LINK_A * r2 * 2));
+	float beta_eef = acosf((fk->X - this->_fivebarConfig->LINK_0) / r2 );
+	float beta_link = acosf((this->_fivebarConfig->LINK_A * this->_fivebarConfig->LINK_A + rr2 - this->_fivebarConfig->LINK_B *this->_fivebarConfig-> LINK_B) / (this->_fivebarConfig->LINK_A * r2 * 2));
 	ik->beta = beta_eef - beta_link;
 
 	if (output_debug){
 		Serial.print("\nLink0= ");
-		Serial.print(this->__config.LINK_0);
+		Serial.print(this->_fivebarConfig->LINK_0);
 		Serial.print(" LinkA= ");
-		Serial.print(this->__config.LINK_A);
+		Serial.print(this->_fivebarConfig->LINK_A);
 		Serial.print(" LinkB= ");
-		Serial.print(this->__config.LINK_B);
+		Serial.print(this->_fivebarConfig->LINK_B);
 		Serial.print(" r2= ");
 		Serial.print(r2);
 		Serial.print(" cos (EEF triangle) = ");
-		Serial.print((this->__config.LINK_A * this->__config.LINK_A + rr2 - this->__config.LINK_B * this->__config.LINK_B) / ( this->__config.LINK_A * r2 * 2));
+		Serial.print((this->_fivebarConfig->LINK_A * this->_fivebarConfig->LINK_A + rr2 - this->_fivebarConfig->LINK_B * this->_fivebarConfig->LINK_B) / ( this->_fivebarConfig->LINK_A * r2 * 2));
 		Serial.print(" angle EEF in degree = ");
 		Serial.print(beta_eef * RAD_TO_DEG);
 		Serial.print(" angle link in degree = ");
@@ -178,10 +178,10 @@ void CncFiveBars::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 
-	float elbow_alpha_x = this->__config.LINK_A * cosf(ik->alpha) - this->__config.LINK_0;   // TODO:: whan alpha > 180 degree.
-	float elbow_alpha_y = this->__config.LINK_A * sinf(ik->alpha);   // TODO:: When alpha > 90 degree
-	float elbow_beta_x = this->__config.LINK_A * cosf(ik->beta) + this->__config.LINK_0;   //TODO: when alpha < 0 degree. 
-	float elbow_beta_y = this->__config.LINK_A * sinf(ik->beta);     //TODO: When beta < -90 degree.
+	float elbow_alpha_x = this->_fivebarConfig->LINK_A * cosf(ik->alpha) - this->_fivebarConfig->LINK_0;   // TODO:: whan alpha > 180 degree.
+	float elbow_alpha_y = this->_fivebarConfig->LINK_A * sinf(ik->alpha);   // TODO:: When alpha > 90 degree
+	float elbow_beta_x = this->_fivebarConfig->LINK_A * cosf(ik->beta) + this->_fivebarConfig->LINK_0;   //TODO: when alpha < 0 degree. 
+	float elbow_beta_y = this->_fivebarConfig->LINK_A * sinf(ik->beta);     //TODO: When beta < -90 degree.
 	
 	bool output_debug = false;
 	if (output_debug){
@@ -229,7 +229,7 @@ void CncFiveBars::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 		Serial.print(" )");
 	}
 	float elbows_distance_sqr = delta_x * delta_x + delta_y * delta_y;
-	float lenth_from_center_to_eef = sqrtf(this->__config.LINK_B * this->__config.LINK_B - elbows_distance_sqr / 4);
+	float lenth_from_center_to_eef = sqrtf(this->_fivebarConfig->LINK_B * this->_fivebarConfig->LINK_B - elbows_distance_sqr / 4);
 	if (output_debug){
 		Serial.print("\nelbow_distance and lenth_from_center_to_eef = ( ");
 		Serial.print(sqrtf(elbows_distance_sqr));
@@ -273,19 +273,19 @@ void CncFiveBars::RunG1(Gcode* gcode){
 
 	// Sometimes, the current position of stepper is NOT the last target position. Since it's moving.
 	// But, The initialized values will effect nothing. They will be over writen. 
-	target_ik_ab.alpha = this->alpha_stepper->getPosition() / this->__config.STEPS_PER_RAD;
-	target_ik_ab.beta = this->beta_stepper->getPosition() / this->__config.STEPS_PER_RAD;
+	target_ik_ab.alpha = this->alpha_stepper->getPosition() / this->_fivebarConfig->STEPS_PER_RAD;
+	target_ik_ab.beta = this->beta_stepper->getPosition() / this->_fivebarConfig->STEPS_PER_RAD;
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
 		// this->__EnableMotor('A', true); 
 		this->_board->EnableMotor('A', true);
-		// target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
+		// target_ik_ab.alpha = gcode->get_value('A') * this->_fivebarConfig->STEPS_PER_RAD * DEG_TO_RAD;
 		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;
 	}
 	if (gcode->has_letter('B')){
 		// this->__EnableMotor('B', true);
 		this->_board->EnableMotor('B', true);
-		// target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD * DEG_TO_RAD;
+		// target_ik_ab.beta = gcode->get_value('B') * this->_fivebarConfig->STEPS_PER_RAD * DEG_TO_RAD;
 		target_ik_ab.beta = gcode->get_value('B') *  DEG_TO_RAD;
 	}
 	// If need IK, do it now.
@@ -301,10 +301,10 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	// Normally the unit in G1A,G1B is degree
 	if(gcode->has_letter('R')) 
 		// Bug now, the unit in G1A,G1B is RAD
-		target_ik_ab.alpha = this->__config.MOTOR_STEPS_PER_SHAFT_ROUND * gcode->get_value('R');
+		target_ik_ab.alpha = this->_fivebarConfig->MOTOR_STEPS_PER_SHAFT_ROUND * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
-	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha * this->__config.STEPS_PER_RAD );
-	this->beta_stepper->setTargetAbs(target_ik_ab.beta * this->__config.STEPS_PER_RAD );
+	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha * this->_fivebarConfig->STEPS_PER_RAD );
+	this->beta_stepper->setTargetAbs(target_ik_ab.beta * this->_fivebarConfig->STEPS_PER_RAD );
 	//None blocking, move backgroundly.
 	this->objStepControl.moveAsync(*this->alpha_stepper, *this->beta_stepper);
 
@@ -330,7 +330,7 @@ void CncFiveBars::RunG1(Gcode* gcode){
 }
 
 void CncFiveBars::_running_G1(){
-    if (this->GetDistanceToTarget_IK() < (this->__config.MAX_STEPS_PER_SECOND_ALPHA_BETA)/32){
+    if (this->GetDistanceToTarget_IK() < (this->_fivebarConfig->MAX_STEPS_PER_SECOND_ALPHA_BETA)/32){
       	this->State = CncState::IDLE;
 		Serial.print("\n[Info] CncFiveBars::_running_G1() is finished. ");
     }
