@@ -1,5 +1,6 @@
 
-#include "all_devices.h"
+#include "all_applications.h"
+// #include "all_devices.h"
 #ifdef USING_WIFI_MQTT
 
 

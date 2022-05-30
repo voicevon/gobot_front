@@ -1,4 +1,5 @@
-#include "all_devices.h"
+// #include "all_devices.h"
+#include "all_applications.h"
 #ifdef I_AM_SPRING_MAKER
 #include "MyBoards/sping_maker/board_spring_maker.h"
 #include "CNC/cnc_single_axis/cnc_single_axis.h"

@@ -1,5 +1,6 @@
 #pragma once
-#include "all_devices.h"
+// #include "all_devices.h"
+#include "all_applications.h"
 #ifdef I_AM_CABLEBOT_CORNER
 
 
@@ -23,7 +24,7 @@
 #define PIN_DC_MOTOR_A_2130 27
 #define PIN_DC_MOTOR_B_2130 14
 #define PIN_LED_POWER_2130 22
-#include "all_devices.h"
+
 
 class RoomBotCorner: public RobotBase{
     public:

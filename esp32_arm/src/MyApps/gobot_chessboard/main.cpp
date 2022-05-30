@@ -1,4 +1,5 @@
-#include "all_devices.h"
+#include "all_applications.h"
+// #include "all_devices.h"
 #ifdef I_AM_GOBOT_CHESSBOARD
 
 #include "gobot_chessboard.h"

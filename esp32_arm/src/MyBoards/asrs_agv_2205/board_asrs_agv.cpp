@@ -17,8 +17,7 @@ void BoardAllInOne::Init(bool is_on_reset){
         delay(3000);           // wait 5 seconds for next scan
     }
     this->_Begin_Mcp23018(&this->__mcp23018, I2C_ADDR_MCP23018_2205, &this->__i2c_bus_main);
-    this->__mcp23018.pinMode(MC23018_PIN_ALPHA_ENABLE_2205, OUTPUT);
-    this->__mcp23018.pinMode(MC23018_PIN_BETA_ENABLE_2205, OUTPUT);
+
     this->__mcp23018.pinMode(PIN_MCP23018_TEST_2205, OUTPUT);
     // Init cnc components 
     this->cnc.Init(false);

@@ -1,4 +1,5 @@
-#include "all_devices.h"
+#include "all_applications.h"
+// #include "all_devices.h"
 #ifdef I_AM_SHARP_IR_DISTANCE_SENSOR
 #include "CNC/Sensor/sharp_ir_distance_adc.h"
 #include <HardwareSerial.h>

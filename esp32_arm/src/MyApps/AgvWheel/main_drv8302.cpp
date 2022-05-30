@@ -1,4 +1,5 @@
-#include "all_devices.h"
+#include "all_applications.h"
+// #include "all_devices.h"
 #ifdef I_AM_DRV8302
 
 #include <SimpleFOC.h>

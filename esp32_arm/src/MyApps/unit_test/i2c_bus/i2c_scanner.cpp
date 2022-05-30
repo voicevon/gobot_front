@@ -1,5 +1,6 @@
 
-#include "all_devices.h"
+#include "all_applications.h"
+// #include "all_devices.h"
 #ifdef I_AM_I2C_SCANNER
  
 #include <HardwareSerial.h>

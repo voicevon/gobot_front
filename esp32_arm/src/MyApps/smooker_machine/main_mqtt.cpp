@@ -1,6 +1,7 @@
 //https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout-1.jpg
 
-#include "all_devices.h"
+// #include "all_devices.h"
+#include "all_applications.h"
 #ifdef I_AM_SMOKE_MACHINE_MQTT
 
 // #include "Iot/wifi_mqtt_client.h"

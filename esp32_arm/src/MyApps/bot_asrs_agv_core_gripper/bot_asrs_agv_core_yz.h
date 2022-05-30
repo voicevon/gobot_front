@@ -1,5 +1,6 @@
 #pragma once
-#include "all_devices.h"
+#include "all_applications.h"
+// #include "all_devices.h"
 // #ifdef I_AM_ROBOT_ASRS_AGV
 
 #include "IoT/mqtt_message_consumer.h"

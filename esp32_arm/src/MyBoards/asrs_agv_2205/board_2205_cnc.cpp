@@ -6,10 +6,14 @@ void Board2205Cnc::Init(bool is_on_reset){
 
 void Board2205Cnc::Init(Adafruit_MCP23X17* mcp_23018){
     this->__mcp23018 = mcp_23018;
-    this->stepper_alpha.Init_mcp23018(mcp_23018, MC23018_PIN_ALPHA_DIR_2205);
-    this->stepper_beta.Init_mcp23018(mcp_23018, MC23018_PIN_BETA_DIR_2205);
-    this->homer_y.Init_mcp23018(mcp_23018, MC23018_PIN_HOME_Y_2205);
-    this->homer_z.Init_mcp23018(mcp_23018, MC23018_PIN_HOME_Z_2205);
+    this->__mcp23018->pinMode(MC23018_PIN_ALPHA_ENABLE_2205, OUTPUT);
+    this->__mcp23018->pinMode(MC23018_PIN_BETA_ENABLE_2205, OUTPUT);
+
+    this->stepper_alpha.Init_mcp23018_gpio(mcp_23018, MC23018_PIN_ALPHA_DIR_2205);
+    this->stepper_beta.Init_mcp23018_gpio(mcp_23018, MC23018_PIN_BETA_DIR_2205);
+
+    this->homer_y.Init_mcp23018_gpio(mcp_23018, MC23018_PIN_HOME_Y_2205);
+    this->homer_z.Init_mcp23018_gpio(mcp_23018, MC23018_PIN_HOME_Z_2205);
 }
 
 Stepper* Board2205Cnc::GetStepper(char axis_name){

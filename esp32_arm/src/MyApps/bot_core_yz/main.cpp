@@ -1,7 +1,6 @@
-#include "all_devices.h"
+#include "all_applications.h"
 #ifdef I_AM_GARMENT_BOX_CARRIER
 
-// #include "box_carrier_board.h"
 
 #include "MyLibs/MyFunctions.hpp"
 #include "box_carrier.h"

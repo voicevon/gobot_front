@@ -1,4 +1,5 @@
-#include "all_devices.h"
+#include "all_applications.h"
+// #include "all_devices.h"
 #ifdef I_AM_ADS1115_SINGLE
 
 #include <Adafruit_ADS1X15.h>

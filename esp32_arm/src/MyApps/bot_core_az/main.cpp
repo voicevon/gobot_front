@@ -1,4 +1,5 @@
-#include "all_devices.h"
+#include "all_applications.h"
+// #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOX_MOVER
 
 #include "MyBoards/asrs_agv_2205/board_2205_cnc.h"

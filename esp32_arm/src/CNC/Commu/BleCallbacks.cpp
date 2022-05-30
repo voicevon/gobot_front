@@ -1,4 +1,6 @@
-#include "all_devices.h"
+
+#include "all_applications.h"
+
 #ifdef USING_BLE
 #include "BleCallbacks.h"
 #include <esp_log.h>
