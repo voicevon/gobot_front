@@ -6,7 +6,8 @@
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/agv_base.h"
 #include "MyBoards/asrs_agv_2205/board_asrs_agv.h"
-#include "MyApps/bot_core_yz/box_carrier.h"
+// #include "MyApps/bot_core_yz/box_carrier.h"
+#include "MyApps/box_carrier/box_carrier.h"
 
 
 class MqttReportData{

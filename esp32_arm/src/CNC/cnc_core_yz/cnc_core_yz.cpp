@@ -65,7 +65,7 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 void Cnc_CoreYZ::Init(CncBoardBase* board, CncMachineBase* config){
 	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
-	this->_cncMachine->Init();
+	this->_cncMachine->Init('A');
 
 
 	// CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.

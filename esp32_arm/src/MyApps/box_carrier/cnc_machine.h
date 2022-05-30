@@ -4,9 +4,13 @@
 
 class BoxCarrierMachine: public CncCoreYZConfig{
     public:
-        void Init();
+        void Init(char solution_id) override;
         void PrintOut();
         int32_t GetStepsPerUnit(char axis_name) override;
+
+    private:
+        void __Init_Fast();
+
     //     float steps_per_mm_for_y;
     //     float steps_per_mm_for_z;
 

@@ -2,7 +2,12 @@
 #include "HardwareSerial.h"
 
 
-void BoxCarrierMachine::Init(){
+void BoxCarrierMachine::Init(char solution_id){
+    if (solution_id == 'F')
+        this->__Init_Fast();
+}
+
+void BoxCarrierMachine::__Init_Fast(){
         this->STEPPER_DRIVER_MICRO_STEPS = 16;
         this->MOTOR_GEARBOX_RATIO_ALPHA_BETA = 27;
         this->MOTOR_DEGREE_PER_STEP = 1.8;

@@ -3,7 +3,7 @@
 
 
 #include "MyBoards/asrs_agv_2205/board_asrs_agv.h"
-#include "box_carrier_hw_config.h"
+#include "cnc_machine.h"
 #include "CNC/cnc_core_yz/cnc_core_yz.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_carrier.h"
@@ -11,7 +11,7 @@
 
 
 BoardAllInOne board = BoardAllInOne();
-BoxCarrierHardwareConfig cncConfig;
+BoxCarrierMachine cncMachine;
 Cnc_CoreYZ cnc = Cnc_CoreYZ();
 BoxCarrier robot = BoxCarrier();
 GcodeQueue gcode_queue = GcodeQueue();
@@ -21,9 +21,8 @@ StepControl objStepControl;
 
 void setup(){
     board.Init(true);
-    cncConfig.Init();
-    // Serial.println("Hi there, I am your lovely bot,  Garment box-Carrier for Jetty .  Keep smiling :)");
-    cnc.Init(&board.cnc, &cncConfig);
+    cncMachine.Init('A');
+    cnc.Init(&board.cnc, &cncMachine);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
