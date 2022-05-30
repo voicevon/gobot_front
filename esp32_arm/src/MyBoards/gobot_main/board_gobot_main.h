@@ -1,5 +1,4 @@
 #pragma once
-// #include "../board_base.h"
 #include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
@@ -15,13 +14,23 @@ class Board_GobotMain: public CncBoardBase{
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_GobotMain* GetEef() override;
         void EnableMotor(char axis_name, bool enable_it) override;
-        
+        uint8_t ReadRoomsSensor();
+
     private:
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
         Stepper stepper_beta = Stepper(PIN_BETA_STEP_2201, PIN_BETA_DIR_2201);
         SingleAxisHomer homer_alpha = SingleAxisHomer(PIN_HOME_ALPHA_2201, LOW);
         SingleAxisHomer homer_beta = SingleAxisHomer(PIN_HOME_BETA_2201, LOW);
         RobotEef_GobotMain eef = RobotEef_GobotMain();
-
+        uint8_t PIN_ROOMS[8];
+        // static uint8_t PIN_ROOMS[] = {PIN_SENSOR_ROOM_0,
+        //                 PIN_SENSOR_ROOM_1,
+        //                 PIN_SENSOR_ROOM_2,
+        //                 PIN_SENSOR_ROOM_3,
+        //                 PIN_SENSOR_ROOM_4,
+        //                 PIN_SENSOR_ROOM_5,
+        //                 PIN_SENSOR_ROOM_6,
+        //                 PIN_SENSOR_ROOM_7
+        //                 };
 
 };

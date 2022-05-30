@@ -1,7 +1,9 @@
-#include "spring_maker_hw_config.h"
-#include "HardwareSerial.h"
-// #include "math.h"
-#define TWO_PI 6.283185307179586476925286766559
+#include "spring_maker_cnc_config.h"
+
+
+int32_t SpringMakerHardwareConfig::GetStepsPerUnit(char axis_name) {
+    return 100;
+}
 
 void SpringMakerHardwareConfig::Init(){
         this->STEPPER_DRIVER_MICRO_STEPS = 16;
@@ -45,3 +47,4 @@ void SpringMakerHardwareConfig::PrintOut(){
 
     Serial.print("\n----------------------------------------------\n\n");
 }
+

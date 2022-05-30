@@ -4,6 +4,8 @@
 
 #include "MyBoards/gobot_house/board_gobot_house.h"
 #include "CNC/cnc_scara/cnc_scara.h"
+// #include "CNC/cnc_scara/cnc_scara_config.h"
+#include "CNC/cnc_scara/gobot_house_cnc_config.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
@@ -12,15 +14,16 @@
 
 StepControl controller;    // Use default settings 
 Board_GobotHouse board = Board_GobotHouse();
+GobotHouseHardwareConfig cncConfig;
 CncScara cncScara = CncScara();
 GcodeQueue gcode_queue = GcodeQueue();
 MessageQueue mqtt_message_queue = MessageQueue();
-
 GobotHouse* robot; 
 
 void setup(){
     board.Init(true);
-    cncScara.Init(&board);
+    cncConfig.Init();
+    cncScara.Init(&board, &cncConfig);
     
     robot = &GobotHouse::getInstance();
     robot->Setup();
@@ -29,7 +32,6 @@ void setup(){
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
-    // mqtt_message_queue = new MessageQueue();
     String mqtt_topic = "gobot/xROBOT_SERIAL_ID/house";
     mqtt_topic.replace("ROBOT_SERIAL_ID",String(ROBOT_SERIAL_ID));
     append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, robot); 

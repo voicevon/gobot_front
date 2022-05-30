@@ -89,9 +89,8 @@ class IkPosition_AB: public IkPositionBase{
         float beta;
 };
 
-
-
 #include "MyBoards/cnc_board_base.h"
+#include "CNC/cnc_config_base.h"
 
 enum class CncState{
     IDLE,
@@ -104,7 +103,7 @@ class CncBase: public GcodeConsumer{
         CncState State = CncState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
-        virtual void Init(CncBoardBase* board);
+        virtual void Init(CncBoardBase* board, CncConfigBase* config);
         virtual void HomeSingleAxis(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
@@ -139,6 +138,8 @@ class CncBase: public GcodeConsumer{
         bool _home_as_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
         CncBoardBase* _board;
         StepControl* objStepControl;
+        // GobotHouseHardwareConfig __config;
+        CncConfigBase* _config;
     
     private:
         int test_int;

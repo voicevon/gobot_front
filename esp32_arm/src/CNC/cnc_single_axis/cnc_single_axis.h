@@ -2,17 +2,17 @@
 
 // #include "MyBoards/board_base.h"
 #include "MyBoards/cnc_board_base.h"
+#include "spring_maker_cnc_config.h"
 #include "CNC/cnc_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
-#include "spring_maker_hw_config.h"
 
 
 class CncSingleAxis: public CncBase{
     public:
         CncSingleAxis();
 
-        void Init(CncBoardBase* board) override;
+        void Init(CncBoardBase* board, CncConfigBase* config) override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 

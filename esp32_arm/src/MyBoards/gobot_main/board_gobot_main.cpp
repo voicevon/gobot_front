@@ -4,7 +4,19 @@
 void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
- 
+    // Setup_RoomsSensor
+    this->PIN_ROOMS[0] = PIN_SENSOR_ROOM_0;
+    this->PIN_ROOMS[1] = PIN_SENSOR_ROOM_1;
+    this->PIN_ROOMS[2] = PIN_SENSOR_ROOM_2;
+    this->PIN_ROOMS[3] = PIN_SENSOR_ROOM_3;
+    this->PIN_ROOMS[4] = PIN_SENSOR_ROOM_4;
+    this->PIN_ROOMS[5] = PIN_SENSOR_ROOM_5;
+    this->PIN_ROOMS[6] = PIN_SENSOR_ROOM_6;
+    this->PIN_ROOMS[7] = PIN_SENSOR_ROOM_7;
+    for(int i=0;i<8;i++){
+        pinMode(this->PIN_ROOMS[i],INPUT_PULLUP);
+    }
+    this->RepportRamUsage();
 }
 
 Stepper* Board_GobotMain::GetStepper(char axis_name) {
@@ -35,6 +47,8 @@ RobotEef_GobotMain* Board_GobotMain::GetEef() {
 }
 
 
+
+
 void Board_GobotMain::EnableMotor(char axis_name, bool enable_it) {
     if (axis_name == 'A'){
         digitalWrite(PIN_ALPHA_ENABLE_2201, !enable_it);   // LOW is enable
@@ -45,3 +59,12 @@ void Board_GobotMain::EnableMotor(char axis_name, bool enable_it) {
     }
 }
 
+uint8_t Board_GobotMain::ReadRoomsSensor(){
+    char result = 0;
+    uint8_t p;
+    for (int i=0; i<8; i++){
+        p = digitalRead(PIN_ROOMS[i]);
+        result += (p<<i);
+    }
+    return result;
+}

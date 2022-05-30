@@ -1,10 +1,6 @@
 #pragma once
 
-// #include <Arduino.h>
-// #include "ESP32Step/src/TeensyStep.h"
 #include "MyLibs/MyFunctions.hpp"
-
-// #include "MyBoards/board_base.h"
 #include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_base.h"
 #include "CNC/single_axis_homer.h"
@@ -22,7 +18,7 @@ class CncScara: public CncBase{
         //                           // Instantiated on first use.
         //     return instance;
         // }
-        void Init(CncBoardBase* board) override;
+        void Init(CncBoardBase* board, CncConfigBase* config) override;
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
 
@@ -31,7 +27,7 @@ class CncScara: public CncBase{
         float GetDistanceToTarget_IK() override;
 
 
-    private:
+    protected:
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 
@@ -53,6 +49,5 @@ class CncScara: public CncBase{
         SingleAxisHomer* __homing_helper;
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;
-        GobotHouseHardwareConfig __config;
-        
+        CncScaraConfig* _scara_config;
 };

@@ -1,21 +1,14 @@
 #pragma once
 
 
-#include <Arduino.h>
+#include "CNC/cnc_config_base.h"
 
-
-
-
-
-class GobotHouseHardwareConfig{
+class CncScaraConfig: public CncConfigBase{
     public:
         // value is vary for each gobot-house robot.
         float Homed_position_alpha_in_degree;
         // value is vary for each gobot-house robot.
         float Homed_position_beta_in_degree;
-
-
-
         float motor_steps_per_round;
 
         //The length of Master linkage, unit is mm
@@ -33,24 +26,20 @@ class GobotHouseHardwareConfig{
         float MAX_ACCELERATION_BETA; // = 200 * this->MOTOR_MICRO_STEPS;
         float MAX_STEPS_PER_SECOND_BETA; // =  500 * this->MOTOR_MICRO_STEPS; 
 
-
         int Homing_acceleration_alpha; 
         int Homing_speed_alpha;    
         int Homing_acceleration_beta ;
         int Homing_speed_beta;
         uint16_t EEF_Suck_Angle;
         uint16_t EEF_Release_Angle;
-        void Init();
-        void PrintOut();
+
         
-    private:
+    protected:
         // Fixed by electronic wiring.
         float MOTOR_MICRO_STEPS = 16;
         // big_gear_teeth == 90 / small_gear_teeth == 10
         float GEAR_BOX_RATIO_ALPHA = 9.0;
         // big_gear_teeth == 26 / small_gear_teeth == 10
         float GEAR_BOX_RATIO_BETA = 2.6;
+
 };
-
-
-

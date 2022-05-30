@@ -13,11 +13,11 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	// }
 	float rr1= fk->X * fk->X + fk->Y * fk->Y;
 
-	float beta = PI - acosf((this->__config.LINK_A * this->__config.LINK_A + this->__config.LINK_B * this->__config.LINK_B -  rr1 ) / (this->__config.LINK_A * this->__config.LINK_B * 2));
+	float beta = PI - acosf((this->_scara_config->LINK_A * this->_scara_config->LINK_A + this->_scara_config->LINK_B * this->_scara_config->LINK_B -  rr1 ) / (this->_scara_config->LINK_A * this->_scara_config->LINK_B * 2));
 	float r1 = sqrtf(rr1);
 	float alpha_eef = acosf(fk->X / r1);    // [0..PI]
 	if (fk->Y < 0)  alpha_eef =  TWO_PI - alpha_eef;  // [0..2*PI]
-	float alpha_link = acosf((this->__config.LINK_A * this->__config.LINK_A + rr1 - this->__config.LINK_B * this->__config.LINK_B)/( this->__config.LINK_A * r1 * 2));  //[0..PI]
+	float alpha_link = acosf((this->_scara_config->LINK_A * this->_scara_config->LINK_A + rr1 - this->_scara_config->LINK_B * this->_scara_config->LINK_B)/( this->_scara_config->LINK_A * r1 * 2));  //[0..PI]
 	float alpha = alpha_eef - alpha_link;  //[-PI.. + 2*PI]?
 	if (alpha >  10 * DEG_TO_RAD) alpha -= TWO_PI;   // [-330..+10 ] in degree
 	// if (beta_reverse){
@@ -41,8 +41,8 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	}
 	// if (alpha < 0) alpha +=
 
-	ik->alpha = alpha * this->__config.STEPS_PER_RAD_ALPHA;
-	ik->beta =  beta * this->__config.STEPS_PER_RAD_BETA;
+	ik->alpha = alpha * this->_scara_config->STEPS_PER_RAD_ALPHA;
+	ik->beta =  beta * this->_scara_config->STEPS_PER_RAD_BETA;
 
 	if (false){
 		Serial.print("\n    Inverse Kinematic result in angle degree (alpha, beta)= ");
@@ -59,11 +59,11 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 void CncScara::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
-	float rad_beta = ik->beta / this->__config.STEPS_PER_RAD_BETA;
-	float rad_eef = rad_beta + ik->alpha / this->__config.STEPS_PER_RAD_ALPHA;
-	float rad_alpha = ik->alpha / this->__config.STEPS_PER_RAD_ALPHA;
-	fk->X = this->__config.LINK_A * cosf(rad_alpha) + this->__config.LINK_B * cosf(rad_eef);
-	fk->Y = this->__config.LINK_A * sinf(rad_alpha) + this->__config.LINK_B * sinf(rad_eef);
+	float rad_beta = ik->beta / this->_scara_config->STEPS_PER_RAD_BETA;
+	float rad_eef = rad_beta + ik->alpha / this->_scara_config->STEPS_PER_RAD_ALPHA;
+	float rad_alpha = ik->alpha / this->_scara_config->STEPS_PER_RAD_ALPHA;
+	fk->X = this->_scara_config->LINK_A * cosf(rad_alpha) + this->_scara_config->LINK_B * cosf(rad_eef);
+	fk->Y = this->_scara_config->LINK_A * sinf(rad_alpha) + this->_scara_config->LINK_B * sinf(rad_eef);
 	if (false){
 		Serial.print("\n\n[Debug] CncScara::FK()  in degree from (alpha,beta) =(");
 		Serial.print(rad_alpha * RAD_TO_DEG);
@@ -85,7 +85,8 @@ bool CncScara::GetCurrentPosition(FkPositionBase* position_fk){
 	return true;
 }
 
-void CncScara::Init(CncBoardBase* board){
+void CncScara::Init(CncBoardBase* board, CncConfigBase* config){
+	this->_scara_config = (CncScaraConfig*)(config);
 	this->alpha_stepper = board->GetStepper('A');
 	this->beta_stepper = board->GetStepper('B');
 	this->alpha_homer = board->GetHomer('A');
@@ -94,14 +95,14 @@ void CncScara::Init(CncBoardBase* board){
 	this->_board->EnableMotor('A', false);
 	this->_board->EnableMotor('B', false);
 
-	this->alpha_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHPA);
-	this->alpha_stepper->setMaxSpeed(this->__config.MAX_ACCELERATION_ALPHPA);
-	this->beta_stepper->setAcceleration(this->__config.MAX_ACCELERATION_BETA);
-	this->beta_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_BETA);
+	this->alpha_stepper->setAcceleration(this->_scara_config->MAX_ACCELERATION_ALPHPA);
+	this->alpha_stepper->setMaxSpeed(this->_scara_config->MAX_ACCELERATION_ALPHPA);
+	this->beta_stepper->setAcceleration(this->_scara_config->MAX_ACCELERATION_BETA);
+	this->beta_stepper->setMaxSpeed(this->_scara_config->MAX_STEPS_PER_SECOND_BETA);
 	this->alpha_stepper->setInverseRotation(true);
 	this->beta_stepper->setInverseRotation(false);
 
-	this->__config.Init();
+	// this->_scara_config->Init();
 	this->_home_as_inverse_kinematic = true;
 
 }
@@ -145,9 +146,9 @@ void CncScara::RunG1(Gcode* gcode) {
 	bool do_ik=false;
 
 	if (gcode->has_letter('A')) 
-		target_ik_ab.alpha = gcode->get_value('A') * this->__config.STEPS_PER_RAD_ALPHA * DEG_TO_RAD;
+		target_ik_ab.alpha = gcode->get_value('A') * this->_scara_config->STEPS_PER_RAD_ALPHA * DEG_TO_RAD;
 	if (gcode->has_letter('B')) 
-		target_ik_ab.beta = gcode->get_value('B') * this->__config.STEPS_PER_RAD_BETA * DEG_TO_RAD;
+		target_ik_ab.beta = gcode->get_value('B') * this->_scara_config->STEPS_PER_RAD_BETA * DEG_TO_RAD;
 
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {
@@ -160,7 +161,7 @@ void CncScara::RunG1(Gcode* gcode) {
 	}
 	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
 	if(gcode->has_letter('R')) 
-		target_ik_ab.alpha = this->__config.motor_steps_per_round * gcode->get_value('R');
+		target_ik_ab.alpha = this->_scara_config->motor_steps_per_round * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B', true);
@@ -182,7 +183,7 @@ void CncScara::RunG1(Gcode* gcode) {
 }
 
 void CncScara:: _running_G1(){
-    if (this->GetDistanceToTarget_IK() < (this->__config.MAX_ACCELERATION_ALPHPA + this->__config.MAX_ACCELERATION_BETA)/64){
+    if (this->GetDistanceToTarget_IK() < (this->_scara_config->MAX_ACCELERATION_ALPHPA + this->_scara_config->MAX_ACCELERATION_BETA)/64){
       	this->State = CncState::IDLE;
 		// Serial.print("\n[Info] CncScara::_running_G1() is finished. ");
     }
@@ -198,13 +199,13 @@ void CncScara::HomeSingleAxis(char axis){
 	this->_homing_axis = axis;
 	this->_board->EnableMotor(axis, true);
 	if (axis=='A'){
-		this->alpha_stepper->setAcceleration(this->__config.Homing_acceleration_alpha);
-		this->alpha_stepper->setMaxSpeed(this->__config.Homing_speed_alpha);
+		this->alpha_stepper->setAcceleration(this->_scara_config->Homing_acceleration_alpha);
+		this->alpha_stepper->setMaxSpeed(this->_scara_config->Homing_speed_alpha);
 		this->__homing_stepper = this->alpha_stepper;
 		this->__homing_helper = this->alpha_homer;
 	}else if (axis=='B'){
-		this->beta_stepper->setAcceleration(this->__config.Homing_acceleration_beta);
-		this->beta_stepper->setMaxSpeed(this->__config.Homing_speed_beta);
+		this->beta_stepper->setAcceleration(this->_scara_config->Homing_acceleration_beta);
+		this->beta_stepper->setMaxSpeed(this->_scara_config->Homing_speed_beta);
 		this->__homing_stepper = this->beta_stepper;
 		this->__homing_helper = this->beta_homer;
 	}
@@ -227,8 +228,8 @@ void CncScara::_running_G28(){
 		if (this->_home_as_inverse_kinematic){
 			// Serial.print("\n   [Info] Trying to get home position from actuator position  ");
 
-			ik_position.alpha = DEG_TO_RAD * this->__config.Homed_position_alpha_in_degree * this->__config.STEPS_PER_RAD_ALPHA;
-			ik_position.beta =  DEG_TO_RAD * this->__config.Homed_position_beta_in_degree * this->__config.STEPS_PER_RAD_BETA;
+			ik_position.alpha = DEG_TO_RAD * this->_scara_config->Homed_position_alpha_in_degree * this->_scara_config->STEPS_PER_RAD_ALPHA;
+			ik_position.beta =  DEG_TO_RAD * this->_scara_config->Homed_position_beta_in_degree * this->_scara_config->STEPS_PER_RAD_BETA;
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik_for_debug;
@@ -242,10 +243,10 @@ void CncScara::_running_G28(){
 		if (this->_homing_axis == 'A') this->alpha_stepper->setPosition(ik_position.alpha);
 		if (this->_homing_axis == 'B') this->beta_stepper->setPosition(ik_position.beta);
 		
-		this->alpha_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_ALPHA);
-		this->alpha_stepper->setAcceleration(this->__config.MAX_ACCELERATION_ALPHPA);
-		this->beta_stepper->setMaxSpeed(this->__config.MAX_STEPS_PER_SECOND_BETA);
-		this->beta_stepper->setAcceleration(this->__config.MAX_ACCELERATION_BETA);
+		this->alpha_stepper->setMaxSpeed(this->_scara_config->MAX_STEPS_PER_SECOND_ALPHA);
+		this->alpha_stepper->setAcceleration(this->_scara_config->MAX_ACCELERATION_ALPHPA);
+		this->beta_stepper->setMaxSpeed(this->_scara_config->MAX_STEPS_PER_SECOND_BETA);
+		this->beta_stepper->setAcceleration(this->_scara_config->MAX_ACCELERATION_BETA);
 		// Serial.print("\n======================================= End of Homing, State to be IDLE\n");
 		this->State = CncState::IDLE;
 
@@ -267,12 +268,12 @@ void CncScara::RunM123(uint8_t eef_channel, EefAction eef_action){
 
 		case EefAction::Suck:
 			// Serial.print("\nCncScara::RunM123()  Suck ");
-			ledcWrite(1, this->__config.EEF_Suck_Angle);
+			ledcWrite(1, this->_scara_config->EEF_Suck_Angle);
 			break;
 		case EefAction::Release:
 			// Serial.print("\nCncScara::RunM123()  Release ");
 			// This will drive the extend coil to create a reversed magnetic field. 
-			ledcWrite(1, this->__config.EEF_Release_Angle);
+			ledcWrite(1, this->_scara_config->EEF_Release_Angle);
 
 			break;
 		case EefAction::Sleep:

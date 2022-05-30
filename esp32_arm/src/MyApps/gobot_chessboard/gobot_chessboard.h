@@ -8,19 +8,19 @@
 
 class GobotChessboard: public GcodeProducer, public MqttMessageConsumer{
     public:
-        static GobotChessboard& getInstance()
-        {
-            static GobotChessboard instance; // Guaranteed to be destroyed.
-                                  // Instantiated on first use.
-            return instance;
-        }
+        GobotChessboard(){};
+        // static GobotChessboard& getInstance()
+        // {
+        //     static GobotChessboard instance; // Guaranteed to be destroyed.
+        //                           // Instantiated on first use.
+        //     return instance;
+        // }
         void SpinOnce();
         void ParkArms(bool do_home);
         void pick_place_park(RobotAction* pAction);
         void Calibrate(int step);
 
     private:
-        GobotChessboard(){};
         // RobotAction* __arm_action;
         void ExecuteMqttCommand(const char* command) override;
 
