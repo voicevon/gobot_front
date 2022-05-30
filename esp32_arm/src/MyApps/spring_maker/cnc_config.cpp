@@ -5,7 +5,7 @@ int32_t SpringMakerHardwareConfig::GetStepsPerUnit(char axis_name) {
     return 100;
 }
 
-void SpringMakerHardwareConfig::Init(){
+void SpringMakerHardwareConfig::Init(char solution){
         this->STEPPER_DRIVER_MICRO_STEPS = 16;
         this->MOTOR_GEARBOX_RATIO_ALPHA = 51;
         this->MOTOR_DEGREE_PER_STEP = 1.8;

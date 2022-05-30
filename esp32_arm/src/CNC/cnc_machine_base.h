@@ -7,6 +7,7 @@
 class CncMachineBase{
     public:
         virtual int32_t GetStepsPerUnit(char axis_name);
+        virtual void Init(char solution_id);
         
     private:
 

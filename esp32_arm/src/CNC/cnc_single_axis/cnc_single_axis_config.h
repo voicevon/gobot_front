@@ -11,7 +11,7 @@ class CncSingleAxis_Config: public CncMachineBase{
         float Homed_position_fk_A = 0;
         int Homing_speed_alpha;        // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
         int Homing_acceleration_alpha ;
-        virtual void Init();
+        // virtual void Init();
         virtual void PrintOut();
         // virtual int32_t GetStepsPerUnit(char axis_name) override;
 

@@ -2,7 +2,7 @@
 #include "cnc_machine.h"
 
 
-void GobotHouseMachine::Init(){
+void GobotHouseMachine::Init(char solution){
         // [when microstep==1] The value 514.0 is measured/Calibrated from running 10 rounds, Not calculated from anywhere.
         // This value should be calculated from motor's datasheet.  But can not get datasheet for 28-BGY motor.
         this->motor_steps_per_round = 514 * this->MOTOR_MICRO_STEPS;

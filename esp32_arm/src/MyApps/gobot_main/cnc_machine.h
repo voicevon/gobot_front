@@ -4,7 +4,8 @@
 
 class GobotMainMachine: public CncFiveBarMachine{
     public:
-        void Init();
+        void Init(char solution_id) override;
+        // void Init();
         void PrintOut(const char* title);
         int32_t GetStepsPerUnit(char axis_name) override;
         

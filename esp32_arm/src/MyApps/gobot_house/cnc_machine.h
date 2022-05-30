@@ -5,7 +5,8 @@
 
 class GobotHouseMachine: public CncScaraMachine{
     public:
-        void Init();
+        void Init(char solution_id) override;
+        // void Init();
         void PrintOut();
         int32_t GetStepsPerUnit(char axis_name) override;
     private:

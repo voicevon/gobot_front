@@ -15,7 +15,6 @@ class CncCoreYZConfig: public CncMachineBase{
         float Homed_position_y = 0;
         int Homing_speed_alpha_beta; // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
         int Homing_acceleration_alpha_beta ;
-        virtual void Init(char solution_id);
         void PrintOut(){};
 
     protected:

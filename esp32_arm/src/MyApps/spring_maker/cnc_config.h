@@ -3,7 +3,8 @@
 class SpringMakerHardwareConfig: public CncSingleAxis_Config{
     public:
         int32_t GetStepsPerUnit(char axis_name) override;
-        void Init() override;
+        void Init(char solution_id) override;
+        // void Init() override;
         void PrintOut() override;
         
     private:

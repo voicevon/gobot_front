@@ -4,7 +4,7 @@ int32_t GobotMainMachine::GetStepsPerUnit(char axis_name) {
     return 100;
 }
 
-void GobotMainMachine::Init(){
+void GobotMainMachine::Init(char solution){
     this->LINK_0 = 191.0f / 2;
     this->LINK_A = 278.1;  //285.18;    // 278.1
     this->LINK_B = 392.1; //  384.51;    // 500-107.8

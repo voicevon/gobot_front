@@ -28,7 +28,7 @@ CncSingleAxis::CncSingleAxis(){
 
 void CncSingleAxis::Init(CncBoardBase* board, CncMachineBase* config){
 	Serial.print("\n[Info] CncSingleAxis::Init() is entering.");
-	this->_singleAxisConfig->Init();
+	this->_singleAxisConfig->Init('F');
 	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	// this->__EnableMotor('A', false);
 	this->objStepper_alpha = board->GetStepper('A');
