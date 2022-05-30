@@ -9,7 +9,7 @@
 class Board_GobotMain: public BoardbaseCnc{
     public:
         Board_GobotMain(){};
-        void Init() override;
+        void Init(bool is_on_reset) override;
         void SayHello();
         Stepper* GetStepper(char axis_name) override;
         SingleAxisHomer* GetHomer(char axis_name) override;

@@ -11,7 +11,7 @@
 class Board_SpringMaker: public BoardbaseCnc{
     public:
         Board_SpringMaker(){};
-        void Init() override;
+        void Init(bool is_on_reset) override;
         
         void SayHello();
         Stepper* GetStepper(char axis_name) override;

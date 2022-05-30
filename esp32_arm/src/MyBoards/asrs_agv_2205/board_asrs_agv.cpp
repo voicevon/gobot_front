@@ -1,7 +1,7 @@
 #include  "board_asrs_agv.h"
 
 
-void BoardAllInOne::Init(){
+void BoardAllInOne::Init(bool is_on_reset){
     Serial.begin(115200);
     while (! Serial) {delay(1);}
     Serial.println("[Info] BoardAllInOne::Init()  Hi there, I am your lovely bot,  BotAsrsAgvCoreYZ, include ASRS AGV CNC.  Keep smiling :) ");

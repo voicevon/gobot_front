@@ -1,7 +1,7 @@
 #include "board_gobot_main.h"
 
 
-void Board_GobotMain::Init(){
+void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
  

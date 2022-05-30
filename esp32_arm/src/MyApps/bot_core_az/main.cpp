@@ -16,7 +16,7 @@ MessageQueue mqtt_command_queue;
 void setup(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Garment-BoxMover.  Keep smiling :)");
-    board.Init();
+    board.Init(true);
     robot_hw.Init(&board);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     robot_hw.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);

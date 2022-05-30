@@ -6,10 +6,10 @@
 #include "CNC/single_axis_homer.h"
 #include "robot_eef/garment_asar_eef.h"
 
-// For Core_YZ cnc application
-class Board2205Cnc: public BoardbaseCnc{
+// For Core_AZ cnc application
+class Board2204Cnc: public BoardbaseCnc{
     public:
-        Board2205Cnc(){};
+        Board2204Cnc(){};
         void Init(bool is_on_reset) override;
         void Init(Adafruit_MCP23X17* mcp_23018);
         void SayHello();
@@ -24,7 +24,7 @@ class Board2205Cnc: public BoardbaseCnc{
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP_2205);
         Stepper stepper_beta = Stepper(PIN_BETA_STEP_2205);
         SingleAxisHomer homer_z = SingleAxisHomer(LOW);
-        SingleAxisHomer homer_y = SingleAxisHomer(LOW);
+        SingleAxisHomer homer_A = SingleAxisHomer(LOW);
         RobotEef_GarmentAsar eef = RobotEef_GarmentAsar();
 
 };

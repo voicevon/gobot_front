@@ -40,7 +40,7 @@ char ReadRoomsSensor(){
 }
 
 void setup(){
-    board.Init();
+    board.Init(true);
     cncFiveBar.Init(&board);
 
     robot = &GobotChessboard::getInstance();

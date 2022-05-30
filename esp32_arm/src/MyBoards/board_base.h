@@ -13,7 +13,7 @@
 
 class BoardBase{
     public:
-        virtual void Init();
+        virtual void Init(bool is_on_reset);
         void RepportRamUsage();  // TODO::  be static
         void ScanI2cBus(TwoWire* i2c_bus, const char* printing_topic);
         static uint8_t Assign_ledc_channel(){return __ledc_channel_index; __ledc_channel_index++;};

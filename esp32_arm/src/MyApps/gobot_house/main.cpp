@@ -18,7 +18,7 @@ MessageQueue mqtt_message_queue = MessageQueue();
 GobotHouse* robot; 
 
 void setup(){
-    board.Init();
+    board.Init(true);
     cncScara.Init(&board);
     
     robot = &GobotHouse::getInstance();

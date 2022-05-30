@@ -4,7 +4,7 @@
 
 class BoardbaseCnc: public BoardBase{
     public:
-        virtual void Init();
+        virtual void Init(bool is_on_reset);
         void SayHello();
         virtual Stepper* GetStepper(char axis_name);
         virtual SingleAxisHomer* GetHomer(char axis_name);

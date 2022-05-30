@@ -14,7 +14,7 @@ MessageQueue garment_bot_message_queue = MessageQueue();
 
 
 void setup(){
-    board.Init();
+    board.Init(true);
     robot.InitAllinOne(&board, &objStepControl);
 
    // mqtt, bridge, receiver.
