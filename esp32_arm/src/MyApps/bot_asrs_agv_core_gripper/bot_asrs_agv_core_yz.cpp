@@ -7,7 +7,7 @@ BotAsrsAgvCoreYZ::BotAsrsAgvCoreYZ(uint16_t id){
 	this->_ID = id;
 }
 
-void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepControl){
+void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, CncConfigBase* cncMachine, StepControl* stepControl){
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is entering");
 	this->agv.Init(&board->agv);
 
@@ -17,7 +17,7 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepContr
 	// Init box carrier robot.
 	// this->jettySensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 
-	this->cnc.Init(&board->cnc);
+	this->cnc.Init(&board->cnc, cncMachine);
 	// this->_gcode_queue = new GcodeQueue();
     this->cnc.LinkLocalGcodeQueue_AsConsumer(&this->_gcode_queue);
 

@@ -4,17 +4,22 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "bot_asrs_agv_core_yz.h"
+// #include "CNC/cnc_core_yz/box_carrier_hw_config.h"
+#include "MyApps/bot_core_yz/box_carrier_hw_config.h"
 #include "IoT/main_mqtt.h"
+#include "MyApps/bot_core_yz/box_carrier_hw_config.h"
 
 StepControl objStepControl;  // This object can not inside any object?
 BoardAllInOne board = BoardAllInOne();
+BoxCarrierHardwareConfig cncMachine;
 BotAsrsAgvCoreYZ robot = BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
 
 
 void setup(){
     board.Init(true);
-    robot.InitAllinOne(&board, &objStepControl);
+    cncMachine.Init();
+    robot.InitAllinOne(&board, &cncMachine,&objStepControl);
 
    // mqtt, bridge, receiver.
     setup_mqtt_block_connect();

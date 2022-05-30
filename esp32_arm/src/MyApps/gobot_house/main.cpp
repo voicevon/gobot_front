@@ -5,7 +5,7 @@
 #include "MyBoards/gobot_house/board_gobot_house.h"
 #include "CNC/cnc_scara/cnc_scara.h"
 // #include "CNC/cnc_scara/cnc_scara_config.h"
-#include "CNC/cnc_scara/gobot_house_cnc_config.h"
+#include "cnc_config.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"

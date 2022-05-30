@@ -7,8 +7,8 @@ void Cnc_CoreYZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_YZ* fk = (FkPosition_YZ*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
-	ik->alpha = (fk->Z * this->__config.steps_per_mm_for_z + fk->Y * this->__config.steps_per_mm_for_y);
-	ik->beta = (fk->Z * this->__config.steps_per_mm_for_z - fk->Y * this->__config.steps_per_mm_for_y);
+	ik->alpha = (fk->Z * this->_cncMachine->steps_per_mm_for_z + fk->Y * this->_cncMachine->steps_per_mm_for_y);
+	ik->beta = (fk->Z * this->_cncMachine->steps_per_mm_for_z - fk->Y * this->_cncMachine->steps_per_mm_for_y);
 
 	Serial.print("\n[Debug] Cnc_CoreYZ::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
@@ -22,8 +22,8 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_YZ* fk = (FkPosition_YZ*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
-	fk->Z = (ik->alpha + ik->beta) / 2 / this->__config.steps_per_mm_for_z;
-	fk->Y = (ik->alpha - ik->beta) / 2 / this->__config.steps_per_mm_for_y;
+	fk->Z = (ik->alpha + ik->beta) / 2 / this->_cncMachine->steps_per_mm_for_z;
+	fk->Y = (ik->alpha - ik->beta) / 2 / this->_cncMachine->steps_per_mm_for_y;
 
 	Serial.print("\n[Debug] Cnc_CoreYZ::FK() output (Z, Y) = ");
 	Serial.print(fk->Z);
@@ -65,7 +65,7 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 void Cnc_CoreYZ::Init(CncBoardBase* board, CncConfigBase* config){
 	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
-	this->__config.Init();
+	this->_cncMachine->Init();
 
 
 	// CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
@@ -86,11 +86,11 @@ void Cnc_CoreYZ::HomeSingleAxis(char axis){
 	Serial.print(axis);
 	this->_homing_axis = axis;
 
-	this->__config.PrintOut();
-	this->stepper_alpha->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
-	this->stepper_alpha->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
-	this->stepper_beta->setAcceleration(this->__config.Homing_acceleration_alpha_beta);
-	this->stepper_beta->setMaxSpeed(this->__config.Homing_speed_alpha_beta);
+	this->_cncMachine->PrintOut();
+	this->stepper_alpha->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
+	this->stepper_alpha->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
+	this->stepper_beta->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
+	this->stepper_beta->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
 
 	if (axis=='Y'){
 		//todo :  process with IK()
@@ -126,8 +126,8 @@ void Cnc_CoreYZ::_running_G28(){
 		else{
 			// We know homed position via FK
 			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
-			this->__current_fk_position.Z = this->__config.Homed_position_z;
-			this->__current_fk_position.Y = this->__config.Homed_position_y;
+			this->__current_fk_position.Z = this->_cncMachine->Homed_position_z;
+			this->__current_fk_position.Y = this->_cncMachine->Homed_position_y;
 			this->IK(&this->__current_fk_position, &ik_position);
 			// verify IK by FK()
 			FkPosition_YZ verifying_fk;
@@ -138,10 +138,10 @@ void Cnc_CoreYZ::_running_G28(){
 		if (this->_homing_axis == 'Z') this->stepper_alpha->setPosition(ik_position.alpha);
 		if (this->_homing_axis == 'Y') this->stepper_beta->setPosition(ik_position.beta);
 		
-		this->stepper_alpha->setMaxSpeed(this->__config.max_speed_alpha_beta);
-		this->stepper_alpha->setAcceleration(this->__config.max_acceleration_alpha_beta);
-		this->stepper_beta->setMaxSpeed(this->__config.max_speed_alpha_beta);
-		this->stepper_beta->setAcceleration(this->__config.max_acceleration_alpha_beta);
+		this->stepper_alpha->setMaxSpeed(this->_cncMachine->max_speed_alpha_beta);
+		this->stepper_alpha->setAcceleration(this->_cncMachine->max_acceleration_alpha_beta);
+		this->stepper_beta->setMaxSpeed(this->_cncMachine->max_speed_alpha_beta);
+		this->stepper_beta->setAcceleration(this->_cncMachine->max_acceleration_alpha_beta);
 		this->State = CncState::IDLE;
 
 	}else{
@@ -219,7 +219,7 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 }
 
 void Cnc_CoreYZ::_running_G1(){
-    if (this->GetDistanceToTarget_IK() < this->__config.max_acceleration_alpha_beta){
+    if (this->GetDistanceToTarget_IK() < this->_cncMachine->max_acceleration_alpha_beta){
       	this->State = CncState::IDLE;
 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
     }

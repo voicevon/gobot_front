@@ -50,3 +50,8 @@ void BoxCarrierHardwareConfig::PrintOut(){
 
     Serial.print("\n----------------------------------------------\n\n");
 }
+
+
+int32_t BoxCarrierHardwareConfig::GetStepsPerUnit(char axis_name) {
+    return 123;
+}

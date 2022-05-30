@@ -1,8 +1,4 @@
 #pragma once
-#include "all_applications.h"
-// #include "all_devices.h"
-// #ifdef I_AM_ROBOT_ASRS_AGV
-
 #include "IoT/mqtt_message_consumer.h"
 #include "CNC/gcode/gcode_queue.h"
 #include "CNC/cnc_core_yz/cnc_core_yz.h"
@@ -47,7 +43,7 @@ class BotAsrsAgvCoreYZ: public MqttMessageConsumer{
         };
 
         BotAsrsAgvCoreYZ(uint16_t id);
-        void InitAllinOne(BoardAllInOne* board, StepControl* stepControl);
+        void InitAllinOne(BoardAllInOne* board, CncConfigBase* cncMachine, StepControl* stepControl);
 
         AsrsBase asrs = AsrsBase();
         AgvBase agv = AgvBase();

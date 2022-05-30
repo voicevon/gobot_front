@@ -1,12 +1,14 @@
 #include "all_applications.h"
 #ifdef I_AM_SPRING_MAKER
 #include "MyBoards/sping_maker/board_spring_maker.h"
+#include "cnc_config.h"
 #include "CNC/cnc_single_axis/cnc_single_axis.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "spring_maker.h"
 
 Board_SpringMaker board = Board_SpringMaker();
+SpringMakerHardwareConfig cncConfig;
 CncSingleAxis cnc = CncSingleAxis();
 SpringMaker robot;
 GcodeQueue gcode_queue;
@@ -17,7 +19,8 @@ long low_count =1;
 
 void setup(){
     board.Init(true);
-    cnc.Init(&board);
+    cncConfig.Init();
+    cnc.Init(&board, &cncConfig);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
