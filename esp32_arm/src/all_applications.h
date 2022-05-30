@@ -13,7 +13,7 @@
 
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
-#define I_AM_ROBOT_ASRS_AGV
+// #define I_AM_ROBOT_ASRS_AGV
 // #define I_AM_GARMENT_BOX_MOVER
 // #define I_AM_GARMENT_BOX_CARRIER
 
@@ -22,7 +22,7 @@
 // #define I_AM_SPRING_MAKER
 
 // #define I_AM_ACUPUCTURE_MAIN_ESP32
-// #define I_AM_SMOKE_MACHINE_WEB_SERVER
+#define I_AM_SMOKE_MACHINE_WEB_SERVER
 // #define I_AM_CABLE_AXIS_XPYP
 // #define I_AM_CABLE_AXIS_XNYP
 // #define I_AM_CABLE_AXIS_XNYN
@@ -138,10 +138,8 @@
 #ifdef I_AM_SMOKE_MACHINE_WEB_SERVER
 	#define USING_WIFI_MQTT
 	#define AXIS_NAME 'X'
+	#define MQTT_SYNCERS_COUNT 1
 #endif
-
-
-
 
 
 #endif

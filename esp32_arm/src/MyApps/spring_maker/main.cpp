@@ -1,4 +1,3 @@
-// #include "all_devices.h"
 #include "all_applications.h"
 #ifdef I_AM_SPRING_MAKER
 #include "MyBoards/sping_maker/board_spring_maker.h"
@@ -9,7 +8,6 @@
 
 Board_SpringMaker board = Board_SpringMaker();
 CncSingleAxis cnc = CncSingleAxis();
-
 SpringMaker robot;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
@@ -18,16 +16,12 @@ long high_count =1;
 long low_count =1;
 
 void setup(){
-    board.Init();
-    
+    board.Init(true);
     cnc.Init(&board);
-    // robot = new SpringMaker();
-    // gcode_queue = new GcodeQueue();
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
     setup_mqtt_block_connect();
-    // mqtt_command_queue = new MessageQueue();
     append_mqtt_bridge("spring/maker", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 
     Serial.println ("\n[Info] main.cpp  setup() is done. ------------------------------------ \n");

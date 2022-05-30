@@ -1,12 +1,10 @@
 #include "all_applications.h"
-// #include "all_devices.h"
 #ifdef I_AM_ROBOT_ASRS_AGV
 
 
 #include "MyLibs/MyFunctions.hpp"
 #include "bot_asrs_agv_core_yz.h"
 #include "IoT/main_mqtt.h"
-// #include "MyLibs/board_static.h"
 
 StepControl objStepControl;  // This object can not inside any object?
 BoardAllInOne board = BoardAllInOne();

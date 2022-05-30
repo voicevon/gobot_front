@@ -1,22 +1,19 @@
 //https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout-1.jpg
 
 #include "all_applications.h"
-// #include "all_devices.h"
 #ifdef I_AM_SMOKE_MACHINE_WEB_SERVER
 
-// #include "Iot/wifi_mqtt_client.h"
 #include "MyLibs/MyFunctions.hpp"
-
-#include <HardwareSerial.h>
 #include "smoke_bot.h"
-#include "CNC/gcode/gcode_queue.h"
-// #include <Arduino.h>
 #include "webCommu.h"
+#include "MyBoards/smoke_machine/board_smoke_machine.h"
+#include "CNC/gcode/gcode_queue.h"
+#include "CNC/cnc_single_axis/cnc_single_axis.h"
 
 // std::string topic = "actu/dev001/yongquan"; 
 // std::string payload ="OFF";
-
-SmokeBotHardware* mybot;
+Board_SmokeMachine board;
+CncSingleAxis cnc;
 GcodeQueue myCommandQueue = GcodeQueue();
 // int distance = 100;
 // int pause_second = 20;
@@ -60,21 +57,16 @@ void test_string(){
   } 
 }
 void setup() {
-	Serial.begin(115200);
-	Serial.println("Hi there, I am smoke robot, Have a good day");
+	board.Init(true);
+	cnc.Init(&board);
 
 	setup_webcommu();
-	// setup_wifi_mqtt();
-	mybot = new SmokeBotHardware();
-	// myCommandQueue.LinkRobot(mybot);
-	mybot->LinkLocalGcodeQueue_AsConsumer(&myCommandQueue);
-	mybot->Init_Gpio();
-	mybot->Init();
+	cnc.LinkLocalGcodeQueue_AsConsumer(&myCommandQueue);
 	Serial.println("\nSet up is done .....");
 	String strG28 = "G28";
 	myCommandQueue.AppendGcodeCommand(strG28);
 	// myCommandQueue.SpinOnce();
-	mybot->SpinOnce();
+	// mybot.SpinOnce();
 	
 	// while (!mqttClient.connected())
 	//     delay(100);
@@ -88,13 +80,11 @@ void loop() {
 	String strG4 = "G4S";
 	String strG1 = "G1X";
 	WebCommu_SpinOnce();
-	mybot->SpinOnce();
+	cnc.SpinOnce();
 	// myCommandQueue.SpinOnce();
 	if (!varOnOff) return;
 	if (var_done_count >= var_total_count) return;
-	
-
-	if ((mybot->State == RobotState::IDLE) && (myCommandQueue.BufferIsEmpty())){
+	if ((cnc.State == CncState::IDLE) && (myCommandQueue.BufferIsEmpty())){
 
 		// Go back to home position, keep a 0.1mm position
 		int speed = float(var_per_volume) / float(var_pull_in_second) * 540;
