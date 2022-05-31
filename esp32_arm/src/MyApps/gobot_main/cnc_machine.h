@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/cnc_five_bars/cnc_five_bar_machine.h"
+#include "CNC/cnc_five_bars/cnc_machine.h"
 
 class GobotMainMachine: public CncFiveBarMachine{
     public:

@@ -6,7 +6,7 @@
 #include "CNC/single_axis_homer.h"
 #include "CNC/eef_standard_code.h"
 #include "MyLibs/Components/Led.h"
-#include "cnc_scara_machine.h"
+#include "cnc_machine.h"
 
 
 class CncScara: public CncBase{

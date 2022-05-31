@@ -4,7 +4,7 @@
 #include <ESP32Servo.h>
 #include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_base.h"
-#include "cnc_five_bar_machine.h"
+#include "cnc_machine.h"
 #include "CNC/eef_standard_code.h"
 #include "CNC/single_axis_homer.h"
 #include "MyLibs/MyFunctions.hpp"

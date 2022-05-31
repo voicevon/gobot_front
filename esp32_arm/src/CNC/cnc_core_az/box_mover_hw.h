@@ -3,8 +3,7 @@
 #include "CNC/cnc_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
-// #include "box_mover_hw_config.h"
-#include "cnc_core_az_machine.h"
+#include "cnc_machine.h"
 #include "MyBoards/board_base.h"
 
 

@@ -1,20 +1,15 @@
 #pragma once
 
-// #include "CNC/robot_hardware_base.h"
-// #include "MyBoards/board_base.h"
 #include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_base.h"
 #include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
-// #include "box_carrier_hw_config.h"
-// #include "MyLibs/board_base.h"
-#include "cnc_core_yz_config.h"
+#include "cnc_machine.h"
 
 class Cnc_CoreYZ: public CncBase{
     public:
         Cnc_CoreYZ(){};
-        // Cnc_CoreYZ(BoardbaseCnc* board, StepControl* stepControl){this->_board=board; this->objStepControl=stepControl;};
         void LinkStepControl(StepControl* stepControl){this->objStepControl=stepControl;};
         void Init(CncBoardBase* board, CncMachineBase* config) override;
 
@@ -26,7 +21,7 @@ class Cnc_CoreYZ: public CncBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        CncCoreYZConfig* _cncMachine;
+        CncCoreYZMachine* _cncMachine;
         Stepper* stepper_alpha; // = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
         Stepper* stepper_beta; // = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
 
@@ -46,6 +41,5 @@ class Cnc_CoreYZ: public CncBase{
         SingleAxisHomer* __homing_helper;
         SingleAxisHomer* objHomeHelper_vertical;
         SingleAxisHomer* objHomeHelper_y;
-        // BoxCarrierHardwareConfig  __config;
 
 };
