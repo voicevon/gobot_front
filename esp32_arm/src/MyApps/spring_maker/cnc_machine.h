@@ -1,10 +1,9 @@
-#include "CNC/cnc_single_axis/cnc_single_axis_config.h"
+#include "CNC/cnc_single_axis/cnc_single_axis_machine.h"
 
-class SpringMakerHardwareConfig: public CncSingleAxis_Config{
+class SpringMakerMachine: public CncSingleAxis_Machine{
     public:
         int32_t GetStepsPerUnit(char axis_name) override;
         void Init(char solution_id) override;
-        // void Init() override;
         void PrintOut() override;
         
     private:

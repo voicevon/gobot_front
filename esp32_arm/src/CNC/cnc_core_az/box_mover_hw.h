@@ -3,8 +3,10 @@
 #include "CNC/cnc_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
-#include "box_mover_hw_config.h"
+// #include "box_mover_hw_config.h"
+#include "cnc_core_az_machine.h"
 #include "MyBoards/board_base.h"
+
 
 
 #define VERTICAL_ENDSTOP 15
@@ -29,7 +31,7 @@ class CncCoreAZ:public CncBase{
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
 
-    private:
+    protected:
         Stepper* objStepper_alpha;//  Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
         Stepper* objStepper_beta;//  Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
 
@@ -49,7 +51,8 @@ class CncCoreAZ:public CncBase{
         SingleAxisHomer* __homing_helper;
         SingleAxisHomer* objHomeHelper_vertical; // = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
         SingleAxisHomer* objHomeHelper_angle; // = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
-        BoxMoverHardwareConfig  __config;
+        // BoxMoverHardwareConfig  __config;
+        CncCoreAZMachine* _machine;
 
 
 };

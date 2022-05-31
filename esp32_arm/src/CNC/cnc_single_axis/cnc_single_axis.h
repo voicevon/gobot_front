@@ -2,8 +2,8 @@
 
 #include "MyBoards/cnc_board_base.h"
 #include "CNC/cnc_base.h"
-#include "cnc_single_axis_config.h"
-
+// #include "cnc_single_axis_config.h"
+#include "cnc_single_axis_machine.h"
 
 class CncSingleAxis: public CncBase{
     public:
@@ -18,7 +18,7 @@ class CncSingleAxis: public CncBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        CncSingleAxis_Config* _singleAxisConfig;  //TODO:  uinify name:  cncConfig??
+        CncSingleAxis_Machine* _singleAxisConfig;  //TODO:  uinify name:  cncConfig??
 
     private:
         Stepper* objStepper_alpha;
@@ -41,6 +41,5 @@ class CncSingleAxis: public CncBase{
 
         SingleAxisHomer* __homing_helper;
         SingleAxisHomer* objHomeHelper_alpha;
-        // SpringMakerHardwareConfig  __config;
 
 };

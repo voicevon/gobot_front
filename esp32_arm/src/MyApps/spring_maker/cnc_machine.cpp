@@ -1,11 +1,11 @@
-#include "cnc_config.h"
+#include "cnc_machine.h"
 
 
-int32_t SpringMakerHardwareConfig::GetStepsPerUnit(char axis_name) {
+int32_t SpringMakerMachine::GetStepsPerUnit(char axis_name) {
     return 100;
 }
 
-void SpringMakerHardwareConfig::Init(char solution){
+void SpringMakerMachine::Init(char solution){
         this->STEPPER_DRIVER_MICRO_STEPS = 16;
         this->MOTOR_GEARBOX_RATIO_ALPHA = 51;
         this->MOTOR_DEGREE_PER_STEP = 1.8;
@@ -20,9 +20,9 @@ void SpringMakerHardwareConfig::Init(char solution){
         this->steps_per_rad_for_a = 360.0f * this->STEPPER_DRIVER_MICRO_STEPS  * this->MOTOR_GEARBOX_RATIO_ALPHA / this->MOTOR_DEGREE_PER_STEP / TWO_PI;
 }
 
-void SpringMakerHardwareConfig::PrintOut(){
+void SpringMakerMachine::PrintOut(){
     Serial.print("\n\n===============================================");
-    Serial.print("\nSpringMakerHardwareConfig::PrintOut()");
+    Serial.print("\nSpringMakerMachine::PrintOut()");
     Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");
     Serial.print(this->STEPPER_DRIVER_MICRO_STEPS);
     Serial.print("\n   MOTOR_DEGREE_PER_STEP = ");

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CNC/cnc_machine_base.h"
-// #include "CNC/cnc_config_base.h"
 
 class CncCoreYZConfig: public CncMachineBase{
     public:

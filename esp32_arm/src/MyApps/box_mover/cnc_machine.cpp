@@ -1,8 +1,10 @@
-#include "box_mover_hw_config.h"
-#include "HardwareSerial.h"
+#include "cnc_machine.h"
 
+int32_t BoxMoverCncMachine::GetStepsPerUnit(char axis_name){
+    return 123;
+}
 
-void BoxMoverHardwareConfig::Init(){
+void BoxMoverCncMachine::Init(char solution_id){
         this->STEPPER_DRIVER_MICRO_STEPS = 16;
         this->MOTOR_GEARBOX_RATIO_ALPHA_BETA = 21;
         this->MOTOR_DEGREE_PER_STEP = 1.8;
@@ -17,9 +19,9 @@ void BoxMoverHardwareConfig::Init(){
         this->steps_per_rad_for_w = 33;
 }
 
-void BoxMoverHardwareConfig::PrintOut(){
+void BoxMoverCncMachine::PrintOut(){
     Serial.print("\n\n===============================================");
-    Serial.print("\nBoxMoverHardwareConfig::PrintOut()");
+    Serial.print("\nBoxMoverCncMachine::PrintOut()");
     Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");
     Serial.print(this->STEPPER_DRIVER_MICRO_STEPS);
     Serial.print("\n   MOTOR_GEARBOX_RATIO_ALPHA_BETA = ");

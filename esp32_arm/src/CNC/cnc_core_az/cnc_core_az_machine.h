@@ -1,6 +1,8 @@
 #pragma once
 
-class BoxMoverHardwareConfig{
+#include "CNC/cnc_machine_base.h"
+
+class CncCoreAZMachine: public CncMachineBase{
     public:
         float steps_per_rad_for_w;
         float steps_per_mm_for_z;
@@ -11,10 +13,10 @@ class BoxMoverHardwareConfig{
         float Homed_position_w = 34;
         int Homing_speed_alpha_beta; // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
         int Homing_acceleration_alpha_beta ;
-        void Init();
-        void PrintOut();
+        void PrintOut(){};
 
-    private:
+
+    protected:
         int STEPPER_DRIVER_MICRO_STEPS;
         float MOTOR_DEGREE_PER_STEP;
         float MOTOR_GEARBOX_RATIO_ALPHA_BETA;
