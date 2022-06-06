@@ -75,6 +75,59 @@ void BoardAllInOne::Test_Sharp_IrSensor(int loop_count){
     }
 }
 
+void BoardAllInOne::Test_TrackSensor(int loop_count){
+    TrackSensorBase* sensor = this->agv.GetTrackSensor();
+    for (int i=0; i<loop_count; i++){
+        int16_t error = sensor->ReadAlignmentError();
+        Serial.println(error);
+        delay(200);
+    }
+}
+
+void BoardAllInOne::Test_AllHomers(int loop_count){
+    SingleAxisHomer* z = this->cnc.GetHomer('Z');
+    SingleAxisHomer* y = this->cnc.GetHomer('Y');
+    bool zh,yh;
+    for(int i=0; i<loop_count; i++){
+        zh= z->IsTriged();
+        yh = y->IsTriged();
+        Serial.print("z: ");
+        Serial.print(zh);
+        Serial.print("\ty: 444");
+        Serial.println(yh);
+        delay(200);
+    }
+    
+}
+void BoardAllInOne::Test_Stepper(int loop_count, char axis_name, int distance_in_step, StepControl* control){
+    Stepper* ss = this->cnc.GetStepper(axis_name);
+    this->cnc.EnableMotor(axis_name, true);
+    ss->setAcceleration(distance_in_step / 2);
+    for(int i=0; i<loop_count; i++){
+        //CW
+        ss->setTargetAbs(distance_in_step);
+        control->move(*ss);
+        delay(500);
+        //CCW
+        ss->setTargetAbs(0);
+        control->move(*ss);
+        delay(500);
+    }
+}
+
+// void BoardAllInOne::Test_CncHome(char axis_name, int loop_count){
+// }
+
+
+void BoardAllInOne::Test_ObstacleSensor(int loop_count){
+    ObstacleSensorBase* sensor = this->agv.GetObstacleSensor();
+    for(int i=0; i<loop_count; i++){
+        bool blocked = sensor->DetectObstacle();
+        Serial.println(blocked);
+        delay(200);
+    }
+}
+
 
 
 float BoardAllInOne::Get_Battery_volt(){
