@@ -9,15 +9,15 @@ void BoardAllInOne::Init(bool is_on_reset){
     this->_Begin_I2cBus(&this->__i2c_bus_main, PIN_MAIN_I2C_SDA_2205, PIN_MAIN_I2C_SCL_2205, 400000);
     this->_Begin_I2cBus(&this->__i2c_bus_ext, PIN_EXT_I2C_SDA_2205, PIN_EXT_I2C_SCL_2205, 400000);
 
-    bool scan_buses = false;
-    if (scan_buses){
-        this->ScanI2cBus(&this->__i2c_bus_main, "bus_main");
-        this->ScanI2cBus(&this->__i2c_bus_ext, "bus_extended");
-        delay(3000);           // wait 5 seconds for next scan
-    }
+
     this->_Begin_Mcp23018(&this->__mcp23018, I2C_ADDR_MCP23018_2205, &this->__i2c_bus_main);
 
     this->__mcp23018.pinMode(PIN_MCP23018_TEST_2205, OUTPUT);
+
+    this->asrs.Init(false);
+    this->asrs.LinkTwoWireBus(&this->__i2c_bus_ext);
+    Serial.println("[Info] BoardAllInOne::Init() ASRS components is OK.");
+    
     // Init cnc components 
     this->cnc.Init(false);
     this->cnc.Init(&this->__mcp23018);
@@ -38,6 +38,12 @@ void BoardAllInOne::Init(bool is_on_reset){
     //     this->BlinkTest();
     Serial.println("[Info] BoardAllInOne::Init() ALL components is OK.");
 
+}
+
+void BoardAllInOne::ScanI2cBuses(){
+    this->ScanI2cBus(&this->__i2c_bus_main, "bus_main");
+    this->ScanI2cBus(&this->__i2c_bus_ext, "bus_extended");
+    delay(3000);           // wait 3 seconds for observing.
 }
 
 void BoardAllInOne::BlinkTest(){

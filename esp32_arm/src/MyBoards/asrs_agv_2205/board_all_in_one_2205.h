@@ -8,10 +8,11 @@
 class BoardAllInOne: public BoardBase{
     public:
         BoardAllInOne(){};
+        Board2205Cnc cnc;
+        Board2205Agv agv;
+        BoardAsrs asrs;
         void Init(bool is_on_reset) override;
-        Board2205Cnc cnc = Board2205Cnc();
-        Board2205Agv agv = Board2205Agv();
-        BoardAsrs asrs = BoardAsrs();
+        void ScanI2cBuses();
         void BlinkTest();
         Adafruit_MCP23X17* Get_Mcp23018(){return &this->__mcp23018;};
 

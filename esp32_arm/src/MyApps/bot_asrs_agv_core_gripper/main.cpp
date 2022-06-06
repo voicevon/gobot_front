@@ -16,8 +16,10 @@ MessageQueue garment_bot_message_queue = MessageQueue();
 
 void setup(){
     board.Init(true);
+    board.ScanI2cBuses();
     cncMachine.Init('S');
     robot.InitAllinOne(&board, &cncMachine,&objStepControl);
+
 
    // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
