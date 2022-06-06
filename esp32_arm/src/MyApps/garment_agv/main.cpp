@@ -3,7 +3,7 @@
 
 
 #include "MyLibs/MyFunctions.hpp"
-#include "bot_asrs_agv_core_yz.h"
+#include "garment_bot.h"
 #include "IoT/main_mqtt.h"
 #include "MyApps/box_carrier/cnc_machine.h"
 
@@ -16,8 +16,8 @@ MessageQueue garment_bot_message_queue = MessageQueue();
 
 void setup(){
     board.Init(true);
-    board.Test_ScanI2cBuses(1);
-    board.Test_Sharp_IrSensor(500);
+    board.Test_ScanI2cBuses(0);
+    board.Test_Sharp_IrSensor(0);
 
     cncMachine.Init('S');
     robot.InitAllinOne(&board, &cncMachine,&objStepControl);
@@ -30,8 +30,8 @@ void setup(){
     append_mqtt_bridge(mqtt_topic.c_str(), &garment_bot_message_queue, &robot); 
     setup_mqtt_on_message_receive(); 
 
-    Serial.println ("\n[Info] main.cpp  setup() is done. ------------------------------------  ");
     board.RepportRamUsage();
+    Serial.println ("\n[Info] main.cpp  setup() is done. ------------------------------------  ");
 }
 
 int64_t last_report_timestamp = 0;

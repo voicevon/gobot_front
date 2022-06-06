@@ -3,7 +3,7 @@
 
 
 void BoxCarrierMachine::Init(char solution_id){
-    if (solution_id == 'F')
+    // if (solution_id == 'F')
         this->__Init_Fast();
 }
 
