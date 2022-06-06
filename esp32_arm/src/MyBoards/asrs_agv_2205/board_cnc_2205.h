@@ -12,7 +12,7 @@ class Board2205Cnc: public CncBoardBase{
         Board2205Cnc(){};
         void Init(bool is_on_reset) override;
         void Init(Adafruit_MCP23X17* mcp_23018);
-        void SayHello();
+        void SayHello() override{};
         Stepper* GetStepper(char axis_name) override;
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_GarmentAsar* GetEef() override;

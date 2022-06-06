@@ -1,4 +1,4 @@
-#include "board_2205_agv.h"
+#include "board_agv_2205.h"
 
 void Board2205Agv::Init(bool is_on_reset){
     Serial.println("[Error] Board2205Agv::Init()");
@@ -13,6 +13,8 @@ void Board2205Agv::Init(TwoWire* i2c_bus_main, TwoWire* i2c_bus_ext){
     // Convert vl53l0x chip to obstacle sensor
     this->_Begin_Vl531l0x(&this->__vl53l0x, I2C_ADDR_VL53L0X_2205, i2c_bus_ext);
     this->__obstacle_vl53l0x.Init(&this->__vl53l0x);
+
+    this->__rfid_reader.Init(PIN_RFID_SPI_CLK_2205, PIN_RFID_SPI_MISO_2205, PIN_RFID_SPI_MOSI_2205);
 
     // Dual-wheel pwm dc motor Driver
     this->__dual_wheel.LinkLeftDriver(&this->__left_wheel);

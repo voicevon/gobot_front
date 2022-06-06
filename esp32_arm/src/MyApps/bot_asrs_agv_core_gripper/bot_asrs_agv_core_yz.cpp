@@ -1,5 +1,4 @@
 #include "all_applications.h"
-// #include "all_devices.h"
 #ifdef I_AM_ROBOT_ASRS_AGV
 #include "bot_asrs_agv_core_yz.h"
 
@@ -11,6 +10,7 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, CncMachineBase* cncMac
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is entering");
 	this->agv.Init(&board->agv);
 
+	this->asrs.LinkJettySensor(board->asrs.GetJettySensor());
 	// this->objAsrs.RfidReader->Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
 	// this->objRfid.LinkCallback(&onDetectedMark);
 
@@ -18,7 +18,6 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, CncMachineBase* cncMac
 	// this->jettySensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
 
 	this->cnc.Init(&board->cnc, cncMachine);
-	// this->_gcode_queue = new GcodeQueue();
     this->cnc.LinkLocalGcodeQueue_AsConsumer(&this->_gcode_queue);
 
 	this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING);
@@ -55,7 +54,7 @@ void BotAsrsAgvCoreYZ::onDetectedMark(uint16_t BranchNode_id){
 	case RoadBranchNode::TASK::SHORT_CUT_ONLY:
 		// Follow branch road, not main road.
 		// this->agv.SetFollowMainRoad(this->objRfid.MainRoad_IsOn_LeftSide , false);
-		this->agv.SetFollowMainRoad(this->asrs.RfidReader->MainRoad_IsOn_LeftSide , false);
+		this->agv.SetFollowMainRoad(this->agv.RfidReader->MainRoad_IsOn_LeftSide , false);
 		break;
 	case RoadBranchNode::TASK::LOAD:
 	  	// ???  This is invoked when agv is SLOW_MOVING, should to loading, after parking.
@@ -104,7 +103,7 @@ void BotAsrsAgvCoreYZ::SpinOnce(){
 	case BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING:
 		//Trying to read RFID.
 		// if (this->__rfidReader->PICC_ReadCardSerial() == 123){
-		if (this->asrs.RfidReader->CardId == 123){
+		if (this->agv.RfidReader->CardId == 123){
 			this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::BOT_SLEEPING);
 		}
 		break;

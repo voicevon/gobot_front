@@ -98,7 +98,9 @@ bool BoardBase::_Begin_Apds9960(Adafruit_APDS9960* apds9960, uint8_t i2c_address
     return apds9960;
 
 }
-
+void BoardBase::SayHello(){
+    Serial.println("[Info] BoardBase::SayHello() Hello world.");
+}
 // Adafruit_NeoPixel* BoardBase::_Make_Ws2812b(uint8_t pin_ws2812b){
 //     Serial.println("[Error] BoardBase::_Make_Ws2812b()  ");
 //     Adafruit_NeoPixel* ws2812b=new Adafruit_NeoPixel();

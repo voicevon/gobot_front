@@ -4,6 +4,10 @@ void SmartRfidReader::Init(int8_t pin_clk, int8_t pin_miso, int8_t pin_mosi){
 	this->__rfidReader = new MFRC522();
 }
 
+int SmartRfidReader::ReadMapSiteId(){
+    return 1234;
+}
+
 bool SmartRfidReader::ReadCard(){
     bool ok = this->__rfidReader->PICC_ReadCardSerial();
     if (ok){
@@ -15,4 +19,9 @@ bool SmartRfidReader::ReadCard(){
     // if(ok){
     //     this->__onDetectCard(this->CardId);
     // }
+}
+
+
+void SmartRfidReader::SayHello(){
+    
 }

@@ -1,12 +1,10 @@
 #pragma once
 #include "IoT/mqtt_message_consumer.h"
 #include "CNC/gcode/gcode_queue.h"
-#include "CNC/cnc_core_yz/cnc_core_yz.h"
 #include "ASRS/asrs_base.h"
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/agv_base.h"
-#include "MyBoards/asrs_agv_2205/board_asrs_agv.h"
-// #include "MyApps/bot_core_yz/box_carrier.h"
+#include "MyBoards/asrs_agv_2205/board_all_in_one_2205.h"
 #include "MyApps/box_carrier/box_carrier.h"
 
 

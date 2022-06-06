@@ -18,7 +18,7 @@ class BoardBase{
         void ScanI2cBus(TwoWire* i2c_bus, const char* printing_topic);
         static uint8_t Assign_ledc_channel(){return __ledc_channel_index; __ledc_channel_index++;};
         static uint8_t Assign_i2c_bus_id(){return __i2c_bus_index; __i2c_bus_index++;};
-
+        virtual void SayHello();
 
     protected:
         // TODO:: be static

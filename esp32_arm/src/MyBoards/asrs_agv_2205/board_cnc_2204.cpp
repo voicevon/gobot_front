@@ -1,4 +1,4 @@
-#include "board_2204_cnc.h"
+#include "board_cnc_2204.h"
 
 void Board2204Cnc::Init(bool is_on_reset){
     if (is_on_reset){

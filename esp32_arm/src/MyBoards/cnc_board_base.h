@@ -9,7 +9,7 @@
 class CncBoardBase: public BoardBase{
     public:
         virtual void Init(bool is_on_reset);
-        void SayHello();
+        void SayHello() override;
         virtual Stepper* GetStepper(char axis_name);
         virtual SingleAxisHomer* GetHomer(char axis_name);
         virtual RobotEefBase* GetEef();

@@ -1,5 +1,4 @@
-#include  "board_asrs_agv.h"
-
+#include "board_all_in_one_2205.h"
 
 void BoardAllInOne::Init(bool is_on_reset){
     Serial.begin(115200);
