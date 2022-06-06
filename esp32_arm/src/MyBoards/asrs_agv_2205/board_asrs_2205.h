@@ -13,5 +13,5 @@ class BoardAsrs: public BoardBase{
 
     private:
         JettySensor_SharpIrOnAds1115 __jettySensor;
-        Adafruit_ADS1115* __ads1115;
+        Adafruit_ADS1115 __ads1115;
 };

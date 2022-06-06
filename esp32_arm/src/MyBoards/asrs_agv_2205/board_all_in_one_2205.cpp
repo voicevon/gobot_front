@@ -11,10 +11,10 @@ void BoardAllInOne::Init(bool is_on_reset){
 
 
     this->_Begin_Mcp23018(&this->__mcp23018, I2C_ADDR_MCP23018_2205, &this->__i2c_bus_main);
-
     this->__mcp23018.pinMode(PIN_MCP23018_TEST_2205, OUTPUT);
 
     this->asrs.Init(false);
+    // this->asrs.SayHello();
     this->asrs.LinkTwoWireBus(&this->__i2c_bus_ext);
     Serial.println("[Info] BoardAllInOne::Init() ASRS components is OK.");
     
@@ -40,18 +40,39 @@ void BoardAllInOne::Init(bool is_on_reset){
 
 }
 
-void BoardAllInOne::ScanI2cBuses(){
-    this->ScanI2cBus(&this->__i2c_bus_main, "bus_main");
-    this->ScanI2cBus(&this->__i2c_bus_ext, "bus_extended");
-    delay(3000);           // wait 3 seconds for observing.
+void BoardAllInOne::Test_ScanI2cBuses(int loop_count){
+    for (int i=0; i<loop_count; i++){
+        this->ScanI2cBus(&this->__i2c_bus_main, "bus_main");
+        this->ScanI2cBus(&this->__i2c_bus_ext, "bus_extended");
+        delay(3000);           // wait 3 seconds for observing.
+    }
 }
 
-void BoardAllInOne::BlinkTest(){
+void BoardAllInOne::Test_Blink(){
     Serial.print("Blinking...    >> ");
     Serial.println(blink_flag);
     this->__mcp23018.digitalWrite(PIN_MCP23018_TEST_2205, this->blink_flag);
     this->blink_flag = ! this->blink_flag;
     delay(2000);
+}
+
+void BoardAllInOne::Test_Sharp_IrSensor(int loop_count){
+    Serial.println("[Info] BoardAllInOne::Test_Sharp_IrSensor() is entering.");
+    JettySensor_SharpIrOnAds1115* sharp = this->asrs.GetJettySensor();
+    for (int i =0; i<loop_count; i++){
+        float a = sharp->ReadDistance(JettySensorBase::IR_POSITION::LOWER_INNER);
+        float b = sharp->ReadDistance(JettySensorBase::IR_POSITION::LOWER_OUTER);
+        float c = sharp->ReadDistance(JettySensorBase::IR_POSITION::UPPER_INNER);
+        float f = sharp->ReadDistance(JettySensorBase::IR_POSITION::UPPER_OUTER);
+        Serial.print(a);
+        Serial.print("\t");
+        Serial.print(b);
+        Serial.print("\t");
+        Serial.print(c);
+        Serial.print("\t");
+        Serial.println(f);
+        delay(300);
+    }
 }
 
 

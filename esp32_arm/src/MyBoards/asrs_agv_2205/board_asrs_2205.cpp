@@ -5,7 +5,7 @@ void BoardAsrs::Init(bool is_on_reset){
 }
 
 void BoardAsrs::LinkTwoWireBus(TwoWire* i2c_bus){
-    if(! this->__ads1115->begin(I2C_ADDR_ADS1115, i2c_bus)){
+    if(! this->__ads1115.begin(I2C_ADDR_ADS1115, i2c_bus)){
         Serial.println("Getting single-ended readings from AIN0..3");
         Serial.println("ADC Range: +/- 6.144V (1 bit = 3mV/ADS1015, 0.1875mV/ADS1115)");
 
@@ -24,12 +24,12 @@ void BoardAsrs::LinkTwoWireBus(TwoWire* i2c_bus){
         Serial.println("[Error] BoardAsrs::Init()   Failed to initialize ADS.");
         while (1);
     }
-    this->__jettySensor.LinkChip(ADS1115_PIN_UPPER_INNER);
-    this->__jettySensor.LinkPinIrPosition(JettySensor_SharpIrOnAds1115::IR_POSITION::LOWER_INNER, ADS1115_PIN_LOWER_INNER);
-    this->__jettySensor.LinkPinIrPosition(JettySensor_SharpIrOnAds1115::IR_POSITION::LOWER_OUTER, ADS1115_PIN_LOWER_OUTER);
-    this->__jettySensor.LinkPinIrPosition(JettySensor_SharpIrOnAds1115::IR_POSITION::UPPER_INNER, ADS1115_PIN_UPPER_INNER);
-    this->__jettySensor.LinkPinIrPosition(JettySensor_SharpIrOnAds1115::IR_POSITION::UPPER_OUTER, ADS1115_PIN_UPPER_OUTER);
-    
+    this->__jettySensor.LinkChip(&this->__ads1115);
+    this->__jettySensor.LinkPinIrPosition(JettySensorBase::IR_POSITION::LOWER_INNER, ADS1115_PIN_LOWER_INNER);
+    this->__jettySensor.LinkPinIrPosition(JettySensorBase::IR_POSITION::LOWER_OUTER, ADS1115_PIN_LOWER_OUTER);
+    this->__jettySensor.LinkPinIrPosition(JettySensorBase::IR_POSITION::UPPER_INNER, ADS1115_PIN_UPPER_INNER);
+    this->__jettySensor.LinkPinIrPosition(JettySensorBase::IR_POSITION::UPPER_OUTER, ADS1115_PIN_UPPER_OUTER);
+    Serial.println("[Info] BoardAsrs::LinkTwoWireBus() is OK.");
     // , ADS1115_PIN_UPPER_OUTER, ADS1115_PIN_LOWER_INNER, ADS1115_PIN_LOWER_OUTER);
 }
 

@@ -12,8 +12,9 @@ class BoardAllInOne: public BoardBase{
         Board2205Agv agv;
         BoardAsrs asrs;
         void Init(bool is_on_reset) override;
-        void ScanI2cBuses();
-        void BlinkTest();
+        void Test_ScanI2cBuses(int loop_count);
+        void Test_Blink();
+        void Test_Sharp_IrSensor(int loop_count);
         Adafruit_MCP23X17* Get_Mcp23018(){return &this->__mcp23018;};
 
         void TurnLedOn(bool turn_on);

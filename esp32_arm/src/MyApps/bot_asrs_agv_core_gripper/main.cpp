@@ -16,7 +16,9 @@ MessageQueue garment_bot_message_queue = MessageQueue();
 
 void setup(){
     board.Init(true);
-    board.ScanI2cBuses();
+    board.Test_ScanI2cBuses(1);
+    board.Test_Sharp_IrSensor(500);
+
     cncMachine.Init('S');
     robot.InitAllinOne(&board, &cncMachine,&objStepControl);
 

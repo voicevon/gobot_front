@@ -10,10 +10,10 @@ class JettySensor_SharpIrOnAds1115: public JettySensorBase{
     public:
         JettySensor_SharpIrOnAds1115(){};
         float ReadDistance(IR_POSITION irPosition) override;
-        
+
         void LinkChip(Adafruit_ADS1115* ads1115);
         void LinkPinIrPosition(IR_POSITION position, uint8_t pin);
-        // void Update() override;
+
     private:
         Adafruit_ADS1115* __ads;  /* Use this for the 16-bit version */
         uint8_t __pin_upper_inner;
