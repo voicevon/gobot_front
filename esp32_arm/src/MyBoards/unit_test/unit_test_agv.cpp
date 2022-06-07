@@ -56,3 +56,37 @@ void UnitTestAgv::Test_RfidReader(int loop_count){
     }  
 }
 
+void UnitTestAgv::Test_Mover(int loop_count){
+    if (loop_count == 0) return;
+
+    Serial.println("[Info] UnitTestAgv::Test_Mover()");
+    delay(3000);
+    MoverBase* mover = this->__board->GetMover();
+    for(int i=0; i<loop_count; i++){
+        Serial.print("Forward    ");
+        for(int speed=-100; speed<100; speed++){
+            mover->SetForwdingSpeed(speed, 0);
+            delay(50);
+        }
+        Serial.println("Backward   ");
+        for(int speed=100; speed>-100; speed--){
+            mover->SetForwdingSpeed(speed, 0);
+            delay(50);
+        }
+    } 
+}
+
+void UnitTestAgv::Test_Battery(int loop_count){
+    if (loop_count == 0) return;
+
+    Serial.println("[Info] UnitTestAgv::Test_ObstacleSensor()");
+    delay(1000);
+    float volt = 0.0;
+    for(int i=0; i<loop_count; i++){
+        volt = this->__board->ReadBatteryVolt();
+        // bool blocked = sensor->DetectObstacle();
+        Serial.println(volt);
+        delay(1000);
+    }
+}
+

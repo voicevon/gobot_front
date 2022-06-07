@@ -54,12 +54,7 @@ void BoardAllInOne::Test_Blink(){
     delay(2000);
 }
 
-float BoardAllInOne::Get_Battery_volt(){
-    int16_t adc = analogRead(PIN_BATTERY_VOLTAGE_ADC_2205);
-    // translate adc to voltage
-    float volt = 0.123 * adc + 12.22 ;
-    return volt;
-}
+
 
 // void BoardAllInOne::TurnLedOn(bool turn_on){
 // 	// Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);

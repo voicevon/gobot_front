@@ -9,6 +9,8 @@ class UnitTestAgv:public UnitTestBase{
         void Test_ObstacleSensor(int loop_count);
         void Test_TrackLight(int loop_count);
         void Test_RfidReader(int loop_count);
+        void Test_Mover(int loop_count);
+        void Test_Battery(int loop_count);
         
     private:
         AgvBoardbase* __board;

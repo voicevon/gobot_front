@@ -25,7 +25,8 @@ void unit_test(){
     agv->Test_TrackLight(2);
     agv->Test_ObstacleSensor(0);
     agv->Test_TrackSensor(0);
-    agv->Test_RfidReader(500);
+    agv->Test_RfidReader(0);
+    agv->Test_Mover(5);
 
     UnitTestCnc* cnc = new UnitTestCnc();
     cnc->LinkBoard(&board.cnc);
@@ -37,8 +38,6 @@ void unit_test(){
     UnitTestAsrs* asrs = new UnitTestAsrs();
     asrs->LinkBoard(&board.asrs);
     // asrs->Test_Sharp_IrSensor(20);
-
-
 }
 void setup(){
     board.Init(true);

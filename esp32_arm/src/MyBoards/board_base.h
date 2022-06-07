@@ -17,6 +17,7 @@ class BoardBase{
         void RepportRamUsage();  // TODO::  be static
         static uint8_t Assign_ledc_channel(){return __ledc_channel_index; __ledc_channel_index++;};
         virtual void SayHello();
+        virtual  float ReadBatteryVolt(){};
 
     protected:
         // TODO:: be static
@@ -26,7 +27,6 @@ class BoardBase{
         bool _Begin_Mcp23018(Adafruit_MCP23X17* mcp, uint8_t i2c_address, TwoWire* i2c_bus);
         bool _Begin_Vl531l0x(Adafruit_VL53L0X* vl53l0x, uint8_t i2c_address, TwoWire* i2c_bus);
         bool _Begin_Apds9960(Adafruit_APDS9960* apds9960, uint8_t i2c_address, TwoWire* i2c_bus);
-        // bool _Make_Ws2812b(uint8_t pin_ws2812b);
 
     private:
         static uint8_t __i2c_bus_index;

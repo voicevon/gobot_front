@@ -17,7 +17,6 @@ class BoardAllInOne: public BoardBase{
         Adafruit_MCP23X17* Get_Mcp23018(){return &this->__mcp23018;};
 
         // void TurnLedOn(bool turn_on);
-        float Get_Battery_volt();
 
 
     private:

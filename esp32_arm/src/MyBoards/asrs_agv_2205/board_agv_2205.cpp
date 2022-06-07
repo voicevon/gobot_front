@@ -32,3 +32,10 @@ void Board2205Agv::Init(TwoWire* i2c_bus_main, TwoWire* i2c_bus_ext){
 
 
 }
+
+float Board2205Agv::ReadBatteryVolt(){
+    int16_t adc = analogRead(PIN_BATTERY_VOLTAGE_ADC_2205);
+    // translate adc to voltage
+    float volt = 1.0 * adc + 0 ;
+    return volt;
+}

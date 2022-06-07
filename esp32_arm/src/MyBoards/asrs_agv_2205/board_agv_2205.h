@@ -26,6 +26,10 @@ class Board2205Agv: public AgvBoardbase{
         MoverBase* GetMover() override {return &this->__dual_wheel;};
         LightBase* GetTrackLight() override {return &this->__track_light;};
         // SmartRfidReader* GetRfidReader() override{return &this->__rfid_reader;};
+        // float Get_Battery_volt();
+        float ReadBatteryVolt() override;
+
+
     private:
         Adafruit_APDS9960 __left_aps9960;
         Adafruit_APDS9960 __right_aps9960;
