@@ -20,9 +20,20 @@ GcodeQueue gcode_queue = GcodeQueue();
 MessageQueue mqtt_message_queue = MessageQueue();
 GobotHouse* robot; 
 
+#include "MyBoards/unit_test/unit_test_cnc.h"
+void unit_test(){
+    UnitTestCnc* tester = new UnitTestCnc();
+    tester->LinkBoard(&board);
+    tester->Test_AllHomers(100);
+    tester->Test_Stepper(10, 'A', 300, &controller);
+    tester->Test_Stepper(10, 'B', 300, &controller);
+}
+
 void setup(){
     board.Init(true);
-    cncMachine.Init();
+    unit_test();
+    
+    cncMachine.Init('M');
     cncScara.Init(&board, &cncMachine);
     
     robot = &GobotHouse::getInstance();

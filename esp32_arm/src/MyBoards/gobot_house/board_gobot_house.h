@@ -9,7 +9,7 @@ class Board_GobotHouse: public CncBoardBase{
     public:
         Board_GobotHouse(){};
         void Init(bool is_on_reset) override;
-        void SayHello();
+        // void SayHello();
         Stepper* GetStepper(char axis_name) override;
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_GobotHouse* GetEef() override;

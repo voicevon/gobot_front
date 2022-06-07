@@ -4,16 +4,16 @@ void UnitTestCnc::Test_AllHomers(int loop_count){
     Serial.println("[Info] UnitTestCnc::Test_AllHomers()");
     delay(3000);
 
-    SingleAxisHomer* z = this->__board->GetHomer('Z');
-    SingleAxisHomer* y = this->__board->GetHomer('Y');
-    bool zh,yh;
+    SingleAxisHomer* hz = this->__board->GetHomer('Z');
+    SingleAxisHomer* hy = this->__board->GetHomer('Y');
+    bool zt,yt;
     for(int i=0; i<loop_count; i++){
-        zh= z->IsTriged();
-        yh = y->IsTriged();
+        zt= hz->IsTriged();
+        yt = hy->IsTriged();
         Serial.print("z: ");
-        Serial.print(zh);
+        Serial.print(zt);
         Serial.print("\ty: ");
-        Serial.println(yh);
+        Serial.println(yt);
         delay(200);
     }
 }
@@ -38,4 +38,5 @@ void UnitTestCnc::Test_Stepper(int loop_count, char axis_name, int distance_in_s
         control->move(*ss);
         delay(500);
     }
+    this->__board->EnableMotor(axis_name, false);
 }

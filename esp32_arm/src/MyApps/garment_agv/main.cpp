@@ -25,10 +25,9 @@ void unit_test(){
     // agv->Test_ObstacleSensor(11);
     // agv->Test_TrackSensor(11);
 
-
     UnitTestCnc* cnc = new UnitTestCnc();
     cnc->LinkBoard(&board.cnc);
-    cnc->Test_AllHomers(22);
+    cnc->Test_AllHomers(888);
     cnc->Test_Stepper(5,'A', 5000, &objStepControl);
     cnc->Test_Stepper(5,'B', 5000, &objStepControl);
 

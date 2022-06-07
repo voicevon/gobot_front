@@ -21,8 +21,6 @@ void BoardAllInOne::Init(bool is_on_reset){
     // Init cnc components 
     this->cnc.Init(false);
     this->cnc.Init(&this->__mcp23018);
-    // this->cnc.EnableMotor_alpha(false);
-    // this->cnc.EnableMotor_beta(false);
     this->cnc.EnableMotor('A', false);
     this->cnc.EnableMotor('B',false);
     Serial.println("[Info] BoardAllInOne::Init() CNC components is OK.");
@@ -55,16 +53,6 @@ void BoardAllInOne::Test_Blink(){
     this->blink_flag = ! this->blink_flag;
     delay(2000);
 }
-
-
-
-
-
-
-
-
-
-
 
 float BoardAllInOne::Get_Battery_volt(){
     int16_t adc = analogRead(PIN_BATTERY_VOLTAGE_ADC_2205);
