@@ -20,4 +20,7 @@ void Board2205Agv::Init(TwoWire* i2c_bus_main, TwoWire* i2c_bus_ext){
     this->__dual_wheel.LinkLeftDriver(&this->__left_wheel);
     this->__dual_wheel.LinkRightDriver(&this->__right_wheel);
 
+    this->__neo_pixel.begin();
+    this->__track_light.LinkDriver(&this->__neo_pixel);
+
 }

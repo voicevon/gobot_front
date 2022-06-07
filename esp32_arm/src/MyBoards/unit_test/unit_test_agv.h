@@ -7,7 +7,8 @@ class UnitTestAgv:public UnitTestBase{
         void LinkBoard(AgvBoardbase* board){this->__board=board;};
         void Test_TrackSensor(int loop_count);
         void Test_ObstacleSensor(int loop_count);
-
+        void Test_TrackLight(int loop_count);
+        
     private:
         AgvBoardbase* __board;
 

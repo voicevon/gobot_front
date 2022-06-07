@@ -61,7 +61,7 @@ float BoardAllInOne::Get_Battery_volt(){
     return volt;
 }
 
-void BoardAllInOne::TurnLedOn(bool turn_on){
-	// Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
-}
+// void BoardAllInOne::TurnLedOn(bool turn_on){
+// 	// Light_WS2812B* led=new Light_WS2812B(WS2812B_COUNT, PIN_WS2812B);
+// }
 

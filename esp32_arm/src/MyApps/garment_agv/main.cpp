@@ -22,8 +22,9 @@ MessageQueue garment_bot_message_queue = MessageQueue();
 void unit_test(){
     UnitTestAgv* agv = new UnitTestAgv();
     agv->LinkBoard(&board.agv);
-    // agv->Test_ObstacleSensor(11);
-    // agv->Test_TrackSensor(11);
+    agv->Test_ObstacleSensor(0);
+    agv->Test_TrackSensor(0);
+    agv->Test_TrackLight(100);
 
     UnitTestCnc* cnc = new UnitTestCnc();
     cnc->LinkBoard(&board.cnc);

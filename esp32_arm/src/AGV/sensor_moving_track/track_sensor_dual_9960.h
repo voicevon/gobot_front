@@ -37,7 +37,7 @@
 #include "Wire.h"
 #include "AGV/sensor_moving_track/track_sensor_base.h"
 #include "smarter_9960.h"
-#include "AGV/light/light_base.h"
+#include "AGV/track_light/light_base.h"
 
 
 class TrackSensor_Dual9960_Config{
