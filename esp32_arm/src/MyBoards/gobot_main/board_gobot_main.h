@@ -14,7 +14,8 @@ class Board_GobotMain: public CncBoardBase{
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_GobotMain* GetEef() override;
         void EnableMotor(char axis_name, bool enable_it) override;
-        uint8_t ReadRoomsSensor();
+        uint8_t ReadAllRooms();
+        uint8_t GetLoadedRoom();
 
     private:
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);

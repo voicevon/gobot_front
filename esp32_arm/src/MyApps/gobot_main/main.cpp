@@ -18,13 +18,16 @@ GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 
 
-#include "MyBoards/unit_test/unit_test_cnc.h"
+// #include "MyBoards/unit_test/unit_test_cnc.h"
+#include "MyBoards/gobot_main/unit_test.h"
+
 void unit_test(){
-    UnitTestCnc* tester = new UnitTestCnc();
+    GobotMain_UnitTest* tester = new GobotMain_UnitTest();
     tester->LinkBoard(&board);
     tester->Test_AllHomers(100);
     tester->Test_Stepper(10, 'A', 300, &controller);
     tester->Test_Stepper(10, 'B', 300, &controller);
+    tester->Test_room_sensors(100);
 }
 
 void setup(){
@@ -47,7 +50,7 @@ void setup(){
     Serial.print("\nGobot-Chessboard setup is done..........");
 }
 
-uint8_t last_rooms_sensor;
+uint8_t last_loaded_room;
 bool xx=true;
 
 void loop(){
@@ -55,13 +58,13 @@ void loop(){
     cncFiveBar.SpinOnce();
     loop_mqtt();
     return;
-    uint8_t rooms_sensor = board.ReadRoomsSensor();
+    uint8_t loadded_room = board.GetLoadedRoom();
     char c_room_sensor = '?';
-    if (last_rooms_sensor != rooms_sensor){
+    if (last_loaded_room != loadded_room){
         String topic = "gobot/xROBOT_SERIAL_ID/rooms";
         topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
         mqttClient.publish(topic.c_str(),2,true, &c_room_sensor);
-        last_rooms_sensor = rooms_sensor;
+        last_loaded_room = loadded_room;
     }
 }
 #endif

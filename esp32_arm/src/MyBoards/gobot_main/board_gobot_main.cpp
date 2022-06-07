@@ -59,12 +59,24 @@ void Board_GobotMain::EnableMotor(char axis_name, bool enable_it) {
     }
 }
 
-uint8_t Board_GobotMain::ReadRoomsSensor(){
-    char result = 0;
+uint8_t Board_GobotMain::ReadAllRooms(){
+    uint8_t result = 0;
     uint8_t p;
     for (int i=0; i<8; i++){
         p = digitalRead(PIN_ROOMS[i]);
         result += (p<<i);
     }
     return result;
+}
+
+
+//Return 9 is all rooms is empty.
+uint8_t Board_GobotMain::GetLoadedRoom(){
+    uint8_t v;
+    for(uint8_t i=0; i<8; i++){
+        v = digitalRead(PIN_ROOMS[i]);
+        if(v == LOW)
+            return i;
+    }
+    return 9;   
 }
