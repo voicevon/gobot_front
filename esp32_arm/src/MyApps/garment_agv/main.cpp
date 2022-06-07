@@ -14,10 +14,24 @@ BotAsrsAgvCoreYZ robot = BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
 
 
+#include "MyBoards/unit_test/unit_test_agv.h"
+#include "MyBoards/unit_test/unit_test_asrs.h"
+#include "MyBoards/unit_test/unit_test_cnc.h"
+
+
+void unit_test(){
+    UnitTestAgv* agv = new UnitTestAgv();
+    UnitTestAsrs* asrs = new UnitTestAsrs();
+    UnitTestCnc* cnc = new UnitTestCnc();
+
+    asrs->LinkBoard(&board.asrs);
+    asrs->Test_Sharp_IrSensor(0);
+
+}
 void setup(){
     board.Init(true);
+    unit_test();
     board.Test_ScanI2cBuses(0);
-    board.Test_Sharp_IrSensor(0);
 
     cncMachine.Init('S');
     robot.InitAllinOne(&board, &cncMachine,&objStepControl);
