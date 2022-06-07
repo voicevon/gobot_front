@@ -21,11 +21,11 @@ MessageQueue garment_bot_message_queue = MessageQueue();
 
 void unit_test(){
     UnitTestAgv* agv = new UnitTestAgv();
-    UnitTestAsrs* asrs = new UnitTestAsrs();
     UnitTestCnc* cnc = new UnitTestCnc();
 
+    UnitTestAsrs* asrs = new UnitTestAsrs();
     asrs->LinkBoard(&board.asrs);
-    asrs->Test_Sharp_IrSensor(0);
+    asrs->Test_Sharp_IrSensor(20);
 
 }
 void setup(){
