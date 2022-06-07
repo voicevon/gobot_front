@@ -29,7 +29,7 @@ void setup(){
     setup_mqtt_block_connect();
     append_mqtt_bridge("puma/x2212/bm", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 
-    Serial.println ("\n[Info] main.cpp  setup() is done. ------------------------------------ \n");
+    Serial.println ("\n[Info] box carrier  setup() is done. ------------------------------------ \n");
 
     robot.ExecuteMqttCommand("G28Y");
 }

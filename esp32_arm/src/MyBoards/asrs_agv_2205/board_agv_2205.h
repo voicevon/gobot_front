@@ -8,6 +8,7 @@
 #include "AGV/mover_driver/mover_dual_wheel.h"
 #include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
 #include "AGV/track_light/light_ws2812b.h"
+#include <MFRC522.h>
 
 class Board2205Agv: public AgvBoardbase{
     public:
@@ -24,7 +25,7 @@ class Board2205Agv: public AgvBoardbase{
         MapSiteReaderBase* GetMapSiteReader() override {return &this->__rfid_reader;};
         MoverBase* GetMover() override {return &this->__dual_wheel;};
         LightBase* GetTrackLight() override {return &this->__track_light;};
-        
+        // SmartRfidReader* GetRfidReader() override{return &this->__rfid_reader;};
     private:
         Adafruit_APDS9960 __left_aps9960;
         Adafruit_APDS9960 __right_aps9960;
@@ -39,5 +40,8 @@ class Board2205Agv: public AgvBoardbase{
 
         Adafruit_NeoPixel __neo_pixel =Adafruit_NeoPixel(16, PIN_WS2812B, NEO_GRB + NEO_KHZ800); 
         Light_WS2812B __track_light = Light_WS2812B(16);
+
+
+        MFRC522 __mfrc522 = MFRC522(PIN_RFID_RESET);
         SmartRfidReader __rfid_reader;
 };

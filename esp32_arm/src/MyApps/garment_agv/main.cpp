@@ -22,9 +22,10 @@ MessageQueue garment_bot_message_queue = MessageQueue();
 void unit_test(){
     UnitTestAgv* agv = new UnitTestAgv();
     agv->LinkBoard(&board.agv);
+    agv->Test_TrackLight(2);
     agv->Test_ObstacleSensor(0);
     agv->Test_TrackSensor(0);
-    agv->Test_TrackLight(100);
+    agv->Test_RfidReader(500);
 
     UnitTestCnc* cnc = new UnitTestCnc();
     cnc->LinkBoard(&board.cnc);
@@ -56,7 +57,7 @@ void setup(){
     setup_mqtt_on_message_receive(); 
 
     board.RepportRamUsage();
-    Serial.println ("\n[Info] main.cpp  setup() is done. ------------------------------------  ");
+    Serial.println ("\n[Info] garment agv  setup() is done. ------------------------------------  ");
 }
 
 int64_t last_report_timestamp = 0;

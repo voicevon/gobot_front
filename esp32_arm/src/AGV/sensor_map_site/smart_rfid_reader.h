@@ -1,8 +1,8 @@
 #pragma once
 
-#include <MFRC522.h>
 #include "AGV/map_road_station/map_road_station.h"
 #include "map_site_reader.h"
+#include <MFRC522.h>
 /*
     There are appplication information inside RFID, after we formated it.
     Those data are:
@@ -19,15 +19,11 @@ class SmartRfidReader: public MapSiteReaderBase{
         bool MainRoad_IsOn_LeftSide;
         WorkStation::TYPE_ON_MAP NextStationType;  
         
-        void Init(int8_t pin_clk, int8_t pin_miso, int8_t pin_mosi);
-        // void LinkCallback(void(* callback)(uint16_t card_id)){this->__onDetectCard = callback;};
+        void LinkDriver(MFRC522* reader){this->__mfrc522=reader;};
         bool ReadCard();
         int ReadMapSiteId() override;
-        void SayHello();
 
     private:
-        MFRC522* __rfidReader;
-        // void(* __onDetectCard)(uint16_t card_id);
-
+        MFRC522* __mfrc522;
 
 };

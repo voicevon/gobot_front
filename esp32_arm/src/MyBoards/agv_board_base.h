@@ -16,7 +16,7 @@ class AgvBoardbase: public BoardBase{
         virtual LightBase* GetTrackLight();
         virtual MoverBase* GetMover();
         virtual MapSiteReaderBase* GetMapSiteReader();
-
+        
     protected:
 
     private:

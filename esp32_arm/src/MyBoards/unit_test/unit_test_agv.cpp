@@ -43,3 +43,16 @@ void UnitTestAgv::Test_TrackLight(int loop_count){
     } 
 }
 
+void UnitTestAgv::Test_RfidReader(int loop_count){
+    if (loop_count == 0) return;
+
+    Serial.println("[Info] UnitTestAgv::Test_RfidReader()");
+    delay(3000);
+    MapSiteReaderBase* reader = this->__board->GetMapSiteReader();
+    for(int i=0; i<loop_count; i++){
+        int id = reader->ReadMapSiteId();
+        Serial.println(id);
+        delay(100);
+    }  
+}
+
