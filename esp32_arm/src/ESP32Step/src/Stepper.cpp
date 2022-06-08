@@ -44,8 +44,8 @@ Stepper::Stepper(const int _stepPin, Adafruit_MCP23X17* mcp23018_dir_pin_only, c
 
 void Stepper::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp23018_dir_pin_only, const int DirPin){
     this->__mcp23018 = mcp23018_dir_pin_only;
-    mcp23018_dir_pin_only->pinMode(dirPin, OUTPUT);
     this->dirPin = DirPin;
+    mcp23018_dir_pin_only->pinMode(this->dirPin, OUTPUT);
 }
 
 
