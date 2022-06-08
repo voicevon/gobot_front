@@ -23,22 +23,24 @@ void unit_test(){
     UnitTestAgv* agv = new UnitTestAgv();
     agv->LinkBoard(&board.agv);
     agv->Test_TrackLight(2);
+    agv->Test_Battery(0);
     agv->Test_ObstacleSensor(0);
     agv->Test_TrackSensor(0);
     agv->Test_RfidReader(0);
-    agv->Test_Mover(5);
+    agv->Test_Mover(0);
 
     UnitTestCnc* cnc = new UnitTestCnc();
     cnc->LinkBoard(&board.cnc);
-    cnc->Test_AllHomers(888);
-    cnc->Test_Stepper(5,'A', 5000, &objStepControl);
-    cnc->Test_Stepper(5,'B', 5000, &objStepControl);
+    cnc->Test_AllHomers(5);
+    cnc->Test_Stepper(0,'A', 5000, &objStepControl);
+    cnc->Test_Stepper(0,'B', 5000, &objStepControl);
 
 
     UnitTestAsrs* asrs = new UnitTestAsrs();
     asrs->LinkBoard(&board.asrs);
     // asrs->Test_Sharp_IrSensor(20);
 }
+
 void setup(){
     board.Init(true);
     unit_test();

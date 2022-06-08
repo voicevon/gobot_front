@@ -9,6 +9,7 @@ void AgvBase::Init(AgvBoardbase* board){
     this->__mover = board->GetMover();
     this->_State=SLOW_MOVING_PAUSED;
     this->ToState(PARKED);
+    this->__board = board;
 }
 
 void AgvBase::SetFollowMainRoad(bool next_branch_is_on_left, bool follow_main_road){
@@ -149,4 +150,8 @@ bool AgvBase::DoParking(){
     if (x_error < 10 && y_error < 10)
         return true;
     return false;
+}
+
+float AgvBase::ReadBattery(){
+    return this->__board->ReadBatteryVolt();
 }

@@ -1,6 +1,8 @@
 #include "unit_test_cnc.h"
 
 void UnitTestCnc::Test_AllHomers(int loop_count){
+    if (loop_count==0) return;
+
     Serial.println("[Info] UnitTestCnc::Test_AllHomers()");
     delay(3000);
 
@@ -19,6 +21,7 @@ void UnitTestCnc::Test_AllHomers(int loop_count){
 }
 
 void UnitTestCnc::Test_Stepper(int loop_count, char axis_name, int distance_in_step, StepControl* control){
+    if (loop_count==0) return;
     Serial.print("[Info] UnitTestCnc::Test_Stepper()  axis_name= ");
     Serial.println(axis_name);
     delay(3000);

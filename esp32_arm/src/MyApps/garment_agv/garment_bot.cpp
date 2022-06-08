@@ -9,17 +9,9 @@ BotAsrsAgvCoreYZ::BotAsrsAgvCoreYZ(uint16_t id){
 void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, CncMachineBase* cncMachine, StepControl* stepControl){
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is entering");
 	this->agv.Init(&board->agv);
-
 	this->asrs.LinkJettySensor(board->asrs.GetJettySensor());
-	// this->objAsrs.RfidReader->Init(PIN_RFID_SPI_CLK, PIN_RFID_SPI_MISO, PIN_RFID_SPI_MOSI);
-	// this->objRfid.LinkCallback(&onDetectedMark);
-
-	// Init box carrier robot.
-	// this->jettySensor = new TrackSensor_DualIR(PIN_IR_FRONT, PIN_IR_REAR);
-
 	this->cnc.Init(&board->cnc, cncMachine);
     this->cnc.LinkLocalGcodeQueue_AsConsumer(&this->_gcode_queue);
-
 	this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING);
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is done.\n");
 }
@@ -224,12 +216,14 @@ void BotAsrsAgvCoreYZ::Test(int test_id){
 
 uint8_t BotAsrsAgvCoreYZ::GetMqtt_PubPayload(uint8_t* chars){
     // a json string,, constructed by state,battery_volt,last_site_id
+
+	float battery_volt = this->agv.ReadBattery();
     String payload = "{\"id\":";
 	payload.concat(String(this->_ID));
     payload.concat(",\"sta\":");
     payload.concat(String(this->__state));
     payload.concat(",\"bat\":");
-    payload.concat(String(12.8));
+    payload.concat(String(battery_volt));
     payload.concat(",\"nd\":");
     payload.concat(String(45));
 	payload.concat("} ");   //Space is important !! for length =+1
@@ -239,6 +233,7 @@ uint8_t BotAsrsAgvCoreYZ::GetMqtt_PubPayload(uint8_t* chars){
 	if (debug){
 		Serial.print("[Debug] BotAsrsAgvCoreYZ::GetMqtt_PubPayload()    length= ");
 		Serial.println(payload.length());
+		Serial.println(payload);
 	}
     payload.getBytes(chars, payload.length());
     return payload.length();

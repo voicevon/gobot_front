@@ -1,0 +1,228 @@
+[
+    {
+        "id": "9162b160f9a09d81",
+        "type": "tab",
+        "label": "Main",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "5f24053fdf6fb118",
+        "type": "ui_audio",
+        "z": "9162b160f9a09d81",
+        "name": "",
+        "group": "7a19476b97301963",
+        "voice": "Microsoft David - English (United States)",
+        "always": "",
+        "x": 640,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "d59c47373391cd3b",
+        "type": "mqtt in",
+        "z": "9162b160f9a09d81",
+        "name": "",
+        "topic": "nodered/speech",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "3e0d2f5c.00d158",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 380,
+        "y": 220,
+        "wires": [
+            [
+                "5f24053fdf6fb118",
+                "f387ad0376d72328"
+            ]
+        ]
+    },
+    {
+        "id": "f387ad0376d72328",
+        "type": "debug",
+        "z": "9162b160f9a09d81",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 660,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "3145465f98b20afe",
+        "type": "ui_button",
+        "z": "9162b160f9a09d81",
+        "name": "",
+        "group": "7a19476b97301963",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "button",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "Hello speaker",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 430,
+        "y": 140,
+        "wires": [
+            [
+                "5f24053fdf6fb118"
+            ]
+        ]
+    },
+    {
+        "id": "85aa3656e4397ecc",
+        "type": "mqtt in",
+        "z": "9162b160f9a09d81",
+        "name": "",
+        "topic": "puma/bot/states",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "3e0d2f5c.00d158",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 340,
+        "wires": [
+            [
+                "5a9bd8e976ce28e1"
+            ]
+        ]
+    },
+    {
+        "id": "70b3e1adda735bb0",
+        "type": "debug",
+        "z": "9162b160f9a09d81",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "4e4ccde4104d2f97",
+        "type": "debug",
+        "z": "9162b160f9a09d81",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "5a9bd8e976ce28e1",
+        "type": "function",
+        "z": "9162b160f9a09d81",
+        "name": "",
+        "func": "msg.payload=msg.payload.bat\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 420,
+        "wires": [
+            [
+                "4e4ccde4104d2f97",
+                "2cf1d480d718780f"
+            ]
+        ]
+    },
+    {
+        "id": "2cf1d480d718780f",
+        "type": "mqtt out",
+        "z": "9162b160f9a09d81",
+        "name": "",
+        "topic": "puma/4444/battery",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "3e0d2f5c.00d158",
+        "x": 590,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "7a19476b97301963",
+        "type": "ui_group",
+        "name": "Main",
+        "tab": "708e65e5a59a9953",
+        "order": 1,
+        "disp": false,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3e0d2f5c.00d158",
+        "type": "mqtt-broker",
+        "name": "voicevon",
+        "broker": "voicevon.vicp.io",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "compatmode": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "Node-Red",
+        "birthQos": "0",
+        "birthRetain": "true",
+        "birthPayload": "Online",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "Node-Red",
+        "willQos": "0",
+        "willRetain": "true",
+        "willPayload": "Offline",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "708e65e5a59a9953",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]

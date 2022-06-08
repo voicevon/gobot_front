@@ -25,6 +25,7 @@ class AgvBase{
         void SetFollowMainRoad(bool next_branch_is_on_left, bool follow_main_road);
         void LinkRfidReader(SmartRfidReader* rfidReader);
         SmartRfidReader* RfidReader;  // TODO: to be private
+        float ReadBattery();
 
     protected:
         AGV_STATE _State;
@@ -41,6 +42,7 @@ class AgvBase{
         TrackSensorBase* trackSensor;
         ObstacleSensorBase *obstacleSensor;
         MoverBase* __mover;
+        AgvBoardbase* __board;   //TODO,  remove this,  to create ClassBatteryReader.
 
         bool DoParking();
 

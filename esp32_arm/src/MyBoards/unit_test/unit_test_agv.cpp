@@ -79,7 +79,7 @@ void UnitTestAgv::Test_Mover(int loop_count){
 void UnitTestAgv::Test_Battery(int loop_count){
     if (loop_count == 0) return;
 
-    Serial.println("[Info] UnitTestAgv::Test_ObstacleSensor()");
+    Serial.println("[Info] UnitTestAgv::Test_Battery()");
     delay(1000);
     float volt = 0.0;
     for(int i=0; i<loop_count; i++){
