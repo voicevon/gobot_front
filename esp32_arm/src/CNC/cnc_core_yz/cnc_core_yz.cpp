@@ -98,16 +98,14 @@ void Cnc_CoreYZ::HomeSingleAxis(char axis){
 		this->stepper_beta->setTargetRel(5000000);
 	}else if (axis=='Z'){
 		this->__homing_helper = this->objHomeHelper_vertical;
-		this->stepper_alpha->setTargetRel(-5000000);
-		this->stepper_beta->setTargetRel(5000000);	
+		this->stepper_alpha->setTargetRel(5000000);
+		this->stepper_beta->setTargetRel(-5000000);	
 	}
 
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B',true);
-	Serial.println("fffffffffffff");
 
 	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
-	Serial.println("hhhhhhhhhhhhhhhh");
 }
 
 void Cnc_CoreYZ::_running_G28(){

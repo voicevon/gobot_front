@@ -22,7 +22,7 @@ MessageQueue garment_bot_message_queue = MessageQueue();
 void unit_test(){
     UnitTestAgv agv;
     agv.LinkBoard(&board.agv);
-    agv.Test_TrackLight(2);
+    agv.Test_TrackLight(0);
     agv.Test_Battery(0);
     agv.Test_ObstacleSensor(0);
     agv.Test_TrackSensor(0);
@@ -32,8 +32,8 @@ void unit_test(){
     UnitTestCnc cnc;
     cnc.LinkBoard(&board.cnc_board);
     cnc.Test_AllHomers(0);
-    cnc.Test_Stepper(0,'A', 5000, &objStepControl);
-    cnc.Test_Stepper(0,'B', 5000, &objStepControl);
+    cnc.Test_Stepper(22,'A', 5000, &objStepControl);
+    // cnc.Test_Stepper(0,'B', 5000, &objStepControl);
 
     UnitTestAsrs asrs;
     asrs.LinkBoard(&board.asrs);

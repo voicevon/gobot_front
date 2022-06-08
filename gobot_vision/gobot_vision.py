@@ -106,7 +106,6 @@ class GobotVision():
     def GetHouseVenderStone(self):
         cell_scanner = CellScanner(self.board_brightness)
         house_vendor_stone_color = cell_scanner.ScanWhite(self.base_house_vender_image, is_inspected=False)
-        # ImageLogger.Output('hhhhhhhhhhhhhhhhhhhhhhh', house_vender_image,to_where=ImageLoggerToWhere.TO_SCREEN)
         # print("house_vendor_stone_color= ", house_vendor_stone_color)
         return house_vendor_stone_color 
 

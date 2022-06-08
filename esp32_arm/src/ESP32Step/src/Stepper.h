@@ -96,10 +96,15 @@ void Stepper::clearStepPin() const
 void Stepper::setDir(int d)
 {
     dir = d;
-    // if (this->__mcp23018 == nullptr)
+    if (this->__mcp23018 == nullptr){
         digitalWrite(dirPin, dir == 1 ? reverse : !reverse);
-    // else
-        // this->__mcp23018->digitalWrite(dirPin, dir == 1 ? reverse : !reverse);
+    }else{
+        Serial.print("Stepper::setDir(int d)= ");
+        Serial.print(dirPin);
+        Serial.print("\t");
+        Serial.println(dir == 1 ? reverse : !reverse);
+        this->__mcp23018->digitalWrite(dirPin, dir == 1 ? reverse : !reverse);
+    }
 }
 #elif
 void Stepper::doStep()

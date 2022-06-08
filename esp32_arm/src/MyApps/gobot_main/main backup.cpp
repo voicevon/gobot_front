@@ -107,7 +107,6 @@ void loop(){
   // pCharacteristic->setValue(action.bytes,13);
 
   // if (action.bytes[0] >=2){
-  //   Serial.print("hhhhhhhhhhhhhhhhhhhhhhhhhhh    ");
   //   Serial.println(action.bytes[0]);
   // }else{
   //   Serial.print(">>>>>>>>>>>>>>>>>>>>>  ");

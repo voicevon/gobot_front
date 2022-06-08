@@ -16,7 +16,7 @@ Stepper::Stepper(const int _stepPin, const int _dirPin)
     setInverseRotation(false);
     setAcceleration(aDefault);
     setMaxSpeed(vMaxDefault);
-    // this->__mcp23018 = nullptr;
+    this->__mcp23018 = nullptr;
 }
 
 Stepper::Stepper(const int _stepPin):stepPin(_stepPin){
@@ -25,6 +25,7 @@ Stepper::Stepper(const int _stepPin):stepPin(_stepPin){
     setInverseRotation(false);
     setAcceleration(aDefault);
     setMaxSpeed(vMaxDefault);
+    this->__mcp23018 = nullptr;
 }
 
 Stepper::Stepper(const int _stepPin, Adafruit_MCP23X17* mcp23018_dir_pin_only, const int _dirPin)
