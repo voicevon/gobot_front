@@ -10,7 +10,9 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, CncMachineBase* cncMac
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is entering");
 	this->agv.Init(&board->agv);
 	this->asrs.LinkJettySensor(board->asrs.GetJettySensor());
-	this->cnc.Init(&board->cnc, cncMachine);
+	this->cnc.Init(&board->cnc_board, cncMachine);
+	this->cnc.LinkStepControl(stepControl);
+	
     this->cnc.LinkLocalGcodeQueue_AsConsumer(&this->_gcode_queue);
 	this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING);
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is done.\n");
@@ -202,16 +204,20 @@ void BotAsrsAgvCoreYZ::ToState(BotAsrsAgvCoreYZ::BOT_STATE state){
    this->__state = new_state;
 }
 
-void BotAsrsAgvCoreYZ::Test(int test_id){
-   	if (test_id == 1) {
-		// this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
-		// this->objBoxMoverAgent.ToPresetState();
-	   }
-   if (test_id==10) {
-        // int track_error = 0;
-        // this->objTwinWheelHardware.MoveForward(track_error);
-		// this->agv.
-   }
+// void BotAsrsAgvCoreYZ::Test(int test_id){
+//    	if (test_id == 1) {
+// 		// this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
+// 		// this->objBoxMoverAgent.ToPresetState();
+// 	   }
+//    if (test_id==10) {
+//         // int track_error = 0;
+//         // this->objTwinWheelHardware.MoveForward(track_error);
+// 		// this->agv.
+//    }
+// }
+
+void BotAsrsAgvCoreYZ::Test_HomeZ(){
+	this->_gcode_queue.AppendGcodeCommand("G28Z");
 }
 
 uint8_t BotAsrsAgvCoreYZ::GetMqtt_PubPayload(uint8_t* chars){

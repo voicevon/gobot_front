@@ -19,10 +19,10 @@ void BoardAllInOne::Init(bool is_on_reset){
     Serial.println("[Info] BoardAllInOne::Init() ASRS components is OK.");
     
     // Init cnc components 
-    this->cnc.Init(false);
-    this->cnc.Init(&this->__mcp23018);
-    this->cnc.EnableMotor('A', false);
-    this->cnc.EnableMotor('B',false);
+    // this->cnc_board.Init(false);
+    this->cnc_board.Init(&this->__mcp23018);
+    this->cnc_board.EnableMotor('A', false);
+    this->cnc_board.EnableMotor('B',false);
     Serial.println("[Info] BoardAllInOne::Init() CNC components is OK.");
 
     //Init agv components

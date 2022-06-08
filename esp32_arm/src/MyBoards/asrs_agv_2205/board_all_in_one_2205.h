@@ -8,7 +8,7 @@
 class BoardAllInOne: public BoardBase{
     public:
         BoardAllInOne(){};
-        Board2205Cnc cnc;
+        Board2205Cnc cnc_board;
         Board2205Agv agv;
         BoardAsrs asrs;
         void Init(bool is_on_reset) override;

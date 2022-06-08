@@ -31,15 +31,10 @@ bool SingleAxisHomer::IsTriged(){
     if (this->__mcp23018 == nullptr)
         pin_value = digitalRead(this->pinTriger);
     else{
-        Serial.print("Reading from mcp23018......   ");
         pin_value = this->__mcp23018->digitalRead(this->pinTriger);
     }
-    Serial.print("SingleAxisHomer::IsTriged()  pin_value= " );
-    Serial.println(pin_value);
-
     // Make a decision if is trigered.
     if (pin_value == trigeredState){
-    // Serial.print("[Debug] SingleAxisHomer.IsTriged() = True\n");
         this->trigered_counter++;
         if (this->trigered_counter > this->trigered_counter_max)
             return true;
@@ -47,7 +42,6 @@ bool SingleAxisHomer::IsTriged(){
     else{
         this->trigered_counter = 0;
     }
-    // Serial.print("[Debug] SingleAxisHomer.IsTriged() = False\n");
     return false;
 }
 

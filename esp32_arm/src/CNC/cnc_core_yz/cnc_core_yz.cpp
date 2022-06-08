@@ -66,6 +66,7 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 void Cnc_CoreYZ::Init(CncBoardBase* board, CncMachineBase* machine){
 	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
 	this->_cncMachine = (CncCoreYZMachine*)(machine);
+	this->_board = board;
 	this->_cncMachine->Init('A');
 
 	this->stepper_alpha = board->GetStepper('A');
@@ -81,10 +82,10 @@ void Cnc_CoreYZ::Init(CncBoardBase* board, CncMachineBase* machine){
 
 void Cnc_CoreYZ::HomeSingleAxis(char axis){
 	Serial.print("[Debug] Cnc_CoreYZ::HomeSingleAxis() is entering:   " );
-	Serial.print(axis);
+	Serial.println(axis);
 	this->_homing_axis = axis;
-
 	this->_cncMachine->PrintOut();
+	Serial.println(this->stepper_alpha->getPosition());
 	this->stepper_alpha->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
 	this->stepper_alpha->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
 	this->stepper_beta->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
@@ -103,7 +104,10 @@ void Cnc_CoreYZ::HomeSingleAxis(char axis){
 
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B',true);
+	Serial.println("fffffffffffff");
+
 	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
+	Serial.println("hhhhhhhhhhhhhhhh");
 }
 
 void Cnc_CoreYZ::_running_G28(){

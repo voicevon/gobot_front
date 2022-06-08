@@ -20,25 +20,28 @@ MessageQueue garment_bot_message_queue = MessageQueue();
 
 
 void unit_test(){
-    UnitTestAgv* agv = new UnitTestAgv();
-    agv->LinkBoard(&board.agv);
-    agv->Test_TrackLight(2);
-    agv->Test_Battery(0);
-    agv->Test_ObstacleSensor(0);
-    agv->Test_TrackSensor(0);
-    agv->Test_RfidReader(0);
-    agv->Test_Mover(0);
+    UnitTestAgv agv;
+    agv.LinkBoard(&board.agv);
+    agv.Test_TrackLight(2);
+    agv.Test_Battery(0);
+    agv.Test_ObstacleSensor(0);
+    agv.Test_TrackSensor(0);
+    agv.Test_RfidReader(0);
+    agv.Test_Mover(0);
 
-    UnitTestCnc* cnc = new UnitTestCnc();
-    cnc->LinkBoard(&board.cnc);
-    cnc->Test_AllHomers(5);
-    cnc->Test_Stepper(0,'A', 5000, &objStepControl);
-    cnc->Test_Stepper(0,'B', 5000, &objStepControl);
+    UnitTestCnc cnc;
+    cnc.LinkBoard(&board.cnc_board);
+    cnc.Test_AllHomers(0);
+    cnc.Test_Stepper(0,'A', 5000, &objStepControl);
+    cnc.Test_Stepper(0,'B', 5000, &objStepControl);
 
-
-    UnitTestAsrs* asrs = new UnitTestAsrs();
-    asrs->LinkBoard(&board.asrs);
+    UnitTestAsrs asrs;
+    asrs.LinkBoard(&board.asrs);
     // asrs->Test_Sharp_IrSensor(20);
+}
+
+void function_test(){
+    robot.Test_HomeZ();
 }
 
 void setup(){
@@ -49,7 +52,6 @@ void setup(){
     cncMachine.Init('S');
     robot.InitAllinOne(&board, &cncMachine,&objStepControl);
 
-
    // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
     String mqtt_topic = "puma/bot/xROBOT_SERIAL_ID";
@@ -59,6 +61,7 @@ void setup(){
 
     board.RepportRamUsage();
     Serial.println ("\n[Info] garment agv  setup() is done. ------------------------------------  ");
+    function_test();
 }
 
 int64_t last_report_timestamp = 0;

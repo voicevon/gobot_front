@@ -82,7 +82,8 @@ bool BoardBase::_Begin_Mcp23018(Adafruit_MCP23X17* mcp23018, uint8_t i2c_address
 bool BoardBase::_Begin_Vl531l0x(Adafruit_VL53L0X* vl53l0x, uint8_t i2c_address, TwoWire* i2c_bus){
     Serial.println("[Debug] BoardBase::_Begin_Vl531l0x()");
     // Adafruit_VL53L0X* vl53l0x = new Adafruit_VL53L0X();
-    if(! vl53l0x->begin(i2c_address, true, i2c_bus)){
+    // if(! vl53l0x->begin(i2c_address, true, i2c_bus)){
+    if(! vl53l0x->begin(i2c_address, false, i2c_bus)){
         Serial.println(F("[Error] Failed to boot VL53L0X"));
         while(1);
     }

@@ -26,7 +26,7 @@ void BoxCarrierMachine::__Init_Fast(){
 
 void BoxCarrierMachine::PrintOut(){
     Serial.print("\n\n===============================================");
-    Serial.print("\nBoxMoverHardwareConfig::PrintOut()");
+    Serial.print("\n  BoxMoverHardwareConfig::PrintOut()");
     Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");
     Serial.print(this->STEPPER_DRIVER_MICRO_STEPS);
     Serial.print("\n   MOTOR_GEARBOX_RATIO_ALPHA_BETA = ");
