@@ -60,8 +60,10 @@ void UnitTestAgv::Test_Mover(int loop_count){
     if (loop_count == 0) return;
 
     Serial.println("[Info] UnitTestAgv::Test_Mover()");
-    delay(3000);
     MoverBase* mover = this->__board->GetMover();
+    // mover->SetForwdingSpeed(100, 0);
+    // delay(50000);
+
     for(int i=0; i<loop_count; i++){
         Serial.print("Forward    ");
         for(int speed=-100; speed<100; speed++){

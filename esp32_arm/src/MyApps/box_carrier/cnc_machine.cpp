@@ -16,8 +16,8 @@ void BoxCarrierMachine::__Init_Fast(){
         this->steps_per_mm_for_z = 200;
         this->steps_per_mm_for_y = 200;
 
-        this->Homing_speed_alpha_beta = 6000;
-        this->Homing_acceleration_alpha_beta = 800;
+        this->Homing_speed_alpha_beta = 2000;
+        this->Homing_acceleration_alpha_beta = 5000;
 
         this->max_acceleration_alpha_beta = 6000;
         this->max_speed_alpha_beta = 20000;

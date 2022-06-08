@@ -225,7 +225,8 @@ void BotAsrsAgvCoreYZ::Test_HomeY(){
 }
 
 void BotAsrsAgvCoreYZ::Test_UnHome(){
-	this->_gcode_queue.AppendGcodeCommand("G1Z100Y30");
+	this->_gcode_queue.AppendGcodeCommand("G1Z1000Y300");
+	this->_gcode_queue.AppendGcodeCommand("M84");
 }
 
 uint8_t BotAsrsAgvCoreYZ::GetMqtt_PubPayload(uint8_t* chars){

@@ -40,11 +40,12 @@ void SingleWheel_HBridgePwmDriver::SetVelocity_in_percent(int8_t velocity){
         digitalWrite(this->__pin_dir, LOW);
         digitalWrite(this->__pin_pwm, LOW);
     }else if(velocity > 0){
-        digitalWrite(this->__pin_dir, HIGH);
+        digitalWrite(this->__pin_dir, LOW);
         ledcWrite(this->__ledc_channel, dutycycle);
     }else{
-        digitalWrite(this->__pin_dir, LOW);
-        ledcWrite(this->__ledc_channel, 255-dutycycle);
+        // Negtive velocity.  
+        digitalWrite(this->__pin_dir, HIGH);
+        ledcWrite(this->__ledc_channel, 256 + dutycycle);
     }
 
 }
