@@ -94,11 +94,11 @@ void Cnc_CoreYZ::HomeSingleAxis(char axis){
 	if (axis=='Y'){
 		//todo :  process with IK()
 		this->__homing_helper = this->objHomeHelper_y;
-		this->stepper_alpha->setTargetRel(5000000);
+		this->stepper_alpha->setTargetRel(-5000000);
 		this->stepper_beta->setTargetRel(5000000);
 	}else if (axis=='Z'){
 		this->__homing_helper = this->objHomeHelper_vertical;
-		this->stepper_alpha->setTargetRel(5000000);
+		this->stepper_alpha->setTargetRel(-5000000);
 		this->stepper_beta->setTargetRel(-5000000);	
 	}
 

@@ -57,6 +57,8 @@ class BotAsrsAgvCoreYZ: public MqttMessageConsumer{
         uint8_t GetMqtt_PubPayload(uint8_t* chars);
         // void onMqttReceived(uint8_t* payload);
         void Test_HomeZ();
+        void Test_HomeY();
+        void Test_UnHome();
         
     protected:
         

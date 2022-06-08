@@ -220,6 +220,14 @@ void BotAsrsAgvCoreYZ::Test_HomeZ(){
 	this->_gcode_queue.AppendGcodeCommand("G28Z");
 }
 
+void BotAsrsAgvCoreYZ::Test_HomeY(){
+	this->_gcode_queue.AppendGcodeCommand("G28Y");
+}
+
+void BotAsrsAgvCoreYZ::Test_UnHome(){
+	this->_gcode_queue.AppendGcodeCommand("G1Z100Y30");
+}
+
 uint8_t BotAsrsAgvCoreYZ::GetMqtt_PubPayload(uint8_t* chars){
     // a json string,, constructed by state,battery_volt,last_site_id
 
