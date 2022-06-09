@@ -4,6 +4,8 @@
 void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
+    this->EnableMotor('A', false);
+    this->EnableMotor('B', false);
     // Setup_RoomsSensor
     this->PIN_ROOMS[0] = PIN_SENSOR_ROOM_0;
     this->PIN_ROOMS[1] = PIN_SENSOR_ROOM_1;
@@ -50,6 +52,11 @@ RobotEef_GobotMain* Board_GobotMain::GetEef() {
 
 
 void Board_GobotMain::EnableMotor(char axis_name, bool enable_it) {
+    Serial.print("[Info] Board_GobotMain::EnableMotor()  axis_name= ");
+    Serial.print(axis_name);
+    Serial.print("\t enable = ");
+    Serial.println(enable_it);
+    
     if (axis_name == 'A'){
         digitalWrite(PIN_ALPHA_ENABLE_2201, !enable_it);   // LOW is enable
     } else if (axis_name == 'B'){

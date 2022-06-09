@@ -5,30 +5,14 @@
 
 void CncFiveBars::Init(CncBoardBase* board, CncMachineBase* config){
 	Serial.print("\n[Info] CncFiveBars::Init() is entering.");
-    // pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-    // pinMode(PIN_BETA_ENABLE, OUTPUT);
-	// pinMode(PIN_EEF_SERVO, OUTPUT);
 
-	
-	// this->eefServo = new Servo();
-	// this->eefServo->attach(PIN_EEF_SERVO);
-
-	// pinMode(PIN_EEF_A, OUTPUT);
-	// pinMode(PIN_EEF_B, OUTPUT);
-
-	// this->__EnableMotor('A', false);
-	// this->__EnableMotor('B', false);
 	this->alpha_stepper = board->GetStepper('A');
 	this->beta_stepper = board->GetStepper('B');
-	// this->LinkHomer();
 	this->alpha_homer = board->GetHomer('A');
 	this->beta_homer = board->GetHomer('B');
-
-	this->_board->EnableMotor('A', false);
-	this->_board->EnableMotor('B', false);
-
-	// CommuUart* objCommuUart = new CommuUart();
-    // this->commuDevice = objCommuUart;
+	board->EnableMotor('A', false);
+	board->EnableMotor('B', false);
+	this->_board = board;
 	Serial.print("\n[Info] CncFiveBars::Init() is done.");
 } 
 
