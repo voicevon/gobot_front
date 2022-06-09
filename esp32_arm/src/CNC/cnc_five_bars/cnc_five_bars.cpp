@@ -55,7 +55,7 @@ void CncFiveBars::HomeSingleAxis(char axis){
 	}else{
 		Serial.print("\n[Error] CncFiveBars::HomeSingleAxis() ");
 	}
-	this->objStepControl.moveAsync(*this->__homing_stepper);
+	this->objStepControl->moveAsync(*this->__homing_stepper);
 	Serial.print("[Debug] CncFiveBars::HomeSingleAxis() is Starting to run...\n" );
 }
 
@@ -68,7 +68,7 @@ void CncFiveBars::_running_G28(){
 		// End stop is trigered
 		Serial.print("\n[Info] CncFiveBars::_running_G28() Home sensor is trigered.  " );
 		Serial.print (this->_homing_axis);
-		this->objStepControl.stop();
+		this->objStepControl->stop();
 
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
@@ -306,7 +306,7 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha * this->_fivebarMachine->STEPS_PER_RAD );
 	this->beta_stepper->setTargetAbs(target_ik_ab.beta * this->_fivebarMachine->STEPS_PER_RAD );
 	//None blocking, move backgroundly.
-	this->objStepControl.moveAsync(*this->alpha_stepper, *this->beta_stepper);
+	this->objStepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
 
 	if (true){
 		FkPosition_XY verified_fk;

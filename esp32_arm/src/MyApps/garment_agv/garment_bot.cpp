@@ -225,7 +225,7 @@ void BotAsrsAgvCoreYZ::Test_HomeY(){
 }
 
 void BotAsrsAgvCoreYZ::Test_UnHome(){
-	this->_gcode_queue.AppendGcodeCommand("G1Z300Y30");
+	this->_gcode_queue.AppendGcodeCommand("G1Z300Y20");
 	this->_gcode_queue.AppendGcodeCommand("M84");
 }
 

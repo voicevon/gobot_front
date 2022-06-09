@@ -14,7 +14,7 @@ void Board_GobotMain::Init(bool is_on_reset){
     this->PIN_ROOMS[6] = PIN_SENSOR_ROOM_6;
     this->PIN_ROOMS[7] = PIN_SENSOR_ROOM_7;
     for(int i=0;i<8;i++){
-        pinMode(this->PIN_ROOMS[i],INPUT_PULLUP);
+        pinMode(this->PIN_ROOMS[i], INPUT_PULLUP);
     }
     this->RepportRamUsage();
 }

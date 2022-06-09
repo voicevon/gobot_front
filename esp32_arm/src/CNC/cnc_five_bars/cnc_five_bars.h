@@ -46,7 +46,7 @@ class CncFiveBars: public CncBase{
 
         Stepper* alpha_stepper;
         Stepper* beta_stepper;
-        StepControl objStepControl;
+        StepControl* objStepControl;
 
         Stepper* __homing_stepper;
         SingleAxisHomer* __current_homer;

@@ -9,11 +9,12 @@
 #include "IoT/main_mqtt.h"
 #include "MyBoards/gobot_main/board_gobot_main.h"
 
-StepControl controller;    // Use default settings 
 Board_GobotMain board;
 GobotMainMachine cncMachine;
 CncFiveBars cncFiveBar;
 GobotChessboard robot; 
+
+StepControl controller;    // Use default settings 
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 
@@ -22,12 +23,12 @@ MessageQueue mqtt_message_queue;
 #include "MyBoards/gobot_main/unit_test.h"
 
 void unit_test(){
-    GobotMain_UnitTest* tester = new GobotMain_UnitTest();
-    tester->LinkBoard(&board);
-    tester->Test_AllHomers(100);
-    tester->Test_Stepper(10, 'A', 300, &controller);
-    tester->Test_Stepper(10, 'B', 300, &controller);
-    tester->Test_room_sensors(100);
+    GobotMain_UnitTest tester;
+    tester.LinkBoard(&board);
+    tester.Test_AllHomers(100);
+    tester.Test_Stepper(10, 'A', 300, &controller);
+    tester.Test_Stepper(10, 'B', 300, &controller);
+    tester.Test_room_sensors(100);
 }
 
 void setup(){
@@ -47,7 +48,7 @@ void setup(){
     append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, &robot); 
     setup_mqtt_on_message_receive(); 
 
-    Serial.print("\nGobot-Chessboard setup is done..........");
+    Serial.print("\nGobot-Main setup is done.........................................");
 }
 
 uint8_t last_loaded_room;
