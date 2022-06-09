@@ -143,11 +143,11 @@ void BotAsrsAgvCoreYZ::SpinOnce(){
 			// Check battery voltage.
 			this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::BOT_SLEEPING);
 		break;
-   default:
+   	default:
 		Serial.print("\n [Warning] BotAsrsAgvCoreYZ::SpinOnce()  A state with out dealer.! \n\n");
       	break;
-   }
-		Serial.println("66666666666666666666666");
+   	}
+	Serial.println("66666666666666666666666");
 }
 
 void BotAsrsAgvCoreYZ::ToState(BotAsrsAgvCoreYZ::BOT_STATE state){
@@ -225,7 +225,7 @@ void BotAsrsAgvCoreYZ::Test_HomeY(){
 }
 
 void BotAsrsAgvCoreYZ::Test_UnHome(){
-	this->_gcode_queue.AppendGcodeCommand("G1Z1000Y300");
+	this->_gcode_queue.AppendGcodeCommand("G1Z300Y30");
 	this->_gcode_queue.AppendGcodeCommand("M84");
 }
 

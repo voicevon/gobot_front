@@ -13,8 +13,11 @@ void BoxCarrierMachine::__Init_Fast(){
         this->MOTOR_DEGREE_PER_STEP = 1.8;
 
         this->steps_per_motor_round = 360.0f / this->MOTOR_DEGREE_PER_STEP * this->STEPPER_DRIVER_MICRO_STEPS;
-        this->steps_per_mm_for_z = 200;
-        this->steps_per_mm_for_y = 200;
+        #define MOTOR_PULLEY_TEETH_COUNT  20
+        #define MOTOR_PULLEY_PITCH  2
+        float steps_per_origin_mm = this->steps_per_motor_round / MOTOR_PULLEY_TEETH_COUNT / MOTOR_PULLEY_PITCH; 
+        this->steps_per_mm_for_z = steps_per_origin_mm / 1.414;
+        this->steps_per_mm_for_y = steps_per_origin_mm / 1.414;
 
         this->Homing_speed_alpha_beta = 2000;
         this->Homing_acceleration_alpha_beta = 5000;

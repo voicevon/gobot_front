@@ -5,7 +5,7 @@ MoverDualWheel::MoverDualWheel(){
 
 }
 
-void MoverDualWheel::SetForwdingSpeed(uint8_t forwarding_speed_in_percent, float angle){
+void MoverDualWheel::SetForwdingSpeed(int forwarding_speed_in_percent, float angle){
     // Serial.print("[Debug] MoverDualWheel::SetForwdingSpeed()  forwarding_speed_in_percent= ");
     // Serial.println(forwarding_speed_in_percent);
     

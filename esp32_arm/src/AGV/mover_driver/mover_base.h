@@ -4,5 +4,5 @@
 class MoverBase{
     public:
         // virtual void SetSingleSpeed(int speed_in_percent);
-        virtual void SetForwdingSpeed(uint8_t forwarding_speed_in_percent, float angle);
+        virtual void SetForwdingSpeed(int forwarding_speed_in_percent, float angle);
 };

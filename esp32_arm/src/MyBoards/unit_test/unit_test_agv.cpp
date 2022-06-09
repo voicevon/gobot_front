@@ -66,14 +66,14 @@ void UnitTestAgv::Test_Mover(int loop_count){
 
     for(int i=0; i<loop_count; i++){
         Serial.print("Forward    ");
-        for(int speed=-100; speed<100; speed++){
+        for(int speed=-100; speed<100; speed+=10){
             mover->SetForwdingSpeed(speed, 0);
-            delay(50);
+            delay(500);
         }
         Serial.println("Backward   ");
-        for(int speed=100; speed>-100; speed--){
+        for(int speed=100; speed>-100; speed-=10){
             mover->SetForwdingSpeed(speed, 0);
-            delay(50);
+            delay(500);
         }
     } 
 }

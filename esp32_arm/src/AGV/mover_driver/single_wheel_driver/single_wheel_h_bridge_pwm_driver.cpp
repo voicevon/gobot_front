@@ -15,7 +15,7 @@ SingleWheel_HBridgePwmDriver::SingleWheel_HBridgePwmDriver(uint8_t pin_dir, uint
 
     BoardBase board;
     this->__ledc_channel = board.Assign_ledc_channel();
-    const int freq = 5000;
+    const int freq = 50;    // 5000Hz will cause H-bridge driver does not work properly.
     const int resolution = 8;
     ledcSetup(this->__ledc_channel, freq, resolution);
     ledcAttachPin(pin_pwm, this->__ledc_channel);
@@ -31,21 +31,24 @@ SingleWheel_HBridgePwmDriver::SingleWheel_HBridgePwmDriver(uint8_t pin_pwm, Adaf
     this->__pin_pwm = pin_pwm;                                                                                                                                                                                                                                                                                                                                                                                                          
 }
 
-void SingleWheel_HBridgePwmDriver::SetVelocity_in_percent(int8_t velocity){
+void SingleWheel_HBridgePwmDriver::SetVelocity_in_percent(int velocity){
     // Serial.print("[debug] SingleWheel_HBridgePwmDriver::SetVelocity_in_percent()  velocity = ");
     // Serial.println(velocity);
     
-    uint32_t dutycycle = 2.55f * velocity;
-    if (velocity == 0){
+    uint32_t dutycycle = abs(2.55f * velocity);
+    // if (velocity == 0){
+    //     digitalWrite(this->__pin_dir, LOW);
+    //     digitalWrite(this->__pin_pwm, LOW);
+    //     return;
+    if(velocity >= 0){
         digitalWrite(this->__pin_dir, LOW);
-        digitalWrite(this->__pin_pwm, LOW);
-    }else if(velocity > 0){
-        digitalWrite(this->__pin_dir, LOW);
-        ledcWrite(this->__ledc_channel, dutycycle);
+
     }else{
         // Negtive velocity.  
         digitalWrite(this->__pin_dir, HIGH);
-        ledcWrite(this->__ledc_channel, 256 + dutycycle);
+        dutycycle = 256 - dutycycle;
+        // ledcWrite(this->__ledc_channel, 256 - dutycycle);
     }
+    ledcWrite(this->__ledc_channel, dutycycle);
 
 }
