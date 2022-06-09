@@ -20,6 +20,8 @@ class CncCoreYZMachine: public CncMachineBase{
         int STEPPER_DRIVER_MICRO_STEPS;
         float MOTOR_DEGREE_PER_STEP;
         float MOTOR_GEARBOX_RATIO_ALPHA_BETA;
+        int MOTOR_PULLEY_TEETH_COUNT;
+        int  MOTOR_PULLEY_PITCH;
         float steps_per_motor_round;
 };
 

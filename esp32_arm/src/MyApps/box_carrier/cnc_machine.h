@@ -9,6 +9,7 @@ class BoxCarrierMachine: public CncCoreYZMachine{
 
     private:
         void __Init_Fast();
+        void __Init_Common();
 
 };
 
