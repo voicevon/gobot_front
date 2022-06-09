@@ -12,7 +12,7 @@ class Board_SpringMaker: public CncBoardBase{
         Board_SpringMaker(){};
         void Init(bool is_on_reset) override;
         
-        void SayHello();
+        // void SayHello();
         Stepper* GetStepper(char axis_name) override;
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_SpringMaker* GetEef() override;

@@ -22,11 +22,11 @@ GobotHouse* robot;
 
 #include "MyBoards/unit_test/unit_test_cnc.h"
 void unit_test(){
-    UnitTestCnc* tester = new UnitTestCnc();
-    tester->LinkBoard(&board);
-    tester->Test_AllHomers(100);
-    tester->Test_Stepper(10, 'A', 300, &controller);
-    tester->Test_Stepper(10, 'B', 300, &controller);
+    BoardTestCnc tester;  // = new BoardTestCnc();
+    tester.LinkBoard(&board);
+    tester.Test_AllHomers(100);
+    tester.Test_Stepper(10, 'A', 300, &controller);
+    tester.Test_Stepper(10, 'B', 300, &controller);
 }
 
 void setup(){
