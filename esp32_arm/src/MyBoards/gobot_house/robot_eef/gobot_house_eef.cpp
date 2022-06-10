@@ -5,40 +5,28 @@ RobotEef_GobotHouse::RobotEef_GobotHouse(){
 }
 
 void RobotEef_GobotHouse::Run(uint8_t eef_code) {
-    	// Serial.println(eef_action);
-
-    //         Lower = 1,
-    // Higher = 2, 
-    // // also Load
-    // Suck = 3,  
-    // Load = 3,
-    // // also Unload
-    // Release = 4,  
-    // Unload = 4,
-    // Sleep = 5,
-
-
-	// switch (eef_action){
-	// 	case EefAction::Lower:
-	// 		this->eefServo->write(180);
-	// 		break;
-	// 	case EefAction::Higher:
-	// 		this->eefServo->write(0);
-	// 		break;
-	// 	case EefAction::Suck:
-	// 		digitalWrite(PIN_EEF_A, HIGH);
-	// 		digitalWrite(PIN_EEF_B, LOW);
-	// 		break;
-	// 	case EefAction::Release:
-	// 		digitalWrite(PIN_EEF_A,LOW);
-	// 		digitalWrite(PIN_EEF_B,HIGH);
-	// 		break;
-	// 	case EefAction::Sleep:
-	// 		digitalWrite(PIN_EEF_A,LOW);
-	// 		digitalWrite(PIN_EEF_B,LOW);
-	// 		break;
-	// 	default:
-	// 		break;
-
-	// }
+	switch (eef_code){
+		case EEF_CODE_DOWN:
+			// this->eefServo->write(180);
+			break;
+		case EEF_CODE_UP:
+			// this->eefServo->write(0);
+			break;
+		case EEF_CODE_LOAD:
+			digitalWrite(PIN_EEF_COIL_A_2109, HIGH);
+			digitalWrite(PIN_EEF_COIL_B_2109, LOW);
+			break;
+		case EEF_CODE_UNLOAD:
+			digitalWrite(PIN_EEF_COIL_A_2109,LOW);
+			digitalWrite(PIN_EEF_COIL_B_2109,HIGH);
+			break;
+		case EEF_CODE_SLEEP:
+			digitalWrite(PIN_EEF_COIL_A_2109,LOW);
+			digitalWrite(PIN_EEF_COIL_B_2109,LOW);
+			break;
+		default:
+			Serial.print("[Warn]  RobotEef_GobotHouse::Run()  Unknown EEF_CODE = ");
+			Serial.println(eef_code);
+			break;
+	}
 }

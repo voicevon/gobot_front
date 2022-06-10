@@ -20,22 +20,16 @@ GcodeQueue gcode_queue = GcodeQueue();
 MessageQueue mqtt_message_queue = MessageQueue();
 GobotHouse* robot; 
 
-#include "MyBoards/board_test/board_test_cnc.h"
-void unit_test(){
-    BoardTestCnc tester;  // = new BoardTestCnc();
-    tester.LinkBoard(&board);
-    tester.Test_AllHomers(100);
-    tester.Test_Stepper(10, 'A', 300, &controller);
-    tester.Test_Stepper(10, 'B', 300, &controller);
-}
+void board_test();
+
 
 void setup(){
     board.Init(true);
-    unit_test();
+    board_test();
     
     cncMachine.Init('M');
     cncScara.Init(&board, &cncMachine);
-    cncScara.link
+    cncScara.LinkStepControl(&controller);
     
     robot = &GobotHouse::getInstance();
     robot->Setup();
@@ -57,5 +51,19 @@ void loop(){
     loop_mqtt();
 }
 
+
+// #include "MyBoards/board_test/board_test_cnc.h"
+#include "MyBoards/gobot_house/board_tester.h"
+void board_test(){
+    // BoardTestCnc tester;
+    GobotHouse_BoardTest tester;
+    tester.LinkBoard(&board);
+    tester.Test_AllHomers(100);
+    tester.Test_Stepper(10, 'A', 300, &controller);
+    tester.Test_Stepper(10, 'B', 300, &controller);
+
+    tester.Test_EefUpDown(100);
+    tester.Test_EefLoadUnload(100);
+}
 
 #endif

@@ -1,7 +1,6 @@
 #pragma once
-// #include "../board_base.h"
 #include "MyBoards/cnc_board_base.h"
-#include "board_gobot_house_ver3.11.h"
+#include "board_pins_ver3.11.h"
 #include "CNC/single_axis_homer.h"
 #include "robot_eef/gobot_house_eef.h"
 

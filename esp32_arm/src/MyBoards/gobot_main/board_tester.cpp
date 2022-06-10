@@ -2,13 +2,13 @@
 
 
 void GobotMain_BoardTest::LinkBoard(CncBoardBase* board){
-    Serial.println("[Info] GobotMain_UnitTest::LinkBoard()");
+    Serial.println("[Info] GobotMain_BoardTest::LinkBoard()");
     this->__board = (Board_GobotMain*) (board);
     this->LinkCncBoard(board);
 }
 
 void GobotMain_BoardTest::Test_room_sensors(int loop_count){
-    Serial.println ("[Info] GobotMain_UnitTest::Test_room_sensors()  ");
+    Serial.println ("[Info] GobotMain_BoardTest::Test_room_sensors()  ");
     delay(3000);
     uint8_t rooms;
     for (int i=0; i<loop_count; i++){
@@ -21,7 +21,7 @@ void GobotMain_BoardTest::Test_room_sensors(int loop_count){
 
 void GobotMain_BoardTest::Test_EefUpDown(int loop_count){
     if(loop_count ==0 ) return;
-    Serial.println ("[Info] GobotMain_UnitTest::Test_room_sensors()  ");
+    Serial.println ("[Info] GobotMain_BoardTest::Test_EefUpDown()  ");
     RobotEef_GobotMain* eef = this->__board->GetEef();
     for (int i=0; i<loop_count; i++){
         Serial.print("Eef UP   ");
@@ -35,7 +35,7 @@ void GobotMain_BoardTest::Test_EefUpDown(int loop_count){
 
 void GobotMain_BoardTest::Test_EefLoadUnload(int loop_count){
     if(loop_count ==0 ) return;
-    Serial.println ("[Info] GobotMain_UnitTest::Test_room_sensors()  ");
+    Serial.println ("[Info] GobotMain_BoardTest::Test_EefLoadUnload()  ");
     RobotEef_GobotMain* eef = this->__board->GetEef();
     for (int i=0; i<loop_count; i++){
         Serial.print("Eef Load   ");

@@ -23,7 +23,8 @@ StepControl objStepControl;
 void setup(){
     board.Init(true);
     cncMachine.Init('A');
-    cnc.Init(&board.cnc, &cncMachine);
+    cnc.Init(&board.cnc_board, &cncMachine);
+    cnc.LinkStepControl(&objStepControl);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
