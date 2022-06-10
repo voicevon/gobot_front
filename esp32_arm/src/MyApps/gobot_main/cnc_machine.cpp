@@ -11,10 +11,10 @@ void GobotMainMachine::Init(char solution){
 
     this->STEPPER_DRIVER_MICRO_STEPS = 16;
     this->MOTOR_STEP_ANGLE = 1.8;
+    this->motor_steps_per_shaft_round = 360.0 / this->MOTOR_STEP_ANGLE * this->STEPPER_DRIVER_MICRO_STEPS;
     this->GEAR_BOX_RATIO = 27.0f / 1.0f;   // Big gear = 90 teeth, small gear = 20 teeth
-    this->MOTOR_STEPS_PER_SHAFT_ROUND = 360.0 / this->MOTOR_STEP_ANGLE * this->STEPPER_DRIVER_MICRO_STEPS;
-    this->STEPS_PER_RAD = this->MOTOR_STEPS_PER_SHAFT_ROUND * this->GEAR_BOX_RATIO / TWO_PI;
-
+    
+    this->STEPS_PER_RAD = this->motor_steps_per_shaft_round * this->GEAR_BOX_RATIO / TWO_PI;
 
     this->MAX_STEPS_PER_SECOND_ALPHA_BETA = 9000;
     this->MAX_ACCELERATION_ALPHA_BETA = 3000;
@@ -50,8 +50,6 @@ void GobotMainMachine::PrintOut(const char* title){
     Serial.print(this->Homed_position_beta_in_degree);
     Serial.print("\n STEPS_PER_RAD = ");
     Serial.print(this->STEPS_PER_RAD);
-
-
 
     Serial.print("\n\n\n");
 

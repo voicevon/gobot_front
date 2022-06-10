@@ -2,7 +2,7 @@
 // #include "all_devices.h"
 #ifdef I_AM_GOBOT_MAIN
 
-#include "gobot_chessboard.h"
+#include "gobot_main.h"
 #include "CNC/cnc_five_bars/cnc_five_bars.h"
 #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
@@ -12,7 +12,7 @@
 Board_GobotMain board;
 GobotMainMachine cncMachine;
 CncFiveBars cncFiveBar;
-GobotChessboard robot; 
+GobotMain robot; 
 
 StepControl controller;    // Use default settings 
 GcodeQueue gcode_queue;
@@ -24,8 +24,10 @@ void cnc_test(){
 
     robot.Test_HomeAlpha(5);
     robot.Test_HomeBeta(5);
-
+    board.EnableMotor('A', false);
+    board.EnableMotor('B', false);
 }
+
 void board_test(){
     GobotMain_BoardTest tester;
     tester.LinkBoard(&board);
@@ -44,11 +46,13 @@ void setup(){
     board.Init(true);
     // board_test();
     cncMachine.Init('S');  //Slow moving
+    cncMachine.PrintOut("GobotMain Machine");
     cncFiveBar.Init(&board, &cncMachine);
     cncFiveBar.LinkStepControl(&controller);
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cncFiveBar.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    // cnc_test();
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
@@ -58,7 +62,6 @@ void setup(){
     setup_mqtt_on_message_receive(); 
 
     Serial.print("\nGobot-Main setup is done.........................................");
-    cnc_test();
 
 }
 

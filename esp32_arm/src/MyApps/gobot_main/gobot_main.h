@@ -6,9 +6,9 @@
 #include "CNC/gcode/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
 
-class GobotChessboard: public GcodeProducer, public MqttMessageConsumer{
+class GobotMain: public GcodeProducer, public MqttMessageConsumer{
     public:
-        GobotChessboard(){};
+        GobotMain(){};
         // static GobotChessboard& getInstance()
         // {
         //     static GobotChessboard instance; // Guaranteed to be destroyed.
@@ -22,6 +22,7 @@ class GobotChessboard: public GcodeProducer, public MqttMessageConsumer{
 
         void Test_HomeAlpha(int loop_count);
         void Test_HomeBeta(int loop_count);
+    
 
     private:
         // RobotAction* __arm_action;

@@ -9,7 +9,7 @@ class CncFiveBarMachine: public CncMachineBase{
         CncFiveBarMachine(){};
         void PrintOut() override;
 
-        float MOTOR_STEPS_PER_SHAFT_ROUND;
+        float motor_steps_per_shaft_round;
         float STEPS_PER_RAD; 
         // 191.0 is the Length between the centers of two motors 
         float LINK_0;  //  = 191.0 / 2 ;

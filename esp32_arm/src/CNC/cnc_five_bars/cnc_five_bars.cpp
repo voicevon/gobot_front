@@ -224,7 +224,7 @@ void CncFiveBars::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 	fk->X = center_x + lenth_from_center_to_eef * cosf(rotated_angle);
 	fk->Y = center_y + lenth_from_center_to_eef * sinf(rotated_angle);
 
-	Serial.print("\n\n[Debug] GobotChessboard_Hardware::FK()  in degree from (alpha,beta) =(");
+	Serial.print("\n\n[Debug] CncFiveBars::FK()  in degree from (alpha,beta) =(");
 	Serial.print(ik->alpha * RAD_TO_DEG);
 	Serial.print(" , ");
 	Serial.print(ik->beta * RAD_TO_DEG);
@@ -285,7 +285,7 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	// Normally the unit in G1A,G1B is degree
 	if(gcode->has_letter('R')) 
 		// Bug now, the unit in G1A,G1B is RAD
-		target_ik_ab.alpha = this->_fivebarMachine->MOTOR_STEPS_PER_SHAFT_ROUND * gcode->get_value('R');
+		target_ik_ab.alpha = this->_fivebarMachine->motor_steps_per_shaft_round * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
 	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha * this->_fivebarMachine->STEPS_PER_RAD );
 	this->beta_stepper->setTargetAbs(target_ik_ab.beta * this->_fivebarMachine->STEPS_PER_RAD );
