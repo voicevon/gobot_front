@@ -1,6 +1,5 @@
 #pragma once
 
-// #include "CNC/robot_eef_base.h"
 #include "RobotEef/robot_eef_base.h"
 
 class RobotEef_GarmentAsar: public RobotEefBase{
