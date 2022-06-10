@@ -35,6 +35,7 @@ void setup(){
     
     cncMachine.Init('M');
     cncScara.Init(&board, &cncMachine);
+    cncScara.link
     
     robot = &GobotHouse::getInstance();
     robot->Setup();

@@ -10,7 +10,6 @@
 class Cnc_CoreYZ: public CncBase{
     public:
         Cnc_CoreYZ(){};
-        void LinkStepControl(StepControl* stepControl){this->objStepControl=stepControl;};
         void Init(CncBoardBase* board, CncMachineBase* machine) override;
 
         void HomeSingleAxis(char axis) override;
@@ -22,8 +21,8 @@ class Cnc_CoreYZ: public CncBase{
 
     protected:
         CncCoreYZMachine* _cncMachine;
-        Stepper* stepper_alpha; // = Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
-        Stepper* stepper_beta; // = Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
+        Stepper* stepper_alpha; 
+        Stepper* stepper_beta; 
 
         //Override private
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;

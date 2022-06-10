@@ -15,7 +15,7 @@
  /**
  * RobotBase has NO axis! 
  *      Reasons:
- *          1. Doesn't know how may axis. 
+ *          1. Doesn't know how many axis. 
  *      ?? Or has at least one axis? 
  *      ?? Saying has no actuator, driver, sensor ?
  * RobotBase has NO ActuatorController!

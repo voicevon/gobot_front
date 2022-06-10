@@ -108,7 +108,7 @@ void CncCoreAZ::HomeSingleAxis(char axis){
 	// this->__EnableMotor('B', true);
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B', true);
-	this->objStepControl->moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
+	this->_stepControl->moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
 }
 
 void CncCoreAZ::_running_G28(){
@@ -116,7 +116,7 @@ void CncCoreAZ::_running_G28(){
 		// End stop is trigered
 		Serial.print("\n[Info] CncCoreAZ::_running_G28() Home sensor is trigger.  " );
 		Serial.print (this->_homing_axis);
-		this->objStepControl->stop();
+		this->_stepControl->stop();
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
@@ -204,7 +204,7 @@ void CncCoreAZ::RunG1(Gcode* gcode) {
 	this->objStepper_alpha->setTargetAbs(target_ik_ab.alpha);
 	this->objStepper_beta->setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
-	this->objStepControl->moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
+	this->_stepControl->moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
 
 	if (true){
 		Serial.print("\n    [Debug] CncCoreAZ::RunG1()     (");

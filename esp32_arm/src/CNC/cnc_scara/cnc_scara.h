@@ -38,12 +38,11 @@ class CncScara: public CncBase{
         void RunM123(uint8_t eef_channel, EefAction eef_action) override;
         void RunM84() override;
         
-        SingleAxisHomer* alpha_homer;  // = SingleAxisHomer(PIN_HOME_ALHPA_2109, LOW);
-        SingleAxisHomer* beta_homer;   // = SingleAxisHomer(PIN_HOME_BETA_2109, LOW);
+        SingleAxisHomer* alpha_homer; 
+        SingleAxisHomer* beta_homer;   
 
         Stepper* alpha_stepper;
         Stepper* beta_stepper;
-        // StepControl objStepControl;
 
         Stepper* __homing_stepper;
         SingleAxisHomer* __homing_helper;

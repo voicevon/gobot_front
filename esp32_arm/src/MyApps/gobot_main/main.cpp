@@ -20,7 +20,12 @@ MessageQueue mqtt_message_queue;
 
 
 #include "MyBoards/gobot_main/unit_test.h"
+void cnc_test(){
 
+    robot.Test_HomeAlpha(5);
+    robot.Test_HomeBeta(5);
+
+}
 void board_test(){
     GobotMain_BoardTest tester;
     tester.LinkBoard(&board);
@@ -37,10 +42,10 @@ void board_test(){
 
 void setup(){
     board.Init(true);
-    board_test();
-    return;
+    // board_test();
     cncMachine.Init('S');  //Slow moving
     cncFiveBar.Init(&board, &cncMachine);
+    cncFiveBar.LinkStepControl(&controller);
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cncFiveBar.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
@@ -53,7 +58,7 @@ void setup(){
     setup_mqtt_on_message_receive(); 
 
     Serial.print("\nGobot-Main setup is done.........................................");
-    // unit_test();
+    cnc_test();
 
 }
 
@@ -61,7 +66,6 @@ uint8_t last_loaded_room;
 bool xx=true;
 
 void loop(){
-    return;
     robot.SpinOnce();
     cncFiveBar.SpinOnce();
     loop_mqtt();

@@ -100,7 +100,7 @@ class HumanLevelGobotArm(HumanLevelRobotBase):
         Home, (AntiClockwise)-180, pause, -90, pause
         '''
         pause = "G4S5"
-        commands = ['G28Bi','G28AI', 'G1A180', pause, 'G1A90', pause, 'G1A150','M996']
+        commands = ['G28BI','G28AI', 'G1A180', pause, 'G1A90', pause, 'G1A150','M996']
         g_amq.PublishBatch(self.mq_name, commands)
 
     def Calibrate_2_HomeBeta(self):
@@ -202,11 +202,11 @@ if __name__ == '__main__':
     # arm.Calibrate_98_Lock_Beta()
 
 
-    # arm.Calibrate_1_HomeAlpha()
+    arm.Calibrate_1_HomeAlpha()
     # arm.Calibrate_2_HomeBeta()
     # arm.Calibrate_3_HomeAlphaBeta()
     # arm.Calibrate_4_ARM_LINE()
-    arm.Calibrate_11_ZigZag_Y()
+    # arm.Calibrate_11_ZigZag_Y()
     # arm.Calibrate_12_ZigZag_X()
     # arm.Calibrate_19_A1_only()
 

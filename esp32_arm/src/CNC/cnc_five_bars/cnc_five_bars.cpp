@@ -3,7 +3,7 @@
 #include "cnc_five_bars.h"
 #include<Arduino.h>
 
-void CncFiveBars::Init(CncBoardBase* board, CncMachineBase* config){
+void CncFiveBars::Init(CncBoardBase* board, CncMachineBase* machine){
 	Serial.print("\n[Info] CncFiveBars::Init() is entering.");
 
 	this->alpha_stepper = board->GetStepper('A');
@@ -13,24 +13,24 @@ void CncFiveBars::Init(CncBoardBase* board, CncMachineBase* config){
 	board->EnableMotor('A', false);
 	board->EnableMotor('B', false);
 	this->_board = board;
+	this->_fivebarMachine = (CncFiveBarMachine*)(machine);
 	Serial.print("\n[Info] CncFiveBars::Init() is done.");
 } 
 
 void CncFiveBars::HomeSingleAxis(char axis){ 
-	Serial.print("[Debug] CncFiveBars::HomeSingleAxis() is entering\n" );
-	Serial.print(axis);
+	Serial.print("[Debug] CncFiveBars::HomeSingleAxis() is entering  axis= " );
+	Serial.println(axis);
 	this->_homing_axis = axis;
 	if (axis=='A'){
-		this->_board->EnableMotor('A', false);
-		// this->__EnableMotor('A', false);
+		this->_board->EnableMotor('A', true);
 		this->alpha_stepper->setAcceleration(this->_fivebarMachine->Homing_acceleration_alpha_beta);
 		this->alpha_stepper->setMaxSpeed(this->_fivebarMachine->Homing_speed_alpha_beta);
 		this->__homing_stepper = this->alpha_stepper;
 		this->__current_homer = this->alpha_homer;
 		this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
 	}else if (axis=='B'){
-		// this->__EnableMotor('B',true);
 		this->_board->EnableMotor('B', true);
+		int xx =this->_fivebarMachine->Homing_acceleration_alpha_beta;
 		this->beta_stepper->setAcceleration(this->_fivebarMachine->Homing_acceleration_alpha_beta);
 		this->beta_stepper->setMaxSpeed(this->_fivebarMachine->Homing_speed_alpha_beta);
 		this->__homing_stepper = this->beta_stepper;
@@ -39,7 +39,7 @@ void CncFiveBars::HomeSingleAxis(char axis){
 	}else{
 		Serial.print("\n[Error] CncFiveBars::HomeSingleAxis() ");
 	}
-	this->objStepControl->moveAsync(*this->__homing_stepper);
+	this->_stepControl->moveAsync(*this->__homing_stepper);
 	Serial.print("[Debug] CncFiveBars::HomeSingleAxis() is Starting to run...\n" );
 }
 
@@ -52,7 +52,7 @@ void CncFiveBars::_running_G28(){
 		// End stop is trigered
 		Serial.print("\n[Info] CncFiveBars::_running_G28() Home sensor is trigered.  " );
 		Serial.print (this->_homing_axis);
-		this->objStepControl->stop();
+		this->_stepControl->stop();
 
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
@@ -290,7 +290,7 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha * this->_fivebarMachine->STEPS_PER_RAD );
 	this->beta_stepper->setTargetAbs(target_ik_ab.beta * this->_fivebarMachine->STEPS_PER_RAD );
 	//None blocking, move backgroundly.
-	this->objStepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
+	this->_stepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
 
 	if (true){
 		FkPosition_XY verified_fk;

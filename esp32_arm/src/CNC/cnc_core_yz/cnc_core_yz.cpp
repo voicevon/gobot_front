@@ -105,7 +105,7 @@ void Cnc_CoreYZ::HomeSingleAxis(char axis){
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B',true);
 
-	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
+	this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 }
 
 void Cnc_CoreYZ::_running_G28(){
@@ -113,7 +113,7 @@ void Cnc_CoreYZ::_running_G28(){
 		// End stop is trigered
 		Serial.print("\n[Info] Cnc_CoreYZ::_running_G28() Home sensor is trigger.  " );
 		Serial.print (this->_homing_axis);
-		this->objStepControl->stop();
+		this->_stepControl->stop();
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
@@ -199,7 +199,7 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	this->stepper_alpha->setTargetAbs(target_ik_ab.alpha);
 	this->stepper_beta->setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
-	this->objStepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
+	this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 
 	if (true){
 		Serial.print("\n    [Debug] Cnc_CoreYZ::RunG1()     (");

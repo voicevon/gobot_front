@@ -168,7 +168,7 @@ void CncScara::RunG1(Gcode* gcode) {
 	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha );
 	this->beta_stepper->setTargetAbs(target_ik_ab.beta);
 	//None blocking, move backgroundly.
-	this->objStepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
+	this->_stepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
 
 	if (true){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
@@ -210,7 +210,7 @@ void CncScara::HomeSingleAxis(char axis){
 		this->__homing_helper = this->beta_homer;
 	}
 	this->__homing_stepper->setTargetRel(500000);
-	this->objStepControl->moveAsync(*this->__homing_stepper);
+	this->_stepControl->moveAsync(*this->__homing_stepper);
 }
 
 void CncScara::_running_G28(){
@@ -221,7 +221,7 @@ void CncScara::_running_G28(){
 			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
 			Serial.print (this->_homing_axis);
 		}
-		this->objStepControl->stop();
+		this->_stepControl->stop();
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;

@@ -13,10 +13,11 @@
 class CncFiveBars: public CncBase{
     public:
         CncFiveBars(){};
+        void Init(CncBoardBase* board, CncMachineBase* machine) override;
+        void LinkEef(RobotEefBase* eef){this->__eef=eef;};
         void HomeSingleAxis(char axis) override;
         void RunG1(Gcode* gcode) override;
-        void Init(CncBoardBase* board, CncMachineBase* config) override;
-        void LinkEef(RobotEefBase* eef){this->__eef=eef;};
+
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
         void Calibrate(int step,bool enable_eef_coil);
@@ -32,7 +33,6 @@ class CncFiveBars: public CncBase{
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
 
-        // Servo* eefServo;
         bool homed;
 
         void RunG6(Gcode* gcode) override {};   //Block mode
@@ -43,15 +43,11 @@ class CncFiveBars: public CncBase{
     
         SingleAxisHomer* alpha_homer;
         SingleAxisHomer* beta_homer;
-
         Stepper* alpha_stepper;
         Stepper* beta_stepper;
-        StepControl* objStepControl;
-
         Stepper* __homing_stepper;
-        SingleAxisHomer* __current_homer;
+
         FkPosition_XY __current_fk_position;
-        // BoardbaseCnc* __board;
         RobotEefBase* __eef;
 
 

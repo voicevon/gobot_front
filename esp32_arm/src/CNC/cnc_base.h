@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CNC/eef_standard_code.h"
-// #include "CNC/Commu/CommuDeviceBase.h"
 #include "CNC/gcode/gcode_consumer.h"
 
 class FkPositionBase{
@@ -105,6 +104,7 @@ class CncBase: public GcodeConsumer{
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void Init(CncBoardBase* board, CncMachineBase* machine);
+        void LinkStepControl(StepControl* stepControl){this->_stepControl=stepControl;};
         virtual void HomeSingleAxis(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
@@ -124,6 +124,24 @@ class CncBase: public GcodeConsumer{
         virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
         bool is_absolute_position = true;
 
+        virtual void _running_G1();
+        virtual void _running_G28();
+        char _homing_axis;
+        bool _home_as_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
+        
+        StepControl* _stepControl;
+        CncMachineBase* _config;
+        CncBoardBase* _board;
+        SingleAxisHomer* __current_homer;
+
+
+    private:
+        int test_int;
+        void _base_spin_once();
+        void __running_G4();
+        long __g4_start_timestamp;
+        int __g4_time_second;
+
         /* Just for fun, don't remove below comment.
         void * __output_message2;
         void (* __output_message3); 
@@ -132,24 +150,6 @@ class CncBase: public GcodeConsumer{
         void OnFinishedGcode4(void(*callback())) {__output_message3 = callback;};
         void OnFinishedGcode5(void(*callback)()) {__output_message3 = callback;};
         */
-
-        virtual void _running_G1();
-        virtual void _running_G28();
-        char _homing_axis;
-        bool _home_as_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
-        CncBoardBase* _board;
-        StepControl* objStepControl;
-        // GobotHouseHardwareConfig __config;
-        CncMachineBase* _config;
-    
-    private:
-        int test_int;
-        void _base_spin_once();
-        void __running_G4();
-        long __g4_start_timestamp;
-        int __g4_time_second;
-
-
 
 };
 
