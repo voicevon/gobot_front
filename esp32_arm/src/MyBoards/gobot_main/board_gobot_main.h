@@ -9,7 +9,6 @@ class Board_GobotMain: public CncBoardBase{
     public:
         Board_GobotMain(){};
         void Init(bool is_on_reset) override;
-        // void SayHello();
         Stepper* GetStepper(char axis_name) override;
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_GobotMain* GetEef() override;
@@ -22,7 +21,7 @@ class Board_GobotMain: public CncBoardBase{
         Stepper stepper_beta = Stepper(PIN_BETA_STEP_2201, PIN_BETA_DIR_2201);
         SingleAxisHomer homer_alpha = SingleAxisHomer(PIN_HOME_ALPHA_2201, LOW);
         SingleAxisHomer homer_beta = SingleAxisHomer(PIN_HOME_BETA_2201, LOW);
-        RobotEef_GobotMain eef = RobotEef_GobotMain();
+        RobotEef_GobotMain __eef;
         uint8_t PIN_ROOMS[8];
         // static uint8_t PIN_ROOMS[] = {PIN_SENSOR_ROOM_0,
         //                 PIN_SENSOR_ROOM_1,

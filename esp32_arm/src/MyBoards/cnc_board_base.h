@@ -3,7 +3,7 @@
 #include "board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "cnc/single_axis_homer.h"
-#include "cnc/robot_eef_base.h"
+#include "RobotEef/robot_eef_base.h"
 
 
 class CncBoardBase: public BoardBase{

@@ -47,7 +47,7 @@ SingleAxisHomer* Board_GobotMain::GetHomer(char axis_name) {
 }
 
 RobotEef_GobotMain* Board_GobotMain::GetEef() {
-    return &this->eef;
+    return &this->__eef;
 }
 
 

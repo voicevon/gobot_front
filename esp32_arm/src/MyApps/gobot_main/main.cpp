@@ -8,10 +8,12 @@
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
 #include "MyBoards/gobot_main/board_gobot_main.h"
+#include "MyBoards/gobot_main/robot_eef/gobot_main_eef.h"
 
 Board_GobotMain board;
 GobotMainMachine cncMachine;
 CncFiveBars cncFiveBar;
+// RobotEef_GobotMain eef;
 GobotMain robot; 
 
 StepControl controller;    // Use default settings 
@@ -19,28 +21,9 @@ GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 
 
-#include "MyBoards/gobot_main/unit_test.h"
-void cnc_test(){
-
-    robot.Test_HomeAlpha(5);
-    robot.Test_HomeBeta(5);
-    board.EnableMotor('A', false);
-    board.EnableMotor('B', false);
-}
-
-void board_test(){
-    GobotMain_BoardTest tester;
-    tester.LinkBoard(&board);
-    // tester.Test_StepperEnablePin(500, 'A');
-    // tester.Test_StepperEnablePin(500, 'B');
-
-    delay(5000);
-    tester.Test_Stepper(3, 'A', 800, &controller);
-    delay(5000);
-    tester.Test_Stepper(3, 'B', 800, &controller);
-    delay(5000);
-    tester.Test_room_sensors(0);
-}
+// #include "MyBoards/gobot_main/board_test.h"
+void cnc_test();
+void board_test();
 
 void setup(){
     board.Init(true);
@@ -52,7 +35,7 @@ void setup(){
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cncFiveBar.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
-    // cnc_test();
+    cnc_test();
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
@@ -82,4 +65,30 @@ void loop(){
         last_loaded_room = loadded_room;
     }
 }
+
+
+
+void cnc_test(){
+    robot.Test_HomeAlpha(0);
+    robot.Test_HomeBeta(0);
+    robot.Test_EefUpDown(100);
+    board.EnableMotor('A', false);
+    board.EnableMotor('B', false);
+}
+
+#include "Myboards/gobot_main/board_tester.h"
+void board_test(){
+    GobotMain_BoardTest tester;
+    tester.LinkBoard(&board);
+    // tester.Test_StepperEnablePin(500, 'A');
+    // tester.Test_StepperEnablePin(500, 'B');
+
+    delay(5000);
+    tester.Test_Stepper(3, 'A', 800, &controller);
+    delay(5000);
+    tester.Test_Stepper(3, 'B', 800, &controller);
+    delay(5000);
+    tester.Test_room_sensors(0);
+}
+
 #endif

@@ -10,6 +10,8 @@ void CncFiveBars::Init(CncBoardBase* board, CncMachineBase* machine){
 	this->beta_stepper = board->GetStepper('B');
 	this->alpha_homer = board->GetHomer('A');
 	this->beta_homer = board->GetHomer('B');
+	this->__eef = board->GetEef();
+
 	board->EnableMotor('A', false);
 	board->EnableMotor('B', false);
 	this->_board = board;

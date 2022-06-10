@@ -1,4 +1,4 @@
-#include "unit_test.h"
+#include "board_tester.h"
 
 
 void GobotMain_BoardTest::LinkBoard(CncBoardBase* board){

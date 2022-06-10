@@ -22,6 +22,8 @@ class GobotMain: public GcodeProducer, public MqttMessageConsumer{
 
         void Test_HomeAlpha(int loop_count);
         void Test_HomeBeta(int loop_count);
+        void Test_EefUpDown(int loop_count);
+        void Test_EefSuckRelease(int loop_count);
     
 
     private:
