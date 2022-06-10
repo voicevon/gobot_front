@@ -66,8 +66,6 @@ void loop(){
     }
 }
 
-
-
 void cnc_test(){
     robot.Test_HomeAlpha(0);
     robot.Test_HomeBeta(0);
@@ -80,9 +78,12 @@ void cnc_test(){
 void board_test(){
     GobotMain_BoardTest tester;
     tester.LinkBoard(&board);
-    // tester.Test_StepperEnablePin(500, 'A');
-    // tester.Test_StepperEnablePin(500, 'B');
+    tester.Test_StepperEnablePin(0, 'A');
+    tester.Test_StepperEnablePin(0, 'B');
 
+    tester.Test_EefUpDown(100);
+    tester.Test_EefLoadUnload(100);
+    
     delay(5000);
     tester.Test_Stepper(3, 'A', 800, &controller);
     delay(5000);
