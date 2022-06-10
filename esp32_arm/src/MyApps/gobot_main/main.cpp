@@ -24,6 +24,9 @@ MessageQueue mqtt_message_queue;
 void board_test(){
     GobotMain_BoardTest tester;
     tester.LinkBoard(&board);
+    // tester.Test_StepperEnablePin(500, 'A');
+    // tester.Test_StepperEnablePin(500, 'B');
+
     delay(5000);
     tester.Test_Stepper(3, 'A', 800, &controller);
     delay(5000);
@@ -35,6 +38,7 @@ void board_test(){
 void setup(){
     board.Init(true);
     board_test();
+    return;
     cncMachine.Init('S');  //Slow moving
     cncFiveBar.Init(&board, &cncMachine);
 
@@ -57,6 +61,7 @@ uint8_t last_loaded_room;
 bool xx=true;
 
 void loop(){
+    return;
     robot.SpinOnce();
     cncFiveBar.SpinOnce();
     loop_mqtt();

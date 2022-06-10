@@ -1,4 +1,4 @@
-#include "unit_test_cnc.h"
+#include "board_test_cnc.h"
 
 void BoardTestCnc::Test_AllHomers(int loop_count){
 // void BoardTestCnc::Test_AllHomers(int loop_count, char* axis_list, int axis_count){
@@ -42,4 +42,19 @@ void BoardTestCnc::Test_Stepper(int loop_count, char axis_name, int distance_in_
         delay(500);
     }
     this->__board->EnableMotor(axis_name, false);
+}
+
+
+void BoardTestCnc::Test_StepperEnablePin(int loop_count, char axis_name){
+    if (loop_count==0) return;
+    Serial.print("[Info] BoardTestCnc::Test_StepperEnablePin()  axis_name= ");
+    Serial.println(axis_name);
+
+    for(int i=0; i<loop_count; i++){
+        this->__board->EnableMotor(axis_name, true);
+        // Serial.println("E.");
+        delay(3000);
+        this->__board->EnableMotor(axis_name, false);
+        delay(3000);
+    }
 }

@@ -4,9 +4,11 @@
 void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
+    pinMode(PIN_ALPHA_ENABLE_2201, OUTPUT);
+    pinMode(PIN_BETA_ENABLE_2201, OUTPUT);
+
     this->EnableMotor('A', false);
     this->EnableMotor('B', false);
-    // Setup_RoomsSensor
     this->PIN_ROOMS[0] = PIN_SENSOR_ROOM_0;
     this->PIN_ROOMS[1] = PIN_SENSOR_ROOM_1;
     this->PIN_ROOMS[2] = PIN_SENSOR_ROOM_2;

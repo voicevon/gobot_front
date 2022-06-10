@@ -2,7 +2,8 @@
 #ifdef I_AM_GARMENT_BOX_CARRIER
 
 
-#include "MyBoards/asrs_agv_2205/board_asrs_agv.h"
+// #include "MyBoards/asrs_agv_2205/board_asrs_agv.h"
+#include "MyBoards/asrs_agv_2205/board_all_in_one_2205.h"
 #include "cnc_machine.h"
 #include "CNC/cnc_core_yz/cnc_core_yz.h"
 #include "MyLibs/MyFunctions.hpp"

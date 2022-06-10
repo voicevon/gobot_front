@@ -14,9 +14,9 @@ BotAsrsAgvCoreYZ robot = BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
 
 
-#include "MyBoards/unit_test/unit_test_agv.h"
-#include "MyBoards/unit_test/unit_test_asrs.h"
-#include "MyBoards/unit_test/unit_test_cnc.h"
+#include "MyBoards/board_test/board_test_agv.h"
+#include "MyBoards/board_test/board_test_asrs.h"
+#include "MyBoards/board_test/board_test_cnc.h"
 
 
 void unit_test(){

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MyBoards/unit_test/unit_test_cnc.h"
+#include "MyBoards/board_test/board_test_cnc.h"
 #include "MyBoards/gobot_main/board_gobot_main.h"
 
 class GobotMain_BoardTest: public BoardTestCnc{
