@@ -4,13 +4,22 @@ RobotEef_GobotHouse::RobotEef_GobotHouse(){
 	
 }
 
+void RobotEef_GobotHouse::Init(){
+	pinMode(PIN_EEF_COIL_A_2109, OUTPUT);
+    pinMode(PIN_EEF_COIL_B_2109, OUTPUT);
+
+	this->__eefServo.setPeriodHertz(50);
+	this->__eefServo.attach(PIN_EEF_SERVO);
+}
+
+
 void RobotEef_GobotHouse::Run(uint8_t eef_code) {
 	switch (eef_code){
 		case EEF_CODE_DOWN:
-			// this->eefServo->write(180);
+			this->__eefServo.write(180);
 			break;
 		case EEF_CODE_UP:
-			// this->eefServo->write(0);
+			this->__eefServo.write(0);
 			break;
 		case EEF_CODE_LOAD:
 			digitalWrite(PIN_EEF_COIL_A_2109, HIGH);

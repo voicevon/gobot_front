@@ -16,7 +16,7 @@ CncFiveBars cncFiveBar;
 // RobotEef_GobotMain eef;
 GobotMain robot; 
 
-StepControl controller;    // Use default settings 
+StepControl objStepControl;    // Use default settings 
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 
@@ -27,11 +27,11 @@ void board_test();
 
 void setup(){
     board.Init(true);
-    // board_test();
+    board_test();
     cncMachine.Init('S');  //Slow moving
     cncMachine.PrintOut("GobotMain Machine");
     cncFiveBar.Init(&board, &cncMachine);
-    cncFiveBar.LinkStepControl(&controller);
+    cncFiveBar.LinkStepControl(&objStepControl);
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cncFiveBar.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
@@ -69,27 +69,24 @@ void loop(){
 void cnc_test(){
     robot.Test_HomeAlpha(0);
     robot.Test_HomeBeta(0);
-    robot.Test_EefUpDown(100);
-    board.EnableMotor('A', false);
-    board.EnableMotor('B', false);
 }
 
 #include "Myboards/gobot_main/board_tester.h"
 void board_test(){
-    GobotMain_BoardTest tester;
-    tester.LinkBoard(&board);
-    tester.Test_StepperEnablePin(0, 'A');
-    tester.Test_StepperEnablePin(0, 'B');
+    GobotMain_BoardTest board_tester;
+    board_tester.LinkBoard(&board);
+    board_tester.Test_StepperEnablePin(0, 'A');
+    board_tester.Test_StepperEnablePin(0, 'B');
 
-    tester.Test_EefUpDown(100);
-    tester.Test_EefLoadUnload(100);
+    board_tester.Test_EefUpDown(100);
+    board_tester.Test_EefLoadUnload(100);
     
     delay(5000);
-    tester.Test_Stepper(3, 'A', 800, &controller);
+    board_tester.Test_Stepper(3, 'A', 800, &objStepControl);
     delay(5000);
-    tester.Test_Stepper(3, 'B', 800, &controller);
+    board_tester.Test_Stepper(3, 'B', 800, &objStepControl);
     delay(5000);
-    tester.Test_room_sensors(0);
+    board_tester.Test_room_sensors(0);
 }
 
 #endif

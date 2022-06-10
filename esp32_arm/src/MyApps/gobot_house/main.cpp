@@ -1,10 +1,8 @@
 #include "all_applications.h"
-// #include "all_devices.h"
 #ifdef I_AM_GOBOT_HOUSE
 
 #include "MyBoards/gobot_house/board_gobot_house.h"
 #include "CNC/cnc_scara/cnc_scara.h"
-// #include "CNC/cnc_scara/cnc_scara_config.h"
 #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
@@ -52,10 +50,8 @@ void loop(){
 }
 
 
-// #include "MyBoards/board_test/board_test_cnc.h"
 #include "MyBoards/gobot_house/board_tester.h"
 void board_test(){
-    // BoardTestCnc tester;
     GobotHouse_BoardTest tester;
     tester.LinkBoard(&board);
     tester.Test_AllHomers(100);

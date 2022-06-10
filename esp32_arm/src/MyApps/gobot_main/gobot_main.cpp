@@ -220,24 +220,24 @@ void GobotMain::Test_HomeBeta(int loop_count){
 	}
 }
 
-void GobotMain::Test_EefUpDown(int loop_count){
-	if (loop_count == 0) return;
+// void GobotMain::Test_EefUpDown(int loop_count){
+// 	if (loop_count == 0) return;
 
-	Serial.println("[Info]  GobotMain::Test_EefUpDown()");
-	String m123 = "M123P3S2";
+// 	Serial.println("[Info]  GobotMain::Test_EefUpDown()");
+// 	String m123 = "M123P3S2";
 
-	bool buffer_is_full = false;
-	for (int i=0; i<loop_count; i++){
-		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(m123);
-		if (buffer_is_full){
-			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
-			return;
-		}
-	}
-}
+// 	bool buffer_is_full = false;
+// 	for (int i=0; i<loop_count; i++){
+// 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(m123);
+// 		if (buffer_is_full){
+// 			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
+// 			return;
+// 		}
+// 	}
+// }
 
-void GobotMain::Test_EefSuckRelease(int loop_count){
+// void GobotMain::Test_EefSuckRelease(int loop_count){
 
-}
+// }
 
 

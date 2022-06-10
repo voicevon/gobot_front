@@ -7,6 +7,8 @@ void Board_GobotMain::Init(bool is_on_reset){
     pinMode(PIN_ALPHA_ENABLE_2201, OUTPUT);
     pinMode(PIN_BETA_ENABLE_2201, OUTPUT);
 
+    this->__eef.Init();
+
     this->EnableMotor('A', false);
     this->EnableMotor('B', false);
     this->PIN_ROOMS[0] = PIN_SENSOR_ROOM_0;
