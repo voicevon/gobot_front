@@ -4,7 +4,7 @@
 
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
-#include "MyBoards/gobot_main/board_ver1.2.h"
+#include "MyBoards/gobot_main/board_pins/board_ver1.2.h"
 #include "robot_eef/board_spring_maker.h"
 
 class Board_SpringMaker: public CncBoardBase{

@@ -2,7 +2,8 @@
 #include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
-#include "board_ver1.2.h"
+// #include "board_ver1.2.h"
+#include "board_pins/board_ver1.2.h"
 #include "robot_eef/gobot_main_eef.h"
 
 class Board_GobotMain: public CncBoardBase{

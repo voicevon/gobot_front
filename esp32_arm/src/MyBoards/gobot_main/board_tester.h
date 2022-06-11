@@ -9,6 +9,8 @@ class GobotMain_BoardTest: public BoardTestCnc{
         void Test_room_sensors(int loop_count);
         void Test_EefUpDown(int loop_count);
         void Test_EefLoadUnload(int loop_count);
+        void Test_Eef_Full(int loop_count);
+
     private:
         Board_GobotMain* __board;
 

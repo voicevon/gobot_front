@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RobotEef/robot_eef_base.h"
-#include "../board_pins_ver3.11.h"
+#include "../board_pins/board_pins_ver3.11.h"
 #include <ESP32Servo.h>
 
 

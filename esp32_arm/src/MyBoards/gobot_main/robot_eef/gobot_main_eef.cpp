@@ -15,10 +15,10 @@ void RobotEef_GobotMain::Init(){
 void RobotEef_GobotMain::Run(uint8_t eef_code) {
 	switch (eef_code){
 		case EEF_CODE_DOWN:
-			this->__eefServo.write(180);
+			this->__eefServo.write(20);
 			break;
 		case EEF_CODE_UP:
-			this->__eefServo.write(0);
+			this->__eefServo.write(180);
 			break;
 		case EEF_CODE_LOAD:
 			digitalWrite(PIN_EEF_COIL_A_2201, HIGH);

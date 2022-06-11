@@ -14,9 +14,9 @@
 #define PIN_HOME_ALPHA_2201  2  
 #define PIN_HOME_BETA_2201  27     
 
-#define PIN_EEF_SERVO_2201 21
-#define PIN_EEF_COIL_A_2201  22
-#define PIN_EEF_COIL_B_2201  23
+#define PIN_EEF_SERVO_2201  21
+#define PIN_EEF_COIL_A_2201  23
+#define PIN_EEF_COIL_B_2201  22
 
 #define PIN_SENSOR_ROOM_0 36
 #define PIN_SENSOR_ROOM_1 39

@@ -78,8 +78,9 @@ void board_test(){
     board_tester.Test_StepperEnablePin(0, 'A');
     board_tester.Test_StepperEnablePin(0, 'B');
 
-    board_tester.Test_EefUpDown(100);
-    board_tester.Test_EefLoadUnload(100);
+    board_tester.Test_EefUpDown(3);
+    board_tester.Test_EefLoadUnload(0);
+    board_tester.Test_Eef_Full(3000);
     
     delay(5000);
     board_tester.Test_Stepper(3, 'A', 800, &objStepControl);
