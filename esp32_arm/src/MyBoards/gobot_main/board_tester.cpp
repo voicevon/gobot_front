@@ -13,8 +13,8 @@ void GobotMain_BoardTest::Test_room_sensors(int loop_count){
     uint8_t rooms;
     for (int i=0; i<loop_count; i++){
         rooms =  this->__board->ReadAllRooms();
-        Serial.println(rooms, 'B');
-
+        Serial.println(rooms, BIN);
+        delay(1000);
     }
 }
 

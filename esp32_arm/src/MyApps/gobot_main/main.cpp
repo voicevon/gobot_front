@@ -13,7 +13,6 @@
 Board_GobotMain board;
 GobotMainMachine cncMachine;
 CncFiveBars cncFiveBar;
-// RobotEef_GobotMain eef;
 GobotMain robot; 
 
 StepControl objStepControl;    // Use default settings 
@@ -75,19 +74,19 @@ void cnc_test(){
 void board_test(){
     GobotMain_BoardTest board_tester;
     board_tester.LinkBoard(&board);
+    board_tester.Test_room_sensors(888);
     board_tester.Test_StepperEnablePin(0, 'A');
     board_tester.Test_StepperEnablePin(0, 'B');
 
-    board_tester.Test_EefUpDown(3);
+    board_tester.Test_EefUpDown(0);
     board_tester.Test_EefLoadUnload(0);
-    board_tester.Test_Eef_Full(3000);
+    board_tester.Test_Eef_Full(0);
     
     delay(5000);
-    board_tester.Test_Stepper(3, 'A', 800, &objStepControl);
+    board_tester.Test_Stepper(0, 'A', 800, &objStepControl);
     delay(5000);
-    board_tester.Test_Stepper(3, 'B', 800, &objStepControl);
+    board_tester.Test_Stepper(0, 'B', 800, &objStepControl);
     delay(5000);
-    board_tester.Test_room_sensors(0);
 }
 
 #endif
