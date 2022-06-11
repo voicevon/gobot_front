@@ -19,6 +19,7 @@ MessageQueue mqtt_message_queue;
 GobotHouse* robot; 
 
 void board_test();
+void cnc_test();
 
 
 void setup(){
@@ -41,6 +42,7 @@ void setup(){
     append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, robot); 
     setup_mqtt_on_message_receive(); 
     Serial.println("lovely bot,  GobotHouse.  setup() is done.  Good luck!");
+    cnc_test();
 }
 
 void loop(){
@@ -58,8 +60,11 @@ void board_test(){
     tester.Test_AllHomers(0);
     tester.Test_Stepper(0, 'A', 300, &controller);
     tester.Test_Stepper(0, 'B', 300, &controller);
+}
 
-    // tester.Test_EefUpDown(100);
+void cnc_test(){
+    robot->Test_HomeBeta(8);
+    robot->Test_HomeAlpha(0);
 }
 
 #endif

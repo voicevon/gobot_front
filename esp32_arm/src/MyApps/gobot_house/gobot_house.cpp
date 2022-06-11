@@ -294,3 +294,45 @@ void GobotHouse::__PreHome(){
 	strG1 = "G1A0";
 	this->_gcode_queue->AppendGcodeCommand(strG1);
 }
+
+void GobotHouse::Test_HomeAlpha(int loop_count){
+	if (loop_count == 0) return;
+
+	Serial.println("[Info]  GobotMain::Test_HomeAlpha()");
+	String g28 = "G28AI";
+	String g1 = "G1A135";
+	bool buffer_is_full = false;
+	for (int i=0; i<loop_count; i++){
+		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g28);
+		if (buffer_is_full){
+			Serial.println("[Warn] GobotMain::Test_HomeAlpha() Buffer is full, return");
+			return;
+		}
+		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g1);
+		if (buffer_is_full){
+			Serial.println("[Warn] GobotMain::Test_HomeAlpha() Buffer is full, return");
+			return;
+		}
+	}
+}
+
+void GobotHouse::Test_HomeBeta(int loop_count){
+	if (loop_count == 0) return;
+
+	Serial.println("[Info]  GobotMain::Test_HomeBeta()");
+	String g28 = "G28BI";
+	String g1 = "G1B45";
+	bool buffer_is_full = false;
+	for (int i=0; i<loop_count; i++){
+		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g28);
+		if (buffer_is_full){
+			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
+			return;
+		}
+		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g1);
+		if (buffer_is_full){
+			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
+			return;
+		}
+	}
+}

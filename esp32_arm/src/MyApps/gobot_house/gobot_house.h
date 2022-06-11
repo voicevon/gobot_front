@@ -24,6 +24,8 @@ class GobotHouse: public GcodeProducer, public MqttMessageConsumer{
         void Calibrate(int step, bool enable_eef_coil);
         bool MoveStone_FromRoomToHead(uint8_t house_id);
         bool MoveStone_FromHeadToRoom(uint8_t house_id);
+        void Test_HomeAlpha(int loop_count);
+        void Test_HomeBeta(int loop_count);
 
 
     private:

@@ -86,14 +86,17 @@ bool CncScara::GetCurrentPosition(FkPositionBase* position_fk){
 }
 
 void CncScara::Init(CncBoardBase* board, CncMachineBase* machine){
+	Serial.println("[Info] CncScara::Init() ");
+	this->_board = board;
 	this->_scara_machine = (CncScaraMachine*)(machine);
+	
 	this->alpha_stepper = board->GetStepper('A');
 	this->beta_stepper = board->GetStepper('B');
 	this->alpha_homer = board->GetHomer('A');
 	this->beta_homer = board->GetHomer('B');
 	
-	this->_board->EnableMotor('A', false);
-	this->_board->EnableMotor('B', false);
+	board->EnableMotor('A', false);
+	board->EnableMotor('B', false);
 
 	this->alpha_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
 	this->alpha_stepper->setMaxSpeed(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
@@ -102,8 +105,8 @@ void CncScara::Init(CncBoardBase* board, CncMachineBase* machine){
 	this->alpha_stepper->setInverseRotation(true);
 	this->beta_stepper->setInverseRotation(false);
 
-	// this->_scara_machine->Init();
 	this->_home_as_inverse_kinematic = true;
+
 
 }
 
@@ -299,3 +302,4 @@ void CncScara::RunM84(){
 // 	// if (actuator == 'B')
 // 	// 	digitalWrite(PIN_BETA_ENABLE, !enable_it);
 // }
+
