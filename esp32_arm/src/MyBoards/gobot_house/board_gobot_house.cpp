@@ -4,6 +4,12 @@
 void Board_GobotHouse::Init(bool is_on_reset){
     Serial.begin(115200);
     Serial.println("[Info] Board_GobotHouse::Init()  Hi Xuming, I am your lovely bot,  GobotHouse. ");
+    pinMode(PIN_ALPHA_ENABLE_2109, OUTPUT);
+    pinMode(PIN_BETA_ENABLE_2109, OUTPUT);
+    this->EnableMotor('A', false);
+    this->EnableMotor('B', false);
+    this->eef.Init();
+
 }
 
 Stepper* Board_GobotHouse::GetStepper(char axis_name) {

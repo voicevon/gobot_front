@@ -11,11 +11,11 @@
 
 
 StepControl controller;    // Use default settings 
-Board_GobotHouse board = Board_GobotHouse();
+Board_GobotHouse board;
 GobotHouseMachine cncMachine;
-CncScara cncScara = CncScara();
-GcodeQueue gcode_queue = GcodeQueue();
-MessageQueue mqtt_message_queue = MessageQueue();
+CncScara cncScara;
+GcodeQueue gcode_queue;
+MessageQueue mqtt_message_queue;
 GobotHouse* robot; 
 
 void board_test();
@@ -54,12 +54,12 @@ void loop(){
 void board_test(){
     GobotHouse_BoardTest tester;
     tester.LinkBoard(&board);
-    tester.Test_AllHomers(100);
-    tester.Test_Stepper(10, 'A', 300, &controller);
-    tester.Test_Stepper(10, 'B', 300, &controller);
+    tester.Test_EefLoadUnload(0);
+    tester.Test_AllHomers(0);
+    tester.Test_Stepper(0, 'A', 300, &controller);
+    tester.Test_Stepper(0, 'B', 300, &controller);
 
-    tester.Test_EefUpDown(100);
-    tester.Test_EefLoadUnload(100);
+    // tester.Test_EefUpDown(100);
 }
 
 #endif

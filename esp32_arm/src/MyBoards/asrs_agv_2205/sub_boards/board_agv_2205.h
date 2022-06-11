@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MyBoards/agv_board_base.h"
-#include "board_pins_ver_2_0.h"
+#include "../board_pins/board_pins_ver_2_0.h"
 #include "AGV/sensor_moving_track/track_sensor_dual_9960.h"
 #include "AGV/sensor_obstacle/obstacle_sensor_vl53l0x.h"
 #include "AGV/sensor_map_site/smart_rfid_reader.h"

@@ -20,12 +20,12 @@ void RobotEef_GobotHouse::Run(uint8_t eef_code) {
 		// case EEF_CODE_UP:
 		// 	break;
 		case EEF_CODE_LOAD:
-			this->__eefServo.write(180);
+			this->__eefServo.write(85);
 			// digitalWrite(PIN_EEF_COIL_A_2109, HIGH);
 			// digitalWrite(PIN_EEF_COIL_B_2109, LOW);
 			break;
 		case EEF_CODE_UNLOAD:
-			this->__eefServo.write(0);
+			this->__eefServo.write(150);
 			// digitalWrite(PIN_EEF_COIL_A_2109,LOW);
 			// digitalWrite(PIN_EEF_COIL_B_2109,HIGH);
 			break;

@@ -1,23 +1,12 @@
 #include "board_test_cnc.h"
 
-void BoardTestCnc::Test_AllHomers(int loop_count){
+void BoardTestCnc::Test_SingleHomer(int loop_count,char axis_name){
 // void BoardTestCnc::Test_AllHomers(int loop_count, char* axis_list, int axis_count){
     if (loop_count==0) return;
 
-    Serial.println("[Info] BoardTestCnc::Test_AllHomers()");
+    Serial.println("[Warn] BoardTestCnc::Test_SingleHomer()  This is a TODO task.");
 
-    SingleAxisHomer* hz = this->__board->GetHomer('Z');
-    SingleAxisHomer* hy = this->__board->GetHomer('Y');
-    bool zt,yt;
-    for(int i=0; i<loop_count; i++){
-        zt= hz->IsTriged();
-        yt = hy->IsTriged();
-        Serial.print("z: ");
-        Serial.print(zt);
-        Serial.print("\ty: ");
-        Serial.println(yt);
-        delay(200);
-    }
+
 }
 
 void BoardTestCnc::Test_Stepper(int loop_count, char axis_name, int distance_in_step, StepControl* control){

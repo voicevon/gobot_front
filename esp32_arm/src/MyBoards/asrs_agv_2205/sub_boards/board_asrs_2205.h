@@ -1,6 +1,7 @@
 #pragma once
-
-#include "board_pins_ver_2_0.h"
+ 
+// #include "board_pins_ver_2_0.h"
+#include "../board_pins/board_pins_ver_2_0.h"
 #include "ASRS/sensor_jetty/sharp_ir_on_ads1115.h"
 #include "MyBoards/board_base.h"
 

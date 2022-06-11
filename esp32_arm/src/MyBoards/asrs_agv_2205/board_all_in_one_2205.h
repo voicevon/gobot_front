@@ -1,8 +1,8 @@
 #pragma once
 #include "MyBoards/board_base.h"
-#include "board_agv_2205.h"
-#include "board_cnc_2205.h"
-#include "board_asrs_2205.h"
+#include "sub_boards/board_agv_2205.h"
+#include "sub_boards/board_cnc_2205.h"
+#include "sub_boards/board_asrs_2205.h"
 
 
 class BoardAllInOne: public BoardBase{

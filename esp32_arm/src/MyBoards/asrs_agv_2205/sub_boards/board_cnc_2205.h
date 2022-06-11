@@ -1,10 +1,10 @@
 #pragma once
 // #include "MyBoards/board_base.h"
 #include "MyBoards/cnc_board_base.h"
-#include "board_pins_ver_2_0.h"
+#include "../board_pins/board_pins_ver_2_0.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
-#include "robot_eef/garment_asar_eef.h"
+#include "../robot_eef/garment_asar_eef.h"
 
 // For Core_YZ cnc application
 class Board2205Cnc: public CncBoardBase{
