@@ -48,6 +48,6 @@ void Board_GobotHouse_2206::EnableMotor(char axis_name, bool enable_it) {
     }
 }
 
-void Board_GobotHouse_2206::SingleMotorMoveTo(char motor_name, float motor_position) {
+// void Board_GobotHouse_2206::SingleMotorMoveTo(char motor_name, float motor_position) {
 
-}         
+// }         

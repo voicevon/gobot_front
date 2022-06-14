@@ -2,7 +2,7 @@
 #ifdef I_AM_SPRING_MAKER
 #include "MyBoards/sping_maker/board_spring_maker.h"
 #include "cnc_machine.h"
-#include "CNC/cnc_single_axis/cnc_single_axis.h"
+#include "CNC/solution/cnc_single_axis/cnc_single_axis.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "spring_maker.h"

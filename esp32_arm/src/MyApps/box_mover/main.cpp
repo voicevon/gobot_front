@@ -3,10 +3,10 @@
 #ifdef I_AM_GARMENT_BOX_MOVER
 
 #include "cnc_machine.h"
-#include "MyBoards/asrs_agv_2205/board_2205_cnc.h"
+#include "MyBoards/asrs_agv_2205/sub_boards/board_cnc_2205.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_mover.h"
-#include "CNC/cnc_core_az/box_mover_hw.h"
+#include "CNC/solution/cnc_core_az/box_mover_hw.h"
 #include "IoT/main_mqtt.h"
 
 BoxMoverCncMachine machine;

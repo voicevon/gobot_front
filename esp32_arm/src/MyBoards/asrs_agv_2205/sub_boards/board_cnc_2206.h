@@ -16,9 +16,9 @@ class Board2204Cnc: public CncBoardBase{
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_GarmentAsar* GetEef() override;
         void EnableMotor(char axis_name, bool enable_it) override;
-        void AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count) override{};
-        void SingleMotorMoveTo(char motor_name, float motor_position) override{};         
-        float GetDistanceToTarget() override{};
+        // void AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count) override{};
+        // void SingleMotorMoveTo(char motor_name, float motor_position) override{};         
+        // float GetDistanceToTarget() override{};
         
     private:
         Adafruit_MCP23X17* __mcp23018;

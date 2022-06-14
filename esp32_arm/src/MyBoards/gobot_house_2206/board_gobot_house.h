@@ -16,13 +16,13 @@ class Board_GobotHouse_2206: public CncBoardBase{
 
         void EnableMotor(char axis_name, bool enable_it) override;
 
-        void AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count) override{};
-        void AllMotorStop() override {};
-        void SingleMotorMoveTo(char motor_name, float motor_position) override;         
-        float GetDistanceToTarget() override{return 0;};
+        // void AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count) override{};
+        // void AllMotorStop() override {};
+        // void SingleMotorMoveTo(char motor_name, float motor_position) override;         
+        // float GetDistanceToTarget() override{return 0;};
 
-        float GetMotorPosition(char motor_name) override {};
-        void SetMotorPosition(char motor_name, float as_current_position) override {};
+        // float GetMotorPosition(char motor_name) override {};
+        // void SetMotorPosition(char motor_name, float as_current_position) override {};
 
     
     private:
