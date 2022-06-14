@@ -2,7 +2,7 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "MyBoards/cnc_board_base.h"
-#include "CNC/cnc_base.h"
+#include "CNC/solution/cnc_base.h"
 #include "CNC/single_axis_homer.h"
 // #include "CNC/eef_standard_code.h"
 #include "RobotEef/eef_standard_code.h"
@@ -42,10 +42,10 @@ class CncScara: public CncBase{
         SingleAxisHomer* alpha_homer; 
         SingleAxisHomer* beta_homer;   
 
-        Stepper* alpha_stepper;
-        Stepper* beta_stepper;
+        // Stepper* alpha_stepper;
+        // Stepper* beta_stepper;
 
-        Stepper* __homing_stepper;
+        // Stepper* __homing_stepper;
         SingleAxisHomer* __homing_helper;
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;

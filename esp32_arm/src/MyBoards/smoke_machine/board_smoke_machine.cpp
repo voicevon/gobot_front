@@ -7,15 +7,15 @@ void Board_SmokeMachine::Init(bool is_on_reset){
    
 }
 
-Stepper* Board_SmokeMachine::GetStepper(char axis_name) {
-    if (axis_name=='A'){
-        return &this->stepper_alpha;
-    }else{
-        Serial.print("['Error']  Board_SpringMaker::GetStepper()   axis_name= ");
-        Serial.println(axis_name);
-    }
+// Stepper* Board_SmokeMachine::GetStepper(char axis_name) {
+//     if (axis_name=='A'){
+//         return &this->stepper_alpha;
+//     }else{
+//         Serial.print("['Error']  Board_SpringMaker::GetStepper()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
 
-}
+// }
 
 SingleAxisHomer* Board_SmokeMachine::GetHomer(char axis_name) {
     if (axis_name=='A'){

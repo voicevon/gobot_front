@@ -90,20 +90,20 @@ void CncScara::Init(CncBoardBase* board, CncMachineBase* machine){
 	this->_board = board;
 	this->_scara_machine = (CncScaraMachine*)(machine);
 	
-	this->alpha_stepper = board->GetStepper('A');
-	this->beta_stepper = board->GetStepper('B');
+	// this->alpha_stepper = board->GetStepper('A');
+	// this->beta_stepper = board->GetStepper('B');
 	this->alpha_homer = board->GetHomer('A');
 	this->beta_homer = board->GetHomer('B');
 	
 	board->EnableMotor('A', false);
 	board->EnableMotor('B', false);
 
-	this->alpha_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
-	this->alpha_stepper->setMaxSpeed(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
-	this->beta_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_BETA);
-	this->beta_stepper->setMaxSpeed(this->_scara_machine->MAX_STEPS_PER_SECOND_BETA);
-	this->alpha_stepper->setInverseRotation(true);
-	this->beta_stepper->setInverseRotation(false);
+	// this->alpha_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
+	// this->alpha_stepper->setMaxSpeed(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
+	// this->beta_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_BETA);
+	// this->beta_stepper->setMaxSpeed(this->_scara_machine->MAX_STEPS_PER_SECOND_BETA);
+	// this->alpha_stepper->setInverseRotation(true);
+	// this->beta_stepper->setInverseRotation(false);
 
 	this->_home_as_inverse_kinematic = true;
 
@@ -115,8 +115,10 @@ float CncScara::GetDistanceToTarget_FK(){
 	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
 	// TODO: Rewrite this function.
 	IkPosition_AB current_ik;
-	current_ik.alpha = (float)this->alpha_stepper->getPosition();
-	current_ik.beta = (float)this->beta_stepper->getPosition();
+	// current_ik.alpha = (float)this->alpha_stepper->getPosition();
+	// current_ik.beta = (float)this->beta_stepper->getPosition();
+	current_ik.alpha = this->_board->GetMotorPosition('A');
+	current_ik.beta = this->_board->GetMotorPosition('B');
 	FK(&current_ik, &this->__current_fk_position);
 	
 	float dx = this->__current_fk_position.X - this->__next_fk_position.X;
@@ -126,10 +128,13 @@ float CncScara::GetDistanceToTarget_FK(){
 }
 
 float CncScara::GetDistanceToTarget_IK(){
-	int32_t da = this->alpha_stepper->getDistanceToTarget();
-	int32_t db = this->beta_stepper->getDistanceToTarget();
-	float distance = sqrt(da * da + db * db);
-	return distance;
+	// int32_t da = this->alpha_stepper->getDistanceToTarget();
+	// int32_t db = this->beta_stepper->getDistanceToTarget();
+	// int32_t da = this->_board->GetDistanceToTarget('A');
+	// int32_t db = this->_board->GetDistanceToTarget('B');
+	// float distance = sqrt(da * da + db * db);
+
+	return this->_board->GetDistanceToTarget();
 }
 
 void CncScara::RunG1(Gcode* gcode) {
@@ -137,15 +142,17 @@ void CncScara::RunG1(Gcode* gcode) {
 	// Serial.print(gcode->get_command());
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
-		this->alpha_stepper->setMaxSpeed(speed);
+		// this->alpha_stepper->setMaxSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
 	target_fk_xy.X = this->__current_fk_position.X;
 	target_fk_xy.Y = this->__current_fk_position.Y;
-	target_ik_ab.alpha = this->alpha_stepper->getPosition();
-	target_ik_ab.beta = this->beta_stepper->getPosition();
+	// target_ik_ab.alpha = this->alpha_stepper->getPosition();
+	// target_ik_ab.beta = this->beta_stepper->getPosition();
+	target_ik_ab.alpha = this->_board->GetMotorPosition('A');
+	target_ik_ab.beta = this->_board->GetMotorPosition('B');
 	bool do_ik=false;
 
 	if (gcode->has_letter('A')) 
@@ -168,18 +175,24 @@ void CncScara::RunG1(Gcode* gcode) {
 	//Prepare actuator/driver to move to next point
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B', true);
-	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha );
-	this->beta_stepper->setTargetAbs(target_ik_ab.beta);
+	// this->alpha_stepper->setTargetAbs(target_ik_ab.alpha );
+	// this->beta_stepper->setTargetAbs(target_ik_ab.beta);
+	float motor_position[2];
+	motor_position[0] = target_ik_ab.alpha;
+	motor_position[1] = target_ik_ab.beta;
 	//None blocking, move backgroundly.
-	this->_stepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
+	// this->_stepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
+	this->_board->AllMotorsMoveTo(true, motor_position, 2);
 
 	if (true){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
-		Serial.print(this->alpha_stepper->getPosition());
+		// Serial.print(this->alpha_stepper->getPosition());
+		Serial.print(this->_board->GetMotorPosition('A'));
 		Serial.print(" , ");
 		Serial.print(target_ik_ab.alpha);
 		Serial.print("    beta = ");
-		Serial.print(this->beta_stepper->getPosition());
+		// Serial.print(this->beta_stepper->getPosition());
+		Serial.print(this->_board->GetMotorPosition('B'));
 		Serial.print(" , ");
 		Serial.println(target_ik_ab.beta);
 	}
@@ -199,21 +212,23 @@ void CncScara::HomeSingleAxis(char axis){
 		Serial.print("\n[Debug] CncScara::HomeSingleAxis() is entering   AXIS = " );
 		Serial.print(axis);
 	}
-	this->_homing_axis = axis;
+	this->_homing_axis_name = axis;
 	this->_board->EnableMotor(axis, true);
+	// float motor_position;
 	if (axis=='A'){
-		this->alpha_stepper->setAcceleration(this->_scara_machine->Homing_acceleration_alpha);
-		this->alpha_stepper->setMaxSpeed(this->_scara_machine->Homing_speed_alpha);
-		this->__homing_stepper = this->alpha_stepper;
+		// this->alpha_stepper->setAcceleration(this->_scara_machine->Homing_acceleration_alpha);
+		// this->alpha_stepper->setMaxSpeed(this->_scara_machine->Homing_speed_alpha);
+		// this->__homing_stepper = this->alpha_stepper;
 		this->__homing_helper = this->alpha_homer;
 	}else if (axis=='B'){
-		this->beta_stepper->setAcceleration(this->_scara_machine->Homing_acceleration_beta);
-		this->beta_stepper->setMaxSpeed(this->_scara_machine->Homing_speed_beta);
-		this->__homing_stepper = this->beta_stepper;
+		// this->beta_stepper->setAcceleration(this->_scara_machine->Homing_acceleration_beta);
+		// this->beta_stepper->setMaxSpeed(this->_scara_machine->Homing_speed_beta);
+		// this->__homing_stepper = this->beta_stepper;
 		this->__homing_helper = this->beta_homer;
 	}
-	this->__homing_stepper->setTargetRel(500000);
-	this->_stepControl->moveAsync(*this->__homing_stepper);
+	// this->__homing_stepper->setTargetRel(500000);
+	// this->_stepControl->moveAsync(*this->__homing_stepper);
+	this->_board->SingleMotorMoveTo(this->_homing_axis_name, 500000);
 }
 
 void CncScara::_running_G28(){
@@ -222,9 +237,11 @@ void CncScara::_running_G28(){
 		// End stop is trigered
 		if (false){
 			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
-			Serial.print (this->_homing_axis);
+			Serial.print (this->_homing_axis_name);
 		}
-		this->_stepControl->stop();
+		// this->_stepControl->stop();
+		this->_board->AllMotorStop();
+
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
@@ -243,13 +260,15 @@ void CncScara::_running_G28(){
 			Serial.print("\n\n\n\n\n  [Error] Trying to get home position with EEF position  ");
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis == 'A') this->alpha_stepper->setPosition(ik_position.alpha);
-		if (this->_homing_axis == 'B') this->beta_stepper->setPosition(ik_position.beta);
+		// if (this->_homing_axis_name == 'A') this->alpha_stepper->setPosition(ik_position.alpha);
+		// if (this->_homing_axis_name == 'B') this->beta_stepper->setPosition(ik_position.beta);
+		this->_board->SetMotorPosition('A', ik_position.alpha);
+		this->_board->SetMotorPosition('B', ik_position.beta);
 		
-		this->alpha_stepper->setMaxSpeed(this->_scara_machine->MAX_STEPS_PER_SECOND_ALPHA);
-		this->alpha_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
-		this->beta_stepper->setMaxSpeed(this->_scara_machine->MAX_STEPS_PER_SECOND_BETA);
-		this->beta_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_BETA);
+		// this->alpha_stepper->setMaxSpeed(this->_scara_machine->MAX_STEPS_PER_SECOND_ALPHA);
+		// this->alpha_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
+		// this->beta_stepper->setMaxSpeed(this->_scara_machine->MAX_STEPS_PER_SECOND_BETA);
+		// this->beta_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_BETA);
 		// Serial.print("\n======================================= End of Homing, State to be IDLE\n");
 		this->State = CncState::IDLE;
 

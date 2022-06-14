@@ -1,7 +1,7 @@
 #include "all_applications.h"
-#ifdef I_AM_GOBOT_HOUSE
+#ifdef I_AM_GOBOT_HOUSE_2206
 
-#include "MyBoards/gobot_house/board_gobot_house.h"
+#include "MyBoards/gobot_house_2206/board_gobot_house.h"
 #include "CNC/solution/cnc_scara/cnc_scara.h"
 #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
@@ -11,12 +11,12 @@
 
 
 StepControl controller;    // Use default settings 
-Board_GobotHouse board;
-GobotHouseMachine cncMachine;
+Board_GobotHouse_2206 board;
+GobotHouseMachine_2206 cncMachine;
 CncScara cncScara;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
-GobotHouse* robot; 
+GobotHouse_2206* robot; 
 
 void board_test();
 void cnc_test();
@@ -30,7 +30,7 @@ void setup(){
     cncScara.Init(&board, &cncMachine);
     // cncScara.LinkStepControl(&controller);
     
-    robot = &GobotHouse::getInstance();
+    robot = &GobotHouse_2206::getInstance();
     robot->Setup();
     robot->LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cncScara.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);

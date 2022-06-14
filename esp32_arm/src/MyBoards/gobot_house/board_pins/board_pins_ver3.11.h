@@ -15,3 +15,4 @@
 // #define PIN_EEF_COIL_A_2109 32
 // #define PIN_EEF_COIL_B_2109 33
 #define PIN_EEF_SERVO 32  
+#define PIN_CNC_BETA_SERVO 33

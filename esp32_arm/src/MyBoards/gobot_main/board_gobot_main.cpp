@@ -25,17 +25,17 @@ void Board_GobotMain::Init(bool is_on_reset){
     this->RepportRamUsage();
 }
 
-Stepper* Board_GobotMain::GetStepper(char axis_name) {
-    if (axis_name=='A'){
-        return &this->stepper_alpha;
-    }else if (axis_name=='B'){
-        return &this->stepper_beta;
-    }else{
-        Serial.print("['Error']  Board_GobotMain::GetStepper()   axis_name= ");
-        Serial.println(axis_name);
-    }
+// Stepper* Board_GobotMain::GetStepper(char axis_name) {
+//     if (axis_name=='A'){
+//         return &this->stepper_alpha;
+//     }else if (axis_name=='B'){
+//         return &this->stepper_beta;
+//     }else{
+//         Serial.print("['Error']  Board_GobotMain::GetStepper()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
 
-}
+// }
 
 SingleAxisHomer* Board_GobotMain::GetHomer(char axis_name) {
     if (axis_name=='A'){

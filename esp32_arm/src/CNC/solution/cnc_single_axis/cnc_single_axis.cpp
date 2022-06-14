@@ -31,7 +31,7 @@ void CncSingleAxis::Init(CncBoardBase* board, CncMachineBase* config){
 	this->_singleAxisConfig->Init('F');
 	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	// this->__EnableMotor('A', false);
-	this->objStepper_alpha = board->GetStepper('A');
+	// this->objStepper_alpha = board->GetStepper('A');
 	this->objHomeHelper_alpha = board->GetHomer('A');
 	this->_board->EnableMotor('A', false);
 
@@ -44,7 +44,7 @@ void CncSingleAxis::Init(CncBoardBase* board, CncMachineBase* config){
 void CncSingleAxis::HomeSingleAxis(char axis){
 	Serial.print("[Debug] CncSingleAxis::HomeSingleAxis() is entering:   " );
 	Serial.print(axis);
-	this->_homing_axis = axis;
+	this->_homing_axis_name = axis;
 	this->_singleAxisConfig->PrintOut();
 	this->objStepper_alpha->setAcceleration(this->_singleAxisConfig->Homing_acceleration_alpha);
 	this->objStepper_alpha->setMaxSpeed(this->_singleAxisConfig->Homing_speed_alpha);
@@ -64,7 +64,7 @@ void CncSingleAxis::_running_G28(){
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
 		Serial.print("\n[Info] CncSingleAxis::_running_G28() Home sensor is trigger.  " );
-		Serial.print (this->_homing_axis);
+		Serial.print (this->_homing_axis_name);
 		this->objStepControl->stop();
 
 		//Set current position to HomePosition
@@ -85,7 +85,7 @@ void CncSingleAxis::_running_G28(){
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis == 'A') this->objStepper_alpha->setPosition(ik_position.alpha);
+		if (this->_homing_axis_name == 'A') this->objStepper_alpha->setPosition(ik_position.alpha);
 		// if (this->_homing_axis == 'W') this->objStepper_beta.setPosition(ik_position.beta);
 		
 		this->objStepper_alpha->setMaxSpeed(this->_singleAxisConfig->max_speed_alpha);

@@ -32,8 +32,8 @@ void unit_test(){
     BoardTestCnc cnc;
     cnc.LinkBoard(&board.cnc_board);
     cnc.Test_AllHomers(0);
-    cnc.Test_Stepper(0,'A', 5000, &objStepControl);
-    cnc.Test_Stepper(0,'B', 5000, &objStepControl);
+    // cnc.Test_Stepper(0,'A', 5000, &objStepControl);
+    // cnc.Test_Stepper(0,'B', 5000, &objStepControl);
 
     UnitTestAsrs asrs;
     asrs.LinkBoard(&board.asrs);

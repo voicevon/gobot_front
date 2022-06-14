@@ -6,8 +6,8 @@
 void CncFiveBars::Init(CncBoardBase* board, CncMachineBase* machine){
 	Serial.print("\n[Info] CncFiveBars::Init() is entering.");
 
-	this->alpha_stepper = board->GetStepper('A');
-	this->beta_stepper = board->GetStepper('B');
+	// this->alpha_stepper = board->GetStepper('A');
+	// this->beta_stepper = board->GetStepper('B');
 	this->alpha_homer = board->GetHomer('A');
 	this->beta_homer = board->GetHomer('B');
 	this->__eef = board->GetEef();
@@ -22,26 +22,31 @@ void CncFiveBars::Init(CncBoardBase* board, CncMachineBase* machine){
 void CncFiveBars::HomeSingleAxis(char axis){ 
 	Serial.print("[Debug] CncFiveBars::HomeSingleAxis() is entering  axis= " );
 	Serial.println(axis);
-	this->_homing_axis = axis;
+	// this->_homing_axis = axis;
+	this->_homing_axis_name = axis;
+	float target_position;
 	if (axis=='A'){
 		this->_board->EnableMotor('A', true);
-		this->alpha_stepper->setAcceleration(this->_fivebarMachine->Homing_acceleration_alpha_beta);
-		this->alpha_stepper->setMaxSpeed(this->_fivebarMachine->Homing_speed_alpha_beta);
-		this->__homing_stepper = this->alpha_stepper;
+		// this->alpha_stepper->setAcceleration(this->_fivebarMachine->Homing_acceleration_alpha_beta);
+		// this->alpha_stepper->setMaxSpeed(this->_fivebarMachine->Homing_speed_alpha_beta);
+		// this->__homing_stepper = this->alpha_stepper;
 		this->__current_homer = this->alpha_homer;
-		this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
+		// this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
+		target_position = 500000;
 	}else if (axis=='B'){
 		this->_board->EnableMotor('B', true);
 		int xx =this->_fivebarMachine->Homing_acceleration_alpha_beta;
-		this->beta_stepper->setAcceleration(this->_fivebarMachine->Homing_acceleration_alpha_beta);
-		this->beta_stepper->setMaxSpeed(this->_fivebarMachine->Homing_speed_alpha_beta);
-		this->__homing_stepper = this->beta_stepper;
+		// this->beta_stepper->setAcceleration(this->_fivebarMachine->Homing_acceleration_alpha_beta);
+		// this->beta_stepper->setMaxSpeed(this->_fivebarMachine->Homing_speed_alpha_beta);
+		// this->__homing_stepper = this->beta_stepper;
 		this->__current_homer = this->beta_homer;
-		this->__homing_stepper->setTargetRel(-500000);    //angle to be smaller.
+		// this->__homing_stepper->setTargetRel(-500000);    //angle to be smaller.
+		target_position = -500000;
 	}else{
 		Serial.print("\n[Error] CncFiveBars::HomeSingleAxis() ");
 	}
-	this->_stepControl->moveAsync(*this->__homing_stepper);
+	this->_board->SingleMotorMoveTo(this->_homing_axis_name, 500000);
+	// this->_stepControl->moveAsync(*this->__homing_stepper);
 	Serial.print("[Debug] CncFiveBars::HomeSingleAxis() is Starting to run...\n" );
 }
 
@@ -53,8 +58,9 @@ void CncFiveBars::_running_G28(){
 	if (this->__current_homer->IsTriged()){
 		// End stop is trigered
 		Serial.print("\n[Info] CncFiveBars::_running_G28() Home sensor is trigered.  " );
-		Serial.print (this->_homing_axis);
-		this->_stepControl->stop();
+		Serial.print (this->_homing_axis_name);
+		// this->_stepControl->stop();
+		this->_board->AllMotorStop();
 
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
@@ -71,15 +77,17 @@ void CncFiveBars::_running_G28(){
 			Serial.print("\n  [Error] Trying to get home position with EEF-FK position  ");
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis == 'A') 
-			this->alpha_stepper->setPosition(ik_position.alpha * this->_fivebarMachine->STEPS_PER_RAD);
-		if (this->_homing_axis == 'B') 
-			this->beta_stepper->setPosition(ik_position.beta * this->_fivebarMachine->STEPS_PER_RAD);
+		// if (this->_homing_axis == 'A') 
+		// 	this->alpha_stepper->setPosition(ik_position.alpha * this->_fivebarMachine->STEPS_PER_RAD);
+		// if (this->_homing_axis == 'B') 
+		// 	this->beta_stepper->setPosition(ik_position.beta * this->_fivebarMachine->STEPS_PER_RAD);
+		this->_board->SetMotorPosition('A', ik_position.alpha * this->_fivebarMachine->STEPS_PER_RAD);
+		this->_board->SetMotorPosition('B', ik_position.beta * this->_fivebarMachine->STEPS_PER_RAD);
 		
-		this->alpha_stepper->setMaxSpeed(this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA);
-		this->alpha_stepper->setAcceleration(this->_fivebarMachine->MAX_ACCELERATION_ALPHA_BETA);
-		this->beta_stepper->setMaxSpeed(this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA);
-		this->beta_stepper->setAcceleration(this->_fivebarMachine->MAX_ACCELERATION_ALPHA_BETA);
+		// this->alpha_stepper->setMaxSpeed(this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA);
+		// this->alpha_stepper->setAcceleration(this->_fivebarMachine->MAX_ACCELERATION_ALPHA_BETA);
+		// this->beta_stepper->setMaxSpeed(this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA);
+		// this->beta_stepper->setAcceleration(this->_fivebarMachine->MAX_ACCELERATION_ALPHA_BETA);
 		this->State = CncState::IDLE;
 
 	}else{
@@ -249,7 +257,7 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	Serial.print(gcode->get_command());
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
-		this->beta_stepper->setMaxSpeed(speed);
+		// this->beta_stepper->setMaxSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
@@ -259,8 +267,10 @@ void CncFiveBars::RunG1(Gcode* gcode){
 
 	// Sometimes, the current position of stepper is NOT the last target position. Since it's moving.
 	// But, The initialized values will effect nothing. They will be over writen. 
-	target_ik_ab.alpha = this->alpha_stepper->getPosition() / this->_fivebarMachine->STEPS_PER_RAD;
-	target_ik_ab.beta = this->beta_stepper->getPosition() / this->_fivebarMachine->STEPS_PER_RAD;
+	// target_ik_ab.alpha = this->alpha_stepper->getPosition() / this->_fivebarMachine->STEPS_PER_RAD;
+	// target_ik_ab.beta = this->beta_stepper->getPosition() / this->_fivebarMachine->STEPS_PER_RAD;
+	target_ik_ab.alpha = this->_board->GetMotorPosition('A') / this->_fivebarMachine->STEPS_PER_RAD;
+	target_ik_ab.beta = this->_board->GetMotorPosition('B') / this->_fivebarMachine->STEPS_PER_RAD;
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
 		// this->__EnableMotor('A', true); 
@@ -289,10 +299,15 @@ void CncFiveBars::RunG1(Gcode* gcode){
 		// Bug now, the unit in G1A,G1B is RAD
 		target_ik_ab.alpha = this->_fivebarMachine->motor_steps_per_shaft_round * gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
-	this->alpha_stepper->setTargetAbs(target_ik_ab.alpha * this->_fivebarMachine->STEPS_PER_RAD );
-	this->beta_stepper->setTargetAbs(target_ik_ab.beta * this->_fivebarMachine->STEPS_PER_RAD );
+	// this->alpha_stepper->setTargetAbs(target_ik_ab.alpha * this->_fivebarMachine->STEPS_PER_RAD );
+	// this->beta_stepper->setTargetAbs(target_ik_ab.beta * this->_fivebarMachine->STEPS_PER_RAD );
+	float target_position[2];
+	target_position[0] = target_ik_ab.alpha * this->_fivebarMachine->STEPS_PER_RAD;
+	target_position[1] = target_ik_ab.beta * this->_fivebarMachine->STEPS_PER_RAD;
+
 	//None blocking, move backgroundly.
-	this->_stepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
+	// this->_stepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
+	this->_board->AllMotorsMoveTo(true, target_position, 2);
 
 	if (true){
 		FkPosition_XY verified_fk;
@@ -305,9 +320,9 @@ void CncFiveBars::RunG1(Gcode* gcode){
 		Serial.print(verified_fk.Y);
 
 		Serial.print("\n[Debug] CncFiveBars::RunG1() ");
-		Serial.print(this->alpha_stepper->getPosition());
-		Serial.print(",");
-		Serial.print(this->beta_stepper->getPosition());
+		// Serial.print(this->alpha_stepper->getPosition());
+		// Serial.print(",");
+		// Serial.print(this->beta_stepper->getPosition());
 		Serial.print(" <-- from   alpha,beta   to --> ");
 		Serial.print(target_ik_ab.alpha);
 		Serial.print(" , ");
@@ -325,7 +340,8 @@ void CncFiveBars::_running_G1(){
 }
 
 float CncFiveBars::GetDistanceToTarget_IK(){
-	return this->alpha_stepper->getDistanceToTarget() + this->beta_stepper->getDistanceToTarget();
+	// return this->alpha_stepper->getDistanceToTarget() + this->beta_stepper->getDistanceToTarget();
+	return this->_board->GetDistanceToTarget();
 }
 
 void CncFiveBars::RunM84(){

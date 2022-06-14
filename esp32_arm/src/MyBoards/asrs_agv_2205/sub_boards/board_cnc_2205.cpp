@@ -16,16 +16,16 @@ void Board2205Cnc::Init(Adafruit_MCP23X17* mcp_23018){
     this->homer_z.Init_mcp23018_gpio(mcp_23018, MC23018_PIN_HOME_Z_2205);
 }
 
-Stepper* Board2205Cnc::GetStepper(char axis_name){
-    if (axis_name=='A'){
-        return &this->stepper_alpha;
-    }else if (axis_name=='B'){
-        return &this->stepper_beta;
-    }else{
-        Serial.print("['Error']  Board2205Cnc::GetStepper()   axis_name= ");
-        Serial.println(axis_name);
-    }
-}
+// Stepper* Board2205Cnc::GetStepper(char axis_name){
+//     if (axis_name=='A'){
+//         return &this->stepper_alpha;
+//     }else if (axis_name=='B'){
+//         return &this->stepper_beta;
+//     }else{
+//         Serial.print("['Error']  Board2205Cnc::GetStepper()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
+// }
 
 SingleAxisHomer* Board2205Cnc::GetHomer(char axis_name){
     if (axis_name=='Z'){

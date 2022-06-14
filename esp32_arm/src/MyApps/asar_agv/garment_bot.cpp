@@ -11,7 +11,7 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, CncMachineBase* cncMac
 	this->agv.Init(&board->agv);
 	this->asrs.LinkJettySensor(board->asrs.GetJettySensor());
 	this->cnc.Init(&board->cnc_board, cncMachine);
-	this->cnc.LinkStepControl(stepControl);
+	// this->cnc.LinkStepControl(stepControl);
 	
     this->cnc.LinkLocalGcodeQueue_AsConsumer(&this->_gcode_queue);
 	this->ToState(BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING);

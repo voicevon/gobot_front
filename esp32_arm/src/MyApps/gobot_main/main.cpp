@@ -3,7 +3,7 @@
 #ifdef I_AM_GOBOT_MAIN
 
 #include "gobot_main.h"
-#include "CNC/cnc_five_bars/cnc_five_bars.h"
+#include "CNC/solution/cnc_five_bars/cnc_five_bars.h"
 #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
@@ -30,7 +30,7 @@ void setup(){
     cncMachine.Init('S');  //Slow moving
     cncMachine.PrintOut("GobotMain Machine");
     cncFiveBar.Init(&board, &cncMachine);
-    cncFiveBar.LinkStepControl(&objStepControl);
+    // cncFiveBar.LinkStepControl(&objStepControl);
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cncFiveBar.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
@@ -75,18 +75,18 @@ void board_test(){
     GobotMain_BoardTest board_tester;
     board_tester.LinkBoard(&board);
     board_tester.Test_room_sensors(888);
-    board_tester.Test_StepperEnablePin(0, 'A');
-    board_tester.Test_StepperEnablePin(0, 'B');
+    // board_tester.Test_StepperEnablePin(0, 'A');
+    // board_tester.Test_StepperEnablePin(0, 'B');
 
     board_tester.Test_EefUpDown(0);
     board_tester.Test_EefLoadUnload(0);
     board_tester.Test_Eef_Full(0);
     
-    delay(5000);
-    board_tester.Test_Stepper(0, 'A', 800, &objStepControl);
-    delay(5000);
-    board_tester.Test_Stepper(0, 'B', 800, &objStepControl);
-    delay(5000);
+    // delay(5000);
+    // board_tester.Test_Stepper(0, 'A', 800, &objStepControl);
+    // delay(5000);
+    // board_tester.Test_Stepper(0, 'B', 800, &objStepControl);
+    // delay(5000);
 }
 
 #endif

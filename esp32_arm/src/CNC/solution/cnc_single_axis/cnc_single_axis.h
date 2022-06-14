@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MyBoards/cnc_board_base.h"
-#include "CNC/cnc_base.h"
+#include "CNC/solution/cnc_base.h"
 // #include "cnc_single_axis_config.h"
 #include "cnc_single_axis_machine.h"
 

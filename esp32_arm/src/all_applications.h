@@ -6,11 +6,12 @@
 
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
-// #define I_AM_ROBOT_ASRS_AGV
+#define I_AM_ROBOT_ASRS_AGV
 // #define I_AM_GARMENT_BOX_MOVER
 // #define I_AM_GARMENT_BOX_CARRIER
 
-#define I_AM_GOBOT_HOUSE
+// #define I_AM_GOBOT_HOUSE
+// #define I_AM_GOBOT_HOUSE_2206
 // #define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
 
@@ -39,6 +40,21 @@
 #endif
 
 #ifdef I_AM_GOBOT_HOUSE
+    #define ROBOT_SERIAL_ID 2134
+	// #define I_AM_GOBOT_HOUSE
+	#define USING_WIFI_MQTT
+	#define MQTT_SYNCERS_COUNT  1   
+
+	// #define USING_BLE
+	#ifdef USING_BLE
+		#define BLE_DEV_NAME "Gobot-House-213401"
+		#define BLE_SERVICE_UUID  "b416890c-062e-11ec-9a03-0242ac130003"
+		#define BLE_COMMU_UUID "bfa35098-062e-11ec-9a03-0242ac130003"
+		#define BLE_STATE_UUID  "c52ca230-062e-11ec-9a03-0242ac130003"
+	#endif
+#endif
+
+#ifdef I_AM_GOBOT_HOUSE_2206
     #define ROBOT_SERIAL_ID 2134
 	// #define I_AM_GOBOT_HOUSE
 	#define USING_WIFI_MQTT

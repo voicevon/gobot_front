@@ -17,14 +17,13 @@ Cnc_CoreYZ cnc = Cnc_CoreYZ();
 BoxCarrier robot = BoxCarrier();
 GcodeQueue gcode_queue = GcodeQueue();
 MessageQueue mqtt_command_queue = MessageQueue();
-StepControl objStepControl;
 
 
 void setup(){
     board.Init(true);
     cncMachine.Init('A');
     cnc.Init(&board.cnc_board, &cncMachine);
-    cnc.LinkStepControl(&objStepControl);
+    // cnc.LinkStepControl(&objStepControl);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 

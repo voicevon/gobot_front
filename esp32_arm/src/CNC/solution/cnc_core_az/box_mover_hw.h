@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/cnc_base.h"
+#include "CNC/solution/cnc_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
 #include "cnc_machine.h"
@@ -31,8 +31,8 @@ class CncCoreAZ:public CncBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        Stepper* objStepper_alpha;//  Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
-        Stepper* objStepper_beta;//  Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
+        // Stepper* objStepper_alpha;//  Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
+        // Stepper* objStepper_beta;//  Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
 
         //Override private
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;

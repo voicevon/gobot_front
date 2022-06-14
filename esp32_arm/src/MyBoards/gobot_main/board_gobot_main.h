@@ -10,12 +10,23 @@ class Board_GobotMain: public CncBoardBase{
     public:
         Board_GobotMain(){};
         void Init(bool is_on_reset) override;
-        Stepper* GetStepper(char axis_name) override;
+        // Stepper* GetStepper(char axis_name) override;
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_GobotMain* GetEef() override;
         void EnableMotor(char axis_name, bool enable_it) override;
         uint8_t ReadAllRooms();
         uint8_t GetLoadedRoom();
+        // void AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count) override{};
+        // void SingleMotorMoveTo(char motor_name, float motor_position) override{};         
+        // float GetDistanceToTarget() override{};
+
+        void AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count) override{};
+        void AllMotorStop() override {};
+        void SingleMotorMoveTo(char motor_name, float motor_position) override {};         
+        float GetDistanceToTarget() override{return 0;};
+
+        float GetMotorPosition(char motor_name) override {};
+        void SetMotorPosition(char motor_name, float as_current_position) override {};
 
     private:
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);

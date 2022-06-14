@@ -69,13 +69,13 @@ void Cnc_CoreYZ::Init(CncBoardBase* board, CncMachineBase* machine){
 	this->_board = board;
 	this->_cncMachine->Init('A');
 
-	this->stepper_alpha = board->GetStepper('A');
-	this->stepper_beta = board->GetStepper('B');
+	// this->stepper_alpha = board->GetStepper('A');
+	// this->stepper_beta = board->GetStepper('B');
 	this->objHomeHelper_y = board->GetHomer('Y');
 	this->objHomeHelper_vertical = board->GetHomer('Z');
 
-	this->stepper_alpha->setInverseRotation(true);
-	this->stepper_beta->setInverseRotation(true);
+	// this->stepper_alpha->setInverseRotation(true);
+	// this->stepper_beta->setInverseRotation(true);
 
 	this->_home_as_inverse_kinematic = false;
 }
@@ -83,37 +83,44 @@ void Cnc_CoreYZ::Init(CncBoardBase* board, CncMachineBase* machine){
 void Cnc_CoreYZ::HomeSingleAxis(char axis){
 	Serial.print("[Debug] Cnc_CoreYZ::HomeSingleAxis() is entering:   " );
 	Serial.println(axis);
-	this->_homing_axis = axis;
+	this->_homing_axis_name = axis;
 	this->_cncMachine->PrintOut();
-	Serial.println(this->stepper_alpha->getPosition());
-	this->stepper_alpha->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
-	this->stepper_alpha->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
-	this->stepper_beta->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
-	this->stepper_beta->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
+	// Serial.println(this->stepper_alpha->getPosition());
+	// this->stepper_alpha->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
+	// this->stepper_alpha->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
+	// this->stepper_beta->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
+	// this->stepper_beta->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
+	float motor_position[2];
 
 	if (axis=='Y'){
 		//todo :  process with IK()
 		this->__homing_helper = this->objHomeHelper_y;
-		this->stepper_alpha->setTargetRel(-5000000);
-		this->stepper_beta->setTargetRel(5000000);
+		// this->stepper_alpha->setTargetRel(-5000000);
+		// this->stepper_beta->setTargetRel(5000000);
+		motor_position[0] = -5000000;
+		motor_position[1] = 5000000;
 	}else if (axis=='Z'){
 		this->__homing_helper = this->objHomeHelper_vertical;
-		this->stepper_alpha->setTargetRel(-5000000);
-		this->stepper_beta->setTargetRel(-5000000);	
+		// this->stepper_alpha->setTargetRel(-5000000);
+		// this->stepper_beta->setTargetRel(-5000000);
+		motor_position[0]=-5000000;
+		motor_position[1]=-5000000;	
 	}
+	this->_board->AllMotorsMoveTo(false, motor_position, 2);
 
-	this->_board->EnableMotor('A', true);
-	this->_board->EnableMotor('B',true);
+	// this->_board->EnableMotor('A', true);
+	// this->_board->EnableMotor('B',true);
 
-	this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
+	// this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 }
 
 void Cnc_CoreYZ::_running_G28(){
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
 		Serial.print("\n[Info] Cnc_CoreYZ::_running_G28() Home sensor is trigger.  " );
-		Serial.print (this->_homing_axis);
-		this->_stepControl->stop();
+		Serial.print (this->_homing_axis_name);
+		// this->_stepControl->stop();
+		this->_board->AllMotorStop();
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
@@ -133,13 +140,19 @@ void Cnc_CoreYZ::_running_G28(){
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis == 'Z') this->stepper_alpha->setPosition(ik_position.alpha);
-		if (this->_homing_axis == 'Y') this->stepper_beta->setPosition(ik_position.beta);
+		if (this->_homing_axis_name == 'Z') {
+			// this->stepper_alpha->setPosition(ik_position.alpha);
+			this->_board->SingleMotorMoveTo(ik_position.alpha, 'A');
+		}
+		if (this->_homing_axis_name == 'Y') {
+			this->_board->SingleMotorMoveTo(ik_position.beta, 'B');
+			// this->stepper_beta->setPosition(ik_position.beta);
+		}
 		
-		this->stepper_alpha->setMaxSpeed(this->_cncMachine->max_speed_alpha_beta);
-		this->stepper_alpha->setAcceleration(this->_cncMachine->max_acceleration_alpha_beta);
-		this->stepper_beta->setMaxSpeed(this->_cncMachine->max_speed_alpha_beta);
-		this->stepper_beta->setAcceleration(this->_cncMachine->max_acceleration_alpha_beta);
+		// this->stepper_alpha->setMaxSpeed(this->_cncMachine->max_speed_alpha_beta);
+		// this->stepper_alpha->setAcceleration(this->_cncMachine->max_acceleration_alpha_beta);
+		// this->stepper_beta->setMaxSpeed(this->_cncMachine->max_speed_alpha_beta);
+		// this->stepper_beta->setAcceleration(this->_cncMachine->max_acceleration_alpha_beta);
 		this->State = CncState::IDLE;
 
 	}else{
@@ -170,16 +183,16 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	this->_board->EnableMotor('B', true);
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
-		this->stepper_alpha->setMaxSpeed(speed);
-		this->stepper_beta->setMaxSpeed(speed);
+		// this->stepper_alpha->setMaxSpeed(speed);
+		// this->stepper_beta->setMaxSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_YZ target_fk_yz;
 	IkPosition_AB target_ik_ab;
 	target_fk_yz.Z = this->__current_fk_position.Z;
 	target_fk_yz.Y = this->__current_fk_position.Y;
-	target_ik_ab.alpha = float(this->stepper_alpha->getPosition()) ;
-	target_ik_ab.beta = float(this->stepper_beta->getPosition());
+	// target_ik_ab.alpha = float(this->stepper_alpha->getPosition()) ;
+	// target_ik_ab.beta = float(this->stepper_beta->getPosition());
 	bool do_ik=false;
 	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A');
 	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B');
@@ -196,16 +209,20 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	if (do_ik) IK(&target_fk_yz,&target_ik_ab);
 
 	//Prepare actuator/driver to move to next point
-	this->stepper_alpha->setTargetAbs(target_ik_ab.alpha);
-	this->stepper_beta->setTargetAbs(target_ik_ab.beta);
-	//None blocking, move backgroundly.
-	this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
+	// this->stepper_alpha->setTargetAbs(target_ik_ab.alpha);
+	// this->stepper_beta->setTargetAbs(target_ik_ab.beta);
+	// //None blocking, move backgroundly.
+	// this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
+	float target_motor_position[2];
+	target_motor_position[0] = target_ik_ab.alpha;
+	target_motor_position[1] = target_ik_ab.beta;
+	this->_board->AllMotorsMoveTo(true, target_motor_position,2);
 
 	if (true){
 		Serial.print("\n    [Debug] Cnc_CoreYZ::RunG1()     (");
-		Serial.print(this->stepper_alpha->getPosition());
+		// Serial.print(this->stepper_alpha->getPosition());
 		Serial.print(",");
-		Serial.print(this->stepper_beta->getPosition());
+		// Serial.print(this->stepper_beta->getPosition());
 		Serial.print(")   <-- from   alpha,beta   to -->  (");
 		Serial.print(target_ik_ab.alpha  );
 		Serial.print(" , ");
@@ -233,7 +250,8 @@ void Cnc_CoreYZ::RunM84(){
 }
 
 float Cnc_CoreYZ::GetDistanceToTarget_IK(){
-	return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
+	// return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
+	return this->_board->GetDistanceToTarget();
 }
 
 

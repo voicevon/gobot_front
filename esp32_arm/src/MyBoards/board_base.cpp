@@ -6,6 +6,9 @@ uint8_t BoardBase::__i2c_bus_index = 0;
 
 void BoardBase::RepportRamUsage(){
     Serial.println("-----------------  RAM usage report -----------------");
+    log_d("Total PSRAM: %d", ESP.getPsramSize());
+    log_d("Free PSRAM: %d", ESP.getFreePsram());
+
     Serial.print("\t\ttotal heap size = ");
     Serial.println(ESP.getHeapSize()); //total heap size
 

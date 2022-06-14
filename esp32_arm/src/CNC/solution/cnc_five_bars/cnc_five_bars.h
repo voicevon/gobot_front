@@ -3,7 +3,7 @@
 
 #include <ESP32Servo.h>
 #include "MyBoards/cnc_board_base.h"
-#include "CNC/cnc_base.h"
+#include "CNC/solution/cnc_base.h"
 #include "cnc_machine.h"
 // #include "CNC/eef_standard_code.h"
 #include "RobotEef/eef_standard_code.h"
@@ -43,9 +43,9 @@ class CncFiveBars: public CncBase{
     
         SingleAxisHomer* alpha_homer;
         SingleAxisHomer* beta_homer;
-        Stepper* alpha_stepper;
-        Stepper* beta_stepper;
-        Stepper* __homing_stepper;
+        // Stepper* alpha_stepper;
+        // Stepper* beta_stepper;
+        // Stepper* __homing_stepper;
 
         FkPosition_XY __current_fk_position;
         RobotEefBase* __eef;
