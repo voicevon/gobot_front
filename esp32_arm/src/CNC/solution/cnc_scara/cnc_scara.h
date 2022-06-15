@@ -38,14 +38,7 @@ class CncScara: public CncBase{
         std::string GetHomeTrigerStateString() override {return " ";};
         void RunM123(uint8_t eef_channel, EefAction eef_action) override;
         void RunM84() override;
-        
-        SingleAxisHomer* alpha_homer; 
-        SingleAxisHomer* beta_homer;   
 
-        // Stepper* alpha_stepper;
-        // Stepper* beta_stepper;
-
-        // Stepper* __homing_stepper;
         SingleAxisHomer* __homing_helper;
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;

@@ -26,7 +26,7 @@ Stepper* Board_GobotHouse_2206::GetJointStepper(char axis_name) {
         Serial.println(axis_name);
     }
 }
-Servo* Board_GobotHouse_2206::GetJointServo(char axis_name){
+ActuatorServo* Board_GobotHouse_2206::GetJointServo(char axis_name){
     if (axis_name=='B'){
         return &this->__beta_servo;
     // }else if (axis_name=='B'){

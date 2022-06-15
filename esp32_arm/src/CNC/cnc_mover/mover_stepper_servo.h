@@ -3,13 +3,14 @@
 #include "cnc_mover_base.h"
 #include "ESP32Step/src/Stepper.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include <ESP32Servo.h>
+// #include <ESP32Servo.h>
+#include "CNC/Actuator/servo/actuator_servo.h"
 
 
 class CncMover_StepperServo: public CncMoverBase{
     public:
         void LinkStepper_asAlpha(Stepper* stepper);
-        void LinkServo_asBeta(Servo* servo);
+        void LinkServo_asBeta(ActuatorServo* servo);
         void AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count);
         void AllMotorStop();
         void SingleMotorMoveTo(bool is_absolute_position, char motor_name, float motor_position);
@@ -21,7 +22,7 @@ class CncMover_StepperServo: public CncMoverBase{
 
     private:
         Stepper* __stepper_alpha;
-        Servo* __servo_beta;
+        ActuatorServo* __servo_beta;
         StepControl __stepControl;
 
 };

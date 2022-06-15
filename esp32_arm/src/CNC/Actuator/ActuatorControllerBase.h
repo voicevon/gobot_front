@@ -2,7 +2,8 @@
 
 // TODO: StepControl should be a child class.
 
-#include "CNC/Actuator/ActuatorBase.h"
+// #include "CNC/Actuator/ActuatorBase.h"
+#include "CNC/Actuator/ActuatorBase_Ver0.1.h"
 
 /**
  * How one or a group of actuators move?
@@ -20,6 +21,6 @@ class ActuatorControllerBase{
         virtual void MoveForward(float speed, bool reverseDir){};  // For DC Motor.
 
     protected:
-        ActuatorBase* _actuator;
+        ActuatorBaseVer_0_1* _actuator;
 };
 

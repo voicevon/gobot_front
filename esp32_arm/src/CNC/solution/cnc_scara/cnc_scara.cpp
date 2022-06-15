@@ -90,11 +90,6 @@ void CncScara::Init(CncBoardBase* board, CncMachineBase* machine){
 	this->_board = board;
 	this->_scara_machine = (CncScaraMachine*)(machine);
 	
-	// this->alpha_stepper = board->GetStepper('A');
-	// this->beta_stepper = board->GetStepper('B');
-	this->alpha_homer = board->GetHomer('A');
-	this->beta_homer = board->GetHomer('B');
-	
 	board->EnableMotor('A', false);
 	board->EnableMotor('B', false);
 
@@ -213,22 +208,24 @@ void CncScara::HomeSingleAxis(char axis){
 		Serial.print(axis);
 	}
 	this->_homing_axis_name = axis;
+	this->__homing_helper = this->_board->GetHomer(axis);
 	this->_board->EnableMotor(axis, true);
 	// float motor_position;
-	if (axis=='A'){
-		// this->alpha_stepper->setAcceleration(this->_scara_machine->Homing_acceleration_alpha);
-		// this->alpha_stepper->setMaxSpeed(this->_scara_machine->Homing_speed_alpha);
-		// this->__homing_stepper = this->alpha_stepper;
-		this->__homing_helper = this->alpha_homer;
-	}else if (axis=='B'){
-		// this->beta_stepper->setAcceleration(this->_scara_machine->Homing_acceleration_beta);
-		// this->beta_stepper->setMaxSpeed(this->_scara_machine->Homing_speed_beta);
-		// this->__homing_stepper = this->beta_stepper;
-		this->__homing_helper = this->beta_homer;
-	}
+	// if (axis=='A'){
+	// 	// this->alpha_stepper->setAcceleration(this->_scara_machine->Homing_acceleration_alpha);
+	// 	// this->alpha_stepper->setMaxSpeed(this->_scara_machine->Homing_speed_alpha);
+	// 	// this->__homing_stepper = this->alpha_stepper;
+	// 	this->__homing_helper = this->alpha_homer;
+	// }else if (axis=='B'){
+	// 	// this->beta_stepper->setAcceleration(this->_scara_machine->Homing_acceleration_beta);
+	// 	// this->beta_stepper->setMaxSpeed(this->_scara_machine->Homing_speed_beta);
+	// 	// this->__homing_stepper = this->beta_stepper;
+	// 	this->__homing_helper = this->beta_homer;
+	// }
 	// this->__homing_stepper->setTargetRel(500000);
 	// this->_stepControl->moveAsync(*this->__homing_stepper);
-	this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, 500000);
+	// this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, 500000);
+
 }
 
 void CncScara::_running_G28(){
@@ -280,6 +277,7 @@ void CncScara::_running_G28(){
 		// When endstop is trigered, must stop the moving. 
 		// this->__homing_stepper->setTargetRel(50000);
 		// this->objStepControl.moveAsync(*this->__homing_stepper);
+		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, this->_scara_machine->Homing_speed_beta);
 	}
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ActuatorBase.h"
+#include "ActuatorBase_Ver0.1.h"
 #include "CNC/Actuator/DriverBase.h"
 
 
@@ -9,7 +9,7 @@
     2. Only stop when triger is trigered.
     3. There are two endstop triger , for each end of the actuator. 
 */
-class DualEndActuator: public ActuatorBase {
+class DualEndActuator: public ActuatorBaseVer_0_1 {
     public:
         enum machine_state{
             START,

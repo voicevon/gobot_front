@@ -35,10 +35,10 @@
         All_ActuatorPos ap = ConvertFrom (SensorsPos* sensorPos){};
         All_ActuatorPos ap = ConvertFrom (CameraImage* image){};
 */
-class ActuatorBase
+class ActuatorBaseVer_0_1
 {
     public:
-        ActuatorBase(){};
+        ActuatorBaseVer_0_1(){};
         void SetTargetAbs(float pos);
         void SetTargetSpeed(float speed);
         float GetCurrentPos();

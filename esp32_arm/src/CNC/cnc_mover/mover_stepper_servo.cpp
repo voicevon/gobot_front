@@ -5,19 +5,22 @@ void CncMover_StepperServo::LinkStepper_asAlpha(Stepper* stepper){
     this->__stepper_alpha = stepper;
 }
 
-void CncMover_StepperServo::LinkServo_asBeta(Servo* servo){
+void CncMover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
     this->__servo_beta = servo;
 }
 
 void CncMover_StepperServo::AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count){
+    float new_angle = motor_position[1];
     if (motors_count==2){
         if (is_absolute_position){
             this->__stepper_alpha->setTargetAbs(motor_position[0]);
+            this->__servo_beta->Write(motor_position[1]);
         } else {
             this->__stepper_alpha->setTargetRel(motor_position[0]);
+            new_angle += this->__servo_beta->Read();
+            this->__servo_beta->Write(new_angle);
         }
         this->__stepControl.moveAsync(*this->__stepper_alpha);
-        this->__servo_beta->write(motor_position[1]);
     }
 }
 
@@ -26,6 +29,7 @@ void CncMover_StepperServo::AllMotorStop(){
 }
 
 void CncMover_StepperServo::SingleMotorMoveTo(bool is_absolute_position, char motor_name, float motor_position){
+    float new_angle = motor_position;
     if (motor_name == 'A'){
         if (is_absolute_position){
             this->__stepper_alpha->setTargetAbs(motor_position);
@@ -35,9 +39,11 @@ void CncMover_StepperServo::SingleMotorMoveTo(bool is_absolute_position, char mo
         this->__stepControl.moveAsync(*this->__stepper_alpha);
     }else if (motor_name == 'B'){
         if (is_absolute_position){
-            this->__servo_beta->write(motor_position);
+            this->__servo_beta->Write(motor_position);
         }else{
-            log_w("CncMover_StepperServo::SingleMotorMoveTo()  "," Not Implemented");
+            new_angle += this->__servo_beta->Read();
+            this->__servo_beta->Write(new_angle);
+            // log_w("CncMover_StepperServo::SingleMotorMoveTo()  "," Not Implemented");
         }
     }else{
         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", motor_name );
@@ -48,7 +54,7 @@ float CncMover_StepperServo::GetMotorPosition(char motor_name){
     if (motor_name == 'A'){
         return this->__stepper_alpha->getPosition();
     }else if (motor_name == 'B'){
-        return this->__servo_beta->read();
+        return this->__servo_beta->Read();
     }else{
         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", motor_name );
     }
