@@ -10,7 +10,7 @@
 #include "gobot_house.h"
 
 
-StepControl controller;    // Use default settings 
+// StepControl controller;    // Use default settings 
 Board_GobotHouse_2206 board;
 GobotHouseMachine_2206 cncMachine;
 CncScara cncScara;
@@ -42,6 +42,7 @@ void setup(){
     append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, robot); 
     setup_mqtt_on_message_receive(); 
     Serial.println("lovely bot,  GobotHouse.  setup() is done.  Good luck!");
+    board.GetEef()->Run(EEF_CODE_UNLOAD);
     cnc_test();
 }
 
@@ -56,15 +57,16 @@ void loop(){
 void board_test(){
     GobotHouse_BoardTest tester;
     tester.LinkBoard(&board);
-    tester.Test_EefLoadUnload(0);
+    tester.Test_EefLoadUnload(666);
     tester.Test_AllHomers(0);
     // tester.Test_Stepper(0, 'A', 300, &controller);
     // tester.Test_Stepper(0, 'B', 300, &controller);
 }
 
 void cnc_test(){
-    robot->Test_HomeBeta(20);
-    robot->Test_HomeAlpha(0);
+    robot->Test_HomeBeta(0);
+    robot->Test_HomeAlpha(3);
+
 }
 
 #endif

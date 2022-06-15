@@ -10,7 +10,7 @@ class Board_GobotMain: public CncBoardBase{
     public:
         Board_GobotMain(){};
         void Init(bool is_on_reset) override;
-        // Stepper* GetStepper(char axis_name) override;
+        Stepper* GetJointStepper(char axis_name) override;
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_GobotMain* GetEef() override;
         void EnableMotor(char axis_name, bool enable_it) override;

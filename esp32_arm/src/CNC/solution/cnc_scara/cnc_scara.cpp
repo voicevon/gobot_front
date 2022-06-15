@@ -117,8 +117,8 @@ float CncScara::GetDistanceToTarget_FK(){
 	IkPosition_AB current_ik;
 	// current_ik.alpha = (float)this->alpha_stepper->getPosition();
 	// current_ik.beta = (float)this->beta_stepper->getPosition();
-	current_ik.alpha = this->_board->_cnc_mover->GetMotorPosition('A');
-	current_ik.beta = this->_board->_cnc_mover->GetMotorPosition('B');
+	current_ik.alpha = this->_board->cnc_mover->GetMotorPosition('A');
+	current_ik.beta = this->_board->cnc_mover->GetMotorPosition('B');
 	FK(&current_ik, &this->__current_fk_position);
 	
 	float dx = this->__current_fk_position.X - this->__next_fk_position.X;
@@ -134,7 +134,7 @@ float CncScara::GetDistanceToTarget_IK(){
 	// int32_t db = this->_board->GetDistanceToTarget('B');
 	// float distance = sqrt(da * da + db * db);
 
-	return this->_board->_cnc_mover->GetDistanceToTarget();
+	return this->_board->cnc_mover->GetDistanceToTarget();
 }
 
 void CncScara::RunG1(Gcode* gcode) {
@@ -151,8 +151,8 @@ void CncScara::RunG1(Gcode* gcode) {
 	target_fk_xy.Y = this->__current_fk_position.Y;
 	// target_ik_ab.alpha = this->alpha_stepper->getPosition();
 	// target_ik_ab.beta = this->beta_stepper->getPosition();
-	target_ik_ab.alpha = this->_board->_cnc_mover->GetMotorPosition('A');
-	target_ik_ab.beta = this->_board->_cnc_mover->GetMotorPosition('B');
+	target_ik_ab.alpha = this->_board->cnc_mover->GetMotorPosition('A');
+	target_ik_ab.beta = this->_board->cnc_mover->GetMotorPosition('B');
 	bool do_ik=false;
 
 	if (gcode->has_letter('A')) 
@@ -182,17 +182,17 @@ void CncScara::RunG1(Gcode* gcode) {
 	motor_position[1] = target_ik_ab.beta;
 	//None blocking, move backgroundly.
 	// this->_stepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
-	this->_board->_cnc_mover->AllMotorsMoveTo(true, motor_position, 2);
+	this->_board->cnc_mover->AllMotorsMoveTo(true, motor_position, 2);
 
 	if (true){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
 		// Serial.print(this->alpha_stepper->getPosition());
-		Serial.print(this->_board->_cnc_mover->GetMotorPosition('A'));
+		Serial.print(this->_board->cnc_mover->GetMotorPosition('A'));
 		Serial.print(" , ");
 		Serial.print(target_ik_ab.alpha);
 		Serial.print("    beta = ");
 		// Serial.print(this->beta_stepper->getPosition());
-		Serial.print(this->_board->_cnc_mover->GetMotorPosition('B'));
+		Serial.print(this->_board->cnc_mover->GetMotorPosition('B'));
 		Serial.print(" , ");
 		Serial.println(target_ik_ab.beta);
 	}
@@ -228,7 +228,7 @@ void CncScara::HomeSingleAxis(char axis){
 	}
 	// this->__homing_stepper->setTargetRel(500000);
 	// this->_stepControl->moveAsync(*this->__homing_stepper);
-	this->_board->_cnc_mover->SingleMotorMoveTo(this->_homing_axis_name, 500000);
+	this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, 500000);
 }
 
 void CncScara::_running_G28(){
@@ -240,7 +240,7 @@ void CncScara::_running_G28(){
 			Serial.print (this->_homing_axis_name);
 		}
 		// this->_stepControl->stop();
-		this->_board->_cnc_mover->AllMotorStop();
+		this->_board->cnc_mover->AllMotorStop();
 
 
 		//Set current position to HomePosition
@@ -262,8 +262,8 @@ void CncScara::_running_G28(){
 		//Copy current ik-position to motor-position.
 		// if (this->_homing_axis_name == 'A') this->alpha_stepper->setPosition(ik_position.alpha);
 		// if (this->_homing_axis_name == 'B') this->beta_stepper->setPosition(ik_position.beta);
-		this->_board->_cnc_mover->SetMotorPosition('A', ik_position.alpha);
-		this->_board->_cnc_mover->SetMotorPosition('B', ik_position.beta);
+		this->_board->cnc_mover->SetMotorPosition('A', ik_position.alpha);
+		this->_board->cnc_mover->SetMotorPosition('B', ik_position.beta);
 		
 		// this->alpha_stepper->setMaxSpeed(this->_scara_machine->MAX_STEPS_PER_SECOND_ALPHA);
 		// this->alpha_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_ALPHPA);

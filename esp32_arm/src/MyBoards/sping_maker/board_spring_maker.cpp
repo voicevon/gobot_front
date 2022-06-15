@@ -7,15 +7,15 @@ void Board_SpringMaker::Init(bool is_on_reset){
    
 }
 
-// Stepper* Board_SpringMaker::GetStepper(char axis_name) {
-//     if (axis_name=='A'){
-//         return &this->stepper_alpha;
-//     }else{
-//         Serial.print("['Error']  Board_SpringMaker::GetStepper()   axis_name= ");
-//         Serial.println(axis_name);
-//     }
+Stepper* Board_SpringMaker::GetJointStepper(char axis_name) {
+    if (axis_name=='A'){
+        return &this->stepper_alpha;
+    }else{
+        Serial.print("['Error']  Board_SpringMaker::GetStepper()   axis_name= ");
+        Serial.println(axis_name);
+    }
 
-// }
+}
 
 SingleAxisHomer* Board_SpringMaker::GetHomer(char axis_name) {
     if (axis_name=='A'){

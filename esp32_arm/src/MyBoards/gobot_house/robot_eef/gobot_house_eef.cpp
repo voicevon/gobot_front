@@ -12,26 +12,17 @@ void RobotEef_GobotHouse::Init(){
 	this->__eefServo.attach(PIN_EEF_SERVO);
 }
 
+#define LOAD_ANGLE 98
+#define UNLOAD_ANGLE LOAD_ANGLE + 70
 
 void RobotEef_GobotHouse::Run(uint8_t eef_code) {
 	switch (eef_code){
-		// case EEF_CODE_DOWN:
-		// 	break;
-		// case EEF_CODE_UP:
-		// 	break;
 		case EEF_CODE_LOAD:
-			this->__eefServo.write(85);
-			// digitalWrite(PIN_EEF_COIL_A_2109, HIGH);
-			// digitalWrite(PIN_EEF_COIL_B_2109, LOW);
+			this->__eefServo.write(LOAD_ANGLE);
 			break;
 		case EEF_CODE_UNLOAD:
-			this->__eefServo.write(150);
-			// digitalWrite(PIN_EEF_COIL_A_2109,LOW);
-			// digitalWrite(PIN_EEF_COIL_B_2109,HIGH);
+			this->__eefServo.write(UNLOAD_ANGLE);
 			break;
-		// case EEF_CODE_SLEEP:
-		// 	digitalWrite(PIN_EEF_COIL_A_2109,LOW);
-		// 	digitalWrite(PIN_EEF_COIL_B_2109,LOW);
 			break;
 		default:
 			Serial.print("[Warn]  RobotEef_GobotHouse::Run()  Unknown EEF_CODE = ");
