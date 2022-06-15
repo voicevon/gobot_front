@@ -22,6 +22,7 @@ void board_test();
 void cnc_test();
 
 
+
 void setup(){
     board.Init(true);
     board_test();
@@ -64,7 +65,7 @@ void board_test(){
 }
 
 void cnc_test(){
-    robot->Test_HomeBeta(5);
+    robot->Test_HomeBeta(2);
     robot->Test_HomeAlpha(0);
 
 }

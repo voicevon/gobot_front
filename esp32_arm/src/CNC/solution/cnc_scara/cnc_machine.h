@@ -6,6 +6,7 @@
 
 class CncScaraMachine: public CncMachineBase{
     public:
+        virtual float GetHomingSpeed(char axis_name);
         // value is vary for each gobot-house robot.
         float Homed_position_alpha_in_degree;
         // value is vary for each gobot-house robot.
@@ -25,14 +26,15 @@ class CncScaraMachine: public CncMachineBase{
 
 
         int Homing_acceleration_alpha; 
-        int Homing_speed_alpha;    
-        int Homing_acceleration_beta ;
-        int Homing_speed_beta;
+
         // uint16_t EEF_Suck_Angle;
         // uint16_t EEF_Release_Angle;
 
         
     protected:
+        int Homing_speed_alpha;    
+        int Homing_acceleration_beta;
 
+        float Homing_speed_beta;
 
 };

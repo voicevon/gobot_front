@@ -13,7 +13,7 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
 	this->__beta_servo_driver.setPeriodHertz(50);
     this->__beta_servo_driver.attach(PIN_CNC_BETA_SERVO);
     this->__beta_servo.LinkServo(&this->__beta_servo_driver);
-    this->__beta_servo.SetPosition(this->__beta_servo_driver.read());    // 
+    this->__beta_servo.SetPosition(DEG_TO_RAD * this->__beta_servo_driver.read());    // 
     
     this->mover_StepperServo.LinkStepper_asAlpha(&this->__alpha_stepper);
     this->mover_StepperServo.LinkServo_asBeta(&this->__beta_servo);

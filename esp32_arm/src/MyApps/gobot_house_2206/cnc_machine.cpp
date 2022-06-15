@@ -14,17 +14,31 @@ void GobotHouseMachine_2206::Init(char solution){
         // this->MAX_ACCELERATION_BETA = 200 * this->MOTOR_MICRO_STEPS;
         // this->MAX_STEPS_PER_SECOND_BETA =  500 * this->MOTOR_MICRO_STEPS; 
 
-        this->Homing_acceleration_alpha = 200 * this->MOTOR_MICRO_STEPS;
+        this->HOMING_DIR_ALPHA = 1;
         this->Homing_speed_alpha = 200 * this->MOTOR_MICRO_STEPS;   //tested 200 * 1
-        this->Homing_acceleration_beta = 500 * this->MOTOR_MICRO_STEPS;
-        this->Homing_speed_beta = 60 * this->MOTOR_MICRO_STEPS; 
+        this->Homing_acceleration_alpha = 200 * this->MOTOR_MICRO_STEPS;
 
-        // this->EEF_Suck_Angle = 164;   // Max is 4096
-        // this->EEF_Release_Angle = 355;   // Max is 4096
+        this->HOMING_DIR_BETA = -1;
+        this->Homing_speed_beta = 0.1; 
+        this->Homing_acceleration_beta = 0;
+
 
         this->Homed_position_alpha_in_degree = 13.6;
         this->Homed_position_beta_in_degree = 138.0;
+
         this->PrintOut();
+}
+
+
+int32_t GobotHouseMachine_2206::GetStepsPerUnit(char axis_name) {
+    return 100;
+}
+
+float GobotHouseMachine_2206::GetHomingSpeed(char axis_name){
+    if (axis_name == 'A')
+        return this->Homing_speed_alpha * this->HOMING_DIR_ALPHA;
+    else if (axis_name == 'B')
+        return this->Homing_speed_beta * this->HOMING_DIR_BETA;
 }
 
 void GobotHouseMachine_2206::PrintOut(){
@@ -50,9 +64,9 @@ void GobotHouseMachine_2206::PrintOut(){
 
     // Serial.print("\n\n       STEPS_PER_RAD_BETA= ");
     // Serial.print(this->STEPS_PER_RAD_BETA);
+    Serial.print("\n   GetHomingSpeed('A')= ");
+    Serial.print(this->GetHomingSpeed('A'));
+    Serial.print("\n   GetHomingSpeed('B')= ");
+    Serial.print(this->GetHomingSpeed('B'));
     Serial.print("\n\n===============================================");
-}
-
-int32_t GobotHouseMachine_2206::GetStepsPerUnit(char axis_name) {
-    return 100;
 }

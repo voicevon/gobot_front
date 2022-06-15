@@ -213,22 +213,6 @@ void CncScara::HomeSingleAxis(char axis){
 	this->_homing_axis_name = axis;
 	this->__homing_helper = this->_board->GetHomer(axis);
 	this->_board->EnableMotor(axis, true);
-	// float motor_position;
-	// if (axis=='A'){
-	// 	// this->alpha_stepper->setAcceleration(this->_scara_machine->Homing_acceleration_alpha);
-	// 	// this->alpha_stepper->setMaxSpeed(this->_scara_machine->Homing_speed_alpha);
-	// 	// this->__homing_stepper = this->alpha_stepper;
-	// 	this->__homing_helper = this->alpha_homer;
-	// }else if (axis=='B'){
-	// 	// this->beta_stepper->setAcceleration(this->_scara_machine->Homing_acceleration_beta);
-	// 	// this->beta_stepper->setMaxSpeed(this->_scara_machine->Homing_speed_beta);
-	// 	// this->__homing_stepper = this->beta_stepper;
-	// 	this->__homing_helper = this->beta_homer;
-	// }
-	// this->__homing_stepper->setTargetRel(500000);
-	// this->_stepControl->moveAsync(*this->__homing_stepper);
-	// this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, 500000);
-
 }
 
 void CncScara::_running_G28(){
@@ -239,9 +223,7 @@ void CncScara::_running_G28(){
 			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
 			Serial.print (this->_homing_axis_name);
 		}
-		// this->_stepControl->stop();
 		this->_board->cnc_mover->AllMotorStop();
-
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
@@ -250,40 +232,35 @@ void CncScara::_running_G28(){
 
 			// ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree * this->_scara_machine->STEPS_PER_RAD_ALPHA;
 			// ik_position.beta =  DEG_TO_RAD * this->_scara_machine->Homed_position_beta_in_degree * this->_scara_machine->STEPS_PER_RAD_BETA;
-			ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree;
-			ik_position.beta = DEG_TO_RAD * this->_scara_machine->Homed_position_beta_in_degree;
+			if (this->_homing_axis_name == 'A'){
+				ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree;
+				this->_board->cnc_mover->SetMotorPosition('A', ik_position.alpha);
+			}else if (this->_homing_axis_name == 'B'){
+				ik_position.beta = DEG_TO_RAD * this->_scara_machine->Homed_position_beta_in_degree;
+				//Copy current ik-position to motor-position.
+				this->_board->cnc_mover->SetMotorPosition('B',ik_position.beta);
+			}
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik_for_debug;
-			// Serial.print("\n\n  [Info] Please verify the below output ======================  ");
+			Serial.print("\n\n  [Info] Please verify the below output ======================  ");
 			this->IK(&this->__current_fk_position, &verifying_ik_for_debug);
 		}
 		else{
 			Serial.print("\n\n\n\n\n  [Error] Trying to get home position with EEF position  ");
 		}
-		//Copy current ik-position to motor-position.
-		// if (this->_homing_axis_name == 'A') this->alpha_stepper->setPosition(ik_position.alpha);
-		// if (this->_homing_axis_name == 'B') this->beta_stepper->setPosition(ik_position.beta);
-		this->_board->cnc_mover->SetMotorPosition('A', ik_position.alpha);
-		this->_board->cnc_mover->SetMotorPosition('B', ik_position.beta);
-		
-		// this->alpha_stepper->setMaxSpeed(this->_scara_machine->MAX_STEPS_PER_SECOND_ALPHA);
-		// this->alpha_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
-		// this->beta_stepper->setMaxSpeed(this->_scara_machine->MAX_STEPS_PER_SECOND_BETA);
-		// this->beta_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_BETA);
+		// this->_board->cnc_mover->SetMotorPosition('A', ik_position.alpha);
+		// this->_board->cnc_mover->SetMotorPosition('B', ik_position.beta);
 		// Serial.print("\n======================================= End of Homing, State to be IDLE\n");
 		this->State = CncState::IDLE;
-
 	}else{
-		// Endstop is not trigered
+		// Endstop is not trigered, When endstop is trigered, must stop the moving. 
 		// Serial.print("[Debug] Still homing\n");
 		// Serial.print("<");
-		// We are going to move a long long distance with async mode(None blocking).
-		// When endstop is trigered, must stop the moving. 
-		// this->__homing_stepper->setTargetRel(50000);
-		// this->objStepControl.moveAsync(*this->__homing_stepper);
-		// this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, this->_scara_machine->Homing_speed_beta);
-		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, -0.1);
+		float homing_speed =  this->_scara_machine->GetHomingSpeed(this->_homing_axis_name);
+		Serial.print("[Debug] CncScara::_running_G28() homing_speed= ");
+		Serial.println(homing_speed);
+		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, homing_speed);
 		delay(50);
 	}
 }
@@ -293,26 +270,6 @@ void CncScara::_running_G28(){
 // void CncScara::RunM123(uint8_t eef_channel, EefAction eef_action){
 void CncScara::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	this->_board->GetEef()->Run(eef_action);
-	// switch (eef_action){
-
-	// 	case EefAction::Suck:
-	// 		// Serial.print("\nCncScara::RunM123()  Suck ");
-	// 		ledcWrite(1, this->_scara_machine->EEF_Suck_Angle);
-	// 		break;
-	// 	case EefAction::Release:
-	// 		// Serial.print("\nCncScara::RunM123()  Release ");
-	// 		// This will drive the extend coil to create a reversed magnetic field. 
-	// 		ledcWrite(1, this->_scara_machine->EEF_Release_Angle);
-
-	// 		break;
-	// 	case EefAction::Sleep:
-	// 		// Serial.print("\nCncScara::RunM123()  Sleep ");
-	// 		ledcWrite(1,0);
-	// 		break;
-	// 	default:
-	// 		Serial.print("\n [Warning] CncScara::RunM123()  Others ");
-	// 		break;
-	// }
 }
 
 void CncScara::RunM84(){
@@ -322,10 +279,5 @@ void CncScara::RunM84(){
 	this->_board->EnableMotor('B', false);
 }
 
-// void CncScara::__EnableMotor(char actuator, bool enable_it){
-// 	// if (actuator == 'A')
-// 	// 	digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
-// 	// if (actuator == 'B')
-// 	// 	digitalWrite(PIN_BETA_ENABLE, !enable_it);
-// }
+
 
