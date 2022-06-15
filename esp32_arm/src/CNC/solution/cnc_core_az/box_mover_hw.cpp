@@ -240,7 +240,8 @@ void CncCoreAZ::_running_G1(){
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);
 }
-void CncCoreAZ::RunM123(uint8_t eef_channel, EefAction eef_action){
+// void CncCoreAZ::RunM123(uint8_t eef_channel, EefAction eef_action){
+void CncCoreAZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	
 }
 

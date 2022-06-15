@@ -245,7 +245,8 @@ void CncFiveBars::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 	Serial.print(")");
 }
 
-void CncFiveBars::RunM123(uint8_t eef_channel, EefAction eef_action){
+// void CncFiveBars::RunM123(uint8_t eef_channel, EefAction eef_action){
+void CncFiveBars::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	Serial.print("[Debug] CncFiveBars::RunM123()  eef_action= ");
 	uint8_t action_code = 1;
 	this->__eef->Run(action_code);

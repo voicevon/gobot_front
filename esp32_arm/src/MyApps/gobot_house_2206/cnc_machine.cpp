@@ -8,19 +8,19 @@ void GobotHouseMachine_2206::Init(char solution){
         this->motor_steps_per_round = 514 * this->MOTOR_MICRO_STEPS;
 
         this->STEPS_PER_RAD_ALPHA = this->motor_steps_per_round * this->GEAR_BOX_RATIO_ALPHA / TWO_PI;  
-        this->STEPS_PER_RAD_BETA =  this->motor_steps_per_round * this->GEAR_BOX_RATIO_BETA / TWO_PI; 
+        // this->STEPS_PER_RAD_BETA =  this->motor_steps_per_round * this->GEAR_BOX_RATIO_BETA / TWO_PI; 
         this->MAX_ACCELERATION_ALPHPA = 600 * this->MOTOR_MICRO_STEPS;
         this->MAX_STEPS_PER_SECOND_ALPHA = 4000 * this->MOTOR_MICRO_STEPS;    // tested 1200          
-        this->MAX_ACCELERATION_BETA = 200 * this->MOTOR_MICRO_STEPS;
-        this->MAX_STEPS_PER_SECOND_BETA =  500 * this->MOTOR_MICRO_STEPS; 
+        // this->MAX_ACCELERATION_BETA = 200 * this->MOTOR_MICRO_STEPS;
+        // this->MAX_STEPS_PER_SECOND_BETA =  500 * this->MOTOR_MICRO_STEPS; 
 
         this->Homing_acceleration_alpha = 200 * this->MOTOR_MICRO_STEPS;
         this->Homing_speed_alpha = 200 * this->MOTOR_MICRO_STEPS;   //tested 200 * 1
         this->Homing_acceleration_beta = 500 * this->MOTOR_MICRO_STEPS;
         this->Homing_speed_beta = 60 * this->MOTOR_MICRO_STEPS; 
 
-        this->EEF_Suck_Angle = 164;   // Max is 4096
-        this->EEF_Release_Angle = 355;   // Max is 4096
+        // this->EEF_Suck_Angle = 164;   // Max is 4096
+        // this->EEF_Release_Angle = 355;   // Max is 4096
 
         this->Homed_position_alpha_in_degree = 13.6;
         this->Homed_position_beta_in_degree = 138.0;
@@ -48,8 +48,8 @@ void GobotHouseMachine_2206::PrintOut(){
     Serial.print("\n   MAX_ACCELERATION_ALPHPA= ");
     Serial.print(this->MAX_ACCELERATION_ALPHPA);
 
-    Serial.print("\n\n       STEPS_PER_RAD_BETA= ");
-    Serial.print(this->STEPS_PER_RAD_BETA);
+    // Serial.print("\n\n       STEPS_PER_RAD_BETA= ");
+    // Serial.print(this->STEPS_PER_RAD_BETA);
     Serial.print("\n\n===============================================");
 }
 

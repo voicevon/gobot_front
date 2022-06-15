@@ -65,7 +65,7 @@ void board_test(){
 
 void cnc_test(){
     robot->Test_HomeBeta(5);
-    robot->Test_HomeAlpha(3);
+    robot->Test_HomeAlpha(0);
 
 }
 

@@ -19,8 +19,8 @@ void GobotHouseMachine::Init(char solution){
         this->Homing_acceleration_beta = 500 * this->MOTOR_MICRO_STEPS;
         this->Homing_speed_beta = 60 * this->MOTOR_MICRO_STEPS; 
 
-        this->EEF_Suck_Angle = 164;   // Max is 4096
-        this->EEF_Release_Angle = 355;   // Max is 4096
+        // this->EEF_Suck_Angle = 164;   // Max is 4096
+        // this->EEF_Release_Angle = 355;   // Max is 4096
 
         this->Homed_position_alpha_in_degree = 13.6;
         this->Homed_position_beta_in_degree = 138.0;

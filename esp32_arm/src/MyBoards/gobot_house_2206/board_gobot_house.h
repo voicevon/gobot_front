@@ -23,10 +23,11 @@ class Board_GobotHouse_2206: public CncBoardBase{
     private:
         Stepper __alpha_stepper = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
         SingleAxisHomer __alpha_homer = SingleAxisHomer(PIN_HOME_ALHPA_2109, LOW);
+        SingleAxisHomer __beta_homer = SingleAxisHomer(PIN_HOME_BETA_2109, LOW);
+        Servo __beta_servo_driver;
         ActuatorServo __beta_servo;
         CncMover_StepperServo mover_StepperServo;
 
-        // StepControl stepControl;
         RobotEef_GobotHouse eef;
 
 };

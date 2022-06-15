@@ -6,10 +6,14 @@
 
 class ActuatorServo: public ActuatorBase{
     public:
-        float Read();
-        void Write(float angle);
+        void LinkServo(Servo* servo){this->__servo=servo;};
+        float GetCurrentPosition() override;
+        void SetPosition(float position) override;
+        void MoveTo(bool is_absolute_position, float position) override;
     protected:
 
     private:
-        Servo __servo;
+        Servo* __servo;
+        float __current_position;
+        float __position_offset = 0;   // Logical position - physic position
 };

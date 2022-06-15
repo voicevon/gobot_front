@@ -145,7 +145,8 @@ void CncSingleAxis::_running_G1(){
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);
 }
-void CncSingleAxis::RunM123(uint8_t eef_channel, EefAction eef_action){
+// void CncSingleAxis::RunM123(uint8_t eef_channel, EefAction eef_action){
+void CncSingleAxis::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	
 }
 

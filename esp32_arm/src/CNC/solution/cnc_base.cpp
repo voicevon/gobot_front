@@ -180,7 +180,8 @@ void CncBase::RunGcode(Gcode* gcode){
 				Serial.print(s_value);
 			}
 			action = (EefAction)s_value;
-			this->RunM123(p_value, action);
+			// this->RunM123(p_value, action);
+			this->RunM123(p_value, s_value);
 			break;
 
 		case 280:

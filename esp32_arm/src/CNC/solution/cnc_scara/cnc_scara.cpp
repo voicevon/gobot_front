@@ -41,8 +41,8 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	}
 	// if (alpha < 0) alpha +=
 
-	ik->alpha = alpha * this->_scara_machine->STEPS_PER_RAD_ALPHA;
-	ik->beta =  beta * this->_scara_machine->STEPS_PER_RAD_BETA;
+	ik->alpha = alpha;  // * this->_scara_machine->STEPS_PER_RAD_ALPHA;
+	ik->beta =  beta ; // * this->_scara_machine->STEPS_PER_RAD_BETA;
 
 	if (false){
 		Serial.print("\n    Inverse Kinematic result in angle degree (alpha, beta)= ");
@@ -59,7 +59,7 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 void CncScara::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
-	float rad_beta = ik->beta / this->_scara_machine->STEPS_PER_RAD_BETA;
+	float rad_beta = ik->beta; // / this->_scara_machine->STEPS_PER_RAD_BETA;
 	float rad_eef = rad_beta + ik->alpha / this->_scara_machine->STEPS_PER_RAD_ALPHA;
 	float rad_alpha = ik->alpha / this->_scara_machine->STEPS_PER_RAD_ALPHA;
 	fk->X = this->_scara_machine->LINK_A * cosf(rad_alpha) + this->_scara_machine->LINK_B * cosf(rad_eef);
@@ -151,9 +151,11 @@ void CncScara::RunG1(Gcode* gcode) {
 	bool do_ik=false;
 
 	if (gcode->has_letter('A')) 
-		target_ik_ab.alpha = gcode->get_value('A') * this->_scara_machine->STEPS_PER_RAD_ALPHA * DEG_TO_RAD;
+		// target_ik_ab.alpha = gcode->get_value('A') * this->_scara_machine->STEPS_PER_RAD_ALPHA * DEG_TO_RAD;
+		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;
 	if (gcode->has_letter('B')) 
-		target_ik_ab.beta = gcode->get_value('B') * this->_scara_machine->STEPS_PER_RAD_BETA * DEG_TO_RAD;
+		// target_ik_ab.beta = gcode->get_value('B')  * this->_scara_machine->STEPS_PER_RAD_BETA * DEG_TO_RAD;
+		target_ik_ab.beta = gcode->get_value('B') * DEG_TO_RAD;
 
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {
@@ -194,7 +196,8 @@ void CncScara::RunG1(Gcode* gcode) {
 }
 
 void CncScara:: _running_G1(){
-    if (this->GetDistanceToTarget_IK() < (this->_scara_machine->MAX_ACCELERATION_ALPHPA + this->_scara_machine->MAX_ACCELERATION_BETA)/64){
+    // if (this->GetDistanceToTarget_IK() < (this->_scara_machine->MAX_ACCELERATION_ALPHPA + this->_scara_machine->MAX_ACCELERATION_BETA)/64){
+    if (this->GetDistanceToTarget_IK() < 1) {
       	this->State = CncState::IDLE;
 		// Serial.print("\n[Info] CncScara::_running_G1() is finished. ");
     }
@@ -245,8 +248,10 @@ void CncScara::_running_G28(){
 		if (this->_home_as_inverse_kinematic){
 			// Serial.print("\n   [Info] Trying to get home position from actuator position  ");
 
-			ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree * this->_scara_machine->STEPS_PER_RAD_ALPHA;
-			ik_position.beta =  DEG_TO_RAD * this->_scara_machine->Homed_position_beta_in_degree * this->_scara_machine->STEPS_PER_RAD_BETA;
+			// ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree * this->_scara_machine->STEPS_PER_RAD_ALPHA;
+			// ik_position.beta =  DEG_TO_RAD * this->_scara_machine->Homed_position_beta_in_degree * this->_scara_machine->STEPS_PER_RAD_BETA;
+			ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree;
+			ik_position.beta = DEG_TO_RAD * this->_scara_machine->Homed_position_beta_in_degree;
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik_for_debug;
@@ -277,33 +282,37 @@ void CncScara::_running_G28(){
 		// When endstop is trigered, must stop the moving. 
 		// this->__homing_stepper->setTargetRel(50000);
 		// this->objStepControl.moveAsync(*this->__homing_stepper);
-		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, this->_scara_machine->Homing_speed_beta);
+		// this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, this->_scara_machine->Homing_speed_beta);
+		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, -0.1);
+		delay(50);
 	}
 }
 
 // We want to fix pin_number in firmware, 
 // So eef_channel takes no effection.
-void CncScara::RunM123(uint8_t eef_channel, EefAction eef_action){
-	switch (eef_action){
+// void CncScara::RunM123(uint8_t eef_channel, EefAction eef_action){
+void CncScara::RunM123(uint8_t eef_channel, uint8_t eef_action){
+	this->_board->GetEef()->Run(eef_action);
+	// switch (eef_action){
 
-		case EefAction::Suck:
-			// Serial.print("\nCncScara::RunM123()  Suck ");
-			ledcWrite(1, this->_scara_machine->EEF_Suck_Angle);
-			break;
-		case EefAction::Release:
-			// Serial.print("\nCncScara::RunM123()  Release ");
-			// This will drive the extend coil to create a reversed magnetic field. 
-			ledcWrite(1, this->_scara_machine->EEF_Release_Angle);
+	// 	case EefAction::Suck:
+	// 		// Serial.print("\nCncScara::RunM123()  Suck ");
+	// 		ledcWrite(1, this->_scara_machine->EEF_Suck_Angle);
+	// 		break;
+	// 	case EefAction::Release:
+	// 		// Serial.print("\nCncScara::RunM123()  Release ");
+	// 		// This will drive the extend coil to create a reversed magnetic field. 
+	// 		ledcWrite(1, this->_scara_machine->EEF_Release_Angle);
 
-			break;
-		case EefAction::Sleep:
-			// Serial.print("\nCncScara::RunM123()  Sleep ");
-			ledcWrite(1,0);
-			break;
-		default:
-			Serial.print("\n [Warning] CncScara::RunM123()  Others ");
-			break;
-	}
+	// 		break;
+	// 	case EefAction::Sleep:
+	// 		// Serial.print("\nCncScara::RunM123()  Sleep ");
+	// 		ledcWrite(1,0);
+	// 		break;
+	// 	default:
+	// 		Serial.print("\n [Warning] CncScara::RunM123()  Others ");
+	// 		break;
+	// }
 }
 
 void CncScara::RunM84(){

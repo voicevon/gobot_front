@@ -240,7 +240,8 @@ void Cnc_CoreYZ::_running_G1(){
 	// delay(100);
 }
 
-void Cnc_CoreYZ::RunM123(uint8_t eef_channel, EefAction eef_action){
+// void Cnc_CoreYZ::RunM123(uint8_t eef_channel, EefAction eef_action){
+void Cnc_CoreYZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	
 }
 

@@ -122,7 +122,8 @@ class CncBase: public GcodeConsumer{
         virtual std::string GetHomeTrigerStateString();
         void RunM42(uint8_t pin_number, uint8_t pin_value);
         virtual void RunM84();
-        virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
+        // virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
+        virtual void RunM123(uint8_t eef_channel, uint8_t eef_action);
         bool is_absolute_position = true;
 
         virtual void _running_G1();
