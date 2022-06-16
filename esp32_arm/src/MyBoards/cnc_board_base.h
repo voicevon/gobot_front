@@ -5,12 +5,13 @@
 #include "cnc/single_axis_homer.h"
 #include "RobotEef/robot_eef_base.h"
 #include "CNC/cnc_mover/mover_stepper_servo.h"
+#include "CNC/Actuator/stepper/actuator_stepper.h"
 
 class CncBoardBase: public BoardBase{
     public:
         virtual void Init(bool is_on_reset);
         void SayHello() override;
-        virtual Stepper* GetJointStepper(char axis_name);
+        virtual ActuatorStepper* GetJointStepper(char axis_name);
         virtual SingleAxisHomer* GetHomer(char axis_name);
         virtual RobotEefBase* GetEef();
         virtual void EnableMotor(char axis_name, bool enable_it);

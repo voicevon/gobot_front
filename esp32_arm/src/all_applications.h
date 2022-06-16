@@ -6,12 +6,12 @@
 
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
-// #define I_AM_ROBOT_ASRS_AGV
+#define I_AM_ROBOT_ASRS_AGV
 // #define I_AM_GARMENT_BOX_MOVER
 // #define I_AM_GARMENT_BOX_CARRIER
 
 // #define I_AM_GOBOT_HOUSE
-#define I_AM_GOBOT_HOUSE_2206
+// #define I_AM_GOBOT_HOUSE_2206
 // #define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
 

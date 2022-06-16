@@ -14,6 +14,6 @@ class ActuatorServo: public ActuatorBase{
 
     private:
         Servo* __servo;
-        float __current_position;
-        float __position_offset = 0;   // Logical position - physic position
+        float __current_position_in_rad;
+        float __position_offset_in_rad = 0;   // Logical position - physic position
 };

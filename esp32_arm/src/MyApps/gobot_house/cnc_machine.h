@@ -9,6 +9,7 @@ class GobotHouseMachine: public CncScaraMachine{
         // void Init();
         void PrintOut();
         int32_t GetStepsPerUnit(char axis_name) override;
+        float GetHomingSpeed(char axis_name) override;
         
         // [when microstep==1] Should be 212.7, validated. 
         float STEPS_PER_RAD_BETA; // =  this->motor_steps_per_round * this->GEAR_BOX_RATIO_BETA / TWO_PI;    
@@ -22,7 +23,8 @@ class GobotHouseMachine: public CncScaraMachine{
         float GEAR_BOX_RATIO_ALPHA = 9.0;
         // big_gear_teeth == 26 / small_gear_teeth == 10
         float GEAR_BOX_RATIO_BETA = 2.6;
-
+        int8_t HOMING_DIR_ALPHA = 1;
+        int8_t HOMING_DIR_BETA = -1;
 };
 
 

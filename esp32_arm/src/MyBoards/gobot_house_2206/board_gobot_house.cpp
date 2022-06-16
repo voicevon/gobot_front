@@ -15,13 +15,15 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     this->__beta_servo.LinkServo(&this->__beta_servo_driver);
     this->__beta_servo.SetPosition(DEG_TO_RAD * this->__beta_servo_driver.read());    // 
     
+    this->__alpha_stepper.LinkStepper(&this->__alpha_stepper_driver);
+
     this->mover_StepperServo.LinkStepper_asAlpha(&this->__alpha_stepper);
     this->mover_StepperServo.LinkServo_asBeta(&this->__beta_servo);
     this->cnc_mover = &this->mover_StepperServo;
 
 }
 
-Stepper* Board_GobotHouse_2206::GetJointStepper(char axis_name) {
+ActuatorStepper* Board_GobotHouse_2206::GetJointStepper(char axis_name) {
     if (axis_name=='A'){
         return &this->__alpha_stepper;
     // }else if (axis_name=='B'){

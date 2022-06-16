@@ -27,6 +27,14 @@ void GobotHouseMachine::Init(char solution){
         this->PrintOut();
 }
 
+
+float GobotHouseMachine::GetHomingSpeed(char axis_name){
+    if (axis_name == 'A')
+        return this->Homing_speed_alpha * this->HOMING_DIR_ALPHA;
+    else if (axis_name == 'B')
+        return this->Homing_speed_beta * this->HOMING_DIR_BETA;
+}
+
 void GobotHouseMachine::PrintOut(){
     Serial.print("\n\n===============================================");
     Serial.print("\n   GobotHouseMachine::PrintOut()");

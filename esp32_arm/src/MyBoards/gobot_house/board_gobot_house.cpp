@@ -17,16 +17,16 @@ void Board_GobotHouse::Init(bool is_on_reset){
 
 }
 
-// Stepper* Board_GobotHouse::GetStepper(char axis_name) {
-//     if (axis_name=='A'){
-//         return &this->stepper_alpha;
-//     }else if (axis_name=='B'){
-//         return &this->stepper_beta;
-//     }else{
-//         Serial.print("['Error']  Board_GobotHouse::GetStepper()   axis_name= ");
-//         Serial.println(axis_name);
-//     }
-// }
+ActuatorStepper* Board_GobotHouse::GetJointStepper(char axis_name) {
+    if (axis_name=='A'){
+        return &this->alpha_stepper;
+    }else if (axis_name=='B'){
+        return &this->beta_stepper;
+    }else{
+        Serial.print("['Error']  Board_GobotHouse::GetStepper()   axis_name= ");
+        Serial.println(axis_name);
+    }
+}
 
 SingleAxisHomer* Board_GobotHouse::GetHomer(char axis_name) {
     if (axis_name=='A'){
@@ -38,6 +38,8 @@ SingleAxisHomer* Board_GobotHouse::GetHomer(char axis_name) {
         Serial.println(axis_name);
     }
 }
+
+
 
 RobotEef_GobotHouse* Board_GobotHouse::GetEef(){
     return &this->eef;
