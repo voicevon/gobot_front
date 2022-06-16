@@ -9,6 +9,7 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     digitalWrite(PIN_BETA_ENABLE_2109, HIGH);   // To avoid A4988 is enabled.  sometimes there is an A4988 chip on the board.
     this->EnableMotor('A', false);
     this->eef.Init();
+    this->eef.Run(EEF_CODE_UNLOAD);
 
 	this->__beta_servo_driver.setPeriodHertz(50);
     this->__beta_servo_driver.attach(PIN_CNC_BETA_SERVO);

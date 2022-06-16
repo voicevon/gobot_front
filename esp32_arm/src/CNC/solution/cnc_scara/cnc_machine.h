@@ -27,14 +27,13 @@ class CncScaraMachine: public CncMachineBase{
 
         int Homing_acceleration_alpha; 
 
-        // uint16_t EEF_Suck_Angle;
-        // uint16_t EEF_Release_Angle;
 
         
     protected:
         int Homing_speed_alpha;    
         int Homing_acceleration_beta;
-
-        float Homing_speed_beta;
+        int8_t HOMING_DIR_ALPHA = 1;
+        int8_t HOMING_DIR_BETA = -1;
+        // float Homing_speed_beta;
 
 };

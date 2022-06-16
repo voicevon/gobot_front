@@ -12,7 +12,7 @@
 
 class CncScara: public CncBase{
     public:
-        CncScara();
+        CncScara(){};
         // static CncScara& getInstance()
         // {
         //     static CncScara instance; // Guaranteed to be destroyed.

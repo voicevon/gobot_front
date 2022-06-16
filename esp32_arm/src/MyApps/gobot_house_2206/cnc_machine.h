@@ -15,9 +15,8 @@ class GobotHouseMachine_2206: public CncScaraMachine{
         float MOTOR_MICRO_STEPS = 16;
         float GEAR_BOX_RATIO_ALPHA = 9.0;
         float GEAR_BOX_RATIO_BETA = 2.6;
-        int8_t HOMING_DIR_ALPHA = 1;
-        int8_t HOMING_DIR_BETA = -1;
 
+        float Homing_speed_beta_degree_per_second;
 };
 
 
