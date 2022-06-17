@@ -238,11 +238,15 @@ void CncScara::_running_G28(){
 		float homing_speed =  this->_scara_machine->GetHomingSpeed(this->_homing_axis_name) * interval / 1000;
 		bool debug = false;
 		if(debug){
-			Serial.print("[Debug] CncScara::_running_G28() homing_speed= ");
-			Serial.println(homing_speed);
+			Serial.print("[Debug] CncScara::_running_G28() homing_axis= ");
+			Serial.print(this->_homing_axis_name);
+			Serial.print(" speed=");
+			Serial.print(homing_speed);
+			Serial.print(" current position= ");
+			Serial.println(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit(this->_homing_axis_name));
 		}
 		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, homing_speed);
-		delay(interval);   // delay
+		delay(interval);   //???  to stepper should be zero .   no delay.
 	}
 }
 

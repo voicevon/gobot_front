@@ -1,16 +1,12 @@
 #include "actuator_stepper.h"
 
 
-// void ActuatorStepper::LinkStepper(Stepper* stepper, bool inverse_stepper_dir, int32_t steps_per_cnc_unit){
 void ActuatorStepper::LinkStepper(Stepper* stepper, ActuatorMechanicStepper* mechanic){
     this->__stepper = stepper;
     this->__steps_per_cnc_unit = mechanic->GetStepsPerCncUnit();
-    // this->steps_per_cnc_unit = steps_per_cnc_unit;
-    // this->inverse_direction = inverse_stepper_dir;
 }
 
 
-// void ActuatorStepper::LinkStepper(Stepper* stepper){this->__stepper=stepper;};
 float ActuatorStepper::GetCurrentPosition_InCncUnit(){
     return 1.0f * this->__stepper->getPosition() / this->__steps_per_cnc_unit;    
 }
@@ -32,6 +28,13 @@ void ActuatorStepper::MoveTo(bool is_absolute_position, float position_in_cnc_un
     } else {
         this->_target_cnc_position += position_in_cnc_unit;
     }
-    int32_t posititon_in_step = position_in_cnc_unit * this->__steps_per_cnc_unit;
+    int32_t posititon_in_step = this->_target_cnc_position * this->__steps_per_cnc_unit;
     this->__stepper->setTargetAbs(posititon_in_step);
+    bool debug = false;
+    if(debug){
+        Serial.print("[Debug] ActuatorStepper::MoveTo() steps_per_cnc_unit=");
+        Serial.print(this->__steps_per_cnc_unit);
+        Serial.print("  _target_cnc_position= ");
+        Serial.println(this->_target_cnc_position);
+    }
 }

@@ -5,7 +5,7 @@
 
 class ActuatorStepper: public ActuatorBase{
     public:
-        void LinkStepper(Stepper* stepper, ActuatorMechanicStepper* mechanic); // bool inverse_stepper_dir,  int32_t steps_per_cnc_unit);
+        void LinkStepper(Stepper* stepper, ActuatorMechanicStepper* mechanic);
         Stepper* GetLinkedStepper(){return this->__stepper;};
         
         float GetCurrentPosition_InCncUnit() override;
@@ -17,8 +17,6 @@ class ActuatorStepper: public ActuatorBase{
 
     private:
         Stepper* __stepper;
-        // ActuatorMechanicStepper* mechanic;
         float __steps_per_cnc_unit;
-        // bool inverse_direction = false;
 
 };

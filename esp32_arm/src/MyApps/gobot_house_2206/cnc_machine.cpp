@@ -15,7 +15,7 @@ void GobotHouseMachine_2206::Init(char solution){
         // this->MAX_STEPS_PER_SECOND_BETA =  500 * this->MOTOR_MICRO_STEPS; 
 
         this->HOMING_DIR_ALPHA_IS_TO_MAX = 1;
-        this->Homing_speed_alpha = 200 * this->MOTOR_MICRO_STEPS;   //tested 200 * 1
+        this->Homing_speed_alpha_degree_per_second =  36;  // degree per second
         this->Homing_acceleration_alpha = 200 * this->MOTOR_MICRO_STEPS;
 
         this->HOMING_DIR_BETA_IS_TO_MAX = 1;
@@ -36,7 +36,7 @@ int32_t GobotHouseMachine_2206::GetStepsPerUnit(char axis_name) {
 
 float GobotHouseMachine_2206::GetHomingSpeed(char axis_name){
     if (axis_name == 'A')
-        return this->Homing_speed_alpha * this->HOMING_DIR_ALPHA_IS_TO_MAX;
+        return DEG_TO_RAD * this->Homing_speed_alpha_degree_per_second  * this->HOMING_DIR_ALPHA_IS_TO_MAX;
     else if (axis_name == 'B')
         return DEG_TO_RAD * this->Homing_speed_beta_degree_per_second  * this->HOMING_DIR_BETA_IS_TO_MAX;
 }

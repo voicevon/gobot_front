@@ -15,7 +15,7 @@ void GobotHouseMachine::Init(char solution){
         this->MAX_STEPS_PER_SECOND_BETA =  500 * this->MOTOR_MICRO_STEPS; 
 
         this->Homing_acceleration_alpha = 200 * this->MOTOR_MICRO_STEPS;
-        this->Homing_speed_alpha = 200 * this->MOTOR_MICRO_STEPS;   //tested 200 * 1
+        this->Homing_speed_alpha_degree_per_second = 200 * this->MOTOR_MICRO_STEPS;   //tested 200 * 1
         this->Homing_acceleration_beta = 500 * this->MOTOR_MICRO_STEPS;
         this->Homing_speed_beta = 60 * this->MOTOR_MICRO_STEPS; 
 
@@ -30,7 +30,7 @@ void GobotHouseMachine::Init(char solution){
 
 float GobotHouseMachine::GetHomingSpeed(char axis_name){
     if (axis_name == 'A')
-        return this->Homing_speed_alpha * this->HOMING_DIR_ALPHA;
+        return this->Homing_speed_alpha_degree_per_second * this->HOMING_DIR_ALPHA;
     else if (axis_name == 'B')
         return this->Homing_speed_beta * this->HOMING_DIR_BETA;
 }
