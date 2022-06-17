@@ -17,9 +17,7 @@ class Board_SmokeMachine: public CncBoardBase{
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_SmokeMachine* GetEef() override;
         void EnableMotor(char axis_name, bool enable_it) override;
-        // void AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count) override{};
-        // void SingleMotorMoveTo(char motor_name, float motor_position) override{};         
-        // float GetDistanceToTarget() override{};
+
         
     private:
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);

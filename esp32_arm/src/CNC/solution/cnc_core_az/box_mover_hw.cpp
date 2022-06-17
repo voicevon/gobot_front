@@ -191,8 +191,8 @@ void CncCoreAZ::RunG1(Gcode* gcode) {
 	target_fk_zw.W = this->__current_fk_position.W;
 	// target_ik_ab.alpha = float(this->objStepper_alpha->getPosition()) ;
 	// target_ik_ab.beta = float(this->objStepper_beta->getPosition());
-	target_ik_ab.alpha = this->_board->cnc_mover->GetMotorPosition('A');
-	target_ik_ab.beta = this->_board->cnc_mover->GetMotorPosition('B');
+	target_ik_ab.alpha = this->_board->cnc_mover->GetMotorPosition_InCncUnit('A');
+	target_ik_ab.beta = this->_board->cnc_mover->GetMotorPosition_InCncUnit('B');
 	bool do_ik=false;
 	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A');
 	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B');
@@ -221,10 +221,10 @@ void CncCoreAZ::RunG1(Gcode* gcode) {
 	if (true){
 		Serial.print("\n    [Debug] CncCoreAZ::RunG1()     (");
 		// Serial.print(this->objStepper_alpha->getPosition());
-		Serial.print(this->_board->cnc_mover->GetMotorPosition('A'));
+		Serial.print(this->_board->cnc_mover->GetMotorPosition_InCncUnit('A'));
 		Serial.print(",");
 		// Serial.print(this->objStepper_beta->getPosition());
-		Serial.print(this->_board->cnc_mover->GetMotorPosition('B'));
+		Serial.print(this->_board->cnc_mover->GetMotorPosition_InCncUnit('B'));
 		Serial.print(")   <-- from   alpha,beta   to -->  (");
 		Serial.print(target_ik_ab.alpha  );
 		Serial.print(" , ");
@@ -254,7 +254,7 @@ void CncCoreAZ::RunM84(){
 
 float CncCoreAZ::GetDistanceToTarget_IK(){
 	// return this->objStepper_alpha->getDistanceToTarget() + this->objStepper_beta->getDistanceToTarget();
-	return this->_board->cnc_mover->GetMotorPosition('A' + this->_board->cnc_mover->GetMotorPosition('B'));
+	return this->_board->cnc_mover->GetMotorPosition_InCncUnit('A' + this->_board->cnc_mover->GetMotorPosition_InCncUnit('B'));
 }
 
 // void CncCoreAZ::__EnableMotor(char actuator, bool enable_it){

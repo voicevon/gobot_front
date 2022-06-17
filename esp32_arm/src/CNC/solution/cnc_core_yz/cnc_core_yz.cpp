@@ -252,7 +252,7 @@ void Cnc_CoreYZ::RunM84(){
 
 float Cnc_CoreYZ::GetDistanceToTarget_IK(){
 	// return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
-	return this->_board->cnc_mover->GetDistanceToTarget();
+	return this->_board->cnc_mover->GetDistanceToTarget_InCncUnit();
 }
 
 

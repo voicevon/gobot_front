@@ -100,8 +100,8 @@ float CncScara::GetDistanceToTarget_FK(){
 	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
 	// TODO: Rewrite this function.
 	IkPosition_AB current_ik;
-	current_ik.alpha = this->_board->cnc_mover->GetMotorPosition('A');
-	current_ik.beta = this->_board->cnc_mover->GetMotorPosition('B');
+	current_ik.alpha = this->_board->cnc_mover->GetMotorPosition_InCncUnit('A');
+	current_ik.beta = this->_board->cnc_mover->GetMotorPosition_InCncUnit('B');
 	FK(&current_ik, &this->__current_fk_position);
 	
 	float dx = this->__current_fk_position.X - this->__next_fk_position.X;
@@ -115,7 +115,7 @@ float CncScara::GetDistanceToTarget_IK(){
 	// int32_t db = this->beta_stepper->getDistanceToTarget();
 	// float distance = sqrt(da * da + db * db);
 
-	return this->_board->cnc_mover->GetDistanceToTarget();
+	return this->_board->cnc_mover->GetDistanceToTarget_InCncUnit();
 }
 
 void CncScara::RunG1(Gcode* gcode) {
@@ -132,16 +132,16 @@ void CncScara::RunG1(Gcode* gcode) {
 	target_fk_xy.Y = this->__current_fk_position.Y;
 	// target_ik_ab.alpha = this->alpha_stepper->getPosition();
 	// target_ik_ab.beta = this->beta_stepper->getPosition();
-	target_ik_ab.alpha = this->_board->cnc_mover->GetMotorPosition('A');
-	target_ik_ab.beta = this->_board->cnc_mover->GetMotorPosition('B');
+	target_ik_ab.alpha = this->_board->cnc_mover->GetMotorPosition_InCncUnit('A');
+	target_ik_ab.beta = this->_board->cnc_mover->GetMotorPosition_InCncUnit('B');
 	bool do_ik=false;
 
 	if (gcode->has_letter('A')) 
 		// target_ik_ab.alpha = gcode->get_value('A') * this->_scara_machine->STEPS_PER_RAD_ALPHA * DEG_TO_RAD;
-		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;
+		target_ik_ab.alpha = DEG_TO_RAD * gcode->get_value('A') ;
 	if (gcode->has_letter('B')) 
 		// target_ik_ab.beta = gcode->get_value('B')  * this->_scara_machine->STEPS_PER_RAD_BETA * DEG_TO_RAD;
-		target_ik_ab.beta = gcode->get_value('B') * DEG_TO_RAD;
+		target_ik_ab.beta = DEG_TO_RAD * gcode->get_value('B');
 
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {
@@ -166,13 +166,13 @@ void CncScara::RunG1(Gcode* gcode) {
 	bool debug = true;
 	if (debug){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
-		Serial.print(this->_board->cnc_mover->GetMotorPosition('A'));
+		Serial.print(this->_board->cnc_mover->GetMotorPosition_InCncUnit('A'));
 		Serial.print(" , ");
 		Serial.print(target_ik_ab.alpha);
 		Serial.print("    beta = ");
-		Serial.print(this->_board->cnc_mover->GetMotorPosition('B'));
+		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit('B'));
 		Serial.print(" , ");
-		Serial.println(target_ik_ab.beta);
+		Serial.println(RAD_TO_DEG * target_ik_ab.beta);
 	}
 }
 
@@ -203,7 +203,7 @@ void CncScara::_running_G28(){
 		bool debug=true;
 		if (debug){
 			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
-			Serial.print (this->_homing_axis_name);
+			Serial.println(this->_homing_axis_name);
 		}
 		this->_board->cnc_mover->AllMotorStop();
 
@@ -234,11 +234,13 @@ void CncScara::_running_G28(){
 		this->State = CncState::IDLE;
 	}else{
 		// Endstop is not trigered, When endstop is trigered, must stop the moving. 
-		int interval =10;   // unit is ms
+		int interval = 50;   // unit is ms
 		float homing_speed =  this->_scara_machine->GetHomingSpeed(this->_homing_axis_name) * interval / 1000;
-		
-		// Serial.print("[Debug] CncScara::_running_G28() homing_speed= ");
-		// Serial.println(homing_speed);
+		bool debug = false;
+		if(debug){
+			Serial.print("[Debug] CncScara::_running_G28() homing_speed= ");
+			Serial.println(homing_speed);
+		}
 		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, homing_speed);
 		delay(interval);   // delay
 	}

@@ -270,8 +270,8 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	// But, The initialized values will effect nothing. They will be over writen. 
 	// target_ik_ab.alpha = this->alpha_stepper->getPosition() / this->_fivebarMachine->STEPS_PER_RAD;
 	// target_ik_ab.beta = this->beta_stepper->getPosition() / this->_fivebarMachine->STEPS_PER_RAD;
-	target_ik_ab.alpha = this->_board->cnc_mover->GetMotorPosition('A') / this->_fivebarMachine->STEPS_PER_RAD;
-	target_ik_ab.beta = this->_board->cnc_mover->GetMotorPosition('B') / this->_fivebarMachine->STEPS_PER_RAD;
+	target_ik_ab.alpha = this->_board->cnc_mover->GetMotorPosition_InCncUnit('A') / this->_fivebarMachine->STEPS_PER_RAD;
+	target_ik_ab.beta = this->_board->cnc_mover->GetMotorPosition_InCncUnit('B') / this->_fivebarMachine->STEPS_PER_RAD;
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
 		// this->__EnableMotor('A', true); 
@@ -342,7 +342,7 @@ void CncFiveBars::_running_G1(){
 
 float CncFiveBars::GetDistanceToTarget_IK(){
 	// return this->alpha_stepper->getDistanceToTarget() + this->beta_stepper->getDistanceToTarget();
-	return this->_board->cnc_mover->GetDistanceToTarget();
+	return this->_board->cnc_mover->GetDistanceToTarget_InCncUnit();
 }
 
 void CncFiveBars::RunM84(){

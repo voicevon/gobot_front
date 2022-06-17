@@ -29,12 +29,12 @@ void setup(){
     
     cncMachine.Init('M');
     cncScara.Init(&board, &cncMachine);
-    // cncScara.LinkStepControl(&controller);
     
     robot = &GobotHouse_2206::getInstance();
     robot->Setup();
     robot->LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cncScara.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    cnc_test();
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
@@ -44,7 +44,6 @@ void setup(){
     setup_mqtt_on_message_receive(); 
     Serial.println("lovely bot,  GobotHouse.  setup() is done.  Good luck!");
     board.GetEef()->Run(EEF_CODE_UNLOAD);
-    cnc_test();
 }
 
 void loop(){
@@ -54,19 +53,22 @@ void loop(){
 }
 
 
-#include "MyBoards/gobot_house/board_tester.h"
+#include "MyBoards/gobot_house_2206/board_tester.h"
 void board_test(){
-    GobotHouse_BoardTest tester;
+    GobotHouse_2206_BoardTest tester;
     tester.LinkBoard(&board);
     tester.Test_EefLoadUnload(0);
     tester.Test_AllHomers(0);
+    tester.Test_ServoDriver_OnBeta(0);
+
     // tester.Test_Stepper(0, 'A', 300, &controller);
     // tester.Test_Stepper(0, 'B', 300, &controller);
 }
 
 void cnc_test(){
-    robot->Test_HomeBeta(88);
-    robot->Test_HomeAlpha(0);
+    Serial.println("[Info] Cnc teset is started.");
+    robot->Test_HomeBeta(2);
+    robot->Test_HomeAlpha(5);
 
 }
 

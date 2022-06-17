@@ -15,12 +15,7 @@ class CncBoardBase: public BoardBase{
         virtual SingleAxisHomer* GetHomer(char axis_name);
         virtual RobotEefBase* GetEef();
         virtual void EnableMotor(char axis_name, bool enable_it);
-        // virtual void AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count);
-        // virtual void AllMotorStop();
-        // virtual void SingleMotorMoveTo(char motor_name, float motor_position);
-        // virtual float GetMotorPosition(char motor_name);
-        // virtual void SetMotorPosition(char motor_name, float as_current_position);
-        // virtual float GetDistanceToTarget();
+
         CncMoverBase* cnc_mover;
 
 

@@ -19,6 +19,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
         // CncMover_StepperServo* GetCncMover();
 
         void EnableMotor(char axis_name, bool enable_it) override;
+        Servo* GetServoDriver_OnBeta(){return &this->__beta_servo_driver;};
 
     
     private:

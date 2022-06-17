@@ -9,7 +9,7 @@ void CncMover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
     this->__servo_beta = servo;
 }
 
-void CncMover_StepperServo::AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count){
+void CncMover_StepperServo::AllMotorsMoveTo(bool is_absolute_position, float* positions_in_cnc_unit, int motors_count){
     // float new_angle = motor_position[1];
     if (motors_count==2){
         // if (is_absolute_position){
@@ -19,10 +19,10 @@ void CncMover_StepperServo::AllMotorsMoveTo(bool is_absolute_position, float* mo
         //     // new_angle += this->__servo_beta->GetCurrentPosition();
         //     // this->__servo_beta->Write(new_angle);
         // }
-        this->__stepper_alpha->MoveTo(is_absolute_position, motor_position[0]);
+        this->__stepper_alpha->MoveTo(is_absolute_position, positions_in_cnc_unit[0]);
         Stepper* alpha = this->__stepper_alpha->GetLinkedStepper();
         this->__stepControl.moveAsync(*alpha);
-        this->__servo_beta->MoveTo(is_absolute_position, motor_position[1]);
+        this->__servo_beta->MoveTo(is_absolute_position, positions_in_cnc_unit[1]);
     }
 }
 
@@ -30,36 +30,29 @@ void CncMover_StepperServo::AllMotorStop(){
     this->__stepControl.stop();
 }
 
-void CncMover_StepperServo::SingleMotorMoveTo(bool is_absolute_position, char motor_name, float motor_position){
+void CncMover_StepperServo::SingleMotorMoveTo(bool is_absolute_position, char motor_name, float position_in_cnc_unit){
     if (motor_name == 'A'){
-        // if (is_absolute_position){
-        //     this->__stepper_alpha->setTargetAbs(motor_position);
-        // }else{
-        //     this->__stepper_alpha->setTargetRel(motor_position);
-        // }
-        this->__stepper_alpha->MoveTo(is_absolute_position, motor_position);
+        this->__stepper_alpha->MoveTo(is_absolute_position, position_in_cnc_unit);
         Stepper* stepper = this->__stepper_alpha->GetLinkedStepper();
         this->__stepControl.moveAsync(*stepper);
     }else if (motor_name == 'B'){
-            this->__servo_beta->MoveTo(is_absolute_position, motor_position);
-        // if (is_absolute_position){
-        //     this->__servo_beta->MoveTo(is_absolute_position, motor_position);
-        // }else{
-        //     new_angle += this->__servo_beta->Read();
-        //     this->__servo_beta->MoveTo(new_angle);
-        //     // log_w("CncMover_StepperServo::SingleMotorMoveTo()  "," Not Implemented");
-        // }
+            this->__servo_beta->MoveTo(is_absolute_position, position_in_cnc_unit);
     }else{
         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", motor_name );
     }
 }
 
-float CncMover_StepperServo::GetMotorPosition(char motor_name){
+float CncMover_StepperServo::GetMotorPosition_InCncUnit(char motor_name){
     if (motor_name == 'A'){
         // return this->__stepper_alpha->getPosition();
-        return this->__stepper_alpha->GetCurrentPosition();
+        int32_t motor_position = this->__stepper_alpha->GetCurrentPosition_InCncUnit();
+        // convert motor_position to cnc position
+        float steps_per_unit = 12.34;
+        float cnc_position = motor_position / steps_per_unit;
+        return cnc_position;
+
     }else if (motor_name == 'B'){
-        return this->__servo_beta->GetCurrentPosition();
+        return this->__servo_beta->GetCurrentPosition_InCncUnit();
     }else{
         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", motor_name );
     }
@@ -76,7 +69,10 @@ void CncMover_StepperServo::SetMotorPosition(char motor_name, float as_current_p
         log_w("[Warn] CncMover_StepperServo::SingleMotorMoveTo() Unkonwn axisname= ", motor_name );
     }
 }
-float CncMover_StepperServo::GetDistanceToTarget(){
+float CncMover_StepperServo::GetDistanceToTarget_InCncUnit(){
     // return this->__stepper_alpha->getDistanceToTarget();
-    return this->__stepper_alpha->GetCurrentPosition();
+    float alpha_distance = this->__stepper_alpha->GetDistanceToTarget();
+    float beta_distance = this->__servo_beta->GetDistanceToTarget();
+    return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
+
 }

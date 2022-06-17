@@ -8,6 +8,9 @@ class GobotHouse_2206_BoardTest: public BoardTestCnc{
         void LinkBoard(CncBoardBase* board) override;
         void Test_room_sensors(int loop_count);
         void Test_EefLoadUnload(int loop_count);
+        void Test_ServoDriver_OnBeta(int loop_count);
+
+
     private:
         Board_GobotHouse_2206* __board;
 

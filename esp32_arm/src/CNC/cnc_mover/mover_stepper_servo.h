@@ -12,12 +12,12 @@ class CncMover_StepperServo: public CncMoverBase{
         // void LinkStepper_asAlpha(Stepper* stepper);
         void LinkStepper_asAlpha(ActuatorStepper* stepper);
         void LinkServo_asBeta(ActuatorServo* servo);
-        void AllMotorsMoveTo(bool is_absolute_position, float* motor_position, int motors_count);
+        void AllMotorsMoveTo(bool is_absolute_position, float* positions_in_cnc_unit, int motors_count);
         void AllMotorStop();
-        void SingleMotorMoveTo(bool is_absolute_position, char motor_name, float motor_position);
-        float GetMotorPosition(char motor_name);
+        void SingleMotorMoveTo(bool is_absolute_position, char motor_name, float position_in_cnc_unit);
+        float GetMotorPosition_InCncUnit(char motor_name);
         void SetMotorPosition(char motor_name, float as_current_position);
-        float GetDistanceToTarget();
+        float GetDistanceToTarget_InCncUnit();
         
     protected:
 
