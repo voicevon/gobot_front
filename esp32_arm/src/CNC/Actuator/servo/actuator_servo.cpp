@@ -21,7 +21,7 @@ float ActuatorServo::GetCurrentPosition_InCncUnit(){
     return this->__current_position_in_rad;
 }
 
-float ActuatorServo::GetDistanceToTarget(){
+float ActuatorServo::GetDistanceToTarget_InCncUnit(){
     //TODO: use timestamp
     return 0;
 }
@@ -29,12 +29,12 @@ float ActuatorServo::GetDistanceToTarget(){
 
 void ActuatorServo::MoveTo(bool is_absolute_position, float position_in_cnc_unit){
     if (is_absolute_position){
-        this->_target_abs_position = position_in_cnc_unit;
+        this->_target_cnc_position = position_in_cnc_unit;
     }else{
-        this->_target_abs_position += position_in_cnc_unit;
+        this->_target_cnc_position += position_in_cnc_unit;
     }
 
-    float physic_angle = this->__ToServoDegree(this->_target_abs_position);
+    float physic_angle = this->__ToServoDegree(this->_target_cnc_position);
     this->__servo->write(physic_angle);
     
     // delay(500);   // Wait for servo executing moving.  //Especially for homing.?? 
@@ -48,7 +48,7 @@ void ActuatorServo::MoveTo(bool is_absolute_position, float position_in_cnc_unit
         Serial.println(physic_angle);
     }
     
-    this->__current_position_in_rad = this->_target_abs_position;    // TODO: record the timestep, To get distance to target by time.
+    this->__current_position_in_rad = this->_target_cnc_position;    // TODO: record the timestep, To get distance to target by time.
 }
 
 void ActuatorServo::SetPosition(float cnc_position_in_rad){

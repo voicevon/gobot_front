@@ -10,9 +10,9 @@ class ActuatorServo: public ActuatorBase{
         void SetInverseDir(bool inversed){this->__inversed_dir=inversed;};
 
         float GetCurrentPosition_InCncUnit() override;
-        void SetPosition(float position) override;
+        void SetPosition(float cnc_position_in_rad) override;
         void MoveTo(bool is_absolute_position, float position_in_cnc_unit) override;
-        float GetDistanceToTarget() override;
+        float GetDistanceToTarget_InCncUnit() override;
 
 
     protected:

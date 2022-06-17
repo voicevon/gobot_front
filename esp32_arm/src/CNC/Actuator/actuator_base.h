@@ -4,11 +4,12 @@ class ActuatorBase{
     public:
         // virtual void Init();
         virtual float GetCurrentPosition_InCncUnit();
-        virtual void SetPosition(float position);
-        virtual void MoveTo(bool is_absolute_position, float position);
-        virtual float GetDistanceToTarget();
+        virtual void SetPosition(float position_in_cnc_unit);
+        virtual void MoveTo(bool is_absolute_position, float position_in_cnc_unit);
+        virtual float GetDistanceToTarget_InCncUnit();
+
     protected:
-        float _target_abs_position;
+        float _target_cnc_position;   // is always an absolute position
     private:
     
 };

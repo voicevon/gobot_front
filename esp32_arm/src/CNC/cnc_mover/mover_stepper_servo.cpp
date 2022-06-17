@@ -71,8 +71,8 @@ void CncMover_StepperServo::SetMotorPosition(char motor_name, float as_current_p
 }
 float CncMover_StepperServo::GetDistanceToTarget_InCncUnit(){
     // return this->__stepper_alpha->getDistanceToTarget();
-    float alpha_distance = this->__stepper_alpha->GetDistanceToTarget();
-    float beta_distance = this->__servo_beta->GetDistanceToTarget();
+    float alpha_distance = this->__stepper_alpha->GetDistanceToTarget_InCncUnit();
+    float beta_distance = this->__servo_beta->GetDistanceToTarget_InCncUnit();
     return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
 
 }
