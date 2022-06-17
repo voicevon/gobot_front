@@ -1,5 +1,5 @@
 #include "board_gobot_house.h"
-
+#include "mechanic/alpha_stepper.h"
 
 void Board_GobotHouse_2206::Init(bool is_on_reset){
     Serial.begin(115200);
@@ -15,8 +15,8 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     this->__beta_servo_driver.attach(PIN_CNC_BETA_SERVO);
     this->__beta_servo.LinkServo(&this->__beta_servo_driver, true);
     
-    ActuatorMechanicStepper
-    this->__alpha_stepper.LinkStepper(&this->__alpha_stepper_driver, false, 123.45f);
+    GobotHouse2206_AlphaStepper_Mechanic alpha_mechanic;
+    this->__alpha_stepper.LinkStepper(&this->__alpha_stepper_driver, &alpha_mechanic);
 
     this->mover_StepperServo.LinkStepper_asAlpha(&this->__alpha_stepper);
     this->mover_StepperServo.LinkServo_asBeta(&this->__beta_servo);

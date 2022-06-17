@@ -11,4 +11,4 @@ class ActuatorMechanic_StepperLinear:public ActuatorMechanicStepper{
     private:
 
 
-}
+};

@@ -5,7 +5,7 @@
 
 class ActuatorMechanic_StepperPolor: public ActuatorMechanicStepper{
     public:
-        uint32_t GetStepsPerCncUnit() override;
+        float GetStepsPerCncUnit() override;
 
 
     protected:
