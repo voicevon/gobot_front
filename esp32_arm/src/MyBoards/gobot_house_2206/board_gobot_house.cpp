@@ -15,7 +15,8 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     this->__beta_servo_driver.attach(PIN_CNC_BETA_SERVO);
     this->__beta_servo.LinkServo(&this->__beta_servo_driver, true);
     
-    this->__alpha_stepper.LinkStepper(&this->__alpha_stepper_driver);
+    ActuatorMechanicStepper
+    this->__alpha_stepper.LinkStepper(&this->__alpha_stepper_driver, false, 123.45f);
 
     this->mover_StepperServo.LinkStepper_asAlpha(&this->__alpha_stepper);
     this->mover_StepperServo.LinkServo_asBeta(&this->__beta_servo);
