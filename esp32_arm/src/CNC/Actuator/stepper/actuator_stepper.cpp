@@ -38,3 +38,8 @@ void ActuatorStepper::MoveTo(bool is_absolute_position, float position_in_cnc_un
         Serial.println(this->_target_cnc_position);
     }
 }
+
+
+void ActuatorStepper::SetSpeed(float speed_per_second){
+    this->__stepper->setMaxSpeed(speed_per_second * this->__steps_per_cnc_unit);
+}

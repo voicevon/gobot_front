@@ -52,8 +52,10 @@ void CncScara::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 	float rad_beta = ik->beta; // / this->_scara_machine->STEPS_PER_RAD_BETA;
-	float rad_eef = rad_beta + ik->alpha / this->_scara_machine->STEPS_PER_RAD_ALPHA;
-	float rad_alpha = ik->alpha / this->_scara_machine->STEPS_PER_RAD_ALPHA;
+	// float rad_eef = rad_beta + ik->alpha / this->_scara_machine->STEPS_PER_RAD_ALPHA;
+	float rad_eef = rad_beta + ik->alpha;
+	// float rad_alpha = ik->alpha / this->_scara_machine->STEPS_PER_RAD_ALPHA;
+	float rad_alpha = ik->alpha; ;
 	fk->X = this->_scara_machine->LINK_A * cosf(rad_alpha) + this->_scara_machine->LINK_B * cosf(rad_eef);
 	fk->Y = this->_scara_machine->LINK_A * sinf(rad_alpha) + this->_scara_machine->LINK_B * sinf(rad_eef);
 	bool debug = false;
@@ -154,7 +156,8 @@ void CncScara::RunG1(Gcode* gcode) {
 	}
 	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
 	if(gcode->has_letter('R')) 
-		target_ik_ab.alpha = this->_scara_machine->motor_steps_per_round * gcode->get_value('R');
+		// target_ik_ab.alpha = this->_scara_machine->motor_steps_per_round * gcode->get_value('R');
+		target_ik_ab.alpha = gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B', true);
@@ -230,23 +233,25 @@ void CncScara::_running_G28(){
 		// Note: If homed_position is defined a FK-XY position,  This must be after IK() translation.
 		this->_board->cnc_mover->SetMotorPosition('A', ik_position.alpha);
 		this->_board->cnc_mover->SetMotorPosition('B', ik_position.beta);
+		this->_board->cnc_mover->SetBlockedMove(false);
 		// Serial.print("\n======================================= End of Homing, State to be IDLE\n");
 		this->State = CncState::IDLE;
 	}else{
 		// Endstop is not trigered, When endstop is trigered, must stop the moving. 
-		int interval = 50;   // unit is ms
-		float homing_speed =  this->_scara_machine->GetHomingSpeed(this->_homing_axis_name) * interval / 1000;
+		float homing_velocity =  this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
+		this->_board->cnc_mover->SetActuatorSpeed(this->_homing_axis_name, abs(homing_velocity));
+		float segment_distance = homing_velocity / 10; 
 		bool debug = false;
 		if(debug){
 			Serial.print("[Debug] CncScara::_running_G28() homing_axis= ");
 			Serial.print(this->_homing_axis_name);
 			Serial.print(" speed=");
-			Serial.print(homing_speed);
+			Serial.print(homing_velocity);
 			Serial.print(" current position= ");
 			Serial.println(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit(this->_homing_axis_name));
 		}
-		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, homing_speed);
-		delay(interval);   //???  to stepper should be zero .   no delay.
+		// this->_board->cnc_mover->SetBlockedMove(true);  //?
+		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, segment_distance);
 	}
 }
 

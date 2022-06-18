@@ -12,6 +12,7 @@ class ActuatorStepper: public ActuatorBase{
         void SetPosition(float position_in_cnc_unit) override;
         void MoveTo(bool is_absolute_position, float position_in_cnc_unit) override;
         float GetDistanceToTarget_InCncUnit() override;
+        void SetSpeed(float speed_per_second) override;
 
     protected:
 

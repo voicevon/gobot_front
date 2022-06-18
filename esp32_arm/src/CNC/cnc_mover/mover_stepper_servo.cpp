@@ -21,8 +21,14 @@ void CncMover_StepperServo::AllMotorsMoveTo(bool is_absolute_position, float* po
         // }
         this->__stepper_alpha->MoveTo(is_absolute_position, positions_in_cnc_unit[0]);
         Stepper* alpha = this->__stepper_alpha->GetLinkedStepper();
-        this->__stepControl.moveAsync(*alpha);
         this->__servo_beta->MoveTo(is_absolute_position, positions_in_cnc_unit[1]);
+        if (this->_is_blocked_move){
+            this->__stepControl.move(*alpha);
+            delay(100);   // Intend For beta only, but side effection is alpha.
+        }else{
+            this->__stepControl.moveAsync(*alpha);
+        }
+        
     }
 }
 
@@ -34,9 +40,16 @@ void CncMover_StepperServo::SingleMotorMoveTo(bool is_absolute_position, char mo
     if (motor_name == 'A'){
         this->__stepper_alpha->MoveTo(is_absolute_position, position_in_cnc_unit);
         Stepper* stepper = this->__stepper_alpha->GetLinkedStepper();
-        this->__stepControl.moveAsync(*stepper);
+        if (this->_is_blocked_move){
+            this->__stepControl.move(*stepper);
+        }else{
+            this->__stepControl.moveAsync(*stepper);
+        }
     }else if (motor_name == 'B'){
-            this->__servo_beta->MoveTo(is_absolute_position, position_in_cnc_unit);
+        this->__servo_beta->MoveTo(is_absolute_position, position_in_cnc_unit);
+        // if(this->_is_blocked_move){
+        //     delay(100);   // will efect speed.
+        // }
     }else{
         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", motor_name );
     }
@@ -76,3 +89,14 @@ float CncMover_StepperServo::GetDistanceToTarget_InCncUnit(){
     return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
 
 }
+
+void CncMover_StepperServo::SetActuatorSpeed(char actuator_name, float speed_per_second){
+    if (actuator_name =='A'){
+        this->__stepper_alpha->SetSpeed(speed_per_second);
+    }else if(actuator_name == 'B'){
+        this->__servo_beta->SetSpeed(speed_per_second);
+    }else{
+        Serial.println("[Error]() CncMover_StepperServo::SetActuatorSpeed");
+    }
+}
+

@@ -28,16 +28,22 @@ float ActuatorServo::GetDistanceToTarget_InCncUnit(){
 
 
 void ActuatorServo::MoveTo(bool is_absolute_position, float position_in_cnc_unit){
+    float time;
     if (is_absolute_position){
         this->_target_cnc_position = position_in_cnc_unit;
     }else{
         this->_target_cnc_position += position_in_cnc_unit;
+        time = abs(position_in_cnc_unit) / this->__speed_degree_per_second;
     }
 
     float physic_angle = this->__ToServoDegree(this->_target_cnc_position);
     this->__servo->write(physic_angle);
     
-    // delay(500);   // Wait for servo executing moving.  //Especially for homing.?? 
+    if(this->__speed_degree_per_second >= 0){
+        // for homing process of CNC.
+        if (time < 50.0f / 1000) time =50;
+        delay(time);
+    }
     bool debug = false;
     if(debug){
         Serial.print("[debug] ActuatorServo::MoveTo() cnc_position in degree = ");
@@ -67,6 +73,11 @@ void ActuatorServo::SetPosition(float cnc_position_in_rad){
         Serial.println(RAD_TO_DEG * this->__position_offset_in_rad);
     }
 }
+
+void ActuatorServo::SetSpeed(float speed_per_second){
+    this->__speed_degree_per_second = RAD_TO_DEG * speed_per_second; 
+}
+
 
 float ActuatorServo::__ToServoDegree(float from_cnc_rad){
     int8_t dir = 1;

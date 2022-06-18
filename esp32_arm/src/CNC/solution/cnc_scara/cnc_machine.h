@@ -6,12 +6,12 @@
 
 class CncScaraMachine: public CncMachineBase{
     public:
-        virtual float GetHomingSpeed(char axis_name);
+        virtual float GetHomingVelocity(char axis_name);
         // value is vary for each gobot-house robot.
         float Homed_position_alpha_in_degree;
         // value is vary for each gobot-house robot.
         float Homed_position_beta_in_degree;
-        float motor_steps_per_round;
+        // float motor_steps_per_round;
 
         //The length of Master linkage, unit is mm
         float LINK_A = 75.0;
@@ -19,14 +19,11 @@ class CncScaraMachine: public CncMachineBase{
         float LINK_B = 75.0;
 
         // when microstep==1 Should be 736.25 , validated.
-        float STEPS_PER_RAD_ALPHA;  
+        // float STEPS_PER_RAD_ALPHA;  
         float MAX_ACCELERATION_ALPHPA; // = 600 * this->MOTOR_MICRO_STEPS;
         float MAX_STEPS_PER_SECOND_ALPHA; // = 1200 * this->MOTOR_MICRO_STEPS;    // tested 1200
 
-
-
         int Homing_acceleration_alpha; 
-
 
         
     protected:

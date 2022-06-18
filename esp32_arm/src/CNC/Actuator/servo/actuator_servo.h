@@ -13,6 +13,7 @@ class ActuatorServo: public ActuatorBase{
         void SetPosition(float cnc_position_in_rad) override;
         void MoveTo(bool is_absolute_position, float position_in_cnc_unit) override;
         float GetDistanceToTarget_InCncUnit() override;
+        void SetSpeed(float speed_per_second) override;
 
 
     protected:
@@ -25,4 +26,6 @@ class ActuatorServo: public ActuatorBase{
         float __position_offset_in_rad = 0;   // Logical position - physic position
         float __ToServoDegree(float from_cnc_rad);
         float __ToCncRad(float from_servo_angle);
+
+        float __speed_degree_per_second;
 };
