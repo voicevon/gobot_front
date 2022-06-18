@@ -17,6 +17,7 @@ class CncMover_StepperServo: public CncMoverBase{
         void SetMotorPosition(char motor_name, float as_current_position) override; 
         float GetDistanceToTarget_InCncUnit() override;
         void SetActuatorSpeed(char actuator_name, float speed_per_second) override;
+        bool MotorIsMoving(char moto_name) override;
         
     protected:
 

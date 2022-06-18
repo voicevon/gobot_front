@@ -100,3 +100,13 @@ void CncMover_StepperServo::SetActuatorSpeed(char actuator_name, float speed_per
     }
 }
 
+bool CncMover_StepperServo::MotorIsMoving(char motor_name) {
+    if (motor_name=='A'){
+        return this->__stepControl.isRunning();
+    }else if (motor_name=='B'){
+        return false;
+    }else{
+        Serial.print("[Error] CncMover_StepperServo::MotorIsMoving() Unknown motor_name= ");
+        Serial.println(motor_name); 
+    }
+}

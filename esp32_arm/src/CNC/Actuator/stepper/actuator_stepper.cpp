@@ -55,16 +55,23 @@ void ActuatorStepper::MoveTo(bool is_absolute_position, float position_in_cnc_un
         this->_target_cnc_position += position_in_cnc_unit;
         this->__stepper->setTargetRel(posititon_in_step);
     }
-    bool debug = true;
+    bool debug = false;
     if(debug){
         Serial.print("[Debug] ActuatorStepper::MoveTo() steps_per_cnc_unit=");
         Serial.print(this->__steps_per_cnc_unit);
+        Serial.print("  position_in_step= ");
+        Serial.print(posititon_in_step);
         Serial.print("  _target_cnc_position degree= ");
         Serial.println(RAD_TO_DEG * this->_target_cnc_position);
     }
 }
 
-
+#define MAX_STEPS_PER_SECOND 4000
 void ActuatorStepper::SetSpeed(float speed_per_second){
-    this->__stepper->setMaxSpeed(speed_per_second * this->__steps_per_cnc_unit);
+    float steps_per_second = speed_per_second * this->__steps_per_cnc_unit;
+    if (steps_per_second > MAX_STEPS_PER_SECOND){
+        steps_per_second = MAX_STEPS_PER_SECOND;
+    }
+    this->__stepper->setMaxSpeed(steps_per_second);
 }
+

@@ -15,7 +15,7 @@ void GobotHouseMachine_2206::Init(char solution){
         // this->MAX_STEPS_PER_SECOND_BETA =  500 * this->MOTOR_MICRO_STEPS; 
 
         this->HOMING_DIR_ALPHA_IS_TO_MAX = 1;
-        this->Homing_speed_alpha_degree_per_second =  36 * 10;  // degree per second
+        this->Homing_speed_alpha_degree_per_second =  99;  // degree per second
         this->Homing_acceleration_alpha = 200 ;
 
         this->HOMING_DIR_BETA_IS_TO_MAX = 1;

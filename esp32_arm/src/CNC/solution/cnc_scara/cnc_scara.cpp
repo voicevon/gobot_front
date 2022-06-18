@@ -233,7 +233,7 @@ void CncScara::_running_G28(){
 		// Serial.print("\n======================================= End of Homing, State to be IDLE\n");
 		this->State = CncState::IDLE;
 
-		bool debug = true;
+		bool debug = false;
 		if (debug){
 			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
 			Serial.print(this->_homing_axis_name);
@@ -242,19 +242,23 @@ void CncScara::_running_G28(){
 		}
 	}else{
 		// Endstop is not trigered, When endstop is trigered, must stop the moving. 
+		if (this->_board->cnc_mover->MotorIsMoving(this->_homing_axis_name)){
+			return;
+		}
 		float homing_velocity_in_rad_per_second =  this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
 		this->_board->cnc_mover->SetActuatorSpeed(this->_homing_axis_name, abs(homing_velocity_in_rad_per_second));
 		float segment_distance_in_rad = homing_velocity_in_rad_per_second / 10; 
-		bool debug = false;
+		bool debug = true;
 		if(debug){
 			Serial.print("[Debug] CncScara::_running_G28() homing_axis= ");
 			Serial.print(this->_homing_axis_name);
-			Serial.print(" speed=");
-			Serial.print(homing_velocity_in_rad_per_second);
+			Serial.print(" velocity in degree= ");
+			Serial.print(RAD_TO_DEG * homing_velocity_in_rad_per_second);
 			Serial.print(" current position= ");
 			Serial.println(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit(this->_homing_axis_name));
 		}
 		// this->_board->cnc_mover->SetBlockedMove(true);  //?
+
 		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, segment_distance_in_rad);
 	}
 }
