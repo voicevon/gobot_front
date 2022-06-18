@@ -43,24 +43,24 @@ void GobotHouseMachine::PrintOut(){
     Serial.print("\n       Homed_position_beta_in_degree= "); 
     Serial.print(this->Homed_position_beta_in_degree);
 
-    Serial.print("\n   MOTOR_MICRO_STEPS= ");
-    Serial.print(this->MOTOR_MICRO_STEPS);
+    // Serial.print("\n   MOTOR_MICRO_STEPS= ");
+    // Serial.print(this->MOTOR_MICRO_STEPS);
     // Serial.print("\n       motor_steps_per_round=514* MOTOR_MICRO_STEPS= ");
     // Serial.print(this->motor_steps_per_round);
-    Serial.print("\n   GEAR_BOX_RATIO_ALPHA= ");
-    Serial.print(this->GEAR_BOX_RATIO_ALPHA);
+    // Serial.print("\n   GEAR_BOX_RATIO_ALPHA= ");
+    // Serial.print(this->GEAR_BOX_RATIO_ALPHA);
     // Serial.print("\n   STEPS_PER_RAD_ALPHA= ");
     // Serial.print(this->STEPS_PER_RAD_ALPHA);
-    Serial.print("\n   MAX_STEPS_PER_SECOND_ALPHA= ");
-    Serial.print(this->MAX_STEPS_PER_SECOND_ALPHA);
+    // Serial.print("\n   MAX_STEPS_PER_SECOND_ALPHA= ");
+    // Serial.print(this->MAX_STEPS_PER_SECOND_ALPHA);
     Serial.print("\n   MAX_ACCELERATION_ALPHPA= ");
     Serial.print(this->MAX_ACCELERATION_ALPHPA);
 
-    Serial.print("\n\n       STEPS_PER_RAD_BETA= ");
-    Serial.print(this->STEPS_PER_RAD_BETA);
+    // Serial.print("\n\n       STEPS_PER_RAD_BETA= ");
+    // Serial.print(this->STEPS_PER_RAD_BETA);
     Serial.print("\n\n===============================================");
 }
 
-int32_t GobotHouseMachine::GetStepsPerUnit(char axis_name) {
-    return 100;
-}
+// int32_t GobotHouseMachine::GetStepsPerUnit(char axis_name) {
+//     return 100;
+// }

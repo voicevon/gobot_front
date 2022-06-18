@@ -8,7 +8,7 @@ class GobotHouseMachine: public CncScaraMachine{
         void Init(char solution_id) override;
         // void Init();
         void PrintOut();
-        int32_t GetStepsPerUnit(char axis_name) override;
+        // int32_t GetStepsPerUnit(char axis_name) override;
         float GetHomingVelocity(char axis_name) override;
         
         // [when microstep==1] Should be 212.7, validated. 

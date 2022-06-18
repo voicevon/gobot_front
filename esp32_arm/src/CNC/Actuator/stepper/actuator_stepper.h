@@ -19,5 +19,6 @@ class ActuatorStepper: public ActuatorBase{
     private:
         Stepper* __stepper;
         float __steps_per_cnc_unit;
+        float __fit_into_joint_range(float cnc_position);
 
 };

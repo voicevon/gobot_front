@@ -1,8 +1,8 @@
 #include "cnc_machine.h"
 
-int32_t GobotMainMachine::GetStepsPerUnit(char axis_name) {
-    return 100;
-}
+// int32_t GobotMainMachine::GetStepsPerUnit(char axis_name) {
+//     return 100;
+// }
 
 void GobotMainMachine::Init(char solution){
     this->LINK_0 = 191.0f / 2;

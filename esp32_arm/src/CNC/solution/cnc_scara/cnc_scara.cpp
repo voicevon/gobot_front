@@ -93,6 +93,7 @@ void CncScara::Init(CncBoardBase* board, CncMachineBase* machine){
 	// this->beta_stepper->setInverseRotation(false);
 
 	this->_home_as_inverse_kinematic = true;
+	this->_board->cnc_mover->SetBlockedMove(false);
 
 
 }
@@ -136,7 +137,7 @@ void CncScara::RunG1(Gcode* gcode) {
 	// target_ik_ab.beta = this->beta_stepper->getPosition();
 	target_ik_ab.alpha = this->_board->cnc_mover->GetMotorPosition_InCncUnit('A');
 	target_ik_ab.beta = this->_board->cnc_mover->GetMotorPosition_InCncUnit('B');
-	bool do_ik=false;
+	bool do_ik = false;
 
 	if (gcode->has_letter('A')) 
 		// target_ik_ab.alpha = gcode->get_value('A') * this->_scara_machine->STEPS_PER_RAD_ALPHA * DEG_TO_RAD;
@@ -203,11 +204,7 @@ void CncScara::_running_G28(){
 	// Serial.print("[Debug] CncScara::running_G28() is entering \n");
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
-		bool debug=true;
-		if (debug){
-			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
-			Serial.println(this->_homing_axis_name);
-		}
+
 		this->_board->cnc_mover->AllMotorStop();
 
 		//Set current position to HomePosition
@@ -233,31 +230,35 @@ void CncScara::_running_G28(){
 		// Note: If homed_position is defined a FK-XY position,  This must be after IK() translation.
 		this->_board->cnc_mover->SetMotorPosition('A', ik_position.alpha);
 		this->_board->cnc_mover->SetMotorPosition('B', ik_position.beta);
-		this->_board->cnc_mover->SetBlockedMove(false);
 		// Serial.print("\n======================================= End of Homing, State to be IDLE\n");
 		this->State = CncState::IDLE;
+
+		bool debug = true;
+		if (debug){
+			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
+			Serial.print(this->_homing_axis_name);
+			Serial.print("  cnc position degree= ");
+			Serial.print(this->_scara_machine->Homed_position_alpha_in_degree);
+		}
 	}else{
 		// Endstop is not trigered, When endstop is trigered, must stop the moving. 
-		float homing_velocity =  this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
-		this->_board->cnc_mover->SetActuatorSpeed(this->_homing_axis_name, abs(homing_velocity));
-		float segment_distance = homing_velocity / 10; 
+		float homing_velocity_in_rad_per_second =  this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
+		this->_board->cnc_mover->SetActuatorSpeed(this->_homing_axis_name, abs(homing_velocity_in_rad_per_second));
+		float segment_distance_in_rad = homing_velocity_in_rad_per_second / 10; 
 		bool debug = false;
 		if(debug){
 			Serial.print("[Debug] CncScara::_running_G28() homing_axis= ");
 			Serial.print(this->_homing_axis_name);
 			Serial.print(" speed=");
-			Serial.print(homing_velocity);
+			Serial.print(homing_velocity_in_rad_per_second);
 			Serial.print(" current position= ");
 			Serial.println(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit(this->_homing_axis_name));
 		}
 		// this->_board->cnc_mover->SetBlockedMove(true);  //?
-		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, segment_distance);
+		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, segment_distance_in_rad);
 	}
 }
 
-// We want to fix pin_number in firmware, 
-// So eef_channel takes no effection.
-// void CncScara::RunM123(uint8_t eef_channel, EefAction eef_action){
 void CncScara::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	this->_board->GetEef()->Run(eef_action);
 }

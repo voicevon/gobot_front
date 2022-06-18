@@ -1,9 +1,9 @@
 #include "cnc_machine.h"
 
 
-int32_t SpringMakerMachine::GetStepsPerUnit(char axis_name) {
-    return 100;
-}
+// int32_t SpringMakerMachine::GetStepsPerUnit(char axis_name) {
+//     return 100;
+// }
 
 void SpringMakerMachine::Init(char solution){
         this->STEPPER_DRIVER_MICRO_STEPS = 16;

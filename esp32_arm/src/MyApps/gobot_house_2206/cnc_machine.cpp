@@ -30,9 +30,9 @@ void GobotHouseMachine_2206::Init(char solution){
 }
 
 
-int32_t GobotHouseMachine_2206::GetStepsPerUnit(char axis_name) {
-    return 100;
-}
+// int32_t GobotHouseMachine_2206::GetStepsPerUnit(char axis_name) {
+//     return 100;
+// }
 
 float GobotHouseMachine_2206::GetHomingVelocity(char axis_name){
     if (axis_name == 'A')

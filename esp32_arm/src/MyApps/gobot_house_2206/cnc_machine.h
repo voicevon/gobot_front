@@ -7,7 +7,7 @@ class GobotHouseMachine_2206: public CncScaraMachine{
     public:
         void Init(char solution_id) override;
         void PrintOut();
-        int32_t GetStepsPerUnit(char axis_name) override;
+        // int32_t GetStepsPerUnit(char axis_name) override;
         float GetHomingVelocity(char axis_name) override;
 
     private:

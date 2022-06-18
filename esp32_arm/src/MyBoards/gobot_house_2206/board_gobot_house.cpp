@@ -16,6 +16,7 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     this->__beta_servo.LinkServo(&this->__beta_servo_driver, true);
     
     GobotHouse2206_AlphaStepper_Mechanic alpha_mechanic;
+    this->__alpha_stepper_driver.setInverseRotation(true);
     this->__alpha_stepper.LinkStepper(&this->__alpha_stepper_driver, &alpha_mechanic);
 
     this->mover_StepperServo.LinkStepper_asAlpha(&this->__alpha_stepper);

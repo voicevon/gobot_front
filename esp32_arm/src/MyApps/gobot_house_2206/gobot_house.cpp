@@ -321,7 +321,7 @@ void GobotHouse_2206::Test_HomeBeta(int loop_count){
 
 	Serial.println("[Info]  GobotMain::Test_HomeBeta()  This is in TODO list.");
 	String g28 = "G28BI";
-	String g1 = "G1B50";
+	String g1 = "G1B120";
 	String g4 = "G4S3";   //Wait for beta is left hall sensor.
 	bool buffer_is_full = false;
 	for (int i=0; i<loop_count; i++){
