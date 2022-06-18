@@ -51,6 +51,11 @@ void ActuatorStepper::MoveTo(bool is_absolute_position, float position_in_cnc_un
         this->_target_cnc_position = new_position_in_cnc_unit;
         posititon_in_step = new_position_in_cnc_unit * this->__steps_per_cnc_unit;
         this->__stepper->setTargetAbs(posititon_in_step);
+        bool debug = true;
+        if (debug){
+            Serial.print("[Debug] ActuatorStepper::MoveTo()   setPositionAbs(posititon_in_step= ");
+            Serial.println (posititon_in_step);
+        }
     } else {
         this->_target_cnc_position += position_in_cnc_unit;
         this->__stepper->setTargetRel(posititon_in_step);

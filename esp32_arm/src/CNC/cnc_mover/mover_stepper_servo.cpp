@@ -21,13 +21,14 @@ void CncMover_StepperServo::AllMotorsMoveTo(bool is_absolute_position, float* po
         // }
         this->__stepper_alpha->MoveTo(is_absolute_position, positions_in_cnc_unit[0]);
         Stepper* alpha = this->__stepper_alpha->GetLinkedStepper();
-        this->__servo_beta->MoveTo(is_absolute_position, positions_in_cnc_unit[1]);
         if (this->_is_blocked_move){
             this->__stepControl.move(*alpha);
             delay(100);   // Intend For beta only, but side effection is alpha.
         }else{
             this->__stepControl.moveAsync(*alpha);
         }
+        
+        this->__servo_beta->MoveTo(is_absolute_position, positions_in_cnc_unit[1]);
         
     }
 }

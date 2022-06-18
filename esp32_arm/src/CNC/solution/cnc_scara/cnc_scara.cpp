@@ -170,9 +170,9 @@ void CncScara::RunG1(Gcode* gcode) {
 	bool debug = true;
 	if (debug){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
-		Serial.print(this->_board->cnc_mover->GetMotorPosition_InCncUnit('A'));
+		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit('A'));
 		Serial.print(" , ");
-		Serial.print(target_ik_ab.alpha);
+		Serial.print(RAD_TO_DEG * target_ik_ab.alpha);
 		Serial.print("    beta = ");
 		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit('B'));
 		Serial.print(" , ");
