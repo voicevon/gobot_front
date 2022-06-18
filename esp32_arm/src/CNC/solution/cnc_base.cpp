@@ -51,7 +51,7 @@ void CncBase::SpinOnce_BaseExit(){
 
 	// this->_mq->SayHello("CncBase::SpinOnce_BaseExit()");
 	if (true){
-		Serial.print("\n[Debug] CncBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
+		Serial.print("\n[Info] CncBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
 		Serial.print(message->payload);
 		Serial.println(" ");
 	}

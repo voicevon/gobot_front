@@ -63,7 +63,7 @@ void ActuatorServo::SetPosition(float cnc_position_in_rad){
     if (this->__inversed_dir) dir = -1;
     this->__current_position_in_rad = cnc_position_in_rad;
     this->__position_offset_in_rad = cnc_position_in_rad - DEG_TO_RAD * this->__servo->read() * dir;
-    bool debug=true;
+    bool debug = false;
     if(debug){
         Serial.print("[Debug] ActuatorServo::SetPosition()  cnc_position, servo_position, __position_offset in_degree = ");
         Serial.print(RAD_TO_DEG * cnc_position_in_rad);

@@ -248,7 +248,7 @@ void CncScara::_running_G28(){
 		float homing_velocity_in_rad_per_second =  this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
 		this->_board->cnc_mover->SetActuatorSpeed(this->_homing_axis_name, abs(homing_velocity_in_rad_per_second));
 		float segment_distance_in_rad = homing_velocity_in_rad_per_second / 10; 
-		bool debug = true;
+		bool debug = false;
 		if(debug){
 			Serial.print("[Debug] CncScara::_running_G28() homing_axis= ");
 			Serial.print(this->_homing_axis_name);
