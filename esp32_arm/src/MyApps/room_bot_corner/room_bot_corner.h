@@ -29,7 +29,7 @@
 class RoomBotCorner: public RobotBase{
     public:
         RoomBotCorner(char axis_name);
-        void HomeSingleAxis(char axis) override;
+        void RunG28(char axis) override;
         void RunG1(Gcode* gcode) override;
         void RunG6(Gcode* gcode) override;
         void Init(BoardbaseCnc* board) override {assert("Must pass me an IrEncoderHelper*");};

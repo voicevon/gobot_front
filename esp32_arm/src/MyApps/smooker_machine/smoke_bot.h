@@ -21,7 +21,7 @@
 // class SmokeBotHardware: public CncBase{
 //     public:
 //         SmokeBotHardware();
-//         void HomeSingleAxis(char axis) override;
+//         void RunG28(char axis) override;
 //         void InitRobot(BoardbaseCnc* board) override;
 //         void Init_Gpio();
 //         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};

@@ -188,16 +188,22 @@ void CncScara:: _running_G1(){
 	// delay(100);
 }
 
-void CncScara::HomeSingleAxis(char axis){
-	if (false){
-		Serial.print("\n[Debug] CncScara::HomeSingleAxis() is entering   AXIS = " );
-		Serial.print(axis);
+void CncScara::RunG28(char axis){
+	bool debug = true;
+	if (debug){
+		Serial.print("\n[Debug] CncScara::RunG28() is entering   AXIS = " );
+		Serial.println(axis);
 	}
-	this->_homing_axis_name = axis;
 	this->__homing_helper = this->_board->GetHomer(axis);
-	float homing_speed = this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
-	this->_board->cnc_mover->SetActuatorSpeed(this->_homing_axis_name, homing_speed);
+	float homing_speed = this->_scara_machine->GetHomingVelocity(axis);
+	this->_board->cnc_mover->SetActuatorSpeed(axis, homing_speed);
 	this->_board->EnableMotor(axis, true);
+	this->_homing_axis_name = axis;
+	//Relative move a long distance , until it reach home position
+		// float homing_velocity_in_rad_per_second =  this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
+	float the_long_distance_in_rad = 9999.0f * this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
+	this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, the_long_distance_in_rad);
+
 }
 
 void CncScara::_running_G28(){
@@ -205,14 +211,13 @@ void CncScara::_running_G28(){
 	if (debug) Serial.print("[Debug] CncScara::running_G28() is entering \n");
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
-		this->_board->cnc_mover->AllMotorStop();
+		this->_board->cnc_mover->SingleMotorStop(this->_homing_axis_name);
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
-			if (debug) Serial.print("\n   [Info] Trying to get home position from actuator position  ");
+			if (debug) Serial.print("\n   [Info] CncScara::_running_G28() Trying to get home position from actuator position  ");
 			if (this->_homing_axis_name == 'A'){
 				ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree;
-				//Copy current ik-position to motor-position.
 			}else if (this->_homing_axis_name == 'B'){
 				ik_position.beta = DEG_TO_RAD * this->_scara_machine->Homed_position_beta_in_degree;
 			}
@@ -246,24 +251,24 @@ void CncScara::_running_G28(){
 		}
 	}else{
 		// Endstop is not trigered, When endstop is trigered, must stop the moving. 
-		if (this->_board->cnc_mover->MotorIsMoving(this->_homing_axis_name)){
-			return;
-		}
-		float homing_velocity_in_rad_per_second =  this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
-		this->_board->cnc_mover->SetActuatorSpeed(this->_homing_axis_name, abs(homing_velocity_in_rad_per_second));
-		float segment_distance_in_rad = homing_velocity_in_rad_per_second / 10; 
-		bool debug = false;
-		if(debug){
-			Serial.print("[Debug] CncScara::_running_G28() homing_axis= ");
-			Serial.print(this->_homing_axis_name);
-			Serial.print(" velocity in degree= ");
-			Serial.print(RAD_TO_DEG * homing_velocity_in_rad_per_second);
-			Serial.print(" current position= ");
-			Serial.println(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit(this->_homing_axis_name));
-		}
-		// this->_board->cnc_mover->SetBlockedMove(true);  //?
+		// if (this->_board->cnc_mover->MotorIsMoving(this->_homing_axis_name)){
+		// 	return;
+		// }
+		// float homing_velocity_in_rad_per_second =  this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
+		// this->_board->cnc_mover->SetActuatorSpeed(this->_homing_axis_name, abs(homing_velocity_in_rad_per_second));
+		// float segment_distance_in_rad = homing_velocity_in_rad_per_second / 10; 
+		// bool debug = false;
+		// if(debug){
+		// 	Serial.print("[Debug] CncScara::_running_G28() homing_axis= ");
+		// 	Serial.print(this->_homing_axis_name);
+		// 	Serial.print(" velocity in degree= ");
+		// 	Serial.print(RAD_TO_DEG * homing_velocity_in_rad_per_second);
+		// 	Serial.print(" current position= ");
+		// 	Serial.println(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit(this->_homing_axis_name));
+		// }
+		// // this->_board->cnc_mover->SetBlockedMove(true);  //?
 
-		this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, segment_distance_in_rad);
+		// this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, segment_distance_in_rad);
 	}
 }
 

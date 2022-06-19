@@ -106,7 +106,7 @@ class CncBase: public GcodeConsumer{
         void SpinOnce();
         virtual void Init(CncBoardBase* board, CncMachineBase* machine);
         // void LinkStepControl(StepControl* stepControl){this->_stepControl=stepControl;};
-        virtual void HomeSingleAxis(char axis);
+        virtual void RunG28(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
         virtual float GetDistanceToTarget_IK();

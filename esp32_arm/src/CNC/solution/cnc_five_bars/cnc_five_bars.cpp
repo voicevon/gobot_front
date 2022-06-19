@@ -19,8 +19,8 @@ void CncFiveBars::Init(CncBoardBase* board, CncMachineBase* machine){
 	Serial.print("\n[Info] CncFiveBars::Init() is done.");
 } 
 
-void CncFiveBars::HomeSingleAxis(char axis){ 
-	Serial.print("[Debug] CncFiveBars::HomeSingleAxis() is entering  axis= " );
+void CncFiveBars::RunG28(char axis){ 
+	Serial.print("[Debug] CncFiveBars::RunG28() is entering  axis= " );
 	Serial.println(axis);
 	// this->_homing_axis = axis;
 	this->_homing_axis_name = axis;
@@ -43,11 +43,11 @@ void CncFiveBars::HomeSingleAxis(char axis){
 		// this->__homing_stepper->setTargetRel(-500000);    //angle to be smaller.
 		target_position = -500000;
 	}else{
-		Serial.print("\n[Error] CncFiveBars::HomeSingleAxis() ");
+		Serial.print("\n[Error] CncFiveBars::RunG28() ");
 	}
 	this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, 500000);
 	// this->_stepControl->moveAsync(*this->__homing_stepper);
-	Serial.print("[Debug] CncFiveBars::HomeSingleAxis() is Starting to run...\n" );
+	Serial.print("[Debug] CncFiveBars::RunG28() is Starting to run...\n" );
 }
 
 

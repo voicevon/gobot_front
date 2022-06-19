@@ -17,6 +17,7 @@ class ActuatorServo: public ActuatorBase{
         // bool MotorIsMoving(char moto_name) override;
         void SpinOnce();
         bool IsMoving(){return this->__is_moving;};
+        void Stop() override {this->__is_moving=false;};
 
 
     protected:
@@ -32,7 +33,7 @@ class ActuatorServo: public ActuatorBase{
 
         float __speed_degree_per_second;
         int64_t last_spin_timestamp;
-        uint8_t __moving_direction_of_cnc;
+        int8_t __moving_direction_of_cnc = 1 ;
         bool __is_moving=false;
         float __distance_to_target_in_rad;
 };

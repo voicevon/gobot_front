@@ -80,8 +80,8 @@ void Cnc_CoreYZ::Init(CncBoardBase* board, CncMachineBase* machine){
 	this->_home_as_inverse_kinematic = false;
 }
 
-void Cnc_CoreYZ::HomeSingleAxis(char axis){
-	Serial.print("[Debug] Cnc_CoreYZ::HomeSingleAxis() is entering:   " );
+void Cnc_CoreYZ::RunG28(char axis){
+	Serial.print("[Debug] Cnc_CoreYZ::RunG28() is entering:   " );
 	Serial.println(axis);
 	this->_homing_axis_name = axis;
 	this->_cncMachine->PrintOut();

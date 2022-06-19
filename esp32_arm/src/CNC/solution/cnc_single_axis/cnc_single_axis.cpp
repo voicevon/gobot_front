@@ -41,8 +41,8 @@ void CncSingleAxis::Init(CncBoardBase* board, CncMachineBase* config){
 	this->_home_as_inverse_kinematic = false;
 }
 
-void CncSingleAxis::HomeSingleAxis(char axis){
-	Serial.print("[Debug] CncSingleAxis::HomeSingleAxis() is entering:   " );
+void CncSingleAxis::RunG28(char axis){
+	Serial.print("[Debug] CncSingleAxis::RunG28() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis_name = axis;
 	this->_singleAxisConfig->PrintOut();

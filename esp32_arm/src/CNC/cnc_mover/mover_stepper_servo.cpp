@@ -37,7 +37,20 @@ void CncMover_StepperServo::AllMotorsMoveTo(bool is_absolute_position, float* po
 
 void CncMover_StepperServo::AllMotorStop(){
     this->__stepControl.stop();
+    this->__servo_beta->Stop();
 }
+
+void CncMover_StepperServo::SingleMotorStop(char motor_name){
+    if (motor_name == 'A'){
+        this->__stepper_alpha->Stop();
+    }else if (motor_name=='B'){
+        this->__servo_beta->Stop();
+    }else{
+        Serial.print("[Error] CncMover_StepperServo::SingleMotorStop() Unknown motor_name= ");
+        Serial.println(motor_name);
+    }
+}
+
 
 void CncMover_StepperServo::SingleMotorMoveTo(bool is_absolute_position, char motor_name, float position_in_cnc_unit){
     if (motor_name == 'A'){
@@ -50,11 +63,11 @@ void CncMover_StepperServo::SingleMotorMoveTo(bool is_absolute_position, char mo
         }
     }else if (motor_name == 'B'){
         this->__servo_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
-        if(this->_is_blocked_move){
-            while (this->__servo_beta->IsMoving()){
-                this->__servo_beta->SpinOnce();
-            }
-        }
+        // if(this->_is_blocked_move){
+        //     while (this->__servo_beta->IsMoving()){
+        //         this->__servo_beta->SpinOnce();
+        //     }
+        // }
     }else{
         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", motor_name );
     }

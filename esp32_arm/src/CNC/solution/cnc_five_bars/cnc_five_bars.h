@@ -15,7 +15,7 @@ class CncFiveBars: public CncBase{
         CncFiveBars(){};
         void Init(CncBoardBase* board, CncMachineBase* machine) override;
         void LinkEef(RobotEefBase* eef){this->__eef=eef;};
-        void HomeSingleAxis(char axis) override;
+        void RunG28(char axis) override;
         void RunG1(Gcode* gcode) override;
 
 

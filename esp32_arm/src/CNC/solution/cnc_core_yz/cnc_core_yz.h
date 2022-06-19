@@ -12,7 +12,7 @@ class Cnc_CoreYZ: public CncBase{
         Cnc_CoreYZ(){};
         void Init(CncBoardBase* board, CncMachineBase* machine) override;
 
-        void HomeSingleAxis(char axis) override;
+        void RunG28(char axis) override;
         void RunG1(Gcode* gcode) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  

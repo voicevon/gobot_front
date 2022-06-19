@@ -104,7 +104,7 @@ void CncBase::RunGcode(Gcode* gcode){
 				Serial.print(home_axis);
 
 			}
-			this->HomeSingleAxis(home_axis);
+			this->RunG28(home_axis);
 			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
 			break;
 

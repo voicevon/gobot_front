@@ -16,6 +16,9 @@ class CncMoverBase{
         void SetBlockedMove(bool is_blocked_move){this->_is_blocked_move=is_blocked_move;};
         virtual void SetActuatorSpeed(char actuator_name, float speed_per_second);
         virtual bool MotorIsMoving(char motor_name);
+        // virtual void Stop(char motor_name);
+        virtual void SingleMotorStop(char motor_name);
+
 
     protected:
         bool _is_blocked_move;

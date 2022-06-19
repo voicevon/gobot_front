@@ -83,8 +83,8 @@ void CncCoreAZ::Init(CncBoardBase* board, CncMachineBase* config){
 	this->_home_as_inverse_kinematic = false;
 }
 
-void CncCoreAZ::HomeSingleAxis(char axis){
-	Serial.print("[Debug] CncCoreAZ::HomeSingleAxis() is entering:   " );
+void CncCoreAZ::RunG28(char axis){
+	Serial.print("[Debug] CncCoreAZ::RunG28() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis_name = axis;
 

@@ -28,7 +28,7 @@
 // 	}
 // }
 
-// void SmokeBotHardware::HomeSingleAxis(char axis){
+// void SmokeBotHardware::RunG28(char axis){
 // 	Serial.println("\n================================  " );
 // 	Serial.print(" Start homing    " );
 // 	this->objStepper.setAcceleration(ACCELERATION_HOMIMG);

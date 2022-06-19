@@ -27,6 +27,8 @@ float ActuatorServo::GetDistanceToTarget_InCncUnit(){
 
 void ActuatorServo::SpinOnce(){
     // Execute moving to target position,  and follow target speed
+    if (!this->__is_moving) return;
+
     int64_t  now = esp_timer_get_time();
     int64_t time_interval_in_us = (now - this->last_spin_timestamp) ;
     bool debug = false;
@@ -45,15 +47,19 @@ void ActuatorServo::SpinOnce(){
     if(debug){
         Serial.print("time_interval_in_us= ");
         Serial.print(time_interval_in_us);
-        Serial.print("  __distance_to_target_in_rad = ");
-        Serial.print(__distance_to_target_in_rad);
-        Serial.print("  __speed_degree_per_second= ");
+        Serial.print("  __distance_to_target = ");
+        Serial.print(RAD_TO_DEG* __distance_to_target_in_rad);
+        Serial.print("  __speed = ");
         Serial.print(this->__speed_degree_per_second);
+        Serial.print("  current position = ");
+        Serial.print(RAD_TO_DEG * this->__current_cnc_position_in_rad);
         Serial.print("  distance_should_be_moved=");
-        Serial.println(distance_should_be_moved);
+        Serial.print(RAD_TO_DEG* distance_should_be_moved);
+        Serial.print(" direction= ");
+        Serial.println(this->__moving_direction_of_cnc);
     }
     if (distance_should_be_moved <= this->__distance_to_target_in_rad){
-        // after running this step, will not go over the target position.
+        // after running this step, The servo will not go over the target position.
         this->__current_cnc_position_in_rad += distance_should_be_moved * this->__moving_direction_of_cnc;
         float servo_angle_in_degree = this->__ToServoDegree(this->__current_cnc_position_in_rad);
         this->__servo->write(servo_angle_in_degree);
@@ -72,12 +78,11 @@ void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float positio
     if (is_absolute_position){
         this->_target_cnc_position = position_in_cnc_unit;
     }else{
-        this->_target_cnc_position += position_in_cnc_unit;
+        this->_target_cnc_position = this->__current_cnc_position_in_rad + position_in_cnc_unit;
     }
 
-    if (this->_target_cnc_position >= this->__current_cnc_position_in_rad){
-        this->__moving_direction_of_cnc = 1;
-    }else{
+    this->__moving_direction_of_cnc = 1;
+    if (this->_target_cnc_position < this->__current_cnc_position_in_rad){
         this->__moving_direction_of_cnc = -1;
     }
 
@@ -93,7 +98,7 @@ void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float positio
     }
     
     this->last_spin_timestamp = esp_timer_get_time();
-    this->__is_moving = true;
+    this->__is_moving = true;   //??
     this->SpinOnce();
 }
 

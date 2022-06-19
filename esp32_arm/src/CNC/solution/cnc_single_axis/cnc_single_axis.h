@@ -10,7 +10,7 @@ class CncSingleAxis: public CncBase{
         CncSingleAxis();
 
         void Init(CncBoardBase* board, CncMachineBase* config) override;
-        void HomeSingleAxis(char axis) override;
+        void RunG28(char axis) override;
         void RunG1(Gcode* gcode) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  

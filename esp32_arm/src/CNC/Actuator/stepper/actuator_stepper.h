@@ -14,6 +14,7 @@ class ActuatorStepper: public ActuatorBase{
         float GetDistanceToTarget_InCncUnit() override;
         void SetSpeed(float speed_per_second) override;
         // bool MotorIsMoving(char moto_name) override;
+        void Stop() override {};   // Implatcate by StepControl.
 
     protected:
 
