@@ -136,21 +136,25 @@ void CncScara::RunG1(Gcode* gcode) {
 	target_ik_ab.alpha = this->_board->cnc_mover->GetMotorPosition_InCncUnit('A');
 	target_ik_ab.beta = this->_board->cnc_mover->GetMotorPosition_InCncUnit('B');
 	bool do_ik = false;
-
+	uint8_t motor_flags = 0;
 	if (gcode->has_letter('A')){
 		target_ik_ab.alpha = DEG_TO_RAD * gcode->get_value('A') ;
+		motor_flags += 0x01;
 	}
 	if (gcode->has_letter('B')) {
 		target_ik_ab.beta = DEG_TO_RAD * gcode->get_value('B');
+		motor_flags += 0x02;
 	}
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {
 		do_ik=true;
 		target_fk_xy.X = gcode->get_value('X');
+		motor_flags = 0x03;
 	}
 	if (gcode->has_letter('Y')){
 		do_ik=true;
 		target_fk_xy.Y = gcode->get_value('Y');
+		motor_flags = 0x03;
 	}
 	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
 	if(gcode->has_letter('R')) {
@@ -164,7 +168,8 @@ void CncScara::RunG1(Gcode* gcode) {
 	cnc_position[0] = target_ik_ab.alpha;
 	cnc_position[1] = target_ik_ab.beta;
 	//None blocking, move backgroundly.
-	this->_board->cnc_mover->AllMotorsMoveTo(true, cnc_position, 2);
+	uint8_t abs_flags = 0x03;
+	this->_board->cnc_mover->AllMotorsMoveTo(abs_flags, cnc_position, motor_flags);
 	bool debug = true;
 	if (debug){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");

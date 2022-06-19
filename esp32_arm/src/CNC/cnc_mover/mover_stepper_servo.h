@@ -10,7 +10,8 @@ class CncMover_StepperServo: public CncMoverBase{
         // void LinkStepper_asAlpha(Stepper* stepper);
         void LinkStepper_asAlpha(ActuatorStepper* stepper);
         void LinkServo_asBeta(ActuatorServo* servo);
-        void AllMotorsMoveTo(bool is_absolute_position, float* positions_in_cnc_unit, int motors_count) override;
+        // void AllMotorsMoveTo(bool is_absolute_position, float* positions_in_cnc_unit, int motors_count) override;
+        void AllMotorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit, uint8_t target_motor_flags);
         void AllMotorStop() override;
         void SingleMotorMoveTo(bool is_absolute_position, char motor_name, float position_in_cnc_unit) override;
         void SingleMotorStop(char motor_name) override;
@@ -21,13 +22,15 @@ class CncMover_StepperServo: public CncMoverBase{
         void SetActuatorSpeed(char actuator_name, float speed_per_second) override;
         bool MotorIsMoving(char moto_name) override;
         // void Stop(char motor_name) override;
+        // struct MotorFlag{
 
+        // }
         
     protected:
 
     private:
         // Stepper* __stepper_alpha;
-        ActuatorStepper* __stepper_alpha;
-        ActuatorServo* __servo_beta;
+        ActuatorStepper* __actuator_alpha;
+        ActuatorServo* __actuator_beta;
         StepControl __stepControl;
 };
