@@ -10,8 +10,8 @@ class CncMover_StepperServo: public CncMoverBase{
         // void LinkStepper_asAlpha(Stepper* stepper);
         void LinkStepper_asAlpha(ActuatorStepper* stepper);
         void LinkServo_asBeta(ActuatorServo* servo);
-        // void AllMotorsMoveTo(bool is_absolute_position, float* positions_in_cnc_unit, int motors_count) override;
-        void AllMotorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit, uint8_t target_motor_flags);
+        void AllMotorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit, uint8_t motors_count) override;
+        // void AllMotorsMoveTo(float* positions_in_cnc_unit) override;
         void AllMotorStop() override;
         void SingleMotorMoveTo(bool is_absolute_position, char motor_name, float position_in_cnc_unit) override;
         void SingleMotorStop(char motor_name) override;

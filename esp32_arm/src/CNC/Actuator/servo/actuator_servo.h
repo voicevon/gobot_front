@@ -17,6 +17,7 @@ class ActuatorServo: public ActuatorBase{
         // bool MotorIsMoving(char moto_name) override;
         void SpinOnce();
         bool IsMoving(){return this->__is_moving;};
+        void StartToMove();
         void Stop() override {this->__is_moving=false;};
 
 

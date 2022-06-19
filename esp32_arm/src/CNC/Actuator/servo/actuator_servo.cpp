@@ -96,8 +96,11 @@ void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float positio
         float physic_angle = this->__ToServoDegree(this->_target_cnc_position);
         Serial.println(physic_angle);
     }
-    
     this->last_spin_timestamp = esp_timer_get_time();
+
+}
+
+void ActuatorServo::StartToMove(){
     this->__is_moving = true;   //??
     this->SpinOnce();
 }

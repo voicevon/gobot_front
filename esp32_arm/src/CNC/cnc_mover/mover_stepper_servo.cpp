@@ -18,23 +18,23 @@ void CncMover_StepperServo::AllMotorsMoveTo(uint8_t is_absolute_position_flags, 
     // Calculator cal;
     // uint8_t target_motor_count = cal.count_ones(target_motor_flags);
     bool is_absolute_position;
+    Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
 
     // Step1:  Set target motor position. determin absolute or relative.
     if (target_motor_flags & 0x01){
         // set alpha position
-        is_absolute_position = is_absolute_position_flags && 0x01;
+        is_absolute_position = is_absolute_position_flags & 0x01;
         this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
     }    
     if (target_motor_flags & 0x02){
         // set beta position
-        is_absolute_position = is_absolute_position_flags && 0x02;
+        is_absolute_position = is_absolute_position_flags & 0x02;
         this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
     }
 
     //Step2:  move one or all motors.
     if (target_motor_flags == 0x01){
         // Move alpha only
-        Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
         if (this->_is_blocked_move){
             // this->__stepControl.move(*alpha);
         }else{
@@ -42,17 +42,19 @@ void CncMover_StepperServo::AllMotorsMoveTo(uint8_t is_absolute_position_flags, 
         }
     }else if (target_motor_flags == 0x02){
         // move beta only
-        this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        this->__actuator_beta->StartToMove();
+
 
     }else if (target_motor_flags == 0x03){
         // Both motor will move
-        Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
         if (this->_is_blocked_move){
             // this->__stepControl.move(*alpha);
         }else{
             this->__stepControl.moveAsync(*alpha);
         }
-        this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        this->__actuator_beta->StartToMove();
 
     }else{
         Serial.print("[Error] CncMover_StepperServo::AllMotorsMoveTo()  target_motor_flags= ");
