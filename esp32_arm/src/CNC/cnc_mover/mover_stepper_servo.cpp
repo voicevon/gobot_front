@@ -60,6 +60,7 @@ void CncMover_StepperServo::AllMotorsMoveTo(uint8_t is_absolute_position_flags, 
         Serial.print("[Error] CncMover_StepperServo::AllMotorsMoveTo()  target_motor_flags= ");
         Serial.println(target_motor_flags);
     }
+    this->__moving_motor_flags = target_motor_flags;
 }
 
 void CncMover_StepperServo::AllMotorStop(){
@@ -70,8 +71,10 @@ void CncMover_StepperServo::AllMotorStop(){
 void CncMover_StepperServo::SingleMotorStop(char motor_name){
     if (motor_name == 'A'){
         this->__actuator_alpha->Stop();
+        this->__moving_motor_flags -= 0x01;
     }else if (motor_name=='B'){
         this->__actuator_beta->Stop();
+        this->__moving_motor_flags -= 0x02;
     }else{
         Serial.print("[Error] CncMover_StepperServo::SingleMotorStop() Unknown motor_name= ");
         Serial.println(motor_name);
@@ -85,12 +88,14 @@ void CncMover_StepperServo::SingleMotorMoveTo(bool is_absolute_position, char mo
         Stepper* stepper = this->__actuator_alpha->GetLinkedStepper();
         if (this->_is_blocked_move){
             this->__stepControl.move(*stepper);
+            this->__moving_motor_flags += 0x01;
         }else{
             this->__stepControl.moveAsync(*stepper);
         }
     }else if (motor_name == 'B'){
         this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
         this->__actuator_beta->StartToMove();
+        this->__moving_motor_flags += 0x02;
         // if(this->_is_blocked_move){
         //     while (this->__actuator_beta->IsMoving()){
         //         this->__actuator_beta->SpinOnce();
@@ -130,8 +135,21 @@ void CncMover_StepperServo::SetMotorPosition(char motor_name, float as_current_p
 }
 float CncMover_StepperServo::GetDistanceToTarget_InCncUnit(){
     // return this->__actuator_alpha->getDistanceToTarget();
-    float alpha_distance = this->__actuator_alpha->GetDistanceToTarget_InCncUnit();
-    float beta_distance = this->__actuator_beta->GetDistanceToTarget_InCncUnit();
+    float alpha_distance = 0;
+    if((this->__moving_motor_flags & 0x01) > 0){
+       alpha_distance = this->__actuator_alpha->GetDistanceToTarget_InCncUnit();
+    }
+    float beta_distance = 0;
+    if ((this->__moving_motor_flags & 0x02) > 0){
+       beta_distance = this->__actuator_beta->GetDistanceToTarget_InCncUnit();
+    }
+    bool debug=true;
+    if(debug){
+        Serial.print("[Debug] CncMover_StepperServo::GetDistanceToTarget_InCncUnit() alpha = ");
+        Serial.print(alpha_distance);
+        Serial.print("  beta = ");
+        Serial.println(beta_distance);
+    }
     return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
 
 }

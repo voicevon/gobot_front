@@ -33,4 +33,5 @@ class CncMover_StepperServo: public CncMoverBase{
         ActuatorStepper* __actuator_alpha;
         ActuatorServo* __actuator_beta;
         StepControl __stepControl;
+        uint8_t __moving_motor_flags;
 };

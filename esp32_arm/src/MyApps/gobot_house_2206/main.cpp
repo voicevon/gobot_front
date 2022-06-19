@@ -71,7 +71,7 @@ void board_test(){
 
 void cnc_test(){
     Serial.println("[Info] Cnc teset is started.");
-    robot->Test_Beta(5);
+    robot->Test_Beta(8);
     robot->Test_Alpha(0);
 
     // robot->__Home();

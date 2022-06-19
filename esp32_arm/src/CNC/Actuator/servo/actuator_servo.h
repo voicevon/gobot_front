@@ -33,7 +33,7 @@ class ActuatorServo: public ActuatorBase{
         float __ToCncRad(float from_servo_angle);
 
         float __speed_degree_per_second;
-        int64_t last_spin_timestamp;
+        int64_t __last_spin_timestamp;
         int8_t __moving_direction_of_cnc = 1 ;
         bool __is_moving=false;
         float __distance_to_target_in_rad;
