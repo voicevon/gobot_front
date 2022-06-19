@@ -3,7 +3,7 @@
 void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
-	bool debug = false;
+	bool debug = true;
 
 	float rr1= fk->X * fk->X + fk->Y * fk->Y;
 
@@ -167,7 +167,7 @@ void CncScara::RunG1(Gcode* gcode) {
 	cnc_position[1] = target_ik_ab.beta;
 	//None blocking, move backgroundly.
 	this->_board->cnc_mover->AllMotorsMoveTo(true, cnc_position, 2);
-	bool debug = true;
+	bool debug = false;
 	if (debug){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
 		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit('A'));
@@ -184,7 +184,7 @@ void CncScara:: _running_G1(){
     // if (this->GetDistanceToTarget_IK() < (this->_scara_machine->MAX_ACCELERATION_ALPHPA + this->_scara_machine->MAX_ACCELERATION_BETA)/64){
     if (this->GetDistanceToTarget_IK() < 1) {
       	this->State = CncState::IDLE;
-		// Serial.print("\n[Info] CncScara::_running_G1() is finished. ");
+		Serial.print("\n[Info] CncScara::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);

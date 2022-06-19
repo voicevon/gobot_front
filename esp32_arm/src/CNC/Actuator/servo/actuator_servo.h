@@ -15,6 +15,7 @@ class ActuatorServo: public ActuatorBase{
         float GetDistanceToTarget_InCncUnit() override;
         void SetSpeed(float speed_per_second) override;
         // bool MotorIsMoving(char moto_name) override;
+        void SpinOnce();
 
 
     protected:
@@ -29,4 +30,8 @@ class ActuatorServo: public ActuatorBase{
         float __ToCncRad(float from_servo_angle);
 
         float __speed_degree_per_second;
+        int64_t last_spin_timestamp;
+        uint8_t __moving_direction;
+        bool __is_moving=false;
+        float __distance_to_target_in_rad;
 };

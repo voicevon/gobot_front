@@ -23,7 +23,6 @@ void GobotHouse_2206::ExecuteMqttCommand(const char* command){
 void GobotHouse_2206::__Home(){
 	bool via_inverse_kinematic = true;
 	String strG28 = "G28B";
-	strG28 = "G28A";
 	if (via_inverse_kinematic) strG28.concat("I");
 	this->_gcode_queue->AppendGcodeCommand(strG28);
 	strG28 = "G28A";
@@ -164,31 +163,35 @@ void GobotHouse_2206::ParkArms(bool do_homing){
 	this->_gcode_queue->AppendGcodeCommand(strG1);
 }
 // Head is a position name, The 5 bar arm will pick up stone from there.
-bool GobotHouse_2206::MoveStone_FromRoomToHead(uint8_t room_id){
+void GobotHouse_2206::Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room_id){
 	// if (this->_gcode_queue->GetFreeBuffersCount() < 16)  return false;
+	if (loop_count==0) return;
 
-	__Move_fromNeck_toDoor(room_id,true);
-	__Move_fromRoom_toDoor(room_id,false);
-	__Enable_eefCoil(true);
-	__Move_fromRoom_toDoor(room_id, true);
-	__Move_fromNeck_toDoor(0, false);
-	__Move_fromHead_toNeck(false);
-	__Enable_eefCoil(false);
-	__Move_fromHead_toNeck(true);
-	return true;
+	for(int i=0; i<loop_count; i++){
+		// __Move_fromNeck_toDoor(room_id,true);
+		// __Move_fromRoom_toDoor(room_id,false);
+		// __Enable_eefCoil(true);
+		// __Move_fromRoom_toDoor(room_id, true);
+		// __Move_fromNeck_toDoor(0, false);
+		__Move_fromHead_toNeck(false);
+		// __Enable_eefCoil(false);
+		// __Move_fromHead_toNeck(true);
+	}
 }
 
-bool GobotHouse_2206::MoveStone_FromHeadToRoom(uint8_t room_id){
+void GobotHouse_2206::Test_MoveStone_FromHeadToRoom(int loop_count,uint8_t room_id){
 	// if (this->_gcode_queue->GetFreeBuffersCount() < 16) return false;
-	__Move_fromNeck_toDoor(0, false);  // 0 is useless.
-	__Move_fromHead_toNeck(false);
-	__Enable_eefCoil(true);
-	__Move_fromHead_toNeck(true);
-	__Move_fromNeck_toDoor(room_id, true);
-	__Move_fromRoom_toDoor(room_id, false);
-	__Enable_eefCoil(false);
-	__Move_fromRoom_toDoor(room_id, true);
-	return true;
+	if (loop_count==0) return;
+	for(int i=0; i<loop_count; i++){
+		__Move_fromNeck_toDoor(0, false);  // 0 is useless.
+		__Move_fromHead_toNeck(false);
+		__Enable_eefCoil(true);
+		__Move_fromHead_toNeck(true);
+		__Move_fromNeck_toDoor(room_id, true);
+		__Move_fromRoom_toDoor(room_id, false);
+		__Enable_eefCoil(false);
+		__Move_fromRoom_toDoor(room_id, true);
+	}
 }
 
 void GobotHouse_2206::__Enable_eefCoil(bool enable){
@@ -254,8 +257,12 @@ void GobotHouse_2206::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
 
 // This is almost a  rotation, because beta should be no changing.
 void GobotHouse_2206::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
+	Serial.print("[Debug] GobotHouse_2206::__Move_fromNeck_toDoor() room_id= ");
+	Serial.print(room_id);
+
 	float x = __map.doors[room_id].x;
 	float y = __map.doors[room_id].y;
+	Serial.println("111111111111");
 	if (!forwarding){
 		x = __map.neck.x;
 		y = __map.neck.y;    
@@ -264,7 +271,11 @@ void GobotHouse_2206::__Move_fromNeck_toDoor(uint8_t room_id, bool forwarding){
 	strGcode.concat(x);
 	strGcode.concat("Y");
 	strGcode.concat(y);
+	Serial.println("2222222222222222");
+
 	this->_gcode_queue->AppendGcodeCommand(strGcode);
+	Serial.println("3333333333333333");
+
 }
 void GobotHouse_2206::__Move_fromParking_toDoor(uint8_t door_id){
 	String strGcode="G1X";
@@ -294,6 +305,7 @@ void GobotHouse_2206::__PreHome(){
 	strG1 = "G1A0";
 	this->_gcode_queue->AppendGcodeCommand(strG1);
 }
+
 
 void GobotHouse_2206::Test_HomeAlpha(int loop_count){
 	if (loop_count == 0) return;
