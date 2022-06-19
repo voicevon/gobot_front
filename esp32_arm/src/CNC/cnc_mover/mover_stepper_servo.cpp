@@ -90,6 +90,7 @@ void CncMover_StepperServo::SingleMotorMoveTo(bool is_absolute_position, char mo
         }
     }else if (motor_name == 'B'){
         this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
+        this->__actuator_beta->StartToMove();
         // if(this->_is_blocked_move){
         //     while (this->__actuator_beta->IsMoving()){
         //         this->__actuator_beta->SpinOnce();
