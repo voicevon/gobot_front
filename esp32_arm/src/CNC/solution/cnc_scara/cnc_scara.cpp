@@ -3,7 +3,7 @@
 void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
-	bool debug = true;
+	bool debug = false;
 
 	float rr1= fk->X * fk->X + fk->Y * fk->Y;
 
@@ -41,7 +41,7 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 		Serial.print(alpha * RAD_TO_DEG);
 		Serial.print(" , ");
 		Serial.print(beta * RAD_TO_DEG);
-		Serial.print(")");
+		Serial.println(")");
 	}
 }
 
@@ -126,26 +126,23 @@ void CncScara::RunG1(Gcode* gcode) {
 	// Serial.print(gcode->get_command());
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
-		// this->alpha_stepper->setMaxSpeed(speed);
+		// this->_board->cnc_mover->SetActuatorSpeed
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
 	target_fk_xy.X = this->__current_fk_position.X;
 	target_fk_xy.Y = this->__current_fk_position.Y;
-	// target_ik_ab.alpha = this->alpha_stepper->getPosition();
-	// target_ik_ab.beta = this->beta_stepper->getPosition();
 	target_ik_ab.alpha = this->_board->cnc_mover->GetMotorPosition_InCncUnit('A');
 	target_ik_ab.beta = this->_board->cnc_mover->GetMotorPosition_InCncUnit('B');
 	bool do_ik = false;
 
-	if (gcode->has_letter('A')) 
-		// target_ik_ab.alpha = gcode->get_value('A') * this->_scara_machine->STEPS_PER_RAD_ALPHA * DEG_TO_RAD;
+	if (gcode->has_letter('A')){
 		target_ik_ab.alpha = DEG_TO_RAD * gcode->get_value('A') ;
-	if (gcode->has_letter('B')) 
-		// target_ik_ab.beta = gcode->get_value('B')  * this->_scara_machine->STEPS_PER_RAD_BETA * DEG_TO_RAD;
+	}
+	if (gcode->has_letter('B')) {
 		target_ik_ab.beta = DEG_TO_RAD * gcode->get_value('B');
-
+	}
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {
 		do_ik=true;
@@ -156,9 +153,10 @@ void CncScara::RunG1(Gcode* gcode) {
 		target_fk_xy.Y = gcode->get_value('Y');
 	}
 	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
-	if(gcode->has_letter('R')) 
-		// target_ik_ab.alpha = this->_scara_machine->motor_steps_per_round * gcode->get_value('R');
+	if(gcode->has_letter('R')) {
 		target_ik_ab.alpha = gcode->get_value('R');
+	}
+
 	//Prepare actuator/driver to move to next point
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B', true);
@@ -167,7 +165,7 @@ void CncScara::RunG1(Gcode* gcode) {
 	cnc_position[1] = target_ik_ab.beta;
 	//None blocking, move backgroundly.
 	this->_board->cnc_mover->AllMotorsMoveTo(true, cnc_position, 2);
-	bool debug = false;
+	bool debug = true;
 	if (debug){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
 		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit('A'));
@@ -197,20 +195,21 @@ void CncScara::HomeSingleAxis(char axis){
 	}
 	this->_homing_axis_name = axis;
 	this->__homing_helper = this->_board->GetHomer(axis);
+	float homing_speed = this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
+	this->_board->cnc_mover->SetActuatorSpeed(this->_homing_axis_name, homing_speed);
 	this->_board->EnableMotor(axis, true);
 }
 
 void CncScara::_running_G28(){
-	// Serial.print("[Debug] CncScara::running_G28() is entering \n");
+	bool debug = false;
+	if (debug) Serial.print("[Debug] CncScara::running_G28() is entering \n");
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
-
 		this->_board->cnc_mover->AllMotorStop();
-
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
-			// Serial.print("\n   [Info] Trying to get home position from actuator position  ");
+			if (debug) Serial.print("\n   [Info] Trying to get home position from actuator position  ");
 			if (this->_homing_axis_name == 'A'){
 				ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree;
 				//Copy current ik-position to motor-position.
@@ -230,15 +229,20 @@ void CncScara::_running_G28(){
 		// Note: If homed_position is defined a FK-XY position,  This must be after IK() translation.
 		this->_board->cnc_mover->SetMotorPosition('A', ik_position.alpha);
 		this->_board->cnc_mover->SetMotorPosition('B', ik_position.beta);
-		// Serial.print("\n======================================= End of Homing, State to be IDLE\n");
 		this->State = CncState::IDLE;
 
-		bool debug = false;
+		bool debug = true;
 		if (debug){
 			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
 			Serial.print(this->_homing_axis_name);
-			Serial.print("  cnc position degree= ");
-			Serial.print(this->_scara_machine->Homed_position_alpha_in_degree);
+			if (this->_homing_axis_name =='A'){
+				Serial.print("  cnc position in degree=  ");
+				Serial.print(RAD_TO_DEG * ik_position.alpha);
+			}
+			if (this->_homing_axis_name =='B'){
+				Serial.print("  cnc position in degree=  ");
+				Serial.print(RAD_TO_DEG * ik_position.beta);
+			}
 		}
 	}else{
 		// Endstop is not trigered, When endstop is trigered, must stop the moving. 

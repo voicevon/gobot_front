@@ -10,19 +10,20 @@ class ActuatorServo: public ActuatorBase{
         void SetInverseDir(bool inversed){this->__inversed_dir=inversed;};
 
         float GetCurrentPosition_InCncUnit() override;
-        void SetPosition(float cnc_position_in_rad) override;
-        void MoveTo(bool is_absolute_position, float position_in_cnc_unit) override;
+        void SetCurrentPositionAs(float cnc_position_in_rad) override;
+        void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit) override;
         float GetDistanceToTarget_InCncUnit() override;
-        void SetSpeed(float speed_per_second) override;
+        void SetSpeed(float speed_per_second) override;   // There is no "unsigned float"
         // bool MotorIsMoving(char moto_name) override;
         void SpinOnce();
+        bool IsMoving(){return this->__is_moving;};
 
 
     protected:
 
     private:
         Servo* __servo;
-        float __current_position_in_rad;
+        float __current_cnc_position_in_rad;
 
         bool __inversed_dir;
         float __position_offset_in_rad = 0;   // Logical position - physic position
@@ -31,7 +32,7 @@ class ActuatorServo: public ActuatorBase{
 
         float __speed_degree_per_second;
         int64_t last_spin_timestamp;
-        uint8_t __moving_direction;
+        uint8_t __moving_direction_of_cnc;
         bool __is_moving=false;
         float __distance_to_target_in_rad;
 };

@@ -35,7 +35,7 @@ void setup(){
     robot->LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cncScara.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     cnc_test();
-    robot->__Home();
+    // robot->__Home();
 
 
     // mqtt, bridge, receiver.
@@ -71,11 +71,11 @@ void board_test(){
 
 void cnc_test(){
     Serial.println("[Info] Cnc teset is started.");
-    robot->Test_HomeBeta(0);
-    robot->Test_HomeAlpha(0);
+    robot->Test_Beta(5);
+    robot->Test_Alpha(0);
 
-    robot->__Home();
-    robot->Test_MoveStone_FromRoomToHead(5, 0);
+    // robot->__Home();
+    robot->Test_MoveStone_FromRoomToHead(0, 0);
     // GobotHouse2206_CncTester tester;
     // tester.Init(&board, &cncScara);
 

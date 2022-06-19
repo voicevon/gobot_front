@@ -27,7 +27,7 @@ float ActuatorStepper::__fit_into_joint_range(float cnc_position_in_rad){
     return new_position_in_cnc_unit;
 }
 
-void ActuatorStepper::SetPosition(float position_in_cnc_unit){
+void ActuatorStepper::SetCurrentPositionAs(float position_in_cnc_unit){
     //TODO:  direction is here.  The joint has range limitation.
 
     float new_position_in_cnc_unit = this->__fit_into_joint_range(position_in_cnc_unit);
@@ -44,7 +44,7 @@ void ActuatorStepper::SetPosition(float position_in_cnc_unit){
     }
 }
 
-void ActuatorStepper::MoveTo(bool is_absolute_position, float position_in_cnc_unit){
+void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
     int32_t posititon_in_step = position_in_cnc_unit * this->__steps_per_cnc_unit;
     if (is_absolute_position){
         float new_position_in_cnc_unit = this->__fit_into_joint_range(position_in_cnc_unit);

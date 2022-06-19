@@ -5,7 +5,7 @@ void ActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
     this->__servo = servo; 
     this->__inversed_dir = is_inversed_dir;
     this->__servo->write(40);
-    this->SetPosition(DEG_TO_RAD * 150); 
+    this->SetCurrentPositionAs(DEG_TO_RAD * 150); 
     bool debug = false;
     if (debug){
         float verify_cnc_position = this->__ToCncRad(50);
@@ -18,7 +18,7 @@ void ActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
 }
 
 float ActuatorServo::GetCurrentPosition_InCncUnit(){
-    return this->__current_position_in_rad;
+    return this->__current_cnc_position_in_rad;
 }
 
 float ActuatorServo::GetDistanceToTarget_InCncUnit(){
@@ -29,14 +29,33 @@ void ActuatorServo::SpinOnce(){
     // Execute moving to target position,  and follow target speed
     int64_t  now = esp_timer_get_time();
     int64_t time_interval_in_us = (now - this->last_spin_timestamp) ;
-    if(time_interval_in_us < (60 *1000)) return;   // at least 60ms
+    bool debug = false;
+    if (debug){
+        Serial.print("[Debug] ActuatorServo::SpinOnce() now= ");
+        Serial.print(now);
+        Serial.print("   interval us = ");
+        Serial.println(time_interval_in_us);
+    }
+    if(time_interval_in_us < (60L * 1000)) return;   // at least 60ms
+
+    this->__distance_to_target_in_rad = abs (this->_target_cnc_position - this->__current_cnc_position_in_rad);
+    float distance_should_be_moved = abs(DEG_TO_RAD * this->__speed_degree_per_second * time_interval_in_us /1000000L);
     
-    this->__distance_to_target_in_rad = this->_target_cnc_position - this->__current_position_in_rad;
-    float distance_should_be_moved = DEG_TO_RAD * this->__speed_degree_per_second * time_interval_in_us /1000000L;
+    debug = false;
+    if(debug){
+        Serial.print("time_interval_in_us= ");
+        Serial.print(time_interval_in_us);
+        Serial.print("  __distance_to_target_in_rad = ");
+        Serial.print(__distance_to_target_in_rad);
+        Serial.print("  __speed_degree_per_second= ");
+        Serial.print(this->__speed_degree_per_second);
+        Serial.print("  distance_should_be_moved=");
+        Serial.println(distance_should_be_moved);
+    }
     if (distance_should_be_moved <= this->__distance_to_target_in_rad){
         // after running this step, will not go over the target position.
-        this->__current_position_in_rad += distance_should_be_moved;
-        float servo_angle_in_degree = this->__ToServoDegree(this->__current_position_in_rad);
+        this->__current_cnc_position_in_rad += distance_should_be_moved * this->__moving_direction_of_cnc;
+        float servo_angle_in_degree = this->__ToServoDegree(this->__current_cnc_position_in_rad);
         this->__servo->write(servo_angle_in_degree);
         this->last_spin_timestamp = now;
         this->__is_moving = true;
@@ -46,48 +65,43 @@ void ActuatorServo::SpinOnce(){
     }
 }
 
-void ActuatorServo::MoveTo(bool is_absolute_position, float position_in_cnc_unit){
+void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
     // float time;
-
+    Serial.println("[Debug] ActuatorServo::MoveTo()");
 
     if (is_absolute_position){
         this->_target_cnc_position = position_in_cnc_unit;
     }else{
         this->_target_cnc_position += position_in_cnc_unit;
-        // time = abs(position_in_cnc_unit) / this->__speed_degree_per_second;
     }
 
-    if (this->_target_cnc_position > this->__current_position_in_rad){
-        this->__moving_direction = 1;
+    if (this->_target_cnc_position >= this->__current_cnc_position_in_rad){
+        this->__moving_direction_of_cnc = 1;
     }else{
-        this->__moving_direction = -1;
+        this->__moving_direction_of_cnc = -1;
     }
-    // if(this->__speed_degree_per_second >= 0){
-    //     // for homing process of CNC.
-    //     if (time < 50.0f / 1000) time =50;
-    //     delay(time);
-    // }
-    bool debug = false;
+
+    bool debug = true;
     if(debug){
-        Serial.print("[debug] ActuatorServo::MoveTo() cnc_position in degree = ");
-        Serial.print(RAD_TO_DEG * position_in_cnc_unit);
-        Serial.print("   ");
-        Serial.print(RAD_TO_DEG * this->__current_position_in_rad);
-        Serial.print("    physical angle= ");
+        Serial.print("[debug] ActuatorServo::MoveTo() current_cnc_position in degree = ");
+        Serial.print(RAD_TO_DEG * this->__current_cnc_position_in_rad);
+        Serial.print("  target position=  ");
+        Serial.print(RAD_TO_DEG * this->_target_cnc_position);
+        Serial.print("    target physical angle= ");
         float physic_angle = this->__ToServoDegree(this->_target_cnc_position);
         Serial.println(physic_angle);
     }
     
-    this->__current_position_in_rad = this->_target_cnc_position;    // TODO: record the timestep, To get distance to target by time.
     this->last_spin_timestamp = esp_timer_get_time();
+    this->__is_moving = true;
     this->SpinOnce();
 }
 
-void ActuatorServo::SetPosition(float cnc_position_in_rad){
-    // This function is called from CNC, Who send a rad-angle of position's unit. 
+void ActuatorServo::SetCurrentPositionAs(float cnc_position_in_rad){
+    // This function is called from CNC, Who send a rad-angle in unit. 
     int8_t dir = 1;
     if (this->__inversed_dir) dir = -1;
-    this->__current_position_in_rad = cnc_position_in_rad;
+    this->__current_cnc_position_in_rad = cnc_position_in_rad;
     this->__position_offset_in_rad = cnc_position_in_rad - DEG_TO_RAD * this->__servo->read() * dir;
     bool debug = false;
     if(debug){
@@ -103,8 +117,6 @@ void ActuatorServo::SetPosition(float cnc_position_in_rad){
 void ActuatorServo::SetSpeed(float speed_per_second){
     this->__speed_degree_per_second = RAD_TO_DEG * speed_per_second; 
 }
-
-
 
 
 float ActuatorServo::__ToServoDegree(float from_cnc_rad){

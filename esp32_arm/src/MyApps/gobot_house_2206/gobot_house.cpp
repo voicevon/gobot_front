@@ -307,7 +307,7 @@ void GobotHouse_2206::__PreHome(){
 }
 
 
-void GobotHouse_2206::Test_HomeAlpha(int loop_count){
+void GobotHouse_2206::Test_Alpha(int loop_count){
 	if (loop_count == 0) return;
 
 	Serial.println("[Info]  GobotMain::Test_HomeAlpha()");
@@ -328,7 +328,7 @@ void GobotHouse_2206::Test_HomeAlpha(int loop_count){
 	}
 }
 
-void GobotHouse_2206::Test_HomeBeta(int loop_count){
+void GobotHouse_2206::Test_Beta(int loop_count){
 	if (loop_count == 0) return;
 
 	Serial.println("[Info]  GobotMain::Test_HomeBeta()  This is in TODO list.");
