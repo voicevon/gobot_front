@@ -16,18 +16,18 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     this->__beta_servo.LinkServo(&this->__beta_servo_driver, true);
     
     GobotHouse2206_AlphaStepper_Mechanic alpha_mechanic;
-    this->__alpha_stepper_driver.setInverseRotation(true);
-    this->__alpha_stepper.LinkStepper(&this->__alpha_stepper_driver, &alpha_mechanic);
+    this->__stepper_alpha.setInverseRotation(true);
+    this->__actuator_alpha.LinkStepper(&this->__stepper_alpha, &alpha_mechanic);
 
-    this->mover_StepperServo.LinkStepper_asAlpha(&this->__alpha_stepper);
+    this->mover_StepperServo.LinkStepper_asAlpha(&this->__actuator_alpha);
     this->mover_StepperServo.LinkServo_asBeta(&this->__beta_servo);
     this->cnc_mover = &this->mover_StepperServo;
 
 }
 
-ActuatorStepper* Board_GobotHouse_2206::GetJointStepper(char axis_name) {
+ActuatorStepper* Board_GobotHouse_2206::GetActuator(char axis_name) {
     if (axis_name=='A'){
-        return &this->__alpha_stepper;
+        return &this->__actuator_alpha;
     // }else if (axis_name=='B'){
     //     return &this->stepper_beta;
     }else{
@@ -44,6 +44,7 @@ ActuatorServo* Board_GobotHouse_2206::GetJointServo(char axis_name){
         Serial.print("['Error']  Board_GobotHouse_2206::GetStepper()   axis_name= ");
         Serial.println(axis_name);
     }
+    return nullptr;
 }
 
 

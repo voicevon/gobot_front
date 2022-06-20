@@ -11,7 +11,7 @@ class CncBoardBase: public BoardBase{
     public:
         virtual void Init(bool is_on_reset);
         void SayHello() override;
-        virtual ActuatorStepper* GetJointStepper(char axis_name);
+        virtual ActuatorStepper* GetActuator(char axis_name);
         virtual SingleAxisHomer* GetHomer(char axis_name);
         virtual RobotEefBase* GetEef();
         virtual void EnableMotor(char axis_name, bool enable_it);

@@ -1,5 +1,5 @@
 #include "board_gobot_main.h"
-
+#include "mechanic/alpha_mechanic.h"
 
 void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
@@ -8,6 +8,17 @@ void Board_GobotMain::Init(bool is_on_reset){
     pinMode(PIN_BETA_ENABLE_2201, OUTPUT);
 
     this->__eef.Init();
+    
+    this->__stepper_alpha.setInverseRotation(false);
+    this->__stepper_beta.setInverseRotation(false);
+
+    GobotMain_AlphaStepper_Mechanic mechanic;
+    this->__actuator_alpha.LinkStepper(&this->__stepper_alpha, &mechanic);
+    this->__actuator_beta.LinkStepper(&this->__stepper_beta, &mechanic);
+    
+    this->__mover_dual_step.LinkStepper_asAlpha(&this->__actuator_alpha);
+    this->__mover_dual_step.LinkStepper_asBeta(&this->__actuator_beta);
+    this->cnc_mover = &this->__mover_dual_step;
 
     this->EnableMotor('A', false);
     this->EnableMotor('B', false);
@@ -25,16 +36,16 @@ void Board_GobotMain::Init(bool is_on_reset){
     this->RepportRamUsage();
 }
 
-ActuatorStepper* Board_GobotMain::GetJointStepper(char axis_name) {
+ActuatorStepper* Board_GobotMain::GetActuator(char axis_name) {
     if (axis_name=='A'){
-        return &this->__stepper_alpha;
+        return &this->__actuator_alpha;
     }else if (axis_name=='B'){
-        return &this->__stepper_beta;
+        return &this->__actuator_beta;
     }else{
         Serial.print("['Error']  Board_GobotMain::GetStepper()   axis_name= ");
         Serial.println(axis_name);
     }
-
+    return nullptr;
 }
 
 SingleAxisHomer* Board_GobotMain::GetHomer(char axis_name) {

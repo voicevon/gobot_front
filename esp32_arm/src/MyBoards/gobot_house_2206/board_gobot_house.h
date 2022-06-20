@@ -11,7 +11,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
         Board_GobotHouse_2206(){};
         void Init(bool is_on_reset) override;
         // void SayHello();
-        ActuatorStepper* GetJointStepper(char axis_name) override;
+        ActuatorStepper* GetActuator(char axis_name) override;
         ActuatorServo* GetJointServo(char axis_name);
         // MotorBase* GetMotor(char axis_name){};  //TODO: Stepper, Servo, BLDC... all is motorbase!
         SingleAxisHomer* GetHomer(char axis_name) override;
@@ -23,8 +23,8 @@ class Board_GobotHouse_2206: public CncBoardBase{
 
     
     private:
-        Stepper __alpha_stepper_driver = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
-        ActuatorStepper __alpha_stepper;
+        Stepper __stepper_alpha = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
+        ActuatorStepper __actuator_alpha;
         SingleAxisHomer __alpha_homer = SingleAxisHomer(PIN_HOME_ALHPA_2109, LOW);
 
         SingleAxisHomer __beta_homer = SingleAxisHomer(PIN_HOME_BETA_2109, LOW);

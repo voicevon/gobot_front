@@ -17,7 +17,7 @@ void Board_GobotHouse::Init(bool is_on_reset){
 
 }
 
-ActuatorStepper* Board_GobotHouse::GetJointStepper(char axis_name) {
+ActuatorStepper* Board_GobotHouse::GetActuator(char axis_name) {
     if (axis_name=='A'){
         return &this->alpha_stepper;
     }else if (axis_name=='B'){
