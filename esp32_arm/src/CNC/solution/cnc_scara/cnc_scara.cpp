@@ -85,15 +85,8 @@ void CncScara::Init(CncBoardBase* board, CncMachineBase* machine){
 	board->EnableMotor('A', false);
 	board->EnableMotor('B', false);
 
-	// this->alpha_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
-	// this->alpha_stepper->setMaxSpeed(this->_scara_machine->MAX_ACCELERATION_ALPHPA);
-	// this->beta_stepper->setAcceleration(this->_scara_machine->MAX_ACCELERATION_BETA);
-	// this->beta_stepper->setMaxSpeed(this->_scara_machine->MAX_STEPS_PER_SECOND_BETA);
-	// this->alpha_stepper->setInverseRotation(true);
-	// this->beta_stepper->setInverseRotation(false);
-
 	this->_home_as_inverse_kinematic = true;
-	this->_board->cnc_mover->SetBlockedMove(false);
+	// this->_board->cnc_mover->SetBlockedMove(false);
 
 
 }
@@ -121,15 +114,17 @@ void CncScara::RunG1(Gcode* gcode) {
 	// Serial.print("\n[Debug] CncScara::RunG1()   ");
 	// Serial.print(gcode->get_command());
 
-	// Assume G1-code want to update actuator directly, no need to do IK.
+	// Assume G1-code mostly wants to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
-	target_fk_xy.X = this->__current_fk_position.X;
-	target_fk_xy.Y = this->__current_fk_position.Y;
-	target_ik_ab.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A');
-	target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B');
+	// target_fk_xy.X = this->__current_fk_position.X;
+	// target_fk_xy.Y = this->__current_fk_position.Y;
+	// target_ik_ab.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A');
+	// target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B');
+
 	bool do_ik = false;
 	uint8_t motor_flags = 0;
+
 	if (gcode->has_letter('A')){
 		target_ik_ab.alpha = DEG_TO_RAD * gcode->get_value('A') ;
 		motor_flags += 0x01;
@@ -140,29 +135,22 @@ void CncScara::RunG1(Gcode* gcode) {
 	}
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {
-		do_ik=true;
+		do_ik = true;
 		target_fk_xy.X = gcode->get_value('X');
 		motor_flags = 0x03;
 	}
 	if (gcode->has_letter('Y')){
-		do_ik=true;
+		do_ik = true;
 		target_fk_xy.Y = gcode->get_value('Y');
 		motor_flags = 0x03;
 	}
-	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
+
+	if (do_ik) IK(&target_fk_xy, &target_ik_ab);
+
 	if(gcode->has_letter('R')) {
 		target_ik_ab.alpha = gcode->get_value('R');
 	}
 
-	//Prepare actuator/driver to move to next point
-	this->_board->EnableMotor('A', true);
-	this->_board->EnableMotor('B', true);
-	float cnc_position[2];
-	cnc_position[0] = target_ik_ab.alpha;
-	cnc_position[1] = target_ik_ab.beta;
-	//None blocking, move backgroundly.
-	uint8_t abs_flags = 0x03;
-	this->_board->cnc_mover->AllActuatorsMoveTo(abs_flags, cnc_position, motor_flags);
 	bool debug = false;
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
@@ -174,6 +162,18 @@ void CncScara::RunG1(Gcode* gcode) {
 			Serial.println(RAD_TO_DEG * speed);
 		}
 	}
+
+	// TODO:  Enable motor via mover->enable_motor(axis)
+	this->_board->EnableMotor('A', true);
+	this->_board->EnableMotor('B', true);
+
+	float cnc_position[2];
+	cnc_position[0] = target_ik_ab.alpha;
+	cnc_position[1] = target_ik_ab.beta;
+	
+	uint8_t abs_flags = 0x03;
+	this->_board->cnc_mover->AllActuatorsMoveTo(abs_flags, cnc_position, motor_flags);
+
 	debug = true;
 	if (debug){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");

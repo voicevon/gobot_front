@@ -12,7 +12,7 @@ class CncMoverBase{
 
         virtual void SetActuatorSpeed(char actuator_name, float speed_per_second);  // TODO:  remove this
         virtual void SetSpeed(float speed);
-        void SetBlockedMove(bool is_blocked_move){this->_is_blocked_move=is_blocked_move;};
+        // void SetBlockedMove(bool is_blocked_move){this->_is_blocked_move=is_blocked_move;};
 
         virtual void SetActuatorCurrentCncPositionAs(char actuator_name, float as_current_position);
 
@@ -27,7 +27,7 @@ class CncMoverBase{
 
 
     protected:
-        bool _is_blocked_move;
+        // bool _is_blocked_move;
     
     private:
     

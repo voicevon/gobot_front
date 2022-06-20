@@ -32,45 +32,41 @@ void CncMover_StepperServo::SetSpeed(float speed){
 // alpha = flags.bits[0]
 // beta = flags.bits[1]
 void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit, uint8_t target_motor_flags){
-    // Calculator cal;
-    // uint8_t target_motor_count = cal.count_ones(target_motor_flags);
     bool is_absolute_position;
     Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
 
     // Step1:  Set target motor position. determin absolute or relative.
-    if (target_motor_flags & 0x01){
+    if (target_motor_flags == 0x01){
         // set alpha position
-        is_absolute_position = is_absolute_position_flags & 0x01;
+        is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
         this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
-    }    
-    if (target_motor_flags & 0x02){
+
+    }else if (target_motor_flags == 0x02){
         // set beta position
-        is_absolute_position = is_absolute_position_flags & 0x02;
+        is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
+        this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+
+    }else if (target_motor_flags == 0x03){
+        // set alpha position
+        is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
+        this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+        // and set beta position
+        is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
         this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
     }
 
     //Step2:  move one or all motors.
     if (target_motor_flags == 0x01){
         // Move alpha only
-        if (this->_is_blocked_move){
-            // this->__stepControl.move(*alpha);
-        }else{
-            this->__stepControl.moveAsync(*alpha);
-        }
+        this->__stepControl.moveAsync(*alpha);
+
     }else if (target_motor_flags == 0x02){
         // move beta only
-        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
         this->__actuator_beta->StartToMove();
-
 
     }else if (target_motor_flags == 0x03){
         // Both motor will move
-        if (this->_is_blocked_move){
-            // this->__stepControl.move(*alpha);
-        }else{
-            this->__stepControl.moveAsync(*alpha);
-        }
-        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        this->__stepControl.moveAsync(*alpha);
         this->__actuator_beta->StartToMove();
 
     }else{
@@ -89,6 +85,7 @@ void CncMover_StepperServo::SingleActuatorStop(char actuator_name){
     if (actuator_name == 'A'){
         this->__actuator_alpha->Stop();
         this->__moving_motor_flags -= 0x01;
+
     }else if (actuator_name=='B'){
         this->__actuator_beta->Stop();
         this->__moving_motor_flags -= 0x02;
@@ -103,21 +100,14 @@ void CncMover_StepperServo::SingleActuatorMoveTo(char actuator_name, bool is_abs
     if (actuator_name == 'A'){
         this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
         Stepper* stepper = this->__actuator_alpha->GetLinkedStepper();
-        if (this->_is_blocked_move){
-            this->__stepControl.move(*stepper);
-            this->__moving_motor_flags += 0x01;
-        }else{
-            this->__stepControl.moveAsync(*stepper);
-        }
+        this->__stepControl.moveAsync(*stepper);
+        this->__moving_motor_flags = 0x01;
+
     }else if (actuator_name == 'B'){
         this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
         this->__actuator_beta->StartToMove();
-        this->__moving_motor_flags += 0x02;
-        // if(this->_is_blocked_move){
-        //     while (this->__actuator_beta->IsMoving()){
-        //         this->__actuator_beta->SpinOnce();
-        //     }
-        // }
+        this->__moving_motor_flags = 0x02;
+
     }else{
         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", actuator_name );
     }
@@ -125,15 +115,11 @@ void CncMover_StepperServo::SingleActuatorMoveTo(char actuator_name, bool is_abs
 
 float CncMover_StepperServo::GetSingleActuatorCurrentPosition_InCncUnit(char actuator_name){
     if (actuator_name == 'A'){
-        // return this->__actuator_alpha->getPosition();
-        int32_t motor_position = this->__actuator_alpha->GetCurrentPosition_InCncUnit();
-        // convert motor_position to cnc position
-        float steps_per_unit = 12.34;
-        float cnc_position = motor_position / steps_per_unit;
-        return cnc_position;
+        return this->__actuator_alpha->GetCurrentPosition_InCncUnit();
 
     }else if (actuator_name == 'B'){
         return this->__actuator_beta->GetCurrentPosition_InCncUnit();
+
     }else{
         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", actuator_name );
     }
@@ -141,17 +127,14 @@ float CncMover_StepperServo::GetSingleActuatorCurrentPosition_InCncUnit(char act
 
 void CncMover_StepperServo::SetActuatorCurrentCncPositionAs(char actuator_name, float as_current_position){
     if (actuator_name == 'A'){
-        // this->__actuator_alpha->setPosition(as_current_position);
         this->__actuator_alpha->SetCurrentPositionAs(as_current_position);
     }else if (actuator_name == 'B'){
         this->__actuator_beta->SetCurrentPositionAs(as_current_position);
-        // log_w("[]CncMover_StepperServo::SingleMotorMoveTo()  "," Not Implemented");
     }else{
         log_w("[Warn] CncMover_StepperServo::SingleMotorMoveTo() Unkonwn axisname= ", actuator_name );
     }
 }
 float CncMover_StepperServo::GetDistanceToTarget_InCncUnit(){
-    // return this->__actuator_alpha->getDistanceToTarget();
     float alpha_distance = 0;
     if((this->__moving_motor_flags & 0x01) > 0){
        alpha_distance = this->__actuator_alpha->GetDistanceToTarget_InCncUnit();

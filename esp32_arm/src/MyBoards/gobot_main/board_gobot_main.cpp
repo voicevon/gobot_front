@@ -46,6 +46,7 @@ SingleAxisHomer* Board_GobotMain::GetHomer(char axis_name) {
         Serial.print("['Error']  Board_GobotMain::GetHomer()   axis_name= ");
         Serial.println(axis_name);
     }
+    return nullptr;
 }
 
 RobotEef_GobotMain* Board_GobotMain::GetEef() {
