@@ -13,7 +13,7 @@ class CncMover_StepperServo: public CncMoverBase{
         void SetSpeed(float speed) override;
         float GetSingleActuatorCurrentPosition_InCncUnit(char motor_name) override;
         float GetDistanceToTarget_InCncUnit() override;
-        void SetActuatorSpeed(char actuator_name, float speed_per_second) override;
+        void SetActuatorSpeed(char actuator_name, float rad_per_second) override;
         bool ActuatorIsMoving(char actuator) override;
 
 
@@ -22,7 +22,7 @@ class CncMover_StepperServo: public CncMoverBase{
         void AllActuatorsStop() override;
         void SingleActuatorStop(char motor_name) override;
 
-        void SetActuatorCurrentPositionTo(char actuator_name, float as_current_position) override;
+        void SetActuatorCurrentCncPositionAs(char actuator_name, float as_current_position) override;
         // void Stop(char motor_name) override;
         // struct MotorFlag{
 

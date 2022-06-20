@@ -14,7 +14,7 @@ class CncMoverBase{
         virtual void SetSpeed(float speed);
         void SetBlockedMove(bool is_blocked_move){this->_is_blocked_move=is_blocked_move;};
 
-        virtual void SetActuatorCurrentPositionTo(char actuator_name, float as_current_position);
+        virtual void SetActuatorCurrentCncPositionAs(char actuator_name, float as_current_position);
 
         virtual void AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit, uint8_t target_motor_flags);
         virtual void SingleActuatorMoveTo(char actuator_name, bool is_absolute_position,  float position_in_cnc_unit);

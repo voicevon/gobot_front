@@ -61,14 +61,18 @@ void ActuatorServo::SpinOnce(){
     if (distance_should_be_moved <= this->__distance_to_target_in_rad){
         // after running this step, The servo will not go over the target position.
         this->__current_cnc_position_in_rad += distance_should_be_moved * this->__moving_direction_of_cnc;
-        float servo_angle_in_degree = this->__ToServoDegree(this->__current_cnc_position_in_rad);
-        this->__servo->write(servo_angle_in_degree);
+        // float servo_angle_in_degree = this->__ToServoDegree(this->__current_cnc_position_in_rad);
+        // this->__servo->write(servo_angle_in_degree);
         this->__last_spin_timestamp = now;
         // this->__is_moving = true;
     }else{
-        //Almost arrived target position already.
+        //Almost arrived target position already, So this is the last step.
+        this->__current_cnc_position_in_rad = this->_target_cnc_position;
+        this->__distance_to_target_in_rad = 0;
         this->__is_moving = false;
     }
+    float servo_angle_in_degree = this->__ToServoDegree(this->__current_cnc_position_in_rad);
+    this->__servo->write(servo_angle_in_degree);
 }
 
 void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){

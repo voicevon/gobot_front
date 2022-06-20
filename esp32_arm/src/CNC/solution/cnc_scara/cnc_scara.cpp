@@ -114,10 +114,6 @@ float CncScara::GetDistanceToTarget_FK(){
 }
 
 float CncScara::GetDistanceToTarget_IK(){
-	// int32_t da = this->alpha_stepper->getDistanceToTarget();
-	// int32_t db = this->beta_stepper->getDistanceToTarget();
-	// float distance = sqrt(da * da + db * db);
-
 	return this->_board->cnc_mover->GetDistanceToTarget_InCncUnit();
 }
 
@@ -193,12 +189,16 @@ void CncScara::RunG1(Gcode* gcode) {
 
 void CncScara:: _running_G1(){
     // if (this->GetDistanceToTarget_IK() < (this->_scara_machine->MAX_ACCELERATION_ALPHPA + this->_scara_machine->MAX_ACCELERATION_BETA)/64){
-    if (this->GetDistanceToTarget_IK() < DEG_TO_RAD * 3) {
+    float distance_in_degree = RAD_TO_DEG * this->GetDistanceToTarget_IK() ;
+	if ( distance_in_degree < 3) {
       	this->State = CncState::IDLE;
 		Serial.print("\n[Info] CncScara::_running_G1() is finished. ");
     }
-	// Serial.println(this->GetDistanceToTarget_IK());
-	// delay(100);
+	bool debug = false;
+	if(debug){
+		Serial.print("[Debug] CncScara:: _running_G1(): distance_in_degree = ");
+		Serial.println(distance_in_degree);
+	}
 }
 
 void CncScara::RunG28(char axis){
@@ -230,6 +230,7 @@ void CncScara::_running_G28(){
 			if (debug) Serial.print("\n   [Info] CncScara::_running_G28() Trying to get home position from actuator position  ");
 			if (this->_homing_axis_name == 'A'){
 				ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree;
+				
 			}else if (this->_homing_axis_name == 'B'){
 				ik_position.beta = DEG_TO_RAD * this->_scara_machine->Homed_position_beta_in_degree;
 			}
@@ -244,8 +245,11 @@ void CncScara::_running_G28(){
 		}
 		//Copy current ik-position to motor-position. 
 		// Note: If homed_position is defined a FK-XY position,  This must be after IK() translation.
-		this->_board->cnc_mover->SetActuatorCurrentPositionTo('A', ik_position.alpha);
-		this->_board->cnc_mover->SetActuatorCurrentPositionTo('B', ik_position.beta);
+		if(this->_homing_axis_name == 'A'){
+			this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('A', ik_position.alpha);
+		}else if (this->_homing_axis_name == 'B'){
+			this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('B', ik_position.beta);
+		}
 		this->State = CncState::IDLE;
 
 		bool debug = true;

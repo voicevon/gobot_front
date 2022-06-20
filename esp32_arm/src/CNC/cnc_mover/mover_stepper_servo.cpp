@@ -139,7 +139,7 @@ float CncMover_StepperServo::GetSingleActuatorCurrentPosition_InCncUnit(char act
     }
 }
 
-void CncMover_StepperServo::SetActuatorCurrentPositionTo(char actuator_name, float as_current_position){
+void CncMover_StepperServo::SetActuatorCurrentCncPositionAs(char actuator_name, float as_current_position){
     if (actuator_name == 'A'){
         // this->__actuator_alpha->setPosition(as_current_position);
         this->__actuator_alpha->SetCurrentPositionAs(as_current_position);

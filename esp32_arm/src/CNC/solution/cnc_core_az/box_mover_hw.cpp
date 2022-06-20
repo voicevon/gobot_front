@@ -144,8 +144,8 @@ void CncCoreAZ::_running_G28(){
 		//Copy current ik-position to motor-position.
 		// if (this->_homing_axis == 'Z') this->objStepper_alpha->setPosition(ik_position.alpha);
 		// if (this->_homing_axis == 'W') this->objStepper_beta->setPosition(ik_position.beta);
-		this->_board->cnc_mover->SetActuatorCurrentPositionTo('A', ik_position.alpha);
-		this->_board->cnc_mover->SetActuatorCurrentPositionTo('B', ik_position.beta);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('A', ik_position.alpha);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('B', ik_position.beta);
 		
 		// this->objStepper_alpha->setMaxSpeed(this->_machine->max_speed_alpha_beta);
 		// this->objStepper_alpha->setAcceleration(this->_machine->max_acceleration_alpha_beta);

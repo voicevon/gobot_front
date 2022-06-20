@@ -81,8 +81,8 @@ void CncFiveBars::_running_G28(){
 		// 	this->alpha_stepper->setPosition(ik_position.alpha * this->_fivebarMachine->STEPS_PER_RAD);
 		// if (this->_homing_axis == 'B') 
 		// 	this->beta_stepper->setPosition(ik_position.beta * this->_fivebarMachine->STEPS_PER_RAD);
-		this->_board->cnc_mover->SetActuatorCurrentPositionTo('A', ik_position.alpha * this->_fivebarMachine->STEPS_PER_RAD);
-		this->_board->cnc_mover->SetActuatorCurrentPositionTo('B', ik_position.beta * this->_fivebarMachine->STEPS_PER_RAD);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('A', ik_position.alpha * this->_fivebarMachine->STEPS_PER_RAD);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('B', ik_position.beta * this->_fivebarMachine->STEPS_PER_RAD);
 		
 		// this->alpha_stepper->setMaxSpeed(this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA);
 		// this->alpha_stepper->setAcceleration(this->_fivebarMachine->MAX_ACCELERATION_ALPHA_BETA);

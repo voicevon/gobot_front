@@ -14,7 +14,7 @@ ActuatorStepper* Board_SpringMaker::GetJointStepper(char axis_name) {
         Serial.print("['Error']  Board_SpringMaker::GetStepper()   axis_name= ");
         Serial.println(axis_name);
     }
-
+    return nullptr;
 }
 
 SingleAxisHomer* Board_SpringMaker::GetHomer(char axis_name) {
