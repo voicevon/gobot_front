@@ -24,8 +24,8 @@ void GobotHouseMachine_2206::Init(char solution){
 
 
         this->Homed_position_alpha_in_degree = 13.6;
-        // this->Homed_position_beta_in_degree = 138.0;
-        this->Homed_position_beta_in_degree = 148.0;
+        this->Homed_position_beta_in_degree = 138.0;
+        // this->Homed_position_beta_in_degree = 148.0;
 
         this->PrintOut();
 }

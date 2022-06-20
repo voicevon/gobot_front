@@ -75,7 +75,7 @@ void cnc_test(){
     robot->Test_Alpha(1);
 
     robot->__Home();
-    robot->Test_MoveStone_FromRoomToHead(2, 0);
+    robot->Test_MoveStone_FromRoomToHead(8, 0);
     // GobotHouse2206_CncTester tester;
     // tester.Init(&board, &cncScara);
 
