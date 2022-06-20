@@ -12,6 +12,7 @@ class ActuatorBase{
 
     protected:
         float _target_cnc_position;   // is always an absolute position
+        //TODO:   float _current_cnc_position;  
     private:
     
 };

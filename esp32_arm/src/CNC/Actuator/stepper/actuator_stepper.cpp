@@ -8,8 +8,7 @@ void ActuatorStepper::LinkStepper(Stepper* stepper, ActuatorMechanicStepper* mec
 
 
 float ActuatorStepper::GetCurrentPosition_InCncUnit(){
-    //todo:  fit into cnc range
-    return 1.0f * this->__stepper->getPosition() / this->__steps_per_cnc_unit;    
+    return this->__current_cnc_position_in_rad;    
 }
 
 float ActuatorStepper::GetDistanceToTarget_InCncUnit(){
@@ -56,9 +55,14 @@ void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float posit
         float joint_position = this->__ConvertTo_JointRange(position_in_cnc_unit);
         motor_position_in_step = joint_position * this->__steps_per_cnc_unit;
         this->__stepper->setTargetAbs(motor_position_in_step);
-        bool debug = false;
+
+        bool debug = true;
         if (debug){
-            Serial.print("[Debug] ActuatorStepper::MoveTo()   setPositionAbs(motor_position_in_step= ");
+            Serial.print("[Debug] ActuatorStepper::MoveTo( absolute)  position_in_cnc_unit= ");
+            Serial.print(RAD_TO_DEG * position_in_cnc_unit);
+            Serial.print("  joint_position= ");
+            Serial.print(RAD_TO_DEG * joint_position);
+            Serial.print(" motor_position_in_step= ");
             Serial.println (motor_position_in_step);
         }
     } else {

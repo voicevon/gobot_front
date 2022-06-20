@@ -313,7 +313,8 @@ void GobotHouse_2206::Test_Alpha(int loop_count){
 
 	Serial.println("[Info]  GobotMain::Test_HomeAlpha()");
 	String g28 = "G28AI";
-	String g1 = "G1A-20";
+	// String g1 = "G1A-20";
+	String g1 = "G1A-68";
 	bool buffer_is_full = false;
 	for (int i=0; i<loop_count; i++){
 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g28);
