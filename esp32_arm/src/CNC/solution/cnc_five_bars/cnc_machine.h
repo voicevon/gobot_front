@@ -1,16 +1,14 @@
 #pragma once
 #include "CNC/cnc_machine_base.h"
-// #include "CNC/cnc_config_base.h"
 
 class CncFiveBarMachine: public CncMachineBase{
     public:
         // link length in mm
-        //  unit is mm
         CncFiveBarMachine(){};
         void PrintOut() override;
 
-        float motor_steps_per_shaft_round;
-        float STEPS_PER_RAD; 
+        // float motor_steps_per_shaft_round;
+        // float STEPS_PER_RAD; 
         // 191.0 is the Length between the centers of two motors 
         float LINK_0;  //  = 191.0 / 2 ;
         // Length from motor to passive joints   
@@ -27,7 +25,7 @@ class CncFiveBarMachine: public CncMachineBase{
         int Homing_speed_alpha_beta;
 
     protected:
-        int STEPPER_DRIVER_MICRO_STEPS;
-        float MOTOR_STEP_ANGLE;
-        float GEAR_BOX_RATIO;
+        // int STEPPER_DRIVER_MICRO_STEPS;
+        // float MOTOR_STEP_ANGLE;
+        // float GEAR_BOX_RATIO;
 };

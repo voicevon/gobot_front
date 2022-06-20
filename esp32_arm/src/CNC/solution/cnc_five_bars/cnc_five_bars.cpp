@@ -81,8 +81,8 @@ void CncFiveBars::_running_G28(){
 		// 	this->alpha_stepper->setPosition(ik_position.alpha * this->_fivebarMachine->STEPS_PER_RAD);
 		// if (this->_homing_axis == 'B') 
 		// 	this->beta_stepper->setPosition(ik_position.beta * this->_fivebarMachine->STEPS_PER_RAD);
-		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('A', ik_position.alpha * this->_fivebarMachine->STEPS_PER_RAD);
-		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('B', ik_position.beta * this->_fivebarMachine->STEPS_PER_RAD);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('A', ik_position.alpha);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('B', ik_position.beta);
 		
 		// this->alpha_stepper->setMaxSpeed(this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA);
 		// this->alpha_stepper->setAcceleration(this->_fivebarMachine->MAX_ACCELERATION_ALPHA_BETA);
@@ -270,8 +270,8 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	// But, The initialized values will effect nothing. They will be over writen. 
 	// target_ik_ab.alpha = this->alpha_stepper->getPosition() / this->_fivebarMachine->STEPS_PER_RAD;
 	// target_ik_ab.beta = this->beta_stepper->getPosition() / this->_fivebarMachine->STEPS_PER_RAD;
-	target_ik_ab.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A') / this->_fivebarMachine->STEPS_PER_RAD;
-	target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B') / this->_fivebarMachine->STEPS_PER_RAD;
+	target_ik_ab.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A');
+	target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B');
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
 		// this->__EnableMotor('A', true); 
@@ -298,13 +298,13 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	// Normally the unit in G1A,G1B is degree
 	if(gcode->has_letter('R')) 
 		// Bug now, the unit in G1A,G1B is RAD
-		target_ik_ab.alpha = this->_fivebarMachine->motor_steps_per_shaft_round * gcode->get_value('R');
+		target_ik_ab.alpha =  gcode->get_value('R');
 	//Prepare actuator/driver to move to next point
 	// this->alpha_stepper->setTargetAbs(target_ik_ab.alpha * this->_fivebarMachine->STEPS_PER_RAD );
 	// this->beta_stepper->setTargetAbs(target_ik_ab.beta * this->_fivebarMachine->STEPS_PER_RAD );
 	float target_position[2];
-	target_position[0] = target_ik_ab.alpha * this->_fivebarMachine->STEPS_PER_RAD;
-	target_position[1] = target_ik_ab.beta * this->_fivebarMachine->STEPS_PER_RAD;
+	target_position[0] = target_ik_ab.alpha;
+	target_position[1] = target_ik_ab.beta;
 
 	//None blocking, move backgroundly.
 	// this->_stepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
