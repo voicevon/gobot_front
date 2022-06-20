@@ -45,7 +45,7 @@ void CncFiveBars::RunG28(char axis){
 	}else{
 		Serial.print("\n[Error] CncFiveBars::RunG28() ");
 	}
-	this->_board->cnc_mover->SingleActuatorMoveTo(false, this->_homing_axis_name, 500000);
+	this->_board->cnc_mover->SingleActuatorMoveTo(axis, false, target_position);
 	// this->_stepControl->moveAsync(*this->__homing_stepper);
 	Serial.print("[Debug] CncFiveBars::RunG28() is Starting to run...\n" );
 }

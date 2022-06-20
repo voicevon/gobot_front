@@ -24,6 +24,7 @@ SingleAxisHomer* Board_SpringMaker::GetHomer(char axis_name) {
         Serial.print("['Error']  Board_SpringMaker::GetHomer()   axis_name= ");
         Serial.println(axis_name);
     }
+    return nullptr;
 }
 
 RobotEef_SpringMaker* Board_SpringMaker::GetEef() {

@@ -3,7 +3,8 @@
 
 #include <stdint.h>
 
-// template <actuator>
+// 
+// TODO:  template <actuator>
 class CncMoverBase{
     public:
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );

@@ -142,10 +142,10 @@ void Cnc_CoreYZ::_running_G28(){
 		//Copy current ik-position to motor-position.
 		if (this->_homing_axis_name == 'Z') {
 			// this->stepper_alpha->setPosition(ik_position.alpha);
-			this->_board->cnc_mover->SingleActuatorMoveTo(true, ik_position.alpha, 'A');
+			this->_board->cnc_mover->SingleActuatorMoveTo('A', true, ik_position.alpha);
 		}
 		if (this->_homing_axis_name == 'Y') {
-			this->_board->cnc_mover->SingleActuatorMoveTo(true, ik_position.beta, 'B');
+			this->_board->cnc_mover->SingleActuatorMoveTo('B', true, ik_position.beta);
 			// this->stepper_beta->setPosition(ik_position.beta);
 		}
 		

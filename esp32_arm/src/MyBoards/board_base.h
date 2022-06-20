@@ -17,7 +17,7 @@ class BoardBase{
         void RepportRamUsage();  // TODO::  be static
         static uint8_t Assign_ledc_channel(){return __ledc_channel_index; __ledc_channel_index++;};
         virtual void SayHello();
-        virtual  float ReadBatteryVolt(){};
+        virtual  float ReadBatteryVolt(){return 1.234f;};
 
     protected:
         // TODO:: be static

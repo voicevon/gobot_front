@@ -24,6 +24,7 @@ SingleAxisHomer* Board_SmokeMachine::GetHomer(char axis_name) {
         Serial.print("['Error']  Board_SpringMaker::GetHomer()   axis_name= ");
         Serial.println(axis_name);
     }
+    return nullptr;
 }
 
 RobotEef_SmokeMachine* Board_SmokeMachine::GetEef() {
