@@ -124,10 +124,7 @@ float CncScara::GetDistanceToTarget_IK(){
 void CncScara::RunG1(Gcode* gcode) {
 	// Serial.print("\n[Debug] CncScara::RunG1()   ");
 	// Serial.print(gcode->get_command());
-	if (gcode->has_letter('F')){
-		int speed = gcode->get_value('F');
-		// this->_board->cnc_mover->SetActuatorSpeed
-	}
+
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
@@ -170,7 +167,17 @@ void CncScara::RunG1(Gcode* gcode) {
 	//None blocking, move backgroundly.
 	uint8_t abs_flags = 0x03;
 	this->_board->cnc_mover->AllMotorsMoveTo(abs_flags, cnc_position, motor_flags);
-	bool debug = true;
+	bool debug = false;
+	if (gcode->has_letter('F')){
+		int speed = gcode->get_value('F');
+		this->_board->cnc_mover->SetSpeed(DEG_TO_RAD * speed);
+		if (debug){
+			Serial.print("[Debug] CncScara::RunG1()  motor_flags= ");
+			Serial.print(motor_flags);
+			Serial.print("  speed= ");
+			Serial.println(RAD_TO_DEG * speed);
+		}
+	}
 	if (debug){
 		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
 		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit('A'));
@@ -185,7 +192,7 @@ void CncScara::RunG1(Gcode* gcode) {
 
 void CncScara:: _running_G1(){
     // if (this->GetDistanceToTarget_IK() < (this->_scara_machine->MAX_ACCELERATION_ALPHPA + this->_scara_machine->MAX_ACCELERATION_BETA)/64){
-    if (this->GetDistanceToTarget_IK() < 1) {
+    if (this->GetDistanceToTarget_IK() < DEG_TO_RAD * 3) {
       	this->State = CncState::IDLE;
 		Serial.print("\n[Info] CncScara::_running_G1() is finished. ");
     }

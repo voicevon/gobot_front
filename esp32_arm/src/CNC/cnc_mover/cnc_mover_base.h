@@ -19,6 +19,7 @@ class CncMoverBase{
         virtual bool MotorIsMoving(char motor_name);
         // virtual void Stop(char motor_name);
         virtual void SingleMotorStop(char motor_name);
+        virtual void SetSpeed(float speed);
 
 
     protected:

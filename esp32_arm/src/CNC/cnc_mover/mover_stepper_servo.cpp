@@ -12,6 +12,23 @@ void CncMover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
 }
 #include "MyLibs/calculator.h"
 
+void CncMover_StepperServo::SetSpeed(float speed){
+    if (this->__moving_motor_flags == 0x01){
+        //speed is for alpha
+        this->__actuator_alpha->SetSpeed(speed);
+    }else if (this->__moving_motor_flags == 0x02){
+        //spped is for beta
+        this->__actuator_beta->SetSpeed(speed);
+    }else if (this->__moving_motor_flags == 0x03){
+        //speed is for both.   TODO:  speed = alpha * alpha + beta * beta;
+        this->__actuator_alpha->SetSpeed(speed);
+        this->__actuator_beta->SetSpeed(speed);
+    }else{
+        Serial.print("[Warn] CncMover_StepperServo::SetSpeed() Unknown flag = ");
+        Serial.println(this->__moving_motor_flags);
+    }
+}
+
 // alpha = flags.bits[0]
 // beta = flags.bits[1]
 void CncMover_StepperServo::AllMotorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit, uint8_t target_motor_flags){

@@ -21,6 +21,7 @@ class CncMover_StepperServo: public CncMoverBase{
         float GetDistanceToTarget_InCncUnit() override;
         void SetActuatorSpeed(char actuator_name, float speed_per_second) override;
         bool MotorIsMoving(char moto_name) override;
+        void SetSpeed(float speed) override;
         // void Stop(char motor_name) override;
         // struct MotorFlag{
 
