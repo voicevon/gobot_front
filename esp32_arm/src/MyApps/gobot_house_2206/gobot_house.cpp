@@ -220,6 +220,7 @@ void GobotHouse_2206::__Move_fromHead_toNeck(bool forwarding){
 		gcode.concat(sx);
 		gcode.concat("Y");
 		gcode.concat(0);
+		gcode.concat("F60");
 
 		this->_gcode_queue->AppendGcodeCommand(gcode);
 	}
@@ -333,7 +334,7 @@ void GobotHouse_2206::Test_Beta(int loop_count){
 
 	Serial.println("[Info]  GobotMain::Test_HomeBeta()  This is in TODO list.");
 	String g28 = "G28BI";
-	String g1 = "G1B120";
+	String g1 = "G1B120F180";
 	String g4 = "G4S3";   //Wait for beta is left hall sensor.
 	bool buffer_is_full = false;
 	for (int i=0; i<loop_count; i++){

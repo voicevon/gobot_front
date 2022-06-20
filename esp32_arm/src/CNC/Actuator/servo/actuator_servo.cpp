@@ -73,7 +73,7 @@ void ActuatorServo::SpinOnce(){
 
 void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
     // float time;
-    Serial.println("[Debug] ActuatorServo::MoveTo()");
+    // Serial.println("[Debug] ActuatorServo::MoveTo()");
 
     if (is_absolute_position){
         this->_target_cnc_position = position_in_cnc_unit;
@@ -86,7 +86,7 @@ void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float positio
         this->__moving_direction_of_cnc = -1;
     }
 
-    bool debug = true;
+    bool debug = false;
     if(debug){
         Serial.print("[debug] ActuatorServo::MoveTo() current_cnc_position in degree = ");
         Serial.print(RAD_TO_DEG * this->__current_cnc_position_in_rad);

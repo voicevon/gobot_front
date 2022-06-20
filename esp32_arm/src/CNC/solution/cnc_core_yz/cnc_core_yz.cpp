@@ -106,7 +106,7 @@ void Cnc_CoreYZ::RunG28(char axis){
 		motor_position[0]=-5000000;
 		motor_position[1]=-5000000;	
 	}
-	this->_board->cnc_mover->AllMotorsMoveTo(false, motor_position, 2);
+	this->_board->cnc_mover->AllActuatorsMoveTo(false, motor_position, 2);
 
 	// this->_board->EnableMotor('A', true);
 	// this->_board->EnableMotor('B',true);
@@ -120,7 +120,7 @@ void Cnc_CoreYZ::_running_G28(){
 		Serial.print("\n[Info] Cnc_CoreYZ::_running_G28() Home sensor is trigger.  " );
 		Serial.print (this->_homing_axis_name);
 		// this->_stepControl->stop();
-		this->_board->cnc_mover->AllMotorStop();
+		this->_board->cnc_mover->AllActuatorsStop();
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
@@ -142,10 +142,10 @@ void Cnc_CoreYZ::_running_G28(){
 		//Copy current ik-position to motor-position.
 		if (this->_homing_axis_name == 'Z') {
 			// this->stepper_alpha->setPosition(ik_position.alpha);
-			this->_board->cnc_mover->SingleMotorMoveTo(true, ik_position.alpha, 'A');
+			this->_board->cnc_mover->SingleActuatorMoveTo(true, ik_position.alpha, 'A');
 		}
 		if (this->_homing_axis_name == 'Y') {
-			this->_board->cnc_mover->SingleMotorMoveTo(true, ik_position.beta, 'B');
+			this->_board->cnc_mover->SingleActuatorMoveTo(true, ik_position.beta, 'B');
 			// this->stepper_beta->setPosition(ik_position.beta);
 		}
 		
@@ -216,7 +216,7 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	float target_motor_position[2];
 	target_motor_position[0] = target_ik_ab.alpha;
 	target_motor_position[1] = target_ik_ab.beta;
-	this->_board->cnc_mover->AllMotorsMoveTo(true, target_motor_position,2);
+	this->_board->cnc_mover->AllActuatorsMoveTo(true, target_motor_position,2);
 
 	if (true){
 		Serial.print("\n    [Debug] Cnc_CoreYZ::RunG1()     (");
