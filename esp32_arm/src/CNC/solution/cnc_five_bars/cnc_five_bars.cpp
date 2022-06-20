@@ -263,8 +263,8 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
-	target_fk_xy.X = this->__current_fk_position.X;
-	target_fk_xy.Y = this->__current_fk_position.Y;
+	// target_fk_xy.X = this->__current_fk_position.X;
+	// target_fk_xy.Y = this->__current_fk_position.Y;
 
 	// Sometimes, the current position of stepper is NOT the last target position. Since it's moving.
 	// But, The initialized values will effect nothing. They will be over writen. 
@@ -321,13 +321,13 @@ void CncFiveBars::RunG1(Gcode* gcode){
 		Serial.print(verified_fk.Y);
 
 		Serial.print("\n[Debug] CncFiveBars::RunG1() ");
-		// Serial.print(this->alpha_stepper->getPosition());
-		// Serial.print(",");
-		// Serial.print(this->beta_stepper->getPosition());
+		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A'));
+		Serial.print(",");
+		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B'));
 		Serial.print(" <-- from   alpha,beta   to --> ");
-		Serial.print(target_ik_ab.alpha);
+		Serial.print(RAD_TO_DEG * target_ik_ab.alpha);
 		Serial.print(" , ");
-		Serial.println(target_ik_ab.beta);
+		Serial.println(RAD_TO_DEG * target_ik_ab.beta);
 	}  
 }
 

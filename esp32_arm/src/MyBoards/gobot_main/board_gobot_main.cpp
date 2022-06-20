@@ -1,6 +1,12 @@
 #include "board_gobot_main.h"
 #include "mechanic/alpha_mechanic.h"
 
+void GetActuator_alpha_mechanic(){
+    ActuatorMechanic_StepperPolor alpha;
+    alpha.GetStepsPerCncUnit();
+
+
+}
 void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
@@ -15,7 +21,7 @@ void Board_GobotMain::Init(bool is_on_reset){
     GobotMain_AlphaStepper_Mechanic mechanic;
     this->__actuator_alpha.LinkStepper(&this->__stepper_alpha, &mechanic);
     this->__actuator_beta.LinkStepper(&this->__stepper_beta, &mechanic);
-    
+
     this->__mover_dual_step.LinkStepper_asAlpha(&this->__actuator_alpha);
     this->__mover_dual_step.LinkStepper_asBeta(&this->__actuator_beta);
     this->cnc_mover = &this->__mover_dual_step;
