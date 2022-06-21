@@ -13,7 +13,7 @@ void GobotHouseMachine_2206::__InitStaticConfig(){
     this->HOMING_DIR_BETA_IS_TO_MAX = 1;
 
     // this->Homed_position_alpha_in_degree = 13.6;
-    this->Homed_position_alpha_in_degree = 5.0;
+    this->Homed_position_alpha_in_degree = 8;
     this->Homed_position_beta_in_degree = 128.0;
 }
 

@@ -16,6 +16,9 @@ void RobotEef_GobotHouse::Init(){
 #define UNLOAD_ANGLE LOAD_ANGLE + 70
 
 void RobotEef_GobotHouse::Run(uint8_t eef_code) {
+	Serial.print("[Debug] RobotEef_GobotHouse::Run() eef_code= ");
+	Serial.print(eef_code);
+	
 	switch (eef_code){
 		case EEF_CODE_LOAD:
 			this->__eefServo.write(LOAD_ANGLE);

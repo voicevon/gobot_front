@@ -145,6 +145,8 @@ void GobotHouse_2206::Test_FollowJig(int loop_count){
 	String g1_60 = "G1B60A0F90";
 	String g1_90 = "G1B90A0F90";
 	String g4 = "G4S3";
+	String eef_load = "M123S3";  //EEF_CODE_LOAD = 3  UNLOAD = 4
+	this->_gcode_queue->AppendGcodeCommand(eef_load);
 	for (int i=0; i< loop_count; i++){
 		this->__Home();
 		this->_gcode_queue->AppendGcodeCommand(g1_0);

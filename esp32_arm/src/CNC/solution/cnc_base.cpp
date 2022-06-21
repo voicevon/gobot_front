@@ -83,6 +83,7 @@ void CncBase::RunGcode(Gcode* gcode){
 	//   Serial.print("RunGcode()   OK or Unknown");
 	//   return;
 	// }
+	bool debug = false;
 
 	if(gcode->has_g){
 		char home_axis = '+';
@@ -173,14 +174,14 @@ void CncBase::RunGcode(Gcode* gcode){
 			}
 			p_value =  gcode->get_value('P');
 			s_value = gcode->get_value('S');
-			if (false){
+			debug = true;
+			if (debug){
 				Serial.print("CncBase::RunGcode() For EEF_ACTION  M123 P= ");
 				Serial.print(p_value);
 				Serial.print("  S= ");
 				Serial.print(s_value);
 			}
 			action = (EefAction)s_value;
-			// this->RunM123(p_value, action);
 			this->RunM123(p_value, s_value);
 			break;
 
