@@ -123,6 +123,7 @@ float CncMover_StepperServo::GetSingleActuatorCurrentPosition_InCncUnit(char act
     }else{
         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", actuator_name );
     }
+    return 0;
 }
 
 void CncMover_StepperServo::SetActuatorCurrentCncPositionAs(char actuator_name, float as_current_position){
@@ -173,4 +174,5 @@ bool CncMover_StepperServo::ActuatorIsMoving(char actuator_name) {
         Serial.print("[Error] CncMover_StepperServo::MotorIsMoving() Unknown motor_name= ");
         Serial.println(actuator_name); 
     }
+    return false;
 }

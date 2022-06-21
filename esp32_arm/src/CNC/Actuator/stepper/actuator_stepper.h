@@ -5,7 +5,7 @@
 
 class ActuatorStepper: public ActuatorBase{
     public:
-        void LinkStepper(Stepper* stepper, ActuatorMechanicStepper* mechanic);
+        void LinkStepper(Stepper* stepper, float steps_per_cnc_unit);
         Stepper* GetLinkedStepper(){return this->__stepper;};
         
         float GetCurrentPosition_InCncUnit() override;

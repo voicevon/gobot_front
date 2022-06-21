@@ -1,9 +1,9 @@
 #include "actuator_stepper.h"
 
 
-void ActuatorStepper::LinkStepper(Stepper* stepper, ActuatorMechanicStepper* mechanic){
+void ActuatorStepper::LinkStepper(Stepper* stepper, float steps_per_cnc_unit){
     this->__stepper = stepper;
-    this->__steps_per_cnc_unit = mechanic->GetStepsPerCncUnit();
+    this->__steps_per_cnc_unit =steps_per_cnc_unit;
 }
 
 

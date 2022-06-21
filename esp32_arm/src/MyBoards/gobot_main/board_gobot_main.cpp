@@ -1,33 +1,14 @@
 #include "board_gobot_main.h"
-#include "mechanic/alpha_mechanic.h"
-
-void GetActuator_alpha_mechanic(){
-    ActuatorMechanic_StepperPolor alpha;
-    alpha.GetStepsPerCncUnit();
+// #include "mechanic/alpha_mechanic.h"
+#include "CNC/Actuator/stepper/mechanic_polor.h"
 
 
-}
-void Board_GobotMain::Init(bool is_on_reset){
-    Serial.begin(115200);
-    Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
+
+void Board_GobotMain::InitHardware(){
+    // init gpio.
     pinMode(PIN_ALPHA_ENABLE_2201, OUTPUT);
     pinMode(PIN_BETA_ENABLE_2201, OUTPUT);
 
-    this->__eef.Init();
-    
-    this->__stepper_alpha.setInverseRotation(false);
-    this->__stepper_beta.setInverseRotation(false);
-
-    GobotMain_AlphaStepper_Mechanic mechanic;
-    this->__actuator_alpha.LinkStepper(&this->__stepper_alpha, &mechanic);
-    this->__actuator_beta.LinkStepper(&this->__stepper_beta, &mechanic);
-
-    this->__mover_dual_step.LinkStepper_asAlpha(&this->__actuator_alpha);
-    this->__mover_dual_step.LinkStepper_asBeta(&this->__actuator_beta);
-    this->cnc_mover = &this->__mover_dual_step;
-
-    this->EnableMotor('A', false);
-    this->EnableMotor('B', false);
     this->PIN_ROOMS[0] = PIN_SENSOR_ROOM_0;
     this->PIN_ROOMS[1] = PIN_SENSOR_ROOM_1;
     this->PIN_ROOMS[2] = PIN_SENSOR_ROOM_2;
@@ -39,6 +20,48 @@ void Board_GobotMain::Init(bool is_on_reset){
     for(int i=0;i<8;i++){
         pinMode(this->PIN_ROOMS[i], INPUT_PULLUP);
     }
+
+    // Init Actuator alpha
+    ActuatorMechanic_StepperPolor alpha;
+    alpha._micro_steps_on_stepper_driver = 16;
+    alpha._motor_gear_teeth_count = 10;
+    alpha._slave_pulley_teeth_count = 90;
+    alpha._motor_step_angle_in_degree = 0.7003891050583658;
+
+    this->__stepper_alpha.setInverseRotation(true);
+    this->__actuator_alpha.LinkStepper(&this->__stepper_alpha,alpha.GetStepsPerCncUnit());
+
+    // Init Actuator beta
+    ActuatorMechanic_StepperPolor beta;
+    beta._micro_steps_on_stepper_driver = 16;
+    beta._motor_gear_teeth_count = 10;
+    beta._slave_pulley_teeth_count = 90;
+    beta._motor_step_angle_in_degree = 0.7003891050583658;
+
+    this->__stepper_beta.setInverseRotation(true);
+    this->__actuator_beta.LinkStepper(&this->__stepper_alpha,beta.GetStepsPerCncUnit());
+}
+
+void Board_GobotMain::Init(bool is_on_reset){
+    Serial.begin(115200);
+    Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
+    this->InitHardware();
+    this->EnableMotor('A', false);
+    this->EnableMotor('B', false);
+
+    this->__eef.Init();
+    
+    // this->__stepper_alpha.setInverseRotation(false);
+    // this->__stepper_beta.setInverseRotation(false);
+
+    // GobotMain_AlphaStepper_Mechanic mechanic;
+    // this->__actuator_alpha.LinkStepper(&this->__stepper_alpha, &mechanic);
+    // this->__actuator_beta.LinkStepper(&this->__stepper_beta, &mechanic);
+
+    this->__mover_dual_step.LinkStepper_asAlpha(&this->__actuator_alpha);
+    this->__mover_dual_step.LinkStepper_asBeta(&this->__actuator_beta);
+    this->cnc_mover = &this->__mover_dual_step;
+
     this->RepportRamUsage();
 }
 

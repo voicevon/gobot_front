@@ -21,6 +21,7 @@ class Board_GobotMain: public CncBoardBase{
 
 
     private:
+        void InitHardware();
         Stepper __stepper_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
         Stepper __stepper_beta = Stepper(PIN_BETA_STEP_2201, PIN_BETA_DIR_2201);
         ActuatorStepper __actuator_alpha;

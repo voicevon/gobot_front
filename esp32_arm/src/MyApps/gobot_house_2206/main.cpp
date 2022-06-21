@@ -49,7 +49,7 @@ void setup(){
 }
 
 void loop(){
-    board.GetJointServo('B')->SpinOnce();
+    board.GetActuaorBeta('B')->SpinOnce();
 	robot->SpinOnce();
     cncScara.SpinOnce();
     loop_mqtt();
