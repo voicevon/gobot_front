@@ -8,7 +8,11 @@ void ActuatorStepper::LinkStepper(Stepper* stepper, float steps_per_cnc_unit){
 
 
 float ActuatorStepper::GetCurrentPosition_InCncUnit(){
-    return this->__current_cnc_position_in_rad;    
+    Serial.println("[Error] ActuatorStepper::GetCurrentPosition_InCncUnit()  I don't know the anser now!");
+    while(1){
+        Serial.print(". ");
+        delay(500);
+    }
 }
 
 float ActuatorStepper::GetDistanceToTarget_InCncUnit(){

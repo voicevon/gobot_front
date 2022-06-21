@@ -15,10 +15,11 @@ class ActuatorServo: public ActuatorBase{
         float GetDistanceToTarget_InCncUnit() override;
         void SetSpeed(float speed_per_second) override;   // There is no "unsigned float"
         // bool MotorIsMoving(char moto_name) override;
+        void Stop() override {this->__is_moving=false;};
+
         void SpinOnce();
         bool IsMoving(){return this->__is_moving;};
         void StartToMove();
-        void Stop() override {this->__is_moving=false;};
 
 
     protected:

@@ -1,5 +1,7 @@
 #pragma once
 #include "MyBoards/const.h"
+#include "stdint.h"
+
 class ActuatorBase{
     public:
         // virtual void Init();
