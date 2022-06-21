@@ -3,7 +3,7 @@
 
 #include "MyBoards/gobot_house_2206/board_gobot_house.h"
 #include "CNC/solution/cnc_scara/cnc_scara.h"
-#include "cnc_machine.h"
+// #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
@@ -11,7 +11,7 @@
 
 // StepControl controller;    // Use default settings 
 Board_GobotHouse_2206 board;
-GobotHouseMachine_2206 cncMachine;
+// GobotHouseMachine_2206 cncMachine;
 CncScara cncScara;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
@@ -21,15 +21,13 @@ GobotHouse_2206* robot;
 void board_test();
 void cnc_test();
 
-void Setup_cnc(){
-    CncScaraMachine scara_machine;
-}
+
 
 void setup(){
     board.Init(true);
     board_test();
     
-    cncMachine.Init('M');
+    // cncMachine.Init('M');
     cncScara.Init(&board);
 
     robot = &GobotHouse_2206::getInstance();
@@ -66,10 +64,7 @@ void board_test(){
     tester.Test_AllHomers(0);
     tester.Test_ServoDriver_OnBeta(0);
 
-    // tester.Test_Stepper(0, 'A', 300, &controller);
-    // tester.Test_Stepper(0, 'B', 300, &controller);
 }
-// #include "cnc_tester.h"
 
 void cnc_test(){
     Serial.println("[Info] Cnc teset is started.");
@@ -79,7 +74,6 @@ void cnc_test(){
 
     // robot->__Home();
     robot->Test_MoveStone_FromRoomToHead(0, 0);
-
 }
 
 #endif

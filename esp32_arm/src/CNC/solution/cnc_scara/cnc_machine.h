@@ -1,11 +1,9 @@
 #pragma once
-
-
 #include "CNC/cnc_machine_base.h"
-// #include "CNC/cnc_config_base.h"
 
 class CncScaraMachine: public CncMachineBase{
     public:
+        CncScaraMachine(){};
         virtual float GetHomingVelocity(char axis_name);
         // value is vary for each gobot-house robot.
         float Homed_position_alpha_in_degree;
