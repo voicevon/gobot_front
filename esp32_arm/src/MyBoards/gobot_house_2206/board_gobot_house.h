@@ -1,11 +1,12 @@
 #pragma once
 #include "MyBoards/cnc_board_base.h"
 #include "MyBoards/gobot_house/board_pins/board_pins_ver3.11.h"
-#include "CNC/single_axis_homer.h"
 #include "MyBoards/gobot_house/robot_eef/gobot_house_eef.h"
 #include "CNC/Actuator/servo/actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-#include "CNC/solution/cnc_scara/cnc_machine.h"
+#include "CNC/single_axis_homer.h"
+// #include "CNC/solution/cnc_scara/cnc_machine.h"
+#include "cnc_machine.h"
 
 class Board_GobotHouse_2206: public CncBoardBase{
     public:
@@ -35,5 +36,5 @@ class Board_GobotHouse_2206: public CncBoardBase{
         SingleAxisHomer __beta_homer = SingleAxisHomer(PIN_HOME_BETA_2109, LOW);
 
         RobotEef_GobotHouse eef;
-        CncScaraMachine __cnc_mechanic;
+        GobotHouseMachine_2206 __cnc_mechanic;
 };
