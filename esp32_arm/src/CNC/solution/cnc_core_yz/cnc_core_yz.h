@@ -10,7 +10,7 @@
 class Cnc_CoreYZ: public CncBase{
     public:
         Cnc_CoreYZ(){};
-        void Init(CncBoardBase* board, CncMachineBase* machine) override;
+        void Init(CncBoardBase* board) override;
 
         void RunG28(char axis) override;
         void RunG1(Gcode* gcode) override;

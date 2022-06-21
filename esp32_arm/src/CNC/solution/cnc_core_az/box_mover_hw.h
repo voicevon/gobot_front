@@ -22,7 +22,7 @@ class CncCoreAZ:public CncBase{
     public:
         CncCoreAZ();
 
-        void Init(CncBoardBase* board, CncMachineBase* config) override;
+        void Init(CncBoardBase* board) override;
         void RunG28(char axis) override;
         void RunG1(Gcode* gcode) override;
 

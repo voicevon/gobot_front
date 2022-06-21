@@ -2,10 +2,11 @@
 
 #include "board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "cnc/single_axis_homer.h"
 #include "RobotEef/robot_eef_base.h"
 #include "CNC/cnc_mover/mover_stepper_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
+#include "CNC/cnc_machine_base.h"
+#include "cnc/single_axis_homer.h"
 
 class CncBoardBase: public BoardBase{
     public:
@@ -13,9 +14,9 @@ class CncBoardBase: public BoardBase{
         void SayHello() override;
         virtual ActuatorStepper* GetActuator(char axis_name);
         virtual SingleAxisHomer* GetHomer(char axis_name);
+        virtual CncMachineBase* GetCncMechanic();
         virtual RobotEefBase* GetEef();
         virtual void EnableMotor(char axis_name, bool enable_it);
-
         CncMoverBase* cnc_mover;
 
 

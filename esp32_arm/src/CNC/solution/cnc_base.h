@@ -104,7 +104,7 @@ class CncBase: public GcodeConsumer{
         CncState State = CncState::IDLE;
         void RunGcode(Gcode* gcode);
         void SpinOnce();
-        virtual void Init(CncBoardBase* board, CncMachineBase* machine);
+        virtual void Init(CncBoardBase* board);
         // void LinkStepControl(StepControl* stepControl){this->_stepControl=stepControl;};
         virtual void RunG28(char axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);

@@ -21,14 +21,16 @@ GobotHouse_2206* robot;
 void board_test();
 void cnc_test();
 
-
+void Setup_cnc(){
+    CncScaraMachine scara_machine;
+}
 
 void setup(){
     board.Init(true);
     board_test();
     
     cncMachine.Init('M');
-    cncScara.Init(&board, &cncMachine);
+    cncScara.Init(&board);
 
     robot = &GobotHouse_2206::getInstance();
     robot->Setup();
@@ -74,7 +76,7 @@ void cnc_test(){
     robot->Test_Beta(0);
     robot->Test_Alpha(0);
     robot->Test_FollowJig(5);
-    
+
     // robot->__Home();
     robot->Test_MoveStone_FromRoomToHead(0, 0);
 

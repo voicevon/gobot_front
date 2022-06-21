@@ -77,10 +77,10 @@ bool CncScara::GetCurrentPosition(FkPositionBase* position_fk){
 	return true;
 }
 
-void CncScara::Init(CncBoardBase* board, CncMachineBase* machine){
+void CncScara::Init(CncBoardBase* board ){
 	Serial.println("[Info] CncScara::Init() ");
 	this->_board = board;
-	this->_scara_machine = (CncScaraMachine*)(machine);
+	this->_scara_machine = (CncScaraMachine*)(this->_board->GetCncMechanic());
 	
 	board->EnableMotor('A', false);
 	board->EnableMotor('B', false);
@@ -117,10 +117,6 @@ void CncScara::RunG1(Gcode* gcode) {
 	// Assume G1-code mostly wants to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
-	// target_fk_xy.X = this->__current_fk_position.X;
-	// target_fk_xy.Y = this->__current_fk_position.Y;
-	// target_ik_ab.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A');
-	// target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B');
 
 	bool do_ik = false;
 	uint8_t motor_flags = 0;

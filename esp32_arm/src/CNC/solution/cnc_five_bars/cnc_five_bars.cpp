@@ -3,7 +3,7 @@
 #include "cnc_five_bars.h"
 #include<Arduino.h>
 
-void CncFiveBars::Init(CncBoardBase* board, CncMachineBase* machine){
+void CncFiveBars::Init(CncBoardBase* board){
 	Serial.print("\n[Info] CncFiveBars::Init() is entering.");
 
 	// this->alpha_stepper = board->GetStepper('A');
@@ -15,7 +15,7 @@ void CncFiveBars::Init(CncBoardBase* board, CncMachineBase* machine){
 	board->EnableMotor('A', false);
 	board->EnableMotor('B', false);
 	this->_board = board;
-	this->_fivebarMachine = (CncFiveBarMachine*)(machine);
+	this->_fivebarMachine = (CncFiveBarMachine*)(this->_board->GetCncMechanic());
 	Serial.print("\n[Info] CncFiveBars::Init() is done.");
 } 
 

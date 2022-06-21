@@ -47,7 +47,7 @@ CncCoreAZ::CncCoreAZ(){
 
 }
 
-void CncCoreAZ::Init(CncBoardBase* board, CncMachineBase* config){
+void CncCoreAZ::Init(CncBoardBase* board){
 	Serial.print("\n[Info] CncCoreAZ::Init_Linkage() is entering.");
 	// this->_machine->Init();
 	// this->objStepper_alpha = board->GetStepper('A');

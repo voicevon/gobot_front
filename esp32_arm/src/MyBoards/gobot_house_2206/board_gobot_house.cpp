@@ -1,6 +1,7 @@
 #include "board_gobot_house.h"
 // #include "mechanic/alpha_stepper.h"
 #include "CNC/Actuator/stepper/mechanic_polor.h"
+#include "CNC/solution/cnc_scara/cnc_scara.h"
 
 
 void Board_GobotHouse_2206::__Init_Hardware(){
@@ -21,6 +22,14 @@ void Board_GobotHouse_2206::__Init_Hardware(){
 	this->__servo_beta.setPeriodHertz(50);
     this->__servo_beta.attach(PIN_CNC_BETA_SERVO);
     this->__actuator_beta.LinkServo(&this->__servo_beta, true);
+
+    // Init mechanic
+    this->__cnc_mechanic.Homed_position_alpha_in_degree = 13.6;
+    this->__cnc_mechanic.Homed_position_beta_in_degree = 148;
+    this->__cnc_mechanic.LINK_A = 75.0;
+    this->__cnc_mechanic.LINK_B = 75.0;
+    this->__cnc_mechanic.Homing_acceleration_alpha = 500;
+    
 }
 
 void Board_GobotHouse_2206::Init(bool is_on_reset){
