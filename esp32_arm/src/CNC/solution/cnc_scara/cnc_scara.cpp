@@ -144,7 +144,8 @@ void CncScara::RunG1(Gcode* gcode) {
 		target_fk_xy.Y = gcode->get_value('Y');
 		motor_flags = 0x03;
 	}
-
+	this->_board->cnc_mover->SetMovingFlags(motor_flags);
+	
 	if (do_ik) IK(&target_fk_xy, &target_ik_ab);
 
 	if(gcode->has_letter('R')) {
@@ -172,7 +173,7 @@ void CncScara::RunG1(Gcode* gcode) {
 	cnc_position[1] = target_ik_ab.beta;
 	
 	uint8_t abs_flags = 0x03;
-	this->_board->cnc_mover->AllActuatorsMoveTo(abs_flags, cnc_position, motor_flags);
+	this->_board->cnc_mover->AllActuatorsMoveTo(abs_flags, cnc_position);
 
 	debug = true;
 	if (debug){

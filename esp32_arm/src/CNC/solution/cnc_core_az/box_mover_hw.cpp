@@ -113,7 +113,7 @@ void CncCoreAZ::RunG28(char axis){
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B', true);
 	// this->_stepControl->moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
-	this->_board->cnc_mover->AllActuatorsMoveTo(true, motor_position, 2);
+	this->_board->cnc_mover->AllActuatorsMoveTo(true, motor_position);
 }
 
 void CncCoreAZ::_running_G28(){
@@ -216,7 +216,7 @@ void CncCoreAZ::RunG1(Gcode* gcode) {
 	motor_position[1] = target_ik_ab.beta;
 	//None blocking, move backgroundly.
 	// this->_stepControl->moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
-	this->_board->cnc_mover->AllActuatorsMoveTo(true, motor_position, 2);
+	this->_board->cnc_mover->AllActuatorsMoveTo(true, motor_position);
 
 	if (true){
 		Serial.print("\n    [Debug] CncCoreAZ::RunG1()     (");

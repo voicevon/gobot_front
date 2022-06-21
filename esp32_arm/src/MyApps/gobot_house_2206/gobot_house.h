@@ -26,6 +26,7 @@ class GobotHouse_2206: public GcodeProducer, public MqttMessageConsumer{
         // bool MoveStone_FromRoomToHead(uint8_t house_id);
         void Test_Alpha(int loop_count);
         void Test_Beta(int loop_count);
+        void Test_FollowJig(int loop_count);
         void Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room_index);
         void Test_MoveStone_FromHeadToRoom(int loop_count, uint8_t house_id);
         void __Home();

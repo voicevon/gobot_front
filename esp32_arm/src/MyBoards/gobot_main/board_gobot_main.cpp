@@ -50,13 +50,6 @@ void Board_GobotMain::Init(bool is_on_reset){
     this->EnableMotor('B', false);
 
     this->__eef.Init();
-    
-    // this->__stepper_alpha.setInverseRotation(false);
-    // this->__stepper_beta.setInverseRotation(false);
-
-    // GobotMain_AlphaStepper_Mechanic mechanic;
-    // this->__actuator_alpha.LinkStepper(&this->__stepper_alpha, &mechanic);
-    // this->__actuator_beta.LinkStepper(&this->__stepper_beta, &mechanic);
 
     this->__mover_dual_step.LinkStepper_asAlpha(&this->__actuator_alpha);
     this->__mover_dual_step.LinkStepper_asBeta(&this->__actuator_beta);

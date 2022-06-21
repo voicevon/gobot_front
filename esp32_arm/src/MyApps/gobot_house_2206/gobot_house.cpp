@@ -138,6 +138,18 @@ void GobotHouse_2206::Calibrate(int step, bool enable_eef_coil){
 	// 	this->SpinOnce();
 	// }
 }
+void GobotHouse_2206::Test_FollowJig(int loop_count){
+	Serial.print("\n[Debug] GobotHouse_2206::Test_FollowJig() is entering");
+	String g1 = "G1B0A0F90";
+	String g4 = "G4S3";
+	for (int i=0; i< loop_count; i++){
+		this->__Home();
+		this->_gcode_queue->AppendGcodeCommand(g1);
+		this->_gcode_queue->AppendGcodeCommand(g4);
+
+	}
+}
+
 
 void GobotHouse_2206::ParkArms(bool do_homing){
 	Serial.print("\n[Debug] GobotHouse_2206::ParkArms() is entering");

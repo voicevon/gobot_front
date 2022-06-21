@@ -256,10 +256,7 @@ void CncFiveBars::RunM123(uint8_t eef_channel, uint8_t eef_action){
 void CncFiveBars::RunG1(Gcode* gcode){
 	Serial.print("\n[Debug] CncFiveBars::RunG1()   ");
 	Serial.print(gcode->get_command());
-	if (gcode->has_letter('F')){
-		int speed = gcode->get_value('F');
-		// this->beta_stepper->setMaxSpeed(speed);
-	}
+
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
@@ -299,6 +296,10 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	if(gcode->has_letter('R')) 
 		// Bug now, the unit in G1A,G1B is RAD
 		target_ik_ab.alpha =  gcode->get_value('R');
+	if (gcode->has_letter('F')){
+		int speed = gcode->get_value('F');
+		// this->beta_stepper->setMaxSpeed(speed);
+	}
 	//Prepare actuator/driver to move to next point
 	// this->alpha_stepper->setTargetAbs(target_ik_ab.alpha * this->_fivebarMachine->STEPS_PER_RAD );
 	// this->beta_stepper->setTargetAbs(target_ik_ab.beta * this->_fivebarMachine->STEPS_PER_RAD );
@@ -308,7 +309,7 @@ void CncFiveBars::RunG1(Gcode* gcode){
 
 	//None blocking, move backgroundly.
 	// this->_stepControl->moveAsync(*this->alpha_stepper, *this->beta_stepper);
-	this->_board->cnc_mover->AllActuatorsMoveTo(true, target_position, 2);
+	this->_board->cnc_mover->AllActuatorsMoveTo(true, target_position);
 
 	if (true){
 		FkPosition_XY verified_fk;

@@ -106,7 +106,7 @@ void Cnc_CoreYZ::RunG28(char axis){
 		motor_position[0]=-5000000;
 		motor_position[1]=-5000000;	
 	}
-	this->_board->cnc_mover->AllActuatorsMoveTo(false, motor_position, 2);
+	this->_board->cnc_mover->AllActuatorsMoveTo(false, motor_position);
 
 	// this->_board->EnableMotor('A', true);
 	// this->_board->EnableMotor('B',true);
@@ -216,7 +216,7 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	float target_motor_position[2];
 	target_motor_position[0] = target_ik_ab.alpha;
 	target_motor_position[1] = target_ik_ab.beta;
-	this->_board->cnc_mover->AllActuatorsMoveTo(true, target_motor_position,2);
+	this->_board->cnc_mover->AllActuatorsMoveTo(true, target_motor_position);
 
 	if (true){
 		Serial.print("\n    [Debug] Cnc_CoreYZ::RunG1()     (");

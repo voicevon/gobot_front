@@ -17,7 +17,7 @@ class CncMover_StepperServo: public CncMoverBase{
         bool ActuatorIsMoving(char actuator) override;
 
 
-        void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit, uint8_t target_motor_flags) override;
+        void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;
         void SingleActuatorMoveTo(char actuator_name, bool is_absolute_position, float position_in_cnc_unit) override;
         void AllActuatorsStop() override;
         void SingleActuatorStop(char motor_name) override;
@@ -35,5 +35,4 @@ class CncMover_StepperServo: public CncMoverBase{
         ActuatorStepper* __actuator_alpha;
         ActuatorServo* __actuator_beta;
         StepControl __stepControl;
-        uint8_t __moving_motor_flags;
 };

@@ -14,7 +14,6 @@ void Board_GobotHouse_2206::__Init_Hardware(){
     alpha._motor_gear_teeth_count = 10;
     alpha._slave_pulley_teeth_count = 90;
     alpha._motor_step_angle_in_degree = 0.7003891050583658;
-
     this->__stepper_alpha.setInverseRotation(true);
     this->__actuator_alpha.LinkStepper(&this->__stepper_alpha,alpha.GetStepsPerCncUnit());
 
@@ -23,8 +22,6 @@ void Board_GobotHouse_2206::__Init_Hardware(){
     this->__servo_beta.attach(PIN_CNC_BETA_SERVO);
     this->__actuator_beta.LinkServo(&this->__servo_beta, true);
 }
-
-
 
 void Board_GobotHouse_2206::Init(bool is_on_reset){
     Serial.begin(115200);
@@ -39,7 +36,6 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     this->mover_StepperServo.LinkStepper_asAlpha(&this->__actuator_alpha);
     this->mover_StepperServo.LinkServo_asBeta(&this->__actuator_beta);
     this->cnc_mover = &this->mover_StepperServo;
-
 }
 
 ActuatorStepper* Board_GobotHouse_2206::GetActuator(char axis_name) {

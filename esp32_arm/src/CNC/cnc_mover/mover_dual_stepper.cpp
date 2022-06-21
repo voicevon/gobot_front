@@ -31,9 +31,10 @@ void CncMover_DualStepper::SetSpeed(float speed){
 
 // alpha = flags.bits[0]
 // beta = flags.bits[1]
-void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit, uint8_t target_motor_flags){
+void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
     bool is_absolute_position;
     Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
+    uint8_t target_motor_flags = this->__moving_motor_flags;
 
     // Step1:  Set target motor position. determin absolute or relative.
     if (target_motor_flags == 0x01){
