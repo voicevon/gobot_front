@@ -31,7 +31,10 @@ The instance is possible to use multi hirachy from other parent class.
 # Detail explain
 * An actuator is a phasical movement component, 
  * Knows: Inverse kinematic values, like: position, axis name
- * Unknows: Forword kinematic position, axis name,
+   * current position, target position, distance to target, 
+   * speed , acceleration
+ * cnc should know: Forword kinematic position, axis name,
+ * mover should know: start/stop to move, hardware driver, bus, interface
 
 
 /*
