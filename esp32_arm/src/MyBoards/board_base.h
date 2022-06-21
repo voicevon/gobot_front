@@ -14,10 +14,10 @@
 class BoardBase{
     public:
         virtual void Init(bool is_on_reset);
-        void RepportRamUsage();  // TODO::  be static
-        static uint8_t Assign_ledc_channel(){return __ledc_channel_index; __ledc_channel_index++;};
         virtual void SayHello();
         virtual  float ReadBatteryVolt(){return 1.234f;};
+        static uint8_t Assign_ledc_channel(){return __ledc_channel_index; __ledc_channel_index++;};
+        void RepportRamUsage();  // TODO::  be static
 
     protected:
         // TODO:: be static

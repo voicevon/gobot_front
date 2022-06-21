@@ -15,7 +15,7 @@ void Board_GobotHouse_2206::__Init_Hardware(){
     alpha._motor_gear_teeth_count = 10;
     alpha._slave_pulley_teeth_count = 90;
     alpha._motor_step_angle_in_degree = 0.7003891050583658;
-    this->__stepper_alpha.setInverseRotation(true);
+    this->__stepper_alpha.setInverseRotation(true);   //TODO:  inside app_mover.
     this->__actuator_alpha.LinkStepper(&this->__stepper_alpha,alpha.GetStepsPerCncUnit());
 
     // Init actuator beta
@@ -24,11 +24,7 @@ void Board_GobotHouse_2206::__Init_Hardware(){
     this->__actuator_beta.LinkServo(&this->__servo_beta, true);
 
     // Init mechanic
-    this->__cnc_mechanic.Homed_position_alpha_in_degree = 13.6;
-    this->__cnc_mechanic.Homed_position_beta_in_degree = 148;
-    this->__cnc_mechanic.LINK_A = 75.0;
-    this->__cnc_mechanic.LINK_B = 75.0;
-    this->__cnc_mechanic.Homing_acceleration_alpha = 500;
+    // this->__cnc_mechanic.Init('M');
     
 }
 

@@ -85,9 +85,7 @@ void CncScara::Init(CncBoardBase* board ){
 	board->EnableMotor('A', false);
 	board->EnableMotor('B', false);
 
-	this->_home_as_inverse_kinematic = true;
-	// this->_board->cnc_mover->SetBlockedMove(false);
-
+	this->_home_as_inverse_kinematic = true;   // TODO: inside mechanic.
 
 }
 

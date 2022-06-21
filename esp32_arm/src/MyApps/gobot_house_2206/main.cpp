@@ -70,7 +70,7 @@ void cnc_test(){
     Serial.println("[Info] Cnc teset is started.");
     robot->Test_Beta(0);
     robot->Test_Alpha(0);
-    robot->Test_FollowJig(5);
+    robot->Test_FollowJig(8);
 
     // robot->__Home();
     robot->Test_MoveStone_FromRoomToHead(0, 0);

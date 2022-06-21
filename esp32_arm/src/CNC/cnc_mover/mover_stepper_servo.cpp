@@ -99,15 +99,15 @@ void CncMover_StepperServo::SingleActuatorStop(char actuator_name){
 
 void CncMover_StepperServo::SingleActuatorMoveTo(char actuator_name, bool is_absolute_position, float position_in_cnc_unit){
     if (actuator_name == 'A'){
+        this->__moving_actuator_flags = 0x01;
         this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
         Stepper* stepper = this->__actuator_alpha->GetLinkedStepper();
         this->__stepControl.moveAsync(*stepper);
-        this->__moving_actuator_flags = 0x01;
 
     }else if (actuator_name == 'B'){
+        this->__moving_actuator_flags = 0x02;
         this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
         this->__actuator_beta->StartToMove();
-        this->__moving_actuator_flags = 0x02;
 
     }else{
         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", actuator_name );

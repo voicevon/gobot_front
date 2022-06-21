@@ -4,3 +4,12 @@
 // this->motor_steps_per_round = 514 ;
 
 // For alpha:   big_gear_teeth == 90 / small_gear_teeth == 10
+
+
+
+        // when microstep==1 Should be 736.25 , validated.
+        // float STEPS_PER_RAD_ALPHA;  
+
+
+
+jig angle = 0, 30,60,90,120
