@@ -8,9 +8,13 @@ void ActuatorStepper::LinkStepper(Stepper* stepper, float steps_per_cnc_unit){
 
 
 float ActuatorStepper::GetCurrentPosition_InCncUnit(){
+    float actuator_position = this->__steps_per_cnc_unit * this->__stepper->getPosition();
+    // convert actuator position in CNC RANGE
+    
+
     Serial.println("[Error] ActuatorStepper::GetCurrentPosition_InCncUnit()  I don't know the anser now!");
     while(1){
-        Serial.print(". ");
+        Serial.print("X ");
         delay(500);
     }
 }
@@ -20,20 +24,24 @@ float ActuatorStepper::GetDistanceToTarget_InCncUnit(){
     return 1.0f * distance_in_step / this->__steps_per_cnc_unit;
 }
 
-float ActuatorStepper::__ConvertTo_JointRange(float cnc_position_in_rad){
-    int range_min_in_degree = -315;
-    int range_max_in_degree = 20;
+float ActuatorStepper::_ConvertTo_ActuatorRange(float cnc_position_in_rad){
+    // int range_min_in_degree = -315;
+    // int range_max_in_rad = this->_cnc_range_max;
     float new_position_in_cnc_unit = cnc_position_in_rad;
-    if(cnc_position_in_rad > DEG_TO_RAD * range_max_in_degree){
+    if(cnc_position_in_rad >  this->_cnc_range_max){
         new_position_in_cnc_unit = cnc_position_in_rad - TWO_PI;
     }
     return new_position_in_cnc_unit;
 }
 
+float ActuatorStepper::_ConvertTo_CncRange(float actuator_position){
+    return 0;
+}
+
 void ActuatorStepper::SetCurrentPositionAs(float position_in_cnc_unit){
     //TODO:  direction is here.  The joint has range limitation.
 
-    float joint_position = this->__ConvertTo_JointRange(position_in_cnc_unit);
+    float joint_position = this->_ConvertTo_ActuatorRange(position_in_cnc_unit);
     int32_t position_in_step = joint_position * this->__steps_per_cnc_unit;
     this->__stepper->setPosition(position_in_step);
 
@@ -56,7 +64,7 @@ void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float posit
     int32_t motor_position_in_step;
     if (is_absolute_position){
         this->_target_cnc_position = position_in_cnc_unit;
-        float joint_position = this->__ConvertTo_JointRange(position_in_cnc_unit);
+        float joint_position = this->_ConvertTo_ActuatorRange(position_in_cnc_unit);
         motor_position_in_step = joint_position * this->__steps_per_cnc_unit;
         this->__stepper->setTargetAbs(motor_position_in_step);
 

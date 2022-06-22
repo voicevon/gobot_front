@@ -17,11 +17,11 @@ class ActuatorStepper: public ActuatorBase{
         void Stop() override {};   // Implatcate by StepControl.
 
     protected:
-
+        float _ConvertTo_ActuatorRange(float cnc_position) override;
+        float _ConvertTo_CncRange(float actuator_position) override;
     private:
         Stepper* __stepper;
         float __steps_per_cnc_unit;
-        float __ConvertTo_JointRange(float cnc_position);
         float __current_cnc_position_in_rad;
         float __distance_to_target;
 
