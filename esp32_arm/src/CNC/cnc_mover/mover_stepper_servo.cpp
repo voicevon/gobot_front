@@ -66,7 +66,7 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
         this->__actuator_beta->StartToMove();
 
     }else if (target_motor_flags == 0x03){
-        // Both motor will move. Should end at the same time. so, it's speed should be set seprated.
+        // Both motors will move. Should end at the same time. so, one of the motor should be slower.
         float alpha_time_in_second = this->__actuator_alpha->GetNeededSeconds();
         float beta_time_in_second = this->__actuator_beta->GetNeededSeconds();
         if (alpha_time_in_second > beta_time_in_second){
@@ -76,9 +76,7 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
             // alpha should be slower, saying renew its speed.
             this->__actuator_alpha->RenewSpeed(beta_time_in_second);
         }
-        alpha->setMaxSpeed(123);
         this->__stepControl.moveAsync(*alpha);
-        this->__actuator_beta->SetSpeed(111);
         this->__actuator_beta->StartToMove();
 
     }else{

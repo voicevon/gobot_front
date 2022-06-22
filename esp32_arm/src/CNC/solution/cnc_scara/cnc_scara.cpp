@@ -159,10 +159,6 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 	
 	if (do_ik) IK(&target_fk_xy, &target_ik_ab);
 
-	if(gcode->has_letter('R')) {
-		target_ik_ab.alpha = gcode->get_value('R');
-	}
-
 	bool debug = false;
 	if (gcode->has_letter('F')){
 		int speed = gcode->get_value('F');
