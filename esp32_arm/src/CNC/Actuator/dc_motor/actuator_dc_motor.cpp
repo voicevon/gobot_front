@@ -6,7 +6,7 @@ ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_a, uint8_t h_bridge_pin_b)
     pinMode(h_bridge_pin_b, OUTPUT);
     digitalWrite(h_bridge_pin_a, LOW);
     digitalWrite(h_bridge_pin_b, LOW);
-    // assign led channel
+    // assign ledc channel
 
     this->__h_bridge_pin_a = h_bridge_pin_a;
     this->__h_bridge_pin_b = h_bridge_pin_b;

@@ -13,6 +13,5 @@ class ActuatorMechanicStepper: public ActuatorMechanicBase{
         
     protected:
 
-
     private:
 };

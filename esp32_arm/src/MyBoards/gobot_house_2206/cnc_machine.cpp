@@ -6,15 +6,15 @@ GobotHouseMachine_2206::GobotHouseMachine_2206(){
 }
 
 void GobotHouseMachine_2206::__InitStaticConfig(){
-    this->LINK_A = 75.0;
-    this->LINK_B = 75.0;
+    this->_link_a_length = 75.0;
+    this->_link_b_length = 75.0;
 
     this->HOMING_DIR_ALPHA_IS_TO_MAX = 1;
     this->HOMING_DIR_BETA_IS_TO_MAX = 1;
 
     // this->Homed_position_alpha_in_degree = 13.6;
-    this->Homed_position_alpha_in_degree = 8;
-    this->Homed_position_beta_in_degree = 128.0;
+    this->_homed_position_alpha_in_degree = 8;
+    this->_homed_position_beta_in_degree = 128.0;
 }
 
 void GobotHouseMachine_2206::Init(char solution){
