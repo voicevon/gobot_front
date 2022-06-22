@@ -3,9 +3,9 @@
 #include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
 #include "SimpleFOC.h"
 
-#define PIN_H_BRIDGE_A  11
-#define PIN_H_BRIDGE_B  11
-#define PIN_SENSOR_ADC 11
+#define PIN_H_BRIDGE_A  12
+#define PIN_H_BRIDGE_B  13
+#define PIN_SENSOR_ADC 14
 
 class Vsc_board: public BoardBase{
     public:
