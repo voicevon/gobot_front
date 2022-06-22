@@ -6,7 +6,7 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	bool debug = false;
 
 	float rr1= fk->X * fk->X + fk->Y * fk->Y;
-
+	// beta range:  [0..PI]
 	float beta = PI - acosf((this->_scara_machine->LINK_A * this->_scara_machine->LINK_A + this->_scara_machine->LINK_B * this->_scara_machine->LINK_B -  rr1 ) / (this->_scara_machine->LINK_A * this->_scara_machine->LINK_B * 2));
 	float r1 = sqrtf(rr1);
 	float alpha_eef = acosf(fk->X / r1);    // [0..PI]
@@ -14,10 +14,25 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	float alpha_link = acosf((this->_scara_machine->LINK_A * this->_scara_machine->LINK_A + rr1 - this->_scara_machine->LINK_B * this->_scara_machine->LINK_B)/( this->_scara_machine->LINK_A * r1 * 2));  //[0..PI]
 	float alpha = alpha_eef - alpha_link;  //[-PI.. + 2*PI]?
 
+	if (alpha < 0){
+		Serial.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+		Serial.println("[Warn] CncScara::IK()   Please inspect!!!!");
+		Serial.print("  FK->(X,Y)= ");
+		Serial.print(fk->X);
+		Serial.print(" , ");
+		Serial.print(fk->Y);
+		Serial.print("  beta = ");
+		Serial.print(RAD_TO_DEG * beta);
+		Serial.print(" alpha_eef= ");
+		Serial.print(RAD_TO_DEG * alpha_eef);
+		Serial.print(" alpha = ");
+		Serial.println(RAD_TO_DEG * alpha);
+	}
+
 	//TODO: remove this line , it's for Gobot house only.
-	if (alpha >  10 * DEG_TO_RAD) alpha -= TWO_PI;   // [-330..+10 ] in degree  
-	#define MACHENIC_LIMIT PI * -330 / 180
-	if (alpha <  MACHENIC_LIMIT) alpha = MACHENIC_LIMIT ;  // Machnic limitation
+	// if (alpha >  10 * DEG_TO_RAD) alpha -= TWO_PI;   // [-330..+10 ] in degree  
+	// #define MACHENIC_LIMIT PI * -330 / 180
+	// if (alpha <  MACHENIC_LIMIT) alpha = MACHENIC_LIMIT ;  // Machnic limitation
 	if (debug){
 		Serial.print("\n[Debug] CncScara::IK() from (X,Y)=(");
 		Serial.print(fk->X);

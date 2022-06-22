@@ -7,6 +7,7 @@ class ActuatorBase{
         // virtual void Init();
         
         void InitCncRange(float min, float max){this->_cnc_range_min=min;this->_cnc_range_max=max;};
+        void InitActuatorRange(float min, float max){this->_actuator_range_min=min;this->_actuator_range_max=max;};
         virtual float GetCurrentPosition_InCncUnit();
         virtual void SetCurrentPositionAs(float position_in_cnc_unit);
         virtual void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit);
@@ -16,7 +17,6 @@ class ActuatorBase{
         virtual void Stop();   //TODO:  Remove from base.
 
     protected:
-        void _SetActuatorRange(float min, float max){this->_actuator_range_min=min;this->_actuator_range_max=max;};
         virtual float _ConvertTo_ActuatorRange(float cnc_position){return 0;};
         virtual float _ConvertTo_CncRange(float actuator_position){return 0;};
 

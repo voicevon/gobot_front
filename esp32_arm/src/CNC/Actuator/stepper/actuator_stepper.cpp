@@ -8,15 +8,15 @@ void ActuatorStepper::LinkStepper(Stepper* stepper, float steps_per_cnc_unit){
 
 
 float ActuatorStepper::GetCurrentPosition_InCncUnit(){
-    float actuator_position = this->__steps_per_cnc_unit * this->__stepper->getPosition();
+    float actuator_position = 1.0f * this->__stepper->getPosition() / this->__steps_per_cnc_unit;
     // convert actuator position in CNC RANGE
-    
+    return this->_ConvertTo_CncRange(actuator_position);
 
-    Serial.println("[Error] ActuatorStepper::GetCurrentPosition_InCncUnit()  I don't know the anser now!");
-    while(1){
-        Serial.print("X ");
-        delay(500);
-    }
+    // Serial.println("[Error] ActuatorStepper::GetCurrentPosition_InCncUnit()  I don't know the anser now!");
+    // while(1){
+    //     Serial.print("X ");
+    //     delay(500);
+    // }
 }
 
 float ActuatorStepper::GetDistanceToTarget_InCncUnit(){
@@ -26,7 +26,7 @@ float ActuatorStepper::GetDistanceToTarget_InCncUnit(){
 
 float ActuatorStepper::_ConvertTo_ActuatorRange(float cnc_position_in_rad){
     // int range_min_in_degree = -315;
-    // int range_max_in_rad = this->_cnc_range_max;
+    // int range_max_in_degree = 20;
     float new_position_in_cnc_unit = cnc_position_in_rad;
     if(cnc_position_in_rad >  this->_cnc_range_max){
         new_position_in_cnc_unit = cnc_position_in_rad - TWO_PI;
@@ -39,8 +39,7 @@ float ActuatorStepper::_ConvertTo_CncRange(float actuator_position){
 }
 
 void ActuatorStepper::SetCurrentPositionAs(float position_in_cnc_unit){
-    //TODO:  direction is here.  The joint has range limitation.
-
+    //TODO:  direction is here.  The joint has range limitation.  --> DONE.  
     float joint_position = this->_ConvertTo_ActuatorRange(position_in_cnc_unit);
     int32_t position_in_step = joint_position * this->__steps_per_cnc_unit;
     this->__stepper->setPosition(position_in_step);
