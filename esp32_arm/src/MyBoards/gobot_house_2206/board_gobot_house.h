@@ -5,7 +5,6 @@
 #include "CNC/Actuator/servo/actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/single_axis_homer.h"
-// #include "CNC/solution/cnc_scara/cnc_machine.h"
 #include "cnc_machine.h"
 
 class Board_GobotHouse_2206: public CncBoardBase{
@@ -26,8 +25,9 @@ class Board_GobotHouse_2206: public CncBoardBase{
     private:
         void __Init_Hardware();
         
-        Stepper __stepper_alpha = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
+        Stepper __alpha_stepper = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
         ActuatorStepper __actuator_alpha;
+        ActuatorRangeConstraintBase __alpha_range;
         Servo __servo_beta;
         ActuatorServo __actuator_beta;
         CncMover_StepperServo mover_StepperServo;

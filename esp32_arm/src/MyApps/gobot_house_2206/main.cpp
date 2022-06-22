@@ -3,7 +3,6 @@
 
 #include "MyBoards/gobot_house_2206/board_gobot_house.h"
 #include "CNC/solution/cnc_scara/cnc_scara.h"
-// #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
@@ -12,7 +11,7 @@
 // StepControl controller;    // Use default settings 
 Board_GobotHouse_2206 board;
 // GobotHouseMachine_2206 cncMachine;
-CncScara cncScara;
+CncScaraSolution cncScara;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 
@@ -60,7 +59,7 @@ void loop(){
 void board_test(){
     GobotHouse_2206_BoardTest tester;
     tester.LinkBoard(&board);
-    tester.Test_EefLoadUnload(0);
+    tester.Test_EefLoadUnload(8);
     tester.Test_AllHomers(0);
     tester.Test_ServoDriver_OnBeta(0);
 

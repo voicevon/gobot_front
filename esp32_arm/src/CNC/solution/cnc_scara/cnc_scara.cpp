@@ -1,6 +1,6 @@
 #include "cnc_scara.h"
 
-void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
+void CncScaraSolution::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 	bool debug = false;
@@ -14,9 +14,9 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	float alpha_link = acosf((this->_scara_machine->LINK_A * this->_scara_machine->LINK_A + rr1 - this->_scara_machine->LINK_B * this->_scara_machine->LINK_B)/( this->_scara_machine->LINK_A * r1 * 2));  //[0..PI]
 	float alpha = alpha_eef - alpha_link;  //[-PI.. + 2*PI]?
 
-	if (alpha < 0){
+	if (alpha < -PI){
 		Serial.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-		Serial.println("[Warn] CncScara::IK()   Please inspect!!!!");
+		Serial.println("[Warn] CncScaraSolution::IK()   Please inspect!!!!");
 		Serial.print("  FK->(X,Y)= ");
 		Serial.print(fk->X);
 		Serial.print(" , ");
@@ -25,6 +25,8 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 		Serial.print(RAD_TO_DEG * beta);
 		Serial.print(" alpha_eef= ");
 		Serial.print(RAD_TO_DEG * alpha_eef);
+		Serial.print(" alpha_link= ");
+		Serial.print(alpha_link);
 		Serial.print(" alpha = ");
 		Serial.println(RAD_TO_DEG * alpha);
 	}
@@ -34,7 +36,7 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	// #define MACHENIC_LIMIT PI * -330 / 180
 	// if (alpha <  MACHENIC_LIMIT) alpha = MACHENIC_LIMIT ;  // Machnic limitation
 	if (debug){
-		Serial.print("\n[Debug] CncScara::IK() from (X,Y)=(");
+		Serial.print("\n[Debug] CncScaraSolution::IK() from (X,Y)=(");
 		Serial.print(fk->X);
 		Serial.print(" , ");
 		Serial.print(fk->Y);
@@ -63,7 +65,7 @@ void CncScara::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 // from_ik: Alpha, Beta
 //          represents  actuator's current position. unit is rad
 // to_fk: x,y.  unit is mm.
-void CncScara::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+void CncScaraSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 	float rad_beta = ik->beta; // / this->_scara_machine->STEPS_PER_RAD_BETA;
@@ -75,7 +77,7 @@ void CncScara::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	fk->Y = this->_scara_machine->LINK_A * sinf(rad_alpha) + this->_scara_machine->LINK_B * sinf(rad_eef);
 	bool debug = false;
 	if (debug){
-		Serial.print("\n\n[Debug] CncScara::FK()  in degree from (alpha,beta) =(");
+		Serial.print("\n\n[Debug] CncScaraSolution::FK()  in degree from (alpha,beta) =(");
 		Serial.print(rad_alpha * RAD_TO_DEG);
 		Serial.print(" , ");
 		Serial.print(rad_beta * RAD_TO_DEG);
@@ -87,13 +89,13 @@ void CncScara::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	}
 }
 
-bool CncScara::GetCurrentPosition(FkPositionBase* position_fk){
+bool CncScaraSolution::GetCurrentPosition(FkPositionBase* position_fk){
 	position_fk = & this->__current_fk_position;
 	return true;
 }
 
-void CncScara::Init(CncBoardBase* board ){
-	Serial.println("[Info] CncScara::Init() ");
+void CncScaraSolution::Init(CncBoardBase* board ){
+	Serial.println("[Info] CncScaraSolution::Init() ");
 	this->_board = board;
 	this->_scara_machine = (CncScaraMachine*)(this->_board->GetCncMechanic());
 	
@@ -104,7 +106,7 @@ void CncScara::Init(CncBoardBase* board ){
 
 }
 
-float CncScara::GetDistanceToTarget_FK(){
+float CncScaraSolution::GetDistanceToTarget_FK(){
 	// because in this arm solution,  FK is equal to IK. so never mind the logic error.
 	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
 	// TODO: Rewrite this function.
@@ -119,12 +121,12 @@ float CncScara::GetDistanceToTarget_FK(){
 	return distance;
 }
 
-float CncScara::GetDistanceToTarget_IK(){
+float CncScaraSolution::GetDistanceToTarget_IK(){
 	return this->_board->cnc_mover->GetDistanceToTarget_InCncUnit();
 }
 
-void CncScara::RunG1(Gcode* gcode) {
-	// Serial.print("\n[Debug] CncScara::RunG1()   ");
+void CncScaraSolution::RunG1(Gcode* gcode) {
+	// Serial.print("\n[Debug] CncScaraSolution::RunG1()   ");
 	// Serial.print(gcode->get_command());
 
 	// Assume G1-code mostly wants to update actuator directly, no need to do IK.
@@ -166,7 +168,7 @@ void CncScara::RunG1(Gcode* gcode) {
 		int speed = gcode->get_value('F');
 		this->_board->cnc_mover->SetSpeed(DEG_TO_RAD * speed);
 		if (debug){
-			Serial.print("[Debug] CncScara::RunG1()  motor_flags= ");
+			Serial.print("[Debug] CncScaraSolution::RunG1()  motor_flags= ");
 			Serial.print(motor_flags);
 			Serial.print("  speed= ");
 			Serial.println(RAD_TO_DEG * speed);
@@ -186,7 +188,7 @@ void CncScara::RunG1(Gcode* gcode) {
 
 	debug = true;
 	if (debug){
-		Serial.print("\n[Debug] CncScara::RunG1()  from,to  alpha=");
+		Serial.print("\n[Debug] CncScaraSolution::RunG1()  from,to  alpha=");
 		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A'));
 		Serial.print(" , ");
 		Serial.print(RAD_TO_DEG * target_ik_ab.alpha);
@@ -197,24 +199,24 @@ void CncScara::RunG1(Gcode* gcode) {
 	}
 }
 
-void CncScara:: _running_G1(){
+void CncScaraSolution:: _running_G1(){
     // if (this->GetDistanceToTarget_IK() < (this->_scara_machine->MAX_ACCELERATION_ALPHPA + this->_scara_machine->MAX_ACCELERATION_BETA)/64){
     float distance_in_degree = RAD_TO_DEG * this->GetDistanceToTarget_IK() ;
 	if ( distance_in_degree < 3) {
       	this->State = CncState::IDLE;
-		Serial.print("\n[Info] CncScara::_running_G1() is finished. ");
+		Serial.print("\n[Info] CncScaraSolution::_running_G1() is finished. ");
     }
 	bool debug = false;
 	if(debug){
-		Serial.print("[Debug] CncScara:: _running_G1(): distance_in_degree = ");
+		Serial.print("[Debug] CncScaraSolution:: _running_G1(): distance_in_degree = ");
 		Serial.println(distance_in_degree);
 	}
 }
 
-void CncScara::RunG28(char axis){
+void CncScaraSolution::RunG28(char axis){
 	bool debug = true;
 	if (debug){
-		Serial.print("\n[Debug] CncScara::RunG28() is entering   AXIS = " );
+		Serial.print("\n[Debug] CncScaraSolution::RunG28() is entering   AXIS = " );
 		Serial.println(axis);
 	}
 	this->__homing_helper = this->_board->GetHomer(axis);
@@ -228,16 +230,16 @@ void CncScara::RunG28(char axis){
 
 }
 
-void CncScara::_running_G28(){
+void CncScaraSolution::_running_G28(){
 	bool debug = false;
-	if (debug) Serial.print("[Debug] CncScara::running_G28() is entering \n");
+	if (debug) Serial.print("[Debug] CncScaraSolution::running_G28() is entering \n");
 	if (this->__homing_helper->IsTriged()){
 		// End stop is trigered
 		this->_board->cnc_mover->SingleActuatorStop(this->_homing_axis_name);
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
-			if (debug) Serial.print("\n   [Info] CncScara::_running_G28() Trying to get home position from actuator position  ");
+			if (debug) Serial.print("\n   [Info] CncScaraSolution::_running_G28() Trying to get home position from actuator position  ");
 			if (this->_homing_axis_name == 'A'){
 				ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree;
 				
@@ -251,7 +253,7 @@ void CncScara::_running_G28(){
 			this->IK(&this->__current_fk_position, &verifying_ik_for_debug);
 		}
 		else{
-			Serial.print("\n\n\n\n\n  [Error] CncScara::_running_G28()  Trying to get home position with EEF FK position  ");
+			Serial.print("\n\n\n\n\n  [Error] CncScaraSolution::_running_G28()  Trying to get home position with EEF FK position  ");
 		}
 		//Copy current ik-position to motor-position. 
 		// Note: If homed_position is defined a FK-XY position,  This must be after IK() translation.
@@ -264,7 +266,7 @@ void CncScara::_running_G28(){
 
 		bool debug = true;
 		if (debug){
-			Serial.print("\n[Info] CncScara::_running_G28() Home sensor is trigger.  " );
+			Serial.print("\n[Info] CncScaraSolution::_running_G28() Home sensor is trigger.  " );
 			Serial.print(this->_homing_axis_name);
 			if (this->_homing_axis_name =='A'){
 				Serial.print("  cnc position in degree=  ");
@@ -285,7 +287,7 @@ void CncScara::_running_G28(){
 		// float segment_distance_in_rad = homing_velocity_in_rad_per_second / 10; 
 		// bool debug = false;
 		// if(debug){
-		// 	Serial.print("[Debug] CncScara::_running_G28() homing_axis= ");
+		// 	Serial.print("[Debug] CncScaraSolution::_running_G28() homing_axis= ");
 		// 	Serial.print(this->_homing_axis_name);
 		// 	Serial.print(" velocity in degree= ");
 		// 	Serial.print(RAD_TO_DEG * homing_velocity_in_rad_per_second);
@@ -298,11 +300,11 @@ void CncScara::_running_G28(){
 	}
 }
 
-void CncScara::RunM123(uint8_t eef_channel, uint8_t eef_action){
+void CncScaraSolution::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	this->_board->GetEef()->Run(eef_action);
 }
 
-void CncScara::RunM84(){
+void CncScaraSolution::RunM84(){
 	this->_board->EnableMotor('A', false);
 	this->_board->EnableMotor('B', false);
 }

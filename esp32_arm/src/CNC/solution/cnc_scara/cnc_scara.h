@@ -10,11 +10,11 @@
 #include "cnc_machine.h"
 
 
-class CncScara: public CncBase{
+class CncScaraSolution: public CncBase{
     public:
-        // static CncScara& getInstance()
+        // static CncScaraSolution& getInstance()
         // {
-        //     static CncScara instance; // Guaranteed to be destroyed.
+        //     static CncScaraSolution instance; // Guaranteed to be destroyed.
         //                           // Instantiated on first use.
         //     return instance;
         // }

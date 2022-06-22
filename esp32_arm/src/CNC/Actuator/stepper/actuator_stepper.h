@@ -17,8 +17,7 @@ class ActuatorStepper: public ActuatorBase{
         void Stop() override {};   // Implatcate by StepControl.
 
     protected:
-        float _ConvertTo_ActuatorRange(float cnc_position) override;
-        float _ConvertTo_CncRange(float actuator_position) override;
+
     private:
         Stepper* __stepper;
         float __steps_per_cnc_unit;

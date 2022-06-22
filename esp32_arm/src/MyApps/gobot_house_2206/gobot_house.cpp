@@ -188,7 +188,7 @@ void GobotHouse_2206::ParkArms(bool do_homing){
 void GobotHouse_2206::Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room_id){
 	// if (this->_gcode_queue->GetFreeBuffersCount() < 16)  return false;
 	if (loop_count==0) return;
-
+	String g4="G4S3";
 	for(int i=0; i<loop_count; i++){
 		// __Move_fromNeck_toDoor(room_id,true);
 		// __Move_fromRoom_toDoor(room_id,false);
@@ -198,6 +198,8 @@ void GobotHouse_2206::Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room
 		__Move_fromHead_toNeck(false);
 		// __Enable_eefCoil(false);
 		// __Move_fromHead_toNeck(true);
+		this->_gcode_queue->AppendGcodeCommand(g4);
+
 	}
 }
 

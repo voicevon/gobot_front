@@ -1,6 +1,6 @@
 #pragma once
 #define MAX_BYTES_PER_MESSAGE 20
-#define MESSAGE_COUNT_IN_QUEUE 22
+#define MESSAGE_COUNT_IN_QUEUE 200
 // #include <Arduino.h>  //for String only
 #include <WString.h>
 
