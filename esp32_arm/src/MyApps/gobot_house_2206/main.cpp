@@ -8,13 +8,10 @@
 #include "IoT/main_mqtt.h"
 #include "gobot_house.h"
 
-// StepControl controller;    // Use default settings 
 Board_GobotHouse_2206 board;
-// GobotHouseMachine_2206 cncMachine;
 CncScaraSolution cncScara;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
-
 GobotHouse_2206* robot; 
 
 void board_test();
@@ -59,7 +56,7 @@ void loop(){
 void board_test(){
     GobotHouse_2206_BoardTest tester;
     tester.LinkBoard(&board);
-    tester.Test_EefLoadUnload(8);
+    tester.Test_EefLoadUnload(0);
     tester.Test_AllHomers(0);
     tester.Test_ServoDriver_OnBeta(0);
 
@@ -68,7 +65,7 @@ void board_test(){
 void cnc_test(){
     Serial.println("[Info] Cnc teset is started.");
     robot->Test_Beta(0);
-    robot->Test_Alpha(0);
+    robot->Test_Alpha(8);
     robot->Test_FollowJig(0);
 
     robot->__Home();

@@ -43,28 +43,11 @@ void ActuatorServo::SpinOnce(){
     this->__distance_to_target_in_rad = abs (this->_target_cnc_position - this->__current_cnc_position_in_rad);
     float distance_should_be_moved = abs(DEG_TO_RAD * this->__speed_degree_per_second * time_interval_in_us /1000000L);
     
-    debug = false;
-    if(debug){
-        Serial.print("time_interval_in_us= ");
-        Serial.print(time_interval_in_us);
-        Serial.print("  __distance_to_target = ");
-        Serial.print(RAD_TO_DEG* __distance_to_target_in_rad);
-        Serial.print("  __speed = ");
-        Serial.print(this->__speed_degree_per_second);
-        Serial.print("  current position = ");
-        Serial.print(RAD_TO_DEG * this->__current_cnc_position_in_rad);
-        Serial.print("  distance_should_be_moved=");
-        Serial.print(RAD_TO_DEG* distance_should_be_moved);
-        Serial.print(" direction= ");
-        Serial.println(this->__moving_direction_of_cnc);
-    }
+
     if (distance_should_be_moved <= this->__distance_to_target_in_rad){
         // after running this step, The servo will not go over the target position.
         this->__current_cnc_position_in_rad += distance_should_be_moved * this->__moving_direction_of_cnc;
-        // float servo_angle_in_degree = this->__ToServoDegree(this->__current_cnc_position_in_rad);
-        // this->__servo->write(servo_angle_in_degree);
         this->__last_spin_timestamp = now;
-        // this->__is_moving = true;
     }else{
         //Almost arrived target position already, So this is the last step.
         this->__current_cnc_position_in_rad = this->_target_cnc_position;
@@ -72,6 +55,23 @@ void ActuatorServo::SpinOnce(){
         this->__is_moving = false;
     }
     float servo_angle_in_degree = this->__ToServoDegree(this->__current_cnc_position_in_rad);
+    debug = false;
+    if(debug){
+        Serial.print("time_interval_in_us= ");
+        Serial.print(time_interval_in_us);
+        Serial.print("  distance_to_target= ");
+        Serial.print(RAD_TO_DEG* __distance_to_target_in_rad);
+        Serial.print("  speed= ");
+        Serial.print(this->__speed_degree_per_second);
+        Serial.print("  current position= ");
+        Serial.print(RAD_TO_DEG * this->__current_cnc_position_in_rad);
+        Serial.print("  distance_should_be_moved=");
+        Serial.print(RAD_TO_DEG* distance_should_be_moved);
+        Serial.print(" direction= ");
+        Serial.print(this->__moving_direction_of_cnc);
+        Serial.print(" servo_angle= ");
+        Serial.println(servo_angle_in_degree);
+    }
     this->__servo->write(servo_angle_in_degree);
 }
 

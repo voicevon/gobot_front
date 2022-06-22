@@ -101,5 +101,6 @@ void ActuatorStepper::SetSpeed(float speed_per_second){
         steps_per_second = MAX_STEPS_PER_SECOND;
     }
     this->__stepper->setMaxSpeed(steps_per_second);
+    this->__speed = speed_per_second;
 }
 

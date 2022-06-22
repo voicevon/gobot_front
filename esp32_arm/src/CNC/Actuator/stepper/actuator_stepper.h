@@ -15,6 +15,7 @@ class ActuatorStepper: public ActuatorBase{
         void SetSpeed(float speed_per_second) override;
         // bool MotorIsMoving(char moto_name) override;
         void Stop() override {};   // Implatcate by StepControl.
+        float GetSpeed() override {return this->__speed;};
 
     protected:
 
@@ -23,5 +24,6 @@ class ActuatorStepper: public ActuatorBase{
         float __steps_per_cnc_unit;
         float __current_cnc_position_in_rad;
         float __distance_to_target;
+        float __speed;
 
 };
