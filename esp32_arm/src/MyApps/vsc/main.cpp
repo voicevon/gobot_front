@@ -1,17 +1,28 @@
 #include "all_applications.h"
 #ifdef I_AM_VSC
-#include "Myboards/vsc/board_vsc.h"
-
+#include "board/board_vsc.h"
+#include "board/board_tester.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "vsc_robot.h"
 
-Vsc_board board;
+Vsc_Board board;
 VscRobot robot;
 MessageQueue mqtt_command_queue;
 
+
+void test_board(){
+    Vsc_BoardTest tester;
+    tester.LinkBoard(&board);
+    tester.Test_AngleSensor(100);
+
+    tester.Test_AllHomers(81);
+    // tester.Test_Motor(20);
+
+}
 void setup(){
     board.Init(true);
+    test_board();
     // robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     // cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
