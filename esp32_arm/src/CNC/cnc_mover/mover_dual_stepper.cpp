@@ -136,18 +136,18 @@ void CncMover_DualStepper::SetActuatorCurrentCncPositionAs(char actuator_name, f
         log_w("[Warn] CncMover_DualStepper::SingleMotorMoveTo() Unkonwn axisname= ", actuator_name );
     }
 }
-float CncMover_DualStepper::GetDistanceToTarget_InCncUnit(){
+float CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit(){
     float alpha_distance = 0;
     if((this->__moving_motor_flags & 0x01) > 0){
-       alpha_distance = this->__actuator_alpha->GetDistanceToTarget_InCncUnit();
+       alpha_distance = this->__actuator_alpha->GetAbsDistanceToTarget_InCncUnit();
     }
     float beta_distance = 0;
     if ((this->__moving_motor_flags & 0x02) > 0){
-       beta_distance = this->__actuator_beta->GetDistanceToTarget_InCncUnit();
+       beta_distance = this->__actuator_beta->GetAbsDistanceToTarget_InCncUnit();
     }
     bool debug= false;
     if(debug){
-        Serial.print("[Debug] CncMover_DualStepper::GetDistanceToTarget_InCncUnit() alpha = ");
+        Serial.print("[Debug] CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit() alpha = ");
         Serial.print(alpha_distance);
         Serial.print("  beta = ");
         Serial.println(beta_distance);

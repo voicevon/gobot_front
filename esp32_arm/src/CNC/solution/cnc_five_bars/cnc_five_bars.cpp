@@ -343,7 +343,7 @@ void CncFiveBars::_running_G1(){
 
 float CncFiveBars::GetDistanceToTarget_IK(){
 	// return this->alpha_stepper->getDistanceToTarget() + this->beta_stepper->getDistanceToTarget();
-	return this->_board->cnc_mover->GetDistanceToTarget_InCncUnit();
+	return this->_board->cnc_mover->GetAbsDistanceToTarget_InCncUnit();
 }
 
 void CncFiveBars::RunM84(){

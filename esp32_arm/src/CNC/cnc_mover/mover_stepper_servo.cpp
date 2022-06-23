@@ -13,19 +13,19 @@ void CncMover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
 #include "MyLibs/calculator.h"
 
 void CncMover_StepperServo::SetSpeed(float speed){
-    if (this->__moving_actuator_flags == 0x01){
+    if (this->_moving_actuator_flags == 0x01){
         //speed is for alpha
         this->__actuator_alpha->SetSpeed(speed);
-    }else if (this->__moving_actuator_flags == 0x02){
+    }else if (this->_moving_actuator_flags == 0x02){
         //spped is for beta
         this->__actuator_beta->SetSpeed(speed);
-    }else if (this->__moving_actuator_flags == 0x03){
+    }else if (this->_moving_actuator_flags == 0x03){
         //speed is for both.   TODO:  speed = alpha * alpha + beta * beta;
         this->__actuator_alpha->SetSpeed(speed);
         this->__actuator_beta->SetSpeed(speed);
     }else{
         Serial.print("[Warn] CncMover_StepperServo::SetSpeed() Unknown flag = ");
-        Serial.println(this->__moving_actuator_flags);
+        Serial.println(this->_moving_actuator_flags);
     }
 }
 
@@ -34,7 +34,7 @@ void CncMover_StepperServo::SetSpeed(float speed){
 void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
     bool is_absolute_position;
     Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
-    uint8_t target_motor_flags = this->__moving_actuator_flags;
+    uint8_t target_motor_flags = this->_moving_actuator_flags;
 
     // Step1:  Set target motor position. determin absolute or relative.
     if (target_motor_flags == 0x01){
@@ -68,7 +68,6 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
     if (target_motor_flags == 0x01){
         // Move alpha only
         this->__stepControl->moveAsync(*alpha);
-
     }else if (target_motor_flags == 0x02){
         // move beta only
         this->__actuator_beta->StartToMove();
@@ -77,7 +76,7 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
         // Both motors will move. Should end at the same time. so, one of the motor should be slower.
         float alpha_time_in_second = this->__actuator_alpha->GetNeededSeconds();
         float beta_time_in_second = this->__actuator_beta->GetNeededSeconds();
-        if (alpha_time_in_second > beta_time_in_second){
+        if (beta_time_in_second < alpha_time_in_second){
             // beta should be slower, saying renew its speed.
             this->__actuator_beta->RenewSpeed(alpha_time_in_second);
         }else{
@@ -106,7 +105,7 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
         Serial.print("[Error] CncMover_StepperServo::AllMotorsMoveTo()  target_motor_flags= ");
         Serial.println(target_motor_flags);
     }
-    this->__moving_actuator_flags = target_motor_flags;
+    this->_moving_actuator_flags = target_motor_flags;
 }
 
 void CncMover_StepperServo::AllActuatorsStop(){
@@ -117,11 +116,11 @@ void CncMover_StepperServo::AllActuatorsStop(){
 void CncMover_StepperServo::SingleActuatorStop(char actuator_name){
     if (actuator_name == 'A'){
         this->__actuator_alpha->Stop();
-        this->__moving_actuator_flags -= 0x01;
+        this->_moving_actuator_flags -= 0x01;
 
     }else if (actuator_name=='B'){
         this->__actuator_beta->Stop();
-        this->__moving_actuator_flags -= 0x02;
+        this->_moving_actuator_flags -= 0x02;
     }else{
         Serial.print("[Error] CncMover_StepperServo::SingleMotorStop() Unknown actuator_name= ");
         Serial.println(actuator_name);
@@ -131,13 +130,13 @@ void CncMover_StepperServo::SingleActuatorStop(char actuator_name){
 
 void CncMover_StepperServo::SingleActuatorMoveTo(char actuator_name, bool is_absolute_position, float position_in_cnc_unit){
     if (actuator_name == 'A'){
-        this->__moving_actuator_flags = 0x01;
+        this->_moving_actuator_flags = 0x01;
         this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
         Stepper* stepper = this->__actuator_alpha->GetLinkedStepper();
         this->__stepControl->moveAsync(*stepper);
 
     }else if (actuator_name == 'B'){
-        this->__moving_actuator_flags = 0x02;
+        this->_moving_actuator_flags = 0x02;
         this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
         this->__actuator_beta->StartToMove();
 
@@ -168,18 +167,18 @@ void CncMover_StepperServo::SetActuatorCurrentCncPositionAs(char actuator_name, 
         log_w("[Warn] CncMover_StepperServo::SingleMotorMoveTo() Unkonwn axisname= ", actuator_name );
     }
 }
-float CncMover_StepperServo::GetDistanceToTarget_InCncUnit(){
+float CncMover_StepperServo::GetAbsDistanceToTarget_InCncUnit(){
     float alpha_distance = 0;
-    if((this->__moving_actuator_flags & 0x01) > 0){
-       alpha_distance = this->__actuator_alpha->GetDistanceToTarget_InCncUnit();
+    if((this->_moving_actuator_flags & 0x01) > 0){
+       alpha_distance = this->__actuator_alpha->GetAbsDistanceToTarget_InCncUnit();
     }
     float beta_distance = 0;
-    if ((this->__moving_actuator_flags & 0x02) > 0){
-       beta_distance = this->__actuator_beta->GetDistanceToTarget_InCncUnit();
+    if ((this->_moving_actuator_flags & 0x02) > 0){
+       beta_distance = this->__actuator_beta->GetAbsDistanceToTarget_InCncUnit();
     }
-    bool debug= true;
+    bool debug= false;
     if(debug){
-        Serial.print("[Debug] CncMover_StepperServo::GetDistanceToTarget_InCncUnit() alpha = ");
+        Serial.print("[Debug] CncMover_StepperServo::GetAbsDistanceToTarget_InCncUnit() alpha = ");
         Serial.print(alpha_distance);
         Serial.print("  beta = ");
         Serial.println(beta_distance);

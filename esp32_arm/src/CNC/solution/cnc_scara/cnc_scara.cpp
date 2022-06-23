@@ -122,7 +122,7 @@ float CncScaraSolution::GetDistanceToTarget_FK(){
 }
 
 float CncScaraSolution::GetDistanceToTarget_IK(){
-	return this->_board->cnc_mover->GetDistanceToTarget_InCncUnit();
+	return this->_board->cnc_mover->GetAbsDistanceToTarget_InCncUnit();
 }
 
 void CncScaraSolution::RunG1(Gcode* gcode) {
@@ -171,7 +171,6 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 			Serial.println(RAD_TO_DEG * speed);
 		}
 	}
-
 	// TODO:  Enable motor via mover->enable_motor(axis)
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B', true);
@@ -179,8 +178,6 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 	float cnc_position[2];
 	cnc_position[0] = target_ik_ab.alpha;
 	cnc_position[1] = target_ik_ab.beta;
-	
-
 
 	debug = true;
 	if (debug){
@@ -200,7 +197,7 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 void CncScaraSolution:: _running_G1(){
     // if (this->GetDistanceToTarget_IK() < (this->_scara_machine->MAX_ACCELERATION_ALPHPA + this->_scara_machine->MAX_ACCELERATION_BETA)/64){
     float distance_in_degree = RAD_TO_DEG * this->GetDistanceToTarget_IK() ;
-	if ( distance_in_degree < 3) {
+	if ( distance_in_degree < 1) {
       	this->State = CncState::IDLE;
 		Serial.print("\n[Info] CncScaraSolution::_running_G1() is finished. ");
     }

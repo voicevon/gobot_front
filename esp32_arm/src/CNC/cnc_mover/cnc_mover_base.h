@@ -23,13 +23,13 @@ class CncMoverBase{
 
         virtual bool ActuatorIsMoving(char actuator_name);
         virtual float GetSingleActuatorCurrentPosition_InCncUnit(char actuator_name);  // TODO: return  all current position.
-        virtual float GetDistanceToTarget_InCncUnit();
-        void SetMovingFlags(uint8_t target_actuator_flags){this->__moving_actuator_flags=target_actuator_flags;};
+        virtual float GetAbsDistanceToTarget_InCncUnit();
+        void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
 
 
     protected:
         // bool _is_blocked_move;
-        uint8_t __moving_actuator_flags;
+        uint8_t _moving_actuator_flags;
     
     private:
     

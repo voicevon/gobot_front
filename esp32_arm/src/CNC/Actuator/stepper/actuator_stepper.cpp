@@ -23,16 +23,18 @@ float ActuatorStepper::GetCurrentPosition_InCncUnit(){
     // }
 }
 
-float ActuatorStepper::GetDistanceToTarget_InCncUnit(){
+float ActuatorStepper::GetAbsDistanceToTarget_InCncUnit(){
     int32_t distance_in_step = this->__stepper->getDistanceToTarget();
-    Serial.print("[Debug] ActuatorStepper::GetDistanceToTarget_InCncUnit() ");
-    Serial.print(" current_step_position= " );
-    Serial.print(this->__stepper->getPosition());
-    Serial.print(" distance to target= " );
-    Serial.println(distance_in_step);
-
+    bool debug = false;
+    if (debug){
+        Serial.print("[Debug] ActuatorStepper::GetAbsDistanceToTarget_InCncUnit() ");
+        Serial.print(" current_step_position= " );
+        Serial.print(this->__stepper->getPosition());
+        Serial.print(" distance to target= " );
+        Serial.println(distance_in_step);
+    }
     if(distance_in_step < 0){
-        Serial.println("[Error] ActuatorStepper::GetDistanceToTarget_InCncUnit() ,  Do inspection! ");
+        Serial.println("[Error] ActuatorStepper::GetAbsDistanceToTarget_InCncUnit() ,  Do inspection! ");
         while(true){
             Serial.print("E ");
             delay(1000);
@@ -80,7 +82,7 @@ void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float posit
         motor_position_in_step = actuator_position * this->__steps_per_cnc_unit;
         this->__stepper->setTargetAbs(motor_position_in_step);
 
-        bool debug = true;
+        bool debug = false;
         if (debug){
             Serial.print("[Debug] ActuatorStepper::MoveTo( absolute)  position_in_cnc_unit= ");
             Serial.print(RAD_TO_DEG * position_in_cnc_unit);
@@ -120,7 +122,7 @@ void ActuatorStepper::SetSpeed(float speed_per_second){
     this->__stepper->setMaxSpeed(steps_per_second);
     // the real speed of actuator.
     this->__speed = steps_per_second / this->__steps_per_cnc_unit;
-    bool debug = true;
+    bool debug = false;
     if (debug){
         Serial.print("[Debug] ActuatorStepper::SetSpeed() speed= ");
         Serial.println(RAD_TO_DEG * this->__speed);
