@@ -1,8 +1,6 @@
 #pragma once
-// #include "../board_base.h"
-// #include "../cnc_board_base.h"
 #include "MyBoards/cnc_board_base.h"
-#include "AGV/mover_driver/single_wheel_driver/single_wheel_h_bridge_pwm_driver.h"
+#include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
 #include <SimpleFOC.h>
 #include "CNC/single_axis_homer.h"
 
@@ -16,14 +14,14 @@ class Vsc_Board: public CncBoardBase{
         Vsc_Board(){};
         void Init(bool is_on_reset) override{};
         void SayHello() override {};
-        SingleWheel_HBridgePwmDriver* GetDcMotor(){return &this->__motor;};
+        ActuatorDcMotor* GetDcMotor(){return &this->__motor;};
         MagneticSensorAnalog* GetSensor(){return &this->__sensor;};
         SingleAxisHomer* GetHomer(char axis_name){return &this->__homer; };
 
     protected:
 
     private:
-	    SingleWheel_HBridgePwmDriver __motor = SingleWheel_HBridgePwmDriver(PIN_H_BRIDGE_A, PIN_H_BRIDGE_B);
+	    ActuatorDcMotor __motor = ActuatorDcMotor(PIN_H_BRIDGE_A, PIN_H_BRIDGE_B);
         MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC);
         SingleAxisHomer __homer = SingleAxisHomer(PIN_HOMER_SENSOR_HALL, LOW);
 
