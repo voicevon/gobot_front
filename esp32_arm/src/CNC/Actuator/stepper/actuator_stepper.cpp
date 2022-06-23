@@ -8,11 +8,19 @@ void ActuatorStepper::LinkStepper(Stepper* stepper, float steps_per_cnc_unit){
 
 
 float ActuatorStepper::GetCurrentPosition_InCncUnit(){
-    Serial.println("[Error] ActuatorStepper::GetCurrentPosition_InCncUnit()  I don't know the anser now!");
-    while(1){
-        Serial.print(". ");
-        delay(500);
+    float actuator_position = 1.0f * this->__stepper->getPosition() / this->__steps_per_cnc_unit;
+    this->__current_cnc_position_in_rad = actuator_position;
+    if (this->_is_range_constraint){
+        // convert actuator position in CNC RANGE
+        // this->__current_cnc_position_in_rad = this-> _ConvertTo_CncRange(actuator_position);
+        this->__current_cnc_position_in_rad = this->_range_constraint->_ConvertTo_CncRange(actuator_position);
     }
+    return this->__current_cnc_position_in_rad;
+    // Serial.println("[Error] ActuatorStepper::GetCurrentPosition_InCncUnit()  I don't know the anser now!");
+    // while(1){
+    //     Serial.print("X ");
+    //     delay(500);
+    // }
 }
 
 float ActuatorStepper::GetDistanceToTarget_InCncUnit(){
@@ -20,20 +28,15 @@ float ActuatorStepper::GetDistanceToTarget_InCncUnit(){
     return 1.0f * distance_in_step / this->__steps_per_cnc_unit;
 }
 
-float ActuatorStepper::__ConvertTo_JointRange(float cnc_position_in_rad){
-    int range_min_in_degree = -315;
-    int range_max_in_degree = 20;
-    float new_position_in_cnc_unit = cnc_position_in_rad;
-    if(cnc_position_in_rad > DEG_TO_RAD * range_max_in_degree){
-        new_position_in_cnc_unit = cnc_position_in_rad - TWO_PI;
-    }
-    return new_position_in_cnc_unit;
-}
+
 
 void ActuatorStepper::SetCurrentPositionAs(float position_in_cnc_unit){
-    //TODO:  direction is here.  The joint has range limitation.
-
-    float joint_position = this->__ConvertTo_JointRange(position_in_cnc_unit);
+    //TODO:  direction is here.  The joint has range limitation.  --> DONE.  
+    float joint_position = position_in_cnc_unit;
+    if(this->_is_range_constraint) {
+        // joint_position = this->_ConvertTo_ActuatorRange(position_in_cnc_unit);
+        joint_position = this->_range_constraint->_ConvertTo_ActuatorRange(position_in_cnc_unit);
+    }
     int32_t position_in_step = joint_position * this->__steps_per_cnc_unit;
     this->__stepper->setPosition(position_in_step);
 
@@ -56,7 +59,11 @@ void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float posit
     int32_t motor_position_in_step;
     if (is_absolute_position){
         this->_target_cnc_position = position_in_cnc_unit;
-        float joint_position = this->__ConvertTo_JointRange(position_in_cnc_unit);
+        float joint_position = position_in_cnc_unit;
+        if (this->_is_range_constraint){
+            // joint_position = this->_ConvertTo_ActuatorRange(position_in_cnc_unit);
+            joint_position = this->_range_constraint->_ConvertTo_ActuatorRange(position_in_cnc_unit);
+        }
         motor_position_in_step = joint_position * this->__steps_per_cnc_unit;
         this->__stepper->setTargetAbs(motor_position_in_step);
 
@@ -87,12 +94,14 @@ void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float posit
     }
 }
 
-#define MAX_STEPS_PER_SECOND 4000
+#define MAX_STEPS_PER_SECOND 6000   //TODO:  be configable
 void ActuatorStepper::SetSpeed(float speed_per_second){
     float steps_per_second = speed_per_second * this->__steps_per_cnc_unit;
     if (steps_per_second > MAX_STEPS_PER_SECOND){
         steps_per_second = MAX_STEPS_PER_SECOND;
     }
     this->__stepper->setMaxSpeed(steps_per_second);
+    // the real speed of actuator.
+    this->__speed = steps_per_second / this->__steps_per_cnc_unit;
 }
 

@@ -6,8 +6,13 @@ GobotHouseMachine_2206::GobotHouseMachine_2206(){
 }
 
 void GobotHouseMachine_2206::__InitStaticConfig(){
-    this->_link_a_length = 75.0;
-    this->_link_b_length = 75.0;
+    // For actuator is stepper BYG-48
+    // this->_link_a_length = 75.0;  
+    // this->_LINK_B_LENGTH = 75.0; 
+
+    // For actuator is servo 
+    this->_LINK_A_LENGTH = 71.5;
+    this->_LINK_B_LENGTH = 79.5;
 
     this->HOMING_DIR_ALPHA_IS_TO_MAX = 1;
     this->HOMING_DIR_BETA_IS_TO_MAX = 1;
@@ -22,7 +27,7 @@ void GobotHouseMachine_2206::Init(char solution){
 
     this->MAX_ACCELERATION_ALPHPA = 600 ;
 
-    this->_homing_speed_alpha_degree_per_second =  99;  // degree per second
+    this->_homing_speed_alpha_degree_per_second =  60;  // degree per second
     this->Homing_acceleration_alpha = 200 ;
 
     this->_homing_speed_beta_degree_per_second = 3;    //degree per second.

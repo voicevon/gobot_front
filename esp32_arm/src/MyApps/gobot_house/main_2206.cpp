@@ -1,22 +1,24 @@
 #include "all_applications.h"
 #ifdef I_AM_GOBOT_HOUSE_2206
 
-#include "MyBoards/gobot_house_2206/board_gobot_house.h"
+#include "board_2206/board_gobot_house.h"
 #include "CNC/solution/cnc_scara/cnc_scara.h"
-// #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
-#include "gobot_house.h"
+#include "gobot_house_2206.h"
 
-// StepControl controller;    // Use default settings 
-Board_GobotHouse_2206 board;
-// GobotHouseMachine_2206 cncMachine;
-CncScara cncScara;
+
+#include "ESP32Step/src/TeensyStep.h"
+StepControl stepControl;
+
+Board_GobotHouse_2206 board = Board_GobotHouse_2206(&stepControl);
+CncScaraSolution cncScara;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
-
 GobotHouse_2206* robot; 
+
+
 
 void board_test();
 void cnc_test();
@@ -56,12 +58,14 @@ void loop(){
 }
 
 
-#include "MyBoards/gobot_house_2206/board_tester.h"
+#include "board_2206/board_tester.h"
 void board_test(){
-    GobotHouse_2206_BoardTest tester;
+    GobotHouse_2206_BoardTest tester = GobotHouse_2206_BoardTest(&stepControl);
     tester.LinkBoard(&board);
+    // tester.LinkStepControl(&stepcontrol);
     tester.Test_EefLoadUnload(0);
     tester.Test_AllHomers(0);
+    tester.Test_StepperDriver_OnAlpha(0);
     tester.Test_ServoDriver_OnBeta(0);
 
 }
@@ -72,7 +76,7 @@ void cnc_test(){
     robot->Test_Alpha(0);
     robot->Test_FollowJig(8);
 
-    // robot->__Home();
+    robot->__Home();
     robot->Test_MoveStone_FromRoomToHead(0, 0);
 }
 

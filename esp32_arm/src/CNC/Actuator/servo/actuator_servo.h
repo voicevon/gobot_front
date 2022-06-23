@@ -23,6 +23,7 @@ class ActuatorServo: public ActuatorBase{
 
 
     protected:
+        float GetSpeed() override {return DEG_TO_RAD * this->__speed_degree_per_second;};
 
     private:
         Servo* __servo;

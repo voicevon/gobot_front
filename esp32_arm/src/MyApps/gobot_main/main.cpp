@@ -11,11 +11,11 @@
 #include "MyBoards/gobot_main/robot_eef/gobot_main_eef.h"
 
 Board_GobotMain board;
-GobotMainMachine cncMachine;
+// GobotMainMachine cncMachine;
 CncFiveBars cncFiveBar;
 GobotMain robot; 
 
-StepControl objStepControl;    // Use default settings 
+// StepControl objStepControl;    // Use default settings 
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 
@@ -27,9 +27,10 @@ void board_test();
 void setup(){
     board.Init(true);
     board_test();
-    cncMachine.Init('S');  //Slow moving
-    cncMachine.PrintOut("GobotMain Machine");
-    cncFiveBar.Init(&board, &cncMachine);
+    // cncMachine.Init('S');  //Slow moving
+    // cncMachine.PrintOut("GobotMain Machine");
+    // cncFiveBar.Init(&board, &cncMachine);
+    cncFiveBar.Init(&board);
     // cncFiveBar.LinkStepControl(&objStepControl);
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);

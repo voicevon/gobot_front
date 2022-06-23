@@ -10,13 +10,19 @@ void Board_GobotHouse_2206::__Init_Hardware(){
     pinMode(PIN_BETA_ENABLE_2109, OUTPUT);
     digitalWrite(PIN_BETA_ENABLE_2109, HIGH);   // To avoid A4988 is enabled.  sometimes there is an A4988 chip on the board.
     // Init Actuator alpha
-    ActuatorMechanic_StepperPolor alpha;
-    alpha._micro_steps_on_stepper_driver = 16;
-    alpha._motor_gear_teeth_count = 10;
-    alpha._slave_pulley_teeth_count = 90;
-    alpha._motor_step_angle_in_degree = 0.7003891050583658;
-    this->__stepper_alpha.setInverseRotation(true);   //TODO:  inside app_mover.
-    this->__actuator_alpha.LinkStepper(&this->__stepper_alpha,alpha.GetStepsPerCncUnit());
+    ActuatorMechanic_StepperPolor alpha_mechanic;
+    alpha_mechanic._micro_steps_on_stepper_driver = 16;
+    alpha_mechanic._motor_gear_teeth_count = 10;
+    alpha_mechanic._slave_pulley_teeth_count = 90;
+    alpha_mechanic._motor_step_angle_in_degree = 0.7003891050583658;
+    this->__alpha_stepper.setInverseRotation(true);   //TODO:  inside app_mover.
+    this->__actuator_alpha.LinkStepper(&this->__alpha_stepper, alpha_mechanic.GetStepsPerCncUnit());
+    this->__alpha_range.InitCncRange(-PI, TWO_PI);
+    this->__alpha_range.InitActuatorRange(DEG_TO_RAD * (-350), DEG_TO_RAD * 10);
+    this->__actuator_alpha.LinkRangeConstraint(&this->__alpha_range);
+    
+    // this->__actuator_alpha.InitCncRange(0, TWO_PI);
+    // this->__actuator_alpha.InitActuatorRange(DEG_TO_RAD * (-350), DEG_TO_RAD * 10);
 
     // Init actuator beta
 	this->__servo_beta.setPeriodHertz(50);
@@ -30,14 +36,14 @@ void Board_GobotHouse_2206::__Init_Hardware(){
 
 void Board_GobotHouse_2206::Init(bool is_on_reset){
     Serial.begin(115200);
-    Serial.println("[Info] Board_GobotHouse_2206::Init()  Hi Xuming, I am your lovely bot,  GobotHouse. ");
+    Serial.println("[Info] Board_GobotHouse_2206::Init()  Hi Xuming, I am your lovely bot,  GobotHouse_2206. ");
 
     this->__Init_Hardware();
     this->EnableMotor('A', false);
 
     this->eef.Init();
     this->eef.Run(EEF_CODE_UNLOAD);
-
+    this->mover_StepperServo.LinkStepControl(this->__stepControl);
     this->mover_StepperServo.LinkStepper_asAlpha(&this->__actuator_alpha);
     this->mover_StepperServo.LinkServo_asBeta(&this->__actuator_beta);
     this->cnc_mover = &this->mover_StepperServo;
@@ -67,7 +73,6 @@ ActuatorServo* Board_GobotHouse_2206::GetActuaorBeta(char axis_name){
     return nullptr;
 }
 
-
 SingleAxisHomer* Board_GobotHouse_2206::GetHomer(char axis_name) {
     if (axis_name=='A'){
         return &this->__alpha_homer;
@@ -96,6 +101,3 @@ void Board_GobotHouse_2206::EnableMotor(char axis_name, bool enable_it) {
     }
 }
 
-// void Board_GobotHouse_2206::SingleMotorMoveTo(char motor_name, float motor_position) {
-
-// }         

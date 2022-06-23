@@ -1,5 +1,5 @@
 
-#include "gobot_house.h"
+#include "gobot_house_2206.h"
 
 void GobotHouse_2206::Setup(){
 	this->__segments = 3;
@@ -139,7 +139,7 @@ void GobotHouse_2206::Calibrate(int step, bool enable_eef_coil){
 	// }
 }
 void GobotHouse_2206::Test_FollowJig(int loop_count){
-	Serial.print("\n[Debug] GobotHouse_2206::Test_FollowJig() is entering");
+	Serial.println("[Debug] GobotHouse_2206::Test_FollowJig() is entering");
 	String g1_0 = "G1B0A0F90";
 	String g1_30 = "G1B30A0F90";
 	String g1_60 = "G1B60A0F90";
@@ -188,7 +188,7 @@ void GobotHouse_2206::ParkArms(bool do_homing){
 void GobotHouse_2206::Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room_id){
 	// if (this->_gcode_queue->GetFreeBuffersCount() < 16)  return false;
 	if (loop_count==0) return;
-
+	String g4="G4S3";
 	for(int i=0; i<loop_count; i++){
 		// __Move_fromNeck_toDoor(room_id,true);
 		// __Move_fromRoom_toDoor(room_id,false);
@@ -198,6 +198,8 @@ void GobotHouse_2206::Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room
 		__Move_fromHead_toNeck(false);
 		// __Enable_eefCoil(false);
 		// __Move_fromHead_toNeck(true);
+		this->_gcode_queue->AppendGcodeCommand(g4);
+
 	}
 }
 
@@ -336,7 +338,7 @@ void GobotHouse_2206::Test_Alpha(int loop_count){
 	Serial.println("[Info]  GobotMain::Test_HomeAlpha()");
 	String g28 = "G28AI";
 	// String g1 = "G1A-20";
-	String g1 = "G1A-68.49";
+	String g1 = "G1A-76.49F30";
 	bool buffer_is_full = false;
 	for (int i=0; i<loop_count; i++){
 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g28);

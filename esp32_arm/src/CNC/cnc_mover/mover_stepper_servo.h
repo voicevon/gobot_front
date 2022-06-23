@@ -7,6 +7,7 @@
 
 class CncMover_StepperServo: public CncMoverBase{
     public:
+        void LinkStepControl(StepControl* stepControl){this->__stepControl=stepControl;};
         void LinkStepper_asAlpha(ActuatorStepper* stepper);
         void LinkServo_asBeta(ActuatorServo* servo);
         
@@ -34,5 +35,5 @@ class CncMover_StepperServo: public CncMoverBase{
         // Stepper* __stepper_alpha;
         ActuatorStepper* __actuator_alpha;
         ActuatorServo* __actuator_beta;
-        StepControl __stepControl;
+        StepControl* __stepControl;
 };

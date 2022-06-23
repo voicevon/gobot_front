@@ -28,8 +28,8 @@ void Board_GobotMain::InitHardware(){
     alpha._slave_pulley_teeth_count = 90;
     alpha._motor_step_angle_in_degree = 0.7003891050583658;
 
-    this->__stepper_alpha.setInverseRotation(true);
-    this->__actuator_alpha.LinkStepper(&this->__stepper_alpha,alpha.GetStepsPerCncUnit());
+    this->__alpha_stepper.setInverseRotation(true);
+    this->__actuator_alpha.LinkStepper(&this->__alpha_stepper,alpha.GetStepsPerCncUnit());
 
     // Init Actuator beta
     ActuatorMechanic_StepperPolor beta;
@@ -38,8 +38,8 @@ void Board_GobotMain::InitHardware(){
     beta._slave_pulley_teeth_count = 90;
     beta._motor_step_angle_in_degree = 0.7003891050583658;
 
-    this->__stepper_beta.setInverseRotation(true);
-    this->__actuator_beta.LinkStepper(&this->__stepper_alpha,beta.GetStepsPerCncUnit());
+    this->__beta_stepper.setInverseRotation(true);
+    this->__actuator_beta.LinkStepper(&this->__beta_stepper, beta.GetStepsPerCncUnit());
 }
 
 void Board_GobotMain::Init(bool is_on_reset){
