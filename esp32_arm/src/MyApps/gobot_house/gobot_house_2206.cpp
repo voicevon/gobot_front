@@ -1,5 +1,5 @@
 
-#include "gobot_house.h"
+#include "gobot_house_2206.h"
 
 void GobotHouse_2206::Setup(){
 	this->__segments = 3;
@@ -338,7 +338,7 @@ void GobotHouse_2206::Test_Alpha(int loop_count){
 	Serial.println("[Info]  GobotMain::Test_HomeAlpha()");
 	String g28 = "G28AI";
 	// String g1 = "G1A-20";
-	String g1 = "G1A-76.49F60";
+	String g1 = "G1A-76.49F30";
 	bool buffer_is_full = false;
 	for (int i=0; i<loop_count; i++){
 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g28);

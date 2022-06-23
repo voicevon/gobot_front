@@ -1,12 +1,12 @@
 #include "all_applications.h"
 #ifdef I_AM_GOBOT_HOUSE_2206
 
-#include "MyBoards/gobot_house_2206/board_gobot_house.h"
+#include "board_2206/board_gobot_house.h"
 #include "CNC/solution/cnc_scara/cnc_scara.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
-#include "gobot_house.h"
+#include "gobot_house_2206.h"
 
 Board_GobotHouse_2206 board;
 CncScaraSolution cncScara;
@@ -52,7 +52,7 @@ void loop(){
 }
 
 
-#include "MyBoards/gobot_house_2206/board_tester.h"
+#include "board_2206/board_tester.h"
 void board_test(){
     GobotHouse_2206_BoardTest tester;
     tester.LinkBoard(&board);
