@@ -59,7 +59,7 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
     //Step2:  move one or all motors.
     if (target_motor_flags == 0x01){
         // Move alpha only
-        this->__stepControl.moveAsync(*alpha);
+        this->__stepControl->moveAsync(*alpha);
 
     }else if (target_motor_flags == 0x02){
         // move beta only
@@ -76,7 +76,7 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
             // alpha should be slower, saying renew its speed.
             this->__actuator_alpha->RenewSpeed(beta_time_in_second);
         }
-        this->__stepControl.moveAsync(*alpha);
+        this->__stepControl->moveAsync(*alpha);
         this->__actuator_beta->StartToMove();
 
     }else{
@@ -87,7 +87,7 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
 }
 
 void CncMover_StepperServo::AllActuatorsStop(){
-    this->__stepControl.stop();
+    this->__stepControl->stop();
     this->__actuator_beta->Stop();
 }
 
@@ -111,7 +111,7 @@ void CncMover_StepperServo::SingleActuatorMoveTo(char actuator_name, bool is_abs
         this->__moving_actuator_flags = 0x01;
         this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
         Stepper* stepper = this->__actuator_alpha->GetLinkedStepper();
-        this->__stepControl.moveAsync(*stepper);
+        this->__stepControl->moveAsync(*stepper);
 
     }else if (actuator_name == 'B'){
         this->__moving_actuator_flags = 0x02;
@@ -177,7 +177,7 @@ void CncMover_StepperServo::SetActuatorSpeed(char actuator_name, float speed_per
 
 bool CncMover_StepperServo::ActuatorIsMoving(char actuator_name) {
     if (actuator_name=='A'){
-        return this->__stepControl.isRunning();
+        return this->__stepControl->isRunning();
     }else if (actuator_name=='B'){
         return this->__actuator_beta->IsMoving();
     }else{

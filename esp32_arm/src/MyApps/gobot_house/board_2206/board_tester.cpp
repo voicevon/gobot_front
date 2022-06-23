@@ -23,6 +23,33 @@ void GobotHouse_2206_BoardTest::Test_EefLoadUnload(int loop_count){
     eef->Run(EEF_CODE_SLEEP);
 }
 
+
+void GobotHouse_2206_BoardTest::Test_StepperDriver_OnAlpha(int loop_count){
+    if(loop_count ==0 ) return;
+    Serial.println ("[Info] GobotHouse_2206_BoardTest::Test_StepperDriver_OnAlpha()  ");
+    Stepper* stepper = this->__board->GetStepperDriver_OnAlpha();
+    // StepControl control;
+    this->__board->EnableMotor('A', true);
+    stepper->setMaxSpeed(6000);
+    stepper->setAcceleration(6000);
+
+    for (int i=0; i<loop_count; i++){
+        Serial.print("   CW");
+        stepper->setTargetRel(-50000);
+        this->__stepControl->move(*stepper);
+        // control.move(*stepper);
+        Serial.print("  paused");
+        delay(2000);
+
+        Serial.print("   CCW");
+        stepper->setTargetAbs(0);
+        this->__stepControl->move(*stepper);
+        // control.move(*stepper);
+        Serial.println("  paused");
+        delay(2000);
+    }
+}
+
 void GobotHouse_2206_BoardTest::Test_ServoDriver_OnBeta(int loop_count){
     if(loop_count ==0 ) return;
     Serial.println ("[Info] GobotHouse_2206_BoardTest::Test_ServoDriver()  ");

@@ -17,7 +17,7 @@ void RobotEef_GobotHouse::Init(){
 
 void RobotEef_GobotHouse::Run(uint8_t eef_code) {
 	Serial.print("[Debug] RobotEef_GobotHouse::Run() eef_code= ");
-	Serial.print(eef_code);
+	Serial.println(eef_code);
 	
 	switch (eef_code){
 		case EEF_CODE_LOAD:

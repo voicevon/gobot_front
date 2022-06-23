@@ -11,9 +11,8 @@
 
 class Board_GobotHouse_2206: public CncBoardBase{
     public:
-        Board_GobotHouse_2206(){};
+        Board_GobotHouse_2206(StepControl* stepControl){this->__stepControl=stepControl;};
         void Init(bool is_on_reset) override;
-        // void SayHello();
         ActuatorStepper* GetActuator(char axis_name) override;
         ActuatorServo* GetActuaorBeta(char axis_name);
         // MotorBase* GetActuator(char axis_name){};  //TODO: Stepper, Servo, BLDC... all is motorbase!
@@ -23,6 +22,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
 
         void EnableMotor(char axis_name, bool enable_it) override;
         Servo* GetServoDriver_OnBeta(){return &this->__servo_beta;};
+        Stepper* GetStepperDriver_OnAlpha(){return &this->__alpha_stepper;};
     
     private:
         void __Init_Hardware();
@@ -34,9 +34,12 @@ class Board_GobotHouse_2206: public CncBoardBase{
         ActuatorServo __actuator_beta;
         CncMover_StepperServo mover_StepperServo;
 
+
         SingleAxisHomer __alpha_homer = SingleAxisHomer(PIN_HOME_ALHPA_2109, LOW);
         SingleAxisHomer __beta_homer = SingleAxisHomer(PIN_HOME_BETA_2109, LOW);
 
         RobotEef_GobotHouse eef;
         GobotHouseMachine_2206 __cnc_mechanic;
+
+        StepControl* __stepControl;
 };

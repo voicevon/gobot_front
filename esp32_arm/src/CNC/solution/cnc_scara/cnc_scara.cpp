@@ -217,10 +217,11 @@ void CncScaraSolution::RunG28(char axis){
 	}
 	this->__homing_helper = this->_board->GetHomer(axis);
 	this->_board->EnableMotor(axis, true);
-	//Relative move a long distance , until it reach home position
-	float the_long_distance_in_rad = 99.0f * this->_scara_machine->GetHomingVelocity(axis);
-	float homing_speed = this->_scara_machine->GetHomingVelocity(axis);
+	//Set homing_speed, this should be always a positive number.
+	float homing_speed = abs(this->_scara_machine->GetHomingVelocity(axis));
 	this->_board->cnc_mover->SetActuatorSpeed(axis, homing_speed);
+	//Relative move a long distance(vector) , until it reach home position
+	float the_long_distance_in_rad = 99.0f * this->_scara_machine->GetHomingVelocity(axis);
 	this->_board->cnc_mover->SingleActuatorMoveTo(axis, false, the_long_distance_in_rad);
 	this->_homing_axis_name = axis;
 

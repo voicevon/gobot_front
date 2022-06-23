@@ -139,7 +139,7 @@ void GobotHouse_2206::Calibrate(int step, bool enable_eef_coil){
 	// }
 }
 void GobotHouse_2206::Test_FollowJig(int loop_count){
-	Serial.print("\n[Debug] GobotHouse_2206::Test_FollowJig() is entering");
+	Serial.println("[Debug] GobotHouse_2206::Test_FollowJig() is entering");
 	String g1_0 = "G1B0A0F90";
 	String g1_30 = "G1B30A0F90";
 	String g1_60 = "G1B60A0F90";

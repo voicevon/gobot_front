@@ -94,13 +94,14 @@ void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float posit
     }
 }
 
-#define MAX_STEPS_PER_SECOND 4000
+#define MAX_STEPS_PER_SECOND 6000   //TODO:  be configable
 void ActuatorStepper::SetSpeed(float speed_per_second){
     float steps_per_second = speed_per_second * this->__steps_per_cnc_unit;
     if (steps_per_second > MAX_STEPS_PER_SECOND){
         steps_per_second = MAX_STEPS_PER_SECOND;
     }
     this->__stepper->setMaxSpeed(steps_per_second);
-    this->__speed = speed_per_second;
+    // the real speed of actuator.
+    this->__speed = steps_per_second / this->__steps_per_cnc_unit;
 }
 
