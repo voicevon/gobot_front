@@ -126,7 +126,7 @@ void ActuatorServo::SetCurrentPositionAs(float cnc_position_in_rad){
 }
 
 void ActuatorServo::SetSpeed(float speed_per_second){
-    this->__speed_degree_per_second = RAD_TO_DEG * speed_per_second; 
+    this->__speed_degree_per_second = abs(RAD_TO_DEG * speed_per_second); 
 }
 
 

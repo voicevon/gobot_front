@@ -140,13 +140,15 @@ void GobotHouse_2206::Calibrate(int step, bool enable_eef_coil){
 }
 void GobotHouse_2206::Test_FollowJig(int loop_count){
 	Serial.println("[Debug] GobotHouse_2206::Test_FollowJig() is entering");
+	String eef_load = "M123S3";  //EEF_CODE_LOAD = 3  UNLOAD = 4
+	this->_gcode_queue->AppendGcodeCommand(eef_load);
+
 	String g1_0 = "G1B0A0F90";
 	String g1_30 = "G1B30A0F90";
 	String g1_60 = "G1B60A0F90";
 	String g1_90 = "G1B90A0F90";
 	String g4 = "G4S3";
-	String eef_load = "M123S3";  //EEF_CODE_LOAD = 3  UNLOAD = 4
-	this->_gcode_queue->AppendGcodeCommand(eef_load);
+
 	for (int i=0; i< loop_count; i++){
 		this->__Home();
 		this->_gcode_queue->AppendGcodeCommand(g1_0);
@@ -338,7 +340,7 @@ void GobotHouse_2206::Test_Alpha(int loop_count){
 	Serial.println("[Info]  GobotMain::Test_HomeAlpha()");
 	String g28 = "G28AI";
 	// String g1 = "G1A-20";
-	String g1 = "G1A-76.49F30";
+	String g1 = "G1A-76.49B90F60";
 	bool buffer_is_full = false;
 	for (int i=0; i<loop_count; i++){
 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g28);

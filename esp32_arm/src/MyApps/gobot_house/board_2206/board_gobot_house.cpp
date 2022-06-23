@@ -21,17 +21,11 @@ void Board_GobotHouse_2206::__Init_Hardware(){
     this->__alpha_range.InitActuatorRange(DEG_TO_RAD * (-350), DEG_TO_RAD * 10);
     this->__actuator_alpha.LinkRangeConstraint(&this->__alpha_range);
     
-    // this->__actuator_alpha.InitCncRange(0, TWO_PI);
-    // this->__actuator_alpha.InitActuatorRange(DEG_TO_RAD * (-350), DEG_TO_RAD * 10);
-
     // Init actuator beta
 	this->__servo_beta.setPeriodHertz(50);
     this->__servo_beta.attach(PIN_CNC_BETA_SERVO);
     this->__actuator_beta.LinkServo(&this->__servo_beta, true);
 
-    // Init mechanic
-    // this->__cnc_mechanic.Init('M');
-    
 }
 
 void Board_GobotHouse_2206::Init(bool is_on_reset){

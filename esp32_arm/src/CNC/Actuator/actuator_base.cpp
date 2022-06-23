@@ -1,4 +1,6 @@
 #include "actuator_base.h"
+#include <HardwareSerial.h>
+
 
 void ActuatorBase::LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint){
     this->_range_constraint = range_constraint;
@@ -7,11 +9,18 @@ void ActuatorBase::LinkRangeConstraint(ActuatorRangeConstraintBase* range_constr
 
 
 float ActuatorBase::GetNeededSeconds(){
-    return this->GetDistanceToTarget_InCncUnit() / this->GetSpeed();
-    
+    if (this->GetDistanceToTarget_InCncUnit() != 0){
+        return this->GetDistanceToTarget_InCncUnit() / this->GetSpeed();
+    }
+    return 0;
 }
 
 void ActuatorBase::RenewSpeed(float moving_time){
     float speed = this->GetDistanceToTarget_InCncUnit() / moving_time;
+    bool debug = true;
+    if (debug){
+        Serial.print("[Debug] ActuatorBase::RenewSpeed() new speed= ");
+        Serial.println(speed);
+    }
     this->SetSpeed(speed);
 }

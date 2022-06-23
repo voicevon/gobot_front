@@ -7,8 +7,6 @@ void GobotHouseMachine::Init(char solution){
         // This value should be calculated from motor's datasheet.  But can not get datasheet for 28-BGY motor.
         // this->motor_steps_per_round = 514 * this->MOTOR_MICRO_STEPS;
 
-        // this->STEPS_PER_RAD_ALPHA = this->motor_steps_per_round * this->GEAR_BOX_RATIO_ALPHA / TWO_PI;  
-        // this->STEPS_PER_RAD_BETA =  this->motor_steps_per_round * this->GEAR_BOX_RATIO_BETA / TWO_PI; 
         this->MAX_ACCELERATION_ALPHPA = 600 * this->MOTOR_MICRO_STEPS;
         this->MAX_STEPS_PER_SECOND_ALPHA = 4000 * this->MOTOR_MICRO_STEPS;    // tested 1200          
         this->MAX_ACCELERATION_BETA = 200 * this->MOTOR_MICRO_STEPS;
@@ -19,8 +17,6 @@ void GobotHouseMachine::Init(char solution){
         this->Homing_acceleration_beta = 500 * this->MOTOR_MICRO_STEPS;
         this->Homing_speed_beta = 60 * this->MOTOR_MICRO_STEPS; 
 
-        // this->EEF_Suck_Angle = 164;   // Max is 4096
-        // this->EEF_Release_Angle = 355;   // Max is 4096
 
         this->_homed_position_alpha_in_degree = 13.6;
         this->_homed_position_beta_in_degree = 138.0;

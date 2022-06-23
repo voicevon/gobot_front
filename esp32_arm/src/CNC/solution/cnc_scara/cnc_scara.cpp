@@ -161,8 +161,9 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 
 	bool debug = false;
 	if (gcode->has_letter('F')){
-		int speed = gcode->get_value('F');
+		uint speed = gcode->get_value('F');
 		this->_board->cnc_mover->SetSpeed(DEG_TO_RAD * speed);
+		debug = false;
 		if (debug){
 			Serial.print("[Debug] CncScaraSolution::RunG1()  motor_flags= ");
 			Serial.print(motor_flags);
@@ -179,8 +180,7 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 	cnc_position[0] = target_ik_ab.alpha;
 	cnc_position[1] = target_ik_ab.beta;
 	
-	uint8_t abs_flags = 0x03;
-	this->_board->cnc_mover->AllActuatorsMoveTo(abs_flags, cnc_position);
+
 
 	debug = true;
 	if (debug){
@@ -193,6 +193,8 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 		Serial.print(" , ");
 		Serial.println(RAD_TO_DEG * target_ik_ab.beta);
 	}
+	uint8_t abs_flags = 0x03;
+	this->_board->cnc_mover->AllActuatorsMoveTo(abs_flags, cnc_position);
 }
 
 void CncScaraSolution:: _running_G1(){
@@ -251,6 +253,7 @@ void CncScaraSolution::_running_G28(){
 		}
 		else{
 			Serial.print("\n\n\n\n\n  [Error] CncScaraSolution::_running_G28()  Trying to get home position with EEF FK position  ");
+			while (1){};
 		}
 		//Copy current ik-position to motor-position. 
 		// Note: If homed_position is defined a FK-XY position,  This must be after IK() translation.
@@ -276,24 +279,7 @@ void CncScaraSolution::_running_G28(){
 		}
 	}else{
 		// Endstop is not trigered, When endstop is trigered, must stop the moving. 
-		// if (this->_board->cnc_mover->MotorIsMoving(this->_homing_axis_name)){
-		// 	return;
-		// }
-		// float homing_velocity_in_rad_per_second =  this->_scara_machine->GetHomingVelocity(this->_homing_axis_name);
-		// this->_board->cnc_mover->SetActuatorSpeed(this->_homing_axis_name, abs(homing_velocity_in_rad_per_second));
-		// float segment_distance_in_rad = homing_velocity_in_rad_per_second / 10; 
-		// bool debug = false;
-		// if(debug){
-		// 	Serial.print("[Debug] CncScaraSolution::_running_G28() homing_axis= ");
-		// 	Serial.print(this->_homing_axis_name);
-		// 	Serial.print(" velocity in degree= ");
-		// 	Serial.print(RAD_TO_DEG * homing_velocity_in_rad_per_second);
-		// 	Serial.print(" current position= ");
-		// 	Serial.println(RAD_TO_DEG * this->_board->cnc_mover->GetMotorPosition_InCncUnit(this->_homing_axis_name));
-		// }
-		// // this->_board->cnc_mover->SetBlockedMove(true);  //?
 
-		// this->_board->cnc_mover->SingleMotorMoveTo(false, this->_homing_axis_name, segment_distance_in_rad);
 	}
 }
 

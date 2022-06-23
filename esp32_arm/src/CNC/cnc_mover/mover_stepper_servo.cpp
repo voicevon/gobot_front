@@ -54,6 +54,14 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
         // and set beta position
         is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
         this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+    }else{
+        Serial.print("[Error]() CncMover_StepperServo::AllActuatorsMoveTo()  target_motor_flags= ");
+        Serial.println(target_motor_flags);
+        while (true){
+            Serial.print("E ");
+            delay(1000);
+        }
+        
     }
 
     //Step2:  move one or all motors.
@@ -75,7 +83,22 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
         }else{
             // alpha should be slower, saying renew its speed.
             this->__actuator_alpha->RenewSpeed(beta_time_in_second);
+            // below line is because the bug of Teensy-step.
+            this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);   //Must redo set position after setting speed.
         }
+        
+        bool debug = true;
+        if(debug){
+            Serial.print("[Debug] CncMover_StepperServo::AllActuatorsMoveTo()  alpha_time= ");
+            Serial.print(alpha_time_in_second);
+            Serial.print( "->" );
+            Serial.print (this->__actuator_alpha->GetNeededSeconds());
+            Serial.print("   Beta time= ");
+            Serial.print(beta_time_in_second);
+            Serial.print(" -> ");
+            Serial.println(this->__actuator_beta->GetNeededSeconds());
+        }
+        
         this->__stepControl->moveAsync(*alpha);
         this->__actuator_beta->StartToMove();
 
@@ -154,7 +177,7 @@ float CncMover_StepperServo::GetDistanceToTarget_InCncUnit(){
     if ((this->__moving_actuator_flags & 0x02) > 0){
        beta_distance = this->__actuator_beta->GetDistanceToTarget_InCncUnit();
     }
-    bool debug= false;
+    bool debug= true;
     if(debug){
         Serial.print("[Debug] CncMover_StepperServo::GetDistanceToTarget_InCncUnit() alpha = ");
         Serial.print(alpha_distance);
