@@ -231,124 +231,59 @@ void GobotHouse::__Enable_eefCoil(bool enable){
 }
 
 void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
-	float x1 = this->__map.head.x;
-	float x2 = this->__map.neck.x;
-	if(!forwarding){
-		//from neck to head
-		x1 = this->__map.neck.x;
-		x2 = this->__map.head.x;
-	}
-	float distance = x2 - x1;
-	float dx = distance / this->__segments ;
-	for(int segment= 0; segment <= this->__segments; segment++){
-		float x = x1 + dx * segment;
-		String gcode="G1X";
-		String sx= String(x,2);
-		gcode.concat(sx);
-		gcode.concat("Y");
-		gcode.concat(0);
-		gcode.concat("F60");
-
-		this->_gcode_queue->AppendGcodeCommand(gcode);
-	}
-}
-
-
-void GobotHouse::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
-	//from room to door, now is at room.
-	float x1 = __map.rooms[room_id].x;
-	float y1 = __map.rooms[room_id].y;
-	float x2 = __map.doors[room_id].x;
-	float y2 = __map.doors[room_id].y;
-
+	FkPosition_XY* from = &this->__map.head;
+	FkPosition_XY* to = &this->__map.neck;
 	if (!forwarding){
-		//from door to room, now is at door.
-		x1 = __map.doors[room_id].x;
-		y1 = __map.doors[room_id].y;
-		x2 = __map.rooms[room_id].x;
-		y2 = __map.rooms[room_id].y;
+		to = &this->__map.head;
+		from = &this->__map.neck;
 	}
-
-	// float distance = __map.distance_room_to_door[room_id];
-	float dx = (x2 - x1) / __segments;
-	float dy = (y2 - y1) / __segments;
-	for(int segment= 0; segment <= __segments; segment++){
-		float x = x1 + dx * segment;
-		float y = y1 + dy * segment;
-		// MoveTo(x,y);
-		String strGcode="G1X";
-		strGcode.concat(x);
-		strGcode.concat("Y");
-		strGcode.concat(y);
-		this->_gcode_queue->AppendGcodeCommand(strGcode);
-	}
+	this->__MakeGcode_and_Send(from, to, 3);
 }
 
 void GobotHouse::__Move_fromRoom_toGate(uint8_t room_id, bool forwarding){
-	//from room to door, now is at room.
-	float x1 = __map.rooms[room_id].x;
-	float y1 = __map.rooms[room_id].y;
-	float x2 = __map.gates[room_id].x;
-	float y2 = __map.gates[room_id].y;
-
-	if (!forwarding){
-		//from door to room, now is at door.
-		x1 = __map.gates[room_id].x;
-		y1 = __map.gates[room_id].y;
-		x2 = __map.rooms[room_id].x;
-		y2 = __map.rooms[room_id].y;
+	// Stage1: from source to door.
+	FkPosition_XY* from = &this->__map.rooms[room_id];
+	FkPosition_XY* to = &this->__map.doors[room_id];
+	int segments_count = 3;
+	if(!forwarding){
+		from = &this->__map.gates[room_id];	
+		segments_count = 1;
 	}
+	this->__MakeGcode_and_Send(from, to, segments_count);
 
-	// float distance = __map.distance_room_to_door[room_id];
-	float dx = (x2 - x1) / __segments;
-	float dy = (y2 - y1) / __segments;
-	for(int segment= 0; segment <= __segments; segment++){
-		float x = x1 + dx * segment;
-		float y = y1 + dy * segment;
-		// MoveTo(x,y);
-		String strGcode="G1X";
-		strGcode.concat(x);
-		strGcode.concat("Y");
-		strGcode.concat(y);
-		this->_gcode_queue->AppendGcodeCommand(strGcode);
+	// Stage2: from door to target
+	from = &this->__map.doors[room_id];
+	to = &this->__map.gates[room_id];
+	segments_count = 1;
+	if(!forwarding)
+	{
+		to = &this->__map.rooms[room_id];
+		segments_count = 3;
 	}
+	this->__MakeGcode_and_Send(from, to, segments_count);
 }
 
 // This is almost a  rotation, because beta should be no changing.
 void GobotHouse::__Move_fromNeck_toGate(uint8_t room_id, bool forwarding){
-	Serial.print("[Debug] GobotHouse::__Move_fromNeck_toGate() room_id= ");
-	Serial.print(room_id);
-
-	float x = __map.gates[room_id].x;
-	float y = __map.gates[room_id].y;
-	Serial.println("111111111111");
-	if (!forwarding){
-		x = __map.neck.x;
-		y = __map.neck.y;    
-	}
-	String strGcode="G1X";
-	strGcode.concat(x);
-	strGcode.concat("Y");
-	strGcode.concat(y);
-	Serial.println("2222222222222222");
-
-	this->_gcode_queue->AppendGcodeCommand(strGcode);
-	Serial.println("3333333333333333");
-
+	FkPosition_XY* from = &this->__map.neck;
+	FkPosition_XY* to = &this->__map.gates[room_id];
+	this->__MakeGcode_and_Send(from, to, 1);
 }
+
 void GobotHouse::__Move_fromParking_toDoor(uint8_t door_id){
 	String strGcode="G1X";
-	strGcode.concat(this->__map.gates[door_id].x);
+	strGcode.concat(this->__map.gates[door_id].X);
 	strGcode.concat("Y");
-	strGcode.concat(this->__map.gates[door_id].y);
+	strGcode.concat(this->__map.gates[door_id].Y);
 	Serial.println(strGcode);
 	this->_gcode_queue->AppendGcodeCommand(strGcode);
 }
+
 void GobotHouse::__Move_fromParking_toNeck(){
 	String strGcode="G1X";
-	strGcode.concat(this->__map.neck.x);
+	strGcode.concat(this->__map.neck.X);
 	strGcode.concat("Y");
-	strGcode.concat(this->__map.neck.y);
+	strGcode.concat(this->__map.neck.Y);
 	this->_gcode_queue->AppendGcodeCommand(strGcode);
 }
 
@@ -408,5 +343,21 @@ void GobotHouse::Test_Beta(int loop_count){
 			return;
 		}
 		this->_gcode_queue->AppendGcodeCommand(g4);
+	}
+}
+
+void GobotHouse::__MakeGcode_and_Send(FkPosition_XY* from, FkPosition_XY* to, int segment_count){
+
+	float dx = (to->X - from->X) / __segments;
+	float dy = (to->Y - from->Y) / __segments;
+	for(int segment= 0; segment <= __segments; segment++){
+		float x = from->X + dx * segment;
+		float y = from->Y + dy * segment;
+		// MoveTo(x,y);
+		String strGcode="G1X";
+		strGcode.concat(x);
+		strGcode.concat("Y");
+		strGcode.concat(y);
+		this->_gcode_queue->AppendGcodeCommand(strGcode);
 	}
 }
