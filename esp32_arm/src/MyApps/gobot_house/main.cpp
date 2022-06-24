@@ -1,9 +1,11 @@
 #include "all_applications.h"
 #ifdef I_AM_GOBOT_HOUSE
 
-#include "MyBoards/gobot_house/board_gobot_house.h"
+// #include "MyBoards/gobot_house/board_gobot_house_22.h"
+#include "board/board_gobot_house.h"
 #include "CNC/solution/cnc_scara/cnc_scara.h"
-#include "cnc_machine.h"
+// #include "cnc_machine.h"
+#include "board/cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
@@ -12,8 +14,8 @@
 
 StepControl controller;    // Use default settings 
 Board_GobotHouse board;
-GobotHouseMachine cncMachine;
-CncScara cncScara;
+// GobotHouseMachine cncMachine;
+CncScaraSolution cncScara;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 GobotHouse* robot; 
@@ -26,8 +28,8 @@ void setup(){
     board.Init(true);
     board_test();
     
-    cncMachine.Init('M');
-    cncScara.Init(&board, &cncMachine);
+    // cncMachine.Init('M');
+    cncScara.Init(&board);
     // cncScara.LinkStepControl(&controller);
     
     robot = &GobotHouse::getInstance();
@@ -52,7 +54,8 @@ void loop(){
 }
 
 
-#include "MyBoards/gobot_house/board_tester.h"
+// #include "MyBoards/gobot_house/board_tester.h"
+#include "board/board_tester.h"
 void board_test(){
     GobotHouse_BoardTest tester;
     tester.LinkBoard(&board);
@@ -63,8 +66,8 @@ void board_test(){
 }
 
 void cnc_test(){
-    robot->Test_HomeBeta(20);
-    robot->Test_HomeAlpha(0);
+    robot->Test_Alpha(0);
+    robot->Test_Beta(0);
 }
 
 #endif

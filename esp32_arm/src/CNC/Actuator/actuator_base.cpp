@@ -9,6 +9,8 @@ void ActuatorBase::LinkRangeConstraint(ActuatorRangeConstraintBase* range_constr
 
 
 float ActuatorBase::GetNeededSeconds(){
+    //TODO: get time  (Distance, max_speed,  acceleration) 
+    // https://github.com/grbl/grbl/blob/master/grbl/planner.c
     if (this->GetAbsDistanceToTarget_InCncUnit() != 0){
         return this->GetAbsDistanceToTarget_InCncUnit() / this->GetSpeed();
     }

@@ -74,7 +74,7 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
 
     }else if (target_motor_flags == 0x03){
         // Both motors will move. Should end at the same time. so, one of the motor should be slower.
-        float alpha_time_in_second = this->__actuator_alpha->GetNeededSeconds();
+        float alpha_time_in_second = this->__actuator_alpha->GetNeededSeconds() + 1.8;  //TODO:  consider accleration
         float beta_time_in_second = this->__actuator_beta->GetNeededSeconds();
         if (beta_time_in_second < alpha_time_in_second){
             // beta should be slower, saying renew its speed.
