@@ -5,6 +5,7 @@ class Point{
         int x;
         int y;
 };
+#include "CNC/coordinate/coordinate_base.h"
 
 class HouseMap{
     public:

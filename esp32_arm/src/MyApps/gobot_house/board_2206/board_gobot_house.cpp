@@ -1,5 +1,4 @@
 #include "board_gobot_house.h"
-// #include "mechanic/alpha_stepper.h"
 #include "CNC/Actuator/stepper/mechanic_polor.h"
 #include "CNC/solution/cnc_scara/cnc_scara.h"
 

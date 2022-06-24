@@ -186,7 +186,8 @@ void GobotHouse::ParkArms(bool do_homing){
 	strG1 = "G1A-60 F2800";
 	this->_gcode_queue->AppendGcodeCommand(strG1);
 }
-// Head is a position name, The 5 bar arm will pick up stone from there.
+
+// Head is a position name, The 5-bar robot will pick up stone from there.
 void GobotHouse::Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room_id){
 	// if (this->_gcode_queue->GetFreeBuffersCount() < 16)  return false;
 	if (loop_count==0) return;
@@ -249,6 +250,37 @@ void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
 		gcode.concat("F60");
 
 		this->_gcode_queue->AppendGcodeCommand(gcode);
+	}
+}
+
+
+void GobotHouse::__Move_fromRoom_toDoor(uint8_t room_id, bool forwarding){
+	//from room to door, now is at room.
+	float x1 = __map.rooms[room_id].x;
+	float y1 = __map.rooms[room_id].y;
+	float x2 = __map.doors[room_id].x;
+	float y2 = __map.doors[room_id].y;
+
+	if (!forwarding){
+		//from door to room, now is at door.
+		x1 = __map.doors[room_id].x;
+		y1 = __map.doors[room_id].y;
+		x2 = __map.rooms[room_id].x;
+		y2 = __map.rooms[room_id].y;
+	}
+
+	// float distance = __map.distance_room_to_door[room_id];
+	float dx = (x2 - x1) / __segments;
+	float dy = (y2 - y1) / __segments;
+	for(int segment= 0; segment <= __segments; segment++){
+		float x = x1 + dx * segment;
+		float y = y1 + dy * segment;
+		// MoveTo(x,y);
+		String strGcode="G1X";
+		strGcode.concat(x);
+		strGcode.concat("Y");
+		strGcode.concat(y);
+		this->_gcode_queue->AppendGcodeCommand(strGcode);
 	}
 }
 
