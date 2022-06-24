@@ -58,7 +58,7 @@ void Board_GobotMain::Init(bool is_on_reset){
     this->RepportRamUsage();
 }
 
-ActuatorStepper* Board_GobotMain::GetActuator(char axis_name) {
+ActuatorBase* Board_GobotMain::GetActuator(char axis_name) {
     if (axis_name=='A'){
         return &this->__actuator_alpha;
     }else if (axis_name=='B'){

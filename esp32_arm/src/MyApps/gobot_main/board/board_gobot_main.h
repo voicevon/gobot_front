@@ -13,7 +13,7 @@ class Board_GobotMain: public CncBoardBase{
     public:
         Board_GobotMain(){};
         void Init(bool is_on_reset) override;
-        ActuatorStepper* GetActuator(char axis_name) override;
+        ActuatorBase* GetActuator(char axis_name) override;
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_GobotMain* GetEef() override;
         CncMachineBase* GetCncMechanic() override {return &this->__cnc_mechanic;};

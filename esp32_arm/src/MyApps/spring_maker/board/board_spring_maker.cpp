@@ -7,7 +7,7 @@ void Board_SpringMaker::Init(bool is_on_reset){
    
 }
 
-ActuatorStepper* Board_SpringMaker::GetActuator(char axis_name) {
+ActuatorBase* Board_SpringMaker::GetActuator(char axis_name) {
     if (axis_name=='A'){
         return &this->stepper_alpha;
     }else{
