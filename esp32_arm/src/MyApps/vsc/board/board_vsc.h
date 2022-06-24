@@ -13,7 +13,8 @@ class Vsc_Board: public CncBoardBase{
         Vsc_Board(){};
         void Init(bool is_on_reset) override;
         void SayHello() override {};
-        ActuatorDcMotor* GetDcMotor(){return &this->__motor;};
+        // ActuatorDcMotor* GetDcMotor(){return &this->__motor;};
+        ActuatorBase* GetActuator(char axis_name) override {return &this->__motor;};
         MagneticSensorAnalog* GetAngleSensor(){return &this->__sensor;};
         SingleAxisHomer* GetHomer(char axis_name){return &this->__homer; };
 
@@ -27,7 +28,6 @@ class Vsc_Board: public CncBoardBase{
         MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
         SingleAxisHomer __homer = SingleAxisHomer(PIN_HOMER_SENSOR_HALL, LOW);
 
-        ActuatorStepper* GetActuator(char axis_name) override {return nullptr;};   // TODO : Feng   base shoud update.
         CncMachineBase* GetCncMechanic() override {return nullptr;};
         RobotEefBase* GetEef()override {return nullptr;};
         void EnableMotor(char axis_name, bool enable_it) override {};
