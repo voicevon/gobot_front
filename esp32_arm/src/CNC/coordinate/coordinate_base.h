@@ -13,6 +13,7 @@ class FkPosition_XY: public FkPositionBase{
     public:
         float X;
         float Y;
+        void PrintOut(const char* title);
 };
 
 class FkPosition_XYZ: public FkPositionBase{

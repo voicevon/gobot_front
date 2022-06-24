@@ -1,21 +1,7 @@
 # include "HouseMap.h"
 #include <math.h>
 
-/*
 
-	House                Y+
-						 ^
-			 r0          |                                                                     \ beta  
-		  r1     d0      |                                                                    \  /
-		r2      d1       |                                                                     \/      
-	  r3       d3  d2    |                                                                   /  alpha
-	  -----------------(0,0)------Neck----------Head    --> X+                               --------------------------------->  Alpha,Beta (0,0)
-	  r4      d4  d5     |
-	   r5       d6       |
-		 r6     d7       |
-		  r7             |
-
-*/
 
 void HouseMap::Init(){
     this->neck.Y = 0;
@@ -52,6 +38,15 @@ void HouseMap::Init(){
     // this->gates[3].Y = 17.95;
 
 
+    // this->gates[4].X = -3;
+    // this->gates[4].Y = -65;
+    // this->gates[5].X = -27;
+    // this->gates[5].Y = -59;
+    // this->gates[6].X = -49;
+    // this->gates[6].Y = -42;
+    // this->gates[7].X = -62;
+    // this->gates[7].Y = -19;
+
     this->gates[4].X = -3;
     this->gates[4].Y = -65;
     this->gates[5].X = -27;
@@ -61,8 +56,8 @@ void HouseMap::Init(){
     this->gates[7].X = -62;
     this->gates[7].Y = -19;
 
-    this->gates[3].X = -62;
-    this->gates[3].Y = 19;
+    this->gates[3].X = -62 ;
+    this->gates[3].Y = 19 ;
     this->gates[0].X = this->gates[3].X;
     this->gates[0].Y = this->gates[3].Y;
     this->gates[1].X = this->gates[3].X;
@@ -72,22 +67,22 @@ void HouseMap::Init(){
 
 
 
-    this->doors[4].X = -51;
-    this->doors[4].Y = -105;
-    this->doors[5].X = -67;
-    this->doors[5].Y = -89;
-    this->doors[6].X = -78;
-    this->doors[6].Y = -51;
-    this->doors[7].X = -85;
-    this->doors[7].Y = -21;
+    this->doors[7].X = -51;
+    this->doors[7].Y = -105;
+    this->doors[6].X = -67;
+    this->doors[6].Y = -89;
+    this->doors[5].X = -78;
+    this->doors[5].Y = -51;
+    this->doors[4].X = -85;
+    this->doors[4].Y = -21;
     
-    this->doors[0].X = this->doors[4].X;
-    this->doors[0].Y = - this->doors[4].Y;
-    this->doors[1].X = this->doors[5].X;
-    this->doors[1].Y = - this->doors[5].Y;
-    this->doors[2].X = this->doors[6].X;
-    this->doors[2].Y = - this->doors[6].Y;
-    this->doors[3].X = this->doors[7].X;
-    this->doors[3].Y = - this->doors[7].Y;
+    this->doors[0].X = this->doors[7].X;
+    this->doors[0].Y = - this->doors[7].Y;
+    this->doors[1].X = this->doors[6].X;
+    this->doors[1].Y = - this->doors[6].Y;
+    this->doors[2].X = this->doors[5].X;
+    this->doors[2].Y = - this->doors[5].Y;
+    this->doors[3].X = this->doors[4].X;
+    this->doors[3].Y = - this->doors[4].Y;
 }
 
