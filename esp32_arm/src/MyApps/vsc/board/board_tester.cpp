@@ -8,8 +8,7 @@ void Vsc_BoardTest::LinkBoard(CncBoardBase* board){
 }
 
 
-void Vsc_BoardTest::Test_Motor(){
-    // Test motor CW and CCW speed 
+void Vsc_BoardTest::Test_Motor(int level){
     /*
     #  Motor should support
     * start the motor function(CW and CCW ) 
@@ -17,12 +16,18 @@ void Vsc_BoardTest::Test_Motor(){
     * change speed of motor in PWM
     * 
      */
-
-    ActuatorDcMotor* motor = this->__board->GetDcMotor();
-    motor->SetTargetPositionTo(true, 500);
-    motor->SetSpeed(111);
-    motor->StartToMove();
-    // motor->SetTargetPositionTo(false, -899);
+    switch (level){
+        case 0:
+            break;
+        case 1:
+            // Start to move
+            ActuatorDcMotor* motor = this->__board->GetDcMotor();
+            motor->SetTargetPositionTo(true, 500);
+            motor->SetSpeed(111);
+            motor->StartToMove();
+            // motor->SetTargetPositionTo(false, -899);
+            break;
+    }
 }
 
 void Vsc_BoardTest::__TestOffset(float value){
@@ -55,9 +60,12 @@ void Vsc_BoardTest::Test_Offset(int loop_count){
 
 void Vsc_BoardTest::Test_AngleSensor(int loop_count){
     MagneticSensorAnalog* sensor = this->__board->GetSensor();
-
+    int down_count = loop_count;
     for(int i=0; i < loop_count; i++){
+        down_count--;
+        Serial.print(down_count);
         sensor->update();
+        Serial.print("\t");
         Serial.print(sensor->getAngle());
         Serial.print("\t");
         Serial.print(sensor->getFullRotations());
@@ -65,5 +73,14 @@ void Vsc_BoardTest::Test_AngleSensor(int loop_count){
         Serial.println(sensor->getVelocity());
         delay(500); 
     }
+    Serial.println("[Info] Vsc_BoardTest::Test_AngleSensor() is done.");
 
+}
+
+void Vsc_BoardTest::Test_AllHomers(int loop_count){
+    SingleAxisHomer* homer = this->__board->GetHomer('A');
+    for (int i=0; i<loop_count; i++){
+        Serial.print(homer->IsTriged());
+
+    }
 }

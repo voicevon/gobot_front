@@ -14,11 +14,11 @@ MessageQueue mqtt_command_queue;
 void test_board(){
     Vsc_BoardTest tester;
     tester.LinkBoard(&board);
-    tester.Test_Offset(5);
-    tester.Test_AngleSensor(0);
+    tester.Test_AngleSensor(100);
     tester.Test_AllHomers(0);
-    tester.Test_Motor();
-
+    tester.Test_Motor(0);
+    tester.Test_Offset(0);
+    Serial.println("[Info] test_board() is done.");
 }
 
 void home(){
@@ -44,7 +44,7 @@ void setup(){
     setup_mqtt_block_connect();
     append_mqtt_bridge("spring/maker", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 
-    Serial.println ("\n[Info] Spring Maker.setup() is done. ------------------------------------ \n");
+    Serial.println ("\n[Info] XiaoJuan  setup() is done. ------------------------------------ \n");
 
 }
 
