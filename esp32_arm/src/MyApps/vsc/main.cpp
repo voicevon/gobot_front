@@ -5,9 +5,15 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "vsc_robot.h"
+#include "board/cnc_machine.h"
+#include "CNC/solution/cnc_single_axis/cnc_single_axis.h"
+
+VscMachine cncMachine;
+CncSingleAxis cnc = CncSingleAxis();
 
 Vsc_Board board;
 VscRobot robot;
+GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
 
@@ -38,8 +44,10 @@ void home(){
 void setup(){
     board.Init(true);
     test_board();
-    // robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
-    // cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    cnc.Init(&board);
+
+    robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
+    cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     home();
     setup_mqtt_block_connect();
     append_mqtt_bridge("spring/maker", &mqtt_command_queue, &robot); 
@@ -51,7 +59,7 @@ void setup(){
 void loop(){
     board.GetDcMotor()->SpinOnce();
     robot.SpinOnce();
-    // cnc.SpinOnce();
+    cnc.SpinOnce();
     loop_mqtt();
 
 }

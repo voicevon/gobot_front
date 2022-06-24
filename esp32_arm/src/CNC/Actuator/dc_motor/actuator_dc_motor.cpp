@@ -40,7 +40,7 @@ ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_a, uint8_t h_bridge_pin_b)
 void ActuatorDcMotor::SpinOnce(){
     // real speed control, position check, auto stop....
 
-    if(this->GetDistanceToTarget_InCncUnit() < INERTIA_DISTANCE_IN_MM){
+    if(this->GetAbsDistanceToTarget_InCncUnit() < INERTIA_DISTANCE_IN_MM){
         // The wheel will continue to run a short time, because the inertia
         // TDDO:  How to deal with negtive distance?
         this->Stop();
@@ -75,8 +75,9 @@ void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float posit
     }
 }
 
-float ActuatorDcMotor::GetDistanceToTarget_InCncUnit(){
+float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
     // sensor --> current poistion   --> distance to target
+    // TODO:  minus distance.
     return this->_target_cnc_position - this->GetCurrentPosition_InCncUnit();
 }
 

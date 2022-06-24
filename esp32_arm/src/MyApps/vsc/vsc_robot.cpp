@@ -13,7 +13,7 @@ void VscRobot::ExecuteMqttCommand(const char* command){
     Serial.println(str_command);
     
     if (str_command.equals("stop")){
-        this->__motor->SetVelocity_in_percent(0);
+        this->__motor->Stop();
     }
 
     // }else if(str_command.equals("reset")){
