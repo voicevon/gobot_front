@@ -29,7 +29,7 @@ void test_board(){
 
 void home(){
     SingleAxisHomer* homer = board.GetHomer('A');
-    ActuatorDcMotor* motor = board.GetDcMotor();
+    ActuatorDcMotor* motor = (ActuatorDcMotor*)(board.GetActuator('A'));
     motor->SetSpeed(100);
     motor->SetTargetPositionTo(false, 999999);
     motor->StartToMove();
@@ -55,7 +55,7 @@ void setup(){
 }
 
 void loop(){
-    board.GetDcMotor()->SpinOnce();
+    //TODO  motor.spinonce()   or board.spinonce()
     robot.SpinOnce();
     cnc.SpinOnce();
     loop_mqtt();

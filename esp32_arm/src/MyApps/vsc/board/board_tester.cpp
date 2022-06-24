@@ -21,7 +21,7 @@ void Vsc_BoardTest::Test_Motor(int level){
             break;
         case 1:
             // Start to move
-            ActuatorDcMotor* motor = this->__board->GetActuator('A');
+            ActuatorDcMotor* motor = (ActuatorDcMotor*)(this->__board->GetActuator('A'));
             motor->SetTargetPositionTo(false, 500);
             motor->SetSpeed(111);
             motor->StartToMove();
@@ -39,7 +39,7 @@ void Vsc_BoardTest::Test_Motor(int level){
 }
 
 void Vsc_BoardTest::__TestOffset(float value){
-    ActuatorDcMotor* motor = this->__board->GetActuator('A');
+    ActuatorDcMotor* motor = (ActuatorDcMotor*) (this->__board->GetActuator('A'));
     float xx= 123;
     motor->SetCurrentPositionAs(xx);
     float result = motor->GetCurrentPosition_InCncUnit();
