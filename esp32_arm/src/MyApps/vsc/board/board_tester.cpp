@@ -22,11 +22,19 @@ void Vsc_BoardTest::Test_Motor(int level){
         case 1:
             // Start to move
             ActuatorDcMotor* motor = this->__board->GetDcMotor();
-            motor->SetTargetPositionTo(true, 500);
+            motor->SetTargetPositionTo(false, 500);
             motor->SetSpeed(111);
             motor->StartToMove();
+
+            motor->SetTargetPositionTo(false, -500);
+
             // motor->SetTargetPositionTo(false, -899);
             break;
+        // case 2:
+        //     motor->SetTargetPositionTo(false, 500);
+        //     motor->SetSpeed(111);
+        //     motor->StartToMove();
+        //     break;
     }
 }
 
@@ -57,21 +65,27 @@ void Vsc_BoardTest::Test_Offset(int loop_count){
     }
 }
 
-
+#define INTERVEL 90
 void Vsc_BoardTest::Test_AngleSensor(int loop_count){
-    MagneticSensorAnalog* sensor = this->__board->GetSensor();
+    MagneticSensorAnalog* sensor = this->__board->GetAngleSensor();
     int down_count = loop_count;
+    int interval = 0;
+
     for(int i=0; i < loop_count; i++){
-        down_count--;
-        Serial.print(down_count);
         sensor->update();
-        Serial.print("\t");
-        Serial.print(sensor->getAngle());
-        Serial.print("\t");
-        Serial.print(sensor->getFullRotations());
-        Serial.print("\t");
-        Serial.println(sensor->getVelocity());
-        delay(500); 
+        interval++;
+        if (interval > INTERVEL){
+            Serial.print(down_count);
+            Serial.print("\t");
+            Serial.print(sensor->getAngle());
+            Serial.print("\t");
+            Serial.print(sensor->getFullRotations());
+            Serial.print("\t");
+            Serial.println(sensor->getVelocity());
+            down_count--;
+            interval = 0;
+        }
+        // delay(500); 
     }
     Serial.println("[Info] Vsc_BoardTest::Test_AngleSensor() is done.");
 
@@ -81,6 +95,7 @@ void Vsc_BoardTest::Test_AllHomers(int loop_count){
     SingleAxisHomer* homer = this->__board->GetHomer('A');
     for (int i=0; i<loop_count; i++){
         Serial.print(homer->IsTriged());
-
+        Serial.println("Homer is Triger");
+        delay(1000);
     }
 }

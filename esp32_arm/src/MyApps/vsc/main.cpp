@@ -2,11 +2,11 @@
 #ifdef I_AM_VSC
 #include "board/board_vsc.h"
 #include "board/board_tester.h"
+#include "board/cnc_machine.h"
+#include "CNC/solution/cnc_single_axis/cnc_single_axis.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "vsc_robot.h"
-#include "board/cnc_machine.h"
-#include "CNC/solution/cnc_single_axis/cnc_single_axis.h"
 
 VscMachine cncMachine;
 CncSingleAxis cnc = CncSingleAxis();
@@ -20,8 +20,8 @@ MessageQueue mqtt_command_queue;
 void test_board(){
     Vsc_BoardTest tester;
     tester.LinkBoard(&board);
-    tester.Test_AngleSensor(100);
-    tester.Test_AllHomers(0);
+    tester.Test_AngleSensor(0);
+    tester.Test_AllHomers(10);
     tester.Test_Motor(0);
     tester.Test_Offset(0);
     Serial.println("[Info] test_board() is done.");
@@ -29,13 +29,11 @@ void test_board(){
 
 void home(){
     SingleAxisHomer* homer = board.GetHomer('A');
-    bool trigered = false;
     ActuatorDcMotor* motor = board.GetDcMotor();
     motor->SetSpeed(100);
     motor->SetTargetPositionTo(false, 999999);
     motor->StartToMove();
-    while (trigered){
-        // motor->SpinOnce();
+    while (homer->IsTriged()){
         motor->Stop();
         motor->SetCurrentPositionAs(15);
     }
@@ -50,9 +48,9 @@ void setup(){
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     home();
     setup_mqtt_block_connect();
-    append_mqtt_bridge("spring/maker", &mqtt_command_queue, &robot); 
+    append_mqtt_bridge("vsc", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 
-    Serial.println ("\n[Info] XiaoJuan  setup() is done. ------------------------------------ \n");
+    Serial.println ("\n[Info] VSC   setup() is done. ------------------------------------ \n");
 
 }
 
