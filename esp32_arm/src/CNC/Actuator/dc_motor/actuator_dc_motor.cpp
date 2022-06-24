@@ -1,39 +1,53 @@
 #include "actuator_dc_motor.h"
 #include "Arduino.h"
+#include "MyBoards/board_base.h"
 
-#define PWM1_Ch0 0
-#define PWM1_Ch1 1
+// #define PWM1_Ch0 0
+// #define PWM1_Ch1 1
 #define PWM1_Res 8
 #define PWM1_Freq 1000
+#define GEAR_TEETH_COUNT 56.0f
+#define GEAR_PITCH 12.7f   //unit is mm
+#define PID_P 1.0f
+#define INERTIA_DISTANCE_IN_MM  50
+
 
 ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_a, uint8_t h_bridge_pin_b){
     pinMode(h_bridge_pin_a, OUTPUT);
     pinMode(h_bridge_pin_b, OUTPUT);
     digitalWrite(h_bridge_pin_a, LOW);
     digitalWrite(h_bridge_pin_b, LOW);
-    // assign ledc channel
 
-    // init ledc 
- 
+    // init ledc via assign ledc channel
+    BoardBase board;
+    this->__pwm_channel_a = board.Assign_ledc_channel();
+    ledcAttachPin (__h_bridge_pin_a, this->__pwm_channel_a);
+	ledcSetup (this->__pwm_channel_a, PWM1_Freq, PWM1_Res);
+
+    this->__pwm_channel_b = board.Assign_ledc_channel();
+	ledcAttachPin (__h_bridge_pin_b, this->__pwm_channel_b);
+	ledcSetup (this->__pwm_channel_b, PWM1_Freq, PWM1_Res);
+
     this->__h_bridge_pin_a = h_bridge_pin_a;
     this->__h_bridge_pin_b = h_bridge_pin_b;
 
 
-    ledcAttachPin (__h_bridge_pin_a, PWM1_Ch0);
-	ledcAttachPin (__h_bridge_pin_b, PWM1_Ch1);
-	ledcSetup (PWM1_Ch0, PWM1_Freq, PWM1_Res);
-	ledcSetup (PWM1_Ch1, PWM1_Freq, PWM1_Res);
+    // Calculate rad_per_mm,  This is determined by mechanic designer.
+    this->__sensor_rad_per_mm = GEAR_PITCH * GEAR_TEETH_COUNT / TWO_PI; 
+    this->__offset = 0;
 }
 
 void ActuatorDcMotor::SpinOnce(){
     // real speed control, position check, auto stop....
 
-    if(this->GetDistanceToTarget_InCncUnit() == 0){
+    if(this->GetDistanceToTarget_InCncUnit() < INERTIA_DISTANCE_IN_MM){
+        // The wheel will continue to run a short time, because the inertia
+        // TDDO:  How to deal with negtive distance?
         this->Stop();
     }else{
         // control speed
         float error = this->__sensor->getVelocity() - this->__speed; 
-        float new_speed =  0;   //   pid.get_speed(error);
+        float new_speed = - PID_P * error;   //   pid.get_speed(error);
         this->UpdateSpeedWhenMotorIsRunning(new_speed);
     }
 }
@@ -45,9 +59,7 @@ float ActuatorDcMotor::GetCurrentPosition_InCncUnit(){
 
 void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
     // known:    current angle,     position_in_cnc_unit
-
     this->__offset = position_in_cnc_unit - this->__sensor->getAngle() * this->__sensor_rad_per_mm;
-
     // the radius of wheel is not sure
     // 
     // if( (position_in_cnc_unit/5) < this->__sensor->getAngle()){//   ??
@@ -66,9 +78,7 @@ void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float posit
 float ActuatorDcMotor::GetDistanceToTarget_InCncUnit(){
     // sensor --> current poistion   --> distance to target
     return this->_target_cnc_position - this->GetCurrentPosition_InCncUnit();
-
 }
-
 
 void ActuatorDcMotor::UpdateSpeedWhenMotorIsRunning(float new_speed){
         this->__speed = new_speed;
@@ -76,9 +86,7 @@ void ActuatorDcMotor::UpdateSpeedWhenMotorIsRunning(float new_speed){
 }
 
 void ActuatorDcMotor::SetSpeed(float speed_per_second){
-    // set the motor speed 
     this->__speed = speed_per_second;
-
 }
 
 void ActuatorDcMotor::Stop(){
@@ -87,24 +95,15 @@ void ActuatorDcMotor::Stop(){
     digitalWrite(__h_bridge_pin_b, LOW);
 }
 
-
-
 void ActuatorDcMotor::StartToMove(){
-    // Get direction from   this->_target_cnc_position    this->GetCurrentPosition_InCncUnit()
-     
     bool dir_is_cw = (this->_target_cnc_position - this->GetCurrentPosition_InCncUnit()) > 0;
-
-    // this function be used to start DC motor(CW and CCW) 
-    // float Speed=128;
-    // make  DCmotor CW 
-    // if(/* PIN_TOUCH_UP == LOW      */){
-    //     // ledcWrite (PWM1_Ch0,Speed);
-    //     ledcWrite (PWM1_Ch0, this->__speed);
-    //     digitalWrite (__h_bridge_pin_b,LOW);
-    // }
-    // // make  DCmotor CCW 
-    // else if(/*PIN_TOUCH_DOWN ==LOW     */){
-    //     ledcWrite (PWM1_Ch1, this->__speed);
-    //     digitalWrite(__h_bridge_pin_a,LOW);
-    // }
+    if(dir_is_cw){
+        ledcWrite (this->__pwm_channel_a, this->__speed);
+        digitalWrite (__h_bridge_pin_b,LOW);
+    }
+    else {
+        // make  DCmotor CCW 
+        ledcWrite (this->__pwm_channel_b, this->__speed);
+        digitalWrite(__h_bridge_pin_a,LOW);
+    }
 }

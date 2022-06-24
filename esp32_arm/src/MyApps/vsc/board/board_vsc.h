@@ -6,13 +6,16 @@
 
 #define PIN_H_BRIDGE_A  12
 #define PIN_H_BRIDGE_B  13
-#define PIN_SENSOR_ADC  14
+#define PIN_SENSOR_ADC  25
 #define PIN_HOMER_SENSOR_HALL 33
+
+#define SMALLEST_COUNT 15
+#define BIGEST_COUNT 4096
 
 class Vsc_Board: public CncBoardBase{
     public:
         Vsc_Board(){};
-        void Init(bool is_on_reset) override{};
+        void Init(bool is_on_reset) override;
         void SayHello() override {};
         ActuatorDcMotor* GetDcMotor(){return &this->__motor;};
         MagneticSensorAnalog* GetSensor(){return &this->__sensor;};
@@ -22,7 +25,7 @@ class Vsc_Board: public CncBoardBase{
 
     private:
 	    ActuatorDcMotor __motor = ActuatorDcMotor(PIN_H_BRIDGE_A, PIN_H_BRIDGE_B);
-        MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC);
+        MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
         SingleAxisHomer __homer = SingleAxisHomer(PIN_HOMER_SENSOR_HALL, LOW);
 
         ActuatorStepper* GetActuator(char axis_name){};
