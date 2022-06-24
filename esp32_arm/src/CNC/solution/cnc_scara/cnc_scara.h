@@ -39,7 +39,7 @@ class CncScaraSolution: public CncBase{
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override;
         void RunM84() override;
 
-        SingleAxisHomer* __homing_helper;
+        SingleAxisHomer* __homer;
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;
         CncScaraMachine* _scara_machine;

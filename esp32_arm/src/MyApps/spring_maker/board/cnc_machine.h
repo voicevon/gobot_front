@@ -1,3 +1,5 @@
+#pragma once
+
 #include "CNC/solution/cnc_single_axis/cnc_single_axis_machine.h"
 
 class SpringMakerMachine: public CncSingleAxis_Machine{

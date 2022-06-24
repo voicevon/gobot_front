@@ -4,7 +4,8 @@
 
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
-#include "MyBoards/gobot_main/board_pins/board_ver1.2.h"
+// #include "MyBoards/gobot_main/board_pins/board_ver1.2.h"
+#include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
 #include "robot_eef/board_smoke_machine.h"
 
 class Board_SmokeMachine: public CncBoardBase{

@@ -214,7 +214,7 @@ void CncScaraSolution::RunG28(char axis){
 		Serial.print("\n[Debug] CncScaraSolution::RunG28() is entering   AXIS = " );
 		Serial.println(axis);
 	}
-	this->__homing_helper = this->_board->GetHomer(axis);
+	this->__homer = this->_board->GetHomer(axis);
 	this->_board->EnableMotor(axis, true);
 	//Set homing_speed, this should be always a positive number.
 	float homing_speed = abs(this->_scara_machine->GetHomingVelocity(axis));
@@ -229,7 +229,7 @@ void CncScaraSolution::RunG28(char axis){
 void CncScaraSolution::_running_G28(){
 	bool debug = false;
 	if (debug) Serial.print("[Debug] CncScaraSolution::running_G28() is entering \n");
-	if (this->__homing_helper->IsTriged()){
+	if (this->__homer->IsTriged()){
 		// End stop is trigered
 		this->_board->cnc_mover->SingleActuatorStop(this->_homing_axis_name);
 		//Set current position to HomePosition

@@ -7,8 +7,10 @@
 #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
-#include "MyBoards/gobot_main/board_gobot_main.h"
-#include "MyBoards/gobot_main/robot_eef/gobot_main_eef.h"
+// #include "MyBoards/gobot_main/board_gobot_main.h"
+#include "board/board_gobot_main.h"
+#include "board/robot_eef/gobot_main_eef.h"
+// #include "MyBoards/gobot_main/robot_eef/gobot_main_eef.h"
 
 Board_GobotMain board;
 // GobotMainMachine cncMachine;
@@ -71,7 +73,8 @@ void cnc_test(){
     robot.Test_HomeBeta(0);
 }
 
-#include "Myboards/gobot_main/board_tester.h"
+#include "board/board_tester.h"
+
 void board_test(){
     GobotMain_BoardTest board_tester;
     board_tester.LinkBoard(&board);
