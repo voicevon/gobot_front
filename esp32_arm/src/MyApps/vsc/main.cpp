@@ -27,17 +27,17 @@ void test_board(){
     Serial.println("[Info] test_board() is done.");
 }
 
-void home(){
-    SingleAxisHomer* homer = board.GetHomer('A');
-    ActuatorDcMotor* motor = (ActuatorDcMotor*)(board.GetActuator('A'));
-    motor->SetSpeed(100);
-    motor->SetTargetPositionTo(false, 999999);
-    motor->StartToMove();
-    while (homer->IsTriged()){
-        motor->Stop();
-        motor->SetCurrentPositionAs(15);
-    }
-}
+// void home(){
+//     SingleAxisHomer* homer = board.GetHomer('A');
+//     ActuatorDcMotor* motor = (ActuatorDcMotor*)(board.GetActuator('A'));
+//     motor->SetSpeed(100);
+//     motor->SetTargetPositionTo(false, 999999);
+//     motor->StartToMove();
+//     while (homer->IsTriged()){
+//         motor->Stop();
+//         motor->SetCurrentPositionAs(15);
+//     }
+// }
 
 void setup(){
     board.Init(true);
@@ -46,7 +46,7 @@ void setup(){
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
-    home();
+    // home();
     setup_mqtt_block_connect();
     append_mqtt_bridge("vsc", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 

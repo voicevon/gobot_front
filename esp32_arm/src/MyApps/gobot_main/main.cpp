@@ -1,5 +1,4 @@
 #include "all_applications.h"
-// #include "all_devices.h"
 #ifdef I_AM_GOBOT_MAIN
 
 #include "gobot_main.h"
@@ -7,22 +6,20 @@
 #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
-// #include "MyBoards/gobot_main/board_gobot_main.h"
 #include "board/board_gobot_main.h"
 #include "board/robot_eef/gobot_main_eef.h"
-// #include "MyBoards/gobot_main/robot_eef/gobot_main_eef.h"
+#include "ESP32Step/src/TeensyStep.h"
 
 Board_GobotMain board;
 // GobotMainMachine cncMachine;
 CncFiveBars cncFiveBar;
 GobotMain robot; 
 
-// StepControl objStepControl;    // Use default settings 
+StepControl objStepControl;    // Use default settings 
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 
 
-// #include "MyBoards/gobot_main/board_test.h"
 void cnc_test();
 void board_test();
 
@@ -31,7 +28,6 @@ void setup(){
     board_test();
     // cncMachine.Init('S');  //Slow moving
     // cncMachine.PrintOut("GobotMain Machine");
-    // cncFiveBar.Init(&board, &cncMachine);
     cncFiveBar.Init(&board);
     // cncFiveBar.LinkStepControl(&objStepControl);
 

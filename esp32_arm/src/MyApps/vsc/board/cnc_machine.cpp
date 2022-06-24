@@ -23,8 +23,6 @@ void VscMachine::Init(char solution){
 void VscMachine::PrintOut(){
     Serial.print("\n\n===============================================");
     Serial.print("\nSpringMakerMachine::PrintOut()");
-    Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");
-    Serial.print(this->STEPPER_DRIVER_MICRO_STEPS);
     Serial.print("\n   MOTOR_DEGREE_PER_STEP = ");
     Serial.print(this->MOTOR_DEGREE_PER_STEP);
     Serial.print("\n   MOTOR_GEARBOX_RATIO_ALPHA =");

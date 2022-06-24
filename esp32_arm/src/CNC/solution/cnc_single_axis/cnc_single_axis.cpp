@@ -32,12 +32,13 @@ void CncSingleAxis::Init(CncBoardBase* board){
 	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	// this->__EnableMotor('A', false);
 	// this->objStepper_alpha = board->GetStepper('A');
-	this->objHomeHelper_alpha = board->GetHomer('A');
+	// this->objHomeHelper_alpha = board->GetHomer('A');
+	this->__homer = board->GetHomer('A');
 	this->_board->EnableMotor('A', false);
 
 	// CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
 	// this->commuDevice = commuUart; 
-	this->objStepper_alpha->setInverseRotation(true);
+	// this->objStepper_alpha->setInverseRotation(true);
 	this->_home_as_inverse_kinematic = false;
 }
 
@@ -46,26 +47,24 @@ void CncSingleAxis::RunG28(char axis){
 	Serial.print(axis);
 	this->_homing_axis_name = axis;
 	this->_singleAxisConfig->PrintOut();
-	this->objStepper_alpha->setAcceleration(this->_singleAxisConfig->Homing_acceleration_alpha);
-	this->objStepper_alpha->setMaxSpeed(this->_singleAxisConfig->Homing_speed_alpha);
-
-	if (axis=='A'){
-		//todo :  process with IK()
-		this->__homing_helper = this->objHomeHelper_alpha;
-		this->objStepper_alpha->setTargetRel(-5000000);
-	}
-	// this->__EnableMotor('A', true);
+	this->_board->cnc_mover->SetActuatorSpeed('A', this->_singleAxisConfig->Homing_speed_alpha);
+	//todo :  process with IK()
+	float long_distance_to_move = 99999;
+	this->_board->cnc_mover->SingleActuatorMoveTo('A', false, long_distance_to_move);
 	this->_board->EnableMotor('A', true);
 	
-	this->objStepControl->moveAsync(*this->objStepper_alpha);
+	float distance_to_move = -9999;
+	uint8_t abs_flag = 0x01;
+	this->_board->cnc_mover->AllActuatorsMoveTo(abs_flag, &distance_to_move);
 }
 
 void CncSingleAxis::_running_G28(){
-	if (this->__homing_helper->IsTriged()){
+	if (this->__homer->IsTriged()){
 		// End stop is trigered
 		Serial.print("\n[Info] CncSingleAxis::_running_G28() Home sensor is trigger.  " );
 		Serial.print (this->_homing_axis_name);
-		this->objStepControl->stop();
+		// this->objStepControl->stop();
+		this->_board->cnc_mover->AllActuatorsStop();
 
 		//Set current position to HomePosition
 		IkPosition_A ik_position;
@@ -85,12 +84,14 @@ void CncSingleAxis::_running_G28(){
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis_name == 'A') this->objStepper_alpha->setPosition(ik_position.alpha);
+		if (this->_homing_axis_name == 'A') {
+			// this->objStepper_alpha->setPosition(ik_position.alpha);
+			this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('A',ik_position.alpha);
+		}
 		// if (this->_homing_axis == 'W') this->objStepper_beta.setPosition(ik_position.beta);
 		
-		this->objStepper_alpha->setMaxSpeed(this->_singleAxisConfig->max_speed_alpha);
-		this->objStepper_alpha->setAcceleration(this->_singleAxisConfig->max_acceleration_alpha);
-		// this->objStepper_beta.setMaxSpeed(this->_singleAxisConfig->max_speed_alpha_beta);
+		// this->objStepper_alpha->setAcceleration(this->_singleAxisConfig->max_acceleration_alpha);
+		this->_board->cnc_mover->SetActuatorSpeed('A',this->_singleAxisConfig->max_acceleration_alpha);
 		// this->objStepper_beta.setAcceleration(this->_singleAxisConfig->max_acceleration_alpha_beta);
 		this->State = CncState::IDLE;
 
@@ -101,18 +102,17 @@ void CncSingleAxis::_running_G28(){
 void CncSingleAxis::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] CncSingleAxis::RunG1() is entering");
 	Serial.print(gcode->get_command());
-	// this->__EnableMotor('A', true);
 	this->_board->EnableMotor('A', true);
-	// this->__EnableMotor('B', true);
 	if (gcode->has_letter('F')){
-		int speed = gcode->get_value('F');
-		this->objStepper_alpha->setMaxSpeed(speed);
+		float speed = gcode->get_value('F');
+		this->_board->cnc_mover->SetActuatorSpeed('A',speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_A target_fk_a;
 	IkPosition_A target_ik_a;
 	target_fk_a.A = this->__current_fk_position.A;
-	target_ik_a.alpha = float(this->objStepper_alpha->getPosition()) ;
+	// target_ik_a.alpha = float(this->objStepper_alpha->getPosition()) ;
+	target_ik_a.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A');
 	bool do_ik=false;
 	if (gcode->has_letter('A')) target_ik_a.alpha = gcode->get_value('A');
 	// If need IK, do it now.
@@ -123,13 +123,14 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 	if (do_ik) IK(&target_fk_a,&target_ik_a);
 
 	//Prepare actuator/driver to move to next point
-	this->objStepper_alpha->setTargetAbs(target_ik_a.alpha);
+	this->_board->cnc_mover->SingleActuatorMoveTo('A',true,target_ik_a.alpha);
 	//None blocking, move backgroundly.
-	this->objStepControl->moveAsync(*this->objStepper_alpha);
-
+	uint8_t abs_flag=0x01;
+	this->_board->cnc_mover->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
 	if (true){
 		Serial.print("\n    [Debug] CncSingleAxis::RunG1()     (");
-		Serial.print(this->objStepper_alpha->getPosition());
+		// Serial.print(this->objStepper_alpha->getPosition());
+		this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A');
 		Serial.print(")   <-- from   alpha   to -->  (");
 		Serial.print(target_ik_a.alpha  );
 		// Serial.print(" , ");
@@ -145,25 +146,17 @@ void CncSingleAxis::_running_G1(){
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);
 }
-// void CncSingleAxis::RunM123(uint8_t eef_channel, EefAction eef_action){
 void CncSingleAxis::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	
 }
 
 void CncSingleAxis::RunM84(){
-	// this->__EnableMotor('A',false);
 	this->_board->EnableMotor('A', false);
-	// this->__EnableMotor('B',false);
 }
 
 float CncSingleAxis::GetDistanceToTarget_IK(){
-	return this->objStepper_alpha->getDistanceToTarget();
+	this->_board->cnc_mover->GetAbsDistanceToTarget_InCncUnit();
+
 }
 
-// void CncSingleAxis::__EnableMotor(char actuator, bool enable_it){
-// 	if (actuator == 'A')
-// 		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
-// 	// if (actuator == 'B')
-// 	// 	digitalWrite(PIN_BETA_ENABLE, !enable_it);
-// }
 
