@@ -16,7 +16,7 @@ class Board_SpringMaker: public CncBoardBase{
         void Init(bool is_on_reset) override;
         
         // void SayHello();
-        ActuatorStepper* GetActuator(char axis_name) override;
+        ActuatorBase* GetActuator(char axis_name) override;
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_SpringMaker* GetEef() override;
         void EnableMotor(char axis_name, bool enable_it) override;

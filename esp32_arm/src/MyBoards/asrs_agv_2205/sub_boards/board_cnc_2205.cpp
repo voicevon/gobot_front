@@ -16,7 +16,7 @@ void Board2205Cnc::Init(Adafruit_MCP23X17* mcp_23018){
     this->homer_z.Init_mcp23018_gpio(mcp_23018, MC23018_PIN_HOME_Z_2205);
 }
 
-ActuatorStepper* Board2205Cnc::GetActuator(char axis_name){
+ActuatorBase* Board2205Cnc::GetActuator(char axis_name){
     if (axis_name=='A'){
         return &this->alpha_stepper;
     }else if (axis_name=='B'){

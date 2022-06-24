@@ -42,7 +42,7 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     this->cnc_mover = &this->mover_StepperServo;
 }
 
-ActuatorStepper* Board_GobotHouse_2206::GetActuator(char axis_name) {
+ActuatorBase* Board_GobotHouse_2206::GetActuator(char axis_name) {
     if (axis_name=='A'){
         return &this->__actuator_alpha;
     // }else if (axis_name=='B'){
