@@ -4,7 +4,8 @@
 #include "ASRS/asrs_base.h"
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/agv_base.h"
-#include "MyBoards/asrs_agv_2205/board_all_in_one_2205.h"
+// #include "MyBoards/asrs_agv_2205/board_all_in_one_2205.h"
+#include "MyApps/asar_agv/board/board_all_in_one_2205.h"
 #include "MyApps/box_carrier/box_carrier.h"
 
 

@@ -10,7 +10,7 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, CncMachineBase* cncMac
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is entering");
 	this->agv.Init(&board->agv);
 	this->asrs.LinkJettySensor(board->asrs.GetJettySensor());
-	this->cnc.Init(&board->cnc_board, cncMachine);
+	this->cnc.Init(&board->cnc_board);
 	// this->cnc.LinkStepControl(stepControl);
 	
     this->cnc.LinkLocalGcodeQueue_AsConsumer(&this->_gcode_queue);

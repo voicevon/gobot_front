@@ -4,7 +4,8 @@
 
 // #include "MyBoards/asrs_agv_2205/board_asrs_agv.h"
 #include "MyBoards/asrs_agv_2205/board_all_in_one_2205.h"
-#include "cnc_machine.h"
+// #include "cnc_machine.h"
+#include "board/mechanic/cnc_machine.h"
 #include "CNC/solution/cnc_core_yz/cnc_core_yz.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_carrier.h"
@@ -22,7 +23,7 @@ MessageQueue mqtt_command_queue = MessageQueue();
 void setup(){
     board.Init(true);
     cncMachine.Init('A');
-    cnc.Init(&board.cnc_board, &cncMachine);
+    cnc.Init(&board.cnc_board);
     // cnc.LinkStepControl(&objStepControl);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);

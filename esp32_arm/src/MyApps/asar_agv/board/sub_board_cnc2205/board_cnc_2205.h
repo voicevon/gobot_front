@@ -17,6 +17,7 @@ class Board2205Cnc: public CncBoardBase{
         SingleAxisHomer* GetHomer(char axis_name) override;
         RobotEef_GarmentAsar* GetEef() override;
         void EnableMotor(char axis_name, bool enable_it) override;
+        CncMachineBase* GetCncMechanic() override {return nullptr;};
 
         
     private:

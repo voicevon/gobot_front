@@ -1,6 +1,7 @@
 #pragma once
 #include "board_test_base.h"
-#include "MyBoards/asrs_agv_2205/sub_boards/board_asrs_2205.h"
+// #include "MyBoards/asrs_agv_2205/sub_boards/board_asrs_2205.h"
+#include "MyApps/asar_agv/board/sub_board_asrs/board_asrs_2205.h"
 
 class UnitTestAsrs:public BoardTestBase{
     public:
