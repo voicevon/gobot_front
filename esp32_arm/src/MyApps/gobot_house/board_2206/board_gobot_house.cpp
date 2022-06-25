@@ -1,7 +1,8 @@
 #include "board_gobot_house.h"
-#include "CNC/Actuator/stepper/mechanic_polor.h"
+// #include "CNC/Actuator/stepper/mechanic_polor.h"
 #include "CNC/solution/cnc_scara/cnc_scara.h"
-
+// #include "actuator_alpha.h"
+#include "mechanic/actuator_alpha.h"
 
 void Board_GobotHouse_2206::__Init_Hardware(){
     //Init GPIO
@@ -9,11 +10,11 @@ void Board_GobotHouse_2206::__Init_Hardware(){
     pinMode(PIN_BETA_ENABLE_2109, OUTPUT);
     digitalWrite(PIN_BETA_ENABLE_2109, HIGH);   // To avoid A4988 is enabled.  sometimes there is an A4988 chip on the board.
     // Init Actuator alpha
-    ActuatorMechanic_StepperPolor alpha_mechanic;
-    alpha_mechanic._micro_steps_on_stepper_driver = 16;
-    alpha_mechanic._motor_gear_teeth_count = 10;
-    alpha_mechanic._slave_pulley_teeth_count = 90;
-    alpha_mechanic._motor_step_angle_in_degree = 0.7003891050583658;
+    GobotHouse_ActuatorAlphaMechanic alpha_mechanic;
+    // alpha_mechanic._micro_steps_on_stepper_driver = 16;
+    // alpha_mechanic._motor_gear_teeth_count = 10;
+    // alpha_mechanic._slave_pulley_teeth_count = 90;
+    // alpha_mechanic._motor_step_angle_in_degree = 0.7003891050583658;
     this->__alpha_stepper.setInverseRotation(true);   //TODO:  inside app_mover.
     this->__actuator_alpha.LinkStepper(&this->__alpha_stepper, alpha_mechanic.GetStepsPerCncUnit());
     this->__alpha_range.InitCncRange(-PI, TWO_PI);

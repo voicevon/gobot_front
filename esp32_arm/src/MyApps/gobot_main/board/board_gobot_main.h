@@ -1,13 +1,12 @@
 #pragma once
 #include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-// #include "board_ver1.2.h"
 #include "board_pins/board_ver1.2.h"
 #include "robot_eef/gobot_main_eef.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/single_axis_homer.h"
 #include "CNC/cnc_mover/mover_dual_stepper.h"
-#include "cnc_machine.h"
+#include "mechanic/cnc_machine.h"
 
 class Board_GobotMain: public CncBoardBase{
     public:

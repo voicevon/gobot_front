@@ -19,6 +19,7 @@ class CncMachineBase{
         virtual void PrintOut();
         int8_t HomingDir_IsToMax(int8_t axis_index){return this->_HOMING_DIR_IS_TO_MAX[axis_index];};
         float HomingSpeed(int8_t axis_index){return this->_HOMING_SPEED[axis_index];};
+        float HomingAcceleration(int8_t axis_index){return this->_HOMING_ACCELERATION[axis_index];};
         float HomedPosition(int8_t axis_index){return this->_HOMED_POSITION[axis_index];};
         // virtual int8_t HomingDir_IsToMax(char axis_name){return this->_HOMING_DIR_IS_TO_MAX[0];};
 

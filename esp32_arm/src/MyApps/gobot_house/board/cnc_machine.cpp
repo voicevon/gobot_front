@@ -47,10 +47,10 @@ void GobotHouseMachine::PrintOut(){
     Serial.print("\n\n===============================================");
     Serial.print("\n   GobotHouseMachine::PrintOut()");
     Serial.print("\n       Homed_position_alpha_in_degree= ");
-    Serial.print(this->Homed_position_alpha_in_degree);
+    Serial.print(RAD_TO_DEG * this->Homed_position_alpha_in_rad);
 
     Serial.print("\n       Homed_position_beta_in_degree= "); 
-    Serial.print(this->Homed_position_beta_in_degree);
+    Serial.print(RAD_TO_DEG * this->Homed_position_beta_in_rad);
 
     // Serial.print("\n   MAX_ACCELERATION_ALPHPA= ");
     // Serial.print(this->MAX_ACCELERATION_ALPHPA);

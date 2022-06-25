@@ -6,26 +6,20 @@ class CncFiveBarMachine: public CncMachineBase{
         // link length in mm
         CncFiveBarMachine(){};
         void PrintOut() override;
+        virtual float GetHomingVelocity(char axis_name);
 
-        // float motor_steps_per_shaft_round;
-        // float STEPS_PER_RAD; 
+        const float& Homed_position_alpha_in_rad = _HOMED_POSITION[AXIS_ALPHA];
+        const float& Homed_position_beta_in_rad = _HOMED_POSITION[AXIS_BETA];
+
         // 191.0 is the Length between the centers of two motors 
-        float LINK_0;  //  = 191.0 / 2 ;
+        const float& LINK_0 = _LINK_0_LENGTH;  //  = 191.0 / 2 ;
         // Length from motor to passive joints   
-        float LINK_A; // = 285.18;  
+        const float& LINK_A = _LINK_A_LENGTH; // = 285.18;  
         // Length from passive joints to end effector 
-        float LINK_B; // 384.51;  
-
-        // int MOTOR_MAX_SPEED;
-        int MAX_STEPS_PER_SECOND_ALPHA_BETA;
-        float MAX_ACCELERATION_ALPHA_BETA;
-        float Homed_position_alpha_in_degree;
-        float Homed_position_beta_in_degree;
-        int Homing_acceleration_alpha_beta;
-        // int Homing_speed_alpha_beta;
+        const float& LINK_B = _LINK_B_LENGTH; // 384.51;  
 
     protected:
-        // int STEPPER_DRIVER_MICRO_STEPS;
-        // float MOTOR_STEP_ANGLE;
-        // float GEAR_BOX_RATIO;
+        float _LINK_0_LENGTH;
+        float _LINK_A_LENGTH;
+        float _LINK_B_LENGTH;
 };

@@ -237,10 +237,10 @@ void CncScaraSolution::_running_G28(){
 		if (this->_home_as_inverse_kinematic){
 			if (debug) Serial.print("\n   [Info] CncScaraSolution::_running_G28() Trying to get home position from actuator position  ");
 			if (this->_homing_axis_name == 'A'){
-				ik_position.alpha = DEG_TO_RAD * this->_scara_machine->Homed_position_alpha_in_degree;
+				ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
 				
 			}else if (this->_homing_axis_name == 'B'){
-				ik_position.beta = DEG_TO_RAD * this->_scara_machine->Homed_position_beta_in_degree;
+				ik_position.beta =  this->_scara_machine->Homed_position_beta_in_rad;
 			}
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()

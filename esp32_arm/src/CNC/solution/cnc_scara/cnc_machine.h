@@ -6,9 +6,9 @@ class CncScaraMachine: public CncMachineBase{
         CncScaraMachine(){};
         virtual float GetHomingVelocity(char axis_name);
         // const float& Homed_position_alpha_in_degree = _homed_position_alpha_in_degree;
-        const float& Homed_position_alpha_in_degree = _HOMED_POSITION[AXIS_ALPHA];
+        const float& Homed_position_alpha_in_rad = _HOMED_POSITION[AXIS_ALPHA];
         // const float& Homed_position_beta_in_degree = _homed_position_beta_in_degree;
-        const float& Homed_position_beta_in_degree = _HOMED_POSITION[AXIS_BETA];
+        const float& Homed_position_beta_in_rad = _HOMED_POSITION[AXIS_BETA];
 
         const float& LINK_A = _LINK_A_LENGTH;
         const float& LINK_B = _LINK_B_LENGTH;

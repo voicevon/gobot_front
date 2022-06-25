@@ -1,4 +1,16 @@
 
+#include "actuator_alpha_beta.h"
+
+GobotMain_ActuatorAlphaBetaMechanic::GobotMain_ActuatorAlphaBetaMechanic(){
+    this->_micro_steps_on_stepper_driver = 16;
+    this->_motor_gear_teeth_count = 10;
+    this->_slave_pulley_teeth_count = 90;
+    this->_motor_step_angle_in_degree = 0.7003891050583658;
+}
+
+
+
+
 #include "cnc_machine.h"
 
 GoboMainMachine::GoboMainMachine(){
@@ -74,9 +86,9 @@ void GoboMainMachine::PrintOut(){
     Serial.print("\n\n===============================================");
     Serial.print("\n   GoboMainMachine::PrintOut()");
     Serial.print("\n       Homed_position_alpha_in_degree= ");
-    Serial.print(this->Homed_position_alpha_in_degree);
+    Serial.print(RAD_TO_DEG * this->Homed_position_alpha_in_rad);
     Serial.print("\n       Homed_position_beta_in_degree= "); 
-    Serial.print(this->Homed_position_beta_in_degree);
+    Serial.print(RAD_TO_DEG * this->Homed_position_beta_in_rad);
 
     Serial.print("\n   MOTOR_MICRO_STEPS= ");
     // Serial.print(this->MOTOR_MICRO_STEPS);

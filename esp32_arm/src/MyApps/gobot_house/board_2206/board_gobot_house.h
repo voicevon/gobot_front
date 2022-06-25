@@ -7,7 +7,9 @@
 #include "CNC/Actuator/servo/actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/single_axis_homer.h"
-#include "cnc_machine.h"
+// #include "cnc_machine.h"
+#include "mechanic/cnc_machine.h"
+#include "mechanic/actuator_alpha.h"
 
 class Board_GobotHouse_2206: public CncBoardBase{
     public:

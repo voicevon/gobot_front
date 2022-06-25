@@ -35,7 +35,8 @@ void CncFiveBars::RunG28(char axis){
 		target_position = 500000;
 	}else if (axis=='B'){
 		this->_board->EnableMotor('B', true);
-		int xx =this->_fivebarMachine->Homing_acceleration_alpha_beta;
+		// int xx =this->_fivebarMachine->Homing_acceleration_alpha_beta;
+		int xx =this->_fivebarMachine->HomingAcceleration(AXIS_BETA);
 		// this->beta_stepper->setAcceleration(this->_fivebarMachine->Homing_acceleration_alpha_beta);
 		// this->beta_stepper->setMaxSpeed(this->_fivebarMachine->Homing_speed_alpha_beta);
 		// this->__homing_stepper = this->beta_stepper;
@@ -66,8 +67,8 @@ void CncFiveBars::_running_G28(){
 		IkPosition_AB ik_position;
 		if (this->_home_as_inverse_kinematic){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
-			ik_position.alpha =  this->_fivebarMachine->Homed_position_alpha_in_degree * DEG_TO_RAD;
-			ik_position.beta =  this->_fivebarMachine->Homed_position_beta_in_degree * DEG_TO_RAD;
+			ik_position.alpha =  this->_fivebarMachine->Homed_position_alpha_in_rad;
+			ik_position.beta =  this->_fivebarMachine->Homed_position_beta_in_rad;
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik;
@@ -333,7 +334,9 @@ void CncFiveBars::RunG1(Gcode* gcode){
 }
 
 void CncFiveBars::_running_G1(){
-    if (this->GetDistanceToTarget_IK() < (this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA)/32){
+    // if (this->GetDistanceToTarget_IK() < (this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA)/32){
+    if (this->GetDistanceToTarget_IK() < 123){  // TODO: to determine g1 is finsied
+
       	this->State = CncState::IDLE;
 		Serial.print("\n[Info] CncFiveBars::_running_G1() is finished. ");
     }
