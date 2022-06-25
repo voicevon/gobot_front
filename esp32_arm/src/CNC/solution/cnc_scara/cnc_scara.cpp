@@ -208,7 +208,7 @@ void CncScaraSolution:: _running_G1(){
 	}
 }
 
-void CncScaraSolution::RunG28(char axis){
+void CncScaraSolution::RunG28(EnumAxis axis){
 	bool debug = true;
 	if (debug){
 		Serial.print("\n[Debug] CncScaraSolution::RunG28() is entering   AXIS = " );

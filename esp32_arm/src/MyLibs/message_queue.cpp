@@ -6,7 +6,7 @@ bool MessageQueue::AppendMessage(String strPayload){
     int length = strPayload.length();
     Serial.print("[Info] MessageQueue::AppendMessage(String strPayload)   ");
     Serial.println(strPayload);
-    this->AppendMessage(payload, length);
+    return this->AppendMessage(payload, length);
 }
 
 // return true: buffer is full , before or after appending.

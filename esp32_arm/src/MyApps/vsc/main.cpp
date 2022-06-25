@@ -3,13 +3,13 @@
 #include "board/board_vsc.h"
 #include "board/board_tester.h"
 #include "board/mechanic/cnc_machine.h"
-#include "CNC/solution/cnc_single_axis/cnc_single_axis.h"
+#include "board/mechanic/cnc_solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "vsc_robot.h"
 
 VscMachine cncMachine;
-CncSingleAxis cnc = CncSingleAxis();
+Vsc_CncSoution cnc;
 
 Vsc_Board board;
 VscRobot robot;
@@ -28,7 +28,7 @@ void test_board(){
 }
 
 void test_cnc(){
-    cnc.RunG28('A');
+    cnc.RunG28(AXIS_ALPHA);
 
     while (true){
         cnc.SpinOnce();

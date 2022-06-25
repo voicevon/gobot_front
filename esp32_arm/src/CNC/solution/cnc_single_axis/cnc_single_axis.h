@@ -4,12 +4,12 @@
 #include "CNC/solution/cnc_base.h"
 #include "cnc_single_axis_machine.h"
 
+
+//This is a virtual class. No Constructor.
 class CncSingleAxis: public CncBase{
     public:
-        CncSingleAxis();
-
         void Init(CncBoardBase* board) override;
-        void RunG28(char axis) override;
+        void RunG28(EnumAxis axis) override;
         void RunG1(Gcode* gcode) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
@@ -32,7 +32,5 @@ class CncSingleAxis: public CncBase{
         std::string GetHomeTrigerStateString() override {return " ";};
 
         FkPosition_A __current_fk_position;
-
-        // SingleAxisHomer* __homer;
 
 };

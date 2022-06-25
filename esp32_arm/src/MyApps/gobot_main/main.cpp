@@ -2,17 +2,19 @@
 #ifdef I_AM_GOBOT_MAIN
 
 #include "gobot_main.h"
-#include "CNC/solution/cnc_five_bars/cnc_five_bars.h"
-#include "cnc_machine.h"
+// #include "CNC/solution/cnc_five_bars/cnc_five_bars.h"
+// #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
 #include "board/board_gobot_main.h"
 #include "board/robot_eef/gobot_main_eef.h"
+#include "board/mechanic/cnc_solution.h"
+#include "board/mechanic/cnc_machine.h"
 #include "ESP32Step/src/TeensyStep.h"
 
 Board_GobotMain board;
 // GobotMainMachine cncMachine;
-CncFiveBars cncFiveBar;
+GobotMainCnc cnc;
 GobotMain robot; 
 
 StepControl objStepControl;    // Use default settings 
@@ -29,11 +31,11 @@ void setup(){
     board_test();
     // cncMachine.Init('S');  //Slow moving
     // cncMachine.PrintOut("GobotMain Machine");
-    cncFiveBar.Init(&board);
+    cnc.Init(&board);
     // cncFiveBar.LinkStepControl(&objStepControl);
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
-    cncFiveBar.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     cnc_test();
 
     // mqtt, bridge, receiver.
@@ -52,7 +54,7 @@ bool xx=true;
 
 void loop(){
     robot.SpinOnce();
-    cncFiveBar.SpinOnce();
+    cnc.SpinOnce();
     loop_mqtt();
     return;
     uint8_t loadded_room = board.GetLoadedRoom();

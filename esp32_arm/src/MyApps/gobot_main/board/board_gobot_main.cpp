@@ -1,5 +1,4 @@
 #include "board_gobot_main.h"
-// #include "mechanic/alpha_mechanic.h"
 #include "CNC/Actuator/stepper/mechanic_polor.h"
 
 

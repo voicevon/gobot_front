@@ -3,7 +3,8 @@
 
 // #include "MyBoards/gobot_house/board_gobot_house_22.h"
 #include "board/board_gobot_house.h"
-#include "CNC/solution/cnc_scara/cnc_scara.h"
+// #include "CNC/solution/cnc_scara/cnc_scara.h"
+#include "board_2206/mechanic/cnc_solution.h"
 // #include "cnc_machine.h"
 #include "board/cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
@@ -15,7 +16,7 @@
 StepControl controller;    // Use default settings 
 Board_GobotHouse board;
 // GobotHouseMachine cncMachine;
-CncScaraSolution cncScara;
+GobotHouse2206Cnc cnc;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 GobotHouse* robot; 
@@ -29,13 +30,13 @@ void setup(){
     board_test();
     
     // cncMachine.Init('M');
-    cncScara.Init(&board);
-    // cncScara.LinkStepControl(&controller);
+    cnc.Init(&board);
+    // cnc.LinkStepControl(&controller);
     
     robot = &GobotHouse::getInstance();
     robot->Setup();
     robot->LinkLocalGcodeQueue_AsProducer(&gcode_queue);
-    cncScara.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
@@ -49,7 +50,7 @@ void setup(){
 
 void loop(){
 	robot->SpinOnce();
-    cncScara.SpinOnce();
+    cnc.SpinOnce();
     loop_mqtt();
 }
 

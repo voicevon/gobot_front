@@ -48,7 +48,7 @@ void Vsc_BoardTest::__TestOffset(float value){
     }else{
         Serial.println("[Error] Vsc_BoardTest::Test_offset_calculation() ");
         while(1){
-            Serial.print('Err ');
+            Serial.print("Err ");
             delay(1000);
         }
     }

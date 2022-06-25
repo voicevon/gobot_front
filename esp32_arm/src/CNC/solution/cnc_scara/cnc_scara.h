@@ -19,7 +19,7 @@ class CncScaraSolution: public CncBase{
         //     return instance;
         // }
         void Init(CncBoardBase* board) override;
-        void RunG28(char axis) override;
+        void RunG28(EnumAxis axis) override;
         void RunG1(Gcode* gcode) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override;

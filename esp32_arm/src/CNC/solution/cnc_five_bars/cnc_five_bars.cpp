@@ -19,17 +19,17 @@ void CncFiveBars::Init(CncBoardBase* board){
 	Serial.println("[Info] CncFiveBars::Init() is done.");
 } 
 
-void CncFiveBars::RunG28(char axis){ 
+void CncFiveBars::RunG28(EnumAxis axis){ 
 	Serial.print("[Debug] CncFiveBars::RunG28() is entering  axis= " );
 	Serial.println(axis);
 	// this->_homing_axis = axis;
-	if ( axis=='A' || axis == 'B'){
+	if ( axis==AXIS_ALPHA || axis == AXIS_BETA){
 		this->_homing_axis_name = axis;
 		this->__current_homer = this->_board->GetHomer(axis);
 		
 		CncMachineBase* config = this->_board->GetCncMechanic();
 		CncMoverBase* mover = this->_board->cnc_mover;
-		config->PrintOut();
+		config->PrintOut("fffffffffffffffffff");
 
 		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));
 		// mover.setAcceleration(axis, config->HomingAcceleration(axis);

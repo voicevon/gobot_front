@@ -37,7 +37,7 @@ class Board_GobotMain: public CncBoardBase{
         SingleAxisHomer homer_beta = SingleAxisHomer(PIN_HOME_BETA_2201, LOW);
         RobotEef_GobotMain __eef;
 
-        GoboMainMachine __cnc_mechanic;
+        GobotMainMachine __cnc_mechanic;
         uint8_t PIN_ROOMS[8];
         // static uint8_t PIN_ROOMS[] = {PIN_SENSOR_ROOM_0,
         //                 PIN_SENSOR_ROOM_1,

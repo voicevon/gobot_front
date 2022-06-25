@@ -38,6 +38,7 @@ SingleAxisHomer* Board2204Cnc::GetHomer(char axis_name){
         Serial.print("['Error']  Board2204Cnc::GetHomer()   axis_name= ");
         Serial.println(axis_name);
     }
+    return nullptr;
 }
 
 RobotEef_GarmentAsar* Board2204Cnc::GetEef(){

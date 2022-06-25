@@ -6,7 +6,7 @@ class VscMachine: public CncSingleAxis_Machine{
     public:
         VscMachine();
         // void Init(char solution_id) override;
-        void PrintOut() override;
+        void PrintOut(const char* title) override;
         
     private:
 

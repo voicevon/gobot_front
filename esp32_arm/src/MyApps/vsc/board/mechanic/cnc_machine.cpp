@@ -7,7 +7,7 @@ VscMachine::VscMachine(){
         this->_HOMING_SPEED[AXIS_ALPHA] = 100.0f;
 }
 
-void VscMachine::PrintOut(){
+void VscMachine::PrintOut(const char* title){
     Serial.print("\n\n===============================================");
     Serial.print("\nSpringMakerMachine::PrintOut()");
     Serial.print("\n     Home_position (a) = (");

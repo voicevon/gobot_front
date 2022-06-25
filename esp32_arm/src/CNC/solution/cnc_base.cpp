@@ -105,7 +105,9 @@ void CncBase::RunGcode(Gcode* gcode){
 				Serial.print(home_axis);
 
 			}
-			this->RunG28(home_axis);
+			//TODO:  convert char to enum
+			// this->ConvertToEnum(home_axis);
+			this->RunG28(this->ConvertToEnum(home_axis));
 			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
 			break;
 

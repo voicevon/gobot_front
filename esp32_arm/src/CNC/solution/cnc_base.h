@@ -6,6 +6,8 @@
 #include "CNC/cnc_machine_base.h"
 #include "CNC/single_axis_homer.h"
 #include "../coordinate/coordinate_base.h"
+#include "../coordinate/cnc_axis.h"
+
 
 enum class CncState{
     IDLE,
@@ -13,6 +15,7 @@ enum class CncState{
     RUNNING_G4,
     RUNNING_G28
 };
+
 class CncBase: public GcodeConsumer{
     public:
         CncState State = CncState::IDLE;
@@ -20,7 +23,7 @@ class CncBase: public GcodeConsumer{
         void SpinOnce();
         virtual void Init(CncBoardBase* board);
         // void LinkStepControl(StepControl* stepControl){this->_stepControl=stepControl;};
-        virtual void RunG28(char axis);
+        virtual void RunG28(EnumAxis axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
         virtual float GetDistanceToTarget_IK();
@@ -42,6 +45,8 @@ class CncBase: public GcodeConsumer{
 
         virtual void _running_G1();
         virtual void _running_G28();
+        virtual EnumAxis ConvertToEnum(char axis);
+
         char _homing_axis_name;
         bool _home_as_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
         

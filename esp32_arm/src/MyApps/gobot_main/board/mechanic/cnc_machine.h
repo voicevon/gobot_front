@@ -4,11 +4,11 @@
 #include "CNC/solution/cnc_five_bars/cnc_machine.h"
 
 
-class GoboMainMachine: public CncFiveBarMachine{
+class GobotMainMachine: public CncFiveBarMachine{
     public:
-        GoboMainMachine();
+        GobotMainMachine();
         // void Init(char solution_id) override;
-        void PrintOut();
+        void PrintOut(const char* title) override;
         // float GetHomingVelocity(char axis_name) override;
 
     private:

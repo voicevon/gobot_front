@@ -35,7 +35,7 @@ void BoxCarrierMachine::__Init_Fast(){
 
 }
 
-void BoxCarrierMachine::PrintOut(){
+void BoxCarrierMachine::PrintOut(const char* title){
     Serial.print("\n\n===============================================");
     Serial.print("\n   BoxMoverHardwareConfig::PrintOut()");
     Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");

@@ -10,7 +10,7 @@ class CncSingleAxis_Machine: public CncMachineBase{
         // int Homing_speed_alpha;        // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
         // int Homing_acceleration_alpha ;
         // int8_t Home_is_to_max_position = 1;
-        virtual void PrintOut();
+        // virtual void PrintOut();
 
     protected:
 

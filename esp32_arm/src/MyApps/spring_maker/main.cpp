@@ -11,7 +11,7 @@
 
 Board_SpringMaker board = Board_SpringMaker();
 SpringMakerMachine cncMachine;
-CncSingleAxis cnc = CncSingleAxis();
+// CncSingleAxis cnc;
 SpringMaker robot;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;

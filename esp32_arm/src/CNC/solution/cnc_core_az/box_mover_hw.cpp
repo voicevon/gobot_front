@@ -83,7 +83,7 @@ void CncCoreAZ::Init(CncBoardBase* board){
 	this->_home_as_inverse_kinematic = false;
 }
 
-void CncCoreAZ::RunG28(char axis){
+void CncCoreAZ::RunG28(EnumAxis axis){
 	Serial.print("[Debug] CncCoreAZ::RunG28() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis_name = axis;
@@ -180,9 +180,10 @@ void CncCoreAZ::RunG1(Gcode* gcode) {
 	this->_board->EnableMotor('A', true);
 	this->_board->EnableMotor('B', true);
 	if (gcode->has_letter('F')){
-		int speed = gcode->get_value('F');
+		float speed = gcode->get_value('F');
 		// this->objStepper_alpha->setMaxSpeed(speed);
 		// this->objStepper_beta->setMaxSpeed(speed);
+		this->_board->cnc_mover->SetSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_ZW target_fk_zw;

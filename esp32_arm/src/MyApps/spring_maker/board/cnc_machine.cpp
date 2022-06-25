@@ -23,7 +23,7 @@ SpringMakerMachine::SpringMakerMachine(){
         // this->steps_per_rad_for_a = 360.0f * this->STEPPER_DRIVER_MICRO_STEPS  * this->MOTOR_GEARBOX_RATIO_ALPHA / this->MOTOR_DEGREE_PER_STEP / TWO_PI;
 }
 
-void SpringMakerMachine::PrintOut(){
+void SpringMakerMachine::PrintOut(const char * title){
     Serial.print("\n\n===============================================");
     Serial.print("\nSpringMakerMachine::PrintOut()");
     // Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");

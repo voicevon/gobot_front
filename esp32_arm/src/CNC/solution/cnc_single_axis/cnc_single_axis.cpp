@@ -22,10 +22,6 @@ void CncSingleAxis::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 }
 
 
-CncSingleAxis::CncSingleAxis(){
-
-}
-
 void CncSingleAxis::Init(CncBoardBase* board){
 	Serial.print("\n[Info] CncSingleAxis::Init() is entering.");
 	// this->_mechanic->Init('F');
@@ -34,7 +30,7 @@ void CncSingleAxis::Init(CncBoardBase* board){
 	this->_home_as_inverse_kinematic = false;
 }
 
-void CncSingleAxis::RunG28(char axis){
+void CncSingleAxis::RunG28(EnumAxis axis){
 	Serial.print("[Debug] CncSingleAxis::RunG28() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis_name = axis;
