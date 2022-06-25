@@ -27,6 +27,14 @@ void test_board(){
     Serial.println("[Info] test_board() is done.");
 }
 
+void test_cnc(){
+    cnc.RunG28('A');
+
+    while (true){
+        cnc.SpinOnce();
+    }
+}
+
 // void home(){
 //     SingleAxisHomer* homer = board.GetHomer('A');
 //     ActuatorDcMotor* motor = (ActuatorDcMotor*)(board.GetActuator('A'));
@@ -43,10 +51,11 @@ void setup(){
     board.Init(true);
     test_board();
     cnc.Init(&board);
-
+    test_cnc();
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
-    // home();
+    gcode_queue.AppendGcodeCommand("G28A");
+
     setup_mqtt_block_connect();
     append_mqtt_bridge("vsc", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 

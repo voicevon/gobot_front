@@ -3,22 +3,16 @@
 
 class CncSingleAxis_Machine: public CncMachineBase{
     public:
-        float steps_per_rad_for_a;
         float max_speed_alpha;
         float max_acceleration_alpha;
      
-        float Homed_position_fk_A = 0;
+        float Homed_position_fk = 0;
         int Homing_speed_alpha;        // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
         int Homing_acceleration_alpha ;
-        // virtual void Init();
+        int8_t Home_is_to_max_position = 1;
         virtual void PrintOut();
-        // virtual int32_t GetStepsPerUnit(char axis_name) override;
 
     protected:
-        int STEPPER_DRIVER_MICRO_STEPS;
-        float MOTOR_DEGREE_PER_STEP;
-        float MOTOR_GEARBOX_RATIO_ALPHA;
-        float motor_steps_per_round;
 
 };
 

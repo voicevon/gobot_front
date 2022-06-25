@@ -18,15 +18,10 @@ class CncBoardBase: public BoardBase{
         virtual CncMachineBase* GetCncMechanic();
         virtual RobotEefBase* GetEef();
         virtual void EnableMotor(char axis_name, bool enable_it);
-        CncMoverBase* cnc_mover;
+        CncMoverBase* cnc_mover;   // TODO remove this memeber.??
 
 
     protected:
-        // void LinkCncMover(CncMoverBase* _cnc_mover){this->cnc_mover=_cnc_mover;};
-
-        // use of deleted function 'StepControlBase<a, t>::StepControlBase(const StepControlBase<a, t>&) [with Accelerator = LinStepAccelerator; TimerField = TimerField]'
-        // StepControl* GetStepControl(){return &this->_objStepControl;};
-        // StepControl _objStepControl;
 
     private:
 

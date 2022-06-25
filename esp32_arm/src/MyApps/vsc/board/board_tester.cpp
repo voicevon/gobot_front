@@ -7,15 +7,15 @@ void Vsc_BoardTest::LinkBoard(CncBoardBase* board){
     this->LinkCncBoard(board);
 }
 
-
+/*
+# Motor should support
+* start the motor function(CW and CCW ) 
+* stop the motor function
+* change speed of motor in PWM
+* 
+*/
 void Vsc_BoardTest::Test_Motor(int level){
-    /*
-    #  Motor should support
-    * start the motor function(CW and CCW ) 
-    * stop the motor function
-    * change speed of motor in PWM
-    * 
-     */
+
     switch (level){
         case 0:
             break;

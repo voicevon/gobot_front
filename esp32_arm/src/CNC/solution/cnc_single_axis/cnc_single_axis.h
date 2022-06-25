@@ -17,9 +17,10 @@ class CncSingleAxis: public CncBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        CncSingleAxis_Machine* _singleAxisConfig;  //TODO:  uinify name:  cncConfig??
+        CncSingleAxis_Machine* _mechanic;  //TODO:  uinify name:  cncConfig??
 
     private:
+        char __AXIS_NAME = 'A';
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 
@@ -32,6 +33,6 @@ class CncSingleAxis: public CncBase{
 
         FkPosition_A __current_fk_position;
 
-        SingleAxisHomer* __homer;
+        // SingleAxisHomer* __homer;
 
 };
