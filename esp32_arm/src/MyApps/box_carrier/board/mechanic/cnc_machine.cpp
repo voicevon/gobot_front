@@ -1,11 +1,11 @@
 #include "cnc_machine.h"
 #include "HardwareSerial.h"
 
-void BoxCarrierMachine::Init(char solution_id){
-    this->__Init_Common();
-    // if (solution_id == 'F')
-        this->__Init_Fast();
-}
+// void BoxCarrierMachine::Init(char solution_id){
+//     this->__Init_Common();
+//     // if (solution_id == 'F')
+//         this->__Init_Fast();
+// }
 void BoxCarrierMachine::__Init_Common(){
     this->MOTOR_DEGREE_PER_STEP = 1.8;
     this->MOTOR_GEARBOX_RATIO_ALPHA_BETA = 27;

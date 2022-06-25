@@ -11,7 +11,19 @@ GobotHouse_ActuatorAlphaMechanic::GobotHouse_ActuatorAlphaMechanic(){
 #include "cnc_machine.h"
 
 GobotHouseMachine_2206::GobotHouseMachine_2206(){
-    this->Init('M');
+    this->__InitStaticConfig();
+
+    // this->MAX_ACCELERATION_ALPHPA = 600 ;
+
+    // this->_homing_speed_alpha_degree_per_second =  60;  // degree per second
+    this->_HOMING_SPEED[AXIS_ALPHA] =  60.0f * DEG_TO_RAD ;  // degree per second
+
+    // this->Homing_acceleration_alpha = 200 ;
+
+    // this->_homing_speed_beta_degree_per_second = 3;    //degree per second.
+    this->_HOMING_SPEED[AXIS_BETA] = 3;
+    // this->Homing_acceleration_beta = 0;
+    this->PrintOut();
 }
 
 void GobotHouseMachine_2206::__InitStaticConfig(){
@@ -37,49 +49,33 @@ void GobotHouseMachine_2206::__InitStaticConfig(){
 
 }
 
-void GobotHouseMachine_2206::Init(char solution){
-    this->__InitStaticConfig();
-
-    // this->MAX_ACCELERATION_ALPHPA = 600 ;
-
-    // this->_homing_speed_alpha_degree_per_second =  60;  // degree per second
-    this->_HOMING_SPEED[AXIS_ALPHA] =  60.0f * DEG_TO_RAD ;  // degree per second
-
-    // this->Homing_acceleration_alpha = 200 ;
-
-    // this->_homing_speed_beta_degree_per_second = 3;    //degree per second.
-    this->_HOMING_SPEED[AXIS_BETA] = 3;
-    // this->Homing_acceleration_beta = 0;
-    this->PrintOut();
-}
-
 
 // int32_t GobotHouseMachine_2206::GetStepsPerUnit(char axis_name) {
 //     return 100;
 // }
 
-float GobotHouseMachine_2206::GetHomingVelocity(char axis_name){
-    if (axis_name == 'A')
-        // return DEG_TO_RAD * this->_homing_speed_alpha_degree_per_second  * this->HomingDir_IsToMax(AXIS_ALPHA);
-        return DEG_TO_RAD * this->HomingSpeed(AXIS_ALPHA)  * this->HomingDir_IsToMax(AXIS_ALPHA);
-    else if (axis_name == 'B'){
-        bool debug = false;
-        if(debug){
-            Serial.print("[Debug] GobotHouseMachine_2206::GetHomingVelocity() _homing_speed_beta_degree_per_second = ");
-            // Serial.print(_homing_speed_beta_degree_per_second);
-            Serial.print(this->HomingSpeed(AXIS_BETA));
-            Serial.print("  HOMING_DIR_BETA_IS_TO_MAX = ");
-            Serial.println(this->HomingDir_IsToMax(AXIS_BETA));
-        }
-        // return DEG_TO_RAD * this->_homing_speed_beta_degree_per_second  * this->HomingDir_IsToMax(AXIS_BETA);
-        return DEG_TO_RAD * this->HomingSpeed(AXIS_BETA)  * this->HomingDir_IsToMax(AXIS_BETA);
-    }
-    else{
-        Serial.print("[Error] GobotHouseMachine_2206::GetHomingVelocity() " );
-        Serial.println(axis_name);
-    }
-    return 0;
-}
+// float GobotHouseMachine_2206::GetHomingVelocity(char axis_name){
+//     if (axis_name == 'A')
+//         // return DEG_TO_RAD * this->_homing_speed_alpha_degree_per_second  * this->HomingDir_IsToMax(AXIS_ALPHA);
+//         return DEG_TO_RAD * this->HomingSpeed(AXIS_ALPHA)  * this->HomingDir_IsToMax(AXIS_ALPHA);
+//     else if (axis_name == 'B'){
+//         bool debug = false;
+//         if(debug){
+//             Serial.print("[Debug] GobotHouseMachine_2206::GetHomingVelocity() _homing_speed_beta_degree_per_second = ");
+//             // Serial.print(_homing_speed_beta_degree_per_second);
+//             Serial.print(this->HomingSpeed(AXIS_BETA));
+//             Serial.print("  HOMING_DIR_BETA_IS_TO_MAX = ");
+//             Serial.println(this->HomingDir_IsToMax(AXIS_BETA));
+//         }
+//         // return DEG_TO_RAD * this->_homing_speed_beta_degree_per_second  * this->HomingDir_IsToMax(AXIS_BETA);
+//         return DEG_TO_RAD * this->HomingSpeed(AXIS_BETA)  * this->HomingDir_IsToMax(AXIS_BETA);
+//     }
+//     else{
+//         Serial.print("[Error] GobotHouseMachine_2206::GetHomingVelocity() " );
+//         Serial.println(axis_name);
+//     }
+//     return 0;
+// }
 
 void GobotHouseMachine_2206::PrintOut(){
     Serial.print("\n\n===============================================");
@@ -104,9 +100,9 @@ void GobotHouseMachine_2206::PrintOut(){
 
     // Serial.print("\n\n       STEPS_PER_RAD_BETA= ");
     // Serial.print(this->STEPS_PER_RAD_BETA);
-    Serial.print("\n   GetHomingSpeed('A')= ");
-    Serial.print(this->GetHomingVelocity('A'));
-    Serial.print("\n   GetHomingSpeed('B')= ");
-    Serial.print(this->GetHomingVelocity('B'));
+    Serial.print("\n   GetHomingSpeed(BETA)= ");
+    Serial.print(this->GetHomingVelocity(AXIS_ALPHA));
+    Serial.print("\n   GetHomingSpeed(ALPHA)= ");
+    Serial.print(this->GetHomingVelocity(AXIS_BETA));
     Serial.print("\n\n===============================================");
 }

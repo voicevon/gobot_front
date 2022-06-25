@@ -41,8 +41,8 @@ class CncFiveBars: public CncBase{
         void _running_G1() override;
         void _running_G28() override;
     
-        SingleAxisHomer* alpha_homer;
-        SingleAxisHomer* beta_homer;
+        // SingleAxisHomer* alpha_homer;
+        // SingleAxisHomer* beta_homer;
         // Stepper* alpha_stepper;
         // Stepper* beta_stepper;
         // Stepper* __homing_stepper;

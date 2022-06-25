@@ -25,6 +25,7 @@ void board_test();
 
 void setup(){
     board.Init(true);
+    board.LinkStepControlToCncMover(&objStepControl);
     board_test();
     // cncMachine.Init('S');  //Slow moving
     // cncMachine.PrintOut("GobotMain Machine");
@@ -65,7 +66,7 @@ void loop(){
 }
 
 void cnc_test(){
-    robot.Test_HomeAlpha(0);
+    robot.Test_HomeAlpha(12);
     robot.Test_HomeBeta(0);
 }
 
@@ -74,7 +75,7 @@ void cnc_test(){
 void board_test(){
     GobotMain_BoardTest board_tester;
     board_tester.LinkBoard(&board);
-    board_tester.Test_room_sensors(888);
+    board_tester.Test_room_sensors(0);
     // board_tester.Test_StepperEnablePin(0, 'A');
     // board_tester.Test_StepperEnablePin(0, 'B');
 

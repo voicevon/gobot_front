@@ -4,8 +4,9 @@
 
 class SpringMakerMachine: public CncSingleAxis_Machine{
     public:
+        SpringMakerMachine();
         // int32_t GetStepsPerUnit(char axis_name) override;
-        void Init(char solution_id) override;
+        // void Init(char solution_id) override;
         void PrintOut() override;
         
     private:

@@ -4,7 +4,7 @@
 //     return 100;
 // }
 
-void GobotMainMachine::Init(char solution){
+GobotMainMachine::GobotMainMachine(){
     this->_LINK_0_LENGTH = 191.0f / 2;
     this->_LINK_A_LENGTH = 278.1;  //285.18;    // 278.1
     this->_LINK_B_LENGTH = 392.1; //  384.51;    // 500-107.8

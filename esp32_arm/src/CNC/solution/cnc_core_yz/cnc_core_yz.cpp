@@ -67,7 +67,7 @@ void Cnc_CoreYZ::Init(CncBoardBase* board){
 	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
 	this->_cncMachine = (CncCoreYZMachine*)(this->_board->GetCncMechanic());
 	this->_board = board;
-	this->_cncMachine->Init('A');
+	// this->_cncMachine->Init('A');
 
 	// this->stepper_alpha = board->GetStepper('A');
 	// this->stepper_beta = board->GetStepper('B');

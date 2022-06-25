@@ -5,7 +5,7 @@
 //     return 100;
 // }
 
-void SpringMakerMachine::Init(char solution){
+SpringMakerMachine::SpringMakerMachine(){
         // this->STEPPER_DRIVER_MICRO_STEPS = 16;
         // this->MOTOR_GEARBOX_RATIO_ALPHA = 51;
         // this->MOTOR_DEGREE_PER_STEP = 1.8;

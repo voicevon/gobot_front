@@ -7,9 +7,9 @@
 class GoboMainMachine: public CncFiveBarMachine{
     public:
         GoboMainMachine();
-        void Init(char solution_id) override;
+        // void Init(char solution_id) override;
         void PrintOut();
-        float GetHomingVelocity(char axis_name) override;
+        // float GetHomingVelocity(char axis_name) override;
 
     private:
 

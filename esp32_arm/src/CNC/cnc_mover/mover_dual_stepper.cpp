@@ -59,7 +59,7 @@ void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags
     //Step2:  move one or all motors.
     if (target_motor_flags == 0x01){
         // Move alpha only
-        this->__stepControl.moveAsync(*alpha);
+        this->__stepControl->moveAsync(*alpha);
 
     }else if (target_motor_flags == 0x02){
         // move beta only
@@ -67,7 +67,7 @@ void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags
 
     }else if (target_motor_flags == 0x03){
         // Both motor will move
-        this->__stepControl.moveAsync(*alpha);
+        this->__stepControl->moveAsync(*alpha);
         // this->__actuator_beta->StartToMove();
 
     }else{
@@ -78,7 +78,7 @@ void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags
 }
 
 void CncMover_DualStepper::AllActuatorsStop(){
-    this->__stepControl.stop();
+    this->__stepControl->stop();
     this->__actuator_beta->Stop();
 }
 
@@ -101,7 +101,7 @@ void CncMover_DualStepper::SingleActuatorMoveTo(char actuator_name, bool is_abso
     if (actuator_name == 'A'){
         this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
         Stepper* stepper = this->__actuator_alpha->GetLinkedStepper();
-        this->__stepControl.moveAsync(*stepper);
+        this->__stepControl->moveAsync(*stepper);
         this->__moving_motor_flags = 0x01;
 
     }else if (actuator_name == 'B'){
@@ -167,9 +167,9 @@ void CncMover_DualStepper::SetActuatorSpeed(char actuator_name, float speed_per_
 
 bool CncMover_DualStepper::ActuatorIsMoving(char actuator_name) {
     if (actuator_name=='A'){
-        return this->__stepControl.isRunning();
+        return this->__stepControl->isRunning();
     }else if (actuator_name=='B'){
-        return this->__stepControl.isRunning();
+        return this->__stepControl->isRunning();
     }else{
         Serial.print("[Error] CncMover_DualStepper::MotorIsMoving() Unknown motor_name= ");
         Serial.println(actuator_name); 

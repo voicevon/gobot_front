@@ -44,7 +44,9 @@ void Board_GobotMain::InitHardware(){
 
 void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
+    Serial.print(FORE_GREEN);
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
+    Serial.print(FB_RESET);
     this->InitHardware();
     this->EnableMotor('A', false);
     this->EnableMotor('B', false);

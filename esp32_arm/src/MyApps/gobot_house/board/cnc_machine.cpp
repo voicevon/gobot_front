@@ -2,7 +2,7 @@
 #include "cnc_machine.h"
 
 
-void GobotHouseMachine::Init(char solution){
+GobotHouseMachine::GobotHouseMachine(){
         // [when microstep==1] The value 514.0 is measured/Calibrated from running 10 rounds, Not calculated from anywhere.
         // This value should be calculated from motor's datasheet.  But can not get datasheet for 28-BGY motor.
         // this->motor_steps_per_round = 514 * this->MOTOR_MICRO_STEPS;
@@ -32,16 +32,16 @@ void GobotHouseMachine::Init(char solution){
 }
 
 
-float GobotHouseMachine::GetHomingVelocity(char axis_name){
-    if (axis_name == 'A')
-        // return this->_homing_speed_alpha_degree_per_second * this->HOMING_DIR_ALPHA;
-        // return this->HomingSpeed(AXIS_ALPHA) * this->HOMING_DIR_ALPHA;
-        return this->HomingSpeed(AXIS_ALPHA) * this->HomingDir_IsToMax(AXIS_ALPHA);
-    else if (axis_name == 'B')
-        // return this->Homing_speed_beta * this->HOMING_DIR_BETA;
-        // return this->Homing_speed_beta * this->HomingDir_IsToMax(AXIS_BETA);
-        return this->HomingSpeed(AXIS_BETA) * this->HomingDir_IsToMax(AXIS_BETA);
-}
+// float GobotHouseMachine::GetHomingVelocity(char axis_name){
+//     if (axis_name == 'A')
+//         // return this->_homing_speed_alpha_degree_per_second * this->HOMING_DIR_ALPHA;
+//         // return this->HomingSpeed(AXIS_ALPHA) * this->HOMING_DIR_ALPHA;
+//         return this->HomingSpeed(AXIS_ALPHA) * this->HomingDir_IsToMax(AXIS_ALPHA);
+//     else if (axis_name == 'B')
+//         // return this->Homing_speed_beta * this->HOMING_DIR_BETA;
+//         // return this->Homing_speed_beta * this->HomingDir_IsToMax(AXIS_BETA);
+//         return this->HomingSpeed(AXIS_BETA) * this->HomingDir_IsToMax(AXIS_BETA);
+// }
 
 void GobotHouseMachine::PrintOut(){
     Serial.print("\n\n===============================================");

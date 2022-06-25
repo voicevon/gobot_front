@@ -4,7 +4,7 @@
 //     return 123;
 // }
 
-void BoxMoverCncMachine::Init(char solution_id){
+BoxMoverCncMachine::BoxMoverCncMachine(){
         this->STEPPER_DRIVER_MICRO_STEPS = 16;
         this->MOTOR_GEARBOX_RATIO_ALPHA_BETA = 21;
         this->MOTOR_DEGREE_PER_STEP = 1.8;

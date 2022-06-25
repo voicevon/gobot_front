@@ -9,6 +9,7 @@ class CncMover_DualStepper: public CncMoverBase{
     public:
         void LinkStepper_asAlpha(ActuatorStepper* stepper);
         void LinkStepper_asBeta(ActuatorStepper* stepper);
+        void LinkStepControl(StepControl* stepControl){this->__stepControl=stepControl;};
         // void LinkServo_asBeta(ActuatorServo* servo);
         
         void SetSpeed(float speed) override;
@@ -35,6 +36,6 @@ class CncMover_DualStepper: public CncMoverBase{
         // Stepper* __stepper_alpha;
         ActuatorStepper* __actuator_alpha;
         ActuatorStepper* __actuator_beta;
-        StepControl __stepControl;
+        StepControl* __stepControl;
         uint8_t __moving_motor_flags;
 };

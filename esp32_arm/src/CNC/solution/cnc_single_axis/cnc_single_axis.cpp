@@ -28,7 +28,7 @@ CncSingleAxis::CncSingleAxis(){
 
 void CncSingleAxis::Init(CncBoardBase* board){
 	Serial.print("\n[Info] CncSingleAxis::Init() is entering.");
-	this->_mechanic->Init('F');
+	// this->_mechanic->Init('F');
 	this->_board->EnableMotor(this->__AXIS_NAME, false);
 
 	this->_home_as_inverse_kinematic = false;

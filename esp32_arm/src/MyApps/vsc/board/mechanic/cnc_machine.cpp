@@ -2,7 +2,7 @@
 
 
 
-void VscMachine::Init(char solution){
+VscMachine::VscMachine(){
         this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;
         this->_HOMING_SPEED[AXIS_ALPHA] = 100.0f;
 }

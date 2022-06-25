@@ -6,7 +6,7 @@ class CncFiveBarMachine: public CncMachineBase{
         // link length in mm
         CncFiveBarMachine(){};
         void PrintOut() override;
-        virtual float GetHomingVelocity(char axis_name);
+        // virtual float GetHomingVelocity(char axis_name);
 
         const float& Homed_position_alpha_in_rad = _HOMED_POSITION[AXIS_ALPHA];
         const float& Homed_position_beta_in_rad = _HOMED_POSITION[AXIS_BETA];

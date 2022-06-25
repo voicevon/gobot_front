@@ -1,6 +1,6 @@
 #pragma once
 
-#include "actions.h"
+// #include "actions.h"
 #include "CNC/gcode/gcode_queue.h"
 #include "chessboard_map.h"
 #include "CNC/gcode/gcode_producer.h"
@@ -17,7 +17,7 @@ class GobotMain: public GcodeProducer, public MqttMessageConsumer{
         // }
         void SpinOnce();
         void ParkArms(bool do_home);
-        void pick_place_park(RobotAction* pAction);
+        // void pick_place_park(RobotAction* pAction);
         void Calibrate(int step);
 
         void Test_HomeAlpha(int loop_count);
