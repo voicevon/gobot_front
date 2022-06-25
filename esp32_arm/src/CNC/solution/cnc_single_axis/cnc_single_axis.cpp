@@ -39,13 +39,15 @@ void CncSingleAxis::RunG28(char axis){
 	Serial.print(axis);
 	this->_homing_axis_name = axis;
 	// this->_mechanic->PrintOut();
-	this->_board->cnc_mover->SetActuatorSpeed(this->__AXIS_NAME, this->_mechanic->Homing_speed_alpha);
+	// this->_board->cnc_mover->SetActuatorSpeed(this->__AXIS_NAME, this->_mechanic->Homing_speed_alpha);
+	this->_board->cnc_mover->SetActuatorSpeed(this->__AXIS_NAME, this->_mechanic->HomingSpeed(AXIS_ALPHA));
 	//todo :  process with IK()
 	float long_distance_to_move = 99999;
 	this->_board->cnc_mover->SingleActuatorMoveTo(this->__AXIS_NAME, false, long_distance_to_move);
 	this->_board->EnableMotor(this->__AXIS_NAME, true);
 	
-	float distance_to_move = 9999.0f * this->_mechanic->Home_is_to_max_position ;
+	// float distance_to_move = 9999.0f * this->_mechanic->Home_is_to_max_position ;
+	float distance_to_move = 9999.0f * this->_mechanic->HomingDir_IsToMax(AXIS_ALPHA) ;
 	this->_board->cnc_mover->SingleActuatorMoveTo('A', false, distance_to_move);
 }
 
@@ -65,7 +67,8 @@ void CncSingleAxis::_running_G28(){
 		else{
 			// We know homed position via FK
 			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
-			this->__current_fk_position.A = this->_mechanic->Homed_position_fk;
+			// this->__current_fk_position.A = this->_mechanic->Homed_position_fk;
+			this->__current_fk_position.A = this->_mechanic->HomedPosition(AXIS_ALPHA);
 			this->IK(&this->__current_fk_position, &ik_position);
 			// verify IK by FK()
 			FkPosition_A verifying_fk;
@@ -76,7 +79,7 @@ void CncSingleAxis::_running_G28(){
 		if (this->_homing_axis_name == this->__AXIS_NAME) {
 			this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(this->__AXIS_NAME,ik_position.alpha);
 		}
-		this->_board->cnc_mover->SetActuatorSpeed(this->__AXIS_NAME,this->_mechanic->max_acceleration_alpha);
+		this->_board->cnc_mover->SetActuatorSpeed(this->__AXIS_NAME,this->_mechanic->HomingSpeed(AXIS_ALPHA));
 		this->State = CncState::IDLE;
 
 	}else{
@@ -121,7 +124,7 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 	}
 }
 void CncSingleAxis::_running_G1(){
-    if (this->GetDistanceToTarget_IK() < this->_mechanic->max_acceleration_alpha){
+    if (this->GetDistanceToTarget_IK() < 100){   // TODO:  How to determine G1 is finished. or almost finished?
       	this->State = CncState::IDLE;
 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
     }

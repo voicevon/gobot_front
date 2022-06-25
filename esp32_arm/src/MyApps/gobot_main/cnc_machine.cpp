@@ -20,7 +20,9 @@ void GobotMainMachine::Init(char solution){
     this->MAX_ACCELERATION_ALPHA_BETA = 3000;
 
     this->Homing_acceleration_alpha_beta = 2000;
-    this->Homing_speed_alpha_beta = 1000;
+    // this->Homing_speed_alpha_beta = 1000;
+    this->_HOMING_SPEED[AXIS_ALPHA] = 1000;
+    this->_HOMING_SPEED[AXIS_BETA] = 1000;
     this->Homed_position_alpha_in_degree = 180 - 4;
     this->Homed_position_beta_in_degree = 4;
 

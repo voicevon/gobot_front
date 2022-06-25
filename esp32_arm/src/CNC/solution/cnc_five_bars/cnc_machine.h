@@ -22,7 +22,7 @@ class CncFiveBarMachine: public CncMachineBase{
         float Homed_position_alpha_in_degree;
         float Homed_position_beta_in_degree;
         int Homing_acceleration_alpha_beta;
-        int Homing_speed_alpha_beta;
+        // int Homing_speed_alpha_beta;
 
     protected:
         // int STEPPER_DRIVER_MICRO_STEPS;
