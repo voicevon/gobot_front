@@ -14,10 +14,10 @@
 // #define I_AM_GOBOT_HOUSE_2206
 // #define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
-#define I_AM_VSC
+// #define I_AM_VSC
 
 // #define I_AM_ACUPUCTURE_MAIN_ESP32
-// #define I_AM_SMOKE_MACHINE_WEB_SERVER
+#define I_AM_SMOKE_MACHINE_WEB_SERVER
 // #define I_AM_CABLE_AXIS_XPYP
 // #define I_AM_CABLE_AXIS_XNYP
 // #define I_AM_CABLE_AXIS_XNYN

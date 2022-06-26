@@ -1,4 +1,4 @@
-#include "board_smoke_machine.h"
+#include "board_smoke_bot.h"
 
 RobotEef_SmokeMachine::RobotEef_SmokeMachine(){
 	

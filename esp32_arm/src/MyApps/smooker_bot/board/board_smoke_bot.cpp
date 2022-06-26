@@ -1,4 +1,4 @@
-#include "board_smoke_machine.h"
+#include "board_smoke_bot.h"
 
 
 void Board_SmokeMachine::Init(bool is_on_reset){
@@ -6,6 +6,11 @@ void Board_SmokeMachine::Init(bool is_on_reset){
     Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
    
 }
+
+void Board_SmokeMachine::SayHello() {
+    
+}
+
 
 // Stepper* Board_SmokeMachine::GetStepper(char axis_name) {
 //     if (axis_name=='A'){
