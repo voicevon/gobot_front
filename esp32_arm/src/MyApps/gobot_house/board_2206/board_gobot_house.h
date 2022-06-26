@@ -15,14 +15,14 @@ class Board_GobotHouse_2206: public CncBoardBase{
     public:
         Board_GobotHouse_2206(StepControl* stepControl){this->__stepControl=stepControl;};
         void Init(bool is_on_reset) override;
-        ActuatorBase* GetActuator(char axis_name) override;
+        ActuatorBase* GetActuator(EnumAxis axis_name) override;
         ActuatorServo* GetActuaorBeta(char axis_name);
         // MotorBase* GetActuator(char axis_name){};  //TODO: Stepper, Servo, BLDC... all is motorbase!
-        SingleAxisHomer* GetHomer(char axis_name) override;
+        SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GobotHouse* GetEef() override;
         CncMachineBase* GetCncMechanic() override {return &this->__cnc_mechanic;};
 
-        void EnableMotor(char axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         Servo* GetServoDriver_OnBeta(){return &this->__servo_beta;};
         Stepper* GetStepperDriver_OnAlpha(){return &this->__alpha_stepper;};
     

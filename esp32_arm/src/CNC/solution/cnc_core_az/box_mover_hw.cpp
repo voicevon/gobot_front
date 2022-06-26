@@ -50,20 +50,20 @@ CncCoreAZ::CncCoreAZ(){
 void CncCoreAZ::Init(CncBoardBase* board){
 	Serial.print("\n[Info] CncCoreAZ::Init_Linkage() is entering.");
 	// this->_machine->Init();
-	// this->objStepper_alpha = board->GetStepper('A');
-	// this->objStepper_beta = board->GetStepper('B');
-	this->objHomeHelper_vertical = board->GetHomer('Z');
-	this->objHomeHelper_vertical = board->GetHomer('A');
+	// this->objStepper_alpha = board->GetStepper(AXIS_ALPHA);
+	// this->objStepper_beta = board->GetStepper(AXIS_BETA);
+	this->objHomeHelper_vertical = board->GetHomer(AXIS_Z);
+	this->objHomeHelper_vertical = board->GetHomer(AXIS_X);
 	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
 	// pinMode(PIN_BETA_ENABLE, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_1, OUTPUT);
 	// pinMode(PIN_MICRIO_STEP_2, OUTPUT);
 
-	// this->__EnableMotor('A', false);
-	// this->__EnableMotor('B', false);
-	this->_board->EnableMotor('A', false);
-	this->_board->EnableMotor('B', false);
+	// this->__EnableMotor(AXIS_ALPHA, false);
+	// this->__EnableMotor(AXIS_BETA, false);
+	this->_board->EnableMotor(AXIS_ALPHA, false);
+	this->_board->EnableMotor(AXIS_BETA, false);
 
 	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
 	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
@@ -110,8 +110,8 @@ void CncCoreAZ::RunG28(EnumAxis axis){
 		motor_position[0] = -5000000;
 		motor_position[1] = -5000000;
 	}
-	this->_board->EnableMotor('A', true);
-	this->_board->EnableMotor('B', true);
+	this->_board->EnableMotor(AXIS_ALPHA, true);
+	this->_board->EnableMotor(AXIS_BETA, true);
 	// this->_stepControl->moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
 	this->_board->cnc_mover->AllActuatorsMoveTo(true, motor_position);
 }
@@ -144,59 +144,38 @@ void CncCoreAZ::_running_G28(){
 		//Copy current ik-position to motor-position.
 		// if (this->_homing_axis == 'Z') this->objStepper_alpha->setPosition(ik_position.alpha);
 		// if (this->_homing_axis == 'W') this->objStepper_beta->setPosition(ik_position.beta);
-		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('A', ik_position.alpha);
-		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('B', ik_position.beta);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
 		
-		// this->objStepper_alpha->setMaxSpeed(this->_machine->max_speed_alpha_beta);
-		// this->objStepper_alpha->setAcceleration(this->_machine->max_acceleration_alpha_beta);
-		// this->objStepper_beta->setMaxSpeed(this->_machine->max_speed_alpha_beta);
-		// this->objStepper_beta->setAcceleration(this->_machine->max_acceleration_alpha_beta);
 		this->State = CncState::IDLE;
 
 	}else{
 		// Endstop is not trigered
 		// Serial.print("[Debug] Still homing\n");
 		// Serial.print("<");
-		// We are going to move a long long distance with async mode(None blocking).
-		// When endstop is trigered, must stop the moving. 
-		// if (this->_homing_axis == 'W'){
-		// 	//todo :  process with IK()
-		// 	this->objStepper_alpha.setTargetRel(500000);
-		// 	this->objStepper_beta.setTargetRel(500000);
-		// 	this->__homing_helper = &this->objHomeHelper_angle;
-		// }else if (this->_homing_axis == 'Z'){
-		// 	// Serial.print("-");
-		// 	this->objStepper_alpha.setTargetRel(500000);
-		// 	this->objStepper_beta.setTargetRel(-500000);	
-		// 	this->__homing_helper = &this->objHomeHelper_vertical;
-		// }
-	// this->objStepControl.moveAsync(this->objStepper_alpha, this->objStepper_beta);
+
 	}	
 }
 
 void CncCoreAZ::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] CncCoreAZ::RunG1() is entering");
 	Serial.print(gcode->get_command());
-	this->_board->EnableMotor('A', true);
-	this->_board->EnableMotor('B', true);
+	this->_board->EnableMotor(AXIS_ALPHA, true);
+	this->_board->EnableMotor(AXIS_BETA, true);
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
-		// this->objStepper_alpha->setMaxSpeed(speed);
-		// this->objStepper_beta->setMaxSpeed(speed);
-		this->_board->cnc_mover->SetSpeed(speed);
+		this->_board->cnc_mover->SetEefSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_ZW target_fk_zw;
 	IkPosition_AB target_ik_ab;
 	target_fk_zw.Z = this->__current_fk_position.Z;
 	target_fk_zw.W = this->__current_fk_position.W;
-	// target_ik_ab.alpha = float(this->objStepper_alpha->getPosition()) ;
-	// target_ik_ab.beta = float(this->objStepper_beta->getPosition());
-	target_ik_ab.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A');
-	target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B');
+	target_ik_ab.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
+	target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	bool do_ik=false;
-	if (gcode->has_letter('A')) target_ik_ab.alpha = gcode->get_value('A');
-	if (gcode->has_letter('B')) target_ik_ab.beta = gcode->get_value('B');
+	if (gcode->has_letter(AXIS_ALPHA)) target_ik_ab.alpha = gcode->get_value(AXIS_ALPHA);
+	if (gcode->has_letter(AXIS_BETA)) target_ik_ab.beta = gcode->get_value(AXIS_BETA);
 
 	// If need IK, do it now.
 	if (gcode->has_letter('Z')) {
@@ -211,21 +190,18 @@ void CncCoreAZ::RunG1(Gcode* gcode) {
 
 	//Prepare actuator/driver to move to next point
 	float motor_position[2];
-	// this->objStepper_alpha->setTargetAbs(target_ik_ab.alpha);
-	// this->objStepper_beta->setTargetAbs(target_ik_ab.beta);
 	motor_position[0] = target_ik_ab.alpha;
 	motor_position[1] = target_ik_ab.beta;
 	//None blocking, move backgroundly.
-	// this->_stepControl->moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
 	this->_board->cnc_mover->AllActuatorsMoveTo(true, motor_position);
 
 	if (true){
 		Serial.print("\n    [Debug] CncCoreAZ::RunG1()     (");
 		// Serial.print(this->objStepper_alpha->getPosition());
-		Serial.print(this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A'));
+		Serial.print(this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
 		Serial.print(",");
 		// Serial.print(this->objStepper_beta->getPosition());
-		Serial.print(this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B'));
+		Serial.print(this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
 		Serial.print(")   <-- from   alpha,beta   to -->  (");
 		Serial.print(target_ik_ab.alpha  );
 		Serial.print(" , ");
@@ -247,21 +223,12 @@ void CncCoreAZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
 }
 
 void CncCoreAZ::RunM84(){
-	// this->__EnableMotor('A',false);
-	// this->__EnableMotor('B',false);
-	this->_board->EnableMotor('A', false);
-	this->_board->EnableMotor('B', false);
+	this->_board->EnableMotor(AXIS_ALPHA, false);
+	this->_board->EnableMotor(AXIS_BETA, false);
 }
 
 float CncCoreAZ::GetDistanceToTarget_IK(){
-	// return this->objStepper_alpha->getDistanceToTarget() + this->objStepper_beta->getDistanceToTarget();
-	return this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A' + this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B'));
+	return this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA) + this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 }
 
-// void CncCoreAZ::__EnableMotor(char actuator, bool enable_it){
-// 	if (actuator == 'A')
-// 		digitalWrite(PIN_ALPHA_ENABLE, !enable_it);
-// 	if (actuator == 'B')
-// 		digitalWrite(PIN_BETA_ENABLE, !enable_it);
-// }
 

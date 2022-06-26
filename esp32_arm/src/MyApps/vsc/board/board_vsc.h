@@ -13,10 +13,9 @@ class Vsc_Board: public CncBoardBase{
         Vsc_Board(){};
         void Init(bool is_on_reset) override;
         void SayHello() override {};
-        // ActuatorDcMotor* GetDcMotor(){return &this->__motor;};
-        ActuatorBase* GetActuator(char axis_name) override {return &this->__motor;};
+        ActuatorBase* GetActuator(EnumAxis axis_name) override {return &this->__motor;};
         MagneticSensorAnalog* GetAngleSensor(){return &this->__sensor;};
-        SingleAxisHomer* GetHomer(char axis_name){return &this->__homer; };
+        SingleAxisHomer* GetHomer(EnumAxis axis_name) override {return &this->__homer; };
 
     protected:
 
@@ -30,7 +29,7 @@ class Vsc_Board: public CncBoardBase{
 
         CncMachineBase* GetCncMechanic() override {return nullptr;};
         RobotEefBase* GetEef()override {return nullptr;};
-        void EnableMotor(char axis_name, bool enable_it) override {};
+        void EnableMotor(EnumAxis axis_name, bool enable_it) override {};
 
 
 };

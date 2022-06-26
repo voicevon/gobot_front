@@ -21,8 +21,8 @@ void BoardAllInOne::Init(bool is_on_reset){
     // Init cnc components 
     // this->cnc_board.Init(false);
     this->cnc_board.Init(&this->__mcp23018);
-    this->cnc_board.EnableMotor('A', false);
-    this->cnc_board.EnableMotor('B',false);
+    this->cnc_board.EnableMotor(AXIS_ALPHA, false);
+    this->cnc_board.EnableMotor(AXIS_BETA,false);
     Serial.println("[Info] BoardAllInOne::Init() CNC components is OK.");
 
     //Init agv components

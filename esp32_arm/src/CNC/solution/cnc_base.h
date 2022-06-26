@@ -47,7 +47,7 @@ class CncBase: public GcodeConsumer{
         virtual void _running_G28();
         virtual EnumAxis ConvertToEnum(char axis);
 
-        char _homing_axis_name;
+        EnumAxis _homing_axis_name;
         bool _home_as_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
         
         // StepControl* _stepControl;

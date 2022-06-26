@@ -29,7 +29,7 @@ void GobotHouse_2206_BoardTest::Test_StepperDriver_OnAlpha(int loop_count){
     Serial.println ("[Info] GobotHouse_2206_BoardTest::Test_StepperDriver_OnAlpha()  ");
     Stepper* stepper = this->__board->GetStepperDriver_OnAlpha();
     // StepControl control;
-    this->__board->EnableMotor('A', true);
+    this->__board->EnableMotor(AXIS_ALPHA, true);
     stepper->setMaxSpeed(6000);
     stepper->setAcceleration(6000);
 

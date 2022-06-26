@@ -13,11 +13,11 @@ class CncBoardBase: public BoardBase{
         virtual void Init(bool is_on_reset);
         void SayHello() override;
         // virtual ActuatorStepper* GetActuator(char axis_name);
-        virtual ActuatorBase* GetActuator(char axis_name);
-        virtual SingleAxisHomer* GetHomer(char axis_name);
+        virtual ActuatorBase* GetActuator(EnumAxis axis_name);
+        virtual SingleAxisHomer* GetHomer(EnumAxis axis_name);
         virtual CncMachineBase* GetCncMechanic();
         virtual RobotEefBase* GetEef();
-        virtual void EnableMotor(char axis_name, bool enable_it);
+        virtual void EnableMotor(EnumAxis axis_name, bool enable_it);
         CncMoverBase* cnc_mover;   // TODO remove this memeber.??
 
 

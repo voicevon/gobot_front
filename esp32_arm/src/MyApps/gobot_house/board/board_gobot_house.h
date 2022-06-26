@@ -13,10 +13,10 @@ class Board_GobotHouse: public CncBoardBase{
         Board_GobotHouse(){};
         void Init(bool is_on_reset) override;
         // void SayHello();
-        ActuatorBase* GetActuator(char axis_name) override;
-        SingleAxisHomer* GetHomer(char axis_name) override;
+        ActuatorBase* GetActuator(EnumAxis axis_name) override;
+        SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GobotHouse* GetEef() override;
-        void EnableMotor(char actuator_name, bool enable_it) override;
+        void EnableMotor(EnumAxis actuator_name, bool enable_it) override;
         CncMachineBase* GetCncMechanic() override {return &this->__cnc_mechanic;};
 
     private:

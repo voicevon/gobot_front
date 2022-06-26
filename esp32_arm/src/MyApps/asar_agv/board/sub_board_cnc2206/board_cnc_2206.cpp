@@ -29,10 +29,10 @@ void Board2204Cnc::Init(Adafruit_MCP23X17* mcp_23018){
 //     }
 // }
 
-SingleAxisHomer* Board2204Cnc::GetHomer(char axis_name){
-    if (axis_name=='Z'){
+SingleAxisHomer* Board2204Cnc::GetHomer(EnumAxis axis_name){
+    if (axis_name==AXIS_Z){
         return &this->homer_z;
-    }else if (axis_name=='A'){
+    }else if (axis_name==AXIS_ALPHA){
         return &this->homer_A;
     }else{
         Serial.print("['Error']  Board2204Cnc::GetHomer()   axis_name= ");
@@ -45,10 +45,10 @@ RobotEef_GarmentAsar* Board2204Cnc::GetEef(){
     return &this->eef;
 }
 
-void Board2204Cnc::EnableMotor(char axis_name, bool enable_it){
-    if (axis_name == 'A'){
+void Board2204Cnc::EnableMotor(EnumAxis axis_name, bool enable_it){
+    if (axis_name == AXIS_ALPHA){
         this->__mcp23018->digitalWrite(MC23018_PIN_ALPHA_ENABLE_2205, !enable_it);   // LOW is enable
-    } else if (axis_name == 'B'){
+    } else if (axis_name == AXIS_BETA){
         this->__mcp23018->digitalWrite(MC23018_PIN_BETA_ENABLE_2205, !enable_it);   // LOW is enable
     } else {
         Serial.println("[Warn] Board2204Cnc::EnableMotor()  ");

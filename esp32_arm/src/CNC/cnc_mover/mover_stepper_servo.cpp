@@ -12,7 +12,7 @@ void CncMover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
 }
 #include "MyLibs/calculator.h"
 
-void CncMover_StepperServo::SetSpeed(float speed){
+void CncMover_StepperServo::SetEefSpeed(float speed){
     if (this->_moving_actuator_flags == 0x01){
         //speed is for alpha
         this->__actuator_alpha->SetSpeed(speed);
@@ -113,7 +113,7 @@ void CncMover_StepperServo::AllActuatorsStop(){
     this->__actuator_beta->Stop();
 }
 
-void CncMover_StepperServo::SingleActuatorStop(char actuator_name){
+void CncMover_StepperServo::SingleActuatorStop(EnumAxis actuator_name){
     if (actuator_name == 'A'){
         this->__actuator_alpha->Stop();
         this->_moving_actuator_flags -= 0x01;
@@ -128,7 +128,7 @@ void CncMover_StepperServo::SingleActuatorStop(char actuator_name){
 }
 
 
-void CncMover_StepperServo::SingleActuatorMoveTo(char actuator_name, bool is_absolute_position, float position_in_cnc_unit){
+void CncMover_StepperServo::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
     if (actuator_name == 'A'){
         this->_moving_actuator_flags = 0x01;
         this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
@@ -145,7 +145,7 @@ void CncMover_StepperServo::SingleActuatorMoveTo(char actuator_name, bool is_abs
     }
 }
 
-float CncMover_StepperServo::GetSingleActuatorCurrentPosition_InCncUnit(char actuator_name){
+float CncMover_StepperServo::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
     if (actuator_name == 'A'){
         return this->__actuator_alpha->GetCurrentPosition_InCncUnit();
 
@@ -158,7 +158,7 @@ float CncMover_StepperServo::GetSingleActuatorCurrentPosition_InCncUnit(char act
     return 0;
 }
 
-void CncMover_StepperServo::SetActuatorCurrentCncPositionAs(char actuator_name, float as_current_position){
+void CncMover_StepperServo::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position){
     if (actuator_name == 'A'){
         this->__actuator_alpha->SetCurrentPositionAs(as_current_position);
     }else if (actuator_name == 'B'){
@@ -187,8 +187,9 @@ float CncMover_StepperServo::GetAbsDistanceToTarget_InCncUnit(){
 
 }
 
-void CncMover_StepperServo::SetActuatorSpeed(char actuator_name, float speed_per_second){
-    if (actuator_name =='A'){
+void CncMover_StepperServo::SetActuatorSpeed(EnumAxis actuator_name, float speed_per_second){
+    
+    if (actuator_name == AXIS_ALPHA){
         this->__actuator_alpha->SetSpeed(speed_per_second);
     }else if(actuator_name == 'B'){
         this->__actuator_beta->SetSpeed(speed_per_second);
@@ -197,7 +198,7 @@ void CncMover_StepperServo::SetActuatorSpeed(char actuator_name, float speed_per
     }
 }
 
-bool CncMover_StepperServo::ActuatorIsMoving(char actuator_name) {
+bool CncMover_StepperServo::ActuatorIsMoving(EnumAxis actuator_name) {
     if (actuator_name=='A'){
         return this->__stepControl->isRunning();
     }else if (actuator_name=='B'){

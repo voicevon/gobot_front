@@ -12,8 +12,8 @@ void CncFiveBars::Init(CncBoardBase* board){
 	// this->beta_homer = board->GetHomer('B');
 	this->__eef = board->GetEef();
 
-	board->EnableMotor('A', false);
-	board->EnableMotor('B', false);
+	board->EnableMotor(AXIS_ALPHA, false);
+	board->EnableMotor(AXIS_BETA, false);
 	this->_board = board;
 	this->_fivebarMachine = (CncFiveBarMachine*)(this->_board->GetCncMechanic());
 	Serial.println("[Info] CncFiveBars::Init() is done.");
@@ -93,8 +93,8 @@ void CncFiveBars::_running_G28(){
 		// 	this->alpha_stepper->setPosition(ik_position.alpha * this->_fivebarMachine->STEPS_PER_RAD);
 		// if (this->_homing_axis == 'B') 
 		// 	this->beta_stepper->setPosition(ik_position.beta * this->_fivebarMachine->STEPS_PER_RAD);
-		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('A', ik_position.alpha);
-		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs('B', ik_position.beta);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
 		
 		// this->alpha_stepper->setMaxSpeed(this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA);
 		// this->alpha_stepper->setAcceleration(this->_fivebarMachine->MAX_ACCELERATION_ALPHA_BETA);
@@ -279,18 +279,18 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	// But, The initialized values will effect nothing. They will be over writen. 
 	// target_ik_ab.alpha = this->alpha_stepper->getPosition() / this->_fivebarMachine->STEPS_PER_RAD;
 	// target_ik_ab.beta = this->beta_stepper->getPosition() / this->_fivebarMachine->STEPS_PER_RAD;
-	target_ik_ab.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A');
-	target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B');
+	target_ik_ab.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
+	target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
 		// this->__EnableMotor('A', true); 
-		this->_board->EnableMotor('A', true);
+		this->_board->EnableMotor(AXIS_ALPHA, true);
 		// target_ik_ab.alpha = gcode->get_value('A') * this->_fivebarMachine->STEPS_PER_RAD * DEG_TO_RAD;
 		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;
 	}
 	if (gcode->has_letter('B')){
 		// this->__EnableMotor('B', true);
-		this->_board->EnableMotor('B', true);
+		this->_board->EnableMotor(AXIS_BETA, true);
 		// target_ik_ab.beta = gcode->get_value('B') * this->_fivebarMachine->STEPS_PER_RAD * DEG_TO_RAD;
 		target_ik_ab.beta = gcode->get_value('B') *  DEG_TO_RAD;
 	}
@@ -334,9 +334,9 @@ void CncFiveBars::RunG1(Gcode* gcode){
 		Serial.print(verified_fk.Y);
 
 		Serial.print("\n[Debug] CncFiveBars::RunG1() ");
-		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('A'));
+		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
 		Serial.print(",");
-		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit('B'));
+		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
 		Serial.print(" <-- from   alpha,beta   to --> ");
 		Serial.print(RAD_TO_DEG * target_ik_ab.alpha);
 		Serial.print(" , ");
@@ -363,8 +363,8 @@ float CncFiveBars::GetDistanceToTarget_IK(){
 void CncFiveBars::RunM84(){
 	// this->__EnableMotor('A', false);
 	// this->__EnableMotor('B', false);
-	this->_board->EnableMotor('A', false);
-	this->_board->EnableMotor('B', false);
+	this->_board->EnableMotor(AXIS_ALPHA, false);
+	this->_board->EnableMotor(AXIS_BETA, false);
 }
 
 // void CncFiveBars::__EnableMotor(char actuator, bool enable_it){

@@ -33,7 +33,7 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     Serial.println("[Info] Board_GobotHouse_2206::Init()  Hi Xuming, I am your lovely bot,  GobotHouse_2206. ");
 
     this->__Init_Hardware();
-    this->EnableMotor('A', false);
+    this->EnableMotor(AXIS_ALPHA, false);
 
     this->eef.Init();
     this->eef.Run(EEF_CODE_UNLOAD);
@@ -43,13 +43,13 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     this->cnc_mover = &this->mover_StepperServo;
 }
 
-ActuatorBase* Board_GobotHouse_2206::GetActuator(char axis_name) {
-    if (axis_name=='A'){
+ActuatorBase* Board_GobotHouse_2206::GetActuator(EnumAxis axis_name) {
+    if (axis_name==AXIS_ALPHA){
         return &this->__actuator_alpha;
     // }else if (axis_name=='B'){
     //     return &this->stepper_beta;
     }else{
-        Serial.print("['Error']  Board_GobotHouse_2206::GetStepper()   axis_name= ");
+        Serial.print("[Error]  Board_GobotHouse_2206::GetActuator()   axis_name= ");
         Serial.println(axis_name);
     }
     return nullptr;
@@ -61,13 +61,13 @@ ActuatorServo* Board_GobotHouse_2206::GetActuaorBeta(char axis_name){
     // }else if (axis_name=='B'){
     //     return &this->stepper_beta;
     }else{
-        Serial.print("['Error']  Board_GobotHouse_2206::GetStepper()   axis_name= ");
+        Serial.print("[Error]  Board_GobotHouse_2206::GetActuaorBeta()   axis_name= ");
         Serial.println(axis_name);
     }
     return nullptr;
 }
 
-SingleAxisHomer* Board_GobotHouse_2206::GetHomer(char axis_name) {
+SingleAxisHomer* Board_GobotHouse_2206::GetHomer(EnumAxis axis_name) {
     if (axis_name=='A'){
         return &this->__alpha_homer;
     }else if (axis_name=='B'){
@@ -83,10 +83,10 @@ RobotEef_GobotHouse* Board_GobotHouse_2206::GetEef(){
     return &this->eef;
 }
 
-void Board_GobotHouse_2206::EnableMotor(char axis_name, bool enable_it) {
-    if (axis_name == 'A'){
+void Board_GobotHouse_2206::EnableMotor(EnumAxis axis_name, bool enable_it) {
+    if (axis_name == AXIS_ALPHA){
         digitalWrite(PIN_ALPHA_ENABLE_2109, !enable_it);   // LOW is enable
-    } else if (axis_name == 'B'){
+    } else if (axis_name == AXIS_BETA){
         // digitalWrite(PIN_BETA_ENABLE_2109, !enable_it);   // LOW is enable
         // Beta joint is using servo.
     } else {

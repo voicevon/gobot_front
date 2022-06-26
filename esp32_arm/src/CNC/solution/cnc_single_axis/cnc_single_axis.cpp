@@ -44,7 +44,7 @@ void CncSingleAxis::RunG28(EnumAxis axis){
 	
 	// float distance_to_move = 9999.0f * this->_mechanic->Home_is_to_max_position ;
 	float distance_to_move = 9999.0f * this->_mechanic->HomingDir_IsToMax(AXIS_ALPHA) ;
-	this->_board->cnc_mover->SingleActuatorMoveTo('A', false, distance_to_move);
+	this->_board->cnc_mover->SingleActuatorMoveTo(AXIS_ALPHA, false, distance_to_move);
 }
 
 void CncSingleAxis::_running_G28(){
@@ -88,7 +88,7 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 	this->_board->EnableMotor(this->__AXIS_NAME, true);
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
-		this->_board->cnc_mover->SetActuatorSpeed(this->__AXIS_NAME,speed);
+		this->_board->cnc_mover->SetActuatorSpeed(this->__AXIS_NAME, speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_A target_fk_a;

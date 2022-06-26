@@ -20,7 +20,7 @@ class CncSingleAxis: public CncBase{
         CncSingleAxis_Machine* _mechanic;  //TODO:  uinify name:  cncConfig??
 
     private:
-        char __AXIS_NAME = 'A';
+        EnumAxis __AXIS_NAME;   // TODO: doubel check this var.
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 

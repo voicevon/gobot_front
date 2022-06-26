@@ -22,10 +22,10 @@ class Board_SmokeMachine: public CncBoardBase{
         
         void SayHello() override;
         // Stepper* GetStepper(char axis_name) override;
-        SingleAxisHomer* GetHomer(char axis_name) override;
+        SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_SmokeMachine* GetEef() override;
-        void EnableMotor(char axis_name, bool enable_it) override;
-        ActuatorBase* GetActuator(char axis_name) override {return &this->__actuator;};
+        void EnableMotor(EnumAxis axis_name, bool enable_it) override;
+        ActuatorBase* GetActuator(EnumAxis axis_name) override {return &this->__actuator;};
         CncMachineBase* GetCncMechanic() override{return &this->__cnc_mechanic;};
 
         

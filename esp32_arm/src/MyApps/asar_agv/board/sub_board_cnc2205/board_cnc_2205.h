@@ -13,10 +13,10 @@ class Board2205Cnc: public CncBoardBase{
         void Init(bool is_on_reset) override;
         void Init(Adafruit_MCP23X17* mcp_23018);
         void SayHello() override{};
-        ActuatorBase* GetActuator(char axis_name) override;
-        SingleAxisHomer* GetHomer(char axis_name) override;
+        ActuatorBase* GetActuator(EnumAxis axis_name) override;
+        SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GarmentAsar* GetEef() override;
-        void EnableMotor(char axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         CncMachineBase* GetCncMechanic() override {return nullptr;};
 
         

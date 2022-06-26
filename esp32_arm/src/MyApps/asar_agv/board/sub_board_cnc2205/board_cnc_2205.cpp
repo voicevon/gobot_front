@@ -16,7 +16,7 @@ void Board2205Cnc::Init(Adafruit_MCP23X17* mcp_23018){
     this->homer_z.Init_mcp23018_gpio(mcp_23018, MC23018_PIN_HOME_Z_2205);
 }
 
-ActuatorBase* Board2205Cnc::GetActuator(char axis_name){
+ActuatorBase* Board2205Cnc::GetActuator(EnumAxis axis_name){
     if (axis_name=='A'){
         return &this->alpha_stepper;
     }else if (axis_name=='B'){
@@ -27,7 +27,7 @@ ActuatorBase* Board2205Cnc::GetActuator(char axis_name){
     }
 }
 
-SingleAxisHomer* Board2205Cnc::GetHomer(char axis_name){
+SingleAxisHomer* Board2205Cnc::GetHomer(EnumAxis axis_name){
     if (axis_name=='Z'){
         return &this->homer_z;
     }else if (axis_name=='Y'){
@@ -42,7 +42,7 @@ RobotEef_GarmentAsar* Board2205Cnc::GetEef(){
     return &this->eef;
 }
 
-void Board2205Cnc::EnableMotor(char axis_name, bool enable_it){
+void Board2205Cnc::EnableMotor(EnumAxis axis_name, bool enable_it){
     if (axis_name == 'A'){
         this->__mcp23018->digitalWrite(MC23018_PIN_ALPHA_ENABLE_2205, !enable_it);   // LOW is enable
     } else if (axis_name == 'B'){

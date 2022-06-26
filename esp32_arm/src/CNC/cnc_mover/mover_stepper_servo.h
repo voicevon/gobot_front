@@ -11,19 +11,19 @@ class CncMover_StepperServo: public CncMoverBase{
         void LinkStepper_asAlpha(ActuatorStepper* stepper);
         void LinkServo_asBeta(ActuatorServo* servo);
         
-        void SetSpeed(float speed) override;
-        float GetSingleActuatorCurrentPosition_InCncUnit(char motor_name) override;
+        void SetEefSpeed(float speed) override;
+        float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;
         float GetAbsDistanceToTarget_InCncUnit() override;
-        void SetActuatorSpeed(char actuator_name, float rad_per_second) override;
-        bool ActuatorIsMoving(char actuator) override;
+        void SetActuatorSpeed(EnumAxis actuator_name, float rad_per_second) override;
+        bool ActuatorIsMoving(EnumAxis actuator) override;
 
 
         void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;
-        void SingleActuatorMoveTo(char actuator_name, bool is_absolute_position, float position_in_cnc_unit) override;
+        void SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit) override;
         void AllActuatorsStop() override;
-        void SingleActuatorStop(char motor_name) override;
+        void SingleActuatorStop(EnumAxis motor_name) override;
 
-        void SetActuatorCurrentCncPositionAs(char actuator_name, float as_current_position) override;
+        void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position) override;
         // void Stop(char motor_name) override;
         // struct MotorFlag{
 

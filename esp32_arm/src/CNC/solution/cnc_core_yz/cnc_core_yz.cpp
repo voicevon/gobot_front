@@ -1,4 +1,3 @@
-// #include "box_carrier_hw.h"
 #include "cnc_core_yz.h"
 
 
@@ -33,46 +32,14 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 }
 
 
-
-// Cnc_CoreYZ::Cnc_CoreYZ(uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
-// 	pinMode(pin_alpha_enable, OUTPUT);
-// 	pinMode(pin_beta_enable, OUTPUT);
-// 	this->__pin_alpha_enable = pin_alpha_enable;
-// 	this->__pin_beta_enable = pin_beta_enable;
-
-// 	this->__mcp23018 = nullptr;
-// 	this->__EnableMotor('A', false);
-// 	this->__EnableMotor('B', false);
-// }
-
-// Cnc_CoreYZ::Cnc_CoreYZ(Adafruit_MCP23X17* mcp_23018, uint8_t pin_alpha_enable, uint8_t pin_beta_enable){
-// 	this->__mcp23018 = mcp_23018;
-// 	this->__mcp23018->pinMode(pin_alpha_enable, OUTPUT);
-// 	this->__mcp23018->pinMode(pin_beta_enable, OUTPUT);
-// 	this->__EnableMotor('A', false);
-// 	this->__EnableMotor('B', false);
-// }
-
-// void Cnc_CoreYZ::LinkStepper(Stepper* alpha, Stepper* beta){
-// 	this->stepper_alpha = alpha;
-// 	this->stepper_beta = beta;
-// }
-
-// void Cnc_CoreYZ::LinkHomer(SingleAxisHomer* homer_z, SingleAxisHomer* homer_y){
-// 	this->objHomeHelper_vertical = homer_z;
-// 	this->objHomeHelper_y = homer_y;
-// }
-
 void Cnc_CoreYZ::Init(CncBoardBase* board){
 	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
 	this->_cncMachine = (CncCoreYZMachine*)(this->_board->GetCncMechanic());
 	this->_board = board;
 	// this->_cncMachine->Init('A');
 
-	// this->stepper_alpha = board->GetStepper('A');
-	// this->stepper_beta = board->GetStepper('B');
-	this->objHomeHelper_y = board->GetHomer('Y');
-	this->objHomeHelper_vertical = board->GetHomer('Z');
+	this->objHomeHelper_y = board->GetHomer(AXIS_Y);
+	this->objHomeHelper_vertical = board->GetHomer(AXIS_Z);
 
 	// this->stepper_alpha->setInverseRotation(true);
 	// this->stepper_beta->setInverseRotation(true);
@@ -141,18 +108,12 @@ void Cnc_CoreYZ::_running_G28(){
 		}
 		//Copy current ik-position to motor-position.
 		if (this->_homing_axis_name == 'Z') {
-			// this->stepper_alpha->setPosition(ik_position.alpha);
-			this->_board->cnc_mover->SingleActuatorMoveTo('A', true, ik_position.alpha);
+			this->_board->cnc_mover->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
 		}
 		if (this->_homing_axis_name == 'Y') {
-			this->_board->cnc_mover->SingleActuatorMoveTo('B', true, ik_position.beta);
-			// this->stepper_beta->setPosition(ik_position.beta);
+			this->_board->cnc_mover->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
 		}
 		
-		// this->stepper_alpha->setMaxSpeed(this->_cncMachine->max_speed_alpha_beta);
-		// this->stepper_alpha->setAcceleration(this->_cncMachine->max_acceleration_alpha_beta);
-		// this->stepper_beta->setMaxSpeed(this->_cncMachine->max_speed_alpha_beta);
-		// this->stepper_beta->setAcceleration(this->_cncMachine->max_acceleration_alpha_beta);
 		this->State = CncState::IDLE;
 
 	}else{
@@ -179,13 +140,13 @@ void Cnc_CoreYZ::_running_G28(){
 void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] Cnc_CoreYZ::RunG1() is entering");
 	Serial.print(gcode->get_command());
-	this->_board->EnableMotor('A', true);
-	this->_board->EnableMotor('B', true);
+	this->_board->EnableMotor(AXIS_ALPHA, true);
+	this->_board->EnableMotor(AXIS_BETA, true);
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
 		// this->stepper_alpha->setMaxSpeed(speed);
 		// this->stepper_beta->setMaxSpeed(speed);
-		this->_board->cnc_mover->SetSpeed(speed);
+		this->_board->cnc_mover->SetEefSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_YZ target_fk_yz;
@@ -247,8 +208,8 @@ void Cnc_CoreYZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
 }
 
 void Cnc_CoreYZ::RunM84(){
-	this->_board->EnableMotor('A', false);
-	this->_board->EnableMotor('B', false);
+	this->_board->EnableMotor(AXIS_ALPHA, false);
+	this->_board->EnableMotor(AXIS_BETA, false);
 }
 
 float Cnc_CoreYZ::GetDistanceToTarget_IK(){

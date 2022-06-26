@@ -47,8 +47,8 @@ void Board_GobotMain::Init(bool is_on_reset){
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
     Serial.print(FB_RESET);
     this->InitHardware();
-    this->EnableMotor('A', false);
-    this->EnableMotor('B', false);
+    this->EnableMotor(AXIS_ALPHA, false);
+    this->EnableMotor(AXIS_BETA, false);
 
     this->__eef.Init();
 
@@ -59,7 +59,7 @@ void Board_GobotMain::Init(bool is_on_reset){
     this->RepportRamUsage();
 }
 
-ActuatorBase* Board_GobotMain::GetActuator(char axis_name) {
+ActuatorBase* Board_GobotMain::GetActuator(EnumAxis axis_name) {
     if (axis_name=='A'){
         return &this->__actuator_alpha;
     }else if (axis_name=='B'){
@@ -71,10 +71,10 @@ ActuatorBase* Board_GobotMain::GetActuator(char axis_name) {
     return nullptr;
 }
 
-SingleAxisHomer* Board_GobotMain::GetHomer(char axis_name) {
-    if (axis_name=='A'){
+SingleAxisHomer* Board_GobotMain::GetHomer(EnumAxis axis_name) {
+    if (axis_name==AXIS_ALPHA){
         return &this->homer_alpha;
-    }else if (axis_name=='B'){
+    }else if (axis_name==AXIS_BETA){
         return &this->homer_beta;
     }else{
         Serial.print("['Error']  Board_GobotMain::GetHomer()   axis_name= ");
@@ -90,7 +90,7 @@ RobotEef_GobotMain* Board_GobotMain::GetEef() {
 
 
 
-void Board_GobotMain::EnableMotor(char axis_name, bool enable_it) {
+void Board_GobotMain::EnableMotor(EnumAxis axis_name, bool enable_it) {
     Serial.print("[Info] Board_GobotMain::EnableMotor()  axis_name= ");
     Serial.print(axis_name);
     Serial.print("\t enable = ");

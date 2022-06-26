@@ -13,11 +13,11 @@ class Board_GobotMain: public CncBoardBase{
         Board_GobotMain(){};
         void Init(bool is_on_reset) override;
         void LinkStepControlToCncMover(StepControl* stepControl){this->__mover_dual_step.LinkStepControl(stepControl);};
-        ActuatorBase* GetActuator(char axis_name) override;
-        SingleAxisHomer* GetHomer(char axis_name) override;
+        ActuatorBase* GetActuator(EnumAxis axis_name) override;
+        SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GobotMain* GetEef() override;
         CncMachineBase* GetCncMechanic() override {return &this->__cnc_mechanic;};
-        void EnableMotor(char axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         uint8_t ReadAllRooms();
         uint8_t GetLoadedRoom();
 
