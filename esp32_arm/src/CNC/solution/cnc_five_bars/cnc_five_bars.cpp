@@ -5,11 +5,6 @@
 
 void CncFiveBars::Init(CncBoardBase* board){
 	Serial.println("[Info] CncFiveBars::Init() is entering.");
-
-	// this->alpha_stepper = board->GetStepper('A');
-	// this->beta_stepper = board->GetStepper('B');
-	// this->alpha_homer = board->GetHomer('A');
-	// this->beta_homer = board->GetHomer('B');
 	this->__eef = board->GetEef();
 
 	board->EnableMotor(AXIS_ALPHA, false);
@@ -29,12 +24,13 @@ void CncFiveBars::RunG28(EnumAxis axis){
 		
 		CncMachineBase* config = this->_board->GetCncMechanic();
 		CncMoverBase* mover = this->_board->cnc_mover;
-		config->PrintOut("fffffffffffffffffff");
-
+		config->PrintOut("in CncFiveBars::RunG28()");
 		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));
 		// mover.setAcceleration(axis, config->HomingAcceleration(axis);
 		this->_board->EnableMotor(axis, true);
 		float long_distance_to_move = 999.0f * config->HomingDir_IsToMax(axis);
+		mover->PrintOut("in CncFiveBars::RunG28()");
+
 		mover->SingleActuatorMoveTo(axis, false, long_distance_to_move);
 
 
@@ -89,10 +85,6 @@ void CncFiveBars::_running_G28(){
 			Serial.print("\n  [Error] Trying to get home position with EEF-FK position  ");
 		}
 		//Copy current ik-position to motor-position.
-		// if (this->_homing_axis == 'A') 
-		// 	this->alpha_stepper->setPosition(ik_position.alpha * this->_fivebarMachine->STEPS_PER_RAD);
-		// if (this->_homing_axis == 'B') 
-		// 	this->beta_stepper->setPosition(ik_position.beta * this->_fivebarMachine->STEPS_PER_RAD);
 		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
 		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
 		
@@ -283,7 +275,6 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
-		// this->__EnableMotor('A', true); 
 		this->_board->EnableMotor(AXIS_ALPHA, true);
 		// target_ik_ab.alpha = gcode->get_value('A') * this->_fivebarMachine->STEPS_PER_RAD * DEG_TO_RAD;
 		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;

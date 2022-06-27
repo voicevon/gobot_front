@@ -7,7 +7,7 @@ class RoomBot_CornerFactory:
         
     def CreateServerHead_XPYP() -> BleServerHead:
         head = BleServerHead()
-        head.AxisName ='A'
+        head.AxisName =AXIS_ALPHA
         head.BleDeviceName = "ConInt-XPYP"
         head.BleServiceUUID = "1fd03a14-1451-11ec-82a8-0242ac130003"
         head.BleCommuUUID = "4b7fbe96-1451-11ec-82a8-0242ac130003"

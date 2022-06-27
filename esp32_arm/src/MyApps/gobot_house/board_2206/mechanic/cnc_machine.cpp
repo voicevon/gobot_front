@@ -47,7 +47,7 @@ void GobotHouseMachine_2206::__InitStaticConfig(){
 // }
 
 // float GobotHouseMachine_2206::GetHomingVelocity(char axis_name){
-//     if (axis_name == 'A')
+//     if (axis_name == AXIS_ALPHA)
 //         // return DEG_TO_RAD * this->_homing_speed_alpha_degree_per_second  * this->HomingDir_IsToMax(AXIS_ALPHA);
 //         return DEG_TO_RAD * this->HomingSpeed(AXIS_ALPHA)  * this->HomingDir_IsToMax(AXIS_ALPHA);
 //     else if (axis_name == 'B'){

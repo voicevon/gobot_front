@@ -114,7 +114,7 @@ void CncMover_StepperServo::AllActuatorsStop(){
 }
 
 void CncMover_StepperServo::SingleActuatorStop(EnumAxis actuator_name){
-    if (actuator_name == 'A'){
+    if (actuator_name == AXIS_ALPHA){
         this->__actuator_alpha->Stop();
         this->_moving_actuator_flags -= 0x01;
 
@@ -129,7 +129,7 @@ void CncMover_StepperServo::SingleActuatorStop(EnumAxis actuator_name){
 
 
 void CncMover_StepperServo::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
-    if (actuator_name == 'A'){
+    if (actuator_name == AXIS_ALPHA){
         this->_moving_actuator_flags = 0x01;
         this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
         Stepper* stepper = this->__actuator_alpha->GetLinkedStepper();
@@ -146,7 +146,7 @@ void CncMover_StepperServo::SingleActuatorMoveTo(EnumAxis actuator_name, bool is
 }
 
 float CncMover_StepperServo::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
-    if (actuator_name == 'A'){
+    if (actuator_name == AXIS_ALPHA){
         return this->__actuator_alpha->GetCurrentPosition_InCncUnit();
 
     }else if (actuator_name == 'B'){
@@ -159,7 +159,7 @@ float CncMover_StepperServo::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis
 }
 
 void CncMover_StepperServo::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position){
-    if (actuator_name == 'A'){
+    if (actuator_name == AXIS_ALPHA){
         this->__actuator_alpha->SetCurrentPositionAs(as_current_position);
     }else if (actuator_name == 'B'){
         this->__actuator_beta->SetCurrentPositionAs(as_current_position);
@@ -199,7 +199,7 @@ void CncMover_StepperServo::SetActuatorSpeed(EnumAxis actuator_name, float speed
 }
 
 bool CncMover_StepperServo::ActuatorIsMoving(EnumAxis actuator_name) {
-    if (actuator_name=='A'){
+    if (actuator_name==AXIS_ALPHA){
         return this->__stepControl->isRunning();
     }else if (actuator_name=='B'){
         return this->__actuator_beta->IsMoving();

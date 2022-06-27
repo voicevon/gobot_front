@@ -9,7 +9,7 @@
 
 
 
-#define FB_RESET  "\033[0m"
+#define FCBC_RESET  "\033[0m"   //FCBC is for "Fore color background color"
 // #define ctl_bold \033[01m
 // #define ctl_disable='\033[02m'
 // #define ctl_underline='\033[04m'
@@ -29,7 +29,7 @@
     //     darkgrey='\033[90m'
     //     lightred='\033[91m'
     //     lightgreen='\033[92m'
-    //     yellow='\033[93m'
+#define FORE_YELLOW "\033[93m"
     //     lightblue='\033[94m'
     //     pink='\033[95m'
     //     lightcyan='\033[96m'

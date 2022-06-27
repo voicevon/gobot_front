@@ -11,6 +11,8 @@ class CncMover_DualStepper: public CncMoverBase{
         void LinkStepper_asBeta(ActuatorStepper* stepper);
         void LinkStepControl(StepControl* stepControl){this->__stepControl=stepControl;};
         // void LinkServo_asBeta(ActuatorServo* servo);
+        void PrintOut(const char* title) override;
+
         
         void SetEefSpeed(float speed) override;
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;

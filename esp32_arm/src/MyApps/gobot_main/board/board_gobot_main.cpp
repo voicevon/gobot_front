@@ -45,7 +45,7 @@ void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
     Serial.print(FORE_GREEN);
     Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
-    Serial.print(FB_RESET);
+    Serial.print(FCBC_RESET);
     this->InitHardware();
     this->EnableMotor(AXIS_ALPHA, false);
     this->EnableMotor(AXIS_BETA, false);
@@ -60,9 +60,9 @@ void Board_GobotMain::Init(bool is_on_reset){
 }
 
 ActuatorBase* Board_GobotMain::GetActuator(EnumAxis axis_name) {
-    if (axis_name=='A'){
+    if (axis_name==AXIS_ALPHA){
         return &this->__actuator_alpha;
-    }else if (axis_name=='B'){
+    }else if (axis_name==AXIS_BETA){
         return &this->__actuator_beta;
     }else{
         Serial.print("['Error']  Board_GobotMain::GetStepper()   axis_name= ");
@@ -96,12 +96,13 @@ void Board_GobotMain::EnableMotor(EnumAxis axis_name, bool enable_it) {
     Serial.print("\t enable = ");
     Serial.println(enable_it);
     
-    if (axis_name == 'A'){
+    if (axis_name == AXIS_ALPHA){
         digitalWrite(PIN_ALPHA_ENABLE_2201, !enable_it);   // LOW is enable
-    } else if (axis_name == 'B'){
+    } else if (axis_name == AXIS_BETA){
         digitalWrite(PIN_BETA_ENABLE_2201, !enable_it);   // LOW is enable
     } else {
-        Serial.println("[Warn] CncDriver_CoreYZ_2205::EnableMotor()  ");
+        Serial.println("[Warn] Board_GobotMain::EnableMotor() axis =");
+        Serial.println(axis_name);
     }
 }
 

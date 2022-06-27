@@ -19,7 +19,7 @@ long low_count =1;
 
 void setup(){
     board.Init(true);
-    // cncMachine.Init('A');
+    // cncMachine.Init(AXIS_ALPHA);
     cnc.Init(&board);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);

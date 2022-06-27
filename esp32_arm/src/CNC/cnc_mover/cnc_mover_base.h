@@ -9,7 +9,7 @@ class CncMoverBase{
     public:
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
 
-
+        virtual void PrintOut(const char* title);
         virtual void SetActuatorSpeed(EnumAxis actuator_name, float speed_per_second);  // TODO:  remove this
         virtual void SetEefSpeed(float speed);
         // void SetBlockedMove(bool is_blocked_move){this->_is_blocked_move=is_blocked_move;};

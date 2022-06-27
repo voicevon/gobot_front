@@ -1,11 +1,12 @@
 #include "message_queue.h"
 #include "HardwareSerial.h"
+#include "MyBoards/const.h"
 
 bool MessageQueue::AppendMessage(String strPayload){
     const char* payload = strPayload.c_str();
     int length = strPayload.length();
-    Serial.print("[Info] MessageQueue::AppendMessage(String strPayload)   ");
-    Serial.println(strPayload);
+    // Serial.print("[Info] MessageQueue::AppendMessage(String strPayload)   ");
+    // Serial.println(strPayload);
     return this->AppendMessage(payload, length);
 }
 
@@ -14,8 +15,10 @@ bool MessageQueue::AppendMessage(String strPayload){
 bool MessageQueue::AppendMessage(const char* payload, int length){
     int next_head = this->__get_pointer_next_index(this->_head);
     if(next_head == this->_tail){
-        Serial.print("\n\n\n  [Error] MessageQueue::AppendMessage() ");
+        Serial.print(FORE_YELLOW);
+        Serial.print("\n  [Warn] MessageQueue::AppendMessage() ");
         Serial.print("\n   Buffer is full");
+        Serial.println(FCBC_RESET);
         return true;
     }
     this->_all_messages[this->_head].length = length;

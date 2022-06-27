@@ -30,11 +30,11 @@ GobotMainMachine::GobotMainMachine(){
 }
 
 void GobotMainMachine::PrintOut(const char* title){
-    Serial.print("\n=========================================================");
-    Serial.print("\n      GobotMainMachine::Printout()    "); 
-    Serial.print(title);
+    Serial.print(FORE_GREEN);
+    Serial.print("GobotMainMachine::Printout()  "); 
+    Serial.println(title);
 
-    Serial.print("\n Lenth of LINK_0, LINK_A, LINK_B = (");
+    Serial.print("Lenth of LINK_0, LINK_A, LINK_B = (");
     Serial.print(this->LINK_0);
     Serial.print(" , ");
     Serial.print(this->LINK_A);
@@ -53,6 +53,6 @@ void GobotMainMachine::PrintOut(const char* title){
     // Serial.print("\n STEPS_PER_RAD = ");
     // Serial.print(this->STEPS_PER_RAD);
 
-    Serial.print("\n\n\n");
+    Serial.println(FCBC_RESET);
 
 }
