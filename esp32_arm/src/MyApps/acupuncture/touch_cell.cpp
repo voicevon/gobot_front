@@ -143,7 +143,7 @@ const char* TouchCell::GetName(int point_id){
 bool TouchCell::CompareCurrentAndLast(){
     for(int i=0; i<4; i++){
         if (LastFlags[i] != CurrentFlags[i]){
-            Serial.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            Serial.println("Some touch pad is changed.");
             this->_has_update = true;
             return true;   
         }

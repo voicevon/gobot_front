@@ -1,11 +1,15 @@
+
 #include "i2c_commu.h"
 #include "HardwareSerial.h"
 #include <Arduino.h>
-void I2c_commu::Init(){
-    Wire.begin();  
-    for(int i=0; i<CELLS; i++){
-        Cells[i].Address = START_CELL_ID + i;
+
+void I2c_commu::Init(int min_cell_i2c_address, int cells_count){
+    Wire.begin(); 
+    for(int i=0; i< cells_count; i++){
+        Cells[i].Address = min_cell_i2c_address + i;
     }
+    this->__CELLS_COUNT = cells_count;
+    this->__CELL_I2C_ADDRESS_MIN = min_cell_i2c_address;
 } 
 
 bool I2c_commu::HasUpdate(){
@@ -23,7 +27,7 @@ void I2c_commu::ReadSingleCell(TouchCell* cell){
     Wire.endTransmission(false);
     Wire.requestFrom(cell->Address, n_bytes);    // request data from slave device
     int i=0;
-    while (Wire.available() > 0) {  // slave may send less than requested
+    while (Wire.available() > 0) {  // slave may send less bytes than expected.
         uint8_t c = Wire.read();         // receive a byte as character
         cell->CurrentFlags[i] = c;
         i++;
@@ -32,17 +36,17 @@ void I2c_commu::ReadSingleCell(TouchCell* cell){
         // Serial.print("   ");
     }
     if(i==0) {
-        // cell->IsOnline = false;
-
+        cell->IsOnline = false;
         cell->PrintOut("I2c_commu::ReadSingleCell()  has no response");
         // Serial.println("     I2c_commu::ReadSingleCell()  No response.  cell_address= " + cell->Address);
     } 
     Wire.endTransmission(true);
     // delay(1000);
 }
-uint8_t I2c_commu::SpinOnce(){
-    uint8_t last_slave_index = 0;
-    for (uint8_t i= 0; i< CELLS; i++){
+
+TouchCell* I2c_commu::SpinOnce(){
+    // uint8_t last_slave_index = 0;
+    for (uint8_t i= 0; i< this->__CELLS_COUNT; i++){
         TouchCell* pCell = &(this->Cells[i]);
         if (pCell->IsOnline){
             // Serial.print("\nTrying I2C addr = ");
@@ -54,14 +58,17 @@ uint8_t I2c_commu::SpinOnce(){
             // Serial.println("   ");
             this->ReadSingleCell(pCell);
             pCell->CompareCurrentAndLast();
-            last_slave_index =  i;
+            if (pCell->IsOnline){
+                // last_slave_index =  i;
+                return pCell;
+            }
         }
     }
-    if (last_slave_index == 0){
-        //All cells is offline. re init all cells to online
-        for(int i=0; i< CELLS; i++){
-            this->Cells[i].IsOnline = true;
-        }
+    // if (last_slave_index == this->__CELLS_COUNT){
+    //All cells is offline. re init all cells to online
+    for(int i=0; i< this->__CELLS_COUNT; i++){
+        this->Cells[i].IsOnline = true;
     }
-    return last_slave_index;
+    // }
+    return nullptr;
 }

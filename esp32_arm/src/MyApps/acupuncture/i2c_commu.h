@@ -4,20 +4,21 @@
 #include <Wire.h>
 #include "touch_cell.h"
 
-#define CELLS 2
-#define START_CELL_ID 3
+
 
 
 //  Pull-up resistor = 1.8K   to 5V
 
 class I2c_commu{
     public:
-        void Init();
-        uint8_t SpinOnce();   // return the last slave_id of avaliable.
+        void Init(int min_cell_i2c_address, int cells_count);
+        TouchCell* SpinOnce();   // return the last slave_id of avaliable.
         void ReadSingleCell(TouchCell* cell);
         bool HasUpdate();
-        TouchCell Cells[CELLS];
+        TouchCell Cells[30];
 
     private:
+        int __CELLS_COUNT;
+        int __CELL_I2C_ADDRESS_MIN;
         bool _has_update = true;
 };
