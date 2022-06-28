@@ -12,6 +12,7 @@ class Board_GobotMain: public CncBoardBase{
     public:
         Board_GobotMain(){};
         void Init(bool is_on_reset) override;
+        void PrintOut();
         void LinkStepControlToCncMover(StepControl* stepControl){this->__mover_dual_step.LinkStepControl(stepControl);};
         ActuatorBase* GetActuator(EnumAxis axis_name) override;
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
@@ -24,6 +25,7 @@ class Board_GobotMain: public CncBoardBase{
 
     private:
         void InitHardware();
+    
         Stepper __alpha_stepper = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
         Stepper __beta_stepper = Stepper(PIN_BETA_STEP_2201, PIN_BETA_DIR_2201);
         ActuatorRangeConstraintBase __alpha_range;

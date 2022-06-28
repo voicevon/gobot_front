@@ -38,11 +38,12 @@
     //     '''
     //     Full name: Perfect_background_color
     //     ''' 
-    //     black='\033[40m'
+#define BGC_BLACK "\033[40m"
     //     red='\033[41m'
     //     green='\033[42m'
-    //     orange='\033[43m'
-    //     blue='\033[44m'
+#define BGC_ORANGE = "\033[43m"
+#define BGC_BLUE  "\033[44m"
     //     purple='\033[45m'
     //     cyan='\033[46m'
     //     lightgrey='\033[47m'
+

@@ -24,33 +24,14 @@ void CncFiveBars::RunG28(EnumAxis axis){
 		
 		CncMachineBase* config = this->_board->GetCncMechanic();
 		CncMoverBase* mover = this->_board->cnc_mover;
-		config->PrintOut("in CncFiveBars::RunG28()");
+		config->PrintOut("Config in CncFiveBars::RunG28()");
 		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));
 		// mover.setAcceleration(axis, config->HomingAcceleration(axis);
 		this->_board->EnableMotor(axis, true);
 		float long_distance_to_move = 999.0f * config->HomingDir_IsToMax(axis);
-		mover->PrintOut("in CncFiveBars::RunG28()");
 
 		mover->SingleActuatorMoveTo(axis, false, long_distance_to_move);
-
-
-	// if (axis=='A'){
-	// 	// this->_board->EnableMotor('A', true);
-	// 	// this->alpha_stepper->setAcceleration(this->_fivebarMachine->Homing_acceleration_alpha_beta);
-	// 	// this->alpha_stepper->setMaxSpeed(this->_fivebarMachine->Homing_speed_alpha_beta);
-	// 	// this->__homing_stepper = this->alpha_stepper;
-	// 	// this->__homing_stepper->setTargetRel(500000);    // angle to be greater.
-	// 	target_position = 500000;
-	// }else if (axis=='B'){
-	// 	// this->_board->EnableMotor('B', true);
-	// 	// int xx =this->_fivebarMachine->Homing_acceleration_alpha_beta;
-	// 	// int xx =this->_fivebarMachine->HomingAcceleration(AXIS_BETA);
-	// 	// this->beta_stepper->setAcceleration(this->_fivebarMachine->Homing_acceleration_alpha_beta);
-	// 	// this->beta_stepper->setMaxSpeed(this->_fivebarMachine->Homing_speed_alpha_beta);
-	// 	// this->__homing_stepper = this->beta_stepper;
-	// 	// this->__current_homer = this->beta_homer;
-	// 	// this->__homing_stepper->setTargetRel(-500000);    //angle to be smaller.
-	// 	target_position = -500000;
+		mover->PrintOut("Mover in CncFiveBars::RunG28()");
 	}else{
 		Serial.print("\n[Error] CncFiveBars::RunG28() ");
 	}

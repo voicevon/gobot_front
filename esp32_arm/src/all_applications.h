@@ -12,12 +12,12 @@
 
 // #define I_AM_GOBOT_HOUSE
 // #define I_AM_GOBOT_HOUSE_2206
-// #define I_AM_GOBOT_MAIN
+#define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
 // #define I_AM_VSC
 
 // #define I_AM_ACUPUCTURE_MAIN
-#define I_AM_ACUPUNCTURE_TESTER
+// #define I_AM_ACUPUNCTURE_TESTER
 // #define I_AM_SMOKE_MACHINE_WEB_SERVER
 // #define I_AM_CABLE_AXIS_XPYP
 // #define I_AM_CABLE_AXIS_XNYP
@@ -106,10 +106,12 @@
 #endif
 
 
-#ifdef I_AM_ACUPUCTURE_MAIN_ESP32
+#ifdef I_AM_ACUPUCTURE_MAIN
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  0   
     #define BODY_ID "001"
+	#define CELL_ID_MIN 3
+	#define CELLS_COUNT 30
 #endif
 
 #ifdef I_AM_ACUPUNCTURE_TESTER

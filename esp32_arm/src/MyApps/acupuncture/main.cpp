@@ -2,7 +2,7 @@
 
 #include "all_applications.h"
 // #include "all_devices.h"
-#ifdef I_AM_ACUPUCTURE_MAIN_ESP32
+#ifdef I_AM_ACUPUCTURE_MAIN
 
 #include "i2c_commu.h"
 // #include "MyLibs/mqtt/wifi_mqtt_client.h"
@@ -40,7 +40,7 @@ I2c_commu obj_i2c_bus = I2c_commu();
 void setup() {
     Serial.begin(115200);
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
-    obj_i2c_bus.Init();
+    obj_i2c_bus.Init(CELL_ID_MIN, CELLS_COUNT);
 
     // Begin_WifiRabbitMqtt
     setup_wifi_mqtt();
@@ -56,7 +56,7 @@ void loop() {
 
     obj_i2c_bus.SpinOnce();
 
-    for(int i = 0; i<CELLS; i++){
+    for(int i = 0; i< CELLS_COUNT; i++){
         TouchCell* cell = &obj_i2c_bus.Cells[i];
         if (cell->HasUpdate()){
             // Touch pin changed

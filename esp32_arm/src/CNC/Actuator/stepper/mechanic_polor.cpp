@@ -7,13 +7,13 @@ float ActuatorMechanic_StepperPolor::GetStepsPerCncUnit(){
     float steps_per_rad =  steps_per_motor_round / TWO_PI * gear_ratio;
     bool debug = false;
     if (debug){
-        Serial.print("[Info] ActuatorMechanic_StepperPolor::GetStepsPerCncUnit()  steps_per_motor_round= ");
-        Serial.print(steps_per_motor_round);
+        Logger::PrintTitle("ActuatorMechanic_StepperPolor::GetStepsPerCncUnit() ");
+        Serial.print("steps_per_motor_round= ");
+        Serial.print(steps_per_motor_round); 
         Serial.print("  gear ratio= ");
         Serial.print(gear_ratio);
         Serial.print("  steps_per_rad= ");
         Serial.println(steps_per_rad);
-        delay(15000);
     }
     return steps_per_rad;
 }

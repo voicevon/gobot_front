@@ -1,5 +1,6 @@
 #include "board_gobot_main.h"
-#include "CNC/Actuator/stepper/mechanic_polor.h"
+// #include "CNC/Actuator/stepper/mechanic_polor.h"
+#include "mechanic/actuator_alpha_beta.h"
 
 
 
@@ -20,23 +21,11 @@ void Board_GobotMain::InitHardware(){
         pinMode(this->PIN_ROOMS[i], INPUT_PULLUP);
     }
 
-    // Init Actuator alpha
-    ActuatorMechanic_StepperPolor alpha;
-    // alpha._micro_steps_on_stepper_driver = 16;
-    // alpha._motor_gear_teeth_count = 10;
-    // alpha._slave_pulley_teeth_count = 90;
-    // alpha._motor_step_angle_in_degree = 0.7003891050583658;
+    GobotMain_ActuatorAlphaBetaMechanic alpha;
+    this->__alpha_stepper.setInverseRotation(false);
+    this->__actuator_alpha.LinkStepper(&this->__alpha_stepper, alpha.GetStepsPerCncUnit());
 
-    this->__alpha_stepper.setInverseRotation(true);
-    this->__actuator_alpha.LinkStepper(&this->__alpha_stepper,alpha.GetStepsPerCncUnit());
-
-    // Init Actuator beta
-    ActuatorMechanic_StepperPolor beta;
-    // beta._micro_steps_on_stepper_driver = 16;
-    // beta._motor_gear_teeth_count = 10;
-    // beta._slave_pulley_teeth_count = 90;
-    // beta._motor_step_angle_in_degree = 0.7003891050583658;
-
+    GobotMain_ActuatorAlphaBetaMechanic beta;
     this->__beta_stepper.setInverseRotation(true);
     this->__actuator_beta.LinkStepper(&this->__beta_stepper, beta.GetStepsPerCncUnit());
 }
@@ -57,6 +46,14 @@ void Board_GobotMain::Init(bool is_on_reset){
     this->cnc_mover = &this->__mover_dual_step;
 
     this->RepportRamUsage();
+}
+
+void Board_GobotMain::PrintOut(){
+    this->cnc_mover->PrintOut("Board_GobotMain. __cnc_mover");
+    this->__cnc_mechanic.PrintOut("Board_GobotMain.__cnc_mechanic");
+    this->__actuator_alpha.PrintOut("Board_GobotMain. __actuator_alpha");
+    this->__actuator_beta.PrintOut("Board_GobotMain. __actuator_beta");
+
 }
 
 ActuatorBase* Board_GobotMain::GetActuator(EnumAxis axis_name) {

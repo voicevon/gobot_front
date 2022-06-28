@@ -2,6 +2,7 @@
 #include "MyBoards/const.h"
 #include "stdint.h"
 #include "range_constraint/actuator_range_constraint_base.h"
+#include "Mylibs/basic/logger.h"
 
 class ActuatorBase{
     public:
@@ -16,6 +17,8 @@ class ActuatorBase{
         float GetNeededSeconds();
         void RenewSpeed(float moving_time);
         virtual void Stop();   //TODO:  Remove from base.
+        float GetTartetCncPosition(){return this->_target_cnc_position;};
+        float GetCurrentCncPosition(){return this->_current_cnc_position;};
 
     protected:
         float _target_cnc_position;   // is always an absolute position

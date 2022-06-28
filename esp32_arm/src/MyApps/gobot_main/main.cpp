@@ -27,6 +27,7 @@ void board_test();
 
 void setup(){
     board.Init(true);
+    board.PrintOut();
     board.LinkStepControlToCncMover(&objStepControl);
     board_test();
     // cncMachine.Init('S');  //Slow moving
@@ -46,6 +47,7 @@ void setup(){
     setup_mqtt_on_message_receive(); 
 
     Serial.print("\nGobot-Main setup is done.........................................");
+    // for(int i=0; i< 200; i++){ loop_mqtt();}
 
 }
 

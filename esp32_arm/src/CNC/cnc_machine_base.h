@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "MyBoards/const.h"
 #include "coordinate/cnc_axis.h"
+#include "MyLibs/basic/logger.h"
 
 class CncMachineBase{
     public:

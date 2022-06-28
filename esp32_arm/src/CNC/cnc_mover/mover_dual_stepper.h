@@ -39,5 +39,5 @@ class CncMover_DualStepper: public CncMoverBase{
         ActuatorStepper* __actuator_alpha;
         ActuatorStepper* __actuator_beta;
         StepControl* __stepControl;
-        uint8_t __moving_motor_flags;
+        // uint8_t __moving_motor_flags;
 };
