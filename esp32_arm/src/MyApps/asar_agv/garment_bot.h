@@ -43,7 +43,7 @@ class BotAsrsAgvCoreYZ: public MqttMessageConsumer{
         };
 
         BotAsrsAgvCoreYZ(uint16_t id);
-        void InitAllinOne(BoardAllInOne* board, CncMachineBase* cncMachine, StepControl* stepControl);
+        void InitAllinOne(BoardAllInOne* board, StepControl* stepControl);
 
         AsrsBase asrs = AsrsBase();
         AgvBase agv = AgvBase();

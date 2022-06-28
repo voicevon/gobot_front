@@ -6,7 +6,7 @@ BotAsrsAgvCoreYZ::BotAsrsAgvCoreYZ(uint16_t id){
 	this->_ID = id;
 }
 
-void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, CncMachineBase* cncMachine, StepControl* stepControl){
+void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepControl){
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is entering");
 	this->agv.Init(&board->agv);
 	this->asrs.LinkJettySensor(board->asrs.GetJettySensor());

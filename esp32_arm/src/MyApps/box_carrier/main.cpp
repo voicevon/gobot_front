@@ -3,10 +3,13 @@
 
 
 // #include "MyBoards/asrs_agv_2205/board_asrs_agv.h"
-#include "MyBoards/asrs_agv_2205/board_all_in_one_2205.h"
+// #include "MyBoards/asrs_agv_2205/board_all_in_one_2205.h"
+#include "MyApps/asar_agv/board/board_all_in_one_2205.h"
 // #include "cnc_machine.h"
-#include "board/mechanic/cnc_machine.h"
-#include "CNC/solution/cnc_core_yz/cnc_core_yz.h"
+// #include "board/mechanic/cnc_machine.h"
+#include "board/mechanic/cnc_solution_config.h"
+// #include "CNC/solution/cnc_core_yz/cnc_core_yz.h"
+#include "board/mechanic/cnc_solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_carrier.h"
 #include "IoT/main_mqtt.h"
@@ -14,7 +17,7 @@
 
 BoardAllInOne board = BoardAllInOne();
 BoxCarrierMachine cncMachine;
-Cnc_CoreYZ cnc = Cnc_CoreYZ();
+BoxCarrier_CncSolution cnc;
 BoxCarrier robot = BoxCarrier();
 GcodeQueue gcode_queue = GcodeQueue();
 MessageQueue mqtt_command_queue = MessageQueue();
@@ -22,7 +25,7 @@ MessageQueue mqtt_command_queue = MessageQueue();
 
 void setup(){
     board.Init(true);
-    cncMachine.Init('A');
+    // cncMachine.Init('A');
     cnc.Init(&board.cnc_board);
     // cnc.LinkStepControl(&objStepControl);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);

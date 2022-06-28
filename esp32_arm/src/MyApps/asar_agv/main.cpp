@@ -6,12 +6,14 @@
 #include "garment_bot.h"
 #include "IoT/main_mqtt.h"
 // #include "MyApps/box_carrier/cnc_machine.h"
-#include "../box_carrier/board/mechanic/cnc_machine.h"
+// #include "../box_carrier/board/mechanic/cnc_machine.h"
+#include "MyApps/box_carrier/board/mechanic/cnc_solution_config.h"
+#include "MyApps/box_carrier/board/mechanic/cnc_solution.h"
 
 StepControl objStepControl;  // This object can not inside any object?
 BoardAllInOne board = BoardAllInOne();
-BoxCarrierMachine cncMachine;
-BotAsrsAgvCoreYZ robot = BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
+// BoxCarrierMachine cncMachine;
+BotAsrsAgvCoreYZ robot= BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
 
 
@@ -42,8 +44,8 @@ void unit_test(){
 }
 
 void function_test(){
-    robot.Test_HomeZ();
-    robot.Test_HomeY();
+    // robot.Test_HomeZ();
+    // robot.Test_HomeY();
     // robot.Test_UnHome();
 
 }
@@ -53,8 +55,8 @@ void setup(){
     unit_test();
     board.Test_ScanI2cBuses(0);
 
-    cncMachine.Init('S');
-    robot.InitAllinOne(&board, &cncMachine,&objStepControl);
+    // cncMachine.Init('S');
+    robot.InitAllinOne(&board, &objStepControl);
 
    // mqtt, bridge, receiver.
     setup_mqtt_block_connect();

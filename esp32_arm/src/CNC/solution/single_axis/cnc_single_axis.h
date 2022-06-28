@@ -3,7 +3,7 @@
 #include "MyBoards/cnc_board_base.h"
 #include "CNC/solution/cnc_base.h"
 // #include "cnc_single_axis_machine.h"
-#include "cnc_solution_config_single_axis.h"
+#include "config.h"
 
 
 //This is a virtual class. No Constructor.

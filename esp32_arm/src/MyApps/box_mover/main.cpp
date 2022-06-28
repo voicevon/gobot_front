@@ -3,13 +3,14 @@
 #ifdef I_AM_GARMENT_BOX_MOVER
 
 #include "cnc_machine.h"
-#include "MyBoards/asrs_agv_2205/sub_boards/board_cnc_2205.h"
+// #include "MyBoards/asrs_agv_2205/sub_boards/board_cnc_2205.h"
+#include "MyApps/asar_agv/board/sub_board_cnc2205/board_cnc_2205.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_mover.h"
 #include "CNC/solution/cnc_core_az/box_mover_hw.h"
 #include "IoT/main_mqtt.h"
 
-BoxMoverCncMachine machine;
+// BoxMoverCncMachine machine;
 Board2205Cnc board = Board2205Cnc();
 CncCoreAZ cnc = CncCoreAZ();
 BoxMover robot = BoxMover();
@@ -18,8 +19,8 @@ MessageQueue mqtt_command_queue;
 
 void setup(){
     board.Init(true);
-    machine.Init('A');
-    cnc.Init(&board, &machine);
+    // machine.Init('A');
+    cnc.Init(&board);
 
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
