@@ -9,6 +9,7 @@ GobotMainMachine::GobotMainMachine(){
     this->_LINK_A_LENGTH = 278.1;  //285.18;    // 278.1
     this->_LINK_B_LENGTH = 392.1; //  384.51;    // 500-107.8
 
+    this->_home_via_inverse_kinematic = true;
     this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;
     this->_HOMING_SPEED[AXIS_ALPHA] = 1000;
     this->_HOMED_POSITION[AXIS_ALPHA] = DEG_TO_RAD * (180 - 4);
@@ -29,6 +30,8 @@ void GobotMainMachine::PrintOut(const char* title){
     Serial.print(" , ");
     Serial.print(this->LINK_B);
     Serial.println(")");
+    Serial.print("Is Inverse kinematic homing.");
+    Serial.println(this->IsInverseKinematicHoimg);
     Serial.print("Homer.Alpha: ");
     Serial.print("  DirIsToMax= ");
     Serial.print(this->HomingDir_IsToMax(AXIS_ALPHA));

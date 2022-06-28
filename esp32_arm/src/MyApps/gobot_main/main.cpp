@@ -47,7 +47,7 @@ void setup(){
     setup_mqtt_on_message_receive(); 
 
     Serial.print("\nGobot-Main setup is done.........................................");
-    // for(int i=0; i< 200; i++){ loop_mqtt();}
+    for(int i=0; i< 200; i++){ loop_mqtt();}
 
 }
 

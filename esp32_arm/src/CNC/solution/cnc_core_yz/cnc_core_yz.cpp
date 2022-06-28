@@ -36,15 +36,11 @@ void Cnc_CoreYZ::Init(CncBoardBase* board){
 	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
 	this->_cncMachine = (CncCoreYZMachine*)(this->_board->GetCncMechanic());
 	this->_board = board;
-	// this->_cncMachine->Init('A');
 
 	this->objHomeHelper_y = board->GetHomer(AXIS_Y);
 	this->objHomeHelper_vertical = board->GetHomer(AXIS_Z);
 
-	// this->stepper_alpha->setInverseRotation(true);
-	// this->stepper_beta->setInverseRotation(true);
 
-	this->_home_as_inverse_kinematic = false;
 }
 
 void Cnc_CoreYZ::RunG28(EnumAxis axis){
@@ -91,7 +87,7 @@ void Cnc_CoreYZ::_running_G28(){
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
-		if (this->_home_as_inverse_kinematic){
+		if (this->_config->IsInverseKinematicHoimg){
 			// We know homed position via IK.
 			Serial.print("\n[Error] Cnc_CoreYZ::_running_G28() This robot does NOT impliment this function.");
 		}

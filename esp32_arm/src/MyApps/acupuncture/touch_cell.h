@@ -18,6 +18,7 @@ class TouchCell{
 
     private:
         bool _has_update;
+        char __mqtt_topic_substring[30];
 
 
 };

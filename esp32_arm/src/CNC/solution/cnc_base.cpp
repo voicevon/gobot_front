@@ -98,8 +98,10 @@ void CncBase::RunGcode(Gcode* gcode){
 			if (gcode->has_letter('B')) home_axis='B';
 			if (gcode->has_letter('C')) home_axis='C';
 			if (gcode->has_letter('W')) home_axis='W';
-			this->_home_as_inverse_kinematic = false;
-			if (gcode->has_letter('I')) this->_home_as_inverse_kinematic = true;
+
+			// Is there any machine that supports both IK, and FK homing?
+			// this->_home_via_inverse_kinematic = false;
+			// if (gcode->has_letter('I')) this->_home_via_inverse_kinematic = true;
 			if (home_axis == '+'){
 				Serial.print("\n\n\n\n[Error] CncBase::RunGcode()  :");
 				Serial.print(home_axis);

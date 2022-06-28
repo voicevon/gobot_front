@@ -32,8 +32,8 @@ void Board_GobotMain::InitHardware(){
 
 void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
-    Serial.print(FORE_GREEN);
-    Serial.println("Hi Xuming, I am Gobot-Chessboard. Good luck......");
+    Logger::PrintTitle("===================================================");
+    Logger::PrintTitle("Hi Xuming, I am GobotMain. Good luck......");
     Serial.print(FCBC_RESET);
     this->InitHardware();
     this->EnableMotor(AXIS_ALPHA, false);
@@ -88,11 +88,13 @@ RobotEef_GobotMain* Board_GobotMain::GetEef() {
 
 
 void Board_GobotMain::EnableMotor(EnumAxis axis_name, bool enable_it) {
-    Serial.print("[Info] Board_GobotMain::EnableMotor()  axis_name= ");
-    Serial.print(axis_name);
-    Serial.print("\t enable = ");
-    Serial.println(enable_it);
-    
+    bool debug = false;
+    if(debug){
+        Serial.print("[Info] Board_GobotMain::EnableMotor()  axis_name= ");
+        Serial.print(axis_name);
+        Serial.print("\t enable = ");
+        Serial.println(enable_it);
+    }
     if (axis_name == AXIS_ALPHA){
         digitalWrite(PIN_ALPHA_ENABLE_2201, !enable_it);   // LOW is enable
     } else if (axis_name == AXIS_BETA){

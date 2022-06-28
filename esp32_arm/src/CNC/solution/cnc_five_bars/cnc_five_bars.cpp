@@ -33,10 +33,10 @@ void CncFiveBars::RunG28(EnumAxis axis){
 		mover->SingleActuatorMoveTo(axis, false, long_distance_to_move);
 		mover->PrintOut("Mover in CncFiveBars::RunG28()");
 	}else{
-		Serial.print("\n[Error] CncFiveBars::RunG28() ");
+		Logger::Error("CncFiveBars::RunG28() ");
 	}
 	// this->_stepControl->moveAsync(*this->__homing_stepper);
-	Serial.print("[Debug] CncFiveBars::RunG28() is Starting to run...\n" );
+	Serial.println("[Debug] CncFiveBars::RunG28() is Starting to run..." );
 }
 
 
@@ -46,14 +46,19 @@ void CncFiveBars::_running_G28(){
 
 	if (this->__current_homer->IsTriged()){
 		// End stop is trigered
-		Serial.print("\n[Info] CncFiveBars::_running_G28() Home sensor is trigered.  " );
-		Serial.print (this->_homing_axis_name);
-		// this->_stepControl->stop();
-		this->_board->cnc_mover->AllActuatorsStop();
+		Serial.print("[Info] CncFiveBars::_running_G28() Home sensor is trigered.  axis= " );
+		Serial.println (this->_homing_axis_name);
+		this->_board->RepportRamUsage();
+		this->_board->cnc_mover->PrintOut("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
+		this->_board->cnc_mover->AllActuatorsStop();
+		Serial.print("1111111111111111111111111111");
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
-		if (this->_home_as_inverse_kinematic){
+		Serial.print("222222222222222222");
+		this->_config->PrintOut("ggggggggggggggggggggggggggggggggggggggggggggggggggg");
+		if (this->_config->IsInverseKinematicHoimg){
+			Serial.print("666666666666666");
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
 			ik_position.alpha =  this->_fivebarMachine->Homed_position_alpha_in_rad;
 			ik_position.beta =  this->_fivebarMachine->Homed_position_beta_in_rad;
@@ -63,23 +68,19 @@ void CncFiveBars::_running_G28(){
 			Serial.print("\n\n  [Info] Please verify IK->FK->IK   ");
 			this->IK(&this->__current_fk_position, &verifying_ik);
 		}else{
-			Serial.print("\n  [Error] Trying to get home position with EEF-FK position  ");
+			Serial.print("5555555555555555555");
+			Logger::Error("CncFiveBars::_running_G28()  Trying to get home position");
+			Serial.print(" with EEF-FK position is under construction");
+			Serial.println(FCBC_RESET);
 		}
 		//Copy current ik-position to motor-position.
 		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
 		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
 		
-		// this->alpha_stepper->setMaxSpeed(this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA);
-		// this->alpha_stepper->setAcceleration(this->_fivebarMachine->MAX_ACCELERATION_ALPHA_BETA);
-		// this->beta_stepper->setMaxSpeed(this->_fivebarMachine->MAX_STEPS_PER_SECOND_ALPHA_BETA);
-		// this->beta_stepper->setAcceleration(this->_fivebarMachine->MAX_ACCELERATION_ALPHA_BETA);
 		this->State = CncState::IDLE;
 
 	}else{
 		// Endstop is not trigered
-		// Serial.print("\n[Debug] CncFiveBars::_running_G28()  Still homing\n");
-		// We are going to move a long long distance with async mode(None blocking).
-		// When endstop is trigered, must stop the moving. 
 
 	}
 }
@@ -233,14 +234,15 @@ void CncFiveBars::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 // void CncFiveBars::RunM123(uint8_t eef_channel, EefAction eef_action){
 void CncFiveBars::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	Serial.print("[Debug] CncFiveBars::RunM123()  eef_action= ");
+	Serial.println(eef_action);
 	uint8_t action_code = 1;
 	this->__eef->Run(action_code);
 
 }
 
 void CncFiveBars::RunG1(Gcode* gcode){
-	Serial.print("\n[Debug] CncFiveBars::RunG1()   ");
-	Serial.print(gcode->get_command());
+	Serial.print("[Debug] CncFiveBars::RunG1()   ");
+	Serial.println(gcode->get_command());
 
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
@@ -298,14 +300,14 @@ void CncFiveBars::RunG1(Gcode* gcode){
 	if (true){
 		FkPosition_XY verified_fk;
 		FK(&target_ik_ab, &verified_fk);
-		Serial.print("-----------------------------------------------");
-		Serial.print("\n Please Verify FK angin to confirm IK() is correct.");
+		Serial.println("-----------------------------------------------");
+		Serial.print(" Please Verify FK angin to confirm IK() is correct.");
 		Serial.print(" FK.X= ");
 		Serial.print(verified_fk.X);
 		Serial.print(" FK.Y= ");
 		Serial.print(verified_fk.Y);
 
-		Serial.print("\n[Debug] CncFiveBars::RunG1() ");
+		Serial.print("[Debug] CncFiveBars::RunG1() ");
 		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
 		Serial.print(",");
 		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
@@ -321,7 +323,7 @@ void CncFiveBars::_running_G1(){
     if (this->GetDistanceToTarget_IK() < 123){  // TODO: to determine g1 is finsied
 
       	this->State = CncState::IDLE;
-		Serial.print("\n[Info] CncFiveBars::_running_G1() is finished. ");
+		Serial.print("[Info] CncFiveBars::_running_G1() is finished. ");
     }
 	// Serial.println(this->GetDistanceToTarget_IK());
 	// delay(100);  

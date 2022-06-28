@@ -94,11 +94,11 @@ void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float posit
 
         bool debug = true;
         if (debug){
-            // Serial.print("[Debug] ActuatorStepper::MoveTo( absolute)  position_in_cnc_unit= ");
-            Logger::PrintTitle("ActuatorStepper::MoveTo( absolute)");
-            Serial.print("  actuator_position= ");
+            Logger::PrintTitle("ActuatorStepper::SetTargetPositionTo(absolute)");
+            Serial.print(" Target_position: actuator= ");
             Serial.print(RAD_TO_DEG * actuator_position);
             Serial.print(" accelleration= ");
+            
             Serial.println( "in TODO list, currently is default. ");
         }
     } else {

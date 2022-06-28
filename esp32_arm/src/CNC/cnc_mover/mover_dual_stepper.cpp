@@ -135,7 +135,11 @@ void CncMover_DualStepper::SetActuatorCurrentCncPositionAs(EnumAxis actuator_nam
     }else if (actuator_name == AXIS_BETA){
         this->__actuator_beta->SetCurrentPositionAs(as_current_position);
     }else{
-        log_w("[Warn] CncMover_DualStepper::SingleMotorMoveTo() Unkonwn axisname= ", actuator_name );
+        Logger::Warn("CncMover_DualStepper::SingleMotorMoveTo()");
+        Serial.print("Unkonwn axisname= ");
+        Serial.print(actuator_name);
+        Serial.println(FCBC_RESET);
+
     }
 }
 float CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit(){

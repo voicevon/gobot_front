@@ -102,7 +102,7 @@ void CncScaraSolution::Init(CncBoardBase* board ){
 	board->EnableMotor(AXIS_ALPHA, false);
 	board->EnableMotor(AXIS_BETA, false);
 
-	this->_home_as_inverse_kinematic = true;   // TODO: inside mechanic.
+	// this->IsInverseKinematicHoimg = true;   // TODO: inside mechanic.
 
 }
 
@@ -234,7 +234,7 @@ void CncScaraSolution::_running_G28(){
 		this->_board->cnc_mover->SingleActuatorStop(this->_homing_axis_name);
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
-		if (this->_home_as_inverse_kinematic){
+		if (this->_config->IsInverseKinematicHoimg){
 			if (debug) Serial.print("\n   [Info] CncScaraSolution::_running_G28() Trying to get home position from actuator position  ");
 			if (this->_homing_axis_name == AXIS_ALPHA){
 				ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;

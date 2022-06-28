@@ -27,7 +27,7 @@ void CncSingleAxis::Init(CncBoardBase* board){
 	// this->_mechanic->Init('F');
 	this->_board->EnableMotor(this->__AXIS_NAME, false);
 
-	this->_home_as_inverse_kinematic = false;
+	// this->IsInverseKinematicHoimg = false;
 }
 
 void CncSingleAxis::RunG28(EnumAxis axis){
@@ -56,7 +56,7 @@ void CncSingleAxis::_running_G28(){
 
 		//Set current position to HomePosition
 		IkPosition_A ik_position;
-		if (this->_home_as_inverse_kinematic){
+		if (this->_config->IsInverseKinematicHoimg){
 			// We know homed position via IK.
 			Serial.print("\n[Error] CncSingleAxis::_running_G28() This robot does NOT impliment this function.");
 		}

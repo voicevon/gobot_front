@@ -49,38 +49,11 @@ CncCoreAZ::CncCoreAZ(){
 
 void CncCoreAZ::Init(CncBoardBase* board){
 	Serial.print("\n[Info] CncCoreAZ::Init_Linkage() is entering.");
-	// this->_machine->Init();
-	// this->objStepper_alpha = board->GetStepper(AXIS_ALPHA);
-	// this->objStepper_beta = board->GetStepper(AXIS_BETA);
 	this->objHomeHelper_vertical = board->GetHomer(AXIS_Z);
 	this->objHomeHelper_vertical = board->GetHomer(AXIS_X);
-	// pinMode(PIN_ALPHA_ENABLE, OUTPUT);
-	// pinMode(PIN_BETA_ENABLE, OUTPUT);
-	// pinMode(PIN_MICRIO_STEP_0, OUTPUT);
-	// pinMode(PIN_MICRIO_STEP_1, OUTPUT);
-	// pinMode(PIN_MICRIO_STEP_2, OUTPUT);
-
-	// this->__EnableMotor(AXIS_ALPHA, false);
-	// this->__EnableMotor(AXIS_BETA, false);
 	this->_board->EnableMotor(AXIS_ALPHA, false);
 	this->_board->EnableMotor(AXIS_BETA, false);
 
-	// digitalWrite(PIN_MICRIO_STEP_0, LOW);
-	// digitalWrite(PIN_MICRIO_STEP_1, LOW);
-	// digitalWrite(PIN_MICRIO_STEP_2, LOW);
-	
-
-	// CommuUart* commuUart = new CommuUart();   //TODO:  remove or rename to: OutputDevice.
-	// this->commuDevice = commuUart; 
-
-	// this->objStepper_alpha.setAcceleration(MAX_ACCELERATION_ALPHPA);
-	// this->objStepper_alpha.setMaxSpeed(MAX_ACCELERATION_ALPHPA);
-	// this->objStepper_beta.setAcceleration(MAX_ACCELERATION_BETA);
-	// this->objStepper_beta.setMaxSpeed(MAX_STEPS_PER_SECOND_BETA);
-	// this->objStepper_alpha->setInverseRotation(true);
-	// this->objStepper_beta->setInverseRotation(true);
-
-	this->_home_as_inverse_kinematic = false;
 }
 
 void CncCoreAZ::RunG28(EnumAxis axis){
@@ -89,30 +62,21 @@ void CncCoreAZ::RunG28(EnumAxis axis){
 	this->_homing_axis_name = axis;
 
 	this->_machine->PrintOut();
-	// this->objStepper_alpha->setAcceleration(this->_machine->Homing_acceleration_alpha_beta);
-	// this->objStepper_alpha->setMaxSpeed(this->_machine->Homing_speed_alpha_beta);
-	// this->objStepper_beta->setAcceleration(this->_machine->Homing_acceleration_alpha_beta);
-	// this->objStepper_beta->setMaxSpeed(this->_machine->Homing_speed_alpha_beta);
 	float motor_position[2];
 
 	if (axis=='W'){
 		//todo :  process with IK()
 		this->__homing_helper = this->objHomeHelper_angle;
-		// this->objStepper_alpha->setTargetRel(5000000);
-		// this->objStepper_beta->setTargetRel(5000000);
 		motor_position[0] = 5000000;
 		motor_position[1] = 5000000;
 	
 	}else if (axis=='Z'){
 		this->__homing_helper = this->objHomeHelper_vertical;
-		// this->objStepper_alpha->setTargetRel(-5000000);
-		// this->objStepper_beta->setTargetRel(5000000);	
 		motor_position[0] = -5000000;
 		motor_position[1] = -5000000;
 	}
 	this->_board->EnableMotor(AXIS_ALPHA, true);
 	this->_board->EnableMotor(AXIS_BETA, true);
-	// this->_stepControl->moveAsync(*this->objStepper_alpha, *this->objStepper_beta);
 	this->_board->cnc_mover->AllActuatorsMoveTo(true, motor_position);
 }
 
@@ -126,7 +90,7 @@ void CncCoreAZ::_running_G28(){
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
-		if (this->_home_as_inverse_kinematic){
+		if (this->_config->IsInverseKinematicHoimg){
 			// We know homed position via IK.
 			Serial.print("\n[Error] CncCoreAZ::_running_G28() This robot does NOT impliment this function.");
 		}
@@ -151,8 +115,6 @@ void CncCoreAZ::_running_G28(){
 
 	}else{
 		// Endstop is not trigered
-		// Serial.print("[Debug] Still homing\n");
-		// Serial.print("<");
 
 	}	
 }
