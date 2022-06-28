@@ -27,7 +27,7 @@ void setup() {
 
 
 void loop() {
-    TouchCell* pCell = obj_i2c_bus.SpinOnce();
+    TouchCell* pCell = obj_i2c_bus.FindandReadValidateCell();
     if (pCell == nullptr){
         Serial.println("Can not find any i2c slave address");
         return;
