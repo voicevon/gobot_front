@@ -2,7 +2,8 @@
 
 #include "MyBoards/cnc_board_base.h"
 #include "CNC/solution/cnc_base.h"
-#include "cnc_single_axis_machine.h"
+// #include "cnc_single_axis_machine.h"
+#include "cnc_solution_config_single_axis.h"
 
 
 //This is a virtual class. No Constructor.
@@ -17,7 +18,7 @@ class CncSingleAxis: public CncBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        CncSingleAxis_Machine* _mechanic;  //TODO:  uinify name:  cncConfig??
+        CncSolutionConfig_SingleAxis* _mechanic;  //TODO:  uinify name:  cncConfig??
 
     private:
         EnumAxis __AXIS_NAME;   // TODO: doubel check this var.

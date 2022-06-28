@@ -1,8 +1,9 @@
 #pragma once
 
-#include "CNC/solution/cnc_single_axis/cnc_single_axis_machine.h"
+// #include "CNC/solution/cnc_single_axis/cnc_single_axis_machine.h"
+#include "CNC/solution/cnc_single_axis/cnc_solution_config_single_axis.h"
 
-class SpringMakerMachine: public CncSingleAxis_Machine{
+class SpringMakerMachine: public CncSolutionConfig_SingleAxis{
     public:
         SpringMakerMachine();
         // int32_t GetStepsPerUnit(char axis_name) override;

@@ -2,7 +2,7 @@
 
 #include "CNC/cnc_machine_base.h"
 
-class CncCoreYZMachine: public CncMachineBase{
+class CncCoreYZMachine: public CncSolutionConfigBase{
     public:
         float steps_per_mm_for_y;
         float steps_per_mm_for_z;

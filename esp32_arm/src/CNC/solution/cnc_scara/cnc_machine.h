@@ -1,7 +1,7 @@
 #pragma once
 #include "CNC/cnc_machine_base.h"
 
-class CncScaraMachine: public CncMachineBase{
+class CncScaraMachine: public CncSolutionConfigBase{
     public:
         CncScaraMachine(){};
         // virtual float GetHomingVelocity(int8_t axis_name);

@@ -6,7 +6,8 @@
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/single_axis_homer.h"
 #include "CNC/cnc_mover/mover_dual_stepper.h"
-#include "mechanic/cnc_machine.h"
+// #include "mechanic/cnc_machine.h"
+#include "mechanic/cnc_solution_config.h"
 
 class Board_GobotMain: public CncBoardBase{
     public:
@@ -17,7 +18,7 @@ class Board_GobotMain: public CncBoardBase{
         ActuatorBase* GetActuator(EnumAxis axis_name) override;
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GobotMain* GetEef() override;
-        CncMachineBase* GetCncMechanic() override {return &this->__cnc_mechanic;};
+        CncSolutionConfigBase* GetCncMechanic() override {return &this->__cnc_mechanic;};
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         uint8_t ReadAllRooms();
         uint8_t GetLoadedRoom();

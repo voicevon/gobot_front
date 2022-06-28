@@ -27,7 +27,7 @@ class Vsc_Board: public CncBoardBase{
         MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
         SingleAxisHomer __homer = SingleAxisHomer(PIN_HOMER_SENSOR_HALL, LOW);
 
-        CncMachineBase* GetCncMechanic() override {return nullptr;};
+        CncSolutionConfigBase* GetCncMechanic() override {return nullptr;};
         RobotEefBase* GetEef()override {return nullptr;};
         void EnableMotor(EnumAxis axis_name, bool enable_it) override {};
 

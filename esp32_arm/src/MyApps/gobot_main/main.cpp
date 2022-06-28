@@ -9,7 +9,8 @@
 #include "board/board_gobot_main.h"
 #include "board/robot_eef/gobot_main_eef.h"
 #include "board/mechanic/cnc_solution.h"
-#include "board/mechanic/cnc_machine.h"
+// #include "board/mechanic/cnc_machine.h"
+#include "board/mechanic/cnc_solution_config.h"
 #include "ESP32Step/src/TeensyStep.h"
 
 Board_GobotMain board;

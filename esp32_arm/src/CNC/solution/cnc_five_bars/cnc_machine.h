@@ -1,7 +1,7 @@
 #pragma once
 #include "CNC/cnc_machine_base.h"
 
-class CncFiveBarMachine: public CncMachineBase{
+class CncFiveBarMachine: public CncSolutionConfigBase{
     public:
         // link length in mm
         CncFiveBarMachine(){};

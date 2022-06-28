@@ -10,6 +10,12 @@ void CncMover_StepperServo::LinkStepper_asAlpha(ActuatorStepper* alpha){
 void CncMover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
     this->__actuator_beta = servo;
 }
+
+void CncMover_StepperServo::PrintOut(const char* title) {
+    Logger::PrintTitle("CncMover_StepperServo::PrintOut eeeeeeeeeeee");
+
+}
+
 #include "MyLibs/calculator.h"
 
 void CncMover_StepperServo::SetEefSpeed(float speed){

@@ -10,6 +10,7 @@ class CncMover_StepperServo: public CncMoverBase{
         void LinkStepControl(StepControl* stepControl){this->__stepControl=stepControl;};
         void LinkStepper_asAlpha(ActuatorStepper* stepper);
         void LinkServo_asBeta(ActuatorServo* servo);
+        void PrintOut(const char* title) override;
         
         void SetEefSpeed(float speed) override;
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;

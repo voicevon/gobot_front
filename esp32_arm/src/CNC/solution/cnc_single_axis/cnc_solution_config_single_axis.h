@@ -1,7 +1,7 @@
 #pragma once
 #include "CNC/cnc_machine_base.h"
 
-class CncSingleAxis_Machine: public CncMachineBase{
+class CncSolutionConfig_SingleAxis: public CncSolutionConfigBase{
     public:
         // float max_speed_alpha;
         // float max_acceleration_alpha;

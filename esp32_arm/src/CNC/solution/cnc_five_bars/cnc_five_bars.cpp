@@ -22,7 +22,7 @@ void CncFiveBars::RunG28(EnumAxis axis){
 		this->_homing_axis_name = axis;
 		this->__current_homer = this->_board->GetHomer(axis);
 		
-		CncMachineBase* config = this->_board->GetCncMechanic();
+		CncSolutionConfigBase* config = this->_board->GetCncMechanic();
 		CncMoverBase* mover = this->_board->cnc_mover;
 		config->PrintOut("Config in CncFiveBars::RunG28()");
 		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));
@@ -49,16 +49,13 @@ void CncFiveBars::_running_G28(){
 		Serial.print("[Info] CncFiveBars::_running_G28() Home sensor is trigered.  axis= " );
 		Serial.println (this->_homing_axis_name);
 		this->_board->RepportRamUsage();
-		this->_board->cnc_mover->PrintOut("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
 		this->_board->cnc_mover->AllActuatorsStop();
-		Serial.print("1111111111111111111111111111");
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
 		Serial.print("222222222222222222");
 		this->_config->PrintOut("ggggggggggggggggggggggggggggggggggggggggggggggggggg");
 		if (this->_config->IsInverseKinematicHoimg){
-			Serial.print("666666666666666");
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
 			ik_position.alpha =  this->_fivebarMachine->Homed_position_alpha_in_rad;
 			ik_position.beta =  this->_fivebarMachine->Homed_position_beta_in_rad;
@@ -68,7 +65,6 @@ void CncFiveBars::_running_G28(){
 			Serial.print("\n\n  [Info] Please verify IK->FK->IK   ");
 			this->IK(&this->__current_fk_position, &verifying_ik);
 		}else{
-			Serial.print("5555555555555555555");
 			Logger::Error("CncFiveBars::_running_G28()  Trying to get home position");
 			Serial.print(" with EEF-FK position is under construction");
 			Serial.println(FCBC_RESET);

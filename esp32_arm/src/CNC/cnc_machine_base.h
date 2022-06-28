@@ -5,7 +5,7 @@
 #include "coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
 
-class CncMachineBase{
+class CncSolutionConfigBase{
     public:
         // virtual int32_t GetStepsPerUnit(char axis_name);
         // virtual void Init(char solution_id);

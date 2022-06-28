@@ -1,7 +1,7 @@
 //https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout-1.jpg
 
 #include "all_applications.h"
-#ifdef I_AM_SMOKE_MACHINE_WEB_SERVER
+#ifdef I_AM_SMOKE_BOT
 
 #include "MyLibs/MyFunctions.hpp"
 #include "smoke_bot.h"

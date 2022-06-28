@@ -1,6 +1,7 @@
 
 
-#include "cnc_machine.h"
+// #include "cnc_machine.h"
+#include "cnc_solution_config.h"
 
 GobotHouseMachine_2206::GobotHouseMachine_2206(){
     this->__InitStaticConfig();

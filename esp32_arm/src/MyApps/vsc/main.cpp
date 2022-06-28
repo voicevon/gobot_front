@@ -2,7 +2,8 @@
 #ifdef I_AM_VSC
 #include "board/board_vsc.h"
 #include "board/board_tester.h"
-#include "board/mechanic/cnc_machine.h"
+// #include "board/mechanic/cnc_machine.h"
+#include "board/mechanic/cnc_solution_config.h"
 #include "board/mechanic/cnc_solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"

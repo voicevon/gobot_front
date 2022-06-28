@@ -50,7 +50,7 @@ class CncBase: public GcodeConsumer{
         EnumAxis _homing_axis_name;
         
         // StepControl* _stepControl;
-        CncMachineBase* _config;
+        CncSolutionConfigBase* _config;
         CncBoardBase* _board;
         SingleAxisHomer* __current_homer;
         // CncMover* _mover;

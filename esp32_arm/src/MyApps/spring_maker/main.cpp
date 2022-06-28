@@ -1,7 +1,8 @@
 #include "all_applications.h"
 #ifdef I_AM_SPRING_MAKER
 #include "board/board_spring_maker.h"
-#include "board/mechanic/cnc_machine.h"
+// #include "board/mechanic/cnc_machine.h"
+#include "board/mechanic/cnc_solution_config.h"
 #include "board/mechanic/cnc_solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"

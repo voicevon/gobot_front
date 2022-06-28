@@ -1,18 +1,11 @@
 #pragma once
-// #include "../board_base.h"
-// #include "MyBoards/board_base.h"
 #include "MyBoards/cnc_board_base.h"
-
 #include "ESP32Step/src/TeensyStep.h"
-// #include "CNC/single_axis_homer.h"
 #include "mechanic/cnc_solution.h"
-// #include "MyBoards/gobot_main/board_pins/board_ver1.2.h"
-// #include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
 #include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
-// #include "robot_eef/board_smoke_machine.h"
 #include "robot_eef/board_smoke_bot.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-#include "mechanic/cnc_machine.h"
+#include "mechanic/cnc_solution_config.h"
 
 
 class Board_SmokeMachine: public CncBoardBase{
@@ -26,7 +19,7 @@ class Board_SmokeMachine: public CncBoardBase{
         RobotEef_SmokeMachine* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         ActuatorBase* GetActuator(EnumAxis axis_name) override {return &this->__actuator;};
-        CncMachineBase* GetCncMechanic() override{return &this->__cnc_mechanic;};
+        CncSolutionConfigBase* GetCncMechanic() override{return &this->__cnc_mechanic;};
 
         
     private:

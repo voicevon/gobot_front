@@ -11,14 +11,14 @@
 // #define I_AM_GARMENT_BOX_CARRIER
 
 // #define I_AM_GOBOT_HOUSE
-// #define I_AM_GOBOT_HOUSE_2206
-#define I_AM_GOBOT_MAIN
+#define I_AM_GOBOT_HOUSE_2206
+// #define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
 // #define I_AM_VSC
 
 // #define I_AM_ACUPUCTURE_MAIN
 // #define I_AM_ACUPUNCTURE_TESTER
-// #define I_AM_SMOKE_MACHINE_WEB_SERVER
+// #define I_AM_SMOKE_BOT
 // #define I_AM_CABLE_AXIS_XPYP
 // #define I_AM_CABLE_AXIS_XNYP
 // #define I_AM_CABLE_AXIS_XNYN
@@ -160,7 +160,7 @@
 	#define BLE_STATE_UUID   "9c43b29c-1451-11ec-82a8-0242ac130003"
 #endif
 
-#ifdef I_AM_SMOKE_MACHINE_WEB_SERVER
+#ifdef I_AM_SMOKE_BOT
 	#define USING_WIFI_MQTT
 	#define AXIS_NAME 'X'
 	#define MQTT_SYNCERS_COUNT 1

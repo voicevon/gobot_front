@@ -1,11 +1,12 @@
-#include "cnc_machine.h"
+// #include "cnc_machine.h"
+#include "cnc_solution_config.h"
 
 
 // int32_t SpringMakerMachine::GetStepsPerUnit(char axis_name) {
 //     return 100;
 // }
 
-SmookerBot_CncMechanic::SmookerBot_CncMechanic(){
+SpringMakerMachine::SpringMakerMachine(){
         // this->STEPPER_DRIVER_MICRO_STEPS = 16;
         // this->MOTOR_GEARBOX_RATIO_ALPHA = 51;
         // this->MOTOR_DEGREE_PER_STEP = 1.8;
@@ -23,9 +24,9 @@ SmookerBot_CncMechanic::SmookerBot_CncMechanic(){
         // this->steps_per_rad_for_a = 360.0f * this->STEPPER_DRIVER_MICRO_STEPS  * this->MOTOR_GEARBOX_RATIO_ALPHA / this->MOTOR_DEGREE_PER_STEP / TWO_PI;
 }
 
-void SmookerBot_CncMechanic::PrintOut(const char * title){
+void SpringMakerMachine::PrintOut(const char * title){
     Serial.print("\n\n===============================================");
-    Serial.print("SmookerBot_CncSoution::PrintOut()");
+    Serial.print("\nSpringMakerMachine::PrintOut()");
     // Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");
     // Serial.print(this->STEPPER_DRIVER_MICRO_STEPS);
     // Serial.print("\n   MOTOR_DEGREE_PER_STEP = ");
