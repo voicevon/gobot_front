@@ -5,7 +5,8 @@
 #include "../solution_base.h"
 #include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "CNC/single_axis_homer.h"
+// #include "CNC/single_axis_homer.h"
+#include "Robot/homer/single_axis_homer.h"
 #include "cnc_machine.h"
 
 class Cnc_CoreYZ: public CncSolutionBase{

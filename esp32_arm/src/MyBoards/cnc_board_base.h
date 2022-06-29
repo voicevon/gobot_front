@@ -2,13 +2,11 @@
 
 #include "board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-// #include "RobotEef/robot_eef_base.h"
-#include "robot_eef/robot_eef_base.h"
+#include "Robot/eef/robot_eef_base.h"
 #include "CNC/mover/stepper_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-// #include "CNC/cnc_machine_base.h"
 #include "CNC/solution/solution_config_base.h"
-#include "cnc/single_axis_homer.h"
+#include "Robot/homer/single_axis_homer.h"
 
 class CncBoardBase: public BoardBase{
     public:

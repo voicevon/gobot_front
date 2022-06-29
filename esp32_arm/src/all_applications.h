@@ -11,8 +11,8 @@
 // #define I_AM_GARMENT_BOX_CARRIER    // CoreYZ
 
 // #define I_AM_GOBOT_HOUSE
-#define I_AM_GOBOT_HOUSE_2206
-// #define I_AM_GOBOT_MAIN
+// #define I_AM_GOBOT_HOUSE_2206
+#define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
 // #define I_AM_VSC
 

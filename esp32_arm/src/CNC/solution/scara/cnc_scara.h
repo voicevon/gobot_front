@@ -3,8 +3,10 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "MyBoards/cnc_board_base.h"
 #include "../solution_base.h"
-#include "CNC/single_axis_homer.h"
-#include "robot_eef/eef_standard_code.h"
+// #include "CNC/single_axis_homer.h"
+#include "Robot/homer/single_axis_homer.h"
+// #include "robot_eef/eef_standard_code.h"
+#include "Robot/eef/eef_standard_code.h"
 #include "MyLibs/Components/Led.h"
 #include "cnc_machine.h"
 
