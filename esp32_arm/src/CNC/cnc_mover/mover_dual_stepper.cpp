@@ -184,7 +184,7 @@ bool CncMover_DualStepper::ActuatorIsMoving(EnumAxis actuator_name) {
 }
 
 void CncMover_DualStepper::PrintOut(const char* title){
-    Logger::PrintTitle(title);
+    Logger::Info(title);
     Serial.print("moving_flags= ");
     Serial.println(this->_moving_actuator_flags);
     

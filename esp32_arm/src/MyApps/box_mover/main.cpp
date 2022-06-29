@@ -2,17 +2,19 @@
 // #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOX_MOVER
 
-#include "cnc_machine.h"
+// #include "cnc_machine.h"
+#include "board/mechanic/cnc_solution_config.h"
 // #include "MyBoards/asrs_agv_2205/sub_boards/board_cnc_2205.h"
 #include "MyApps/asar_agv/board/sub_board_cnc2205/board_cnc_2205.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_mover.h"
-#include "CNC/solution/cnc_core_az/box_mover_hw.h"
+// #include "CNC/solution/core_az/box_mover_hw.h"
+#include "board/mechanic/cnc_solution.h"
 #include "IoT/main_mqtt.h"
 
 // BoxMoverCncMachine machine;
 Board2205Cnc board = Board2205Cnc();
-CncCoreAZ cnc = CncCoreAZ();
+BoxMover_CncSoution cnc;
 BoxMover robot = BoxMover();
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;

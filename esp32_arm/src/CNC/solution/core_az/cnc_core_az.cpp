@@ -1,4 +1,5 @@
-#include "box_mover_hw.h"
+// #include "box_mover_hw.h"
+#include "cnc_core_az.h"
 
 // #define PIN_ALPHA_ENABLE 18
 // #define PIN_BETA_ENABLE 16
@@ -42,10 +43,6 @@ void CncCoreAZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	Serial.print(")");
 }
 
-
-CncCoreAZ::CncCoreAZ(){
-
-}
 
 void CncCoreAZ::Init(CncBoardBase* board){
 	Serial.print("\n[Info] CncCoreAZ::Init_Linkage() is entering.");

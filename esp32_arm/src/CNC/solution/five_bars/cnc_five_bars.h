@@ -10,7 +10,7 @@
 #include "CNC/single_axis_homer.h"
 #include "MyLibs/MyFunctions.hpp"
 
-class CncFiveBars: public CncBase{
+class CncFiveBars: public CncSolutionBase{
     public:
         CncFiveBars(){};
         void Init(CncBoardBase* board) override;

@@ -12,7 +12,7 @@ void CncMover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
 }
 
 void CncMover_StepperServo::PrintOut(const char* title) {
-    Logger::PrintTitle("CncMover_StepperServo::PrintOut eeeeeeeeeeee");
+    Logger::Info("CncMover_StepperServo::PrintOut eeeeeeeeeeee");
 
 }
 

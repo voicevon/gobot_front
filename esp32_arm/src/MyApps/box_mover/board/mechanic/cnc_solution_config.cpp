@@ -1,8 +1,6 @@
-#include "cnc_machine.h"
+// #include "cnc_machine.h"
+#include "cnc_solution_config.h"
 
-// int32_t BoxMoverCncMachine::GetStepsPerUnit(char axis_name){
-//     return 123;
-// }
 
 BoxMoverCncMachine::BoxMoverCncMachine(){
         this->STEPPER_DRIVER_MICRO_STEPS = 16;

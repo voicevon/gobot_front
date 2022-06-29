@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/solution/cnc_scara/cnc_machine.h"
+#include "CNC/solution/scara/cnc_machine.h"
 
 
 class GobotHouseMachine: public CncScaraMachine{

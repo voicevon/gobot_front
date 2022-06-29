@@ -3,16 +3,16 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "HardwareSerial.h"
 #include "MyLibs/message_queue.h"
-// void CncBase::FeedMessage(char* message, int length){
+// void CncSolutionBase::FeedMessage(char* message, int length){
 // 	Gcode gcode = Gcode(message);
 // 	this->RunGcode(&gcode);
 // }
-void CncBase::SayHello(){
-	Serial.println("[Debug] CncBase::SayHello()");
+void CncSolutionBase::SayHello(){
+	Serial.println("[Debug] CncSolutionBase::SayHello()");
 }
 
-void CncBase::SpinOnce(){
-	// Serial.print("[Debug] CncBase::SpinOnce() is entering.  Current state= ");
+void CncSolutionBase::SpinOnce(){
+	// Serial.print("[Debug] CncSolutionBase::SpinOnce() is entering.  Current state= ");
 	// Serial.println(this->State);
 	switch (this->State){
 	case CncState::IDLE:
@@ -27,17 +27,17 @@ void CncBase::SpinOnce(){
 		this->_running_G28();
 		break;
 	default:
-		Serial.print("[Warning] CncBase::SpinOnce() Unknown current state: ");
+		Serial.print("[Warning] CncSolutionBase::SpinOnce() Unknown current state: ");
 		// Serial.print(this->State);
 		break;
 	}
 
-	// Serial.println("[Debug]( CncBase::SpinOnce() is finished.)");
+	// Serial.println("[Debug]( CncSolutionBase::SpinOnce() is finished.)");
 	this->SpinOnce_BaseExit();
 }
 
 // Check gcode queue, if there is gcode to be run.
-void CncBase::SpinOnce_BaseExit(){
+void CncSolutionBase::SpinOnce_BaseExit(){
 	if (this->State != CncState::IDLE)
 		return;
 	if (this->_gcode_queue->BufferIsEmpty())
@@ -45,13 +45,13 @@ void CncBase::SpinOnce_BaseExit(){
 
 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
 	if (message == NULL){
-		Serial.println("\n\n\n [Error] CncBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
+		Serial.println("\n\n\n [Error] CncSolutionBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
 		return;
 	}
 
-	// this->_mq->SayHello("CncBase::SpinOnce_BaseExit()");
+	// this->_mq->SayHello("CncSolutionBase::SpinOnce_BaseExit()");
 	if (true){
-		Serial.print("\n[Info] CncBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
+		Serial.print("\n[Info] CncSolutionBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
 		Serial.print(message->payload);
 		Serial.println(" ");
 	}
@@ -64,12 +64,12 @@ void CncBase::SpinOnce_BaseExit(){
 	this->RunGcode(&gcode);
 }
 
-void CncBase::RunG4(Gcode* gcode){
+void CncSolutionBase::RunG4(Gcode* gcode){
 	__g4_start_timestamp = micros();
 	__g4_time_second = gcode->get_value('S');
 }
 
-void CncBase::__running_G4(){
+void CncSolutionBase::__running_G4(){
 	long delayed = (micros() - __g4_start_timestamp) / 1000 /1000;
 	if (delayed >= __g4_time_second ){
 		this->State = CncState::IDLE;
@@ -77,7 +77,7 @@ void CncBase::__running_G4(){
 	}
 }
 
-void CncBase::RunGcode(Gcode* gcode){
+void CncSolutionBase::RunGcode(Gcode* gcode){
 	std::string result;
 	// if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND)){
 	//   Serial.print("RunGcode()   OK or Unknown");
@@ -103,7 +103,7 @@ void CncBase::RunGcode(Gcode* gcode){
 			// this->_home_via_inverse_kinematic = false;
 			// if (gcode->has_letter('I')) this->_home_via_inverse_kinematic = true;
 			if (home_axis == '+'){
-				Serial.print("\n\n\n\n[Error] CncBase::RunGcode()  :");
+				Serial.print("\n\n\n\n[Error] CncSolutionBase::RunGcode()  :");
 				Serial.print(home_axis);
 
 			}
@@ -180,7 +180,7 @@ void CncBase::RunGcode(Gcode* gcode){
 			s_value = gcode->get_value('S');
 			debug = true;
 			if (debug){
-				Serial.print("CncBase::RunGcode() For EEF_ACTION  M123 P= ");
+				Serial.print("CncSolutionBase::RunGcode() For EEF_ACTION  M123 P= ");
 				Serial.print(p_value);
 				Serial.print("  S= ");
 				Serial.print(s_value);
@@ -212,13 +212,13 @@ void CncBase::RunGcode(Gcode* gcode){
 			break;
 		}
 	}else{
-		// this->commuDevice->OutputMessage("\n[Warning] CncBase::RunGcode()  Has NO letter 'G' or 'M'. ");
+		// this->commuDevice->OutputMessage("\n[Warning] CncSolutionBase::RunGcode()  Has NO letter 'G' or 'M'. ");
 		// this->commuDevice->OutputMessage(gcode->get_command());
 		// this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
 	}
 }
 
 
-void CncBase::RunM42(uint8_t pin_number, uint8_t pin_value){
+void CncSolutionBase::RunM42(uint8_t pin_number, uint8_t pin_value){
 	digitalWrite(pin_number, pin_value);
 }

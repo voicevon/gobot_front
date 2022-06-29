@@ -16,7 +16,7 @@ enum class CncState{
     RUNNING_G28
 };
 
-class CncBase: public GcodeConsumer{
+class CncSolutionBase: public GcodeConsumer{
     public:
         CncState State = CncState::IDLE;
         void RunGcode(Gcode* gcode);

@@ -5,7 +5,7 @@ uint8_t BoardBase::__i2c_bus_index = 0;
 
 
 void BoardBase::RepportRamUsage(){
-    Logger::PrintTitle("-----------------  RAM usage -----------------");
+    Logger::Info("-----------------  RAM usage -----------------");
     Serial.print("Total PSRAM: ");
     Serial.println(ESP.getPsramSize());
     Serial.print("Free PSRAM: ");

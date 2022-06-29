@@ -77,7 +77,7 @@ void I2c_commu::SpinOnce(){
         this->Cells[i].IsOnline = true;
 
     }
-    Logger::PrintTitle("Reset all cells state to online");
+    Logger::Info("Reset all cells state to online");
     Serial.print("Min_address= ");
     Serial.print(this->Cells[0].Address);
     Serial.print("   CELLS_COUNT= ");

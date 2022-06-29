@@ -23,7 +23,7 @@ GobotMainMachine::GobotMainMachine(){
 }
 
 void GobotMainMachine::PrintOut(const char* title){
-    Logger::PrintTitle(title);
+    Logger::Info(title);
     Serial.print("Lenth of LINK_0, LINK_A, LINK_B = (");
     Serial.print(this->LINK_0);
     Serial.print(" , ");

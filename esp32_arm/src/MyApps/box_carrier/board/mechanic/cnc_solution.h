@@ -1,5 +1,5 @@
 #pragma once
-#include "CNC/solution/cnc_core_yz/cnc_core_yz.h"
+#include "CNC/solution/core_yz/cnc_core_yz.h"
 
 
 class BoxCarrier_CncSolution: public Cnc_CoreYZ{

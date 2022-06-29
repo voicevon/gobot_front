@@ -7,7 +7,7 @@
 
 
 //This is a virtual class. No Constructor.
-class CncSingleAxis: public CncBase{
+class CncSingleAxis: public CncSolutionBase{
     public:
         void Init(CncBoardBase* board) override;
         void RunG28(EnumAxis axis) override;

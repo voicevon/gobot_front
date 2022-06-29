@@ -1,6 +1,7 @@
 #pragma once
 
-#include "CNC/solution/cnc_core_az/cnc_machine.h"
+// #include "CNC/solution/core_az/cnc_machine.h"
+#include "CNC/solution/core_az/config.h"
 
 class BoxMoverCncMachine: public CncCoreAZMachine{
     public:

@@ -10,7 +10,7 @@
 #include "cnc_machine.h"
 
 
-class CncScaraSolution: public CncBase{
+class CncScaraSolution: public CncSolutionBase{
     public:
         // static CncScaraSolution& getInstance()
         // {

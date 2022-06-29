@@ -1,7 +1,7 @@
 #pragma once
 
-// #include "box_mover_hw.h"
-#include "CNC/solution/cnc_core_az/box_mover_hw.h"
+// #include "CNC/solution/core_az/box_mover_hw.h"
+#include "CNC/solution/core_az/cnc_core_az.h"
 #include "CNC/gcode/gcode_queue.h"
 #include "CNC/gcode/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"

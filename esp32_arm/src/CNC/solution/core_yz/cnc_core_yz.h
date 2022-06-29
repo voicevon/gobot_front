@@ -1,28 +1,17 @@
 #pragma once
 
+#include "MyBoards/cnc_board_base.h"
 #include "CNC/solution/cnc_base.h"
+#include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
 #include "cnc_machine.h"
-#include "MyBoards/board_base.h"
 
-
-
-#define VERTICAL_ENDSTOP 15
-#define ANGLE_ENDSTOP 2
-
-#define PIN_STEP_ALPHA 5
-#define PIN_DIR_ALPHA 19
-#define PIN_STEP_BETA 4
-#define PIN_DIR_BETA 17
-
-
-
-class CncCoreAZ:public CncBase{
+class Cnc_CoreYZ: public CncSolutionBase{
     public:
-        CncCoreAZ();
-
+        Cnc_CoreYZ(){};
         void Init(CncBoardBase* board) override;
+
         void RunG28(EnumAxis axis) override;
         void RunG1(Gcode* gcode) override;
 
@@ -31,8 +20,9 @@ class CncCoreAZ:public CncBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        // Stepper* objStepper_alpha;//  Stepper(PIN_STEP_ALPHA, PIN_DIR_ALPHA);
-        // Stepper* objStepper_beta;//  Stepper(PIN_STEP_BETA, PIN_DIR_BETA);
+        CncCoreYZMachine* _cncMachine;
+        // Stepper* stepper_alpha; 
+        // Stepper* stepper_beta; 
 
         //Override private
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
@@ -46,13 +36,10 @@ class CncCoreAZ:public CncBase{
         void RunM84() override;
         std::string GetHomeTrigerStateString() override {return " ";};
 
-        FkPosition_ZW __current_fk_position;
+        FkPosition_YZ __current_fk_position;
 
         SingleAxisHomer* __homing_helper;
-        SingleAxisHomer* objHomeHelper_vertical; // = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
-        SingleAxisHomer* objHomeHelper_angle; // = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
-        // BoxMoverHardwareConfig  __config;
-        CncCoreAZMachine* _machine;
-
+        SingleAxisHomer* objHomeHelper_vertical;
+        SingleAxisHomer* objHomeHelper_y;
 
 };

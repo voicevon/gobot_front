@@ -7,7 +7,7 @@ void ActuatorStepper::LinkStepper(Stepper* stepper, float steps_per_cnc_unit){
 }
 
 void ActuatorStepper::PrintOut(const char* title){
-    Logger::PrintTitle(title);
+    Logger::Info(title);
     Serial.print("ActuatorStepper  in");
     Serial.println(title);
     Serial.print("Positions:  current=" );
@@ -94,7 +94,7 @@ void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float posit
 
         bool debug = true;
         if (debug){
-            Logger::PrintTitle("ActuatorStepper::SetTargetPositionTo(absolute)");
+            Logger::Info("ActuatorStepper::SetTargetPositionTo(absolute)");
             Serial.print(" Target_position: actuator= ");
             Serial.print(RAD_TO_DEG * actuator_position);
             Serial.print(" accelleration= ");
@@ -111,7 +111,7 @@ void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float posit
 
     bool debug = true;
     if(debug){
-        Logger::PrintTitle("[Debug] ActuatorStepper::MoveTo()" );
+        Logger::Info("[Debug] ActuatorStepper::MoveTo()" );
         Serial.print("steps_per_cnc_unit= ");
         Serial.print(this->__steps_per_cnc_unit);
         

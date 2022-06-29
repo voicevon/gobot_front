@@ -1,7 +1,7 @@
 #pragma once
 
 // #include "CNC/solution/cnc_scara/cnc_machine.h"
-#include "CNC/solution/cnc_five_bars/config.h"
+#include "CNC/solution/five_bars/config.h"
 
 
 class GobotMainMachine: public CncFiveBarMachine{
