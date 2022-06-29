@@ -42,9 +42,13 @@ void I2c_commu::ReadSingleCell(TouchCell* cell){
         i++;
     }
     if(i==0) {
-        cell->IsOnline = false;
-        // cell->PrintOut("I2c_commu::ReadSingleCell()  has no response");
-        // Serial.println(" I2c_commu::ReadSingleCell()  No response.  cell_address= " + cell->Address);
+        // Can not read any data from i2c bus  for this address.
+        if (cell->auto_offline){
+            cell->SetOffline();
+        }else{
+            cell->PrintOut("I2c_commu::ReadSingleCell()  has no response");
+            Serial.println(" I2c_commu::ReadSingleCell()  No response.  cell_address= " + cell->Address);
+        }
     } 
     Wire.endTransmission(true);
     // delay(1000);
@@ -74,7 +78,7 @@ void I2c_commu::SpinOnce(){
 
     //All cells is offline. re init all cells to online
     for(int i=0; i< this->__CELLS_COUNT; i++){
-        this->Cells[i].IsOnline = true;
+        this->Cells[i].SetOnline();
 
     }
     Logger::Info("Reset all cells state to online");
@@ -100,7 +104,7 @@ TouchCell* I2c_commu::FindandReadValidateCell(){
     }
     //All cells is offline. re init all cells to online
     for(int i=0; i< this->__CELLS_COUNT; i++){
-        this->Cells[i].IsOnline = true;
+        this->Cells[i].SetOnline();
     }
     // }
     return nullptr;

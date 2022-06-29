@@ -5,7 +5,6 @@
 class TouchCell{
     public:
         uint8_t Address;
-        bool IsOnline = true;
         uint8_t CurrentFlags[4];
         uint8_t LastFlags[4];
         bool HasUpdate();
@@ -15,9 +14,14 @@ class TouchCell{
         bool IsBitUpdated(int bit_index);
         const char* GetMqttPayload(int bit_index);
         void PrintOut(const char* title);
-
+        bool auto_offline = true;
+        const bool& IsOnline = _is_online;
+        void SetOffline(){this->_is_online = false;};
+        void SetOnline(){this->_is_online= true;};
+        
     private:
         bool _has_update;
+        bool _is_online = true;
         char __mqtt_topic_substring[30];
 
 
