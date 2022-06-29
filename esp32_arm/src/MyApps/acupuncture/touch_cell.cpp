@@ -25,7 +25,9 @@ bool TouchCell::HasUpdate(){
 }
 
 const char* TouchCell::GetName(int point_id){
-    String name = String(this->Address);
+    String name = "u";
+    name.concat(this->Address);
+    name.concat("p");
     name.concat(point_id);
     name.toCharArray(this->__mqtt_topic_substring, 30);
     return this->__mqtt_topic_substring;
