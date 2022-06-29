@@ -3,7 +3,7 @@
 #include "board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "RobotEef/robot_eef_base.h"
-#include "CNC/cnc_mover/mover_stepper_servo.h"
+#include "CNC/mover/stepper_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/cnc_machine_base.h"
 #include "cnc/single_axis_homer.h"

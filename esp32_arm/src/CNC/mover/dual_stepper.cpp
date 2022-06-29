@@ -1,4 +1,4 @@
-#include "mover_dual_stepper.h"
+#include "dual_stepper.h"
 
 
 void CncMover_DualStepper::LinkStepper_asAlpha(ActuatorStepper* alpha){

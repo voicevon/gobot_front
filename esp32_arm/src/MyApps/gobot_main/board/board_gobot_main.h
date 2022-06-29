@@ -5,8 +5,7 @@
 #include "robot_eef/gobot_main_eef.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/single_axis_homer.h"
-#include "CNC/cnc_mover/mover_dual_stepper.h"
-// #include "mechanic/cnc_machine.h"
+#include "CNC/mover/dual_stepper.h"
 #include "mechanic/cnc_solution_config.h"
 
 class Board_GobotMain: public CncBoardBase{

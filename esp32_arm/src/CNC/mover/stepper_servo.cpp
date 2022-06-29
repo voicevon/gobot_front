@@ -1,4 +1,4 @@
-#include "mover_stepper_servo.h"
+#include "stepper_servo.h"
 
 
 void CncMover_StepperServo::LinkStepper_asAlpha(ActuatorStepper* alpha){

@@ -2,11 +2,10 @@
 #include "MyBoards/cnc_board_base.h"
 #include "board_pins/board_pins_ver3.11.h"
 #include "robot_eef/gobot_house_eef.h"
-// #include "cnc_machine.h"
 #include "mechanic/cnc_machine.h"
 #include "CNC/single_axis_homer.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-#include "CNC/cnc_mover/mover_dual_stepper.h"
+#include "CNC/mover/dual_stepper.h"
 
 class Board_GobotHouse: public CncBoardBase{
     public:
