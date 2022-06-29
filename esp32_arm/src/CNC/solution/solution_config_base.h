@@ -2,7 +2,8 @@
 #include <HardwareSerial.h>
 #include <stdint.h>
 #include "MyBoards/const.h"
-#include "coordinate/cnc_axis.h"
+// #include "coordinate/cnc_axis.h"
+#include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
 
 class CncSolutionConfigBase{

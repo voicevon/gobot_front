@@ -5,6 +5,7 @@
 #include "chessboard_map.h"
 #include "CNC/gcode/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
+#include "robot_eef/eef_standard_code.h"
 
 class GobotMain: public GcodeProducer, public MqttMessageConsumer{
     public:

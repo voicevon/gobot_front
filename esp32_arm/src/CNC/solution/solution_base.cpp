@@ -1,5 +1,6 @@
 // #include "robot_hardware_base.h"
-#include "cnc_base.h"
+// #include "cnc_base.h"
+#include "solution_base.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "HardwareSerial.h"
 #include "MyLibs/message_queue.h"

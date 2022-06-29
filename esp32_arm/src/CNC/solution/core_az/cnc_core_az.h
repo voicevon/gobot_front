@@ -1,6 +1,7 @@
 #pragma once
 
-#include "CNC/solution/cnc_base.h"
+// #include "CNC/solution/solution_base.h"
+#include "../solution_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/single_axis_homer.h"
 // #include "cnc_machine.h"

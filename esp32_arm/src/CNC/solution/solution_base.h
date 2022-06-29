@@ -1,9 +1,11 @@
 #pragma once
 
-#include "RobotEef/eef_standard_code.h"
+// #include "RobotEef/eef_standard_code.h"
+#include "robot_eef/eef_standard_code.h"
 #include "CNC/gcode/gcode_consumer.h"
 #include "MyBoards/cnc_board_base.h"
-#include "CNC/cnc_machine_base.h"
+// #include "CNC/cnc_machine_base.h"
+#include "solution_config_base.h"
 #include "CNC/single_axis_homer.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"

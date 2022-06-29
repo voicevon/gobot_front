@@ -1,5 +1,6 @@
 #pragma once
-#include "CNC/cnc_machine_base.h"
+// #include "CNC/cnc_machine_base.h"
+#include "../solution_config_base.h"
 
 class CncFiveBarMachine: public CncSolutionConfigBase{
     public:

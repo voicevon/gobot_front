@@ -6,7 +6,10 @@
 #include <stdint.h>
 #include <string>
 // #include <Robot/robot_hardware_base.h>
-#include "CNC/solution/cnc_base.h"
+// #include "CNC/solution/cnc_base.h"
+// #include "CNC/solution/solution_config_base.h"
+#include "CNC/coordinate/coordinate_base.h"
+
 
 class ChessboardCell{
     public:

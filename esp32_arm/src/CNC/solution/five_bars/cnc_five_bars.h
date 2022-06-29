@@ -3,10 +3,12 @@
 
 #include <ESP32Servo.h>
 #include "MyBoards/cnc_board_base.h"
-#include "CNC/solution/cnc_base.h"
+// #include "CNC/solution/cnc_base.h"
+#include "../solution_base.h"
 // #include "cnc_machine.h"
 #include "config.h"
-#include "RobotEef/eef_standard_code.h"
+// #include "RobotEef/eef_standard_code.h"
+#include "robot_eef/eef_standard_code.h"
 #include "CNC/single_axis_homer.h"
 #include "MyLibs/MyFunctions.hpp"
 
