@@ -6,8 +6,8 @@
 #include "IoT/main_mqtt.h"
 #include "board/board_gobot_main.h"
 #include "board/robot_eef/gobot_main_eef.h"
-#include "board/mechanic/cnc_solution.h"
-#include "board/mechanic/cnc_solution_config.h"
+#include "board/cnc/solution.h"
+#include "board/cnc/solution_config.h"
 #include "ESP32Step/src/TeensyStep.h"
 
 Board_GobotMain board;

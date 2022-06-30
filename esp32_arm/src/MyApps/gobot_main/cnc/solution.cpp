@@ -1,4 +1,4 @@
-#include "cnc_solution.h"
+#include "solution.h"
 
 EnumAxis GobotMainCnc::ConvertToEnum(char axis){
     switch (axis){

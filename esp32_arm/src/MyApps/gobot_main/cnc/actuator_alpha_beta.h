@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/Actuator/stepper/mechanic_polor.h"
+#include "CNC/Actuator/stepper/polor_config.h"
 
 class GobotMain_ActuatorAlphaBetaMechanic: public ActuatorStepper_PolorConfig{
     public:

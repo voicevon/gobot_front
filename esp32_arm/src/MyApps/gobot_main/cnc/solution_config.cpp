@@ -1,5 +1,5 @@
 // #include "cnc_machine.h"
-#include "cnc_solution_config.h"
+#include "solution_config.h"
 
 // int32_t GobotMain_CncSolutionConfig::GetStepsPerUnit(char axis_name) {
 //     return 100;

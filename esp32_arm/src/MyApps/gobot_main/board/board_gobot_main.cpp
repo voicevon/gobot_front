@@ -1,6 +1,6 @@
 #include "board_gobot_main.h"
 // #include "CNC/Actuator/stepper/mechanic_polor.h"
-#include "mechanic/actuator_alpha_beta.h"
+#include "cnc/actuator_alpha_beta.h"
 
 
 

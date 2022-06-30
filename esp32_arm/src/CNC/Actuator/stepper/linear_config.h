@@ -1,5 +1,5 @@
 #pragma once
-#include "mechanic.h"
+#include "config.h"
 
 class ActuatorStepper_LinearConfig :public ActuatorStepperConfig{
     public:

@@ -1,4 +1,4 @@
-#include "mechanic_polor.h"
+#include "polor_config.h"
 
 float ActuatorStepper_PolorConfig::GetStepsPerCncUnit(){
     // The unit is RAD here.

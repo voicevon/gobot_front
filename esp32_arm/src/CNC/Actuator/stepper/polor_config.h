@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "mechanic.h"
+#include "config.h"
 
 class ActuatorStepper_PolorConfig: public ActuatorStepperConfig{
     public:

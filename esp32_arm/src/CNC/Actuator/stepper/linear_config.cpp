@@ -1,4 +1,4 @@
-#include "mechanic_linear.h"
+#include "linear_config.h"
 
 float ActuatorStepper_LinearConfig::GetStepsPerCncUnit(){
     // The unit is mm here.
