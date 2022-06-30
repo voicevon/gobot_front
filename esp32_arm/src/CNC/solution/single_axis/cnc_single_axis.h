@@ -11,7 +11,7 @@
 class CncSingleAxis: public CncSolutionBase{
     public:
         void Init(CncBoardBase* board) override;
-        void RunG28(EnumAxis axis) override;
+        // void RunG28(EnumAxis axis) override;
         void RunG1(Gcode* gcode) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
@@ -20,6 +20,7 @@ class CncSingleAxis: public CncSolutionBase{
 
     protected:
         CncSolutionConfig_SingleAxis* _mechanic;  //TODO:  uinify name:  cncConfig??
+        void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
 
     private:
         EnumAxis __AXIS_NAME;   // TODO: doubel check this var.
@@ -27,8 +28,8 @@ class CncSingleAxis: public CncSolutionBase{
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 
         void RunG6(Gcode* gcode) override{} ; 
-        void _running_G1() override;
-        void _running_G28() override;
+        // void _running_G1() override;
+        // void _running_G28() override;
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override;
         void RunM84() override;
         std::string GetHomeTrigerStateString() override {return " ";};

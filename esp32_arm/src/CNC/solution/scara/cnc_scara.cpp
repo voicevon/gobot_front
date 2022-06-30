@@ -194,91 +194,111 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 	this->_board->cnc_mover->AllActuatorsMoveTo(abs_flags, cnc_position);
 }
 
-void CncScaraSolution:: _running_G1(){
-    // if (this->GetDistanceToTarget_IK() < (this->_scara_machine->MAX_ACCELERATION_ALPHPA + this->_scara_machine->MAX_ACCELERATION_BETA)/64){
-    float distance_in_degree = RAD_TO_DEG * this->GetDistanceToTarget_IK() ;
-	if ( distance_in_degree < 1) {
-      	this->State = CncState::IDLE;
-		Serial.print("\n[Info] CncScaraSolution::_running_G1() is finished. ");
-    }
+// void CncScaraSolution:: _running_G1(){
+//     // if (this->GetDistanceToTarget_IK() < (this->_scara_machine->MAX_ACCELERATION_ALPHPA + this->_scara_machine->MAX_ACCELERATION_BETA)/64){
+//     float distance_in_degree = RAD_TO_DEG * this->GetDistanceToTarget_IK() ;
+// 	if ( distance_in_degree < 1) {
+//       	this->State = CncState::IDLE;
+// 		Serial.print("\n[Info] CncScaraSolution::_running_G1() is finished. ");
+//     }
+// 	bool debug = false;
+// 	if(debug){
+// 		Serial.print("[Debug] CncScaraSolution:: _running_G1(): distance_in_degree = ");
+// 		Serial.println(distance_in_degree);
+// 	}
+// }
+
+// void CncScaraSolution::RunG28(EnumAxis axis){
+// 	bool debug = true;
+// 	if (debug){
+// 		Serial.print("\n[Debug] CncScaraSolution::RunG28() is entering   AXIS = " );
+// 		Serial.println(axis);
+// 	}
+// 	this->__homer = this->_board->GetHomer(axis);
+// 	this->_board->EnableMotor(axis, true);
+// 	//Set homing_speed, this should be always a positive number.
+// 	float homing_speed = abs(this->_scara_machine->GetHomingVelocity(axis));
+// 	this->_board->cnc_mover->SetActuatorSpeed(axis, homing_speed);
+// 	//Relative move a long distance(vector) , until it reach home position
+// 	float the_long_distance_in_rad = 99.0f * this->_scara_machine->GetHomingVelocity(axis);
+// 	this->_board->cnc_mover->SingleActuatorMoveTo(axis, false, the_long_distance_in_rad);
+// 	this->_homing_axis_name = axis;
+
+// }
+
+void CncScaraSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+	//Set current position to HomePosition
 	bool debug = false;
-	if(debug){
-		Serial.print("[Debug] CncScaraSolution:: _running_G1(): distance_in_degree = ");
-		Serial.println(distance_in_degree);
-	}
-}
-
-void CncScaraSolution::RunG28(EnumAxis axis){
-	bool debug = true;
-	if (debug){
-		Serial.print("\n[Debug] CncScaraSolution::RunG28() is entering   AXIS = " );
-		Serial.println(axis);
-	}
-	this->__homer = this->_board->GetHomer(axis);
-	this->_board->EnableMotor(axis, true);
-	//Set homing_speed, this should be always a positive number.
-	float homing_speed = abs(this->_scara_machine->GetHomingVelocity(axis));
-	this->_board->cnc_mover->SetActuatorSpeed(axis, homing_speed);
-	//Relative move a long distance(vector) , until it reach home position
-	float the_long_distance_in_rad = 99.0f * this->_scara_machine->GetHomingVelocity(axis);
-	this->_board->cnc_mover->SingleActuatorMoveTo(axis, false, the_long_distance_in_rad);
-	this->_homing_axis_name = axis;
-
-}
-
-void CncScaraSolution::_running_G28(){
-	bool debug = false;
-	if (debug) Serial.print("[Debug] CncScaraSolution::running_G28() is entering \n");
-	if (this->__homer->IsTriged()){
-		// End stop is trigered
-		this->_board->cnc_mover->SingleActuatorStop(this->_homing_axis_name);
-		//Set current position to HomePosition
-		IkPosition_AB ik_position;
-		if (this->_config->IsInverseKinematicHoimg){
-			if (debug) Serial.print("\n   [Info] CncScaraSolution::_running_G28() Trying to get home position from actuator position  ");
-			if (this->_homing_axis_name == AXIS_ALPHA){
-				ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
-				
-			}else if (this->_homing_axis_name == AXIS_BETA){
-				ik_position.beta =  this->_scara_machine->Homed_position_beta_in_rad;
-			}
-			this->FK(&ik_position, &this->__current_fk_position);
-			// verify FK by IK()
-			IkPosition_AB verifying_ik_for_debug;
-			// Serial.print("\n\n  [Info] Please verify the below output ======================  ");
-			this->IK(&this->__current_fk_position, &verifying_ik_for_debug);
-		}
-		else{
-			Serial.print("\n\n\n\n\n  [Error] CncScaraSolution::_running_G28()  Trying to get home position with EEF FK position  ");
-			while (1){};
-		}
-		//Copy current ik-position to motor-position. 
-		// Note: If homed_position is defined a FK-XY position,  This must be after IK() translation.
-		if(this->_homing_axis_name == AXIS_ALPHA){
-			this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
+	IkPosition_AB ik_position;
+	if (this->_config->IsInverseKinematicHoimg){
+		if (debug) Serial.print("\n   [Info] CncScaraSolution::_running_G28() Trying to get home position from actuator position  ");
+		if (this->_homing_axis_name == AXIS_ALPHA){
+			ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
+			
 		}else if (this->_homing_axis_name == AXIS_BETA){
-			this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
+			ik_position.beta =  this->_scara_machine->Homed_position_beta_in_rad;
 		}
-		this->State = CncState::IDLE;
-
-		bool debug = true;
-		if (debug){
-			Serial.print("\n[Info] CncScaraSolution::_running_G28() Home sensor is trigger.  " );
-			Serial.print(this->_homing_axis_name);
-			if (this->_homing_axis_name ==AXIS_ALPHA){
-				Serial.print("  cnc position in degree=  ");
-				Serial.print(RAD_TO_DEG * ik_position.alpha);
-			}
-			if (this->_homing_axis_name ==AXIS_BETA){
-				Serial.print("  cnc position in degree=  ");
-				Serial.print(RAD_TO_DEG * ik_position.beta);
-			}
-		}
-	}else{
-		// Endstop is not trigered, When endstop is trigered, must stop the moving. 
-
+		this->FK(&ik_position, &this->__current_fk_position);
+		// verify FK by IK()
+		IkPosition_AB verifying_ik_for_debug;
+		// Serial.print("\n\n  [Info] Please verify the below output ======================  ");
+		this->IK(&this->__current_fk_position, &verifying_ik_for_debug);
 	}
 }
+
+// void CncScaraSolution::_running_G28(){
+// 	bool debug = false;
+// 	if (debug) Serial.print("[Debug] CncScaraSolution::running_G28() is entering \n");
+// 	if (this->__homer->IsTriged()){
+// 		// End stop is trigered
+// 		this->_board->cnc_mover->SingleActuatorStop(this->_homing_axis_name);
+// 		//Set current position to HomePosition
+// 		IkPosition_AB ik_position;
+// 		if (this->_config->IsInverseKinematicHoimg){
+// 			if (debug) Serial.print("\n   [Info] CncScaraSolution::_running_G28() Trying to get home position from actuator position  ");
+// 			if (this->_homing_axis_name == AXIS_ALPHA){
+// 				ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
+				
+// 			}else if (this->_homing_axis_name == AXIS_BETA){
+// 				ik_position.beta =  this->_scara_machine->Homed_position_beta_in_rad;
+// 			}
+// 			this->FK(&ik_position, &this->__current_fk_position);
+// 			// verify FK by IK()
+// 			IkPosition_AB verifying_ik_for_debug;
+// 			// Serial.print("\n\n  [Info] Please verify the below output ======================  ");
+// 			this->IK(&this->__current_fk_position, &verifying_ik_for_debug);
+// 		}
+// 		else{
+// 			Serial.print("\n\n\n\n\n  [Error] CncScaraSolution::_running_G28()  Trying to get home position with EEF FK position  ");
+// 			while (1){};
+// 		}
+// 		//Copy current ik-position to motor-position. 
+// 		// Note: If homed_position is defined a FK-XY position,  This must be after IK() translation.
+// 		if(this->_homing_axis_name == AXIS_ALPHA){
+// 			this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
+// 		}else if (this->_homing_axis_name == AXIS_BETA){
+// 			this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
+// 		}
+// 		this->State = CncState::IDLE;
+
+// 		bool debug = true;
+// 		if (debug){
+// 			Serial.print("\n[Info] CncScaraSolution::_running_G28() Home sensor is trigger.  " );
+// 			Serial.print(this->_homing_axis_name);
+// 			if (this->_homing_axis_name ==AXIS_ALPHA){
+// 				Serial.print("  cnc position in degree=  ");
+// 				Serial.print(RAD_TO_DEG * ik_position.alpha);
+// 			}
+// 			if (this->_homing_axis_name ==AXIS_BETA){
+// 				Serial.print("  cnc position in degree=  ");
+// 				Serial.print(RAD_TO_DEG * ik_position.beta);
+// 			}
+// 		}
+// 	}else{
+// 		// Endstop is not trigered, When endstop is trigered, must stop the moving. 
+
+// 	}
+// }
 
 void CncScaraSolution::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	this->_board->GetEef()->Run(eef_action);

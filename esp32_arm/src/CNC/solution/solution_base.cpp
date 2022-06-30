@@ -65,6 +65,94 @@ void CncSolutionBase::SpinOnce_BaseExit(){
 	this->RunGcode(&gcode);
 }
 
+
+void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
+	// this->_homing_axis = axis;
+	if ( axis==AXIS_ALPHA || axis == AXIS_BETA){
+		this->_homing_axis_name = axis;
+		this->__current_homer = this->_board->GetHomer(axis);
+		
+		CncSolutionConfigBase* config = this->_board->GetCncMechanic();
+		CncMoverBase* mover = this->_board->cnc_mover;
+		config->PrintOut("Config in CncFiveBars::RunG28()");
+		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));
+		// mover.setAcceleration(axis, config->HomingAcceleration(axis);
+		this->_board->EnableMotor(axis, true);
+		float long_distance_to_move = 999.0f * config->HomingDir_IsToMax(axis);
+
+		mover->SingleActuatorMoveTo(axis, false, long_distance_to_move);
+		mover->PrintOut("Mover in CncSolutionBase::RunG28()");
+	}else{
+		Logger::Error("CncSolutionBase::RunG28() ");
+	}
+	// this->_stepControl->moveAsync(*this->__homing_stepper);
+	Serial.println("[Debug] CncSolutionBase::RunG28() is Starting to run..." );
+}
+
+
+//Can deal with:  home via single actuator.
+//Can NOT deal with:  CoreXY, It's combined moving.
+void CncSolutionBase::RunG28(EnumAxis axis){ 
+	Serial.print("[Debug] CncFiveBars::RunG28() is entering  axis= " );
+	Serial.println(axis);
+	if (this->_config->IsCombinedFk){
+		this->_RunG28_CombinedFk(axis);
+
+	}else{
+		this->__HomeSingleAxis(axis);
+	}
+
+}
+
+
+void CncSolutionBase::_running_G28(){
+	// Serial.print("[Info] GobotHouseHardware::running_G28() is entering \n");
+
+	if (this->__current_homer->IsTriged()){
+		// End stop is trigered
+		Serial.print("[Info] CncSolutionBase::_running_G28() Home sensor is trigered.  axis= " );
+		Serial.println (this->_homing_axis_name);
+		this->_board->RepportRamUsage();
+
+		this->_board->cnc_mover->AllActuatorsStop();
+		// The homed postion is a Inverse kinematic position for alpha, beta.
+		this->_SetCurrentPositionAsHome(this->_homing_axis_name);
+		IkPosition_AB ik_position;
+		// Serial.print("222222222222222222");
+		// this->_config->PrintOut("ggggggggggggggggggggggggggggggggggggggggggggggggggg");
+		// if (this->_config->IsInverseKinematicHoimg){
+		// 	Serial.print("\n   [Info] Trying to get home position from actuator position  ");
+		// 	ik_position.alpha =  this->_fivebarMachine->Homed_position_alpha_in_rad;
+		// 	ik_position.beta =  this->_fivebarMachine->Homed_position_beta_in_rad;
+		// 	this->FK(&ik_position, &this->__current_fk_position);
+		// 	// verify FK by IK()
+		// 	IkPosition_AB verifying_ik;
+		// 	Serial.print("\n\n  [Info] Please verify IK->FK->IK   ");
+		// 	this->IK(&this->__current_fk_position, &verifying_ik);
+		// }else{
+		// 	Logger::Error("CncFiveBars::_running_G28()  Trying to get home position");
+		// 	Serial.print(" with EEF-FK position is under construction");
+		// 	Serial.println(FCBC_RESET);
+		// }
+		// //Copy current ik-position to motor-position.
+		// this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
+		// this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
+		
+		this->State = CncState::IDLE;
+
+	}else{
+		// Endstop is not trigered
+
+	}
+}
+
+void CncSolutionBase::_running_G1(){
+    if (this->GetDistanceToTarget_IK() < 1){  // TODO: to determine g1 is finsied
+
+      	this->State = CncState::IDLE;
+		Serial.print("[Info] CncFiveBars::_running_G1() is finished. ");
+    }
+}
 void CncSolutionBase::RunG4(Gcode* gcode){
 	__g4_start_timestamp = micros();
 	__g4_time_second = gcode->get_value('S');

@@ -25,7 +25,7 @@ class CncCoreAZ: public CncSolutionBase{
     public:
 
         void Init(CncBoardBase* board) override;
-        void RunG28(EnumAxis axis) override;
+        // void RunG28(EnumAxis axis) override;
         void RunG1(Gcode* gcode) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
@@ -37,10 +37,11 @@ class CncCoreAZ: public CncSolutionBase{
         //Override private
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
-
+        virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
+        void RunG28_CombinedAxis(EnumAxis axis);
         void RunG6(Gcode* gcode) override{} ; 
-        void _running_G1() override;
-        void _running_G28() override;
+        // void _running_G1() override;
+        // void _running_G28() override;
         // void RunM123(uint8_t eef_channel, EefAction eef_action) override;
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override;
         void RunM84() override;
