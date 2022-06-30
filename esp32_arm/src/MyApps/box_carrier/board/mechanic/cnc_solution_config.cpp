@@ -1,4 +1,3 @@
-// #include "cnc_machine.h"
 #include "cnc_solution_config.h"
 #include "HardwareSerial.h"
 
@@ -8,22 +7,23 @@
 //         this->__Init_Fast();
 // }
 void BoxCarrierMachine::__Init_Common(){
-    this->MOTOR_DEGREE_PER_STEP = 1.8;
-    this->MOTOR_GEARBOX_RATIO_ALPHA_BETA = 27;
-    this->MOTOR_PULLEY_PITCH = 2;
-    this->MOTOR_PULLEY_TEETH_COUNT = 20;
-    this->STEPPER_DRIVER_MICRO_STEPS = 16;
+    // this->MOTOR_DEGREE_PER_STEP = 1.8;
+    // this->MOTOR_GEARBOX_RATIO_ALPHA_BETA = 27;
+    // this->MOTOR_PULLEY_PITCH = 2;
+    // this->MOTOR_PULLEY_TEETH_COUNT = 20;
+    // this->STEPPER_DRIVER_MICRO_STEPS = 16;
+    this->_IS_COMBINED_FK = true;
 }
 
 void BoxCarrierMachine::__Init_Fast(){
 
-        this->steps_per_motor_round = 360.0f / MOTOR_DEGREE_PER_STEP * STEPPER_DRIVER_MICRO_STEPS * MOTOR_GEARBOX_RATIO_ALPHA_BETA;
+        // this->steps_per_motor_round = 360.0f / MOTOR_DEGREE_PER_STEP * STEPPER_DRIVER_MICRO_STEPS * MOTOR_GEARBOX_RATIO_ALPHA_BETA;
 
-        float steps_per_origin_mm = this->steps_per_motor_round / MOTOR_PULLEY_TEETH_COUNT / MOTOR_PULLEY_PITCH; 
+        // float steps_per_origin_mm = this->steps_per_motor_round / MOTOR_PULLEY_TEETH_COUNT / MOTOR_PULLEY_PITCH; 
         // this->steps_per_mm_for_z = steps_per_origin_mm / 1.414;
         // this->steps_per_mm_for_y = steps_per_origin_mm / 1.414;
-        this->steps_per_mm_for_z = steps_per_origin_mm ;
-        this->steps_per_mm_for_y = steps_per_origin_mm ;
+        // this->steps_per_mm_for_z = steps_per_origin_mm ;
+        // this->steps_per_mm_for_y = steps_per_origin_mm ;
 
 
         this->Homing_speed_alpha_beta = 6000;
@@ -39,17 +39,17 @@ void BoxCarrierMachine::__Init_Fast(){
 void BoxCarrierMachine::PrintOut(const char* title){
     Serial.print("\n\n===============================================");
     Serial.print("\n   BoxMoverHardwareConfig::PrintOut()");
-    Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");
-    Serial.print(this->STEPPER_DRIVER_MICRO_STEPS);
-    Serial.print("\n   MOTOR_GEARBOX_RATIO_ALPHA_BETA = ");
-    Serial.print(this->MOTOR_GEARBOX_RATIO_ALPHA_BETA);
-    Serial.print("\n   steps_per_motor_round = ");
-    Serial.print(this->steps_per_motor_round);
+    // Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");
+    // Serial.print(this->STEPPER_DRIVER_MICRO_STEPS);
+    // Serial.print("\n   MOTOR_GEARBOX_RATIO_ALPHA_BETA = ");
+    // Serial.print(this->MOTOR_GEARBOX_RATIO_ALPHA_BETA);
+    // Serial.print("\n   steps_per_motor_round = ");
+    // Serial.print(this->steps_per_motor_round);
 
-    Serial.print("\n      steps_per_mm_for_z = ");
-    Serial.print(this->steps_per_mm_for_z);
-    Serial.print("\n      steps_per_rad_for_y = ");
-    Serial.print(this->steps_per_mm_for_y);
+    // Serial.print("\n      steps_per_mm_for_z = ");
+    // Serial.print(this->steps_per_mm_for_z);
+    // Serial.print("\n      steps_per_rad_for_y = ");
+    // Serial.print(this->steps_per_mm_for_y);
     Serial.print("\n          Home_position (z,y) = (");
     Serial.print(this->Homed_position_z);
     Serial.print(" , ");

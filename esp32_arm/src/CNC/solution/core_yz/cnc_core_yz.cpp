@@ -6,8 +6,8 @@ void Cnc_CoreYZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_YZ* fk = (FkPosition_YZ*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
-	ik->alpha = (fk->Z * this->_cncMachine->steps_per_mm_for_z + fk->Y * this->_cncMachine->steps_per_mm_for_y);
-	ik->beta = (fk->Z * this->_cncMachine->steps_per_mm_for_z - fk->Y * this->_cncMachine->steps_per_mm_for_y);
+	ik->alpha = (fk->Z  + fk->Y );
+	ik->beta = (fk->Z - fk->Y );
 
 	Serial.print("\n[Debug] Cnc_CoreYZ::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
@@ -21,8 +21,8 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_YZ* fk = (FkPosition_YZ*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
-	fk->Z = (ik->alpha + ik->beta) / 2 / this->_cncMachine->steps_per_mm_for_z;
-	fk->Y = (ik->alpha - ik->beta) / 2 / this->_cncMachine->steps_per_mm_for_y;
+	fk->Z = (ik->alpha + ik->beta) / 2;
+	fk->Y = (ik->alpha - ik->beta) / 2;
 
 	Serial.print("\n[Debug] Cnc_CoreYZ::FK() output (Z, Y) = ");
 	Serial.print(fk->Z);

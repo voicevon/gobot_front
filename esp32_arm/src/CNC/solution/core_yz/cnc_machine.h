@@ -5,8 +5,8 @@
 
 class CncCoreYZMachine: public CncSolutionConfigBase{
     public:
-        float steps_per_mm_for_y;
-        float steps_per_mm_for_z;
+        // float steps_per_mm_for_y;
+        // float steps_per_mm_for_z;
 
         float max_speed_alpha_beta;
         float max_acceleration_alpha_beta;
@@ -18,12 +18,12 @@ class CncCoreYZMachine: public CncSolutionConfigBase{
         void PrintOut(const char* title) override;
 
     protected:
-        int STEPPER_DRIVER_MICRO_STEPS;
-        float MOTOR_DEGREE_PER_STEP;
-        float MOTOR_GEARBOX_RATIO_ALPHA_BETA;
-        int MOTOR_PULLEY_TEETH_COUNT;
-        int  MOTOR_PULLEY_PITCH;
-        float steps_per_motor_round;
+        // int STEPPER_DRIVER_MICRO_STEPS;
+        // float MOTOR_DEGREE_PER_STEP;
+        // float MOTOR_GEARBOX_RATIO_ALPHA_BETA;
+        // int MOTOR_PULLEY_TEETH_COUNT;
+        // int  MOTOR_PULLEY_PITCH;
+        // float steps_per_motor_round;
 };
 
 

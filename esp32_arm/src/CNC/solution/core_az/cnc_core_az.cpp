@@ -18,8 +18,8 @@ void CncCoreAZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_ZW* fk = (FkPosition_ZW*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
-	ik->alpha = (fk->Z * this->_machine->steps_per_mm_for_z + fk->W * this->_machine->steps_per_rad_for_w);
-	ik->beta = (fk->Z * this->_machine->steps_per_mm_for_z - fk->W * this->_machine->steps_per_rad_for_w);
+	ik->alpha = (fk->Z  + fk->W);
+	ik->beta = (fk->Z  - fk->W );
 
 	Serial.print("\n[Debug] CncCoreAZ::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
@@ -33,8 +33,8 @@ void CncCoreAZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_ZW* fk = (FkPosition_ZW*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
-	fk->Z = (ik->alpha + ik->beta) / 2 / this->_machine->steps_per_mm_for_z;
-	fk->W = (ik->alpha - ik->beta) / 2 / this->_machine->steps_per_rad_for_w;
+	fk->Z = (ik->alpha + ik->beta) / 2 ;
+	fk->W = (ik->alpha - ik->beta) / 2 ;
 
 	Serial.print("\n[Debug] CncCoreAZ::FK() output (Z, W) = ");
 	Serial.print(fk->Z);
