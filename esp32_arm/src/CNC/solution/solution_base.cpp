@@ -166,6 +166,21 @@ void CncSolutionBase::__running_G4(){
 	}
 }
 
+void CncSolutionBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
+	Serial.print("[Debug] CncFiveBars::RunM123()  eef_action= ");
+	Serial.println(eef_action);
+	// uint8_t action_code = 1;
+	this->__eef->Run(eef_action);
+}
+
+void CncSolutionBase::RunM84(){
+	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
+	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
+		this->_board->EnableMotor(EnumAxis(axis), false);
+	}
+	// this->_board->EnableMotor(AXIS_ALPHA, false);
+	// this->_board->EnableMotor(AXIS_BETA, false);
+}
 void CncSolutionBase::RunGcode(Gcode* gcode){
 	std::string result;
 	// if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND)){

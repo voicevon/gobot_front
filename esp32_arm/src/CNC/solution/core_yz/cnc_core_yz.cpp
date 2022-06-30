@@ -227,14 +227,14 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 // }
 
 // void Cnc_CoreYZ::RunM123(uint8_t eef_channel, EefAction eef_action){
-void Cnc_CoreYZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// void Cnc_CoreYZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	
-}
+// }
 
-void Cnc_CoreYZ::RunM84(){
-	this->_board->EnableMotor(AXIS_ALPHA, false);
-	this->_board->EnableMotor(AXIS_BETA, false);
-}
+// void Cnc_CoreYZ::RunM84(){
+// 	this->_board->EnableMotor(AXIS_ALPHA, false);
+// 	this->_board->EnableMotor(AXIS_BETA, false);
+// }
 
 float Cnc_CoreYZ::GetDistanceToTarget_IK(){
 	// return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();

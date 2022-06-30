@@ -151,13 +151,13 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 // 	// Serial.println(this->GetDistanceToTarget_IK());
 // 	// delay(100);
 // }
-void CncSingleAxis::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// void CncSingleAxis::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	
-}
+// }
 
-void CncSingleAxis::RunM84(){
-	this->_board->EnableMotor(this->__AXIS_NAME, false);
-}
+// void CncSingleAxis::RunM84(){
+// 	this->_board->EnableMotor(this->__AXIS_NAME, false);
+// }
 
 float CncSingleAxis::GetDistanceToTarget_IK(){
 	this->_board->cnc_mover->GetAbsDistanceToTarget_InCncUnit();

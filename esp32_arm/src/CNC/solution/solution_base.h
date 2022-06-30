@@ -22,6 +22,7 @@ class CncSolutionBase: public GcodeConsumer{
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void Init(CncBoardBase* board);
+        void LinkEef(RobotEefBase* eef){this->__eef=eef;};
         // void LinkStepControl(StepControl* stepControl){this->_stepControl=stepControl;};
         void RunG28(EnumAxis axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
@@ -38,9 +39,9 @@ class CncSolutionBase: public GcodeConsumer{
         void RunG4(Gcode* gcode);
         virtual std::string GetHomeTrigerStateString();
         void RunM42(uint8_t pin_number, uint8_t pin_value);
-        virtual void RunM84();
+        void RunM84();
         // virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
-        virtual void RunM123(uint8_t eef_channel, uint8_t eef_action);
+        void RunM123(uint8_t eef_channel, uint8_t eef_action);
         bool is_absolute_position = true;
 
         void _running_G1();
@@ -60,6 +61,7 @@ class CncSolutionBase: public GcodeConsumer{
 
     private:
         int test_int;
+        RobotEefBase* __eef;
         void _base_spin_once();
         void __running_G4();
         void __HomeSingleAxis(EnumAxis axis);

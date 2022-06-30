@@ -300,14 +300,14 @@ void CncScaraSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 // 	}
 // }
 
-void CncScaraSolution::RunM123(uint8_t eef_channel, uint8_t eef_action){
-	this->_board->GetEef()->Run(eef_action);
-}
+// void CncScaraSolution::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// 	this->_board->GetEef()->Run(eef_action);
+// }
 
-void CncScaraSolution::RunM84(){
-	this->_board->EnableMotor(AXIS_ALPHA, false);
-	this->_board->EnableMotor(AXIS_BETA, false);
-}
+// void CncScaraSolution::RunM84(){
+// 	this->_board->EnableMotor(AXIS_ALPHA, false);
+// 	this->_board->EnableMotor(AXIS_BETA, false);
+// }
 
 
 

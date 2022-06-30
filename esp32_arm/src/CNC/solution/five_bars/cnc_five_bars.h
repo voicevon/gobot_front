@@ -13,14 +13,13 @@ class CncFiveBars: public CncSolutionBase{
     public:
         CncFiveBars(){};
         void Init(CncBoardBase* board) override;
-        void LinkEef(RobotEefBase* eef){this->__eef=eef;};
         // void RunG28(EnumAxis axis) override;
         void RunG1(Gcode* gcode) override;
 
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
         void Calibrate(int step,bool enable_eef_coil);
-        void RunM84() override;
+        // void RunM84() override;
 
     protected:
         CncFiveBarMachine* _fivebarMachine;
@@ -36,7 +35,7 @@ class CncFiveBars: public CncSolutionBase{
 
         void RunG6(Gcode* gcode) override {};   //Block mode
         // void RunM123(uint8_t eef_channel, EefAction eef_action) override;
-        void RunM123(uint8_t eef_channel, uint8_t eef_action) override;
+        // void RunM123(uint8_t eef_channel, uint8_t eef_action) override;
         std::string GetHomeTrigerStateString() override {return " ";};
         // void _running_G1() override;
         // void _running_G28() override;
@@ -45,7 +44,6 @@ class CncFiveBars: public CncSolutionBase{
     
 
         FkPosition_XY __current_fk_position;
-        RobotEefBase* __eef;
 
 
 };

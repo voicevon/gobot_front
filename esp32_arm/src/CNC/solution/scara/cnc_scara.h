@@ -37,8 +37,8 @@ class CncScaraSolution: public CncSolutionBase{
         // void _running_G28() override;
         std::string GetHomeTrigerStateString() override {return " ";};
         // void RunM123(uint8_t eef_channel, EefAction eef_action) override;
-        void RunM123(uint8_t eef_channel, uint8_t eef_action) override;
-        void RunM84() override;
+        // void RunM123(uint8_t eef_channel, uint8_t eef_action) override;
+        // void RunM84() override;
 
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
 

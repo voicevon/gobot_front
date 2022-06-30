@@ -5,7 +5,9 @@
 
 void CncFiveBars::Init(CncBoardBase* board){
 	Serial.println("[Info] CncFiveBars::Init() is entering.");
-	this->__eef = board->GetEef();
+	// this->__eef = board->GetEef();
+	this->LinkEef(board->GetEef());
+
 
 	board->EnableMotor(AXIS_ALPHA, false);
 	board->EnableMotor(AXIS_BETA, false);
@@ -253,13 +255,6 @@ void CncFiveBars::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 }
 
 // void CncFiveBars::RunM123(uint8_t eef_channel, EefAction eef_action){
-void CncFiveBars::RunM123(uint8_t eef_channel, uint8_t eef_action){
-	Serial.print("[Debug] CncFiveBars::RunM123()  eef_action= ");
-	Serial.println(eef_action);
-	uint8_t action_code = 1;
-	this->__eef->Run(action_code);
-
-}
 
 void CncFiveBars::RunG1(Gcode* gcode){
 	Serial.print("[Debug] CncFiveBars::RunG1()   ");
@@ -335,8 +330,8 @@ float CncFiveBars::GetDistanceToTarget_IK(){
 	return this->_board->cnc_mover->GetAbsDistanceToTarget_InCncUnit();
 }
 
-void CncFiveBars::RunM84(){
-	this->_board->EnableMotor(AXIS_ALPHA, false);
-	this->_board->EnableMotor(AXIS_BETA, false);
-}
+// void CncFiveBars::RunM84(){
+// 	this->_board->EnableMotor(AXIS_ALPHA, false);
+// 	this->_board->EnableMotor(AXIS_BETA, false);
+// }
 

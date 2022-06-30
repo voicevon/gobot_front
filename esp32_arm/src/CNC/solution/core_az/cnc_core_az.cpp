@@ -204,14 +204,11 @@ void CncCoreAZ::RunG1(Gcode* gcode) {
 // 	// delay(100);
 // }
 // void CncCoreAZ::RunM123(uint8_t eef_channel, EefAction eef_action){
-void CncCoreAZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// void CncCoreAZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	
-}
+// }
 
-void CncCoreAZ::RunM84(){
-	this->_board->EnableMotor(AXIS_ALPHA, false);
-	this->_board->EnableMotor(AXIS_BETA, false);
-}
+
 
 float CncCoreAZ::GetDistanceToTarget_IK(){
 	return this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA) + this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
