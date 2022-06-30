@@ -3,7 +3,7 @@
 #include "../actuator_mechanic_base.h"
 #include "MyBoards/const.h"
 
-class ActuatorMechanicStepper: public ActuatorMechanicBase{
+class ActuatorConfigStepper: public ActuatorConfigBase{
     public: 
         virtual float GetStepsPerCncUnit();
         

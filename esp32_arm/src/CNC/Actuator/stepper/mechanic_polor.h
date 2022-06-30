@@ -3,7 +3,7 @@
 
 #include "mechanic.h"
 
-class ActuatorMechanic_StepperPolor: public ActuatorMechanicStepper{
+class ActuatorMechanic_StepperPolor: public ActuatorConfigStepper{
     public:
         float GetStepsPerCncUnit() override;
 

@@ -13,11 +13,11 @@ class Board_SpringMaker: public CncBoardBase{
         void Init(bool is_on_reset) override;
         
         // void SayHello();
-        ActuatorBase* GetActuator(EnumAxis axis_name) override;
+        ActuatorStepper* GetActuator(EnumAxis axis_name) override;
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_SpringMaker* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
-        CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_mechanic;};
+        SpringMakerMachine* GetCncConfig() override {return &this->__cnc_solution_config;};
 
         
     private:
@@ -25,5 +25,5 @@ class Board_SpringMaker: public CncBoardBase{
         ActuatorStepper stepper_alpha;
         SingleAxisHomer homer_alpha = SingleAxisHomer(PIN_HOME_ALPHA_2201, LOW);
         RobotEef_SpringMaker eef = RobotEef_SpringMaker();
-        SpringMakerMachine __cnc_mechanic;
+        SpringMakerMachine __cnc_solution_config;
 };

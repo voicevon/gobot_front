@@ -4,7 +4,7 @@
 #include "Mylibs/basic/logger.h"
 
 
-class ActuatorMechanicBase{
+class ActuatorConfigBase{
     public:
         
     protected:
