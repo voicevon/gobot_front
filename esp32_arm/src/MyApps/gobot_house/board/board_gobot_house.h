@@ -17,7 +17,7 @@ class Board_GobotHouse: public CncBoardBase{
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GobotHouse* GetEef() override;
         void EnableMotor(EnumAxis actuator_name, bool enable_it) override;
-        CncSolutionConfigBase* GetCncMechanic() override {return &this->__cnc_mechanic;};
+        CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_mechanic;};
 
     private:
         Stepper stepper_driver_alpha = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);

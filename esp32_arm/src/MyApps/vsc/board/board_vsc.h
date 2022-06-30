@@ -6,7 +6,6 @@
 
 #include "MyBoards/cnc_board_base.h"
 #include "pins/wroom_board.h"
-// #include "pins/gobot_house_board.h"
 
 
 class Vsc_Board: public CncBoardBase{
@@ -28,7 +27,7 @@ class Vsc_Board: public CncBoardBase{
         MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
         SingleAxisHomer __homer = SingleAxisHomer(PIN_HOMER_SENSOR_HALL, LOW);
 
-        CncSolutionConfigBase* GetCncMechanic() override {return nullptr;};
+        CncSolutionConfigBase* GetCncConfig() override {return nullptr;};
         RobotEefBase* GetEef()override {return nullptr;};
         void EnableMotor(EnumAxis axis_name, bool enable_it) override {};
 

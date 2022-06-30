@@ -1,15 +1,12 @@
 #pragma once
 
-// #include "CNC/solution/cnc_scara/cnc_machine.h"
 #include "CNC/solution/five_bars/config.h"
 
 
-class GobotMainMachine: public CncFiveBarMachine{
+class GobotMain_CncSolutionConfig: public CncFiveBarMachine{
     public:
-        GobotMainMachine();
-        // void Init(char solution_id) override;
+        GobotMain_CncSolutionConfig();
         void PrintOut(const char* title) override;
-        // float GetHomingVelocity(char axis_name) override;
 
     private:
 

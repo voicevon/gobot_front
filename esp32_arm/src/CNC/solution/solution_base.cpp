@@ -72,7 +72,7 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 		this->_homing_axis_name = axis;
 		this->__current_homer = this->_board->GetHomer(axis);
 		
-		CncSolutionConfigBase* config = this->_board->GetCncMechanic();
+		CncSolutionConfigBase* config = this->_board->GetCncConfig();
 		CncMoverBase* mover = this->_board->cnc_mover;
 		config->PrintOut("Config in CncFiveBars::RunG28()");
 		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));

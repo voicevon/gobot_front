@@ -1,11 +1,11 @@
 // #include "cnc_machine.h"
 #include "cnc_solution_config.h"
 
-// int32_t GobotMainMachine::GetStepsPerUnit(char axis_name) {
+// int32_t GobotMain_CncSolutionConfig::GetStepsPerUnit(char axis_name) {
 //     return 100;
 // }
 
-GobotMainMachine::GobotMainMachine(){
+GobotMain_CncSolutionConfig::GobotMain_CncSolutionConfig(){
     this->_LINK_0_LENGTH = 191.0f / 2;
     this->_LINK_A_LENGTH = 278.1;  //285.18;    // 278.1
     this->_LINK_B_LENGTH = 392.1; //  384.51;    // 500-107.8
@@ -22,7 +22,7 @@ GobotMainMachine::GobotMainMachine(){
 
 }
 
-void GobotMainMachine::PrintOut(const char* title){
+void GobotMain_CncSolutionConfig::PrintOut(const char* title){
     Logger::Info(title);
     Serial.print("Lenth of LINK_0, LINK_A, LINK_B = (");
     Serial.print(this->LINK_0);
