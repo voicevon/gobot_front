@@ -2,7 +2,7 @@
 
 #include "CNC/Actuator/stepper/mechanic_polor.h"
 
-class GobotHouse_ActuatorAlphaMechanic: public ActuatorMechanic_StepperPolor{
+class GobotHouse_ActuatorAlphaMechanic: public ActuatorStepper_PolorConfig{
     public:
         GobotHouse_ActuatorAlphaMechanic();
 };

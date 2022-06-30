@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../actuator_mechanic_base.h"
+// #include "../actuator_mechanic_base.h"
+#include "../actuator_config_base.h"
 #include "MyBoards/const.h"
 
-class ActuatorConfigStepper: public ActuatorConfigBase{
+class ActuatorStepperConfig: public ActuatorConfigBase{
     public: 
         virtual float GetStepsPerCncUnit();
         
