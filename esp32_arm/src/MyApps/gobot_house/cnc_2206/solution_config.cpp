@@ -1,7 +1,6 @@
 
 
-// #include "cnc_machine.h"
-#include "cnc_solution_config.h"
+#include "solution_config.h"
 
 GobotHouseMachine_2206::GobotHouseMachine_2206(){
     this->__InitStaticConfig();
@@ -71,7 +70,7 @@ void GobotHouseMachine_2206::PrintOut(const char * title){
     Serial.print("\n       Homed_position_beta_in_degree= "); 
     Serial.print(RAD_TO_DEG * this->Homed_position_beta_in_rad);
 
-    Serial.print("\n   MOTOR_MICRO_STEPS= ");
+    // Serial.print("\n   MOTOR_MICRO_STEPS= ");
     // Serial.print(this->MOTOR_MICRO_STEPS);
     // Serial.print("\n       motor_steps_per_round=514* MOTOR_MICRO_STEPS= ");
     // Serial.print(this->motor_steps_per_round);

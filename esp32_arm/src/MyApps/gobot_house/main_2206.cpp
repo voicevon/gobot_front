@@ -3,7 +3,8 @@
 
 #include "board_2206/board_gobot_house.h"
 // #include "CNC/solution/cnc_scara/cnc_scara.h"
-#include "board/mechanic/cnc_solution.h"
+// #include "board/mechanic/cnc_solution.h"
+#include "cnc/solution.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
@@ -14,7 +15,7 @@
 StepControl stepControl;
 
 Board_GobotHouse_2206 board = Board_GobotHouse_2206(&stepControl);
-GobotHouseCnc cnc;
+GobotHouse_CncSolution cnc;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 GobotHouse* robot; 

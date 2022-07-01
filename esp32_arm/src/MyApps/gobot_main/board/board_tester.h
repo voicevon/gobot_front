@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MyBoards/board_test/board_test_cnc.h"
-#include "board_gobot_main.h"
+#include "board.h"
 
 class GobotMain_BoardTest: public BoardTestCnc{
     public:

@@ -1,13 +1,14 @@
 #pragma once
 #include "MyBoards/cnc_board_base.h"
-#include "../board/board_pins/board_pins_ver3.11.h"
-#include "../board/robot_eef/gobot_house_eef.h"
+// #include "../board/board_pins/board_pins_ver3.11.h"
+#include "../board_2205/board_pins/board_pins_ver3.11.h"
+// #include "../board/robot_eef/gobot_house_eef.h"
+#include "../board_2205/robot_eef/gobot_house_eef.h"
 #include "CNC/Actuator/servo/actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-// #include "CNC/single_axis_homer.h"
 #include "Robot/homer//single_axis_homer.h"
-#include "mechanic/cnc_solution_config.h"
-#include "mechanic/actuator_alpha.h"
+#include "../cnc_2206/solution_config.h"
+#include "../cnc_2206/actuator_alpha.h"
 
 class Board_GobotHouse_2206: public CncBoardBase{
     public:

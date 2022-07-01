@@ -1,12 +1,13 @@
 #include "all_applications.h"
-#ifdef I_AM_GOBOT_HOUSE
+#ifdef I_AM_GOBOT_HOUSE_2205
 
 // #include "MyBoards/gobot_house/board_gobot_house_22.h"
-#include "board/board_gobot_house.h"
+#include "board_2205/board_gobot_house.h"
 // #include "CNC/solution/cnc_scara/cnc_scara.h"
-#include "board_2206/mechanic/cnc_solution.h"
+#include "cnc/solution.h"
 // #include "cnc_machine.h"
-#include "board/cnc_machine.h"
+// #include "board/cnc_machine.h"
+#include "cnc_2205/solution_config_2205.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
@@ -16,7 +17,7 @@
 StepControl controller;    // Use default settings 
 Board_GobotHouse board;
 // GobotHouseMachine cncMachine;
-GobotHouse2206Cnc cnc;
+GobotHouse_CncSolution cnc;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 GobotHouse* robot; 
@@ -56,7 +57,7 @@ void loop(){
 
 
 // #include "MyBoards/gobot_house/board_tester.h"
-#include "board/board_tester.h"
+#include "board_2205/board_tester.h"
 void board_test(){
     GobotHouse_BoardTest tester;
     tester.LinkBoard(&board);

@@ -10,7 +10,7 @@
 // #define I_AM_GARMENT_BOX_MOVER   //CoreAZ
 // #define I_AM_GARMENT_BOX_CARRIER    // CoreYZ
 
-// #define I_AM_GOBOT_HOUSE
+// #define I_AM_GOBOT_HOUSE_2205
 // #define I_AM_GOBOT_HOUSE_2206
 #define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
@@ -41,7 +41,7 @@
 	#endif
 #endif
 
-#ifdef I_AM_GOBOT_HOUSE
+#ifdef I_AM_GOBOT_HOUSE_2205
     #define ROBOT_SERIAL_ID 2134
 	// #define I_AM_GOBOT_HOUSE
 	#define USING_WIFI_MQTT

@@ -4,7 +4,7 @@
 #include "gobot_main.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
-#include "board/board_gobot_main.h"
+#include "board/board.h"
 #include "board/robot_eef/gobot_main_eef.h"
 #include "cnc/solution.h"
 #include "cnc/solution_config.h"

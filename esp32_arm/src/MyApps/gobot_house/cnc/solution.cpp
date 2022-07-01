@@ -1,6 +1,6 @@
-#include "cnc_solution.h"
+#include "solution.h"
 
-EnumAxis GobotHouse2206Cnc::ConvertToEnum(char axis){
+EnumAxis GobotHouse_CncSolution::ConvertToEnum(char axis){
     switch (axis){
         case 'A':
             return AXIS_ALPHA;
