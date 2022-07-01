@@ -6,8 +6,8 @@
 #include "IoT/main_mqtt.h"
 #include "board/board_gobot_main.h"
 #include "board/robot_eef/gobot_main_eef.h"
-#include "board/cnc/solution.h"
-#include "board/cnc/solution_config.h"
+#include "cnc/solution.h"
+#include "cnc/solution_config.h"
 #include "ESP32Step/src/TeensyStep.h"
 
 Board_GobotMain board;
@@ -26,6 +26,7 @@ void setup(){
     board.Init(true);
     board.PrintOut();
     board.LinkStepControlToCncMover(&objStepControl);
+
     board_test();
     // cncMachine.Init('S');  //Slow moving
     // cncMachine.PrintOut("GobotMain Machine");

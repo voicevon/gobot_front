@@ -1,10 +1,9 @@
 #include<math.h>
-// #include "gobot_chessboard_hw.h"
-#include "cnc_five_bars.h"
+#include "cnc_five_bars_base.h"
 #include<Arduino.h>
 
-void CncFiveBars::Init(CncBoardBase* board){
-	Serial.println("[Info] CncFiveBars::Init() is entering.");
+void CncFiveBarsBase::Init(CncBoardBase* board){
+	Serial.println("[Info] CncFiveBarsBase::Init() is entering.");
 	// this->__eef = board->GetEef();
 	this->LinkEef(board->GetEef());
 
@@ -12,11 +11,11 @@ void CncFiveBars::Init(CncBoardBase* board){
 	board->EnableMotor(AXIS_ALPHA, false);
 	board->EnableMotor(AXIS_BETA, false);
 	this->_board = board;
-	this->_fivebarMachine = (CncFiveBarMachine*)(this->_board->GetCncConfig());
-	Serial.println("[Info] CncFiveBars::Init() is done.");
+	this->_fivebarMachine = (CncFiveBarConfig*)(this->_board->GetCncConfig());
+	Serial.println("[Info] CncFiveBarsBase::Init() is done.");
 } 
 
-void CncFiveBars::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CncFiveBarsBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
 		Serial.print("222222222222222222");
@@ -31,7 +30,7 @@ void CncFiveBars::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 			Serial.print("\n\n  [Info] Please verify IK->FK->IK   ");
 			this->IK(&this->__current_fk_position, &verifying_ik);
 		}else{
-			Logger::Error("CncFiveBars::_running_G28()  Trying to get home position");
+			Logger::Error("CncFiveBarsBase::_running_G28()  Trying to get home position");
 			Serial.print(" with EEF-FK position is under construction");
 			Serial.println(FCBC_RESET);
 		}
@@ -40,8 +39,8 @@ void CncFiveBars::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
 }
 
-// void CncFiveBars::RunG28(EnumAxis axis){ 
-// 	Serial.print("[Debug] CncFiveBars::RunG28() is entering  axis= " );
+// void CncFiveBarsBase::RunG28(EnumAxis axis){ 
+// 	Serial.print("[Debug] CncFiveBarsBase::RunG28() is entering  axis= " );
 // 	Serial.println(axis);
 // 	// this->_homing_axis = axis;
 // 	if ( axis==AXIS_ALPHA || axis == AXIS_BETA){
@@ -50,31 +49,31 @@ void CncFiveBars::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		
 // 		CncSolutionConfigBase* config = this->_board->GetCncMechanic();
 // 		CncMoverBase* mover = this->_board->cnc_mover;
-// 		config->PrintOut("Config in CncFiveBars::RunG28()");
+// 		config->PrintOut("Config in CncFiveBarsBase::RunG28()");
 // 		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));
 // 		// mover.setAcceleration(axis, config->HomingAcceleration(axis);
 // 		this->_board->EnableMotor(axis, true);
 // 		float long_distance_to_move = 999.0f * config->HomingDir_IsToMax(axis);
 
 // 		mover->SingleActuatorMoveTo(axis, false, long_distance_to_move);
-// 		mover->PrintOut("Mover in CncFiveBars::RunG28()");
+// 		mover->PrintOut("Mover in CncFiveBarsBase::RunG28()");
 // 	}else{
-// 		Logger::Error("CncFiveBars::RunG28() ");
+// 		Logger::Error("CncFiveBarsBase::RunG28() ");
 // 	}
 // 	// this->_stepControl->moveAsync(*this->__homing_stepper);
-// 	Serial.println("[Debug] CncFiveBars::RunG28() is Starting to run..." );
+// 	Serial.println("[Debug] CncFiveBarsBase::RunG28() is Starting to run..." );
 // }
 
 
 // When first axis is homed, should it park to somewhere? For the reason, LINK_B might not long enouth to park the second arm.
 
 // When first axis is homed, should it park to somewhere? For the reason, LINK_B might not long enouth to park the second arm.
-// void CncFiveBars::_running_G28(){
+// void CncFiveBarsBase::_running_G28(){
 // 	// Serial.print("[Info] GobotHouseHardware::running_G28() is entering \n");
 
 // 	if (this->__current_homer->IsTriged()){
 // 		// End stop is trigered
-// 		Serial.print("[Info] CncFiveBars::_running_G28() Home sensor is trigered.  axis= " );
+// 		Serial.print("[Info] CncFiveBarsBase::_running_G28() Home sensor is trigered.  axis= " );
 // 		Serial.println (this->_homing_axis_name);
 // 		this->_board->RepportRamUsage();
 
@@ -93,7 +92,7 @@ void CncFiveBars::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 // 			Serial.print("\n\n  [Info] Please verify IK->FK->IK   ");
 // 			this->IK(&this->__current_fk_position, &verifying_ik);
 // 		}else{
-// 			Logger::Error("CncFiveBars::_running_G28()  Trying to get home position");
+// 			Logger::Error("CncFiveBarsBase::_running_G28()  Trying to get home position");
 // 			Serial.print(" with EEF-FK position is under construction");
 // 			Serial.println(FCBC_RESET);
 // 		}
@@ -109,7 +108,7 @@ void CncFiveBars::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 // 	}
 // }
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
-void CncFiveBars::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
+void CncFiveBarsBase::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
@@ -177,7 +176,7 @@ void CncFiveBars::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	Serial.print(")");
 }
 
-void CncFiveBars::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
+void CncFiveBarsBase::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 
@@ -243,7 +242,7 @@ void CncFiveBars::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 	fk->X = center_x + lenth_from_center_to_eef * cosf(rotated_angle);
 	fk->Y = center_y + lenth_from_center_to_eef * sinf(rotated_angle);
 
-	Serial.print("\n\n[Debug] CncFiveBars::FK()  in degree from (alpha,beta) =(");
+	Serial.print("\n\n[Debug] CncFiveBarsBase::FK()  in degree from (alpha,beta) =(");
 	Serial.print(ik->alpha * RAD_TO_DEG);
 	Serial.print(" , ");
 	Serial.print(ik->beta * RAD_TO_DEG);
@@ -254,10 +253,10 @@ void CncFiveBars::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 	Serial.print(")");
 }
 
-// void CncFiveBars::RunM123(uint8_t eef_channel, EefAction eef_action){
+// void CncFiveBarsBase::RunM123(uint8_t eef_channel, EefAction eef_action){
 
-void CncFiveBars::RunG1(Gcode* gcode){
-	Serial.print("[Debug] CncFiveBars::RunG1()   ");
+void CncFiveBarsBase::RunG1(Gcode* gcode){
+	Serial.print("[Debug] CncFiveBarsBase::RunG1()   ");
 	Serial.println(gcode->get_command());
 
 	// Assume G1-code want to update actuator directly, no need to do IK.
@@ -313,7 +312,7 @@ void CncFiveBars::RunG1(Gcode* gcode){
 		Serial.print(" FK.Y= ");
 		Serial.print(verified_fk.Y);
 
-		Serial.print("[Debug] CncFiveBars::RunG1() ");
+		Serial.print("[Debug] CncFiveBarsBase::RunG1() ");
 		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
 		Serial.print(",");
 		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
@@ -326,11 +325,11 @@ void CncFiveBars::RunG1(Gcode* gcode){
 
 
 
-float CncFiveBars::GetDistanceToTarget_IK(){
+float CncFiveBarsBase::GetDistanceToTarget_IK(){
 	return this->_board->cnc_mover->GetAbsDistanceToTarget_InCncUnit();
 }
 
-// void CncFiveBars::RunM84(){
+// void CncFiveBarsBase::RunM84(){
 // 	this->_board->EnableMotor(AXIS_ALPHA, false);
 // 	this->_board->EnableMotor(AXIS_BETA, false);
 // }

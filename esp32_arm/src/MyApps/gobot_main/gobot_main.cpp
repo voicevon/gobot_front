@@ -1,6 +1,6 @@
 #include "gobot_main.h"
 #include <HardwareSerial.h>
-#include "CNC/solution/five_bars/cnc_five_bars.h"
+#include "CNC/solution/five_bars/cnc_five_bars_base.h"
 
 
 void GobotMain::SpinOnce(){
