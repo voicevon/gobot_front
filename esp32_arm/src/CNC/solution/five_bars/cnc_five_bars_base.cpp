@@ -10,7 +10,8 @@ void CncSolution_FiveBarsBase::Init(CncBoardBase* board){
 	board->EnableMotor(AXIS_ALPHA, false);
 	board->EnableMotor(AXIS_BETA, false);
 	this->_board = board;
-	this->_config = (CncSolution_FiveBarConfig*)(this->_board->GetCncConfig());
+	this->_config_base = this->_board->GetCncConfig();
+	this->_config = (CncSolution_FiveBarConfig*)this->_config;
 	Serial.println("[Info] CncSolution_FiveBarsBase::Init() is done.");
 } 
 

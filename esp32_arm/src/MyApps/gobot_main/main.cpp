@@ -28,10 +28,7 @@ void setup(){
     board.LinkStepControlToCncMover(&objStepControl);
 
     board_test();
-    // cncMachine.Init('S');  //Slow moving
-    // cncMachine.PrintOut("GobotMain Machine");
     cnc.Init(&board);
-    // cncFiveBar.LinkStepControl(&objStepControl);
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);

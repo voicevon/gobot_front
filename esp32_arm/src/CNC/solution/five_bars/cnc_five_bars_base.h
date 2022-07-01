@@ -12,8 +12,6 @@
 class CncSolution_FiveBarsBase: public CncSolutionBase{
     public:
         void Init(CncBoardBase* board) override;
-        void RunG1(Gcode* gcode) override;
-        bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
 
     protected:
         CncSolution_FiveBarConfig* _config;
@@ -24,6 +22,8 @@ class CncSolution_FiveBarsBase: public CncSolutionBase{
         virtual void FK(IkPositionBase* from_ik, FkPositionBase* to_fk) override;
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
+        bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
+        void RunG1(Gcode* gcode) override;
 
         // bool homed;
 

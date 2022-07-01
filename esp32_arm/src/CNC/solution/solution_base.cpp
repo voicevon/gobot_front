@@ -97,8 +97,8 @@ void CncSolutionBase::RunG28(EnumAxis axis){
 	Serial.print("[Debug] CncFiveBars::RunG28() is entering  axis= " );
 	Serial.println(axis);
 	Serial.print(" IsCombinedFK= ");
-	Serial.println(this->_config->IsCombinedFk);
-	if (this->_config->IsCombinedFk){
+	Serial.println(this->_config_base->IsCombinedFk);
+	if (this->_config_base->IsCombinedFk){
 		this->_RunG28_CombinedFk(axis);
 
 	}else{

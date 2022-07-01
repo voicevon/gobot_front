@@ -81,7 +81,7 @@ void Cnc_CoreYZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
-		if (this->_config->IsInverseKinematicHoimg){
+		if (this->_config_base->IsInverseKinematicHoimg){
 			// We know homed position via IK.
 			Serial.print("\n[Error] Cnc_CoreYZ::_running_G28() This robot does NOT impliment this function.");
 		}
