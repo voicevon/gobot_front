@@ -67,7 +67,6 @@ void CncSolutionBase::SpinOnce_BaseExit(){
 
 
 void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
-	// this->_homing_axis = axis;
 	Logger::Debug("CncSolutionBase::__HomeSingleAxis()");
 	Serial.print(axis);
 
@@ -80,7 +79,6 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 		CncMoverBase* mover = this->_board->cnc_mover;
 		config->PrintOut("Config in CncFiveBars::RunG28()");
 		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));
-		// mover.setAcceleration(axis, config->HomingAcceleration(axis);
 		this->_board->EnableMotor(axis, true);
 		float long_distance_to_move = 999.0f * config->HomingDir_IsToMax(axis);
 
@@ -89,7 +87,6 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	}else{
 		Logger::Error("CncSolutionBase::RunG28() ");
 	}
-	// this->_stepControl->moveAsync(*this->__homing_stepper);
 	Serial.println("[Debug] CncSolutionBase::RunG28() is Starting to run..." );
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "../solution_config_base.h"
 
-class CncFiveBarConfig: public CncSolutionConfigBase{
+class CncSolution_FiveBarConfig: public CncSolutionConfigBase{
     public:
         const float& Homed_position_alpha_in_rad = _HOMED_POSITION[AXIS_ALPHA];
         const float& Homed_position_beta_in_rad = _HOMED_POSITION[AXIS_BETA];

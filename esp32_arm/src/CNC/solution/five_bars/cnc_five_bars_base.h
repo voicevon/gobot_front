@@ -9,14 +9,14 @@
 #include "Robot/homer/single_axis_homer.h"
 #include "MyLibs/MyFunctions.hpp"
 
-class CncFiveBarsBase: public CncSolutionBase{
+class CncSolution_FiveBarsBase: public CncSolutionBase{
     public:
         void Init(CncBoardBase* board) override;
         void RunG1(Gcode* gcode) override;
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
 
     protected:
-        CncFiveBarConfig* _fivebarMachine;
+        CncSolution_FiveBarConfig* _config;
 
     
     private:
@@ -25,7 +25,7 @@ class CncFiveBarsBase: public CncSolutionBase{
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
 
-        bool homed;
+        // bool homed;
 
         void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {return " ";};
