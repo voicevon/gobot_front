@@ -6,8 +6,8 @@ void Cnc_CoreYZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_YZ* fk = (FkPosition_YZ*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
-	ik->alpha = (fk->Z * this->_cncMachine->steps_per_mm_for_z + fk->Y * this->_cncMachine->steps_per_mm_for_y);
-	ik->beta = (fk->Z * this->_cncMachine->steps_per_mm_for_z - fk->Y * this->_cncMachine->steps_per_mm_for_y);
+	ik->alpha = (fk->Z  + fk->Y );
+	ik->beta = (fk->Z - fk->Y );
 
 	Serial.print("\n[Debug] Cnc_CoreYZ::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
@@ -21,8 +21,8 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_YZ* fk = (FkPosition_YZ*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
-	fk->Z = (ik->alpha + ik->beta) / 2 / this->_cncMachine->steps_per_mm_for_z;
-	fk->Y = (ik->alpha - ik->beta) / 2 / this->_cncMachine->steps_per_mm_for_y;
+	fk->Z = (ik->alpha + ik->beta) / 2;
+	fk->Y = (ik->alpha - ik->beta) / 2;
 
 	Serial.print("\n[Debug] Cnc_CoreYZ::FK() output (Z, Y) = ");
 	Serial.print(fk->Z);
@@ -34,7 +34,7 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 void Cnc_CoreYZ::Init(CncBoardBase* board){
 	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
-	this->_cncMachine = (CncCoreYZMachine*)(this->_board->GetCncMechanic());
+	this->_cncMachine = (CncCoreYZMachine*)(this->_board->GetCncConfig());
 	this->_board = board;
 
 	this->objHomeHelper_y = board->GetHomer(AXIS_Y);
@@ -43,7 +43,7 @@ void Cnc_CoreYZ::Init(CncBoardBase* board){
 
 }
 
-void Cnc_CoreYZ::RunG28(EnumAxis axis){
+void Cnc_CoreYZ::RunG28_CombinedAxis(EnumAxis axis){
 	Serial.print("[Debug] Cnc_CoreYZ::RunG28() is entering:   " );
 	Serial.println(axis);
 	this->_homing_axis_name = axis;
@@ -77,13 +77,7 @@ void Cnc_CoreYZ::RunG28(EnumAxis axis){
 	// this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 }
 
-void Cnc_CoreYZ::_running_G28(){
-	if (this->__homing_helper->IsTriged()){
-		// End stop is trigered
-		Serial.print("\n[Info] Cnc_CoreYZ::_running_G28() Home sensor is trigger.  " );
-		Serial.print (this->_homing_axis_name);
-		// this->_stepControl->stop();
-		this->_board->cnc_mover->AllActuatorsStop();
+void Cnc_CoreYZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
@@ -109,29 +103,63 @@ void Cnc_CoreYZ::_running_G28(){
 		if (this->_homing_axis_name == 'Y') {
 			this->_board->cnc_mover->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
 		}
-		
-		this->State = CncState::IDLE;
-
-	}else{
-		// Endstop is not trigered
-		// Serial.print("[Debug] Still homing\n");
-		// Serial.print("<");
-		// We are going to move a long long distance with async mode(None blocking).
-		// When endstop is trigered, must stop the moving. 
-		// if (this->_homing_axis == 'W'){
-		// 	//todo :  process with IK()
-		// 	this->stepper_alpha.setTargetRel(500000);
-		// 	this->stepper_beta.setTargetRel(500000);
-		// 	this->__homing_helper = &this->objHomeHelper_angle;
-		// }else if (this->_homing_axis == 'Z'){
-		// 	// Serial.print("-");
-		// 	this->stepper_alpha.setTargetRel(500000);
-		// 	this->stepper_beta.setTargetRel(-500000);	
-		// 	this->__homing_helper = &this->objHomeHelper_vertical;
-		// }
-	// this->objStepControl.moveAsync(this->stepper_alpha, this->stepper_beta);
-	}	
 }
+
+// void Cnc_CoreYZ::_running_G28(){
+// 	if (this->__homing_helper->IsTriged()){
+// 		// End stop is trigered
+// 		Serial.print("\n[Info] Cnc_CoreYZ::_running_G28() Home sensor is trigger.  " );
+// 		Serial.print (this->_homing_axis_name);
+// 		// this->_stepControl->stop();
+// 		this->_board->cnc_mover->AllActuatorsStop();
+
+// 		//Set current position to HomePosition
+// 		IkPosition_AB ik_position;
+// 		if (this->_config->IsInverseKinematicHoimg){
+// 			// We know homed position via IK.
+// 			Serial.print("\n[Error] Cnc_CoreYZ::_running_G28() This robot does NOT impliment this function.");
+// 		}
+// 		else{
+// 			// We know homed position via FK
+// 			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
+// 			this->__current_fk_position.Z = this->_cncMachine->Homed_position_z;
+// 			this->__current_fk_position.Y = this->_cncMachine->Homed_position_y;
+// 			this->IK(&this->__current_fk_position, &ik_position);
+// 			// verify IK by FK()
+// 			FkPosition_YZ verifying_fk;
+// 			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
+// 			this->FK(&ik_position, &verifying_fk);
+// 		}
+// 		//Copy current ik-position to motor-position.
+// 		if (this->_homing_axis_name == 'Z') {
+// 			this->_board->cnc_mover->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
+// 		}
+// 		if (this->_homing_axis_name == 'Y') {
+// 			this->_board->cnc_mover->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
+// 		}
+		
+// 		this->State = CncState::IDLE;
+
+// 	}else{
+// 		// Endstop is not trigered
+// 		// Serial.print("[Debug] Still homing\n");
+// 		// Serial.print("<");
+// 		// We are going to move a long long distance with async mode(None blocking).
+// 		// When endstop is trigered, must stop the moving. 
+// 		// if (this->_homing_axis == 'W'){
+// 		// 	//todo :  process with IK()
+// 		// 	this->stepper_alpha.setTargetRel(500000);
+// 		// 	this->stepper_beta.setTargetRel(500000);
+// 		// 	this->__homing_helper = &this->objHomeHelper_angle;
+// 		// }else if (this->_homing_axis == 'Z'){
+// 		// 	// Serial.print("-");
+// 		// 	this->stepper_alpha.setTargetRel(500000);
+// 		// 	this->stepper_beta.setTargetRel(-500000);	
+// 		// 	this->__homing_helper = &this->objHomeHelper_vertical;
+// 		// }
+// 	// this->objStepControl.moveAsync(this->stepper_alpha, this->stepper_beta);
+// 	}	
+// }
 
 void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] Cnc_CoreYZ::RunG1() is entering");
@@ -189,24 +217,24 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	}
 }
 
-void Cnc_CoreYZ::_running_G1(){
-    if (this->GetDistanceToTarget_IK() < this->_cncMachine->max_acceleration_alpha_beta){
-      	this->State = CncState::IDLE;
-		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
-    }
-	// Serial.println(this->GetDistanceToTarget_IK());
-	// delay(100);
-}
+// void Cnc_CoreYZ::_running_G1(){
+//     if (this->GetDistanceToTarget_IK() < this->_cncMachine->max_acceleration_alpha_beta){
+//       	this->State = CncState::IDLE;
+// 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
+//     }
+// 	// Serial.println(this->GetDistanceToTarget_IK());
+// 	// delay(100);
+// }
 
 // void Cnc_CoreYZ::RunM123(uint8_t eef_channel, EefAction eef_action){
-void Cnc_CoreYZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// void Cnc_CoreYZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	
-}
+// }
 
-void Cnc_CoreYZ::RunM84(){
-	this->_board->EnableMotor(AXIS_ALPHA, false);
-	this->_board->EnableMotor(AXIS_BETA, false);
-}
+// void Cnc_CoreYZ::RunM84(){
+// 	this->_board->EnableMotor(AXIS_ALPHA, false);
+// 	this->_board->EnableMotor(AXIS_BETA, false);
+// }
 
 float Cnc_CoreYZ::GetDistanceToTarget_IK(){
 	// return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();

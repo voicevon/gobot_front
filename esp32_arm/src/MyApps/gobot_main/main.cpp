@@ -2,19 +2,15 @@
 #ifdef I_AM_GOBOT_MAIN
 
 #include "gobot_main.h"
-// #include "CNC/solution/cnc_five_bars/cnc_five_bars.h"
-// #include "cnc_machine.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
 #include "board/board_gobot_main.h"
 #include "board/robot_eef/gobot_main_eef.h"
-#include "board/mechanic/cnc_solution.h"
-// #include "board/mechanic/cnc_machine.h"
-#include "board/mechanic/cnc_solution_config.h"
+#include "cnc/solution.h"
+#include "cnc/solution_config.h"
 #include "ESP32Step/src/TeensyStep.h"
 
 Board_GobotMain board;
-// GobotMainMachine cncMachine;
 GobotMainCnc cnc;
 GobotMain robot; 
 
@@ -30,6 +26,7 @@ void setup(){
     board.Init(true);
     board.PrintOut();
     board.LinkStepControlToCncMover(&objStepControl);
+
     board_test();
     // cncMachine.Init('S');  //Slow moving
     // cncMachine.PrintOut("GobotMain Machine");

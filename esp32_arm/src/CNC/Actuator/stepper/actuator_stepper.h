@@ -1,7 +1,7 @@
 #pragma once
 #include "../actuator_base.h"
 #include "ESP32Step/src/Stepper.h"
-#include "mechanic.h"
+// #include "config.h"
 
 class ActuatorStepper: public ActuatorBase{
     public:

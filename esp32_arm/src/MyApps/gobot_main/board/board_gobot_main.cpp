@@ -1,6 +1,6 @@
 #include "board_gobot_main.h"
 // #include "CNC/Actuator/stepper/mechanic_polor.h"
-#include "mechanic/actuator_alpha_beta.h"
+#include "../cnc/actuator_alpha_beta.h"
 
 
 
@@ -50,7 +50,7 @@ void Board_GobotMain::Init(bool is_on_reset){
 
 void Board_GobotMain::PrintOut(){
     this->cnc_mover->PrintOut("Board_GobotMain. __cnc_mover");
-    this->__cnc_mechanic.PrintOut("Board_GobotMain.__cnc_mechanic");
+    this->__cnc_config.PrintOut("Board_GobotMain.__cnc_config");
     this->__actuator_alpha.PrintOut("Board_GobotMain. __actuator_alpha");
     this->__actuator_beta.PrintOut("Board_GobotMain. __actuator_beta");
 

@@ -1,7 +1,7 @@
 #pragma once
-#include "mechanic.h"
+#include "config.h"
 
-class ActuatorMechanic_StepperLinear:public ActuatorMechanicStepper{
+class ActuatorStepper_LinearConfig :public ActuatorStepperConfig{
     public:
         float GetStepsPerCncUnit() override;
 

@@ -1,5 +1,5 @@
 // #include "cnc_machine.h"
-#include "cnc_solution_config.h"
+#include "solution_config.h"
 
 
 

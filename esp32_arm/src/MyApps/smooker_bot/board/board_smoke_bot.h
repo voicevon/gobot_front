@@ -19,7 +19,7 @@ class Board_SmokeMachine: public CncBoardBase{
         RobotEef_SmokeMachine* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         ActuatorBase* GetActuator(EnumAxis axis_name) override {return &this->__actuator;};
-        CncSolutionConfigBase* GetCncMechanic() override{return &this->__cnc_mechanic;};
+        CncSolutionConfigBase* GetCncConfig() override{return &this->__cnc_mechanic;};
 
         
     private:

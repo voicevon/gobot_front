@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include "mechanic.h"
+#include "config.h"
 
-class ActuatorMechanic_StepperPolor: public ActuatorMechanicStepper{
+class ActuatorStepper_PolorConfig: public ActuatorStepperConfig{
     public:
         float GetStepsPerCncUnit() override;
 

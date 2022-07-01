@@ -1,13 +1,9 @@
 #pragma once
 
-// #include "RobotEef/eef_standard_code.h"
-// #include "robot_eef/eef_standard_code.h"
 #include "Robot/eef/eef_standard_code.h"
 #include "CNC/gcode/gcode_consumer.h"
 #include "MyBoards/cnc_board_base.h"
-// #include "CNC/cnc_machine_base.h"
 #include "solution_config_base.h"
-// #include "CNC/single_axis_homer.h"
 #include "Robot/homer/single_axis_homer.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
@@ -26,8 +22,9 @@ class CncSolutionBase: public GcodeConsumer{
         void RunGcode(Gcode* gcode);
         void SpinOnce();
         virtual void Init(CncBoardBase* board);
+        void LinkEef(RobotEefBase* eef){this->__eef=eef;};
         // void LinkStepControl(StepControl* stepControl){this->_stepControl=stepControl;};
-        virtual void RunG28(EnumAxis axis);
+        void RunG28(EnumAxis axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
         virtual float GetDistanceToTarget_IK();
@@ -42,14 +39,16 @@ class CncSolutionBase: public GcodeConsumer{
         void RunG4(Gcode* gcode);
         virtual std::string GetHomeTrigerStateString();
         void RunM42(uint8_t pin_number, uint8_t pin_value);
-        virtual void RunM84();
+        void RunM84();
         // virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
-        virtual void RunM123(uint8_t eef_channel, uint8_t eef_action);
+        void RunM123(uint8_t eef_channel, uint8_t eef_action);
         bool is_absolute_position = true;
 
-        virtual void _running_G1();
-        virtual void _running_G28();
+        void _running_G1();
+        void _running_G28();
         virtual EnumAxis ConvertToEnum(char axis);
+        virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis){};  //TODO:  remove defination
+		virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
         EnumAxis _homing_axis_name;
         
@@ -62,8 +61,10 @@ class CncSolutionBase: public GcodeConsumer{
 
     private:
         int test_int;
+        RobotEefBase* __eef;
         void _base_spin_once();
         void __running_G4();
+        void __HomeSingleAxis(EnumAxis axis);
         long __g4_start_timestamp;
         int __g4_time_second;
 

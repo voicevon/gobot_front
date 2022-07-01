@@ -18,8 +18,8 @@ void CncCoreAZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_ZW* fk = (FkPosition_ZW*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
-	ik->alpha = (fk->Z * this->_machine->steps_per_mm_for_z + fk->W * this->_machine->steps_per_rad_for_w);
-	ik->beta = (fk->Z * this->_machine->steps_per_mm_for_z - fk->W * this->_machine->steps_per_rad_for_w);
+	ik->alpha = (fk->Z  + fk->W);
+	ik->beta = (fk->Z  - fk->W );
 
 	Serial.print("\n[Debug] CncCoreAZ::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
@@ -33,8 +33,8 @@ void CncCoreAZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_ZW* fk = (FkPosition_ZW*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
-	fk->Z = (ik->alpha + ik->beta) / 2 / this->_machine->steps_per_mm_for_z;
-	fk->W = (ik->alpha - ik->beta) / 2 / this->_machine->steps_per_rad_for_w;
+	fk->Z = (ik->alpha + ik->beta) / 2 ;
+	fk->W = (ik->alpha - ik->beta) / 2 ;
 
 	Serial.print("\n[Debug] CncCoreAZ::FK() output (Z, W) = ");
 	Serial.print(fk->Z);
@@ -53,7 +53,34 @@ void CncCoreAZ::Init(CncBoardBase* board){
 
 }
 
-void CncCoreAZ::RunG28(EnumAxis axis){
+
+void CncCoreAZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+//Set current position to HomePosition
+		IkPosition_AB ik_position;
+		if (this->_config->IsInverseKinematicHoimg){
+			// We know homed position via IK.
+			Serial.print("\n[Error] CncCoreAZ::_running_G28() This robot does NOT impliment this function.");
+		}
+		else{
+			// We know homed position via FK
+			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
+			this->__current_fk_position.Z = this->_machine->Homed_position_z;
+			this->__current_fk_position.W = this->_machine->Homed_position_w;
+			this->IK(&this->__current_fk_position, &ik_position);
+			// verify IK by FK()
+			FkPosition_XY verifying_fk;
+			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
+			this->FK(&ik_position, &verifying_fk);
+		}
+		//Copy current ik-position to motor-position.
+		// if (this->_homing_axis == 'Z') this->objStepper_alpha->setPosition(ik_position.alpha);
+		// if (this->_homing_axis == 'W') this->objStepper_beta->setPosition(ik_position.beta);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
+		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
+		
+}
+
+void CncCoreAZ::RunG28_CombinedAxis(EnumAxis axis){
 	Serial.print("[Debug] CncCoreAZ::RunG28() is entering:   " );
 	Serial.print(axis);
 	this->_homing_axis_name = axis;
@@ -77,44 +104,44 @@ void CncCoreAZ::RunG28(EnumAxis axis){
 	this->_board->cnc_mover->AllActuatorsMoveTo(true, motor_position);
 }
 
-void CncCoreAZ::_running_G28(){
-	if (this->__homing_helper->IsTriged()){
-		// End stop is trigered
-		Serial.print("\n[Info] CncCoreAZ::_running_G28() Home sensor is trigger.  " );
-		Serial.print (this->_homing_axis_name);
-		// this->_stepControl->stop();
-		this->_board->cnc_mover->AllActuatorsStop();
+// void CncCoreAZ::_running_G28(){
+// 	if (this->__homing_helper->IsTriged()){
+// 		// End stop is trigered
+// 		Serial.print("\n[Info] CncCoreAZ::_running_G28() Home sensor is trigger.  " );
+// 		Serial.print (this->_homing_axis_name);
+// 		// this->_stepControl->stop();
+// 		this->_board->cnc_mover->AllActuatorsStop();
 
-		//Set current position to HomePosition
-		IkPosition_AB ik_position;
-		if (this->_config->IsInverseKinematicHoimg){
-			// We know homed position via IK.
-			Serial.print("\n[Error] CncCoreAZ::_running_G28() This robot does NOT impliment this function.");
-		}
-		else{
-			// We know homed position via FK
-			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
-			this->__current_fk_position.Z = this->_machine->Homed_position_z;
-			this->__current_fk_position.W = this->_machine->Homed_position_w;
-			this->IK(&this->__current_fk_position, &ik_position);
-			// verify IK by FK()
-			FkPosition_XY verifying_fk;
-			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
-			this->FK(&ik_position, &verifying_fk);
-		}
-		//Copy current ik-position to motor-position.
-		// if (this->_homing_axis == 'Z') this->objStepper_alpha->setPosition(ik_position.alpha);
-		// if (this->_homing_axis == 'W') this->objStepper_beta->setPosition(ik_position.beta);
-		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
-		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
+// 		//Set current position to HomePosition
+// 		IkPosition_AB ik_position;
+// 		if (this->_config->IsInverseKinematicHoimg){
+// 			// We know homed position via IK.
+// 			Serial.print("\n[Error] CncCoreAZ::_running_G28() This robot does NOT impliment this function.");
+// 		}
+// 		else{
+// 			// We know homed position via FK
+// 			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
+// 			this->__current_fk_position.Z = this->_machine->Homed_position_z;
+// 			this->__current_fk_position.W = this->_machine->Homed_position_w;
+// 			this->IK(&this->__current_fk_position, &ik_position);
+// 			// verify IK by FK()
+// 			FkPosition_XY verifying_fk;
+// 			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
+// 			this->FK(&ik_position, &verifying_fk);
+// 		}
+// 		//Copy current ik-position to motor-position.
+// 		// if (this->_homing_axis == 'Z') this->objStepper_alpha->setPosition(ik_position.alpha);
+// 		// if (this->_homing_axis == 'W') this->objStepper_beta->setPosition(ik_position.beta);
+// 		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
+// 		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
 		
-		this->State = CncState::IDLE;
+// 		this->State = CncState::IDLE;
 
-	}else{
-		// Endstop is not trigered
+// 	}else{
+// 		// Endstop is not trigered
 
-	}	
-}
+// 	}	
+// }
 
 void CncCoreAZ::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] CncCoreAZ::RunG1() is entering");
@@ -168,23 +195,20 @@ void CncCoreAZ::RunG1(Gcode* gcode) {
 		Serial.print(")");
 	}
 }
-void CncCoreAZ::_running_G1(){
-    if (this->GetDistanceToTarget_IK() < this->_machine->max_acceleration_alpha_beta){
-      	this->State = CncState::IDLE;
-		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
-    }
-	// Serial.println(this->GetDistanceToTarget_IK());
-	// delay(100);
-}
+// void CncCoreAZ::_running_G1(){
+//     if (this->GetDistanceToTarget_IK() < this->_machine->max_acceleration_alpha_beta){
+//       	this->State = CncState::IDLE;
+// 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
+//     }
+// 	// Serial.println(this->GetDistanceToTarget_IK());
+// 	// delay(100);
+// }
 // void CncCoreAZ::RunM123(uint8_t eef_channel, EefAction eef_action){
-void CncCoreAZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// void CncCoreAZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
 	
-}
+// }
 
-void CncCoreAZ::RunM84(){
-	this->_board->EnableMotor(AXIS_ALPHA, false);
-	this->_board->EnableMotor(AXIS_BETA, false);
-}
+
 
 float CncCoreAZ::GetDistanceToTarget_IK(){
 	return this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA) + this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
