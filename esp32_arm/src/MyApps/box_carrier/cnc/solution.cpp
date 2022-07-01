@@ -1,4 +1,4 @@
-#include "cnc_solution.h"
+#include "solution.h"
 
 EnumAxis BoxCarrier_CncSolution::ConvertToEnum(char axis){
     switch (axis){

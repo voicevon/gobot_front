@@ -6,15 +6,10 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "smoke_bot.h"
 #include "webCommu.h"
-// #include "MyBoards/smoke_machine/board_smoke_machine.h"
-// #include "board/board_smoke_machine.h"
 #include "board/board_smoke_bot.h"
 #include "CNC/gcode/gcode_queue.h"
-// #include "CNC/cnc_single_axis/cnc_single_axis.h"
-#include "board/mechanic/cnc_solution.h"
+#include "cnc/solution.h"
 
-// std::string topic = "actu/dev001/yongquan"; 
-// std::string payload ="OFF";
 Board_SmokeMachine board;
 SmookerBot_CncSoution cnc;
 GcodeQueue myCommandQueue = GcodeQueue();

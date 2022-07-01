@@ -1,7 +1,7 @@
 #pragma once
 
 // #include "CNC/cnc_machine_base.h"
-#include "../solution_config_base.h"
+#include "../solution_config_base.h" 
 
 class CncCoreAZMachine: public CncSolutionConfigBase{
     public:

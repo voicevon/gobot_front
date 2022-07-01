@@ -1,11 +1,11 @@
 #pragma once
 
-#include "CNC/solution/scara/cnc_machine.h"
+#include "CNC/solution/scara/config_base.h"
 
 
-class GobotHouseMachine: public CncScaraMachine{
+class GobotHouse_CncSolotuionConfig_2205: public CncSolution_ScaraConfigBase{
     public:
-        GobotHouseMachine();
+        GobotHouse_CncSolotuionConfig_2205();
         void PrintOut(const char* title) override;
 
         // void Init(char solution_id) override;

@@ -26,7 +26,7 @@ class Board_GobotHouse: public CncBoardBase{
         ActuatorStepper alpha_stepper;
         ActuatorStepper beta_stepper;
         CncMover_DualStepper mover_StepperServo;
-        GobotHouseMachine __cnc_mechanic;
+        GobotHouse_CncSolotuionConfig_2205 __cnc_mechanic;
 
         SingleAxisHomer homer_alpha = SingleAxisHomer(PIN_HOME_ALHPA_2109, LOW);
         SingleAxisHomer homer_beta = SingleAxisHomer(PIN_HOME_BETA_2109, LOW);

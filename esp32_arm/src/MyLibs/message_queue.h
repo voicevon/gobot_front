@@ -3,7 +3,7 @@
 #define MESSAGE_COUNT_IN_QUEUE 200
 // #include <Arduino.h>  //for String only
 #include <WString.h>
-
+#include "MyLibs/basic/logger.h"
 
 class MessageQueue{
     public:

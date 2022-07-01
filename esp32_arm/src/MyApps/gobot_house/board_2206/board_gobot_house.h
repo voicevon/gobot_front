@@ -40,7 +40,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
         SingleAxisHomer __beta_homer = SingleAxisHomer(PIN_HOME_BETA_2109, LOW);
 
         RobotEef_GobotHouse eef;
-        GobotHouseMachine_2206 __cnc_mechanic;
+        GobotHouse_CncSolutionConfig_2206 __cnc_mechanic;
 
         StepControl* __stepControl;
 };

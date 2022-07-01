@@ -2,7 +2,7 @@
 
 #include "solution_config.h"
 
-GobotHouseMachine_2206::GobotHouseMachine_2206(){
+GobotHouse_CncSolutionConfig_2206::GobotHouse_CncSolutionConfig_2206(){
     this->__InitStaticConfig();
 
     // this->MAX_ACCELERATION_ALPHPA = 600 ;
@@ -13,7 +13,7 @@ GobotHouseMachine_2206::GobotHouseMachine_2206(){
     this->_HOMING_SPEED[AXIS_BETA] = DEG_TO_RAD * 3;
 }
 
-void GobotHouseMachine_2206::__InitStaticConfig(){
+void GobotHouse_CncSolutionConfig_2206::__InitStaticConfig(){
     // For actuator is stepper BYG-48
     // this->_link_a_length = 75.0;  
     // this->_LINK_B_LENGTH = 75.0; 
@@ -35,18 +35,18 @@ void GobotHouseMachine_2206::__InitStaticConfig(){
 }
 
 
-// int32_t GobotHouseMachine_2206::GetStepsPerUnit(char axis_name) {
+// int32_t GobotHouse_CncSolutionConfig_2206::GetStepsPerUnit(char axis_name) {
 //     return 100;
 // }
 
-// float GobotHouseMachine_2206::GetHomingVelocity(char axis_name){
+// float GobotHouse_CncSolutionConfig_2206::GetHomingVelocity(char axis_name){
 //     if (axis_name == AXIS_ALPHA)
 //         // return DEG_TO_RAD * this->_homing_speed_alpha_degree_per_second  * this->HomingDir_IsToMax(AXIS_ALPHA);
 //         return DEG_TO_RAD * this->HomingSpeed(AXIS_ALPHA)  * this->HomingDir_IsToMax(AXIS_ALPHA);
 //     else if (axis_name == 'B'){
 //         bool debug = false;
 //         if(debug){
-//             Serial.print("[Debug] GobotHouseMachine_2206::GetHomingVelocity() _homing_speed_beta_degree_per_second = ");
+//             Serial.print("[Debug] GobotHouse_CncSolutionConfig_2206::GetHomingVelocity() _homing_speed_beta_degree_per_second = ");
 //             // Serial.print(_homing_speed_beta_degree_per_second);
 //             Serial.print(this->HomingSpeed(AXIS_BETA));
 //             Serial.print("  HOMING_DIR_BETA_IS_TO_MAX = ");
@@ -56,15 +56,15 @@ void GobotHouseMachine_2206::__InitStaticConfig(){
 //         return DEG_TO_RAD * this->HomingSpeed(AXIS_BETA)  * this->HomingDir_IsToMax(AXIS_BETA);
 //     }
 //     else{
-//         Serial.print("[Error] GobotHouseMachine_2206::GetHomingVelocity() " );
+//         Serial.print("[Error] GobotHouse_CncSolutionConfig_2206::GetHomingVelocity() " );
 //         Serial.println(axis_name);
 //     }
 //     return 0;
 // }
 
-void GobotHouseMachine_2206::PrintOut(const char * title){
+void GobotHouse_CncSolutionConfig_2206::PrintOut(const char * title){
     Serial.print("\n\n===============================================");
-    Serial.print("\n   GobotHouseMachine_2206::PrintOut()");
+    Serial.print("\n   GobotHouse_CncSolutionConfig_2206::PrintOut()");
     Serial.print("\n       Homed_position_alpha_in_degree= ");
     Serial.print(RAD_TO_DEG * this->Homed_position_alpha_in_rad);
     Serial.print("\n       Homed_position_beta_in_degree= "); 

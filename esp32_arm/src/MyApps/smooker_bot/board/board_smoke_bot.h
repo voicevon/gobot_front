@@ -1,11 +1,11 @@
 #pragma once
 #include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "mechanic/cnc_solution.h"
 #include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
 #include "robot_eef/board_smoke_bot.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-#include "mechanic/cnc_solution_config.h"
+#include "../cnc/solution_config.h"
+#include "../cnc/solution.h"
 
 
 class Board_SmokeMachine: public CncBoardBase{

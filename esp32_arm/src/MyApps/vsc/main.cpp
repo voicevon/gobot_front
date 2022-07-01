@@ -2,13 +2,13 @@
 #ifdef I_AM_VSC
 #include "board/board_vsc.h"
 #include "board/board_tester.h"
-#include "cnc/solution_config.h"
+// #include "cnc/solution_config.h"
 #include "cnc/solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "vsc_robot.h"
 
-VscMachine cncMachine;
+// Vsc_CncSolutionConfig cnc_solution_config;
 Vsc_CncSoution cnc;
 
 Vsc_Board board;

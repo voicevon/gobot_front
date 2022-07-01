@@ -8,7 +8,8 @@
 // #include "robot_eef/eef_standard_code.h"
 #include "Robot/eef/eef_standard_code.h"
 #include "MyLibs/Components/Led.h"
-#include "cnc_machine.h"
+// #include "cnc_machine.h"
+#include "config_base.h"
 
 
 class CncScaraSolution: public CncSolutionBase{
@@ -45,5 +46,5 @@ class CncScaraSolution: public CncSolutionBase{
         SingleAxisHomer* __homer;
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;
-        CncScaraMachine* _scara_machine;
+        CncSolution_ScaraConfigBase* _scara_machine;
 };

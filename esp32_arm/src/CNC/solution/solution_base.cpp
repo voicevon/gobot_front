@@ -50,9 +50,9 @@ void CncSolutionBase::SpinOnce_BaseExit(){
 		return;
 	}
 
-	// this->_mq->SayHello("CncSolutionBase::SpinOnce_BaseExit()");
-	if (true){
-		Serial.print("\n[Info] CncSolutionBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
+	bool debug = false;
+	if (debug){
+		Logger::Debug("[Info] CncSolutionBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
 		Serial.print(message->payload);
 		Serial.println(" ");
 	}
@@ -68,11 +68,15 @@ void CncSolutionBase::SpinOnce_BaseExit(){
 
 void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	// this->_homing_axis = axis;
+	Logger::Debug("CncSolutionBase::__HomeSingleAxis()");
+	Serial.print(axis);
+
 	if ( axis==AXIS_ALPHA || axis == AXIS_BETA){
 		this->_homing_axis_name = axis;
 		this->__current_homer = this->_board->GetHomer(axis);
-		
+		Serial.print("1111111111111111111");
 		CncSolutionConfigBase* config = this->_board->GetCncConfig();
+		Serial.print("2222222222222");
 		CncMoverBase* mover = this->_board->cnc_mover;
 		config->PrintOut("Config in CncFiveBars::RunG28()");
 		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));
@@ -95,6 +99,8 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 void CncSolutionBase::RunG28(EnumAxis axis){ 
 	Serial.print("[Debug] CncFiveBars::RunG28() is entering  axis= " );
 	Serial.println(axis);
+	Serial.print(" IsCombinedFK= ");
+	Serial.println(this->_config->IsCombinedFk);
 	if (this->_config->IsCombinedFk){
 		this->_RunG28_CombinedFk(axis);
 

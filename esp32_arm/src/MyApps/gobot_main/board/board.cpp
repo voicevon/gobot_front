@@ -31,8 +31,15 @@ void Board_GobotMain::InitHardware(){
 
 void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
-    Logger::Info("===================================================");
+    Logger::Info(" ");
+    Logger::Info(" ");
+    Logger::Info(" ");
+    Logger::Info(" ");
+    Logger::Info(" ");
+    Logger::Info(" ");
+    Logger::Info("==========================================");
     Logger::Info("Hi Xuming, I am GobotMain. Good luck......");
+    Logger::Info("==========================================");
     Serial.print(FCBC_RESET);
     this->InitHardware();
     this->EnableMotor(AXIS_ALPHA, false);

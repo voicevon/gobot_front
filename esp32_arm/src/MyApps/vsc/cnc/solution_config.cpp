@@ -3,12 +3,12 @@
 
 
 
-VscMachine::VscMachine(){
+Vsc_CncSolutionConfig::Vsc_CncSolutionConfig(){
         this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;
         this->_HOMING_SPEED[AXIS_ALPHA] = 100.0f;
 }
 
-void VscMachine::PrintOut(const char* title){
+void Vsc_CncSolutionConfig::PrintOut(const char* title){
     Serial.print("\n\n===============================================");
     Serial.print("\nSpringMakerMachine::PrintOut()");
     Serial.print("\n     Home_position (a) = (");

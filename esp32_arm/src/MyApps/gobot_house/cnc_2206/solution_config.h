@@ -1,11 +1,11 @@
 #pragma once
 
-#include "CNC/solution/scara/cnc_machine.h"
+#include "CNC/solution/scara/config_base.h"
 
 
-class GobotHouseMachine_2206: public CncScaraMachine{
+class GobotHouse_CncSolutionConfig_2206: public CncSolution_ScaraConfigBase{
     public:
-        GobotHouseMachine_2206();
+        GobotHouse_CncSolutionConfig_2206();
         // void Init(char solution_id) override;
         void PrintOut(const char * title) override;
         // float GetHomingVelocity(char axis_name) override;

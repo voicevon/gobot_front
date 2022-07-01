@@ -1,11 +1,11 @@
 #pragma once
 
 // #include "CNC/solution/cnc_single_axis/cnc_single_axis_machine.h"
-#include "CNC/solution/single_axis/config.h"
+#include "CNC/solution/single_axis/config_base.h"
 
-class SpringMakerMachine: public CncSolutionConfig_SingleAxis{
+class SmookerBot_CncMechanic: public CncSolution_SingleAxisConfig{
     public:
-        SpringMakerMachine();
+        SmookerBot_CncMechanic();
         // int32_t GetStepsPerUnit(char axis_name) override;
         // void Init(char solution_id) override;
         void PrintOut(const char * title) override;

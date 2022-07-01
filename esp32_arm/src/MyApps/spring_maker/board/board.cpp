@@ -1,4 +1,4 @@
-#include "board_spring_maker.h"
+#include "board.h"
 
 
 void Board_SpringMaker::Init(bool is_on_reset){

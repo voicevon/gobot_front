@@ -7,7 +7,8 @@
 #include "ESP32Step/src/TeensyStep.h"
 // #include "CNC/single_axis_homer.h"
 #include "Robot/homer/single_axis_homer.h"
-#include "cnc_machine.h"
+// #include "cnc_machine.h"
+#include "config_base.h"
 
 class Cnc_CoreYZ: public CncSolutionBase{
     public:
@@ -22,7 +23,7 @@ class Cnc_CoreYZ: public CncSolutionBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        CncCoreYZMachine* _cncMachine;
+        CncSolution_CoreYZConfigBase* _cncMachine;
 
         //Override private
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;

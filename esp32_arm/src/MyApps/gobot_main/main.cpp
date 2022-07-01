@@ -44,7 +44,7 @@ void setup(){
     append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, &robot); 
     setup_mqtt_on_message_receive(); 
 
-    Serial.print("\nGobot-Main setup is done.........................................");
+    Logger::Info("Gobot-Main setup is done.........................................");
     for(int i=0; i< 200; i++){ loop_mqtt();}
 
 }

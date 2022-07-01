@@ -16,7 +16,7 @@
 
 
 BoardAllInOne board = BoardAllInOne();
-BoxCarrierMachine cncMachine;
+BoxCarrier_CncSolutionConfig cncMachine;
 BoxCarrier_CncSolution cnc;
 BoxCarrier robot = BoxCarrier();
 GcodeQueue gcode_queue = GcodeQueue();

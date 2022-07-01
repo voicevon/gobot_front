@@ -1,7 +1,7 @@
 #pragma once
-#include "CNC/solution/core_yz/cnc_machine.h"
+#include "CNC/solution/core_yz/config_base.h"
 
-class BoxCarrierMachine: public CncCoreYZMachine{
+class BoxCarrier_CncSolutionConfig: public CncSolution_CoreYZConfigBase{
     public:
         void PrintOut(const char* title) override;
 

@@ -13,7 +13,8 @@ void MqttSyncer::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_top
 
     bool debug=true;
     if(debug){
-        Serial.print("\n[Info] MqttSyncer::SubscribeMqtt() is done  Subsribe_topic= ");
+        Logger::Debug("[Info] MqttSyncer::SubscribeMqtt() is done");
+        Serial.print("Subsribe_topic= ");
         Serial.print(main_topic);
         Serial.print(" feedback_topic= ");
         Serial.println(feedback_topic);
@@ -36,8 +37,10 @@ void MqttSyncer::OnReceived(const char* payload, int length){
         return;
     }
     //  local message queue is not full [after appending current message], publish mqtt feedback now.
-    Serial.println("[Info] MqttSyncer::OnReceived() sending feedback.");
+    // Serial.println("[Info] MqttSyncer::OnReceived() sending feedback.");
     this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, payload, length);
+    Serial.println("[Info] MqttSyncer::OnReceived() sent feedback.");
+
 }
 
 // This function will be invoked on master thread.

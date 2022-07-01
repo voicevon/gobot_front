@@ -2,7 +2,7 @@
 // #include "CNC/cnc_machine_base.h"
 #include "../solution_config_base.h"
 
-class CncSolutionConfig_SingleAxis: public CncSolutionConfigBase{
+class CncSolution_SingleAxisConfig: public CncSolutionConfigBase{
     public:
         // float max_speed_alpha;
         // float max_acceleration_alpha;

@@ -16,7 +16,7 @@
 
 StepControl controller;    // Use default settings 
 Board_GobotHouse board;
-// GobotHouseMachine cncMachine;
+// GobotHouse_CncSolotuionConfig_2205 cncMachine;
 GobotHouse_CncSolution cnc;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;

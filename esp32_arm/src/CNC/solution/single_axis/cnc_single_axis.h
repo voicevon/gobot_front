@@ -1,10 +1,8 @@
 #pragma once
 
 #include "MyBoards/cnc_board_base.h"
-// #include "CNC/solution/cnc_base.h"
 #include "../solution_base.h"
-// #include "cnc_single_axis_machine.h"
-#include "config.h"
+#include "config_base.h"
 
 
 //This is a virtual class. No Constructor.
@@ -19,7 +17,7 @@ class CncSingleAxis: public CncSolutionBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        CncSolutionConfig_SingleAxis* _mechanic;  //TODO:  uinify name:  cncConfig??
+        CncSolution_SingleAxisConfig* _mechanic;  //TODO:  uinify name:  cncConfig??
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
 
     private:

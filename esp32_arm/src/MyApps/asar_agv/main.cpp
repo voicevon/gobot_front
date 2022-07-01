@@ -12,7 +12,7 @@
 
 StepControl objStepControl;  // This object can not inside any object?
 BoardAllInOne board = BoardAllInOne();
-// BoxCarrierMachine cncMachine;
+// BoxCarrier_CncSolutionConfig cncMachine;
 BotAsrsAgvCoreYZ robot= BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
 

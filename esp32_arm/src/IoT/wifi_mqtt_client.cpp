@@ -85,11 +85,14 @@ void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
 }
 
 void onMqttSubscribe(uint16_t packetId, uint8_t qos) {
-	Serial.println("[Info] wifi_mqtt_client.cpp   onMqttSubscribe()   Subscribe acknowledged.");
-	Serial.print("  packetId: ");
-	Serial.println(packetId);
-	Serial.print("  qos: ");
-	Serial.println(qos);
+    bool debug = false;
+    if (debug){
+        Serial.println("[Info] wifi_mqtt_client.cpp   onMqttSubscribe()   Subscribe acknowledged.");
+        Serial.print("  packetId: ");
+        Serial.println(packetId);
+        Serial.print("  qos: ");
+        Serial.println(qos);
+    }
 }
 
 void onMqttUnsubscribe(uint16_t packetId) {

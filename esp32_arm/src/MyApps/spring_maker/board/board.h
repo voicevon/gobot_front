@@ -5,7 +5,7 @@
 #include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
 #include "robot_eef/board_spring_maker.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-#include "mechanic/cnc_solution_config.h"
+#include "../cnc/solution_config.h"
 
 class Board_SpringMaker: public CncBoardBase{
     public:
@@ -17,7 +17,7 @@ class Board_SpringMaker: public CncBoardBase{
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_SpringMaker* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
-        SpringMakerMachine* GetCncConfig() override {return &this->__cnc_solution_config;};
+        SpringMaker_CncSolutionConfig* GetCncConfig() override {return &this->__cnc_solution_config;};
 
         
     private:
@@ -25,5 +25,5 @@ class Board_SpringMaker: public CncBoardBase{
         ActuatorStepper stepper_alpha;
         SingleAxisHomer homer_alpha = SingleAxisHomer(PIN_HOME_ALPHA_2201, LOW);
         RobotEef_SpringMaker eef = RobotEef_SpringMaker();
-        SpringMakerMachine __cnc_solution_config;
+        SpringMaker_CncSolutionConfig __cnc_solution_config;
 };
