@@ -18,12 +18,11 @@
 
 
 
-class CncCoreAZ: public CncSolutionBase{
+class CncSolution_CoreAZ: public CncSolutionBase{
     public:
 
         void Init(CncBoardBase* board) override;
-        // void RunG28(EnumAxis axis) override;
-        void RunG1(Gcode* gcode) override;
+         void RunG1(Gcode* gcode) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
         float GetDistanceToTarget_FK() override{return 0.0;};
@@ -37,11 +36,6 @@ class CncCoreAZ: public CncSolutionBase{
         virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
         void RunG28_CombinedAxis(EnumAxis axis);
         void RunG6(Gcode* gcode) override{} ; 
-        // void _running_G1() override;
-        // void _running_G28() override;
-        // void RunM123(uint8_t eef_channel, EefAction eef_action) override;
-        // void RunM123(uint8_t eef_channel, uint8_t eef_action) override;
-        // void RunM84() override;
         std::string GetHomeTrigerStateString() override {return " ";};
 
         FkPosition_ZW __current_fk_position;
@@ -49,7 +43,7 @@ class CncCoreAZ: public CncSolutionBase{
         SingleAxisHomer* __homing_helper;
         SingleAxisHomer* objHomeHelper_vertical; // = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
         SingleAxisHomer* objHomeHelper_angle; // = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
-        CncCoreAZMachine* _machine;
+        CncSolution_CoreAZConfigBase* _config;
 
 
 };

@@ -2,9 +2,9 @@
 
 #include "CNC/solution/core_az/config_base.h"
 
-class BoxMoverCncMachine: public CncCoreAZMachine{
+class BoxMover_CncSolutionConfig: public CncSolution_CoreAZConfigBase{
     public:
-        BoxMoverCncMachine();
+        BoxMover_CncSolutionConfig();
         void PrintOut();
     private:
 };
