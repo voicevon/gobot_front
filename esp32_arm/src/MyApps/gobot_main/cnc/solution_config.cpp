@@ -9,6 +9,8 @@ GobotMain_CncSolutionConfig::GobotMain_CncSolutionConfig(){
     this->_LINK_0_LENGTH = 191.0f / 2;
     this->_LINK_A_LENGTH = 278.1;  //285.18;    // 278.1
     this->_LINK_B_LENGTH = 392.1; //  384.51;    // 500-107.8
+    this->__ACCELERATION[AXIS_ALPHA] = 2000;
+    this->__ACCELERATION[AXIS_BETA] = 2000;
 
     this->_home_via_inverse_kinematic = true;
     this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;
@@ -31,17 +33,17 @@ void GobotMain_CncSolutionConfig::PrintOut(const char* title){
     Serial.print(" , ");
     Serial.print(this->LINK_B);
     Serial.println(")");
-    Serial.print("Is Inverse kinematic homing.");
+    Serial.print("Is Inverse kinematic homing= ");
     Serial.println(this->IsInverseKinematicHoimg);
     Serial.print("Homer.Alpha: ");
-    Serial.print("  DirIsToMax= ");
+    Serial.print("\tDirIsToMax= ");
     Serial.print(this->HomingDir_IsToMax(AXIS_ALPHA));
-    Serial.print("  Homed_position_in_degree = ");
+    Serial.print("\tHomed_position_in_degree = ");
     Serial.println(RAD_TO_DEG * this->Homed_position_alpha_in_rad);
-    Serial.print("Homer,Beta: " );
-    Serial.print("  DirIsToMax= ");
+    Serial.print("Homer.Beta:  " );
+    Serial.print("\tDirIsToMax= ");
     Serial.print(this->HomingDir_IsToMax(AXIS_BETA));
-    Serial.print("  Homed_position_in_degree = ");
+    Serial.print("\tHomed_position_in_degree = ");
     Serial.print(RAD_TO_DEG * this->Homed_position_beta_in_rad);
     // Serial.print("\n STEPS_PER_RAD = ");
     // Serial.print(this->STEPS_PER_RAD);

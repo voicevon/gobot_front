@@ -56,7 +56,6 @@ class CncSolutionBase: public GcodeConsumer{
         CncBoardBase* _board;
         SingleAxisHomer* __current_homer;
 
-
     private:
         int test_int;
         RobotEefBase* __eef;

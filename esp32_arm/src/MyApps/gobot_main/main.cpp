@@ -65,8 +65,8 @@ void loop(){
 }
 
 void cnc_test(){
-    robot.Test_HomeAlpha(12);
-    robot.Test_HomeBeta(0);
+    robot.Test_HomeAlpha(0);
+    robot.Test_HomeBeta(22);
 }
 
 #include "board/board_tester.h"
@@ -80,7 +80,7 @@ void board_test(){
 
     board_tester.Test_EefUpDown(0);
     board_tester.Test_EefLoadUnload(0);
-    board_tester.Test_Eef_Full(0);
+    board_tester.Test_Eef_Full(999);
     
     // delay(5000);
     // board_tester.Test_Stepper(0, 'A', 800, &objStepControl);

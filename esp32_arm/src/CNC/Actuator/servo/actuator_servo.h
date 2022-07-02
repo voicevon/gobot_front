@@ -13,7 +13,7 @@ class ActuatorServo: public ActuatorBase{
         void SetCurrentPositionAs(float cnc_position_in_rad) override;
         void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit) override;
         float GetAbsDistanceToTarget_InCncUnit() override;
-        void SetSpeed(float speed_per_second) override;   // There is no "unsigned float"
+        void SetSpeed(float speed_in_cnc_unit) override;   // There is no "unsigned float"
         // bool MotorIsMoving(char moto_name) override;
         void Stop() override {this->__is_moving=false;};
 

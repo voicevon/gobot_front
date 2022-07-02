@@ -202,7 +202,7 @@ void GobotMain::Test_HomeAlpha(int loop_count){
 void GobotMain::Test_HomeBeta(int loop_count){
 	if (loop_count == 0) return;
 
-	Serial.println("[Info]  GobotMain::Test_HomeBeta()");
+	Logger::Info("GobotMain::Test_HomeBeta()");
 	String g28 = "G28BI";
 	String g1 = "G1B45";
 	bool buffer_is_full = false;

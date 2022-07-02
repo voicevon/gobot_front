@@ -2,7 +2,6 @@
 
 #include "cnc_mover_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-// #include "CNC/Actuator/servo/actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 
 class CncMover_DualStepper: public CncMoverBase{
@@ -18,6 +17,7 @@ class CncMover_DualStepper: public CncMoverBase{
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;
         float GetAbsDistanceToTarget_InCncUnit() override;
         void SetActuatorSpeed(EnumAxis actuator_name, float rad_per_second) override;
+        void SetActuatorAcceleration(EnumAxis axis, float accelleration) override;
         bool ActuatorIsMoving(EnumAxis actuator) override;
 
 

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "../coordinate/cnc_axis.h"
+#include "MyLibs/basic/logger.h"
 // 
 // TODO:  template <actuator>
 class CncMoverBase{
@@ -10,7 +11,8 @@ class CncMoverBase{
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
 
         virtual void PrintOut(const char* title);
-        virtual void SetActuatorSpeed(EnumAxis actuator_name, float speed_per_second);  // TODO:  remove this
+        virtual void SetActuatorSpeed(EnumAxis axis, float speed);  // TODO:  remove this
+        virtual void SetActuatorAcceleration(EnumAxis axis, float accelleration);
         virtual void SetEefSpeed(float speed);
         // void SetBlockedMove(bool is_blocked_move){this->_is_blocked_move=is_blocked_move;};
 

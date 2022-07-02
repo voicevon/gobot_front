@@ -1,5 +1,5 @@
 #pragma once
-
+#include <stdint.h>
 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398
@@ -25,13 +25,13 @@
 #define FORE_BLUE "\033[34m"
     //     purple='\033[35m'
     //     cyan='\033[36m'
-    //     lightgrey='\033[37m'
+#define FORE_LIGHT_GRAY "\033[37m"
     //     darkgrey='\033[90m'
     //     lightred='\033[91m'
     //     lightgreen='\033[92m'
 #define FORE_YELLOW "\033[93m"
     //     lightblue='\033[94m'
-    //     pink='\033[95m'
+#define  FORE_PINK "\033[95m"
     //     lightcyan='\033[96m'
 
     // class Background: 

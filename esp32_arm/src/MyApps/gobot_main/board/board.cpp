@@ -25,7 +25,7 @@ void Board_GobotMain::InitHardware(){
     this->__actuator_alpha.LinkStepper(&this->__alpha_stepper, alpha.GetStepsPerCncUnit());
 
     GobotMain_ActuatorAlphaBetaMechanic beta;
-    this->__beta_stepper.setInverseRotation(true);
+    this->__beta_stepper.setInverseRotation(false);
     this->__actuator_beta.LinkStepper(&this->__beta_stepper, beta.GetStepsPerCncUnit());
 }
 
@@ -56,7 +56,7 @@ void Board_GobotMain::Init(bool is_on_reset){
 
 void Board_GobotMain::PrintOut(){
     this->cnc_mover->PrintOut("Board_GobotMain. __cnc_mover");
-    this->__cnc_config.PrintOut("Board_GobotMain.__cnc_config");
+    this->__cnc_solution_config.PrintOut("Board_GobotMain.__cnc_solution_config");
     this->__actuator_alpha.PrintOut("Board_GobotMain. __actuator_alpha");
     this->__actuator_beta.PrintOut("Board_GobotMain. __actuator_beta");
 

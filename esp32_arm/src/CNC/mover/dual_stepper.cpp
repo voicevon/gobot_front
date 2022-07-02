@@ -36,6 +36,8 @@ void CncMover_DualStepper::SetEefSpeed(float speed){
 void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
     bool is_absolute_position;
     Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
+    Stepper* beta = this->__actuator_beta->GetLinkedStepper();
+
     uint8_t target_motor_flags = this->_moving_actuator_flags;
 
     // Step1:  Set target motor position. determin absolute or relative.
@@ -66,15 +68,16 @@ void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags
     }else if (target_motor_flags == 0x02){
         // move beta only
         // this->__actuator_beta->StartToMove();
+        this->__stepControl->moveAsync(*beta);
 
     }else if (target_motor_flags == 0x03){
         // Both motor will move
-        this->__stepControl->moveAsync(*alpha);
+        this->__stepControl->moveAsync(*alpha, *beta);
         // this->__actuator_beta->StartToMove();
 
     }else{
-        Serial.print("[Error] CncMover_DualStepper::AllMotorsMoveTo()  target_motor_flags= ");
-        Serial.println(target_motor_flags);
+        Logger::Error("CncMover_DualStepper::AllMotorsMoveTo()");
+        Logger::Print("target_motor_flags", target_motor_flags);
     }
     this->_moving_actuator_flags = target_motor_flags;
 }
@@ -100,20 +103,25 @@ void CncMover_DualStepper::SingleActuatorStop(EnumAxis actuator_name){
 
 
 void CncMover_DualStepper::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
+    Stepper* stepper;
     if (actuator_name == AXIS_ALPHA){
         this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
-        Stepper* stepper = this->__actuator_alpha->GetLinkedStepper();
-        this->__stepControl->moveAsync(*stepper);
+        stepper = this->__actuator_alpha->GetLinkedStepper();
+        // this->__stepControl->moveAsync(*stepper);
         this->_moving_actuator_flags = 0x01;
 
     }else if (actuator_name == AXIS_BETA){
         this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
-        // this->__actuator_beta->StartToMove();
+        stepper = this->__actuator_beta->GetLinkedStepper();
+        // this->__stepControl->moveAsync(*stepper);
         this->_moving_actuator_flags = 0x02;
 
     }else{
-        log_w("CncMover_DualStepper::SingleMotorMoveTo() axisname= ", actuator_name );
+        Logger::Halt ("CncMover_DualStepper::SingleMotorMoveTo() axisname= " );
+
     }
+    this->__stepControl->moveAsync(*stepper);
+
 }
 
 float CncMover_DualStepper::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
@@ -161,11 +169,21 @@ float CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit(){
     return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
 }
 
-void CncMover_DualStepper::SetActuatorSpeed(EnumAxis actuator_name, float speed_per_second){
+void CncMover_DualStepper::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
     if (actuator_name ==AXIS_ALPHA){
-        this->__actuator_alpha->SetSpeed(speed_per_second);
+        this->__actuator_alpha->SetSpeed(steps_per_second);
     }else if(actuator_name == AXIS_BETA){
-        this->__actuator_beta->SetSpeed(speed_per_second);
+        this->__actuator_beta->SetSpeed(steps_per_second);
+    }else{
+        Serial.println("[Error] CncMover_DualStepper::SetActuatorSpeed() ");
+    }
+}
+
+void CncMover_DualStepper::SetActuatorAcceleration(EnumAxis axis, float accelleration){
+    if (actuator_name ==AXIS_ALPHA){
+        this->__actuator_alpha->SetSpeed(steps_per_second);
+    }else if(actuator_name == AXIS_BETA){
+        this->__actuator_beta->SetSpeevvd(steps_per_second);
     }else{
         Serial.println("[Error] CncMover_DualStepper::SetActuatorSpeed() ");
     }

@@ -11,7 +11,7 @@ class ActuatorBase{
         virtual void SetCurrentPositionAs(float position_in_cnc_unit);
         virtual void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit);
         virtual float GetAbsDistanceToTarget_InCncUnit();
-        virtual void SetSpeed(float speed_per_second);
+        virtual void SetSpeed(float speed_in_cnc_unit);
         virtual void SetAccelleration(float accelleration_per_sqr_second){};  // TODO: remove defination.
         virtual float GetSpeed();    // ?? TODO:  var should be in base class ?
         float GetNeededSeconds();

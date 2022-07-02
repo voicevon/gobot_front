@@ -8,21 +8,31 @@
 class CncSolutionConfigBase{
     public:
         virtual void PrintOut(const char* title);
+        const bool& IsCombinedFk = _IS_COMBINED_FK;  // Like core-xy, core-yz, core-az.
+
+        //Moving
+        float GetAcceleration(EnumAxis axis){return this->__ACCELERATION[axis];};
+
+        //Homing
+        const bool& IsInverseKinematicHoimg = _home_via_inverse_kinematic;
         int8_t HomingDir_IsToMax(EnumAxis axis){return this->_HOMING_DIR_IS_TO_MAX[axis];};   //TODO:  axis should be an enum class.
+        float HomedPosition(EnumAxis axis){return this->_HOMED_POSITION[axis];};
         float HomingSpeed(EnumAxis axis){return this->_HOMING_SPEED[axis];};
         float HomingAcceleration(EnumAxis axis){return this->_HOMING_ACCELERATION[axis];};
-        float HomedPosition(EnumAxis axis){return this->_HOMED_POSITION[axis];};
         float GetHomingVelocity(EnumAxis axis){return this->HomingSpeed(axis)  * this->HomingDir_IsToMax(axis);};
-        const bool& IsInverseKinematicHoimg = _home_via_inverse_kinematic;
-        const bool& IsCombinedFk = _IS_COMBINED_FK;
+
 
     protected:
+        bool _IS_COMBINED_FK = false;   
+        //Moving
+        float __ACCELERATION[CNC_AXIS_COUNT];
+        
+        //Homing
         int8_t _HOMING_DIR_IS_TO_MAX[CNC_AXIS_COUNT];
         float _HOMING_SPEED[CNC_AXIS_COUNT];
         float _HOMING_ACCELERATION[CNC_AXIS_COUNT];
         float _HOMED_POSITION[CNC_AXIS_COUNT];
         bool _home_via_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
-        bool _IS_COMBINED_FK = false;   // Like core-xy, core-yz, core-az.
 
     private:
 

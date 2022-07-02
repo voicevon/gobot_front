@@ -17,7 +17,7 @@ class Board_GobotMain: public CncBoardBase{
         ActuatorBase* GetActuator(EnumAxis axis_name) override;
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GobotMain* GetEef() override;
-        CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_config;};
+        CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_solution_config;};
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         uint8_t ReadAllRooms();
         uint8_t GetLoadedRoom();
@@ -39,7 +39,7 @@ class Board_GobotMain: public CncBoardBase{
         SingleAxisHomer homer_beta = SingleAxisHomer(PIN_HOME_BETA_2201, LOW);
         RobotEef_GobotMain __eef;
 
-        GobotMain_CncSolutionConfig __cnc_config;
+        GobotMain_CncSolutionConfig __cnc_solution_config;
         uint8_t PIN_ROOMS[8];
         // static uint8_t PIN_ROOMS[] = {PIN_SENSOR_ROOM_0,
         //                 PIN_SENSOR_ROOM_1,
