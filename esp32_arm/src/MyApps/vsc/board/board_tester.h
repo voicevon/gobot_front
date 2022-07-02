@@ -7,7 +7,8 @@ class Vsc_BoardTest: public BoardTestCnc{
     public:
         void LinkBoard(CncBoardBase* board) override;
         void Test_AngleSensor(int loop_count);
-        void Test_Motor(int level);
+        void Test_MotorDriver(int loop_count);
+        void Test_Actuator(int loop_count);
         void Test_Offset(int loop_count);
         void Test_AllHomers(int loop_count) override;
 

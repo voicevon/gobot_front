@@ -13,7 +13,7 @@ class Vsc_Board: public CncBoardBase{
         Vsc_Board(){};
         void Init(bool is_on_reset) override;
         void SayHello() override {};
-        ActuatorBase* GetActuator(EnumAxis axis_name) override {return &this->__motor;};
+        ActuatorBase* GetActuator(EnumAxis axis_name) override {return &this->__motor;};   //todo:  rename motor to actuator
         MagneticSensorAnalog* GetAngleSensor(){return &this->__sensor;};
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override {return &this->__homer; };
 

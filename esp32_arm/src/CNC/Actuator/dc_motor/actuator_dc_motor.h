@@ -15,11 +15,12 @@ class ActuatorDcMotor: public ActuatorBase{
         void UpdateSpeedWhenMotorIsRunning(float new_speed);      
         void Stop() override;
         // void SetDirection(bool is_to_CW);
-        float GetSpeed() override {return this->__speed;};
+        float GetSpeed() override {return this->__cnc_speed;};
 
         void SpinOnce();
-        void StartToMove();
+        void StartToMove(bool dir_is_cw,  int pwm_speed);
         bool IsMoving(){return this->__is_moving;};
+        // void TestDriver(bool dir_is_cw, int pwm_speed);
 
     private:
         uint8_t __h_bridge_pin_a;
@@ -32,7 +33,8 @@ class ActuatorDcMotor: public ActuatorBase{
 
         // PIDController* __pid;
 
-        uint __speed;
+        uint __pwm_speed;
+        float __cnc_speed;   // mm/s  or   rad/s
         bool __is_moving = false;
 
 

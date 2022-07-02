@@ -7,35 +7,56 @@ void Vsc_BoardTest::LinkBoard(CncBoardBase* board){
     this->LinkCncBoard(board);
 }
 
+// Even without angel sensor,  Only a h-bridge driver is there, Should be work properly.
+void Vsc_BoardTest::Test_MotorDriver(int loop_count){
+    float speed = 123;
+    ActuatorDcMotor* motor = (ActuatorDcMotor*)(this->__board->GetActuator(AXIS_ALPHA));
+    motor->StartToMove(true, 150);
+    delay(5000);
+    motor->StartToMove(true, 0);
+    delay(5000);
+    //.....
+
+
+
+
+    // switch (level){
+    //     case 0:
+    //         break;
+    //     case 1:
+    //         // Start to move
+    //         // Min speed =0  ; Max Speed = 255;  Don't link angle sensor
+
+
+    //         // motor->SetTargetPositionTo(false, -899);
+    //         break;
+    //     // case 2:
+    //     //     motor->SetTargetPositionTo(false, 500);
+    //     //     motor->SetSpeed(111);
+    //     //     motor->StartToMove();
+    //     //     break;
+    // }
+}
+
+
 /*
-# Motor should support
+# Actuator should support
 * start the motor function(CW and CCW ) 
 * stop the motor function
 * change speed of motor in PWM
 * 
 */
-void Vsc_BoardTest::Test_Motor(int level){
-
-    switch (level){
-        case 0:
-            break;
-        case 1:
-            // Start to move
+void Vsc_BoardTest::Test_Actuator(int loop_count){
+    //Speed unit is:    mm/second   or   rad/second
             ActuatorDcMotor* motor = (ActuatorDcMotor*)(this->__board->GetActuator(AXIS_ALPHA));
             motor->SetTargetPositionTo(false, 500);
-            motor->SetSpeed(111);
-            motor->StartToMove();
-
+            motor->SetSpeed(111);   
+            for(long i=0; i<88888; i++){
+                motor->SpinOnce();
+            }
             motor->SetTargetPositionTo(false, -500);
-
-            // motor->SetTargetPositionTo(false, -899);
-            break;
-        // case 2:
-        //     motor->SetTargetPositionTo(false, 500);
-        //     motor->SetSpeed(111);
-        //     motor->StartToMove();
-        //     break;
-    }
+ 
+    
 }
 
 void Vsc_BoardTest::__TestOffset(float value){

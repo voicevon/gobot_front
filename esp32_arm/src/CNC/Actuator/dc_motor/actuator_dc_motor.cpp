@@ -9,7 +9,7 @@
 #define GEAR_TEETH_COUNT 56.0f
 #define GEAR_PITCH 12.7f   //unit is mm
 #define PID_P 1.0f
-#define INERTIA_DISTANCE_IN_MM  50
+#define INERTIA_DISTANCE_IN_MM  50   // ??  in_rad
 
 
 ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_a, uint8_t h_bridge_pin_b){
@@ -37,6 +37,12 @@ ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_a, uint8_t h_bridge_pin_b)
     this->__offset = 0;
 }
 
+// void ActuatorDcMotor::TestDriver(bool dir_is_cw, int pwm_speed){
+//     this->__pwm_speed = pwm_speed;
+//     this->
+// }
+
+
 void ActuatorDcMotor::SpinOnce(){
     // real speed control, position check, auto stop....
 
@@ -46,7 +52,7 @@ void ActuatorDcMotor::SpinOnce(){
         this->Stop();
     }else{
         // control speed
-        float error = this->__sensor->getVelocity() - this->__speed; 
+        float error = this->__sensor->getVelocity() - this->__cnc_speed; 
         float new_speed = - PID_P * error;   //   pid.get_speed(error);
         this->UpdateSpeedWhenMotorIsRunning(new_speed);
     }
@@ -81,13 +87,14 @@ float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
     return this->_target_cnc_position - this->GetCurrentPosition_InCncUnit();
 }
 
-void ActuatorDcMotor::UpdateSpeedWhenMotorIsRunning(float new_speed){
-        this->__speed = new_speed;
-        this->StartToMove();
+void ActuatorDcMotor::UpdateSpeedWhenMotorIsRunning(float new_cnc_speed){
+        this->__pwm_speed = 12.23f * new_cnc_speed;   // todo:   ax^3 + bx^2 + cx + d
+        bool dir_is_cw = (this->_target_cnc_position - this->GetCurrentPosition_InCncUnit()) > 0;
+        this->StartToMove(dir_is_cw, this->__pwm_speed);
 }
 
-void ActuatorDcMotor::SetSpeed(float speed_per_second){
-    this->__speed = speed_per_second;
+void ActuatorDcMotor::SetSpeed(float rad_per_second){
+    this->__cnc_speed = rad_per_second;
 }
 
 void ActuatorDcMotor::Stop(){
@@ -96,15 +103,14 @@ void ActuatorDcMotor::Stop(){
     digitalWrite(__h_bridge_pin_b, LOW);
 }
 
-void ActuatorDcMotor::StartToMove(){
-    bool dir_is_cw = (this->_target_cnc_position - this->GetCurrentPosition_InCncUnit()) > 0;
+void ActuatorDcMotor::StartToMove(bool dir_is_cw,  int pwm_speed){
     if(dir_is_cw){
-        ledcWrite (this->__pwm_channel_a, this->__speed);
-        digitalWrite (__h_bridge_pin_b,LOW);
+        ledcWrite (this->__pwm_channel_a, pwm_speed);
+        digitalWrite (this->__h_bridge_pin_b,LOW);
     }
     else {
         // make  DCmotor CCW 
-        ledcWrite (this->__pwm_channel_b, this->__speed);
-        digitalWrite(__h_bridge_pin_a,LOW);
+        ledcWrite (this->__pwm_channel_b, pwm_speed);
+        digitalWrite(this->__h_bridge_pin_a, LOW);
     }
 }

@@ -13,7 +13,7 @@ class ActuatorBase{
         virtual float GetAbsDistanceToTarget_InCncUnit();
         virtual void SetSpeed(float speed_per_second);
         virtual void SetAccelleration(float accelleration_per_sqr_second){};  // TODO: remove defination.
-        virtual float GetSpeed();
+        virtual float GetSpeed();    // ?? TODO:  var should be in base class ?
         float GetNeededSeconds();
         void RenewSpeed(float moving_time);
         virtual void Stop();   //TODO:  Remove from base.
