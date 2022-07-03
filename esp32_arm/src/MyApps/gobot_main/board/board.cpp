@@ -71,13 +71,13 @@ Stepper* GobotMain_Board::GetStepper(EnumAxis axis){
 //     return nullptr;
 // }
 
-SingleAxisHomer* GobotMain_Board::GetHomer(EnumAxis axis_name) {
-    if (axis_name==AXIS_ALPHA){
+SingleAxisHomer* GobotMain_Board::GetHomer(EnumAxis axis) {
+    if (axis == AXIS_ALPHA){
         return &this->homer_alpha;
-    }else if (axis_name==AXIS_BETA){
+    }else if (axis == AXIS_BETA){
         return &this->homer_beta;
     }else{
-        Logger::Halt("GobotMain_Board::GetHomer()   axis_name= ");
+        Logger::Halt("GobotMain_Board::GetHomer()   axis= ");
         Serial.println(axis_name);
     }
     return nullptr;

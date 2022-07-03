@@ -13,8 +13,11 @@ void GobotMainCncSolution::Init(GobotMain_Board* board, StepControl* step_contro
     this->_LinkEef(board->GetEef());
     this->_config = &this->__config;
     this->_config_base = &this->__config;
-    this->_Init_FiverBarBase(board);
+    // this->_Init_FiverBarBase(board);
 
+    board->EnableMotor(AXIS_ALPHA, false);
+	board->EnableMotor(AXIS_BETA, false);
+	this->_board = board;
     this->__SelfTest();
 }
 
