@@ -152,17 +152,7 @@ void ActuatorStepper::SetSpeed(float speed_in_cnc_unit){
 }
 
 void ActuatorStepper::SetAccelleration(float new_acceleration){
-    float steps_per_second = speed_per_second * this->__steps_per_cnc_unit;
-    if (steps_per_second > MAX_STEPS_PER_SECOND){
-        steps_per_second = MAX_STEPS_PER_SECOND;
-    }
-    this->__stepper->setMaxSpeed(steps_per_second);
-    // the real speed of actuator.
-    this->__speed = steps_per_second / this->__steps_per_cnc_unit;
-    bool debug = false;
-    if (debug){
-        Serial.print("[Debug] ActuatorStepper::SetSpeed() speed= ");
-        Serial.println(RAD_TO_DEG * this->__speed);
-    }
+    int32_t step_acceleration = new_acceleration * this->__steps_per_cnc_unit;
+    this->GetLinkedStepper()->setAcceleration(step_acceleration);
 }
 

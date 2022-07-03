@@ -1,5 +1,4 @@
 #include "board.h"
-#include "../cnc/actuator_alpha_beta.h"
 
 
 
@@ -42,8 +41,8 @@ void Board_GobotMain::Init(bool is_on_reset){
     Logger::Info("==========================================");
     Serial.print(FCBC_RESET);
     this->InitHardware();
-    this->EnableMotor(AXIS_ALPHA, false);
-    this->EnableMotor(AXIS_BETA, false);
+    // this->EnableMotor(AXIS_ALPHA, false);
+    // this->EnableMotor(AXIS_BETA, false);
 
     this->__eef.Init();
 

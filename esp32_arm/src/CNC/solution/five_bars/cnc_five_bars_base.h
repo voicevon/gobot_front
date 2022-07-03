@@ -11,10 +11,10 @@
 
 class CncSolution_FiveBarsBase: public CncSolutionBase{
     public:
-        void Init(CncBoardBase* board) override;
 
     protected:
         CncSolution_FiveBarConfig* _config;
+        void _Init_FiverBarBase(CncBoardBase* board);
 
     
     private:
@@ -24,12 +24,10 @@ class CncSolution_FiveBarsBase: public CncSolutionBase{
         float GetDistanceToTarget_IK() override;
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
         void RunG1(Gcode* gcode) override;
-
-        // bool homed;
-
         void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {return " ";};
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
+
         FkPosition_XY __current_fk_position;
 
 

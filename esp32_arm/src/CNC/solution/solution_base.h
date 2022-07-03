@@ -19,11 +19,11 @@ enum class CncState{
 class CncSolutionBase: public GcodeConsumer{
     public:
         CncState State = CncState::IDLE;
-        void RunGcode(Gcode* gcode);
-        void SpinOnce();
         virtual void Init(CncBoardBase* board);
         void LinkEef(RobotEefBase* eef){this->__eef=eef;};
-        // void LinkStepControl(StepControl* stepControl){this->_stepControl=stepControl;};
+        void SpinOnce();
+
+        void RunGcode(Gcode* gcode);
         void RunG28(EnumAxis axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
@@ -42,7 +42,6 @@ class CncSolutionBase: public GcodeConsumer{
         void RunM84();
         // virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
         void RunM123(uint8_t eef_channel, uint8_t eef_action);
-        bool is_absolute_position = true;
 
         void _running_G1();
         void _running_G28();
@@ -51,6 +50,7 @@ class CncSolutionBase: public GcodeConsumer{
 		virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
         EnumAxis _homing_axis_name;
+        bool is_absolute_position = true;
         
         CncSolutionConfigBase* _config_base;    //???
         CncBoardBase* _board;

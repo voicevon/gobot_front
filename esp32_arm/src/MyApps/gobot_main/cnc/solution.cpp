@@ -1,4 +1,18 @@
 #include "solution.h"
+#include "../cnc/actuator_alpha_beta.h"
+#include "mover.h"
+
+void GobotMainCnc::Init(CncBoardBase* board){
+    this->_Init_FiverBarBase(board);
+    this->__mover.Init(board);
+    Board_GobotMain* my_board = (Board_GobotMain*) board;
+    this->_Init(my_board);
+}
+
+void GobotMainCnc::_Init(Board_GobotMain* board){
+    GobotMain_ActuatorAlphaBetaMechanic alpha;
+}
+
 
 EnumAxis GobotMainCnc::ConvertToEnum(char axis){
     switch (axis){

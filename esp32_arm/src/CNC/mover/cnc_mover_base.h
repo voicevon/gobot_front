@@ -4,12 +4,12 @@
 #include <stdint.h>
 #include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
-// 
+#include "MyBoards/cnc_board_base.h"
 // TODO:  template <actuator>
 class CncMoverBase{
     public:
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
-
+        virtual void Init(CncBoardBase* board);
         virtual void PrintOut(const char* title);
         virtual void SetActuatorSpeed(EnumAxis axis, float speed);  // TODO:  remove this
         virtual void SetActuatorAcceleration(EnumAxis axis, float accelleration);

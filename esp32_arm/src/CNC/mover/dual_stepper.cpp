@@ -1,5 +1,8 @@
 #include "dual_stepper.h"
 
+void CncMover_DualStepper::Init(CncBoardBase* board){
+    this->__actuator_alpha = board->GetActuator(AXIS_ALPHA);
+}
 
 void CncMover_DualStepper::LinkStepper_asAlpha(ActuatorStepper* alpha){
     alpha->SetCurrentPositionAs(0);
@@ -180,10 +183,10 @@ void CncMover_DualStepper::SetActuatorSpeed(EnumAxis actuator_name, float steps_
 }
 
 void CncMover_DualStepper::SetActuatorAcceleration(EnumAxis axis, float accelleration){
-    if (actuator_name ==AXIS_ALPHA){
-        this->__actuator_alpha->SetSpeed(steps_per_second);
-    }else if(actuator_name == AXIS_BETA){
-        this->__actuator_beta->SetSpeevvd(steps_per_second);
+    if (axis ==AXIS_ALPHA){
+        this->__actuator_alpha->SetAccelleration(accelleration);
+    }else if(axis == AXIS_BETA){
+        this->__actuator_beta->SetAccelleration(accelleration);
     }else{
         Serial.println("[Error] CncMover_DualStepper::SetActuatorSpeed() ");
     }

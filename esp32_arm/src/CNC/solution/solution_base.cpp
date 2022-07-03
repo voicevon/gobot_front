@@ -69,7 +69,7 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 		CncMoverBase* mover = this->_board->cnc_mover;
 		config->PrintOut("Config in CncFiveBars::RunG28()");
 		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));
-		mover->setac
+		mover->SetActuatorAcceleration(axis, config->HomingAcceleration(axis));
 		this->_board->EnableMotor(axis, true);
 		float long_distance_to_move = 9.9f * config->HomingDir_IsToMax(axis);
 
@@ -111,7 +111,7 @@ void CncSolutionBase::_running_G28(){
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		this->_SetCurrentPositionAsHome(this->_homing_axis_name);
 		IkPosition_AB ik_position;
-		
+		// this->cc
 		this->State = CncState::IDLE;
 
 	}else{
