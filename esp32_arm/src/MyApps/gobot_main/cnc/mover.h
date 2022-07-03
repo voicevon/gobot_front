@@ -5,5 +5,5 @@
 
 class Gobot_CncMover: public CncMover_DualStepper{
     public:
-        void Init()
+        // void Init()
 };

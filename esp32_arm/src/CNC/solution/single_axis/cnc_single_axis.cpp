@@ -50,7 +50,7 @@ void CncSingleAxis::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		}
 		//Copy current ik-position to motor-position.
 		if (this->_homing_axis_name == this->__AXIS_NAME) {
-			this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(this->__AXIS_NAME,ik_position.alpha);
+			this->_mover->SetActuatorCurrentCncPositionAs(this->__AXIS_NAME,ik_position.alpha);
 		}
 }
 
@@ -112,13 +112,13 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 	this->_board->EnableMotor(this->__AXIS_NAME, true);
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
-		this->_board->cnc_mover->SetActuatorSpeed(this->__AXIS_NAME, speed);
+		this->_mover->SetActuatorSpeed(this->__AXIS_NAME, speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_A target_fk_a;
 	IkPosition_A target_ik_a;
 	target_fk_a.A = this->__current_fk_position.A;
-	target_ik_a.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(this->__AXIS_NAME);
+	target_ik_a.alpha = this->_mover->GetSingleActuatorCurrentPosition_InCncUnit(this->__AXIS_NAME);
 	bool do_ik=false;
 	if (gcode->has_letter(this->__AXIS_NAME)) target_ik_a.alpha = gcode->get_value(this->__AXIS_NAME);
 	// If need IK, do it now.
@@ -129,13 +129,13 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 	if (do_ik) IK(&target_fk_a,&target_ik_a);
 
 	//Prepare actuator/driver to move to next point
-	this->_board->cnc_mover->SingleActuatorMoveTo(this->__AXIS_NAME,true,target_ik_a.alpha);
+	this->_mover->SingleActuatorMoveTo(this->__AXIS_NAME,true,target_ik_a.alpha);
 	//None blocking, move backgroundly.
 	uint8_t abs_flag=0x01;
-	this->_board->cnc_mover->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
+	this->_mover->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
 	if (true){
 		Serial.print("\n    [Debug] CncSingleAxis::RunG1()     (");
-		this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(this->__AXIS_NAME);
+		this->_mover->GetSingleActuatorCurrentPosition_InCncUnit(this->__AXIS_NAME);
 		Serial.print(")   <-- from   alpha   to -->  (");
 		Serial.print(target_ik_a.alpha  );
 		// Serial.print(" , ");
@@ -160,7 +160,7 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 // }
 
 float CncSingleAxis::GetDistanceToTarget_IK(){
-	this->_board->cnc_mover->GetAbsDistanceToTarget_InCncUnit();
+	this->_mover->GetAbsDistanceToTarget_InCncUnit();
 
 }
 

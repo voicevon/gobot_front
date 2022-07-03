@@ -32,8 +32,8 @@ void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 			Serial.println(FCBC_RESET);
 		}
 		//Copy current ik-position to motor-position.
-		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
-		this->_board->cnc_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
+		this->_mover->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
+		this->_mover->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
 }
 
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
@@ -195,8 +195,8 @@ void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
 
 	// Sometimes, the current position of stepper is NOT the last target position. Since it's moving.
 	// But, The initialized values will effect nothing. They will be over writen. 
-	target_ik_ab.alpha = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
-	target_ik_ab.beta = this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
+	target_ik_ab.alpha = this->_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
+	target_ik_ab.beta = this->_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
 		this->_board->EnableMotor(AXIS_ALPHA, true);
@@ -231,7 +231,7 @@ void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
 	target_position[1] = target_ik_ab.beta;
 
 	//None blocking, move backgroundly.
-	this->_board->cnc_mover->AllActuatorsMoveTo(true, target_position);
+	this->_mover->AllActuatorsMoveTo(true, target_position);
 
 	if (true){
 		FkPosition_XY verified_fk;
@@ -244,9 +244,9 @@ void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
 		Serial.print(verified_fk.Y);
 
 		Serial.print("[Debug] CncSolution_FiveBarsBase::RunG1() ");
-		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
+		Serial.print(RAD_TO_DEG * this->_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
 		Serial.print(",");
-		Serial.print(RAD_TO_DEG * this->_board->cnc_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
+		Serial.print(RAD_TO_DEG * this->_mover->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
 		Serial.print(" <-- from   alpha,beta   to --> ");
 		Serial.print(RAD_TO_DEG * target_ik_ab.alpha);
 		Serial.print(" , ");
@@ -256,6 +256,6 @@ void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
 
 
 float CncSolution_FiveBarsBase::GetDistanceToTarget_IK(){
-	return this->_board->cnc_mover->GetAbsDistanceToTarget_InCncUnit();
+	return this->_mover->GetAbsDistanceToTarget_InCncUnit();
 }
 

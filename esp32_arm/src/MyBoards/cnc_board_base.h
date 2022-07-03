@@ -3,8 +3,8 @@
 #include "board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/eef/robot_eef_base.h"
-#include "CNC/mover/stepper_servo.h"
-#include "CNC/Actuator/stepper/actuator_stepper.h"
+// #include "CNC/mover/stepper_servo.h"    //???
+#include "CNC/Actuator/stepper/actuator_stepper.h"   //???
 #include "CNC/solution/solution_config_base.h"
 #include "Robot/homer/single_axis_homer.h"
 
@@ -18,7 +18,7 @@ class CncBoardBase: public BoardBase{
         virtual CncSolutionConfigBase* GetCncConfig();
         virtual RobotEefBase* GetEef();
         virtual void EnableMotor(EnumAxis axis_name, bool enable_it);
-        CncMoverBase* cnc_mover;   // TODO remove this memeber.??
+        // CncMoverBase* cnc_mover;   // TODO remove this memeber.??
 
 
     protected:

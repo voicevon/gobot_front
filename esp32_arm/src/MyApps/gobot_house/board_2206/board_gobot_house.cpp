@@ -31,10 +31,10 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
 
     this->eef.Init();
     this->eef.Run(EEF_CODE_UNLOAD);
-    this->mover_StepperServo.LinkStepControl(this->__stepControl);
-    this->mover_StepperServo.LinkStepper_asAlpha(&this->__actuator_alpha);
-    this->mover_StepperServo.LinkServo_asBeta(&this->__actuator_beta);
-    this->cnc_mover = &this->mover_StepperServo;
+    // this->mover_StepperServo.LinkStepControl(this->__stepControl);
+    // this->mover_StepperServo.LinkStepper_asAlpha(&this->__actuator_alpha);
+    // this->mover_StepperServo.LinkServo_asBeta(&this->__actuator_beta);
+    // this->cnc_mover = &this->mover_StepperServo;
 }
 
 ActuatorBase* Board_GobotHouse_2206::GetActuator(EnumAxis axis_name) {

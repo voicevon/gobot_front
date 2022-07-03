@@ -19,56 +19,38 @@ void Board_GobotMain::InitHardware(){
         pinMode(this->PIN_ROOMS[i], INPUT_PULLUP);
     }
 
-    GobotMain_ActuatorAlphaBetaMechanic alpha;
     this->__alpha_stepper.setInverseRotation(false);
-    this->__actuator_alpha.LinkStepper(&this->__alpha_stepper, alpha.GetStepsPerCncUnit());
-
-    GobotMain_ActuatorAlphaBetaMechanic beta;
     this->__beta_stepper.setInverseRotation(false);
-    this->__actuator_beta.LinkStepper(&this->__beta_stepper, beta.GetStepsPerCncUnit());
 }
 
 void Board_GobotMain::Init(bool is_on_reset){
     Serial.begin(115200);
-    Logger::Info(" ");
-    Logger::Info(" ");
-    Logger::Info(" ");
-    Logger::Info(" ");
-    Logger::Info(" ");
-    Logger::Info(" ");
+    Serial.print("\n\n\n\n\n\n");
     Logger::Info("==========================================");
     Logger::Info("Hi Xuming, I am GobotMain. Good luck......");
     Logger::Info("==========================================");
     Serial.print(FCBC_RESET);
     this->InitHardware();
-    // this->EnableMotor(AXIS_ALPHA, false);
-    // this->EnableMotor(AXIS_BETA, false);
-
     this->__eef.Init();
-
-    this->__mover_dual_step.LinkStepper_asAlpha(&this->__actuator_alpha);
-    this->__mover_dual_step.LinkStepper_asBeta(&this->__actuator_beta);
-    this->cnc_mover = &this->__mover_dual_step;
-
     this->RepportRamUsage();
 }
 
 void Board_GobotMain::PrintOut(){
-    this->cnc_mover->PrintOut("Board_GobotMain. __cnc_mover");
+    // this->cnc_mover->PrintOut("Board_GobotMain. __cnc_mover");
     this->__cnc_solution_config.PrintOut("Board_GobotMain.__cnc_solution_config");
     this->__actuator_alpha.PrintOut("Board_GobotMain. __actuator_alpha");
     this->__actuator_beta.PrintOut("Board_GobotMain. __actuator_beta");
 
 }
 
-ActuatorBase* Board_GobotMain::GetActuator(EnumAxis axis_name) {
-    if (axis_name==AXIS_ALPHA){
+ActuatorBase* Board_GobotMain::GetActuator(EnumAxis axis) {
+    if (axis==AXIS_ALPHA){
         return &this->__actuator_alpha;
-    }else if (axis_name==AXIS_BETA){
+    }else if (axis==AXIS_BETA){
         return &this->__actuator_beta;
     }else{
-        Serial.print("['Error']  Board_GobotMain::GetStepper()   axis_name= ");
-        Serial.println(axis_name);
+        Logger::Halt(" Board_GobotMain::GetStepper()   axis_name= ");
+        Serial.println(axis);
     }
     return nullptr;
 }

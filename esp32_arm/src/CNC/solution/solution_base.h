@@ -7,6 +7,7 @@
 #include "Robot/homer/single_axis_homer.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
+#include "../mover/cnc_mover_base.h"
 
 
 enum class CncState{
@@ -54,6 +55,7 @@ class CncSolutionBase: public GcodeConsumer{
         
         CncSolutionConfigBase* _config_base;    //???
         CncBoardBase* _board;
+        CncMoverBase* _mover;
         SingleAxisHomer* __current_homer;
 
     private:

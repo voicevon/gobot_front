@@ -1,18 +1,18 @@
 #include "dual_stepper.h"
 
-void CncMover_DualStepper::Init(CncBoardBase* board){
-    this->__actuator_alpha = board->GetActuator(AXIS_ALPHA);
-}
+// void CncMover_DualStepper::Init(CncBoardBase* board){
+//     this->__actuator_alpha = board->GetActuator(AXIS_ALPHA);
+// }
 
-void CncMover_DualStepper::LinkStepper_asAlpha(ActuatorStepper* alpha){
-    alpha->SetCurrentPositionAs(0);
-    alpha->GetLinkedStepper()->setPosition(0);
-    this->__actuator_alpha = alpha;
-}
+// void CncMover_DualStepper::LinkStepper_asAlpha(ActuatorStepper* alpha){
+//     alpha->SetCurrentPositionAs(0);
+//     alpha->GetLinkedStepper()->setPosition(0);
+//     this->__actuator_alpha = alpha;
+// }
 
-void CncMover_DualStepper::LinkStepper_asBeta(ActuatorStepper* beta){
-    this->__actuator_beta = beta;
-}
+// void CncMover_DualStepper::LinkStepper_asBeta(ActuatorStepper* beta){
+//     this->__actuator_beta = beta;
+// }
 #include "MyLibs/calculator.h"
 
 

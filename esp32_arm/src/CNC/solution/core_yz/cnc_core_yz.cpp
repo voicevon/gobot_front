@@ -69,7 +69,7 @@ void Cnc_CoreYZ::RunG28_CombinedAxis(EnumAxis axis){
 		motor_position[0]=-5000000;
 		motor_position[1]=-5000000;	
 	}
-	this->_board->cnc_mover->AllActuatorsMoveTo(false, motor_position);
+	this->_mover->AllActuatorsMoveTo(false, motor_position);
 
 	// this->_board->EnableMotor('A', true);
 	// this->_board->EnableMotor('B',true);
@@ -98,10 +98,10 @@ void Cnc_CoreYZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		}
 		//Copy current ik-position to motor-position.
 		if (this->_homing_axis_name == 'Z') {
-			this->_board->cnc_mover->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
+			this->_mover->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
 		}
 		if (this->_homing_axis_name == 'Y') {
-			this->_board->cnc_mover->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
+			this->_mover->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
 		}
 }
 
@@ -170,7 +170,7 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 		float speed = gcode->get_value('F');
 		// this->stepper_alpha->setMaxSpeed(speed);
 		// this->stepper_beta->setMaxSpeed(speed);
-		this->_board->cnc_mover->SetEefSpeed(speed);
+		this->_mover->SetEefSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_YZ target_fk_yz;
@@ -202,7 +202,7 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	float target_motor_position[2];
 	target_motor_position[0] = target_ik_ab.alpha;
 	target_motor_position[1] = target_ik_ab.beta;
-	this->_board->cnc_mover->AllActuatorsMoveTo(true, target_motor_position);
+	this->_mover->AllActuatorsMoveTo(true, target_motor_position);
 
 	if (true){
 		Serial.print("\n    [Debug] Cnc_CoreYZ::RunG1()     (");
@@ -217,28 +217,11 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	}
 }
 
-// void Cnc_CoreYZ::_running_G1(){
-//     if (this->GetDistanceToTarget_IK() < this->_cncMachine->max_acceleration_alpha_beta){
-//       	this->State = CncState::IDLE;
-// 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
-//     }
-// 	// Serial.println(this->GetDistanceToTarget_IK());
-// 	// delay(100);
-// }
 
-// void Cnc_CoreYZ::RunM123(uint8_t eef_channel, EefAction eef_action){
-// void Cnc_CoreYZ::RunM123(uint8_t eef_channel, uint8_t eef_action){
-	
-// }
-
-// void Cnc_CoreYZ::RunM84(){
-// 	this->_board->EnableMotor(AXIS_ALPHA, false);
-// 	this->_board->EnableMotor(AXIS_BETA, false);
-// }
 
 float Cnc_CoreYZ::GetDistanceToTarget_IK(){
 	// return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
-	return this->_board->cnc_mover->GetAbsDistanceToTarget_InCncUnit();
+	return this->_mover->GetAbsDistanceToTarget_InCncUnit();
 }
 
 

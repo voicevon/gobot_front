@@ -33,7 +33,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
         ActuatorRangeConstraintBase __alpha_range;
         Servo __servo_beta;
         ActuatorServo __actuator_beta;
-        CncMover_StepperServo mover_StepperServo;
+        // CncMover_StepperServo mover_StepperServo;
 
 
         SingleAxisHomer __alpha_homer = SingleAxisHomer(PIN_HOME_ALHPA_2109, LOW);

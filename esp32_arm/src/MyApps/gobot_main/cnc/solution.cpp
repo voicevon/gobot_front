@@ -4,7 +4,7 @@
 
 void GobotMainCnc::Init(CncBoardBase* board){
     this->_Init_FiverBarBase(board);
-    this->__mover.Init(board);
+    // this->__mover.Init(board);
     Board_GobotMain* my_board = (Board_GobotMain*) board;
     this->_Init(my_board);
 }
