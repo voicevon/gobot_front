@@ -11,7 +11,7 @@ void Vsc_BoardTest::LinkBoard(CncBoardBase* board){
 void Vsc_BoardTest::Test_MotorDriver(int loop_count){
     float speed = 123;
     // ActuatorDcMotor* motor = (ActuatorDcMotor*)(this->__board->GetActuator(AXIS_ALPHA));
-    ActuatorDcMotor* motor ;
+    ActuatorDcMotor* motor ;   
     motor->StartToMove(true, 150);
     delay(5000);
     motor->StartToMove(true, 0);

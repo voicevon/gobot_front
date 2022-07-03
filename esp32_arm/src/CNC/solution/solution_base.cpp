@@ -65,16 +65,15 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	if ( axis==AXIS_ALPHA || axis == AXIS_BETA){
 		this->_homing_axis_name = axis;
 		this->__current_homer = this->_board->GetHomer(axis);
-		// CncSolutionConfigBase* config = this->_board->GetCncConfig();
-		CncMoverBase* mover = this->_mover;    //??????
+		// CncMoverBase* mover = this->_mover;    //??????
 		this->_config_base->PrintOut("Config in CncFiveBars::RunG28()");
-		mover->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
-		mover->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
+		this->_mover->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
+		this->_mover->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
 		this->_board->EnableMotor(axis, true);
-		float long_distance_to_move = 9.9f * this->_config_base->HomingDir_IsToMax(axis);
+		float long_distance_to_move = this->_config_base->GetLongOffsetToGoHome(axis);
 
-		mover->SingleActuatorMoveTo(axis, false, long_distance_to_move);
-		mover->PrintOut("Mover in CncSolutionBase::RunG28()");
+		this->_mover->SingleActuatorMoveTo(axis, false, long_distance_to_move);
+		this->_mover->PrintOut("Mover in CncSolutionBase::RunG28()");
 	}else{
 		Logger::Error("CncSolutionBase::RunG28() ");
 	}
@@ -92,6 +91,7 @@ void CncSolutionBase::RunG28(EnumAxis axis){
 		Serial.print(" IsCombinedFK= ");
 		Serial.println(this->_config_base->IsCombinedFk);
 	}
+
 	if (this->_config_base->IsCombinedFk){
 		this->_RunG28_CombinedFk(axis);
 
@@ -116,7 +116,8 @@ void CncSolutionBase::_running_G28(){
 
 	}else{
 		// Endstop is not trigered
-
+		Serial.print(".");
+		delay(100);
 	}
 }
 

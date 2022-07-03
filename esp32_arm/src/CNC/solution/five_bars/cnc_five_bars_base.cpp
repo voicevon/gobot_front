@@ -9,7 +9,7 @@ void CncSolution_FiveBarsBase::_Init_FiverBarBase(CncBoardBase* board){
 	this->_board = board;
 	// this->_config_base = this->_board->GetCncConfig();
 	// this->_config = (CncSolution_FiveBarConfig*)this->_config_base;
-	Serial.println("[Info] CncSolution_FiveBarsBase::Init() is done.");
+	Logger::Info("CncSolution_FiveBarsBase::Init() is done.");
 } 
 
 void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){

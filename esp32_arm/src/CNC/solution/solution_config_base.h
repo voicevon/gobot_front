@@ -9,9 +9,9 @@ class CncSolutionConfigBase{
     public:
         virtual void PrintOut(const char* title);
         const bool& IsCombinedFk = _IS_COMBINED_FK;  // Like core-xy, core-yz, core-az.
-
+        float GetLongOffsetToGoHome(EnumAxis axis);
         //Moving
-        float GetAcceleration(EnumAxis axis){return this->__ACCELERATION[axis];};
+        float GetAcceleration_ForG1(EnumAxis axis){return this->_ACCELERATION_FOR_G1[axis];};
 
         //Homing
         const bool& IsInverseKinematicHoimg = _home_via_inverse_kinematic;
@@ -25,10 +25,11 @@ class CncSolutionConfigBase{
     protected:
         bool _IS_COMBINED_FK = false;   
         //Moving
-        float __ACCELERATION[CNC_AXIS_COUNT];
+        float _ACCELERATION_FOR_G1[CNC_AXIS_COUNT];
         
         //Homing
         int8_t _HOMING_DIR_IS_TO_MAX[CNC_AXIS_COUNT];
+        float _LONG_DISTANCE_TO_HOME[CNC_AXIS_COUNT];
         float _HOMING_SPEED[CNC_AXIS_COUNT];
         float _HOMING_ACCELERATION[CNC_AXIS_COUNT];
         float _HOMED_POSITION[CNC_AXIS_COUNT];

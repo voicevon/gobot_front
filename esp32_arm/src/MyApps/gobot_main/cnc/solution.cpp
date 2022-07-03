@@ -2,34 +2,27 @@
 #include "../cnc/actuator_alpha_beta.h"
 #include "mover.h"
 
-void GobotMainCnc::Init(CncBoardBase* board){
-    this->__mover.Init(board, nullptr);
+void GobotMainCncSolution::Init(CncBoardBase* board){
+    Logger::Halt("GobotMainCncSolution::Init(CncBoardBase* board)");
+}
+
+void GobotMainCncSolution::Init(Board_GobotMain* board, StepControl* step_control){
+    this->__mover.Init(board, step_control);
+    this->_mover = &this->__mover;
     this->_Init_FiverBarBase(board);
     this->_LinkEef(board->GetEef());
     this->_config = &this->__config;
     this->_config_base = &this->__config;
 
-    Logger::Debug("11111111111111111");
-    Board_GobotMain* my_board = (Board_GobotMain*) board;
-    Logger::Debug("2222222");
-
-    // ActuatorStepper* alpha = (ActuatorStepper*)my_board->GetActuator(AXIS_ALPHA);
-    // Stepper* alpha_stepper = my_board->GetStepper(AXIS_ALPHA);
-    // alpha->LinkStepper(alpha_stepper);
-    Logger::Debug("fffffffffff");
-    // this->__mover.LinkStepper_asAlpha(alpha);
-    Logger::Debug("33333");
-    // ActuatorStepper* beta = (ActuatorStepper*)my_board->GetActuator(AXIS_BETA);
-    // this->__mover.LinkStepper_asBeta(beta);
     this->__SelfTest();
-    Logger::Debug("44444444");
 }
 
-void GobotMainCnc::__SelfTest(){
-    this->_mover->PrintOut("GobotMainCnc::__SelfTest()");
+void GobotMainCncSolution::__SelfTest(){
+    this->_config_base->PrintOut("GobotMainCncSolution:: config");
+    this->_mover->PrintOut("GobotMainCncSolution:: mover");
 }
 
-EnumAxis GobotMainCnc::ConvertToEnum(char axis){
+EnumAxis GobotMainCncSolution::ConvertToEnum(char axis){
     switch (axis){
         case 'A':
             return AXIS_ALPHA;
@@ -44,7 +37,7 @@ EnumAxis GobotMainCnc::ConvertToEnum(char axis){
             return AXIS_Y;
             break;
         default:
-            Serial.print("[Error] GobotMainCnc::ConvertToEnum() Unknown axis= ");
+            Serial.print("[Error] GobotMainCncSolution::ConvertToEnum() Unknown axis= ");
             Serial.println(axis);
             break;
     }

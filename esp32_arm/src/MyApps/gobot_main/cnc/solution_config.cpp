@@ -1,32 +1,34 @@
-// #include "cnc_machine.h"
 #include "solution_config.h"
-
-// int32_t GobotMain_CncSolutionConfig::GetStepsPerUnit(char axis_name) {
-//     return 100;
-// }
+#include "actuator_alpha_beta.h"
 
 GobotMain_CncSolutionConfig::GobotMain_CncSolutionConfig(){
+
     this->_LINK_0_LENGTH = 191.0f / 2;
     this->_LINK_A_LENGTH = 278.1;  //285.18;    // 278.1
     this->_LINK_B_LENGTH = 392.1; //  384.51;    // 500-107.8
-    this->__ACCELERATION[AXIS_ALPHA] = 2000;
-    this->__ACCELERATION[AXIS_BETA] = 2000;
+    // GobotMain_Actuator_MechanicConfig config;
+    this->_ACCELERATION_FOR_G1[AXIS_ALPHA] = DEG_TO_RAD * 60;
+    this->_ACCELERATION_FOR_G1[AXIS_BETA] = DEG_TO_RAD * 60;
 
     this->_home_via_inverse_kinematic = true;
+
     this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;
-    this->_HOMING_SPEED[AXIS_ALPHA] = 1000;
     this->_HOMED_POSITION[AXIS_ALPHA] = DEG_TO_RAD * (180 - 4);
+    this->_LONG_DISTANCE_TO_HOME[AXIS_ALPHA] = 9.9f;
+    this->_HOMING_SPEED[AXIS_ALPHA] = DEG_TO_RAD * 30;
+    this->_HOMING_ACCELERATION[AXIS_ALPHA] = DEG_TO_RAD * 30;
 
     this->_HOMING_DIR_IS_TO_MAX[AXIS_BETA] = -1;
-    this->_HOMING_SPEED[AXIS_BETA] = 1000;
     this->_HOMED_POSITION[AXIS_BETA] = DEG_TO_RAD * 4;
-
+    this->_LONG_DISTANCE_TO_HOME[AXIS_BETA] = 9.9f;
+    this->_HOMING_SPEED[AXIS_BETA] = DEG_TO_RAD * 30;
+    this->_HOMING_ACCELERATION[AXIS_BETA] = DEG_TO_RAD * 30;
 
 }
 
 void GobotMain_CncSolutionConfig::PrintOut(const char* title){
     Logger::Info(title);
-    Serial.print("Lenth of LINK_0, LINK_A, LINK_B = (");
+    Serial.print("Lenth of (LINK_0, LINK_A, LINK_B) = (");
     Serial.print(this->LINK_0);
     Serial.print(" , ");
     Serial.print(this->LINK_A);
@@ -35,19 +37,23 @@ void GobotMain_CncSolutionConfig::PrintOut(const char* title){
     Serial.println(")");
     Serial.print("Is Inverse kinematic homing= ");
     Serial.println(this->IsInverseKinematicHoimg);
-    Serial.print("Homer.Alpha: ");
-    Serial.print("\tDirIsToMax= ");
-    Serial.print(this->HomingDir_IsToMax(AXIS_ALPHA));
-    Serial.print("\tHomed_position_in_degree = ");
-    Serial.println(RAD_TO_DEG * this->Homed_position_alpha_in_rad);
-    Serial.print("Homer.Beta:  " );
-    Serial.print("\tDirIsToMax= ");
-    Serial.print(this->HomingDir_IsToMax(AXIS_BETA));
-    Serial.print("\tHomed_position_in_degree = ");
-    Serial.print(RAD_TO_DEG * this->Homed_position_beta_in_rad);
-    // Serial.print("\n STEPS_PER_RAD = ");
-    // Serial.print(this->STEPS_PER_RAD);
+    Logger::Print("Alpha","");
+    Logger::Print("\t_ACCELERATION", this->_ACCELERATION_FOR_G1[AXIS_ALPHA]);
+    Serial.println("Home ");
+    Logger::Print("\tDirIsToMax", this->HomingDir_IsToMax(AXIS_ALPHA));
+    Logger::Print("\tDistanceToGoHome", this->GetLongOffsetToGoHome(AXIS_ALPHA));
+    Logger::Print("\tHomed_position_in_degree", RAD_TO_DEG * this->Homed_position_alpha_in_rad);
+    Logger::Print("\tSpeed", RAD_TO_DEG * this->HomingSpeed(AXIS_ALPHA) );
+    Logger::Print("\tAcceleration", RAD_TO_DEG * this->HomingAcceleration(AXIS_ALPHA));
 
+    Serial.println("Beta:" );
+    Logger::Print("\t_ACCELERATION", this->_ACCELERATION_FOR_G1[AXIS_BETA]);
+    Serial.println("Home ");
+    Logger::Print("\tDirIsToMax", this->HomingDir_IsToMax(AXIS_BETA));
+    Logger::Print("\tDistanceToGoHome", this->GetLongOffsetToGoHome(AXIS_BETA));
+    Logger::Print("\tHomed_position_in_degree", RAD_TO_DEG * this->Homed_position_beta_in_rad);
+    Logger::Print("\tSpeed",  RAD_TO_DEG * this->HomingSpeed(AXIS_BETA));
+    Logger::Print("\tAcceleration", RAD_TO_DEG * this->HomingAcceleration(AXIS_BETA));
     Serial.println(FCBC_RESET);
 
 }

@@ -5,9 +5,10 @@
 #include "solution_config.h"
 #include "mover.h"
 
-class GobotMainCnc: public CncSolution_FiveBarsBase{
+class GobotMainCncSolution: public CncSolution_FiveBarsBase{
     public:  
         void Init(CncBoardBase* board) override;
+        void Init(Board_GobotMain* board, StepControl* step_control);
 
     private:
         // void _Init(Board_GobotMain* board);

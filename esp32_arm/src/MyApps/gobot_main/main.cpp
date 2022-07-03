@@ -11,7 +11,7 @@
 #include "ESP32Step/src/TeensyStep.h"
 
 Board_GobotMain board;
-GobotMainCnc cnc;
+GobotMainCncSolution cnc;
 GobotMain robot; 
 
 StepControl objStepControl;    // Use default settings 
@@ -28,11 +28,10 @@ void setup(){
     // board.LinkStepControlToCncMover(&objStepControl);
 
     board_test();
-    cnc.Init(&board);
+    cnc.Init(&board, &objStepControl);
 
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
-    cnc_test();
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
@@ -43,6 +42,7 @@ void setup(){
 
     Logger::Info("Gobot-Main setup is done.........................................");
     for(int i=0; i< 200; i++){ loop_mqtt();}
+    cnc_test();
 
 }
 
