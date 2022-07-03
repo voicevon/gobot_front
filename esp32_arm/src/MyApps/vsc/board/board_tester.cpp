@@ -10,7 +10,8 @@ void Vsc_BoardTest::LinkBoard(CncBoardBase* board){
 // Even without angel sensor,  Only a h-bridge driver is there, Should be work properly.
 void Vsc_BoardTest::Test_MotorDriver(int loop_count){
     float speed = 123;
-    ActuatorDcMotor* motor = (ActuatorDcMotor*)(this->__board->GetActuator(AXIS_ALPHA));
+    // ActuatorDcMotor* motor = (ActuatorDcMotor*)(this->__board->GetActuator(AXIS_ALPHA));
+    ActuatorDcMotor* motor ;
     motor->StartToMove(true, 150);
     delay(5000);
     motor->StartToMove(true, 0);
@@ -48,7 +49,8 @@ void Vsc_BoardTest::Test_MotorDriver(int loop_count){
 */
 void Vsc_BoardTest::Test_Actuator(int loop_count){
     //Speed unit is:    mm/second   or   rad/second
-            ActuatorDcMotor* motor = (ActuatorDcMotor*)(this->__board->GetActuator(AXIS_ALPHA));
+            // ActuatorDcMotor* motor = (ActuatorDcMotor*)(this->__board->GetActuator(AXIS_ALPHA));
+            ActuatorDcMotor* motor;   // todo: 
             motor->SetTargetPositionTo(false, 500);
             motor->SetSpeed(111);   
             for(long i=0; i<88888; i++){
@@ -60,7 +62,8 @@ void Vsc_BoardTest::Test_Actuator(int loop_count){
 }
 
 void Vsc_BoardTest::__TestOffset(float value){
-    ActuatorDcMotor* motor = (ActuatorDcMotor*) (this->__board->GetActuator(AXIS_ALPHA));
+    // ActuatorDcMotor* motor = (ActuatorDcMotor*) (this->__board->GetActuator(AXIS_ALPHA));
+    ActuatorDcMotor* motor ;  // todo
     float xx= 123;
     motor->SetCurrentPositionAs(xx);
     float result = motor->GetCurrentPosition_InCncUnit();

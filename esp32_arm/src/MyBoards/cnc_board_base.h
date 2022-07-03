@@ -13,7 +13,7 @@ class CncBoardBase: public BoardBase{
         virtual void Init(bool is_on_reset);
         void SayHello() override;
         // virtual ActuatorStepper* GetActuator(char axis_name);
-        virtual ActuatorBase* GetActuator(EnumAxis axis_name);
+        // virtual ActuatorBase* GetActuator(EnumAxis axis_name);
         virtual SingleAxisHomer* GetHomer(EnumAxis axis_name);
         // virtual CncSolutionConfigBase* GetCncConfig();
         virtual RobotEefBase* GetEef();

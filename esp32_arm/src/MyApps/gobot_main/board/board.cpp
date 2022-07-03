@@ -43,8 +43,8 @@ void Board_GobotMain::Init(bool is_on_reset){
 void Board_GobotMain::PrintOut(){
     // this->cnc_mover->PrintOut("Board_GobotMain. __cnc_mover");
     // this->__cnc_solution_config.PrintOut("Board_GobotMain.__cnc_solution_config");
-    this->__actuator_alpha.PrintOut("Board_GobotMain. __actuator_alpha");
-    this->__actuator_beta.PrintOut("Board_GobotMain. __actuator_beta");
+    // this->__actuator_alpha.PrintOut("Board_GobotMain. __actuator_alpha");
+    // this->__actuator_beta.PrintOut("Board_GobotMain. __actuator_beta");
 
 }
 Stepper* Board_GobotMain::GetStepper(EnumAxis axis){
@@ -59,17 +59,17 @@ Stepper* Board_GobotMain::GetStepper(EnumAxis axis){
     return nullptr;
 }
 
-ActuatorBase* Board_GobotMain::GetActuator(EnumAxis axis) {
-    if (axis==AXIS_ALPHA){
-        return &this->__actuator_alpha;
-    }else if (axis==AXIS_BETA){
-        return &this->__actuator_beta;
-    }else{
-        Logger::Halt(" Board_GobotMain::GetStepper()   axis_name= ");
-        Serial.println(axis);
-    }
-    return nullptr;
-}
+// ActuatorBase* Board_GobotMain::GetActuator(EnumAxis axis) {
+//     if (axis==AXIS_ALPHA){
+//         return &this->__actuator_alpha;
+//     }else if (axis==AXIS_BETA){
+//         return &this->__actuator_beta;
+//     }else{
+//         Logger::Halt(" Board_GobotMain::GetStepper()   axis_name= ");
+//         Serial.println(axis);
+//     }
+//     return nullptr;
+// }
 
 SingleAxisHomer* Board_GobotMain::GetHomer(EnumAxis axis_name) {
     if (axis_name==AXIS_ALPHA){

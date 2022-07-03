@@ -6,7 +6,7 @@
 
 class CncMover_DualStepper: public CncMoverBase{
     public:
-        CncMover_DualStepper(){};
+        // CncMover_DualStepper(){};
         // void Init(CncBoardBase* board) override;
         void LinkStepper_asAlpha(ActuatorStepper* stepper);
         void LinkStepper_asBeta(ActuatorStepper* stepper);

@@ -7,15 +7,15 @@ void Board_SpringMaker::Init(bool is_on_reset){
    
 }
 
-ActuatorStepper* Board_SpringMaker::GetActuator(EnumAxis axis_name) {
-    if (axis_name==AXIS_ALPHA){
-        return &this->stepper_alpha;
-    }else{
-        Serial.print("['Error']  Board_SpringMaker::GetStepper()   axis_name= ");
-        Serial.println(axis_name);
-    }
-    return nullptr;
-}
+// ActuatorStepper* Board_SpringMaker::GetActuator(EnumAxis axis_name) {
+//     if (axis_name==AXIS_ALPHA){
+//         return &this->stepper_alpha;
+//     }else{
+//         Serial.print("['Error']  Board_SpringMaker::GetStepper()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
+//     return nullptr;
+// }
 
 SingleAxisHomer* Board_SpringMaker::GetHomer(EnumAxis axis_name) {
     if (axis_name==AXIS_ALPHA){

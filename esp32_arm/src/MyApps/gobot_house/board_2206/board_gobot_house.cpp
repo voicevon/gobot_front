@@ -37,17 +37,17 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     // this->cnc_mover = &this->mover_StepperServo;
 }
 
-ActuatorBase* Board_GobotHouse_2206::GetActuator(EnumAxis axis_name) {
-    if (axis_name==AXIS_ALPHA){
-        return &this->__actuator_alpha;
-    // }else if (axis_name=='B'){
-    //     return &this->stepper_beta;
-    }else{
-        Serial.print("[Error]  Board_GobotHouse_2206::GetActuator()   axis_name= ");
-        Serial.println(axis_name);
-    }
-    return nullptr;
-}
+// ActuatorBase* Board_GobotHouse_2206::GetActuator(EnumAxis axis_name) {
+//     if (axis_name==AXIS_ALPHA){
+//         return &this->__actuator_alpha;
+//     // }else if (axis_name=='B'){
+//     //     return &this->stepper_beta;
+//     }else{
+//         Serial.print("[Error]  Board_GobotHouse_2206::GetActuator()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
+//     return nullptr;
+// }
 
 ActuatorServo* Board_GobotHouse_2206::GetActuaorBeta(char axis_name){
     if (axis_name=='B'){

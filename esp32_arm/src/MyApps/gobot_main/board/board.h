@@ -3,7 +3,7 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "board_pins/board_ver1.2.h"
 #include "robot_eef/gobot_main_eef.h"
-#include "CNC/Actuator/stepper/actuator_stepper.h"
+// #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "Robot/homer/single_axis_homer.h"
 // #include "CNC/mover/dual_stepper.h"
 // #include "../cnc/solution_config.h"
@@ -14,7 +14,7 @@ class Board_GobotMain: public CncBoardBase{
         void Init(bool is_on_reset) override;
         void PrintOut();
         // void LinkStepControlToCncMover(StepControl* stepControl){this->__mover_dual_step.LinkStepControl(stepControl);};
-        ActuatorBase* GetActuator(EnumAxis axis_name) override;
+        // ActuatorBase* GetActuator(EnumAxis axis_name) override;
         Stepper* GetStepper(EnumAxis axis);
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GobotMain* GetEef() override;
@@ -29,11 +29,11 @@ class Board_GobotMain: public CncBoardBase{
     
         Stepper __alpha_stepper = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
         Stepper __beta_stepper = Stepper(PIN_BETA_STEP_2201, PIN_BETA_DIR_2201);
-        ActuatorRangeConstraintBase __alpha_range;
+        // ActuatorRangeConstraintBase __alpha_range;
         
-        ActuatorStepper __actuator_alpha;
-        ActuatorStepper __actuator_beta;
-        ActuatorRangeConstraintBase __beta_range;
+        // ActuatorStepper __actuator_alpha;
+        // ActuatorStepper __actuator_beta;
+        // ActuatorRangeConstraintBase __beta_range;
         // CncMover_DualStepper __mover_dual_step;
 
         SingleAxisHomer homer_alpha = SingleAxisHomer(PIN_HOME_ALPHA_2201, LOW);
