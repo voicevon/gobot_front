@@ -1,26 +1,26 @@
 
-#include "gobot_house.h"
+#include "robot.h"
 
-void GobotHouse::Setup(){
+void GobotHouse_Robot::Setup(){
 	this->__segments = 3;
 	this->__map.Init();
 	this->_gcode_queue = new GcodeQueue();
 
-    Serial.print("\n[Debug] GobotHouse::Setup() is done..........");
+    Logger::Info("GobotHouse_Robot::Setup() is done..........");
 }
 
-void GobotHouse::SpinOnce(){
+void GobotHouse_Robot::SpinOnce(){
 	// this->_gcode_queue->SpinOnce();
 	if (!this->_gcode_queue->BufferIsFull())
 		// My Input mq is from MQTT, My output mq is this->_gcode_queue.
 		this->CheckMqttCommand();
 }
-void GobotHouse::ExecuteMqttCommand(const char* command){
+void GobotHouse_Robot::AsyncExecuteMqttCommand(const char* command){
 	this->_gcode_queue->AppendGcodeCommand(command);
 }
 
 
-void GobotHouse::__Home(){
+void GobotHouse_Robot::__Home(){
 	bool via_inverse_kinematic = true;
 	String strG28 = "G28B";
 	if (via_inverse_kinematic) strG28.concat("I");
@@ -29,7 +29,7 @@ void GobotHouse::__Home(){
 	if (via_inverse_kinematic) strG28.concat("I");
 	this->_gcode_queue->AppendGcodeCommand(strG28);
 }
-void GobotHouse::Calibrate(int step, bool enable_eef_coil){
+void GobotHouse_Robot::Calibrate(int step, bool enable_eef_coil){
 
 	if (step ==1){
 		// STEPS_PER_ROUND_MOTOR, this variable should be calculated by electronic designer,
@@ -138,8 +138,8 @@ void GobotHouse::Calibrate(int step, bool enable_eef_coil){
 	// 	this->SpinOnce();
 	// }
 }
-void GobotHouse::Test_FollowJig(int loop_count){
-	Serial.println("[Debug] GobotHouse::Test_FollowJig() is entering");
+void GobotHouse_Robot::Test_FollowJig(int loop_count){
+	Serial.println("[Debug] GobotHouse_Robot::Test_FollowJig() is entering");
 	String eef_load = "M123S3";  //EEF_CODE_LOAD = 3  UNLOAD = 4
 	this->_gcode_queue->AppendGcodeCommand(eef_load);
 
@@ -163,8 +163,8 @@ void GobotHouse::Test_FollowJig(int loop_count){
 }
 
 
-void GobotHouse::ParkArms(bool do_homing){
-	Serial.print("\n[Debug] GobotHouse::ParkArms() is entering");
+void GobotHouse_Robot::ParkArms(bool do_homing){
+	Serial.print("\n[Debug] GobotHouse_Robot::ParkArms() is entering");
 	int free_buffer_count = 0;
 	while (free_buffer_count < 3){
 		this->SpinOnce();
@@ -188,7 +188,7 @@ void GobotHouse::ParkArms(bool do_homing){
 }
 
 // Head is a position name, The 5-bar robot will pick up stone from there.
-void GobotHouse::Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room_id){
+void GobotHouse_Robot::Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room_id){
 	// if (this->_gcode_queue->GetFreeBuffersCount() < 16)  return false;
 	if (loop_count==0) return;
 	String g4="G4S3";
@@ -209,7 +209,7 @@ void GobotHouse::Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room_id){
 	}
 }
 
-void GobotHouse::Test_MoveStone_FromHeadToRoom(int loop_count,uint8_t room_id){
+void GobotHouse_Robot::Test_MoveStone_FromHeadToRoom(int loop_count,uint8_t room_id){
 	// if (this->_gcode_queue->GetFreeBuffersCount() < 16) return false;
 	if (loop_count==0) return;
 	for(int i=0; i<loop_count; i++){
@@ -224,7 +224,7 @@ void GobotHouse::Test_MoveStone_FromHeadToRoom(int loop_count,uint8_t room_id){
 	}
 }
 
-void GobotHouse::__Enable_eefCoil(bool enable){
+void GobotHouse_Robot::__Enable_eefCoil(bool enable){
 	// String strM = "M42 P33 S1";
 	// if (!enable) strM = "M42 P33 S0";
 	String strM = "M280 P2S0";
@@ -233,7 +233,7 @@ void GobotHouse::__Enable_eefCoil(bool enable){
 
 }
 
-void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
+void GobotHouse_Robot::__Move_fromHead_toNeck(bool forwarding){
 	FkPosition_XY* from = &this->__map.head;
 	FkPosition_XY* to = &this->__map.neck;
 	if (!forwarding){
@@ -243,7 +243,7 @@ void GobotHouse::__Move_fromHead_toNeck(bool forwarding){
 	this->__MakeGcode_and_Send(from, to, 3);
 }
 
-void GobotHouse::__Move_fromRoom_toGate(uint8_t room_id, bool forwarding){
+void GobotHouse_Robot::__Move_fromRoom_toGate(uint8_t room_id, bool forwarding){
 	// Stage1: from source to door.
 	Serial.println("from xxx to door");
 	FkPosition_XY* from = &this->__map.rooms[room_id];
@@ -272,7 +272,7 @@ void GobotHouse::__Move_fromRoom_toGate(uint8_t room_id, bool forwarding){
 }
 
 // This is almost a  rotation, because beta should be no changing.
-void GobotHouse::__Move_fromNeck_toGate(uint8_t room_id, bool forwarding){
+void GobotHouse_Robot::__Move_fromNeck_toGate(uint8_t room_id, bool forwarding){
 	FkPosition_XY* from = &this->__map.neck;
 	FkPosition_XY* to = &this->__map.gates[room_id];
 	if(forwarding){
@@ -282,7 +282,7 @@ void GobotHouse::__Move_fromNeck_toGate(uint8_t room_id, bool forwarding){
 	}
 }
 
-void GobotHouse::__Move_fromParking_toDoor(uint8_t door_id){
+void GobotHouse_Robot::__Move_fromParking_toDoor(uint8_t door_id){
 	String strGcode="G1X";
 	strGcode.concat(this->__map.gates[door_id].X);
 	strGcode.concat("Y");
@@ -291,7 +291,7 @@ void GobotHouse::__Move_fromParking_toDoor(uint8_t door_id){
 	this->_gcode_queue->AppendGcodeCommand(strGcode);
 }
 
-void GobotHouse::__Move_fromParking_toNeck(){
+void GobotHouse_Robot::__Move_fromParking_toNeck(){
 	String strGcode="G1X";
 	strGcode.concat(this->__map.neck.X);
 	strGcode.concat("Y");
@@ -299,13 +299,13 @@ void GobotHouse::__Move_fromParking_toNeck(){
 	this->_gcode_queue->AppendGcodeCommand(strGcode);
 }
 
-void GobotHouse::__Pause(uint8_t second){
+void GobotHouse_Robot::__Pause(uint8_t second){
 		String strG1 = "G4S";
 		strG1.concat(second);
 		this->_gcode_queue->AppendGcodeCommand(strG1);
 }
 
-void GobotHouse::__PreHome(){
+void GobotHouse_Robot::__PreHome(){
 	String strG1 = "G1B130";
 	this->_gcode_queue->AppendGcodeCommand(strG1);
 	strG1 = "G1A0";
@@ -313,7 +313,7 @@ void GobotHouse::__PreHome(){
 }
 
 
-void GobotHouse::Test_Alpha(int loop_count){
+void GobotHouse_Robot::Test_Alpha(int loop_count){
 	if (loop_count == 0) return;
 
 	Serial.println("[Info]  GobotMain::Test_HomeAlpha()");
@@ -335,7 +335,7 @@ void GobotHouse::Test_Alpha(int loop_count){
 	}
 }
 
-void GobotHouse::Test_Beta(int loop_count){
+void GobotHouse_Robot::Test_Beta(int loop_count){
 	if (loop_count == 0) return;
 
 	Serial.println("[Info]  GobotMain::Test_HomeBeta()  This is in TODO list.");
@@ -358,7 +358,7 @@ void GobotHouse::Test_Beta(int loop_count){
 	}
 }
 
-void GobotHouse::__MakeGcode_and_Send(FkPosition_XY* from, FkPosition_XY* to, int segment_count){
+void GobotHouse_Robot::__MakeGcode_and_Send(FkPosition_XY* from, FkPosition_XY* to, int segment_count){
 	Serial.println("---------------------------------");
 	from->PrintOut("from");
 	to->PrintOut("to");

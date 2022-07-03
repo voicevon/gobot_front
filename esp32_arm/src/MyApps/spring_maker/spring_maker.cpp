@@ -6,7 +6,7 @@ SpringMaker::SpringMaker(){
     Serial.print("\n[Info] SpringMaker::SpringMaker() is done..........");
 }
 
-void SpringMaker::ExecuteMqttCommand(const char* command){
+void SpringMaker::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
     Serial.print("[Info] SpringMaker::ExecuteMqttCommand() is entering.... = ");
     Serial.println(str_command);

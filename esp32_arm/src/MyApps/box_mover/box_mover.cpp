@@ -6,7 +6,7 @@ BoxMover::BoxMover(){
     Serial.print("\n[Info] BoxMover::BoxMover() is done..........");
 }
 
-void BoxMover::ExecuteMqttCommand(const char* command){
+void BoxMover::AsyncExecuteMqttCommand(const char* command){
 	this->_gcode_queue->AppendGcodeCommand(command);
 
 }

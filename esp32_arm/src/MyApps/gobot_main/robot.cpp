@@ -1,19 +1,19 @@
-#include "gobot_main.h"
+#include "robot.h"
 #include <HardwareSerial.h>
 #include "CNC/solution/five_bars/cnc_five_bars_base.h"
 
 
-void GobotMain::SpinOnce(){
+void GobotMain_Robot::SpinOnce(){
 	if (!this->_gcode_queue->BufferIsFull())
 		// My Input mq is from MQTT, My output mq is this->_gcode_queue.
 		this->CheckMqttCommand();
 }
-void GobotMain::ExecuteMqttCommand(const char* command){
+void GobotMain_Robot::AsyncExecuteMqttCommand(const char* command){
 	this->_gcode_queue->AppendGcodeCommand(command);
 }
 
-void GobotMain::ParkArms(bool do_home){
-	Serial.print("\n[Debug] GobotMain::ParkArms() is entering");
+void GobotMain_Robot::ParkArms(bool do_home){
+	Serial.print("\n[Debug] GobotMain_Robot::ParkArms() is entering");
 	if (do_home){
 		String strG28 = "G28AI";
 		this->_gcode_queue->AppendGcodeCommand(strG28);
@@ -27,7 +27,7 @@ void GobotMain::ParkArms(bool do_home){
 	this->_gcode_queue->AppendGcodeCommand(strG1);
 }
 
-// void GobotMain::pick_place_park(RobotAction* pAction){
+// void GobotMain_Robot::pick_place_park(RobotAction* pAction){
 // 	uint8_t action_code = pAction->Arm.action_code;
 // 		// for(int i=0;i<14;i++){
 // 		//   Serial.print(pAction->bytes[i]);
@@ -61,7 +61,7 @@ void GobotMain::ParkArms(bool do_home){
 // 	// pAction->bytes[0] = 1;
 // }
 
-String GobotMain::__GetGcode_for_eef_action(EefAction eef_action){
+String GobotMain_Robot::__GetGcode_for_eef_action(EefAction eef_action){
 	switch (eef_action)
 	{
 	case EefAction::Sleep:
@@ -88,7 +88,7 @@ String GobotMain::__GetGcode_for_eef_action(EefAction eef_action){
 	return xx;
 }
 
-void GobotMain::__Pickup(ChessboardCell* cell){
+void GobotMain_Robot::__Pickup(ChessboardCell* cell){
 	// Move to that cell, Lower, Load stone, Up
 	String gc = cell->GetG1Code();
 	this->_gcode_queue->AppendGcodeCommand(gc);
@@ -101,19 +101,19 @@ void GobotMain::__Pickup(ChessboardCell* cell){
 
 }
 
-void GobotMain::__Place(ChessboardCell* cell){
+void GobotMain_Robot::__Place(ChessboardCell* cell){
 	// Move to that cell, Lower, Unload, Up, Sleep
 
 }
 
-void GobotMain::__Park(){
+void GobotMain_Robot::__Park(){
 	// Move to park point.
 	ChessboardCell park_point = ChessboardCell('W',0);
 	String gc = park_point.GetG1Code();
 	this->_gcode_queue->AppendGcodeCommand(gc);
 }
 
-void GobotMain::__Home(){
+void GobotMain_Robot::__Home(){
 	String g = "G28AI";
 	this->_gcode_queue->AppendGcodeCommand(g);
 	g = "G28BI";
@@ -121,7 +121,7 @@ void GobotMain::__Home(){
 
 }
 
-void GobotMain::__Calibrate_99(){
+void GobotMain_Robot::__Calibrate_99(){
 	this->__Home();
 	for (uint8_t x =0; x<=19;x++){
 		for (uint8_t y=0; y<=19; y++){
@@ -132,7 +132,7 @@ void GobotMain::__Calibrate_99(){
 	}
 }
 
-void GobotMain::Calibrate(int step){
+void GobotMain_Robot::Calibrate(int step){
 	if(step == 1){
 		// Goal:
 		//		To calibrate home_position_alpha.
@@ -178,65 +178,65 @@ void GobotMain::Calibrate(int step){
 	}
 }
 
-void GobotMain::Test_HomeAlpha(int loop_count){
+void GobotMain_Robot::Test_HomeAlpha(int loop_count){
 	if (loop_count == 0) return;
 
-	Serial.println("[Info]  GobotMain::Test_HomeAlpha()");
+	Serial.println("[Info]  GobotMain_Robot::Test_HomeAlpha()");
 	String g28 = "G28AI";
 	String g1 = "G1A135";
 	bool buffer_is_full = false;
 	for (int i=0; i<loop_count; i++){
 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g28);
 		if (buffer_is_full){
-			Serial.println("[Warn] GobotMain::Test_HomeAlpha() Buffer is full, return");
+			Serial.println("[Warn] GobotMain_Robot::Test_HomeAlpha() Buffer is full, return");
 			return;
 		}
 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g1);
 		if (buffer_is_full){
-			Serial.println("[Warn] GobotMain::Test_HomeAlpha() Buffer is full, return");
+			Serial.println("[Warn] GobotMain_Robot::Test_HomeAlpha() Buffer is full, return");
 			return;
 		}
 	}
 }
 
-void GobotMain::Test_HomeBeta(int loop_count){
+void GobotMain_Robot::Test_HomeBeta(int loop_count){
 	if (loop_count == 0) return;
 
-	Logger::Info("GobotMain::Test_HomeBeta()");
+	Logger::Info("GobotMain_Robot::Test_HomeBeta()");
 	String g28 = "G28BI";
 	String g1 = "G1B45";
 	bool buffer_is_full = false;
 	for (int i=0; i<loop_count; i++){
 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g28);
 		if (buffer_is_full){
-			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
+			Serial.println("[Warn] GobotMain_Robot::Test_HomeBeta() Buffer is full, return");
 			return;
 		}
 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g1);
 		if (buffer_is_full){
-			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
+			Serial.println("[Warn] GobotMain_Robot::Test_HomeBeta() Buffer is full, return");
 			return;
 		}
 	}
 }
 
-// void GobotMain::Test_EefUpDown(int loop_count){
+// void GobotMain_Robot::Test_EefUpDown(int loop_count){
 // 	if (loop_count == 0) return;
 
-// 	Serial.println("[Info]  GobotMain::Test_EefUpDown()");
+// 	Serial.println("[Info]  GobotMain_Robot::Test_EefUpDown()");
 // 	String m123 = "M123P3S2";
 
 // 	bool buffer_is_full = false;
 // 	for (int i=0; i<loop_count; i++){
 // 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(m123);
 // 		if (buffer_is_full){
-// 			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
+// 			Serial.println("[Warn] GobotMain_Robot::Test_HomeBeta() Buffer is full, return");
 // 			return;
 // 		}
 // 	}
 // }
 
-// void GobotMain::Test_EefSuckRelease(int loop_count){
+// void GobotMain_Robot::Test_EefSuckRelease(int loop_count){
 
 // }
 

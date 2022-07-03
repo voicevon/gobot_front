@@ -7,7 +7,7 @@ VscRobot::VscRobot(){
     Serial.print("\n[Info] VscRobot::VscRobot() is done..........");
 }
 
-void VscRobot::ExecuteMqttCommand(const char* command){
+void VscRobot::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
     Serial.print("[Info] VscRobot::ExecuteMqttCommand() is entering.... = ");
     Serial.println(str_command);

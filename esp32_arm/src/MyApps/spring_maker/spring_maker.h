@@ -9,7 +9,7 @@ class SpringMaker: public GcodeProducer, public MqttMessageConsumer{
     public:
         SpringMaker();
         void SpinOnce(); 
-        void ExecuteMqttCommand(const char*) override;
+        void AsyncExecuteMqttCommand(const char*) override;
         
     private:
    

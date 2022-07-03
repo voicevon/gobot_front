@@ -78,7 +78,7 @@ SingleAxisHomer* GobotMain_Board::GetHomer(EnumAxis axis) {
         return &this->homer_beta;
     }else{
         Logger::Halt("GobotMain_Board::GetHomer()   axis= ");
-        Serial.println(axis_name);
+        // Serial.println(axis);
     }
     return nullptr;
 }

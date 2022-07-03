@@ -1,16 +1,14 @@
 #pragma once
 
-// #include "actions.h"
 #include "CNC/gcode/gcode_queue.h"
-#include "chessboard_map.h"
 #include "CNC/gcode/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
-// #include "robot_eef/eef_standard_code.h"
 #include "Robot/eef/eef_standard_code.h"
+#include "chessboard_map.h"
 
-class GobotMain: public GcodeProducer, public MqttMessageConsumer{
+class GobotMain_Robot: public GcodeProducer, public MqttMessageConsumer{
     public:
-        GobotMain(){};
+        GobotMain_Robot(){};
 
         void SpinOnce();
         void ParkArms(bool do_home);
@@ -20,7 +18,7 @@ class GobotMain: public GcodeProducer, public MqttMessageConsumer{
     
 
     private:
-        void ExecuteMqttCommand(const char* command) override;
+        void AsyncExecuteMqttCommand(const char* command) override;
 
         void __Pickup(ChessboardCell* cell);
         void __Place(ChessboardCell* cell);

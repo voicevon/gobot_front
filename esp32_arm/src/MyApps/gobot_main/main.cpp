@@ -1,18 +1,19 @@
 #include "all_applications.h"
 #ifdef I_AM_GOBOT_MAIN
 
-#include "gobot_main.h"
-#include "MyLibs/MyFunctions.hpp" 
-#include "IoT/main_mqtt.h"
 #include "board/board.h"
 #include "board/robot_eef/gobot_main_eef.h"
 #include "cnc/solution.h"
 #include "cnc/solution_config.h"
 #include "ESP32Step/src/TeensyStep.h"
 
+#include "robot.h"
+#include "MyLibs/MyFunctions.hpp" 
+#include "IoT/main_mqtt.h"
+
 GobotMain_Board board;
 GobotMainCncSolution cnc;
-GobotMain robot; 
+GobotMain_Robot robot; 
 
 StepControl objStepControl;    // Use default settings 
 GcodeQueue gcode_queue;

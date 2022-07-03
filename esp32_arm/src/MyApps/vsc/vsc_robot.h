@@ -9,7 +9,7 @@ class VscRobot: public GcodeProducer, public MqttMessageConsumer{
     public:
         VscRobot();
         void SpinOnce(); 
-        void ExecuteMqttCommand(const char*) override;
+        void AsyncExecuteMqttCommand(const char*) override;
         
     private:
         ActuatorDcMotor* __motor;

@@ -1,12 +1,12 @@
 #pragma once
 
 
-#include  "MyApps/gobot_house/HouseMap.h"
 #include "CNC/gcode/gcode_queue.h"
 #include "CNC/gcode/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
+#include  "MyApps/gobot_house/HouseMap.h"
 
-class GobotHouse: public GcodeProducer, public MqttMessageConsumer{
+class GobotHouse_Robot: public GcodeProducer, public MqttMessageConsumer{
     public:
         enum SITE_TYPE{
             HEAD,
@@ -14,9 +14,9 @@ class GobotHouse: public GcodeProducer, public MqttMessageConsumer{
             DOOR,
             ROOM,
         };
-        static GobotHouse& getInstance()
+        static GobotHouse_Robot& getInstance()
         {
-            static GobotHouse instance; // Guaranteed to be destroyed.
+            static GobotHouse_Robot instance; // Guaranteed to be destroyed.
                                   // Instantiated on first use.
             return instance;
         }    
@@ -33,11 +33,9 @@ class GobotHouse: public GcodeProducer, public MqttMessageConsumer{
         void Test_MoveStone_FromHeadToRoom(int loop_count, uint8_t house_id);
         void __Home();
 
-
-
     private:
         void __MakeGcode_and_Send(FkPosition_XY* from, FkPosition_XY* to, int segment_count);
-        void ExecuteMqttCommand(const char* command) override;
+        void AsyncExecuteMqttCommand(const char* command) override;
         void __Move_fromRoom_toGate(uint8_t room_id, bool forwarding);
         // void __Move_fromRoom_toDoor(uint8_t room_id, bool forwarding);
         void __Move_fromHead_toNeck(bool forwarding);
