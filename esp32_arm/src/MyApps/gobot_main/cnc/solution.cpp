@@ -6,13 +6,14 @@ void GobotMainCncSolution::Init(CncBoardBase* board){
     Logger::Halt("GobotMainCncSolution::Init(CncBoardBase* board)");
 }
 
-void GobotMainCncSolution::Init(Board_GobotMain* board, StepControl* step_control){
+void GobotMainCncSolution::Init(GobotMain_Board* board, StepControl* step_control){
     this->__mover.Init(board, step_control);
     this->_mover = &this->__mover;
-    this->_Init_FiverBarBase(board);
+    
     this->_LinkEef(board->GetEef());
     this->_config = &this->__config;
     this->_config_base = &this->__config;
+    this->_Init_FiverBarBase(board);
 
     this->__SelfTest();
 }

@@ -46,7 +46,7 @@ void CncSolution_CoreYZBase::Init(CncBoardBase* board){
 void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis axis){
 	Serial.print("[Debug] CncSolution_CoreYZBase::RunG28() is entering:   " );
 	Serial.println(axis);
-	this->_homing_axis_name = axis;
+	this->_homing_axis = axis;
 	this->_cncMachine->PrintOut("CncSolution_CoreYZBase::RunG28()");
 	// Serial.println(this->stepper_alpha->getPosition());
 	// this->stepper_alpha->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
@@ -97,10 +97,10 @@ void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis_name == 'Z') {
+		if (this->_homing_axis == AXIS_Z) {
 			this->_mover->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
 		}
-		if (this->_homing_axis_name == 'Y') {
+		if (this->_homing_axis == AXIS_Y) {
 			this->_mover->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
 		}
 }

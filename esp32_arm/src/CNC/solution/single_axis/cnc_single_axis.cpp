@@ -49,8 +49,10 @@ void CncSingleAxis::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.
-		if (this->_homing_axis_name == this->__AXIS_NAME) {
+		if (this->_homing_axis == this->__AXIS_NAME) {
 			this->_mover->SetActuatorCurrentCncPositionAs(this->__AXIS_NAME,ik_position.alpha);
+		}else{
+			Logger::Halt("CncSingleAxis::_SetCurrentPositionAsHome()");
 		}
 }
 

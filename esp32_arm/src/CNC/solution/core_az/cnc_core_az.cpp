@@ -81,7 +81,7 @@ void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
 	Serial.print("[Debug] CncSolution_CoreAZ::RunG28() is entering:   " );
 	Serial.print(axis);
-	this->_homing_axis_name = axis;
+	this->_homing_axis = axis;
 
 	this->_config->PrintOut();
 	float motor_position[2];

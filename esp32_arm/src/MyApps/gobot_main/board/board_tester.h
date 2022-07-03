@@ -12,6 +12,6 @@ class GobotMain_BoardTest: public BoardTestCnc{
         void Test_Eef_Full(int loop_count);
 
     private:
-        Board_GobotMain* __board;
+        GobotMain_Board* __board;
 
 };

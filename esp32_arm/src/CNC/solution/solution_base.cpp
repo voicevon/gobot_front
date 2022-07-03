@@ -63,10 +63,9 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	Logger::Debug("CncSolutionBase::__HomeSingleAxis()" + axis);
 
 	if ( axis==AXIS_ALPHA || axis == AXIS_BETA){
-		this->_homing_axis_name = axis;
+		this->_homing_axis = axis;
 		this->__current_homer = this->_board->GetHomer(axis);
-		// CncMoverBase* mover = this->_mover;    //??????
-		this->_config_base->PrintOut("Config in CncFiveBars::RunG28()");
+		// this->_config_base->PrintOut("Config in CncFiveBars::RunG28()");
 		this->_mover->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
 		this->_mover->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
 		this->_board->EnableMotor(axis, true);
@@ -105,11 +104,11 @@ void CncSolutionBase::_running_G28(){
 	if (this->__current_homer->IsTriged()){
 		// End stop is trigered
 		Logger::Info("CncSolutionBase::_running_G28() Home sensor is trigered." );
-		Logger::Print("_homing_axis_name", this->_homing_axis_name);
+		Logger::Print("_homing_axis_name", this->_homing_axis);
 
 		this->_mover->AllActuatorsStop();
 		// The homed postion is a Inverse kinematic position for alpha, beta.
-		this->_SetCurrentPositionAsHome(this->_homing_axis_name);
+		this->_SetCurrentPositionAsHome(this->_homing_axis);
 		IkPosition_AB ik_position;
 		// this->cc
 		this->State = CncState::IDLE;
@@ -117,7 +116,7 @@ void CncSolutionBase::_running_G28(){
 	}else{
 		// Endstop is not trigered
 		Serial.print(".");
-		delay(100);
+		delay(10);
 	}
 }
 

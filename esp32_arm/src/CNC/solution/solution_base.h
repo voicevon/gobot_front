@@ -50,7 +50,7 @@ class CncSolutionBase: public GcodeConsumer{
         virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis){};  //TODO:  remove defination
 		virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
-        EnumAxis _homing_axis_name;
+        EnumAxis _homing_axis;
         bool is_absolute_position = true;
         
         CncSolutionConfigBase* _config_base;    //???

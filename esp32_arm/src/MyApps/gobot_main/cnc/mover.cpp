@@ -1,9 +1,9 @@
 #include "mover.h"
 #include "actuator_alpha_beta.h"
 
-void Gobot_CncMover::Init(BoardBase* board, StepControl* stepControl){
+void GobotMain_CncMover::Init(BoardBase* board, StepControl* stepControl){
     GobotMain_Actuator_MechanicConfig config;
-    Board_GobotMain* myboard = (Board_GobotMain*) board;
+    GobotMain_Board* myboard = (GobotMain_Board*) board;
     this->__alpha.LinkStepper(myboard->GetStepper(AXIS_ALPHA), config.GetStepsPerCncUnit());
     this->LinkStepper_asAlpha(&this->__alpha);
 

@@ -3,7 +3,7 @@
 
 void GobotMain_BoardTest::LinkBoard(CncBoardBase* board){
     Serial.println("[Info] GobotMain_BoardTest::LinkBoard()");
-    this->__board = (Board_GobotMain*) (board);
+    this->__board = (GobotMain_Board*) (board);
     this->LinkCncBoard(board);
 }
 

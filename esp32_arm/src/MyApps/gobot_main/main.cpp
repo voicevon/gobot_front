@@ -10,7 +10,7 @@
 #include "cnc/solution_config.h"
 #include "ESP32Step/src/TeensyStep.h"
 
-Board_GobotMain board;
+GobotMain_Board board;
 GobotMainCncSolution cnc;
 GobotMain robot; 
 

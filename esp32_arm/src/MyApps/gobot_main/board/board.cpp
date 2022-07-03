@@ -2,7 +2,7 @@
 
 
 
-void Board_GobotMain::InitHardware(){
+void GobotMain_Board::InitHardware(){
     // init gpio.
     pinMode(PIN_ALPHA_ENABLE_2201, OUTPUT);
     pinMode(PIN_BETA_ENABLE_2201, OUTPUT);
@@ -23,7 +23,7 @@ void Board_GobotMain::InitHardware(){
     this->__beta_stepper.setInverseRotation(false);
 }
 
-void Board_GobotMain::Init(bool is_on_reset){
+void GobotMain_Board::Init(bool is_on_reset){
     Serial.begin(115200);
     Serial.print("\n\n\n\n\n\n");
     Logger::Info("==========================================");
@@ -40,60 +40,60 @@ void Board_GobotMain::Init(bool is_on_reset){
     this->RepportRamUsage();
 }
 
-void Board_GobotMain::PrintOut(){
-    // this->cnc_mover->PrintOut("Board_GobotMain. __cnc_mover");
-    // this->__cnc_solution_config.PrintOut("Board_GobotMain.__cnc_solution_config");
-    // this->__actuator_alpha.PrintOut("Board_GobotMain. __actuator_alpha");
-    // this->__actuator_beta.PrintOut("Board_GobotMain. __actuator_beta");
+void GobotMain_Board::PrintOut(){
+    // this->cnc_mover->PrintOut("GobotMain_Board. __cnc_mover");
+    // this->__cnc_solution_config.PrintOut("GobotMain_Board.__cnc_solution_config");
+    // this->__actuator_alpha.PrintOut("GobotMain_Board. __actuator_alpha");
+    // this->__actuator_beta.PrintOut("GobotMain_Board. __actuator_beta");
 
 }
-Stepper* Board_GobotMain::GetStepper(EnumAxis axis){
+Stepper* GobotMain_Board::GetStepper(EnumAxis axis){
     if (axis==AXIS_ALPHA){
         return &this->__alpha_stepper;
     }else if (axis==AXIS_BETA){
         return &this->__beta_stepper;
     }else{
-        Logger::Halt(" Board_GobotMain::GetStepper()   axis_name= ");
+        Logger::Halt(" GobotMain_Board::GetStepper()   axis_name= ");
         Serial.println(axis);
     }
     return nullptr;
 }
 
-// ActuatorBase* Board_GobotMain::GetActuator(EnumAxis axis) {
+// ActuatorBase* GobotMain_Board::GetActuator(EnumAxis axis) {
 //     if (axis==AXIS_ALPHA){
 //         return &this->__actuator_alpha;
 //     }else if (axis==AXIS_BETA){
 //         return &this->__actuator_beta;
 //     }else{
-//         Logger::Halt(" Board_GobotMain::GetStepper()   axis_name= ");
+//         Logger::Halt(" GobotMain_Board::GetStepper()   axis_name= ");
 //         Serial.println(axis);
 //     }
 //     return nullptr;
 // }
 
-SingleAxisHomer* Board_GobotMain::GetHomer(EnumAxis axis_name) {
+SingleAxisHomer* GobotMain_Board::GetHomer(EnumAxis axis_name) {
     if (axis_name==AXIS_ALPHA){
         return &this->homer_alpha;
     }else if (axis_name==AXIS_BETA){
         return &this->homer_beta;
     }else{
-        Serial.print("['Error']  Board_GobotMain::GetHomer()   axis_name= ");
+        Logger::Halt("GobotMain_Board::GetHomer()   axis_name= ");
         Serial.println(axis_name);
     }
     return nullptr;
 }
 
-RobotEef_GobotMain* Board_GobotMain::GetEef() {
+RobotEef_GobotMain* GobotMain_Board::GetEef() {
     return &this->__eef;
 }
 
 
 
 
-void Board_GobotMain::EnableMotor(EnumAxis axis_name, bool enable_it) {
+void GobotMain_Board::EnableMotor(EnumAxis axis_name, bool enable_it) {
     bool debug = false;
     if(debug){
-        Serial.print("[Info] Board_GobotMain::EnableMotor()  axis_name= ");
+        Serial.print("[Info] GobotMain_Board::EnableMotor()  axis_name= ");
         Serial.print(axis_name);
         Serial.print("\t enable = ");
         Serial.println(enable_it);
@@ -103,12 +103,12 @@ void Board_GobotMain::EnableMotor(EnumAxis axis_name, bool enable_it) {
     } else if (axis_name == AXIS_BETA){
         digitalWrite(PIN_BETA_ENABLE_2201, !enable_it);   // LOW is enable
     } else {
-        Serial.println("[Warn] Board_GobotMain::EnableMotor() axis =");
+        Serial.println("[Warn] GobotMain_Board::EnableMotor() axis =");
         Serial.println(axis_name);
     }
 }
 
-uint8_t Board_GobotMain::ReadAllRooms(){
+uint8_t GobotMain_Board::ReadAllRooms(){
     uint8_t result = 0;
     uint8_t p;
     for (int i=0; i<8; i++){
@@ -120,7 +120,7 @@ uint8_t Board_GobotMain::ReadAllRooms(){
 
 
 //Return 9 is all rooms is empty.
-uint8_t Board_GobotMain::GetLoadedRoom(){
+uint8_t GobotMain_Board::GetLoadedRoom(){
     uint8_t v;
     for(uint8_t i=0; i<8; i++){
         v = digitalRead(PIN_ROOMS[i]);

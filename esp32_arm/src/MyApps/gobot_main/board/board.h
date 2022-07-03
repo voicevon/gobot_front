@@ -8,9 +8,9 @@
 // #include "CNC/mover/dual_stepper.h"
 // #include "../cnc/solution_config.h"
 
-class Board_GobotMain: public CncBoardBase{
+class GobotMain_Board: public CncBoardBase{
     public:
-        Board_GobotMain(){};
+        GobotMain_Board(){};
         void Init(bool is_on_reset) override;
         void PrintOut();
         // void LinkStepControlToCncMover(StepControl* stepControl){this->__mover_dual_step.LinkStepControl(stepControl);};

@@ -202,10 +202,10 @@ void CncScaraSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 	IkPosition_AB ik_position;
 	if (this->_config_base->IsInverseKinematicHoimg){
 		if (debug) Serial.print("\n   [Info] CncScaraSolution::_running_G28() Trying to get home position from actuator position  ");
-		if (this->_homing_axis_name == AXIS_ALPHA){
+		if (this->_homing_axis == AXIS_ALPHA){
 			ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
 			
-		}else if (this->_homing_axis_name == AXIS_BETA){
+		}else if (this->_homing_axis == AXIS_BETA){
 			ik_position.beta =  this->_scara_machine->Homed_position_beta_in_rad;
 		}
 		this->FK(&ik_position, &this->__current_fk_position);
