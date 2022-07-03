@@ -7,7 +7,7 @@
 // #include "MyBoards/asrs_agv_2205/board_all_in_one_2205.h"
 #include "MyApps/asar_agv/board/board_all_in_one_2205.h"
 #include "MyApps/box_carrier/box_carrier.h"
-
+// #include "MyApps/box_carrier/cnc/solution.h"
 
 class MqttReportData{
     float battery_voltage;
@@ -47,7 +47,7 @@ class BotAsrsAgvCoreYZ: public MqttMessageConsumer{
 
         AsrsBase asrs = AsrsBase();
         AgvBase agv = AgvBase();
-        Cnc_CoreYZ cnc = Cnc_CoreYZ();
+        BoxCarrier_CncSolution cnc = BoxCarrier_CncSolution();
 
         BoxCarrier objBoxCarrier = BoxCarrier();  //??
 

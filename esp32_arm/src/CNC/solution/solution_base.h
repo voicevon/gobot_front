@@ -21,7 +21,6 @@ class CncSolutionBase: public GcodeConsumer{
     public:
         CncState State = CncState::IDLE;
         virtual void Init(CncBoardBase* board);
-        void LinkEef(RobotEefBase* eef){this->__eef=eef;};
         void SpinOnce();
 
         void RunGcode(Gcode* gcode);
@@ -32,6 +31,7 @@ class CncSolutionBase: public GcodeConsumer{
         void SayHello();
 
     protected:
+        void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
         void SpinOnce_BaseExit();
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);

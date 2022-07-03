@@ -5,7 +5,7 @@
 #include "robot_eef/gobot_main_eef.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "Robot/homer/single_axis_homer.h"
-#include "CNC/mover/dual_stepper.h"
+// #include "CNC/mover/dual_stepper.h"
 #include "../cnc/solution_config.h"
 
 class Board_GobotMain: public CncBoardBase{
@@ -13,8 +13,9 @@ class Board_GobotMain: public CncBoardBase{
         Board_GobotMain(){};
         void Init(bool is_on_reset) override;
         void PrintOut();
-        void LinkStepControlToCncMover(StepControl* stepControl){this->__mover_dual_step.LinkStepControl(stepControl);};
+        // void LinkStepControlToCncMover(StepControl* stepControl){this->__mover_dual_step.LinkStepControl(stepControl);};
         ActuatorBase* GetActuator(EnumAxis axis_name) override;
+        Stepper* GetStepper(EnumAxis axis);
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GobotMain* GetEef() override;
         CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_solution_config;};
@@ -33,7 +34,7 @@ class Board_GobotMain: public CncBoardBase{
         ActuatorStepper __actuator_alpha;
         ActuatorStepper __actuator_beta;
         ActuatorRangeConstraintBase __beta_range;
-        CncMover_DualStepper __mover_dual_step;
+        // CncMover_DualStepper __mover_dual_step;
 
         SingleAxisHomer homer_alpha = SingleAxisHomer(PIN_HOME_ALPHA_2201, LOW);
         SingleAxisHomer homer_beta = SingleAxisHomer(PIN_HOME_BETA_2201, LOW);

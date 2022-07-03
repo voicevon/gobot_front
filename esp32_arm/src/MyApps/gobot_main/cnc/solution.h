@@ -8,8 +8,9 @@ class GobotMainCnc: public CncSolution_FiveBarsBase{
         void Init(CncBoardBase* board) override;
 
     private:
-        void _Init(Board_GobotMain* board);
+        // void _Init(Board_GobotMain* board);
         EnumAxis ConvertToEnum(char axis) override;
         CncMover_DualStepper __mover;
+        void __SelfTest();
 
 };

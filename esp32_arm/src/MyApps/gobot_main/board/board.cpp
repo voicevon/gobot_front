@@ -42,6 +42,17 @@ void Board_GobotMain::PrintOut(){
     this->__actuator_beta.PrintOut("Board_GobotMain. __actuator_beta");
 
 }
+Stepper* Board_GobotMain::GetStepper(EnumAxis axis){
+    if (axis==AXIS_ALPHA){
+        return &this->__alpha_stepper;
+    }else if (axis==AXIS_BETA){
+        return &this->__beta_stepper;
+    }else{
+        Logger::Halt(" Board_GobotMain::GetStepper()   axis_name= ");
+        Serial.println(axis);
+    }
+    return nullptr;
+}
 
 ActuatorBase* Board_GobotMain::GetActuator(EnumAxis axis) {
     if (axis==AXIS_ALPHA){

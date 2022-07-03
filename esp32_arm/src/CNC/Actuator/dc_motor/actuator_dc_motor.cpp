@@ -97,6 +97,10 @@ void ActuatorDcMotor::SetSpeed(float rad_per_second){
     this->__cnc_speed = rad_per_second;
 }
 
+void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
+    // this is a future feature.
+}
+
 void ActuatorDcMotor::Stop(){
     // motor A and motor B setted LOW to stop DC motor
     digitalWrite(__h_bridge_pin_a, LOW);

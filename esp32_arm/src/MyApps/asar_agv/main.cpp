@@ -7,8 +7,10 @@
 #include "IoT/main_mqtt.h"
 // #include "MyApps/box_carrier/cnc_machine.h"
 // #include "../box_carrier/board/mechanic/cnc_machine.h"
-#include "MyApps/box_carrier/board/mechanic/cnc_solution_config.h"
-#include "MyApps/box_carrier/board/mechanic/cnc_solution.h"
+// #include "MyApps/box_carrier/board/mechanic/cnc_solution_config.h"
+// #include "MyApps/box_carrier/board/mechanic/cnc_solution.h"
+#include "MyApps/box_carrier/cnc/solution.h"
+#include "MyApps/box_carrier/cnc/solution_config.h"
 
 StepControl objStepControl;  // This object can not inside any object?
 BoardAllInOne board = BoardAllInOne();

@@ -16,6 +16,7 @@ class ActuatorDcMotor: public ActuatorBase{
         void Stop() override;
         // void SetDirection(bool is_to_CW);
         float GetSpeed() override {return this->__cnc_speed;};
+        void SetAccelleration(float accelleration_in_cnc_unit) override;
 
         void SpinOnce();
         void StartToMove(bool dir_is_cw,  int pwm_speed);

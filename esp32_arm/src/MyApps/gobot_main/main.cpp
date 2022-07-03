@@ -25,7 +25,7 @@ void board_test();
 void setup(){
     board.Init(true);
     board.PrintOut();
-    board.LinkStepControlToCncMover(&objStepControl);
+    // board.LinkStepControlToCncMover(&objStepControl);
 
     board_test();
     cnc.Init(&board);
@@ -66,7 +66,7 @@ void loop(){
 
 void cnc_test(){
     robot.Test_HomeAlpha(0);
-    robot.Test_HomeBeta(22);
+    robot.Test_HomeBeta(0);
 }
 
 #include "board/board_tester.h"
@@ -80,7 +80,7 @@ void board_test(){
 
     board_tester.Test_EefUpDown(0);
     board_tester.Test_EefLoadUnload(0);
-    board_tester.Test_Eef_Full(999);
+    board_tester.Test_Eef_Full(0);
     
     // delay(5000);
     // board_tester.Test_Stepper(0, 'A', 800, &objStepControl);

@@ -9,17 +9,18 @@ class ActuatorServo: public ActuatorBase{
         void LinkServo(Servo* servo, bool is_inversed_dir);
         void SetInverseDir(bool inversed){this->__inversed_dir=inversed;};
 
-        // float GetCurrentPosition_InCncUnit() override;
+        void SpinOnce();
+        bool IsMoving(){return this->__is_moving;};
+
+        void Stop() override {this->__is_moving=false;};
+        void StartToMove();
+
         void SetCurrentPositionAs(float cnc_position_in_rad) override;
         void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit) override;
         float GetAbsDistanceToTarget_InCncUnit() override;
         void SetSpeed(float speed_in_cnc_unit) override;   // There is no "unsigned float"
-        // bool MotorIsMoving(char moto_name) override;
-        void Stop() override {this->__is_moving=false;};
+        virtual void SetAccelleration(float accelleration_in_cnc_unit){}; 
 
-        void SpinOnce();
-        bool IsMoving(){return this->__is_moving;};
-        void StartToMove();
 
 
     protected:

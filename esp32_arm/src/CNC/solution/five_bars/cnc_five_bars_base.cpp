@@ -4,7 +4,6 @@
 
 void CncSolution_FiveBarsBase::_Init_FiverBarBase(CncBoardBase* board){
 	Serial.println("[Info] CncSolution_FiveBarsBase::Init() is entering.");
-	this->LinkEef(board->GetEef());
 	board->EnableMotor(AXIS_ALPHA, false);
 	board->EnableMotor(AXIS_BETA, false);
 	this->_board = board;

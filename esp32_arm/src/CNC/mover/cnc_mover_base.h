@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
-// #include "MyBoards/cnc_board_base.h"
+#include "MyBoards/cnc_board_base.h"
 // TODO:  template <actuator>
 class CncMoverBase{
     public:

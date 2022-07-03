@@ -1,5 +1,5 @@
 #pragma once
-#include "cnc_solution_config.h"
+#include "solution_config.h"
 
 
 BoxMover_CncSolutionConfig::BoxMover_CncSolutionConfig(){
@@ -10,24 +10,10 @@ BoxMover_CncSolutionConfig::BoxMover_CncSolutionConfig(){
 
         this->Homing_speed_alpha_beta = 1300;
         this->Homing_acceleration_alpha_beta = 500;
-
-        // this->steps_per_mm_for_z = 200;
-        // this->steps_per_rad_for_w = 33;
 }
 
 void BoxMover_CncSolutionConfig::PrintOut(){
-    Serial.print("\n\n===============================================");
-    Serial.print("\nBoxMover_CncSolutionConfig::PrintOut()");
-    // Serial.print("\n   STEPPER_DRIVER_MICRO_STEPS = ");
-    // Serial.print(this->STEPPER_DRIVER_MICRO_STEPS);
-    // Serial.print("\n   MOTOR_GEARBOX_RATIO_ALPHA_BETA = ");
-    // Serial.print(this->MOTOR_GEARBOX_RATIO_ALPHA_BETA);
-
-    // Serial.print("\n    steps_per_mm_for_z = ");
-    // Serial.print(this->steps_per_mm_for_z);
-    // Serial.print("\n    steps_per_rad_for_w = ");
-    // Serial.print(this->steps_per_rad_for_w);
-    // Serial.print("\n     Home_position (z,w) = (");
+    Logger::Info("BoxMover_CncSolutionConfig::PrintOut()");
     Serial.print(this->Homed_position_z);
     Serial.print(" , ");
     Serial.print(this->Homed_position_w);
@@ -42,7 +28,6 @@ void BoxMover_CncSolutionConfig::PrintOut(){
     Serial.print(max_acceleration_alpha_beta);
     Serial.print("\n        max_acceleration_alpha_beta = ");
     Serial.print(max_acceleration_alpha_beta);
-
 
     Serial.print("\n----------------------------------------------\n\n");
 }

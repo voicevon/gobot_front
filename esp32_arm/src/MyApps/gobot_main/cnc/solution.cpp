@@ -4,15 +4,18 @@
 
 void GobotMainCnc::Init(CncBoardBase* board){
     this->_Init_FiverBarBase(board);
-    // this->__mover.Init(board);
+    this->_LinkEef(board->GetEef());
     Board_GobotMain* my_board = (Board_GobotMain*) board;
-    this->_Init(my_board);
+    ActuatorStepper* alpha = (ActuatorStepper*)my_board->GetActuator(AXIS_ALPHA);
+    this->__mover.LinkStepper_asAlpha(alpha);
+    ActuatorStepper* beta = (ActuatorStepper*)my_board->GetActuator(AXIS_BETA);
+    this->__mover.LinkStepper_asBeta(beta);
+    this->__SelfTest();
 }
 
-void GobotMainCnc::_Init(Board_GobotMain* board){
-    GobotMain_ActuatorAlphaBetaMechanic alpha;
+void GobotMainCnc::__SelfTest(){
+    this->_mover->PrintOut("GobotMainCnc::__SelfTest()");
 }
-
 
 EnumAxis GobotMainCnc::ConvertToEnum(char axis){
     switch (axis){

@@ -1,30 +1,30 @@
-#include "cnc_core_yz.h"
+#include "cnc_core_yz_base.h"
 
 
-void Cnc_CoreYZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
-	Serial.print("\n[Info] Cnc_CoreYZ::IK() is entering. ");
+void CncSolution_CoreYZBase::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
+	Serial.print("\n[Info] CncSolution_CoreYZBase::IK() is entering. ");
 	FkPosition_YZ* fk = (FkPosition_YZ*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
 	ik->alpha = (fk->Z  + fk->Y );
 	ik->beta = (fk->Z - fk->Y );
 
-	Serial.print("\n[Debug] Cnc_CoreYZ::IK() output (alpha, beta) = ");
+	Serial.print("\n[Debug] CncSolution_CoreYZBase::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
 	Serial.print(" , ");
 	Serial.print(ik->beta);
 	Serial.print(")");
 }
 
-void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
-	Serial.print("\n[Debug] Cnc_CoreYZ::FK() is entering ");
+void CncSolution_CoreYZBase::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+	Serial.print("\n[Debug] CncSolution_CoreYZBase::FK() is entering ");
 	FkPosition_YZ* fk = (FkPosition_YZ*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
 	fk->Z = (ik->alpha + ik->beta) / 2;
 	fk->Y = (ik->alpha - ik->beta) / 2;
 
-	Serial.print("\n[Debug] Cnc_CoreYZ::FK() output (Z, Y) = ");
+	Serial.print("\n[Debug] CncSolution_CoreYZBase::FK() output (Z, Y) = ");
 	Serial.print(fk->Z);
 	Serial.print(" , ");
 	Serial.print(fk->Y);
@@ -32,8 +32,8 @@ void Cnc_CoreYZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 }
 
 
-void Cnc_CoreYZ::Init(CncBoardBase* board){
-	Serial.print("\n[Info] Cnc_CoreYZ::Init_Linkage() is entering.");
+void CncSolution_CoreYZBase::Init(CncBoardBase* board){
+	Serial.print("\n[Info] CncSolution_CoreYZBase::Init_Linkage() is entering.");
 	this->_cncMachine = (CncSolution_CoreYZConfigBase*)(this->_board->GetCncConfig());
 	this->_board = board;
 
@@ -43,11 +43,11 @@ void Cnc_CoreYZ::Init(CncBoardBase* board){
 
 }
 
-void Cnc_CoreYZ::RunG28_CombinedAxis(EnumAxis axis){
-	Serial.print("[Debug] Cnc_CoreYZ::RunG28() is entering:   " );
+void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis axis){
+	Serial.print("[Debug] CncSolution_CoreYZBase::RunG28() is entering:   " );
 	Serial.println(axis);
 	this->_homing_axis_name = axis;
-	this->_cncMachine->PrintOut("Cnc_CoreYZ::RunG28()");
+	this->_cncMachine->PrintOut("CncSolution_CoreYZBase::RunG28()");
 	// Serial.println(this->stepper_alpha->getPosition());
 	// this->stepper_alpha->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
 	// this->stepper_alpha->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
@@ -77,13 +77,13 @@ void Cnc_CoreYZ::RunG28_CombinedAxis(EnumAxis axis){
 	// this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 }
 
-void Cnc_CoreYZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_config_base->IsInverseKinematicHoimg){
 			// We know homed position via IK.
-			Serial.print("\n[Error] Cnc_CoreYZ::_running_G28() This robot does NOT impliment this function.");
+			Serial.print("\n[Error] CncSolution_CoreYZBase::_running_G28() This robot does NOT impliment this function.");
 		}
 		else{
 			// We know homed position via FK
@@ -105,10 +105,10 @@ void Cnc_CoreYZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		}
 }
 
-// void Cnc_CoreYZ::_running_G28(){
+// void CncSolution_CoreYZBase::_running_G28(){
 // 	if (this->__homing_helper->IsTriged()){
 // 		// End stop is trigered
-// 		Serial.print("\n[Info] Cnc_CoreYZ::_running_G28() Home sensor is trigger.  " );
+// 		Serial.print("\n[Info] CncSolution_CoreYZBase::_running_G28() Home sensor is trigger.  " );
 // 		Serial.print (this->_homing_axis_name);
 // 		// this->_stepControl->stop();
 // 		this->_board->cnc_mover->AllActuatorsStop();
@@ -117,7 +117,7 @@ void Cnc_CoreYZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 // 		IkPosition_AB ik_position;
 // 		if (this->_config->IsInverseKinematicHoimg){
 // 			// We know homed position via IK.
-// 			Serial.print("\n[Error] Cnc_CoreYZ::_running_G28() This robot does NOT impliment this function.");
+// 			Serial.print("\n[Error] CncSolution_CoreYZBase::_running_G28() This robot does NOT impliment this function.");
 // 		}
 // 		else{
 // 			// We know homed position via FK
@@ -161,8 +161,8 @@ void Cnc_CoreYZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 // 	}	
 // }
 
-void Cnc_CoreYZ::RunG1(Gcode* gcode) {
-	Serial.print("\n[Debug] Cnc_CoreYZ::RunG1() is entering");
+void CncSolution_CoreYZBase::RunG1(Gcode* gcode) {
+	Serial.print("\n[Debug] CncSolution_CoreYZBase::RunG1() is entering");
 	Serial.print(gcode->get_command());
 	this->_board->EnableMotor(AXIS_ALPHA, true);
 	this->_board->EnableMotor(AXIS_BETA, true);
@@ -205,7 +205,7 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 	this->_mover->AllActuatorsMoveTo(true, target_motor_position);
 
 	if (true){
-		Serial.print("\n    [Debug] Cnc_CoreYZ::RunG1()     (");
+		Serial.print("\n    [Debug] CncSolution_CoreYZBase::RunG1()     (");
 		// Serial.print(this->stepper_alpha->getPosition());
 		Serial.print(",");
 		// Serial.print(this->stepper_beta->getPosition());
@@ -219,7 +219,7 @@ void Cnc_CoreYZ::RunG1(Gcode* gcode) {
 
 
 
-float Cnc_CoreYZ::GetDistanceToTarget_IK(){
+float CncSolution_CoreYZBase::GetDistanceToTarget_IK(){
 	// return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
 	return this->_mover->GetAbsDistanceToTarget_InCncUnit();
 }
