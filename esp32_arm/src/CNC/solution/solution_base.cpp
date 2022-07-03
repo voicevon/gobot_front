@@ -65,13 +65,13 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	if ( axis==AXIS_ALPHA || axis == AXIS_BETA){
 		this->_homing_axis_name = axis;
 		this->__current_homer = this->_board->GetHomer(axis);
-		CncSolutionConfigBase* config = this->_board->GetCncConfig();
+		// CncSolutionConfigBase* config = this->_board->GetCncConfig();
 		CncMoverBase* mover = this->_mover;    //??????
-		config->PrintOut("Config in CncFiveBars::RunG28()");
-		mover->SetActuatorSpeed(axis, config->HomingSpeed(axis));
-		mover->SetActuatorAcceleration(axis, config->HomingAcceleration(axis));
+		this->_config_base->PrintOut("Config in CncFiveBars::RunG28()");
+		mover->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
+		mover->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
 		this->_board->EnableMotor(axis, true);
-		float long_distance_to_move = 9.9f * config->HomingDir_IsToMax(axis);
+		float long_distance_to_move = 9.9f * this->_config_base->HomingDir_IsToMax(axis);
 
 		mover->SingleActuatorMoveTo(axis, false, long_distance_to_move);
 		mover->PrintOut("Mover in CncSolutionBase::RunG28()");
@@ -154,8 +154,6 @@ void CncSolutionBase::RunM84(){
 	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
 		this->_board->EnableMotor(EnumAxis(axis), false);
 	}
-	// this->_board->EnableMotor(AXIS_ALPHA, false);
-	// this->_board->EnableMotor(AXIS_BETA, false);
 }
 void CncSolutionBase::RunGcode(Gcode* gcode){
 	std::string result;
@@ -181,14 +179,12 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 
 			// Is there any machine that supports both IK, and FK homing?
 			// this->_home_via_inverse_kinematic = false;
-			// if (gcode->has_letter('I')) this->_home_via_inverse_kinematic = true;
 			if (home_axis == '+'){
 				Serial.print("\n\n\n\n[Error] CncSolutionBase::RunGcode()  :");
 				Serial.print(home_axis);
 
 			}
 			//TODO:  convert char to enum
-			// this->ConvertToEnum(home_axis);
 			this->RunG28(this->ConvertToEnum(home_axis));
 			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
 			break;

@@ -6,7 +6,7 @@
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "Robot/homer/single_axis_homer.h"
 // #include "CNC/mover/dual_stepper.h"
-#include "../cnc/solution_config.h"
+// #include "../cnc/solution_config.h"
 
 class Board_GobotMain: public CncBoardBase{
     public:
@@ -18,7 +18,7 @@ class Board_GobotMain: public CncBoardBase{
         Stepper* GetStepper(EnumAxis axis);
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GobotMain* GetEef() override;
-        CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_solution_config;};
+        // CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_solution_config;};
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         uint8_t ReadAllRooms();
         uint8_t GetLoadedRoom();
@@ -40,7 +40,7 @@ class Board_GobotMain: public CncBoardBase{
         SingleAxisHomer homer_beta = SingleAxisHomer(PIN_HOME_BETA_2201, LOW);
         RobotEef_GobotMain __eef;
 
-        GobotMain_CncSolutionConfig __cnc_solution_config;
+        // GobotMain_CncSolutionConfig __cnc_solution_config;
         uint8_t PIN_ROOMS[8];
         // static uint8_t PIN_ROOMS[] = {PIN_SENSOR_ROOM_0,
         //                 PIN_SENSOR_ROOM_1,

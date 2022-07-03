@@ -5,6 +5,7 @@
 // }
 
 void CncMover_DualStepper::LinkStepper_asAlpha(ActuatorStepper* alpha){
+    Logger::Debug("CncMover_DualStepper::LinkStepper_asAlpha()");
     alpha->SetCurrentPositionAs(0);
     alpha->GetLinkedStepper()->setPosition(0);
     this->__actuator_alpha = alpha;

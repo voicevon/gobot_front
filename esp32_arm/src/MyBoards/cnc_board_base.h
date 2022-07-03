@@ -15,7 +15,7 @@ class CncBoardBase: public BoardBase{
         // virtual ActuatorStepper* GetActuator(char axis_name);
         virtual ActuatorBase* GetActuator(EnumAxis axis_name);
         virtual SingleAxisHomer* GetHomer(EnumAxis axis_name);
-        virtual CncSolutionConfigBase* GetCncConfig();
+        // virtual CncSolutionConfigBase* GetCncConfig();
         virtual RobotEefBase* GetEef();
         virtual void EnableMotor(EnumAxis axis_name, bool enable_it);
         // CncMoverBase* cnc_mover;   // TODO remove this memeber.??

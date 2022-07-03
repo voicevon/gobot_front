@@ -31,13 +31,18 @@ void Board_GobotMain::Init(bool is_on_reset){
     Logger::Info("==========================================");
     Serial.print(FCBC_RESET);
     this->InitHardware();
+
+    //Init CNC
+
+    // this->__actuator_alpha.LinkStepper(this->__alpha_stepper, );
+    // this->__actuator_beta.LinkStepper(this->__beta_stepper);
     this->__eef.Init();
     this->RepportRamUsage();
 }
 
 void Board_GobotMain::PrintOut(){
     // this->cnc_mover->PrintOut("Board_GobotMain. __cnc_mover");
-    this->__cnc_solution_config.PrintOut("Board_GobotMain.__cnc_solution_config");
+    // this->__cnc_solution_config.PrintOut("Board_GobotMain.__cnc_solution_config");
     this->__actuator_alpha.PrintOut("Board_GobotMain. __actuator_alpha");
     this->__actuator_beta.PrintOut("Board_GobotMain. __actuator_beta");
 

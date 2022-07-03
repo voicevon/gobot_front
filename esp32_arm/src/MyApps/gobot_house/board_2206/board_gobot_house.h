@@ -7,8 +7,8 @@
 #include "CNC/Actuator/servo/actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "Robot/homer//single_axis_homer.h"
-#include "../cnc_2206/solution_config.h"
-#include "../cnc_2206/actuator_alpha.h"
+// #include "../cnc_2206/solution_config.h"
+// #include "../cnc_2206/actuator_alpha.h"
 
 class Board_GobotHouse_2206: public CncBoardBase{
     public:
@@ -19,7 +19,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
         // MotorBase* GetActuator(char axis_name){};  //TODO: Stepper, Servo, BLDC... all is motorbase!
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
         RobotEef_GobotHouse* GetEef() override;
-        CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_mechanic;};
+        // CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_mechanic;};
 
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         Servo* GetServoDriver_OnBeta(){return &this->__servo_beta;};
@@ -40,7 +40,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
         SingleAxisHomer __beta_homer = SingleAxisHomer(PIN_HOME_BETA_2109, LOW);
 
         RobotEef_GobotHouse eef;
-        GobotHouse_CncSolutionConfig_2206 __cnc_mechanic;
+        // GobotHouse_CncSolutionConfig_2206 __cnc_mechanic;
 
         StepControl* __stepControl;
 };

@@ -4,8 +4,8 @@
 #include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
 #include "robot_eef/board_smoke_bot.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-#include "../cnc/solution_config.h"
-#include "../cnc/solution.h"
+// #include "../cnc/solution_config.h"
+// #include "../cnc/solution.h"
 
 
 class Board_SmokeMachine: public CncBoardBase{
@@ -19,13 +19,13 @@ class Board_SmokeMachine: public CncBoardBase{
         RobotEef_SmokeMachine* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         ActuatorBase* GetActuator(EnumAxis axis_name) override {return &this->__actuator;};
-        CncSolutionConfigBase* GetCncConfig() override{return &this->__cnc_mechanic;};
+        // CncSolutionConfigBase* GetCncConfig() override{return &this->__cnc_mechanic;};
 
         
     private:
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
         ActuatorStepper __actuator;
-        SmookerBot_CncMechanic __cnc_mechanic;
+        // SmookerBot_CncMechanic __cnc_mechanic;
         SingleAxisHomer homer_alpha = SingleAxisHomer(PIN_HOME_ALPHA_2201, LOW);
         RobotEef_SmokeMachine eef = RobotEef_SmokeMachine();
 

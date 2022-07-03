@@ -1,6 +1,5 @@
 #pragma once
 #include <SimpleFOC.h>
-// #include "CNC/single_axis_homer.h"
 #include "Robot/homer/single_axis_homer.h"
 #include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
 
@@ -27,7 +26,7 @@ class Vsc_Board: public CncBoardBase{
         MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
         SingleAxisHomer __homer = SingleAxisHomer(PIN_HOMER_SENSOR_HALL, LOW);
 
-        CncSolutionConfigBase* GetCncConfig() override {return nullptr;};
+        // CncSolutionConfigBase* GetCncConfig() override {return nullptr;};
         RobotEefBase* GetEef()override {return nullptr;};
         void EnableMotor(EnumAxis axis_name, bool enable_it) override {};
 

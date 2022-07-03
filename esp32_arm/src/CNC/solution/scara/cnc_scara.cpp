@@ -97,7 +97,7 @@ bool CncScaraSolution::GetCurrentPosition(FkPositionBase* position_fk){
 void CncScaraSolution::Init(CncBoardBase* board ){
 	Serial.println("[Info] CncScaraSolution::Init() ");
 	this->_board = board;
-	this->_scara_machine = (CncSolution_ScaraConfigBase*)(this->_board->GetCncConfig());
+	// this->_scara_machine = (CncSolution_ScaraConfigBase*)(this->_board->GetCncConfig());
 	
 	board->EnableMotor(AXIS_ALPHA, false);
 	board->EnableMotor(AXIS_BETA, false);
