@@ -66,8 +66,9 @@ void loop(){
 }
 
 void cnc_test(){
-    robot.Test_HomeAlpha(99);
+    robot.Test_HomeAlpha(0);
     robot.Test_HomeBeta(0);
+    robot.Test_PickPlace(99);
 }
 
 #include "board/board_tester.h"

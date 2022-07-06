@@ -15,6 +15,7 @@ class GobotMain_Robot: public GcodeProducer, public MqttMessageConsumer{
         void Calibrate(int step);
         void Test_HomeAlpha(int loop_count);
         void Test_HomeBeta(int loop_count);
+        void Test_PickPlace(int loop_count);
     
 
     private:

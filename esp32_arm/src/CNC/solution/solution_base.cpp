@@ -108,8 +108,8 @@ void CncSolutionBase::_running_G28(){
 		this->State = CncState::IDLE;
 	}else{
 		// Endstop is not trigered
-		Serial.print(".");
-		delay(10);
+		// Serial.print(".");
+		// delay(10);
 	}
 }
 

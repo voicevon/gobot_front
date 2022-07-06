@@ -27,40 +27,6 @@ void GobotMain_Robot::ParkArms(bool do_home){
 	this->_gcode_queue->AppendGcodeCommand(strG1);
 }
 
-// void GobotMain_Robot::pick_place_park(RobotAction* pAction){
-// 	uint8_t action_code = pAction->Arm.action_code;
-// 		// for(int i=0;i<14;i++){
-// 		//   Serial.print(pAction->bytes[i]);
-// 		//   Serial.print(",  ");
-// 		// }
-
-// 	if ((action_code & (1<<1)) > 0){
-// 		Serial.print("\npicking up "); 
-// 		// MoveTo(pAction->Arm.pickup_x, pAction->Arm.pickup_y);
-// 		// SetEffector(Lower);
-// 		// SetEffector(Suck);
-// 		// SetEffector(Higher);
-// 	}
-// 	if ((action_code & (1<<2)) > 0){
-// 		Serial.print("\n  placing     ");
-// 		// for(int i=5;i<9;i++){
-// 		//   Serial.print(pAction->bytes[i]);
-// 		//   Serial.print(",  ");
-// 		// }    
-// 		// MoveTo(pAction->Arm.place_x, pAction->Arm.place_y);
-// 		// SetEffector(Lower);
-// 		// SetEffector(Release);
-// 		// SetEffector(Higher);
-// 		// SetEffector(Sleep);
-// 	}
-// 	if ((action_code & (1<<3)) > 0){
-// 		Serial.print("\n  parking     ");
-// 		// MoveTo(pAction->Arm.park_x, pAction->Arm.park_y);
-// 		// SetEffector(Sleep);
-// 	}
-// 	// pAction->bytes[0] = 1;
-// }
-
 String GobotMain_Robot::__GetGcode_for_eef_action(EefAction eef_action){
 	switch (eef_action)
 	{
@@ -220,24 +186,11 @@ void GobotMain_Robot::Test_HomeBeta(int loop_count){
 	}
 }
 
-// void GobotMain_Robot::Test_EefUpDown(int loop_count){
-// 	if (loop_count == 0) return;
+void GobotMain_Robot::Test_PickPlace(int loop_count){
 
-// 	Serial.println("[Info]  GobotMain_Robot::Test_EefUpDown()");
-// 	String m123 = "M123P3S2";
+}
 
-// 	bool buffer_is_full = false;
-// 	for (int i=0; i<loop_count; i++){
-// 		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(m123);
-// 		if (buffer_is_full){
-// 			Serial.println("[Warn] GobotMain_Robot::Test_HomeBeta() Buffer is full, return");
-// 			return;
-// 		}
-// 	}
-// }
 
-// void GobotMain_Robot::Test_EefSuckRelease(int loop_count){
 
-// }
 
 
