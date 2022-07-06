@@ -12,14 +12,14 @@ class Vsc_Board: public CncBoardBase{
         Vsc_Board(){};
         void Init(bool is_on_reset) override;
         void SayHello() override {};
-        // ActuatorBase* GetActuator(EnumAxis axis_name) override {return &this->__motor;};   //todo:  rename motor to actuator
+        ActuatorDcMotor* GetActuator(EnumAxis axis_name) {return &this->__motor;};
         MagneticSensorAnalog* GetAngleSensor(){return &this->__sensor;};
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override {return &this->__homer; };
 
     protected:
 
     private:
-	    ActuatorDcMotor __motor = ActuatorDcMotor(PIN_H_BRIDGE_A, PIN_H_BRIDGE_B);
+	    ActuatorDcMotor __motor = ActuatorDcMotor(PIN_H_BRIDGE_DIR, PIN_H_BRIDGE_SPEED);
 
         #define SMALLEST_COUNT 1
         #define BIGEST_COUNT 4096

@@ -2,46 +2,43 @@
 #include "Arduino.h"
 #include "MyBoards/board_base.h"
 
-// #define PWM1_Ch0 0
-// #define PWM1_Ch1 1
-#define PWM1_Res 8
-#define PWM1_Freq 1000
+#define PWM_RESOLUTION 8
+#define PWM_FREQUENCY 20
 #define GEAR_TEETH_COUNT 56.0f
 #define GEAR_PITCH 12.7f   //unit is mm
 #define PID_P 1.0f
 #define INERTIA_DISTANCE_IN_MM  50   // ??  in_rad
 
 
-ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_a, uint8_t h_bridge_pin_b){
-    pinMode(h_bridge_pin_a, OUTPUT);
-    pinMode(h_bridge_pin_b, OUTPUT);
-    digitalWrite(h_bridge_pin_a, LOW);
-    digitalWrite(h_bridge_pin_b, LOW);
+ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_dir, uint8_t h_bridge_pin_speed){
+    pinMode(h_bridge_pin_dir, OUTPUT);
+    pinMode(h_bridge_pin_speed, OUTPUT);
+    digitalWrite(h_bridge_pin_dir, LOW);
 
     // init ledc via assign ledc channel
     BoardBase board;
-    this->__pwm_channel_a = board.Assign_ledc_channel();
-    ledcAttachPin (__h_bridge_pin_a, this->__pwm_channel_a);
-	ledcSetup (this->__pwm_channel_a, PWM1_Freq, PWM1_Res);
 
-    this->__pwm_channel_b = board.Assign_ledc_channel();
-	ledcAttachPin (__h_bridge_pin_b, this->__pwm_channel_b);
-	ledcSetup (this->__pwm_channel_b, PWM1_Freq, PWM1_Res);
+    this->__pwm_channel = board.Assign_ledc_channel();
+	ledcAttachPin (h_bridge_pin_speed, this->__pwm_channel);
+	ledcSetup (this->__pwm_channel, PWM_FREQUENCY, PWM_RESOLUTION);
+    ledcWrite(this->__pwm_channel, 0);
 
-    this->__h_bridge_pin_a = h_bridge_pin_a;
-    this->__h_bridge_pin_b = h_bridge_pin_b;
-
+    this->__h_bridge_pin_dir = h_bridge_pin_dir;
+    this->__h_bridge_pin_speed = h_bridge_pin_speed;
 
     // Calculate rad_per_mm,  This is determined by mechanic designer.
     this->__sensor_rad_per_mm = GEAR_PITCH * GEAR_TEETH_COUNT / TWO_PI; 
     this->__offset = 0;
 }
 
-// void ActuatorDcMotor::TestDriver(bool dir_is_cw, int pwm_speed){
-//     this->__pwm_speed = pwm_speed;
-//     this->
-// }
+void ActuatorDcMotor::PrintOut(){
 
+    Logger::Debug("ActuatorDcMotor::ActuatorDcMotor()");
+    Logger::Print("this->__pwm_channel ",this->__pwm_channel );
+    Logger::Print("this->__h_bridge_pin_dir ",this->__h_bridge_pin_dir );
+    Logger::Print("this->__h_bridge_pin_speed ",this->__h_bridge_pin_speed );
+    Serial.println(FCBC_RESET);
+}
 
 void ActuatorDcMotor::SpinOnce(){
     // real speed control, position check, auto stop....
@@ -103,18 +100,21 @@ void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
 
 void ActuatorDcMotor::Stop(){
     // motor A and motor B setted LOW to stop DC motor
-    digitalWrite(__h_bridge_pin_a, LOW);
-    digitalWrite(__h_bridge_pin_b, LOW);
+    digitalWrite(this->__h_bridge_pin_dir, LOW);
+    ledcWrite(this->__pwm_channel, 0);
 }
 
-void ActuatorDcMotor::StartToMove(bool dir_is_cw,  int pwm_speed){
+void ActuatorDcMotor::StartToMove(bool dir_is_cw,  uint32_t pwm_speed){
+    // this->PrintOut();
     if(dir_is_cw){
-        ledcWrite (this->__pwm_channel_a, pwm_speed);
-        digitalWrite (this->__h_bridge_pin_b,LOW);
+        Serial.println (pwm_speed);
+        this->PrintOut();
+        digitalWrite(this->__h_bridge_pin_dir, LOW);
+        ledcWrite(this->__pwm_channel, pwm_speed);
     }
     else {
         // make  DCmotor CCW 
-        ledcWrite (this->__pwm_channel_b, pwm_speed);
-        digitalWrite(this->__h_bridge_pin_a, LOW);
+        ledcWrite(this->__pwm_channel, (255 - pwm_speed));
+        digitalWrite(this->__h_bridge_pin_dir, HIGH);
     }
 }
