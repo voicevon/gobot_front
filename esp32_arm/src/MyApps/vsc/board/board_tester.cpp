@@ -9,34 +9,27 @@ void Vsc_BoardTest::LinkBoard(CncBoardBase* board){
 
 // Even without angel sensor,  Only a h-bridge driver is there, Should be work properly.
 void Vsc_BoardTest::Test_MotorDriver(int loop_count){
-    float speed = 123;
-    // ActuatorDcMotor* motor = (ActuatorDcMotor*)(this->__board->GetActuator(AXIS_ALPHA));
-    ActuatorDcMotor* motor ;   
-    motor->StartToMove(true, 150);
-    delay(5000);
-    motor->StartToMove(true, 0);
-    delay(5000);
-    //.....
+    uint32_t speed = 255;
+    ActuatorDcMotor* motor = this->__board->GetActuator(AXIS_ALPHA);
+    for(int i=0; i<loop_count ;i++){    
+        Serial.print("motor test start");
+        Serial.println("       motor CW ");
+        motor->StartToMove(true, speed);
+        delay(5000);
+        
+        Serial.print("       motor stop");
+        motor->StartToMove(true, 0);
+        delay(5000);
+        
+        Serial.print("       motor CCW");
+        motor->StartToMove(false, speed);
+        delay(5000);
 
-
-
-
-    // switch (level){
-    //     case 0:
-    //         break;
-    //     case 1:
-    //         // Start to move
-    //         // Min speed =0  ; Max Speed = 255;  Don't link angle sensor
-
-
-    //         // motor->SetTargetPositionTo(false, -899);
-    //         break;
-    //     // case 2:
-    //     //     motor->SetTargetPositionTo(false, 500);
-    //     //     motor->SetSpeed(111);
-    //     //     motor->StartToMove();
-    //     //     break;
-    // }
+        Serial.print("       motor stop");
+        motor->StartToMove(false, 0);
+        delay(5000);
+        Serial.println("     motor test end");
+    }
 }
 
 
@@ -77,13 +70,13 @@ void Vsc_BoardTest::__TestOffset(float value){
         }
     }
 }
+
 void Vsc_BoardTest::Test_Offset(int loop_count){
     for (int i=0; i<loop_count; i++){
         Serial.print("[Info]  Vsc_BoardTest::Test_offset_calculation()  Please turn the sensor...");
         delay(3000);
         Serial.print("Stop turning..");
         delay(2000);
-
         float xx = rand();
         this->__TestOffset(xx);
     }
@@ -91,6 +84,8 @@ void Vsc_BoardTest::Test_Offset(int loop_count){
 
 #define INTERVEL 900
 void Vsc_BoardTest::Test_AngleSensor(int loop_count){
+    if (loop_count==0) return;
+
     MagneticSensorAnalog* sensor = this->__board->GetAngleSensor();
     int down_count = loop_count;
     int interval = 0;
@@ -118,8 +113,8 @@ void Vsc_BoardTest::Test_AngleSensor(int loop_count){
 void Vsc_BoardTest::Test_AllHomers(int loop_count){
     SingleAxisHomer* homer = this->__board->GetHomer(AXIS_ALPHA);
     for (int i=0; i<loop_count; i++){
-        Serial.print(homer->IsTriged());
-        Serial.println("Homer is Triger");
+        Serial.print("Homer is Triger = ");
+        Serial.println(homer->IsTriged());
         delay(1000);
     }
 }

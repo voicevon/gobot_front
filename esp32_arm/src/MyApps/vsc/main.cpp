@@ -21,8 +21,8 @@ void test_board(){
     Vsc_BoardTest tester;
     tester.LinkBoard(&board);
     tester.Test_AngleSensor(0);
-    tester.Test_AllHomers(10);
-    tester.Test_MotorDriver(20);
+    tester.Test_AllHomers(0);
+    tester.Test_MotorDriver(99);
     // tester.Test_Motor(0);
     tester.Test_Offset(0);
     Serial.println("[Info] test_board() is done.");

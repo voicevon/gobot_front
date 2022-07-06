@@ -7,4 +7,6 @@ void Vsc_Board::Init(bool is_on_reset){
     }
     //??  Init sensor ??
     this->__motor.LinkSensor(&this->__sensor);
+
+    this->__motor.PrintOut();
 }
