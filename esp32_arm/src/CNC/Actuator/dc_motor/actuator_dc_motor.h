@@ -2,9 +2,10 @@
 #include "../actuator_base.h"
 #include "SimpleFOC.h"
 
-class ActuatorDcMotor: public ActuatorBase{
+class   ActuatorDcMotor: public ActuatorBase{
     public:
-        ActuatorDcMotor(uint8_t h_bridge_pin_a, uint8_t h_bridge_pin_b);
+        ActuatorDcMotor(uint8_t h_bridge_pin_dir, uint8_t h_bridge_pin_speed);
+        void PrintOut();
         void LinkSensor(Sensor* sensor){this->__sensor=sensor;};
         // void LinkPidController(PIDController* pid){this->__pid=pid;};
         float GetCurrentPosition_InCncUnit() override;
@@ -19,17 +20,20 @@ class ActuatorDcMotor: public ActuatorBase{
         void SetAccelleration(float accelleration_in_cnc_unit) override;
 
         void SpinOnce();
-        void StartToMove(bool dir_is_cw,  int pwm_speed);
+        void StartToMove(bool dir_is_cw,  uint32_t pwm_speed);
         bool IsMoving(){return this->__is_moving;};
         // void TestDriver(bool dir_is_cw, int pwm_speed);
 
     private:
-        uint8_t __h_bridge_pin_a;
-        uint8_t __h_bridge_pin_b;
+        // uint8_t __h_bridge_pin_dir;
+        // uint8_t __h_bridge_pin_pwm;
+        uint8_t __h_bridge_pin_dir;
+        uint8_t __h_bridge_pin_speed;
+        uint8_t __pwm_channel;
+        
         float __sensor_rad_per_mm = 1.0f;
         float __offset = 0.0f;
-        uint8_t __pwm_channel_a;
-        uint8_t __pwm_channel_b;
+        // uint8_t __pwm_channel_a;
         Sensor* __sensor;
 
         // PIDController* __pid;

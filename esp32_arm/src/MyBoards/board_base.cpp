@@ -25,6 +25,12 @@ void BoardBase::RepportRamUsage(){
     Serial.println(FCBC_RESET);
 }
 
+uint8_t BoardBase::Assign_ledc_channel(){
+    uint8_t channel= BoardBase::__ledc_channel_index;
+    BoardBase::__ledc_channel_index ++;
+    return channel;
+}
+
 bool BoardBase::_Begin_I2cBus(TwoWire* i2c_bus, uint8_t pin_sda, uint8_t pin_scl, uint32_t frequency){
     // TwoWire* new_bus = new TwoWire(this->__i2c_bus_index);
     if (!i2c_bus->begin(pin_sda, pin_scl, frequency)){
