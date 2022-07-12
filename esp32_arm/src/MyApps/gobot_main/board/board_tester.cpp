@@ -57,6 +57,8 @@ void GobotMain_BoardTest::Test_Eef_Full(int loop_count){
     Serial.println ("[Info] GobotMain_BoardTest::Test_Eef_Full()  ");
     RobotEef_GobotMain* eef = this->__board->GetEef();
     for (int i=0; i<loop_count; i++){
+        //Load + Unload = 2.4s + 2s = 4.4s
+        //Sleep 5.4s
         Serial.print(loop_count -i);
         Serial.print("\t");
         Serial.print("Down   ");

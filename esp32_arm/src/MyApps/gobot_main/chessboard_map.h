@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include <string>
+#include <WString.h>
 #include "CNC/coordinate/coordinate_base.h"
 
 
@@ -18,6 +18,6 @@ class ChessboardCell{
 };
 
 class ChessboardMap{
-    String GetG1Code(ChessboardCell* cell)
+    String GetG1Code(ChessboardCell* cell);
 
 };
