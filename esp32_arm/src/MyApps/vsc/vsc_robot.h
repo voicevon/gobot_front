@@ -10,6 +10,7 @@ class VscRobot: public GcodeProducer, public MqttMessageConsumer{
         VscRobot();
         void SpinOnce(); 
         void AsyncExecuteMqttCommand(const char*) override;
+        void ShowLayer(int layer_index);
         
     private:
         ActuatorDcMotor* __motor;

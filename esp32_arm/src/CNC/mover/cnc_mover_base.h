@@ -5,13 +5,16 @@
 #include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
 #include "MyBoards/cnc_board_base.h"
+#include "../Actuator/actuator_base.h"
+
 // TODO:  template <actuator>
 class CncMoverBase{
     public:
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
         // virtual void Init(CncBoardBase* board){};
         virtual void PrintOut(const char* title);
-        virtual void SetActuatorSpeed(EnumAxis axis, float speed);  // TODO:  remove this
+        // virtual void SetActuatorSpeed(EnumAxis axis, float speed);  // TODO:  remove this  ??
+        void SetActuatorSpeed(EnumAxis axis, float speed);  // TODO:  remove this  ??
         virtual void SetActuatorAcceleration(EnumAxis axis, float accelleration);
         virtual void SetEefSpeed(float speed);
         // void SetBlockedMove(bool is_blocked_move){this->_is_blocked_move=is_blocked_move;};
@@ -32,6 +35,13 @@ class CncMoverBase{
     protected:
         // bool _is_blocked_move;
         uint8_t _moving_actuator_flags;
+        
+        ActuatorBase* _actuator_alpha_base;
+        ActuatorBase* _actuator_beta_base;
+        ActuatorBase* _actuator_gamma_base;
+        ActuatorBase* _actuator_delta_base;
+        ActuatorBase* _actuator_epsilon_base;
+
     
     private:
     

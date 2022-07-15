@@ -18,7 +18,7 @@ class CncMover_DualStepper: public CncMoverBase{
         void SetEefSpeed(float speed) override;
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;
         float GetAbsDistanceToTarget_InCncUnit() override;
-        void SetActuatorSpeed(EnumAxis actuator_name, float rad_per_second) override;
+        // void SetActuatorSpeed(EnumAxis actuator_name, float rad_per_second) override;
         void SetActuatorAcceleration(EnumAxis axis, float accelleration) override;
         bool ActuatorIsMoving(EnumAxis actuator) override;
 

@@ -42,30 +42,29 @@ void Vsc_BoardTest::Test_MotorDriver(int loop_count){
 */
 void Vsc_BoardTest::Test_Actuator(int loop_count){
     //Speed unit is:    mm/second   or   rad/second
-            // ActuatorDcMotor* motor = (ActuatorDcMotor*)(this->__board->GetActuator(AXIS_ALPHA));
-            ActuatorDcMotor* motor = this->__board->GetActuator(AXIS_ALPHA);   // todo: 
-            float speed = 12;
-            for (int i =0; i<loop_count; i++){
-                motor->SetTargetPositionTo(false, 500);
-                motor->SetSpeed(speed);   
-                float distance = motor->GetAbsDistanceToTarget_InCncUnit();
-                while (distance > 10){
-                    motor->SpinOnce();
-                    distance = motor->GetAbsDistanceToTarget_InCncUnit();
-                }
-                delay(5000);
+    float distance;
+    ActuatorDcMotor* motor = this->__board->GetActuator(AXIS_ALPHA);   // todo: 
+    float speed = 12;
+    for (int i =0; i<loop_count; i++){
+        motor->SetTargetPositionTo(false, 500);
+        motor->SetSpeed(speed);   
+        distance = motor->GetAbsDistanceToTarget_InCncUnit();
+        while (distance > 10){
+            motor->SpinOnce();
+            distance = motor->GetAbsDistanceToTarget_InCncUnit();
+        }
+        delay(5000);
 
 
-                motor->SetTargetPositionTo(false, 0);
-                motor->SetSpeed(speed/2);   
-                float distance = motor->GetAbsDistanceToTarget_InCncUnit();
-                while (distance > 10){
-                    motor->SpinOnce();
-                    distance = motor->GetAbsDistanceToTarget_InCncUnit();
-                }
-                delay(5000);
-                
-            }
+        motor->SetTargetPositionTo(false, 0);
+        motor->SetSpeed(speed/2);   
+        distance = motor->GetAbsDistanceToTarget_InCncUnit();
+        while (distance > 10){
+            motor->SpinOnce();
+            distance = motor->GetAbsDistanceToTarget_InCncUnit();
+        }
+        delay(5000);
+    }
  
     
 }

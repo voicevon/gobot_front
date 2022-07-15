@@ -1,17 +1,13 @@
 #pragma once
 
 #include "cnc_mover_base.h"
-#include "ESP32Step/src/TeensyStep.h"
-#include "CNC/Actuator/servo/actuator_servo.h"
-#include "CNC/Actuator/stepper/actuator_stepper.h"
+// #include "../Actuator/dc_motor/actuator_dc_motor.h"
+#include "../Actuator/actuator_base.h"
 
-class CncMover_StepperServo: public CncMoverBase{
+class CncMover_SingleAxis: public CncMoverBase{
     public:
-        void LinkStepControl(StepControl* stepControl){this->__stepControl=stepControl;};
-        void LinkStepper_asAlpha(ActuatorStepper* stepper);
-        void LinkServo_asBeta(ActuatorServo* servo);
         void PrintOut(const char* title) override;
-        
+        // void LinkDcMotor(ActuatorDcMotor* dc_motor){this->_actuator_alpha=dc_motor;};
         void SetEefSpeed(float speed) override;
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;
         float GetAbsDistanceToTarget_InCncUnit() override;
@@ -25,16 +21,10 @@ class CncMover_StepperServo: public CncMoverBase{
         void SingleActuatorStop(EnumAxis motor_name) override;
 
         void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position) override;
-        // void Stop(char motor_name) override;
-        // struct MotorFlag{
-
-        // }
         
     protected:
+        // ActuatorDcMotor* _actuator_alpha;
+        ActuatorBase* _actuator_alpha;
 
     private:
-        // Stepper* __stepper_alpha;
-        ActuatorStepper* __actuator_alpha;
-        ActuatorServo* __actuator_beta;
-        StepControl* __stepControl;
 };

@@ -193,16 +193,16 @@ float CncMover_StepperServo::GetAbsDistanceToTarget_InCncUnit(){
 
 }
 
-void CncMover_StepperServo::SetActuatorSpeed(EnumAxis actuator_name, float speed_per_second){
+// void CncMover_StepperServo::SetActuatorSpeed(EnumAxis actuator_name, float speed_per_second){
     
-    if (actuator_name == AXIS_ALPHA){
-        this->__actuator_alpha->SetSpeed(speed_per_second);
-    }else if(actuator_name == 'B'){
-        this->__actuator_beta->SetSpeed(speed_per_second);
-    }else{
-        Serial.println("[Error]() CncMover_StepperServo::SetActuatorSpeed");
-    }
-}
+//     if (actuator_name == AXIS_ALPHA){
+//         this->__actuator_alpha->SetSpeed(speed_per_second);
+//     }else if(actuator_name == 'B'){
+//         this->__actuator_beta->SetSpeed(speed_per_second);
+//     }else{
+//         Serial.println("[Error]() CncMover_StepperServo::SetActuatorSpeed");
+//     }
+// }
 
 bool CncMover_StepperServo::ActuatorIsMoving(EnumAxis actuator_name) {
     if (actuator_name==AXIS_ALPHA){

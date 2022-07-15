@@ -145,21 +145,7 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 		Serial.print(")");
 	}
 }
-// void CncSingleAxis::_running_G1(){
-//     if (this->GetDistanceToTarget_IK() < 100){   // TODO:  How to determine G1 is finished. or almost finished?
-//       	this->State = CncState::IDLE;
-// 		Serial.print("\n[Info] GobotHouseHardware::_running_G1() is finished. ");
-//     }
-// 	// Serial.println(this->GetDistanceToTarget_IK());
-// 	// delay(100);
-// }
-// void CncSingleAxis::RunM123(uint8_t eef_channel, uint8_t eef_action){
-	
-// }
 
-// void CncSingleAxis::RunM84(){
-// 	this->_board->EnableMotor(this->__AXIS_NAME, false);
-// }
 
 float CncSingleAxis::GetDistanceToTarget_IK(){
 	this->_mover->GetAbsDistanceToTarget_InCncUnit();

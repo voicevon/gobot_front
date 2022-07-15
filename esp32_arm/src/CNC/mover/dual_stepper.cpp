@@ -175,15 +175,15 @@ float CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit(){
     return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
 }
 
-void CncMover_DualStepper::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
-    if (actuator_name ==AXIS_ALPHA){
-        this->__actuator_alpha->SetSpeed(steps_per_second);
-    }else if(actuator_name == AXIS_BETA){
-        this->__actuator_beta->SetSpeed(steps_per_second);
-    }else{
-        Serial.println("[Error] CncMover_DualStepper::SetActuatorSpeed() ");
-    }
-}
+// void CncMover_DualStepper::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
+//     if (actuator_name ==AXIS_ALPHA){
+//         this->__actuator_alpha->SetSpeed(steps_per_second);
+//     }else if(actuator_name == AXIS_BETA){
+//         this->__actuator_beta->SetSpeed(steps_per_second);
+//     }else{
+//         Serial.println("[Error] CncMover_DualStepper::SetActuatorSpeed() ");
+//     }
+// }
 
 void CncMover_DualStepper::SetActuatorAcceleration(EnumAxis axis, float accelleration){
     if (axis ==AXIS_ALPHA){
