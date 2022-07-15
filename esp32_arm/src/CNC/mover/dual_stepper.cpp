@@ -130,70 +130,40 @@ void CncMover_DualStepper::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_
 
 }
 
-float CncMover_DualStepper::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
-    if (actuator_name == AXIS_ALPHA){
-        return this->__actuator_alpha->GetCurrentPosition_InCncUnit();
 
-    }else if (actuator_name == AXIS_BETA){
-        return this->__actuator_beta->GetCurrentPosition_InCncUnit();
 
-    }else{
-        log_w("CncMover_DualStepper::SingleMotorMoveTo() axisname= ", actuator_name );
-    }
-    return 0;
-}
 
-void CncMover_DualStepper::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position){
-    if (actuator_name == AXIS_ALPHA){
-        this->__actuator_alpha->SetCurrentPositionAs(as_current_position);
-    }else if (actuator_name == AXIS_BETA){
-        this->__actuator_beta->SetCurrentPositionAs(as_current_position);
-    }else{
-        Logger::Warn("CncMover_DualStepper::SingleMotorMoveTo()");
-        Serial.print("Unkonwn axisname= ");
-        Serial.print(actuator_name);
-        Serial.println(FCBC_RESET);
 
-    }
-}
-float CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit(){
-    float alpha_distance = 0;
-    if((this->_moving_actuator_flags & 0x01) > 0){
-       alpha_distance = this->__actuator_alpha->GetAbsDistanceToTarget_InCncUnit();
-    }
-    float beta_distance = 0;
-    if ((this->_moving_actuator_flags & 0x02) > 0){
-       beta_distance = this->__actuator_beta->GetAbsDistanceToTarget_InCncUnit();
-    }
-    bool debug= false;
-    if(debug){
-        Serial.print("[Debug] CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit() alpha = ");
-        Serial.print(alpha_distance);
-        Serial.print("  beta = ");
-        Serial.println(beta_distance);
-    }
-    return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
-}
+// float CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit(){
+//     float alpha_distance = 0;
+//     if((this->_moving_actuator_flags & 0x01) > 0){
+//        alpha_distance = this->__actuator_alpha->GetAbsDistanceToTarget_InCncUnit();
+//     }
+//     float beta_distance = 0;
+//     if ((this->_moving_actuator_flags & 0x02) > 0){
+//        beta_distance = this->__actuator_beta->GetAbsDistanceToTarget_InCncUnit();
+//     }
+//     bool debug= false;
+//     if(debug){
+//         Serial.print("[Debug] CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit() alpha = ");
+//         Serial.print(alpha_distance);
+//         Serial.print("  beta = ");
+//         Serial.println(beta_distance);
+//     }
+//     return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
+// }
 
-void CncMover_DualStepper::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
-    if (actuator_name ==AXIS_ALPHA){
-        this->__actuator_alpha->SetSpeed(steps_per_second);
-    }else if(actuator_name == AXIS_BETA){
-        this->__actuator_beta->SetSpeed(steps_per_second);
-    }else{
-        Serial.println("[Error] CncMover_DualStepper::SetActuatorSpeed() ");
-    }
-}
+// void CncMover_DualStepper::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
+//     if (actuator_name ==AXIS_ALPHA){
+//         this->__actuator_alpha->SetSpeed(steps_per_second);
+//     }else if(actuator_name == AXIS_BETA){
+//         this->__actuator_beta->SetSpeed(steps_per_second);
+//     }else{
+//         Serial.println("[Error] CncMover_DualStepper::SetActuatorSpeed() ");
+//     }
+// }
 
-void CncMover_DualStepper::SetActuatorAcceleration(EnumAxis axis, float accelleration){
-    if (axis ==AXIS_ALPHA){
-        this->__actuator_alpha->SetAccelleration(accelleration);
-    }else if(axis == AXIS_BETA){
-        this->__actuator_beta->SetAccelleration(accelleration);
-    }else{
-        Serial.println("[Error] CncMover_DualStepper::SetActuatorSpeed() ");
-    }
-}
+
 
 bool CncMover_DualStepper::ActuatorIsMoving(EnumAxis actuator_name) {
     if (actuator_name==AXIS_ALPHA){

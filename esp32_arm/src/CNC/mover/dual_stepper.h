@@ -16,10 +16,10 @@ class CncMover_DualStepper: public CncMoverBase{
 
         
         void SetEefSpeed(float speed) override;
-        float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;
-        float GetAbsDistanceToTarget_InCncUnit() override;
-        void SetActuatorSpeed(EnumAxis actuator_name, float rad_per_second) override;
-        void SetActuatorAcceleration(EnumAxis axis, float accelleration) override;
+        // float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;
+        // float GetAbsDistanceToTarget_InCncUnit() override;
+        // void SetActuatorSpeed(EnumAxis actuator_name, float rad_per_second) override;
+        // void SetActuatorAcceleration(EnumAxis axis, float accelleration) override;
         bool ActuatorIsMoving(EnumAxis actuator) override;
 
 
@@ -28,7 +28,7 @@ class CncMover_DualStepper: public CncMoverBase{
         void AllActuatorsStop() override;
         void SingleActuatorStop(EnumAxis motor_name) override;
 
-        void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position) override;
+        // void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position) override;
         // void Stop(char motor_name) override;
         // struct MotorFlag{
 

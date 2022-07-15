@@ -7,6 +7,13 @@ VscRobot::VscRobot(){
     Serial.print("\n[Info] VscRobot::VscRobot() is done..........");
 }
 
+void VscRobot::ShowLayer(int layer_index){
+    float a= 123.45 * layer_index;
+    String g1 = "G1A";
+    g1.concat(a);
+    this->_gcode_queue->AppendGcodeCommand(g1);
+}
+
 void VscRobot::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
     Serial.print("[Info] VscRobot::ExecuteMqttCommand() is entering.... = ");
