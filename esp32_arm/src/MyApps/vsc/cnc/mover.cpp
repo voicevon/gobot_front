@@ -4,6 +4,6 @@
 
 void Vsc_CncMover::Init(Vsc_Board* board){
     Vsc_ActuatorAlphaMechanic config;
-    this->_actuator_alpha = board->GetActuator(AXIS_ALPHA);
+    this->_actuator_alpha_base = board->GetActuator(AXIS_ALPHA);
 
 }
