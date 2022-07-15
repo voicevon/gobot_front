@@ -20,7 +20,6 @@ class CncMoverBase{
 
         virtual void SetEefSpeed(float speed);
 
-
         void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
 
         virtual void AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit);
