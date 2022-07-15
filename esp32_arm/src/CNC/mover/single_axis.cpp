@@ -81,35 +81,35 @@ void CncMover_SingleAxis::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_a
     }
 }
 
-float CncMover_SingleAxis::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
-    if (actuator_name == AXIS_ALPHA){
-        return this->_actuator_alpha->GetCurrentPosition_InCncUnit();
-    }else{
-        log_w("CncMover_SingleAxis::SingleMotorMoveTo() axisname= ", actuator_name );
-    }
-    return 0;
-}
+// float CncMover_SingleAxis::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
+//     if (actuator_name == AXIS_ALPHA){
+//         return this->_actuator_alpha->GetCurrentPosition_InCncUnit();
+//     }else{
+//         log_w("CncMover_SingleAxis::SingleMotorMoveTo() axisname= ", actuator_name );
+//     }
+//     return 0;
+// }
 
-void CncMover_SingleAxis::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position){
-    if (actuator_name == AXIS_ALPHA){
-        this->_actuator_alpha->SetCurrentPositionAs(as_current_position);
-    }else{
-        log_w("[Warn] CncMover_SingleAxis::SingleMotorMoveTo() Unkonwn axisname= ", actuator_name );
-    }
-}
-float CncMover_SingleAxis::GetAbsDistanceToTarget_InCncUnit(){
-    float alpha_distance = 0;
-    if((this->_moving_actuator_flags & 0x01) > 0){
-       alpha_distance = this->_actuator_alpha->GetAbsDistanceToTarget_InCncUnit();
-    }
-    bool debug= false;
-    if(debug){
-        Serial.print("[Debug] CncMover_SingleAxis::GetAbsDistanceToTarget_InCncUnit() alpha = ");
-        Serial.print(alpha_distance);
-    }
-    return sqrt(alpha_distance * alpha_distance);
+// void CncMover_SingleAxis::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position){
+//     if (actuator_name == AXIS_ALPHA){
+//         this->_actuator_alpha->SetCurrentPositionAs(as_current_position);
+//     }else{
+//         log_w("[Warn] CncMover_SingleAxis::SingleMotorMoveTo() Unkonwn axisname= ", actuator_name );
+//     }
+// }
+// float CncMover_SingleAxis::GetAbsDistanceToTarget_InCncUnit(){
+//     float alpha_distance = 0;
+//     if((this->_moving_actuator_flags & 0x01) > 0){
+//        alpha_distance = this->_actuator_alpha->GetAbsDistanceToTarget_InCncUnit();
+//     }
+//     bool debug= false;
+//     if(debug){
+//         Serial.print("[Debug] CncMover_SingleAxis::GetAbsDistanceToTarget_InCncUnit() alpha = ");
+//         Serial.print(alpha_distance);
+//     }
+//     return sqrt(alpha_distance * alpha_distance);
 
-}
+// }
 
 // void CncMover_SingleAxis::SetActuatorSpeed(EnumAxis actuator_name, float speed_per_second){
     

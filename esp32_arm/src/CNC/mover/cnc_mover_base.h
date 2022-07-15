@@ -13,13 +13,15 @@ class CncMoverBase{
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
         // virtual void Init(CncBoardBase* board){};
         virtual void PrintOut(const char* title);
-        // virtual void SetActuatorSpeed(EnumAxis axis, float speed);  // TODO:  remove this  ??
-        void SetActuatorSpeed(EnumAxis axis, float speed);  // TODO:  remove this  ??
-        virtual void SetActuatorAcceleration(EnumAxis axis, float accelleration);
-        virtual void SetEefSpeed(float speed);
-        // void SetBlockedMove(bool is_blocked_move){this->_is_blocked_move=is_blocked_move;};
+        void SetActuatorSpeed(EnumAxis axis, float speed);  
+        void SetActuatorAcceleration(EnumAxis axis, float accelleration);
+        void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position);
+        float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name);  // TODO: return  all current position.
 
-        virtual void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position);
+        virtual void SetEefSpeed(float speed);
+
+
+        void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
 
         virtual void AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit);
         virtual void SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position,  float position_in_cnc_unit);
@@ -27,9 +29,7 @@ class CncMoverBase{
         virtual void SingleActuatorStop(EnumAxis actuator_name);
 
         virtual bool ActuatorIsMoving(EnumAxis actuator_name);
-        virtual float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name);  // TODO: return  all current position.
-        virtual float GetAbsDistanceToTarget_InCncUnit();
-        void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
+        float GetAbsDistanceToTarget_InCncUnit();
 
 
     protected:
