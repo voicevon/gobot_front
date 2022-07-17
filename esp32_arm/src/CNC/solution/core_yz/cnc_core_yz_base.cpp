@@ -32,16 +32,16 @@ void CncSolution_CoreYZBase::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk)
 }
 
 
-void CncSolution_CoreYZBase::Init(CncBoardBase* board){
-	Serial.print("\n[Info] CncSolution_CoreYZBase::Init_Linkage() is entering.");
-	// this->_cncMachine = (CncSolution_CoreYZConfigBase*)(this->_board->GetCncConfig());
-	this->_board = board;
+// void CncSolution_CoreYZBase::Init(CncBoardBase* board){
+// 	Serial.print("\n[Info] CncSolution_CoreYZBase::Init_Linkage() is entering.");
+// 	// this->_cncMachine = (CncSolution_CoreYZConfigBase*)(this->_board->GetCncConfig());
+// 	this->_board = board;
 
-	this->objHomeHelper_y = board->GetHomer(AXIS_Y);
-	this->objHomeHelper_vertical = board->GetHomer(AXIS_Z);
+// 	this->objHomeHelper_y = board->GetHomer(AXIS_Y);
+// 	this->objHomeHelper_vertical = board->GetHomer(AXIS_Z);
 
 
-}
+// }
 
 void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis axis){
 	Serial.print("[Debug] CncSolution_CoreYZBase::RunG28() is entering:   " );

@@ -8,7 +8,7 @@
 
 class CncSolution_CoreYZBase: public CncSolutionBase{
     public:
-        void Init(CncBoardBase* board) override;
+        // void Init(CncBoardBase* board) override;
         void RunG1(Gcode* gcode) override;
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
         float GetDistanceToTarget_FK() override{return 0.0;};

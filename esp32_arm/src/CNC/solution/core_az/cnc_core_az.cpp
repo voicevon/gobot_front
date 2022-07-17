@@ -44,14 +44,14 @@ void CncSolution_CoreAZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 }
 
 
-void CncSolution_CoreAZ::Init(CncBoardBase* board){
-	Serial.print("\n[Info] CncSolution_CoreAZ::Init_Linkage() is entering.");
-	this->objHomeHelper_vertical = board->GetHomer(AXIS_Z);
-	this->objHomeHelper_vertical = board->GetHomer(AXIS_X);
-	this->_board->EnableMotor(AXIS_ALPHA, false);
-	this->_board->EnableMotor(AXIS_BETA, false);
+// void CncSolution_CoreAZ::Init(CncBoardBase* board){
+// 	Serial.print("\n[Info] CncSolution_CoreAZ::Init_Linkage() is entering.");
+// 	this->objHomeHelper_vertical = board->GetHomer(AXIS_Z);
+// 	this->objHomeHelper_vertical = board->GetHomer(AXIS_X);
+// 	this->_board->EnableMotor(AXIS_ALPHA, false);
+// 	this->_board->EnableMotor(AXIS_BETA, false);
 
-}
+// }
 
 
 void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){

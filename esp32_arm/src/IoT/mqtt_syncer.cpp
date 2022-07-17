@@ -13,7 +13,7 @@ void MqttSyncer::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_top
 
     bool debug=true;
     if(debug){
-        Logger::Debug("[Info] MqttSyncer::SubscribeMqtt() is done");
+        Logger::Debug("MqttSyncer::SubscribeMqtt() is done");
         Serial.print("Subsribe_topic= ");
         Serial.print(main_topic);
         Serial.print(" feedback_topic= ");

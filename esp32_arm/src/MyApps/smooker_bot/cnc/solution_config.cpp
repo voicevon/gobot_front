@@ -45,8 +45,5 @@ void SmookerBot_CncSolutionConfig::PrintOut(const char * title){
     // Serial.print(this->Homing_acceleration_alpha);
     // Serial.print("\n\n        max_speed_alpha = ");
     // Serial.print(max_acceleration_alpha);
-
-
-    Serial.print("\n----------------------------------------------\n\n");
 }
 

@@ -6,7 +6,7 @@
 
 class GobotMainCncSolution: public CncSolution_FiveBarsBase{
     public:  
-        void Init(CncBoardBase* board) override;
+        // void Init(CncBoardBase* board);
         void Init(GobotMain_Board* board, StepControl* step_control);
 
     private:

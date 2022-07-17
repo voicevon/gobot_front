@@ -29,5 +29,4 @@ void BoxMover_CncSolutionConfig::PrintOut(){
     Serial.print("\n        max_acceleration_alpha_beta = ");
     Serial.print(max_acceleration_alpha_beta);
 
-    Serial.print("\n----------------------------------------------\n\n");
 }

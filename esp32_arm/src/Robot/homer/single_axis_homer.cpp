@@ -1,4 +1,5 @@
 #include "single_axis_homer.h"
+#include "MyLibs/basic/logger.h"
 
 SingleAxisHomer::SingleAxisHomer(uint8_t pinTriger, int trigeredState){
     this->pinTriger = pinTriger;
@@ -44,4 +45,10 @@ bool SingleAxisHomer::IsTriged(){
     }
     return false;
 }
+
+void SingleAxisHomer::PrintOut(const char* title){
+    Logger::Debug("SingleAxisHomer::PrintOut()");
+    Logger::Print("pin_triger", this->pinTriger);
+}
+
 

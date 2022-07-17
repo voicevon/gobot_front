@@ -12,10 +12,9 @@ class SingleAxisHomer{
         SingleAxisHomer(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger, int trigeredState);
         SingleAxisHomer(int trigeredState);
         void Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger);
-        // void SetHomePosition();   //???
         bool IsTriged();
         void SetTrigeredCountMax(int new_value){this->trigered_counter_max = new_value;};
-
+        void PrintOut(const char* title);
     private:
         int trigered_counter = 0;
         int trigered_counter_max = 3;

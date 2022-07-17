@@ -2,9 +2,9 @@
 #include "../cnc/actuator_alpha_beta.h"
 #include "mover.h"
 
-void GobotMainCncSolution::Init(CncBoardBase* board){
-    Logger::Halt("GobotMainCncSolution::Init(CncBoardBase* board)");
-}
+// void GobotMainCncSolution::Init(CncBoardBase* board){
+//     Logger::Halt("GobotMainCncSolution::Init(CncBoardBase* board)");
+// }
 
 void GobotMainCncSolution::Init(GobotMain_Board* board, StepControl* step_control){
     this->__mover.Init(board, step_control);
@@ -13,7 +13,6 @@ void GobotMainCncSolution::Init(GobotMain_Board* board, StepControl* step_contro
     this->_LinkEef(board->GetEef());
     this->_config = &this->__config;
     this->_config_base = &this->__config;
-    // this->_Init_FiverBarBase(board);
 
     board->EnableMotor(AXIS_ALPHA, false);
 	board->EnableMotor(AXIS_BETA, false);

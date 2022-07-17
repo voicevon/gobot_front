@@ -2,16 +2,6 @@
 #include "cnc_five_bars_base.h"
 #include<Arduino.h>
 
-// void CncSolution_FiveBarsBase::_Init_FiverBarBase(CncBoardBase* board){
-// 	// Serial.println("[Info] CncSolution_FiveBarsBase::Init() is entering.");
-// 	board->EnableMotor(AXIS_ALPHA, false);
-// 	board->EnableMotor(AXIS_BETA, false);
-// 	this->_board = board;
-// 	// this->_config_base = this->_board->GetCncConfig();
-// 	// this->_config = (CncSolution_FiveBarConfig*)this->_config_base;
-// 	Logger::Info("CncSolution_FiveBarsBase::Init() is done.");
-// } 
-
 void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
@@ -235,7 +225,6 @@ void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
 	if (true){
 		FkPosition_XY verified_fk;
 		FK(&target_ik_ab, &verified_fk);
-		Serial.println("-----------------------------------------------");
 		Serial.print(" Please Verify FK angin to confirm IK() is correct.");
 		Serial.print(" FK.X= ");
 		Serial.print(verified_fk.X);

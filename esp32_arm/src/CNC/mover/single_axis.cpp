@@ -1,10 +1,4 @@
-// #include "single_dc_motor.h"
 #include "single_axis.h"
-
-void CncMover_SingleAxis::PrintOut(const char* title) {
-    Logger::Info("CncMover_SingleAxis::PrintOut eeeeeeeeeeee");
-}
-
 #include "MyLibs/calculator.h"
 
 void CncMover_SingleAxis::SetEefSpeed(float speed){

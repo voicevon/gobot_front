@@ -17,7 +17,6 @@ void BoxCarrier_CncSolutionConfig::__Init_Fast(){
 }
 
 void BoxCarrier_CncSolutionConfig::PrintOut(const char* title){
-    Serial.print("\n\n===============================================");
     Serial.print("\n   BoxMoverHardwareConfig::PrintOut()");
     
     Serial.print("\n          Home_position (z,y) = (");
@@ -37,6 +36,5 @@ void BoxCarrier_CncSolutionConfig::PrintOut(const char* title){
     Serial.print(max_acceleration_alpha_beta);
 
 
-    Serial.print("\n----------------------------------------------\n\n");
 }
 

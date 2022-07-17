@@ -2,13 +2,11 @@
 #ifdef I_AM_VSC
 #include "board/board_vsc.h"
 #include "board/board_tester.h"
-// #include "cnc/solution_config.h"
 #include "cnc/solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "vsc_robot.h"
 
-// Vsc_CncSolutionConfig cnc_solution_config;
 Vsc_CncSoution cnc;
 
 Vsc_Board board;
@@ -22,8 +20,7 @@ void test_board(){
     tester.LinkBoard(&board);
     tester.Test_AngleSensor(0);
     tester.Test_AllHomers(0);
-    tester.Test_MotorDriver(99);
-    // tester.Test_Motor(0);
+    tester.Test_MotorDriver(0);
     tester.Test_Offset(0);
     Serial.println("[Info] test_board() is done.");
 }
@@ -36,17 +33,6 @@ void test_cnc(){
     }
 }
 
-// void home(){
-//     SingleAxisHomer* homer = board.GetHomer('A');
-//     ActuatorDcMotor* motor = (ActuatorDcMotor*)(board.GetActuator('A'));
-//     motor->SetSpeed(100);
-//     motor->SetTargetPositionTo(false, 999999);
-//     motor->StartToMove();
-//     while (homer->IsTriged()){
-//         motor->Stop();
-//         motor->SetCurrentPositionAs(15);
-//     }
-// }
 
 void setup(){
     board.Init(true);

@@ -10,3 +10,7 @@ void Vsc_Board::Init(bool is_on_reset){
 
     this->__motor.PrintOut();
 }
+
+void Vsc_Board::SayHello(){
+    Logger::Debug("I am Vsc Board, Have a good day.");
+}

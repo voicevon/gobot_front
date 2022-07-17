@@ -22,13 +22,11 @@ void CncSingleAxis::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 }
 
 
-void CncSingleAxis::Init(CncBoardBase* board){
-	Serial.print("\n[Info] CncSingleAxis::Init() is entering.");
-	// this->_mechanic->Init('F');
-	this->_board->EnableMotor(this->__AXIS_NAME, false);
+// void CncSingleAxis::Init(CncBoardBase* board){
+// 	Logger::Debug("CncSingleAxis::Init() is entering.");
+// 	this->_board->EnableMotor(this->__AXIS_NAME, false);
 
-	// this->IsInverseKinematicHoimg = false;
-}
+// }
 
 void CncSingleAxis::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		//Set current position to HomePosition

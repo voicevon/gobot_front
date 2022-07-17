@@ -11,7 +11,6 @@
 class CncMoverBase{
     public:
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
-        // virtual void Init(CncBoardBase* board){};
         virtual void PrintOut(const char* title);
         void SetActuatorSpeed(EnumAxis axis, float speed);  
         void SetActuatorAcceleration(EnumAxis axis, float accelleration);

@@ -14,7 +14,6 @@ class CncSolution_FiveBarsBase: public CncSolutionBase{
 
     protected:
         CncSolution_FiveBarConfig* _config;
-        // void _Init_FiverBarBase(CncBoardBase* board);
 
     
     private:

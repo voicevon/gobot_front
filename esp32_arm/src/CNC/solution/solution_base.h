@@ -20,7 +20,7 @@ enum class CncState{
 class CncSolutionBase: public GcodeConsumer{
     public:
         CncState State = CncState::IDLE;
-        virtual void Init(CncBoardBase* board);
+        // virtual void Init(CncBoardBase* board);
         void SpinOnce();
 
         void RunGcode(Gcode* gcode);
