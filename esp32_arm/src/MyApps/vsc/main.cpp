@@ -27,7 +27,6 @@ void test_board(){
 
 void test_cnc(){
     cnc.RunG28(AXIS_ALPHA);
-
     while (true){
         cnc.SpinOnce();
     }
@@ -38,15 +37,17 @@ void setup(){
     board.Init(true);
     test_board();
     cnc.Init(&board);
-    test_cnc();
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
-    gcode_queue.AppendGcodeCommand("G28A");
 
     setup_mqtt_block_connect();
     append_mqtt_bridge("vsc", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 
     Serial.println ("\n[Info] VSC   setup() is done. ------------------------------------ \n");
+
+    //test robot and cnc
+    gcode_queue.AppendGcodeCommand("G28A");
+    // test_cnc();
 
 }
 

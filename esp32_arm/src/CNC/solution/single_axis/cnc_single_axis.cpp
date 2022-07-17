@@ -37,9 +37,9 @@ void CncSingleAxis::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		}
 		else{
 			// We know homed position via FK
-			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
-			// this->__current_fk_position.A = this->_mechanic->Homed_position_fk;
-			this->__current_fk_position.A = this->_mechanic->HomedPosition(AXIS_ALPHA);
+			Logger::Info("CncSingleAxis::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
+			Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
+			this->__current_fk_position.A = this->_config_base->HomedPosition(AXIS_ALPHA);
 			this->IK(&this->__current_fk_position, &ik_position);
 			// verify IK by FK()
 			FkPosition_A verifying_fk;

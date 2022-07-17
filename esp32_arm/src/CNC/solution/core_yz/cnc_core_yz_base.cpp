@@ -87,7 +87,7 @@ void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		}
 		else{
 			// We know homed position via FK
-			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
+			Logger::Info("CncSolution_CoreYZBase::_SetCurrentPositionAsHome() Trying to get home position with EEF FK position  ");
 			this->__current_fk_position.Z = this->_cncMachine->Homed_position_z;
 			this->__current_fk_position.Y = this->_cncMachine->Homed_position_y;
 			this->IK(&this->__current_fk_position, &ik_position);

@@ -16,7 +16,7 @@ class CncSingleAxis: public CncSolutionBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        CncSolution_SingleAxisConfig* _mechanic;  //TODO:  uinify name:  cncConfig??
+        CncSolution_SingleAxisConfig* _config;  
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
 
     private:

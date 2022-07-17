@@ -9,11 +9,16 @@ extern "C" {
 	#include "freertos/timers.h"
 }
 
-#define WIFI_SSID "Perfect"
-#define WIFI_PASSWORD "1234567890"
+// #define WIFI_SSID "Perfect"
+// #define WIFI_PASSWORD "1234567890"
+#define WIFI_SSID "369"
+#define WIFI_PASSWORD "hahafeng12200"
 
 #define MQTT_HOST "voicevon.vicp.io"
 #define MQTT_PORT 1883
+#define MQTT_UID "von"
+#define MQTT_PASSWORD "von1970"
+
 bool mqtt_is_connected = false;
 extern void app_mqtt_subscribe();
 extern void app_mqtt_received_message(char* topic, char* payload);
@@ -30,7 +35,7 @@ void connectToWifi() {
 void connectToMqtt() {
 	Serial.println("Connecting to MQTT...");
 
-	mqttClient.setCredentials("von","von1970");
+	mqttClient.setCredentials(MQTT_UID, MQTT_PASSWORD);
 	mqttClient.connect();
 }
 
