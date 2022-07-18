@@ -69,7 +69,7 @@ void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis axis){
 		motor_position[0]=-5000000;
 		motor_position[1]=-5000000;	
 	}
-	this->_mover->AllActuatorsMoveTo(false, motor_position);
+	this->_mover_base->AllActuatorsMoveTo(false, motor_position);
 
 	// this->_board->EnableMotor('A', true);
 	// this->_board->EnableMotor('B',true);
@@ -98,79 +98,24 @@ void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		}
 		//Copy current ik-position to motor-position.
 		if (this->_homing_axis == AXIS_Z) {
-			this->_mover->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
+			this->_mover_base->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
 		}
 		if (this->_homing_axis == AXIS_Y) {
-			this->_mover->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
+			this->_mover_base->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
 		}
 }
 
-// void CncSolution_CoreYZBase::_running_G28(){
-// 	if (this->__homing_helper->IsTriged()){
-// 		// End stop is trigered
-// 		Serial.print("\n[Info] CncSolution_CoreYZBase::_running_G28() Home sensor is trigger.  " );
-// 		Serial.print (this->_homing_axis_name);
-// 		// this->_stepControl->stop();
-// 		this->_board->cnc_mover->AllActuatorsStop();
-
-// 		//Set current position to HomePosition
-// 		IkPosition_AB ik_position;
-// 		if (this->_config->IsInverseKinematicHoimg){
-// 			// We know homed position via IK.
-// 			Serial.print("\n[Error] CncSolution_CoreYZBase::_running_G28() This robot does NOT impliment this function.");
-// 		}
-// 		else{
-// 			// We know homed position via FK
-// 			Serial.print("\n  [Info] Trying to get home position with EEF FK position  ");
-// 			this->__current_fk_position.Z = this->_cncMachine->Homed_position_z;
-// 			this->__current_fk_position.Y = this->_cncMachine->Homed_position_y;
-// 			this->IK(&this->__current_fk_position, &ik_position);
-// 			// verify IK by FK()
-// 			FkPosition_YZ verifying_fk;
-// 			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
-// 			this->FK(&ik_position, &verifying_fk);
-// 		}
-// 		//Copy current ik-position to motor-position.
-// 		if (this->_homing_axis_name == 'Z') {
-// 			this->_board->cnc_mover->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
-// 		}
-// 		if (this->_homing_axis_name == 'Y') {
-// 			this->_board->cnc_mover->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
-// 		}
-		
-// 		this->State = CncState::IDLE;
-
-// 	}else{
-// 		// Endstop is not trigered
-// 		// Serial.print("[Debug] Still homing\n");
-// 		// Serial.print("<");
-// 		// We are going to move a long long distance with async mode(None blocking).
-// 		// When endstop is trigered, must stop the moving. 
-// 		// if (this->_homing_axis == 'W'){
-// 		// 	//todo :  process with IK()
-// 		// 	this->stepper_alpha.setTargetRel(500000);
-// 		// 	this->stepper_beta.setTargetRel(500000);
-// 		// 	this->__homing_helper = &this->objHomeHelper_angle;
-// 		// }else if (this->_homing_axis == 'Z'){
-// 		// 	// Serial.print("-");
-// 		// 	this->stepper_alpha.setTargetRel(500000);
-// 		// 	this->stepper_beta.setTargetRel(-500000);	
-// 		// 	this->__homing_helper = &this->objHomeHelper_vertical;
-// 		// }
-// 	// this->objStepControl.moveAsync(this->stepper_alpha, this->stepper_beta);
-// 	}	
-// }
 
 void CncSolution_CoreYZBase::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] CncSolution_CoreYZBase::RunG1() is entering");
 	Serial.print(gcode->get_command());
-	this->_board->EnableMotor(AXIS_ALPHA, true);
-	this->_board->EnableMotor(AXIS_BETA, true);
+	this->_board_base->EnableMotor(AXIS_ALPHA, true);
+	this->_board_base->EnableMotor(AXIS_BETA, true);
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
 		// this->stepper_alpha->setMaxSpeed(speed);
 		// this->stepper_beta->setMaxSpeed(speed);
-		this->_mover->SetEefSpeed(speed);
+		this->_mover_base->SetEefSpeed(speed);
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_YZ target_fk_yz;
@@ -202,7 +147,7 @@ void CncSolution_CoreYZBase::RunG1(Gcode* gcode) {
 	float target_motor_position[2];
 	target_motor_position[0] = target_ik_ab.alpha;
 	target_motor_position[1] = target_ik_ab.beta;
-	this->_mover->AllActuatorsMoveTo(true, target_motor_position);
+	this->_mover_base->AllActuatorsMoveTo(true, target_motor_position);
 
 	if (true){
 		Serial.print("\n    [Debug] CncSolution_CoreYZBase::RunG1()     (");
@@ -221,7 +166,7 @@ void CncSolution_CoreYZBase::RunG1(Gcode* gcode) {
 
 float CncSolution_CoreYZBase::GetDistanceToTarget_IK(){
 	// return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
-	return this->_mover->GetAbsDistanceToTarget_InCncUnit();
+	return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
 }
 
 

@@ -22,12 +22,8 @@ void CncMover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags,
         is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
         this->_actuator_alpha_base->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
     }else{
-        Serial.print("[Error]() CncMover_SingleAxis::AllActuatorsMoveTo()  target_motor_flags= ");
-        Serial.println(target_motor_flags);
-        while (true){
-            Serial.print("E ");
-            delay(1000);
-        }
+        Logger::Error("CncMover_SingleAxis::AllActuatorsMoveTo()");
+        Logger::Print("target_motor_flags", target_motor_flags);
         
     }
 
@@ -39,7 +35,8 @@ void CncMover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags,
         
         bool debug = true;
         if(debug){
-            Serial.print("[Debug] CncMover_SingleAxis::AllActuatorsMoveTo()  alpha_time= ");
+            Logger::Debug("CncMover_SingleAxis::AllActuatorsMoveTo()");
+            // Logger::Print("alpha_time", alpatim)
             // Serial.print(alpha_time_in_second);
             // Serial.print( "->" );
             // Serial.print (this->_actuator_alpha_base->GetNeededSeconds());

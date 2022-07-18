@@ -20,8 +20,6 @@ class CncScaraSolution: public CncSolutionBase{
         //                           // Instantiated on first use.
         //     return instance;
         // }
-        // void Init(CncBoardBase* board) override;
-        // void RunG28(EnumAxis axis) override;
         void RunG1(Gcode* gcode) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override;
@@ -34,12 +32,7 @@ class CncScaraSolution: public CncSolutionBase{
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 
         void RunG6(Gcode* gcode) override {};   //Block mode
-        // void _running_G1() override;
-        // void _running_G28() override;
         std::string GetHomeTrigerStateString() override {return " ";};
-        // void RunM123(uint8_t eef_channel, EefAction eef_action) override;
-        // void RunM123(uint8_t eef_channel, uint8_t eef_action) override;
-        // void RunM84() override;
 
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
 

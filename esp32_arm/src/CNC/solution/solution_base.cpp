@@ -87,15 +87,15 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	Logger::Debug("CncSolutionBase::__HomeSingleAxis()");
 	this->_homing_axis = axis;
 	// this->_board->SayHello();
-	this->__current_homer = this->_board->GetHomer(axis);
+	this->__current_homer = this->_board_base->GetHomer(axis);
 	// this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()");
 	// this->_config_base->PrintOut("CncSolutionBase::__HomeSingleAxis()");
 	// this->_mover->PrintOut("CncSolutionBase::__HomeSingleAxis()");
-	this->_mover->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
-	this->_mover->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
-	this->_board->EnableMotor(axis, true);
+	this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
+	this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
+	this->_board_base->EnableMotor(axis, true);
 	float long_distance_to_move = this->_config_base->GetLongOffsetToGoHome(axis);
-	this->_mover->SingleActuatorMoveTo(axis, false, long_distance_to_move);
+	this->_mover_base->SingleActuatorMoveTo(axis, false, long_distance_to_move);
 
 	Logger::Debug("CncSolutionBase::RunG28() is Starting to run..." );
 }
@@ -106,9 +106,8 @@ void CncSolutionBase::_running_G28(){
 		Logger::Info("CncSolutionBase::_running_G28() Home sensor is trigered." );
 		Logger::Print("_homing_axis_name", this->_homing_axis);
 
-		this->_mover->AllActuatorsStop();
+		this->_mover_base->AllActuatorsStop();
 		this->_SetCurrentPositionAsHome(this->_homing_axis);
-		Serial.println("bbbbbbbbb");
 		this->State = CncState::IDLE;
 	}else{
 		// Endstop is not trigered
@@ -149,7 +148,7 @@ void CncSolutionBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
 void CncSolutionBase::RunM84(){
 	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
 	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
-		this->_board->EnableMotor(EnumAxis(axis), false);
+		this->_board_base->EnableMotor(EnumAxis(axis), false);
 	}
 }
 void CncSolutionBase::RunGcode(Gcode* gcode){

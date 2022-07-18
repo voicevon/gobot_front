@@ -2,15 +2,16 @@
 
 
 void Vsc_CncSoution::Init(Vsc_Board* board ){
+    this->_AXIS = AXIS_ALPHA;
+
     this->__mover.Init(board);
-    this->_mover = &this->__mover;
+    this->_mover_base = &this->__mover;
     
     this->_LinkEef(board->GetEef());
     this->_config_base = &this->__config;
 
     board->EnableMotor(AXIS_ALPHA, false);
-	board->EnableMotor(AXIS_BETA, false);
-	this->_board = board;
+	this->_board_base = board;
 }
 
 EnumAxis Vsc_CncSoution::ConvertToEnum(char axis){

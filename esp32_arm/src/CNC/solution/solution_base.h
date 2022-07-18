@@ -53,8 +53,8 @@ class CncSolutionBase: public GcodeConsumer{
         bool is_absolute_position = true;
         
         CncSolutionConfigBase* _config_base;    //???
-        CncBoardBase* _board;
-        CncMoverBase* _mover;
+        CncBoardBase* _board_base;
+        CncMoverBase* _mover_base;
         SingleAxisHomer* __current_homer;
 
     private:

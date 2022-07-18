@@ -18,9 +18,9 @@ class CncSingleAxis: public CncSolutionBase{
     protected:
         CncSolution_SingleAxisConfig* _config;  
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
+        EnumAxis _AXIS;   // TODO: doubel check this var.
 
     private:
-        EnumAxis __AXIS_NAME;   // TODO: doubel check this var.
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 

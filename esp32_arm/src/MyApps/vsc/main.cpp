@@ -37,10 +37,11 @@ void setup(){
     setup_mqtt_block_connect();
     append_mqtt_bridge("vsc", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 
-    Logger::Info ("VSC   setup() is done. ------------------------------------");
+    Logger::Info ("VSC-XiaoJuan   setup() is done. ------------------------------------");
 
     //test robot and cnc
     robot.AsyncExecuteMqttCommand("G28A");
+    robot.AsyncExecuteMqttCommand("G1A230F345");
 
 }
 
