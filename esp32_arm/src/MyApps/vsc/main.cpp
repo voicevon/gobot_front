@@ -42,6 +42,7 @@ void setup(){
     //test robot and cnc
     robot.AsyncExecuteMqttCommand("G28A");
     robot.AsyncExecuteMqttCommand("G1A230F345");
+    robot.AsyncExecuteMqttCommand("ShowLayer12");
 
 }
 
