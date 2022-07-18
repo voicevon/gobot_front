@@ -25,12 +25,6 @@ void test_board(){
     Serial.println("[Info] test_board() is done.");
 }
 
-void test_cnc(){
-    cnc.RunG28(AXIS_ALPHA);
-    while (true){
-        cnc.SpinOnce();
-    }
-}
 
 
 void setup(){
@@ -43,16 +37,15 @@ void setup(){
     setup_mqtt_block_connect();
     append_mqtt_bridge("vsc", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 
-    Serial.println ("\n[Info] VSC   setup() is done. ------------------------------------ \n");
+    Logger::Info ("VSC   setup() is done. ------------------------------------");
 
     //test robot and cnc
-    gcode_queue.AppendGcodeCommand("G28A");
-    // test_cnc();
+    robot.AsyncExecuteMqttCommand("G28A");
 
 }
 
 void loop(){
-    //TODO  motor.spinonce()   or board.spinonce()
+    board.GetActuator(AXIS_ALPHA)->SpinOnce();
     robot.SpinOnce();
     cnc.SpinOnce();
     loop_mqtt();

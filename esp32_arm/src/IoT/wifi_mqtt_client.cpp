@@ -9,10 +9,10 @@ extern "C" {
 	#include "freertos/timers.h"
 }
 
-// #define WIFI_SSID "Perfect"
-// #define WIFI_PASSWORD "1234567890"
-#define WIFI_SSID "369"
-#define WIFI_PASSWORD "hahafeng12200"
+#define WIFI_SSID "Perfect"
+#define WIFI_PASSWORD "1234567890"
+// #define WIFI_SSID "369"
+// #define WIFI_PASSWORD "hahafeng12200"
 
 #define MQTT_HOST "voicevon.vicp.io"
 #define MQTT_PORT 1883

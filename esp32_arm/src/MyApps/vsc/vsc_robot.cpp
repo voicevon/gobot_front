@@ -16,12 +16,13 @@ void VscRobot::ShowLayer(int layer_index){
 
 void VscRobot::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
-    Serial.print("[Info] VscRobot::ExecuteMqttCommand() is entering.... = ");
-    Serial.println(str_command);
+    Logger::Info("VscRobot::ExecuteMqttCommand() is entering.");
+    Logger::Print("Command", str_command);
+    this->_gcode_queue->AppendGcodeCommand(command);
     
-    if (str_command.equals("stop")){
-        this->__motor->Stop();
-    }
+    // if (str_command.equals("stop")){
+    //     this->__motor->Stop();
+    // }
 
     // }else if(str_command.equals("reset")){
     //     String gcode = "G28A";
