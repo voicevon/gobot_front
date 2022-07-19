@@ -11,22 +11,22 @@ VscRobot::VscRobot(){
     }
 
     //  0 ~ TWO_PI
-    __position_diction[0] = 0;
-    __position_diction[1] = 0;
-    __position_diction[2] = 0;
-    __position_diction[3] = 0;
-    __position_diction[4] = 0;
-    __position_diction[5] = 0;
-    __position_diction[6] = 0;
-    __position_diction[7] = 0;
-    __position_diction[8] = 0;
+    __position_diction[0] = 0.112;
+    __position_diction[1] = 0.21;
+    __position_diction[2] = 0.88;
+    __position_diction[3] = 1.22;
+    __position_diction[4] = 3.44;
+    __position_diction[5] = 5.67;
+    __position_diction[6] = 5.99;
+    __position_diction[7] = 6.88;
+    __position_diction[8] = 7.11;
 
     Serial.print("\n[Info] VscRobot::VscRobot() is constructed");
 }
 
 void VscRobot::ShowLayer(int layer_index){
     String g1 = "G1A";
-    g1.concat(this->__position_diction[layer_index]);
+    g1.concat(this->__actuator_slope *  this->__position_diction[layer_index]);
     this->_gcode_queue->AppendGcodeCommand(g1);
 }
 

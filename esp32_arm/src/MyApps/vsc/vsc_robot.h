@@ -15,6 +15,6 @@ class VscRobot: public GcodeProducer, public MqttMessageConsumer{
     private:
         ActuatorDcMotor* __motor;
         float __position_diction[LAYER_COUNT];
-
+        float __actuator_slope = 12.456;
    
 };

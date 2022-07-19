@@ -71,6 +71,10 @@ void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
 }
 
 void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
+    Logger::Debug("ActuatorDcMotor::SetTargetPositionTo()  is entering");
+    Logger::Print("is_absolute_position", is_absolute_position);
+    Logger::Print("position_in_cnc_unit", position_in_cnc_unit);
+    
     if (is_absolute_position){
         this->_target_cnc_position = position_in_cnc_unit;
     }else{
@@ -107,8 +111,8 @@ void ActuatorDcMotor::Stop(){
 void ActuatorDcMotor::StartToMove(bool dir_is_cw,  uint32_t pwm_speed){
     // this->PrintOut();
     if(dir_is_cw){
-        Serial.println (pwm_speed);
-        this->PrintOut();
+        // Serial.println (pwm_speed);
+        // this->PrintOut();
         digitalWrite(this->__h_bridge_pin_dir, LOW);
         ledcWrite(this->__pwm_channel, pwm_speed);
     }

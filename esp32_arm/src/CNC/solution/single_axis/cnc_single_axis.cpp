@@ -71,8 +71,8 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 	//Prepare actuator/driver to move to next point
 	this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
 	//None blocking, move backgroundly.
-	uint8_t abs_flag=0x01;
-	this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
+	// uint8_t abs_flag=0x01;
+	// this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
 	bool debug = true;
 	if (debug){
 		this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
