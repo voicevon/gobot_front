@@ -1,32 +1,39 @@
 
-// #include "spring_maker.h
 #include "vsc_robot.h"
 #include <HardwareSerial.h>
 
-// #include <Arduino.h>
 
 VscRobot::VscRobot(){
     for (int i=0; i<LAYER_COUNT; i++){
-        __position_diction[i] = 0;
+        __position_in_pitch[i] = 0;
     }
 
-    //  0 ~ TWO_PI
-    __position_diction[0] = 0.112;
-    __position_diction[1] = 0.21;
-    __position_diction[2] = 0.88;
-    __position_diction[3] = 1.22;
-    __position_diction[4] = 3.44;
-    __position_diction[5] = 5.67;
-    __position_diction[6] = 5.99;
-    __position_diction[7] = 6.88;
-    __position_diction[8] = 7.11;
+    //  0 ~ 156
+    this->__position_in_pitch[0] = 0;
+    this->__position_in_pitch[1] = 13;
+    this->__position_in_pitch[2] = 26;
+    this->__position_in_pitch[3] = 39;
+    this->__position_in_pitch[4] = 52;
+    this->__position_in_pitch[5] = 65;
+    this->__position_in_pitch[6] = 78;
+    this->__position_in_pitch[7] = 91;
+    this->__position_in_pitch[8] = 104;
+    this->__position_in_pitch[9] = 117;
+    this->__position_in_pitch[10] = 130;
+    this->__position_in_pitch[11] = 143;
 
     Serial.print("\n[Info] VscRobot::VscRobot() is constructed");
 }
 
-void VscRobot::ShowLayer(int layer_index){
+void VscRobot::MoveTo(int layer_index, int cell_index){
+    String m123 = "M123C";
+    m123.concat(cell_index);
+    this->_gcode_queue->AppendGcodeCommand(m123);
+
     String g1 = "G1A";
-    g1.concat(this->__actuator_slope *  this->__position_diction[layer_index]);
+    // TODO:  over single circle.
+    float gear_angle = TWO_PI *  this->__position_in_pitch[layer_index] / this->__GEAR_TEETH ;
+    g1.concat(gear_angle);
     this->_gcode_queue->AppendGcodeCommand(g1);
 }
 
@@ -35,9 +42,13 @@ void VscRobot::AsyncExecuteMqttCommand(const char* command){
     Logger::Info("VscRobot::ExecuteMqttCommand() is entering.");
     Logger::Print("Command", str_command);
     
-    if (str_command.substring(0,9) == "ShowLayer"){
-        int layer = atoi(str_command.substring(9).c_str());
-        this->ShowLayer(layer);
+    //TODO:  L3C8 == Show Layer 3, Cell 8.   target cell will be indicated by LED.
+    if (str_command.substring(0,1) == "L"){
+        int C_position = str_command.indexOf('C');
+        int layer = atoi(str_command.substring(9, C_position-1).c_str());
+        int cell = atoi(str_command.substring(C_position+1).c_str());
+        this->MoveTo(layer, cell);
+
     }else{
         this->_gcode_queue->AppendGcodeCommand(command);
     }

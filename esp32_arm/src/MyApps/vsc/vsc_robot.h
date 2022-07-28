@@ -10,11 +10,11 @@ class VscRobot: public GcodeProducer, public MqttMessageConsumer{
         VscRobot();
         void SpinOnce(); 
         void AsyncExecuteMqttCommand(const char*) override;
-        void ShowLayer(int layer_index);
+        void MoveTo(int layer_index, int cell_index);
         
     private:
         ActuatorDcMotor* __motor;
-        float __position_diction[LAYER_COUNT];
-        float __actuator_slope = 12.456;
-   
+        int __position_in_pitch[LAYER_COUNT];
+        int __GEAR_TEETH = 56;
+        int __PITCH_COUNT = 157;
 };
