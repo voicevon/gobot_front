@@ -71,10 +71,12 @@ class OdooBasic():
 
     def GetLocation(self):
         model_name = 'stock.location'
-        ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[]], {'limit': 2})
+        # ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[]], {'limit': 2})
+        ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[['name','ilike','J3']]], {'limit': 20})
         print("================================================")
         print(ids)
         for id in ids:
+            print('---------------------------------------------------')
             [record] = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'read', [id])
             print(record)
 
