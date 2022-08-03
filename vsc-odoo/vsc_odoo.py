@@ -1,5 +1,5 @@
 import xmlrpc.client
-
+# https://www.odoo.com/documentation/15.0/developer/api/external_api.html#connection
 class OdooBasic():
     def TestDatabase(self):
         # Test database
@@ -71,16 +71,41 @@ class OdooBasic():
 
     def GetLocation(self):
         model_name = 'stock.location'
-        # ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[]], {'limit': 2})
+        # ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[]], {'limit': 200})
         ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[['name','ilike','J3']]], {'limit': 20})
         print("================================================")
         print(ids)
         for id in ids:
             print('---------------------------------------------------')
             [record] = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'read', [id])
-            print(record)
+            print(record['location_id'], record['name'], record['child_ids'])
+            # print(record)
 
+    def GetProduct(self):
+        model_name = 'product.product'
+        ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[]], {'limit': 8})
+        # ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[['name','ilike','J3']]], {'limit': 20})
+        print("================================================")
+        print(ids)
+        for id in ids:
+            print('---------------------------------------------------')
+            [record] = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'read', [id])
+            print(record['name'],record['description'])
 
+    def GetStockQuantity(self):
+        model_name = 'stock.quant'
+        # ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[]], {'limit': 8})
+        ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[['name','ilike','J3']]], {'limit': 20})
+        print("================================================")
+        print(ids)
+        for id in ids:
+            print('---------------------------------------------------')
+            [record] = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'read', [id])
+            location_id, location_name = record['location_id']
+            product_id, product_name = record['product_id']
+            print(location_name,product_name)
+            # print(record['product_id'],record['location_id'], record['quantity'])
+            # print(record)
 
 
 
@@ -93,5 +118,7 @@ if __name__ == "__main__":
     odoo.ConfigConnection()
     odoo.Login()
     # odoo.Test_execute_kw()
-    odoo.GetLocation()
+    # odoo.GetLocation()
+    odoo.GetProduct()
+    # odoo.GetStockQuantity()
 
