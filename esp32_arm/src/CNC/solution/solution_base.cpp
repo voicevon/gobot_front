@@ -88,9 +88,9 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	this->_homing_axis = axis;
 	// this->_board->SayHello();
 	this->__current_homer = this->_board_base->GetHomer(axis);
-	// this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()");
-	// this->_config_base->PrintOut("CncSolutionBase::__HomeSingleAxis()");
-	// this->_mover->PrintOut("CncSolutionBase::__HomeSingleAxis()");
+	this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()  __current_homer");
+	this->_config_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _config_base");
+	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
 	this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
 	this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
 	this->_board_base->EnableMotor(axis, true);
@@ -139,9 +139,10 @@ void CncSolutionBase::__running_G4(){
 }
 
 void CncSolutionBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
-	Serial.print("[Debug] CncFiveBars::RunM123()  eef_action= ");
-	Serial.println(eef_action);
+	Logger::Debug("CncSolutionBase::RunM123()");
+	Logger::Print("eef_action", eef_action);
 	// uint8_t action_code = 1;
+	this->__eef->PrintOut();
 	this->__eef->Run(eef_action);
 }
 
@@ -252,10 +253,9 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 			s_value = gcode->get_value('S');
 			debug = true;
 			if (debug){
-				Serial.print("CncSolutionBase::RunGcode() For EEF_ACTION  M123 P= ");
-				Serial.print(p_value);
-				Serial.print("  S= ");
-				Serial.print(s_value);
+				Logger::Debug("CncSolutionBase::RunGcode() For EEF_ACTION  M123 ");
+				Logger::Print("P", p_value);
+				Logger::Print("S", s_value);
 			}
 			action = (EefAction)s_value;
 			this->RunM123(p_value, s_value);

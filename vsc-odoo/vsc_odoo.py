@@ -69,6 +69,12 @@ class OdooBasic():
         # check if the deleted record is still in the database
         self.models.execute_kw(self.db, self.uid, self.password, 'res.partner', 'search', [[['id', '=', id]]])
 
+    def Test_Insert(self):
+        model_name = 'res.partner'
+        id = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'create', [{'name': "New Partner"}])
+        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        print(id)
+
     def GetLocation(self):
         model_name = 'stock.location'
         # ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[]], {'limit': 200})
@@ -85,17 +91,18 @@ class OdooBasic():
         model_name = 'product.product'
         ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[]], {'limit': 8})
         # ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[['name','ilike','J3']]], {'limit': 20})
-        print("================================================")
+        print("================================================  Product ids:")
         print(ids)
         for id in ids:
             print('---------------------------------------------------')
             [record] = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'read', [id])
-            print(record['name'],record['description'])
+            # print(record['name'],record['description'])
+            print(record)
 
     def GetStockQuantity(self):
         model_name = 'stock.quant'
-        # ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[]], {'limit': 8})
-        ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[['name','ilike','J3']]], {'limit': 20})
+        ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[]], {'limit': 8})
+        # ids = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'search', [[['name','ilike','J3']]], {'limit': 20})
         print("================================================")
         print(ids)
         for id in ids:
@@ -103,11 +110,15 @@ class OdooBasic():
             [record] = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'read', [id])
             location_id, location_name = record['location_id']
             product_id, product_name = record['product_id']
-            print(location_name,product_name)
+            # print(location_name,product_name)
             # print(record['product_id'],record['location_id'], record['quantity'])
-            # print(record)
+            print(record)
 
-
+    def InsertStockQuanty(self):
+        model_name = 'stock.quant'
+        id = self.models.execute_kw(self.db, self.uid, self.password, model_name, 'create', [{'product_id':1,'location_id':14}])
+        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        print(id)
 
 
 
@@ -117,8 +128,10 @@ if __name__ == "__main__":
     # odoo.TestDatabase()
     odoo.ConfigConnection()
     odoo.Login()
+    # odoo.Test_Insert()
+    # odoo.InsertStockQuanty()
     # odoo.Test_execute_kw()
     # odoo.GetLocation()
-    odoo.GetProduct()
-    # odoo.GetStockQuantity()
+    # odoo.GetProduct()
+    odoo.GetStockQuantity()
 

@@ -40,18 +40,27 @@ void VscRobot::MoveTo(int layer_index, int cell_index){
 void VscRobot::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
     Logger::Info("VscRobot::ExecuteMqttCommand() is entering.");
-    Logger::Print("Command", str_command);
-    
+    Serial.println(str_command);
+    // Logger::Print("Command", str_command);   // TODO:  There is a bug.
+    Gcode my_gcode = Gcode(command);
+    // if (my_gcode.has_letter('L')){
+    int layer = my_gcode.get_value('L');
+    int cell = my_gcode.get_value('C');
+    Logger::Print("layer", layer);
+    Logger::Print("cell", cell);
+    this->MoveTo(layer, cell);
+    // }
     //TODO:  L3C8 == Show Layer 3, Cell 8.   target cell will be indicated by LED.
-    if (str_command.substring(0,1) == "L"){
-        int C_position = str_command.indexOf('C');
-        int layer = atoi(str_command.substring(9, C_position-1).c_str());
-        int cell = atoi(str_command.substring(C_position+1).c_str());
-        this->MoveTo(layer, cell);
+    // if (str_command.substring(0,1) == "L"){
+    //     int C_position = str_command.indexOf('C');
+    //     int layer = atoi(str_command.substring(9, C_position-1).c_str());
+    //     int cell = atoi(str_command.substring(C_position+1).c_str());
 
-    }else{
-        this->_gcode_queue->AppendGcodeCommand(command);
-    }
+    //     this->MoveTo(layer, cell);
+
+    // }else{
+    //     this->_gcode_queue->AppendGcodeCommand(command);
+    // }
     // if (str_command.equals("stop")){
     //     this->__motor->Stop();
     // }
@@ -83,10 +92,10 @@ void VscRobot::AsyncExecuteMqttCommand(const char* command){
 }
 
 void VscRobot::SpinOnce(){
-    // if (!this->_gcode_queue->BufferIsFull()){
-    //     this->CheckMqttCommand();
-    // }
-    this->CheckMqttCommand();
+    if (!this->_gcode_queue->BufferIsFull()){
+        this->CheckMqttCommand();
+    }
+    // this->CheckMqttCommand();
 }
 
 

@@ -25,6 +25,7 @@ bool MessageQueue::AppendMessage(const char* payload, int length){
     char* target = &(this->_all_messages[this->_head].payload[0]);
     //Copy byte to byte.  There is a 0x00 ender , so lenth should be +1.
     for(int i=0;i<=length;i++){
+        // Serial.print(*payload);
         *target = * payload;
         target++;
         payload++;

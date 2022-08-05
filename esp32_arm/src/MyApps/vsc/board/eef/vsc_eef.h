@@ -2,10 +2,11 @@
 
 #include "Robot/eef/robot_eef_base.h"
 
-class RobotEef_GarmentAsar: public RobotEefBase{
+class Vsc_RobotEef: public RobotEefBase{
     public:
-        RobotEef_GarmentAsar();
+        Vsc_RobotEef(){};
         void Run(uint8_t eef_code) override;
+        void PrintOut() override;
 
     private:
 

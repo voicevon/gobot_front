@@ -12,6 +12,7 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
 
     board->EnableMotor(AXIS_ALPHA, false);
 	this->_board_base = board;
+
 }
 
 EnumAxis Vsc_CncSoution::ConvertToEnum(char axis){

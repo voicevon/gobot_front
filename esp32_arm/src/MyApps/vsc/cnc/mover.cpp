@@ -9,6 +9,7 @@ void Vsc_CncMover::Init(Vsc_Board* board){
 }
 
 void Vsc_CncMover::PrintOut(const char* title){
+    Serial.println("2222222222222222222222222222222222222222");
     Logger::Debug(title);
     Logger::Debug("\t\tVsc_CncMover::PrintOut()");
 }
