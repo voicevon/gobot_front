@@ -210,7 +210,7 @@ void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
 		// Bug now, the unit in G1A,G1B is RAD
 		target_ik_ab.alpha =  gcode->get_value('R');
 	if (gcode->has_letter('F')){
-		float speed = gcode->get_value('F');
+		// float speed = gcode->get_value('F');
 		// this.sets
 		// this->beta_stepper->setMaxSpeed(speed);
 	}

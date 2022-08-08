@@ -14,19 +14,19 @@ void Vsc_BoardTest::Test_MotorDriver(int loop_count){
     for(int i=0; i<loop_count ;i++){    
         Serial.print("motor test start");
         Serial.println("       motor CW ");
-        motor->StartToMove(true, speed);
+        motor->SetPwmSpeed(true, speed);
         delay(5000);
         
         Serial.print("       motor stop");
-        motor->StartToMove(true, 0);
+        motor->SetPwmSpeed(true, 0);
         delay(5000);
         
         Serial.print("       motor CCW");
-        motor->StartToMove(false, speed);
+        motor->SetPwmSpeed(false, speed);
         delay(5000);
 
         Serial.print("       motor stop");
-        motor->StartToMove(false, 0);
+        motor->SetPwmSpeed(false, 0);
         delay(5000);
         Serial.println("     motor test end");
     }

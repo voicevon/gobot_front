@@ -15,25 +15,21 @@ class   ActuatorDcMotor: public ActuatorBase{
         void SetSpeed(float speed_in_cnc_unit) override;   // When motor is running, should not effect running speed.
         void UpdateSpeedWhenMotorIsRunning(float new_speed);      
         void Stop() override;
-        // void SetDirection(bool is_to_CW);
         float GetSpeed() override {return this->__cnc_speed;};
         void SetAccelleration(float accelleration_in_cnc_unit) override;
 
         void SpinOnce();
-        void StartToMove(bool dir_is_cw,  uint32_t pwm_speed);
+        void SetPwmSpeed(bool dir_is_cw,  uint32_t pwm_speed);
         bool IsMoving(){return this->__is_moving;};
         // void TestDriver(bool dir_is_cw, int pwm_speed);
 
     private:
-        // uint8_t __h_bridge_pin_dir;
-        // uint8_t __h_bridge_pin_pwm;
         uint8_t __h_bridge_pin_dir;
         uint8_t __h_bridge_pin_speed;
         uint8_t __pwm_channel;
         
-        float __sensor_rad_per_mm = 1.0f;
-        float __offset = 0.0f;
-        // uint8_t __pwm_channel_a;
+        // float __sensor_rad_per_mm = 1.0f;
+        float __sensor_offset = 0.0f;
         Sensor* __sensor;
 
         // PIDController* __pid;
@@ -41,7 +37,11 @@ class   ActuatorDcMotor: public ActuatorBase{
         uint __pwm_speed;
         float __cnc_speed;   // mm/s  or   rad/s
         bool __is_moving = false;
+        int SENSOR_GEAR_COUNT = 10;
+        int CHAIN_PITCH_COUNT = 157;
 
+        float __SLOPE_FROM_CNC_TO_SENSOR = 1.0;
+        float __SLOPE_FROM_SENSOR_TO_CND = 1.0;
 
 
 
