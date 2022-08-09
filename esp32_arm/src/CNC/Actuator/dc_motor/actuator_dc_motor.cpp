@@ -7,21 +7,30 @@
 #define GEAR_TEETH_COUNT 56.0f
 #define GEAR_PITCH 12.7f   //unit is mm
 #define PID_P 1.0f
-#define INERTIA_DISTANCE_IN_MM  50   // ??  in_rad
+#define INERTIA_DISTANCE_IN_MM  0.0001   // ??  in_rad
 
 
 void ActuatorDcMotor::SpinOnce(){
     // real speed control, position check, auto stop....
-
-    if(this->GetAbsDistanceToTarget_InCncUnit() * GEAR_PITCH < INERTIA_DISTANCE_IN_MM){
+    float abs_distance = this->GetAbsDistanceToTarget_InCncUnit();
+    // if(this->GetAbsDistanceToTarget_InCncUnit() * GEAR_PITCH < INERTIA_DISTANCE_IN_MM){
+    if (false){
         // The wheel will continue to run a short time after stoping, because the inertia.
         // TDDO:  How to deal with negtive distance?
         this->Stop();
     }else{
         // control speed
+        this->__count_down--;
+        if (this->__count_down <=0){
+            Logger::Print("Abs DIstanceToTarget in CNC Rad ", abs_distance);
+            this->__count_down = 58888;
+        }
         float error = this->__sensor->getVelocity() - this->__cnc_speed; 
-        float new_speed = - PID_P * error;   //   pid.get_speed(error);
-        this->UpdateSpeedWhenMotorIsRunning(new_speed);
+        float pwm_speed = - PID_P * error;   //   pid.get_speed(error);
+        // todo:   ax^3 + bx^2 + cx + f
+        if (pwm_speed > 255) pwm_speed = 255;
+        bool dir_is_cw = (this->_target_cnc_position - this->GetCurrentPosition_InCncUnit()) > 0;
+        this->SetPwmSpeed(dir_is_cw, pwm_speed);
     }
 }
 
@@ -31,7 +40,7 @@ float ActuatorDcMotor::GetCurrentPosition_InCncUnit(){
     //           == sensor_angle * (SENSOR_GEAR_COUNT / MOTOR_GEAR_COUNT)* (MOTOR_GEAR_COUNT / DRIVER_GEAR_COUNT) * (DRIVER_GEAR_COUNT / CHAIN_PITCH_COUNT)
     //           == sensor_angle * (SENSOR_GEAR_COUNT / CHAIN_PITCH_COUNT)
 
-    float cnc_position = (this->__sensor->getAngle() + this->__sensor_offset) * this->__SLOPE_FROM_SENSOR_TO_CND;
+    float cnc_position = (this->__sensor->getAngle() + this->__sensor_offset) * this->__SLOPE_FROM_SENSOR_TO_CNC;
     return cnc_position;
 }
 
@@ -57,11 +66,7 @@ float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
     return this->_target_cnc_position - this->GetCurrentPosition_InCncUnit();
 }
 
-void ActuatorDcMotor::UpdateSpeedWhenMotorIsRunning(float new_cnc_speed){
-        this->__pwm_speed = 12.23f * new_cnc_speed;   // todo:   ax^3 + bx^2 + cx + d
-        bool dir_is_cw = (this->_target_cnc_position - this->GetCurrentPosition_InCncUnit()) > 0;
-        this->SetPwmSpeed(dir_is_cw, this->__pwm_speed);
-}
+
 
 void ActuatorDcMotor::SetSpeed(float rad_per_second){
     this->__cnc_speed = rad_per_second;
@@ -112,7 +117,7 @@ ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_dir, uint8_t h_bridge_pin_
     // Calculate rad_per_mm,  This is determined by mechanic designer.
     // this->__sensor_rad_per_mm = GEAR_PITCH * GEAR_TEETH_COUNT / TWO_PI; 
     this->__sensor_offset = 0;
-    this->__SLOPE_FROM_SENSOR_TO_CND = float(this->SENSOR_GEAR_COUNT) / this->CHAIN_PITCH_COUNT;
+    this->__SLOPE_FROM_SENSOR_TO_CNC = float(this->SENSOR_GEAR_COUNT) / this->CHAIN_PITCH_COUNT;
     this->__SLOPE_FROM_CNC_TO_SENSOR = float(this->CHAIN_PITCH_COUNT) / this->SENSOR_GEAR_COUNT;
 }
 
