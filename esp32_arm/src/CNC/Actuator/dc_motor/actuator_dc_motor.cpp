@@ -11,6 +11,7 @@
 
 
 void ActuatorDcMotor::SpinOnce(){
+    this->__sensor->update();
     // real speed control, position check, auto stop....
     float abs_distance = this->GetAbsDistanceToTarget_InCncUnit();
     // if(this->GetAbsDistanceToTarget_InCncUnit() * GEAR_PITCH < INERTIA_DISTANCE_IN_MM){

@@ -40,9 +40,10 @@ void setup(){
     Logger::Info ("VSC-XiaoJuan   setup() is done. ");
 
     //test robot and cnc
-    // robot.AsyncExecuteMqttCommand("G28A");
-    robot.AsyncExecuteMqttCommand("ShowLayer12");
-    robot.AsyncExecuteMqttCommand("G1A230F345");
+    gcode_queue.AppendGcodeCommand("G28A");
+
+    // robot.AsyncExecuteMqttCommand("ShowLayer12");
+    // robot.AsyncExecuteMqttCommand("G1A230F345");
 
 }
 

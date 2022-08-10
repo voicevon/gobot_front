@@ -102,22 +102,24 @@ void Vsc_BoardTest::Test_AngleSensor(int loop_count){
     if (loop_count==0) return;
 
     MagneticSensorAnalog* sensor = this->__board->GetAngleSensor();
-    int down_count = loop_count;
+    int down_count = loop_count;   // For display how many count is left  only. No other purpose.
     int interval = 0;
 
     for(int i=0; i < loop_count; i++){
-        sensor->update();
-        interval++;
-        if (interval > INTERVEL){
-            Serial.print(down_count);
-            Serial.print("\t");
-            Serial.print(sensor->getAngle());
-            Serial.print("\t");
-            Serial.print(sensor->getFullRotations());
-            Serial.print("\t");
-            Serial.println(sensor->getVelocity());
-            down_count--;
-            interval = 0;
+        while (interval < INTERVEL){
+            sensor->update();
+            interval++;
+            if (interval == INTERVEL){
+                Serial.print(down_count);
+                Serial.print("\t");
+                Serial.print(sensor->getAngle());
+                Serial.print("\t");
+                Serial.print(sensor->getFullRotations());
+                Serial.print("\t");
+                Serial.println(sensor->getVelocity());
+                down_count--;
+                interval = 0;
+            }
         }
         // delay(500); 
     }
