@@ -17,10 +17,10 @@ MessageQueue mqtt_command_queue;
 
 void test_board(){
     Vsc_BoardTest tester;
-    tester.LinkBoard(&board);
-    tester.Test_AngleSensor(0);
-    tester.Test_AllHomers(0);
-    tester.Test_MotorDriver(0);
+    // tester.LinkBoard(&board);
+    tester.Test_AngleSensor(board.GetAngleSensor(), 0);
+    tester.Test_AllHomers(board.GetHomer(AXIS_ALPHA), 0);
+    tester.Test_MotorDriver(board.GetActuator(AXIS_ALPHA), 0);
     tester.Test_Offset(0);
     Serial.println("[Info] test_board() is done.");
 }

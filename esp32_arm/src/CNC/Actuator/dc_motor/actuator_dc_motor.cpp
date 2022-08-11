@@ -6,8 +6,9 @@
 #define PWM_FREQUENCY 20
 #define GEAR_TEETH_COUNT 56.0f
 #define GEAR_PITCH 12.7f   //unit is mm
-#define PID_P 1.0f
+#define PID_P 10.0f
 #define INERTIA_DISTANCE_IN_MM  0.0001   // ??  in_rad
+
 
 
 void ActuatorDcMotor::SpinOnce(){
@@ -24,13 +25,30 @@ void ActuatorDcMotor::SpinOnce(){
         this->__count_down--;
         if (this->__count_down <=0){
             Logger::Print("Abs DIstanceToTarget in CNC Rad ", abs_distance);
-            this->__count_down = 58888;
+            this->__count_down = 18888;
         }
-        float error = this->__sensor->getVelocity() - this->__cnc_speed; 
-        float pwm_speed = - PID_P * error;   //   pid.get_speed(error);
+
+        // float velocity =  this->__filter(this->__sensor->getVelocity());
+        float velocity =  this->__sensor->getVelocity();
+        float error =  velocity - this->__cnc_speed / 30;
+        float pwm_speed =  - this->__speed_pid.FeedError(error);
+        // float pwm_speed = - PID_P * error;   //   pid.get_speed(error);
+
+ 
+        Serial.print("velocity of sensor, error, pwm_speed \t\t");
+        Serial.print(velocity);
+        Serial.print("\t");
+        // Serial.print(this->__cnc_speed/15);
+        // Serial.print("\t");
+        Serial.print(error);
+        Serial.print("\t");
+        Serial.println(pwm_speed);
         // todo:   ax^3 + bx^2 + cx + f
-        if (pwm_speed > 255) pwm_speed = 255;
         bool dir_is_cw = (this->_target_cnc_position - this->GetCurrentPosition_InCncUnit()) > 0;
+        dir_is_cw = true;
+        // pwm_speed = constrain(pwm_speed, 0 , 255);
+        if (pwm_speed > 255.0f) pwm_speed = 255.0f;
+        if (pwm_speed < 0.0f) pwm_speed = 0.0f;
         this->SetPwmSpeed(dir_is_cw, pwm_speed);
     }
 }

@@ -44,6 +44,9 @@ class   ActuatorDcMotor: public ActuatorBase{
         float __SLOPE_FROM_SENSOR_TO_CNC = 1.0;
 
         int __count_down = 0;
+        LowPassFilter __filter = LowPassFilter(0.05f);
+        PIDController __speed_pid = PIDController(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
+        // PIDController __speed_pid {1.0f, 1.0f, 0.0f, 10.0f, 100.0f};
 
 
 
