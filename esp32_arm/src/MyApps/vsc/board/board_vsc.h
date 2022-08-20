@@ -14,7 +14,8 @@ class Vsc_Board: public CncBoardBase{
         void Init(bool is_on_reset) override;
         void SayHello() override;
         ActuatorDcMotor* GetActuator(EnumAxis axis_name) {return &this->__motor;};
-        MagneticSensorAnalog* GetAngleSensor(){return &this->__sensor;};
+        Encoder* GetAngleSensor(){return this->__sensor;};
+        void LinkEncoderAsSensor(Encoder* encoder){this->__sensor=encoder;};
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override {return &this->__homer; };
         RobotEefBase* GetEef() override {return &this->__eef;};
         void EnableMotor(EnumAxis axis_name, bool enable_it) override {};
@@ -26,7 +27,8 @@ class Vsc_Board: public CncBoardBase{
 
         #define SMALLEST_COUNT 1
         #define BIGEST_COUNT 4096
-        MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
+        // MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
+        Encoder* __sensor;
         SingleAxisHomer __homer = SingleAxisHomer(PIN_HOMER_SENSOR_HALL, LOW);
         Vsc_RobotEef __eef;
 

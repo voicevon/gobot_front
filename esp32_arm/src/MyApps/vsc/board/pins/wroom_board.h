@@ -6,4 +6,10 @@
 #define PIN_H_BRIDGE_SPEED  33
 
 #define PIN_SENSOR_ADC  34
+#define PIN_ENCODER_A 18
+#define PIN_ENCODER_B 21
+
+
+
 #define PIN_HOMER_SENSOR_HALL 19
+

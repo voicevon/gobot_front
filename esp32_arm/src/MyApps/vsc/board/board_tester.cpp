@@ -104,30 +104,62 @@ void Vsc_BoardTest::Test_AngleSensor(MagneticSensorAnalog* sensor, int loop_coun
     //  = this->__board->GetAngleSensor();
     int down_count = loop_count;   // For display how many count is left  only. No other purpose.
     int interval = 0;
-
+    LowPassFilter filter = LowPassFilter(0.05);
     sensor->init();
     for(int i=0; i < loop_count; i++){
         while (interval < INTERVEL){
             sensor->update();
+            float filtered_speed = filter(sensor->getVelocity());
             interval++;
             if (interval == INTERVEL){
                 Serial.print(down_count);
                 Serial.print("\t");
-                Serial.print(sensor->getAngle());
+                Serial.print(sensor->getAngle()* RAD_TO_DEG);
                 Serial.print("\t");
                 Serial.print(sensor->getFullRotations());
                 Serial.print("\t");
-                Serial.println(sensor->getVelocity());
+                Serial.println(filtered_speed * RAD_TO_DEG);
                 down_count--;
                 interval = 0;
             }
         }
-        // delay(500); 
     }
+
     Serial.println("[Info] Vsc_BoardTest::Test_AngleSensor() is done.");
 
 }
 
+
+void Vsc_BoardTest::Test_EncoderSensor(Encoder* sensor, int loop_count){
+    if (loop_count==0) return;
+
+    //  = this->__board->GetAngleSensor();
+    int down_count = loop_count;   // For display how many count is left  only. No other purpose.
+    int interval = 0;
+    // LowPassFilter filter = LowPassFilter(0.05);
+    // sensor->init();
+    for(int i=0; i < loop_count; i++){
+        while (interval < INTERVEL){
+            sensor->update();
+            // float filtered_speed = filter(sensor->getVelocity());
+            interval++;
+            if (interval == INTERVEL){
+                Serial.print(down_count);
+                Serial.print("\t");
+                Serial.print(sensor->getAngle()* RAD_TO_DEG);
+                Serial.print("\t");
+                Serial.print(sensor->getFullRotations());
+                Serial.print("\t");
+                Serial.println(sensor->getVelocity() * RAD_TO_DEG);
+                down_count--;
+                interval = 0;
+            }
+        }
+    }
+
+    Serial.println("[Info] Vsc_BoardTest::Test_AngleSensor() is done.");
+
+}
 // void Vsc_BoardTest::Test_AllHomers(int loop_count){
 //     SingleAxisHomer* homer = this->__board->GetHomer(AXIS_ALPHA);
 //     for (int i=0; i<loop_count; i++){
