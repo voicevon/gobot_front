@@ -7,9 +7,14 @@ void Vsc_Board::Init(bool is_on_reset){
     }
     // this->__sensor.init();
     // this->__motor.LinkSensor(&this->__sensor);
-    this->__motor.LinkSensor(this->__sensor);
+    // this->__motor.LinkSensor(this->__sensor);
 
     this->__motor.PrintOut();
+}
+
+void Vsc_Board::LinkEncoderAsSensor(Encoder* encoder){
+    this->__sensor = encoder;
+    this->__motor.LinkSensor(encoder);
 }
 
 void Vsc_Board::SayHello(){

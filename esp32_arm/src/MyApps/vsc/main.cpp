@@ -52,15 +52,16 @@ void setup(){
     setup_mqtt_block_connect();
     append_mqtt_bridge("JXYStock", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 
+    gcode_queue.AppendGcodeCommand("G28A");
     Logger::Info ("VSC-XiaoJuan   setup() is done. ");
 
     //test robot and cnc
-    gcode_queue.AppendGcodeCommand("G28A");
 
 }
 
 void loop(){
-    board.GetActuator(AXIS_ALPHA)->SpinOnce();
+    ActuatorDcMotor* motor = board.GetActuator(AXIS_ALPHA);
+    motor->SpinOnce();
     robot.SpinOnce();
     cnc.SpinOnce();
     loop_mqtt();

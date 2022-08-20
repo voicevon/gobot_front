@@ -29,26 +29,26 @@ void ActuatorDcMotor::SpinOnce(){
         }
 
         // float velocity =  this->__filter(this->__sensor->getVelocity());
+        this->__speed_pid.P = 1;
         float velocity =  this->__sensor->getVelocity();
-        float error =  velocity - this->__cnc_speed / 30;
-        float pwm_speed =  - this->__speed_pid.FeedError(error);
+        float speed_error =  velocity - this->__cnc_speed / 30;
+        float pwm_speed =  - this->__speed_pid.FeedError(speed_error);
         // float pwm_speed = - PID_P * error;   //   pid.get_speed(error);
 
  
-        Serial.print("velocity of sensor, error, pwm_speed \t\t");
+        // Serial.print("velocity of sensor, speed_error, pwm_speed \t");
         Serial.print(velocity);
         Serial.print("\t");
-        // Serial.print(this->__cnc_speed/15);
-        // Serial.print("\t");
-        Serial.print(error);
+        Serial.print(speed_error);
         Serial.print("\t");
-        Serial.println(pwm_speed);
+        Serial.print(pwm_speed);
+        Serial.println();
         // todo:   ax^3 + bx^2 + cx + f
         bool dir_is_cw = (this->_target_cnc_position - this->GetCurrentPosition_InCncUnit()) > 0;
         dir_is_cw = true;
         // pwm_speed = constrain(pwm_speed, 0 , 255);
         if (pwm_speed > 255.0f) pwm_speed = 255.0f;
-        if (pwm_speed < 0.0f) pwm_speed = 0.0f;
+        if (pwm_speed < 1.0f) pwm_speed = 0.0f;
         this->SetPwmSpeed(dir_is_cw, pwm_speed);
     }
 }

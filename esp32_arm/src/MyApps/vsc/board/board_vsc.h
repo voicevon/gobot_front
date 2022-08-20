@@ -15,7 +15,7 @@ class Vsc_Board: public CncBoardBase{
         void SayHello() override;
         ActuatorDcMotor* GetActuator(EnumAxis axis_name) {return &this->__motor;};
         Encoder* GetAngleSensor(){return this->__sensor;};
-        void LinkEncoderAsSensor(Encoder* encoder){this->__sensor=encoder;};
+        void LinkEncoderAsSensor(Encoder* encoder);
         SingleAxisHomer* GetHomer(EnumAxis axis_name) override {return &this->__homer; };
         RobotEefBase* GetEef() override {return &this->__eef;};
         void EnableMotor(EnumAxis axis_name, bool enable_it) override {};
