@@ -43,7 +43,7 @@ void setup_encoder(){
 void setup(){
     board.Init(true);
     setup_encoder();
-    board.LinkEncoderAsSensor(&encoder);
+    board.LinkEncoderSensor(&encoder);
     test_board();
     cnc.Init(&board);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);

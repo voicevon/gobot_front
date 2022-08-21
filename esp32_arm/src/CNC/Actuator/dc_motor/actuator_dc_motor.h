@@ -1,13 +1,18 @@
 #pragma once
 #include "../actuator_base.h"
 #include "SimpleFOC.h"
+#include "CNC/mover/driver/h_bridge/h_bridge.h"
+
 
 class   ActuatorDcMotor: public ActuatorBase{
     public:
         ActuatorDcMotor(uint8_t h_bridge_pin_dir, uint8_t h_bridge_pin_speed);
         void PrintOut();
         void LinkSensor(Sensor* sensor){this->__sensor=sensor;};
-        // void LinkPidController(PIDController* pid){this->__pid=pid;};
+        void LinkPidController(PIDController* pid){this->__speed_pid=pid;};
+        void LinkDriver(H_Bridge* h_bridge){this->__h_bridge=h_bridge;};
+
+        // void Init();  //Call this after linking sensor, driver, and PidController.
         float GetCurrentPosition_InCncUnit() override;
         void SetCurrentPositionAs(float position_in_cnc_unit) override;
         void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit) override;
@@ -24,13 +29,16 @@ class   ActuatorDcMotor: public ActuatorBase{
         bool IsMoving(){return this->__is_moving;};
 
     private:
-        uint8_t __h_bridge_pin_dir;
-        uint8_t __h_bridge_pin_speed;
-        uint8_t __pwm_channel;
+        // uint8_t __h_bridge_pin_dir;
+        // uint8_t __h_bridge_pin_speed;
+        // uint8_t __pwm_channel;
+        H_Bridge* __h_bridge;
         
         // float __sensor_rad_per_mm = 1.0f;
         float __sensor_offset = 0.0f;
         Sensor* __sensor;
+        // PIDController __speed_pid = PIDController(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
+        PIDController* __speed_pid;
 
         // PIDController* __pid;
 
@@ -45,7 +53,6 @@ class   ActuatorDcMotor: public ActuatorBase{
 
         int __count_down = 0;
         LowPassFilter __filter = LowPassFilter(0.05f);
-        PIDController __speed_pid = PIDController(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
         // PIDController __speed_pid {1.0f, 1.0f, 0.0f, 10.0f, 100.0f};
 
 

@@ -2,8 +2,7 @@
 #include "Arduino.h"
 #include "MyBoards/board_base.h"
 
-#define PWM_RESOLUTION 8
-#define PWM_FREQUENCY 20
+
 #define GEAR_TEETH_COUNT 56.0f
 #define GEAR_PITCH 12.7f   //unit is mm
 #define PID_P 10.0f
@@ -29,10 +28,10 @@ void ActuatorDcMotor::SpinOnce(){
         }
 
         // float velocity =  this->__filter(this->__sensor->getVelocity());
-        this->__speed_pid.P = 1;
+        // this->__speed_pid->P = 1;
         float velocity =  this->__sensor->getVelocity();
         float speed_error =  velocity - this->__cnc_speed / 30;
-        float pwm_speed =  - this->__speed_pid.FeedError(speed_error);
+        float pwm_speed =  - this->__speed_pid->FeedError(speed_error);
         // float pwm_speed = - PID_P * error;   //   pid.get_speed(error);
 
  
@@ -96,42 +95,34 @@ void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
 }
 
 void ActuatorDcMotor::Stop(){
-    // motor A and motor B setted LOW to stop DC motor
-    digitalWrite(this->__h_bridge_pin_dir, LOW);
-    ledcWrite(this->__pwm_channel, 0);
+    this->__h_bridge->Stop();
 }
+//     // motor A and motor B setted LOW to stop DC motor
+//     digitalWrite(this->__h_bridge_pin_dir, LOW);
+//     ledcWrite(this->__pwm_channel, 0);
+// }
 
 void ActuatorDcMotor::SetPwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
-    if(dir_is_cw){
-        // Serial.println (pwm_speed);
-        // this->PrintOut();
-        digitalWrite(this->__h_bridge_pin_dir, LOW);
-        ledcWrite(this->__pwm_channel, pwm_speed);
-    }
-    else {
-        // make  DCmotor CCW 
-        ledcWrite(this->__pwm_channel, (256 - pwm_speed));
-        digitalWrite(this->__h_bridge_pin_dir, HIGH);
-    }
+    this->__h_bridge->SetPwmSpeed(dir_is_cw, pwm_speed);
 }
+//     if(dir_is_cw){
+//         // Serial.println (pwm_speed);
+//         // this->PrintOut();
+//         digitalWrite(this->__h_bridge_pin_dir, LOW);
+//         ledcWrite(this->__pwm_channel, pwm_speed);
+//     }
+//     else {
+//         // make  DCmotor CCW 
+//         ledcWrite(this->__pwm_channel, (256 - pwm_speed));
+//         digitalWrite(this->__h_bridge_pin_dir, HIGH);
+//     }
+// }
+
 
 
 
 ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_dir, uint8_t h_bridge_pin_speed){
-    pinMode(h_bridge_pin_dir, OUTPUT);
-    pinMode(h_bridge_pin_speed, OUTPUT);
-    digitalWrite(h_bridge_pin_dir, LOW);
 
-    // init ledc via assign ledc channel
-    BoardBase board;
-
-    this->__pwm_channel = board.Assign_ledc_channel();
-	ledcAttachPin (h_bridge_pin_speed, this->__pwm_channel);
-	ledcSetup (this->__pwm_channel, PWM_FREQUENCY, PWM_RESOLUTION);
-    ledcWrite(this->__pwm_channel, 0);
-
-    this->__h_bridge_pin_dir = h_bridge_pin_dir;
-    this->__h_bridge_pin_speed = h_bridge_pin_speed;
 
     // Calculate rad_per_mm,  This is determined by mechanic designer.
     // this->__sensor_rad_per_mm = GEAR_PITCH * GEAR_TEETH_COUNT / TWO_PI; 
@@ -143,8 +134,8 @@ ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_dir, uint8_t h_bridge_pin_
 void ActuatorDcMotor::PrintOut(){
 
     Logger::Debug("ActuatorDcMotor::ActuatorDcMotor()");
-    Logger::Print("this->__pwm_channel ",this->__pwm_channel );
-    Logger::Print("this->__h_bridge_pin_dir ",this->__h_bridge_pin_dir );
-    Logger::Print("this->__h_bridge_pin_speed ",this->__h_bridge_pin_speed );
+    // Logger::Print("this->__pwm_channel ",this->__pwm_channel );
+    // Logger::Print("this->__h_bridge_pin_dir ",this->__h_bridge_pin_dir );
+    // Logger::Print("this->__h_bridge_pin_speed ",this->__h_bridge_pin_speed );
     Serial.println(FCBC_RESET);
 }
