@@ -6,17 +6,18 @@
 //     Logger::Halt("GobotMainCncSolution::Init(CncBoardBase* board)");
 // }
 
-void GobotMainCncSolution::Init(GobotMain_Board* board, StepControl* step_control){
-    this->__mover.Init(board, step_control);
+void GobotMainCncSolution::Init(GobotMain_Board* cnc_board, StepControl* step_control){
+    this->__mover.Init(cnc_board, step_control);
     this->_mover_base = &this->__mover;
     
-    this->_LinkEef(board->GetEef());
+    this->_LinkEef(cnc_board->GetEef());
     this->_config = &this->__config;
     this->_config_base = &this->__config;
 
-    board->EnableMotor(AXIS_ALPHA, false);
-	board->EnableMotor(AXIS_BETA, false);
-	this->_board_base = board;
+    cnc_board->EnableMotor(AXIS_ALPHA, false);
+	cnc_board->EnableMotor(AXIS_BETA, false);
+    
+	this->_cnc_board = cnc_board;
     this->__SelfTest();
 }
 

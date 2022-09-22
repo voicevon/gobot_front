@@ -109,8 +109,8 @@ void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 void CncSolution_CoreYZBase::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] CncSolution_CoreYZBase::RunG1() is entering");
 	Serial.print(gcode->get_command());
-	this->_board_base->EnableMotor(AXIS_ALPHA, true);
-	this->_board_base->EnableMotor(AXIS_BETA, true);
+	this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
+	this->_cnc_board->EnableMotor(AXIS_BETA, true);
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
 		// this->stepper_alpha->setMaxSpeed(speed);

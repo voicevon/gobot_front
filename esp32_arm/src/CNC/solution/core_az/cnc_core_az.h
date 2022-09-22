@@ -2,7 +2,8 @@
 
 #include "../solution_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/homer/single_axis_homer.h"
+// #include "Robot/homer/single_axis_homer.h"
+#include "Robot/position_trigger/position_triggers.h"
 #include "config_base.h"
 #include "MyBoards/board_base.h"
 
@@ -40,9 +41,9 @@ class CncSolution_CoreAZ: public CncSolutionBase{
 
         FkPosition_ZW __current_fk_position;
 
-        SingleAxisHomer* __homing_helper;
-        SingleAxisHomer* objHomeHelper_vertical; // = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
-        SingleAxisHomer* objHomeHelper_angle; // = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
+        SinglePositionTriger* __homing_helper;
+        SinglePositionTriger* objHomeHelper_vertical; // = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
+        SinglePositionTriger* objHomeHelper_angle; // = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
         CncSolution_CoreAZConfigBase* _config;
 
 

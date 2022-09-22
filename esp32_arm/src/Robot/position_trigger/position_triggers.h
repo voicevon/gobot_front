@@ -1,13 +1,15 @@
 #pragma once
 
 
-#include "single_axis_homer.h"
+// #include "single_axis_homer.h"
+#include "Robot/position_trigger/single_position_trigger.h"
+
 
 class MultiPositionHomers{
     public:
 
         MultiPositionHomers(uint8_t triger_count);
-        void AppendSingleHomer(SingleAxisHomer* single_homer);
+        void AppendSingleHomer(SinglePositionTriger* single_homer);
 
         //return -1, if no homer is trigered.
         uint8_t GetTrigeredIndex();
@@ -16,7 +18,7 @@ class MultiPositionHomers{
         uint8_t __triger_count;
         uint8_t __appending_index;
 
-        SingleAxisHomer* _all_single_homers[4];
+        SinglePositionTriger* _all_single_homers[4];
 
 
 };

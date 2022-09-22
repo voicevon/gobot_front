@@ -97,8 +97,8 @@ void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
 		motor_position[0] = -5000000;
 		motor_position[1] = -5000000;
 	}
-	this->_board_base->EnableMotor(AXIS_ALPHA, true);
-	this->_board_base->EnableMotor(AXIS_BETA, true);
+	this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
+	this->_cnc_board->EnableMotor(AXIS_BETA, true);
 	this->_mover_base->AllActuatorsMoveTo(true, motor_position);
 }
 
@@ -144,8 +144,8 @@ void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
 void CncSolution_CoreAZ::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] CncSolution_CoreAZ::RunG1() is entering");
 	Serial.print(gcode->get_command());
-	this->_board_base->EnableMotor(AXIS_ALPHA, true);
-	this->_board_base->EnableMotor(AXIS_BETA, true);
+	this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
+	this->_cnc_board->EnableMotor(AXIS_BETA, true);
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
 		this->_mover_base->SetEefSpeed(speed);

@@ -1,4 +1,5 @@
-#include "multi_homers.h"
+// #include "multi_homers.h"
+#include "Robot/position_trigger/position_triggers.h"
 #include "MyLibs/basic/logger.h"
 
 MultiPositionHomers::MultiPositionHomers(uint8_t triger_count){
@@ -11,7 +12,7 @@ MultiPositionHomers::MultiPositionHomers(uint8_t triger_count){
     }
 }
 
-void MultiPositionHomers::AppendSingleHomer(SingleAxisHomer* single_homer){
+void MultiPositionHomers::AppendSingleHomer(SinglePositionTriger* single_homer){
     this->_all_single_homers[this->__appending_index] = single_homer;
     this->__appending_index++;
     if (this->__appending_index > this->__triger_count){

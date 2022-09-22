@@ -51,7 +51,7 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 	Logger::Debug("CncSingleAxis::RunG1() is entering");
 	Logger::Print("G1 ", gcode->get_command());
 	Logger::Print("this->AXIS", this->_AXIS);
-	this->_board_base->EnableMotor(this->_AXIS, true);
+	this->_cnc_board->EnableMotor(this->_AXIS, true);
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
 		this->_mover_base->SetActuatorSpeed(this->_AXIS, speed);

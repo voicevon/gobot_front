@@ -4,7 +4,8 @@
 #include "CNC/gcode/gcode_consumer.h"
 #include "MyBoards/cnc_board_base.h"
 #include "solution_config_base.h"
-#include "Robot/homer/single_axis_homer.h"
+// #include "Robot/homer/single_axis_homer.h"
+#include "Robot/position_trigger/position_triggers.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
 #include "../mover/cnc_mover_base.h"
@@ -53,9 +54,9 @@ class CncSolutionBase: public GcodeConsumer{
         bool is_absolute_position = true;
         
         CncSolutionConfigBase* _config_base;    //???
-        CncBoardBase* _board_base;
+        CncBoardBase* _cnc_board;
         CncMoverBase* _mover_base;
-        SingleAxisHomer* __current_homer;
+        SinglePositionTriger* __current_homer;
 
     private:
         int test_int;

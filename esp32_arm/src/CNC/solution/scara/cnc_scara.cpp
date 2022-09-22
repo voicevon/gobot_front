@@ -161,8 +161,8 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 		}
 	}
 	// TODO:  Enable motor via mover->enable_motor(axis)
-	this->_board_base->EnableMotor(AXIS_ALPHA, true);
-	this->_board_base->EnableMotor(AXIS_BETA, true);
+	this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
+	this->_cnc_board->EnableMotor(AXIS_BETA, true);
 
 	float cnc_position[2];
 	cnc_position[0] = target_ik_ab.alpha;

@@ -1,14 +1,15 @@
-#include "single_axis_homer.h"
+// #include "single_axis_homer.h"
+#include "single_position_trigger.h"
 #include "MyLibs/basic/logger.h"
 
-SingleAxisHomer::SingleAxisHomer(uint8_t pinTriger, int trigeredState){
+SinglePositionTriger::SinglePositionTriger(uint8_t pinTriger, int trigeredState){
     this->pinTriger = pinTriger;
     this->trigeredState = trigeredState;
     pinMode(pinTriger, INPUT_PULLUP);
     this->__mcp23018 = nullptr;
 }
 
-SingleAxisHomer::SingleAxisHomer(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger, int trigeredState){
+SinglePositionTriger::SinglePositionTriger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger, int trigeredState){
     this->__mcp23018 = mcp_23018;
     this->pinTriger = expanded_pinTriger;
     this->trigeredState = trigeredState;
@@ -16,17 +17,17 @@ SingleAxisHomer::SingleAxisHomer(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_
     this->__mcp23018->pinMode(pinTriger, INPUT_PULLUP);
 }
 
-SingleAxisHomer::SingleAxisHomer(int trigeredState){
+SinglePositionTriger::SinglePositionTriger(int trigeredState){
     this->trigeredState = trigeredState;
 }
 
-void SingleAxisHomer::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger){
+void SinglePositionTriger::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger){
     mcp_23018->pinMode(pinTriger, INPUT_PULLUP);
     this->pinTriger = expanded_pinTriger;
     this->__mcp23018 = mcp_23018;
 }
 
-bool SingleAxisHomer::IsTriged(){
+bool SinglePositionTriger::IsTriged(){
     // Read sensor pin
     int pin_value;
     if (this->__mcp23018 == nullptr)
@@ -46,8 +47,8 @@ bool SingleAxisHomer::IsTriged(){
     return false;
 }
 
-void SingleAxisHomer::PrintOut(const char* title){
-    Logger::Debug("SingleAxisHomer::PrintOut()");
+void SinglePositionTriger::PrintOut(const char* title){
+    Logger::Debug("SinglePositionTriger::PrintOut()");
     Logger::Print("pin_triger", this->pinTriger);
 }
 

@@ -188,11 +188,11 @@ void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
 	target_ik_ab.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
-		this->_board_base->EnableMotor(AXIS_ALPHA, true);
+		this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
 		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;
 	}
 	if (gcode->has_letter('B')){
-		this->_board_base->EnableMotor(AXIS_BETA, true);
+		this->_cnc_board->EnableMotor(AXIS_BETA, true);
 		target_ik_ab.beta = gcode->get_value('B') *  DEG_TO_RAD;
 	}
 	// If need IK, do it now.

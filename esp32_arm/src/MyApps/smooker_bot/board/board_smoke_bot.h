@@ -15,7 +15,7 @@ class Board_SmokeMachine: public CncBoardBase{
         
         void SayHello() override;
         // Stepper* GetStepper(char axis_name) override;
-        SingleAxisHomer* GetSingleHomer(EnumAxis axis_name) override;
+        SinglePositionTriger* GetSingleHomer(EnumAxis axis_name) override;
         RobotEef_SmokeMachine* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         // ActuatorBase* GetActuator(EnumAxis axis_name) override {return &this->__actuator;};
@@ -26,7 +26,7 @@ class Board_SmokeMachine: public CncBoardBase{
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
         ActuatorStepper __actuator;
         // SmookerBot_CncMechanic __cnc_mechanic;
-        SingleAxisHomer homer_alpha = SingleAxisHomer(PIN_HOME_ALPHA_2201, LOW);
+        SinglePositionTriger homer_alpha = SinglePositionTriger(PIN_HOME_ALPHA_2201, LOW);
         RobotEef_SmokeMachine eef = RobotEef_SmokeMachine();
 
 

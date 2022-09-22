@@ -4,7 +4,8 @@
 #include "MyBoards/cnc_board_base.h"
 #include "../solution_base.h"
 // #include "CNC/single_axis_homer.h"
-#include "Robot/homer/single_axis_homer.h"
+// #include "Robot/homer/single_axis_homer.h"
+#include "Robot/position_trigger/position_triggers.h"
 // #include "robot_eef/eef_standard_code.h"
 #include "Robot/eef/eef_standard_code.h"
 #include "MyLibs/Components/Led.h"
@@ -36,7 +37,7 @@ class CncScaraSolution: public CncSolutionBase{
 
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
 
-        SingleAxisHomer* __homer;
+        SinglePositionTriger* __homer;
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;
         CncSolution_ScaraConfigBase* _scara_machine;

@@ -3,7 +3,8 @@
 #include "MyBoards/cnc_board_base.h"
 #include "../solution_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/homer/single_axis_homer.h"
+// #include "Robot/homer/single_axis_homer.h"
+#include "Robot/position_trigger/position_triggers.h"
 #include "config_base.h"
 
 class CncSolution_CoreYZBase: public CncSolutionBase{
@@ -28,8 +29,8 @@ class CncSolution_CoreYZBase: public CncSolutionBase{
 
         FkPosition_YZ __current_fk_position;
 
-        SingleAxisHomer* __homing_helper;
-        SingleAxisHomer* objHomeHelper_vertical;
-        SingleAxisHomer* objHomeHelper_y;
+        SinglePositionTriger* __homing_helper;
+        SinglePositionTriger* objHomeHelper_vertical;
+        SinglePositionTriger* objHomeHelper_y;
 
 };

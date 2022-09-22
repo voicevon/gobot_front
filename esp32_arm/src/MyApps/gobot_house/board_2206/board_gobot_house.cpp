@@ -61,7 +61,7 @@ ActuatorServo* Board_GobotHouse_2206::GetActuaorBeta(char axis_name){
     return nullptr;
 }
 
-SingleAxisHomer* Board_GobotHouse_2206::GetSingleHomer(EnumAxis axis_name) {
+SinglePositionTriger* Board_GobotHouse_2206::GetSingleHomer(EnumAxis axis_name) {
     if (axis_name=='A'){
         return &this->__alpha_homer;
     }else if (axis_name=='B'){

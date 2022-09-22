@@ -87,13 +87,14 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	Logger::Debug("CncSolutionBase::__HomeSingleAxis()");
 	this->_homing_axis = axis;
 	// this->_board->SayHello();
-	this->__current_homer = this->_board_base->GetSingleHomer(axis);
+	this->__current_homer = this->_cnc_board->GetSingleHomer(axis);
+	this->_cnc_board->EnableMotor(axis, true);
+	
 	this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()  __current_homer");
 	this->_config_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _config_base");
 	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
 	this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
 	this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
-	this->_board_base->EnableMotor(axis, true);
 	float long_distance_to_move = this->_config_base->GetLongOffsetToGoHome(axis);
 	this->_mover_base->SingleActuatorMoveTo(axis, false, long_distance_to_move);
 
@@ -149,7 +150,7 @@ void CncSolutionBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
 void CncSolutionBase::RunM84(){
 	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
 	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
-		this->_board_base->EnableMotor(EnumAxis(axis), false);
+		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
 	}
 }
 void CncSolutionBase::RunGcode(Gcode* gcode){

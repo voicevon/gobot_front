@@ -11,7 +11,7 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
     this->_config_base = &this->__config;
 
     board->EnableMotor(AXIS_ALPHA, false);
-	this->_board_base = board;
+	this->_cnc_board = board;
 
 }
 

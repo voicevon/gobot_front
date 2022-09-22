@@ -29,7 +29,7 @@ void Board_GobotHouse::Init(bool is_on_reset){
 //     return nullptr;
 // }
 
-SingleAxisHomer* Board_GobotHouse::GetSingleHomer(EnumAxis axis_name) {
+SinglePositionTriger* Board_GobotHouse::GetSingleHomer(EnumAxis axis_name) {
     if (axis_name==AXIS_ALPHA){
         return &this->homer_alpha;
     }else if (axis_name==AXIS_BETA){

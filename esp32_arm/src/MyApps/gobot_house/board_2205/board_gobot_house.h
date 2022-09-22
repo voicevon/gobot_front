@@ -5,7 +5,8 @@
 // #include "mechanic/cnc_machine.h"
 // #include "../cnc_2205/solution_config_2205.h"
 // #include "CNC/single_axis_homer.h"
-#include "Robot/homer/single_axis_homer.h"
+// #include "Robot/homer/single_axis_homer.h"
+#include "Robot/position_trigger/position_triggers.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 // #include "CNC/mover/dual_stepper.h"
 
@@ -15,7 +16,7 @@ class Board_GobotHouse: public CncBoardBase{
         void Init(bool is_on_reset) override;
         // void SayHello();
         // ActuatorBase* GetActuator(EnumAxis axis_name) override;
-        SingleAxisHomer* GetSingleHomer(EnumAxis axis_name) override;
+        SinglePositionTriger* GetSingleHomer(EnumAxis axis_name) override;
         MultiPositionHomers* GetMultiHomers(EnumAxis axis_name) override;
         RobotEef_GobotHouse* GetEef() override;
         void EnableMotor(EnumAxis actuator_name, bool enable_it) override;
@@ -30,8 +31,8 @@ class Board_GobotHouse: public CncBoardBase{
         // CncMover_DualStepper mover_StepperServo;
         // GobotHouse_CncSolotuionConfig_2205 __cnc_mechanic;
 
-        SingleAxisHomer homer_alpha = SingleAxisHomer(PIN_HOME_ALHPA_2109, LOW);
-        SingleAxisHomer homer_beta = SingleAxisHomer(PIN_HOME_BETA_2109, LOW);
+        SinglePositionTriger homer_alpha = SinglePositionTriger(PIN_HOME_ALHPA_2109, LOW);
+        SinglePositionTriger homer_beta = SinglePositionTriger(PIN_HOME_BETA_2109, LOW);
         RobotEef_GobotHouse eef;
         Servo __cnc_beta;
 
