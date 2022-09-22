@@ -11,7 +11,7 @@ class CncBoardBase: public BoardBase{
     public:
         virtual void Init(bool is_on_reset);
         virtual SinglePositionTriger* GetSingleHomer(EnumAxis axis_name);
-        virtual MultiPositionHomers* GetMultiHomers(EnumAxis axis_name);
+        virtual PositionTriggers* GetPositionTriggers(EnumAxis axis_name);
 
         virtual RobotEefBase* GetEef();
         virtual void EnableMotor(EnumAxis axis_name, bool enable_it);

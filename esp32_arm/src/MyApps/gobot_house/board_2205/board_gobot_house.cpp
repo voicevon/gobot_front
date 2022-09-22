@@ -41,8 +41,8 @@ SinglePositionTriger* Board_GobotHouse::GetSingleHomer(EnumAxis axis_name) {
     return nullptr;
 }
 
-MultiPositionHomers* Board_GobotHouse::GetMultiHomers(EnumAxis axis_name){
-    Logger::Error("Board_GobotHouse::GetMultiHomers()  NOT SUPPORTED");
+PositionTriggers* Board_GobotHouse::GetPositionTriggers(EnumAxis axis_name){
+    Logger::Error("Board_GobotHouse::GetPositionTriggers()  NOT SUPPORTED");
     return nullptr;
 }
 

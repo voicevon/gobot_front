@@ -261,7 +261,13 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 			action = (EefAction)s_value;
 			this->RunM123(p_value, s_value);
 			break;
-
+		case 130:
+			p_value =  gcode->get_value('P');
+			s_value = gcode->get_value('S');
+			// this->__pid_setter(p_value, s_value);
+			break;
+		case 141:
+			break;
 		case 280:
 			// Set servo position  
 			//	 	Pnnn Servo index

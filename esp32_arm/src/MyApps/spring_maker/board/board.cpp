@@ -27,8 +27,8 @@ SinglePositionTriger* Board_SpringMaker::GetSingleHomer(EnumAxis axis_name) {
     return nullptr;
 }
 
-MultiPositionHomers* Board_SpringMaker::GetMultiHomers(EnumAxis axis_name){
-    Logger::Error("Board_SpringMaker::GetMultiHomers() NOT SUPPORTED");
+PositionTriggers* Board_SpringMaker::GetPositionTriggers(EnumAxis axis_name){
+    Logger::Error("Board_SpringMaker::GetPositionTriggers() NOT SUPPORTED");
 }
 
 RobotEef_SpringMaker* Board_SpringMaker::GetEef() {

@@ -39,8 +39,8 @@ SinglePositionTriger* Board2205Cnc::GetSingleHomer(EnumAxis axis_name){
     return nullptr;
 }
 
-MultiPositionHomers* Board2205Cnc::GetMultiHomers(EnumAxis axis_name){
-    Logger::Error("Board2205Cnc::GetMultiHomers() , NOT SUPPORT");
+PositionTriggers* Board2205Cnc::GetPositionTriggers(EnumAxis axis_name){
+    Logger::Error("Board2205Cnc::GetPositionTriggers() , NOT SUPPORT");
 }
 
 

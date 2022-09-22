@@ -5,10 +5,10 @@
 #include "Robot/position_trigger/single_position_trigger.h"
 
 
-class MultiPositionHomers{
+class PositionTriggers{
     public:
 
-        MultiPositionHomers(uint8_t triger_count);
+        PositionTriggers(uint8_t triger_count);
         void AppendSingleHomer(SinglePositionTriger* single_homer);
 
         //return -1, if no homer is trigered.

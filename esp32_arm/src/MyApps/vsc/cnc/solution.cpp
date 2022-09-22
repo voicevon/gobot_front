@@ -1,6 +1,5 @@
 #include "solution.h"
 
-
 void Vsc_CncSoution::Init(Vsc_Board* board ){
     this->_AXIS = AXIS_ALPHA;
 
@@ -9,6 +8,8 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
     
     this->_LinkEef(board->GetEef());
     this->_config_base = &this->__config;
+
+    this->link_pid_controllers();
 
     board->EnableMotor(AXIS_ALPHA, false);
 	this->_cnc_board = board;

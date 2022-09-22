@@ -83,8 +83,8 @@ SinglePositionTriger* GobotMain_Board::GetSingleHomer(EnumAxis axis) {
     return nullptr;
 }
 
-MultiPositionHomers* GobotMain_Board::GetMultiHomers(EnumAxis axis_name){
-    Logger::Error("GobotMain_Board::GetMultiHomers() NOT SUPPORT");
+PositionTriggers* GobotMain_Board::GetPositionTriggers(EnumAxis axis_name){
+    Logger::Error("GobotMain_Board::GetPositionTriggers() NOT SUPPORT");
 }
 
 RobotEef_GobotMain* GobotMain_Board::GetEef() {

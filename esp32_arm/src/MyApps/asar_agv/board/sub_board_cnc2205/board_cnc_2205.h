@@ -16,7 +16,7 @@ class Board2205Cnc: public CncBoardBase{
         void SayHello() override{};
         // ActuatorBase* GetActuator(EnumAxis axis_name) override;
         SinglePositionTriger* GetSingleHomer(EnumAxis axis_name) override;
-        MultiPositionHomers* GetMultiHomers(EnumAxis axis_name) override;
+        PositionTriggers* GetPositionTriggers(EnumAxis axis_name) override;
         RobotEef_GarmentAsar* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         // CncSolutionConfigBase* GetCncConfig() override {return nullptr;};
