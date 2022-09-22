@@ -8,17 +8,29 @@ void Vsc_Board::Init(bool is_on_reset){
 
     this->__motor.LinkDriver(&this->__pwm_h_bridge);
     this->__motor.LinkPidController(&this->__speed_pid);
+    this->__motor.LinkSensor(this->__motor_angle_sensor);
 
-    // this->__sensor.init();
-    // this->__motor.LinkSensor(&this->__sensor);
-    // this->__motor.LinkSensor(this->__sensor);
     this->__motor.PrintOut();
 }
 
-void Vsc_Board::LinkEncoderSensor(Encoder* encoder){
-    this->__sensor = encoder;
-    this->__motor.LinkSensor(encoder);
+
+SingleAxisHomer* Vsc_Board::GetHomer(EnumAxis axis_name){
+    if (axis_name == 0){
+        return &this->__homer_0;
+    } else if (axis_name == 1){
+        return &this->__homer_1;
+    } else if (axis_name == 2){
+        return &this->__homer_2;
+    }else if (axis_name == 3){
+        return &this->__homer_3;
+    }else{
+        Logger::Error("Vsc_Board::GetHomer()");
+        Logger::Print("Wrong axis_name = ", axis_name);
+    }
 }
+   //{return &this->__homer_0; };
+
+
 
 void Vsc_Board::SayHello(){
     Logger::Debug("I am Vsc Board, Have a good day.");

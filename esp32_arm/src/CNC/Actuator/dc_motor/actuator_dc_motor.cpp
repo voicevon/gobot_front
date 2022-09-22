@@ -121,9 +121,7 @@ void ActuatorDcMotor::SetPwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
 
 
 
-ActuatorDcMotor::ActuatorDcMotor(uint8_t h_bridge_pin_dir, uint8_t h_bridge_pin_speed){
-
-
+ActuatorDcMotor::ActuatorDcMotor(){
     // Calculate rad_per_mm,  This is determined by mechanic designer.
     // this->__sensor_rad_per_mm = GEAR_PITCH * GEAR_TEETH_COUNT / TWO_PI; 
     this->__sensor_offset = 0;

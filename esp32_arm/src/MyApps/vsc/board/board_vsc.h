@@ -11,29 +11,40 @@
 
 class Vsc_Board: public CncBoardBase{
     public:
+        // For being a real PCB board.
         Vsc_Board(){};
+        void LinkEncoderSensor(Encoder* encoder){this->__motor_angle_sensor=encoder;};
+        // call me must after LinkEncoderSensor().
         void Init(bool is_on_reset) override;
         void SayHello() override;
+
+        // For being an actuator and its components.
         ActuatorDcMotor* GetActuator(EnumAxis axis_name) {return &this->__motor;};
-        Encoder* GetAngleSensor(){return this->__sensor;};
+        Encoder* GetAngleSensor(){return this->__motor_angle_sensor;};
         H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
-        void LinkEncoderSensor(Encoder* encoder);
-        SingleAxisHomer* GetHomer(EnumAxis axis_name) override {return &this->__homer; };
+
+        // For being a CNC machine.
+        SingleAxisHomer* GetHomer(EnumAxis axis_name) override;   //{return &this->__homer_0; };
         RobotEefBase* GetEef() override {return &this->__eef;};
+
+        // We do nothing, just override the methods.
         void EnableMotor(EnumAxis axis_name, bool enable_it) override {};
 
     protected:
 
     private:
-	    ActuatorDcMotor __motor = ActuatorDcMotor(PIN_H_BRIDGE_DIR, PIN_H_BRIDGE_SPEED);
+	    ActuatorDcMotor __motor = ActuatorDcMotor();
         PIDController __speed_pid = PIDController(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
         H_Bridge __pwm_h_bridge = H_Bridge(PIN_H_BRIDGE_DIR, PIN_H_BRIDGE_SPEED);
+        Encoder* __motor_angle_sensor;
 
         #define SMALLEST_COUNT 1
         #define BIGEST_COUNT 4096
         // MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
-        Encoder* __sensor;
-        SingleAxisHomer __homer = SingleAxisHomer(PIN_HOMER_SENSOR_HALL, LOW);
+        SingleAxisHomer __homer_0 = SingleAxisHomer(PIN_HOMER_SENSOR_HALL_0, LOW);
+        SingleAxisHomer __homer_1 = SingleAxisHomer(PIN_HOMER_SENSOR_HALL_1, LOW);
+        SingleAxisHomer __homer_2 = SingleAxisHomer(PIN_HOMER_SENSOR_HALL_2, LOW);
+        SingleAxisHomer __homer_3 = SingleAxisHomer(PIN_HOMER_SENSOR_HALL_3, LOW);
         Vsc_RobotEef __eef;
 
 };
