@@ -1,7 +1,17 @@
+# About CNC
+* CNC understand gcode, can translate gcode to movement, So there is a mover!
+## Linked components, circle == 1
+* Mover
+* Actuator
+
+## Linked components, circle == 2
+* Homer and EEF are the outside components of CNC, saying they are linked components
+
+
 # About CNCBase
 * I know my child can do somthing, so these are my virual methods.
   * How many axis I have.
-  * Translate gcode to motor movement
+  
   * IK and FK
   * Homing process
 

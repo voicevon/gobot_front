@@ -10,7 +10,7 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepContr
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is entering");
 	this->agv.Init(&board->agv);
 	this->asrs.LinkJettySensor(board->asrs.GetJettySensor());
-	this->cnc.Init(&board->cnc_board);
+	// this->cnc.Init(&board->cnc_board);
 	// this->cnc.LinkStepControl(stepControl);
 	
     this->cnc.LinkLocalGcodeQueue_AsConsumer(&this->_gcode_queue);
@@ -18,14 +18,14 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepContr
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is done.\n");
 }
 
-void BotAsrsAgvCoreYZ::ExecuteMqttCommand(const char* command){
+void BotAsrsAgvCoreYZ::AsyncExecuteMqttCommand(const char* command){
 	// command examples
 	// "99,short_cut" == leave main road.
 	// "11,load"      == move to point 23, loading 
 	// "22,unloads"   == move to point 25, unloading
 	// "33,charge"
 	// "44,sleep"
-	int16_t node_id;
+	// int16_t node_id;
 	String str_command;
 
 	if (str_command == "short_cut"){

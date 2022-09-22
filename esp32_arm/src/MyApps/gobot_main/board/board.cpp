@@ -71,7 +71,7 @@ Stepper* GobotMain_Board::GetStepper(EnumAxis axis){
 //     return nullptr;
 // }
 
-SingleAxisHomer* GobotMain_Board::GetHomer(EnumAxis axis) {
+SingleAxisHomer* GobotMain_Board::GetSingleHomer(EnumAxis axis) {
     if (axis == AXIS_ALPHA){
         return &this->homer_alpha;
     }else if (axis == AXIS_BETA){
@@ -81,6 +81,10 @@ SingleAxisHomer* GobotMain_Board::GetHomer(EnumAxis axis) {
         // Serial.println(axis);
     }
     return nullptr;
+}
+
+MultiPositionHomers* GobotMain_Board::GetMultiHomers(EnumAxis axis_name){
+    Logger::Error("GobotMain_Board::GetMultiHomers() NOT SUPPORT");
 }
 
 RobotEef_GobotMain* GobotMain_Board::GetEef() {

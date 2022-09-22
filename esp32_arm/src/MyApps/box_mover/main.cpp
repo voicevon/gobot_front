@@ -17,7 +17,7 @@ MessageQueue mqtt_command_queue;
 
 void setup(){
     board.Init(true);
-    cnc.Init(&board);
+    // cnc.Init(&board);
 
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);

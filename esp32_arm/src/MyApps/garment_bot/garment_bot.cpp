@@ -9,23 +9,23 @@ GarmentBot::GarmentBot(uint16_t id){
 
 void GarmentBot::Init(){
 	Serial.print("\n[Info] GarmentBot::Init() is entering");
-	this->objRfid.Init(17,18,19);
+	// this->objRfid.Init(17,18,19);
 	// this->objRfid.LinkCallback(&onDetectedMark);
-	this->objAgv.Init();
+	// this->objAgv.Init();
 	pinMode(PIN_BATTERY_VOLTAGE_ADC, INPUT);
 
 	this->ToState(GarmentBot::BOT_STATE::BOT_LOCATING);
 	Serial.print("\n[Info] GarmentBot::Init() is done.\n");
 }
 
-void GarmentBot::ExecuteMqttCommand(const char* command){
+void GarmentBot::AsyncExecuteMqttCommand(const char* command){
 	// command examples
 	// "99,short_cut" == leave main road.
 	// "11,load"      == move to point 23, loading 
 	// "22,unloads"   == move to point 25, unloading
 	// "33,charge"
 	// "44,sleep"
-	int16_t node_id;
+	// int16_t node_id;
 	String str_command;
 
 	if (str_command == "short_cut"){

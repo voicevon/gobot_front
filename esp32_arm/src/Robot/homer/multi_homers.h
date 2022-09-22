@@ -1,11 +1,13 @@
+#pragma once
+
+
 #include "single_axis_homer.h"
 
-
-class MultiPositionHomer{
+class MultiPositionHomers{
     public:
 
-        MultiPositionHomer(uint8_t triger_count);
-        void LinkSingleHomer(SingleAxisHomer* single_homer);
+        MultiPositionHomers(uint8_t triger_count);
+        void AppendSingleHomer(SingleAxisHomer* single_homer);
 
         //return -1, if no homer is trigered.
         uint8_t GetTrigeredIndex();

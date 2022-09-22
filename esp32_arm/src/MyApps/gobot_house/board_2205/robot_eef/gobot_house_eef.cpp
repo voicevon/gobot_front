@@ -12,6 +12,10 @@ void RobotEef_GobotHouse::Init(){
 	this->__eefServo.attach(PIN_EEF_SERVO);
 }
 
+void RobotEef_GobotHouse::PrintOut(){
+	Logger::Debug("RobotEef_GobotHouse::PrintOut() ");
+}
+
 #define LOAD_ANGLE 98
 #define UNLOAD_ANGLE LOAD_ANGLE + 70
 

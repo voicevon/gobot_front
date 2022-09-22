@@ -1,17 +1,13 @@
 #include "all_applications.h"
 #ifdef I_AM_GOBOT_HOUSE_2205
 
-// #include "MyBoards/gobot_house/board_gobot_house_22.h"
 #include "board_2205/board_gobot_house.h"
-// #include "CNC/solution/cnc_scara/cnc_scara.h"
 #include "cnc/solution.h"
-// #include "cnc_machine.h"
-// #include "board/cnc_machine.h"
 #include "cnc_2205/solution_config_2205.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
-#include "gobot_house.h"
+#include "robot.h"
 
 
 StepControl controller;    // Use default settings 
@@ -20,7 +16,7 @@ Board_GobotHouse board;
 GobotHouse_CncSolution cnc;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
-GobotHouse* robot; 
+GobotHouse_Robot* robot; 
 
 void board_test();
 void cnc_test();
@@ -31,10 +27,10 @@ void setup(){
     board_test();
     
     // cncMachine.Init('M');
-    cnc.Init(&board);
+    // cnc.Init(&board);
     // cnc.LinkStepControl(&controller);
     
-    robot = &GobotHouse::getInstance();
+    robot = &GobotHouse_Robot::getInstance();
     robot->Setup();
     robot->LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
@@ -62,7 +58,7 @@ void board_test(){
     GobotHouse_BoardTest tester;
     tester.LinkBoard(&board);
     tester.Test_EefLoadUnload(0);
-    tester.Test_AllHomers(0);
+    // tester.Test_AllHomers(0);
     // tester.Test_Stepper(0, 'A', 300, &controller);
     // tester.Test_Stepper(0, 'B', 300, &controller);
 }

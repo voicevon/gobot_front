@@ -14,7 +14,7 @@ void Vsc_Board::Init(bool is_on_reset){
 }
 
 
-SingleAxisHomer* Vsc_Board::GetHomer(EnumAxis axis_name){
+SingleAxisHomer* Vsc_Board::GetSingleHomer(EnumAxis axis_name){
     if (axis_name == 0){
         return &this->__homer_0;
     } else if (axis_name == 1){

@@ -1,7 +1,7 @@
 #include "multi_homers.h"
 #include "MyLibs/basic/logger.h"
 
-MultiPositionHomer::MultiPositionHomer(uint8_t triger_count){
+MultiPositionHomers::MultiPositionHomers(uint8_t triger_count){
     if (triger_count <= 4){
         this->__triger_count = triger_count;
     } else {
@@ -10,7 +10,7 @@ MultiPositionHomer::MultiPositionHomer(uint8_t triger_count){
     }
 }
 
-uint8_t MultiPositionHomer::GetTrigeredIndex(){
+uint8_t MultiPositionHomers::GetTrigeredIndex(){
     for (uint8_t i=0; i<this->__triger_count; i++){
         if (this->_all_single_homers[i]->IsTriged())
             return i;

@@ -31,7 +31,7 @@ void setup(){
     board_test();
     
     // cncMachine.Init('M');
-    cnc.Init(&board);
+    // cnc.Init(&board);
 
     robot = &GobotHouse_Robot::getInstance();
     robot->Setup();
@@ -65,7 +65,7 @@ void board_test(){
     tester.LinkBoard(&board);
     // tester.LinkStepControl(&stepcontrol);
     tester.Test_EefLoadUnload(0);
-    tester.Test_AllHomers(0);
+    // tester.Test_AllHomers(0);
     tester.Test_StepperDriver_OnAlpha(0);
     tester.Test_ServoDriver_OnBeta(0);
 

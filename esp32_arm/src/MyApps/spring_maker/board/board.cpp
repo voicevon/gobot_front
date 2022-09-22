@@ -17,7 +17,7 @@ void Board_SpringMaker::Init(bool is_on_reset){
 //     return nullptr;
 // }
 
-SingleAxisHomer* Board_SpringMaker::GetHomer(EnumAxis axis_name) {
+SingleAxisHomer* Board_SpringMaker::GetSingleHomer(EnumAxis axis_name) {
     if (axis_name==AXIS_ALPHA){
         return &this->homer_alpha;
     }else{
@@ -25,6 +25,10 @@ SingleAxisHomer* Board_SpringMaker::GetHomer(EnumAxis axis_name) {
         Serial.println(axis_name);
     }
     return nullptr;
+}
+
+MultiPositionHomers* Board_SpringMaker::GetMultiHomers(EnumAxis axis_name){
+    Logger::Error("Board_SpringMaker::GetMultiHomers() NOT SUPPORTED");
 }
 
 RobotEef_SpringMaker* Board_SpringMaker::GetEef() {

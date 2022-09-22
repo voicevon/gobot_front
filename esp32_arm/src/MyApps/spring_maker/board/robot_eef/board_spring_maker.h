@@ -8,7 +8,7 @@ class RobotEef_SpringMaker: public RobotEefBase{
     public:
         RobotEef_SpringMaker();
         void Run(uint8_t eef_code) override;
-
+        void PrintOut() override;
     private:
 
 };

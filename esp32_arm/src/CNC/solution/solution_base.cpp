@@ -87,7 +87,7 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	Logger::Debug("CncSolutionBase::__HomeSingleAxis()");
 	this->_homing_axis = axis;
 	// this->_board->SayHello();
-	this->__current_homer = this->_board_base->GetHomer(axis);
+	this->__current_homer = this->_board_base->GetSingleHomer(axis);
 	this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()  __current_homer");
 	this->_config_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _config_base");
 	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );

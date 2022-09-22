@@ -14,7 +14,8 @@ class Board2205Cnc: public CncBoardBase{
         void Init(Adafruit_MCP23X17* mcp_23018);
         void SayHello() override{};
         // ActuatorBase* GetActuator(EnumAxis axis_name) override;
-        SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
+        SingleAxisHomer* GetSingleHomer(EnumAxis axis_name) override;
+        MultiPositionHomers* GetMultiHomers(EnumAxis axis_name) override;
         RobotEef_GarmentAsar* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         // CncSolutionConfigBase* GetCncConfig() override {return nullptr;};

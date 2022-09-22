@@ -5,12 +5,15 @@
 #include "Robot/eef/robot_eef_base.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"   //???
 #include "CNC/solution/solution_config_base.h"
-#include "Robot/homer/single_axis_homer.h"
+// #include "Robot/homer/single_axis_homer.h"
+#include "Robot/homer/multi_homers.h"
 
 class CncBoardBase: public BoardBase{
     public:
         virtual void Init(bool is_on_reset);
-        virtual SingleAxisHomer* GetHomer(EnumAxis axis_name);
+        virtual SingleAxisHomer* GetSingleHomer(EnumAxis axis_name);
+        virtual MultiPositionHomers* GetMultiHomers(EnumAxis axis_name);
+
         virtual RobotEefBase* GetEef();
         virtual void EnableMotor(EnumAxis axis_name, bool enable_it);
 

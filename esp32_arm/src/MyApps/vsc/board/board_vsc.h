@@ -1,6 +1,7 @@
 #pragma once
 #include <SimpleFOC.h>
-#include "Robot/homer/single_axis_homer.h"
+// #include "Robot/homer/single_axis_homer.h"
+#include "Robot/homer/multi_homers.h"
 #include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
 #include "CNC/mover/driver/h_bridge/h_bridge.h"
 #include "eef/vsc_eef.h"
@@ -24,7 +25,8 @@ class Vsc_Board: public CncBoardBase{
         H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
 
         // For being a CNC machine.
-        SingleAxisHomer* GetHomer(EnumAxis axis_name) override;   //{return &this->__homer_0; };
+        SingleAxisHomer* GetSingleHomer(EnumAxis axis_name) override;   //{return &this->__homer_0; };
+        MultiPositionHomers* GetMultiHomers(EnumAxis axis_name) override {return &this->__all_homers;};
         RobotEefBase* GetEef() override {return &this->__eef;};
 
         // We do nothing, just override the methods.
@@ -45,6 +47,7 @@ class Vsc_Board: public CncBoardBase{
         SingleAxisHomer __homer_1 = SingleAxisHomer(PIN_HOMER_SENSOR_HALL_1, LOW);
         SingleAxisHomer __homer_2 = SingleAxisHomer(PIN_HOMER_SENSOR_HALL_2, LOW);
         SingleAxisHomer __homer_3 = SingleAxisHomer(PIN_HOMER_SENSOR_HALL_3, LOW);
+        MultiPositionHomers __all_homers = MultiPositionHomers(4);
         Vsc_RobotEef __eef;
 
 };

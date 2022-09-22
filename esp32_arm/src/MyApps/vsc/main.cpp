@@ -25,7 +25,7 @@ void test_board(){
     // tester.LinkBoard(&board);
     tester.Test_EncoderSensor(board.GetAngleSensor(), 0);
     // tester.Test_EncoderSensor(&encoder, 0);
-    tester.Test_AllHomers(board.GetHomer(AXIS_ALPHA), 0);
+    tester.Test_AllHomers(board.GetSingleHomer(AXIS_ALPHA), 0);
     tester.Test_MotorDriver(board.GetActuator(AXIS_ALPHA), 0);
     tester.Test_Offset(0);
     Serial.println("[Info] test_board() is done.");

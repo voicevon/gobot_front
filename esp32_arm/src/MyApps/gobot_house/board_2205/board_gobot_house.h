@@ -15,10 +15,12 @@ class Board_GobotHouse: public CncBoardBase{
         void Init(bool is_on_reset) override;
         // void SayHello();
         // ActuatorBase* GetActuator(EnumAxis axis_name) override;
-        SingleAxisHomer* GetHomer(EnumAxis axis_name) override;
+        SingleAxisHomer* GetSingleHomer(EnumAxis axis_name) override;
+        MultiPositionHomers* GetMultiHomers(EnumAxis axis_name) override;
         RobotEef_GobotHouse* GetEef() override;
         void EnableMotor(EnumAxis actuator_name, bool enable_it) override;
         // CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_mechanic;};
+        
 
     private:
         Stepper stepper_driver_alpha = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);

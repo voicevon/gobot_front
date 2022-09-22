@@ -22,7 +22,7 @@ void Board_SmokeMachine::SayHello() {
 
 // }
 
-SingleAxisHomer* Board_SmokeMachine::GetHomer(EnumAxis axis_name) {
+SingleAxisHomer* Board_SmokeMachine::GetSingleHomer(EnumAxis axis_name) {
     if (axis_name== AXIS_ALPHA){
         return &this->homer_alpha;
     }else{

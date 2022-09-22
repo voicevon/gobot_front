@@ -27,7 +27,7 @@ void Board2205Cnc::Init(Adafruit_MCP23X17* mcp_23018){
 //     }
 // }
 
-SingleAxisHomer* Board2205Cnc::GetHomer(EnumAxis axis_name){
+SingleAxisHomer* Board2205Cnc::GetSingleHomer(EnumAxis axis_name){
     if (axis_name=='Z'){
         return &this->homer_z;
     }else if (axis_name=='Y'){
@@ -38,6 +38,11 @@ SingleAxisHomer* Board2205Cnc::GetHomer(EnumAxis axis_name){
     }
     return nullptr;
 }
+
+MultiPositionHomers* Board2205Cnc::GetMultiHomers(EnumAxis axis_name){
+    Logger::Error("Board2205Cnc::GetMultiHomers() , NOT SUPPORT");
+}
+
 
 RobotEef_GarmentAsar* Board2205Cnc::GetEef(){
     return &this->eef;

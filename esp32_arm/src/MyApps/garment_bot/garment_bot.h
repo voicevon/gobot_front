@@ -7,7 +7,7 @@
 #include "AGV/agv_base.h"
 #include "box_mover_agent.h"
 #include "AGV/map_road_station/map_navigator.h"
-#include "ASRS/sensor_map_site/smart_rfid_reader.h"
+// #include "AGV/sensor_map_site/smart_rfid_reader.h"
 #define  PIN_BATTERY_VOLTAGE_ADC  34
 #define  PIN_CHARGER_VOLTAGE_ADC  35
 
@@ -56,7 +56,7 @@ class GarmentBot: public MqttMessageConsumer{
     protected:
         
     private:
-        void ExecuteMqttCommand(const char* command) override;
+        void AsyncExecuteMqttCommand(const char* command) override;
         RoadGraph objMapNavigator;
         SmartRfidReader objRfid;
         float __battery_voltage;

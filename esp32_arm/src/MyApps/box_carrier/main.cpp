@@ -26,7 +26,7 @@ MessageQueue mqtt_command_queue = MessageQueue();
 void setup(){
     board.Init(true);
     // cncMachine.Init('A');
-    cnc.Init(&board.cnc_board);
+    // cnc.Init(&board.cnc_board);
     // cnc.LinkStepControl(&objStepControl);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
@@ -36,7 +36,7 @@ void setup(){
     setup_mqtt_on_message_receive(); 
     Serial.println ("\n[Info] box carrier  setup() is done. ------------------------------------ \n");
 
-    robot.ExecuteMqttCommand("G28Y");
+    robot.AsyncExecuteMqttCommand("G28Y");
 }
 
 void loop(){
