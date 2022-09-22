@@ -2,11 +2,20 @@
 #include "MyLibs/basic/logger.h"
 
 MultiPositionHomers::MultiPositionHomers(uint8_t triger_count){
+    this->__triger_count = 0;
+    this->__appending_index = 0;
     if (triger_count <= 4){
         this->__triger_count = triger_count;
     } else {
         Logger::Error("MultiPositionHomer::MultiPositionHomer() triger_count must be 4 or smaller...");
-        this->__triger_count = 0;
+    }
+}
+
+void MultiPositionHomers::AppendSingleHomer(SingleAxisHomer* single_homer){
+    this->_all_single_homers[this->__appending_index] = single_homer;
+    this->__appending_index++;
+    if (this->__appending_index > this->__triger_count){
+        Logger::Warn("MultiPositionHomers::AppendSingleHomer()   TOO MANY HAS BEEN APPENED! ");
     }
 }
 

@@ -14,6 +14,8 @@ class MultiPositionHomers{
 
     private:
         uint8_t __triger_count;
+        uint8_t __appending_index;
+
         SingleAxisHomer* _all_single_homers[4];
 
 

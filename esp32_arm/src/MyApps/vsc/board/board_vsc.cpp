@@ -10,6 +10,11 @@ void Vsc_Board::Init(bool is_on_reset){
     this->__motor.LinkPidController(&this->__speed_pid);
     this->__motor.LinkSensor(this->__motor_angle_sensor);
 
+    this->__all_homers.AppendSingleHomer(&this->__homer_0);
+    this->__all_homers.AppendSingleHomer(&this->__homer_1);
+    this->__all_homers.AppendSingleHomer(&this->__homer_2);
+    this->__all_homers.AppendSingleHomer(&this->__homer_3);
+
     this->__motor.PrintOut();
 }
 
