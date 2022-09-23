@@ -1,4 +1,31 @@
-#include "board_test_cnc.h"
+#include "cnc_board_test.h"
+
+
+void CncBoard_Test::Test_SinglePositionTrigger(SinglePositionTriger* homer, int loop_count){
+    for (int i=0; i<loop_count; i++){
+        Serial.print("Trigger is fired = ");
+        Serial.println(homer->IsTriged());
+        delay(1000);
+    }
+}
+
+void CncBoard_Test::Test_AllPositionTriggers(PositionTriggers* position_triggers, int loop_count){
+    static int last_index = -1;
+    int changing_count = 0;
+    while (changing_count < loop_count){
+        int index = position_triggers->GetTrigeredIndex();
+        if (index != last_index){
+            if(index >=0){
+                Serial.print("First fired trigger, index= ");
+                Serial.print(index);
+            }else{
+                Serial.println("              Unfired.");
+                changing_count++;
+            }
+            last_index = index;
+        }
+    }
+}
 
 // void BoardTestCnc::Test_SingleHomer(int loop_count,char axis_name){
 // // void BoardTestCnc::Test_AllHomers(int loop_count, char* axis_list, int axis_count){

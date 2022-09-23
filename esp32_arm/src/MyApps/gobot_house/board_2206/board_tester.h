@@ -1,10 +1,12 @@
 #pragma once
 
-#include "MyBoards/board_test/board_test_cnc.h"
+// #include "MyBoards/board_test/board_test_cnc.h"
+#include "CNC/board_test/cnc_board_test.h"
+
 #include "board_gobot_house.h"
 #include "ESP32Step/src/Stepper.h"
 
-class GobotHouse_2206_BoardTest: public BoardTestCnc{
+class GobotHouse_2206_BoardTest: public CncBoard_Test{
     public:
         GobotHouse_2206_BoardTest(StepControl* stepControl){this->__stepControl=stepControl;};
         void LinkBoard(CncBoardBase* board) override;

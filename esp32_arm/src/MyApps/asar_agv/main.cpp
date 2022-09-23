@@ -21,7 +21,8 @@ MessageQueue garment_bot_message_queue = MessageQueue();
 
 #include "MyBoards/board_test/board_test_agv.h"
 #include "MyBoards/board_test/board_test_asrs.h"
-#include "MyBoards/board_test/board_test_cnc.h"
+#include "CNC/board_test/cnc_board_test.h"
+
 
 
 void unit_test(){
@@ -34,7 +35,7 @@ void unit_test(){
     agv.Test_RfidReader(0);
     agv.Test_Mover(0);
 
-    BoardTestCnc cnc;
+    CncBoard_Test cnc;
     cnc.LinkBoard(&board.cnc_board);
     // cnc.Test_AllHomers(0);
     // cnc.Test_Stepper(0,'A', 5000, &objStepControl);

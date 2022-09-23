@@ -1,0 +1,19 @@
+#pragma once
+#include "MyBoards/board_test/board_test_base.h"
+#include "MyBoards/cnc_board_base.h"
+#include "Robot/position_trigger/position_triggers.h"
+
+class CncBoard_Test:public BoardTestBase{
+    public:
+        virtual void LinkBoard(CncBoardBase* board){this->__board=board;};
+        void Test_SinglePositionTrigger(SinglePositionTriger* homer, int loop_count);
+        void Test_AllPositionTriggers(PositionTriggers* position_triggers, int loop_count);
+
+    protected:
+        void LinkCncBoard(CncBoardBase* board){this->__board=board;};
+
+
+    private:
+        CncBoardBase* __board;
+
+};

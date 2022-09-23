@@ -33,7 +33,7 @@ SinglePositionTriger* Vsc_Board::GetSingleHomer(EnumAxis axis_name){
     }else if (axis_name == 3){
         return &this->__homer_3;
     }else{
-        Logger::Error("Vsc_Board::GetHomer()");
+        Logger::Error("Vsc_Board::GetSingleHomer()");
         Logger::Print("Wrong axis_name = ", axis_name);
     }
 }
