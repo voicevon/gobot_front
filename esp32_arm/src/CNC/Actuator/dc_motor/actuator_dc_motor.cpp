@@ -23,7 +23,7 @@ void ActuatorDcMotor::SpinOnce(){
         // control speed
         this->__count_down--;
         if (this->__count_down <=0){
-            Logger::Print("Abs DIstanceToTarget in CNC Rad ", abs_distance);
+            // Logger::Print("Abs DIstanceToTarget in CNC Rad ", abs_distance);
             this->__count_down = 18888;
         }
 

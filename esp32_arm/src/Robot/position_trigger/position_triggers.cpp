@@ -20,7 +20,7 @@ void PositionTriggers::AppendSingleHomer(SinglePositionTriger* single_homer){
     }
 }
 
-uint8_t PositionTriggers::GetTrigeredIndex(){
+int PositionTriggers::GetTrigeredIndex(){
     for (uint8_t i=0; i<this->__triger_count; i++){
         if (this->_all_single_homers[i]->IsTriged())
             return i;

@@ -87,10 +87,11 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	Logger::Debug("CncSolutionBase::__HomeSingleAxis()");
 	this->_homing_axis = axis;
 	// this->_board->SayHello();
-	this->__current_homer = this->_cnc_board->GetSingleHomer(axis);
+	// this->__current_homer = this->_cnc_board->GetSingleHomer(axis);
+	this->_all_position_trigers_of_homing_axis = this->_cnc_board->GetPositionTriggers(axis);
 	this->_cnc_board->EnableMotor(axis, true);
 	
-	this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()  __current_homer");
+	// this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()  __current_homer");
 	this->_config_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _config_base");
 	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
 	this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
@@ -102,10 +103,13 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 }
 
 void CncSolutionBase::_running_G28(){
-	if (this->__current_homer->IsTriged()){
+	// if (this->__current_homer->IsTriged()){
+	int fired_trigger_index =  this->_all_position_trigers_of_homing_axis->GetTrigeredIndex();
+	if (fired_trigger_index >=0 ){
 		// End stop is trigered
 		Logger::Info("CncSolutionBase::_running_G28() Home sensor is trigered." );
 		Logger::Print("_homing_axis_name", this->_homing_axis);
+		Logger::Print(" fired_trigger_index", fired_trigger_index);
 
 		this->_mover_base->AllActuatorsStop();
 		this->_SetCurrentPositionAsHome(this->_homing_axis);
@@ -160,6 +164,8 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 	//   return;
 	// }
 	bool debug = false;
+	Logger::Debug("CncSolutionBase::RunGcode()");
+	Logger::Print("gcode_command", gcode->get_command());
 
 	if(gcode->has_g){
 		char home_axis = '+';
@@ -231,7 +237,7 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 		case 42:
 			p_value =  gcode->get_value('P');
 			s_value = gcode->get_value('S');
-			this->RunM42(p_value, s_value);
+			this->Run_M42_OutputGpio(p_value, s_value);
 		case 84:
 			this->RunM84();
 		case 114:
@@ -267,6 +273,7 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 			Logger::Debug("CncSolutionBase::RunGcode()   M130");
 			Logger::Print("gcode", gcode->get_command());
 			p_value =  gcode->get_value('N');
+			
 			f_value = gcode->get_value('P');
 			this->__pid_controllers->GetController(p_value)->P = f_value;
 			f_value = gcode->get_value('I');
@@ -278,6 +285,7 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 
 		case 141:
 			break;
+
 		case 280:
 			// Set servo position  
 			//	 	Pnnn Servo index
@@ -308,6 +316,6 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 }
 
 
-void CncSolutionBase::RunM42(uint8_t pin_number, uint8_t pin_value){
+void CncSolutionBase::Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value){
 	digitalWrite(pin_number, pin_value);
 }

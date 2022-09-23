@@ -17,8 +17,8 @@ void Vsc_Board::Init(bool is_on_reset){
     
     this->__all_homers.AppendSingleHomer(&this->__homer_0);
     this->__all_homers.AppendSingleHomer(&this->__homer_1);
-    this->__all_homers.AppendSingleHomer(&this->__homer_2);
-    this->__all_homers.AppendSingleHomer(&this->__homer_3);
+    // this->__all_homers.AppendSingleHomer(&this->__homer_2);
+    // this->__all_homers.AppendSingleHomer(&this->__homer_3);
 
 }
 

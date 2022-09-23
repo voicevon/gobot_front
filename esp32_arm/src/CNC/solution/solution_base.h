@@ -4,7 +4,6 @@
 #include "CNC/gcode/gcode_consumer.h"
 #include "MyBoards/cnc_board_base.h"
 #include "solution_config_base.h"
-// #include "Robot/homer/single_axis_homer.h"
 #include "Robot/position_trigger/position_triggers.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
@@ -34,6 +33,7 @@ class CncSolutionBase: public GcodeConsumer{
     protected:
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
         void _LinkPidControllers(PidControllers* pid_controllers){this->__pid_controllers=pid_controllers;};
+       
         void SpinOnce_BaseExit();
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
@@ -41,7 +41,9 @@ class CncSolutionBase: public GcodeConsumer{
         virtual void RunG6(Gcode* gcode);   //Block mode
         void RunG4(Gcode* gcode);
         virtual std::string GetHomeTrigerStateString();
-        void RunM42(uint8_t pin_number, uint8_t pin_value);
+
+        void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
+        
         void RunM84();
         // virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
         void RunM123(uint8_t eef_channel, uint8_t eef_action);
@@ -58,7 +60,8 @@ class CncSolutionBase: public GcodeConsumer{
         CncSolutionConfigBase* _config_base;    //???
         CncBoardBase* _cnc_board;
         CncMoverBase* _mover_base;
-        SinglePositionTriger* __current_homer;
+        // SinglePositionTriger* __current_homer;
+        PositionTriggers* _all_position_trigers_of_homing_axis;
 
     private:
         int test_int;

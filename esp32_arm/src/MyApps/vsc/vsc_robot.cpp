@@ -43,13 +43,20 @@ void VscRobot::AsyncExecuteMqttCommand(const char* command){
     Serial.println(str_command);
     // Logger::Print("Command", str_command);   // TODO:  There is a bug.
     Gcode my_gcode = Gcode(command);
-    // if (my_gcode.has_letter('L')){
-    int layer = my_gcode.get_value('L');
-    int cell = my_gcode.get_value('C');
-    Logger::Print("layer", layer);
-    Logger::Print("cell", cell);
-    this->MoveTo(layer, cell);
-    // }
+    if (str_command.substring(0,7) == "vsc_cmd"){
+    // if (false){
+        // This is a robot command, not a gcode or mcode
+        str_command = str_command.substring(7);
+        int layer = my_gcode.get_value('L');
+        int cell = my_gcode.get_value('C');
+        Logger::Print("layer", layer);
+        Logger::Print("cell", cell);
+        this->MoveTo(layer, cell);
+    } else{
+        // this is a normal gcode.
+        this->_gcode_queue->AppendGcodeCommand(command);
+
+    }
     //TODO:  L3C8 == Show Layer 3, Cell 8.   target cell will be indicated by LED.
     // if (str_command.substring(0,1) == "L"){
     //     int C_position = str_command.indexOf('C');

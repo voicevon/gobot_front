@@ -54,7 +54,7 @@ class Vsc_Board: public CncBoardBase{
         SinglePositionTriger __homer_1 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_1, LOW);
         SinglePositionTriger __homer_2 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_2, LOW);
         SinglePositionTriger __homer_3 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_3, LOW);
-        PositionTriggers __all_homers = PositionTriggers(4);
+        PositionTriggers __all_homers = PositionTriggers(2);
         Vsc_RobotEef __eef;
 
 };

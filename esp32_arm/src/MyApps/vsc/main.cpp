@@ -52,7 +52,7 @@ void setup(){
     setup_mqtt_block_connect();
     append_mqtt_bridge("vsc/j4", &mqtt_command_queue, &robot); 
     setup_mqtt_on_message_receive(); 
-    gcode_queue.AppendGcodeCommand("G28A");
+    // gcode_queue.AppendGcodeCommand("G28A");
     Logger::Info ("VSC-XiaoJuan   setup() is done. ");
 
     //test robot and cnc

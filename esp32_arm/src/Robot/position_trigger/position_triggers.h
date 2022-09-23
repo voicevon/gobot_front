@@ -12,7 +12,7 @@ class PositionTriggers{
         void AppendSingleHomer(SinglePositionTriger* single_homer);
 
         //return -1, if no homer is trigered.
-        uint8_t GetTrigeredIndex();
+        int GetTrigeredIndex();
 
     private:
         uint8_t __triger_count;
