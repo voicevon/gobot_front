@@ -39,7 +39,7 @@ SinglePositionTriger* Board2205Cnc::GetSingleHomer(EnumAxis axis_name){
     return nullptr;
 }
 
-PositionTriggers* Board2205Cnc::GetPositionTriggers(EnumAxis axis_name){
+AxisHomer* Board2205Cnc::GetPositionTriggers(EnumAxis axis_name){
     Logger::Error("Board2205Cnc::GetPositionTriggers() , NOT SUPPORT");
 }
 

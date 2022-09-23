@@ -2,7 +2,7 @@
 #include "CNC/solution/axis_homer/axis_homer.h"
 #include "MyLibs/basic/logger.h"
 
-PositionTriggers::PositionTriggers(uint8_t triger_count, HomingConfig* config){
+AxisHomer::AxisHomer(uint8_t triger_count, HomingConfig* config){
     this->__triger_count = 0;
     // this->__is_home_direction_to_max = is_home_direction_to_max;
     // this->__max_distance_to_home = max_distance_to_home;
@@ -15,15 +15,15 @@ PositionTriggers::PositionTriggers(uint8_t triger_count, HomingConfig* config){
     }
 }
 
-void PositionTriggers::AppendSingleHomer(SinglePositionTriger* single_homer){
+void AxisHomer::AppendSingleHomer(SinglePositionTriger* single_homer){
     this->_all_single_homers[this->__appending_index] = single_homer;
     this->__appending_index++;
     if (this->__appending_index > this->__triger_count){
-        Logger::Warn("PositionTriggers::AppendSingleHomer()   TOO MANY HAS BEEN APPENED! ");
+        Logger::Warn("AxisHomer::AppendSingleHomer()   TOO MANY HAS BEEN APPENED! ");
     }
 }
 
-int PositionTriggers::GetTrigeredIndex(){
+int AxisHomer::GetTrigeredIndex(){
     for (uint8_t i=0; i<this->__triger_count; i++){
         if (this->_all_single_homers[i]->IsTriged()){
             this->__last_fired_index = i;    
@@ -34,6 +34,6 @@ int PositionTriggers::GetTrigeredIndex(){
     return -1;
 }
 
-float PositionTriggers::GetFiredPosition(){
+float AxisHomer::GetFiredPosition(){
     return this->_all_single_homers[this->__last_fired_index]->GetTriggerPosition();
 }

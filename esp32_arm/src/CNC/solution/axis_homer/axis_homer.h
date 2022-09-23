@@ -13,10 +13,10 @@ class HomingConfig{
         bool IsIkPosition=true;
 };
 
-class PositionTriggers{
+class AxisHomer{
     public:
 
-        PositionTriggers(uint8_t triger_count, HomingConfig* homing_para);
+        AxisHomer(uint8_t triger_count, HomingConfig* homing_para);
         void AppendSingleHomer(SinglePositionTriger* single_homer);
 
         //return -1, if no homer is trigered.

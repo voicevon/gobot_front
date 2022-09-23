@@ -27,7 +27,7 @@ SinglePositionTriger* Board_SpringMaker::GetSingleHomer(EnumAxis axis_name) {
     return nullptr;
 }
 
-PositionTriggers* Board_SpringMaker::GetPositionTriggers(EnumAxis axis_name){
+AxisHomer* Board_SpringMaker::GetPositionTriggers(EnumAxis axis_name){
     Logger::Error("Board_SpringMaker::GetPositionTriggers() NOT SUPPORTED");
 }
 

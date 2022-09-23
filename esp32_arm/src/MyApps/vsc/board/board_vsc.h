@@ -27,7 +27,7 @@ class Vsc_Board: public CncBoardBase{
 
         // For being a CNC machine.
         SinglePositionTriger* GetSingleHomer(EnumAxis axis_name) override;   //{return &this->__homer_0; };
-        PositionTriggers* GetPositionTriggers(EnumAxis axis_name) override {return &this->__all_homers;};
+        AxisHomer* GetPositionTriggers(EnumAxis axis_name) override {return &this->__all_homers;};
         RobotEefBase* GetEef() override {return &this->__eef;};
         PidControllers* GetPidControllers() override {return &this->__all_pids;};
         
@@ -55,7 +55,7 @@ class Vsc_Board: public CncBoardBase{
         SinglePositionTriger __homer_2 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_2, LOW);
         SinglePositionTriger __homer_3 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_3, LOW);
         HomingConfig __homing_config;
-        PositionTriggers __all_homers = PositionTriggers(2,&__homing_config);
+        AxisHomer __all_homers = AxisHomer(2,&__homing_config);
         Vsc_RobotEef __eef;
 
 };

@@ -62,7 +62,7 @@ class CncSolutionBase: public GcodeConsumer{
         CncBoardBase* _cnc_board;
         CncMoverBase* _mover_base;
         // SinglePositionTriger* __current_homer;
-        PositionTriggers* _all_position_trigers_of_homing_axis;
+        AxisHomer* _all_position_trigers_of_homing_axis;
 
     private:
         int test_int;

@@ -13,7 +13,7 @@ class CncBoardBase: public BoardBase{
     public:
         virtual void Init(bool is_on_reset);
         virtual SinglePositionTriger* GetSingleHomer(EnumAxis axis_name);
-        virtual PositionTriggers* GetPositionTriggers(EnumAxis axis_name);
+        virtual AxisHomer* GetPositionTriggers(EnumAxis axis_name);
 
         virtual RobotEefBase* GetEef();
         virtual PidControllers* GetPidControllers(){};

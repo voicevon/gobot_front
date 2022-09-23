@@ -15,7 +15,7 @@ class GobotMain_Board: public CncBoardBase{
         // ActuatorBase* GetActuator(EnumAxis axis_name) override;
         Stepper* GetStepper(EnumAxis axis);
         SinglePositionTriger* GetSingleHomer(EnumAxis axis_name) override;
-        PositionTriggers* GetPositionTriggers(EnumAxis axis_name) override;
+        AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
         RobotEef_GobotMain* GetEef() override;
         // CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_solution_config;};
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
