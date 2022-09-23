@@ -1,6 +1,7 @@
 #pragma once
 #include <SimpleFOC.h>
-#include "CNC/Sensor/position_trigger/position_triggers.h"
+// #include "CNC/Sensor/position_trigger/position_triggers.h"
+#include "CNC/solution/axis_homer/axis_homer.h"
 #include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
 #include "CNC/mover/driver/h_bridge/h_bridge.h"
 #include "CNC/Sensor/position_sensor/polor_encoder.h"

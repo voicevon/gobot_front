@@ -3,7 +3,8 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "board_pins/board_ver1.2.h"
 #include "robot_eef/gobot_main_eef.h"
-#include "CNC/Sensor/position_trigger/position_triggers.h"
+// #include "CNC/Sensor/position_trigger/position_triggers.h"
+#include "CNC/solution/axis_homer/axis_homer.h"
 
 class GobotMain_Board: public CncBoardBase{
     public:

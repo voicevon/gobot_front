@@ -3,7 +3,8 @@
 #include "../solution_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 // #include "Robot/homer/single_axis_homer.h"
-#include "CNC/Sensor/position_trigger/position_triggers.h"
+// #include "CNC/Sensor/position_trigger/position_triggers.h"
+#include "CNC/solution/axis_homer/axis_homer.h"
 #include "config_base.h"
 #include "MyBoards/board_base.h"
 

@@ -2,7 +2,8 @@
 #include "MyBoards/cnc_board_base.h"
 #include "board_pins/board_pins_ver3.11.h"
 #include "robot_eef/gobot_house_eef.h"
-#include "CNC/Sensor/position_trigger/position_triggers.h"
+// #include "CNC/Sensor/position_trigger/position_triggers.h"
+#include "CNC/solution/axis_homer/axis_homer.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 // #include "CNC/mover/dual_stepper.h"
 

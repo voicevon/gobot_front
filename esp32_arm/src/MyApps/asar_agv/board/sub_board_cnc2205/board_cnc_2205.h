@@ -2,7 +2,8 @@
 #include "MyBoards/cnc_board_base.h"
 #include "../board_pins/board_pins_ver_2_0.h"
 #include "ESP32Step/src/TeensyStep.h"
-#include "CNC/Sensor/position_trigger/position_triggers.h"
+// #include "CNC/Sensor/position_trigger/position_triggers.h"
+#include "CNC/solution/axis_homer/axis_homer.h"
 #include "../robot_eef/garment_asar_eef.h"
 
 

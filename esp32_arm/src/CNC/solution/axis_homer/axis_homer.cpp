@@ -1,4 +1,5 @@
-#include "CNC/Sensor/position_trigger/position_triggers.h"
+// #include "CNC/Sensor/position_trigger/position_triggers.h"
+#include "CNC/solution/axis_homer/axis_homer.h"
 #include "MyLibs/basic/logger.h"
 
 PositionTriggers::PositionTriggers(uint8_t triger_count, HomingConfig* config){

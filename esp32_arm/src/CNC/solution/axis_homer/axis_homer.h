@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/Sensor/position_trigger/single_position_trigger.h"
+#include "single_position_trigger.h"
 
 #define POSITION_TRIGGER_MAX_COUNT 4 
 class HomingConfig{
