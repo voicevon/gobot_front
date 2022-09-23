@@ -37,10 +37,10 @@ void SmookerBot_CncSolutionConfig::PrintOut(const char * title){
     // Serial.print("\n    steps_per_rad_for_a = ");
     // Serial.print(this->steps_per_rad_for_a);
     Serial.print("\n     Home_position (a) = (");
-    Serial.print(this->HomedPosition(AXIS_ALPHA));
+    // Serial.print(this->HomedPosition(AXIS_ALPHA));
     Serial.print(" , ");
     Serial.print("\n     Homing_speed_alpha = ");
-    Serial.print(this->HomingSpeed(AXIS_ALPHA));
+    // Serial.print(this->HomingSpeed(AXIS_ALPHA));
     // Serial.print("\n     Homing_acceleration_alpha = ");
     // Serial.print(this->Homing_acceleration_alpha);
     // Serial.print("\n\n        max_speed_alpha = ");

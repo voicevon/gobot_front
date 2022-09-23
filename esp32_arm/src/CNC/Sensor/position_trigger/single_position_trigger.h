@@ -15,6 +15,8 @@ class SinglePositionTriger{
         bool IsTriged();   //TODO:  rename to IsFired()
         void SetTrigeredCountMax(int new_value){this->trigered_counter_max = new_value;};
         void PrintOut(const char* title);
+        void SetTriggerPosition(float trigger_position){this->__trigger_position_in_cnc_unit=trigger_position;};
+        float GetTriggerPosition(){return this->__trigger_position_in_cnc_unit;};
 
     private:
         int trigered_counter = 0;
@@ -22,6 +24,7 @@ class SinglePositionTriger{
         uint8_t pinTriger;
         int trigeredState;
         Adafruit_MCP23X17* __mcp23018;
+        float __trigger_position_in_cnc_unit = 0;
 };
 
 

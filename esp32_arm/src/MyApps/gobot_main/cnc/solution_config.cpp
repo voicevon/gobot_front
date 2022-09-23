@@ -40,8 +40,8 @@ void GobotMain_CncSolutionConfig::PrintOut(const char* title){
     Logger::Print("Alpha","");
     Logger::Print("\t_ACCELERATION", this->_ACCELERATION_FOR_G1[AXIS_ALPHA]);
     Serial.println("Home ");
-    Logger::Print("\tDirIsToMax", this->HomingDir_IsToMax(AXIS_ALPHA));
-    Logger::Print("\tDistanceToGoHome", this->GetLongOffsetToGoHome(AXIS_ALPHA));
+    // Logger::Print("\tDirIsToMax", this->HomingDir_IsToMax(AXIS_ALPHA));
+    // Logger::Print("\tDistanceToGoHome", this->GetLongOffsetToGoHome(AXIS_ALPHA));
     Logger::Print("\tHomed_position_in_degree", RAD_TO_DEG * this->Homed_position_alpha_in_rad);
     Logger::Print("\tSpeed", RAD_TO_DEG * this->HomingSpeed(AXIS_ALPHA) );
     Logger::Print("\tAcceleration", RAD_TO_DEG * this->HomingAcceleration(AXIS_ALPHA));
@@ -49,8 +49,8 @@ void GobotMain_CncSolutionConfig::PrintOut(const char* title){
     Serial.println("Beta:" );
     Logger::Print("\t_ACCELERATION", this->_ACCELERATION_FOR_G1[AXIS_BETA]);
     Serial.println("Home ");
-    Logger::Print("\tDirIsToMax", this->HomingDir_IsToMax(AXIS_BETA));
-    Logger::Print("\tDistanceToGoHome", this->GetLongOffsetToGoHome(AXIS_BETA));
+    // Logger::Print("\tDirIsToMax", this->HomingDir_IsToMax(AXIS_BETA));
+    // Logger::Print("\tDistanceToGoHome", this->GetLongOffsetToGoHome(AXIS_BETA));
     Logger::Print("\tHomed_position_in_degree", RAD_TO_DEG * this->Homed_position_beta_in_rad);
     Logger::Print("\tSpeed",  RAD_TO_DEG * this->HomingSpeed(AXIS_BETA));
     Logger::Print("\tAcceleration", RAD_TO_DEG * this->HomingAcceleration(AXIS_BETA));

@@ -45,6 +45,7 @@ class Vsc_Board: public CncBoardBase{
         // Encoder* __motor_angle_sensor;
         PolorEncoder __motor_angle_sensor;
 
+        
         // #define SMALLEST_COUNT 1
         // #define BIGEST_COUNT 4096
         // MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
@@ -52,7 +53,8 @@ class Vsc_Board: public CncBoardBase{
         SinglePositionTriger __homer_1 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_1, LOW);
         SinglePositionTriger __homer_2 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_2, LOW);
         SinglePositionTriger __homer_3 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_3, LOW);
-        PositionTriggers __all_homers = PositionTriggers(2);
+        HomingConfig __homing_config;
+        PositionTriggers __all_homers = PositionTriggers(2,&__homing_config);
         Vsc_RobotEef __eef;
 
 };

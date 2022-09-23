@@ -86,8 +86,8 @@ void GobotHouse_CncSolutionConfig_2206::PrintOut(const char * title){
     // Serial.print("\n\n       STEPS_PER_RAD_BETA= ");
     // Serial.print(this->STEPS_PER_RAD_BETA);
     Serial.print("\n   GetHomingSpeed(BETA)= ");
-    Serial.print(this->GetHomingVelocity(AXIS_ALPHA));
+    // Serial.print(this->GetHomingVelocity(AXIS_ALPHA));
     Serial.print("\n   GetHomingSpeed(ALPHA)= ");
-    Serial.print(this->GetHomingVelocity(AXIS_BETA));
+    // Serial.print(this->GetHomingVelocity(AXIS_BETA));
     Serial.print("\n\n===============================================");
 }
