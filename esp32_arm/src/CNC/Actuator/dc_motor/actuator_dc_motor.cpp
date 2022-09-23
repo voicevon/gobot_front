@@ -130,9 +130,9 @@ void ActuatorDcMotor::SetPwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
 ActuatorDcMotor::ActuatorDcMotor(){
     // Calculate rad_per_mm,  This is determined by mechanic designer.
     // this->__sensor_rad_per_mm = GEAR_PITCH * GEAR_TEETH_COUNT / TWO_PI; 
-    this->__sensor_offset = 0;
-    this->__SLOPE_FROM_SENSOR_TO_CNC = float(this->SENSOR_GEAR_COUNT) / this->CHAIN_PITCH_COUNT;
-    this->__SLOPE_FROM_CNC_TO_SENSOR = float(this->CHAIN_PITCH_COUNT) / this->SENSOR_GEAR_COUNT;
+    // this->__sensor_offset = 0;
+    // this->__SLOPE_FROM_SENSOR_TO_CNC = float(this->SENSOR_GEAR_COUNT) / this->CHAIN_PITCH_COUNT;
+    // this->__SLOPE_FROM_CNC_TO_SENSOR = float(this->CHAIN_PITCH_COUNT) / this->SENSOR_GEAR_COUNT;
 }
 
 void ActuatorDcMotor::PrintOut(){

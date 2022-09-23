@@ -21,7 +21,7 @@ class Vsc_Board: public CncBoardBase{
 
         // For being an actuator and its components.
         ActuatorDcMotor* GetActuator(EnumAxis axis_name) {return &this->__motor;};
-        PolorEncoder* GetAngleSensor(){return this->__motor_angle_sensor;};
+        PolorEncoder* GetAngleSensor(){return &this->__motor_angle_sensor;};
         H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
 
         // For being a CNC machine.
@@ -43,7 +43,7 @@ class Vsc_Board: public CncBoardBase{
 
         H_Bridge __pwm_h_bridge = H_Bridge(PIN_H_BRIDGE_DIR, PIN_H_BRIDGE_SPEED);
         // Encoder* __motor_angle_sensor;
-        PolorEncoder* __motor_angle_sensor;
+        PolorEncoder __motor_angle_sensor;
 
         // #define SMALLEST_COUNT 1
         // #define BIGEST_COUNT 4096

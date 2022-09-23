@@ -13,9 +13,9 @@ class   ActuatorDcMotor: public ActuatorBase{
 
         ActuatorDcMotor();
         void PrintOut();
-        void LinkSensor(PolorEncoder* sensor){this->__sensor=sensor;};   // todo:  rename to LinkAngleSensor
+        void LinkAngleSensor(PolorEncoder* sensor){this->__sensor=sensor;}; 
         void LinkPidController(PIDController* pid){this->__speed_pid=pid;};
-        void LinkDriver(H_Bridge* h_bridge){this->__h_bridge=h_bridge;};
+        void LinkMotorDriver(H_Bridge* h_bridge){this->__h_bridge=h_bridge;};  
         void SpinOnce();
         void SetPwmSpeed(bool dir_is_cw,  uint32_t pwm_speed);
         // Will auto change to false, when arrived(very closed to) target position during moving.
@@ -46,17 +46,19 @@ class   ActuatorDcMotor: public ActuatorBase{
 
         H_Bridge* __h_bridge;
         PolorEncoder* __sensor;  //todo :  rename to encoder or amgle_sensor or position_sensor
+
+        // speed control
         PIDController* __speed_pid;
-
-        float __sensor_offset = 0.0f;
-
         float __target_speed;   // cnc rad per second.
-        bool __is_moving = false;
-        int SENSOR_GEAR_COUNT = 10;
-        int CHAIN_PITCH_COUNT = 157;
 
-        float __SLOPE_FROM_CNC_TO_SENSOR = 1.0;
-        float __SLOPE_FROM_SENSOR_TO_CNC = 1.0;
+        // float __sensor_offset = 0.0f;
+
+        bool __is_moving = false;
+        // int SENSOR_GEAR_COUNT = 10;
+        // int CHAIN_PITCH_COUNT = 157;
+
+        // float __SLOPE_FROM_CNC_TO_SENSOR = 1.0;
+        // float __SLOPE_FROM_SENSOR_TO_CNC = 1.0;
 
         int __count_down_for_serial_print = 0;
         LowPassFilter __filter = LowPassFilter(0.05f);

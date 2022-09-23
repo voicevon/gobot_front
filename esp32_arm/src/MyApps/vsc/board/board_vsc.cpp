@@ -6,13 +6,13 @@ void Vsc_Board::Init(bool is_on_reset){
         Serial.println("I am XiaoJuan.");
     }
 
-    this->__motor.LinkDriver(&this->__pwm_h_bridge);
-    this->__motor.LinkSensor(this->__motor_angle_sensor);
+    this->__motor.LinkMotorDriver(&this->__pwm_h_bridge);
+    this->__motor.LinkAngleSensor(&this->__motor_angle_sensor);
     this->__motor.PrintOut();
 
-    // PID controller  speed control for motor
+    // motor is the user of PID controller
     this->__motor.LinkPidController(&this->__speed_pid);
-    // We can send mcode 'M130 N0 P1 I2 D3'  to update pid parameters.
+    // We can send mCode 'M130 N0 P1 I2 D3'  to update pid parameters.
     this->__all_pids.AppendPidController(&this->__speed_pid);
     
     this->__all_homers.AppendSingleHomer(&this->__homer_0);
@@ -22,7 +22,8 @@ void Vsc_Board::Init(bool is_on_reset){
 
 }
 void Vsc_Board::LinkEncoderSensor(Encoder* encoder){
-    this->__motor_angle_sensor->LinkRawSensor(encoder);
+    this->__motor_angle_sensor.LinkRawSensor(encoder);
+    this->__motor_angle_sensor.SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)
 }
 
 
