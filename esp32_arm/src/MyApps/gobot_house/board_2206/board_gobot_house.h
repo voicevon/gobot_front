@@ -7,7 +7,7 @@
 #include "CNC/Actuator/servo/actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 // #include "Robot/homer//single_axis_homer.h"
-#include "Robot/position_trigger/position_triggers.h"
+#include "CNC/Sensor/position_trigger/position_triggers.h"
 // #include "../cnc_2206/solution_config.h"
 // #include "../cnc_2206/actuator_alpha.h"
 

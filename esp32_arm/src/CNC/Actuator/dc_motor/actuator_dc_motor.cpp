@@ -39,6 +39,9 @@ void ActuatorDcMotor::SpinOnce(){
             // Serial.print("velocity of sensor, speed_error, pwm_speed \t");
             // Logger::Debug("velocity", velocity_in_cnc_unit);
             // Logger::Debug("target_speed", )
+            Serial.print("\t");
+            Serial.print(this->__sensor->GetCurrentPosition() * 360 / TWO_PI);
+            Serial.print("\t");
             Serial.print(velocity);
             Serial.print("\t");
             Serial.print(speed_error);

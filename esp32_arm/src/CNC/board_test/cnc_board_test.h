@@ -1,7 +1,7 @@
 #pragma once
 #include "MyBoards/board_test/board_test_base.h"
 #include "MyBoards/cnc_board_base.h"
-#include "Robot/position_trigger/position_triggers.h"
+#include "CNC/Sensor/position_trigger/position_triggers.h"
 
 class CncBoard_Test:public BoardTestBase{
     public:

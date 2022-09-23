@@ -2,7 +2,8 @@
 
 
 // #include "single_axis_homer.h"
-#include "Robot/position_trigger/single_position_trigger.h"
+#include "CNC/Sensor/position_trigger/single_position_trigger.h"
+
 
 
 class PositionTriggers{
