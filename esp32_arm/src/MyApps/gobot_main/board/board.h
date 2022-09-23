@@ -28,6 +28,7 @@ class GobotMain_Board: public CncBoardBase{
 
     private:
         void InitHardware();
+        PidControllers* GetPidControllers() override {Logger::Error("GobotMain_Board::GetPidControllers()");};
     
         Stepper __alpha_stepper = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
         Stepper __beta_stepper = Stepper(PIN_BETA_STEP_2201, PIN_BETA_DIR_2201);
