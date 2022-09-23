@@ -19,10 +19,10 @@ void Vsc_Board::Init(bool is_on_reset){
     this->__homer_1.SetTriggerPosition(TWO_PI * 90 / 368);    //at 90 pitch of total 368 pitches.
     this->__homer_2.SetTriggerPosition(TWO_PI * 180 / 368);    //at 180 pitch of total 368 pitches.
     this->__homer_3.SetTriggerPosition(TWO_PI * 270 / 368);    //at 270 pitch of total 368 pitches
-    this->__all_homers.AppendSingleHomer(&this->__homer_0);
-    this->__all_homers.AppendSingleHomer(&this->__homer_1);
-    // this->__all_homers.AppendSingleHomer(&this->__homer_2);
-    // this->__all_homers.AppendSingleHomer(&this->__homer_3);
+    this->__all_homers.AppendPositionTrigger(&this->__homer_0);
+    this->__all_homers.AppendPositionTrigger(&this->__homer_1);
+    // this->__all_homers.AppendPositionTrigger(&this->__homer_2);
+    // this->__all_homers.AppendPositionTrigger(&this->__homer_3);
 
 }
 void Vsc_Board::LinkEncoderSensor(Encoder* encoder){
@@ -31,7 +31,7 @@ void Vsc_Board::LinkEncoderSensor(Encoder* encoder){
 }
 
 
-SinglePositionTriger* Vsc_Board::GetSingleHomer(EnumAxis axis_name){
+SinglePositionTrigger* Vsc_Board::GetSingleHomer(EnumAxis axis_name){
     if (axis_name == 0){
         return &this->__homer_0;
     } else if (axis_name == 1){

@@ -71,7 +71,7 @@ Stepper* GobotMain_Board::GetStepper(EnumAxis axis){
 //     return nullptr;
 // }
 
-SinglePositionTriger* GobotMain_Board::GetSingleHomer(EnumAxis axis) {
+SinglePositionTrigger* GobotMain_Board::GetSingleHomer(EnumAxis axis) {
     if (axis == AXIS_ALPHA){
         return &this->homer_alpha;
     }else if (axis == AXIS_BETA){

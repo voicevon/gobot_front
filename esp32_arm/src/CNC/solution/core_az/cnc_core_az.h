@@ -42,9 +42,9 @@ class CncSolution_CoreAZ: public CncSolutionBase{
 
         FkPosition_ZW __current_fk_position;
 
-        SinglePositionTriger* __homing_helper;
-        SinglePositionTriger* objHomeHelper_vertical; // = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
-        SinglePositionTriger* objHomeHelper_angle; // = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
+        SinglePositionTrigger* __homing_helper;
+        SinglePositionTrigger* objHomeHelper_vertical; // = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
+        SinglePositionTrigger* objHomeHelper_angle; // = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
         CncSolution_CoreAZConfigBase* _config;
 
 

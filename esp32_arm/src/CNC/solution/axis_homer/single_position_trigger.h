@@ -5,12 +5,13 @@
 #include <Adafruit_MCP23X17.h>
 
 
-class SinglePositionTriger{
+// class SinglePositionTrigger{
+class SinglePositionTrigger{
     public:
         // For OC output sensor, trigeredState should be LOW
-        SinglePositionTriger(uint8_t pinTriger, int trigeredState);
-        SinglePositionTriger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger, int trigeredState);
-        SinglePositionTriger(int trigeredState);
+        SinglePositionTrigger(uint8_t pinTriger, int trigeredState);
+        SinglePositionTrigger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger, int trigeredState);
+        SinglePositionTrigger(int trigeredState);
         void Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger);
         bool IsTriged();   //TODO:  rename to IsFired()
         void SetTrigeredCountMax(int new_value){this->trigered_counter_max = new_value;};

@@ -26,7 +26,7 @@ class Vsc_Board: public CncBoardBase{
         H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
 
         // For being a CNC machine.
-        SinglePositionTriger* GetSingleHomer(EnumAxis axis_name) override;   //{return &this->__homer_0; };
+        SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name) override;   //{return &this->__homer_0; };
         AxisHomer* GetPositionTriggers(EnumAxis axis_name) override {return &this->__all_homers;};
         RobotEefBase* GetEef() override {return &this->__eef;};
         PidControllers* GetPidControllers() override {return &this->__all_pids;};
@@ -50,10 +50,10 @@ class Vsc_Board: public CncBoardBase{
         // #define SMALLEST_COUNT 1
         // #define BIGEST_COUNT 4096
         // MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
-        SinglePositionTriger __homer_0 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_0, LOW);
-        SinglePositionTriger __homer_1 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_1, LOW);
-        SinglePositionTriger __homer_2 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_2, LOW);
-        SinglePositionTriger __homer_3 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_3, LOW);
+        SinglePositionTrigger __homer_0 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_0, LOW);
+        SinglePositionTrigger __homer_1 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_1, LOW);
+        SinglePositionTrigger __homer_2 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_2, LOW);
+        SinglePositionTrigger __homer_3 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_3, LOW);
         HomingConfig __homing_config;
         AxisHomer __all_homers = AxisHomer(2,&__homing_config);
         Vsc_RobotEef __eef;

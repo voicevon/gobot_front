@@ -14,7 +14,7 @@ class Board_SpringMaker: public CncBoardBase{
         
         // void SayHello();
         // ActuatorStepper* GetActuator(EnumAxis axis_name) override;
-        SinglePositionTriger* GetSingleHomer(EnumAxis axis_name) override;
+        SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
         AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
         RobotEef_SpringMaker* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
@@ -24,7 +24,7 @@ class Board_SpringMaker: public CncBoardBase{
     private:
         Stepper stepper_driver_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
         ActuatorStepper stepper_alpha;
-        SinglePositionTriger homer_alpha = SinglePositionTriger(PIN_HOME_ALPHA_2201, LOW);
+        SinglePositionTrigger homer_alpha = SinglePositionTrigger(PIN_HOME_ALPHA_2201, LOW);
         RobotEef_SpringMaker eef = RobotEef_SpringMaker();
         // SpringMaker_CncSolutionConfig __cnc_solution_config;
 };

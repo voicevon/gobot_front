@@ -17,7 +17,7 @@ void Board_SpringMaker::Init(bool is_on_reset){
 //     return nullptr;
 // }
 
-SinglePositionTriger* Board_SpringMaker::GetSingleHomer(EnumAxis axis_name) {
+SinglePositionTrigger* Board_SpringMaker::GetSingleHomer(EnumAxis axis_name) {
     if (axis_name==AXIS_ALPHA){
         return &this->homer_alpha;
     }else{

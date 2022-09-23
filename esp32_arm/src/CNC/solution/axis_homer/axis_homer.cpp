@@ -15,11 +15,11 @@ AxisHomer::AxisHomer(uint8_t triger_count, HomingConfig* config){
     }
 }
 
-void AxisHomer::AppendSingleHomer(SinglePositionTriger* single_homer){
+void AxisHomer::AppendPositionTrigger(SinglePositionTrigger* single_homer){
     this->_all_single_homers[this->__appending_index] = single_homer;
     this->__appending_index++;
     if (this->__appending_index > this->__triger_count){
-        Logger::Warn("AxisHomer::AppendSingleHomer()   TOO MANY HAS BEEN APPENED! ");
+        Logger::Warn("AxisHomer::AppendPositionTrigger()   TOO MANY HAS BEEN APPENED! ");
     }
 }
 

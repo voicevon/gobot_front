@@ -1,7 +1,7 @@
 #include "cnc_board_test.h"
 
 
-void CncBoard_Test::Test_SinglePositionTrigger(SinglePositionTriger* homer, int loop_count){
+void CncBoard_Test::Test_SinglePositionTrigger(SinglePositionTrigger* homer, int loop_count){
     for (int i=0; i<loop_count; i++){
         Serial.print("Trigger is fired = ");
         Serial.println(homer->IsTriged());

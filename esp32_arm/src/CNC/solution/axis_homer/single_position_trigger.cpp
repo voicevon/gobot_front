@@ -2,14 +2,14 @@
 #include "single_position_trigger.h"
 #include "MyLibs/basic/logger.h"
 
-SinglePositionTriger::SinglePositionTriger(uint8_t pinTriger, int trigeredState){
+SinglePositionTrigger::SinglePositionTrigger(uint8_t pinTriger, int trigeredState){
     this->pinTriger = pinTriger;
     this->trigeredState = trigeredState;
     pinMode(pinTriger, INPUT_PULLUP);
     this->__mcp23018 = nullptr;
 }
 
-SinglePositionTriger::SinglePositionTriger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger, int trigeredState){
+SinglePositionTrigger::SinglePositionTrigger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger, int trigeredState){
     this->__mcp23018 = mcp_23018;
     this->pinTriger = expanded_pinTriger;
     this->trigeredState = trigeredState;
@@ -17,17 +17,17 @@ SinglePositionTriger::SinglePositionTriger(Adafruit_MCP23X17* mcp_23018, uint8_t
     this->__mcp23018->pinMode(pinTriger, INPUT_PULLUP);
 }
 
-SinglePositionTriger::SinglePositionTriger(int trigeredState){
+SinglePositionTrigger::SinglePositionTrigger(int trigeredState){
     this->trigeredState = trigeredState;
 }
 
-void SinglePositionTriger::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger){
+void SinglePositionTrigger::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger){
     mcp_23018->pinMode(pinTriger, INPUT_PULLUP);
     this->pinTriger = expanded_pinTriger;
     this->__mcp23018 = mcp_23018;
 }
 
-bool SinglePositionTriger::IsTriged(){
+bool SinglePositionTrigger::IsTriged(){
     // Read sensor pin
     int pin_value;
     if (this->__mcp23018 == nullptr)
@@ -47,8 +47,8 @@ bool SinglePositionTriger::IsTriged(){
     return false;
 }
 
-void SinglePositionTriger::PrintOut(const char* title){
-    Logger::Debug("SinglePositionTriger::PrintOut()");
+void SinglePositionTrigger::PrintOut(const char* title){
+    Logger::Debug("SinglePositionTrigger::PrintOut()");
     Logger::Print("pin_triger", this->pinTriger);
 }
 

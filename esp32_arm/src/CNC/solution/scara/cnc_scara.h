@@ -34,7 +34,7 @@ class CncScaraSolution: public CncSolutionBase{
 
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
 
-        SinglePositionTriger* __homer;
+        SinglePositionTrigger* __homer;
         FkPosition_XY __current_fk_position;
         FkPosition_XY __next_fk_position;
         CncSolution_ScaraConfigBase* _scara_machine;

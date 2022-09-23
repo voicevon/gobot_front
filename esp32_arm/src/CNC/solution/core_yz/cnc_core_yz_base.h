@@ -30,8 +30,8 @@ class CncSolution_CoreYZBase: public CncSolutionBase{
 
         FkPosition_YZ __current_fk_position;
 
-        SinglePositionTriger* __homing_helper;
-        SinglePositionTriger* objHomeHelper_vertical;
-        SinglePositionTriger* objHomeHelper_y;
+        SinglePositionTrigger* __homing_helper;
+        SinglePositionTrigger* objHomeHelper_vertical;
+        SinglePositionTrigger* objHomeHelper_y;
 
 };

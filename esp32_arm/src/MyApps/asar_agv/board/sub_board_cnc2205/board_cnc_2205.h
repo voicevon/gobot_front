@@ -15,7 +15,7 @@ class Board2205Cnc: public CncBoardBase{
         void Init(Adafruit_MCP23X17* mcp_23018);
         void SayHello() override{};
         // ActuatorBase* GetActuator(EnumAxis axis_name) override;
-        SinglePositionTriger* GetSingleHomer(EnumAxis axis_name) override;
+        SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
         AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
         RobotEef_GarmentAsar* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
@@ -28,8 +28,8 @@ class Board2205Cnc: public CncBoardBase{
         Stepper stepper_driver_beta = Stepper(PIN_BETA_STEP_2205);
         // ActuatorStepper alpha_stepper;
         // ActuatorStepper beta_stepper;
-        SinglePositionTriger homer_z = SinglePositionTriger(LOW);
-        SinglePositionTriger homer_y = SinglePositionTriger(LOW);
+        SinglePositionTrigger homer_z = SinglePositionTrigger(LOW);
+        SinglePositionTrigger homer_y = SinglePositionTrigger(LOW);
         RobotEef_GarmentAsar eef = RobotEef_GarmentAsar();
 
 };

@@ -17,7 +17,8 @@ class AxisHomer{
     public:
 
         AxisHomer(uint8_t triger_count, HomingConfig* homing_para);
-        void AppendSingleHomer(SinglePositionTriger* single_homer);
+        // void AppendSingleHomer(SinglePositionTrigger* single_homer);
+        void AppendPositionTrigger(SinglePositionTrigger* single_homer);
 
         //return -1, if no homer is trigered.
         int GetTrigeredIndex();
@@ -29,7 +30,7 @@ class AxisHomer{
         uint8_t __appending_index;
         uint8_t __last_fired_index;
 
-        SinglePositionTriger* _all_single_homers[POSITION_TRIGGER_MAX_COUNT];
+        SinglePositionTrigger* _all_single_homers[POSITION_TRIGGER_MAX_COUNT];
         HomingConfig* __homing_config;
 
 };
