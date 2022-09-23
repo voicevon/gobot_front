@@ -5,7 +5,7 @@
 // #include "SimpleFOC/common/time_utils.h"
 #include <SimpleFOC.h>
 #include "stdint.h"
-#include "SensorBase.h"
+#include "sensor_base.h"
 
 /**
  *  Quadrature mode configuration structure

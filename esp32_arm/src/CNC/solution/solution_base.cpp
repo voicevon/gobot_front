@@ -97,6 +97,7 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
 	this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
 	float long_distance_to_move = this->_config_base->GetLongOffsetToGoHome(axis);
+	Logger::Print("CncSolutionBase::__HomeSingleAxis()  long_distance_to_move", long_distance_to_move);
 	this->_mover_base->SingleActuatorMoveTo(axis, false, long_distance_to_move);
 
 	Logger::Debug("CncSolutionBase::RunG28() is Starting to run..." );

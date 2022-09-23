@@ -1,12 +1,9 @@
 #pragma once
 #include <SimpleFOC.h>
-// #include "MyLibs/rc_pid/rc_pid.h"
-// #include "CNC/Actuator/rc_pid/rc_pid.h"
-// #include "Robot/homer/single_axis_homer.h"
-// #include "Robot/homer/multi_homers.h"
 #include "Robot/position_trigger/position_triggers.h"
 #include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
 #include "CNC/mover/driver/h_bridge/h_bridge.h"
+#include "CNC/Sensor/position_sensor/polor_encoder.h"
 #include "eef/vsc_eef.h"
 
 #include "MyBoards/cnc_board_base.h"
@@ -17,14 +14,14 @@ class Vsc_Board: public CncBoardBase{
     public:
         // For being a real PCB board.
         Vsc_Board(){};
-        void LinkEncoderSensor(Encoder* encoder){this->__motor_angle_sensor=encoder;};
+        void LinkEncoderSensor(Encoder* encoder);
         // call me must after LinkEncoderSensor().
         void Init(bool is_on_reset) override;
         void SayHello() override;
 
         // For being an actuator and its components.
         ActuatorDcMotor* GetActuator(EnumAxis axis_name) {return &this->__motor;};
-        Encoder* GetAngleSensor(){return this->__motor_angle_sensor;};
+        PolorEncoder* GetAngleSensor(){return this->__motor_angle_sensor;};
         H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
 
         // For being a CNC machine.
@@ -45,10 +42,11 @@ class Vsc_Board: public CncBoardBase{
         PidControllers __all_pids = PidControllers(1);
 
         H_Bridge __pwm_h_bridge = H_Bridge(PIN_H_BRIDGE_DIR, PIN_H_BRIDGE_SPEED);
-        Encoder* __motor_angle_sensor;
+        // Encoder* __motor_angle_sensor;
+        PolorEncoder* __motor_angle_sensor;
 
-        #define SMALLEST_COUNT 1
-        #define BIGEST_COUNT 4096
+        // #define SMALLEST_COUNT 1
+        // #define BIGEST_COUNT 4096
         // MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
         SinglePositionTriger __homer_0 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_0, LOW);
         SinglePositionTriger __homer_1 = SinglePositionTriger(PIN_HOMER_SENSOR_HALL_1, LOW);

@@ -21,6 +21,9 @@ void Vsc_Board::Init(bool is_on_reset){
     // this->__all_homers.AppendSingleHomer(&this->__homer_3);
 
 }
+void Vsc_Board::LinkEncoderSensor(Encoder* encoder){
+    this->__motor_angle_sensor->LinkRawSensor(encoder);
+}
 
 
 SinglePositionTriger* Vsc_Board::GetSingleHomer(EnumAxis axis_name){

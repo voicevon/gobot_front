@@ -3,39 +3,42 @@
 #include "MyBoards/board_base.h"
 
 
-#define GEAR_TEETH_COUNT 56.0f
-#define GEAR_PITCH 12.7f   //unit is mm
-#define PID_P 10.0f
-#define INERTIA_DISTANCE_IN_MM  0.0001   // ??  in_rad
+// #define GEAR_TEETH_COUNT 56.0f
+// #define GEAR_PITCH 12.7f   //unit is mm
+// #define PID_P 10.0f
+// #define INERTIA_DISTANCE  0.008    // this is a CNC unit == (1/386)/ (2*PI), around 6.3mm
+#define INERTIA_DISTANCE  0.016    // this is a CNC unit == (1/386)/ (2*PI), around 12.7mm
 
 
 
 void ActuatorDcMotor::SpinOnce(){
-    this->__sensor->update();
+    this->__sensor->GetRawSensor()->update();
     // real speed control, position check, auto stop....
-    float abs_distance = this->GetAbsDistanceToTarget_InCncUnit();
-    // if(this->GetAbsDistanceToTarget_InCncUnit() * GEAR_PITCH < INERTIA_DISTANCE_IN_MM){
-    if (false){
+    // float abs_distance = this->GetAbsDistanceToTarget_InCncUnit();
+    if(this->GetAbsDistanceToTarget_InCncUnit()  < INERTIA_DISTANCE){
+    // if (false){
         // The wheel will continue to run a short time after stoping, because the inertia.
         // TDDO:  How to deal with negtive distance?
         this->Stop();
     }else{
         // control speed
-        this->__count_down--;
-        if (this->__count_down <=0){
+        this->__count_down_for_serial_print--;
+        if (this->__count_down_for_serial_print <=0){
             // Logger::Print("Abs DIstanceToTarget in CNC Rad ", abs_distance);
-            this->__count_down = 18888;
+            this->__count_down_for_serial_print = 18888;
         }
 
         // float velocity =  this->__filter(this->__sensor->getVelocity());
         // this->__speed_pid->P = 1;
-        float velocity =  this->__sensor->getVelocity();
-        float speed_error =  velocity - this->__cnc_speed / 30;
+        float raw_velocity =  this->__sensor->GetRawSensor()->getVelocity();
+        float velocity_in_cnc_unit = raw_velocity * 36.8f;  // (10T /56T) * (56T / 368T)
+        float speed_error =  velocity_in_cnc_unit - this->__target_speed;
         float pwm_speed =  - this->__speed_pid->FeedError(speed_error);
-        // float pwm_speed = - PID_P * error;   //   pid.get_speed(error);
 
-        if (false){
+        if (true){
             // Serial.print("velocity of sensor, speed_error, pwm_speed \t");
+            // Logger::Debug("velocity", velocity_in_cnc_unit);
+            // Logger::Debug("target_speed", )
             Serial.print(velocity);
             Serial.print("\t");
             Serial.print(speed_error);
@@ -59,12 +62,11 @@ float ActuatorDcMotor::GetCurrentPosition_InCncUnit(){
     //           == sensor_angle * (SENSOR_GEAR_COUNT / MOTOR_GEAR_COUNT)* (MOTOR_GEAR_COUNT / DRIVER_GEAR_COUNT) * (DRIVER_GEAR_COUNT / CHAIN_PITCH_COUNT)
     //           == sensor_angle * (SENSOR_GEAR_COUNT / CHAIN_PITCH_COUNT)
 
-    float cnc_position = (this->__sensor->getAngle() + this->__sensor_offset) * this->__SLOPE_FROM_SENSOR_TO_CNC;
-    return cnc_position;
+    return this->__sensor->GetCurrentPosition();
 }
 
 void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
-    this->__sensor_offset = (position_in_cnc_unit * this->__SLOPE_FROM_CNC_TO_SENSOR - this->__sensor->getAngle());
+    this->__sensor->SetCurrentPosition(position_in_cnc_unit);
 }
 
 void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
@@ -82,13 +84,16 @@ void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float posit
 float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
     // sensor --> current poistion   --> distance to target
     // TODO:  minus distance.
+    // Logger::Debug(" ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit()");
+    // Logger::Print("target_cnc_position", this->_target_cnc_position);
+    // Logger::Print("Current_position", this->GetCurrentCncPosition());
     return this->_target_cnc_position - this->GetCurrentPosition_InCncUnit();
 }
 
 
 
 void ActuatorDcMotor::SetSpeed(float rad_per_second){
-    this->__cnc_speed = rad_per_second;
+    this->__target_speed = rad_per_second;
 }
 
 void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){

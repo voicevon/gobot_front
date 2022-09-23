@@ -23,7 +23,7 @@ void doB(){encoder.handleB();}
 void test_board(){
     Vsc_BoardTest tester;
     // tester.LinkBoard(&board);
-    tester.Test_EncoderSensor(board.GetAngleSensor(), 0);
+    tester.Test_EncoderSensor(board.GetAngleSensor()->GetRawSensor(), 0);
     // tester.Test_EncoderSensor(&encoder, 0);
     tester.Test_SinglePositionTrigger(board.GetSingleHomer(AXIS_ALPHA), 0);
     tester.Test_AllPositionTriggers(board.GetPositionTriggers(AXIS_ALPHA), 0);

@@ -5,6 +5,7 @@
 Vsc_CncSolutionConfig::Vsc_CncSolutionConfig(){
         this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;
         this->_HOMING_SPEED[AXIS_ALPHA] = 100.0f;
+        this->_LONG_DISTANCE_TO_HOME[AXIS_ALPHA] = PI;   // half PI, with 4 position triggers.
 }
 
 void Vsc_CncSolutionConfig::PrintOut(const char* title){
