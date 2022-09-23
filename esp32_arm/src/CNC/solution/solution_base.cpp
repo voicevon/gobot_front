@@ -225,6 +225,7 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 	}else if(gcode->has_m){
 		uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
 		uint8_t s_value = 0;
+		float f_value = 0.0f;
 		EefAction action;
 		switch (gcode->m){
 		case 42:
@@ -261,11 +262,20 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 			action = (EefAction)s_value;
 			this->RunM123(p_value, s_value);
 			break;
+
 		case 130:
-			p_value =  gcode->get_value('P');
-			s_value = gcode->get_value('S');
-			// this->__pid_setter(p_value, s_value);
+			Logger::Debug("CncSolutionBase::RunGcode()   M130");
+			Logger::Print("gcode", gcode->get_command());
+			p_value =  gcode->get_value('N');
+			f_value = gcode->get_value('P');
+			this->__pid_controllers->GetController(p_value)->P = f_value;
+			f_value = gcode->get_value('I');
+			this->__pid_controllers->GetController(p_value)->I = f_value;
+			f_value = gcode->get_value('D');
+			this->__pid_controllers->GetController(p_value)->D = f_value;
+
 			break;
+
 		case 141:
 			break;
 		case 280:

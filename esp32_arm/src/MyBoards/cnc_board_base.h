@@ -6,6 +6,7 @@
 #include "CNC/Actuator/stepper/actuator_stepper.h"   //???
 #include "CNC/solution/solution_config_base.h"
 #include "Robot/position_trigger/position_triggers.h"
+#include "MyLibs/pid_controllers/pid_controllers.h"
 
 class CncBoardBase: public BoardBase{
     public:
@@ -14,6 +15,7 @@ class CncBoardBase: public BoardBase{
         virtual PositionTriggers* GetPositionTriggers(EnumAxis axis_name);
 
         virtual RobotEefBase* GetEef();
+        virtual PidControllers* GetPidControllers();
         virtual void EnableMotor(EnumAxis axis_name, bool enable_it);
 
 

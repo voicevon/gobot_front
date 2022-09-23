@@ -11,7 +11,6 @@
 
 #include "MyBoards/cnc_board_base.h"
 #include "pins/wroom_board.h"
-#include "MyLibs/pid_controllers/pid_controllers.h"
 
 
 class Vsc_Board: public CncBoardBase{
@@ -32,6 +31,8 @@ class Vsc_Board: public CncBoardBase{
         SinglePositionTriger* GetSingleHomer(EnumAxis axis_name) override;   //{return &this->__homer_0; };
         PositionTriggers* GetPositionTriggers(EnumAxis axis_name) override {return &this->__all_homers;};
         RobotEefBase* GetEef() override {return &this->__eef;};
+        PidControllers* GetPidControllers() override {return &this->__all_pids;};
+        
 
         // We do nothing, just override the methods.
         void EnableMotor(EnumAxis axis_name, bool enable_it) override {};

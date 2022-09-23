@@ -9,6 +9,7 @@
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
 #include "../mover/cnc_mover_base.h"
+#include "MyLibs/pid_controllers/pid_controllers.h"
 
 
 enum class CncState{
@@ -32,6 +33,7 @@ class CncSolutionBase: public GcodeConsumer{
 
     protected:
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
+        void _LinkPidControllers(PidControllers* pid_controllers){this->__pid_controllers=pid_controllers;};
         void SpinOnce_BaseExit();
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
@@ -61,6 +63,7 @@ class CncSolutionBase: public GcodeConsumer{
     private:
         int test_int;
         RobotEefBase* __eef;
+        PidControllers* __pid_controllers;
         void _base_spin_once();
         void __running_G4();
         void __HomeSingleAxis(EnumAxis axis);

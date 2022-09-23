@@ -9,7 +9,8 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
     this->_LinkEef(board->GetEef());
     this->_config_base = &this->__config;
 
-    this->link_pid_controllers();
+    //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
+    this->_LinkPidControllers(board->GetPidControllers());
 
     board->EnableMotor(AXIS_ALPHA, false);
 	this->_cnc_board = board;
