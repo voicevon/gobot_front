@@ -1,5 +1,6 @@
 #pragma once
-#include "MyBoards/cnc_board_base.h"
+// #include "MyBoards/cnc_board_base.h"
+#include "CNC/board/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "board_pins/board_ver1.2.h"
 #include "robot_eef/gobot_main_eef.h"

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "MyLibs/MyFunctions.hpp"
-#include "MyBoards/cnc_board_base.h"
+#include "CNC/board/cnc_board_base.h"
+// #include "MyBoards/cnc_board_base.h"
 #include "../solution_base.h"
 // #include "CNC/Sensor/position_trigger/position_triggers.h"
 #include "CNC/solution/axis_homer/axis_homer.h"

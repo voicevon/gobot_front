@@ -4,7 +4,9 @@
 #include <stdint.h>
 #include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
-#include "MyBoards/cnc_board_base.h"
+// #include "MyBoards/cnc_board_base.h"
+#include "CNC/board/cnc_board_base.h"
+
 #include "../Actuator/actuator_base.h"
 
 // TODO:  template <actuator>

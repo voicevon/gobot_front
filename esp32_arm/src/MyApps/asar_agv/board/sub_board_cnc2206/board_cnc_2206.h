@@ -1,6 +1,7 @@
 #pragma once
 #include "../board_pins/board_pins_ver_2_0.h"
-#include "MyBoards/cnc_board_base.h"
+#include "CNC/board/cnc_board_base.h"
+// #include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 // #include "CNC/Sensor/position_trigger/position_triggers.h"
 #include "CNC/solution/axis_homer/axis_homer.h"

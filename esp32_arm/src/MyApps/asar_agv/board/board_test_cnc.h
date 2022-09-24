@@ -1,6 +1,7 @@
 #pragma once
 
-#include "CNC/board_test/cnc_board_test.h"
+// #include "CNC/board_test/cnc_board_test.h"
+#include "CNC/board/cnc_board_test.h"
 
 #include "board_all_in_one_2205.h"
 

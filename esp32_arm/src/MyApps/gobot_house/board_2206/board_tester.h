@@ -1,7 +1,8 @@
 #pragma once
 
 // #include "MyBoards/board_test/board_test_cnc.h"
-#include "CNC/board_test/cnc_board_test.h"
+#include "CNC/board/cnc_board_test.h"
+// #include "CNC/board_test/cnc_board_test.h"
 
 #include "board_gobot_house.h"
 #include "ESP32Step/src/Stepper.h"

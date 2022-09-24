@@ -1,10 +1,9 @@
 #pragma once
 
-#include "board_base.h"
+#include "MyBoards/board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/eef/robot_eef_base.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"   //???
-// #include "CNC/solution/solution_config_base.h"
 #include "CNC/solution/axis_homer/cnc_homers.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
 

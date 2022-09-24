@@ -1,5 +1,6 @@
 #pragma once
-#include "MyBoards/cnc_board_base.h"
+#include "CNC/board/cnc_board_base.h"
+// #include "MyBoards/cnc_board_base.h"
 #include "board_pins/board_pins_ver3.11.h"
 #include "robot_eef/gobot_house_eef.h"
 // #include "CNC/Sensor/position_trigger/position_triggers.h"

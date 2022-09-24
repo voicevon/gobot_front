@@ -2,7 +2,8 @@
 
 
 #include <ESP32Servo.h>
-#include "MyBoards/cnc_board_base.h"
+#include "CNC/board/cnc_board_base.h"
+// #include "MyBoards/cnc_board_base.h"
 #include "../solution_base.h"
 #include "config_base.h"
 #include "Robot/eef/eef_standard_code.h"

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "board_vsc.h"
-#include "CNC/board_test/cnc_board_test.h"
+// #include "CNC/board_test/cnc_board_test.h"
+#include "CNC/board/cnc_board_test.h"
 
 
 class Vsc_BoardTest: public CncBoard_Test{

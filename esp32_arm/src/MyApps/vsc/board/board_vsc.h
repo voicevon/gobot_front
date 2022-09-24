@@ -7,7 +7,9 @@
 #include "CNC/Sensor/position_sensor/polor_encoder.h"
 #include "eef/vsc_eef.h"
 
-#include "MyBoards/cnc_board_base.h"
+// #include "MyBoards/cnc_board_base.h"
+#include "CNC/board/cnc_board_base.h"
+
 #include "pins/wroom_board.h"
 
 
