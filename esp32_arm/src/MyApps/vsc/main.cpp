@@ -27,7 +27,7 @@ void test_board(){
     // tester.Test_AngleSensor();
     // tester.Test_EncoderSensor(&encoder, 0);
     // tester.Test_SinglePositionTrigger(board.GetSingleHomer(AXIS_ALPHA), 0);
-    tester.Test_AxisHomer(board.GetCncHomers()->GetAxisHomer(AXIS_ALPHA), 0);
+    // tester.Test_AxisHomer(board.GetCncHomers()->GetAxisHomer(AXIS_ALPHA), 0);
 
     tester.Test_MotorDriver(board.GetActuator(AXIS_ALPHA), 0);
     tester.Test_Offset(0);
