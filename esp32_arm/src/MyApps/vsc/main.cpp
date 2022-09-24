@@ -7,7 +7,7 @@
 #include "IoT/main_mqtt.h"
 #include "vsc_robot.h"
 
-Vsc_CncSoution cnc;
+Vsc_CncSoution cnc_solution;
 
 Vsc_Board board;
 VscRobot robot;
@@ -48,9 +48,9 @@ void setup(){
     board.LinkEncoderSensor(&encoder);
     board.Init(true);
     test_board();
-    cnc.Init(&board);
+    cnc_solution.Init(&board);
     robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
-    cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    cnc_solution.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
     setup_mqtt_block_connect();
     append_mqtt_bridge("vsc/j4", &mqtt_command_queue, &robot); 
@@ -66,7 +66,7 @@ void loop(){
     ActuatorDcMotor* motor = board.GetActuator(AXIS_ALPHA);
     motor->SpinOnce();
     robot.SpinOnce();
-    cnc.SpinOnce();
+    cnc_solution.SpinOnce();
     loop_mqtt();
 
 }

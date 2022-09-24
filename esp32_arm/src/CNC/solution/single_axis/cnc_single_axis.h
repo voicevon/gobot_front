@@ -7,6 +7,7 @@
 
 
 //This is a virtual class. No Constructor.
+// The class name is really confused. Here means a cnc has only one axis,  NOT one of the multi axises cnc.
 class CncSingleAxis: public CncSolutionBase{
     public:
         // void Init(CncBoardBase* board) override;
@@ -17,7 +18,6 @@ class CncSingleAxis: public CncSolutionBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        CncSolution_SingleAxisConfig* _config;  
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
         EnumAxis _AXIS;   // TODO: doubel check this var.
 

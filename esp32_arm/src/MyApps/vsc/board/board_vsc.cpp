@@ -16,17 +16,35 @@ void Vsc_Board::Init(bool is_on_reset){
     this->__all_pids.AppendPidController(&this->__speed_pid);
     
     
-    this->__homer_0.SetTriggerPosition(0);
-    this->__homer_1.SetTriggerPosition(TWO_PI * 90 / 368);    //at 90 pitch of total 368 pitches.
-    this->__homer_2.SetTriggerPosition(TWO_PI * 180 / 368);    //at 180 pitch of total 368 pitches.
-    this->__homer_3.SetTriggerPosition(TWO_PI * 270 / 368);    //at 270 pitch of total 368 pitches
 
-    this->_cnc_homers.GetAxisHomer(AXIS_ALPHA)->AppendPositionTrigger(&this->__homer_0);
-    this->_cnc_homers.GetAxisHomer(AXIS_ALPHA)->AppendPositionTrigger(&this->__homer_1);
+
+
+    // this->_cnc_homers.GetAxisHomer(AXIS_ALPHA)->AppendPositionTrigger(&this->__homer_0);
+    // this->_cnc_homers.GetAxisHomer(AXIS_ALPHA)->AppendPositionTrigger(&this->__homer_1);
     // this->__all_homers.AppendPositionTrigger(&this->__homer_2);
     // this->__all_homers.AppendPositionTrigger(&this->__homer_3);
 
 }
+
+SinglePositionTrigger* Vsc_Board::GetPositionTrigger(uint8_t trigger_index){
+    switch (trigger_index){
+    case 1:
+        return &this->__homer_1;
+        break;
+    case 2:
+        return &this->__homer_2;
+        break;
+    case 3:
+        return &this->__homer_3;
+        break;
+    default:
+        break;
+    }
+    return &this->__homer_0;
+}
+
+
+
 void Vsc_Board::LinkEncoderSensor(Encoder* encoder){
     this->__motor_angle_sensor.LinkRawSensor(encoder);
     this->__motor_angle_sensor.SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)

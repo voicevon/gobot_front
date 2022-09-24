@@ -14,11 +14,13 @@ class CncBoardBase: public BoardBase{
         virtual RobotEefBase* GetEef();
         virtual PidControllers* GetPidControllers(){return nullptr;};
         virtual void EnableMotor(EnumAxis axis_name, bool enable_it);
-        CncHomers* GetCncHomers(){return &this->_cnc_homers;};
+        // CncHomers* GetCncHomers(){return &this->_cnc_homers;};
+        // virtual CncSolutionConfigBase* GetCncConfig();
 
 
     protected:
-        CncHomers _cnc_homers = CncHomers(CNC_AXIS_COUNT);
+        // CncHomers _cnc_homers = CncHomers(CNC_AXIS_COUNT);
+        // CncSolutionConfigBase cnc_convig
 
     private:
 

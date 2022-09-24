@@ -37,6 +37,7 @@ class CncSolutionBase: public GcodeConsumer{
 
     protected:
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
+        void _linkHomer(CncHomers* cnc_homer_group){this->_cnc_homer=cnc_homer_group;};
         void _LinkPidControllers(PidControllers* pid_controllers){this->__pid_controllers=pid_controllers;};
        
         void SpinOnce_BaseExit();
@@ -60,13 +61,16 @@ class CncSolutionBase: public GcodeConsumer{
 		virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
         EnumAxis _homing_axis;
-        AxisHomer* _current_homer;
+        // AxisHomer* _current_homer;
+        CncHomers _homer;
+
         CncSolutionConfigBase* _config_base;    //???
 
         bool is_absolute_position = true;
         
         CncBoardBase* _cnc_board;
         CncMoverBase* _mover_base;
+        CncHomers* _cnc_homer;
 
     private:
         int test_int;

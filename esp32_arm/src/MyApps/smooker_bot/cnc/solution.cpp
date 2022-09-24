@@ -1,5 +1,14 @@
 #include "solution.h"
 
+void SmookerBot_CncSoution::Init(){
+        HomingConfig* config = this->_homer.GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
+        config->IsDirectionToMax = true;
+        // config->LastHomedPosition = 1
+        config->Accelleration = 6000;
+        config->DistanceToGo = 100;
+}
+
+
 EnumAxis SmookerBot_CncSoution::ConvertToEnum(char axis){
     switch (axis){
         case 'A':
