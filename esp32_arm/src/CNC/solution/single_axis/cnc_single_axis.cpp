@@ -32,7 +32,7 @@ void CncSingleAxis::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		Logger::Info("CncSingleAxis::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
 		// this->__current_fk_position.A = this->_config_base->HomedPosition(AXIS_ALPHA);
-		this->__current_fk_position.A = this->_all_position_trigers_of_homing_axis->GetFiredPosition();
+		this->__current_fk_position.A = this->_current_homer->GetFiredPosition();
 		this->IK(&this->__current_fk_position, &ik_position);
 		// verify IK by FK()
 		FkPosition_A verifying_fk;

@@ -9,7 +9,7 @@ void CncBoard_Test::Test_SinglePositionTrigger(SinglePositionTrigger* homer, int
     }
 }
 
-void CncBoard_Test::Test_AllPositionTriggers(AxisHomer* position_triggers, int loop_count){
+void CncBoard_Test::Test_AxisHomer(AxisHomer* position_triggers, int loop_count){
     static int last_index = -1;
     int changing_count = 0;
     while (changing_count < loop_count){

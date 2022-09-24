@@ -7,8 +7,7 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
     this->_mover_base = &this->__mover;
     
     this->_LinkEef(board->GetEef());
-    this->_config->LinkHomers(board->GetHomers());
-
+    this->_config->LinkHomers(board->GetCncHomers());
 
     //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
     this->_LinkPidControllers(board->GetPidControllers());
