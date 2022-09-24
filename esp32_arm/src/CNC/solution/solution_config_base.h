@@ -4,7 +4,7 @@
 #include "MyBoards/const.h"
 #include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
-#include "axis_homer/axis_homers.h"
+#include "axis_homer/cnc_homers.h"
 
 class CncSolutionConfigBase{
     public:
@@ -16,13 +16,13 @@ class CncSolutionConfigBase{
 
         //Homing
         const bool& IsInverseKinematicHoimg = _home_via_inverse_kinematic;
-        AxisHomers* GetAxisHomers(){return this->_homers;};
-        void LinkHomers(AxisHomers* homers){this->_homers=homers;};
+        CncHomers* GetAxisHomers(){return this->_homers;};
+        void LinkHomers(CncHomers* homers){this->_homers=homers;};
         
     protected:
         bool _IS_COMBINED_FK = false;   
         // AxisHomer  _homers[CNC_AXIS_COUNT];
-        AxisHomers* _homers;
+        CncHomers* _homers;
         bool _home_via_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
 
         //Moving

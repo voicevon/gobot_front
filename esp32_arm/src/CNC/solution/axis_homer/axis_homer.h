@@ -28,8 +28,8 @@ class AxisHomer{
         HomingConfig* GetHomingConfig(){return &this->__homing_config;};
 
     private:
-        uint8_t __trigger_count = 1;
-        uint8_t __appending_index = 0;
+        // uint8_t __trigger_count = 1;
+        uint8_t __appended_count = 0;
         uint8_t __last_fired_index = 0;
 
         SinglePositionTrigger* _all_single_homers[POSITION_TRIGGER_MAX_COUNT];

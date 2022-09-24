@@ -2,9 +2,10 @@
 
 #include "axis_homer.h"
 #include "CNC/coordinate/cnc_axis.h"
-class AxisHomers{
+
+class CncHomers{
     public:
-        AxisHomers(uint8_t axis_count){};
+        CncHomers(uint8_t axis_count){};
         AxisHomer* GetAxisHomer(EnumAxis axis){return &this->__all_homers[axis];};
 
 
