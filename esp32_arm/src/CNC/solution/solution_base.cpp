@@ -87,34 +87,23 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	Logger::Debug("CncSolutionBase::__HomeSingleAxis()");
 	this->_homing_axis = axis;
 	HomingConfig* config = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
-	// this->_board->SayHello();
-	// this->__current_homer = this->_cnc_board->GetSingleHomer(axis);
-	this->_current_homer = this->_cnc_board->GetCncHomers()->GetAxisHomer(axis);
 	this->_cnc_board->EnableMotor(axis, true);
 	
-	// this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()  __current_homer");
 	this->_config_base.PrintOut("CncSolutionBase::__HomeSingleAxis()  _config_base");
 	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
-	// this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
-	// this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
-	// this->_mover_base->SetActuatorSpeed(axis, this->_cnc_homer.GetAxisHomer(axis) _config_base->GetAxisHomers()->GetAxisHomer(axis)->GetHomingConfig()->Speed);
-	// this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->GetAxisHomers()->GetAxisHomer(axis)->GetHomingConfig()->Speed);
 	this->_mover_base->SetActuatorSpeed(axis, config->Speed);
 	this->_mover_base->SetActuatorAcceleration(axis, config->Accelleration);
-	// float long_distance_to_move = this->_config_base->GetLongOffsetToGoHome(axis);
-	// float long_distance_to_move = this->_current_homer->GetHomingConfig()->DistanceToGo;
-	// Logger::Print("CncSolutionBase::__HomeSingleAxis()  long_distance_to_move", long_distance_to_move);
 	this->_mover_base->SingleActuatorMoveTo(axis, false, config->DistanceToGo);
 
 	Logger::Debug("CncSolutionBase::RunG28() is Starting to run..." );
 }
 
 void CncSolutionBase::_running_G28(){
-	// if (this->__current_homer->IsTriged()){
-	int fired_trigger_index =  this->_current_homer->GetTrigeredIndex();
+	// Logger::Debug("CncSolutionBase::_running_G28() is entering...");
+	int fired_trigger_index =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetTrigeredIndex();
 	if (fired_trigger_index >=0 ){
 		// End stop is trigered
-		Logger::Info("CncSolutionBase::_running_G28() Home sensor is trigered." );
+		Logger::Info("CncSolutionBase::_running_G28() ----> Home sensor is trigered." );
 		Logger::Print("_homing_axis_name", this->_homing_axis);
 		Logger::Print(" fired_trigger_index", fired_trigger_index);
 
