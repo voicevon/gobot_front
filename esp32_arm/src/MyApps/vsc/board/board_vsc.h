@@ -54,8 +54,8 @@ class Vsc_Board: public CncBoardBase{
         SinglePositionTrigger __homer_1 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_1, LOW);
         SinglePositionTrigger __homer_2 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_2, LOW);
         SinglePositionTrigger __homer_3 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_3, LOW);
-        HomingConfig __homing_config;
-        AxisHomer __all_homers = AxisHomer(2,&__homing_config);
+        // HomingConfig __homing_config;
+        AxisHomer __all_homers = AxisHomer(2);
         Vsc_RobotEef __eef;
 
 };

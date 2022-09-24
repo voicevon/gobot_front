@@ -8,6 +8,7 @@
 
 class CncSolutionConfigBase{
     public:
+        CncSolutionConfigBase(){};
         virtual void PrintOut(const char* title);
         const bool& IsCombinedFk = _IS_COMBINED_FK;  // Like core-xy, core-yz, core-az.
         //Moving
@@ -17,11 +18,11 @@ class CncSolutionConfigBase{
         const bool& IsInverseKinematicHoimg = _home_via_inverse_kinematic;
         // float HomingSpeed(EnumAxis axis){return this->_HOMING_SPEED[axis];};
         // float HomingAcceleration(EnumAxis axis){return this->_HOMING_ACCELERATION[axis];};
-        HomingConfig* GetHomingConfig(EnumAxis axis){return &this->_homing_configs[axis];};
+        AxisHomer* GetAxisHomer(EnumAxis axis){return &this->_homers[axis];};
 
     protected:
         bool _IS_COMBINED_FK = false;   
-        HomingConfig  _homing_configs[CNC_AXIS_COUNT];
+        AxisHomer  _homers[CNC_AXIS_COUNT];
 
         //Moving
         float _ACCELERATION_FOR_G1[CNC_AXIS_COUNT];

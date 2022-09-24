@@ -7,7 +7,7 @@ Vsc_CncSolutionConfig::Vsc_CncSolutionConfig(){
         // this->_HOMING_SPEED[AXIS_ALPHA] = 100.0f;
         // this->_LONG_DISTANCE_TO_HOME[AXIS_ALPHA] = PI;   // half PI, with 4 position triggers.
 
-    HomingConfig* config = &this->_homing_configs[AXIS_ALPHA];
+    HomingConfig* config = this->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
     config->IsDirectionToMax = true;
     config->Speed = TWO_PI / 60;  // 60 seconds Per loop.
     config->Accelleration = 0.1;

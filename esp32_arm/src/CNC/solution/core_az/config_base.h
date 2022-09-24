@@ -4,6 +4,7 @@
 
 class CncSolution_CoreAZConfigBase: public CncSolutionConfigBase{
     public:
+    
         float max_speed_alpha_beta;
         float max_acceleration_alpha_beta;
      

@@ -7,3 +7,6 @@
 # about tridered_state
 For OC output sensor, trigeredState should be LOW
 
+
+#Homer has created a HomingConfig
+

@@ -2,11 +2,11 @@
 #include "CNC/solution/axis_homer/axis_homer.h"
 #include "MyLibs/basic/logger.h"
 
-AxisHomer::AxisHomer(uint8_t trigger_count, HomingConfig* config){
+AxisHomer::AxisHomer(uint8_t trigger_count){
     this->__trigger_count = 0;
     // this->__is_home_direction_to_max = is_home_direction_to_max;
     // this->__max_distance_to_home = max_distance_to_home;
-    this->__homing_config = config;
+    // this->__homing_config = config;
     this->__appending_index = 0;
     if (trigger_count <= 4){
         this->__trigger_count = trigger_count;
