@@ -12,7 +12,7 @@ void GobotMainCncSolution::Init(GobotMain_Board* cnc_board, StepControl* step_co
     
     this->_LinkEef(cnc_board->GetEef());
     this->_config = &this->__config;
-    this->_config_base = &this->__config;
+    // this->_config_base = &this->__config;
 
     cnc_board->EnableMotor(AXIS_ALPHA, false);
 	cnc_board->EnableMotor(AXIS_BETA, false);
@@ -30,7 +30,7 @@ void GobotMainCncSolution::Init(GobotMain_Board* cnc_board, StepControl* step_co
 }
 
 void GobotMainCncSolution::__SelfTest(){
-    this->_config_base->PrintOut("GobotMainCncSolution:: config");
+    this->_config_base.PrintOut("GobotMainCncSolution:: config");
     this->_mover_base->PrintOut("GobotMainCncSolution:: mover");
 }
 

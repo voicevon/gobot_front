@@ -6,18 +6,14 @@
 #include "MyLibs/basic/logger.h"
 #include "axis_homer/cnc_homers.h"
 
+// TODO:  rename to KinematicConfig
 class CncSolutionConfigBase{
     public:
-        CncSolutionConfigBase(){};
-        virtual void PrintOut(const char* title);
-        const bool& IsCombinedFk = _IS_COMBINED_FK;  // Like core-xy, core-yz, core-az.
-        //Moving
-        float GetAcceleration_ForG1(EnumAxis axis){return this->_ACCELERATION_FOR_G1[axis];};
+        virtual void PrintOut(const char* title){};
+        bool IsCombinedFk = false;  // Like core-xy, core-yz, core-az.
+        bool IsInverseKinematicHoimg = false;
 
-        //Homing
-        const bool& IsInverseKinematicHoimg = _home_via_inverse_kinematic;
-        // CncHomers* GetAxisHomers(){return this->_homers;};
-        // void LinkHomers(CncHomers* homers){this->_homers=homers;};
+        float GetAcceleration_ForG1(EnumAxis axis){return this->_ACCELERATION_FOR_G1[axis];};
         
     protected:
         bool _IS_COMBINED_FK = false;   

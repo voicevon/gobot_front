@@ -69,12 +69,12 @@ void CncSolutionBase::SpinOnce_BaseExit(){
 void CncSolutionBase::RunG28(EnumAxis axis){ 
 	bool debug = true;
 	if (debug){
-		Logger::Debug("CncFiveBars::RunG28() is entering" );
+		Logger::Debug("CncSolutionBase::RunG28() is entering" );
 		Logger::Print("axis", axis);
-		Logger::Print("IsCombinedFK", this->_config_base->IsCombinedFk);
+		Logger::Print("IsCombinedFK", this->_config_base.IsCombinedFk);
 	}
 
-	if (this->_config_base->IsCombinedFk){
+	if (this->_config_base.IsCombinedFk){
 		this->_RunG28_CombinedFk(axis);
 
 	}else{
@@ -93,7 +93,7 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	this->_cnc_board->EnableMotor(axis, true);
 	
 	// this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()  __current_homer");
-	this->_config_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _config_base");
+	this->_config_base.PrintOut("CncSolutionBase::__HomeSingleAxis()  _config_base");
 	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
 	// this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
 	// this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
