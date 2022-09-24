@@ -1,7 +1,7 @@
 #pragma once
 #include <SimpleFOC.h>
 // #include "CNC/Sensor/position_trigger/position_triggers.h"
-#include "CNC/solution/axis_homer/axis_homer.h"
+#include "CNC/solution/axis_homer/axis_homers.h"
 #include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
 #include "CNC/mover/driver/h_bridge/h_bridge.h"
 #include "CNC/Sensor/position_sensor/polor_encoder.h"
@@ -26,8 +26,8 @@ class Vsc_Board: public CncBoardBase{
         H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
 
         // For being a CNC machine.
-        SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name) override;   //{return &this->__homer_0; };
-        AxisHomer* GetPositionTriggers(EnumAxis axis_name) override {return &this->__all_homers;};
+        // SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name) override;   //{return &this->__homer_0; };
+        // AxisHomer* GetPositionTriggers(EnumAxis axis_name) override {return this->__all_homers.GetAxisHomer(axis_name);};
         RobotEefBase* GetEef() override {return &this->__eef;};
         PidControllers* GetPidControllers() override {return &this->__all_pids;};
         
@@ -55,7 +55,6 @@ class Vsc_Board: public CncBoardBase{
         SinglePositionTrigger __homer_2 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_2, LOW);
         SinglePositionTrigger __homer_3 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_3, LOW);
         // HomingConfig __homing_config;
-        AxisHomer __all_homers = AxisHomer(2);
         Vsc_RobotEef __eef;
 
 };

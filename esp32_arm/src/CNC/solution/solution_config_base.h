@@ -4,7 +4,7 @@
 #include "MyBoards/const.h"
 #include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
-#include "axis_homer/axis_homer.h"
+#include "axis_homer/axis_homers.h"
 
 class CncSolutionConfigBase{
     public:
@@ -16,13 +16,14 @@ class CncSolutionConfigBase{
 
         //Homing
         const bool& IsInverseKinematicHoimg = _home_via_inverse_kinematic;
-        // float HomingSpeed(EnumAxis axis){return this->_HOMING_SPEED[axis];};
-        // float HomingAcceleration(EnumAxis axis){return this->_HOMING_ACCELERATION[axis];};
-        AxisHomer* GetAxisHomer(EnumAxis axis){return &this->_homers[axis];};
-
+        AxisHomers* GetAxisHomers(){return this->_homers;};
+        void LinkHomers(AxisHomers* homers){this->_homers=homers;};
+        
     protected:
         bool _IS_COMBINED_FK = false;   
-        AxisHomer  _homers[CNC_AXIS_COUNT];
+        // AxisHomer  _homers[CNC_AXIS_COUNT];
+        AxisHomers* _homers;
+        bool _home_via_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
 
         //Moving
         float _ACCELERATION_FOR_G1[CNC_AXIS_COUNT];
@@ -33,7 +34,6 @@ class CncSolutionConfigBase{
         // float _HOMING_SPEED[CNC_AXIS_COUNT];
         // float _HOMING_ACCELERATION[CNC_AXIS_COUNT];
         // float _HOMED_POSITION[CNC_AXIS_COUNT];
-        bool _home_via_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
 
     private:
 

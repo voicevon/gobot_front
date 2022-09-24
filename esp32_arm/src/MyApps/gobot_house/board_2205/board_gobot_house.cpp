@@ -29,22 +29,22 @@ void Board_GobotHouse::Init(bool is_on_reset){
 //     return nullptr;
 // }
 
-SinglePositionTrigger* Board_GobotHouse::GetSingleHomer(EnumAxis axis_name) {
-    if (axis_name==AXIS_ALPHA){
-        return &this->homer_alpha;
-    }else if (axis_name==AXIS_BETA){
-        return &this->homer_beta;
-    }else{
-        Serial.print("['Error']  Board_GobotHouse::GetHomer()   axis_name= ");
-        Serial.println(axis_name);
-    }
-    return nullptr;
-}
+// SinglePositionTrigger* Board_GobotHouse::GetSingleHomer(EnumAxis axis_name) {
+//     if (axis_name==AXIS_ALPHA){
+//         return &this->homer_alpha;
+//     }else if (axis_name==AXIS_BETA){
+//         return &this->homer_beta;
+//     }else{
+//         Serial.print("['Error']  Board_GobotHouse::GetHomer()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
+//     return nullptr;
+// }
 
-AxisHomer* Board_GobotHouse::GetPositionTriggers(EnumAxis axis_name){
-    Logger::Error("Board_GobotHouse::GetPositionTriggers()  NOT SUPPORTED");
-    return nullptr;
-}
+// AxisHomer* Board_GobotHouse::GetPositionTriggers(EnumAxis axis_name){
+//     Logger::Error("Board_GobotHouse::GetPositionTriggers()  NOT SUPPORTED");
+//     return nullptr;
+// }
 
 
 

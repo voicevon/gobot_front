@@ -12,15 +12,17 @@
 class CncBoardBase: public BoardBase{
     public:
         virtual void Init(bool is_on_reset);
-        virtual SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name);
-        virtual AxisHomer* GetPositionTriggers(EnumAxis axis_name);
+        // virtual SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name);
+        // virtual AxisHomer* GetPositionTriggers(EnumAxis axis_name);
 
         virtual RobotEefBase* GetEef();
         virtual PidControllers* GetPidControllers(){};
         virtual void EnableMotor(EnumAxis axis_name, bool enable_it);
+        AxisHomers* GetHomers(){return &this->__all_homers;};
 
 
     protected:
+        AxisHomers __all_homers = AxisHomers(CNC_AXIS_COUNT);
 
     private:
 

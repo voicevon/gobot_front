@@ -3,7 +3,7 @@
 
 
 SpringMaker_CncSolutionConfig::SpringMaker_CncSolutionConfig(){
-    HomingConfig* config = this->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
+    HomingConfig* config = this->GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
     config->IsDirectionToMax = true;
     config->Accelleration = 6000;
     config->Speed = 13000.0f;

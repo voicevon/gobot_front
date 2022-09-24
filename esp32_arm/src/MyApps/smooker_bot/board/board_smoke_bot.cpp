@@ -22,15 +22,15 @@ void Board_SmokeMachine::SayHello() {
 
 // }
 
-SinglePositionTrigger* Board_SmokeMachine::GetSingleHomer(EnumAxis axis_name) {
-    if (axis_name== AXIS_ALPHA){
-        return &this->homer_alpha;
-    }else{
-        Serial.print("['Error']  Board_SpringMaker::GetHomer()   axis_name= ");
-        Serial.println(axis_name);
-    }
-    return nullptr;
-}
+// SinglePositionTrigger* Board_SmokeMachine::GetSingleHomer(EnumAxis axis_name) {
+//     if (axis_name== AXIS_ALPHA){
+//         return &this->homer_alpha;
+//     }else{
+//         Serial.print("['Error']  Board_SpringMaker::GetHomer()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
+//     return nullptr;
+// }
 
 RobotEef_SmokeMachine* Board_SmokeMachine::GetEef() {
     return &this->eef;

@@ -14,8 +14,8 @@ class GobotMain_Board: public CncBoardBase{
         // void LinkStepControlToCncMover(StepControl* stepControl){this->__mover_dual_step.LinkStepControl(stepControl);};
         // ActuatorBase* GetActuator(EnumAxis axis_name) override;
         Stepper* GetStepper(EnumAxis axis);
-        SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
-        AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
+        // SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
+        // AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
         RobotEef_GobotMain* GetEef() override;
         // CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_solution_config;};
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;

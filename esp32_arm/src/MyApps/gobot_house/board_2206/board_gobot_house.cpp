@@ -61,21 +61,21 @@ ActuatorServo* Board_GobotHouse_2206::GetActuaorBeta(char axis_name){
     return nullptr;
 }
 
-SinglePositionTrigger* Board_GobotHouse_2206::GetSingleHomer(EnumAxis axis_name) {
-    if (axis_name=='A'){
-        return &this->__alpha_homer;
-    }else if (axis_name=='B'){
-        return &this->__beta_homer;
-    }else{
-        Serial.print("['Error']  Board_GobotHouse_2206::GetHomer()   axis_name= ");
-        Serial.println(axis_name);
-    }
-    return nullptr;
-}
+// SinglePositionTrigger* Board_GobotHouse_2206::GetSingleHomer(EnumAxis axis_name) {
+//     if (axis_name=='A'){
+//         return &this->__alpha_homer;
+//     }else if (axis_name=='B'){
+//         return &this->__beta_homer;
+//     }else{
+//         Serial.print("['Error']  Board_GobotHouse_2206::GetHomer()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
+//     return nullptr;
+// }
 
-AxisHomer* Board_GobotHouse_2206::GetPositionTriggers(EnumAxis axis_name){
-    Logger::Error("Board_GobotHouse_2206::GetPositionTriggers()  NOT SUPPORTED");
-}
+// AxisHomer* Board_GobotHouse_2206::GetPositionTriggers(EnumAxis axis_name){
+//     Logger::Error("Board_GobotHouse_2206::GetPositionTriggers()  NOT SUPPORTED");
+// }
 
 RobotEef_GobotHouse* Board_GobotHouse_2206::GetEef(){
     return &this->eef;

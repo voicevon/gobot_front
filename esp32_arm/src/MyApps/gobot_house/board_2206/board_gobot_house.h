@@ -19,8 +19,8 @@ class Board_GobotHouse_2206: public CncBoardBase{
         // ActuatorBase* GetActuator(EnumAxis axis_name) override;
         ActuatorServo* GetActuaorBeta(char axis_name);
         // MotorBase* GetActuator(char axis_name){};  //TODO: Stepper, Servo, BLDC... all is motorbase!
-        SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
-        AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
+        // SinglePositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
+        // AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
 
         RobotEef_GobotHouse* GetEef() override;
         // CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_mechanic;};

@@ -27,21 +27,21 @@ void Board2205Cnc::Init(Adafruit_MCP23X17* mcp_23018){
 //     }
 // }
 
-SinglePositionTrigger* Board2205Cnc::GetSingleHomer(EnumAxis axis_name){
-    if (axis_name=='Z'){
-        return &this->homer_z;
-    }else if (axis_name=='Y'){
-        return &this->homer_y;
-    }else{
-        Serial.print("['Error']  Board2205Cnc::GetHomer()   axis_name= ");
-        Serial.println(axis_name);
-    }
-    return nullptr;
-}
+// SinglePositionTrigger* Board2205Cnc::GetSingleHomer(EnumAxis axis_name){
+//     if (axis_name=='Z'){
+//         return &this->homer_z;
+//     }else if (axis_name=='Y'){
+//         return &this->homer_y;
+//     }else{
+//         Serial.print("['Error']  Board2205Cnc::GetHomer()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
+//     return nullptr;
+// }
 
-AxisHomer* Board2205Cnc::GetPositionTriggers(EnumAxis axis_name){
-    Logger::Error("Board2205Cnc::GetPositionTriggers() , NOT SUPPORT");
-}
+// AxisHomer* Board2205Cnc::GetPositionTriggers(EnumAxis axis_name){
+//     Logger::Error("Board2205Cnc::GetPositionTriggers() , NOT SUPPORT");
+// }
 
 
 RobotEef_GarmentAsar* Board2205Cnc::GetEef(){

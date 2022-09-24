@@ -26,8 +26,9 @@ void test_board(){
     tester.Test_EncoderSensor(board.GetAngleSensor()->GetRawSensor(), 0);
     // tester.Test_AngleSensor();
     // tester.Test_EncoderSensor(&encoder, 0);
-    tester.Test_SinglePositionTrigger(board.GetSingleHomer(AXIS_ALPHA), 0);
-    tester.Test_AllPositionTriggers(board.GetPositionTriggers(AXIS_ALPHA), 0);
+    // tester.Test_SinglePositionTrigger(board.GetSingleHomer(AXIS_ALPHA), 0);
+    // tester.Test_AllPositionTriggers(board.GetPositionTriggers(AXIS_ALPHA), 0);
+    tester.Test_AllPositionTriggers(board.GetHomers()->GetAxisHomer(AXIS_ALPHA), 0);
 
     tester.Test_MotorDriver(board.GetActuator(AXIS_ALPHA), 0);
     tester.Test_Offset(0);

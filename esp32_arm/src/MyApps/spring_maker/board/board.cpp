@@ -17,19 +17,19 @@ void Board_SpringMaker::Init(bool is_on_reset){
 //     return nullptr;
 // }
 
-SinglePositionTrigger* Board_SpringMaker::GetSingleHomer(EnumAxis axis_name) {
-    if (axis_name==AXIS_ALPHA){
-        return &this->homer_alpha;
-    }else{
-        Serial.print("['Error']  Board_SpringMaker::GetHomer()   axis_name= ");
-        Serial.println(axis_name);
-    }
-    return nullptr;
-}
+// SinglePositionTrigger* Board_SpringMaker::GetSingleHomer(EnumAxis axis_name) {
+//     if (axis_name==AXIS_ALPHA){
+//         return &this->homer_alpha;
+//     }else{
+//         Serial.print("['Error']  Board_SpringMaker::GetHomer()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
+//     return nullptr;
+// }
 
-AxisHomer* Board_SpringMaker::GetPositionTriggers(EnumAxis axis_name){
-    Logger::Error("Board_SpringMaker::GetPositionTriggers() NOT SUPPORTED");
-}
+// AxisHomer* Board_SpringMaker::GetPositionTriggers(EnumAxis axis_name){
+//     Logger::Error("Board_SpringMaker::GetPositionTriggers() NOT SUPPORTED");
+// }
 
 RobotEef_SpringMaker* Board_SpringMaker::GetEef() {
     return &this->eef;

@@ -88,7 +88,7 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	this->_homing_axis = axis;
 	// this->_board->SayHello();
 	// this->__current_homer = this->_cnc_board->GetSingleHomer(axis);
-	this->_all_position_trigers_of_homing_axis = this->_cnc_board->GetPositionTriggers(axis);
+	this->_all_position_trigers_of_homing_axis = this->_cnc_board->GetHomers()->GetAxisHomer(axis);
 	this->_cnc_board->EnableMotor(axis, true);
 	
 	// this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()  __current_homer");
@@ -96,8 +96,8 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
 	// this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
 	// this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
-	this->_mover_base->SetActuatorSpeed(axis, this->_config_base->GetAxisHomer(axis)->GetHomingConfig()->Speed);
-	this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->GetAxisHomer(axis)->GetHomingConfig()->Speed);
+	this->_mover_base->SetActuatorSpeed(axis, this->_config_base->GetAxisHomers()->GetAxisHomer(axis)->GetHomingConfig()->Speed);
+	this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->GetAxisHomers()->GetAxisHomer(axis)->GetHomingConfig()->Speed);
 	// float long_distance_to_move = this->_config_base->GetLongOffsetToGoHome(axis);
 	float long_distance_to_move = this->_all_position_trigers_of_homing_axis->GetHomingConfig()->DistanceToGo;
 	Logger::Print("CncSolutionBase::__HomeSingleAxis()  long_distance_to_move", long_distance_to_move);

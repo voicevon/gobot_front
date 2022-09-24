@@ -11,7 +11,7 @@ GobotMain_CncSolutionConfig::GobotMain_CncSolutionConfig(){
     this->_ACCELERATION_FOR_G1[AXIS_BETA] = DEG_TO_RAD * 60;
 
     this->_home_via_inverse_kinematic = true;
-    HomingConfig* config = this->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
+    HomingConfig* config = this->GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
     config->IsDirectionToMax = true;
     // config->LastHomedPosition
     config->Accelleration = DEG_TO_RAD * 30;

@@ -29,17 +29,17 @@ void Board2204Cnc::Init(Adafruit_MCP23X17* mcp_23018){
 //     }
 // }
 
-SinglePositionTrigger* Board2204Cnc::GetSingleHomer(EnumAxis axis_name){
-    if (axis_name==AXIS_Z){
-        return &this->homer_z;
-    }else if (axis_name==AXIS_ALPHA){
-        return &this->homer_A;
-    }else{
-        Serial.print("['Error']  Board2204Cnc::GetHomer()   axis_name= ");
-        Serial.println(axis_name);
-    }
-    return nullptr;
-}
+// SinglePositionTrigger* Board2204Cnc::GetSingleHomer(EnumAxis axis_name){
+//     if (axis_name==AXIS_Z){
+//         return &this->homer_z;
+//     }else if (axis_name==AXIS_ALPHA){
+//         return &this->homer_A;
+//     }else{
+//         Serial.print("['Error']  Board2204Cnc::GetHomer()   axis_name= ");
+//         Serial.println(axis_name);
+//     }
+//     return nullptr;
+// }
 
 RobotEef_GarmentAsar* Board2204Cnc::GetEef(){
     return &this->eef;

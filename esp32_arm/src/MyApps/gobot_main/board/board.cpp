@@ -71,21 +71,21 @@ Stepper* GobotMain_Board::GetStepper(EnumAxis axis){
 //     return nullptr;
 // }
 
-SinglePositionTrigger* GobotMain_Board::GetSingleHomer(EnumAxis axis) {
-    if (axis == AXIS_ALPHA){
-        return &this->homer_alpha;
-    }else if (axis == AXIS_BETA){
-        return &this->homer_beta;
-    }else{
-        Logger::Halt("GobotMain_Board::GetHomer()   axis= ");
-        // Serial.println(axis);
-    }
-    return nullptr;
-}
+// SinglePositionTrigger* GobotMain_Board::GetSingleHomer(EnumAxis axis) {
+//     if (axis == AXIS_ALPHA){
+//         return &this->homer_alpha;
+//     }else if (axis == AXIS_BETA){
+//         return &this->homer_beta;
+//     }else{
+//         Logger::Halt("GobotMain_Board::GetHomer()   axis= ");
+//         // Serial.println(axis);
+//     }
+//     return nullptr;
+// }
 
-AxisHomer* GobotMain_Board::GetPositionTriggers(EnumAxis axis_name){
-    Logger::Error("GobotMain_Board::GetPositionTriggers() NOT SUPPORT");
-}
+// AxisHomer* GobotMain_Board::GetPositionTriggers(EnumAxis axis_name){
+//     Logger::Error("GobotMain_Board::GetPositionTriggers() NOT SUPPORT");
+// }
 
 RobotEef_GobotMain* GobotMain_Board::GetEef() {
     return &this->__eef;
