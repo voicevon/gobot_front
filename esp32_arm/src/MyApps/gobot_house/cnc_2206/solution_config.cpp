@@ -7,10 +7,10 @@ GobotHouse_CncSolutionConfig_2206::GobotHouse_CncSolutionConfig_2206(){
 
     // this->MAX_ACCELERATION_ALPHPA = 600 ;
 
-    this->_HOMING_SPEED[AXIS_ALPHA] = DEG_TO_RAD * 60.0f ;  // degree per second
+    // this->_HOMING_SPEED[AXIS_ALPHA] = DEG_TO_RAD * 60.0f ;  // degree per second
 
 
-    this->_HOMING_SPEED[AXIS_BETA] = DEG_TO_RAD * 3;
+    // this->_HOMING_SPEED[AXIS_BETA] = DEG_TO_RAD * 3;
 }
 
 void GobotHouse_CncSolutionConfig_2206::__InitStaticConfig(){
@@ -24,12 +24,12 @@ void GobotHouse_CncSolutionConfig_2206::__InitStaticConfig(){
 
     this->_home_via_inverse_kinematic = true;
 
-    this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;
-    this->_HOMING_DIR_IS_TO_MAX[AXIS_BETA] = 1;
+    // this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;
+    // this->_HOMING_DIR_IS_TO_MAX[AXIS_BETA] = 1;
 
     // this->Homed_position_alpha_in_degree = 13.6;
-    this->_HOMED_POSITION[AXIS_ALPHA] = 8.0f;
-    this->_HOMED_POSITION[AXIS_BETA] = 128.0f;
+    // this->_HOMED_POSITION[AXIS_ALPHA] = 8.0f;
+    // this->_HOMED_POSITION[AXIS_BETA] = 128.0f;
 
 
 }
@@ -66,9 +66,9 @@ void GobotHouse_CncSolutionConfig_2206::PrintOut(const char * title){
     Serial.print("\n\n===============================================");
     Serial.print("\n   GobotHouse_CncSolutionConfig_2206::PrintOut()");
     Serial.print("\n       Homed_position_alpha_in_degree= ");
-    Serial.print(RAD_TO_DEG * this->Homed_position_alpha_in_rad);
-    Serial.print("\n       Homed_position_beta_in_degree= "); 
-    Serial.print(RAD_TO_DEG * this->Homed_position_beta_in_rad);
+    // Serial.print(RAD_TO_DEG * this->Homed_position_alpha_in_rad);
+    // Serial.print("\n       Homed_position_beta_in_degree= "); 
+    // Serial.print(RAD_TO_DEG * this->Homed_position_beta_in_rad);
 
     // Serial.print("\n   MOTOR_MICRO_STEPS= ");
     // Serial.print(this->MOTOR_MICRO_STEPS);

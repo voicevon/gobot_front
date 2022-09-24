@@ -3,11 +3,14 @@
 
 
 SpringMaker_CncSolutionConfig::SpringMaker_CncSolutionConfig(){
-
-        this->_HOMING_SPEED[AXIS_ALPHA] = 13000.0f;
-        this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;
-        this->_HOMING_ACCELERATION[AXIS_ALPHA] = 6000;
-        }
+    HomingConfig* config = this->GetHomingConfig(AXIS_ALPHA);
+    config->IsDirectionToMax = true;
+    config->Accelleration = 6000;
+    config->Speed = 13000.0f;
+        // this->_HOMING_SPEED[AXIS_ALPHA] = 13000.0f;
+        // this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;
+        // this->_HOMING_ACCELERATION[AXIS_ALPHA] = 6000;
+}
 
 void SpringMaker_CncSolutionConfig::PrintOut(const char * title){
     Serial.print("\n\n===============================================");

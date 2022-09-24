@@ -6,7 +6,7 @@ class Vsc_CncSolutionConfig: public CncSolution_SingleAxisConfig{
     public:
         Vsc_CncSolutionConfig();
         void PrintOut(const char* title) override;
-        
+        // void Init();
     private:
 
 };

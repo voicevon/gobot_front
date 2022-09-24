@@ -94,8 +94,10 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	// this->__current_homer->PrintOut("CncSolutionBase::__HomeSingleAxis()  __current_homer");
 	this->_config_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _config_base");
 	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
-	this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
-	this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
+	// this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
+	// this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
+	this->_mover_base->SetActuatorSpeed(axis, this->_config_base->GetHomingConfig(axis)->Speed);
+	this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->GetHomingConfig(axis)->Speed);
 	// float long_distance_to_move = this->_config_base->GetLongOffsetToGoHome(axis);
 	float long_distance_to_move = this->_all_position_trigers_of_homing_axis->GetHomingConfig()->DistanceToGo;
 	Logger::Print("CncSolutionBase::__HomeSingleAxis()  long_distance_to_move", long_distance_to_move);

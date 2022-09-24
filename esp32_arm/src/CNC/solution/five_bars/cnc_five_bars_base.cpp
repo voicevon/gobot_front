@@ -8,8 +8,10 @@ void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		this->_config->PrintOut("CncSolution_FiveBarsBase::_SetCurrentPositionAsHome()");
 		if (this->_config->IsInverseKinematicHoimg){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
-			ik_position.alpha =  this->_config->Homed_position_alpha_in_rad;
-			ik_position.beta =  this->_config->Homed_position_beta_in_rad;
+			// ik_position.alpha =  this->_config->Homed_position_alpha_in_rad;
+			// ik_position.beta =  this->_config->Homed_position_beta_in_rad;
+			ik_position.alpha = this->_config->GetHomingConfig(AXIS_ALPHA)->LastHomedPosition;
+			ik_position.beta = this->_config->GetHomingConfig(AXIS_BETA)->LastHomedPosition;
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik;
