@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CNC/solution/single_axis/config_base.h"
+#include "CNC/solution/single_axis/kinematic_config.h"
 
-class SmookerBot_CncSolutionConfig: public CncSolution_SingleAxisConfig{
+class SmookerBot_CncSolutionConfig: public SingleAxis_KinematicConfig{
     public:
         SmookerBot_CncSolutionConfig();
         // int32_t GetStepsPerUnit(char axis_name) override;

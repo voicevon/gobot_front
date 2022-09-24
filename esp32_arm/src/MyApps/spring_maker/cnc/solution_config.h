@@ -1,9 +1,9 @@
 #pragma once
 
 // #include "CNC/solution/cnc_single_axis/cnc_single_axis_machine.h"
-#include "CNC/solution/single_axis/config_base.h"
+#include "CNC/solution/single_axis/kinematic_config.h"
 
-class SpringMaker_CncSolutionConfig: public CncSolution_SingleAxisConfig{
+class SpringMaker_CncSolutionConfig: public SingleAxis_KinematicConfig{
     public:
         SpringMaker_CncSolutionConfig();
         // int32_t GetStepsPerUnit(char axis_name) override;

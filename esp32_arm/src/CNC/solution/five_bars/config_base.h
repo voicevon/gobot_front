@@ -1,5 +1,5 @@
 #pragma once
-#include "../solution_config_base.h"
+#include "../kinematic_config.h"
 
 class CncSolution_FiveBarConfig: public KinematicConfig{
     public:
