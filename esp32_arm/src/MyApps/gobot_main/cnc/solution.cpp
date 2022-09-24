@@ -17,6 +17,14 @@ void GobotMainCncSolution::Init(GobotMain_Board* cnc_board, StepControl* step_co
     cnc_board->EnableMotor(AXIS_ALPHA, false);
 	cnc_board->EnableMotor(AXIS_BETA, false);
     
+    HomingConfig* config = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetHomingConfig(); // GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
+    config->IsDirectionToMax = true;
+    // config->LastHomedPosition
+    config->Accelleration = DEG_TO_RAD * 30;
+    config->DistanceToGo = 9.9f;
+    config->Speed = DEG_TO_RAD * 10;
+
+
 	this->_cnc_board = cnc_board;
     this->__SelfTest();
 }

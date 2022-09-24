@@ -1,5 +1,11 @@
 #include "solution.h"
 
+    // HomingConfig* config = this->GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
+    // config->IsDirectionToMax = true;
+    // config->Accelleration = 6000;
+    // config->Speed = 13000.0f;
+
+
 EnumAxis SpringMaker_CncSoution::ConvertToEnum(char axis){
     switch (axis){
         case 'A':

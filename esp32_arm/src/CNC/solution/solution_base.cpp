@@ -86,6 +86,7 @@ void CncSolutionBase::RunG28(EnumAxis axis){
 void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	Logger::Debug("CncSolutionBase::__HomeSingleAxis()");
 	this->_homing_axis = axis;
+	HomingConfig* config = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
 	// this->_board->SayHello();
 	// this->__current_homer = this->_cnc_board->GetSingleHomer(axis);
 	this->_current_homer = this->_cnc_board->GetCncHomers()->GetAxisHomer(axis);
@@ -96,12 +97,14 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
 	// this->_mover_base->SetActuatorSpeed(axis, this->_config_base->HomingSpeed(axis));
 	// this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->HomingAcceleration(axis));
-	this->_mover_base->SetActuatorSpeed(axis, this->_config_base->GetAxisHomers()->GetAxisHomer(axis)->GetHomingConfig()->Speed);
-	this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->GetAxisHomers()->GetAxisHomer(axis)->GetHomingConfig()->Speed);
+	// this->_mover_base->SetActuatorSpeed(axis, this->_cnc_homer.GetAxisHomer(axis) _config_base->GetAxisHomers()->GetAxisHomer(axis)->GetHomingConfig()->Speed);
+	// this->_mover_base->SetActuatorAcceleration(axis, this->_config_base->GetAxisHomers()->GetAxisHomer(axis)->GetHomingConfig()->Speed);
+	this->_mover_base->SetActuatorSpeed(axis, config->Speed);
+	this->_mover_base->SetActuatorAcceleration(axis, config->Accelleration);
 	// float long_distance_to_move = this->_config_base->GetLongOffsetToGoHome(axis);
-	float long_distance_to_move = this->_current_homer->GetHomingConfig()->DistanceToGo;
-	Logger::Print("CncSolutionBase::__HomeSingleAxis()  long_distance_to_move", long_distance_to_move);
-	this->_mover_base->SingleActuatorMoveTo(axis, false, long_distance_to_move);
+	// float long_distance_to_move = this->_current_homer->GetHomingConfig()->DistanceToGo;
+	// Logger::Print("CncSolutionBase::__HomeSingleAxis()  long_distance_to_move", long_distance_to_move);
+	this->_mover_base->SingleActuatorMoveTo(axis, false, config->DistanceToGo);
 
 	Logger::Debug("CncSolutionBase::RunG28() is Starting to run..." );
 }

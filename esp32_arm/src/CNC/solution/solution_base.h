@@ -62,6 +62,7 @@ class CncSolutionBase: public GcodeConsumer{
         EnumAxis _homing_axis;
         AxisHomer* _current_homer;
         CncSolutionConfigBase* _config_base;    //???
+        CncHomers _cnc_homer = CncHomers(CNC_AXIS_COUNT);
 
         bool is_absolute_position = true;
         

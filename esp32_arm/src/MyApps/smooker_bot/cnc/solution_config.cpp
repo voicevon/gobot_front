@@ -15,11 +15,7 @@ SmookerBot_CncSolutionConfig::SmookerBot_CncSolutionConfig(){
 
         // this->motor_steps_per_round = 1.0 * this->STEPPER_DRIVER_MICRO_STEPS;
         // this->Homing_speed_alpha = 13000;
-        HomingConfig* config = this->GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
-        config->IsDirectionToMax = true;
-        // config->LastHomedPosition = 1
-        config->Accelleration = 6000;
-        config->DistanceToGo = 100;
+ 
         
         // this->_HOMING_SPEED[AXIS_ALPHA] = 13000.0f;
         // this->_HOMING_DIR_IS_TO_MAX[AXIS_ALPHA] = 1;

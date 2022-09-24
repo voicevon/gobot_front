@@ -16,13 +16,13 @@ class CncSolutionConfigBase{
 
         //Homing
         const bool& IsInverseKinematicHoimg = _home_via_inverse_kinematic;
-        CncHomers* GetAxisHomers(){return this->_homers;};
-        void LinkHomers(CncHomers* homers){this->_homers=homers;};
+        // CncHomers* GetAxisHomers(){return this->_homers;};
+        // void LinkHomers(CncHomers* homers){this->_homers=homers;};
         
     protected:
         bool _IS_COMBINED_FK = false;   
         // AxisHomer  _homers[CNC_AXIS_COUNT];
-        CncHomers* _homers;
+        // CncHomers* _homers;
         bool _home_via_inverse_kinematic;   //When home sensor is trigered, What is the current position? Can use predefined FK position, also can use predefined IK position.
 
         //Moving
