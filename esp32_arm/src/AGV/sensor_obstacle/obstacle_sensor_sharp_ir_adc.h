@@ -11,7 +11,7 @@
 
 #include "obstacle_sensor_base.h"
 // #include "CNC/Sensor/sharp_ir_distance_adc.h"
-#include "CNC/Sensor/sharp_ir_distance_adc.h"
+#include "CNC/Sensor/position_sensor/sharp_ir_distance_adc.h"
 #include "stdint.h"
 
 class ObstacleSensor_SharpIr:public ObstacleSensorBase{

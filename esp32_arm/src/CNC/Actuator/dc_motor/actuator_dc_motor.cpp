@@ -3,10 +3,6 @@
 #include "MyBoards/board_base.h"
 
 
-// #define GEAR_TEETH_COUNT 56.0f
-// #define GEAR_PITCH 12.7f   //unit is mm
-// #define PID_P 10.0f
-// #define INERTIA_DISTANCE  0.008    // this is a CNC unit == (1/386)/ (2*PI), around 6.3mm
 #define INERTIA_DISTANCE  0.016    // this is a CNC unit == (1/386)/ (2*PI), around 12.7mm
 
 
@@ -14,7 +10,6 @@
 void ActuatorDcMotor::SpinOnce(){
     this->__sensor->GetRawSensor()->update();
     // real speed control, position check, auto stop....
-    // float abs_distance = this->GetAbsDistanceToTarget_InCncUnit();
     if(this->GetAbsDistanceToTarget_InCncUnit()  < INERTIA_DISTANCE){
     // if (false){
         // The wheel will continue to run a short time after stoping, because the inertia.
@@ -28,11 +23,8 @@ void ActuatorDcMotor::SpinOnce(){
             this->__count_down_for_serial_print = 18888;
         }
 
-        // float velocity =  this->__filter(this->__sensor->getVelocity());
-        // this->__speed_pid->P = 1;
-        float raw_velocity =  this->__sensor->GetRawSensor()->getVelocity();
-        float velocity_in_cnc_unit = raw_velocity * 36.8f;  // (10T /56T) * (56T / 368T)
-        float speed_error =  velocity_in_cnc_unit - this->__target_speed;
+         
+        float speed_error =  this->__sensor->GetCurrentVelocity() - this->__target_speed;
         float pwm_speed =  - this->__speed_pid->FeedError(speed_error);
 
         if (true){
