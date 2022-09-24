@@ -7,7 +7,7 @@
 #include "CNC/board/cnc_board_base.h"
 
 
-#include "solution_config_base.h"
+#include "kinematic_config.h"
 // #include "CNC/Sensor/position_trigger/position_triggers.h"
 #include "CNC/solution/axis_homer/axis_homer.h"
 #include "../coordinate/coordinate_base.h"
@@ -60,7 +60,7 @@ class CncSolutionBase: public GcodeConsumer{
 		virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
         EnumAxis _homing_axis;
-        CncSolutionConfigBase _config_base;    //???
+        KinematicConfig _config_base;    //???
         CncHomers _cnc_homer = CncHomers(CNC_AXIS_COUNT);
 
         bool is_absolute_position = true;

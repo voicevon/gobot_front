@@ -18,7 +18,7 @@ class Board_GobotHouse: public CncBoardBase{
         // AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
         RobotEef_GobotHouse* GetEef() override;
         void EnableMotor(EnumAxis actuator_name, bool enable_it) override;
-        // CncSolutionConfigBase* GetCncConfig() override {return &this->__cnc_mechanic;};
+        // KinematicConfig* GetCncConfig() override {return &this->__cnc_mechanic;};
         
 
     private:

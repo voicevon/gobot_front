@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../solution_config_base.h" 
+#include "../kinematic_config.h" 
 
-class CncSolution_CoreAZConfigBase: public CncSolutionConfigBase{
+class CncSolution_CoreAZConfigBase: public KinematicConfig{
     public:
     
         float max_speed_alpha_beta;

@@ -3,7 +3,7 @@
 
 
 // TODO:  This class name is quite confused to understand,  Real meaning is A cnc machine, only has one axis, Not means one of tha multi axises.
-class CncSolution_SingleAxisConfig: public CncSolutionConfigBase{
+class CncSolution_SingleAxisConfig: public KinematicConfig{
     public:
         // float max_speed_alpha;
         // float max_acceleration_alpha;
