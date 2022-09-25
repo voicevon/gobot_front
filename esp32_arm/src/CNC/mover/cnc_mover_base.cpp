@@ -30,7 +30,7 @@ void CncMoverBase::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float
     }else if (actuator_name == AXIS_BETA){
         this->_actuator_beta_base->SetCurrentPositionAs(as_current_position);
     }else{
-        Logger::Warn("CncMover_DualStepper::SingleMotorMoveTo()");
+        Logger::Warn("CncMoverBase::SingleMotorMoveTo()");
         Serial.print("Unkonwn axisname= ");
         Serial.print(actuator_name);
         Serial.println(FCBC_RESET);
