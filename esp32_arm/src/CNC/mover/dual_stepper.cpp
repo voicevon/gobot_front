@@ -90,16 +90,16 @@ void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags
 
 void CncMover_DualStepper::AllActuatorsStop(){
     this->__stepControl->stop();
-    this->__actuator_beta->Stop();
+    this->__actuator_beta->UpdateTargetPositionFromCurrent();
 }
 
 void CncMover_DualStepper::SingleActuatorStop(EnumAxis actuator_name){
     if (actuator_name == AXIS_ALPHA){
-        this->__actuator_alpha->Stop();
+        this->__actuator_alpha->UpdateTargetPositionFromCurrent();
         this->_moving_actuator_flags -= 0x01;
 
     }else if (actuator_name==AXIS_BETA){
-        this->__actuator_beta->Stop();
+        this->__actuator_beta->UpdateTargetPositionFromCurrent();
         this->_moving_actuator_flags -= 0x02;
     }else{
         Serial.print("[Error] CncMover_DualStepper::SingleMotorStop() Unknown actuator_name= ");

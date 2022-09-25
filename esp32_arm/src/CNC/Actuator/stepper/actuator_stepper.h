@@ -15,7 +15,8 @@ class ActuatorStepper: public ActuatorBase{
         float GetAbsDistanceToTarget_InCncUnit() override;
 
         //speed and acceleration
-        void Stop() override{};   // Implatcate by StepControl.  //TODO:  remove this from base class, and all actuator will not know: start(), stop()
+        // void Stop() override{};   // Implatcate by StepControl.  //TODO:  remove this from base class, and all actuator will not know: start(), stop()
+        void UpdateTargetPositionFromCurrent() override;
         float GetSpeed() override {return this->__speed;};
         void SetSpeed(float speed_in_cnc_unit) override;
         void SetAccelleration(float accelleration_in_cnc_unit) override;

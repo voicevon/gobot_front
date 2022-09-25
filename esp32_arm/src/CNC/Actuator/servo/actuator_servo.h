@@ -12,7 +12,8 @@ class ActuatorServo: public ActuatorBase{
         void SpinOnce();
         bool IsMoving(){return this->__is_moving;};
 
-        void Stop() override {this->__is_moving=false;};
+        // void Stop() override {this->__is_moving=false;};
+        void UpdateTargetPositionFromCurrent() override {this->__is_moving=false;};
         void StartToMove();
 
         void SetCurrentPositionAs(float cnc_position_in_rad) override;

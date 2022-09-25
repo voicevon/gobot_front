@@ -116,16 +116,16 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
 
 void CncMover_StepperServo::AllActuatorsStop(){
     this->__stepControl->stop();
-    this->__actuator_beta->Stop();
+    this->__actuator_beta->UpdateTargetPositionFromCurrent();
 }
 
 void CncMover_StepperServo::SingleActuatorStop(EnumAxis actuator_name){
     if (actuator_name == AXIS_ALPHA){
-        this->__actuator_alpha->Stop();
+        this->__actuator_alpha->UpdateTargetPositionFromCurrent();
         this->_moving_actuator_flags -= 0x01;
 
     }else if (actuator_name=='B'){
-        this->__actuator_beta->Stop();
+        this->__actuator_beta->UpdateTargetPositionFromCurrent();
         this->_moving_actuator_flags -= 0x02;
     }else{
         Serial.print("[Error] CncMover_StepperServo::SingleMotorStop() Unknown actuator_name= ");

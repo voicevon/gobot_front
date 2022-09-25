@@ -33,7 +33,7 @@ class ActuatorDcMotor: public ActuatorBase{
         // When motor is running, should not effect running speed. 
         // Will take effection when invoke SpinOnce().
         void SetSpeed(float speed_in_cnc_unit) override;   
-        void Stop() override;
+        void UpdateTargetPositionFromCurrent() override;
         float GetSpeed() override {return this->__target_speed;};
         void SetAccelleration(float accelleration_in_cnc_unit) override;
 

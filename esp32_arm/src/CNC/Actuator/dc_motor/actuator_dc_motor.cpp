@@ -3,7 +3,7 @@
 #include "MyBoards/board_base.h"
 
 
-#define INERTIA_DISTANCE  0.016    // this is a CNC unit == (1/386)/ (2*PI), around 12.7mm
+#define INERTIA_DISTANCE  0.032    // this is a CNC unit  0.016== (1/386)/ (2*PI), around 12.7mm
 
 
 
@@ -16,7 +16,7 @@ void ActuatorDcMotor::SpinOnce(){
     // if (false){
         // The wheel will continue to run a short time after stoping, because the inertia.
         // TDDO:  How to deal with negtive distance?
-        this->Stop();
+        this->__h_bridge->Stop();
     }else{
         this->__count_down_for_serial_print--;
         if (this->__count_down_for_serial_print <=0){
@@ -108,44 +108,24 @@ void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
     // this is a future feature.
 }
 
-void ActuatorDcMotor::Stop(){
+void ActuatorDcMotor::UpdateTargetPositionFromCurrent(){
+    Logger::Debug("ActuatorDcMotor::UpdateTargetPositionFromCurrent() is entering...");
     this->__h_bridge->Stop();
+    this->_target_cnc_position = this->_current_cnc_position;
 }
-//     // motor A and motor B setted LOW to stop DC motor
-//     digitalWrite(this->__h_bridge_pin_dir, LOW);
-//     ledcWrite(this->__pwm_channel, 0);
-// }
+
 
 void ActuatorDcMotor::SetPwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
     this->__h_bridge->SetPwmSpeed(dir_is_cw, pwm_speed);
 }
-//     if(dir_is_cw){
-//         // Serial.println (pwm_speed);
-//         // this->PrintOut();
-//         digitalWrite(this->__h_bridge_pin_dir, LOW);
-//         ledcWrite(this->__pwm_channel, pwm_speed);
-//     }
-//     else {
-//         // make  DCmotor CCW 
-//         ledcWrite(this->__pwm_channel, (256 - pwm_speed));
-//         digitalWrite(this->__h_bridge_pin_dir, HIGH);
-//     }
-// }
-
-
 
 
 ActuatorDcMotor::ActuatorDcMotor(){
-    // Calculate rad_per_mm,  This is determined by mechanic designer.
-    // this->__sensor_rad_per_mm = GEAR_PITCH * GEAR_TEETH_COUNT / TWO_PI; 
-    // this->__sensor_offset = 0;
-    // this->__SLOPE_FROM_SENSOR_TO_CNC = float(this->SENSOR_GEAR_COUNT) / this->CHAIN_PITCH_COUNT;
-    // this->__SLOPE_FROM_CNC_TO_SENSOR = float(this->CHAIN_PITCH_COUNT) / this->SENSOR_GEAR_COUNT;
+
 }
 
 void ActuatorDcMotor::PrintOut(){
-
-    Logger::Debug("ActuatorDcMotor::ActuatorDcMotor()");
+    Logger::Debug("ActuatorDcMotor::PrintOut()");
     // Logger::Print("this->__pwm_channel ",this->__pwm_channel );
     // Logger::Print("this->__h_bridge_pin_dir ",this->__h_bridge_pin_dir );
     // Logger::Print("this->__h_bridge_pin_speed ",this->__h_bridge_pin_speed );

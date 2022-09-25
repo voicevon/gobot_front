@@ -16,7 +16,8 @@ class ActuatorBase{
         float GetCurrentCncPosition(){return this->_current_cnc_position;};
 
         //Speed and acceleration
-        virtual void Stop();   //TODO:  Remove from base.
+        // virtual void Stop();   //TODO:  Remove from base.
+        virtual void UpdateTargetPositionFromCurrent();
         virtual float GetSpeed();    // ?? TODO:  var should be in base class ?
         virtual void SetSpeed(float speed_in_cnc_unit);
         float GetNeededSeconds();

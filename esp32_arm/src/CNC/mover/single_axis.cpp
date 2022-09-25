@@ -55,11 +55,12 @@ void CncMover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags,
 }
 
 void CncMover_SingleAxis::AllActuatorsStop(){
-    this->_actuator_alpha_base->Stop();
+    this->_actuator_alpha_base->UpdateTargetPositionFromCurrent();
+    
 }
 
 void CncMover_SingleAxis::SingleActuatorStop(EnumAxis actuator_name){
-    this->_actuator_alpha_base->Stop();
+    this->_actuator_alpha_base->UpdateTargetPositionFromCurrent();
 }
 
 
