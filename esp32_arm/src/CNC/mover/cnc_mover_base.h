@@ -9,6 +9,16 @@
 
 #include "../Actuator/actuator_base.h"
 
+class MovementConfig{
+    public:
+        EnumAxis axis;
+        bool IsAbsTargetPosition;
+        float TargetPosition;
+        float Speed;
+        float Acceleration;
+};
+
+
 // TODO:  template <actuator>
 class CncMoverBase{
     public:
@@ -24,7 +34,7 @@ class CncMoverBase{
         void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
 
         virtual void AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit);
-        virtual void SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position,  float position_in_cnc_unit);
+        virtual void SingleActuatorMoveTo(MovementConfig* movement);
         virtual void AllActuatorsStop();  // TODO: with flags
         virtual void SingleActuatorStop(EnumAxis actuator_name);
 

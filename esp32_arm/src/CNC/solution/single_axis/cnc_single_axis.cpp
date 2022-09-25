@@ -52,10 +52,14 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 	Logger::Print("G1 ", gcode->get_command());
 	Logger::Print("this->AXIS", this->_AXIS);
 	this->_cnc_board->EnableMotor(this->_AXIS, true);
+	float target_speed = 0.1;
 	if (gcode->has_letter('F')){
-		float speed = gcode->get_value('F');
-		this->_mover_base->SetActuatorSpeed(this->_AXIS, speed);
-		Logger::Print("Speed", speed);
+		target_speed = gcode->get_value('F');
+		this->_mover_base->SetActuatorSpeed(this->_AXIS, target_speed);
+		Logger::Print("Target Speed", target_speed);
+	}else{
+		//Not set speed. How to get correct default speed?
+		
 	}
 	FkPosition_A target_fk_a;
 	IkPosition_A target_ik_a;
@@ -69,7 +73,15 @@ void CncSingleAxis::RunG1(Gcode* gcode) {
 	if (do_ik) IK(&target_fk_a, &target_ik_a);
 
 	//Prepare actuator/driver to move to next point
-	this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
+	// this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
+	MovementConfig move;
+	move.axis = this->_AXIS;
+	move.IsAbsTargetPosition = true;
+	move.TargetPosition = target_ik_a.alpha;
+	move.Speed = target_speed;
+	// this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
+	this->_mover_base->SingleActuatorMoveTo(&move);
+
 	//None blocking, move backgroundly.
 	// uint8_t abs_flag=0x01;
 	// this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);

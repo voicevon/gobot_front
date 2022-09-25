@@ -64,10 +64,14 @@ void CncMover_SingleAxis::SingleActuatorStop(EnumAxis actuator_name){
 }
 
 
-void CncMover_SingleAxis::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
-    if (actuator_name == AXIS_ALPHA){
+// void CncMover_SingleAxis::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
+void CncMover_SingleAxis::SingleActuatorMoveTo(MovementConfig* move){
+    // if (actuator_name == AXIS_ALPHA){
+    if (move->axis == AXIS_ALPHA){
         this->_moving_actuator_flags = 0x01;
-        this->_actuator_alpha_base->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
+        // this->_actuator_alpha_base->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
+        this->_actuator_alpha_base->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+        
     }else{
         log_w("CncMover_SingleAxis::SingleMotorMoveTo() axisname= ", actuator_name );
     }

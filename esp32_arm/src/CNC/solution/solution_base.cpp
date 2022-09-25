@@ -93,7 +93,12 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
 	this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
 	this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
-	this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
+	// this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
+	MovementConfig move;
+	move.axis = axis;
+	move.IsAbsTargetPosition = false;
+	move.TargetPosition = homing->DistanceToGo;
+	this->_mover_base->SingleActuatorMoveTo(&move);
 
 	Logger::Debug("CncSolutionBase::RunG28() is Starting to run..." );
 }

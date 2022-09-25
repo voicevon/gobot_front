@@ -78,7 +78,6 @@ void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis axis){
 }
 
 void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
-
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_config_base.IsInverseKinematicHoimg){
@@ -97,11 +96,18 @@ void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.
+		MovementConfig move;
+		move.axis = this->_homing_axis;
+		move.IsAbsTargetPosition = true;
 		if (this->_homing_axis == AXIS_Z) {
-			this->_mover_base->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
+			// this->_mover_base->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
+			move.TargetPosition = ik_position.alpha;
+			this->_mover_base->SingleActuatorMoveTo(&move);
 		}
 		if (this->_homing_axis == AXIS_Y) {
-			this->_mover_base->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
+			// this->_mover_base->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
+			move.TargetPosition = ik_position.beta;
+			this->_mover_base->SingleActuatorMoveTo(&move);
 		}
 }
 

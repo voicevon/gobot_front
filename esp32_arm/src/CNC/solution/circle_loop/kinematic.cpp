@@ -70,7 +70,12 @@ void CncCircleLoop::RunG1(Gcode* gcode) {
 	if (do_ik) IK(&target_fk_a, &target_ik_a);
 
 	//Prepare actuator/driver to move to next point
-	this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
+	// this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
+	MovementConfig move;
+	move.axis = this->_AXIS;
+	move.IsAbsTargetPosition = true;
+	move.TargetPosition = target_ik_a.alpha;
+	this->_mover_base->SingleActuatorMoveTo(&move);
 	//None blocking, move backgroundly.
 	// uint8_t abs_flag=0x01;
 	// this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);

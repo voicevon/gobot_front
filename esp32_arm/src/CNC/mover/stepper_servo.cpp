@@ -134,16 +134,20 @@ void CncMover_StepperServo::SingleActuatorStop(EnumAxis actuator_name){
 }
 
 
-void CncMover_StepperServo::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
-    if (actuator_name == AXIS_ALPHA){
+void CncMover_StepperServo::SingleActuatorMoveTo(MovementConfig* move){
+    // if (actuator_name == AXIS_ALPHA){
+    if (move->axis == AXIS_ALPHA){
         this->_moving_actuator_flags = 0x01;
-        this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
+        // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
+        this->__actuator_alpha->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
         Stepper* stepper = this->__actuator_alpha->GetLinkedStepper();
         this->__stepControl->moveAsync(*stepper);
 
-    }else if (actuator_name == 'B'){
+    // }else if (actuator_name == 'B'){
+    }else if (move->axis == 'B'){
         this->_moving_actuator_flags = 0x02;
-        this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
+        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
+        this->__actuator_beta->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
         this->__actuator_beta->StartToMove();
 
     }else{
