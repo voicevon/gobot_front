@@ -21,6 +21,9 @@ VscRobot::VscRobot(){
     this->__position_in_pitch[9] = 117;
     this->__position_in_pitch[10] = 130;
     this->__position_in_pitch[11] = 143;
+    this->__position_in_pitch[12] = 143;
+    this->__position_in_pitch[13] = 143;
+    this->__position_in_pitch[14] = 143;
 
     Serial.print("\n[Info] VscRobot::VscRobot() is constructed");
 }
@@ -32,7 +35,7 @@ void VscRobot::MoveTo(int layer_index, int cell_index){
 
     String g1 = "G1A";
     // TODO:  over single circle.
-    float gear_angle = TWO_PI *  this->__position_in_pitch[layer_index] / this->__GEAR_TEETH ;
+    float gear_angle = TWO_PI *  this->__position_in_pitch[layer_index] / 184;
     g1.concat(gear_angle);
     g1.concat("F0.1");
     this->_gcode_queue->AppendGcodeCommand(g1);
@@ -41,14 +44,16 @@ void VscRobot::MoveTo(int layer_index, int cell_index){
 void VscRobot::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
     Logger::Info("VscRobot::ExecuteMqttCommand() is entering.");
-    Logger::Print("command",str_command);
-    Logger::Print("substring(0,7)", str_command.substring(0,7));
-    Logger::Print("substring(7)", str_command.substring(7));
-    Serial.print(str_command);
-    Serial.print("\t");
-    Serial.print(str_command.substring(0,7));
-    Serial.print("\t");
-    Serial.print(str_command.substring(7));
+    // Logger::Print("command",str_command);
+    // Logger::Print("substring(0,7)", str_command.substring(0,7));
+    // Logger::Print("substring(7)", str_command.substring(7));
+    // Serial.print(str_command);
+    // Serial.print("\t");
+    // Serial.print(str_command.substring(0,7));
+    // Serial.print("\t");
+    // Serial.print(str_command.substring(7));
+    // Serial.println();
+
     Gcode my_gcode = Gcode(command);
     if (str_command.substring(0,7) == "vsc_cmd"){
     // if (false){

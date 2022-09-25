@@ -14,10 +14,10 @@ class CncMover_SingleAxis: public CncMoverBase{
         void SingleActuatorMoveTo(MovementConfig* movement) override;
         void AllActuatorsStop() override;
         void SingleActuatorStop(EnumAxis motor_name) override;
+        bool HasArrivedTargetPosition() override;
 
         
     protected:
         // ActuatorBase* _actuator_alpha;
-
     private:
 };

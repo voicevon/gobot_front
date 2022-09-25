@@ -94,3 +94,9 @@ bool CncMover_SingleAxis::ActuatorIsMoving(EnumAxis actuator_name) {
     }
     return false;
 }
+
+bool CncMover_SingleAxis::HasArrivedTargetPosition(){
+    if (this->GetAbsDistanceToTarget_InCncUnit() < this->_small_distance_for_arriving_target_position)
+        return true;
+    return false;
+}

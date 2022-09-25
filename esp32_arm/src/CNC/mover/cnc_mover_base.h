@@ -32,12 +32,14 @@ class CncMoverBase{
         virtual void SingleActuatorStop(EnumAxis actuator_name);
 
         virtual bool ActuatorIsMoving(EnumAxis actuator_name);
+        virtual bool HasArrivedTargetPosition();
         float GetAbsDistanceToTarget_InCncUnit();
 
 
     protected:
         // bool _is_blocked_move;
         uint8_t _moving_actuator_flags;
+        float _small_distance_for_arriving_target_position = 0.1;
         
         ActuatorBase* _actuator_alpha_base;
         ActuatorBase* _actuator_beta_base;

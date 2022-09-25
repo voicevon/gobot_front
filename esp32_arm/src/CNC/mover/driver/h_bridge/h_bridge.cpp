@@ -31,14 +31,11 @@ void H_Bridge::Stop(){
 
 void H_Bridge::SetPwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
     if(dir_is_cw){
-        // Serial.println (pwm_speed);
-        // this->PrintOut();
         digitalWrite(this->__h_bridge_pin_dir, LOW);
         ledcWrite(this->__pwm_channel, pwm_speed);
-    }
-    else {
+    } else {
         // make  DCmotor CCW 
-        ledcWrite(this->__pwm_channel, (256 - pwm_speed));
         digitalWrite(this->__h_bridge_pin_dir, HIGH);
+        ledcWrite(this->__pwm_channel, (256 - pwm_speed));
     }
 }

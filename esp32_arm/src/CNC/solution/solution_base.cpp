@@ -98,6 +98,7 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	move.axis = axis;
 	move.IsAbsTargetPosition = false;
 	move.TargetPosition = homing->DistanceToGo;
+	move.Speed = homing->Speed;
 	this->_mover_base->SingleActuatorMoveTo(&move);
 
 	Logger::Debug("CncSolutionBase::RunG28() is Starting to run..." );
@@ -132,14 +133,16 @@ void CncSolutionBase::_running_G28(){
 }
 
 void CncSolutionBase::_running_G1(){
-	float distance_to_target = this->GetDistanceToTarget_IK();
-    if (distance_to_target < DEG_TO_RAD * 1.0f){  // TODO:  == 0  or decide by subclass.
+	if (this->_mover_base->HasArrivedTargetPosition()){
+	// float distance_to_target = this->GetDistanceToTarget_IK();
+    // if (distance_to_target < DEG_TO_RAD * 1.0f){  // TODO:  == 0  or decide by subclass.
 
       	this->State = CncState::IDLE;
-		Logger::Info("CncFiveBars::_running_G1() is finished. ");
-		Logger::Print("distance_to_target", RAD_TO_DEG * distance_to_target);
+		Logger::Info("CncSolutionBase::_running_G1() is finished. ");
+		// Logger::Print("distance_to_target", RAD_TO_DEG * distance_to_target);
     }
 }
+
 void CncSolutionBase::RunG4(Gcode* gcode){
 	__g4_start_timestamp = micros();
 	__g4_time_second = gcode->get_value('S');
