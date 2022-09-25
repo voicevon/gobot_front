@@ -70,11 +70,16 @@ void ActuatorServo::SpinOnce(){
     this->__servo->write(servo_angle_in_degree);
 }
 
-void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
-    if (is_absolute_position){
-        this->_target_cnc_position = position_in_cnc_unit;
+// void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
+void ActuatorServo::UpdateMovement(MovementConfig* move){
+
+    // if (is_absolute_position){
+    if (move->IsAbsTargetPosition){
+        // this->_target_cnc_position = position_in_cnc_unit;
+        this->_target_cnc_position = move->TargetPosition;
     }else{
-        this->_target_cnc_position = this->_current_cnc_position + position_in_cnc_unit;
+        // this->_target_cnc_position = this->_current_cnc_position + position_in_cnc_unit;
+        this->_target_cnc_position = this->_current_cnc_position + move->TargetPosition;
     }
 
     this->__moving_direction_of_cnc = 1;

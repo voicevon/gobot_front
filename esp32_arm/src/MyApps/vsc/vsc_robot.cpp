@@ -34,6 +34,7 @@ void VscRobot::MoveTo(int layer_index, int cell_index){
     // TODO:  over single circle.
     float gear_angle = TWO_PI *  this->__position_in_pitch[layer_index] / this->__GEAR_TEETH ;
     g1.concat(gear_angle);
+    g1.concat("F0.1");
     this->_gcode_queue->AppendGcodeCommand(g1);
 }
 

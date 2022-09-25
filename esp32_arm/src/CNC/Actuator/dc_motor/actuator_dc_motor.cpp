@@ -76,16 +76,21 @@ void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
     this->__sensor->SetCurrentPosition(position_in_cnc_unit);
 }
 
-void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float target_position){
+// void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float target_position){
+void ActuatorDcMotor::UpdateMovement(MovementConfig* move){
+
     Logger::Debug("ActuatorDcMotor::SetTargetPositionTo()  is entering");
-    Logger::Print("is_absolute_position", is_absolute_position);
-    Logger::Print("target_position", target_position);
+    Logger::Print("is_absolute_position", move->IsAbsTargetPosition);
+    Logger::Print("target_position", move->TargetPosition);
     Logger::Print("Current_position",this->GetCurrentPosition());
     
-    if (is_absolute_position){
-        this->_target_cnc_position = target_position;
+    // if (is_absolute_position){
+    if (move->IsAbsTargetPosition){
+        // this->_target_cnc_position = target_position;
+        this->_target_cnc_position = move->TargetPosition;
     }else{
-        this->_target_cnc_position = this->GetCurrentPosition() + target_position;
+        // this->_target_cnc_position = this->GetCurrentPosition() + target_position;
+        this->_target_cnc_position = this->GetCurrentPosition() + move->TargetPosition;
     }
     Logger::Print("this->_target_cnc_position", this->_target_cnc_position);
 }

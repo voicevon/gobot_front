@@ -45,25 +45,37 @@ void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags
     Stepper* beta = this->__actuator_beta->GetLinkedStepper();
 
     uint8_t target_motor_flags = this->_moving_actuator_flags;
-
+    MovementConfig move;
     // Step1:  Set target motor position. determin absolute or relative.
     if (target_motor_flags == 0x01){
         // set alpha position
         is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
-        this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+        // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+        move.IsAbsTargetPosition = is_absolute_position;
+        move.TargetPosition = positions_in_cnc_unit[0];
+        this->__actuator_alpha->UpdateMovement(&move);
 
     }else if (target_motor_flags == 0x02){
         // set beta position
         is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
-        this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        move.IsAbsTargetPosition = is_absolute_position;
+        move.TargetPosition = positions_in_cnc_unit[1];
+        this->__actuator_beta->UpdateMovement(&move);
 
     }else if (target_motor_flags == 0x03){
         // set alpha position
         is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
-        this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+        // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+        move.IsAbsTargetPosition = is_absolute_position;
+        move.TargetPosition = positions_in_cnc_unit[0];
+        this->__actuator_alpha->UpdateMovement(&move);
         // and set beta position
         is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
-        this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        move.IsAbsTargetPosition = is_absolute_position;
+        move.TargetPosition = positions_in_cnc_unit[1];
+        this->__actuator_beta->UpdateMovement(&move);
     }
 
     //Step2:  move one or all motors.
@@ -114,7 +126,8 @@ void CncMover_DualStepper::SingleActuatorMoveTo(MovementConfig* move){
     // if (actuator_name == AXIS_ALPHA){
     if (move->axis == AXIS_ALPHA){
         // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
-        this->__actuator_alpha->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+        // this->__actuator_alpha->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+        this->__actuator_alpha->UpdateMovement(move);
         stepper = this->__actuator_alpha->GetLinkedStepper();
         // this->__stepControl->moveAsync(*stepper);
         this->_moving_actuator_flags = 0x01;
@@ -122,7 +135,10 @@ void CncMover_DualStepper::SingleActuatorMoveTo(MovementConfig* move){
     // }else if (actuator_name == AXIS_BETA){
     }else if (move->axis == AXIS_BETA){
         // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
-        this->__actuator_beta->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+        // this->__actuator_beta->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+        // this->__actuator_beta->SetTargetPositionTo(move);
+        this->__actuator_beta->UpdateMovement(move);
+
         stepper = this->__actuator_beta->GetLinkedStepper();
         // this->__stepControl->moveAsync(*stepper);
         this->_moving_actuator_flags = 0x02;

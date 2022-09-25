@@ -41,25 +41,39 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
     bool is_absolute_position;
     Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
     uint8_t target_motor_flags = this->_moving_actuator_flags;
+    MovementConfig move;
 
     // Step1:  Set target motor position. determin absolute or relative.
     if (target_motor_flags == 0x01){
         // set alpha position
-        is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
-        this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+        // is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
+        // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+        move.IsAbsTargetPosition = (is_absolute_position_flags & 0x01) > 0;
+        move.TargetPosition = positions_in_cnc_unit[0];
+        this->__actuator_alpha->UpdateMovement(&move);
 
     }else if (target_motor_flags == 0x02){
         // set beta position
-        is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
-        this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        // is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
+        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        move.IsAbsTargetPosition = (is_absolute_position_flags & 0x02) > 0;
+        move.TargetPosition = positions_in_cnc_unit[1];
+        this->__actuator_beta->UpdateMovement(&move);
 
     }else if (target_motor_flags == 0x03){
         // set alpha position
-        is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
-        this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+        // is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
+        // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+        move.IsAbsTargetPosition = (is_absolute_position_flags & 0x01) > 0;
+        move.TargetPosition = positions_in_cnc_unit[0];
+        this->__actuator_alpha->UpdateMovement(&move);
         // and set beta position
-        is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
-        this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        // is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
+        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+        move.IsAbsTargetPosition = (is_absolute_position_flags & 0x02) > 0;
+        move.TargetPosition = positions_in_cnc_unit[1];
+        this->__actuator_beta->UpdateMovement(&move);
+
     }else{
         Serial.print("[Error]() CncMover_StepperServo::AllActuatorsMoveTo()  target_motor_flags= ");
         Serial.println(target_motor_flags);
@@ -89,7 +103,10 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
             // alpha should be slower, saying renew its speed.
             this->__actuator_alpha->RenewSpeed(beta_time_in_second);
             // below line is because the bug of Teensy-step.
-            this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);   //Must redo set position after setting speed.
+            // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);   //Must redo set position after setting speed.
+            move.IsAbsTargetPosition = is_absolute_position;
+            move.TargetPosition =  positions_in_cnc_unit[0];
+            this->__actuator_alpha->UpdateMovement(&move);   //Must redo set position after setting speed.
         }
         
         bool debug = true;
@@ -139,7 +156,9 @@ void CncMover_StepperServo::SingleActuatorMoveTo(MovementConfig* move){
     if (move->axis == AXIS_ALPHA){
         this->_moving_actuator_flags = 0x01;
         // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
-        this->__actuator_alpha->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+        // this->__actuator_alpha->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+        // this->__actuator_alpha->SetTargetPositionTo(move);
+        this->__actuator_alpha->UpdateMovement(move);
         Stepper* stepper = this->__actuator_alpha->GetLinkedStepper();
         this->__stepControl->moveAsync(*stepper);
 
@@ -147,7 +166,9 @@ void CncMover_StepperServo::SingleActuatorMoveTo(MovementConfig* move){
     }else if (move->axis == 'B'){
         this->_moving_actuator_flags = 0x02;
         // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
-        this->__actuator_beta->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+        // this->__actuator_beta->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+        // this->__actuator_beta->SetTargetPositionTo(move);
+        this->__actuator_beta->UpdateMovement(move);
         this->__actuator_beta->StartToMove();
 
     }else{

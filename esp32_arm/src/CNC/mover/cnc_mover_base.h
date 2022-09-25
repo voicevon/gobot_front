@@ -9,14 +9,7 @@
 
 #include "../Actuator/actuator_base.h"
 
-class MovementConfig{
-    public:
-        EnumAxis axis;
-        bool IsAbsTargetPosition;
-        float TargetPosition;
-        float Speed;
-        float Acceleration;
-};
+
 
 
 // TODO:  template <actuator>
