@@ -23,8 +23,8 @@ class Board2205Cnc: public CncBoardBase{
         Adafruit_MCP23X17* __mcp23018;
         Stepper stepper_driver_alpha = Stepper(PIN_ALPHA_STEP_2205);
         Stepper stepper_driver_beta = Stepper(PIN_BETA_STEP_2205);
-        SinglePositionTrigger homer_z = SinglePositionTrigger(LOW);
-        SinglePositionTrigger homer_y = SinglePositionTrigger(LOW);
+        PositionTrigger homer_z = PositionTrigger(LOW);
+        PositionTrigger homer_y = PositionTrigger(LOW);
         RobotEef_GarmentAsar eef = RobotEef_GarmentAsar();
 
 };

@@ -9,7 +9,7 @@
 class CncBoard_Test:public BoardTestBase{
     public:
         virtual void LinkBoard(CncBoardBase* board){this->__board=board;};
-        void Test_SinglePositionTrigger(SinglePositionTrigger* homer, int loop_count);
+        void Test_SinglePositionTrigger(PositionTrigger* homer, int loop_count);
         void Test_AxisHomer(AxisHomer* position_triggers, int loop_count);
 
     protected:

@@ -32,7 +32,7 @@ void Vsc_Board::LinkEncoderSensor(Encoder* encoder){
     this->__motor_angle_sensor.SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)
 }
 
-SinglePositionTrigger* Vsc_Board::GetPositionTrigger(uint8_t index){
+PositionTrigger* Vsc_Board::GetPositionTrigger(uint8_t index){
     switch (index)
     {
     case 1:
@@ -50,7 +50,7 @@ SinglePositionTrigger* Vsc_Board::GetPositionTrigger(uint8_t index){
     return &this->__homer_0;
 }
 
-// SinglePositionTrigger* Vsc_Board::GetSingleHomer(EnumAxis axis_name){
+// PositionTrigger* Vsc_Board::GetSingleHomer(EnumAxis axis_name){
 //     if (axis_name == 0){
 //         return &this->__homer_0;
 //     } else if (axis_name == 1){

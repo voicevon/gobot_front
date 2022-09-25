@@ -19,7 +19,7 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
 	this->_cnc_board = board;
 
     Logger::Debug("Vsc_CncSoution::Init() Kinematic_config");
-    CircleLoop_KinematicConfig* kinematic = this->_kinematic_config;
+    CircleLoop_KinematicConfig* kinematic = &this->_kinematic_config;
     kinematic->CircleLength = 12.7 * 368;
     kinematic->PitchLength = 12.7;  
 

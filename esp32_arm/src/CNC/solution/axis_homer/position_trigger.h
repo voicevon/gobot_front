@@ -6,12 +6,12 @@
 
 
 // TODO:  rename to PositionTrigger
-class SinglePositionTrigger{
+class PositionTrigger{
     public:
         // For OC output sensor, trigeredState should be LOW
-        SinglePositionTrigger(uint8_t pinTriger, int triggeredState);
-        SinglePositionTrigger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger, int triggered_state);
-        SinglePositionTrigger(int trigeredState);
+        PositionTrigger(uint8_t pinTriger, int triggeredState);
+        PositionTrigger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger, int triggered_state);
+        PositionTrigger(int trigeredState);
         void Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger);
         bool IsTriggered();   //TODO:  rename to IsFired()
         void SetTriggeredCountMax(int new_value){this->__triggered_counter_max = new_value;};

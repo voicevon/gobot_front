@@ -1,6 +1,6 @@
 #pragma once
 
-#include "single_position_trigger.h"
+#include "position_trigger.h"
 
 #define POSITION_TRIGGER_MAX_COUNT 4 
 
@@ -20,7 +20,7 @@ class AxisHomer{
     public:
         AxisHomer(){};
         AxisHomer(uint8_t triger_count);
-        void AppendPositionTrigger(SinglePositionTrigger* single_homer);
+        void AppendPositionTrigger(PositionTrigger* single_homer);
 
         //return -1, if no homer is trigered.
         int GetTrigeredIndex();
@@ -28,11 +28,10 @@ class AxisHomer{
         HomingConfig* GetHomingConfig(){return &this->__homing_config;};
 
     private:
-        // uint8_t __trigger_count = 1;
         uint8_t __appended_count = 0;
-        uint8_t __last_fired_index = 0;
+        uint8_t __last_fired_index = -1;
 
-        SinglePositionTrigger* _all_single_homers[POSITION_TRIGGER_MAX_COUNT];
+        PositionTrigger* __all_triggers[POSITION_TRIGGER_MAX_COUNT];
         HomingConfig __homing_config;
 
 };

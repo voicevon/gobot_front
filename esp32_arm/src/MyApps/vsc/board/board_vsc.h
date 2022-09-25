@@ -30,7 +30,7 @@ class Vsc_Board: public CncBoardBase{
         // For being a CNC machine.
         RobotEefBase* GetEef() override {return &this->__eef;};
         PidControllers* GetPidControllers() override {return &this->__all_pids;};
-        SinglePositionTrigger* GetPositionTrigger(uint8_t index) override;
+        PositionTrigger* GetPositionTrigger(uint8_t index) override;
         
 
         // We do nothing, just override the methods.
@@ -51,10 +51,10 @@ class Vsc_Board: public CncBoardBase{
         // #define SMALLEST_COUNT 1
         // #define BIGEST_COUNT 4096
         // MagneticSensorAnalog __sensor = MagneticSensorAnalog(PIN_SENSOR_ADC, SMALLEST_COUNT, BIGEST_COUNT);
-        SinglePositionTrigger __homer_0 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_0, LOW);
-        SinglePositionTrigger __homer_1 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_1, LOW);
-        SinglePositionTrigger __homer_2 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_2, LOW);
-        SinglePositionTrigger __homer_3 = SinglePositionTrigger(PIN_HOMER_SENSOR_HALL_3, LOW);
+        PositionTrigger __homer_0 = PositionTrigger(PIN_HOMER_SENSOR_HALL_0, LOW);
+        PositionTrigger __homer_1 = PositionTrigger(PIN_HOMER_SENSOR_HALL_1, LOW);
+        PositionTrigger __homer_2 = PositionTrigger(PIN_HOMER_SENSOR_HALL_2, LOW);
+        PositionTrigger __homer_3 = PositionTrigger(PIN_HOMER_SENSOR_HALL_3, LOW);
         // HomingConfig __homing_config;
         Vsc_RobotEef __eef;
 

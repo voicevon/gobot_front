@@ -29,7 +29,7 @@ void Board2204Cnc::Init(Adafruit_MCP23X17* mcp_23018){
 //     }
 // }
 
-// SinglePositionTrigger* Board2204Cnc::GetSingleHomer(EnumAxis axis_name){
+// PositionTrigger* Board2204Cnc::GetSingleHomer(EnumAxis axis_name){
 //     if (axis_name==AXIS_Z){
 //         return &this->homer_z;
 //     }else if (axis_name==AXIS_ALPHA){

@@ -1,15 +1,15 @@
 // #include "single_axis_homer.h"
-#include "single_position_trigger.h"
+#include "position_trigger.h"
 #include "MyLibs/basic/logger.h"
 
-SinglePositionTrigger::SinglePositionTrigger(uint8_t pin_trigger, int triggered_state){
+PositionTrigger::PositionTrigger(uint8_t pin_trigger, int triggered_state){
     this->__pin_trigger = pin_trigger;
     this->__triggered_state = triggered_state;
     pinMode(pin_trigger, INPUT_PULLUP);
     this->__mcp23018 = nullptr;
 }
 
-SinglePositionTrigger::SinglePositionTrigger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger, int triggered_state){
+PositionTrigger::PositionTrigger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger, int triggered_state){
     this->__mcp23018 = mcp_23018;
     this->__pin_trigger = expanded_pin_trigger;
     this->__triggered_state = triggered_state;
@@ -17,17 +17,19 @@ SinglePositionTrigger::SinglePositionTrigger(Adafruit_MCP23X17* mcp_23018, uint8
     this->__mcp23018->pinMode(expanded_pin_trigger, INPUT_PULLUP);
 }
 
-SinglePositionTrigger::SinglePositionTrigger(int triggeredState){
+PositionTrigger::PositionTrigger(int triggeredState){
     this->__triggered_state = triggeredState;
 }
 
-void SinglePositionTrigger::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger){
+void PositionTrigger::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger){
     mcp_23018->pinMode(expanded_pin_trigger, INPUT_PULLUP);
     this->__pin_trigger = expanded_pin_trigger;
     this->__mcp23018 = mcp_23018;
 }
 
-bool SinglePositionTrigger::IsTriggered(){
+bool PositionTrigger::IsTriggered(){
+    Logger::Debug("PositionTrigger::IsTriggered() is entering...");
+    Logger::Print("__pin_trigger", __pin_trigger);
     // Read sensor pin
     int pin_value;
     if (this->__mcp23018 == nullptr)
@@ -47,8 +49,8 @@ bool SinglePositionTrigger::IsTriggered(){
     return false;
 }
 
-void SinglePositionTrigger::PrintOut(const char* title){
-    Logger::Debug("SinglePositionTrigger::PrintOut()");
+void PositionTrigger::PrintOut(const char* title){
+    Logger::Debug("PositionTrigger::PrintOut()");
     Logger::Print("pin_triger", this->__pin_trigger);
 }
 

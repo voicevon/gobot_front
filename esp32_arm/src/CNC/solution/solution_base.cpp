@@ -29,7 +29,7 @@ void CncSolutionBase::SpinOnce(){
 		break;
 	}
 
-	// Serial.println("[Debug]( CncSolutionBase::SpinOnce() is finished.)");
+	Serial.println("[Debug]( CncSolutionBase::SpinOnce() is finished.)");
 	this->SpinOnce_BaseExit();
 }
 
@@ -99,7 +99,16 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 }
 
 void CncSolutionBase::_running_G28(){
-	// Logger::Debug("CncSolutionBase::_running_G28() is entering...");
+	bool debug = true;
+	if(debug){
+		Logger::Debug("CncSolutionBase::_running_G28() is entering...");
+		Logger::Print("_homing_axis", this->_homing_axis);
+		auto aa = this->_cnc_homer.GetAxisHomer(this->_homing_axis);
+		Logger::Print("Got axis_homer",true);
+		auto bb = aa->GetTrigeredIndex();
+		Logger::Print("Got triggered index", bb);
+	}
+
 	int fired_trigger_index =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetTrigeredIndex();
 	if (fired_trigger_index >=0 ){
 		// End stop is trigered

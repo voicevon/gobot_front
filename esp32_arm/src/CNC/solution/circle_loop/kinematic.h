@@ -16,7 +16,7 @@ class CncCircleLoop: public CncSolutionBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        CircleLoop_KinematicConfig* _kinematic_config;  
+        CircleLoop_KinematicConfig _kinematic_config;  
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
         EnumAxis _AXIS;   // TODO: doubel check this var.
 

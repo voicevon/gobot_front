@@ -22,7 +22,7 @@ class Board_SmokeMachine: public CncBoardBase{
     private:
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
         ActuatorStepper __actuator;
-        SinglePositionTrigger homer_alpha = SinglePositionTrigger(PIN_HOME_ALPHA_2201, LOW);
+        PositionTrigger homer_alpha = PositionTrigger(PIN_HOME_ALPHA_2201, LOW);
         RobotEef_SmokeMachine eef = RobotEef_SmokeMachine();
 
 

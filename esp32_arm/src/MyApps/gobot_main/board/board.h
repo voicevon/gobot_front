@@ -34,8 +34,8 @@ class GobotMain_Board: public CncBoardBase{
         // ActuatorRangeConstraintBase __beta_range;
         // CncMover_DualStepper __mover_dual_step;
 
-        SinglePositionTrigger homer_alpha = SinglePositionTrigger(PIN_HOME_ALPHA_2201, LOW);
-        SinglePositionTrigger homer_beta = SinglePositionTrigger(PIN_HOME_BETA_2201, LOW);
+        PositionTrigger homer_alpha = PositionTrigger(PIN_HOME_ALPHA_2201, LOW);
+        PositionTrigger homer_beta = PositionTrigger(PIN_HOME_BETA_2201, LOW);
         RobotEef_GobotMain __eef;
 
         // GobotMain_CncSolutionConfig __cnc_solution_config;
