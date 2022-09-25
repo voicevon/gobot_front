@@ -26,9 +26,9 @@ VscRobot::VscRobot(){
 }
 
 void VscRobot::MoveTo(int layer_index, int cell_index){
-    String m123 = "M123C";
-    m123.concat(cell_index);
-    this->_gcode_queue->AppendGcodeCommand(m123);
+    // String m123 = "M123C";
+    // m123.concat(cell_index);
+    // this->_gcode_queue->AppendGcodeCommand(m123);
 
     String g1 = "G1A";
     // TODO:  over single circle.
@@ -40,8 +40,14 @@ void VscRobot::MoveTo(int layer_index, int cell_index){
 void VscRobot::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
     Logger::Info("VscRobot::ExecuteMqttCommand() is entering.");
-    Serial.println(str_command);
-    // Logger::Print("Command", str_command);   // TODO:  There is a bug.
+    Logger::Print("command",str_command);
+    Logger::Print("substring(0,7)", str_command.substring(0,7));
+    Logger::Print("substring(7)", str_command.substring(7));
+    Serial.print(str_command);
+    Serial.print("\t");
+    Serial.print(str_command.substring(0,7));
+    Serial.print("\t");
+    Serial.print(str_command.substring(7));
     Gcode my_gcode = Gcode(command);
     if (str_command.substring(0,7) == "vsc_cmd"){
     // if (false){

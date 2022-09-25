@@ -22,6 +22,7 @@ void ActuatorDcMotor::SpinOnce(){
         if (this->__count_down_for_serial_print <=0){
             // Logger::Print("Abs DIstanceToTarget in CNC Rad ", abs_distance);
             this->__count_down_for_serial_print = 200;
+            this->__count_down_for_serial_print = 9900;
             serial_output = true;
         }
 
