@@ -18,12 +18,22 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
     board->EnableMotor(AXIS_ALPHA, false);
 	this->_cnc_board = board;
 
-    HomingConfig* config = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
-    config->IsDirectionToMax = true;
-    config->Speed = TWO_PI / 60;  // 60 seconds Per loop.
-    config->Accelleration = 0.1;
-    config->DistanceToGo = TWO_PI;
+    Logger::Debug("Vsc_CncSoution::Init() Kinematic_config");
+    CircleLoop_KinematicConfig* kinematic = this->_kinematic_config;
+    kinematic->CircleLength = 12.7 * 368;
+    kinematic->PitchLength = 12.7;  
 
+    Logger::Debug("Vsc_CncSoution::Init() Hoiming_config");
+    HomingConfig* homing = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
+    homing->IsDirectionToMax = true;
+    homing->Speed = TWO_PI / 60;  // 60 seconds Per loop.
+    homing->Accelleration = 0.1;
+    homing->DistanceToGo = TWO_PI;
+    
+    Logger::Debug("Vsc_CncSoution::Init() Alpha_home_triggers");
+    AxisHomer* alpha = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA);
+    alpha->AppendPositionTrigger(board->GetPositionTrigger(0));
+    alpha->AppendPositionTrigger(board->GetPositionTrigger(1));
 
 }
 

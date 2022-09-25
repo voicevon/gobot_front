@@ -4,7 +4,9 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/eef/robot_eef_base.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"   //???
-#include "CNC/solution/axis_homer/cnc_homers.h"
+// #include "CNC/solution/axis_homer/cnc_homers.h"
+#include "CNC/solution/axis_homer/single_position_trigger.h"
+#include "CNC/coordinate/cnc_axis.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
 
 class CncBoardBase: public BoardBase{
@@ -12,13 +14,15 @@ class CncBoardBase: public BoardBase{
         virtual void Init(bool is_on_reset);
 
         virtual RobotEefBase* GetEef();
+        virtual SinglePositionTrigger* GetPositionTrigger(uint8_t index);
         virtual PidControllers* GetPidControllers(){return nullptr;};
         virtual void EnableMotor(EnumAxis axis_name, bool enable_it);
-        CncHomers* GetCncHomers(){return &this->_cnc_homers;};
+        // CncHomers* GetCncHomers(){return &this->_cnc_homers;};
+
 
 
     protected:
-        CncHomers _cnc_homers = CncHomers(CNC_AXIS_COUNT);
+        // CncHomers _cnc_homers = CncHomers(CNC_AXIS_COUNT);
 
     private:
 

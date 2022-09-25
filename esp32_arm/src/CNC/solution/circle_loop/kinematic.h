@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CNC/board/cnc_board_base.h"
-// #include "MyBoards/cnc_board_base.h"
 #include "../solution_base.h"
 #include "kinematic_config.h"
 
@@ -17,7 +16,7 @@ class CncCircleLoop: public CncSolutionBase{
         float GetDistanceToTarget_IK() override;
 
     protected:
-        SingleAxis_KinematicConfig* _config;  
+        CircleLoop_KinematicConfig* _kinematic_config;  
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
         EnumAxis _AXIS;   // TODO: doubel check this var.
 

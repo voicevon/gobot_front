@@ -5,7 +5,7 @@
 #include <Adafruit_MCP23X17.h>
 
 
-// class SinglePositionTrigger{
+// TODO:  rename to PositionTrigger
 class SinglePositionTrigger{
     public:
         // For OC output sensor, trigeredState should be LOW
