@@ -71,7 +71,9 @@ class CncSolutionBase: public GcodeConsumer{
     private:
         int test_int;
         RobotEefBase* __eef;
-        PidControllers* __pid_controllers;
+        // Why it's a pointer, not a object? Because I don't know how many pid controllers in the system. I can't init it.
+        // And the author doesn't want to use "new PidControll()"  to create an instance.
+        PidControllers* __pid_controllers;   
         void _base_spin_once();
         void __running_G4();
         void __HomeSingleAxis(EnumAxis axis);

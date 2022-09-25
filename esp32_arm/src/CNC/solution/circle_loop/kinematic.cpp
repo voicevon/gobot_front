@@ -32,6 +32,7 @@ void CncCircleLoop::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		Logger::Info("CncCircleLoop::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
 		this->__current_fk_position.A = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetFiredPosition();
+		Logger::Print("position trigger, fired position", this->__current_fk_position.A);
 		this->IK(&this->__current_fk_position, &ik_position);
 		// verify IK by FK()
 		FkPosition_A verifying_fk;

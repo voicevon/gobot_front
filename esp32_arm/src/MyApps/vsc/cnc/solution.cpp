@@ -41,8 +41,14 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
     
     Logger::Debug("Vsc_CncSoution::Init() Alpha_home_triggers");
     AxisHomer* alpha = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA);
-    alpha->AppendPositionTrigger(board->GetPositionTrigger(0));
-    alpha->AppendPositionTrigger(board->GetPositionTrigger(1));
+    PositionTrigger* trigger;
+    trigger = board->GetPositionTrigger(0);
+    trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
+    alpha->AppendPositionTrigger(trigger);
+
+    trigger = board->GetPositionTrigger(1);
+    trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
+    alpha->AppendPositionTrigger(trigger);
 
 	this->_cnc_board = board;
 

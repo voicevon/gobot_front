@@ -20,5 +20,6 @@ class PolorEncoder: public PositionSensorBase{
         Encoder* __simple_foc_encoder;
         float __raw_offset;
         float __slope_from_raw_to_cnc;
+        float __ModTwoPi(float origin_value);
 
 };

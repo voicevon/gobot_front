@@ -36,7 +36,7 @@ int AxisHomer::GetTrigeredIndex(){
         // auto aa = this->__all_triggers[i];
         // Logger::Print("Got this trigger, index", i);
         if (this->__all_triggers[i]->IsTriggered()){
-            // Logger::Print("This trigger is fired", i);
+            Logger::Print("This trigger is fired", i);
             this->__last_fired_index = i;    
             return i;
         }
