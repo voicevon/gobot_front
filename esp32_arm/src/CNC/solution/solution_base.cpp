@@ -121,7 +121,7 @@ void CncSolutionBase::_running_G28(){
 		this->State = CncState::IDLE;
 	}else{
 		// Endstop is not trigered
-		Serial.print(".");
+		// Serial.print(".");
 		delay(10);
 	}
 }
@@ -278,13 +278,19 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 			Logger::Debug("CncSolutionBase::RunGcode()   M130");
 			Logger::Print("gcode", gcode->get_command());
 			p_value =  gcode->get_value('N');
+			Logger::Print("Index", p_value);
 			
 			f_value = gcode->get_value('P');
 			this->__pid_controllers->GetController(p_value)->P = f_value;
+			Logger::Print("P", f_value);
+
 			f_value = gcode->get_value('I');
 			this->__pid_controllers->GetController(p_value)->I = f_value;
+			Logger::Print("I", f_value);
+
 			f_value = gcode->get_value('D');
 			this->__pid_controllers->GetController(p_value)->D = f_value;
+			Logger::Print("D", f_value);
 
 			break;
 

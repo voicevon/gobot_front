@@ -11,39 +11,46 @@ void ActuatorDcMotor::SpinOnce(){
     this->__sensor->GetRawSensor()->update();
     // real speed control, position check, auto stop....
     float abs_distance_to_target = this->GetAbsDistanceToTarget_InCncUnit();
-
+    bool serial_output = false;
     if(abs_distance_to_target < INERTIA_DISTANCE){
     // if (false){
         // The wheel will continue to run a short time after stoping, because the inertia.
         // TDDO:  How to deal with negtive distance?
         this->Stop();
     }else{
-        // control speed
         this->__count_down_for_serial_print--;
         if (this->__count_down_for_serial_print <=0){
             // Logger::Print("Abs DIstanceToTarget in CNC Rad ", abs_distance);
-            this->__count_down_for_serial_print = 110000;
+            this->__count_down_for_serial_print = 200;
+            serial_output = true;
         }
 
-         
+        // speed pid 
         float speed_error =  this->__sensor->GetCurrentVelocity() - this->__target_speed;
-        float pwm_speed =  - this->__speed_pid->FeedError(speed_error);
+        float pwm_speed =  - this->__speed_pid->FeedError(speed_error) * 5;
 
-        if (false){
+        if (serial_output){
             // Serial.print("velocity of sensor, speed_error, pwm_speed \t");
             // Logger::Debug("velocity", velocity_in_cnc_unit);
             // Logger::Debug("target_speed", )
-            Serial.print("    ----  \t");
+            Serial.print("\n    pos(cur,dis): ");
+            Serial.print(this->__sensor->GetCurrentPosition());
+            Serial.print("\t");
             Serial.print(abs_distance_to_target);
+            Serial.print("   speed(tar,cur,err,pwm): ");
+            Serial.print(this->__target_speed);
             Serial.print("\t");
-            Serial.print(this->__sensor->GetCurrentPosition() * 360 / TWO_PI);
-            Serial.print("\t");
-            Serial.print(velocity);
+            Serial.print(this->__sensor->GetCurrentVelocity());
             Serial.print("\t");
             Serial.print(speed_error);
             Serial.print("\t");
             Serial.print(pwm_speed);
-            Serial.println();
+            Serial.print("  pid: ");
+            Serial.print(this->__speed_pid->P);
+            Serial.print("\t");
+            Serial.print(this->__speed_pid->I);
+            Serial.print("\t");
+            Serial.print(this->__speed_pid->D);
         }
         // todo:   ax^3 + bx^2 + cx + f
         bool dir_is_cw = (this->_target_cnc_position - this->GetCurrentPosition()) > 0;

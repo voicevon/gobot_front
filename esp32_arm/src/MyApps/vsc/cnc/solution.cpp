@@ -13,16 +13,16 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
     this->_LinkEef(board->GetEef());
 
 
-    // PIDs remote configable, Link to end user, and initial setting
-    this->__all_pids.AppendPidController(&this->__speed_pid);
     //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
+    this->__all_pids.AppendPidController(&this->__speed_pid);
     this->_LinkPidControllers(&this->__all_pids);
     // motor is the user of PID controller
     board->LinkSpeedPid_ForMotor(&this->__speed_pid);
-    this->__speed_pid.P = 10;
-    this->__speed_pid.I = 1;
+    // and initial setting
+    this->__speed_pid.P = 100;
+    this->__speed_pid.I = 100;
     this->__speed_pid.D = 0;
-    
+
 
     board->GetAngleSensor()->SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)
     board->EnableMotor(AXIS_ALPHA, false);

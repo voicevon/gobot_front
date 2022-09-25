@@ -38,27 +38,17 @@ class ActuatorDcMotor: public ActuatorBase{
         void SetAccelleration(float accelleration_in_cnc_unit) override;
 
     protected:
-        // virtual float _ConvertToCncUnit_FromEncoderVelocity(float encoder_velocity);
         
     private:
 
         // My components
-
         H_Bridge* __h_bridge;
         PolorEncoder* __sensor;  //todo :  rename to encoder or amgle_sensor or position_sensor
 
         // speed control
         PIDController* __speed_pid;
         float __target_speed;   // cnc rad per second.
-
-        // float __sensor_offset = 0.0f;
-
         bool __is_moving = false;
-        // int SENSOR_GEAR_COUNT = 10;
-        // int CHAIN_PITCH_COUNT = 157;
-
-        // float __SLOPE_FROM_CNC_TO_SENSOR = 1.0;
-        // float __SLOPE_FROM_SENSOR_TO_CNC = 1.0;
 
         int __count_down_for_serial_print = 0;
         LowPassFilter __filter = LowPassFilter(0.05f);
