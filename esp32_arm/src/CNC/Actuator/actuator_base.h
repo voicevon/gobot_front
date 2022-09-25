@@ -7,7 +7,7 @@
 class ActuatorBase{
     public:
         void LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint);
-        virtual float GetCurrentPosition_InCncUnit(){return this->_current_cnc_position;};
+        virtual float GetCurrentPosition(){return this->_current_cnc_position;};
         virtual void SetCurrentPositionAs(float position_in_cnc_unit);
         virtual void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit);
         virtual float GetAbsDistanceToTarget_InCncUnit();

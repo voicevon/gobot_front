@@ -9,7 +9,7 @@ class ActuatorStepper: public ActuatorBase{
         void LinkStepper(Stepper* stepper, float steps_per_cnc_unit);
         Stepper* GetLinkedStepper(){return this->_stepper;};
 
-        float GetCurrentPosition_InCncUnit() override;
+        float GetCurrentPosition() override;
         void SetCurrentPositionAs(float position_in_cnc_unit) override;
         void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit) override;
         float GetAbsDistanceToTarget_InCncUnit() override;

@@ -10,7 +10,9 @@
 void ActuatorDcMotor::SpinOnce(){
     this->__sensor->GetRawSensor()->update();
     // real speed control, position check, auto stop....
-    if(this->GetAbsDistanceToTarget_InCncUnit()  < INERTIA_DISTANCE){
+    float abs_distance_to_target = this->GetAbsDistanceToTarget_InCncUnit();
+
+    if(abs_distance_to_target < INERTIA_DISTANCE){
     // if (false){
         // The wheel will continue to run a short time after stoping, because the inertia.
         // TDDO:  How to deal with negtive distance?
@@ -20,18 +22,20 @@ void ActuatorDcMotor::SpinOnce(){
         this->__count_down_for_serial_print--;
         if (this->__count_down_for_serial_print <=0){
             // Logger::Print("Abs DIstanceToTarget in CNC Rad ", abs_distance);
-            this->__count_down_for_serial_print = 18888;
+            this->__count_down_for_serial_print = 110000;
         }
 
          
         float speed_error =  this->__sensor->GetCurrentVelocity() - this->__target_speed;
         float pwm_speed =  - this->__speed_pid->FeedError(speed_error);
 
-        if (true){
+        if (false){
             // Serial.print("velocity of sensor, speed_error, pwm_speed \t");
             // Logger::Debug("velocity", velocity_in_cnc_unit);
             // Logger::Debug("target_speed", )
             Serial.print("    ----  \t");
+            Serial.print(abs_distance_to_target);
+            Serial.print("\t");
             Serial.print(this->__sensor->GetCurrentPosition() * 360 / TWO_PI);
             Serial.print("\t");
             Serial.print(velocity);
@@ -42,7 +46,7 @@ void ActuatorDcMotor::SpinOnce(){
             Serial.println();
         }
         // todo:   ax^3 + bx^2 + cx + f
-        bool dir_is_cw = (this->_target_cnc_position - this->GetCurrentPosition_InCncUnit()) > 0;
+        bool dir_is_cw = (this->_target_cnc_position - this->GetCurrentPosition()) > 0;
         dir_is_cw = true;
         // pwm_speed = constrain(pwm_speed, 0 , 255);
         if (pwm_speed > 255.0f) pwm_speed = 255.0f;
@@ -51,7 +55,7 @@ void ActuatorDcMotor::SpinOnce(){
     }
 }
 
-float ActuatorDcMotor::GetCurrentPosition_InCncUnit(){
+float ActuatorDcMotor::GetCurrentPosition(){
     // from sensor_angle to cnc_angle.
     // cnc_angle == sensor_angle  * (10 / 10) * (10 / 56) * (56 / 157) 
     //           == sensor_angle * (SENSOR_GEAR_COUNT / MOTOR_GEAR_COUNT)* (MOTOR_GEAR_COUNT / DRIVER_GEAR_COUNT) * (DRIVER_GEAR_COUNT / CHAIN_PITCH_COUNT)
@@ -64,16 +68,18 @@ void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
     this->__sensor->SetCurrentPosition(position_in_cnc_unit);
 }
 
-void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
+void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float target_position){
     Logger::Debug("ActuatorDcMotor::SetTargetPositionTo()  is entering");
     Logger::Print("is_absolute_position", is_absolute_position);
-    Logger::Print("position_in_degree", TWO_PI * position_in_cnc_unit);
+    Logger::Print("target_position", target_position);
+    Logger::Print("Current_position",this->GetCurrentPosition());
     
     if (is_absolute_position){
-        this->_target_cnc_position = position_in_cnc_unit;
+        this->_target_cnc_position = target_position;
     }else{
-        this->_target_cnc_position = this->GetCurrentPosition_InCncUnit() + position_in_cnc_unit;
+        this->_target_cnc_position = this->GetCurrentPosition() + target_position;
     }
+    Logger::Print("this->_target_cnc_position", this->_target_cnc_position);
 }
 
 float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
@@ -82,7 +88,7 @@ float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
     // Logger::Debug(" ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit()");
     // Logger::Print("target_cnc_position", this->_target_cnc_position);
     // Logger::Print("Current_position", this->GetCurrentCncPosition());
-    return this->_target_cnc_position - this->GetCurrentPosition_InCncUnit();
+    return this->_target_cnc_position - this->GetCurrentPosition();
 }
 
 

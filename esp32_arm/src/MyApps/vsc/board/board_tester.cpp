@@ -74,7 +74,7 @@ void Vsc_BoardTest::__TestOffset(float value){
     ActuatorDcMotor* motor ;  // todo
     float xx= 123;
     motor->SetCurrentPositionAs(xx);
-    float result = motor->GetCurrentPosition_InCncUnit();
+    float result = motor->GetCurrentPosition();
     if (xx == result){
         Serial.println("[Info] Vsc_BoardTest::Test_offset_calculation()  Passed");
     }else{

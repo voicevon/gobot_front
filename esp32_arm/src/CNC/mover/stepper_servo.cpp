@@ -153,10 +153,10 @@ void CncMover_StepperServo::SingleActuatorMoveTo(EnumAxis actuator_name, bool is
 
 // float CncMover_StepperServo::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
 //     if (actuator_name == AXIS_ALPHA){
-//         return this->__actuator_alpha->GetCurrentPosition_InCncUnit();
+//         return this->__actuator_alpha->GetCurrentPosition();
 
 //     }else if (actuator_name == 'B'){
-//         return this->__actuator_beta->GetCurrentPosition_InCncUnit();
+//         return this->__actuator_beta->GetCurrentPosition();
 
 //     }else{
 //         log_w("CncMover_StepperServo::SingleMotorMoveTo() axisname= ", actuator_name );

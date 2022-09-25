@@ -86,14 +86,14 @@ void CncSolutionBase::RunG28(EnumAxis axis){
 void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	Logger::Debug("CncSolutionBase::__HomeSingleAxis()");
 	this->_homing_axis = axis;
-	HomingConfig* config = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
+	HomingConfig* homing = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
 	this->_cnc_board->EnableMotor(axis, true);
 	
 	this->_config_base.PrintOut("CncSolutionBase::__HomeSingleAxis()  _config_base");
 	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
-	this->_mover_base->SetActuatorSpeed(axis, config->Speed);
-	this->_mover_base->SetActuatorAcceleration(axis, config->Accelleration);
-	this->_mover_base->SingleActuatorMoveTo(axis, false, config->DistanceToGo);
+	this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
+	this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
+	this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
 
 	Logger::Debug("CncSolutionBase::RunG28() is Starting to run..." );
 }

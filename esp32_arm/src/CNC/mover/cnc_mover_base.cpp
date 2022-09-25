@@ -39,10 +39,10 @@ void CncMoverBase::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float
 
 float CncMoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
     if (actuator_name == AXIS_ALPHA){
-        return this->_actuator_alpha_base->GetCurrentPosition_InCncUnit();
+        return this->_actuator_alpha_base->GetCurrentPosition();
 
     }else if (actuator_name == AXIS_BETA){
-        return this->_actuator_beta_base->GetCurrentPosition_InCncUnit();
+        return this->_actuator_beta_base->GetCurrentPosition();
 
     }else{
         log_w("CncMover_DualStepper::SingleMotorMoveTo() axisname= ", actuator_name );

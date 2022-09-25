@@ -60,13 +60,13 @@ class CncSolutionBase: public GcodeConsumer{
 		virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
         EnumAxis _homing_axis;
-        KinematicConfig _config_base;    //???
+        KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
         CncHomers _cnc_homer = CncHomers(CNC_AXIS_COUNT);
 
         bool is_absolute_position = true;
         
         CncBoardBase* _cnc_board;
-        CncMoverBase* _mover_base;
+        CncMoverBase* _mover_base;   //???
 
     private:
         int test_int;

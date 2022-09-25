@@ -13,7 +13,7 @@ void Vsc_Board::Init(bool is_on_reset){
 
 void Vsc_Board::LinkEncoderSensor(Encoder* encoder){
     this->__motor_angle_sensor.LinkRawSensor(encoder);
-    this->__motor_angle_sensor.SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)
+    // this->__motor_angle_sensor.SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)
 }
 
 PositionTrigger* Vsc_Board::GetPositionTrigger(uint8_t index){

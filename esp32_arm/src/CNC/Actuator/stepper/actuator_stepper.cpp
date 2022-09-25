@@ -19,7 +19,7 @@ void ActuatorStepper::PrintOut(const char* title){
     Serial.println(FCBC_RESET);
 }
 
-float ActuatorStepper::GetCurrentPosition_InCncUnit(){
+float ActuatorStepper::GetCurrentPosition(){
     float actuator_position = 1.0f * this->_stepper->getPosition() / this->__steps_per_cnc_unit;
     this->__current_cnc_position_in_rad = actuator_position;
     if (this->_is_range_constraint){
@@ -28,7 +28,7 @@ float ActuatorStepper::GetCurrentPosition_InCncUnit(){
         this->__current_cnc_position_in_rad = this->_range_constraint->_ConvertTo_CncRange(actuator_position);
     }
     return this->__current_cnc_position_in_rad;
-    // Serial.println("[Error] ActuatorStepper::GetCurrentPosition_InCncUnit()  I don't know the anser now!");
+    // Serial.println("[Error] ActuatorStepper::GetCurrentPosition()  I don't know the anser now!");
     // while(1){
     //     Serial.print("X ");
     //     delay(500);

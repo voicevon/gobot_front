@@ -19,12 +19,12 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
     this->_LinkPidControllers(&this->__all_pids);
     // motor is the user of PID controller
     board->LinkSpeedPid_ForMotor(&this->__speed_pid);
-
     this->__speed_pid.P = 10;
     this->__speed_pid.I = 1;
     this->__speed_pid.D = 0;
+    
 
-
+    board->GetAngleSensor()->SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)
     board->EnableMotor(AXIS_ALPHA, false);
 
     Logger::Debug("Vsc_CncSoution::Init() Kinematic_config");

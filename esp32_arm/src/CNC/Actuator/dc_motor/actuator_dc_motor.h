@@ -5,7 +5,7 @@
 
 
 
-class   ActuatorDcMotor: public ActuatorBase{
+class ActuatorDcMotor: public ActuatorBase{
     public:
 
         //===================================================================
@@ -26,9 +26,9 @@ class   ActuatorDcMotor: public ActuatorBase{
         //===================================================================
         // For Being an actuator
 
-        float GetCurrentPosition_InCncUnit() override;
+        float GetCurrentPosition() override;
         void SetCurrentPositionAs(float position_in_cnc_unit) override;
-        void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit) override;
+        void SetTargetPositionTo(bool is_absolute_position, float target_position) override;
         float GetAbsDistanceToTarget_InCncUnit() override;
         // When motor is running, should not effect running speed. 
         // Will take effection when invoke SpinOnce().
