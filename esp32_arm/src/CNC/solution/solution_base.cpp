@@ -29,7 +29,7 @@ void CncSolutionBase::SpinOnce(){
 		break;
 	}
 
-	Serial.println("[Debug]( CncSolutionBase::SpinOnce() is finished.)");
+	// Serial.println("[Debug]( CncSolutionBase::SpinOnce() is finished.)");
 	this->SpinOnce_BaseExit();
 }
 
@@ -99,7 +99,7 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 }
 
 void CncSolutionBase::_running_G28(){
-	bool debug = true;
+	bool debug = false;
 	if(debug){
 		Logger::Debug("CncSolutionBase::_running_G28() is entering...");
 		Logger::Print("_homing_axis", this->_homing_axis);

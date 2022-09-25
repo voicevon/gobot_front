@@ -28,8 +28,8 @@ void PositionTrigger::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t e
 }
 
 bool PositionTrigger::IsTriggered(){
-    Logger::Debug("PositionTrigger::IsTriggered() is entering...");
-    Logger::Print("__pin_trigger", __pin_trigger);
+    // Logger::Debug("PositionTrigger::IsTriggered() is entering...");
+    // Logger::Print("__pin_trigger", __pin_trigger);
     // Read sensor pin
     int pin_value;
     if (this->__mcp23018 == nullptr)

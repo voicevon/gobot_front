@@ -29,14 +29,14 @@ void AxisHomer::AppendPositionTrigger(PositionTrigger* single_homer){
 }
 
 int AxisHomer::GetTrigeredIndex(){
-    Logger::Debug("AxisHomer::GetTrigeredIndex() is entering...");
-    Logger::Print("__appended_count", __appended_count);
+    // Logger::Debug("AxisHomer::GetTrigeredIndex() is entering...");
+    // Logger::Print("__appended_count", __appended_count);
     for (uint8_t i=0; i<this->__appended_count; i++){
-        Logger::Print("inside for loop ", i);
-        auto aa = this->__all_triggers[i];
-        Logger::Print("Got this trigger, index", i);
+        // Logger::Print("inside for loop ", i);
+        // auto aa = this->__all_triggers[i];
+        // Logger::Print("Got this trigger, index", i);
         if (this->__all_triggers[i]->IsTriggered()){
-            Logger::Print("This trigger is fired", i);
+            // Logger::Print("This trigger is fired", i);
             this->__last_fired_index = i;    
             return i;
         }
