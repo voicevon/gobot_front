@@ -4,7 +4,7 @@
 #include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
 
-#define INERTIA_DISTANCE  0.032    // this is a CNC unit  0.016== (1/386)/ (2*PI), around 12.7mm
+#define INERTIA_DISTANCE  0.064    // this is a CNC unit  0.016== (1/386)/ (2*PI), around 12.7mm
 
 
 
@@ -75,9 +75,7 @@ float ActuatorDcMotor::GetCurrentPosition(){
     return this->__sensor->GetCurrentPosition();
 }
 
-void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
-    this->__sensor->SetCurrentPosition(position_in_cnc_unit);
-}
+
 
 // void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float target_position){
 void ActuatorDcMotor::UpdateMovement(LineSegment* move){
@@ -127,6 +125,12 @@ void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
     // this is a future feature.
 }
 
+void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
+    this->__sensor->SetCurrentPosition(position_in_cnc_unit);
+    //When currentPosition is changed, SpinOnce()   will follow targetPosition. To avoid this happen.
+    this->_target_cnc_position = position_in_cnc_unit;
+
+}
 
 void ActuatorDcMotor::ForceStop(){   
     //* Only G28 is using this.
@@ -137,6 +141,9 @@ void ActuatorDcMotor::ForceStop(){
 
 void ActuatorDcMotor::UpdateTargetPositionFromCurrent(){
     Logger::Debug("ActuatorDcMotor::UpdateTargetPositionFromCurrent() is entering...");
+    Logger::Print("_target_cnc_position",_target_cnc_position);
+    Logger::Print("this->GetCurrentPosition()",this->GetCurrentPosition());
+
     this->_target_cnc_position = this->GetCurrentPosition();
 }
 
