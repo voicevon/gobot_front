@@ -96,7 +96,7 @@ void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.
-		MovementConfig move;
+		LineSegment move;
 		move.axis = this->_homing_axis;
 		move.IsAbsTargetPosition = true;
 		if (this->_homing_axis == AXIS_Z) {

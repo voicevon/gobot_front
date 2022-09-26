@@ -1,6 +1,7 @@
 #include "actuator_dc_motor.h"
 #include "Arduino.h"
 #include "MyBoards/board_base.h"
+#include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
 
 #define INERTIA_DISTANCE  0.032    // this is a CNC unit  0.016== (1/386)/ (2*PI), around 12.7mm
@@ -79,7 +80,7 @@ void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
 }
 
 // void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float target_position){
-void ActuatorDcMotor::UpdateMovement(MovementConfig* move){
+void ActuatorDcMotor::UpdateMovement(LineSegment* move){
 
     Logger::Debug("ActuatorDcMotor::SetTargetPositionTo()  is entering");
     Logger::Print("is_absolute_position", move->IsAbsTargetPosition);
@@ -126,18 +127,23 @@ void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
     // this is a future feature.
 }
 
+
+void ActuatorDcMotor::ForceStop(){   
+    //* Only G28 is using this.
+    //* SpinOnce will restart the movement, untill the actuator reach targetPosition.
+    Logger::Debug("ActuatorDcMotor::ForceStop() is entering...");
+    this->__h_bridge->Stop();
+}
+
 void ActuatorDcMotor::UpdateTargetPositionFromCurrent(){
     Logger::Debug("ActuatorDcMotor::UpdateTargetPositionFromCurrent() is entering...");
-    this->__h_bridge->Stop();
-    this->_target_cnc_position = this->_current_cnc_position;
+    this->_target_cnc_position = this->GetCurrentPosition();
 }
 
 
 
 
-ActuatorDcMotor::ActuatorDcMotor(){
 
-}
 
 void ActuatorDcMotor::PrintOut(){
     Logger::Debug("ActuatorDcMotor::PrintOut()");

@@ -4,6 +4,7 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/Actuator/servo/actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
+#include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
 class CncMover_StepperServo: public CncMoverBase{
     public:
@@ -20,7 +21,7 @@ class CncMover_StepperServo: public CncMoverBase{
 
 
         void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;
-        void SingleActuatorMoveTo(MovementConfig* movement) override;
+        void SingleActuatorMoveTo(LineSegment* line) override;
         void AllActuatorsStop() override;
         void SingleActuatorStop(EnumAxis motor_name) override;
 

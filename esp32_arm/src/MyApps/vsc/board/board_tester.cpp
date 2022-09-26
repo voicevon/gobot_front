@@ -47,7 +47,7 @@ void Vsc_BoardTest::Test_Actuator(ActuatorDcMotor* motor, int loop_count){
     float distance;
     // ActuatorDcMotor* motor = this->__board->GetActuator(AXIS_ALPHA);   // todo: 
     float speed = 12;
-    MovementConfig move;
+    LineSegment move;
     move.IsAbsTargetPosition = false;
     move.TargetPosition = 500;
     for (int i =0; i<loop_count; i++){

@@ -71,7 +71,7 @@ void CncCircleLoop::RunG1(Gcode* gcode) {
 
 	//Prepare actuator/driver to move to next point
 	// this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
-	MovementConfig move;
+	LineSegment move;
 	move.axis = this->_AXIS;
 	move.IsAbsTargetPosition = true;
 	move.TargetPosition = target_ik_a.alpha;

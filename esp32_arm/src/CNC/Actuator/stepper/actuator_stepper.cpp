@@ -1,4 +1,5 @@
 #include "actuator_stepper.h"
+#include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
 
 void ActuatorStepper::LinkStepper(Stepper* stepper, float steps_per_cnc_unit){
@@ -82,7 +83,7 @@ void ActuatorStepper::SetCurrentPositionAs(float position_in_cnc_unit){
 
 // Must clear to understand:  cnc_position,  actuator_position(or joint_position), and motor_position.
 // void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
-void ActuatorStepper::UpdateMovement(MovementConfig* move){
+void ActuatorStepper::UpdateMovement(LineSegment* move){
     int32_t motor_position_in_step;
     // if (is_absolute_position){
     if (move->IsAbsTargetPosition){

@@ -21,7 +21,7 @@ void CncMover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags,
         // set alpha position
         is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
         // this->_actuator_alpha_base->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
-        MovementConfig move;
+        LineSegment move;
         move.IsAbsTargetPosition = is_absolute_position;
         move.TargetPosition = positions_in_cnc_unit[0];
         // this->_actuator_alpha_base->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
@@ -60,6 +60,7 @@ void CncMover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags,
 }
 
 void CncMover_SingleAxis::AllActuatorsStop(){
+    this->_actuator_alpha_base->ForceStop();
     this->_actuator_alpha_base->UpdateTargetPositionFromCurrent();
     
 }
@@ -70,7 +71,7 @@ void CncMover_SingleAxis::SingleActuatorStop(EnumAxis actuator_name){
 
 
 // void CncMover_SingleAxis::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
-void CncMover_SingleAxis::SingleActuatorMoveTo(MovementConfig* move){
+void CncMover_SingleAxis::SingleActuatorMoveTo(LineSegment* move){
     // if (actuator_name == AXIS_ALPHA){
     if (move->axis == AXIS_ALPHA){
         this->_moving_actuator_flags = 0x01;

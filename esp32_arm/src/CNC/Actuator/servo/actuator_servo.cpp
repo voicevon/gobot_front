@@ -1,4 +1,5 @@
 #include "actuator_servo.h"
+#include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
 
 void ActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
@@ -71,7 +72,7 @@ void ActuatorServo::SpinOnce(){
 }
 
 // void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
-void ActuatorServo::UpdateMovement(MovementConfig* move){
+void ActuatorServo::UpdateMovement(LineSegment* move){
 
     // if (is_absolute_position){
     if (move->IsAbsTargetPosition){
