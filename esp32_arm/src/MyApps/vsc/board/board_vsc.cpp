@@ -43,3 +43,24 @@ void Vsc_Board::LinkSpeedPid_ForMotor(PIDController* speed_pid){
 void Vsc_Board::SayHello(){
     Logger::Debug("I am Vsc Board, Have a good day.");
 }
+
+
+
+void Vsc_Board::Test_PositionTriggers(int loops){
+    uint32_t flags = 0;
+    uint32_t last_flags = 999;
+    int count =0;
+    while (count < loops){
+        flags = this->__homer_0.IsTriggered();
+        flags += 2 * this->__homer_1.IsTriggered();
+        flags += 4 * this->__homer_2.IsTriggered();
+        flags += 8 * this->__homer_3.IsTriggered();
+        if (flags != last_flags){
+            Serial.print("Trigger is channged: \t\t");
+            Serial.println(flags,BIN);
+            last_flags = flags;
+            count++;
+        }
+    }
+}
+

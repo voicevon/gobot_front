@@ -118,7 +118,7 @@ void CncSolutionBase::_running_G28(){
 	int fired_trigger_index =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetTrigeredIndex();
 	if (fired_trigger_index >=0 ){
 		// End stop is trigered
-		Logger::Info("CncSolutionBase::_running_G28() ----> Home sensor is trigered." );
+		Logger::Info("CncSolutionBase::_running_G28() ----> Home sensor is triggered." );
 		Logger::Print("_homing_axis_name", this->_homing_axis);
 		Logger::Print(" fired_trigger_index", fired_trigger_index);
 

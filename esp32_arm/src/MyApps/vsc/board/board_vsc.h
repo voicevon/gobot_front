@@ -36,6 +36,8 @@ class Vsc_Board: public CncBoardBase{
         // We do nothing, just override the methods.
         void EnableMotor(EnumAxis axis_name, bool enable_it) override {};
 
+        void Test_PositionTriggers(int loops);
+
     protected:
 
     private:

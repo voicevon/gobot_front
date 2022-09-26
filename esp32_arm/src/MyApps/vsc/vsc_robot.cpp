@@ -21,9 +21,9 @@ VscRobot::VscRobot(){
     this->__position_in_pitch[9] = 117;
     this->__position_in_pitch[10] = 130;
     this->__position_in_pitch[11] = 143;
-    this->__position_in_pitch[12] = 143;
-    this->__position_in_pitch[13] = 143;
-    this->__position_in_pitch[14] = 143;
+    this->__position_in_pitch[12] = 156;
+    this->__position_in_pitch[13] = 169;
+    this->__position_in_pitch[14] = 182;
 
     Serial.print("\n[Info] VscRobot::VscRobot() is constructed");
 }

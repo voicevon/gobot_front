@@ -36,10 +36,10 @@ void Vsc_BoardTest::Test_MotorDriver(ActuatorDcMotor* motor,int loop_count){
 
 
 /*
-# Actuator should support
-* start the motor function(CW and CCW ) 
-* stop the motor function
-* change speed of motor in PWM
+# Actuator should support below requirements:
+*    start the motor function(CW and CCW ) 
+*    stop the motor function
+*    change speed of motor in PWM
 * 
 */
 void Vsc_BoardTest::Test_Actuator(ActuatorDcMotor* motor, int loop_count){
@@ -170,11 +170,3 @@ void Vsc_BoardTest::Test_EncoderSensor(Encoder* sensor, int loop_count){
     Serial.println("[Info] Vsc_BoardTest::Test_AngleSensor() is done.");
 
 }
-// void Vsc_BoardTest::Test_AllHomers(int loop_count){
-//     SingleAxisHomer* homer = this->__board->GetHomer(AXIS_ALPHA);
-//     for (int i=0; i<loop_count; i++){
-//         Serial.print("Homer is Triger = ");
-//         Serial.println(homer->IsTriged());
-//         delay(1000);
-//     }
-// }
