@@ -32,6 +32,7 @@ class CncSolutionBase: public GcodeConsumer{
         void SayHello();    // TODO:  be virtual
 
     protected:
+        // virtual _DispatchGcode(Gcode* gcode);
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
         void _LinkPidControllers(PidControllers* pid_controllers){this->__pid_controllers=pid_controllers;};
        
