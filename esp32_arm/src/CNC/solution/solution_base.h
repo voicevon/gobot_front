@@ -2,19 +2,15 @@
 
 #include "Robot/eef/eef_standard_code.h"
 #include "CNC/gcode/gcode_consumer.h"
-// #include "MyBoards/cnc_board_base.h"
-// #include "CNC/board/cnc_board_base.h"
 #include "CNC/board/cnc_board_base.h"
 
-
 #include "kinematic_config.h"
-// #include "CNC/Sensor/position_trigger/position_triggers.h"
 #include "CNC/solution/axis_homer/axis_homer.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
 #include "../mover/cnc_mover_base.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
-
+#include "CNC/gcode/line_segment_queue.h"
 
 enum class CncState{
     IDLE,
@@ -67,6 +63,8 @@ class CncSolutionBase: public GcodeConsumer{
         
         CncBoardBase* _cnc_board;
         CncMoverBase* _mover_base;   //???
+        LineSegmentQueue* _line_segment_queue;
+
 
     private:
         int test_int;

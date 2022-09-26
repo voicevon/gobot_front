@@ -1,4 +1,4 @@
-#include "kinematic.h"
+#include "cnc_circle_loop.h"
 
 
 void CncCircleLoop::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
@@ -71,11 +71,11 @@ void CncCircleLoop::RunG1(Gcode* gcode) {
 
 	//Prepare actuator/driver to move to next point
 	// this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
-	LineSegment move;
-	move.axis = this->_AXIS;
-	move.IsAbsTargetPosition = true;
-	move.TargetPosition = target_ik_a.alpha;
-	this->_mover_base->SingleActuatorMoveTo(&move);
+	LineSegment line;
+	line.axis = this->_AXIS;
+	line.IsAbsTargetPosition = true;
+	line.TargetPosition = target_ik_a.alpha;
+	this->_mover_base->SingleActuatorMoveTo(&line);   //TODO:  put line to lineSegment queue
 	//None blocking, move backgroundly.
 	// uint8_t abs_flag=0x01;
 	// this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);

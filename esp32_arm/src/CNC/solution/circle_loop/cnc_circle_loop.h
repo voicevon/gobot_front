@@ -2,7 +2,7 @@
 
 #include "CNC/board/cnc_board_base.h"
 #include "../solution_base.h"
-#include "kinematic_config.h"
+#include "cnc_circle_loop_config.h"
 
 
 //This is a virtual class. No Constructor.

@@ -109,10 +109,10 @@ void CncSolutionBase::_running_G28(){
 	if(debug){
 		Logger::Debug("CncSolutionBase::_running_G28() is entering...");
 		Logger::Print("_homing_axis", this->_homing_axis);
-		auto aa = this->_cnc_homer.GetAxisHomer(this->_homing_axis);
+		auto homer = this->_cnc_homer.GetAxisHomer(this->_homing_axis);
 		Logger::Print("Got axis_homer",true);
-		auto bb = aa->GetTrigeredIndex();
-		Logger::Print("Got triggered index", bb);
+		auto index = homer->GetTrigeredIndex();
+		Logger::Print("Got triggered index", index);
 	}
 
 	int fired_trigger_index =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetTrigeredIndex();
