@@ -7,6 +7,11 @@ void Board_SpringMaker::Init(bool is_on_reset){
    
 }
 
+PositionTrigger* Board_SpringMaker::GetPositionTrigger(uint8_t index){
+    
+}
+
+
 // ActuatorStepper* Board_SpringMaker::GetActuator(EnumAxis axis_name) {
 //     if (axis_name==AXIS_ALPHA){
 //         return &this->stepper_alpha;

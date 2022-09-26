@@ -21,6 +21,7 @@ class Board_SpringMaker: public CncBoardBase{
         RobotEef_SpringMaker* GetEef() override;
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         // SpringMaker_CncSolutionConfig* GetCncConfig() override {return &this->__cnc_solution_config;};
+        PositionTrigger* GetPositionTrigger(uint8_t index) override;
 
         
     private:

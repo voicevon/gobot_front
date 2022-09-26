@@ -15,6 +15,8 @@ class GobotMain_Board: public CncBoardBase{
         void EnableMotor(EnumAxis axis_name, bool enable_it) override;
         uint8_t ReadAllRooms();
         uint8_t GetLoadedRoom();
+        PositionTrigger* GetPositionTrigger(uint8_t index) override{};
+
 
 
     private:

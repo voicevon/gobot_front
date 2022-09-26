@@ -28,6 +28,8 @@ class CncMover_DualStepper: public CncMoverBase{
         void AllActuatorsStop() override;
         void SingleActuatorStop(EnumAxis motor_name) override;
 
+        bool HasArrivedTargetPosition(){};
+
         // void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position) override;
         // void Stop(char motor_name) override;
         // struct MotorFlag{

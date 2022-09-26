@@ -39,6 +39,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
         ActuatorServo __actuator_beta;
         // CncMover_StepperServo mover_StepperServo;
 
+        PositionTrigger* GetPositionTrigger(uint8_t index) override{};
 
         PositionTrigger __alpha_homer = PositionTrigger(PIN_HOME_ALHPA_2109, LOW);
         PositionTrigger __beta_homer = PositionTrigger(PIN_HOME_BETA_2109, LOW);

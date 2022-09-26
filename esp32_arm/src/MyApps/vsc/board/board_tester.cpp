@@ -8,26 +8,28 @@
 // }
 
 // Even without angel sensor,  Only a h-bridge driver is there, Should be work properly.
+
 void Vsc_BoardTest::Test_MotorDriver(ActuatorDcMotor* motor,int loop_count){
     uint32_t speed = 255;
+    uint32_t delay_ms = 10000;
     //  = this->__board->GetActuator(AXIS_ALPHA);
     for(int i=0; i<loop_count ;i++){    
         Serial.print("motor test start");
         Serial.println("       motor CW ");
         motor->Test_PwmSpeed(true, speed);
-        delay(5000);
+        delay(delay_ms);
         
         Serial.print("       motor stop");
         motor->Test_PwmSpeed(true, 0);
-        delay(5000);
+        delay(delay_ms);
         
         Serial.print("       motor CCW");
         motor->Test_PwmSpeed(false, speed);
-        delay(5000);
+        delay(delay_ms);
 
         Serial.print("       motor stop");
         motor->Test_PwmSpeed(false, 0);
-        delay(5000);
+        delay(delay_ms);
         Serial.println("     motor test end");
     }
 }
