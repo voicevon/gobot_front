@@ -2,9 +2,13 @@
 
 void VscRobot::Init(Vsc_Board* board,  Vsc_ArmSoution *arm_solution){
     Logger::Info("Vsc_ArmSoution::Init() is entering...");
-    this->_LinkEef(board->GetEef());
-    this->_arm_solution = arm_solution;
     this->_cnc_board = board;
+    this->_LinkEef(board->GetEef());
+    this->__queue_move_block._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    this->__planner.__moveblock_queue = &this->__queue_move_block;
+    this->__mover.__moveblock_queue = &this->__queue_move_block;
+
+    this->_arm_solution = arm_solution;
 
     this->_arm_solution->_cnc_board = board;
     this->_arm_solution->planner = &this->__planner;

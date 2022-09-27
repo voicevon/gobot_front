@@ -35,6 +35,7 @@ class CncMoverBase{
         virtual bool HasArrivedTargetPosition();
         float GetAbsDistanceToTarget_InCncUnit();
 
+        MoveBlockQueue* __moveblock_queue;
 
     protected:
         // bool _is_blocked_move;

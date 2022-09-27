@@ -11,8 +11,10 @@ class Planner{
         bool IsPlanable();
         void AppendLineSegment(LineSegment* line);
 
+
+        MoveBlockQueue* __moveblock_queue;
+
     private:
-        BlockQueue __block_queue;
 
 
 

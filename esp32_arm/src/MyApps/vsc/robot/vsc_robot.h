@@ -15,6 +15,10 @@ class VscRobot: public RobotBase{
         PIDController __speed_pid = PIDController(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
         PidControllers __all_pids = PidControllers(1);
         Planner __planner;
-        MoveBlock __all_move_blocks = MoveBlock(88);  //!!!!
+        Vsc_CncMover __mover;
+        MoveBlock __all_move_blocks[88]; 
+        MoveBlockQueue __queue_move_block;
+        // MoveBlock* __all_move_blocks_pointer[88];
+
 
 };
