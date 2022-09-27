@@ -3,8 +3,7 @@
 #include "MyBoards/const.h"
 
 
-// return true: buffer is full , before or after appending.
-// return false:  buffer is not full, after appending.
+
 bool CommonQueue::AppendObject(Queue_able* new_object){
     int next_head = this->__get_pointer_next_index(this->_head);
     if(next_head == this->_tail){
@@ -25,6 +24,27 @@ bool CommonQueue::AppendObject(Queue_able* new_object){
     // buffer is NOT full. 
     return false;  
 }
+bool CommonQueue::ForwardHead(){
+    int next_head = this->__get_pointer_next_index(this->_head);
+    if(next_head == this->_tail){
+        Serial.print(FORE_YELLOW);
+        Serial.print("\n  [Warn] CommonQueue::ForwardHead() ");
+        Serial.print("\n   Buffer is full");
+        Serial.println(FCBC_RESET);
+        return true;
+    }
+
+    // new_object->DeepCopyTo((Queue_able*) (this->_all_queue_ables + this->_head * this->_sizeof_item));
+
+    this->_head = next_head;
+    next_head = this->__get_pointer_next_index(this->_head);
+    if (next_head == this->_tail)
+        // buffer is full, after copying.
+        return true;
+    // buffer is NOT full. 
+    return false;  
+}
+
 
 Queue_able* CommonQueue::GetHeadObject(){
     int previous_head = this->__get_pointer_previous_index(this->_head);
