@@ -6,18 +6,19 @@
 
 #include "CNC/arm_solution/kinematic_config.h"
 #include "CNC/arm_solution/axis_homer/axis_homer.h"
-#include "../coordinate/coordinate_base.h"
-#include "../coordinate/cnc_axis.h"
-#include "../mover/cnc_mover_base.h"
+#include "CNC/arm_solution/solution_base.h"
+#include "CNC/coordinate/coordinate_base.h"
+#include "CNC/coordinate/cnc_axis.h"
+#include "CNC/mover/cnc_mover_base.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
 #include "CNC/gcode/line_segment_queue.h"
 
-enum class CncState{
-    IDLE,
-    RUNNING_G1,
-    RUNNING_G4,
-    RUNNING_G28
-};
+// enum class CncState{
+//     IDLE,
+//     RUNNING_G1,
+//     RUNNING_G4,
+//     RUNNING_G28
+// };
 
 class RobotBase: public GcodeConsumer{
     public:
@@ -26,35 +27,34 @@ class RobotBase: public GcodeConsumer{
 
         void RunGcode(Gcode* gcode);
         void RunG28(EnumAxis axis);
-        virtual bool GetCurrentPosition(FkPositionBase* position_fk);
-        virtual float GetDistanceToTarget_FK();
-        virtual float GetDistanceToTarget_IK();
+        // virtual bool GetCurrentPosition(FkPositionBase* position_fk);
+        // virtual float GetDistanceToTarget_FK();
+        // virtual float GetDistanceToTarget_IK();
         void SayHello();    // TODO:  be virtual
 
     protected:
         // virtual _DispatchGcode(Gcode* gcode);
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
-        void _LinkPidControllers(PidControllers* pid_controllers){this->__pid_controllers=pid_controllers;};
+        void _LinkPidControllers_M130(PidControllers* pid_controllers){this->__pid_controllers_m130=pid_controllers;};
        
-        void SpinOnce_BaseExit();
-        virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
-        virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
-        virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.
-        virtual void RunG6(Gcode* gcode);   //Block mode
-        void RunG4(Gcode* gcode);
-        virtual std::string GetHomeTrigerStateString();
+        // virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
+        // virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
+        // virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.
+        // virtual void RunG6(Gcode* gcode);   //Block mode
+        // void RunG4(Gcode* gcode);
+        // virtual std::string GetHomeTrigerStateString();
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
         
         void RunM84();
         // virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
-        void RunM123(uint8_t eef_channel, uint8_t eef_action);
+        virtual void RunM123(uint8_t eef_channel, uint8_t eef_action);
 
-        void _running_G1();
+        // void _running_G1();
         void _running_G28();
-        virtual EnumAxis ConvertToEnum(char axis);
-        virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis);
-		virtual void _RunG28_CombinedFk(EnumAxis axis){};
+        // virtual EnumAxis ConvertToEnum(char axis_name);
+        // virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis);
+		// virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
         EnumAxis _homing_axis;
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
@@ -68,16 +68,19 @@ class RobotBase: public GcodeConsumer{
 
 
     private:
+        CncSolutionBase* __arm_solution;
+        void SpinOnce_BaseExit();
+
         int test_int;
         RobotEefBase* __eef;
         // Why it's a pointer, not a object? Because I don't know how many pid controllers in the system. I can't init it.
         // And the author doesn't want to use "new PidControll()"  to create an instance.
-        PidControllers* __pid_controllers;   
+        PidControllers* __pid_controllers_m130;   
         void _base_spin_once();
-        void __running_G4();
+        // void __running_G4();
         void __HomeSingleAxis(EnumAxis axis);
-        long __g4_start_timestamp;
-        int __g4_time_second;
+        // long __g4_start_timestamp;
+        // int __g4_time_second;
 
         /* Just for fun, don't remove below comment.
         void * __output_message2;

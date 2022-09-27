@@ -10,7 +10,7 @@ void GobotMainCncSolution::Init(GobotMain_Board* cnc_board, StepControl* step_co
     this->__mover.Init(cnc_board, step_control);
     this->_mover_base = &this->__mover;
     
-    this->_LinkEef(cnc_board->GetEef());
+    // this->_LinkEef(cnc_board->GetEef());
     this->_config = &this->__config;
     // this->_config_base = &this->__config;
 

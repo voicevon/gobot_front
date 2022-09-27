@@ -19,7 +19,7 @@ enum class CncState{
     RUNNING_G28
 };
 
-class CncSolutionBase: public GcodeConsumer{
+class CncSolutionBase{
     public:
         CncState State = CncState::IDLE;
         void SpinOnce();
@@ -30,11 +30,13 @@ class CncSolutionBase: public GcodeConsumer{
         virtual float GetDistanceToTarget_FK();
         virtual float GetDistanceToTarget_IK();
         void SayHello();    // TODO:  be virtual
+        virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis);
+        virtual EnumAxis ConvertToEnum(char axis);
 
     protected:
         // virtual _DispatchGcode(Gcode* gcode);
-        void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
-        void _LinkPidControllers(PidControllers* pid_controllers){this->__pid_controllers=pid_controllers;};
+        // void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
+        // void _LinkPidControllers(PidControllers* pid_controllers){this->__pid_controllers=pid_controllers;};
        
         void SpinOnce_BaseExit();
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
@@ -48,12 +50,10 @@ class CncSolutionBase: public GcodeConsumer{
         
         void RunM84();
         // virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
-        void RunM123(uint8_t eef_channel, uint8_t eef_action);
+        // void RunM123(uint8_t eef_channel, uint8_t eef_action);
 
         void _running_G1();
         void _running_G28();
-        virtual EnumAxis ConvertToEnum(char axis);
-        virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis);
 		virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
         EnumAxis _homing_axis;
@@ -69,10 +69,10 @@ class CncSolutionBase: public GcodeConsumer{
 
     private:
         int test_int;
-        RobotEefBase* __eef;
+        // RobotEefBase* __eef;
         // Why it's a pointer, not a object? Because I don't know how many pid controllers in the system. I can't init it.
         // And the author doesn't want to use "new PidControll()"  to create an instance.
-        PidControllers* __pid_controllers;   
+        // PidControllers* __pid_controllers;   
         void _base_spin_once();
         void __running_G4();
         void __HomeSingleAxis(EnumAxis axis);

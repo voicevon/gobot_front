@@ -1,8 +1,5 @@
 #include "solution.h"
 
-Vsc_CncSoution::Vsc_CncSoution(){
-
-}
 
 void Vsc_CncSoution::Init(Vsc_Board* board ){
     this->_AXIS = AXIS_ALPHA;
@@ -10,18 +7,7 @@ void Vsc_CncSoution::Init(Vsc_Board* board ){
     this->__mover.Init(board);
     this->_mover_base = &this->__mover;
     
-    this->_LinkEef(board->GetEef());
 
-    Logger::Info("Vsc_CncSoution::Init() Pid controller.");
-    //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
-    this->__all_pids.AppendPidController(&this->__speed_pid);
-    this->_LinkPidControllers(&this->__all_pids);
-    // motor is the user of PID controller
-    board->LinkSpeedPid_ForMotor(&this->__speed_pid);
-    // and initial setting
-    this->__speed_pid.P = 100;
-    this->__speed_pid.I = 100;
-    this->__speed_pid.D = 0;
 
     Logger::Info("Vsc_CncSoution::Init() angle sensor and motor");
     board->GetAngleSensor()->SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)

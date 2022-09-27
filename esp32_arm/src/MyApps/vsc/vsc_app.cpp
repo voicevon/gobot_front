@@ -1,9 +1,9 @@
 
-#include "vsc_robot.h"
+#include "vsc_app.h"
 #include <HardwareSerial.h>
 
 
-VscRobot::VscRobot(){
+VscApp::VscApp(){
     for (int i=0; i<LAYER_COUNT; i++){
         __position_in_pitch[i] = 0;
     }
@@ -25,10 +25,10 @@ VscRobot::VscRobot(){
     this->__position_in_pitch[13] = 169;
     this->__position_in_pitch[14] = 182;
 
-    Serial.print("\n[Info] VscRobot::VscRobot() is constructed");
+    Serial.print("\n[Info] VscApp::VscApp() is constructed");
 }
 
-void VscRobot::MoveTo(int layer_index, int cell_index){
+void VscApp::MoveTo(int layer_index, int cell_index){
     // String m123 = "M123C";
     // m123.concat(cell_index);
     // this->_gcode_queue->AppendGcodeCommand(m123);
@@ -41,9 +41,9 @@ void VscRobot::MoveTo(int layer_index, int cell_index){
     this->_gcode_queue->AppendGcodeCommand(g1);
 }
 
-void VscRobot::AsyncExecuteMqttCommand(const char* command){
+void VscApp::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
-    Logger::Info("VscRobot::ExecuteMqttCommand() is entering.");
+    Logger::Info("VscApp::ExecuteMqttCommand() is entering.");
     // Logger::Print("command",str_command);
     // Logger::Print("substring(0,7)", str_command.substring(0,7));
     // Logger::Print("substring(7)", str_command.substring(7));
@@ -105,12 +105,12 @@ void VscRobot::AsyncExecuteMqttCommand(const char* command){
     //     String gcode = "G1 A86.25 F5000";     // 700 turns without gearbox reducer
     //     this->_gcode_queue->AppendGcodeCommand(gcode);
     // }else{
-    //     Serial.print("[Warn] VscRobot::ExecuteMqttCommand()  = ");
+    //     Serial.print("[Warn] VscApp::ExecuteMqttCommand()  = ");
     //     Serial.println(command);
     // }
 }
 
-void VscRobot::SpinOnce(){
+void VscApp::SpinOnce(){
     if (!this->_gcode_queue->BufferIsFull()){
         this->CheckMqttCommand();
     }

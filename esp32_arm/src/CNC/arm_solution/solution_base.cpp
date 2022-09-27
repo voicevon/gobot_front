@@ -34,32 +34,32 @@ void CncSolutionBase::SpinOnce(){
 }
 
 // Check gcode queue, if there is gcode to be run.
-void CncSolutionBase::SpinOnce_BaseExit(){
-	if (this->State != CncState::IDLE)
-		return;
-	if (this->_gcode_queue->BufferIsEmpty())
-		return;
+// void CncSolutionBase::SpinOnce_BaseExit(){
+// 	if (this->State != CncState::IDLE)
+// 		return;
+// 	if (this->_gcode_queue->BufferIsEmpty())
+// 		return;
 
-	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
-	if (message == NULL){
-		Serial.println("\n\n\n [Error] CncSolutionBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
-		return;
-	}
+// 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
+// 	if (message == NULL){
+// 		Serial.println("\n\n\n [Error] CncSolutionBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
+// 		return;
+// 	}
 
-	bool debug = false;
-	if (debug){
-		Logger::Debug("[Info] CncSolutionBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
-		Serial.print(message->payload);
-		Serial.println(" ");
-	}
+// 	bool debug = false;
+// 	if (debug){
+// 		Logger::Debug("[Info] CncSolutionBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
+// 		Serial.print(message->payload);
+// 		Serial.println(" ");
+// 	}
 	
-	// type convert   from char* to std::string
-	char* p = &message->payload[0];
-	std::string str = std::string(p);
-	// feed std::string to Gcode constructor.
-	Gcode gcode = Gcode(str);
-	this->RunGcode(&gcode);
-}
+// 	// type convert   from char* to std::string
+// 	char* p = &message->payload[0];
+// 	std::string str = std::string(p);
+// 	// feed std::string to Gcode constructor.
+// 	Gcode gcode = Gcode(str);
+// 	this->RunGcode(&gcode);
+// }
 
 
 
@@ -156,13 +156,13 @@ void CncSolutionBase::__running_G4(){
 	}
 }
 
-void CncSolutionBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
-	Logger::Debug("CncSolutionBase::RunM123()");
-	Logger::Print("eef_action", eef_action);
-	// uint8_t action_code = 1;
-	this->__eef->PrintOut();
-	this->__eef->Run(eef_action);
-}
+// void CncSolutionBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// 	Logger::Debug("CncSolutionBase::RunM123()");
+// 	Logger::Print("eef_action", eef_action);
+// 	// uint8_t action_code = 1;
+// 	this->__eef->PrintOut();
+// 	this->__eef->Run(eef_action);
+// }
 
 void CncSolutionBase::RunM84(){
 	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
@@ -178,7 +178,8 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 	// }
 	bool debug = false;
 	Logger::Debug("CncSolutionBase::RunGcode()");
-	Logger::Print("gcode_command", gcode->get_command());
+	// Logger::Print("gcode_command", gcode->get_command());
+	Serial.println(gcode->get_command());
 
 	if(gcode->has_g){
 		char home_axis = '+';
@@ -257,69 +258,69 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 			// Get Current Position
 			break;
 
-		case 119:
-			// Get Endstop Status
-			result = GetHomeTrigerStateString();
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			Serial.print(result.c_str());
-			// this->commuDevice->WriteNotification(result);
-			break;
+		// case 119:
+		// 	// Get Endstop Status
+		// 	result = GetHomeTrigerStateString();
+		// 	// this->commuDevice->OutputMessage(COMMU_OK);
+		// 	Serial.print(result.c_str());
+		// 	// this->commuDevice->WriteNotification(result);
+		// 	break;
 
-		case 123:
-			//M123 P=channel_index, S=Set EEF action			
-			while (this->State != CncState::IDLE){
-				this->SpinOnce();
-			}
-			p_value =  gcode->get_value('P');
-			s_value = gcode->get_value('S');
-			debug = true;
-			if (debug){
-				Logger::Debug("CncSolutionBase::RunGcode() For EEF_ACTION  M123 ");
-				Logger::Print("P", p_value);
-				Logger::Print("S", s_value);
-			}
-			action = (EefAction)s_value;
-			this->RunM123(p_value, s_value);
-			break;
+		// case 123:
+		// 	//M123 P=channel_index, S=Set EEF action			
+		// 	while (this->State != CncState::IDLE){
+		// 		this->SpinOnce();
+		// 	}
+		// 	p_value =  gcode->get_value('P');
+		// 	s_value = gcode->get_value('S');
+		// 	debug = true;
+		// 	if (debug){
+		// 		Logger::Debug("CncSolutionBase::RunGcode() For EEF_ACTION  M123 ");
+		// 		Logger::Print("P", p_value);
+		// 		Logger::Print("S", s_value);
+		// 	}
+		// 	action = (EefAction)s_value;
+		// 	this->RunM123(p_value, s_value);
+		// 	break;
 
-		case 130:
-			Logger::Debug("CncSolutionBase::RunGcode()   M130");
-			Logger::Print("gcode", gcode->get_command());
-			p_value =  gcode->get_value('N');
-			Logger::Print("Index", p_value);
+		// case 130:
+		// 	Logger::Debug("CncSolutionBase::RunGcode()   M130");
+		// 	Logger::Print("gcode", gcode->get_command());
+		// 	p_value =  gcode->get_value('N');
+		// 	Logger::Print("Index", p_value);
 			
-			f_value = gcode->get_value('P');
-			this->__pid_controllers->GetController(p_value)->P = f_value;
-			Logger::Print("P", f_value);
+		// 	f_value = gcode->get_value('P');
+		// 	this->__pid_controllers->GetController(p_value)->P = f_value;
+		// 	Logger::Print("P", f_value);
 
-			f_value = gcode->get_value('I');
-			this->__pid_controllers->GetController(p_value)->I = f_value;
-			Logger::Print("I", f_value);
+		// 	f_value = gcode->get_value('I');
+		// 	this->__pid_controllers->GetController(p_value)->I = f_value;
+		// 	Logger::Print("I", f_value);
 
-			f_value = gcode->get_value('D');
-			this->__pid_controllers->GetController(p_value)->D = f_value;
-			Logger::Print("D", f_value);
+		// 	f_value = gcode->get_value('D');
+		// 	this->__pid_controllers->GetController(p_value)->D = f_value;
+		// 	Logger::Print("D", f_value);
 
-			break;
+		// 	break;
 
 		case 141:
 			break;
 
-		case 280:
-			// Set servo position  
-			//	 	Pnnn Servo index
-			// 		Snnn Angle or microseconds
-			// Wait for all gcode, mcode is finished
-			// Serial.println("M280 Started");
-			while (this->State != CncState::IDLE){
-				this->SpinOnce();
-			}
-			if (gcode->has_letter('P')) p_value = gcode->get_value('P');
-			if (gcode->has_letter('S')) s_value = gcode->get_value('S');
-			ledcWrite(p_value, s_value);   // from ledcWrite(ledChannel, dutyCycle);
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			// this->commuDevice->WriteNotification("IDLE");
-			break;
+		// case 280:
+		// 	// Set servo position  
+		// 	//	 	Pnnn Servo index
+		// 	// 		Snnn Angle or microseconds
+		// 	// Wait for all gcode, mcode is finished
+		// 	// Serial.println("M280 Started");
+		// 	while (this->State != CncState::IDLE){
+		// 		this->SpinOnce();
+		// 	}
+		// 	if (gcode->has_letter('P')) p_value = gcode->get_value('P');
+		// 	if (gcode->has_letter('S')) s_value = gcode->get_value('S');
+		// 	ledcWrite(p_value, s_value);   // from ledcWrite(ledChannel, dutyCycle);
+		// 	// this->commuDevice->OutputMessage(COMMU_OK);
+		// 	// this->commuDevice->WriteNotification("IDLE");
+		// 	break;
 		case 996:
 			// Do nothing. this should be the last gcode of a movement in transaction.
 			// after MCU reset, This should be the first gcode it received, even the message queue is nothing.

@@ -7,7 +7,7 @@ class Queue_able{
         virtual void DeepCopyTo(Queue_able* the_copy);
 };
 
-
+//TODO:  make a template, to remove Queue_able.
 class CommonQueue{
     public:
         // For Producer:    

@@ -5,12 +5,15 @@
 #include "cnc/solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
-#include "vsc_robot.h"
+#include "vsc_app.h"
+#include "robot/robot.h"    //TODO:: rename to ??
 
-Vsc_CncSoution cnc;
+// Vsc_CncSoution cnc;
 
 Vsc_Board board;
-VscRobot robot;
+VscApp vsc_app;
+VscRobot vsc_robot;
+
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
@@ -48,12 +51,12 @@ void setup(){
     board.LinkEncoderSensor(&encoder);
     board.Init(true);
     test_board();
-    cnc.Init(&board);
-    robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
-    cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    vsc_robot.Init(&board);
+    vsc_robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    vsc_app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
 
     setup_mqtt_block_connect();
-    append_mqtt_bridge("vsc/j4", &mqtt_command_queue, &robot); 
+    append_mqtt_bridge("vsc/j4", &mqtt_command_queue, &vsc_app); 
     setup_mqtt_on_message_receive(); 
     // gcode_queue.AppendGcodeCommand("G28A");
     Logger::Info ("VSC-XiaoJuan   setup() is done. ");
@@ -65,8 +68,8 @@ void setup(){
 void loop(){
     ActuatorDcMotor* motor = board.GetActuator(AXIS_ALPHA);
     motor->SpinOnce();
-    robot.SpinOnce();
-    cnc.SpinOnce();
+    vsc_app.SpinOnce();
+    vsc_robot.SpinOnce();
     loop_mqtt();
 
 }

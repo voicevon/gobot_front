@@ -2,7 +2,7 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "HardwareSerial.h"
 #include "MyLibs/message_queue.h"
-
+#include "CNC/arm_solution/solution_base.h"
 
 void RobotBase::SayHello(){
 	Serial.println("[Debug] RobotBase::SayHello()");
@@ -14,12 +14,12 @@ void RobotBase::SpinOnce(){
 	switch (this->State){
 	case CncState::IDLE:   //0
 		break;
-	case CncState::RUNNING_G4:  // 2
-		this->__running_G4();
-		break;
-	case CncState::RUNNING_G1:  // 1
-		this->_running_G1();
-		break;
+	// case CncState::RUNNING_G4:  // 2
+	// 	this->__running_G4();
+	// 	break;
+	// case CncState::RUNNING_G1:  // 1
+	// 	this->_running_G1();
+	// 	break;
 	case CncState::RUNNING_G28:  // 4
 		// Logger::Debug("CncState::RUNNING_G28");
 		this->_running_G28();
@@ -58,6 +58,8 @@ void RobotBase::SpinOnce_BaseExit(){
 	std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
 	Gcode gcode = Gcode(str);
+	Serial.print("RobotBase::SpinOnce_BaseExit\t\t");
+	Serial.println(str.c_str());
 	this->RunGcode(&gcode);
 }
 
@@ -75,7 +77,7 @@ void RobotBase::RunG28(EnumAxis axis){
 	}
 
 	if (this->_config_base.IsCombinedFk){
-		this->_RunG28_CombinedFk(axis);
+		// this->_RunG28_CombinedFk(axis);
 
 	}else{
 		this->__HomeSingleAxis(axis);
@@ -123,7 +125,8 @@ void RobotBase::_running_G28(){
 		Logger::Print(" fired_trigger_index", fired_trigger_index);
 
 		this->_mover_base->AllActuatorsStop();
-		this->_SetCurrentPositionAsHome(this->_homing_axis);
+		// this->_SetCurrentPositionAsHome(this->_homing_axis);
+		this->__arm_solution->_SetCurrentPositionAsHome(this->_homing_axis);
 		this->State = CncState::IDLE;
 	}else{
 		// Endstop is not trigered
@@ -132,37 +135,14 @@ void RobotBase::_running_G28(){
 	}
 }
 
-void RobotBase::_running_G1(){
-	if (this->_mover_base->HasArrivedTargetPosition()){
-	// float distance_to_target = this->GetDistanceToTarget_IK();
-    // if (distance_to_target < DEG_TO_RAD * 1.0f){  // TODO:  == 0  or decide by subclass.
 
-      	this->State = CncState::IDLE;
-		Logger::Info("RobotBase::_running_G1() is finished. ");
-		// Logger::Print("distance_to_target", RAD_TO_DEG * distance_to_target);
-    }
-}
-
-void RobotBase::RunG4(Gcode* gcode){
-	__g4_start_timestamp = micros();
-	__g4_time_second = gcode->get_value('S');
-}
-
-void RobotBase::__running_G4(){
-	long delayed = (micros() - __g4_start_timestamp) / 1000 /1000;
-	if (delayed >= __g4_time_second ){
-		this->State = CncState::IDLE;
-		return;
-	}
-}
-
-void RobotBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
-	Logger::Debug("RobotBase::RunM123()");
-	Logger::Print("eef_action", eef_action);
-	// uint8_t action_code = 1;
-	this->__eef->PrintOut();
-	this->__eef->Run(eef_action);
-}
+// void RobotBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// 	Logger::Debug("RobotBase::RunM123()");
+// 	Logger::Print("eef_action", eef_action);
+// 	// uint8_t action_code = 1;
+// 	this->__eef->PrintOut();
+// 	this->__eef->Run(eef_action);
+// }
 
 void RobotBase::RunM84(){
 	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
@@ -181,66 +161,74 @@ void RobotBase::RunGcode(Gcode* gcode){
 	Logger::Print("gcode_command", gcode->get_command());
 
 	if(gcode->has_g){
-		char home_axis = '+';
-		switch (gcode->g){
-		case 28:
+		char home_axis_name = '+';
+		// switch (gcode->g){
+		if (gcode->g==28){
+		// case 28:
 			// G28: Home
 			this->State = CncState::RUNNING_G28;
-			if (gcode->has_letter('X')) home_axis='X';
-			if (gcode->has_letter('Y')) home_axis='Y';
-			if (gcode->has_letter('Z')) home_axis='Z';
-			if (gcode->has_letter('A')) home_axis='A';
-			if (gcode->has_letter('B')) home_axis='B';
-			if (gcode->has_letter('C')) home_axis='C';
-			if (gcode->has_letter('W')) home_axis='W';
+			if (gcode->has_letter('X')) home_axis_name='X';
+			if (gcode->has_letter('Y')) home_axis_name='Y';
+			if (gcode->has_letter('Z')) home_axis_name='Z';
+			if (gcode->has_letter('A')) home_axis_name='A';
+			if (gcode->has_letter('B')) home_axis_name='B';
+			if (gcode->has_letter('C')) home_axis_name='C';
+			if (gcode->has_letter('W')) home_axis_name='W';
+			Logger::Debug("RobotBase::RunGcode()    G28");
+			Logger::Print("home_axis",home_axis_name);
 
 			// Is there any machine that supports both IK, and FK homing?
 			// this->_home_via_inverse_kinematic = false;
-			if (home_axis == '+'){
+			if (home_axis_name == '+'){
 				Serial.print("\n\n\n\n[Error] RobotBase::RunGcode()  :");
-				Serial.print(home_axis);
+				Serial.print(home_axis_name);
 
 			}
 			//TODO:  convert char to enum
-			this->RunG28(this->ConvertToEnum(home_axis));
+			// this->RunG28(this->ConvertToEnum(home_axis));
+			EnumAxis home_axis =  this->__arm_solution->ConvertToEnum(home_axis_name);
+			this->RunG28(home_axis);
 			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
-			break;
-
-		case 1:
-			// G1 Move
-			//TODO:  1. put position to movement queue. called "plan" in smoothieware? 
-			//       2. send out OK.
-			//       3. Set status to busy.
-			//       4. Start Moving.
-			this->State = CncState::RUNNING_G1;
-			this->RunG1(gcode);
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			break;
-		case 4:
-			// G4 Dwell, Pause for a period of time.
-			this->State = CncState::RUNNING_G4;
-			this->RunG4(gcode);
-			break;
-		case 6:
-			this->RunG6(gcode);
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			break;
-		case 90:
-			// Absolute position
-			this->is_absolute_position = true;
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			break;
-		case 91:
-			// Relative position
-			this->is_absolute_position = false;
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			break;
-		// case 92:
-			// Set Position     G92 X10 E90
 			// break;
-		default:
-			break;
+		}else {
+			this->__arm_solution->RunGcode(gcode);
 		}
+
+		// case 1:
+		// 	// G1 Move
+		// 	//TODO:  1. put position to movement queue. called "plan" in smoothieware? 
+		// 	//       2. send out OK.
+		// 	//       3. Set status to busy.
+		// 	//       4. Start Moving.
+		// 	this->State = CncState::RUNNING_G1;
+		// 	this->RunG1(gcode);
+		// 	// this->commuDevice->OutputMessage(COMMU_OK);
+		// 	break;
+		// case 4:
+		// 	// G4 Dwell, Pause for a period of time.
+		// 	this->State = CncState::RUNNING_G4;
+		// 	this->RunG4(gcode);
+		// 	break;
+		// case 6:
+		// 	this->RunG6(gcode);
+		// 	// this->commuDevice->OutputMessage(COMMU_OK);
+		// 	break;
+		// case 90:
+		// 	// Absolute position
+		// 	this->is_absolute_position = true;
+		// 	// this->commuDevice->OutputMessage(COMMU_OK);
+		// 	break;
+		// case 91:
+		// 	// Relative position
+		// 	this->is_absolute_position = false;
+		// 	// this->commuDevice->OutputMessage(COMMU_OK);
+		// 	break;
+		// // case 92:
+		// 	// Set Position     G92 X10 E90
+		// 	// break;
+		// default:
+		// 	break;
+		// }
 	}else if(gcode->has_m){
 		uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
 		uint8_t s_value = 0;
@@ -259,9 +247,9 @@ void RobotBase::RunGcode(Gcode* gcode){
 
 		case 119:
 			// Get Endstop Status
-			result = GetHomeTrigerStateString();
+			// result = GetHomeTrigerStateString();
 			// this->commuDevice->OutputMessage(COMMU_OK);
-			Serial.print(result.c_str());
+			// Serial.print(result.c_str());
 			// this->commuDevice->WriteNotification(result);
 			break;
 
@@ -289,15 +277,15 @@ void RobotBase::RunGcode(Gcode* gcode){
 			Logger::Print("Index", p_value);
 			
 			f_value = gcode->get_value('P');
-			this->__pid_controllers->GetController(p_value)->P = f_value;
+			this->__pid_controllers_m130->GetController(p_value)->P = f_value;
 			Logger::Print("P", f_value);
 
 			f_value = gcode->get_value('I');
-			this->__pid_controllers->GetController(p_value)->I = f_value;
+			this->__pid_controllers_m130->GetController(p_value)->I = f_value;
 			Logger::Print("I", f_value);
 
 			f_value = gcode->get_value('D');
-			this->__pid_controllers->GetController(p_value)->D = f_value;
+			this->__pid_controllers_m130->GetController(p_value)->D = f_value;
 			Logger::Print("D", f_value);
 
 			break;
