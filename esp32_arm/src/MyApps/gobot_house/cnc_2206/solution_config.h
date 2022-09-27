@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/solution/scara/config_base.h"
+#include "CNC/arm_solution/scara/config_base.h"
 
 
 class GobotHouse_CncSolutionConfig_2206: public CncSolution_ScaraConfigBase{

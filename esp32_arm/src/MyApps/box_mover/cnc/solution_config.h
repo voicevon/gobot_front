@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/solution/core_az/config_base.h"
+#include "CNC/arm_solution/core_az/config_base.h"
 
 class BoxMover_CncSolutionConfig: public CncSolution_CoreAZConfigBase{
     public:

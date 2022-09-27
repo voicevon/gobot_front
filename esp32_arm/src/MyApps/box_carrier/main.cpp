@@ -8,7 +8,7 @@
 // #include "cnc_machine.h"
 // #include "board/mechanic/cnc_machine.h"
 #include "cnc/solution_config.h"
-// #include "CNC/solution/cnc_core_yz/cnc_core_yz.h"
+// #include "CNC/arm_solution/cnc_core_yz/cnc_core_yz.h"
 #include "cnc/solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_carrier.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/solution/five_bars/config_base.h"
+#include "CNC/arm_solution/five_bars/config_base.h"
 
 
 class GobotMain_CncSolutionConfig: public CncSolution_FiveBarConfig{

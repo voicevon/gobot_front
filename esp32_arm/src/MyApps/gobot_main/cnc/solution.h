@@ -1,5 +1,5 @@
 #pragma once
-#include "CNC/solution/five_bars/cnc_five_bars_base.h"
+#include "CNC/arm_solution/five_bars/cnc_five_bars_base.h"
 #include "../board/board.h"
 #include "solution_config.h"
 #include "mover.h"

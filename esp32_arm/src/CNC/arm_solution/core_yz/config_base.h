@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/solution/kinematic_config.h"
+#include "CNC/arm_solution/kinematic_config.h"
 
 class CncSolution_CoreYZConfigBase: public KinematicConfig{
     public:

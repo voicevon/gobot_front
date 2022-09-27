@@ -4,7 +4,7 @@
 // #include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 // #include "CNC/Sensor/position_trigger/position_triggers.h"
-#include "CNC/solution/axis_homer/axis_homer.h"
+#include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "../robot_eef/garment_asar_eef.h"
 
 // For Core_AZ cnc application

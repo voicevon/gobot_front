@@ -4,8 +4,8 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/eef/robot_eef_base.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"   //???
-// #include "CNC/solution/axis_homer/cnc_homers.h"
-#include "CNC/solution/axis_homer/position_trigger.h"
+// #include "CNC/arm_solution/axis_homer/cnc_homers.h"
+#include "CNC/arm_solution/axis_homer/position_trigger.h"
 #include "CNC/coordinate/cnc_axis.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/solution/single_axis/kinematic_config.h"
+#include "CNC/arm_solution/single_axis/kinematic_config.h"
 
 class SmookerBot_CncSolutionConfig: public SingleAxis_KinematicConfig{
     public:

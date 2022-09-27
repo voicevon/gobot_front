@@ -1,6 +1,6 @@
 #pragma once
 
-// #include "CNC/solution/core_yz/cnc_core_yz_base.h"
+// #include "CNC/arm_solution/core_yz/cnc_core_yz_base.h"
 #include "cnc/solution.h"
 #include "CNC/gcode/gcode_queue.h"
 #include "CNC/gcode/gcode_producer.h"

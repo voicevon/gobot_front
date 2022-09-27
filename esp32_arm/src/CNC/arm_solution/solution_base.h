@@ -5,7 +5,7 @@
 #include "CNC/board/cnc_board_base.h"
 
 #include "kinematic_config.h"
-#include "CNC/solution/axis_homer/axis_homer.h"
+#include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
 #include "../mover/cnc_mover_base.h"

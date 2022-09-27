@@ -1,15 +1,11 @@
 #pragma once
 #include <SimpleFOC.h>
-// #include "CNC/Sensor/position_trigger/position_triggers.h"
-#include "CNC/solution/axis_homer/cnc_homers.h"
+#include "CNC/arm_solution/axis_homer/cnc_homers.h"
 #include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
 #include "CNC/mover/driver/h_bridge/h_bridge.h"
 #include "CNC/Sensor/position_sensor/polor_encoder.h"
 #include "eef/vsc_eef.h"
-
-// #include "MyBoards/cnc_board_base.h"
 #include "CNC/board/cnc_board_base.h"
-
 #include "pins/wroom_board.h"
 
 
