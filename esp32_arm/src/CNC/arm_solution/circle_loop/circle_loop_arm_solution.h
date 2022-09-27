@@ -6,7 +6,7 @@
 #include "CNC/planner/planner.h"
 
 //This is a virtual class. No Constructor.
-class CncCircleLoop_ArmSolution: public ArmSolutionBase{
+class CircleLoop_ArmSolution: public ArmSolutionBase{
     public:
         // void Init(CncBoardBase* board) override;
         void RunG1(Gcode* gcode) override;

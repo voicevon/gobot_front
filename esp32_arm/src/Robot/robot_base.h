@@ -48,9 +48,6 @@ class RobotBase: public GcodeConsumer{
         bool is_absolute_position = true;
         
         CncBoardBase* _cnc_board;  //!!!!
-        // CncMoverBase* _mover_base;   //???
-        // LineSegmentQueue* _line_segment_queue;
-
         ArmSolutionBase* _arm_solution;
 
     private:

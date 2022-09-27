@@ -1,35 +1,35 @@
 #include "circle_loop_arm_solution.h"
 
 
-void CncCircleLoop_ArmSolution::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
+void CircleLoop_ArmSolution::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_A* fk = (FkPosition_A*)(from_fk);
 	IkPosition_A* ik = (IkPosition_A*)(to_ik);
 
 	ik->alpha = fk->A;
-	Logger::Debug("CncCircleLoop_ArmSolution::IK()");
+	Logger::Debug("CircleLoop_ArmSolution::IK()");
 	Logger::Print("IK output alpha", ik->alpha);
 }
 
-void CncCircleLoop_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+void CircleLoop_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_A* fk = (FkPosition_A*)(to_fk);
 	IkPosition_A* ik = (IkPosition_A*)(from_ik);
 	
 	fk->A = ik->alpha;
-	Logger::Debug("CncCircleLoop_ArmSolution::FK()" );
+	Logger::Debug("CircleLoop_ArmSolution::FK()" );
 	Logger::Print("FK output A", fk->A);
 }
 
 
-void CncCircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 	//Set current position to HomePosition
 	IkPosition_A ik_position;
 	if (this->_config_base.IsInverseKinematicHoimg){
 		// We know homed position via IK.
-		Serial.print("\n[Error] CncCircleLoop_ArmSolution::_running_G28() This robot does NOT impliment this function.");
+		Serial.print("\n[Error] CircleLoop_ArmSolution::_running_G28() This robot does NOT impliment this function.");
 	}
 	else{
 		// We know homed position via FK
-		Logger::Info("CncCircleLoop_ArmSolution::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
+		Logger::Info("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
 		this->__current_fk_position.A = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetFiredPosition();
 		Logger::Print("position trigger, fired position", this->__current_fk_position.A);
@@ -43,13 +43,13 @@ void CncCircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 	if (this->_homing_axis == this->_AXIS) {
 		this->_mover_base->SetActuatorCurrentCncPositionAs(this->_AXIS,ik_position.alpha);
 	}else{
-		Logger::Halt("CncCircleLoop_ArmSolution::_SetCurrentPositionAsHome()");
+		Logger::Halt("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()");
 	}
 }
 
 
-void CncCircleLoop_ArmSolution::RunG1(Gcode* gcode) {
-	Logger::Debug("CncCircleLoop_ArmSolution::RunG1() is entering");
+void CircleLoop_ArmSolution::RunG1(Gcode* gcode) {
+	Logger::Debug("CircleLoop_ArmSolution::RunG1() is entering");
 	Logger::Print("G1 ", gcode->get_command());
 	Logger::Print("this->AXIS", this->_AXIS);
 	this->_cnc_board->EnableMotor(this->_AXIS, true);
@@ -87,14 +87,14 @@ void CncCircleLoop_ArmSolution::RunG1(Gcode* gcode) {
 	bool debug = true;
 	if (debug){
 		this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
-		Logger::Debug("CncCircleLoop_ArmSolution::RunG1() ");
+		Logger::Debug("CircleLoop_ArmSolution::RunG1() ");
 		Logger::Print("from", this->__current_fk_position.A);
 		Logger::Print("to", target_ik_a.alpha);
 	}
 }
 
 
-float CncCircleLoop_ArmSolution::GetDistanceToTarget_IK(){
+float CircleLoop_ArmSolution::GetDistanceToTarget_IK(){
 	return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
 }
 

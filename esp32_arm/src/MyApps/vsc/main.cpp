@@ -10,7 +10,7 @@
 
 Vsc_Board board;
 VscApp vsc_app;
-Vsc_CncSoution vsc_arm_solution;
+Vsc_ArmSoution vsc_arm_solution;
 VscRobot vsc_robot;
 
 GcodeQueue gcode_queue;
@@ -44,33 +44,10 @@ void setup_encoder(){
     encoder.enableInterrupts(doA, doB);
 }
 
-// class AnyClass: public Queue_able{
-//     public:
-//         int id=11111;
-//         void DeepCopyTo(Queue_able* the_copy) override{
-//             AnyClass* copy=(AnyClass*)(the_copy);
-//             copy->id = this->id;
-//         };
-
-// };
-
-
-CommonQueue q;
 void setup(){
-
-
-
     setup_encoder();
     board.LinkEncoderSensor(&encoder);
     board.Init(true);
-
-
-
-    // AnyClass a;
-    // a.id = 22222;
-    // q.AppendObject(&a);
-    // AnyClass* b = (AnyClass*) q.FetchTailObject();
-    // Serial.println(b->id);
 
     test_board();
     vsc_robot.Init(&board, &vsc_arm_solution);
@@ -82,9 +59,6 @@ void setup(){
     setup_mqtt_on_message_receive(); 
     // gcode_queue.AppendGcodeCommand("G28A");
     Logger::Info ("VSC-XiaoJuan   setup() is done. ");
-
-    //test robot and cnc
-
 }
 
 void loop(){

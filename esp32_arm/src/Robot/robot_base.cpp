@@ -142,10 +142,6 @@ void RobotBase::RunM84(){
 }
 void RobotBase::RunGcode(Gcode* gcode){
 	std::string result;
-	// if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND)){
-	//   Serial.print("RunGcode()   OK or Unknown");
-	//   return;
-	// }
 	if (!this->_arm_solution->planner->IsPlanable())
 		return;   // todo:   return false
 
