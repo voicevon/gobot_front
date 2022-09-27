@@ -38,7 +38,7 @@ class CncSolutionBase{
         // void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
         // void _LinkPidControllers(PidControllers* pid_controllers){this->__pid_controllers=pid_controllers;};
        
-        void SpinOnce_BaseExit();
+        // void SpinOnce_BaseExit();
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
         virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.

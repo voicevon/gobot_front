@@ -30,7 +30,7 @@ void CncSolutionBase::SpinOnce(){
 	}
 
 	// Serial.println("[Debug]( CncSolutionBase::SpinOnce() is finished.)");
-	this->SpinOnce_BaseExit();
+	// this->SpinOnce_BaseExit();
 }
 
 // Check gcode queue, if there is gcode to be run.

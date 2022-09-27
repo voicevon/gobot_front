@@ -13,16 +13,14 @@
 #include "MyLibs/pid_controllers/pid_controllers.h"
 #include "CNC/gcode/line_segment_queue.h"
 
-// enum class CncState{
-//     IDLE,
-//     RUNNING_G1,
-//     RUNNING_G4,
-//     RUNNING_G28
-// };
+enum class RobotState{
+    IDLE,
+    RUNNING_G28
+};
 
 class RobotBase: public GcodeConsumer{
     public:
-        CncState State = CncState::IDLE;
+        RobotState State = RobotState::IDLE;
         void SpinOnce();
 
         void RunGcode(Gcode* gcode);
@@ -66,10 +64,11 @@ class RobotBase: public GcodeConsumer{
         CncMoverBase* _mover_base;   //???
         LineSegmentQueue* _line_segment_queue;
 
+        // void LinkArmSolution(CncSolutionBase* arm_solution){this->__arm_solution=arm_solution;};
+        CncSolutionBase* __arm_solution;
 
     private:
-        CncSolutionBase* __arm_solution;
-        void SpinOnce_BaseExit();
+        void __TryNextGmCode_FromQueue();
 
         int test_int;
         RobotEefBase* __eef;

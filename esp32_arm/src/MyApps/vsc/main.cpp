@@ -7,11 +7,12 @@
 #include "IoT/main_mqtt.h"
 #include "vsc_app.h"
 #include "robot/robot.h"    //TODO:: rename to ??
-
+#include "cnc/solution.h"
 // Vsc_CncSoution cnc;
 
 Vsc_Board board;
 VscApp vsc_app;
+Vsc_CncSoution vsc_arm_solution;
 VscRobot vsc_robot;
 
 GcodeQueue gcode_queue;
@@ -51,7 +52,7 @@ void setup(){
     board.LinkEncoderSensor(&encoder);
     board.Init(true);
     test_board();
-    vsc_robot.Init(&board);
+    vsc_robot.Init(&board, &vsc_arm_solution);
     vsc_robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     vsc_app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
 

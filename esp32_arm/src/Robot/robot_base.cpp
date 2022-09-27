@@ -9,46 +9,34 @@ void RobotBase::SayHello(){
 }
 
 void RobotBase::SpinOnce(){
-	// Logger::Debug("RobotBase::SpinOnce()");
+	Logger::Debug("RobotBase::SpinOnce()");
 	// Logger::Print("this->State", this->State);
-	switch (this->State){
-	case CncState::IDLE:   //0
-		break;
-	// case CncState::RUNNING_G4:  // 2
-	// 	this->__running_G4();
-	// 	break;
-	// case CncState::RUNNING_G1:  // 1
-	// 	this->_running_G1();
-	// 	break;
-	case CncState::RUNNING_G28:  // 4
+	this->__arm_solution->SpinOnce();
+	if (this->__arm_solution->State == CncState::IDLE){
+		this->__TryNextGmCode_FromQueue();
+	}
+	if (this->State == RobotState::IDLE){
+		this->__TryNextGmCode_FromQueue();
+	}else{
 		// Logger::Debug("CncState::RUNNING_G28");
 		this->_running_G28();
-		break;
-	default:
-		Logger::Warn("RobotBase::SpinOnce() Unknown current state: ");
-		break;
 	}
-
-	// Serial.println("[Debug]( RobotBase::SpinOnce() is finished.)");
-	this->SpinOnce_BaseExit();
 }
 
 // Check gcode queue, if there is gcode to be run.
-void RobotBase::SpinOnce_BaseExit(){
-	if (this->State != CncState::IDLE)
-		return;
+void RobotBase::__TryNextGmCode_FromQueue(){
 	if (this->_gcode_queue->BufferIsEmpty())
 		return;
 
 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
 	if (message == NULL){
-		Serial.println("\n\n\n [Error] RobotBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
+		Logger::Error("\n\n\n [Error] RobotBase::__TryNextGmCode_FromQueue() tail_message is null. \n\n ");
 		return;
 	}
 
 	bool debug = false;
 	if (debug){
-		Logger::Debug("[Info] RobotBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
+		Logger::Debug("[Info] RobotBase::__TryNextGmCode_FromQueue()  Going to run next gcode   ===> ");
 		Serial.print(message->payload);
 		Serial.println(" ");
 	}
@@ -58,7 +46,7 @@ void RobotBase::SpinOnce_BaseExit(){
 	std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
 	Gcode gcode = Gcode(str);
-	Serial.print("RobotBase::SpinOnce_BaseExit\t\t");
+	Serial.print("RobotBase::__TryNextGmCode_FromQueue\t\t");
 	Serial.println(str.c_str());
 	this->RunGcode(&gcode);
 }
@@ -127,7 +115,7 @@ void RobotBase::_running_G28(){
 		this->_mover_base->AllActuatorsStop();
 		// this->_SetCurrentPositionAsHome(this->_homing_axis);
 		this->__arm_solution->_SetCurrentPositionAsHome(this->_homing_axis);
-		this->State = CncState::IDLE;
+		this->State = RobotState::IDLE;
 	}else{
 		// Endstop is not trigered
 		// Serial.print(".");
@@ -166,7 +154,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 		if (gcode->g==28){
 		// case 28:
 			// G28: Home
-			this->State = CncState::RUNNING_G28;
+			this->State = RobotState::RUNNING_G28;
 			if (gcode->has_letter('X')) home_axis_name='X';
 			if (gcode->has_letter('Y')) home_axis_name='Y';
 			if (gcode->has_letter('Z')) home_axis_name='Z';
@@ -255,7 +243,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 
 		case 123:
 			//M123 P=channel_index, S=Set EEF action			
-			while (this->State != CncState::IDLE){
+			while (this->State != RobotState::IDLE){
 				this->SpinOnce();
 			}
 			p_value =  gcode->get_value('P');
@@ -299,7 +287,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 			// 		Snnn Angle or microseconds
 			// Wait for all gcode, mcode is finished
 			// Serial.println("M280 Started");
-			while (this->State != CncState::IDLE){
+			while (this->State != RobotState::IDLE){
 				this->SpinOnce();
 			}
 			if (gcode->has_letter('P')) p_value = gcode->get_value('P');

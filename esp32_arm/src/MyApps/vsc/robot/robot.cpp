@@ -1,6 +1,6 @@
 #include "robot.h"
 
-void VscRobot::Init(Vsc_Board* board){
+void VscRobot::Init(Vsc_Board* board,  Vsc_CncSoution *arm_solution){
     Logger::Info("Vsc_CncSoution::Init() Pid controller.");
     //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
     this->__all_pids.AppendPidController(&this->__speed_pid);
@@ -11,5 +11,8 @@ void VscRobot::Init(Vsc_Board* board){
     this->__speed_pid.P = 100;
     this->__speed_pid.I = 100;
     this->__speed_pid.D = 0;
+    
     this->_LinkEef(board->GetEef());
+    this->__arm_solution = arm_solution;
+
 }
