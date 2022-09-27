@@ -1,18 +1,14 @@
 #include "planner.h"
 
 
-void Planner::SpinOnce(){
+bool Planner::IsPlanable(){
     int fbc = this->__block_queue.GetFreeBuffersCount();
-    if (fbc >=3 ){
-        // Check lineSegment queue,
-        if (! this->__line_queue->BufferIsEmpty()){
-            LineSegment* line = this->__line_queue->FetchTail_LineSegment();
-            this->__TranslateLineSegment_ToBlock(line);
-        }
-    }
+    if (fbc>3) return true;
+    return false;
 }
 
-void Planner::__TranslateLineSegment_ToBlock(LineSegment* line){
+void Planner::AppendLineSegment(LineSegment* line){
+    //Translate LineSegment ToBlocks
     for (int i=0; i<1; i++){
         MoveBlock* bq = (MoveBlock*) this->__block_queue.FetchTailObject();
         bq->axis = line->axis;
@@ -22,6 +18,9 @@ void Planner::__TranslateLineSegment_ToBlock(LineSegment* line){
         bq->Acceleration = line->Acceleration;
     }
 }
+
+
+
 
 
 

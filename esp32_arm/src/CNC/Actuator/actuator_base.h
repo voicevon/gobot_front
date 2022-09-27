@@ -4,7 +4,8 @@
 #include "range_constraint/actuator_range_constraint_base.h"
 #include "Mylibs/basic/logger.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
+#include "CNC/gcode/line_segment.h"   //TODO:  use block queue.
+#include "CNC/planner/move_block_queue.h"
 
 
 

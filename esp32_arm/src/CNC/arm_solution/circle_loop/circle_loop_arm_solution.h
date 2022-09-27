@@ -3,7 +3,7 @@
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "circle_loop_arm_solution_config.h"
-
+#include "CNC/planner/planner.h"
 
 //This is a virtual class. No Constructor.
 class CncCircleLoop_ArmSolution: public ArmSolutionBase{

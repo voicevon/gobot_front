@@ -26,8 +26,8 @@ class CncMoverBase{
 
         void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
 
-        virtual void AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit);
         virtual void SingleActuatorMoveTo(LineSegment* movement);
+        virtual void AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit);
         virtual void AllActuatorsStop();  // TODO: with flags
         virtual void SingleActuatorStop(EnumAxis actuator_name);
 

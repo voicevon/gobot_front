@@ -4,7 +4,7 @@
         
 class Queue_able{
     public:
-        virtual void DeepCopyTo(Queue_able* the_copy);
+        virtual void DeepCopyTo(Queue_able* the_copy){};
 };
 
 //TODO:  make a template, to remove Queue_able.
@@ -24,7 +24,7 @@ class CommonQueue{
         Queue_able* GetHeadObject();
 
     protected:
-        virtual Queue_able* GetSubClass();
+        // virtual Queue_able* GetSubClass();
         // This is a buffer , can contain 20 bytes per command, and 22 commands in the queue.
         Queue_able _all_messages[MESSAGE_COUNT_IN_QUEUE];
         int _head = 0;

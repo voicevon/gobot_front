@@ -11,7 +11,7 @@
 #include "CNC/coordinate/cnc_axis.h"
 #include "CNC/mover/cnc_mover_base.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
-#include "CNC/gcode/line_segment_queue.h"
+// #include "CNC/gcode/line_segment.h"
 
 enum class RobotState{
     IDLE,
@@ -49,7 +49,7 @@ class RobotBase: public GcodeConsumer{
         
         CncBoardBase* _cnc_board;  //!!!!
         // CncMoverBase* _mover_base;   //???
-        LineSegmentQueue* _line_segment_queue;
+        // LineSegmentQueue* _line_segment_queue;
 
         ArmSolutionBase* _arm_solution;
 

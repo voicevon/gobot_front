@@ -32,9 +32,9 @@ class IamTester{
             AnyClass* y=(AnyClass*) queue.FetchTailObject();
             AnyClass* yy = queue.FetchTailAnyClass(); 
             yy= queue.GetHeadAnyClass();
-        }
-        
 
+            // yy->DeepCopyTo(&xx);
+        }
     };
 };
 

@@ -75,6 +75,9 @@ void CncCircleLoop_ArmSolution::RunG1(Gcode* gcode) {
 	line.axis = this->_AXIS;
 	line.IsAbsTargetPosition = true;
 	line.TargetPosition = target_ik_a.alpha;
+
+	this->planner->AppendLineSegment(&line);
+
 	Serial.println("ffffffffffffffffffffffffffffff");
 	this->_mover_base->SingleActuatorMoveTo(&line);   //TODO:  put line to lineSegment queue
 	Serial.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk");

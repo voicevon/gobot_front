@@ -10,7 +10,8 @@
 #include "../coordinate/cnc_axis.h"
 #include "../mover/cnc_mover_base.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
-#include "CNC/gcode/line_segment_queue.h"
+// #include "CNC/gcode/line_segment_queue.h"
+#include "CNC/planner/planner.h"
 
 enum class CncState{
     IDLE,
@@ -34,6 +35,9 @@ class ArmSolutionBase{
         virtual EnumAxis ConvertToEnum(char axis);
         void ForceStopMover();
         CncBoardBase* _cnc_board;
+        Planner* planner;
+
+        
     protected:
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
@@ -55,7 +59,7 @@ class ArmSolutionBase{
         bool is_absolute_position = true;
         
         CncMoverBase* _mover_base;   //???
-        LineSegmentQueue* _line_segment_queue;
+        // LineSegmentQueue* _line_segment_queue;
 
 
     private:

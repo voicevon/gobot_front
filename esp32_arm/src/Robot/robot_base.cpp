@@ -43,7 +43,7 @@ void RobotBase::__TryNextGmCode_FromQueue(){
 	std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
 	Gcode gcode = Gcode(str);
-	Serial.print("RobotBase::__TryNextGmCode_FromQueue\t\t");
+	Logger::Debug("RobotBase::__TryNextGmCode_FromQueue() has got command string ");
 	Serial.println(str.c_str());
 	this->RunGcode(&gcode);
 }
@@ -146,6 +146,9 @@ void RobotBase::RunGcode(Gcode* gcode){
 	//   Serial.print("RunGcode()   OK or Unknown");
 	//   return;
 	// }
+	if (!this->_arm_solution->planner->IsPlanable())
+		return;   // todo:   return false
+
 	bool debug = false;
 	Logger::Debug("RobotBase::RunGcode()");
 	Logger::Print("gcode_command", gcode->get_command());
