@@ -2,17 +2,14 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "HardwareSerial.h"
 #include "MyLibs/message_queue.h"
-#include "CNC/arm_solution/solution_base.h"
+#include "CNC/arm_solution/arm_solution_base.h"
 
-void RobotBase::SayHello(){
-	Serial.println("[Debug] RobotBase::SayHello()");
-}
 
 void RobotBase::SpinOnce(){
-	Logger::Debug("RobotBase::SpinOnce()");
+	// Logger::Debug("RobotBase::SpinOnce()");
 	// Logger::Print("this->State", this->State);
-	this->__arm_solution->SpinOnce();
-	if (this->__arm_solution->State == CncState::IDLE){
+	this->_arm_solution->SpinOnce();
+	if (this->_arm_solution->State == CncState::IDLE){
 		this->__TryNextGmCode_FromQueue();
 	}
 	if (this->State == RobotState::IDLE){
@@ -52,8 +49,6 @@ void RobotBase::__TryNextGmCode_FromQueue(){
 }
 
 
-
-
 //Can deal with:  home via single actuator.
 //Can NOT deal with:  CoreXY, It's combined moving.
 void RobotBase::RunG28(EnumAxis axis){ 
@@ -75,21 +70,27 @@ void RobotBase::RunG28(EnumAxis axis){
 
 void RobotBase::__HomeSingleAxis(EnumAxis axis){
 	Logger::Debug("RobotBase::__HomeSingleAxis()");
+	Logger::Print("axis",axis);
 	this->_homing_axis = axis;
 	HomingConfig* homing = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
-	this->_cnc_board->EnableMotor(axis, true);
+	Logger::Print("homing->IsDirectionToMax", homing->IsDirectionToMax);
+	// Gcode gcode = Gcode("G1A6.28");
+	this->_gcode_queue->AppendGcodeCommand("G1A6.28");  //Risk of Gcode queue is full?
+	// this->_cnc_board->SayHello();
+	// this->_cnc_board->EnableMotor(axis, true);
+	// // Serial.println("bbbbbbbbbbbbbbbbbbbbbb");
 	
-	this->_config_base.PrintOut("RobotBase::__HomeSingleAxis()  _config_base");
-	this->_mover_base->PrintOut("RobotBase::__HomeSingleAxis()  _mover_base" );
-	this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
-	this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
-	// this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
-	LineSegment line;
-	line.axis = axis;
-	line.IsAbsTargetPosition = false;
-	line.TargetPosition = homing->DistanceToGo;
-	line.Speed = homing->Speed;
-	this->_mover_base->SingleActuatorMoveTo(&line);   //TOdo:  Put this line to line_queue
+	// // this->_config_base.PrintOut("RobotBase::__HomeSingleAxis()  _config_base");
+	// this->_mover_base->PrintOut("RobotBase::__HomeSingleAxis()  _mover_base" );
+	// this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
+	// this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
+	// // this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
+	// LineSegment line;
+	// line.axis = axis;
+	// line.IsAbsTargetPosition = false;
+	// line.TargetPosition = homing->DistanceToGo;
+	// line.Speed = homing->Speed;
+	// this->_mover_base->SingleActuatorMoveTo(&line);   //TOdo:  Put this line to line_queue
 
 	Logger::Debug("RobotBase::RunG28() is Starting to run..." );
 }
@@ -112,9 +113,10 @@ void RobotBase::_running_G28(){
 		Logger::Print("_homing_axis_name", this->_homing_axis);
 		Logger::Print(" fired_trigger_index", fired_trigger_index);
 
-		this->_mover_base->AllActuatorsStop();
+		// this->_mover_base->AllActuatorsStop();
 		// this->_SetCurrentPositionAsHome(this->_homing_axis);
-		this->__arm_solution->_SetCurrentPositionAsHome(this->_homing_axis);
+		this->_arm_solution->ForceStopMover();
+		this->_arm_solution->_SetCurrentPositionAsHome(this->_homing_axis);
 		this->State = RobotState::IDLE;
 	}else{
 		// Endstop is not trigered
@@ -174,12 +176,12 @@ void RobotBase::RunGcode(Gcode* gcode){
 			}
 			//TODO:  convert char to enum
 			// this->RunG28(this->ConvertToEnum(home_axis));
-			EnumAxis home_axis =  this->__arm_solution->ConvertToEnum(home_axis_name);
+			EnumAxis home_axis =  this->_arm_solution->ConvertToEnum(home_axis_name);
 			this->RunG28(home_axis);
 			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
 			// break;
 		}else {
-			this->__arm_solution->RunGcode(gcode);
+			this->_arm_solution->RunGcode(gcode);
 		}
 
 		// case 1:

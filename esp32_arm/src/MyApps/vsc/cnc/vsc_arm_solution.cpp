@@ -1,4 +1,4 @@
-#include "solution.h"
+#include "vsc_arm_solution.h"
 
 
 void Vsc_CncSoution::Init(Vsc_Board* board ){

@@ -1,15 +1,15 @@
-#include "solution_base.h"
+#include "arm_solution_base.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "HardwareSerial.h"
 #include "MyLibs/message_queue.h"
 
 
-void CncSolutionBase::SayHello(){
-	Serial.println("[Debug] CncSolutionBase::SayHello()");
+void ArmSolutionBase::SayHello(){
+	Serial.println("[Debug] ArmSolutionBase::SayHello()");
 }
 
-void CncSolutionBase::SpinOnce(){
-	// Logger::Debug("CncSolutionBase::SpinOnce()");
+void ArmSolutionBase::SpinOnce(){
+	// Logger::Debug("ArmSolutionBase::SpinOnce()");
 	// Logger::Print("this->State", this->State);
 	switch (this->State){
 	case CncState::IDLE:   //0
@@ -25,16 +25,21 @@ void CncSolutionBase::SpinOnce(){
 		this->_running_G28();
 		break;
 	default:
-		Logger::Warn("CncSolutionBase::SpinOnce() Unknown current state: ");
+		Logger::Warn("ArmSolutionBase::SpinOnce() Unknown current state: ");
 		break;
 	}
 
-	// Serial.println("[Debug]( CncSolutionBase::SpinOnce() is finished.)");
+	// Serial.println("[Debug]( ArmSolutionBase::SpinOnce() is finished.)");
 	// this->SpinOnce_BaseExit();
 }
 
+void ArmSolutionBase::ForceStopMover(){
+	this->_mover_base->AllActuatorsStop();
+}
+
+
 // Check gcode queue, if there is gcode to be run.
-// void CncSolutionBase::SpinOnce_BaseExit(){
+// void ArmSolutionBase::SpinOnce_BaseExit(){
 // 	if (this->State != CncState::IDLE)
 // 		return;
 // 	if (this->_gcode_queue->BufferIsEmpty())
@@ -42,13 +47,13 @@ void CncSolutionBase::SpinOnce(){
 
 // 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
 // 	if (message == NULL){
-// 		Serial.println("\n\n\n [Error] CncSolutionBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
+// 		Serial.println("\n\n\n [Error] ArmSolutionBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
 // 		return;
 // 	}
 
 // 	bool debug = false;
 // 	if (debug){
-// 		Logger::Debug("[Info] CncSolutionBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
+// 		Logger::Debug("[Info] ArmSolutionBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
 // 		Serial.print(message->payload);
 // 		Serial.println(" ");
 // 	}
@@ -66,10 +71,10 @@ void CncSolutionBase::SpinOnce(){
 
 //Can deal with:  home via single actuator.
 //Can NOT deal with:  CoreXY, It's combined moving.
-void CncSolutionBase::RunG28(EnumAxis axis){ 
+void ArmSolutionBase::RunG28(EnumAxis axis){ 
 	bool debug = true;
 	if (debug){
-		Logger::Debug("CncSolutionBase::RunG28() is entering" );
+		Logger::Debug("ArmSolutionBase::RunG28() is entering" );
 		Logger::Print("axis", axis);
 		Logger::Print("IsCombinedFK", this->_config_base.IsCombinedFk);
 	}
@@ -83,14 +88,14 @@ void CncSolutionBase::RunG28(EnumAxis axis){
 }
 
 
-void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
-	Logger::Debug("CncSolutionBase::__HomeSingleAxis()");
+void ArmSolutionBase::__HomeSingleAxis(EnumAxis axis){
+	Logger::Debug("ArmSolutionBase::__HomeSingleAxis()");
 	this->_homing_axis = axis;
 	HomingConfig* homing = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
 	this->_cnc_board->EnableMotor(axis, true);
 	
-	this->_config_base.PrintOut("CncSolutionBase::__HomeSingleAxis()  _config_base");
-	this->_mover_base->PrintOut("CncSolutionBase::__HomeSingleAxis()  _mover_base" );
+	this->_config_base.PrintOut("ArmSolutionBase::__HomeSingleAxis()  _config_base");
+	this->_mover_base->PrintOut("ArmSolutionBase::__HomeSingleAxis()  _mover_base" );
 	this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
 	this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
 	// this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
@@ -101,13 +106,13 @@ void CncSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	line.Speed = homing->Speed;
 	this->_mover_base->SingleActuatorMoveTo(&line);   //TOdo:  Put this line to line_queue
 
-	Logger::Debug("CncSolutionBase::RunG28() is Starting to run..." );
+	Logger::Debug("ArmSolutionBase::RunG28() is Starting to run..." );
 }
 
-void CncSolutionBase::_running_G28(){
+void ArmSolutionBase::_running_G28(){
 	bool debug = false;
 	if(debug){
-		Logger::Debug("CncSolutionBase::_running_G28() is entering...");
+		Logger::Debug("ArmSolutionBase::_running_G28() is entering...");
 		Logger::Print("_homing_axis", this->_homing_axis);
 		auto homer = this->_cnc_homer.GetAxisHomer(this->_homing_axis);
 		Logger::Print("Got axis_homer",true);
@@ -118,7 +123,7 @@ void CncSolutionBase::_running_G28(){
 	int fired_trigger_index =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetTrigeredIndex();
 	if (fired_trigger_index >=0 ){
 		// End stop is trigered
-		Logger::Info("CncSolutionBase::_running_G28() ----> Home sensor is triggered." );
+		Logger::Info("ArmSolutionBase::_running_G28() ----> Home sensor is triggered." );
 		Logger::Print("_homing_axis_name", this->_homing_axis);
 		Logger::Print(" fired_trigger_index", fired_trigger_index);
 
@@ -132,23 +137,23 @@ void CncSolutionBase::_running_G28(){
 	}
 }
 
-void CncSolutionBase::_running_G1(){
+void ArmSolutionBase::_running_G1(){
 	if (this->_mover_base->HasArrivedTargetPosition()){
 	// float distance_to_target = this->GetDistanceToTarget_IK();
     // if (distance_to_target < DEG_TO_RAD * 1.0f){  // TODO:  == 0  or decide by subclass.
 
       	this->State = CncState::IDLE;
-		Logger::Info("CncSolutionBase::_running_G1() is finished. ");
+		Logger::Info("ArmSolutionBase::_running_G1() is finished. ");
 		// Logger::Print("distance_to_target", RAD_TO_DEG * distance_to_target);
     }
 }
 
-void CncSolutionBase::RunG4(Gcode* gcode){
+void ArmSolutionBase::RunG4(Gcode* gcode){
 	__g4_start_timestamp = micros();
 	__g4_time_second = gcode->get_value('S');
 }
 
-void CncSolutionBase::__running_G4(){
+void ArmSolutionBase::__running_G4(){
 	long delayed = (micros() - __g4_start_timestamp) / 1000 /1000;
 	if (delayed >= __g4_time_second ){
 		this->State = CncState::IDLE;
@@ -156,28 +161,28 @@ void CncSolutionBase::__running_G4(){
 	}
 }
 
-// void CncSolutionBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
-// 	Logger::Debug("CncSolutionBase::RunM123()");
+// void ArmSolutionBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// 	Logger::Debug("ArmSolutionBase::RunM123()");
 // 	Logger::Print("eef_action", eef_action);
 // 	// uint8_t action_code = 1;
 // 	this->__eef->PrintOut();
 // 	this->__eef->Run(eef_action);
 // }
 
-void CncSolutionBase::RunM84(){
+void ArmSolutionBase::RunM84(){
 	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
 	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
 		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
 	}
 }
-void CncSolutionBase::RunGcode(Gcode* gcode){
+void ArmSolutionBase::RunGcode(Gcode* gcode){
 	std::string result;
 	// if ((gcode->get_command() == COMMU_OK) || (gcode->get_command() == COMMU_UNKNOWN_COMMAND)){
 	//   Serial.print("RunGcode()   OK or Unknown");
 	//   return;
 	// }
 	bool debug = false;
-	Logger::Debug("CncSolutionBase::RunGcode()");
+	Logger::Debug("ArmSolutionBase::RunGcode()");
 	// Logger::Print("gcode_command", gcode->get_command());
 	Serial.println(gcode->get_command());
 
@@ -198,7 +203,7 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 			// Is there any machine that supports both IK, and FK homing?
 			// this->_home_via_inverse_kinematic = false;
 			if (home_axis == '+'){
-				Serial.print("\n\n\n\n[Error] CncSolutionBase::RunGcode()  :");
+				Serial.print("\n\n\n\n[Error] ArmSolutionBase::RunGcode()  :");
 				Serial.print(home_axis);
 
 			}
@@ -275,7 +280,7 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 		// 	s_value = gcode->get_value('S');
 		// 	debug = true;
 		// 	if (debug){
-		// 		Logger::Debug("CncSolutionBase::RunGcode() For EEF_ACTION  M123 ");
+		// 		Logger::Debug("ArmSolutionBase::RunGcode() For EEF_ACTION  M123 ");
 		// 		Logger::Print("P", p_value);
 		// 		Logger::Print("S", s_value);
 		// 	}
@@ -284,7 +289,7 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 		// 	break;
 
 		// case 130:
-		// 	Logger::Debug("CncSolutionBase::RunGcode()   M130");
+		// 	Logger::Debug("ArmSolutionBase::RunGcode()   M130");
 		// 	Logger::Print("gcode", gcode->get_command());
 		// 	p_value =  gcode->get_value('N');
 		// 	Logger::Print("Index", p_value);
@@ -329,13 +334,13 @@ void CncSolutionBase::RunGcode(Gcode* gcode){
 			break;
 		}
 	}else{
-		// this->commuDevice->OutputMessage("\n[Warning] CncSolutionBase::RunGcode()  Has NO letter 'G' or 'M'. ");
+		// this->commuDevice->OutputMessage("\n[Warning] ArmSolutionBase::RunGcode()  Has NO letter 'G' or 'M'. ");
 		// this->commuDevice->OutputMessage(gcode->get_command());
 		// this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
 	}
 }
 
 
-void CncSolutionBase::Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value){
+void ArmSolutionBase::Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value){
 	digitalWrite(pin_number, pin_value);
 }

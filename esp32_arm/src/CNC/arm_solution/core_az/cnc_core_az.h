@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../solution_base.h"
+#include "CNC/arm_solution/arm_solution_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 // #include "Robot/homer/single_axis_homer.h"
 // #include "CNC/Sensor/position_trigger/position_triggers.h"
@@ -20,7 +20,7 @@
 
 
 
-class CncSolution_CoreAZ: public CncSolutionBase{
+class CncSolution_CoreAZ: public ArmSolutionBase{
     public:
 
         // void Init(CncBoardBase* board) override;

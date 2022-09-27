@@ -19,7 +19,7 @@ enum class CncState{
     RUNNING_G28
 };
 
-class CncSolutionBase{
+class ArmSolutionBase{
     public:
         CncState State = CncState::IDLE;
         void SpinOnce();
@@ -32,13 +32,9 @@ class CncSolutionBase{
         void SayHello();    // TODO:  be virtual
         virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis);
         virtual EnumAxis ConvertToEnum(char axis);
-
+        void ForceStopMover();
+        CncBoardBase* _cnc_board;
     protected:
-        // virtual _DispatchGcode(Gcode* gcode);
-        // void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
-        // void _LinkPidControllers(PidControllers* pid_controllers){this->__pid_controllers=pid_controllers;};
-       
-        // void SpinOnce_BaseExit();
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
         virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.
@@ -47,11 +43,7 @@ class CncSolutionBase{
         virtual std::string GetHomeTrigerStateString();
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
-        
         void RunM84();
-        // virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
-        // void RunM123(uint8_t eef_channel, uint8_t eef_action);
-
         void _running_G1();
         void _running_G28();
 		virtual void _RunG28_CombinedFk(EnumAxis axis){};
@@ -62,31 +54,17 @@ class CncSolutionBase{
 
         bool is_absolute_position = true;
         
-        CncBoardBase* _cnc_board;
         CncMoverBase* _mover_base;   //???
         LineSegmentQueue* _line_segment_queue;
 
 
     private:
         int test_int;
-        // RobotEefBase* __eef;
-        // Why it's a pointer, not a object? Because I don't know how many pid controllers in the system. I can't init it.
-        // And the author doesn't want to use "new PidControll()"  to create an instance.
-        // PidControllers* __pid_controllers;   
         void _base_spin_once();
         void __running_G4();
         void __HomeSingleAxis(EnumAxis axis);
         long __g4_start_timestamp;
         int __g4_time_second;
-
-        /* Just for fun, don't remove below comment.
-        void * __output_message2;
-        void (* __output_message3); 
-        void OnFinishedGcode2(void(*callback)()) {__output_message2 = callback;};
-        void OnFinishedGcode3(void(*callback)()) {__output_message2 = callback;};
-        void OnFinishedGcode4(void(*callback())) {__output_message3 = callback;};
-        void OnFinishedGcode5(void(*callback)()) {__output_message3 = callback;};
-        */
 
 };
 

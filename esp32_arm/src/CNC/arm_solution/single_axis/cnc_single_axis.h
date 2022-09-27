@@ -1,12 +1,12 @@
 #pragma once
 
 #include "CNC/board/cnc_board_base.h"
-#include "../solution_base.h"
+#include "CNC/arm_solution/arm_solution_base.h"
 #include "kinematic_config.h"
 #include "CNC/planner/move_block_queue.h"
 
 //This is a virtual class. No Constructor.
-class CncSingleAxis: public CncSolutionBase{
+class CncSingleAxis: public ArmSolutionBase{
     public:
         // void Init(CncBoardBase* board) override;
         void RunG1(Gcode* gcode) override;

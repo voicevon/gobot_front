@@ -1,14 +1,12 @@
 #include "all_applications.h"
 #ifdef I_AM_VSC
-#include "board/board_vsc.h"
-#include "board/board_tester.h"
-#include "cnc/solution.h"
+#include "MyApps/vsc/board/board_vsc.h"
+#include "MyApps/vsc/board/board_tester.h"
+#include "MyApps/vsc/cnc/vsc_arm_solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
-#include "vsc_app.h"
-#include "robot/robot.h"    //TODO:: rename to ??
-#include "cnc/solution.h"
-// Vsc_CncSoution cnc;
+#include "MyApps/vsc/vsc_app.h"
+#include "MyApps/vsc/robot/vsc_robot.h"
 
 Vsc_Board board;
 VscApp vsc_app;

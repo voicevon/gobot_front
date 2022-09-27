@@ -8,7 +8,7 @@
 //     //   return;
 //     // }
 //     bool debug = false;
-//     Logger::Debug("CncSolutionBase::RunGcode()");
+//     Logger::Debug("ArmSolutionBase::RunGcode()");
 //     Logger::Print("gcode_command", gcode->get_command());
 
 //     if(gcode->has_g){
@@ -28,7 +28,7 @@
 //             // Is there any machine that supports both IK, and FK homing?
 //             // this->_home_via_inverse_kinematic = false;
 //             if (home_axis == '+'){
-//                 Serial.print("\n\n\n\n[Error] CncSolutionBase::RunGcode()  :");
+//                 Serial.print("\n\n\n\n[Error] ArmSolutionBase::RunGcode()  :");
 //                 Serial.print(home_axis);
 
 //             }
@@ -105,7 +105,7 @@
 //             s_value = gcode->get_value('S');
 //             debug = true;
 //             if (debug){
-//                 Logger::Debug("CncSolutionBase::RunGcode() For EEF_ACTION  M123 ");
+//                 Logger::Debug("ArmSolutionBase::RunGcode() For EEF_ACTION  M123 ");
 //                 Logger::Print("P", p_value);
 //                 Logger::Print("S", s_value);
 //             }
@@ -114,7 +114,7 @@
 //             break;
 
 //         case 130:
-//             Logger::Debug("CncSolutionBase::RunGcode()   M130");
+//             Logger::Debug("ArmSolutionBase::RunGcode()   M130");
 //             Logger::Print("gcode", gcode->get_command());
 //             p_value =  gcode->get_value('N');
 //             Logger::Print("Index", p_value);
@@ -159,7 +159,7 @@
 //             break;
 //         }
 //     }else{
-//         // this->commuDevice->OutputMessage("\n[Warning] CncSolutionBase::RunGcode()  Has NO letter 'G' or 'M'. ");
+//         // this->commuDevice->OutputMessage("\n[Warning] ArmSolutionBase::RunGcode()  Has NO letter 'G' or 'M'. ");
 //         // this->commuDevice->OutputMessage(gcode->get_command());
 //         // this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
 //     }

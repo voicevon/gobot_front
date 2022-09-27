@@ -1,16 +1,12 @@
 #pragma once
 
-// #include "MyBoards/cnc_board_base.h"
 #include "CNC/board/cnc_board_base.h"
-
-#include "../solution_base.h"
-#include "ESP32Step/src/TeensyStep.h"
-// #include "Robot/homer/single_axis_homer.h"
-// #include "CNC/Sensor/position_trigger/position_triggers.h"
+#include "CNC/arm_solution/arm_solution_base.h"
 #include "CNC/arm_solution/axis_homer/axis_homer.h"
+#include "ESP32Step/src/TeensyStep.h"
 #include "config_base.h"
 
-class CncSolution_CoreYZBase: public CncSolutionBase{
+class CncSolution_CoreYZBase: public ArmSolutionBase{
     public:
         // void Init(CncBoardBase* board) override;
         void RunG1(Gcode* gcode) override;

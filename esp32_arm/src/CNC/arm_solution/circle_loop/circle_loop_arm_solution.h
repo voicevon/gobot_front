@@ -1,12 +1,12 @@
 #pragma once
 
 #include "CNC/board/cnc_board_base.h"
-#include "../solution_base.h"
-#include "cnc_circle_loop_config.h"
+#include "CNC/arm_solution/arm_solution_base.h"
+#include "circle_loop_arm_solution_config.h"
 
 
 //This is a virtual class. No Constructor.
-class CncCircleLoop: public CncSolutionBase{
+class CncCircleLoop_ArmSolution: public ArmSolutionBase{
     public:
         // void Init(CncBoardBase* board) override;
         void RunG1(Gcode* gcode) override;

@@ -6,7 +6,7 @@
 
 #include "CNC/arm_solution/kinematic_config.h"
 #include "CNC/arm_solution/axis_homer/axis_homer.h"
-#include "CNC/arm_solution/solution_base.h"
+#include "CNC/arm_solution/arm_solution_base.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
 #include "CNC/mover/cnc_mover_base.h"
@@ -25,33 +25,20 @@ class RobotBase: public GcodeConsumer{
 
         void RunGcode(Gcode* gcode);
         void RunG28(EnumAxis axis);
-        // virtual bool GetCurrentPosition(FkPositionBase* position_fk);
-        // virtual float GetDistanceToTarget_FK();
-        // virtual float GetDistanceToTarget_IK();
-        void SayHello();    // TODO:  be virtual
 
     protected:
         // virtual _DispatchGcode(Gcode* gcode);
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
         void _LinkPidControllers_M130(PidControllers* pid_controllers){this->__pid_controllers_m130=pid_controllers;};
        
-        // virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
-        // virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
-        // virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.
-        // virtual void RunG6(Gcode* gcode);   //Block mode
-        // void RunG4(Gcode* gcode);
         // virtual std::string GetHomeTrigerStateString();
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
         
         void RunM84();
-        // virtual void RunM123(uint8_t eef_channel, EefAction eef_action);
         virtual void RunM123(uint8_t eef_channel, uint8_t eef_action);
 
-        // void _running_G1();
         void _running_G28();
-        // virtual EnumAxis ConvertToEnum(char axis_name);
-        // virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis);
 		// virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
         EnumAxis _homing_axis;
@@ -60,12 +47,11 @@ class RobotBase: public GcodeConsumer{
 
         bool is_absolute_position = true;
         
-        CncBoardBase* _cnc_board;
-        CncMoverBase* _mover_base;   //???
+        CncBoardBase* _cnc_board;  //!!!!
+        // CncMoverBase* _mover_base;   //???
         LineSegmentQueue* _line_segment_queue;
 
-        // void LinkArmSolution(CncSolutionBase* arm_solution){this->__arm_solution=arm_solution;};
-        CncSolutionBase* __arm_solution;
+        ArmSolutionBase* _arm_solution;
 
     private:
         void __TryNextGmCode_FromQueue();
@@ -76,10 +62,7 @@ class RobotBase: public GcodeConsumer{
         // And the author doesn't want to use "new PidControll()"  to create an instance.
         PidControllers* __pid_controllers_m130;   
         void _base_spin_once();
-        // void __running_G4();
         void __HomeSingleAxis(EnumAxis axis);
-        // long __g4_start_timestamp;
-        // int __g4_time_second;
 
         /* Just for fun, don't remove below comment.
         void * __output_message2;

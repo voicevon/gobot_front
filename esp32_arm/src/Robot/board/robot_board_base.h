@@ -8,7 +8,7 @@
 #include "CNC/coordinate/cnc_axis.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
 
-class CncBoardBase: public BoardBase{
+class RobotBoardBase: public BoardBase{
     public:
         virtual void Init(bool is_on_reset);
 
