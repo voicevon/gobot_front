@@ -5,6 +5,8 @@
 class Queue_able{
     public:
         virtual void DeepCopyTo(Queue_able* the_copy){};  //TODO: Can remove body "{}"?
+        virtual void DeepReset_ToDefault(){};
+
 };
 
 //TODO:  make a template, to remove Queue_able.

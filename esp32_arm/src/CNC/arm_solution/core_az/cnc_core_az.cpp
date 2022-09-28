@@ -73,33 +73,43 @@ void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 			this->FK(&ik_position, &verifying_fk);
 		}
 		//Copy current ik-position to motor-position.
-		this->_mover_base->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
-		this->_mover_base->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
+
+
+		// this->_mover_base->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
+		// this->_mover_base->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
+		// TODO:  Undone.
 		
 }
 
 void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
 	Serial.print("[Debug] CncSolution_CoreAZ::RunG28() is entering:   " );
 	Serial.print(axis);
+	MoveBlock* mb=this->__queue_move_block->GetHeadMoveblock(); 
 	this->_homing_axis = axis;
 
 	this->_config->PrintOut();
-	float motor_position[2];
+	// float motor_position[2];
 
 	if (axis==AXIS_ALPHA){
 		//todo :  process with IK()
 		this->__homing_helper = this->objHomeHelper_angle;
-		motor_position[0] = 5000000;
-		motor_position[1] = 5000000;
+		mb->MoveBlocks[0].TargetPosition = 500000;
+		mb->MoveBlocks[1].TargetPosition = 500000;
+		// motor_position[0] = 5000000;
+		// motor_position[1] = 5000000;
 	
 	}else if (axis==AXIS_Z){
 		this->__homing_helper = this->objHomeHelper_vertical;
-		motor_position[0] = -5000000;
-		motor_position[1] = -5000000;
+		// motor_position[0] = -5000000;
+		// motor_position[1] = -5000000;
+		mb->MoveBlocks[0].TargetPosition = -500000;
+		mb->MoveBlocks[1].TargetPosition = -500000;
 	}
-	this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
-	this->_cnc_board->EnableMotor(AXIS_BETA, true);
-	this->_mover_base->AllActuatorsMoveTo(true, motor_position);
+	this->__queue_move_block->ForwardHead();
+
+	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
+	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
+	// this->_mover_base->AllActuatorsMoveTo(true, motor_position);
 }
 
 // void CncSolution_CoreAZ::_running_G28(){
@@ -144,19 +154,22 @@ void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
 void CncSolution_CoreAZ::RunG1(Gcode* gcode) {
 	Serial.print("\n[Debug] CncSolution_CoreAZ::RunG1() is entering");
 	Serial.print(gcode->get_command());
-	this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
-	this->_cnc_board->EnableMotor(AXIS_BETA, true);
+	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
+	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
+	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
-		this->_mover_base->SetEefSpeed(speed);
+		// this->_mover_base->SetEefSpeed(speed);
+		mb->MoveBlocks[AXIS_ALPHA].Speed = speed;
+		mb->MoveBlocks[AXIS_BETA].Speed = speed;
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_ZW target_fk_zw;
 	IkPosition_AB target_ik_ab;
 	target_fk_zw.Z = this->__current_fk_position.Z;
 	target_fk_zw.W = this->__current_fk_position.W;
-	target_ik_ab.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
-	target_ik_ab.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
+	// target_ik_ab.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
+	// target_ik_ab.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	bool do_ik=false;
 	if (gcode->has_letter(AXIS_ALPHA)) target_ik_ab.alpha = gcode->get_value(AXIS_ALPHA);
 	if (gcode->has_letter(AXIS_BETA)) target_ik_ab.beta = gcode->get_value(AXIS_BETA);
@@ -173,19 +186,22 @@ void CncSolution_CoreAZ::RunG1(Gcode* gcode) {
 	if (do_ik) IK(&target_fk_zw,&target_ik_ab);
 
 	//Prepare actuator/driver to move to next point
-	float motor_position[2];
-	motor_position[0] = target_ik_ab.alpha;
-	motor_position[1] = target_ik_ab.beta;
+	// float motor_position[2];
+	// motor_position[0] = target_ik_ab.alpha;
+	// motor_position[1] = target_ik_ab.beta;
+	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
+	mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
+	this->__queue_move_block->ForwardHead();
 	//None blocking, move backgroundly.
-	this->_mover_base->AllActuatorsMoveTo(true, motor_position);
+	// this->_mover_base->AllActuatorsMoveTo(true, motor_position);
 
 	if (true){
 		Serial.print("\n    [Debug] CncSolution_CoreAZ::RunG1()     (");
 		// Serial.print(this->objStepper_alpha->getPosition());
-		Serial.print(this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
+		// Serial.print(this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
 		Serial.print(",");
 		// Serial.print(this->objStepper_beta->getPosition());
-		Serial.print(this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
+		// Serial.print(this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
 		Serial.print(")   <-- from   alpha,beta   to -->  (");
 		Serial.print(target_ik_ab.alpha  );
 		Serial.print(" , ");
@@ -209,7 +225,7 @@ void CncSolution_CoreAZ::RunG1(Gcode* gcode) {
 
 
 float CncSolution_CoreAZ::GetDistanceToTarget_IK(){
-	return this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA) + this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
+	// return this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA) + this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 }
 
 

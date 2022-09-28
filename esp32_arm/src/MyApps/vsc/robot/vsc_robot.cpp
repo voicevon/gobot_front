@@ -14,7 +14,7 @@ void VscRobot::Init(Vsc_Board* board){
 
     arm_solution.Init(board);
     // this->arm_solution.planner = &this->__planner;
-    arm_solution._mover_base = &this->__mover;
+    // arm_solution._mover_base = &this->__mover;
     this->_arm_solution = &this->arm_solution;  
 
 

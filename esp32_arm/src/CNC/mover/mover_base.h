@@ -14,7 +14,7 @@
 class MoverBase{
     public:
         // virtual void SingleActuatorMoveTo(LineSegment* movement);
-        virtual void SingleActuatorMoveTo(MoveBlock* move_block);
+        virtual void SingleActuatorMoveTo(MoveBlock_SingleActuator* move_block);
 
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
         virtual void PrintOut(const char* title);

@@ -72,7 +72,7 @@ void ActuatorServo::SpinOnce(){
 }
 
 // void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
-void ActuatorServo::UpdateMovement(MoveBlock* move){
+void ActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
 
     // if (is_absolute_position){
     if (move->IsAbsTargetPosition){

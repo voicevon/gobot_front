@@ -27,15 +27,19 @@ class ArmSolutionBase{
         void RunGcode(Gcode* gcode);  //todo:  rename to RunMovement(),  CncMoveTo()
         void RunG28(EnumAxis axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
+
+        // Todo:  should remove these two lines?
         virtual float GetDistanceToTarget_FK();
         virtual float GetDistanceToTarget_IK();
+
+
         void SayHello();    // TODO:  be virtual
         virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis);
         virtual EnumAxis ConvertToEnum(char axis);
         void ForceStopMover();
-        CncBoardBase* _cnc_board;
+        CncBoardBase* _cnc_board;   // TODO:  remove this.
         // Planner* planner;
-        MoverBase* _mover_base;   // Should this be here?
+        // MoverBase* _mover_base;   // Should this be here?
         Queue_MoveBlock* __queue_move_block;
 
         
@@ -50,7 +54,7 @@ class ArmSolutionBase{
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
         void RunM84();
-        void _running_G1();
+        // void _running_G1();
         void _running_G28();
 		virtual void _RunG28_CombinedFk(EnumAxis axis){};
 

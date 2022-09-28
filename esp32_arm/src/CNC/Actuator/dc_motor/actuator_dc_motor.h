@@ -31,7 +31,7 @@ class ActuatorDcMotor: public ActuatorBase{
         float GetCurrentPosition() override;
         void SetCurrentPositionAs(float position_in_cnc_unit) override;
         // void SetTargetPositionTo(bool is_absolute_position, float target_position) override;
-        void UpdateMovement(MoveBlock* movement) override;
+        void UpdateMovement(MoveBlock_SingleActuator* movement) override;
 
         float GetAbsDistanceToTarget_InCncUnit() override;
         // When motor is running, should not effect running speed. 

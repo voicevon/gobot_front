@@ -15,7 +15,7 @@ class ActuatorBase{
         virtual float GetCurrentPosition(){return this->_current_cnc_position;};
         virtual void SetCurrentPositionAs(float position_in_cnc_unit);
         // virtual void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit);
-        virtual void UpdateMovement(MoveBlock* movement);
+        virtual void UpdateMovement(MoveBlock_SingleActuator* movement);
         virtual float GetAbsDistanceToTarget_InCncUnit();
 
         float GetTartetCncPosition(){return this->_target_cnc_position;};
@@ -29,7 +29,7 @@ class ActuatorBase{
         float GetNeededSeconds();
         void RenewSpeed(float moving_time);
         virtual void SetAccelleration(float accelleration_in_cnc_unit);  // TODO: remove defination.
-
+        EnumAxis MyAxis;
     protected:
         float _target_cnc_position;   // is always an absolute position
         float _current_cnc_position;

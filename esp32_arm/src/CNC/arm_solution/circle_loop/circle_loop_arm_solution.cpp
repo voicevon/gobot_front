@@ -41,7 +41,9 @@ void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 	}
 	//Copy current ik-position to motor-position.
 	if (this->_homing_axis == this->_AXIS) {
-		this->_mover_base->SetActuatorCurrentCncPositionAs(this->_AXIS,ik_position.alpha);
+		// this->_mover_base->SetActuatorCurrentCncPositionAs(this->_AXIS,ik_position.alpha);
+
+		// TODO:  todo anything is necessary?
 	}else{
 		Logger::Halt("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()");
 	}
@@ -52,11 +54,12 @@ void CircleLoop_ArmSolution::RunG1(Gcode* gcode) {
 	Logger::Debug("CircleLoop_ArmSolution::RunG1() is entering");
 	Logger::Print("G1 ", gcode->get_command());
 	Logger::Print("this->AXIS", this->_AXIS);
+	LineSegment line;
+
 	this->_cnc_board->EnableMotor(this->_AXIS, true);
 	if (gcode->has_letter('F')){
-		float speed = gcode->get_value('F');
-		this->_mover_base->SetActuatorSpeed(this->_AXIS, speed);
-		Logger::Print("Speed", speed);
+		line.Speed = gcode->get_value('F');
+		Logger::Print("Speed", line.Speed);
 	}
 	FkPosition_A target_fk_a;
 	IkPosition_A target_ik_a;
@@ -71,7 +74,6 @@ void CircleLoop_ArmSolution::RunG1(Gcode* gcode) {
 
 	//Prepare actuator/driver to move to next point
 	// this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
-	LineSegment line;
 	line.axis = this->_AXIS;
 	line.IsAbsTargetPosition = true;
 	line.TargetPosition = target_ik_a.alpha;
@@ -86,7 +88,7 @@ void CircleLoop_ArmSolution::RunG1(Gcode* gcode) {
 	bool debug = true;
 	if (debug){
 		Logger::Print("CircleLoop_ArmSolution::RunG1() point", 6);
-		this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
+		// this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
 		Logger::Print("CircleLoop_ArmSolution::RunG1() point", 7);
 
 		Logger::Print("from", this->__current_fk_position.A);
@@ -96,7 +98,7 @@ void CircleLoop_ArmSolution::RunG1(Gcode* gcode) {
 
 
 float CircleLoop_ArmSolution::GetDistanceToTarget_IK(){
-	return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
+	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
 }
 
 

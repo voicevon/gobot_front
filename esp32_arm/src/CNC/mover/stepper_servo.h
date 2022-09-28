@@ -21,7 +21,7 @@ class CncMover_StepperServo: public MoverBase{
 
 
         void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;
-        void SingleActuatorMoveTo(MoveBlock* line) override;
+        void SingleActuatorMoveTo(MoveBlock_SingleActuator* line) override;
         void AllActuatorsStop() override;
         void SingleActuatorStop(EnumAxis motor_name) override;
 

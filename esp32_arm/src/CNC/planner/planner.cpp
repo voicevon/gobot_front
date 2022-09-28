@@ -25,14 +25,16 @@ void Planner::AppendLineSegment(LineSegment* line){
     for (int i=0; i<1; i++){
         // TODO: recalculate acceleration, speed.
         MoveBlock* mb = this->__arm_solution->__queue_move_block->GetHeadMoveblock();
-        Logger::Print("mb->axis  old", mb->axis);
-        mb->axis = line->axis;
-        mb->IsAbsTargetPosition = line->IsAbsTargetPosition;
-        mb->TargetPosition = line->TargetPosition;
-        mb->Speed = line->Speed;
-        mb->Acceleration = line->Acceleration;
+        for(int i=0; i<6;i++){
+            Logger::Print("mb->axis  old", mb->MoveBlocks[i].axis);
+            mb->MoveBlocks[i].axis = line->axis;
+            mb->MoveBlocks[i].IsAbsTargetPosition = line->IsAbsTargetPosition;
+            mb->MoveBlocks[i].TargetPosition = line->TargetPosition;
+            mb->MoveBlocks[i].Speed = line->Speed;
+            mb->MoveBlocks[i].Acceleration = line->Acceleration;
 
-        Logger::Print("mb->axis  new", mb->axis);
+            Logger::Print("mb->axis  new", mb->MoveBlocks[i].axis);
+        }
         Logger::Print("Going to forward queue head", 0 );
         this->__arm_solution->__queue_move_block->ForwardHead();
         Logger::Print("Going to forward queue head", 1 );

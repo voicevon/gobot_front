@@ -12,11 +12,11 @@ void ArmSolutionBase::SayHello(){
 void ArmSolutionBase::__CutLineSegment_ToMoveBlocks_to_queue(LineSegment* line){
 	//TODO:  This is a virtual function.
 	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-	mb->axis = line->axis;
-	mb->IsAbsTargetPosition = line->IsAbsTargetPosition;
-	mb->TargetPosition = line->TargetPosition;
-	mb->Speed = line->Speed;
-	mb->Acceleration = line->Acceleration;
+	mb->MoveBlocks[line->axis].axis = line->axis;
+	mb->MoveBlocks[line->axis].IsAbsTargetPosition = line->IsAbsTargetPosition;
+	mb->MoveBlocks[line->axis].TargetPosition = line->TargetPosition;
+	mb->MoveBlocks[line->axis].Speed = line->Speed;
+	mb->MoveBlocks[line->axis].Acceleration = line->Acceleration;
 	this->__queue_move_block->ForwardHead();
 }
 
@@ -31,9 +31,9 @@ void ArmSolutionBase::SpinOnce(){
 	case CncState::RUNNING_G4:  // 2
 		this->__running_G4();
 		break;
-	case CncState::RUNNING_G1:  // 1
-		this->_running_G1();
-		break;
+	// case CncState::RUNNING_G1:  // 1
+	// 	this->_running_G1();
+	// 	break;
 	case CncState::RUNNING_G28:  // 4
 		// Logger::Debug("CncState::RUNNING_G28");
 		this->_running_G28();
@@ -48,7 +48,9 @@ void ArmSolutionBase::SpinOnce(){
 }
 
 void ArmSolutionBase::ForceStopMover(){
-	this->_mover_base->AllActuatorsStop();
+	// this->_mover_base->AllActuatorsStop();
+
+	//TODO:    How to do it without mover_base??
 }
 
 
@@ -79,18 +81,19 @@ void ArmSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	HomingConfig* homing = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
 	this->_cnc_board->EnableMotor(axis, true);
 	
-	this->_config_base.PrintOut("ArmSolutionBase::__HomeSingleAxis()  _config_base");
-	this->_mover_base->PrintOut("ArmSolutionBase::__HomeSingleAxis()  _mover_base" );
-	this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
-	this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
+	// this->_config_base.PrintOut("ArmSolutionBase::__HomeSingleAxis()  _config_base");
+	// this->_mover_base->PrintOut("ArmSolutionBase::__HomeSingleAxis()  _mover_base" );
+	// this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
+	// this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
 	// this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
-	MoveBlock line;
-	line.axis = axis;
-	line.IsAbsTargetPosition = false;
-	line.TargetPosition = homing->DistanceToGo;
-	line.Speed = homing->Speed;
-	this->_mover_base->SingleActuatorMoveTo(&line);   //TOdo:  Put this line to line_queue
-
+	MoveBlock *mb = this->__queue_move_block->GetHeadMoveblock();
+	mb->MoveBlocks[axis].axis = axis;
+	mb->MoveBlocks[axis].IsAbsTargetPosition = false;
+	mb->MoveBlocks[axis].TargetPosition = homing->DistanceToGo;
+	mb->MoveBlocks[axis].Speed = homing->Speed;
+	this->__queue_move_block->ForwardHead();
+	// this->_mover_base->SingleActuatorMoveTo(&line);   //TOdo:  Put this line to line_queue
+	// this->__queue_move_block->AppendObject(&mb);
 	Logger::Debug("ArmSolutionBase::RunG28() is Starting to run..." );
 }
 
@@ -112,7 +115,8 @@ void ArmSolutionBase::_running_G28(){
 		Logger::Print("_homing_axis_name", this->_homing_axis);
 		Logger::Print(" fired_trigger_index", fired_trigger_index);
 
-		this->_mover_base->AllActuatorsStop();
+		// this->_mover_base->AllActuatorsStop();
+		this->ForceStopMover();
 		this->_SetCurrentPositionAsHome(this->_homing_axis);
 		this->State = CncState::IDLE;
 	}else{
@@ -122,16 +126,16 @@ void ArmSolutionBase::_running_G28(){
 	}
 }
 
-void ArmSolutionBase::_running_G1(){
-	if (this->_mover_base->HasArrivedTargetPosition()){
-	// float distance_to_target = this->GetDistanceToTarget_IK();
-    // if (distance_to_target < DEG_TO_RAD * 1.0f){  // TODO:  == 0  or decide by subclass.
+// void ArmSolutionBase::_running_G1(){
+// 	if (this->_mover_base->HasArrivedTargetPosition()){
+// 	// float distance_to_target = this->GetDistanceToTarget_IK();
+//     // if (distance_to_target < DEG_TO_RAD * 1.0f){  // TODO:  == 0  or decide by subclass.
 
-      	this->State = CncState::IDLE;
-		Logger::Info("ArmSolutionBase::_running_G1() is finished. ");
-		// Logger::Print("distance_to_target", RAD_TO_DEG * distance_to_target);
-    }
-}
+//       	this->State = CncState::IDLE;
+// 		Logger::Info("ArmSolutionBase::_running_G1() is finished. ");
+// 		// Logger::Print("distance_to_target", RAD_TO_DEG * distance_to_target);
+//     }
+// }
 
 void ArmSolutionBase::RunG4(Gcode* gcode){
 	__g4_start_timestamp = micros();

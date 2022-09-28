@@ -8,7 +8,7 @@
 
 void GobotMainCncSolution::Init(GobotMain_Board* cnc_board, StepControl* step_control){
     this->__mover.Init(cnc_board, step_control);
-    this->_mover_base = &this->__mover;
+    // this->_mover_base = &this->__mover;
     
     // this->_LinkEef(cnc_board->GetEef());
     this->_config = &this->__config;
@@ -31,7 +31,7 @@ void GobotMainCncSolution::Init(GobotMain_Board* cnc_board, StepControl* step_co
 
 void GobotMainCncSolution::__SelfTest(){
     this->_config_base.PrintOut("GobotMainCncSolution:: config");
-    this->_mover_base->PrintOut("GobotMainCncSolution:: mover");
+    // this->_mover_base->PrintOut("GobotMainCncSolution:: mover");
 }
 
 EnumAxis GobotMainCncSolution::ConvertToEnum(char axis){

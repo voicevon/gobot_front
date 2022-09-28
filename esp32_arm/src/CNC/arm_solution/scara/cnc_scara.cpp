@@ -100,8 +100,8 @@ float CncScaraSolution::GetDistanceToTarget_FK(){
 	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
 	// TODO: Rewrite this function.
 	IkPosition_AB current_ik;
-	current_ik.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
-	current_ik.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
+	// current_ik.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
+	// current_ik.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	FK(&current_ik, &this->__current_fk_position);
 	
 	float dx = this->__current_fk_position.X - this->__next_fk_position.X;
@@ -111,7 +111,8 @@ float CncScaraSolution::GetDistanceToTarget_FK(){
 }
 
 float CncScaraSolution::GetDistanceToTarget_IK(){
-	return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
+	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
+	return 0;
 }
 
 void CncScaraSolution::RunG1(Gcode* gcode) {
@@ -121,6 +122,7 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 	// Assume G1-code mostly wants to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
+	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
 
 	bool do_ik = false;
 	uint8_t motor_flags = 0;
@@ -144,14 +146,19 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 		target_fk_xy.Y = gcode->get_value('Y');
 		motor_flags = 0x03;
 	}
-	this->_mover_base->SetMovingFlags(motor_flags);
+	// this->_mover_base->SetMovingFlags(motor_flags);
+
 	
 	if (do_ik) IK(&target_fk_xy, &target_ik_ab);
-
+	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
+	mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
+	
 	bool debug = false;
 	if (gcode->has_letter('F')){
 		uint speed = gcode->get_value('F');
-		this->_mover_base->SetEefSpeed(DEG_TO_RAD * speed);
+		// this->_mover_base->SetEefSpeed(DEG_TO_RAD * speed);
+		mb->MoveBlocks[AXIS_ALPHA].Speed = speed;
+		mb->MoveBlocks[AXIS_BETA].Speed = speed;
 		debug = false;
 		if (debug){
 			Serial.print("[Debug] CncScaraSolution::RunG1()  motor_flags= ");
@@ -161,26 +168,27 @@ void CncScaraSolution::RunG1(Gcode* gcode) {
 		}
 	}
 	// TODO:  Enable motor via mover->enable_motor(axis)
-	this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
-	this->_cnc_board->EnableMotor(AXIS_BETA, true);
+	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
+	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
 
-	float cnc_position[2];
-	cnc_position[0] = target_ik_ab.alpha;
-	cnc_position[1] = target_ik_ab.beta;
+	// float cnc_position[2];
+	// cnc_position[0] = target_ik_ab.alpha;
+	// cnc_position[1] = target_ik_ab.beta;
 
 	debug = true;
 	if (debug){
 		Serial.print("\n[Debug] CncScaraSolution::RunG1()  from,to  alpha=");
-		Serial.print(RAD_TO_DEG * this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
+		// Serial.print(RAD_TO_DEG * this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
 		Serial.print(" , ");
 		Serial.print(RAD_TO_DEG * target_ik_ab.alpha);
 		Serial.print("    beta = ");
-		Serial.print(RAD_TO_DEG * this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
+		// Serial.print(RAD_TO_DEG * this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
 		Serial.print(" , ");
 		Serial.println(RAD_TO_DEG * target_ik_ab.beta);
 	}
 	uint8_t abs_flags = 0x03;
-	this->_mover_base->AllActuatorsMoveTo(abs_flags, cnc_position);
+	// this->_mover_base->AllActuatorsMoveTo(abs_flags, cnc_position);
+	this->__queue_move_block->ForwardHead();
 }
 
 
