@@ -11,8 +11,8 @@ class Vsc_ArmSoution: public CircleLoop_ArmSolution{
         void Init(Vsc_Board* board);
 
     private:
-        Vsc_CncMover __mover;
-        Planner __planner;
+        // Vsc_CncMover __mover;
+        // Planner __planner;
 
 
 
