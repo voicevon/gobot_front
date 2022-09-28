@@ -6,7 +6,7 @@ void Vsc_ArmSoution::Init(Vsc_Board* board ){
 
     // this->__mover.Init(board);
     this->_cnc_board = board;
-    this->_mover_base = &this->__mover;
+    // this->_mover_base = &this->__mover;
     // this->planner = &this->__planner;
     
 

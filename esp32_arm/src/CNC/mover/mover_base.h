@@ -35,7 +35,7 @@ class MoverBase{
         virtual bool HasArrivedTargetPosition();
         float GetAbsDistanceToTarget_InCncUnit();
 
-        Queue_MoveBlock* __moveblock_queue;
+        Queue_MoveBlock* __queue_move_block;
 
     protected:
         // bool _is_blocked_move;

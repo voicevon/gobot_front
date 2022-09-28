@@ -34,7 +34,7 @@ class ArmSolutionBase{
         void ForceStopMover();
         CncBoardBase* _cnc_board;
         Planner* planner;
-        MoverBase* _mover_base;   //???
+        MoverBase* _mover_base;   // Should this be here?
 
         
     protected:

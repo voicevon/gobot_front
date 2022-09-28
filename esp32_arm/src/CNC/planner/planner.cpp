@@ -2,8 +2,8 @@
 
 
 bool Planner::IsPlanable(){
-    int fbc = this->__moveblock_queue->GetFreeBuffersCount();
-    if (fbc>3) return true;
+    int fbc = this->__queue_move_block->GetFreeBuffersCount();
+    if (fbc > 3) return true;
     return false;
 }
 
@@ -14,7 +14,7 @@ void Planner::AppendLineSegment(LineSegment* line){
 
     for (int i=0; i<1; i++){
         // TODO: recalculate acceleration, speed.
-        MoveBlock* mb = this->__moveblock_queue->GetHeadMoveblock();
+        MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
         Logger::Print("mb->axis  old", mb->axis);
         mb->axis = line->axis;
         mb->IsAbsTargetPosition = line->IsAbsTargetPosition;
@@ -24,7 +24,7 @@ void Planner::AppendLineSegment(LineSegment* line){
 
         Logger::Print("mb->axis  new", mb->axis);
         Logger::Print("Going to forward queue head", 0 );
-        this->__moveblock_queue->ForwardHead();
+        this->__queue_move_block->ForwardHead();
         Logger::Print("Going to forward queue head", 1 );
 
     }

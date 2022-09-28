@@ -12,7 +12,7 @@ class Planner{
         void AppendLineSegment(LineSegment* line);
 
 
-        Queue_MoveBlock* __moveblock_queue;
+        Queue_MoveBlock* __queue_move_block;
 
     private:
 

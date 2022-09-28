@@ -9,10 +9,15 @@ void RobotBase::SpinOnce(){
 	// Logger::Debug("RobotBase::SpinOnce()");
 	// Logger::Print("this->State", this->State);  // TODO:  Fix this bug.
 	this->_arm_solution->SpinOnce();
-	// Logger::Print("Just a debug point.", 0);
+	// Logger::Print("RobotBase::SpinOnce() point", 1);
 	if (this->_arm_solution->State == CncState::IDLE){
+		// Logger::Print("RobotBase::SpinOnce() point", 2);
 		this->__TryNextGmCode_FromQueue();
+		// Logger::Print("RobotBase::SpinOnce() point", 3);
 	}
+	// Logger::Print("RobotBase::SpinOnce() point", 4);
+		
+
 	// if (this->State == RobotState::IDLE){
 	// 	this->__TryNextGmCode_FromQueue();
 	// }else{
