@@ -11,6 +11,8 @@
 
 class ActuatorBase{
     public:
+        virtual void SpinOnce();
+
         void LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint);
         virtual float GetCurrentPosition(){return this->_current_cnc_position;};
         virtual void SetCurrentPositionAs(float position_in_cnc_unit);
@@ -25,10 +27,10 @@ class ActuatorBase{
         virtual void ForceStop();   //Only G28 is using this.
         virtual void UpdateTargetPositionFromCurrent();
         virtual float GetSpeed();    // ?? TODO:  var should be in base class ?
-        virtual void SetSpeed(float speed_in_cnc_unit);   // TODO:  remove, merge to LineSegment.
+        // virtual void SetSpeed(float speed_in_cnc_unit);   // TODO:  remove, merge to LineSegment.
         float GetNeededSeconds();
         void RenewSpeed(float moving_time);
-        virtual void SetAccelleration(float accelleration_in_cnc_unit);  // TODO: remove defination.
+        // virtual void SetAccelleration(float accelleration_in_cnc_unit);  // TODO: remove defination.
         EnumAxis MyAxis;
     protected:
         float _target_cnc_position;   // is always an absolute position

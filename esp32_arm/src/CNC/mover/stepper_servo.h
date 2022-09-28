@@ -20,10 +20,11 @@ class CncMover_StepperServo: public MoverBase{
         bool ActuatorIsMoving(EnumAxis actuator) override;
 
 
-        void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;
-        void SingleActuatorMoveTo(MoveBlock_SingleActuator* line) override;
+        // void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;
+        void AllActuatorsMoveTo(MoveBlock* move) override;
+        // void SingleActuatorMoveTo(MoveBlock_SingleActuator* line) override;
         void AllActuatorsStop() override;
-        void SingleActuatorStop(EnumAxis motor_name) override;
+        // void SingleActuatorStop(EnumAxis motor_name) override;
 
         // void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position) override;
         // void Stop(char motor_name) override;

@@ -21,8 +21,8 @@ class ActuatorServo: public ActuatorBase{
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;
 
         float GetAbsDistanceToTarget_InCncUnit() override;
-        void SetSpeed(float speed_in_cnc_unit) override;   // There is no "unsigned float"
-        virtual void SetAccelleration(float accelleration_in_cnc_unit){}; 
+        // void SetSpeed(float speed_in_cnc_unit) override;   // There is no "unsigned float"
+        // virtual void SetAccelleration(float accelleration_in_cnc_unit){}; 
 
 
 

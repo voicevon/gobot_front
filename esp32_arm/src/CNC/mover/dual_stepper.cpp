@@ -39,118 +39,119 @@ void Mover_DualStepper::LinkStepper_asBeta(ActuatorStepper* beta){
 
 // alpha = flags.bits[0]
 // beta = flags.bits[1]
-void Mover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
-    bool is_absolute_position;
-    Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
-    Stepper* beta = this->__actuator_beta->GetLinkedStepper();
+// void Mover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
+void Mover_DualStepper::AllActuatorsMoveTo(MoveBlock* move){
+//     bool is_absolute_position;
+//     Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
+//     Stepper* beta = this->__actuator_beta->GetLinkedStepper();
 
-    uint8_t target_motor_flags = this->_moving_actuator_flags;
-    MoveBlock_SingleActuator move;
-    // Step1:  Set target motor position. determin absolute or relative.
-    if (target_motor_flags == 0x01){
-        // set alpha position
-        is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
-        // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
-        move.IsAbsTargetPosition= is_absolute_position;
-        move.TargetPosition = positions_in_cnc_unit[0];
-        this->__actuator_alpha->UpdateMovement(&move);
+//     uint8_t target_motor_flags = this->_moving_actuator_flags;
+//     MoveBlock_SingleActuator move;
+//     // Step1:  Set target motor position. determin absolute or relative.
+//     if (target_motor_flags == 0x01){
+//         // set alpha position
+//         is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
+//         // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+//         move.IsAbsTargetPosition= is_absolute_position;
+//         move.TargetPosition = positions_in_cnc_unit[0];
+//         this->__actuator_alpha->UpdateMovement(&move);
 
-    }else if (target_motor_flags == 0x02){
-        // set beta position
-        is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
-        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
-        move.IsAbsTargetPosition = is_absolute_position;
-        move.TargetPosition = positions_in_cnc_unit[1];
-        this->__actuator_beta->UpdateMovement(&move);
+//     }else if (target_motor_flags == 0x02){
+//         // set beta position
+//         is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
+//         // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+//         move.IsAbsTargetPosition = is_absolute_position;
+//         move.TargetPosition = positions_in_cnc_unit[1];
+//         this->__actuator_beta->UpdateMovement(&move);
 
-    }else if (target_motor_flags == 0x03){
-        // set alpha position
-        is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
-        // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
-        move.IsAbsTargetPosition = is_absolute_position;
-        move.TargetPosition = positions_in_cnc_unit[0];
-        this->__actuator_alpha->UpdateMovement(&move);
-        // and set beta position
-        is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
-        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
-        move.IsAbsTargetPosition = is_absolute_position;
-        move.TargetPosition = positions_in_cnc_unit[1];
-        this->__actuator_beta->UpdateMovement(&move);
-    }
+//     }else if (target_motor_flags == 0x03){
+//         // set alpha position
+//         is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
+//         // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
+//         move.IsAbsTargetPosition = is_absolute_position;
+//         move.TargetPosition = positions_in_cnc_unit[0];
+//         this->__actuator_alpha->UpdateMovement(&move);
+//         // and set beta position
+//         is_absolute_position = (is_absolute_position_flags & 0x02) > 0;
+//         // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[1]);
+//         move.IsAbsTargetPosition = is_absolute_position;
+//         move.TargetPosition = positions_in_cnc_unit[1];
+//         this->__actuator_beta->UpdateMovement(&move);
+//     }
 
-    //Step2:  move one or all motors.
-    if (target_motor_flags == 0x01){
-        // Move alpha only
-        this->__stepControl->moveAsync(*alpha);
+//     //Step2:  move one or all motors.
+//     if (target_motor_flags == 0x01){
+//         // Move alpha only
+//         this->__stepControl->moveAsync(*alpha);
 
-    }else if (target_motor_flags == 0x02){
-        // move beta only
-        // this->__actuator_beta->StartToMove();
-        this->__stepControl->moveAsync(*beta);
+//     }else if (target_motor_flags == 0x02){
+//         // move beta only
+//         // this->__actuator_beta->StartToMove();
+//         this->__stepControl->moveAsync(*beta);
 
-    }else if (target_motor_flags == 0x03){
-        // Both motor will move
-        this->__stepControl->moveAsync(*alpha, *beta);
-        // this->__actuator_beta->StartToMove();
+//     }else if (target_motor_flags == 0x03){
+//         // Both motor will move
+//         this->__stepControl->moveAsync(*alpha, *beta);
+//         // this->__actuator_beta->StartToMove();
 
-    }else{
-        Logger::Error("Mover_DualStepper::AllMotorsMoveTo()");
-        Logger::Print("target_motor_flags", target_motor_flags);
-    }
-    this->_moving_actuator_flags = target_motor_flags;
+//     }else{
+//         Logger::Error("Mover_DualStepper::AllMotorsMoveTo()");
+//         Logger::Print("target_motor_flags", target_motor_flags);
+//     }
+//     this->_moving_actuator_flags = target_motor_flags;
+// }
+
+// void Mover_DualStepper::AllActuatorsStop(){
+//     this->__stepControl->stop();
+//     this->__actuator_beta->UpdateTargetPositionFromCurrent();
 }
 
-void Mover_DualStepper::AllActuatorsStop(){
-    this->__stepControl->stop();
-    this->__actuator_beta->UpdateTargetPositionFromCurrent();
-}
+// void Mover_DualStepper::SingleActuatorStop(EnumAxis actuator_name){
+//     if (actuator_name == AXIS_ALPHA){
+//         this->__actuator_alpha->UpdateTargetPositionFromCurrent();
+//         this->_moving_actuator_flags -= 0x01;
 
-void Mover_DualStepper::SingleActuatorStop(EnumAxis actuator_name){
-    if (actuator_name == AXIS_ALPHA){
-        this->__actuator_alpha->UpdateTargetPositionFromCurrent();
-        this->_moving_actuator_flags -= 0x01;
-
-    }else if (actuator_name==AXIS_BETA){
-        this->__actuator_beta->UpdateTargetPositionFromCurrent();
-        this->_moving_actuator_flags -= 0x02;
-    }else{
-        Serial.print("[Error] Mover_DualStepper::SingleMotorStop() Unknown actuator_name= ");
-        Serial.println(actuator_name);
-    }
-}
+//     }else if (actuator_name==AXIS_BETA){
+//         this->__actuator_beta->UpdateTargetPositionFromCurrent();
+//         this->_moving_actuator_flags -= 0x02;
+//     }else{
+//         Serial.print("[Error] Mover_DualStepper::SingleMotorStop() Unknown actuator_name= ");
+//         Serial.println(actuator_name);
+//     }
+// }
 
 
 // void Mover_DualStepper::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
 // void Mover_DualStepper::SingleActuatorMoveTo(LineSegment* move){
-void Mover_DualStepper::SingleActuatorMoveTo(MoveBlock_SingleActuator* move){
-    Stepper* stepper;
-    // if (actuator_name == AXIS_ALPHA){
-    if (move->axis == AXIS_ALPHA){
-        // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
-        // this->__actuator_alpha->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
-        this->__actuator_alpha->UpdateMovement(move);
-        stepper = this->__actuator_alpha->GetLinkedStepper();
-        // this->__stepControl->moveAsync(*stepper);
-        this->_moving_actuator_flags = 0x01;
+// void Mover_DualStepper::SingleActuatorMoveTo(MoveBlock_SingleActuator* move){
+//     Stepper* stepper;
+//     // if (actuator_name == AXIS_ALPHA){
+//     if (move->axis == AXIS_ALPHA){
+//         // this->__actuator_alpha->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
+//         // this->__actuator_alpha->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+//         this->__actuator_alpha->UpdateMovement(move);
+//         stepper = this->__actuator_alpha->GetLinkedStepper();
+//         // this->__stepControl->moveAsync(*stepper);
+//         this->_moving_actuator_flags = 0x01;
 
-    // }else if (actuator_name == AXIS_BETA){
-    }else if (move->axis == AXIS_BETA){
-        // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
-        // this->__actuator_beta->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
-        // this->__actuator_beta->SetTargetPositionTo(move);
-        this->__actuator_beta->UpdateMovement(move);
+//     // }else if (actuator_name == AXIS_BETA){
+//     }else if (move->axis == AXIS_BETA){
+//         // this->__actuator_beta->SetTargetPositionTo(is_absolute_position, position_in_cnc_unit);
+//         // this->__actuator_beta->SetTargetPositionTo(move->IsAbsTargetPosition, move->TargetPosition);
+//         // this->__actuator_beta->SetTargetPositionTo(move);
+//         this->__actuator_beta->UpdateMovement(move);
 
-        stepper = this->__actuator_beta->GetLinkedStepper();
-        // this->__stepControl->moveAsync(*stepper);
-        this->_moving_actuator_flags = 0x02;
+//         stepper = this->__actuator_beta->GetLinkedStepper();
+//         // this->__stepControl->moveAsync(*stepper);
+//         this->_moving_actuator_flags = 0x02;
 
-    }else{
-        Logger::Halt ("Mover_DualStepper::SingleMotorMoveTo() axisname= " );
+//     }else{
+//         Logger::Halt ("Mover_DualStepper::SingleMotorMoveTo() axisname= " );
 
-    }
-    this->__stepControl->moveAsync(*stepper);
+//     }
+//     this->__stepControl->moveAsync(*stepper);
 
-}
+// }
 
 
 

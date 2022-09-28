@@ -121,9 +121,9 @@ float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
 //     this->__target_speed = rad_per_second;
 // }
 
-void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
-    // this is a future feature.
-}
+// void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
+//     // this is a future feature.
+// }
 
 void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
     this->__sensor->SetCurrentPosition(position_in_cnc_unit);

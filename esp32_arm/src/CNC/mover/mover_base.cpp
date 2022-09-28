@@ -4,12 +4,17 @@
 // bool MotorIsMoving(char moto_name);
 void MoverBase::SpinOnce(){
     // Logger::Debug("MoverBase::SpinOnce()");
+    _actuator_alpha_base->SpinOnce();
+    _actuator_beta_base->SpinOnce();
+    _actuator_delta_base->SpinOnce();
+
     if (this->__queue_move_block->BufferIsEmpty()) return;
 
     MoveBlock* mb = this->__queue_move_block->FetchTailMoveBlock();
-    _actuator_alpha_base->UpdateMovement(&mb->MoveBlocks[AXIS_ALPHA]);
-    _actuator_beta_base->UpdateMovement(&mb->MoveBlocks[AXIS_BETA]);
-    _actuator_delta_base->UpdateMovement(&mb->MoveBlocks[AXIS_GAMMA]);
+    this->AllActuatorsMoveTo(mb);
+    // _actuator_alpha_base->UpdateMovement(&mb->MoveBlocks[AXIS_ALPHA]);
+    // _actuator_beta_base->UpdateMovement(&mb->MoveBlocks[AXIS_BETA]);
+    // _actuator_delta_base->UpdateMovement(&mb->MoveBlocks[AXIS_GAMMA]);
 }
 
 // void MoverBase::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){

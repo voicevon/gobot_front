@@ -15,7 +15,9 @@ class MoverBase{
     public:
         void SpinOnce();
         // virtual void SingleActuatorMoveTo(LineSegment* movement);
-        virtual void SingleActuatorMoveTo(MoveBlock_SingleActuator* move_block);
+        // virtual void SingleActuatorMoveTo(MoveBlock_SingleActuator* move_block);
+        // virtual void AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit);
+        virtual void AllActuatorsMoveTo(MoveBlock* move);
 
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
         virtual void PrintOut(const char* title);
@@ -28,9 +30,8 @@ class MoverBase{
 
         void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
 
-        virtual void AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit);
         virtual void AllActuatorsStop();  // TODO: with flags
-        virtual void SingleActuatorStop(EnumAxis actuator_name);
+        // virtual void SingleActuatorStop(EnumAxis actuator_name);
 
         virtual bool ActuatorIsMoving(EnumAxis actuator_name);
         virtual bool HasArrivedTargetPosition();

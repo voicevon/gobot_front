@@ -24,5 +24,5 @@ void ActuatorBase::RenewSpeed(float moving_time){
         Serial.print("[Debug] ActuatorBase::RenewSpeed() new speed= ");
         Serial.println(speed);
     }
-    this->SetSpeed(speed);
+    // this->SetSpeed(speed);
 }
