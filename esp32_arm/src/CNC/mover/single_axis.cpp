@@ -21,7 +21,7 @@ void Mover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, fl
         // set alpha position
         is_absolute_position = (is_absolute_position_flags & 0x01) > 0;
         // this->_actuator_alpha_base->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
-        LineSegment move;
+        MoveBlock move;
         move.IsAbsTargetPosition = is_absolute_position;
         move.TargetPosition = positions_in_cnc_unit[0];
         // this->_actuator_alpha_base->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
@@ -70,7 +70,7 @@ void Mover_SingleAxis::SingleActuatorStop(EnumAxis actuator_name){
 }
 
 
-void Mover_SingleAxis::SingleActuatorMoveTo(LineSegment* line){
+void Mover_SingleAxis::SingleActuatorMoveTo(MoveBlock* line){
     // if (actuator_name == AXIS_ALPHA){
     if (line->axis == AXIS_ALPHA){
         this->_moving_actuator_flags = 0x01;

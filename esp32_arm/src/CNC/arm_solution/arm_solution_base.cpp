@@ -38,35 +38,6 @@ void ArmSolutionBase::ForceStopMover(){
 }
 
 
-// Check gcode queue, if there is gcode to be run.
-// void ArmSolutionBase::SpinOnce_BaseExit(){
-// 	if (this->State != CncState::IDLE)
-// 		return;
-// 	if (this->_gcode_queue->BufferIsEmpty())
-// 		return;
-
-// 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
-// 	if (message == NULL){
-// 		Serial.println("\n\n\n [Error] ArmSolutionBase::SpinOnce_BaseExit() tail_message is null. \n\n ");
-// 		return;
-// 	}
-
-// 	bool debug = false;
-// 	if (debug){
-// 		Logger::Debug("[Info] ArmSolutionBase::SpinOnce_BaseExit()  Going to run next gcode   ===> ");
-// 		Serial.print(message->payload);
-// 		Serial.println(" ");
-// 	}
-	
-// 	// type convert   from char* to std::string
-// 	char* p = &message->payload[0];
-// 	std::string str = std::string(p);
-// 	// feed std::string to Gcode constructor.
-// 	Gcode gcode = Gcode(str);
-// 	this->RunGcode(&gcode);
-// }
-
-
 
 
 //Can deal with:  home via single actuator.
@@ -99,7 +70,7 @@ void ArmSolutionBase::__HomeSingleAxis(EnumAxis axis){
 	this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
 	this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
 	// this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
-	LineSegment line;
+	MoveBlock line;
 	line.axis = axis;
 	line.IsAbsTargetPosition = false;
 	line.TargetPosition = homing->DistanceToGo;

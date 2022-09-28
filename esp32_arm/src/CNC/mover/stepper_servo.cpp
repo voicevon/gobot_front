@@ -41,7 +41,7 @@ void CncMover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flag
     bool is_absolute_position;
     Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
     uint8_t target_motor_flags = this->_moving_actuator_flags;
-    LineSegment move;
+    MoveBlock move;
 
     // Step1:  Set target motor position. determin absolute or relative.
     if (target_motor_flags == 0x01){
@@ -151,7 +151,7 @@ void CncMover_StepperServo::SingleActuatorStop(EnumAxis actuator_name){
 }
 
 
-void CncMover_StepperServo::SingleActuatorMoveTo(LineSegment* move){
+void CncMover_StepperServo::SingleActuatorMoveTo(MoveBlock* move){
     // if (actuator_name == AXIS_ALPHA){
     if (move->axis == AXIS_ALPHA){
         this->_moving_actuator_flags = 0x01;

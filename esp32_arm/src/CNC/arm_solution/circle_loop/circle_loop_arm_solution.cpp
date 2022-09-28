@@ -79,7 +79,7 @@ void CircleLoop_ArmSolution::RunG1(Gcode* gcode) {
 	this->planner->AppendLineSegment(&line);
 
 	Serial.println("ffffffffffffffffffffffffffffff");
-	this->_mover_base->SingleActuatorMoveTo(&line);   //TODO:  put line to lineSegment queue
+	// this->_mover_base->SingleActuatorMoveTo(&line);   //TODO:  put line to lineSegment queue
 	Serial.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
 	//None blocking, move backgroundly.
 	// uint8_t abs_flag=0x01;

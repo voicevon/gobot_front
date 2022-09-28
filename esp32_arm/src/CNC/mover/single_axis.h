@@ -13,7 +13,7 @@ class Mover_SingleAxis: public MoverBase{
         bool ActuatorIsMoving(EnumAxis actuator) override;
 
         void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;
-        void SingleActuatorMoveTo(LineSegment* movement) override;
+        void SingleActuatorMoveTo(MoveBlock* movement) override;
         void AllActuatorsStop() override;
         void SingleActuatorStop(EnumAxis motor_name) override;
         bool HasArrivedTargetPosition() override;

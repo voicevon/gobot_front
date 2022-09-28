@@ -12,7 +12,7 @@ class ActuatorStepper: public ActuatorBase{
         float GetCurrentPosition() override;
         void SetCurrentPositionAs(float position_in_cnc_unit) override;
         // void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit) override;
-        void UpdateMovement(LineSegment* line) override;
+        void UpdateMovement(MoveBlock* line) override;
 
         float GetAbsDistanceToTarget_InCncUnit() override;
 

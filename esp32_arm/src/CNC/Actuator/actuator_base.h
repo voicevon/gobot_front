@@ -15,7 +15,7 @@ class ActuatorBase{
         virtual float GetCurrentPosition(){return this->_current_cnc_position;};
         virtual void SetCurrentPositionAs(float position_in_cnc_unit);
         // virtual void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit);
-        virtual void UpdateMovement(LineSegment* movement);
+        virtual void UpdateMovement(MoveBlock* movement);
         virtual float GetAbsDistanceToTarget_InCncUnit();
 
         float GetTartetCncPosition(){return this->_target_cnc_position;};

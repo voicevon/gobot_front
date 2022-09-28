@@ -13,8 +13,8 @@
 // TODO:  template <actuator>
 class MoverBase{
     public:
-        virtual void SingleActuatorMoveTo(LineSegment* movement);
-        // virtual void SingleActuatorMoveTo(MoveBlock* move_block);
+        // virtual void SingleActuatorMoveTo(LineSegment* movement);
+        virtual void SingleActuatorMoveTo(MoveBlock* move_block);
 
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
         virtual void PrintOut(const char* title);
