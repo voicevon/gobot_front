@@ -7,9 +7,9 @@
 
 
 //TODO:  want a better name, like  MoveBlockQueueManager ?
-class MoveBlockQueue: public CommonQueue{
+class Queue_MoveBlock: public CommonQueue{
     public:
-        MoveBlockQueue(){this->_Init(88, sizeof(MoveBlock));};
+        Queue_MoveBlock(){this->_Init(88, sizeof(MoveBlock));};
         MoveBlock* FetchTailMoveBlock(){return (MoveBlock*)this->FetchTailObject(); };
         MoveBlock* GetHeadMoveblock() {return (MoveBlock*)this->GetHeadObject(); };
     private:

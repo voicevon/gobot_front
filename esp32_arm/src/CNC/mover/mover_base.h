@@ -4,17 +4,18 @@
 #include <stdint.h>
 #include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
-// #include "MyBoards/cnc_board_base.h"
 #include "CNC/board/cnc_board_base.h"
-
 #include "../Actuator/actuator_base.h"
 
 
 
 
 // TODO:  template <actuator>
-class CncMoverBase{
+class MoverBase{
     public:
+        virtual void SingleActuatorMoveTo(LineSegment* movement);
+        // virtual void SingleActuatorMoveTo(MoveBlock* move_block);
+
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
         virtual void PrintOut(const char* title);
         void SetActuatorSpeed(EnumAxis axis, float speed);  
@@ -26,7 +27,6 @@ class CncMoverBase{
 
         void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
 
-        virtual void SingleActuatorMoveTo(LineSegment* movement);
         virtual void AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit);
         virtual void AllActuatorsStop();  // TODO: with flags
         virtual void SingleActuatorStop(EnumAxis actuator_name);
@@ -35,7 +35,7 @@ class CncMoverBase{
         virtual bool HasArrivedTargetPosition();
         float GetAbsDistanceToTarget_InCncUnit();
 
-        MoveBlockQueue* __moveblock_queue;
+        Queue_MoveBlock* __moveblock_queue;
 
     protected:
         // bool _is_blocked_move;

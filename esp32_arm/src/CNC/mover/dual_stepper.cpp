@@ -1,17 +1,17 @@
 #include "dual_stepper.h"
 
-// void CncMover_DualStepper::Init(CncBoardBase* board){
+// void Mover_DualStepper::Init(CncBoardBase* board){
 //     this->__actuator_alpha = board->GetActuator(AXIS_ALPHA);
 // }
 
-void CncMover_DualStepper::LinkStepper_asAlpha(ActuatorStepper* alpha){
-    Logger::Debug("CncMover_DualStepper::LinkStepper_asAlpha()");
+void Mover_DualStepper::LinkStepper_asAlpha(ActuatorStepper* alpha){
+    Logger::Debug("Mover_DualStepper::LinkStepper_asAlpha()");
     alpha->SetCurrentPositionAs(0);
     alpha->GetLinkedStepper()->setPosition(0);
     this->__actuator_alpha = alpha;
 }
 
-void CncMover_DualStepper::LinkStepper_asBeta(ActuatorStepper* beta){
+void Mover_DualStepper::LinkStepper_asBeta(ActuatorStepper* beta){
     beta->SetCurrentPositionAs(0);
     beta->GetLinkedStepper()->setPosition(0);
     this->__actuator_beta = beta;
@@ -19,7 +19,7 @@ void CncMover_DualStepper::LinkStepper_asBeta(ActuatorStepper* beta){
 #include "MyLibs/calculator.h"
 
 
-void CncMover_DualStepper::SetEefSpeed(float speed){
+void Mover_DualStepper::SetEefSpeed(float speed){
     //TODO:  set eef speed, not actuator speed
     if (this->_moving_actuator_flags == 0x01){
         //speed is for alpha
@@ -32,14 +32,14 @@ void CncMover_DualStepper::SetEefSpeed(float speed){
         this->__actuator_alpha->SetSpeed(speed);
         this->__actuator_beta->SetSpeed(speed);
     }else{
-        Serial.print("[Warn] CncMover_DualStepper::SetSpeed() Unknown flag = ");
+        Serial.print("[Warn] Mover_DualStepper::SetSpeed() Unknown flag = ");
         Serial.println(this->_moving_actuator_flags);
     }
 }
 
 // alpha = flags.bits[0]
 // beta = flags.bits[1]
-void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
+void Mover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
     bool is_absolute_position;
     Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
     Stepper* beta = this->__actuator_beta->GetLinkedStepper();
@@ -94,18 +94,18 @@ void CncMover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags
         // this->__actuator_beta->StartToMove();
 
     }else{
-        Logger::Error("CncMover_DualStepper::AllMotorsMoveTo()");
+        Logger::Error("Mover_DualStepper::AllMotorsMoveTo()");
         Logger::Print("target_motor_flags", target_motor_flags);
     }
     this->_moving_actuator_flags = target_motor_flags;
 }
 
-void CncMover_DualStepper::AllActuatorsStop(){
+void Mover_DualStepper::AllActuatorsStop(){
     this->__stepControl->stop();
     this->__actuator_beta->UpdateTargetPositionFromCurrent();
 }
 
-void CncMover_DualStepper::SingleActuatorStop(EnumAxis actuator_name){
+void Mover_DualStepper::SingleActuatorStop(EnumAxis actuator_name){
     if (actuator_name == AXIS_ALPHA){
         this->__actuator_alpha->UpdateTargetPositionFromCurrent();
         this->_moving_actuator_flags -= 0x01;
@@ -114,14 +114,14 @@ void CncMover_DualStepper::SingleActuatorStop(EnumAxis actuator_name){
         this->__actuator_beta->UpdateTargetPositionFromCurrent();
         this->_moving_actuator_flags -= 0x02;
     }else{
-        Serial.print("[Error] CncMover_DualStepper::SingleMotorStop() Unknown actuator_name= ");
+        Serial.print("[Error] Mover_DualStepper::SingleMotorStop() Unknown actuator_name= ");
         Serial.println(actuator_name);
     }
 }
 
 
-// void CncMover_DualStepper::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
-void CncMover_DualStepper::SingleActuatorMoveTo(LineSegment* move){
+// void Mover_DualStepper::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
+void Mover_DualStepper::SingleActuatorMoveTo(LineSegment* move){
     Stepper* stepper;
     // if (actuator_name == AXIS_ALPHA){
     if (move->axis == AXIS_ALPHA){
@@ -144,7 +144,7 @@ void CncMover_DualStepper::SingleActuatorMoveTo(LineSegment* move){
         this->_moving_actuator_flags = 0x02;
 
     }else{
-        Logger::Halt ("CncMover_DualStepper::SingleMotorMoveTo() axisname= " );
+        Logger::Halt ("Mover_DualStepper::SingleMotorMoveTo() axisname= " );
 
     }
     this->__stepControl->moveAsync(*stepper);
@@ -155,7 +155,7 @@ void CncMover_DualStepper::SingleActuatorMoveTo(LineSegment* move){
 
 
 
-// float CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit(){
+// float Mover_DualStepper::GetAbsDistanceToTarget_InCncUnit(){
 //     float alpha_distance = 0;
 //     if((this->_moving_actuator_flags & 0x01) > 0){
 //        alpha_distance = this->__actuator_alpha->GetAbsDistanceToTarget_InCncUnit();
@@ -166,7 +166,7 @@ void CncMover_DualStepper::SingleActuatorMoveTo(LineSegment* move){
 //     }
 //     bool debug= false;
 //     if(debug){
-//         Serial.print("[Debug] CncMover_DualStepper::GetAbsDistanceToTarget_InCncUnit() alpha = ");
+//         Serial.print("[Debug] Mover_DualStepper::GetAbsDistanceToTarget_InCncUnit() alpha = ");
 //         Serial.print(alpha_distance);
 //         Serial.print("  beta = ");
 //         Serial.println(beta_distance);
@@ -174,31 +174,31 @@ void CncMover_DualStepper::SingleActuatorMoveTo(LineSegment* move){
 //     return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
 // }
 
-// void CncMover_DualStepper::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
+// void Mover_DualStepper::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
 //     if (actuator_name ==AXIS_ALPHA){
 //         this->__actuator_alpha->SetSpeed(steps_per_second);
 //     }else if(actuator_name == AXIS_BETA){
 //         this->__actuator_beta->SetSpeed(steps_per_second);
 //     }else{
-//         Serial.println("[Error] CncMover_DualStepper::SetActuatorSpeed() ");
+//         Serial.println("[Error] Mover_DualStepper::SetActuatorSpeed() ");
 //     }
 // }
 
 
 
-bool CncMover_DualStepper::ActuatorIsMoving(EnumAxis actuator_name) {
+bool Mover_DualStepper::ActuatorIsMoving(EnumAxis actuator_name) {
     if (actuator_name==AXIS_ALPHA){
         return this->__stepControl->isRunning();
     }else if (actuator_name==AXIS_BETA){
         return this->__stepControl->isRunning();
     }else{
-        Serial.print("[Error] CncMover_DualStepper::MotorIsMoving() Unknown motor_name= ");
+        Serial.print("[Error] Mover_DualStepper::MotorIsMoving() Unknown motor_name= ");
         Serial.println(actuator_name); 
     }
     return false;
 }
 
-void CncMover_DualStepper::PrintOut(const char* title){
+void Mover_DualStepper::PrintOut(const char* title){
     Logger::Info(title);
     Serial.print("moving_flags= ");
     Serial.println(this->_moving_actuator_flags);

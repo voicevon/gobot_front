@@ -3,14 +3,12 @@
 #include "Robot/eef/eef_standard_code.h"
 #include "CNC/gcode/gcode_consumer.h"
 #include "CNC/board/cnc_board_base.h"
-
 #include "kinematic_config.h"
 #include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
-#include "../mover/cnc_mover_base.h"
+#include "../mover/mover_base.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
-// #include "CNC/gcode/line_segment_queue.h"
 #include "CNC/planner/planner.h"
 
 enum class CncState{
@@ -58,7 +56,7 @@ class ArmSolutionBase{
 
         bool is_absolute_position = true;
         
-        CncMoverBase* _mover_base;   //???
+        MoverBase* _mover_base;   //???
         // LineSegmentQueue* _line_segment_queue;
 
 

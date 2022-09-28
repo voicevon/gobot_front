@@ -9,9 +9,8 @@
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "CNC/mover/cnc_mover_base.h"
+#include "CNC/mover/mover_base.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
-// #include "CNC/gcode/line_segment.h"
 
 enum class RobotState{
     IDLE,

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "cnc_mover_base.h"
+#include "mover_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 
-class CncMover_DualStepper: public CncMoverBase{
+class Mover_DualStepper: public MoverBase{
     public:
-        // CncMover_DualStepper(){};
+        // Mover_DualStepper(){};
         // void Init(CncBoardBase* board) override;
         void LinkStepper_asAlpha(ActuatorStepper* stepper);
         void LinkStepper_asBeta(ActuatorStepper* stepper);

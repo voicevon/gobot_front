@@ -1,13 +1,13 @@
 #pragma once
 
-#include "cnc_mover_base.h"
+#include "mover_base.h"
 #include "../Actuator/actuator_base.h"
 #include "CNC/planner/planner.h"
 
 
 
 
-class CncMover_SingleAxis: public CncMoverBase{
+class Mover_SingleAxis: public MoverBase{
     public:
         void SetEefSpeed(float speed) override;
         bool ActuatorIsMoving(EnumAxis actuator) override;

@@ -26,7 +26,7 @@ class Board_GobotHouse: public CncBoardBase{
         Stepper stepper_driver_beta = Stepper(PIN_BETA_STEP_2109,PIN_BETA_DIR_2109);
         ActuatorStepper alpha_stepper;
         ActuatorStepper beta_stepper;
-        // CncMover_DualStepper mover_StepperServo;
+        // Mover_DualStepper mover_StepperServo;
         // GobotHouse_CncSolotuionConfig_2205 __cnc_mechanic;
 
         PositionTrigger homer_alpha = PositionTrigger(PIN_HOME_ALHPA_2109, LOW);

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "cnc_mover_base.h"
+#include "mover_base.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "CNC/Actuator/servo/actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
-class CncMover_StepperServo: public CncMoverBase{
+class CncMover_StepperServo: public MoverBase{
     public:
         void LinkStepControl(StepControl* stepControl){this->__stepControl=stepControl;};
         void LinkStepper_asAlpha(ActuatorStepper* stepper);

@@ -17,7 +17,7 @@ class VscRobot: public RobotBase{
         Planner __planner;
         Vsc_CncMover __mover;
         MoveBlock __all_move_blocks[88]; 
-        MoveBlockQueue __queue_move_block;
+        Queue_MoveBlock __queue_move_block;
         // MoveBlock* __all_move_blocks_pointer[88];
 
 

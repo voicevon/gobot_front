@@ -1,18 +1,18 @@
 #include "single_axis.h"
 #include "MyLibs/calculator.h"
 
-void CncMover_SingleAxis::SetEefSpeed(float speed){
+void Mover_SingleAxis::SetEefSpeed(float speed){
     if (this->_moving_actuator_flags == 0x01){
         //speed is for alpha
         this->_actuator_alpha_base->SetSpeed(speed);
     }else{
-        Serial.print("[Warn] CncMover_SingleAxis::SetSpeed() Unknown flag = ");
+        Serial.print("[Warn] Mover_SingleAxis::SetSpeed() Unknown flag = ");
         Serial.println(this->_moving_actuator_flags);
     }
 }
 
 // alpha = flags.bits[0]
-void CncMover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
+void Mover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
     bool is_absolute_position;
     uint8_t target_motor_flags = this->_moving_actuator_flags;
 
@@ -27,7 +27,7 @@ void CncMover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags,
         // this->_actuator_alpha_base->SetTargetPositionTo(is_absolute_position, positions_in_cnc_unit[0]);
         this->_actuator_alpha_base->UpdateMovement(&move);
     }else{
-        Logger::Error("CncMover_SingleAxis::AllActuatorsMoveTo()");
+        Logger::Error("Mover_SingleAxis::AllActuatorsMoveTo()");
         Logger::Print("target_motor_flags", target_motor_flags);
         
     }
@@ -40,7 +40,7 @@ void CncMover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags,
         
         bool debug = true;
         if(debug){
-            Logger::Debug("CncMover_SingleAxis::AllActuatorsMoveTo()");
+            Logger::Debug("Mover_SingleAxis::AllActuatorsMoveTo()");
             // Logger::Print("alpha_time", alpatim)
             // Serial.print(alpha_time_in_second);
             // Serial.print( "->" );
@@ -53,47 +53,47 @@ void CncMover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags,
         
 
     }else{
-        Serial.print("[Error] CncMover_SingleAxis::AllMotorsMoveTo()  target_motor_flags= ");
+        Serial.print("[Error] Mover_SingleAxis::AllMotorsMoveTo()  target_motor_flags= ");
         Serial.println(target_motor_flags);
     }
     this->_moving_actuator_flags = target_motor_flags;
 }
 
-void CncMover_SingleAxis::AllActuatorsStop(){
+void Mover_SingleAxis::AllActuatorsStop(){
     this->_actuator_alpha_base->ForceStop();
     this->_actuator_alpha_base->UpdateTargetPositionFromCurrent();
     
 }
 
-void CncMover_SingleAxis::SingleActuatorStop(EnumAxis actuator_name){
+void Mover_SingleAxis::SingleActuatorStop(EnumAxis actuator_name){
     this->_actuator_alpha_base->UpdateTargetPositionFromCurrent();
 }
 
 
-void CncMover_SingleAxis::SingleActuatorMoveTo(LineSegment* line){
+void Mover_SingleAxis::SingleActuatorMoveTo(LineSegment* line){
     // if (actuator_name == AXIS_ALPHA){
     if (line->axis == AXIS_ALPHA){
         this->_moving_actuator_flags = 0x01;
         this->_actuator_alpha_base->UpdateMovement(line);
         
     }else{
-        log_w("CncMover_SingleAxis::SingleMotorMoveTo() axisname= ", actuator_name );
+        log_w("Mover_SingleAxis::SingleMotorMoveTo() axisname= ", actuator_name );
     }
 }
 
 
-bool CncMover_SingleAxis::ActuatorIsMoving(EnumAxis actuator_name) {
+bool Mover_SingleAxis::ActuatorIsMoving(EnumAxis actuator_name) {
     if (actuator_name==AXIS_ALPHA){
         // return this->_actuator_alpha_base->IsMoving();
 
     }else{
-        Serial.print("[Error] CncMover_SingleAxis::MotorIsMoving() Unknown motor_name= ");
+        Serial.print("[Error] Mover_SingleAxis::MotorIsMoving() Unknown motor_name= ");
         Serial.println(actuator_name); 
     }
     return false;
 }
 
-bool CncMover_SingleAxis::HasArrivedTargetPosition(){
+bool Mover_SingleAxis::HasArrivedTargetPosition(){
     if (this->GetAbsDistanceToTarget_InCncUnit() < this->_small_distance_for_arriving_target_position)
         return true;
     return false;
