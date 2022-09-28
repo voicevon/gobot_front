@@ -7,15 +7,16 @@ void VscRobot::Init(Vsc_Board* board){
 
     //  queue_move_block involved.
     this->__queue_move_block._all_queue_ables = (Queue_able*)this->__all_move_blocks;
-    this->__planner.__queue_move_block = &this->__queue_move_block;
-    this->__mover.__queue_move_block = &this->__queue_move_block;
-    
+    arm_solution.__queue_move_block = &this->__queue_move_block;    //todo:  LinkAsProducer()
+    this->__mover.__queue_move_block = &this->__queue_move_block;   //todo:  LinkAsConsumer()
+    this->__planner.__arm_solution = &arm_solution;
     this->__mover.Init(board);
 
-    this->arm_solution.Init(board);
-    this->arm_solution.planner = &this->__planner;
-    this->arm_solution._mover_base = &this->__mover;
-    this->_arm_solution = &this->arm_solution;    
+    arm_solution.Init(board);
+    // this->arm_solution.planner = &this->__planner;
+    arm_solution._mover_base = &this->__mover;
+    this->_arm_solution = &this->arm_solution;  
+
 
     Logger::Info("Vsc_ArmSoution::Init() Pid controller.");
     //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'

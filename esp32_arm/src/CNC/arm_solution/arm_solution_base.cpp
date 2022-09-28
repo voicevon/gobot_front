@@ -8,6 +8,20 @@ void ArmSolutionBase::SayHello(){
 	Serial.println("[Debug] ArmSolutionBase::SayHello()");
 }
 
+
+void ArmSolutionBase::__CutLineSegment_ToMoveBlocks_to_queue(LineSegment* line){
+	//TODO:  This is a virtual function.
+	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	mb->axis = line->axis;
+	mb->IsAbsTargetPosition = line->IsAbsTargetPosition;
+	mb->TargetPosition = line->TargetPosition;
+	mb->Speed = line->Speed;
+	mb->Acceleration = line->Acceleration;
+	this->__queue_move_block->ForwardHead();
+}
+
+
+
 void ArmSolutionBase::SpinOnce(){
 	// Logger::Debug("ArmSolutionBase::SpinOnce()");
 	// Logger::Print("this->State", this->State);

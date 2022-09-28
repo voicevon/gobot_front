@@ -76,7 +76,7 @@ void CircleLoop_ArmSolution::RunG1(Gcode* gcode) {
 	line.IsAbsTargetPosition = true;
 	line.TargetPosition = target_ik_a.alpha;
 
-	this->planner->AppendLineSegment(&line);
+	this->__CutLineSegment_ToMoveBlocks_to_queue(&line);
 
 	
 	// this->_mover_base->SingleActuatorMoveTo(&line);   //DOING:  put line to lineSegment queue

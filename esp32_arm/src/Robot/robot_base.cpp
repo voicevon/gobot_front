@@ -51,6 +51,7 @@ void RobotBase::__TryNextGmCode_FromQueue(){
 	Gcode gcode = Gcode(str);
 	Logger::Debug("RobotBase::__TryNextGmCode_FromQueue() has got command string ");
 	Serial.println(str.c_str());
+	
 	this->RunGcode(&gcode);
 }
 
@@ -147,12 +148,12 @@ void RobotBase::RunM84(){
 	}
 }
 void RobotBase::RunGcode(Gcode* gcode){
+	Logger::Debug("RobotBase::RunGcode() is entering.");
 	std::string result;
-	if (!this->_arm_solution->planner->IsPlanable())
+	if (!this->__planner.IsPlanable())
 		return;   // todo:   return false
 
 	bool debug = false;
-	Logger::Debug("RobotBase::RunGcode()");
 	Logger::Print("gcode_command", gcode->get_command());
 
 	if(gcode->has_g){

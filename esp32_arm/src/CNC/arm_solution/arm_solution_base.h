@@ -1,15 +1,16 @@
 #pragma once
 
-#include "Robot/eef/eef_standard_code.h"
-#include "CNC/gcode/gcode_consumer.h"
 #include "CNC/board/cnc_board_base.h"
 #include "kinematic_config.h"
-#include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
-#include "../mover/mover_base.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
-#include "CNC/planner/planner.h"
+// #include "CNC/planner/planner.h"
+
+#include "Robot/eef/eef_standard_code.h"
+#include "CNC/gcode/gcode_consumer.h"
+#include "../mover/mover_base.h"
+#include "CNC/arm_solution/axis_homer/axis_homer.h"
 
 enum class CncState{
     IDLE,
@@ -23,7 +24,7 @@ class ArmSolutionBase{
         CncState State = CncState::IDLE;
         void SpinOnce();
 
-        void RunGcode(Gcode* gcode);
+        void RunGcode(Gcode* gcode);  //todo:  rename to RunMovement(),  CncMoveTo()
         void RunG28(EnumAxis axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
         virtual float GetDistanceToTarget_FK();
@@ -33,11 +34,13 @@ class ArmSolutionBase{
         virtual EnumAxis ConvertToEnum(char axis);
         void ForceStopMover();
         CncBoardBase* _cnc_board;
-        Planner* planner;
+        // Planner* planner;
         MoverBase* _mover_base;   // Should this be here?
+        Queue_MoveBlock* __queue_move_block;
 
         
     protected:
+        void __CutLineSegment_ToMoveBlocks_to_queue(LineSegment* line);
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
         virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.

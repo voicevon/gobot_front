@@ -11,6 +11,7 @@
 #include "CNC/coordinate/cnc_axis.h"
 #include "CNC/mover/mover_base.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
+#include "CNC/planner/planner.h"
 
 enum class RobotState{
     IDLE,
