@@ -63,7 +63,7 @@ void CircleLoop_ArmSolution::__CutLineSegment_ToMoveBlocks_to_queue(LineSegment*
 
 // void CircleLoop_ArmSolution::RunG1(Gcode* gcode) {
 bool CircleLoop_ArmSolution::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
-	Logger::Debug("CircleLoop_ArmSolution::RunG1() is entering");
+	Logger::Debug("CircleLoop_ArmSolution::RunG1()");
 	Logger::Print("G1 ", gcode->get_command());
 	Logger::Print("this->AXIS", this->_AXIS);
 	// LineSegment line;
@@ -90,7 +90,7 @@ bool CircleLoop_ArmSolution::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* 
 	line->IsAbsTargetPosition = true;
 	line->TargetPosition = &this->__target_fk_position;
 
-	this->__CutLineSegment_ToMoveBlocks_to_queue(line);
+	// this->__CutLineSegment_ToMoveBlocks_to_queue(line);
 
 	
 	// this->_mover_base->SingleActuatorMoveTo(&line);   //DOING:  put line to lineSegment queue
@@ -99,9 +99,9 @@ bool CircleLoop_ArmSolution::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* 
 	// this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
 	bool debug = true;
 	if (debug){
-		Logger::Print("CircleLoop_ArmSolution::RunG1() point", 6);
+		Logger::Print("CircleLoop_ArmSolution::_ConvertG1ToLineSegment() point", 6);
 		// this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
-		Logger::Print("CircleLoop_ArmSolution::RunG1() point", 7);
+		Logger::Print("CircleLoop_ArmSolution::_ConvertG1ToLineSegment() point", 7);
 
 		Logger::Print("from", this->__current_fk_position.A);
 		Logger::Print("to", target_ik_a.alpha);

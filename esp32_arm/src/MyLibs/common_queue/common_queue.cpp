@@ -5,6 +5,9 @@
 
 
 bool CommonQueue::AppendObject(Queue_able* new_object){
+    Logger::Debug("CommonQueue::AppendObject()");
+    Logger::Print("head old", this->_head);
+    Logger::Print("tail", this->_tail);
     int next_head = this->__get_pointer_next_index(this->_head);
     if(next_head == this->_tail){
         Serial.print(FORE_YELLOW);
@@ -17,6 +20,7 @@ bool CommonQueue::AppendObject(Queue_able* new_object){
     new_object->DeepCopyTo((Queue_able*) (this->_all_queue_ables + this->_head * this->_sizeof_item));
 
     this->_head = next_head;
+    Logger::Print("head new", this->_head);
     next_head = this->__get_pointer_next_index(this->_head);
     if (next_head == this->_tail)
         // buffer is full, after copying.
@@ -25,6 +29,9 @@ bool CommonQueue::AppendObject(Queue_able* new_object){
     return false;  
 }
 bool CommonQueue::ForwardHead(){
+    Logger::Debug("ommonQueue::ForwardHead()");
+    Logger::Print("head old", this->_head);
+    Logger::Print("tail", this->_tail);
     int next_head = this->__get_pointer_next_index(this->_head);
     if(next_head == this->_tail){
         Serial.print(FORE_YELLOW);
@@ -37,6 +44,7 @@ bool CommonQueue::ForwardHead(){
     // new_object->DeepCopyTo((Queue_able*) (this->_all_queue_ables + this->_head * this->_sizeof_item));
 
     this->_head = next_head;
+    Logger::Print("head new", this->_head);
     next_head = this->__get_pointer_next_index(this->_head);
     if (next_head == this->_tail)
         // buffer is full, after copying.

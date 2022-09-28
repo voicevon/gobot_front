@@ -15,7 +15,7 @@ bool Planner::IsPlanable(){
 }
 
 
-//TODO:  Arm solution will help a lot of translation/transforming.
+//Doing:  Arm solution will help a lot of translation/transforming.
 //  Convert FK line_segment to IK move_block.
 void Planner::AppendLineSegment(LineSegment* line){
     //Translate LineSegment To MoveBlocks, and insert to move_block_queue.

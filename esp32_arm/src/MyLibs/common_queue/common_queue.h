@@ -37,12 +37,12 @@ class CommonQueue{
         // virtual Queue_able* GetSubClass();
         int _head = 0;
         int _tail = 0;
-        int _sizeof_item;
         void _Init(int items_count, int sizeof_item){this->__MESSAGE_COUNT_IN_QUEUE = items_count; this->_sizeof_item=sizeof_item;};
 
     private:
         int __get_pointer_next_index(int current_index);
         int __get_pointer_previous_index(int current_index);
         int __MESSAGE_COUNT_IN_QUEUE=0;
+        int _sizeof_item;
 
 };
