@@ -18,22 +18,22 @@ void CncMover_StepperServo::PrintOut(const char* title) {
 
 #include "MyLibs/calculator.h"
 
-void CncMover_StepperServo::SetEefSpeed(float speed){
-    if (this->_moving_actuator_flags == 0x01){
-        //speed is for alpha
-        this->__actuator_alpha->SetSpeed(speed);
-    }else if (this->_moving_actuator_flags == 0x02){
-        //spped is for beta
-        this->__actuator_beta->SetSpeed(speed);
-    }else if (this->_moving_actuator_flags == 0x03){
-        //speed is for both.   TODO:  speed = alpha * alpha + beta * beta;
-        this->__actuator_alpha->SetSpeed(speed);
-        this->__actuator_beta->SetSpeed(speed);
-    }else{
-        Serial.print("[Warn] CncMover_StepperServo::SetSpeed() Unknown flag = ");
-        Serial.println(this->_moving_actuator_flags);
-    }
-}
+// void CncMover_StepperServo::SetEefSpeed(float speed){
+//     if (this->_moving_actuator_flags == 0x01){
+//         //speed is for alpha
+//         this->__actuator_alpha->SetSpeed(speed);
+//     }else if (this->_moving_actuator_flags == 0x02){
+//         //spped is for beta
+//         this->__actuator_beta->SetSpeed(speed);
+//     }else if (this->_moving_actuator_flags == 0x03){
+//         //speed is for both.   TODO:  speed = alpha * alpha + beta * beta;
+//         this->__actuator_alpha->SetSpeed(speed);
+//         this->__actuator_beta->SetSpeed(speed);
+//     }else{
+//         Serial.print("[Warn] CncMover_StepperServo::SetSpeed() Unknown flag = ");
+//         Serial.println(this->_moving_actuator_flags);
+//     }
+// }
 
 // alpha = flags.bits[0]
 // beta = flags.bits[1]

@@ -8,12 +8,12 @@ void ArmSolutionBase::SayHello(){
 	Serial.println("[Debug] ArmSolutionBase::SayHello()");
 }
 
-
-
-
-
-
 void ArmSolutionBase::SpinOnce(){
+	// Nothing need to do.
+	return;
+
+
+	
 	// Logger::Debug("ArmSolutionBase::SpinOnce()");
 	// Logger::Print("this->State", this->State);
 	switch (this->State){
@@ -31,6 +31,7 @@ void ArmSolutionBase::SpinOnce(){
 		break;
 	default:
 		Logger::Warn("ArmSolutionBase::SpinOnce() Unknown current state: ");
+		// Serial.println(this->State);
 		break;
 	}
 

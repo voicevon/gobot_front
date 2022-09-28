@@ -2,27 +2,35 @@
 
 
 // bool MotorIsMoving(char moto_name);
+void MoverBase::SpinOnce(){
+    // Logger::Debug("MoverBase::SpinOnce()");
+    if (this->__queue_move_block->BufferIsEmpty()) return;
 
-
-void MoverBase::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
-    if (actuator_name ==AXIS_ALPHA){
-        this->_actuator_alpha_base->SetSpeed(steps_per_second);
-    }else if(actuator_name == AXIS_BETA){
-        this->_actuator_beta_base->SetSpeed(steps_per_second);
-    }else{
-        Logger::Halt("MoverBase::SetActuatorSpeed() ");
-    }
+    MoveBlock* mb = this->__queue_move_block->FetchTailMoveBlock();
+    _actuator_alpha_base->UpdateMovement(&mb->MoveBlocks[AXIS_ALPHA]);
+    _actuator_beta_base->UpdateMovement(&mb->MoveBlocks[AXIS_BETA]);
+    _actuator_delta_base->UpdateMovement(&mb->MoveBlocks[AXIS_GAMMA]);
 }
 
-void MoverBase::SetActuatorAcceleration(EnumAxis axis, float accelleration){
-    if (axis ==AXIS_ALPHA){
-        this->_actuator_alpha_base->SetAccelleration(accelleration);
-    }else if(axis == AXIS_BETA){
-        this->_actuator_beta_base->SetAccelleration(accelleration);
-    }else{
-        Logger::Halt("Mover_DualStepper::SetActuatorSpeed() ");
-    }
-}
+// void MoverBase::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
+//     if (actuator_name ==AXIS_ALPHA){
+//         this->_actuator_alpha_base->SetSpeed(steps_per_second);
+//     }else if(actuator_name == AXIS_BETA){
+//         this->_actuator_beta_base->SetSpeed(steps_per_second);
+//     }else{
+//         Logger::Halt("MoverBase::SetActuatorSpeed() ");
+//     }
+// }
+
+// void MoverBase::SetActuatorAcceleration(EnumAxis axis, float accelleration){
+//     if (axis ==AXIS_ALPHA){
+//         this->_actuator_alpha_base->SetAccelleration(accelleration);
+//     }else if(axis == AXIS_BETA){
+//         this->_actuator_beta_base->SetAccelleration(accelleration);
+//     }else{
+//         Logger::Halt("Mover_DualStepper::SetActuatorSpeed() ");
+//     }
+// }
 
 void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position){
     if (actuator_name == AXIS_ALPHA){

@@ -15,7 +15,7 @@ class Mover_DualStepper: public MoverBase{
         void PrintOut(const char* title) override;
 
         
-        void SetEefSpeed(float speed) override;
+        // void SetEefSpeed(float speed) override;
         // float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;
         // float GetAbsDistanceToTarget_InCncUnit() override;
         // void SetActuatorSpeed(EnumAxis actuator_name, float rad_per_second) override;

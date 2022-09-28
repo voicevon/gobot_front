@@ -51,9 +51,10 @@ class RobotBase: public GcodeConsumer{
         
         CncBoardBase* _cnc_board;  //!!!!
         ArmSolutionBase* _arm_solution;
+        MoverBase* _mover;
 
     private:
-        void __TryNextGmCode_FromQueue();
+        // void __TryNextGmCode_FromQueue();
 
         int test_int;
         RobotEefBase* __eef;

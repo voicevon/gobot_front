@@ -9,7 +9,7 @@
 
 class Mover_SingleAxis: public MoverBase{
     public:
-        void SetEefSpeed(float speed) override;
+        // void SetEefSpeed(float speed) override;
         bool ActuatorIsMoving(EnumAxis actuator) override;
 
         void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;

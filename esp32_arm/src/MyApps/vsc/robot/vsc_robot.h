@@ -17,7 +17,7 @@ class VscRobot: public RobotBase{
 
         MoveBlock __all_move_blocks[88]; 
 
-        Vsc_CncMover __mover;
+        Vsc_CncMover mover;
         Vsc_ArmSoution arm_solution;
 
 };

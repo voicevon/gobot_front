@@ -13,17 +13,18 @@
 // TODO:  template <actuator>
 class MoverBase{
     public:
+        void SpinOnce();
         // virtual void SingleActuatorMoveTo(LineSegment* movement);
         virtual void SingleActuatorMoveTo(MoveBlock_SingleActuator* move_block);
 
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
         virtual void PrintOut(const char* title);
-        void SetActuatorSpeed(EnumAxis axis, float speed);  
-        void SetActuatorAcceleration(EnumAxis axis, float accelleration);
+        // void SetActuatorSpeed(EnumAxis axis, float speed);  
+        // void SetActuatorAcceleration(EnumAxis axis, float accelleration);
         void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position);
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name);  // TODO: return  all current position.
 
-        virtual void SetEefSpeed(float speed);
+        // virtual void SetEefSpeed(float speed);
 
         void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
 

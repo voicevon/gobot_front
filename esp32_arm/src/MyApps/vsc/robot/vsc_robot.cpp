@@ -5,12 +5,14 @@ void VscRobot::Init(Vsc_Board* board){
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());
 
+    
+    this->_mover = &mover;
     //  queue_move_block involved.
     this->__queue_move_block._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     arm_solution.__queue_move_block = &this->__queue_move_block;    //todo:  LinkAsProducer()
-    this->__mover.__queue_move_block = &this->__queue_move_block;   //todo:  LinkAsConsumer()
+    mover.__queue_move_block = &this->__queue_move_block;   //todo:  LinkAsConsumer()
     this->__planner.__arm_solution = &arm_solution;
-    this->__mover.Init(board);
+    mover.Init(board);
 
     arm_solution.Init(board);
     // this->arm_solution.planner = &this->__planner;

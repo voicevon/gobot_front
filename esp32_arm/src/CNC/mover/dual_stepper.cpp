@@ -19,23 +19,23 @@ void Mover_DualStepper::LinkStepper_asBeta(ActuatorStepper* beta){
 #include "MyLibs/calculator.h"
 
 
-void Mover_DualStepper::SetEefSpeed(float speed){
-    //TODO:  set eef speed, not actuator speed
-    if (this->_moving_actuator_flags == 0x01){
-        //speed is for alpha
-        this->__actuator_alpha->SetSpeed(speed);
-    }else if (this->_moving_actuator_flags == 0x02){
-        //spped is for beta
-        this->__actuator_beta->SetSpeed(speed);
-    }else if (this->_moving_actuator_flags == 0x03){
-        //speed is for both.   TODO:  speed = alpha * alpha + beta * beta;
-        this->__actuator_alpha->SetSpeed(speed);
-        this->__actuator_beta->SetSpeed(speed);
-    }else{
-        Serial.print("[Warn] Mover_DualStepper::SetSpeed() Unknown flag = ");
-        Serial.println(this->_moving_actuator_flags);
-    }
-}
+// void Mover_DualStepper::SetEefSpeed(float speed){
+//     //TODO:  set eef speed, not actuator speed
+//     if (this->_moving_actuator_flags == 0x01){
+//         //speed is for alpha
+//         this->__actuator_alpha->SetSpeed(speed);
+//     }else if (this->_moving_actuator_flags == 0x02){
+//         //spped is for beta
+//         this->__actuator_beta->SetSpeed(speed);
+//     }else if (this->_moving_actuator_flags == 0x03){
+//         //speed is for both.   TODO:  speed = alpha * alpha + beta * beta;
+//         this->__actuator_alpha->SetSpeed(speed);
+//         this->__actuator_beta->SetSpeed(speed);
+//     }else{
+//         Serial.print("[Warn] Mover_DualStepper::SetSpeed() Unknown flag = ");
+//         Serial.println(this->_moving_actuator_flags);
+//     }
+// }
 
 // alpha = flags.bits[0]
 // beta = flags.bits[1]

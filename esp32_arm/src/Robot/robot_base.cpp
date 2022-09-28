@@ -7,30 +7,14 @@
 
 void RobotBase::SpinOnce(){
 	// Logger::Debug("RobotBase::SpinOnce()");
-	// Logger::Print("this->State", this->State);  // TODO:  Fix this bug.
-	this->_arm_solution->SpinOnce();
-	// Logger::Print("RobotBase::SpinOnce() point", 1);
-	if (this->_arm_solution->State == CncState::IDLE){
-		// Logger::Print("RobotBase::SpinOnce() point", 2);
-		this->__TryNextGmCode_FromQueue();
-		// Logger::Print("RobotBase::SpinOnce() point", 3);
-	}
-	// Logger::Print("RobotBase::SpinOnce() point", 4);
-		
-
-	// if (this->State == RobotState::IDLE){
-	// 	this->__TryNextGmCode_FromQueue();
-	// }else{
-	// 	Logger::Debug("CncState::RUNNING_G28");
-	// 	this->_running_G28();
-	// }
-}
-
-// Check gcode queue, if there is gcode to be run.
-void RobotBase::__TryNextGmCode_FromQueue(){
+	this->_mover->SpinOnce();
 	if (this->_gcode_queue->BufferIsEmpty())
 		return;
+	if (!this->__planner.IsPlanable())
+		return;
+	// Logger::Print("RobotBase::SpinOnce() point", 1);
 
+	// Check gcode queue, if there is gcode to be run.
 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
 	if (message == NULL){
 		Logger::Error("\n\n\n [Error] RobotBase::__TryNextGmCode_FromQueue() tail_message is null. \n\n ");
@@ -53,7 +37,11 @@ void RobotBase::__TryNextGmCode_FromQueue(){
 	Serial.println(str.c_str());
 	
 	this->RunGcode(&gcode);
+	// Logger::Print("RobotBase::SpinOnce() point", 3);
+	// Logger::Print("RobotBase::SpinOnce() point", 4);
+
 }
+
 
 
 //Can deal with:  home via single actuator.
@@ -150,8 +138,6 @@ void RobotBase::RunM84(){
 void RobotBase::RunGcode(Gcode* gcode){
 	Logger::Debug("RobotBase::RunGcode() is entering.");
 	std::string result;
-	if (!this->__planner.IsPlanable())
-		return;   // todo:   return false
 
 	bool debug = false;
 	Logger::Print("gcode_command", gcode->get_command());

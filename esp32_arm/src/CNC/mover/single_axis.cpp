@@ -1,15 +1,15 @@
 #include "single_axis.h"
 #include "MyLibs/calculator.h"
 
-void Mover_SingleAxis::SetEefSpeed(float speed){
-    if (this->_moving_actuator_flags == 0x01){
-        //speed is for alpha
-        this->_actuator_alpha_base->SetSpeed(speed);
-    }else{
-        Serial.print("[Warn] Mover_SingleAxis::SetSpeed() Unknown flag = ");
-        Serial.println(this->_moving_actuator_flags);
-    }
-}
+// void Mover_SingleAxis::SetEefSpeed(float speed){
+//     if (this->_moving_actuator_flags == 0x01){
+//         //speed is for alpha
+//         this->_actuator_alpha_base->SetSpeed(speed);
+//     }else{
+//         Serial.print("[Warn] Mover_SingleAxis::SetSpeed() Unknown flag = ");
+//         Serial.println(this->_moving_actuator_flags);
+//     }
+// }
 
 // alpha = flags.bits[0]
 void Mover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
