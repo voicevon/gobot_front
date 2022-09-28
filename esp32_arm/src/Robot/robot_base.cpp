@@ -8,22 +8,28 @@
 void RobotBase::SpinOnce(){
 	// Logger::Debug("RobotBase::SpinOnce()");
 	this->_mover->SpinOnce();
-	if (this->_gcode_queue->BufferIsEmpty())
-		return;
-	if (!this->__planner.IsPlanable())
-		return;
 	// Logger::Print("RobotBase::SpinOnce() point", 1);
+	if (this->_gcode_queue->BufferIsEmpty()){
+	// Logger::Print("RobotBase::SpinOnce() point", 91);
+		return;
+	}
+	if (!this->__planner.IsPlanable()){
+		Logger::Print("RobotBase::SpinOnce() Planner can not go on,  queue might be full(or almost full).", 92);
+		return;
+	}
+	Logger::Print("RobotBase::SpinOnce() point", 3);
 
 	// Check gcode queue, if there is gcode to be run.
 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
+	Logger::Print("RobotBase::SpinOnce() point", 4);
 	if (message == NULL){
-		Logger::Error("\n\n\n [Error] RobotBase::__TryNextGmCode_FromQueue() tail_message is null. \n\n ");
+		Logger::Error("\n\n\n [Error] RobotBase::SpinOnce() tail_message is null. \n\n ");
 		return;
 	}
 
 	bool debug = false;
 	if (debug){
-		Logger::Debug("[Info] RobotBase::__TryNextGmCode_FromQueue()  Going to run next gcode   ===> ");
+		Logger::Debug("[Info] RobotBase::SpinOnce()  Going to run next gcode   ===> ");
 		Serial.print(message->payload);
 		Serial.println(" ");
 	}
@@ -33,12 +39,12 @@ void RobotBase::SpinOnce(){
 	std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
 	Gcode gcode = Gcode(str);
-	Logger::Debug("RobotBase::__TryNextGmCode_FromQueue() has got command string ");
+	Logger::Debug("RobotBase::SpinOnce() has got command string ");
 	Serial.println(str.c_str());
+	Logger::Print("RobotBase::SpinOnce() point", 6);
 	
 	this->RunGcode(&gcode);
-	// Logger::Print("RobotBase::SpinOnce() point", 3);
-	// Logger::Print("RobotBase::SpinOnce() point", 4);
+	Logger::Print("RobotBase::SpinOnce() point", 99);
 
 }
 
@@ -305,7 +311,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 		// this->commuDevice->OutputMessage(gcode->get_command());
 		// this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
 	}
-	Logger::Debug("RobotBase::RunGcode() is finished ");
+	Logger::Print("RobotBase::RunGcode() point ",99);
 	
 }
 

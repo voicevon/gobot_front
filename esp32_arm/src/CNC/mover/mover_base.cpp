@@ -5,16 +5,20 @@
 void MoverBase::SpinOnce(){
     // Logger::Debug("MoverBase::SpinOnce()");
     _actuator_alpha_base->SpinOnce();
-    _actuator_beta_base->SpinOnce();
-    _actuator_delta_base->SpinOnce();
-
+    // _actuator_beta_base->SpinOnce();
+    // _actuator_delta_base->SpinOnce();
+    // Logger::Print("MoverBase::SpinOnce() point", 1);
     if (this->__queue_move_block->BufferIsEmpty()) return;
-
+    
+    Logger::Info("MoverBase::SpinOnce() fetching queue_moveb_lock");
     MoveBlock* mb = this->__queue_move_block->FetchTailMoveBlock();
+    Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
     this->AllActuatorsMoveTo(mb);
     // _actuator_alpha_base->UpdateMovement(&mb->MoveBlocks[AXIS_ALPHA]);
     // _actuator_beta_base->UpdateMovement(&mb->MoveBlocks[AXIS_BETA]);
     // _actuator_delta_base->UpdateMovement(&mb->MoveBlocks[AXIS_GAMMA]);
+    // Logger::Print("MoverBase::SpinOnce() point", 99);
+
 }
 
 // void MoverBase::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){

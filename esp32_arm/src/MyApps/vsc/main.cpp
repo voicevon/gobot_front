@@ -62,10 +62,7 @@ void setup(){
 }
 
 void loop(){
-    ActuatorDcMotor* motor = board.GetActuator(AXIS_ALPHA);
     // Logger::Print("Arduino loop() point ",1);
-    motor->SpinOnce();
-    // Logger::Print("Arduino loop() point ",2);
     vsc_app.SpinOnce();
     // Logger::Print("Arduino loop() point ",3);
     vsc_robot.SpinOnce();
