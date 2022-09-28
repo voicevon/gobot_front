@@ -7,17 +7,18 @@
 
 void RobotBase::SpinOnce(){
 	// Logger::Debug("RobotBase::SpinOnce()");
-	// Logger::Print("this->State", this->State);
+	// Logger::Print("this->State", this->State);  // TODO:  Fix this bug.
 	this->_arm_solution->SpinOnce();
+	// Logger::Print("Just a debug point.", 0);
 	if (this->_arm_solution->State == CncState::IDLE){
 		this->__TryNextGmCode_FromQueue();
 	}
-	if (this->State == RobotState::IDLE){
-		this->__TryNextGmCode_FromQueue();
-	}else{
-		// Logger::Debug("CncState::RUNNING_G28");
-		this->_running_G28();
-	}
+	// if (this->State == RobotState::IDLE){
+	// 	this->__TryNextGmCode_FromQueue();
+	// }else{
+	// 	Logger::Debug("CncState::RUNNING_G28");
+	// 	this->_running_G28();
+	// }
 }
 
 // Check gcode queue, if there is gcode to be run.
@@ -92,7 +93,7 @@ void RobotBase::__HomeSingleAxis(EnumAxis axis){
 	// line.Speed = homing->Speed;
 	// this->_mover_base->SingleActuatorMoveTo(&line);   //TOdo:  Put this line to line_queue
 
-	Logger::Debug("RobotBase::RunG28() is Starting to run..." );
+	Logger::Debug("RobotBase::__HomeSingleAxis() is finished." );
 }
 
 void RobotBase::_running_G28(){
@@ -177,6 +178,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 			// this->RunG28(this->ConvertToEnum(home_axis));
 			EnumAxis home_axis =  this->_arm_solution->ConvertToEnum(home_axis_name);
 			this->RunG28(home_axis);
+			Logger::Print("RobotBase::RunGcode() invoking is over.", 9);
 			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
 			// break;
 		}else {
@@ -309,6 +311,8 @@ void RobotBase::RunGcode(Gcode* gcode){
 		// this->commuDevice->OutputMessage(gcode->get_command());
 		// this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
 	}
+	Logger::Debug("RobotBase::RunGcode() is finished ");
+	
 }
 
 

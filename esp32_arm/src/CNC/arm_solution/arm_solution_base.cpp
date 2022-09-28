@@ -305,10 +305,8 @@ void ArmSolutionBase::RunGcode(Gcode* gcode){
 			break;
 		}
 	}else{
-		// this->commuDevice->OutputMessage("\n[Warning] ArmSolutionBase::RunGcode()  Has NO letter 'G' or 'M'. ");
-		// this->commuDevice->OutputMessage(gcode->get_command());
-		// this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
 	}
+	Logger::Print("ArmSolutionBase::RunGcode() is finished", 0);
 }
 
 

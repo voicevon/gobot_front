@@ -34,6 +34,7 @@ class ArmSolutionBase{
         void ForceStopMover();
         CncBoardBase* _cnc_board;
         Planner* planner;
+        MoverBase* _mover_base;   //???
 
         
     protected:
@@ -56,7 +57,6 @@ class ArmSolutionBase{
 
         bool is_absolute_position = true;
         
-        MoverBase* _mover_base;   //???
         // LineSegmentQueue* _line_segment_queue;
 
 

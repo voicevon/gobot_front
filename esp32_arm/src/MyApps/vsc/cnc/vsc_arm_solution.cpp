@@ -4,9 +4,10 @@
 void Vsc_ArmSoution::Init(Vsc_Board* board ){
     this->_AXIS = AXIS_ALPHA;
 
-    this->__mover.Init(board);
+    // this->__mover.Init(board);
+    this->_cnc_board = board;
     this->_mover_base = &this->__mover;
-    this->planner = &this->__planner;
+    // this->planner = &this->__planner;
     
 
 

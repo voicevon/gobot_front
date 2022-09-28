@@ -14,14 +14,19 @@ void Planner::AppendLineSegment(LineSegment* line){
 
     for (int i=0; i<1; i++){
         // TODO: recalculate acceleration, speed.
-        MoveBlock* bq = this->__moveblock_queue->GetHeadMoveblock();
-        Logger::Print("bq->axis", bq->axis);
-        bq->axis = line->axis;
-        bq->IsAbsTargetPosition = line->IsAbsTargetPosition;
-        bq->TargetPosition = line->TargetPosition;
-        bq->Speed = line->Speed;
-        bq->Acceleration = line->Acceleration;
+        MoveBlock* mb = this->__moveblock_queue->GetHeadMoveblock();
+        Logger::Print("mb->axis  old", mb->axis);
+        mb->axis = line->axis;
+        mb->IsAbsTargetPosition = line->IsAbsTargetPosition;
+        mb->TargetPosition = line->TargetPosition;
+        mb->Speed = line->Speed;
+        mb->Acceleration = line->Acceleration;
+
+        Logger::Print("mb->axis  new", mb->axis);
+        Logger::Print("Going to forward queue head", 0 );
         this->__moveblock_queue->ForwardHead();
+        Logger::Print("Going to forward queue head", 1 );
+
     }
 }
 

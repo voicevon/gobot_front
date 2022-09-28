@@ -26,6 +26,8 @@ class RobotBase: public GcodeConsumer{
         void RunG28(EnumAxis axis);
 
     protected:
+        Queue_MoveBlock __queue_move_block;
+        Planner __planner;
         // virtual _DispatchGcode(Gcode* gcode);
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
         void _LinkPidControllers_M130(PidControllers* pid_controllers){this->__pid_controllers_m130=pid_controllers;};

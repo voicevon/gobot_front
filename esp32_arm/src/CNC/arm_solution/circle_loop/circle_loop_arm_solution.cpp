@@ -78,16 +78,17 @@ void CircleLoop_ArmSolution::RunG1(Gcode* gcode) {
 
 	this->planner->AppendLineSegment(&line);
 
-	Serial.println("ffffffffffffffffffffffffffffff");
-	// this->_mover_base->SingleActuatorMoveTo(&line);   //TODO:  put line to lineSegment queue
-	Serial.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+	
+	// this->_mover_base->SingleActuatorMoveTo(&line);   //DOING:  put line to lineSegment queue
 	//None blocking, move backgroundly.
 	// uint8_t abs_flag=0x01;
 	// this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
 	bool debug = true;
 	if (debug){
+		Logger::Print("CircleLoop_ArmSolution::RunG1() point", 6);
 		this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
-		Logger::Debug("CircleLoop_ArmSolution::RunG1() ");
+		Logger::Print("CircleLoop_ArmSolution::RunG1() point", 7);
+
 		Logger::Print("from", this->__current_fk_position.A);
 		Logger::Print("to", target_ik_a.alpha);
 	}

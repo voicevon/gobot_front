@@ -1,17 +1,18 @@
 #include "vsc_robot.h"
 
-void VscRobot::Init(Vsc_Board* board,  Vsc_ArmSoution *arm_solution){
+void VscRobot::Init(Vsc_Board* board){
     Logger::Info("Vsc_ArmSoution::Init() is entering...");
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());
     this->__queue_move_block._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     this->__planner.__moveblock_queue = &this->__queue_move_block;
     this->__mover.__moveblock_queue = &this->__queue_move_block;
+    this->arm_solution.Init(board);
+    this->arm_solution.planner = &this->__planner;
 
-    this->_arm_solution = arm_solution;
-
-    this->_arm_solution->_cnc_board = board;
-    this->_arm_solution->planner = &this->__planner;
+    // this->_arm_solution->_cnc_board = board;
+    // this->_arm_solution->planner = &this->__planner;
+    
     
     Logger::Info("Vsc_ArmSoution::Init() Pid controller.");
     //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'

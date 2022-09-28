@@ -38,8 +38,16 @@ void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as
 }
 
 float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
+    Logger::Debug("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() ");
     if (actuator_name == AXIS_ALPHA){
+        Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 1);
+        auto aa = this->_actuator_alpha_base;
+        Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 2);
+        auto bb = aa->GetCurrentPosition();
+        Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() bb", bb);
+
         return this->_actuator_alpha_base->GetCurrentPosition();
+
 
     }else if (actuator_name == AXIS_BETA){
         return this->_actuator_beta_base->GetCurrentPosition();

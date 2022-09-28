@@ -10,7 +10,7 @@
 
 Vsc_Board board;
 VscApp vsc_app;
-Vsc_ArmSoution vsc_arm_solution;
+
 VscRobot vsc_robot;
 
 GcodeQueue gcode_queue;
@@ -50,7 +50,7 @@ void setup(){
     board.Init(true);
 
     test_board();
-    vsc_robot.Init(&board, &vsc_arm_solution);
+    vsc_robot.Init(&board);
     vsc_robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     vsc_app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
 
