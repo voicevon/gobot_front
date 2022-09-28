@@ -9,11 +9,14 @@
 class CircleLoop_ArmSolution: public ArmSolutionBase{
     public:
         // void Init(CncBoardBase* board) override;
-        void RunG1(Gcode* gcode) override;
+        // void RunG1(Gcode* gcode) override;
+        bool _ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line) override;
+
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
+        void __CutLineSegment_ToMoveBlocks_to_queue(LineSegment* line) override;
 
     protected:
         CircleLoop_KinematicConfig _kinematic_config;  
@@ -28,5 +31,7 @@ class CircleLoop_ArmSolution: public ArmSolutionBase{
         std::string GetHomeTrigerStateString() override {return " ";};
 
         FkPosition_A __current_fk_position;
+        FkPosition_A __target_fk_position;
+
 
 };

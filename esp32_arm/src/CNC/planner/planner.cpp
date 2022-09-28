@@ -21,25 +21,25 @@ void Planner::AppendLineSegment(LineSegment* line){
     //Translate LineSegment To MoveBlocks, and insert to move_block_queue.
     Logger::Debug("Planner::AppendLineSegment()");
     Logger::Print("line->axis", line->axis);
+    this->__arm_solution->__CutLineSegment_ToMoveBlocks_to_queue(line);
+    // for (int i=0; i<1; i++){
+    //     // TODO: recalculate acceleration, speed.
+    //     MoveBlock* mb = this->__arm_solution->__queue_move_block->GetHeadMoveblock();
+    //     for(int i=0; i<6;i++){
+    //         Logger::Print("mb->axis  old", mb->MoveBlocks[i].axis);
+    //         mb->MoveBlocks[i].axis = line->axis;
+    //         mb->MoveBlocks[i].IsAbsTargetPosition = line->IsAbsTargetPosition;
+    //         mb->MoveBlocks[i].TargetPosition = line->TargetPosition;
+    //         mb->MoveBlocks[i].Speed = line->Speed;
+    //         mb->MoveBlocks[i].Acceleration = line->Acceleration;
 
-    for (int i=0; i<1; i++){
-        // TODO: recalculate acceleration, speed.
-        MoveBlock* mb = this->__arm_solution->__queue_move_block->GetHeadMoveblock();
-        for(int i=0; i<6;i++){
-            Logger::Print("mb->axis  old", mb->MoveBlocks[i].axis);
-            mb->MoveBlocks[i].axis = line->axis;
-            mb->MoveBlocks[i].IsAbsTargetPosition = line->IsAbsTargetPosition;
-            mb->MoveBlocks[i].TargetPosition = line->TargetPosition;
-            mb->MoveBlocks[i].Speed = line->Speed;
-            mb->MoveBlocks[i].Acceleration = line->Acceleration;
+    //         Logger::Print("mb->axis  new", mb->MoveBlocks[i].axis);
+    //     }
+    //     Logger::Print("Going to forward queue head", 0 );
+    //     this->__arm_solution->__queue_move_block->ForwardHead();
+    //     Logger::Print("Going to forward queue head", 1 );
 
-            Logger::Print("mb->axis  new", mb->MoveBlocks[i].axis);
-        }
-        Logger::Print("Going to forward queue head", 0 );
-        this->__arm_solution->__queue_move_block->ForwardHead();
-        Logger::Print("Going to forward queue head", 1 );
-
-    }
+    // }
 }
 
 

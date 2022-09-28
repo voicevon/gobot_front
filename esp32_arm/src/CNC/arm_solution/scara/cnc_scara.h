@@ -17,7 +17,8 @@ class CncScaraSolution: public ArmSolutionBase{
         //                           // Instantiated on first use.
         //     return instance;
         // }
-        void RunG1(Gcode* gcode) override;
+        // void RunG1(Gcode* gcode) override;
+        bool _ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override;
         float GetDistanceToTarget_FK() override;

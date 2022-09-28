@@ -24,7 +24,7 @@ class ArmSolutionBase{
         CncState State = CncState::IDLE;
         void SpinOnce();
 
-        void RunGcode(Gcode* gcode);  //todo:  rename to RunMovement(),  CncMoveTo()
+        // void RunGcode(Gcode* gcode);  //todo:  rename to RunMovement(),  CncMoveTo()
         void RunG28(EnumAxis axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
 
@@ -42,19 +42,20 @@ class ArmSolutionBase{
         // MoverBase* _mover_base;   // Should this be here?
         Queue_MoveBlock* __queue_move_block;
 
+        virtual bool _ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line);
+        virtual void __CutLineSegment_ToMoveBlocks_to_queue(LineSegment* line);
         
     protected:
-        void __CutLineSegment_ToMoveBlocks_to_queue(LineSegment* line);
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
-        virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.
+        // virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.
+        // virtual void RunG1(LineSegment* line);  
         virtual void RunG6(Gcode* gcode);   //Block mode
         void RunG4(Gcode* gcode);
         virtual std::string GetHomeTrigerStateString();
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
         void RunM84();
-        // void _running_G1();
         void _running_G28();
 		virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
@@ -64,7 +65,6 @@ class ArmSolutionBase{
 
         bool is_absolute_position = true;
         
-        // LineSegmentQueue* _line_segment_queue;
 
 
     private:

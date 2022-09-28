@@ -22,7 +22,8 @@ class CncSolution_FiveBarsBase: public ArmSolutionBase{
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
-        void RunG1(Gcode* gcode) override;
+        bool _ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line) override;
+        // void RunG1(Gcode* gcode) override;
         void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {return " ";};
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;

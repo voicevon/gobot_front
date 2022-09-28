@@ -188,8 +188,8 @@ void RobotBase::RunGcode(Gcode* gcode){
 			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
 			// break;
 		}else {
-			this->_arm_solution->RunGcode(gcode);
-		}
+		// 	this->_arm_solution->RunGcode(gcode);
+		// }
 
 		// case 1:
 		// 	// G1 Move
@@ -224,8 +224,10 @@ void RobotBase::RunGcode(Gcode* gcode){
 		// 	// Set Position     G92 X10 E90
 		// 	// break;
 		// default:
-		// 	break;
-		// }
+			LineSegment line;
+			this->__planner.__arm_solution->_ConvertG1ToLineSegment(gcode, &line);
+			this->__planner.AppendLineSegment(&line);
+		}
 	}else if(gcode->has_m){
 		uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
 		uint8_t s_value = 0;

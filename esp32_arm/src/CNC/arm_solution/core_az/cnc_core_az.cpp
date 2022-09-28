@@ -151,7 +151,8 @@ void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
 // 	}	
 // }
 
-void CncSolution_CoreAZ::RunG1(Gcode* gcode) {
+// void CncSolution_CoreAZ::RunG1(Gcode* gcode) {
+bool CncSolution_CoreAZ::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
 	Serial.print("\n[Debug] CncSolution_CoreAZ::RunG1() is entering");
 	Serial.print(gcode->get_command());
 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);

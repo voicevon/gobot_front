@@ -178,7 +178,8 @@ void CncSolution_FiveBarsBase::FK(IkPositionBase* from_ik, FkPositionBase* to_fk
 	Serial.print(")");
 }
 
-void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
+// void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
+bool CncSolution_FiveBarsBase::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
 	Logger::Warn("CncSolution_FiveBarsBase::RunG1()");
 	Serial.println(gcode->get_command());
 
@@ -220,9 +221,6 @@ void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
 		// this->beta_stepper->setMaxSpeed(speed);
 	}
 	//Prepare actuator/driver to move to next point
-	// float target_position[2];
-	// target_position[0] = target_ik_ab.alpha;
-	// target_position[1] = target_ik_ab.beta;
 
 	//None blocking, move backgroundly.
 	// this->_mover_base->AllActuatorsMoveTo(true, target_position);

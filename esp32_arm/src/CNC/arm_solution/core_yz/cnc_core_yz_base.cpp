@@ -123,7 +123,8 @@ void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 }
 
 
-void CncSolution_CoreYZBase::RunG1(Gcode* gcode) {
+// void CncSolution_CoreYZBase::RunG1(Gcode* gcode) {
+bool CncSolution_CoreYZBase::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
 	Serial.print("\n[Debug] CncSolution_CoreYZBase::RunG1() is entering");
 	Serial.print(gcode->get_command());
 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);

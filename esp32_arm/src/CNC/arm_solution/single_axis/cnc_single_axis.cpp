@@ -51,7 +51,8 @@ void CncSingleAxis::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 }
 
 
-void CncSingleAxis::RunG1(Gcode* gcode) {
+// void CncSingleAxis::RunG1(Gcode* gcode) {
+bool CncSingleAxis::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
 	Logger::Debug("CncSingleAxis::RunG1() is entering");
 	Logger::Print("G1 ", gcode->get_command());
 	Logger::Print("this->AXIS", this->_AXIS);

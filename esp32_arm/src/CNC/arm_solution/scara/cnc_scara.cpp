@@ -115,7 +115,8 @@ float CncScaraSolution::GetDistanceToTarget_IK(){
 	return 0;
 }
 
-void CncScaraSolution::RunG1(Gcode* gcode) {
+// void CncScaraSolution::RunG1(Gcode* gcode) {
+bool CncScaraSolution::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
 	// Serial.print("\n[Debug] CncScaraSolution::RunG1()   ");
 	// Serial.print(gcode->get_command());
 
