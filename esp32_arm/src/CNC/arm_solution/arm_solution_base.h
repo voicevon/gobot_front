@@ -24,8 +24,6 @@ class ArmSolutionBase{
         CncState State = CncState::IDLE;
         void SpinOnce();
 
-        // void RunGcode(Gcode* gcode);  //todo:  rename to RunMovement(),  CncMoveTo()
-        void RunG28(EnumAxis axis);
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
 
         // Todo:  should remove these two lines?
@@ -38,8 +36,6 @@ class ArmSolutionBase{
         virtual EnumAxis ConvertToEnum(char axis);
         void ForceStopMover();
         CncBoardBase* _cnc_board;   // TODO:  remove this.
-        // Planner* planner;
-        // MoverBase* _mover_base;   // Should this be here?
         Queue_MoveBlock* __queue_move_block;
 
         virtual bool _ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line);
@@ -48,16 +44,12 @@ class ArmSolutionBase{
     protected:
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
-        // virtual void RunG1(Gcode* gcode);   //None blocking, move backgroundly.
-        // virtual void RunG1(LineSegment* line);  
-        virtual void RunG6(Gcode* gcode);   //Block mode
-        void RunG4(Gcode* gcode);
         virtual std::string GetHomeTrigerStateString();
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
         void RunM84();
-        void _running_G28();
-		virtual void _RunG28_CombinedFk(EnumAxis axis){};
+        // void _running_G28();
+		// virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
         EnumAxis _homing_axis;
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
@@ -68,12 +60,10 @@ class ArmSolutionBase{
 
 
     private:
-        int test_int;
-        void _base_spin_once();
-        void __running_G4();
-        void __HomeSingleAxis(EnumAxis axis);
-        long __g4_start_timestamp;
-        int __g4_time_second;
+        // int test_int;
+        // void _base_spin_once();
+        // long __g4_start_timestamp;
+        // int __g4_time_second;
 
 };
 

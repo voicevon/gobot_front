@@ -25,7 +25,7 @@ class CncSingleAxis: public ArmSolutionBase{
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 
-        void RunG6(Gcode* gcode) override{} ; 
+        // void RunG6(Gcode* gcode) override{} ; 
         std::string GetHomeTrigerStateString() override {return " ";};
 
         FkPosition_A __current_fk_position;

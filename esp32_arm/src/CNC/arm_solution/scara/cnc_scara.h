@@ -29,7 +29,7 @@ class CncScaraSolution: public ArmSolutionBase{
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 
-        void RunG6(Gcode* gcode) override {};   //Block mode
+        // void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {return " ";};
 
         void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;

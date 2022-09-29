@@ -25,7 +25,7 @@ class CncSolution_CoreYZBase: public ArmSolutionBase{
         void RunG28_CombinedAxis(EnumAxis axis);
         virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
 
-        void RunG6(Gcode* gcode) override{} ; 
+        // void RunG6(Gcode* gcode) override{} ; 
         std::string GetHomeTrigerStateString() override {return " ";};
 
         FkPosition_YZ __current_fk_position;

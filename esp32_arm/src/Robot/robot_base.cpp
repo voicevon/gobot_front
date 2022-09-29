@@ -153,7 +153,7 @@ void RobotBase::__RunMcode(Gcode* gcode){
 			s_value = gcode->get_value('S');
 			this->Run_M42_OutputGpio(p_value, s_value);
 		case 84:
-			this->RunM84();
+			this->__m84_runner.Run(gcode);
 		case 114:
 			// Get Current Position
 			break;
@@ -184,23 +184,7 @@ void RobotBase::__RunMcode(Gcode* gcode){
 			break;
 
 		case 130:
-			Logger::Debug("RobotBase::RunGcode()   M130");
-			Logger::Print("gcode", gcode->get_command());
-			p_value =  gcode->get_value('N');
-			Logger::Print("Index", p_value);
-			
-			f_value = gcode->get_value('P');
-			this->__pid_controllers_m130->GetController(p_value)->P = f_value;
-			Logger::Print("P", f_value);
-
-			f_value = gcode->get_value('I');
-			this->__pid_controllers_m130->GetController(p_value)->I = f_value;
-			Logger::Print("I", f_value);
-
-			f_value = gcode->get_value('D');
-			this->__pid_controllers_m130->GetController(p_value)->D = f_value;
-			Logger::Print("D", f_value);
-
+			this->__m130_runner.Run(gcode);
 			break;
 
 		case 141:
@@ -241,12 +225,12 @@ void RobotBase::__RunMcode(Gcode* gcode){
 // 	this->__eef->Run(eef_action);
 // }
 
-void RobotBase::RunM84(){
-	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
-	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
-		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
-	}
-}
+// void RobotBase::RunM84(){
+// 	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
+// 	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
+// 		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
+// 	}
+// }
 
 void RobotBase::Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value){
 	digitalWrite(pin_number, pin_value);

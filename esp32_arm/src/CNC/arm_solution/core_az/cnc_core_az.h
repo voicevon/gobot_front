@@ -38,7 +38,7 @@ class CncSolution_CoreAZ: public ArmSolutionBase{
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
         virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
         void RunG28_CombinedAxis(EnumAxis axis);
-        void RunG6(Gcode* gcode) override{} ; 
+        // void RunG6(Gcode* gcode) override{} ; 
         std::string GetHomeTrigerStateString() override {return " ";};
 
         FkPosition_ZW __current_fk_position;
