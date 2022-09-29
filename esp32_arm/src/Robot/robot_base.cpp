@@ -8,13 +8,45 @@
 void RobotBase::SpinOnce(){
 	// Logger::Debug("RobotBase::SpinOnce()");
 	this->_mover->SpinOnce();
-	// Logger::Print("RobotBase::SpinOnce() point", 1);
+	switch (this->State){
+		case RobotState::G4_IS_SYNCING:
+			//todo:  when buffer is empty,  a gcode is still runnning.
+			// Correct way is:  buffer is empey, and Mover is stoped.
+			if (this->__queue_move_block.BufferIsEmpty()){
+				this->__g4_runner.Start();
+				this->State = RobotState::G4_IS_RUNNING;
+			}
+			break;
+		case RobotState::G4_IS_RUNNING:
+			if(this->__g4_runner.IsDone()){
+				this->State =RobotState::IDLE_OR_ASYNC;
+			}
+			break;
+		case RobotState::G28_IS_SYNCING:
+			if (this->__queue_move_block.BufferIsEmpty()){
+				this->__g28_runner.Start();
+				this->State = RobotState::G28_IS_RUNNING;
+			}
+			break;
+		case RobotState::G28_IS_RUNNING:
+			if(this->__g28_runner.IsDone()){
+				this->State = RobotState::IDLE_OR_ASYNC;
+			}
+			break;
+
+		default:
+			break;
+	}
+	if (this->State != RobotState::IDLE_OR_ASYNC ) {
+		// Logger::Print("RobotBase::SpinOnce() point", 91);
+		return;
+	}
 	if (this->_gcode_queue->BufferIsEmpty()){
-	// Logger::Print("RobotBase::SpinOnce() point", 91);
+	// Logger::Print("RobotBase::SpinOnce() point", 92);
 		return;
 	}
 	if (!this->__planner.IsPlanable()){
-		Logger::Print("RobotBase::SpinOnce() Planner can not go on,  queue might be full(or almost full).", 92);
+		Logger::Print("RobotBase::SpinOnce() Planner can not go on,  queue might be full(or almost full).", 93);
 		return;
 	}
 	Logger::Print("RobotBase::SpinOnce() point", 3);
@@ -53,98 +85,79 @@ void RobotBase::SpinOnce(){
 
 }
 
+void RobotBase::__RunGcode(Gcode* gcode){
+	char home_axis_name = '+';
+	LineSegment line;
+	EnumAxis home_axis;
 
+	switch (gcode->g){
+		case 28:
+			this->State = RobotState::G28_IS_SYNCING;
+			if (gcode->has_letter('X')) home_axis_name='X';
+			if (gcode->has_letter('Y')) home_axis_name='Y';
+			if (gcode->has_letter('Z')) home_axis_name='Z';
+			if (gcode->has_letter('A')) home_axis_name='A';
+			if (gcode->has_letter('B')) home_axis_name='B';
+			if (gcode->has_letter('C')) home_axis_name='C';
+			if (gcode->has_letter('W')) home_axis_name='W';
+			Logger::Debug("RobotBase::RunGcode()    G28");
+			Logger::Print("home_axis",home_axis_name);
 
-//Can deal with:  home via single actuator.
-//Can NOT deal with:  CoreXY, It's combined moving.
-void RobotBase::RunG28(EnumAxis axis){ 
-	bool debug = true;
-	if (debug){
-		Logger::Debug("RobotBase::RunG28() is entering" );
-		Logger::Print("axis", axis);
-		Logger::Print("IsCombinedFK", this->_config_base.IsCombinedFk);
+			// Is there any machine that supports both IK, and FK homing?
+			// this->_home_via_inverse_kinematic = false;
+			if (home_axis_name == '+'){
+				Serial.print("\n\n\n\n[Error] RobotBase::RunGcode()  :");
+				Serial.print(home_axis_name);
+
+			}
+			//TODO:  convert char to enum
+			// this->RunG28(this->ConvertToEnum(home_axis));
+			home_axis =  this->_arm_solution->ConvertToEnum(home_axis_name);
+			this->__g28_runner.HomingAxis = home_axis;
+			this->State = RobotState::G28_IS_SYNCING;
+			// this->RunG28(home_axis);
+			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
+			break;
+		case 4:
+			// G4 Dwell, Pause for a period of time.
+			this->__g4_runner.SetTarget_in_ms(gcode->get_value('S'));
+			this->State = RobotState::G4_IS_SYNCING;
+			break;
+						
+		case 1:
+			// G1 Move
+			//TODO:  1. put position to movement queue. called "plan" in smoothieware? 
+			//       2. send out OK.
+			//       3. Set status to busy.
+			//       4. Start Moving.
+			this->__planner.__arm_solution->_ConvertG1ToLineSegment(gcode, &line);
+			this->__planner.AppendLineSegment(&line);
+
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			break;
+
+		// case 6:
+			// this->RunG6(gcode);
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			// break;
+		case 90:
+			// Absolute position
+			this->is_absolute_position = true;
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			break;
+		case 91:
+			// Relative position
+			this->is_absolute_position = false;
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			break;
+		case 92:
+			//Set Position     G92 X10 E90
+			break;
+		default:
+			break;
 	}
-
-	if (this->_config_base.IsCombinedFk){
-		// this->_RunG28_CombinedFk(axis);
-
-	}else{
-		this->__HomeSingleAxis(axis);
-	}
-}
-
-
-void RobotBase::__HomeSingleAxis(EnumAxis axis){
-	Logger::Debug("RobotBase::__HomeSingleAxis()");
-	Logger::Print("axis",axis);
-	this->_homing_axis = axis;
-	HomingConfig* homing = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
-	Logger::Print("homing->IsDirectionToMax", homing->IsDirectionToMax);
-	// Gcode gcode = Gcode("G1A6.28");
-	this->_gcode_queue->AppendGcodeCommand("G1A6.28");  //Risk of Gcode queue is full?
-	// this->_cnc_board->SayHello();
-	// this->_cnc_board->EnableMotor(axis, true);
-	// // Serial.println("bbbbbbbbbbbbbbbbbbbbbb");
-	
-	// // this->_config_base.PrintOut("RobotBase::__HomeSingleAxis()  _config_base");
-	// this->_mover_base->PrintOut("RobotBase::__HomeSingleAxis()  _mover_base" );
-	// this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
-	// this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
-	// // this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
-	// LineSegment line;
-	// line.axis = axis;
-	// line.IsAbsTargetPosition = false;
-	// line.TargetPosition = homing->DistanceToGo;
-	// line.Speed = homing->Speed;
-	// this->_mover_base->SingleActuatorMoveTo(&line);   //TOdo:  Put this line to line_queue
-
-	Logger::Debug("RobotBase::__HomeSingleAxis() is finished." );
-}
-
-void RobotBase::_running_G28(){
-	bool debug = false;
-	if(debug){
-		Logger::Debug("RobotBase::_running_G28() is entering...");
-		Logger::Print("_homing_axis", this->_homing_axis);
-		auto homer = this->_cnc_homer.GetAxisHomer(this->_homing_axis);
-		Logger::Print("Got axis_homer",true);
-		auto index = homer->GetTrigeredIndex();
-		Logger::Print("Got triggered index", index);
-	}
-
-	int fired_trigger_index =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetTrigeredIndex();
-	if (fired_trigger_index >=0 ){
-		// End stop is trigered
-		Logger::Info("RobotBase::_running_G28() ----> Home sensor is triggered." );
-		Logger::Print("_homing_axis_name", this->_homing_axis);
-		Logger::Print(" fired_trigger_index", fired_trigger_index);
-
-		// this->_mover_base->AllActuatorsStop();
-		// this->_SetCurrentPositionAsHome(this->_homing_axis);
-		this->_arm_solution->ForceStopMover();
-		this->_arm_solution->_SetCurrentPositionAsHome(this->_homing_axis);
-		this->State = RobotState::IDLE_OR_ASYNC;
-	}else{
-		// Endstop is not trigered
-		// Serial.print(".");
-		delay(10);
-	}
-}
-
-
-// void RobotBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
-// 	Logger::Debug("RobotBase::RunM123()");
-// 	Logger::Print("eef_action", eef_action);
-// 	// uint8_t action_code = 1;
-// 	this->__eef->PrintOut();
-// 	this->__eef->Run(eef_action);
-// }
-
-void RobotBase::RunM84(){
-	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
-	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
-		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
-	}
+	Logger::Print("RobotBase::RunMcode() point ",99);
+		
 }
 
 void RobotBase::__RunMcode(Gcode* gcode){
@@ -237,78 +250,96 @@ void RobotBase::__RunMcode(Gcode* gcode){
 	Logger::Print("RobotBase::RunMcode() point ",99);
 
 }
-void RobotBase::__RunGcode(Gcode* gcode){
-	char home_axis_name = '+';
-	LineSegment line;
-	EnumAxis home_axis;
 
-	switch (gcode->g){
-		case 28:
-			this->State = RobotState::G28_IS_SYNCING;
-			if (gcode->has_letter('X')) home_axis_name='X';
-			if (gcode->has_letter('Y')) home_axis_name='Y';
-			if (gcode->has_letter('Z')) home_axis_name='Z';
-			if (gcode->has_letter('A')) home_axis_name='A';
-			if (gcode->has_letter('B')) home_axis_name='B';
-			if (gcode->has_letter('C')) home_axis_name='C';
-			if (gcode->has_letter('W')) home_axis_name='W';
-			Logger::Debug("RobotBase::RunGcode()    G28");
-			Logger::Print("home_axis",home_axis_name);
-
-			// Is there any machine that supports both IK, and FK homing?
-			// this->_home_via_inverse_kinematic = false;
-			if (home_axis_name == '+'){
-				Serial.print("\n\n\n\n[Error] RobotBase::RunGcode()  :");
-				Serial.print(home_axis_name);
-
-			}
-			//TODO:  convert char to enum
-			// this->RunG28(this->ConvertToEnum(home_axis));
-			home_axis =  this->_arm_solution->ConvertToEnum(home_axis_name);
-			this->RunG28(home_axis);
-			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
-			break;
-		case 1:
-			// G1 Move
-			//TODO:  1. put position to movement queue. called "plan" in smoothieware? 
-			//       2. send out OK.
-			//       3. Set status to busy.
-			//       4. Start Moving.
-			this->__planner.__arm_solution->_ConvertG1ToLineSegment(gcode, &line);
-			this->__planner.AppendLineSegment(&line);
-
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			break;
-		case 4:
-			// G4 Dwell, Pause for a period of time.
-			this->State = RobotState::G4_IS_SYNCING;
-			// this->RunG4(gcode);
-			break;
-		// case 6:
-			// this->RunG6(gcode);
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			// break;
-		case 90:
-			// Absolute position
-			this->is_absolute_position = true;
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			break;
-		case 91:
-			// Relative position
-			this->is_absolute_position = false;
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			break;
-		case 92:
-			//Set Position     G92 X10 E90
-			break;
-		default:
-			break;
+//Can deal with:  home via single actuator.
+//TODO: Solve this:  Can NOT deal with:  CoreXY, It's combined moving.
+void RobotBase::RunG28(EnumAxis axis){ 
+	bool debug = true;
+	if (debug){
+		Logger::Debug("RobotBase::RunG28() is entering" );
+		Logger::Print("axis", axis);
+		Logger::Print("IsCombinedFK", this->_config_base.IsCombinedFk);
 	}
-	Logger::Print("RobotBase::RunMcode() point ",99);
-		
+
+	if (this->_config_base.IsCombinedFk){
+		// this->_RunG28_CombinedFk(axis);
+
+	}else{
+		this->__HomeSingleAxis(axis);
+	}
 }
 
+void RobotBase::__HomeSingleAxis(EnumAxis axis){
+	Logger::Debug("RobotBase::__HomeSingleAxis()");
+	Logger::Print("axis",axis);
+	this->_homing_axis = axis;
+	HomingConfig* homing = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
+	Logger::Print("homing->IsDirectionToMax", homing->IsDirectionToMax);
+	// Gcode gcode = Gcode("G1A6.28");
+	this->_gcode_queue->AppendGcodeCommand("G1A6.28");  //Risk of Gcode queue is full?
+	// this->_cnc_board->SayHello();
+	// this->_cnc_board->EnableMotor(axis, true);
+	// // Serial.println("bbbbbbbbbbbbbbbbbbbbbb");
+	
+	// // this->_config_base.PrintOut("RobotBase::__HomeSingleAxis()  _config_base");
+	// this->_mover_base->PrintOut("RobotBase::__HomeSingleAxis()  _mover_base" );
+	// this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
+	// this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
+	// // this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
+	// LineSegment line;
+	// line.axis = axis;
+	// line.IsAbsTargetPosition = false;
+	// line.TargetPosition = homing->DistanceToGo;
+	// line.Speed = homing->Speed;
+	// this->_mover_base->SingleActuatorMoveTo(&line);   //TOdo:  Put this line to line_queue
 
+	Logger::Debug("RobotBase::__HomeSingleAxis() is finished." );
+}
+
+void RobotBase::_running_G28(){
+	bool debug = false;
+	if(debug){
+		Logger::Debug("RobotBase::_running_G28() is entering...");
+		Logger::Print("_homing_axis", this->_homing_axis);
+		auto homer = this->_cnc_homer.GetAxisHomer(this->_homing_axis);
+		Logger::Print("Got axis_homer",true);
+		auto index = homer->GetTrigeredIndex();
+		Logger::Print("Got triggered index", index);
+	}
+
+	int fired_trigger_index =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetTrigeredIndex();
+	if (fired_trigger_index >=0 ){
+		// End stop is trigered
+		Logger::Info("RobotBase::_running_G28() ----> Home sensor is triggered." );
+		Logger::Print("_homing_axis_name", this->_homing_axis);
+		Logger::Print(" fired_trigger_index", fired_trigger_index);
+
+		// this->_mover_base->AllActuatorsStop();
+		// this->_SetCurrentPositionAsHome(this->_homing_axis);
+		this->_arm_solution->ForceStopMover();
+		this->_arm_solution->_SetCurrentPositionAsHome(this->_homing_axis);
+		this->State = RobotState::IDLE_OR_ASYNC;
+	}else{
+		// Endstop is not trigered
+		// Serial.print(".");
+		delay(10);
+	}
+}
+
+// void RobotBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// 	Logger::Debug("RobotBase::RunM123()");
+// 	Logger::Print("eef_action", eef_action);
+// 	// uint8_t action_code = 1;
+// 	this->__eef->PrintOut();
+// 	this->__eef->Run(eef_action);
+// }
+
+void RobotBase::RunM84(){
+	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
+	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
+		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
+	}
+}
 
 void RobotBase::Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value){
 	digitalWrite(pin_number, pin_value);

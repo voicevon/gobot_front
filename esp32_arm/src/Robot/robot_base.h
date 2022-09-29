@@ -3,7 +3,6 @@
 #include "Robot/eef/eef_standard_code.h"
 #include "CNC/gcode/gcode_consumer.h"
 #include "CNC/board/cnc_board_base.h"
-
 #include "CNC/arm_solution/kinematic_config.h"
 #include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "CNC/arm_solution/arm_solution_base.h"
@@ -12,6 +11,9 @@
 #include "CNC/mover/mover_base.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
 #include "CNC/planner/planner.h"
+#include "gcode_runner/g28_runner.h"
+#include "gcode_runner/g4_runner.h"
+
 
 enum class RobotState{
     IDLE_OR_ASYNC,
@@ -31,7 +33,6 @@ class RobotBase: public GcodeConsumer{
     protected:
         Queue_MoveBlock __queue_move_block;
         Planner __planner;
-        // virtual _DispatchGcode(Gcode* gcode);
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
         void _LinkPidControllers_M130(PidControllers* pid_controllers){this->__pid_controllers_m130=pid_controllers;};
        
@@ -56,14 +57,14 @@ class RobotBase: public GcodeConsumer{
         MoverBase* _mover;
 
     private:
-        // void __TryNextGmCode_FromQueue();
-        // void __RunGmCode(Gcode* gcode);
 
         int test_int;
         RobotEefBase* __eef;
         // Why it's a pointer, not a object? Because I don't know how many pid controllers in the system. I can't init it.
         // And the author doesn't want to use "new PidControll()"  to create an instance.
-        PidControllers* __pid_controllers_m130;   
+        PidControllers* __pid_controllers_m130;  
+        G28_Runner __g28_runner;
+        G4_Runner __g4_runner;
         void _base_spin_once();
         void __HomeSingleAxis(EnumAxis axis);
         void __RunGcode(Gcode* gcode);
