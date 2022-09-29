@@ -2,7 +2,7 @@
 #include "../actuator_base.h"
 #include "CNC/mover/driver/h_bridge/h_bridge.h"
 #include "CNC/Sensor/position_sensor/polor_encoder.h"
-#include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
+// #include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
 
 

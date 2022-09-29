@@ -4,7 +4,6 @@
 #include "CNC/gcode/gcode_consumer.h"
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/arm_solution/kinematic_config.h"
-#include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
@@ -27,8 +26,7 @@ class RobotBase: public GcodeConsumer{
     public:
         RobotState State = RobotState::IDLE_OR_ASYNC;
         void SpinOnce();
-
-        void RunG28(EnumAxis axis);
+        // void RunG28(EnumAxis axis);
 
     protected:
         Queue_MoveBlock __queue_move_block;

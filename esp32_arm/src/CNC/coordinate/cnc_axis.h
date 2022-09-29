@@ -12,6 +12,10 @@ enum EnumAxis{
     AXIS_Z = 6,
 };
 
+class CncAxis{
+    public:
+        static EnumAxis GetFromName(char name);
+};
 
 
 
