@@ -2,14 +2,13 @@
 
 
 #include "Robot/robot_base.h"
-#include "MyApps/vsc/board/board_vsc.h"
-#include "MyApps/vsc/cnc/vsc_arm_solution.h"
-#include "vsc_g28_runner.h"
-#include "MyApps/vsc/cnc/vsc_cnc_mover.h"
+#include "MyApps/spring_maker/board/board.h"
+#include "MyApps/spring_maker/cnc/spring_maker_arm_solution.h"
+#include "spring_maker_g28_runner.h"
 
-class VscRobot: public RobotBase{
+class SpringRobot: public RobotBase{
     public:
-        void Init(Vsc_Board* board);
+        void Init(Board_SpringMaker* board);
 
     private:
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
@@ -19,8 +18,8 @@ class VscRobot: public RobotBase{
 
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
-        Vsc_CncMover mover;
-        Vsc_ArmSoution arm_solution;
-        Vsc_G28_Runner g28_runner;
+        // Spring_CncMover mover;
+        SpringMaker_ArmSolution arm_solution;
+        Spring_G28_Runner g28_runner;
 
 };

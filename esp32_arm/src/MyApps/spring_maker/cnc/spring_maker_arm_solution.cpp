@@ -1,4 +1,4 @@
-#include "solution.h"
+#include "spring_maker_arm_solution.h"
 
     // HomingConfig* config = this->GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
     // config->IsDirectionToMax = true;
@@ -6,7 +6,7 @@
     // config->Speed = 13000.0f;
 
 
-EnumAxis SpringMaker_CncSoution::ConvertToEnum(char axis){
+EnumAxis SpringMaker_ArmSolution::ConvertToEnum(char axis){
     switch (axis){
         case 'A':
             return AXIS_ALPHA;

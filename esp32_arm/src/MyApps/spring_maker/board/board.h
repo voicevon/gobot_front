@@ -1,9 +1,7 @@
 #pragma once
-// #include "MyBoards/cnc_board_base.h"
 #include "CNC/board/cnc_board_base.h"
 
 #include "ESP32Step/src/TeensyStep.h"
-// #include "CNC/Sensor/position_trigger/position_triggers.h"
 #include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
 #include "robot_eef/board_spring_maker.h"

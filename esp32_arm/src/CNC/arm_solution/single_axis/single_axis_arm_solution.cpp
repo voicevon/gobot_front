@@ -1,35 +1,35 @@
-#include "cnc_single_axis.h"
+#include "single_axis_arm_solution.h"
 
 
-void CncSingleAxis::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
+void SingleAxis_ArmSolution::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_A* fk = (FkPosition_A*)(from_fk);
 	IkPosition_A* ik = (IkPosition_A*)(to_ik);
 
 	ik->alpha = fk->A;
-	Logger::Debug("CncSingleAxis::IK()");
+	Logger::Debug("SingleAxis_ArmSolution::IK()");
 	Logger::Print("IK output alpha", ik->alpha);
 }
 
-void CncSingleAxis::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+void SingleAxis_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	FkPosition_A* fk = (FkPosition_A*)(to_fk);
 	IkPosition_A* ik = (IkPosition_A*)(from_ik);
 	
 	fk->A = ik->alpha;
-	Logger::Debug("CncSingleAxis::FK()" );
+	Logger::Debug("SingleAxis_ArmSolution::FK()" );
 	Logger::Print("FK output A", fk->A);
 }
 
 
-void CncSingleAxis::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void SingleAxis_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 	//Set current position to HomePosition
 	IkPosition_A ik_position;
 	if (this->_config_base.IsInverseKinematicHoimg){
 		// We know homed position via IK.
-		Serial.print("\n[Error] CncSingleAxis::_running_G28() This robot does NOT impliment this function.");
+		Serial.print("\n[Error] SingleAxis_ArmSolution::_running_G28() This robot does NOT impliment this function.");
 	}
 	else{
 		// We know homed position via FK
-		Logger::Info("CncSingleAxis::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
+		Logger::Info("SingleAxis_ArmSolution::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
 		this->__current_fk_position.A = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetFiredPosition();
 		this->IK(&this->__current_fk_position, &ik_position);
@@ -48,14 +48,14 @@ void CncSingleAxis::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		Queue_MoveBlock::Instance().ForwardHead();
 		// this->_mover_base->SetActuatorCurrentCncPositionAs(this->_AXIS,ik_position.alpha);
 	}else{
-		Logger::Halt("CncSingleAxis::_SetCurrentPositionAsHome()");
+		Logger::Halt("SingleAxis_ArmSolution::_SetCurrentPositionAsHome()");
 	}
 }
 
 
-// void CncSingleAxis::RunG1(Gcode* gcode) {
-bool CncSingleAxis::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
-	Logger::Debug("CncSingleAxis::RunG1() is entering");
+// void SingleAxis_ArmSolution::RunG1(Gcode* gcode) {
+bool SingleAxis_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
+	Logger::Debug("SingleAxis_ArmSolution::RunG1() is entering");
 	Logger::Print("G1 ", gcode->get_command());
 	Logger::Print("this->AXIS", this->_AXIS);
 	// this->_cnc_board->EnableMotor(this->_AXIS, true);
@@ -98,17 +98,17 @@ bool CncSingleAxis::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	// bool debug = true;
 	// if (debug){
 	// 	// this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
-	// 	Logger::Debug("CncSingleAxis::RunG1() ");
+	// 	Logger::Debug("SingleAxis_ArmSolution::RunG1() ");
 	// 	Logger::Print("from", this->__current_fk_position.A);
 	// 	Logger::Print("to", target_ik_a.alpha);
 	// }
 }
 
-void CncSingleAxis::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
+void SingleAxis_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 	
 }
 
-float CncSingleAxis::GetDistanceToTarget_IK(){
+float SingleAxis_ArmSolution::GetDistanceToTarget_IK(){
 	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
 }
 

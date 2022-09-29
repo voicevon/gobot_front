@@ -2,6 +2,10 @@
 #include "../board/board_vsc.h"
 #include "CNC/mover/single_axis.h" 
 
+
+
+
+//TODO:  remove this class.
 class Vsc_CncMover: public Mover_SingleAxis{
     public:
         void Init(Vsc_Board* board);

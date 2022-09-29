@@ -1,18 +1,18 @@
-#include "board_smoke_bot.h"
+#include "smoker_board.h"
 
 
-void Board_SmokeMachine::Init(bool is_on_reset){
+void Smoker_Board::Init(bool is_on_reset){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
    
 }
 
-void Board_SmokeMachine::SayHello() {
+void Smoker_Board::SayHello() {
     
 }
 
 
-// Stepper* Board_SmokeMachine::GetStepper(char axis_name) {
+// Stepper* Smoker_Board::GetStepper(char axis_name) {
 //     if (axis_name=='A'){
 //         return &this->stepper_alpha;
 //     }else{
@@ -22,7 +22,7 @@ void Board_SmokeMachine::SayHello() {
 
 // }
 
-// SinglePositionTrigger* Board_SmokeMachine::GetSingleHomer(EnumAxis axis_name) {
+// SinglePositionTrigger* Smoker_Board::GetSingleHomer(EnumAxis axis_name) {
 //     if (axis_name== AXIS_ALPHA){
 //         return &this->homer_alpha;
 //     }else{
@@ -32,12 +32,12 @@ void Board_SmokeMachine::SayHello() {
 //     return nullptr;
 // }
 
-RobotEef_SmokeMachine* Board_SmokeMachine::GetEef() {
+RobotEef_SmokeMachine* Smoker_Board::GetEef() {
     return &this->eef;
 }
 
 
-void Board_SmokeMachine::EnableMotor(EnumAxis axis_name, bool enable_it) {
+void Smoker_Board::EnableMotor(EnumAxis axis_name, bool enable_it) {
     if (axis_name == AXIS_ALPHA){
         digitalWrite(PIN_ALPHA_ENABLE_2201, !enable_it);   // LOW is enable
     } else {

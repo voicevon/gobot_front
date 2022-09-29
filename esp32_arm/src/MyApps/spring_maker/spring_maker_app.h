@@ -5,9 +5,9 @@
 #include "IoT/mqtt_message_consumer.h"
 
 
-class SpringMaker: public GcodeProducer, public MqttMessageConsumer{
+class SpringMakerApp: public GcodeProducer, public MqttMessageConsumer{
     public:
-        SpringMaker();
+        SpringMakerApp();
         void SpinOnce(); 
         void AsyncExecuteMqttCommand(const char*) override;
         

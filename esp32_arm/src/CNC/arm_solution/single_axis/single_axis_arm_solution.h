@@ -8,10 +8,8 @@
 
 
 //This is a virtual class. No Constructor.
-class CncSingleAxis: public ArmSolutionBase{
+class SingleAxis_ArmSolution: public ArmSolutionBase{
     public:
-        // void Init(CncBoardBase* board) override;
-        // void RunG1(Gcode* gcode) override;
         bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
         void __ConvertSegment_ToMoveBlockQueue(LineSegment* line)override;
 

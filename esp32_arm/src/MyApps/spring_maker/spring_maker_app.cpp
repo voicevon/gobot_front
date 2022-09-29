@@ -1,14 +1,14 @@
 
-#include "spring_maker.h"
+#include "spring_maker_app.h"
 
-SpringMaker::SpringMaker(){
+SpringMakerApp::SpringMakerApp(){
 	this->_gcode_queue = new GcodeQueue();
-    Serial.print("\n[Info] SpringMaker::SpringMaker() is done..........");
+    Serial.print("\n[Info] SpringMakerApp::SpringMakerApp() is done..........");
 }
 
-void SpringMaker::AsyncExecuteMqttCommand(const char* command){
+void SpringMakerApp::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
-    Serial.print("[Info] SpringMaker::ExecuteMqttCommand() is entering.... = ");
+    Serial.print("[Info] SpringMakerApp::ExecuteMqttCommand() is entering.... = ");
     Serial.println(str_command);
     if (str_command.equals("home")){
         String gcode = "G28A";
@@ -34,12 +34,12 @@ void SpringMaker::AsyncExecuteMqttCommand(const char* command){
         String gcode = "G1 A86.25 F5000";     // 700 turns without gearbox reducer
         this->_gcode_queue->AppendGcodeCommand(gcode);
     }else{
-        Serial.print("[Warn] SpringMaker::ExecuteMqttCommand()  = ");
+        Serial.print("[Warn] SpringMakerApp::ExecuteMqttCommand()  = ");
         Serial.println(command);
     }
 }
 
-void SpringMaker::SpinOnce(){
+void SpringMakerApp::SpinOnce(){
     if (!this->_gcode_queue->BufferIsFull()){
         this->CheckMqttCommand();
     }
