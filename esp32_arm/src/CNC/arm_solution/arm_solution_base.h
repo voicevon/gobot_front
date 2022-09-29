@@ -36,10 +36,9 @@ class ArmSolutionBase{
         virtual EnumAxis ConvertToEnum(char axis);
         void ForceStopMover();
         CncBoardBase* _cnc_board;   // TODO:  remove this.
-        Queue_MoveBlock* __queue_move_block;
 
-        virtual bool _ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line);
-        virtual void __CutLineSegment_ToMoveBlocks_to_queue(LineSegment* line);
+        virtual bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode);
+        virtual void __ConvertSegment_ToMoveBlockQueue(LineSegment* line);
         
     protected:
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
@@ -47,9 +46,6 @@ class ArmSolutionBase{
         virtual std::string GetHomeTrigerStateString();
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
-        // void RunM84();
-        // void _running_G28();
-		// virtual void _RunG28_CombinedFk(EnumAxis axis){};
 
         EnumAxis _homing_axis;
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config

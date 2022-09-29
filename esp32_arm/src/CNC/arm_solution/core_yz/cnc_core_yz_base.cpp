@@ -54,7 +54,8 @@ void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis axis){
 	// this->stepper_beta->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
 	// this->stepper_beta->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
 	// float motor_position[2];
-	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
 	mb->MoveBlocks[AXIS_ALPHA].IsAbsTargetPosition = false;
 	mb->MoveBlocks[AXIS_BETA].IsAbsTargetPosition = false;
 	if (axis=='Y'){
@@ -79,7 +80,8 @@ void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis axis){
 
 	
 	// this->_mover_base->AllActuatorsMoveTo(false, motor_position);
-	this->__queue_move_block->ForwardHead();	
+	// this->__queue_move_block->ForwardHead();	
+	Queue_MoveBlock::Instance().ForwardHead();
 
 	// this->_board->EnableMotor('A', true);
 	// this->_board->EnableMotor('B',true);
@@ -124,12 +126,13 @@ void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 
 
 // void CncSolution_CoreYZBase::RunG1(Gcode* gcode) {
-bool CncSolution_CoreYZBase::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
+bool CncSolution_CoreYZBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	Serial.print("\n[Debug] CncSolution_CoreYZBase::RunG1() is entering");
 	Serial.print(gcode->get_command());
 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
 	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
-	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
 		// this->stepper_alpha->setMaxSpeed(speed);
@@ -172,7 +175,8 @@ bool CncSolution_CoreYZBase::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* 
 
 	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
 	mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
-	this->__queue_move_block->ForwardHead();
+	// this->__queue_move_block->ForwardHead();
+	Queue_MoveBlock::Instance().ForwardHead();
 
 	if (true){
 		Serial.print("\n    [Debug] CncSolution_CoreYZBase::RunG1()     (");

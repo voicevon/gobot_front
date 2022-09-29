@@ -84,7 +84,8 @@ void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
 	Serial.print("[Debug] CncSolution_CoreAZ::RunG28() is entering:   " );
 	Serial.print(axis);
-	MoveBlock* mb=this->__queue_move_block->GetHeadMoveblock(); 
+	// MoveBlock* mb=this->__queue_move_block->GetHeadMoveblock(); 
+	MoveBlock* mb= Queue_MoveBlock::Instance().GetHeadMoveblock();
 	this->_homing_axis = axis;
 
 	this->_config->PrintOut();
@@ -105,7 +106,8 @@ void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
 		mb->MoveBlocks[0].TargetPosition = -500000;
 		mb->MoveBlocks[1].TargetPosition = -500000;
 	}
-	this->__queue_move_block->ForwardHead();
+	// this->__queue_move_block->ForwardHead();
+	Queue_MoveBlock::Instance().ForwardHead();
 
 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
 	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
@@ -152,12 +154,13 @@ void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
 // }
 
 // void CncSolution_CoreAZ::RunG1(Gcode* gcode) {
-bool CncSolution_CoreAZ::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
+bool CncSolution_CoreAZ::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	Serial.print("\n[Debug] CncSolution_CoreAZ::RunG1() is entering");
 	Serial.print(gcode->get_command());
 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
 	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
-	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
 		// this->_mover_base->SetEefSpeed(speed);
@@ -192,7 +195,8 @@ bool CncSolution_CoreAZ::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line
 	// motor_position[1] = target_ik_ab.beta;
 	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
 	mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
-	this->__queue_move_block->ForwardHead();
+	// this->__queue_move_block->ForwardHead();
+	Queue_MoveBlock::Instance().ForwardHead();
 	//None blocking, move backgroundly.
 	// this->_mover_base->AllActuatorsMoveTo(true, motor_position);
 

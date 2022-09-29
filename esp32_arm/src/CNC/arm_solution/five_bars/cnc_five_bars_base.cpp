@@ -178,12 +178,12 @@ void CncSolution_FiveBarsBase::FK(IkPositionBase* from_ik, FkPositionBase* to_fk
 	Serial.print(")");
 }
 
-// void CncSolution_FiveBarsBase::RunG1(Gcode* gcode){
-bool CncSolution_FiveBarsBase::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
+bool CncSolution_FiveBarsBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	Logger::Warn("CncSolution_FiveBarsBase::RunG1()");
 	Serial.println(gcode->get_command());
 
-	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
@@ -226,7 +226,8 @@ bool CncSolution_FiveBarsBase::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment
 	// this->_mover_base->AllActuatorsMoveTo(true, target_position);
 	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
 	mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
-	this->__queue_move_block->ForwardHead();
+	// this->__queue_move_block->ForwardHead();
+	Queue_MoveBlock::Instance().ForwardHead();
 
 	if (true){
 		FkPosition_XY verified_fk;
@@ -248,6 +249,9 @@ bool CncSolution_FiveBarsBase::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment
 	}  
 }
 
+void CncSolution_FiveBarsBase::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
+
+}
 
 float CncSolution_FiveBarsBase::GetDistanceToTarget_IK(){
 	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();

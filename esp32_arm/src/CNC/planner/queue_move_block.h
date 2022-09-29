@@ -9,7 +9,11 @@
 //TODO:  want a better name, like  MoveBlockQueueManager ?
 class Queue_MoveBlock: public CommonQueue{
     public:
-        Queue_MoveBlock(){this->_Init(88, sizeof(MoveBlock));};
+        static Queue_MoveBlock& Instance(){
+            static Queue_MoveBlock instance;
+            return instance;
+        };
+        Queue_MoveBlock(){this->_Init(BLOCK_QUEUE_SIZE, sizeof(MoveBlock));};
         MoveBlock* FetchTailMoveBlock(){return (MoveBlock*)this->FetchTailObject(); };
         MoveBlock* GetHeadMoveblock() {return (MoveBlock*)this->GetHeadObject(); };
     private:

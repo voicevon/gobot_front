@@ -8,10 +8,12 @@ void MoverBase::SpinOnce(){
     // _actuator_beta_base->SpinOnce();
     // _actuator_delta_base->SpinOnce();
     // Logger::Print("MoverBase::SpinOnce() point", 1);
-    if (this->__queue_move_block->BufferIsEmpty()) return;
+    // if (this->__queue_move_block->BufferIsEmpty()) return;
+    if (Queue_MoveBlock::Instance().BufferIsEmpty()) return;
     
     Logger::Info("MoverBase::SpinOnce() fetching queue_moveb_lock");
-    MoveBlock* mb = this->__queue_move_block->FetchTailMoveBlock();
+    // MoveBlock* mb = this->__queue_move_block->FetchTailMoveBlock();
+    MoveBlock* mb = Queue_MoveBlock::Instance().FetchTailMoveBlock();
     Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
     this->AllActuatorsMoveTo(mb);
     // _actuator_alpha_base->UpdateMovement(&mb->MoveBlocks[AXIS_ALPHA]);

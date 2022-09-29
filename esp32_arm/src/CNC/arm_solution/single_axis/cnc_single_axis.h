@@ -3,14 +3,18 @@
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "kinematic_config.h"
-#include "CNC/planner/move_block_queue.h"
+#include "CNC/planner/queue_line_segment.h"
+#include "CNC/planner/queue_move_block.h"
+
 
 //This is a virtual class. No Constructor.
 class CncSingleAxis: public ArmSolutionBase{
     public:
         // void Init(CncBoardBase* board) override;
         // void RunG1(Gcode* gcode) override;
-        bool _ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line) override;
+        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        void __ConvertSegment_ToMoveBlockQueue(LineSegment* line)override;
+
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
         float GetDistanceToTarget_FK() override{return 0.0;};

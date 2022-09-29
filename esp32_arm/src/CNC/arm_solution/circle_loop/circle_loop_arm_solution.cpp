@@ -49,63 +49,64 @@ void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 	}
 }
 
-void CircleLoop_ArmSolution::__CutLineSegment_ToMoveBlocks_to_queue(LineSegment* line){
+void CircleLoop_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 	//TODO:  This is a virtual function.
 	FkPosition_A* fk_pos =  (FkPosition_A*) line->TargetPosition;
-	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
 	mb->MoveBlocks[line->axis].axis = line->axis;
 	mb->MoveBlocks[line->axis].IsAbsTargetPosition = line->IsAbsTargetPosition;
 	mb->MoveBlocks[line->axis].TargetPosition = fk_pos->A ;
 	mb->MoveBlocks[line->axis].Speed = line->Speed;
 	mb->MoveBlocks[line->axis].Acceleration = line->Acceleration;
-	this->__queue_move_block->ForwardHead();
+	// this->__queue_move_block->ForwardHead();
+	Queue_MoveBlock::Instance().ForwardHead();
 }
 
-// void CircleLoop_ArmSolution::RunG1(Gcode* gcode) {
-bool CircleLoop_ArmSolution::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
+bool CircleLoop_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	Logger::Debug("CircleLoop_ArmSolution::RunG1()");
 	Logger::Print("G1 ", gcode->get_command());
 	Logger::Print("this->AXIS", this->_AXIS);
 	// LineSegment line;
 
-	// this->_cnc_board->EnableMotor(this->_AXIS, true);
-	if (gcode->has_letter('F')){
-		line->Speed = gcode->get_value('F');
-		Logger::Print("Speed", line->Speed);
-	}
-	// FkPosition_A target_fk_a;
-	IkPosition_A target_ik_a;
-	char axis_name = 'A';
-	bool do_ik = false;
-	if (gcode->has_letter(axis_name)) {
-		do_ik = true;
-		this->__target_fk_position.A = gcode->get_value(axis_name);
-		Logger::Print("G1 target position", this->__target_fk_position.A);
-	}
-	if (do_ik) IK(&this->__target_fk_position, &target_ik_a);
+	// // this->_cnc_board->EnableMotor(this->_AXIS, true);
+	// if (gcode->has_letter('F')){
+	// 	line->Speed = gcode->get_value('F');
+	// 	Logger::Print("Speed", line->Speed);
+	// }
+	// // FkPosition_A target_fk_a;
+	// IkPosition_A target_ik_a;
+	// char axis_name = 'A';
+	// bool do_ik = false;
+	// if (gcode->has_letter(axis_name)) {
+	// 	do_ik = true;
+	// 	this->__target_fk_position.A = gcode->get_value(axis_name);
+	// 	Logger::Print("G1 target position", this->__target_fk_position.A);
+	// }
+	// if (do_ik) IK(&this->__target_fk_position, &target_ik_a);
 
-	//Prepare actuator/driver to move to next point
-	// this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
-	line->axis = this->_AXIS;
-	line->IsAbsTargetPosition = true;
-	line->TargetPosition = &this->__target_fk_position;
+	// //Prepare actuator/driver to move to next point
+	// // this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
+	// line->axis = this->_AXIS;
+	// line->IsAbsTargetPosition = true;
+	// line->TargetPosition = &this->__target_fk_position;
 
-	// this->__CutLineSegment_ToMoveBlocks_to_queue(line);
+	// // this->__CutLineSegment_ToMoveBlocks_to_queue(line);
 
 	
-	// this->_mover_base->SingleActuatorMoveTo(&line);   //DOING:  put line to lineSegment queue
-	//None blocking, move backgroundly.
-	// uint8_t abs_flag=0x01;
-	// this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
-	bool debug = true;
-	if (debug){
-		Logger::Print("CircleLoop_ArmSolution::_ConvertG1ToLineSegment() point", 6);
-		// this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
-		Logger::Print("CircleLoop_ArmSolution::_ConvertG1ToLineSegment() point", 7);
+	// // this->_mover_base->SingleActuatorMoveTo(&line);   //DOING:  put line to lineSegment queue
+	// //None blocking, move backgroundly.
+	// // uint8_t abs_flag=0x01;
+	// // this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
+	// bool debug = true;
+	// if (debug){
+	// 	Logger::Print("CircleLoop_ArmSolution::_ConvertG1ToLineSegment() point", 6);
+	// 	// this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
+	// 	Logger::Print("CircleLoop_ArmSolution::_ConvertG1ToLineSegment() point", 7);
 
-		Logger::Print("from", this->__current_fk_position.A);
-		Logger::Print("to", target_ik_a.alpha);
-	}
+	// 	Logger::Print("from", this->__current_fk_position.A);
+	// 	Logger::Print("to", target_ik_a.alpha);
+	// }
 }
 
 

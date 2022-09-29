@@ -9,7 +9,8 @@ bool Planner::IsPlanable(){
     // Logger::Print("Planner::IsPlanable() point",2);
     // auto cc = bb->GetFreeBuffersCount();
     // Logger::Print("Planner::IsPlanable() point",3);
-    int fbc = this->__arm_solution->__queue_move_block->GetFreeBuffersCount();
+    // int fbc = this->__arm_solution->__queue_move_block->GetFreeBuffersCount();
+    int fbc = Queue_MoveBlock::Instance().GetFreeBuffersCount();
     if (fbc > 3) return true;
     return false;
 }
@@ -21,7 +22,8 @@ void Planner::AppendLineSegment(LineSegment* line){
     //Translate LineSegment To MoveBlocks, and insert to move_block_queue.
     Logger::Debug("Planner::AppendLineSegment()");
     Logger::Print("line->axis", line->axis);
-    this->__arm_solution->__CutLineSegment_ToMoveBlocks_to_queue(line);
+    // this->__arm_solution->__CutLineSegment_ToMoveBlocks_to_queue(line);
+    this->__arm_solution->__ConvertSegment_ToMoveBlockQueue(line);
     // for (int i=0; i<1; i++){
     //     // TODO: recalculate acceleration, speed.
     //     MoveBlock* mb = this->__arm_solution->__queue_move_block->GetHeadMoveblock();

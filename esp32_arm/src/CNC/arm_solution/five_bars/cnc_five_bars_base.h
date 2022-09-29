@@ -22,7 +22,9 @@ class CncSolution_FiveBarsBase: public ArmSolutionBase{
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
         bool GetCurrentPosition(FkPositionBase* position_fk) override {return false;};
-        bool _ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line) override;
+        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
+        
         // void RunG1(Gcode* gcode) override;
         // void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {return " ";};

@@ -25,7 +25,8 @@ class CncSolution_CoreAZ: public ArmSolutionBase{
 
         // void Init(CncBoardBase* board) override;
         //  void RunG1(Gcode* gcode) override;
-        bool _ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line) override;
+        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
         float GetDistanceToTarget_FK() override{return 0.0;};

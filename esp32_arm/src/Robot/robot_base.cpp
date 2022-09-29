@@ -12,7 +12,8 @@ void RobotBase::SpinOnce(){
 		case RobotState::G4_IS_SYNCING:
 			//todo:  when buffer is empty,  a gcode is still runnning.
 			// Correct way is:  buffer is empey, and Mover is stoped.
-			if (this->__queue_move_block.BufferIsEmpty()){
+			// if (this->__queue_move_block.BufferIsEmpty()){
+			if (Queue_MoveBlock::Instance().BufferIsEmpty()){
 				this->__g4_runner.Start();
 				this->State = RobotState::G4_IS_RUNNING;
 			}
@@ -23,7 +24,8 @@ void RobotBase::SpinOnce(){
 			}
 			break;
 		case RobotState::G28_IS_SYNCING:
-			if (this->__queue_move_block.BufferIsEmpty()){
+			// if (this->__queue_move_block.BufferIsEmpty()){
+			if (Queue_MoveBlock::Instance().BufferIsEmpty()){
 				this->__g28_runner.Start();
 				this->State = RobotState::G28_IS_RUNNING;
 			}
@@ -111,8 +113,8 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			//       2. send out OK.
 			//       3. Set status to busy.
 			//       4. Start Moving.
-			this->__planner.__arm_solution->_ConvertG1ToLineSegment(gcode, &line);
-			this->__planner.AppendLineSegment(&line);
+			this->__planner.__arm_solution->_CutGcodeLine_ToSegmentQueue(gcode);
+			this->__planner.AppendLineSegment(&line);   //TODO:: many lines ?
 
 			// this->commuDevice->OutputMessage(COMMU_OK);
 			break;
@@ -194,7 +196,7 @@ void RobotBase::__RunMcode(Gcode* gcode){
 
 		case 130:
 			// this->__m130_runner.Run(gcode);
-			// McodeRunners::GetRunner(130)->Run(gcode);
+			McodeRunners::getInstance().Run(gcode);
 			break;
 
 		case 141:

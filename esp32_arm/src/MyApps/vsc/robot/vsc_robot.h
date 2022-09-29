@@ -16,7 +16,7 @@ class VscRobot: public RobotBase{
         PidControllers __all_pids = PidControllers(1);
 
         MoveBlock __all_move_blocks[88]; 
-
+        LineSegment __all_line_segments[88];
         Vsc_CncMover mover;
         Vsc_ArmSoution arm_solution;
 

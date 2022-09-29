@@ -39,11 +39,13 @@ void CncSingleAxis::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		this->FK(&ik_position, &verifying_fk);
 	}
 	//Copy current ik-position to motor-position.
-	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
 	if (this->_homing_axis == this->_AXIS) {
 		mb->MoveBlocks[AXIS_ALPHA].axis= AXIS_ALPHA;
 		mb->MoveBlocks[AXIS_ALPHA].TargetPosition = ik_position.alpha;
-		this->__queue_move_block->ForwardHead();
+		// this->__queue_move_block->ForwardHead();
+		Queue_MoveBlock::Instance().ForwardHead();
 		// this->_mover_base->SetActuatorCurrentCncPositionAs(this->_AXIS,ik_position.alpha);
 	}else{
 		Logger::Halt("CncSingleAxis::_SetCurrentPositionAsHome()");
@@ -52,54 +54,59 @@ void CncSingleAxis::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 
 
 // void CncSingleAxis::RunG1(Gcode* gcode) {
-bool CncSingleAxis::_ConvertG1ToLineSegment(Gcode* gcode, LineSegment* line){
+bool CncSingleAxis::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	Logger::Debug("CncSingleAxis::RunG1() is entering");
 	Logger::Print("G1 ", gcode->get_command());
 	Logger::Print("this->AXIS", this->_AXIS);
 	// this->_cnc_board->EnableMotor(this->_AXIS, true);
-	MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-	float target_speed = 0.1;
-	if (gcode->has_letter('F')){
-		target_speed = gcode->get_value('F');
-		// this->_mover_base->SetActuatorSpeed(this->_AXIS, target_speed);
-		mb->MoveBlocks[AXIS_ALPHA].Speed = target_speed;
-		Logger::Print("Target Speed", target_speed);
-	}else{
-		//Not set speed. How to get correct default speed?
+	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+	// MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
+	// float target_speed = 0.1;
+	// if (gcode->has_letter('F')){
+	// 	target_speed = gcode->get_value('F');
+	// 	// this->_mover_base->SetActuatorSpeed(this->_AXIS, target_speed);
+	// 	mb->MoveBlocks[AXIS_ALPHA].Speed = target_speed;
+	// 	Logger::Print("Target Speed", target_speed);
+	// }else{
+	// 	//Not set speed. How to get correct default speed?
 		
-	}
-	FkPosition_A target_fk_a;
-	IkPosition_A target_ik_a;
-	char axis_name = 'A';
-	bool do_ik = false;
-	if (gcode->has_letter(axis_name)) {
-		do_ik = true;
-		target_fk_a.A = gcode->get_value(axis_name);
-		Logger::Print("G1 target position", target_fk_a.A);
-	}
-	if (do_ik) IK(&target_fk_a, &target_ik_a);
+	// }
+	// FkPosition_A target_fk_a;
+	// IkPosition_A target_ik_a;
+	// char axis_name = 'A';
+	// bool do_ik = false;
+	// if (gcode->has_letter(axis_name)) {
+	// 	do_ik = true;
+	// 	target_fk_a.A = gcode->get_value(axis_name);
+	// 	Logger::Print("G1 target position", target_fk_a.A);
+	// }
+	// if (do_ik) IK(&target_fk_a, &target_ik_a);
 
-	//Prepare actuator/driver to move to next point
-	// this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
-	mb->MoveBlocks[AXIS_ALPHA].IsAbsTargetPosition = true;
-	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_a.alpha;
-	mb->MoveBlocks[AXIS_ALPHA].Speed = target_speed;
-	// this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
-	// this->_mover_base->SingleActuatorMoveTo(&move);
-	this->__queue_move_block->ForwardHead();
+	// //Prepare actuator/driver to move to next point
+	// // this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
+	// mb->MoveBlocks[AXIS_ALPHA].IsAbsTargetPosition = true;
+	// mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_a.alpha;
+	// mb->MoveBlocks[AXIS_ALPHA].Speed = target_speed;
+	// // this->_mover_base->SingleActuatorMoveTo(this->_AXIS, true, target_ik_a.alpha);
+	// // this->_mover_base->SingleActuatorMoveTo(&move);
+	// // this->__queue_move_block->ForwardHead();
+	// Queue_MoveBlock::Instance().ForwardHead();
 
-	//None blocking, move backgroundly.
-	// uint8_t abs_flag=0x01;
-	// this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
-	bool debug = true;
-	if (debug){
-		// this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
-		Logger::Debug("CncSingleAxis::RunG1() ");
-		Logger::Print("from", this->__current_fk_position.A);
-		Logger::Print("to", target_ik_a.alpha);
-	}
+	// //None blocking, move backgroundly.
+	// // uint8_t abs_flag=0x01;
+	// // this->_mover_base->AllActuatorsMoveTo(abs_flag, &target_ik_a.alpha);
+	// bool debug = true;
+	// if (debug){
+	// 	// this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(this->_AXIS);
+	// 	Logger::Debug("CncSingleAxis::RunG1() ");
+	// 	Logger::Print("from", this->__current_fk_position.A);
+	// 	Logger::Print("to", target_ik_a.alpha);
+	// }
 }
 
+void CncSingleAxis::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
+	
+}
 
 float CncSingleAxis::GetDistanceToTarget_IK(){
 	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();

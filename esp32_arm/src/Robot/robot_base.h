@@ -8,16 +8,10 @@
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
 #include "CNC/mover/mover_base.h"
-// #include "MyLibs/pid_controllers/pid_controllers.h"
 #include "CNC/planner/planner.h"
 #include "gcode_runner/g28_runner.h"
 #include "gcode_runner/g4_runner.h"
 #include "mcode_runner/mcode_runners.h"
-// #include "mcode_runner/m42_runner.h"
-// #include "mcode_runner/m84_runner.h"
-// #include "mcode_runner/m130_runner.h"
-// #include "mcode_runner/mcode_runner_base.h"
-
 
 enum class RobotState{
     IDLE_OR_ASYNC,
@@ -34,7 +28,7 @@ class RobotBase: public GcodeConsumer{
         // void RunG28(EnumAxis axis);
 
     protected:
-        Queue_MoveBlock __queue_move_block;
+        // Queue_MoveBlock __queue_move_block;
         Planner __planner;
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
        

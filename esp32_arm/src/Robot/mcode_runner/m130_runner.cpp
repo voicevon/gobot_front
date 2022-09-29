@@ -5,7 +5,7 @@ void M130_Runner::Run(Gcode* gcode){
     uint8_t s_value = 0;
     float f_value = 0.0f;
 
-    Logger::Debug("RobotBase::RunGcode()   M130");
+    Logger::Info("M130_Runner::Run()");
     Logger::Print("gcode", gcode->get_command());
     p_value =  gcode->get_value('N');
     Logger::Print("Index", p_value);

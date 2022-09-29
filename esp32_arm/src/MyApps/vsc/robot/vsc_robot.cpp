@@ -9,9 +9,11 @@ void VscRobot::Init(Vsc_Board* board){
     
     this->_mover = &mover;
     //  queue_move_block involved.
-    this->__queue_move_block._all_queue_ables = (Queue_able*)this->__all_move_blocks;
-    arm_solution.__queue_move_block = &this->__queue_move_block;    //todo:  LinkAsProducer()
-    mover.__queue_move_block = &this->__queue_move_block;   //todo:  LinkAsConsumer()
+    // this->__queue_move_block._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    // arm_solution.__queue_move_block = &this->__queue_move_block;    //todo:  LinkAsProducer()
+    // arm_solution.__queue_move_block = &this->__queue_move_block;    //todo:  LinkAsProducer()
+    // mover.__queue_move_block = &this->__queue_move_block;   //todo:  LinkAsConsumer()
     this->__planner.__arm_solution = &arm_solution;
     mover.Init(board);
 
