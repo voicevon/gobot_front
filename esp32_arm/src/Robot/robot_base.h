@@ -50,11 +50,13 @@ class RobotBase: public GcodeConsumer{
         ArmSolutionBase* _arm_solution;
         MoverBase* _mover;
 
+    protected:
+        G28_Runner *__g28_runner;
+
     private:
 
         int test_int;
         RobotEefBase* __eef;
-        G28_Runner __g28_runner;
         G4_Runner __g4_runner;
 
         void __RunGcode(Gcode* gcode);

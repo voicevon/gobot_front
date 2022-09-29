@@ -26,12 +26,12 @@ void RobotBase::SpinOnce(){
 		case RobotState::G28_IS_SYNCING:
 			// if (this->__queue_move_block.BufferIsEmpty()){
 			if (Queue_MoveBlock::Instance().BufferIsEmpty()){
-				this->__g28_runner.Start();
+				this->__g28_runner->Start();
 				this->State = RobotState::G28_IS_RUNNING;
 			}
 			break;
 		case RobotState::G28_IS_RUNNING:
-			if(this->__g28_runner.IsDone()){
+			if(this->__g28_runner->IsDone()){
 				this->State = RobotState::IDLE_OR_ASYNC;
 			}
 			break;
@@ -94,7 +94,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 
 	switch (gcode->g){
 		case 28:
-			this->__g28_runner.LinkGcode(gcode);
+			this->__g28_runner->LinkGcode(gcode);
 
 			//TODO:  convert char to enum
 			// this->RunG28(this->ConvertToEnum(home_axis));

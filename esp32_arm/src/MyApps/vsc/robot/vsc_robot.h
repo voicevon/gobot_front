@@ -4,6 +4,7 @@
 #include "Robot/robot_base.h"
 #include "MyApps/vsc/board/board_vsc.h"
 #include "MyApps/vsc/cnc/vsc_arm_solution.h"
+#include "vsc_g28_runner.h"
 
 class VscRobot: public RobotBase{
     public:
@@ -19,5 +20,6 @@ class VscRobot: public RobotBase{
         LineSegment __all_line_segments[88];
         Vsc_CncMover mover;
         Vsc_ArmSoution arm_solution;
+        Vsc_G28_Runner g28_runner;
 
 };

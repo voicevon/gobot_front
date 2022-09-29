@@ -5,13 +5,11 @@
 
 
 bool G28_Runner::IsDone(){
-    // Check homer trigger
-	// if(homer.is_triggerd()){
-	// 	// Stop movement
-	// 	mover.force_stop();
-	// 	return true;
-	// }
-	return false;
+	if(__homer->GetTrigeredIndex()==-1){
+		return false;
+	}
+	__mover->AllActuatorsStop();
+	return true;
 }
 
 // Put a move_block to the queue.
@@ -27,15 +25,12 @@ void G28_Runner::Start(){
     Logger::Print("home_axis", axis_name);
     EnumAxis axis = CncAxis::GetFromName(axis_name);
 
-    // Is there any machine that supports both IK, and FK homing?
-    // this->_home_via_inverse_kinematic = false;
+	//Put a move_block into the queue.  Mover will let the actuator to turn...
 
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
+	this->SetMoveBlock_ToHome(axis, mb);
+	Queue_MoveBlock::Instance().ForwardHead();
+	this->__mover->SpinOnce();
 
-	// if (this->_config_base.IsCombinedFk){
-		// this->_RunG28_CombinedFk(axis);
-
-	// }else{
-		this->__HomeSingleAxis(axis);
-	// }
 }
 

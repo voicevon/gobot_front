@@ -6,6 +6,7 @@ void VscRobot::Init(Vsc_Board* board){
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());
 
+    this->__g28_runner=&this->g28_runner;
     
     this->_mover = &mover;
     //  queue_move_block involved.
