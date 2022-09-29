@@ -8,9 +8,9 @@ void ArmSolutionBase::SayHello(){
 	Serial.println("[Debug] ArmSolutionBase::SayHello()");
 }
 
-void ArmSolutionBase::SpinOnce(){
-	// Nothing need to do.
-	return;
+// void ArmSolutionBase::SpinOnce(){
+// 	// Nothing need to do.
+// 	return;
 
 
 	
@@ -37,7 +37,7 @@ void ArmSolutionBase::SpinOnce(){
 
 	// Serial.println("[Debug]( ArmSolutionBase::SpinOnce() is finished.)");
 	// this->SpinOnce_BaseExit();
-}
+// }
 
 void ArmSolutionBase::ForceStopMover(){
 	// this->_mover_base->AllActuatorsStop();

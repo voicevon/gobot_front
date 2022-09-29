@@ -21,8 +21,8 @@ enum class CncState{
 
 class ArmSolutionBase{
     public:
-        CncState State = CncState::IDLE;
-        void SpinOnce();
+        // CncState State = CncState::IDLE;
+        // void SpinOnce();
 
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
 
@@ -47,7 +47,7 @@ class ArmSolutionBase{
         virtual std::string GetHomeTrigerStateString();
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
-        void RunM84();
+        // void RunM84();
         // void _running_G28();
 		// virtual void _RunG28_CombinedFk(EnumAxis axis){};
 

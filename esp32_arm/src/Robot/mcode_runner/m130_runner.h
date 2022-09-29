@@ -5,7 +5,7 @@
 class M130_Runner: public McodeRunnerBase{
     public:
         void Run(Gcode* gcode) override;
-
+        void LinkPidControllers(PidControllers* pids){this->__pid_controllers_m130=pids;};
     private:
         PidControllers* __pid_controllers_m130;  
     

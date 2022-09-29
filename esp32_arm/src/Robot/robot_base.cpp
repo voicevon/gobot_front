@@ -147,13 +147,22 @@ void RobotBase::__RunMcode(Gcode* gcode){
 		uint8_t s_value = 0;
 		float f_value = 0.0f;
 		EefAction action;
+		McodeRunnerBase* mr;
 		switch (gcode->m){
 		case 42:
-			p_value =  gcode->get_value('P');
-			s_value = gcode->get_value('S');
-			this->Run_M42_OutputGpio(p_value, s_value);
+			McodeRunners::Run(gcode);
+			// mr->Run(gcode);
+			// McodeRunners::GetRunner(42)->Run(gcode);
+			
+			// this->__m42_runner.Run(gcode);
+			// p_value =  gcode->get_value('P');
+			// s_value = gcode->get_value('S');
+			// this->Run_M42_OutputGpio(p_value, s_value);
+			break;
 		case 84:
-			this->__m84_runner.Run(gcode);
+			// McodeRunners::GetRunner(84)->Run(gcode);
+			// this->__m84_runner.Run(gcode);
+			break;
 		case 114:
 			// Get Current Position
 			break;
@@ -184,7 +193,8 @@ void RobotBase::__RunMcode(Gcode* gcode){
 			break;
 
 		case 130:
-			this->__m130_runner.Run(gcode);
+			// this->__m130_runner.Run(gcode);
+			// McodeRunners::GetRunner(130)->Run(gcode);
 			break;
 
 		case 141:
