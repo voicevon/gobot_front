@@ -42,8 +42,13 @@ void RobotBase::SpinOnce(){
 	Logger::Debug("RobotBase::SpinOnce() has got command string ");
 	Serial.println(str.c_str());
 	Logger::Print("RobotBase::SpinOnce() point", 6);
-	
-	this->RunGcode(&gcode);
+	Logger::Print("gcode_command", gcode.get_command());
+
+	if(gcode.has_g){
+		this->__RunGcode(&gcode);
+	}else if(gcode.has_m){
+		this->__RunMcode(&gcode);
+	}
 	Logger::Print("RobotBase::SpinOnce() point", 99);
 
 }
@@ -118,7 +123,7 @@ void RobotBase::_running_G28(){
 		// this->_SetCurrentPositionAsHome(this->_homing_axis);
 		this->_arm_solution->ForceStopMover();
 		this->_arm_solution->_SetCurrentPositionAsHome(this->_homing_axis);
-		this->State = RobotState::IDLE;
+		this->State = RobotState::IDLE_OR_ASYNC;
 	}else{
 		// Endstop is not trigered
 		// Serial.print(".");
@@ -141,86 +146,9 @@ void RobotBase::RunM84(){
 		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
 	}
 }
-void RobotBase::RunGcode(Gcode* gcode){
-	Logger::Debug("RobotBase::RunGcode() is entering.");
-	std::string result;
 
+void RobotBase::__RunMcode(Gcode* gcode){
 	bool debug = false;
-	Logger::Print("gcode_command", gcode->get_command());
-
-	if(gcode->has_g){
-		char home_axis_name = '+';
-		// switch (gcode->g){
-		if (gcode->g==28){
-		// case 28:
-			// G28: Home
-			this->State = RobotState::RUNNING_G28;
-			if (gcode->has_letter('X')) home_axis_name='X';
-			if (gcode->has_letter('Y')) home_axis_name='Y';
-			if (gcode->has_letter('Z')) home_axis_name='Z';
-			if (gcode->has_letter('A')) home_axis_name='A';
-			if (gcode->has_letter('B')) home_axis_name='B';
-			if (gcode->has_letter('C')) home_axis_name='C';
-			if (gcode->has_letter('W')) home_axis_name='W';
-			Logger::Debug("RobotBase::RunGcode()    G28");
-			Logger::Print("home_axis",home_axis_name);
-
-			// Is there any machine that supports both IK, and FK homing?
-			// this->_home_via_inverse_kinematic = false;
-			if (home_axis_name == '+'){
-				Serial.print("\n\n\n\n[Error] RobotBase::RunGcode()  :");
-				Serial.print(home_axis_name);
-
-			}
-			//TODO:  convert char to enum
-			// this->RunG28(this->ConvertToEnum(home_axis));
-			EnumAxis home_axis =  this->_arm_solution->ConvertToEnum(home_axis_name);
-			this->RunG28(home_axis);
-			Logger::Print("RobotBase::RunGcode() invoking is over.", 9);
-			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
-			// break;
-		}else {
-		// 	this->_arm_solution->RunGcode(gcode);
-		// }
-
-		// case 1:
-		// 	// G1 Move
-		// 	//TODO:  1. put position to movement queue. called "plan" in smoothieware? 
-		// 	//       2. send out OK.
-		// 	//       3. Set status to busy.
-		// 	//       4. Start Moving.
-		// 	this->State = CncState::RUNNING_G1;
-		// 	this->RunG1(gcode);
-		// 	// this->commuDevice->OutputMessage(COMMU_OK);
-		// 	break;
-		// case 4:
-		// 	// G4 Dwell, Pause for a period of time.
-		// 	this->State = CncState::RUNNING_G4;
-		// 	this->RunG4(gcode);
-		// 	break;
-		// case 6:
-		// 	this->RunG6(gcode);
-		// 	// this->commuDevice->OutputMessage(COMMU_OK);
-		// 	break;
-		// case 90:
-		// 	// Absolute position
-		// 	this->is_absolute_position = true;
-		// 	// this->commuDevice->OutputMessage(COMMU_OK);
-		// 	break;
-		// case 91:
-		// 	// Relative position
-		// 	this->is_absolute_position = false;
-		// 	// this->commuDevice->OutputMessage(COMMU_OK);
-		// 	break;
-		// // case 92:
-		// 	// Set Position     G92 X10 E90
-		// 	// break;
-		// default:
-			LineSegment line;
-			this->__planner.__arm_solution->_ConvertG1ToLineSegment(gcode, &line);
-			this->__planner.AppendLineSegment(&line);
-		}
-	}else if(gcode->has_m){
 		uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
 		uint8_t s_value = 0;
 		float f_value = 0.0f;
@@ -246,7 +174,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 
 		case 123:
 			//M123 P=channel_index, S=Set EEF action			
-			while (this->State != RobotState::IDLE){
+			while (this->State != RobotState::IDLE_OR_ASYNC){
 				this->SpinOnce();
 			}
 			p_value =  gcode->get_value('P');
@@ -290,7 +218,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 			// 		Snnn Angle or microseconds
 			// Wait for all gcode, mcode is finished
 			// Serial.println("M280 Started");
-			while (this->State != RobotState::IDLE){
+			while (this->State != RobotState::IDLE_OR_ASYNC){
 				this->SpinOnce();
 			}
 			if (gcode->has_letter('P')) p_value = gcode->get_value('P');
@@ -306,14 +234,80 @@ void RobotBase::RunGcode(Gcode* gcode){
 		default:
 			break;
 		}
-	}else{
-		// this->commuDevice->OutputMessage("\n[Warning] RobotBase::RunGcode()  Has NO letter 'G' or 'M'. ");
-		// this->commuDevice->OutputMessage(gcode->get_command());
-		// this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
-	}
-	Logger::Print("RobotBase::RunGcode() point ",99);
-	
+	Logger::Print("RobotBase::RunMcode() point ",99);
+
 }
+void RobotBase::__RunGcode(Gcode* gcode){
+	char home_axis_name = '+';
+	LineSegment line;
+	EnumAxis home_axis;
+
+	switch (gcode->g){
+		case 28:
+			this->State = RobotState::G28_IS_SYNCING;
+			if (gcode->has_letter('X')) home_axis_name='X';
+			if (gcode->has_letter('Y')) home_axis_name='Y';
+			if (gcode->has_letter('Z')) home_axis_name='Z';
+			if (gcode->has_letter('A')) home_axis_name='A';
+			if (gcode->has_letter('B')) home_axis_name='B';
+			if (gcode->has_letter('C')) home_axis_name='C';
+			if (gcode->has_letter('W')) home_axis_name='W';
+			Logger::Debug("RobotBase::RunGcode()    G28");
+			Logger::Print("home_axis",home_axis_name);
+
+			// Is there any machine that supports both IK, and FK homing?
+			// this->_home_via_inverse_kinematic = false;
+			if (home_axis_name == '+'){
+				Serial.print("\n\n\n\n[Error] RobotBase::RunGcode()  :");
+				Serial.print(home_axis_name);
+
+			}
+			//TODO:  convert char to enum
+			// this->RunG28(this->ConvertToEnum(home_axis));
+			home_axis =  this->_arm_solution->ConvertToEnum(home_axis_name);
+			this->RunG28(home_axis);
+			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
+			break;
+		case 1:
+			// G1 Move
+			//TODO:  1. put position to movement queue. called "plan" in smoothieware? 
+			//       2. send out OK.
+			//       3. Set status to busy.
+			//       4. Start Moving.
+			this->__planner.__arm_solution->_ConvertG1ToLineSegment(gcode, &line);
+			this->__planner.AppendLineSegment(&line);
+
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			break;
+		case 4:
+			// G4 Dwell, Pause for a period of time.
+			this->State = RobotState::G4_IS_SYNCING;
+			// this->RunG4(gcode);
+			break;
+		// case 6:
+			// this->RunG6(gcode);
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			// break;
+		case 90:
+			// Absolute position
+			this->is_absolute_position = true;
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			break;
+		case 91:
+			// Relative position
+			this->is_absolute_position = false;
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			break;
+		case 92:
+			//Set Position     G92 X10 E90
+			break;
+		default:
+			break;
+	}
+	Logger::Print("RobotBase::RunMcode() point ",99);
+		
+}
+
 
 
 void RobotBase::Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value){

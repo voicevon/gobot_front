@@ -14,16 +14,18 @@
 #include "CNC/planner/planner.h"
 
 enum class RobotState{
-    IDLE,
-    RUNNING_G28
+    IDLE_OR_ASYNC,
+    G28_IS_SYNCING,
+    G28_IS_RUNNING,
+    G4_IS_SYNCING,
+    G4_IS_RUNNING,
 };
 
 class RobotBase: public GcodeConsumer{
     public:
-        RobotState State = RobotState::IDLE;
+        RobotState State = RobotState::IDLE_OR_ASYNC;
         void SpinOnce();
 
-        void RunGcode(Gcode* gcode);
         void RunG28(EnumAxis axis);
 
     protected:
@@ -55,6 +57,7 @@ class RobotBase: public GcodeConsumer{
 
     private:
         // void __TryNextGmCode_FromQueue();
+        // void __RunGmCode(Gcode* gcode);
 
         int test_int;
         RobotEefBase* __eef;
@@ -63,6 +66,8 @@ class RobotBase: public GcodeConsumer{
         PidControllers* __pid_controllers_m130;   
         void _base_spin_once();
         void __HomeSingleAxis(EnumAxis axis);
+        void __RunGcode(Gcode* gcode);
+        void __RunMcode(Gcode* gcode);
 
         /* Just for fun, don't remove below comment.
         void * __output_message2;
