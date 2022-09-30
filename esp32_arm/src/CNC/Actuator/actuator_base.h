@@ -32,7 +32,7 @@ class ActuatorBase{
         float GetNeededSeconds();
         void RenewSpeed(float moving_time);
         // virtual void SetAccelleration(float accelleration_in_cnc_unit);  // TODO: remove defination.
-        EnumAxis MyAxis;
+        char MyAxis;
     protected:
         float _target_cnc_position;   // is always an absolute position
         float _current_cnc_position;

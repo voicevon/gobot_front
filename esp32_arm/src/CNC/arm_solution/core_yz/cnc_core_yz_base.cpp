@@ -43,7 +43,7 @@ void CncSolution_CoreYZBase::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk)
 
 // }
 
-void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis axis){
+void CncSolution_CoreYZBase::RunG28_CombinedAxis(char axis){
 	Serial.print("[Debug] CncSolution_CoreYZBase::RunG28() is entering:   " );
 	Serial.println(axis);
 	this->_homing_axis = axis;
@@ -89,7 +89,7 @@ void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis axis){
 	// this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 }
 
-void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(char homing_axis){
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_config_base.IsInverseKinematicHoimg){

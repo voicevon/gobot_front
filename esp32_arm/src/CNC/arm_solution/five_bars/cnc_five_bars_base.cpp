@@ -2,7 +2,7 @@
 #include "cnc_five_bars_base.h"
 #include<Arduino.h>
 
-void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(char homing_axis){
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
 		this->_config->PrintOut("CncSolution_FiveBarsBase::_SetCurrentPositionAsHome()");

@@ -3,6 +3,6 @@
 
 
 class BoxCarrier_CncSolution: public CncSolution_CoreYZBase{
-    EnumAxis ConvertToEnum(char axis) override;
+    // EnumAxis ConvertToEnum(char axis) override;
 
 };

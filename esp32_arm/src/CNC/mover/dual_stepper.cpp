@@ -106,7 +106,7 @@ void Mover_DualStepper::AllActuatorsMoveTo(MoveBlock* move){
 //     this->__actuator_beta->UpdateTargetPositionFromCurrent();
 }
 
-// void Mover_DualStepper::SingleActuatorStop(EnumAxis actuator_name){
+// void Mover_DualStepper::SingleActuatorStop(char actuator_name){
 //     if (actuator_name == AXIS_ALPHA){
 //         this->__actuator_alpha->UpdateTargetPositionFromCurrent();
 //         this->_moving_actuator_flags -= 0x01;
@@ -121,7 +121,7 @@ void Mover_DualStepper::AllActuatorsMoveTo(MoveBlock* move){
 // }
 
 
-// void Mover_DualStepper::SingleActuatorMoveTo(EnumAxis actuator_name, bool is_absolute_position, float position_in_cnc_unit){
+// void Mover_DualStepper::SingleActuatorMoveTo(char actuator_name, bool is_absolute_position, float position_in_cnc_unit){
 // void Mover_DualStepper::SingleActuatorMoveTo(LineSegment* move){
 // void Mover_DualStepper::SingleActuatorMoveTo(MoveBlock_SingleActuator* move){
 //     Stepper* stepper;
@@ -176,7 +176,7 @@ void Mover_DualStepper::AllActuatorsMoveTo(MoveBlock* move){
 //     return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
 // }
 
-// void Mover_DualStepper::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
+// void Mover_DualStepper::SetActuatorSpeed(char actuator_name, float steps_per_second){
 //     if (actuator_name ==AXIS_ALPHA){
 //         this->__actuator_alpha->SetSpeed(steps_per_second);
 //     }else if(actuator_name == AXIS_BETA){
@@ -188,7 +188,7 @@ void Mover_DualStepper::AllActuatorsMoveTo(MoveBlock* move){
 
 
 
-bool Mover_DualStepper::ActuatorIsMoving(EnumAxis actuator_name) {
+bool Mover_DualStepper::ActuatorIsMoving(char actuator_name) {
     if (actuator_name==AXIS_ALPHA){
         return this->__stepControl->isRunning();
     }else if (actuator_name==AXIS_BETA){

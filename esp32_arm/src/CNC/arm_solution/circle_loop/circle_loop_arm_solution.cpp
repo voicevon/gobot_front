@@ -20,7 +20,7 @@ void CircleLoop_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk)
 }
 
 
-void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(char homing_axis){
 	//Set current position to HomePosition
 	IkPosition_A ik_position;
 	if (this->_config_base.IsInverseKinematicHoimg){

@@ -12,7 +12,7 @@ class KinematicConfig{
         bool IsCombinedFk = false;  // Like core-xy, core-yz, core-az.
         bool IsInverseKinematicHoimg = false;
 
-        float GetAcceleration_ForG1(EnumAxis axis){return this->_ACCELERATION_FOR_G1[axis];};
+        float GetAcceleration_ForG1(char axis){return this->_ACCELERATION_FOR_G1[axis];};
         
     protected:
         bool _IS_COMBINED_FK = false;   

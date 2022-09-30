@@ -54,7 +54,7 @@ void CncSolution_CoreAZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 // }
 
 
-void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CncSolution_CoreAZ::_SetCurrentPositionAsHome(char homing_axis){
 //Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_config_base.IsInverseKinematicHoimg){
@@ -81,7 +81,7 @@ void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		
 }
 
-void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
+void CncSolution_CoreAZ::RunG28_CombinedAxis(char axis){
 	Serial.print("[Debug] CncSolution_CoreAZ::RunG28() is entering:   " );
 	Serial.print(axis);
 	// MoveBlock* mb=this->__queue_move_block->GetHeadMoveblock(); 

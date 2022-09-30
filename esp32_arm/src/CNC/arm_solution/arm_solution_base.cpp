@@ -50,7 +50,7 @@ void ArmSolutionBase::ForceStopMover(){
 
 //Can deal with:  home via single actuator.
 //Can NOT deal with:  CoreXY, It's combined moving.
-// void ArmSolutionBase::RunG28(EnumAxis axis){ 
+// void ArmSolutionBase::RunG28(char axis){ 
 // 	bool debug = true;
 // 	if (debug){
 // 		Logger::Debug("ArmSolutionBase::RunG28() is entering" );
@@ -67,7 +67,7 @@ void ArmSolutionBase::ForceStopMover(){
 // }
 
 
-// void ArmSolutionBase::__HomeSingleAxis(EnumAxis axis){
+// void ArmSolutionBase::__HomeSingleAxis(char axis){
 // 	Logger::Debug("ArmSolutionBase::__HomeSingleAxis()");
 // 	this->_homing_axis = axis;
 // 	HomingConfig* homing = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
@@ -153,7 +153,7 @@ void ArmSolutionBase::ForceStopMover(){
 // void ArmSolutionBase::RunM84(){
 // 	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
 // 	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
-// 		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
+// 		this->_cnc_board->EnableMotor(char(axis), false);
 // 	}
 // }
 

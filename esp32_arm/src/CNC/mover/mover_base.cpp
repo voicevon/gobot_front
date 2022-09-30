@@ -41,7 +41,7 @@ void MoverBase::LinkActuator(char actuator_name, ActuatorBase* actuator){
     }
 }
 
-void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position){
+void MoverBase::SetActuatorCurrentCncPositionAs(char actuator_name, float as_current_position){
     if (actuator_name == AXIS_ALPHA){
         this->_actuator_alpha_base->SetCurrentPositionAs(as_current_position);
     }else if (actuator_name == AXIS_BETA){
@@ -54,7 +54,7 @@ void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as
     }
 }
 
-float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
+float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(char actuator_name){
     Logger::Debug("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() ");
     if (actuator_name == AXIS_ALPHA){
         Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 1);

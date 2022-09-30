@@ -199,7 +199,7 @@ void CncScaraSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 
 
 
-void CncScaraSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CncScaraSolution::_SetCurrentPositionAsHome(char homing_axis){
 	//Set current position to HomePosition
 	bool debug = false;
 	IkPosition_AB ik_position;

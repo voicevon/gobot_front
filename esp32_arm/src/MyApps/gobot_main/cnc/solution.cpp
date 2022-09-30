@@ -34,24 +34,24 @@ void GobotMainCncSolution::__SelfTest(){
     // this->_mover_base->PrintOut("GobotMainCncSolution:: mover");
 }
 
-EnumAxis GobotMainCncSolution::ConvertToEnum(char axis){
-    switch (axis){
-        case 'A':
-            return AXIS_ALPHA;
-            break;
-        case 'B':
-            return AXIS_BETA;
-            break;
-        case 'X':
-            return AXIS_X;
-            break;
-        case 'Y':
-            return AXIS_Y;
-            break;
-        default:
-            Serial.print("[Error] GobotMainCncSolution::ConvertToEnum() Unknown axis= ");
-            Serial.println(axis);
-            break;
-    }
-    return AXIS_ALPHA;
-}
+// EnumAxis GobotMainCncSolution::ConvertToEnum(char axis){
+//     switch (axis){
+//         case 'A':
+//             return AXIS_ALPHA;
+//             break;
+//         case 'B':
+//             return AXIS_BETA;
+//             break;
+//         case 'X':
+//             return AXIS_X;
+//             break;
+//         case 'Y':
+//             return AXIS_Y;
+//             break;
+//         default:
+//             Serial.print("[Error] GobotMainCncSolution::ConvertToEnum() Unknown axis= ");
+//             Serial.println(axis);
+//             break;
+//     }
+//     return AXIS_ALPHA;
+// }
