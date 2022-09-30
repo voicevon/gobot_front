@@ -1,5 +1,5 @@
 #include "actuator_servo.h"
-#include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
+// #include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
 
 void ActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
@@ -72,7 +72,7 @@ void ActuatorServo::SpinOnce(){
 }
 
 // void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
-void ActuatorServo::UpdateMovement(MoveBlock* move){
+void ActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
 
     // if (is_absolute_position){
     if (move->IsAbsTargetPosition){
@@ -123,9 +123,9 @@ void ActuatorServo::SetCurrentPositionAs(float cnc_position_in_rad){
     }
 }
 
-void ActuatorServo::SetSpeed(float speed_in_cnc_unit){
-    this->__speed_degree_per_second = abs(RAD_TO_DEG * speed_in_cnc_unit); 
-}
+// void ActuatorServo::SetSpeed(float speed_in_cnc_unit){
+//     this->__speed_degree_per_second = abs(RAD_TO_DEG * speed_in_cnc_unit); 
+// }
 
 
 float ActuatorServo::__ToServoDegree(float from_cnc_rad){

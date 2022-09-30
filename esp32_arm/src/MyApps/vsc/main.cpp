@@ -2,7 +2,6 @@
 #ifdef I_AM_VSC
 #include "MyApps/vsc/board/board_vsc.h"
 #include "MyApps/vsc/board/board_tester.h"
-#include "MyApps/vsc/cnc/vsc_arm_solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "MyApps/vsc/vsc_app.h"
@@ -62,16 +61,13 @@ void setup(){
 }
 
 void loop(){
-    ActuatorDcMotor* motor = board.GetActuator(AXIS_ALPHA);
-    // Logger::Print("Arduino loop() point ",1);
-    motor->SpinOnce();
-    // Logger::Print("Arduino loop() point ",2);
+    // Logger::Print("Arduino loop() point ", 1);
     vsc_app.SpinOnce();
-    // Logger::Print("Arduino loop() point ",3);
+    // Logger::Print("Aruino loop() point ", 2);
     vsc_robot.SpinOnce();
-    // Logger::Print("Arduino loop() point ",4);
+    // Logger::Print("Arduino loop() point ", 3);
     loop_mqtt();
-    // Logger::Print("Arduino loop() point ",5);
+    // Logger::Print("Arduino loop() point ", 4);
 
 }
 

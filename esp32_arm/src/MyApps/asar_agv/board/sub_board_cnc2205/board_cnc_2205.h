@@ -14,7 +14,7 @@ class Board2205Cnc: public CncBoardBase{
         void Init(Adafruit_MCP23X17* mcp_23018);
         void SayHello() override{};
         RobotEef_GarmentAsar* GetEef() override;
-        void EnableMotor(EnumAxis axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
         PositionTrigger* GetPositionTrigger(uint8_t index) override{};
 
         

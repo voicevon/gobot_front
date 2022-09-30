@@ -47,14 +47,14 @@ void Vsc_BoardTest::Test_Actuator(ActuatorDcMotor* motor, int loop_count){
     float distance;
     // ActuatorDcMotor* motor = this->__board->GetActuator(AXIS_ALPHA);   // todo: 
     float speed = 12;
-    MoveBlock move;
+    MoveBlock_SingleActuator move;
     move.IsAbsTargetPosition = false;
     move.TargetPosition = 500;
     for (int i =0; i<loop_count; i++){
         // motor->SetTargetPositionTo(false, 500);
  
         motor->UpdateMovement(&move);
-        motor->SetSpeed(speed);   
+        // motor->SetSpeed(speed);   
         distance = motor->GetAbsDistanceToTarget_InCncUnit();
         while (distance > 10){
             motor->SpinOnce();
@@ -67,7 +67,7 @@ void Vsc_BoardTest::Test_Actuator(ActuatorDcMotor* motor, int loop_count){
         move.TargetPosition = 0;
         motor->UpdateMovement(&move);
 
-        motor->SetSpeed(speed/2);   
+        // motor->SetSpeed(speed/2);   
         distance = motor->GetAbsDistanceToTarget_InCncUnit();
         while (distance > 10){
             motor->SpinOnce();

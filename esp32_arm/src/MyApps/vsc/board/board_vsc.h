@@ -19,7 +19,7 @@ class Vsc_Board: public CncBoardBase{
         void SayHello() override;
 
         // For being an actuator and its components.
-        ActuatorDcMotor* GetActuator(EnumAxis axis_name) {return &this->__motor;};
+        ActuatorDcMotor* GetActuator(EnumAxis_Inverseinematic axis_name) {return &this->__motor;};
         PolorEncoder* GetAngleSensor(){return &this->__motor_angle_sensor;};
         H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
         void LinkSpeedPid_ForMotor(PIDController* speed_pid);
@@ -30,7 +30,7 @@ class Vsc_Board: public CncBoardBase{
         
 
         // We do nothing, just override the methods.
-        void EnableMotor(EnumAxis axis_name, bool enable_it) override {};
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override {};
 
         void Test_PositionTriggers(int loops);
 

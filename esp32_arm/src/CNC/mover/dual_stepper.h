@@ -12,21 +12,22 @@ class Mover_DualStepper: public MoverBase{
         void LinkStepper_asBeta(ActuatorStepper* stepper);
         void LinkStepControl(StepControl* stepControl){this->__stepControl=stepControl;};
         // void LinkServo_asBeta(ActuatorServo* servo);
-        void PrintOut(const char* title) override;
+        // void PrintOut(const char* title) override;
 
         
-        void SetEefSpeed(float speed) override;
+        // void SetEefSpeed(float speed) override;
         // float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;
         // float GetAbsDistanceToTarget_InCncUnit() override;
         // void SetActuatorSpeed(EnumAxis actuator_name, float rad_per_second) override;
         // void SetActuatorAcceleration(EnumAxis axis, float accelleration) override;
-        bool ActuatorIsMoving(EnumAxis actuator) override;
+        bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator) override;
 
 
-        void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;
-        void SingleActuatorMoveTo(MoveBlock* movement) override;
+        // void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;
+        void AllActuatorsMoveTo(MoveBlock* move) override;
+        // void SingleActuatorMoveTo(MoveBlock_SingleActuator* movement) override;
         void AllActuatorsStop() override;
-        void SingleActuatorStop(EnumAxis motor_name) override;
+        // void SingleActuatorStop(EnumAxis motor_name) override;
 
         bool HasArrivedTargetPosition(){};
 

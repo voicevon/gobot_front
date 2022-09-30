@@ -1,30 +1,47 @@
 #include "mover_base.h"
 
 
-// bool MotorIsMoving(char moto_name);
+void MoverBase::SpinOnce(){
+    // Logger::Debug("MoverBase::SpinOnce()");
+    _actuator_alpha_base->SpinOnce();
+    // _actuator_beta_base->SpinOnce();
+    // _actuator_delta_base->SpinOnce();
 
+    // Logger::Print("MoverBase::SpinOnce() point", 1);
+    if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
+        // Logger::Print("MoverBase::SpinOnce() Queue_MoveBlock::  Buffer is Empty", 91);
+        return;
+    }
+    Logger::Print("MoverBase::SpinOnce() point", 2);
+    
+    Logger::Info("MoverBase::SpinOnce() fetching queue_moveb_lock");
+    MoveBlock* mb = Queue_MoveBlock::Instance().Withdraw();
+    Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
+    this->AllActuatorsMoveTo(mb);
+    Logger::Print("MoverBase::SpinOnce() point", 99);
 
-void MoverBase::SetActuatorSpeed(EnumAxis actuator_name, float steps_per_second){
-    if (actuator_name ==AXIS_ALPHA){
-        this->_actuator_alpha_base->SetSpeed(steps_per_second);
-    }else if(actuator_name == AXIS_BETA){
-        this->_actuator_beta_base->SetSpeed(steps_per_second);
-    }else{
-        Logger::Halt("MoverBase::SetActuatorSpeed() ");
+}
+
+void MoverBase::LinkActuator(char actuator_name, ActuatorBase* actuator){
+    switch (actuator_name){
+    case 'A':
+        this->_actuator_alpha_base = actuator;
+        break;
+    case 'B':
+        this->_actuator_beta_base = actuator;
+        break;
+    case 'C':
+        this->_actuator_gamma_base = actuator;
+        break;
+    
+    default:
+        Logger::Warn("MoverBase::LinkActuator()");
+        Logger::Print("actuator_name", actuator_name);
+        break;
     }
 }
 
-void MoverBase::SetActuatorAcceleration(EnumAxis axis, float accelleration){
-    if (axis ==AXIS_ALPHA){
-        this->_actuator_alpha_base->SetAccelleration(accelleration);
-    }else if(axis == AXIS_BETA){
-        this->_actuator_beta_base->SetAccelleration(accelleration);
-    }else{
-        Logger::Halt("Mover_DualStepper::SetActuatorSpeed() ");
-    }
-}
-
-void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position){
+void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position){
     if (actuator_name == AXIS_ALPHA){
         this->_actuator_alpha_base->SetCurrentPositionAs(as_current_position);
     }else if (actuator_name == AXIS_BETA){
@@ -37,7 +54,8 @@ void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as
     }
 }
 
-float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name){
+float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic
+ actuator_name){
     Logger::Debug("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() ");
     if (actuator_name == AXIS_ALPHA){
         Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 1);

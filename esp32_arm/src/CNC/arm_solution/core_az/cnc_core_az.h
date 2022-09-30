@@ -24,7 +24,9 @@ class CncSolution_CoreAZ: public ArmSolutionBase{
     public:
 
         // void Init(CncBoardBase* board) override;
-         void RunG1(Gcode* gcode) override;
+        //  void RunG1(Gcode* gcode) override;
+        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
         float GetDistanceToTarget_FK() override{return 0.0;};
@@ -35,9 +37,9 @@ class CncSolution_CoreAZ: public ArmSolutionBase{
         //Override private
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
-        virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
-        void RunG28_CombinedAxis(EnumAxis axis);
-        void RunG6(Gcode* gcode) override{} ; 
+        virtual void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
+        // void RunG28_CombinedAxis(EnumAxis_ForwardKinematic axis);
+        // void RunG6(Gcode* gcode) override{} ; 
         std::string GetHomeTrigerStateString() override {return " ";};
 
         FkPosition_ZW __current_fk_position;

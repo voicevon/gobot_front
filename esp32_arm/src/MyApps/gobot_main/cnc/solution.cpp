@@ -8,7 +8,7 @@
 
 void GobotMainCncSolution::Init(GobotMain_Board* cnc_board, StepControl* step_control){
     this->__mover.Init(cnc_board, step_control);
-    this->_mover_base = &this->__mover;
+    // this->_mover_base = &this->__mover;
     
     // this->_LinkEef(cnc_board->GetEef());
     this->_config = &this->__config;
@@ -17,7 +17,7 @@ void GobotMainCncSolution::Init(GobotMain_Board* cnc_board, StepControl* step_co
     cnc_board->EnableMotor(AXIS_ALPHA, false);
 	cnc_board->EnableMotor(AXIS_BETA, false);
     
-    HomingConfig* config = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetHomingConfig(); // GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
+    HomingConfig* config = this->_cnc_homer.GetAxisHomer(AXIS_X)->GetHomingConfig(); // GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
     config->IsDirectionToMax = true;
     // config->LastHomedPosition
     config->Accelleration = DEG_TO_RAD * 30;
@@ -31,27 +31,27 @@ void GobotMainCncSolution::Init(GobotMain_Board* cnc_board, StepControl* step_co
 
 void GobotMainCncSolution::__SelfTest(){
     this->_config_base.PrintOut("GobotMainCncSolution:: config");
-    this->_mover_base->PrintOut("GobotMainCncSolution:: mover");
+    // this->_mover_base->PrintOut("GobotMainCncSolution:: mover");
 }
 
-EnumAxis GobotMainCncSolution::ConvertToEnum(char axis){
-    switch (axis){
-        case 'A':
-            return AXIS_ALPHA;
-            break;
-        case 'B':
-            return AXIS_BETA;
-            break;
-        case 'X':
-            return AXIS_X;
-            break;
-        case 'Y':
-            return AXIS_Y;
-            break;
-        default:
-            Serial.print("[Error] GobotMainCncSolution::ConvertToEnum() Unknown axis= ");
-            Serial.println(axis);
-            break;
-    }
-    return AXIS_ALPHA;
-}
+// EnumAxis GobotMainCncSolution::ConvertToEnum(char axis){
+//     switch (axis){
+//         case 'A':
+//             return AXIS_ALPHA;
+//             break;
+//         case 'B':
+//             return AXIS_BETA;
+//             break;
+//         case 'X':
+//             return AXIS_X;
+//             break;
+//         case 'Y':
+//             return AXIS_Y;
+//             break;
+//         default:
+//             Serial.print("[Error] GobotMainCncSolution::ConvertToEnum() Unknown axis= ");
+//             Serial.println(axis);
+//             break;
+//     }
+//     return AXIS_ALPHA;
+// }

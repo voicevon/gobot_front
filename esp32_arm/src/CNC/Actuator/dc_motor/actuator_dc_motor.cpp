@@ -1,7 +1,7 @@
 #include "actuator_dc_motor.h"
 #include "Arduino.h"
 #include "MyBoards/board_base.h"
-#include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
+// #include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
 
 #define INERTIA_DISTANCE  0.064    // this is a CNC unit  0.016== (1/386)/ (2*PI), around 12.7mm
@@ -78,7 +78,7 @@ float ActuatorDcMotor::GetCurrentPosition(){
 
 
 // void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float target_position){
-void ActuatorDcMotor::UpdateMovement(MoveBlock* move){
+void ActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
 
     Logger::Debug("ActuatorDcMotor::SetTargetPositionTo()  is entering");
     Logger::Print("is_absolute_position", move->IsAbsTargetPosition);
@@ -121,9 +121,9 @@ float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
 //     this->__target_speed = rad_per_second;
 // }
 
-void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
-    // this is a future feature.
-}
+// void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
+//     // this is a future feature.
+// }
 
 void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
     this->__sensor->SetCurrentPosition(position_in_cnc_unit);

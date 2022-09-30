@@ -11,7 +11,7 @@ class GobotMainCncSolution: public CncSolution_FiveBarsBase{
 
     private:
         // void _Init(Board_GobotMain* board);
-        EnumAxis ConvertToEnum(char axis) override;
+        // EnumAxis ConvertToEnum(char axis) override;
         GobotMain_CncMover __mover;
         GobotMain_CncSolutionConfig __config;
         void __SelfTest();

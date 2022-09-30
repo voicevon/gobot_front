@@ -1,5 +1,5 @@
 #include "actuator_stepper.h"
-#include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
+// #include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
 
 void ActuatorStepper::LinkStepper(Stepper* stepper, float steps_per_cnc_unit){
@@ -83,7 +83,7 @@ void ActuatorStepper::SetCurrentPositionAs(float position_in_cnc_unit){
 
 // Must clear to understand:  cnc_position,  actuator_position(or joint_position), and motor_position.
 // void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
-void ActuatorStepper::UpdateMovement(MoveBlock* move){
+void ActuatorStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     int32_t motor_position_in_step;
     // if (is_absolute_position){
     if (move->IsAbsTargetPosition){
@@ -143,24 +143,24 @@ void ActuatorStepper::UpdateMovement(MoveBlock* move){
     }
 }
 
-#define MAX_STEPS_PER_SECOND 6000   //TODO:  be configable
-void ActuatorStepper::SetSpeed(float speed_in_cnc_unit){
-    float steps_per_second = speed_in_cnc_unit * this->__steps_per_cnc_unit;
-    if (steps_per_second > MAX_STEPS_PER_SECOND){
-        steps_per_second = MAX_STEPS_PER_SECOND;
-    }
-    this->_stepper->setMaxSpeed(steps_per_second);
-    // the real speed of actuator.
-    this->__speed = steps_per_second / this->__steps_per_cnc_unit;
-    bool debug = false;
-    if (debug){
-        Serial.print("[Debug] ActuatorStepper::SetSpeed() speed= ");
-        Serial.println(RAD_TO_DEG * this->__speed);
-    }
-}
+// #define MAX_STEPS_PER_SECOND 6000   //TODO:  be configable
+// void ActuatorStepper::SetSpeed(float speed_in_cnc_unit){
+//     float steps_per_second = speed_in_cnc_unit * this->__steps_per_cnc_unit;
+//     if (steps_per_second > MAX_STEPS_PER_SECOND){
+//         steps_per_second = MAX_STEPS_PER_SECOND;
+//     }
+//     this->_stepper->setMaxSpeed(steps_per_second);
+//     // the real speed of actuator.
+//     this->__speed = steps_per_second / this->__steps_per_cnc_unit;
+//     bool debug = false;
+//     if (debug){
+//         Serial.print("[Debug] ActuatorStepper::SetSpeed() speed= ");
+//         Serial.println(RAD_TO_DEG * this->__speed);
+//     }
+// }
 
-void ActuatorStepper::SetAccelleration(float new_acceleration){
-    int32_t step_acceleration = new_acceleration * this->__steps_per_cnc_unit;
-    this->GetLinkedStepper()->setAcceleration(step_acceleration);
-}
+// void ActuatorStepper::SetAccelleration(float new_acceleration){
+//     int32_t step_acceleration = new_acceleration * this->__steps_per_cnc_unit;
+//     this->GetLinkedStepper()->setAcceleration(step_acceleration);
+// }
 

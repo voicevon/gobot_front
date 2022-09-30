@@ -1,9 +1,9 @@
 #pragma once
-#include "CNC/arm_solution/single_axis/cnc_single_axis.h"
-class SmookerBot_CncSoution: public CncSingleAxis{
+#include "CNC/arm_solution/single_axis/single_axis_arm_solution.h"
+class SmookerBot_CncSoution: public SingleAxis_ArmSolution{
     public:
         // void Init();
-        EnumAxis ConvertToEnum(char axis) override;
+        // EnumAxis ConvertToEnum(char axis) override;
 
 
 

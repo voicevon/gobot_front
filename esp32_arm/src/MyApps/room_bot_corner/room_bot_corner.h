@@ -59,7 +59,7 @@ class RoomBotCorner: public RobotBase{
 
         // FkPosX currentPosX;
         FkPosition_X nextPosX;
-        void _running_G1() override{};
+        // void _running_G1() override{};
         void _running_G28() override{};
         void RunM123(uint8_t eef_channel, EefAction eef_action) override {};
         void RunM84() override{};

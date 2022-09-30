@@ -1,8 +1,9 @@
 #pragma once
 
-#include "move_block_queue.h"
-#include "CNC/gcode/line_segment.h"
-
+#include "queue_move_block.h"
+#include "queue_line_segment.h"
+// #include "CNC/gcode/line_segment.h"
+#include "CNC/arm_solution/arm_solution_base.h"
 
 
 
@@ -11,8 +12,7 @@ class Planner{
         bool IsPlanable();
         void AppendLineSegment(LineSegment* line);
 
-
-        Queue_MoveBlock* __queue_move_block;
+        ArmSolutionBase* __arm_solution;
 
     private:
 

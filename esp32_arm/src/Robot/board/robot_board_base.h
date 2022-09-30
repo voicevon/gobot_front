@@ -14,7 +14,7 @@ class RobotBoardBase: public BoardBase{
 
         virtual RobotEefBase* GetEef();
         virtual PositionTrigger* GetPositionTrigger(uint8_t index);
-        virtual void EnableMotor(EnumAxis axis_name, bool enable_it);
+        virtual void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it);
 
 
 

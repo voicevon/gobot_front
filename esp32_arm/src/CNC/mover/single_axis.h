@@ -6,20 +6,15 @@
 
 
 
-
+//TOdo:  rename to Mover_SingleActuator
 class Mover_SingleAxis: public MoverBase{
     public:
-        void SetEefSpeed(float speed) override;
-        bool ActuatorIsMoving(EnumAxis actuator) override;
-
-        void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;
-        void SingleActuatorMoveTo(MoveBlock* movement) override;
+        bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator) override;
+        void AllActuatorsMoveTo(MoveBlock* move) override;
         void AllActuatorsStop() override;
-        void SingleActuatorStop(EnumAxis motor_name) override;
         bool HasArrivedTargetPosition() override;
 
         
     protected:
-        // ActuatorBase* _actuator_alpha;
     private:
 };

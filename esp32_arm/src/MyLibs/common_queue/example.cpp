@@ -16,8 +16,8 @@ class AnyClass: public Queue_able{
 
 class AnyQueue: public CommonQueue{
     public:
-        AnyClass* FetchTailAnyClass(){return (AnyClass*)this->FetchTailObject(); };
-        AnyClass* GetHeadAnyClass() {return (AnyClass*)this->GetHeadObject(); };
+        AnyClass* Withdraw(){return (AnyClass*)this->_Withdraw(); };
+        AnyClass* GetRoom() {return (AnyClass*)this->_GetRoom(); };
 };
 
 class IamTester{
@@ -29,9 +29,9 @@ class IamTester{
             queue.AppendObject(&xx);
         }
         if (! queue.BufferIsEmpty()){
-            AnyClass* y=(AnyClass*) queue.FetchTailObject();
-            AnyClass* yy = queue.FetchTailAnyClass(); 
-            yy= queue.GetHeadAnyClass();
+            AnyClass* y=(AnyClass*) queue.Withdraw();
+            AnyClass* yy = queue.Withdraw(); 
+            yy= queue.GetRoom();
 
             // yy->DeepCopyTo(&xx);
         }

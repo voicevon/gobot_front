@@ -7,39 +7,72 @@
 
 void RobotBase::SpinOnce(){
 	// Logger::Debug("RobotBase::SpinOnce()");
-	// Logger::Print("this->State", this->State);  // TODO:  Fix this bug.
-	this->_arm_solution->SpinOnce();
-	// Logger::Print("RobotBase::SpinOnce() point", 1);
-	if (this->_arm_solution->State == CncState::IDLE){
-		// Logger::Print("RobotBase::SpinOnce() point", 2);
-		this->__TryNextGmCode_FromQueue();
-		// Logger::Print("RobotBase::SpinOnce() point", 3);
+	this->_mover->SpinOnce();
+	// Logger::Print("RobotBase::SpinOnce() point", 2);
+
+	switch (this->State){
+		case RobotState::G4_IS_SYNCING:
+			//todo:  when buffer is empty,  a gcode is still runnning.
+			// Correct way is:  buffer is empey, and Mover is stoped.
+			// if (this->__queue_move_block.BufferIsEmpty()){
+			Logger::Print("RobotBase::SpinOnce() G4_Runner is Waiting. ", 41);
+			if (Queue_MoveBlock::Instance().BufferIsEmpty()){
+				this->__g4_runner.Start();
+				this->State = RobotState::G4_IS_RUNNING;
+				Logger::Print("RobotBase::SpinOnce()  G4_Runner is started", 42);
+			}
+			break;
+		case RobotState::G4_IS_RUNNING:
+			if(this->__g4_runner.IsDone()){
+				this->State =RobotState::IDLE_OR_ASYNC;
+				Logger::Print("RobotBase::SpinOnce()  G4_Runner is over", 43);
+			}
+			break;
+		case RobotState::G28_IS_SYNCING:
+			Logger::Print("RobotBase::SpinOnce()  G28_Runner is waiting ", 21);
+			// if (this->__queue_move_block.BufferIsEmpty()){
+			if (Queue_MoveBlock::Instance().BufferIsEmpty()){
+				this->__g28_runner->Start();
+				this->State = RobotState::G28_IS_RUNNING;
+				Logger::Print("RobotBase::SpinOnce()  G28_Runner is started ", 22);
+			}
+			break;
+		case RobotState::G28_IS_RUNNING:
+			if(this->__g28_runner->IsDone()){
+				this->State = RobotState::IDLE_OR_ASYNC;
+				Logger::Print("RobotBase::SpinOnce() point G28_Runner is over ", 23);
+			}
+			break;
+
+		default:
+			// Logger::Print("RobotBase::SpinOnce() point", 29);
+			break;
 	}
-	// Logger::Print("RobotBase::SpinOnce() point", 4);
-		
-
-	// if (this->State == RobotState::IDLE){
-	// 	this->__TryNextGmCode_FromQueue();
-	// }else{
-	// 	Logger::Debug("CncState::RUNNING_G28");
-	// 	this->_running_G28();
-	// }
-}
-
-// Check gcode queue, if there is gcode to be run.
-void RobotBase::__TryNextGmCode_FromQueue(){
-	if (this->_gcode_queue->BufferIsEmpty())
+	if (this->State != RobotState::IDLE_OR_ASYNC ) {
+		// Logger::Print("RobotBase::SpinOnce() point", 91);
 		return;
+	}
+	if (this->_gcode_queue->BufferIsEmpty()){
+		// Logger::Print("RobotBase::SpinOnce() point", 92);
+		return;
+	}
+	if (!this->__planner.IsPlanable()){
+		Logger::Print("RobotBase::SpinOnce() Planner can not go on,  queue might be full(or almost full).", 93);
+		return;
+	}
+	Logger::Print("RobotBase::SpinOnce() point", 3);
 
+	// Check gcode queue, if there is gcode to be run.
 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
+	Logger::Print("RobotBase::SpinOnce() point", 4);
 	if (message == NULL){
-		Logger::Error("\n\n\n [Error] RobotBase::__TryNextGmCode_FromQueue() tail_message is null. \n\n ");
+		Logger::Error("\n\n\n [Error] RobotBase::SpinOnce() tail_message is null. \n\n ");
 		return;
 	}
 
 	bool debug = false;
 	if (debug){
-		Logger::Debug("[Info] RobotBase::__TryNextGmCode_FromQueue()  Going to run next gcode   ===> ");
+		Logger::Debug("[Info] RobotBase::SpinOnce()  Going to run next gcode   ===> ");
 		Serial.print(message->payload);
 		Serial.println(" ");
 	}
@@ -49,194 +82,99 @@ void RobotBase::__TryNextGmCode_FromQueue(){
 	std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
 	Gcode gcode = Gcode(str);
-	Logger::Debug("RobotBase::__TryNextGmCode_FromQueue() has got command string ");
+	// __gcode = gcode;
+	Logger::Debug("RobotBase::SpinOnce() has got command string ");
 	Serial.println(str.c_str());
-	this->RunGcode(&gcode);
+	Logger::Print("RobotBase::SpinOnce() point", 6);
+	Logger::Print("gcode_command", gcode.get_command());
+
+	if(gcode.has_g){
+		this->__RunGcode(&gcode);
+	}else if(gcode.has_m){
+		this->__RunMcode(&gcode);
+	}
+	// Logger::Print("RobotBase::SpinOnce() point", 99);
+
 }
 
+void RobotBase::__RunGcode(Gcode* gcode){
+	// char home_axis_name = '+';
+	LineSegment line;
+	// EnumAxis home_axis;
 
-//Can deal with:  home via single actuator.
-//Can NOT deal with:  CoreXY, It's combined moving.
-void RobotBase::RunG28(EnumAxis axis){ 
-	bool debug = true;
-	if (debug){
-		Logger::Debug("RobotBase::RunG28() is entering" );
-		Logger::Print("axis", axis);
-		Logger::Print("IsCombinedFK", this->_config_base.IsCombinedFk);
-	}
+	switch (gcode->g){
+		case 28:
+			this->__g28_runner->LinkGcode(gcode);   //bug, gcode will be deleted, after SpinOnce()
 
-	if (this->_config_base.IsCombinedFk){
-		// this->_RunG28_CombinedFk(axis);
-
-	}else{
-		this->__HomeSingleAxis(axis);
-	}
-}
-
-
-void RobotBase::__HomeSingleAxis(EnumAxis axis){
-	Logger::Debug("RobotBase::__HomeSingleAxis()");
-	Logger::Print("axis",axis);
-	this->_homing_axis = axis;
-	HomingConfig* homing = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
-	Logger::Print("homing->IsDirectionToMax", homing->IsDirectionToMax);
-	// Gcode gcode = Gcode("G1A6.28");
-	this->_gcode_queue->AppendGcodeCommand("G1A6.28");  //Risk of Gcode queue is full?
-	// this->_cnc_board->SayHello();
-	// this->_cnc_board->EnableMotor(axis, true);
-	// // Serial.println("bbbbbbbbbbbbbbbbbbbbbb");
-	
-	// // this->_config_base.PrintOut("RobotBase::__HomeSingleAxis()  _config_base");
-	// this->_mover_base->PrintOut("RobotBase::__HomeSingleAxis()  _mover_base" );
-	// this->_mover_base->SetActuatorSpeed(axis, homing->Speed);
-	// this->_mover_base->SetActuatorAcceleration(axis, homing->Accelleration);
-	// // this->_mover_base->SingleActuatorMoveTo(axis, false, homing->DistanceToGo);
-	// LineSegment line;
-	// line.axis = axis;
-	// line.IsAbsTargetPosition = false;
-	// line.TargetPosition = homing->DistanceToGo;
-	// line.Speed = homing->Speed;
-	// this->_mover_base->SingleActuatorMoveTo(&line);   //TOdo:  Put this line to line_queue
-
-	Logger::Debug("RobotBase::__HomeSingleAxis() is finished." );
-}
-
-void RobotBase::_running_G28(){
-	bool debug = false;
-	if(debug){
-		Logger::Debug("RobotBase::_running_G28() is entering...");
-		Logger::Print("_homing_axis", this->_homing_axis);
-		auto homer = this->_cnc_homer.GetAxisHomer(this->_homing_axis);
-		Logger::Print("Got axis_homer",true);
-		auto index = homer->GetTrigeredIndex();
-		Logger::Print("Got triggered index", index);
-	}
-
-	int fired_trigger_index =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetTrigeredIndex();
-	if (fired_trigger_index >=0 ){
-		// End stop is trigered
-		Logger::Info("RobotBase::_running_G28() ----> Home sensor is triggered." );
-		Logger::Print("_homing_axis_name", this->_homing_axis);
-		Logger::Print(" fired_trigger_index", fired_trigger_index);
-
-		// this->_mover_base->AllActuatorsStop();
-		// this->_SetCurrentPositionAsHome(this->_homing_axis);
-		this->_arm_solution->ForceStopMover();
-		this->_arm_solution->_SetCurrentPositionAsHome(this->_homing_axis);
-		this->State = RobotState::IDLE;
-	}else{
-		// Endstop is not trigered
-		// Serial.print(".");
-		delay(10);
-	}
-}
-
-
-// void RobotBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
-// 	Logger::Debug("RobotBase::RunM123()");
-// 	Logger::Print("eef_action", eef_action);
-// 	// uint8_t action_code = 1;
-// 	this->__eef->PrintOut();
-// 	this->__eef->Run(eef_action);
-// }
-
-void RobotBase::RunM84(){
-	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
-	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
-		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
-	}
-}
-void RobotBase::RunGcode(Gcode* gcode){
-	std::string result;
-	if (!this->_arm_solution->planner->IsPlanable())
-		return;   // todo:   return false
-
-	bool debug = false;
-	Logger::Debug("RobotBase::RunGcode()");
-	Logger::Print("gcode_command", gcode->get_command());
-
-	if(gcode->has_g){
-		char home_axis_name = '+';
-		// switch (gcode->g){
-		if (gcode->g==28){
-		// case 28:
-			// G28: Home
-			this->State = RobotState::RUNNING_G28;
-			if (gcode->has_letter('X')) home_axis_name='X';
-			if (gcode->has_letter('Y')) home_axis_name='Y';
-			if (gcode->has_letter('Z')) home_axis_name='Z';
-			if (gcode->has_letter('A')) home_axis_name='A';
-			if (gcode->has_letter('B')) home_axis_name='B';
-			if (gcode->has_letter('C')) home_axis_name='C';
-			if (gcode->has_letter('W')) home_axis_name='W';
-			Logger::Debug("RobotBase::RunGcode()    G28");
-			Logger::Print("home_axis",home_axis_name);
-
-			// Is there any machine that supports both IK, and FK homing?
-			// this->_home_via_inverse_kinematic = false;
-			if (home_axis_name == '+'){
-				Serial.print("\n\n\n\n[Error] RobotBase::RunGcode()  :");
-				Serial.print(home_axis_name);
-
-			}
 			//TODO:  convert char to enum
 			// this->RunG28(this->ConvertToEnum(home_axis));
-			EnumAxis home_axis =  this->_arm_solution->ConvertToEnum(home_axis_name);
-			this->RunG28(home_axis);
-			Logger::Print("RobotBase::RunGcode() invoking is over.", 9);
-			// this->commuDevice->OutputMessage(COMMU_OK);  For calble-bot-corner, it should be 'Unknown Command'
-			// break;
-		}else {
-			this->_arm_solution->RunGcode(gcode);
-		}
+			// home_axis =  this->_arm_solution->ConvertToEnum(home_axis_name);
+			this->State = RobotState::G28_IS_SYNCING;
+			break;
+		case 4:
+			// G4 Dwell, Pause for a period of time.
+			this->__g4_runner.LinkGcode(gcode);
+			this->State = RobotState::G4_IS_SYNCING;
+			break;
+						
+		case 1:
+			// G1 Move
+			//TODO:  1. put position to movement queue. called "plan" in smoothieware? 
+			//       2. send out OK.
+			//       3. Set status to busy.
+			//       4. Start Moving.
+			this->__planner.__arm_solution->_CutGcodeLine_ToSegmentQueue(gcode);
+			this->__planner.AppendLineSegment(&line);   //TODO:: many lines ?
 
-		// case 1:
-		// 	// G1 Move
-		// 	//TODO:  1. put position to movement queue. called "plan" in smoothieware? 
-		// 	//       2. send out OK.
-		// 	//       3. Set status to busy.
-		// 	//       4. Start Moving.
-		// 	this->State = CncState::RUNNING_G1;
-		// 	this->RunG1(gcode);
-		// 	// this->commuDevice->OutputMessage(COMMU_OK);
-		// 	break;
-		// case 4:
-		// 	// G4 Dwell, Pause for a period of time.
-		// 	this->State = CncState::RUNNING_G4;
-		// 	this->RunG4(gcode);
-		// 	break;
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			break;
+
 		// case 6:
-		// 	this->RunG6(gcode);
-		// 	// this->commuDevice->OutputMessage(COMMU_OK);
-		// 	break;
-		// case 90:
-		// 	// Absolute position
-		// 	this->is_absolute_position = true;
-		// 	// this->commuDevice->OutputMessage(COMMU_OK);
-		// 	break;
-		// case 91:
-		// 	// Relative position
-		// 	this->is_absolute_position = false;
-		// 	// this->commuDevice->OutputMessage(COMMU_OK);
-		// 	break;
-		// // case 92:
-		// 	// Set Position     G92 X10 E90
-		// 	// break;
-		// default:
-		// 	break;
-		// }
-	}else if(gcode->has_m){
+			// this->RunG6(gcode);
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			// break;
+		case 90:
+			// Absolute position
+			this->is_absolute_position = true;
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			break;
+		case 91:
+			// Relative position
+			this->is_absolute_position = false;
+			// this->commuDevice->OutputMessage(COMMU_OK);
+			break;
+		case 92:
+			//Set Position     G92 X10 E90
+			break;
+		default:
+			break;
+	}
+	// Logger::Print("RobotBase::RunMcode() point ",99);
+		
+}
+
+void RobotBase::__RunMcode(Gcode* gcode){
+	bool debug = false;
 		uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
 		uint8_t s_value = 0;
 		float f_value = 0.0f;
 		EefAction action;
+		McodeRunnerBase* mr;
 		switch (gcode->m){
 		case 42:
-			p_value =  gcode->get_value('P');
-			s_value = gcode->get_value('S');
-			this->Run_M42_OutputGpio(p_value, s_value);
+			McodeRunners::Run(gcode);
+			// mr->Run(gcode);
+			// McodeRunners::GetRunner(42)->Run(gcode);
+			
+			// this->__m42_runner.Run(gcode);
+			// p_value =  gcode->get_value('P');
+			// s_value = gcode->get_value('S');
+			// this->Run_M42_OutputGpio(p_value, s_value);
+			break;
 		case 84:
-			this->RunM84();
+			// McodeRunners::GetRunner(84)->Run(gcode);
+			// this->__m84_runner.Run(gcode);
+			break;
 		case 114:
 			// Get Current Position
 			break;
@@ -251,7 +189,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 
 		case 123:
 			//M123 P=channel_index, S=Set EEF action			
-			while (this->State != RobotState::IDLE){
+			while (this->State != RobotState::IDLE_OR_ASYNC){
 				this->SpinOnce();
 			}
 			p_value =  gcode->get_value('P');
@@ -267,23 +205,8 @@ void RobotBase::RunGcode(Gcode* gcode){
 			break;
 
 		case 130:
-			Logger::Debug("RobotBase::RunGcode()   M130");
-			Logger::Print("gcode", gcode->get_command());
-			p_value =  gcode->get_value('N');
-			Logger::Print("Index", p_value);
-			
-			f_value = gcode->get_value('P');
-			this->__pid_controllers_m130->GetController(p_value)->P = f_value;
-			Logger::Print("P", f_value);
-
-			f_value = gcode->get_value('I');
-			this->__pid_controllers_m130->GetController(p_value)->I = f_value;
-			Logger::Print("I", f_value);
-
-			f_value = gcode->get_value('D');
-			this->__pid_controllers_m130->GetController(p_value)->D = f_value;
-			Logger::Print("D", f_value);
-
+			// this->__m130_runner.Run(gcode);
+			McodeRunners::getInstance().Run(gcode);
 			break;
 
 		case 141:
@@ -295,7 +218,7 @@ void RobotBase::RunGcode(Gcode* gcode){
 			// 		Snnn Angle or microseconds
 			// Wait for all gcode, mcode is finished
 			// Serial.println("M280 Started");
-			while (this->State != RobotState::IDLE){
+			while (this->State != RobotState::IDLE_OR_ASYNC){
 				this->SpinOnce();
 			}
 			if (gcode->has_letter('P')) p_value = gcode->get_value('P');
@@ -311,15 +234,25 @@ void RobotBase::RunGcode(Gcode* gcode){
 		default:
 			break;
 		}
-	}else{
-		// this->commuDevice->OutputMessage("\n[Warning] RobotBase::RunGcode()  Has NO letter 'G' or 'M'. ");
-		// this->commuDevice->OutputMessage(gcode->get_command());
-		// this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND);
-	}
-	Logger::Debug("RobotBase::RunGcode() is finished ");
-	
+	// Logger::Print("RobotBase::RunMcode() point ",99);
+
 }
 
+
+// void RobotBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
+// 	Logger::Debug("RobotBase::RunM123()");
+// 	Logger::Print("eef_action", eef_action);
+// 	// uint8_t action_code = 1;
+// 	this->__eef->PrintOut();
+// 	this->__eef->Run(eef_action);
+// }
+
+// void RobotBase::RunM84(){
+// 	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
+// 	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
+// 		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
+// 	}
+// }
 
 void RobotBase::Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value){
 	digitalWrite(pin_number, pin_value);

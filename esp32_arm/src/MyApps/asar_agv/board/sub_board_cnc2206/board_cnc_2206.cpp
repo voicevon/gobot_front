@@ -45,7 +45,7 @@ RobotEef_GarmentAsar* Board2204Cnc::GetEef(){
     return &this->eef;
 }
 
-void Board2204Cnc::EnableMotor(EnumAxis axis_name, bool enable_it){
+void Board2204Cnc::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it){
     if (axis_name == AXIS_ALPHA){
         this->__mcp23018->digitalWrite(MC23018_PIN_ALPHA_ENABLE_2205, !enable_it);   // LOW is enable
     } else if (axis_name == AXIS_BETA){

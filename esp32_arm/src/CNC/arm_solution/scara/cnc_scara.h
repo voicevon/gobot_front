@@ -17,7 +17,10 @@ class CncScaraSolution: public ArmSolutionBase{
         //                           // Instantiated on first use.
         //     return instance;
         // }
-        void RunG1(Gcode* gcode) override;
+        // void RunG1(Gcode* gcode) override;
+        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
+
 
         bool GetCurrentPosition(FkPositionBase* position_fk) override;
         float GetDistanceToTarget_FK() override;
@@ -28,10 +31,10 @@ class CncScaraSolution: public ArmSolutionBase{
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 
-        void RunG6(Gcode* gcode) override {};   //Block mode
+        // void RunG6(Gcode* gcode) override {};   //Block mode
         std::string GetHomeTrigerStateString() override {return " ";};
 
-        void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
+        void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
 
         PositionTrigger* __homer;
         FkPosition_XY __current_fk_position;

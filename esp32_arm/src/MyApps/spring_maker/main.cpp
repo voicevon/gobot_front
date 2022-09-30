@@ -1,19 +1,17 @@
 #include "all_applications.h"
 #ifdef I_AM_SPRING_MAKER
 #include "board/board.h"
-// #include "board/mechanic/cnc_machine.h"
-// #include "board/mechanic/cnc_solution_config.h"
 #include"cnc/solution_config.h"
-#include "cnc/solution.h"
-// #include "board/mechanic/cnc_solution.h"
+#include "cnc/spring_maker_arm_solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
-#include "spring_maker.h"
+#include "spring_maker_app.h"
+#include "robot/spring_robot.h"
 
 Board_SpringMaker board;
-// SpringMakerMachine cncMachine;
-SpringMaker_CncSoution cnc;
-SpringMaker robot;
+// SpringMaker_CncSoution cnc;
+SpringMakerApp app;
+SpringRobot robot;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
@@ -24,11 +22,11 @@ void setup(){
     board.Init(true);
     // cncMachine.Init(AXIS_ALPHA);
     // cnc.Init(&board);
-    robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
-    cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
+    robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
     setup_mqtt_block_connect();
-    append_mqtt_bridge("spring/maker", &mqtt_command_queue, &robot); 
+    append_mqtt_bridge("spring/maker", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
     Serial.println ("\n[Info] Spring Maker.setup() is done. ------------------------------------ \n");
 }
@@ -48,7 +46,7 @@ void loop(){
 
     // return;
     robot.SpinOnce();
-    cnc.SpinOnce();
+    app.SpinOnce();
     loop_mqtt();
 }
 
