@@ -1,6 +1,6 @@
 #include "board_gobot_house.h"
-#include "CNC/arm_solution/scara/cnc_scara.h"
-#include "../cnc_2206/actuator_alpha.h"
+#include "CNC/arm_solution/scara/scara_arm_solution.h"
+// #include "../cnc_2206/actuator_alpha.h"
 
 void Board_GobotHouse_2206::__Init_Hardware(){
     //Init GPIO
@@ -8,12 +8,12 @@ void Board_GobotHouse_2206::__Init_Hardware(){
     pinMode(PIN_BETA_ENABLE_2109, OUTPUT);
     digitalWrite(PIN_BETA_ENABLE_2109, HIGH);   // To avoid A4988 is enabled.  sometimes there is an A4988 chip on the board.
     // Init Actuator alpha
-    GobotHouse_ActuatorAlphaMechanic alpha_mechanic;
-    this->__alpha_stepper.setInverseRotation(true);   //TODO:  inside app_mover.
-    this->__actuator_alpha.LinkStepper(&this->__alpha_stepper, alpha_mechanic.GetStepsPerCncUnit());
-    this->__alpha_range.InitCncRange(-PI, TWO_PI);
-    this->__alpha_range.InitActuatorRange(DEG_TO_RAD * (-350), DEG_TO_RAD * 10);
-    this->__actuator_alpha.LinkRangeConstraint(&this->__alpha_range);
+    // GobotHouse_ActuatorAlphaMechanic alpha_mechanic;
+    // this->__alpha_stepper.setInverseRotation(true);   //TODO:  inside app_mover.
+    // this->__actuator_alpha.LinkStepper(&this->__alpha_stepper, alpha_mechanic.GetStepsPerCncUnit());
+    // this->__alpha_range.InitCncRange(-PI, TWO_PI);
+    // this->__alpha_range.InitActuatorRange(DEG_TO_RAD * (-350), DEG_TO_RAD * 10);
+    // this->__actuator_alpha.LinkRangeConstraint(&this->__alpha_range);
     
     // Init actuator beta
 	this->__servo_beta.setPeriodHertz(50);

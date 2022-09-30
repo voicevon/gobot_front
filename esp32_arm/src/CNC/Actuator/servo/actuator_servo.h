@@ -12,17 +12,14 @@ class ActuatorServo: public ActuatorBase{
         void SpinOnce();
         bool IsMoving(){return this->__is_moving;};
 
-        // void Stop() override {this->__is_moving=false;};
         void UpdateTargetPositionFromCurrent() override {this->__is_moving=false;};
         void StartToMove();
 
         void SetCurrentPositionAs(float cnc_position_in_rad) override;
-        // void SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit) override;
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;
 
         float GetAbsDistanceToTarget_InCncUnit() override;
-        // void SetSpeed(float speed_in_cnc_unit) override;   // There is no "unsigned float"
-        // virtual void SetAccelleration(float accelleration_in_cnc_unit){}; 
+        void ForceStop() override {};   //Only G28 is using this.
 
 
 

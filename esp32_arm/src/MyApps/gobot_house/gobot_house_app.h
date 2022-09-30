@@ -6,7 +6,7 @@
 #include "IoT/mqtt_message_consumer.h"
 #include  "MyApps/gobot_house/HouseMap.h"
 
-class GobotHouse_Robot: public GcodeProducer, public MqttMessageConsumer{
+class GobotHouseApp: public GcodeProducer, public MqttMessageConsumer{
     public:
         enum SITE_TYPE{
             HEAD,
@@ -14,9 +14,9 @@ class GobotHouse_Robot: public GcodeProducer, public MqttMessageConsumer{
             DOOR,
             ROOM,
         };
-        static GobotHouse_Robot& getInstance()
+        static GobotHouseApp& getInstance()
         {
-            static GobotHouse_Robot instance; // Guaranteed to be destroyed.
+            static GobotHouseApp instance; // Guaranteed to be destroyed.
                                   // Instantiated on first use.
             return instance;
         }    

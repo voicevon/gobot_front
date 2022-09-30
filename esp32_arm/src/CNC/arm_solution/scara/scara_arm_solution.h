@@ -9,11 +9,11 @@
 #include "config_base.h"
 
 
-class CncScaraSolution: public ArmSolutionBase{
+class Scara_ArmSolution: public ArmSolutionBase{
     public:
-        // static CncScaraSolution& getInstance()
+        // static Scara_ArmSolution& getInstance()
         // {
-        //     static CncScaraSolution instance; // Guaranteed to be destroyed.
+        //     static Scara_ArmSolution instance; // Guaranteed to be destroyed.
         //                           // Instantiated on first use.
         //     return instance;
         // }
