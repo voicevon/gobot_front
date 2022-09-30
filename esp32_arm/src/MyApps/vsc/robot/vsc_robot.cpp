@@ -7,7 +7,8 @@ void VscRobot::Init(Vsc_Board* board){
     this->_LinkEef(board->GetEef());
 
     this->__g28_runner=&this->g28_runner;
-    g28_runner.LinkMover(&mover);
+    // g28_runner.LinkMover(&mover);
+    g28_runner.Init(board, &mover);
     this->LinkMover(&mover);
     
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;

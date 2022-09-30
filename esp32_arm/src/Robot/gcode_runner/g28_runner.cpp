@@ -5,9 +5,14 @@
 
 
 bool G28_Runner::IsDone(){
-    Logger::Debug("G28_Runner::IsDone()");
+    // Logger::Debug("G28_Runner::IsDone()");
+    static unsigned long last_micros;
+    
 	if(__homer->GetTrigeredIndex()==-1){
-        Serial.print(".");  //print too fast?
+        if(micros() - last_micros > 100000){
+            Serial.print(".");  //print too fast?
+            last_micros = micros();
+        }
 		return false;
 	}
     Logger::Info("G28_Runner::IsDone()  homer is triggered...");
@@ -57,10 +62,12 @@ void G28_Runner::Start(){
     Logger::Print("G28_Runner::Start() point", 2);
     if (home_actuator_directly){
         EnumAxis_Inverseinematic axis_ik = CncAxis::InverserKinematic_Axis(__axis_name);
+        __homer = this->GetHomer(axis_ik);
         this->SetMoveBlock_ToHome(axis_ik, mb);
         Logger::Print("G28_Runner::Start() point", 31);
     }else{
         EnumAxis_ForwardKinematic axis_fk = CncAxis::ForwardKinematic_Axis(__axis_name);
+	    __homer = this->GetHomer(axis_fk);
 	    this->SetMoveBlock_ToHome(axis_fk, mb);
         Logger::Print("G28_Runner::Start() point", 32);
     }

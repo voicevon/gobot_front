@@ -9,21 +9,20 @@ class G28_Runner: public SyncGcodeRunnerBase{
     public:
         void Start() override ;
         bool IsDone() override;
-        void LinkMover(MoverBase* mover){this->__mover=mover;};
+        // void LinkMover(MoverBase* mover){this->__mover=mover;};
         void LinkHomer(AxisHomer* homer){this->__homer=homer;};
         void LinkGcode(Gcode* gcode) override;
 
     protected:
         virtual void SetMoveBlock_ToHome(EnumAxis_Inverseinematic axis, MoveBlock* mb);
         virtual void SetMoveBlock_ToHome(EnumAxis_ForwardKinematic axis, MoveBlock* mb);
+        virtual AxisHomer* GetHomer(EnumAxis_ForwardKinematic axis);
+        virtual AxisHomer* GetHomer(EnumAxis_Inverseinematic axis);
+        MoverBase* __mover;
+        AxisHomer* __homer;
         
     private:
-        // void __HomeSingleAxis(EnumAxis axis);
-        // void _running_G28();
         char __axis_name;
         bool home_actuator_directly;
-        AxisHomer* __homer;
-        MoverBase* __mover;
-        // HomingConfig* __config;
 };
 
