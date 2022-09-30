@@ -61,13 +61,13 @@ void setup(){
 }
 
 void loop(){
-    // Logger::Print("Arduino loop() point ",1);
+    // Logger::Print("Arduino loop() point ", 1);
     vsc_app.SpinOnce();
-    // Logger::Print("Arduino loop() point ",3);
+    // Logger::Print("Aruino loop() point ", 2);
     vsc_robot.SpinOnce();
-    // Logger::Print("Arduino loop() point ",4);
+    // Logger::Print("Arduino loop() point ", 3);
     loop_mqtt();
-    // Logger::Print("Arduino loop() point ",5);
+    // Logger::Print("Arduino loop() point ", 4);
 
 }
 

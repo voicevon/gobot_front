@@ -8,35 +8,44 @@
 void RobotBase::SpinOnce(){
 	// Logger::Debug("RobotBase::SpinOnce()");
 	this->_mover->SpinOnce();
+	// Logger::Print("RobotBase::SpinOnce() point", 2);
+
 	switch (this->State){
 		case RobotState::G4_IS_SYNCING:
 			//todo:  when buffer is empty,  a gcode is still runnning.
 			// Correct way is:  buffer is empey, and Mover is stoped.
 			// if (this->__queue_move_block.BufferIsEmpty()){
+			Logger::Print("RobotBase::SpinOnce() G4_Runner is Waiting. ", 41);
 			if (Queue_MoveBlock::Instance().BufferIsEmpty()){
 				this->__g4_runner.Start();
 				this->State = RobotState::G4_IS_RUNNING;
+				Logger::Print("RobotBase::SpinOnce()  G4_Runner is started", 42);
 			}
 			break;
 		case RobotState::G4_IS_RUNNING:
 			if(this->__g4_runner.IsDone()){
 				this->State =RobotState::IDLE_OR_ASYNC;
+				Logger::Print("RobotBase::SpinOnce()  G4_Runner is over", 43);
 			}
 			break;
 		case RobotState::G28_IS_SYNCING:
+			Logger::Print("RobotBase::SpinOnce()  G28_Runner is waiting ", 21);
 			// if (this->__queue_move_block.BufferIsEmpty()){
 			if (Queue_MoveBlock::Instance().BufferIsEmpty()){
 				this->__g28_runner->Start();
 				this->State = RobotState::G28_IS_RUNNING;
+				Logger::Print("RobotBase::SpinOnce()  G28_Runner is started ", 22);
 			}
 			break;
 		case RobotState::G28_IS_RUNNING:
 			if(this->__g28_runner->IsDone()){
 				this->State = RobotState::IDLE_OR_ASYNC;
+				Logger::Print("RobotBase::SpinOnce() point G28_Runner is over ", 23);
 			}
 			break;
 
 		default:
+			// Logger::Print("RobotBase::SpinOnce() point", 29);
 			break;
 	}
 	if (this->State != RobotState::IDLE_OR_ASYNC ) {
@@ -44,7 +53,7 @@ void RobotBase::SpinOnce(){
 		return;
 	}
 	if (this->_gcode_queue->BufferIsEmpty()){
-	// Logger::Print("RobotBase::SpinOnce() point", 92);
+		// Logger::Print("RobotBase::SpinOnce() point", 92);
 		return;
 	}
 	if (!this->__planner.IsPlanable()){
@@ -83,7 +92,7 @@ void RobotBase::SpinOnce(){
 	}else if(gcode.has_m){
 		this->__RunMcode(&gcode);
 	}
-	Logger::Print("RobotBase::SpinOnce() point", 99);
+	// Logger::Print("RobotBase::SpinOnce() point", 99);
 
 }
 
@@ -139,7 +148,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 		default:
 			break;
 	}
-	Logger::Print("RobotBase::RunMcode() point ",99);
+	// Logger::Print("RobotBase::RunMcode() point ",99);
 		
 }
 
@@ -224,7 +233,7 @@ void RobotBase::__RunMcode(Gcode* gcode){
 		default:
 			break;
 		}
-	Logger::Print("RobotBase::RunMcode() point ",99);
+	// Logger::Print("RobotBase::RunMcode() point ",99);
 
 }
 

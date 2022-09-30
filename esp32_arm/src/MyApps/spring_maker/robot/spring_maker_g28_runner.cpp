@@ -12,7 +12,7 @@ void Spring_G28_Runner::SetMoveBlock_ToHome(EnumAxis axis, MoveBlock* mb){
             aa->Acceleration = 33;
             break;
         default:
-            Logger::Error(" Vsc_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
+            Logger::Error(" SpringMaker_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
             
             break;
     }
