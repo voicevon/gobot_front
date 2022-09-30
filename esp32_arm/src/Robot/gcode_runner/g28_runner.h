@@ -11,7 +11,7 @@ class G28_Runner: public SyncGcodeRunnerBase{
         bool IsDone() override;
 
     protected:
-        virtual void SetMoveBlock_ToHome(EnumAxis axis, MoveBlock* mb);
+        virtual void SetMoveBlock_ToHome(EnumAxis_Inverseinematic axis, MoveBlock* mb);
         
     private:
         // void __HomeSingleAxis(EnumAxis axis);

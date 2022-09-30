@@ -47,7 +47,7 @@ void GobotMain_Board::PrintOut(){
     // this->__actuator_beta.PrintOut("GobotMain_Board. __actuator_beta");
 
 }
-Stepper* GobotMain_Board::GetStepper(EnumAxis axis){
+Stepper* GobotMain_Board::GetStepper(EnumAxis_Inverseinematic axis){
     if (axis==AXIS_ALPHA){
         return &this->__alpha_stepper;
     }else if (axis==AXIS_BETA){
@@ -94,7 +94,7 @@ RobotEef_GobotMain* GobotMain_Board::GetEef() {
 
 
 
-void GobotMain_Board::EnableMotor(EnumAxis axis_name, bool enable_it) {
+void GobotMain_Board::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {
     bool debug = false;
     if(debug){
         Serial.print("[Info] GobotMain_Board::EnableMotor()  axis_name= ");

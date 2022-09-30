@@ -25,7 +25,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
 
         RobotEef_GobotHouse* GetEef() override;
 
-        void EnableMotor(EnumAxis axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
         Servo* GetServoDriver_OnBeta(){return &this->__servo_beta;};
         Stepper* GetStepperDriver_OnAlpha(){return &this->__alpha_stepper;};
     

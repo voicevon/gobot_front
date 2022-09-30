@@ -52,7 +52,7 @@ RobotEef_GobotHouse* Board_GobotHouse::GetEef(){
     return &this->eef;
 }
 
-void Board_GobotHouse::EnableMotor(EnumAxis axis_name, bool enable_it) {
+void Board_GobotHouse::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {
     if (axis_name == 'A'){
         digitalWrite(PIN_ALPHA_ENABLE_2109, !enable_it);   // LOW is enable
     } else if (axis_name == 'B'){

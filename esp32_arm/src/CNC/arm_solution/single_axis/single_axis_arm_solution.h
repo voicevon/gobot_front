@@ -20,8 +20,8 @@ class SingleAxis_ArmSolution: public ArmSolutionBase{
 
     protected:
         SingleAxis_KinematicConfig* _config;  
-        void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
-        EnumAxis _AXIS;   // TODO: doubel check this var.
+        void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
+        EnumAxis_ForwardKinematic _AXIS;   // TODO: doubel check this var.
 
     private:
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;

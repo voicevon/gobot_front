@@ -17,7 +17,7 @@ class Board_SpringMaker: public CncBoardBase{
         // PositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
         // AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
         RobotEef_SpringMaker* GetEef() override;
-        void EnableMotor(EnumAxis axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
         // SpringMaker_CncSolutionConfig* GetCncConfig() override {return &this->__cnc_solution_config;};
         PositionTrigger* GetPositionTrigger(uint8_t index) override;
 

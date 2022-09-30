@@ -23,14 +23,14 @@ void G28_Runner::Start(){
     if (this->_gcode->has_letter('B')) axis_name = 'B';
     if (this->_gcode->has_letter('C')) axis_name = 'C';
     Logger::Print("home_axis", axis_name);
-    EnumAxis axis = CncAxis::GetFromName(axis_name);
+    EnumAxis_ForwardKinematic axis = CncAxis::ForwardKinematic_Axis(axis_name);
     Logger::Print("G28_Runner::Start() point", 1);
 
 	//Put a move_block into the queue.  Mover will let the actuator to turn...
 
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
     Logger::Print("G28_Runner::Start() point", 2);
-	this->SetMoveBlock_ToHome(axis, mb);
+	// this->SetMoveBlock_ToHome(axis, mb);
     Logger::Print("G28_Runner::Start() point", 3);
 
 	Queue_MoveBlock::Instance().ForwardHead();

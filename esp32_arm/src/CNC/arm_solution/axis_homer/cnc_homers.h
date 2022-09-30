@@ -6,7 +6,7 @@
 class CncHomers{
     public:
         CncHomers(uint8_t axis_count){};
-        AxisHomer* GetAxisHomer(EnumAxis axis){return &this->__all_homers[axis];};
+        AxisHomer* GetAxisHomer(EnumAxis_ForwardKinematic axis){return &this->__all_homers[axis];};
 
 
     private:

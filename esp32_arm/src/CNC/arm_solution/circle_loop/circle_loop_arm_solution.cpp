@@ -20,7 +20,7 @@ void CircleLoop_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk)
 }
 
 
-void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 	//Set current position to HomePosition
 	IkPosition_A ik_position;
 	if (this->_config_base.IsInverseKinematicHoimg){
@@ -31,7 +31,7 @@ void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		// We know homed position via FK
 		Logger::Info("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
-		this->__current_fk_position.A = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetFiredPosition();
+		this->__current_fk_position.A = this->_cnc_homer.GetAxisHomer(AXIS_X)->GetFiredPosition();
 		Logger::Print("position trigger, fired position", this->__current_fk_position.A);
 		this->IK(&this->__current_fk_position, &ik_position);
 		// verify IK by FK()
@@ -40,13 +40,13 @@ void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		this->FK(&ik_position, &verifying_fk);
 	}
 	//Copy current ik-position to motor-position.
-	if (this->_homing_axis == this->_AXIS) {
-		// this->_mover_base->SetActuatorCurrentCncPositionAs(this->_AXIS,ik_position.alpha);
+	// if (this->_homing_axis == this->_AXIS) {
+	// 	// this->_mover_base->SetActuatorCurrentCncPositionAs(this->_AXIS,ik_position.alpha);
 
-		// TODO:  todo anything is necessary?
-	}else{
-		Logger::Halt("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()");
-	}
+	// 	// TODO:  todo anything is necessary?
+	// }else{
+	// 	Logger::Halt("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()");
+	// }
 }
 
 void CircleLoop_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
@@ -54,7 +54,7 @@ void CircleLoop_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line
 	FkPosition_A* fk_pos =  (FkPosition_A*) line->TargetPosition;
 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
-	mb->MoveBlocks[line->axis].axis = line->axis;
+	// mb->MoveBlocks[line->axis].axis = line->axis;
 	mb->MoveBlocks[line->axis].IsAbsTargetPosition = line->IsAbsTargetPosition;
 	mb->MoveBlocks[line->axis].TargetPosition = fk_pos->A ;
 	mb->MoveBlocks[line->axis].Speed = line->Speed;

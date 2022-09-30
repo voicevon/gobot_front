@@ -199,22 +199,22 @@ void CncScaraSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 
 
 
-void CncScaraSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CncScaraSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 	//Set current position to HomePosition
 	bool debug = false;
 	IkPosition_AB ik_position;
 	if (this->_config_base.IsInverseKinematicHoimg){
 		if (debug) Serial.print("\n   [Info] CncScaraSolution::_running_G28() Trying to get home position from actuator position  ");
-		if (this->_homing_axis == AXIS_ALPHA){
-			// ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
-			// ik_position.alpha =  this->_scara_machine->GetAxisHomers()->GetAxisHomer(this->_homing_axis)->GetHomingConfig()->LastHomedPosition;
-			ik_position.alpha =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
+		// if (this->_homing_axis == AXIS_ALPHA){
+		// 	// ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
+		// 	// ik_position.alpha =  this->_scara_machine->GetAxisHomers()->GetAxisHomer(this->_homing_axis)->GetHomingConfig()->LastHomedPosition;
+		// 	ik_position.alpha =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
 			
-		}else if (this->_homing_axis == AXIS_BETA){
-			// ik_position.beta =  this->_scara_machine->Homed_position_beta_in_rad;
-			// ik_position.beta =  this->_scara_machine->GetAxisHomers()->GetAxisHomer(this->_homing_axis)->GetHomingConfig()->LastHomedPosition;
-			ik_position.beta =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
-		}
+		// }else if (this->_homing_axis == AXIS_BETA){
+		// 	// ik_position.beta =  this->_scara_machine->Homed_position_beta_in_rad;
+		// 	// ik_position.beta =  this->_scara_machine->GetAxisHomers()->GetAxisHomer(this->_homing_axis)->GetHomingConfig()->LastHomedPosition;
+		// 	ik_position.beta =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
+		// }
 		this->FK(&ik_position, &this->__current_fk_position);
 		// verify FK by IK()
 		IkPosition_AB verifying_ik_for_debug;

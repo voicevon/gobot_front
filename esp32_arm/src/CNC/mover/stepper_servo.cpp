@@ -232,7 +232,7 @@ void CncMover_StepperServo::AllActuatorsStop(){
 //     }
 // }
 
-bool CncMover_StepperServo::ActuatorIsMoving(EnumAxis actuator_name) {
+bool CncMover_StepperServo::ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name) {
     if (actuator_name==AXIS_ALPHA){
         return this->__stepControl->isRunning();
     }else if (actuator_name=='B'){

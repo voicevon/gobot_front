@@ -1,6 +1,6 @@
 #include "vsc_g28_runner.h"
 
-void Vsc_G28_Runner::SetMoveBlock_ToHome(EnumAxis axis, MoveBlock* mb){
+void Vsc_G28_Runner::SetMoveBlock_ToHome(EnumAxis_Inverseinematic axis, MoveBlock* mb){
     Logger::Debug("Vsc_G28_Runner::SetMoveBlock_ToHome()");
     Logger::Print("axis", axis);
     MoveBlock_SingleActuator* aa;

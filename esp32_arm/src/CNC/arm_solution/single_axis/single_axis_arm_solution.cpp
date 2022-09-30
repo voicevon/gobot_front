@@ -20,7 +20,7 @@ void SingleAxis_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk)
 }
 
 
-void SingleAxis_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void SingleAxis_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 	//Set current position to HomePosition
 	IkPosition_A ik_position;
 	if (this->_config_base.IsInverseKinematicHoimg){
@@ -31,7 +31,7 @@ void SingleAxis_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		// We know homed position via FK
 		Logger::Info("SingleAxis_ArmSolution::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
-		this->__current_fk_position.A = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetFiredPosition();
+		this->__current_fk_position.A = this->_cnc_homer.GetAxisHomer(AXIS_X)->GetFiredPosition();
 		this->IK(&this->__current_fk_position, &ik_position);
 		// verify IK by FK()
 		FkPosition_A verifying_fk;
@@ -41,15 +41,15 @@ void SingleAxis_ArmSolution::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 	//Copy current ik-position to motor-position.
 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
-	if (this->_homing_axis == this->_AXIS) {
-		mb->MoveBlocks[AXIS_ALPHA].axis= AXIS_ALPHA;
-		mb->MoveBlocks[AXIS_ALPHA].TargetPosition = ik_position.alpha;
-		// this->__queue_move_block->ForwardHead();
-		Queue_MoveBlock::Instance().ForwardHead();
-		// this->_mover_base->SetActuatorCurrentCncPositionAs(this->_AXIS,ik_position.alpha);
-	}else{
-		Logger::Halt("SingleAxis_ArmSolution::_SetCurrentPositionAsHome()");
-	}
+	// if (this->_homing_axis == this->_AXIS) {
+	// 	mb->MoveBlocks[AXIS_ALPHA].axis= AXIS_ALPHA;
+	// 	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = ik_position.alpha;
+	// 	// this->__queue_move_block->ForwardHead();
+	// 	Queue_MoveBlock::Instance().ForwardHead();
+	// 	// this->_mover_base->SetActuatorCurrentCncPositionAs(this->_AXIS,ik_position.alpha);
+	// }else{
+	// 	Logger::Halt("SingleAxis_ArmSolution::_SetCurrentPositionAsHome()");
+	// }
 }
 
 

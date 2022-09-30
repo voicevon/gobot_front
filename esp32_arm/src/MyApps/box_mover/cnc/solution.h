@@ -3,7 +3,7 @@
 
 class BoxMover_CncSoution: public CncSolution_CoreAZ{
     public:
-        EnumAxis ConvertToEnum(char axis) override;
+        // EnumAxis ConvertToEnum(char axis) override;
 
 
 

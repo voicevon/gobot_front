@@ -9,7 +9,7 @@
 //TOdo:  rename to Mover_SingleActuator
 class Mover_SingleAxis: public MoverBase{
     public:
-        bool ActuatorIsMoving(EnumAxis actuator) override;
+        bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator) override;
         void AllActuatorsMoveTo(MoveBlock* move) override;
         void AllActuatorsStop() override;
         bool HasArrivedTargetPosition() override;

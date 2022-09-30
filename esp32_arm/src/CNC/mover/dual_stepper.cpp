@@ -188,7 +188,7 @@ void Mover_DualStepper::AllActuatorsMoveTo(MoveBlock* move){
 
 
 
-bool Mover_DualStepper::ActuatorIsMoving(EnumAxis actuator_name) {
+bool Mover_DualStepper::ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name) {
     if (actuator_name==AXIS_ALPHA){
         return this->__stepControl->isRunning();
     }else if (actuator_name==AXIS_BETA){

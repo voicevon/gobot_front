@@ -10,9 +10,9 @@ class GobotMain_Board: public CncBoardBase{
         GobotMain_Board(){};
         void Init(bool is_on_reset) override;
         void PrintOut();
-        Stepper* GetStepper(EnumAxis axis);
+        Stepper* GetStepper(EnumAxis_Inverseinematic axis);
         RobotEef_GobotMain* GetEef() override;
-        void EnableMotor(EnumAxis axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
         uint8_t ReadAllRooms();
         uint8_t GetLoadedRoom();
         PositionTrigger* GetPositionTrigger(uint8_t index) override{};

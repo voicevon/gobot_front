@@ -17,11 +17,11 @@ class CircleLoop_ArmSolution: public ArmSolutionBase{
 
     protected:
         CircleLoop_KinematicConfig _kinematic_config;  
-        void _SetCurrentPositionAsHome(EnumAxis homing_axis) override;
-        EnumAxis _AXIS;   // TODO: doubel check this var.
+        void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
+        EnumAxis_ForwardKinematic _AXIS;   // TODO: doubel check this var.
 
     private:
-        EnumAxis ConvertToEnum(char axis) override{return AXIS_ALPHA;};
+        // EnumAxis ConvertToEnum(char axis) override{return AXIS_ALPHA;};
         void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 

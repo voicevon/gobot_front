@@ -6,7 +6,7 @@
 
 class LineSegment: public Queue_able{
     public:
-        EnumAxis axis;
+        EnumAxis_ForwardKinematic axis;
         bool IsAbsTargetPosition;
         FkPositionBase* TargetPosition;
         float Speed;

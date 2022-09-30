@@ -3,7 +3,7 @@
 class SmookerBot_CncSoution: public SingleAxis_ArmSolution{
     public:
         // void Init();
-        EnumAxis ConvertToEnum(char axis) override;
+        // EnumAxis ConvertToEnum(char axis) override;
 
 
 

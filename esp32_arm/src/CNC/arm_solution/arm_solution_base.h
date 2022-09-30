@@ -32,8 +32,8 @@ class ArmSolutionBase{
 
 
         void SayHello();    // TODO:  be virtual
-        virtual void _SetCurrentPositionAsHome(EnumAxis homing_axis);
-        virtual EnumAxis ConvertToEnum(char axis);
+        virtual void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis);
+        // virtual EnumAxis ConvertToEnum(char axis);
         void ForceStopMover();
         CncBoardBase* _cnc_board;   // TODO:  remove this.
 
@@ -47,7 +47,7 @@ class ArmSolutionBase{
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
 
-        EnumAxis _homing_axis;
+        // EnumAxis _homing_axis;
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
         CncHomers _cnc_homer = CncHomers(CNC_AXIS_COUNT);
 

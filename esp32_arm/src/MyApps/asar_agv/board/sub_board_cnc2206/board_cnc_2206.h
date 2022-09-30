@@ -17,7 +17,7 @@ class Board2204Cnc: public CncBoardBase{
         // Stepper* GetStepper(char axis_name) override;
         // PositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
         RobotEef_GarmentAsar* GetEef() override;
-        void EnableMotor(EnumAxis axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
 
         
     private:

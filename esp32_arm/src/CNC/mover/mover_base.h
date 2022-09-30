@@ -17,11 +17,11 @@ class MoverBase{
         virtual void AllActuatorsMoveTo(MoveBlock* move);
 
         void LinkActuator(char actuator_name, ActuatorBase* actuator);
-        void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position);
-        float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name);  // TODO: return  all current position.
+        void SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position);
+        float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name);  // TODO: return  all current position.
         void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
         virtual void AllActuatorsStop();  // TODO: with flags
-        virtual bool ActuatorIsMoving(EnumAxis actuator_name);
+        virtual bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name);
         virtual bool HasArrivedTargetPosition();
         float GetAbsDistanceToTarget_InCncUnit();
 

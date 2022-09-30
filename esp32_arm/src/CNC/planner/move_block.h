@@ -4,7 +4,7 @@
 
 class MoveBlock_SingleActuator{
     public:
-        EnumAxis axis;
+        EnumAxis_Inverseinematic axis;
         bool IsAbsTargetPosition;
         float TargetPosition;
         float Speed;

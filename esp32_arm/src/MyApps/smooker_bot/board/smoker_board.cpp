@@ -37,7 +37,7 @@ RobotEef_SmokeMachine* Smoker_Board::GetEef() {
 }
 
 
-void Smoker_Board::EnableMotor(EnumAxis axis_name, bool enable_it) {
+void Smoker_Board::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {
     if (axis_name == AXIS_ALPHA){
         digitalWrite(PIN_ALPHA_ENABLE_2201, !enable_it);   // LOW is enable
     } else {

@@ -13,7 +13,7 @@ class Smoker_Board: public CncBoardBase{
         
         void SayHello() override;
         RobotEef_SmokeMachine* GetEef() override;
-        void EnableMotor(EnumAxis axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
 
         
     private:

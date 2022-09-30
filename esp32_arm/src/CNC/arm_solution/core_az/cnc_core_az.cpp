@@ -54,7 +54,7 @@ void CncSolution_CoreAZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 // }
 
 
-void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 //Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_config_base.IsInverseKinematicHoimg){
@@ -81,38 +81,38 @@ void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 		
 }
 
-void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis axis){
-	Serial.print("[Debug] CncSolution_CoreAZ::RunG28() is entering:   " );
-	Serial.print(axis);
-	// MoveBlock* mb=this->__queue_move_block->GetHeadMoveblock(); 
-	MoveBlock* mb= Queue_MoveBlock::Instance().GetHeadMoveblock();
-	this->_homing_axis = axis;
+// void CncSolution_CoreAZ::RunG28_CombinedAxis(EnumAxis_ForwardKinematic axis){
+// 	Serial.print("[Debug] CncSolution_CoreAZ::RunG28() is entering:   " );
+// 	Serial.print(axis);
+// 	// MoveBlock* mb=this->__queue_move_block->GetHeadMoveblock(); 
+// 	MoveBlock* mb= Queue_MoveBlock::Instance().GetHeadMoveblock();
+// 	// this->_homing_axis = axis;
 
-	this->_config->PrintOut();
-	// float motor_position[2];
+// 	this->_config->PrintOut();
+// 	// float motor_position[2];
 
-	if (axis==AXIS_ALPHA){
-		//todo :  process with IK()
-		this->__homing_helper = this->objHomeHelper_angle;
-		mb->MoveBlocks[0].TargetPosition = 500000;
-		mb->MoveBlocks[1].TargetPosition = 500000;
-		// motor_position[0] = 5000000;
-		// motor_position[1] = 5000000;
+// 	if (axis==AXIS_ALPHA){
+// 		//todo :  process with IK()
+// 		this->__homing_helper = this->objHomeHelper_angle;
+// 		mb->MoveBlocks[0].TargetPosition = 500000;
+// 		mb->MoveBlocks[1].TargetPosition = 500000;
+// 		// motor_position[0] = 5000000;
+// 		// motor_position[1] = 5000000;
 	
-	}else if (axis==AXIS_Z){
-		this->__homing_helper = this->objHomeHelper_vertical;
-		// motor_position[0] = -5000000;
-		// motor_position[1] = -5000000;
-		mb->MoveBlocks[0].TargetPosition = -500000;
-		mb->MoveBlocks[1].TargetPosition = -500000;
-	}
-	// this->__queue_move_block->ForwardHead();
-	Queue_MoveBlock::Instance().ForwardHead();
+// 	}else if (axis==AXIS_Z){
+// 		this->__homing_helper = this->objHomeHelper_vertical;
+// 		// motor_position[0] = -5000000;
+// 		// motor_position[1] = -5000000;
+// 		mb->MoveBlocks[0].TargetPosition = -500000;
+// 		mb->MoveBlocks[1].TargetPosition = -500000;
+// 	}
+// 	// this->__queue_move_block->ForwardHead();
+// 	Queue_MoveBlock::Instance().ForwardHead();
 
-	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
-	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
-	// this->_mover_base->AllActuatorsMoveTo(true, motor_position);
-}
+// 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
+// 	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
+// 	// this->_mover_base->AllActuatorsMoveTo(true, motor_position);
+// }
 
 // void CncSolution_CoreAZ::_running_G28(){
 // 	if (this->__homing_helper->IsTriged()){

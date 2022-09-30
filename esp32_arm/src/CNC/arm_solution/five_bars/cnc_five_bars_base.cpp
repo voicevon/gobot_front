@@ -2,7 +2,7 @@
 #include "cnc_five_bars_base.h"
 #include<Arduino.h>
 
-void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
+void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
 		this->_config->PrintOut("CncSolution_FiveBarsBase::_SetCurrentPositionAsHome()");
@@ -12,8 +12,8 @@ void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis homing_axis){
 			// ik_position.beta =  this->_config->Homed_position_beta_in_rad;
 			// ik_position.alpha = this->_config->GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig()->LastHomedPosition;
 			// ik_position.beta = this->_config->GetAxisHomers()->GetAxisHomer(AXIS_BETA)->GetHomingConfig()-> LastHomedPosition;
-			ik_position.alpha = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetFiredPosition();
-			ik_position.beta = this->_cnc_homer.GetAxisHomer(AXIS_BETA)->GetFiredPosition();
+			// ik_position.alpha = this->_cnc_homer.GetAxisHomer(AXIS_ALPHA)->GetFiredPosition();
+			// ik_position.beta = this->_cnc_homer.GetAxisHomer(AXIS_)->GetFiredPosition();
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
 			IkPosition_AB verifying_ik;

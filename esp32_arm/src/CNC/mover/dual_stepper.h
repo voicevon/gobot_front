@@ -20,7 +20,7 @@ class Mover_DualStepper: public MoverBase{
         // float GetAbsDistanceToTarget_InCncUnit() override;
         // void SetActuatorSpeed(EnumAxis actuator_name, float rad_per_second) override;
         // void SetActuatorAcceleration(EnumAxis axis, float accelleration) override;
-        bool ActuatorIsMoving(EnumAxis actuator) override;
+        bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator) override;
 
 
         // void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;

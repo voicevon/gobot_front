@@ -40,7 +40,7 @@ class RobotBase: public GcodeConsumer{
 
         void _running_G28();
 
-        EnumAxis _homing_axis;
+        // EnumAxis _homing_axis;
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
         CncHomers _cnc_homer = CncHomers(CNC_AXIS_COUNT);
 

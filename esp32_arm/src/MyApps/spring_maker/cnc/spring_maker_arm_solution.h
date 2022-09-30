@@ -3,7 +3,7 @@
 
 class SpringMaker_ArmSolution: public SingleAxis_ArmSolution{
     public:
-        EnumAxis ConvertToEnum(char axis) override;
+        // EnumAxis ConvertToEnum(char axis) override;
 
 
 

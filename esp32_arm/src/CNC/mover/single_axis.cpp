@@ -83,7 +83,7 @@ void Mover_SingleAxis::AllActuatorsStop(){
 // }
 
 
-bool Mover_SingleAxis::ActuatorIsMoving(EnumAxis actuator_name) {
+bool Mover_SingleAxis::ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name) {
     if (actuator_name==AXIS_ALPHA){
         // return this->_actuator_alpha_base->IsMoving();
 

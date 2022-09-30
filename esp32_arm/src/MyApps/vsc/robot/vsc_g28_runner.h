@@ -4,6 +4,6 @@ class Vsc_G28_Runner: public G28_Runner{
     public:
 
     private:
-        void SetMoveBlock_ToHome(EnumAxis axis, MoveBlock* mb) override;
+        void SetMoveBlock_ToHome(EnumAxis_Inverseinematic axis, MoveBlock* mb) override;
 
 };

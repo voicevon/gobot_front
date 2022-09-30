@@ -17,7 +17,7 @@ class CncMover_StepperServo: public MoverBase{
         // float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis motor_name) override;
         // float GetAbsDistanceToTarget_InCncUnit() override;
         // void SetActuatorSpeed(EnumAxis actuator_name, float rad_per_second) override;
-        bool ActuatorIsMoving(EnumAxis actuator) override;
+        bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator) override;
 
 
         // void AllActuatorsMoveTo(uint8_t is_absolute_position, float* positions_in_cnc_unit) override;

@@ -41,7 +41,7 @@ RobotEef_SpringMaker* Board_SpringMaker::GetEef() {
 }
 
 
-void Board_SpringMaker::EnableMotor(EnumAxis axis_name, bool enable_it) {
+void Board_SpringMaker::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {
     if (axis_name == AXIS_ALPHA){
         digitalWrite(PIN_ALPHA_ENABLE_2201, !enable_it);   // LOW is enable
     } else {
