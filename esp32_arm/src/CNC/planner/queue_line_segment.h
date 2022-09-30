@@ -14,8 +14,8 @@ class Queue_LineSegment: public CommonQueue{
             return instance;
         };
         Queue_LineSegment(){this->_Init(LINE_SEGMENT_QUEUE_SIZE, sizeof(LineSegment));};
-        LineSegment* FetchTailMoveBlock(){return (LineSegment*)this->FetchTailObject(); };
-        LineSegment* GetHeadMoveblock() {return (LineSegment*)this->GetHeadObject(); };
+        LineSegment* Withdraw() {return (LineSegment*)this->_Withdraw();};
+        LineSegment* GetRoom() {return (LineSegment*)this->_GetRoom();};
     private:
         
 

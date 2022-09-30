@@ -14,8 +14,8 @@ class Queue_MoveBlock: public CommonQueue{
             return instance;
         };
         Queue_MoveBlock(){this->_Init(BLOCK_QUEUE_SIZE, sizeof(MoveBlock));};
-        MoveBlock* FetchTailMoveBlock(){return (MoveBlock*)this->FetchTailObject(); };
-        MoveBlock* GetHeadMoveblock() {return (MoveBlock*)this->GetHeadObject(); };
+        MoveBlock* Withdraw(){return (MoveBlock*)this->_Withdraw(); };
+        MoveBlock* GetRoom() {return (MoveBlock*)this->_GetRoom(); };
     private:
         
 

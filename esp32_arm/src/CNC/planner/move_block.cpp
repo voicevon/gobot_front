@@ -12,7 +12,9 @@ void MoveBlock::DeepCopyTo(Queue_able* copy){
 }
 
 void MoveBlock::DeepReset_ToDefault(){
-        for(int i=0; i<6; i++){
+    Logger::Debug("MoveBlock::DeepReset_ToDefault()");
+    for(int i=0; i<6; i++){
+        Logger::Print("for  i", i );
         // this->MoveBlocks[i].axis = i;
         this->MoveBlocks[i].IsAbsTargetPosition = false;
         this->MoveBlocks[i].TargetPosition = 0;

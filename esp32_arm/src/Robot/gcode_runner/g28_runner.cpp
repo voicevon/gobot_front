@@ -31,7 +31,17 @@ void G28_Runner::Start(){
     Logger::Print("G28_Runner::Start() point", 1);
 
 	//Put a move_block into the queue.  Mover will let the actuator to turn...
-	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
+    Logger::Print("G28_Runner::Start() point", 11);
+    mb->DeepReset_ToDefault();
+    Logger::Print("G28_Runner::Start() point", 12);
+    MoveBlock_SingleActuator* aa = &mb->MoveBlocks[0];
+    Logger::Print("G28_Runner::Start() point", 13);
+    aa->TargetPosition = 12;
+    Logger::Print("G28_Runner::Start() point", 14);
+    
+
+
     Logger::Print("G28_Runner::Start() point", 2);
     if (home_actuator_directly){
         EnumAxis_Inverseinematic axis_ik = CncAxis::InverserKinematic_Axis(axis_name);
@@ -42,7 +52,7 @@ void G28_Runner::Start(){
         Logger::Print("G28_Runner::Start() point", 3);
     }
 
-	Queue_MoveBlock::Instance().ForwardHead();
+	Queue_MoveBlock::Instance().Deposit();
     Logger::Print("G28_Runner::Start() point", 4);
 	this->__mover->SpinOnce();
     Logger::Print("G28_Runner::Start() point", 99);

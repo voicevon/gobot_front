@@ -55,7 +55,7 @@ void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis_ForwardKinematic axis)
 	// this->stepper_beta->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
 	// float motor_position[2];
 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
 	mb->MoveBlocks[AXIS_ALPHA].IsAbsTargetPosition = false;
 	mb->MoveBlocks[AXIS_BETA].IsAbsTargetPosition = false;
 	if (axis=='Y'){
@@ -81,7 +81,7 @@ void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis_ForwardKinematic axis)
 	
 	// this->_mover_base->AllActuatorsMoveTo(false, motor_position);
 	// this->__queue_move_block->ForwardHead();	
-	Queue_MoveBlock::Instance().ForwardHead();
+	Queue_MoveBlock::Instance().Deposit();
 
 	// this->_board->EnableMotor('A', true);
 	// this->_board->EnableMotor('B',true);
@@ -132,7 +132,7 @@ bool CncSolution_CoreYZBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
 	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
 	if (gcode->has_letter('F')){
 		float speed = gcode->get_value('F');
 		// this->stepper_alpha->setMaxSpeed(speed);
@@ -176,7 +176,7 @@ bool CncSolution_CoreYZBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
 	mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
 	// this->__queue_move_block->ForwardHead();
-	Queue_MoveBlock::Instance().ForwardHead();
+	Queue_MoveBlock::Instance().Deposit();
 
 	if (true){
 		Serial.print("\n    [Debug] CncSolution_CoreYZBase::RunG1()     (");

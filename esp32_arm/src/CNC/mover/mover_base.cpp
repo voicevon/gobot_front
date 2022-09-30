@@ -2,12 +2,12 @@
 
 
 void MoverBase::SpinOnce(){
-    // Logger::Debug("MoverBase::SpinOnce()");
+    Logger::Debug("MoverBase::SpinOnce()");
     _actuator_alpha_base->SpinOnce();
     // _actuator_beta_base->SpinOnce();
     // _actuator_delta_base->SpinOnce();
 
-    // Logger::Print("MoverBase::SpinOnce() point", 1);
+    Logger::Print("MoverBase::SpinOnce() point", 1);
     if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
         // Logger::Print("MoverBase::SpinOnce() point", 91);
         return;
@@ -15,7 +15,7 @@ void MoverBase::SpinOnce(){
     Logger::Print("MoverBase::SpinOnce() point", 2);
     
     Logger::Info("MoverBase::SpinOnce() fetching queue_moveb_lock");
-    MoveBlock* mb = Queue_MoveBlock::Instance().FetchTailMoveBlock();
+    MoveBlock* mb = Queue_MoveBlock::Instance().Withdraw();
     Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
     this->AllActuatorsMoveTo(mb);
     Logger::Print("MoverBase::SpinOnce() point", 99);

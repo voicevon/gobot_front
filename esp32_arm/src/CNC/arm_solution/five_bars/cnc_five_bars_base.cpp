@@ -183,7 +183,7 @@ bool CncSolution_FiveBarsBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	Serial.println(gcode->get_command());
 
 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
 	IkPosition_AB target_ik_ab;
@@ -227,7 +227,7 @@ bool CncSolution_FiveBarsBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
 	mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
 	// this->__queue_move_block->ForwardHead();
-	Queue_MoveBlock::Instance().ForwardHead();
+	Queue_MoveBlock::Instance().Deposit();
 
 	if (true){
 		FkPosition_XY verified_fk;

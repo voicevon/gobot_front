@@ -40,7 +40,7 @@ void SingleAxis_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic
 	}
 	//Copy current ik-position to motor-position.
 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
 	// if (this->_homing_axis == this->_AXIS) {
 	// 	mb->MoveBlocks[AXIS_ALPHA].axis= AXIS_ALPHA;
 	// 	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = ik_position.alpha;

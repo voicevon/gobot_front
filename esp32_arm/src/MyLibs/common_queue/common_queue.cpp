@@ -28,7 +28,7 @@ bool CommonQueue::AppendObject(Queue_able* new_object){
     // buffer is NOT full. 
     return false;  
 }
-bool CommonQueue::ForwardHead(){
+bool CommonQueue::Deposit(){
     Logger::Debug("ommonQueue::ForwardHead()");
     Logger::Print("head old", this->_head);
     Logger::Print("tail", this->_tail);
@@ -54,15 +54,24 @@ bool CommonQueue::ForwardHead(){
 }
 
 
-Queue_able* CommonQueue::GetHeadObject(){
-    int previous_head = this->__get_pointer_previous_index(this->_head);
-    // Queue_able* head_message = this->_all_queue_ables[previous_head];
-    Queue_able* head_message =(Queue_able*)(this->_all_queue_ables + previous_head * this->_sizeof_item);
+Queue_able* CommonQueue::_GetRoom(){
+    Logger::Debug("CommonQueue::GetHeadObject()");
+    // int previous_head = this->__get_pointer_previous_index(this->_head);
 
+    int previous_head = this->_head;
+    Logger::Print("previous_head", previous_head);
+    Logger::Print("&this->_all_queue_ables",&this->_all_queue_ables);
+    Logger::Print("previous_head * this->_sizeof_item", previous_head * this->_sizeof_item);
+    Logger::Print("&this->_all_queue_ables + previous_head * this->_sizeof_item", &this->_all_queue_ables + previous_head * this->_sizeof_item);
+    Serial.println((long) this->_all_queue_ables);
+    // Serial.println(&this->_all_queue_ables);
+    Queue_able* head_message =(Queue_able*)(this->_all_queue_ables + previous_head * this->_sizeof_item);
+    Serial.print("test id = \t\t");
+    Serial.println(head_message->id);
     return  head_message;
 }
 
-Queue_able* CommonQueue::FetchTailObject(){
+Queue_able* CommonQueue::_Withdraw(){
     Queue_able* tail_message = NULL;
     if (this->_head != this->_tail){
         // tail_message = this->_all_queue_ables[this->_tail];

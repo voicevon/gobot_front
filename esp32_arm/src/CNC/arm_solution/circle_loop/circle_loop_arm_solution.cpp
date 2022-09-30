@@ -53,14 +53,14 @@ void CircleLoop_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line
 	//TODO:  This is a virtual function.
 	FkPosition_A* fk_pos =  (FkPosition_A*) line->TargetPosition;
 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-	MoveBlock* mb = Queue_MoveBlock::Instance().GetHeadMoveblock();
+	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
 	// mb->MoveBlocks[line->axis].axis = line->axis;
 	mb->MoveBlocks[line->axis].IsAbsTargetPosition = line->IsAbsTargetPosition;
 	mb->MoveBlocks[line->axis].TargetPosition = fk_pos->A ;
 	mb->MoveBlocks[line->axis].Speed = line->Speed;
 	mb->MoveBlocks[line->axis].Acceleration = line->Acceleration;
 	// this->__queue_move_block->ForwardHead();
-	Queue_MoveBlock::Instance().ForwardHead();
+	Queue_MoveBlock::Instance().Deposit();
 }
 
 bool CircleLoop_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
