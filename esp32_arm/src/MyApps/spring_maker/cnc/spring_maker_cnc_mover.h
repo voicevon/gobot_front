@@ -5,7 +5,7 @@
 class SpringMaker_CncMover: public Mover_SingleAxis{
     public:
         void Init(Board_SpringMaker* board);
-        void PrintOut(const char* title) override;
+        // void PrintOut(const char* title) override;
         
     private:
 };

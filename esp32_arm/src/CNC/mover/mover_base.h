@@ -17,7 +17,7 @@ class MoverBase{
         virtual void AllActuatorsMoveTo(MoveBlock* move);
 
         //TODO:   void LinkActuator(char actuator_name,  ActuatorBase* actuator );
-        virtual void PrintOut(const char* title);
+        // virtual void PrintOut(const char* title);
         void SetActuatorCurrentCncPositionAs(EnumAxis actuator_name, float as_current_position);
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis actuator_name);  // TODO: return  all current position.
 

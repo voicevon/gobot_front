@@ -8,7 +8,7 @@ void Smoker_CncMover::Init(Smoker_Board* board){
     
 }
 
-void Smoker_CncMover::PrintOut(const char* title){
-    Logger::Debug(title);
-    Logger::Debug("\t\tVsc_CncMover::PrintOut()");
-}
+// void Smoker_CncMover::PrintOut(const char* title){
+//     Logger::Debug(title);
+//     Logger::Debug("\t\tVsc_CncMover::PrintOut()");
+// }

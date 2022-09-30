@@ -5,7 +5,7 @@
 class Smoker_CncMover: public Mover_SingleAxis{
     public:
         void Init(Smoker_Board* board);
-        void PrintOut(const char* title) override;
+        // void PrintOut(const char* title) override;
         
     private:
 };

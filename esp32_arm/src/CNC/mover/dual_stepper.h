@@ -12,7 +12,7 @@ class Mover_DualStepper: public MoverBase{
         void LinkStepper_asBeta(ActuatorStepper* stepper);
         void LinkStepControl(StepControl* stepControl){this->__stepControl=stepControl;};
         // void LinkServo_asBeta(ActuatorServo* servo);
-        void PrintOut(const char* title) override;
+        // void PrintOut(const char* title) override;
 
         
         // void SetEefSpeed(float speed) override;

@@ -11,10 +11,10 @@ void CncMover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
     this->__actuator_beta = servo;
 }
 
-void CncMover_StepperServo::PrintOut(const char* title) {
-    Logger::Info("CncMover_StepperServo::PrintOut eeeeeeeeeeee");
+// void CncMover_StepperServo::PrintOut(const char* title) {
+//     Logger::Info("CncMover_StepperServo::PrintOut eeeeeeeeeeee");
 
-}
+// }
 
 #include "MyLibs/calculator.h"
 

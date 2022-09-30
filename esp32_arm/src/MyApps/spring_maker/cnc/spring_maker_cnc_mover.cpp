@@ -8,7 +8,7 @@ void SpringMaker_CncMover::Init(Board_SpringMaker* board){
     
 }
 
-void SpringMaker_CncMover::PrintOut(const char* title){
-    Logger::Debug(title);
-    Logger::Debug("\t\tVsc_CncMover::PrintOut()");
-}
+// void SpringMaker_CncMover::PrintOut(const char* title){
+//     Logger::Debug(title);
+//     Logger::Debug("\t\tVsc_CncMover::PrintOut()");
+// }

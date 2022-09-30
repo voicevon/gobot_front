@@ -200,24 +200,24 @@ bool Mover_DualStepper::ActuatorIsMoving(EnumAxis actuator_name) {
     return false;
 }
 
-void Mover_DualStepper::PrintOut(const char* title){
-    Logger::Info(title);
-    Serial.print("moving_flags= ");
-    Serial.println(this->_moving_actuator_flags);
+// void Mover_DualStepper::PrintOut(const char* title){
+//     Logger::Info(title);
+//     Serial.print("moving_flags= ");
+//     Serial.println(this->_moving_actuator_flags);
     
-    if ((this->_moving_actuator_flags & 0x01) == 1){
-        Serial.print("For alpha:  ");
-        Serial.print("  current_position= ");
-        Serial.print(this->__actuator_alpha->GetCurrentCncPosition());
-        Serial.print("  target_position= ");
-        Serial.print(this->__actuator_alpha->GetTartetCncPosition());
-        Serial.println();
-    }
-    if ((this->_moving_actuator_flags & 0x02) == 2){
-        Serial.print("For beta:  target_position= ");
-        Serial.print(this->__actuator_alpha->GetTartetCncPosition());
-        Serial.println();
-    }
+//     if ((this->_moving_actuator_flags & 0x01) == 1){
+//         Serial.print("For alpha:  ");
+//         Serial.print("  current_position= ");
+//         Serial.print(this->__actuator_alpha->GetCurrentCncPosition());
+//         Serial.print("  target_position= ");
+//         Serial.print(this->__actuator_alpha->GetTartetCncPosition());
+//         Serial.println();
+//     }
+//     if ((this->_moving_actuator_flags & 0x02) == 2){
+//         Serial.print("For beta:  target_position= ");
+//         Serial.print(this->__actuator_alpha->GetTartetCncPosition());
+//         Serial.println();
+//     }
 
-    Serial.println(FCBC_RESET);
-}
+//     Serial.println(FCBC_RESET);
+// }

@@ -2,7 +2,6 @@
 #ifdef I_AM_VSC
 #include "MyApps/vsc/board/board_vsc.h"
 #include "MyApps/vsc/board/board_tester.h"
-#include "MyApps/vsc/cnc/vsc_arm_solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "MyApps/vsc/vsc_app.h"

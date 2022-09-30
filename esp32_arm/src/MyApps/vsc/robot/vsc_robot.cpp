@@ -2,25 +2,15 @@
 #include "Robot/mcode_runner/mcode_runners.h"
 
 void VscRobot::Init(Vsc_Board* board){
-    Logger::Info("Vsc_ArmSoution::Init() is entering...");
+    Logger::Debug("Vsc_ArmSoution::Init()");
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());
 
     this->__g28_runner=&this->g28_runner;
     
     this->_mover = &mover;
-    //  queue_move_block involved.
-    // this->__queue_move_block._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
-    // arm_solution.__queue_move_block = &this->__queue_move_block;    //todo:  LinkAsProducer()
-    // arm_solution.__queue_move_block = &this->__queue_move_block;    //todo:  LinkAsProducer()
-    // mover.__queue_move_block = &this->__queue_move_block;   //todo:  LinkAsConsumer()
     this->__planner.__arm_solution = &arm_solution;
-    mover.Init(board);
-
-    arm_solution.Init(board);
-    // this->arm_solution.planner = &this->__planner;
-    // arm_solution._mover_base = &this->__mover;
     this->_arm_solution = &this->arm_solution;  
 
     Logger::Info("Vsc_ArmSoution::Init() Pid controller.");
@@ -35,4 +25,15 @@ void VscRobot::Init(Vsc_Board* board){
     this->__speed_pid.P = 100;
     this->__speed_pid.I = 100;
     this->__speed_pid.D = 0;
+
+
+
+        // TODO: for mover config
+    //     Vsc_ActuatorAlphaMechanic config;
+    // this->_actuator_alpha_base = board->GetActuator(AXIS_ALPHA);
+    
+    // // this->_micro_steps_on_stepper_driver = 16;
+    // // this->_motor_gear_teeth_count = 10;
+    // // this->_slave_pulley_teeth_count = 90;
+    // // this->_motor_step_angle_in_degree = 0.7003891050583658;
 }
