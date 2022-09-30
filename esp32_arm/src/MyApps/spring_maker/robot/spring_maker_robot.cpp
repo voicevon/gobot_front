@@ -1,7 +1,7 @@
-#include "spring_robot.h"
+#include "spring_maker_robot.h"
 #include "Robot/mcode_runner/mcode_runners.h"
 
-void SpringRobot::Init(Board_SpringMaker* board){
+void SpringMakerRobot::Init(Board_SpringMaker* board){
     Logger::Info("Vsc_ArmSoution::Init() is entering...");
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());

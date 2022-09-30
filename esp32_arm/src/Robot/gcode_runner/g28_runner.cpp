@@ -9,7 +9,7 @@ bool G28_Runner::IsDone(){
     static unsigned long last_micros;
     
 	if(__homer->GetTrigeredIndex()==-1){
-        if(micros() - last_micros > 100000){
+        if(micros() - last_micros > 200000){
             Serial.print(".");  //print too fast?
             last_micros = micros();
         }

@@ -2,12 +2,7 @@
 
 
 // void Vsc_ArmSoution::Init(Vsc_Board* board ){
-//     this->_AXIS = AXIS_ALPHA;
 
-//     // this->__mover.Init(board);
-//     this->_cnc_board = board;
-//     // this->_mover_base = &this->__mover;
-//     // this->planner = &this->__planner;
     
 
 
@@ -24,22 +19,4 @@
 
 // 	this->_cnc_board = board;
 
-// }
-
-// EnumAxis Vsc_ArmSoution::ConvertToEnum(char axis){
-//     switch (axis){
-//         case 'A':
-//             return AXIS_ALPHA;
-//             break;
-
-//         default:
-//             Serial.print("[Error] GobotMainCnc::ConvertToEnum() Unknown axis= ");
-//             Serial.println(axis);
-//             while(true){
-//                 Serial.print("E ");
-//                 delay(500);
-//             }
-//             return AXIS_ALPHA;
-//             break;
-//     }
 // }

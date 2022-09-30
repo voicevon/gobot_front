@@ -1,17 +1,15 @@
 #include "all_applications.h"
 #ifdef I_AM_SPRING_MAKER
 #include "board/board.h"
-#include"cnc/solution_config.h"
-#include "cnc/spring_maker_arm_solution.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "spring_maker_app.h"
-#include "robot/spring_robot.h"
+#include "robot/spring_maker_robot.h"
 
 Board_SpringMaker board;
 // SpringMaker_CncSoution cnc;
 SpringMakerApp app;
-SpringRobot robot;
+SpringMakerRobot robot;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 

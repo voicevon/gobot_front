@@ -3,10 +3,11 @@
 
 #include "Robot/robot_base.h"
 #include "MyApps/spring_maker/board/board.h"
-#include "MyApps/spring_maker/cnc/spring_maker_arm_solution.h"
+// #include "MyApps/spring_maker/cnc/spring_maker_arm_solution.h"
 #include "spring_maker_g28_runner.h"
+#include "CNC/arm_solution/single_axis/single_axis_arm_solution.h"
 
-class SpringRobot: public RobotBase{
+class SpringMakerRobot: public RobotBase{
     public:
         void Init(Board_SpringMaker* board);
 
@@ -19,7 +20,7 @@ class SpringRobot: public RobotBase{
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
         // Spring_CncMover mover;
-        SpringMaker_ArmSolution arm_solution;
-        Spring_G28_Runner g28_runner;
+        SingleAxis_ArmSolution arm_solution;
+        SpringMaker_G28_Runner g28_runner;
 
 };
