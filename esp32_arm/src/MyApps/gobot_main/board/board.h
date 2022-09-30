@@ -16,7 +16,7 @@ class GobotMain_Board: public CncBoardBase{
         uint8_t ReadAllRooms();
         uint8_t GetLoadedRoom();
         PositionTrigger* GetPositionTrigger(uint8_t index) override{};
-
+        ActuatorStepper* GetActuator(EnumAxis_Inverseinematic axis){};
 
 
     private:

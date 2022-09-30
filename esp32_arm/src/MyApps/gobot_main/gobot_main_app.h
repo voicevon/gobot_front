@@ -6,9 +6,9 @@
 #include "Robot/eef/eef_standard_code.h"
 #include "chessboard_map.h"
 
-class GobotMain_Robot: public GcodeProducer, public MqttMessageConsumer{
+class GobotMain_App: public GcodeProducer, public MqttMessageConsumer{
     public:
-        GobotMain_Robot(){};
+        GobotMain_App(){};
 
         void SpinOnce();
         void ParkArms(bool do_home);

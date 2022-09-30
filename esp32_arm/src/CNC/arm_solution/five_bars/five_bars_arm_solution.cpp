@@ -1,11 +1,11 @@
 #include<math.h>
-#include "cnc_five_bars_base.h"
+#include "five_bars_arm_solution.h"
 #include<Arduino.h>
 
-void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
+void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AB ik_position;
-		this->_config->PrintOut("CncSolution_FiveBarsBase::_SetCurrentPositionAsHome()");
+		this->_config->PrintOut("FiveBars_ArmSolution::_SetCurrentPositionAsHome()");
 		if (this->_config->IsInverseKinematicHoimg){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
 			// ik_position.alpha =  this->_config->Homed_position_alpha_in_rad;
@@ -20,7 +20,7 @@ void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis_ForwardKinemat
 			Serial.println("\n\n  [Info] Please verify IK->FK->IK   ");
 			this->IK(&this->__current_fk_position, &verifying_ik);
 		}else{
-			Logger::Error("CncSolution_FiveBarsBase::_running_G28()  Trying to get home position");
+			Logger::Error("FiveBars_ArmSolution::_running_G28()  Trying to get home position");
 			Serial.print(" with EEF-FK position is under construction");
 			Serial.println(FCBC_RESET);
 		}
@@ -30,7 +30,7 @@ void CncSolution_FiveBarsBase::_SetCurrentPositionAsHome(EnumAxis_ForwardKinemat
 }
 
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
-void CncSolution_FiveBarsBase::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
+void FiveBars_ArmSolution::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
@@ -101,7 +101,7 @@ void CncSolution_FiveBarsBase::IK(FkPositionBase* from_fk, IkPositionBase* to_ik
 	
 }
 
-void CncSolution_FiveBarsBase::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
+void FiveBars_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 
@@ -167,7 +167,7 @@ void CncSolution_FiveBarsBase::FK(IkPositionBase* from_ik, FkPositionBase* to_fk
 	fk->X = center_x + lenth_from_center_to_eef * cosf(rotated_angle);
 	fk->Y = center_y + lenth_from_center_to_eef * sinf(rotated_angle);
 
-	Serial.print("\n\n[Debug] CncSolution_FiveBarsBase::FK()  in degree from (alpha,beta) =(");
+	Serial.print("\n\n[Debug] FiveBars_ArmSolution::FK()  in degree from (alpha,beta) =(");
 	Serial.print(ik->alpha * RAD_TO_DEG);
 	Serial.print(" , ");
 	Serial.print(ik->beta * RAD_TO_DEG);
@@ -178,11 +178,10 @@ void CncSolution_FiveBarsBase::FK(IkPositionBase* from_ik, FkPositionBase* to_fk
 	Serial.print(")");
 }
 
-bool CncSolution_FiveBarsBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
-	Logger::Warn("CncSolution_FiveBarsBase::RunG1()");
+bool FiveBars_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
+	Logger::Warn("FiveBars_ArmSolution::RunG1()");
 	Serial.println(gcode->get_command());
 
-	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
@@ -238,7 +237,7 @@ bool CncSolution_FiveBarsBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 		Serial.print(" FK.Y= ");
 		Serial.print(verified_fk.Y);
 
-		Serial.print("[Debug] CncSolution_FiveBarsBase::RunG1() ");
+		Serial.print("[Debug] FiveBars_ArmSolution::RunG1() ");
 		// Serial.print(RAD_TO_DEG * this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
 		Serial.print(",");
 		// Serial.print(RAD_TO_DEG * this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
@@ -249,11 +248,11 @@ bool CncSolution_FiveBarsBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	}  
 }
 
-void CncSolution_FiveBarsBase::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
+void FiveBars_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 
 }
 
-float CncSolution_FiveBarsBase::GetDistanceToTarget_IK(){
+float FiveBars_ArmSolution::GetDistanceToTarget_IK(){
 	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
 }
 

@@ -3,17 +3,18 @@
 
 #include "board/board.h"
 #include "board/robot_eef/gobot_main_eef.h"
-#include "cnc/solution.h"
-#include "cnc/solution_config.h"
+// #include "cnc/solution.h"
+// #include "cnc/solution_config.h"
 #include "ESP32Step/src/TeensyStep.h"
-
-#include "robot.h"
+#include "robot/gobot_main_robot.h"
+#include "gobot_main_app.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/main_mqtt.h"
 
 GobotMain_Board board;
-GobotMainCncSolution cnc;
-GobotMain_Robot robot; 
+// GobotMainCncSolution cnc;
+GobotMainRobot robot; 
+GobotMain_App app;
 
 StepControl objStepControl;    // Use default settings 
 GcodeQueue gcode_queue;
@@ -28,17 +29,17 @@ void setup(){
     board.PrintOut();
     // board.LinkStepControlToCncMover(&objStepControl);
 
-    board_test();
-    cnc.Init(&board, &objStepControl);
+    // board_test();
+    // cnc.Init(&board, &objStepControl);
 
-    robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
-    cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
+    robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
     // mqtt, bridge, receiver.
     setup_mqtt_block_connect();
     String mqtt_topic = "gobot/xROBOT_SERIAL_ID/arm";
     mqtt_topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
-    append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, &robot); 
+    append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, &app); 
     setup_mqtt_on_message_receive(); 
 
     Logger::Info("Gobot-Main setup is done.........................................");
@@ -52,7 +53,8 @@ bool xx=true;
 
 void loop(){
     robot.SpinOnce();
-    cnc.SpinOnce();
+    // cnc.SpinOnce();
+    app.SpinOnce();
     loop_mqtt();
     return;
     uint8_t loadded_room = board.GetLoadedRoom();
@@ -66,9 +68,9 @@ void loop(){
 }
 
 void cnc_test(){
-    robot.Test_HomeAlpha(0);
-    robot.Test_HomeBeta(0);
-    robot.Test_PickPlace(99);
+    // robot.Test_HomeAlpha(0);
+    // robot.Test_HomeBeta(0);
+    // robot.Test_PickPlace(99);
 }
 
 #include "board/board_tester.h"
