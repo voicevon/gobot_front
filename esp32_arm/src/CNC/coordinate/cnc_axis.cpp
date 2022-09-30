@@ -1,7 +1,7 @@
 #include "cnc_axis.h"
 
-        static EnumAxis_ForwardKinematic ForwardKinematic_Axis(char name);
-        static EnumAxis_Inverseinematic InverserKinematic_Axis(char name);
+// static EnumAxis_ForwardKinematic ForwardKinematic_Axis(char name);
+// static EnumAxis_Inverseinematic InverserKinematic_Axis(char name);
 EnumAxis_ForwardKinematic CncAxis::ForwardKinematic_Axis(char name){
     EnumAxis_ForwardKinematic result_axis = AXIS_X;
     switch (name){

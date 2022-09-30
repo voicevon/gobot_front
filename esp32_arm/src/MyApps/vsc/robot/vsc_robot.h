@@ -19,7 +19,6 @@ class VscRobot: public RobotBase{
 
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
-        // Mover_SingleDcMotor mover;
         Mover_SingleAxis mover;
         CircleLoop_ArmSolution arm_solution;
         Vsc_G28_Runner g28_runner;

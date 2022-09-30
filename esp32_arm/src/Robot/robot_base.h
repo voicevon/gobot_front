@@ -25,13 +25,10 @@ class RobotBase: public GcodeConsumer{
     public:
         RobotState State = RobotState::IDLE_OR_ASYNC;
         void SpinOnce();
-        // void RunG28(EnumAxis axis);
 
     protected:
-        // Queue_MoveBlock __queue_move_block;
         Planner __planner;
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
-       
         // virtual std::string GetHomeTrigerStateString();
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
@@ -40,7 +37,6 @@ class RobotBase: public GcodeConsumer{
 
         void _running_G28();
 
-        // EnumAxis _homing_axis;
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
         CncHomers _cnc_homer = CncHomers(CNC_AXIS_COUNT);
 
@@ -48,16 +44,17 @@ class RobotBase: public GcodeConsumer{
         
         CncBoardBase* _cnc_board;  //!!!!
         ArmSolutionBase* _arm_solution;
-        MoverBase* _mover;
-
+        void LinkMover(MoverBase* mover){this->_mover=mover;};
+        
     protected:
         G28_Runner *__g28_runner;
+        MoverBase* _mover;
 
     private:
-
         int test_int;
         RobotEefBase* __eef;
         G4_Runner __g4_runner;
+        // Gcode __gcode; //Will be survived , until be override by new value. 
 
         void __RunGcode(Gcode* gcode);
         void __RunMcode(Gcode* gcode);

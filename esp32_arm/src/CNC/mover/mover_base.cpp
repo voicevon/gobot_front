@@ -2,14 +2,14 @@
 
 
 void MoverBase::SpinOnce(){
-    Logger::Debug("MoverBase::SpinOnce()");
+    // Logger::Debug("MoverBase::SpinOnce()");
     _actuator_alpha_base->SpinOnce();
     // _actuator_beta_base->SpinOnce();
     // _actuator_delta_base->SpinOnce();
 
-    Logger::Print("MoverBase::SpinOnce() point", 1);
+    // Logger::Print("MoverBase::SpinOnce() point", 1);
     if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
-        // Logger::Print("MoverBase::SpinOnce() point", 91);
+        // Logger::Print("MoverBase::SpinOnce() Queue_MoveBlock::  Buffer is Empty", 91);
         return;
     }
     Logger::Print("MoverBase::SpinOnce() point", 2);

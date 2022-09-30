@@ -82,6 +82,7 @@ void RobotBase::SpinOnce(){
 	std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
 	Gcode gcode = Gcode(str);
+	// __gcode = gcode;
 	Logger::Debug("RobotBase::SpinOnce() has got command string ");
 	Serial.println(str.c_str());
 	Logger::Print("RobotBase::SpinOnce() point", 6);
@@ -103,7 +104,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 
 	switch (gcode->g){
 		case 28:
-			this->__g28_runner->LinkGcode(gcode);
+			this->__g28_runner->LinkGcode(gcode);   //bug, gcode will be deleted, after SpinOnce()
 
 			//TODO:  convert char to enum
 			// this->RunG28(this->ConvertToEnum(home_axis));
