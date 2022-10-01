@@ -3,17 +3,18 @@
 
 #include <Arduino.h>
 #include <Adafruit_MCP23X17.h>
+#include "MyLibs/common_diction/diction_base.h"
 
-
-// TODO:  rename to PositionTrigger
-class PositionTrigger{
+class PositionTrigger: public DictionItem{
     public:
+        char AxisName;
         // For OC output sensor, trigeredState should be LOW
-        PositionTrigger(uint8_t pinTriger, int triggeredState);
-        PositionTrigger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger, int triggered_state);
-        PositionTrigger(int trigeredState);
-        void Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pinTriger);
-        bool IsTriggered();   //TODO:  rename to IsFired()
+        PositionTrigger(){};
+        // When Connect to Esp32 GPIO. 
+        void Init(uint8_t pinTriger, int triggeredState);
+        //When connect to MCP23X17/18
+        void Init(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger, int triggered_state);
+        bool IsTriggered();   //TODO:  rename to IsFired()?
         void SetTriggeredCountMax(int new_value){this->__triggered_counter_max = new_value;};
         void PrintOut(const char* title);
         void SetTriggerPosition(float trigger_position){this->__trigger_position_in_cnc_unit=trigger_position;};

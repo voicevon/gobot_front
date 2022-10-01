@@ -15,7 +15,7 @@ class Mover_DualStepper: public MoverBase{
         void AllActuatorsMoveTo(MoveBlock* move) override;
         void AllActuatorsStop() override{};
 
-        bool HasArrivedTargetPosition(){};
+        bool HasArrivedTargetPosition(){return false;};  //TODO: not false;
 
 
         

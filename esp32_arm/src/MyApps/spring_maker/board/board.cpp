@@ -4,12 +4,14 @@
 void Board_SpringMaker::Init(bool is_on_reset){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
-   
+    
+    HomeTrigger_Diction::Instance().Init(_all_position_triggers,1);
+    _all_position_triggers[0].Init(PIN_HOME_ALPHA_2201, LOW);
 }
 
-PositionTrigger* Board_SpringMaker::GetPositionTrigger(uint8_t index){
-    
-}
+// PositionTrigger* Board_SpringMaker::GetPositionTrigger(uint8_t index){
+
+// }
 
 
 // ActuatorStepper* Board_SpringMaker::GetActuator(EnumAxis axis_name) {

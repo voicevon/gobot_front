@@ -37,7 +37,7 @@ class RobotBase: public GcodeConsumer{
         void _running_G28();
 
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
-        HomerDiction _homer_diction = HomerDiction(CNC_AXIS_COUNT);
+        // HomerDiction _homer_diction = HomerDiction(CNC_AXIS_COUNT);
 
         bool is_absolute_position = true;
         

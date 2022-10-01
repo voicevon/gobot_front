@@ -43,7 +43,7 @@ class ArmSolutionBase{
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);  //TODO:: remove-able?
 
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
-        HomerDiction _homer_diction;
+        // HomerDiction _homer_diction;
 
         bool is_absolute_position = true;
 

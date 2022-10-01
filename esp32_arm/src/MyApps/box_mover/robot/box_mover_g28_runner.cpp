@@ -13,12 +13,14 @@ void BoxMover_G28_Runner::Init(Board2205Cnc* board, MoverBase* mover){
     Logger::Info("BoxMover_G28_Runner::Init() Alpha axis home_triggers");
     PositionTrigger* trigger;
     trigger = board->GetPositionTrigger(0);
-    trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
-    __homer.AppendPositionTrigger(trigger);
+    trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,
+    trigger->AxisName = 'X' ;   
+    // __homer.AppendPositionTrigger(trigger);
 
     trigger = board->GetPositionTrigger(1);
     trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
-    __homer.AppendPositionTrigger(trigger);
+    trigger->AxisName = 'Z';
+    // __homer.AppendPositionTrigger(trigger);
 }
 
 
@@ -71,10 +73,10 @@ void BoxMover_G28_Runner::SetMoveBlock_ToHome(EnumAxis_ForwardKinematic axis, Mo
     Logger::Print("BoxMover_G28_Runner::SetMoveBlock_ToHome()  point", 99);
 }
 
-AxisHomer* BoxMover_G28_Runner::GetHomer(EnumAxis_ForwardKinematic axis){
-    return &__homer;
-}
+// AxisHomer* BoxMover_G28_Runner::GetHomer(EnumAxis_ForwardKinematic axis){
+//     return &__homer;
+// }
 
-AxisHomer* BoxMover_G28_Runner::GetHomer(EnumAxis_Inverseinematic axis){
-    return &__homer;
-}
+// AxisHomer* BoxMover_G28_Runner::GetHomer(EnumAxis_Inverseinematic axis){
+//     return &__homer;
+// }

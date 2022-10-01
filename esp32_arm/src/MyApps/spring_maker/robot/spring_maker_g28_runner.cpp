@@ -11,10 +11,10 @@ void SpringMaker_G28_Runner::Init(Board_SpringMaker* board, MoverBase* mover){
     homing.DistanceToGo = TWO_PI;
     
     Logger::Info("SpringMaker_G28_Runner::Init() Alpha axis home_triggers");
-    PositionTrigger* trigger;
-    trigger = board->GetPositionTrigger(0);
+    PositionTrigger* trigger = HomeTrigger_Diction::Instance().GetPositionTrigger(0);
+    trigger->AxisName = 'X';
     trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
-    __homer.AppendPositionTrigger(trigger);
+    // __homer.AppendPositionTrigger(trigger);
 
 }
 
@@ -69,9 +69,10 @@ void SpringMaker_G28_Runner::SetMoveBlock_ToHome(EnumAxis_ForwardKinematic axis,
 }
 
 AxisHomer* SpringMaker_G28_Runner::GetHomer(EnumAxis_ForwardKinematic axis){
-    return &__homer;
+    // return HomerDiction::Instance().GetAxisHomer(0);
 }
 
 AxisHomer* SpringMaker_G28_Runner::GetHomer(EnumAxis_Inverseinematic axis){
-    return &__homer;
+        // return HomerDiction::Instance().GetAxisHomer(0);
+
 }

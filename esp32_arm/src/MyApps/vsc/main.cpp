@@ -51,11 +51,11 @@ void setup(){
     board.LinkEncoderSensor(&encoder);
     board.Init(true);
 
-    MyDiction dd;
-    dd.Init(5);
-    MyItem* aa =  dd.GetMyItem(0);
+    MyItem buffer[6];
+    MyDiction::Instance().Init(buffer,6);
+    MyItem* aa = MyDiction::Instance().GetMyItem(0);
     aa->test_id = 5555;
-    MyItem* bb = dd.GetMyItem(0);
+    MyItem* bb = MyDiction::Instance().GetMyItem(0);
     Serial.println(bb->test_id);
     Serial.println("\n\n\n\n\n\n");
 

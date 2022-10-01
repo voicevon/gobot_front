@@ -60,17 +60,17 @@ void G28_Runner::Start(){
     // Logger::Print("G28_Runner::Start() point", 14);
 
     Logger::Print("G28_Runner::Start() point", 2);
-    if (home_actuator_directly){
-        EnumAxis_Inverseinematic axis_ik = CncAxis::InverserKinematic_Axis(__axis_name);
-        __homer = this->GetHomer(axis_ik);
-        this->SetMoveBlock_ToHome(axis_ik, mb);
-        Logger::Print("G28_Runner::Start() point", 31);
-    }else{
-        EnumAxis_ForwardKinematic axis_fk = CncAxis::ForwardKinematic_Axis(__axis_name);
-	    __homer = this->GetHomer(axis_fk);
-	    this->SetMoveBlock_ToHome(axis_fk, mb);
-        Logger::Print("G28_Runner::Start() point", 32);
-    }
+    // __homer = HomerDiction::Instance().GetAxisHomer(__axis_name);
+    // if (home_actuator_directly){
+    //     EnumAxis_Inverseinematic axis_ik = CncAxis::From_FkName_ToEnum(__axis_name);
+    //     this->SetMoveBlock_ToHome(axis_ik, mb);
+    //     Logger::Print("G28_Runner::Start() point", 31);
+    // }else{
+    //     EnumAxis_ForwardKinematic axis_fk = CncAxis::From_Ik_Name_ToEnum(__axis_name);
+	//     __homer = this->GetHomer(axis_fk);
+	//     this->SetMoveBlock_ToHome(axis_fk, mb);
+    //     Logger::Print("G28_Runner::Start() point", 32);
+    // }
 
 	Queue_MoveBlock::Instance().Deposit();
     Logger::Print("G28_Runner::Start() point", 4);

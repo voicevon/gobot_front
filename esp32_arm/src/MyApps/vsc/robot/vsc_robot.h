@@ -7,6 +7,8 @@
 #include "CNC/arm_solution/circle_loop/circle_loop_arm_solution.h"
 #include "CNC/mover/single_axis.h"
 
+
+
 class VscRobot: public RobotBase{
     public:
         void Init(Vsc_Board* board);

@@ -31,7 +31,8 @@ void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic
 		// We know homed position via FK
 		Logger::Info("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
-		this->__current_fk_position.A = this->_homer_diction.GetAxisHomer(AXIS_X)->GetFiredPosition();
+		// this->__current_fk_position.A = this->_homer_diction.GetAxisHomer(AXIS_X)->GetFiredPosition();
+		this->__current_fk_position.A = HomeTrigger_Diction::Instance().GetFiredPosition('A');
 		Logger::Print("position trigger, fired position", this->__current_fk_position.A);
 		this->IK(&this->__current_fk_position, &ik_position);
 		// verify IK by FK()

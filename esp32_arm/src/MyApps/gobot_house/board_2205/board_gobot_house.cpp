@@ -15,6 +15,10 @@ void Board_GobotHouse::Init(bool is_on_reset){
     this->EnableMotor(AXIS_BETA, false);
     this->eef.Init();
 
+    __all_position_triggers[0].Init(PIN_HOME_ALHPA_2109, LOW);
+    __all_position_triggers[1].Init(PIN_HOME_BETA_2109, LOW);
+    HomeTrigger_Diction::Instance().Init(__all_position_triggers,2);
+
 }
 
 // ActuatorBase* Board_GobotHouse::GetActuator(EnumAxis axis_name) {

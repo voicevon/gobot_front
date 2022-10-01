@@ -40,10 +40,7 @@ class Vsc_Board: public CncBoardBase{
         H_Bridge __pwm_h_bridge = H_Bridge(PIN_H_BRIDGE_DIR, PIN_H_BRIDGE_SPEED);
         PolorEncoder __motor_angle_sensor;
         
-        PositionTrigger __homer_0 = PositionTrigger(PIN_HOMER_SENSOR_HALL_0, LOW);
-        PositionTrigger __homer_1 = PositionTrigger(PIN_HOMER_SENSOR_HALL_1, LOW);
-        PositionTrigger __homer_2 = PositionTrigger(PIN_HOMER_SENSOR_HALL_2, LOW);
-        PositionTrigger __homer_3 = PositionTrigger(PIN_HOMER_SENSOR_HALL_3, LOW);
+        PositionTrigger __all_position_triggers[4];
 
         Vsc_RobotEef __eef;
 

@@ -1,13 +1,16 @@
-#include "homer_diction.h"
+// #include "homer_diction.h"
 
 
-AxisHomer* HomerDiction::GetAxisHomer(EnumAxis_ForwardKinematic axis){
-    uint8_t axis_id = AXIS_ALPHA
-    return &this->__all_homers[axis_id];
-}
+// AxisHomer* HomerDiction::GetAxisHomer(EnumAxis_ForwardKinematic axis){
+//     uint8_t axis_id = 0;
+//     return (AxisHomer*) _GetItem(axis_id);
+// }
 
-AxisHomer* HomerDiction::GetAxisHomer(EnumAxis_Inverseinematic axis){
-    int axis_id;
-    return &this->__all_homers[axis_id];
+// AxisHomer* HomerDiction::GetAxisHomer(EnumAxis_Inverseinematic axis){
+//     int axis_id=0;
+//     return (AxisHomer*) _GetItem(axis_id)
 
-}
+// AxisHomer* HomerDiction::GetAxisHomer(char axis_name){
+//     int axis_id=0;
+//     return (AxisHomer*) _GetItem(axis_id)
+// }
