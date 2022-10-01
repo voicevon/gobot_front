@@ -7,9 +7,9 @@ void Smoker_Board::Init(bool is_on_reset){
    
 }
 
-void Smoker_Board::SayHello() {
+// void Smoker_Board::SayHello() {
     
-}
+// }
 
 
 // Stepper* Smoker_Board::GetStepper(char axis_name) {

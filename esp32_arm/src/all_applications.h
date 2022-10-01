@@ -7,7 +7,7 @@
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
 // #define I_AM_ROBOT_ASRS_AGV
-#define I_AM_GARMENT_BOX_MOVER   //CoreAZ
+// #define I_AM_GARMENT_BOX_MOVER   //CoreAZ
 // #define I_AM_GARMENT_BOX_CARRIER    // CoreYZ
 
 // #define I_AM_GOBOT_HOUSE_2205
@@ -18,7 +18,7 @@
 
 // #define I_AM_ACUPUCTURE_MAIN
 // #define I_AM_ACUPUNCTURE_TESTER
-// #define I_AM_SMOKE_BOT
+#define I_AM_SMOKE_BOT
 // #define I_AM_CABLE_AXIS_XPYP
 // #define I_AM_CABLE_AXIS_XNYP
 // #define I_AM_CABLE_AXIS_XNYN

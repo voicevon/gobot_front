@@ -16,7 +16,7 @@ class Vsc_Board: public CncBoardBase{
         void LinkEncoderSensor(Encoder* encoder);
         // call me must after LinkEncoderSensor().
         void Init(bool is_on_reset) override;
-        void SayHello() override;
+        // void SayHello() override;
 
         // For being an actuator and its components.
         ActuatorDcMotor* GetActuator(EnumAxis_Inverseinematic axis_name) {return &this->__motor;};

@@ -10,7 +10,7 @@ class RobotEef_GobotMain: public RobotEefBase{
         RobotEef_GobotMain();
         void Init();
         void Run(uint8_t eef_code) override;
-        void PrintOut() override;
+        // void PrintOut() override;
 
     private:
         Servo __eefServo;

@@ -1,24 +1,18 @@
 #pragma once
 #include "CNC/board/cnc_board_base.h"
-
-#include "ESP32Step/src/TeensyStep.h"
 #include "CNC/arm_solution/axis_homer/axis_homer.h"
+#include "CNC/Actuator/stepper/actuator_stepper.h"
+#include "ESP32Step/src/TeensyStep.h"
 #include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
 #include "robot_eef/board_spring_maker.h"
-#include "CNC/Actuator/stepper/actuator_stepper.h"
 
 class Board_SpringMaker: public CncBoardBase{
     public:
         Board_SpringMaker(){};
         void Init(bool is_on_reset) override;
         
-        // void SayHello();
-        // ActuatorStepper* GetActuator(EnumAxis axis_name) override;
-        // PositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
-        // AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
         RobotEef_SpringMaker* GetEef() override;
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
-        // SpringMaker_CncSolutionConfig* GetCncConfig() override {return &this->__cnc_solution_config;};
         PositionTrigger* GetPositionTrigger(uint8_t index) override;
 
         
@@ -27,5 +21,4 @@ class Board_SpringMaker: public CncBoardBase{
         ActuatorStepper stepper_alpha;
         PositionTrigger homer_alpha = PositionTrigger(PIN_HOME_ALPHA_2201, LOW);
         RobotEef_SpringMaker eef = RobotEef_SpringMaker();
-        // SpringMaker_CncSolutionConfig __cnc_solution_config;
 };

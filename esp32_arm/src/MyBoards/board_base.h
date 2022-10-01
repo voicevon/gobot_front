@@ -14,7 +14,7 @@
 class BoardBase{
     public:
         virtual void Init(bool is_on_reset);
-        virtual void SayHello();
+        // virtual void SayHello();
         virtual  float ReadBatteryVolt(){return 1.234f;};
         static uint8_t Assign_ledc_channel();
         void RepportRamUsage();  // TODO::  be static

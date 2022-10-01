@@ -6,7 +6,7 @@ class Vsc_RobotEef: public RobotEefBase{
     public:
         Vsc_RobotEef(){};
         void Run(uint8_t eef_code) override;
-        void PrintOut() override;
+        // void PrintOut() override;
 
     private:
 

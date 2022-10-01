@@ -18,7 +18,7 @@
 class RobotEefBase{
     public:
         virtual void Run(uint8_t eef_code);
-        virtual void PrintOut();
+        // virtual void PrintOut();
 
     private:
     

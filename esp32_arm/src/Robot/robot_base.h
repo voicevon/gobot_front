@@ -29,7 +29,6 @@ class RobotBase: public GcodeConsumer{
     protected:
         Planner __planner;
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
-        // virtual std::string GetHomeTrigerStateString();
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
         
@@ -45,6 +44,9 @@ class RobotBase: public GcodeConsumer{
         CncBoardBase* _cnc_board;  //!!!!
         ArmSolutionBase* _arm_solution;
         void LinkMover(MoverBase* mover){this->_mover=mover;};
+
+        // TODO: Consider G4.
+        // CncState GetMoverState() {return this->_mover.State;};   
         
     protected:
         G28_Runner *__g28_runner;
@@ -54,7 +56,6 @@ class RobotBase: public GcodeConsumer{
         int test_int;
         RobotEefBase* __eef;
         G4_Runner __g4_runner;
-        // Gcode __gcode; //Will be survived , until be override by new value. 
 
         void __RunGcode(Gcode* gcode);
         void __RunMcode(Gcode* gcode);

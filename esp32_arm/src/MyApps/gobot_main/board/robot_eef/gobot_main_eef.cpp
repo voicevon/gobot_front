@@ -12,9 +12,9 @@ void RobotEef_GobotMain::Init(){
 	this->__eefServo.attach(PIN_EEF_SERVO_2201);
 }
 
-void RobotEef_GobotMain::PrintOut(){
-	Logger::Debug(" RobotEef_GobotMain::PrintOut()");
-}
+// void RobotEef_GobotMain::PrintOut(){
+// 	Logger::Debug(" RobotEef_GobotMain::PrintOut()");
+// }
 
 
 void RobotEef_GobotMain::Run(uint8_t eef_code) {

@@ -12,10 +12,10 @@ class Board2205Cnc: public CncBoardBase{
         Board2205Cnc(){};
         void Init(bool is_on_reset) override;
         void Init(Adafruit_MCP23X17* mcp_23018);
-        void SayHello() override{};
+        // void SayHello() override{};
         RobotEef_GarmentAsar* GetEef() override;
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
-        PositionTrigger* GetPositionTrigger(uint8_t index) override{};
+        PositionTrigger* GetPositionTrigger(uint8_t index) override{return nullptr;};
         ActuatorBase* GetActuator(EnumAxis_Inverseinematic axis){return nullptr;};
 
         

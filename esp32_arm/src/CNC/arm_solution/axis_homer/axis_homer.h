@@ -4,7 +4,7 @@
 
 #define POSITION_TRIGGER_MAX_COUNT 4 
 
-
+// TODO:  Mover to folder: Robot
 class HomingConfig{
     public:
         bool IsDirectionToMax=true;

@@ -11,7 +11,7 @@ class RobotEef_GobotHouse: public RobotEefBase{
         RobotEef_GobotHouse();
         void Init();
         void Run(uint8_t eef_code) override;
-        void PrintOut() override;
+        // void PrintOut() override;
 
 
     private:

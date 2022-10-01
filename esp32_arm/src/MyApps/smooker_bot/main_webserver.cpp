@@ -6,12 +6,14 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "smoke_bot.h"
 #include "webCommu.h"
-#include "board/board_smoke_bot.h"
+#include "board/smoker_board.h"
 #include "CNC/gcode/gcode_queue.h"
-#include "cnc/solution.h"
+// #include "cnc/solution.h"
+#include "robot/smoker_robot.h"
+Smoker_Board board;
+// SmookerBot_CncSoution cnc;
+SmokerRobot cnc;
 
-Board_SmokeMachine board;
-SmookerBot_CncSoution cnc;
 GcodeQueue myCommandQueue = GcodeQueue();
 // int distance = 100;
 // int pause_second = 20;
@@ -82,7 +84,9 @@ void loop() {
 	// myCommandQueue.SpinOnce();
 	if (!varOnOff) return;
 	if (var_done_count >= var_total_count) return;
-	if ((cnc.State == CncState::IDLE) && (myCommandQueue.BufferIsEmpty())){
+	// if ((cnc.State == CncState::IDLE) && (myCommandQueue.BufferIsEmpty())){
+	// if ((cnc.GetMoverState == CncState::IDLE) && (myCommandQueue.BufferIsEmpty())){
+	if ((myCommandQueue.BufferIsEmpty())){   //TODO: above
 
 		// Go back to home position, keep a 0.1mm position
 		int speed = float(var_per_volume) / float(var_pull_in_second) * 540;

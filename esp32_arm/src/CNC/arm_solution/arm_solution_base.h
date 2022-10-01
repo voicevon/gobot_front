@@ -12,7 +12,7 @@
 #include "../mover/mover_base.h"
 #include "CNC/arm_solution/axis_homer/axis_homer.h"
 
-enum class CncState{
+enum class CncState{    //TODO: rename to MoverState?
     IDLE,
     RUNNING_G1,
     RUNNING_G4,
@@ -21,8 +21,6 @@ enum class CncState{
 
 class ArmSolutionBase{
     public:
-        // CncState State = CncState::IDLE;
-        // void SpinOnce();
 
         virtual bool GetCurrentPosition(FkPositionBase* position_fk);
 
@@ -33,7 +31,6 @@ class ArmSolutionBase{
 
         void SayHello();    // TODO:  be virtual
         virtual void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis);
-        // virtual EnumAxis ConvertToEnum(char axis);
         void ForceStopMover();
         CncBoardBase* _cnc_board;   // TODO:  remove this.
 
@@ -47,19 +44,12 @@ class ArmSolutionBase{
 
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);  //TODO:: remove-able?
 
-        // EnumAxis _homing_axis;
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
         CncHomers _cnc_homer = CncHomers(CNC_AXIS_COUNT);
 
         bool is_absolute_position = true;
-        
-
 
     private:
-        // int test_int;
-        // void _base_spin_once();
-        // long __g4_start_timestamp;
-        // int __g4_time_second;
 
 };
 

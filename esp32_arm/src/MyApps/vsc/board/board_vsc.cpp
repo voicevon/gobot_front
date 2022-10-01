@@ -38,14 +38,6 @@ void Vsc_Board::LinkSpeedPid_ForMotor(PIDController* speed_pid){
     this->__motor.LinkPidController(speed_pid);
 }
 
-
-
-void Vsc_Board::SayHello(){
-    Logger::Debug("I am Vsc Board, Have a good day.");
-}
-
-
-
 void Vsc_Board::Test_PositionTriggers(int loops){
     uint32_t flags = 0;
     uint32_t last_flags = 999;
