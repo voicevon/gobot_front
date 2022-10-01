@@ -1,5 +1,5 @@
 // #include "box_mover_hw.h"
-#include "cnc_core_az.h"
+#include "core_az_arm_solution.h"
 
 // #define PIN_ALPHA_ENABLE 18
 // #define PIN_BETA_ENABLE 16

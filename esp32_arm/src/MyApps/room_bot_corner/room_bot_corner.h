@@ -11,7 +11,7 @@
 
 
 #include "CNC/Actuator/DCMotor/DcMotor.h"
-#include "CNC/Sensor/IrEncoderHelper.h"
+#include "Robot/Sensor/IrEncoderHelper.h"
 // #include "CNC/Actuator/DCMotor/DCDriverHBridge.h"
 #include "CNC/Actuator/DCMotor/h_bridge_yuxin.h"
 #include "CNC/Actuator/DCMotor/DCMotorController.h"

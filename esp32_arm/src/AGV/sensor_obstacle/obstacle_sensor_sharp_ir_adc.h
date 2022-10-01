@@ -10,8 +10,6 @@
 #pragma once
 
 #include "obstacle_sensor_base.h"
-// #include "CNC/Sensor/sharp_ir_distance_adc.h"
-#include "CNC/Sensor/position_sensor/sharp_ir_distance_adc.h"
 #include "stdint.h"
 
 class ObstacleSensor_SharpIr:public ObstacleSensorBase{
@@ -22,5 +20,5 @@ class ObstacleSensor_SharpIr:public ObstacleSensorBase{
         bool DetectObstacle() override;
 
     private:
-        SharpIrAdc* __sharp_ir;
+        // SharpIrAdc* __sharp_ir;
 };

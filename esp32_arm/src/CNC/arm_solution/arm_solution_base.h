@@ -5,13 +5,11 @@
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
 #include "MyLibs/pid_controllers/pid_controllers.h"
-// #include "CNC/planner/planner.h"
-
 #include "Robot/eef/eef_standard_code.h"
 #include "CNC/gcode/gcode_consumer.h"
 #include "../mover/mover_base.h"
-// #include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "Robot/axis_homer/axis_homer.h"
+#include "Robot/axis_homer/cnc_homers.h"
 
 enum class CncState{    //TODO: rename to MoverState?
     IDLE,

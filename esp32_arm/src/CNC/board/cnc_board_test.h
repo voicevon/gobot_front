@@ -1,11 +1,7 @@
 #pragma once
 #include "MyBoards/board_test/board_test_base.h"
-// #include "MyBoards/cnc_board_base.h"
 #include "CNC/board/cnc_board_base.h"
-// #include "CNC/Sensor/position_trigger/position_triggers.h"
-// #include "Robot/axis_homer/axis_homer.h"
 #include "Robot/axis_homer/axis_homer.h"
-// #include "CNC/arm_solution/axis_homer/axis_homer.h"
 
 
 class CncBoard_Test:public BoardTestBase{

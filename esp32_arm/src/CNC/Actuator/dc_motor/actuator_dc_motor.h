@@ -1,7 +1,7 @@
 #pragma once
 #include "../actuator_base.h"
 #include "CNC/mover/driver/h_bridge/h_bridge.h"
-#include "CNC/Sensor/position_sensor/polor_encoder.h"
+#include "Robot/Sensor/position_sensor/polor_encoder.h"
 
 
 class ActuatorDcMotor: public ActuatorBase{
