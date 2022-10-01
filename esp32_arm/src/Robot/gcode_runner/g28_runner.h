@@ -15,8 +15,8 @@ class G28_Runner: public SyncGcodeRunnerBase{
         float GetTriggerPosition(){return __last_homed_position;};
 
     protected:
-        virtual void SetMoveBlock_ToHome(EnumAxis_Inverseinematic axis, MoveBlock* mb);
-        virtual void SetMoveBlock_ToHome(EnumAxis_ForwardKinematic axis, MoveBlock* mb);
+        virtual void SetMoveBlock_ToHome(char axis_name, MoveBlock* mb);
+        // virtual void SetMoveBlock_ToHome(EnumAxis_ForwardKinematic axis, MoveBlock* mb);
         // virtual AxisHomer* GetHomer(EnumAxis_ForwardKinematic axis);
         // virtual AxisHomer* GetHomer(EnumAxis_Inverseinematic axis);
         MoverBase* __mover;   //Only for stop()

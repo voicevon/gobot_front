@@ -9,7 +9,6 @@ bool G28_Runner::IsDone(){
     static unsigned long last_micros;
     PositionTrigger* trigger;
     for(int i=0; i<HomeTrigger_Diction::Instance().GetItemsCount(); i++){
-    // for(int i=0; i<5; i++){
         trigger = HomeTrigger_Diction::Instance().GetPositionTrigger(i);
         if (trigger->AxisName == this->__axis_name){
             if(trigger->IsTriggered()){

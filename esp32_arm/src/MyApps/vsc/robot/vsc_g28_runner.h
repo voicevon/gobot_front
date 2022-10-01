@@ -8,14 +8,14 @@ class Vsc_G28_Runner: public G28_Runner{
         void Init(Vsc_Board* board, MoverBase* mover);
 
     private:
-        void SetMoveBlock_ToHome(EnumAxis_Inverseinematic axis, MoveBlock* mb) override;
-        void SetMoveBlock_ToHome(EnumAxis_ForwardKinematic axis, MoveBlock* mb) override;
+        void SetMoveBlock_ToHome(char axis, MoveBlock* mb) override;
+        // void SetMoveBlock_ToHome(EnumAxis_ForwardKinematic axis, MoveBlock* mb) override;
         // virtual AxisHomer* GetHomer(EnumAxis_ForwardKinematic axis);
         // virtual AxisHomer* GetHomer(EnumAxis_Inverseinematic axis);
 
         // HomerDiction __homer_diction;
         // AxisHomer __homer;
-        HomingConfig homing;
+        // HomingConfig homing;
         // AxisHomer homers[HOMERS_COUNT];
 
 
