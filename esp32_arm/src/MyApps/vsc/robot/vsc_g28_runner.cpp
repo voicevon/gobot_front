@@ -72,9 +72,11 @@ void Vsc_G28_Runner::SetMoveBlock_ToHome(EnumAxis_ForwardKinematic axis, MoveBlo
 }
 
 AxisHomer* Vsc_G28_Runner::GetHomer(EnumAxis_ForwardKinematic axis){
-    return &__homer;
+    return __homer_diction.GetAxisHomer(axis);
 }
 
 AxisHomer* Vsc_G28_Runner::GetHomer(EnumAxis_Inverseinematic axis){
-    return &__homer;
+    Logger::Error("Vsc_G28_Runner::GetHomer() --- Inverseinematic");
+
+    return nullptr;
 }

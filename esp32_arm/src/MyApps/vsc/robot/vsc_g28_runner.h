@@ -1,5 +1,7 @@
 #include "Robot/gcode_runner/g28_runner.h"
 #include "MyApps/vsc/board/board_vsc.h"
+// #include "Robot/axis_homer/homer_diction.h"
+
 class Vsc_G28_Runner: public G28_Runner{
     public:
         void Init(Vsc_Board* board, MoverBase* mover);
@@ -10,7 +12,10 @@ class Vsc_G28_Runner: public G28_Runner{
         virtual AxisHomer* GetHomer(EnumAxis_ForwardKinematic axis);
         virtual AxisHomer* GetHomer(EnumAxis_Inverseinematic axis);
 
+        // HomerDiction __homer_diction;
         AxisHomer __homer;
         HomingConfig homing;
+
+
 
 };

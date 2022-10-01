@@ -6,6 +6,8 @@
 #include "IoT/main_mqtt.h"
 #include "MyApps/vsc/vsc_app.h"
 #include "MyApps/vsc/robot/vsc_robot.h"
+#include  "MyLibs/common_diction/example.h"
+
 
 Vsc_Board board;
 VscApp vsc_app;
@@ -44,9 +46,19 @@ void setup_encoder(){
 }
 
 void setup(){
+    
     setup_encoder();
     board.LinkEncoderSensor(&encoder);
     board.Init(true);
+
+    MyDiction dd;
+    dd.Init(5);
+    MyItem* aa =  dd.GetMyItem(0);
+    aa->test_id = 5555;
+    MyItem* bb = dd.GetMyItem(0);
+    Serial.println(bb->test_id);
+    Serial.println("\n\n\n\n\n\n");
+
 
     test_board();
     vsc_robot.Init(&board);

@@ -6,7 +6,9 @@
 class HomerDiction{  // HomerCollects? HomerDiction? 
     public:
         HomerDiction(uint8_t axis_count){};
-        AxisHomer* GetAxisHomer(EnumAxis_ForwardKinematic axis){return &this->__all_homers[axis];};
+        // void Init(int axis_count){this->__axis_count=axis_count;}
+        AxisHomer* GetAxisHomer(EnumAxis_ForwardKinematic axis);
+        AxisHomer* GetAxisHomer(EnumAxis_Inverseinematic axis);
 
 
     private:

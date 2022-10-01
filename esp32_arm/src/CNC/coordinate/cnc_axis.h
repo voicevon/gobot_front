@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 
 #define CNC_AXIS_COUNT 6
 
@@ -35,8 +36,18 @@ enum EnumAxis_Inverseinematic{
 
 class CncAxis{
     public:
-        static EnumAxis_ForwardKinematic ForwardKinematic_Axis(char name);
-        static EnumAxis_Inverseinematic InverserKinematic_Axis(char name);
+        // static EnumAxis_ForwardKinematic ForwardKinematic_Axis(char name);
+        // static EnumAxis_Inverseinematic InverserKinematic_Axis(char name);
+        // static uint8_t GetIndex(EnumAxis_ForwardKinematic axis);
+        // static uint8_t GetIndex(EnumAxis_Inverseinematic axis);
+        // static uint8_t GetIndex(char name);
+
+        static uint8_t From_Name_ToIndex(char name);
+        static uint8_t From_Enum_ToIndex(EnumAxis_ForwardKinematic axis);
+        static uint8_t From_Enum_ToIndex(EnumAxis_Inverseinematic axis);
+        static EnumAxis_ForwardKinematic From_FkName_ToEnum(char name);
+        static EnumAxis_Inverseinematic From_Ik_Name_ToEnum(char name);
+
 };
 
 
