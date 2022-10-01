@@ -44,19 +44,20 @@ void VscApp::MoveTo(int layer_index, int cell_index){
 void VscApp::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
     Logger::Info("VscApp::ExecuteMqttCommand() is entering.");
-    // Logger::Print("command",str_command);
-    // Logger::Print("substring(0,7)", str_command.substring(0,7));
-    // Logger::Print("substring(7)", str_command.substring(7));
-    // Serial.print(str_command);
-    // Serial.print("\t");
-    // Serial.print(str_command.substring(0,7));
-    // Serial.print("\t");
-    // Serial.print(str_command.substring(7));
-    // Serial.println();
-
+    bool debug = false;
+    if (debug){
+        Logger::Print("command",str_command);
+        Logger::Print("substring(0,7)", str_command.substring(0,7));
+        Logger::Print("substring(7)", str_command.substring(7));
+        Serial.print(str_command);
+        Serial.print("\t");
+        Serial.print(str_command.substring(0,7));
+        Serial.print("\t");
+        Serial.print(str_command.substring(7));
+        Serial.println();
+    }
     Gcode my_gcode = Gcode(command);
     if (str_command.substring(0,7) == "vsc_cmd"){
-    // if (false){
         // This is a robot command, not a gcode or mcode
         str_command = str_command.substring(7);
         int layer = my_gcode.get_value('L');
@@ -69,52 +70,9 @@ void VscApp::AsyncExecuteMqttCommand(const char* command){
         this->_gcode_queue->AppendGcodeCommand(command);
 
     }
-    //TODO:  L3C8 == Show Layer 3, Cell 8.   target cell will be indicated by LED.
-    // if (str_command.substring(0,1) == "L"){
-    //     int C_position = str_command.indexOf('C');
-    //     int layer = atoi(str_command.substring(9, C_position-1).c_str());
-    //     int cell = atoi(str_command.substring(C_position+1).c_str());
 
-    //     this->MoveTo(layer, cell);
-
-    // }else{
-    //     this->_gcode_queue->AppendGcodeCommand(command);
-    // }
-    // if (str_command.equals("stop")){
-    //     this->__motor->Stop();
-    // }
-
-    // }else if(str_command.equals("reset")){
-    //     String gcode = "G28A";
-    //     this->_gcode_queue->AppendGcodeCommand(gcode);
-    //     gcode = "G1 A-3";
-    //     this->_gcode_queue->AppendGcodeCommand(gcode);
-    // }else if(str_command.equals("big")){
-    //     Serial.println("                        Start to make big spring....  ");
-    //     String gcode = "G1 A-75.36";       // 1.0mm   D ?? 12 turns.    
-    //     this->_gcode_queue->AppendGcodeCommand(gcode);
-        
-    // }else if(str_command.equals("mid")){
-    //     String gcode = "G1 A-50.24";    // 8 turns
-    //     this->_gcode_queue->AppendGcodeCommand(gcode);
-
-    // }else if(str_command.equals("small")){
-    //     String gcode = "G1 A-300";     // 50 turns
-    //     this->_gcode_queue->AppendGcodeCommand(gcode);
-    // }else if(str_command.equals("coil")){
-    //     String gcode = "G1 A86.25 F5000";     // 700 turns without gearbox reducer
-    //     this->_gcode_queue->AppendGcodeCommand(gcode);
-    // }else{
-    //     Serial.print("[Warn] VscApp::ExecuteMqttCommand()  = ");
-    //     Serial.println(command);
-    // }
 }
 
-void VscApp::SpinOnce(){
-    if (!this->_gcode_queue->BufferIsFull()){
-        this->CheckMqttCommand();
-    }
-    // this->CheckMqttCommand();
-}
+
 
 

@@ -8,36 +8,10 @@ void ArmSolutionBase::SayHello(){
 	Serial.println("[Debug] ArmSolutionBase::SayHello()");
 }
 
-// void ArmSolutionBase::SpinOnce(){
-// 	// Nothing need to do.
-// 	return;
+
 
 
 	
-	// Logger::Debug("ArmSolutionBase::SpinOnce()");
-	// Logger::Print("this->State", this->State);
-	// switch (this->State){
-	// case CncState::IDLE:   //0
-	// 	break;
-	// case CncState::RUNNING_G4:  // 2
-	// 	this->__running_G4();
-	// 	break;
-	// // case CncState::RUNNING_G1:  // 1
-	// // 	this->_running_G1();
-	// // 	break;
-	// case CncState::RUNNING_G28:  // 4
-	// 	// Logger::Debug("CncState::RUNNING_G28");
-	// 	this->_running_G28();
-	// 	break;
-	// default:
-	// 	Logger::Warn("ArmSolutionBase::SpinOnce() Unknown current state: ");
-	// 	// Serial.println(this->State);
-	// 	break;
-	// }
-
-	// Serial.println("[Debug]( ArmSolutionBase::SpinOnce() is finished.)");
-	// this->SpinOnce_BaseExit();
-// }
 
 void ArmSolutionBase::ForceStopMover(){
 	// this->_mover_base->AllActuatorsStop();
@@ -47,24 +21,6 @@ void ArmSolutionBase::ForceStopMover(){
 
 
 
-
-//Can deal with:  home via single actuator.
-//Can NOT deal with:  CoreXY, It's combined moving.
-// void ArmSolutionBase::RunG28(EnumAxis axis){ 
-// 	bool debug = true;
-// 	if (debug){
-// 		Logger::Debug("ArmSolutionBase::RunG28() is entering" );
-// 		Logger::Print("axis", axis);
-// 		Logger::Print("IsCombinedFK", this->_config_base.IsCombinedFk);
-// 	}
-
-// 	if (this->_config_base.IsCombinedFk){
-// 		this->_RunG28_CombinedFk(axis);
-
-// 	}else{
-// 		this->__HomeSingleAxis(axis);
-// 	}
-// }
 
 
 // void ArmSolutionBase::__HomeSingleAxis(EnumAxis axis){

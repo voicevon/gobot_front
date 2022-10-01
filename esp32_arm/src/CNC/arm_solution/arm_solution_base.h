@@ -1,22 +1,21 @@
 #pragma once
 
+#include "MyLibs/pid_controllers/pid_controllers.h"
 #include "CNC/board/cnc_board_base.h"
+#include "CNC/gcode/gcode_consumer.h"
 #include "kinematic_config.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
-#include "MyLibs/pid_controllers/pid_controllers.h"
-#include "Robot/eef/eef_standard_code.h"
-#include "CNC/gcode/gcode_consumer.h"
 #include "../mover/mover_base.h"
 #include "Robot/axis_homer/axis_homer.h"
 #include "Robot/axis_homer/cnc_homers.h"
+#include "Robot/eef/eef_standard_code.h"
 
-enum class CncState{    //TODO: rename to MoverState?
-    IDLE,
-    RUNNING_G1,
-    RUNNING_G4,
-    RUNNING_G28
-};
+// enum class MoverState{    //TODO: rename to MoverState?
+//     IDLE,       // Motor is enabled.
+//     SLEEPING,   // Motor is disabled
+//     RUNNING_G1,
+// };
 
 class ArmSolutionBase{
     public:

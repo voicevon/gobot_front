@@ -3,8 +3,6 @@
 
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "config_base.h"
-// #include "Robot/eef/eef_standard_code.h"
-// #include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "MyLibs/MyFunctions.hpp"
 
 class FiveBars_ArmSolution: public ArmSolutionBase{
