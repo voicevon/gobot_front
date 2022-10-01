@@ -1,27 +1,18 @@
 #include "all_applications.h"
 #ifdef I_AM_ROBOT_ASRS_AGV
 
-
 #include "MyLibs/MyFunctions.hpp"
 #include "garment_bot.h"
 #include "IoT/main_mqtt.h"
-// #include "MyApps/box_carrier/cnc_machine.h"
-// #include "../box_carrier/board/mechanic/cnc_machine.h"
-// #include "MyApps/box_carrier/board/mechanic/cnc_solution_config.h"
-// #include "MyApps/box_carrier/board/mechanic/cnc_solution.h"
-#include "MyApps/box_carrier/cnc/solution.h"
-#include "MyApps/box_carrier/cnc/solution_config.h"
 
 StepControl objStepControl;  // This object can not inside any object?
 BoardAllInOne board = BoardAllInOne();
-// BoxCarrier_CncSolutionConfig cncMachine;
 BotAsrsAgvCoreYZ robot= BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
 
 
 #include "MyBoards/board_test/board_test_agv.h"
 #include "MyBoards/board_test/board_test_asrs.h"
-// #include "CNC/board_test/cnc_board_test.h"
 
 
 
