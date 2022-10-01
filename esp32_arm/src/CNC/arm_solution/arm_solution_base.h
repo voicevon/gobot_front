@@ -8,7 +8,7 @@
 #include "../coordinate/cnc_axis.h"
 #include "../mover/mover_base.h"
 #include "Robot/axis_homer/axis_homer.h"
-#include "Robot/axis_homer/cnc_homers.h"
+#include "Robot/axis_homer/homer_diction.h"
 #include "Robot/eef/eef_standard_code.h"
 
 // enum class MoverState{    //TODO: rename to MoverState?
@@ -43,7 +43,7 @@ class ArmSolutionBase{
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);  //TODO:: remove-able?
 
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
-        CncHomers _cnc_homer = CncHomers(CNC_AXIS_COUNT);
+        HomerDiction _homer_diction = HomerDiction(CNC_AXIS_COUNT);
 
         bool is_absolute_position = true;
 

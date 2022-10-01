@@ -39,11 +39,11 @@ void SpringMakerApp::AsyncExecuteMqttCommand(const char* command){
     }
 }
 
-void SpringMakerApp::SpinOnce(){
-    if (!this->_gcode_queue->BufferIsFull()){
-        this->CheckMqttCommand();
-    }
-    this->CheckMqttCommand();
-}
+// void SpringMakerApp::SpinOnce(){
+//     if (!this->_gcode_queue->BufferIsFull()){
+//         this->CheckMqttCommand();
+//     }
+//     this->CheckMqttCommand();
+// }
 
 

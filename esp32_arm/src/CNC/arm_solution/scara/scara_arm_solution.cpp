@@ -208,12 +208,12 @@ void Scara_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homi
 		// if (this->_homing_axis == AXIS_ALPHA){
 		// 	// ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
 		// 	// ik_position.alpha =  this->_scara_machine->GetAxisHomers()->GetAxisHomer(this->_homing_axis)->GetHomingConfig()->LastHomedPosition;
-		// 	ik_position.alpha =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
+		// 	ik_position.alpha =  this->_homer_diction.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
 			
 		// }else if (this->_homing_axis == AXIS_BETA){
 		// 	// ik_position.beta =  this->_scara_machine->Homed_position_beta_in_rad;
 		// 	// ik_position.beta =  this->_scara_machine->GetAxisHomers()->GetAxisHomer(this->_homing_axis)->GetHomingConfig()->LastHomedPosition;
-		// 	ik_position.beta =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
+		// 	ik_position.beta =  this->_homer_diction.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
 		// }
 		this->FK(&ik_position, &this->__current_fk_position);
 		// verify FK by IK()

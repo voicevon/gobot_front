@@ -55,7 +55,7 @@ bool CommonQueue::Deposit(){
 
 
 Queue_able* CommonQueue::_GetRoom(){
-    Logger::Debug("CommonQueue::_GetRoom()");
+    // Logger::Debug("CommonQueue::_GetRoom()");
     // int previous_head = this->__get_pointer_previous_index(this->_head);
 
     int previous_head = this->_head;
@@ -63,11 +63,11 @@ Queue_able* CommonQueue::_GetRoom(){
     // Logger::Print("&this->_all_queue_ables",&this->_all_queue_ables);
     // Logger::Print("previous_head * this->_sizeof_item", previous_head * this->_sizeof_item);
     // Logger::Print("&this->_all_queue_ables + previous_head * this->_sizeof_item", &this->_all_queue_ables + previous_head * this->_sizeof_item);
-    Serial.println((long) this->_all_queue_ables);
+    // Serial.println((long) this->_all_queue_ables);
     // Serial.println(&this->_all_queue_ables);
     Queue_able* head_message =(Queue_able*)(this->_all_queue_ables + previous_head * this->_sizeof_item);
-    Serial.print("test id = \t\t");
-    Serial.println(head_message->id);
+    // Serial.print("test id = \t\t");
+    // Serial.println(head_message->id);
     return  head_message;
 }
 

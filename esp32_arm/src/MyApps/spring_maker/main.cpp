@@ -7,7 +7,6 @@
 #include "robot/spring_maker_robot.h"
 
 Board_SpringMaker board;
-// SpringMaker_CncSoution cnc;
 SpringMakerApp app;
 SpringMakerRobot robot;
 GcodeQueue gcode_queue;
@@ -18,8 +17,6 @@ long low_count =1;
 
 void setup(){
     board.Init(true);
-    // cncMachine.Init(AXIS_ALPHA);
-    // cnc.Init(&board);
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
@@ -30,19 +27,6 @@ void setup(){
 }
 
 void loop(){
-    // if (digitalRead(15) == HIGH)
-    //     high_count++;
-    // else{
-    //     low_count++;
-    //     Serial.print(high_count);
-    //     Serial.print("\t");
-    //     Serial.print(low_count);
-    //     Serial.print("\t");
-    //     Serial.print(high_count/low_count);
-    //     Serial.print("\t");
-    // }
-
-    // return;
     robot.SpinOnce();
     app.SpinOnce();
     loop_mqtt();

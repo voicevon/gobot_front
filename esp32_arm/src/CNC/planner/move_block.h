@@ -4,7 +4,7 @@
 
 class MoveBlock_SingleActuator{
     public:
-        EnumAxis_Inverseinematic axis;
+        // EnumAxis_Inverseinematic axis;
         bool IsAbsTargetPosition;
         float TargetPosition;
         float Speed;
@@ -14,7 +14,7 @@ class MoveBlock_SingleActuator{
 
 class MoveBlock: public Queue_able{
     public:
-        MoveBlock_SingleActuator MoveBlocks[6];
+        MoveBlock_SingleActuator MoveBlocks[CNC_AXIS_COUNT];
         void DeepCopyTo(Queue_able* copy) override;
         void DeepReset_ToDefault() override;
 

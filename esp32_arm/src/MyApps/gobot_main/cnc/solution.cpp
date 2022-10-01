@@ -17,7 +17,7 @@
 //     cnc_board->EnableMotor(AXIS_ALPHA, false);
 // 	cnc_board->EnableMotor(AXIS_BETA, false);
     
-//     HomingConfig* config = this->_cnc_homer.GetAxisHomer(AXIS_X)->GetHomingConfig(); // GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
+//     HomingConfig* config = this->_homer_diction.GetAxisHomer(AXIS_X)->GetHomingConfig(); // GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig();
 //     config->IsDirectionToMax = true;
 //     // config->LastHomedPosition
 //     config->Accelleration = DEG_TO_RAD * 30;

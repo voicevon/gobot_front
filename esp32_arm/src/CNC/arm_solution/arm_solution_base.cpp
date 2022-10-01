@@ -26,7 +26,7 @@ void ArmSolutionBase::ForceStopMover(){
 // void ArmSolutionBase::__HomeSingleAxis(EnumAxis axis){
 // 	Logger::Debug("ArmSolutionBase::__HomeSingleAxis()");
 // 	this->_homing_axis = axis;
-// 	HomingConfig* homing = this->_cnc_homer.GetAxisHomer(axis)->GetHomingConfig();
+// 	HomingConfig* homing = this->_homer_diction.GetAxisHomer(axis)->GetHomingConfig();
 // 	this->_cnc_board->EnableMotor(axis, true);
 	
 // 	// this->_config_base.PrintOut("ArmSolutionBase::__HomeSingleAxis()  _config_base");
@@ -50,13 +50,13 @@ void ArmSolutionBase::ForceStopMover(){
 // 	if(debug){
 // 		Logger::Debug("ArmSolutionBase::_running_G28() is entering...");
 // 		Logger::Print("_homing_axis", this->_homing_axis);
-// 		auto homer = this->_cnc_homer.GetAxisHomer(this->_homing_axis);
+// 		auto homer = this->_homer_diction.GetAxisHomer(this->_homing_axis);
 // 		Logger::Print("Got axis_homer",true);
 // 		auto index = homer->GetTrigeredIndex();
 // 		Logger::Print("Got triggered index", index);
 // 	}
 
-// 	int fired_trigger_index =  this->_cnc_homer.GetAxisHomer(this->_homing_axis)->GetTrigeredIndex();
+// 	int fired_trigger_index =  this->_homer_diction.GetAxisHomer(this->_homing_axis)->GetTrigeredIndex();
 // 	if (fired_trigger_index >=0 ){
 // 		// End stop is trigered
 // 		Logger::Info("ArmSolutionBase::_running_G28() ----> Home sensor is triggered." );

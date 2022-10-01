@@ -31,7 +31,7 @@ class AxisHomer{
         uint8_t __appended_count = 0;
         uint8_t __last_fired_index = -1;
 
-        PositionTrigger* __all_triggers[POSITION_TRIGGER_MAX_COUNT];
+        PositionTrigger* __triggers_diction[POSITION_TRIGGER_MAX_COUNT];
         HomingConfig __homing_config;
 
 };

@@ -13,7 +13,7 @@ For OC output sensor, trigeredState should be LOW
 
 # class tree
 ```
-    CncHomers --- AxisHomer[0] ---- PositionTrigger[0]
+    HomerDiction --- AxisHomer[0] ---- PositionTrigger[0]
               |                 |
               |                 |-- PositionTrigger[n]
               |-- AxisHomer[n]

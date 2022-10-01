@@ -17,7 +17,7 @@ AxisHomer::AxisHomer(uint8_t trigger_count){
 
 void AxisHomer::AppendPositionTrigger(PositionTrigger* single_homer){
     if (this->__appended_count < 4){
-        this->__all_triggers[this->__appended_count] = single_homer;
+        this->__triggers_diction[this->__appended_count] = single_homer;
         Logger::Info("AxisHomer::AppendPositionTrigger()");
         Logger::Print("Total appened count", this->__appended_count);
         this->__appended_count++;
@@ -32,9 +32,9 @@ int AxisHomer::GetTrigeredIndex(){
     // Logger::Print("__appended_count", __appended_count);
     for (uint8_t i=0; i<this->__appended_count; i++){
         // Logger::Print("inside for loop ", i);
-        // auto aa = this->__all_triggers[i];
+        // auto aa = this->__triggers_diction[i];
         // Logger::Print("Got this trigger, index", i);
-        if (this->__all_triggers[i]->IsTriggered()){
+        if (this->__triggers_diction[i]->IsTriggered()){
             Logger::Print("This trigger is fired", i);
             this->__last_fired_index = i;    
             return i;
@@ -45,5 +45,5 @@ int AxisHomer::GetTrigeredIndex(){
 }
 
 float AxisHomer::GetFiredPosition(){
-    return this->__all_triggers[this->__last_fired_index]->GetTriggerPosition();
+    return this->__triggers_diction[this->__last_fired_index]->GetTriggerPosition();
 }

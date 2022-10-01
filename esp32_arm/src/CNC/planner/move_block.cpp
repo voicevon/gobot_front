@@ -4,21 +4,23 @@
 void MoveBlock::DeepCopyTo(Queue_able* copy){
     MoveBlock* cp = (MoveBlock*) copy;
     // TODO: any risk of mem_copy ?
-    for(int i=0; i<6; i++){
-        cp->MoveBlocks[i].axis = this->MoveBlocks[i].axis;
-        cp->MoveBlocks[i].Acceleration = this->MoveBlocks[i].Acceleration;
+    for(int a=0; a<CNC_AXIS_COUNT; a++){
+        // cp->MoveBlocks[a].axis = this->MoveBlocks[a].axis;
+        cp->MoveBlocks[a].Acceleration = this->MoveBlocks[a].Acceleration;
+        cp->MoveBlocks[a].Speed = this->MoveBlocks[a].Speed;
+        cp->MoveBlocks[a].IsAbsTargetPosition = this->MoveBlocks[a].IsAbsTargetPosition;
+        cp->MoveBlocks[a].TargetPosition = this->MoveBlocks[a].TargetPosition;
     }
 
 }
 
 void MoveBlock::DeepReset_ToDefault(){
-    Logger::Debug("MoveBlock::DeepReset_ToDefault()");
-    for(int i=0; i<6; i++){
-        Logger::Print("for  i", i );
-        // this->MoveBlocks[i].axis = i;
-        this->MoveBlocks[i].IsAbsTargetPosition = false;
-        this->MoveBlocks[i].TargetPosition = 0;
-        this->MoveBlocks[i].Speed = 0;
+    // Logger::Debug("MoveBlock::DeepReset_ToDefault()");
+    for(int a=0; a<CNC_AXIS_COUNT; a++){
+        // Logger::Print("for  i", i );
+        this->MoveBlocks[a].IsAbsTargetPosition = false;
+        this->MoveBlocks[a].TargetPosition = 0;
+        this->MoveBlocks[a].Speed = 0;
     }
 }
 
