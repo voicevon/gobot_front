@@ -7,8 +7,8 @@
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
 // #define I_AM_ROBOT_ASRS_AGV
-// #define I_AM_GARMENT_BOX_MOVER   //CoreAZ
-#define I_AM_GARMENT_BOX_CARRIER    // CoreYZ
+#define I_AM_GARMENT_BOX_MOVER   //CoreAZ
+// #define I_AM_GARMENT_BOX_CARRIER    // CoreYZ
 
 // #define I_AM_GOBOT_HOUSE_2205
 // #define I_AM_GOBOT_HOUSE_2206

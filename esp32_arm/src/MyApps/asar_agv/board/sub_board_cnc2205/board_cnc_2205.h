@@ -16,6 +16,7 @@ class Board2205Cnc: public CncBoardBase{
         RobotEef_GarmentAsar* GetEef() override;
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
         PositionTrigger* GetPositionTrigger(uint8_t index) override{};
+        ActuatorBase* GetActuator(EnumAxis_Inverseinematic axis){return nullptr;};
 
         
     private:

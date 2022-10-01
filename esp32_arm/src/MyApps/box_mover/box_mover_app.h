@@ -7,7 +7,7 @@
 #include "IoT/mqtt_message_consumer.h"
 
 
-class BoxMover: public GcodeProducer, public MqttMessageConsumer{
+class BoxMoverApp: public GcodeProducer, public MqttMessageConsumer{
     public:
         enum BoxMoverState{ START, 
                                 RESETTING, 
@@ -19,15 +19,15 @@ class BoxMover: public GcodeProducer, public MqttMessageConsumer{
                                 UNLOADING, 
                                 UNLOADED
                                 };
-        BoxMover::BoxMoverState State;
+        BoxMoverApp::BoxMoverState State;
 
-        BoxMover();
+        BoxMoverApp();
         void ParkArms(bool do_homing);
         void LoadBox();
         void UnloadBox();
         void SpinOnce(); 
         void AsyncExecuteMqttCommand(const char*) override;
-        BoxMover::BoxMoverState GetState(){return this->State;};
+        BoxMoverApp::BoxMoverState GetState(){return this->State;};
     
     private:
    
