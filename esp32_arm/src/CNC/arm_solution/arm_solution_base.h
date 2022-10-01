@@ -43,9 +43,9 @@ class ArmSolutionBase{
     protected:
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
-        virtual std::string GetHomeTrigerStateString();
+        virtual std::string GetHomeTrigerStateString();  //TODO:: remove-able?
 
-        void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
+        void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);  //TODO:: remove-able?
 
         // EnumAxis _homing_axis;
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config

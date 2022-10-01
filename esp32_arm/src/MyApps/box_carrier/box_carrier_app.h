@@ -1,13 +1,13 @@
 #pragma once
 
 // #include "CNC/arm_solution/core_yz/cnc_core_yz_base.h"
-#include "cnc/solution.h"
+// #include "cnc/solution.h"
 #include "CNC/gcode/gcode_queue.h"
 #include "CNC/gcode/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
 
 
-class BoxCarrier: public GcodeProducer, public MqttMessageConsumer{
+class BoxCarrierApp: public GcodeProducer, public MqttMessageConsumer{
     public:
         enum BoxMoverState{ START, 
                                 RESETTING, 
@@ -19,15 +19,15 @@ class BoxCarrier: public GcodeProducer, public MqttMessageConsumer{
                                 UNLOADING, 
                                 UNLOADED
                                 };
-        BoxCarrier::BoxMoverState State;
+        BoxCarrierApp::BoxMoverState State;
 
-        BoxCarrier();
+        BoxCarrierApp();
         void ParkArms(bool do_homing);
         void LoadBox();
         void UnloadBox();
         void SpinOnce(); 
         void AsyncExecuteMqttCommand(const char*) override;
-        BoxCarrier::BoxMoverState GetState(){return this->State;};
+        BoxCarrierApp::BoxMoverState GetState(){return this->State;};
     
     private:
    

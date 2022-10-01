@@ -41,7 +41,7 @@ class AgvBase{
 
         TrackSensorBase* trackSensor;
         ObstacleSensorBase *obstacleSensor;
-        MoverBase* __mover;
+        AgvMoverBase* __mover;
         AgvBoardbase* __board;   //TODO,  remove this,  to create ClassBatteryReader.
 
         bool DoParking();

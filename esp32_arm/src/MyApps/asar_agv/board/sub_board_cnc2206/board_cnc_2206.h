@@ -1,9 +1,7 @@
 #pragma once
 #include "../board_pins/board_pins_ver_2_0.h"
 #include "CNC/board/cnc_board_base.h"
-// #include "MyBoards/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-// #include "CNC/Sensor/position_trigger/position_triggers.h"
 #include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "../robot_eef/garment_asar_eef.h"
 
@@ -14,9 +12,8 @@ class Board2204Cnc: public CncBoardBase{
         void Init(bool is_on_reset) override;
         void Init(Adafruit_MCP23X17* mcp_23018);
         void SayHello() override;
-        // Stepper* GetStepper(char axis_name) override;
-        // PositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
         RobotEef_GarmentAsar* GetEef() override;
+        ActuatorBase* GetActuator(EnumAxis_Inverseinematic axis);
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
 
         
@@ -27,6 +24,8 @@ class Board2204Cnc: public CncBoardBase{
         PositionTrigger homer_z = PositionTrigger(LOW);
         PositionTrigger homer_A = PositionTrigger(LOW);
         RobotEef_GarmentAsar eef = RobotEef_GarmentAsar();
+        ActuatorStepper __actuator_alpha;
+        ActuatorStepper __actuator_beta;
 
 };
 

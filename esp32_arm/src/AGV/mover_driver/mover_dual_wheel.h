@@ -1,9 +1,9 @@
 #pragma once
 
-#include "mover_base.h"
+#include "agv_mover_base.h"
 #include "single_wheel_driver/single_wheel_driver_base.h"
 
-class MoverDualWheel: public MoverBase{
+class MoverDualWheel: public AgvMoverBase{
     public:
         MoverDualWheel();
         void LinkLeftDriver(SingleWheelDriverBase* leftwheelDriver){this->__leftDriver=leftwheelDriver;};

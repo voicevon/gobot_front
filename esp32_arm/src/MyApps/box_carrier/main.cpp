@@ -2,25 +2,18 @@
 #ifdef I_AM_GARMENT_BOX_CARRIER
 
 
-// #include "MyBoards/asrs_agv_2205/board_asrs_agv.h"
-// #include "MyBoards/asrs_agv_2205/board_all_in_one_2205.h"
 #include "MyApps/asar_agv/board/board_all_in_one_2205.h"
-// #include "cnc_machine.h"
-// #include "board/mechanic/cnc_machine.h"
-#include "cnc/solution_config.h"
-// #include "CNC/arm_solution/cnc_core_yz/cnc_core_yz.h"
-#include "cnc/solution.h"
 #include "MyLibs/MyFunctions.hpp"
-#include "box_carrier.h"
+#include "box_carrier_app.h"
 #include "IoT/main_mqtt.h"
+#include "robot/box_carrier_robot.h"
 
 
 BoardAllInOne board = BoardAllInOne();
-BoxCarrier_CncSolutionConfig cncMachine;
-BoxCarrier_CncSolution cnc;
-BoxCarrier robot = BoxCarrier();
+BoxCarrierApp app;
 GcodeQueue gcode_queue = GcodeQueue();
 MessageQueue mqtt_command_queue = MessageQueue();
+BoxCarrierRobot robot;
 
 
 void setup(){
@@ -28,20 +21,20 @@ void setup(){
     // cncMachine.Init('A');
     // cnc.Init(&board.cnc_board);
     // cnc.LinkStepControl(&objStepControl);
-    robot.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
-    cnc.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
+    robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
     setup_mqtt_block_connect();
-    append_mqtt_bridge("puma/x2212/bm", &mqtt_command_queue, &robot); 
+    append_mqtt_bridge("puma/x2212/bm", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
     Serial.println ("\n[Info] box carrier  setup() is done. ------------------------------------ \n");
 
-    robot.AsyncExecuteMqttCommand("G28Y");
+    app.AsyncExecuteMqttCommand("G28Y");
 }
 
 void loop(){
     robot.SpinOnce();
-    cnc.SpinOnce();
+    app.SpinOnce();
     loop_mqtt();
 }
 

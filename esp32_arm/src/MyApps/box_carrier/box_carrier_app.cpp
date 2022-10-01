@@ -1,15 +1,15 @@
 
-#include "box_carrier.h"
+#include "box_carrier_app.h"
 
-BoxCarrier::BoxCarrier(){
-    Serial.print("\n[Info] BoxCarrier::BoxCarrier() is done..........");
+BoxCarrierApp::BoxCarrierApp(){
+    Serial.print("\n[Info] BoxCarrierApp::BoxCarrierApp() is done..........");
 }
 
-void BoxCarrier::AsyncExecuteMqttCommand(const char* command){
+void BoxCarrierApp::AsyncExecuteMqttCommand(const char* command){
 	this->_gcode_queue->AppendGcodeCommand(command);
 }
 
-void BoxCarrier::SpinOnce(){
+void BoxCarrierApp::SpinOnce(){
     if (!this->_gcode_queue->BufferIsFull()){
         this->CheckMqttCommand();
     }
@@ -38,8 +38,8 @@ void BoxCarrier::SpinOnce(){
     }
 }
 
-void BoxCarrier::ParkArms(bool do_homing){
-	Serial.print("\n[Debug] BoxCarrier::ParkArms() is entering");
+void BoxCarrierApp::ParkArms(bool do_homing){
+	Serial.print("\n[Debug] BoxCarrierApp::ParkArms() is entering");
 	int free_buffer_count = 0;
 	while (free_buffer_count < 3){
 		this->SpinOnce();
@@ -59,7 +59,7 @@ void BoxCarrier::ParkArms(bool do_homing){
 	this->_gcode_queue->AppendGcodeCommand(strG1);
 }
 
-void BoxCarrier::LoadBox(){
+void BoxCarrierApp::LoadBox(){
     // Vertical down.  Angle down, Triger gate
     this->_gcode_queue->AppendGcodeCommand("G1 Z100");  // Lift the box-track.
     this->_gcode_queue->AppendGcodeCommand("G1 W1");  // Rotate the box-track. will load the box.
@@ -67,7 +67,7 @@ void BoxCarrier::LoadBox(){
 
 }
 
-void BoxCarrier::UnloadBox(){
+void BoxCarrierApp::UnloadBox(){
 
 }
 

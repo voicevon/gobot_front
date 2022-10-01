@@ -59,23 +59,23 @@ void UnitTestAgv::Test_RfidReader(int loop_count){
 void UnitTestAgv::Test_Mover(int loop_count){
     if (loop_count == 0) return;
 
-    Serial.println("[Info] UnitTestAgv::Test_Mover()");
-    MoverBase* mover = this->__board->GetMover();
-    // mover->SetForwdingSpeed(100, 0);
-    // delay(50000);
+    // Serial.println("[Info] UnitTestAgv::Test_Mover()");
+    // AgvMoverBase* mover = this->__board->GetMover();
+    // // mover->SetForwdingSpeed(100, 0);
+    // // delay(50000);
 
-    for(int i=0; i<loop_count; i++){
-        Serial.print("Forward    ");
-        for(int speed=-100; speed<100; speed+=10){
-            mover->SetForwdingSpeed(speed, 0);
-            delay(500);
-        }
-        Serial.println("Backward   ");
-        for(int speed=100; speed>-100; speed-=10){
-            mover->SetForwdingSpeed(speed, 0);
-            delay(500);
-        }
-    } 
+    // for(int i=0; i<loop_count; i++){
+    //     Serial.print("Forward    ");
+    //     for(int speed=-100; speed<100; speed+=10){
+    //         mover->SetForwdingSpeed(speed, 0);
+    //         delay(500);
+    //     }
+    //     Serial.println("Backward   ");
+    //     for(int speed=100; speed>-100; speed-=10){
+    //         mover->SetForwdingSpeed(speed, 0);
+    //         delay(500);
+    //     }
+    // } 
 }
 
 void UnitTestAgv::Test_Battery(int loop_count){

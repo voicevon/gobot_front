@@ -23,7 +23,7 @@ class Board2205Agv: public AgvBoardbase{
         ObstacleSensorBase* GetObstacleSensor() override{return &this->__obstacle_vl53l0x;};
         TrackSensorBase* GetTrackSensor() override {return &this->__dual_9960;};
         MapSiteReaderBase* GetMapSiteReader() override {return &this->__rfid_reader;};
-        MoverBase* GetMover() override {return &this->__dual_wheel;};
+        AgvMoverBase* GetMover() override {return &this->__dual_wheel;};
         LightBase* GetTrackLight() override {return &this->__track_light;};
         // SmartRfidReader* GetRfidReader() override{return &this->__rfid_reader;};
         // float Get_Battery_volt();

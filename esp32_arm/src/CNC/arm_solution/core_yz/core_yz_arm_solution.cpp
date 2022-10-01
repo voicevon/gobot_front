@@ -1,30 +1,30 @@
-#include "cnc_core_yz_base.h"
+#include "core_yz_arm_solution.h"
 
 
-void CncSolution_CoreYZBase::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
-	Serial.print("\n[Info] CncSolution_CoreYZBase::IK() is entering. ");
+void CoreYZ_ArmSolution::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
+	Serial.print("\n[Info] CoreYZ_ArmSolution::IK() is entering. ");
 	FkPosition_YZ* fk = (FkPosition_YZ*)(from_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
 
 	ik->alpha = (fk->Z  + fk->Y );
 	ik->beta = (fk->Z - fk->Y );
 
-	Serial.print("\n[Debug] CncSolution_CoreYZBase::IK() output (alpha, beta) = ");
+	Serial.print("\n[Debug] CoreYZ_ArmSolution::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
 	Serial.print(" , ");
 	Serial.print(ik->beta);
 	Serial.print(")");
 }
 
-void CncSolution_CoreYZBase::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
-	Serial.print("\n[Debug] CncSolution_CoreYZBase::FK() is entering ");
+void CoreYZ_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+	Serial.print("\n[Debug] CoreYZ_ArmSolution::FK() is entering ");
 	FkPosition_YZ* fk = (FkPosition_YZ*)(to_fk);
 	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
 	
 	fk->Z = (ik->alpha + ik->beta) / 2;
 	fk->Y = (ik->alpha - ik->beta) / 2;
 
-	Serial.print("\n[Debug] CncSolution_CoreYZBase::FK() output (Z, Y) = ");
+	Serial.print("\n[Debug] CoreYZ_ArmSolution::FK() output (Z, Y) = ");
 	Serial.print(fk->Z);
 	Serial.print(" , ");
 	Serial.print(fk->Y);
@@ -32,8 +32,8 @@ void CncSolution_CoreYZBase::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk)
 }
 
 
-// void CncSolution_CoreYZBase::Init(CncBoardBase* board){
-// 	Serial.print("\n[Info] CncSolution_CoreYZBase::Init_Linkage() is entering.");
+// void CoreYZ_ArmSolution::Init(CncBoardBase* board){
+// 	Serial.print("\n[Info] CoreYZ_ArmSolution::Init_Linkage() is entering.");
 // 	// this->_cncMachine = (CncSolution_CoreYZConfigBase*)(this->_board->GetCncConfig());
 // 	this->_board = board;
 
@@ -43,62 +43,62 @@ void CncSolution_CoreYZBase::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk)
 
 // }
 
-void CncSolution_CoreYZBase::RunG28_CombinedAxis(EnumAxis_ForwardKinematic axis){
-	Serial.print("[Debug] CncSolution_CoreYZBase::RunG28() is entering:   " );
-	Serial.println(axis);
-	// this->_homing_axis = axis;
-	this->_cncMachine->PrintOut("CncSolution_CoreYZBase::RunG28()");
-	// Serial.println(this->stepper_alpha->getPosition());
-	// this->stepper_alpha->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
-	// this->stepper_alpha->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
-	// this->stepper_beta->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
-	// this->stepper_beta->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
-	// float motor_position[2];
-	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
-	mb->MoveBlocks[AXIS_ALPHA].IsAbsTargetPosition = false;
-	mb->MoveBlocks[AXIS_BETA].IsAbsTargetPosition = false;
-	if (axis=='Y'){
-		//todo :  process with IK()
-		this->__homing_helper = this->objHomeHelper_y;
-		// this->stepper_alpha->setTargetRel(-5000000);
-		// this->stepper_beta->setTargetRel(5000000);
-		// motor_position[0] = -5000000;
-		// motor_position[1] = 5000000;
-		mb->MoveBlocks[AXIS_ALPHA].TargetPosition = -5000000;
-		mb->MoveBlocks[AXIS_BETA].TargetPosition = 5000000;
+// void CoreYZ_ArmSolution::RunG28_CombinedAxis(EnumAxis_ForwardKinematic axis){
+// 	Serial.print("[Debug] CoreYZ_ArmSolution::RunG28() is entering:   " );
+// 	Serial.println(axis);
+// 	// this->_homing_axis = axis;
+// 	this->_cncMachine->PrintOut("CoreYZ_ArmSolution::RunG28()");
+// 	// Serial.println(this->stepper_alpha->getPosition());
+// 	// this->stepper_alpha->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
+// 	// this->stepper_alpha->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
+// 	// this->stepper_beta->setAcceleration(this->_cncMachine->Homing_acceleration_alpha_beta);
+// 	// this->stepper_beta->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
+// 	// float motor_position[2];
+// 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
+// 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
+// 	mb->MoveBlocks[AXIS_ALPHA].IsAbsTargetPosition = false;
+// 	mb->MoveBlocks[AXIS_BETA].IsAbsTargetPosition = false;
+// 	if (axis=='Y'){
+// 		//todo :  process with IK()
+// 		this->__homing_helper = this->objHomeHelper_y;
+// 		// this->stepper_alpha->setTargetRel(-5000000);
+// 		// this->stepper_beta->setTargetRel(5000000);
+// 		// motor_position[0] = -5000000;
+// 		// motor_position[1] = 5000000;
+// 		mb->MoveBlocks[AXIS_ALPHA].TargetPosition = -5000000;
+// 		mb->MoveBlocks[AXIS_BETA].TargetPosition = 5000000;
 
-	}else if (axis=='Z'){
-		this->__homing_helper = this->objHomeHelper_vertical;
-		// this->stepper_alpha->setTargetRel(-5000000);
-		// this->stepper_beta->setTargetRel(-5000000);
-		// motor_position[0]=-5000000;
-		// motor_position[1]=-5000000;	
-		mb->MoveBlocks[AXIS_ALPHA].TargetPosition = -5000000;
-		mb->MoveBlocks[AXIS_BETA].TargetPosition = -5000000;
-	}
+// 	}else if (axis=='Z'){
+// 		this->__homing_helper = this->objHomeHelper_vertical;
+// 		// this->stepper_alpha->setTargetRel(-5000000);
+// 		// this->stepper_beta->setTargetRel(-5000000);
+// 		// motor_position[0]=-5000000;
+// 		// motor_position[1]=-5000000;	
+// 		mb->MoveBlocks[AXIS_ALPHA].TargetPosition = -5000000;
+// 		mb->MoveBlocks[AXIS_BETA].TargetPosition = -5000000;
+// 	}
 
 	
-	// this->_mover_base->AllActuatorsMoveTo(false, motor_position);
-	// this->__queue_move_block->ForwardHead();	
-	Queue_MoveBlock::Instance().Deposit();
+// 	// this->_mover_base->AllActuatorsMoveTo(false, motor_position);
+// 	// this->__queue_move_block->ForwardHead();	
+// 	Queue_MoveBlock::Instance().Deposit();
 
-	// this->_board->EnableMotor('A', true);
-	// this->_board->EnableMotor('B',true);
+// 	// this->_board->EnableMotor('A', true);
+// 	// this->_board->EnableMotor('B',true);
 
-	// this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
-}
+// 	// this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
+// }
 
-void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
+void CoreYZ_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 		//Set current position to HomePosition
 		IkPosition_AB ik_position;
 		if (this->_config_base.IsInverseKinematicHoimg){
 			// We know homed position via IK.
-			Serial.print("\n[Error] CncSolution_CoreYZBase::_running_G28() This robot does NOT impliment this function.");
+			Serial.print("\n[Error] CoreYZ_ArmSolution::_running_G28() This robot does NOT impliment this function.");
 		}
 		else{
 			// We know homed position via FK
-			Logger::Info("CncSolution_CoreYZBase::_SetCurrentPositionAsHome() Trying to get home position with EEF FK position  ");
+			Logger::Info("CoreYZ_ArmSolution::_SetCurrentPositionAsHome() Trying to get home position with EEF FK position  ");
 			this->__current_fk_position.Z = this->_cncMachine->Homed_position_z;
 			this->__current_fk_position.Y = this->_cncMachine->Homed_position_y;
 			this->IK(&this->__current_fk_position, &ik_position);
@@ -125,9 +125,9 @@ void CncSolution_CoreYZBase::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic
 }
 
 
-// void CncSolution_CoreYZBase::RunG1(Gcode* gcode) {
-bool CncSolution_CoreYZBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
-	Serial.print("\n[Debug] CncSolution_CoreYZBase::RunG1() is entering");
+// void CoreYZ_ArmSolution::RunG1(Gcode* gcode) {
+bool CoreYZ_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
+	Serial.print("\n[Debug] CoreYZ_ArmSolution::RunG1() is entering");
 	Serial.print(gcode->get_command());
 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
 	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
@@ -179,7 +179,7 @@ bool CncSolution_CoreYZBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	Queue_MoveBlock::Instance().Deposit();
 
 	if (true){
-		Serial.print("\n    [Debug] CncSolution_CoreYZBase::RunG1()     (");
+		Serial.print("\n    [Debug] CoreYZ_ArmSolution::RunG1()     (");
 		// Serial.print(this->stepper_alpha->getPosition());
 		Serial.print(",");
 		// Serial.print(this->stepper_beta->getPosition());
@@ -193,10 +193,13 @@ bool CncSolution_CoreYZBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 
 
 
-float CncSolution_CoreYZBase::GetDistanceToTarget_IK(){
+float CoreYZ_ArmSolution::GetDistanceToTarget_IK(){
 	// return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
 	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
 }
 
 
+void CoreYZ_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
+
+}
 
