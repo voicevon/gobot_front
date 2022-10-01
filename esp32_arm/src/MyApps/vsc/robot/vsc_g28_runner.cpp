@@ -13,12 +13,14 @@ void Vsc_G28_Runner::Init(Vsc_Board* board, MoverBase* mover){
     Logger::Info("Vsc_G28_Runner::Init() Alpha axis home_triggers");
     PositionTrigger* trigger;
     trigger = board->GetPositionTrigger(0);
+    trigger->AxisName='X';
     trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
-    homers[0].AppendPositionTrigger(trigger);
+    // homers[0].AppendPositionTrigger(trigger);
 
     trigger = board->GetPositionTrigger(1);
+    trigger->AxisName='X';
     trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
-    homers[0].AppendPositionTrigger(trigger);
+    // homers[0].AppendPositionTrigger(trigger);
 
     // HomerDiction::Instance().Init(homers, HOMERS_COUNT);
 }
@@ -73,11 +75,11 @@ void Vsc_G28_Runner::SetMoveBlock_ToHome(EnumAxis_ForwardKinematic axis, MoveBlo
     Logger::Print("Vsc_G28_Runner::SetMoveBlock_ToHome()  point", 99);
 }
 
-AxisHomer* Vsc_G28_Runner::GetHomer(EnumAxis_ForwardKinematic axis){
-    return &homers[0];
-}
+// AxisHomer* Vsc_G28_Runner::GetHomer(EnumAxis_ForwardKinematic axis){
+//     return &homers[0];
+// }
 
-AxisHomer* Vsc_G28_Runner::GetHomer(EnumAxis_Inverseinematic axis){
-    return &homers[0];
+// AxisHomer* Vsc_G28_Runner::GetHomer(EnumAxis_Inverseinematic axis){
+//     return &homers[0];
 
-}
+// }
