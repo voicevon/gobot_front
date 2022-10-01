@@ -1,5 +1,6 @@
 // #include "CNC/Sensor/position_trigger/position_triggers.h"
-#include "CNC/arm_solution/axis_homer/axis_homer.h"
+#include "Robot/axis_homer/axis_homer.h"
+// #include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "MyLibs/basic/logger.h"
 
 AxisHomer::AxisHomer(uint8_t trigger_count){

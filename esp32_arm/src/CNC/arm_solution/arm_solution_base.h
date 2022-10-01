@@ -10,7 +10,8 @@
 #include "Robot/eef/eef_standard_code.h"
 #include "CNC/gcode/gcode_consumer.h"
 #include "../mover/mover_base.h"
-#include "CNC/arm_solution/axis_homer/axis_homer.h"
+// #include "CNC/arm_solution/axis_homer/axis_homer.h"
+#include "Robot/axis_homer/axis_homer.h"
 
 enum class CncState{    //TODO: rename to MoverState?
     IDLE,

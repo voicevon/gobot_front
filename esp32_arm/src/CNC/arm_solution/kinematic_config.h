@@ -4,7 +4,8 @@
 #include "MyBoards/const.h"
 #include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
-#include "axis_homer/cnc_homers.h"
+// #include "axis_homer/cnc_homers.h"
+#include "Robot/axis_homer/cnc_homers.h"
 
 class KinematicConfig{
     public:

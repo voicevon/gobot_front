@@ -1,7 +1,8 @@
 #pragma once
 #include "MyBoards/board_test/board_test_base.h"
 #include "CNC/board/cnc_board_base.h"
-#include "CNC/arm_solution/axis_homer/axis_homer.h"
+#include "Robot/axis_homer/axis_homer.h"
+// #include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "robot_board_base.h"
 
 class RobotBoard_Test:public BoardTestBase{

@@ -1,6 +1,5 @@
 #pragma once
 #include <SimpleFOC.h>
-#include "CNC/arm_solution/axis_homer/cnc_homers.h"
 #include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
 #include "CNC/mover/driver/h_bridge/h_bridge.h"
 #include "CNC/Sensor/position_sensor/polor_encoder.h"
@@ -16,7 +15,6 @@ class Vsc_Board: public CncBoardBase{
         void LinkEncoderSensor(Encoder* encoder);
         // call me must after LinkEncoderSensor().
         void Init(bool is_on_reset) override;
-        // void SayHello() override;
 
         // For being an actuator and its components.
         ActuatorDcMotor* GetActuator(EnumAxis_Inverseinematic axis_name) {return &this->__motor;};
