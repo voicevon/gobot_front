@@ -24,7 +24,16 @@ void VscRobot::Init(Vsc_Board* board){
 
     Logger::Info("VscRobot::Init() Pid controllers.");
     PidControllers_List::Instance().Init(__all_pids, PID_CONTROLLERS_COUNT);
+    Logger::Print("list",1);
     PidControllers_List::Instance().AddPidController(&this->__speed_pid);
+    Logger::Print("list",2);
+    PidControllers_List::Instance().AddPidController(&this->__test_pid);
+    Logger::Print("list",3);
+
+    Logger::Print("test",PidControllers_List::Instance().GetPidController(1)->P);
+    Logger::Print("test",PidControllers_List::Instance().GetPidController(1)->I);
+    Logger::Print("test",PidControllers_List::Instance().GetPidController(1)->D);
+
     //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
     // M130_Runner* m130 = (M130_Runner*) McodeRunners::getInstance().GetRunner(130);   //??
     

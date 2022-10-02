@@ -1,8 +1,8 @@
 #pragma once
 
 #include <SimpleFOC.h>
-// #include "array_base.h"
 #include "list_base.h"
+
 
 class PidControllers_Listable: public PIDController, public ListItem{
     public:
@@ -17,7 +17,10 @@ class PidControllers_List: public ListBase{
             return __instance;
         }
 
-        void Init(PidControllers_Listable** the_list, int items_count){_Init((ListItem**)the_list, items_count);};
+        void Init(PidControllers_Listable** the_list, int items_count){
+            Logger::Print("Init()",1);
+            _Init((ListItem**)the_list, items_count);
+            };
         void AddPidController(PidControllers_Listable* pid){__AddItem(pid);};
         PidControllers_Listable* GetPidController(int index){return (PidControllers_Listable*)_GetItem(index);};
 
