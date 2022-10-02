@@ -3,8 +3,8 @@
 
 void MoverBase::SpinOnce(){
     // Logger::Debug("MoverBase::SpinOnce()");
-    for(int a=0; a<CNC_AXIS_COUNT; a++){
-        Actuator_Diction::Instance().GetActuator(a)->SpinOnce();
+    for(int a=0; a<__cnc_actuator_count; a++){
+        Actuator_List::Instance().GetActuator(a)->SpinOnce();
     }
 
     // Logger::Print("MoverBase::SpinOnce() point", 1);
@@ -28,9 +28,9 @@ void MoverBase::SpinOnce(){
 void MoverBase::AllActuatorsMoveTo(MoveBlock* move){
     ActuatorBase* act;
     MoveBlock_SingleActuator * ms;
-    for(int a=0; a<CNC_AXIS_COUNT; a++){
+    for(int a=0; a<__cnc_actuator_count; a++){
         ms = &move->MoveBlocks[a];
-        // act =  ActuatorDiction.GetActuator[a];
+        act =  Actuator_List::Instance().GetActuator(a);
 
         if (ms->IsAbsTargetPosition){
             act->UpdateMovement(ms);
@@ -41,8 +41,8 @@ void MoverBase::AllActuatorsMoveTo(MoveBlock* move){
 }
 
 void MoverBase::AllActuatorsStop(){
-    for(int a=0; a<Actuator_Diction::Instance().GetItemsCount(); a++){
-        Actuator_Diction::Instance().GetActuator(a)->ForceStop();
+    for(int a=0; a<Actuator_List::Instance().GetItemsCount(); a++){
+        Actuator_List::Instance().GetActuator(a)->ForceStop();
     }
 }
 
@@ -68,7 +68,7 @@ void MoverBase::AllActuatorsStop(){
 // }
 
 void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position){
-    Actuator_Diction::Instance().GetActuator(actuator_name)->SetCurrentPositionAs(as_current_position);
+    Actuator_List::Instance().GetActuator(actuator_name)->SetCurrentPositionAs(as_current_position);
     // if (actuator_name == AXIS_ALPHA){
     //     this->_actuator_alpha_base->SetCurrentPositionAs(as_current_position);
     // }else if (actuator_name == AXIS_BETA){
@@ -83,7 +83,7 @@ void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuato
 
 float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name){
     Logger::Debug("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() ");
-    return Actuator_Diction::Instance().GetActuator(actuator_name)->GetCurrentPosition();
+    return Actuator_List::Instance().GetActuator(actuator_name)->GetCurrentPosition();
     // if (actuator_name == AXIS_ALPHA){
     //     Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 1);
     //     auto aa = this->_actuator_alpha_base;

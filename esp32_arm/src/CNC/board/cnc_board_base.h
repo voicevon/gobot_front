@@ -6,7 +6,8 @@
 #include "CNC/Actuator/stepper/actuator_stepper.h"   //???
 #include "Robot/axis_homer/position_trigger.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "MyLibs/array/pid_controllers_array.h"
+#include "MyLibs/list/pid_controllers_list.h"
+// #include "MyLibs/array/pid_controllers_array.h"
 #include "Robot/axis_homer/home_trigger_array.h"
 
 class CncBoardBase: public BoardBase{

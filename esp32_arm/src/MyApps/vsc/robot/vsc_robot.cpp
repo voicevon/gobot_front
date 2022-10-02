@@ -1,40 +1,43 @@
 #include "vsc_robot.h"
 #include "Robot/mcode_runner/mcode_runners.h"
 
+
+
 void VscRobot::Init(Vsc_Board* board){
     Logger::Debug("Vsc_ArmSoution::Init()");
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());
 
-    
-    
-
+    mover.Init(1);
     this->LinkMover(&mover);
+
+    Actuator_List::Instance().Init(__all_actuators, CNC_ACTUATOR_COUNT);
+    Actuator_List::Instance().AddActuator(&this->__actuator_alpha);
     
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
 
-    Logger::Info("VscRobot::Init()   Pid controller.");
+
     this->__g28_runner=&this->g28_runner;
     g28_runner.Init(board, &mover);
 
-    Logger::Info("VscRobot::Init() Pid controller.");
-    PidControllers_Diction::Instance().Init(__all_pid_controllers, 1);
-
-    // this->__all_pids.AppendPidController(&this->__speed_pid);
+    Logger::Info("VscRobot::Init() Pid controllers.");
+    PidControllers_List::Instance().Init(__all_pids, PID_CONTROLLERS_COUNT);
+    PidControllers_List::Instance().AddPidController(&this->__speed_pid);
     //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
-    M130_Runner* m130 = (M130_Runner*) McodeRunners::getInstance().GetRunner(130);
-    // m130->LinkPidControllers(&this->__all_pids);
+    // M130_Runner* m130 = (M130_Runner*) McodeRunners::getInstance().GetRunner(130);   //??
     
     // motor is the user of PID controller
-    // board->LinkSpeedPid_ForMotor(&this->__speed_pid);
     // and initial setting
-    PidController_Dictable* speed_pid = &__all_pid_controllers[0];
-    speed_pid->P = 100.0f;
-    speed_pid->I = 100.0f;
-    speed_pid->D = 0.0f;
-    this->__actuator_alpha.LinkPidController(speed_pid);
+
+    Logger::Info("VscRobot::Init()  Speed Pid controller.");
+    
+    __speed_pid.P = 100.0f;
+    __speed_pid.I = 100.0f;
+    __speed_pid.D = 0.0f;
+
+    this->__actuator_alpha.LinkPidController(&__speed_pid);
     this->__actuator_alpha.LinkMotorDriver(board->GetMotorDriver());
     this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
     

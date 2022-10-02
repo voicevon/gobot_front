@@ -6,11 +6,10 @@
 #include "CNC/coordinate/cnc_axis.h"
 #include "CNC/planner/queue_move_block.h"
 #include "CNC/planner/queue_line_segment.h"
-// #include "MyLibs/dictions/diction_base.h"
-#include "MyLibs/array/array_base.h"
+#include "MyLibs/list/list_base.h"
 
 
-class ActuatorBase: public ArrayItem{
+class ActuatorBase: public ListItem{
     public:
         virtual void SpinOnce();
 
@@ -30,6 +29,7 @@ class ActuatorBase: public ArrayItem{
         float GetNeededSeconds();
         void RenewSpeed(float moving_time);
         EnumAxis_Inverseinematic MyAxis;
+
     protected:
         float _target_cnc_position;   // is always an absolute position
         float _current_cnc_position;

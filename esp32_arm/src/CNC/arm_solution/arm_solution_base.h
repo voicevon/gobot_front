@@ -2,7 +2,8 @@
 
 // #include "MyLibs/pid_controllers/pid_controllers.h"
 // #include "MyLibs/dictions/pid_controllers_diction.h"
-#include "MyLibs/array/pid_controllers_array.h"
+// #include "MyLibs/array/pid_controllers_array.h"
+#include "MyLibs/list/pid_controllers_list.h"
 
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/gcode/gcode_consumer.h"

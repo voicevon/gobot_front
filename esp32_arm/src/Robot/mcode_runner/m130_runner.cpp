@@ -9,7 +9,7 @@ void M130_Runner::Run(Gcode* gcode){
     Logger::Print("gcode", gcode->get_command());
     int index =  gcode->get_value('N');
     Logger::Print("Index", p_value);
-    PidController_Dictable* pid = PidControllers_Diction::Instance().GetPidController(index);
+    PidControllers_Listable* pid = PidControllers_List::Instance().GetPidController(index);
     
     f_value = gcode->get_value('P');
     pid->P = f_value;

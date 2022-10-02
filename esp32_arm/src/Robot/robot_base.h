@@ -21,6 +21,7 @@ enum class RobotState{
     G4_IS_RUNNING,
 };
 
+
 class RobotBase: public GcodeConsumer{
     public:
         RobotState State = RobotState::IDLE_OR_ASYNC;
@@ -37,7 +38,6 @@ class RobotBase: public GcodeConsumer{
         void _running_G28();
 
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
-        // HomerDiction _homer_diction = HomerDiction(CNC_AXIS_COUNT);
 
         bool is_absolute_position = true;
         
@@ -45,8 +45,6 @@ class RobotBase: public GcodeConsumer{
         ArmSolutionBase* _arm_solution;
         void LinkMover(MoverBase* mover){this->_mover=mover;};
 
-        // TODO: Consider G4.
-        // CncState GetMoverState() {return this->_mover.State;};   
         
     protected:
         G28_Runner *__g28_runner;

@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 
-#define CNC_AXIS_COUNT 6
+#define CNC_AXIS_COUNT 3
 
 // enum EnumAxis{
 //     AXIS_NONE = 0,

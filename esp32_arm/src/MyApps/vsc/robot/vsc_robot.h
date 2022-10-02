@@ -6,9 +6,13 @@
 #include "vsc_g28_runner.h"
 #include "CNC/arm_solution/circle_loop/circle_loop_arm_solution.h"
 #include "CNC/mover/single_axis.h"
-#include "MyLibs/array/pid_controllers_array.h"
-// #include "MyLibs/dictions/pid_controllers_diction.h"
-// #include "MyLibs/pid_controllers/pid_controllers_diction.h"
+#include "MyLibs/list/pid_controllers_list.h"
+// #include "MyLibs/array/pid_controllers_array.h"
+
+
+#define PID_CONTROLLERS_COUNT 1
+#define CNC_ACTUATOR_COUNT 1
+
 
 class VscRobot: public RobotBase{
     public:
@@ -17,11 +21,14 @@ class VscRobot: public RobotBase{
     private:
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
 
-        // PIDController __speed_pid = PIDController(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
-        // PidControllers __all_pids = PidControllers(1);
-        PidController_Dictable __all_pid_controllers[1];
+        PidControllers_Listable __speed_pid = PidControllers_Listable(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
+        PidControllers_Listable** __all_pids;
+        // PidControllers_Listable __all_pid_controllers[PID_CONTROLLERS_COUNT];
 
-	    ActuatorDcMotor __actuator_alpha = ActuatorDcMotor();  //??
+        ActuatorBase* __all_actuators[CNC_ACTUATOR_COUNT];
+
+	    ActuatorDcMotor __actuator_alpha = ActuatorDcMotor(); 
+        
         Mover_SingleAxis mover;
         CircleLoop_ArmSolution arm_solution;
         Vsc_G28_Runner g28_runner;

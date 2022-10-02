@@ -92,6 +92,7 @@
 #ifdef I_AM_VSC
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   
+	// #define CNC_ACTUATOR_COUNT 1
 #endif
 
 
