@@ -1,10 +1,11 @@
 #pragma once
+#include "CNC/board/cnc_board_base.h"
 #include <SimpleFOC.h>
 #include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
-#include "CNC/mover/driver/h_bridge/h_bridge.h"
-#include "Robot/Sensor/position_sensor/polor_encoder.h"
+#include "Robot/driver/h_bridge/h_bridge.h"
+// #include "CNC/mover/driver/h_bridge/h_bridge.h"
+#include "Robot/Sensor/position_sensor/rotary_encoder.h"
 #include "eef/vsc_eef.h"
-#include "CNC/board/cnc_board_base.h"
 #include "pins/wroom_board.h"
 
 
@@ -18,7 +19,7 @@ class Vsc_Board: public CncBoardBase{
 
         // For being an actuator and its components.
         // ActuatorDcMotor* GetActuator(EnumAxis_Inverseinematic axis_name) {return &this->__motor;};
-        PolorEncoder* GetAngleSensor(){return &this->__motor_angle_sensor;};
+        RotaryEncoder* GetAngleSensor(){return &this->__motor_angle_sensor;};
         H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
         // void LinkSpeedPid_ForMotor(PIDController* speed_pid);
 
@@ -31,13 +32,14 @@ class Vsc_Board: public CncBoardBase{
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override {};
 
         void Test_PositionTriggers(int loops);
+        void Test_HBridge(ActuatorDcMotor* motor,int loop_count);
 
     protected:
 
     private:
 	    // ActuatorDcMotor __motor = ActuatorDcMotor();  //??
         H_Bridge __pwm_h_bridge = H_Bridge(PIN_H_BRIDGE_DIR, PIN_H_BRIDGE_SPEED);
-        PolorEncoder __motor_angle_sensor;
+        RotaryEncoder __motor_angle_sensor;
         
         PositionTrigger __all_position_triggers[4];
 

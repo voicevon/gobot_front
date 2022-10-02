@@ -6,64 +6,66 @@
 
 #define INERTIA_DISTANCE  0.064    // this is a CNC unit  0.016== (1/386)/ (2*PI), around 12.7mm
 
+// real speed control, position check, auto stop....
+void ActuatorDcMotor::SpinOnce_FollowVelocity(float velocity){
+    static uint32_t last_micros;
+    bool serial_output = false;
+    if(micros() - last_micros > 1000){
+        // Logger::Print("Abs DIstanceToTarget in CNC Rad ", abs_distance);
+        serial_output = true;
+        last_micros = micros();
+    }
+
+    // speed pid 
+    float speed_error =  abs(this->__sensor->GetCurrentVelocity()) - abs(this->__target_velocity);
+    float pwm_speed =  - this->__speed_pid->FeedError(speed_error) * 8;
+
+    if (serial_output){
+        // Serial.print("velocity of sensor, speed_error, pwm_speed \t");
+        // Logger::Debug("velocity", velocity_in_cnc_unit);
+        // Logger::Debug("target_speed", )
+        Serial.print("\n    pos(cur,dis): ");
+        Serial.print(this->__sensor->GetCurrentPosition());
+        Serial.print("\t");
+        Serial.print(this->GetAbsDistanceToTarget_InCncUnit());
+        Serial.print("   speed(tar,cur,err,pwm): ");
+        Serial.print(this->__target_velocity);
+        Serial.print("\t");
+        Serial.print(this->__sensor->GetCurrentVelocity());
+        Serial.print("\t");
+        Serial.print(speed_error);
+        Serial.print("\t");
+        Serial.print(pwm_speed);
+        Serial.print("        pid: ");
+        Serial.print(this->__speed_pid->P);
+        Serial.print("\t");
+        Serial.print(this->__speed_pid->I);
+        Serial.print("\t");
+        Serial.print(this->__speed_pid->D);
+    }
+    // todo:  pwm_speed = ax^3 + bx^2 + cx + f
+    bool dir_is_cw = (this->__target_velocity > 0);
+    // pwm_speed = constrain(pwm_speed, 0 , 255);
+    if (pwm_speed > 255.0f) pwm_speed = 255.0f;
+    if (pwm_speed < 30.0f) pwm_speed = 0.0f;
+    this->__h_bridge->SetPwmSpeed(dir_is_cw, pwm_speed);
+}    
 
 
 void ActuatorDcMotor::SpinOnce(){
     // Logger::Debug("ActuatorDcMotor::SpinOnce()");
     this->__sensor->GetRawSensor()->update();
-    // real speed control, position check, auto stop....
-    float abs_distance_to_target = this->GetAbsDistanceToTarget_InCncUnit();
-    bool serial_output = false;
-    if(abs_distance_to_target < INERTIA_DISTANCE){
-    // if (false){
-        // The wheel will continue to run a short time after stoping, because the inertia.
-        // TDDO:  How to deal with negtive distance?
-        this->__h_bridge->Stop();
-    }else{
-        this->__count_down_for_serial_print--;
-        if (this->__count_down_for_serial_print <=0){
-            // Logger::Print("Abs DIstanceToTarget in CNC Rad ", abs_distance);
-            this->__count_down_for_serial_print = 200;
-            this->__count_down_for_serial_print = 9900;
-            serial_output = true;
-        }
 
-        // speed pid 
-        float speed_error =  abs(this->__sensor->GetCurrentVelocity()) - abs(this->__target_velocity);
-        float pwm_speed =  - this->__speed_pid->FeedError(speed_error) * 8;
-
-        if (serial_output){
-            // Serial.print("velocity of sensor, speed_error, pwm_speed \t");
-            // Logger::Debug("velocity", velocity_in_cnc_unit);
-            // Logger::Debug("target_speed", )
-            Serial.print("\n    pos(cur,dis): ");
-            Serial.print(this->__sensor->GetCurrentPosition());
-            Serial.print("\t");
-            Serial.print(abs_distance_to_target);
-            Serial.print("   speed(tar,cur,err,pwm): ");
-            Serial.print(this->__target_velocity);
-            Serial.print("\t");
-            Serial.print(this->__sensor->GetCurrentVelocity());
-            Serial.print("\t");
-            Serial.print(speed_error);
-            Serial.print("\t");
-            Serial.print(pwm_speed);
-            Serial.print("        pid: ");
-            Serial.print(this->__speed_pid->P);
-            Serial.print("\t");
-            Serial.print(this->__speed_pid->I);
-            Serial.print("\t");
-            Serial.print(this->__speed_pid->D);
-        }
-        // todo:  pwm_speed = ax^3 + bx^2 + cx + f
-        bool dir_is_cw = (this->__target_velocity > 0);
-        // dir_is_cw = true;
-        // pwm_speed = constrain(pwm_speed, 0 , 255);
-        if (pwm_speed > 255.0f) pwm_speed = 255.0f;
-        if (pwm_speed < 30.0f) pwm_speed = 0.0f;
-        this->__h_bridge->SetPwmSpeed(dir_is_cw, pwm_speed);
-        
-        // this->SetPwmSpeed(dir_is_cw, pwm_speed);
+    if (this->__is_moving){
+        float abs_distance_to_target = this->GetAbsDistanceToTarget_InCncUnit();
+        if(abs_distance_to_target < INERTIA_DISTANCE){
+            // The wheel will continue to run a short time after stoping, because the inertia.
+            // TDDO:  How to deal with negtive distance?
+            this->__h_bridge->Stop();
+            this->__is_moving= false;
+        } else{
+            this->SpinOnce_FollowVelocity(this->__target_velocity);
+        } 
     }
 }
 
@@ -86,13 +88,9 @@ void ActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
     Logger::Print("target_position", move->TargetPosition);
     Logger::Print("speed", move->Speed);
     
-    
-    // if (is_absolute_position){
     if (move->IsAbsTargetPosition){
-        // this->_target_cnc_position = target_position;
         this->_target_cnc_position = move->TargetPosition;
     }else{
-        // this->_target_cnc_position = this->GetCurrentPosition() + target_position;
         this->_target_cnc_position = this->GetCurrentPosition() + move->TargetPosition;
     }
 
@@ -116,16 +114,6 @@ float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
     return abs(this->_target_cnc_position - this->GetCurrentPosition());
 }
 
-
-
-// void ActuatorDcMotor::SetSpeed(float rad_per_second){
-//     this->__target_speed = rad_per_second;
-// }
-
-// void ActuatorDcMotor::SetAccelleration(float accelleration_in_cnc_unit){
-//     // this is a future feature.
-// }
-
 void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
     this->__sensor->SetCurrentPosition(position_in_cnc_unit);
     //When currentPosition is changed, SpinOnce()   will follow targetPosition. To avoid this happen.
@@ -147,21 +135,6 @@ void ActuatorDcMotor::UpdateTargetPositionFromCurrent(){
 
     this->_target_cnc_position = this->GetCurrentPosition();
 }
-
-
-
-
-
-
-void ActuatorDcMotor::PrintOut(){
-    Logger::Debug("ActuatorDcMotor::PrintOut()");
-    // Logger::Print("this->__pwm_channel ",this->__pwm_channel );
-    // Logger::Print("this->__h_bridge_pin_dir ",this->__h_bridge_pin_dir );
-    // Logger::Print("this->__h_bridge_pin_speed ",this->__h_bridge_pin_speed );
-    Serial.println(FCBC_RESET);
-}
-
-
 
 void ActuatorDcMotor::Test_PwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
     this->__h_bridge->SetPwmSpeed(dir_is_cw, pwm_speed);

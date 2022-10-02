@@ -3,9 +3,9 @@
 #include <SimpleFOC.h>
 #include "postitioon_sensor_base.h"
 
-class PolorEncoder: public PositionSensorBase{
+class RotaryEncoder: public PositionSensorBase{
     public:
-        PolorEncoder(){};
+        RotaryEncoder(){};
         void LinkRawSensor(Encoder* simple_foc_encoder);
         Encoder* GetRawSensor(){return this->__simple_foc_encoder;};
         void SetCurrentPosition(float current_cnc_position) override;

@@ -63,3 +63,23 @@ void Vsc_Board::Test_PositionTriggers(int loops){
     }
 }
 
+
+void Vsc_Board::Test_HBridge(ActuatorDcMotor* motor,int loop_count){
+    uint32_t speed = 200;
+    uint32_t delay_ms = 10000;
+    bool is_cw = true;
+    Serial.print("speed=" + speed);
+    for(int i=0; i< 2 * loop_count ;i++){
+        if(is_cw)
+            Serial.print("\n loop count=" + i/2);
+
+        is_cw = !is_cw;
+        Serial.print("Is CW = " + is_cw);
+        this->__pwm_h_bridge.SetPwmSpeed(is_cw, speed);
+        delay(delay_ms);
+        
+        Serial.print("\tstop");
+        this->__pwm_h_bridge.SetPwmSpeed(is_cw, 0);
+        delay(delay_ms);
+    }
+}

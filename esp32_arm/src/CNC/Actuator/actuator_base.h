@@ -12,7 +12,14 @@
 class ActuatorBase: public ListItem{
     public:
         char MyName;
-
+        // Don't remove these lines.  
+        // enum EnumActuatorState{
+        //     IDLE,
+        //     FOLLOW_SPEED_ONLY,    // For AGV travelling.  or CNC spindle liked.
+        //     FOLLOW_POSITION_SPEED,  // Currently, we are using
+        //     FOLLOW_POSITION_ACCEL_SPEED,  //For CNC actuator
+        // };
+        // EnumActuatorState ActuatorState;
         virtual void SpinOnce();
 
         void LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint);
@@ -23,6 +30,7 @@ class ActuatorBase: public ListItem{
 
         float GetTartetCncPosition(){return this->_target_cnc_position;};
         float GetCurrentCncPosition(){return this->_current_cnc_position;};
+        bool IsMoving(){return this->__is_moving;};
 
         //Speed and acceleration
         virtual void ForceStop();   //Only G28 is using this.
@@ -35,6 +43,7 @@ class ActuatorBase: public ListItem{
     protected:
         float _target_cnc_position;   // is always an absolute position
         float _current_cnc_position;
+        bool __is_moving = false;
 
         ActuatorRangeConstraintBase* _range_constraint;
         bool _is_range_constraint = false;
