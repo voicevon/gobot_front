@@ -9,7 +9,7 @@
 
 
 void ActuatorDcMotor::SpinOnce(){
-    Logger::Debug("ActuatorDcMotor::SpinOnce()");
+    // Logger::Debug("ActuatorDcMotor::SpinOnce()");
     this->__sensor->GetRawSensor()->update();
     // real speed control, position check, auto stop....
     float abs_distance_to_target = this->GetAbsDistanceToTarget_InCncUnit();

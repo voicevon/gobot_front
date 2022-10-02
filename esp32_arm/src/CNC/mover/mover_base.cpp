@@ -2,26 +2,18 @@
 
 
 void MoverBase::SpinOnce(){
-    Logger::Debug("MoverBase::SpinOnce()");
+    // Logger::Debug("MoverBase::SpinOnce()");
     for(int a=0; a<Actuator_List::Instance().GetItemsCount(); a++){
-        Logger::Print("axis=", a);
-        auto aa=Actuator_List::Instance();
-        Logger::Print("MoverBase::SpinOnce() point", 31);
-        auto bb=aa.GetActuator(a);
-        Logger::Print("MoverBase::SpinOnce() point", 33);
-        Serial.print(char(bb->MyName));
-        Logger::Print("\t\tbb->MyName", bb->MyName);
+        // Logger::Print("axis=", a);
         Actuator_List::Instance().GetActuator(a)->SpinOnce();
-        Logger::Print("axis= spinoce over", a);
 
     }
 
-    Logger::Print("MoverBase::SpinOnce() point", 1);
+    // Logger::Print("MoverBase::SpinOnce() point", 1);
     if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
         // Logger::Print("MoverBase::SpinOnce() Queue_MoveBlock::  Buffer is Empty", 91);
         return;
     }
-    Logger::Print("MoverBase::SpinOnce() point", 2);
     
     Logger::Info("MoverBase::SpinOnce() withdraw queue_move_block");
     MoveBlock* mb = Queue_MoveBlock::Instance().Withdraw();
