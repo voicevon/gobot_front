@@ -14,7 +14,7 @@ void Vsc_Board::Init(bool is_on_reset){
     __all_position_triggers[1].Init(PIN_HOMER_SENSOR_HALL_1, LOW);
     __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
     __all_position_triggers[3].Init(PIN_HOMER_SENSOR_HALL_3, LOW);
-    HomeTrigger_Diction::Instance().Init(__all_position_triggers, 4);
+    HomeTrigger_Array::Instance().Init(__all_position_triggers, 4);
 }
 
 void Vsc_Board::LinkEncoderSensor(Encoder* encoder){

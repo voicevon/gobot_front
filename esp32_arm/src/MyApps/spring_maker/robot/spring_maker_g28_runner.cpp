@@ -11,7 +11,7 @@ void SpringMaker_G28_Runner::Init(Board_SpringMaker* board, MoverBase* mover){
     // homing.DistanceToGo = TWO_PI;
     
     Logger::Info("SpringMaker_G28_Runner::Init() Alpha axis home_triggers");
-    PositionTrigger* trigger = HomeTrigger_Diction::Instance().GetPositionTrigger(0);
+    PositionTrigger* trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
     trigger->AxisName = 'X';
     trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
     // __homer.AppendPositionTrigger(trigger);

@@ -7,10 +7,10 @@
 // #include "MyLibs/common_diction/diction_base.h"
 
 
-class HomeTrigger_Diction: public ArrayBase{
+class HomeTrigger_Array: public ArrayBase{
     public:
-        static HomeTrigger_Diction& Instance(){
-            static HomeTrigger_Diction __instance;
+        static HomeTrigger_Array& Instance(){
+            static HomeTrigger_Array __instance;
             return __instance;
         };
         void Init(PositionTrigger* triggers, int triggers_count){_Init(triggers, triggers_count, sizeof(PositionTrigger));};

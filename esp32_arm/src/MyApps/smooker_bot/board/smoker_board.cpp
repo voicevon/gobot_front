@@ -6,7 +6,7 @@ void Smoker_Board::Init(bool is_on_reset){
     Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
 
     __all_position_trigger[0].Init(PIN_HOME_ALPHA_2201, LOW);
-    HomeTrigger_Diction::Instance().Init(__all_position_trigger, 1);
+    HomeTrigger_Array::Instance().Init(__all_position_trigger, 1);
 }
 
 // void Smoker_Board::SayHello() {

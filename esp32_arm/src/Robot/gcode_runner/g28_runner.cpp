@@ -8,8 +8,8 @@ bool G28_Runner::IsDone(){
     // Logger::Debug("G28_Runner::IsDone()");
     static unsigned long last_micros;
     PositionTrigger* trigger;
-    for(int i=0; i<HomeTrigger_Diction::Instance().GetItemsCount(); i++){
-        trigger = HomeTrigger_Diction::Instance().GetPositionTrigger(i);
+    for(int i=0; i<HomeTrigger_Array::Instance().GetItemsCount(); i++){
+        trigger = HomeTrigger_Array::Instance().GetPositionTrigger(i);
         if (trigger->AxisName == this->__axis_name){
             if(trigger->IsTriggered()){
                 Logger::Info("G28_Runner::IsDone()  homer is triggered...");
