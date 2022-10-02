@@ -4,7 +4,7 @@
 
 #define POSITION_TRIGGER_MAX_COUNT 4 
 
-// TODO:  Mover to folder: Robot
+// TODO:  remove this class
 class HomingConfig{
     public:
         bool IsDirectionToMax=true;
@@ -16,7 +16,8 @@ class HomingConfig{
         float LastHomedPosition = 0;
 };
 
-class AxisHomer{
+#include "MyLibs/dictions/diction_base.h"
+class AxisHomer: public DictionItem{
     public:
         AxisHomer(){};
         AxisHomer(uint8_t triger_count);

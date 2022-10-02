@@ -3,7 +3,7 @@
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "board_pins/board_pins_ver3.11.h"
 #include "robot_eef/gobot_house_eef.h"
-#include "Robot/axis_homer/position_trigger.h"
+// #include "Robot/axis_homer/position_trigger.h"
 
 class Board_GobotHouse: public CncBoardBase{
     public:
@@ -19,8 +19,9 @@ class Board_GobotHouse: public CncBoardBase{
         ActuatorStepper alpha_stepper;
         ActuatorStepper beta_stepper;
 
-        PositionTrigger homer_alpha = PositionTrigger(PIN_HOME_ALHPA_2109, LOW);
-        PositionTrigger homer_beta = PositionTrigger(PIN_HOME_BETA_2109, LOW);
+        PositionTrigger __all_position_triggers[2];
+        // PositionTrigger homer_alpha = PositionTrigger(PIN_HOME_ALHPA_2109, LOW);
+        // PositionTrigger homer_beta = PositionTrigger(PIN_HOME_BETA_2109, LOW);
         RobotEef_GobotHouse eef;
         Servo __cnc_beta;
 

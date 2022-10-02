@@ -6,15 +6,15 @@
 #include "IoT/main_mqtt.h"
 #include "MyApps/vsc/vsc_app.h"
 #include "MyApps/vsc/robot/vsc_robot.h"
+// #include  "MyLibs/common_diction/example.h"
+
 
 Vsc_Board board;
-VscApp vsc_app;
-
-VscRobot vsc_robot;
-
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
+VscApp vsc_app;
+VscRobot vsc_robot;
 
 Encoder encoder = Encoder(PIN_ENCODER_A, PIN_ENCODER_B, 360);
 void doA(){encoder.handleA();}
@@ -31,7 +31,7 @@ void test_board(){
     // tester.Test_SinglePositionTrigger(board.GetSingleHomer(AXIS_ALPHA), 0);
     // tester.Test_AxisHomer(board.GetCncHomers()->GetAxisHomer(AXIS_ALPHA), 0);
 
-    tester.Test_MotorDriver(board.GetActuator(AXIS_ALPHA), 0);
+    // tester.Test_MotorDriver(board.GetActuator(AXIS_ALPHA), 0);
     tester.Test_Offset(0);
     Serial.println("[Info] test_board() is done.");
 }
@@ -44,9 +44,19 @@ void setup_encoder(){
 }
 
 void setup(){
+    
     setup_encoder();
     board.LinkEncoderSensor(&encoder);
     board.Init(true);
+
+    // MyItem buffer[6];
+    // MyDiction::Instance().Init(buffer,6);
+    // MyItem* aa = MyDiction::Instance().GetMyItem(0);
+    // aa->test_id = 5555;
+    // MyItem* bb = MyDiction::Instance().GetMyItem(0);
+    // Serial.println(bb->test_id);
+    // Serial.println("\n\n\n\n\n\n");
+
 
     test_board();
     vsc_robot.Init(&board);

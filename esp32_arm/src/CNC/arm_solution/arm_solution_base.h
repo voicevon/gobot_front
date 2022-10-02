@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MyLibs/pid_controllers/pid_controllers.h"
+// #include "MyLibs/pid_controllers/pid_controllers.h"
+#include "MyLibs/dictions/pid_controllers_diction.h"
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/gcode/gcode_consumer.h"
 #include "kinematic_config.h"
@@ -43,7 +44,7 @@ class ArmSolutionBase{
         void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);  //TODO:: remove-able?
 
         KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
-        HomerDiction _homer_diction = HomerDiction(CNC_AXIS_COUNT);
+        // HomerDiction _homer_diction;
 
         bool is_absolute_position = true;
 

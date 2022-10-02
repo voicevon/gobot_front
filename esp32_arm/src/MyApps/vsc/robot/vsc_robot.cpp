@@ -6,30 +6,39 @@ void VscRobot::Init(Vsc_Board* board){
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());
 
-    this->__g28_runner=&this->g28_runner;
-    // g28_runner.LinkMover(&mover);
-    g28_runner.Init(board, &mover);
+    
+    
+
     this->LinkMover(&mover);
     
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
 
-    Logger::Info("Vsc_ArmSoution::Init() Pid controller.");
-    this->__all_pids.AppendPidController(&this->__speed_pid);
+    Logger::Info("VscRobot::Init()   Pid controller.");
+    this->__g28_runner=&this->g28_runner;
+    g28_runner.Init(board, &mover);
+
+    Logger::Info("VscRobot::Init() Pid controller.");
+    PidControllers_Diction::Instance().Init(__all_pid_controllers, 1);
+
+    // this->__all_pids.AppendPidController(&this->__speed_pid);
     //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
     M130_Runner* m130 = (M130_Runner*) McodeRunners::getInstance().GetRunner(130);
-    m130->LinkPidControllers(&this->__all_pids);
+    // m130->LinkPidControllers(&this->__all_pids);
     
     // motor is the user of PID controller
-    board->LinkSpeedPid_ForMotor(&this->__speed_pid);
+    // board->LinkSpeedPid_ForMotor(&this->__speed_pid);
     // and initial setting
-    this->__speed_pid.P = 100;
-    this->__speed_pid.I = 100;
-    this->__speed_pid.D = 0;
-
-
-    this->mover.LinkActuator('A', board->GetActuator(AXIS_ALPHA));
+    PidController_Dictable* speed_pid = &__all_pid_controllers[0];
+    speed_pid->P = 100.0f;
+    speed_pid->I = 100.0f;
+    speed_pid->D = 0.0f;
+    this->__actuator_alpha.LinkPidController(speed_pid);
+    this->__actuator_alpha.LinkMotorDriver(board->GetMotorDriver());
+    this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
+    
+    this->mover.LinkActuator('A', &this->__actuator_alpha);
 
         // TODO: for mover config
     //     Vsc_ActuatorAlphaMechanic config;
@@ -39,4 +48,13 @@ void VscRobot::Init(Vsc_Board* board){
     // // this->_motor_gear_teeth_count = 10;
     // // this->_slave_pulley_teeth_count = 90;
     // // this->_motor_step_angle_in_degree = 0.7003891050583658;
+
+    //     Logger::Info("Vsc_ArmSoution::Init() angle sensor and motor");
+//     board->GetAngleSensor()->SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)
+//     board->EnableMotor(AXIS_ALPHA, false);
+
+//     Logger::Info("Vsc_ArmSoution::Init() Kinematic_config");
+//     CircleLoop_KinematicConfig* kinematic = &this->_kinematic_config;
+//     kinematic->CircleLength = 12.7 * 368;
+//     kinematic->PitchLength = 12.7;  
 }

@@ -2,14 +2,14 @@
 #include "position_trigger.h"
 #include "MyLibs/basic/logger.h"
 
-PositionTrigger::PositionTrigger(uint8_t pin_trigger, int triggered_state){
+void PositionTrigger::Init(uint8_t pin_trigger, int triggered_state){
     this->__pin_trigger = pin_trigger;
     this->__triggered_state = triggered_state;
     pinMode(pin_trigger, INPUT_PULLUP);
     this->__mcp23018 = nullptr;
 }
 
-PositionTrigger::PositionTrigger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger, int triggered_state){
+void PositionTrigger::Init(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger, int triggered_state){
     this->__mcp23018 = mcp_23018;
     this->__pin_trigger = expanded_pin_trigger;
     this->__triggered_state = triggered_state;
@@ -17,15 +17,15 @@ PositionTrigger::PositionTrigger(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_
     this->__mcp23018->pinMode(expanded_pin_trigger, INPUT_PULLUP);
 }
 
-PositionTrigger::PositionTrigger(int triggeredState){
-    this->__triggered_state = triggeredState;
-}
+// PositionTrigger::PositionTrigger(int triggeredState){
+//     this->__triggered_state = triggeredState;
+// }
 
-void PositionTrigger::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger){
-    mcp_23018->pinMode(expanded_pin_trigger, INPUT_PULLUP);
-    this->__pin_trigger = expanded_pin_trigger;
-    this->__mcp23018 = mcp_23018;
-}
+// void PositionTrigger::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger){
+//     mcp_23018->pinMode(expanded_pin_trigger, INPUT_PULLUP);
+//     this->__pin_trigger = expanded_pin_trigger;
+//     this->__mcp23018 = mcp_23018;
+// }
 
 bool PositionTrigger::IsTriggered(){
     // Logger::Debug("PositionTrigger::IsTriggered() is entering...");

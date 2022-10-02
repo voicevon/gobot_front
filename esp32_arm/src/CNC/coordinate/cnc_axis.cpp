@@ -1,8 +1,18 @@
 #include "cnc_axis.h"
 
-// static EnumAxis_ForwardKinematic ForwardKinematic_Axis(char name);
-// static EnumAxis_Inverseinematic InverserKinematic_Axis(char name);
-EnumAxis_ForwardKinematic CncAxis::ForwardKinematic_Axis(char name){
+uint8_t CncAxis::From_Enum_ToIndex(EnumAxis_ForwardKinematic axis){
+    return 0;
+}
+
+uint8_t CncAxis::From_Enum_ToIndex(EnumAxis_Inverseinematic axis){
+    return 0;
+}
+
+uint8_t CncAxis::From_Name_ToIndex(char name){
+    return 0;
+}
+
+EnumAxis_ForwardKinematic CncAxis::From_FkName_ToEnum(char name){
     EnumAxis_ForwardKinematic result_axis = AXIS_X;
     switch (name){
         case 'Y':
@@ -26,7 +36,7 @@ EnumAxis_ForwardKinematic CncAxis::ForwardKinematic_Axis(char name){
     return result_axis;
 }
 
-EnumAxis_Inverseinematic CncAxis::InverserKinematic_Axis(char name){
+EnumAxis_Inverseinematic CncAxis::From_Ik_Name_ToEnum(char name){
     EnumAxis_Inverseinematic result_axis = AXIS_ALPHA;
     switch (name){
         case 'b':

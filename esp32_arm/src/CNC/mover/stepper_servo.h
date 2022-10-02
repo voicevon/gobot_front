@@ -11,7 +11,7 @@ class Mover_StepperServo: public MoverBase{
         void LinkStepper_asAlpha(ActuatorStepper* stepper);
         void LinkServo_asBeta(ActuatorServo* servo);
         bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator) override;
-        bool HasArrivedTargetPosition() override{};
+        bool HasArrivedTargetPosition() override{return false;};
 
 
         void AllActuatorsMoveTo(MoveBlock* move) override;

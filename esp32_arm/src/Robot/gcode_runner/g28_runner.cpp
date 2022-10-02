@@ -7,19 +7,23 @@
 bool G28_Runner::IsDone(){
     // Logger::Debug("G28_Runner::IsDone()");
     static unsigned long last_micros;
-    
-	if(__homer->GetTrigeredIndex()==-1){
-        if(micros() - last_micros > 200000){
-            Serial.print(".");  //print too fast?
-            last_micros = micros();
+    PositionTrigger* trigger;
+    for(int i=0; i<HomeTrigger_Diction::Instance().GetItemsCount(); i++){
+        trigger = HomeTrigger_Diction::Instance().GetPositionTrigger(i);
+        if (trigger->AxisName == this->__axis_name){
+            if(trigger->IsTriggered()){
+                Logger::Info("G28_Runner::IsDone()  homer is triggered...");
+            	__mover->AllActuatorsStop();
+                this->__last_homed_position = trigger->GetTriggerPosition();
+	            return true;
+            }
         }
-		return false;
-	}
-    Logger::Info("G28_Runner::IsDone()  homer is triggered...");
-    
-
-	__mover->AllActuatorsStop();
-	return true;
+    }
+    if(micros() - last_micros > 200000){
+        Serial.print(".");  //print too fast?
+        last_micros = micros();
+    }
+    return false;
 }
 
 void G28_Runner::LinkGcode(Gcode* gcode){
@@ -27,17 +31,17 @@ void G28_Runner::LinkGcode(Gcode* gcode){
     Serial.println(gcode->get_command());
 
     char axis_name = '+';
-    home_actuator_directly = false;
+    // home_actuator_directly = false;
     if (gcode->has_letter('X')) axis_name = 'X';
     if (gcode->has_letter('Y')) axis_name = 'Y';
     if (gcode->has_letter('Z')) axis_name = 'Z';
     if (gcode->has_letter('A')) axis_name = 'A';
     if (gcode->has_letter('B')) axis_name = 'B';
     if (gcode->has_letter('C')) axis_name = 'C';
-    if (gcode->has_letter('a')) {axis_name = 'a'; home_actuator_directly=true;}
-    if (gcode->has_letter('b')) {axis_name = 'b'; home_actuator_directly=true;}
-    if (gcode->has_letter('g')) {axis_name = 'g'; home_actuator_directly=true;}
-    if (gcode->has_letter('d')) {axis_name = 'd'; home_actuator_directly=true;}
+    if (gcode->has_letter('a')) axis_name = 'a'; 
+    if (gcode->has_letter('b')) axis_name = 'b'; 
+    if (gcode->has_letter('g')) axis_name = 'g'; 
+    if (gcode->has_letter('d')) axis_name = 'd'; 
     Serial.print(char(axis_name));
     Logger::Print("\t\thome_axis", char(axis_name));
     this->__axis_name = axis_name;
@@ -60,17 +64,17 @@ void G28_Runner::Start(){
     // Logger::Print("G28_Runner::Start() point", 14);
 
     Logger::Print("G28_Runner::Start() point", 2);
-    if (home_actuator_directly){
-        EnumAxis_Inverseinematic axis_ik = CncAxis::InverserKinematic_Axis(__axis_name);
-        __homer = this->GetHomer(axis_ik);
-        this->SetMoveBlock_ToHome(axis_ik, mb);
-        Logger::Print("G28_Runner::Start() point", 31);
-    }else{
-        EnumAxis_ForwardKinematic axis_fk = CncAxis::ForwardKinematic_Axis(__axis_name);
-	    __homer = this->GetHomer(axis_fk);
-	    this->SetMoveBlock_ToHome(axis_fk, mb);
-        Logger::Print("G28_Runner::Start() point", 32);
-    }
+    // __homer = HomerDiction::Instance().GetAxisHomer(__axis_name);
+    // if (home_actuator_directly){
+    //     EnumAxis_Inverseinematic axis_ik = CncAxis::From_FkName_ToEnum(__axis_name);
+    //     this->SetMoveBlock_ToHome(axis_ik, mb);
+    //     Logger::Print("G28_Runner::Start() point", 31);
+    // }else{
+    //     EnumAxis_ForwardKinematic axis_fk = CncAxis::From_Ik_Name_ToEnum(__axis_name);
+	//     __homer = this->GetHomer(axis_fk);
+	//     this->SetMoveBlock_ToHome(axis_fk, mb);
+    //     Logger::Print("G28_Runner::Start() point", 32);
+    // }
 
 	Queue_MoveBlock::Instance().Deposit();
     Logger::Print("G28_Runner::Start() point", 4);

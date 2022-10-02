@@ -31,7 +31,8 @@ void SingleAxis_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic
 		// We know homed position via FK
 		Logger::Info("SingleAxis_ArmSolution::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
-		this->__current_fk_position.A = this->_homer_diction.GetAxisHomer(AXIS_X)->GetFiredPosition();
+		// this->__current_fk_position.A = this->_homer_diction.GetAxisHomer(AXIS_X)->GetFiredPosition();
+		this->__current_fk_position.A = HomeTrigger_Diction::Instance().GetFiredPosition('A');
 		this->IK(&this->__current_fk_position, &ik_position);
 		// verify IK by FK()
 		FkPosition_A verifying_fk;
@@ -110,6 +111,7 @@ void SingleAxis_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line
 
 float SingleAxis_ArmSolution::GetDistanceToTarget_IK(){
 	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
+	return 1.234;
 }
 
 
