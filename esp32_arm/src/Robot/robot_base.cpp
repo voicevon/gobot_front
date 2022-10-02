@@ -85,8 +85,8 @@ void RobotBase::SpinOnce(){
 	// __gcode = gcode;
 	Logger::Debug("RobotBase::SpinOnce() has got command string ");
 	Serial.println(str.c_str());
-	Logger::Print("RobotBase::SpinOnce() point", 6);
-	Logger::Print("gcode_command", gcode.get_command());
+	// Logger::Print("RobotBase::SpinOnce() point", 6);
+	// Logger::Print("gcode_command", gcode.get_command());
 
 	if(gcode.has_g){
 		this->__RunGcode(&gcode);

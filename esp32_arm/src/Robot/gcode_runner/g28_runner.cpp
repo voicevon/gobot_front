@@ -56,30 +56,11 @@ void G28_Runner::Start(){
 	//Put a move_block into the queue.  Mover will let the actuator to turn...
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
     // Logger::Print("G28_Runner::Start() point", 11);
-    // mb->DeepReset_ToDefault();
-    // Logger::Print("G28_Runner::Start() point", 12);
-    // MoveBlock_SingleActuator* aa = &mb->MoveBlocks[0];
-    // Logger::Print("G28_Runner::Start() point", 13);
-    // aa->TargetPosition = 12;
-    // Logger::Print("G28_Runner::Start() point", 14);
-
-    Logger::Print("G28_Runner::Start() point", 2);
-    // __homer = HomerDiction::Instance().GetAxisHomer(__axis_name);
-    // if (home_actuator_directly){
-    //     EnumAxis_Inverseinematic axis_ik = CncAxis::From_FkName_ToEnum(__axis_name);
-    //     this->SetMoveBlock_ToHome(axis_ik, mb);
-    //     Logger::Print("G28_Runner::Start() point", 31);
-    // }else{
-    //     EnumAxis_ForwardKinematic axis_fk = CncAxis::From_Ik_Name_ToEnum(__axis_name);
-	//     __homer = this->GetHomer(axis_fk);
-	//     this->SetMoveBlock_ToHome(axis_fk, mb);
-    //     Logger::Print("G28_Runner::Start() point", 32);
-    // }
-
+    this->SetMoveBlock_ToHome(__axis_name, mb);
 	Queue_MoveBlock::Instance().Deposit();
-    Logger::Print("G28_Runner::Start() point", 4);
+    // Logger::Print("G28_Runner::Start() point", 4);
 	this->__mover->SpinOnce();
-    Logger::Print("G28_Runner::Start() point", 99);
+    // Logger::Print("G28_Runner::Start() point", 99);
 
 }
 

@@ -23,14 +23,23 @@ enum EnumAxis_ForwardKinematic{
 };
 
 enum EnumAxis_Inverseinematic{
-    AXIS_ALPHA = 'a', 
-    AXIS_BETA = 'b', 
-    AXIS_GAMMA = 'g',
-    AXIS_DELTA = 'd',
-    AXIS_EPSION = 'e',
-    AXIS_ZETA = 'z',
-    AXIS_THETA = 't',
-    AXIS_KAPPPA ='k',
+    // AXIS_ALPHA = 'a', 
+    // AXIS_BETA = 'b', 
+    // AXIS_GAMMA = 'g',
+    // AXIS_DELTA = 'd',
+    // AXIS_EPSION = 'e',
+    // AXIS_ZETA = 'z',
+    // AXIS_THETA = 't',
+    // AXIS_KAPPPA ='k',
+
+    AXIS_ALPHA = 0, 
+    AXIS_BETA = 1, 
+    AXIS_GAMMA = 2,
+    AXIS_DELTA = 3,
+    AXIS_EPSION = 4,
+    AXIS_ZETA = 5,
+    AXIS_THETA = 6,
+    AXIS_KAPPPA =7,
 };
 
 

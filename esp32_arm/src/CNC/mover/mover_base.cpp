@@ -14,9 +14,12 @@ void MoverBase::SpinOnce(){
     }
     Logger::Print("MoverBase::SpinOnce() point", 2);
     
-    Logger::Info("MoverBase::SpinOnce() fetching queue_moveb_lock");
+    Logger::Info("MoverBase::SpinOnce() withdraw queue_move_block");
     MoveBlock* mb = Queue_MoveBlock::Instance().Withdraw();
     Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
+    Logger::Print("MoveBlocks[AXIS_ALPHA].Speed", mb->MoveBlocks[AXIS_ALPHA].Speed);
+    Logger::Print("MoveBlocks[AXIS_ALPHA].Acceleration", mb->MoveBlocks[AXIS_ALPHA].Acceleration);
+    
     this->AllActuatorsMoveTo(mb);
     Logger::Print("MoverBase::SpinOnce() point", 99);
 
