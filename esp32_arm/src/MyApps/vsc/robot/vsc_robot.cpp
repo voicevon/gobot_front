@@ -38,7 +38,7 @@ void VscRobot::Init(Vsc_Board* board){
     this->__actuator_alpha.LinkMotorDriver(board->GetMotorDriver());
     this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
     
-    this->mover.LinkActuator('A', &this->__actuator_alpha);
+    // this->mover.LinkActuator('A', &this->__actuator_alpha);
 
         // TODO: for mover config
     //     Vsc_ActuatorAlphaMechanic config;

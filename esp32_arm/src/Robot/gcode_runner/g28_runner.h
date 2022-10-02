@@ -3,7 +3,8 @@
 #include "Robot/axis_homer/axis_homer.h"
 #include "CNC/mover/mover_base.h"
 #include "sync_gcode_runner_base.h"
-#include "Robot/axis_homer/homer_diction.h"
+#include "Robot/axis_homer/home_trigger_array.h"
+// #include "Robot/axis_homer/homer_diction.h"
 
 class G28_Runner: public SyncGcodeRunnerBase{
     public:

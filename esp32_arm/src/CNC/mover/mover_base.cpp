@@ -3,9 +3,9 @@
 
 void MoverBase::SpinOnce(){
     // Logger::Debug("MoverBase::SpinOnce()");
-    _actuator_alpha_base->SpinOnce();
-    // _actuator_beta_base->SpinOnce();
-    // _actuator_delta_base->SpinOnce();
+    for(int a=0; a<CNC_AXIS_COUNT; a++){
+        Actuator_Diction::Instance().GetActuator(a)->SpinOnce();
+    }
 
     // Logger::Print("MoverBase::SpinOnce() point", 1);
     if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
@@ -40,76 +40,87 @@ void MoverBase::AllActuatorsMoveTo(MoveBlock* move){
     }
 }
 
-
-void MoverBase::LinkActuator(char actuator_name, ActuatorBase* actuator){
-    switch (actuator_name){
-    case 'A':
-        this->_actuator_alpha_base = actuator;
-        break;
-    case 'B':
-        this->_actuator_beta_base = actuator;
-        break;
-    case 'C':
-        this->_actuator_gamma_base = actuator;
-        break;
-    
-    default:
-        Logger::Warn("MoverBase::LinkActuator()");
-        Logger::Print("actuator_name", actuator_name);
-        break;
+void MoverBase::AllActuatorsStop(){
+    for(int a=0; a<Actuator_Diction::Instance().GetItemsCount(); a++){
+        Actuator_Diction::Instance().GetActuator(a)->ForceStop();
     }
 }
+
+
+
+// void MoverBase::LinkActuator(char actuator_name, ActuatorBase* actuator){
+//     switch (actuator_name){
+//     case 'A':
+//         this->_actuator_alpha_base = actuator;
+//         break;
+//     case 'B':
+//         this->_actuator_beta_base = actuator;
+//         break;
+//     case 'C':
+//         this->_actuator_gamma_base = actuator;
+//         break;
+    
+//     default:
+//         Logger::Warn("MoverBase::LinkActuator()");
+//         Logger::Print("actuator_name", actuator_name);
+//         break;
+//     }
+// }
 
 void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position){
-    if (actuator_name == AXIS_ALPHA){
-        this->_actuator_alpha_base->SetCurrentPositionAs(as_current_position);
-    }else if (actuator_name == AXIS_BETA){
-        this->_actuator_beta_base->SetCurrentPositionAs(as_current_position);
-    }else{
-        Logger::Warn("MoverBase::SingleMotorMoveTo()");
-        Serial.print("Unkonwn axisname= ");
-        Serial.print(actuator_name);
-        Serial.println(FCBC_RESET);
-    }
+    Actuator_Diction::Instance().GetActuator(actuator_name)->SetCurrentPositionAs(as_current_position);
+    // if (actuator_name == AXIS_ALPHA){
+    //     this->_actuator_alpha_base->SetCurrentPositionAs(as_current_position);
+    // }else if (actuator_name == AXIS_BETA){
+    //     this->_actuator_beta_base->SetCurrentPositionAs(as_current_position);
+    // }else{
+    //     Logger::Warn("MoverBase::SingleMotorMoveTo()");
+    //     Serial.print("Unkonwn axisname= ");
+    //     Serial.print(actuator_name);
+    //     Serial.println(FCBC_RESET);
+    // }
 }
 
-float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic
- actuator_name){
+float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name){
     Logger::Debug("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() ");
-    if (actuator_name == AXIS_ALPHA){
-        Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 1);
-        auto aa = this->_actuator_alpha_base;
-        Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 2);
-        auto bb = aa->GetCurrentPosition();
-        Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() bb", bb);
+    return Actuator_Diction::Instance().GetActuator(actuator_name)->GetCurrentPosition();
+    // if (actuator_name == AXIS_ALPHA){
+    //     Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 1);
+    //     auto aa = this->_actuator_alpha_base;
+    //     Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 2);
+    //     auto bb = aa->GetCurrentPosition();
+    //     Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() bb", bb);
 
-        return this->_actuator_alpha_base->GetCurrentPosition();
+    //     return this->_actuator_alpha_base->GetCurrentPosition();
 
 
-    }else if (actuator_name == AXIS_BETA){
-        return this->_actuator_beta_base->GetCurrentPosition();
+    // }else if (actuator_name == AXIS_BETA){
+    //     return this->_actuator_beta_base->GetCurrentPosition();
 
-    }else{
-        log_w("Mover_DualStepper::SingleMotorMoveTo() axisname= ", actuator_name );
-    }
-    return 0;
+    // }else{
+    //     log_w("Mover_DualStepper::SingleMotorMoveTo() axisname= ", actuator_name );
+    // }
+    // return 0;
 }
 
+
+//TODO:  be a virtual method.
 float MoverBase::GetAbsDistanceToTarget_InCncUnit(){
-    float alpha_distance = 0;
-    if((this->_moving_actuator_flags & 0x01) > 0){
-       alpha_distance = this->_actuator_alpha_base->GetAbsDistanceToTarget_InCncUnit();
-    }
-    float beta_distance = 0;
-    if ((this->_moving_actuator_flags & 0x02) > 0){
-       beta_distance = this->_actuator_beta_base->GetAbsDistanceToTarget_InCncUnit();
-    }
-    bool debug= false;
-    if(debug){
-        Serial.print("[Debug] Mover_DualStepper::GetAbsDistanceToTarget_InCncUnit() alpha = ");
-        Serial.print(alpha_distance);
-        Serial.print("  beta = ");
-        Serial.println(beta_distance);
-    }
-    return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
+
+    // float alpha_distance = 0;
+    // if((this->_moving_actuator_flags & 0x01) > 0){
+    //    alpha_distance = this->_actuator_alpha_base->GetAbsDistanceToTarget_InCncUnit();
+    // }
+    // float beta_distance = 0;
+    // if ((this->_moving_actuator_flags & 0x02) > 0){
+    //    beta_distance = this->_actuator_beta_base->GetAbsDistanceToTarget_InCncUnit();
+    // }
+    // bool debug= false;
+    // if(debug){
+    //     Serial.print("[Debug] Mover_DualStepper::GetAbsDistanceToTarget_InCncUnit() alpha = ");
+    //     Serial.print(alpha_distance);
+    //     Serial.print("  beta = ");
+    //     Serial.println(beta_distance);
+    // }
+    // return sqrt(alpha_distance * alpha_distance + beta_distance * beta_distance);
 }

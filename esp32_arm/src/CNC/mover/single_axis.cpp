@@ -74,11 +74,11 @@
     // this->_moving_actuator_flags = target_motor_flags;
 // }
 
-void Mover_SingleAxis::AllActuatorsStop(){
-    this->_actuator_alpha_base->ForceStop();
-    this->_actuator_alpha_base->UpdateTargetPositionFromCurrent();
+// void Mover_SingleAxis::AllActuatorsStop(){
+//     this->_actuator_alpha_base->ForceStop();
+//     this->_actuator_alpha_base->UpdateTargetPositionFromCurrent();
     
-}
+// }
 
 // void Mover_SingleAxis::SingleActuatorStop(EnumAxis actuator_name){
 //     this->_actuator_alpha_base->UpdateTargetPositionFromCurrent();

@@ -134,10 +134,10 @@ void Mover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
     // this->_moving_actuator_flags = target_motor_flags;
 // }
 
-void Mover_StepperServo::AllActuatorsStop(){
-    this->__stepControl->stop();
-    this->__actuator_beta->UpdateTargetPositionFromCurrent();
-}
+// void Mover_StepperServo::AllActuatorsStop(){
+//     this->__stepControl->stop();
+//     this->__actuator_beta->UpdateTargetPositionFromCurrent();
+// }
 
 // void Mover_StepperServo::SingleActuatorStop(EnumAxis actuator_name){
 //     if (actuator_name == AXIS_ALPHA){

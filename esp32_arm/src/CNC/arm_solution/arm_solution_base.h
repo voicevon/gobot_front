@@ -1,7 +1,9 @@
 #pragma once
 
 // #include "MyLibs/pid_controllers/pid_controllers.h"
-#include "MyLibs/dictions/pid_controllers_diction.h"
+// #include "MyLibs/dictions/pid_controllers_diction.h"
+#include "MyLibs/array/pid_controllers_array.h"
+
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/gcode/gcode_consumer.h"
 #include "kinematic_config.h"
@@ -9,7 +11,8 @@
 #include "../coordinate/cnc_axis.h"
 #include "../mover/mover_base.h"
 #include "Robot/axis_homer/axis_homer.h"
-#include "Robot/axis_homer/homer_diction.h"
+// #include "Robot/axis_homer/homer_diction.h"
+#include "Robot/axis_homer/home_trigger_array.h"
 #include "Robot/eef/eef_standard_code.h"
 
 // enum class MoverState{    //TODO: rename to MoverState?

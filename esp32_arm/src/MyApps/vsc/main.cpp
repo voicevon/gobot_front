@@ -50,10 +50,10 @@ void setup(){
     board.Init(true);
 
     // MyItem buffer[6];
-    // MyDiction::Instance().Init(buffer,6);
-    // MyItem* aa = MyDiction::Instance().GetMyItem(0);
+    // MyArray::Instance().Init(buffer,6);
+    // MyItem* aa = MyArray::Instance().GetMyItem(0);
     // aa->test_id = 5555;
-    // MyItem* bb = MyDiction::Instance().GetMyItem(0);
+    // MyItem* bb = MyArray::Instance().GetMyItem(0);
     // Serial.println(bb->test_id);
     // Serial.println("\n\n\n\n\n\n");
 

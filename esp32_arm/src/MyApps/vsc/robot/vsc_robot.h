@@ -6,7 +6,8 @@
 #include "vsc_g28_runner.h"
 #include "CNC/arm_solution/circle_loop/circle_loop_arm_solution.h"
 #include "CNC/mover/single_axis.h"
-#include "MyLibs/dictions/pid_controllers_diction.h"
+#include "MyLibs/array/pid_controllers_array.h"
+// #include "MyLibs/dictions/pid_controllers_diction.h"
 // #include "MyLibs/pid_controllers/pid_controllers_diction.h"
 
 class VscRobot: public RobotBase{

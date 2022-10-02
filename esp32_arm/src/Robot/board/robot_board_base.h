@@ -6,7 +6,8 @@
 #include "ESP32Step/src/TeensyStep.h"   //???
 #include "Robot/axis_homer/position_trigger.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "MyLibs/dictions/pid_controllers_diction.h"
+#include "MyLibs/array/pid_controllers_array.h"
+// #include "MyLibs/dictions/pid_controllers_diction.h"
 
 class RobotBoardBase: public BoardBase{
     public:

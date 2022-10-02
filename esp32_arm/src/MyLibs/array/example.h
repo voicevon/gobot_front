@@ -2,17 +2,17 @@
 
 #include "diction_base.h"
 
-class MyItem: public DictionItem{
+class MyItem: public ArrayItem{
     public:
         int test_id;
 
     private:
 };
 
-class MyDiction: public DictionBase{
+class MyArray: public ArrayBase{
     public:
-        static MyDiction& Instance(){
-            static MyDiction instance;
+        static MyArray& Instance(){
+            static MyArray instance;
             return instance;
         }
         MyItem* GetMyItem(int index){
@@ -28,7 +28,7 @@ class MyDiction: public DictionBase{
 
 void test(){
     MyItem buffer[20];
-    MyDiction::Instance()._Init(buffer, 20,sizeof(MyItem));
+    MyArray::Instance()._Init(buffer, 20,sizeof(MyItem));
     
-    MyDiction::Instance().GetItem(2);
+    MyArray::Instance().GetItem(2);
 }

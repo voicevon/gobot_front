@@ -1,15 +1,15 @@
 #pragma once
 
 #include <SimpleFOC.h>
-#include "diction_base.h"
+#include "array_base.h"
 
-class PidController_Dictable: public PIDController, public DictionItem{
+class PidController_Dictable: public PIDController, public ArrayItem{
 
 };
 
 
 // Make sure to add an blank constructor to clas  FOC.PidController.
-class PidControllers_Diction: public DictionBase{
+class PidControllers_Diction: public ArrayBase{
     public:
         static PidControllers_Diction& Instance(){
             static PidControllers_Diction __instance;

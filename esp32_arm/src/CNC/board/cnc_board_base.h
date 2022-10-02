@@ -4,12 +4,10 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/eef/robot_eef_base.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"   //???
-// #include "CNC/arm_solution/axis_homer/position_trigger.h"
 #include "Robot/axis_homer/position_trigger.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "MyLibs/dictions/pid_controllers_diction.h"
-// #include "MyLibs/pid_controllers/pid_controllers.h"
-#include "Robot/axis_homer/home_trigger_diction.h"
+#include "MyLibs/array/pid_controllers_array.h"
+#include "Robot/axis_homer/home_trigger_array.h"
 
 class CncBoardBase: public BoardBase{
     public:

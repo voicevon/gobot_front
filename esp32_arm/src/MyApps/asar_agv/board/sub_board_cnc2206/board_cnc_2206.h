@@ -2,9 +2,7 @@
 #include "../board_pins/board_pins_ver_2_0.h"
 #include "CNC/board/cnc_board_base.h"
 #include "ESP32Step/src/TeensyStep.h"
-// #include "Robot/axis_homer/axis_homer.h"
-// #include "CNC/arm_solution/axis_homer/axis_homer.h"
-#include "Robot/axis_homer/home_trigger_diction.h"
+#include "Robot/axis_homer/home_trigger_array.h"
 #include "../robot_eef/garment_asar_eef.h"
 
 // For Core_AZ cnc application

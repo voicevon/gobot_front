@@ -2,11 +2,12 @@
 
 #include "position_trigger.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "MyLibs/dictions/diction_base.h"
+#include "MyLibs/array/array_base.h"
+// #include "MyLibs/dictions/diction_base.h"
 // #include "MyLibs/common_diction/diction_base.h"
 
 
-class HomeTrigger_Diction: public DictionBase{
+class HomeTrigger_Diction: public ArrayBase{
     public:
         static HomeTrigger_Diction& Instance(){
             static HomeTrigger_Diction __instance;

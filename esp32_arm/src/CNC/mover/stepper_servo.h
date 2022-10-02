@@ -15,7 +15,7 @@ class Mover_StepperServo: public MoverBase{
 
 
         // void AllActuatorsMoveTo(MoveBlock* move) override;
-        void AllActuatorsStop() override;
+        // void AllActuatorsStop() override;
         
     protected:
 

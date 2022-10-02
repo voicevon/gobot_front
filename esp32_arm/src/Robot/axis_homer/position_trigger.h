@@ -1,12 +1,12 @@
-#ifndef _HOME_TRIGER_H_
-#define _HOME_TRIGER_H_
+#pragma once
 
 #include <Arduino.h>
 #include <Adafruit_MCP23X17.h>
 // #include "MyLibs/common_diction/diction_base.h"
-#include "MyLibs/dictions/diction_base.h"
+#include "MyLibs/array/array_base.h"
+// #include "MyLibs/dictions/diction_base.h"
 
-class PositionTrigger: public DictionItem{
+class PositionTrigger: public ArrayItem{
     public:
         char AxisName;
         // For OC output sensor, trigeredState should be LOW
@@ -30,5 +30,3 @@ class PositionTrigger: public DictionItem{
         float __trigger_position_in_cnc_unit = 0;
 };
 
-
-#endif

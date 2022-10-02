@@ -29,7 +29,7 @@ void GobotHouseRobot::Init(GobotMain_Board* board){
     // this->__speed_pid.D = 0;
 
 
-    this->mover.LinkActuator('A', board->GetActuator(AXIS_ALPHA));
+    // this->mover.LinkActuator('A', board->GetActuator(AXIS_ALPHA));
 
         // TODO: for mover config
     //     Vsc_ActuatorAlphaMechanic config;

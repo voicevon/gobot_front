@@ -7,7 +7,6 @@ void BoxCarrierRobot::Init(Board2204Cnc* board){
     this->_LinkEef(board->GetEef());
 
     this->__g28_runner=&this->g28_runner;
-    // g28_runner.LinkMover(&mover);
     g28_runner.Init(board, &mover);
     this->LinkMover(&mover);
     
@@ -15,21 +14,9 @@ void BoxCarrierRobot::Init(Board2204Cnc* board){
     this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
 
-    // Logger::Info("Vsc_ArmSoution::Init() Pid controller.");
-    // this->__all_pids.AppendPidController(&this->__speed_pid);
-    //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
-    // M130_Runner* m130 = (M130_Runner*) McodeRunners::getInstance().GetRunner(130);
-    // m130->LinkPidControllers(&this->__all_pids);
-    
-    // motor is the user of PID controller
-    // board->LinkSpeedPid_ForMotor(&this->__speed_pid);
-    // and initial setting
-    // this->__speed_pid.P = 100;
-    // this->__speed_pid.I = 100;
-    // this->__speed_pid.D = 0;
 
 
-    this->mover.LinkActuator('A', board->GetActuator(AXIS_ALPHA));
+    // this->mover.LinkActuator('A', board->GetActuator(AXIS_ALPHA));
 
         // TODO: for mover config
     //     Vsc_ActuatorAlphaMechanic config;

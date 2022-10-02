@@ -16,8 +16,9 @@ class HomingConfig{
         float LastHomedPosition = 0;
 };
 
-#include "MyLibs/dictions/diction_base.h"
-class AxisHomer: public DictionItem{
+#include "MyLibs/array/array_base.h"
+// #include "MyLibs/dictions/diction_base.h"
+class AxisHomer: public ArrayItem{
     public:
         AxisHomer(){};
         AxisHomer(uint8_t triger_count);

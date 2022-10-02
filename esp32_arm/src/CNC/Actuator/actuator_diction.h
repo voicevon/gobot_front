@@ -4,7 +4,7 @@
 #include "actuator_base.h"
 
 
-class Actuator_Diction: public DictionBase{
+class Actuator_Diction: public ArrayBase{
     public:
         static Actuator_Diction& Instance(){
             static Actuator_Diction __instance;
