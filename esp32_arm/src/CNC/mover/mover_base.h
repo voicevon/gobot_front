@@ -14,7 +14,7 @@
 class MoverBase{
     public:
         void SpinOnce();
-        virtual void AllActuatorsMoveTo(MoveBlock* move);
+        void AllActuatorsMoveTo(MoveBlock* move);
 
         void LinkActuator(char actuator_name, ActuatorBase* actuator);
         void SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position);
@@ -30,6 +30,7 @@ class MoverBase{
         uint8_t _moving_actuator_flags;
         float _small_distance_for_arriving_target_position = 0.1;
         
+        //TODO:  put all to a diction.
         ActuatorBase* _actuator_alpha_base;
         ActuatorBase* _actuator_beta_base;
         ActuatorBase* _actuator_gamma_base;

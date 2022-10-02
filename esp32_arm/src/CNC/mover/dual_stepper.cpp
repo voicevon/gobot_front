@@ -40,7 +40,7 @@ void Mover_DualStepper::LinkStepper_asBeta(ActuatorStepper* beta){
 // alpha = flags.bits[0]
 // beta = flags.bits[1]
 // void Mover_DualStepper::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
-void Mover_DualStepper::AllActuatorsMoveTo(MoveBlock* move){
+// void Mover_DualStepper::AllActuatorsMoveTo(MoveBlock* move){
     //     bool is_absolute_position;
     //     Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
     //     Stepper* beta = this->__actuator_beta->GetLinkedStepper();
@@ -104,7 +104,7 @@ void Mover_DualStepper::AllActuatorsMoveTo(MoveBlock* move){
     // void Mover_DualStepper::AllActuatorsStop(){
     //     this->__stepControl->stop();
     //     this->__actuator_beta->UpdateTargetPositionFromCurrent();
-}
+// }
 
 // void Mover_DualStepper::SingleActuatorStop(EnumAxis actuator_name){
 //     if (actuator_name == AXIS_ALPHA){

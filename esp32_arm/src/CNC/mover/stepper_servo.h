@@ -14,7 +14,7 @@ class Mover_StepperServo: public MoverBase{
         bool HasArrivedTargetPosition() override{return false;};
 
 
-        void AllActuatorsMoveTo(MoveBlock* move) override;
+        // void AllActuatorsMoveTo(MoveBlock* move) override;
         void AllActuatorsStop() override;
         
     protected:

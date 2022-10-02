@@ -12,7 +12,7 @@ class Mover_DualStepper: public MoverBase{
         
         bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator) override;
 
-        void AllActuatorsMoveTo(MoveBlock* move) override;
+        // void AllActuatorsMoveTo(MoveBlock* mov) override;
         void AllActuatorsStop() override{};
 
         bool HasArrivedTargetPosition(){return false;};  //TODO: not false;

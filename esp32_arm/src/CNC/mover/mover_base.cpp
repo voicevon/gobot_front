@@ -19,11 +19,27 @@ void MoverBase::SpinOnce(){
     Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
     Logger::Print("MoveBlocks[AXIS_ALPHA].Speed", mb->MoveBlocks[AXIS_ALPHA].Speed);
     Logger::Print("MoveBlocks[AXIS_ALPHA].Acceleration", mb->MoveBlocks[AXIS_ALPHA].Acceleration);
-    
+
     this->AllActuatorsMoveTo(mb);
     Logger::Print("MoverBase::SpinOnce() point", 99);
 
 }
+
+void MoverBase::AllActuatorsMoveTo(MoveBlock* move){
+    ActuatorBase* act;
+    MoveBlock_SingleActuator * ms;
+    for(int a=0; a<CNC_AXIS_COUNT; a++){
+        ms = &move->MoveBlocks[a];
+        // act =  ActuatorDiction.GetActuator[a];
+
+        if (ms->IsAbsTargetPosition){
+            act->UpdateMovement(ms);
+        }else if(ms->TargetPosition != 0){
+            act->UpdateMovement(ms);
+        }
+    }
+}
+
 
 void MoverBase::LinkActuator(char actuator_name, ActuatorBase* actuator){
     switch (actuator_name){

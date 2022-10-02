@@ -13,7 +13,21 @@
 
 // alpha = flags.bits[0]
 // void Mover_SingleAxis::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
-void Mover_SingleAxis::AllActuatorsMoveTo(MoveBlock* move){
+// void Mover_SingleAxis::AllActuatorsMoveTo(MoveBlock* move){
+    // ActuatorBase* act;
+    // MoveBlock_SingleActuator * ms;
+    // for(int a=0; a<1; a++){
+    //     ms = &move->MoveBlocks[a];
+    //     act =  ActuatorDiction.GetActuator[a];
+
+    //     if (ms->IsAbsTargetPosition){
+    //         act->UpdateMovement(ms);
+    //     }else{
+    //         if(ms->TargetPosition != 0){
+    //             act->UpdateMovement(ms);
+    //         }
+    //     }
+    // }
     // bool is_absolute_position;
     // uint8_t target_motor_flags = this->_moving_actuator_flags;
 
@@ -58,7 +72,7 @@ void Mover_SingleAxis::AllActuatorsMoveTo(MoveBlock* move){
     //     Serial.println(target_motor_flags);
     // }
     // this->_moving_actuator_flags = target_motor_flags;
-}
+// }
 
 void Mover_SingleAxis::AllActuatorsStop(){
     this->_actuator_alpha_base->ForceStop();

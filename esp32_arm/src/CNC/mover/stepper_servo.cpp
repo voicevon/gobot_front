@@ -38,7 +38,7 @@ void Mover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
 // alpha = flags.bits[0]
 // beta = flags.bits[1]
 // void Mover_StepperServo::AllActuatorsMoveTo(uint8_t is_absolute_position_flags, float* positions_in_cnc_unit){
-void Mover_StepperServo::AllActuatorsMoveTo(MoveBlock* move){
+// void Mover_StepperServo::AllActuatorsMoveTo(MoveBlock* move){
     // bool is_absolute_position;
     // Stepper* alpha = this->__actuator_alpha->GetLinkedStepper();
     // uint8_t target_motor_flags = this->_moving_actuator_flags;
@@ -132,7 +132,7 @@ void Mover_StepperServo::AllActuatorsMoveTo(MoveBlock* move){
     //     Serial.println(target_motor_flags);
     // }
     // this->_moving_actuator_flags = target_motor_flags;
-}
+// }
 
 void Mover_StepperServo::AllActuatorsStop(){
     this->__stepControl->stop();

@@ -6,10 +6,10 @@
 #include "CNC/coordinate/cnc_axis.h"
 #include "CNC/planner/queue_move_block.h"
 #include "CNC/planner/queue_line_segment.h"
+#include "MyLibs/dictions/diction_base.h"
 
 
-
-class ActuatorBase{
+class ActuatorBase: public DictionItem{
     public:
         virtual void SpinOnce();
 
