@@ -2,7 +2,8 @@
 
 #include "position_trigger.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "MyLibs/common_diction/diction_base.h"
+#include "MyLibs/dictions/diction_base.h"
+// #include "MyLibs/common_diction/diction_base.h"
 
 
 class HomeTrigger_Diction: public DictionBase{

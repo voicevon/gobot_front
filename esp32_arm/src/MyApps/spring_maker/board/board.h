@@ -15,7 +15,7 @@ class Board_SpringMaker: public CncBoardBase{
         
         RobotEef_SpringMaker* GetEef() override;
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
-        // PositionTrigger* GetPositionTrigger(uint8_t index) override;
+        PositionTrigger* GetPositionTrigger(uint8_t index) override;
 
         
     private:

@@ -6,9 +6,9 @@ void Vsc_Board::Init(bool is_on_reset){
         Serial.println("I am XiaoJuan.");
     }
 
-    this->__motor.LinkMotorDriver(&this->__pwm_h_bridge);
-    this->__motor.LinkAngleSensor(&this->__motor_angle_sensor);
-    this->__motor.PrintOut();
+    // this->__motor.LinkMotorDriver(&this->__pwm_h_bridge);
+    // this->__motor.LinkAngleSensor(&this->__motor_angle_sensor);
+    // this->__motor.PrintOut();
 
     __all_position_triggers[0].Init(PIN_HOMER_SENSOR_HALL_0, LOW);
     __all_position_triggers[1].Init(PIN_HOMER_SENSOR_HALL_1, LOW);
@@ -41,9 +41,9 @@ PositionTrigger* Vsc_Board::GetPositionTrigger(uint8_t index){
     // return &this->__homer_0;
 }
 
-void Vsc_Board::LinkSpeedPid_ForMotor(PIDController* speed_pid){
-    this->__motor.LinkPidController(speed_pid);
-}
+// void Vsc_Board::LinkSpeedPid_ForMotor(PIDController* speed_pid){
+//     this->__motor.LinkPidController(speed_pid);
+// }
 
 void Vsc_Board::Test_PositionTriggers(int loops){
     uint32_t flags = 0;

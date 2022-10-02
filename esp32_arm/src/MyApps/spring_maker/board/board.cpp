@@ -9,9 +9,9 @@ void Board_SpringMaker::Init(bool is_on_reset){
     _all_position_triggers[0].Init(PIN_HOME_ALPHA_2201, LOW);
 }
 
-// PositionTrigger* Board_SpringMaker::GetPositionTrigger(uint8_t index){
-
-// }
+PositionTrigger* Board_SpringMaker::GetPositionTrigger(uint8_t index){
+    return &this->_all_position_triggers[index];
+}
 
 
 // ActuatorStepper* Board_SpringMaker::GetActuator(EnumAxis axis_name) {

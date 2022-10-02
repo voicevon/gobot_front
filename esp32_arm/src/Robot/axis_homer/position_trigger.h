@@ -3,7 +3,8 @@
 
 #include <Arduino.h>
 #include <Adafruit_MCP23X17.h>
-#include "MyLibs/common_diction/diction_base.h"
+// #include "MyLibs/common_diction/diction_base.h"
+#include "MyLibs/dictions/diction_base.h"
 
 class PositionTrigger: public DictionItem{
     public:

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MyLibs/pid_controllers/pid_controllers.h"
+// #include "MyLibs/pid_controllers/pid_controllers.h"
+#include "MyLibs/dictions/pid_controllers_diction.h"
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/gcode/gcode_consumer.h"
 #include "kinematic_config.h"

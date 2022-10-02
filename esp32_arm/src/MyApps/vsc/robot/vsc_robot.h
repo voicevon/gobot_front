@@ -6,8 +6,8 @@
 #include "vsc_g28_runner.h"
 #include "CNC/arm_solution/circle_loop/circle_loop_arm_solution.h"
 #include "CNC/mover/single_axis.h"
-
-
+#include "MyLibs/dictions/pid_controllers_diction.h"
+// #include "MyLibs/pid_controllers/pid_controllers_diction.h"
 
 class VscRobot: public RobotBase{
     public:
@@ -16,13 +16,17 @@ class VscRobot: public RobotBase{
     private:
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
 
-        PIDController __speed_pid = PIDController(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
-        PidControllers __all_pids = PidControllers(1);
+        // PIDController __speed_pid = PIDController(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
+        // PidControllers __all_pids = PidControllers(1);
+        PidController_Dictable __all_pid_controllers[1];
 
-        MoveBlock __all_move_blocks[88]; 
-        LineSegment __all_line_segments[88];
+	    ActuatorDcMotor __actuator_alpha = ActuatorDcMotor();  //??
         Mover_SingleAxis mover;
         CircleLoop_ArmSolution arm_solution;
         Vsc_G28_Runner g28_runner;
+
+
+        MoveBlock __all_move_blocks[88]; 
+        LineSegment __all_line_segments[88];
 
 };

@@ -1,15 +1,15 @@
 #include "cnc_axis.h"
 
 uint8_t CncAxis::From_Enum_ToIndex(EnumAxis_ForwardKinematic axis){
-
+    return 0;
 }
 
 uint8_t CncAxis::From_Enum_ToIndex(EnumAxis_Inverseinematic axis){
-
+    return 0;
 }
 
 uint8_t CncAxis::From_Name_ToIndex(char name){
-
+    return 0;
 }
 
 EnumAxis_ForwardKinematic CncAxis::From_FkName_ToEnum(char name){

@@ -5,9 +5,8 @@
 #include "CNC/Actuator/stepper/actuator_stepper.h"   //???
 #include "ESP32Step/src/TeensyStep.h"   //???
 #include "Robot/axis_homer/position_trigger.h"
-// #include "CNC/arm_solution/axis_homer/position_trigger.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "MyLibs/pid_controllers/pid_controllers.h"
+#include "MyLibs/dictions/pid_controllers_diction.h"
 
 class RobotBoardBase: public BoardBase{
     public:

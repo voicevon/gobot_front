@@ -2,12 +2,12 @@
 #ifdef I_AM_GOBOT_HOUSE_2205
 
 #include "board_2205/board_gobot_house.h"
-#include "cnc/solution.h"
+// #include "cnc/solution.h"
 #include "cnc_2205/solution_config_2205.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
-#include "robot.h"
+// #include "robot.h"
 
 
 StepControl controller;    // Use default settings 
