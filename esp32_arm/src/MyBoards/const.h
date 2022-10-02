@@ -26,7 +26,7 @@
     //     purple='\033[35m'
     //     cyan='\033[36m'
 #define FORE_LIGHT_GRAY "\033[37m"
-    //     darkgrey='\033[90m'
+#define FORE_DARK_GRAY "\033[90m"
     //     lightred='\033[91m'
     //     lightgreen='\033[92m'
 #define FORE_YELLOW "\033[93m"
@@ -41,7 +41,7 @@
 #define BGC_BLACK "\033[40m"
     //     red='\033[41m'
     //     green='\033[42m'
-#define BGC_ORANGE = "\033[43m"
+#define BGC_ORANGE "\033[43m"
 #define BGC_BLUE  "\033[44m"
     //     purple='\033[45m'
     //     cyan='\033[46m'

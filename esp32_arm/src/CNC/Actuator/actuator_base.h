@@ -11,6 +11,8 @@
 
 class ActuatorBase: public ListItem{
     public:
+        char MyName;
+
         virtual void SpinOnce();
 
         void LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint);
@@ -28,7 +30,7 @@ class ActuatorBase: public ListItem{
         virtual float GetSpeed();    // ?? TODO:  var should be in base class ?
         float GetNeededSeconds();
         void RenewSpeed(float moving_time);
-        EnumAxis_Inverseinematic MyAxis;
+        
 
     protected:
         float _target_cnc_position;   // is always an absolute position

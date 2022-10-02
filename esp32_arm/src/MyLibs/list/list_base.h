@@ -9,38 +9,39 @@ class ListItem{
 
 };
 
-// Is this a List?   or diction?
-class ListBase{  // HomerCollects? HomerDiction? 
+class ListBase{ 
     public:
-        // ListItem* GetItem(int index);
         int GetItemsCount(){return this->__items_count;};
         
     protected:
-        bool __AddItem(ListItem* item){
-            Logger::Print("Index",__index);
+        void __AddItem(ListItem* item){
+            if (__index >= __items_count){
+                Logger::Error("ListBase::__AddItem()");
+                Logger::Print("__index", __index);
+                Logger::Print("__items_count", __items_count);
+                Logger::Halt("List Item is Overflow!");
+            }
             __all_items[__index] = item;
-            // ListItem** addr = (ListItem**)(__all_items + __index * __SIZEOF_POINTER__);
-            // *addr = item;
-            Logger::Print("_add()",2);
             __index++; 
-            Logger::Print("_add()",3);
+            };  
+        ListItem* _GetItem(int index){
+            if(index >= __items_count){
+                Logger::Error("ListBase::_GetItem()");
+                Logger::Halt("List Item is Outside");
+            }
+            return (ListItem*)(__all_items[index]);
+            };
 
-            return true;
-            };  //todo:  check overflow
-        ListItem* _GetItem(int index){return (ListItem*)(__all_items[index]);};
         void _Init(ListItem** list, int items_count){
-            Logger::Print("_init()",2);
             __index = 0;
             __all_items = list;
             __items_count = items_count;
-            Logger::Print("_init()",3);
             };
 
     private:
         ListItem** __all_items;
         int __items_count;
         int __index;
-        // int __item_size;   // unit in byte.
 
 };
 

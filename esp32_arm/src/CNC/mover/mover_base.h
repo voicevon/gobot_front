@@ -2,19 +2,17 @@
 #pragma once
 
 #include <stdint.h>
-#include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"
+
+#include "../coordinate/cnc_axis.h"
 #include "CNC/board/cnc_board_base.h"
-#include "../Actuator/actuator_base.h"
-// #include "CNC/Actuator/actuator_diction.h"
 #include "CNC/Actuator/actuator_list.h"
+// #include "../Actuator/actuator_base.h"
 
 
 
-// TODO:  template <actuator>
 class MoverBase{
     public:
-        void Init(int actuator_count){this->__cnc_actuator_count = actuator_count;};
         // To do some move
         void SpinOnce();
         void AllActuatorsMoveTo(MoveBlock* move);
@@ -32,16 +30,7 @@ class MoverBase{
 
     protected:
         uint8_t _moving_actuator_flags;
-        float _small_distance_for_arriving_target_position = 0.1;
-        int __cnc_actuator_count;
-        //Doing:  put all to a list. and it's a statci list, so, do nothin here.
-
-        // ActuatorBase* _actuator_alpha_base;
-        // ActuatorBase* _actuator_beta_base;
-        // ActuatorBase* _actuator_gamma_base;
-        // ActuatorBase* _actuator_delta_base;
-        // ActuatorBase* _actuator_epsilon_base;
-        
+        float _small_distance_for_arriving_target_position = 0.1;   //Todo: configer-able
     
     private:
     

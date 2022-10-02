@@ -2,12 +2,21 @@
 
 
 void MoverBase::SpinOnce(){
-    // Logger::Debug("MoverBase::SpinOnce()");
-    for(int a=0; a<__cnc_actuator_count; a++){
+    Logger::Debug("MoverBase::SpinOnce()");
+    for(int a=0; a<Actuator_List::Instance().GetItemsCount(); a++){
+        Logger::Print("axis=", a);
+        auto aa=Actuator_List::Instance();
+        Logger::Print("MoverBase::SpinOnce() point", 31);
+        auto bb=aa.GetActuator(a);
+        Logger::Print("MoverBase::SpinOnce() point", 33);
+        Serial.print(char(bb->MyName));
+        Logger::Print("\t\tbb->MyName", bb->MyName);
         Actuator_List::Instance().GetActuator(a)->SpinOnce();
+        Logger::Print("axis= spinoce over", a);
+
     }
 
-    // Logger::Print("MoverBase::SpinOnce() point", 1);
+    Logger::Print("MoverBase::SpinOnce() point", 1);
     if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
         // Logger::Print("MoverBase::SpinOnce() Queue_MoveBlock::  Buffer is Empty", 91);
         return;
@@ -28,7 +37,7 @@ void MoverBase::SpinOnce(){
 void MoverBase::AllActuatorsMoveTo(MoveBlock* move){
     ActuatorBase* act;
     MoveBlock_SingleActuator * ms;
-    for(int a=0; a<__cnc_actuator_count; a++){
+    for(int a=0; a<Actuator_List::Instance().GetItemsCount(); a++){
         ms = &move->MoveBlocks[a];
         act =  Actuator_List::Instance().GetActuator(a);
 
@@ -47,60 +56,13 @@ void MoverBase::AllActuatorsStop(){
 }
 
 
-
-// void MoverBase::LinkActuator(char actuator_name, ActuatorBase* actuator){
-//     switch (actuator_name){
-//     case 'A':
-//         this->_actuator_alpha_base = actuator;
-//         break;
-//     case 'B':
-//         this->_actuator_beta_base = actuator;
-//         break;
-//     case 'C':
-//         this->_actuator_gamma_base = actuator;
-//         break;
-    
-//     default:
-//         Logger::Warn("MoverBase::LinkActuator()");
-//         Logger::Print("actuator_name", actuator_name);
-//         break;
-//     }
-// }
-
 void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position){
     Actuator_List::Instance().GetActuator(actuator_name)->SetCurrentPositionAs(as_current_position);
-    // if (actuator_name == AXIS_ALPHA){
-    //     this->_actuator_alpha_base->SetCurrentPositionAs(as_current_position);
-    // }else if (actuator_name == AXIS_BETA){
-    //     this->_actuator_beta_base->SetCurrentPositionAs(as_current_position);
-    // }else{
-    //     Logger::Warn("MoverBase::SingleMotorMoveTo()");
-    //     Serial.print("Unkonwn axisname= ");
-    //     Serial.print(actuator_name);
-    //     Serial.println(FCBC_RESET);
-    // }
 }
 
 float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name){
     Logger::Debug("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() ");
     return Actuator_List::Instance().GetActuator(actuator_name)->GetCurrentPosition();
-    // if (actuator_name == AXIS_ALPHA){
-    //     Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 1);
-    //     auto aa = this->_actuator_alpha_base;
-    //     Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() point", 2);
-    //     auto bb = aa->GetCurrentPosition();
-    //     Logger::Print("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() bb", bb);
-
-    //     return this->_actuator_alpha_base->GetCurrentPosition();
-
-
-    // }else if (actuator_name == AXIS_BETA){
-    //     return this->_actuator_beta_base->GetCurrentPosition();
-
-    // }else{
-    //     log_w("Mover_DualStepper::SingleMotorMoveTo() axisname= ", actuator_name );
-    // }
-    // return 0;
 }
 
 

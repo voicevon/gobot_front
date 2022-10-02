@@ -51,16 +51,17 @@ void Logger::Error(const char * title){
 }
 
 void Logger::Halt(const char* title){
-    Serial.print(FORE_YELLOW);
-    Serial.print(BGC_BLUE);
+    Serial.print(FORE_DARK_GRAY);
+    Serial.print(BGC_BLACK);
     Serial.print("[Halt]");
     Serial.print(title);
-    Serial.print(BGC_BLACK);
-    Serial.println(FORE_GREEN);
-    Serial.print("Esp32 is halt  ");
+    Serial.print(BGC_ORANGE);
+    // Serial.println(FORE_GREEN);
+    // Serial.print("Esp32 is halt  ");
+    // esp_random()
     while (true){
-        Serial.print("= ");
-        delay(500);
+        Serial.print("\t I am playing my game. ");
+        delay(2000);
     }
 }
 

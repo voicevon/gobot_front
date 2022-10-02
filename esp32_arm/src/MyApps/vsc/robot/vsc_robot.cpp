@@ -8,12 +8,8 @@ void VscRobot::Init(Vsc_Board* board){
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());
 
-    mover.Init(1);
-    this->LinkMover(&mover);
 
-    Actuator_List::Instance().Init(__all_actuators, CNC_ACTUATOR_COUNT);
-    Actuator_List::Instance().AddActuator(&this->__actuator_alpha);
-    
+
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
@@ -24,38 +20,31 @@ void VscRobot::Init(Vsc_Board* board){
 
     Logger::Info("VscRobot::Init() Pid controllers.");
     PidControllers_List::Instance().Init(__all_pids, PID_CONTROLLERS_COUNT);
-    Logger::Print("list",1);
     PidControllers_List::Instance().AddPidController(&this->__speed_pid);
-    Logger::Print("list",2);
-    PidControllers_List::Instance().AddPidController(&this->__test_pid);
-    Logger::Print("list",3);
+    // PidControllers_List::Instance().AddPidController(&this->__test_pid);
 
-    Logger::Print("test",PidControllers_List::Instance().GetPidController(1)->P);
-    Logger::Print("test",PidControllers_List::Instance().GetPidController(1)->I);
-    Logger::Print("test",PidControllers_List::Instance().GetPidController(1)->D);
-
-    //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
-    // M130_Runner* m130 = (M130_Runner*) McodeRunners::getInstance().GetRunner(130);   //??
+    // Logger::Print("test",PidControllers_List::Instance().GetPidController(1)->P);
+    // Logger::Print("test",PidControllers_List::Instance().GetPidController(1)->I);
+    // Logger::Print("test",PidControllers_List::Instance().GetPidController(1)->D);
+    // Logger::Halt("");
     
-    // motor is the user of PID controller
-    // and initial setting
-
+    // motor is the user of PID controller,  initial setting
     Logger::Info("VscRobot::Init()  Speed Pid controller.");
-    
     __speed_pid.P = 100.0f;
     __speed_pid.I = 100.0f;
     __speed_pid.D = 0.0f;
 
+    Logger::Info("VscRobot::Init() Actuators.");
+    Actuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    Actuator_List::Instance().AddActuator(&__actuator_alpha);
     this->__actuator_alpha.LinkPidController(&__speed_pid);
     this->__actuator_alpha.LinkMotorDriver(board->GetMotorDriver());
     this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
+    this->__actuator_alpha.MyName = 'A';
     
-    // this->mover.LinkActuator('A', &this->__actuator_alpha);
+    this->LinkMover(&mover);
 
-        // TODO: for mover config
-    //     Vsc_ActuatorAlphaMechanic config;
-    // this->_actuator_alpha_base = board->GetActuator(AXIS_ALPHA);
-    
+
     // // this->_micro_steps_on_stepper_driver = 16;
     // // this->_motor_gear_teeth_count = 10;
     // // this->_slave_pulley_teeth_count = 90;

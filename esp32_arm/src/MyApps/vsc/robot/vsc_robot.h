@@ -10,8 +10,8 @@
 // #include "MyLibs/array/pid_controllers_array.h"
 
 
-#define PID_CONTROLLERS_COUNT 3
-#define CNC_ACTUATOR_COUNT 1
+#define PID_CONTROLLERS_COUNT 1
+#define CNC_ACTUATORS_COUNT 1
 
 
 class VscRobot: public RobotBase{
@@ -21,13 +21,11 @@ class VscRobot: public RobotBase{
     private:
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
 
-        PidControllers_Listable __speed_pid = PidControllers_Listable(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
-        PidControllers_Listable __test_pid = PidControllers_Listable(3.0f, 4.0f, 5.0f, 33.0f, 33.0f);
         PidControllers_Listable* __all_pids[PID_CONTROLLERS_COUNT];
-        // PidControllers_Listable __all_pid_controllers[PID_CONTROLLERS_COUNT];
+        PidControllers_Listable __speed_pid = PidControllers_Listable(1.0f, 1.0f, 1.0f, 10.0f, 255.0f);
+        // PidControllers_Listable __test_pid = PidControllers_Listable(3.0f, 4.0f, 5.0f, 33.0f, 33.0f);
 
-        ActuatorBase* __all_actuators[CNC_ACTUATOR_COUNT];
-
+        ActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
 	    ActuatorDcMotor __actuator_alpha = ActuatorDcMotor(); 
         
         Mover_SingleAxis mover;
