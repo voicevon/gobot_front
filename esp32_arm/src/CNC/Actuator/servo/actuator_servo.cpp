@@ -6,7 +6,9 @@ void ActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
     this->__servo = servo; 
     this->__inversed_dir = is_inversed_dir;
     this->__servo->write(40);
-    this->InitFormular_FromCncPosition(DEG_TO_RAD * 150); 
+    // this->InitFormular_FromCncPosition(DEG_TO_RAD * 150); 
+    this->Init_FomularSlope(DEG_TO_RAD * 150);  //???
+    this->ReInit_FormularOffset(DEG_TO_RAD * 150);  
     bool debug = false;
     if (debug){
         float verify_cnc_position = this->__ToCncRad(50);
@@ -107,22 +109,22 @@ void ActuatorServo::StartToMove(){
     this->__last_spin_timestamp = esp_timer_get_time();
 }
 
-void ActuatorServo::InitFormular_FromCncPosition(float cnc_position_in_rad){
-    // This function is called from CNC, Who send a rad-angle in unit. 
-    int8_t dir = 1;
-    if (this->__inversed_dir) dir = -1;
-    this->_current_position = cnc_position_in_rad;
-    this->__position_offset_in_rad = cnc_position_in_rad - DEG_TO_RAD * this->__servo->read() * dir;
-    bool debug = false;
-    if(debug){
-        Serial.print("[Debug] ActuatorServo::SetPosition()  cnc_position, servo_position, __position_offset in_degree = ");
-        Serial.print(RAD_TO_DEG * cnc_position_in_rad);
-        Serial.print (",   " );
-        Serial.print(this->__servo->read());
-        Serial.print(",   ");
-        Serial.println(RAD_TO_DEG * this->__position_offset_in_rad);
-    }
-}
+// void ActuatorServo::ReInit_FormularOffset(float cnc_position_in_rad){
+//     // This function is called from CNC, Who send a rad-angle in unit. 
+//     int8_t dir = 1;
+//     if (this->__inversed_dir) dir = -1;
+//     this->_current_position = cnc_position_in_rad;
+//     this->__position_offset_in_rad = cnc_position_in_rad - DEG_TO_RAD * this->__servo->read() * dir;
+//     bool debug = false;
+//     if(debug){
+//         Serial.print("[Debug] ActuatorServo::SetPosition()  cnc_position, servo_position, __position_offset in_degree = ");
+//         Serial.print(RAD_TO_DEG * cnc_position_in_rad);
+//         Serial.print (",   " );
+//         Serial.print(this->__servo->read());
+//         Serial.print(",   ");
+//         Serial.println(RAD_TO_DEG * this->__position_offset_in_rad);
+//     }
+// }
 
 // void ActuatorServo::SetSpeed(float speed_in_cnc_unit){
 //     this->__speed_degree_per_second = abs(RAD_TO_DEG * speed_in_cnc_unit); 

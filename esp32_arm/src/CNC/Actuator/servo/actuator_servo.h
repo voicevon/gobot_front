@@ -15,7 +15,7 @@ class ActuatorServo: public ActuatorBase{
         // void UpdateTargetPositionFromCurrent() override {this->__is_moving=false;};
         void StartToMove();
 
-        void InitFormular_FromCncPosition(float cnc_position_in_rad) override;
+        // void InitFormular_FromCncPosition(float cnc_position_in_rad) override;
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;
 
         // float GetAbsDistanceToTarget_InCncUnit() override;

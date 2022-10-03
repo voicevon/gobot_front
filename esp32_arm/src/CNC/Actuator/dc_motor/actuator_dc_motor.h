@@ -28,7 +28,7 @@ class ActuatorDcMotor: public ActuatorBase{
         // For Being an actuator
 
         // float GetCurrentPosition() override;
-        void InitFormular_FromCncPosition(float position_in_cnc_unit) override;
+        // void InitFormular_FromCncPosition(float position_in_cnc_unit) override;
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;
 
         // float GetAbsDistanceToTarget_InCncUnit() override;

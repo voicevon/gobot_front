@@ -122,12 +122,12 @@ void ActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
 //     return abs(this->_target_position - this->GetCurrentPosition());
 // }
 
-void ActuatorDcMotor::InitFormular_FromCncPosition(float position_in_cnc_unit){
-    // this->__sensor->SetCurrentPosition(position_in_cnc_unit);
-    //When currentPosition is changed, SpinOnce()   will follow targetPosition. To avoid this happen.
-    this->_target_position = position_in_cnc_unit;
+// void ActuatorDcMotor::InitFormular_FromCncPosition(float position_in_cnc_unit){
+//     // this->__sensor->SetCurrentPosition(position_in_cnc_unit);
+//     //When currentPosition is changed, SpinOnce()   will follow targetPosition. To avoid this happen.
+//     this->_target_position = position_in_cnc_unit;
 
-}
+// }
 
 void ActuatorDcMotor::ForceStop(){   
     //* Only G28 is using this.
@@ -147,3 +147,9 @@ void ActuatorDcMotor::ForceStop(){
 void ActuatorDcMotor::Test_PwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
     this->__h_bridge->SetPwmSpeed(dir_is_cw, pwm_speed);
 }
+
+
+
+
+
+

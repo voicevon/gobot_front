@@ -30,13 +30,12 @@ class ActuatorBase: public ListItem{
         bool IsMoving(){return this->__is_moving;};
         virtual void ForceStop();   //Only G28 is using this.
 
-        virtual void InitFormular_FromCncPosition(float position_in_cnc_unit);
-        virtual float ConvertPosition_ToCncUnit(float actuator_position){};
-        float GetPosition_FromCncUnit(float cnc_position){};
+        void Init_FomularSlope(float slope_from_actuator_to_cnc){this->__slope_from_raw_to_cnc=slope_from_actuator_to_cnc;};
+        void ReInit_FormularOffset(float current_cnc_position);
+        float ConvertPosition_ToCncUnit(float actuator_position);
+        float GetPosition_FromCncUnit(float cnc_position);
 
     protected:
-
-
         float _target_position;   // is always an absolute position
         float _current_position;
         // float _current_velocity;   // todo: only speed control need this, known:  dc_motor_actuator.
@@ -45,6 +44,9 @@ class ActuatorBase: public ListItem{
         ActuatorRangeConstraintBase* _range_constraint;
         bool _is_range_constraint = false;
         //TODO:   float _current_cnc_position;  
+
     private:
+        float __slope_from_raw_to_cnc = 1.0;
+        float __raw_offset = 0;
     
 };

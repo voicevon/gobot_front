@@ -13,7 +13,7 @@ class ActuatorStepper: public ActuatorBase{
         Stepper* GetLinkedStepper(){return this->_stepper;};
 
         // float GetCurrentPosition() override;
-        void InitFormular_FromCncPosition(float position_in_cnc_unit) override;
+        // void InitFormular_FromCncPosition(float position_in_cnc_unit) override;
         void UpdateMovement(MoveBlock_SingleActuator* line) override;
 
         // float GetAbsDistanceToTarget_InCncUnit() override;
@@ -27,7 +27,7 @@ class ActuatorStepper: public ActuatorBase{
 
     private:
         float __steps_per_cnc_unit;
-        float __current_cnc_position_in_rad;
+        // float __current_cnc_position_in_rad;
         float __distance_to_target;
         float __speed;
 

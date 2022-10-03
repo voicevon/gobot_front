@@ -26,3 +26,28 @@ void ActuatorBase::LinkRangeConstraint(ActuatorRangeConstraintBase* range_constr
 //     }
 //     // this->SetSpeed(speed);
 // }
+
+
+
+
+
+void ActuatorBase::ReInit_FormularOffset(float current_cnc_position){
+    this->__raw_offset = current_cnc_position / this->__slope_from_raw_to_cnc - this->_current_position ;
+}
+
+float ActuatorBase::ConvertPosition_ToCncUnit(float actuator_position){
+    float cnc_position =  (actuator_position + this->__raw_offset) * this->__slope_from_raw_to_cnc;
+    // return this->__ModTwoPi(cnc_position);  //??
+    return cnc_position;  //??
+}
+
+float ActuatorBase::GetPosition_FromCncUnit(float cnc_position){
+    return cnc_position / this->__slope_from_raw_to_cnc - this->__raw_offset;
+}
+
+
+// float ActuatorBase::__ModTwoPi(float origin_value){
+//     int zoom = 100000;
+//     float v = (int)(origin_value * zoom) % (int)(TWO_PI * zoom);
+//     return v / zoom;
+// }
