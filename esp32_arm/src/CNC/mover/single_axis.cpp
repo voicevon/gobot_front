@@ -97,19 +97,19 @@
 // }
 
 
-bool Mover_SingleAxis::ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name) {
-    if (actuator_name==AXIS_ALPHA){
-        // return this->_actuator_alpha_base->IsMoving();
+// bool Mover_SingleAxis::ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name) {
+//     if (actuator_name==AXIS_ALPHA){
+//         // return this->_actuator_alpha_base->IsMoving();
 
-    }else{
-        Serial.print("[Error] Mover_SingleAxis::MotorIsMoving() Unknown motor_name= ");
-        Serial.println(actuator_name); 
-    }
-    return false;
-}
+//     }else{
+//         Serial.print("[Error] Mover_SingleAxis::MotorIsMoving() Unknown motor_name= ");
+//         Serial.println(actuator_name); 
+//     }
+//     return false;
+// }
 
-bool Mover_SingleAxis::HasArrivedTargetPosition(){
-    if (this->GetAbsDistanceToTarget_InCncUnit() < this->_small_distance_for_arriving_target_position)
-        return true;
-    return false;
-}
+// bool Mover_SingleAxis::HasArrivedTargetPosition(){
+//     if (this->GetAbsDistanceToTarget_InCncUnit() < this->_small_distance_for_arriving_target_position)
+//         return true;
+//     return false;
+// }

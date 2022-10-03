@@ -28,7 +28,7 @@ class ActuatorBase: public ListItem{
         virtual void UpdateMovement(MoveBlock_SingleActuator* movement);
         virtual float GetAbsDistanceToTarget_InCncUnit();
 
-        float GetTartetCncPosition(){return this->_target_cnc_position;};
+        float GetTartetCncPosition(){return this->_target_position;};
         float GetCurrentCncPosition(){return this->_current_cnc_position;};
         bool IsMoving(){return this->__is_moving;};
 
@@ -41,7 +41,7 @@ class ActuatorBase: public ListItem{
         
 
     protected:
-        float _target_cnc_position;   // is always an absolute position
+        float _target_position;   // is always an absolute position
         float _current_cnc_position;
         bool __is_moving = false;
 

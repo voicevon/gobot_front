@@ -16,7 +16,8 @@ class BoxMoverRobot: public RobotBase{
 
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
-        Mover_DualStepper mover;
+        // Mover_DualStepper mover;
+        MoverBase mover;
         CoreYZ_ArmSolution arm_solution;
         BoxMover_G28_Runner g28_runner;
 

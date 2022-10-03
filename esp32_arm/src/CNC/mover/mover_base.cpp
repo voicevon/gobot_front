@@ -1,5 +1,5 @@
 #include "mover_base.h"
-
+#include "teensy_step_gateway.h"
 
 void MoverBase::SpinOnce(){
     // Logger::Debug("MoverBase::SpinOnce()");
@@ -32,13 +32,14 @@ void MoverBase::AllActuatorsMoveTo(MoveBlock* move){
     for(int a=0; a<Actuator_List::Instance().GetItemsCount(); a++){
         ms = &move->MoveBlocks[a];
         act =  Actuator_List::Instance().GetActuator(a);
-
         if (ms->IsAbsTargetPosition){
             act->UpdateMovement(ms);
         }else if(ms->TargetPosition != 0){
             act->UpdateMovement(ms);
         }
     }
+    TeensyStep_Gateway::Instance().AsyncMove();
+
 }
 
 void MoverBase::AllActuatorsStop(){

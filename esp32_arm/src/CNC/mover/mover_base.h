@@ -23,8 +23,10 @@ class MoverBase{
         // To get status or position
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name);  // TODO: return  all current position.
         void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
-        virtual bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name);
-        virtual bool HasArrivedTargetPosition();
+        // virtual bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name);
+        bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name);
+        // virtual bool HasArrivedTargetPosition();
+        bool HasArrivedTargetPosition();
         float GetAbsDistanceToTarget_InCncUnit();
 
 
@@ -33,5 +35,6 @@ class MoverBase{
         float _small_distance_for_arriving_target_position = 0.1;   //Todo: configer-able
     
     private:
+        StepControl* __stepControl;
     
 };

@@ -89,19 +89,20 @@ void ActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
     Logger::Print("speed", move->Speed);
     
     if (move->IsAbsTargetPosition){
-        this->_target_cnc_position = move->TargetPosition;
+        this->_target_position = move->TargetPosition;
     }else{
-        this->_target_cnc_position = this->GetCurrentPosition() + move->TargetPosition;
+        this->_target_position = this->GetCurrentPosition() + move->TargetPosition;
     }
 
     this->__target_velocity =  move->Speed;
-    if (this->_target_cnc_position < this->GetCurrentPosition()){
+    if (this->_target_position < this->GetCurrentPosition()){
         this->__target_velocity = - move->Speed;
     }
+    this->__is_moving = true;
 
     Logger::Print("-------------------------------------",0);
     Logger::Print("Current_position",this->GetCurrentPosition());
-    Logger::Print("this->_target_cnc_position", this->_target_cnc_position);
+    Logger::Print("this->_target_position", this->_target_position);
     Logger::Print("target_velocity", this->__target_velocity);
 }
 
@@ -109,31 +110,31 @@ float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
     // sensor --> current poistion   --> distance to target
     // TODO:  minus distance.
     // Logger::Debug(" ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit()");
-    // Logger::Print("target_cnc_position", this->_target_cnc_position);
+    // Logger::Print("target_cnc_position", this->_target_position);
     // Logger::Print("Current_position", this->GetCurrentCncPosition());
-    return abs(this->_target_cnc_position - this->GetCurrentPosition());
+    return abs(this->_target_position - this->GetCurrentPosition());
 }
 
 void ActuatorDcMotor::SetCurrentPositionAs(float position_in_cnc_unit){
     this->__sensor->SetCurrentPosition(position_in_cnc_unit);
     //When currentPosition is changed, SpinOnce()   will follow targetPosition. To avoid this happen.
-    this->_target_cnc_position = position_in_cnc_unit;
+    this->_target_position = position_in_cnc_unit;
 
 }
 
 void ActuatorDcMotor::ForceStop(){   
     //* Only G28 is using this.
-    //* SpinOnce will restart the movement, untill the actuator reach targetPosition.
     Logger::Debug("ActuatorDcMotor::ForceStop() is entering...");
     this->__h_bridge->Stop();
+    this->__is_moving = false;
 }
 
 void ActuatorDcMotor::UpdateTargetPositionFromCurrent(){
     Logger::Debug("ActuatorDcMotor::UpdateTargetPositionFromCurrent() is entering...");
-    Logger::Print("_target_cnc_position",_target_cnc_position);
+    Logger::Print("_target_position",_target_position);
     Logger::Print("this->GetCurrentPosition()",this->GetCurrentPosition());
 
-    this->_target_cnc_position = this->GetCurrentPosition();
+    this->_target_position = this->GetCurrentPosition();
 }
 
 void ActuatorDcMotor::Test_PwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){

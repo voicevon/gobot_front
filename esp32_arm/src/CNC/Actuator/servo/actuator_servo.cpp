@@ -19,7 +19,7 @@ void ActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
 }
 
 float ActuatorServo::GetAbsDistanceToTarget_InCncUnit(){
-    return abs(this->_target_cnc_position - this->_current_cnc_position);
+    return abs(this->_target_position - this->_current_cnc_position);
 }
 
 void ActuatorServo::SpinOnce(){
@@ -37,7 +37,7 @@ void ActuatorServo::SpinOnce(){
     }
     if(time_interval_in_us < (60L * 1000)) return;   // at least 60ms
 
-    float distance_to_target_in_rad = abs (this->_target_cnc_position - this->_current_cnc_position);
+    float distance_to_target_in_rad = abs (this->_target_position - this->_current_cnc_position);
     float distance_should_be_moved = abs(DEG_TO_RAD * this->__speed_degree_per_second * time_interval_in_us /1000000L);
     
 
@@ -47,7 +47,7 @@ void ActuatorServo::SpinOnce(){
         this->__last_spin_timestamp = now;
     }else{
         //Almost arrived target position already, So this is the last step.
-        this->_current_cnc_position = this->_target_cnc_position;
+        this->_current_cnc_position = this->_target_position;
         this->__is_moving = false;
     }
     float servo_angle_in_degree = this->__ToServoDegree(this->_current_cnc_position);
@@ -76,15 +76,15 @@ void ActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
 
     // if (is_absolute_position){
     if (move->IsAbsTargetPosition){
-        // this->_target_cnc_position = position_in_cnc_unit;
-        this->_target_cnc_position = move->TargetPosition;
+        // this->_target_position = position_in_cnc_unit;
+        this->_target_position = move->TargetPosition;
     }else{
-        // this->_target_cnc_position = this->_current_cnc_position + position_in_cnc_unit;
-        this->_target_cnc_position = this->_current_cnc_position + move->TargetPosition;
+        // this->_target_position = this->_current_cnc_position + position_in_cnc_unit;
+        this->_target_position = this->_current_cnc_position + move->TargetPosition;
     }
 
     this->__moving_direction_of_cnc = 1;
-    if (this->_target_cnc_position < this->_current_cnc_position){
+    if (this->_target_position < this->_current_cnc_position){
         this->__moving_direction_of_cnc = -1;
     }
 
@@ -93,9 +93,9 @@ void ActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
         Serial.print("[debug] ActuatorServo::MoveTo() current_cnc_position in degree = ");
         Serial.print(RAD_TO_DEG * this->_current_cnc_position);
         Serial.print("  target position=  ");
-        Serial.print(RAD_TO_DEG * this->_target_cnc_position);
+        Serial.print(RAD_TO_DEG * this->_target_position);
         Serial.print("    target physical angle= ");
-        float physic_angle = this->__ToServoDegree(this->_target_cnc_position);
+        float physic_angle = this->__ToServoDegree(this->_target_position);
         Serial.println(physic_angle);
     }
 

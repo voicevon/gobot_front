@@ -232,14 +232,14 @@ void Mover_StepperServo::LinkServo_asBeta(ActuatorServo* servo){
 //     }
 // }
 
-bool Mover_StepperServo::ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name) {
-    if (actuator_name==AXIS_ALPHA){
-        return this->__stepControl->isRunning();
-    }else if (actuator_name=='B'){
-        return this->__actuator_beta->IsMoving();
-    }else{
-        Serial.print("[Error] Mover_StepperServo::MotorIsMoving() Unknown motor_name= ");
-        Serial.println(actuator_name); 
-    }
-    return false;
-}
+// bool Mover_StepperServo::ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name) {
+//     if (actuator_name==AXIS_ALPHA){
+//         return this->__stepControl->isRunning();
+//     }else if (actuator_name=='B'){
+//         return this->__actuator_beta->IsMoving();
+//     }else{
+//         Serial.print("[Error] Mover_StepperServo::MotorIsMoving() Unknown motor_name= ");
+//         Serial.println(actuator_name); 
+//     }
+//     return false;
+// }
