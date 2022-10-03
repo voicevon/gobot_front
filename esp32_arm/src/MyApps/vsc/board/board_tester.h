@@ -11,7 +11,7 @@ class Vsc_BoardTest: public CncBoard_Test{
         void Test_AngleSensor(MagneticSensorAnalog* sensor,int loop_count);
         void Test_EncoderSensor(Encoder* sensor, int loop_count);
         void Test_MotorDriver(ActuatorDcMotor* motor, int loop_count);
-        void Test_Actuator(ActuatorDcMotor* motor, int loop_count);
+        // void Test_Actuator(ActuatorDcMotor* motor, int loop_count);
         void Test_Offset(int loop_count);
         // void Test_AllHomers(int loop_count) override;
 

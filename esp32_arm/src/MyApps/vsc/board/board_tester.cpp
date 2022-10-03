@@ -4,48 +4,48 @@
 
 
 
-void Vsc_BoardTest::Test_Actuator(ActuatorDcMotor* motor, int loop_count){
-    //Speed unit is:    mm/second   or   rad/second
-    float distance;
-    // ActuatorDcMotor* motor = this->__board->GetActuator(AXIS_ALPHA);   // todo: 
-    // float speed = 12;
-    MoveBlock_SingleActuator move;
-    move.IsAbsTargetPosition = false;
-    move.TargetPosition = 500;
-    for (int i =0; i<loop_count; i++){
-        // motor->SetTargetPositionTo(false, 500);
+// void Vsc_BoardTest::Test_Actuator(ActuatorDcMotor* motor, int loop_count){
+//     //Speed unit is:    mm/second   or   rad/second
+//     float distance;
+//     // ActuatorDcMotor* motor = this->__board->GetActuator(AXIS_ALPHA);   // todo: 
+//     // float speed = 12;
+//     MoveBlock_SingleActuator move;
+//     move.IsAbsTargetPosition = false;
+//     move.TargetPosition = 500;
+//     for (int i =0; i<loop_count; i++){
+//         // motor->SetTargetPositionTo(false, 500);
  
-        motor->UpdateMovement(&move);
-        // motor->SetSpeed(speed);   
-        distance = motor->GetAbsDistanceToTarget_InCncUnit();
-        while (distance > 10){
-            motor->SpinOnce();
-            distance = motor->GetAbsDistanceToTarget_InCncUnit();
-        }
-        delay(5000);
+//         motor->UpdateMovement(&move);
+//         // motor->SetSpeed(speed);   
+//         distance = motor->GetAbsDistanceToTarget_InCncUnit();
+//         while (distance > 10){
+//             motor->SpinOnce();
+//             distance = motor->GetAbsDistanceToTarget_InCncUnit();
+//         }
+//         delay(5000);
 
 
-        // motor->SetTargetPositionTo(false, 0);
-        move.TargetPosition = 0;
-        motor->UpdateMovement(&move);
+//         // motor->SetTargetPositionTo(false, 0);
+//         move.TargetPosition = 0;
+//         motor->UpdateMovement(&move);
 
-        // motor->SetSpeed(speed/2);   
-        distance = motor->GetAbsDistanceToTarget_InCncUnit();
-        while (distance > 10){
-            motor->SpinOnce();
-            distance = motor->GetAbsDistanceToTarget_InCncUnit();
-        }
-        delay(5000);
-    }
+//         // motor->SetSpeed(speed/2);   
+//         distance = motor->GetAbsDistanceToTarget_InCncUnit();
+//         while (distance > 10){
+//             motor->SpinOnce();
+//             distance = motor->GetAbsDistanceToTarget_InCncUnit();
+//         }
+//         delay(5000);
+//     }
  
     
-}
+// }
 
 void Vsc_BoardTest::__TestOffset(float value){
     // ActuatorDcMotor* motor = (ActuatorDcMotor*) (this->__board->GetActuator(AXIS_ALPHA));
     ActuatorDcMotor* motor ;  // todo
     float xx= 123.4f;
-    motor->SetCurrentPositionAs(xx);
+    motor->InitFormular_FromCncPosition(xx);
     float result = motor->GetCurrentPosition();
     if (xx == result){
         Serial.println("[Info] Vsc_BoardTest::Test_offset_calculation()  Passed");

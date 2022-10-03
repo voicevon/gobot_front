@@ -8,21 +8,21 @@ void ActuatorBase::LinkRangeConstraint(ActuatorRangeConstraintBase* range_constr
 }
 
 
-float ActuatorBase::GetNeededSeconds(){
-    //TODO: get time  (Distance, max_speed,  acceleration) 
-    // https://github.com/grbl/grbl/blob/master/grbl/planner.c
-    if (this->GetAbsDistanceToTarget_InCncUnit() != 0){
-        return this->GetAbsDistanceToTarget_InCncUnit() / this->GetSpeed();
-    }
-    return 0;
-}
+// float ActuatorBase::GetNeededSeconds(){
+//     //TODO: get time  (Distance, max_speed,  acceleration) 
+//     // https://github.com/grbl/grbl/blob/master/grbl/planner.c
+//     if (this->GetAbsDistanceToTarget_InCncUnit() != 0){
+//         return this->GetAbsDistanceToTarget_InCncUnit() / this->GetSpeed();
+//     }
+//     return 0;
+// }
 
-void ActuatorBase::RenewSpeed(float moving_time){
-    float speed = this->GetAbsDistanceToTarget_InCncUnit() / moving_time;
-    bool debug = false;
-    if (debug){
-        Serial.print("[Debug] ActuatorBase::RenewSpeed() new speed= ");
-        Serial.println(speed);
-    }
-    // this->SetSpeed(speed);
-}
+// void ActuatorBase::RenewSpeed(float moving_time){
+//     float speed = this->GetAbsDistanceToTarget_InCncUnit() / moving_time;
+//     bool debug = false;
+//     if (debug){
+//         Serial.print("[Debug] ActuatorBase::RenewSpeed() new speed= ");
+//         Serial.println(speed);
+//     }
+//     // this->SetSpeed(speed);
+// }

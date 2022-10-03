@@ -12,19 +12,19 @@ class ActuatorServo: public ActuatorBase{
         void SpinOnce();
         bool IsMoving(){return this->__is_moving;};
 
-        void UpdateTargetPositionFromCurrent() override {this->__is_moving=false;};
+        // void UpdateTargetPositionFromCurrent() override {this->__is_moving=false;};
         void StartToMove();
 
-        void SetCurrentPositionAs(float cnc_position_in_rad) override;
+        void InitFormular_FromCncPosition(float cnc_position_in_rad) override;
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;
 
-        float GetAbsDistanceToTarget_InCncUnit() override;
+        // float GetAbsDistanceToTarget_InCncUnit() override;
         void ForceStop() override {};   //Only G28 is using this.
 
 
 
     protected:
-        float GetSpeed() override {return DEG_TO_RAD * this->__speed_degree_per_second;};
+        // float GetSpeed() override {return DEG_TO_RAD * this->__speed_degree_per_second;};
 
     private:
         Servo* __servo;

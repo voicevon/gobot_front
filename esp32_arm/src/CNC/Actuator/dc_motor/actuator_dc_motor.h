@@ -13,8 +13,8 @@ class ActuatorDcMotor: public ActuatorBase{
         ActuatorDcMotor(){};
         void SpinOnce_FollowVelocity(float velocity);
 
-        // void PrintOut();
         void LinkAngleSensor(RotaryEncoder* sensor){this->__sensor=sensor;}; 
+        void LinkEncoder(Encoder* encoder){this->__encoder=encoder;};
         void LinkPidController(PIDController* pid){this->__speed_pid=pid;};
         void LinkMotorDriver(H_Bridge* h_bridge){this->__h_bridge=h_bridge;};  
         void SpinOnce() override;
@@ -27,15 +27,15 @@ class ActuatorDcMotor: public ActuatorBase{
         //===================================================================
         // For Being an actuator
 
-        float GetCurrentPosition() override;
-        void SetCurrentPositionAs(float position_in_cnc_unit) override;
+        // float GetCurrentPosition() override;
+        void InitFormular_FromCncPosition(float position_in_cnc_unit) override;
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;
 
-        float GetAbsDistanceToTarget_InCncUnit() override;
+        // float GetAbsDistanceToTarget_InCncUnit() override;
         // When motor is running, should not effect running speed. 
         // Will take effection when invoke SpinOnce().
-        void UpdateTargetPositionFromCurrent() override;
-        float GetSpeed() override {return abs(this->__target_velocity);};  //todo:  read speed from sensor, rename to GetVelocity
+        // void UpdateTargetPositionFromCurrent() override;
+        // float GetSpeed() override {return abs(this->__target_velocity);};  //todo:  read speed from sensor, rename to GetVelocity
 
         void Test_PwmSpeed(bool dir_is_cw,  uint32_t pwm_speed);
 
@@ -44,7 +44,8 @@ class ActuatorDcMotor: public ActuatorBase{
     private:
         // My components
         H_Bridge* __h_bridge;
-        RotaryEncoder* __sensor;  //todo :  rename to encoder or amgle_sensor or position_sensor
+        Encoder* __encoder;
+        RotaryEncoder* __sensor;
 
         // speed control
         PIDController* __speed_pid;

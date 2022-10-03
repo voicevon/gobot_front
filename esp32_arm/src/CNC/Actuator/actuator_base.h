@@ -20,29 +20,26 @@ class ActuatorBase: public ListItem{
         //     FOLLOW_POSITION_ACCEL_SPEED,  //For CNC actuator
         // };
         // EnumActuatorState ActuatorState;
+
         virtual void SpinOnce();
-
         void LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint);
-        virtual float GetCurrentPosition(){return this->_current_cnc_position;};
-        virtual void SetCurrentPositionAs(float position_in_cnc_unit);
         virtual void UpdateMovement(MoveBlock_SingleActuator* movement);
-        virtual float GetAbsDistanceToTarget_InCncUnit();
 
-        float GetTartetCncPosition(){return this->_target_position;};
-        float GetCurrentCncPosition(){return this->_current_cnc_position;};
+        float GetCurrentPosition(){return this->_current_position;};
+
         bool IsMoving(){return this->__is_moving;};
-
-        //Speed and acceleration
         virtual void ForceStop();   //Only G28 is using this.
-        virtual void UpdateTargetPositionFromCurrent();
-        virtual float GetSpeed();    // ?? TODO:  var should be in base class ?
-        float GetNeededSeconds();
-        void RenewSpeed(float moving_time);
-        
+
+        virtual void InitFormular_FromCncPosition(float position_in_cnc_unit);
+        virtual float ConvertPosition_ToCncUnit(float actuator_position){};
+        float GetPosition_FromCncUnit(float cnc_position){};
 
     protected:
+
+
         float _target_position;   // is always an absolute position
-        float _current_cnc_position;
+        float _current_position;
+        float _current_velocity;   // todo: only speed control need this, known:  dc_motor_actuator.
         bool __is_moving = false;
 
         ActuatorRangeConstraintBase* _range_constraint;

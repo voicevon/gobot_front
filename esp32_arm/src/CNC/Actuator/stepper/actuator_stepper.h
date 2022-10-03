@@ -5,20 +5,21 @@
 
 class ActuatorStepper: public ActuatorBase{
     public:
-        void SpinOnce() override{};
+    // float actuator_position = 1.0f * this->_stepper->getPosition() / this->__steps_per_cnc_unit;
+        void SpinOnce() override{this->_current_position=this->_stepper->getPosition();};
         void ForceStop() override{};
         void PrintOut(const char* title);
         void LinkStepper(Stepper* stepper, float steps_per_cnc_unit);
         Stepper* GetLinkedStepper(){return this->_stepper;};
 
-        float GetCurrentPosition() override;
-        void SetCurrentPositionAs(float position_in_cnc_unit) override;
+        // float GetCurrentPosition() override;
+        void InitFormular_FromCncPosition(float position_in_cnc_unit) override;
         void UpdateMovement(MoveBlock_SingleActuator* line) override;
 
-        float GetAbsDistanceToTarget_InCncUnit() override;
+        // float GetAbsDistanceToTarget_InCncUnit() override;
 
-        void UpdateTargetPositionFromCurrent() override{};
-        float GetSpeed() override {return this->__speed;};
+        // void UpdateTargetPositionFromCurrent() override{};
+        // float GetSpeed() override {return this->__speed;};
         
 
     protected:

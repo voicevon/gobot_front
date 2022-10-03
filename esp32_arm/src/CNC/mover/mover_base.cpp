@@ -50,7 +50,7 @@ void MoverBase::AllActuatorsStop(){
 
 
 void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position){
-    Actuator_List::Instance().GetActuator(actuator_name)->SetCurrentPositionAs(as_current_position);
+    Actuator_List::Instance().GetActuator(actuator_name)->InitFormular_FromCncPosition(as_current_position);
 }
 
 float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name){
