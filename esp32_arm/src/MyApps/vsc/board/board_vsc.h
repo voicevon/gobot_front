@@ -17,7 +17,7 @@ class Vsc_Board: public CncBoardBase{
 
         // For being an actuator and its components.
         Encoder* GetEncoder(){return this->__encoder;};
-        H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
+        H_Bridge* GetHBridgeDriver(){return &this->__pwm_h_bridge;};
 
         // For being a CNC machine.
         RobotEefBase* GetEef() override {return &this->__eef;};

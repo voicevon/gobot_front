@@ -12,7 +12,7 @@ class ActuatorDcMotor: public ActuatorBase{
         // void LinkAngleSensor(RotaryEncoder* sensor){this->__sensor=sensor;}; 
         void LinkEncoder(Encoder* encoder){this->__encoder=encoder;};
         void LinkPidController(PIDController* pid){this->__speed_pid=pid;};
-        void LinkMotorDriver(H_Bridge* h_bridge){this->__h_bridge=h_bridge;};  
+        void LinkHBridgeDriver(H_Bridge* h_bridge){this->__h_bridge=h_bridge;};  
         void SpinOnce() override;
 
         // Will auto change to false, when arrived(very closed to) target position during moving.

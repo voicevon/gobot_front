@@ -1,5 +1,7 @@
 #include "m42_runner.h"
 
+
+// NOTICE: output pin should be initialized in Board::Init()
 void M42_Runner::Run(Gcode* gcode){
     uint8_t pin_number = gcode->get_value('P');
     uint8_t pin_value = gcode->get_value('S');

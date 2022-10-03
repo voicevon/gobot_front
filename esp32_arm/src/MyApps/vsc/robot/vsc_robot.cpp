@@ -1,8 +1,9 @@
 #include "vsc_robot.h"
 #include "Robot/mcode_runner/mcode_runners.h"
+#include "CNC/Actuator/dc_motor/actuator_encoder_calculator.h"
 
 void VscRobot::Init(Vsc_Board* board){
-    Logger::Debug("Vsc_ArmSoution::Init()");
+    Logger::Debug("VscRobot::Init()");
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());
 
@@ -13,16 +14,31 @@ void VscRobot::Init(Vsc_Board* board){
     this->__g28_runner = &this->g28_runner;
     g28_runner.Init(&mover);
 
+    this->LinkMover(&mover);
+    this->__Init_actuators(board);
+    this->__Init_pids();
+
+}
+
+void VscRobot::__Init_actuators(Vsc_Board* board){
     Logger::Info("VscRobot::Init() Actuators.");
     Actuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     Actuator_List::Instance().AddActuator(&__actuator_alpha);
+
     this->__actuator_alpha.LinkPidController(&__speed_pid);
-    this->__actuator_alpha.LinkMotorDriver(board->GetMotorDriver());
+    this->__actuator_alpha.LinkHBridgeDriver(board->GetHBridgeDriver());
     this->__actuator_alpha.LinkEncoder(board->GetEncoder());
-    // this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
     this->__actuator_alpha.MyName = 'A';
     
-    this->LinkMover(&mover);
+    ActuatorEncoder_Calculator helper;
+    helper._motor_gear_pitch_in_mm = 12.7;
+    helper._slave_pulley_teeth_count = 368;
+    float slope = helper.GetActuatorToCncFormular_Slope_raw_per_rad();
+    __actuator_alpha.Init_FomularSlope(slope);
+
+
+}
+void VscRobot::__Init_pids(){
 
     Logger::Info("VscRobot::Init() Pid controllers.");
     PidControllers_List::Instance().Init(__all_pids, PID_CONTROLLERS_COUNT);

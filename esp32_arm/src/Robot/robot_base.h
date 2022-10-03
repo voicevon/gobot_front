@@ -31,7 +31,7 @@ class RobotBase: public GcodeConsumer{
         Planner __planner;
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
 
-        void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);
+        void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);   //TODO: become m42_runner.
         
         virtual void RunM123(uint8_t eef_channel, uint8_t eef_action);
 

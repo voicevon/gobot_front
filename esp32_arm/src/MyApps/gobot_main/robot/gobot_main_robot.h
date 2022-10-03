@@ -4,8 +4,9 @@
 #include "Robot/robot_base.h"
 #include "MyApps/gobot_main/board/board.h"
 #include "gobot_main_g28_runner.h"
-// #include "CNC/mover/dual_stepper.h"
 #include "CNC/arm_solution/five_bars/five_bars_arm_solution.h"
+
+#define CNC_ACTUATORS_COUNT 2
 
 class GobotMainRobot: public RobotBase{
     public:
@@ -13,6 +14,11 @@ class GobotMainRobot: public RobotBase{
 
     private:
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
+        void __InitActuator(GobotMain_Board* board);
+
+        ActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
+	    ActuatorStepper __actuator_alpha = ActuatorStepper(); 
+        ActuatorStepper __actuator_beta = ActuatorStepper();
 
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
