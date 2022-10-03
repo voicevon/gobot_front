@@ -14,7 +14,7 @@ H_Bridge::H_Bridge(uint8_t h_bridge_pin_dir, uint8_t h_bridge_pin_speed){
     digitalWrite(h_bridge_pin_dir, LOW);
 
     // init ledc via assign ledc channel
-    BoardBase board;
+    BoardBase board;    //TODO:  double check , Is any risk ?
 
     this->__pwm_channel = board.Assign_ledc_channel();
 	ledcAttachPin (h_bridge_pin_speed, this->__pwm_channel);

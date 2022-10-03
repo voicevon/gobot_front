@@ -24,6 +24,7 @@ void doB(){encoder.handleB();}
 void test_board(){
     Vsc_BoardTest tester;
     board.Test_PositionTriggers(0);
+    board.Test_HBridge(999);
     // tester.LinkBoard(&board);
     tester.Test_EncoderSensor(board.GetAngleSensor()->GetRawSensor(), 0);
     // tester.Test_AngleSensor();
@@ -48,15 +49,6 @@ void setup(){
     setup_encoder();
     board.LinkEncoderSensor(&encoder);
     board.Init(true);
-
-    // MyItem buffer[6];
-    // MyArray::Instance().Init(buffer,6);
-    // MyItem* aa = MyArray::Instance().GetMyItem(0);
-    // aa->test_id = 5555;
-    // MyItem* bb = MyArray::Instance().GetMyItem(0);
-    // Serial.println(bb->test_id);
-    // Serial.println("\n\n\n\n\n\n");
-
 
     test_board();
     vsc_robot.Init(&board);

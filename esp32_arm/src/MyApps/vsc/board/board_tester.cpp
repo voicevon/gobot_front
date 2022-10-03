@@ -1,47 +1,9 @@
 #include "board_tester.h"
 
 
-// void Vsc_BoardTest::LinkBoard(CncBoardBase* board){
-//     Serial.println("[Info] Vsc_BoardTest::LinkBoard()");
-//     this->__board = (Vsc_Board*) (board);
-//     this->LinkCncBoard(board);
-// }
-
-// Even without angel sensor,  Only a h-bridge driver is there, Should be work properly.
-
-void Vsc_BoardTest::Test_MotorDriver(ActuatorDcMotor* motor,int loop_count){
-    uint32_t speed = 255;
-    uint32_t delay_ms = 10000;
-    //  = this->__board->GetActuator(AXIS_ALPHA);
-    for(int i=0; i<loop_count ;i++){    
-        Serial.print("motor test start");
-        Serial.println("       motor CW ");
-        motor->Test_PwmSpeed(true, speed);
-        delay(delay_ms);
-        
-        Serial.print("       motor stop");
-        motor->Test_PwmSpeed(true, 0);
-        delay(delay_ms);
-        
-        Serial.print("       motor CCW");
-        motor->Test_PwmSpeed(false, speed);
-        delay(delay_ms);
-
-        Serial.print("       motor stop");
-        motor->Test_PwmSpeed(false, 0);
-        delay(delay_ms);
-        Serial.println("     motor test end");
-    }
-}
 
 
-/*
-# Actuator should support below requirements:
-*    start the motor function(CW and CCW ) 
-*    stop the motor function
-*    change speed of motor in PWM
-* 
-*/
+
 void Vsc_BoardTest::Test_Actuator(ActuatorDcMotor* motor, int loop_count){
     //Speed unit is:    mm/second   or   rad/second
     float distance;
