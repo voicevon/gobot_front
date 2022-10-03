@@ -8,8 +8,6 @@ void VscRobot::Init(Vsc_Board* board){
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());
 
-
-
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
@@ -17,6 +15,16 @@ void VscRobot::Init(Vsc_Board* board){
 
     this->__g28_runner=&this->g28_runner;
     g28_runner.Init(board, &mover);
+
+    Logger::Info("VscRobot::Init() Actuators.");
+    Actuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    Actuator_List::Instance().AddActuator(&__actuator_alpha);
+    this->__actuator_alpha.LinkPidController(&__speed_pid);
+    this->__actuator_alpha.LinkMotorDriver(board->GetMotorDriver());
+    this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
+    this->__actuator_alpha.MyName = 'A';
+    
+    this->LinkMover(&mover);
 
     Logger::Info("VscRobot::Init() Pid controllers.");
     PidControllers_List::Instance().Init(__all_pids, PID_CONTROLLERS_COUNT);
@@ -34,15 +42,7 @@ void VscRobot::Init(Vsc_Board* board){
     __speed_pid.I = 100.0f;
     __speed_pid.D = 0.0f;
 
-    Logger::Info("VscRobot::Init() Actuators.");
-    Actuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
-    Actuator_List::Instance().AddActuator(&__actuator_alpha);
-    this->__actuator_alpha.LinkPidController(&__speed_pid);
-    this->__actuator_alpha.LinkMotorDriver(board->GetMotorDriver());
-    this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
-    this->__actuator_alpha.MyName = 'A';
-    
-    this->LinkMover(&mover);
+
 
 
     // // this->_micro_steps_on_stepper_driver = 16;

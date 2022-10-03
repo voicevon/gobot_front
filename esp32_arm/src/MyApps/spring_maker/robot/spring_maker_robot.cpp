@@ -2,37 +2,27 @@
 #include "Robot/mcode_runner/mcode_runners.h"
 
 void SpringMakerRobot::Init(Board_SpringMaker* board){
-    Logger::Info("Vsc_ArmSoution::Init() is entering...");
+    Logger::Debug("SpringMakerRobot::Init()");
     this->_cnc_board = board;
     this->_LinkEef(board->GetEef());
 
-    this->__g28_runner=&this->g28_runner;
-    
-    // this->_mover = &mover;
-    //  queue_move_block involved.
-    // this->__queue_move_block._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
-    // arm_solution.__queue_move_block = &this->__queue_move_block;    //todo:  LinkAsProducer()
-    // arm_solution.__queue_move_block = &this->__queue_move_block;    //todo:  LinkAsProducer()
-    // mover.__queue_move_block = &this->__queue_move_block;   //todo:  LinkAsConsumer()
     this->__planner.__arm_solution = &arm_solution;
-    // mover.Init(board);
-
-    // arm_solution.Init(board);
-    // this->arm_solution.planner = &this->__planner;
-    // arm_solution._mover_base = &this->__mover;
     this->_arm_solution = &this->arm_solution;  
 
-    // Logger::Info("Vsc_ArmSoution::Init() Pid controller.");
-    // this->__all_pids.AppendPidController(&this->__speed_pid);
-    // //So all pid controllers are configable via mcode. example: 'M130 N0 P1 I2 D3'
-    // M130_Runner* m130 = (M130_Runner*) McodeRunners::getInstance().GetRunner(130);
-    // m130->LinkPidControllers(&this->__all_pids);
+
+    this->__g28_runner = &this->g28_runner;
+    g28_runner.Init(board, &mover);
+
+    Logger::Info("SpringMakerRobot::Init() Actuators.");
+    Actuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    Actuator_List::Instance().AddActuator(&__actuator_alpha);
+    // this->__actuator_alpha.LinkPidController(&__speed_pid);
+    // this->__actuator_alpha.LinkMotorDriver(board->GetMotorDriver());
+    // this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
+    this->__actuator_alpha.MyName = 'A';
+    this->__actuator_alpha.LinkStepper(board->GetStepper(), 1.0f);
     
-    // motor is the user of PID controller
-    // board->LinkSpeedPid_ForMotor(&this->__speed_pid);
-    // and initial setting
-    // this->__speed_pid.P = 100;
-    // this->__speed_pid.I = 100;
-    // this->__speed_pid.D = 0;
+    this->LinkMover(&mover);
+
 }

@@ -14,11 +14,11 @@ class Board_SpringMaker: public CncBoardBase{
         RobotEef_SpringMaker* GetEef() override;
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
         PositionTrigger* GetPositionTrigger(uint8_t index) override;
-
+        Stepper* GetStepper(){return &this->stepper_driver_alpha;};
         
     private:
         Stepper stepper_driver_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
-        ActuatorStepper stepper_alpha;
+        // ActuatorStepper stepper_alpha;
         PositionTrigger _all_position_triggers[1];
         // PositionTrigger homer_alpha = PositionTrigger(PIN_HOME_ALPHA_2201, LOW);
         RobotEef_SpringMaker eef = RobotEef_SpringMaker();

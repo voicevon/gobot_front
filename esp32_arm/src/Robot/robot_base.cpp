@@ -103,10 +103,12 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	// char home_axis_name = '+';
 	LineSegment line;
 	// EnumAxis home_axis;
-
+	Logger::Debug("RobotBase::__RunGcode()");
 	switch (gcode->g){
 		case 28:
-			this->__g28_runner->LinkGcode(gcode);   //bug, gcode will be deleted, after SpinOnce()
+			Logger::Print("RobotBase::__RunGcode() --- g28_runner->LinkGcode", 1);
+			this->__g28_runner->LinkGcode(gcode);
+			Logger::Print("RobotBase::__RunGcode() --- g28_runner->LinkGcode", 2);
 
 			//TODO:  convert char to enum
 			// this->RunG28(this->ConvertToEnum(home_axis));

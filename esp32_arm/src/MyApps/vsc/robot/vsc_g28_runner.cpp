@@ -37,7 +37,7 @@ void Vsc_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             break;
         default:
             Logger::Error(" Vsc_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
-            
+            Logger::Halt("AcDc::TNT");
             break;
     }
     // Logger::Print("Vsc_G28_Runner::SetMoveBlock_ToHome()  point", 99);

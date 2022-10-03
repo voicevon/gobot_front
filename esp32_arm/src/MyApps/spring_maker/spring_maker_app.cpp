@@ -34,16 +34,10 @@ void SpringMakerApp::AsyncExecuteMqttCommand(const char* command){
         String gcode = "G1 A86.25 F5000";     // 700 turns without gearbox reducer
         this->_gcode_queue->AppendGcodeCommand(gcode);
     }else{
-        Serial.print("[Warn] SpringMakerApp::ExecuteMqttCommand()  = ");
-        Serial.println(command);
+        this->_gcode_queue->AppendGcodeCommand(command);
+
+        // Logger::Warn("SpringMakerApp::ExecuteMqttCommand()  Unknown Command ");
+        // Serial.println(command);
     }
 }
-
-// void SpringMakerApp::SpinOnce(){
-//     if (!this->_gcode_queue->BufferIsFull()){
-//         this->CheckMqttCommand();
-//     }
-//     this->CheckMqttCommand();
-// }
-
 

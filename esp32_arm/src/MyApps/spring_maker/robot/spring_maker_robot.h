@@ -3,9 +3,12 @@
 
 #include "Robot/robot_base.h"
 #include "MyApps/spring_maker/board/board.h"
-// #include "MyApps/spring_maker/cnc/spring_maker_arm_solution.h"
 #include "spring_maker_g28_runner.h"
 #include "CNC/arm_solution/single_axis/single_axis_arm_solution.h"
+#include "CNC/Actuator/stepper/actuator_stepper.h"
+
+
+#define CNC_ACTUATORS_COUNT 1
 
 class SpringMakerRobot: public RobotBase{
     public:
@@ -14,13 +17,16 @@ class SpringMakerRobot: public RobotBase{
     private:
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
 
-        // PIDController __speed_pid = PIDController(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
-        // PidControllers __all_pids = PidControllers(1);
+        ActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
+	    ActuatorStepper __actuator_alpha = ActuatorStepper(); 
+        // Mover_SingleAxis mover;
+        MoverBase mover;
+        SingleAxis_ArmSolution arm_solution;
+        SpringMaker_G28_Runner g28_runner;
+
 
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
         // Spring_CncMover mover;
-        SingleAxis_ArmSolution arm_solution;
-        SpringMaker_G28_Runner g28_runner;
 
 };

@@ -23,7 +23,7 @@ void setup(){
     setup_mqtt_block_connect();
     append_mqtt_bridge("spring/maker", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
-    Serial.println ("\n[Info] Spring Maker.setup() is done. ------------------------------------ \n");
+    Logger::Info ("\nSpring Maker.setup() is done. ------------------------------------ \n");
 }
 
 void loop(){

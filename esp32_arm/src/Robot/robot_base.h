@@ -47,7 +47,7 @@ class RobotBase: public GcodeConsumer{
 
         
     protected:
-        G28_Runner *__g28_runner;
+        G28_Runner*__g28_runner;
         MoverBase* _mover;
 
     private:
