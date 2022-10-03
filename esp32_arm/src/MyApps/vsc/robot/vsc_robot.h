@@ -1,14 +1,10 @@
 #pragma once
 
-
 #include "Robot/robot_base.h"
 #include "MyApps/vsc/board/board_vsc.h"
 #include "vsc_g28_runner.h"
 #include "CNC/arm_solution/circle_loop/circle_loop_arm_solution.h"
-#include "CNC/mover/single_axis.h"
 #include "MyLibs/list/pid_controllers_list.h"
-// #include "MyLibs/array/pid_controllers_array.h"
-
 
 #define PID_CONTROLLERS_COUNT 1
 #define CNC_ACTUATORS_COUNT 1
@@ -28,7 +24,7 @@ class VscRobot: public RobotBase{
         ActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
 	    ActuatorDcMotor __actuator_alpha = ActuatorDcMotor(); 
         
-        Mover_SingleAxis mover;
+        MoverBase mover;
         CircleLoop_ArmSolution arm_solution;
         Vsc_G28_Runner g28_runner;
 

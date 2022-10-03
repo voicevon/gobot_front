@@ -5,7 +5,7 @@
 #include "MyApps/smooker_bot/board/smoker_board.h"
 #include "smoker_g28_runner.h"
 #include "CNC/arm_solution/circle_loop/circle_loop_arm_solution.h"
-#include "CNC/mover/single_axis.h"
+// #include "CNC/mover/single_axis.h"
 
 class SmokerRobot: public RobotBase{
     public:
@@ -19,7 +19,7 @@ class SmokerRobot: public RobotBase{
 
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
-        Mover_SingleAxis mover;
+        MoverBase mover;
         CircleLoop_ArmSolution arm_solution;
         Smoker_G28_Runner g28_runner;
 
