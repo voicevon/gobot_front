@@ -44,7 +44,7 @@ void MqttSyncer::OnReceived(const char* payload, int length){
 }
 
 // This function will be invoked on master thread.
-// Check if local mq is:  from full to not.
+// Check whether local mq is full:  from full to not.
 void MqttSyncer::SpinOnce(){
     if (this->__local_mq_is_full){
         // double check whether local mq is still full or not.

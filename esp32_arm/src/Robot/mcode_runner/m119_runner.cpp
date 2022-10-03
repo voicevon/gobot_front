@@ -3,7 +3,7 @@
 #include "Robot/axis_homer/home_trigger_array.h"
 
 // Print all triggers status, when there is a change.
-void M119_Runner::Run(Gcode* gcode){
+bool M119_Runner::StartToRun(Gcode* gcode){
     Logger::Debug("M119_Runner::Run()");
     static uint32_t last_flags;
     HomeTrigger_Array::Instance().GetFiredPosition('X');
@@ -13,5 +13,5 @@ void M119_Runner::Run(Gcode* gcode){
         Logger::Print("\t\tflags", flags);
 
     }
-    
+    return true;   
 }

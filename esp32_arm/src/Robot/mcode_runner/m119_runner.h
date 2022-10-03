@@ -3,5 +3,5 @@
 
 class M119_Runner: public McodeRunnerBase{
     public:
-        void Run(Gcode* mcode) override;
+        bool StartToRun(Gcode* mcode) override;
 };

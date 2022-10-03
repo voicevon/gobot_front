@@ -19,6 +19,7 @@ enum class RobotState{
     G28_IS_RUNNING,
     G4_IS_SYNCING,
     G4_IS_RUNNING,
+    RUNNING_M_CODE,
 };
 
 
