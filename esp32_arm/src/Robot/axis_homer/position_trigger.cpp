@@ -17,16 +17,6 @@ void PositionTrigger::Init(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_tr
     this->__mcp23018->pinMode(expanded_pin_trigger, INPUT_PULLUP);
 }
 
-// PositionTrigger::PositionTrigger(int triggeredState){
-//     this->__triggered_state = triggeredState;
-// }
-
-// void PositionTrigger::Init_mcp23018_gpio(Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger){
-//     mcp_23018->pinMode(expanded_pin_trigger, INPUT_PULLUP);
-//     this->__pin_trigger = expanded_pin_trigger;
-//     this->__mcp23018 = mcp_23018;
-// }
-
 bool PositionTrigger::IsTriggered(){
     // Logger::Debug("PositionTrigger::IsTriggered() is entering...");
     // Logger::Print("__pin_trigger", __pin_trigger);

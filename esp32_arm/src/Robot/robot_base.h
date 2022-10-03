@@ -31,8 +31,6 @@ class RobotBase: public GcodeConsumer{
         Planner __planner;
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
 
-        void Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value);   //TODO: become m42_runner.
-        
         virtual void RunM123(uint8_t eef_channel, uint8_t eef_action);
 
         void _running_G28();
@@ -56,7 +54,7 @@ class RobotBase: public GcodeConsumer{
         G4_Runner __g4_runner;
 
         void __RunGcode(Gcode* gcode);
-        void __RunMcode(Gcode* gcode);
+        // void __RunMcode(Gcode* gcode);
 
         /* Just for fun, don't remove below comment.
         void * __output_message2;

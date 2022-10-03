@@ -3,7 +3,7 @@
 
 bool MqttMessageConsumer::CheckMqttCommand(){
     // Serial.println("[Info] MqttMessageConsumer::CheckMqttCommand() is entering.");
-    MessageQueue::SingleMessage* new_message = this->__mq->FetchTailMessage();
+    MessageQueue::SingleMessage* new_message = this->__mq->FetchTailMessage(true);
     if (new_message != NULL){
         // Serial.println("[Info] MqttMessageConsumer::CheckMqttCommand() got new meeage.");
         this->AsyncExecuteMqttCommand(new_message->payload);

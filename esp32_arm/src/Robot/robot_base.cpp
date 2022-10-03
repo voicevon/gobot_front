@@ -63,7 +63,7 @@ void RobotBase::SpinOnce(){
 	Logger::Print("RobotBase::SpinOnce() point", 3);
 
 	// Check gcode queue, if there is gcode to be run.
-	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage();
+	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage(false);
 	Logger::Print("RobotBase::SpinOnce() point", 4);
 	if (message == NULL){
 		Logger::Error("\n\n\n [Error] RobotBase::SpinOnce() tail_message is null. \n\n ");
@@ -90,8 +90,13 @@ void RobotBase::SpinOnce(){
 
 	if(gcode.has_g){
 		this->__RunGcode(&gcode);
+		this->_gcode_queue->FetchTailMessage(true);
 	}else if(gcode.has_m){
-		this->__RunMcode(&gcode);
+		if (this->State == RobotState::IDLE_OR_ASYNC){
+			McodeRunners::Run(&gcode);   // DOING: How to run it async?
+			this->_gcode_queue->FetchTailMessage(true);
+		}
+		// this->__RunMcode(&gcode);
 	}
 	// Logger::Print("RobotBase::SpinOnce() point", 99);
 
@@ -155,90 +160,55 @@ void RobotBase::__RunGcode(Gcode* gcode){
 		
 }
 
-void RobotBase::__RunMcode(Gcode* gcode){
-	bool debug = false;
-		uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
-		uint8_t s_value = 0;
-		float f_value = 0.0f;
-		EefAction action;
-		McodeRunnerBase* mr;
-		switch (gcode->m){
-		case 42:
-			McodeRunners::Run(gcode);
-			// mr->Run(gcode);
-			// McodeRunners::GetRunner(42)->Run(gcode);
-			
-			// this->__m42_runner.Run(gcode);
-			// p_value =  gcode->get_value('P');
-			// s_value = gcode->get_value('S');
-			// this->Run_M42_OutputGpio(p_value, s_value);
-			break;
-		case 84:
-			// McodeRunners::GetRunner(84)->Run(gcode);
-			// this->__m84_runner.Run(gcode);
-			break;
-		case 114:
-			// Get Current Position
-			break;
+// void RobotBase::__RunMcode(Gcode* gcode){
+// 	bool debug = false;
+// 		uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
+// 		uint8_t s_value = 0;
+// 		float f_value = 0.0f;
+// 		EefAction action;
+// 		switch (gcode->m){
+// 		case 123:
+// 			//M123 P=channel_index, S=Set EEF action			
+// 			while (this->State != RobotState::IDLE_OR_ASYNC){
+// 				this->SpinOnce();
+// 			}
+// 			p_value =  gcode->get_value('P');
+// 			s_value = gcode->get_value('S');
+// 			debug = true;
+// 			if (debug){
+// 				Logger::Debug("RobotBase::RunGcode() For EEF_ACTION  M123 ");
+// 				Logger::Print("P", p_value);
+// 				Logger::Print("S", s_value);
+// 			}
+// 			action = (EefAction)s_value;
+// 			this->RunM123(p_value, s_value);
+// 			break;
 
-		case 119:
-			// Get Endstop Status
-			// result = GetHomeTrigerStateString();
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			// Serial.print(result.c_str());
-			// this->commuDevice->WriteNotification(result);
-			break;
+// 		case 280:
+// 			// Set servo position  
+// 			//	 	Pnnn Servo index
+// 			// 		Snnn Angle or microseconds
+// 			// Wait for all gcode, mcode is finished
+// 			// Serial.println("M280 Started");
+// 			while (this->State != RobotState::IDLE_OR_ASYNC){
+// 				this->SpinOnce();
+// 			}
+// 			if (gcode->has_letter('P')) p_value = gcode->get_value('P');
+// 			if (gcode->has_letter('S')) s_value = gcode->get_value('S');
+// 			ledcWrite(p_value, s_value);   // from ledcWrite(ledChannel, dutyCycle);
+// 			// this->commuDevice->OutputMessage(COMMU_OK);
+// 			// this->commuDevice->WriteNotification("IDLE");
+// 			break;
+// 		case 996:
+// 			// Do nothing. this should be the last gcode of a movement in transaction.
+// 			// after MCU reset, This should be the first gcode it received, even the message queue is nothing.
+// 			break;
+// 		default:
+// 			break;
+// 		}
+// 	// Logger::Print("RobotBase::RunMcode() point ",99);
 
-		case 123:
-			//M123 P=channel_index, S=Set EEF action			
-			while (this->State != RobotState::IDLE_OR_ASYNC){
-				this->SpinOnce();
-			}
-			p_value =  gcode->get_value('P');
-			s_value = gcode->get_value('S');
-			debug = true;
-			if (debug){
-				Logger::Debug("RobotBase::RunGcode() For EEF_ACTION  M123 ");
-				Logger::Print("P", p_value);
-				Logger::Print("S", s_value);
-			}
-			action = (EefAction)s_value;
-			this->RunM123(p_value, s_value);
-			break;
-
-		case 130:
-			// this->__m130_runner.Run(gcode);
-			McodeRunners::getInstance().Run(gcode);
-			break;
-
-		case 141:
-			break;
-
-		case 280:
-			// Set servo position  
-			//	 	Pnnn Servo index
-			// 		Snnn Angle or microseconds
-			// Wait for all gcode, mcode is finished
-			// Serial.println("M280 Started");
-			while (this->State != RobotState::IDLE_OR_ASYNC){
-				this->SpinOnce();
-			}
-			if (gcode->has_letter('P')) p_value = gcode->get_value('P');
-			if (gcode->has_letter('S')) s_value = gcode->get_value('S');
-			ledcWrite(p_value, s_value);   // from ledcWrite(ledChannel, dutyCycle);
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			// this->commuDevice->WriteNotification("IDLE");
-			break;
-		case 996:
-			// Do nothing. this should be the last gcode of a movement in transaction.
-			// after MCU reset, This should be the first gcode it received, even the message queue is nothing.
-			break;
-		default:
-			break;
-		}
-	// Logger::Print("RobotBase::RunMcode() point ",99);
-
-}
+// }
 
 
 // void RobotBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
@@ -256,6 +226,6 @@ void RobotBase::__RunMcode(Gcode* gcode){
 // 	}
 // }
 
-void RobotBase::Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value){
-	digitalWrite(pin_number, pin_value);
-}
+// void RobotBase::Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value){
+// 	digitalWrite(pin_number, pin_value);
+// }

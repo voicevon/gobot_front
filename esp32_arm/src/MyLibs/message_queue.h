@@ -20,7 +20,7 @@ class MessageQueue{
 
         // For Consumer:
         bool BufferIsEmpty();  //TODO: remove this function?
-        SingleMessage* FetchTailMessage();
+        SingleMessage* FetchTailMessage(bool takeout_from_queue);
 
         // For both Producer and Consumer:
         MessageQueue(){};

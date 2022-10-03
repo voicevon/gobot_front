@@ -53,11 +53,13 @@ MessageQueue::SingleMessage* MessageQueue::GetHeadMessage(){
     return  head_message;
 }
 
-MessageQueue::SingleMessage* MessageQueue::FetchTailMessage(){
+MessageQueue::SingleMessage* MessageQueue::FetchTailMessage(bool take_out_from_queue){
     SingleMessage* tail_message = NULL;
     if (this->_head != this->_tail){
         tail_message = & this->_all_messages[this->_tail];
-        this->_tail = this->__get_pointer_next_index(this->_tail);
+        if(take_out_from_queue){
+            this->_tail = this->__get_pointer_next_index(this->_tail);
+        }
     }
     return tail_message;
 }
