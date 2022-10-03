@@ -83,7 +83,7 @@ float ActuatorDcMotor::GetCurrentPosition(){
 // void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float target_position){
 void ActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
 
-    Logger::Debug("ActuatorDcMotor::SetTargetPositionTo()  is entering");
+    Logger::Debug("ActuatorDcMotor::UpdateMovement()");
     Logger::Print("is_absolute_position", move->IsAbsTargetPosition);
     Logger::Print("target_position", move->TargetPosition);
     Logger::Print("speed", move->Speed);

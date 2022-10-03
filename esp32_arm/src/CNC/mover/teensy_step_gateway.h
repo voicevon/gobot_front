@@ -1,10 +1,12 @@
 #pragma once
 #include "ESP32Step/src/TeensyStep.h"
+#include "MyLibs/basic/logger.h"
+
 
 class TeensyStep_Gateway{
     public:
         static TeensyStep_Gateway& Instance(){
-            TeensyStep_Gateway __instance;
+            static TeensyStep_Gateway __instance;
             return __instance;
         };
 
@@ -30,26 +32,25 @@ class TeensyStep_Gateway{
             default:
                 break;
             }
+            __steppers_count++;
         };
         // void LinkDualStepper(Stepper* stepper1, Stepper* stepper2);
         // void LinkTrippleStepper(Stepper* stepper1, Stepper* stepper2,Stepper* stepper3);
 
         void AsyncMove(){
+            Logger::Debug("TeensyStep_Gateway::AsyncMove()");
+            Logger::Print("__steppers_count", __steppers_count);
             switch (__steppers_count){
-            case 1: __step_control->moveAsync(*stepper_a); break;
-            case 2: __step_control->moveAsync(*stepper_a,*stepper_b); break;
-            case 3: __step_control->moveAsync(*stepper_a,*stepper_b, *stepper_g); break;
-            case 4: __step_control->moveAsync(*stepper_a,*stepper_b, *stepper_g,*stepper_d); break;
-            
-            default:
-                return;
-                break;
+                case 1: __step_control->moveAsync(*stepper_a); break;
+                case 2: __step_control->moveAsync(*stepper_a,*stepper_b); break;
+                case 3: __step_control->moveAsync(*stepper_a,*stepper_b, *stepper_g); break;
+                case 4: __step_control->moveAsync(*stepper_a,*stepper_b, *stepper_g,*stepper_d); break;
+                default: break;
             }
-            __steppers_count++;
-        }
+        };
 
     private:
-        int __steppers_count;
+        int __steppers_count = 0;
         StepControl* __step_control;
         Stepper* stepper_a;
         Stepper* stepper_b;
