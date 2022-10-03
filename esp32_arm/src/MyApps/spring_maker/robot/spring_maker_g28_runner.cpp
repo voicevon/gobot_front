@@ -1,20 +1,15 @@
 #include "spring_maker_g28_runner.h"
 
 
-void SpringMaker_G28_Runner::Init(Board_SpringMaker* board, MoverBase* mover){
+void SpringMaker_G28_Runner::Init( MoverBase* mover){
     Logger::Info("SpringMaker_G28_Runner::Init() Hoiming_config");
     this->__mover = mover;
 
-    // homing.IsDirectionToMax = true;
-    // homing.Speed = TWO_PI / 60;  // 60 seconds Per loop.
-    // homing.Accelleration = 0.1;
-    // homing.DistanceToGo = TWO_PI;
-    
     Logger::Info("SpringMaker_G28_Runner::Init() Alpha axis home_triggers");
-    PositionTrigger* trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
+    PositionTrigger* trigger;
+    trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
     trigger->AxisName = 'X';
-    trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
-    // __homer.AppendPositionTrigger(trigger);
+    trigger->SetTriggerPosition(TWO_PI* 1 / 386);       
 
 }
 

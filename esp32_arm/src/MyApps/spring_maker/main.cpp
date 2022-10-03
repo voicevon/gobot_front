@@ -17,6 +17,7 @@ long low_count =1;
 
 void setup(){
     board.Init(true);
+    robot.Init(&board);    
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 

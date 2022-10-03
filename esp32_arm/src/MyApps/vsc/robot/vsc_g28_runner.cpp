@@ -8,12 +8,10 @@ void Vsc_G28_Runner::Init(MoverBase* mover){
     Logger::Info("Vsc_G28_Runner::Init() Alpha axis home_triggers");
     PositionTrigger* trigger;
     trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    // trigger = board->GetPositionTrigger(0);
-    trigger->AxisName='X';
+    trigger->AxisName = 'X';
     trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
 
     trigger = HomeTrigger_Array::Instance().GetPositionTrigger(1);
-    // trigger = board->GetPositionTrigger(1);
     trigger->AxisName='X';
     trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
 }

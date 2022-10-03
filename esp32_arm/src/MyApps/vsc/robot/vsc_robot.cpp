@@ -1,8 +1,6 @@
 #include "vsc_robot.h"
 #include "Robot/mcode_runner/mcode_runners.h"
 
-
-
 void VscRobot::Init(Vsc_Board* board){
     Logger::Debug("Vsc_ArmSoution::Init()");
     this->_cnc_board = board;
@@ -12,8 +10,7 @@ void VscRobot::Init(Vsc_Board* board){
     this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
 
-
-    this->__g28_runner=&this->g28_runner;
+    this->__g28_runner = &this->g28_runner;
     g28_runner.Init(&mover);
 
     Logger::Info("VscRobot::Init() Actuators.");
