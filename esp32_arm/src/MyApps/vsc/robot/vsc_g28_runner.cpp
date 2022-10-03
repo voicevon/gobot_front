@@ -21,10 +21,8 @@ void Vsc_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
     Serial.print(char(axis));
     Logger::Print("\taxis", char(axis));
     MoveBlock_SingleActuator* move;
-    int axis_index = 0;
     switch (axis){
         case 'X':
-            axis_index = 0;
             // Logger::Print("Vsc_G28_Runner::SetMoveBlock_ToHome()  point", 21);
             mb->DeepReset_ToDefault();
             // Logger::Print("Vsc_G28_Runner::SetMoveBlock_ToHome()  point", 22);

@@ -12,6 +12,6 @@ class BoxMover_G28_Runner: public G28_Runner{
         // virtual AxisHomer* GetHomer(EnumAxis_Inverseinematic axis);
 
         // AxisHomer __homer;
-        HomingConfig homing;
+        // HomingConfig homing;
 
 };

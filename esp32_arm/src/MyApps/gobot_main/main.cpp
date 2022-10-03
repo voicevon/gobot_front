@@ -3,8 +3,6 @@
 
 #include "board/board.h"
 #include "board/robot_eef/gobot_main_eef.h"
-// #include "cnc/solution.h"
-// #include "cnc/solution_config.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "robot/gobot_main_robot.h"
 #include "gobot_main_app.h"
@@ -12,7 +10,6 @@
 #include "IoT/main_mqtt.h"
 
 GobotMain_Board board;
-// GobotMainCncSolution cnc;
 GobotMainRobot robot; 
 GobotMain_App app;
 
@@ -26,11 +23,7 @@ void board_test();
 
 void setup(){
     board.Init(true);
-    board.PrintOut();
-    // board.LinkStepControlToCncMover(&objStepControl);
-
-    // board_test();
-    // cnc.Init(&board, &objStepControl);
+    robot.Init(&board);
 
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
@@ -53,10 +46,10 @@ bool xx=true;
 
 void loop(){
     robot.SpinOnce();
-    // cnc.SpinOnce();
     app.SpinOnce();
     loop_mqtt();
     return;
+    
     uint8_t loadded_room = board.GetLoadedRoom();
     char c_room_sensor = '?';
     if (last_loaded_room != loadded_room){

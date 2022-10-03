@@ -2,7 +2,6 @@
 
 void M130_Runner::Run(Gcode* gcode){
     uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
-    uint8_t s_value = 0;
     float f_value = 0.0f;
 
     Logger::Info("M130_Runner::Run()");

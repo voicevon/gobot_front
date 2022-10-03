@@ -11,7 +11,7 @@
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
 #include "../mover/mover_base.h"
-#include "Robot/axis_homer/axis_homer.h"
+// #include "Robot/axis_homer/axis_homer.h"
 // #include "Robot/axis_homer/homer_diction.h"
 #include "Robot/axis_homer/home_trigger_array.h"
 #include "Robot/eef/eef_standard_code.h"

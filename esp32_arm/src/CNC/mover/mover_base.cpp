@@ -61,7 +61,7 @@ float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinem
 
 //TODO:  be a virtual method.
 float MoverBase::GetAbsDistanceToTarget_InCncUnit(){
-
+    return 0.0f;
     // float alpha_distance = 0;
     // if((this->_moving_actuator_flags & 0x01) > 0){
     //    alpha_distance = this->_actuator_alpha_base->GetAbsDistanceToTarget_InCncUnit();

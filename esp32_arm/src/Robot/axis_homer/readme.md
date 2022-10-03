@@ -8,16 +8,4 @@
 For OC output sensor, trigeredState should be LOW
 
 
-# Homer has created a HomingConfig
-
-
-# class tree
-```
-    HomerDiction --- AxisHomer[0] ---- PositionTrigger[0]
-              |                 |
-              |                 |-- PositionTrigger[n]
-              |-- AxisHomer[n]
-```
-
-
 

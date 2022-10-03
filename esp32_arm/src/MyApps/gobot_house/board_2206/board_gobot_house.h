@@ -4,7 +4,7 @@
 #include "../board_2205/robot_eef/gobot_house_eef.h"
 #include "CNC/Actuator/servo/actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-#include "Robot/axis_homer/axis_homer.h"
+// #include "Robot/axis_homer/axis_homer.h"
 // #include "CNC/arm_solution/axis_homer/axis_homer.h"
 // #include "../cnc_2206/solution_config.h"
 // #include "../cnc_2206/actuator_alpha.h"

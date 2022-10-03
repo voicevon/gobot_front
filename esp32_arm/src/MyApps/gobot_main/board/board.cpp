@@ -45,13 +45,7 @@ void GobotMain_Board::Init(bool is_on_reset){
     this->RepportRamUsage();
 }
 
-void GobotMain_Board::PrintOut(){
-    // this->cnc_mover->PrintOut("GobotMain_Board. __cnc_mover");
-    // this->__cnc_solution_config.PrintOut("GobotMain_Board.__cnc_solution_config");
-    // this->__actuator_alpha.PrintOut("GobotMain_Board. __actuator_alpha");
-    // this->__actuator_beta.PrintOut("GobotMain_Board. __actuator_beta");
 
-}
 Stepper* GobotMain_Board::GetStepper(EnumAxis_Inverseinematic axis){
     if (axis==AXIS_ALPHA){
         return &this->__alpha_stepper;
