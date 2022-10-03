@@ -25,7 +25,7 @@ class Vsc_Board: public CncBoardBase{
 
         // For being a CNC machine.
         RobotEefBase* GetEef() override {return &this->__eef;};
-        PositionTrigger* GetPositionTrigger(uint8_t index) override;
+        // PositionTrigger* GetPositionTrigger(uint8_t index) override;
         
 
         // We do nothing, just override the methods.

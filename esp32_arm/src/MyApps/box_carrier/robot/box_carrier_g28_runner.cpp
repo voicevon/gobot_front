@@ -1,7 +1,7 @@
 #include "box_carrier_g28_runner.h"
 
 
-void BoxCarrier_G28_Runner::Init(Board2204Cnc* board, MoverBase* mover){
+void BoxCarrier_G28_Runner::Init( MoverBase* mover){
     Logger::Info("BoxCarrier_G28_Runner::Init() Hoiming_config");
     this->__mover = mover;
 
@@ -12,12 +12,14 @@ void BoxCarrier_G28_Runner::Init(Board2204Cnc* board, MoverBase* mover){
     
     Logger::Info("BoxCarrier_G28_Runner::Init() Alpha axis home_triggers");
     PositionTrigger* trigger;
-    trigger = board->GetPositionTrigger(0);
+    trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
+    // trigger = board->GetPositionTrigger(0);
     trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,
     trigger->AxisName  = 'X';    
     // __homer.AppendPositionTrigger(trigger);
 
-    trigger = board->GetPositionTrigger(1);
+    // trigger = board->GetPositionTrigger(1);
+    trigger = HomeTrigger_Array::Instance().GetPositionTrigger(1);
     trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
     trigger->AxisName='Z';
     // __homer.AppendPositionTrigger(trigger);

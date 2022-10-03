@@ -3,7 +3,7 @@
 
 class GobotHouse_G28_Runner: public G28_Runner{
     public:
-        void Init(GobotMain_Board* board, MoverBase* mover);
+        void Init(MoverBase* mover) override;
 
     private:
         void SetMoveBlock_ToHome(char axis, MoveBlock* mb) override;

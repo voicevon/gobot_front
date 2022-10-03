@@ -17,7 +17,7 @@ class Smoker_Board: public CncBoardBase{
         RobotEef_SmokeMachine* GetEef() override;
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
         ActuatorBase* GetActuator(EnumAxis_Inverseinematic axis) {return nullptr;};   //todo:  get it.
-        PositionTrigger* GetPositionTrigger(uint8_t index) override {return nullptr;}; 
+        // PositionTrigger* GetPositionTrigger(uint8_t index) override {return nullptr;}; 
 
     private:
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);

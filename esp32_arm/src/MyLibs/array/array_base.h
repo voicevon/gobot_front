@@ -11,11 +11,11 @@ class ArrayItem{
 class ArrayBase{  // HomerCollects? HomerDiction? 
     public:
 
-        ArrayItem* GetItem(int index);
-        void _Init(ArrayItem* the_array, int items_count, int item_size){this->__items_count=items_count;this->__item_size=item_size; __all_items=the_array; };
+        // ArrayItem* GetItem(int index);
         int GetItemsCount(){return this->__items_count;};
     protected:
         ArrayItem* _GetItem(int index){return (ArrayItem*)(&__all_items[0] + __item_size*index);};
+        void _Init(ArrayItem* the_array, int items_count, int item_size){this->__items_count=items_count;this->__item_size=item_size; __all_items=the_array; };
 
     private:
         ArrayItem* __all_items;

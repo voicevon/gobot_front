@@ -1,5 +1,3 @@
-#pragma once
-
 #include "robot_base.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "HardwareSerial.h"

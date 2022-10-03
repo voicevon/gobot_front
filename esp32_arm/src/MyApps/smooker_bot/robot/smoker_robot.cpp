@@ -8,7 +8,7 @@ void SmokerRobot::Init(Smoker_Board* board){
 
     this->__g28_runner=&this->g28_runner;
     // g28_runner.LinkMover(&mover);
-    g28_runner.Init(board, &mover);
+    g28_runner.Init(&mover);
     this->LinkMover(&mover);
     
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;

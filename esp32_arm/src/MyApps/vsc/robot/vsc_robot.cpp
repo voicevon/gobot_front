@@ -14,7 +14,7 @@ void VscRobot::Init(Vsc_Board* board){
 
 
     this->__g28_runner=&this->g28_runner;
-    g28_runner.Init(board, &mover);
+    g28_runner.Init(&mover);
 
     Logger::Info("VscRobot::Init() Actuators.");
     Actuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);

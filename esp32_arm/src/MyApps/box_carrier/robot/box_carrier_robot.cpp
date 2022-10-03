@@ -7,7 +7,7 @@ void BoxCarrierRobot::Init(Board2204Cnc* board){
     this->_LinkEef(board->GetEef());
 
     this->__g28_runner=&this->g28_runner;
-    g28_runner.Init(board, &mover);
+    g28_runner.Init(&mover);
     this->LinkMover(&mover);
     
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;

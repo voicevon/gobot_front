@@ -35,7 +35,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
         ActuatorServo __actuator_beta;
         // CncMover_StepperServo mover_StepperServo;
 
-        PositionTrigger* GetPositionTrigger(uint8_t index) override{return nullptr;};
+        // PositionTrigger* GetPositionTrigger(uint8_t index) override{return nullptr;};
 
         PositionTrigger __all_position_triggers[2];
         RobotEef_GobotHouse eef;

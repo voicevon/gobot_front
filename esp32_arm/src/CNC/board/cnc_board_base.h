@@ -15,7 +15,7 @@ class CncBoardBase: public BoardBase{
         virtual void Init(bool is_on_reset);
 
         virtual RobotEefBase* GetEef();
-        virtual PositionTrigger* GetPositionTrigger(uint8_t index);
+        // virtual PositionTrigger* GetPositionTrigger(uint8_t index);
         virtual void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it);
 
 
