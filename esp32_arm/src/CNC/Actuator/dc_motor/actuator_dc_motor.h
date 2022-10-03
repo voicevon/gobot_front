@@ -13,7 +13,7 @@ class ActuatorDcMotor: public ActuatorBase{
         ActuatorDcMotor(){};
         void SpinOnce_FollowVelocity(float velocity);
 
-        void LinkAngleSensor(RotaryEncoder* sensor){this->__sensor=sensor;}; 
+        // void LinkAngleSensor(RotaryEncoder* sensor){this->__sensor=sensor;}; 
         void LinkEncoder(Encoder* encoder){this->__encoder=encoder;};
         void LinkPidController(PIDController* pid){this->__speed_pid=pid;};
         void LinkMotorDriver(H_Bridge* h_bridge){this->__h_bridge=h_bridge;};  
@@ -45,7 +45,7 @@ class ActuatorDcMotor: public ActuatorBase{
         // My components
         H_Bridge* __h_bridge;
         Encoder* __encoder;
-        RotaryEncoder* __sensor;
+        // RotaryEncoder* __sensor;
 
         // speed control
         PIDController* __speed_pid;

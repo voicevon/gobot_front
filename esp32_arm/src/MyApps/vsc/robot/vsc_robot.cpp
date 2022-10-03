@@ -18,7 +18,8 @@ void VscRobot::Init(Vsc_Board* board){
     Actuator_List::Instance().AddActuator(&__actuator_alpha);
     this->__actuator_alpha.LinkPidController(&__speed_pid);
     this->__actuator_alpha.LinkMotorDriver(board->GetMotorDriver());
-    this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
+    this->__actuator_alpha.LinkEncoder(board->GetEncoder());
+    // this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
     this->__actuator_alpha.MyName = 'A';
     
     this->LinkMover(&mover);

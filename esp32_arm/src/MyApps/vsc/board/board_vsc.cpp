@@ -13,9 +13,9 @@ void Vsc_Board::Init(bool is_on_reset){
     HomeTrigger_Array::Instance().Init(__all_position_triggers, 4);
 }
 
-void Vsc_Board::LinkEncoderSensor(Encoder* encoder){
-    this->__motor_angle_sensor.LinkRawSensor(encoder);
-}
+// void Vsc_Board::LinkEncoderSensor(Encoder* encoder){
+//     this->__motor_angle_sensor.LinkRawSensor(encoder);
+// }
 
 void Vsc_Board::Test_PositionTriggers(int loops){
     uint32_t flags = 0;

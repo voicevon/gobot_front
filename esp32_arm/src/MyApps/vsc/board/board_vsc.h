@@ -13,12 +13,13 @@ class Vsc_Board: public CncBoardBase{
     public:
         // For being a real PCB board.
         Vsc_Board(){};
-        void LinkEncoderSensor(Encoder* encoder);
+        void LinkEncoderSensor(Encoder* encoder){this->__encoder=encoder;};
         // call me must after LinkEncoderSensor().
         void Init(bool is_on_reset) override;
 
         // For being an actuator and its components.
-        RotaryEncoder* GetAngleSensor(){return &this->__motor_angle_sensor;};
+        // RotaryEncoder* GetAngleSensor(){return &this->__motor_angle_sensor;};
+        Encoder* GetEncoder(){return this->__encoder;};
         H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
 
         // For being a CNC machine.
@@ -34,10 +35,11 @@ class Vsc_Board: public CncBoardBase{
     protected:
 
     private:
-        RotaryEncoder __motor_angle_sensor;
+        // RotaryEncoder __motor_angle_sensor;
+        Encoder* __encoder;
         H_Bridge __pwm_h_bridge = H_Bridge(PIN_H_BRIDGE_DIR, PIN_H_BRIDGE_SPEED);
         Vsc_RobotEef __eef;
-
+        
         PositionTrigger __all_position_triggers[4];
 
 };

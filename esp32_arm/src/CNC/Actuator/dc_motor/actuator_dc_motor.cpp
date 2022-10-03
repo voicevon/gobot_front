@@ -16,7 +16,8 @@ void ActuatorDcMotor::SpinOnce_FollowVelocity(float velocity){
     }
 
     // speed pid 
-    float speed_error =  abs(this->__sensor->GetCurrentVelocity()) - abs(this->__target_velocity);
+    // float speed_error =  abs(this->__sensor->GetCurrentVelocity()) - abs(this->__target_velocity);
+    float speed_error =  abs(this->__encoder->getVelocity()) - abs(this->__target_velocity);
     float pwm_speed =  - this->__speed_pid->FeedError(speed_error) * 8;
 
     if (serial_output){
@@ -30,7 +31,8 @@ void ActuatorDcMotor::SpinOnce_FollowVelocity(float velocity){
         Serial.print("   speed(tar,cur,err,pwm): ");
         Serial.print(this->__target_velocity);
         Serial.print("\t");
-        Serial.print(this->__sensor->GetCurrentVelocity());
+        // Serial.print(this->__sensor->GetCurrentVelocity());
+        Serial.print(this->__encoder->getVelocity());
         Serial.print("\t");
         Serial.print(speed_error);
         Serial.print("\t");
@@ -53,9 +55,12 @@ void ActuatorDcMotor::SpinOnce_FollowVelocity(float velocity){
 
 void ActuatorDcMotor::SpinOnce(){
     // Logger::Debug("ActuatorDcMotor::SpinOnce()");
-    this->__sensor->GetRawSensor()->update();
-    this->_current_position = __sensor->GetCurrentPosition();
-    this->_current_velocity = __sensor->GetCurrentVelocity();
+    // this->__sensor->GetRawSensor()->update();
+    this->__encoder->update();
+    // this->_current_position = __sensor->GetCurrentPosition();
+    // this->_current_velocity = __sensor->GetCurrentVelocity();
+    this->_current_position = this->__encoder->getSensorAngle();
+    // this->_current_velocity = this->__encoder->getVelocity();
 
     if (this->__is_moving){
         // float abs_distance_to_target = this->GetAbsDistanceToTarget_InCncUnit();
@@ -118,7 +123,7 @@ void ActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
 // }
 
 void ActuatorDcMotor::InitFormular_FromCncPosition(float position_in_cnc_unit){
-    this->__sensor->SetCurrentPosition(position_in_cnc_unit);
+    // this->__sensor->SetCurrentPosition(position_in_cnc_unit);
     //When currentPosition is changed, SpinOnce()   will follow targetPosition. To avoid this happen.
     this->_target_position = position_in_cnc_unit;
 

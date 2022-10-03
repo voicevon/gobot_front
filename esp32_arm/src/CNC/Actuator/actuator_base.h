@@ -39,7 +39,7 @@ class ActuatorBase: public ListItem{
 
         float _target_position;   // is always an absolute position
         float _current_position;
-        float _current_velocity;   // todo: only speed control need this, known:  dc_motor_actuator.
+        // float _current_velocity;   // todo: only speed control need this, known:  dc_motor_actuator.
         bool __is_moving = false;
 
         ActuatorRangeConstraintBase* _range_constraint;

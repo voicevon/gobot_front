@@ -26,7 +26,7 @@ void test_board(){
     board.Test_PositionTriggers(0);
     board.Test_HBridge(999);
     // tester.LinkBoard(&board);
-    tester.Test_EncoderSensor(board.GetAngleSensor()->GetRawSensor(), 0);
+    // tester.Test_EncoderSensor(board.GetAngleSensor()->GetRawSensor(), 0);
     // tester.Test_AngleSensor();
     // tester.Test_EncoderSensor(&encoder, 0);
     // tester.Test_SinglePositionTrigger(board.GetSingleHomer(AXIS_ALPHA), 0);
