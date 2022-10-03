@@ -3,8 +3,6 @@
 #include <SimpleFOC.h>
 #include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
 #include "Robot/driver/h_bridge/h_bridge.h"
-// #include "CNC/mover/driver/h_bridge/h_bridge.h"
-#include "Robot/Sensor/position_sensor/rotary_encoder.h"
 #include "eef/vsc_eef.h"
 #include "pins/wroom_board.h"
 
@@ -18,7 +16,6 @@ class Vsc_Board: public CncBoardBase{
         void Init(bool is_on_reset) override;
 
         // For being an actuator and its components.
-        // RotaryEncoder* GetAngleSensor(){return &this->__motor_angle_sensor;};
         Encoder* GetEncoder(){return this->__encoder;};
         H_Bridge* GetMotorDriver(){return &this->__pwm_h_bridge;};
 
@@ -35,7 +32,6 @@ class Vsc_Board: public CncBoardBase{
     protected:
 
     private:
-        // RotaryEncoder __motor_angle_sensor;
         Encoder* __encoder;
         H_Bridge __pwm_h_bridge = H_Bridge(PIN_H_BRIDGE_DIR, PIN_H_BRIDGE_SPEED);
         Vsc_RobotEef __eef;

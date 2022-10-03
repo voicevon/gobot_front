@@ -1,15 +1,11 @@
 #pragma once
 #include "../actuator_base.h"
-// #include "CNC/mover/driver/h_bridge/h_bridge.h"
 #include "Robot/driver/h_bridge/h_bridge.h"
-#include "Robot/Sensor/position_sensor/rotary_encoder.h"
+#include <SimpleFOC.h>  //For encoder only
 
 
 class ActuatorDcMotor: public ActuatorBase{
     public:
-        //===================================================================
-        // For being myself.
-
         ActuatorDcMotor(){};
         void SpinOnce_FollowVelocity(float velocity);
 

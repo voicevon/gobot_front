@@ -6,7 +6,6 @@
 #include "IoT/main_mqtt.h"
 #include "MyApps/vsc/vsc_app.h"
 #include "MyApps/vsc/robot/vsc_robot.h"
-// #include  "MyLibs/common_diction/example.h"
 
 
 Vsc_Board board;
@@ -24,7 +23,7 @@ void doB(){encoder.handleB();}
 void test_board(){
     Vsc_BoardTest tester;
     board.Test_PositionTriggers(0);
-    board.Test_HBridge(999);
+    board.Test_HBridge(0);
     // tester.LinkBoard(&board);
     // tester.Test_EncoderSensor(board.GetAngleSensor()->GetRawSensor(), 0);
     // tester.Test_AngleSensor();

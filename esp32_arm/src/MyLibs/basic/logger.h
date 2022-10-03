@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MyBoards/const.h"
+#include <HardwareSerial.h>
 
 class Logger{
     public :

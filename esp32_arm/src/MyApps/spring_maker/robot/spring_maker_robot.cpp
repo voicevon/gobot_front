@@ -1,5 +1,6 @@
 #include "spring_maker_robot.h"
 #include "Robot/mcode_runner/mcode_runners.h"
+#include "CNC/Actuator/stepper/actuator_stepper_calculator.h"
 
 void SpringMakerRobot::Init(Board_SpringMaker* board){
     Logger::Debug("SpringMakerRobot::Init()");
@@ -21,6 +22,13 @@ void SpringMakerRobot::Init(Board_SpringMaker* board){
     // this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());
     this->__actuator_alpha.MyName = 'A';
     this->__actuator_alpha.LinkStepper(board->GetStepper(), 1.0f);
+    
+    ActuatorStepper_Calculator helper;
+    helper._micro_steps_on_stepper_driver = 10;
+    helper._motor_gear_teeth_count = 12;
+    helper._slave_pulley_teeth_count = 33;
+    float slope = helper.GetActuatorToCncFormular_Slope_raw_per_mm();
+    this->__actuator_alpha.Init_FomularSlope(slope);
     
     this->LinkMover(&mover);
 

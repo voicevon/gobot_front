@@ -1,5 +1,4 @@
 #include "logger.h"
-#include <HardwareSerial.h>
 
 void Logger::Info(const char* title){
     Serial.print(FORE_YELLOW);
