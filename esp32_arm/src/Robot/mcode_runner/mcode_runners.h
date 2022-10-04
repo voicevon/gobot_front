@@ -7,7 +7,7 @@
 //todo:  better name:  McodeRunner_Finder
 class McodeRunners{
     public:
-        bool StartToRun(Gcode* gcode);  //todo: Rename to FindThenRun
+        bool StartToRun(Gcode* gcode);  //todo: Rename to FindRunnerThenRun
         bool SpinOnce();        //todo: Rename RunnerSpinOnce();
         static McodeRunners& Instance(){
             static McodeRunners __instance; // Guaranteed to be destroyed.
