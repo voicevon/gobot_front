@@ -216,21 +216,3 @@ void RobotBase::__RunGcode(Gcode* gcode){
 // }
 
 
-// void RobotBase::RunM123(uint8_t eef_channel, uint8_t eef_action){
-// 	Logger::Debug("RobotBase::RunM123()");
-// 	Logger::Print("eef_action", eef_action);
-// 	// uint8_t action_code = 1;
-// 	this->__eef->PrintOut();
-// 	this->__eef->Run(eef_action);
-// }
-
-// void RobotBase::RunM84(){
-// 	//TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
-// 	for (int axis=0; axis<CNC_AXIS_COUNT; axis++){
-// 		this->_cnc_board->EnableMotor(EnumAxis(axis), false);
-// 	}
-// }
-
-// void RobotBase::Run_M42_OutputGpio(uint8_t pin_number, uint8_t pin_value){
-// 	digitalWrite(pin_number, pin_value);
-// }

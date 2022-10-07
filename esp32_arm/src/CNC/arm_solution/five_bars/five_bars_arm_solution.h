@@ -21,7 +21,6 @@ class FiveBars_ArmSolution: public ArmSolutionBase{
         bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
         void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
         
-        std::string GetHomeTrigerStateString() override {return " ";}; //TODO:: remove 
         void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
 
         FkPosition_XY __current_fk_position;

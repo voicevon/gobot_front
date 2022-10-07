@@ -30,13 +30,9 @@ class CncSolution_CoreAZ: public ArmSolutionBase{
         virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
         virtual void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
-        std::string GetHomeTrigerStateString() override {return " ";};
 
         FkPosition_ZW __current_fk_position;
 
-        // PositionTrigger* __homing_helper;
-        // PositionTrigger* objHomeHelper_vertical; // = SingleAxisHomer(VERTICAL_ENDSTOP, LOW);
-        // PositionTrigger* objHomeHelper_angle; // = SingleAxisHomer(ANGLE_ENDSTOP, LOW);        
         CncSolution_CoreAZConfigBase* _config;
 
 

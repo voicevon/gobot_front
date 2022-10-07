@@ -26,7 +26,6 @@ class CircleLoop_ArmSolution: public ArmSolutionBase{
         void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 
         // void RunG6(Gcode* gcode) override{} ; 
-        std::string GetHomeTrigerStateString() override {return " ";};
 
         FkPosition_A __current_fk_position;
         FkPosition_A __target_fk_position;

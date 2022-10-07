@@ -20,7 +20,6 @@ class CoreYZ_ArmSolution: public ArmSolutionBase{
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
         virtual void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
 
-        std::string GetHomeTrigerStateString() override {return " ";};
 
         FkPosition_YZ __current_fk_position;
 

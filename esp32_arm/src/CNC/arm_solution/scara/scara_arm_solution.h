@@ -33,7 +33,6 @@ class Scara_ArmSolution: public ArmSolutionBase{
         virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
 
         // void RunG6(Gcode* gcode) override {};   //Block mode
-        std::string GetHomeTrigerStateString() override {return " ";};
 
         void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
 

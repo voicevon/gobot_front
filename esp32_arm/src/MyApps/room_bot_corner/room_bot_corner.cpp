@@ -46,15 +46,7 @@ void RoomBotCorner::RunG28(char axis){
     this->commuDevice->OutputMessage(COMMU_UNKNOWN_COMMAND); 
 }
 
-std::string RoomBotCorner::GetHomeTrigerStateString(){
-    std::string result = "Trigger = ";    // Will be deleted after function run?
-    if (this->objHomeTriger.IsTriged()){
-        result += "Yes";
-    }else{
-        result += "No";
-    }
-    return result;
-}
+
 
 void RoomBotCorner::MoveToTargetPosition(){
     static float debug_last_distance = 0.0f;
