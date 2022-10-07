@@ -9,6 +9,7 @@
 #include "MyLibs/list/list_base.h"
 
 
+
 class ActuatorBase: public ListItem{
     public:
         char MyName;
@@ -20,15 +21,20 @@ class ActuatorBase: public ListItem{
         //     FOLLOW_POSITION_ACCEL_SPEED,  //For CNC actuator
         // };
         // EnumActuatorState ActuatorState;
-
+        enum EnumActuatorMachenicType{
+            CONTINUROUS_ROTARY = 1,  // stepper, dc-motor, bldc
+            LIMITED_ROTARY = 2,      // servo
+            LIMITED_LINEAR = 3,      // 
+        };
+        EnumActuatorMachenicType MachenicType;
         virtual void SpinOnce();
         void LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint);
         virtual void UpdateMovement(MoveBlock_SingleActuator* movement);
+        virtual void ForceStop();   //Only G28 is using this.
+        bool IsMoving(){return this->__is_moving;};
 
         float GetCurrentPosition(){return this->_current_position;};
 
-        bool IsMoving(){return this->__is_moving;};
-        virtual void ForceStop();   //Only G28 is using this.
 
         void Init_FomularSlope(float slope_from_actuator_to_cnc){this->__slope_from_raw_to_cnc=slope_from_actuator_to_cnc;};
         void ReInit_FormularOffset(float current_cnc_position);

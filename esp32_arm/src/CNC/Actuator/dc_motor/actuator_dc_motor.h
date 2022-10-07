@@ -7,7 +7,6 @@
 class ActuatorDcMotor: public ActuatorBase{
     public:
         ActuatorDcMotor(){};
-        void SpinOnce_FollowVelocity(float velocity);
 
         // void LinkAngleSensor(RotaryEncoder* sensor){this->__sensor=sensor;}; 
         void LinkEncoder(Encoder* encoder){this->__encoder=encoder;};
@@ -18,6 +17,7 @@ class ActuatorDcMotor: public ActuatorBase{
         // Will auto change to false, when arrived(very closed to) target position during moving.
         // Also mightly auto change to true, After SetTargetPositionTo() is invoked.
         void ForceStop();   //Only G28 is using this.
+        void UpdateMovement(MoveBlock_SingleActuator* movement) override;
 
 
         //===================================================================
@@ -25,7 +25,6 @@ class ActuatorDcMotor: public ActuatorBase{
 
         // float GetCurrentPosition() override;
         // void InitFormular_FromCncPosition(float position_in_cnc_unit) override;
-        void UpdateMovement(MoveBlock_SingleActuator* movement) override;
 
         // float GetAbsDistanceToTarget_InCncUnit() override;
         // When motor is running, should not effect running speed. 
@@ -50,6 +49,6 @@ class ActuatorDcMotor: public ActuatorBase{
         // int __count_down_for_serial_print = 0;
         LowPassFilter __filter = LowPassFilter(0.05f);
 
-
+        void __SpinOnce_FollowVelocity(float velocity);
 
 };

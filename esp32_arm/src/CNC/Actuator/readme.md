@@ -1,3 +1,7 @@
+# unit of actuator speed:
+linear actuator:    
+rotary actuator:  
+
 # What is an actuator?
 * Is a movable thing.
 ## From machenical point of view:

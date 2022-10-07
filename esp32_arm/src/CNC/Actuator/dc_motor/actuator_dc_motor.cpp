@@ -6,7 +6,7 @@
 #define INERTIA_DISTANCE  0.064    // this is a CNC unit  0.016== (1/386)/ (2*PI), around 12.7mm
 
 // real speed control, position check, auto stop....
-void ActuatorDcMotor::SpinOnce_FollowVelocity(float velocity){
+void ActuatorDcMotor::__SpinOnce_FollowVelocity(float velocity){
     static uint32_t last_micros;
     bool serial_output = false;
     if(micros() - last_micros > 1000){
@@ -16,7 +16,6 @@ void ActuatorDcMotor::SpinOnce_FollowVelocity(float velocity){
     }
 
     // speed pid 
-    // float speed_error =  abs(this->__sensor->GetCurrentVelocity()) - abs(this->__target_velocity);
     float speed_error =  abs(this->__encoder->getVelocity()) - abs(this->__target_velocity);
     float pwm_speed =  - this->__speed_pid->FeedError(speed_error) * 8;
 
@@ -55,15 +54,10 @@ void ActuatorDcMotor::SpinOnce_FollowVelocity(float velocity){
 
 void ActuatorDcMotor::SpinOnce(){
     // Logger::Debug("ActuatorDcMotor::SpinOnce()");
-    // this->__sensor->GetRawSensor()->update();
     this->__encoder->update();
-    // this->_current_position = __sensor->GetCurrentPosition();
-    // this->_current_velocity = __sensor->GetCurrentVelocity();
     this->_current_position = this->__encoder->getSensorAngle();
-    // this->_current_velocity = this->__encoder->getVelocity();
 
     if (this->__is_moving){
-        // float abs_distance_to_target = this->GetAbsDistanceToTarget_InCncUnit();
         float abs_distance_to_target = abs (this->_target_position-this->_current_position);
         if(abs_distance_to_target < INERTIA_DISTANCE){
             // The wheel will continue to run a short time after stoping, because the inertia.
@@ -71,7 +65,7 @@ void ActuatorDcMotor::SpinOnce(){
             this->__h_bridge->Stop();
             this->__is_moving= false;
         } else{
-            this->SpinOnce_FollowVelocity(this->__target_velocity);
+            this->__SpinOnce_FollowVelocity(this->__target_velocity);
         } 
     }
 }
@@ -96,12 +90,16 @@ void ActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
     Logger::Print("speed", move->Speed);
     
     if (move->IsAbsTargetPosition){
-        this->_target_position = move->TargetPosition;
+        this->_target_position = this->GetPosition_FromCncUnit(move->TargetPosition);
     }else{
-        this->_target_position = this->GetCurrentPosition() + move->TargetPosition;
+        this->_target_position = this->GetCurrentPosition() 
+                                + this->GetPosition_FromCncUnit(move->TargetPosition);
     }
 
+    //actuator_dc_motor speed, comes from encoder, speed unit is: rad_per_second.
+    //CNC velocity unit is: ??
     this->__target_velocity =  move->Speed;
+
     if (this->_target_position < this->GetCurrentPosition()){
         this->__target_velocity = - move->Speed;
     }
@@ -113,22 +111,6 @@ void ActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
     Logger::Print("target_velocity", this->__target_velocity);
 }
 
-// float ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit(){
-//     // sensor --> current poistion   --> distance to target
-//     // TODO:  minus distance.
-//     // Logger::Debug(" ActuatorDcMotor::GetAbsDistanceToTarget_InCncUnit()");
-//     // Logger::Print("target_cnc_position", this->_target_position);
-//     // Logger::Print("Current_position", this->GetCurrentCncPosition());
-//     return abs(this->_target_position - this->GetCurrentPosition());
-// }
-
-// void ActuatorDcMotor::InitFormular_FromCncPosition(float position_in_cnc_unit){
-//     // this->__sensor->SetCurrentPosition(position_in_cnc_unit);
-//     //When currentPosition is changed, SpinOnce()   will follow targetPosition. To avoid this happen.
-//     this->_target_position = position_in_cnc_unit;
-
-// }
-
 void ActuatorDcMotor::ForceStop(){   
     //* Only G28 is using this.
     Logger::Debug("ActuatorDcMotor::ForceStop() is entering...");
@@ -136,13 +118,6 @@ void ActuatorDcMotor::ForceStop(){
     this->__is_moving = false;
 }
 
-// void ActuatorDcMotor::UpdateTargetPositionFromCurrent(){
-//     Logger::Debug("ActuatorDcMotor::UpdateTargetPositionFromCurrent() is entering...");
-//     Logger::Print("_target_position",_target_position);
-//     Logger::Print("this->GetCurrentPosition()",this->GetCurrentPosition());
-
-//     this->_target_position = this->GetCurrentPosition();
-// }
 
 void ActuatorDcMotor::Test_PwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
     this->__h_bridge->SetPwmSpeed(dir_is_cw, pwm_speed);

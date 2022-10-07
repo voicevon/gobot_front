@@ -8,7 +8,7 @@
 class McodeOS{
     public:
         bool StartToRun(Gcode* gcode);  
-        bool SpinOnce();        //todo: Rename RunnerSpinOnce();
+        bool SpinOnce();        
         static McodeOS& Instance(){
             static McodeOS __instance; // Guaranteed to be destroyed.
                                   // Instantiated on first use.

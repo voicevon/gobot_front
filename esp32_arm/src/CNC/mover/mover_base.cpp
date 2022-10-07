@@ -31,6 +31,8 @@ void MoverBase::AllActuatorsMoveTo(MoveBlock* move){
     MoveBlock_SingleActuator * ms;
     for(int a=0; a<Actuator_List::Instance().GetItemsCount(); a++){
         ms = &move->MoveBlocks[a];
+        // TODO: transloate postion unit here ??  What actuator is using?
+        // TODO: translate speed unit here.!!
         act =  Actuator_List::Instance().GetActuator(a);
         if (ms->IsAbsTargetPosition){
             act->UpdateMovement(ms);
