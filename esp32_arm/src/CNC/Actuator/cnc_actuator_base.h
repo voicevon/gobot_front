@@ -40,6 +40,7 @@ class CncActuatorBase: public ListItem{
         void ReInit_FormularOffset(float current_cnc_position);
         float ConvertPosition_ToCncUnit(float actuator_position);
         float GetPosition_FromCncUnit(float cnc_position);
+        float GetSpeed_FromCncUnit(float cnc_speed);
 
     protected:
         float _target_position;   // is always an absolute position

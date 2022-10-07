@@ -1,13 +1,13 @@
 #pragma once
 #include "CNC/coordinate/cnc_axis.h"
-#include "CNC/mover/mover_base.h"
+#include "CNC/mover/cnc_mover_base.h"
 // #include "Robot/axis_homer/axis_homer.h"
 #include "sync_gcode_runner_base.h"
 #include "Robot/axis_homer/home_trigger_array.h"
 
 class G28_Runner: public SyncGcodeRunnerBase{
     public:
-        virtual void Init(MoverBase* mover);
+        virtual void Init(CncMoverBase* mover);
     
         void Start() override ;
         bool IsDone() override;
@@ -16,7 +16,7 @@ class G28_Runner: public SyncGcodeRunnerBase{
 
     protected:
         virtual void SetMoveBlock_ToHome(char axis_name, MoveBlock* mb);
-        MoverBase* __mover;   //Only for stop()
+        CncMoverBase* __mover;   //Only for stop()
         
     private:
         char __axis_name;

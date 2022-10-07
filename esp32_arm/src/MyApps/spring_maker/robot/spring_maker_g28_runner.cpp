@@ -1,7 +1,7 @@
 #include "spring_maker_g28_runner.h"
 
 
-void SpringMaker_G28_Runner::Init( MoverBase* mover){
+void SpringMaker_G28_Runner::Init( CncMoverBase* mover){
     Logger::Info("SpringMaker_G28_Runner::Init() Hoiming_config");
     this->__mover = mover;
 

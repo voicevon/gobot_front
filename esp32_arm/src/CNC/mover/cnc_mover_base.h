@@ -10,7 +10,7 @@
 
 
 
-class MoverBase{
+class CncMoverBase{
     public:
         // To do some move
         void SpinOnce();

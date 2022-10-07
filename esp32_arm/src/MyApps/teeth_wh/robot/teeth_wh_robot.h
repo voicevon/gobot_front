@@ -1,23 +1,23 @@
 #pragma once
 
 #include "Robot/robot_base.h"
-#include "MyApps/vsc/board/board_vsc.h"
-#include "vsc_g28_runner.h"
-#include "CNC/arm_solution/circle_loop/circle_loop_arm_solution.h"
+#include "MyApps/teeth_wh/board/teeth_wh_board.h"
+#include "teeth_wh_g28_runner.h"
+#include "CNC/arm_solution/core_xa/core_xa_arm_solution.h"
 #include "MyLibs/list/pid_controllers_list.h"
 
 #define PID_CONTROLLERS_COUNT 1
 #define CNC_ACTUATORS_COUNT 1
 
 
-class VscRobot: public RobotBase{
+class TeechWarehouse_Robot: public RobotBase{
     public:
-        void Init(Vsc_Board* board);
+        void Init(TeethWarehouse_Board* board);
 
     private:
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
         void __Init_pids();
-        void __Init_actuators(Vsc_Board* board);
+        void __Init_actuators(TeethWarehouse_Board* board);
 
         PidControllers_Listable* __all_pids[PID_CONTROLLERS_COUNT];
         PidControllers_Listable __speed_pid = PidControllers_Listable(1.0f, 1.0f, 1.0f, 10.0f, 255.0f);
@@ -27,8 +27,8 @@ class VscRobot: public RobotBase{
 	    CncActuatorDcMotor __actuator_alpha = CncActuatorDcMotor(); 
         
         CncMoverBase mover;
-        CircleLoop_ArmSolution arm_solution;
-        Vsc_G28_Runner g28_runner;
+        CncSolution_CoreXA arm_solution;
+        TeethWarehouse_G28_Runner g28_runner;
 
 
         MoveBlock __all_move_blocks[88]; 

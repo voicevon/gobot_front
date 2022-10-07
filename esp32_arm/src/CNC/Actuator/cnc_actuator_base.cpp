@@ -45,6 +45,10 @@ float CncActuatorBase::GetPosition_FromCncUnit(float cnc_position){
     return cnc_position / this->__slope_from_raw_to_cnc - this->__raw_offset;
 }
 
+float CncActuatorBase::GetSpeed_FromCncUnit(float cnc_speed){
+    return cnc_speed / this->__slope_from_raw_to_cnc;
+}
+
 
 // float CncActuatorBase::__ModTwoPi(float origin_value){
 //     int zoom = 100000;

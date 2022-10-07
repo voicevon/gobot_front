@@ -7,7 +7,7 @@
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "CNC/mover/mover_base.h"
+#include "CNC/mover/cnc_mover_base.h"
 #include "CNC/planner/planner.h"
 #include "gcode_runner/g28_runner.h"
 #include "gcode_runner/g4_runner.h"
@@ -42,12 +42,12 @@ class RobotBase: public GcodeConsumer{
         
         CncBoardBase* _cnc_board;  //!!!!
         ArmSolutionBase* _arm_solution;
-        void LinkMover(MoverBase* mover){this->_mover=mover;};
+        void LinkMover(CncMoverBase* mover){this->_mover=mover;};
 
         
     protected:
         G28_Runner*__g28_runner;
-        MoverBase* _mover;
+        CncMoverBase* _mover;
 
     private:
         int test_int;

@@ -1,7 +1,7 @@
 #include "Robot/gcode_runner/g28_runner.h"
-#include "MyApps/spring_maker/board/board.h"
+#include "Robot/axis_homer/home_trigger_array.h"
 
-class SpringMaker_G28_Runner: public G28_Runner{
+class TeethWarehouse_G28_Runner: public G28_Runner{
     public:
         void Init(CncMoverBase* mover) override;
 

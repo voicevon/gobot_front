@@ -10,7 +10,7 @@
 #include "kinematic_config.h"
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
-#include "../mover/mover_base.h"
+#include "../mover/cnc_mover_base.h"
 // #include "Robot/axis_homer/axis_homer.h"
 // #include "Robot/axis_homer/homer_diction.h"
 #include "Robot/axis_homer/home_trigger_array.h"

@@ -96,6 +96,10 @@ void CncActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
                                 + this->GetPosition_FromCncUnit(move->TargetPosition);
     }
 
+    // TODO:  got target speed, not target_velocity. But:
+    // seems, target_speed will be used directly,  target_velocicy will not be. 
+    this->__target_velocity = this->GetSpeed_FromCncUnit(move->Speed);
+
     //actuator_dc_motor speed, comes from encoder, speed unit is: rad_per_second.
     //CNC velocity unit is: ??
     this->__target_velocity =  move->Speed;

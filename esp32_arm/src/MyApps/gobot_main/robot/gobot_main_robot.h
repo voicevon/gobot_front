@@ -22,7 +22,7 @@ class GobotMainRobot: public RobotBase{
 
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
-        MoverBase mover;
+        CncMoverBase mover;
         FiveBars_ArmSolution arm_solution;
         GobotMain_G28_Runner g28_runner;
 };

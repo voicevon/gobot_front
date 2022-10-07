@@ -1,0 +1,19 @@
+#pragma once
+
+// #define PIN_H_BRIDGE_A  33
+// #define PIN_H_BRIDGE_B  32
+#define PIN_H_BRIDGE_DIR  32
+#define PIN_H_BRIDGE_SPEED  33
+
+#define PIN_SENSOR_ADC  34
+#define PIN_ENCODER_A 18
+#define PIN_ENCODER_B 21
+
+
+
+#define PIN_HOMER_SENSOR_HALL_0 19
+#define PIN_HOMER_SENSOR_HALL_1 23
+
+#define PIN_HOMER_SENSOR_HALL_2 16
+#define PIN_HOMER_SENSOR_HALL_3 15
+

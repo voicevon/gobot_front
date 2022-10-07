@@ -3,7 +3,7 @@
 
 class BoxMover_G28_Runner: public G28_Runner{
     public:
-        void Init(MoverBase* mover);
+        void Init(CncMoverBase* mover);
 
     private:
         void SetMoveBlock_ToHome(char axis, MoveBlock* mb) override;

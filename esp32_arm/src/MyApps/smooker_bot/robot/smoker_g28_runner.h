@@ -3,7 +3,7 @@
 
 class Smoker_G28_Runner: public G28_Runner{
     public:
-        void Init(MoverBase* mover) override;
+        void Init(CncMoverBase* mover) override;
 
     private:
         void SetMoveBlock_ToHome(char axis, MoveBlock* mb) override;

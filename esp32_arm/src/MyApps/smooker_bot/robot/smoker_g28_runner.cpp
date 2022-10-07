@@ -1,7 +1,7 @@
 #include "smoker_g28_runner.h"
 
 
-void Smoker_G28_Runner::Init(MoverBase* mover){
+void Smoker_G28_Runner::Init(CncMoverBase* mover){
     Logger::Info("Smoker_G28_Runner::Init() Hoiming_config");
     this->__mover = mover;
 

@@ -1,9 +1,7 @@
 #pragma once
 
-// #include "MyLibs/dictions/diction_base.h"
 #include "cnc_actuator_base.h"
 #include "dc_motor/cnc_actuator_dc_motor.h"
-
 
 class CncActuator_List: public ListBase{
     public:

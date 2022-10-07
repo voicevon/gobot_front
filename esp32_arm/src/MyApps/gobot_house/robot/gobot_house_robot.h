@@ -18,7 +18,7 @@ class GobotHouseRobot: public RobotBase{
 
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
-        MoverBase  mover;
+        CncMoverBase  mover;
         Scara_ArmSolution arm_solution;
         GobotHouse_G28_Runner g28_runner;
 

@@ -14,7 +14,8 @@
 // #define I_AM_GOBOT_HOUSE_2206
 // #define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
-#define I_AM_VSC
+// #define I_AM_VSC
+#define I_AM_TEETH_WAREHOUSE
 
 // #define I_AM_ACUPUCTURE_MAIN
 // #define I_AM_ACUPUNCTURE_TESTER
@@ -92,9 +93,12 @@
 #ifdef I_AM_VSC
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   
-	// #define CNC_ACTUATOR_COUNT 1
 #endif
 
+#ifdef I_AM_TEETH_WAREHOUSE
+	#define USING_WIFI_MQTT
+	#define MQTT_SYNCERS_COUNT  1   
+#endif
 
 #ifdef I_AM_GARMENT_BOX_MOVER
 	#define USING_WIFI_MQTT
