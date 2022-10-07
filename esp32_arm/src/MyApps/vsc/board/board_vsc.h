@@ -1,7 +1,7 @@
 #pragma once
 #include "CNC/board/cnc_board_base.h"
 #include <SimpleFOC.h>
-#include "CNC/Actuator/dc_motor/actuator_dc_motor.h"
+#include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
 #include "Robot/driver/h_bridge/h_bridge.h"
 #include "eef/vsc_eef.h"
 #include "pins/wroom_board.h"

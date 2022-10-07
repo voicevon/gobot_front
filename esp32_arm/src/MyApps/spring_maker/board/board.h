@@ -21,7 +21,7 @@ class Board_SpringMaker: public CncBoardBase{
         
     private:
         Stepper stepper_driver_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
-        // ActuatorStepper stepper_alpha;
+        // CncActuatorStepper stepper_alpha;
         PositionTrigger _all_position_triggers[POSITION_TRIGGERS_COUNT];
         // PositionTrigger homer_alpha = PositionTrigger(PIN_HOME_ALPHA_2201, LOW);
         RobotEef_SpringMaker eef = RobotEef_SpringMaker();

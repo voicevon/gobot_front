@@ -1,8 +1,7 @@
-#include "actuator_servo.h"
-// #include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
+#include "cnc_actuator_servo.h"
 
 
-void ActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
+void CncActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
     this->__servo = servo; 
     this->__inversed_dir = is_inversed_dir;
     this->__servo->write(40);
@@ -12,19 +11,19 @@ void ActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
     bool debug = false;
     if (debug){
         float verify_cnc_position = this->__ToCncRad(50);
-        Serial.print("[Debug] ActuatorServo::LinkServo()   verify ");
+        Serial.print("[Debug] CncActuatorServo::LinkServo()   verify ");
         Serial.println(RAD_TO_DEG * verify_cnc_position);
         float verify_servo_position = this->__ToServoDegree(DEG_TO_RAD * 140);
-        Serial.print("[Debug] ActuatorServo::LinkServo()   verify ");
+        Serial.print("[Debug] CncActuatorServo::LinkServo()   verify ");
         Serial.println(verify_servo_position);
     }
 }
 
-// float ActuatorServo::GetAbsDistanceToTarget_InCncUnit(){
+// float CncActuatorServo::GetAbsDistanceToTarget_InCncUnit(){
 //     return abs(this->_target_position - this->_current_position);
 // }
 
-void ActuatorServo::SpinOnce(){
+void CncActuatorServo::SpinOnce(){
     // Execute moving to target position,  and follow target speed
     // Never know the current position. Shold be equal to target_position.  Right?  TODO:  doble check.
     if (!this->__is_moving) return;
@@ -33,7 +32,7 @@ void ActuatorServo::SpinOnce(){
     int64_t time_interval_in_us = (now - this->__last_spin_timestamp) ;
     bool debug = false;
     if (debug){
-        Serial.print("[Debug] ActuatorServo::SpinOnce() now= ");
+        Serial.print("[Debug] CncActuatorServo::SpinOnce() now= ");
         Serial.print(now);
         Serial.print("   interval us = ");
         Serial.println(time_interval_in_us);
@@ -74,8 +73,8 @@ void ActuatorServo::SpinOnce(){
     this->__servo->write(servo_angle_in_degree);
 }
 
-// void ActuatorServo::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
-void ActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
+// void CncActuatorServo::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
+void CncActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
 
     // if (is_absolute_position){
     if (move->IsAbsTargetPosition){
@@ -93,7 +92,7 @@ void ActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
 
     bool debug = false;
     if(debug){
-        Serial.print("[debug] ActuatorServo::MoveTo() current_cnc_position in degree = ");
+        Serial.print("[debug] CncActuatorServo::MoveTo() current_cnc_position in degree = ");
         Serial.print(RAD_TO_DEG * this->_current_position);
         Serial.print("  target position=  ");
         Serial.print(RAD_TO_DEG * this->_target_position);
@@ -104,12 +103,12 @@ void ActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
 
 }
 
-void ActuatorServo::StartToMove(){
+void CncActuatorServo::StartToMove(){
     this->__is_moving = true;   //??
     this->__last_spin_timestamp = esp_timer_get_time();
 }
 
-// void ActuatorServo::ReInit_FormularOffset(float cnc_position_in_rad){
+// void CncActuatorServo::ReInit_FormularOffset(float cnc_position_in_rad){
 //     // This function is called from CNC, Who send a rad-angle in unit. 
 //     int8_t dir = 1;
 //     if (this->__inversed_dir) dir = -1;
@@ -117,7 +116,7 @@ void ActuatorServo::StartToMove(){
 //     this->__position_offset_in_rad = cnc_position_in_rad - DEG_TO_RAD * this->__servo->read() * dir;
 //     bool debug = false;
 //     if(debug){
-//         Serial.print("[Debug] ActuatorServo::SetPosition()  cnc_position, servo_position, __position_offset in_degree = ");
+//         Serial.print("[Debug] CncActuatorServo::SetPosition()  cnc_position, servo_position, __position_offset in_degree = ");
 //         Serial.print(RAD_TO_DEG * cnc_position_in_rad);
 //         Serial.print (",   " );
 //         Serial.print(this->__servo->read());
@@ -126,18 +125,18 @@ void ActuatorServo::StartToMove(){
 //     }
 // }
 
-// void ActuatorServo::SetSpeed(float speed_in_cnc_unit){
+// void CncActuatorServo::SetSpeed(float speed_in_cnc_unit){
 //     this->__speed_degree_per_second = abs(RAD_TO_DEG * speed_in_cnc_unit); 
 // }
 
 
-float ActuatorServo::__ToServoDegree(float from_cnc_rad){
+float CncActuatorServo::__ToServoDegree(float from_cnc_rad){
     int8_t dir = 1;
     if (this->__inversed_dir) dir = -1;
     return  RAD_TO_DEG * (from_cnc_rad * dir + this->__position_offset_in_rad);
 }
 
-float ActuatorServo::__ToCncRad(float from_servo_degree){
+float CncActuatorServo::__ToCncRad(float from_servo_degree){
     int8_t dir = 1;
     if (this->__inversed_dir) dir = -1;
     return  from_servo_degree * DEG_TO_RAD * dir + this->__position_offset_in_rad;

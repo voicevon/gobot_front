@@ -1,4 +1,4 @@
-#include "actuator_dc_motor.h"
+#include "cnc_actuator_dc_motor.h"
 #include "Arduino.h"
 #include "MyBoards/board_base.h"   //todo: ??
 
@@ -6,7 +6,7 @@
 #define INERTIA_DISTANCE  0.064    // this is a CNC unit  0.016== (1/386)/ (2*PI), around 12.7mm
 
 // real speed control, position check, auto stop....
-void ActuatorDcMotor::__SpinOnce_FollowVelocity(float velocity){
+void CncActuatorDcMotor::__SpinOnce_FollowVelocity(float velocity){
     static uint32_t last_micros;
     bool serial_output = false;
     if(micros() - last_micros > 1000){
@@ -52,8 +52,8 @@ void ActuatorDcMotor::__SpinOnce_FollowVelocity(float velocity){
 }    
 
 
-void ActuatorDcMotor::SpinOnce(){
-    // Logger::Debug("ActuatorDcMotor::SpinOnce()");
+void CncActuatorDcMotor::SpinOnce(){
+    // Logger::Debug("CncActuatorDcMotor::SpinOnce()");
     this->__encoder->update();
     this->_current_position = this->__encoder->getSensorAngle();
 
@@ -70,7 +70,7 @@ void ActuatorDcMotor::SpinOnce(){
     }
 }
 
-// float ActuatorDcMotor::GetCurrentPosition(){
+// float CncActuatorDcMotor::GetCurrentPosition(){
 //     // from sensor_angle to cnc_angle.
 //     // cnc_angle == sensor_angle  * (10 / 10) * (10 / 56) * (56 / 157) 
 //     //           == sensor_angle * (SENSOR_GEAR_COUNT / MOTOR_GEAR_COUNT)* (MOTOR_GEAR_COUNT / DRIVER_GEAR_COUNT) * (DRIVER_GEAR_COUNT / CHAIN_PITCH_COUNT)
@@ -81,10 +81,10 @@ void ActuatorDcMotor::SpinOnce(){
 
 
 
-// void ActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float target_position){
-void ActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
+// void CncActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float target_position){
+void CncActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
 
-    Logger::Debug("ActuatorDcMotor::UpdateMovement()");
+    Logger::Debug("CncActuatorDcMotor::UpdateMovement()");
     Logger::Print("is_absolute_position", move->IsAbsTargetPosition);
     Logger::Print("target_position", move->TargetPosition);
     Logger::Print("speed", move->Speed);
@@ -111,15 +111,15 @@ void ActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
     Logger::Print("target_velocity", this->__target_velocity);
 }
 
-void ActuatorDcMotor::ForceStop(){   
+void CncActuatorDcMotor::ForceStop(){   
     //* Only G28 is using this.
-    Logger::Debug("ActuatorDcMotor::ForceStop() is entering...");
+    Logger::Debug("CncActuatorDcMotor::ForceStop() is entering...");
     this->__h_bridge->Stop();
     this->__is_moving = false;
 }
 
 
-void ActuatorDcMotor::Test_PwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
+void CncActuatorDcMotor::Test_PwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
     this->__h_bridge->SetPwmSpeed(dir_is_cw, pwm_speed);
 }
 

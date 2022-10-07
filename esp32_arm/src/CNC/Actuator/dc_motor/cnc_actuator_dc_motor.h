@@ -4,9 +4,9 @@
 #include <SimpleFOC.h>  //For encoder only
 
 
-class ActuatorDcMotor: public CncActuatorBase{
+class CncActuatorDcMotor: public CncActuatorBase{
     public:
-        ActuatorDcMotor(){};
+        CncActuatorDcMotor(){};
 
         // void LinkAngleSensor(RotaryEncoder* sensor){this->__sensor=sensor;}; 
         void LinkEncoder(Encoder* encoder){this->__encoder=encoder;};

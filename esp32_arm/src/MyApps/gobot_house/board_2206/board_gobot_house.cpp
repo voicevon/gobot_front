@@ -53,7 +53,7 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
 //     return nullptr;
 // }
 
-ActuatorServo* Board_GobotHouse_2206::GetActuaorBeta(char axis_name){
+CncActuatorServo* Board_GobotHouse_2206::GetActuaorBeta(char axis_name){
     if (axis_name=='B'){
         return &this->__actuator_beta;
     // }else if (axis_name=='B'){

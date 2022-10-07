@@ -14,7 +14,7 @@ class GobotMain_Board: public CncBoardBase{
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
         uint8_t ReadAllRooms();
         uint8_t GetLoadedRoom();
-        ActuatorStepper* GetActuator(EnumAxis_Inverseinematic axis){return nullptr;};
+        CncActuatorStepper* GetActuator(EnumAxis_Inverseinematic axis){return nullptr;};
 
     private:
         void InitHardware();

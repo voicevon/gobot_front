@@ -17,8 +17,8 @@ class GobotMainRobot: public RobotBase{
         void __InitActuator(GobotMain_Board* board);
 
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
-	    ActuatorStepper __actuator_alpha = ActuatorStepper(); 
-        ActuatorStepper __actuator_beta = ActuatorStepper();
+	    CncActuatorStepper __actuator_alpha = CncActuatorStepper(); 
+        CncActuatorStepper __actuator_beta = CncActuatorStepper();
 
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];

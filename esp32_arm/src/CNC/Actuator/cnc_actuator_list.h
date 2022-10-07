@@ -2,7 +2,7 @@
 
 // #include "MyLibs/dictions/diction_base.h"
 #include "cnc_actuator_base.h"
-#include "dc_motor/actuator_dc_motor.h"
+#include "dc_motor/cnc_actuator_dc_motor.h"
 
 
 class CncActuator_List: public ListBase{
@@ -23,5 +23,5 @@ class CncActuator_List: public ListBase{
             };
         
         // This is risky,  Be careful;
-        ActuatorDcMotor* GetActuator_DcMotor(int index) {return (ActuatorDcMotor*)_GetItem(index);};
+        CncActuatorDcMotor* GetActuator_DcMotor(int index) {return (CncActuatorDcMotor*)_GetItem(index);};
 };

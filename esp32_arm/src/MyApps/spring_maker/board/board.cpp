@@ -14,7 +14,7 @@ void Board_SpringMaker::Init(bool is_on_reset){
 // }
 
 
-// ActuatorStepper* Board_SpringMaker::GetActuator(EnumAxis axis_name) {
+// CncActuatorStepper* Board_SpringMaker::GetActuator(EnumAxis axis_name) {
 //     if (axis_name==AXIS_ALPHA){
 //         return &this->stepper_alpha;
 //     }else{

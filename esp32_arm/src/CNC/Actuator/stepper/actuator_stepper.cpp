@@ -2,14 +2,14 @@
 // #include "CNC/gcode/line_segment_queue.h"   //TODO:  use block
 
 
-void ActuatorStepper::LinkStepper(Stepper* stepper, float steps_per_cnc_unit){
+void CncActuatorStepper::LinkStepper(Stepper* stepper, float steps_per_cnc_unit){
     this->_stepper = stepper;
     this->__steps_per_cnc_unit =steps_per_cnc_unit;
 }
 
-void ActuatorStepper::PrintOut(const char* title){
+void CncActuatorStepper::PrintOut(const char* title){
     Logger::Info(title);
-    Serial.print("ActuatorStepper  in");
+    Serial.print("CncActuatorStepper  in");
     Serial.println(title);
     Serial.print("Positions:  current=" );
     Serial.println(RAD_TO_DEG * this->ConvertPosition_ToCncUnit(_current_position));
@@ -20,7 +20,7 @@ void ActuatorStepper::PrintOut(const char* title){
     Serial.println(FCBC_RESET);
 }
 
-// float ActuatorStepper::GetCurrentPosition(){
+// float CncActuatorStepper::GetCurrentPosition(){
 //     float actuator_position = 1.0f * this->_stepper->getPosition() / this->__steps_per_cnc_unit;
 //     this->__current_cnc_position_in_rad = actuator_position;
 //     if (this->_is_range_constraint){
@@ -29,25 +29,25 @@ void ActuatorStepper::PrintOut(const char* title){
 //         this->__current_cnc_position_in_rad = this->_range_constraint->_ConvertTo_CncRange(actuator_position);
 //     }
 //     return this->__current_cnc_position_in_rad;
-//     // Serial.println("[Error] ActuatorStepper::GetCurrentPosition()  I don't know the anser now!");
+//     // Serial.println("[Error] CncActuatorStepper::GetCurrentPosition()  I don't know the anser now!");
 //     // while(1){
 //     //     Serial.print("X ");
 //     //     delay(500);
 //     // }
 // }
 
-// float ActuatorStepper::GetAbsDistanceToTarget_InCncUnit(){
+// float CncActuatorStepper::GetAbsDistanceToTarget_InCncUnit(){
 //     int32_t distance_in_step = this->_stepper->getDistanceToTarget();
 //     bool debug = false;
 //     if (debug){
-//         Serial.print("[Debug] ActuatorStepper::GetAbsDistanceToTarget_InCncUnit() ");
+//         Serial.print("[Debug] CncActuatorStepper::GetAbsDistanceToTarget_InCncUnit() ");
 //         Serial.print(" current_step_position= " );
 //         Serial.print(this->_stepper->getPosition());
 //         Serial.print(" distance to target= " );
 //         Serial.println(distance_in_step);
 //     }
 //     if(distance_in_step < 0){
-//         Serial.println("[Error] ActuatorStepper::GetAbsDistanceToTarget_InCncUnit() ,  Do inspection! ");
+//         Serial.println("[Error] CncActuatorStepper::GetAbsDistanceToTarget_InCncUnit() ,  Do inspection! ");
 //         while(true){
 //             Serial.print("E ");
 //             delay(1000);
@@ -58,7 +58,7 @@ void ActuatorStepper::PrintOut(const char* title){
 
 
 
-// void ActuatorStepper::InitFormular_FromCncPosition(float position_in_cnc_unit){
+// void CncActuatorStepper::InitFormular_FromCncPosition(float position_in_cnc_unit){
 //     //TODO:  direction is here.  The joint has range limitation.  --> DONE.  
 //     float joint_position = position_in_cnc_unit;
 //     if(this->_is_range_constraint) {
@@ -69,7 +69,7 @@ void ActuatorStepper::PrintOut(const char* title){
 
 //     bool debug = true;
 //     if(debug){
-//         Logger::Debug("ActuatorStepper::InitFormular_FromCncPosition()  ");
+//         Logger::Debug("CncActuatorStepper::InitFormular_FromCncPosition()  ");
 //         Serial.print("__steps_per_cnc_unit= ");
 //         Serial.print(this->__steps_per_cnc_unit);
 //         Serial.print("  cnc position in degree = ");
@@ -82,8 +82,8 @@ void ActuatorStepper::PrintOut(const char* title){
 // }
 
 // Must clear to understand:  cnc_position,  actuator_position(or joint_position), and motor_position.
-// void ActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
-void ActuatorStepper::UpdateMovement(MoveBlock_SingleActuator* move){
+// void CncActuatorStepper::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
+void CncActuatorStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     int32_t motor_position_in_step;
     if (move->IsAbsTargetPosition){
         this->_target_position = move->TargetPosition;
@@ -96,7 +96,7 @@ void ActuatorStepper::UpdateMovement(MoveBlock_SingleActuator* move){
 
         bool debug = true;
         if (debug){
-            Logger::Info("ActuatorStepper::SetTargetPositionTo()");
+            Logger::Info("CncActuatorStepper::SetTargetPositionTo()");
             Logger::Print("is_absolute_position", move->IsAbsTargetPosition);
             Logger::Print("motor_position_in_step", motor_position_in_step);
             Logger::Print("Target_position: actuator ", RAD_TO_DEG * actuator_position);
@@ -112,7 +112,7 @@ void ActuatorStepper::UpdateMovement(MoveBlock_SingleActuator* move){
 
     bool debug = true;
     if(debug){
-        Logger::Debug(" ActuatorStepper::MoveTo()" );
+        Logger::Debug(" CncActuatorStepper::MoveTo()" );
         Serial.print("steps_per_cnc_unit= ");
         Serial.print(this->__steps_per_cnc_unit);
         
@@ -138,7 +138,7 @@ void ActuatorStepper::UpdateMovement(MoveBlock_SingleActuator* move){
 }
 
 // #define MAX_STEPS_PER_SECOND 6000   //TODO:  be configable
-// void ActuatorStepper::SetSpeed(float speed_in_cnc_unit){
+// void CncActuatorStepper::SetSpeed(float speed_in_cnc_unit){
 //     float steps_per_second = speed_in_cnc_unit * this->__steps_per_cnc_unit;
 //     if (steps_per_second > MAX_STEPS_PER_SECOND){
 //         steps_per_second = MAX_STEPS_PER_SECOND;
@@ -148,7 +148,7 @@ void ActuatorStepper::UpdateMovement(MoveBlock_SingleActuator* move){
 //     this->__speed = steps_per_second / this->__steps_per_cnc_unit;
 //     bool debug = false;
 //     if (debug){
-//         Serial.print("[Debug] ActuatorStepper::SetSpeed() speed= ");
+//         Serial.print("[Debug] CncActuatorStepper::SetSpeed() speed= ");
 //         Serial.println(RAD_TO_DEG * this->__speed);
 //     }
 // }

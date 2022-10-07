@@ -4,7 +4,7 @@
 #include <ESP32Servo.h>
 
 
-class ActuatorServo: public CncActuatorBase{
+class CncActuatorServo: public CncActuatorBase{
     public:
         void LinkServo(Servo* servo, bool is_inversed_dir);
         void SetInverseDir(bool inversed){this->__inversed_dir=inversed;};

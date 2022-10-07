@@ -4,10 +4,10 @@
 
 
 
-// void Vsc_BoardTest::Test_Actuator(ActuatorDcMotor* motor, int loop_count){
+// void Vsc_BoardTest::Test_Actuator(CncActuatorDcMotor* motor, int loop_count){
 //     //Speed unit is:    mm/second   or   rad/second
 //     float distance;
-//     // ActuatorDcMotor* motor = this->__board->GetActuator(AXIS_ALPHA);   // todo: 
+//     // CncActuatorDcMotor* motor = this->__board->GetActuator(AXIS_ALPHA);   // todo: 
 //     // float speed = 12;
 //     MoveBlock_SingleActuator move;
 //     move.IsAbsTargetPosition = false;
@@ -42,8 +42,8 @@
 // }
 
 void Vsc_BoardTest::__TestOffset(float value){
-    // ActuatorDcMotor* motor = (ActuatorDcMotor*) (this->__board->GetActuator(AXIS_ALPHA));
-    ActuatorDcMotor* motor ;  // todo
+    // CncActuatorDcMotor* motor = (CncActuatorDcMotor*) (this->__board->GetActuator(AXIS_ALPHA));
+    CncActuatorDcMotor* motor ;  // todo
     float slope= 123.4f;
     motor->Init_FomularSlope(slope);
     float result = motor->GetCurrentPosition();

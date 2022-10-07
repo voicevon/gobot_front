@@ -21,7 +21,7 @@ class Smoker_Board: public CncBoardBase{
 
     private:
         Stepper stepper_alpha = Stepper(PIN_ALPHA_STEP_2201, PIN_ALPHA_DIR_2201);
-        ActuatorStepper __actuator;
+        CncActuatorStepper __actuator;
         PositionTrigger __all_position_trigger[1];
         RobotEef_SmokeMachine eef = RobotEef_SmokeMachine();
 

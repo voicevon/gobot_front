@@ -25,8 +25,8 @@ class Board2204Cnc: public CncBoardBase{
         // PositionTrigger homer_z = PositionTrigger(LOW);
         // PositionTrigger homer_A = PositionTrigger(LOW);
         RobotEef_GarmentAsar eef = RobotEef_GarmentAsar();
-        ActuatorStepper __actuator_alpha;
-        ActuatorStepper __actuator_beta;
+        CncActuatorStepper __actuator_alpha;
+        CncActuatorStepper __actuator_beta;
 
 };
 
