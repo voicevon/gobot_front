@@ -2,15 +2,15 @@
 
 #include "m42_runner.h"
 #include "m84_runner.h"
+#include "m119_runner.h"
 #include "m130_runner.h"
 
-//todo:  better name:  McodeRunner_Finder
-class McodeRunners{
+class McodeOS{
     public:
-        bool StartToRun(Gcode* gcode);  //todo: Rename to FindRunnerThenRun
+        bool StartToRun(Gcode* gcode);  
         bool SpinOnce();        //todo: Rename RunnerSpinOnce();
-        static McodeRunners& Instance(){
-            static McodeRunners __instance; // Guaranteed to be destroyed.
+        static McodeOS& Instance(){
+            static McodeOS __instance; // Guaranteed to be destroyed.
                                   // Instantiated on first use.
             return __instance;
         } 
@@ -19,6 +19,7 @@ class McodeRunners{
     private:
         M42_Runner __m42_runner;
         M84_Runner __m84_runner;
+        M119_Runner __m119_runner;
         M130_Runner __m130_runner;
         McodeRunnerBase* __current_runner;
 };

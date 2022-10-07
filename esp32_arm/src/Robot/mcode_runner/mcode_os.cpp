@@ -1,19 +1,19 @@
-#include "mcode_runners.h"
+#include "mcode_os.h"
 
-bool McodeRunners::StartToRun(Gcode* mcode){
-    McodeRunnerBase* runner = McodeRunners::Instance().GetRunner(mcode->m);
+bool McodeOS::StartToRun(Gcode* mcode){
+    McodeRunnerBase* runner = McodeOS::Instance().GetRunner(mcode->m);
     if (runner==nullptr){
-        Logger::Error("McodeRunners::StartToRun()");
+        Logger::Error("McodeOS::StartToRun()");
         Logger::Print("mcode->m", mcode->m);
         Logger::Halt("More ablility, More responsbility!");
     }
     return runner->StartToRun(mcode);
 }
-bool McodeRunners::SpinOnce(){
+bool McodeOS::SpinOnce(){
     __current_runner->SpinOnce();
 }
 
-McodeRunnerBase* McodeRunners::GetRunner(int mcode_id){
+McodeRunnerBase* McodeOS::GetRunner(int mcode_id){
     __current_runner = nullptr;
     switch(mcode_id){
         case 42:
