@@ -16,7 +16,7 @@ class GobotMainRobot: public RobotBase{
         void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
         void __InitActuator(GobotMain_Board* board);
 
-        ActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
+        CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
 	    ActuatorStepper __actuator_alpha = ActuatorStepper(); 
         ActuatorStepper __actuator_beta = ActuatorStepper();
 

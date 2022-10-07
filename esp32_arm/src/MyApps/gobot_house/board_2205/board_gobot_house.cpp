@@ -21,7 +21,7 @@ void Board_GobotHouse::Init(bool is_on_reset){
 
 }
 
-// ActuatorBase* Board_GobotHouse::GetActuator(EnumAxis axis_name) {
+// CncActuatorBase* Board_GobotHouse::GetActuator(EnumAxis axis_name) {
 //     if (axis_name=='A'){
 //         return &this->alpha_stepper;
 //     }else if (axis_name=='B'){

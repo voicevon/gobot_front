@@ -58,7 +58,7 @@ Stepper* GobotMain_Board::GetStepper(EnumAxis_Inverseinematic axis){
     return nullptr;
 }
 
-// ActuatorBase* GobotMain_Board::GetActuator(EnumAxis axis) {
+// CncActuatorBase* GobotMain_Board::GetActuator(EnumAxis axis) {
 //     if (axis==AXIS_ALPHA){
 //         return &this->__actuator_alpha;
 //     }else if (axis==AXIS_BETA){

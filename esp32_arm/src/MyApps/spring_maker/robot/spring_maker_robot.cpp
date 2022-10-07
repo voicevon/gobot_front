@@ -16,8 +16,8 @@ void SpringMakerRobot::Init(Board_SpringMaker* board){
     g28_runner.Init(&mover);
 
     Logger::Info("SpringMakerRobot::Init() Actuators.");
-    Actuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
-    Actuator_List::Instance().AddActuator(&__actuator_alpha);
+    CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    CncActuator_List::Instance().AddActuator(&__actuator_alpha);
     // this->__actuator_alpha.LinkPidController(&__speed_pid);
     // this->__actuator_alpha.LinkMotorDriver(board->GetMotorDriver());
     // this->__actuator_alpha.LinkAngleSensor(board->GetAngleSensor());

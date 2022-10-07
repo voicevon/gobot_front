@@ -23,7 +23,7 @@ class VscRobot: public RobotBase{
         PidControllers_Listable __speed_pid = PidControllers_Listable(1.0f, 1.0f, 1.0f, 10.0f, 255.0f);
         // PidControllers_Listable __test_pid = PidControllers_Listable(3.0f, 4.0f, 5.0f, 33.0f, 33.0f);
 
-        ActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
+        CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
 	    ActuatorDcMotor __actuator_alpha = ActuatorDcMotor(); 
         
         MoverBase mover;

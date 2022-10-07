@@ -53,7 +53,7 @@ class RoomBotCorner: public RobotBase{
         // DCDriverHBridge objHBridge = YuXin_HBridge(PIN_DC_MOTOR_A_2130, PIN_DC_MOTOR_B_2130);
         YuXin_HBridge objHBridge = YuXin_HBridge();
         HomeHelper objHomeTriger = HomeHelper(PIN_HOME_SENSOR_2130, LOW);
-        DCMotor objDcMotor = DCMotor();   //parent is ActuatorBase
+        DCMotor objDcMotor = DCMotor();   //parent is CncActuatorBase
         CommuUart objCommuUart = CommuUart();
         CommuBleGattServer objCommuBle = CommuBleGattServer();
 

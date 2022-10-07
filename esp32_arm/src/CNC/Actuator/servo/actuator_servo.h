@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../actuator_base.h"
+#include "../cnc_actuator_base.h"
 #include <ESP32Servo.h>
 
 
-class ActuatorServo: public ActuatorBase{
+class ActuatorServo: public CncActuatorBase{
     public:
         void LinkServo(Servo* servo, bool is_inversed_dir);
         void SetInverseDir(bool inversed){this->__inversed_dir=inversed;};

@@ -17,7 +17,7 @@ void Board2205Cnc::Init(Adafruit_MCP23X17* mcp_23018){
     HomeTrigger_Array::Instance().Init(__all_position_triggers, 2);
 }
 
-// ActuatorBase* Board2205Cnc::GetActuator(EnumAxis axis_name){
+// CncActuatorBase* Board2205Cnc::GetActuator(EnumAxis axis_name){
 //     if (axis_name=='A'){
 //         return &this->alpha_stepper;
 //     }else if (axis_name=='B'){

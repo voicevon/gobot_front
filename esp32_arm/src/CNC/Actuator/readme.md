@@ -16,7 +16,7 @@ rotary actuator:
 * Interface: can be GPIO, SPI/I2C/UART bus
  
 ## Involved
-Some features are very related to actuator, but we don't consider them as a part of ActuatorBase.
+Some features are very related to actuator, but we don't consider them as a part of CncActuatorBase.
 The instance is possible to use multi hirachy from other parent class.
 * Openloop vs Closeloop
  * Instance of closed loop: servo
@@ -26,7 +26,7 @@ The instance is possible to use multi hirachy from other parent class.
  * Homing sensor,
 # Class hirachy
 ```
-    ActuatorBase
+    CncActuatorBase
        |---- Actuator_DcMotor
        |---- Actuator_Stepper
        |---- Actuator_Bldc

@@ -1,25 +1,25 @@
 #pragma once
 
 // #include "MyLibs/dictions/diction_base.h"
-#include "actuator_base.h"
+#include "cnc_actuator_base.h"
 #include "dc_motor/actuator_dc_motor.h"
 
 
-class Actuator_List: public ListBase{
+class CncActuator_List: public ListBase{
     public:
-        static Actuator_List& Instance(){
-            static Actuator_List __instance;
+        static CncActuator_List& Instance(){
+            static CncActuator_List __instance;
             return __instance;
             };
 
-        void Init(ActuatorBase** all_items, int count){
+        void Init(CncActuatorBase** all_items, int count){
             _Init((ListItem**)all_items, count);
             };
-        void AddActuator(ActuatorBase* actuator){
+        void AddActuator(CncActuatorBase* actuator){
             __AddItem(actuator);
             };
-        ActuatorBase* GetActuator(int index) {
-            return (ActuatorBase*)_GetItem(index);
+        CncActuatorBase* GetActuator(int index) {
+            return (CncActuatorBase*)_GetItem(index);
             };
         
         // This is risky,  Be careful;

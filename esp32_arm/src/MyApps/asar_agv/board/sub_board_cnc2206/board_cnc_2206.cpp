@@ -46,7 +46,7 @@ RobotEef_GarmentAsar* Board2204Cnc::GetEef(){
     return &this->eef;
 }
 
-ActuatorBase* Board2204Cnc::GetActuator(EnumAxis_Inverseinematic axis){
+CncActuatorBase* Board2204Cnc::GetActuator(EnumAxis_Inverseinematic axis){
     return nullptr;
 }
 

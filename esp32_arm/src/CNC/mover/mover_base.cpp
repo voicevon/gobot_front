@@ -3,9 +3,9 @@
 
 void MoverBase::SpinOnce(){
     // Logger::Debug("MoverBase::SpinOnce()");
-    for(int a=0; a<Actuator_List::Instance().GetItemsCount(); a++){
+    for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
         // Logger::Print("axis=", a);
-        Actuator_List::Instance().GetActuator(a)->SpinOnce();
+        CncActuator_List::Instance().GetActuator(a)->SpinOnce();
 
     }
 
@@ -27,13 +27,13 @@ void MoverBase::SpinOnce(){
 }
 
 void MoverBase::AllActuatorsMoveTo(MoveBlock* move){
-    ActuatorBase* act;
+    CncActuatorBase* act;
     MoveBlock_SingleActuator * ms;
-    for(int a=0; a<Actuator_List::Instance().GetItemsCount(); a++){
+    for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
         ms = &move->MoveBlocks[a];
         // TODO: transloate postion unit here ??  What actuator is using?
         // TODO: translate speed unit here.!!
-        act =  Actuator_List::Instance().GetActuator(a);
+        act =  CncActuator_List::Instance().GetActuator(a);
         if (ms->IsAbsTargetPosition){
             act->UpdateMovement(ms);
         }else if(ms->TargetPosition != 0){
@@ -45,19 +45,19 @@ void MoverBase::AllActuatorsMoveTo(MoveBlock* move){
 }
 
 void MoverBase::AllActuatorsStop(){
-    for(int a=0; a<Actuator_List::Instance().GetItemsCount(); a++){
-        Actuator_List::Instance().GetActuator(a)->ForceStop();
+    for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
+        CncActuator_List::Instance().GetActuator(a)->ForceStop();
     }
 }
 
 
 void MoverBase::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position){
-    Actuator_List::Instance().GetActuator(actuator_name)->ReInit_FormularOffset(as_current_position);
+    CncActuator_List::Instance().GetActuator(actuator_name)->ReInit_FormularOffset(as_current_position);
 }
 
 float MoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name){
     Logger::Debug("MoverBase::GetSingleActuatorCurrentPosition_InCncUnit() ");
-    return Actuator_List::Instance().GetActuator(actuator_name)->GetCurrentPosition();
+    return CncActuator_List::Instance().GetActuator(actuator_name)->GetCurrentPosition();
 }
 
 

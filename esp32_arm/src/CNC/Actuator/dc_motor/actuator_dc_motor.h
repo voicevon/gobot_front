@@ -1,10 +1,10 @@
 #pragma once
-#include "../actuator_base.h"
+#include "../cnc_actuator_base.h"
 #include "Robot/driver/h_bridge/h_bridge.h"
 #include <SimpleFOC.h>  //For encoder only
 
 
-class ActuatorDcMotor: public ActuatorBase{
+class ActuatorDcMotor: public CncActuatorBase{
     public:
         ActuatorDcMotor(){};
 

@@ -23,8 +23,8 @@ void VscRobot::Init(Vsc_Board* board){
 
 void VscRobot::__Init_actuators(Vsc_Board* board){
     Logger::Info("VscRobot::Init() Actuators.");
-    Actuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
-    Actuator_List::Instance().AddActuator(&__actuator_alpha);
+    CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    CncActuator_List::Instance().AddActuator(&__actuator_alpha);
 
     this->__actuator_alpha.LinkPidController(&__speed_pid);
     this->__actuator_alpha.LinkHBridgeDriver(board->GetHBridgeDriver());

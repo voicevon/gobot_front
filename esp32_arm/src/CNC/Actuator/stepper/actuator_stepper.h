@@ -1,9 +1,9 @@
 #pragma once
-#include "../actuator_base.h"
+#include "../cnc_actuator_base.h"
 #include "ESP32Step/src/Stepper.h"
 
 
-class ActuatorStepper: public ActuatorBase{
+class ActuatorStepper: public CncActuatorBase{
     public:
     // float actuator_position = 1.0f * this->_stepper->getPosition() / this->__steps_per_cnc_unit;
         void SpinOnce() override{this->_current_position=this->_stepper->getPosition();};

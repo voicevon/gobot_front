@@ -10,7 +10,7 @@
 
 
 
-class ActuatorBase: public ListItem{
+class CncActuatorBase: public ListItem{
     public:
         char MyName;
         // Don't remove these lines.  
