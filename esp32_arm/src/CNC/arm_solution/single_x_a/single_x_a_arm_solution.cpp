@@ -1,4 +1,4 @@
-#include "single_axis_arm_solution.h"
+#include "single_x_a_arm_solution.h"
 
 
 void SingleAxis_ArmSolution::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){

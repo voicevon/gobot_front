@@ -1,4 +1,4 @@
-#include "scara_arm_solution.h"
+#include "scara_xy_ab_arm_solution.h"
 
 void Scara_ArmSolution::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);

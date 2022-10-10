@@ -1,5 +1,5 @@
 #include "board_gobot_house.h"
-#include "CNC/arm_solution/scara/scara_arm_solution.h"
+#include "CNC/arm_solution/scara_xy_ab/scara_xy_ab_arm_solution.h"
 // #include "../cnc_2206/actuator_alpha.h"
 
 void Board_GobotHouse_2206::__Init_Hardware(){
