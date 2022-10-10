@@ -28,8 +28,7 @@ class ArmSolutionBase{
 
 
         virtual void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis);
-        void ForceStopMover();
-        CncBoardBase* _cnc_board;   // TODO:  remove this.
+        void ForceStopMover();  //TODO:  para is MoverAction:  EnableActuator, ForceStop, DisableActuator. 
 
         virtual bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode);
         virtual void __ConvertSegment_ToMoveBlockQueue(LineSegment* line);

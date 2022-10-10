@@ -4,7 +4,7 @@
 
 void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 		// The homed postion is a Inverse kinematic position for alpha, beta.
-		IkPosition_AB ik_position;
+		IkPosition_AlphaBeta ik_position;
 		this->_config->PrintOut("FiveBars_ArmSolution::_SetCurrentPositionAsHome()");
 		if (this->_config->IsInverseKinematicHoimg){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
@@ -16,7 +16,7 @@ void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic h
 			// ik_position.beta = this->_homer_diction.GetAxisHomer(AXIS_)->GetFiredPosition();
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
-			IkPosition_AB verifying_ik;
+			IkPosition_AlphaBeta verifying_ik;
 			Serial.println("\n\n  [Info] Please verify IK->FK->IK   ");
 			this->IK(&this->__current_fk_position, &verifying_ik);
 		}else{
@@ -32,7 +32,7 @@ void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic h
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
 void FiveBars_ArmSolution::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
-	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
+	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(to_ik);
 
 	float rr1= (fk->X + this->_config->LINK_0) * (fk->X + this->_config->LINK_0) + fk->Y * fk->Y;
 	// alpha , beta are in unit of RAD.
@@ -102,7 +102,7 @@ void FiveBars_ArmSolution::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 }
 
 void FiveBars_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
-	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
+	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 
 	float elbow_alpha_x = this->_config->LINK_A * cosf(ik->alpha) - this->_config->LINK_0;   // TODO:: whan alpha > 180 degree.
@@ -185,7 +185,7 @@ bool FiveBars_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
-	IkPosition_AB target_ik_ab;
+	IkPosition_AlphaBeta target_ik_ab;
 
 	// Sometimes, the current position of stepper is NOT the last target position. Since it's moving.
 	// But, The initialized values will effect nothing. They will be over writen. 
@@ -193,11 +193,11 @@ bool FiveBars_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	// target_ik_ab.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	bool do_ik=false;
 	if (gcode->has_letter('A')){
-		this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
+		// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
 		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;
 	}
 	if (gcode->has_letter('B')){
-		this->_cnc_board->EnableMotor(AXIS_BETA, true);
+		// this->_cnc_board->EnableMotor(AXIS_BETA, true);
 		target_ik_ab.beta = gcode->get_value('B') *  DEG_TO_RAD;
 	}
 	// If need IK, do it now.

@@ -3,7 +3,7 @@
 #include "Robot/robot_base.h"
 #include "MyApps/teeth_wh/board/teeth_wh_board.h"
 #include "teeth_wh_g28_runner.h"
-#include "CNC/arm_solution/core_xa/core_xa_arm_solution.h"
+#include "CNC/arm_solution/core_xy_ab/core_xy_ab_arm_solution.h"
 #include "MyLibs/list/pid_controllers_list.h"
 
 #define PID_CONTROLLERS_COUNT 1
@@ -27,7 +27,7 @@ class TeechWarehouse_Robot: public RobotBase{
 	    CncActuatorDcMotor __actuator_alpha = CncActuatorDcMotor(); 
         
         CncMoverBase mover;
-        CncSolution_CoreXA arm_solution;
+        CncSolution_CoreXY_ab arm_solution;
         TeethWarehouse_G28_Runner g28_runner;
 
 

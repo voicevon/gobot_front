@@ -2,7 +2,7 @@
 
 void Scara_ArmSolution::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
-	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
+	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(to_ik);
 	bool debug = false;
 
 	float rr1= fk->X * fk->X + fk->Y * fk->Y;
@@ -66,7 +66,7 @@ void Scara_ArmSolution::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 //          represents  actuator's current position. unit is rad
 // to_fk: x,y.  unit is mm.
 void Scara_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
-	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
+	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(from_ik);
 	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
 	float rad_beta = ik->beta; // / this->_scara_machine->STEPS_PER_RAD_BETA;
 	// float rad_eef = rad_beta + ik->alpha / this->_scara_machine->STEPS_PER_RAD_ALPHA;
@@ -99,7 +99,7 @@ float Scara_ArmSolution::GetDistanceToTarget_FK(){
 	// because in this arm solution,  FK is equal to IK. so never mind the logic error.
 	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
 	// TODO: Rewrite this function.
-	IkPosition_AB current_ik;
+	IkPosition_AlphaBeta current_ik;
 	// current_ik.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
 	// current_ik.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	FK(&current_ik, &this->__current_fk_position);
@@ -125,7 +125,7 @@ void Scara_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 
 	// Assume G1-code mostly wants to update actuator directly, no need to do IK.
 	FkPosition_XY target_fk_xy;
-	IkPosition_AB target_ik_ab;
+	IkPosition_AlphaBeta target_ik_ab;
 	// Queue_LineSegment* line = this->__queue_move_block->GetHeadMoveblock();
 	// Queue_LineSegment* line = Queue_LineSegment::Instance().GetHeadMoveblock();
 
@@ -202,7 +202,7 @@ void Scara_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 void Scara_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 	//Set current position to HomePosition
 	bool debug = false;
-	IkPosition_AB ik_position;
+	IkPosition_AlphaBeta ik_position;
 	if (this->_config_base.IsInverseKinematicHoimg){
 		if (debug) Serial.print("\n   [Info] Scara_ArmSolution::_running_G28() Trying to get home position from actuator position  ");
 		// if (this->_homing_axis == AXIS_ALPHA){
@@ -217,7 +217,7 @@ void Scara_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homi
 		// }
 		this->FK(&ik_position, &this->__current_fk_position);
 		// verify FK by IK()
-		IkPosition_AB verifying_ik_for_debug;
+		IkPosition_AlphaBeta verifying_ik_for_debug;
 		// Serial.print("\n\n  [Info] Please verify the below output ======================  ");
 		this->IK(&this->__current_fk_position, &verifying_ik_for_debug);
 	}

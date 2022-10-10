@@ -83,8 +83,10 @@ class IkPosition_A: public IkPositionBase{
     public:
         float alpha;
 };
-class IkPosition_AB: public IkPositionBase{
+class IkPosition_AlphaBeta: public IkPositionBase{
     public:
         float alpha;
         float beta;
 };
+
+

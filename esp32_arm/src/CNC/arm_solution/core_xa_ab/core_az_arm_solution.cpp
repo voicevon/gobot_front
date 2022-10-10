@@ -16,7 +16,7 @@
 void CncSolution_CoreAZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	Serial.print("\n[Info] CncSolution_CoreAZ::IK() is entering. ");
 	FkPosition_ZW* fk = (FkPosition_ZW*)(from_fk);
-	IkPosition_AB* ik = (IkPosition_AB*)(to_ik);
+	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(to_ik);
 
 	ik->alpha = (fk->Z  + fk->W);
 	ik->beta = (fk->Z  - fk->W );
@@ -31,7 +31,7 @@ void CncSolution_CoreAZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 void CncSolution_CoreAZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 	Serial.print("\n[Debug] CncSolution_CoreAZ::FK() is entering ");
 	FkPosition_ZW* fk = (FkPosition_ZW*)(to_fk);
-	IkPosition_AB* ik = (IkPosition_AB*)(from_ik);
+	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(from_ik);
 	
 	fk->Z = (ik->alpha + ik->beta) / 2 ;
 	fk->W = (ik->alpha - ik->beta) / 2 ;
@@ -56,7 +56,7 @@ void CncSolution_CoreAZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 //Set current position to HomePosition
-		IkPosition_AB ik_position;
+		IkPosition_AlphaBeta ik_position;
 		if (this->_config_base.IsInverseKinematicHoimg){
 			// We know homed position via IK.
 			Serial.print("\n[Error] CncSolution_CoreAZ::_running_G28() This robot does NOT impliment this function.");
@@ -123,7 +123,7 @@ void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic hom
 // 		this->_board->cnc_mover->AllActuatorsStop();
 
 // 		//Set current position to HomePosition
-// 		IkPosition_AB ik_position;
+// 		IkPosition_AlphaBeta ik_position;
 // 		if (this->_config->IsInverseKinematicHoimg){
 // 			// We know homed position via IK.
 // 			Serial.print("\n[Error] CncSolution_CoreAZ::_running_G28() This robot does NOT impliment this function.");
@@ -169,7 +169,7 @@ bool CncSolution_CoreAZ::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
 	FkPosition_ZW target_fk_zw;
-	IkPosition_AB target_ik_ab;
+	IkPosition_AlphaBeta target_ik_ab;
 	target_fk_zw.Z = this->__current_fk_position.Z;
 	target_fk_zw.W = this->__current_fk_position.W;
 	// target_ik_ab.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
