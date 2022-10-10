@@ -1,4 +1,4 @@
-#include "core_xy_ab_arm_solution.h"
+#include "core_xy_xa_ab_arm_solution.h"
 
 class MiddleKinematic{
 	public:

@@ -3,7 +3,7 @@
 #include "Robot/robot_base.h"
 #include "MyApps/teeth_wh/board/teeth_wh_board.h"
 #include "teeth_wh_g28_runner.h"
-#include "CNC/arm_solution/core_xy_ab/core_xy_ab_arm_solution.h"
+#include "CNC/arm_solution/core_xy_xa_ab/core_xy_xa_ab_arm_solution.h"
 #include "MyLibs/list/pid_controllers_list.h"
 
 #define PID_CONTROLLERS_COUNT 1
