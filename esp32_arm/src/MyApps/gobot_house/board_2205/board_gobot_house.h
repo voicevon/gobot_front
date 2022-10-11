@@ -9,7 +9,7 @@ class Board_GobotHouse: public CncBoardBase{
     public:
         Board_GobotHouse(){};
         void Init(bool is_on_reset) override;
-        RobotEef_GobotHouse* GetEef() override;
+        // RobotEef_GobotHouse* GetEef() override;
         void EnableMotor(EnumAxis_Inverseinematic actuator_name, bool enable_it) override;
         
 

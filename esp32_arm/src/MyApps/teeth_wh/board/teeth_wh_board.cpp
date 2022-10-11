@@ -4,6 +4,7 @@
 #define PIN_HOMER_SENSOR_HALL_0 22
 #define PIN_HOMER_SENSOR_HALL_1 22
 #define PIN_HOMER_SENSOR_HALL_2 22
+#define PIN_VACUUME_PUMP 22
 
 void TeethWarehouse_Board::Init(bool is_on_reset){
     if (is_on_reset){
@@ -15,6 +16,8 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
     __all_position_triggers[1].Init(PIN_HOMER_SENSOR_HALL_1, LOW);
     __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
     HomeTrigger_Array::Instance().Init(__all_position_triggers, 4);
+    
+    pinMode(PIN_VACUUME_PUMP, OUTPUT);
 }
 
 // void TeethWarehouse_Board::LinkEncoderSensor(Encoder* encoder){
@@ -33,5 +36,9 @@ void TeethWarehouse_Board::Test_PositionTriggers(int loops){
             count++;
         }
     }
+}
+
+void TeethWarehouse_Board::EnableVacuume(bool enable_it){
+    digitalWrite(PIN_VACUUME_PUMP, enable_it);
 }
 

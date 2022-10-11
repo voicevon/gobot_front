@@ -9,7 +9,7 @@ StepControl step_control;
 void GobotMainRobot::Init(GobotMain_Board* board){
     Logger::Debug("GobotMainRobot::Init()");
     this->_cnc_board = board;
-    this->_LinkEef(board->GetEef());
+    // this->_LinkEef(board->GetEef());
 
     this->__g28_runner=&this->g28_runner;
     g28_runner.Init(&mover);

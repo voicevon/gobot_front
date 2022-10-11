@@ -45,9 +45,9 @@ void Board2205Cnc::Init(Adafruit_MCP23X17* mcp_23018){
 // }
 
 
-RobotEef_GarmentAsar* Board2205Cnc::GetEef(){
-    return &this->eef;
-}
+// RobotEef_GarmentAsar* Board2205Cnc::GetEef(){
+//     return &this->eef;
+// }
 
 void Board2205Cnc::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it){
     if (axis_name == 'A'){

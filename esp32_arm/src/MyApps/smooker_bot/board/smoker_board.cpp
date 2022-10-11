@@ -34,9 +34,9 @@ void Smoker_Board::Init(bool is_on_reset){
 //     return nullptr;
 // }
 
-RobotEef_SmokeMachine* Smoker_Board::GetEef() {
-    return &this->eef;
-}
+// RobotEef_SmokeMachine* Smoker_Board::GetEef() {
+//     return &this->eef;
+// }
 
 
 void Smoker_Board::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {

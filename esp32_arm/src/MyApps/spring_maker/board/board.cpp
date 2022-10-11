@@ -38,9 +38,9 @@ void Board_SpringMaker::Init(bool is_on_reset){
 //     Logger::Error("Board_SpringMaker::GetPositionTriggers() NOT SUPPORTED");
 // }
 
-RobotEef_SpringMaker* Board_SpringMaker::GetEef() {
-    return &this->eef;
-}
+// RobotEef_SpringMaker* Board_SpringMaker::GetEef() {
+//     return &this->eef;
+// }
 
 
 void Board_SpringMaker::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {

@@ -14,7 +14,7 @@ class Smoker_Board: public CncBoardBase{
         void Init(bool is_on_reset) override;
         
         // void SayHello() override;
-        RobotEef_SmokeMachine* GetEef() override;
+        // RobotEef_SmokeMachine* GetEef() override;
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
         CncActuatorBase* GetActuator(EnumAxis_Inverseinematic axis) {return nullptr;};   //todo:  get it.
         // PositionTrigger* GetPositionTrigger(uint8_t index) override {return nullptr;}; 

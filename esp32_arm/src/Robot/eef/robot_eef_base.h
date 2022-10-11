@@ -13,6 +13,8 @@
 #define EEF_CODE_RELEASE 4  
 #define EEF_CODE_UNLOAD 4
 #define EEF_CODE_SLEEP 5
+#define EEF_CODE_ENABLE_VACUUME 11
+#define EEF_CODE_DISABLE_VACUUME 12
 
 
 class RobotEefBase{

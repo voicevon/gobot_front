@@ -86,9 +86,9 @@ Stepper* GobotMain_Board::GetStepper(EnumAxis_Inverseinematic axis){
 //     Logger::Error("GobotMain_Board::GetPositionTriggers() NOT SUPPORT");
 // }
 
-RobotEef_GobotMain* GobotMain_Board::GetEef() {
-    return &this->__eef;
-}
+// RobotEef_GobotMain* GobotMain_Board::GetEef() {
+//     return &this->__eef;
+// }
 
 
 

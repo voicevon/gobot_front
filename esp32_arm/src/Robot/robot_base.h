@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Robot/eef/eef_standard_code.h"
 #include "CNC/gcode/gcode_consumer.h"
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/arm_solution/kinematic_config.h"
@@ -12,6 +11,7 @@
 #include "gcode_runner/g28_runner.h"
 #include "gcode_runner/g4_runner.h"
 #include "Robot/mcode_runner/mcode_os.h"
+#include "Robot/eef/robot_eef_base.h"
 
 enum class RobotState{
     IDLE_OR_ASYNC,

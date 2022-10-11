@@ -22,7 +22,7 @@ void GobotMain_BoardTest::Test_room_sensors(int loop_count){
 void GobotMain_BoardTest::Test_EefUpDown(int loop_count){
     if(loop_count ==0 ) return;
     Serial.println ("[Info] GobotMain_BoardTest::Test_EefUpDown()  ");
-    RobotEef_GobotMain* eef = this->__board->GetEef();
+    RobotEef_GobotMain* eef;  // todo:  = this->__board->GetEef();
     for (int i=0; i<loop_count; i++){
         Serial.print("Eef UP   ");
         eef->Run(EEF_CODE_UP);
@@ -36,7 +36,7 @@ void GobotMain_BoardTest::Test_EefUpDown(int loop_count){
 void GobotMain_BoardTest::Test_EefLoadUnload(int loop_count){
     if(loop_count ==0 ) return;
     Serial.println ("[Info] GobotMain_BoardTest::Test_EefLoadUnload()  ");
-    RobotEef_GobotMain* eef = this->__board->GetEef();
+    RobotEef_GobotMain* eef;  // todo  = this->__board->GetEef();
     eef->Run(EEF_CODE_UP);
     for (int i=0; i<loop_count; i++){
         Serial.print("Eef Load   ");
@@ -55,7 +55,7 @@ void GobotMain_BoardTest::Test_EefLoadUnload(int loop_count){
 void GobotMain_BoardTest::Test_Eef_Full(int loop_count){
     if(loop_count ==0 ) return;
     Serial.println ("[Info] GobotMain_BoardTest::Test_Eef_Full()  ");
-    RobotEef_GobotMain* eef = this->__board->GetEef();
+    RobotEef_GobotMain* eef;  // todo:  the instance.  = this->__board->GetEef();
     for (int i=0; i<loop_count; i++){
         //Load + Unload = 2.4s + 2s = 4.4s
         //Sleep 5.4s

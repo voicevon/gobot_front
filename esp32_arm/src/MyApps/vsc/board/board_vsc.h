@@ -20,7 +20,7 @@ class Vsc_Board: public CncBoardBase{
         H_Bridge* GetHBridgeDriver(){return &this->__pwm_h_bridge;};
 
         // For being a CNC machine.
-        RobotEefBase* GetEef() override {return &this->__eef;};
+        // RobotEefBase* GetEef() override {return &this->__eef;};
 
         // We do nothing, just override the methods.
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override {};

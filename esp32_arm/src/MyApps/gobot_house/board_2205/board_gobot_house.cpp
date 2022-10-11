@@ -52,9 +52,9 @@ void Board_GobotHouse::Init(bool is_on_reset){
 
 
 
-RobotEef_GobotHouse* Board_GobotHouse::GetEef(){
-    return &this->eef;
-}
+// RobotEef_GobotHouse* Board_GobotHouse::GetEef(){
+//     return &this->eef;
+// }
 
 void Board_GobotHouse::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {
     if (axis_name == 'A'){

@@ -42,9 +42,9 @@ void Board2204Cnc::Init(Adafruit_MCP23X17* mcp_23018){
 //     return nullptr;
 // }
 
-RobotEef_GarmentAsar* Board2204Cnc::GetEef(){
-    return &this->eef;
-}
+// RobotEef_GarmentAsar* Board2204Cnc::GetEef(){
+//     return &this->eef;
+// }
 
 CncActuatorBase* Board2204Cnc::GetActuator(EnumAxis_Inverseinematic axis){
     return nullptr;

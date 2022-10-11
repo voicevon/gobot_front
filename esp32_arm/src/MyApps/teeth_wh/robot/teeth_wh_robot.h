@@ -16,8 +16,8 @@ class TeechWarehouse_Robot: public RobotBase{
         void __Init_actuators(TeethWarehouse_Board* board);
 
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
-	    CncActuatorDcMotor __actuator_alpha;
-	    CncActuatorDcMotor __actuator_beta;
+	    CncActuatorStepper __actuator_alpha;
+	    CncActuatorStepper __actuator_beta;
         
         CncMoverBase mover;
         CncSolution_CoreXY_XA_ab arm_solution;

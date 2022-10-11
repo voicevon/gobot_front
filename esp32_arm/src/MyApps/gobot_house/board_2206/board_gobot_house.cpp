@@ -81,9 +81,9 @@ CncActuatorServo* Board_GobotHouse_2206::GetActuaorBeta(char axis_name){
 //     Logger::Error("Board_GobotHouse_2206::GetPositionTriggers()  NOT SUPPORTED");
 // }
 
-RobotEef_GobotHouse* Board_GobotHouse_2206::GetEef(){
-    return &this->eef;
-}
+// RobotEef_GobotHouse* Board_GobotHouse_2206::GetEef(){
+//     return &this->eef;
+// }
 
 void Board_GobotHouse_2206::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {
     if (axis_name == AXIS_ALPHA){

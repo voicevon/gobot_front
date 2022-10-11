@@ -19,7 +19,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
         // PositionTrigger* GetSingleHomer(EnumAxis axis_name) override;
         // AxisHomer* GetPositionTriggers(EnumAxis axis_name) override;
 
-        RobotEef_GobotHouse* GetEef() override;
+        // RobotEef_GobotHouse* GetEef() override;
 
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
         Servo* GetServoDriver_OnBeta(){return &this->__servo_beta;};
