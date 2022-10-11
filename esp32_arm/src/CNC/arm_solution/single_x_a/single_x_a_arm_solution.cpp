@@ -1,5 +1,5 @@
 #include "single_x_a_arm_solution.h"
-
+#include "Robot/axis_homer/home_trigger_array.h"
 
 void SingleAxis_ArmSolution::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	FkPosition_A* fk = (FkPosition_A*)(from_fk);

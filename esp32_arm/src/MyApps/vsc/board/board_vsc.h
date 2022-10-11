@@ -5,6 +5,7 @@
 #include "Robot/driver/h_bridge/h_bridge.h"
 #include "eef/vsc_eef.h"
 #include "pins/wroom_board.h"
+#include "Robot/axis_homer/home_trigger_array.h" 
 
 
 class Vsc_Board: public CncBoardBase{

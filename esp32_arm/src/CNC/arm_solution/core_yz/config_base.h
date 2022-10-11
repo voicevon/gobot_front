@@ -11,7 +11,7 @@ class CncSolution_CoreYZConfigBase: public KinematicConfig{
         float Homed_position_y = 0;
         int Homing_speed_alpha_beta; // MAX_SPEED_HOMING_ALPHA 200 * MICRO_STEPS   
         int Homing_acceleration_alpha_beta ;
-        void PrintOut(const char* title) override;
+        // void PrintOut(const char* title) override;
 
     protected:
 };

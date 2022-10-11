@@ -1,5 +1,5 @@
 #include "board_tester.h"
-
+#include "ESP32Step/src/TeensyStep.h" 
 
 void GobotHouse_2206_BoardTest::LinkBoard(CncBoardBase* board){
     Serial.println("[Info] GobotHouse_2206_BoardTest::LinkBoard()");

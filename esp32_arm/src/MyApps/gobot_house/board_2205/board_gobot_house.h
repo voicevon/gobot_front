@@ -2,8 +2,9 @@
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "board_pins/board_pins_ver3.11.h"
-#include "robot_eef/gobot_house_eef.h"
+#include "robot_eef/gobot_house_eef.h"   // todo: remove
 // #include "Robot/axis_homer/position_trigger.h"
+#include "Robot/axis_homer/home_trigger_array.h"
 
 class Board_GobotHouse: public CncBoardBase{
     public:

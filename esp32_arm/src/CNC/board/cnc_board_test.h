@@ -2,6 +2,7 @@
 #include "MyBoards/board_test/board_test_base.h"
 #include "CNC/board/cnc_board_base.h"
 // #include "Robot/axis_homer/axis_homer.h"
+#include "Robot/axis_homer/home_trigger_array.h"
 
 
 class CncBoard_Test:public BoardTestBase{

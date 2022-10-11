@@ -13,7 +13,7 @@
 class CncActuatorBase: public ListItem{
     public:
         char MyName;
-        // Don't remove these lines.  
+        // Don't remove this enum.  
         // enum EnumActuatorState{
         //     IDLE,
         //     FOLLOW_SPEED_ONLY,    // For AGV travelling.  or CNC spindle liked.
@@ -45,12 +45,10 @@ class CncActuatorBase: public ListItem{
     protected:
         float _target_position;   // is always an absolute position
         float _current_position;
-        // float _current_velocity;   // todo: only speed control need this, known:  dc_motor_actuator.
         bool __is_moving = false;
 
         ActuatorRangeConstraintBase* _range_constraint;
         bool _is_range_constraint = false;
-        //TODO:   float _current_cnc_position;  
 
     private:
         float __slope_from_raw_to_cnc = 1.0;

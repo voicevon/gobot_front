@@ -4,6 +4,7 @@
 #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/axis_homer/home_trigger_array.h"
 #include "../robot_eef/garment_asar_eef.h"
+#include "CNC/Actuator/stepper/actuator_stepper.h"
 
 
 // For Core_YZ cnc application

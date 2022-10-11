@@ -3,11 +3,10 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/arm_solution/arm_solution_base.h"
-// #include "Robot/axis_homer/axis_homer.h"
-// #include "CNC/arm_solution/axis_homer/axis_homer.h"
 #include "Robot/eef/eef_standard_code.h"
 #include "MyLibs/Components/Led.h"
 #include "config_base.h"
+#include "Robot/axis_homer/position_trigger.h"
 
 
 class Scara_ArmSolution: public ArmSolutionBase{

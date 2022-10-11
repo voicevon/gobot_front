@@ -4,10 +4,8 @@
 #include "../board_2205/robot_eef/gobot_house_eef.h"
 #include "CNC/Actuator/servo/cnc_actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-// #include "Robot/axis_homer/axis_homer.h"
-// #include "CNC/arm_solution/axis_homer/axis_homer.h"
-// #include "../cnc_2206/solution_config.h"
-// #include "../cnc_2206/actuator_alpha.h"
+#include "ESP32Step/src/TeensyStep.h" 
+#include "Robot/axis_homer/home_trigger_array.h"
 
 class Board_GobotHouse_2206: public CncBoardBase{
     public:

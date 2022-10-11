@@ -5,7 +5,7 @@
 void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AlphaBeta ik_position;
-		this->_config->PrintOut("FiveBars_ArmSolution::_SetCurrentPositionAsHome()");
+		// this->_config->PrintOut("FiveBars_ArmSolution::_SetCurrentPositionAsHome()");
 		if (this->_config->IsInverseKinematicHoimg){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
 			// ik_position.alpha =  this->_config->Homed_position_alpha_in_rad;

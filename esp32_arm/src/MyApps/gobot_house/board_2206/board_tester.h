@@ -6,6 +6,7 @@
 
 #include "board_gobot_house.h"
 #include "ESP32Step/src/Stepper.h"
+#include "ESP32Step/src/TeensyStep.h" 
 
 class GobotHouse_2206_BoardTest: public CncBoard_Test{
     public:

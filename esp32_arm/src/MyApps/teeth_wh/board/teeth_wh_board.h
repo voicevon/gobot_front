@@ -2,7 +2,7 @@
 #include "CNC/board/cnc_board_base.h"
 // #include "eef/teeth_wh_eef.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-
+#include "Robot/axis_homer/home_trigger_array.h" 
 
 class TeethWarehouse_Board: public CncBoardBase{
     public:
