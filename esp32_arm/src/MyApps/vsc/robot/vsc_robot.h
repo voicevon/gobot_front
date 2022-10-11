@@ -15,7 +15,7 @@ class VscRobot: public RobotBase{
         void Init(Vsc_Board* board);
 
     private:
-        void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
+        // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
         void __Init_pids();
         void __Init_actuators(Vsc_Board* board);
 

@@ -1,15 +1,19 @@
 #include "teeth_wh_board.h"
 
+
+#define PIN_HOMER_SENSOR_HALL_0 22
+#define PIN_HOMER_SENSOR_HALL_1 22
+#define PIN_HOMER_SENSOR_HALL_2 22
+
 void TeethWarehouse_Board::Init(bool is_on_reset){
     if (is_on_reset){
         Serial.begin(115200);
-        Serial.println("I am XiaoJuan.");
+        Serial.println("I am Teeth Warehouse.");
     }
 
     __all_position_triggers[0].Init(PIN_HOMER_SENSOR_HALL_0, LOW);
     __all_position_triggers[1].Init(PIN_HOMER_SENSOR_HALL_1, LOW);
     __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
-    __all_position_triggers[3].Init(PIN_HOMER_SENSOR_HALL_3, LOW);
     HomeTrigger_Array::Instance().Init(__all_position_triggers, 4);
 }
 
@@ -31,27 +35,3 @@ void TeethWarehouse_Board::Test_PositionTriggers(int loops){
     }
 }
 
-void TeethWarehouse_Board::Test_HBridge(int loop_count){
-    uint32_t speed = 200;
-    uint32_t delay_ms = 10000;
-    bool is_cw = true;
-    Logger::Info("TeethWarehouse_Board::Test_HBridge");
-    Logger::Print("loop_count", loop_count);
-    Logger::Print("speed", speed);
-
-    for(int i=0; i< 2 * loop_count ;i++){
-        if(is_cw){
-            Serial.print("\n loop count = ");
-            Serial.print(i/2);
-        }
-        Serial.print("\t\tIs CW = ");
-        Serial.print(is_cw);
-        this->__pwm_h_bridge.SetPwmSpeed(is_cw, speed);
-        delay(delay_ms);
-        
-        Serial.print("\t\tstop");
-        this->__pwm_h_bridge.SetPwmSpeed(is_cw, 0);
-        delay(delay_ms);
-        is_cw = !is_cw;
-    }
-}

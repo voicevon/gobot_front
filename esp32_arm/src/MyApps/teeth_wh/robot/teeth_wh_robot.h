@@ -4,10 +4,8 @@
 #include "MyApps/teeth_wh/board/teeth_wh_board.h"
 #include "teeth_wh_g28_runner.h"
 #include "CNC/arm_solution/core_xy_xa_ab/core_xy_xa_ab_arm_solution.h"
-#include "MyLibs/list/pid_controllers_list.h"
 
-#define PID_CONTROLLERS_COUNT 1
-#define CNC_ACTUATORS_COUNT 1
+#define CNC_ACTUATORS_COUNT 2
 
 
 class TeechWarehouse_Robot: public RobotBase{
@@ -15,22 +13,18 @@ class TeechWarehouse_Robot: public RobotBase{
         void Init(TeethWarehouse_Board* board);
 
     private:
-        void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
-        void __Init_pids();
+        // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
         void __Init_actuators(TeethWarehouse_Board* board);
-
-        PidControllers_Listable* __all_pids[PID_CONTROLLERS_COUNT];
-        PidControllers_Listable __speed_pid = PidControllers_Listable(1.0f, 1.0f, 1.0f, 10.0f, 255.0f);
-        // PidControllers_Listable __test_pid = PidControllers_Listable(3.0f, 4.0f, 5.0f, 33.0f, 33.0f);
 
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
 	    CncActuatorDcMotor __actuator_alpha = CncActuatorDcMotor(); 
+	    CncActuatorDcMotor __actuator_beta = CncActuatorDcMotor(); 
         
         CncMoverBase mover;
-        CncSolution_CoreXY_ab arm_solution;
+        CncSolution_CoreXY_XA_ab arm_solution;
         TeethWarehouse_G28_Runner g28_runner;
 
-
+        Core_XY_XA_ab_config arm_config;
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
 

@@ -11,7 +11,7 @@ class BoxMoverRobot: public RobotBase{
         void Init(Board2205Cnc* board);
 
     private:
-        void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
+        // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
 
 
         MoveBlock __all_move_blocks[88]; 

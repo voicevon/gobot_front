@@ -11,7 +11,7 @@ class GobotHouseRobot: public RobotBase{
         void Init(GobotMain_Board* board);
 
     private:
-        void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
+        // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
 
         // PIDController __speed_pid = PIDController(1.0f, 1.0f, 0.0f, 10.0f, 255.0f);
         // PidControllers __all_pids = PidControllers(1);

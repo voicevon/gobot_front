@@ -28,3 +28,7 @@ float ActuatorStepper_Calculator::GetActuatorToCncFormular_Slope_raw_per_mm(){
     float steps_of_output_pulley_per_mm = steps_per_mm_of_motor_pulley * gear_ratio;  //?? something is wrong here !!!
     return steps_of_output_pulley_per_mm;
 }
+
+float ActuatorStepper_Calculator::Get_steps_per_mm(){
+    return 1.0f;
+}

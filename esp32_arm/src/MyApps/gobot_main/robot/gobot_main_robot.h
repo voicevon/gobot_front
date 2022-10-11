@@ -13,7 +13,7 @@ class GobotMainRobot: public RobotBase{
         void Init(GobotMain_Board* board);
 
     private:
-        void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
+        // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
         void __InitActuator(GobotMain_Board* board);
 
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];

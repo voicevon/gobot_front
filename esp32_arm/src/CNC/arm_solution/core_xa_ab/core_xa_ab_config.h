@@ -2,7 +2,7 @@
 
 #include "../kinematic_config.h" 
 
-class CncSolution_CoreAZConfigBase: public KinematicConfig{
+class Core_XA_ab_config: public KinematicConfig{
     public:
     
         float max_speed_alpha_beta;

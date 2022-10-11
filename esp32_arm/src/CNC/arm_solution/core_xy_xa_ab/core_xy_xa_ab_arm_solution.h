@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CNC/arm_solution/arm_solution_base.h"
-#include "config_base.h"
+#include "core_xy_xa_ab_config.h"
 
 // class EnumQuandrant{
 //     public:
@@ -10,7 +10,7 @@
 
 // };
 
-class CncSolution_CoreXY_ab: public ArmSolutionBase{
+class CncSolution_CoreXY_XA_ab: public ArmSolutionBase{
     public:
         // enum EnumQuadrant{
         //     Quadrant_XPYP,
@@ -22,7 +22,7 @@ class CncSolution_CoreXY_ab: public ArmSolutionBase{
         // CncSolution_CoreXA(EnumQuadrant default_quadrant);
         bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
         void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override{};
-
+        void LinkConfig(Core_XY_XA_ab_config* config){this->_config=config;};
 
     protected:
         void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override{};
@@ -37,11 +37,8 @@ class CncSolution_CoreXY_ab: public ArmSolutionBase{
         FkPosition_XY __current_fk_position;
         IkPosition_AlphaBeta __current_ik_position;
 
-        CncSolution_CoreAZConfigBase* _config;
+        Core_XY_XA_ab_config* _config;
 
     private:
-    	float master_slope_steps_per_mm = 1; 
-        float slave_gear_circle_length = 123;
-        float arm_length = 11;
-        float middle_kinematic_minimuim_X = 123;
+
 };

@@ -32,7 +32,7 @@ class RobotBase: public GcodeConsumer{
         Planner __planner;
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
 
-        virtual void RunM123(uint8_t eef_channel, uint8_t eef_action);
+        // virtual void RunM123(uint8_t eef_channel, uint8_t eef_action);
 
         void _running_G28();
 

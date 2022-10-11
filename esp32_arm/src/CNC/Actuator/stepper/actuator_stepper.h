@@ -1,7 +1,7 @@
 #pragma once
 #include "../cnc_actuator_base.h"
 #include "ESP32Step/src/Stepper.h"
-
+#include "actuator_stepper_calculator.h"
 
 class CncActuatorStepper: public CncActuatorBase{
     public:
