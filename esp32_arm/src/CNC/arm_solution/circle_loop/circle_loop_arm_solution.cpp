@@ -23,11 +23,6 @@ void CircleLoop_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk)
 void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 	//Set current position to HomePosition
 	IkPosition_A ik_position;
-	if (this->_config_base.IsInverseKinematicHoimg){
-		// We know homed position via IK.
-		Serial.print("\n[Error] CircleLoop_ArmSolution::_running_G28() This robot does NOT impliment this function.");
-	}
-	else{
 		// We know homed position via FK
 		Logger::Info("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
@@ -39,15 +34,6 @@ void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic
 		FkPosition_A verifying_fk;
 		Serial.print("\n   [Info] Please verify: FK->IK->FK  ");
 		this->FK(&ik_position, &verifying_fk);
-	}
-	//Copy current ik-position to motor-position.
-	// if (this->_homing_axis == this->_AXIS) {
-	// 	// this->_mover_base->SetActuatorCurrentCncPositionAs(this->_AXIS,ik_position.alpha);
-
-	// 	// TODO:  todo anything is necessary?
-	// }else{
-	// 	Logger::Halt("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()");
-	// }
 }
 
 void CircleLoop_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){

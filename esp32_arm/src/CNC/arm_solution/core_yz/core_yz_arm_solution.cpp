@@ -92,11 +92,6 @@ void CoreYZ_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 void CoreYZ_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 		//Set current position to HomePosition
 		IkPosition_AlphaBeta ik_position;
-		if (this->_config_base.IsInverseKinematicHoimg){
-			// We know homed position via IK.
-			Serial.print("\n[Error] CoreYZ_ArmSolution::_running_G28() This robot does NOT impliment this function.");
-		}
-		else{
 			// We know homed position via FK
 			Logger::Info("CoreYZ_ArmSolution::_SetCurrentPositionAsHome() Trying to get home position with EEF FK position  ");
 			this->__current_fk_position.Z = this->_cncMachine->Homed_position_z;
@@ -106,26 +101,9 @@ void CoreYZ_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic hom
 			FkPosition_YZ verifying_fk;
 			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
 			this->FK(&ik_position, &verifying_fk);
-		}
-		//Copy current ik-position to motor-position.
-		// MoveBlock move;
-		// move.axis = this->_homing_axis;
-		// move.IsAbsTargetPosition = true;
-		
-		// if (this->_homing_axis == AXIS_Z) {
-		// 	// this->_mover_base->SingleActuatorMoveTo(AXIS_ALPHA, true, ik_position.alpha);
-		// 	move.TargetPosition = ik_position.alpha;
-		// 	this->_mover_base->SingleActuatorMoveTo(&move);
-		// }
-		// if (this->_homing_axis == AXIS_Y) {
-		// 	// this->_mover_base->SingleActuatorMoveTo(AXIS_BETA, true, ik_position.beta);
-		// 	move.TargetPosition = ik_position.beta;
-		// 	this->_mover_base->SingleActuatorMoveTo(&move);
-		// }
 }
 
 
-// void CoreYZ_ArmSolution::RunG1(Gcode* gcode) {
 bool CoreYZ_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	Serial.print("\n[Debug] CoreYZ_ArmSolution::RunG1() is entering");
 	Serial.print(gcode->get_command());

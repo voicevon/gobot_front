@@ -1,8 +1,7 @@
 #pragma once
-#include "../kinematic_config.h"
 
 
-class SingleAxis_KinematicConfig: public KinematicConfig{
+class SingleAxis_KinematicConfig{
     public:
         
 

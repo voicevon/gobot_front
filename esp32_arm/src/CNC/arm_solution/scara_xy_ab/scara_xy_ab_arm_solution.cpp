@@ -203,7 +203,7 @@ void Scara_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homi
 	//Set current position to HomePosition
 	bool debug = false;
 	IkPosition_AlphaBeta ik_position;
-	if (this->_config_base.IsInverseKinematicHoimg){
+	// if (this->_config_base.IsInverseKinematicHoimg){
 		if (debug) Serial.print("\n   [Info] Scara_ArmSolution::_running_G28() Trying to get home position from actuator position  ");
 		// if (this->_homing_axis == AXIS_ALPHA){
 		// 	// ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
@@ -220,7 +220,7 @@ void Scara_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homi
 		IkPosition_AlphaBeta verifying_ik_for_debug;
 		// Serial.print("\n\n  [Info] Please verify the below output ======================  ");
 		this->IK(&this->__current_fk_position, &verifying_ik_for_debug);
-	}
+	// }
 }
 
 

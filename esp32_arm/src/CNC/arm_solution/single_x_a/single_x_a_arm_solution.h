@@ -2,10 +2,9 @@
 
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/arm_solution/arm_solution_base.h"
-#include "kinematic_config.h"
 #include "CNC/planner/queue_line_segment.h"
 #include "CNC/planner/queue_move_block.h"
-
+#include "kinematic_config.h"
 
 //This is a virtual class. No Constructor.
 class SingleAxis_ArmSolution: public ArmSolutionBase{

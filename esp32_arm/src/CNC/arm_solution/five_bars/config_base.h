@@ -1,7 +1,6 @@
 #pragma once
-#include "../kinematic_config.h"
 
-class CncSolution_FiveBarConfig: public KinematicConfig{
+class CncSolution_FiveBarConfig{
     public:
         // const float& Homed_position_alpha_in_rad = _HOMED_POSITION[AXIS_ALPHA];
         // const float& Homed_position_beta_in_rad = _HOMED_POSITION[AXIS_BETA];

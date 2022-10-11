@@ -5,8 +5,7 @@
 void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 		// The homed postion is a Inverse kinematic position for alpha, beta.
 		IkPosition_AlphaBeta ik_position;
-		// this->_config->PrintOut("FiveBars_ArmSolution::_SetCurrentPositionAsHome()");
-		if (this->_config->IsInverseKinematicHoimg){
+		// if (this->_config->IsInverseKinematicHoimg){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
 			// ik_position.alpha =  this->_config->Homed_position_alpha_in_rad;
 			// ik_position.beta =  this->_config->Homed_position_beta_in_rad;
@@ -19,14 +18,6 @@ void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic h
 			IkPosition_AlphaBeta verifying_ik;
 			Serial.println("\n\n  [Info] Please verify IK->FK->IK   ");
 			this->IK(&this->__current_fk_position, &verifying_ik);
-		}else{
-			Logger::Error("FiveBars_ArmSolution::_running_G28()  Trying to get home position");
-			Serial.print(" with EEF-FK position is under construction");
-			Serial.println(FCBC_RESET);
-		}
-		//Copy current ik-position to motor-position.
-		// this->_mover_base->SetActuatorCurrentCncPositionAs(AXIS_ALPHA, ik_position.alpha);
-		// this->_mover_base->SetActuatorCurrentCncPositionAs(AXIS_BETA, ik_position.beta);
 }
 
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py

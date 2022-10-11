@@ -2,7 +2,6 @@
 
 #include "CNC/gcode/gcode_consumer.h"
 #include "CNC/board/cnc_board_base.h"
-#include "CNC/arm_solution/kinematic_config.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
@@ -36,7 +35,7 @@ class RobotBase: public GcodeConsumer{
 
         void _running_G28();
 
-        KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
+        // KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
 
         bool is_absolute_position = true;
         

@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../kinematic_config.h" 
 
-class Core_XA_ab_config: public KinematicConfig{
+class Core_XA_ab_config{
     public:
     
         float max_speed_alpha_beta;

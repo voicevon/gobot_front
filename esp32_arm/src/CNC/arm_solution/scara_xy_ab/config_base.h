@@ -1,7 +1,6 @@
 #pragma once
-#include "../kinematic_config.h"
 
-class CncSolution_ScaraConfigBase: public KinematicConfig{
+class CncSolution_ScaraConfigBase{
     public:
         // CncScaraMachine(){};   // This is a abstract class, no constructor.
         // const float& Homed_position_alpha_in_rad = _HOMED_POSITION[AXIS_ALPHA];
