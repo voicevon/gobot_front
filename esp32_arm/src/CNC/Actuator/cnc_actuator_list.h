@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cnc_actuator_base.h"
-#include "dc_motor/cnc_actuator_dc_motor.h"
+// #include "dc_motor/cnc_actuator_dc_motor.h"
 
 class CncActuator_List: public ListBase{
     public:
@@ -21,5 +21,5 @@ class CncActuator_List: public ListBase{
             };
         
         // This is risky,  Be careful;
-        CncActuatorDcMotor* GetActuator_DcMotor(int index) {return (CncActuatorDcMotor*)_GetItem(index);};
+        // CncActuatorDcMotor* GetActuator_DcMotor(int index) {return (CncActuatorDcMotor*)_GetItem(index);};
 };

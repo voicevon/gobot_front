@@ -3,8 +3,7 @@
 #include <stdint.h>
 #include "MyBoards/const.h"
 #include "../coordinate/cnc_axis.h"
-#include "MyLibs/basic/logger.h"
-// #include "Robot/axis_homer/cnc_homers.h"
+#include "MyLibs/basic/logger.h"   // todo: remove
 
 class KinematicConfig{
     public:
@@ -12,7 +11,6 @@ class KinematicConfig{
         bool IsCombinedFk = false;  // Like core-xy, core-yz, core-az.
         bool IsInverseKinematicHoimg = false;
 
-        // float GetAcceleration_ForG1(EnumAxis_Inverseinematic axis){return this->_ACCELERATION_FOR_G1[axis];};
         
     protected:
         bool _IS_COMBINED_FK = false;   

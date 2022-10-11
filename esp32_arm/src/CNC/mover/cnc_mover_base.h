@@ -2,7 +2,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "MyLibs/basic/logger.h"
+#include "MyLibs/basic/logger.h"   // todo: remove
 
 #include "../coordinate/cnc_axis.h"
 #include "CNC/board/cnc_board_base.h"

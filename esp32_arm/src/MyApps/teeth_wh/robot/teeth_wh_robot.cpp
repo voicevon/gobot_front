@@ -20,7 +20,6 @@ void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
 
     this->LinkMover(&mover);
     this->__Init_actuators(board);
-    // this->__Init_pids();
 
 }
 
@@ -29,9 +28,6 @@ void TeechWarehouse_Robot::__Init_actuators(TeethWarehouse_Board* board){
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
 
-    // this->__actuator_alpha.LinkPidController(&__speed_pid);
-    // this->__actuator_alpha.LinkHBridgeDriver(board->GetHBridgeDriver());
-    // this->__actuator_alpha.LinkEncoder(board->GetEncoder());
     this->__actuator_alpha.MyName = 'a';
     this->__actuator_beta.MyName = 'b';
     
