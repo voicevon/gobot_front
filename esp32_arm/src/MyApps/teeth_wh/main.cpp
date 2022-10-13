@@ -1,7 +1,7 @@
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE
+
 #include "MyApps/teeth_wh/board/teeth_wh_board.h"
-// #include "MyApps/vsc/board/board_tester.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "MyApps/teeth_wh/teeth_wh_app.h"
@@ -15,38 +15,14 @@ MessageQueue mqtt_command_queue;
 TeethWarehouse_App app;
 TeechWarehouse_Robot robot;
 
-// Encoder encoder = Encoder(PIN_ENCODER_A, PIN_ENCODER_B, 360);
-// void doA(){encoder.handleA();}
-// void doB(){encoder.handleB();}
-
-
 void test_board(){
-    // Vsc_BoardTest tester;
     board.Test_PositionTriggers(0);
-    // board.Test_HBridge(0);
-    // tester.LinkBoard(&board);
-    // tester.Test_EncoderSensor(board.GetAngleSensor()->GetRawSensor(), 0);
-    // tester.Test_AngleSensor();
-    // tester.Test_EncoderSensor(&encoder, 0);
-    // tester.Test_SinglePositionTrigger(board.GetSingleHomer(AXIS_ALPHA), 0);
-    // tester.Test_AxisHomer(board.GetCncHomers()->GetAxisHomer(AXIS_ALPHA), 0);
-
-    // tester.Test_MotorDriver(board.GetActuator(AXIS_ALPHA), 0);
-    // tester.Test_Offset(0);
     Serial.println("[Info] test_board() is done.");
 }
 
-// void setup_encoder(){
-    // encoder.quadrature = Quadrature::ON;
-//     encoder.pullup = Pullup::USE_INTERN;
-//     encoder.init();
-//     encoder.enableInterrupts(doA, doB);
-// }
 
 void setup(){
     
-    // setup_encoder();
-    // board.LinkEncoderSensor(&encoder);
     board.Init(true);
 
     // test_board();

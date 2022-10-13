@@ -30,13 +30,14 @@ class TeechWarehouse_Robot: public RobotBase{
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
 
+        TeethWarehouse_Board* __board;
         //Eef actions:
         void __MoveToCell(int row_index, int col_index);
         void __EefMoveToCollectionBox();
         void __EefMoveToTop();
 
-        void __TurnOn_VacuumePump(bool is_turn_on);
-        void __TurnOn_VacuumeSucker(bool is_turn_on);
+        void __TurnOn_VacuumePump(bool is_turn_on){this->__board->EnableVacuumePump(is_turn_on);};
+        void __TurnOn_VacuumeSucker(bool is_turn_on){this->__board->EnableVacuumeSucker(is_turn_on);};
 
         float __GetWeight();
         void __GetDistanceToTeeth();

@@ -2,10 +2,12 @@
 #include "Robot/mcode_runner/mcode_os.h"
 #include "CNC/Actuator/dc_motor/actuator_encoder_calculator.h"
 
+
+
 void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
     Logger::Debug("TeechWarehouse_Robot::Init()");
     this->_cnc_board = board;
-    // this->_LinkEef(board->GetEef());
+    this->__board = board;
 
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     this->__planner.__arm_solution = &arm_solution;
@@ -36,8 +38,6 @@ void TeechWarehouse_Robot::__Init_actuators(TeethWarehouse_Board* board){
     helper._slave_pulley_teeth_count = 368;
     float slope = helper.Get_steps_per_mm();
     __actuator_alpha.Init_FomularSlope(slope);
-
-
 }
 
 void TeechWarehouse_Robot::StoreToCell(int row_index, int col_index){
@@ -49,14 +49,15 @@ void TeechWarehouse_Robot::RetrieveFromCell(int row_index, int col_index){
 }
 
 void TeechWarehouse_Robot::__MoveToCell(int row_index, int col_index){
-    // String m123 = "M123C";
-    // m123.concat(cell_index);
-    // this->_gcode_queue->AppendGcodeCommand(m123);
-
-    String g1 = "G1A";
-    // TODO:  over single circle.
-    // float gear_angle = TWO_PI *  this->__position_in_pitch[layer_index] / 184;
-    // g1.concat(gear_angle);
+    // Constrctu Gcode from (row, col) to (X,Y)
+    String g1 = "G1X";
+    float x = 40.0f * row_index + 25;
+    float y= 40.0f * (col_index -4);
+    if(col_index>=4) y += 35.0f;
+    if(col_index<=3) y -= 35.0f;
+    g1.concat(x);
+    g1.concat("Y");
+    g1.concat(y);
     g1.concat("F0.1");
     this->_gcode_queue->AppendGcodeCommand(g1);
 }

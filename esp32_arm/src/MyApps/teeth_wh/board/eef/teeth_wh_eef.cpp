@@ -16,10 +16,10 @@ void TeethWarehouse_RobotEef::Run(uint8_t eef_code){
         
             break;;
         case EEF_CODE_ENABLE_VACUUME:
-            this->board->EnableVacuume(true);
+            this->board->EnableVacuumePump(true);
             break;;
         case EEF_CODE_DISABLE_VACUUME:
-            this->board->EnableVacuume(false);
+            this->board->EnableVacuumePump(false);
             break;;
         default:
             break;

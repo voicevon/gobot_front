@@ -1,8 +1,14 @@
 #pragma once
+
+
 #include "CNC/board/cnc_board_base.h"
-// #include "eef/teeth_wh_eef.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "Robot/axis_homer/home_trigger_array.h" 
+#include "HX711.h"
+#include "VL6180X.h"
+#include <ESP32Servo.h>
+
+
 
 class TeethWarehouse_Board: public CncBoardBase{
     public:
@@ -17,15 +23,30 @@ class TeethWarehouse_Board: public CncBoardBase{
 
         // We do nothing, just override the methods.
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override {};
-        void EnableVacuume(bool enable_it);
+        void EnableVacuumePump(bool enable_it);
+        void EnableVacuumeSucker(bool enable_it);
+
+        float ReadHx711Adc();
+        float ReadVL6180();
+
+        HX711* GetHx711(){return &this->__hx711;};
 
         void Test_PositionTriggers(int loops);
+        void Test_Hx711(int loops);
+        void Test_VL6180x();
+        void Test_Servo(int loops);
+
 
     protected:
 
     private:
-        // TeethWarehouse_RobotEef __eef;
-        
         PositionTrigger __all_position_triggers[4];
+        HX711 __hx711;
+        // VL6180x sensor(VL6180X_ADDRESS);
+        VL6180X sensor;
+        Servo __servo;
+
+
+        
 
 };
