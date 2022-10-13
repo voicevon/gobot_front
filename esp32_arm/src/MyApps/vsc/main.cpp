@@ -4,16 +4,16 @@
 #include "MyApps/vsc/board/board_tester.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
-#include "MyApps/vsc/vsc_app.h"
-#include "MyApps/vsc/robot/vsc_robot.h"
+#include "MyApps/vsc/app.h"
+#include "MyApps/vsc/robot/robot.h"
 
 
 Vsc_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
-VscApp vsc_app;
-VscRobot vsc_robot;
+VscApp app;
+VscRobot robot;
 
 Encoder encoder = Encoder(PIN_ENCODER_A, PIN_ENCODER_B, 360);
 void doA(){encoder.handleA();}
@@ -50,12 +50,13 @@ void setup(){
     board.Init(true);
 
     test_board();
-    vsc_robot.Init(&board);
-    vsc_robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
-    vsc_app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
+    robot.Init(&board);
+    robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
+    app.LinkRobot(&robot);
 
     setup_mqtt_block_connect();
-    append_mqtt_bridge("vsc/j4", &mqtt_command_queue, &vsc_app); 
+    append_mqtt_bridge("vsc/j4", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
     // gcode_queue.AppendGcodeCommand("G28A");
     Logger::Info ("VSC-XiaoJuan   setup() is done. ");
@@ -63,9 +64,9 @@ void setup(){
 
 void loop(){
     // Logger::Print("Arduino loop() point ", 1);
-    vsc_app.SpinOnce();
+    app.SpinOnce();
     // Logger::Print("Aruino loop() point ", 2);
-    vsc_robot.SpinOnce();
+    robot.SpinOnce();
     // Logger::Print("Arduino loop() point ", 3);
     loop_mqtt();
     // Logger::Print("Arduino loop() point ", 4);

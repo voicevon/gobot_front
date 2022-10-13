@@ -39,3 +39,24 @@ void TeechWarehouse_Robot::__Init_actuators(TeethWarehouse_Board* board){
 
 
 }
+
+void TeechWarehouse_Robot::StoreToCell(int row_index, int col_index){
+
+}
+
+void TeechWarehouse_Robot::RetrieveFromCell(int row_index, int col_index){
+
+}
+
+void TeechWarehouse_Robot::__MoveToCell(int row_index, int col_index){
+    // String m123 = "M123C";
+    // m123.concat(cell_index);
+    // this->_gcode_queue->AppendGcodeCommand(m123);
+
+    String g1 = "G1A";
+    // TODO:  over single circle.
+    // float gear_angle = TWO_PI *  this->__position_in_pitch[layer_index] / 184;
+    // g1.concat(gear_angle);
+    g1.concat("F0.1");
+    this->_gcode_queue->AppendGcodeCommand(g1);
+}

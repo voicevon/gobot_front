@@ -8,16 +8,19 @@
 
 #define PID_CONTROLLERS_COUNT 1
 #define CNC_ACTUATORS_COUNT 1
+#define STORE_LAYER_COUNT 20
 
 
 class VscRobot: public RobotBase{
     public:
         void Init(Vsc_Board* board);
+        void MoveTo(int layer_index, int cell_index);
 
     private:
         // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
         void __Init_pids();
         void __Init_actuators(Vsc_Board* board);
+        void __Init_layer_position();
 
         PidControllers_Listable* __all_pids[PID_CONTROLLERS_COUNT];
         PidControllers_Listable __speed_pid = PidControllers_Listable(1.0f, 1.0f, 1.0f, 10.0f, 255.0f);
@@ -34,4 +37,9 @@ class VscRobot: public RobotBase{
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
 
+
+        CncActuatorDcMotor* __motor;
+        int __position_in_pitch[STORE_LAYER_COUNT];
+        int __GEAR_TEETH = 56;
+        int __PITCH_COUNT = 157;
 };

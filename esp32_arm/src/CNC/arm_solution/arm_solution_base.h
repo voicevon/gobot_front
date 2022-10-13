@@ -1,9 +1,9 @@
 #pragma once
 
-#include "CNC/gcode/gcode_consumer.h"  //todo:  remove
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
 #include "../mover/cnc_mover_base.h"
+#include "CNC/gcode/Gcode.h"
 
 // enum class MoverState{    //TODO: rename to MoverState?
 //     IDLE,       // Motor is enabled.
@@ -31,7 +31,6 @@ class ArmSolutionBase{
         virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
         virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
 
-        // KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
 
         bool is_absolute_position = true;
 

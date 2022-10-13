@@ -12,8 +12,8 @@ TeethWarehouse_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
-TeethWarehouse_App _app;
-TeechWarehouse_Robot _robot;
+TeethWarehouse_App app;
+TeechWarehouse_Robot robot;
 
 // Encoder encoder = Encoder(PIN_ENCODER_A, PIN_ENCODER_B, 360);
 // void doA(){encoder.handleA();}
@@ -50,12 +50,13 @@ void setup(){
     board.Init(true);
 
     // test_board();
-    _robot.Init(&board);
-    _robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
-    _app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
+    robot.Init(&board);
+    robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
+    app.LinkRobot(&robot);
 
     setup_mqtt_block_connect();
-    append_mqtt_bridge("teeth_wh/j4", &mqtt_command_queue, &_app); 
+    append_mqtt_bridge("teeth_wh/wh2210", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
     // gcode_queue.AppendGcodeCommand("G28A");
     Logger::Info ("VSC-XiaoJuan   setup() is done. ");
@@ -63,9 +64,9 @@ void setup(){
 
 void loop(){
     // Logger::Print("Arduino loop() point ", 1);
-    _app.SpinOnce();
+    app.SpinOnce();
     // Logger::Print("Aruino loop() point ", 2);
-    _robot.SpinOnce();
+    robot.SpinOnce();
     // Logger::Print("Arduino loop() point ", 3);
     loop_mqtt();
     // Logger::Print("Arduino loop() point ", 4);
