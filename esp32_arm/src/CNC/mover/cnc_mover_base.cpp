@@ -5,6 +5,7 @@ void CncMoverBase::SpinOnce(){
     // Logger::Debug("CncMoverBase::SpinOnce()");
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
         // Logger::Print("axis=", a);
+        // Logger::Print("axis name=", CncActuator_List::Instance().GetActuator(a)->MyName);
         CncActuator_List::Instance().GetActuator(a)->SpinOnce();
 
     }

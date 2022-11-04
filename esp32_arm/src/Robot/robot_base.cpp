@@ -48,6 +48,7 @@ void RobotBase::SpinOnce(){
 			// Logger::Print("RobotBase::SpinOnce() point", 29);
 			break;
 	}
+
 	if (this->State != RobotState::IDLE_OR_ASYNC ) {
 		// Logger::Print("RobotBase::SpinOnce() point", 91);
 		return;

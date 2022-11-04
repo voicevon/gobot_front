@@ -35,7 +35,7 @@ void setup(){
     append_mqtt_bridge("teeth_wh/wh2210", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
     // gcode_queue.AppendGcodeCommand("G28A");
-    Logger::Info ("VSC-XiaoJuan   setup() is done. ");
+    Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
 
 void loop(){

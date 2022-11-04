@@ -1,14 +1,22 @@
 #include "teeth_wh_board.h"
 
 
-#define PIN_HOMER_SENSOR_HALL_0 22
-#define PIN_HOMER_SENSOR_HALL_1 22
-#define PIN_HOMER_SENSOR_HALL_2 22
-#define PIN_VACUUME_PUMP 22
-#define PIN_VACUUME_SUCKER 22
+#define PIN_HOMER_SENSOR_HALL_0 23
+#define PIN_HOMER_SENSOR_HALL_1 16
+#define PIN_HOMER_SENSOR_HALL_2 2
+#define PIN_VACUUME_PUMP 33
+// #define PIN_VACUUME_SUCKER 22
+
+#define PIN_SERVO_AIR_PEN 15
+#define PIN_SERVO_AIR_SWITCH 25
+
 #define PIN_HX711_CLK 22
 #define PIN_HX711_DATA 22
-#define PIN_SERVO 22
+
+#define PIN_VL6180_XXX 22
+#define PIN_VL6180_XXX 22
+#define PIN_VL6180_XXX 22
+
 
 
 
@@ -21,16 +29,19 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
     __all_position_triggers[0].Init(PIN_HOMER_SENSOR_HALL_0, LOW);
     __all_position_triggers[1].Init(PIN_HOMER_SENSOR_HALL_1, LOW);
     __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
-    HomeTrigger_Array::Instance().Init(__all_position_triggers, 4);
+    HomeTrigger_Array::Instance().Init(__all_position_triggers, HOME_TRIGGER_COUNT);
     
     pinMode(PIN_VACUUME_PUMP, OUTPUT);
-    pinMode(PIN_VACUUME_SUCKER, OUTPUT);
+    // pinMode(PIN_VACUUME_SUCKER, OUTPUT);
 
 
     // Init servo.
     ESP32PWM::allocateTimer(0);   //https://github.com/madhephaestus/ESP32Servo/blob/master/examples/Multiple-Servo-Example-Arduino/Multiple-Servo-Example-Arduino.ino
-    __servo.setPeriodHertz(50);      // Standard 50hz servo
-    __servo.attach(PIN_SERVO);
+    __servo_air_pen.setPeriodHertz(50);      // Standard 50hz servo
+    __servo_air_pen.attach(PIN_SERVO_AIR_PEN);
+
+    __servo_air_switch.setPeriodHertz(50);      // Standard 50hz servo
+    __servo_air_switch.attach(PIN_SERVO_AIR_SWITCH);
 
     // Init Hx711
     __hx711.begin(PIN_HX711_DATA, PIN_HX711_CLK);
@@ -60,10 +71,10 @@ void TeethWarehouse_Board::EnableVacuumePump(bool enable_it){
     digitalWrite(PIN_VACUUME_PUMP, enable_it);
 }
 
-void TeethWarehouse_Board::EnableVacuumeSucker(bool enable_it){
-    digitalWrite(PIN_VACUUME_SUCKER, enable_it);
+// void TeethWarehouse_Board::EnableVacuumeSucker(bool enable_it){
+//     digitalWrite(PIN_VACUUME_SUCKER, enable_it);
 
-}
+// }
 
 
 
@@ -100,7 +111,7 @@ void TeethWarehouse_Board::Test_Servo(int loops){
     int pos = 0;      // position in degrees
     for (pos = 0; pos <= 270; pos += 1) { // sweep from 0 degrees to 180 degrees
 		// in steps of 1 degree
-		__servo.write(pos);
+		__servo_air_pen.write(pos);
 		delay(1);             // waits 20ms for the servo to reach the position
 	}
 }

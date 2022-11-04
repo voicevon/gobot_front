@@ -37,7 +37,6 @@ class TeechWarehouse_Robot: public RobotBase{
         void __EefMoveToTop();
 
         void __TurnOn_VacuumePump(bool is_turn_on){this->__board->EnableVacuumePump(is_turn_on);};
-        void __TurnOn_VacuumeSucker(bool is_turn_on){this->__board->EnableVacuumeSucker(is_turn_on);};
 
         float __GetWeight();
         void __GetDistanceToTeeth();
