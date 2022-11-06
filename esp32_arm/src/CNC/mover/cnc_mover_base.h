@@ -8,6 +8,7 @@
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/Actuator/cnc_actuator_list.h"
 #include "ESP32Step/src/TeensyStep.h" 
+#include "FastAccelStepper.h"
 
 
 

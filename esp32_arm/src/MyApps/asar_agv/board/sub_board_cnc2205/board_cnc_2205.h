@@ -1,10 +1,13 @@
 #pragma once
 #include "CNC/board/cnc_board_base.h"
 #include "../board_pins/board_pins_ver_2_0.h"
-#include "ESP32Step/src/TeensyStep.h"
+#include "FastAccelStepper.h"
+// #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/axis_homer/home_trigger_array.h"
 #include "../robot_eef/garment_asar_eef.h"
-#include "CNC/Actuator/stepper/actuator_stepper.h"
+// #include "CNC/Actuator/stepper/actuator_stepper.h"
+#include "CNC/Actuator/stepper/actuator_fast_stepper.h"
+
 
 
 // For Core_YZ cnc application
@@ -22,8 +25,11 @@ class Board2205Cnc: public CncBoardBase{
         
     private:
         Adafruit_MCP23X17* __mcp23018;
-        Stepper stepper_driver_alpha = Stepper(PIN_ALPHA_STEP_2205);
-        Stepper stepper_driver_beta = Stepper(PIN_BETA_STEP_2205);
+        // Stepper stepper_driver_alpha = Stepper(PIN_ALPHA_STEP_2205);
+        // Stepper stepper_driver_beta = Stepper(PIN_BETA_STEP_2205);
+        FastAccelStepper stepper_driver_alpha; // = Stepper(PIN_ALPHA_STEP_2205);
+        FastAccelStepper stepper_driver_beta; // = Stepper(PIN_BETA_STEP_2205);
+         
         PositionTrigger __all_position_triggers[2];
         // PositionTrigger homer_z = PositionTrigger(LOW);
         // PositionTrigger homer_y = PositionTrigger(LOW);

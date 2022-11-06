@@ -2,20 +2,20 @@
 
 
 #include "CNC/board/cnc_board_base.h"
-#include "CNC/Actuator/stepper/actuator_stepper.h"
+// #include "CNC/Actuator/stepper/actuator_stepper.h"
+#include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "CNC/Actuator/servo/cnc_actuator_servo.h"
 #include "Robot/axis_homer/home_trigger_array.h" 
 #include "HX711.h"
 #include "VL6180X.h"
 #include <ESP32Servo.h>
+// #include "ESP32Step/src/TeensyStep.h"
+#include "FastAccelStepper.h"
+
 
 #define HOME_TRIGGER_COUNT 3
 
-#define PIN_ALPHA_DIR 14
-#define PIN_ALPHA_STEP 12
-#define PIN_BETA_DIR 26
-#define PIN_BETA_STEP 27
-#define PIN_STEPPER_ENABLE 13
+
 
 
 class TeethWarehouse_Board: public CncBoardBase{
@@ -23,6 +23,7 @@ class TeethWarehouse_Board: public CncBoardBase{
         // For being a real PCB board.
         // TeethWarehouse_Board(){};
         void Init(bool is_on_reset) override;
+        
 
         // For being an actuator and its components.
 
@@ -39,22 +40,30 @@ class TeethWarehouse_Board: public CncBoardBase{
         float ReadVL6180();
 
         HX711* GetHx711(){return &this->__hx711;};
-        Stepper* GetStepper_Alpha(){return &this->__stepper_alpha;};
-        Stepper* GetStepper_Beta(){return &this->__stepper_beta;};
+        FastAccelStepper* GetStepper_Alpha(){return __stepper_alpha;};
+        FastAccelStepper* GetStepper_Beta(){return __stepper_beta;};
 
         void Test_PositionTriggers(int loops);
         void Test_Hx711(int loops);
         void Test_VL6180x();
-        void Test_Servo(int loops);
+        void Test_Servo_AirPen(int loops);
+        void Test_Servo_AirSwitch(int loops);
+        void Test_VacuumPump(int loops);
+        // void Test_Servo_Simutenious()
+
+        void Test_SingleStepper(int index, int loops);
+        void Test_DualStepper(int loops);
 
 
     protected:
 
     private:
+
+        void __InitSteppers();
         PositionTrigger __all_position_triggers[HOME_TRIGGER_COUNT];
-        // PositionTrigger __all_position_triggers[3];
-        Stepper __stepper_alpha = Stepper(PIN_ALPHA_STEP, PIN_ALPHA_DIR);
-        Stepper __stepper_beta = Stepper(PIN_BETA_STEP, PIN_BETA_DIR);
+        FastAccelStepperEngine __stepper_engine = FastAccelStepperEngine();
+        FastAccelStepper* __stepper_alpha = NULL;
+        FastAccelStepper* __stepper_beta = NULL;
         
 
         HX711 __hx711;

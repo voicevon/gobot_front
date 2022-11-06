@@ -5,7 +5,8 @@
 #include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
 #include "robot_eef/board_smoke_bot.h"    // todo: remove
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-#include "ESP32Step/src/TeensyStep.h"
+#include "FastAccelStepper.h"
+// #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/axis_homer/home_trigger_array.h"
 
 

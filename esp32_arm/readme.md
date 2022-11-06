@@ -1,3 +1,5 @@
+# Going to use https://github.com/gin66/FastAccelStepper
+
 # Structure of Project
 ## board
 * Produce hardware component

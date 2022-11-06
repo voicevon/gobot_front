@@ -1,4 +1,5 @@
 #pragma once
+#include "FastAccelStepper.h"
 #include "ESP32Step/src/TeensyStep.h"
 #include "MyLibs/basic/logger.h"
 

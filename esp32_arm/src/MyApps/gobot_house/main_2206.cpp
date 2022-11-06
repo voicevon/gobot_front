@@ -10,7 +10,8 @@
 // #include "cnc/solution.h"
 #include "robot/gobot_house_robot.h"
 
-#include "ESP32Step/src/TeensyStep.h"
+#include "FastAccelStepper.h"
+// #include "ESP32Step/src/TeensyStep.h"
 StepControl stepControl;
 
 Board_GobotHouse_2206 board = Board_GobotHouse_2206(&stepControl);
