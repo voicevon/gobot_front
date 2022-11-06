@@ -50,7 +50,19 @@ void TeechWarehouse_Robot::StoreToCell(int row_index, int col_index){
 }
 
 void TeechWarehouse_Robot::RetrieveFromCell(int row_index, int col_index){
-
+    // turn on vacuum pump
+    __eef.Run(EEF_CODE_ENABLE_VACUUME);
+    // air pen to top position
+    __eef.Run(EEF_CODE_HIGHER);
+    // Move eef to row, col
+    // turn on air vacuum.
+    // lower air pen
+    // eef run a small circle.
+    // upper air_pen
+    // eef run a middle circle, to remove multi-sucked-teeth.
+    // air pen to top position
+    // eef move to center output-box
+    // turn off air_vacume_switch, to let the tooth drop into output-box
 }
 
 void TeechWarehouse_Robot::__MoveToCell(int row_index, int col_index){

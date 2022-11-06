@@ -7,7 +7,7 @@
 #include "../coordinate/cnc_axis.h"
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/Actuator/cnc_actuator_list.h"
-#include "ESP32Step/src/TeensyStep.h" 
+// #include "ESP32Step/src/TeensyStep.h" 
 #include "FastAccelStepper.h"
 
 
@@ -36,6 +36,6 @@ class CncMoverBase{
         float _small_distance_for_arriving_target_position = 0.1;   //Todo: configer-able
     
     private:
-        StepControl* __stepControl;
+        // StepControl* __stepControl;
     
 };

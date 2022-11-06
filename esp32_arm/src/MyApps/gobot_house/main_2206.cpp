@@ -50,7 +50,7 @@ void setup(){
     append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, app); 
     setup_mqtt_on_message_receive(); 
     Serial.println("lovely bot,  GobotHouse.  setup() is done.  Good luck!");
-    board.GetEef()->Run(EEF_CODE_UNLOAD);
+    // board.GetEef()->Run(EEF_CODE_UNLOAD);
 }
 
 void loop(){

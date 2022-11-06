@@ -2,6 +2,7 @@
 #include "m119_runner.h"
 #include "Robot/axis_homer/home_trigger_array.h"
 
+
 // Print all triggers status, when there is a change.
 bool M119_Runner::StartToRun(Gcode* gcode){
     Logger::Debug("M119_Runner::Run()");

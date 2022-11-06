@@ -14,7 +14,7 @@ GobotMain_Board board;
 GobotMainRobot robot; 
 GobotMain_App app;
 
-StepControl objStepControl;    // Use default settings 
+// StepControl objStepControl;    // Use default settings 
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 

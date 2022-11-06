@@ -4,8 +4,8 @@
 #include "MyApps/vsc/board/board_tester.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
-#include "MyApps/vsc/app.h"
-#include "MyApps/vsc/robot/robot.h"
+#include "MyApps/vsc/vsc_app.h"
+#include "MyApps/vsc/robot/vsc_robot.h"
 
 
 Vsc_Board board;

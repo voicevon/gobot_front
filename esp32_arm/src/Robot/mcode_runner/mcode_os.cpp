@@ -17,10 +17,10 @@ McodeRunnerBase* McodeOS::GetRunner(int mcode_id){
     __current_runner = nullptr;
     switch(mcode_id){
         case 42:
-            __current_runner = &this->__m42_runner;
+            __current_runner = &this->__m42_runner_switch_gpio;
             break;
         case 84:
-            __current_runner = &this->__m84_runner;
+            __current_runner = &this->__m84_runner_disable_all_steppers;
             break;
         case 130:
             __current_runner = &this->__m130_runner;

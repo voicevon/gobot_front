@@ -4,6 +4,7 @@
 #include "MyApps/teeth_wh/board/teeth_wh_board.h"
 #include "CNC/arm_solution/core_xy_xa_ab/core_xy_xa_ab_arm_solution.h"
 #include "teeth_wh_g28_runner.h"
+#include "MyApps/teeth_wh/board/eef/teeth_wh_eef.h"
 
 #define CNC_ACTUATORS_COUNT 2
 #define ROWS_COUNT 20
@@ -31,6 +32,9 @@ class TeechWarehouse_Robot: public RobotBase{
         Core_XY_XA_ab_config arm_config;
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];
+
+        TeethWarehouse_RobotEef __eef;
+        
 
         TeethWarehouse_Board* __board;
         //Eef actions:
