@@ -3,7 +3,7 @@
 
 #define PIN_HOMER_SENSOR_HALL_0 23
 #define PIN_HOMER_SENSOR_HALL_1 16
-#define PIN_HOMER_SENSOR_HALL_2 2
+#define PIN_HOMER_SENSOR_HALL_2 4
 #define PIN_VACUUME_PUMP 33
 // #define PIN_VACUUME_SUCKER 22
 
@@ -17,7 +17,7 @@
 #define PIN_VL6180_XXX 22
 #define PIN_VL6180_XXX 22
 
-#define PIN_ALPHA_DIR 27  //14
+#define PIN_ALPHA_DIR 32  //14
 #define PIN_ALPHA_STEP 26   //12
 #define PIN_BETA_DIR 14  //26
 #define PIN_BETA_STEP 12  //27
@@ -29,19 +29,21 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
         Serial.begin(115200);
         Serial.println("I am Teeth Warehouse.");
     }
-
     __all_position_triggers[0].Init(PIN_HOMER_SENSOR_HALL_0, LOW);
     __all_position_triggers[1].Init(PIN_HOMER_SENSOR_HALL_1, LOW);
     __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
     HomeTrigger_Array::Instance().Init(__all_position_triggers, HOME_TRIGGER_COUNT);
     
+    // Disable vacuumPump
     pinMode(PIN_VACUUME_PUMP, OUTPUT);
+    this->EnableVacuumPump(false);
 
 
     // Init servo.
     ESP32PWM::allocateTimer(0);   //https://github.com/madhephaestus/ESP32Servo/blob/master/examples/Multiple-Servo-Example-Arduino/Multiple-Servo-Example-Arduino.ino
     __servo_air_pen.setPeriodHertz(50);      // Standard 50hz servo
     __servo_air_pen.attach(PIN_SERVO_AIR_PEN);
+    __servo_air_pen.write(270);   //Move air pen to top position.
 
     __servo_air_switch.setPeriodHertz(50);      // Standard 50hz servo
     __servo_air_switch.attach(PIN_SERVO_AIR_SWITCH);
@@ -71,12 +73,12 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
 
 void TeethWarehouse_Board::__InitSteppers(){
     __stepper_engine.init(1);
-    __stepper_alpha = __stepper_engine.stepperConnectToPin(26);  // for alpha=27, for beta=12
-    __stepper_beta = __stepper_engine.stepperConnectToPin(12);  // for alpha=27, for beta=12
+    __stepper_alpha = __stepper_engine.stepperConnectToPin(PIN_ALPHA_STEP);  // for alpha=27, for beta=12
+    __stepper_beta = __stepper_engine.stepperConnectToPin(PIN_BETA_STEP);  // for alpha=27, for beta=12
 
     if (__stepper_alpha) {
-        __stepper_alpha->setDirectionPin(27);   //for alpha=26, for beta = 14
-        __stepper_alpha->setEnablePin(13);                            
+        __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR);   //for alpha=26, for beta = 14
+        __stepper_alpha->setEnablePin(PIN_STEPPER_ENABLE);                            
         __stepper_alpha->setAutoEnable(false);
 
         __stepper_alpha->setSpeedInUs(1000);  // the parameter is us/step !!!
@@ -91,8 +93,8 @@ void TeethWarehouse_Board::__InitSteppers(){
     }
 
     if (__stepper_beta) {
-        __stepper_beta->setDirectionPin(14);   //for alpha=26, for beta = 14
-        __stepper_beta->setEnablePin(13);                            
+        __stepper_beta->setDirectionPin(PIN_BETA_DIR);   //for alpha=26, for beta = 14
+        __stepper_beta->setEnablePin(PIN_STEPPER_ENABLE);                          
         __stepper_beta->setAutoEnable(false);
 
         __stepper_beta->setSpeedInUs(1000);  // the parameter is us/step !!!
@@ -108,16 +110,9 @@ void TeethWarehouse_Board::__InitSteppers(){
 }
 
 
-void TeethWarehouse_Board::EnableVacuumePump(bool enable_it){
-    digitalWrite(PIN_VACUUME_PUMP, enable_it);
+void TeethWarehouse_Board::EnableVacuumPump(bool enable_it){
+    digitalWrite(PIN_VACUUME_PUMP, !enable_it);
 }
-
-// void TeethWarehouse_Board::EnableVacuumeSucker(bool enable_it){
-//     digitalWrite(PIN_VACUUME_SUCKER, enable_it);
-
-// }
-
-
 
 void TeethWarehouse_Board::Test_PositionTriggers(int loops){
     uint32_t flags = 0;
@@ -200,18 +195,20 @@ void TeethWarehouse_Board::Test_DualStepper(int loops){
     for (int i=0; i<loops; i++){
         Logger::Info("Test_DualStepper");
         Logger::Print("loop", i);
+        // Move to Y+
         __stepper_alpha->moveTo(1000, false);
-        __stepper_beta->moveTo(1000,false);
+        __stepper_beta->moveTo(-1000,false);
         while (__stepper_alpha->isRunning()){
-            Logger::Print("alpha position", __stepper_alpha->getCurrentPosition());
-            Logger::Print("beta position", __stepper_beta->getCurrentPosition());
+            // Logger::Print("alpha position", __stepper_alpha->getCurrentPosition());
+            // Logger::Print("beta position", __stepper_beta->getCurrentPosition());
             delay(300);
         }
+        // Move to Y-.
         __stepper_alpha->moveTo(-1000, false);
-        __stepper_beta->moveTo(-1000, false);
+        __stepper_beta->moveTo(1000, false);
         while (__stepper_beta->isRunning()){
-            Logger::Print("alpha position", __stepper_alpha->getCurrentPosition());
-            Logger::Print("beta position", __stepper_beta->getCurrentPosition());
+            // Logger::Print("alpha position", __stepper_alpha->getCurrentPosition());
+            // Logger::Print("beta position", __stepper_beta->getCurrentPosition());
             delay(300);
         }
     }
@@ -264,11 +261,11 @@ void TeethWarehouse_Board::Test_VacuumPump(int loops){
     for (int loop=0; loop<loops; loop++){
         Serial.print (loop);
         // turn on
-        digitalWrite(PIN_VACUUME_PUMP, HIGH);
-        Serial.print("ON    ");
+        digitalWrite(PIN_VACUUME_PUMP, LOW);
+        Serial.print("\t\tON    ");
         delay(5000);
         // turn off
-        digitalWrite(PIN_VACUUME_PUMP, LOW);
+        digitalWrite(PIN_VACUUME_PUMP, HIGH);
         Serial.print("OFF    ");
         delay(5000);
 

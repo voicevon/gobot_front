@@ -32,7 +32,7 @@ class TeethWarehouse_Board: public CncBoardBase{
 
         // We do nothing, just override the methods.
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override {};
-        void EnableVacuumePump(bool enable_it);
+        void EnableVacuumPump(bool enable_it);
         // void EnableVacuumeSucker(bool enable_it);
     
 
