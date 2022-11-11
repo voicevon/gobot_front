@@ -28,6 +28,8 @@ bool CommonQueue::AppendObject(Queue_able* new_object){
     // buffer is NOT full. 
     return false;  
 }
+
+
 bool CommonQueue::Deposit(){
     // Logger::Debug("ommonQueue::Deposit()");
     // Logger::Print("head old", this->_head);

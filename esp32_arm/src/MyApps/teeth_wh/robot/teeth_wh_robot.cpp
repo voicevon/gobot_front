@@ -17,7 +17,7 @@ void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
     arm_config.master_slope_steps_per_mm = 12.778;
     this->arm_solution.LinkConfig(&arm_config);
 
-    this->__g28_runner = &this->g28_runner;
+    this->_g28_runner = &this->g28_runner;
     g28_runner.Init(&mover);
 
     this->LinkMover(&mover);

@@ -29,6 +29,8 @@ class CommonQueue{
 
         
         Queue_able* _all_queue_ables;
+
+        //Push the appended object to queue. 
         bool Deposit();   //Push()?   Enqueue()?   Deposit()?
 
     protected:

@@ -12,11 +12,7 @@
 // #include "ESP32Step/src/TeensyStep.h"
 #include "FastAccelStepper.h"
 
-
-#define HOME_TRIGGER_COUNT 3
-
-
-
+#define HOME_TRIGGER_COUNT 1
 
 class TeethWarehouse_Board: public CncBoardBase{
     public:
@@ -33,7 +29,7 @@ class TeethWarehouse_Board: public CncBoardBase{
         // We do nothing, just override the methods.
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override {};
         void EnableVacuumPump(bool enable_it);
-        // void EnableVacuumeSucker(bool enable_it);
+        void EnableVacuumeSucker(bool enable_it);
     
 
         float ReadHx711Adc();

@@ -12,7 +12,7 @@ void SpringMakerRobot::Init(Board_SpringMaker* board){
     this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
 
-    this->__g28_runner = &this->g28_runner;
+    this->_g28_runner = &this->g28_runner;
     g28_runner.Init(&mover);
 
     Logger::Info("SpringMakerRobot::Init() Actuators.");

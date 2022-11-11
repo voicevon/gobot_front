@@ -23,12 +23,12 @@ TeechWarehouse_Robot robot;
 // FastAccelStepper* __stepper_beta = NULL;
 
 void test_board(){
-    board.Test_PositionTriggers(0);
+    board.Test_PositionTriggers(99);
     board.Test_Servo_AirPen(0);
     board.Test_Servo_AirSwitch(0);
     board.Test_VacuumPump(0);
     board.Test_SingleStepper(1, 0);
-    board.Test_DualStepper(8);
+    board.Test_DualStepper(0);
     Serial.println("[Info] test_board() is done.");
 }
 
@@ -45,7 +45,8 @@ void setup(){
     setup_mqtt_block_connect();
     append_mqtt_bridge("teeth_wh/wh2210", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
-    // gcode_queue.AppendGcodeCommand("G28A");
+    gcode_queue.AppendGcodeCommand("G28A");
+    gcode_queue.AppendGcodeCommand("G28Y");
 
 
     // Serial.begin(115200);

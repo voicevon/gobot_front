@@ -14,9 +14,9 @@
 
 enum class RobotState{
     IDLE_OR_ASYNC,
-    G28_IS_SYNCING,
+    G28_IS_SYNCING,  //Wait command in queue in front of G28 is Done.
     G28_IS_RUNNING,
-    G4_IS_SYNCING,
+    G4_IS_SYNCING,   //Wait command in queue in front of G4 is Done.
     G4_IS_RUNNING,
     RUNNING_M_CODE,
 };
@@ -45,7 +45,7 @@ class RobotBase: public GcodeConsumer{
 
         
     protected:
-        G28_Runner*__g28_runner;
+        G28_Runner* _g28_runner;
         CncMoverBase* _mover;
 
     private:

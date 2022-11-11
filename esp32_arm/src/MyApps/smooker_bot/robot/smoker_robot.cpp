@@ -7,7 +7,7 @@ void SmokerRobot::Init(Smoker_Board* board){
     this->_cnc_board = board;
     // this->_LinkEef(board->GetEef());
 
-    this->__g28_runner=&this->g28_runner;
+    this->_g28_runner=&this->g28_runner;
     // g28_runner.LinkMover(&mover);
     g28_runner.Init(&mover);
     this->LinkMover(&mover);

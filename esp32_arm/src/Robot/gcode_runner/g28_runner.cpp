@@ -48,6 +48,7 @@ void G28_Runner::LinkGcode(Gcode* gcode){
 }
 
 // Put a move_block to the queue.
+// This move_block will set all the involved actuators to move to home direction.
 void G28_Runner::Start(){ 
     Logger::Debug("G28_Runner::Start()");
 

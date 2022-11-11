@@ -2,8 +2,8 @@
 
 
 #define PIN_HOMER_SENSOR_HALL_0 23
-#define PIN_HOMER_SENSOR_HALL_1 16
-#define PIN_HOMER_SENSOR_HALL_2 4
+// #define PIN_HOMER_SENSOR_HALL_1 16
+// #define PIN_HOMER_SENSOR_HALL_2 4
 #define PIN_VACUUME_PUMP 33
 // #define PIN_VACUUME_SUCKER 22
 
@@ -23,15 +23,14 @@
 #define PIN_BETA_STEP 12  //27
 #define PIN_STEPPER_ENABLE 13
 
-
 void TeethWarehouse_Board::Init(bool is_on_reset){
     if (is_on_reset){
         Serial.begin(115200);
         Serial.println("I am Teeth Warehouse.");
     }
     __all_position_triggers[0].Init(PIN_HOMER_SENSOR_HALL_0, LOW);
-    __all_position_triggers[1].Init(PIN_HOMER_SENSOR_HALL_1, LOW);
-    __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
+    // __all_position_triggers[1].Init(PIN_HOMER_SENSOR_HALL_1, LOW);
+    // __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
     HomeTrigger_Array::Instance().Init(__all_position_triggers, HOME_TRIGGER_COUNT);
     
     // Disable vacuumPump
@@ -108,7 +107,6 @@ void TeethWarehouse_Board::__InitSteppers(){
         Logger::Halt("failed FastAccelStepper.");
     }
 }
-
 
 void TeethWarehouse_Board::EnableVacuumPump(bool enable_it){
     digitalWrite(PIN_VACUUME_PUMP, !enable_it);
@@ -215,7 +213,6 @@ void TeethWarehouse_Board::Test_DualStepper(int loops){
     __stepper_alpha->disableOutputs();
 }
 
-
 void TeethWarehouse_Board::Test_Hx711(int loops){
 
     __hx711.set_scale(2280.f);          // this value is obtained by calibrating the scale with known weights; see the README for details
@@ -245,17 +242,24 @@ void TeethWarehouse_Board::Test_Servo_AirPen(int loops){
 }
 
 void TeethWarehouse_Board::Test_Servo_AirSwitch(int loops){
-    int pos = 0;      // position in degrees
     for (int loop=0; loop<loops; loop++){
-        Serial.println("Air switch loop");
-        for (pos = 0; pos <= 270; pos += 1) { // sweep from 0 degrees to 180 degrees
-            // in steps of 1 degree
-            __servo_air_switch.write(pos);
-            delay(10);             // waits 20ms for the servo to reach the position
-        }
+        Serial.print("Air switch loop = ");
+        Serial.print(loop);
+        Serial.print("  Enable   ");
+        EnableVacuumeSucker(true);
+        delay(3000);
+        Serial.print("  Disable   ");
+        EnableVacuumeSucker(false);
+        delay(3000);
+        Serial.println("");
     }
 }
 
+void TeethWarehouse_Board::EnableVacuumeSucker(bool enable_it){
+    int angle = 0;
+    if (enable_it) angle = 270;
+    __servo_air_switch.write(angle);
+}
 
 void TeethWarehouse_Board::Test_VacuumPump(int loops){
     for (int loop=0; loop<loops; loop++){
