@@ -1,6 +1,14 @@
 #include "teeth_wh_eef.h"
 
 
+void TeethWarehouse_RobotEef::Run_Circle(){
+
+}
+
+// void TeethWarehouse_RobotEef::TurnOnOff_VacuumPump(bool to_turn_on){
+
+// }
+
 void TeethWarehouse_RobotEef::Run(uint8_t eef_code){
     switch (eef_code){
         case EEF_CODE_UP:

@@ -4,7 +4,7 @@
 
 
 // TODO:  Example, How to use M130
-class M130_Runner: public McodeRunnerBase{
+class M130_Runner_UpdatePid: public McodeRunnerBase{
     public:
         bool StartToRun(Gcode* gcode) override;
     private:

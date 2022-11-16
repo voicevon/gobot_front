@@ -23,7 +23,7 @@ TeechWarehouse_Robot robot;
 // FastAccelStepper* __stepper_beta = NULL;
 
 void test_board(){
-    board.Test_PositionTriggers(99);
+    board.Test_PositionTriggers(0);
     board.Test_Servo_AirPen(0);
     board.Test_Servo_AirSwitch(0);
     board.Test_VacuumPump(0);

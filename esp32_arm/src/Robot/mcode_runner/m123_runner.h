@@ -4,7 +4,11 @@
 #include "MyLibs/list/pid_controllers_list.h"
 
 
-// TODO: Example of How to use M123
+//  Example:  M123 P1A5R8C2    EEF #0 Pickup(code=5) from Row=8, Col=2 
+//       P0  Channel = 0
+//       A5  ActionCode = 5
+//       R8  Row = 8
+//       C2  Column = 2
 class Final_M123_RunnerBase{
     public:
         virtual bool StartToRun(Gcode* gcode);
@@ -16,7 +20,7 @@ class Final_M123_RunnerBase{
 
 // From point of view of processing task:  this is not a runner, this is a finnal runner agent.
 // From point of Mcode runner diapaching:  this is a runner, I can send the job to you.
-class M123_Runner: public McodeRunnerBase{
+class M123_Runner_EefAct: public McodeRunnerBase{
     public:
         bool StartToRun(Gcode* gcode) override;
         bool SpinOnce() override;

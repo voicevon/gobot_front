@@ -232,12 +232,16 @@ void TeethWarehouse_Board::Test_Servo_AirPen(int loops){
     int pos = 0;      // position in degrees
     for (int loop=0; loop<loops; loop++){
         Serial.println("Air pen loop");
-        for (pos = 0; pos <= 270; pos += 1) { // sweep from 0 degrees to 180 degrees
-            // in steps of 1 degree
-            __servo_air_pen.write(pos);
-            delay(10);             // waits 20ms for the servo to reach the position
+        // for (pos = 0; pos <= 270; pos += 1) { // sweep from 0 degrees to 180 degrees
+        //     // in steps of 1 degree
+        //     __servo_air_pen.write(pos);
+        //     delay(10);             // waits 20ms for the servo to reach the position
             
-        }
+        // }
+        __servo_air_pen.write(0);
+        delay(3000);
+        __servo_air_pen.write(270);
+        delay(3000);
     }
 }
 

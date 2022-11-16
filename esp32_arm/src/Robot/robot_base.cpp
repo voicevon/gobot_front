@@ -29,8 +29,8 @@ void RobotBase::SpinOnce(){
 			}
 			break;
 		case RobotState::G28_IS_SYNCING:
+			// In case of these gocde in queue:    G1X123;  G4S5; G28X  what will hanppen 
 			Logger::Print("RobotBase::SpinOnce()  G28_Runner is waiting ", 21);
-			// if (this->__queue_move_block.BufferIsEmpty()){
 			if (Queue_MoveBlock::Instance().BufferIsEmpty()){
 				this->_g28_runner->Start();
 				this->State = RobotState::G28_IS_RUNNING;

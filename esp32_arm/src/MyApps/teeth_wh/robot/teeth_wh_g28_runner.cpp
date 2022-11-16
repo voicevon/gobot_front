@@ -11,7 +11,7 @@ void TeethWarehouse_G28_Runner::Init(CncMoverBase* mover){
     trigger->AxisName = 'X';
     trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
 
-    trigger = HomeTrigger_Array::Instance().GetPositionTrigger(1);
+    trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
     trigger->AxisName='X';
     trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
 }
@@ -22,7 +22,18 @@ void TeethWarehouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
     Logger::Print("\taxis", char(axis));
     MoveBlock_SingleActuator* move;
     switch (axis){
-        case 'X':
+        case 'A':
+            // Logger::Print("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()  point", 21);
+            mb->DeepReset_ToDefault();
+            // Logger::Print("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()  point", 22);
+            move = &mb->MoveBlocks[AXIS_ALPHA];
+            // Logger::Print("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()  point", 23);
+            move->IsAbsTargetPosition = false;
+            move->TargetPosition = TWO_PI;
+            move->Speed = 0.1;
+            move->Acceleration = 0.05;
+            break;
+        case 'Y':
             // Logger::Print("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()  point", 21);
             mb->DeepReset_ToDefault();
             // Logger::Print("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()  point", 22);

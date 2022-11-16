@@ -1,6 +1,6 @@
 #include "m130_runner.h"
 
-bool M130_Runner::StartToRun(Gcode* gcode){
+bool M130_Runner_UpdatePid::StartToRun(Gcode* gcode){
     uint8_t n_value = 33;   //TODO: Make sure this is no harmful!
     float f_value = 0.0f;
 

@@ -8,6 +8,7 @@ class TeethWarehouse_RobotEef: public RobotEefBase{
         TeethWarehouse_RobotEef(){};
         void Run(uint8_t eef_code) override;
         // void PrintOut() override;
+        void Run_Circle();
 
     private:
         TeethWarehouse_Board* board;

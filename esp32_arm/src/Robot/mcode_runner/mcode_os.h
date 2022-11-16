@@ -19,7 +19,7 @@ class McodeOS{
     private:
         M42_Runner_Switch_GPIO __m42_runner_switch_gpio;
         M84_Runner_Disable_All_Steppers __m84_runner_disable_all_steppers;
-        M119_Runner __m119_runner;
-        M130_Runner __m130_runner;
+        M119_Runner_TestPositionTriggers __m119_runner;
+        M130_Runner_UpdatePid __m130_runner;
         McodeRunnerBase* __current_runner;
 };
