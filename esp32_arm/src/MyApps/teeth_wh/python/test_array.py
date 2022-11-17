@@ -11,6 +11,11 @@ class person():
 
 people = [person(99)]
 
+
+people = []
+
+
+
 people.append(person(11))
 people.append(person(22))
 

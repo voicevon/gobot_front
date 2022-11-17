@@ -34,7 +34,7 @@ void test_board(){
 
 bool running_flag = false;
 void setup(){
-    
+   
     board.Init(true);
     test_board();
     robot.Init(&board);
