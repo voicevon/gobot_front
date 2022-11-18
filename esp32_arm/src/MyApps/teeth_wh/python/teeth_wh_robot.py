@@ -46,6 +46,7 @@ class GcodeSender():
     def MoveTo(self, x, y):
         print('gcode ','MoveTo')
         g1 = "G!X" + str(x) + "Y" + str(y)
+        g_amq.Publish('twh_221109_gcode', g1)
 
 
 class RobotCerebellum():
@@ -121,22 +122,15 @@ class TeethWarehouseRobot():
 
 robot = TeethWarehouseRobot()
 
-def callback_example_twh( ch, method, properties, body):
-        # print('RabbitMqAgent::callback_example()  mq Received ' ,  method.routing_key, body)
-        # channel.basic_ack(delivery_tag=method.delivery_tag)
+def callback_twh_request( ch, method, properties, body):
         robot.ExecCommand(body.decode("utf-8") )
-        # if body == 'withdraw_end':
-        #     print('withdraw_end')
-        # else:
-        #     msg = json.loads(body)
-        #     print(msg)
 
 
 if __name__ == '__main__':
     g_amq = RabbitMqAgent()
     amq_broke_config = AMQ_BrokerConfig()
     g_amq.connect_to_broker(amq_broke_config)
-    g_amq.Subscribe("twh_221109_request",callback=callback_example_twh)
+    g_amq.Subscribe("twh_221109_request",callback=callback_twh_request)
     
     while True:
         # request = AmqAgent.FetchMessage()
