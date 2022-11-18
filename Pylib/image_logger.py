@@ -2,8 +2,8 @@
 from enum import Enum
 import logging
 import cv2
-from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
-from Pylib.rabbit_mq_helper import g_amq
+from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
+from Pylib.rabbitmq_agent import g_amq
 
 class ImageLoggerToWhere(Enum):
     TO_MQTT = 1

@@ -106,9 +106,6 @@ class RabbitMqClient():
         var_callback = callback
         if callback is None:
             var_callback = self.callback_example
-        # self.channel_main = self.connection.channel()
-        # self.channel_main.queue_declare(queue=self.queue_config.main_queue)
-        # self.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=False )
         self.channel.basic_consume(queue=queue_name, on_message_callback=var_callback, auto_ack=False )
 
     def RabbitMQ_publish_tester(self):
@@ -130,19 +127,21 @@ def callback_example_app(self, ch, method, properties, body):
         self.channel.basic_ack(delivery_tag=method.delivery_tag)
 
 if __name__ == '__main__':
+
+    #test 1
     g_mqtt.connect_to_broker(g_mqtt_broker_config)
-
-    g_amq = RabbitMqClient()
-    amq_broke_config = AMQ_BrokerConfig()
-    g_amq.connect_to_broker(amq_broke_config)
-    print("------------------------------------------------------")
-    img = cv2.imread("nocommand.jpg")
-    g_amq.publish_cv_image("test" , img)
-
     hello =  MqttAutoSyncVar(mqtt_topic='test/auto_sync/hello', default_value='hello world')
     while hello.local_value == hello.default_value:
         pass
     print("got new remote value   ",hello.local_value)
+
+    #test2
+    g_amq = RabbitMqClient()
+    amq_broke_config = AMQ_BrokerConfig()
+    g_amq.connect_to_broker(amq_broke_config)
+
+    img = cv2.imread("nocommand.jpg")
+    g_amq.publish_cv_image("test" , img)
 
     g_amq.Subscribe(queue_name='twh_221109_request',callback=None )
     while True:

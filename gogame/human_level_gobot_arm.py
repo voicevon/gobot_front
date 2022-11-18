@@ -21,7 +21,7 @@ from Pylib.robot_map import MapSite
 from gogame.arm_map import ArmMapSite_Catalog, ArmMapSiteFactory
 from gogame.chessboard_cell import ChessboardCell
 from gogame.human_level_robot_base import HumanLevelRobotBase
-from Pylib.rabbit_mq_helper import AMQ_ConnectionConfig, g_amq
+from Pylib.rabbitmq_agent import AMQ_ConnectionConfig, g_amq
 import enum
 
 

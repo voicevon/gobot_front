@@ -7,7 +7,7 @@ import copy
 import sys
 sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10
 sys.path.append('/home/xm/gobot_front')    #for linux 
-from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
+from Pylib.rabbitmq_agent import g_amq, AMQ_ConnectionConfig
 
 
 

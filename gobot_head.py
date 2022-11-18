@@ -2,7 +2,7 @@
 from vision.robot_eye_factory import RobotEye_Factory, RobotEye_Product
 from vision.robot_eye_base import MonoEyeBase
 
-from Pylib.rabbit_mq_helper import g_amq, AMQ_ConnectionConfig
+from Pylib.rabbitmq_agent import g_amq, AMQ_ConnectionConfig
 from Pylib.image_logger import ImageLogger,ImageLoggerToWhere
 from Pylib.message_logger import MessageLoggerToWhere,MessageLogger
 from von.terminal_font import TerminalFont  # pip3 install VonPylib

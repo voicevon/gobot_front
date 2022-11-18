@@ -28,7 +28,7 @@ import sys
 sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 from gogame.human_level_robot_base import HumanLevelRobotBase
 from gogame.chessboard_cell import StoneColor
-from Pylib.rabbit_mq_helper import g_amq,AMQ_ConnectionConfig
+from Pylib.rabbitmq_agent import g_amq,AMQ_ConnectionConfig
 from datetime import datetime
 from gogame.house_map import HouseMapSite_Catalog, HouseMapSiteFactory, MapSite
 

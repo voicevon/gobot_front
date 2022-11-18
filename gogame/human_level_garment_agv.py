@@ -3,7 +3,7 @@
 import sys
 sys.path.append('D:\\XumingSource\\gobot_front')  # For runing in VsCode on Windows-10 
 from gogame.human_level_robot_base import HumanLevelRobotBase
-from Pylib.rabbit_mq_helper import AMQ_ConnectionConfig, g_amq, MQTT_ConnectionConfig
+from Pylib.rabbitmq_agent import AMQ_ConnectionConfig, g_amq, MQTT_ConnectionConfig
 # from rabbitmq_app_examle_uselss import RabbitClient
 import enum
 
