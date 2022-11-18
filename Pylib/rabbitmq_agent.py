@@ -1,11 +1,5 @@
-import numpy
-from pika import BlockingConnection
-
-import cv2
 import pika 
-from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
-from von.mqtt_auto_syncer import MqttAutoSyncVar
-
+import cv2
 import time
 
 # def color_print(fore: Color, obj: any):
@@ -16,15 +10,13 @@ import time
 
 class AMQ_BrokerConfig:
     host = 'voicevon.vicp.io'
-    # port = 15672      
-    # host = '192.168.1.4'
     port = 5672  
     virtual_host = '/'
     uid = 'von'
     password = 'von1970'
 
 
-class RabbitMqClient():
+class RabbitMqAgent():
     '''
     To learn:  What is channel indeed ?
     '''
@@ -34,6 +26,7 @@ class RabbitMqClient():
     def connect_to_broker(self, broker_config: AMQ_BrokerConfig) -> None:
         self.serverConfig = broker_config
         self.reconnect_to_broker()
+        # self.blocking_connection = None
 
     def SpinOnce(self):
         self.blocking_connection.process_data_events()
@@ -63,7 +56,7 @@ class RabbitMqClient():
                         body = payload)
 
     def PublishBatch(self, queue_name:str, payloads:list):
-        print("[Info] RabbitMqClient.PublishBatch(), queue_name=, payload= ", queue_name, payloads)
+        print("[Info] RabbitMqAgent.PublishBatch(), queue_name=, payload= ", queue_name, payloads)
         if not (queue_name in self.declaed_queues):
             self.channel.queue_declare(queue=queue_name)
             self.declaed_queues.append(queue_name)
@@ -91,7 +84,7 @@ class RabbitMqClient():
                         body = img_pub)
 
     def callback_example(self, ch, method, properties, body):
-        print('RabbitMqClient::callback_example()  mq Received ' ,  method.routing_key, body)
+        print('RabbitMqAgent::callback_example()  mq Received ' ,  method.routing_key, body)
         self.channel.basic_ack(delivery_tag=method.delivery_tag)
 
 
@@ -123,20 +116,11 @@ class RabbitMqClient():
 
 
 def callback_example_app(self, ch, method, properties, body):
-        print('RabbitMqClient::callback_example_app()  mq Received ' ,  method.routing_key, body)
+        print('RabbitMqAgent::callback_example_app()  mq Received ' ,  method.routing_key, body)
         self.channel.basic_ack(delivery_tag=method.delivery_tag)
 
 if __name__ == '__main__':
-
-    #test 1
-    g_mqtt.connect_to_broker(g_mqtt_broker_config)
-    hello =  MqttAutoSyncVar(mqtt_topic='test/auto_sync/hello', default_value='hello world')
-    while hello.local_value == hello.default_value:
-        pass
-    print("got new remote value   ",hello.local_value)
-
-    #test2
-    g_amq = RabbitMqClient()
+    g_amq = RabbitMqAgent()
     amq_broke_config = AMQ_BrokerConfig()
     g_amq.connect_to_broker(amq_broke_config)
 

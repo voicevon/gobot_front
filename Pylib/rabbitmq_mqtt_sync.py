@@ -1,6 +1,8 @@
 from shutil import ExecError
 from pika import BlockingConnection
-from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
+# from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
+from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
+from von.mqtt_auto_syncer import MqttAutoSyncVar
 # from Pylib.rabbit_mq_basic import RabbitMQBrokeConfig, RabbitClient
 import copy
 
@@ -130,10 +132,10 @@ class SyncerFactory:
 # TODO:  remove this
 class SyncerHelper_ForGobot:
     def __init__(self) -> None:
-        config_mqtt = MQTT_ConnectionConfig()
-        config_mqtt.uid = 'agent'
-        config_mqtt.password = 'agent'
-        g_mqtt.connect_to_broker(config_mqtt)
+        # config_mqtt = MQTT_ConnectionConfig()
+        # config_mqtt.uid = 'agent'
+        # config_mqtt.password = 'agent'
+        g_mqtt.connect_to_broker(g_mqtt_broker_config)
 
         config_rabbit = AMQ_ConnectionConfig()
         config_rabbit.uid = 'agent'
@@ -151,6 +153,15 @@ class SyncerHelper_ForGobot:
         self.helper.SpinOnce()
 
 if __name__ == '__main__':
+
+    #test 1
+    g_mqtt.connect_to_broker(g_mqtt_broker_config)
+    hello =  MqttAutoSyncVar(mqtt_topic='test/auto_sync/hello', default_value='hello world')
+    while hello.local_value == hello.default_value:
+        pass
+    print("got new remote value   ",hello.local_value)
+
+
     app = SyncerHelper_ForGobot()
     while True:
         app.SpinOnce()
