@@ -1,9 +1,10 @@
-import json
 # from pika import BlockingConnection
 from rabbit_mq_basic import RabbitClient, RabbitMQBrokeConfig
 from AGV.mes_elements import FileNames, MyJsonEncoder, Single_MesTask, MapElement_Robot, MapElement_Node
 from rabbitmq_mqtt_sync import RabbitMQSyncer
 from AGV.mes_resources_init_files import MES_ResourcesHelper
+
+import json
 
 
 from enum import Enum
@@ -241,11 +242,8 @@ class MesManager:
 
 
 if __name__ == '__main__':
-        from von.mqtt_helper import g_mqtt, MQTT_ConnectionConfig
-        config = MQTT_ConnectionConfig()
-        config.uid='von'
-        config.password = 'von1970'
-        g_mqtt.connect_to_broker(config)
+        from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
+        g_mqtt.connect_to_broker(g_mqtt_broker_config)
 
         mm = MesManager()
         while True:
