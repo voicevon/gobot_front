@@ -213,7 +213,8 @@
             "deac9204a715aeb9",
             "e103a603dc3955c4",
             "a6994a782a4f9f83",
-            "28967f28423812cd"
+            "28967f28423812cd",
+            "6c045c858d53c619"
         ],
         "x": 14,
         "y": 1573,
@@ -1311,8 +1312,8 @@
         "g": "c84e9bdfcdd9622c",
         "name": "",
         "topic": "twh_221109_gcode_feed",
-        "qos": "",
-        "retain": "",
+        "qos": "2",
+        "retain": "true",
         "respTopic": "",
         "contentType": "",
         "userProps": "",
@@ -1395,7 +1396,7 @@
         "z": "3b3b51ba9856c9a7",
         "g": "c84e9bdfcdd9622c",
         "name": "set gcode",
-        "func": "flow.set (\"twh_221109_gcode\", msg)\nnode.warn(msg)\nreturn msg;",
+        "func": "flow.set (\"twh_221109_gcode\", msg)\n// node.warn(msg)\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1476,7 +1477,8 @@
         "wires": [
             [
                 "1fc120fb37d76447",
-                "5f8384ece0aab120"
+                "5f8384ece0aab120",
+                "6c045c858d53c619"
             ]
         ]
     },
@@ -1524,6 +1526,23 @@
                 "34bf51da37bc5553"
             ]
         ]
+    },
+    {
+        "id": "6c045c858d53c619",
+        "type": "debug",
+        "z": "3b3b51ba9856c9a7",
+        "g": "c84e9bdfcdd9622c",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1220,
+        "y": 1760,
+        "wires": []
     },
     {
         "id": "0ef930b72091b7f3",
