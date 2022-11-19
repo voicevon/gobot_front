@@ -10,6 +10,8 @@ class GcodeSender():
 
     def __init__(self) -> None:
         self.target_device_id = 221109
+        self.exchange_name = 'twh'
+        self.queue_name = self.exchange_name + '_' + str(self.target_device_id) + '_gcode'
 
     def EefMove_Z_toTop(self):
         '''
@@ -46,7 +48,7 @@ class GcodeSender():
     def MoveTo(self, x, y):
         print('gcode ','MoveTo')
         g1 = "G!X" + str(x) + "Y" + str(y)
-        g_amq.Publish('twh_221109_gcode', g1)
+        g_amq.Publish(self.exchange_name, self.queue_name, g1)
 
 
 class RobotCerebellum():
@@ -74,9 +76,29 @@ class RobotCerebellum():
         self.gcode_sender.PauseForWaiting(3)
         self.gcode_sender.Eef_EnableSuck(False)
 
+
 class TeethWarehouseRobot():
     def __init__(self) -> None:
         self.cerebellum = RobotCerebellum()
+        self.state = 'idle'
+
+
+    def SpinOnce(self):
+        if self.state == 'idle':
+            return
+        if self.state == 'picking_cell':
+            if 1==1:
+                #IR checking is ready
+                self.state =='to_be_checked'
+        if self.state == 'to_be_checked':
+            if 2==2:
+                # passed checking
+                self.state = 'droping_box'
+            else:
+                #failed checking
+                self.state = 'picking_cell'
+        if self.state == 'droping_box':
+            self.state = 'idle'
 
     def ExecCommand(self, command: str) -> bool:
         '''
@@ -91,21 +113,25 @@ class TeethWarehouseRobot():
             request = json.loads(command)
             # while index <request.locations.count():
                 # clear message on broker.
-            pickup_state = 'todo'
-            while pickup_state != 'done':
-                if pickup_state == 'todo':
-                    self.cerebellum.PickupAndCheck(request['row'], request['col'])
-                    pickup_state = 'doing'
-                if pickup_state == 'doing':
-                    #check message, and update suck_state
-                    if (1==1):
-                        # got message:  ir is blocked
-                        pickup_state = 'done'
-                    if (2==3):
-                        # got message:  ir is passing through.
-                        pickup_state = 'todo'
+            if request['is_withdraw']:
+                self.pickup_state = 'todo'
+                while self.pickup_state != 'done':
+                    if self.pickup_state == 'todo':
+                        self.cerebellum.PickupAndCheck(request['row'], request['col'])
+                        self.pickup_state = 'doing'
+                    if self.pickup_state == 'doing':
+                        #check message, and update suck_state
+                        if (1==1):
+                            # got message:  ir is blocked
+                            self.pickup_state = 'done'
+                        if (2==3):
+                            # got message:  ir is passing through.
+                            self.pickup_state = 'todo'
+                else:
+                    #do deposite
+                    pass
 
-            self.cerebellum.Dropto_CenterBox()
+                self.cerebellum.Dropto_CenterBox()
                 # checking weight before-dropping
             
                 # # checking weight after-dropping
@@ -122,18 +148,16 @@ class TeethWarehouseRobot():
 
 robot = TeethWarehouseRobot()
 
-def callback_twh_request( ch, method, properties, body):
-        robot.ExecCommand(body.decode("utf-8") )
-
 
 if __name__ == '__main__':
     g_amq = RabbitMqAgent()
     amq_broke_config = AMQ_BrokerConfig()
     g_amq.connect_to_broker(amq_broke_config)
-    g_amq.Subscribe("twh_221109_request",callback=callback_twh_request)
+    g_amq.Subscribe("twh_221109_request")
     
     while True:
-        # request = AmqAgent.FetchMessage()
-        # g_amq.connect_to_broker(amq_broke_config)
         g_amq.SpinOnce()
+        user_request = g_amq.FetchMessage()
+        if user_request is not None:
+            robot.ExecCommand(user_request.decode('utf-8'))
 
