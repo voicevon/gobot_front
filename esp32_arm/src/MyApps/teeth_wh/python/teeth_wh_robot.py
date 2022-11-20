@@ -1,9 +1,8 @@
 from von.rabbitmq_agent import RabbitMqAgent, AMQ_BrokerConfig
+from von.mqtt_auto_syncer import MqttAutoSyncVar
+from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
 import json
-
-
-
-
+# How to Convert JSON Data Into a Python Object?   https://www.youtube.com/watch?v=hJ2HfejqppE 
 
 
 class GcodeSender():
@@ -50,7 +49,6 @@ class GcodeSender():
         g1 = "G!X" + str(x) + "Y" + str(y)
         g_amq.Publish(self.exchange_name, self.queue_name, g1)
 
-
 class RobotCerebellum():
     def __init__(self) -> None:
         # self.map = RobotMap()
@@ -76,88 +74,121 @@ class RobotCerebellum():
         self.gcode_sender.PauseForWaiting(3)
         self.gcode_sender.Eef_EnableSuck(False)
 
+class StateMachine_Item():
+
+    def __init__(self, current_state:str, command:str, post_state:str, service_function) -> None:
+        self.command = command
+        self.current_state = current_state
+        self.post_state = post_state
+        self.service_function = service_function
+
+    @classmethod
+    def from_json(cls, json_string):
+        json_dict = json.loads(json_string)
+        return cls(** json_dict)
+
+    def is_acceptable(self,  current_state: str) -> bool:
+        if current_state in self.current_state:
+            return True
+        return False
+
+    # def update(self):
+    #     self.current_state = self.ne
 
 class TeethWarehouseRobot():
     def __init__(self) -> None:
         self.cerebellum = RobotCerebellum()
-        self.state = 'idle'
+        # self.state = 'idle'
+        self.ir_state = MqttAutoSyncVar("dev_221109_ir", "unknown")
+        self.ir_state.auto_sync_to_local = False
+        self.ir_state.auto_sync_to_remote = True
+        # self.state_machine = json.load(UserRequest)
+        # self.all_requests = {'withdraw_preare': UserRequest(), }
+        self.init_statemachine()
 
+    def init_statemachine(self):
+        # self.current_state = 'idle'
+        self.machine = [StateMachine_Item('idle', 'prepare_deposit', 'preparing_deposit', self.do_prepare_deposit)]
+        # self.machine.append(StateMachine_Item('idle', 'prepare_withdraw', 'preparing_withdraw', self.do_prepare_withdraw))
+        # self.machine.append(StateMachine_Item('preparing_withdraw', 'cancel', 'idle', self.do_cancel))
+        self.machine.append(StateMachine_Item('preparing_deposit', 'cancel', 'idle', self.do_cancel))
+        # self.machine.append(StateMachine_Item('preparing_deposit', 'cancel', 'idle', self.do_cancel))
+
+        self.current_state = 'idle'
+
+
+    def is_acceptable(self, command) ->bool:
+        for item in self.machine:
+            if item.current_state == self.current_state:
+                if item.command == command:
+                    return True
+        return False
+
+    def update_state(self, command:str) -> bool:
+        '''
+        Returns
+        True:  Update to post state successed.
+        False: Update to post state failed.
+        '''
+        for item in self.machine:
+            if item.current_state == self.current_state:
+                if item.command == command:
+                    item.service_function()
+                    self.current_state = item.post_state
+                    return True
+        print("TeethWarehouseRobot::update_state() failed")
+        return False 
+
+    def do_prepare_deposit(self):
+        pass
+    
+    def do_prepare_withdraw(self):
+        pass
+
+    def do_cancel(self):
+        self.current_state = 'idle'
+        pass
 
     def SpinOnce(self):
-        if self.state == 'idle':
-            return
-        if self.state == 'picking_cell':
-            if 1==1:
-                #IR checking is ready
-                self.state =='to_be_checked'
-        if self.state == 'to_be_checked':
-            if 2==2:
-                # passed checking
-                self.state = 'droping_box'
-            else:
-                #failed checking
-                self.state = 'picking_cell'
-        if self.state == 'droping_box':
-            self.state = 'idle'
+        pass
 
-    def ExecCommand(self, command: str) -> bool:
+    
+    def AppendCommand(self, request_str: str) -> bool:
         '''
         This should start a new thread.
         Reason: Dynamic gcode follow a  branched processing flow. Synced with hardware robot. 
                 And take a long time up to couple minutes.
+        Return:
+            True: The command is accepted by state machine
+            False: The commnd is rejected by state machine
         '''
-        print(command)
-        if command == '"withdraw_end"':
-            print('withdraw_end')
-        else:
-            request = json.loads(command)
-            # while index <request.locations.count():
-                # clear message on broker.
-            if request['is_withdraw']:
-                self.pickup_state = 'todo'
-                while self.pickup_state != 'done':
-                    if self.pickup_state == 'todo':
-                        self.cerebellum.PickupAndCheck(request['row'], request['col'])
-                        self.pickup_state = 'doing'
-                    if self.pickup_state == 'doing':
-                        #check message, and update suck_state
-                        if (1==1):
-                            # got message:  ir is blocked
-                            self.pickup_state = 'done'
-                        if (2==3):
-                            # got message:  ir is passing through.
-                            self.pickup_state = 'todo'
-                else:
-                    #do deposite
-                    pass
+        request = json.loads(request_str)
+        command = request['command']
+        # if request.Acceptable():
+        self.update_state(command)
 
-                self.cerebellum.Dropto_CenterBox()
-                # checking weight before-dropping
-            
-                # # checking weight after-dropping
-                # if(False):
-                #     #weight is not increased.  
-                #     pass
-                # if (False):
-                #     # Weight is increased too much.
-                #     pass
-                # index += 1
 
-            # All the location in request is done. 
-            # Now, send a message to inform user:  "Your request is dealed. Please pick up the bag."
 
-robot = TeethWarehouseRobot()
 
 
 if __name__ == '__main__':
-    g_amq = RabbitMqAgent()
-    amq_broke_config = AMQ_BrokerConfig()
-    g_amq.connect_to_broker(amq_broke_config)
-    g_amq.Subscribe("twh_221109_request")
-    
-    while True:
-        g_amq.SpinOnce()
-        user_request = g_amq.FetchMessage()
-        if user_request is not None:
-            robot.ExecCommand(user_request.decode('utf-8'))
+    g_mqtt.connect_to_broker(g_mqtt_broker_config)
+    robot = TeethWarehouseRobot()
+
+    if True:
+        import time
+        g_amq = RabbitMqAgent()
+        amq_broke_config = AMQ_BrokerConfig()
+        g_amq.connect_to_broker(amq_broke_config)
+        g_amq.Subscribe("twh_221109_request")
+        
+        while True:
+            g_amq.SpinOnce()
+            user_request = g_amq.FetchMessage()
+            if user_request is not None:
+                robot_accepted_request = False
+                while not robot_accepted_request:
+                    robot.AppendCommand(user_request.decode('utf-8'))
+                    time.sleep(0.1) 
+            
 
