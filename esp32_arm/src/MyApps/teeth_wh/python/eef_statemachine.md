@@ -12,9 +12,9 @@
 .    idle  --> pickingCell --> to_be_checked ---> dropto_outbox --> withdraw_ending          ^
 .          |                                                                                 ^
 .          |                                                                                 ^
-.          |                                            -----------------<                   ^
-.          |                                            |                ^                   ^
-.          |-> deposite_prepare  --> user_ready  --> picking_box  --> dropto_cell -----------^ 
+.          |                                                                                 ^
+.          |                                                                                 ^
+.          |-> preparing_deposit  -->  despositting -----------------------------------------^ 
 .                     |                                                                      ^                                       '                     |--------------------------------(cancel)------------------------------^     
 
 '''                  
