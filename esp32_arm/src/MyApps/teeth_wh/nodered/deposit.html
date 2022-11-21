@@ -8,7 +8,7 @@ $(function(){
 //添加数据。分两部分：一个是数据，list添加；另一个是界面添加
 $("#btnAppend").click(function(){
     var object = {};
-    object.id_order = $("#id_order").val();
+    object.id_order = $("#deposit_count").val();
     object.brand = $("#brand").val();
     object.color = $("#color").val();
     object.size = $("#size").val();
@@ -28,7 +28,7 @@ $("#btnAppend").click(function(){
     //           + " 位置："+$("#location_index").val() 
     //           + "<br>";
 
-    var str = "" + $("#id_order").val() 
+    var str = "" + $("#deposit_count").val() 
               + " "+$("#brand").val() 
               + " "+$("#color").val() 
               + " "+$("#size").val() 
@@ -70,7 +70,10 @@ alert(JSON.stringify(list));
 </script>
 </head>
 <body>
-订单编号：<input type="text" id="id_order" ><br>
+    山东卷积分大数据公司  2022<p>
+        散牙入库<br><br>
+
+        入库数量：<input type="text" id="deposit_count" ><br>
 品牌：<select id="brand" name="noname" >
     <option value="好口腔">好口腔</option>
     <option value="红叶牌">红叶牌</option>
@@ -108,7 +111,7 @@ alert(JSON.stringify(list));
     <option value="6">6</option>
     <option value="7">7</option>
 </select><br>
-<input id="btnAppend" type="button" value="添加"><br>
+<!-- <input id="btnAppend" type="button" value="开始入库"><br> -->
 
 
 <form id="myForm">
@@ -117,8 +120,10 @@ alert(JSON.stringify(list));
     </div>
     <div>
         <hr>
-        <input id="btnClear" type="button" value="重新填写"> 
-        <button type="button" onclick="submitForm()">开始出库</button>
+        <input id="btnClear" type="button" value="取消入库"> 
+        <button type="button" onclick="submitForm()">开始入库</button>
+        <!-- <button type="button" onclick="submitForm()">取消入库</button> -->
+        <button type="button" onclick="submitForm()">入库结束</button>
     </div>
 </form>
 </body>
