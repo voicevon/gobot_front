@@ -135,9 +135,9 @@ class TeethWarehouseRobot():
     def init_statemachine(self):
         # self.current_state = 'idle'
         self.machine = [StateMachine_Item('idle', 'prepare_deposit', 'preparing_deposit', self.do_prepare_deposit)]
-        self.machine.append(StateMachine_Item('preparing_deposit', 'cancel', 'idle', self.do_cancel))
-        self.machine.append(StateMachine_Item('preparing_deposit', 'start_deposit', 'depositting', self.do_start_deposit))
-        self.machine.append(StateMachine_Item('preparing_deposit', 'preparing_deposit', 'depositting', self.do_nothing))
+        self.machine.append(StateMachine_Item('preparing_deposit', 'prepare_deposit', 'preparing_deposit', self.do_nothing))
+        self.machine.append(StateMachine_Item('preparing_deposit', 'start_deposit', 'picking_centerbox', self.do_start_deposit))
+        self.machine.append(StateMachine_Item('picking_centerbox', 'ir_check_empty', 'picking_centerbox', self.do_start_deposit))
         # self.machine.append(StateMachine_Item('preparing_deposit', 'cancel', 'idle', self.do_cancel))
 
         self.machine.append(StateMachine_Item('idle', 'pickup', 'picking_cell', self.do_pickup))

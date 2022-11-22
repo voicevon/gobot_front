@@ -17,14 +17,16 @@
 .     |                                                                                       ^
 .     |                                                                                       ^
 .     |                                                                                       ^
-.     |                                                    / (ir_check_block)                 ^
-.     |                                                   /                                   ^
-.     |                                   droping_cell <---                                   ^
-.     |                                           |        ^    / (ir_check_empty<=3)         ^
-.     |                                           |        ^   /                              ^
-.     |--------------> preparing_deposit ----->  picking_centerbox -------------------------> ^
-.        \                        |        \                          \                       ^
-.         \ (prepare_deposit)     |         \ (start_deposit)          \ (ir_check_empty>3)   ^
+.     |                                                     / (ir_check_block)                ^
+.     |                                                    /                                  ^
+.     |                                                   /            / (retry <=3)          ^
+.     |                                                  /            /                       ^
+.     |                                   droping_cell <---          /        /(white)        ^
+.     |                                           |        ^    ------<-----------<           ^
+.     |                                           |        ^   |       ^           ^          ^
+.     |----> preparing_deposit ----->  picking_centerbox -----> retry ---> verify ----------> ^
+.        \                        |        \                       \                     \    ^
+.         \ (prepare_deposit)     |         \ (start_deposit)       \ (ir_check_empty)    \ (black)   
 .                                 |                                                           ^
 '                                 |-----------------------------------------------------------^     
 '                                                            \
