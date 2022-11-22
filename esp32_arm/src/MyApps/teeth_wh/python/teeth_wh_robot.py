@@ -1,119 +1,17 @@
 
 
-from von.rabbitmq_agent import RabbitMqAgent, AMQ_BrokerConfig
+from von.rabbitmq_agent import g_amq, AMQ_BrokerConfig
 from von.mqtt_auto_syncer import MqttAutoSyncVar
 from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
+from gcode_sender import GcodeSender
+from statemachine_item import StateMachine_Item
 import json
 # How to Convert JSON Data Into a Python Object?   https://www.youtube.com/watch?v=hJ2HfejqppE 
-g_amq = RabbitMqAgent()
-
-
-class GcodeSender():
-
-    def __init__(self) -> None:
-        self.target_device_id = 221109
-        self.exchange_name = 'twh'
-        self.queue_name = self.exchange_name + '_' + str(self.target_device_id) + '_gcode'
-
-    def home_alpha(self):
-        g28 = 'G28A'
-        g_amq.Publish(self.exchange_name, self.queue_name, g28)
-
-    def move_centerbox_to_outside(self):
-        g1 = 'G1X1200'
-        g_amq.Publish(self.exchange_name, self.queue_name, g1)
-
-    def move_centerbox_to_inside(self):
-        g1 = 'G1X400'
-        g_amq.Publish(self.exchange_name, self.queue_name, g1)
-
-    def pickup_from_centerbox(self):
-        # move to top
-        g1 = 'G1Z0'
-        g_amq.Publish(self.exchange_name, self.queue_name, g1)
-        self.Eef_EnableSuck(True)
-        # arm to center position
-        g1 = 'G1A0'
-        g_amq.Publish(self.exchange_name, self.queue_name, g1)
-        # move down
-        g1 = 'G1Z100'
-        g_amq.Publish(self.exchange_name, self.queue_name, g1)
-        g4 = 'G4S2'
-        g_amq.Publish(self.exchange_name, self.queue_name, g4)
-        # move up
-        g1 = 'G1Z0'
-        g_amq.Publish(self.exchange_name, self.queue_name, g1)
-        g4 = 'G4S2'
-        g_amq.Publish(self.exchange_name, self.queue_name, g4)
-        
-    def drop_to_cellbox(self, row, col):
-        self.MoveTo(row * 40, col * 40)
-        self.Eef_EnableSuck(False)
-
-
-
-    def EefMove_Z_toTop(self):
-        '''
-        For Ir checking product
-        '''
-        print('gcode ','EefMove_Z_toTop')
-        pass
-
-    def EefMove_Z_toMiddle(self, depth:int):
-        '''
-        For 
-        '''
-        print('gcode ','EefMove_Z_toMiddle')
-        pass
-
-    def Eef_TurnOn_VacuumFan(self, is_turn_on: bool):
-        print('gcode ','Eef_TurnOn_VacuumFan')
-        pass
-
-    def Eef_EnableSuck(self, is_enable:bool):
-        print('gcode ','Eef_EnableSuck')
-        pass
-
-    def PauseForWaiting(self, second: int):
-        print('gcode ','PauseForWaiting')
-        pass
-
-
-    def MoveArmToCenter(self):
-        print('gcode ','MoveArmToCenter')
-        g1 = "G1A0"
-
-
-    def MoveTo(self, x, y):
-        print('gcode ','MoveTo')
-        g1 = "G!X" + str(x) + "Y" + str(y)
-        g_amq.Publish(self.exchange_name, self.queue_name, g1)
+# g_amq = RabbitMqAgent()
 
 
 
 
-class StateMachine_Item():
-
-    def __init__(self, current_state:str, command:str, post_state:str, service_function, repeat_serve=False) -> None:
-        self.current_state = current_state
-        self.command = command
-        self.post_state = post_state
-        self.service_function = service_function
-        self.repeat_invoke_service_function = repeat_serve
-
-    def print_out(self):
-        print("------------ StateMachine_Item() -------------")
-        print("from_state=", self.current_state, "  command=", self.command, "    post_state=", self.post_state)
-
-    @classmethod
-    def from_json(cls, json_string):
-        json_dict = json.loads(json_string)
-        return cls(** json_dict)
-
-    def is_acceptable(self,  current_state: str) -> bool:
-        if current_state in self.current_state:
-            return True
-        return False
 
 
 
@@ -123,29 +21,44 @@ class StateMachine_Item():
 class TeethWarehouseRobot():
     
     def __init__(self) -> None:
-        # self.state = 'idle'
         self.ir_state = MqttAutoSyncVar("dev_221109_ir", "unknown")
         self.ir_state.auto_sync_to_local = False
         self.ir_state.auto_sync_to_remote = True
-        # self.state_machine = json.load(UserRequest)
-        # self.all_requests = {'withdraw_preare': UserRequest(), }
-        self.init_statemachine()
         self.gcode_sender = GcodeSender()
+        self.init_statemachine()
 
     def init_statemachine(self):
-        # self.current_state = 'idle'
-        self.machine = [StateMachine_Item('idle', 'prepare_deposit', 'preparing_deposit', self.do_prepare_deposit)]
-        self.machine.append(StateMachine_Item('preparing_deposit', 'prepare_deposit', 'preparing_deposit', self.do_nothing))
-        self.machine.append(StateMachine_Item('preparing_deposit', 'start_deposit', 'picking_centerbox', self.do_start_deposit))
-        self.machine.append(StateMachine_Item('picking_centerbox', 'ir_check_empty', 'picking_centerbox', self.do_start_deposit))
-        # self.machine.append(StateMachine_Item('preparing_deposit', 'cancel', 'idle', self.do_cancel))
+        # for deposit
+        self.machine = [StateMachine_Item('parking', 'prepare_deposit', 'feeding_centerbox', self.do_prepare_deposit)]
+        self.machine.append(StateMachine_Item('feeding_centerbox', 'end_deposit', 'parking', self.do_nothing))
+        self.machine.append(StateMachine_Item('feeding_centerbox', 'prepare_deposit', 'feeding_centerbox', self.do_start_deposit))
+        self.machine.append(StateMachine_Item('feeding_centerbox', 'start_deposit', 'axis_x', self.do_start_deposit))
+        self.machine.append(StateMachine_Item('axis_x', 'auto', 'picking_centerbox', self.do_nothing))
+        self.machine.append(StateMachine_Item('picking_centerbox', 'ir_check_empty', 'picking_centerbox', self.do_pickup))
+        self.machine.append(StateMachine_Item('picking_centerbox', 'ir_check_blocked', 'droping_cell', self.do_pickup))
+        self.machine.append(StateMachine_Item('droping_cell', 'count_less_20', 'picking_centerbox', self.do_pickup))
+        self.machine.append(StateMachine_Item('droping_cell', 'count_more_20', 'verify', self.do_pickup))
+        self.machine.append(StateMachine_Item('verify', 'white', 'axis_x', self.do_pickup))
+        self.machine.append(StateMachine_Item('verify', 'black', 'parking', self.do_pickup))
+        # for withdraw
+        self.machine.append(StateMachine_Item('parking', 'withdraw', 'picking_cell', self.do_pickup))
+        self.machine.append(StateMachine_Item('picking_cell', 'ir_check_empty', 'picking_cell', self.do_ir_check, repeat_serve=True))
+        self.machine.append(StateMachine_Item('picking_cell', 'ir_check_blocked', 'droping_centerbox', self.do_pickup))
+        self.machine.append(StateMachine_Item('droping_centerbox', 'end_withdraw', 'be_outside', self.do_cancel))
+        self.machine.append(StateMachine_Item('be_outside', 'auto', 'parking', self.do_cancel))
 
-        self.machine.append(StateMachine_Item('idle', 'pickup', 'picking_cell', self.do_pickup))
-        self.machine.append(StateMachine_Item('picking_cell', 'ir_check_pass', 'idle', self.do_ir_check, repeat_serve=True))
-        self.machine.append(StateMachine_Item('picking_cell', 'ir_check_failed', 'picking_cell', self.do_pickup))
-        self.machine.append(StateMachine_Item('preparing_withdraw', 'withdrawing', '', self.do_cancel))
-
-        self.current_state = 'idle'
+        #init, to enter 'parking'
+        self.current_state = 'parking'
+        self.do_park(True)
+    
+    def do_park(self, home_park: bool):
+        self.gcode_sender.Eef_TurnOn_VacuumFan(False)
+        if home_park:
+            self.gcode_sender.home_x()
+            self.gcode_sender.home_alpha()
+        else:
+            self.gcode_sender.move_x_to (200)
+            self.gcode_sender.move_a_to(0)
 
     def is_acceptable(self, command) ->bool:
         for item in self.machine:
@@ -156,8 +69,6 @@ class TeethWarehouseRobot():
         return False
 
     def statemachine_drive(self, command:str, house_cell) -> bool:
-
-
         '''
         Returns
         True:  Update to post state successed.
@@ -252,8 +163,7 @@ class TeethWarehouseRobot():
         return self.statemachine_drive(command, self.house_cell)
 
 def test():
-
-    g_amq = RabbitMqAgent()
+    # g_amq = RabbitMqAgent()
     amq_broke_config = AMQ_BrokerConfig()
     g_amq.connect_to_broker(amq_broke_config)
 
@@ -314,13 +224,16 @@ if __name__ == '__main__':
     is_dealing_deposit = True
 
     g_mqtt.connect_to_broker(g_mqtt_broker_config)
+    amq_broke_config = AMQ_BrokerConfig()
+    g_amq.connect_to_broker(amq_broke_config)
+
     robot = TeethWarehouseRobot()
 
     if True:
         import time
         # g_amq = RabbitMqAgent()
-        amq_broke_config = AMQ_BrokerConfig()
-        g_amq.connect_to_broker(amq_broke_config)
+        # amq_broke_config = AMQ_BrokerConfig()
+        # g_amq.connect_to_broker(amq_broke_config)
         g_amq.Subscribe("twh_221109_deposit")
         g_amq.Subscribe('twh_221109_withdraw')
 

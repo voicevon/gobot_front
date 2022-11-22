@@ -1,3 +1,6 @@
+# check statemahine
+- http://www.plantuml.com/plantuml/png/
+
 # user command
 ## deposit_prepare
 - Arm move to 0 degree
