@@ -11,7 +11,7 @@
 .     |         |                                 ^                                           ^
 .     |         |     / (ir_check_empty)          ^                                           ^
 .     |         |    /                            ^                                           ^
-.     +-----> pickingCell --------------> dropto_outbox --------------------------------------^
+.     +-----> picking_Cell --------------> dropto_outbox -------------------------------------^
 .     | \                          \                                    \                     ^
 .     |  \ (withdraw)               \ (ir_check_blocked)                 \ (end_withdraw)     ^
 .     |                                                                                       ^
@@ -22,13 +22,13 @@
 .     |                                                   /            / (retry <=3)          ^
 .     |                                                  /            /                       ^
 .     |                                   droping_cell <---          /        /(white)        ^
-.     |                                           |        ^    ------<-----------<           ^
-.     |                                           |        ^   |       ^           ^          ^
-.     |----> preparing_deposit ----->  picking_centerbox -----> retry ---> verify ----------> ^
-.        \                        |        \                       \                     \    ^
-.         \ (prepare_deposit)     |         \ (start_deposit)       \ (ir_check_empty)    \ (black)   
-.                                 |                                                           ^
-'                                 |-----------------------------------------------------------^     
+.     |                                           |        ^      <--------------------<      ^
+.     |                                           |        ^      |      ^              ^     ^
+.     |----> preparing_deposit ----->  @picking_centerbox ----->@picking ---> verify -------> ^
+.        \                      | \                          \                          \     ^
+.         \ (prepare_deposit)   |  \ (start_deposit)          \ (ir_check_empty)         \ (black)   
+.                               |                                                             ^
+'                               |-------------------------------------------------------------^     
 '                                                            \
 '                                                             \ (end_deposit)
 '''                  
