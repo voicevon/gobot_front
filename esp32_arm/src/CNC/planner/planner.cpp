@@ -22,8 +22,9 @@ void Planner::AppendLineSegment(LineSegment* line){
     //Translate LineSegment To MoveBlocks, and insert to move_block_queue.
     Logger::Debug("Planner::AppendLineSegment()");
     Logger::Print("line->axis", line->axis);
+    Queue_LineSegment::Instance().AppendObject(line);
     // this->__arm_solution->__CutLineSegment_ToMoveBlocks_to_queue(line);
-    this->__arm_solution->__ConvertSegment_ToMoveBlockQueue(line);
+    // this->__arm_solution->__ConvertSegment_ToMoveBlockQueue(line);
     // for (int i=0; i<1; i++){
     //     // TODO: recalculate acceleration, speed.
     //     MoveBlock* mb = this->__arm_solution->__queue_move_block->GetHeadMoveblock();
@@ -42,6 +43,24 @@ void Planner::AppendLineSegment(LineSegment* line){
     //     Logger::Print("Going to forward queue head", 1 );
 
     // }
+}
+
+void Planner::__ConvertLineSegment_AppendMoveBlocks(LineSegment* line){
+    // line->DeepCopyTo(this->current_line);
+    IKPosition_abgdekl ik;
+    Queue_MoveBlock::Instance().DeepCopyToPosition(&ik);
+    __arm_solution->IK(line->TargetPosition, &ik);
+    MoveBlock* mk = Queue_MoveBlock::Instance().GetRoom();
+    mk->MoveBlocks[AXIS_ALPHA].TargetPosition = ik.alpha;
+    mk->MoveBlocks[AXIS_ALPHA].Speed = 11;
+    mk->MoveBlocks[AXIS_ALPHA].Acceleration = 11;
+
+    mk->MoveBlocks[AXIS_BETA].TargetPosition = ik.beta;
+    mk->MoveBlocks[AXIS_GAMMA].TargetPosition = ik.gamma;
+    mk->MoveBlocks[AXIS_DELTA].TargetPosition = ik.delta;
+    
+    Queue_MoveBlock::Instance().Deposit();
+
 }
 
 

@@ -13,11 +13,11 @@ class Planner{
         void AppendLineSegment(LineSegment* line);
 
         ArmSolutionBase* __arm_solution;    // should be here?  Only robot can manage arm_solution, right?
-        float current_speed;
-        FKPosition_XYZRPY current_fk_position;
-        IKPosition_abgdekl current_ik_psotion;
+        // float current_speed;
+        // LineSegment current_line;
+        // IKPosition_abgdekl current_ik_psotion;
     private:
-
+        void __ConvertLineSegment_AppendMoveBlocks(LineSegment* line);
 
 
 };

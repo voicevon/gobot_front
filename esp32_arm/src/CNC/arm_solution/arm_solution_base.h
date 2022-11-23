@@ -13,6 +13,8 @@
 
 class ArmSolutionBase{
     public:
+        virtual void IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik);
+        virtual void FK(IKPosition_abgdekl* from_ik,FKPosition_XYZRPY* to_fk);
 
         virtual bool GetCurrentPosition(FKPosition_XYZRPY* position_fk);
 
@@ -28,8 +30,6 @@ class ArmSolutionBase{
         virtual void __ConvertSegment_ToMoveBlockQueue(LineSegment* line);
         
     protected:
-        virtual void IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik);
-        virtual void FK(IKPosition_abgdekl* from_ik,FKPosition_XYZRPY* to_fk);
 
 
         bool is_absolute_position = true;

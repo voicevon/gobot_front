@@ -11,6 +11,10 @@ class LineSegment: public Queue_able{
         FKPosition_XYZRPY * TargetPosition;
         float Speed;
         float Acceleration;
+        void DeepCopyTo(LineSegment* the_copy);
+
+    protected:
+
 };
 
 // class Queue_LineSegments: public CommonQueue{

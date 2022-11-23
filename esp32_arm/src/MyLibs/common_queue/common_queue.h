@@ -5,7 +5,7 @@
 class Queue_able{
     public:
         int id = 1234;
-        virtual void DeepCopyTo(Queue_able* the_copy){};  //TODO: Can remove body "{}"?
+        virtual void DeepCopyTo(Queue_able* the_copy);
         virtual void DeepReset_ToDefault(){};
 
 };
