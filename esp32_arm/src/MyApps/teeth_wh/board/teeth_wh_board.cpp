@@ -6,7 +6,7 @@
 #define PIN_VACUUME_PUMP 33
 // #define PIN_VACUUME_SUCKER 22
 
-// #define PIN_SERVO_AIR_PEN 25
+#define PIN_SERVO_EEF_VERTICAL 25
 #define PIN_SERVO_VACUUM_SWITCH 15
 
 #define PIN_HX711_CLK 22
@@ -25,6 +25,7 @@
 #define POSITION_TRIGGER_ALPHA  0
 #define POSITION_TRIGGER_X  1
 #define SERVO_VACUUM_SUCKER  0
+#define SERVO_EEF_VERTICAL 1
 
 
 void TeethWarehouse_Board::Init(bool is_on_reset){
@@ -44,12 +45,9 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
 
     // Init servo.
     ESP32PWM::allocateTimer(0);   //https://github.com/madhephaestus/ESP32Servo/blob/master/examples/Multiple-Servo-Example-Arduino/Multiple-Servo-Example-Arduino.ino
-    // __servo_air_pen.setPeriodHertz(50);      // Standard 50hz servo
-    // __servo_air_pen.attach(PIN_SERVO_AIR_PEN);
-    // __servo_air_pen.write(270);   //Move air pen to top position.
-
-    // __servo_air_switch.setPeriodHertz(50);      // Standard 50hz servo
-    // __servo_air_switch.attach(PIN_SERVO_AIR_SWITCH);
+    __all_servos[SERVO_EEF_VERTICAL].setPeriodHertz(50);  // Standard 50hz servo
+    __all_servos[SERVO_EEF_VERTICAL].attach(PIN_SERVO_EEF_VERTICAL);
+    
     __all_servos[SERVO_VACUUM_SUCKER].setPeriodHertz(50);  // Standard 50hz servo
     __all_servos[SERVO_VACUUM_SUCKER].attach(PIN_SERVO_VACUUM_SWITCH);
 
@@ -112,6 +110,11 @@ void TeethWarehouse_Board::__InitSteppers(){
         Logger::Error("TeethWarehouse_Board::Init() ");
         Logger::Halt("failed FastAccelStepper.");
     }
+}
+
+
+Servo* TeethWarehouse_Board::GetServo_onVertical(){
+    return &__all_servos[SERVO_EEF_VERTICAL];
 }
 
 void TeethWarehouse_Board::EnableVacuumPump(bool enable_it){

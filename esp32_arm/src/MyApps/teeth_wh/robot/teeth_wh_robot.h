@@ -10,7 +10,7 @@
 #define ROWS_COUNT 20
 #define COLS_COUNT 8
 #define CNC_PLANNER_BLOCK_COUNT 88
-#define CNC_ACTUATORS_COUNT 2
+#define CNC_ACTUATORS_COUNT 3
 
 class TeechWarehouse_Robot: public RobotBase{
     public:
@@ -26,6 +26,7 @@ class TeechWarehouse_Robot: public RobotBase{
 	    // CncActuatorStepper __actuator_beta;
         CncActuatorFastStepper __actuator_alpha;
         CncActuatorFastStepper __actuator_beta;
+        CncActuatorServo __actuator_gamma;
         
         CncMoverBase mover;
         CncSolution_CoreXY_XA_ab arm_solution;

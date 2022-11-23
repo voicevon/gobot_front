@@ -30,9 +30,11 @@ void TeechWarehouse_Robot::__Init_actuators(TeethWarehouse_Board* board){
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
     CncActuator_List::Instance().AddActuator(&__actuator_beta);
+    CncActuator_List::Instance().AddActuator(&__actuator_gamma);
 
     this->__actuator_alpha.MyName = 'a';
     this->__actuator_beta.MyName = 'b';
+    this->__actuator_beta.MyName = 'g';
     
     ActuatorStepper_Calculator helper;
     helper._motor_gear_pitch_in_mm = 12.7;
@@ -43,6 +45,9 @@ void TeechWarehouse_Robot::__Init_actuators(TeethWarehouse_Board* board){
 
     __actuator_beta.Init_FomularSlope(slope);
     __actuator_beta.LinkStepper(board->GetStepper_Beta(), slope);
+
+    __actuator_gamma.LinkServo(board->GetServo_onVertical(), true);
+    __actuator_gamma.Init_FomularSlope(slope);
 }
 
 void TeechWarehouse_Robot::StoreToCell(int row_index, int col_index){
