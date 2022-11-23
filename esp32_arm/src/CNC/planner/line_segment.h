@@ -8,7 +8,7 @@ class LineSegment: public Queue_able{
     public:
         EnumAxis_ForwardKinematic axis;
         bool IsAbsTargetPosition;
-        FkPositionBase* TargetPosition;
+        FKPosition_XYZRPY * TargetPosition;
         float Speed;
         float Acceleration;
 };

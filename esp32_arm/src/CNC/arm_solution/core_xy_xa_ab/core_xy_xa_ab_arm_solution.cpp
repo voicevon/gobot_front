@@ -7,11 +7,11 @@ class MiddleKinematic{
 		// float Minimuim_X;
 };
 
-void CncSolution_CoreXY_XA_ab::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
+void CncSolution_CoreXY_XA_ab::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	Serial.print("\n[Info] CncSolution_CoreXY_XA_ab::IK()");
 	MiddleKinematic mk;
-	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
-	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(to_ik);
+	FKPosition_XYZRPY* fk = from_fk;
+	IKPosition_abgdekl* ik = to_ik;
 
 	mk.Angle = asinf(fk->Y / _config->arm_length);  // range should be in range of degree [-90, +90]
 	mk.X = fk->X - _config->arm_length * cosf(mk.Angle);
@@ -36,10 +36,10 @@ void CncSolution_CoreXY_XA_ab::IK(FkPositionBase* from_fk,IkPositionBase* to_ik)
 	// Serial.print(")");
 }
 
-void CncSolution_CoreXY_XA_ab::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+void CncSolution_CoreXY_XA_ab::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
 	Serial.print("\n[Debug] CncSolution_CoreXY_XA_ab::FK()");
-	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
-	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(from_ik);
+	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(to_fk);
+	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);
 	
 	MiddleKinematic mk;
 
@@ -70,10 +70,10 @@ bool CncSolution_CoreXY_XA_ab::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 		mb->MoveBlocks[AXIS_BETA].Speed = speed;
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
-	FkPosition_XY FkPosition_XY;
-	IkPosition_AlphaBeta target_ik_ab;
-	FkPosition_XY.X = this->__current_fk_position.X;
-	FkPosition_XY.Y = this->__current_fk_position.Y;
+	FKPosition_XYZRPY from_fk;
+	IKPosition_abgdekl target_ik_ab;
+	from_fk.X = this->__current_fk_position.X;
+	from_fk.Y = this->__current_fk_position.Y;
 	// target_ik_ab.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
 	// target_ik_ab.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	bool do_ik=false;
@@ -83,13 +83,13 @@ bool CncSolution_CoreXY_XA_ab::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	// If need IK, do it now.
 	if (gcode->has_letter('X')) {
 		do_ik=true;
-		FkPosition_XY.X = gcode->get_value('X');
+		from_fk.X = gcode->get_value('X');
 	}
 	if (gcode->has_letter('Y')){
 		do_ik=true;
-		FkPosition_XY.Y = gcode->get_value('Y');
+		from_fk.Y = gcode->get_value('Y');
 	}
-	if (do_ik) IK(&FkPosition_XY,&target_ik_ab);
+	if (do_ik) IK(&from_fk,&target_ik_ab);
 
 	//Prepare actuator/driver to move to next point
 	// float motor_position[2];

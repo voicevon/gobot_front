@@ -13,7 +13,7 @@ class ChessboardCell{
         String GetG1Code(){return "";};  //TODO: Can return arduino string or pointer?
 
     private:
-        void __GetXY(FkPosition_XY* to_xy){};
+        void __GetXY(FKPosition_XYZRPY* to_xy){};
 
 };
 

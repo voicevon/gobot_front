@@ -1,10 +1,10 @@
 #include "core_yz_arm_solution.h"
 
 
-void CoreYZ_ArmSolution::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
+void CoreYZ_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	Serial.print("\n[Info] CoreYZ_ArmSolution::IK() is entering. ");
-	FkPosition_YZ* fk = (FkPosition_YZ*)(from_fk);
-	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(to_ik);
+	FKPosition_XYZRPY * fk = (FKPosition_XYZRPY*)(from_fk);
+	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(to_ik);
 
 	ik->alpha = (fk->Z  + fk->Y );
 	ik->beta = (fk->Z - fk->Y );
@@ -16,10 +16,10 @@ void CoreYZ_ArmSolution::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	Serial.print(")");
 }
 
-void CoreYZ_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+void CoreYZ_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
 	Serial.print("\n[Debug] CoreYZ_ArmSolution::FK() is entering ");
-	FkPosition_YZ* fk = (FkPosition_YZ*)(to_fk);
-	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(from_ik);
+	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(to_fk);
+	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);
 	
 	fk->Z = (ik->alpha + ik->beta) / 2;
 	fk->Y = (ik->alpha - ik->beta) / 2;
@@ -91,14 +91,14 @@ void CoreYZ_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
 
 void CoreYZ_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 		//Set current position to HomePosition
-		IkPosition_AlphaBeta ik_position;
+		IKPosition_abgdekl ik_position;
 			// We know homed position via FK
 			Logger::Info("CoreYZ_ArmSolution::_SetCurrentPositionAsHome() Trying to get home position with EEF FK position  ");
 			this->__current_fk_position.Z = this->_cncMachine->Homed_position_z;
 			this->__current_fk_position.Y = this->_cncMachine->Homed_position_y;
 			this->IK(&this->__current_fk_position, &ik_position);
 			// verify IK by FK()
-			FkPosition_YZ verifying_fk;
+			FKPosition_XYZRPY verifying_fk;
 			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
 			this->FK(&ik_position, &verifying_fk);
 }
@@ -120,8 +120,8 @@ bool CoreYZ_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 		mb->MoveBlocks[AXIS_BETA].Speed = speed;
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
-	FkPosition_YZ target_fk_yz;
-	IkPosition_AlphaBeta target_ik_ab;
+	FKPosition_XYZRPY target_fk_yz;
+	IKPosition_abgdekl target_ik_ab;
 	target_fk_yz.Z = this->__current_fk_position.Z;
 	target_fk_yz.Y = this->__current_fk_position.Y;
 	// target_ik_ab.alpha = float(this->stepper_alpha->getPosition()) ;

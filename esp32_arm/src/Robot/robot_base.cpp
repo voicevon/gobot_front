@@ -125,7 +125,7 @@ bool RobotBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	}
 	// // Assume G1-code want to update actuator directly, no need to do IK.
 	// FkPosition_ZW target_fk_zw;
-	// IkPosition_AlphaBeta target_ik_ab;
+	// IKPosition_abgdekl target_ik_ab;
 	// target_fk_zw.Z = this->__current_fk_position.Z;
 	// target_fk_zw.W = this->__current_fk_position.W;
 	// // target_ik_ab.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);

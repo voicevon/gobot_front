@@ -14,8 +14,8 @@ class Planner{
 
         ArmSolutionBase* __arm_solution;    // should be here?  Only robot can manage arm_solution, right?
         float current_speed;
-        FkPosition_XYZAB current_fk_position;
-        IkPosition_AlphaBeta current_ik_psotion;
+        FKPosition_XYZRPY current_fk_position;
+        IKPosition_abgdekl current_ik_psotion;
     private:
 
 

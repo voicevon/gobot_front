@@ -13,7 +13,7 @@ class SingleAxis_ArmSolution: public ArmSolutionBase{
         void __ConvertSegment_ToMoveBlockQueue(LineSegment* line)override;
 
 
-        bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
+        bool GetCurrentPosition(FKPosition_XYZRPY* position_fk) override{return false;};  
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
 
@@ -23,11 +23,11 @@ class SingleAxis_ArmSolution: public ArmSolutionBase{
         EnumAxis_ForwardKinematic _AXIS;   // TODO: doubel check this var.
 
     private:
-        virtual void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
-        virtual void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
+        virtual void IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
+        virtual void FK(IKPosition_abgdekl* ik, FKPosition_XYZRPY*  to_fk) override;
 
         // void RunG6(Gcode* gcode) override{} ; 
 
-        FkPosition_A __current_fk_position;
+        FKPosition_XYZRPY __current_fk_position;
 
 };

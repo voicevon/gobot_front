@@ -4,7 +4,7 @@
 
 void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 		// The homed postion is a Inverse kinematic position for alpha, beta.
-		IkPosition_AlphaBeta ik_position;
+		IKPosition_abgdekl ik_position;
 		// if (this->_config->IsInverseKinematicHoimg){
 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
 			// ik_position.alpha =  this->_config->Homed_position_alpha_in_rad;
@@ -15,15 +15,15 @@ void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic h
 			// ik_position.beta = this->_homer_diction.GetAxisHomer(AXIS_)->GetFiredPosition();
 			this->FK(&ik_position, &this->__current_fk_position);
 			// verify FK by IK()
-			IkPosition_AlphaBeta verifying_ik;
+			IKPosition_abgdekl verifying_ik;
 			Serial.println("\n\n  [Info] Please verify IK->FK->IK   ");
 			this->IK(&this->__current_fk_position, &verifying_ik);
 }
 
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
-void FiveBars_ArmSolution::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
-	FkPosition_XY* fk = (FkPosition_XY*)(from_fk);
-	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(to_ik);
+void FiveBars_ArmSolution::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik){
+	FKPosition_XYZRPY* fk = from_fk;
+	IKPosition_abgdekl* ik = to_ik;
 
 	float rr1= (fk->X + this->_config->LINK_0) * (fk->X + this->_config->LINK_0) + fk->Y * fk->Y;
 	// alpha , beta are in unit of RAD.
@@ -92,9 +92,9 @@ void FiveBars_ArmSolution::IK(FkPositionBase* from_fk, IkPositionBase* to_ik){
 	
 }
 
-void FiveBars_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase* to_fk){
-	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(from_ik);
-	FkPosition_XY* fk = (FkPosition_XY*)(to_fk);
+void FiveBars_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* to_fk){
+	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);
+	FKPosition_XYZRPY * fk = (FKPosition_XYZRPY*)(to_fk);
 
 	float elbow_alpha_x = this->_config->LINK_A * cosf(ik->alpha) - this->_config->LINK_0;   // TODO:: whan alpha > 180 degree.
 	float elbow_alpha_y = this->_config->LINK_A * sinf(ik->alpha);   // TODO:: When alpha > 90 degree
@@ -175,8 +175,8 @@ bool FiveBars_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
 	// Assume G1-code want to update actuator directly, no need to do IK.
-	FkPosition_XY target_fk_xy;
-	IkPosition_AlphaBeta target_ik_ab;
+	FKPosition_XYZRPY target_fk_xy;
+	IKPosition_abgdekl target_ik_ab;
 
 	// Sometimes, the current position of stepper is NOT the last target position. Since it's moving.
 	// But, The initialized values will effect nothing. They will be over writen. 
@@ -220,7 +220,7 @@ bool FiveBars_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	Queue_MoveBlock::Instance().Deposit();
 
 	if (true){
-		FkPosition_XY verified_fk;
+		FKPosition_XYZRPY verified_fk;
 		FK(&target_ik_ab, &verified_fk);
 		Serial.print(" Please Verify FK angin to confirm IK() is correct.");
 		Serial.print(" FK.X= ");

@@ -28,14 +28,14 @@ class CncSolution_CoreXY_XA_ab: public ArmSolutionBase{
         void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override{};
 
         //Override private
-        void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
-        void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
-        bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
+        void IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
+        void FK(IKPosition_abgdekl* ik, FKPosition_XYZRPY*  to_fk) override;
+        bool GetCurrentPosition(FKPosition_XYZRPY* position_fk) override{return false;};  
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override{};
 
-        FkPosition_XY __current_fk_position;
-        IkPosition_AlphaBeta __current_ik_position;
+        FKPosition_XYZRPY __current_fk_position;
+        IKPosition_abgdekl __current_ik_position;
 
         Core_XY_XA_ab_config* _config;
 

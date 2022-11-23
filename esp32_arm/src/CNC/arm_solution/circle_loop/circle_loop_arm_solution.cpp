@@ -1,49 +1,49 @@
 #include "circle_loop_arm_solution.h"
 #include "Robot/axis_homer/home_trigger_array.h"
 
-void CircleLoop_ArmSolution::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
-	FkPosition_A* fk = (FkPosition_A*)(from_fk);
-	IkPosition_A* ik = (IkPosition_A*)(to_ik);
+void CircleLoop_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
+	FKPosition_XYZRPY* fk = from_fk;
+	IKPosition_abgdekl* ik = to_ik;
 
-	ik->alpha = fk->A;
+	ik->alpha = fk->Roll;
 	Logger::Debug("CircleLoop_ArmSolution::IK()");
 	Logger::Print("IK output alpha", ik->alpha);
 }
 
-void CircleLoop_ArmSolution::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
-	FkPosition_A* fk = (FkPosition_A*)(to_fk);
-	IkPosition_A* ik = (IkPosition_A*)(from_ik);
+void CircleLoop_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
+	FKPosition_XYZRPY* fk = to_fk;
+	IKPosition_abgdekl* ik = from_ik;
 	
-	fk->A = ik->alpha;
+	fk->Roll = ik->alpha;
 	Logger::Debug("CircleLoop_ArmSolution::FK()" );
-	Logger::Print("FK output A", fk->A);
+	Logger::Print("FK output A", fk->Roll);
 }
 
 
 void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 	//Set current position to HomePosition
-	IkPosition_A ik_position;
+	IKPosition_abgdekl ik_position;
 		// We know homed position via FK
 		Logger::Info("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
 		// this->__current_fk_position.A = this->_homer_diction.GetAxisHomer(AXIS_X)->GetFiredPosition();
-		this->__current_fk_position.A = HomeTrigger_Array::Instance().GetFiredPosition('A');
-		Logger::Print("position trigger, fired position", this->__current_fk_position.A);
+		this->__current_fk_position.Roll = HomeTrigger_Array::Instance().GetFiredPosition('A');
+		Logger::Print("position trigger, fired position", this->__current_fk_position.Roll);
 		this->IK(&this->__current_fk_position, &ik_position);
 		// verify IK by FK()
-		FkPosition_A verifying_fk;
+		FKPosition_XYZRPY verifying_fk;
 		Serial.print("\n   [Info] Please verify: FK->IK->FK  ");
 		this->FK(&ik_position, &verifying_fk);
 }
 
 void CircleLoop_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 	//TODO:  This is a virtual function.
-	FkPosition_A* fk_pos =  (FkPosition_A*) line->TargetPosition;
+	FKPosition_XYZRPY* fk_pos =  line->TargetPosition;
 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
 	// mb->MoveBlocks[line->axis].axis = line->axis;
 	mb->MoveBlocks[line->axis].IsAbsTargetPosition = line->IsAbsTargetPosition;
-	mb->MoveBlocks[line->axis].TargetPosition = fk_pos->A ;
+	mb->MoveBlocks[line->axis].TargetPosition = fk_pos->Roll ;
 	mb->MoveBlocks[line->axis].Speed = line->Speed;
 	mb->MoveBlocks[line->axis].Acceleration = line->Acceleration;
 	// this->__queue_move_block->ForwardHead();
@@ -61,7 +61,7 @@ bool CircleLoop_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	// 	line->Speed = gcode->get_value('F');
 	// 	Logger::Print("Speed", line->Speed);
 	// }
-	// // FkPosition_A target_fk_a;
+	// // FKPosition_XYZRPY target_fk_a;
 	// IkPosition_A target_ik_a;
 	// char axis_name = 'A';
 	// bool do_ik = false;

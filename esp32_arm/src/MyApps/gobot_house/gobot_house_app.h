@@ -34,7 +34,7 @@ class GobotHouseApp: public GcodeProducer, public MqttMessageConsumer{
         void __Home();
 
     private:
-        void __MakeGcode_and_Send(FkPosition_XY* from, FkPosition_XY* to, int segment_count);
+        void __MakeGcode_and_Send(FKPosition_XYZRPY* from, FKPosition_XYZRPY* to, int segment_count);
         void AsyncExecuteMqttCommand(const char* command) override;
         void __Move_fromRoom_toGate(uint8_t room_id, bool forwarding);
         // void __Move_fromRoom_toDoor(uint8_t room_id, bool forwarding);

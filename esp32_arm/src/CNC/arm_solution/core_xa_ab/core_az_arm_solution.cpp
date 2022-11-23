@@ -13,13 +13,13 @@
 
 
 
-void CncSolution_CoreAZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
+void CncSolution_CoreAZ::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	Serial.print("\n[Info] CncSolution_CoreAZ::IK() is entering. ");
-	FkPosition_ZW* fk = (FkPosition_ZW*)(from_fk);
-	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(to_ik);
+	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(from_fk);
+	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(to_ik);
 
-	ik->alpha = (fk->Z  + fk->W);
-	ik->beta = (fk->Z  - fk->W );
+	ik->alpha = (fk->Z  + fk->Roll);
+	ik->beta = (fk->Z  - fk->Roll );
 
 	Serial.print("\n[Debug] CncSolution_CoreAZ::IK() output (alpha, beta) = ");
 	Serial.print(ik->alpha);
@@ -28,32 +28,32 @@ void CncSolution_CoreAZ::IK(FkPositionBase* from_fk,IkPositionBase* to_ik){
 	Serial.print(")");
 }
 
-void CncSolution_CoreAZ::FK(IkPositionBase* from_ik, FkPositionBase*  to_fk){
+void CncSolution_CoreAZ::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
 	Serial.print("\n[Debug] CncSolution_CoreAZ::FK() is entering ");
-	FkPosition_ZW* fk = (FkPosition_ZW*)(to_fk);
-	IkPosition_AlphaBeta* ik = (IkPosition_AlphaBeta*)(from_ik);
+	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(to_fk);
+	IKPosition_abgdekl* ik =from_ik;
 	
 	fk->Z = (ik->alpha + ik->beta) / 2 ;
-	fk->W = (ik->alpha - ik->beta) / 2 ;
+	fk->Roll = (ik->alpha - ik->beta) / 2 ;
 
 	Serial.print("\n[Debug] CncSolution_CoreAZ::FK() output (Z, W) = ");
 	Serial.print(fk->Z);
 	Serial.print(" , ");
-	Serial.print(fk->W);
+	Serial.print(fk->Roll);
 	Serial.print(")");
 }
 
 
 void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
 //Set current position to HomePosition
-		IkPosition_AlphaBeta ik_position;
+		IKPosition_abgdekl ik_position;
 			// We know homed position via FK
 			Logger::Info("CncSolution_CoreAZ::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 			this->__current_fk_position.Z = this->_config->Homed_position_z;
-			this->__current_fk_position.W = this->_config->Homed_position_w;
+			this->__current_fk_position.Roll = this->_config->Homed_position_w;
 			this->IK(&this->__current_fk_position, &ik_position);
 			// verify IK by FK()
-			FkPosition_XY verifying_fk;
+			FKPosition_XYZRPY verifying_fk;
 			Serial.print("\n   [Info] Please verify: FK->IK->FK  ");
 			this->FK(&ik_position, &verifying_fk);
 		
@@ -76,10 +76,10 @@ bool CncSolution_CoreAZ::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 		mb->MoveBlocks[AXIS_BETA].Speed = speed;
 	}
 	// Assume G1-code want to update actuator directly, no need to do IK.
-	FkPosition_ZW target_fk_zw;
-	IkPosition_AlphaBeta target_ik_ab;
+	FKPosition_XYZRPY target_fk_zw;
+	IKPosition_abgdekl target_ik_ab;
 	target_fk_zw.Z = this->__current_fk_position.Z;
-	target_fk_zw.W = this->__current_fk_position.W;
+	target_fk_zw.Roll = this->__current_fk_position.Roll;
 	// target_ik_ab.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
 	// target_ik_ab.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
 	bool do_ik=false;
@@ -93,7 +93,7 @@ bool CncSolution_CoreAZ::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	}
 	if (gcode->has_letter('W')){
 		do_ik=true;
-		target_fk_zw.W = gcode->get_value('W');
+		target_fk_zw.Roll = gcode->get_value('R');
 	}
 	if (do_ik) IK(&target_fk_zw,&target_ik_ab);
 
