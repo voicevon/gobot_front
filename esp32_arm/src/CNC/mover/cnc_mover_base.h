@@ -33,7 +33,7 @@ class CncMoverBase{
 
     protected:
         uint8_t _moving_actuator_flags;
-        float _small_distance_for_arriving_target_position = 0.1;   //Todo: configer-able
+        float _small_distance_for_arriving_target_position = 0.1;   //Todo: configable
     
     private:
         // StepControl* __stepControl;
