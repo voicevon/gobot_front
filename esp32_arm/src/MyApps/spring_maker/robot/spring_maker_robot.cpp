@@ -9,7 +9,7 @@ void SpringMakerRobot::Init(Board_SpringMaker* board){
     // this->_LinkEef(board->GetEef());
 
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
-    this->__planner.__arm_solution = &arm_solution;
+    // this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
 
     this->_g28_runner = &this->g28_runner;
@@ -31,6 +31,6 @@ void SpringMakerRobot::Init(Board_SpringMaker* board){
     float slope = helper.GetActuatorToCncFormular_Slope_raw_per_mm();
     this->__actuator_alpha.Init_FomularSlope(slope);
     
-    this->LinkMover(&mover);
+    this->_LinkMover(&mover);
 
 }

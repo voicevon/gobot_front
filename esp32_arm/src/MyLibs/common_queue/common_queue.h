@@ -26,8 +26,6 @@ class CommonQueue{
         bool BufferIsEmpty();  //TODO: remove this function?
 
         // For both Producer and Consumer:
-
-        
         Queue_able* _all_queue_ables;
 
         //Push the appended object to queue. 
@@ -37,6 +35,7 @@ class CommonQueue{
         // When you GetPreHeadObject(), you can view/check/modify it, also can ForwardHead(), equal to AppendObject().
         Queue_able* _GetRoom();  //GetPrePush()?  GetRoom()?  
         Queue_able* _Withdraw();  //Pop()?  Withdraw()?  Dequeue?
+        Queue_able* _GetHeadObject();  //Pop()?  Withdraw()?  Dequeue?
 
         // virtual Queue_able* GetSubClass();
         int _head = 0;

@@ -49,7 +49,7 @@ EnumAxis_Inverseinematic CncAxis::From_Ik_Name_ToEnum(char name){
             result_axis = AXIS_DELTA;
             break;
         case 'e':
-            result_axis = AXIS_EPSION;
+            result_axis = AXIS_EPSILON;
             break;
         case 'k':
             result_axis = AXIS_KAPPPA;

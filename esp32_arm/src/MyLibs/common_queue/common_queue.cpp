@@ -83,6 +83,10 @@ Queue_able* CommonQueue::_Withdraw(){
     return tail_message;
 }
 
+Queue_able* CommonQueue::_GetHeadObject(){
+    return (Queue_able*) (this->_all_queue_ables + this->_head* this->_sizeof_item);
+}
+
 bool CommonQueue::BufferIsEmpty(){
     if (this->_head == this->_tail) 
         return true;

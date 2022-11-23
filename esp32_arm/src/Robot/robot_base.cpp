@@ -53,6 +53,15 @@ void RobotBase::SpinOnce(){
 		// Logger::Print("RobotBase::SpinOnce() point", 91);
 		return;
 	}
+
+	if (Queue_MoveBlock::Instance().BufferIsFull()){
+		return;
+	}
+
+	if (Queue_LineSegment::Instance().BufferIsFull()){
+		return;
+	}
+
 	if (this->_gcode_queue->BufferIsEmpty()){
 		// Logger::Print("RobotBase::SpinOnce() point", 92);
 		return;
@@ -108,7 +117,6 @@ void RobotBase::SpinOnce(){
 
 }
 
-// void CncSolution_CoreAZ::RunG1(Gcode* gcode) {
 bool RobotBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	Serial.print("\n[Debug] CncSolution_CoreAZ::RunG1() is entering");
 	Serial.print(gcode->get_command());
@@ -119,12 +127,13 @@ bool RobotBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	float speed = __planner.current_speed;
 	if (gcode->has_letter('F')){
 		speed = gcode->get_value('F');
-		// this->_mover_base->SetEefSpeed(speed);
-		// mb->MoveBlocks[AXIS_ALPHA].Speed = speed;
-		// mb->MoveBlocks[AXIS_BETA].Speed = speed;
+		current_speed = speed;
+	}else{
+		speed = current_speed;
 	}
 	// // Assume G1-code want to update actuator directly, no need to do IK.
-	// FkPosition_ZW target_fk_zw;
+	FKPosition_XYZRPY target_fk;
+
 	// IKPosition_abgdekl target_ik_ab;
 	// target_fk_zw.Z = this->__current_fk_position.Z;
 	// target_fk_zw.W = this->__current_fk_position.W;
@@ -170,10 +179,18 @@ bool RobotBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	// 	Serial.print(")");
 	// }
 }
+
+
+// Before invoking this function. Make sure:
+// 1. Queue_MoveBlock is not full
+// 2. Queue_LineSegment is not full
 void RobotBase::__RunGcode(Gcode* gcode){
-	// char home_axis_name = '+';
-	LineSegment line;
-	// EnumAxis home_axis;
+	LineSegment* new_line = Queue_LineSegment::Instance().GetRoom();
+	Queue_LineSegment::Instance().GetHeadLineSegment()->DeepCopyTo(new_line);
+	// __current_line.DeepCopyTo(&new_line);
+	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
+	Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
+
 	Logger::Debug("RobotBase::__RunGcode()");
 	switch (gcode->g){
 		case 28:
@@ -194,28 +211,37 @@ void RobotBase::__RunGcode(Gcode* gcode){
 						
 		case 1:
 			// G1 Move
-			//TODO:  1. put position to movement queue. called "plan" in smoothieware? 
-			//       2. send out OK.
-			//       3. Set status to busy.
-			//       4. Start Moving.
-			this->__planner.__arm_solution->_CutGcodeLine_ToSegmentQueue(gcode);
-			this->__planner.AppendLineSegment(&line);   //TODO:: many lines ?
+			if (gcode->has_letter('X')) new_line->TargetPosition->X = gcode->get_value('X');
+			if (gcode->has_letter('Y')) new_line->TargetPosition->Y = gcode->get_value('Y');
+			if (gcode->has_letter('Z')) new_line->TargetPosition->Z = gcode->get_value('Z');
+			if (gcode->has_letter('R')) new_line->TargetPosition->Roll = gcode->get_value('R');
+			if (gcode->has_letter('P')) new_line->TargetPosition->Pitch = gcode->get_value('P');
+			if (gcode->has_letter('W')) new_line->TargetPosition->Yaw = gcode->get_value('W');
+			Queue_LineSegment::Instance().Deposit();
+			// this->__planner.AppendLineSegment(new_line);   //TODO:: many lines ?
 
-			// this->commuDevice->OutputMessage(COMMU_OK);
 			break;
 
-		// case 6:
-			// this->RunG6(gcode);
-			// this->commuDevice->OutputMessage(COMMU_OK);
-			// break;
+		case 6:
+			// will directly put move_block to the queue.
+			if (gcode->has_letter('a')) new_move_block->MoveBlocks[AXIS_ALPHA].TargetPosition = gcode->get_value('a');
+			if (gcode->has_letter('b')) new_move_block->MoveBlocks[AXIS_BETA].TargetPosition = gcode->get_value('b');
+			if (gcode->has_letter('g')) new_move_block->MoveBlocks[AXIS_GAMMA].TargetPosition = gcode->get_value('g');
+			if (gcode->has_letter('d')) new_move_block->MoveBlocks[AXIS_DELTA].TargetPosition = gcode->get_value('d');
+			if (gcode->has_letter('e')) new_move_block->MoveBlocks[AXIS_EPSILON].TargetPosition = gcode->get_value('e');
+			if (gcode->has_letter('k')) new_move_block->MoveBlocks[AXIS_KAPPPA].TargetPosition = gcode->get_value('k');
+			if (gcode->has_letter('l')) new_move_block->MoveBlocks[AXIS_LAMBDA].TargetPosition = gcode->get_value('l');
+			Queue_MoveBlock::Instance().Deposit();
+			break;
+
 		case 90:
 			// Absolute position
-			this->is_absolute_position = true;
+			// this->is_absolute_position = true;
 			// this->commuDevice->OutputMessage(COMMU_OK);
 			break;
 		case 91:
 			// Relative position
-			this->is_absolute_position = false;
+			// this->is_absolute_position = false;
 			// this->commuDevice->OutputMessage(COMMU_OK);
 			break;
 		case 92:
@@ -228,54 +254,6 @@ void RobotBase::__RunGcode(Gcode* gcode){
 		
 }
 
-// void RobotBase::__RunMcode(Gcode* gcode){
-// 	bool debug = false;
-// 		uint8_t p_value = 33;   //TODO: Make sure this is no harmful!
-// 		uint8_t s_value = 0;
-// 		float f_value = 0.0f;
-// 		EefAction action;
-// 		switch (gcode->m){
-// 		case 123:
-// 			//M123 P=channel_index, S=Set EEF action			
-// 			while (this->State != RobotState::IDLE_OR_ASYNC){
-// 				this->SpinOnce();
-// 			}
-// 			p_value =  gcode->get_value('P');
-// 			s_value = gcode->get_value('S');
-// 			debug = true;
-// 			if (debug){
-// 				Logger::Debug("RobotBase::RunGcode() For EEF_ACTION  M123 ");
-// 				Logger::Print("P", p_value);
-// 				Logger::Print("S", s_value);
-// 			}
-// 			action = (EefAction)s_value;
-// 			this->RunM123(p_value, s_value);
-// 			break;
 
-// 		case 280:
-// 			// Set servo position  
-// 			//	 	Pnnn Servo index
-// 			// 		Snnn Angle or microseconds
-// 			// Wait for all gcode, mcode is finished
-// 			// Serial.println("M280 Started");
-// 			while (this->State != RobotState::IDLE_OR_ASYNC){
-// 				this->SpinOnce();
-// 			}
-// 			if (gcode->has_letter('P')) p_value = gcode->get_value('P');
-// 			if (gcode->has_letter('S')) s_value = gcode->get_value('S');
-// 			ledcWrite(p_value, s_value);   // from ledcWrite(ledChannel, dutyCycle);
-// 			// this->commuDevice->OutputMessage(COMMU_OK);
-// 			// this->commuDevice->WriteNotification("IDLE");
-// 			break;
-// 		case 996:
-// 			// Do nothing. this should be the last gcode of a movement in transaction.
-// 			// after MCU reset, This should be the first gcode it received, even the message queue is nothing.
-// 			break;
-// 		default:
-// 			break;
-// 		}
-// 	// Logger::Print("RobotBase::RunMcode() point ",99);
-
-// }
 
 
