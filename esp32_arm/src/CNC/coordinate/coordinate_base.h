@@ -44,12 +44,12 @@ class FkPosition_XYZAB: public FkPositionBase{
 
 class FPosition_XYZABC: public FkPositionBase{
     public:
-        float x;
-        float y;
-        float z;
-        float a;
-        float b;
-        float c;
+        float X;
+        float Y;
+        float Z;
+        float Roll;  // about axis-X
+        float Pitch;  // about axis-Y
+        float Yaw;  // about axis-Z
 };
 
 class FkPosition_ZW: public FkPositionBase{
@@ -90,3 +90,13 @@ class IkPosition_AlphaBeta: public IkPositionBase{
 };
 
 
+class IKPosition_abgdekl: public IkPositionBase{
+    public:
+        float alpha;
+        float beta;
+        float gamma;
+        float delta;
+        float eppsilon;  
+        float kappa; 
+        float lambda;
+};

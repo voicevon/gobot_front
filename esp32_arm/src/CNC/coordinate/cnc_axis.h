@@ -13,6 +13,9 @@
 //     AXIS_Z = 6,
 // };
 
+
+
+//These char will apply in G1 or G28.
 enum EnumAxis_ForwardKinematic{
     AXIS_X = 'X', 
     AXIS_Y = 'Y', 
@@ -37,9 +40,8 @@ enum EnumAxis_Inverseinematic{
     AXIS_GAMMA = 2,
     AXIS_DELTA = 3,
     AXIS_EPSION = 4,
-    AXIS_ZETA = 5,
-    AXIS_THETA = 6,
-    AXIS_KAPPPA =7,
+    AXIS_KAPPPA = 5,
+    AXIS_LAMBDA = 6
 };
 
 

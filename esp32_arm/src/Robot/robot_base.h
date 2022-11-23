@@ -42,11 +42,9 @@ class RobotBase: public GcodeConsumer{
         CncBoardBase* _cnc_board;  //!!!!
         ArmSolutionBase* _arm_solution;
         void LinkMover(CncMoverBase* mover){this->_mover=mover;};
-
-        
-    protected:
         G28_Runner* _g28_runner;
         CncMoverBase* _mover;
+        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode);
 
     private:
         int test_int;

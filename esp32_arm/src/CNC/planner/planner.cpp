@@ -5,7 +5,7 @@ bool Planner::IsPlanable(){
     // Logger::Debug("Planner::IsPlanable()");
     // auto aa= this->__arm_solution;
     // Logger::Print("Planner::IsPlanable() point",1);
-    // auto bb = aa->__queue_move_block;
+    // auto bb = aa->__queue_move_block;line
     // Logger::Print("Planner::IsPlanable() point",2);
     // auto cc = bb->GetFreeBuffersCount();
     // Logger::Print("Planner::IsPlanable() point",3);

@@ -51,14 +51,11 @@ EnumAxis_Inverseinematic CncAxis::From_Ik_Name_ToEnum(char name){
         case 'e':
             result_axis = AXIS_EPSION;
             break;
-        case 'z':
-            result_axis = AXIS_ZETA;
-            break;
-        case 't':
-            result_axis = AXIS_THETA;
-            break;
         case 'k':
             result_axis = AXIS_KAPPPA;
+            break;
+        case 'l':
+            result_axis = AXIS_LAMBDA;
             break;
         default:
             break;
