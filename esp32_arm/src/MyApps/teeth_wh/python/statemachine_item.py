@@ -9,9 +9,10 @@ class StateMachine_Item():
         self.post_state = post_state
         self.service_function = service_function
         self.repeat_invoke_service_function = repeat_serve
+        # self.print_debug = False
 
     def print_out(self):
-        print("------------ StateMachine_Item() -------------")
+        print("------------ StateMachine_Item() -------------", end='')
         print("from_state=", self.current_state, "  command=", self.command, "    post_state=", self.post_state)
 
     @classmethod

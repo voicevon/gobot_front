@@ -1,5 +1,3 @@
-
-
 from von.rabbitmq_agent import g_amq, AMQ_BrokerConfig
 from von.mqtt_auto_syncer import MqttAutoSyncVar
 from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
@@ -10,36 +8,29 @@ import json
 # g_amq = RabbitMqAgent()
 
 
-
-
-
-
-
-    # def update(self):
-    #     self.current_state = self.ne
-
 class TeethWarehouseRobot():
     
     def __init__(self) -> None:
-        self.ir_state = MqttAutoSyncVar("dev_221109_ir", "unknown")
+        self.ir_state = MqttAutoSyncVar("twh/221109/ir_state", "unknown")
         self.ir_state.auto_sync_to_local = False
         self.ir_state.auto_sync_to_remote = True
         self.gcode_sender = GcodeSender()
         self.init_statemachine()
+        
 
     def init_statemachine(self):
         # for deposit
-        self.machine = [StateMachine_Item('parking', 'prepare_deposit', 'feeding_centerbox', self.do_prepare_deposit)]
-        self.machine.append(StateMachine_Item('feeding_centerbox', 'end_deposit', 'parking', self.do_nothing))
-        self.machine.append(StateMachine_Item('feeding_centerbox', 'prepare_deposit', 'feeding_centerbox', self.do_start_deposit))
-        self.machine.append(StateMachine_Item('feeding_centerbox', 'start_deposit', 'axis_x', self.do_start_deposit))
-        self.machine.append(StateMachine_Item('axis_x', 'auto', 'picking_centerbox', self.do_nothing))
-        self.machine.append(StateMachine_Item('picking_centerbox', 'ir_check_empty', 'picking_centerbox', self.do_pickup))
-        self.machine.append(StateMachine_Item('picking_centerbox', 'ir_check_blocked', 'droping_cell', self.do_pickup))
-        self.machine.append(StateMachine_Item('droping_cell', 'count_less_20', 'picking_centerbox', self.do_pickup))
-        self.machine.append(StateMachine_Item('droping_cell', 'count_more_20', 'verify', self.do_pickup))
-        self.machine.append(StateMachine_Item('verify', 'white', 'axis_x', self.do_pickup))
-        self.machine.append(StateMachine_Item('verify', 'black', 'parking', self.do_pickup))
+        self.machine = [StateMachine_Item('parking', 'prepare_deposit', 'feeding_centerbox', self.do_feed_centerbox)]
+        self.machine.append(StateMachine_Item('feeding_centerbox', 'end_deposit', 'parking', self.do_park))
+        self.machine.append(StateMachine_Item('feeding_centerbox', 'prepare_deposit', 'feeding_centerbox', self.do_nothing))
+        self.machine.append(StateMachine_Item('feeding_centerbox', 'start_deposit', 'axis_x', self.do_position_x_for_cell))
+        self.machine.append(StateMachine_Item('axis_x', 'auto', 'picking_centerbox', self.do_pick_centerbox))
+        self.machine.append(StateMachine_Item('picking_centerbox', 'ir_check_blocked', 'droping_cell', self.do_drop_cell))
+        self.machine.append(StateMachine_Item('picking_centerbox', 'ir_check_empty', 'picking_centerbox', self.do_pick_centerbox))
+        self.machine.append(StateMachine_Item('picking_centerbox', 'ir_empty_many_times', 'verify', self.do_be_outside))
+        self.machine.append(StateMachine_Item('droping_cell', 'auto', 'picking_centerbox', self.do_pick_centerbox))
+        self.machine.append(StateMachine_Item('verify', 'white', 'axis_x', self.do_moveback_pick_centerbox))
+        self.machine.append(StateMachine_Item('verify', 'black', 'parking', self.do_park))
         # for withdraw
         self.machine.append(StateMachine_Item('parking', 'withdraw', 'picking_cell', self.do_pickup))
         self.machine.append(StateMachine_Item('picking_cell', 'ir_check_empty', 'picking_cell', self.do_ir_check, repeat_serve=True))
@@ -50,15 +41,8 @@ class TeethWarehouseRobot():
         #init, to enter 'parking'
         self.current_state = 'parking'
         self.do_park(True)
-    
-    def do_park(self, home_park: bool):
-        self.gcode_sender.Eef_TurnOn_VacuumFan(False)
-        if home_park:
-            self.gcode_sender.home_x()
-            self.gcode_sender.home_alpha()
-        else:
-            self.gcode_sender.move_x_to (200)
-            self.gcode_sender.move_a_to(0)
+        self.current_housecell = None
+        self.ir_empty_count = 0
 
     def is_acceptable(self, command) ->bool:
         for item in self.machine:
@@ -75,52 +59,73 @@ class TeethWarehouseRobot():
         False: Update to post state failed.
         '''
         for item in self.machine:
-            item.print_out()
             if item.current_state == self.current_state:
                 if item.command == command:
+                    item.print_out()
                     item.service_function(house_cell)
                     self.current_state = item.post_state
                     return True
         print("TeethWarehouseRobot::update_state() failed")
         return False 
 
-    def GetXY_FromRowCol(self, row, col):
+    def get_xy(self, house_cell):
+        row, col = house_cell['row'], house_cell['col']
         x = row * 40
         y = col * 40
         return x,y
 
-    def PickupAndCheck(self, row: int, col: int):
-        self.gcode_sender.EefMove_Z_toTop()
-        x,y = self.GetXY_FromRowCol(row=row, col=col)
-        self.gcode_sender.MoveTo(x,y)
+    def do_pick_centerbox(self, house_cell):
+        self.gcode_sender.move_z_top()
+        x,y = self.get_xy(house_cell)
+        self.gcode_sender.move_a_to(house_cell)
         self.gcode_sender.EefMove_Z_toMiddle(12)
-        self.gcode_sender.Eef_EnableSuck(True)
-        self.gcode_sender.EefMove_Z_toTop()
+        self.gcode_sender.enable_vacuum_sucker(True)
+        self.gcode_sender.move_z_top()
 
-    def Dropto_CenterBox(self):
+    def do_drop_denterbox(self, house_cell):
         self.gcode_sender.MoveArmToCenter()
-        self.gcode_sender.Eef_EnableSuck(False)  # drop the tooth to out-box
+        self.gcode_sender.enable_vacuum_sucker(False)  # drop the tooth to out-box
         self.gcode_sender.PauseForWaiting(3)
-        self.gcode_sender.Eef_EnableSuck(False)        
+        self.gcode_sender.enable_vacuum_sucker(False)        
+    
+    def do_drop_cell(self, house_cell):
+        pass
 
+    def do_position_x_for_cell(self, house_cell):
+        self.current_housecell = house_cell
+        x = house_cell['row'] * 40
+        self.gcode_sender.move_x_to(x)
+    
     def do_nothing(self, house_cell):
         pass
 
-    def do_prepare_deposit(self, house_cell):
-        self.gcode_sender.home_alpha()
-        self.gcode_sender.move_centerbox_to_outside()
+    def do_park(self, home_park: bool):
+        self.gcode_sender.Eef_TurnOn_VacuumFan(False)
+        if home_park:
+            self.gcode_sender.home_x()
+            self.gcode_sender.home_alpha()
+        else:
+            self.gcode_sender.move_x_to (200)
+            self.gcode_sender.move_a_to(0)
+
+    def do_be_outside(self, house_cell):
+        pass
+
+    
+    def do_feed_centerbox(self, house_cell):
+        self.gcode_sender.move_a_to(0)
+        self.gcode_sender.move_x_to(1200)
     
     def do_start_deposit(self, house_cell):
         for i in range(20):
             self.gcode_sender.pickup_from_centerbox()
             # self.do_ir_check()
             self.gcode_sender.drop_to_cellbox(house_cell['row'], house_cell['col'])
-
     
     def do_pickup(self, house_cell):
-        #get x,y from row, col
-        # gcode move to x,y
-        # mcode ir check
+        '''
+        pickup from cell   vs  pickup from centerbox ??
+        '''
         self.ir_state.local_value = self.ir_state.default_value
 
     def do_cancel(self, house_cell):
@@ -132,19 +137,36 @@ class TeethWarehouseRobot():
                 # Have not get new state
                 return
 
-            case "passed":
-                self.statemachine_drive('ir_check_pass')
+            case "empty":
+                self.statemachine_drive('ir_check_empty', self.current_housecell)
+                self.ir_state.local_value = self.ir_state.default_value
+                self.ir_state.remote_value = self.ir_state.default_value
+                self.ir_empty_count += 1
 
-            case "failed":
-                self.statemachine_drive('ir_check_failed')
+            case "blocked":
+                self.statemachine_drive('ir_check_blocked', self.current_housecell)
+                self.ir_state.local_value = self.ir_state.default_value
+                self.ir_state.remote_value = self.ir_state.default_value
+                self.ir_empty_count = 0
+
+            case others:
+                print('TeethWarehouseRobot::do_ir_check()', self.ir_state.remote_value)
 
     # def do_deposite_user_ready(self, house_cell):
     #     self.cerebellum.Dropto_CenterBox()
     #     self.cerebellum.PickupAndCheck(house_cell)
 
     def SpinOnce(self):
-        if self.current_state == 'picking_cell':
-            self.do_ir_check(self.house_cell)
+        match self.current_state:
+            case 'picking_cell' | 'picking_centerbox':
+                self.do_ir_check(self.house_cell)
+            case 'axis_x' | 'be_outside':
+                print('TeethWarehouseRobot::SpinOnce()',  'auto')
+                self.statemachine_drive('auto', self.current_housecell)
+            case others:
+                # print('TeethWarehouseRobot::SpinOnce()'， self.current_state, self.current_housecell)
+                pass
+
     
     def feed_request(self, request_str: str) -> bool:
         '''
@@ -159,7 +181,7 @@ class TeethWarehouseRobot():
         command = request['command']
         self.house_cell = request['cell']
         # if request.Acceptable():
-        print('-------------------', request,command)
+        # print('-------------------', request,command)
         return self.statemachine_drive(command, self.house_cell)
 
 def test():
@@ -238,6 +260,7 @@ if __name__ == '__main__':
         g_amq.Subscribe('twh_221109_withdraw')
 
         while True:
+            robot.SpinOnce()
             if is_dealing_deposit:
                 deal_deposit()
             else:

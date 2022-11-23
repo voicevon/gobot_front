@@ -12,7 +12,8 @@
 // #include "ESP32Step/src/TeensyStep.h"
 #include "FastAccelStepper.h"
 
-#define HOME_TRIGGER_COUNT 1
+#define HOME_TRIGGER_COUNT 2
+#define SERVO_COUNT 1
 
 class TeethWarehouse_Board: public CncBoardBase{
     public:
@@ -57,6 +58,7 @@ class TeethWarehouse_Board: public CncBoardBase{
 
         void __InitSteppers();
         PositionTrigger __all_position_triggers[HOME_TRIGGER_COUNT];
+        Servo __all_servos[SERVO_COUNT];
         FastAccelStepperEngine __stepper_engine = FastAccelStepperEngine();
         FastAccelStepper* __stepper_alpha = NULL;
         FastAccelStepper* __stepper_beta = NULL;
@@ -65,8 +67,8 @@ class TeethWarehouse_Board: public CncBoardBase{
         HX711 __hx711;
         // VL6180x sensor(VL6180X_ADDRESS);
         VL6180X sensor;
-        Servo __servo_air_switch;
-        Servo __servo_air_pen;
+        // Servo __servo_air_switch;
+        // Servo __servo_air_pen;
 
         // CncActuatorServo servo_air_pen;
         

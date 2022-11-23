@@ -32,9 +32,9 @@ feeding_centerbox --> feeding_centerbox : prepare_deposit
 feeding_centerbox -> parking: end_deposit
 axis_x -> picking_centerbox
 picking_centerbox --> droping_cell: ir_check_blocked
-picking_centerbox --> picking_centerbox: ir_check_empty
-droping_cell --> verify: count >=22
-droping_cell -> picking_centerbox: count<20
+picking_centerbox --> picking_centerbox: ir_check_empty <=3
+picking_centerbox --> verify: ir_check_emtpy > 3
+droping_cell -> picking_centerbox: .         .
 verify -> axis_x: white
 verify -> parking: black
 

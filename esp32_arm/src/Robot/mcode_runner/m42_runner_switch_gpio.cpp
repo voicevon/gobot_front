@@ -1,4 +1,4 @@
-#include "m42_runner.h"
+#include "m42_runner_switch_gpio.h"
 
 
 // NOTICE: output pin should be initialized in Board::Init()

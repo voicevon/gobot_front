@@ -1,14 +1,13 @@
 #include "teeth_wh_board.h"
 
 
-#define PIN_HOMER_SENSOR_HALL_0 23
-// #define PIN_HOMER_SENSOR_HALL_1 16
-// #define PIN_HOMER_SENSOR_HALL_2 4
+#define PIN_HOMER_SENSOR_HALL_ALPHA 23
+#define PIN_HOMER_SENSOR_HALL_X 16
 #define PIN_VACUUME_PUMP 33
 // #define PIN_VACUUME_SUCKER 22
 
-#define PIN_SERVO_AIR_PEN 25
-#define PIN_SERVO_AIR_SWITCH 15
+// #define PIN_SERVO_AIR_PEN 25
+#define PIN_SERVO_VACUUM_SWITCH 15
 
 #define PIN_HX711_CLK 22
 #define PIN_HX711_DATA 22
@@ -23,13 +22,18 @@
 #define PIN_BETA_STEP 12  //27
 #define PIN_STEPPER_ENABLE 13
 
+#define POSITION_TRIGGER_ALPHA  0
+#define POSITION_TRIGGER_X  1
+#define SERVO_VACUUM_SUCKER  0
+
+
 void TeethWarehouse_Board::Init(bool is_on_reset){
     if (is_on_reset){
         Serial.begin(115200);
         Serial.println("I am Teeth Warehouse.");
     }
-    __all_position_triggers[0].Init(PIN_HOMER_SENSOR_HALL_0, LOW);
-    // __all_position_triggers[1].Init(PIN_HOMER_SENSOR_HALL_1, LOW);
+    __all_position_triggers[POSITION_TRIGGER_ALPHA].Init(PIN_HOMER_SENSOR_HALL_ALPHA, LOW);
+    __all_position_triggers[POSITION_TRIGGER_X].Init(PIN_HOMER_SENSOR_HALL_X, LOW);
     // __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
     HomeTrigger_Array::Instance().Init(__all_position_triggers, HOME_TRIGGER_COUNT);
     
@@ -40,12 +44,14 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
 
     // Init servo.
     ESP32PWM::allocateTimer(0);   //https://github.com/madhephaestus/ESP32Servo/blob/master/examples/Multiple-Servo-Example-Arduino/Multiple-Servo-Example-Arduino.ino
-    __servo_air_pen.setPeriodHertz(50);      // Standard 50hz servo
-    __servo_air_pen.attach(PIN_SERVO_AIR_PEN);
-    __servo_air_pen.write(270);   //Move air pen to top position.
+    // __servo_air_pen.setPeriodHertz(50);      // Standard 50hz servo
+    // __servo_air_pen.attach(PIN_SERVO_AIR_PEN);
+    // __servo_air_pen.write(270);   //Move air pen to top position.
 
-    __servo_air_switch.setPeriodHertz(50);      // Standard 50hz servo
-    __servo_air_switch.attach(PIN_SERVO_AIR_SWITCH);
+    // __servo_air_switch.setPeriodHertz(50);      // Standard 50hz servo
+    // __servo_air_switch.attach(PIN_SERVO_AIR_SWITCH);
+    __all_servos[SERVO_VACUUM_SUCKER].setPeriodHertz(50);  // Standard 50hz servo
+    __all_servos[SERVO_VACUUM_SUCKER].attach(PIN_SERVO_VACUUM_SWITCH);
 
     __InitSteppers();
 
@@ -238,9 +244,11 @@ void TeethWarehouse_Board::Test_Servo_AirPen(int loops){
         //     delay(10);             // waits 20ms for the servo to reach the position
             
         // }
-        __servo_air_pen.write(0);
+        // __servo_air_pen.write(0);
+        __all_servos[SERVO_VACUUM_SUCKER].write(0);
         delay(3000);
-        __servo_air_pen.write(270);
+        // __servo_air_pen.write(270);
+        __all_servos[SERVO_VACUUM_SUCKER].write(270);
         delay(3000);
     }
 }
@@ -262,7 +270,8 @@ void TeethWarehouse_Board::Test_Servo_AirSwitch(int loops){
 void TeethWarehouse_Board::EnableVacuumeSucker(bool enable_it){
     int angle = 0;
     if (enable_it) angle = 270;
-    __servo_air_switch.write(angle);
+    // __servo_air_switch.write(angle);
+    __all_servos[SERVO_VACUUM_SUCKER].write(angle);
 }
 
 void TeethWarehouse_Board::Test_VacuumPump(int loops){

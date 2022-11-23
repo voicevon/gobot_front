@@ -1,9 +1,10 @@
 #pragma once
 
-#include "m42_runner.h"
+#include "m42_runner_switch_gpio.h"
 #include "m84_runner.h"
 #include "m119_runner.h"
-#include "m130_runner.h"
+#include "m130_runner_pid_list.h"
+#include "m280_runner_servo_array.h"
 
 class McodeOS{
     public:
@@ -21,5 +22,6 @@ class McodeOS{
         M84_Runner_Disable_All_Steppers __m84_runner_disable_all_steppers;
         M119_Runner_TestPositionTriggers __m119_runner;
         M130_Runner_UpdatePid __m130_runner;
+        M280_Runner_Servo __m280_runner;
         McodeRunnerBase* __current_runner;
 };
