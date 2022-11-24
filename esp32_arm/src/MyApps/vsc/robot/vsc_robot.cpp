@@ -4,16 +4,16 @@
 
 void VscRobot::Init(Vsc_Board* board){
     Logger::Debug("VscRobot::Init()");
-    this->_cnc_board = board;
+    // this->_cnc_board = board;
 
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
-    this->__planner.__arm_solution = &arm_solution;
+    // this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
 
     this->_g28_runner = &this->g28_runner;
     g28_runner.Init(&mover);
 
-    this->LinkMover(&mover);
+    this->_LinkMover(&mover);
     this->__Init_actuators(board);
     this->__Init_pids();
     this->__Init_layer_position();

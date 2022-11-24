@@ -6,11 +6,11 @@
 
 void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
     Logger::Debug("TeechWarehouse_Robot::Init()");
-    this->_cnc_board = board;
+    // this->_cnc_board = board;
     this->__board = board;
 
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
-    this->__planner.__arm_solution = &arm_solution;
+    // this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
     arm_config.arm_length = 205;
     arm_config.slave_gear_circle_length = 123.98;
@@ -20,7 +20,7 @@ void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
     this->_g28_runner = &this->g28_runner;
     g28_runner.Init(&mover);
 
-    this->LinkMover(&mover);
+    this->_LinkMover(&mover);
     this->__Init_actuators(board);
 
 }
@@ -30,9 +30,11 @@ void TeechWarehouse_Robot::__Init_actuators(TeethWarehouse_Board* board){
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
     CncActuator_List::Instance().AddActuator(&__actuator_beta);
+    CncActuator_List::Instance().AddActuator(&__actuator_gamma);
 
     this->__actuator_alpha.MyName = 'a';
     this->__actuator_beta.MyName = 'b';
+    this->__actuator_beta.MyName = 'g';
     
     ActuatorStepper_Calculator helper;
     helper._motor_gear_pitch_in_mm = 12.7;
@@ -43,6 +45,9 @@ void TeechWarehouse_Robot::__Init_actuators(TeethWarehouse_Board* board){
 
     __actuator_beta.Init_FomularSlope(slope);
     __actuator_beta.LinkStepper(board->GetStepper_Beta(), slope);
+
+    __actuator_gamma.LinkServo(board->GetServo_onVertical(), true);
+    __actuator_gamma.Init_FomularSlope(slope);
 }
 
 void TeechWarehouse_Robot::StoreToCell(int row_index, int col_index){

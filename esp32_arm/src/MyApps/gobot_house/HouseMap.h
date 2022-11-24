@@ -9,11 +9,11 @@
 
 class HouseMap{
     public:
-        FkPosition_XY rooms[8];
-        FkPosition_XY doors[8];
-        FkPosition_XY gates[8];
-        FkPosition_XY neck;
-        FkPosition_XY head;
+        FKPosition_XYZRPY rooms[8];
+        FKPosition_XYZRPY doors[8];
+        FKPosition_XYZRPY gates[8];
+        FKPosition_XYZRPY neck;
+        FKPosition_XYZRPY head;
         void Init();
 
 };

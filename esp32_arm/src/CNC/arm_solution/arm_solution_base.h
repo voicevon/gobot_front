@@ -13,8 +13,10 @@
 
 class ArmSolutionBase{
     public:
+        virtual void IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik);
+        virtual void FK(IKPosition_abgdekl* from_ik,FKPosition_XYZRPY* to_fk);
 
-        virtual bool GetCurrentPosition(FkPositionBase* position_fk);
+        virtual bool GetCurrentPosition(FKPosition_XYZRPY* position_fk);
 
         // Todo:  should remove these two lines?
         virtual float GetDistanceToTarget_FK();
@@ -24,12 +26,10 @@ class ArmSolutionBase{
         virtual void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis);
         void ForceStopMover();  //TODO:  para is MoverAction:  EnableActuator, ForceStop, DisableActuator. 
 
-        virtual bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode);
+        // virtual bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode);
         virtual void __ConvertSegment_ToMoveBlockQueue(LineSegment* line);
         
     protected:
-        virtual void IK(FkPositionBase* from_fk, IkPositionBase* to_ik);
-        virtual void FK(IkPositionBase* from_ik,FkPositionBase* to_fk);
 
 
         bool is_absolute_position = true;

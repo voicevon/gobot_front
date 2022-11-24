@@ -16,6 +16,8 @@ class Queue_LineSegment: public CommonQueue{
         Queue_LineSegment(){this->_Init(LINE_SEGMENT_QUEUE_SIZE, sizeof(LineSegment));};
         LineSegment* Withdraw() {return (LineSegment*)this->_Withdraw();};
         LineSegment* GetRoom() {return (LineSegment*)this->_GetRoom();};
+        LineSegment* GetHeadLineSegment() {return (LineSegment*)this->_GetHeadObject();};
+        void DeepCopyCurrentFkPositionTo(FKPosition_XYZRPY* position);
     private:
         
 

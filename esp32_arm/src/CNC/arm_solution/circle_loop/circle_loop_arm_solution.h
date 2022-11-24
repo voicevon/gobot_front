@@ -7,11 +7,11 @@
 
 class CircleLoop_ArmSolution: public ArmSolutionBase{
     public:
-        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
         void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
 
 
-        bool GetCurrentPosition(FkPositionBase* position_fk) override{return false;};  
+        bool GetCurrentPosition(FKPosition_XYZRPY* position_fk) override{return false;};  
         float GetDistanceToTarget_FK() override{return 0.0;};
         float GetDistanceToTarget_IK() override;
 
@@ -22,13 +22,13 @@ class CircleLoop_ArmSolution: public ArmSolutionBase{
 
     private:
         // EnumAxis ConvertToEnum(char axis) override{return AXIS_ALPHA;};
-        void IK(FkPositionBase* from_fk,IkPositionBase* to_ik) override;
-        void FK(IkPositionBase* ik, FkPositionBase*  to_fk) override;
+        void IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
+        void FK(IKPosition_abgdekl* ik, FKPosition_XYZRPY*  to_fk) override;
 
         // void RunG6(Gcode* gcode) override{} ; 
 
-        FkPosition_A __current_fk_position;
-        FkPosition_A __target_fk_position;
+        FKPosition_XYZRPY __current_fk_position;
+        FKPosition_XYZRPY __target_fk_position;
 
 
 };

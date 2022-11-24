@@ -13,7 +13,7 @@
 #include "FastAccelStepper.h"
 
 #define HOME_TRIGGER_COUNT 2
-#define SERVO_COUNT 1
+#define SERVO_COUNT 2
 
 class TeethWarehouse_Board: public CncBoardBase{
     public:
@@ -39,6 +39,7 @@ class TeethWarehouse_Board: public CncBoardBase{
         HX711* GetHx711(){return &this->__hx711;};
         FastAccelStepper* GetStepper_Alpha(){return __stepper_alpha;};
         FastAccelStepper* GetStepper_Beta(){return __stepper_beta;};
+        Servo* GetServo_onVertical();
 
         void Test_PositionTriggers(int loops);
         void Test_Hx711(int loops);

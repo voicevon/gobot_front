@@ -4,15 +4,15 @@
 
 void BoxCarrierRobot::Init(Board2204Cnc* board){
     Logger::Debug("Vsc_ArmSoution::Init()");
-    this->_cnc_board = board;
+    // this->_cnc_board = board;
     // this->_LinkEef(board->GetEef());
 
     this->_g28_runner=&this->g28_runner;
     g28_runner.Init(&mover);
-    this->LinkMover(&mover);
+    this->_LinkMover(&mover);
     
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
-    this->__planner.__arm_solution = &arm_solution;
+    // this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
 
 

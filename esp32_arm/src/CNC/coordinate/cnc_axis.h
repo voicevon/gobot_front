@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 
-#define CNC_AXIS_COUNT 3
+#define CNC_AXIS_COUNT 7
 
 // enum EnumAxis{
 //     AXIS_NONE = 0,
@@ -26,20 +26,11 @@ enum EnumAxis_ForwardKinematic{
 };
 
 enum EnumAxis_Inverseinematic{
-    // AXIS_ALPHA = 'a', 
-    // AXIS_BETA = 'b', 
-    // AXIS_GAMMA = 'g',
-    // AXIS_DELTA = 'd',
-    // AXIS_EPSION = 'e',
-    // AXIS_ZETA = 'z',
-    // AXIS_THETA = 't',
-    // AXIS_KAPPPA ='k',
-
     AXIS_ALPHA = 0, 
     AXIS_BETA = 1, 
     AXIS_GAMMA = 2,
     AXIS_DELTA = 3,
-    AXIS_EPSION = 4,
+    AXIS_EPSILON = 4,
     AXIS_KAPPPA = 5,
     AXIS_LAMBDA = 6
 };

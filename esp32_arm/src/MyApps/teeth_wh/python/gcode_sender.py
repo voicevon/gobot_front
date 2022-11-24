@@ -9,7 +9,7 @@ class GcodeSender():
         self.queue_name = self.exchange_name + '_' + str(self.target_device_id) + '_gcode'
 
     def home_alpha(self):
-        g28 = 'G28A'
+        g28 = 'G28a'
         g_amq.Publish(self.exchange_name, self.queue_name, g28)
 
     def home_x(self):
@@ -30,7 +30,7 @@ class GcodeSender():
         g_amq.Publish(self.exchange_name, self.queue_name, g1)
         self.Eef_EnableSuck(True)
         # arm to center position
-        g1 = 'G1A0'
+        g1 = 'G1a0'
         g_amq.Publish(self.exchange_name, self.queue_name, g1)
         # move down
         g1 = 'G1Z100'
@@ -83,7 +83,7 @@ class GcodeSender():
 
     def MoveArmToCenter(self):
         print('gcode ','MoveArmToCenter')
-        g1 = "G1A0"
+        g1 = "G1a0"
         g_amq.Publish(self.exchange_name, self.queue_name, g1)
 
 
@@ -99,7 +99,7 @@ class GcodeSender():
 
     def move_a_to(self, a):
         # print('gcode ','MoveTo')
-        g1 = "G1A" + str(a) 
+        g1 = "G1a" + str(a) 
         g_amq.Publish(self.exchange_name, self.queue_name, g1)
 
     def move_xy_to(self, x, y):

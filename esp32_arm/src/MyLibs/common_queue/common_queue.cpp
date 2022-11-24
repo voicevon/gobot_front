@@ -4,30 +4,30 @@
 
 
 
-bool CommonQueue::AppendObject(Queue_able* new_object){
-    Logger::Debug("CommonQueue::AppendObject()");
-    Logger::Print("head old", this->_head);
-    Logger::Print("tail", this->_tail);
-    int next_head = this->__get_pointer_next_index(this->_head);
-    if(next_head == this->_tail){
-        Serial.print(FORE_YELLOW);
-        Serial.print("\n  [Warn] CommonQueue::AppendMessage() ");
-        Serial.print("\n   Buffer is full");
-        Serial.println(FCBC_RESET);
-        return true;
-    }
+// bool CommonQueue::AppendObject(Queue_able* new_object){
+//     Logger::Debug("CommonQueue::AppendObject()");
+//     Logger::Print("head old", this->_head);
+//     Logger::Print("tail", this->_tail);
+//     int next_head = this->__get_pointer_next_index(this->_head);
+//     if(next_head == this->_tail){
+//         Serial.print(FORE_YELLOW);
+//         Serial.print("\n  [Warn] CommonQueue::AppendMessage() ");
+//         Serial.print("\n   Buffer is full");
+//         Serial.println(FCBC_RESET);
+//         return true;
+//     }
 
-    new_object->DeepCopyTo((Queue_able*) (this->_all_queue_ables + this->_head * this->_sizeof_item));
+//     // new_object->DeepCopyTo((Queue_able*) (this->_all_queue_ables + this->_head * this->_sizeof_item));
 
-    this->_head = next_head;
-    Logger::Print("head new", this->_head);
-    next_head = this->__get_pointer_next_index(this->_head);
-    if (next_head == this->_tail)
-        // buffer is full, after copying.
-        return true;
-    // buffer is NOT full. 
-    return false;  
-}
+//     this->_head = next_head;
+//     Logger::Print("head new", this->_head);
+//     next_head = this->__get_pointer_next_index(this->_head);
+//     if (next_head == this->_tail)
+//         // buffer is full, after copying.
+//         return true;
+//     // buffer is NOT full. 
+//     return false;  
+// }
 
 
 bool CommonQueue::Deposit(){
@@ -81,6 +81,10 @@ Queue_able* CommonQueue::_Withdraw(){
         this->_tail = this->__get_pointer_next_index(this->_tail);
     }
     return tail_message;
+}
+
+Queue_able* CommonQueue::_GetHeadObject(){
+    return (Queue_able*) (this->_all_queue_ables + this->_head* this->_sizeof_item);
 }
 
 bool CommonQueue::BufferIsEmpty(){

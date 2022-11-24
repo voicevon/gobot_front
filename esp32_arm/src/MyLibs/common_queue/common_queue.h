@@ -5,7 +5,7 @@
 class Queue_able{
     public:
         int id = 1234;
-        virtual void DeepCopyTo(Queue_able* the_copy){};  //TODO: Can remove body "{}"?
+        // virtual void DeepCopyTo(Queue_able* the_copy);
         virtual void DeepReset_ToDefault(){};
 
 };
@@ -18,7 +18,7 @@ class CommonQueue{
         // For Producer:  Will deep copy the object to the queue.
         // return true: buffer is full , before or after appending.
         // return false:  buffer is not full, after appending.   
-        bool AppendObject(Queue_able* new_object);
+        // bool AppendObject(Queue_able* new_object);
         bool BufferIsFull();
         int GetFreeBuffersCount();
 
@@ -26,8 +26,6 @@ class CommonQueue{
         bool BufferIsEmpty();  //TODO: remove this function?
 
         // For both Producer and Consumer:
-
-        
         Queue_able* _all_queue_ables;
 
         //Push the appended object to queue. 
@@ -37,6 +35,7 @@ class CommonQueue{
         // When you GetPreHeadObject(), you can view/check/modify it, also can ForwardHead(), equal to AppendObject().
         Queue_able* _GetRoom();  //GetPrePush()?  GetRoom()?  
         Queue_able* _Withdraw();  //Pop()?  Withdraw()?  Dequeue?
+        Queue_able* _GetHeadObject();  //Pop()?  Withdraw()?  Dequeue?
 
         // virtual Queue_able* GetSubClass();
         int _head = 0;

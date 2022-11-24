@@ -1,14 +1,14 @@
 #pragma once
 
 #include "CNC/gcode/gcode_consumer.h"
-#include "CNC/board/cnc_board_base.h"
-#include "CNC/arm_solution/arm_solution_base.h"
+// #include "CNC/board/cnc_board_base.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "CNC/mover/cnc_mover_base.h"
 #include "CNC/planner/planner.h"
-#include "gcode_runner/g28_runner.h"
-#include "gcode_runner/g4_runner.h"
+#include "CNC/arm_solution/arm_solution_base.h"
+#include "CNC/mover/cnc_mover_base.h"
+#include "Robot/gcode_runner/g28_runner.h"
+#include "Robot/gcode_runner/g4_runner.h"
 #include "Robot/mcode_runner/mcode_os.h"
 #include "Robot/eef/robot_eef_base.h"
 
@@ -28,31 +28,26 @@ class RobotBase: public GcodeConsumer{
         void SpinOnce();
 
     protected:
-        Planner __planner;
+        void _running_G28();
+        // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode);
+
+        void _LinkMover(CncMoverBase* mover){this->_mover=mover;};
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
 
-        // virtual void RunM123(uint8_t eef_channel, uint8_t eef_action);
-
-        void _running_G28();
-
-        // KinematicConfig _config_base;    //TODO:  rename to _kinamatic_config
-
-        bool is_absolute_position = true;
-        
-        CncBoardBase* _cnc_board;  //!!!!
-        ArmSolutionBase* _arm_solution;
-        void LinkMover(CncMoverBase* mover){this->_mover=mover;};
+        // CncBoardBase* _cnc_board;  //!!!!
         G28_Runner* _g28_runner;
         CncMoverBase* _mover;
-        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode);
+        ArmSolutionBase* _arm_solution;
 
     private:
-        int test_int;
+        // int test_int;
+        Planner __planner;
         RobotEefBase* __eef;
         G4_Runner __g4_runner;
-
         void __RunGcode(Gcode* gcode);
-        // void __RunMcode(Gcode* gcode);
+        LineSegment __current_line;
+        float current_speed;
+        
 
         /* Just for fun, don't remove below comment.
         void * __output_message2;

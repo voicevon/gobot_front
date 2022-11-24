@@ -16,32 +16,28 @@ bool Planner::IsPlanable(){
 }
 
 
-//Doing:  Arm solution will help a lot of translation/transforming.
-//  Convert FK line_segment to IK move_block.
-void Planner::AppendLineSegment(LineSegment* line){
-    //Translate LineSegment To MoveBlocks, and insert to move_block_queue.
-    Logger::Debug("Planner::AppendLineSegment()");
-    Logger::Print("line->axis", line->axis);
-    // this->__arm_solution->__CutLineSegment_ToMoveBlocks_to_queue(line);
-    this->__arm_solution->__ConvertSegment_ToMoveBlockQueue(line);
-    // for (int i=0; i<1; i++){
-    //     // TODO: recalculate acceleration, speed.
-    //     MoveBlock* mb = this->__arm_solution->__queue_move_block->GetHeadMoveblock();
-    //     for(int i=0; i<6;i++){
-    //         Logger::Print("mb->axis  old", mb->MoveBlocks[i].axis);
-    //         mb->MoveBlocks[i].axis = line->axis;
-    //         mb->MoveBlocks[i].IsAbsTargetPosition = line->IsAbsTargetPosition;
-    //         mb->MoveBlocks[i].TargetPosition = line->TargetPosition;
-    //         mb->MoveBlocks[i].Speed = line->Speed;
-    //         mb->MoveBlocks[i].Acceleration = line->Acceleration;
+void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* line){
+    line->Calculate_distance_time(current_line.TargetPosition);
+    IKPosition_abgdekl start_ik_position;
+    IKPosition_abgdekl target_ik_position;
 
-    //         Logger::Print("mb->axis  new", mb->MoveBlocks[i].axis);
-    //     }
-    //     Logger::Print("Going to forward queue head", 0 );
-    //     this->__arm_solution->__queue_move_block->ForwardHead();
-    //     Logger::Print("Going to forward queue head", 1 );
+    Queue_MoveBlock::Instance().DeepCopyHead_ToPosition(&target_ik_position);
+    __arm_solution->IK(line->TargetPosition, &target_ik_position);
+    MoveBlock* mk = Queue_MoveBlock::Instance().GetRoom();
+    mk->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_position.alpha;
+    mk->MoveBlocks[AXIS_ALPHA].Recalulate_distance_speed_acceleration(start_ik_position.alpha, line->required_time);
 
-    // }
+    mk->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_position.beta;
+    mk->MoveBlocks[AXIS_BETA].Recalulate_distance_speed_acceleration(start_ik_position.beta, line->required_time);
+
+    mk->MoveBlocks[AXIS_GAMMA].TargetPosition = target_ik_position.gamma;
+    mk->MoveBlocks[AXIS_GAMMA].Recalulate_distance_speed_acceleration(start_ik_position.gamma, line->required_time);
+
+    mk->MoveBlocks[AXIS_DELTA].TargetPosition = target_ik_position.delta;
+    mk->MoveBlocks[AXIS_DELTA].Recalulate_distance_speed_acceleration(start_ik_position.delta, line->required_time);
+    
+    Queue_MoveBlock::Instance().Deposit();
+
 }
 
 
