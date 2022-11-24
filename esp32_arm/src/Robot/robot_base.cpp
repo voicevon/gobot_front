@@ -176,7 +176,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			Queue_MoveBlock::Instance().Deposit();
 			// Update Current FK position 
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);
-			_arm_solution->FK(&new_ik_position, &new_fk_position);
+			__planner.arm_solution->FK(&new_ik_position, &new_fk_position);
 			new_line->DeepCopyFromFkPosition(&new_fk_position);
 			new_line->Speed = 123;   //TODO: for next fk gcode usage. should be A:) default speed,  B:) follow previous speed
 			Queue_LineSegment::Instance().Deposit();

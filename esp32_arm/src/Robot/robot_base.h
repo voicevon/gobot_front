@@ -31,10 +31,11 @@ class RobotBase: public GcodeConsumer{
 
         void _LinkMover(CncMoverBase* mover){this->_mover=mover;};
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
+        void _LinkArmSolution(ArmSolutionBase* arm_solution){__planner.arm_solution=arm_solution;};
         virtual void _Init_Queues();
         G28_Runner* _g28_runner;
         CncMoverBase* _mover;
-        ArmSolutionBase* _arm_solution;
+        // ArmSolutionBase* _arm_solution;
 
     private:
         Planner __planner;

@@ -10,11 +10,12 @@ void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
     this->__board = board;
 
     // this->__planner.__arm_solution = &arm_solution;
-    this->_arm_solution = &this->arm_solution;  
+    // this->_arm_solution = &this->arm_solution;  
     arm_config.arm_length = 205;
     arm_config.slave_gear_circle_length = 123.98;
     arm_config.master_slope_steps_per_mm = 12.778;
     this->arm_solution.LinkConfig(&arm_config);
+    this->_LinkArmSolution(&arm_solution);
 
     this->_g28_runner = &this->g28_runner;
     g28_runner.Init(&mover);
