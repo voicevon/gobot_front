@@ -20,7 +20,7 @@ class CncSolution_CoreXY_XA_ab: public ArmSolutionBase{
         // };
 
         // CncSolution_CoreXA(EnumQuadrant default_quadrant);
-        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
         void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override{};
         void LinkConfig(Core_XY_XA_ab_config* config){this->_config=config;};
 

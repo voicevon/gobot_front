@@ -4,7 +4,7 @@
 
 void SmokerRobot::Init(Smoker_Board* board){
     Logger::Debug("Vsc_ArmSoution::Init()");
-    this->_cnc_board = board;
+    // this->_cnc_board = board;
     // this->_LinkEef(board->GetEef());
 
     this->_g28_runner=&this->g28_runner;

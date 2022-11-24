@@ -1,12 +1,12 @@
 #pragma once
 
 #include "CNC/gcode/gcode_consumer.h"
-#include "CNC/board/cnc_board_base.h"
-#include "CNC/arm_solution/arm_solution_base.h"
+// #include "CNC/board/cnc_board_base.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "CNC/mover/cnc_mover_base.h"
 #include "CNC/planner/planner.h"
+#include "CNC/arm_solution/arm_solution_base.h"
+#include "CNC/mover/cnc_mover_base.h"
 #include "Robot/gcode_runner/g28_runner.h"
 #include "Robot/gcode_runner/g4_runner.h"
 #include "Robot/mcode_runner/mcode_os.h"
@@ -29,12 +29,12 @@ class RobotBase: public GcodeConsumer{
 
     protected:
         void _running_G28();
-        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode);
+        // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode);
 
         void _LinkMover(CncMoverBase* mover){this->_mover=mover;};
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
 
-        CncBoardBase* _cnc_board;  //!!!!
+        // CncBoardBase* _cnc_board;  //!!!!
         G28_Runner* _g28_runner;
         CncMoverBase* _mover;
         ArmSolutionBase* _arm_solution;

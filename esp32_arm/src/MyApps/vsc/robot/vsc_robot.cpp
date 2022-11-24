@@ -4,7 +4,7 @@
 
 void VscRobot::Init(Vsc_Board* board){
     Logger::Debug("VscRobot::Init()");
-    this->_cnc_board = board;
+    // this->_cnc_board = board;
 
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     // this->__planner.__arm_solution = &arm_solution;

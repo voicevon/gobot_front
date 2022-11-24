@@ -5,7 +5,7 @@
 
 void SpringMakerRobot::Init(Board_SpringMaker* board){
     Logger::Debug("SpringMakerRobot::Init()");
-    this->_cnc_board = board;
+    // this->_cnc_board = board;
     // this->_LinkEef(board->GetEef());
 
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;

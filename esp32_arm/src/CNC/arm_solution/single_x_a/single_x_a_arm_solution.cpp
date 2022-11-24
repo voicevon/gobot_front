@@ -40,11 +40,11 @@ void SingleAxis_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic
 
 
 // void SingleAxis_ArmSolution::RunG1(Gcode* gcode) {
-bool SingleAxis_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
-	Logger::Debug("SingleAxis_ArmSolution::RunG1() is entering");
-	Logger::Print("G1 ", gcode->get_command());
-	Logger::Print("this->AXIS", this->_AXIS);
-}
+// bool SingleAxis_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
+// 	Logger::Debug("SingleAxis_ArmSolution::RunG1() is entering");
+// 	Logger::Print("G1 ", gcode->get_command());
+// 	Logger::Print("this->AXIS", this->_AXIS);
+// }
 
 void SingleAxis_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 	

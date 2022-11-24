@@ -6,7 +6,7 @@
 
 void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
     Logger::Debug("TeechWarehouse_Robot::Init()");
-    this->_cnc_board = board;
+    // this->_cnc_board = board;
     this->__board = board;
 
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;

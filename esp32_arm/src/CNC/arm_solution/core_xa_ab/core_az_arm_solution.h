@@ -16,7 +16,7 @@
 
 class CncSolution_CoreAZ: public ArmSolutionBase{
     public:
-        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
         void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
 
         bool GetCurrentPosition(FKPosition_XYZRPY* position_fk) override{return false;};  

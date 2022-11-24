@@ -9,7 +9,7 @@
 //This is a virtual class. No Constructor.
 class SingleAxis_ArmSolution: public ArmSolutionBase{
     public:
-        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
         void __ConvertSegment_ToMoveBlockQueue(LineSegment* line)override;
 
 

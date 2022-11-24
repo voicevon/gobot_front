@@ -50,10 +50,10 @@ void CircleLoop_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line
 	Queue_MoveBlock::Instance().Deposit();
 }
 
-bool CircleLoop_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
-	Logger::Debug("CircleLoop_ArmSolution::RunG1()");
-	Logger::Print("G1 ", gcode->get_command());
-	Logger::Print("this->AXIS", this->_AXIS);
+// bool CircleLoop_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
+// 	Logger::Debug("CircleLoop_ArmSolution::RunG1()");
+// 	Logger::Print("G1 ", gcode->get_command());
+// 	Logger::Print("this->AXIS", this->_AXIS);
 	// LineSegment line;
 
 	// // this->_cnc_board->EnableMotor(this->_AXIS, true);
@@ -94,7 +94,7 @@ bool CircleLoop_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
 	// 	Logger::Print("from", this->__current_fk_position.A);
 	// 	Logger::Print("to", target_ik_a.alpha);
 	// }
-}
+// }
 
 
 float CircleLoop_ArmSolution::GetDistanceToTarget_IK(){

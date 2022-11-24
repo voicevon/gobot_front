@@ -18,7 +18,7 @@ class Scara_ArmSolution: public ArmSolutionBase{
         //     return instance;
         // }
         // void RunG1(Gcode* gcode) override;
-        bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
         void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
 
 

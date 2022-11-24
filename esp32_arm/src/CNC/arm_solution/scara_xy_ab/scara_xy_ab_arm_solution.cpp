@@ -116,8 +116,8 @@ float Scara_ArmSolution::GetDistanceToTarget_IK(){
 }
 
 // void Scara_ArmSolution::RunG1(Gcode* gcode) {
-bool Scara_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
-}
+// bool Scara_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
+// }
 
 void Scara_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 	// Serial.print("\n[Debug] Scara_ArmSolution::RunG1()   ");

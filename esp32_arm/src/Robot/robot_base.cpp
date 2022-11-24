@@ -117,8 +117,8 @@ void RobotBase::SpinOnce(){
 
 }
 
-bool RobotBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
-}
+// bool RobotBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
+// }
 
 
 // Before invoking this function. Make sure:
@@ -174,10 +174,11 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('k')) new_move_block->MoveBlocks[AXIS_KAPPPA].TargetPosition = gcode->get_value('k');
 			if (gcode->has_letter('l')) new_move_block->MoveBlocks[AXIS_LAMBDA].TargetPosition = gcode->get_value('l');
 			Queue_MoveBlock::Instance().Deposit();
+			// Update Current FK position 
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);
 			_arm_solution->FK(&new_ik_position, &new_fk_position);
 			new_line->DeepCopyFromFkPosition(&new_fk_position);
-			new_line->Speed = 123;   //for next fk gcode usage.
+			new_line->Speed = 123;   //TODO: for next fk gcode usage. should be A:) default speed,  B:) follow previous speed
 			Queue_LineSegment::Instance().Deposit();
 			break;
 
