@@ -9,7 +9,6 @@ void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
     // this->_cnc_board = board;
     this->__board = board;
 
-    Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     // this->__planner.__arm_solution = &arm_solution;
     this->_arm_solution = &this->arm_solution;  
     arm_config.arm_length = 205;
@@ -22,7 +21,7 @@ void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
 
     this->_LinkMover(&mover);
     this->__Init_actuators(board);
-
+    this->_Init_Queues();
 }
 
 void TeechWarehouse_Robot::__Init_actuators(TeethWarehouse_Board* board){
@@ -48,6 +47,24 @@ void TeechWarehouse_Robot::__Init_actuators(TeethWarehouse_Board* board){
 
     __actuator_gamma.LinkServo(board->GetServo_onVertical(), true);
     __actuator_gamma.Init_FomularSlope(slope);
+}
+
+
+void TeechWarehouse_Robot::_Init_Queues(){
+    Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    // Init LineSegment queue head
+    Queue_LineSegment::Instance()._all_queue_ables = (Queue_able*) this->__all_line_segments;
+    Logger::Print("TeechWarehouse_Robot::Init", 81);
+    LineSegment* line = Queue_LineSegment::Instance().GetRoom();
+    Logger::Print("TeechWarehouse_Robot::Init", 82);
+    line->TargetPosition.X = 0;
+    line->TargetPosition.Y = 0;
+    line->TargetPosition.Z = 0;
+    line->TargetPosition.Roll = 0;
+    line->TargetPosition.Pitch = 0;
+    line->TargetPosition.Yaw = 0;
+    Queue_LineSegment::Instance().Deposit();
+    Logger::Print("TeechWarehouse_Robot::Init", 83);
 }
 
 void TeechWarehouse_Robot::StoreToCell(int row_index, int col_index){

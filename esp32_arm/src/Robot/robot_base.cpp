@@ -6,9 +6,9 @@
 
 
 void RobotBase::SpinOnce(){
-	Logger::Debug("RobotBase::SpinOnce()");
+	// Logger::Debug("RobotBase::SpinOnce()");
 	this->_mover->SpinOnce();
-	Logger::Print("RobotBase::SpinOnce() point", 2);
+	// Logger::Print("RobotBase::SpinOnce() point", 2);
 
 	switch (this->State){
 		case RobotState::G4_IS_SYNCING:

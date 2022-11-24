@@ -31,7 +31,7 @@ class RobotBase: public GcodeConsumer{
 
         void _LinkMover(CncMoverBase* mover){this->_mover=mover;};
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
-
+        virtual void _Init_Queues();
         G28_Runner* _g28_runner;
         CncMoverBase* _mover;
         ArmSolutionBase* _arm_solution;

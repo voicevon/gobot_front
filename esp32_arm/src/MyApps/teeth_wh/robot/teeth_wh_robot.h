@@ -20,6 +20,8 @@ class TeechWarehouse_Robot: public RobotBase{
 
     private:
         void __Init_actuators(TeethWarehouse_Board* board);
+        void _Init_Queues() override;
+
 
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
 	    // CncActuatorStepper __actuator_alpha;

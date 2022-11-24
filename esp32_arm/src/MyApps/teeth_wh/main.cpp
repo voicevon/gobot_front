@@ -40,9 +40,9 @@ void setup(){
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     app.LinkRobot(&robot);
 
-    // setup_mqtt_block_connect();
-    // append_mqtt_bridge("teeth_wh/wh2210", &mqtt_command_queue, &app); 
-    // setup_mqtt_on_message_receive(); 
+    setup_mqtt_block_connect();
+    append_mqtt_bridge("teeth_wh/wh2210", &mqtt_command_queue, &app); 
+    setup_mqtt_on_message_receive(); 
 
     gcode_queue.AppendGcodeCommand("G28a");
     gcode_queue.AppendGcodeCommand("G28X");
@@ -52,12 +52,12 @@ void setup(){
 
 void loop(){
 
-    Logger::Print("Arduino loop() point ", 1);
-    // app.SpinOnce();
-    Logger::Print("Aruino loop() point ", 2);
+    // Logger::Print("Arduino loop() point ", 1);
+    app.SpinOnce();
+    // Logger::Print("Aruino loop() point ", 2);
     robot.SpinOnce();
-    Logger::Print("Arduino loop() point ", 3);
-    // loop_mqtt();
+    // Logger::Print("Arduino loop() point ", 3);
+    loop_mqtt();
     // Logger::Print("Arduino loop() point ", 4);
 
 }

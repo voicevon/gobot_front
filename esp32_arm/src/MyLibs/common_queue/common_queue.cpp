@@ -68,8 +68,8 @@ Queue_able* CommonQueue::_GetRoom(){
     // Serial.println((long) this->_all_queue_ables);
     // Serial.println(&this->_all_queue_ables);
     Queue_able* head_message =(Queue_able*)(this->_all_queue_ables + previous_head * this->_sizeof_item);
-    // Serial.print("test id = \t\t");
     // Serial.println(head_message->id);
+    // Logger::Print("CommonQueue::_GetRoom() point", 99);
     return  head_message;
 }
 
