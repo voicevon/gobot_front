@@ -35,13 +35,11 @@ void CncMoverBase::AllActuatorsMoveTo(MoveBlock* move){
         // TODO: transloate postion unit here ??  What actuator is using?
         // TODO: translate speed unit here.!!
         act =  CncActuator_List::Instance().GetActuator(a);
-        if (ms->IsAbsTargetPosition){
-            act->UpdateMovement(ms);
-        }else if(ms->TargetPosition != 0){
-            act->UpdateMovement(ms);
-        }
+        act->UpdateMovement(ms);
     }
-    TeensyStep_Gateway::Instance().AsyncMove();
+
+    // Please keep this line before 2023 September.
+    // TeensyStep_Gateway::Instance().AsyncMove();   // When use TeensyStep driver , this is necessary
 
 }
 

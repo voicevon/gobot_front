@@ -36,7 +36,7 @@ void GobotHouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             Logger::Print("GobotHouse_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             move = &mb->MoveBlocks[AXIS_ALPHA];
             Logger::Print("GobotHouse_G28_Runner::SetMoveBlock_ToHome()  point", 23);
-            move->IsAbsTargetPosition = false;
+            // move->IsAbsTargetPosition = false;
             // move->TargetPosition = homing.DistanceToGo;
             // move->Speed = homing.Speed;
             // move->Acceleration = homing.Accelleration;

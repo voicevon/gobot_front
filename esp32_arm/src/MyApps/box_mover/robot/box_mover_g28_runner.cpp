@@ -37,7 +37,7 @@ void BoxMover_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             Logger::Print("BoxMover_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             move = &mb->MoveBlocks[AXIS_ALPHA];
             Logger::Print("BoxMover_G28_Runner::SetMoveBlock_ToHome()  point", 23);
-            move->IsAbsTargetPosition = false;
+            // move->IsAbsTargetPosition = false;
             move->TargetPosition = 123.1f;
             move->Speed = 0.2f;
             move->Acceleration = 0.1f;

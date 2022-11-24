@@ -70,31 +70,14 @@ void CncActuatorDcMotor::SpinOnce(){
     }
 }
 
-// float CncActuatorDcMotor::GetCurrentPosition(){
-//     // from sensor_angle to cnc_angle.
-//     // cnc_angle == sensor_angle  * (10 / 10) * (10 / 56) * (56 / 157) 
-//     //           == sensor_angle * (SENSOR_GEAR_COUNT / MOTOR_GEAR_COUNT)* (MOTOR_GEAR_COUNT / DRIVER_GEAR_COUNT) * (DRIVER_GEAR_COUNT / CHAIN_PITCH_COUNT)
-//     //           == sensor_angle * (SENSOR_GEAR_COUNT / CHAIN_PITCH_COUNT)
-
-//     return this->__sensor->GetCurrentPosition();
-// }
-
-
-
-// void CncActuatorDcMotor::SetTargetPositionTo(bool is_absolute_position, float target_position){
 void CncActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
 
     Logger::Debug("CncActuatorDcMotor::UpdateMovement()");
-    Logger::Print("is_absolute_position", move->IsAbsTargetPosition);
     Logger::Print("target_position", move->TargetPosition);
     Logger::Print("speed", move->Speed);
     
-    if (move->IsAbsTargetPosition){
-        this->_target_position = this->GetPosition_FromCncUnit(move->TargetPosition);
-    }else{
-        this->_target_position = this->GetCurrentPosition() 
-                                + this->GetPosition_FromCncUnit(move->TargetPosition);
-    }
+    this->_target_position = this->GetPosition_FromCncUnit(move->TargetPosition);
+   
 
     // TODO:  got target speed, not target_velocity. But:
     // seems, target_speed will be used directly,  target_velocicy will not be. 

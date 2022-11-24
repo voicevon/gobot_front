@@ -30,7 +30,6 @@ void MoveBlock::DeepReset_ToDefault(){
     // Logger::Debug("MoveBlock::DeepReset_ToDefault()");
     for(int a=0; a<CNC_AXIS_COUNT; a++){
         // Logger::Print("for  i", i );
-        this->MoveBlocks[a].IsAbsTargetPosition = false;
         this->MoveBlocks[a].TargetPosition = 0;
         this->MoveBlocks[a].Speed = 0;
     }

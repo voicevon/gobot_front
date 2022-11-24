@@ -77,13 +77,13 @@ void CncActuatorServo::SpinOnce(){
 void CncActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
 
     // if (is_absolute_position){
-    if (move->IsAbsTargetPosition){
+    // if (move->IsAbsTargetPosition){
         // this->_target_position = position_in_cnc_unit;
         this->_target_position = move->TargetPosition;
-    }else{
-        // this->_target_position = this->_current_position + position_in_cnc_unit;
-        this->_target_position = this->_current_position + move->TargetPosition;
-    }
+    // }else{
+    //     // this->_target_position = this->_current_position + position_in_cnc_unit;
+    //     this->_target_position = this->_current_position + move->TargetPosition;
+    // }
 
     this->__moving_direction_of_cnc = 1;
     if (this->_target_position < this->_current_position){
