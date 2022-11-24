@@ -7,7 +7,7 @@
 class AnyClass: public Queue_able{
     public:
         int id;
-        void DeepCopyTo(Queue_able* the_copy) override{
+        void DeepCopyTo(AnyClass* the_copy) {
             AnyClass* copy=(AnyClass*)(the_copy);
             copy->id = this->id;
         };
@@ -23,10 +23,10 @@ class AnyQueue: public CommonQueue{
 class IamTester{
     void test(){
         AnyQueue queue;
-
-        AnyClass xx;
         if(queue.GetFreeBuffersCount() > 5){
-            queue.AppendObject(&xx);
+            AnyClass* new_object = queue.GetRoom();
+            new_object->id = 8;
+            queue.Deposit();
         }
         if (! queue.BufferIsEmpty()){
             AnyClass* y=(AnyClass*) queue.Withdraw();

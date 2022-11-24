@@ -10,7 +10,11 @@ class LineSegment: public Queue_able{
         bool IsAbsTargetPosition;
         FKPosition_XYZRPY * TargetPosition;
         float Speed;
-        float Acceleration;
+        float Acceleration;   // Is this needed ?
+        void Calculate_distance_time(FKPosition_XYZRPY* start_position);
+
+        float vector_distance;
+        float required_time;
         void DeepCopyTo(LineSegment* the_copy);
 
     protected:

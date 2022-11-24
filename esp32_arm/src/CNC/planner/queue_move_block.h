@@ -18,7 +18,7 @@ class Queue_MoveBlock: public CommonQueue{
         MoveBlock* Withdraw(){return (MoveBlock*)this->_Withdraw(); };
         MoveBlock* GetRoom() {return (MoveBlock*)this->_GetRoom(); };
         MoveBlock* GetHead_MoveBlock(){return (MoveBlock*)this->_GetHeadObject();};
-        void DeepCopyToPosition(IKPosition_abgdekl* ik_position);
+        void DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position);
     private:
         
 

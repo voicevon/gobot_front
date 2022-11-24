@@ -10,12 +10,10 @@
 class Planner{
     public:
         bool IsPlanable();
-        void AppendLineSegment(LineSegment* line);
+        // void AppendLineSegment(LineSegment* line);
 
         ArmSolutionBase* __arm_solution;    // should be here?  Only robot can manage arm_solution, right?
-        // float current_speed;
-        // LineSegment current_line;
-        // IKPosition_abgdekl current_ik_psotion;
+        LineSegment current_line;   //shoud be here?
     private:
         void __ConvertLineSegment_AppendMoveBlocks(LineSegment* line);
 

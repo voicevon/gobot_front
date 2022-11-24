@@ -5,7 +5,7 @@
 class Queue_able{
     public:
         int id = 1234;
-        virtual void DeepCopyTo(Queue_able* the_copy);
+        // virtual void DeepCopyTo(Queue_able* the_copy);
         virtual void DeepReset_ToDefault(){};
 
 };
@@ -18,7 +18,7 @@ class CommonQueue{
         // For Producer:  Will deep copy the object to the queue.
         // return true: buffer is full , before or after appending.
         // return false:  buffer is not full, after appending.   
-        bool AppendObject(Queue_able* new_object);
+        // bool AppendObject(Queue_able* new_object);
         bool BufferIsFull();
         int GetFreeBuffersCount();
 
