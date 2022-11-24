@@ -38,7 +38,7 @@ void CircleLoop_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic
 
 void CircleLoop_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 	//TODO:  This is a virtual function.
-	FKPosition_XYZRPY* fk_pos =  line->TargetPosition;
+	FKPosition_XYZRPY* fk_pos =  &line->TargetPosition;
 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
 	// mb->MoveBlocks[line->axis].axis = line->axis;

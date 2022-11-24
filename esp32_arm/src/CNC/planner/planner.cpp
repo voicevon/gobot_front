@@ -17,12 +17,12 @@ bool Planner::IsPlanable(){
 
 
 void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* line){
-    line->Calculate_distance_time(current_line.TargetPosition);
+    line->Calculate_distance_time(&current_line.TargetPosition);
     IKPosition_abgdekl start_ik_position;
     IKPosition_abgdekl target_ik_position;
 
     Queue_MoveBlock::Instance().DeepCopyHead_ToPosition(&target_ik_position);
-    __arm_solution->IK(line->TargetPosition, &target_ik_position);
+    __arm_solution->IK(&line->TargetPosition, &target_ik_position);
     MoveBlock* mk = Queue_MoveBlock::Instance().GetRoom();
     mk->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_position.alpha;
     mk->MoveBlocks[AXIS_ALPHA].Recalulate_distance_speed_acceleration(start_ik_position.alpha, line->required_time);

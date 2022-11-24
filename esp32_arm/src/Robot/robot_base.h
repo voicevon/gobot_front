@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CNC/gcode/gcode_consumer.h"
-// #include "CNC/board/cnc_board_base.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
 #include "CNC/planner/planner.h"
@@ -29,18 +28,15 @@ class RobotBase: public GcodeConsumer{
 
     protected:
         void _running_G28();
-        // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode);
 
         void _LinkMover(CncMoverBase* mover){this->_mover=mover;};
         void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
 
-        // CncBoardBase* _cnc_board;  //!!!!
         G28_Runner* _g28_runner;
         CncMoverBase* _mover;
         ArmSolutionBase* _arm_solution;
 
     private:
-        // int test_int;
         Planner __planner;
         RobotEefBase* __eef;
         G4_Runner __g4_runner;

@@ -8,7 +8,8 @@ class LineSegment: public Queue_able{
     public:
         EnumAxis_ForwardKinematic axis;
         bool IsAbsTargetPosition;
-        FKPosition_XYZRPY * TargetPosition;
+        // FKPosition_XYZRPY* TargetPosition;
+        FKPosition_XYZRPY TargetPosition;
         float Speed;
         float Acceleration;   // Is this needed ?
         void Calculate_distance_time(FKPosition_XYZRPY* start_position);

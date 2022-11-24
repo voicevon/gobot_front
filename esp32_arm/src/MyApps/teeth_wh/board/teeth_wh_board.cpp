@@ -1,13 +1,13 @@
 #include "teeth_wh_board.h"
 
+// http://www.bachinmaker.com/wikicn/doku.php?id=bachin-e3
 
-#define PIN_HOMER_SENSOR_HALL_ALPHA 23
-#define PIN_HOMER_SENSOR_HALL_X 16
-#define PIN_VACUUME_PUMP 33
-// #define PIN_VACUUME_SUCKER 22
+#define PIN_HOMER_SENSOR_HALL_ALPHA  17 //23
+#define PIN_HOMER_SENSOR_HALL_X  4 //16
+#define PIN_VACUUME_PUMP 0 // 33
 
-#define PIN_SERVO_EEF_VERTICAL 25
-#define PIN_SERVO_VACUUM_SWITCH 15
+#define PIN_SERVO_EEF_VERTICAL 25   //FreeIO1  //25
+#define PIN_SERVO_VACUUM_SWITCH 22  //FreeIO2  //15
 
 #define PIN_HX711_CLK 22
 #define PIN_HX711_DATA 22
@@ -16,13 +16,15 @@
 #define PIN_VL6180_XXX 22
 #define PIN_VL6180_XXX 22
 
-#define PIN_ALPHA_DIR 32  //14
-#define PIN_ALPHA_STEP 26   //12
-#define PIN_BETA_DIR 14  //26
-#define PIN_BETA_STEP 12  //27
+#define PIN_ALPHA_DIR 14 //32  
+#define PIN_ALPHA_STEP 12 //26   
+#define PIN_BETA_DIR  15 //14  
+#define PIN_BETA_STEP  26 //12  
 #define PIN_STEPPER_ENABLE 13
 
-#define POSITION_TRIGGER_ALPHA  0
+
+// Index number
+#define POSITION_TRIGGER_ALPHA 0
 #define POSITION_TRIGGER_X  1
 #define SERVO_VACUUM_SUCKER  0
 #define SERVO_EEF_VERTICAL 1

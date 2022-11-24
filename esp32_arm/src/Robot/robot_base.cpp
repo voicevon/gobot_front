@@ -6,9 +6,9 @@
 
 
 void RobotBase::SpinOnce(){
-	// Logger::Debug("RobotBase::SpinOnce()");
+	Logger::Debug("RobotBase::SpinOnce()");
 	this->_mover->SpinOnce();
-	// Logger::Print("RobotBase::SpinOnce() point", 2);
+	Logger::Print("RobotBase::SpinOnce() point", 2);
 
 	switch (this->State){
 		case RobotState::G4_IS_SYNCING:
@@ -92,7 +92,6 @@ void RobotBase::SpinOnce(){
 	std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
 	Gcode gcode = Gcode(str);
-	// __gcode = gcode;
 	Logger::Debug("RobotBase::SpinOnce() has got command string ");
 	Serial.println(str.c_str());
 	// Logger::Print("RobotBase::SpinOnce() point", 6);
@@ -111,28 +110,29 @@ void RobotBase::SpinOnce(){
 			}
 			this->_gcode_queue->FetchTailMessage(true);
 		}
-		// this->__RunMcode(&gcode);
 	}
 	// Logger::Print("RobotBase::SpinOnce() point", 99);
 
 }
-
-// bool RobotBase::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
-// }
 
 
 // Before invoking this function. Make sure:
 // 1. Queue_MoveBlock is not full
 // 2. Queue_LineSegment is not full
 void RobotBase::__RunGcode(Gcode* gcode){
+	Logger::Info("RobotBase::__RunGcode()");
 	LineSegment* new_line = Queue_LineSegment::Instance().GetRoom();
+	Logger::Print("RobotBase::__RunGcode() point", 11);
 	Queue_LineSegment::Instance().GetHeadLineSegment()->DeepCopyTo(new_line);
+	Logger::Print("RobotBase::__RunGcode() point", 12);
 	// __current_line.DeepCopyTo(&new_line);
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
+	Logger::Print("RobotBase::__RunGcode() point", 13);
 	Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
+	Logger::Print("RobotBase::__RunGcode() point", 14);
 	FKPosition_XYZRPY new_fk_position;
 	IKPosition_abgdekl new_ik_position;
-	Logger::Debug("RobotBase::__RunGcode()");
+	Logger::Print("RobotBase::__RunGcode() point", 51);
 	switch (gcode->g){
 		case 28:
 			Logger::Print("RobotBase::__RunGcode() --- g28_runner->LinkGcode", 1);
@@ -152,12 +152,12 @@ void RobotBase::__RunGcode(Gcode* gcode){
 						
 		case 1:
 			// G1 Move
-			if (gcode->has_letter('X')) new_line->TargetPosition->X = gcode->get_value('X');
-			if (gcode->has_letter('Y')) new_line->TargetPosition->Y = gcode->get_value('Y');
-			if (gcode->has_letter('Z')) new_line->TargetPosition->Z = gcode->get_value('Z');
-			if (gcode->has_letter('R')) new_line->TargetPosition->Roll = gcode->get_value('R');
-			if (gcode->has_letter('P')) new_line->TargetPosition->Pitch = gcode->get_value('P');
-			if (gcode->has_letter('W')) new_line->TargetPosition->Yaw = gcode->get_value('W');
+			if (gcode->has_letter('X')) new_line->TargetPosition.X = gcode->get_value('X');
+			if (gcode->has_letter('Y')) new_line->TargetPosition.Y = gcode->get_value('Y');
+			if (gcode->has_letter('Z')) new_line->TargetPosition.Z = gcode->get_value('Z');
+			if (gcode->has_letter('R')) new_line->TargetPosition.Roll = gcode->get_value('R');
+			if (gcode->has_letter('P')) new_line->TargetPosition.Pitch = gcode->get_value('P');
+			if (gcode->has_letter('W')) new_line->TargetPosition.Yaw = gcode->get_value('W');
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			Queue_LineSegment::Instance().Deposit();
 			// this->__planner.AppendLineSegment(new_line);   //TODO:: many lines ?

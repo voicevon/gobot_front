@@ -7,20 +7,23 @@ void LineSegment::Calculate_distance_time(FKPosition_XYZRPY* start_position){
 }
 
 void LineSegment::DeepCopyTo(LineSegment* the_copy){
-    the_copy->TargetPosition->X = this->TargetPosition->X;
-    the_copy->TargetPosition->Y = this->TargetPosition->Y;
-    the_copy->TargetPosition->Z = this->TargetPosition->Z;
-    the_copy->TargetPosition->Roll = this->TargetPosition->Roll;
-    the_copy->TargetPosition->Pitch = this->TargetPosition->Pitch;
-    the_copy->TargetPosition->Yaw = this->TargetPosition->Yaw;
+    Logger::Debug("LineSegment::DeepCopyTo()");
+    auto x = the_copy->TargetPosition.X;
+    Logger::Print("LineSegment::DeepCopyTo() point", 11);
+    the_copy->TargetPosition.X = this->TargetPosition.X;
+    the_copy->TargetPosition.Y = this->TargetPosition.Y;
+    the_copy->TargetPosition.Z = this->TargetPosition.Z;
+    the_copy->TargetPosition.Roll = this->TargetPosition.Roll;
+    the_copy->TargetPosition.Pitch = this->TargetPosition.Pitch;
+    the_copy->TargetPosition.Yaw = this->TargetPosition.Yaw;
 }
 
 void LineSegment::DeepCopyFromFkPosition(FKPosition_XYZRPY* from){
-    this->TargetPosition->X = from->X;
-    this->TargetPosition->Y = from->Y;
-    this->TargetPosition->Z = from->Z;
-    this->TargetPosition->Roll = from->Roll;
-    this->TargetPosition->Pitch = from->Pitch;
-    this->TargetPosition->Yaw = from->Yaw;
+    this->TargetPosition.X = from->X;
+    this->TargetPosition.Y = from->Y;
+    this->TargetPosition.Z = from->Z;
+    this->TargetPosition.Roll = from->Roll;
+    this->TargetPosition.Pitch = from->Pitch;
+    this->TargetPosition.Yaw = from->Yaw;
 }
 

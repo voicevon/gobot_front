@@ -6,7 +6,7 @@ class GcodeSender():
     def __init__(self) -> None:
         self.target_device_id = 221109
         self.exchange_name = 'twh'
-        self.queue_name = self.exchange_name + '_' + str(self.target_device_id) + '_gcode'
+        self.queue_name = self.exchange_name + '_' + str(self.target_device_id) + '_gcode'  # twh_221109_gcode
 
     def home_alpha(self):
         g28 = 'G28a'
@@ -28,7 +28,7 @@ class GcodeSender():
         # move to top
         g1 = 'G1Z0'
         g_amq.Publish(self.exchange_name, self.queue_name, g1)
-        self.Eef_EnableSuck(True)
+        self.enable_vacuum_sucker(True)
         # arm to center position
         g1 = 'G1a0'
         g_amq.Publish(self.exchange_name, self.queue_name, g1)
@@ -45,9 +45,7 @@ class GcodeSender():
         
     def drop_to_cellbox(self, row, col):
         self.move_xy_to(row * 40, col * 40)
-        self.Eef_EnableSuck(False)
-
-
+        self.enable_vacuum_sucker(False)
 
     def move_z_top(self):
         # print('gcode ','EefMove_Z_toTop')
@@ -76,30 +74,18 @@ class GcodeSender():
             
         g_amq.Publish(self.exchange_name, self.queue_name, m1)
 
-    def PauseForWaiting(self, second: int):
+    def dwell(self, second: int):
         print('gcode ','PauseForWaiting')
-        pass
+        g4 = 'G4S' + str(second)
+        g_amq.Publish(self.exchange_name, self.queue_name, g4)
 
+    def move_arm_to_center(self):
+        # print('gcode ','MoveArmToCenter')
+        self.move_a_to(0)
 
-    def MoveArmToCenter(self):
-        print('gcode ','MoveArmToCenter')
-        g1 = "G1a0"
-        g_amq.Publish(self.exchange_name, self.queue_name, g1)
-
-
-    # def MoveTo(self, x, y):
-    #     print('gcode ','MoveTo')
-    #     g1 = "G1X" + str(x) + "Y" + str(y)
-    #     g_amq.Publish(self.exchange_name, self.queue_name, g1)
-
-    def move_x_to(self, x):
+    def move_a_to(self, angle_in_rad):
         # print('gcode ','MoveTo')
-        g1 = "G1X" + str(x) 
-        g_amq.Publish(self.exchange_name, self.queue_name, g1)
-
-    def move_a_to(self, a):
-        # print('gcode ','MoveTo')
-        g1 = "G1a" + str(a) 
+        g1 = "G6a" + str(angle_in_rad) 
         g_amq.Publish(self.exchange_name, self.queue_name, g1)
 
     def move_xy_to(self, x, y):

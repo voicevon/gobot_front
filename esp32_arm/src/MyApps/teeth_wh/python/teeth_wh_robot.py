@@ -5,7 +5,6 @@ from gcode_sender import GcodeSender
 from statemachine_item import StateMachine_Item
 import json
 # How to Convert JSON Data Into a Python Object?   https://www.youtube.com/watch?v=hJ2HfejqppE 
-# g_amq = RabbitMqAgent()
 
 
 class TeethWarehouseRobot():
@@ -167,7 +166,6 @@ class TeethWarehouseRobot():
                 # print('TeethWarehouseRobot::SpinOnce()'， self.current_state, self.current_housecell)
                 pass
 
-    
     def feed_request(self, request_str: str) -> bool:
         '''
         This should start a new thread.
@@ -185,7 +183,6 @@ class TeethWarehouseRobot():
         return self.statemachine_drive(command, self.house_cell)
 
 def test():
-    # g_amq = RabbitMqAgent()
     amq_broke_config = AMQ_BrokerConfig()
     g_amq.connect_to_broker(amq_broke_config)
 
@@ -253,7 +250,6 @@ if __name__ == '__main__':
 
     if True:
         import time
-        # g_amq = RabbitMqAgent()
         # amq_broke_config = AMQ_BrokerConfig()
         # g_amq.connect_to_broker(amq_broke_config)
         g_amq.Subscribe("twh_221109_deposit")
