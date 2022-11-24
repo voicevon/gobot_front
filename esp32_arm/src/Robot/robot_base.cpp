@@ -130,7 +130,8 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	// __current_line.DeepCopyTo(&new_line);
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
 	Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
-
+	FKPosition_XYZRPY new_fk_position;
+	IKPosition_abgdekl new_ik_position;
 	Logger::Debug("RobotBase::__RunGcode()");
 	switch (gcode->g){
 		case 28:
@@ -157,6 +158,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('R')) new_line->TargetPosition->Roll = gcode->get_value('R');
 			if (gcode->has_letter('P')) new_line->TargetPosition->Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) new_line->TargetPosition->Yaw = gcode->get_value('W');
+			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			Queue_LineSegment::Instance().Deposit();
 			// this->__planner.AppendLineSegment(new_line);   //TODO:: many lines ?
 
@@ -172,6 +174,11 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('k')) new_move_block->MoveBlocks[AXIS_KAPPPA].TargetPosition = gcode->get_value('k');
 			if (gcode->has_letter('l')) new_move_block->MoveBlocks[AXIS_LAMBDA].TargetPosition = gcode->get_value('l');
 			Queue_MoveBlock::Instance().Deposit();
+			new_move_block->DeepCopyToIkPosition(&new_ik_position);
+			_arm_solution->FK(&new_ik_position, &new_fk_position);
+			new_line->DeepCopyFromFkPosition(&new_fk_position);
+			new_line->Speed = 123;   //for next fk gcode usage.
+			Queue_LineSegment::Instance().Deposit();
 			break;
 
 		case 90:

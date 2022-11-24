@@ -16,7 +16,7 @@ class LineSegment: public Queue_able{
         float vector_distance;
         float required_time;
         void DeepCopyTo(LineSegment* the_copy);
-
+        void DeepCopyFromFkPosition(FKPosition_XYZRPY* from);
     protected:
 
 };

@@ -14,3 +14,13 @@ void LineSegment::DeepCopyTo(LineSegment* the_copy){
     the_copy->TargetPosition->Pitch = this->TargetPosition->Pitch;
     the_copy->TargetPosition->Yaw = this->TargetPosition->Yaw;
 }
+
+void LineSegment::DeepCopyFromFkPosition(FKPosition_XYZRPY* from){
+    this->TargetPosition->X = from->X;
+    this->TargetPosition->Y = from->Y;
+    this->TargetPosition->Z = from->Z;
+    this->TargetPosition->Roll = from->Roll;
+    this->TargetPosition->Pitch = from->Pitch;
+    this->TargetPosition->Yaw = from->Yaw;
+}
+
