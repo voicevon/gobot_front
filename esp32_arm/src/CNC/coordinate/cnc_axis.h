@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 
-#define CNC_AXIS_COUNT 7
+#define CNC_AXIS_COUNT 7   //TODO:  rename to  CNC_ACTUATOR_IDEAL_COUNT
 
 // enum EnumAxis{
 //     AXIS_NONE = 0,
@@ -43,7 +43,8 @@ class CncAxis{
         // static uint8_t GetIndex(EnumAxis_ForwardKinematic axis);
         // static uint8_t GetIndex(EnumAxis_Inverseinematic axis);
         // static uint8_t GetIndex(char name);
-
+        static bool IsCncAxis_FkName(char name);
+        static bool IsActuator_IkName(char name);
         static uint8_t From_Name_ToIndex(char name);
         static uint8_t From_Enum_ToIndex(EnumAxis_ForwardKinematic axis);
         static uint8_t From_Enum_ToIndex(EnumAxis_Inverseinematic axis);

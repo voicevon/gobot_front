@@ -6,13 +6,17 @@ void CoreYZ_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik
 	FKPosition_XYZRPY * fk = (FKPosition_XYZRPY*)(from_fk);
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(to_ik);
 
-	ik->alpha = (fk->Z  + fk->Y );
-	ik->beta = (fk->Z - fk->Y );
+	// ik->alpha = (fk->Z  + fk->Y );
+	ik->Actuator[AXIS_ALPHA] = (fk->Z  + fk->Y );
+	// ik->beta = (fk->Z - fk->Y );
+	ik->Actuator[AXIS_BETA] = (fk->Z - fk->Y );
 
 	Serial.print("\n[Debug] CoreYZ_ArmSolution::IK() output (alpha, beta) = ");
-	Serial.print(ik->alpha);
+	// Serial.print(ik->alpha);
+	Serial.print(ik->Actuator[AXIS_ALPHA]);
 	Serial.print(" , ");
-	Serial.print(ik->beta);
+	// Serial.print(ik->beta);
+	Serial.print(ik->Actuator[AXIS_BETA]);
 	Serial.print(")");
 }
 
@@ -21,8 +25,10 @@ void CoreYZ_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_
 	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(to_fk);
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);
 	
-	fk->Z = (ik->alpha + ik->beta) / 2;
-	fk->Y = (ik->alpha - ik->beta) / 2;
+	// fk->Z = (ik->alpha + ik->beta) / 2;
+	fk->Z = (ik->Actuator[AXIS_ALPHA] + ik->Actuator[AXIS_BETA]) / 2;
+	// fk->Y = (ik->alpha - ik->beta) / 2;
+	fk->Y = (ik->Actuator[AXIS_ALPHA] - ik->Actuator[AXIS_BETA]) / 2;
 
 	Serial.print("\n[Debug] CoreYZ_ArmSolution::FK() output (Z, Y) = ");
 	Serial.print(fk->Z);

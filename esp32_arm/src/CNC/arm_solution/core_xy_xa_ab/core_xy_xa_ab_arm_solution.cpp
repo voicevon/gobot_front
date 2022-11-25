@@ -26,8 +26,10 @@ void CncSolution_CoreXY_XA_ab::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl*
 	}
 
 
-	ik->alpha = (mk.X + mk.Angle /_config->slave_gear_circle_length ) / _config->master_slope_steps_per_mm * 2;   
-	ik->beta = (mk.X - mk.Angle / _config->slave_gear_circle_length) / _config->master_slope_steps_per_mm * 2;
+	// ik->alpha = (mk.X + mk.Angle /_config->slave_gear_circle_length ) / _config->master_slope_steps_per_mm * 2;   
+	ik->Actuator[AXIS_ALPHA] = (mk.X + mk.Angle /_config->slave_gear_circle_length ) / _config->master_slope_steps_per_mm * 2;   
+	// ik->beta = (mk.X - mk.Angle / _config->slave_gear_circle_length) / _config->master_slope_steps_per_mm * 2;
+	ik->Actuator[AXIS_BETA] = (mk.X - mk.Angle / _config->slave_gear_circle_length) / _config->master_slope_steps_per_mm * 2;
 
 	// Serial.print("\n[Debug] CncSolution_CoreXY_XA_ab::IK() output (alpha, beta) = ");
 	// Serial.print(ik->alpha);
@@ -43,8 +45,10 @@ void CncSolution_CoreXY_XA_ab::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY
 	
 	MiddleKinematic mk;
 
-	mk.X = (ik->alpha   - ik->beta) * _config->master_slope_steps_per_mm / 2;
-	mk.Angle = (ik->alpha + ik->beta) / 2 / _config->slave_gear_circle_length;  // Notice: angle has no range now.
+	// mk.X = (ik->alpha   - ik->beta) * _config->master_slope_steps_per_mm / 2;
+	mk.X = (ik->Actuator[AXIS_ALPHA]   - ik->Actuator[AXIS_BETA]) * _config->master_slope_steps_per_mm / 2;
+	// mk.Angle = (ik->alpha + ik->beta) / 2 / _config->slave_gear_circle_length;  // Notice: angle has no range now.
+	mk.Angle = (ik->Actuator[AXIS_ALPHA] + ik->Actuator[AXIS_BETA]) / 2 / _config->slave_gear_circle_length;  // Notice: angle has no range now.
 
 	fk->X = mk.X + _config->arm_length * cosf(mk.Angle);
 	fk->Y = _config->arm_length * sinf(mk.Angle);

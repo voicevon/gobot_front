@@ -1,5 +1,27 @@
 #include "cnc_axis.h"
 
+
+bool CncAxis::IsCncAxis_FkName(char name){
+    if (name == 'X') return true;
+    if (name == 'Y') return true;
+    if (name == 'Z') return true;
+    if (name == 'U') return true;
+    if (name == 'V') return true;
+    if (name == 'W') return true;
+    return false;
+}
+
+bool CncAxis::IsActuator_IkName(char name){
+    if (name == 'a') return true;
+    if (name == 'b') return true;
+    if (name == 'g') return true;
+    if (name == 'd') return true;
+    if (name == 'e') return true;
+    if (name == 'k') return true;
+    if (name == 'l') return true;
+    return false;
+}
+
 uint8_t CncAxis::From_Enum_ToIndex(EnumAxis_ForwardKinematic axis){
     return 0;
 }
@@ -21,13 +43,13 @@ EnumAxis_ForwardKinematic CncAxis::From_FkName_ToEnum(char name){
         case 'Z':
             result_axis = AXIS_Z;
             break;
-        case 'A':
+        case 'U':
             result_axis = AXIS_PITCH;
             break;
-        case 'B':
+        case 'V':
             result_axis = AXIS_ROLL;
             break;
-        case 'C':
+        case 'W':
             result_axis = AXIS_YAW;
             break;
         default:

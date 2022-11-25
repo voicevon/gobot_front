@@ -12,7 +12,8 @@ void ArmSolutionBase::ForceStopMover(){
 void ArmSolutionBase::GetRealTimePosition(FKPosition_XYZRPY* position_fk){
 	//TODO::  
 	IKPosition_abgdekl realtime_ik;
-	realtime_ik.alpha = CncActuator_List::Instance().GetActuator(AXIS_ALPHA)->GetCurrentPosition();
+	// realtime_ik.alpha = CncActuator_List::Instance().GetActuator(AXIS_ALPHA)->GetCurrentPosition();
+	realtime_ik.Actuator[AXIS_ALPHA] = CncActuator_List::Instance().GetActuator(AXIS_ALPHA)->GetCurrentPosition();
 	this->FK(&realtime_ik, position_fk);
 }
 

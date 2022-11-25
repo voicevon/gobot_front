@@ -4,9 +4,12 @@
 
 void Queue_MoveBlock::DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position){
     MoveBlock* head_mb = this->GetHead_MoveBlock();
-    ik_position->alpha = head_mb->MoveBlocks[AXIS_ALPHA].TargetPosition;
-    ik_position->beta = head_mb->MoveBlocks[AXIS_BETA].TargetPosition;
-    ik_position->gamma =head_mb->MoveBlocks[AXIS_GAMMA].TargetPosition;
+    for (int a=0; a<CNC_AXIS_COUNT; a++){
+        ik_position->Actuator[a] = head_mb->MoveBlocks[a].TargetPosition;
+    }
+    // ik_position->alpha = head_mb->MoveBlocks[AXIS_ALPHA].TargetPosition;
+    // ik_position->beta = head_mb->MoveBlocks[AXIS_BETA].TargetPosition;
+    // ik_position->gamma =head_mb->MoveBlocks[AXIS_GAMMA].TargetPosition;
 }
 
 MoveBlock* Queue_MoveBlock::GetRoom(){

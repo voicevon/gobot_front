@@ -42,6 +42,8 @@ void G28_Runner::LinkGcode(Gcode* gcode){
     if (gcode->has_letter('b')) axis_name = 'b'; 
     if (gcode->has_letter('g')) axis_name = 'g'; 
     if (gcode->has_letter('d')) axis_name = 'd'; 
+    if (gcode->has_letter('k')) axis_name = 'k'; 
+    if (gcode->has_letter('l')) axis_name = 'l'; 
     Serial.print(char(axis_name));
     Logger::Print("\t\thome_axis", char(axis_name));
     this->__axis_name = axis_name;
@@ -51,9 +53,7 @@ void G28_Runner::LinkGcode(Gcode* gcode){
 // This move_block will set all the involved actuators to move to home direction.
 void G28_Runner::Start(){ 
     Logger::Debug("G28_Runner::Start()");
-
-    Logger::Print("G28_Runner::Start() point", 1);
-
+    
 	//Put a move_block into the queue.  Mover will let the actuator to turn...
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
     // Logger::Print("G28_Runner::Start() point", 11);

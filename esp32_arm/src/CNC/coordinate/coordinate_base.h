@@ -15,11 +15,12 @@ class FKPosition_XYZRPY{
 
 class IKPosition_abgdekl{
     public:
-        float alpha;
-        float beta;
-        float gamma;
-        float delta;
-        float eppsilon;  
-        float kappa; 
-        float lambda;
+        float Actuator[7];
+        // float alpha;
+        // float beta;
+        // float gamma;
+        // float delta;
+        // float eppsilon;  
+        // float kappa; 
+        // float lambda;
 };

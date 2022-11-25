@@ -39,6 +39,19 @@ void RobotBase::SpinOnce(){
 			break;
 		case RobotState::G28_IS_RUNNING:
 			if(this->_g28_runner->IsDone()){
+				IKPosition_abgdekl homed_ik_position;
+				FKPosition_XYZRPY homed_fk_position;
+				this->__planner.arm_solution->GetRealTimePosition(&homed_fk_position);
+				char homing_axis_name = this->_g28_runner->GetHomingAxisName();
+				if (CncAxis::IsCncAxis_FkName(homing_axis_name)){
+
+					this->__planner.arm_solution->SetCurrentPosition(&homed_fk_position);
+				}else if (CncAxis::IsActuator_IkName(homing_axis_name)){
+					this->__planner.arm_solution->IK(&homed_fk_position, &homed_ik_position);
+					// homed_ik_position.alpha = this->_g28_runner->GetTriggerPosition();
+					homed_ik_position.Actuator[AXIS_ALPHA] = this->_g28_runner->GetTriggerPosition();
+					this->__planner.arm_solution->SetCurrentPosition(&homed_ik_position);
+				}
 				this->State = RobotState::IDLE_OR_ASYNC;
 				Logger::Print("RobotBase::SpinOnce() point G28_Runner is over ", 23);
 			}

@@ -31,7 +31,8 @@ void FiveBars_ArmSolution::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to
 	float alpha_eef = acosf((fk->X + this->_config->LINK_0) / r1);
 
 	float alpha_link = acosf((this->_config->LINK_A * this->_config->LINK_A + rr1 - this->_config->LINK_B * this->_config->LINK_B) / ( this->_config->LINK_A * r1 * 2));
-	ik->alpha = alpha_eef + alpha_link;
+	// ik->alpha = alpha_eef + alpha_link;
+	ik->Actuator[AXIS_ALPHA] = alpha_eef + alpha_link;
 
 	bool output_debug = false;
 	if (output_debug){
@@ -50,14 +51,16 @@ void FiveBars_ArmSolution::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to
 		Serial.print(" angle link in degree = ");
 		Serial.print(alpha_link * RAD_TO_DEG);
 		Serial.print(" alpha motor angle in degree = ");
-		Serial.print(ik->alpha * RAD_TO_DEG);
+		// Serial.print(ik->alpha * RAD_TO_DEG);
+		Serial.print(ik->Actuator[AXIS_ALPHA] * RAD_TO_DEG);
 	}
 
 	float rr2 = (fk->X - this->_config->LINK_0)* (fk->X - this->_config->LINK_0) + fk->Y * fk->Y;
 	float r2 = sqrtf(rr2);
 	float beta_eef = acosf((fk->X - this->_config->LINK_0) / r2 );
 	float beta_link = acosf((this->_config->LINK_A * this->_config->LINK_A + rr2 - this->_config->LINK_B *this->_config-> LINK_B) / (this->_config->LINK_A * r2 * 2));
-	ik->beta = beta_eef - beta_link;
+	// ik->beta = beta_eef - beta_link;
+	ik->Actuator[AXIS_BETA] = beta_eef - beta_link;
 
 	if (output_debug){
 		Serial.print("\nLink0= ");
@@ -75,7 +78,8 @@ void FiveBars_ArmSolution::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to
 		Serial.print(" angle link in degree = ");
 		Serial.print(beta_link * RAD_TO_DEG);
 		Serial.print(" beta motor angle in degree = ");
-		Serial.print(ik->beta * RAD_TO_DEG);
+		// Serial.print(ik->beta * RAD_TO_DEG);
+		Serial.print(ik->Actuator[AXIS_BETA] * RAD_TO_DEG);
 	}
 
   	Logger::Debug("GobotHouseHardware::IK() ");
@@ -85,9 +89,11 @@ void FiveBars_ArmSolution::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to
 	Serial.print(fk->Y);
 	Serial.println(")");
 	Serial.print("kinematic angle degree of origin (ik->alpha, ik->beta)=( ");
-	Serial.print(ik->alpha * RAD_TO_DEG);
+	// Serial.print(ik->alpha * RAD_TO_DEG);
+	Serial.print(ik->Actuator[AXIS_ALPHA] * RAD_TO_DEG);
 	Serial.print(" , ");
-	Serial.print(ik->beta * RAD_TO_DEG);
+	// Serial.print(ik->beta * RAD_TO_DEG);
+	Serial.print(ik->Actuator[AXIS_BETA] * RAD_TO_DEG);
 	Serial.println(")");
 	
 }
@@ -96,10 +102,14 @@ void FiveBars_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* to
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);
 	FKPosition_XYZRPY * fk = (FKPosition_XYZRPY*)(to_fk);
 
-	float elbow_alpha_x = this->_config->LINK_A * cosf(ik->alpha) - this->_config->LINK_0;   // TODO:: whan alpha > 180 degree.
-	float elbow_alpha_y = this->_config->LINK_A * sinf(ik->alpha);   // TODO:: When alpha > 90 degree
-	float elbow_beta_x = this->_config->LINK_A * cosf(ik->beta) + this->_config->LINK_0;   //TODO: when alpha < 0 degree. 
-	float elbow_beta_y = this->_config->LINK_A * sinf(ik->beta);     //TODO: When beta < -90 degree.
+	// float elbow_alpha_x = this->_config->LINK_A * cosf(ik->alpha) - this->_config->LINK_0;   // TODO:: whan alpha > 180 degree.
+	float elbow_alpha_x = this->_config->LINK_A * cosf(ik->Actuator[AXIS_ALPHA]) - this->_config->LINK_0;   // TODO:: whan alpha > 180 degree.
+	// float elbow_alpha_y = this->_config->LINK_A * sinf(ik->alpha);   // TODO:: When alpha > 90 degree
+	float elbow_alpha_y = this->_config->LINK_A * sinf(ik->Actuator[AXIS_ALPHA]);   // TODO:: When alpha > 90 degree
+	// float elbow_beta_x = this->_config->LINK_A * cosf(ik->beta) + this->_config->LINK_0;   //TODO: when alpha < 0 degree. 
+	float elbow_beta_x = this->_config->LINK_A * cosf(ik->Actuator[AXIS_BETA]) + this->_config->LINK_0;   //TODO: when alpha < 0 degree. 
+	// float elbow_beta_y = this->_config->LINK_A * sinf(ik->beta);     //TODO: When beta < -90 degree.
+	float elbow_beta_y = this->_config->LINK_A * sinf(ik->Actuator[AXIS_BETA]);     //TODO: When beta < -90 degree.
 	
 	bool output_debug = false;
 	if (output_debug){
@@ -159,9 +169,11 @@ void FiveBars_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* to
 	fk->Y = center_y + lenth_from_center_to_eef * sinf(rotated_angle);
 
 	Serial.print("\n\n[Debug] FiveBars_ArmSolution::FK()  in degree from (alpha,beta) =(");
-	Serial.print(ik->alpha * RAD_TO_DEG);
+	// Serial.print(ik->alpha * RAD_TO_DEG);
+	Serial.print(ik->Actuator[AXIS_ALPHA] * RAD_TO_DEG);
 	Serial.print(" , ");
-	Serial.print(ik->beta * RAD_TO_DEG);
+	// Serial.print(ik->beta * RAD_TO_DEG);
+	Serial.print(ik->Actuator[AXIS_BETA] * RAD_TO_DEG);
 	Serial.print(") \n     Forward Kinematic result:  (X,Y)= (");
 	Serial.print(fk->X);
 	Serial.print(" , ");
