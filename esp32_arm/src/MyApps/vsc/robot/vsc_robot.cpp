@@ -69,9 +69,9 @@ void VscRobot::__Init_actuators(Vsc_Board* board){
     this->__actuator_alpha.MyName = 'A';
     
     ActuatorEncoder_Calculator helper;
-    helper._motor_gear_pitch_in_mm = 12.7;
-    helper._slave_pulley_teeth_count = 368;
-    float slope = helper.GetActuatorToCncFormular_Slope_raw_per_rad();
+    helper.motor_gear_pitch_in_mm = 12.7;
+    helper.slave_pulley_teeth_count = 368;
+    float slope = helper.Get_Formular_Slope_raw_per_rad();
     __actuator_alpha.Init_FomularSlope(slope);
 
 
@@ -100,7 +100,7 @@ void VscRobot::__Init_pids(){
     // // this->_micro_steps_on_stepper_driver = 16;
     // // this->_motor_gear_teeth_count = 10;
     // // this->_slave_pulley_teeth_count = 90;
-    // // this->_motor_step_angle_in_degree = 0.7003891050583658;
+    // // this->motor_step_angle_in_degree = 0.7003891050583658;
 
     //     Logger::Info("Vsc_ArmSoution::Init() angle sensor and motor");
 //     board->GetAngleSensor()->SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)

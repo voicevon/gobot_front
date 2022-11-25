@@ -37,9 +37,13 @@ void TeechWarehouse_Robot::__Init_actuators(TeethWarehouse_Board* board){
     this->__actuator_beta.MyName = 'g';
     
     ActuatorStepper_Calculator helper;
-    helper._motor_gear_pitch_in_mm = 12.7;
-    helper._slave_pulley_teeth_count = 368;
-    float slope = helper.Get_steps_per_mm();
+    helper.motor_step_angle_in_degree = 1.8;
+    helper.motor_driver_micro_steps = 16;
+    helper.motor_gear_teeth_count = 15;
+    helper.motor_gear_pitch_in_mm = 3;
+
+    helper.slave_pulley_teeth_count = 15;
+    float slope = helper.Get_Formular_Slope_raw_per_mm();
     __actuator_alpha.Init_FomularSlope(slope);
     __actuator_alpha.LinkStepper(board->GetStepper_Alpha(), slope);
 
@@ -55,9 +59,7 @@ void TeechWarehouse_Robot::_Init_Queues(){
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     // Init LineSegment queue head
     Queue_LineSegment::Instance()._all_queue_ables = (Queue_able*) this->__all_line_segments;
-    Logger::Print("TeechWarehouse_Robot::Init", 81);
     LineSegment* line = Queue_LineSegment::Instance().GetRoom();
-    Logger::Print("TeechWarehouse_Robot::Init", 82);
     line->TargetPosition.X = 0;
     line->TargetPosition.Y = 0;
     line->TargetPosition.Z = 0;

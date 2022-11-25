@@ -36,11 +36,11 @@ void GobotMainRobot::__InitActuator(GobotMain_Board* board){
     this->__actuator_beta.LinkStepper(board->GetStepper(AXIS_BETA), 1.0f);
     
     ActuatorStepper_Calculator helper;
-    helper._micro_steps_on_stepper_driver = 16;
-    helper._motor_gear_teeth_count = 10;
-    helper._slave_pulley_teeth_count = 90;
+    helper.motor_driver_micro_steps = 16;
+    helper.motor_gear_teeth_count = 10;
+    helper.slave_pulley_teeth_count = 90;
 
-    float slope = helper.GetActuatorToCncFormular_Slope_raw_per_mm();
+    float slope = helper.Get_Formular_Slope_raw_per_mm();
     this->__actuator_alpha.Init_FomularSlope(slope);
     this->__actuator_beta.Init_FomularSlope(slope);
 
@@ -53,5 +53,5 @@ void GobotMainRobot::__InitActuator(GobotMain_Board* board){
     // // this->_micro_steps_on_stepper_driver = 16;
     // // this->_motor_gear_teeth_count = 10;
     // // this->_slave_pulley_teeth_count = 90;
-    // // this->_motor_step_angle_in_degree = 0.7003891050583658;
+    // // this->motor_step_angle_in_degree = 0.7003891050583658;
 }
