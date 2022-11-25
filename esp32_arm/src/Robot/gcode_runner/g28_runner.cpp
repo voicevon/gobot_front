@@ -10,11 +10,12 @@ bool G28_Runner::IsDone(){
     PositionTrigger* trigger;
     for(int i=0; i<HomeTrigger_Array::Instance().GetItemsCount(); i++){
         trigger = HomeTrigger_Array::Instance().GetPositionTrigger(i);
-        if (trigger->AxisName == this->__axis_name){
+        if (trigger->AxisName == this->_axis_name){
             if(trigger->IsTriggered()){
                 Logger::Info("G28_Runner::IsDone()  homer is triggered...");
-            	__mover->AllActuatorsStop();
-                this->__last_homed_position = trigger->GetTriggerPosition();
+            	_mover->AllActuatorsStop();
+                this->SetHomedPosition(trigger->GetTriggerPosition());
+                // this->__last_homed_position = trigger->GetTriggerPosition();
 	            return true;
             }
         }
@@ -46,21 +47,21 @@ void G28_Runner::LinkGcode(Gcode* gcode){
     if (gcode->has_letter('l')) axis_name = 'l'; 
     Serial.print(char(axis_name));
     Logger::Print("\t\thome_axis", char(axis_name));
-    this->__axis_name = axis_name;
+    this->_axis_name = axis_name;
 }
 
 // Put a move_block to the queue.
 // This move_block will set all the involved actuators to move to home direction.
 void G28_Runner::Start(){ 
     Logger::Debug("G28_Runner::Start()");
-    
+
 	//Put a move_block into the queue.  Mover will let the actuator to turn...
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
     // Logger::Print("G28_Runner::Start() point", 11);
-    this->SetMoveBlock_ToHome(__axis_name, mb);
+    this->SetMoveBlock_ToHome(_axis_name, mb);
 	Queue_MoveBlock::Instance().Deposit();
     // Logger::Print("G28_Runner::Start() point", 4);
-	this->__mover->SpinOnce();
+	this->_mover->SpinOnce();
     // Logger::Print("G28_Runner::Start() point", 99);
 
 }

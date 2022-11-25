@@ -3,7 +3,7 @@
 
 void Vsc_G28_Runner::Init(CncMover* mover){
     Logger::Info("Vsc_G28_Runner::Init() Hoiming_config");
-    this->__mover = mover;
+    this->_mover = mover;
 
     Logger::Info("Vsc_G28_Runner::Init() Alpha axis home_triggers");
     PositionTrigger* trigger;

@@ -6,7 +6,7 @@
 void MoveBlock::DeepCopyTo(MoveBlock* copy){
     MoveBlock* cp = (MoveBlock*) copy;
     // TODO: any risk of mem_copy ?
-    for(int a=0; a<CNC_AXIS_COUNT; a++){
+    for(int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
         // cp->MoveBlocks[a].axis = this->MoveBlocks[a].axis;
         cp->MoveBlocks[a].Acceleration = this->MoveBlocks[a].Acceleration;
         cp->MoveBlocks[a].Speed = this->MoveBlocks[a].Speed;
@@ -16,7 +16,7 @@ void MoveBlock::DeepCopyTo(MoveBlock* copy){
 }
 
 void MoveBlock::DeepCopyToIkPosition(IKPosition_abgdekl* to_position){
-    for (int a=0; a<CNC_AXIS_COUNT; a++){
+    for (int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
         to_position->Actuator[a] =this->MoveBlocks[a].TargetPosition;
     }
     // to_position->alpha =  this->MoveBlocks[AXIS_ALPHA].TargetPosition;
@@ -31,7 +31,7 @@ void MoveBlock::DeepCopyToIkPosition(IKPosition_abgdekl* to_position){
 
 void MoveBlock::DeepReset_ToDefault(){
     // Logger::Debug("MoveBlock::DeepReset_ToDefault()");
-    for(int a=0; a<CNC_AXIS_COUNT; a++){
+    for(int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
         // Logger::Print("for  i", i );
         this->MoveBlocks[a].TargetPosition = 0;
         this->MoveBlocks[a].Speed = 0;

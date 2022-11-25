@@ -7,7 +7,7 @@
 
 class MoveBlock: public Queue_able{
     public:
-        MoveBlock_SingleActuator MoveBlocks[CNC_AXIS_COUNT];
+        MoveBlock_SingleActuator MoveBlocks[CNC_ACTUATORS_IDEAL_COUNT];
         // void DeepCopyTo(Queue_able* copy) override;
         void DeepCopyTo(MoveBlock* copy);
         void DeepCopyToIkPosition(IKPosition_abgdekl* to_position);

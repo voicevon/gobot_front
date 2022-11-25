@@ -3,7 +3,7 @@
 
 void GobotMain_G28_Runner::Init(CncMover* mover){
     Logger::Info("GobotMain_G28_Runner::Init() Hoiming_config");
-    this->__mover = mover;
+    this->_mover = mover;
 
     // homing.IsDirectionToMax = true;
     // homing.Speed = TWO_PI / 60;  // 60 seconds Per loop.

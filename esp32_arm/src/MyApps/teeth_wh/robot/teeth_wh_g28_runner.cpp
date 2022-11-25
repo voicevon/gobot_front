@@ -3,7 +3,7 @@
 
 void TeethWarehouse_G28_Runner::Init(CncMover* mover){
     Logger::Info("TeethWarehouse_G28_Runner::Init() Hoiming_config");
-    this->__mover = mover;
+    this->_mover = mover;
 
     Logger::Info("TeethWarehouse_G28_Runner::Init() Alpha axis home_triggers");
     PositionTrigger* trigger;
@@ -65,3 +65,6 @@ void TeethWarehouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
 }
 
 
+void TeethWarehouse_G28_Runner::SetHomedPosition(float triggered_position){
+
+}

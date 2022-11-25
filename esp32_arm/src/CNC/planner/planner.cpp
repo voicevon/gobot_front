@@ -25,7 +25,7 @@ void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* line){
     Queue_MoveBlock::Instance().DeepCopyHead_ToPosition(&target_ik_position);
     arm_solution->IK(&line->TargetPosition, &target_ik_position);
     MoveBlock* mk = Queue_MoveBlock::Instance().GetRoom();
-    for(int a=0; a<CNC_AXIS_COUNT; a++){
+    for(int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
         mk->MoveBlocks[a].TargetPosition = target_ik_position.Actuator[a];
     }
     // mk->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_position.alpha;

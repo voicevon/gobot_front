@@ -4,7 +4,7 @@
 
 void Queue_MoveBlock::DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position){
     MoveBlock* head_mb = this->GetHead_MoveBlock();
-    for (int a=0; a<CNC_AXIS_COUNT; a++){
+    for (int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
         ik_position->Actuator[a] = head_mb->MoveBlocks[a].TargetPosition;
     }
     // ik_position->alpha = head_mb->MoveBlocks[AXIS_ALPHA].TargetPosition;
