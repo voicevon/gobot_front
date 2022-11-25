@@ -7,13 +7,14 @@
 
 
 class Planner{
-    public:
-        bool IsPlanable();
-        // void AppendLineSegment(LineSegment* line);
 
-        ArmSolutionBase* arm_solution;    // should be here?  Only robot can manage arm_solution, right?
-        LineSegment current_line;   //shoud be here?
+    public:
+
+        ArmSolutionBase* arm_solution; 
+        // LineSegment current_line;   //shoud be here?
+        bool IsPlanable();
         void ConvertLineSegment_AppendMoveBlocks(LineSegment* line);
+    
     private:
 
 

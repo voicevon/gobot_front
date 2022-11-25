@@ -33,7 +33,7 @@ class TeechWarehouse_Robot: public RobotBase{
         CncActuatorFastStepper __actuator_beta;
         CncActuatorServo __actuator_gamma;
         
-        CncMoverBase __mover;
+        CncMover __mover;
         CncSolution_CoreXY_XA_ab __arm_solution;
         TeethWarehouse_G28_Runner __g28_runner;
 

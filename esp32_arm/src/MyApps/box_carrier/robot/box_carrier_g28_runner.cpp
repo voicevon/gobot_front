@@ -1,7 +1,7 @@
 #include "box_carrier_g28_runner.h"
 
 
-void BoxCarrier_G28_Runner::Init( CncMoverBase* mover){
+void BoxCarrier_G28_Runner::Init( CncMover* mover){
     Logger::Info("BoxCarrier_G28_Runner::Init() Hoiming_config");
     this->__mover = mover;
 

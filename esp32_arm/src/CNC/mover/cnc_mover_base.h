@@ -12,7 +12,7 @@
 
 
 
-class CncMoverBase{
+class CncMover{
     public:
         // To do some move
         void SpinOnce();
@@ -23,16 +23,14 @@ class CncMoverBase{
 
         // To get status or position
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name);  // TODO: return  all current position.
-        void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
-        // virtual bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name);
+        // void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
         bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name);
-        // virtual bool HasArrivedTargetPosition();
         bool HasArrivedTargetPosition();
         float GetAbsDistanceToTarget_InCncUnit();
 
 
     protected:
-        uint8_t _moving_actuator_flags;
+        // uint8_t _moving_actuator_flags;
         float _small_distance_for_arriving_target_position = 0.1;   //Todo: configable
     
     private:

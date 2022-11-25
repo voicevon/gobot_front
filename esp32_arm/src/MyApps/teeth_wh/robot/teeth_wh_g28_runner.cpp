@@ -1,7 +1,7 @@
 #include "teeth_wh_g28_runner.h"
 
 
-void TeethWarehouse_G28_Runner::Init(CncMoverBase* mover){
+void TeethWarehouse_G28_Runner::Init(CncMover* mover){
     Logger::Info("TeethWarehouse_G28_Runner::Init() Hoiming_config");
     this->__mover = mover;
 

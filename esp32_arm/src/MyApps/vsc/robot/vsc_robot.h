@@ -32,7 +32,7 @@ class VscRobot: public RobotBase{
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
 	    CncActuatorDcMotor __actuator_alpha = CncActuatorDcMotor(); 
         
-        CncMoverBase mover;
+        CncMover mover;
         CircleLoop_ArmSolution arm_solution;
         Vsc_G28_Runner g28_runner;
 

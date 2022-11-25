@@ -1,7 +1,7 @@
 #include "gobot_house_g28_runner.h"
 
 
-void GobotHouse_G28_Runner::Init(CncMoverBase* mover){
+void GobotHouse_G28_Runner::Init(CncMover* mover){
     Logger::Info("GobotHouse_G28_Runner::Init() Hoiming_config");
     this->__mover = mover;
 

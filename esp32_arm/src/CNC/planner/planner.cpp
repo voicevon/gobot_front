@@ -17,7 +17,8 @@ bool Planner::IsPlanable(){
 
 
 void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* line){
-    line->Calculate_distance_time(&current_line.TargetPosition);
+    LineSegment* current_line = Queue_LineSegment::Instance().GetHeadLineSegment();
+    line->Calculate_distance_time(&current_line->TargetPosition);
     IKPosition_abgdekl start_ik_position;
     IKPosition_abgdekl target_ik_position;
 

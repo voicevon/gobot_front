@@ -6,7 +6,7 @@
 
 class G28_Runner: public SyncGcodeRunnerBase{
     public:
-        virtual void Init(CncMoverBase* mover);
+        virtual void Init(CncMover* mover);
     
         void Start() override ;
         bool IsDone() override;
@@ -15,7 +15,7 @@ class G28_Runner: public SyncGcodeRunnerBase{
 
     protected:
         virtual void SetMoveBlock_ToHome(char axis_name, MoveBlock* mb);
-        CncMoverBase* __mover;   //Only for stop()
+        CncMover* __mover;   //Only for stop()
         
     private:
         char __axis_name;

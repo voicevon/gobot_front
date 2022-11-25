@@ -29,23 +29,18 @@ class RobotBase: public GcodeConsumer{
     protected:
         void _running_G28();
 
-        void _LinkMover(CncMoverBase* mover){this->_mover=mover;};
-        void _LinkEef(RobotEefBase* eef){this->__eef=eef;};
+        void _LinkMover(CncMover* mover){this->_mover=mover;};
         void _LinkArmSolution(ArmSolutionBase* arm_solution){__planner.arm_solution=arm_solution;};
         virtual void _InitStatic_Queues();
         virtual void _InitStatic_PositionTriggers();
         virtual void _Init_ArmSolution();
         G28_Runner* _g28_runner;
-        CncMoverBase* _mover;
-        // ArmSolutionBase* _arm_solution;
+        CncMover* _mover;
 
     private:
         Planner __planner;
-        RobotEefBase* __eef;
         G4_Runner __g4_runner;
         void __RunGcode(Gcode* gcode);
-        LineSegment __current_line;
-        float current_speed;
         
 
         /* Just for fun, don't remove below comment.

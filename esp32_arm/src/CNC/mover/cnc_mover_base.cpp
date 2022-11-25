@@ -1,8 +1,8 @@
 #include "cnc_mover_base.h"
 #include "teensy_step_gateway.h"
 
-void CncMoverBase::SpinOnce(){
-    // Logger::Debug("CncMoverBase::SpinOnce()");
+void CncMover::SpinOnce(){
+    // Logger::Debug("CncMover::SpinOnce()");
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
         // Logger::Print("axis=", a);
         // Logger::Print("axis name=", CncActuator_List::Instance().GetActuator(a)->MyName);
@@ -10,24 +10,24 @@ void CncMoverBase::SpinOnce(){
 
     }
 
-    // Logger::Print("CncMoverBase::SpinOnce() point", 1);
+    // Logger::Print("CncMover::SpinOnce() point", 1);
     if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
-        // Logger::Print("CncMoverBase::SpinOnce() Queue_MoveBlock::  Buffer is Empty", 91);
+        // Logger::Print("CncMover::SpinOnce() Queue_MoveBlock::  Buffer is Empty", 91);
         return;
     }
     
-    Logger::Info("CncMoverBase::SpinOnce() withdraw queue_move_block");
+    Logger::Info("CncMover::SpinOnce() withdraw queue_move_block");
     MoveBlock* mb = Queue_MoveBlock::Instance().Withdraw();
     Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
     Logger::Print("MoveBlocks[AXIS_ALPHA].Speed", mb->MoveBlocks[AXIS_ALPHA].Speed);
     Logger::Print("MoveBlocks[AXIS_ALPHA].Acceleration", mb->MoveBlocks[AXIS_ALPHA].Acceleration);
 
     this->AllActuatorsMoveTo(mb);
-    Logger::Print("CncMoverBase::SpinOnce() point", 99);
+    Logger::Print("CncMover::SpinOnce() point", 99);
 
 }
 
-void CncMoverBase::AllActuatorsMoveTo(MoveBlock* move){
+void CncMover::AllActuatorsMoveTo(MoveBlock* move){
     CncActuatorBase* act;
     MoveBlock_SingleActuator * ms;
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
@@ -43,25 +43,25 @@ void CncMoverBase::AllActuatorsMoveTo(MoveBlock* move){
 
 }
 
-void CncMoverBase::AllActuatorsStop(){
+void CncMover::AllActuatorsStop(){
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
         CncActuator_List::Instance().GetActuator(a)->ForceStop();
     }
 }
 
 
-void CncMoverBase::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position){
+void CncMover::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position){
     CncActuator_List::Instance().GetActuator(actuator_name)->ReInit_FormularOffset(as_current_position);
 }
 
-float CncMoverBase::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name){
-    Logger::Debug("CncMoverBase::GetSingleActuatorCurrentPosition_InCncUnit() ");
+float CncMover::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name){
+    Logger::Debug("CncMover::GetSingleActuatorCurrentPosition_InCncUnit() ");
     return CncActuator_List::Instance().GetActuator(actuator_name)->GetCurrentPosition();
 }
 
 
 //TODO:  be a virtual method.
-float CncMoverBase::GetAbsDistanceToTarget_InCncUnit(){
+float CncMover::GetAbsDistanceToTarget_InCncUnit(){
     return 0.0f;
     // float alpha_distance = 0;
     // if((this->_moving_actuator_flags & 0x01) > 0){
