@@ -6,15 +6,15 @@ void TeethWarehouse_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solut
     this->_mover = mover;
     this->_arm_solution = arm_solution;
 
-    Logger::Info("TeethWarehouse_G28_Runner::Init() Alpha axis home_triggers");
-    PositionTrigger* trigger;
-    trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    trigger->AxisName = 'X';
-    trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
+    // Logger::Info("TeethWarehouse_G28_Runner::Init() Alpha axis home_triggers");
+    // PositionTrigger* trigger;
+    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
+    // trigger->AxisName = 'X';
+    // trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
 
-    trigger = HomeTrigger_Array::Instance().GetPositionTrigger(1);
-    trigger->AxisName='a';
-    trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
+    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(1);
+    // trigger->AxisName='a';
+    // trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
 }
 
 void TeethWarehouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
@@ -66,7 +66,7 @@ void TeethWarehouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
 }
 
 
-void TeethWarehouse_G28_Runner::SetHomedPosition(float triggered_position){
+void TeethWarehouse_G28_Runner::SetHomedPosition(PositionTrigger* firer){
     if (this->_axis_name =='a'){
         // do nothing
     }else if (this->_axis_name == 'X'){

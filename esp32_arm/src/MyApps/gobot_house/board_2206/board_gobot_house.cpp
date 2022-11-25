@@ -32,8 +32,8 @@ void Board_GobotHouse_2206::Init(bool is_on_reset){
     this->eef.Init();
     this->eef.Run(EEF_CODE_UNLOAD);
 
-    __all_position_triggers[0].Init(PIN_HOME_ALHPA_2109, LOW);
-    __all_position_triggers[1].Init(PIN_HOME_BETA_2109, LOW);
+    __all_position_triggers[0].Init('a',PIN_HOME_ALHPA_2109, LOW);
+    __all_position_triggers[1].Init('b',PIN_HOME_BETA_2109, LOW);
     HomeTrigger_Array::Instance().Init(__all_position_triggers,2);
     // this->mover_StepperServo.LinkStepControl(this->__stepControl);
     // this->mover_StepperServo.LinkStepper_asAlpha(&this->__actuator_alpha);

@@ -5,11 +5,11 @@ void SpringMaker_G28_Runner::Init( CncMover* mover, ArmSolutionBase* arm_solutio
     Logger::Info("SpringMaker_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
 
-    Logger::Info("SpringMaker_G28_Runner::Init() Alpha axis home_triggers");
-    PositionTrigger* trigger;
-    trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    trigger->AxisName = 'X';
-    trigger->SetTriggerPosition(TWO_PI* 1 / 386);       
+    // Logger::Info("SpringMaker_G28_Runner::Init() Alpha axis home_triggers");
+    // PositionTrigger* trigger;
+    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
+    // trigger->AxisName = 'X';
+    // trigger->SetTriggerPosition(TWO_PI* 1 / 386);       
 
 }
 

@@ -6,7 +6,7 @@ void Board_SpringMaker::Init(bool is_on_reset){
     Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
     
     HomeTrigger_Array::Instance().Init(_all_position_triggers, POSITION_TRIGGERS_COUNT);
-    _all_position_triggers[0].Init(PIN_HOME_ALPHA_2201, LOW);
+    _all_position_triggers[0].Init('U',PIN_HOME_ALPHA_2201, LOW);
 }
 
 // PositionTrigger* Board_SpringMaker::GetPositionTrigger(uint8_t index){

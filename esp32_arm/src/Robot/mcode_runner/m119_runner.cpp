@@ -7,7 +7,7 @@
 bool M119_Runner_TestPositionTriggers::StartToRun(Gcode* gcode){
     Logger::Debug("M119_Runner::Run()");
     static uint32_t last_flags;
-    HomeTrigger_Array::Instance().GetFiredPosition('X');
+    // HomeTrigger_Array::Instance().GetFiredPosition('X');
     uint32_t flags = HomeTrigger_Array::Instance().GetStateBitsFlag();
     if (flags != last_flags){
         Serial.print(flags,BIN);

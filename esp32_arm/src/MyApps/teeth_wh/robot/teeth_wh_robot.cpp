@@ -56,13 +56,13 @@ void TeechWarehouse_Robot::_Init_ArmSolution(){
 }
 
 void TeechWarehouse_Robot::_InitStatic_PositionTriggers(){
-    PositionTrigger* trigger_X = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    trigger_X->AxisName = 'X';
-    trigger_X->SetTriggerPosition(1234);
+    // PositionTrigger* trigger_X = HomeTrigger_Array::Instance().GetPositionTrigger(0);
+    // trigger_X->AxisName = 'X';
+    // trigger_X->SetTriggerPosition(1234);
 
-    PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(1);
-    trigger_a->AxisName = 'a';
-    trigger_a->SetTriggerPosition(DEG_TO_RAD * 90);
+    // PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(1);
+    // trigger_a->AxisName = 'a';
+    // trigger_a->SetTriggerPosition(DEG_TO_RAD * 90);
 }
 
 void TeechWarehouse_Robot::_InitStatic_Queues(){

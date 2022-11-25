@@ -10,17 +10,17 @@ void GobotHouse_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution)
     // homing.Accelleration = 0.1;
     // homing.DistanceToGo = TWO_PI;
     
-    Logger::Info("GobotHouse_G28_Runner::Init() Alpha axis home_triggers");
-    PositionTrigger* trigger;
-    // trigger = board->GetPositionTrigger(0);
-    trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
-    // __homer.AppendPositionTrigger(trigger);
+    // Logger::Info("GobotHouse_G28_Runner::Init() Alpha axis home_triggers");
+    // PositionTrigger* trigger;
+    // // trigger = board->GetPositionTrigger(0);
+    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
+    // trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
+    // // __homer.AppendPositionTrigger(trigger);
 
-    trigger = HomeTrigger_Array::Instance().GetPositionTrigger(1);
-    // trigger = board->GetPositionTrigger(1);
-    trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
-    // __homer.AppendPositionTrigger(trigger);
+    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(1);
+    // // trigger = board->GetPositionTrigger(1);
+    // trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
+    // // __homer.AppendPositionTrigger(trigger);
 }
 
 

@@ -12,8 +12,8 @@ void Board2205Cnc::Init(Adafruit_MCP23X17* mcp_23018){
     // this->stepper_driver_alpha.Init_mcp23018_gpio(mcp_23018, MC23018_PIN_ALPHA_DIR_2205);
     // this->stepper_driver_beta.Init_mcp23018_gpio(mcp_23018, MC23018_PIN_BETA_DIR_2205);
 
-    this->__all_position_triggers[0].Init(mcp_23018, MC23018_PIN_HOME_Y_2205,LOW);  // for home-Y
-    this->__all_position_triggers[1].Init(mcp_23018, MC23018_PIN_HOME_Z_2205, LOW);  // for home Z
+    this->__all_position_triggers[0].Init('Y',mcp_23018, MC23018_PIN_HOME_Y_2205,LOW);  // for home-Y
+    this->__all_position_triggers[1].Init('Z',mcp_23018, MC23018_PIN_HOME_Z_2205, LOW);  // for home Z
     HomeTrigger_Array::Instance().Init(__all_position_triggers, 2);
 }
 

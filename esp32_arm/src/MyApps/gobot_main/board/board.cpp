@@ -38,8 +38,8 @@ void GobotMain_Board::Init(bool is_on_reset){
     // this->__actuator_beta.LinkStepper(this->__beta_stepper);
     this->__eef.Init();
 
-    __all_position_triggers[0].Init(PIN_HOME_ALPHA_2201, LOW);
-    __all_position_triggers[1].Init(PIN_HOME_BETA_2201, LOW);
+    __all_position_triggers[0].Init('a',PIN_HOME_ALPHA_2201, LOW);
+    __all_position_triggers[1].Init('b',PIN_HOME_BETA_2201, LOW);
     HomeTrigger_Array::Instance().Init(__all_position_triggers,2);
 
     this->RepportRamUsage();
