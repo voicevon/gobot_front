@@ -14,7 +14,7 @@ void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
     this->_LinkMover(&__mover);
     
     this->_g28_runner = &this->__g28_runner;
-    __g28_runner.Init(&__mover);
+    __g28_runner.Init(&__mover, &__arm_solution);
 
 }
 

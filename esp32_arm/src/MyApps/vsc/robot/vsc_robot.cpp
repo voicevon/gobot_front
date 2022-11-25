@@ -11,7 +11,7 @@ void VscRobot::Init(Vsc_Board* board){
     // this->_arm_solution = &this->arm_solution;  
 
     this->_g28_runner = &this->g28_runner;
-    g28_runner.Init(&mover);
+    g28_runner.Init(&mover, &arm_solution);
 
     this->_LinkMover(&mover);
     this->_InitStatic_PositionTriggers();

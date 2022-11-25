@@ -13,7 +13,7 @@ void SpringMakerRobot::Init(Board_SpringMaker* board){
     // this->_arm_solution = &this->arm_solution;  
 
     this->_g28_runner = &this->g28_runner;
-    g28_runner.Init(&mover);
+    g28_runner.Init(&mover, &arm_solution);
 
     Logger::Info("SpringMakerRobot::Init() Actuators.");
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);

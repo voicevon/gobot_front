@@ -1,7 +1,7 @@
 #include "vsc_g28_runner.h"
 
 
-void Vsc_G28_Runner::Init(CncMover* mover){
+void Vsc_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
     Logger::Info("Vsc_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
 

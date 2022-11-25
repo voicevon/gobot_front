@@ -1,9 +1,10 @@
 #include "teeth_wh_g28_runner.h"
 
 
-void TeethWarehouse_G28_Runner::Init(CncMover* mover){
+void TeethWarehouse_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
     Logger::Info("TeethWarehouse_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
+    this->_arm_solution = arm_solution;
 
     Logger::Info("TeethWarehouse_G28_Runner::Init() Alpha axis home_triggers");
     PositionTrigger* trigger;
@@ -66,5 +67,20 @@ void TeethWarehouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
 
 
 void TeethWarehouse_G28_Runner::SetHomedPosition(float triggered_position){
-
+    if (this->_axis_name =='a'){
+        // do nothing
+    }else if (this->_axis_name == 'X'){
+        // must home('a') first, then home('X')
+        IKPosition_abgdekl ik;
+        ik.Actuator[AXIS_ALPHA] = 123;
+        ik.Actuator[AXIS_BETA] = 123;
+        this->_arm_solution->SetCurrentPosition(&ik);
+        
+        bool debug = true;
+        if (debug){
+            FKPosition_XYZRPY fk;
+            this->_arm_solution->FK(&ik, &fk);
+            fk.PrintOut("TeethWarehouse_G28_Runner::SetHomedPosition() 'X'");
+        }
+    }
 }
