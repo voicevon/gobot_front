@@ -2,8 +2,9 @@
 
 #include "Robot/robot_base.h"
 #include "MyApps/teeth_wh/board/teeth_wh_board.h"
-#include "CNC/arm_solution/core_xy_xa_ab/core_xy_xa_ab_arm_solution.h"
-#include "teeth_wh_g28_runner.h"
+// #include "CNC/arm_solution/core_xy_xa_ab/core_xy_xa_ab_arm_solution.h"
+#include "twh_arm_solution.h"
+#include "twh_g28_runner.h"
 #include "MyApps/teeth_wh/board/eef/teeth_wh_eef.h"
 
 #define ROWS_COUNT 20
@@ -34,8 +35,8 @@ class TeechWarehouse_Robot: public RobotBase{
         CncActuatorServo __actuator_gamma;
         
         CncMover __mover;
-        CncSolution_CoreXY_XA_ab __arm_solution;
-        TeethWarehouse_G28_Runner __g28_runner;
+        Twh_ArmSolution __arm_solution;
+        Twh_G28_Runner __g28_runner;
 
         Core_XY_XA_ab_config __arm_config;
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 

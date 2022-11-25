@@ -1,12 +1,12 @@
-#include "teeth_wh_g28_runner.h"
+#include "twh_g28_runner.h"
 
 
-void TeethWarehouse_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
-    Logger::Info("TeethWarehouse_G28_Runner::Init() Hoiming_config");
+void Twh_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
+    Logger::Info("Twh_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
     this->_arm_solution = arm_solution;
 
-    // Logger::Info("TeethWarehouse_G28_Runner::Init() Alpha axis home_triggers");
+    // Logger::Info("Twh_G28_Runner::Init() Alpha axis home_triggers");
     // PositionTrigger* trigger;
     // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
     // trigger->AxisName = 'X';
@@ -17,8 +17,8 @@ void TeethWarehouse_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solut
     // trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
 }
 
-void TeethWarehouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
-    Logger::Debug("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()" );
+void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
+    Logger::Debug("Twh_G28_Runner::SetMoveBlock_ToHome()" );
     Serial.print(char(axis));
     Logger::Print("\taxis", char(axis));
     MoveBlock_SingleActuator* alpha;
@@ -27,8 +27,8 @@ void TeethWarehouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
 
     switch (axis){
         case 'X':
-            Logger::Print("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()  point", 21);
-            // Logger::Print("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()  point", 22);
+            Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 21);
+            // Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha = &mb->MoveBlocks[AXIS_ALPHA];
             // alpha->IsAbsTargetPosition = false;
             alpha->TargetPosition = 99999;
@@ -42,9 +42,9 @@ void TeethWarehouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             break;
 
         case 'a':
-            Logger::Print("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()  point", 31);
+            Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 31);
             mb->DeepReset_ToDefault();
-            // Logger::Print("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()  point", 22);
+            // Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha = &mb->MoveBlocks[AXIS_ALPHA];
             // alpha->IsAbsTargetPosition = false;
             alpha->TargetPosition = -99999;
@@ -58,15 +58,15 @@ void TeethWarehouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             break;
 
         default:
-            Logger::Error(" TeethWarehouse_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
+            Logger::Error(" Twh_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
             Logger::Halt("AcDc::TNT");
             break;
     }
-    // Logger::Print("TeethWarehouse_G28_Runner::SetMoveBlock_ToHome()  point", 99);
+    // Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 99);
 }
 
 
-void TeethWarehouse_G28_Runner::SetHomedPosition(PositionTrigger* firer){
+void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
     if (this->_axis_name =='a'){
         // do nothing
     }else if (this->_axis_name == 'X'){
@@ -80,7 +80,7 @@ void TeethWarehouse_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         if (debug){
             FKPosition_XYZRPY fk;
             this->_arm_solution->FK(&ik, &fk);
-            fk.PrintOut("TeethWarehouse_G28_Runner::SetHomedPosition() 'X'");
+            fk.PrintOut("Twh_G28_Runner::SetHomedPosition() 'X'");
         }
     }
 }
