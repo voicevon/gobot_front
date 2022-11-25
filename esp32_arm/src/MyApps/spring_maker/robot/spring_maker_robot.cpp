@@ -28,9 +28,22 @@ void SpringMakerRobot::Init(Board_SpringMaker* board){
     helper.motor_driver_micro_steps = 10;
     helper.motor_gear_teeth_count = 12;
     helper.slave_pulley_teeth_count = 33;
-    float slope = helper.Get_Formular_Slope_raw_per_mm();
+    float slope = helper.Get_Formular_Slope_steps_per_mm();
     this->__actuator_alpha.Init_FomularSlope(slope);
     
     this->_LinkMover(&mover);
+
+}
+
+void SpringMakerRobot::_InitStatic_Queues() {
+
+}
+
+void SpringMakerRobot::_InitStatic_PositionTriggers() {
+
+}
+
+void SpringMakerRobot::_Init_ArmSolution() {
+
 
 }

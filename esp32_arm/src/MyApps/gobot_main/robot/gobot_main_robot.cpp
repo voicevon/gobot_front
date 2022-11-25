@@ -40,7 +40,7 @@ void GobotMainRobot::__InitActuator(GobotMain_Board* board){
     helper.motor_gear_teeth_count = 10;
     helper.slave_pulley_teeth_count = 90;
 
-    float slope = helper.Get_Formular_Slope_raw_per_mm();
+    float slope = helper.Get_Formular_Slope_steps_per_mm();
     this->__actuator_alpha.Init_FomularSlope(slope);
     this->__actuator_beta.Init_FomularSlope(slope);
 

@@ -14,6 +14,9 @@ void VscRobot::Init(Vsc_Board* board){
     g28_runner.Init(&mover);
 
     this->_LinkMover(&mover);
+    this->_InitStatic_PositionTriggers();
+    this->_InitStatic_Queues();
+    this->_Init_ArmSolution();
     this->__Init_actuators(board);
     this->__Init_pids();
     this->__Init_layer_position();
@@ -42,8 +45,6 @@ void VscRobot::__Init_layer_position(){
 
     Serial.print("\n[Info] VscApp::VscApp() is constructed");
 }
-
-
 
 void VscRobot::MoveTo(int layer_index, int cell_index){
     // String m123 = "M123C";
@@ -76,6 +77,30 @@ void VscRobot::__Init_actuators(Vsc_Board* board){
 
 
 }
+
+void VscRobot::_InitStatic_Queues() {
+
+}
+void VscRobot::_InitStatic_PositionTriggers() {
+    PositionTrigger* trigger_X = HomeTrigger_Array::Instance().GetPositionTrigger(0);
+    trigger_X->AxisName = 'a';
+    trigger_X->SetTriggerPosition(DEG_TO_RAD * 180);
+
+    PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(1);
+    trigger_a->AxisName = 'a';
+    trigger_a->SetTriggerPosition(DEG_TO_RAD * 90);
+
+    PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(2);
+    trigger_a->AxisName = 'a';
+    trigger_a->SetTriggerPosition(DEG_TO_RAD * 270);
+
+    PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(3);
+    trigger_a->AxisName = 'a';
+    trigger_a->SetTriggerPosition(DEG_TO_RAD * 0);
+}
+void VscRobot::_Init_ArmSolution() {
+
+}
 void VscRobot::__Init_pids(){
 
     Logger::Info("VscRobot::Init() Pid controllers.");
@@ -94,20 +119,4 @@ void VscRobot::__Init_pids(){
     __speed_pid.I = 100.0f;
     __speed_pid.D = 0.0f;
 
-
-
-
-    // // this->_micro_steps_on_stepper_driver = 16;
-    // // this->_motor_gear_teeth_count = 10;
-    // // this->_slave_pulley_teeth_count = 90;
-    // // this->motor_step_angle_in_degree = 0.7003891050583658;
-
-    //     Logger::Info("Vsc_ArmSoution::Init() angle sensor and motor");
-//     board->GetAngleSensor()->SetupFormular(0.027173913f, 0.0f);   // slope = (10 / 56) * (56/368)
-//     board->EnableMotor(AXIS_ALPHA, false);
-
-//     Logger::Info("Vsc_ArmSoution::Init() Kinematic_config");
-//     CircleLoop_KinematicConfig* kinematic = &this->_kinematic_config;
-//     kinematic->CircleLength = 12.7 * 368;
-//     kinematic->PitchLength = 12.7;  
 }

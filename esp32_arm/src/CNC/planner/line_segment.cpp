@@ -26,3 +26,12 @@ void LineSegment::DeepCopyFromFkPosition(FKPosition_XYZRPY* from){
     this->TargetPosition.Yaw = from->Yaw;
 }
 
+void LineSegment::PrintOUt(){
+    Logger::Debug("LineSegment::PrintOUt()");
+    Logger::Print("TargetPosition.X",this->TargetPosition.X);
+    Logger::Print("TargetPosition.Y",this->TargetPosition.Y);
+    Logger::Print("TargetPosition.Z",this->TargetPosition.Z);
+    Logger::Print("TargetPosition.Roll",this->TargetPosition.Roll);
+    Logger::Print("TargetPosition.Pitch",this->TargetPosition.Pitch);
+    Logger::Print("TargetPosition.Yaw",this->TargetPosition.Yaw);
+}

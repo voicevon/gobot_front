@@ -4,12 +4,12 @@
 #include "MyBoards/const.h"
 #include "MyLibs/basic/logger.h"
 
-class ActuatorEncoder_Calculator: public ActuatorToCncFormular_CalculatorBase{
+class ActuatorEncoder_Calculator{
     public: 
 
         //Slope unit is:  steps_per_mm, or  steps_per_rad.
-        float Get_Formular_Slope_raw_per_mm() override; 
-        float Get_Formular_Slope_raw_per_rad() override;
+        float Get_Formular_Slope_raw_per_mm() ; 
+        float Get_Formular_Slope_raw_per_rad() ;
 
         // float Get_steps_per_mm();
 

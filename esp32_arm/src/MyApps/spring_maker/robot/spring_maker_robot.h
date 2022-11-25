@@ -16,7 +16,9 @@ class SpringMakerRobot: public RobotBase{
 
     private:
         // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
-
+        void _InitStatic_Queues() override;
+        void _InitStatic_PositionTriggers() override;
+        void _Init_ArmSolution() override;
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
 	    CncActuatorStepper __actuator_alpha = CncActuatorStepper(); 
         // Mover_SingleAxis mover;

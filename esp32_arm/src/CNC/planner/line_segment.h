@@ -7,7 +7,7 @@
 class LineSegment: public Queue_able{
     public:
         EnumAxis_ForwardKinematic axis;
-        bool IsAbsTargetPosition;
+        // bool IsAbsTargetPosition;
         // FKPosition_XYZRPY* TargetPosition;
         FKPosition_XYZRPY TargetPosition;
         float Speed;
@@ -18,6 +18,8 @@ class LineSegment: public Queue_able{
         float required_time;
         void DeepCopyTo(LineSegment* the_copy);
         void DeepCopyFromFkPosition(FKPosition_XYZRPY* from);
+
+        void PrintOUt();
     protected:
 
 };

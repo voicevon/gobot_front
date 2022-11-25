@@ -57,13 +57,13 @@ void CncActuatorDcMotor::SpinOnce(){
     this->__encoder->update();
     this->_current_position = this->__encoder->getSensorAngle();
 
-    if (this->__is_moving){
+    if (this->_is_moving){
         float abs_distance_to_target = abs (this->_target_position-this->_current_position);
         if(abs_distance_to_target < INERTIA_DISTANCE){
             // The wheel will continue to run a short time after stoping, because the inertia.
             // TDDO:  How to deal with negtive distance?
             this->__h_bridge->Stop();
-            this->__is_moving= false;
+            this->_is_moving= false;
         } else{
             this->__SpinOnce_FollowVelocity(this->__target_velocity);
         } 
@@ -90,7 +90,7 @@ void CncActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
     if (this->_target_position < this->GetCurrentPosition()){
         this->__target_velocity = - move->Speed;
     }
-    this->__is_moving = true;
+    this->_is_moving = true;
 
     Logger::Print("-------------------------------------",0);
     Logger::Print("Current_position",this->GetCurrentPosition());
@@ -102,7 +102,7 @@ void CncActuatorDcMotor::ForceStop(){
     //* Only G28 is using this.
     Logger::Debug("CncActuatorDcMotor::ForceStop() is entering...");
     this->__h_bridge->Stop();
-    this->__is_moving = false;
+    this->_is_moving = false;
 }
 
 

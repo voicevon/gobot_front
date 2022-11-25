@@ -31,7 +31,7 @@ class CncActuatorBase: public ListItem{
         void LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint);
         virtual void UpdateMovement(MoveBlock_SingleActuator* movement);
         virtual void ForceStop();   //Only G28 is using this.
-        bool IsMoving(){return this->__is_moving;};
+        bool IsMoving(){return this->_is_moving;};
 
         float GetCurrentPosition(){return this->_current_position;};
 
@@ -45,7 +45,7 @@ class CncActuatorBase: public ListItem{
     protected:
         float _target_position;   // is always an absolute position
         float _current_position;
-        bool __is_moving = false;
+        bool _is_moving = false;
 
         ActuatorRangeConstraintBase* _range_constraint;
         bool _is_range_constraint = false;

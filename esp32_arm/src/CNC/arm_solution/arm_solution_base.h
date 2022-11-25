@@ -32,7 +32,7 @@ class ArmSolutionBase{
     protected:
 
 
-        bool is_absolute_position = true;
+        bool is_absolute_position = true;   //TODO:  remove this ?
 
     private:
 

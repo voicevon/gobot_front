@@ -6,21 +6,24 @@
 #include "teeth_wh_g28_runner.h"
 #include "MyApps/teeth_wh/board/eef/teeth_wh_eef.h"
 
-
 #define ROWS_COUNT 20
 #define COLS_COUNT 8
-#define CNC_PLANNER_BLOCK_COUNT 88
+
+#define QUEUE_LINE_SEGMENT_COUNT 5
+#define QUEUE_PLANNER_BLOCK_COUNT 88
+
 #define CNC_ACTUATORS_COUNT 3
+
 
 class TeechWarehouse_Robot: public RobotBase{
     public:
         void Init(TeethWarehouse_Board* board);
-        void StoreToCell(int row_index, int col_index);
-        void RetrieveFromCell(int row_index, int col_index);
 
     private:
-        void __Init_actuators(TeethWarehouse_Board* board);
-        void _Init_Queues() override;
+        void __InitStatic_Actuators(TeethWarehouse_Board* board);
+        void _InitStatic_Queues() override;
+        void _InitStatic_PositionTriggers() override;
+        void _Init_ArmSolution() override;
 
 
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
@@ -30,28 +33,15 @@ class TeechWarehouse_Robot: public RobotBase{
         CncActuatorFastStepper __actuator_beta;
         CncActuatorServo __actuator_gamma;
         
-        CncMoverBase mover;
-        CncSolution_CoreXY_XA_ab arm_solution;
-        TeethWarehouse_G28_Runner g28_runner;
+        CncMoverBase __mover;
+        CncSolution_CoreXY_XA_ab __arm_solution;
+        TeethWarehouse_G28_Runner __g28_runner;
 
-        Core_XY_XA_ab_config arm_config;
-        MoveBlock __all_move_blocks[CNC_PLANNER_BLOCK_COUNT]; 
-        LineSegment __all_line_segments[88];
-
-        TeethWarehouse_RobotEef __eef;
-
-        TeethWarehouse_Board* __board;
-        //Eef actions:
-        void __MoveToCell(int row_index, int col_index);
-        void __EefMoveToCollectionBox();
-        void __EefMoveToTop();
-
-        void __TurnOn_VacuumePump(bool is_turn_on){this->__board->EnableVacuumPump(is_turn_on);};
+        Core_XY_XA_ab_config __arm_config;
+        MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
+        LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
 
         float __GetWeight();
         void __GetDistanceToTeeth();
-
-        void __Open_BottomCover(bool is_open);
-
 
 };

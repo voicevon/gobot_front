@@ -10,8 +10,6 @@ class ArrayItem{
 
 class ArrayBase{  // HomerCollects? HomerDiction? 
     public:
-
-        // ArrayItem* GetItem(int index);
         int GetItemsCount(){return this->__items_count;};
     protected:
         ArrayItem* _GetItem(int index){return (ArrayItem*)(&__all_items[0] + __item_size*index);};

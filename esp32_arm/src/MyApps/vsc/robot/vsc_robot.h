@@ -19,8 +19,11 @@ class VscRobot: public RobotBase{
     private:
         // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
         void __Init_pids();
-        void __Init_actuators(Vsc_Board* board);
         void __Init_layer_position();
+        void __Init_actuators(Vsc_Board* board);
+        void _InitStatic_Queues() override;
+        void _InitStatic_PositionTriggers() override;
+        void _Init_ArmSolution() override;
 
         PidControllers_Listable* __all_pids[PID_CONTROLLERS_COUNT];
         PidControllers_Listable __speed_pid = PidControllers_Listable(1.0f, 1.0f, 1.0f, 10.0f, 255.0f);

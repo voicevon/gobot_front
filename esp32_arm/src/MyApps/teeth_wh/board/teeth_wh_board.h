@@ -21,12 +21,6 @@ class TeethWarehouse_Board: public CncBoardBase{
         // TeethWarehouse_Board(){};
         void Init(bool is_on_reset) override;
         
-
-        // For being an actuator and its components.
-
-        // For being a CNC machine.
-        // RobotEefBase* GetEef() override {return &this->__eef;};
-
         // We do nothing, just override the methods.
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override {};
         void EnableVacuumPump(bool enable_it);
@@ -68,10 +62,6 @@ class TeethWarehouse_Board: public CncBoardBase{
         HX711 __hx711;
         // VL6180x sensor(VL6180X_ADDRESS);
         VL6180X sensor;
-        // Servo __servo_air_switch;
-        // Servo __servo_air_pen;
-
-        // CncActuatorServo servo_air_pen;
         
 
 
