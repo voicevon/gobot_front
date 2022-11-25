@@ -8,16 +8,16 @@
 class CircleLoop_ArmSolution: public ArmSolutionBase{
     public:
         // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
-        void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
+        // void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
 
 
-        bool GetCurrentPosition(FKPosition_XYZRPY* position_fk) override{return false;};  
-        float GetDistanceToTarget_FK() override{return 0.0;};
-        float GetDistanceToTarget_IK() override;
+        // bool GetCurrentPosition(FKPosition_XYZRPY* position_fk) override{return false;};  
+        // float GetDistanceToTarget_FK() override{return 0.0;};
+        // float GetDistanceToTarget_IK() override;
 
     protected:
         CircleLoop_KinematicConfig _kinematic_config;  
-        void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
+        // void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
         EnumAxis_ForwardKinematic _AXIS;   // TODO: doubel check this var.
 
     private:

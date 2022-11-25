@@ -2,23 +2,23 @@
 #include "five_bars_arm_solution.h"
 #include<Arduino.h>
 
-void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
-		// The homed postion is a Inverse kinematic position for alpha, beta.
-		IKPosition_abgdekl ik_position;
-		// if (this->_config->IsInverseKinematicHoimg){
-			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
-			// ik_position.alpha =  this->_config->Homed_position_alpha_in_rad;
-			// ik_position.beta =  this->_config->Homed_position_beta_in_rad;
-			// ik_position.alpha = this->_config->GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig()->LastHomedPosition;
-			// ik_position.beta = this->_config->GetAxisHomers()->GetAxisHomer(AXIS_BETA)->GetHomingConfig()-> LastHomedPosition;
-			// ik_position.alpha = this->_homer_diction.GetAxisHomer(AXIS_ALPHA)->GetFiredPosition();
-			// ik_position.beta = this->_homer_diction.GetAxisHomer(AXIS_)->GetFiredPosition();
-			this->FK(&ik_position, &this->__current_fk_position);
-			// verify FK by IK()
-			IKPosition_abgdekl verifying_ik;
-			Serial.println("\n\n  [Info] Please verify IK->FK->IK   ");
-			this->IK(&this->__current_fk_position, &verifying_ik);
-}
+// void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
+// 		// The homed postion is a Inverse kinematic position for alpha, beta.
+// 		IKPosition_abgdekl ik_position;
+// 		// if (this->_config->IsInverseKinematicHoimg){
+// 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
+// 			// ik_position.alpha =  this->_config->Homed_position_alpha_in_rad;
+// 			// ik_position.beta =  this->_config->Homed_position_beta_in_rad;
+// 			// ik_position.alpha = this->_config->GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig()->LastHomedPosition;
+// 			// ik_position.beta = this->_config->GetAxisHomers()->GetAxisHomer(AXIS_BETA)->GetHomingConfig()-> LastHomedPosition;
+// 			// ik_position.alpha = this->_homer_diction.GetAxisHomer(AXIS_ALPHA)->GetFiredPosition();
+// 			// ik_position.beta = this->_homer_diction.GetAxisHomer(AXIS_)->GetFiredPosition();
+// 			this->FK(&ik_position, &this->__current_fk_position);
+// 			// verify FK by IK()
+// 			IKPosition_abgdekl verifying_ik;
+// 			Serial.println("\n\n  [Info] Please verify IK->FK->IK   ");
+// 			this->IK(&this->__current_fk_position, &verifying_ik);
+// }
 
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
 void FiveBars_ArmSolution::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik){
@@ -239,11 +239,9 @@ void FiveBars_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* to
 // 	}  
 // }
 
-void FiveBars_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 
-}
 
-float FiveBars_ArmSolution::GetDistanceToTarget_IK(){
-	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
-}
+// float FiveBars_ArmSolution::GetDistanceToTarget_IK(){
+// 	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
+// }
 

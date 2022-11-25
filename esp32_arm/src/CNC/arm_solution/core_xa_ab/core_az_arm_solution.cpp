@@ -44,20 +44,20 @@ void CncSolution_CoreAZ::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_
 }
 
 
-void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
-//Set current position to HomePosition
-		IKPosition_abgdekl ik_position;
-			// We know homed position via FK
-			Logger::Info("CncSolution_CoreAZ::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
-			this->__current_fk_position.Z = this->_config->Homed_position_z;
-			this->__current_fk_position.Roll = this->_config->Homed_position_w;
-			this->IK(&this->__current_fk_position, &ik_position);
-			// verify IK by FK()
-			FKPosition_XYZRPY verifying_fk;
-			Serial.print("\n   [Info] Please verify: FK->IK->FK  ");
-			this->FK(&ik_position, &verifying_fk);
+// void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
+// //Set current position to HomePosition
+// 		IKPosition_abgdekl ik_position;
+// 			// We know homed position via FK
+// 			Logger::Info("CncSolution_CoreAZ::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
+// 			this->__current_fk_position.Z = this->_config->Homed_position_z;
+// 			this->__current_fk_position.Roll = this->_config->Homed_position_w;
+// 			this->IK(&this->__current_fk_position, &ik_position);
+// 			// verify IK by FK()
+// 			FKPosition_XYZRPY verifying_fk;
+// 			Serial.print("\n   [Info] Please verify: FK->IK->FK  ");
+// 			this->FK(&ik_position, &verifying_fk);
 		
-}
+// }
 
 
 
@@ -137,8 +137,8 @@ void CncSolution_CoreAZ::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic hom
 
 
 
-float CncSolution_CoreAZ::GetDistanceToTarget_IK(){
-	// return this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA) + this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
-}
+// float CncSolution_CoreAZ::GetDistanceToTarget_IK(){
+// 	// return this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA) + this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
+// }
 
 

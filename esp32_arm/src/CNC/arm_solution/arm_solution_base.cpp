@@ -3,6 +3,13 @@
 #include "HardwareSerial.h"
 #include "MyLibs/message_queue.h"
 
+void ArmSolutionBase::GetRealTimePosition(FKPosition_XYZRPY* position_fk){
+	//TODO::  
+	IKPosition_abgdekl realtime_ik;
+	realtime_ik.alpha = CncActuator_List::Instance().GetActuator(AXIS_ALPHA)->GetCurrentPosition();
+	this->FK(&realtime_ik, position_fk);
+}
+
 
 void ArmSolutionBase::ForceStopMover(){
 	// this->_mover_base->AllActuatorsStop();
@@ -10,3 +17,10 @@ void ArmSolutionBase::ForceStopMover(){
 	//TODO:    How to do it without mover_base??
 }
 
+void ArmSolutionBase::SetCurrentPosition(FKPosition_XYZRPY* fk_position){
+
+}
+
+void ArmSolutionBase::SetCurrentPosition(IKPosition_abgdekl* ik_position){
+
+}

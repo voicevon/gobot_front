@@ -89,139 +89,55 @@ void Scara_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_f
 	}
 }
 
-bool Scara_ArmSolution::GetCurrentPosition(FKPosition_XYZRPY* position_fk){
-	position_fk = & this->__current_fk_position;
-	return true;
-}
-
-
-float Scara_ArmSolution::GetDistanceToTarget_FK(){
-	// because in this arm solution,  FK is equal to IK. so never mind the logic error.
-	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
-	// TODO: Rewrite this function.
-	IKPosition_abgdekl current_ik;
-	// current_ik.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
-	// current_ik.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
-	FK(&current_ik, &this->__current_fk_position);
-	
-	float dx = this->__current_fk_position.X - this->__next_fk_position.X;
-	float dy = this->__current_fk_position.Y - this->__next_fk_position.Y;
-	float distance = sqrt(dx * dx + dy * dy);
-	return distance;
-}
-
-float Scara_ArmSolution::GetDistanceToTarget_IK(){
-	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
-	return 0;
-}
-
-// void Scara_ArmSolution::RunG1(Gcode* gcode) {
-// bool Scara_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
+// bool Scara_ArmSolution::GetCurrentPosition(FKPosition_XYZRPY* position_fk){
+// 	position_fk = & this->__current_fk_position;
+// 	return true;
 // }
 
-void Scara_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
-	// Serial.print("\n[Debug] Scara_ArmSolution::RunG1()   ");
-	// Serial.print(gcode->get_command());
 
-	// Assume G1-code mostly wants to update actuator directly, no need to do IK.
-	FKPosition_XYZRPY target_fk_xy;
-	IKPosition_abgdekl target_ik_ab;
-	// Queue_LineSegment* line = this->__queue_move_block->GetHeadMoveblock();
-	// Queue_LineSegment* line = Queue_LineSegment::Instance().GetHeadMoveblock();
-
-
-	bool do_ik = false;
-	uint8_t motor_flags = 0;
-
-	// if (gcode->has_letter(AXIS_ALPHA)){
-	// 	target_ik_ab.alpha = DEG_TO_RAD * gcode->get_value(AXIS_ALPHA) ;
-	// 	motor_flags += 0x01;
-	// }
-	// if (gcode->has_letter(AXIS_BETA)) {
-	// 	target_ik_ab.beta = DEG_TO_RAD * gcode->get_value(AXIS_BETA);
-	// 	motor_flags += 0x02;
-	// }
-	// // If need IK, do it now.
-	// if (gcode->has_letter('X')) {
-	// 	do_ik = true;
-	// 	target_fk_xy.X = gcode->get_value('X');
-	// 	motor_flags = 0x03;
-	// }
-	// if (gcode->has_letter('Y')){
-	// 	do_ik = true;
-	// 	target_fk_xy.Y = gcode->get_value('Y');
-	// 	motor_flags = 0x03;
-	// }
-	// this->_mover_base->SetMovingFlags(motor_flags);
-
+// float Scara_ArmSolution::GetDistanceToTarget_FK(){
+// 	// because in this arm solution,  FK is equal to IK. so never mind the logic error.
+// 	// BUT: PLEASE DO NOT REFERENCE THESE CODES!!!
+// 	// TODO: Rewrite this function.
+// 	IKPosition_abgdekl current_ik;
+// 	// current_ik.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
+// 	// current_ik.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
+// 	FK(&current_ik, &this->__current_fk_position);
 	
-	// if (do_ik) IK(&target_fk_xy, &target_ik_ab);
-	// mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
-	// mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
-	
-	// bool debug = false;
-	// if (gcode->has_letter('F')){
-	// 	uint speed = gcode->get_value('F');
-	// 	// this->_mover_base->SetEefSpeed(DEG_TO_RAD * speed);
-	// 	mb->MoveBlocks[AXIS_ALPHA].Speed = speed;
-	// 	mb->MoveBlocks[AXIS_BETA].Speed = speed;
-	// 	debug = false;
-	// 	if (debug){
-	// 		Serial.print("[Debug] Scara_ArmSolution::RunG1()  motor_flags= ");
-	// 		Serial.print(motor_flags);
-	// 		Serial.print("  speed= ");
-	// 		Serial.println(RAD_TO_DEG * speed);
-	// 	}
-	// }
-	// TODO:  Enable motor via mover->enable_motor(axis)
-	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
-	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
+// 	float dx = this->__current_fk_position.X - this->__next_fk_position.X;
+// 	float dy = this->__current_fk_position.Y - this->__next_fk_position.Y;
+// 	float distance = sqrt(dx * dx + dy * dy);
+// 	return distance;
+// }
 
-	// float cnc_position[2];
-	// cnc_position[0] = target_ik_ab.alpha;
-	// cnc_position[1] = target_ik_ab.beta;
+// float Scara_ArmSolution::GetDistanceToTarget_IK(){
+// 	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
+// 	return 0;
+// }
 
-	// debug = true;
-	// if (debug){
-	// 	Serial.print("\n[Debug] Scara_ArmSolution::RunG1()  from,to  alpha=");
-	// 	// Serial.print(RAD_TO_DEG * this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
-	// 	Serial.print(" , ");
-	// 	Serial.print(RAD_TO_DEG * target_ik_ab.alpha);
-	// 	Serial.print("    beta = ");
-	// 	// Serial.print(RAD_TO_DEG * this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
-	// 	Serial.print(" , ");
-	// 	Serial.println(RAD_TO_DEG * target_ik_ab.beta);
-	// }
-	// uint8_t abs_flags = 0x03;
-	// // this->_mover_base->AllActuatorsMoveTo(abs_flags, cnc_position);
-	// this->__queue_move_block->ForwardHead();
-}
-
-
-
-void Scara_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
-	//Set current position to HomePosition
-	bool debug = false;
-	IKPosition_abgdekl ik_position;
-	// if (this->_config_base.IsInverseKinematicHoimg){
-		if (debug) Serial.print("\n   [Info] Scara_ArmSolution::_running_G28() Trying to get home position from actuator position  ");
-		// if (this->_homing_axis == AXIS_ALPHA){
-		// 	// ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
-		// 	// ik_position.alpha =  this->_scara_machine->GetAxisHomers()->GetAxisHomer(this->_homing_axis)->GetHomingConfig()->LastHomedPosition;
-		// 	ik_position.alpha =  this->_homer_diction.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
+// void Scara_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
+// 	//Set current position to HomePosition
+// 	bool debug = false;
+// 	IKPosition_abgdekl ik_position;
+// 	// if (this->_config_base.IsInverseKinematicHoimg){
+// 		if (debug) Serial.print("\n   [Info] Scara_ArmSolution::_running_G28() Trying to get home position from actuator position  ");
+// 		// if (this->_homing_axis == AXIS_ALPHA){
+// 		// 	// ik_position.alpha =  this->_scara_machine->Homed_position_alpha_in_rad;
+// 		// 	// ik_position.alpha =  this->_scara_machine->GetAxisHomers()->GetAxisHomer(this->_homing_axis)->GetHomingConfig()->LastHomedPosition;
+// 		// 	ik_position.alpha =  this->_homer_diction.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
 			
-		// }else if (this->_homing_axis == AXIS_BETA){
-		// 	// ik_position.beta =  this->_scara_machine->Homed_position_beta_in_rad;
-		// 	// ik_position.beta =  this->_scara_machine->GetAxisHomers()->GetAxisHomer(this->_homing_axis)->GetHomingConfig()->LastHomedPosition;
-		// 	ik_position.beta =  this->_homer_diction.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
-		// }
-		this->FK(&ik_position, &this->__current_fk_position);
-		// verify FK by IK()
-		IKPosition_abgdekl verifying_ik_for_debug;
-		// Serial.print("\n\n  [Info] Please verify the below output ======================  ");
-		this->IK(&this->__current_fk_position, &verifying_ik_for_debug);
-	// }
-}
+// 		// }else if (this->_homing_axis == AXIS_BETA){
+// 		// 	// ik_position.beta =  this->_scara_machine->Homed_position_beta_in_rad;
+// 		// 	// ik_position.beta =  this->_scara_machine->GetAxisHomers()->GetAxisHomer(this->_homing_axis)->GetHomingConfig()->LastHomedPosition;
+// 		// 	ik_position.beta =  this->_homer_diction.GetAxisHomer(this->_homing_axis)->GetFiredPosition();
+// 		// }
+// 		this->FK(&ik_position, &this->__current_fk_position);
+// 		// verify FK by IK()
+// 		IKPosition_abgdekl verifying_ik_for_debug;
+// 		// Serial.print("\n\n  [Info] Please verify the below output ======================  ");
+// 		this->IK(&this->__current_fk_position, &verifying_ik_for_debug);
+// 	// }
+// }
 
 
 

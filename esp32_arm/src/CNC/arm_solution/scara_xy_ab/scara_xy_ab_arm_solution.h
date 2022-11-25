@@ -19,12 +19,12 @@ class Scara_ArmSolution: public ArmSolutionBase{
         // }
         // void RunG1(Gcode* gcode) override;
         // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
-        void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
+        // void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
 
 
-        bool GetCurrentPosition(FKPosition_XYZRPY* position_fk) override;
-        float GetDistanceToTarget_FK() override;
-        float GetDistanceToTarget_IK() override;
+        // bool GetCurrentPosition(FKPosition_XYZRPY* position_fk) override;
+        // float GetDistanceToTarget_FK() override;
+        // float GetDistanceToTarget_IK() override;
 
 
     protected:
@@ -33,7 +33,7 @@ class Scara_ArmSolution: public ArmSolutionBase{
 
         // void RunG6(Gcode* gcode) override {};   //Block mode
 
-        void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
+        // void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
 
         PositionTrigger* __homer;
         FKPosition_XYZRPY __current_fk_position;

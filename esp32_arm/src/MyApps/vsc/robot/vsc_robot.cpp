@@ -82,19 +82,19 @@ void VscRobot::_InitStatic_Queues() {
 
 }
 void VscRobot::_InitStatic_PositionTriggers() {
-    PositionTrigger* trigger_X = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    trigger_X->AxisName = 'a';
-    trigger_X->SetTriggerPosition(DEG_TO_RAD * 180);
+    PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(0);
+    trigger_a->AxisName = 'a';
+    trigger_a->SetTriggerPosition(DEG_TO_RAD * 180);
 
-    PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(1);
+    trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(1);
     trigger_a->AxisName = 'a';
     trigger_a->SetTriggerPosition(DEG_TO_RAD * 90);
 
-    PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(2);
+    trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(2);
     trigger_a->AxisName = 'a';
     trigger_a->SetTriggerPosition(DEG_TO_RAD * 270);
 
-    PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(3);
+    trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(3);
     trigger_a->AxisName = 'a';
     trigger_a->SetTriggerPosition(DEG_TO_RAD * 0);
 }

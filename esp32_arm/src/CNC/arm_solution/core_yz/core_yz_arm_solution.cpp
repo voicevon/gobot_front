@@ -89,19 +89,19 @@ void CoreYZ_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_
 // 	// this->_stepControl->moveAsync(*this->stepper_alpha, *this->stepper_beta);
 // }
 
-void CoreYZ_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
-		//Set current position to HomePosition
-		IKPosition_abgdekl ik_position;
-			// We know homed position via FK
-			Logger::Info("CoreYZ_ArmSolution::_SetCurrentPositionAsHome() Trying to get home position with EEF FK position  ");
-			this->__current_fk_position.Z = this->_cncMachine->Homed_position_z;
-			this->__current_fk_position.Y = this->_cncMachine->Homed_position_y;
-			this->IK(&this->__current_fk_position, &ik_position);
-			// verify IK by FK()
-			FKPosition_XYZRPY verifying_fk;
-			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
-			this->FK(&ik_position, &verifying_fk);
-}
+// void CoreYZ_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
+// 		//Set current position to HomePosition
+// 		IKPosition_abgdekl ik_position;
+// 			// We know homed position via FK
+// 			Logger::Info("CoreYZ_ArmSolution::_SetCurrentPositionAsHome() Trying to get home position with EEF FK position  ");
+// 			this->__current_fk_position.Z = this->_cncMachine->Homed_position_z;
+// 			this->__current_fk_position.Y = this->_cncMachine->Homed_position_y;
+// 			this->IK(&this->__current_fk_position, &ik_position);
+// 			// verify IK by FK()
+// 			FKPosition_XYZRPY verifying_fk;
+// 			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
+// 			this->FK(&ik_position, &verifying_fk);
+// }
 
 
 // bool CoreYZ_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
@@ -171,13 +171,13 @@ void CoreYZ_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic hom
 
 
 
-float CoreYZ_ArmSolution::GetDistanceToTarget_IK(){
-	// return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
-	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
-}
+// float CoreYZ_ArmSolution::GetDistanceToTarget_IK(){
+// 	// return this->stepper_alpha->getDistanceToTarget() + this->stepper_beta->getDistanceToTarget();
+// 	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
+// }
 
 
-void CoreYZ_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
+// void CoreYZ_ArmSolution::__ConvertSegment_ToMoveBlockQueue(LineSegment* line){
 
-}
+// }
 
