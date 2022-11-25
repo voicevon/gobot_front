@@ -4,7 +4,7 @@
 void RobotBoard_Test::Test_SinglePositionTrigger(PositionTrigger* homer, int loop_count){
     for (int i=0; i<loop_count; i++){
         Serial.print("Trigger is fired = ");
-        Serial.println(homer->IsTriggered());
+        Serial.println(homer->IsFired());
         delay(1000);
     }
 }

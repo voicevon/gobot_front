@@ -19,7 +19,7 @@ class HomeTrigger_Array: public ArrayBase{
         //     __bits_flag = 0;
         //     for(int i=0; i<GetItemsCount();i++){
         //         PositionTrigger* this_trigger = GetPositionTrigger(i);
-        //         if(this_trigger->IsTriggered()){
+        //         if(this_trigger->IsFired()){
         //             __bits_flag += 1<< i;
         //             if (this_trigger->AxisName == axis_name){
         //                 result = this_trigger->GetTriggerPosition();

@@ -17,8 +17,8 @@ void PositionTrigger::Init(char name, Adafruit_MCP23X17* mcp_23018, uint8_t expa
     this->__mcp23018->pinMode(expanded_pin_trigger, INPUT_PULLUP);
 }
 
-bool PositionTrigger::IsTriggered(){
-    // Logger::Debug("PositionTrigger::IsTriggered() is entering...");
+bool PositionTrigger::IsFired(){
+    // Logger::Debug("PositionTrigger::IsFired() is entering...");
     // Logger::Print("__pin_trigger", __pin_trigger);
     // Read sensor pin
     int pin_value;

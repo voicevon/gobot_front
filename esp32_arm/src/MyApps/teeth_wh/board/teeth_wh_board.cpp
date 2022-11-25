@@ -130,7 +130,7 @@ void TeethWarehouse_Board::Test_PositionTriggers(int loops){
     while (count < loops){
         flags = 0;
         for (int index=0; index < HOME_TRIGGER_COUNT; index++){
-            if (__all_position_triggers[index].IsTriggered()){
+            if (__all_position_triggers[index].IsFired()){
                 flags += 1<<index;
             }
         }
