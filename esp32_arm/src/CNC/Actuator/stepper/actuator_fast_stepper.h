@@ -1,15 +1,15 @@
 #pragma once
 #include "../cnc_actuator_base.h"
-// #include "ESP32Step/src/Stepper.h"
 #include "FastAccelStepper.h"
 #include "actuator_stepper_calculator.h"
+
 
 class CncActuatorFastStepper: public CncActuatorBase{
     public:
     // float actuator_position = 1.0f * this->_stepper->getPosition() / this->__steps_per_cnc_unit;
         // void SpinOnce() override{this->_current_position=this->_stepper->getPosition();};
         void SpinOnce() override{this->_current_position=this->_stepper->getCurrentPosition();};
-        void ForceStop() override{};
+        void ForceStop() override;
         void PrintOut(const char* title);
         void LinkStepper(FastAccelStepper* stepper, float steps_per_cnc_unit);
         FastAccelStepper* GetLinkedStepper(){return this->_stepper;};

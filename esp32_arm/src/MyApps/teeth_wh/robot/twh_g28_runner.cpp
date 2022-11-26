@@ -31,12 +31,12 @@ void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             // Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha = &mb->MoveBlocks[AXIS_ALPHA];
             // alpha->IsAbsTargetPosition = false;
-            alpha->TargetPosition = 99999;
+            alpha->TargetPosition = -99999;
             alpha->Speed = 0.1;
             alpha->Acceleration = 0.05;
             beta = &mb->MoveBlocks[AXIS_BETA];
             // beta->IsAbsTargetPosition = false;
-            beta->TargetPosition = -99999;
+            beta->TargetPosition = 99999;
             beta->Speed = 0.1;
             beta->Acceleration = 0.05;
             break;

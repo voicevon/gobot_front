@@ -2,13 +2,15 @@
 #include "teensy_step_gateway.h"
 
 void CncMover::SpinOnce(){
-    Logger::Debug("CncMover::SpinOnce()");
+    // Logger::Debug("CncMover::SpinOnce()");
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
         // Logger::Print("axis", a);
         // Logger::Print("axis name", CncActuator_List::Instance().GetActuator(a)->MyName);
-        Serial.print(CncActuator_List::Instance().GetActuator(a)->MyName);
-        Serial.print('\t current position = ');
-        Serial.print(CncActuator_List::Instance().GetActuator(a)->GetCurrentPosition());
+        // Serial.print("\t");
+        // Serial.print(CncActuator_List::Instance().GetActuator(a)->MyName);
+        // Serial.print("\t current position = ");
+        // Serial.print(CncActuator_List::Instance().GetActuator(a)->GetCurrentPosition());
+        // Serial.print("\n");
         CncActuator_List::Instance().GetActuator(a)->SpinOnce();
     }
 

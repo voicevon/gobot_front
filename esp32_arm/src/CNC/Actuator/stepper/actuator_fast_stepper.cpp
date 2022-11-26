@@ -21,7 +21,6 @@ void CncActuatorFastStepper::PrintOut(const char* title){
 
 
 // Must clear to understand:  cnc_position,  actuator_position(or joint_position), and motor_position.
-// void CncActuatorFastStepper::SetTargetPositionTo(bool is_absolute_position, float position_in_cnc_unit){
 void CncActuatorFastStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     int32_t motor_position_in_step;
     // if (move->IsAbsTargetPosition){
@@ -31,37 +30,29 @@ void CncActuatorFastStepper::UpdateMovement(MoveBlock_SingleActuator* move){
         actuator_position = this->_range_constraint->_ConvertTo_ActuatorRange(move->TargetPosition);
     }
     motor_position_in_step = actuator_position * this->__steps_per_cnc_unit;
-    this->_stepper->setPositionAfterCommandsCompleted(motor_position_in_step);
+    // this->_stepper->setPositionAfterCommandsCompleted(motor_position_in_step);
+    _stepper->enableOutputs();
+    _stepper->moveTo(motor_position_in_step, false);
 
     bool debug = true;
     if (debug){
         Logger::Info("CncActuatorFastStepper::SetTargetPositionTo()");
         Logger::Print("motor_position_in_step", motor_position_in_step);
         Logger::Print("Target_position: actuator ", RAD_TO_DEG * actuator_position);
-        Logger::Print("accelleration ", "in TODO list, currently is default. ");
+        Logger::Print("accelleration ", move->Acceleration);
         }
 
     debug = true;
     if(debug){
         Logger::Debug(" CncActuatorFastStepper::MoveTo()" );
-        Serial.print("steps_per_cnc_unit= ");
-        Serial.print(this->__steps_per_cnc_unit);
-        
-        // Serial.print("  actuator_speed= ");
-        // Serial.println(RAD_TO_DEG * this->GetSpeed());
-
-
-        Serial.print("Current_position: stepper = ");
-        // Serial.println(this->_stepper->getPosition());
-        Serial.println(this->_stepper->getCurrentPosition());
-
-        Serial.print(" cnc_position degree= ");
-        Serial.print(RAD_TO_DEG * this->_target_position);
-
-        Serial.print("  stepper_position= ");
-        Serial.print(motor_position_in_step);
-        Serial.println(FCBC_RESET);
+        Logger::Print("steps_per_cnc_unit= ", this->__steps_per_cnc_unit);
+        Logger::Print("Current_position: stepper ", this->_stepper->getCurrentPosition());
+        Logger::Print("cnc_position degree ", RAD_TO_DEG * this->_target_position);
+        Logger::Print("stepper_position= ", motor_position_in_step);
     }
 }
 
 
+void CncActuatorFastStepper::ForceStop(){
+    _stepper->forceStop();
+}
