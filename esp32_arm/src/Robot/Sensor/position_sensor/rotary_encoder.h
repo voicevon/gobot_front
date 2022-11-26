@@ -18,8 +18,8 @@ class RotaryEncoder: public PositionSensorBase{
 
     private:
         Encoder* __simple_foc_encoder;
-        float __raw_offset;
-        float __slope_from_raw_to_cnc;
+        float __formular_raw_offset;
+        float __formular_slope_from_raw_to_cnc;
         float __ModTwoPi(float origin_value);
 
 };

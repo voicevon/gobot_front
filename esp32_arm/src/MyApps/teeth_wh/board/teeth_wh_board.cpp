@@ -6,8 +6,8 @@
 #define PIN_HOMER_SENSOR_HALL_X  4 //16
 #define PIN_VACUUME_PUMP 0 // 33
 
-#define PIN_SERVO_EEF_VERTICAL 25   //FreeIO1  //25
-#define PIN_SERVO_VACUUM_SWITCH 22  //FreeIO2  //15
+#define PIN_SERVO_EEF_VERTICAL 19   
+#define PIN_SERVO_VACUUM_SWITCH 18  
 
 #define PIN_HX711_CLK 22
 #define PIN_HX711_DATA 22
@@ -240,7 +240,8 @@ void TeethWarehouse_Board::Test_Hx711(int loops){
 void TeethWarehouse_Board::Test_Servo_AirPen(int loops){
     int pos = 0;      // position in degrees
     for (int loop=0; loop<loops; loop++){
-        Serial.println("Air pen loop");
+        Logger::Print("SERVO_EEF_VERTICAL  count", loop);
+        // Serial.println("Air pen loop");
         // for (pos = 0; pos <= 270; pos += 1) { // sweep from 0 degrees to 180 degrees
         //     // in steps of 1 degree
         //     __servo_air_pen.write(pos);
@@ -248,10 +249,10 @@ void TeethWarehouse_Board::Test_Servo_AirPen(int loops){
             
         // }
         // __servo_air_pen.write(0);
-        __all_servos[SERVO_VACUUM_SUCKER].write(0);
+        __all_servos[SERVO_EEF_VERTICAL].write(0);
         delay(3000);
         // __servo_air_pen.write(270);
-        __all_servos[SERVO_VACUUM_SUCKER].write(270);
+        __all_servos[SERVO_EEF_VERTICAL].write(270);
         delay(3000);
     }
 }

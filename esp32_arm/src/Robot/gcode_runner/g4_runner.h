@@ -5,9 +5,9 @@
 
 class G4_Runner: public SyncGcodeRunnerBase{
     public:
-        void LinkGcode(Gcode* gcode) override{__delay_target_in_ms=1000.0f * gcode->get_value('S');};
-        void Start() override {this->__start_time_stamp = micros();};
-        bool IsDone() override {return (micros() - __start_time_stamp > __delay_target_in_ms);};
+        void LinkGcode(Gcode* gcode) override;
+        void Start() override;
+        bool IsDone() override;
 
     private:
         unsigned long __delay_target_in_ms;

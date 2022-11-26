@@ -19,6 +19,7 @@ class Logger{
         static void Print(const char* var_name, float value);
         static void Print(const char* var_name, int32_t value);
         static void Print(const char* var_name, uint32_t value);
+        static void Print(const char* var_name, int64_t value);
         static void Print(const char* var_name, double value);
         static void Print(const char* var_name, const char* value);
         static void Print(const char* var_name, const char value);

@@ -34,17 +34,17 @@ void CncActuatorFastStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     _stepper->enableOutputs();
     _stepper->moveTo(motor_position_in_step, false);
 
-    bool debug = true;
+    bool debug = false;
     if (debug){
-        Logger::Info("CncActuatorFastStepper::SetTargetPositionTo()");
+        Logger::Info("CncActuatorFastStepper::UpdateMovement()");
         Logger::Print("motor_position_in_step", motor_position_in_step);
         Logger::Print("Target_position: actuator ", RAD_TO_DEG * actuator_position);
         Logger::Print("accelleration ", move->Acceleration);
         }
 
-    debug = true;
+    debug = false;
     if(debug){
-        Logger::Debug(" CncActuatorFastStepper::MoveTo()" );
+        Logger::Debug(" CncActuatorFastStepper::UpdateMovement()" );
         Logger::Print("steps_per_cnc_unit= ", this->__steps_per_cnc_unit);
         Logger::Print("Current_position: stepper ", this->_stepper->getCurrentPosition());
         Logger::Print("cnc_position degree ", RAD_TO_DEG * this->_target_position);

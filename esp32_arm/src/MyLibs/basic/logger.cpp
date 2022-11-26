@@ -99,6 +99,12 @@ void Logger::Print(const char* var_name, int32_t value){
     Serial.print(" =\t");
     Serial.println(value);
 }
+void Logger::Print(const char* var_name, int64_t value){
+    Serial.print(var_name);
+    Serial.print(" =\t");
+    Serial.println(value);
+}
+
 void Logger::Print(const char* var_name, uint32_t value){
     Serial.print(var_name);
     Serial.print(" =\t");

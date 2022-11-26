@@ -11,23 +11,23 @@ void RotaryEncoder::LinkRawSensor(Encoder* simple_foc_encoder){
 void RotaryEncoder::SetCurrentPosition(float current_cnc_position){
     float raw_value = this->__simple_foc_encoder->getAngle();
     // float ranged_raw_value = this->__ModTwoPi(raw_value);
-    this->__raw_offset = current_cnc_position / this->__slope_from_raw_to_cnc - raw_value ;
+    this->__formular_raw_offset = current_cnc_position / this->__formular_slope_from_raw_to_cnc - raw_value ;
 }
 
 float RotaryEncoder::GetCurrentPosition(){
     float raw_value = this->__simple_foc_encoder->getAngle();
-    float raw_cnc_position =  (raw_value + this->__raw_offset) * this->__slope_from_raw_to_cnc;
+    float raw_cnc_position =  (raw_value + this->__formular_raw_offset) * this->__formular_slope_from_raw_to_cnc;
     return this->__ModTwoPi(raw_cnc_position);
 }
 
 float RotaryEncoder::GetCurrentVelocity(){
     float raw_value = this->__simple_foc_encoder->getVelocity();
-    return raw_value * this->__slope_from_raw_to_cnc;
+    return raw_value * this->__formular_slope_from_raw_to_cnc;
 }
 
 void RotaryEncoder::SetupFormular(float slope, float raw_offset){
-    this->__slope_from_raw_to_cnc = slope;
-    this->__raw_offset = raw_offset;
+    this->__formular_slope_from_raw_to_cnc = slope;
+    this->__formular_raw_offset = raw_offset;
 }
 
 float RotaryEncoder::__ModTwoPi(float origin_value){

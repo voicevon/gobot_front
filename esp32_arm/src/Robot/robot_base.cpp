@@ -15,7 +15,7 @@ void RobotBase::SpinOnce(){
 			//todo:  when buffer is empty,  a gcode is still runnning.
 			// Correct way is:  buffer is empey, and Mover is stoped.
 			// if (this->__queue_move_block.BufferIsEmpty()){
-			Logger::Print("RobotBase::SpinOnce() G4_Runner is Waiting. ", 41);
+			Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 41);
 			if (Queue_MoveBlock::Instance().BufferIsEmpty()){
 				this->__g4_runner.Start();
 				this->State = RobotState::G4_IS_RUNNING;
@@ -82,11 +82,11 @@ void RobotBase::SpinOnce(){
 		Logger::Print("RobotBase::SpinOnce() Planner can not go on,  queue might be full(or almost full).", 93);
 		return;
 	}
-	Logger::Print("RobotBase::SpinOnce() point", 3);
+	// Logger::Print("RobotBase::SpinOnce() point", 3);
 
 	// Check gcode queue, if there is gcode to be run.
 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage(false);
-	Logger::Print("RobotBase::SpinOnce() point", 4);
+	// Logger::Print("RobotBase::SpinOnce() point", 4);
 	if (message == NULL){
 		Logger::Error("\n\n\n [Error] RobotBase::SpinOnce() tail_message is null. \n\n ");
 		return;
@@ -134,17 +134,17 @@ void RobotBase::SpinOnce(){
 void RobotBase::__RunGcode(Gcode* gcode){
 	Logger::Info("RobotBase::__RunGcode()");
 	LineSegment* new_line = Queue_LineSegment::Instance().GetRoom();
-	Logger::Print("RobotBase::__RunGcode() point", 11);
+	// Logger::Print("RobotBase::__RunGcode() point", 11);
 	Queue_LineSegment::Instance().GetHeadLineSegment()->DeepCopyTo(new_line);
-	Logger::Print("RobotBase::__RunGcode() point", 12);
+	// Logger::Print("RobotBase::__RunGcode() point", 12);
 	// __current_line.DeepCopyTo(&new_line);
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
-	Logger::Print("RobotBase::__RunGcode() point", 13);
+	// Logger::Print("RobotBase::__RunGcode() point", 13);
 	Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
-	Logger::Print("RobotBase::__RunGcode() point", 14);
+	// Logger::Print("RobotBase::__RunGcode() point", 14);
 	FKPosition_XYZRPY new_fk_position;
 	IKPosition_abgdekl new_ik_position;
-	Logger::Print("RobotBase::__RunGcode() point", 51);
+	// Logger::Print("RobotBase::__RunGcode() point", 51);
 	switch (gcode->g){
 		case 28:
 			Logger::Print("RobotBase::__RunGcode() --- g28_runner->LinkGcode", 1);
