@@ -26,7 +26,7 @@ void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* line){
     arm_solution->IK(&line->TargetPosition, &target_ik_position);
     MoveBlock* mk = Queue_MoveBlock::Instance().GetRoom();
     for(int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
-        mk->MoveBlocks[a].TargetPosition = target_ik_position.Actuator[a];
+        mk->MoveBlocks[a].TargetPosition = target_ik_position.Positions[a];
     }
     // mk->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_position.alpha;
     // mk->MoveBlocks[AXIS_ALPHA].Recalulate_distance_speed_acceleration(start_ik_position.alpha, line->required_time);

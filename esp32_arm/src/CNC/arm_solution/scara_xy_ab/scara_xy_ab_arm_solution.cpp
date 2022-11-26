@@ -51,9 +51,9 @@ void Scara_ArmSolution::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik
 	// if (alpha < 0) alpha +=
 
 	// ik->alpha = alpha;  // * this->_scara_machine->STEPS_PER_RAD_ALPHA;
-	ik->Actuator[AXIS_ALPHA] = alpha;  // * this->_scara_machine->STEPS_PER_RAD_ALPHA;
+	ik->Positions[AXIS_ALPHA] = alpha;  // * this->_scara_machine->STEPS_PER_RAD_ALPHA;
 	// ik->beta =  beta ; // * this->_scara_machine->STEPS_PER_RAD_BETA;
-	ik->Actuator[AXIS_BETA] =  beta ; // * this->_scara_machine->STEPS_PER_RAD_BETA;
+	ik->Positions[AXIS_BETA] =  beta ; // * this->_scara_machine->STEPS_PER_RAD_BETA;
 
 	if (debug){
 		Serial.print("\n    Inverse Kinematic result in angle degree (alpha, beta)= ");
@@ -71,13 +71,13 @@ void Scara_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_f
 	IKPosition_abgdekl* ik = from_ik;
 	FKPosition_XYZRPY* fk = to_fk;
 	// float rad_beta = ik->beta; // / this->_scara_machine->STEPS_PER_RAD_BETA;
-	float rad_beta = ik->Actuator[AXIS_BETA]; // / this->_scara_machine->STEPS_PER_RAD_BETA;
+	float rad_beta = ik->Positions[AXIS_BETA]; // / this->_scara_machine->STEPS_PER_RAD_BETA;
 	// float rad_eef = rad_beta + ik->alpha / this->_scara_machine->STEPS_PER_RAD_ALPHA;
 	// float rad_eef = rad_beta + ik->alpha;
-	float rad_eef = rad_beta + ik->Actuator[AXIS_ALPHA];
+	float rad_eef = rad_beta + ik->Positions[AXIS_ALPHA];
 	// float rad_alpha = ik->alpha / this->_scara_machine->STEPS_PER_RAD_ALPHA;
 	// float rad_alpha = ik->alpha; ;
-	float rad_alpha = ik->Actuator[AXIS_ALPHA]; 
+	float rad_alpha = ik->Positions[AXIS_ALPHA]; 
 	fk->X = this->_scara_machine->LINK_A * cosf(rad_alpha) + this->_scara_machine->LINK_B * cosf(rad_eef);
 	fk->Y = this->_scara_machine->LINK_A * sinf(rad_alpha) + this->_scara_machine->LINK_B * sinf(rad_eef);
 	bool debug = false;

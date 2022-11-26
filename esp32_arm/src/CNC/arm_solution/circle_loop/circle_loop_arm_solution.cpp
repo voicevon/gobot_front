@@ -6,10 +6,10 @@ void CircleLoop_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* t
 	IKPosition_abgdekl* ik = to_ik;
 
 	// ik->alpha = fk->Roll;
-	ik->Actuator[AXIS_ALPHA] = fk->Roll;
+	ik->Positions[AXIS_ALPHA] = fk->Roll;
 	Logger::Debug("CircleLoop_ArmSolution::IK()");
 	// Logger::Print("IK output alpha", ik->alpha);
-	Logger::Print("IK output alpha", ik->Actuator[AXIS_ALPHA]);
+	Logger::Print("IK output alpha", ik->Positions[AXIS_ALPHA]);
 }
 
 void CircleLoop_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
@@ -17,7 +17,7 @@ void CircleLoop_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* 
 	IKPosition_abgdekl* ik = from_ik;
 	
 	// fk->Roll = ik->alpha;
-	fk->Roll = ik->Actuator[AXIS_ALPHA];
+	fk->Roll = ik->Positions[AXIS_ALPHA];
 	Logger::Debug("CircleLoop_ArmSolution::FK()" );
 	Logger::Print("FK output A", fk->Roll);
 }

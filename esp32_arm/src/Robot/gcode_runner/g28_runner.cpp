@@ -10,7 +10,7 @@ bool G28_Runner::IsDone(){
     PositionTrigger* trigger;
     for(int i=0; i<HomeTrigger_Array::Instance().GetItemsCount(); i++){
         trigger = HomeTrigger_Array::Instance().GetPositionTrigger(i);
-        // if (trigger->AxisName == this->_axis_name){
+        if (trigger->__short_name == this->_axis_name){
             if(trigger->IsFired()){
                 Logger::Info("G28_Runner::IsDone()  homer is triggered...");
             	_mover->AllActuatorsStop();
@@ -18,7 +18,7 @@ bool G28_Runner::IsDone(){
                 // this->__last_homed_position = trigger->GetTriggerPosition();
 	            return true;
             }
-        // }
+        }
     }
     if(micros() - last_micros > 200000){
         Serial.print(".");  //print too fast?

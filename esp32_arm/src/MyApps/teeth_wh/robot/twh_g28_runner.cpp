@@ -9,11 +9,11 @@ void Twh_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
     // Logger::Info("Twh_G28_Runner::Init() Alpha axis home_triggers");
     // PositionTrigger* trigger;
     // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    // trigger->AxisName = 'X';
+    // trigger->__short_name = 'a';
     // trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
 
     // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(1);
-    // trigger->AxisName='a';
+    // trigger->__short_name='X';
     // trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
 }
 
@@ -72,8 +72,8 @@ void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
     }else if (this->_axis_name == 'X'){
         // must home('a') first, then home('X')
         IKPosition_abgdekl ik;
-        ik.Actuator[AXIS_ALPHA] = 123;
-        ik.Actuator[AXIS_BETA] = 123;
+        ik.Positions[AXIS_ALPHA] = 123;
+        ik.Positions[AXIS_BETA] = 123;
         this->_arm_solution->SetCurrentPosition(&ik);
         
         bool debug = true;

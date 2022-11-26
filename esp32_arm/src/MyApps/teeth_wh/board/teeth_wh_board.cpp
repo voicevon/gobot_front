@@ -35,8 +35,8 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
         Serial.begin(115200);
         Serial.println("I am Teeth Warehouse.");
     }
-    __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_HOMER_SENSOR_HALL_ALPHA, LOW);
-    __all_position_triggers[POSITION_TRIGGER_X].Init('a', PIN_HOMER_SENSOR_HALL_X, LOW);
+    __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_HOMER_SENSOR_HALL_ALPHA, HIGH);
+    __all_position_triggers[POSITION_TRIGGER_X].Init('a', PIN_HOMER_SENSOR_HALL_X, HIGH);
     // __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
     HomeTrigger_Array::Instance().Init(__all_position_triggers, HOME_TRIGGER_COUNT);
     
@@ -104,8 +104,6 @@ void TeethWarehouse_Board::__InitSteppers(){
 
         __stepper_beta->setSpeedInUs(1000);  // the parameter is us/step !!!
         __stepper_beta->setAcceleration(100);
-        // int res =  __stepper_beta->moveTo(1000, false);
-        // Logger::Print("moveTo() returns", res);
         Logger::Info("TeethWarehouse_Board::Init()");
         Logger::Print("stepper alpha is OK.", 0);
     }else{

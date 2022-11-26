@@ -27,7 +27,7 @@ void TeechWarehouse_Robot::__InitStatic_Actuators(TeethWarehouse_Board* board){
 
     this->__actuator_alpha.MyName = 'a';
     this->__actuator_beta.MyName = 'b';
-    this->__actuator_beta.MyName = 'g';
+    this->__actuator_gamma.MyName = 'g';
     
     ActuatorStepper_Calculator calculator;
     calculator.motor_step_angle_in_degree = 1.8;

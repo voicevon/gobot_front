@@ -17,7 +17,7 @@ void MoveBlock::DeepCopyTo(MoveBlock* copy){
 
 void MoveBlock::DeepCopyToIkPosition(IKPosition_abgdekl* to_position){
     for (int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
-        to_position->Actuator[a] =this->MoveBlocks[a].TargetPosition;
+        to_position->Positions[a] =this->MoveBlocks[a].TargetPosition;
     }
     // to_position->alpha =  this->MoveBlocks[AXIS_ALPHA].TargetPosition;
     // to_position->beta =  this->MoveBlocks[AXIS_BETA].TargetPosition;
@@ -38,3 +38,18 @@ void MoveBlock::DeepReset_ToDefault(){
     }
 }
 
+
+void MoveBlock::PrintOut(){
+    Serial.print("MoveBlock::PrintOut()--------------------------------------------------\n" );
+    for (int i=0; i< CNC_ACTUATORS_IDEAL_COUNT; i++){
+        Serial.print('\t');
+        Serial.print(MoveBlocks[i].TargetPosition);
+        Serial.print('\t');
+        Serial.print(MoveBlocks[i].Speed);
+        Serial.print('\t');
+        Serial.print(MoveBlocks[i].Acceleration);
+        Serial.print('\t');
+        Serial.print(MoveBlocks[i].VectorDistance);
+        Serial.print('\n');
+    }
+}

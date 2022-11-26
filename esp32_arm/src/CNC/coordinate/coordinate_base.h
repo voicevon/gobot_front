@@ -15,7 +15,7 @@ class FKPosition_XYZRPY{
 
 class IKPosition_abgdekl{
     public:
-        float Actuator[7];
+        float Positions[7];
         // float alpha;
         // float beta;
         // float gamma;

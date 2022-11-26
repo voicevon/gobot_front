@@ -48,7 +48,7 @@ void RobotBase::SpinOnce(){
 				// }else if (CncAxis::IsActuator_IkName(homing_axis_name)){
 				// 	this->__planner.arm_solution->IK(&homed_fk_position, &homed_ik_position);
 				// 	// homed_ik_position.alpha = this->_g28_runner->GetTriggerPosition();
-				// 	homed_ik_position.Actuator[AXIS_ALPHA] = this->_g28_runner->GetTriggerPosition();
+				// 	homed_ik_position.Positions[AXIS_ALPHA] = this->_g28_runner->GetTriggerPosition();
 				// 	this->__planner.arm_solution->SetCurrentPosition(&homed_ik_position);
 				// }
 				this->State = RobotState::IDLE_OR_ASYNC;

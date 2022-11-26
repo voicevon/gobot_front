@@ -14,20 +14,14 @@ MessageQueue mqtt_command_queue;
 
 TeethWarehouse_App app;
 TeechWarehouse_Robot robot;
-// #include "FastAccelStepper.h"
-// #include "MyLibs/basic/logger.h"
-
-
-// FastAccelStepperEngine __stepper_engine = FastAccelStepperEngine();
-// FastAccelStepper* __stepper_alpha = NULL;
-// FastAccelStepper* __stepper_beta = NULL;
 
 void test_board(){
     board.Test_PositionTriggers(0);
     board.Test_Servo_AirPen(0);
     board.Test_Servo_AirSwitch(0);
     board.Test_VacuumPump(0);
-    board.Test_SingleStepper(1, 0);
+    board.Test_SingleStepper(AXIS_ALPHA, 0);
+    board.Test_SingleStepper(AXIS_BETA, 0);
     board.Test_DualStepper(0);
     Serial.println("[Info] test_board() is done.");
 }

@@ -20,15 +20,15 @@ void CncSolution_CoreAZ::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik
 
 	// ik->alpha = (fk->Z  + fk->Roll);
 	// ik->beta = (fk->Z  - fk->Roll );
-	ik->Actuator[AXIS_ALPHA] = (fk->Z  + fk->Roll);
-	ik->Actuator[AXIS_BETA] = (fk->Z  - fk->Roll );
+	ik->Positions[AXIS_ALPHA] = (fk->Z  + fk->Roll);
+	ik->Positions[AXIS_BETA] = (fk->Z  - fk->Roll );
 
 	Serial.print("\n[Debug] CncSolution_CoreAZ::IK() output (alpha, beta) = ");
 	// Serial.print(ik->alpha);
-	Serial.print(ik->Actuator[AXIS_ALPHA]);
+	Serial.print(ik->Positions[AXIS_ALPHA]);
 	Serial.print(" , ");
 	// Serial.print(ik->beta);
-	Serial.print(ik->Actuator[AXIS_BETA]);
+	Serial.print(ik->Positions[AXIS_BETA]);
 	Serial.print(")");
 }
 
@@ -38,9 +38,9 @@ void CncSolution_CoreAZ::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_
 	IKPosition_abgdekl* ik =from_ik;
 	
 	// fk->Z = (ik->alpha + ik->beta) / 2 ;
-	fk->Z = (ik->Actuator[AXIS_ALPHA] + ik->Actuator[AXIS_BETA]) / 2 ;
+	fk->Z = (ik->Positions[AXIS_ALPHA] + ik->Positions[AXIS_BETA]) / 2 ;
 	// fk->Roll = (ik->alpha - ik->beta) / 2 ;
-	fk->Roll = (ik->Actuator[AXIS_ALPHA] - ik->Actuator[AXIS_BETA]) / 2 ;
+	fk->Roll = (ik->Positions[AXIS_ALPHA] - ik->Positions[AXIS_BETA]) / 2 ;
 
 	Serial.print("\n[Debug] CncSolution_CoreAZ::FK() output (Z, W) = ");
 	Serial.print(fk->Z);

@@ -2,12 +2,14 @@
 #include "teensy_step_gateway.h"
 
 void CncMover::SpinOnce(){
-    // Logger::Debug("CncMover::SpinOnce()");
+    Logger::Debug("CncMover::SpinOnce()");
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
-        // Logger::Print("axis=", a);
-        // Logger::Print("axis name=", CncActuator_List::Instance().GetActuator(a)->MyName);
+        // Logger::Print("axis", a);
+        // Logger::Print("axis name", CncActuator_List::Instance().GetActuator(a)->MyName);
+        Serial.print(CncActuator_List::Instance().GetActuator(a)->MyName);
+        Serial.print('\t current position = ');
+        Serial.print(CncActuator_List::Instance().GetActuator(a)->GetCurrentPosition());
         CncActuator_List::Instance().GetActuator(a)->SpinOnce();
-
     }
 
     // Logger::Print("CncMover::SpinOnce() point", 1);
@@ -18,9 +20,9 @@ void CncMover::SpinOnce(){
     
     Logger::Info("CncMover::SpinOnce() withdraw queue_move_block");
     MoveBlock* mb = Queue_MoveBlock::Instance().Withdraw();
-    Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
-    Logger::Print("MoveBlocks[AXIS_ALPHA].Speed", mb->MoveBlocks[AXIS_ALPHA].Speed);
-    Logger::Print("MoveBlocks[AXIS_ALPHA].Acceleration", mb->MoveBlocks[AXIS_ALPHA].Acceleration);
+    // Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
+    // Logger::Print("MoveBlocks[AXIS_ALPHA].Speed", mb->MoveBlocks[AXIS_ALPHA].Speed);
+    // Logger::Print("MoveBlocks[AXIS_ALPHA].Acceleration", mb->MoveBlocks[AXIS_ALPHA].Acceleration);
 
     this->AllActuatorsMoveTo(mb);
     Logger::Print("CncMover::SpinOnce() point", 99);
@@ -29,13 +31,14 @@ void CncMover::SpinOnce(){
 
 void CncMover::AllActuatorsMoveTo(MoveBlock* move){
     CncActuatorBase* act;
-    MoveBlock_SingleActuator * ms;
+    Logger::Debug("CncMover::AllActuatorsMoveTo()");
+    move->PrintOut();
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
-        ms = &move->MoveBlocks[a];
         // TODO: transloate postion unit here ??  What actuator is using?
         // TODO: translate speed unit here.!!
+        // Logger::Print("axis = ", CncAxis::From_index_toName());
         act =  CncActuator_List::Instance().GetActuator(a);
-        act->UpdateMovement(ms);
+        act->UpdateMovement(&move->MoveBlocks[a]);
     }
 
     // Please keep this line before 2023 September.
