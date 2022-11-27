@@ -13,10 +13,10 @@
 // #define I_AM_GOBOT_HOUSE_2205   //Depricated
 // #define I_AM_GOBOT_HOUSE_2206   //Depricated with arm solution
 // #define I_AM_GOBOT_HOUSE
-#define I_AM_GOBOT_MAIN
+// #define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
 // #define I_AM_VSC
-// #define I_AM_TEETH_WAREHOUSE
+#define I_AM_TEETH_WAREHOUSE
 
 // #define I_AM_ACUPUCTURE_MAIN
 // #define I_AM_ACUPUNCTURE_TESTER

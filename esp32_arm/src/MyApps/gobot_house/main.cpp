@@ -11,7 +11,7 @@
 
 #include "FastAccelStepper.h"
 
-Board_GobotHouse_2206 board = Board_GobotHouse_2206(&stepControl);
+// Board_GobotHouse_2206 board = Board_GobotHouse_2206(&stepControl);
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 GobotHouseApp* app; 

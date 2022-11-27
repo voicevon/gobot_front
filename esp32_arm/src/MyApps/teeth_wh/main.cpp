@@ -31,7 +31,7 @@ void test_board(){
 
 void test_robot(){
     for (int i=0; i<5;i++){
-        gcode_queue.AppendGcodeCommand("M408");
+        // gcode_queue.AppendGcodeCommand("M408");
         // gcode_queue.AppendGcodeCommand(String(__payload_buffer));
 
         // gcode_queue.AppendGcodeCommand("G1Z0");
