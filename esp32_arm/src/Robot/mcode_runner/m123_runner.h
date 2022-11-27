@@ -12,7 +12,7 @@
 class Final_M123_RunnerBase{
     public:
         virtual bool StartToRun(Gcode* gcode);
-        virtual bool SpinOnce();
+        virtual void SpinOnce();
         void LinkToRunnerDispacher();
 
     private:
@@ -22,8 +22,8 @@ class Final_M123_RunnerBase{
 // From point of Mcode runner diapaching:  this is a runner, I can send the job to you.
 class M123_Runner_EefAct: public McodeRunnerBase{
     public:
-        bool StartToRun(Gcode* gcode) override;
-        void SpinOnce() override;
+        bool StartExec(Gcode* gcode) override;
+        bool LoopExec() override;
         void LinkFinalRunner(Final_M123_RunnerBase* final_runner){this->__final_runner=final_runner;};
 
     private:

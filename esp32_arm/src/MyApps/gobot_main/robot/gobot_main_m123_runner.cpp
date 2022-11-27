@@ -5,6 +5,5 @@ bool GobotMain_M123_Runner::StartToRun(Gcode* gcode){
 }
 
 
-bool GobotMain_M123_Runner::SpinOnce(){
-    return false;
+void GobotMain_M123_Runner::SpinOnce(){
 }

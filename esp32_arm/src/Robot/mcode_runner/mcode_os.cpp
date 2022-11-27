@@ -1,5 +1,7 @@
 #include "mcode_os.h"
 
+// return true:  running is finished ,
+// return false: running is on the go, will keep a long time, like test_position_trigger 99 times.
 bool McodeOS::StartToRun(Gcode* mcode){
     McodeRunnerBase* runner = McodeOS::Instance().GetRunner(mcode->m);
     if (runner==nullptr){
@@ -7,10 +9,10 @@ bool McodeOS::StartToRun(Gcode* mcode){
         Logger::Print("mcode->m", mcode->m);
         Logger::Halt("More ablility, More responsbility!");
     }
-    return runner->StartToRun(mcode);
+    return runner->StartExec(mcode);
 }
 bool McodeOS::SpinOnce(){
-    __current_runner->SpinOnce();
+    __current_runner->LoopExec();
 }
 
 McodeRunnerBase* McodeOS::GetRunner(int mcode_id){

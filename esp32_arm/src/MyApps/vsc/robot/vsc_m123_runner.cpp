@@ -5,6 +5,5 @@ bool Vsc_M123_Runner::StartToRun(Gcode* gcode){
 }
 
 
-bool Vsc_M123_Runner::SpinOnce(){
-    return false;
+void Vsc_M123_Runner::SpinOnce(){
 }

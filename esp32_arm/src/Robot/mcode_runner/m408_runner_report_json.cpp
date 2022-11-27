@@ -7,7 +7,7 @@
 
 // Mqtt publish a message, report something via MQTT
 // The payload is a static buffer, declared as global.
-bool M408_Runner_ReportJson::StartToRun(Gcode* gcode){
+bool M408_Runner_ReportJson::StartExec(Gcode* gcode){
     Logger::Debug("M408_Runner_ReportJson::Run()");
 
     char *payload = (char*) (gcode->get_command());
