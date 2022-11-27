@@ -5,16 +5,6 @@ void Twh_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
     Logger::Info("Twh_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
     this->_arm_solution = arm_solution;
-
-    // Logger::Info("Twh_G28_Runner::Init() Alpha axis home_triggers");
-    // PositionTrigger* trigger;
-    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    // trigger->__short_name = 'a';
-    // trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
-
-    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(1);
-    // trigger->__short_name='X';
-    // trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
 }
 
 void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){

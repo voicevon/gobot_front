@@ -3,7 +3,8 @@
 #include "Robot/robot_base.h"
 #include "MyApps/vsc/board/board_vsc.h"
 #include "vsc_g28_runner.h"
-#include "CNC/arm_solution/circle_loop/circle_loop_arm_solution.h"
+// #include "CNC/arm_solution/circle_loop/circle_loop_arm_solution.h"
+#include "arm_solution_circle_loop/circle_loop_arm_solution.h"
 #include "MyLibs/list/pid_controllers_list.h"
 
 #define PID_CONTROLLERS_COUNT 1
@@ -17,12 +18,10 @@ class VscRobot: public RobotBase{
         void MoveTo(int layer_index, int cell_index);
 
     private:
-        // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
         void __Init_pids();
         void __Init_layer_position();
         void __Init_actuators(Vsc_Board* board);
         void _InitStatic_Queues() override;
-        void _InitStatic_PositionTriggers() override;
         void _Init_ArmSolution() override;
 
         PidControllers_Listable* __all_pids[PID_CONTROLLERS_COUNT];

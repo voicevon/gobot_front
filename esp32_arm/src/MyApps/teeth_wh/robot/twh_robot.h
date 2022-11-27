@@ -23,7 +23,6 @@ class TeechWarehouse_Robot: public RobotBase{
     private:
         void __InitStatic_Actuators(TeethWarehouse_Board* board);
         void _InitStatic_Queues() override;
-        void _InitStatic_PositionTriggers() override;
         void _Init_ArmSolution() override;
 
 

@@ -35,10 +35,10 @@ class CncActuatorBase: public ListItem{
 
         float GetCurrentPosition(){return this->_current_position;};
 
-        void Init_FomularSlope(float slope_from_actuator_to_cnc){
+        void Formular_SetSlope(float slope_from_actuator_to_cnc){
             this->__formular_slope_from_raw_to_cnc=slope_from_actuator_to_cnc;
             };
-        void ReInit_FormularOffset(float current_cnc_position);
+        void Formular_SetRawOffset(float current_cnc_position);
         float ConvertPosition_ToCncUnit(float actuator_position);
 
     protected:

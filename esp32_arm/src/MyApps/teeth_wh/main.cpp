@@ -8,6 +8,9 @@
 #include "MyApps/teeth_wh/robot/twh_robot.h"
 
 
+    // char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_200K];
+
+
 TeethWarehouse_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
@@ -29,11 +32,13 @@ void test_board(){
 void test_robot(){
     for (int i=0; i<5;i++){
         gcode_queue.AppendGcodeCommand("M408");
+        // gcode_queue.AppendGcodeCommand(String(__payload_buffer));
 
         // gcode_queue.AppendGcodeCommand("G1Z0");
         // gcode_queue.AppendGcodeCommand("G4S15");
         // gcode_queue.AppendGcodeCommand("G1Z100");
         // gcode_queue.AppendGcodeCommand("G4S15");
+
     }
     
 }
@@ -47,7 +52,7 @@ void setup(){
     app.LinkRobot(&robot);
 
     setup_mqtt_block_connect();
-    append_mqtt_bridge("teeth_wh/wh2210", &mqtt_command_queue, &app); 
+    append_mqtt_bridge("twh/221109/gcode_feed", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
 
     // gcode_queue.AppendGcodeCommand("G28a");

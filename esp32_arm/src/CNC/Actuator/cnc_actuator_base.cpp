@@ -7,7 +7,7 @@ void CncActuatorBase::LinkRangeConstraint(ActuatorRangeConstraintBase* range_con
     this->_is_range_constraint = true;
 }
 
-void CncActuatorBase::ReInit_FormularOffset(float current_cnc_position){
+void CncActuatorBase::Formular_SetRawOffset(float current_cnc_position){
     this->__formular_raw_offset = current_cnc_position / this->__formular_slope_from_raw_to_cnc - this->_current_position ;
 }
 

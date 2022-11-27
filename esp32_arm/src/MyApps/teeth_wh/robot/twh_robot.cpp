@@ -8,7 +8,6 @@ void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
     Logger::Debug("TeechWarehouse_Robot::Init()");
     this->_InitStatic_Queues();
     this->__InitStatic_Actuators(board);
-    this->_InitStatic_PositionTriggers();
     this->_Init_ArmSolution();
 
     this->_LinkMover(&__mover);
@@ -37,10 +36,10 @@ void TeechWarehouse_Robot::__InitStatic_Actuators(TeethWarehouse_Board* board){
     calculator.slave_pulley_teeth_count = 1;
 
     float slope = 1.0f / calculator.Get_Formular_Slope_steps_per_mm();
-    __actuator_alpha.Init_FomularSlope(slope);
+    __actuator_alpha.Formular_SetSlope(slope);
     __actuator_alpha.LinkStepper(board->GetStepper_Alpha(), slope);
 
-    __actuator_beta.Init_FomularSlope(slope);
+    __actuator_beta.Formular_SetSlope(slope);
     __actuator_beta.LinkStepper(board->GetStepper_Beta(), slope);
 
     // M=0.8, T=48, circle_length = 3.14*48*0.8=120.6mm
@@ -50,8 +49,8 @@ void TeechWarehouse_Robot::__InitStatic_Actuators(TeethWarehouse_Board* board){
     slope = -0.335;
     float offset = -270.0f;
     __actuator_gamma.LinkServo(board->GetServo_onVertical(), true);
-    __actuator_gamma.Init_FomularSlope(slope);
-    __actuator_gamma.ReInit_FormularOffset(offset);
+    __actuator_gamma.Formular_SetSlope(slope);
+    __actuator_gamma.Formular_SetRawOffset(offset);
 }
 
 void TeechWarehouse_Robot::_Init_ArmSolution(){
@@ -62,15 +61,6 @@ void TeechWarehouse_Robot::_Init_ArmSolution(){
     this->_LinkArmSolution(&__arm_solution);
 }
 
-void TeechWarehouse_Robot::_InitStatic_PositionTriggers(){
-    // PositionTrigger* trigger_X = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    // trigger_X->AxisName = 'X';
-    // trigger_X->SetTriggerPosition(1234);
-
-    // PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(1);
-    // trigger_a->AxisName = 'a';
-    // trigger_a->SetTriggerPosition(DEG_TO_RAD * 90);
-}
 
 void TeechWarehouse_Robot::_InitStatic_Queues(){
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;

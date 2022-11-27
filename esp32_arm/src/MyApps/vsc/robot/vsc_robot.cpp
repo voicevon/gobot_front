@@ -14,7 +14,6 @@ void VscRobot::Init(Vsc_Board* board){
     g28_runner.Init(&mover, &arm_solution);
 
     this->_LinkMover(&mover);
-    this->_InitStatic_PositionTriggers();
     this->_InitStatic_Queues();
     this->_Init_ArmSolution();
     this->__Init_actuators(board);
@@ -47,10 +46,6 @@ void VscRobot::__Init_layer_position(){
 }
 
 void VscRobot::MoveTo(int layer_index, int cell_index){
-    // String m123 = "M123C";
-    // m123.concat(cell_index);
-    // this->_gcode_queue->AppendGcodeCommand(m123);
-
     String g1 = "G1A";
     // TODO:  over single circle.
     float gear_angle = TWO_PI *  this->__position_in_pitch[layer_index] / 184;
@@ -73,7 +68,7 @@ void VscRobot::__Init_actuators(Vsc_Board* board){
     helper.motor_gear_pitch_in_mm = 12.7;
     helper.slave_pulley_teeth_count = 368;
     float slope = helper.Get_Formular_Slope_raw_per_rad();
-    __actuator_alpha.Init_FomularSlope(slope);
+    __actuator_alpha.Formular_SetSlope(slope);
 
 
 }
@@ -81,23 +76,7 @@ void VscRobot::__Init_actuators(Vsc_Board* board){
 void VscRobot::_InitStatic_Queues() {
 
 }
-void VscRobot::_InitStatic_PositionTriggers() {
-    // PositionTrigger* trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    // trigger_a->AxisName = 'a';
-    // trigger_a->SetTriggerPosition(DEG_TO_RAD * 180);
 
-    // trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(1);
-    // trigger_a->AxisName = 'a';
-    // trigger_a->SetTriggerPosition(DEG_TO_RAD * 90);
-
-    // trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(2);
-    // trigger_a->AxisName = 'a';
-    // trigger_a->SetTriggerPosition(DEG_TO_RAD * 270);
-
-    // trigger_a = HomeTrigger_Array::Instance().GetPositionTrigger(3);
-    // trigger_a->AxisName = 'a';
-    // trigger_a->SetTriggerPosition(DEG_TO_RAD * 0);
-}
 void VscRobot::_Init_ArmSolution() {
 
 }

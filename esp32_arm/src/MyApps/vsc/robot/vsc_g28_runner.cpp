@@ -5,15 +5,6 @@ void Vsc_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
     Logger::Info("Vsc_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
 
-    // Logger::Info("Vsc_G28_Runner::Init() Alpha axis home_triggers");
-    // PositionTrigger* trigger;
-    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    // trigger->AxisName = 'X';
-    // trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,    
-
-    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(1);
-    // trigger->AxisName='X';
-    // trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
 }
 
 void Vsc_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
@@ -42,3 +33,21 @@ void Vsc_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
 }
 
 
+void Vsc_G28_Runner::SetHomedPosition(PositionTrigger* firer){
+    if (this->_axis_name =='a'){
+        // do nothing
+    }else if (this->_axis_name == 'X'){
+        // must home('a') first, then home('X')
+        IKPosition_abgdekl ik;
+        ik.Positions[AXIS_ALPHA] = 123;
+        ik.Positions[AXIS_BETA] = 123;
+        this->_arm_solution->SetCurrentPosition(&ik);
+        
+        bool debug = true;
+        if (debug){
+            FKPosition_XYZRPY fk;
+            this->_arm_solution->FK(&ik, &fk);
+            fk.PrintOut("Twh_G28_Runner::SetHomedPosition() 'X'");
+        }
+    }
+}
