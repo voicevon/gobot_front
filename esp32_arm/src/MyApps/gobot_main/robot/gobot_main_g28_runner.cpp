@@ -5,24 +5,6 @@ void GobotMain_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
     Logger::Info("GobotMain_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
 
-    // homing.IsDirectionToMax = true;
-    // homing.Speed = TWO_PI / 60;  // 60 seconds Per loop.
-    // homing.Accelleration = 0.1;
-    // homing.DistanceToGo = TWO_PI;
-    
-    // Logger::Info("GobotMain_G28_Runner::Init() Alpha axis home_triggers");
-    // PositionTrigger* trigger;
-    // // trigger = board->GetPositionTrigger(0);
-    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    // trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,
-    // trigger->AxisName = 'a';    
-    // // __homer.AppendPositionTrigger(trigger);
-
-    // trigger = HomeTrigger_Array::Instance().GetPositionTrigger(0);
-    // // trigger = board->GetPositionTrigger(1);
-    // trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
-    // trigger->AxisName = 'b';
-    // __homer.AppendPositionTrigger(trigg//er);
 }
 
 void GobotMain_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
@@ -48,4 +30,24 @@ void GobotMain_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             break;
     }
     Logger::Print("GobotMain_G28_Runner::SetMoveBlock_ToHome()  point", 99);
+}
+
+
+void GobotMain_G28_Runner::SetHomedPosition(PositionTrigger* firer){
+    if (this->_axis_name =='a'){
+        // do nothing
+    }else if (this->_axis_name == 'X'){
+        // must home('a') first, then home('X')
+        IKPosition_abgdekl ik;
+        ik.Positions[AXIS_ALPHA] = 123;
+        ik.Positions[AXIS_BETA] = 123;
+        this->_arm_solution->SetCurrentPosition(&ik);
+        
+        bool debug = true;
+        if (debug){
+            FKPosition_XYZRPY fk;
+            this->_arm_solution->FK(&ik, &fk);
+            fk.PrintOut("Twh_G28_Runner::SetHomedPosition() 'X'");
+        }
+    }
 }

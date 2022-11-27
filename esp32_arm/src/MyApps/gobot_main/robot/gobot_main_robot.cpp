@@ -1,6 +1,5 @@
 #include "gobot_main_robot.h"
 #include "Robot/mcode_runner/mcode_os.h"
-// #include "Robot/mcode_runner/mcode_runners.h"
 #include "CNC/mover/teensy_step_gateway.h"
 #include "CNC/Actuator/stepper/actuator_stepper_calculator.h"
 
@@ -54,4 +53,30 @@ void GobotMainRobot::__InitActuator(GobotMain_Board* board){
     // // this->_motor_gear_teeth_count = 10;
     // // this->_slave_pulley_teeth_count = 90;
     // // this->motor_step_angle_in_degree = 0.7003891050583658;
+}
+
+
+void GobotMainRobot::_Init_ArmSolution(){
+    // __arm_config.arm_length = 205;
+    // // __arm_config.slave_gear_circle_length = 123.98;
+    // __arm_config.master_slope_steps_per_mm = 12.778;
+    // __arm_solution.LinkConfig(&__arm_config);
+    // this->_LinkArmSolution(&__arm_solution);
+}
+
+
+void GobotMainRobot::_InitStatic_Queues(){
+    Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    // Init LineSegment queue head
+    Queue_LineSegment::Instance()._all_queue_ables = (Queue_able*) this->__all_line_segments;
+    LineSegment* line = Queue_LineSegment::Instance().GetRoom();
+    line->TargetPosition.X = 0;
+    line->TargetPosition.Y = 0;
+    line->TargetPosition.Z = 0;
+    line->TargetPosition.Roll = 0;
+    line->TargetPosition.Pitch = 0;
+    line->TargetPosition.Yaw = 0;
+    line->PrintOUt();
+    Queue_LineSegment::Instance().Deposit();
+    Logger::Print("TeechWarehouse_Robot::Init", 83);
 }

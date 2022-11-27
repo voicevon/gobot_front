@@ -1,24 +1,9 @@
 #include<math.h>
 #include "five_bars_arm_solution.h"
 #include<Arduino.h>
+#include "config_base.h"
 
-// void FiveBars_ArmSolution::_SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis){
-// 		// The homed postion is a Inverse kinematic position for alpha, beta.
-// 		IKPosition_abgdekl ik_position;
-// 		// if (this->_config->IsInverseKinematicHoimg){
-// 			Serial.print("\n   [Info] Trying to get home position from actuator position  ");
-// 			// ik_position.alpha =  this->_config->Homed_position_alpha_in_rad;
-// 			// ik_position.beta =  this->_config->Homed_position_beta_in_rad;
-// 			// ik_position.alpha = this->_config->GetAxisHomers()->GetAxisHomer(AXIS_ALPHA)->GetHomingConfig()->LastHomedPosition;
-// 			// ik_position.beta = this->_config->GetAxisHomers()->GetAxisHomer(AXIS_BETA)->GetHomingConfig()-> LastHomedPosition;
-// 			// ik_position.alpha = this->_homer_diction.GetAxisHomer(AXIS_ALPHA)->GetFiredPosition();
-// 			// ik_position.beta = this->_homer_diction.GetAxisHomer(AXIS_)->GetFiredPosition();
-// 			this->FK(&ik_position, &this->__current_fk_position);
-// 			// verify FK by IK()
-// 			IKPosition_abgdekl verifying_ik;
-// 			Serial.println("\n\n  [Info] Please verify IK->FK->IK   ");
-// 			this->IK(&this->__current_fk_position, &verifying_ik);
-// }
+
 
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
 void FiveBars_ArmSolution::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik){
@@ -181,79 +166,4 @@ void FiveBars_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* to
 	Serial.print(")");
 }
 
-// bool FiveBars_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
-// 	Logger::Warn("FiveBars_ArmSolution::RunG1()");
-// 	Serial.println(gcode->get_command());
-
-// 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
-// 	// Assume G1-code want to update actuator directly, no need to do IK.
-// 	FKPosition_XYZRPY target_fk_xy;
-// 	IKPosition_abgdekl target_ik_ab;
-
-// 	// Sometimes, the current position of stepper is NOT the last target position. Since it's moving.
-// 	// But, The initialized values will effect nothing. They will be over writen. 
-// 	// target_ik_ab.alpha = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA);
-// 	// target_ik_ab.beta = this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA);
-// 	bool do_ik=false;
-// 	if (gcode->has_letter('A')){
-// 		// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
-// 		target_ik_ab.alpha = gcode->get_value('A') * DEG_TO_RAD;
-// 	}
-// 	if (gcode->has_letter('B')){
-// 		// this->_cnc_board->EnableMotor(AXIS_BETA, true);
-// 		target_ik_ab.beta = gcode->get_value('B') *  DEG_TO_RAD;
-// 	}
-// 	// If need IK, do it now.
-// 	if (gcode->has_letter('X')) {
-// 		do_ik=true;
-// 		target_fk_xy.X = gcode->get_value('X');
-// 	}
-// 	if (gcode->has_letter('Y')){
-// 		do_ik=true;
-// 		target_fk_xy.Y = gcode->get_value('Y');
-// 	}
-// 	if (do_ik) IK(&target_fk_xy,&target_ik_ab);
-// 	// Normally the unit in G1A,G1B is degree
-// 	if(gcode->has_letter('R')) 
-// 		// Bug now, the unit in G1A,G1B is RAD
-// 		target_ik_ab.alpha =  gcode->get_value('R');
-// 	if (gcode->has_letter('F')){
-// 		// float speed = gcode->get_value('F');
-// 		// this.sets
-// 		// this->beta_stepper->setMaxSpeed(speed);
-// 	}
-// 	//Prepare actuator/driver to move to next point
-
-// 	//None blocking, move backgroundly.
-// 	// this->_mover_base->AllActuatorsMoveTo(true, target_position);
-// 	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
-// 	mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
-// 	// this->__queue_move_block->ForwardHead();
-// 	Queue_MoveBlock::Instance().Deposit();
-
-// 	if (true){
-// 		FKPosition_XYZRPY verified_fk;
-// 		FK(&target_ik_ab, &verified_fk);
-// 		Serial.print(" Please Verify FK angin to confirm IK() is correct.");
-// 		Serial.print(" FK.X= ");
-// 		Serial.print(verified_fk.X);
-// 		Serial.print(" FK.Y= ");
-// 		Serial.print(verified_fk.Y);
-
-// 		Serial.print("[Debug] FiveBars_ArmSolution::RunG1() ");
-// 		// Serial.print(RAD_TO_DEG * this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_ALPHA));
-// 		Serial.print(",");
-// 		// Serial.print(RAD_TO_DEG * this->_mover_base->GetSingleActuatorCurrentPosition_InCncUnit(AXIS_BETA));
-// 		Serial.print(" <-- from   alpha,beta   to --> ");
-// 		Serial.print(RAD_TO_DEG * target_ik_ab.alpha);
-// 		Serial.print(" , ");
-// 		Serial.println(RAD_TO_DEG * target_ik_ab.beta);
-// 	}  
-// }
-
-
-
-// float FiveBars_ArmSolution::GetDistanceToTarget_IK(){
-// 	// return this->_mover_base->GetAbsDistanceToTarget_InCncUnit();
-// }
 
