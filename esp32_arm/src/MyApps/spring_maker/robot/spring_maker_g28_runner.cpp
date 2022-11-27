@@ -38,3 +38,22 @@ void SpringMaker_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
     }
     Logger::Print("SpringMaker_G28_Runner::SetMoveBlock_ToHome()  point", 99);
 }
+
+void SpringMaker_G28_Runner::SetHomedPosition(PositionTrigger* firer){
+    if (this->_axis_name =='a'){
+        // do nothing
+    }else if (this->_axis_name == 'X'){
+        // must home('a') first, then home('X')
+        IKPosition_abgdekl ik;
+        ik.Positions[AXIS_ALPHA] = 123;
+        ik.Positions[AXIS_BETA] = 123;
+        this->_arm_solution->SetCurrentPosition(&ik);
+        
+        bool debug = true;
+        if (debug){
+            FKPosition_XYZRPY fk;
+            this->_arm_solution->FK(&ik, &fk);
+            fk.PrintOut("Twh_G28_Runner::SetHomedPosition() 'X'");
+        }
+    }
+}

@@ -7,5 +7,6 @@ class SpringMaker_G28_Runner: public G28_Runner{
 
     private:
         void SetMoveBlock_ToHome(char axis, MoveBlock* mb) override;
+        void SetHomedPosition(PositionTrigger* firer) override;
 
 };
