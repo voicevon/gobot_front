@@ -4,7 +4,7 @@
 class Vsc_M123_Runner: public Final_M123_RunnerBase{
     public:
         bool StartToRun(Gcode* gcode) override;
-        bool SpinOnce() override;
+        void SpinOnce() override;
 
     private:
 

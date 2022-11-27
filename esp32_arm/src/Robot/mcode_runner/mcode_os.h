@@ -21,9 +21,9 @@ class McodeOS{
     private:
         M42_Runner_Switch_GPIO __m42_runner_switch_gpio;
         M84_Runner_Disable_All_Steppers __m84_runner_disable_all_steppers;
-        M119_Runner_TestPositionTriggers __m119_runner;
-        M130_Runner_UpdatePid __m130_runner;
-        M280_Runner_Servo __m280_runner;
-        M408_Runner_ReportJson _m408_runner;
+        M119_Runner_TestPositionTriggers __m119_runner_test_position_triggers;
+        M130_Runner_UpdatePid __m130_runner_update_pid;
+        M280_Runner_Servo __m280_runner_set_servo;
+        M408_Runner_ReportJson __m408_runner_report_json;
         McodeRunnerBase* __current_runner;
 };

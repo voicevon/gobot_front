@@ -23,7 +23,7 @@ class Final_M123_RunnerBase{
 class M123_Runner_EefAct: public McodeRunnerBase{
     public:
         bool StartToRun(Gcode* gcode) override;
-        bool SpinOnce() override;
+        void SpinOnce() override;
         void LinkFinalRunner(Final_M123_RunnerBase* final_runner){this->__final_runner=final_runner;};
 
     private:

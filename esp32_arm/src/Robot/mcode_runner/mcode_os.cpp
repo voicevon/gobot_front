@@ -22,9 +22,17 @@ McodeRunnerBase* McodeOS::GetRunner(int mcode_id){
         case 84:
             __current_runner = &this->__m84_runner_disable_all_steppers;
             break;
+        case 119:
+            __current_runner = &this->__m119_runner_test_position_triggers;
+            break;
         case 130:
-            __current_runner = &this->__m130_runner;
-            break;                        
+            __current_runner = &this->__m130_runner_update_pid;
+            break;  
+        case 280:
+            __current_runner = &this->__m280_runner_set_servo;
+        case 408:
+            __current_runner = &this->__m408_runner_report_json;
+            break;
         default:
             break;
     }

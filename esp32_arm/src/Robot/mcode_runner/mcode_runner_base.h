@@ -9,5 +9,5 @@ class McodeRunnerBase{
         // return true: Fininshed running.
         // return false: Not finished running. robot state should be blocked. runner will be run backgroundly.
         virtual bool StartToRun(Gcode* mcode);
-        virtual bool SpinOnce(){};  // TODO: remove body
+        virtual void SpinOnce(){};  // TODO: remove body
 };
