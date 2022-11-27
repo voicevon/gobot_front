@@ -3,8 +3,8 @@
     - Message Procuder: NodeRed (from UI)
     - Message Consumer: teeth_wh_robot.py
 - Example
- - { 'dev':221109, 'command':'prepare_deposit', 'cell':{}};
- - { 'dev':221109, 'command':'start_deposit', 'cell':{ 'row':123, 'col':4 } }
+  - { 'dev':221109, 'command':'prepare_deposit', 'cell':{}};
+  - { 'dev':221109, 'command':'start_deposit', 'cell':{ 'row':123, 'col':4 } }
 
 # AMQ: twh_withdraw
 - Group name: command_queues
@@ -18,15 +18,15 @@
 - Message Procuder: NodeRed (from command_queues)
 - Message Consumer: teeth_wh_robot.py
 - Example
- - G1X123Y45
- - G4S3
- - M408
+  - G1X123Y45
+  - G4S3
+  - M408
  
 # MQTT: 
 - topic twh/221109/gcode_feed
- - payload examples: 'G1X123Y4', 'G4S5', 'M408' 
+  - payload examples: 'G1X123Y4', 'G4S5', 'M408' 
 - twh/221109/gcode_feed/fb
- - payload examples: 'G1X123Y4', 'G4S5', 'M408' 
+  - payload examples: 'G1X123Y4', 'G4S5', 'M408' 
 - twh/221109/ir_state
- - payload = {'empty','blocked'}
+  - payload = {'empty','blocked'}
 
