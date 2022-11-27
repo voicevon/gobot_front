@@ -43,8 +43,12 @@ void TeechWarehouse_Robot::__InitStatic_Actuators(TeethWarehouse_Board* board){
     __actuator_beta.Init_FomularSlope(slope);
     __actuator_beta.LinkStepper(board->GetStepper_Beta(), slope);
 
-    slope = 1;
-    float offset = 0;
+    // M=0.8, T=48, circle_length = 3.14*48*0.8=120.6mm
+    // mm_per_degree = 120.6/360 = 0.335
+    // max: Z=0,  degree=0
+    // min: Z=-90.45, degree=270.
+    slope = -0.335;
+    float offset = -270.0f;
     __actuator_gamma.LinkServo(board->GetServo_onVertical(), true);
     __actuator_gamma.Init_FomularSlope(slope);
     __actuator_gamma.ReInit_FormularOffset(offset);

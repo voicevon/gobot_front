@@ -19,25 +19,16 @@ bool Planner::IsPlanable(){
 void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* line){
     LineSegment* current_line = Queue_LineSegment::Instance().GetHeadLineSegment();
     line->Calculate_distance_time(&current_line->TargetPosition);
-    IKPosition_abgdekl start_ik_position;
-    IKPosition_abgdekl target_ik_position;
+    IKPosition_abgdekl start_ik;
+    IKPosition_abgdekl target_ik;
 
-    Queue_MoveBlock::Instance().DeepCopyHead_ToPosition(&target_ik_position);
-    arm_solution->IK(&line->TargetPosition, &target_ik_position);
+    Queue_MoveBlock::Instance().DeepCopyHead_ToPosition(&target_ik);
+    arm_solution->IK(&line->TargetPosition, &target_ik);
     MoveBlock* mk = Queue_MoveBlock::Instance().GetRoom();
     for(int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
-        mk->MoveBlocks[a].TargetPosition = target_ik_position.Positions[a];
+        mk->MoveBlocks[a].TargetPosition = target_ik.Positions[a];
+        mk->MoveBlocks[a].Recalulate_distance_speed_acceleration(start_ik.Positions[a], line->required_time);
     }
-    // mk->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_position.alpha;
-    // mk->MoveBlocks[AXIS_ALPHA].Recalulate_distance_speed_acceleration(start_ik_position.alpha, line->required_time);
-
-    // mk->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_position.beta;
-    // mk->MoveBlocks[AXIS_BETA].Recalulate_distance_speed_acceleration(start_ik_position.beta, line->required_time);
-
-    // mk->MoveBlocks[AXIS_GAMMA].TargetPosition = target_ik_position.gamma;
-    // mk->MoveBlocks[AXIS_GAMMA].Recalulate_distance_speed_acceleration(start_ik_position.gamma, line->required_time);
-
-    // mk->MoveBlocks[AXIS_DELTA].TargetPosition = target_ik_position.delta;
     // mk->MoveBlocks[AXIS_DELTA].Recalulate_distance_speed_acceleration(start_ik_position.delta, line->required_time);
     
     Queue_MoveBlock::Instance().Deposit();

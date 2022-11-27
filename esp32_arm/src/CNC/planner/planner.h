@@ -11,7 +11,6 @@ class Planner{
     public:
 
         ArmSolutionBase* arm_solution; 
-        // LineSegment current_line;   //shoud be here?
         bool IsPlanable();
         void ConvertLineSegment_AppendMoveBlocks(LineSegment* line);
     

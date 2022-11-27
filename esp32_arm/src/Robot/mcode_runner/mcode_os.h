@@ -2,9 +2,10 @@
 
 #include "m42_runner_switch_gpio.h"
 #include "m84_runner.h"
-#include "m119_runner.h"
+#include "m119_runner_test_position_triggers.h"
 #include "m130_runner_pid_list.h"
 #include "m280_runner_servo_array.h"
+#include "m408_runner_report_json.h"
 
 class McodeOS{
     public:
@@ -23,5 +24,6 @@ class McodeOS{
         M119_Runner_TestPositionTriggers __m119_runner;
         M130_Runner_UpdatePid __m130_runner;
         M280_Runner_Servo __m280_runner;
+        M408_Runner_ReportJson _m408_runner;
         McodeRunnerBase* __current_runner;
 };
