@@ -10,27 +10,27 @@ class UserRequest:
 
     def __init__(self, json_string: str) -> None:
         if json_string == '':
-            self.robot_id = 0
-            self.command = ''
-            self.row = 0
-            self.col = 0
+            self.reset()
         else:
             obj = json.loads(json_string)
             self.robot_id = obj['dev']
             self.command = obj['command']
             self.row = obj['cell']['row']
             self.col = obj['cell']['col']
+        
+    def reset(self):
+        self.robot_id = 0
+        self.command = ''
+        self.row = 0
+        self.col = 0
 
 
 class TeethWarehouseRobot():
     
     def __init__(self, robot_id) -> None:
         self.robot_id = robot_id
-        self.request_withdraw = UserRequest('')
-        self.request_deposit = UserRequest('')
-        self.direction = self.__get_direction(self.request_withdraw)
-        self.eef_statemachine = StateMachine()
-             
+        self.withdraw_request = UserRequest('')
+        self.deposit_request = UserRequest('')
 
         self.ir_state = MqttAutoSyncVar("twh/" + str(robot_id) + "/ir_state", "unknown")
         self.ir_state.auto_sync_to_local = False
@@ -41,62 +41,47 @@ class TeethWarehouseRobot():
         # self.withdraw_queue_name = 'twh_'+str(robot_id)+'_withdraw'
         self.deposit_queue_name = 'twh_deposit'
         self.withdraw_queue_name = 'twh_withdraw'
-        self.current_queue_name = self.deposit_queue_name
         g_amq.Subscribe(queue_name = self.deposit_queue_name)
         g_amq.Subscribe(queue_name= self.withdraw_queue_name)
     
-    def __get_direction(self, user_request: UserRequest):
-        if user_request is None:
-            self.direction = 'None'
-            return
-        if user_request.command in ['prepare_deposit','start_deposit']:
-            self.direction = 'deposit'
-        if user_request.command in ['withdraw', 'end_withdraw']:
-            self.direction = 'withdraw'
-        
     def spin_once(self):
-        match self.current_state:
-            case 'picking_cell' | 'picking_centerbox':
-                self.do_ir_check(self.house_cell)
-            case 'axis_x' | 'be_outside':
+        # print("current state=", self.eef_statemachine.current_state)
+        is_accepted = self.eef_statemachine.stimulate(command=self.deposit_request.command, row=self.deposit_request.row, col=self.deposit_request.col)
+        if is_accepted:
+            self.deposit_request.reset()
+            return
+
+        is_accepted = self.eef_statemachine.stimulate(command=self.withdraw_request.command, row=self.withdraw_request.row, col=self.withdraw_request.col)
+        if is_accepted:
+            self.withdraw_request.reset()
+            return
+
+        match self.eef_statemachine.current_state:
+            case 'picking_cell':
+                self.eef_do_ir_check(row=self.withdraw_request.row, col=self.withdraw_request.col)
+            case 'be_outside':
                 print('TeethWarehouseRobot::SpinOnce()',  'auto')
-                self.eef_statemachine_drive('auto', self.current_housecell)
-            case others:
-                # print('TeethWarehouseRobot::SpinOnce()'， self.current_state, self.current_housecell)
-                pass
+                self.eef_statemachine.stimulate('auto', row=self.withdraw_request.row, col=self.withdraw_request.col)                
+            case 'picking_centerbox':
+                self.eef_do_ir_check(row=self.deposit_request.row, col=self.deposit_request.col)
+            case 'axis_x':
+                self.eef_statemachine.stimulate('auto', row=self.deposit_request.row, col=self.deposit_request.col)
 
-        if self.request_withdraw.command != '':
-            print ('Trying to feed a request.', self.request_withdraw)
-            self.feed_request(self.request_withdraw)
-            return
-        
-        payload = g_amq.fetch_message(self.current_queue_name)
-        if payload is not None:
-            request_string = payload.decode('utf-8')
-            self.request_withdraw = UserRequest(request_string)
-            return
+        if self.withdraw_request.command == '':
+            payload = g_amq.fetch_message(self.withdraw_queue_name)
+            if payload is not None:
+                request_string = payload.decode('utf-8')
+                print('withdraw request ', payload)
+                self.withdraw_request = UserRequest(request_string)
 
-        # current queue is empty, consider to change between deposit and withdraw
-        if self.current_queue_name == self.deposit_queue_name:
-            self.current_queue_name = self.withdraw_queue_name
-        else:
-            self.current_queue_name = self.deposit_queue_name
-        # self.request_withdraw = UserRequest(g_amq.fetch_message(self.current_queue_name))
+        if self.deposit_request.command == '':
+            # print('deposit request is blank.   ', self.deposit_queue_name)
+            payload = g_amq.fetch_message(self.deposit_queue_name)
+            if payload is not None:
+                request_string = payload.decode('utf-8')
+                print('deposit request---- ', payload)
+                self.deposit_request = UserRequest(request_string)
 
-    def feed_request(self, user_request: UserRequest) -> bool:
-        '''
-        This should start a new thread.
-        Reason: Dynamic gcode follow a  branched processing flow. Synced with hardware robot. 
-                And take a long time up to couple minutes.
-        Return:
-            True: The command is accepted by state machine
-            False: The commnd is rejected by state machine
-        '''
-
-        # self.house_cell = request['cell']
-        # if request.Acceptable():
-        # print('-------------------', request,command)
-        return self.eef_statemachine_drive(user_request.command, user_request.get_cell())
 
     def __init_mq_statemachine(self):
         self.mq_statemachine = StateMachine('User Request Queue')
@@ -107,9 +92,9 @@ class TeethWarehouseRobot():
         self.mq_statemachine.AppendItem (StateMachine_Item('deposit', 'deposit', 'deposit', self.do_nothing))
         self.mq_statemachine.AppendItem (StateMachine_Item('deposit', 'idle', 'idle', self.do_nothing))
 
-
     def __init_eef_statemachine(self):
         # for deposit
+        self.eef_statemachine = StateMachine('robot_eef', 'parking')
         self.eef_statemachine.AppendItem(StateMachine_Item('parking', 'prepare_deposit', 'feeding_centerbox', self.eef_do_feed_centerbox))
         self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'end_deposit', 'parking', self.eef_do_park))
         self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'prepare_deposit', 'feeding_centerbox', self.do_nothing))
@@ -123,23 +108,17 @@ class TeethWarehouseRobot():
         self.eef_statemachine.AppendItem(StateMachine_Item('verify', 'black', 'parking', self.eef_do_park))
         # for withdraw
         self.eef_statemachine.AppendItem(StateMachine_Item('parking', 'withdraw', 'picking_cell', self.eef_do_pickup))
-        self.eef_statemachine.AppendItem(StateMachine_Item('picking_cell', 'ir_check_empty', 'picking_cell', self.eef_do_ir_check, repeat_serve=True))
-        self.eef_statemachine.AppendItem(StateMachine_Item('picking_cell', 'ir_check_blocked', 'droping_centerbox', self.eef_do_pickup))
-        self.eef_statemachine.AppendItem(StateMachine_Item('droping_centerbox', 'end_withdraw', 'be_outside', self.eef_do_cancel))
-        self.eef_statemachine.AppendItem(StateMachine_Item('be_outside', 'auto', 'parking', self.eef_do_cancel))
+        self.eef_statemachine.AppendItem(StateMachine_Item('picking_cell', 'ir_check_empty', 'picking_cell', self.eef_do_pickup))
+        self.eef_statemachine.AppendItem(StateMachine_Item('picking_cell', 'ir_check_blocked', 'droping_centerbox', self.eef_do_drop_denterbox))
+        self.eef_statemachine.AppendItem(StateMachine_Item('droping_centerbox', 'withdraw', 'picking_cell', self.eef_do_pickup))
+        self.eef_statemachine.AppendItem(StateMachine_Item('droping_centerbox', 'end_withdraw', 'be_outside', self.eef_do_be_outside))
+        self.eef_statemachine.AppendItem(StateMachine_Item('be_outside', 'auto', 'parking', self.eef_do_park))
 
-        #init, to enter 'parking'
-        self.current_state = 'parking'
         self.eef_do_park(True)
-        # self.current_housecell = None
         self.ir_empty_count = 0
 
 
-
-
-
-    def get_xy(self, house_cell):
-        row, col = house_cell['row'], house_cell['col']
+    def get_xy(self, row,col):
         x = row * 40
         y = col * 40
         return x,y
@@ -154,29 +133,29 @@ class TeethWarehouseRobot():
     def mq_do_fetch_withdraw_exit(self):
         pass
 
-    def eef_do_pick_centerbox(self, house_cell):
+    def eef_do_pick_centerbox(self, row,col):
         self.gcode_sender.move_z_top()
-        x,y = self.get_xy(house_cell)
-        self.gcode_sender.move_a_to(house_cell)
+        x,y = self.get_xy(row,col)
+        self.gcode_sender.move_xy_to(x,y)
         self.gcode_sender.EefMove_Z_toMiddle(12)
         self.gcode_sender.enable_vacuum_sucker(True)
         self.gcode_sender.move_z_top()
 
-    def eef_do_drop_denterbox(self, house_cell):
+    def eef_do_drop_denterbox(self, row, col):
         self.gcode_sender.MoveArmToCenter()
         self.gcode_sender.enable_vacuum_sucker(False)  # drop the tooth to out-box
         self.gcode_sender.PauseForWaiting(3)
         self.gcode_sender.enable_vacuum_sucker(False)        
     
-    def eef_do_drop_cell(self, house_cell):
+    def eef_do_drop_cell(self, row, col):
         pass
 
-    def eef_do_position_x_for_cell(self, house_cell):
-        self.current_housecell = house_cell
-        x = house_cell['row'] * 40
-        self.gcode_sender.move_x_to(x)
+    def eef_do_position_x_for_cell(self, row, col):
+        x = row * 40
+        y = col * 40
+        self.gcode_sender.move_xy_to(x,y)
     
-    def do_nothing(self, house_cell):
+    def do_nothing(self, row, col):
         pass
 
     def eef_do_park(self, home_park: bool):
@@ -188,45 +167,45 @@ class TeethWarehouseRobot():
             self.gcode_sender.move_x_to (200)
             self.gcode_sender.move_a_to(0)
 
-    def eef_do_be_outside(self, house_cell):
+    def eef_do_be_outside(self, row, col):
         pass
 
-    def eef_do_moveback_pick_centerbox(self, house_cell):
+    def eef_do_moveback_pick_centerbox(self, row, col):
         pass
 
-    def eef_do_feed_centerbox(self, house_cell):
+    def eef_do_feed_centerbox(self, row, col):
         self.gcode_sender.move_a_to(0)
         self.gcode_sender.move_xy_to(1000, 1)
     
-    def eef_do_start_deposit(self, house_cell):
+    def eef_do_start_deposit(self, row, col):
         for i in range(20):
             self.gcode_sender.pickup_from_centerbox()
             # self.do_ir_check()
             self.gcode_sender.drop_to_cellbox(house_cell['row'], house_cell['col'])
     
-    def eef_do_pickup(self, house_cell):
+    def eef_do_pickup(self, row, col):
         '''
         pickup from cell   vs  pickup from centerbox ??
         '''
         self.ir_state.local_value = self.ir_state.default_value
 
-    def eef_do_cancel(self, house_cell):
+    def eef_do_cancel(self, row, col):
         pass
 
-    def eef_do_ir_check(self, house_cell):
+    def eef_do_ir_check(self, row, col):
         match self.ir_state.remote_value:
             case 'unknown':
                 # Have not get new state
                 return
 
             case "empty":
-                self.eef_statemachine_drive('ir_check_empty', self.current_housecell)
+                self.eef_statemachine.stimulate('ir_check_empty', row, col)
                 self.ir_state.local_value = self.ir_state.default_value
                 self.ir_state.remote_value = self.ir_state.default_value
                 self.ir_empty_count += 1
 
             case "blocked":
-                self.eef_statemachine_drive('ir_check_blocked', self.current_housecell)
+                self.eef_statemachine.stimulate('ir_check_blocked', row, col)
                 self.ir_state.local_value = self.ir_state.default_value
                 self.ir_state.remote_value = self.ir_state.default_value
                 self.ir_empty_count = 0
@@ -280,6 +259,6 @@ if __name__ == '__main__':
     g_amq.connect_to_broker(amq_broke_config)
     g_mqtt.connect_to_broker(g_mqtt_broker_config)
     twh_message_dealler = TeethWarehouseMessageDispacher()
-    g_amq.SpinOnce()
     while True:
+        g_amq.SpinOnce()
         twh_message_dealler.spin_once()

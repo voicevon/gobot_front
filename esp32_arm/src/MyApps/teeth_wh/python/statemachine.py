@@ -3,15 +3,13 @@ import json
 
 class StateMachine_Item():
 
-    def __init__(self, current_state:str, command:str, post_state:str, service_function=None, repeat_serve=False) -> None:
+    def __init__(self, current_state:str, command:str, post_state:str, service_function=None) -> None:
         self.current_state = current_state
         self.command = command
         self.post_state = post_state
         self.service_function = service_function
         if service_function is None:
             self.service_function = self.do_nothing
-        self.repeat_invoke_service_function = repeat_serve
-        # self.print_debug = False
 
     def print_out(self):
         print("------------ StateMachine_Item() -------------", end='')
