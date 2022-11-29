@@ -12,6 +12,7 @@
 
 # IDE
 * Install platformio.
+
 # Lost file:  soc/soc_caps.h
 
 # Colored font in terminal

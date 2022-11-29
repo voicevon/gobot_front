@@ -31,8 +31,8 @@
             "82c12bd2863e0963",
             "3aeb6c3126fd9d50"
         ],
-        "x": 14,
-        "y": 1979,
+        "x": 2194,
+        "y": 159,
         "w": 812,
         "h": 342
     },
@@ -49,8 +49,8 @@
             "42af1cb4a5b99cf4",
             "97128cda05717535"
         ],
-        "x": 594,
-        "y": 779,
+        "x": 814,
+        "y": 1299,
         "w": 432,
         "h": 142
     },
@@ -67,8 +67,8 @@
             "f80a2d23a1f79baf",
             "3f5e8d668ec104c0"
         ],
-        "x": 594,
-        "y": 953,
+        "x": 814,
+        "y": 1513,
         "w": 1118,
         "h": 254
     },
@@ -103,12 +103,15 @@
         "nodes": [
             "b86a61a159912718",
             "d2daf55a59bfd57d",
-            "1f0cbed7523d21c7"
+            "1f0cbed7523d21c7",
+            "7386455eeb4c7aaa",
+            "cf97895e5b37fdfa",
+            "f40f94efbe1b12da"
         ],
         "x": 294,
         "y": 539,
-        "w": 652,
-        "h": 82
+        "w": 672,
+        "h": 202
     },
     {
         "id": "fdc2fb7e5de3a7b4",
@@ -150,50 +153,10 @@
             "bc7bc818adb4a317",
             "9fd4ed75c941d7db"
         ],
-        "x": 94,
-        "y": 699,
+        "x": 274,
+        "y": 1319,
         "w": 312,
         "h": 262
-    },
-    {
-        "id": "6f75cbb5b20dcf69",
-        "type": "group",
-        "z": "3b3b51ba9856c9a7",
-        "g": "8f4b1fa53febb784",
-        "name": "Append record",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "99b5a527becdd40a",
-            "d630c041ff2249fc",
-            "af889340e4ad9a82",
-            "6386830edd2a3f73"
-        ],
-        "x": 874,
-        "y": 1099,
-        "w": 812,
-        "h": 82
-    },
-    {
-        "id": "f80a2d23a1f79baf",
-        "type": "group",
-        "z": "3b3b51ba9856c9a7",
-        "g": "8f4b1fa53febb784",
-        "name": "update stock file",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "415e144fae24c102",
-            "b175f7bb99b837b8",
-            "5551b61f8679f4d4",
-            "0a7a22f02c03e0bb"
-        ],
-        "x": 874,
-        "y": 979,
-        "w": 812,
-        "h": 82
     },
     {
         "id": "c84e9bdfcdd9622c",
@@ -216,10 +179,50 @@
             "28967f28423812cd",
             "6c045c858d53c619"
         ],
-        "x": 14,
-        "y": 1573,
+        "x": 234,
+        "y": 2133,
         "w": 1638,
         "h": 288
+    },
+    {
+        "id": "6f75cbb5b20dcf69",
+        "type": "group",
+        "z": "3b3b51ba9856c9a7",
+        "g": "8f4b1fa53febb784",
+        "name": "Append record",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "99b5a527becdd40a",
+            "d630c041ff2249fc",
+            "af889340e4ad9a82",
+            "6386830edd2a3f73"
+        ],
+        "x": 1094,
+        "y": 1659,
+        "w": 812,
+        "h": 82
+    },
+    {
+        "id": "f80a2d23a1f79baf",
+        "type": "group",
+        "z": "3b3b51ba9856c9a7",
+        "g": "8f4b1fa53febb784",
+        "name": "update stock file",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "415e144fae24c102",
+            "b175f7bb99b837b8",
+            "5551b61f8679f4d4",
+            "0a7a22f02c03e0bb"
+        ],
+        "x": 1094,
+        "y": 1539,
+        "w": 812,
+        "h": 82
     },
     {
         "id": "28967f28423812cd",
@@ -234,10 +237,30 @@
             "34bf51da37bc5553",
             "5f8384ece0aab120"
         ],
-        "x": 1114,
-        "y": 1599,
+        "x": 1334,
+        "y": 2159,
         "w": 512,
         "h": 82
+    },
+    {
+        "id": "1a9e515cc5cd13d7",
+        "type": "group",
+        "z": "3b3b51ba9856c9a7",
+        "name": "Debug triggers",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "4bea98f760f6d93d",
+            "c62c0edda53adde3",
+            "771b8fd3e7a7aa8e",
+            "80d1c94e390c77d5",
+            "b22a4529b8650f22"
+        ],
+        "x": 14,
+        "y": 899,
+        "w": 232,
+        "h": 782
     },
     {
         "id": "e8349c823e922a57",
@@ -270,8 +293,8 @@
         "topic": "topic",
         "topicType": "msg",
         "className": "",
-        "x": 90,
-        "y": 2020,
+        "x": 2270,
+        "y": 200,
         "wires": [
             [
                 "3aeb6c3126fd9d50"
@@ -309,8 +332,8 @@
         "topic": "topic",
         "topicType": "msg",
         "className": "",
-        "x": 90,
-        "y": 2080,
+        "x": 2270,
+        "y": 260,
         "wires": [
             []
         ]
@@ -346,8 +369,8 @@
         "topic": "topic",
         "topicType": "msg",
         "className": "",
-        "x": 90,
-        "y": 2140,
+        "x": 2270,
+        "y": 320,
         "wires": [
             []
         ]
@@ -388,8 +411,8 @@
         "topic": "topic",
         "topicType": "msg",
         "className": "",
-        "x": 90,
-        "y": 2200,
+        "x": 2270,
+        "y": 380,
         "wires": [
             []
         ]
@@ -415,8 +438,8 @@
         "payloadType": "str",
         "topic": "topic",
         "topicType": "msg",
-        "x": 90,
-        "y": 2280,
+        "x": 2270,
+        "y": 460,
         "wires": [
             [
                 "17d09a4fd259539d"
@@ -435,8 +458,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 310,
-        "y": 2280,
+        "x": 2490,
+        "y": 460,
         "wires": [
             [
                 "82c12bd2863e0963"
@@ -458,8 +481,8 @@
         "correl": "",
         "expiry": "",
         "broker": "d1d506186f8ae701",
-        "x": 740,
-        "y": 2280,
+        "x": 2920,
+        "y": 460,
         "wires": []
     },
     {
@@ -474,8 +497,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 530,
-        "y": 2280,
+        "x": 2710,
+        "y": 460,
         "wires": [
             [
                 "0402892a8b40f6c0"
@@ -494,8 +517,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 2020,
+        "x": 2460,
+        "y": 200,
         "wires": [
             []
         ]
@@ -510,8 +533,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 180,
-        "y": 740,
+        "x": 360,
+        "y": 1360,
         "wires": [
             [
                 "9fd4ed75c941d7db"
@@ -528,8 +551,8 @@
         "headers": {
             "title": "ddff"
         },
-        "x": 910,
-        "y": 840,
+        "x": 1130,
+        "y": 1360,
         "wires": [],
         "inputLabels": [
             "aa"
@@ -540,13 +563,13 @@
         "type": "http in",
         "z": "3b3b51ba9856c9a7",
         "g": "aae3ceec0c3a44c7",
-        "name": "UserEntrance",
-        "url": "/twh/home",
+        "name": "withdraw entrance",
+        "url": "/twh/withdraw",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 390,
-        "y": 580,
+        "x": 410,
+        "y": 700,
         "wires": [
             [
                 "1f0cbed7523d21c7"
@@ -558,13 +581,13 @@
         "type": "http response",
         "z": "3b3b51ba9856c9a7",
         "g": "aae3ceec0c3a44c7",
-        "name": "home page",
+        "name": "withdraw page",
         "statusCode": "",
         "headers": {
             "title": "ddff"
         },
-        "x": 850,
-        "y": 580,
+        "x": 860,
+        "y": 700,
         "wires": [],
         "inputLabels": [
             "aa"
@@ -575,16 +598,16 @@
         "type": "file in",
         "z": "3b3b51ba9856c9a7",
         "g": "aae3ceec0c3a44c7",
-        "name": "Construct query form",
-        "filename": "/home/xm/twh/entrance.txt",
+        "name": "withdraw page",
+        "filename": "/home/xm/twh/withdraw.html",
         "filenameType": "str",
         "format": "utf8",
         "chunk": false,
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 620,
-        "y": 580,
+        "x": 640,
+        "y": 700,
         "wires": [
             [
                 "d2daf55a59bfd57d"
@@ -641,8 +664,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 330,
-        "y": 920,
+        "x": 510,
+        "y": 1540,
         "wires": [
             [
                 "42af1cb4a5b99cf4"
@@ -667,8 +690,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 690,
-        "y": 820,
+        "x": 910,
+        "y": 1340,
         "wires": [
             [
                 "91ea0c05b989b037"
@@ -688,8 +711,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 680,
-        "y": 880,
+        "x": 900,
+        "y": 1400,
         "wires": [
             [
                 "91ea0c05b989b037"
@@ -757,8 +780,8 @@
         "strings": true,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 1390,
-        "y": 1140,
+        "x": 1610,
+        "y": 1700,
         "wires": [
             [
                 "6386830edd2a3f73"
@@ -777,8 +800,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1160,
-        "y": 1140,
+        "x": 1380,
+        "y": 1700,
         "wires": [
             [
                 "99b5a527becdd40a"
@@ -799,8 +822,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 970,
-        "y": 1140,
+        "x": 1190,
+        "y": 1700,
         "wires": [
             [
                 "d630c041ff2249fc"
@@ -823,8 +846,8 @@
         "strings": true,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 1390,
-        "y": 1020,
+        "x": 1610,
+        "y": 1580,
         "wires": [
             [
                 "0a7a22f02c03e0bb"
@@ -843,8 +866,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1170,
-        "y": 1020,
+        "x": 1390,
+        "y": 1580,
         "wires": [
             [
                 "415e144fae24c102"
@@ -865,8 +888,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 970,
-        "y": 1020,
+        "x": 1190,
+        "y": 1580,
         "wires": [
             [
                 "b175f7bb99b837b8"
@@ -885,8 +908,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 1080,
+        "x": 940,
+        "y": 1640,
         "wires": [
             [
                 "5551b61f8679f4d4",
@@ -1046,8 +1069,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 820,
+        "x": 460,
+        "y": 1440,
         "wires": [
             [
                 "bc7bc818adb4a317"
@@ -1160,8 +1183,8 @@
         "createDir": false,
         "overwriteFile": "false",
         "encoding": "none",
-        "x": 1600,
-        "y": 1020,
+        "x": 1820,
+        "y": 1580,
         "wires": [
             []
         ]
@@ -1178,8 +1201,8 @@
         "createDir": false,
         "overwriteFile": "false",
         "encoding": "none",
-        "x": 1600,
-        "y": 1140,
+        "x": 1820,
+        "y": 1700,
         "wires": [
             []
         ]
@@ -1189,54 +1212,21 @@
         "type": "function",
         "z": "3b3b51ba9856c9a7",
         "name": "Create pickups",
-        "func": "for (var i=1;i<98;i++){\n    var row = i *2;\n    var col = i;\n    var is_withdraw = true;\n    // msg.routingKey = \"dev_221109_request\";\n    msg.topic = \"twh_221109_request\";\n    msg.payload= {\"row\":row,\"col\":col,\"is_withdraw\":is_withdraw};\n    node.send(msg);\n    // await new Promise(resolve => setTimeout(resolve, 1000));    \n}\nmsg.payload = \"withdraw_end\"\nreturn msg",
+        "func": "for (var i=1;i<948;i++){\n    var row = i *2;\n    var col = i;\n    var is_withdraw = true;\n    msg.topic = \"twh_withdraw\";\n    msg.payload = {'dev':'221109', 'command': 'withdraw', 'cell': { 'row': 1, 'col': 1 } };\n    node.send(msg);\n}\nmsg.payload = {'dev':'221109','command':'end_withdraw'};\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
-        "y": 1300,
+        "x": 880,
+        "y": 1860,
         "wires": [
             [
-                "863ff22c7cd9c737",
-                "01400a149a6286e8"
+                "01400a149a6286e8",
+                "cfbdcb43961174da"
             ]
         ],
         "info": "output\r\n\r\n\r\n{\r\n    \"is_withdraw\": bool,\r\n    \"\"row_col\":[(2,3),(4,5),(5,6)]\r\n}"
-    },
-    {
-        "id": "863ff22c7cd9c737",
-        "type": "amqp-out",
-        "z": "3b3b51ba9856c9a7",
-        "name": "twh_request",
-        "broker": "2de97a4d668ad4f7",
-        "exchangeName": "twh",
-        "exchangeType": "direct",
-        "exchangeRoutingKey": "topic",
-        "exchangeRoutingKeyType": "msg",
-        "exchangeDurable": true,
-        "amqpProperties": "{\"headers\":{}}",
-        "rpcTimeoutMilliseconds": 3000,
-        "outputs": 0,
-        "x": 1010,
-        "y": 1300,
-        "wires": []
-    },
-    {
-        "id": "bb391f8549a89f8f",
-        "type": "http in",
-        "z": "3b3b51ba9856c9a7",
-        "name": "deposit",
-        "url": "/twh/deposit",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 310,
-        "y": 660,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "01400a149a6286e8",
@@ -1250,14 +1240,15 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 880,
-        "y": 1360,
+        "x": 1100,
+        "y": 1920,
         "wires": []
     },
     {
         "id": "4bea98f760f6d93d",
         "type": "inject",
         "z": "3b3b51ba9856c9a7",
+        "g": "1a9e515cc5cd13d7",
         "name": "",
         "props": [
             {
@@ -1275,8 +1266,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 480,
-        "y": 1340,
+        "x": 140,
+        "y": 1640,
         "wires": [
             [
                 "021830f9f7d66802"
@@ -1297,8 +1288,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 160,
-        "y": 1800,
+        "x": 380,
+        "y": 2360,
         "wires": [
             [
                 "497fbcf1fac175b6"
@@ -1320,8 +1311,8 @@
         "correl": "",
         "expiry": "",
         "broker": "d1d506186f8ae701",
-        "x": 1230,
-        "y": 1820,
+        "x": 1450,
+        "y": 2380,
         "wires": []
     },
     {
@@ -1336,8 +1327,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 1760,
+        "x": 840,
+        "y": 2320,
         "wires": [
             [
                 "deac9204a715aeb9"
@@ -1362,8 +1353,8 @@
         "queueDurable": true,
         "queueAutoDelete": false,
         "headers": "{}",
-        "x": 680,
-        "y": 1620,
+        "x": 900,
+        "y": 2180,
         "wires": [
             [
                 "0a1a25a034f855a0"
@@ -1382,8 +1373,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
-        "y": 1800,
+        "x": 610,
+        "y": 2360,
         "wires": [
             [
                 "91df2c6e8b4c86aa"
@@ -1402,8 +1393,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 1740,
+        "x": 620,
+        "y": 2300,
         "wires": [
             [
                 "91df2c6e8b4c86aa"
@@ -1429,8 +1420,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 790,
-        "y": 1760,
+        "x": 1010,
+        "y": 2320,
         "wires": [
             [
                 "e103a603dc3955c4"
@@ -1452,8 +1443,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
-        "y": 1620,
+        "x": 650,
+        "y": 2180,
         "wires": [
             [
                 "06e1b3060fdb78e3"
@@ -1472,12 +1463,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 990,
-        "y": 1800,
+        "x": 1210,
+        "y": 2360,
         "wires": [
             [
                 "1fc120fb37d76447",
-                "5f8384ece0aab120",
                 "6c045c858d53c619"
             ]
         ]
@@ -1497,8 +1487,8 @@
         "correl": "",
         "expiry": "",
         "broker": "d1d506186f8ae701",
-        "x": 1470,
-        "y": 1640,
+        "x": 1690,
+        "y": 2200,
         "wires": []
     },
     {
@@ -1519,8 +1509,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1220,
-        "y": 1640,
+        "x": 1440,
+        "y": 2200,
         "wires": [
             [
                 "34bf51da37bc5553"
@@ -1533,6 +1523,339 @@
         "z": "3b3b51ba9856c9a7",
         "g": "c84e9bdfcdd9622c",
         "name": "debug 14",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1440,
+        "y": 2320,
+        "wires": []
+    },
+    {
+        "id": "7386455eeb4c7aaa",
+        "type": "http in",
+        "z": "3b3b51ba9856c9a7",
+        "g": "aae3ceec0c3a44c7",
+        "name": "/wth/home",
+        "url": "/twh/home",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 380,
+        "y": 580,
+        "wires": [
+            [
+                "cf97895e5b37fdfa"
+            ]
+        ]
+    },
+    {
+        "id": "cf97895e5b37fdfa",
+        "type": "file in",
+        "z": "3b3b51ba9856c9a7",
+        "g": "aae3ceec0c3a44c7",
+        "name": "home page",
+        "filename": "/home/xm/twh/home.html",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 630,
+        "y": 580,
+        "wires": [
+            [
+                "f40f94efbe1b12da"
+            ]
+        ]
+    },
+    {
+        "id": "f40f94efbe1b12da",
+        "type": "http response",
+        "z": "3b3b51ba9856c9a7",
+        "g": "aae3ceec0c3a44c7",
+        "name": "home page",
+        "statusCode": "",
+        "headers": {
+            "title": "ddff"
+        },
+        "x": 850,
+        "y": 580,
+        "wires": [],
+        "inputLabels": [
+            "aa"
+        ]
+    },
+    {
+        "id": "22ae2fec5d0a15aa",
+        "type": "http in",
+        "z": "3b3b51ba9856c9a7",
+        "name": "deposit entrance",
+        "url": "/twh/deposit",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 360,
+        "y": 860,
+        "wires": [
+            [
+                "0017e43483bddc48",
+                "3787d65993d296af"
+            ]
+        ]
+    },
+    {
+        "id": "0017e43483bddc48",
+        "type": "file in",
+        "z": "3b3b51ba9856c9a7",
+        "name": "deposit page",
+        "filename": "/home/xm/twh/deposit.html",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 590,
+        "y": 860,
+        "wires": [
+            [
+                "92e03b9d102038eb"
+            ]
+        ]
+    },
+    {
+        "id": "92e03b9d102038eb",
+        "type": "http response",
+        "z": "3b3b51ba9856c9a7",
+        "name": "deposit form",
+        "statusCode": "",
+        "headers": {
+            "title": "ddff"
+        },
+        "x": 810,
+        "y": 860,
+        "wires": [],
+        "inputLabels": [
+            "aa"
+        ]
+    },
+    {
+        "id": "3787d65993d296af",
+        "type": "function",
+        "z": "3b3b51ba9856c9a7",
+        "name": "moving outside",
+        "func": "flow.set('deposit_lock', true);\nmsg.topic = \"twh_deposit\";\nvar payload = {'dev':'221109','command':'prepare_deposit','cell':{'row':1, 'col':1}};\nmsg.payload = payload;\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 940,
+        "wires": [
+            [
+                "2cdc4d6662c66528"
+            ]
+        ],
+        "info": "output\r\n\r\n\r\n{\r\n    \"is_withdraw\": bool,\r\n    \"\"row_col\":[(2,3),(4,5),(5,6)]\r\n}"
+    },
+    {
+        "id": "170eb0d7275c1b66",
+        "type": "amqp-out",
+        "z": "3b3b51ba9856c9a7",
+        "name": "deposite queue",
+        "broker": "2de97a4d668ad4f7",
+        "exchangeName": "twh",
+        "exchangeType": "direct",
+        "exchangeRoutingKey": "topic",
+        "exchangeRoutingKeyType": "msg",
+        "exchangeDurable": true,
+        "amqpProperties": "{\"headers\":{}}",
+        "rpcTimeoutMilliseconds": 3000,
+        "outputs": 0,
+        "x": 900,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "b02d70b8444a93c0",
+        "type": "http in",
+        "z": "3b3b51ba9856c9a7",
+        "name": "deposit stater",
+        "url": "/twh/deposit",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 350,
+        "y": 1060,
+        "wires": [
+            [
+                "60d91aa0acd0edc3",
+                "7207478569b645c5"
+            ]
+        ]
+    },
+    {
+        "id": "60d91aa0acd0edc3",
+        "type": "file in",
+        "z": "3b3b51ba9856c9a7",
+        "name": "deposit on the go page",
+        "filename": "/home/xm/twh/deposit.html",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 600,
+        "y": 1060,
+        "wires": [
+            [
+                "db98f7ae3d9d707c"
+            ]
+        ]
+    },
+    {
+        "id": "db98f7ae3d9d707c",
+        "type": "http response",
+        "z": "3b3b51ba9856c9a7",
+        "name": "deposit on the go",
+        "statusCode": "",
+        "headers": {
+            "title": "ddff"
+        },
+        "x": 830,
+        "y": 1060,
+        "wires": [],
+        "inputLabels": [
+            "aa"
+        ]
+    },
+    {
+        "id": "7207478569b645c5",
+        "type": "function",
+        "z": "3b3b51ba9856c9a7",
+        "name": "get row,col",
+        "func": "flow.set('deposit_lock', false);\nmsg.topic = \"twh_deposit\";\nvar payload = {'dev':'221109', 'command': 'start_deposit', 'cell': { 'row': 1, 'col': 1 } };\nmsg.payload = payload;\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 1140,
+        "wires": [
+            [
+                "01bd9c7df8fe644f"
+            ]
+        ],
+        "info": "output\r\n\r\n\r\n{\r\n    \"is_withdraw\": bool,\r\n    \"\"row_col\":[(2,3),(4,5),(5,6)]\r\n}"
+    },
+    {
+        "id": "ba780da76ca5c37a",
+        "type": "link in",
+        "z": "3b3b51ba9856c9a7",
+        "name": "enqueue",
+        "links": [],
+        "x": 765,
+        "y": 780,
+        "wires": [
+            [
+                "170eb0d7275c1b66",
+                "70e2a058b9458b9d"
+            ]
+        ]
+    },
+    {
+        "id": "2cdc4d6662c66528",
+        "type": "link call",
+        "z": "3b3b51ba9856c9a7",
+        "name": "",
+        "links": [
+            "ba780da76ca5c37a"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 820,
+        "y": 940,
+        "wires": [
+            [
+                "700854ac52270eef"
+            ]
+        ]
+    },
+    {
+        "id": "01bd9c7df8fe644f",
+        "type": "link call",
+        "z": "3b3b51ba9856c9a7",
+        "name": "",
+        "links": [
+            "ba780da76ca5c37a"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 960,
+        "y": 1140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cfbdcb43961174da",
+        "type": "link call",
+        "z": "3b3b51ba9856c9a7",
+        "name": "",
+        "links": [
+            "ba780da76ca5c37a"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 1100,
+        "y": 1860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b22a4529b8650f22",
+        "type": "inject",
+        "z": "3b3b51ba9856c9a7",
+        "g": "1a9e515cc5cd13d7",
+        "name": "prepare_deposit",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 940,
+        "wires": [
+            [
+                "3787d65993d296af"
+            ]
+        ]
+    },
+    {
+        "id": "700854ac52270eef",
+        "type": "debug",
+        "z": "3b3b51ba9856c9a7",
+        "name": "debug 15",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -1540,9 +1863,176 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1220,
-        "y": 1760,
+        "x": 1020,
+        "y": 1000,
         "wires": []
+    },
+    {
+        "id": "c62c0edda53adde3",
+        "type": "inject",
+        "z": "3b3b51ba9856c9a7",
+        "g": "1a9e515cc5cd13d7",
+        "name": "start_deposit",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 1140,
+        "wires": [
+            [
+                "7207478569b645c5"
+            ]
+        ]
+    },
+    {
+        "id": "bbee5dd80c5ae3b5",
+        "type": "function",
+        "z": "3b3b51ba9856c9a7",
+        "name": "init",
+        "func": "",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nflow.set('deposit_lock', false);\n",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 780,
+        "wires": [
+            []
+        ],
+        "info": "output\r\n\r\n\r\n{\r\n    \"is_withdraw\": bool,\r\n    \"\"row_col\":[(2,3),(4,5),(5,6)]\r\n}"
+    },
+    {
+        "id": "6855af11761696d5",
+        "type": "delay",
+        "z": "3b3b51ba9856c9a7",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 340,
+        "y": 1000,
+        "wires": [
+            [
+                "7207478569b645c5"
+            ]
+        ]
+    },
+    {
+        "id": "70e2a058b9458b9d",
+        "type": "debug",
+        "z": "3b3b51ba9856c9a7",
+        "name": "debug 16",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "993580d95b905a71",
+        "type": "mqtt out",
+        "z": "3b3b51ba9856c9a7",
+        "name": "",
+        "topic": "twh/221109/ir_state",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d1d506186f8ae701",
+        "x": 390,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "771b8fd3e7a7aa8e",
+        "type": "inject",
+        "z": "3b3b51ba9856c9a7",
+        "g": "1a9e515cc5cd13d7",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "blocked",
+        "payloadType": "str",
+        "x": 150,
+        "y": 1220,
+        "wires": [
+            [
+                "993580d95b905a71"
+            ]
+        ]
+    },
+    {
+        "id": "80d1c94e390c77d5",
+        "type": "inject",
+        "z": "3b3b51ba9856c9a7",
+        "g": "1a9e515cc5cd13d7",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "empty",
+        "payloadType": "str",
+        "x": 150,
+        "y": 1280,
+        "wires": [
+            [
+                "993580d95b905a71"
+            ]
+        ]
     },
     {
         "id": "0ef930b72091b7f3",
