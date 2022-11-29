@@ -1,6 +1,5 @@
-from von.rabbitmq_agent import g_amq, AMQ_BrokerConfig
+from von.rabbitmq_agent import g_amq
 from von.mqtt_auto_syncer import MqttAutoSyncVar
-from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
 from gcode_sender import GcodeSender
 from statemachine import StateMachine_Item,StateMachine
 import json, time
@@ -26,7 +25,7 @@ class UserRequest:
 
 
 class TeethWarehouseRobot():
-    
+    global g_amq
     def __init__(self, robot_id) -> None:
         self.robot_id = robot_id
         self.withdraw_request = UserRequest('')
@@ -43,7 +42,7 @@ class TeethWarehouseRobot():
         # self.withdraw_queue_name = 'twh_'+str(robot_id)+'_withdraw'
         self.deposit_queue_name = 'twh_deposit'
         self.withdraw_queue_name = 'twh_withdraw'
-        g_amq.Subscribe(queue_name = self.deposit_queue_name)
+        # g_amq.Subscribe(queue_name = self.deposit_queue_name)
         g_amq.Subscribe(queue_name= self.withdraw_queue_name)
     
     def spin_once(self):
@@ -68,23 +67,28 @@ class TeethWarehouseRobot():
 
 
         if self.withdraw_request.command == '':
+            # g_amq.SpinOnce()
             payload = g_amq.fetch_message(self.withdraw_queue_name)
+            print('prefetch....................', end='')
+            time.sleep(1)
             if payload is not None:
+                g_amq.SpinOnce()
                 request_string = payload.decode('utf-8')
-                # print('withdraw request ', payload)
+                print('fetched new withdraw request ', payload)
                 self.withdraw_request = UserRequest(request_string)
 
-        if self.deposit_request.command == '':
-            # print('deposit request is blank.   ', self.deposit_queue_name)
-            payload = g_amq.fetch_message(self.deposit_queue_name)
-            if payload is not None:
-                request_string = payload.decode('utf-8')
-                print('deposit request---- ', payload)
-                self.deposit_request = UserRequest(request_string)
+        # if self.deposit_request.command == '':
+        #     # print('deposit request is blank.   ', self.deposit_queue_name)
+        #     payload = g_amq.fetch_message(self.deposit_queue_name)
+        #     if payload is not None:
+        #         request_string = payload.decode('utf-8')
+        #         print('deposit request---- ', payload)
+        #         self.deposit_request = UserRequest(request_string)
 
     def eef_stimulate(self, command:str, row:int, col:int):
         is_accepted = self.eef_statemachine.stimulate(command=command, row=row, col=col)
         if is_accepted:
+            print('self.doingjob', self.doing_job)
             if self.doing_job == 'withdraw':
                 self.withdraw_request.reset()
             if self.doing_job == 'deposit':
@@ -116,7 +120,7 @@ class TeethWarehouseRobot():
 
             case "blocked":
                 # print('eef_do_ir_check() point=', 'ir_check_blocked')
-                is_accepted = self.eef_statemachine.stimulate('ir_check_blocked', row=1, col=1)
+                is_accepted = self.eef_stimulate('ir_check_blocked', row=1, col=1)
                 self.ir_state.local_value = self.ir_state.default_value
                 self.ir_state.Copy_LocalToRemote()
                 self.ir_empty_count = 0
