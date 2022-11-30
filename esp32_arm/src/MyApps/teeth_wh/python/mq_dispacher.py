@@ -47,7 +47,6 @@ if __name__ == '__main__':
     print("connected to mqtt broker.......")
 
     twh_message_dealler = TeethWarehouseMessageDispacher()
-    g_amq.SpinOnce()
     while True:
-        # g_amq.SpinOnce()
+        g_amq.process_data_events()
         twh_message_dealler.spin_once()

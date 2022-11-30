@@ -1,4 +1,5 @@
 #include "twh_g28_runner.h"
+#include "twh_arm_solution.h"
 
 
 void Twh_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
@@ -22,13 +23,13 @@ void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             alpha = &mb->MoveBlocks[AXIS_ALPHA];
             // alpha->IsAbsTargetPosition = false;
             alpha->TargetPosition = -99999;
-            alpha->Speed = 0.1;
-            alpha->Acceleration = 0.05;
+            alpha->Speed = 10000;
+            alpha->Acceleration = 99;
             beta = &mb->MoveBlocks[AXIS_BETA];
             // beta->IsAbsTargetPosition = false;
             beta->TargetPosition = 99999;
-            beta->Speed = 0.1;
-            beta->Acceleration = 0.05;
+            beta->Speed = 10000;
+            beta->Acceleration = 99;
             break;
 
         case 'a':
@@ -37,13 +38,13 @@ void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             // Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha = &mb->MoveBlocks[AXIS_ALPHA];
             // alpha->IsAbsTargetPosition = false;
-            alpha->TargetPosition = -99999;
-            alpha->Speed = 0.1;
+            alpha->TargetPosition = 99999;
+            alpha->Speed = 100;
             alpha->Acceleration = 0.05;
             beta = &mb->MoveBlocks[AXIS_BETA];
             // beta->IsAbsTargetPosition = false;
-            beta->TargetPosition = -99999;
-            beta->Speed = 0.1;
+            beta->TargetPosition = 99999;
+            beta->Speed = 100;
             beta->Acceleration = 0.05;
             break;
 
@@ -61,16 +62,24 @@ void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         // do nothing
     }else if (this->_axis_name == 'X'){
         // must home('a') first, then home('X')
+        MiddleKinematic mk;
+        mk.Angle = DEG_TO_RAD * (-90);
+        mk.X = -188;
+        FKPosition_XYZRPY fk;
+        Twh_ArmSolution arm;
+        arm.MK_to_Fk(&mk, &fk);
+
         IKPosition_abgdekl ik;
-        ik.Positions[AXIS_ALPHA] = 123;
-        ik.Positions[AXIS_BETA] = 123;
+        this->_arm_solution->IK(&fk,&ik);
+        // ik.Positions[AXIS_ALPHA] = 123;
+        // ik.Positions[AXIS_BETA] = 123;
         this->_arm_solution->SetCurrentPosition(&ik);
         
         bool debug = true;
         if (debug){
             FKPosition_XYZRPY fk;
             this->_arm_solution->FK(&ik, &fk);
-            fk.PrintOut("Twh_G28_Runner::SetHomedPosition() 'X'");
+            fk.PrintOut("Twh_G28_Runner::SetHomedPosition()");
         }
     }
 }

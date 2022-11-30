@@ -12,6 +12,7 @@ class LineSegment: public Queue_able{
         FKPosition_XYZRPY TargetPosition;
         float Speed;
         float Acceleration;   // Is this needed ?
+        bool IsMiddleKinematicPosition = false;    // A middle kinematic position is borrowing this.
         void Calculate_distance_time(FKPosition_XYZRPY* start_position);
 
         float vector_distance;

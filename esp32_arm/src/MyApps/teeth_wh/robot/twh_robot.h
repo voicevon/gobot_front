@@ -24,6 +24,7 @@ class TeechWarehouse_Robot: public RobotBase{
         void __InitStatic_Actuators(TeethWarehouse_Board* board);
         void _InitStatic_Queues() override;
         void _Init_ArmSolution() override;
+        void _Convert_MK_to_FK(LineSegment * middle_kinematic_line, LineSegment* fk_line) override;
 
 
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];

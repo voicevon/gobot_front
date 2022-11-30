@@ -25,6 +25,9 @@ void CncActuatorFastStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     int32_t motor_position_in_step;
     // if (move->IsAbsTargetPosition){
     this->_target_position = move->TargetPosition;
+    this->_stepper->setSpeedInHz(move->Speed);
+    this->_stepper->setAcceleration(move->Acceleration);
+    this->_stepper->applySpeedAcceleration();
     float actuator_position = move->TargetPosition;
     if (this->_is_range_constraint){
         actuator_position = this->_range_constraint->_ConvertTo_ActuatorRange(move->TargetPosition);

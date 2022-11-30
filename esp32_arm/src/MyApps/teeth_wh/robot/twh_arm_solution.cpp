@@ -1,11 +1,5 @@
 #include "twh_arm_solution.h"
 
-class MiddleKinematic{
-	public:
-		float X;
-		float Angle;
-		// float Minimuim_X;
-};
 
 void Twh_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	Serial.print("\n[Info] Twh_ArmSolution::IK()");
@@ -65,5 +59,10 @@ void Twh_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk)
 	// Serial.print(")");
 }
 
+void Twh_ArmSolution::MK_to_Fk(MiddleKinematic* mk, FKPosition_XYZRPY* fk){
+	fk->X = mk->X + _config->arm_length * cosf(mk->Angle);
+	fk->Y = _config->arm_length * sinf(mk->Angle);
+	// fk->Z = ik->Positions[AXIS_GAMMA];
+}
 
 

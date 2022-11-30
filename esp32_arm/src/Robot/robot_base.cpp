@@ -144,6 +144,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	// Logger::Print("RobotBase::__RunGcode() point", 14);
 	FKPosition_XYZRPY new_fk_position;
 	IKPosition_abgdekl new_ik_position;
+	LineSegment middle_kinematic_line;
 	// Logger::Print("RobotBase::__RunGcode() point", 51);
 	switch (gcode->g){
 		case 28:
@@ -163,21 +164,36 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			break;
 						
 		case 1:
-			// G1 Move
+			// G1 Move. will follow a Forward kinematic poisition.
+			// The position will be put in to Queue_LineSegment, Then convert to Queue_MoveBlock by Planner
 			if (gcode->has_letter('X')) new_line->TargetPosition.X = gcode->get_value('X');
 			if (gcode->has_letter('Y')) new_line->TargetPosition.Y = gcode->get_value('Y');
 			if (gcode->has_letter('Z')) new_line->TargetPosition.Z = gcode->get_value('Z');
 			if (gcode->has_letter('R')) new_line->TargetPosition.Roll = gcode->get_value('R');
 			if (gcode->has_letter('P')) new_line->TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) new_line->TargetPosition.Yaw = gcode->get_value('W');
+			new_line->IsMiddleKinematicPosition = false;
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			Queue_LineSegment::Instance().Deposit();
 			// this->__planner.AppendLineSegment(new_line);   //TODO:: many lines ?
-
 			break;
-
+		case 5:
+			// G5 Move. will follow a Forward kinematic poisition.
+			// The position will be put in to Queue_LineSegment, Then Convert to Queue_moveBlock by Planner.
+			
+			if (gcode->has_letter('X')) middle_kinematic_line.TargetPosition.X = gcode->get_value('X');
+			if (gcode->has_letter('Y')) middle_kinematic_line.TargetPosition.Y = gcode->get_value('Y');
+			if (gcode->has_letter('Z')) middle_kinematic_line.TargetPosition.Z = gcode->get_value('Z');
+			if (gcode->has_letter('R')) middle_kinematic_line.TargetPosition.Roll = gcode->get_value('R');
+			if (gcode->has_letter('P')) middle_kinematic_line.TargetPosition.Pitch = gcode->get_value('P');
+			if (gcode->has_letter('W')) middle_kinematic_line.TargetPosition.Yaw = gcode->get_value('W');
+			new_line->IsMiddleKinematicPosition = true;
+			this->_Convert_MK_to_FK (&middle_kinematic_line, new_line);
+			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
+			Queue_LineSegment::Instance().Deposit();
+			
 		case 6:
-			// will directly put move_block to the queue.
+			// G6 Move.will directly put move_block to the queue.
 			if (gcode->has_letter('a')) new_move_block->MoveBlocks[AXIS_ALPHA].TargetPosition = gcode->get_value('a');
 			if (gcode->has_letter('b')) new_move_block->MoveBlocks[AXIS_BETA].TargetPosition = gcode->get_value('b');
 			if (gcode->has_letter('g')) new_move_block->MoveBlocks[AXIS_GAMMA].TargetPosition = gcode->get_value('g');

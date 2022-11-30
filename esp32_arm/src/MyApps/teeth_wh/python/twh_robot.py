@@ -67,23 +67,11 @@ class TeethWarehouseRobot():
 
 
         if self.withdraw_request.command == '':
-            # g_amq.SpinOnce()
             payload = g_amq.fetch_message(self.withdraw_queue_name)
-            print('prefetch....................', end='')
-            time.sleep(1)
             if payload is not None:
-                g_amq.SpinOnce()
                 request_string = payload.decode('utf-8')
-                print('fetched new withdraw request ', payload)
                 self.withdraw_request = UserRequest(request_string)
 
-        # if self.deposit_request.command == '':
-        #     # print('deposit request is blank.   ', self.deposit_queue_name)
-        #     payload = g_amq.fetch_message(self.deposit_queue_name)
-        #     if payload is not None:
-        #         request_string = payload.decode('utf-8')
-        #         print('deposit request---- ', payload)
-        #         self.deposit_request = UserRequest(request_string)
 
     def eef_stimulate(self, command:str, row:int, col:int):
         is_accepted = self.eef_statemachine.stimulate(command=command, row=row, col=col)

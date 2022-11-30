@@ -55,9 +55,10 @@ void setup(){
     append_mqtt_bridge("twh/221109/gcode_feed", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
 
-    // gcode_queue.AppendGcodeCommand("G28a");
-    // gcode_queue.AppendGcodeCommand("G28X");
-    test_robot();
+    gcode_queue.AppendGcodeCommand("G28a");
+    gcode_queue.AppendGcodeCommand("G28X");
+    gcode_queue.AppendGcodeCommand("G5R0");
+    // test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
 

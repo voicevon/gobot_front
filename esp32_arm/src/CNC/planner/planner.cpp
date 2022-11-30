@@ -24,10 +24,10 @@ void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* line){
 
     Queue_MoveBlock::Instance().DeepCopyHead_ToPosition(&target_ik);
     arm_solution->IK(&line->TargetPosition, &target_ik);
-    MoveBlock* mk = Queue_MoveBlock::Instance().GetRoom();
+    MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
     for(int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
-        mk->MoveBlocks[a].TargetPosition = target_ik.Positions[a];
-        mk->MoveBlocks[a].Recalulate_distance_speed_acceleration(start_ik.Positions[a], line->required_time);
+        mb->MoveBlocks[a].TargetPosition = target_ik.Positions[a];
+        mb->MoveBlocks[a].Recalulate_distance_speed_acceleration(start_ik.Positions[a], line->required_time);
     }
     // mk->MoveBlocks[AXIS_DELTA].Recalulate_distance_speed_acceleration(start_ik_position.delta, line->required_time);
     

@@ -33,6 +33,8 @@ class RobotBase: public GcodeConsumer{
         void _LinkArmSolution(ArmSolutionBase* arm_solution){__planner.arm_solution=arm_solution;};
         virtual void _InitStatic_Queues();
         virtual void _Init_ArmSolution();
+        
+        virtual void _Convert_MK_to_FK(LineSegment * middle_kinematic_line, LineSegment* fk_line){};
         G28_Runner* _g28_runner;
         CncMover* _mover;
 
