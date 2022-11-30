@@ -67,7 +67,7 @@ void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         mk.Arm_shaft_At_Y= -188;
         FKPosition_XYZRPY fk;
         Twh_ArmSolution arm;
-        arm.real_MK_to_Fk(&mk, &fk);
+        arm.real_MK_to_FK(&mk, &fk);
 
         IKPosition_abgdekl ik;
         this->_arm_solution->IK(&fk,&ik);

@@ -16,8 +16,8 @@ class Twh_ArmSolution: public ArmSolutionBase{
         void LinkConfig(Twh_ArmSolution_Config* config){this->_config=config;};
         void MK_to_FK(FKPosition_XYZRPY* from_mk, FKPosition_XYZRPY* to_fk) override;
         void MK_to_Ik(FKPosition_XYZRPY* from_mk, IKPosition_abgdekl* to_ik) override;
-        void real_MK_to_Fk(MiddleKinematic* mk, FKPosition_XYZRPY* fk);
-        void real_MK_to_Ik(MiddleKinematic* mk, IKPosition_abgdekl* ik);
+        void real_MK_to_FK(MiddleKinematic* mk, FKPosition_XYZRPY* fk);
+        void real_MK_to_IK(MiddleKinematic* mk, IKPosition_abgdekl* ik);
 
     protected:
         void IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
