@@ -36,9 +36,9 @@ void Twh_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk)
 	MiddleKinematic mk;
 
 	// mk.X = (ik->alpha   - ik->beta) * _config->master_slope_steps_per_mm / 2;
-	mk.Arm_shaft_At_Y = (from_ik->Positions[AXIS_ALPHA]   - from_ik->Positions[AXIS_BETA]) * _config->master_slope_steps_per_mm / 2;
+	mk.Arm_shaft_At_Y = (from_ik->Positions[AXIS_BETA] - from_ik->Positions[AXIS_ALPHA]) / _config->linear_slope_steps_per_mm;
 	// mk.Angle = (ik->alpha + ik->beta) / 2 / _config->slave_gear_circle_length;  // Notice: angle has no range now.
-	mk.Arm_Angle = (from_ik->Positions[AXIS_ALPHA] + from_ik->Positions[AXIS_BETA]) / 2 / _config->arm_gear_circle_length;  // Notice: angle has no range now.
+	mk.Arm_Angle = (from_ik->Positions[AXIS_ALPHA] + from_ik->Positions[AXIS_BETA]) / _config->arm_slope_steps_per_rad;  // Notice: angle has no range now.
 	real_MK_to_FK(&mk, to_fk);
 	// fk->X = mk.Arm_shaft_At_Y + _config->arm_length * cosf(mk.Arm_Angle);
 	// fk->Y = _config->arm_length * sinf(mk.Arm_Angle);
@@ -83,7 +83,8 @@ void Twh_ArmSolution::real_MK_to_IK(MiddleKinematic* mk, IKPosition_abgdekl* ik)
 			mk->Arm_Angle = -PI - mk->Arm_Angle;
 		}
 	}
-	ik->Positions[AXIS_ALPHA] = (mk->Arm_shaft_At_Y + mk->Arm_Angle /_config->arm_gear_circle_length ) / _config->master_slope_steps_per_mm * 2;   
-	ik->Positions[AXIS_BETA] = (mk->Arm_shaft_At_Y - mk->Arm_Angle / _config->arm_gear_circle_length) / _config->master_slope_steps_per_mm * 2;
+	ik->Positions[AXIS_ALPHA] = mk->Arm_shaft_At_Y * _config->linear_slope_steps_per_mm + mk->Arm_Angle *_config->arm_slope_steps_per_rad;   
+	// ik->Positions[AXIS_BETA] = (mk->Arm_shaft_At_Y - mk->Arm_Angle / _config->arm_gear_circle_length) / _config->master_slope_steps_per_mm * 2;
+	ik->Positions[AXIS_BETA] = mk->Arm_shaft_At_Y * _config->linear_slope_steps_per_mm - mk->Arm_Angle * _config->arm_slope_steps_per_rad;
 }
 

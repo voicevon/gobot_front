@@ -2,12 +2,9 @@
 
 #include "WiFi.h"
  
-void setup(){
+void setup__macaddress(){
   Serial.begin(115200);
   WiFi.mode(WIFI_MODE_STA);
   Serial.println(WiFi.macAddress());
 }
  
-void loop(){
-
-}

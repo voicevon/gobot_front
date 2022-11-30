@@ -30,7 +30,7 @@ class RobotBase: public GcodeConsumer{
         void _running_G28();
 
         void _LinkMover(CncMover* mover){this->_mover=mover;};
-        void _LinkArmSolution(ArmSolutionBase* arm_solution){__planner.arm_solution=arm_solution;};
+        void _LinkArmSolution_for_planner(ArmSolutionBase* arm_solution){__planner.arm_solution=arm_solution;};
         virtual void _InitStatic_Queues();
         virtual void _Init_ArmSolution();
         

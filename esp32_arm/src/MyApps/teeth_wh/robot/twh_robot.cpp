@@ -54,11 +54,11 @@ void TeechWarehouse_Robot::__InitStatic_Actuators(TeethWarehouse_Board* board){
 }
 
 void TeechWarehouse_Robot::_Init_ArmSolution(){
-    __arm_config.arm_length = 205;
+    // __arm_config.arm_length = 205;
     // __arm_config.slave_gear_circle_length = 123.98;
-    __arm_config.master_slope_steps_per_mm = 12.778;
+    // __arm_config.master_slope_steps_per_mm = 12.778;
     __arm_solution.LinkConfig(&__arm_config);
-    this->_LinkArmSolution(&__arm_solution);
+    this->_LinkArmSolution_for_planner(&__arm_solution);
 }
 
 
