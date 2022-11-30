@@ -37,7 +37,7 @@ class TeechWarehouse_Robot: public RobotBase{
         Twh_ArmSolution __arm_solution;
         Twh_G28_Runner __g28_runner;
 
-        Core_XY_XA_ab_config __arm_config;
+        Twh_ArmSolution_Config __arm_config;
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
         LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
 

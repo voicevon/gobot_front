@@ -12,25 +12,25 @@
 */
 
 
-class Core_XY_XA_ab_config{
+class Twh_ArmSolution_Config{
     public:
-    
+
+        float arm_length = 190;                 //unit is mm, confirmed
+
         float max_speed_alpha_beta;
         float max_acceleration_alpha_beta;
-     
-        float master_slope_steps_per_mm = 1; 
-        float slave_gear_pitch_in_mm = 3;    // confirmed
-        float slave_gear_teeth_count = 24;  //confiemd
-        float slave_gear_circle_length = 123;
-        float arm_length = 190;   //unit is mm, confirmed
+
         float middle_kinematic_minimuim_X = 123;
+        float arm_gear_circle_length;
+        float master_slope_steps_per_mm = 1; 
 
+        Twh_ArmSolution_Config(){
+            arm_gear_circle_length = __arm_gear_pitch_in_mm * __arm_gear_teeth_count;
+        }
 
-        void PrintOut(){};
-
-
-    protected:
-
+    private:
+        float __arm_gear_pitch_in_mm = 3.0f;    // confirmed
+        int __arm_gear_teeth_count = 24;        //confiemd
 };
 
 
