@@ -77,8 +77,3 @@ void TeechWarehouse_Robot::_InitStatic_Queues(){
     Queue_LineSegment::Instance().Deposit();
     Logger::Print("TeechWarehouse_Robot::Init", 83);
 }
-
-void TeechWarehouse_Robot::_Convert_MK_to_FK(LineSegment * middle_kinematic_line, LineSegment* fk_line){
-    // Convert mk to fk
-
-}

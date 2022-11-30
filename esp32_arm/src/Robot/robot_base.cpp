@@ -178,7 +178,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			// this->__planner.AppendLineSegment(new_line);   //TODO:: many lines ?
 			break;
 		case 5:
-			// G5 Move. will follow a Forward kinematic poisition.
+			// G5 Move. will follow a Middle kinematic poisition.
 			// The position will be put in to Queue_LineSegment, Then Convert to Queue_moveBlock by Planner.
 			
 			if (gcode->has_letter('X')) middle_kinematic_line.TargetPosition.X = gcode->get_value('X');
@@ -188,10 +188,11 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('P')) middle_kinematic_line.TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) middle_kinematic_line.TargetPosition.Yaw = gcode->get_value('W');
 			new_line->IsMiddleKinematicPosition = true;
-			this->_Convert_MK_to_FK (&middle_kinematic_line, new_line);
+			this->__planner.arm_solution->MK_to_FK(&middle_kinematic_line.TargetPosition , &new_line->TargetPosition);
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			Queue_LineSegment::Instance().Deposit();
-			
+			break;
+
 		case 6:
 			// G6 Move.will directly put move_block to the queue.
 			if (gcode->has_letter('a')) new_move_block->MoveBlocks[AXIS_ALPHA].TargetPosition = gcode->get_value('a');
@@ -201,6 +202,28 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('e')) new_move_block->MoveBlocks[AXIS_EPSILON].TargetPosition = gcode->get_value('e');
 			if (gcode->has_letter('k')) new_move_block->MoveBlocks[AXIS_KAPPPA].TargetPosition = gcode->get_value('k');
 			if (gcode->has_letter('l')) new_move_block->MoveBlocks[AXIS_LAMBDA].TargetPosition = gcode->get_value('l');
+			Queue_MoveBlock::Instance().Deposit();
+			// Update Current FK position 
+			new_move_block->DeepCopyToIkPosition(&new_ik_position);
+			__planner.arm_solution->FK(&new_ik_position, &new_fk_position);
+			new_line->DeepCopyFromFkPosition(&new_fk_position);
+			new_line->Speed = 123;   //TODO: for next fk gcode usage. should be A:) default speed,  B:) follow previous speed
+			Queue_LineSegment::Instance().Deposit();
+			break;
+		case 7:
+			// G7 Move. will follow a Middle kinematic poisition.
+			// The position will be put into Queue_moveBlock after convertion of MK->IK.
+			if (gcode->has_letter('X')) middle_kinematic_line.TargetPosition.X = gcode->get_value('X');
+			if (gcode->has_letter('Y')) middle_kinematic_line.TargetPosition.Y = gcode->get_value('Y');
+			if (gcode->has_letter('Z')) middle_kinematic_line.TargetPosition.Z = gcode->get_value('Z');
+			if (gcode->has_letter('R')) middle_kinematic_line.TargetPosition.Roll = gcode->get_value('R');
+			if (gcode->has_letter('P')) middle_kinematic_line.TargetPosition.Pitch = gcode->get_value('P');
+			if (gcode->has_letter('W')) middle_kinematic_line.TargetPosition.Yaw = gcode->get_value('W');
+			new_line->IsMiddleKinematicPosition = true;
+			this->__planner.arm_solution->MK_to_Ik(&middle_kinematic_line.TargetPosition, &new_ik_position);
+			for (int i=0; i<CncActuator_List::Instance().GetItemsCount(); i++){
+				new_move_block->MoveBlocks[AXIS_ALPHA].TargetPosition=new_ik_position.Positions[AXIS_ALPHA];
+			}
 			Queue_MoveBlock::Instance().Deposit();
 			// Update Current FK position 
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);

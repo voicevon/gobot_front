@@ -1,5 +1,4 @@
 #pragma once
-// #include "all_devices.h"
 #include "all_applications.h"
 #ifdef I_AM_CABLEBOT_CORNER
 
@@ -7,12 +6,8 @@
 #include "CNC/robot_hardware_base.h"
 #include "CNC/Commu/CommuUart.h"
 #include "CNC/Commu/CommuBleGattServer.h"
-// #include "CNC/Axis/SingleAxis.h"
-
-
 #include "CNC/Actuator/DCMotor/DcMotor.h"
 #include "Robot/Sensor/IrEncoderHelper.h"
-// #include "CNC/Actuator/DCMotor/DCDriverHBridge.h"
 #include "CNC/Actuator/DCMotor/h_bridge_yuxin.h"
 #include "CNC/Actuator/DCMotor/DCMotorController.h"
 

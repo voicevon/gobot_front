@@ -34,7 +34,8 @@ class RobotBase: public GcodeConsumer{
         virtual void _InitStatic_Queues();
         virtual void _Init_ArmSolution();
         
-        virtual void _Convert_MK_to_FK(LineSegment * middle_kinematic_line, LineSegment* fk_line){};
+        // virtual void _Convert_MK_to_FK(LineSegment * middle_kinematic_line, LineSegment* fk_line){};
+        // virtual void _Convert_MK_to_IK(FKPosition_XYZRPY * middle_kinematic_position, IKPosition_abgdekl* ik_position){};
         G28_Runner* _g28_runner;
         CncMover* _mover;
 

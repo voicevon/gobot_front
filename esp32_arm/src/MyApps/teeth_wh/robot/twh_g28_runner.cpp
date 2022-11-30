@@ -17,7 +17,7 @@ void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
     mb->DeepReset_ToDefault();
 
     switch (axis){
-        case 'X':
+        case 'Y':
             Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 21);
             // Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha = &mb->MoveBlocks[AXIS_ALPHA];
@@ -60,14 +60,14 @@ void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
 void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
     if (this->_axis_name =='a'){
         // do nothing
-    }else if (this->_axis_name == 'X'){
+    }else if (this->_axis_name == 'Y'){
         // must home('a') first, then home('X')
         MiddleKinematic mk;
-        mk.Angle = DEG_TO_RAD * (-90);
-        mk.X = -188;
+        mk.Arm_Angle = DEG_TO_RAD * (-90);
+        mk.Arm_shaft_At_Y= -188;
         FKPosition_XYZRPY fk;
         Twh_ArmSolution arm;
-        arm.MK_to_Fk(&mk, &fk);
+        arm.real_MK_to_Fk(&mk, &fk);
 
         IKPosition_abgdekl ik;
         this->_arm_solution->IK(&fk,&ik);

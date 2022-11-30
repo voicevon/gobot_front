@@ -6,22 +6,24 @@
 
 class MiddleKinematic{
 	public:
-		float X;
-		float Angle;
+		float Arm_shaft_At_Y;
+		float Arm_Angle;
 		// float Minimuim_X;
 };
 
 class Twh_ArmSolution: public ArmSolutionBase{
     public:
         void LinkConfig(Core_XY_XA_ab_config* config){this->_config=config;};
-        void MK_to_Fk(MiddleKinematic* from_mk, FKPosition_XYZRPY* to_fk);
+        void MK_to_FK(FKPosition_XYZRPY* from_mk, FKPosition_XYZRPY* to_fk) override;
+        void MK_to_Ik(FKPosition_XYZRPY* from_mk, IKPosition_abgdekl* to_ik) override;
+        void real_MK_to_Fk(MiddleKinematic* mk, FKPosition_XYZRPY* fk);
 
     protected:
         void IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
         void FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk) override;
 
+    private:
         Core_XY_XA_ab_config* _config;
 
-    private:
 
 };
