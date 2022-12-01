@@ -13,13 +13,27 @@ class CncActuator_List: public ListBase{
         void Init(CncActuatorBase** all_items, int count){
             _Init((ListItem**)all_items, count);
             };
+
         void AddActuator(CncActuatorBase* actuator){
             __AddItem(actuator);
             };
+
+        bool HasMovingActuator(){
+            CncActuatorBase* actuator;
+            for(int a=0; a<this->GetItemsCount(); a++){
+                actuator = this->GetActuator(a);
+                if (actuator->IsMoving()){
+                    Serial.println(actuator->MyName);
+                    return true;
+                }        
+            }
+
+            return false;
+            };
+        
         CncActuatorBase* GetActuator(int index) {
             return (CncActuatorBase*)_GetItem(index);
             };
-        
         // This is risky,  Be careful;
         // CncActuatorDcMotor* GetActuator_DcMotor(int index) {return (CncActuatorDcMotor*)_GetItem(index);};
 };

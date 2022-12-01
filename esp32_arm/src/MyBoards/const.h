@@ -39,7 +39,7 @@
     //     Full name: Perfect_background_color
     //     ''' 
 #define BGC_BLACK "\033[40m"
-    //     red='\033[41m'
+#define BGC_RED "\033[41m"
     //     green='\033[42m'
 #define BGC_ORANGE "\033[43m"
 #define BGC_BLUE  "\033[44m"

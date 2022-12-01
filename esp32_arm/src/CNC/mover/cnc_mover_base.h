@@ -23,7 +23,6 @@ class CncMover{
 
         // To get status or position
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name);  // TODO: return  all current position.
-        // void SetMovingFlags(uint8_t target_actuator_flags){this->_moving_actuator_flags=target_actuator_flags;};
         bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name);
         bool HasArrivedTargetPosition();
         float GetAbsDistanceToTarget_InCncUnit();

@@ -41,7 +41,7 @@ void Vsc_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         IKPosition_abgdekl ik;
         ik.Positions[AXIS_ALPHA] = 123;
         ik.Positions[AXIS_BETA] = 123;
-        this->_arm_solution->SetCurrentPosition(&ik);
+        this->_arm_solution->SetCurrentPositionAs(&ik);
         
         bool debug = true;
         if (debug){

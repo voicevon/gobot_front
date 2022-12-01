@@ -6,7 +6,7 @@ void G4_Runner::LinkGcode(Gcode* gcode) {
 
 
 void G4_Runner::Start(){
-    this->__start_time_stamp = micros() / 1000;
+    __start_time_stamp = micros() / 1000;
 }
 
 bool G4_Runner::IsDone(){

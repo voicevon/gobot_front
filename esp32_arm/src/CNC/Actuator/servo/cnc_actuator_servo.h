@@ -19,3 +19,4 @@ class CncActuatorServo: public CncActuatorBase{
 
     private:
         Servo* __servo;
+};

@@ -33,7 +33,7 @@ void Logger::Debug(const char* title){
 
 void Logger::Warn(const char * title){
     Serial.print(FORE_YELLOW);
-    Serial.print(BGC_BLUE);
+    Serial.print(BGC_RED);
     Serial.print("[Warn] ");
     Serial.print(title);
     Serial.print(BGC_BLACK);

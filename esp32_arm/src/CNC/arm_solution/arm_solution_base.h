@@ -20,13 +20,14 @@ class ArmSolutionBase{
 
         void ForceStopMover();  //TODO:  para is MoverAction:  EnableActuator, ForceStop, DisableActuator. 
 
-        void SetCurrentPosition(FKPosition_XYZRPY* fk_position);
-        void SetCurrentPosition(IKPosition_abgdekl* ik_position);
+        void SetCurrentPositionAs(FKPosition_XYZRPY* fk_position);
+        void SetCurrentPositionAs(IKPosition_abgdekl* ik_position);
         void GetRealTimePosition(FKPosition_XYZRPY* position_fk);
         
     protected:
 
     private:
-
+        FKPosition_XYZRPY __current_position_fk;
+        IKPosition_abgdekl __current_position_ik;
 };
 

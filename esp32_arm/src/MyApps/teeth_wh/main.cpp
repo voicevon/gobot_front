@@ -30,9 +30,11 @@ void test_board(){
 }
 
 void test_robot(){
-    for (int i=0; i<5;i++){
-        gcode_queue.AppendGcodeCommand("G6a2b2");
+    for (int i=0; i<8;i++){
+        gcode_queue.AppendGcodeCommand("G6a800b800");
         gcode_queue.AppendGcodeCommand("G6a0b0");
+        gcode_queue.AppendGcodeCommand("G4S5");
+
 
         // gcode_queue.AppendGcodeCommand(String(__payload_buffer));
 

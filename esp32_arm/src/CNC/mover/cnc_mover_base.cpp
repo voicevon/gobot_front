@@ -3,6 +3,13 @@
 
 void CncMover::SpinOnce(){
     // Logger::Debug("CncMover::SpinOnce()");
+
+    // Logger::Print("CncMover::SpinOnce() point", 1);
+    if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
+        // Logger::Print("CncMover::SpinOnce() Queue_MoveBlock::  Buffer is Empty", 91);
+        return;
+    }
+
     bool has_moving_actuator = false;
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
         // Logger::Print("axis", a);
@@ -13,19 +20,18 @@ void CncMover::SpinOnce(){
         // Serial.print(CncActuator_List::Instance().GetActuator(a)->GetCurrentPosition());
         // Serial.print("\n");
         CncActuatorBase* actuator = CncActuator_List::Instance().GetActuator(a);
+        actuator->SpinOnce();
         if (actuator->IsMoving()){
+            Logger::Print("CncMover::SpinOnce()  moving actuator index", actuator->MyName);
             has_moving_actuator = true;
         }
     }
 
-    // Logger::Print("CncMover::SpinOnce() point", 1);
-    if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
-        // Logger::Print("CncMover::SpinOnce() Queue_MoveBlock::  Buffer is Empty", 91);
-        return;
-    }
+
     
     if (has_moving_actuator){
-        // Serial.print('M');
+        delay(500);
+        Serial.print('M');
         return;
     }
 

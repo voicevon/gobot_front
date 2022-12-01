@@ -14,12 +14,13 @@ void CncActuatorServo::SpinOnce(){
 }
 
 void CncActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
-    Logger::Debug("CncActuatorServo::UpdateMovement()");
+    bool debug = false;
+    if(debug)
+        Logger::Debug("CncActuatorServo::UpdateMovement()");
     this->_target_position =  move->TargetPosition;   // TODO:  in base class?
     float physic_angle = this->GetPosition_FromCncUnit(move->TargetPosition);
     __servo->write(physic_angle);
 
-    bool debug = true;
     if(debug){
         Logger::Print("current_cnc_position in degree = ", RAD_TO_DEG * this->_current_position);
         Logger::Print("target position in degree =  ",  this->_target_position);

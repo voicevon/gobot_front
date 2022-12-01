@@ -21,11 +21,11 @@ void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 21);
             // Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha = &mb->MoveBlocks[AXIS_ALPHA];
-            alpha->TargetPosition = -99999;
+            alpha->TargetPosition = 99999;
             alpha->Speed = 10000;
             alpha->Acceleration = 99;
             beta = &mb->MoveBlocks[AXIS_BETA];
-            beta->TargetPosition = 99999;
+            beta->TargetPosition = -99999;
             beta->Speed = 10000;
             beta->Acceleration = 99;
             break;
@@ -35,11 +35,11 @@ void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             mb->DeepReset_ToDefault();
             // Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha = &mb->MoveBlocks[AXIS_ALPHA];
-            alpha->TargetPosition = 99999;
+            alpha->TargetPosition = -99999;
             alpha->Speed = 100;
             alpha->Acceleration = 0.05;
             beta = &mb->MoveBlocks[AXIS_BETA];
-            beta->TargetPosition = 99999;
+            beta->TargetPosition = -99999;
             beta->Speed = 100;
             beta->Acceleration = 0.05;
             break;
@@ -74,7 +74,7 @@ void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         IKPosition_abgdekl ik;
         this->_arm_solution->IK(&fk,&ik);
         Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 34);
-        this->_arm_solution->SetCurrentPosition(&ik);
+        this->_arm_solution->SetCurrentPositionAs(&ik);
         
         bool debug = true;
         if (debug){
