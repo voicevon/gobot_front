@@ -34,14 +34,14 @@ void GobotMainRobot::__InitActuator(GobotMain_Board* board){
     this->__actuator_beta.MyName = 'a';
     this->__actuator_beta.LinkStepper(board->GetStepper(AXIS_BETA), 1.0f);
     
-    ActuatorStepper_Calculator helper;
-    helper.motor_driver_micro_steps = 16;
-    helper.motor_gear_teeth_count = 10;
-    helper.slave_pulley_teeth_count = 90;
+    // ActuatorStepper_Calculator helper;
+    // helper.motor_driver_micro_steps = 16;
+    // helper.motor_gear_teeth_count = 10;
+    // helper.slave_pulley_teeth_count = 90;
 
-    float slope = helper.Get_Formular_Slope_steps_per_mm();
-    this->__actuator_alpha.Formular_SetSlope(slope);
-    this->__actuator_beta.Formular_SetSlope(slope);
+    // float slope = helper.Get_Formular_Slope_steps_per_mm();
+    // this->__actuator_alpha.Formular_SetSlope(slope);
+    // this->__actuator_beta.Formular_SetSlope(slope);
 
 
 

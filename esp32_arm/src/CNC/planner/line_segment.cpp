@@ -14,7 +14,7 @@ void LineSegment::DeepCopyTo(LineSegment* the_copy){
     the_copy->TargetPosition.Roll = this->TargetPosition.Roll;
     the_copy->TargetPosition.Pitch = this->TargetPosition.Pitch;
     the_copy->TargetPosition.Yaw = this->TargetPosition.Yaw;
-    Logger::Print("LineSegment::DeepCopyTo() point", 99);
+    // Logger::Print("LineSegment::DeepCopyTo() point", 99);
 }
 
 void LineSegment::DeepCopyFromFkPosition(FKPosition_XYZRPY* from){

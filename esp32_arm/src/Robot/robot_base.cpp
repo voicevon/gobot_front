@@ -134,14 +134,9 @@ void RobotBase::SpinOnce(){
 void RobotBase::__RunGcode(Gcode* gcode){
 	Logger::Info("RobotBase::__RunGcode()");
 	LineSegment* new_line = Queue_LineSegment::Instance().GetRoom();
-	// Logger::Print("RobotBase::__RunGcode() point", 11);
 	Queue_LineSegment::Instance().GetHeadLineSegment()->DeepCopyTo(new_line);
-	// Logger::Print("RobotBase::__RunGcode() point", 12);
-	// __current_line.DeepCopyTo(&new_line);
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
-	// Logger::Print("RobotBase::__RunGcode() point", 13);
 	Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
-	// Logger::Print("RobotBase::__RunGcode() point", 14);
 	FKPosition_XYZRPY new_fk_position;
 	IKPosition_abgdekl new_ik_position;
 	LineSegment middle_kinematic_line;
@@ -180,7 +175,6 @@ void RobotBase::__RunGcode(Gcode* gcode){
 		case 5:
 			// G5 Move. will follow a Middle kinematic poisition.
 			// The position will be put in to Queue_LineSegment, Then Convert to Queue_moveBlock by Planner.
-			
 			if (gcode->has_letter('X')) middle_kinematic_line.TargetPosition.X = gcode->get_value('X');
 			if (gcode->has_letter('Y')) middle_kinematic_line.TargetPosition.Y = gcode->get_value('Y');
 			if (gcode->has_letter('Z')) middle_kinematic_line.TargetPosition.Z = gcode->get_value('Z');
@@ -202,6 +196,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('e')) new_move_block->MoveBlocks[AXIS_EPSILON].TargetPosition = gcode->get_value('e');
 			if (gcode->has_letter('k')) new_move_block->MoveBlocks[AXIS_KAPPPA].TargetPosition = gcode->get_value('k');
 			if (gcode->has_letter('l')) new_move_block->MoveBlocks[AXIS_LAMBDA].TargetPosition = gcode->get_value('l');
+			new_move_block->PrintOut("From RobotBase::__RunGcode()");
 			Queue_MoveBlock::Instance().Deposit();
 			// Update Current FK position 
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);

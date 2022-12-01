@@ -39,7 +39,8 @@ void MoveBlock::DeepReset_ToDefault(){
 }
 
 
-void MoveBlock::PrintOut(){
+void MoveBlock::PrintOut(const char* title){
+    Logger::Debug(title);
     Serial.print("MoveBlock::PrintOut()  position, speed, acceleration, VectorDistance-------\n" );
     for (int i=0; i< CNC_ACTUATORS_IDEAL_COUNT; i++){
         Serial.print('\t\t\t');

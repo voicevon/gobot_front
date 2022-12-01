@@ -24,11 +24,12 @@ void SpringMakerRobot::Init(Board_SpringMaker* board){
     this->__actuator_alpha.MyName = 'A';
     this->__actuator_alpha.LinkStepper(board->GetStepper(), 1.0f);
     
-    ActuatorStepper_Calculator helper;
-    helper.motor_driver_micro_steps = 10;
-    helper.motor_gear_teeth_count = 12;
-    helper.slave_pulley_teeth_count = 33;
-    float slope = helper.Get_Formular_Slope_steps_per_mm();
+    // ActuatorStepper_Calculator helper;
+    // helper.motor_driver_micro_steps = 10;
+    // helper.motor_gear_teeth_count = 12;
+    // helper.slave_pulley_teeth_count = 33;
+    // float slope = helper.Get_Formular_Slope_steps_per_mm();
+    float slope = 1;
     this->__actuator_alpha.Formular_SetSlope(slope);
     
     this->_LinkMover(&mover);

@@ -11,7 +11,8 @@ class CncActuatorFastStepper: public CncActuatorBase{
         void SpinOnce() override{this->_current_position=this->_stepper->getCurrentPosition();};
         void ForceStop() override;
         void PrintOut(const char* title);
-        void LinkStepper(FastAccelStepper* stepper, float steps_per_cnc_unit);
+        // void LinkStepper(FastAccelStepper* stepper, float steps_per_cnc_unit);
+        void LinkStepper(FastAccelStepper* stepper);
         FastAccelStepper* GetLinkedStepper(){return this->_stepper;};
 
         void UpdateMovement(MoveBlock_SingleActuator* line) override;
@@ -21,8 +22,8 @@ class CncActuatorFastStepper: public CncActuatorBase{
         FastAccelStepper* _stepper;
 
     private:
-        float __steps_per_cnc_unit;
-        float __distance_to_target;
-        float __speed;   // todo:  remove this
+        // float __steps_per_cnc_unit;
+        // float __distance_to_target;
+        // float __speed;   // todo:  remove this
 
 };
