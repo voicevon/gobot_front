@@ -10,7 +10,7 @@ class CncActuatorStepper: public CncActuatorBase{
         void ForceStop() override{};
         void PrintOut(const char* title);
         void LinkStepper(Stepper* stepper, float steps_per_cnc_unit);
-        Stepper* GetLinkedStepper(){return this->_stepper;};
+        // Stepper* GetLinkedStepper(){return this->_stepper;};
 
         void UpdateMovement(MoveBlock_SingleActuator* line) override;
 

@@ -11,7 +11,7 @@ class CncActuatorServo: public CncActuatorBase{
         void SpinOnce();
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;
 
-        void ForceStop() override {};   //Only G28 is using this.
+        void ForceStop() override {};   //No point for servo actuator.
 
 
 
@@ -19,10 +19,3 @@ class CncActuatorServo: public CncActuatorBase{
 
     private:
         Servo* __servo;
-
-        float __position_offset_in_rad = 0;   // Logical position - physic position
-
-        float __speed_degree_per_second;
-        int64_t __last_spin_timestamp;
-        bool __is_moving=false;
-};

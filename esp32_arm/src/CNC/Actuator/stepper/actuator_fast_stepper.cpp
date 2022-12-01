@@ -7,6 +7,10 @@ void CncActuatorFastStepper::LinkStepper(FastAccelStepper* stepper){
     // this->__steps_per_cnc_unit =steps_per_cnc_unit;
 }
 
+void CncActuatorFastStepper::SpinOnce(){
+    _is_moving = _stepper->isRunning();
+}
+
 void CncActuatorFastStepper::PrintOut(const char* title){
     Logger::Info(title);
     Serial.print("CncActuatorFastStepper  in");
@@ -38,7 +42,7 @@ void CncActuatorFastStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     _stepper->enableOutputs();
     // _stepper->moveTo(motor_position_in_step, false);
     _stepper->moveTo(_target_position, false);
-
+    _is_moving = true;  //??
     bool debug = false;
     if (debug){
         Logger::Info("CncActuatorFastStepper::UpdateMovement()");
@@ -60,4 +64,6 @@ void CncActuatorFastStepper::UpdateMovement(MoveBlock_SingleActuator* move){
 
 void CncActuatorFastStepper::ForceStop(){
     _stepper->forceStop();
+    _is_moving = false;
 }
+

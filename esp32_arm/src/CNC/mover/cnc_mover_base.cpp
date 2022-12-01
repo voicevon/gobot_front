@@ -3,6 +3,7 @@
 
 void CncMover::SpinOnce(){
     // Logger::Debug("CncMover::SpinOnce()");
+    bool has_moving_actuator = false;
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
         // Logger::Print("axis", a);
         // Logger::Print("axis name", CncActuator_List::Instance().GetActuator(a)->MyName);
@@ -11,7 +12,10 @@ void CncMover::SpinOnce(){
         // Serial.print("\t current position = ");
         // Serial.print(CncActuator_List::Instance().GetActuator(a)->GetCurrentPosition());
         // Serial.print("\n");
-        CncActuator_List::Instance().GetActuator(a)->SpinOnce();
+        CncActuatorBase* actuator = CncActuator_List::Instance().GetActuator(a);
+        if (actuator->IsMoving()){
+            has_moving_actuator = true;
+        }
     }
 
     // Logger::Print("CncMover::SpinOnce() point", 1);
@@ -20,6 +24,11 @@ void CncMover::SpinOnce(){
         return;
     }
     
+    if (has_moving_actuator){
+        // Serial.print('M');
+        return;
+    }
+
     Logger::Info("CncMover::SpinOnce() withdraw queue_move_block");
     MoveBlock* mb = Queue_MoveBlock::Instance().Withdraw();
     // Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);

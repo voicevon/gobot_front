@@ -10,6 +10,7 @@ void CncActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
 
 
 void CncActuatorServo::SpinOnce(){
+    _is_moving = false;
 }
 
 void CncActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
