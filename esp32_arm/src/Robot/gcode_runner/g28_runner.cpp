@@ -15,7 +15,6 @@ bool G28_Runner::IsDone(){
                 Logger::Info("G28_Runner::IsDone()  homer is triggered...");
             	_mover->AllActuatorsStop();
                 this->SetHomedPosition(trigger);
-                // this->__last_homed_position = trigger->GetTriggerPosition();
 	            return true;
             }
         }

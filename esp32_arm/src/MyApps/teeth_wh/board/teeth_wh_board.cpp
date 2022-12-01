@@ -35,7 +35,7 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
         Serial.begin(115200);
         Serial.println("I am Teeth Warehouse.");
     }
-    __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_HOMER_SENSOR_HALL_ALPHA, HIGH);
+    __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('Y',PIN_HOMER_SENSOR_HALL_ALPHA, HIGH);
     __all_position_triggers[POSITION_TRIGGER_X].Init('a', PIN_HOMER_SENSOR_HALL_X, HIGH);
     // __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
     HomeTrigger_Array::Instance().Init(__all_position_triggers, HOME_TRIGGER_COUNT);

@@ -21,12 +21,10 @@ void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 21);
             // Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha = &mb->MoveBlocks[AXIS_ALPHA];
-            // alpha->IsAbsTargetPosition = false;
             alpha->TargetPosition = -99999;
             alpha->Speed = 10000;
             alpha->Acceleration = 99;
             beta = &mb->MoveBlocks[AXIS_BETA];
-            // beta->IsAbsTargetPosition = false;
             beta->TargetPosition = 99999;
             beta->Speed = 10000;
             beta->Acceleration = 99;
@@ -37,12 +35,10 @@ void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             mb->DeepReset_ToDefault();
             // Logger::Print("Twh_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha = &mb->MoveBlocks[AXIS_ALPHA];
-            // alpha->IsAbsTargetPosition = false;
             alpha->TargetPosition = 99999;
             alpha->Speed = 100;
             alpha->Acceleration = 0.05;
             beta = &mb->MoveBlocks[AXIS_BETA];
-            // beta->IsAbsTargetPosition = false;
             beta->TargetPosition = 99999;
             beta->Speed = 100;
             beta->Acceleration = 0.05;
@@ -58,21 +54,26 @@ void Twh_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
 
 
 void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
+    Logger::Debug("Twh_G28_Runner::SetHomedPosition()");
     if (this->_axis_name =='a'){
         // do nothing
     }else if (this->_axis_name == 'Y'){
         // must home('a') first, then home('X')
+        Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 31);
         MiddleKinematic mk;
         mk.Arm_Angle = DEG_TO_RAD * (-90);
         mk.Arm_shaft_At_Y= -188;
+        Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 32);
         FKPosition_XYZRPY fk;
         Twh_ArmSolution arm;
+        // arm.LinkConfig();
         arm.real_MK_to_FK(&mk, &fk);
+        // this->_arm_solution->MK_to_FK();
+        Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 33);
 
         IKPosition_abgdekl ik;
         this->_arm_solution->IK(&fk,&ik);
-        // ik.Positions[AXIS_ALPHA] = 123;
-        // ik.Positions[AXIS_BETA] = 123;
+        Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 34);
         this->_arm_solution->SetCurrentPosition(&ik);
         
         bool debug = true;

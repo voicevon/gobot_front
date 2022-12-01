@@ -13,7 +13,7 @@ class MiddleKinematic{
 
 class Twh_ArmSolution: public ArmSolutionBase{
     public:
-        void LinkConfig(Twh_ArmSolution_Config* config){this->_config=config;};
+        // void LinkConfig(Twh_ArmSolution_Config* config){this->_config=config;};
         void MK_to_FK(FKPosition_XYZRPY* from_mk, FKPosition_XYZRPY* to_fk) override;
         void MK_to_Ik(FKPosition_XYZRPY* from_mk, IKPosition_abgdekl* to_ik) override;
         void real_MK_to_FK(MiddleKinematic* mk, FKPosition_XYZRPY* fk);
@@ -24,7 +24,5 @@ class Twh_ArmSolution: public ArmSolutionBase{
         void FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk) override;
 
     private:
-        Twh_ArmSolution_Config* _config;
-
-
+        Twh_ArmSolution_Config __config;
 };
