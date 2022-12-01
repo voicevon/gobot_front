@@ -33,5 +33,6 @@ void ArmSolutionBase::SetCurrentPositionAs(IKPosition_abgdekl* ik_position){
 		__current_position_ik.Positions[i] = ik_position->Positions[i];
 	}
 	this->FK(&__current_position_ik, &__current_position_fk);
-
+	__current_position_fk.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions FK");
+	__current_position_ik.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions IK");
 }

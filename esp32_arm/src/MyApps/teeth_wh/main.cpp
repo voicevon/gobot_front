@@ -27,6 +27,9 @@ void test_board(){
     board.Test_SingleStepper(AXIS_BETA, 0);
     board.Test_DualStepper(0);
     Serial.println("[Info] test_board() is done.");
+
+    Twh_ArmSolution arm;
+    arm.test();
 }
 
 void test_robot(){

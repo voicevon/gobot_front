@@ -16,6 +16,7 @@ class FKPosition_XYZRPY{
 class IKPosition_abgdekl{
     public:
         float Positions[7];
+        void PrintOut(const char* title);
         // float alpha;
         // float beta;
         // float gamma;

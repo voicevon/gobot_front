@@ -76,11 +76,5 @@ void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 34);
         this->_arm_solution->SetCurrentPositionAs(&ik);
         
-        bool debug = true;
-        if (debug){
-            FKPosition_XYZRPY fk;
-            this->_arm_solution->FK(&ik, &fk);
-            fk.PrintOut("Twh_G28_Runner::SetHomedPosition()");
-        }
     }
 }

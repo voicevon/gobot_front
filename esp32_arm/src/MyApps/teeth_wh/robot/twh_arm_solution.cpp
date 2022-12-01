@@ -2,7 +2,7 @@
 
 
 void Twh_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
-	Serial.print("\n[Info] Twh_ArmSolution::IK()");
+	// Logger::Info("Twh_ArmSolution::IK()");
 	MiddleKinematic mk;
 
 	mk.Arm_Angle = asinf(from_fk->Y / __config.arm_length);  // range should be in range of degree [-90, +90]
@@ -31,7 +31,7 @@ void Twh_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 }
 
 void Twh_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
-	Serial.print("\n[Debug] Twh_ArmSolution::FK()");
+	// Logger::Debug("Twh_ArmSolution::FK()");
 	
 	MiddleKinematic mk;
 
@@ -91,3 +91,23 @@ void Twh_ArmSolution::real_MK_to_IK(MiddleKinematic* mk, IKPosition_abgdekl* ik)
 	ik->Positions[AXIS_BETA] = mk->Arm_shaft_At_Y * __config.linear_slope_steps_per_mm - mk->Arm_Angle * __config.arm_slope_steps_per_rad;
 }
 
+void Twh_ArmSolution::test(){
+	IKPosition_abgdekl ik;
+	FKPosition_XYZRPY input;
+	FKPosition_XYZRPY output;
+	input.X =600;
+	input.Y = 120;
+	this->IK(&input,&ik);
+	this->FK(&ik,&output);
+	Logger::Info("Twh_ArmSolution::test()");
+	Serial.print("input \t");
+	Serial.print(input.X);
+	Serial.print("\t");
+	Serial.println(input.Y);
+
+	Serial.print("output \t");
+	Serial.print(output.X);
+	Serial.print("\t");
+	Serial.println(output.Y);
+
+}
