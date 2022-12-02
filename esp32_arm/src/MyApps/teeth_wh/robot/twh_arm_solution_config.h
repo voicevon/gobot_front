@@ -25,7 +25,7 @@ class Twh_ArmSolution_Config{
         Twh_ArmSolution_Config(){
             float steps_per_motor_round  = 360.0f / __motor_gear_teeth_count * __stepper_driver_micro_steps;
             float motor_gear_circle_length = __gear_pitch_in_mm * __motor_gear_teeth_count;
-            linear_slope_steps_per_mm = steps_per_motor_round / motor_gear_circle_length /2;
+            linear_slope_steps_per_mm = steps_per_motor_round / motor_gear_circle_length ;
     
             float arm_gear_circle_length = __gear_pitch_in_mm * __arm_gear_teeth_count;
             arm_slope_steps_per_rad = linear_slope_steps_per_mm * arm_gear_circle_length / TWO_PI ;

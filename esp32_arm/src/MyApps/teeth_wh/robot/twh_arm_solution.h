@@ -18,8 +18,12 @@ class Twh_ArmSolution: public ArmSolutionBase{
         void MK_to_Ik(FKPosition_XYZRPY* from_mk, IKPosition_abgdekl* to_ik) override;
         void real_MK_to_FK(MiddleKinematic* mk, FKPosition_XYZRPY* fk);
         void real_MK_to_IK(MiddleKinematic* mk, IKPosition_abgdekl* ik);
+        void real_FK_to_MK(FKPosition_XYZRPY* fk, MiddleKinematic* mk);
+        void real_IK_to_MK(IKPosition_abgdekl* ik, MiddleKinematic* mk);
 
-        void test();
+        void Test_FK_MK_FK(FKPosition_XYZRPY* input);
+        void Test_IK_MK_IK(IKPosition_abgdekl* input);
+        void Test_MK_IK_MK(MiddleKinematic* input);
 
     protected:
         void IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;

@@ -36,3 +36,27 @@ void ArmSolutionBase::SetCurrentPositionAs(IKPosition_abgdekl* ik_position){
 	__current_position_fk.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions FK");
 	__current_position_ik.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions IK");
 }
+
+
+void ArmSolutionBase::Test(FKPosition_XYZRPY* input){
+	IKPosition_abgdekl ik;
+	// FKPosition_XYZRPY input;
+	FKPosition_XYZRPY output;
+	this->IK(input,&ik);
+	this->FK(&ik,&output);
+	Logger::Info("Twh_ArmSolution::test()");
+	Serial.print("input \t");
+	Serial.print(input->X);
+	Serial.print("\t");
+	Serial.println(input->Y);
+	Serial.print("\t");
+	Serial.println(input->Z);
+
+	Serial.print("output \t");
+	Serial.print(output.X);
+	Serial.print("\t");
+	Serial.println(output.Y);
+	Serial.print("\t");
+	Serial.println(output.Z);
+
+}

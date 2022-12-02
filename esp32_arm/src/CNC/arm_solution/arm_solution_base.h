@@ -23,6 +23,7 @@ class ArmSolutionBase{
         void SetCurrentPositionAs(FKPosition_XYZRPY* fk_position);
         void SetCurrentPositionAs(IKPosition_abgdekl* ik_position);
         void GetRealTimePosition(FKPosition_XYZRPY* position_fk);
+        void Test(FKPosition_XYZRPY* input);
         
     protected:
 
@@ -30,4 +31,3 @@ class ArmSolutionBase{
         FKPosition_XYZRPY __current_position_fk;
         IKPosition_abgdekl __current_position_ik;
 };
-

@@ -28,8 +28,6 @@ void test_board(){
     board.Test_DualStepper(0);
     Serial.println("[Info] test_board() is done.");
 
-    Twh_ArmSolution arm;
-    arm.test();
 }
 
 void test_robot(){
@@ -50,8 +48,31 @@ void test_robot(){
     
 }
 
+void test_arm(){
+    Twh_ArmSolution arm;
+    FKPosition_XYZRPY input_fk;
+    input_fk.X = 123;
+    input_fk.Y = 234;
+    input_fk.Z = 12;
+    arm.Test_FK_MK_FK(&input_fk);
+
+    IKPosition_abgdekl input_ik;
+    input_ik.Positions[AXIS_ALPHA] = 456;
+    input_ik.Positions[AXIS_BETA] = 567;
+    arm.Test_IK_MK_IK(&input_ik);
+
+    MiddleKinematic input_mk;
+    input_mk.Arm_shaft_At_Y = 210;
+    input_mk.Arm_Angle = 45 * DEG_TO_RAD;
+    // arm.Test_MK_IK_MK(&input_mk);
+
+    while (true){
+
+    }
+}
 void setup(){
     board.Init(true);
+    // test_arm();
     test_board();
     robot.Init(&board);
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
