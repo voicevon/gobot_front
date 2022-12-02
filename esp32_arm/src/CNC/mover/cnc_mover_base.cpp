@@ -22,7 +22,7 @@ void CncMover::SpinOnce(){
         return;
     }
 
-    Logger::Info("CncMover::SpinOnce() withdraw queue_move_block");
+    // Logger::Info("CncMover::SpinOnce() withdraw queue_move_block");
     MoveBlock* mb = Queue_MoveBlock::Instance().Withdraw();
     // Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
     // Logger::Print("MoveBlocks[AXIS_ALPHA].Speed", mb->MoveBlocks[AXIS_ALPHA].Speed);

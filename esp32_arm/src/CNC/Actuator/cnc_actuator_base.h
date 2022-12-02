@@ -33,7 +33,7 @@ class CncActuatorBase: public ListItem{
         virtual void ForceStop();   //Only G28 is using this.
         virtual float GetCurrentPosition(){};   //TODO:  remove body
         virtual void SetCurrentPositionAs(float new_position){};    //TODO: remove body
-
+        void Recalulate_distance_speed_acceleration(MoveBlock_SingleActuator* move, float start_position, float target_time);
         bool IsMoving(){return _is_moving;};   // TODO:  is this necessary?
 
 
@@ -45,6 +45,8 @@ class CncActuatorBase: public ListItem{
         float ConvertPosition_ToCncUnit(float actuator_position);
 
     protected:
+        float _limited_speed = 100;
+        float _limited_accelleration = 100;
         // TODO:  remove below 2
         float GetPosition_FromCncUnit(float cnc_position);
         float GetSpeed_FromCncUnit(float cnc_speed);

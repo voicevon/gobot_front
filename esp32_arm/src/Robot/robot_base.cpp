@@ -136,7 +136,7 @@ void RobotBase::SpinOnce(){
 // 1. Queue_MoveBlock is not full
 // 2. Queue_LineSegment is not full
 void RobotBase::__RunGcode(Gcode* gcode){
-	Logger::Info("RobotBase::__RunGcode()");
+	// Logger::Info("RobotBase::__RunGcode()");
 	LineSegment* new_line = Queue_LineSegment::Instance().GetRoom();
 	Queue_LineSegment::Instance().GetHeadLineSegment()->DeepCopyTo(new_line);
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();

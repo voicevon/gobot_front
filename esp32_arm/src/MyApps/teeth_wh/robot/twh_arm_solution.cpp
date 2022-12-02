@@ -37,7 +37,7 @@ void Twh_ArmSolution::real_IK_to_MK(IKPosition_abgdekl* ik, MiddleKinematic* mk)
 }
 
 void Twh_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
-	Logger::Info("Twh_ArmSolution::IK()");
+	// Logger::Info("Twh_ArmSolution::IK()");
 	MiddleKinematic mk;
 	real_FK_to_MK(from_fk, &mk);
 	real_MK_to_IK(&mk, to_ik);
