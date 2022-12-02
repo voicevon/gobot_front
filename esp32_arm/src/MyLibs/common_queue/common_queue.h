@@ -1,11 +1,9 @@
 #pragma once
-// #define MESSAGE_COUNT_IN_QUEUE 200
 #include "MyLibs/basic/logger.h"
         
 class Queue_able{
     public:
         int id = 1234;
-        // virtual void DeepCopyTo(Queue_able* the_copy);
         virtual void DeepReset_ToDefault(){};
 
 };
@@ -18,7 +16,6 @@ class CommonQueue{
         // For Producer:  Will deep copy the object to the queue.
         // return true: buffer is full , before or after appending.
         // return false:  buffer is not full, after appending.   
-        // bool AppendObject(Queue_able* new_object);
         bool BufferIsFull();
         int GetFreeBuffersCount();
 
@@ -37,7 +34,6 @@ class CommonQueue{
         Queue_able* _Withdraw();  //Pop()?  Withdraw()?  Dequeue?
         Queue_able* _GetHeadObject();  //Pop()?  Withdraw()?  Dequeue?
 
-        // virtual Queue_able* GetSubClass();
         int _head = 0;
         int _tail = 0;
         void _Init(int items_count, int sizeof_item){

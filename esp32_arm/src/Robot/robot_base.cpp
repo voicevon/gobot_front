@@ -12,11 +12,11 @@ void RobotBase::SpinOnce(){
 
 	switch (this->State){
 		case RobotState::G4_IS_SYNCING:
-			Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 41);
+			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 41);
 			if (! Queue_MoveBlock::Instance().BufferIsEmpty()){
 				return;
 			}
-			Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 42);
+			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 42);
 
 			if (CncActuator_List::Instance().HasMovingActuator())
 				return;
@@ -144,8 +144,8 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	FKPosition_XYZRPY new_fk_position;
 	IKPosition_abgdekl new_ik_position;
 	LineSegment middle_kinematic_line;
-	float speed_in_gcode = 100;
-	if (gcode->has_letter('F')) speed_in_gcode = gcode->get_value('F');
+	
+	if (gcode->has_letter('F')) __newest_line_speed = gcode->get_value('F');
 	// Logger::Print("RobotBase::__RunGcode() point", 51);
 	switch (gcode->g){
 		case 28:
@@ -174,7 +174,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('P')) new_line->TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) new_line->TargetPosition.Yaw = gcode->get_value('W');
 			new_line->IsMiddleKinematicPosition = false;
-			new_line->Speed = speed_in_gcode;
+			new_line->Speed_mm_per_second = __newest_line_speed;
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			Queue_LineSegment::Instance().Deposit();
 			// this->__planner.AppendLineSegment(new_line);   //TODO:: many lines ?
@@ -189,7 +189,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('P')) middle_kinematic_line.TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) middle_kinematic_line.TargetPosition.Yaw = gcode->get_value('W');
 			new_line->IsMiddleKinematicPosition = true;
-			new_line->Speed = speed_in_gcode;
+			new_line->Speed_mm_per_second = __newest_line_speed;
 			this->__planner.arm_solution->MK_to_FK(&middle_kinematic_line.TargetPosition , &new_line->TargetPosition);
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			Queue_LineSegment::Instance().Deposit();
@@ -205,7 +205,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('k')) new_move_block->MoveBlocks[AXIS_KAPPPA].TargetPosition = gcode->get_value('k');
 			if (gcode->has_letter('l')) new_move_block->MoveBlocks[AXIS_LAMBDA].TargetPosition = gcode->get_value('l');
 			for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
-				new_move_block->MoveBlocks[a].Speed = speed_in_gcode;
+				new_move_block->MoveBlocks[a].Speed = __newest_line_speed;
 				new_move_block->MoveBlocks[a].Acceleration = 100;
 			}
 			// new_move_block->PrintOut("From RobotBase::__RunGcode()");
@@ -214,7 +214,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);
 			__planner.arm_solution->FK(&new_ik_position, &new_fk_position);
 			new_line->DeepCopyFromFkPosition(&new_fk_position);
-			new_line->Speed = speed_in_gcode;   //TODO: for next fk gcode usage. should be A:) default speed,  B:) follow previous speed
+			new_line->Speed_mm_per_second = __newest_line_speed;   //TODO: for next fk gcode usage. should be A:) default speed,  B:) follow previous speed
 			Queue_LineSegment::Instance().Deposit();
 			break;
 		case 7:
@@ -227,19 +227,19 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('P')) middle_kinematic_line.TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) middle_kinematic_line.TargetPosition.Yaw = gcode->get_value('W');
 			new_line->IsMiddleKinematicPosition = true;
-			new_line->Speed = speed_in_gcode;
+			new_line->Speed_mm_per_second = __newest_line_speed;
 			this->__planner.arm_solution->MK_to_Ik(&middle_kinematic_line.TargetPosition, &new_ik_position);
 			Queue_MoveBlock::Instance().Deposit();
 			// Update Current FK position 
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);
 			for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
 				new_move_block->MoveBlocks[a].TargetPosition = new_ik_position.Positions[a];
-				new_move_block->MoveBlocks[a].Speed = speed_in_gcode;
+				new_move_block->MoveBlocks[a].Speed = __newest_line_speed;
 				new_move_block->MoveBlocks[a].Acceleration = 100;
 			}
 			__planner.arm_solution->FK(&new_ik_position, &new_fk_position);
 			new_line->DeepCopyFromFkPosition(&new_fk_position);
-			new_line->Speed = 123;   //TODO: for next fk gcode usage. should be A:) default speed,  B:) follow previous speed
+			new_line->Speed_mm_per_second = __newest_line_speed;   //TODO: for next fk gcode usage. should be A:) default speed,  B:) follow previous speed
 			Queue_LineSegment::Instance().Deposit();
 			break;
 

@@ -18,7 +18,7 @@ void CncMover::SpinOnce(){
 
     if (has_moving_actuator){
         delay(500);
-        Serial.print('M');
+        // Serial.print("M");
         return;
     }
 

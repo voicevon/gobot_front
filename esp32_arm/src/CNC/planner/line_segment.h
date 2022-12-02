@@ -10,13 +10,13 @@ class LineSegment: public Queue_able{
         // bool IsAbsTargetPosition;
         // FKPosition_XYZRPY* TargetPosition;
         FKPosition_XYZRPY TargetPosition;
-        float Speed;
+        float Speed_mm_per_second;
         float Acceleration;   // Is this needed ?
         bool IsMiddleKinematicPosition = false;    // A middle kinematic position is borrowing this.
         void Calculate_distance_time(FKPosition_XYZRPY* start_position);
 
-        float vector_distance;
-        float required_time;
+        float Distance_mm;
+        float Required_time;
         void DeepCopyTo(LineSegment* the_copy);
         void DeepCopyFromFkPosition(FKPosition_XYZRPY* from);
 

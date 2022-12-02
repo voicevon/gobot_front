@@ -32,8 +32,8 @@ void test_board(){
 
 void test_robot(){
     for (int i=0; i<8;i++){
-        gcode_queue.AppendGcodeCommand("G1X0Y300");
-        gcode_queue.AppendGcodeCommand("G1X0Y190");
+        gcode_queue.AppendGcodeCommand("G1X1Y300F8000");
+        gcode_queue.AppendGcodeCommand("G1X2Y190F2000");
         // gcode_queue.AppendGcodeCommand("G6a800b800");
         // gcode_queue.AppendGcodeCommand("G6a0b0");
         gcode_queue.AppendGcodeCommand("G4S5");

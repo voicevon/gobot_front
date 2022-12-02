@@ -59,15 +59,14 @@ bool CommonQueue::Deposit(){
 Queue_able* CommonQueue::_GetRoom(){
     // Logger::Debug("CommonQueue::_GetRoom()");
     // int previous_head = this->__get_pointer_previous_index(this->_head);
-
-    int previous_head = this->_head;
+    // int previous_head = this->_head;
     // Logger::Print("previous_head", previous_head);
     // Logger::Print("&this->_all_queue_ables",&this->_all_queue_ables);
     // Logger::Print("previous_head * this->_sizeof_item", previous_head * this->_sizeof_item);
     // Logger::Print("&this->_all_queue_ables + previous_head * this->_sizeof_item", &this->_all_queue_ables + previous_head * this->_sizeof_item);
     // Serial.println((long) this->_all_queue_ables);
     // Serial.println(&this->_all_queue_ables);
-    Queue_able* head_message =(Queue_able*)(this->_all_queue_ables + previous_head * this->_sizeof_item);
+    Queue_able* head_message =(Queue_able*)(this->_all_queue_ables + _head * this->_sizeof_item);
     // Serial.println(head_message->id);
     // Logger::Print("CommonQueue::_GetRoom() point", 99);
     return  head_message;
@@ -76,15 +75,16 @@ Queue_able* CommonQueue::_GetRoom(){
 Queue_able* CommonQueue::_Withdraw(){
     Queue_able* tail_message = NULL;
     if (this->_head != this->_tail){
-        // tail_message = this->_all_queue_ables[this->_tail];
         tail_message = (Queue_able*) (this->_all_queue_ables + this->_tail * this->_sizeof_item);
         this->_tail = this->__get_pointer_next_index(this->_tail);
     }
     return tail_message;
 }
 
+// Notice:  If buffer is empty, this will return unexpected result.
 Queue_able* CommonQueue::_GetHeadObject(){
-    return (Queue_able*) (this->_all_queue_ables + this->_head* this->_sizeof_item);
+    int previous_head =  __get_pointer_previous_index(_head);
+    return (Queue_able*) (this->_all_queue_ables + previous_head* this->_sizeof_item);
 }
 
 bool CommonQueue::BufferIsEmpty(){

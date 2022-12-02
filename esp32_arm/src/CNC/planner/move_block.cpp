@@ -43,14 +43,14 @@ void MoveBlock::PrintOut(const char* title){
     Logger::Debug(title);
     Serial.print("MoveBlock::PrintOut()  position, speed, acceleration, VectorDistance-------\n" );
     for (int i=0; i< CNC_ACTUATORS_IDEAL_COUNT; i++){
-        Serial.print('\t\t\t');
+        Serial.print("\t\t\t");
         Serial.print(MoveBlocks[i].TargetPosition);
-        Serial.print('\t');
+        Serial.print("\t");
         Serial.print(MoveBlocks[i].Speed);
-        Serial.print('\t');
+        Serial.print("\t");
         Serial.print(MoveBlocks[i].Acceleration);
-        Serial.print('\t');
+        Serial.print("\t");
         Serial.print(MoveBlocks[i].VectorDistance);
-        Serial.print('\n');
+        Serial.print("\n");
     }
 }

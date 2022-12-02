@@ -28,14 +28,11 @@ class RobotBase: public GcodeConsumer{
 
     protected:
         void _running_G28();
-
         void _LinkMover(CncMover* mover){this->_mover=mover;};
         void _LinkArmSolution_for_planner(ArmSolutionBase* arm_solution){__planner.arm_solution=arm_solution;};
         virtual void _InitStatic_Queues();
         virtual void _Init_ArmSolution();
         
-        // virtual void _Convert_MK_to_FK(LineSegment * middle_kinematic_line, LineSegment* fk_line){};
-        // virtual void _Convert_MK_to_IK(FKPosition_XYZRPY * middle_kinematic_position, IKPosition_abgdekl* ik_position){};
         G28_Runner* _g28_runner;
         CncMover* _mover;
 
@@ -43,6 +40,8 @@ class RobotBase: public GcodeConsumer{
         Planner __planner;
         G4_Runner __g4_runner;
         void __RunGcode(Gcode* gcode);
+        float __newest_line_speed = 500;   //
+
         
 
         /* Just for fun, don't remove below comment.
