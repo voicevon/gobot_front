@@ -3,32 +3,19 @@
 
 void CncMover::SpinOnce(){
     // Logger::Debug("CncMover::SpinOnce()");
+    bool has_moving_actuator = false;
+    for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
+        CncActuatorBase* actuator = CncActuator_List::Instance().GetActuator(a);
+        actuator->SpinOnce();
+        if (actuator->IsMoving()) has_moving_actuator= true;
+    }
 
-    // Logger::Print("CncMover::SpinOnce() point", 1);
     if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
         // Logger::Print("CncMover::SpinOnce() Queue_MoveBlock::  Buffer is Empty", 91);
         return;
     }
+    // Logger::Print("CncMover::SpinOnce() Queue_MoveBlock::  Buffer got moveblock", 21);
 
-    bool has_moving_actuator = false;
-    for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
-        // Logger::Print("axis", a);
-        // Logger::Print("axis name", CncActuator_List::Instance().GetActuator(a)->MyName);
-        // Serial.print("\t");
-        // Serial.print(CncActuator_List::Instance().GetActuator(a)->MyName);
-        // Serial.print("\t current position = ");
-        // Serial.print(CncActuator_List::Instance().GetActuator(a)->GetCurrentPosition());
-        // Serial.print("\n");
-        CncActuatorBase* actuator = CncActuator_List::Instance().GetActuator(a);
-        actuator->SpinOnce();
-        if (actuator->IsMoving()){
-            Logger::Print("CncMover::SpinOnce()  moving actuator index", actuator->MyName);
-            has_moving_actuator = true;
-        }
-    }
-
-
-    
     if (has_moving_actuator){
         delay(500);
         Serial.print('M');

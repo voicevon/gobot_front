@@ -23,7 +23,7 @@ class CncActuator_List: public ListBase{
             for(int a=0; a<this->GetItemsCount(); a++){
                 actuator = this->GetActuator(a);
                 if (actuator->IsMoving()){
-                    Serial.println(actuator->MyName);
+                    // Logger::Print("CncActuator_List::HasMovingActuator()", actuator->MyName);
                     return true;
                 }        
             }

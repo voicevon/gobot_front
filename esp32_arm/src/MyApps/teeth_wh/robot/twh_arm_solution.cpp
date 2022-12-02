@@ -3,41 +3,38 @@
 
 
 void Twh_ArmSolution::real_MK_to_FK(MiddleKinematic* mk, FKPosition_XYZRPY* fk){
-	Logger::Debug("Twh_ArmSolution::real_MK_to_FK()");
 	fk->Y = mk->Arm_shaft_At_Y + __config.arm_length * cosf(mk->Arm_Angle);
 	fk->X = __config.arm_length * sinf(mk->Arm_Angle);
-	Logger::Print("fk.X", fk->X);
-	Logger::Print("fk.Y", fk->Y);
+
+	// Logger::Debug("Twh_ArmSolution::real_MK_to_FK()");
+	// Logger::Print("fk.X", fk->X);
+	// Logger::Print("fk.Y", fk->Y);
 }
 
 void Twh_ArmSolution::real_FK_to_MK(FKPosition_XYZRPY* fk, MiddleKinematic* mk){
 	mk->Arm_Angle = asinf(fk->X / __config.arm_length);  // range should be in range of degree [-90, +90]
 	mk->Arm_shaft_At_Y = fk->Y - __config.arm_length * cosf(mk->Arm_Angle);
-	Logger::Print("input.X", fk->X);
-	Logger::Print("arm_length", __config.arm_length);
-	Logger::Print("mk.Arm_Angle in deg", mk->Arm_Angle * RAD_TO_DEG);
-	Logger::Print("mk.arm_shart_at_Y", mk->Arm_shaft_At_Y);
+	// Logger::Print("input.X", fk->X);
+	// Logger::Print("arm_length", __config.arm_length);
+	// Logger::Print("mk.Arm_Angle in deg", mk->Arm_Angle * RAD_TO_DEG);
+	// Logger::Print("mk.arm_shart_at_Y", mk->Arm_shaft_At_Y);
 }
 
 void Twh_ArmSolution::real_MK_to_IK(MiddleKinematic* mk, IKPosition_abgdekl* ik){
-	Logger::Debug("Twh_ArmSolution::real_MK_to_IK()");
 	ik->Positions[AXIS_ALPHA] = - (mk->Arm_shaft_At_Y - __config.arm_length) * __config.linear_slope_steps_per_mm + mk->Arm_Angle *__config.arm_slope_steps_per_rad ;   
 	ik->Positions[AXIS_BETA] = (mk->Arm_shaft_At_Y - __config.arm_length ) * __config.linear_slope_steps_per_mm + mk->Arm_Angle * __config.arm_slope_steps_per_rad;
-	Logger::Print("Twh_ArmSolution::real_MK_to_IK()  alpha", ik->Positions[AXIS_ALPHA]);
-	Logger::Print("Twh_ArmSolution::real_MK_to_IK()  beta", ik->Positions[AXIS_BETA]);
+	// Logger::Debug("Twh_ArmSolution::real_MK_to_IK()");
+	// Logger::Print("Twh_ArmSolution::real_MK_to_IK()  alpha", ik->Positions[AXIS_ALPHA]);
+	// Logger::Print("Twh_ArmSolution::real_MK_to_IK()  beta", ik->Positions[AXIS_BETA]);
 }
 
 void Twh_ArmSolution::real_IK_to_MK(IKPosition_abgdekl* ik, MiddleKinematic* mk){
-	// mk.X = (ik->alpha   - ik->beta) * __config.master_slope_steps_per_mm / 2;
 	mk->Arm_shaft_At_Y = (ik->Positions[AXIS_BETA] - ik->Positions[AXIS_ALPHA]) / __config.linear_slope_steps_per_mm / 2 + __config.arm_length;
-	// mk.Angle = (ik->alpha + ik->beta) / 2 / __config.slave_gear_circle_length;  // Notice: angle has no range now.
 	mk->Arm_Angle = (ik->Positions[AXIS_ALPHA] + ik->Positions[AXIS_BETA]) / __config.arm_slope_steps_per_rad /2;  // Notice: angle has no range now.
 	
-	Logger::Print("Twh_ArmSolution::real_IK_to_MK() mk.y", mk->Arm_shaft_At_Y);
-	Logger::Print("Twh_ArmSolution::real_IK_to_MK() mk.Angle in deg", mk->Arm_Angle * RAD_TO_DEG);
-
+	// Logger::Print("Twh_ArmSolution::real_IK_to_MK() mk.y", mk->Arm_shaft_At_Y);
+	// Logger::Print("Twh_ArmSolution::real_IK_to_MK() mk.Angle in deg", mk->Arm_Angle * RAD_TO_DEG);
 }
-
 
 void Twh_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	Logger::Info("Twh_ArmSolution::IK()");

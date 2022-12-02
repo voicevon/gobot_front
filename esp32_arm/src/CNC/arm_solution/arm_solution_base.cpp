@@ -31,6 +31,8 @@ void ArmSolutionBase::SetCurrentPositionAs(FKPosition_XYZRPY* fk_position){
 void ArmSolutionBase::SetCurrentPositionAs(IKPosition_abgdekl* ik_position){
 	for(int i=0; i< CncActuator_List::Instance().GetItemsCount();i++){
 		__current_position_ik.Positions[i] = ik_position->Positions[i];
+		CncActuatorBase* actuator = CncActuator_List::Instance().GetActuator(i);
+		actuator->SetCurrentPositionAs(__current_position_ik.Positions[i]);
 	}
 	this->FK(&__current_position_ik, &__current_position_fk);
 	__current_position_fk.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions FK");

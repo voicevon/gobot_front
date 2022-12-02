@@ -6,12 +6,12 @@ void CncActuatorFastStepper::LinkStepper(FastAccelStepper* stepper){
 }
 
 void CncActuatorFastStepper::SpinOnce(){
-    if (_is_moving != _stepper->isRunning()){
-        _is_moving = _stepper->isRunning();
-        // Logger::Warn("CncActuatorFastStepper::SpinOnce()") ;
-        // Logger::Print("", MyName );
-        // Logger::Print("CncActuatorFastStepper::SpinOnce()  is_moving  update to ", _is_moving );
-    }
+    // if (_is_moving != _stepper->isRunning()){
+    //     Logger::Warn("CncActuatorFastStepper::SpinOnce()") ;
+    //     Logger::Print("CncActuatorFastStepper::SpinOnce()  axis name", MyName );
+    //     Logger::Print("CncActuatorFastStepper::SpinOnce()  is_moving  update to ", _stepper->isRunning() );
+    // }
+    _is_moving = _stepper->isRunning();
 }
 
 void CncActuatorFastStepper::PrintOut(const char* title){
@@ -43,3 +43,6 @@ void CncActuatorFastStepper::ForceStop(){
     _is_moving = false;
 }
 
+void CncActuatorFastStepper::SetCurrentPositionAs(float new_position){
+    _stepper->setCurrentPosition(new_position);
+}

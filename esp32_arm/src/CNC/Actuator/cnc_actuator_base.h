@@ -31,10 +31,13 @@ class CncActuatorBase: public ListItem{
         void LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint);
         virtual void UpdateMovement(MoveBlock_SingleActuator* movement);
         virtual void ForceStop();   //Only G28 is using this.
-        virtual float GetCurrentPosition(){};
+        virtual float GetCurrentPosition(){};   //TODO:  remove body
+        virtual void SetCurrentPositionAs(float new_position){};    //TODO: remove body
+
         bool IsMoving(){return _is_moving;};   // TODO:  is this necessary?
 
 
+        // TODO: remove below 3.
         void Formular_SetSlope(float slope_from_actuator_to_cnc){
             this->__formular_slope_from_raw_to_cnc=slope_from_actuator_to_cnc;
             };
@@ -42,10 +45,13 @@ class CncActuatorBase: public ListItem{
         float ConvertPosition_ToCncUnit(float actuator_position);
 
     protected:
+        // TODO:  remove below 2
         float GetPosition_FromCncUnit(float cnc_position);
         float GetSpeed_FromCncUnit(float cnc_speed);
+
+
         float _target_position;   // is always an absolute position
-        float _current_position;
+        float _current_position;  //TODO: remove this
         bool _is_moving = false;   // a: Not reach target_position,  b:Force stopped.
 
         ActuatorRangeConstraintBase* _range_constraint;

@@ -11,10 +11,11 @@ class CncActuatorFastStepper: public CncActuatorBase{
         void LinkStepper(FastAccelStepper* stepper);
 
         void UpdateMovement(MoveBlock_SingleActuator* line) override;
+        void SetCurrentPositionAs(float new_position) override;
 
     protected:
-        FastAccelStepper* _stepper;
 
     private:
+        FastAccelStepper* _stepper;
 
 };
