@@ -198,7 +198,7 @@ class TeethWarehouseRobot():
     def eef_do_park(self, home_park=False, row=1,col=1):
         self.gcode_sender.Eef_TurnOn_VacuumFan(False)
         if home_park:
-            self.gcode_sender.home_x()
+            self.gcode_sender.home_y()
             self.gcode_sender.home_alpha()
         else:
             self.gcode_sender.move_xy_to (200,22)

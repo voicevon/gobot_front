@@ -14,8 +14,8 @@ class GcodeSender():
     def home_alpha(self):
         self.send_code('G28a')
 
-    def home_x(self):
-        self.send_code('G28X')
+    def home_y(self):
+        self.send_code('G28Y')
 
     def move_centerbox_to_outside(self):
         self.send_code('G1X1200')

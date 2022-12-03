@@ -2,7 +2,7 @@
 
 void Logger::Info(const char* title){
     Serial.print(FORE_YELLOW);
-    Serial.print(BGC_BLUE);
+    Serial.print(BGC_ORANGE);
     Serial.print("[Info] ");
     Serial.print(title);
     // Serial.print("  ");
