@@ -32,17 +32,8 @@ void test_board(){
 
 void test_robot(){
     for (int i=0; i<8;i++){
-        gcode_queue.AppendGcodeCommand("G1X1Y300F8000");
-        gcode_queue.AppendGcodeCommand("G1X2Y190F2000");
+        gcode_queue.AppendGcodeCommand("M408");
         gcode_queue.AppendGcodeCommand("G4S5");
-
-
-        // gcode_queue.AppendGcodeCommand(String(__payload_buffer));
-
-        // gcode_queue.AppendGcodeCommand("G1Z0");
-        // gcode_queue.AppendGcodeCommand("G4S15");
-        // gcode_queue.AppendGcodeCommand("G1Z100");
-        // gcode_queue.AppendGcodeCommand("G4S15");
 
     }
     
@@ -85,7 +76,7 @@ void setup(){
 
     gcode_queue.AppendGcodeCommand("G28a");
     gcode_queue.AppendGcodeCommand("G28Y");
-    // test_robot();
+    test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
 

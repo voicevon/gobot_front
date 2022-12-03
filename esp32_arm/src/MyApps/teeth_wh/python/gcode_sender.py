@@ -35,6 +35,7 @@ class GcodeSender():
         # move up
         self.send_code('G1Z0')
         self.send_code('G4S2')
+        # report ir_state via MQTT
         self.send_code('M408')
         
     def drop_to_cellbox(self, row, col):

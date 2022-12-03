@@ -20,16 +20,16 @@ void RobotBase::SpinOnce(){
 
 			if (CncActuator_List::Instance().HasMovingActuator())
 				return;
-			Logger::Print("RobotBase::SpinOnce()  G4_Runner is starting. ", 43);
+			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is starting. ", 43);
 			this->__g4_runner.Start();
 			this->State = RobotState::G4_IS_RUNNING;
-			Logger::Print("RobotBase::SpinOnce()  G4_Runner is started", 44);
+			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is started", 44);
 			break;
 			
 		case RobotState::G4_IS_RUNNING:
 			if(this->__g4_runner.IsDone()){
 				this->State =RobotState::IDLE_OR_ASYNC;
-				Logger::Print("RobotBase::SpinOnce()  G4_Runner is over", 45);
+				// Logger::Print("RobotBase::SpinOnce()  G4_Runner is over", 45);
 			}
 			break;
 		case RobotState::G28_IS_SYNCING:

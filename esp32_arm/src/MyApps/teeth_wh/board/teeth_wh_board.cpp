@@ -9,6 +9,8 @@
 #define PIN_SERVO_EEF_VERTICAL 19   
 #define PIN_SERVO_VACUUM_SWITCH 18  
 
+#define PIN_IR_CHECKING 32
+
 #define PIN_HX711_CLK 22
 #define PIN_HX711_DATA 22
 
@@ -35,6 +37,9 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
         Serial.begin(115200);
         Serial.println("I am Teeth Warehouse.");
     }
+
+    pinMode(PIN_IR_CHECKING, INPUT_PULLUP);
+
     __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('Y',PIN_HOMER_SENSOR_HALL_ALPHA, HIGH);
     __all_position_triggers[POSITION_TRIGGER_X].Init('a', PIN_HOMER_SENSOR_HALL_X, HIGH);
     // __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
