@@ -13,7 +13,7 @@ TeethWarehouse_App::TeethWarehouse_App(){
 
 void TeethWarehouse_App::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
-    Logger::Info("TeethWarehouse_App::ExecuteMqttCommand()");
+    // Logger::Info("TeethWarehouse_App::ExecuteMqttCommand()");
     bool debug = false;
     if (debug){
         Logger::Print("command",str_command);

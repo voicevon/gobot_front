@@ -108,8 +108,8 @@ void RobotBase::SpinOnce(){
 	std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
 	Gcode gcode = Gcode(str);
-	Logger::Debug("RobotBase::SpinOnce() has got command string ");
-	Serial.println(str.c_str());
+	// Logger::Debug("RobotBase::SpinOnce() has got command string ");
+	// Serial.println(str.c_str());
 	// Logger::Print("RobotBase::SpinOnce() point", 6);
 	// Logger::Print("gcode_command", gcode.get_command());
 
@@ -126,6 +126,11 @@ void RobotBase::SpinOnce(){
 			}
 			this->_gcode_queue->FetchTailMessage(true);
 		}
+	}else{
+		Logger::Warn("RobotBase::SpinOnce() ---- Unknown command, Ignored.");
+		Serial.println(str.c_str());
+		this->_gcode_queue->FetchTailMessage(true);
+
 	}
 	// Logger::Print("RobotBase::SpinOnce() point", 99);
 

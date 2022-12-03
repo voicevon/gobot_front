@@ -9,6 +9,12 @@ class GcodeSender():
     def send_code(self, code):
         exchange_name = 'twh'
         queue_name = exchange_name + '_' + str(self.target_device_id) + '_gcode'  # twh_221109_gcode
+        if code[0:2] == 'G1':
+            return
+        if code[0:2] == 'G2':
+            return
+        if code[0:2] == 'G6':
+            return
         g_amq.Publish(exchange_name, queue_name, code)
 
     def home_alpha(self):
@@ -37,6 +43,12 @@ class GcodeSender():
         self.send_code('G4S2')
         # report ir_state via MQTT
         self.send_code('M408')
+
+    def pickup_from_cell(self, row, col):
+
+        self.send_code("G4S3")
+        #report ir_state via MQTT
+        self.send_code('M408')  
         
     def drop_to_cellbox(self, row, col):
         self.move_xy_to(row * 40, col * 40)

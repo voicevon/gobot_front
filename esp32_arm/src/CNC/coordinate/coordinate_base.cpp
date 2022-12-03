@@ -18,5 +18,5 @@ void IKPosition_abgdekl::PrintOut(const char* title){
         Serial.print("\t");
         Serial.print(this->Positions[i]);
     }
-
+    Serial.println("");
 }

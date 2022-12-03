@@ -153,7 +153,7 @@ class TeethWarehouseRobot():
         self.eef_statemachine.AppendItem(StateMachine_Item('droping_centerbox', 'end_withdraw', 'be_outside', self.eef_do_be_outside))
         self.eef_statemachine.AppendItem(StateMachine_Item('be_outside', 'auto', 'parking', self.eef_do_park))
 
-        self.eef_do_park(True)
+        self.eef_do_park(False)
 
     def get_xy(self, row,col):
         x = row * 40
@@ -227,6 +227,7 @@ class TeethWarehouseRobot():
         '''
         self.doing_job = 'withdraw'
         self.ir_state.local_value = self.ir_state.default_value
+        self.gcode_sender.pickup_from_cell(row, col)
 
     def eef_do_cancel(self, row, col):
         pass
