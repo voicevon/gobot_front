@@ -1,6 +1,6 @@
 
 #include "m408_runner_report_json.h"
-#include "Robot/axis_homer/home_trigger_array.h"
+#include "Robot/axis_homer/position_trigger_array.h"
 
 #include "IoT/wifi_mqtt_client.h"
 

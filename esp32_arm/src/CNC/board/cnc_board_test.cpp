@@ -1,5 +1,5 @@
 #include "cnc_board_test.h"
-#include "Robot/axis_homer/home_trigger_array.h"
+#include "Robot/axis_homer/position_trigger_array.h"
 
 void CncBoard_Test::Test_SinglePositionTrigger(PositionTrigger* homer, int loop_count){
     for (int i=0; i<loop_count; i++){

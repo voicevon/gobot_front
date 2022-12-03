@@ -5,7 +5,7 @@
 // #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "CNC/Actuator/servo/cnc_actuator_servo.h"
-#include "Robot/axis_homer/home_trigger_array.h" 
+#include "Robot/axis_homer/position_trigger_array.h" 
 #include "HX711.h"
 #include "VL6180X.h"
 #include <ESP32Servo.h>

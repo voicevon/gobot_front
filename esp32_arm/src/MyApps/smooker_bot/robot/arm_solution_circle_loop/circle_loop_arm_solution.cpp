@@ -1,5 +1,5 @@
 #include "circle_loop_arm_solution.h"
-#include "Robot/axis_homer/home_trigger_array.h"
+#include "Robot/axis_homer/position_trigger_array.h"
 
 void Smoker_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	FKPosition_XYZRPY* fk = from_fk;

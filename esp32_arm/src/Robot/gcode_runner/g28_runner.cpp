@@ -8,9 +8,9 @@ bool G28_Runner::IsDone(){
     // Logger::Debug("G28_Runner::IsDone()");
     static unsigned long last_micros;
     PositionTrigger* trigger;
-    for(int i=0; i<HomeTrigger_Array::Instance().GetItemsCount(); i++){
-        trigger = HomeTrigger_Array::Instance().GetPositionTrigger(i);
-        if (trigger->__short_name == this->_axis_name){
+    for(int i=0; i<PositionTrigger_Array::Instance().GetItemsCount(); i++){
+        trigger = PositionTrigger_Array::Instance().GetPositionTrigger(i);
+        if (trigger->MyName == this->_axis_name){
             if(trigger->IsFired()){
                 Logger::Info("G28_Runner::IsDone()  homer is triggered...");
             	_mover->AllActuatorsStop();

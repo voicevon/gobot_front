@@ -3,7 +3,7 @@
 #include "CNC/board/cnc_board_base.h"
 #include "FastAccelStepper.h"
 // #include "ESP32Step/src/TeensyStep.h"
-#include "Robot/axis_homer/home_trigger_array.h"
+#include "Robot/axis_homer/position_trigger_array.h"
 #include "../robot_eef/garment_asar_eef.h"   //todo remove
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 

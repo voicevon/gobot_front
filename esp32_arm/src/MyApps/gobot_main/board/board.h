@@ -6,7 +6,7 @@
 #include "robot_eef/gobot_main_eef.h"
 // #include "Robot/axis_homer/axis_homer.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
-#include "Robot/axis_homer/home_trigger_array.h"
+#include "Robot/axis_homer/position_trigger_array.h"
 
 class GobotMain_Board: public CncBoardBase{
     public:

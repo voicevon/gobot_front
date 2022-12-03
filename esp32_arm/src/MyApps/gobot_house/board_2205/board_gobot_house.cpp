@@ -17,7 +17,7 @@ void Board_GobotHouse::Init(bool is_on_reset){
 
     __all_position_triggers[0].Init('a',PIN_HOME_ALHPA_2109, LOW);
     __all_position_triggers[1].Init('b',PIN_HOME_BETA_2109, LOW);
-    HomeTrigger_Array::Instance().Init(__all_position_triggers,2);
+    PositionTrigger_Array::Instance().Init(__all_position_triggers,2);
 
 }
 

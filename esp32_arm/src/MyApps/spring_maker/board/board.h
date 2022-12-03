@@ -5,7 +5,7 @@
 // #include "ESP32Step/src/TeensyStep.h"
 #include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
 #include "robot_eef/board_spring_maker.h"
-#include "Robot/axis_homer/home_trigger_array.h"
+#include "Robot/axis_homer/position_trigger_array.h"
 
 
 #define POSITION_TRIGGERS_COUNT 1

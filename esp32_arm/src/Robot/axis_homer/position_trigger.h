@@ -15,7 +15,7 @@ class PositionTrigger: public ArrayItem{
         bool IsFired();  
         void SetTriggeredCountMax(int new_value){this->__triggered_counter_max = new_value;};
         void PrintOut(const char* title);
-        char __short_name;   //??
+        char MyName;   
 
     private:
         int __triggered_counter = 0;

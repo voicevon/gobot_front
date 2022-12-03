@@ -1,5 +1,5 @@
 #include "circle_loop_arm_solution.h"
-#include "Robot/axis_homer/home_trigger_array.h"
+#include "Robot/axis_homer/position_trigger_array.h"
 
 void CircleLoop_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	FKPosition_XYZRPY* fk = from_fk;
@@ -30,7 +30,7 @@ void CircleLoop_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* 
 // 		Logger::Info("CircleLoop_ArmSolution::_SetCurrentPositionAsHome()  Trying to get home position with EEF FK position  ");
 // 		// Logger::Print("Config.HomedPosition()", this->_config_base->HomedPosition(AXIS_ALPHA));
 // 		// this->__current_fk_position.A = this->_homer_diction.GetAxisHomer(AXIS_X)->GetFiredPosition();
-// 		this->__current_fk_position.Roll = HomeTrigger_Array::Instance().GetFiredPosition('A');
+// 		this->__current_fk_position.Roll = PositionTrigger_Array::Instance().GetFiredPosition('A');
 // 		Logger::Print("position trigger, fired position", this->__current_fk_position.Roll);
 // 		this->IK(&this->__current_fk_position, &ik_position);
 // 		// verify IK by FK()

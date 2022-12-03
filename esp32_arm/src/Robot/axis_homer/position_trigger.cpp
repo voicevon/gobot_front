@@ -2,7 +2,7 @@
 #include "MyLibs/basic/logger.h"
 
 void PositionTrigger::Init(char name, uint8_t pin_trigger, int triggered_state){
-    this->__short_name = name;
+    this->MyName = name;
     this->__pin_trigger = pin_trigger;
     this->__triggered_state = triggered_state;
     pinMode(pin_trigger, INPUT_PULLUP);
@@ -10,7 +10,7 @@ void PositionTrigger::Init(char name, uint8_t pin_trigger, int triggered_state){
 }
 
 void PositionTrigger::Init(char name, Adafruit_MCP23X17* mcp_23018, uint8_t expanded_pin_trigger, int triggered_state){
-    this->__short_name = name;
+    this->MyName = name;
     this->__mcp23018 = mcp_23018;
     this->__pin_trigger = expanded_pin_trigger;
     this->__triggered_state = triggered_state;

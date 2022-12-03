@@ -38,7 +38,7 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
     __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('Y',PIN_HOMER_SENSOR_HALL_ALPHA, HIGH);
     __all_position_triggers[POSITION_TRIGGER_X].Init('a', PIN_HOMER_SENSOR_HALL_X, HIGH);
     // __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
-    HomeTrigger_Array::Instance().Init(__all_position_triggers, HOME_TRIGGER_COUNT);
+    PositionTrigger_Array::Instance().Init(__all_position_triggers, HOME_TRIGGER_COUNT);
     
     // Disable vacuumPump
     pinMode(PIN_VACUUME_PUMP, OUTPUT);

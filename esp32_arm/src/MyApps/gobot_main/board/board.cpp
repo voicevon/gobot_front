@@ -40,7 +40,7 @@ void GobotMain_Board::Init(bool is_on_reset){
 
     __all_position_triggers[0].Init('a',PIN_HOME_ALPHA_2201, LOW);
     __all_position_triggers[1].Init('b',PIN_HOME_BETA_2201, LOW);
-    HomeTrigger_Array::Instance().Init(__all_position_triggers,2);
+    PositionTrigger_Array::Instance().Init(__all_position_triggers,2);
 
     this->RepportRamUsage();
 }
