@@ -27,6 +27,7 @@ class ListBase{
         ListItem* _GetItem(int index){
             if(index >= __items_count){
                 Logger::Error("ListBase::_GetItem()");
+                Logger::Print("index", index);
                 Logger::Halt("List Item is Outside");
             }
             return (ListItem*)(__all_items[index]);

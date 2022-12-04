@@ -21,20 +21,26 @@ void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* new_line){
     // Logger::Debug("Planner::ConvertLineSegment_AppendMoveBlocks()");
     // Logger::Print("new_line->TargetPosition.X", new_line->TargetPosition.X);
     // Logger::Print("new_line->TargetPosition.Y", new_line->TargetPosition.Y);
+    // Logger::Print("new_line->TargetPosition.Z", new_line->TargetPosition.Z);
 
     new_line->Calculate_distance_time(&current_line->TargetPosition);
     IKPosition_abgdekl start_ik;
+    // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 21);
     Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyToIkPosition(&start_ik);
+    // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 22);
 
     IKPosition_abgdekl target_ik;
     Queue_MoveBlock::Instance().DeepCopyHead_ToPosition(&target_ik);
     arm_solution->IK(&new_line->TargetPosition, &target_ik);
     MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
-    for(int i=0; i<CNC_ACTUATORS_IDEAL_COUNT; i++){
+    // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 24);
+    for(int i=0; i<CncActuator_List::Instance().GetItemsCount(); i++){
+        // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 31);
         mb->MoveBlocks[i].TargetPosition = target_ik.Positions[i];
         CncActuatorBase* actuator = CncActuator_List::Instance().GetActuator(i);
+        // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 32);
         actuator->Recalulate_distance_speed_acceleration(&mb->MoveBlocks[i], start_ik.Positions[i], new_line->Required_time);
-        // mb->MoveBlocks[a].Recalulate_distance_speed_acceleration(start_ik.Positions[a], new_line->Required_time);
+        // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 33);
     }
     
     Queue_MoveBlock::Instance().Deposit();

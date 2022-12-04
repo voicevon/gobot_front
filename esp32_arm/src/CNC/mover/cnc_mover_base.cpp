@@ -29,7 +29,7 @@ void CncMover::SpinOnce(){
     // Logger::Print("MoveBlocks[AXIS_ALPHA].Acceleration", mb->MoveBlocks[AXIS_ALPHA].Acceleration);
 
     this->AllActuatorsMoveTo(mb);
-    Logger::Print("CncMover::SpinOnce() point", 99);
+    // Logger::Print("CncMover::SpinOnce() point", 99);
 
 }
 

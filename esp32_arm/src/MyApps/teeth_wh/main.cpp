@@ -32,9 +32,11 @@ void test_board(){
 
 void test_robot(){
     for (int i=0; i<8;i++){
-        // gcode_queue.AppendGcodeCommand("M408");
-        // gcode_queue.AppendGcodeCommand("G4S5");
-
+        gcode_queue.AppendGcodeCommand("G1Z0");
+        gcode_queue.AppendGcodeCommand("G4S5");
+        
+        gcode_queue.AppendGcodeCommand("G1Z-90");
+        gcode_queue.AppendGcodeCommand("G4S2");
     }
     
 }
@@ -55,7 +57,7 @@ void test_arm(){
     MiddleKinematic input_mk;
     input_mk.Arm_shaft_At_Y = 210;
     input_mk.Arm_Angle = 45 * DEG_TO_RAD;
-    // arm.Test_MK_IK_MK(&input_mk);
+    arm.Test_MK_IK_MK(&input_mk);
 
     while (true){
 
@@ -74,8 +76,9 @@ void setup(){
     append_mqtt_bridge("twh/221109/gcode_feed", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
 
-    // gcode_queue.AppendGcodeCommand("G28a");
-    // gcode_queue.AppendGcodeCommand("G28Y");
+    gcode_queue.AppendGcodeCommand("G28a");
+    gcode_queue.AppendGcodeCommand("G28Y");
+    // gcode_queue.AppendGcodeCommand("G1Z0");
     test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
