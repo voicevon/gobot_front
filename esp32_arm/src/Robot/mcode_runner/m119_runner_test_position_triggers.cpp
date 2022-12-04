@@ -2,9 +2,12 @@
 #include "m119_runner_test_position_triggers.h"
 #include "Robot/axis_homer/position_trigger_array.h"
 
+void M119_Runner_TestPositionTriggers::LinkMcode(Gcode* mcode){
+    
+}
 
 // Print all triggers status, when there is a change.
-bool M119_Runner_TestPositionTriggers::StartExec(Gcode* gcode){
+bool M119_Runner_TestPositionTriggers::StartExec(){
     Logger::Debug("M119_Runner::Run()");
     static uint32_t last_flags;
     // HomeTrigger_Array::Instance().GetFiredPosition('X');

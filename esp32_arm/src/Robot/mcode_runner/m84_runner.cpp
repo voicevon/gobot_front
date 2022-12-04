@@ -2,7 +2,12 @@
 #include "m84_runner.h"
 #include "CNC/Actuator/cnc_actuator_list.h"
 
-bool M84_Runner_Disable_All_Steppers::StartExec(Gcode* mcode){
+
+void M84_Runner_Disable_All_Steppers::LinkMcode(Gcode* mcode){
+    
+}
+
+bool M84_Runner_Disable_All_Steppers::StartExec(){
     //TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
 	for (int axis=0; axis<CncActuator_List::Instance().GetItemsCount(); axis++){
 		CncActuatorBase* actuator = CncActuator_List::Instance().GetActuator(axis);

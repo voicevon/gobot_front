@@ -5,8 +5,8 @@
 bool MessageQueue::AppendMessage(String strPayload){
     const char* payload = strPayload.c_str();
     int length = strPayload.length();
-    // Serial.print("[Info] MessageQueue::AppendMessage(String strPayload)   ");
-    // Serial.println(strPayload);
+    Serial.print("[Info] MessageQueue::AppendMessage(String strPayload)   ");
+    Serial.println(strPayload);
     return this->AppendMessage(payload, length);
 }
 

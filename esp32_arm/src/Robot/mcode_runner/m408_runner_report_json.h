@@ -6,7 +6,8 @@
 #define MQTT_PAYLOAD_BUFFER_COUNT_200K 200000    // For camera picture.
 class M408_Runner_ReportJson: public McodeRunnerBase{
     public:
-        bool StartExec(Gcode* mcode) override;
+        void LinkMcode(Gcode* mcode) override;
+        bool StartExec() override;
 
     private:
         char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_1K];

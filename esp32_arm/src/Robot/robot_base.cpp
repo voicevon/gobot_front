@@ -9,8 +9,27 @@ void RobotBase::SpinOnce(){
 	// Logger::Debug("RobotBase::SpinOnce()");
 	this->_mover->SpinOnce();
 	// Logger::Print("RobotBase::SpinOnce() point", 2);
-
 	switch (this->State){
+		case RobotState::MCODE_IS_SYNCING:
+			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 41);
+			if (! Queue_MoveBlock::Instance().BufferIsEmpty()){
+				return;
+			}
+			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 42);
+
+			if (CncActuator_List::Instance().HasMovingActuator())
+				return;
+			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is starting. ", 43);
+			this->State = RobotState::MCODE_IS_RUNNING;
+			break;
+
+		case RobotState::MCODE_IS_RUNNING:
+			if(McodeOS::Instance().SpinOnce()){
+				// Finished running current mcode.
+				this->State = RobotState::IDLE_OR_ASYNC;
+			}
+			break;
+
 		case RobotState::G4_IS_SYNCING:
 			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 41);
 			if (! Queue_MoveBlock::Instance().BufferIsEmpty()){
@@ -32,6 +51,7 @@ void RobotBase::SpinOnce(){
 				// Logger::Print("RobotBase::SpinOnce()  G4_Runner is over", 45);
 			}
 			break;
+
 		case RobotState::G28_IS_SYNCING:
 			// In case of these gocde in queue:    G1X123;  G4S5; G28X  what will hanppen 
 			Logger::Print("RobotBase::SpinOnce()  G28_Runner is waiting ", 21);
@@ -43,18 +63,6 @@ void RobotBase::SpinOnce(){
 			break;
 		case RobotState::G28_IS_RUNNING:
 			if(this->_g28_runner->IsDone()){
-				// IKPosition_abgdekl homed_ik_position;
-				// FKPosition_XYZRPY homed_fk_position;
-				// this->__planner.arm_solution->GetRealTimePosition(&homed_fk_position);
-				// char homing_axis_name = this->_g28_runner->GetHomingAxisName();
-				// if (CncAxis::IsCncAxis_FkName(homing_axis_name)){
-				// 	this->__planner.arm_solution->SetCurrentPosition(&homed_fk_position);
-				// }else if (CncAxis::IsActuator_IkName(homing_axis_name)){
-				// 	this->__planner.arm_solution->IK(&homed_fk_position, &homed_ik_position);
-				// 	// homed_ik_position.alpha = this->_g28_runner->GetTriggerPosition();
-				// 	homed_ik_position.Positions[AXIS_ALPHA] = this->_g28_runner->GetTriggerPosition();
-				// 	this->__planner.arm_solution->SetCurrentPosition(&homed_ik_position);
-				// }
 				this->State = RobotState::IDLE_OR_ASYNC;
 				Logger::Print("RobotBase::SpinOnce() point G28_Runner is over ", 23);
 			}
@@ -117,15 +125,18 @@ void RobotBase::SpinOnce(){
 		this->__RunGcode(&gcode);
 		this->_gcode_queue->FetchTailMessage(true);
 	}else if(gcode.has_m){
-		if (this->State == RobotState::IDLE_OR_ASYNC){
-			bool is_finished = McodeOS::Instance().StartToRun(&gcode);   // DOING: How to run it async? assume the runner will take a long time.
-			if (!is_finished){
-				Logger::Warn("RobotBase::SpinOnce() ---- Run mCode background");
-				Serial.print(gcode.get_command());
-				this->State = RobotState::RUNNING_M_CODE;
-			}
-			this->_gcode_queue->FetchTailMessage(true);
-		}
+		McodeOS::Instance().LinkRunner(&gcode);
+		this->State = RobotState::MCODE_IS_SYNCING;
+		this->_gcode_queue->FetchTailMessage(true);
+		// if (this->State == RobotState::IDLE_OR_ASYNC){
+		// 	bool is_finished = McodeOS::Instance().StartToRun(&gcode);   // DOING: How to run it async? assume the runner will take a long time.
+		// 	if (!is_finished){
+		// 		Logger::Warn("RobotBase::SpinOnce() ---- Run mCode background");
+		// 		Serial.print(gcode.get_command());
+		// 		this->State = RobotState::RUNNING_M_CODE;
+		// 	}
+		// 	this->_gcode_queue->FetchTailMessage(true);
+		// }
 	}else{
 		Logger::Warn("RobotBase::SpinOnce() ---- Unknown command, Ignored.");
 		Serial.println(str.c_str());
@@ -158,9 +169,6 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			this->_g28_runner->LinkGcode(gcode);
 			Logger::Print("RobotBase::__RunGcode() --- g28_runner->LinkGcode", 2);
 
-			//TODO:  convert char to enum
-			// this->RunG28(this->ConvertToEnum(home_axis));
-			// home_axis =  this->_arm_solution->ConvertToEnum(home_axis_name);
 			this->State = RobotState::G28_IS_SYNCING;
 			break;
 		case 4:

@@ -25,7 +25,7 @@ void MqttSyncer::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_top
 void MqttSyncer::OnReceived(const char* payload, int length){
     // Put message to local MQ   
     // TODO:: Is this necessary??
-    // Serial.println("[Info] MqttSyncer::OnReceived() Starting a huge process...");
+    Logger::Info("MqttSyncer::OnReceived() Starting a huge process...");
     char* p = (char*)(payload) + length;
     *p = 0x00;
 
@@ -33,7 +33,7 @@ void MqttSyncer::OnReceived(const char* payload, int length){
 
     // send message to feedback topic
     if (this->__local_mq_is_full){
-        Serial.println("\n[Info] MqttSyncer::OnReceived() is appended to local mq, will not publish a feedback via mqtt.");
+        Logger::Info("MqttSyncer::OnReceived() is appended to local mq, will not publish a feedback via mqtt.");
         return;
     }
     //  local message queue is not full [after appending current message], publish mqtt feedback now.

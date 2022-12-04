@@ -2,7 +2,6 @@
 
 #include "Robot/robot_base.h"
 #include "MyApps/teeth_wh/board/teeth_wh_board.h"
-// #include "CNC/arm_solution/core_xy_xa_ab/core_xy_xa_ab_arm_solution.h"
 #include "twh_arm_solution.h"
 #include "twh_g28_runner.h"
 #include "MyApps/teeth_wh/board/eef/teeth_wh_eef.h"

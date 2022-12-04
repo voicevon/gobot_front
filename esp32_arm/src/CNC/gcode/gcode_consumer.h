@@ -6,5 +6,5 @@ class GcodeConsumer{
         void LinkLocalGcodeQueue_AsConsumer(GcodeQueue* gcode_queue) {this->_gcode_queue =gcode_queue;};
 
     protected:
-        GcodeQueue* _gcode_queue;
+        GcodeQueue* _gcode_queue;  //TODO:   GcodeQueue be a static global object.
 };

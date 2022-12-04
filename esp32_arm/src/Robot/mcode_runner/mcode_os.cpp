@@ -1,15 +1,27 @@
 #include "mcode_os.h"
 
-// return true:  running is finished ,
-// return false: running is on the go, will keep a long time, like test_position_trigger 99 times.
-bool McodeOS::StartToRun(Gcode* mcode){
-    McodeRunnerBase* runner = McodeOS::Instance().GetRunner(mcode->m);
-    if (runner==nullptr){
+void McodeOS::LinkRunner(Gcode* mcode){
+    __current_runner = McodeOS::Instance().GetRunner(mcode->m);
+    if (__current_runner==nullptr){
         Logger::Error("McodeOS::StartToRun()");
         Logger::Print("mcode->m", mcode->m);
         Logger::Halt("More ablility, More responsbility!");
     }
-    return runner->StartExec(mcode);
+    // copy mcode->command to mcode_command
+    // return runner->StartExec(mcode);  
+}
+
+// return true:  running is finished ,
+// return false: running is on the go, will keep a long time, like test_position_trigger 99 times.
+bool McodeOS::StartToRun(){
+    __current_runner->StartExec();
+    // McodeRunnerBase* runner = McodeOS::Instance().GetRunner(mcode->m);
+    // if (runner==nullptr){
+    //     Logger::Error("McodeOS::StartToRun()");
+    //     Logger::Print("mcode->m", mcode->m);
+    //     Logger::Halt("More ablility, More responsbility!");
+    // }
+    // return runner->StartExec(mcode);
 }
 bool McodeOS::SpinOnce(){
     __current_runner->LoopExec();

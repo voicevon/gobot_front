@@ -2,6 +2,9 @@
 #include "Robot/mcode_runner/mcode_os.h"
 // #include "mcode_runners.h"
 
+// void Final_M123_RunnerBase::LinkMcode(Gcode* mcode){
+    
+// }
 
 // EEF action will be differ for each robot
 

@@ -32,8 +32,8 @@ void test_board(){
 
 void test_robot(){
     for (int i=0; i<8;i++){
-        gcode_queue.AppendGcodeCommand("M408");
-        gcode_queue.AppendGcodeCommand("G4S5");
+        // gcode_queue.AppendGcodeCommand("M408");
+        // gcode_queue.AppendGcodeCommand("G4S5");
 
     }
     
@@ -74,8 +74,8 @@ void setup(){
     append_mqtt_bridge("twh/221109/gcode_feed", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
 
-    gcode_queue.AppendGcodeCommand("G28a");
-    gcode_queue.AppendGcodeCommand("G28Y");
+    // gcode_queue.AppendGcodeCommand("G28a");
+    // gcode_queue.AppendGcodeCommand("G28Y");
     test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }

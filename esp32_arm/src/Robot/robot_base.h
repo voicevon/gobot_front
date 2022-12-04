@@ -17,7 +17,8 @@ enum class RobotState{
     G28_IS_RUNNING,
     G4_IS_SYNCING,   //Wait command in queue in front of G4 is Done.
     G4_IS_RUNNING,
-    RUNNING_M_CODE,
+    MCODE_IS_SYNCING,
+    MCODE_IS_RUNNING,
 };
 
 

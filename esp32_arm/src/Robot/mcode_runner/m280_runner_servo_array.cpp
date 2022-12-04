@@ -1,8 +1,13 @@
 #include "m280_runner_servo_array.h"
 
-bool M280_Runner_Servo::StartExec(Gcode* gcode){
-    uint8_t n_value = 33;   //TODO: Make sure this is no harmful!
-    float f_value = 0.0f;
+
+void M280_Runner_Servo::LinkMcode(Gcode* mcode){
+    
+}
+
+bool M280_Runner_Servo::StartExec(){
+    // uint8_t n_value = 33;   
+    // float f_value = 0.0f;
 
     // Logger::Info("M130_Runner::Run()");
     // Logger::Print("gcode", gcode->get_command());
