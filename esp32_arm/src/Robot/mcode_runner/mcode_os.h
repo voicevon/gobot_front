@@ -1,6 +1,6 @@
 #pragma once
 
-#include "m42_runner_switch_gpio.h"
+#include "m42_runner_switch_output.h"
 #include "m84_runner.h"
 #include "m119_runner_test_position_triggers.h"
 #include "m130_runner_pid_list.h"
@@ -18,13 +18,16 @@ class McodeOS{
             return __instance;
         } 
         McodeRunnerBase* GetRunner(int mcode_id);
+        void LinkRunner(M280_Runner_Servo* m280_runner){this->__m280_runner_set_servo=m280_runner;};
+        void LinkRunner(M42_Runner_Switch_Output * m42_runner){this->__m42_runner_switch_output=m42_runner;};
 
+        
     private:
-        M42_Runner_Switch_GPIO __m42_runner_switch_gpio;
+        M42_Runner_Switch_Output* __m42_runner_switch_output;
         M84_Runner_Disable_All_Steppers __m84_runner_disable_all_steppers;
         M119_Runner_TestPositionTriggers __m119_runner_test_position_triggers;
         M130_Runner_UpdatePid __m130_runner_update_pid;
-        M280_Runner_Servo __m280_runner_set_servo;
+        M280_Runner_Servo*  __m280_runner_set_servo;
         M408_Runner_ReportJson __m408_runner_report_json;
         McodeRunnerBase* __current_runner;
 };

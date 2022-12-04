@@ -1,15 +1,12 @@
 #pragma once
 
-
 #include "CNC/board/cnc_board_base.h"
-// #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "CNC/Actuator/servo/cnc_actuator_servo.h"
 #include "Robot/axis_homer/position_trigger_array.h" 
 #include "HX711.h"
 #include "VL6180X.h"
 #include <ESP32Servo.h>
-// #include "ESP32Step/src/TeensyStep.h"
 #include "FastAccelStepper.h"
 
 #define HOME_TRIGGER_COUNT 2
@@ -17,8 +14,6 @@
 
 class TeethWarehouse_Board: public CncBoardBase{
     public:
-        // For being a real PCB board.
-        // TeethWarehouse_Board(){};
         void Init(bool is_on_reset) override;
         
         // We do nothing, just override the methods.
@@ -57,10 +52,8 @@ class TeethWarehouse_Board: public CncBoardBase{
         FastAccelStepperEngine __stepper_engine = FastAccelStepperEngine();
         FastAccelStepper* __stepper_alpha = NULL;
         FastAccelStepper* __stepper_beta = NULL;
-        
 
         HX711 __hx711;
-        // VL6180x sensor(VL6180X_ADDRESS);
         VL6180X sensor;
         
 

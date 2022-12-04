@@ -15,6 +15,9 @@ void TeechWarehouse_Robot::Init(TeethWarehouse_Board* board){
     this->_g28_runner = &this->__g28_runner;
     __g28_runner.Init(&__mover, &__arm_solution);
 
+    this->__m42_runner.Init(board);
+    McodeOS::Instance().LinkRunner(&this->__m42_runner);
+
 }
 
 void TeechWarehouse_Robot::__InitStatic_Actuators(TeethWarehouse_Board* board){

@@ -3,12 +3,12 @@
 
 // https://reprap.org/wiki/G-code#M42:_Switch_I.2FO_pin 
 
-class M42_Runner_Switch_GPIO: public McodeRunnerBase{
+class M42_Runner_Switch_Output: public McodeRunnerBase{
     public:
         void SetupRunner(Gcode* mcode) override;
-        bool RunnerLoop() override;
+        // bool RunnerLoop() override;
 
-    private:
-        uint8_t pin_number;
-        uint8_t pin_value ;
+    protected:
+        uint8_t _index;
+        bool _is_on;
 };

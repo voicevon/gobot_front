@@ -7,13 +7,14 @@
 #define PIN_IR_CHECKING 32    //   TODO:  This is should not be fixed,  For TWH project only,  right now.
 
 void M408_Runner_ReportJson::SetupRunner(Gcode* mcode){
-    Logger::Info("M408_Runner_ReportJson::SetupRunner");
+    // Logger::Info("M408_Runner_ReportJson::SetupRunner");
 }
 
 // Mqtt publish a message, report something via MQTT
 // The payload is a static buffer, declared as global.
 bool M408_Runner_ReportJson::RunnerLoop(){
     // Logger::Debug("M408_Runner_ReportJson::Run()");
+    // Logger::Print(" M408_Runner_ReportJson::RunnerLoop()", gcodequ)
     __payload_string = "blocked";
     if (digitalRead(PIN_IR_CHECKING) == HIGH) 
         __payload_string = "empty";   //TODO:  any memoory risk?

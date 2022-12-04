@@ -1,5 +1,5 @@
 #include "twh_g28_runner.h"
-#include "twh_arm_solution.h"
+#include "../twh_arm_solution.h"
 
 
 void Twh_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){

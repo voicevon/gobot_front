@@ -5,7 +5,7 @@ void McodeOS::SetupRunner(Gcode* mcode){
     if (__current_runner==nullptr){
         Logger::Error("McodeOS::SetupRunner()");
         Logger::Print("mcode->m", mcode->m);
-        Logger::Halt("More ablility, More responsbility!");
+        Logger::Halt("More ability, More responsbility!");
     }
     // Logger::Info(" McodeOS::SetupRunner() ");
     // Logger::Print("Mcode ", mcode->m);
@@ -21,7 +21,7 @@ McodeRunnerBase* McodeOS::GetRunner(int mcode_id){
     __current_runner = nullptr;
     switch(mcode_id){
         case 42:
-            __current_runner = &this->__m42_runner_switch_gpio;
+            __current_runner = this->__m42_runner_switch_output;
             break;
         case 84:
             __current_runner = &this->__m84_runner_disable_all_steppers;
@@ -33,7 +33,7 @@ McodeRunnerBase* McodeOS::GetRunner(int mcode_id){
             __current_runner = &this->__m130_runner_update_pid;
             break;  
         case 280:
-            __current_runner = &this->__m280_runner_set_servo;
+            __current_runner = this->__m280_runner_set_servo;
             break;
         case 408:
             __current_runner = &this->__m408_runner_report_json;
