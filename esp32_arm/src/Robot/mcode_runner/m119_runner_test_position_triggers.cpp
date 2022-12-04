@@ -7,7 +7,7 @@ void M119_Runner_TestPositionTriggers::SetupRunner(Gcode* mcode){
 }
 
 // Print all triggers status, when there is a change.
-bool M119_Runner_TestPositionTriggers::StartExec(){
+bool M119_Runner_TestPositionTriggers::RunnerLoop(){
     Logger::Debug("M119_Runner::Run()");
     static uint32_t last_flags;
     // HomeTrigger_Array::Instance().GetFiredPosition('X');

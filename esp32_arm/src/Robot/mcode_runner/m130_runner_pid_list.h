@@ -7,7 +7,7 @@
 class M130_Runner_UpdatePid: public McodeRunnerBase{
     public:
         void SetupRunner(Gcode* mcode) override;
-        bool StartExec() override;
+        bool RunnerLoop() override;
 
     private:
         int index;

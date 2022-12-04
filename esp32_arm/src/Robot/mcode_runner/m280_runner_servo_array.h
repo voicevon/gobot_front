@@ -7,7 +7,7 @@
 class M280_Runner_Servo: public McodeRunnerBase{
     public:
         void SetupRunner(Gcode* mcode) override;
-        bool StartExec() override;
+        bool RunnerLoop() override;
     private:
     
 };

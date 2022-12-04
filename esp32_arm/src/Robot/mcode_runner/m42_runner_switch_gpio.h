@@ -6,7 +6,7 @@
 class M42_Runner_Switch_GPIO: public McodeRunnerBase{
     public:
         void SetupRunner(Gcode* mcode) override;
-        bool StartExec() override;
+        bool RunnerLoop() override;
 
     private:
         uint8_t pin_number;

@@ -11,7 +11,7 @@
 //       C2  Column = 2
 class Final_M123_RunnerBase{
     public:
-        virtual bool StartToRun(Gcode* gcode);
+        // virtual bool StartToRun(Gcode* gcode);
         virtual void SpinOnce();
         void LinkToRunnerDispacher();
 
@@ -23,7 +23,7 @@ class Final_M123_RunnerBase{
 class M123_Runner_EefAct: public McodeRunnerBase{
     public:
         void SetupRunner(Gcode* mcode) override;
-        bool StartExec() override;
+        // bool RunnerLoop() override;
         bool RunnerLoop() override;
         void LinkFinalRunner(Final_M123_RunnerBase* final_runner){this->__final_runner=final_runner;};
 

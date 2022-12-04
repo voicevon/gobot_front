@@ -6,7 +6,7 @@ void M42_Runner_Switch_GPIO::SetupRunner(Gcode* mcode){
 }
 
 // NOTICE: output pin should be initialized in Board::Init()
-bool M42_Runner_Switch_GPIO::StartExec(){
+bool M42_Runner_Switch_GPIO::RunnerLoop(){
 
 	digitalWrite(pin_number, pin_value);
     return true;

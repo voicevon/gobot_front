@@ -9,6 +9,5 @@ class McodeRunnerBase{
         virtual void SetupRunner(Gcode* mcode);
         // return true: Fininshed running.
         // return false: Not finished running. robot state should be blocked. runner will be run backgroundly.
-        virtual bool StartExec();
-        virtual bool RunnerLoop(){return true;};
+        virtual bool RunnerLoop();
 };

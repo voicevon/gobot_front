@@ -3,26 +3,26 @@
 void McodeOS::SetupRunner(Gcode* mcode){
     __current_runner = McodeOS::Instance().GetRunner(mcode->m);
     if (__current_runner==nullptr){
-        Logger::Error("McodeOS::StartToRun()");
+        Logger::Error("McodeOS::SetupRunner()");
         Logger::Print("mcode->m", mcode->m);
         Logger::Halt("More ablility, More responsbility!");
     }
     // copy mcode->command to mcode_command
-    // return runner->StartExec(mcode);  
+    // return runner->RunnerLoop(mcode);  
 }
 
 // return true:  running is finished ,
 // return false: running is on the go, will keep a long time, like test_position_trigger 99 times.
-bool McodeOS::StartToRun(){
-    __current_runner->StartExec();
-    // McodeRunnerBase* runner = McodeOS::Instance().GetRunner(mcode->m);
-    // if (runner==nullptr){
-    //     Logger::Error("McodeOS::StartToRun()");
-    //     Logger::Print("mcode->m", mcode->m);
-    //     Logger::Halt("More ablility, More responsbility!");
-    // }
-    // return runner->StartExec(mcode);
-}
+// bool McodeOS::StartToRun(){
+//     __current_runner->RunnerLoop();
+//     // McodeRunnerBase* runner = McodeOS::Instance().GetRunner(mcode->m);
+//     // if (runner==nullptr){
+//     //     Logger::Error("McodeOS::StartToRun()");
+//     //     Logger::Print("mcode->m", mcode->m);
+//     //     Logger::Halt("More ablility, More responsbility!");
+//     // }
+//     // return runner->RunnerLoop(mcode);
+// }
 bool McodeOS::RunnerLoop(){
     __current_runner->RunnerLoop();
 }

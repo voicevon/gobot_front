@@ -5,7 +5,7 @@ void M280_Runner_Servo::SetupRunner(Gcode* mcode){
     
 }
 
-bool M280_Runner_Servo::StartExec(){
+bool M280_Runner_Servo::RunnerLoop(){
     // uint8_t n_value = 33;   
     // float f_value = 0.0f;
 

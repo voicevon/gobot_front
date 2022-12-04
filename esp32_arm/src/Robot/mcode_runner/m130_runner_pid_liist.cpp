@@ -19,7 +19,7 @@ void M130_Runner_UpdatePid::SetupRunner(Gcode* mcode){
     // pid->D = f_value;
 }
 
-bool M130_Runner_UpdatePid::StartExec(){
+bool M130_Runner_UpdatePid::RunnerLoop(){
     PidControllers_Listable* pid = PidControllers_List::Instance().GetPidController(index);
     pid->P = p_value;
     pid->I = i_value;

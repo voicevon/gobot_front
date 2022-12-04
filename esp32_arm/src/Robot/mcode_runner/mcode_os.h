@@ -10,7 +10,7 @@
 class McodeOS{
     public:
         void SetupRunner(Gcode* mcode);
-        bool StartToRun();  
+        // bool StartToRun();  
         bool RunnerLoop();        
         static McodeOS& Instance(){
             static McodeOS __instance; // Guaranteed to be destroyed.
