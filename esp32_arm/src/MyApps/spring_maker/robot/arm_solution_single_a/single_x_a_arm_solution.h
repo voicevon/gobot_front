@@ -2,7 +2,7 @@
 
 #include "CNC/arm_solution/arm_solution_base.h"
 
-class SingleAxis_ArmSolution: public ArmSolutionBase{
+class SpringMaker_ArmSolution: public ArmSolutionBase{
     public:
 
 

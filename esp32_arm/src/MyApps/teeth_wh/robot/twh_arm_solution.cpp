@@ -41,7 +41,7 @@ void Twh_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	MiddleKinematic mk;
 	real_FK_to_MK(from_fk, &mk);
 	real_MK_to_IK(&mk, to_ik);
-	to_ik->Positions[AXIS_GAMMA] = from_fk->Z;   // TODO: through mk?
+	to_ik->Positions[AXIS_GAMMA] =  from_fk->Z / __config.servo_slope - __config.servo_offset;
 }
 
 void Twh_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
@@ -49,7 +49,7 @@ void Twh_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk)
 	MiddleKinematic mk;
 	real_IK_to_MK(from_ik,&mk);
 	real_MK_to_FK(&mk, to_fk);
-	to_fk->Z = from_ik->Positions[AXIS_GAMMA];
+	to_fk->Z = (from_ik->Positions[AXIS_GAMMA] + __config.servo_offset) * __config.servo_slope;
 }
 
 void Twh_ArmSolution::MK_to_FK(FKPosition_XYZRPY* from_mk, FKPosition_XYZRPY* to_fk){

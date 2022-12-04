@@ -57,9 +57,9 @@ void CncMover::AllActuatorsStop(){
 }
 
 
-void CncMover::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position){
-    CncActuator_List::Instance().GetActuator(actuator_name)->Formular_SetRawOffset(as_current_position);
-}
+// void CncMover::SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position){
+//     CncActuator_List::Instance().GetActuator(actuator_name)->Formular_SetRawOffset(as_current_position);
+// }
 
 float CncMover::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name){
     Logger::Debug("CncMover::GetSingleActuatorCurrentPosition_InCncUnit() ");

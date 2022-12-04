@@ -23,7 +23,7 @@ class SpringMakerRobot: public RobotBase{
 	    CncActuatorStepper __actuator_alpha = CncActuatorStepper(); 
         // Mover_SingleAxis mover;
         CncMover mover;
-        SingleAxis_ArmSolution arm_solution;
+        SpringMaker_ArmSolution arm_solution;
         SpringMaker_G28_Runner g28_runner;
 
 

@@ -45,7 +45,7 @@ void Vsc_BoardTest::__TestOffset(float value){
     // CncActuatorDcMotor* motor = (CncActuatorDcMotor*) (this->__board->GetActuator(AXIS_ALPHA));
     CncActuatorDcMotor* motor ;  // todo
     float slope= 123.4f;
-    motor->Formular_SetSlope(slope);
+    // motor->Formular_SetSlope(slope);
     float result = motor->GetCurrentPosition();
     if (slope == result){
         Serial.println("[Info] Vsc_BoardTest::Test_offset_calculation()  Passed");

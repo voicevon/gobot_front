@@ -38,11 +38,11 @@ class CncActuatorBase: public ListItem{
 
 
         // TODO: remove below 3.
-        void Formular_SetSlope(float slope_from_actuator_to_cnc){
-            this->__formular_slope_from_raw_to_cnc=slope_from_actuator_to_cnc;
-            };
-        void Formular_SetRawOffset(float current_cnc_position);
-        float ConvertPosition_ToCncUnit(float actuator_position);
+        // void Formular_SetSlope(float slope_from_actuator_to_cnc){
+        //     this->__formular_slope_from_raw_to_cnc=slope_from_actuator_to_cnc;
+        //     };
+        // void Formular_SetRawOffset(float current_cnc_position);
+        // float ConvertPosition_ToCncUnit(float actuator_position);
 
     protected:
         float _limited_speed = 100;
@@ -61,6 +61,6 @@ class CncActuatorBase: public ListItem{
 
 
     private:
-        float __formular_slope_from_raw_to_cnc = 1.0;   //TODO:  remove this
-        float __formular_raw_offset = 0;              //TODO: remove this ??
+        // float __formular_slope_from_raw_to_cnc = 1.0;   //TODO:  remove this
+        // float __formular_raw_offset = 0;              //TODO: remove this ??
 };

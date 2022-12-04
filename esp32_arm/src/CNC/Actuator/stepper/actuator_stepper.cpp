@@ -12,7 +12,7 @@ void CncActuatorStepper::PrintOut(const char* title){
     Serial.print("CncActuatorStepper  in");
     Serial.println(title);
     Serial.print("Positions:  current=" );
-    Serial.println(RAD_TO_DEG * this->ConvertPosition_ToCncUnit(_current_position));
+    // Serial.println(RAD_TO_DEG * this->ConvertPosition_ToCncUnit(_current_position));
     Serial.print("Mechanic: steps_per_unit= ");
     Serial.print(this->__steps_per_cnc_unit);
     Serial.print("  is_range_constraint= ");

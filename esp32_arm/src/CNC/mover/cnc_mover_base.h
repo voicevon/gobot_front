@@ -19,7 +19,7 @@ class CncMover{
         void AllActuatorsMoveTo(MoveBlock* move);
         void AllActuatorsStop(); 
 
-        void SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position);
+        // void SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position);
 
         // To get status or position
         float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name);  // TODO: return  all current position.

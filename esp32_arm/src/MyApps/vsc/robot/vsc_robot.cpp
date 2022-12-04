@@ -67,8 +67,8 @@ void VscRobot::__Init_actuators(Vsc_Board* board){
     ActuatorEncoder_Calculator helper;
     helper.motor_gear_pitch_in_mm = 12.7;
     helper.slave_pulley_teeth_count = 368;
-    float slope = helper.Get_Formular_Slope_raw_per_rad();
-    __actuator_alpha.Formular_SetSlope(slope);
+    // float slope = helper.Get_Formular_Slope_raw_per_rad();
+    // __actuator_alpha.Formular_SetSlope(slope);
 
 
 }

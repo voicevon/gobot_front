@@ -38,11 +38,11 @@ void TeechWarehouse_Robot::__InitStatic_Actuators(TeethWarehouse_Board* board){
     // mm_per_degree = 120.6/360 = 0.335
     // max: Z=0,  degree=0
     // min: Z=-90.45, degree=270.
-    float slope = -0.335;
-    float offset = -270.0f;
+    // float slope = -0.335;
+    // float offset = -270.0f;
     __actuator_gamma.LinkServo(board->GetServo_onVertical());
-    __actuator_gamma.Formular_SetSlope(slope);
-    __actuator_gamma.Formular_SetRawOffset(offset);
+    // __actuator_gamma.Formular_SetSlope(slope);
+    // __actuator_gamma.Formular_SetRawOffset(offset);
 }
 
 void TeechWarehouse_Robot::_Init_ArmSolution(){
