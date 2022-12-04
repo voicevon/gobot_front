@@ -21,14 +21,13 @@ class CncActuatorBase: public ListItem{
         //     FOLLOW_POSITION_ACCEL_SPEED,  //For CNC actuator
         // };
         // EnumActuatorState ActuatorState;
-        enum EnumActuatorMachenicType{
-            CONTINUROUS_ROTARY = 1,  // stepper, dc-motor, bldc
-            LIMITED_ROTARY = 2,      // servo
-            LIMITED_LINEAR = 3,      // 
-        };
-        EnumActuatorMachenicType MachenicType;
+        // enum EnumActuatorMachenicType{
+        //     CONTINUROUS_ROTARY = 1,  // stepper, dc-motor, bldc
+        //     LIMITED_ROTARY = 2,      // servo
+        //     LIMITED_LINEAR = 3,      // 
+        // };
+        // EnumActuatorMachenicType MachenicType;
         virtual void SpinOnce();
-        void LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint);
         virtual void UpdateMovement(MoveBlock_SingleActuator* movement);
         virtual void ForceStop();   //Only G28 is using this.
         virtual float GetCurrentPosition(){};   //TODO:  remove body
@@ -43,21 +42,22 @@ class CncActuatorBase: public ListItem{
         //     };
         // void Formular_SetRawOffset(float current_cnc_position);
         // float ConvertPosition_ToCncUnit(float actuator_position);
+        // void LinkRangeConstraint(ActuatorRangeConstraintBase* range_constraint);
 
     protected:
-        float _limited_speed = 100;
-        float _limited_accelleration = 100;
+        // float _limited_speed = 100;
+        // float _limited_accelleration = 100;
         // TODO:  remove below 2
-        float GetPosition_FromCncUnit(float cnc_position);
-        float GetSpeed_FromCncUnit(float cnc_speed);
+        // float GetPosition_FromCncUnit(float cnc_position);
+        // float GetSpeed_FromCncUnit(float cnc_speed);
 
 
         float _target_position;   // is always an absolute position
-        float _current_position;  //TODO: remove this
+        // float _current_position;  //TODO: remove this
         bool _is_moving = false;   // a: Not reach target_position,  b:Force stopped.
 
-        ActuatorRangeConstraintBase* _range_constraint;
-        bool _is_range_constraint = false;
+        // ActuatorRangeConstraintBase* _range_constraint;
+        // bool _is_range_constraint = false;
 
 
     private:

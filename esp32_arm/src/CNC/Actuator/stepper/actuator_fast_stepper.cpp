@@ -21,7 +21,7 @@ void CncActuatorFastStepper::PrintOut(const char* title){
     Serial.print("Positions:  current=" );
     // Serial.println(RAD_TO_DEG * this->ConvertPosition_ToCncUnit(_current_position));
     Serial.print("  is_range_constraint= ");
-    Serial.print(this->_is_range_constraint);
+    // Serial.print(this->_is_range_constraint);
     Serial.println(FCBC_RESET);
 }
 

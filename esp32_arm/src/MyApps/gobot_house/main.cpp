@@ -11,7 +11,7 @@
 
 #include "FastAccelStepper.h"
 
-// Board_GobotHouse_2206 board = Board_GobotHouse_2206(&stepControl);
+Board_GobotHouse_2206 board = Board_GobotHouse_2206();
 GcodeQueue gcode_queue;
 MessageQueue mqtt_message_queue;
 GobotHouseApp* app; 
@@ -22,7 +22,7 @@ GobotHouseRobot robot;
 // void board_test();
 // void cnc_test();
 
-
+#define ROBOT_SERIAL_ID 111
 
 void setup(){
     board.Init(true);
@@ -60,13 +60,13 @@ void loop(){
 
 #include "board_2206/board_tester.h"
 void board_test(){
-    GobotHouse_2206_BoardTest tester = GobotHouse_2206_BoardTest(&stepControl);
-    tester.LinkBoard(&board);
+    // GobotHouse_2206_BoardTest tester = GobotHouse_2206_BoardTest(&stepControl);
+    // tester.LinkBoard(&board);
     // tester.LinkStepControl(&stepcontrol);
-    tester.Test_EefLoadUnload(0);
-    // tester.Test_AllHomers(0);
-    tester.Test_StepperDriver_OnAlpha(0);
-    tester.Test_ServoDriver_OnBeta(0);
+    // tester.Test_EefLoadUnload(0);
+    // // tester.Test_AllHomers(0);
+    // tester.Test_StepperDriver_OnAlpha(0);
+    // tester.Test_ServoDriver_OnBeta(0);
 
 }
 

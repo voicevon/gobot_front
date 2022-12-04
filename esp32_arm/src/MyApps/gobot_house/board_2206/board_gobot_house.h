@@ -10,6 +10,7 @@
 class Board_GobotHouse_2206: public CncBoardBase{
     public:
         Board_GobotHouse_2206(StepControl* stepControl){this->__stepControl=stepControl;};
+        Board_GobotHouse_2206(){};
         void Init(bool is_on_reset) override;
         // CncActuatorBase* GetActuator(EnumAxis axis_name) override;
         CncActuatorServo* GetActuaorBeta(char axis_name);

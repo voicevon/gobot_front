@@ -15,8 +15,8 @@ void CncActuatorStepper::PrintOut(const char* title){
     // Serial.println(RAD_TO_DEG * this->ConvertPosition_ToCncUnit(_current_position));
     Serial.print("Mechanic: steps_per_unit= ");
     Serial.print(this->__steps_per_cnc_unit);
-    Serial.print("  is_range_constraint= ");
-    Serial.print(this->_is_range_constraint);
+    // Serial.print("  is_range_constraint= ");
+    // Serial.print(this->_is_range_constraint);
     Serial.println(FCBC_RESET);
 }
 
@@ -28,9 +28,9 @@ void CncActuatorStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     int32_t motor_position_in_step;
     this->_target_position = move->TargetPosition;
     float actuator_position = move->TargetPosition;
-    if (this->_is_range_constraint){
-        actuator_position = this->_range_constraint->_ConvertTo_ActuatorRange(move->TargetPosition);
-    }
+    // if (this->_is_range_constraint){
+    //     actuator_position = this->_range_constraint->_ConvertTo_ActuatorRange(move->TargetPosition);
+    // }
     motor_position_in_step = actuator_position * this->__steps_per_cnc_unit;
     this->_stepper->setTargetAbs(motor_position_in_step);
 

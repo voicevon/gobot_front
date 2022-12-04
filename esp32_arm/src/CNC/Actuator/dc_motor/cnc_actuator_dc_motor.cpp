@@ -23,10 +23,10 @@ void CncActuatorDcMotor::__SpinOnce_FollowVelocity(float velocity){
         // Serial.print("velocity of sensor, speed_error, pwm_speed \t");
         // Logger::Debug("velocity", velocity_in_cnc_unit);
         // Logger::Debug("target_speed", )
-        Serial.print("\n    pos(cur,dis): ");
-        Serial.print(this->_current_position);
-        Serial.print("\t");
-        Serial.print(this->_target_position - this->_current_position);
+        // Serial.print("\n    pos(cur,dis): ");
+        // Serial.print(this->_current_position);
+        // Serial.print("\t");
+        // Serial.print(this->_target_position - this->_current_position);
         Serial.print("   speed(tar,cur,err,pwm): ");
         Serial.print(this->__target_velocity);
         Serial.print("\t");
@@ -55,10 +55,10 @@ void CncActuatorDcMotor::__SpinOnce_FollowVelocity(float velocity){
 void CncActuatorDcMotor::SpinOnce(){
     // Logger::Debug("CncActuatorDcMotor::SpinOnce()");
     this->__encoder->update();
-    this->_current_position = this->__encoder->getSensorAngle();
+    // this->_current_position = this->__encoder->getSensorAngle();
 
     if (this->_is_moving){
-        float abs_distance_to_target = abs (this->_target_position-this->_current_position);
+        float abs_distance_to_target = 1 ; // abs (this->_target_position-this->_current_position);
         if(abs_distance_to_target < INERTIA_DISTANCE){
             // The wheel will continue to run a short time after stoping, because the inertia.
             // TDDO:  How to deal with negtive distance?
@@ -76,12 +76,12 @@ void CncActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
     Logger::Print("target_position", move->TargetPosition);
     Logger::Print("speed", move->Speed);
     
-    this->_target_position = this->GetPosition_FromCncUnit(move->TargetPosition);
+    // this->_target_position = this->GetPosition_FromCncUnit(move->TargetPosition);
    
 
     // TODO:  got target speed, not target_velocity. But:
     // seems, target_speed will be used directly,  target_velocicy will not be. 
-    this->__target_velocity = this->GetSpeed_FromCncUnit(move->Speed);
+    // this->__target_velocity = this->GetSpeed_FromCncUnit(move->Speed);
 
     //actuator_dc_motor speed, comes from encoder, speed unit is: rad_per_second.
     //CNC velocity unit is: ??
