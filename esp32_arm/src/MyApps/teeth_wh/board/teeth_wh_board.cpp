@@ -6,8 +6,8 @@
 #define PIN_HOMER_SENSOR_HALL_X  4 //16
 #define PIN_VACUUME_PUMP 0 // 33
 
-#define PIN_SERVO_EEF_VERTICAL 19   
-#define PIN_SERVO_VACUUM_SWITCH 18  
+#define PIN_SERVO_EEF_VERTICAL 18   
+#define PIN_SERVO_VACUUM_SWITCH 19  
 
 #define PIN_IR_CHECKING 32
 
@@ -28,7 +28,7 @@
 // Index number
 #define POSITION_TRIGGER_ALPHA 0
 #define POSITION_TRIGGER_X  1
-#define SERVO_VACUUM_SUCKER  0
+#define SERVO_VACUUM_SWITCH  0
 #define SERVO_EEF_VERTICAL 1
 
 
@@ -55,8 +55,8 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
     __all_servos[SERVO_EEF_VERTICAL].setPeriodHertz(50);  // Standard 50hz servo
     __all_servos[SERVO_EEF_VERTICAL].attach(PIN_SERVO_EEF_VERTICAL);
     
-    __all_servos[SERVO_VACUUM_SUCKER].setPeriodHertz(50);  // Standard 50hz servo
-    __all_servos[SERVO_VACUUM_SUCKER].attach(PIN_SERVO_VACUUM_SWITCH);
+    __all_servos[SERVO_VACUUM_SWITCH].setPeriodHertz(50);  // Standard 50hz servo
+    __all_servos[SERVO_VACUUM_SWITCH].attach(PIN_SERVO_VACUUM_SWITCH);
 
     __InitSteppers();
 
@@ -117,12 +117,13 @@ void TeethWarehouse_Board::__InitSteppers(){
     }
 }
 
-
 Servo* TeethWarehouse_Board::GetServo_onVertical(){
     return &__all_servos[SERVO_EEF_VERTICAL];
 }
 
 void TeethWarehouse_Board::EnableVacuumPump(bool enable_it){
+
+    Logger::Print("TeethWarehouse_Board::EnableVacuumPump()  enable_it", enable_it );
     digitalWrite(PIN_VACUUME_PUMP, !enable_it);
 }
 
@@ -262,25 +263,26 @@ void TeethWarehouse_Board::Test_Servo_AirPen(int loops){
     }
 }
 
-void TeethWarehouse_Board::Test_Servo_AirSwitch(int loops){
+void TeethWarehouse_Board::Test_Servo_VacuumSwitch(int loops){
     for (int loop=0; loop<loops; loop++){
         Serial.print("Air switch loop = ");
         Serial.print(loop);
         Serial.print("  Enable   ");
-        EnableVacuumeSucker(true);
+        EnableVacuumSwitch(true);
         delay(3000);
         Serial.print("  Disable   ");
-        EnableVacuumeSucker(false);
+        EnableVacuumSwitch(false);
         delay(3000);
         Serial.println("");
     }
 }
 
-void TeethWarehouse_Board::EnableVacuumeSucker(bool enable_it){
+void TeethWarehouse_Board::EnableVacuumSwitch(bool enable_it){
     int angle = 0;
     if (enable_it) angle = 270;
+    if (enable_it) angle = 5;
     // __servo_air_switch.write(angle);
-    __all_servos[SERVO_VACUUM_SUCKER].write(angle);
+    __all_servos[SERVO_VACUUM_SWITCH].write(angle);
 }
 
 void TeethWarehouse_Board::Test_VacuumPump(int loops){

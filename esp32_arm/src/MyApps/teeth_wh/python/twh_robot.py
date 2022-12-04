@@ -181,8 +181,8 @@ class TeethWarehouseRobot():
     def eef_do_drop_denterbox(self, row, col):
         self.gcode_sender.move_arm_to_center()
         self.gcode_sender.enable_vacuum_sucker(False)  # drop the tooth to out-box
-        self.gcode_sender.dwell(5)
-        self.gcode_sender.enable_vacuum_sucker(False)        
+        # self.gcode_sender.dwell(5)
+        # self.gcode_sender.enable_vacuum_sucker(False)        
     
     def eef_do_drop_cell(self, row, col):
         pass

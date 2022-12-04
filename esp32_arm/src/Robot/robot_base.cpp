@@ -128,15 +128,6 @@ void RobotBase::SpinOnce(){
 		McodeOS::Instance().SetupRunner(&gcode);
 		this->State = RobotState::MCODE_IS_SYNCING;
 		this->_gcode_queue->FetchTailMessage(true);
-		// if (this->State == RobotState::IDLE_OR_ASYNC){
-		// 	bool is_finished = McodeOS::Instance().StartToRun(&gcode);   // DOING: How to run it async? assume the runner will take a long time.
-		// 	if (!is_finished){
-		// 		Logger::Warn("RobotBase::SpinOnce() ---- Run mCode background");
-		// 		Serial.print(gcode.get_command());
-		// 		this->State = RobotState::RUNNING_M_CODE;
-		// 	}
-		// 	this->_gcode_queue->FetchTailMessage(true);
-		// }
 	}else{
 		Logger::Warn("RobotBase::SpinOnce() ---- Unknown command, Ignored.");
 		Serial.println(str.c_str());

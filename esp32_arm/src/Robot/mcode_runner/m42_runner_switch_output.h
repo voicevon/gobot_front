@@ -6,7 +6,6 @@
 class M42_Runner_Switch_Output: public McodeRunnerBase{
     public:
         void SetupRunner(Gcode* mcode) override;
-        // bool RunnerLoop() override;
 
     protected:
         uint8_t _index;

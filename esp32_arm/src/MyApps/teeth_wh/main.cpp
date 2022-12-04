@@ -21,7 +21,7 @@ TeechWarehouse_Robot robot;
 void test_board(){
     board.Test_PositionTriggers(0);
     board.Test_Servo_AirPen(0);
-    board.Test_Servo_AirSwitch(0);
+    board.Test_Servo_VacuumSwitch(0);
     board.Test_VacuumPump(0);
     board.Test_SingleStepper(AXIS_ALPHA, 0);
     board.Test_SingleStepper(AXIS_BETA, 0);

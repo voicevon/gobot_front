@@ -48,7 +48,7 @@ class GcodeSender():
         self.send_code('M408')
 
     def pickup_from_cell(self, row, col):
-
+        self.send_code("M42P18S1")
         self.send_code("G4S3")
         #report ir_state via MQTT
         self.send_code('M408')  
@@ -72,9 +72,10 @@ class GcodeSender():
     def enable_vacuum_sucker(self, is_enable:bool):
         # print('gcode ','Eef_EnableSuck')
         if is_enable:
-            self.send_code('M280P0S0')   # servo 0 angle 0
+            self.send_code('M42P18S1')   # trun on
         else:
-            self.send_code('M280P0S270')  # servo 0 angle 270
+            self.send_code('M42P18S0')  # turn off
+        self.send_code("G4S3")
             
     def dwell(self, second: int):
         self.send_code('G4S' + str(second))

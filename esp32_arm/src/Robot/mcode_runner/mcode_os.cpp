@@ -7,6 +7,7 @@ void McodeOS::SetupRunner(Gcode* mcode){
         Logger::Print("mcode->m", mcode->m);
         Logger::Halt("More ability, More responsbility!");
     }
+    __current_runner->SetupRunner(mcode);
     // Logger::Info(" McodeOS::SetupRunner() ");
     // Logger::Print("Mcode ", mcode->m);
 }
