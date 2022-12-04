@@ -1,10 +1,8 @@
 #include "all_applications.h"
-// #include "all_devices.h"
 #ifdef I_AM_GOBOT_CHESSBOARD_bACKUP
 
 #include "hardware.hpp"
 
-// #include "board_gobot_chessboard.h"
 #include "hardware.hpp"
 #include "MyLibs/BleServerBase.h"
 #include "gobot_chessboard.h"   

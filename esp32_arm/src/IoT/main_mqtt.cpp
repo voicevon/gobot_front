@@ -83,7 +83,8 @@ void append_mqtt_bridge(const char* topic, MessageQueue* local_message_queue, Mq
     syncer->LinkLocalCommandQueue_AsMqttMessageProducer(local_message_queue);
     String topic_feedback = String(topic) + "/fb";
     //Important: During this line, after subsribe_mqtt() is called, will invoke on_mqtt_message immediately.
-    // This is happened because on_mqtt_message is in anther thread.
+    // This is happened because on_mqtt_message is in other thread.
+    //TODO:  re-subscibe the topic , after disconnected -->  connected.
     syncer->SubscribeMqtt(&mqttClient, topic, topic_feedback.c_str());
 
     mqtt_bridge_index++;

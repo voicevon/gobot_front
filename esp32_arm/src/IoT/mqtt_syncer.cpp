@@ -7,9 +7,7 @@ void MqttSyncer::LinkLocalCommandQueue_AsMqttMessageProducer(MessageQueue* loaca
 void MqttSyncer::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic){
     this->__mqttClient = mqttClient;
     mqttClient->subscribe(main_topic, 2);
-    // mqttClient->subscribe("gobot/x2134/house", 2);
     this->topic_feedback = String(feedback_topic);
-    // this->topic_feedback = "gobot/x2134/house/fb";
 
     bool debug=true;
     if(debug){
@@ -25,7 +23,7 @@ void MqttSyncer::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_top
 void MqttSyncer::OnReceived(const char* payload, int length){
     // Put message to local MQ   
     // TODO:: Is this necessary??
-    Logger::Info("MqttSyncer::OnReceived() Starting a huge process...");
+    // Logger::Info("MqttSyncer::OnReceived() Starting a huge process...");
     char* p = (char*)(payload) + length;
     *p = 0x00;
 

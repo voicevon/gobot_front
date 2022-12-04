@@ -9,12 +9,15 @@ class GcodeSender():
     def send_code(self, code):
         exchange_name = 'twh'
         queue_name = exchange_name + '_' + str(self.target_device_id) + '_gcode'  # twh_221109_gcode
+        # if code[0:4] != 'M408':
+        #     return
         if code[0:2] == 'G1':
             return
         if code[0:2] == 'G2':
             return
         if code[0:2] == 'G6':
             return
+
         g_amq.Publish(exchange_name, queue_name, code)
 
     def home_alpha(self):

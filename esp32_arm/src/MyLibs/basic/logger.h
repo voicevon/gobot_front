@@ -23,6 +23,9 @@ class Logger{
         static void Print(const char* var_name, double value);
         static void Print(const char* var_name, const char* value);
         static void Print(const char* var_name, const char value);
+
+        static void __print_sid();
+        static int sid;
 };
 
 

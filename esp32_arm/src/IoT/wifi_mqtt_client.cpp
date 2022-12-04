@@ -58,6 +58,8 @@ void WiFiEvent(WiFiEvent_t event) {
     }
 }
 
+
+//TODO:  subsribe topics after:  disconnected --> connected.
 void onMqttConnect(bool sessionPresent) {
     Serial.println("Connected to MQTT.");
     Serial.print("Session present: ");

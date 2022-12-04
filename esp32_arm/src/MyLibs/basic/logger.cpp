@@ -1,5 +1,6 @@
 #include "logger.h"
 
+int Logger::sid = 0;
 void Logger::Info(const char* title){
     Serial.print(FORE_YELLOW);
     Serial.print(BGC_ORANGE);
@@ -70,47 +71,62 @@ void Logger::Halt(const char* title){
 //     Serial.print(value);
 // }
 
+void Logger::__print_sid(){
+    Serial.print(Logger::sid); 
+    Serial.print("\t");
+    Logger::sid++;
+
+}
 void Logger::Print(const char* var_name, bool value){
+    __print_sid();
     Serial.print(var_name);
     Serial.print("=\t");
     Serial.println(value);
 }
 
 void Logger::Print(const char* var_name, float value){
+    __print_sid();
     Serial.print(var_name);
     Serial.print("=\t");
     Serial.println(value);
 }
 
 void Logger::Print(const char* var_name, const char* value){
+    __print_sid();
     Serial.print(var_name);
     Serial.print("=\t");
     Serial.println(value);
 }
 
 void Logger::Print(const char* var_name, double value){
+    __print_sid();
     Serial.print(var_name);
     Serial.print("=\t");
     Serial.println(value);
 }
 
 void Logger::Print(const char* var_name, int32_t value){
+    __print_sid();
     Serial.print(var_name);
     Serial.print(" =\t");
     Serial.println(value);
 }
 void Logger::Print(const char* var_name, int64_t value){
+    __print_sid();
     Serial.print(var_name);
     Serial.print(" =\t");
     Serial.println(value);
 }
 
 void Logger::Print(const char* var_name, uint32_t value){
+    __print_sid();
     Serial.print(var_name);
     Serial.print(" =\t");
     Serial.println(value);
 }
+
 void Logger::Print(const char* var_name, const char value){
+    __print_sid();
     Serial.print(var_name);
     Serial.print(" =\t");
     Serial.println(char(value));
