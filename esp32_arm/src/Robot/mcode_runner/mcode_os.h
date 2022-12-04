@@ -9,9 +9,9 @@
 
 class McodeOS{
     public:
-        void LinkRunner(Gcode* mcode);
+        void SetupRunner(Gcode* mcode);
         bool StartToRun();  
-        bool SpinOnce();        
+        bool RunnerLoop();        
         static McodeOS& Instance(){
             static McodeOS __instance; // Guaranteed to be destroyed.
                                   // Instantiated on first use.

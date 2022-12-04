@@ -6,7 +6,7 @@
 
 #define PIN_IR_CHECKING 32    //   TODO:  This is should not be fixed,  For TWH project only,  right now.
 
-void M408_Runner_ReportJson::LinkMcode(Gcode* mcode){
+void M408_Runner_ReportJson::SetupRunner(Gcode* mcode){
     
 }
 

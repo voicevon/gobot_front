@@ -24,7 +24,7 @@ void RobotBase::SpinOnce(){
 			break;
 
 		case RobotState::MCODE_IS_RUNNING:
-			if(McodeOS::Instance().SpinOnce()){
+			if(McodeOS::Instance().RunnerLoop()){
 				// Finished running current mcode.
 				this->State = RobotState::IDLE_OR_ASYNC;
 			}
@@ -125,7 +125,7 @@ void RobotBase::SpinOnce(){
 		this->__RunGcode(&gcode);
 		this->_gcode_queue->FetchTailMessage(true);
 	}else if(gcode.has_m){
-		McodeOS::Instance().LinkRunner(&gcode);
+		McodeOS::Instance().SetupRunner(&gcode);
 		this->State = RobotState::MCODE_IS_SYNCING;
 		this->_gcode_queue->FetchTailMessage(true);
 		// if (this->State == RobotState::IDLE_OR_ASYNC){

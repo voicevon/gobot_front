@@ -1,6 +1,6 @@
 #include "m130_runner_pid_list.h"
 
-void M130_Runner_UpdatePid::LinkMcode(Gcode* mcode){
+void M130_Runner_UpdatePid::SetupRunner(Gcode* mcode){
     // uint8_t n_value = 33;   //TODO: Make sure this is no harmful!
     // float f_value = 0.0f;
 

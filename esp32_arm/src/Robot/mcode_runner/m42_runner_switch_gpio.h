@@ -5,7 +5,7 @@
 
 class M42_Runner_Switch_GPIO: public McodeRunnerBase{
     public:
-        void LinkMcode(Gcode* mcode) override;
+        void SetupRunner(Gcode* mcode) override;
         bool StartExec() override;
 
     private:

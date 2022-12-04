@@ -22,9 +22,9 @@ class Final_M123_RunnerBase{
 // From point of Mcode runner diapaching:  this is a runner, I can send the job to you.
 class M123_Runner_EefAct: public McodeRunnerBase{
     public:
-        void LinkMcode(Gcode* mcode) override;
+        void SetupRunner(Gcode* mcode) override;
         bool StartExec() override;
-        bool LoopExec() override;
+        bool RunnerLoop() override;
         void LinkFinalRunner(Final_M123_RunnerBase* final_runner){this->__final_runner=final_runner;};
 
     private:

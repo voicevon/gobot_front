@@ -1,6 +1,6 @@
 #include "m42_runner_switch_gpio.h"
 
-void M42_Runner_Switch_GPIO::LinkMcode(Gcode* mcode){
+void M42_Runner_Switch_GPIO::SetupRunner(Gcode* mcode){
     uint8_t pin_number = mcode->get_value('P');
     uint8_t pin_value = mcode->get_value('S');
 }

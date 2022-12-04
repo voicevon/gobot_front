@@ -3,7 +3,7 @@
 #include "CNC/Actuator/cnc_actuator_list.h"
 
 
-void M84_Runner_Disable_All_Steppers::LinkMcode(Gcode* mcode){
+void M84_Runner_Disable_All_Steppers::SetupRunner(Gcode* mcode){
     
 }
 

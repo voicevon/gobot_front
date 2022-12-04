@@ -2,7 +2,7 @@
 #include "m119_runner_test_position_triggers.h"
 #include "Robot/axis_homer/position_trigger_array.h"
 
-void M119_Runner_TestPositionTriggers::LinkMcode(Gcode* mcode){
+void M119_Runner_TestPositionTriggers::SetupRunner(Gcode* mcode){
     
 }
 

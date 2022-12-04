@@ -1,6 +1,6 @@
 #include "mcode_os.h"
 
-void McodeOS::LinkRunner(Gcode* mcode){
+void McodeOS::SetupRunner(Gcode* mcode){
     __current_runner = McodeOS::Instance().GetRunner(mcode->m);
     if (__current_runner==nullptr){
         Logger::Error("McodeOS::StartToRun()");
@@ -23,8 +23,8 @@ bool McodeOS::StartToRun(){
     // }
     // return runner->StartExec(mcode);
 }
-bool McodeOS::SpinOnce(){
-    __current_runner->LoopExec();
+bool McodeOS::RunnerLoop(){
+    __current_runner->RunnerLoop();
 }
 
 McodeRunnerBase* McodeOS::GetRunner(int mcode_id){

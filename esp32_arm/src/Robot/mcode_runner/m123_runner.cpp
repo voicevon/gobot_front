@@ -2,7 +2,7 @@
 #include "Robot/mcode_runner/mcode_os.h"
 // #include "mcode_runners.h"
 
-// void Final_M123_RunnerBase::LinkMcode(Gcode* mcode){
+// void Final_M123_RunnerBase::SetupRunner(Gcode* mcode){
     
 // }
 
