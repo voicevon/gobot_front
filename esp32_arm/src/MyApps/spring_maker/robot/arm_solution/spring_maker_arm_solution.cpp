@@ -1,4 +1,4 @@
-#include "single_x_a_arm_solution.h"
+#include "spring_maker_arm_solution.h"
 
 void SpringMaker_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	to_ik->Positions[AXIS_ALPHA] = from_fk->X;

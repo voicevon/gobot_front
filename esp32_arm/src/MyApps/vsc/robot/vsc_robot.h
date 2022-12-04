@@ -3,8 +3,7 @@
 #include "Robot/robot_base.h"
 #include "MyApps/vsc/board/board_vsc.h"
 #include "vsc_g28_runner.h"
-// #include "CNC/arm_solution/circle_loop/circle_loop_arm_solution.h"
-#include "arm_solution_circle_loop/circle_loop_arm_solution.h"
+#include "arm_solution/circle_loop_arm_solution.h"
 #include "MyLibs/list/pid_controllers_list.h"
 
 #define PID_CONTROLLERS_COUNT 1

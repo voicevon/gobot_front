@@ -4,8 +4,7 @@
 #include "Robot/robot_base.h"
 #include "MyApps/spring_maker/board/board.h"
 #include "spring_maker_g28_runner.h"
-// #include "CNC/arm_solution/single_x_a/single_x_a_arm_solution.h"
-#include "arm_solution_single_a/single_x_a_arm_solution.h"
+#include "arm_solution/spring_maker_arm_solution.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 
 
