@@ -6,7 +6,8 @@
 
 class CncActuatorServo: public CncActuatorBase{
     public:
-        void LinkServo(Servo* servo, bool is_inversed_dir);
+        // void LinkServo(Servo* servo, bool is_inversed_dir);
+        void LinkServo(Servo* servo);
 
         void SpinOnce();
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;

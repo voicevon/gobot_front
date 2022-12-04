@@ -41,7 +41,6 @@ class RobotBase: public GcodeConsumer{
         Planner __planner;
         G4_Runner __g4_runner;
         void __RunGcode(Gcode* gcode);
-        float __newest_line_speed = 500;   //
 
         
 

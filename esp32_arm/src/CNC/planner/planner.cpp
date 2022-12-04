@@ -17,13 +17,7 @@ bool Planner::IsPlanable(){
 
 
 void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* new_line){
-    LineSegment* current_line = Queue_LineSegment::Instance().GetHeadLineSegment();
-    // Logger::Debug("Planner::ConvertLineSegment_AppendMoveBlocks()");
-    // Logger::Print("new_line->TargetPosition.X", new_line->TargetPosition.X);
-    // Logger::Print("new_line->TargetPosition.Y", new_line->TargetPosition.Y);
-    // Logger::Print("new_line->TargetPosition.Z", new_line->TargetPosition.Z);
-
-    new_line->Calculate_distance_time(&current_line->TargetPosition);
+    new_line->Calculate_distance_time(arm_solution->GetCurrentPosition_Fk());
     IKPosition_abgdekl start_ik;
     // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 21);
     Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyToIkPosition(&start_ik);

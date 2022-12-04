@@ -31,29 +31,16 @@ void TeechWarehouse_Robot::__InitStatic_Actuators(TeethWarehouse_Board* board){
     this->__actuator_beta.MyName = 'b';
     this->__actuator_gamma.MyName = 'g';
     
-    // ActuatorStepper_Calculator calculator;
-    // calculator.motor_step_angle_in_degree = 1.8;
-    // calculator.motor_driver_micro_steps = 16;
-    // calculator.motor_gear_teeth_count = 15;
-    // calculator.motor_gear_pitch_in_mm = 3;
-    // calculator.slave_pulley_teeth_count = 1;
-
-    // float slope = 1.0f / calculator.Get_Formular_Slope_steps_per_mm();
-    // __actuator_alpha.Formular_SetSlope(slope);
-    // __actuator_alpha.LinkStepper(board->GetStepper_Alpha(), slope);
     __actuator_alpha.LinkStepper(board->GetStepper_Alpha());
-
-    // __actuator_beta.Formular_SetSlope(slope);
-    // __actuator_beta.LinkStepper(board->GetStepper_Beta(), slope);
     __actuator_beta.LinkStepper(board->GetStepper_Beta());
 
-    // M=0.8, T=48, circle_length = 3.14*48*0.8=120.6mm
+    // Gear:  M=0.8, T=48, circle_length = 3.14*48*0.8=120.6mm
     // mm_per_degree = 120.6/360 = 0.335
     // max: Z=0,  degree=0
     // min: Z=-90.45, degree=270.
     float slope = -0.335;
     float offset = -270.0f;
-    __actuator_gamma.LinkServo(board->GetServo_onVertical(), true);
+    __actuator_gamma.LinkServo(board->GetServo_onVertical());
     __actuator_gamma.Formular_SetSlope(slope);
     __actuator_gamma.Formular_SetRawOffset(offset);
 }

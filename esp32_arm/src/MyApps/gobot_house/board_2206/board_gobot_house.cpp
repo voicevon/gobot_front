@@ -18,7 +18,7 @@ void Board_GobotHouse_2206::__Init_Hardware(){
     // Init actuator beta
 	this->__servo_beta.setPeriodHertz(50);
     this->__servo_beta.attach(PIN_CNC_BETA_SERVO);
-    this->__actuator_beta.LinkServo(&this->__servo_beta, true);
+    this->__actuator_beta.LinkServo(&this->__servo_beta);
 
 }
 
