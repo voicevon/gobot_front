@@ -22,6 +22,7 @@ class Twh_ArmSolution: public ArmSolutionBase{
         void real_IK_to_MK(IKPosition_abgdekl* ik, MiddleKinematic* mk);
 
         void Test_FK_MK_FK(FKPosition_XYZRPY* input);
+        void Test_MK_FK_MK(MiddleKinematic* input);
         void Test_IK_MK_IK(IKPosition_abgdekl* input);
         void Test_MK_IK_MK(MiddleKinematic* input);
 

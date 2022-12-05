@@ -160,22 +160,13 @@ void TeethWarehouse_Board::Test_SingleStepper(int index, int loops){
     for (int i=0; i<loops; i++){
         Logger::Print("Test stepper loop=", i);
         if (stepper) {
-            // stepper->setDirectionPin(dirPinStepper);
-            // stepper->setEnablePin(enablePinStepper);
-            // stepper->setAutoEnable(true);
-
-            // If auto enable/disable need delays, just add (one or both):
-            // stepper->setDelayToEnable(50);
-            // stepper->setDelayToDisable(1000);
-
-            // __stepper_alpha->setSpeedInUs(1000);  // the parameter is us/step !!!
-            // __stepper_alpha->setAcceleration(100);
-            stepper->moveTo(1000, false);
+            // 5 circles.
+            stepper->moveTo(360.0f /1.8f * 16 * 1, false);
             while (stepper->isRunning()){
                 Logger::Print("Current position", stepper->getCurrentPosition());
                 delay(300);
             }
-            stepper->moveTo(-1000, false);
+            stepper->moveTo(0, false);
             while (stepper->isRunning()){
                 Logger::Print("Current position", stepper->getCurrentPosition());
                 delay(300);
@@ -244,23 +235,16 @@ void TeethWarehouse_Board::Test_Hx711(int loops){
     __hx711.power_up();
 }
 
-void TeethWarehouse_Board::Test_Servo_AirPen(int loops){
+void TeethWarehouse_Board::Test_Servo_Vertical_Move(int loops){
     int pos = 0;      // position in degrees
     for (int loop=0; loop<loops; loop++){
         Logger::Print("SERVO_EEF_VERTICAL  count", loop);
-        // Serial.println("Air pen loop");
-        // for (pos = 0; pos <= 270; pos += 1) { // sweep from 0 degrees to 180 degrees
-        //     // in steps of 1 degree
-        //     __servo_air_pen.write(pos);
-        //     delay(10);             // waits 20ms for the servo to reach the position
-            
-        // }
-        // __servo_air_pen.write(0);
+        Logger::Print("write angle", 0);
         __all_servos[SERVO_EEF_VERTICAL].write(0);
-        delay(3000);
-        // __servo_air_pen.write(270);
+        delay(9000);
+        Logger::Print("write angle", 270);
         __all_servos[SERVO_EEF_VERTICAL].write(270);
-        delay(3000);
+        delay(9000);
     }
 }
 

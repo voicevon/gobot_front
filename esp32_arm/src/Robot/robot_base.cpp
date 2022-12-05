@@ -149,7 +149,6 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	new_line->DeepCopyFromFkPosition(__planner.arm_solution->GetCurrentPosition_Fk());
 	if (gcode->has_letter('F')) __newest_line_speed = gcode->get_value('F');
 	new_line->Speed_mm_per_second = __newest_line_speed;
-	new_line->PrintOUt("caller is RobotBase::__RunGcode()");
 	
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
 	//This is wrong for the very first moveblock after MCU is reset.
@@ -180,6 +179,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('P')) new_line->TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) new_line->TargetPosition.Yaw = gcode->get_value('W');
 			new_line->IsMiddleKinematicPosition = false;
+			new_line->PrintOUt("caller is RobotBase::__RunGcode() G1");
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			Queue_LineSegment::Instance().Deposit();
 			break;
@@ -194,6 +194,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('W')) middle_kinematic_line.TargetPosition.Yaw = gcode->get_value('W');
 			new_line->IsMiddleKinematicPosition = true;
 			this->__planner.arm_solution->MK_to_FK(&middle_kinematic_line.TargetPosition , &new_line->TargetPosition);
+			new_line->PrintOUt("caller is RobotBase::__RunGcode() G5");
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			Queue_LineSegment::Instance().Deposit();
 			break;
@@ -216,8 +217,9 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			// Update Current FK position 
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);
 			__planner.arm_solution->IK_to_FK(&new_ik_position, &new_fk_position);
-			new_line->DeepCopyFromFkPosition(&new_fk_position);
-			Queue_LineSegment::Instance().Deposit();
+
+			new_line->DeepCopyFromFkPosition(&new_fk_position);  //??
+			Queue_LineSegment::Instance().Deposit();             //??
 			break;
 		case 7:
 			// G7 Move. will follow a Middle kinematic poisition.

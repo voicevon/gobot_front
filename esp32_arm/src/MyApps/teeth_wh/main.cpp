@@ -20,7 +20,7 @@ TeethWarehouse_Robot robot;
 
 void test_board(){
     board.Test_PositionTriggers(0);
-    board.Test_Servo_AirPen(0);
+    board.Test_Servo_Vertical_Move(0);
     board.Test_Servo_VacuumSwitch(0);
     board.Test_VacuumPump(0);
     board.Test_SingleStepper(AXIS_ALPHA, 0);
@@ -31,14 +31,36 @@ void test_board(){
 }
 
 void test_robot(){
-    for (int i=0; i<8;i++){
-        gcode_queue.AppendGcodeCommand("G1Z-90");
-        gcode_queue.AppendGcodeCommand("G4S2");
+    for (int i=0; i<6;i++){
 
-        gcode_queue.AppendGcodeCommand("G1Z0");
-        gcode_queue.AppendGcodeCommand("G4S5");
+        gcode_queue.AppendGcodeCommand("G1X-190Y0");
+        gcode_queue.AppendGcodeCommand("G4S0");
+
+        gcode_queue.AppendGcodeCommand("G1X-190Y200");
+        gcode_queue.AppendGcodeCommand("G4S3");
+
+
+
+        // gcode_queue.AppendGcodeCommand("G1X-189Y0");
+        // gcode_queue.AppendGcodeCommand("G4S5");
+
+        // gcode_queue.AppendGcodeCommand("G1X0Y-190");
+        // gcode_queue.AppendGcodeCommand("G4S5");
+
+        // gcode_queue.AppendGcodeCommand("G1X189Y0");
+        // gcode_queue.AppendGcodeCommand("G4S5");
     }
     
+}
+
+void test(){
+    Twh_ArmSolution_Config cc;
+    
+    Logger::Debug("aaaaaaaaaaaaaaa");
+    Logger::Print("linear   ", cc.linear_slope_steps_per_mm);
+    while (true){
+
+    }
 }
 
 void test_arm(){
@@ -51,13 +73,14 @@ void test_arm(){
 
     IKPosition_abgdekl input_ik;
     input_ik.Positions[AXIS_ALPHA] = 456;
-    input_ik.Positions[AXIS_BETA] = 567;
+    input_ik.Positions[AXIS_BETA] = -567;
     arm.Test_IK_MK_IK(&input_ik);
 
     MiddleKinematic input_mk;
-    input_mk.Arm_shaft_At_Y = 210;
-    input_mk.Arm_Angle = 45 * DEG_TO_RAD;
+    input_mk.Arm_shaft_At_Y = -12.3f;
+    input_mk.Arm_Angle = -23.4f * DEG_TO_RAD;
     arm.Test_MK_IK_MK(&input_mk);
+    arm.Test_MK_FK_MK(&input_mk);
 
     while (true){
 
@@ -65,6 +88,7 @@ void test_arm(){
 }
 void setup(){
     board.Init(true);
+    // test();
     // test_arm();
     test_board();
     robot.Init(&board);

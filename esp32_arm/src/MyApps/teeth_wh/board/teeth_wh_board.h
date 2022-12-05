@@ -33,7 +33,7 @@ class TeethWarehouse_Board: public CncBoardBase{
         void Test_PositionTriggers(int loops);
         void Test_Hx711(int loops);
         void Test_VL6180x();
-        void Test_Servo_AirPen(int loops);
+        void Test_Servo_Vertical_Move(int loops);
         void Test_Servo_VacuumSwitch(int loops);
         void Test_VacuumPump(int loops);
         // void Test_Servo_Simutenious()
