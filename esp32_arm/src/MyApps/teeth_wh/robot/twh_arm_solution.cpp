@@ -36,7 +36,7 @@ void Twh_ArmSolution::real_IK_to_MK(IKPosition_abgdekl* ik, MiddleKinematic* mk)
 	// Logger::Print("Twh_ArmSolution::real_IK_to_MK() mk.Angle in deg", mk->Arm_Angle * RAD_TO_DEG);
 }
 
-void Twh_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
+void Twh_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	// Logger::Info("Twh_ArmSolution::IK()");
 	MiddleKinematic mk;
 	real_FK_to_MK(from_fk, &mk);
@@ -44,7 +44,7 @@ void Twh_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	to_ik->Positions[AXIS_GAMMA] =  from_fk->Z / __config.servo_slope - __config.servo_offset;
 }
 
-void Twh_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
+void Twh_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
 	// Logger::Debug("Twh_ArmSolution::FK()");
 	MiddleKinematic mk;
 	real_IK_to_MK(from_ik,&mk);

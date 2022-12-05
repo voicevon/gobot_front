@@ -1,7 +1,7 @@
 #include "core_yz_arm_solution.h"
 
 
-void CoreYZ_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
+void CoreYZ_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	Serial.print("\n[Info] CoreYZ_ArmSolution::IK() is entering. ");
 	FKPosition_XYZRPY * fk = (FKPosition_XYZRPY*)(from_fk);
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(to_ik);
@@ -20,7 +20,7 @@ void CoreYZ_ArmSolution::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik
 	Serial.print(")");
 }
 
-void CoreYZ_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
+void CoreYZ_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
 	Serial.print("\n[Debug] CoreYZ_ArmSolution::FK() is entering ");
 	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(to_fk);
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);

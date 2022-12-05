@@ -6,7 +6,7 @@
 
 
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
-void FiveBars_ArmSolution::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik){
+void FiveBars_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik){
 	FKPosition_XYZRPY* fk = from_fk;
 	IKPosition_abgdekl* ik = to_ik;
 
@@ -83,7 +83,7 @@ void FiveBars_ArmSolution::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to
 	
 }
 
-void FiveBars_ArmSolution::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* to_fk){
+void FiveBars_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* to_fk){
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);
 	FKPosition_XYZRPY * fk = (FKPosition_XYZRPY*)(to_fk);
 

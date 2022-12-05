@@ -13,7 +13,7 @@
 
 
 
-void CncSolution_CoreAZ::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
+void CncSolution_CoreAZ::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
 	Serial.print("\n[Info] CncSolution_CoreAZ::IK() is entering. ");
 	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(from_fk);
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(to_ik);
@@ -32,7 +32,7 @@ void CncSolution_CoreAZ::IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik
 	Serial.print(")");
 }
 
-void CncSolution_CoreAZ::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
+void CncSolution_CoreAZ::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
 	Serial.print("\n[Debug] CncSolution_CoreAZ::FK() is entering ");
 	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(to_fk);
 	IKPosition_abgdekl* ik =from_ik;

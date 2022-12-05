@@ -54,6 +54,7 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
     ESP32PWM::allocateTimer(0);   //https://github.com/madhephaestus/ESP32Servo/blob/master/examples/Multiple-Servo-Example-Arduino/Multiple-Servo-Example-Arduino.ino
     __all_servos[SERVO_EEF_VERTICAL].setPeriodHertz(50);  // Standard 50hz servo
     __all_servos[SERVO_EEF_VERTICAL].attach(PIN_SERVO_EEF_VERTICAL);
+    __all_servos[SERVO_EEF_VERTICAL].write(260);
     
     __all_servos[SERVO_VACUUM_SWITCH].setPeriodHertz(50);  // Standard 50hz servo
     __all_servos[SERVO_VACUUM_SWITCH].attach(PIN_SERVO_VACUUM_SWITCH);

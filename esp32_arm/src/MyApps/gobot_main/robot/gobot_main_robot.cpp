@@ -76,7 +76,7 @@ void GobotMainRobot::_InitStatic_Queues(){
     line->TargetPosition.Roll = 0;
     line->TargetPosition.Pitch = 0;
     line->TargetPosition.Yaw = 0;
-    line->PrintOUt();
+    line->PrintOUt("caller: GobotMainRobot::_InitStatic_Queues()");
     Queue_LineSegment::Instance().Deposit();
-    Logger::Print("TeechWarehouse_Robot::Init", 83);
+    Logger::Print("TeethWarehouse_Robot::Init", 83);
 }

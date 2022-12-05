@@ -46,7 +46,7 @@ void GobotMain_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         bool debug = true;
         if (debug){
             FKPosition_XYZRPY fk;
-            this->_arm_solution->FK(&ik, &fk);
+            this->_arm_solution->IK_to_FK(&ik, &fk);
             fk.PrintOut("Twh_G28_Runner::SetHomedPosition() 'X'");
         }
     }

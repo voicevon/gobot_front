@@ -16,7 +16,7 @@
 #define CNC_ACTUATORS_COUNT 3
 
 
-class TeechWarehouse_Robot: public RobotBase{
+class TeethWarehouse_Robot: public RobotBase{
     public:
         void Init(TeethWarehouse_Board* board);
 

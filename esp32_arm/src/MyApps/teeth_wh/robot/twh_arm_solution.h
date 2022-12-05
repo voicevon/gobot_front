@@ -25,9 +25,8 @@ class Twh_ArmSolution: public ArmSolutionBase{
         void Test_IK_MK_IK(IKPosition_abgdekl* input);
         void Test_MK_IK_MK(MiddleKinematic* input);
 
-    protected:
-        void IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
-        void FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk) override;
+        void FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
+        void IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk) override;
 
     private:
         Twh_ArmSolution_Config __config;

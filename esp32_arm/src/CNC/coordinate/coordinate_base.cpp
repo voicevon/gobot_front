@@ -2,7 +2,7 @@
 #include <HardwareSerial.h>
 
 void FKPosition_XYZRPY::PrintOut(const char* title){
-    Serial.print(title);
+    Serial.println(title);
     Serial.print("    ");
     Serial.print(this->X);
     Serial.print(" , ");

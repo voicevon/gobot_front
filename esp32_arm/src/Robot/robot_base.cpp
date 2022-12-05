@@ -143,12 +143,13 @@ void RobotBase::SpinOnce(){
 // 1. Queue_MoveBlock is not full
 // 2. Queue_LineSegment is not full
 void RobotBase::__RunGcode(Gcode* gcode){
-	static float __newest_line_speed;
+	static float __newest_line_speed = 100;
 	// Logger::Info("RobotBase::__RunGcode()");
 	LineSegment* new_line = Queue_LineSegment::Instance().GetRoom();
 	new_line->DeepCopyFromFkPosition(__planner.arm_solution->GetCurrentPosition_Fk());
 	if (gcode->has_letter('F')) __newest_line_speed = gcode->get_value('F');
 	new_line->Speed_mm_per_second = __newest_line_speed;
+	new_line->PrintOUt("caller is RobotBase::__RunGcode()");
 	
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
 	//This is wrong for the very first moveblock after MCU is reset.
@@ -192,7 +193,6 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('P')) middle_kinematic_line.TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) middle_kinematic_line.TargetPosition.Yaw = gcode->get_value('W');
 			new_line->IsMiddleKinematicPosition = true;
-			// new_line->Speed_mm_per_second = __newest_line_speed;
 			this->__planner.arm_solution->MK_to_FK(&middle_kinematic_line.TargetPosition , &new_line->TargetPosition);
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			Queue_LineSegment::Instance().Deposit();
@@ -215,9 +215,8 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			Queue_MoveBlock::Instance().Deposit();
 			// Update Current FK position 
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);
-			__planner.arm_solution->FK(&new_ik_position, &new_fk_position);
+			__planner.arm_solution->IK_to_FK(&new_ik_position, &new_fk_position);
 			new_line->DeepCopyFromFkPosition(&new_fk_position);
-			// new_line->Speed_mm_per_second = __newest_line_speed;   //TODO: for next fk gcode usage. should be A:) default speed,  B:) follow previous speed
 			Queue_LineSegment::Instance().Deposit();
 			break;
 		case 7:
@@ -230,7 +229,6 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('P')) middle_kinematic_line.TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) middle_kinematic_line.TargetPosition.Yaw = gcode->get_value('W');
 			new_line->IsMiddleKinematicPosition = true;
-			// new_line->Speed_mm_per_second = __newest_line_speed;
 			this->__planner.arm_solution->MK_to_Ik(&middle_kinematic_line.TargetPosition, &new_ik_position);
 			Queue_MoveBlock::Instance().Deposit();
 			// Update Current FK position 
@@ -240,9 +238,8 @@ void RobotBase::__RunGcode(Gcode* gcode){
 				new_move_block->MoveBlocks[a].Speed = __newest_line_speed;
 				new_move_block->MoveBlocks[a].Acceleration = 100;
 			}
-			__planner.arm_solution->FK(&new_ik_position, &new_fk_position);
+			__planner.arm_solution->IK_to_FK(&new_ik_position, &new_fk_position);
 			new_line->DeepCopyFromFkPosition(&new_fk_position);
-			// new_line->Speed_mm_per_second = __newest_line_speed;   //TODO: for next fk gcode usage. should be A:) default speed,  B:) follow previous speed
 			Queue_LineSegment::Instance().Deposit();
 			break;
 

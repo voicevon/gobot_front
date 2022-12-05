@@ -14,7 +14,7 @@ void ArmSolutionBase::GetRealTimePosition(FKPosition_XYZRPY* position_fk){
 	IKPosition_abgdekl realtime_ik;
 	// realtime_ik.alpha = CncActuator_List::Instance().GetActuator(AXIS_ALPHA)->GetCurrentPosition();
 	realtime_ik.Positions[AXIS_ALPHA] = CncActuator_List::Instance().GetActuator(AXIS_ALPHA)->GetCurrentPosition();
-	this->FK(&realtime_ik, position_fk);
+	this->IK_to_FK(&realtime_ik, position_fk);
 }
 
 void ArmSolutionBase::SetCurrentPositionAs(FKPosition_XYZRPY* fk_position){
@@ -25,7 +25,8 @@ void ArmSolutionBase::SetCurrentPositionAs(FKPosition_XYZRPY* fk_position){
 	__current_position_fk.Pitch = fk_position->Pitch;
 	__current_position_fk.Yaw = fk_position->Yaw;
 
-	this->IK(&__current_position_fk, &__current_position_ik);
+	// this->IK(&__current_position_fk, &__current_position_ik);
+	__current_position_fk.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions FK");
 }
 
 void ArmSolutionBase::SetCurrentPositionAs(IKPosition_abgdekl* ik_position){
@@ -33,9 +34,9 @@ void ArmSolutionBase::SetCurrentPositionAs(IKPosition_abgdekl* ik_position){
 		__current_position_ik.Positions[i] = ik_position->Positions[i];
 		CncActuatorBase* actuator = CncActuator_List::Instance().GetActuator(i);
 		actuator->SetCurrentPositionAs(__current_position_ik.Positions[i]);
+	__current_position_ik.Positions[i] = ik_position->Positions[i];
 	}
-	this->FK(&__current_position_ik, &__current_position_fk);
-	__current_position_fk.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions FK");
+	// this->FK(&__current_position_ik, &__current_position_fk);
 	__current_position_ik.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions IK");
 }
 
@@ -44,8 +45,8 @@ void ArmSolutionBase::Test(FKPosition_XYZRPY* input){
 	IKPosition_abgdekl ik;
 	// FKPosition_XYZRPY input;
 	FKPosition_XYZRPY output;
-	this->IK(input,&ik);
-	this->FK(&ik,&output);
+	this->FK_to_IK(input,&ik);
+	this->IK_to_FK(&ik,&output);
 	Logger::Info("Twh_ArmSolution::test()");
 	Serial.print("input \t");
 	Serial.print(input->X);

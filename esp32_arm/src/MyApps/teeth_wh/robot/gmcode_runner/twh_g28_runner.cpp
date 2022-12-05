@@ -58,7 +58,7 @@ void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
     if (this->_axis_name =='a'){
         // do nothing
     }else if (this->_axis_name == 'Y'){
-        // must home('a') first, then home('X')
+        // must home('a') first, then home('Y')
         // Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 31);
         MiddleKinematic mk;
         mk.Arm_Angle = DEG_TO_RAD * (-90);
@@ -66,15 +66,14 @@ void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         // Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 32);
         FKPosition_XYZRPY fk;
         Twh_ArmSolution arm;
-        // arm.LinkConfig();
         arm.real_MK_to_FK(&mk, &fk);
-        // this->_arm_solution->MK_to_FK();
+        this->_arm_solution->SetCurrentPositionAs(&fk);
         // Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 33);
 
         IKPosition_abgdekl ik;
-        this->_arm_solution->IK(&fk,&ik);
-        // Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 34);
+        this->_arm_solution->FK_to_IK(&fk,&ik);
         this->_arm_solution->SetCurrentPositionAs(&ik);
+        // Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 34);
         
     }
 }

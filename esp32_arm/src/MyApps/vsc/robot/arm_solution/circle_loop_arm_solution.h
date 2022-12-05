@@ -13,8 +13,8 @@ class CircleLoop_ArmSolution: public ArmSolutionBase{
         // EnumAxis_ForwardKinematic _AXIS;   // TODO: doubel check this var.
 
     private:
-        void IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
-        void FK(IKPosition_abgdekl* ik, FKPosition_XYZRPY*  to_fk) override;
+        void FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
+        void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPY*  to_fk) override;
 
         // FKPosition_XYZRPY __current_fk_position;
         // FKPosition_XYZRPY __target_fk_position;

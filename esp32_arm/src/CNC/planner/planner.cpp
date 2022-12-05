@@ -25,7 +25,7 @@ void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* new_line){
 
     IKPosition_abgdekl target_ik;
     Queue_MoveBlock::Instance().DeepCopyHead_ToPosition(&target_ik);
-    arm_solution->IK(&new_line->TargetPosition, &target_ik);
+    arm_solution->FK_to_IK(&new_line->TargetPosition, &target_ik);
     MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
     // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 24);
     for(int i=0; i<CncActuator_List::Instance().GetItemsCount(); i++){

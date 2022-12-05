@@ -6,12 +6,12 @@
 class TeethWarehouse_App: public AppBase{
     public:
         TeethWarehouse_App();
-        void LinkRobot(TeechWarehouse_Robot* robot){this->__robot=robot;};
+        void LinkRobot(TeethWarehouse_Robot* robot){this->__robot=robot;};
         void AsyncExecuteMqttCommand(const char*) override;
         
     private:
 
-        TeechWarehouse_Robot* __robot;
+        TeethWarehouse_Robot* __robot;
         // CncActuatorDcMotor* __motor;
         // int __position_in_pitch[LAYER_COUNT];
         // int __GEAR_TEETH = 56;
