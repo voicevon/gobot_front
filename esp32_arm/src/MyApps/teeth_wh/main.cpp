@@ -33,22 +33,22 @@ void test_board(){
 void test_robot(){
     for (int i=0; i<6;i++){
 
+        // gcode_queue.AppendGcodeCommand("G1X-90Y0");
+        // gcode_queue.AppendGcodeCommand("G4S0");
+
+        // gcode_queue.AppendGcodeCommand("G1X-90Y200");
+        // gcode_queue.AppendGcodeCommand("G4S3");
+
+
+
         gcode_queue.AppendGcodeCommand("G1X-190Y0");
-        gcode_queue.AppendGcodeCommand("G4S0");
+        gcode_queue.AppendGcodeCommand("G4S5");
 
-        gcode_queue.AppendGcodeCommand("G1X-190Y200");
-        gcode_queue.AppendGcodeCommand("G4S3");
+        gcode_queue.AppendGcodeCommand("G1X0Y0");
+        gcode_queue.AppendGcodeCommand("G4S5");
 
-
-
-        // gcode_queue.AppendGcodeCommand("G1X-189Y0");
-        // gcode_queue.AppendGcodeCommand("G4S5");
-
-        // gcode_queue.AppendGcodeCommand("G1X0Y-190");
-        // gcode_queue.AppendGcodeCommand("G4S5");
-
-        // gcode_queue.AppendGcodeCommand("G1X189Y0");
-        // gcode_queue.AppendGcodeCommand("G4S5");
+        gcode_queue.AppendGcodeCommand("G1X190Y0");
+        gcode_queue.AppendGcodeCommand("G4S5");
     }
     
 }

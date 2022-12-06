@@ -24,9 +24,10 @@ void Twh_ArmSolution::real_MK_to_IK(MiddleKinematic* mk, IKPosition_abgdekl* ik)
 	// ik->Positions[AXIS_ALPHA] = - (mk->Arm_shaft_At_Y - __config.arm_length) * __config.linear_slope_steps_per_mm + mk->Arm_Angle *__config.arm_slope_steps_per_rad ;   
 	ik->Positions[AXIS_ALPHA] = - mk->Arm_Angle *__config.arm_slope_steps_per_rad + mk->Arm_shaft_At_Y  * __config.linear_slope_steps_per_mm  ;   
 	// ik->Positions[AXIS_BETA] = (mk->Arm_shaft_At_Y - __config.arm_length ) * __config.linear_slope_steps_per_mm + mk->Arm_Angle * __config.arm_slope_steps_per_rad;
-	ik->Positions[AXIS_BETA] =  - mk->Arm_Angle * __config.arm_slope_steps_per_rad - mk->Arm_shaft_At_Y * __config.linear_slope_steps_per_mm;
+	ik->Positions[AXIS_BETA] = - mk->Arm_Angle * __config.arm_slope_steps_per_rad - mk->Arm_shaft_At_Y * __config.linear_slope_steps_per_mm;
 	Logger::Debug("Twh_ArmSolution::real_MK_to_IK()");
 	Logger::Print("__config.linear_slope_steps_per_mm", __config.linear_slope_steps_per_mm);
+	Logger::Print("__config.arm_slope_steps_per_rad", __config.arm_slope_steps_per_rad);
 	Logger::Print("Twh_ArmSolution::real_MK_to_IK()  alpha", ik->Positions[AXIS_ALPHA]);
 	Logger::Print("Twh_ArmSolution::real_MK_to_IK()  beta", ik->Positions[AXIS_BETA]);
 }
