@@ -1,5 +1,5 @@
-from von.rabbitmq_agent import g_amq
-from von.mqtt_auto_syncer import MqttAutoSyncVar
+from von.amq_agent import g_amq
+from von.mqtt_auto_sync_var import MqttAutoSyncVar
 from gcode_sender import GcodeSender
 from statemachine import StateMachine_Item,StateMachine
 import json, time
@@ -67,7 +67,7 @@ class TeethWarehouseRobot():
 
 
         if self.withdraw_request.command == '':
-            payload = g_amq.fetch_message(self.withdraw_queue_name)
+            payload = g_amq.fetch_message_payload(self.withdraw_queue_name)
             if payload is not None:
                 request_string = payload.decode('utf-8')
                 self.withdraw_request = UserRequest(request_string)

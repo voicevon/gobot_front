@@ -1,4 +1,4 @@
-from von.rabbitmq_agent import g_amq
+from von.amq_agent import g_amq
 
 
 class GcodeSender():
