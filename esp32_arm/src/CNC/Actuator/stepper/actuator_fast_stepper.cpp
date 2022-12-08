@@ -46,3 +46,7 @@ void CncActuatorFastStepper::ForceStop(){
 void CncActuatorFastStepper::SetCurrentPositionAs(float new_position){
     _stepper->setCurrentPosition(new_position);
 }
+
+float CncActuatorFastStepper::GetCurrentPosition(){
+    return _stepper->getCurrentPosition();
+}

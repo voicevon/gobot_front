@@ -22,7 +22,7 @@ GobotHouseRobot robot;
 // void board_test();
 // void cnc_test();
 
-#define ROBOT_SERIAL_ID 111
+// #define ROBOT_SERIAL_ID 111
 
 void setup(){
     board.Init(true);

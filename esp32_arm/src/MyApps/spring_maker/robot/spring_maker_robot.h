@@ -5,7 +5,8 @@
 #include "MyApps/spring_maker/board/board.h"
 #include "spring_maker_g28_runner.h"
 #include "arm_solution/spring_maker_arm_solution.h"
-#include "CNC/Actuator/stepper/actuator_stepper.h"
+// #include "CNC/Actuator/stepper/actuator_stepper.h"
+#include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 
 
 #define CNC_ACTUATORS_COUNT 1
@@ -19,7 +20,8 @@ class SpringMakerRobot: public RobotBase{
         void _InitStatic_Queues() override;
         void _Init_ArmSolution() override;
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
-	    CncActuatorStepper __actuator_alpha = CncActuatorStepper(); 
+	    // CncActuatorStepper __actuator_alpha = CncActuatorStepper(); 
+	    CncActuatorFastStepper __actuator_alpha = CncActuatorFastStepper(); 
         // Mover_SingleAxis mover;
         CncMover mover;
         SpringMaker_ArmSolution arm_solution;

@@ -9,38 +9,6 @@ void Board_SpringMaker::Init(bool is_on_reset){
     _all_position_triggers[0].Init('U',PIN_HOME_ALPHA_2201, LOW);
 }
 
-// PositionTrigger* Board_SpringMaker::GetPositionTrigger(uint8_t index){
-//     return &this->_all_position_triggers[index];
-// }
-
-
-// CncActuatorStepper* Board_SpringMaker::GetActuator(EnumAxis axis_name) {
-//     if (axis_name==AXIS_ALPHA){
-//         return &this->stepper_alpha;
-//     }else{
-//         Serial.print("['Error']  Board_SpringMaker::GetStepper()   axis_name= ");
-//         Serial.println(axis_name);
-//     }
-//     return nullptr;
-// }
-
-// SinglePositionTrigger* Board_SpringMaker::GetSingleHomer(EnumAxis axis_name) {
-//     if (axis_name==AXIS_ALPHA){
-//         return &this->homer_alpha;
-//     }else{
-//         Serial.print("['Error']  Board_SpringMaker::GetHomer()   axis_name= ");
-//         Serial.println(axis_name);
-//     }
-//     return nullptr;
-// }
-
-// AxisHomer* Board_SpringMaker::GetPositionTriggers(EnumAxis axis_name){
-//     Logger::Error("Board_SpringMaker::GetPositionTriggers() NOT SUPPORTED");
-// }
-
-// RobotEef_SpringMaker* Board_SpringMaker::GetEef() {
-//     return &this->eef;
-// }
 
 
 void Board_SpringMaker::EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {

@@ -1,25 +1,29 @@
 #include "cnc_actuator_servo.h"
 
-
-// void CncActuatorServo::LinkServo(Servo* servo, bool is_inversed_dir){
 void CncActuatorServo::LinkServo(Servo* servo){
     // Logger::Debug("CncActuatorServo::LinkServo()");
     this->__servo = servo; 
-    // this->Formular_SetSlope(DEG_TO_RAD * 150);  //???
-    // this->Formular_SetRawOffset(DEG_TO_RAD * 150);  
 }
-
 
 void CncActuatorServo::SpinOnce(){
     _is_moving = false;
 }
 
+void CncActuatorServo::SetCurrentPositionAs(float new_position){
+    Logger::Error("CncActuatorServo::SetCurrentPositionAs()");
+    Logger::Halt("Give it up . KC and summer shine 1982");
+}
+
+float CncActuatorServo::GetCurrentPosition(){
+    return __target_position;
+}
+
+
 void CncActuatorServo::UpdateMovement(MoveBlock_SingleActuator* move){
     Logger::Debug("CncActuatorServo::UpdateMovement()");
-    // this->_target_position =  move->TargetPosition;   // TODO:  in base class?
-    // float physic_angle = this->GetPosition_FromCncUnit(move->TargetPosition);
-    // __servo->write(physic_angle);
     __servo->write(move->TargetPosition);
+    __target_position = move->TargetPosition;
+
     _is_moving = true;
 
     // Logger::Print("current_cnc_position = ", this->_current_position);

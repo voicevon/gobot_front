@@ -19,8 +19,8 @@ void GobotMain_Board::InitHardware(){
         pinMode(this->PIN_ROOMS[i], INPUT_PULLUP);
     }
 
-    this->__alpha_stepper.setInverseRotation(false);
-    this->__beta_stepper.setInverseRotation(false);
+    // this->__alpha_stepper.setInverseRotation(false);
+    // this->__beta_stepper.setInverseRotation(false);
 }
 
 void GobotMain_Board::Init(bool is_on_reset){
@@ -46,7 +46,8 @@ void GobotMain_Board::Init(bool is_on_reset){
 }
 
 
-Stepper* GobotMain_Board::GetStepper(EnumAxis_Inverseinematic axis){
+// Stepper* GobotMain_Board::GetStepper(EnumAxis_Inverseinematic axis){
+FastAccelStepper* GobotMain_Board::GetStepper(EnumAxis_Inverseinematic axis){
     if (axis==AXIS_ALPHA){
         return &this->__alpha_stepper;
     }else if (axis==AXIS_BETA){

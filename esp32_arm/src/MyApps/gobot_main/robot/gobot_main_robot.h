@@ -19,8 +19,10 @@ class GobotMainRobot: public RobotBase{
         void _InitStatic_Queues() override;
         void _Init_ArmSolution() override;
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
-	    CncActuatorStepper __actuator_alpha = CncActuatorStepper(); 
-        CncActuatorStepper __actuator_beta = CncActuatorStepper();
+	    // CncActuatorStepper __actuator_alpha = CncActuatorStepper(); 
+        // CncActuatorStepper __actuator_beta = CncActuatorStepper();
+	    CncActuatorFastStepper __actuator_alpha;
+	    CncActuatorFastStepper __actuator_beta;
 
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];

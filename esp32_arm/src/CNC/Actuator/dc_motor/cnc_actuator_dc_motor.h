@@ -8,7 +8,6 @@ class CncActuatorDcMotor: public CncActuatorBase{
     public:
         CncActuatorDcMotor(){};
 
-        // void LinkAngleSensor(RotaryEncoder* sensor){this->__sensor=sensor;}; 
         void LinkEncoder(Encoder* encoder){this->__encoder=encoder;};
         void LinkPidController(PIDController* pid){this->__speed_pid=pid;};
         void LinkHBridgeDriver(H_Bridge* h_bridge){this->__h_bridge=h_bridge;};  
@@ -18,7 +17,8 @@ class CncActuatorDcMotor: public CncActuatorBase{
         // Also mightly auto change to true, After SetTargetPositionTo() is invoked.
         void ForceStop();   //Only G28 is using this.
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;
-
+        void SetCurrentPositionAs(float new_position) override;
+        float GetCurrentPosition() override;
 
         //===================================================================
         // For Being an actuator
@@ -27,9 +27,9 @@ class CncActuatorDcMotor: public CncActuatorBase{
     protected:
         
     private:
-        // My components
         H_Bridge* __h_bridge;
         Encoder* __encoder;
+        float __encoder_raw_angle_offset = 0;
         PIDController* __speed_pid;
         float __target_velocity;   // cnc rad per second.
         LowPassFilter __filter = LowPassFilter(0.05f);

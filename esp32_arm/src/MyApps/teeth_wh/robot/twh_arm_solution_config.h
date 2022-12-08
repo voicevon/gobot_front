@@ -27,7 +27,7 @@ class Twh_ArmSolution_Config{
             linear_slope_steps_per_mm = steps_per_motor_round / motor_gear_circle_length ;   // = 71.111 steps_per_mm 
     
             float arm_gear_circle_length_in_mm = __gear_pitch_in_mm * __arm_gear_teeth_count;
-            arm_slope_steps_per_rad = linear_slope_steps_per_mm * arm_gear_circle_length_in_mm / TWO_PI ;
+            arm_slope_steps_per_rad = - linear_slope_steps_per_mm * arm_gear_circle_length_in_mm / TWO_PI ;
         }
 
         // Servo Gear:  M=0.8, T=48, circle_length = 3.14 * 48 * 0.8 = 120.6mm

@@ -10,3 +10,11 @@ void GobotHouseRobot::Init(GobotMain_Board* board){
     
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
 }
+
+void GobotHouseRobot::_InitStatic_Queues(){
+
+}
+
+void GobotHouseRobot::_Init_ArmSolution(){
+    
+}

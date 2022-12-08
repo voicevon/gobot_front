@@ -53,15 +53,6 @@ void test_robot(){
     
 }
 
-void test(){
-    Twh_ArmSolution_Config cc;
-    
-    Logger::Debug("aaaaaaaaaaaaaaa");
-    Logger::Print("linear   ", cc.linear_slope_steps_per_mm);
-    while (true){
-
-    }
-}
 
 void test_arm(){
     Twh_ArmSolution arm;
@@ -97,13 +88,13 @@ void setup(){
     app.LinkRobot(&robot);
 
     setup_mqtt_block_connect();
-    append_mqtt_bridge("twh/221109/gcode_feed", &mqtt_command_queue, &app); 
+    append_mqtt_bridge("twh/221109/gcode", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
 
     gcode_queue.AppendGcodeCommand("G1Z0");
     gcode_queue.AppendGcodeCommand("G28a");
     gcode_queue.AppendGcodeCommand("G28Y");
-    test_robot();
+    // test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
 

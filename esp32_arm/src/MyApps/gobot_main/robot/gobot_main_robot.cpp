@@ -18,9 +18,9 @@ void GobotMainRobot::Init(GobotMain_Board* board){
     // this->__planner.__arm_solution = &arm_solution;
     // this->_arm_solution = &this->arm_solution;  
 
-    TeensyStep_Gateway::Instance().Init(&step_control);
-    TeensyStep_Gateway::Instance().AddStepper(board->GetStepper(AXIS_ALPHA));
-    TeensyStep_Gateway::Instance().AddStepper(board->GetStepper(AXIS_BETA));
+    // TeensyStep_Gateway::Instance().Init(&step_control);
+    // TeensyStep_Gateway::Instance().AddStepper(board->GetStepper(AXIS_ALPHA));
+    // TeensyStep_Gateway::Instance().AddStepper(board->GetStepper(AXIS_BETA));
 }
 
 void GobotMainRobot::__InitActuator(GobotMain_Board* board){
@@ -30,9 +30,9 @@ void GobotMainRobot::__InitActuator(GobotMain_Board* board){
     CncActuator_List::Instance().AddActuator(&__actuator_beta);
 
     this->__actuator_alpha.MyName = 'a';
-    this->__actuator_alpha.LinkStepper(board->GetStepper(AXIS_ALPHA), 1.0f);
-    this->__actuator_beta.MyName = 'a';
-    this->__actuator_beta.LinkStepper(board->GetStepper(AXIS_BETA), 1.0f);
+    // this->__actuator_alpha.LinkStepper(board->GetStepper(AXIS_ALPHA), 1.0f);
+    this->__actuator_beta.MyName = 'b';
+    // this->__actuator_beta.LinkStepper(board->GetStepper(AXIS_BETA), 1.0f);
     
     // ActuatorStepper_Calculator helper;
     // helper.motor_driver_micro_steps = 16;

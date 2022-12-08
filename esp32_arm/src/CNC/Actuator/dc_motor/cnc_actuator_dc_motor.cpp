@@ -105,6 +105,13 @@ void CncActuatorDcMotor::ForceStop(){
     this->_is_moving = false;
 }
 
+void CncActuatorDcMotor::SetCurrentPositionAs(float new_position){
+    __encoder_raw_angle_offset = __encoder->getSensorAngle() -  new_position ;
+}
+
+float CncActuatorDcMotor::GetCurrentPosition(){
+    return __encoder->getAngle() + __encoder_raw_angle_offset;
+}
 
 void CncActuatorDcMotor::Test_PwmSpeed(bool dir_is_cw,  uint32_t pwm_speed){
     this->__h_bridge->SetPwmSpeed(dir_is_cw, pwm_speed);
