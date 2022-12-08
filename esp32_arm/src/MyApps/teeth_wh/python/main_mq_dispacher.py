@@ -1,5 +1,5 @@
 from twh_robot import TeethWarehouseRobot, UserRequest
-from von.amq_agent import g_amq, g_amq_broke_config
+from von.amq_agent import g_amq, g_amq_broker_config
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 
 
@@ -39,7 +39,8 @@ class TeethWarehouseMessageDispacher():
 
 
 if __name__ == '__main__':
-    g_amq.connect_to_broker(g_amq_broke_config)
+    g_amq.connect_to_broker(g_amq_broker_config)
+    g_mqtt_broker_config.client_id = '221208'
     g_mqtt.connect_to_broker(g_mqtt_broker_config)
     while not g_mqtt.paho_mqtt_client.is_connected():
         pass

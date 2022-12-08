@@ -1,10 +1,11 @@
 from von.amq_mqtt_bridges import AmqMqtt_Bridges
-from von.amq_agent import g_amq, g_amq_broke_config
+from von.amq_agent import g_amq, g_amq_broker_config
 from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
 
 
 if __name__ == '__main__':
-    g_amq.connect_to_broker(g_amq_broke_config)
+    g_amq.connect_to_broker(g_amq_broker_config)
+    g_mqtt_broker_config.client_id = '221106'
     g_mqtt.connect_to_broker(g_mqtt_broker_config)
     bridges = AmqMqtt_Bridges()
 

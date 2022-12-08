@@ -58,7 +58,7 @@ class TeethWarehouseRobot():
                 self.eef_stimulate('auto', row=self.withdraw_request.row, col=self.withdraw_request.col)                
             case 'picking_centerbox':
                 self.eef_do_ir_check(row=self.deposit_request.row, col=self.deposit_request.col)
-            case 'axis_x': 
+            case 'axis_y': 
                 self.eef_stimulate('auto', row=self.deposit_request.row, col=self.deposit_request.col)
             case 'droping_cell':
                 self.eef_stimulate('auto', row=self.deposit_request.row, col=self.deposit_request.col)
@@ -137,13 +137,13 @@ class TeethWarehouseRobot():
         self.eef_statemachine.AppendItem(StateMachine_Item('parking', 'prepare_deposit', 'feeding_centerbox', self.eef_do_feed_centerbox))
         self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'end_deposit', 'parking', self.eef_do_park))
         self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'prepare_deposit', 'feeding_centerbox', self.do_nothing))
-        self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'start_deposit', 'axis_x', self.eef_do_position_x_for_cell))
-        self.eef_statemachine.AppendItem(StateMachine_Item('axis_x', 'auto', 'picking_centerbox', self.eef_do_pick_centerbox))
+        self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'start_deposit', 'axis_y', self.eef_do_position_x_for_cell))
+        self.eef_statemachine.AppendItem(StateMachine_Item('axis_y', 'auto', 'picking_centerbox', self.eef_do_pick_centerbox))
         self.eef_statemachine.AppendItem(StateMachine_Item('picking_centerbox', 'ir_check_blocked', 'droping_cell', self.eef_do_drop_cell))
         self.eef_statemachine.AppendItem(StateMachine_Item('picking_centerbox', 'ir_check_empty', 'picking_centerbox', self.eef_do_pick_centerbox))
         self.eef_statemachine.AppendItem(StateMachine_Item('picking_centerbox', 'ir_empty_enough', 'verify', self.eef_do_be_outside))
         self.eef_statemachine.AppendItem(StateMachine_Item('droping_cell', 'auto', 'picking_centerbox', self.eef_do_pick_centerbox))
-        self.eef_statemachine.AppendItem(StateMachine_Item('verify', 'white', 'axis_x', self.eef_do_moveback_pick_centerbox))
+        self.eef_statemachine.AppendItem(StateMachine_Item('verify', 'white', 'axis_y', self.eef_do_moveback_pick_centerbox))
         self.eef_statemachine.AppendItem(StateMachine_Item('verify', 'black', 'parking', self.eef_do_park))
         # for withdraw
         self.eef_statemachine.AppendItem(StateMachine_Item('parking', 'withdraw', 'picking_cell', self.eef_do_pickup_cell))

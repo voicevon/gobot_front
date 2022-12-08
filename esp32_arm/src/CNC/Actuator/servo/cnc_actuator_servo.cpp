@@ -10,8 +10,7 @@ void CncActuatorServo::SpinOnce(){
 }
 
 void CncActuatorServo::SetCurrentPositionAs(float new_position){
-    Logger::Error("CncActuatorServo::SetCurrentPositionAs()");
-    Logger::Halt("Give it up . KC and summer shine 1982");
+    //Do nothing.  arm_solution will use the current position. Servo will take no effection.
 }
 
 float CncActuatorServo::GetCurrentPosition(){

@@ -32,6 +32,8 @@ class IamTester{
             AnyClass* y=(AnyClass*) queue.Withdraw();
             AnyClass* yy = queue.Withdraw(); 
             yy= queue.GetRoom();
+            Serial.println(yy->id);
+            Serial.println(y->id);
 
             // yy->DeepCopyTo(&xx);
         }

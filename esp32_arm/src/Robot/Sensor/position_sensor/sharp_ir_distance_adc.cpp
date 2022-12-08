@@ -85,7 +85,7 @@ void SharpIrAdc::sort(int a[], int size) {
 int SharpIrAdc::distance() {
 
     int ir_val[NB_SAMPLE] = {};
-    int distanceCM;
+    int distanceCM = 0;
     float current;
     int median;
 
