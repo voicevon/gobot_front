@@ -3,7 +3,8 @@
 #include "Robot/robot_base.h"
 #include "MyApps/vsc/board/board_vsc.h"
 #include "vsc_g28_runner.h"
-#include "arm_solution/circle_loop_arm_solution.h"
+// #include "arm_solution/circle_loop_arm_solution.h"
+#include "arm_solution/vsc_arm_solution.h"
 #include "MyLibs/list/pid_controllers_list.h"
 
 #define PID_CONTROLLERS_COUNT 1
@@ -31,7 +32,7 @@ class VscRobot: public RobotBase{
 	    CncActuatorDcMotor __actuator_alpha = CncActuatorDcMotor(); 
         
         CncMover mover;
-        CircleLoop_ArmSolution arm_solution;
+        Vsc_ArmSolution arm_solution;
         Vsc_G28_Runner g28_runner;
 
 

@@ -52,7 +52,7 @@ class GcodeSender():
         self.send_code("G4S3")
         #report ir_state via MQTT
         self.send_code('M408')  
-        
+         
     def drop_to_cellbox(self, row, col):
         self.move_xy_to(row * 40, col * 40)
         self.enable_vacuum_sucker(False)
