@@ -1,87 +1,97 @@
-/*********
+/*
   Rui Santos
-  Complete project details at https://RandomNerdTutorials.com/esp-now-many-to-one-esp32/
+  Complete project details at https://RandomNerdTutorials.com/esp-now-esp8266-nodemcu-arduino-ide/
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files.
   
   The above copyright notice and this permission notice shall be included in all
   copies or substantial portions of the Software.
-*********/
+*/
 #include "all_applications.h"
 #ifdef I_AM_LONG_DISTANCE_SLAVE
 
-#include <esp_now.h>
 #include <WiFi.h>
+#include <esp_now.h>
+#include "message.h"
+#include "esp_wifi.h"
 
-// REPLACE WITH THE RECEIVER'S MAC Address
-uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-// Structure example to send data
-// Must match the receiver structure
-typedef struct struct_message {
-    int id; // must be unique for each sender board
-    int x;
-    int y;
-} struct_message;
+#define PIN_YUNXING_4 4
+#define PIN_TINGZHI_4 5
+#define PIN_GUZHANG_4 16
+#define PIN_YUNXING_3 14
+#define PIN_TINGZHI_3 12
+#define PIN_GUZHANG_3 13
+
 
 // Create a struct_message called myData
-struct_message myData;
+// struct_message myData;
+struct_message rx_buffer;
 
-// Create peer interface
-esp_now_peer_info_t peerInfo;
+// Callback function that will be executed when data is received
+void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+  memcpy(&rx_buffer, incomingData, sizeof(rx_buffer));
+  Serial.print("Bytes received: ");
+  Serial.println(len);
+  Serial.print("Char: ");
+  Serial.println(rx_buffer.station_id);
+  Serial.print("bool: ");
+  Serial.println(rx_buffer.io_1);
+  Serial.print("bool: ");
+  Serial.println(rx_buffer.io_2);
+  Serial.print("bool: ");
+  Serial.println(rx_buffer.io_3);
 
-// callback when data is sent
-void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-  Serial.print("\r\nLast Packet Send Status:\t");
-  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+  switch (rx_buffer.station_id)
+  {
+    case 4:
+        digitalWrite(PIN_YUNXING_4, rx_buffer.io_1);
+        digitalWrite(PIN_TINGZHI_4, rx_buffer.io_2);
+        digitalWrite(PIN_GUZHANG_4, rx_buffer.io_3);
+        break;
+    case 3:
+        digitalWrite(PIN_YUNXING_3, rx_buffer.io_1);
+        digitalWrite(PIN_TINGZHI_3, rx_buffer.io_2);
+        digitalWrite(PIN_GUZHANG_3, rx_buffer.io_3);
+        break;
+    
+    default:
+        break;
+  }
 }
  
-void setup() {
-  // Init Serial Monitor
-  Serial.begin(115200);
 
+void setup() {
+  // Initialize Serial Monitor
+  Serial.begin(115200);
+  pinMode(PIN_YUNXING_3, OUTPUT);
+  pinMode(PIN_TINGZHI_3, OUTPUT);
+  pinMode(PIN_GUZHANG_3, OUTPUT);
+  pinMode(PIN_YUNXING_4, OUTPUT);
+  pinMode(PIN_TINGZHI_4, OUTPUT);
+  pinMode(PIN_GUZHANG_4, OUTPUT);
+  
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  ESP_ERROR_CHECK(esp_wifi_set_protocol( WIFI_IF_STA, WIFI_PROTOCOL_LR ));
 
   // Init ESP-NOW
-  if (esp_now_init() != ESP_OK) {
+  if (esp_now_init() != 0) {
     Serial.println("Error initializing ESP-NOW");
     return;
   }
-
-  // Once ESPNow is successfully Init, we will register for Send CB to
-  // get the status of Trasnmitted packet
-  esp_now_register_send_cb(OnDataSent);
   
-  // Register peer
-  memcpy(peerInfo.peer_addr, broadcastAddress, 6);
-  peerInfo.channel = 0;  
-  peerInfo.encrypt = false;
-  
-  // Add peer        
-  if (esp_now_add_peer(&peerInfo) != ESP_OK){
-    Serial.println("Failed to add peer");
-    return;
-  }
+  // Once ESPNow is successfully Init, we will register for recv CB to
+  // get recv packer info
+  // esp_now_set_self_role(ESP_NOW_ROLE_SLAVE);
+  esp_now_register_recv_cb(OnDataRecv);
+  Serial.print("Hello, I am Espnow  receiver");
 }
- 
-void loop() {
-  // Set values to send
-  myData.id = 1;
-  myData.x = random(0,50);
-  myData.y = random(0,50);
 
-  // Send message via ESP-NOW
-  esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
-   
-  if (result == ESP_OK) {
-    Serial.println("Sent with success");
-  }
-  else {
-    Serial.println("Error sending the data");
-  }
-  delay(10000);
+void loop() {
+  
 }
 
 
