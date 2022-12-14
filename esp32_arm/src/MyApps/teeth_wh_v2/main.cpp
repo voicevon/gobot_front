@@ -1,27 +1,16 @@
 #include "all_applications.h"
-#ifdef I_AM_TEETH_WAREHOUSE
+#ifdef I_AM_TEETH_WAREHOUSE_V2
 
-#define I_AM_VERSION_2
-#ifdef I_AM_VERSION_1
-#include "MyApps/teeth_wh/board/teeth_wh_board.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
-#include "MyApps/teeth_wh/teeth_wh_app.h"
-#include "MyApps/teeth_wh/robot/twh_robot.h"
-#endif 
-
-#ifdef I_AM_VERSION_2
-#include "MyApps/teeth_wh/board_v2/teeth_wh_board.h"
-#include "MyLibs/MyFunctions.hpp"
-#include "IoT/main_mqtt.h"
-#include "MyApps/teeth_wh/teeth_wh_app.h"
-#include "MyApps/teeth_wh/robot_v2/twh_robot.h"
-#endif
+#include "MyApps/teeth_wh_v2/board/teeth_wh_board.h"
+#include "MyApps/teeth_wh_v2/teeth_wh_app.h"
+#include "MyApps/teeth_wh_v2/robot/twh_robot.h"
 
     // char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_200K];
 
 
-TeethWarehouse_Board board;
+Twh2_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
@@ -65,7 +54,7 @@ void test_robot(){
 
 
 void test_arm(){
-    Twh_ArmSolution arm;
+    Twh2_XzArmSolution arm;
     FKPosition_XYZRPY input_fk;
     input_fk.X = 123;
     input_fk.Y = 234;

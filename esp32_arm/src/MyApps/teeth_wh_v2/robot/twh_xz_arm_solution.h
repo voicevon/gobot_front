@@ -10,7 +10,7 @@ class MiddleKinematic{
 		float Arm_Angle;
 };
 
-class Twh_XzArmSolution: public ArmSolutionBase{
+class Twh2_XzArmSolution: public ArmSolutionBase{
     public:
         void MK_to_FK(FKPosition_XYZRPY* from_mk, FKPosition_XYZRPY* to_fk) override;
         void MK_to_Ik(FKPosition_XYZRPY* from_mk, IKPosition_abgdekl* to_ik) override;

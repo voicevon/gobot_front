@@ -34,7 +34,7 @@ class TeethWarehouse_Robot: public RobotBase{
         // CncActuatorServo __actuator_gamma;
         
         CncMover __mover;
-        Twh_XzArmSolution __arm_solution;
+        Twh2_XzArmSolution __arm_solution;
         Twh_G28_Runner __g28_runner;
         Twh_M42_Runner_Switch_Output __m42_runner;
 
