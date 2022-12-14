@@ -15,8 +15,8 @@ TeethWarehouse_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
-TeethWarehouse_App app;
-TeethWarehouse_Robot robot;
+Twh1_App app;
+Twh1_Robot robot;
 
 void test_board(){
     board.Test_PositionTriggers(0);
@@ -53,9 +53,8 @@ void test_robot(){
     
 }
 
-
 void test_arm(){
-    Twh_ArmSolution arm;
+    Twh1_XaArmSolution arm;
     FKPosition_XYZRPY input_fk;
     input_fk.X = 123;
     input_fk.Y = 234;
@@ -77,10 +76,6 @@ void test_arm(){
 
     }
 }
-
-
-
-
 
 void setup(){
     board.Init(true);

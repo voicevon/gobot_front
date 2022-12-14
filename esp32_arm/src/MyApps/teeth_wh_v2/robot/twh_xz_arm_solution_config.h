@@ -12,7 +12,7 @@
 */
 
 
-class Twh2_ArmSolution_Config{
+class Twh_XzArmSolution_Config{
     public:
 
         float arm_length = 190;                 //unit is mm, confirmed
@@ -21,7 +21,7 @@ class Twh2_ArmSolution_Config{
         float arm_slope_steps_per_rad; 
         float linear_slope_steps_per_mm;
 
-        Twh_ArmSolution_Config(){
+        Twh_XzArmSolution_Config(){
             float steps_per_motor_round  = 360.0f / __motor_step_angle_in_degree * __stepper_driver_micro_steps;
             float motor_gear_circle_length = __gear_pitch_in_mm * __motor_gear_teeth_count;
             linear_slope_steps_per_mm = steps_per_motor_round / motor_gear_circle_length ;   // = 71.111 steps_per_mm 

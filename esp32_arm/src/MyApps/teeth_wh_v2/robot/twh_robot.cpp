@@ -4,7 +4,7 @@
 
 
 
-void TeethWarehouse_Robot::Init(TeethWarehouse_Board* board){
+void TeethWarehouse_Robot::Init(Twh2_Board* board){
     Logger::Debug("TeethWarehouse_Robot::Init()");
     this->_InitStatic_Queues();
     this->__InitStatic_Actuators(board);
@@ -20,21 +20,21 @@ void TeethWarehouse_Robot::Init(TeethWarehouse_Board* board){
 
 }
 
-void TeethWarehouse_Robot::__InitStatic_Actuators(TeethWarehouse_Board* board){
+void TeethWarehouse_Robot::__InitStatic_Actuators(Twh2_Board* board){
     Logger::Info("TeethWarehouse_Robot::Init() Actuators.");
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
     CncActuator_List::Instance().AddActuator(&__actuator_beta);
-    CncActuator_List::Instance().AddActuator(&__actuator_gamma);
+    // CncActuator_List::Instance().AddActuator(&__actuator_gamma);
 
     this->__actuator_alpha.MyName = 'a';
     this->__actuator_beta.MyName = 'b';
-    this->__actuator_gamma.MyName = 'g';
+    // this->__actuator_gamma.MyName = 'g';
     
     __actuator_alpha.LinkStepper(board->GetStepper_Alpha());
     __actuator_beta.LinkStepper(board->GetStepper_Beta());
 
-    __actuator_gamma.LinkServo(board->GetServo_onVertical());
+    // __actuator_gamma.LinkServo(board->GetServo_onVertical());
 
 }
 

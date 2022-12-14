@@ -1,5 +1,5 @@
 #include "twh_g28_runner.h"
-#include "../twh_arm_solution.h"
+#include "../twh_xz_arm_solution.h"
 
 
 void Twh_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
@@ -63,7 +63,7 @@ void Twh_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         mk.Arm_Angle = DEG_TO_RAD * (-90);
         mk.Arm_shaft_At_Y= 0;
         // Logger::Print("Twh_G28_Runner::SetHomedPosition() Y", 32);
-        Twh_ArmSolution arm;
+        Twh_XzArmSolution arm;
         FKPosition_XYZRPY fk;
         arm.real_MK_to_FK(&mk, &fk);
         this->_arm_solution->SetCurrentPositionAs(&fk);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CNC/arm_solution/arm_solution_base.h"
-#include "twh_arm_solution_config.h"
+#include "twh_xa_arm_solution_config.h"
 
 
 class MiddleKinematic{
@@ -10,7 +10,7 @@ class MiddleKinematic{
 		float Arm_Angle;
 };
 
-class Twh_ArmSolution: public ArmSolutionBase{
+class Twh1_XaArmSolution: public ArmSolutionBase{
     public:
         void MK_to_FK(FKPosition_XYZRPY* from_mk, FKPosition_XYZRPY* to_fk) override;
         void MK_to_Ik(FKPosition_XYZRPY* from_mk, IKPosition_abgdekl* to_ik) override;

@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Robot/robot_base.h"
-#include "MyApps/teeth_wh/board_v2/teeth_wh_board.h"
 // #include "twh_arm_solution.h"
 #include "twh_xz_arm_solution.h"
 #include "twh_circle_loop_arm_solution.h"
 #include "gmcode_runner/twh_g28_runner.h"
 #include "gmcode_runner/twh_m42_switch_output.h"
-#include "MyApps/teeth_wh/board/eef/teeth_wh_eef.h"
+#include "MyApps/teeth_wh_v2/board/teeth_wh_board.h"
+// #include "MyApps/teeth_wh_v2/board/eef/teeth_wh_eef.h"
 
 #define ROWS_COUNT 20
 #define COLS_COUNT 8
@@ -20,10 +20,10 @@
 
 class TeethWarehouse_Robot: public RobotBase{
     public:
-        void Init(TeethWarehouse_Board* board);
+        void Init(Twh2_Board* board);
 
     private:
-        void __InitStatic_Actuators(TeethWarehouse_Board* board);
+        void __InitStatic_Actuators(Twh2_Board* board);
         void _InitStatic_Queues() override;
         void _Init_ArmSolution() override;
 
@@ -34,11 +34,11 @@ class TeethWarehouse_Robot: public RobotBase{
         // CncActuatorServo __actuator_gamma;
         
         CncMover __mover;
-        Twh_ArmSolution __arm_solution;
+        Twh_XzArmSolution __arm_solution;
         Twh_G28_Runner __g28_runner;
         Twh_M42_Runner_Switch_Output __m42_runner;
 
-        Twh_ArmSolution_Config __arm_config;
+        // Twh_ArmSolution_Config __arm_config;
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
         LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
 
