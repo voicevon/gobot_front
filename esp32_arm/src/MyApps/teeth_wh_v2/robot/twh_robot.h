@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Robot/robot_base.h"
-#include "MyApps/teeth_wh/board/teeth_wh_board.h"
+#include "MyApps/teeth_wh/board_v2/teeth_wh_board.h"
 // #include "twh_arm_solution.h"
 #include "twh_xz_arm_solution.h"
 #include "twh_circle_loop_arm_solution.h"

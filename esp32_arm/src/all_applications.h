@@ -16,7 +16,8 @@
 // #define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
 // #define I_AM_VSC
-#define I_AM_TEETH_WAREHOUSE
+#define I_AM_TEETH_WAREHOUSE_V1
+// #define I_AM_TEETH_WAREHOUSE_V2
 
 
 // #define I_AM_ACUPUCTURE_MAIN
@@ -114,7 +115,13 @@
 	#define MQTT_SYNCERS_COUNT  1   
 #endif
 
-#ifdef I_AM_TEETH_WAREHOUSE
+#ifdef I_AM_TEETH_WAREHOUSE_V1
+	#define USING_WIFI_MQTT
+	#define MQTT_SYNCERS_COUNT  1   
+#endif
+
+
+#ifdef I_AM_TEETH_WAREHOUSE_V2
 	#define USING_WIFI_MQTT
 	#define MQTT_SYNCERS_COUNT  1   
 #endif
