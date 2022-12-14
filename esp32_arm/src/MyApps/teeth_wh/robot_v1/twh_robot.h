@@ -29,7 +29,7 @@ class TeethWarehouse_Robot: public RobotBase{
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
         CncActuatorFastStepper __actuator_alpha;
         CncActuatorFastStepper __actuator_beta;
-        CncActuatorServo __actuator_gamma;
+        // CncActuatorServo __actuator_gamma;
         
         CncMover __mover;
         Twh_ArmSolution __arm_solution;
