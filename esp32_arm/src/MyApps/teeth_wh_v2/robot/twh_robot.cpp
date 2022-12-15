@@ -12,8 +12,8 @@ void Twh2_Robot::Init(Twh2_Board* board){
 
     this->_LinkMover(&__mover);
     
-    this->_g28_runner = &this->__g28_runner;
-    __g28_runner.Init(&__mover, &__arm_solution);
+    this->_g28_runner = &this->__g28_runner_corexz;
+    __g28_runner_corexz.Init(&__mover, &__arm_solution_corexz);
 
     this->__m42_runner.Init(board);
     McodeOS::Instance().LinkRunner(&this->__m42_runner);
@@ -39,17 +39,17 @@ void Twh2_Robot::__InitStatic_Actuators(Twh2_Board* board){
 }
 
 void Twh2_Robot::_Init_ArmSolution(){
-    this->_LinkArmSolution_for_planner(&__arm_solution);
+    this->_LinkArmSolution_for_planner(&__arm_solution_corexz);
     // We don't care the value of current position, But  fk_position and ik_position must be consistent
     FKPosition_XYZRPY current;
     current.X = 0;
     current.Y = 0;
     current.Z = 0;
-    __arm_solution.SetCurrentPositionAs(&current);
+    __arm_solution_corexz.SetCurrentPositionAs(&current);
     IKPosition_abgdekl ik;
 
-    __arm_solution.FK_to_IK(&current, &ik);
-    __arm_solution.SetCurrentPositionAs(&ik);
+    __arm_solution_corexz.FK_to_IK(&current, &ik);
+    __arm_solution_corexz.SetCurrentPositionAs(&ik);
 }
 
 

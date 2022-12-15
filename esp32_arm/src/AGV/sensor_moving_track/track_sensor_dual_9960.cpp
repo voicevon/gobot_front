@@ -64,12 +64,12 @@ int16_t TrackSensor_Dual9960::ReadAlignmentError(){
 // when move forward, error is from negtive to positive.
 void TrackSensor_Dual9960::ReadParkingError(int16_t* x_error, int16_t* y_error){
     // return x_error, y_error
-    uint16_t rr,rg,rb,rc;
-    uint16_t lr,lg,lb,lc;
+    // uint16_t rr,rg,rb,rc;
+    // uint16_t lr,lg,lb,lc;
 
 
-    *x_error = rr - rg;
-    *y_error = rr - lr;
+    // *x_error = rr - rg;
+    // *y_error = rr - lr;
 
 }
 

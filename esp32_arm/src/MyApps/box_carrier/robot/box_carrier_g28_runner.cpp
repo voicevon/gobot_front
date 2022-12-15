@@ -11,15 +11,15 @@ void BoxCarrier_G28_Runner::Init( CncMover* mover, ArmSolutionBase* arm_solution
     // homing.DistanceToGo = TWO_PI;
     
     Logger::Info("BoxCarrier_G28_Runner::Init() Alpha axis home_triggers");
-    PositionTrigger* trigger;
-    trigger = PositionTrigger_Array::Instance().GetPositionTrigger(0);
+    // PositionTrigger* trigger;
+    // trigger = PositionTrigger_Array::Instance().GetPositionTrigger(0);
     // trigger = board->GetPositionTrigger(0);
     // trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,
     // trigger->AxisName  = 'X';    
     // __homer.AppendPositionTrigger(trigger);
 
     // trigger = board->GetPositionTrigger(1);
-    trigger = PositionTrigger_Array::Instance().GetPositionTrigger(1);
+    // trigger = PositionTrigger_Array::Instance().GetPositionTrigger(1);
     // trigger->SetTriggerPosition(TWO_PI * 90 / 386);     //at pitch 90 , total 386 pitches, value = TWOPI *(90/386)
     // trigger->AxisName='Z';
     // __homer.AppendPositionTrigger(trigger);
