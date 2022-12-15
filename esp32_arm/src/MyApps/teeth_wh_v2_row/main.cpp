@@ -1,5 +1,5 @@
 #include "all_applications.h"
-#ifdef I_AM_TEETH_WAREHOUSE_V2
+#ifdef I_AM_TEETH_WAREHOUSE_V2_ROW
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
@@ -14,11 +14,14 @@ Twh2_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
-Twh2_App app;
-Twh2_Robot robot;
+Twh2Row_App app;
+Twh2Row_Robot robot;
 
 void test_board(){
     board.Test_PositionTriggers(0);
+    board.Test_Servo_Vertical_Move(0);
+    board.Test_Servo_VacuumSwitch(0);
+    board.Test_VacuumPump(0);
     board.Test_SingleStepper(AXIS_ALPHA, 0);
     board.Test_SingleStepper(AXIS_BETA, 0);
     board.Test_DualStepper(0);

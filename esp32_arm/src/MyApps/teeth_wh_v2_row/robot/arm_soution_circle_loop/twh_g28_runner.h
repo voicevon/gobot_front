@@ -1,6 +1,6 @@
 #include "Robot/gcode_runner/g28_runner.h"
 
-class Twh2_G28_Runner_CircleLoop: public G28_Runner{
+class Twh2Row_G28_Runner_CircleLoop: public G28_Runner{
     public:
         void Init(CncMover* mover, ArmSolutionBase* arm_solution) override;
 

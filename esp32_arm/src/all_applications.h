@@ -18,6 +18,7 @@
 // #define I_AM_VSC
 // #define I_AM_TEETH_WAREHOUSE_V1
 #define I_AM_TEETH_WAREHOUSE_V2
+// #define I_AM_TEETH_WAREHOUSE_V2_ROW
 
 
 // #define I_AM_ACUPUCTURE_MAIN

@@ -4,35 +4,57 @@
 
 #define PIN_HOMER_SENSOR_HALL_ALPHA  17 //23
 #define PIN_HOMER_SENSOR_HALL_X  4 //16
-#define PIN_VACUUME_PUMP 0 // 33
+// #define PIN_VACUUME_PUMP 0 // 33
 
-#define PIN_SERVO_EEF_VERTICAL 18   
-#define PIN_SERVO_VACUUM_SWITCH 19  
+// #define PIN_SERVO_EEF_VERTICAL 18   
+// #define PIN_SERVO_VACUUM_SWITCH 19  
 
 #define PIN_IR_CHECKING 32
 
-#define PIN_HX711_CLK 22
-#define PIN_HX711_DATA 22
+// #define PIN_HX711_CLK 22
+// #define PIN_HX711_DATA 22
 
 #define PIN_VL6180_XXX 22
 #define PIN_VL6180_XXX 22
 #define PIN_VL6180_XXX 22
 
-#define PIN_ALPHA_DIR 14 //32  
+// #define PIN_ALPHA_DIR 14 //32  
 #define PIN_ALPHA_STEP 12 //26   
-#define PIN_BETA_DIR  15 //14  
+// #define PIN_BETA_DIR  15 //14  
 #define PIN_BETA_STEP  26 //12  
-#define PIN_STEPPER_ENABLE 13
+// #define PIN_STEPPER_ENABLE 13
 
+#define PIN_POSITION_TRIGGER_X  128
+#define PIN_POSITION_TRIGGER_Z  5
+#define PIN_POSITION_TRIGGER_ROW_0 129
+#define PIN_POSITION_TRIGGER_ROW_1 129
+#define PIN_POSITION_TRIGGER_ROW_2 129
+#define PIN_POSITION_TRIGGER_ROW_3 129
+#define PIN_POSITION_TRIGGER_ROW_4 129
+#define PIN_POSITION_TRIGGER_ROW_5 129
+#define PIN_POSITION_TRIGGER_ROW_6 129
+
+#define PIN_STEPPER_DIR_ROW_0  133
+#define PIN_STEPPER_DIR_ROW_1  133
+#define PIN_STEPPER_DIR_ROW_2  133
+#define PIN_STEPPER_DIR_ROW_3  133
+#define PIN_STEPPER_DIR_ROW_4  133
+#define PIN_STEPPER_DIR_ROW_5  133
+#define PIN_STEPPER_DIR_ROW_6  133
+
+#define PIN_STEPPER_DIR_ALPHA  144
+#define PIN_STEPPER_DIR_BETA   144
+
+#define PIN_STEPPERS_ENABLE 155
 
 // Index number
 #define POSITION_TRIGGER_ALPHA 0
 #define POSITION_TRIGGER_X  1
-#define SERVO_VACUUM_SWITCH  0
-#define SERVO_EEF_VERTICAL 1
+// #define SERVO_VACUUM_SWITCH  0
+// #define SERVO_EEF_VERTICAL 1
 
 
-void TeethWarehouse_Board::Init(bool is_on_reset){
+void Twh2Row_Board::Init(bool is_on_reset){
     if (is_on_reset){
         Serial.begin(115200);
         Serial.println("I am Teeth Warehouse.");
@@ -44,20 +66,6 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
     __all_position_triggers[POSITION_TRIGGER_X].Init('a', PIN_HOMER_SENSOR_HALL_X, HIGH);
     // __all_position_triggers[2].Init(PIN_HOMER_SENSOR_HALL_2, LOW);
     PositionTrigger_Array::Instance().Init(__all_position_triggers, HOME_TRIGGER_COUNT);
-    
-    // Disable vacuumPump
-    pinMode(PIN_VACUUME_PUMP, OUTPUT);
-    this->EnableVacuumPump(false);
-
-
-    // Init servo.
-    ESP32PWM::allocateTimer(0);   //https://github.com/madhephaestus/ESP32Servo/blob/master/examples/Multiple-Servo-Example-Arduino/Multiple-Servo-Example-Arduino.ino
-    __all_servos[SERVO_EEF_VERTICAL].setPeriodHertz(50);  // Standard 50hz servo
-    __all_servos[SERVO_EEF_VERTICAL].attach(PIN_SERVO_EEF_VERTICAL);
-    __all_servos[SERVO_EEF_VERTICAL].write(260);
-    
-    __all_servos[SERVO_VACUUM_SWITCH].setPeriodHertz(50);  // Standard 50hz servo
-    __all_servos[SERVO_VACUUM_SWITCH].attach(PIN_SERVO_VACUUM_SWITCH);
 
     __InitSteppers();
 
@@ -82,53 +90,45 @@ void TeethWarehouse_Board::Init(bool is_on_reset){
 
 }
 
-void TeethWarehouse_Board::__InitSteppers(){
+void Twh2Row_Board::__InitSteppers(){
     __stepper_engine.init(1);
     __stepper_alpha = __stepper_engine.stepperConnectToPin(PIN_ALPHA_STEP);  // for alpha=27, for beta=12
     __stepper_beta = __stepper_engine.stepperConnectToPin(PIN_BETA_STEP);  // for alpha=27, for beta=12
 
+    // __stepper_rows[0] = __stepper_engine.stepperConnectToPin(PIN_STER);
+
     if (__stepper_alpha) {
-        __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR);   //for alpha=26, for beta = 14
-        __stepper_alpha->setEnablePin(PIN_STEPPER_ENABLE);                            
+        __stepper_alpha->setDirectionPin(PIN_STEPPER_DIR_ALPHA);   //for alpha=26, for beta = 14
+        __stepper_alpha->setEnablePin(PIN_STEPPERS_ENABLE);                            
         __stepper_alpha->setAutoEnable(false);
 
         __stepper_alpha->setSpeedInUs(1000);  // the parameter is us/step !!!
         __stepper_alpha->setAcceleration(100);
         // int res =  __stepper_alpha->moveTo(-1000, false);
         // Logger::Print("moveTo() returns", res);
-        Logger::Info("TeethWarehouse_Board::Init()");
+        Logger::Info("Twh2Row_Board::Init()");
         Logger::Print("stepper alpha is OK.", 0);
     }else{
-        Logger::Error("TeethWarehouse_Board::Init() ");
+        Logger::Error("Twh2Row_Board::Init() ");
         Logger::Halt("failed FastAccelStepper.");
     }
 
     if (__stepper_beta) {
-        __stepper_beta->setDirectionPin(PIN_BETA_DIR);   //for alpha=26, for beta = 14
-        __stepper_beta->setEnablePin(PIN_STEPPER_ENABLE);                          
+        __stepper_beta->setDirectionPin(PIN_STEPPER_DIR_BETA);   //for alpha=26, for beta = 14
+        __stepper_beta->setEnablePin(PIN_STEPPERS_ENABLE);                          
         __stepper_beta->setAutoEnable(false);
 
         __stepper_beta->setSpeedInUs(1000);  // the parameter is us/step !!!
         __stepper_beta->setAcceleration(100);
-        Logger::Info("TeethWarehouse_Board::Init()");
+        Logger::Info("Twh2Row_Board::Init()");
         Logger::Print("stepper alpha is OK.", 0);
     }else{
-        Logger::Error("TeethWarehouse_Board::Init() ");
+        Logger::Error("Twh2Row_Board::Init() ");
         Logger::Halt("failed FastAccelStepper.");
     }
 }
 
-Servo* TeethWarehouse_Board::GetServo_onVertical(){
-    return &__all_servos[SERVO_EEF_VERTICAL];
-}
-
-void TeethWarehouse_Board::EnableVacuumPump(bool enable_it){
-
-    Logger::Print("TeethWarehouse_Board::EnableVacuumPump()  enable_it", enable_it );
-    digitalWrite(PIN_VACUUME_PUMP, !enable_it);
-}
-
-void TeethWarehouse_Board::Test_PositionTriggers(int loops){
+void Twh2Row_Board::Test_PositionTriggers(int loops){
     uint32_t flags = 0;
     uint32_t last_flags = 999;
     int count =0;
@@ -152,7 +152,7 @@ void TeethWarehouse_Board::Test_PositionTriggers(int loops){
     }
 }
 
-void TeethWarehouse_Board::Test_SingleStepper(int index, int loops){
+void Twh2Row_Board::Test_SingleStepper(int index, int loops){
     FastAccelStepper* stepper;
     if (index==0)  stepper = __stepper_alpha;
     if (index==1)  stepper = __stepper_beta;
@@ -161,11 +161,7 @@ void TeethWarehouse_Board::Test_SingleStepper(int index, int loops){
         Logger::Print("Test stepper loop=", i);
         if (stepper) {
             // 5 circles.
-            int8_t move_ok = stepper->moveTo(360.0f / 1.80f * 16 * 1, false);  // should return MOVE_OK
-            if (move_ok != MOVE_OK){
-                Logger::Error("TeethWarehouse_Board::Test_SingleStepper stepper->MoveTo()");
-                Logger::Print("move_ok", move_ok);
-            }
+            stepper->moveTo(360.0f /1.8f * 16 * 1, false);
             while (stepper->isRunning()){
                 Logger::Print("Current position", stepper->getCurrentPosition());
                 delay(300);
@@ -199,7 +195,7 @@ void TeethWarehouse_Board::Test_SingleStepper(int index, int loops){
         
 }
 
-void TeethWarehouse_Board::Test_DualStepper(int loops){
+void Twh2Row_Board::Test_DualStepper(int loops){
     __stepper_alpha->enableOutputs();
     for (int i=0; i<loops; i++){
         Logger::Info("Test_DualStepper");
@@ -223,74 +219,7 @@ void TeethWarehouse_Board::Test_DualStepper(int loops){
     }
     __stepper_alpha->disableOutputs();
 }
-
-void TeethWarehouse_Board::Test_Hx711(int loops){
-
-    __hx711.set_scale(2280.f);          // this value is obtained by calibrating the scale with known weights; see the README for details
-    __hx711.tare();				        // reset the scale to 0
-
-    Serial.print("one reading:\t");
-    Serial.print(__hx711.get_units(), 1);
-    Serial.print("\t| average:\t");
-    Serial.println(__hx711.get_units(10), 1);
-
-    __hx711.power_down();			        // put the ADC in sleep mode
-    delay(5000);
-    __hx711.power_up();
-}
-
-void TeethWarehouse_Board::Test_Servo_Vertical_Move(int loops){
-    int pos = 0;      // position in degrees
-    for (int loop=0; loop<loops; loop++){
-        Logger::Print("SERVO_EEF_VERTICAL  count", loop);
-        Logger::Print("write angle", 0);
-        __all_servos[SERVO_EEF_VERTICAL].write(0);
-        delay(9000);
-        Logger::Print("write angle", 270);
-        __all_servos[SERVO_EEF_VERTICAL].write(270);
-        delay(9000);
-    }
-}
-
-void TeethWarehouse_Board::Test_Servo_VacuumSwitch(int loops){
-    for (int loop=0; loop<loops; loop++){
-        Serial.print("Air switch loop = ");
-        Serial.print(loop);
-        Serial.print("  Enable   ");
-        EnableVacuumSwitch(true);
-        delay(3000);
-        Serial.print("  Disable   ");
-        EnableVacuumSwitch(false);
-        delay(3000);
-        Serial.println("");
-    }
-}
-
-void TeethWarehouse_Board::EnableVacuumSwitch(bool enable_it){
-    int angle = 0;
-    if (enable_it) angle = 270;
-    if (enable_it) angle = 5;
-    // __servo_air_switch.write(angle);
-    __all_servos[SERVO_VACUUM_SWITCH].write(angle);
-}
-
-void TeethWarehouse_Board::Test_VacuumPump(int loops){
-    for (int loop=0; loop<loops; loop++){
-        Serial.print (loop);
-        // turn on
-        digitalWrite(PIN_VACUUME_PUMP, LOW);
-        Serial.print("\t\tON    ");
-        delay(5000);
-        // turn off
-        digitalWrite(PIN_VACUUME_PUMP, HIGH);
-        Serial.print("OFF    ");
-        delay(5000);
-
-        Serial.println("");
-    }
-}
-
-void TeethWarehouse_Board::Test_VL6180x(){
+// void Twh2Row_Board::Test_VL6180x(){
     // VL6180xIdentification identification;
     // sensor.getIdentification(&identification); // Retrieve manufacture info from device memory
     // // printIdentification(&identification);      // Helper function to print all the Module information
@@ -320,4 +249,4 @@ void TeethWarehouse_Board::Test_VL6180x(){
     // Serial.println(identification->idTime * 2);
     // Serial.println();
     // Serial.println();
-}
+// }
