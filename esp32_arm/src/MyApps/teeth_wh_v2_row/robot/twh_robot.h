@@ -5,7 +5,6 @@
 #include "arm_soution_circle_loop/twh_g28_runner.h"
 #include "gmcode_runner/twh_m42_switch_output.h"
 #include "MyApps/teeth_wh_v2/board/teeth_wh_board.h"
-// #include "MyApps/teeth_wh_v2/board/eef/teeth_wh_eef.h"
 
 #define ROWS_COUNT 20
 #define COLS_COUNT 8
@@ -33,7 +32,7 @@ class Twh2Row_Robot: public RobotBase{
         
         Twh2_Circleloop_ArmSolution __arm_solution;
         CncMover __mover;
-        Twh2Row_G28_Runner_CircleLoop __g28_runner;
+        Twh2Row_G28_Runner __g28_runner;
         Twh2Row_M42_Runner_Switch_Output __m42_runner;
         
 
@@ -41,7 +40,7 @@ class Twh2Row_Robot: public RobotBase{
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
         LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
 
-        float __GetWeight();
-        void __GetDistanceToTeeth();
+        // float __GetWeight();
+        // void __GetDistanceToTeeth();
 
 };

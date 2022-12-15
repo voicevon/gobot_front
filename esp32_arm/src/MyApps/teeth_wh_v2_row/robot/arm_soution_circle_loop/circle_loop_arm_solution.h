@@ -12,6 +12,6 @@ class Twh2_Circleloop_ArmSolution: public ArmSolutionBase{
         void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPY*  to_fk) override;
 
     private:
-        float __sensor_slope;
-        float __sensor_offset;
+        float __slope;
+        float __offset;
 };
