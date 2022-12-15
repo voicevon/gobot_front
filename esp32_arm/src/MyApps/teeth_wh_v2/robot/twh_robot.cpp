@@ -4,8 +4,8 @@
 
 
 
-void TeethWarehouse_Robot::Init(Twh2_Board* board){
-    Logger::Debug("TeethWarehouse_Robot::Init()");
+void Twh2_Robot::Init(Twh2_Board* board){
+    Logger::Debug("Twh2_Robot::Init()");
     this->_InitStatic_Queues();
     this->__InitStatic_Actuators(board);
     this->_Init_ArmSolution();
@@ -20,8 +20,8 @@ void TeethWarehouse_Robot::Init(Twh2_Board* board){
 
 }
 
-void TeethWarehouse_Robot::__InitStatic_Actuators(Twh2_Board* board){
-    Logger::Info("TeethWarehouse_Robot::Init() Actuators.");
+void Twh2_Robot::__InitStatic_Actuators(Twh2_Board* board){
+    Logger::Info("Twh2_Robot::Init() Actuators.");
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
     CncActuator_List::Instance().AddActuator(&__actuator_beta);
@@ -38,7 +38,7 @@ void TeethWarehouse_Robot::__InitStatic_Actuators(Twh2_Board* board){
 
 }
 
-void TeethWarehouse_Robot::_Init_ArmSolution(){
+void Twh2_Robot::_Init_ArmSolution(){
     this->_LinkArmSolution_for_planner(&__arm_solution);
     // We don't care the value of current position, But  fk_position and ik_position must be consistent
     FKPosition_XYZRPY current;
@@ -53,7 +53,7 @@ void TeethWarehouse_Robot::_Init_ArmSolution(){
 }
 
 
-void TeethWarehouse_Robot::_InitStatic_Queues(){
+void Twh2_Robot::_InitStatic_Queues(){
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     // Init LineSegment queue head
     Queue_LineSegment::Instance()._all_queue_ables = (Queue_able*) this->__all_line_segments;
@@ -64,7 +64,7 @@ void TeethWarehouse_Robot::_InitStatic_Queues(){
     line->TargetPosition.Roll = 0;
     line->TargetPosition.Pitch = 0;
     line->TargetPosition.Yaw = 0;
-    line->PrintOUt("caller: TeethWarehouse_Robot::_InitStatic_Queues()");
+    line->PrintOUt("caller: Twh2_Robot::_InitStatic_Queues()");
     Queue_LineSegment::Instance().Deposit();
-    Logger::Print("TeethWarehouse_Robot::Init", 83);
+    Logger::Print("Twh2_Robot::Init", 83);
 }

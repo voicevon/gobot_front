@@ -3,17 +3,17 @@
 #include <HardwareSerial.h>
 
 
-TeethWarehouse_App::TeethWarehouse_App(){
+Twh2_App::Twh2_App(){
 
 
-    Serial.print("\n[Info] TeethWarehouse_App::TeethWarehouse_App() is constructed");
+    Serial.print("\n[Info] Twh2_App::Twh2_App() is constructed");
 }
 
 
 
-void TeethWarehouse_App::AsyncExecuteMqttCommand(const char* command){
+void Twh2_App::AsyncExecuteMqttCommand(const char* command){
     String str_command = String(command);
-    // Logger::Info("TeethWarehouse_App::ExecuteMqttCommand()");
+    // Logger::Info("Twh2_App::ExecuteMqttCommand()");
     bool debug = false;
     if (debug){
         Logger::Print("command",str_command);

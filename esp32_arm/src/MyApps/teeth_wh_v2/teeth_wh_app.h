@@ -3,15 +3,16 @@
 #include "MyApps/app_base.h"
 #include "robot/twh_robot.h"
 
-class TeethWarehouse_App: public AppBase{
+class Twh2_App: public AppBase{
     public:
-        TeethWarehouse_App();
-        void LinkRobot(TeethWarehouse_Robot* robot){this->__robot=robot;};
+        Twh2_App();
+        void LinkRobot(Twh2_Robot* robot){this->__robot=robot;};
         void AsyncExecuteMqttCommand(const char*) override;
         
     private:
 
-        TeethWarehouse_Robot* __robot;
+        // Twh2_XzArmSolution_Config* __robot;
+        Twh2_Robot* __robot;
         // CncActuatorDcMotor* __motor;
         // int __position_in_pitch[LAYER_COUNT];
         // int __GEAR_TEETH = 56;

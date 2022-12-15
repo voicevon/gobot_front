@@ -15,7 +15,7 @@ void McodeOS::SetupRunner(Gcode* mcode){
 // return true:  running is finished ,
 // return false: running is on the go, will keep a long time, like test_position_trigger 99 times.
 bool McodeOS::RunnerLoop(){
-    __current_runner->RunnerLoop();
+    return __current_runner->RunnerLoop();
 }
 
 McodeRunnerBase* McodeOS::GetRunner(int mcode_id){

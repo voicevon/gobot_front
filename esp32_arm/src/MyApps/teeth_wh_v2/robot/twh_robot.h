@@ -18,7 +18,7 @@
 #define CNC_ACTUATORS_COUNT 3
 
 
-class TeethWarehouse_Robot: public RobotBase{
+class Twh2_Robot: public RobotBase{
     public:
         void Init(Twh2_Board* board);
 
@@ -35,8 +35,8 @@ class TeethWarehouse_Robot: public RobotBase{
         
         CncMover __mover;
         Twh2_XzArmSolution __arm_solution;
-        Twh_G28_Runner __g28_runner;
-        Twh_M42_Runner_Switch_Output __m42_runner;
+        Twh2_G28_Runner __g28_runner;
+        Twh2_M42_Runner_Switch_Output __m42_runner;
 
         // Twh_ArmSolution_Config __arm_config;
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 

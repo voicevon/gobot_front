@@ -14,8 +14,8 @@ Twh2_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
-TeethWarehouse_App app;
-TeethWarehouse_Robot robot;
+Twh2_App app;
+Twh2_Robot robot;
 
 void test_board(){
     board.Test_PositionTriggers(0);

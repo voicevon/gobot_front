@@ -28,6 +28,6 @@ class Twh2_XzArmSolution: public ArmSolutionBase{
         void IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk) override;
 
     private:
-        Twh_XzArmSolution_Config __config;
+        Twh2_XzArmSolution_Config __config;
 };
 
