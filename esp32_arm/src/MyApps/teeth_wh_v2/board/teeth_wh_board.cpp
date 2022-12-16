@@ -4,54 +4,27 @@
 
 #define PIN_HOMER_SENSOR_HALL_ALPHA  17 //23
 #define PIN_HOMER_SENSOR_HALL_X  4 //16
-// #define PIN_VACUUME_PUMP 0 // 33
-
-// #define PIN_SERVO_EEF_VERTICAL 18   
-// #define PIN_SERVO_VACUUM_SWITCH 19  
 
 #define PIN_IR_CHECKING 32
 
-// #define PIN_HX711_CLK 22
-// #define PIN_HX711_DATA 22
-
 #define PIN_VL6180_XXX 22
 #define PIN_VL6180_XXX 22
 #define PIN_VL6180_XXX 22
 
-// #define PIN_ALPHA_DIR 14 //32  
+#define PIN_ALPHA_DIR 14 //32  
 #define PIN_ALPHA_STEP 12 //26   
-// #define PIN_BETA_DIR  15 //14  
+#define PIN_BETA_DIR  15 //14  
 #define PIN_BETA_STEP  26 //12  
-// #define PIN_STEPPER_ENABLE 13
+#define PIN_STEPPER_ENABLE 13
 
 #define PIN_POSITION_TRIGGER_X  128
 #define PIN_POSITION_TRIGGER_Z  5
-#define PIN_POSITION_TRIGGER_ROW_0 129
-#define PIN_POSITION_TRIGGER_ROW_1 129
-#define PIN_POSITION_TRIGGER_ROW_2 129
-#define PIN_POSITION_TRIGGER_ROW_3 129
-#define PIN_POSITION_TRIGGER_ROW_4 129
-#define PIN_POSITION_TRIGGER_ROW_5 129
-#define PIN_POSITION_TRIGGER_ROW_6 129
-
-#define PIN_STEPPER_DIR_ROW_0  133
-#define PIN_STEPPER_DIR_ROW_1  133
-#define PIN_STEPPER_DIR_ROW_2  133
-#define PIN_STEPPER_DIR_ROW_3  133
-#define PIN_STEPPER_DIR_ROW_4  133
-#define PIN_STEPPER_DIR_ROW_5  133
-#define PIN_STEPPER_DIR_ROW_6  133
-
-#define PIN_STEPPER_DIR_ALPHA  144
-#define PIN_STEPPER_DIR_BETA   144
 
 #define PIN_STEPPERS_ENABLE 155
 
 // Index number
 #define POSITION_TRIGGER_ALPHA 0
 #define POSITION_TRIGGER_X  1
-// #define SERVO_VACUUM_SWITCH  0
-// #define SERVO_EEF_VERTICAL 1
 
 
 void Twh2_Board::Init(bool is_on_reset){
@@ -67,25 +40,7 @@ void Twh2_Board::Init(bool is_on_reset){
 
     __InitSteppers();
 
-    // Init Hx711
-    // __hx711.begin(PIN_HX711_DATA, PIN_HX711_CLK);
-
-    // Init VL6180
-    // Wire.begin();         // Start I2C library
-    // delay(100);           // delay .1s
-
-
-
-    // if (sensor.VL6180xInit() != 0)
-    // {
-    //     Serial.println("Failed to initialize. Freezing..."); // Initialize device and check for errors
-    //     while (1);
-    // }
-
-    // sensor.VL6180xDefautSettings(); // Load default settings to get started.
-
-    // delay(1000); // delay 1s
-
+    
 }
 
 void Twh2_Board::__InitSteppers(){
@@ -94,7 +49,7 @@ void Twh2_Board::__InitSteppers(){
     __stepper_beta = __stepper_engine.stepperConnectToPin(PIN_BETA_STEP);  // for alpha=27, for beta=12
 
     if (__stepper_alpha) {
-        __stepper_alpha->setDirectionPin(PIN_STEPPER_DIR_ALPHA);   //for alpha=26, for beta = 14
+        __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR);   //for alpha=26, for beta = 14
         __stepper_alpha->setEnablePin(PIN_STEPPERS_ENABLE);                            
         __stepper_alpha->setAutoEnable(false);
 
@@ -110,7 +65,7 @@ void Twh2_Board::__InitSteppers(){
     }
 
     if (__stepper_beta) {
-        __stepper_beta->setDirectionPin(PIN_STEPPER_DIR_BETA);   //for alpha=26, for beta = 14
+        __stepper_beta->setDirectionPin(PIN_BETA_DIR);   //for alpha=26, for beta = 14
         __stepper_beta->setEnablePin(PIN_STEPPERS_ENABLE);                          
         __stepper_beta->setAutoEnable(false);
 

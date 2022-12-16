@@ -7,13 +7,13 @@
 #include "MyApps/teeth_wh_v1/board/teeth_wh_board.h"
 #include "MyApps/teeth_wh_v1/board/eef/teeth_wh_eef.h"
 
-#define ROWS_COUNT 20
-#define COLS_COUNT 8
+// #define ROWS_COUNT 20
+// #define COLS_COUNT 8
 
 #define QUEUE_LINE_SEGMENT_COUNT 5
 #define QUEUE_PLANNER_BLOCK_COUNT 88
 
-#define CNC_ACTUATORS_COUNT 3
+#define CNC_ACTUATORS_COUNT 2
 
 
 class Twh1_Robot: public RobotBase{

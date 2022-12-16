@@ -15,8 +15,8 @@ void Twh2Row_Robot::Init(Twh2_Board* board){
     this->_g28_runner = &this->__g28_runner;
     __g28_runner.Init(&__mover, &__arm_solution);
 
-    this->__m42_runner.Init(board);
-    McodeOS::Instance().LinkRunner(&this->__m42_runner);
+    // this->__m42_runner.Init(board);
+    // McodeOS::Instance().LinkRunner(&this->__m42_runner);
 
 }
 
@@ -24,15 +24,15 @@ void Twh2Row_Robot::__InitStatic_Actuators(Twh2_Board* board){
     Logger::Info("Twh2Row_Robot::Init() Actuators.");
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
-    CncActuator_List::Instance().AddActuator(&__actuator_beta);
+    // CncActuator_List::Instance().AddActuator(&__actuator_beta);
     // CncActuator_List::Instance().AddActuator(&__actuator_gamma);
 
     this->__actuator_alpha.MyName = 'a';
-    this->__actuator_beta.MyName = 'b';
+    // this->__actuator_beta.MyName = 'b';
     // this->__actuator_gamma.MyName = 'g';
     
     __actuator_alpha.LinkStepper(board->GetStepper_Alpha());
-    __actuator_beta.LinkStepper(board->GetStepper_Beta());
+    // __actuator_beta.LinkStepper(board->GetStepper_Beta());
 
     // __actuator_gamma.LinkServo(board->GetServo_onVertical());
 

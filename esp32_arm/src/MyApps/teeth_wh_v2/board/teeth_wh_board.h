@@ -2,15 +2,11 @@
 
 #include "CNC/board/cnc_board_base.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
-// #include "CNC/Actuator/servo/cnc_actuator_servo.h"
 #include "Robot/axis_homer/position_trigger_array.h" 
-// #include "HX711.h"
 #include "VL6180X.h"
-// #include <ESP32Servo.h>
 #include "FastAccelStepper.h"
 
-#define HOME_TRIGGER_COUNT 9
-// #define SERVO_COUNT 2
+#define HOME_TRIGGER_COUNT 92
 
 class Twh2_Board: public CncBoardBase{
     public:

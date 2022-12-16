@@ -11,11 +11,6 @@ class Twh2_App: public AppBase{
         
     private:
 
-        // Twh2_XzArmSolution_Config* __robot;
         Twh2_Robot* __robot;
-        // CncActuatorDcMotor* __motor;
-        // int __position_in_pitch[LAYER_COUNT];
-        // int __GEAR_TEETH = 56;
-        // int __PITCH_COUNT = 157;
 
 };

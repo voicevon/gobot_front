@@ -6,8 +6,8 @@
 #include "gmcode_runner/twh_m42_switch_output.h"
 #include "MyApps/teeth_wh_v2/board/teeth_wh_board.h"
 
-#define ROWS_COUNT 20
-#define COLS_COUNT 8
+// #define ROWS_COUNT 20
+// #define COLS_COUNT 8
 
 #define QUEUE_LINE_SEGMENT_COUNT 5
 #define QUEUE_PLANNER_BLOCK_COUNT 88
