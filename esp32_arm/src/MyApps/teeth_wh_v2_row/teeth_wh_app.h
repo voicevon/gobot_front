@@ -5,17 +5,12 @@
 
 class Twh2Row_App: public AppBase{
     public:
-        Twh2Row_App();
+        Twh2Row_App(int row_id);
         void LinkRobot(Twh2Row_Robot* robot){this->__robot=robot;};
         void AsyncExecuteMqttCommand(const char*) override;
         
     private:
-
-        // Twh2_XzArmSolution_Config* __robot;
+        int __row_id = 0;
         Twh2Row_Robot* __robot;
-        // CncActuatorDcMotor* __motor;
-        // int __position_in_pitch[LAYER_COUNT];
-        // int __GEAR_TEETH = 56;
-        // int __PITCH_COUNT = 157;
 
 };

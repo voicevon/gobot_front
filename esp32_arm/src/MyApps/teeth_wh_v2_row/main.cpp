@@ -1,6 +1,8 @@
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_V2_ROW
 
+#define MY_ROBOT_ROW_ID 1
+
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "MyApps/teeth_wh_v2_row/board/teeth_wh_board.h"
@@ -14,7 +16,7 @@ Twh2_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
-Twh2Row_App app;
+Twh2Row_App app(MY_ROBOT_ROW_ID);
 Twh2Row_Robot robot;
 
 void test_board(){

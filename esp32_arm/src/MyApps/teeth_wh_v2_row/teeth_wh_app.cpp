@@ -3,9 +3,8 @@
 #include <HardwareSerial.h>
 
 
-Twh2Row_App::Twh2Row_App(){
-
-
+Twh2Row_App::Twh2Row_App(int row_id){
+    this->__row_id = row_id;
     Serial.print("\n[Info] Twh2Row_App::Twh2Row_App() is constructed");
 }
 
@@ -27,7 +26,11 @@ void Twh2Row_App::AsyncExecuteMqttCommand(const char* command){
         Serial.println();
     }
     Gcode my_gcode = Gcode(command);
-    this->_gcode_queue->AppendGcodeCommand(command);
+    if (my_gcode.g == 1){
+        if (my_gcode.get_value('R') == this->__row_id){
+            this->_gcode_queue->AppendGcodeCommand(command);
+        }
+    }
 
         // Complete command example:  
         // payload: "twh_store R12C0"      //store to row=12, col=0

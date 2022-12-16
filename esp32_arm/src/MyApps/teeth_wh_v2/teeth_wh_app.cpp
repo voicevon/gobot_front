@@ -4,8 +4,6 @@
 
 
 Twh2_App::Twh2_App(){
-
-
     Serial.print("\n[Info] Twh2_App::Twh2_App() is constructed");
 }
 
