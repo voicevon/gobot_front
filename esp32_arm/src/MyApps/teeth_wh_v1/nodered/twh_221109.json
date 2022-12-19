@@ -179,10 +179,30 @@
             "28967f28423812cd",
             "6c045c858d53c619"
         ],
-        "x": 234,
+        "x": 274,
         "y": 2133,
         "w": 1638,
         "h": 288
+    },
+    {
+        "id": "1a9e515cc5cd13d7",
+        "type": "group",
+        "z": "3b3b51ba9856c9a7",
+        "name": "Debug triggers",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "4bea98f760f6d93d",
+            "c62c0edda53adde3",
+            "771b8fd3e7a7aa8e",
+            "80d1c94e390c77d5",
+            "b22a4529b8650f22"
+        ],
+        "x": 14,
+        "y": 879,
+        "w": 252,
+        "h": 782
     },
     {
         "id": "6f75cbb5b20dcf69",
@@ -237,30 +257,10 @@
             "34bf51da37bc5553",
             "5f8384ece0aab120"
         ],
-        "x": 1334,
+        "x": 1374,
         "y": 2159,
         "w": 512,
         "h": 82
-    },
-    {
-        "id": "1a9e515cc5cd13d7",
-        "type": "group",
-        "z": "3b3b51ba9856c9a7",
-        "name": "Debug triggers",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "4bea98f760f6d93d",
-            "c62c0edda53adde3",
-            "771b8fd3e7a7aa8e",
-            "80d1c94e390c77d5",
-            "b22a4529b8650f22"
-        ],
-        "x": 14,
-        "y": 899,
-        "w": 232,
-        "h": 782
     },
     {
         "id": "e8349c823e922a57",
@@ -1212,7 +1212,7 @@
         "type": "function",
         "z": "3b3b51ba9856c9a7",
         "name": "Create pickups",
-        "func": "for (var i=1;i<948;i++){\n    var row = i *2;\n    var col = i;\n    var is_withdraw = true;\n    msg.topic = \"twh_withdraw\";\n    msg.payload = {'dev':'221109', 'command': 'withdraw', 'cell': { 'row': 1, 'col': 1 } };\n    node.send(msg);\n}\nmsg.payload = {'dev':'221109','command':'end_withdraw'};\nreturn msg",
+        "func": "msg.topic = \"twh_withdraw\";\nfor (var i=1;i<948;i++){\n    var row = i *2;\n    var col = i;\n    var is_withdraw = true;\n    msg.payload = {'dev':'221109', 'command': 'withdraw', 'cell': { 'row': 1, 'col': 1 } };\n    node.send(msg);\n}\nmsg.payload = { 'dev': '221109', 'command': 'end_withdraw', 'cell': { 'row': 1, 'col': 1 }};\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1249,7 +1249,7 @@
         "type": "inject",
         "z": "3b3b51ba9856c9a7",
         "g": "1a9e515cc5cd13d7",
-        "name": "",
+        "name": "Withdraw",
         "props": [
             {
                 "p": "payload"
@@ -1266,8 +1266,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 140,
-        "y": 1640,
+        "x": 160,
+        "y": 1620,
         "wires": [
             [
                 "021830f9f7d66802"
@@ -1278,9 +1278,10 @@
         "id": "16ca59e0e78e000c",
         "type": "mqtt in",
         "z": "3b3b51ba9856c9a7",
+        "d": true,
         "g": "c84e9bdfcdd9622c",
         "name": "",
-        "topic": "twh_221109_gcode_feedback",
+        "topic": "twh/221109/gcode_feed/fb",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "d1d506186f8ae701",
@@ -1288,7 +1289,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 380,
+        "x": 410,
         "y": 2360,
         "wires": [
             [
@@ -1300,9 +1301,10 @@
         "id": "1fc120fb37d76447",
         "type": "mqtt out",
         "z": "3b3b51ba9856c9a7",
+        "d": true,
         "g": "c84e9bdfcdd9622c",
         "name": "",
-        "topic": "twh_221109_gcode_feed",
+        "topic": "twh/221109/gcode_feed",
         "qos": "2",
         "retain": "true",
         "respTopic": "",
@@ -1311,7 +1313,7 @@
         "correl": "",
         "expiry": "",
         "broker": "d1d506186f8ae701",
-        "x": 1450,
+        "x": 1530,
         "y": 2380,
         "wires": []
     },
@@ -1321,13 +1323,13 @@
         "z": "3b3b51ba9856c9a7",
         "g": "c84e9bdfcdd9622c",
         "name": "is equal or not",
-        "func": "var gcode = flow.get('twh_221109_gcode');\nvar feedback = flow.get('twh_221109_gcode_feedback');\n\n// if (feedback == gcode.payload){\n//     // node.warn(\"Got correct feedback from Esp32\");\n//     msg=gcode\n// }else{\n//     node.warn(\"Expected feedback\");\n//     node.warn(gcode.payload);\n//     msg = null\n// }\n\nif (feedback.payload == gcode.payload)\n    msg.case = true;\nelse\n    msg.case = false;\nreturn msg;",
+        "func": "var gcode = flow.get('twh_221109_gcode');\nvar feedback = flow.get('twh_221109_gcode_feed_fb');\n\n// if (feedback == gcode.payload){\n//     // node.warn(\"Got correct feedback from Esp32\");\n//     msg=gcode\n// }else{\n//     node.warn(\"Expected feedback\");\n//     node.warn(gcode.payload);\n//     msg = null\n// }\n\nif (feedback.payload == gcode.payload)\n    msg.case = true;\nelse\n    msg.case = false;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 840,
+        "x": 880,
         "y": 2320,
         "wires": [
             [
@@ -1339,6 +1341,7 @@
         "id": "06e1b3060fdb78e3",
         "type": "amqp-in-manual-ack",
         "z": "3b3b51ba9856c9a7",
+        "d": true,
         "g": "c84e9bdfcdd9622c",
         "name": "",
         "broker": "2de97a4d668ad4f7",
@@ -1353,7 +1356,7 @@
         "queueDurable": true,
         "queueAutoDelete": false,
         "headers": "{}",
-        "x": 900,
+        "x": 960,
         "y": 2180,
         "wires": [
             [
@@ -1367,13 +1370,13 @@
         "z": "3b3b51ba9856c9a7",
         "g": "c84e9bdfcdd9622c",
         "name": "set feedback",
-        "func": "flow.set (\"twh_221109_gcode_feedback\", msg)\nreturn msg;",
+        "func": "flow.set (\"twh_221109_gcode_feed_fb\", msg)\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
+        "x": 650,
         "y": 2360,
         "wires": [
             [
@@ -1393,11 +1396,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
+        "x": 660,
         "y": 2300,
         "wires": [
             [
-                "91df2c6e8b4c86aa"
+                "91df2c6e8b4c86aa",
+                "481b05cffe87951d"
             ]
         ]
     },
@@ -1420,7 +1424,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1010,
+        "x": 1050,
         "y": 2320,
         "wires": [
             [
@@ -1443,7 +1447,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 650,
+        "x": 690,
         "y": 2180,
         "wires": [
             [
@@ -1463,12 +1467,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1210,
+        "x": 1250,
         "y": 2360,
         "wires": [
             [
-                "1fc120fb37d76447",
-                "6c045c858d53c619"
+                "6c045c858d53c619",
+                "1fc120fb37d76447"
             ]
         ]
     },
@@ -1487,7 +1491,7 @@
         "correl": "",
         "expiry": "",
         "broker": "d1d506186f8ae701",
-        "x": 1690,
+        "x": 1730,
         "y": 2200,
         "wires": []
     },
@@ -1509,7 +1513,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1440,
+        "x": 1480,
         "y": 2200,
         "wires": [
             [
@@ -1530,7 +1534,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1440,
+        "x": 1600,
         "y": 2320,
         "wires": []
     },
@@ -1729,7 +1733,7 @@
         "headers": {
             "title": "ddff"
         },
-        "x": 830,
+        "x": 870,
         "y": 1060,
         "wires": [],
         "inputLabels": [
@@ -1762,7 +1766,7 @@
         "z": "3b3b51ba9856c9a7",
         "name": "enqueue",
         "links": [],
-        "x": 765,
+        "x": 715,
         "y": 780,
         "wires": [
             [
@@ -1843,8 +1847,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 140,
-        "y": 940,
+        "x": 160,
+        "y": 920,
         "wires": [
             [
                 "3787d65993d296af"
@@ -1864,7 +1868,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1020,
-        "y": 1000,
+        "y": 980,
         "wires": []
     },
     {
@@ -1889,8 +1893,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 150,
-        "y": 1140,
+        "x": 130,
+        "y": 1120,
         "wires": [
             [
                 "7207478569b645c5"
@@ -1909,7 +1913,7 @@
         "finalize": "",
         "libs": [],
         "x": 350,
-        "y": 780,
+        "y": 800,
         "wires": [
             []
         ],
@@ -1960,10 +1964,11 @@
         "id": "993580d95b905a71",
         "type": "mqtt out",
         "z": "3b3b51ba9856c9a7",
+        "d": true,
         "name": "",
         "topic": "twh/221109/ir_state",
-        "qos": "",
-        "retain": "",
+        "qos": "2",
+        "retain": "true",
         "respTopic": "",
         "contentType": "",
         "userProps": "",
@@ -1996,8 +2001,8 @@
         "topic": "",
         "payload": "blocked",
         "payloadType": "str",
-        "x": 150,
-        "y": 1220,
+        "x": 130,
+        "y": 1200,
         "wires": [
             [
                 "993580d95b905a71"
@@ -2026,11 +2031,239 @@
         "topic": "",
         "payload": "empty",
         "payloadType": "str",
-        "x": 150,
+        "x": 110,
         "y": 1280,
         "wires": [
             [
                 "993580d95b905a71"
+            ]
+        ]
+    },
+    {
+        "id": "41a75257f0cc9f69",
+        "type": "mqtt in",
+        "z": "3b3b51ba9856c9a7",
+        "d": true,
+        "name": "",
+        "topic": "twh/221109/ir_state",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1d506186f8ae701",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 670,
+        "y": 1240,
+        "wires": [
+            [
+                "5a1dbb2baf7272b3"
+            ]
+        ]
+    },
+    {
+        "id": "5a1dbb2baf7272b3",
+        "type": "debug",
+        "z": "3b3b51ba9856c9a7",
+        "name": "debug 17",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "23ec3d54bb982dd9",
+        "type": "mqtt out",
+        "z": "3b3b51ba9856c9a7",
+        "name": "",
+        "topic": "twh/221109/gcode_feed",
+        "qos": "2",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d1d506186f8ae701",
+        "x": 590,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "15ce274ca6dc75bb",
+        "type": "inject",
+        "z": "3b3b51ba9856c9a7",
+        "d": true,
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 140,
+        "wires": [
+            [
+                "d2e24bd5a9ecabc1"
+            ]
+        ]
+    },
+    {
+        "id": "d2e24bd5a9ecabc1",
+        "type": "function",
+        "z": "3b3b51ba9856c9a7",
+        "name": "function 2",
+        "func": "var i = flow.get(\"iii\");\nif (i == null) {\n    i=0;\n}\ni++;\nflow.set(\"iii\",i);\nmsg.payload = i;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [
+                "23ec3d54bb982dd9"
+            ]
+        ]
+    },
+    {
+        "id": "0578b97264fe5ffb",
+        "type": "inject",
+        "z": "3b3b51ba9856c9a7",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 560,
+        "y": 2460,
+        "wires": [
+            [
+                "91df2c6e8b4c86aa"
+            ]
+        ]
+    },
+    {
+        "id": "481b05cffe87951d",
+        "type": "debug",
+        "z": "3b3b51ba9856c9a7",
+        "name": "debug 18",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 2500,
+        "wires": []
+    },
+    {
+        "id": "ec0c240edb04e023",
+        "type": "inject",
+        "z": "3b3b51ba9856c9a7",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 540,
+        "y": 2080,
+        "wires": [
+            [
+                "06e1b3060fdb78e3"
+            ]
+        ]
+    },
+    {
+        "id": "5af0a23929bc794f",
+        "type": "function",
+        "z": "3b3b51ba9856c9a7",
+        "name": "M408",
+        "func": "\nmsg.payload = 'M408';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 60,
+        "wires": [
+            [
+                "23ec3d54bb982dd9"
+            ]
+        ]
+    },
+    {
+        "id": "a76b07c9ace22f89",
+        "type": "inject",
+        "z": "3b3b51ba9856c9a7",
+        "d": true,
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 60,
+        "wires": [
+            [
+                "5af0a23929bc794f"
             ]
         ]
     },

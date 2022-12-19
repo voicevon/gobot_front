@@ -1,5 +1,5 @@
 from von.amq_agent import g_amq
-
+from von.mqtt_agent import g_mqtt
 
 class GcodeSender():
 
@@ -89,3 +89,8 @@ class GcodeSender():
     def move_xy_to(self, x, y):
         # print('gcode ','MoveTo')
         self.send_code("G1X" + str(x) + "Y" + str(y))
+    
+    def row_robot_move_to_col(self, row:int, col:int):
+        mqtt_topic = 'twh/' + str(self.target_device_id) + "/row/gcode"
+        mqtt_payload = ("G1R" + str(row) + "C" + str(col))
+        g_mqtt.publish(mqtt_topic, mqtt_payload)

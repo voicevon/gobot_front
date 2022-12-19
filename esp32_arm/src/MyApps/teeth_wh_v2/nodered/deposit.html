@@ -8,7 +8,7 @@ $(function(){
 //添加数据。分两部分：一个是数据，list添加；另一个是界面添加
 $("#btnAppend").click(function(){
     var object = {};
-    object.id_order = $("#deposit_count").val();
+    // object.id_order = $("#deposit_count").val();
     object.brand = $("#brand").val();
     object.color = $("#color").val();
     object.size = $("#size").val();
@@ -28,7 +28,8 @@ $("#btnAppend").click(function(){
     //           + " 位置："+$("#location_index").val() 
     //           + "<br>";
 
-    var str = "" + $("#deposit_count").val() 
+    var str = "" 
+            //   + $("#deposit_count").val() 
               + " "+$("#brand").val() 
               + " "+$("#color").val() 
               + " "+$("#size").val() 
@@ -53,8 +54,8 @@ function submitForm() {
 alert(JSON.stringify(list));
 //标准的ajax请求方式，需要改的就是类型：GET或POST；url，后台地址。成功了弹出的data就是后台返回的数据。
     $.ajax({
-        type: "GET",   //提交的方法 POST
-        url: "http://127.0.0.1:8888/outApi/saveUserMsg", //接口地址
+        type: "GET",   //提交的方法 GET
+        url: "http://voicevon.vicp.io:1880/twh/deposit_request", //接口地址
         data: JSON.stringify(list),// 转化为json字符串--我公司是喜欢用post和json来接收的
         async: false,//false同步，true异步
         dataType:"json",
@@ -122,8 +123,8 @@ alert(JSON.stringify(list));
         <hr>
         <!-- <input id="btnClear" type="button" value="取消入库">  -->
         <button type="button" onclick="submitForm()">开始入库</button>
-        <button type="button" onclick="submitForm()">继续入库</button>
-        <button type="button" onclick="submitForm()">结束入库</button>
+        <!-- <button type="button" onclick="submitForm()">继续入库</button> -->
+        <button type="button" onclick="submitForm()">返回主页</button>
     </div>
 </form>
 </body>

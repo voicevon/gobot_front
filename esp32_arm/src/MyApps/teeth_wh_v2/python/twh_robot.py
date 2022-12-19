@@ -2,6 +2,7 @@ from von.amq_agent import g_amq
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
 from gcode_sender import GcodeSender
 from statemachine import StateMachine_Item,StateMachine
+from twh_row_robot import Twh_RowRobot
 import json, time
 # How to Convert JSON Data Into a Python Object?   https://www.youtube.com/watch?v=hJ2HfejqppE 
 
@@ -24,10 +25,16 @@ class UserRequest:
         self.col = 0
 
 
+
 class TeethWarehouseRobot():
     global g_amq
     def __init__(self, robot_id) -> None:
         self.robot_id = robot_id
+        self.row_robots = [Twh_RowRobot(0)]
+        for i in range[1:7]:
+            new_robot = Twh_RowRobot(i)
+            self.row_robots.append(new_robot)
+
         self.withdraw_request = UserRequest('')
         self.deposit_request = UserRequest('')
         self.doing_job = 'parking'  # 'parking','deposit','withdraw'
