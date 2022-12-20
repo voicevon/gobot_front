@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+   <body>
+      <table border = "1">
+         {% for key, value in result.items() %}
+            <tr>
+               <th> {{ key }} </th>
+               <td> {{ value }} </td>
+            </tr>
+         {% endfor %}
+      </table>
+
+      <table border="1">
+            <tr>
+            </tr>
+      </table>
+
+      推荐库号：{{ stock['layer'] }} <br>
+      推荐仓号：{{ stock['row'] }} <br>
+      推荐盒子号:{{ stock[('col')] }} <br>
+      <hr>
+      <form action="deposit_move" method="POST">
+        <input name="layer" value="{{ stock['layer'] }}">
+        <input name="row" value = "{{ stock['row'] }}">
+        <input name="col" value = "{{ stock['col'] }}">
+         <p><input type = "submit" value = "下一步：放入物料盒" /></p>
+
+      </form>
+   </body>
+</html>

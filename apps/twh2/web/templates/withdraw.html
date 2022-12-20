@@ -16,6 +16,11 @@ $("#btnAppend").click(function(){
     object.location_vertical = $("#location_vertical").val();
     object.location_horizontal = $("#location_horizontal").val();
     object.location_index = $("#location_index").val();
+
+    // Xing Farming.
+    // 检查库存。 http://voicevon.vicp.io:5000/get_stock?brand=123&color=白&size=大
+    // 库存不满足，给个提示，而且不能加入到 list 中。
+
     list.push(object);
     
     // var str = "订单编号:" + $("#id_order").val() 
@@ -52,9 +57,12 @@ $("#btnClear").click(function(){
 function submitForm() {
 alert(JSON.stringify(list));
 //标准的ajax请求方式，需要改的就是类型：GET或POST；url，后台地址。成功了弹出的data就是后台返回的数据。
+// Xing Farming  此处是否应该直接跳转到新页面？
+    window.location.href = '/withdraw_move'
+
     $.ajax({
         type: "GET",   //提交的方法 POST
-        url: "http://127.0.0.1:8888/outApi/saveUserMsg", //接口地址
+        url: "http://localhost:5000/withdraw_move", //接口地址
         data: JSON.stringify(list),// 转化为json字符串--我公司是喜欢用post和json来接收的
         async: false,//false同步，true异步
         dataType:"json",
@@ -64,6 +72,7 @@ alert(JSON.stringify(list));
         },
         success: function (data) {  //成功
             alert(data);  //就将返回的数据显示出来
+            window.location.href = '/withdraw_move'
         }
     });
 }
