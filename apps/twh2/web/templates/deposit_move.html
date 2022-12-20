@@ -1,9 +1,35 @@
 <!doctype html>
 <html>
    <body>
+      入库请求，详细信息
+      <table border = "1">
+         {% for key,value in user_request.items() %}
+            <tr>
+               <th> {{ key }} </th>
+               <td> {{ value }} </td>
+            </tr>
+         {% endfor %}
+      </table>
+      <p><p>
 1. 请等待仓库移动，移动过程中，绿灯闪烁<p>
 2. 请等待移动完毕，移动完毕后，黄灯闪烁<p></p>
 3. 请放入牙齿到盒子，数量是 30.<p></p>
-4. 放入后，请 <a href="deposit_end">单击此处</a>a>, 完成操作。
+4. 放入后，请单击下面的按钮, 完成操作。
+
+   <form action="/deposit_end", method="POST">
+      <br><input name="brand" value="{{ user_request['brand'] }}">
+      <br><input name="color" value="{{ user_request['color'] }}">
+      <br><input name="size" value="{{ user_request['size'] }}">
+      <br><input name="shape" value="{{ user_request['shape'] }}">
+      <br><input name="location_vertical" value="{{ user_request['location_vertical'] }}">
+      <br><input name="location_horizontal" value="{{ user_request['location_horizontal'] }}">
+      <br><input name="location_index" value="{{ user_request['location_index'] }}">
+      <br><input name="origin_quantity" value="{{ user_request['origin_quantity'] }}">
+      <br><input name="deposit_quantity" value="{{ user_request['deposit_quantity'] }}">
+      <br><input name="layer" value="{{ user_request['layer'] }}">
+      <br><input name="row" value = "{{ user_request['row'] }}">
+      <br><input name="col" value = "{{ user_request['col'] }}">
+      <p><input type = "submit" value = "入盒完成" /></p>
+      </form>
    </body>
 </html>

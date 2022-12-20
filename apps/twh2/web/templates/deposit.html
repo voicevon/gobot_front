@@ -5,7 +5,7 @@
 
 
 <form action = "/deposit_request" method = "POST">        
-        入库数量：<input type="text" name="deposit_count" ><br>
+入库数量：<input type="text" name="deposit_quantity" ><br>
 品牌：<select id="brand" name="brand" >
     <option value="好口腔">好口腔</option>
     <option value="红叶牌">红叶牌</option>
@@ -43,6 +43,10 @@
     <option value="6">6</option>
     <option value="7">7</option>
 </select><br>
+<input type="hidden" name="layer" value="1">
+<input type="hidden" name="row" value="2">
+<input type="hidden" name="col" value="3">
+<input type="hidden" name="origin_quantity" value="0">
 <!-- <input id="btnAppend" type="button" value="开始入库"><br> -->
 
 <p><input type = "submit" value = "submit" /></p>

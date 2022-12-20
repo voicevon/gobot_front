@@ -1,25 +1,7 @@
 from flask import Flask, render_template, request
+from db_api import DbApi, UserRequest
 app = Flask(__name__)
 
-
-class UserRequest:
-    size = 1
-    color = '白'
-
-# class TwhStock:
-#     layer = 1
-#     row = 2
-#     col = 3
-#     quantity = 0
-
-class DbApi():
-    def __init__(self) -> None:
-       pass
-
-    def get_stock(self, request:UserRequest):
-        # query stock from TinyDB. 
-        stock = {"layer":1, "row":2, "col":3, "quantity":4 }
-        return stock
 
 @app.route('/get_stock', methods = ['POST', 'GET'])
 def get_stock():
@@ -38,36 +20,40 @@ def deposit():
 def deposit_request():
     if request.method == 'POST':
         result = request.form
-        user_request = UserRequest()
-        user_request.color = result.get('color')
-        stock = DbApi().get_stock(user_request)
-        # layer = location.layer
-        # row = location.row
-        # col = location.col
+        user_request = {}
+
+        # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
+        for key in request.form.to_dict():
+            user_request[key] = result.get(key)
+
+        user_request = DbApi().get_stock(user_request)
         
-        return render_template("deposit_request.html",result = result, stock = stock)
+        return render_template("deposit_request.html",user_request = user_request)
 
 @app.route('/deposit_move', methods = ['POST', 'GET'])
 def deposit_move():
     if request.method == 'POST':
-      result = request.form
-      user_request = UserRequest()
-      user_request.color = result.get('color')
-      stock_json = DbApi().get_stock(user_request)
-    #   layer = location.layer
-    #   row = location.row
-    #   col = location.col
-      return render_template("deposit_move.html",result = result, stock = stock_json)
+        request_form = request.form
+        user_request ={}
+        for key in request_form.to_dict():
+            user_request[key] = request_form.get(key)
+        # user_request = []
+        # user_request.append({'color': request_form.get('color')})
+        # user_request.append({'size': request_form.get('size')})
+        # user_request.append({'layer': request_form.get('layer')})
+        # user_request.append({'row': request_form.get('row')})
+        # user_request.append({'col': request_form.get('col')})
+        # user_request.append({'origin_quantity': request_form.get('origin_quantity')})
+        # user_request.append({'deposit_quantity': request_form.get('deposit_quantity')})
+        print('user_request', user_request)
+        return render_template("deposit_move.html",user_request = user_request)
 
 @app.route('/deposit_end', methods = ['POST', 'GET'])
 def deposit_end():
-    # if request.method == 'POST':
-    #   result = request.form
-    #   layer = 123
-    #   row = 456
-    #   col = 789
-      return render_template("deposit_end.html")
-
+    if request.method == 'POST':
+        request_form = request.form
+        DbApi().update_stock(request_form)
+        return render_template("deposit_end.html")
 
 @app.route('/withdraw')
 def withdraw():
