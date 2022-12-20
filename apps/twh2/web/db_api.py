@@ -29,8 +29,8 @@ class DbApi():
 
     def get_stock(self, request):
         query = Query()
-        db_row = self.db_stock.search(query.color=='白')
-        if (len(db_row) == 0):
+        db_rows = self.db_stock.search(query.color=='白')
+        if (len(db_rows) == 0):
             # Can not find in stock
             box = self.get_emptybox()
             request['layer'] = box.layer
@@ -38,7 +38,8 @@ class DbApi():
             request['col'] = box.col
         else:
             # Yes, Find it in stock
-            request['doc_id'] = db_row['doc_id']  #?
+            # request['doc_id'] = db_row['doc_id']  #?
+            db_row = db_rows[0]
             request['layer'] = db_row['layer']
             request['row'] = db_row['row']
             request['col'] = db_row['col']
@@ -53,7 +54,8 @@ class DbApi():
         return box
 
     def update_stock(self, user_request):
-        if user_request['origin_quantity'] == 0:
+        print("origin_quantity", user_request['origin_quantity'])
+        if user_request['origin_quantity'] == '0':
             # insert into database
             print("insert stock")
             self.db_stock.insert(user_request)

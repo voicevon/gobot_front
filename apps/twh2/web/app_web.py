@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request
 from db_api import DbApi, UserRequest
+
 app = Flask(__name__)
+app.config['SCRET_KEY'] = '20221220'
+
 
 
 @app.route('/get_stock', methods = ['POST', 'GET'])
