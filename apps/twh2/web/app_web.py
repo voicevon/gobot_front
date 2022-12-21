@@ -2,13 +2,14 @@ from flask import Flask, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
-
-from db_api import DbApi, UserRequest
+from db_api import DbApi
+from von.amq_agent import g_amq, g_amq_broker_config
 
 app = Flask(__name__)
 app.config['SCRET_KEY'] = '20221220'
 app.debug=True
 
+g_amq.connect_to_broker(g_amq_broker_config)
 
 class MyForm(FlaskForm):
     brand = StringField('品牌', validators=[InputRequired('品牌不可空白')])
@@ -17,7 +18,13 @@ class MyForm(FlaskForm):
 
 @app.route('/get_stock', methods = ['POST', 'GET'])
 def get_stock():
-    user_request = UserRequest()
+    return 'OK'
+    print("get_stock  ==========================================================================")
+    if request.method == 'POST':
+        user_request = {}   
+        for key in request.form.to_dict():
+            user_request[key] = request.form.get(key)  # It's not form, but a json
+            # request.json
     return DbApi().get_stock(user_request)
 
 @app.route('/')
@@ -71,6 +78,9 @@ def withdraw():
 
 @app.route('/withdraw_move', methods = ['POST', 'GET'])
 def withdraw_move():
+    withdraw_request = {"uid": 555, "doc_ids": [1,2,3]}
+    payload = str(withdraw_request)
+    g_amq.Publish('twh', 'twh_withdraw',payload=payload)
     return render_template('withdraw_move.html')
 
 

@@ -1,14 +1,7 @@
 # https://www.youtube.com/watch?v=aP2KJoTITO0
 from tinydb import TinyDB, Query
 
-class UserRequest:
-    size = 1
-    color = '白'
-    layer = 0
-    row = 0
-    col = 0
-    origin_quantity = 0
-    deposit_quantity = 0
+
 
 class TwhLocation:
     layer = -1
@@ -25,7 +18,14 @@ class DbApi():
 
     def get_stock(self, request):
         q = Query()
-        db_rows = self.db_stock.search((q.brand==request['brand']) & (q.color==request['color']))
+        db_rows = self.db_stock.search((q.brand == request['brand']) 
+                                        & (q.color == request['color'])
+                                        & (q.size == request['size'])
+                                        & (q.shape == request['shape'])
+                                        & (q.location_vertical == request['location_vertical'])
+                                        & (q.location_horizontal == request['location_horizontal'])
+                                        & (q.location_index == request['location_index'])
+                                        )
         if (len(db_rows) == 0):
             # Can not find in stock
             box = self.get_emptybox()
