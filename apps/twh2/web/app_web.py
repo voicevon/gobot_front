@@ -1,10 +1,19 @@
 from flask import Flask, render_template, request
+from flask_wtf import FlaskForm
+from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
+from wtforms.validators import DataRequired, InputRequired
+
 from db_api import DbApi, UserRequest
 
 app = Flask(__name__)
 app.config['SCRET_KEY'] = '20221220'
+app.debug=True
 
 
+class MyForm(FlaskForm):
+    brand = StringField('品牌', validators=[InputRequired('品牌不可空白')])
+    # location_verital = boll
+    pass
 
 @app.route('/get_stock', methods = ['POST', 'GET'])
 def get_stock():
@@ -24,11 +33,10 @@ def deposit_request():
     if request.method == 'POST':
         result = request.form
         user_request = {}
-
         # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
         for key in request.form.to_dict():
             user_request[key] = result.get(key)
-
+            # print(key, user_request[key])
         user_request = DbApi().get_stock(user_request)
         
         return render_template("deposit_request.html",user_request = user_request)

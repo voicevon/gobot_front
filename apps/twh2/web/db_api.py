@@ -1,8 +1,6 @@
 # https://www.youtube.com/watch?v=aP2KJoTITO0
 from tinydb import TinyDB, Query
 
-
-
 class UserRequest:
     size = 1
     color = '白'
@@ -40,10 +38,12 @@ class DbApi():
             # Yes, Find it in stock
             # request['doc_id'] = db_row['doc_id']  #?
             db_row = db_rows[0]
+            print('db_row', db_row.doc_id)
+            request['doc_id'] = db_row.doc_id
             request['layer'] = db_row['layer']
             request['row'] = db_row['row']
             request['col'] = db_row['col']
-            request['origin_quantity'] = db_row['origin_quantity']
+            request['origin_quantity'] = db_row['stock_quantity']
         return request
 
     def get_emptybox(self) -> TwhLocation:
@@ -54,14 +54,29 @@ class DbApi():
         return box
 
     def update_stock(self, user_request):
-        print("origin_quantity", user_request['origin_quantity'])
+        print("color", user_request['color'])
         if user_request['origin_quantity'] == '0':
             # insert into database
             print("insert stock")
-            self.db_stock.insert(user_request)
+            db_row={}
+            db_row['brand'] = user_request['brand']
+            db_row['color'] = user_request['color']
+            db_row['size'] = user_request['size']
+            db_row['shape'] = user_request['shape']
+            db_row['location_vertical'] = user_request['location_vertical']
+            db_row['location_horizontal'] = user_request['location_horizontal']
+            db_row['location_index'] = user_request['location_index']
+            db_row['layer'] = (user_request['layer'])
+            db_row['row'] = (user_request['row'])
+            db_row['col'] = user_request['col']
+            db_row['stock_quantity'] = int(user_request['deposit_quantity'])
+            self.db_stock.insert(db_row)
+
         else:
             # update into database()
-            new_quantity = user_request['origin_quantity'] + user_request['deposit_quantity']
-            print("update stock")
-            # self.db_stock.update()
+            doc_id = [int(user_request['doc_id'])]
+            new_quantity = int(user_request['origin_quantity']) + int(user_request['deposit_quantity'])
+            print("update stock", new_quantity)
+            self.db_stock.update({'stock_quantity':new_quantity}, doc_ids=doc_id)
+
 

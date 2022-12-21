@@ -1,7 +1,7 @@
-<!doctype html>
-<html>
-   <body>
-      <table border = "1">
+{% extends "common_base.html" %}
+{% block content %}
+
+<table border = "1">
          {% for key, value in user_request.items() %}
             <tr>
                <th> {{ key }} </th>
@@ -26,11 +26,12 @@
          <br><input name="location_index" value={{ user_request['location_index'] }}>
          <br><input name="origin_quantity" value="{{ user_request['origin_quantity'] }}">
          <br><input name="deposit_quantity" value="{{ user_request['deposit_quantity'] }}">
+
+         <br>doc_id：<input name="doc_id" value="{{ user_request['doc_id'] }}">
          <br>推荐库号：<input name="layer" value="{{ user_request['layer'] }}">
          <br>推荐仓号：<input name="row" value = "{{ user_request['row'] }}">
-         <br>推荐盒子号<input name="col" value = "{{ user_request['col'] }}">
+         <br>推荐盒子号：<input name="col" value = "{{ user_request['col'] }}">
          <p><input type = "submit" value = "下一步：放入物料盒" /></p>
 
       </form>
-   </body>
-</html>
+{% endblock %}

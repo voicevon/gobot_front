@@ -1,6 +1,6 @@
-<!doctype html>
-<html>
-   <body>
+{% extends "common_base.html" %}
+{% block content %}
+
       入库请求，详细信息
       <table border = "1">
          {% for key,value in user_request.items() %}
@@ -26,10 +26,10 @@
       <br><input name="location_index" value={{ user_request['location_index'] }}>
       <br><input name="origin_quantity" value="{{ user_request['origin_quantity'] }}">
       <br><input name="deposit_quantity" value="{{ user_request['deposit_quantity'] }}">
+      <br><input name="doc_id" value="{{ user_request['doc_id'] }}">
       <br><input name="layer" value="{{ user_request['layer'] }}">
       <br><input name="row" value = "{{ user_request['row'] }}">
       <br><input name="col" value = "{{ user_request['col'] }}">
       <p><input type = "submit" value = "入盒完成" /></p>
       </form>
-   </body>
-</html>
+{% endblock %}
