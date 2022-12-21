@@ -5,8 +5,16 @@
 var list = [];
 $(function(){
                 
-//添加数据。分两部分：一个是数据，list添加；另一个是界面添加
-$("#btnAppend").click(function(){
+
+//清空界面
+$("#btnClear").click(function(){
+    list=[];
+    var str = "<br>";
+    $("#div_output").html(str);
+})
+});
+
+function get_json_from_html_form(){
     var object = {};
     object.id_order = $("#id_order").val();
     object.brand = $("#brand").val();
@@ -16,43 +24,57 @@ $("#btnAppend").click(function(){
     object.location_vertical = $("#location_vertical").val();
     object.location_horizontal = $("#location_horizontal").val();
     object.location_index = $("#location_index").val();
+    return object;
+}
+
+
+//添加数据。分两部分：一个是数据，list添加；另一个是界面添加
+function append_to_list(){
+    var object = get_json_from_html_form();
 
     // Xing Farming.
     // 检查库存。 http://voicevon.vicp.io:5000/get_stock?brand=123&color=白&size=大
     // 库存不满足，给个提示，而且不能加入到 list 中。
+    stock = get_stock()
+    // if (stock['stock_quantity'] > 0){
+    if (true){
+        list.push(object);
+        var str = "" + $("#id_order").val() 
+                + " "+$("#brand").val() 
+                + " "+$("#color").val() 
+                + " "+$("#size").val() 
+                + " "+$("#shape").val() 
+                + " "+$("#location_vertical").val() 
+                + " "+$("#location_horizontal").val() 
+                + " "+$("#location_index").val() 
+                + "<br>";
+        $("#div_output").append(str);
+    }
 
-    list.push(object);
-    
-    // var str = "订单编号:" + $("#id_order").val() 
-    //           + " 品牌："+$("#brand").val() 
-    //           + " 颜色："+$("#color").val() 
-    //           + " 大小："+$("#size").val() 
-    //           + " 形状："+$("#shape").val() 
-    //           + " 上下："+$("#location_vertical").val() 
-    //           + " 左右："+$("#location_horizontal").val() 
-    //           + " 位置："+$("#location_index").val() 
-    //           + "<br>";
+}
+function get_stock(){
+    var db_row = get_json_from_html_form();
+    // alert(db_row.brand);
 
-    var str = "" + $("#id_order").val() 
-              + " "+$("#brand").val() 
-              + " "+$("#color").val() 
-              + " "+$("#size").val() 
-              + " "+$("#shape").val() 
-              + " "+$("#location_vertical").val() 
-              + " "+$("#location_horizontal").val() 
-              + " "+$("#location_index").val() 
-              + "<br>";
-    $("#div_output").append(str);
-
-
-})
-//清空界面
-$("#btnClear").click(function(){
-    list=[];
-    var str = "<br>";
-    $("#div_output").html(str);
-})
-});
+    $.ajax({
+        type: "POST",   //提交的方法 POST
+        url: "http://localhost:5000/get_stock", //接口地址
+        data: JSON.stringify(db_row),// 转化为json字符串--我公司是喜欢用post和json来接收的
+        async: false,//false同步，true异步
+        dataType:"json",
+        contentType:"application/json",
+        error: function (request) {  //失败
+            alert("Connection error");
+        },
+        success: function (data) {  //成功
+            alert(data);  //就将返回的数据显示出来
+            if (data['original_quantity'] > data['withdraw_quantity']){
+                append_to_list()
+            }
+            window.location.href = '/withdraw_move'
+        }
+    });
+}
 
 function submitForm() {
 alert(JSON.stringify(list));
@@ -79,36 +101,36 @@ alert(JSON.stringify(list));
 </script>
 </head>
 <body>
-订单编号：<input type="text" id="id_order" ><br>
-品牌：<select id="brand" name="noname" >
+    订单编号：<input type="text" id="id_order" ><br>
+    品牌：<select id="brand" name="noname" >
     <option value="好口腔">好口腔</option>
     <option value="红叶牌">红叶牌</option>
     <option value="其他">其他</option>
-</select><br>
-颜色：<select id="color" name="noname" >
+    </select><br>
+    颜色：<select id="color" name="noname" >
     <option value="白">白</option>
     <option value="黄">黄</option>
     <option value="灰">灰</option>
-</select><br>
-大小：<select id="size" name="noname" >
+    </select><br>
+    大小：<select id="size" name="noname" >
     <option value="大">大</option>
     <option value="中">中</option>
     <option value="小">小</option>
-</select><br>
-形状：<select id="shape" name="noname" >
+    </select><br>
+    形状：<select id="shape" name="noname" >
     <option value="方">方</option>
     <option value="圆">圆</option>
     <option value="其他">其他</option>
-</select><br>
-上下：<select id="location_vertical" name="noname" >
+    </select><br>
+    上下：<select id="location_vertical" name="noname" >
     <option value="上">上</option>
     <option value="下">下</option>
-</select><br>
-左右：<select id="location_horizontal" name="noname" >
+    </select><br>
+    左右：<select id="location_horizontal" name="noname" >
     <option value="左">左</option>
     <option value="右">右</option>
-</select><br>
-位置：<select id="location_index" name="noname" >
+    </select><br>
+    位置：<select id="location_index" name="noname" >
     <option value="1">1</option>
     <option value="2">2</option>
     <option value="3">3</option>
@@ -116,8 +138,9 @@ alert(JSON.stringify(list));
     <option value="5">5</option>
     <option value="6">6</option>
     <option value="7">7</option>
-</select><br>
-<input id="btnAppend" type="button" value="添加"><br>
+    </select><br>
+
+    <input id="btnAppend" type="button" value="添加" onclick="append_to_list()"><br>
 
 
 <form id="myForm">
