@@ -61,7 +61,8 @@ function get_stock(){
         url: "http://localhost:5000/get_stock", //接口地址
         data: JSON.stringify(db_row),// 转化为json字符串--我公司是喜欢用post和json来接收的
         async: false,//false同步，true异步
-        dataType:"json",
+        // dataType:"json",
+        dataType: "text",
         contentType:"application/json",
         error: function (request) {  //失败
             alert("Connection error");

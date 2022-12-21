@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, redirect, url_for, render_template, request, session
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
@@ -7,7 +7,9 @@ from von.amq_agent import g_amq, g_amq_broker_config
 
 app = Flask(__name__)
 app.config['SCRET_KEY'] = '20221220'
+app.secret_key = '20221221'
 app.debug=True
+db = DbApi()
 
 g_amq.connect_to_broker(g_amq_broker_config)
 
@@ -18,8 +20,11 @@ class MyForm(FlaskForm):
 
 @app.route('/get_stock', methods = ['POST', 'GET'])
 def get_stock():
-    return 'OK'
     print("get_stock  ==========================================================================")
+    # return {'stock':11}   # Brower 正确
+    return 'OK'         # Browser 错误 
+
+
     if request.method == 'POST':
         user_request = {}   
         for key in request.form.to_dict():
@@ -27,13 +32,54 @@ def get_stock():
             # request.json
     return DbApi().get_stock(user_request)
 
+
+def check_login():
+    if "user" not in session:
+        return redirect(url_for('login'))
+
 @app.route('/')
 def home():
     return render_template('home.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/login_real', methods=['GET', 'POST'])
+def login_real():
+    if request.method == 'POST':
+        session['user'] = request.form.get('user_id')
+        return render_template('home.html')
+    else:
+        # wrong password
+        print("login_real    xxxxxxxxxxxxxxxxxxxxxxxxxxx")
+        return render_template('login.html')
+
+@app.route('/sign_up')
+def sign_up():
+    return render_template('sign_up.html')
+
+
+@app.route('/sign_up_real', methods=['GET', 'POST'])
+def sign_up_real():
+    if request.method == 'POST':
+        user_in_db  = db.get_user(request.form.get('user_id'))
+        if user_in_db is None:
+            # insert into db_user
+            new_user = {}
+            new_user['user_id'] = request.form.get('user_id')
+            new_user['password'] = request.form.get('password')
+            db.db_user.insert(new_user)
+            return render_template('login.html')
+        else:
+            return render_template(url_for('login_real'))
+
 @app.route('/deposit')
 def deposit():
-    return render_template('deposit.html')
+    if 'user' in session:
+        return render_template('deposit.html', twh = 221108)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/deposit_request', methods = ['POST', 'GET'])
 def deposit_request():
@@ -42,7 +88,7 @@ def deposit_request():
         user_request = {}
         # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
         for key in request.form.to_dict():
-            user_request[key] = result.get(key)
+            user_request[key] = request.form.get(key)
         user_request = DbApi().get_stock(user_request)
         
         return render_template("deposit_request.html",user_request = user_request)
@@ -62,6 +108,9 @@ def deposit_move():
         # user_request.append({'col': request_form.get('col')})
         # user_request.append({'origin_quantity': request_form.get('origin_quantity')})
         # user_request.append({'deposit_quantity': request_form.get('deposit_quantity')})
+        payload =  {'uid':666, 'layer':11, 'row':22, 'col':33, 'deposit_quantity':55}
+        g_amq.reconnect_to_broker()
+        g_amq.Publish('twh','twh_deposit',str(payload))
         print('user_request', user_request)
         return render_template("deposit_move.html",user_request = user_request)
 
@@ -74,12 +123,18 @@ def deposit_end():
 
 @app.route('/withdraw')
 def withdraw():
-    return render_template('withdraw.html')
+    if 'user' in session:
+        return render_template('withdraw.html')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/withdraw_move', methods = ['POST', 'GET'])
 def withdraw_move():
     withdraw_request = {"uid": 555, "doc_ids": [1,2,3]}
     payload = str(withdraw_request)
+    # if g_amq.blocking_connection.is_closed:      
+    #     g_amq.reconnect_to_broker()
+    g_amq.reconnect_to_broker()
     g_amq.Publish('twh', 'twh_withdraw',payload=payload)
     return render_template('withdraw_move.html')
 

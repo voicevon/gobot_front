@@ -62,7 +62,6 @@ class DbApi():
         box.row = -1
         box.col = -1
 
-
     def update_stock(self, user_request):
         print("color", user_request['color'])
         if user_request['origin_quantity'] == '0':
@@ -89,6 +88,12 @@ class DbApi():
             print("update stock", new_quantity)
             self.db_stock.update({'stock_quantity':new_quantity}, doc_ids=doc_id)
 
+    def get_user(self, user_id):
+        q = Query()
+        users = self.db_user.search(q.user_id==user_id)
+        if len(users) > 0:
+            return users[0]
+        return None
 
 if __name__ == '__main__':
     DbApi().get_emptybox()
