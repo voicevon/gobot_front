@@ -36,7 +36,6 @@ def deposit_request():
         # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
         for key in request.form.to_dict():
             user_request[key] = result.get(key)
-            # print(key, user_request[key])
         user_request = DbApi().get_stock(user_request)
         
         return render_template("deposit_request.html",user_request = user_request)

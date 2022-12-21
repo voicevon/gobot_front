@@ -11,9 +11,9 @@ class UserRequest:
     deposit_quantity = 0
 
 class TwhLocation:
-    layer = 0
-    row = 0
-    col = 0
+    layer = -1
+    row = -1
+    col = -1 
 
 
 
@@ -21,13 +21,11 @@ class DbApi():
     def __init__(self) -> None:
         self.db_stock = TinyDB('twh_stock.json')
         self.db_user = TinyDB('twh_user.json')
-        # self.db.insert({'type': 'OSFY', 'count': 700})
-        # self.db.insert({'type': 'EFY', 'count': 800})
-        # self.db.all()
+
 
     def get_stock(self, request):
-        query = Query()
-        db_rows = self.db_stock.search(query.color=='白')
+        q = Query()
+        db_rows = self.db_stock.search((q.brand==request['brand']) & (q.color==request['color']))
         if (len(db_rows) == 0):
             # Can not find in stock
             box = self.get_emptybox()
@@ -38,7 +36,7 @@ class DbApi():
             # Yes, Find it in stock
             # request['doc_id'] = db_row['doc_id']  #?
             db_row = db_rows[0]
-            print('db_row', db_row.doc_id)
+            # print('db_row', db_row.doc_id)
             request['doc_id'] = db_row.doc_id
             request['layer'] = db_row['layer']
             request['row'] = db_row['row']
@@ -47,11 +45,23 @@ class DbApi():
         return request
 
     def get_emptybox(self) -> TwhLocation:
+        q = Query()
         box = TwhLocation()
-        box.layer = 99
-        box.row = 98
-        box.col = 97
-        return box
+        for layer in range(1):
+            for row in range(4):
+                for col in range(120):
+                    db_rows = self.db_stock.search((q.layer==str(layer)) & (q.row==str(row)) & (q.col==str(col)))
+                    if len(db_rows) == 0:
+                        box.layer = layer
+                        box.row = row
+                        box.col = col
+                        # print('get_emptybox', box.layer, box.row, box.col)
+                        return box
+        # Can not find an empty box
+        box.layer = -1
+        box.row = -1
+        box.col = -1
+
 
     def update_stock(self, user_request):
         print("color", user_request['color'])
@@ -80,3 +90,5 @@ class DbApi():
             self.db_stock.update({'stock_quantity':new_quantity}, doc_ids=doc_id)
 
 
+if __name__ == '__main__':
+    DbApi().get_emptybox()
