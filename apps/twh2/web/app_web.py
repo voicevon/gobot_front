@@ -3,7 +3,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
 from db_api import DbApi
-from von.amq_agent import g_amq, g_amq_broker_config
+# from von.amq_agent import g_amq, g_amq_broker_config
+from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 
 app = Flask(__name__)
 app.config['SCRET_KEY'] = '20221220'
@@ -11,7 +12,10 @@ app.secret_key = '20221221'
 app.debug=True
 db = DbApi()
 
-g_amq.connect_to_broker(g_amq_broker_config)
+# g_amq.connect_to_broker(g_amq_broker_config)
+g_mqtt_broker_config.client_id = '20221222'
+g_mqtt.connect_to_broker(g_mqtt_broker_config)
+
 
 class MyForm(FlaskForm):
     brand = StringField('品牌', validators=[InputRequired('品牌不可空白')])
@@ -77,7 +81,8 @@ def sign_up_real():
 @app.route('/deposit')
 def deposit():
     if 'user' in session:
-        return render_template('deposit.html', twh = 221108)
+        twh = request.args.get('twh')
+        return render_template('deposit.html', twh = twh)
     else:
         return redirect(url_for('login'))
 
@@ -109,8 +114,8 @@ def deposit_move():
         # user_request.append({'origin_quantity': request_form.get('origin_quantity')})
         # user_request.append({'deposit_quantity': request_form.get('deposit_quantity')})
         payload =  {'uid':666, 'layer':11, 'row':22, 'col':33, 'deposit_quantity':55}
-        g_amq.reconnect_to_broker()
-        g_amq.Publish('twh','twh_deposit',str(payload))
+        # g_amq.reconnect_to_broker()
+        # g_amq.Publish('twh','twh_deposit',str(payload))
         print('user_request', user_request)
         return render_template("deposit_move.html",user_request = user_request)
 
@@ -124,7 +129,8 @@ def deposit_end():
 @app.route('/withdraw')
 def withdraw():
     if 'user' in session:
-        return render_template('withdraw.html')
+        twh = request.args.get('twh')
+        return render_template('withdraw.html', twh=twh)
     else:
         return redirect(url_for('login'))
 
@@ -134,11 +140,23 @@ def withdraw_move():
     payload = str(withdraw_request)
     # if g_amq.blocking_connection.is_closed:      
     #     g_amq.reconnect_to_broker()
-    g_amq.reconnect_to_broker()
-    g_amq.Publish('twh', 'twh_withdraw',payload=payload)
+    # g_amq.reconnect_to_broker()
+    # g_amq.Publish('twh', 'twh_withdraw',payload=payload)
     return render_template('withdraw_move.html')
 
-
+@app.route('/withdraw_takeout')
+def withdraw_takeout():
+    if 'user' in session:
+        twh = request.args.get('twh')
+        is_in_untaken = False   # How to know?  db.table.untaken
+        if is_in_untaken:
+            pipe_id = 12
+            g_mqtt.publish(topic="twh/221109/pipe_flash/" , payload= pipe_id)
+            return render_template('withdraw_takeout.html', twh=twh)
+        else:
+            return render_template('withdraw_in_queue.html')
+    else:
+        return redirect(url_for('login'))
 
 if __name__ == '__main__':
    app.run(debug = True)
