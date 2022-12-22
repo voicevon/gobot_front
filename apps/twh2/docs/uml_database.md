@@ -1,0 +1,68 @@
+@startuml
+
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "stock" as stock{
+  *id : number <<generated>>
+  --
+  brand : text
+  color: text
+  size: text
+  shape: text
+  location_vertical: text
+  location_horizontal: text
+  location_index: text
+  --
+  twh_id: int
+  layer_id: int
+  row_id: int
+  col_id: int
+  --
+  stock_quantity: int
+
+}
+
+entity "user" as user{
+  *id: number <<generated>>
+  --
+  user_name: text  
+  password: text
+
+}
+
+entity "withdraw_queue" as withdraw_queue {
+  *id : number <<generated>>
+  --
+  user_id : number <<FK>>
+  stock_ids: list  
+
+}
+ 
+entity "log" as log{
+  *id : number <<generated>>
+  --
+  user_id : number <<FK>>
+  --
+  brand : text
+  color: text
+  size: text
+  shape: text
+  location_vertical: text
+  location_horizontal: text
+  location_index: text
+  twh_id: int
+  layer_id: int
+  row_id: int
+  col_id: int
+  --
+  the_date: datetime
+  stock_quantity: int
+  deposit_quantity(in,out): int 
+}
+stock||..o{ withdraw_queue
+user ||..o{ withdraw_queue
+user ||..o{ log
+
+@enduml

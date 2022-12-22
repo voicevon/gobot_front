@@ -12,10 +12,10 @@ class TwhLocation:
 
 class DbApi():
     def __init__(self) -> None:
-        self.db_stock = TinyDB('twh_stock.json')
-        self.db_user = TinyDB('twh_user.json')
+        self.db_stock = TinyDB('database/twh_stock.json')
+        self.db_user = TinyDB('database/twh_user.json')
         # self.table_deposit = TinyDB('twh_untaken.json')
-        self.table_withdraw = TinyDB('twh_untaken.json')
+        self.table_withdraw = TinyDB('database/twh_untaken.json')
 
 
     def get_stock(self, request):

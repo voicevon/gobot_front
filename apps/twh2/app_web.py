@@ -2,7 +2,8 @@ from flask import Flask, redirect, url_for, render_template, request, session
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
-from db_api import DbApi
+from database.db_api import DbApi
+
 # from von.amq_agent import g_amq, g_amq_broker_config
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 
@@ -13,8 +14,8 @@ app.debug=True
 db = DbApi()
 
 # g_amq.connect_to_broker(g_amq_broker_config)
-g_mqtt_broker_config.client_id = '20221222'
-g_mqtt.connect_to_broker(g_mqtt_broker_config)
+# g_mqtt_broker_config.client_id = '20221222'
+# g_mqtt.connect_to_broker(g_mqtt_broker_config)
 
 
 class MyForm(FlaskForm):

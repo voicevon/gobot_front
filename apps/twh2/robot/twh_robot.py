@@ -1,9 +1,15 @@
-from von.amq_agent import g_amq
+# from von.amq_agent import g_amq
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
 from gcode_sender import GcodeSender
 from statemachine import StateMachine_Item,StateMachine
 from twh_row_robot import Twh_RowRobot
 import json, time
+
+import sys
+sys.path.append('D:\\XumingSource\\gobot_front\\apps')
+from twh2.database.db_api import DbApi
+
+
 # How to Convert JSON Data Into a Python Object?   https://www.youtube.com/watch?v=hJ2HfejqppE 
 
 class UserRequest:
@@ -27,10 +33,12 @@ class UserRequest:
 
 
 class TeethWarehouseRobot():
-    global g_amq
+    # global g_amq
     def __init__(self, robot_id) -> None:
+        DbApi().get_emptybox()
+        print("1111111111111111111111111")
         self.robot_id = robot_id
-        self.row_robots = [Twh_RowRobot(0)]
+        self.row_robots = [Twh_RowRobot(0,5)]
         for i in range[1:7]:
             new_robot = Twh_RowRobot(i)
             self.row_robots.append(new_robot)
@@ -50,7 +58,8 @@ class TeethWarehouseRobot():
         self.deposit_queue_name = 'twh_deposit'
         self.withdraw_queue_name = 'twh_withdraw'
         # g_amq.Subscribe(queue_name = self.deposit_queue_name)
-        g_amq.Subscribe(queue_name= self.withdraw_queue_name)
+        # g_amq.Subscribe(queue_name= self.withdraw_queue_name)
+
     
     def spin_once(self):
         # print("current state=", self.eef_statemachine.current_state)
@@ -74,10 +83,15 @@ class TeethWarehouseRobot():
 
 
         if self.withdraw_request.command == '':
-            payload = g_amq.fetch_message_payload(self.withdraw_queue_name)
-            if payload is not None:
-                request_string = payload.decode('utf-8')
-                self.withdraw_request = UserRequest(request_string)
+            # Get withdraw_request from database
+
+
+            # payload = g_amq.fetch_message_payload(self.withdraw_queue_name)
+            # if payload is not None:
+            #     request_string = payload.decode('utf-8')
+            #     self.withdraw_request = UserRequest(request_string)
+            pass
+            
 
 
     def eef_stimulate(self, command:str, row:int, col:int):
@@ -226,7 +240,7 @@ class TeethWarehouseRobot():
         for i in range(20):
             self.gcode_sender.pickup_from_centerbox()
             # self.do_ir_check()
-            self.gcode_sender.drop_to_cellbox(house_cell['row'], house_cell['col'])
+            # self.gcode_sender.drop_to_cellbox(house_cell['row'], house_cell['col'])
     
     def eef_do_pickup_cell(self, row, col):
         '''
@@ -240,3 +254,5 @@ class TeethWarehouseRobot():
         pass
 
 
+if __name__ == '__main__':
+    xx = TeethWarehouseRobot(111)
