@@ -30,9 +30,9 @@ class StateMachine_Item():
 
 
 class StateMachine():
-    def __init__(self, machine_name = 'NoName', current_state = 'idle') -> None:
+    def __init__(self, machine_name = 'NoName', init_state = 'idle') -> None:
         self.items = [StateMachine_Item('idle','idle','idle', self.do_nothing)]
-        self.current_state = current_state
+        self.current_state = init_state
         self.name = machine_name
 
     def AppendItem(self, item: StateMachine_Item):

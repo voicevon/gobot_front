@@ -2,7 +2,7 @@ from flask import Flask, redirect, url_for, render_template, request, session
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
-from database.db_api import DbApi
+from database.db_api import g_db_api
 
 # from von.amq_agent import g_amq, g_amq_broker_config
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.config['SCRET_KEY'] = '20221220'
 app.secret_key = '20221221'
 app.debug=True
-db = DbApi()
+
 
 # g_amq.connect_to_broker(g_amq_broker_config)
 # g_mqtt_broker_config.client_id = '20221222'
@@ -74,7 +74,7 @@ def sign_up_real():
             new_user = {}
             new_user['user_id'] = request.form.get('user_id')
             new_user['password'] = request.form.get('password')
-            db.db_user.insert(new_user)
+            g_db_api.db_user.insert(new_user)
             return render_template('login.html')
         else:
             return render_template(url_for('login_real'))
@@ -95,7 +95,7 @@ def deposit_request():
         # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
         for key in request.form.to_dict():
             user_request[key] = request.form.get(key)
-        user_request = DbApi().get_stock(user_request)
+        user_request = g_db_api.get_stock(user_request)
         
         return render_template("deposit_request.html",user_request = user_request)
 
@@ -106,25 +106,14 @@ def deposit_move():
         user_request ={}
         for key in request_form.to_dict():
             user_request[key] = request_form.get(key)
-        # user_request = []
-        # user_request.append({'color': request_form.get('color')})
-        # user_request.append({'size': request_form.get('size')})
-        # user_request.append({'layer': request_form.get('layer')})
-        # user_request.append({'row': request_form.get('row')})
-        # user_request.append({'col': request_form.get('col')})
-        # user_request.append({'origin_quantity': request_form.get('origin_quantity')})
-        # user_request.append({'deposit_quantity': request_form.get('deposit_quantity')})
-        payload =  {'uid':666, 'layer':11, 'row':22, 'col':33, 'deposit_quantity':55}
-        # g_amq.reconnect_to_broker()
-        # g_amq.Publish('twh','twh_deposit',str(payload))
-        print('user_request', user_request)
+        g_db_api.deposit_request.append(user_request)
         return render_template("deposit_move.html",user_request = user_request)
 
 @app.route('/deposit_end', methods = ['POST', 'GET'])
 def deposit_end():
     if request.method == 'POST':
         request_form = request.form
-        DbApi().update_stock(request_form)
+        g_db_api.update_stock(request_form)
         return render_template("deposit_end.html")
 
 @app.route('/withdraw')

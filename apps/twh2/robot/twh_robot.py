@@ -7,7 +7,7 @@ import json, time
 
 import sys
 sys.path.append('D:\\XumingSource\\gobot_front\\apps')
-from twh2.database.db_api import DbApi
+from twh2.database.db_api import g_db_api
 
 
 # How to Convert JSON Data Into a Python Object?   https://www.youtube.com/watch?v=hJ2HfejqppE 
@@ -35,8 +35,6 @@ class UserRequest:
 class TeethWarehouseRobot():
     # global g_amq
     def __init__(self, robot_id) -> None:
-        DbApi().get_emptybox()
-        print("1111111111111111111111111")
         self.robot_id = robot_id
         self.row_robots = [Twh_RowRobot(0,5)]
         for i in range[1:7]:
@@ -60,13 +58,24 @@ class TeethWarehouseRobot():
         # g_amq.Subscribe(queue_name = self.deposit_queue_name)
         # g_amq.Subscribe(queue_name= self.withdraw_queue_name)
 
-    
+    def check_deposit_request(self):
+        if len(g_db_api.deposit_request) > 0:
+            deposit_request = g_db_api.deposit_request[0]
+            if deposit_request['twh'] == self.robot_id:
+                self.eef_stimulate('depsit', row=deposit_request['row'], col=deposit_request['col'])
+
+
+
     def spin_once(self):
+
+
         # print("current state=", self.eef_statemachine.current_state)
         self.eef_stimulate(command=self.deposit_request.command, row=self.deposit_request.row, col=self.deposit_request.col)
         self.eef_stimulate(command=self.withdraw_request.command, row=self.withdraw_request.row, col=self.withdraw_request.col)
 
         match self.eef_statemachine.current_state:
+            case 'idle':
+                self.check_deposit_request()
             case 'picking_cell':
                 self.eef_do_ir_check(row=self.withdraw_request.row, col=self.withdraw_request.col)
             case 'be_outside':
@@ -143,6 +152,27 @@ class TeethWarehouseRobot():
             else:
                 self.deposit_request.reset()
 
+    def robot_do_deposit(self):
+        pass
+
+    def robot_do_deposit_end(self):
+        pass
+
+    def robot_do_withdraw(self):
+        pass
+
+    def robot_do_withdraw_picking(self):
+        pass
+
+    def robot_do_withdraw_check(self):
+        pass
+
+    def robot_do_withdraw_drop(self):
+        pass
+
+    def robot_do_withdraw_end(self):
+        pass
+
     def __init_mq_statemachine(self):
         self.mq_statemachine = StateMachine('User Request Queue')
         self.mq_statemachine.AppendItem(StateMachine_Item('idle', 'withdraw', 'withdraw', self.mq_do_fetch_withdraw_enter))
@@ -154,25 +184,38 @@ class TeethWarehouseRobot():
 
     def __init_eef_statemachine(self):
         # for deposit
-        self.eef_statemachine = StateMachine('robot_eef', 'parking')
-        self.eef_statemachine.AppendItem(StateMachine_Item('parking', 'prepare_deposit', 'feeding_centerbox', self.eef_do_feed_centerbox))
-        self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'end_deposit', 'parking', self.eef_do_park))
-        self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'prepare_deposit', 'feeding_centerbox', self.do_nothing))
-        self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'start_deposit', 'axis_y', self.eef_do_position_x_for_cell))
-        self.eef_statemachine.AppendItem(StateMachine_Item('axis_y', 'auto', 'picking_centerbox', self.eef_do_pick_centerbox))
-        self.eef_statemachine.AppendItem(StateMachine_Item('picking_centerbox', 'ir_check_blocked', 'droping_cell', self.eef_do_drop_cell))
-        self.eef_statemachine.AppendItem(StateMachine_Item('picking_centerbox', 'ir_check_empty', 'picking_centerbox', self.eef_do_pick_centerbox))
-        self.eef_statemachine.AppendItem(StateMachine_Item('picking_centerbox', 'ir_empty_enough', 'verify', self.eef_do_be_outside))
-        self.eef_statemachine.AppendItem(StateMachine_Item('droping_cell', 'auto', 'picking_centerbox', self.eef_do_pick_centerbox))
-        self.eef_statemachine.AppendItem(StateMachine_Item('verify', 'white', 'axis_y', self.eef_do_moveback_pick_centerbox))
-        self.eef_statemachine.AppendItem(StateMachine_Item('verify', 'black', 'parking', self.eef_do_park))
+        self.robot_statemachine = StateMachine(machine_name='robot_twh',init_state= 'idle')
+        self.robot_statemachine.AppendItem(StateMachine_Item('idle','deposit','deposit', self.robot_do_deposit))
+        self.robot_statemachine.AppendItem(StateMachine_Item('deposit','deposit_end','idle', self.robot_do_deposit_end))
         # for withdraw
-        self.eef_statemachine.AppendItem(StateMachine_Item('parking', 'withdraw', 'picking_cell', self.eef_do_pickup_cell))
-        self.eef_statemachine.AppendItem(StateMachine_Item('picking_cell', 'ir_check_empty', 'picking_cell', self.eef_do_pickup_cell))
-        self.eef_statemachine.AppendItem(StateMachine_Item('picking_cell', 'ir_check_blocked', 'droping_centerbox', self.eef_do_drop_denterbox))
-        self.eef_statemachine.AppendItem(StateMachine_Item('droping_centerbox', 'withdraw', 'picking_cell', self.eef_do_pickup_cell))
-        self.eef_statemachine.AppendItem(StateMachine_Item('droping_centerbox', 'end_withdraw', 'be_outside', self.eef_do_be_outside))
-        self.eef_statemachine.AppendItem(StateMachine_Item('be_outside', 'auto', 'parking', self.eef_do_park))
+        self.robot_statemachine.AppendItem(StateMachine_Item('idle','withdraw','withdraw', self.robot_do_withdraw))
+        self.robot_statemachine.AppendItem(StateMachine_Item('withdraw','row_ready','picking', self.robot_do_withdraw_picking))
+        self.robot_statemachine.AppendItem(StateMachine_Item('picking','auto','check', self.robot_do_withdraw_check))
+        self.robot_statemachine.AppendItem(StateMachine_Item('check','ir_is_blocked','drop', self.robot_do_withdraw_drop))
+        self.robot_statemachine.AppendItem(StateMachine_Item('check','ir_is_empty','picking', self.robot_do_withdraw_picking))
+        self.robot_statemachine.AppendItem(StateMachine_Item('check','ir_is_empty_many','drop', self.robot_do_withdraw_drop))
+        self.robot_statemachine.AppendItem(StateMachine_Item('drop','withdraw_done','idle', self.do_nothing))
+        self.robot_statemachine.AppendItem(StateMachine_Item('drop','withdraw_on_the_go','withdraw', self.robot_do_withdraw))
+
+
+        # self.eef_statemachine.AppendItem(StateMachine_Item('parking', 'prepare_deposit', 'feeding_centerbox', self.eef_do_feed_centerbox))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'end_deposit', 'parking', self.eef_do_park))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'prepare_deposit', 'feeding_centerbox', self.do_nothing))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('feeding_centerbox', 'start_deposit', 'axis_y', self.eef_do_position_x_for_cell))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('axis_y', 'auto', 'picking_centerbox', self.eef_do_pick_centerbox))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('picking_centerbox', 'ir_check_blocked', 'droping_cell', self.eef_do_drop_cell))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('picking_centerbox', 'ir_check_empty', 'picking_centerbox', self.eef_do_pick_centerbox))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('picking_centerbox', 'ir_empty_enough', 'verify', self.eef_do_be_outside))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('droping_cell', 'auto', 'picking_centerbox', self.eef_do_pick_centerbox))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('verify', 'white', 'axis_y', self.eef_do_moveback_pick_centerbox))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('verify', 'black', 'parking', self.eef_do_park))
+        # # for withdraw
+        # self.eef_statemachine.AppendItem(StateMachine_Item('parking', 'withdraw', 'picking_cell', self.eef_do_pickup_cell))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('picking_cell', 'ir_check_empty', 'picking_cell', self.eef_do_pickup_cell))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('picking_cell', 'ir_check_blocked', 'droping_centerbox', self.eef_do_drop_denterbox))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('droping_centerbox', 'withdraw', 'picking_cell', self.eef_do_pickup_cell))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('droping_centerbox', 'end_withdraw', 'be_outside', self.eef_do_be_outside))
+        # self.eef_statemachine.AppendItem(StateMachine_Item('be_outside', 'auto', 'parking', self.eef_do_park))
 
         self.eef_do_park(False)
 
@@ -255,4 +298,6 @@ class TeethWarehouseRobot():
 
 
 if __name__ == '__main__':
-    xx = TeethWarehouseRobot(111)
+    robot = TeethWarehouseRobot(221109)
+    while True:
+        robot.spin_once()

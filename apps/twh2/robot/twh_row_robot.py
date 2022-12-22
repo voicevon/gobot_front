@@ -1,6 +1,7 @@
 from gcode_sender import GcodeSender
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
 
+
 class Twh_RowRobot():
     def __init__(self, robot_id, row_id:int) -> None:
         self.row_id = row_id
@@ -15,4 +16,7 @@ class Twh_RowRobot():
 
     def get_state(self) -> str:
         return self.state.remote_value
+
+
+    
 

@@ -15,7 +15,8 @@ class DbApi():
         self.db_stock = TinyDB('database/twh_stock.json')
         self.db_user = TinyDB('database/twh_user.json')
         # self.table_deposit = TinyDB('twh_untaken.json')
-        self.table_withdraw = TinyDB('database/twh_untaken.json')
+        self.table_withdraw = TinyDB('database/twh_withdraw_queue.json')
+        self.deposit_request = []
 
 
     def get_stock(self, request):
@@ -96,6 +97,11 @@ class DbApi():
         if len(users) > 0:
             return users[0]
         return None
+
+    # def append_deposit(self, user_request):
+    #     self.deposit_request.append(user_request)
+
+g_db_api = DbApi()
 
 if __name__ == '__main__':
     DbApi().get_emptybox()

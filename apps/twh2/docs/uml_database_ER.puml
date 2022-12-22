@@ -21,6 +21,7 @@ entity "stock" as stock{
   col_id: int
   --
   stock_quantity: int
+  
 
 }
 
@@ -32,7 +33,7 @@ entity "user" as user{
 
 }
 
-entity "withdraw_queue" as withdraw_queue {
+annotation "withdraw_queue" as withdraw_queue {
   *id : number <<generated>>
   --
   user_id : number <<FK>>
@@ -40,7 +41,7 @@ entity "withdraw_queue" as withdraw_queue {
 
 }
  
-entity "log" as log{
+annotation "log" as log{
   *id : number <<generated>>
   --
   user_id : number <<FK>>
@@ -58,8 +59,9 @@ entity "log" as log{
   col_id: int
   --
   the_date: datetime
-  stock_quantity: int
+  before_quantity: int
   deposit_quantity(in,out): int 
+  after_quantity: int 
 }
 stock||..o{ withdraw_queue
 user ||..o{ withdraw_queue
