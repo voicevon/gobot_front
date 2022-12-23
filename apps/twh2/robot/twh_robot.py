@@ -62,8 +62,10 @@ class TwhRobot():
         if msg is None:
             self.current_state = 'idle'
         else:
-            print('TwhRobot::sm_check_withdraw_mq()',msg)
-            self.withdraw_list = msg
+            # print('TwhRobot::sm_check_withdraw_mq()',msg)
+            msg_str = (msg.decode('utf-8').replace("'", '"'))
+            # print('TwhRobot::sm_check_withdraw_mq()',msg_str)
+            self.withdraw_list = json.loads(msg_str)
             self.current_state = 'withdraw'
 
     def sm_do_withdraw(self):
@@ -74,12 +76,13 @@ class TwhRobot():
             for row in range(0,3):
                 layer_robot = self.layer_robots[layer]
                 row_robot = self.layer_robots[layer].row_robots[row]
-                if layer.current_state == 'dropped':
+                if layer_robot.current_state == 'dropped':
                     # remove member in list
-                    layer_robot.reset_state()  # will reset row_robot inside.
-                    
+                    layer_robot.reset_current_state_to_idle()  # will reset row_robot inside.
             
         for box in self.withdraw_list:
+            # print('@@@@@@')
+            # print(box)
             layer = int(box['layer'])
             row = int(box['row'])
             col = int(box['col'])

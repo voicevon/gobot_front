@@ -51,25 +51,16 @@ class TwhRobot_Layer():
     def move_to(self, row:int, col:int):
         self.row_robots[row].move_to(col)
 
-
+    def reset_current_state_to_idle(self):
+        if self.current_state != 'ready':
+            print("TwhRobot_Layer::reset_state()  Warning...." )
+        self.current_state = 'idle'
 
     def spin_once(self):
-
-
-        # print("current state=", self.eef_statemachine.current_state)
-        # self.eef_stimulate(command=self.deposit_request.command, row=self.deposit_request.row, col=self.deposit_request.col)
-        # self.eef_stimulate(command=self.withdraw_request.command, row=self.withdraw_request.row, col=self.withdraw_request.col)
 
         match self.current_state:
             case 'idle':
                 self.check_deposit_request()
-
-
-            
-
-
-
-
 
 
     def eef_do_ir_check(self, row, col):

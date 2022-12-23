@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, render_template, request, session
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
+from tinydb import Query
 from threading import Thread
 
 from von.amq_agent import g_amq, g_amq_broker_config
@@ -19,25 +20,35 @@ web.secret_key = '20221221'   # for WTForm
 class MyForm(FlaskForm):
     brand = StringField('品牌', validators=[InputRequired('品牌不可空白')])
     # location_verital = boll
-    pass
 
 @web.route('/get_stock', methods=['POST'])
 def get_stock():
     # print('query_string\n\n', ss)  # https://stackoverflow.com/questions/11774265/how-do-you-access-the-query-string-in-flask-routes
     data = request.json
-    brand =  data.get('brand')
+    index =  data.get('location_index')
     color =  data.get('color')
-    print(brand, color)
-
-    # return {'stock':11}   # Brower 正确
-    return 'OK'         # Browser 错误 
+    print(index, color)
+    q= Query()
+    stocks = g_database.db_stock.search(
+                                (q.brand == data.get('brand'))
+                                & (q.color == data.get('color'))
+                                & (q.size == data.get('size'))
+                                & (q.shape == data.get('shape'))
+                                & (q.location_vertical == data.get('location_vertical'))
+                                & (q.location_horizontal == data.get('location_horizontal'))
+                                & (q.location_index == data.get('location_index'))
+                                )
+    # stocks = g_database.db_stock.search((q.location_index == data.get('location_index')) & (q.color == data.get('color')))
+    if len(stocks) > 0:
+        # print(stocks[0])
+        return stocks[0]
+    print('get_stock()  Out of stock')
+    return []
 
 @web.route('/withdraw_list', methods=['POST'])
 def withdraw_list():
     user_request = request.json
     print('withdraw_list()===========', user_request)
-    # if g_amq.blocking_connection.is_closed:      
-    #     g_amq.reconnect_to_broker()
     g_amq.Publish('twh', 'twh_withdraw', str(user_request))
     return 'OK'
 
@@ -131,14 +142,6 @@ def withdraw():
 
 @web.route('/withdraw_end', methods = ['POST', 'GET'])
 def withdraw_end():
-    # payload = request.args
-    # print('withdraw_move()===========', payload)
-    # if g_amq.blocking_connection.is_closed:      
-    #     g_amq.reconnect_to_broker()
-    # g_amq.reconnect_to_broker()
-    # g_amq.Publish('twh', 'twh_withdraw',payload=payload)
-    # return 'OK'
-
     return render_template('withdraw_end.html')
 
 @web.route('/withdraw_takeout')
