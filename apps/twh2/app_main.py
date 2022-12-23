@@ -2,20 +2,17 @@ from flask import Flask, redirect, url_for, render_template, request, session
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
-from database.db_api import g_db_api
+from threading import Thread
 
 # from von.amq_agent import g_amq, g_amq_broker_config
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
+from database.db_api import g_database
+from robot.twh_robot_layer import TwhRobot_Layer
 
-app = Flask(__name__)
-app.config['SCRET_KEY'] = '20221220'
-app.secret_key = '20221221'
-app.debug=True
-
-
-# g_amq.connect_to_broker(g_amq_broker_config)
-# g_mqtt_broker_config.client_id = '20221222'
-# g_mqtt.connect_to_broker(g_mqtt_broker_config)
+web = Flask(__name__)
+web.config['SECRET_KEY'] = '20221220'
+web.secret_key = '20221221'   # for WTForm
+# web.debug=False
 
 
 class MyForm(FlaskForm):
@@ -23,7 +20,7 @@ class MyForm(FlaskForm):
     # location_verital = boll
     pass
 
-@app.route('/get_stock', methods = ['POST', 'GET'])
+@web.route('/get_stock', methods = ['POST', 'GET'])
 def get_stock():
     print("get_stock  ==========================================================================")
     # return {'stock':11}   # Brower 正确
@@ -42,15 +39,15 @@ def check_login():
     if "user" not in session:
         return redirect(url_for('login'))
 
-@app.route('/')
+@web.route('/')
 def home():
     return render_template('home.html')
 
-@app.route('/login')
+@web.route('/login')
 def login():
     return render_template('login.html')
 
-@app.route('/login_real', methods=['GET', 'POST'])
+@web.route('/login_real', methods=['GET', 'POST'])
 def login_real():
     if request.method == 'POST':
         session['user'] = request.form.get('user_id')
@@ -60,12 +57,12 @@ def login_real():
         print("login_real    xxxxxxxxxxxxxxxxxxxxxxxxxxx")
         return render_template('login.html')
 
-@app.route('/sign_up')
+@web.route('/sign_up')
 def sign_up():
     return render_template('sign_up.html')
 
 
-@app.route('/sign_up_real', methods=['GET', 'POST'])
+@web.route('/sign_up_real', methods=['GET', 'POST'])
 def sign_up_real():
     if request.method == 'POST':
         user_in_db  = db.get_user(request.form.get('user_id'))
@@ -79,7 +76,7 @@ def sign_up_real():
         else:
             return render_template(url_for('login_real'))
 
-@app.route('/deposit')
+@web.route('/deposit')
 def deposit():
     if 'user' in session:
         twh = request.args.get('twh')
@@ -87,7 +84,7 @@ def deposit():
     else:
         return redirect(url_for('login'))
 
-@app.route('/deposit_request', methods = ['POST', 'GET'])
+@web.route('/deposit_request', methods = ['POST', 'GET'])
 def deposit_request():
     if request.method == 'POST':
         result = request.form
@@ -95,28 +92,29 @@ def deposit_request():
         # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
         for key in request.form.to_dict():
             user_request[key] = request.form.get(key)
-        user_request = g_db_api.get_stock(user_request)
+        user_request = g_database.get_stock(user_request)
         
         return render_template("deposit_request.html",user_request = user_request)
 
-@app.route('/deposit_move', methods = ['POST', 'GET'])
+@web.route('/deposit_move', methods = ['POST', 'GET'])
 def deposit_move():
     if request.method == 'POST':
         request_form = request.form
         user_request ={}
         for key in request_form.to_dict():
             user_request[key] = request_form.get(key)
-        g_db_api.deposit_request.append(user_request)
+        g_database.append_deposit(user_request)
+        print("robot will move box to somewhere for operator........ ")
         return render_template("deposit_move.html",user_request = user_request)
 
-@app.route('/deposit_end', methods = ['POST', 'GET'])
+@web.route('/deposit_end', methods = ['POST', 'GET'])
 def deposit_end():
     if request.method == 'POST':
         request_form = request.form
-        g_db_api.update_stock(request_form)
+        g_database.update_stock(request_form)
         return render_template("deposit_end.html")
 
-@app.route('/withdraw')
+@web.route('/withdraw')
 def withdraw():
     if 'user' in session:
         twh = request.args.get('twh')
@@ -124,7 +122,7 @@ def withdraw():
     else:
         return redirect(url_for('login'))
 
-@app.route('/withdraw_move', methods = ['POST', 'GET'])
+@web.route('/withdraw_move', methods = ['POST', 'GET'])
 def withdraw_move():
     withdraw_request = {"uid": 555, "doc_ids": [1,2,3]}
     payload = str(withdraw_request)
@@ -134,7 +132,7 @@ def withdraw_move():
     # g_amq.Publish('twh', 'twh_withdraw',payload=payload)
     return render_template('withdraw_move.html')
 
-@app.route('/withdraw_takeout')
+@web.route('/withdraw_takeout')
 def withdraw_takeout():
     if 'user' in session:
         twh = request.args.get('twh')
@@ -148,5 +146,24 @@ def withdraw_takeout():
     else:
         return redirect(url_for('login'))
 
+def start():
+    g_mqtt_broker_config.client_id = '20221222'
+    g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
+    new_thread = Thread(target=web.run, kwargs={'debug':False})   # DebugMode, must be turn off.  
+    new_thread.start()
+    
+# start()
+
 if __name__ == '__main__':
-   app.run(debug = True)
+    start()
+    twh_robot = TwhRobot_Layer("221109")
+
+    while True:
+        twh_robot.spin_once()
+
+    # reloader or debug must be false.  
+    # https://stackoverflow.com/questions/31264826/start-a-flask-application-in-separate-thread
+    #  web.run(debug=True)
+    # while True:
+    #     pass
+    # web.run(debug=False)

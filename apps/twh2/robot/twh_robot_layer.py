@@ -1,16 +1,20 @@
 # from von.amq_agent import g_amq
+from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
-from gcode_sender import GcodeSender
-from statemachine import StateMachine_Item,StateMachine
-from twh_row_robot import Twh_RowRobot
+from robot.twh_robot_row import TwhRobot_Row
+from robot.gcode_sender import GcodeSender
+from robot.statemachine import StateMachine_Item, StateMachine
 import json, time
 
 import sys
 sys.path.append('D:\\XumingSource\\gobot_front\\apps')
-from twh2.database.db_api import g_db_api
+from twh2.database.db_api import g_database
 
 
 # How to Convert JSON Data Into a Python Object?   https://www.youtube.com/watch?v=hJ2HfejqppE 
+
+
+
 
 class UserRequest:
 
@@ -32,13 +36,13 @@ class UserRequest:
 
 
 
-class TeethWarehouseRobot():
+class TwhRobot_Layer():
     # global g_amq
-    def __init__(self, robot_id) -> None:
+    def __init__(self, robot_id:str) -> None:
         self.robot_id = robot_id
-        self.row_robots = [Twh_RowRobot(0,5)]
-        for i in range[1:7]:
-            new_robot = Twh_RowRobot(i)
+        self.row_robots = [TwhRobot_Row(0,5)]
+        for i in range(1,7):
+            new_robot = TwhRobot_Row(robot_id=robot_id, row_id=i)
             self.row_robots.append(new_robot)
 
         self.withdraw_request = UserRequest('')
@@ -59,36 +63,40 @@ class TeethWarehouseRobot():
         # g_amq.Subscribe(queue_name= self.withdraw_queue_name)
 
     def check_deposit_request(self):
-        if len(g_db_api.deposit_request) > 0:
-            deposit_request = g_db_api.deposit_request[0]
-            if deposit_request['twh'] == self.robot_id:
-                self.eef_stimulate('depsit', row=deposit_request['row'], col=deposit_request['col'])
-
-
+        deposit_reuqest_list = g_database.search_deposit(self.robot_id, "0")
+        # print(deposit_reuqest_list)
+        if len(deposit_reuqest_list) > 0:
+            print("TwhRobot_Layer::check_deposit_request()", len(deposit_reuqest_list))
+            dr = deposit_reuqest_list[0]
+            print("TwhRobot_Layer::check_deposit_request()", dr['row'], dr['col'], dr['deposit_quantity'])
+            row = int(dr['row'])
+            col = int(dr['col'])
+            # self.robot_stimulate('deposit', row=row, col=col)
+            g_database.remove_deposit(dr['doc_id'])
 
     def spin_once(self):
 
 
         # print("current state=", self.eef_statemachine.current_state)
-        self.eef_stimulate(command=self.deposit_request.command, row=self.deposit_request.row, col=self.deposit_request.col)
-        self.eef_stimulate(command=self.withdraw_request.command, row=self.withdraw_request.row, col=self.withdraw_request.col)
+        # self.eef_stimulate(command=self.deposit_request.command, row=self.deposit_request.row, col=self.deposit_request.col)
+        # self.eef_stimulate(command=self.withdraw_request.command, row=self.withdraw_request.row, col=self.withdraw_request.col)
 
-        match self.eef_statemachine.current_state:
+        match self.robot_statemachine.current_state:
             case 'idle':
                 self.check_deposit_request()
-            case 'picking_cell':
-                self.eef_do_ir_check(row=self.withdraw_request.row, col=self.withdraw_request.col)
-            case 'be_outside':
-                print('TeethWarehouseRobot::SpinOnce()',  'auto')
-                self.eef_stimulate('auto', row=self.withdraw_request.row, col=self.withdraw_request.col)                
-            case 'picking_centerbox':
-                self.eef_do_ir_check(row=self.deposit_request.row, col=self.deposit_request.col)
-            case 'axis_y': 
-                self.eef_stimulate('auto', row=self.deposit_request.row, col=self.deposit_request.col)
-            case 'droping_cell':
-                self.eef_stimulate('auto', row=self.deposit_request.row, col=self.deposit_request.col)
-            case 'verify':
-                self.eef_stimulate('black', row=self.deposit_request.row, col=self.deposit_request.col)
+            # case 'picking_cell':
+            #     self.eef_do_ir_check(row=self.withdraw_request.row, col=self.withdraw_request.col)
+            # case 'be_outside':
+            #     print('TwhRobot_Layer::SpinOnce()',  'auto')
+            #     self.eef_stimulate('auto', row=self.withdraw_request.row, col=self.withdraw_request.col)                
+            # case 'picking_centerbox':
+            #     self.eef_do_ir_check(row=self.deposit_request.row, col=self.deposit_request.col)
+            # case 'axis_y': 
+            #     self.eef_stimulate('auto', row=self.deposit_request.row, col=self.deposit_request.col)
+            # case 'droping_cell':
+            #     self.eef_stimulate('auto', row=self.deposit_request.row, col=self.deposit_request.col)
+            # case 'verify':
+            #     self.eef_stimulate('black', row=self.deposit_request.row, col=self.deposit_request.col)
 
 
         if self.withdraw_request.command == '':
@@ -103,16 +111,16 @@ class TeethWarehouseRobot():
             
 
 
-    def eef_stimulate(self, command:str, row:int, col:int):
-        is_accepted = self.eef_statemachine.stimulate(command=command, row=row, col=col)
-        if is_accepted:
-            print('self.doingjob', self.doing_job)
-            if self.doing_job == 'withdraw':
-                self.withdraw_request.reset()
-            if self.doing_job == 'deposit':
-                self.withdraw_request.reset()
-            if self.eef_statemachine.current_state == 'parking':
-                self.doing_job = 'parking'
+    def robot_stimulate(self, command:str, row:int, col:int):
+        is_accepted = self.robot_statemachine.stimulate(command=command, row=row, col=col)
+        # if is_accepted:
+        #     print('self.doingjob', self.doing_job)
+        #     if self.doing_job == 'withdraw':
+        #         self.withdraw_request.reset()
+        #     if self.doing_job == 'deposit':
+        #         self.withdraw_request.reset()
+        #     if self.robot_statemachine.current_state == 'parking':
+        #         self.doing_job = 'parking'
 
 
 
@@ -144,7 +152,7 @@ class TeethWarehouseRobot():
                 self.ir_empty_count = 0
 
             case others:
-                print('TeethWarehouseRobot::do_ir_check()', self.ir_state.remote_value)
+                print('TwhRobot_Layer::do_ir_check()', self.ir_state.remote_value)
 
         if is_accepted:
             if self.doing_job == 'withdraw':
@@ -152,10 +160,10 @@ class TeethWarehouseRobot():
             else:
                 self.deposit_request.reset()
 
-    def robot_do_deposit(self):
+    def robot_do_deposit(self, row, col):
         pass
 
-    def robot_do_deposit_end(self):
+    def robot_do_deposit_end(self, row, col):
         pass
 
     def robot_do_withdraw(self):
@@ -217,7 +225,7 @@ class TeethWarehouseRobot():
         # self.eef_statemachine.AppendItem(StateMachine_Item('droping_centerbox', 'end_withdraw', 'be_outside', self.eef_do_be_outside))
         # self.eef_statemachine.AppendItem(StateMachine_Item('be_outside', 'auto', 'parking', self.eef_do_park))
 
-        self.eef_do_park(False)
+        # self.eef_do_park(False)
 
     def get_xy(self, row,col):
         x = row * 40
@@ -298,6 +306,8 @@ class TeethWarehouseRobot():
 
 
 if __name__ == '__main__':
-    robot = TeethWarehouseRobot(221109)
+    g_mqtt_broker_config.client_id = '20221218'
+    g_mqtt.connect_to_broker(g_mqtt_broker_config)
+    robot = TwhRobot_Layer("221109")
     while True:
         robot.spin_once()

@@ -1,5 +1,5 @@
 # https://www.youtube.com/watch?v=aP2KJoTITO0
-from tinydb import TinyDB, Query
+from tinydb import TinyDB, Query, where
 
 
 
@@ -14,9 +14,9 @@ class DbApi():
     def __init__(self) -> None:
         self.db_stock = TinyDB('database/twh_stock.json')
         self.db_user = TinyDB('database/twh_user.json')
-        # self.table_deposit = TinyDB('twh_untaken.json')
+        self.table_deposit = TinyDB('database/twh_deposit.json')
         self.table_withdraw = TinyDB('database/twh_withdraw_queue.json')
-        self.deposit_request = []
+        # self.deposit_request = []
 
 
     def get_stock(self, request):
@@ -98,10 +98,21 @@ class DbApi():
             return users[0]
         return None
 
-    # def append_deposit(self, user_request):
-    #     self.deposit_request.append(user_request)
+    def append_deposit(self, user_request):
+        self.table_deposit.insert(user_request)
 
-g_db_api = DbApi()
+    
+    def search_deposit(self, robot_id:str, layer_id:str):
+        q = Query()
+        s = self.table_deposit.search((q.twh==robot_id) & (q.layer==layer_id))
+        # print(s)
+        return s
+
+    def remove_deposit(self, doc_id:int):
+        self.table_deposit.remove(where ('doc_id')== doc_id)
+        
+
+g_database = DbApi()
 
 if __name__ == '__main__':
     DbApi().get_emptybox()

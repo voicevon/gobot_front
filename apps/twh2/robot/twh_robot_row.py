@@ -1,8 +1,8 @@
-from gcode_sender import GcodeSender
+from robot.gcode_sender import GcodeSender
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
 
 
-class Twh_RowRobot():
+class TwhRobot_Row():
     def __init__(self, robot_id, row_id:int) -> None:
         self.row_id = row_id
         state_topic = "twh/" + str(robot_id) + '/' + str(row_id) + "/state"
