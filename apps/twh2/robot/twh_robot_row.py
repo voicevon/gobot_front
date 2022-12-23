@@ -10,9 +10,10 @@ class TwhRobot_Row():
         self.gcode_sender = GcodeSender()
 
     def move_to(self, col: int) -> None:
-        GcodeSender.row_robot_move_to_col(self.row_id, col)
-        self.state.local_value = 'moving'
-        self.state.Copy_LocalToRemote()
+        # GcodeSender.row_robot_move_to_col(self.row_id, col)
+        # self.state.local_value = 'moving'
+        # self.state.Copy_LocalToRemote()
+        print("TwhRobot_Row::move_to()", col)
 
     def get_state(self) -> str:
         return self.state.remote_value

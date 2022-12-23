@@ -8,6 +8,7 @@ from von.amq_agent import g_amq, g_amq_broker_config
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from database.db_api import g_database
 # from robot.twh_robot_layer import TwhRobot_Layer
+# import json
 
 web = Flask(__name__)
 web.config['SECRET_KEY'] = '20221220'
@@ -20,20 +21,25 @@ class MyForm(FlaskForm):
     # location_verital = boll
     pass
 
-@web.route('/get_stock', methods = ['POST', 'GET'])
+@web.route('/get_stock', methods=['POST'])
 def get_stock():
-    print("get_stock  ==========================================================================")
+    # print('query_string\n\n', ss)  # https://stackoverflow.com/questions/11774265/how-do-you-access-the-query-string-in-flask-routes
+    data = request.json
+    brand =  data.get('brand')
+    color =  data.get('color')
+    print(brand, color)
+
     # return {'stock':11}   # Brower 正确
     return 'OK'         # Browser 错误 
 
-
-    if request.method == 'POST':
-        user_request = {}   
-        for key in request.form.to_dict():
-            user_request[key] = request.form.get(key)  # It's not form, but a json
-            # request.json
-    return DbApi().get_stock(user_request)
-
+@web.route('/withdraw_list', methods=['POST'])
+def withdraw_list():
+    user_request = request.json
+    print('withdraw_list()===========', user_request)
+    # if g_amq.blocking_connection.is_closed:      
+    #     g_amq.reconnect_to_broker()
+    g_amq.Publish('twh', 'twh_withdraw', str(user_request))
+    return 'OK'
 
 def check_login():
     if "user" not in session:
@@ -123,15 +129,17 @@ def withdraw():
     else:
         return redirect(url_for('login'))
 
-@web.route('/withdraw_move', methods = ['POST', 'GET'])
-def withdraw_move():
-    withdraw_request = {"uid": 555, "doc_ids": [1,2,3]}
-    payload = str(withdraw_request)
+@web.route('/withdraw_end', methods = ['POST', 'GET'])
+def withdraw_end():
+    # payload = request.args
+    # print('withdraw_move()===========', payload)
     # if g_amq.blocking_connection.is_closed:      
     #     g_amq.reconnect_to_broker()
     # g_amq.reconnect_to_broker()
     # g_amq.Publish('twh', 'twh_withdraw',payload=payload)
-    return render_template('withdraw_move.html')
+    # return 'OK'
+
+    return render_template('withdraw_end.html')
 
 @web.route('/withdraw_takeout')
 def withdraw_takeout():

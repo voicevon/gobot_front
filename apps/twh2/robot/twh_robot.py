@@ -1,6 +1,7 @@
 from statemachine import StateMachine_Item, StateMachine
 from von.amq_agent import g_amq, g_amq_broker_config
 from twh_robot_layer import TwhRobot_Layer
+import json
 
 class TwhRobot():
     def __init__(self) -> None:
@@ -27,10 +28,10 @@ class TwhRobot():
                 self.sm_do_deposit()
 
             case 'withdraw':
-                self.smdo
+                self.sm_do_withdraw()
 
             case _:
-                print("state_machine_spin_once", self.current_state)
+                print("TwhRobot::state_machine_spin_once()", self.current_state)
 
 
 
@@ -38,13 +39,16 @@ class TwhRobot():
     def sm_check_deposit_mq(self):
         msg = g_amq.fetch_message_payload('twh_deposit')
         if msg is None:
-            print('nnnnnnnnnnnnnnnnnnnnnnnn')
             self.current_state = 'checking_withdraw_mq'
         else:
-            print(msg)
             # let robot moving
-            row = int(msg['row'])
-            col = int(msg['col'])
+            msg_str = msg.decode('utf-8').replace("'", '"')
+            # print("sm_check_deposit_mq", msg_str)
+            user_request = json.loads(msg_str)
+            # print("sm_check_deposit_mq", user_request)
+            row = int(user_request['row'])
+            col = int(user_request['col'])
+            # print("sm_check_deposit_mq", row, col)
             self.layer_robots[0].move_to(row,col)
             self.current_state = 'deposit'
 
@@ -58,7 +62,7 @@ class TwhRobot():
         if msg is None:
             self.current_state = 'idle'
         else:
-            print(msg)
+            print('TwhRobot::sm_check_withdraw_mq()',msg)
             self.withdraw_list = msg
             self.current_state = 'withdraw'
 
@@ -73,6 +77,7 @@ class TwhRobot():
                 if layer.current_state == 'dropped':
                     # remove member in list
                     layer_robot.reset_state()  # will reset row_robot inside.
+                    
             
         for box in self.withdraw_list:
             layer = int(box['layer'])
@@ -82,12 +87,6 @@ class TwhRobot():
             row_robot = self.layer_robots[layer].row_robots[row]
             if row_robot.current_state == 'idle':
                 row_robot.move_to(col)
-
-            
-
-
-
-
 
 
 if __name__ == '__main__':

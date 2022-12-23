@@ -2,13 +2,13 @@
 	<head>
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
     	<script>
-var list = [];
+var withdraw_list = [];
 $(function(){
                 
 
 //清空界面
 $("#btnClear").click(function(){
-    list=[];
+    withdraw_list=[];
     var str = "<br>";
     $("#div_output").html(str);
 })
@@ -27,18 +27,39 @@ function get_json_from_html_form(){
     return object;
 }
 
+function check_stock(){
+    var db_row = get_json_from_html_form();
+    var result = ""
+    $.ajax({
+        type: "POST",                           //提交的方法 POST
+        url: "http://localhost:5000/get_stock", //接口地址
+        data: JSON.stringify(db_row),           // 转化为json字符串--我公司是喜欢用post和json来接收的
+        async: false,                           //false同步，true异步
+        // dataType:"json",
+        dataType: "text",  
+        contentType:"application/json",
+        error: function (request) {             //失败
+            alert("get_stock().   Connection error");
+            return "error"
+        },
+        success: function (data) {              //成功
+            // alert(data)
+            result = data
+            // window.location.href = '/withdraw_move'
+        }
+    });
+    return result
+}
 
-//添加数据。分两部分：一个是数据，list添加；另一个是界面添加
-function append_to_list(){
-    var object = get_json_from_html_form();
-
-    // Xing Farming.
+//添加数据。分两部分：一个是数据，withdraw_list添加；另一个是界面添加
+function append_to_withdraw_list(){
     // 检查库存。 http://voicevon.vicp.io:5000/get_stock?brand=123&color=白&size=大
-    // 库存不满足，给个提示，而且不能加入到 list 中。
-    stock = get_stock()
-    // if (stock['stock_quantity'] > 0){
-    if (true){
-        list.push(object);
+    var in_stock = check_stock()
+    // alert(in_stock)
+
+    if (check_stock()=="OK"){
+        var object = get_json_from_html_form();
+        withdraw_list.push(object);
         var str = "" + $("#id_order").val() 
                 + " "+$("#brand").val() 
                 + " "+$("#color").val() 
@@ -49,53 +70,30 @@ function append_to_list(){
                 + " "+$("#location_index").val() 
                 + "<br>";
         $("#div_output").append(str);
+    }else{
+        // 库存不满足，给个提示，而且不能加入到 withdraw_list 中。
+        alert("没有足够库存，请更换品牌，或者其他")
     }
 
 }
-function get_stock(){
-    var db_row = get_json_from_html_form();
-    // alert(db_row.brand);
 
-    $.ajax({
-        type: "POST",   //提交的方法 POST
-        url: "http://localhost:5000/get_stock", //接口地址
-        data: JSON.stringify(db_row),// 转化为json字符串--我公司是喜欢用post和json来接收的
-        async: false,//false同步，true异步
-        // dataType:"json",
-        dataType: "text",
-        contentType:"application/json",
-        error: function (request) {  //失败
-            alert("Connection error");
-        },
-        success: function (data) {  //成功
-            alert(data);  //就将返回的数据显示出来
-            if (data['original_quantity'] > data['withdraw_quantity']){
-                append_to_list()
-            }
-            window.location.href = '/withdraw_move'
-        }
-    });
-}
 
 function submitForm() {
-alert(JSON.stringify(list));
-//标准的ajax请求方式，需要改的就是类型：GET或POST；url，后台地址。成功了弹出的data就是后台返回的数据。
-// Xing Farming  此处是否应该直接跳转到新页面？
-    window.location.href = '/withdraw_move'
-
+    // alert(JSON.stringify(withdraw_list));
+    //标准的ajax请求方式，需要改的就是类型：GET或POST；url，后台地址。成功了弹出的data就是后台返回的数据。
     $.ajax({
-        type: "GET",   //提交的方法 POST
-        url: "http://localhost:5000/withdraw_move", //接口地址
-        data: JSON.stringify(list),// 转化为json字符串--我公司是喜欢用post和json来接收的
-        async: false,//false同步，true异步
-        dataType:"json",
+        type: "POST",                                    //提交的方法 POST
+        url: "http://localhost:5000/withdraw_list",     //接口地址
+        data: JSON.stringify(withdraw_list),            // 转化为json字符串--我公司是喜欢用post和json来接收的
+        async: false,                                   //false同步，true异步
+        dataType:"text",
         contentType:"application/json",
-        error: function (request) {  //失败
-            alert("Connection error");
+        error: function (request) {                     //失败
+            alert("submitForm()   Connection error");
         },
-        success: function (data) {  //成功
-            alert(data);  //就将返回的数据显示出来
-            window.location.href = '/withdraw_move'
+        success: function (data) {                      //成功
+            alert(data);                                //就将返回的数据显示出来
+            window.location.href = '/withdraw_end'
         }
     });
 }
@@ -142,7 +140,7 @@ alert(JSON.stringify(list));
     <option value="7">7</option>
     </select><br>
 
-    <input id="btnAppend" type="button" value="添加" onclick="append_to_list()"><br>
+    <input id="btnAppend" type="button" value="添加" onclick="append_to_withdraw_list()"><br>
 
 
 <form id="myForm">
