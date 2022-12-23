@@ -1,4 +1,4 @@
-from robot.gcode_sender import GcodeSender
+from gcode_sender import GcodeSender
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
 
 

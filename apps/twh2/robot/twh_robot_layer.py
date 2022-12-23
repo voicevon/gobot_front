@@ -1,14 +1,11 @@
 # from von.amq_agent import g_amq
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
-from robot.twh_robot_row import TwhRobot_Row
-from robot.gcode_sender import GcodeSender
-from robot.statemachine import StateMachine_Item, StateMachine
+from twh_robot_row import TwhRobot_Row
+from gcode_sender import GcodeSender
+from statemachine import StateMachine_Item, StateMachine
 import json, time
 
-import sys
-sys.path.append('D:\\XumingSource\\gobot_front\\apps')
-from twh2.database.db_api import g_database
 
 
 # How to Convert JSON Data Into a Python Object?   https://www.youtube.com/watch?v=hJ2HfejqppE 
@@ -62,8 +59,12 @@ class TwhRobot_Layer():
         # g_amq.Subscribe(queue_name = self.deposit_queue_name)
         # g_amq.Subscribe(queue_name= self.withdraw_queue_name)
 
+    def move_to(self, row:int, col:int):
+        self.row_robots[row].move_to(col)
+
+    
     def check_deposit_request(self):
-        deposit_reuqest_list = g_database.search_deposit(self.robot_id, "0")
+        deposit_reuqest_list = ga
         # print(deposit_reuqest_list)
         if len(deposit_reuqest_list) > 0:
             print("TwhRobot_Layer::check_deposit_request()", len(deposit_reuqest_list))
@@ -72,7 +73,7 @@ class TwhRobot_Layer():
             row = int(dr['row'])
             col = int(dr['col'])
             # self.robot_stimulate('deposit', row=row, col=col)
-            g_database.remove_deposit(dr['doc_id'])
+            # g_database.remove_deposit(dr['doc_id'])
 
     def spin_once(self):
 

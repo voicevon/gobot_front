@@ -4,10 +4,10 @@ from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormFi
 from wtforms.validators import DataRequired, InputRequired
 from threading import Thread
 
-# from von.amq_agent import g_amq, g_amq_broker_config
+from von.amq_agent import g_amq, g_amq_broker_config
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from database.db_api import g_database
-from robot.twh_robot_layer import TwhRobot_Layer
+# from robot.twh_robot_layer import TwhRobot_Layer
 
 web = Flask(__name__)
 web.config['SECRET_KEY'] = '20221220'
@@ -103,7 +103,8 @@ def deposit_move():
         user_request ={}
         for key in request_form.to_dict():
             user_request[key] = request_form.get(key)
-        g_database.append_deposit(user_request)
+        # g_database.append_deposit(user_request)
+        g_amq.Publish('twh', 'twh_deposit', str(user_request))
         print("robot will move box to somewhere for operator........ ")
         return render_template("deposit_move.html",user_request = user_request)
 
@@ -149,17 +150,18 @@ def withdraw_takeout():
 def start():
     g_mqtt_broker_config.client_id = '20221222'
     g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
+    g_amq.connect_to_broker(g_amq_broker_config)
     new_thread = Thread(target=web.run, kwargs={'debug':False})   # DebugMode, must be turn off.  
     new_thread.start()
     
-# start()
+start()
 
 if __name__ == '__main__':
     start()
-    twh_robot = TwhRobot_Layer("221109")
+    # twh_robot = TwhRobot_Layer("221109")
 
-    while True:
-        twh_robot.spin_once()
+    # while True:
+    #     twh_robot.spin_once()
 
     # reloader or debug must be false.  
     # https://stackoverflow.com/questions/31264826/start-a-flask-application-in-separate-thread

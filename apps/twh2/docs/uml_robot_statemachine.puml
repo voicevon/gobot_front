@@ -1,51 +1,49 @@
 @startuml
 [*] -> idle
-' state Row {
-'   state row_idle {
-'   }
-'   state row_moving {
-'   }
-'   state row_ready {
-'   }
-' }
 
-
-' row_moving -[#red,bold]-> row_ready
 idle-[#red,bold]-> checking_deposit_mq
-checking_deposit_mq -[#red,bold]-> deposit: deposit(row, col)
-' deposit -[#red,bold]-> row_moving: G1R5C6
+checking_deposit_mq -[#red,bold]-> deposit: deposit(row, col, quantity) \nrobot[row].moveto(col)
 deposit -[#red,bold]-> idle: user_finished, \nuser_canceled
 
-
 checking_deposit_mq --> checking_withdraw_mq: mq is empty
-
-
-
-
 checking_withdraw_mq --> idle: mq is empty
 checking_withdraw_mq --> withdraw: withdraw(list(row,col))
-withdraw --> robot_row
-state robot_row {
-  [*] -> row_idle 
-  row_idle ->moving
-  moving -> ready
-'   row_x_is_ready --> row_x_is_idle
+withdraw -> idle: withdraw_list is empty
+
+
+  state robot_row {
+    [*] -> row_idle 
+    row_idle -> moving
+    moving -> ready
+  }
+  
+state robot_layer{
+  [*] -> layer_idle
+  layer_idle -[#green,bold]-> picking
+  picking -[#green,bold]-> ir_checking: .     .
+  ir_checking -[#green,bold]-> drop: ir is blocked
+  drop -[#green,bold]-> dropped
+  ir_checking -[#green,bold]-> drop: ir is empty >=3 \nLog this fail
+  ir_checking -[#green,bold]-> picking: ir is empty <3
+
+  ' dropped -[#green]-> layer_idle
+
+
+
+
+  ready -[#green,bold,dashed]->layer_idle: the ready row_id
+  ' dropped -[#green]-> row_idle
 
 }
+withdraw -[#green,bold,dashed]-> layer_idle
+layer_idle -[#green,bold,dashed]-> row_idle
 
-ready -->picking: the ready row_id
-picking -> ir_checking: .     .
-ir_checking --> picking: ir is empty <3
-ir_checking --> drop: ir is blocked
-ir_checking --> drop: ir is empty >=3 \nLog this fail
-state drop_folk <<fork>>
-drop --> drop_folk
-drop_folk --> withdraw: remove one item in list.
-drop_folk --> row_idle
-withdraw --> idle: withdraw_list is empty
-' drop --> drop_end
-' drop_end --> row_idle
-' drop_end --> idle: all rows are idle
+dropped -[#green,bold,dashed]-> withdraw
+
+
+' drop_folk -[#green,bold]-> withdraw: remove one item in list.
+
+
 
 
 @enduml
