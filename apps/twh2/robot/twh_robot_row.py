@@ -21,16 +21,18 @@ class TwhRobot_Row():
                 pass
 
 
-    def move_to(self, col: int) -> None:
+    def move_to(self, withdraw_item) -> None:
         if self.current_state != 'idle':
             print('TwhRobot_Row::move_to()  Waring. current state')
         self.current_state = 'moving'
         # GcodeSender.row_robot_move_to_col(self.row_id, col)
         # self.state.local_value = 'moving'
         # self.state.Copy_LocalToRemote()
-        print("TwhRobot_Row::move_to()", col)
+        self.withdraw_item = withdraw_item
+        print("TwhRobot_Row::move_to()", withdraw_item['col'])
 
 
-
+    def get_withdraw_item(self):
+        return self.withdraw_item
     
 

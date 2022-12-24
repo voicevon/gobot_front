@@ -3,13 +3,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
 from tinydb import Query
-from threading import Thread
 
 from von.amq_agent import g_amq, g_amq_broker_config
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from database.db_api import g_database
-# from robot.twh_robot_layer import TwhRobot_Layer
-# import json
 
 web = Flask(__name__)
 web.config['SECRET_KEY'] = '20221220'
@@ -41,6 +38,7 @@ def get_stock():
     # stocks = g_database.db_stock.search((q.location_index == data.get('location_index')) & (q.color == data.get('color')))
     if len(stocks) > 0:
         # print(stocks[0])
+        stocks[0]['doc_id'] = stocks[0].doc_id
         return stocks[0]
     print('get_stock()  Out of stock')
     return []
@@ -50,6 +48,19 @@ def withdraw_list():
     user_request = request.json
     print('withdraw_list()===========', user_request)
     g_amq.Publish('twh', 'twh_withdraw', str(user_request))
+    return 'OK'
+
+@web.route('/decrease_stock')
+def decrease_stock():
+    row_id = int(request.args.get('doc_id'))
+    print("rrrrrrrrrrrrrrrrrrrrrrrrrrr  row_id=  ", row_id)
+    q = Query()
+    rows = g_database.db_stock.search(q.doc_id==row_id)
+    for row in rows:
+        print(row['stock_quantity'])
+        row['stock_quantity'] = row['stock_quantity'] -1
+        print(row['stock_quantity'])
+    g_database.db_stock.write_back(rows)
     return 'OK'
 
 def check_login():
@@ -162,8 +173,9 @@ def start():
     g_mqtt_broker_config.client_id = '20221222'
     g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
     g_amq.connect_to_broker(g_amq_broker_config)
-    new_thread = Thread(target=web.run, kwargs={'debug':False})   # DebugMode, must be turn off.  
-    new_thread.start()
+    # new_thread = Thread(target=web.run, kwargs={'debug':False, 'host':'0.0.0.0'})   # DebugMode, must be turn off.  
+    # new_thread = Thread(target=web.run, kwargs={'debug':False})   # DebugMode, must be turn off.  
+    # new_thread.start()
     
 start()
 
@@ -179,4 +191,4 @@ if __name__ == '__main__':
     #  web.run(debug=True)
     # while True:
     #     pass
-    # web.run(debug=False)
+    web.run(host='0.0.0.0', debug=False)

@@ -1,6 +1,7 @@
 from statemachine import StateMachine_Item, StateMachine
 from von.amq_agent import g_amq, g_amq_broker_config
 from twh_robot_layer import TwhRobot_Layer
+import requests
 import json
 
 class TwhRobot():
@@ -33,9 +34,6 @@ class TwhRobot():
             case _:
                 print("TwhRobot::state_machine_spin_once()", self.current_state)
 
-
-
-
     def sm_check_deposit_mq(self):
         msg = g_amq.fetch_message_payload('twh_deposit')
         if msg is None:
@@ -52,7 +50,6 @@ class TwhRobot():
             self.layer_robots[0].move_to(row,col)
             self.current_state = 'deposit'
 
-
     def sm_do_deposit(self):
         # if user_finished, update stock?\
         self.current_state = 'idle'
@@ -68,6 +65,11 @@ class TwhRobot():
             self.withdraw_list = json.loads(msg_str)
             self.current_state = 'withdraw'
 
+    def decrease_stock(self, doc_id:int):
+        url = 'http://localhost:5000/decrease_stock?doc_id=' + str(doc_id)
+        response = requests.get(url)
+        print(response)
+
     def sm_do_withdraw(self):
         if len(self.withdraw_list) == 0:
             self.current_state = 'idle'
@@ -77,7 +79,11 @@ class TwhRobot():
                 layer_robot = self.layer_robots[layer]
                 row_robot = self.layer_robots[layer].row_robots[row]
                 if layer_robot.current_state == 'dropped':
+                    done_item = row_robot.get_withdraw_item()
+                    # update database
+                    self.decrease_stock(done_item['doc_id'])
                     # remove member in list
+                    self.withdraw_list.remove()
                     layer_robot.reset_current_state_to_idle()  # will reset row_robot inside.
             
         for box in self.withdraw_list:

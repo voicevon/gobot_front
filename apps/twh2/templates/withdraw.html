@@ -61,7 +61,7 @@ function append_to_withdraw_list(){
     var in_stock = get_stock()
     // alert(in_stock)
 
-    if (in_stock != []){
+    if (Object.keys(in_stock).length > 0){
         withdraw_list.push(in_stock);
         // var str = "" + $("#id_order").val() 
         //         + " "+$("#brand").val() 
@@ -79,7 +79,7 @@ function append_to_withdraw_list(){
         //     str += v + "  ";
         // }
         // Solution B:   put items one by one, display order is good
-        str += '需求 '
+        str += '....... 需求 '
         str += in_stock['brand'] + ' '
         str += in_stock['color'] + ' '
         str += in_stock['size'] + ' '
@@ -87,11 +87,13 @@ function append_to_withdraw_list(){
         str += in_stock['location_vertical'] + ' '
         str += in_stock['location_horizontal'] + ' '
         str += in_stock['location_index'] + ' '
-        str += '....... 库存 '
+        str += '....... 库存数量 '
+        str += in_stock['stock_quantity'] + ' '
+        str += '....... 库存位置 '
+        str += in_stock['doc_id'] + ' '
         str += in_stock['layer'] + ' '
         str += in_stock['row'] + ' '
         str += in_stock['col'] + ' '
-        str += in_stock['stock_quantity'] + ' '
         // str += in_stock['col'] + ' '
         str += "<br>";
         $("#div_output").append(str);
