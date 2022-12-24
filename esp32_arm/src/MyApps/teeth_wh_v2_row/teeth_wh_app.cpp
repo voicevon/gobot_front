@@ -4,7 +4,7 @@
 
 
 Twh2Row_App::Twh2Row_App(int row_id){
-    this->__row_id = row_id;
+    this->__robot_row_id = row_id;
     Serial.print("\n[Info] Twh2Row_App::Twh2Row_App() is constructed");
 }
 
@@ -27,7 +27,7 @@ void Twh2Row_App::AsyncExecuteMqttCommand(const char* command){
     }
     Gcode my_gcode = Gcode(command);
     if (my_gcode.g == 1){
-        if (my_gcode.get_value('R') == this->__row_id){
+        if (my_gcode.get_value('R') == this->__robot_row_id){
             this->_gcode_queue->AppendGcodeCommand(command);
         }
     }

@@ -11,8 +11,8 @@ class Vsc_ArmSolution: public ArmSolutionBase{
         Vsc_ArmSolution();
 
     private:
-        void FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
-        void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPY*  to_fk) override;
+        void FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik) override;
+        void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPW*  to_fk) override;
         float __sensor_slope;
         float __sensor_offset;
 };

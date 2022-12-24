@@ -1,7 +1,7 @@
 #include "line_segment.h"
 
 
-void LineSegment::Calculate_distance_time(FKPosition_XYZRPY* start_position){
+void LineSegment::Calculate_distance_time(FKPosition_XYZRPW* start_position){
     //TODO:: distance in 3D space.
     float dx = this->TargetPosition.X - start_position->X;  
     float dy = this->TargetPosition.Y - start_position->Y;
@@ -27,7 +27,7 @@ void LineSegment::DeepCopyTo(LineSegment* the_copy){
     // Logger::Print("LineSegment::DeepCopyTo() point", 99);
 }
 
-void LineSegment::DeepCopyFromFkPosition(FKPosition_XYZRPY* from){
+void LineSegment::DeepCopyFromFkPosition(FKPosition_XYZRPW* from){
     this->TargetPosition.X = from->X;
     this->TargetPosition.Y = from->Y;
     this->TargetPosition.Z = from->Z;

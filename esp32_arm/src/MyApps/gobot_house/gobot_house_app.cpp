@@ -234,8 +234,8 @@ void GobotHouseApp::__Enable_eefCoil(bool enable){
 }
 
 void GobotHouseApp::__Move_fromHead_toNeck(bool forwarding){
-	FKPosition_XYZRPY* from = &this->__map.head;
-	FKPosition_XYZRPY* to = &this->__map.neck;
+	FKPosition_XYZRPW* from = &this->__map.head;
+	FKPosition_XYZRPW* to = &this->__map.neck;
 	if (!forwarding){
 		to = &this->__map.head;
 		from = &this->__map.neck;
@@ -246,8 +246,8 @@ void GobotHouseApp::__Move_fromHead_toNeck(bool forwarding){
 void GobotHouseApp::__Move_fromRoom_toGate(uint8_t room_id, bool forwarding){
 	// Stage1: from source to door.
 	Serial.println("from xxx to door");
-	FKPosition_XYZRPY* from = &this->__map.rooms[room_id];
-	FKPosition_XYZRPY* to = &this->__map.doors[room_id];
+	FKPosition_XYZRPW* from = &this->__map.rooms[room_id];
+	FKPosition_XYZRPW* to = &this->__map.doors[room_id];
 	int segments_count = 6;
 	if(!forwarding){
 		from = &this->__map.gates[room_id];	
@@ -273,8 +273,8 @@ void GobotHouseApp::__Move_fromRoom_toGate(uint8_t room_id, bool forwarding){
 
 // This is almost a  rotation, because beta should be no changing.
 void GobotHouseApp::__Move_fromNeck_toGate(uint8_t room_id, bool forwarding){
-	FKPosition_XYZRPY* from = &this->__map.neck;
-	FKPosition_XYZRPY* to = &this->__map.gates[room_id];
+	FKPosition_XYZRPW* from = &this->__map.neck;
+	FKPosition_XYZRPW* to = &this->__map.gates[room_id];
 	if(forwarding){
 		this->__MakeGcode_and_Send(from, to, 1);
 	}else{
@@ -358,7 +358,7 @@ void GobotHouseApp::Test_Beta(int loop_count){
 	}
 }
 
-void GobotHouseApp::__MakeGcode_and_Send(FKPosition_XYZRPY* from, FKPosition_XYZRPY* to, int segment_count){
+void GobotHouseApp::__MakeGcode_and_Send(FKPosition_XYZRPW* from, FKPosition_XYZRPW* to, int segment_count){
 	Serial.println("---------------------------------");
 	from->PrintOut("from");
 	to->PrintOut("to");

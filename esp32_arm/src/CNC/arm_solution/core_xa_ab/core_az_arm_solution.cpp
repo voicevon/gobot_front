@@ -13,9 +13,9 @@
 
 
 
-void CncSolution_CoreAZ::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
+void CncSolution_CoreAZ::FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik){
 	Serial.print("\n[Info] CncSolution_CoreAZ::IK() is entering. ");
-	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(from_fk);
+	FKPosition_XYZRPW* fk = (FKPosition_XYZRPW*)(from_fk);
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(to_ik);
 
 	// ik->alpha = (fk->Z  + fk->Roll);
@@ -32,9 +32,9 @@ void CncSolution_CoreAZ::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl*
 	Serial.print(")");
 }
 
-void CncSolution_CoreAZ::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
+void CncSolution_CoreAZ::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW*  to_fk){
 	Serial.print("\n[Debug] CncSolution_CoreAZ::FK() is entering ");
-	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(to_fk);
+	FKPosition_XYZRPW* fk = (FKPosition_XYZRPW*)(to_fk);
 	IKPosition_abgdekl* ik =from_ik;
 	
 	// fk->Z = (ik->alpha + ik->beta) / 2 ;
@@ -59,7 +59,7 @@ void CncSolution_CoreAZ::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY
 // 			this->__current_fk_position.Roll = this->_config->Homed_position_w;
 // 			this->IK(&this->__current_fk_position, &ik_position);
 // 			// verify IK by FK()
-// 			FKPosition_XYZRPY verifying_fk;
+// 			FKPosition_XYZRPW verifying_fk;
 // 			Serial.print("\n   [Info] Please verify: FK->IK->FK  ");
 // 			this->FK(&ik_position, &verifying_fk);
 		
@@ -82,7 +82,7 @@ void CncSolution_CoreAZ::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY
 // 		mb->MoveBlocks[AXIS_BETA].Speed = speed;
 // 	}
 // 	// Assume G1-code want to update actuator directly, no need to do IK.
-// 	FKPosition_XYZRPY target_fk_zw;
+// 	FKPosition_XYZRPW target_fk_zw;
 // 	IKPosition_abgdekl target_ik_ab;
 // 	target_fk_zw.Z = this->__current_fk_position.Z;
 // 	target_fk_zw.Roll = this->__current_fk_position.Roll;

@@ -1,7 +1,8 @@
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_V2_ROW
 
-#define MY_ROBOT_ROW_ID 1
+#define MY_ROBOT_ROW_ID 0
+#define GCODE_MQTT_TOPIC "twh/221109/r0"
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
@@ -10,7 +11,6 @@
 #include "MyApps/teeth_wh_v2_row/robot/twh_robot.h"
 
     // char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_200K];
-
 
 Twh2_Board board;
 GcodeQueue gcode_queue;
@@ -54,7 +54,7 @@ void test_robot(){
 
 void test_arm(){
     // Twh2_Circleloop_ArmSolution arm;
-    // FKPosition_XYZRPY input_fk;
+    // FKPosition_XYZRPW input_fk;
     // input_fk.X = 123;
     // input_fk.Y = 234;
     // input_fk.Z = 12;
@@ -77,9 +77,6 @@ void test_arm(){
 }
 
 
-
-
-
 void setup(){
     board.Init(true);
     // test();
@@ -91,12 +88,10 @@ void setup(){
     app.LinkRobot(&robot);
 
     setup_mqtt_block_connect();
-    append_mqtt_bridge("twh/221109/gcode", &mqtt_command_queue, &app); 
+    append_mqtt_bridge(GCODE_MQTT_TOPIC, &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
 
-    gcode_queue.AppendGcodeCommand("G1Z0");
-    gcode_queue.AppendGcodeCommand("G28a");
-    gcode_queue.AppendGcodeCommand("G28Y");
+    gcode_queue.AppendGcodeCommand("G28R");
     // test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }

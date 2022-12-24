@@ -1,9 +1,9 @@
 #include "core_yz_arm_solution.h"
 
 
-void CoreYZ_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
+void CoreYZ_ArmSolution::FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik){
 	Serial.print("\n[Info] CoreYZ_ArmSolution::IK() is entering. ");
-	FKPosition_XYZRPY * fk = (FKPosition_XYZRPY*)(from_fk);
+	FKPosition_XYZRPW * fk = (FKPosition_XYZRPW*)(from_fk);
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(to_ik);
 
 	// ik->alpha = (fk->Z  + fk->Y );
@@ -20,9 +20,9 @@ void CoreYZ_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl*
 	Serial.print(")");
 }
 
-void CoreYZ_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
+void CoreYZ_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW*  to_fk){
 	Serial.print("\n[Debug] CoreYZ_ArmSolution::FK() is entering ");
-	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(to_fk);
+	FKPosition_XYZRPW* fk = (FKPosition_XYZRPW*)(to_fk);
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);
 	
 	// fk->Z = (ik->alpha + ik->beta) / 2;
@@ -104,7 +104,7 @@ void CoreYZ_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY
 // 			this->__current_fk_position.Y = this->_cncMachine->Homed_position_y;
 // 			this->IK(&this->__current_fk_position, &ik_position);
 // 			// verify IK by FK()
-// 			FKPosition_XYZRPY verifying_fk;
+// 			FKPosition_XYZRPW verifying_fk;
 // 			Serial.print("\n   [Info] Please verify: FK->IK->FK ======================  ");
 // 			this->FK(&ik_position, &verifying_fk);
 // }
@@ -126,7 +126,7 @@ void CoreYZ_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY
 // 		mb->MoveBlocks[AXIS_BETA].Speed = speed;
 // 	}
 // 	// Assume G1-code want to update actuator directly, no need to do IK.
-// 	FKPosition_XYZRPY target_fk_yz;
+// 	FKPosition_XYZRPW target_fk_yz;
 // 	IKPosition_abgdekl target_ik_ab;
 // 	target_fk_yz.Z = this->__current_fk_position.Z;
 // 	target_fk_yz.Y = this->__current_fk_position.Y;

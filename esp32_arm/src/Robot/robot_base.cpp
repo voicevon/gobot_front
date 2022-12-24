@@ -153,7 +153,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
 	//This is wrong for the very first moveblock after MCU is reset.
 	Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
-	FKPosition_XYZRPY new_fk_position;
+	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;
 	LineSegment middle_kinematic_line;
 	

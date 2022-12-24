@@ -31,14 +31,14 @@ class RoomBotCorner: public RobotBase{
         // void Init(IrEncoderHelper* sensorHelper);
         void test_hBridge();
         void test_home();
-        // bool GetCurrentPosition(FKPosition_XYZRPY* position_fk) override {assert("Do not invoke me()"); return false;};
+        // bool GetCurrentPosition(FKPosition_XYZRPW* position_fk) override {assert("Do not invoke me()"); return false;};
         // float GetDistanceToTarget_FK() override{assert("Do not invoke me()"); return 0.0;};
         // float GetDistanceToTarget_IK() override{assert("Do not invoke me()"); return 0.0;};
     protected:
         
     private:
-        virtual void IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik) override;
-        virtual void FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* to_fk) override;
+        virtual void IK(FKPosition_XYZRPW* from_fk, IKPosition_abgdekl* to_ik) override;
+        virtual void FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW* to_fk) override;
         void MoveToTargetPosition();
         // void SpinOnce_BaseEnter() override {};
         void SpinOnce_BaseExit() override;

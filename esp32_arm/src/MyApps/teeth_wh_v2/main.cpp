@@ -52,7 +52,7 @@ void test_robot(){
 
 void test_arm(){
     Twh2_XzArmSolution arm;
-    FKPosition_XYZRPY input_fk;
+    FKPosition_XYZRPW input_fk;
     input_fk.X = 123;
     input_fk.Y = 234;
     input_fk.Z = 12;

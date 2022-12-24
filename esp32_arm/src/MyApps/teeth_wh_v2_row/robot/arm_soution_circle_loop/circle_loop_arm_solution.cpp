@@ -8,8 +8,8 @@ Twh2_Circleloop_ArmSolution::Twh2_Circleloop_ArmSolution(){
 	Twh2_Circleloop_Armsolution_Config config;
 	__slope = config.Slope_Steps_per_column();
 }
-void Twh2_Circleloop_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
-	FKPosition_XYZRPY* fk = from_fk;
+void Twh2_Circleloop_ArmSolution::FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik){
+	FKPosition_XYZRPW* fk = from_fk;
 	IKPosition_abgdekl* ik = to_ik;
 
 	ik->Positions[AXIS_ALPHA] = fk->Roll / __slope - __offset ;
@@ -18,8 +18,8 @@ void Twh2_Circleloop_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition
 	Logger::Print("IK output alpha", ik->Positions[AXIS_ALPHA]);
 }
 
-void Twh2_Circleloop_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
-	FKPosition_XYZRPY* fk = to_fk;
+void Twh2_Circleloop_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW*  to_fk){
+	FKPosition_XYZRPW* fk = to_fk;
 	IKPosition_abgdekl* ik = from_ik;
 	
 	fk->Roll = __slope * (ik->Positions[AXIS_ALPHA] + __offset);

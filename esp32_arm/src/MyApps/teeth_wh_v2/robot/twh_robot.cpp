@@ -41,7 +41,7 @@ void Twh2_Robot::__InitStatic_Actuators(Twh2_Board* board){
 void Twh2_Robot::_Init_ArmSolution(){
     this->_LinkArmSolution_for_planner(&__arm_solution_corexz);
     // We don't care the value of current position, But  fk_position and ik_position must be consistent
-    FKPosition_XYZRPY current;
+    FKPosition_XYZRPW current;
     current.X = 0;
     current.Y = 0;
     current.Z = 0;

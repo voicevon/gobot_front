@@ -10,7 +10,7 @@ class Twh2Row_App: public AppBase{
         void AsyncExecuteMqttCommand(const char*) override;
         
     private:
-        int __row_id = 0;
+        int __robot_row_id = 0;
         Twh2Row_Robot* __robot;
 
 };

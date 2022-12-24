@@ -8,8 +8,8 @@
 class Twh2_Circleloop_ArmSolution: public ArmSolutionBase{
     public:
         Twh2_Circleloop_ArmSolution();
-        void FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
-        void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPY*  to_fk) override;
+        void FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik) override;
+        void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPW*  to_fk) override;
 
     private:
         float __slope;

@@ -7,10 +7,10 @@ class MiddleKinematic{
 		// float Minimuim_X;
 };
 
-void CncSolution_CoreXY_XA_ab::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
+void CncSolution_CoreXY_XA_ab::FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik){
 	Serial.print("\n[Info] CncSolution_CoreXY_XA_ab::IK()");
 	MiddleKinematic mk;
-	FKPosition_XYZRPY* fk = from_fk;
+	FKPosition_XYZRPW* fk = from_fk;
 	IKPosition_abgdekl* ik = to_ik;
 
 	mk.Angle = asinf(fk->Y / _config->arm_length);  // range should be in range of degree [-90, +90]
@@ -38,9 +38,9 @@ void CncSolution_CoreXY_XA_ab::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_ab
 	// Serial.print(")");
 }
 
-void CncSolution_CoreXY_XA_ab::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
+void CncSolution_CoreXY_XA_ab::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW*  to_fk){
 	Serial.print("\n[Debug] CncSolution_CoreXY_XA_ab::FK()");
-	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(to_fk);
+	FKPosition_XYZRPW* fk = (FKPosition_XYZRPW*)(to_fk);
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);
 	
 	MiddleKinematic mk;

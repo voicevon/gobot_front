@@ -13,22 +13,22 @@
 
 class ArmSolutionBase{
     public:
-        virtual void FK_to_IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik);
-        virtual void IK_to_FK(IKPosition_abgdekl* from_ik,FKPosition_XYZRPY* to_fk);
-        virtual void MK_to_FK(FKPosition_XYZRPY* from_mk, FKPosition_XYZRPY* to_fk){};
-        virtual void MK_to_Ik(FKPosition_XYZRPY* from_mk, IKPosition_abgdekl* to_ik){};
+        virtual void FK_to_IK(FKPosition_XYZRPW* from_fk, IKPosition_abgdekl* to_ik);
+        virtual void IK_to_FK(IKPosition_abgdekl* from_ik,FKPosition_XYZRPW* to_fk);
+        virtual void MK_to_FK(FKPosition_XYZRPW* from_mk, FKPosition_XYZRPW* to_fk){};
+        virtual void MK_to_Ik(FKPosition_XYZRPW* from_mk, IKPosition_abgdekl* to_ik){};
 
         void ForceStopMover();  //TODO:  para is MoverAction:  EnableActuator, ForceStop, DisableActuator. 
 
-        void SetCurrentPositionAs(FKPosition_XYZRPY* fk_position);
+        void SetCurrentPositionAs(FKPosition_XYZRPW* fk_position);
         void SetCurrentPositionAs(IKPosition_abgdekl* ik_position);
-        void GetRealTimePosition(FKPosition_XYZRPY* position_fk);
-        FKPosition_XYZRPY* GetCurrentPosition_Fk(){return &__current_position_fk;};
-        void Test(FKPosition_XYZRPY* input);
+        void GetRealTimePosition(FKPosition_XYZRPW* position_fk);
+        FKPosition_XYZRPW* GetCurrentPosition_Fk(){return &__current_position_fk;};
+        void Test(FKPosition_XYZRPW* input);
         
     protected:
 
     private:
-        FKPosition_XYZRPY __current_position_fk;
+        FKPosition_XYZRPW __current_position_fk;
         IKPosition_abgdekl __current_position_ik;
 };

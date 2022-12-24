@@ -6,8 +6,8 @@
 
 
 // https://github.com/ddelago/5-Bar-Parallel-Robot-Kinematics-Simulation/blob/master/fiveBar_InvKinematics.py
-void FiveBars_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik){
-	FKPosition_XYZRPY* fk = from_fk;
+void FiveBars_ArmSolution::FK_to_IK(FKPosition_XYZRPW* from_fk, IKPosition_abgdekl* to_ik){
+	FKPosition_XYZRPW* fk = from_fk;
 	IKPosition_abgdekl* ik = to_ik;
 
 	float rr1= (fk->X + this->_config->LINK_0) * (fk->X + this->_config->LINK_0) + fk->Y * fk->Y;
@@ -83,9 +83,9 @@ void FiveBars_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk, IKPosition_abgde
 	
 }
 
-void FiveBars_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* to_fk){
+void FiveBars_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW* to_fk){
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);
-	FKPosition_XYZRPY * fk = (FKPosition_XYZRPY*)(to_fk);
+	FKPosition_XYZRPW * fk = (FKPosition_XYZRPW*)(to_fk);
 
 	// float elbow_alpha_x = this->_config->LINK_A * cosf(ik->alpha) - this->_config->LINK_0;   // TODO:: whan alpha > 180 degree.
 	float elbow_alpha_x = this->_config->LINK_A * cosf(ik->Positions[AXIS_ALPHA]) - this->_config->LINK_0;   // TODO:: whan alpha > 180 degree.

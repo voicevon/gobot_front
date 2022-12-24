@@ -9,7 +9,7 @@ void ArmSolutionBase::ForceStopMover(){
 	//TODO:    How to do it without mover_base??
 }
 
-void ArmSolutionBase::GetRealTimePosition(FKPosition_XYZRPY* position_fk){
+void ArmSolutionBase::GetRealTimePosition(FKPosition_XYZRPW* position_fk){
 	//TODO::  
 	IKPosition_abgdekl realtime_ik;
 	// realtime_ik.alpha = CncActuator_List::Instance().GetActuator(AXIS_ALPHA)->GetCurrentPosition();
@@ -17,7 +17,7 @@ void ArmSolutionBase::GetRealTimePosition(FKPosition_XYZRPY* position_fk){
 	this->IK_to_FK(&realtime_ik, position_fk);
 }
 
-void ArmSolutionBase::SetCurrentPositionAs(FKPosition_XYZRPY* fk_position){
+void ArmSolutionBase::SetCurrentPositionAs(FKPosition_XYZRPW* fk_position){
 	__current_position_fk.X = fk_position->X;
 	__current_position_fk.Y = fk_position->Y;
 	__current_position_fk.Z = fk_position->Z;
@@ -41,10 +41,10 @@ void ArmSolutionBase::SetCurrentPositionAs(IKPosition_abgdekl* ik_position){
 }
 
 
-void ArmSolutionBase::Test(FKPosition_XYZRPY* input){
+void ArmSolutionBase::Test(FKPosition_XYZRPW* input){
 	IKPosition_abgdekl ik;
-	// FKPosition_XYZRPY input;
-	FKPosition_XYZRPY output;
+	// FKPosition_XYZRPW input;
+	FKPosition_XYZRPW output;
 	this->FK_to_IK(input,&ik);
 	this->IK_to_FK(&ik,&output);
 	Logger::Info("Twh_ArmSolution::test()");

@@ -132,15 +132,15 @@ void RoomBotCorner::Init(IrEncoderHelper* sensorHelperBase){
 // } 
 
 
-void RoomBotCorner::IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik){
-    FKPosition_XYZRPY* fk = (FkPosition_X*)(from_fk);
+void RoomBotCorner::IK(FKPosition_XYZRPW* from_fk, IKPosition_abgdekl* to_ik){
+    FKPosition_XYZRPW* fk = (FkPosition_X*)(from_fk);
     IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(to_ik);
     ik->alpha = fk->x;
 }
 
-void RoomBotCorner::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY* to_fk){
+void RoomBotCorner::FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW* to_fk){
     IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(from_ik);
-    FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(to_fk);
+    FKPosition_XYZRPW* fk = (FKPosition_XYZRPW*)(to_fk);
     fk->x = ik->alpha;
 }
 

@@ -22,21 +22,21 @@ class Scara_ArmSolution: public ArmSolutionBase{
         // void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
 
 
-        // bool GetCurrentPosition(FKPosition_XYZRPY* position_fk) override;
+        // bool GetCurrentPosition(FKPosition_XYZRPW* position_fk) override;
         // float GetDistanceToTarget_FK() override;
         // float GetDistanceToTarget_IK() override;
 
 
     protected:
-        virtual void FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik) override;
-        virtual void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPY*  to_fk) override;
+        virtual void FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik) override;
+        virtual void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPW*  to_fk) override;
 
         // void RunG6(Gcode* gcode) override {};   //Block mode
 
         // void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
 
         PositionTrigger* __homer;
-        FKPosition_XYZRPY __current_fk_position;
-        FKPosition_XYZRPY __next_fk_position;
+        FKPosition_XYZRPW __current_fk_position;
+        FKPosition_XYZRPW __next_fk_position;
         CncSolution_ScaraConfigBase* _scara_machine;
 };

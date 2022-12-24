@@ -2,7 +2,7 @@
 
 
 
-class FKPosition_XYZRPY{
+class FKPosition_XYZRPW{
     public:
         float X;
         float Y;

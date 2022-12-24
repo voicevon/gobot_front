@@ -1,7 +1,7 @@
 #include "scara_xy_ab_arm_solution.h"
 
-void Scara_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl* to_ik){
-	FKPosition_XYZRPY* fk = (FKPosition_XYZRPY*)(from_fk);
+void Scara_ArmSolution::FK_to_IK(FKPosition_XYZRPW* from_fk, IKPosition_abgdekl* to_ik){
+	FKPosition_XYZRPW* fk = (FKPosition_XYZRPW*)(from_fk);
 	IKPosition_abgdekl* ik = (IKPosition_abgdekl*)(to_ik);
 	bool debug = false;
 
@@ -67,9 +67,9 @@ void Scara_ArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk, IKPosition_abgdekl*
 // from_ik: Alpha, Beta
 //          represents  actuator's current position. unit is rad
 // to_fk: x,y.  unit is mm.
-void Scara_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
+void Scara_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW*  to_fk){
 	IKPosition_abgdekl* ik = from_ik;
-	FKPosition_XYZRPY* fk = to_fk;
+	FKPosition_XYZRPW* fk = to_fk;
 	// float rad_beta = ik->beta; // / this->_scara_machine->STEPS_PER_RAD_BETA;
 	float rad_beta = ik->Positions[AXIS_BETA]; // / this->_scara_machine->STEPS_PER_RAD_BETA;
 	// float rad_eef = rad_beta + ik->alpha / this->_scara_machine->STEPS_PER_RAD_ALPHA;
@@ -94,7 +94,7 @@ void Scara_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*
 	}
 }
 
-// bool Scara_ArmSolution::GetCurrentPosition(FKPosition_XYZRPY* position_fk){
+// bool Scara_ArmSolution::GetCurrentPosition(FKPosition_XYZRPW* position_fk){
 // 	position_fk = & this->__current_fk_position;
 // 	return true;
 // }

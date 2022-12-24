@@ -1,7 +1,7 @@
 #include "coordinate_base.h"
 #include <HardwareSerial.h>
 
-void FKPosition_XYZRPY::PrintOut(const char* title){
+void FKPosition_XYZRPW::PrintOut(const char* title){
     Serial.println(title);
     Serial.print("    ");
     Serial.print(this->X);

@@ -2,7 +2,7 @@
 
 
 
-void Twh2_XzArmSolution::real_MK_to_FK(MiddleKinematic* mk, FKPosition_XYZRPY* fk){
+void Twh2_XzArmSolution::real_MK_to_FK(MiddleKinematic* mk, FKPosition_XYZRPW* fk){
 	fk->Y = mk->Arm_shaft_At_Y + __config.arm_length * cosf(mk->Arm_Angle);
 	fk->X = __config.arm_length * sinf(mk->Arm_Angle);
 
@@ -11,7 +11,7 @@ void Twh2_XzArmSolution::real_MK_to_FK(MiddleKinematic* mk, FKPosition_XYZRPY* f
 	// Logger::Print("fk.Y", fk->Y);
 }
 
-void Twh2_XzArmSolution::real_FK_to_MK(FKPosition_XYZRPY* fk, MiddleKinematic* mk){
+void Twh2_XzArmSolution::real_FK_to_MK(FKPosition_XYZRPW* fk, MiddleKinematic* mk){
 	mk->Arm_Angle = asinf(fk->X / __config.arm_length);  // range should be in range of degree [-90, +90]
 	mk->Arm_shaft_At_Y = fk->Y - __config.arm_length * cosf(mk->Arm_Angle);
 	// Logger::Print("input.X", fk->X);
@@ -38,7 +38,7 @@ void Twh2_XzArmSolution::real_IK_to_MK(IKPosition_abgdekl* ik, MiddleKinematic* 
 	// Logger::Print("Twh2_XzArmSolution::real_IK_to_MK() mk.Angle in deg", mk->Arm_Angle * RAD_TO_DEG);
 }
 
-void Twh2_XzArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl* to_ik){
+void Twh2_XzArmSolution::FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik){
 	// Logger::Info("Twh2_XzArmSolution::IK()");
 	MiddleKinematic mk;
 	real_FK_to_MK(from_fk, &mk);
@@ -46,7 +46,7 @@ void Twh2_XzArmSolution::FK_to_IK(FKPosition_XYZRPY* from_fk,IKPosition_abgdekl*
 	to_ik->Positions[AXIS_GAMMA] =  from_fk->Z / __config.servo_slope - __config.servo_offset;
 }
 
-void Twh2_XzArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY*  to_fk){
+void Twh2_XzArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW*  to_fk){
 	// Logger::Debug("Twh2_XzArmSolution::FK()");
 	MiddleKinematic mk;
 	real_IK_to_MK(from_ik,&mk);
@@ -54,13 +54,13 @@ void Twh2_XzArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPY
 	to_fk->Z = (from_ik->Positions[AXIS_GAMMA] + __config.servo_offset) * __config.servo_slope;
 }
 
-void Twh2_XzArmSolution::MK_to_FK(FKPosition_XYZRPY* from_mk, FKPosition_XYZRPY* to_fk){
+void Twh2_XzArmSolution::MK_to_FK(FKPosition_XYZRPW* from_mk, FKPosition_XYZRPW* to_fk){
 	MiddleKinematic mk;
 	mk.Arm_shaft_At_Y = from_mk->Y;
 	mk.Arm_Angle = from_mk->Roll;
 	real_MK_to_FK(&mk, to_fk);
 }
-void Twh2_XzArmSolution::MK_to_Ik(FKPosition_XYZRPY* from_mk, IKPosition_abgdekl* to_ik){
+void Twh2_XzArmSolution::MK_to_Ik(FKPosition_XYZRPW* from_mk, IKPosition_abgdekl* to_ik){
 	MiddleKinematic mk;
 	mk.Arm_shaft_At_Y = from_mk->Y;
 	mk.Arm_Angle = from_mk->Roll;
@@ -68,9 +68,9 @@ void Twh2_XzArmSolution::MK_to_Ik(FKPosition_XYZRPY* from_mk, IKPosition_abgdekl
 
 }
 
-void Twh2_XzArmSolution::Test_FK_MK_FK(FKPosition_XYZRPY* input){
+void Twh2_XzArmSolution::Test_FK_MK_FK(FKPosition_XYZRPW* input){
 	MiddleKinematic mk;
-	FKPosition_XYZRPY output;
+	FKPosition_XYZRPW output;
 	// Logger::Info("Twh2_XzArmSolution::Test_FK_MK_FK()");
 	real_FK_to_MK(input, &mk);
 	real_MK_to_FK(&mk, &output);
@@ -94,7 +94,7 @@ void Twh2_XzArmSolution::Test_MK_IK_MK(MiddleKinematic* input){
 }
 
 void Twh2_XzArmSolution::Test_MK_FK_MK(MiddleKinematic* input){
-	FKPosition_XYZRPY fk;
+	FKPosition_XYZRPW fk;
 	MiddleKinematic output;
 	// Logger::Info("Twh2_XzArmSolution::Test_MK_IK_MK()");
 	real_MK_to_FK(input, &fk);

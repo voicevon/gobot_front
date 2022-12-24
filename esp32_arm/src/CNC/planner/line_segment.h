@@ -7,16 +7,16 @@
 class LineSegment: public Queue_able{
     public:
         EnumAxis_ForwardKinematic axis;
-        FKPosition_XYZRPY TargetPosition;
+        FKPosition_XYZRPW TargetPosition;
         float Speed_mm_per_second;
         float Acceleration;   // Is this needed ?
         bool IsMiddleKinematicPosition = false;    // A middle kinematic position is borrowing this.
-        void Calculate_distance_time(FKPosition_XYZRPY* start_position);
+        void Calculate_distance_time(FKPosition_XYZRPW* start_position);
 
         float Distance_mm;
         float Required_time;
         void DeepCopyTo(LineSegment* the_copy);
-        void DeepCopyFromFkPosition(FKPosition_XYZRPY* from);
+        void DeepCopyFromFkPosition(FKPosition_XYZRPW* from);
 
         void PrintOUt(const char* title);
     protected:

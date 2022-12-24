@@ -64,7 +64,7 @@ void Twh1_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         mk.Arm_shaft_At_Y= 0;
         // Logger::Print("Twh1_G28_Runner::SetHomedPosition() Y", 32);
         Twh1_XaArmSolution arm;
-        FKPosition_XYZRPY fk;
+        FKPosition_XYZRPW fk;
         arm.real_MK_to_FK(&mk, &fk);
         this->_arm_solution->SetCurrentPositionAs(&fk);
         // Logger::Print("Twh1_G28_Runner::SetHomedPosition() Y", 33);
