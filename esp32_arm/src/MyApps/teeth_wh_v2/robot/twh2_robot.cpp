@@ -17,7 +17,9 @@ void Twh2_Robot::Init(Twh2_Board* board){
 
     this->__m42_runner.Init(board);
     McodeOS::Instance().LinkRunner(&this->__m42_runner);
-    McodeOS::Instance().LinkRunner(&this->__m408_runner);
+    McodeOS::Instance().LinkJsonLoader_ForM408Runner(&this->__json_loader);
+    // this->__m408_runner.LinkJsonLoader(&this->__json_loader);
+    // McodeOS::Instance().LinkRunner(&this->__m408_runner);
 
 }
 

@@ -37,7 +37,7 @@ McodeRunnerBase* McodeOS::GetRunner(int mcode_id){
             __current_runner = this->__m280_runner_set_servo;
             break;
         case 408:
-            __current_runner = this->__m408_runner_report_json;
+            __current_runner = &this->__m408_runner_report_json;
             break;
         default:
             break;
