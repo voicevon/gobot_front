@@ -5,7 +5,8 @@
 #include "MyLibs/basic/logger.h"   // todo: remove
 
 #include "../coordinate/cnc_axis.h"
-#include "CNC/board/cnc_board_base.h"
+#include "MyBoards/board_base.h"
+// #include "CNC/board/cnc_board_base.h"
 #include "CNC/Actuator/cnc_actuator_list.h"
 // #include "ESP32Step/src/TeensyStep.h" 
 #include "FastAccelStepper.h"

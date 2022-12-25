@@ -1,6 +1,5 @@
 
 #include "all_applications.h"
-// #include "all_devices.h"
 #ifdef USING_WIFI_MQTT
 
 
@@ -17,7 +16,6 @@ uint8_t mqtt_bridge_index = 0;
 struct MqttBridge{
     char mqtt_topic[20];
     MqttSyncer* mqtt_syncer;
-    // MessageQueue* local_message_queue;
 };
 MqttBridge all_mqtt_bridges[MQTT_SYNCERS_COUNT];
 
@@ -69,7 +67,7 @@ void setup_mqtt_block_connect(){
     }
 }
 void setup_mqtt_on_message_receive(){
-    mqttClient.onMessage(on_MqttMessage);
+    g_mqttClient.onMessage(on_MqttMessage);
 }
 
 /*
@@ -85,7 +83,7 @@ void append_mqtt_bridge(const char* topic, MessageQueue* local_message_queue, Mq
     //Important: During this line, after subsribe_mqtt() is called, will invoke on_mqtt_message immediately.
     // This is happened because on_mqtt_message is in other thread.
     //TODO:  re-subscibe the topic , after disconnected -->  connected.
-    syncer->SubscribeMqtt(&mqttClient, topic, topic_feedback.c_str());
+    syncer->SubscribeMqtt(&g_mqttClient, topic, topic_feedback.c_str());
 
     mqtt_bridge_index++;
     if (mqtt_bridge_index > MQTT_SYNCERS_COUNT){

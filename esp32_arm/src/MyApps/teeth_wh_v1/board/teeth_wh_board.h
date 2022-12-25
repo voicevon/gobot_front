@@ -1,6 +1,7 @@
 #pragma once
 
-#include "CNC/board/cnc_board_base.h"
+// #include "CNC/board/cnc_board_base.h"
+#include "MyBoards/board_base.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "CNC/Actuator/servo/cnc_actuator_servo.h"
 #include "Robot/axis_homer/position_trigger_array.h" 
@@ -12,12 +13,12 @@
 #define HOME_TRIGGER_COUNT 2
 #define SERVO_COUNT 2
 
-class TeethWarehouse_Board: public CncBoardBase{
+class TeethWarehouse_Board: public BoardBase{
     public:
         void Init(bool is_on_reset) override;
         
         // We do nothing, just override the methods.
-        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override {};
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {};
         void EnableVacuumPump(bool enable_it);
         void EnableVacuumSwitch(bool enable_it);
     

@@ -19,8 +19,8 @@ class McodeOS{
         } 
         McodeRunnerBase* GetRunner(int mcode_id);
         void LinkRunner(M280_Runner_Servo* m280_runner){this->__m280_runner_set_servo=m280_runner;};
-        void LinkRunner(M42_Runner_Switch_Output * m42_runner){this->__m42_runner_switch_output=m42_runner;};
-        void LinkRunner(M408_Runner_ReportJson * m408_runner){this->__m408_runner_report_json=m408_runner;};
+        void LinkRunner(M42_Runner_Switch_Output* m42_runner){this->__m42_runner_switch_output=m42_runner;};
+        void LinkRunner(M408_Runner_ReportJson* m408_runner){this->__m408_runner_report_json=m408_runner;};
 
         
     private:

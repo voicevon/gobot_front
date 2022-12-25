@@ -1,5 +1,6 @@
 #pragma once
-#include "CNC/board/cnc_board_base.h"
+#include "MyBoards/board_base.h"
+// #include "CNC/board/cnc_board_base.h"
 #include "../board_2205/board_pins/board_pins_ver3.11.h"
 #include "../board_2205/robot_eef/gobot_house_eef.h"
 #include "CNC/Actuator/servo/cnc_actuator_servo.h"
@@ -8,11 +9,11 @@
 // #include "ESP32Step/src/TeensyStep.h" 
 #include "Robot/axis_homer/position_trigger_array.h"
 
-class Board_GobotHouse_2206: public CncBoardBase{
+class Board_GobotHouse_2206{
     public:
         // Board_GobotHouse_2206(StepControl* stepControl){this->__stepControl=stepControl;};
         Board_GobotHouse_2206(){};
-        void Init(bool is_on_reset) override;
+        void Init(bool is_on_reset);
         // CncActuatorBase* GetActuator(EnumAxis axis_name) override;
         CncActuatorServo* GetActuaorBeta(char axis_name);
         // MotorBase* GetActuator(char axis_name){};  //TODO: Stepper, Servo, BLDC... all is motorbase!
@@ -21,7 +22,7 @@ class Board_GobotHouse_2206: public CncBoardBase{
 
         // RobotEef_GobotHouse* GetEef() override;
 
-        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it);
         Servo* GetServoDriver_OnBeta(){return &this->__servo_beta;};
         // Stepper* GetStepperDriver_OnAlpha(){return &this->__alpha_stepper;};
         FastAccelStepper* GetStepperDriver_OnAlpha(){return &this->__alpha_stepper;};

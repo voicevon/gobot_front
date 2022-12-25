@@ -14,7 +14,7 @@ bool Twh2_M408_Runner_ReportJson::RunnerLoop(){
         __payload_string = "empty";   //TODO:  any memoory risk?
     const char* payload = __payload_string.c_str();
     Logger::Print(" M408_Runner_ReportJson::RunnerLoop()  payload", payload);
-    mqttClient.publish("twh/221109/ir_state", 2, true, payload);
+    g_mqttClient.publish("twh/221109/ir_state", 2, true, payload);
 
     return true;   
 }

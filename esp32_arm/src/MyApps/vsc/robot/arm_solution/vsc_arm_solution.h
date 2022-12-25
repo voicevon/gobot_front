@@ -1,8 +1,6 @@
 #pragma once
 
-#include "CNC/board/cnc_board_base.h"
 #include "CNC/arm_solution/arm_solution_base.h"
-// #include "circle_loop_arm_solution_config.h"
 #include "vsc_arm_solution.h"
 #include "CNC/planner/planner.h"
 

@@ -1,21 +1,19 @@
 #pragma once
-#include "CNC/board/cnc_board_base.h"
+#include "MyBoards/board_base.h"
 #include "FastAccelStepper.h"
-// #include "ESP32Step/src/TeensyStep.h"
 #include "board_pins/board_ver1.2.h"
 #include "robot_eef/gobot_main_eef.h"
-// #include "Robot/axis_homer/axis_homer.h"
-// #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "Robot/axis_homer/position_trigger_array.h"
+#include "MyBoards/board_base.h"
 
-class GobotMain_Board: public CncBoardBase{
+class GobotMain_Board: public BoardBase{
     public:
         GobotMain_Board(){};
         void Init(bool is_on_reset) override;
         // Stepper* GetStepper(EnumAxis_Inverseinematic axis);
         FastAccelStepper* GetStepper(EnumAxis_Inverseinematic axis);
-        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it);
         uint8_t ReadAllRooms();
         uint8_t GetLoadedRoom();
         // CncActuatorStepper* GetActuator(EnumAxis_Inverseinematic axis){return nullptr;};

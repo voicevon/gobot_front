@@ -1,5 +1,6 @@
 #pragma once
-#include "CNC/board/cnc_board_base.h"
+// #include "CNC/board/cnc_board_base.h"
+#include "MyBoards/board_base.h"
 // #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "FastAccelStepper.h"
@@ -11,12 +12,12 @@
 
 #define POSITION_TRIGGERS_COUNT 1
 
-class Board_SpringMaker: public CncBoardBase{
+class Board_SpringMaker: public BoardBase{
     public:
         Board_SpringMaker(){};
         void Init(bool is_on_reset) override;
         
-        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it);
         FastAccelStepper* GetStepper(){return &this->stepper_driver_alpha;};
         
     private:

@@ -1,14 +1,15 @@
 #pragma once
-#include "CNC/board/cnc_board_base.h"
+#include "MyBoards/board_base.h"
+// #include "CNC/board/cnc_board_base.h"
 #include <SimpleFOC.h>
 #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
-#include "Robot/driver/h_bridge/h_bridge.h"
+// #include "Robot/driver/h_bridge/h_bridge.h"
 #include "eef/vsc_eef.h"
 #include "pins/wroom_board.h"
 #include "Robot/axis_homer/position_trigger_array.h" 
 
 
-class Vsc_Board: public CncBoardBase{
+class Vsc_Board: public BoardBase{
     public:
         // For being a real PCB board.
         Vsc_Board(){};
@@ -24,7 +25,9 @@ class Vsc_Board: public CncBoardBase{
         // RobotEefBase* GetEef() override {return &this->__eef;};
 
         // We do nothing, just override the methods.
-        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override {};
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) 
+        
+        {};
 
 
         void Test_PositionTriggers(int loops);

@@ -1,10 +1,10 @@
 #include "board_tester.h"
 
 
-void GobotMain_BoardTest::LinkBoard(CncBoardBase* board){
+void GobotMain_BoardTest::LinkBoard(GobotMain_Board* board){
     Serial.println("[Info] GobotMain_BoardTest::LinkBoard()");
     this->__board = (GobotMain_Board*) (board);
-    this->LinkCncBoard(board);
+    // this->LinkCncBoard(board);
 }
 
 void GobotMain_BoardTest::Test_room_sensors(int loop_count){

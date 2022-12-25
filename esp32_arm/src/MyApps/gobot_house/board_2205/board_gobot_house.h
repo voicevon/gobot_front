@@ -1,17 +1,18 @@
 #pragma once
-#include "CNC/board/cnc_board_base.h"
+#include "MyBoards/board_base.h"
+// #include "CNC/board/cnc_board_base.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "board_pins/board_pins_ver3.11.h"
 #include "robot_eef/gobot_house_eef.h"   // todo: remove
 // #include "Robot/axis_homer/position_trigger.h"
 #include "Robot/axis_homer/position_trigger_array.h"
 
-class Board_GobotHouse: public CncBoardBase{
+class Board_GobotHouse{
     public:
         Board_GobotHouse(){};
-        void Init(bool is_on_reset) override;
+        void Init(bool is_on_reset) ;
         // RobotEef_GobotHouse* GetEef() override;
-        void EnableMotor(EnumAxis_Inverseinematic actuator_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic actuator_name, bool enable_it) ;
         
 
     private:

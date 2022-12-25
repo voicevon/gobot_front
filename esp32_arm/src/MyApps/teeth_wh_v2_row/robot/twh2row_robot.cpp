@@ -1,6 +1,7 @@
 #include "twh2row_robot.h"
 #include "Robot/mcode_runner/mcode_os.h"
 #include "CNC/Actuator/dc_motor/actuator_encoder_calculator.h"
+#include "IoT/wifi_mqtt_client.h"
 
 
 void Twh2Row_Robot::MySpinOnce(){
@@ -12,12 +13,15 @@ void Twh2Row_Robot::MySpinOnce(){
             break;
         case 1:
             if (_mover->IsMoving()){
-                // publish ready
-                //mqtt_client.publish()
+                // publish ready  //report state topic =  "twh/221109/r0/state"
+                g_mqttClient.publish("twh/221109/r0/state", 2, true, "ready");
                 __current_state = 2;
             }
             break;
         case 2:
+            break;
+        default:
+            __current_state = 0;
             break;
     }
 }

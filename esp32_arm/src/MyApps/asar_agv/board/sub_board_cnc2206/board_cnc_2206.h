@@ -1,6 +1,7 @@
 #pragma once
 #include "../board_pins/board_pins_ver_2_0.h"
-#include "CNC/board/cnc_board_base.h"
+#include "MyBoards/board_base.h"
+// #include "CNC/board/cnc_board_base.h"
 #include "FastAccelStepper.h"
 // #include "ESP32Step/src/TeensyStep.h"
 #include "Robot/axis_homer/position_trigger_array.h"
@@ -9,15 +10,15 @@
 
 
 // For Core_AZ cnc application
-class Board2204Cnc: public CncBoardBase{
+class Board2204Cnc{
     public:
         Board2204Cnc(){};
-        void Init(bool is_on_reset) override;
+        void Init(bool is_on_reset) ;
         void Init(Adafruit_MCP23X17* mcp_23018);
         // void SayHello() override;
         // RobotEef_GarmentAsar* GetEef() override;
         CncActuatorBase* GetActuator(EnumAxis_Inverseinematic axis);
-        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) ;
 
         
     private:

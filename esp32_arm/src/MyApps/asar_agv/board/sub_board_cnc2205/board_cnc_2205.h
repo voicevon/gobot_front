@@ -1,5 +1,6 @@
 #pragma once
-#include "CNC/board/cnc_board_base.h"
+#include "MyBoards/board_base.h"
+// #include "CNC/board/cnc_board_base.h"
 #include "../board_pins/board_pins_ver_2_0.h"
 #include "FastAccelStepper.h"
 // #include "ESP32Step/src/TeensyStep.h"
@@ -11,14 +12,14 @@
 
 
 // For Core_YZ cnc application
-class Board2205Cnc: public CncBoardBase{
+class Board2205Cnc{
     public:
         Board2205Cnc(){};
-        void Init(bool is_on_reset) override;
+        void Init(bool is_on_reset) ;
         void Init(Adafruit_MCP23X17* mcp_23018);
         // void SayHello() override{};
         // RobotEef_GarmentAsar* GetEef() override;
-        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override;
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) ;
         // PositionTrigger* GetPositionTrigger(uint8_t index) override{return nullptr;};
         CncActuatorBase* GetActuator(EnumAxis_Inverseinematic axis){return nullptr;};
 

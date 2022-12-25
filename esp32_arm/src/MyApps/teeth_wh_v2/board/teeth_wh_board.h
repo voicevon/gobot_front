@@ -1,6 +1,7 @@
 #pragma once
 
-#include "CNC/board/cnc_board_base.h"
+#include "MyBoards/board_base.h"
+// #include "CNC/board/cnc_board_base.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "Robot/axis_homer/position_trigger_array.h" 
 #include "VL6180X.h"
@@ -8,12 +9,12 @@
 
 #define HOME_TRIGGER_COUNT 92
 
-class Twh2_Board: public CncBoardBase{
+class Twh2_Board: public BoardBase{
     public:
         void Init(bool is_on_reset) override;
         
         // We do nothing, just override the methods.
-        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) override {};
+        void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) {};
 
         FastAccelStepper* GetStepper_Alpha(){return __stepper_alpha;};
         FastAccelStepper* GetStepper_Beta(){return __stepper_beta;};

@@ -1,4 +1,3 @@
-// #include "all_devices.h"
 #include "all_applications.h"
 #ifdef USING_WIFI_MQTT
 
@@ -23,7 +22,7 @@ bool mqtt_is_connected = false;
 extern void app_mqtt_subscribe();
 extern void app_mqtt_received_message(char* topic, char* payload);
 
-AsyncMqttClient mqttClient;
+AsyncMqttClient g_mqttClient;
 TimerHandle_t mqttReconnectTimer;
 TimerHandle_t wifiReconnectTimer;
 
@@ -35,8 +34,8 @@ void connectToWifi() {
 void connectToMqtt() {
 	Serial.println("Connecting to MQTT...");
 
-	mqttClient.setCredentials(MQTT_UID, MQTT_PASSWORD);
-	mqttClient.connect();
+	g_mqttClient.setCredentials(MQTT_UID, MQTT_PASSWORD);
+	g_mqttClient.connect();
 }
 
 void WiFiEvent(WiFiEvent_t event) {
@@ -66,15 +65,15 @@ void onMqttConnect(bool sessionPresent) {
     Serial.println(sessionPresent);
     bool test_publish = false;
     if (test_publish){
-        uint16_t packetIdSub = mqttClient.subscribe("test/lol", 2);
+        uint16_t packetIdSub = g_mqttClient.subscribe("test/lol", 2);
         Serial.print("Subscribing at QoS 2, packetId: ");
         Serial.println(packetIdSub);
-        mqttClient.publish("test/lol", 0, true, "test 1");
+        g_mqttClient.publish("test/lol", 0, true, "test 1");
         Serial.println("Publishing at QoS 0");
-        uint16_t packetIdPub1 = mqttClient.publish("test/lol", 1, true, "test 2");
+        uint16_t packetIdPub1 = g_mqttClient.publish("test/lol", 1, true, "test 2");
         Serial.print("Publishing at QoS 1, packetId: ");
         Serial.println(packetIdPub1);
-        uint16_t packetIdPub2 = mqttClient.publish("test/lol", 2, true, "test 3");
+        uint16_t packetIdPub2 = g_mqttClient.publish("test/lol", 2, true, "test 3");
         Serial.print("Publishing at QoS 2, packetId: ");
         Serial.println(packetIdPub2);
     }
@@ -148,13 +147,13 @@ void setup_wifi_mqtt() {
 
     WiFi.onEvent(WiFiEvent);
 
-    mqttClient.onConnect(onMqttConnect);
-    mqttClient.onDisconnect(onMqttDisconnect);
-    mqttClient.onSubscribe(onMqttSubscribe);
-    mqttClient.onUnsubscribe(onMqttUnsubscribe);
-    // mqttClient.onMessage(onMqttMessage);
-    mqttClient.onPublish(onMqttPublish);
-    mqttClient.setServer(MQTT_HOST, MQTT_PORT);
+    g_mqttClient.onConnect(onMqttConnect);
+    g_mqttClient.onDisconnect(onMqttDisconnect);
+    g_mqttClient.onSubscribe(onMqttSubscribe);
+    g_mqttClient.onUnsubscribe(onMqttUnsubscribe);
+    // g_mqttClient.onMessage(onMqttMessage);
+    g_mqttClient.onPublish(onMqttPublish);
+    g_mqttClient.setServer(MQTT_HOST, MQTT_PORT);
 
     connectToWifi();
 }
