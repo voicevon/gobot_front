@@ -17,6 +17,7 @@ void Twh2_Robot::Init(Twh2_Board* board){
 
     this->__m42_runner.Init(board);
     McodeOS::Instance().LinkRunner(&this->__m42_runner);
+    McodeOS::Instance().LinkRunner(&this->__m408_runner);
 
 }
 

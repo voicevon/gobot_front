@@ -7,9 +7,9 @@
 class M408_Runner_ReportJson: public McodeRunnerBase{
     public:
         void SetupRunner(Gcode* mcode) override;
-        bool RunnerLoop() override;
+        // bool RunnerLoop() override;
 
-    private:
+    protected:
         char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_1K];
         String __payload_string;
 

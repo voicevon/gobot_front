@@ -4,6 +4,7 @@
 #include "arm_solution_core_xz/twh_xz_arm_solution.h"
 #include "arm_solution_core_xz/twh_g28_runner.h"
 #include "gmcode_runner/twh_m42_switch_output.h"
+#include "gmcode_runner/twh2_m408_report_json_runner.h"
 #include "MyApps/teeth_wh_v2/board/teeth_wh_board.h"
 
 // #define ROWS_COUNT 20
@@ -34,6 +35,7 @@ class Twh2_Robot: public RobotBase{
         Twh2_XzArmSolution __arm_solution_corexz;
         Twh2_G28_Runner_CoreXz __g28_runner_corexz;
         Twh2_M42_Runner_Switch_Output __m42_runner;
+        Twh2_M408_Runner_ReportJson __m408_runner;
 
         // Twh_ArmSolution_Config __arm_config;
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 

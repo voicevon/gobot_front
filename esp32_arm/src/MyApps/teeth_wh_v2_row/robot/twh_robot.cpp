@@ -3,6 +3,24 @@
 #include "CNC/Actuator/dc_motor/actuator_encoder_calculator.h"
 
 
+void Twh2Row_Robot::MySpinOnce(){
+    switch (__current_state){
+        case 0:
+            if (! _mover->IsMoving()){
+                __current_state = 1;
+            }
+            break;
+        case 1:
+            if (_mover->IsMoving()){
+                // publish ready
+                //mqtt_client.publish()
+                __current_state = 2;
+            }
+            break;
+        case 2:
+            break;
+    }
+}
 
 void Twh2Row_Robot::Init(Twh2_Board* board){
     Logger::Debug("Twh2Row_Robot::Init()");
@@ -14,40 +32,27 @@ void Twh2Row_Robot::Init(Twh2_Board* board){
     
     this->_g28_runner = &this->__g28_runner;
     __g28_runner.Init(&__mover, &__arm_solution);
-
-    // this->__m42_runner.Init(board);
-    // McodeOS::Instance().LinkRunner(&this->__m42_runner);
-
+    // McodeOS::Instance().LinkRunner(&__m408_runner);
 }
 
 void Twh2Row_Robot::__InitStatic_Actuators(Twh2_Board* board){
     Logger::Info("Twh2Row_Robot::Init() Actuators.");
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
-    // CncActuator_List::Instance().AddActuator(&__actuator_beta);
-    // CncActuator_List::Instance().AddActuator(&__actuator_gamma);
-
     this->__actuator_alpha.MyName = 'a';
-    // this->__actuator_beta.MyName = 'b';
-    // this->__actuator_gamma.MyName = 'g';
-    
     __actuator_alpha.LinkStepper(board->GetStepper_Alpha());
-    // __actuator_beta.LinkStepper(board->GetStepper_Beta());
-
-    // __actuator_gamma.LinkServo(board->GetServo_onVertical());
 
 }
 
 void Twh2Row_Robot::_Init_ArmSolution(){
     this->_LinkArmSolution_for_planner(&__arm_solution);
-    // We don't care the value of current position, But  fk_position and ik_position must be consistent
+    // We don't care the value of current position,
+    // But  fk_position and ik_position must be consistent
     FKPosition_XYZRPW current;
-    current.X = 0;
-    current.Y = 0;
-    current.Z = 0;
+    current.Roll = 0;
     __arm_solution.SetCurrentPositionAs(&current);
-    IKPosition_abgdekl ik;
 
+    IKPosition_abgdekl ik;
     __arm_solution.FK_to_IK(&current, &ik);
     __arm_solution.SetCurrentPositionAs(&ik);
 }
@@ -68,3 +73,5 @@ void Twh2Row_Robot::_InitStatic_Queues(){
     Queue_LineSegment::Instance().Deposit();
     Logger::Print("Twh2Row_Robot::Init", 83);
 }
+
+

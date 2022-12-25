@@ -1,6 +1,7 @@
 #include "Twh_G28_Runner.h"
 #include "circle_loop_arm_solution.h"
 
+#define HOME_POSITION_FK_ROLL 12.345
 
 void Twh2Row_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
     Logger::Info("Twh2Row_G28_Runner::Init() Hoiming_config");
@@ -36,9 +37,13 @@ void Twh2Row_G28_Runner::SetMoveBlock_ToHome(char axis_name, MoveBlock* mb){
 
 void Twh2Row_G28_Runner::SetHomedPosition(PositionTrigger* firer){
     Logger::Debug("Twh2Row_G28_Runner::SetHomedPosition()");
+    FKPosition_XYZRPW current_fk;
+    IKPosition_abgdekl ik;
     if (this->_axis_name =='R'){
-        FKPosition_XYZRPW fk;
-        fk.X = 12.345;
-        _arm_solution->SetCurrentPositionAs(&fk);
+        current_fk.X = HOME_POSITION_FK_ROLL;
+        _arm_solution->SetCurrentPositionAs(&current_fk);
+        
+        _arm_solution->FK_to_IK(&current_fk, &ik);
+        _arm_solution->SetCurrentPositionAs(&ik);
     }
 }

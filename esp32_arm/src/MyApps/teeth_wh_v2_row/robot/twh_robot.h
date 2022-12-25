@@ -3,6 +3,7 @@
 #include "Robot/robot_base.h"
 #include "arm_soution_circle_loop/circle_loop_arm_solution.h"
 #include "arm_soution_circle_loop/twh_g28_runner.h"
+// #include "mcode_runner/twh2row_m408_report_json_runner.h"
 #include "MyApps/teeth_wh_v2/board/teeth_wh_board.h"
 
 #define QUEUE_LINE_SEGMENT_COUNT 1
@@ -14,6 +15,7 @@
 class Twh2Row_Robot: public RobotBase{
     public:
         void Init(Twh2_Board* board);
+        void MySpinOnce();
 
     private:
         void __InitStatic_Actuators(Twh2_Board* board);
@@ -27,7 +29,12 @@ class Twh2Row_Robot: public RobotBase{
         Twh2_Circleloop_ArmSolution __arm_solution;
         CncMover __mover;
         Twh2Row_G28_Runner __g28_runner;
+        // Twh2Row_M408_Runner_ReportJson __m408_runner;
 
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
         LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
+
+        int __current_state = 0;  //idle=0.   moving=1 , ready=2
+
 };
+

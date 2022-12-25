@@ -2,7 +2,7 @@
 #ifdef I_AM_TEETH_WAREHOUSE_V2_ROW
 
 #define MY_ROBOT_ROW_ID 0
-#define GCODE_MQTT_TOPIC "twh/221109/r0"
+#define GCODE_MQTT_TOPIC "twh/221109/r0"   //report state topic =  "twh/221109/r0/state"
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
@@ -96,15 +96,18 @@ void setup(){
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
 
+
 void loop(){
 
     // Logger::Print("Arduino loop() point ", 1);
     app.SpinOnce();
     // Logger::Print("Aruino loop() point ", 2);
     robot.SpinOnce();
+    robot.MySpinOnce();
     // Logger::Print("Arduino loop() point ", 3);
     loop_mqtt();
     // Logger::Print("Arduino loop() point ", 4);
+
 
 }
 

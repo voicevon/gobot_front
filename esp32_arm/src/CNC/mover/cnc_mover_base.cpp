@@ -65,6 +65,13 @@ float CncMover::GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinema
     Logger::Debug("CncMover::GetSingleActuatorCurrentPosition_InCncUnit() ");
     return CncActuator_List::Instance().GetActuator(actuator_name)->GetCurrentPosition();
 }
+bool CncMover::IsMoving(){
+    for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
+        if (CncActuator_List::Instance().GetActuator(a)->IsMoving() )
+            return true;
+    }
+    return false;
+}
 
 
 //TODO:  be a virtual method.
