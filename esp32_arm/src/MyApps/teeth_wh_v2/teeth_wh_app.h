@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MyApps/app_base.h"
-#include "robot/twh_robot.h"
+#include "robot/twh2_robot.h"
 
 class Twh2_App: public AppBase{
     public:

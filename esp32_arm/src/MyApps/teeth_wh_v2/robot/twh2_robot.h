@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Robot/robot_base.h"
-#include "arm_solution_core_xz/twh_xz_arm_solution.h"
-#include "arm_solution_core_xz/twh_g28_runner.h"
-#include "gmcode_runner/twh_m42_switch_output.h"
+#include "arm_solution_core_xz/twh2_xz_arm_solution.h"
+#include "arm_solution_core_xz/twh2_g28_runner.h"
+#include "gmcode_runner/twh2_m42_switch_output.h"
 #include "gmcode_runner/twh2_m408_report_json_runner.h"
 #include "MyApps/teeth_wh_v2/board/teeth_wh_board.h"
 

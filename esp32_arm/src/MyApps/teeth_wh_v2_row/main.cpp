@@ -7,8 +7,8 @@
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "MyApps/teeth_wh_v2_row/board/teeth_wh_board.h"
-#include "MyApps/teeth_wh_v2_row/teeth_wh_app.h"
-#include "MyApps/teeth_wh_v2_row/robot/twh_robot.h"
+#include "MyApps/teeth_wh_v2_row/twh2row_app.h"
+#include "MyApps/teeth_wh_v2_row/robot/twh2row_robot.h"
 
     // char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_200K];
 

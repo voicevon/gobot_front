@@ -1,5 +1,5 @@
-#include "Twh_G28_Runner.h"
-#include "../arm_solution_core_xz/twh_xz_arm_solution.h"
+#include "twh2_g28_runner.h"
+#include "../arm_solution_core_xz/twh2_xz_arm_solution.h"
 
 
 void Twh2_G28_Runner_CoreXz::Init(CncMover* mover, ArmSolutionBase* arm_solution){

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CNC/arm_solution/arm_solution_base.h"
-#include "twh_xz_arm_solution_config.h"
+#include "twh2_xz_arm_solution_config.h"
 
 
 class MiddleKinematic{
