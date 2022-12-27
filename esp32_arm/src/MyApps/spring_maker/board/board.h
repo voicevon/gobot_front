@@ -15,7 +15,7 @@
 class Board_SpringMaker: public BoardBase{
     public:
         Board_SpringMaker(){};
-        void Init(bool is_on_reset) override;
+        void Init() override;
         
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it);
         FastAccelStepper* GetStepper(){return &this->stepper_driver_alpha;};

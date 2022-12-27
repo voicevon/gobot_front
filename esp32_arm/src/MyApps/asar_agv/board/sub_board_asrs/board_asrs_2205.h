@@ -8,7 +8,7 @@
 class BoardAsrs: public BoardBase{
     public:
         BoardAsrs(){};
-        void Init(bool is_on_reset);
+        void Init();
         void LinkTwoWireBus(TwoWire* i2c_bus);
         JettySensor_SharpIrOnAds1115* GetJettySensor(){return &this->__jettySensor;};
 

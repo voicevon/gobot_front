@@ -1,7 +1,7 @@
 #include "smoker_board.h"
 
 
-void Smoker_Board::Init(bool is_on_reset){
+void Smoker_Board::Init(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
 

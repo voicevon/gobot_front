@@ -23,7 +23,7 @@ void GobotMain_Board::InitHardware(){
     // this->__beta_stepper.setInverseRotation(false);
 }
 
-void GobotMain_Board::Init(bool is_on_reset){
+void GobotMain_Board::Init(){
     Serial.begin(115200);
     Serial.print("\n\n\n\n\n\n");
     Logger::Info("==========================================");

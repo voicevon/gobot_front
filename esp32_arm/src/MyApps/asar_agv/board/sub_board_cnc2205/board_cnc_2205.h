@@ -15,7 +15,7 @@
 class Board2205Cnc{
     public:
         Board2205Cnc(){};
-        void Init(bool is_on_reset) ;
+        void Init() ;
         void Init(Adafruit_MCP23X17* mcp_23018);
         // void SayHello() override{};
         // RobotEef_GarmentAsar* GetEef() override;

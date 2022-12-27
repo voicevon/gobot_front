@@ -58,7 +58,7 @@ void loop(){
 }
 
 
-#include "board_2206/board_tester.h"
+// #include "board_2206/board_tester.h"
 void board_test(){
     // GobotHouse_2206_BoardTest tester = GobotHouse_2206_BoardTest(&stepControl);
     // tester.LinkBoard(&board);

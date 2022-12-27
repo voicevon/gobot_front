@@ -10,7 +10,7 @@
 class GobotMain_Board: public BoardBase{
     public:
         GobotMain_Board(){};
-        void Init(bool is_on_reset) override;
+        void Init() override;
         // Stepper* GetStepper(EnumAxis_Inverseinematic axis);
         FastAccelStepper* GetStepper(EnumAxis_Inverseinematic axis);
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it);

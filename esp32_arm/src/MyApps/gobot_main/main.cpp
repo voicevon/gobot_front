@@ -56,7 +56,7 @@ void loop(){
     if (last_loaded_room != loadded_room){
         String topic = "gobot/xROBOT_SERIAL_ID/rooms";
         topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
-        mqttClient.publish(topic.c_str(),2,true, &c_room_sensor);
+        g_mqttClient.publish(topic.c_str(),2,true, &c_room_sensor);
         last_loaded_room = loadded_room;
     }
 }

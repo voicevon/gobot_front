@@ -1,6 +1,6 @@
 #include "board_cnc_2205.h"
 
-void Board2205Cnc::Init(bool is_on_reset){
+void Board2205Cnc::Init(){
     Serial.println("[Error] Board2205Cnc::Init().  You should call Init(Adafruit_MCP23X17* )");
 }
 

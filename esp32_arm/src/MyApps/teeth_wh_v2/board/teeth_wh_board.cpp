@@ -26,13 +26,10 @@
 #define POSITION_TRIGGER_ALPHA 0
 #define POSITION_TRIGGER_X  1
 
-
-void Twh2_Board::Init(bool is_on_reset){
-    if (is_on_reset){
-        Serial.begin(115200);
-        Serial.println("I am Teeth Warehouse.");
-    }
-
+Twh2_Board::Twh2_Board(){
+    _InitSerialBoard("I am Teeth Warehouse.");
+}
+void Twh2_Board::Init(){
     pinMode(PIN_IR_CHECKING, INPUT_PULLUP);
 
     __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('Y',PIN_HOMER_SENSOR_HALL_ALPHA, HIGH);
@@ -49,7 +46,7 @@ void Twh2_Board::__InitSteppers(){
     __stepper_beta = __stepper_engine.stepperConnectToPin(PIN_BETA_STEP);  // for alpha=27, for beta=12
 
     if (__stepper_alpha) {
-        __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR);   //for alpha=26, for beta = 14
+        __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR,true);   //for alpha=26, for beta = 14
         __stepper_alpha->setEnablePin(PIN_STEPPERS_ENABLE);                            
         __stepper_alpha->setAutoEnable(false);
 
@@ -66,7 +63,7 @@ void Twh2_Board::__InitSteppers(){
 
     if (__stepper_beta) {
         __stepper_beta->setDirectionPin(PIN_BETA_DIR);   //for alpha=26, for beta = 14
-        __stepper_beta->setEnablePin(PIN_STEPPERS_ENABLE);                          
+        __stepper_beta->setEnablePin(PIN_STEPPERS_ENABLE, true);                          
         __stepper_beta->setAutoEnable(false);
 
         __stepper_beta->setSpeedInUs(1000);  // the parameter is us/step !!!

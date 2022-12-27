@@ -35,9 +35,9 @@ void G28_Runner::LinkGcode(Gcode* gcode){
     if (gcode->has_letter('X')) axis_name = 'X';
     if (gcode->has_letter('Y')) axis_name = 'Y';
     if (gcode->has_letter('Z')) axis_name = 'Z';
-    if (gcode->has_letter('A')) axis_name = 'A';
-    if (gcode->has_letter('B')) axis_name = 'B';
-    if (gcode->has_letter('C')) axis_name = 'C';
+    if (gcode->has_letter('R')) axis_name = 'R';
+    if (gcode->has_letter('P')) axis_name = 'P';
+    if (gcode->has_letter('W')) axis_name = 'W';
     if (gcode->has_letter('a')) axis_name = 'a'; 
     if (gcode->has_letter('b')) axis_name = 'b'; 
     if (gcode->has_letter('g')) axis_name = 'g'; 

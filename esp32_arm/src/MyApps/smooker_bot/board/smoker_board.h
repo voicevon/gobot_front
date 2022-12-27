@@ -14,7 +14,7 @@
 class Smoker_Board: public BoardBase{
     public:
         Smoker_Board(){};
-        void Init(bool is_on_reset) override;
+        void Init() override;
         
         // void SayHello() override;
         // RobotEef_SmokeMachine* GetEef() override;

@@ -10,7 +10,7 @@
 
 class AgvBoardbase: public BoardBase{
     public:
-        virtual void Init(bool is_on_reset);
+        virtual void Init();
         virtual ObstacleSensorBase* GetObstacleSensor();
         virtual TrackSensorBase* GetTrackSensor();
         virtual LightBase* GetTrackLight();

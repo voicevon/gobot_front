@@ -31,12 +31,11 @@
 #define SERVO_VACUUM_SWITCH  0
 #define SERVO_EEF_VERTICAL 1
 
+TeethWarehouse_Board::TeethWarehouse_Board(){
+    _InitSerialBoard("I am Teeth Warehouse.");
+}
 
-void TeethWarehouse_Board::Init(bool is_on_reset){
-    if (is_on_reset){
-        Serial.begin(115200);
-        Serial.println("I am Teeth Warehouse.");
-    }
+void TeethWarehouse_Board::Init(){
 
     pinMode(PIN_IR_CHECKING, INPUT_PULLUP);
 

@@ -22,7 +22,7 @@ void Board_GobotHouse_2206::__Init_Hardware(){
 
 }
 
-void Board_GobotHouse_2206::Init(bool is_on_reset){
+void Board_GobotHouse_2206::Init(){
     Serial.begin(115200);
     Serial.println("[Info] Board_GobotHouse_2206::Init()  Hi Xuming, I am your lovely bot,  GobotHouse_2206. ");
 

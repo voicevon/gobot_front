@@ -12,10 +12,10 @@
 class Vsc_Board: public BoardBase{
     public:
         // For being a real PCB board.
-        Vsc_Board(){};
+        Vsc_Board();
         void LinkEncoderSensor(Encoder* encoder){this->__encoder=encoder;};
         // call me must after LinkEncoderSensor().
-        void Init(bool is_on_reset) override;
+        void Init() override;
 
         // For being an actuator and its components.
         Encoder* GetEncoder(){return this->__encoder;};

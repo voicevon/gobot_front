@@ -13,7 +13,7 @@ class Board_GobotHouse_2206{
     public:
         // Board_GobotHouse_2206(StepControl* stepControl){this->__stepControl=stepControl;};
         Board_GobotHouse_2206(){};
-        void Init(bool is_on_reset);
+        void Init();
         // CncActuatorBase* GetActuator(EnumAxis axis_name) override;
         CncActuatorServo* GetActuaorBeta(char axis_name);
         // MotorBase* GetActuator(char axis_name){};  //TODO: Stepper, Servo, BLDC... all is motorbase!

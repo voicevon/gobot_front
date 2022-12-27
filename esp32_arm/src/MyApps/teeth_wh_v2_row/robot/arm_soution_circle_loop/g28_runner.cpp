@@ -17,7 +17,7 @@ void Twh2Row_G28_Runner::SetMoveBlock_ToHome(char axis_name, MoveBlock* mb){
     mb->DeepReset_ToDefault();
 
     switch (axis_name){
-        case 'R':
+        case 'X':
             // Logger::Print("Twh2Row_G28_Runner::SetMoveBlock_ToHome()  point", 31);
             mb->DeepReset_ToDefault();
             // Logger::Print("Twh2Row_G28_Runner::SetMoveBlock_ToHome()  point", 22);
@@ -39,7 +39,7 @@ void Twh2Row_G28_Runner::SetHomedPosition(PositionTrigger* firer){
     Logger::Debug("Twh2Row_G28_Runner::SetHomedPosition()");
     FKPosition_XYZRPW current_fk;
     IKPosition_abgdekl ik;
-    if (this->_axis_name =='R'){
+    if (this->_axis_name =='X'){
         current_fk.X = HOME_POSITION_FK_ROLL;
         _arm_solution->SetCurrentPositionAs(&current_fk);
         

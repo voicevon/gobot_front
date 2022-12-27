@@ -10,10 +10,10 @@
 
 
 // For Core_AZ cnc application
-class Board2204Cnc{
+class Board2204Cnc:public BoardBase{
     public:
-        Board2204Cnc(){};
-        void Init(bool is_on_reset) ;
+        Board2204Cnc();
+        void Init() ;
         void Init(Adafruit_MCP23X17* mcp_23018);
         // void SayHello() override;
         // RobotEef_GarmentAsar* GetEef() override;

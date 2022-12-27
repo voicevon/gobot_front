@@ -13,7 +13,7 @@
 
 class BoardBase{
     public:
-        virtual void Init(bool is_on_reset);
+        virtual void Init();
         // virtual void SayHello();
         virtual  float ReadBatteryVolt(){return 1.234f;};
         static uint8_t Assign_ledc_channel();
@@ -21,6 +21,7 @@ class BoardBase{
 
     protected:
         // TODO:: be static
+        void _InitSerialBoard(const char* welcome_statement);
         static uint8_t Assign_i2c_bus_id(){return __i2c_bus_index; __i2c_bus_index++;};
         void ScanI2cBus(TwoWire* i2c_bus, const char* printing_topic);
         bool _Begin_I2cBus(TwoWire* i2c_bus, uint8_t pin_sda, uint8_t pin_scl, uint32_t frequency);

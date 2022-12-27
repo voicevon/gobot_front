@@ -10,7 +10,10 @@ class Twh2_Circleloop_Armsolution_Config{
             float steps_per_chain_gear_round = steps_per_motor_round * __slave_pulley_teeth_count / __motor_pulley_teeth_count;
             float steps_per_chain_gear_teeth = steps_per_chain_gear_round / __chain_gear_teeth_count;
          
-            return steps_per_chain_gear_teeth / 2;   // one box occupy two gear teeth.
+            float slope = steps_per_chain_gear_teeth / 2;   // one box occupy two gear teeth.
+            Logger::Info("Twh2_Circleloop_Armsolution_Config");
+            Logger::Print("slope",slope);
+            return slope;
         };
 
     protected:

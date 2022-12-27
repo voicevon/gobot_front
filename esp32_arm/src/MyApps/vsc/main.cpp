@@ -1,7 +1,7 @@
 #include "all_applications.h"
 #ifdef I_AM_VSC
 #include "MyApps/vsc/board/board_vsc.h"
-#include "MyApps/vsc/board/board_tester.h"
+// #include "MyApps/vsc/board/board_tester.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
 #include "MyApps/vsc/vsc_app.h"
@@ -21,7 +21,7 @@ void doB(){encoder.handleB();}
 
 
 void test_board(){
-    Vsc_BoardTest tester;
+    // Vsc_BoardTest tester;
     board.Test_PositionTriggers(0);
     board.Test_HBridge(0);
     // tester.LinkBoard(&board);
@@ -32,7 +32,7 @@ void test_board(){
     // tester.Test_AxisHomer(board.GetCncHomers()->GetAxisHomer(AXIS_ALPHA), 0);
 
     // tester.Test_MotorDriver(board.GetActuator(AXIS_ALPHA), 0);
-    tester.Test_Offset(0);
+    // tester.Test_Offset(0);
     Serial.println("[Info] test_board() is done.");
 }
 

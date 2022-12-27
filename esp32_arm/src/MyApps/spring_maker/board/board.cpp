@@ -1,7 +1,7 @@
 #include "board.h"
 
 
-void Board_SpringMaker::Init(bool is_on_reset){
+void Board_SpringMaker::Init(){
     Serial.begin(115200);
     Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
     

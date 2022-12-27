@@ -1,8 +1,12 @@
 #include "board_base.h"
-
+#include "Mylibs/basic/logger.h"
 uint8_t BoardBase::__ledc_channel_index = 0;
 uint8_t BoardBase::__i2c_bus_index = 0;
 
+void BoardBase::_InitSerialBoard(const char* welcome_statement){
+    Serial.begin(115200);
+    Logger::Info(welcome_statement);
+}
 
 void BoardBase::RepportRamUsage(){
     Logger::Info("-----------------  RAM usage -----------------");

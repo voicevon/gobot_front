@@ -1,6 +1,6 @@
 #include "board_agv_2205.h"
 
-void Board2205Agv::Init(bool is_on_reset){
+void Board2205Agv::Init(){
     Serial.println("[Error] Board2205Agv::Init()");
 }
 

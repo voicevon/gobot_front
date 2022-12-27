@@ -26,7 +26,7 @@ void Twh2Row_Robot::MySpinOnce(){
     }
 }
 
-void Twh2Row_Robot::Init(Twh2_Board* board){
+void Twh2Row_Robot::Init(Twh2Row_Board* board){
     Logger::Debug("Twh2Row_Robot::Init()");
     this->_InitStatic_Queues();
     this->__InitStatic_Actuators(board);
@@ -39,12 +39,12 @@ void Twh2Row_Robot::Init(Twh2_Board* board){
     // McodeOS::Instance().LinkRunner(&__m408_runner);
 }
 
-void Twh2Row_Robot::__InitStatic_Actuators(Twh2_Board* board){
+void Twh2Row_Robot::__InitStatic_Actuators(Twh2Row_Board* board){
     Logger::Info("Twh2Row_Robot::Init() Actuators.");
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
     this->__actuator_alpha.MyName = 'a';
-    __actuator_alpha.LinkStepper(board->GetStepper_Alpha());
+    __actuator_alpha.LinkStepper(board->GetStepper());
 
 }
 

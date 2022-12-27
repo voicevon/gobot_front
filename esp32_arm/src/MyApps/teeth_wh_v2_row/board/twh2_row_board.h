@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MyBoards/board_base.h"
-// #include "CNC/board/cnc_board_base.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "Robot/axis_homer/position_trigger_array.h" 
 #include "FastAccelStepper.h"
@@ -10,10 +9,9 @@
 
 class Twh2Row_Board: public BoardBase{
     public:
-        void Init(bool is_on_reset) override;
+        Twh2Row_Board();
+        void Init() override;
         
-        float ReadVL6180();
-
         // HX711* GetHx711(){return &this->__hx711;};
         FastAccelStepper* GetStepper(){return __stepper_alpha;};
 

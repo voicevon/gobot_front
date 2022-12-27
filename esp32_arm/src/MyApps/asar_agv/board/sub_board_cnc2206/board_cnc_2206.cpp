@@ -1,13 +1,11 @@
 #include "board_cnc_2206.h"
 
-void Board2204Cnc::Init(bool is_on_reset){
-    if (is_on_reset){
-        Serial.begin(115200);
-        Serial.println("[Info]  Board2204Cnc::Init() Hi world! ");
-    }
-    else{
-        Serial.println("[Warn] Board2204Cnc::Init().  You should call Init(Adafruit_MCP23X17* )");
-    }
+Board2204Cnc::Board2204Cnc(){
+    _InitSerialBoard("Board2204Cnc::Init() Hi world!");
+}
+
+void Board2204Cnc::Init(){
+    Serial.println("[Warn] Board2204Cnc::Init().  You should call Init(Adafruit_MCP23X17* )");
 }
 
 void Board2204Cnc::Init(Adafruit_MCP23X17* mcp_23018){

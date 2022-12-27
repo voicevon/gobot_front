@@ -35,7 +35,7 @@ void mqtt_report_states(){
     uint8_t payload[60]; 
     garment_robot->GetMqtt_PubPayload(&payload[0]);
     const char * pp = (const char*)(&payload[0]);
-    mqttClient.publish(topic.c_str(), 2, true, pp);
+    g_mqttClient.publish(topic.c_str(), 2, true, pp);
 }
 
 void loop(){

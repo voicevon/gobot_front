@@ -1,7 +1,7 @@
 #include "board_gobot_house.h"
 
 
-void Board_GobotHouse::Init(bool is_on_reset){
+void Board_GobotHouse::Init(){
     Serial.begin(115200);
     Serial.println("[Info] Board_GobotHouse::Init()  Hi Xuming, I am your lovely bot,  GobotHouse. ");
     pinMode(PIN_ALPHA_ENABLE_2109, OUTPUT);
