@@ -7,7 +7,7 @@
 #include "VL6180X.h"
 #include "FastAccelStepper.h"
 
-#define HOME_TRIGGER_COUNT 92
+#define TWH2_POSITION_TRIGGERS_COUNT 2
 
 class Twh2_Board: public BoardBase{
     public:
@@ -32,13 +32,10 @@ class Twh2_Board: public BoardBase{
     private:
 
         void __InitSteppers();
-        PositionTrigger __all_position_triggers[HOME_TRIGGER_COUNT];
-        // Servo __all_servos[SERVO_COUNT];
+        PositionTrigger __all_position_triggers[TWH2_POSITION_TRIGGERS_COUNT];
         FastAccelStepperEngine __stepper_engine = FastAccelStepperEngine();
         FastAccelStepper* __stepper_alpha = NULL;
         FastAccelStepper* __stepper_beta = NULL;
-        FastAccelStepper* __stepper_rows[7];
-        // HX711 __hx711;
         VL6180X sensor;
         
 

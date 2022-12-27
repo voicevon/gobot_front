@@ -2,6 +2,19 @@
 
 #include "MyBoards/const.h"
 #include <HardwareSerial.h>
+#include "arduinotrace.h"  //https://www.youtube.com/watch?v=JHMpszgzWSg
+
+/*
+#define TRACE() \
+    Serial.print(__FILE__); \
+    Serial.print(":"); \
+    Serial.print(__LINE__); \
+    Serial.print(":"); \
+    Serial.print(__FUNCTION__); \
+    Serial.print(":"); \
+    Serial.print(__PRETTY_FUNCTION__); \
+    Serial.flush();
+*/
 
 class Logger{
     public :

@@ -10,15 +10,14 @@ void Twh2_G28_Runner_CoreXz::Init(CncMover* mover, ArmSolutionBase* arm_solution
 
 void Twh2_G28_Runner_CoreXz::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
     Logger::Debug("Twh2_G28_Runner_CoreXz::SetMoveBlock_ToHome()" );
-    Serial.print(char(axis));
+    Serial.print(axis);
     Logger::Print("\taxis", char(axis));
     MoveBlock_SingleActuator* alpha = &mb->MoveBlocks[AXIS_ALPHA];
     MoveBlock_SingleActuator* beta = &mb->MoveBlocks[AXIS_BETA];
-    MoveBlock_SingleActuator* gamma = &mb->MoveBlocks[AXIS_GAMMA];
     mb->DeepReset_ToDefault();
 
     switch (axis){
-        case 'Y':
+        case 'X':
             // Logger::Print("Twh2_G28_Runner_CoreXz::SetMoveBlock_ToHome()  point", 21);
             // Logger::Print("Twh2_G28_Runner_CoreXz::SetMoveBlock_ToHome()  point", 22);
             alpha->TargetPosition = -99999;
@@ -27,10 +26,9 @@ void Twh2_G28_Runner_CoreXz::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             beta->TargetPosition = 99999;
             beta->Speed = 10000;
             beta->Acceleration = 99;
-            gamma ->TargetPosition = 260;
             break;
 
-        case 'a':
+        case 'Z':
             // Logger::Print("Twh2_G28_Runner_CoreXz::SetMoveBlock_ToHome()  point", 31);
             mb->DeepReset_ToDefault();
             // Logger::Print("Twh2_G28_Runner_CoreXz::SetMoveBlock_ToHome()  point", 22);
@@ -40,11 +38,11 @@ void Twh2_G28_Runner_CoreXz::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
             beta->TargetPosition = 99999;
             beta->Speed = 100;
             beta->Acceleration = 0.05;
-            gamma ->TargetPosition = 260;
             break;
 
         default:
             Logger::Error(" Twh2_G28_Runner_CoreXz::SetMoveBlock_ToHome() Unknown axis");
+            Serial.println(axis);
             Logger::Halt("AcDc::TNT");
             break;
     }
@@ -54,10 +52,9 @@ void Twh2_G28_Runner_CoreXz::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
 
 void Twh2_G28_Runner_CoreXz::SetHomedPosition(PositionTrigger* firer){
     Logger::Debug("Twh2_G28_Runner_CoreXz::SetHomedPosition()");
-    if (this->_axis_name =='a'){
+    if (this->_axis_name =='Z'){
         // do nothing
-    }else if (this->_axis_name == 'Y'){
-        // must home('a') first, then home('Y')
+    }else if (this->_axis_name == 'X'){
         // Logger::Print("Twh2_G28_Runner_CoreXz::SetHomedPosition() Y", 31);
         MiddleKinematic mk;
         mk.Arm_Angle = DEG_TO_RAD * (-90);

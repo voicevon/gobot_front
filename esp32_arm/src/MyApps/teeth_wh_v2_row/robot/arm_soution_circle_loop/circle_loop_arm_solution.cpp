@@ -10,7 +10,7 @@ void Twh2_Circleloop_ArmSolution::FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition
 	FKPosition_XYZRPW* fk = from_fk;
 	IKPosition_abgdekl* ik = to_ik;
 
-	ik->Positions[AXIS_ALPHA] = fk->X / __slope ;
+	ik->Positions[AXIS_ALPHA] = fk->X * __slope ;
 	Logger::Debug("Twh2_Circleloop_ArmSolution::IK()");
 	// Logger::Print("FK input  ")
 
@@ -21,7 +21,7 @@ void Twh2_Circleloop_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPositi
 	FKPosition_XYZRPW* fk = to_fk;
 	IKPosition_abgdekl* ik = from_ik;
 	
-	fk->Roll = __slope * (ik->Positions[AXIS_ALPHA]);
+	fk->Roll = ik->Positions[AXIS_ALPHA] / __slope;
 	Logger::Debug("Twh2_Circleloop_ArmSolution::FK()" );
 	Logger::Print("FK output A", fk->X);
 }

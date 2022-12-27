@@ -14,7 +14,7 @@
 #define QUEUE_LINE_SEGMENT_COUNT 5
 #define QUEUE_PLANNER_BLOCK_COUNT 88
 
-#define CNC_ACTUATORS_COUNT 3
+#define CNC_ACTUATORS_COUNT 2
 
 
 class Twh2_Robot: public RobotBase{
@@ -33,8 +33,8 @@ class Twh2_Robot: public RobotBase{
         // CncActuatorServo __actuator_gamma;
         
         CncMover __mover;
-        Twh2_XzArmSolution __arm_solution_corexz;
-        Twh2_G28_Runner_CoreXz __g28_runner_corexz;
+        Twh2_XzArmSolution __arm_solution;
+        Twh2_G28_Runner_CoreXz __g28_runner;
         Twh2_M42_Runner_Switch_Output __m42_runner;
         // Twh2_M408_Runner_ReportJson __m408_runner;
         Twh2_JsonLoader __json_loader;

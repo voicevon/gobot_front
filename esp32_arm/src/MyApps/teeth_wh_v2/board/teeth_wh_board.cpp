@@ -2,8 +2,8 @@
 
 // http://www.bachinmaker.com/wikicn/doku.php?id=bachin-e3
 
-#define PIN_HOMER_SENSOR_HALL_ALPHA  17 //23
-#define PIN_HOMER_SENSOR_HALL_X  4 //16
+// #define PIN_HOMER_SENSOR_HALL_Z  17 //23
+// #define PIN_HOMER_SENSOR_HALL_X  4 //16
 
 #define PIN_IR_CHECKING 32
 
@@ -15,29 +15,28 @@
 #define PIN_ALPHA_STEP 12 //26   
 #define PIN_BETA_DIR  15 //14  
 #define PIN_BETA_STEP  26 //12  
-#define PIN_STEPPER_ENABLE 13
+#define PIN_STEPPERS_ENABLE 13
 
-#define PIN_POSITION_TRIGGER_X  128
-#define PIN_POSITION_TRIGGER_Z  5
+#define PIN_POSITION_TRIGGER_X  17
+#define PIN_POSITION_TRIGGER_Z  4
 
-#define PIN_STEPPERS_ENABLE 155
 
 // Index number
-#define POSITION_TRIGGER_ALPHA 0
-#define POSITION_TRIGGER_X  1
+#define POSITION_TRIGGER_Z 1
+#define POSITION_TRIGGER_X 0
 
 Twh2_Board::Twh2_Board(){
-    _InitSerialBoard("I am Teeth Warehouse.");
+    _InitSerialBoard("I am Twh2.");
 }
 void Twh2_Board::Init(){
     pinMode(PIN_IR_CHECKING, INPUT_PULLUP);
 
-    __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('Y',PIN_HOMER_SENSOR_HALL_ALPHA, HIGH);
-    __all_position_triggers[POSITION_TRIGGER_X].Init('a', PIN_HOMER_SENSOR_HALL_X, HIGH);
+    __all_position_triggers[POSITION_TRIGGER_Z].Init('Z',PIN_POSITION_TRIGGER_Z, HIGH);
+    __all_position_triggers[POSITION_TRIGGER_X].Init('X', PIN_POSITION_TRIGGER_X, HIGH);
+    PositionTrigger_Array::Instance().Init(__all_position_triggers, TWH2_POSITION_TRIGGERS_COUNT);
+
 
     __InitSteppers();
-
-    
 }
 
 void Twh2_Board::__InitSteppers(){
@@ -58,7 +57,7 @@ void Twh2_Board::__InitSteppers(){
         Logger::Print("stepper alpha is OK.", 0);
     }else{
         Logger::Error("Twh2_Board::Init() ");
-        Logger::Halt("failed FastAccelStepper.");
+        Logger::Halt("failed FastAccelStepper.  alpha");
     }
 
     if (__stepper_beta) {
@@ -72,7 +71,7 @@ void Twh2_Board::__InitSteppers(){
         Logger::Print("stepper alpha is OK.", 0);
     }else{
         Logger::Error("Twh2_Board::Init() ");
-        Logger::Halt("failed FastAccelStepper.");
+        Logger::Halt("failed FastAccelStepper.  beta");
     }
 }
 
@@ -82,7 +81,7 @@ void Twh2_Board::Test_PositionTriggers(int loops){
     int count =0;
     while (count < loops){
         flags = 0;
-        for (int index=0; index < HOME_TRIGGER_COUNT; index++){
+        for (int index=0; index < TWH2_POSITION_TRIGGERS_COUNT; index++){
             if (__all_position_triggers[index].IsFired()){
                 flags += 1<<index;
             }
@@ -102,7 +101,7 @@ void Twh2_Board::Test_PositionTriggers(int loops){
 
 void Twh2_Board::Test_SingleStepper(int index, int loops){
     FastAccelStepper* stepper;
-    if (index==0)  stepper = __stepper_alpha;
+    stepper = __stepper_alpha;
     if (index==1)  stepper = __stepper_beta;
     stepper->enableOutputs();
     for (int i=0; i<loops; i++){

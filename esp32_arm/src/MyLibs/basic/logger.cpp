@@ -2,6 +2,7 @@
 
 int Logger::sid = 0;
 void Logger::Info(const char* title){
+    TRACE();
     Serial.print(FORE_YELLOW);
     Serial.print(BGC_ORANGE);
     Serial.print("[Info] ");

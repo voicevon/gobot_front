@@ -17,7 +17,7 @@ Twh2_App app;
 Twh2_Robot robot;
 
 void test_board(){
-    board.Test_PositionTriggers(0);
+    board.Test_PositionTriggers(9);
     board.Test_SingleStepper(AXIS_ALPHA, 0);
     board.Test_SingleStepper(AXIS_BETA, 0);
     board.Test_DualStepper(0);
@@ -75,11 +75,9 @@ void test_arm(){
 
 
 
-
-
 void setup(){
-    board.Init(true);
-    // test();
+    board.Init();
+    test_board();
     // test_arm();
     test_board();
     robot.Init(&board);
@@ -91,9 +89,9 @@ void setup(){
     append_mqtt_bridge("twh/221109/gcode", &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
 
-    gcode_queue.AppendGcodeCommand("G1Z0");
-    gcode_queue.AppendGcodeCommand("G28a");
-    gcode_queue.AppendGcodeCommand("G28Y");
+    gcode_queue.AppendGcodeCommand("G28Z");
+    gcode_queue.AppendGcodeCommand("G28X");
+    // gcode_queue.AppendGcodeCommand("G28Y");
     // test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
