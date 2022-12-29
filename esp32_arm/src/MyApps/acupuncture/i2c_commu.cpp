@@ -26,7 +26,7 @@ bool I2c_commu::HasUpdate(){
 }
 
 void I2c_commu::ReadSingleCell(TouchCell* cell){
-    if (!cell->IsOnline) return;
+    if (!cell->IsOnI2cBus) return;
     // Serial.println("\n     I2c_commu::ReadSingleCell() is Entering. cell_address= " + cell->Address);
     // cell->PrintOut("I2c_commu::ReadSingleCell() is Entering.");
 
@@ -57,12 +57,12 @@ void I2c_commu::ReadSingleCell(TouchCell* cell){
 void I2c_commu::SpinOnce(){
        for (uint8_t i= 0; i< this->__CELLS_COUNT; i++){
         TouchCell* pCell = &(this->Cells[i]);
-        if (pCell->IsOnline){
+        if (pCell->IsOnI2cBus){
             pCell->PrintOut("Trying to read a cell");
             pCell->CopyCurrentToLast();
             this->ReadSingleCell(pCell);
             pCell->CompareCurrentAndLast();
-            if (!pCell->IsOnline){
+            if (!pCell->IsOnI2cBus){
                 Logger::Warn("I2c_commu::SpinOnce()  A cell is offline ");
                 Serial.print("cell address = ");
                 Serial.println(pCell->Address);
@@ -71,7 +71,7 @@ void I2c_commu::SpinOnce(){
     }
     // bool all_is_offline = false;
     for(int i=0; i< this->__CELLS_COUNT; i++){
-        if (this->Cells[i].IsOnline)
+        if (this->Cells[i].IsOnI2cBus)
             return;
     }
 
@@ -92,12 +92,12 @@ void I2c_commu::SpinOnce(){
 TouchCell* I2c_commu::FindandReadValidateCell(){
     for (uint8_t i= 0; i< this->__CELLS_COUNT; i++){
         TouchCell* pCell = &(this->Cells[i]);
-        if (pCell->IsOnline){
+        if (pCell->IsOnI2cBus){
             pCell->PrintOut("Trying to read a cell");
             pCell->CopyCurrentToLast();
             this->ReadSingleCell(pCell);
             pCell->CompareCurrentAndLast();
-            if (pCell->IsOnline){
+            if (pCell->IsOnI2cBus){
                 return pCell;
             }
         }

@@ -17,11 +17,11 @@
 // #define I_AM_SPRING_MAKER
 // #define I_AM_VSC
 // #define I_AM_TEETH_WAREHOUSE_V1
-#define I_AM_TEETH_WAREHOUSE_V2
+// #define I_AM_TEETH_WAREHOUSE_V2
 // #define I_AM_TEETH_WAREHOUSE_V2_ROW
 
 
-// #define I_AM_ACUPUCTURE_MAIN
+#define I_AM_ACUPUCTURE_MAIN
 // #define I_AM_ACUPUNCTURE_TESTER
 // #define I_AM_SMOKE_BOT
 // #define I_AM_CABLE_AXIS_XPYP

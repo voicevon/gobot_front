@@ -28,6 +28,15 @@ void init_online_cells(){
             }
         }
     }
+    String payload="";
+    for(int i=0; i<CELLS_COUNT;i++){
+        TouchCell* pCell = &obj_i2c_bus.Cells[i];
+        if(pCell->IsOnI2cBus){
+            payload.concat(String(pCell->Address));
+        }
+    }
+
+    g_mqttClient.publish("acupucture/online/addrs", 2, false,  payload.c_str());
 }
 
 void setup() {
@@ -60,7 +69,7 @@ void loop() {
                     Serial.print(cell->GetName(j));
                     topic.append(cell->GetName(j));
                     payload = cell->GetMqttPayload(j);
-                    mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
+                    g_mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
                     
                     Serial.print(topic.c_str());
                     Serial.print("  ");
@@ -78,7 +87,7 @@ void loop() {
             // Serial.print("  payload");
             // Serial.print(payload.c_str());
 
-            mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
+            g_mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
         }
     }  
 }
