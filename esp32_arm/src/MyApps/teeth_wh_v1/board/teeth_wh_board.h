@@ -1,7 +1,8 @@
 #pragma once
 
 // #include "CNC/board/cnc_board_base.h"
-#include "MyBoards/board_base.h"
+#include "MyLibs/basic/board_base.h"
+// #include "MyBoards/board_base.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "CNC/Actuator/servo/cnc_actuator_servo.h"
 #include "Robot/axis_homer/position_trigger_array.h" 

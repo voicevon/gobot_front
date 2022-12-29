@@ -2,7 +2,8 @@
 // #include "CNC/board/cnc_board_base.h"
 // #include "Robot/axis_homer/axis_homer.h"
 // #include "CNC/arm_solution/axis_homer/axis_homer.h"
-#include "MyBoards/board_base.h"
+#include "MyLibs/basic/board_base.h"
+// #include "MyBoards/board_base.h"
 #include "MyApps/gobot_main/board/board_pins/board_ver1.2.h"
 #include "robot_eef/board_smoke_bot.h"    // todo: remove
 #include "CNC/Actuator/stepper/actuator_stepper.h"

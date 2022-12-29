@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MyBoards/const.h"
+#include "my_const.h"
 #include <HardwareSerial.h>
 #include "arduinotrace.h"  //https://www.youtube.com/watch?v=JHMpszgzWSg
 

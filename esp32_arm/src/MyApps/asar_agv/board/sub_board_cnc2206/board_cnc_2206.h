@@ -1,6 +1,7 @@
 #pragma once
 #include "../board_pins/board_pins_ver_2_0.h"
-#include "MyBoards/board_base.h"
+#include "MyLibs/basic/board_base.h"
+// #include "MyBoards/board_base.h"
 // #include "CNC/board/cnc_board_base.h"
 #include "FastAccelStepper.h"
 // #include "ESP32Step/src/TeensyStep.h"

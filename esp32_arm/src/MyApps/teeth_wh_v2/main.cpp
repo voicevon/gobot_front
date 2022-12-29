@@ -73,10 +73,14 @@ void test_arm(){
     }
 }
 
-
+void test_json(){
+    Twh2_JsonLoader jl;
+    
+}
 
 void setup(){
     board.Init();
+    test_json();
     test_board();
     // test_arm();
     test_board();

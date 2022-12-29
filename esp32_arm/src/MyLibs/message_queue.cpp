@@ -1,6 +1,5 @@
 #include "message_queue.h"
-#include "HardwareSerial.h"
-#include "MyBoards/const.h"
+#include "MyLibs/basic/logger.h"
 
 bool MessageQueue::AppendMessage(String strPayload){
     const char* payload = strPayload.c_str();

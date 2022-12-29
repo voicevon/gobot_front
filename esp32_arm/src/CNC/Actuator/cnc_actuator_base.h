@@ -1,5 +1,4 @@
 #pragma once
-#include "MyBoards/const.h"
 #include "stdint.h"
 #include "range_constraint/actuator_range_constraint_base.h"
 #include "Mylibs/basic/logger.h"

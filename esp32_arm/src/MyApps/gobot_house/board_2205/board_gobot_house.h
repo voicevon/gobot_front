@@ -1,5 +1,6 @@
 #pragma once
-#include "MyBoards/board_base.h"
+#include "MyLibs/basic/board_base.h"
+// #include "MyBoards/board_base.h"
 // #include "CNC/board/cnc_board_base.h"
 #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "board_pins/board_pins_ver3.11.h"

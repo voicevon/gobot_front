@@ -23,7 +23,6 @@ void test_board(){
     board.Test_PositionTriggers(0);
     board.Test_Stepper(9);
     Serial.println("[Info] test_board() is done.");
-
 }
 
 void test_robot(){
@@ -49,7 +48,6 @@ void test_robot(){
     
 }
 
-
 void test_arm(){
     // Twh2_Circleloop_ArmSolution arm;
     // FKPosition_XYZRPW input_fk;
@@ -73,6 +71,7 @@ void test_arm(){
 
     }
 }
+
 
 
 void setup(){

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MyBoards/board_base.h"
+#include "MyLibs/basic/board_base.h"
+// #include "MyBoards/board_base.h"
 // #include "CNC/board/cnc_board_base.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "circle_loop_arm_solution_config.h"
