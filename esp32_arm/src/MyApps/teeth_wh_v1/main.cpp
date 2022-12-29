@@ -78,7 +78,7 @@ void test_arm(){
 }
 
 void setup(){
-    board.Init(true);
+    board.Init();
     // test();
     // test_arm();
     test_board();

@@ -23,7 +23,7 @@ void cnc_test();
 void board_test();
 
 void setup(){
-    board.Init(true);
+    board.Init();
     robot.Init(&board);
 
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
