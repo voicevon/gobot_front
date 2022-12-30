@@ -1,9 +1,9 @@
 #include "gobot_main_robot.h"
 #include "Robot/mcode_runner/mcode_os.h"
-#include "CNC/mover/teensy_step_gateway.h"
-#include "CNC/Actuator/stepper/actuator_stepper_calculator.h"
-
-StepControl step_control;
+// #include "CNC/mover/teensy_step_gateway.h"
+// #include "CNC/Actuator/stepper/actuator_stepper_calculator.h"
+#include "CNC/Actuator/stepper/actuator_fast_stepper.h"
+// StepControl step_control;
 
 void GobotMainRobot::Init(GobotMain_Board* board){
     Logger::Debug("GobotMainRobot::Init()");

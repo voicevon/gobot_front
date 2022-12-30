@@ -2,11 +2,12 @@
 #include "MyLibs/basic/board_base.h"
 // #include "MyBoards/board_base.h"
 // #include "CNC/board/cnc_board_base.h"
-#include "CNC/Actuator/stepper/actuator_stepper.h"
+// #include "CNC/Actuator/stepper/actuator_stepper.h"
 #include "board_pins/board_pins_ver3.11.h"
 #include "robot_eef/gobot_house_eef.h"   // todo: remove
 // #include "Robot/axis_homer/position_trigger.h"
 #include "Robot/axis_homer/position_trigger_array.h"
+#include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 
 class Board_GobotHouse{
     public:
@@ -17,10 +18,10 @@ class Board_GobotHouse{
         
 
     private:
-        Stepper stepper_driver_alpha = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
-        Stepper stepper_driver_beta = Stepper(PIN_BETA_STEP_2109,PIN_BETA_DIR_2109);
-        CncActuatorStepper alpha_stepper;
-        CncActuatorStepper beta_stepper;
+        // Stepper stepper_driver_alpha = Stepper(PIN_ALPHA_STEP_2109, PIN_ALPHA_DIR_2109);
+        // Stepper stepper_driver_beta = Stepper(PIN_BETA_STEP_2109,PIN_BETA_DIR_2109);
+        FastAccelStepper* alpha_stepper;
+        FastAccelStepper* beta_stepper;
 
         PositionTrigger __all_position_triggers[2];
         // PositionTrigger homer_alpha = PositionTrigger(PIN_HOME_ALHPA_2109, LOW);
