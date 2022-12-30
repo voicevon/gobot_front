@@ -14,7 +14,7 @@ class I2c_commu{
         void Init(int min_cell_i2c_address, int cells_count);
         TouchCell* FindandReadValidateCell();   // return the last slave_id of avaliable.
         void SpinOnce();
-        void ReadSingleCell(TouchCell* cell);
+        bool ReadSingleCell(TouchCell* cell);
         bool HasUpdate();
         TouchCell Cells[30];
 

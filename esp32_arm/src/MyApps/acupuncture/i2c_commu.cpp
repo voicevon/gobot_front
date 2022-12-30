@@ -54,6 +54,7 @@ bool  I2c_commu::ReadSingleCell(TouchCell* cell){
         g_mqttClient.publish("actp/001/offline", 2, false, String(cell->Address).c_str());
         if (cell->auto_offline){
             cell->SetOffline();
+            digitalWrite(2, HIGH);
         }else{
             cell->PrintOut("I2c_commu::ReadSingleCell()  has no response");
             Serial.println(" I2c_commu::ReadSingleCell()  No response.  cell_address= " + cell->Address);

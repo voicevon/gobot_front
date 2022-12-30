@@ -52,11 +52,11 @@ void setup() {
     delay(1000);
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
     obj_i2c_bus.Init(CELL_ID_MIN, CELLS_COUNT);
-
     setup_wifi_mqtt();
     while (!mqtt_is_connected){
         delay(100);
     }
+    init_online_cells();
 
 }
 
