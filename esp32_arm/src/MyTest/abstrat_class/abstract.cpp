@@ -1,21 +1,21 @@
-class base{
+class Human{
     public:
-        void bbb();
+        void Grow();
 };
-class child:public base{
+class Man:public Human{
 
 };
 
-class user{
+class Dog{
     public:
-        void go(base* bb){};
+        void Follow(Human* human){};
 };
 
 class test{
-    child cc=child();
-    user uu=user();
+    Man xuming=Man();
+    Dog tom=Dog();
     void gogo(){
-        uu.go(&cc);
+        tom.Follow(&xuming);
     }
 };
 

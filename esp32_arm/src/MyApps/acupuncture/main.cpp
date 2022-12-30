@@ -13,34 +13,43 @@
 
 I2c_commu obj_i2c_bus = I2c_commu();
 
+
 void init_online_cells(){
     //All online cells will never turn itself off.
     // For test_jig, The online_cells list should be empty.
 
-    #define ONLINE_CELL_COUNT 2
-    int cell_list[ONLINE_CELL_COUNT] = {3, 4};
+    #define ONLINE_CELL_COUNT 11
+    int cell_list[ONLINE_CELL_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
 
     for (int i=0; i < CELLS_COUNT; i++){
        TouchCell* pCell = &obj_i2c_bus.Cells[i];
         for (int j=0; j< ONLINE_CELL_COUNT; j++){
             if (cell_list[j] == pCell->Address){
                 pCell->auto_offline = false;
+                Serial.print("offline detected: ");
+                Serial.println(pCell->Address);
             }
         }
     }
+
+}
+
+void publish_online_cells(){
     String payload="";
     for(int i=0; i<CELLS_COUNT;i++){
         TouchCell* pCell = &obj_i2c_bus.Cells[i];
-        if(pCell->IsOnI2cBus){
+        if(pCell->IsOnline){
             payload.concat(String(pCell->Address));
+            payload.concat(" ");
         }
     }
-
-    g_mqttClient.publish("acupucture/online/addrs", 2, false,  payload.c_str());
+    Serial.println(payload);
+    g_mqttClient.publish("acupucture/online/addrs", 2, true,  payload.c_str());
 }
 
 void setup() {
     Serial.begin(115200);
+    delay(1000);
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
     obj_i2c_bus.Init(CELL_ID_MIN, CELLS_COUNT);
 
@@ -48,6 +57,7 @@ void setup() {
     while (!mqtt_is_connected){
         delay(100);
     }
+
 }
 
 std::string topic = "actu/foot/yongquanxue"; 
@@ -55,6 +65,7 @@ std::string payload ="123456";
 
 void loop() {
     obj_i2c_bus.SpinOnce();
+    // publish_online_cells();
 
     for(int i = 0; i< CELLS_COUNT; i++){
         TouchCell* cell = &obj_i2c_bus.Cells[i];

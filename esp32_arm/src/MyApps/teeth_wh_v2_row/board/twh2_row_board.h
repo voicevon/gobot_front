@@ -18,7 +18,7 @@ class Twh2Row_Board: public BoardBase{
 
         void Test_PositionTriggers(int loops);
         void Test_Stepper(int loops);
-
+        void Test_StepperQueue(int loops);
 
     protected:
 

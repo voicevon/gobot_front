@@ -15,7 +15,7 @@ class TouchCell{
         const char* GetMqttPayload(int bit_index);
         void PrintOut(const char* title);
         bool auto_offline = true;
-        const bool& IsOnI2cBus = _is_online;
+        const bool& IsOnline = _is_online;
         void SetOffline(){this->_is_online = false;};
         void SetOnline(){this->_is_online= true;};
         

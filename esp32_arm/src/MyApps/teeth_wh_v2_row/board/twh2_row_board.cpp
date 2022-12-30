@@ -39,7 +39,7 @@ void Twh2Row_Board::__InitSteppers(){
     __stepper_alpha = __stepper_engine.stepperConnectToPin(PIN_ALPHA_STEP);
 
     if (__stepper_alpha) {
-        __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR);   
+        __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR, true, 0);   
         __stepper_alpha->setEnablePin(PIN_ALPHA_ENABLE, true);        //Low is active enable.                    
         __stepper_alpha->setAutoEnable(false);
         __stepper_alpha->setSpeedInUs(1000);  // the parameter is us/step !!!
@@ -101,4 +101,8 @@ void Twh2Row_Board::Test_Stepper(int loops){
     }
     stepper->disableOutputs();
         
+}
+
+void Twh2Row_Board::Test_StepperQueue(int loops){
+    // __stepper_alpha->queueEntries
 }

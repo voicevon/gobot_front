@@ -1,7 +1,7 @@
 //https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout-1.jpg
 
 #include "all_applications.h"
-#ifdef I_AM_ACUPUNCTURE_TESTER
+#ifdef I_AM_ACUPUNCTURE_JIG_TESTER
 
 #include "i2c_commu.h"
 #include <string>
