@@ -35,32 +35,30 @@ bool I2c_commu::HasUpdate(){
 //          false:  the cell is from online to offline.
 bool  I2c_commu::ReadSingleCell(TouchCell* cell){
     if (!cell->IsOnline) return true;
-    // Serial.println("\n     I2c_commu::ReadSingleCell() is Entering. cell_address= " + cell->Address);
-    // cell->PrintOut("I2c_commu::ReadSingleCell() is Entering.");
 
     uint8_t n_bytes = 4;
-    // cell->Address = 3;
     Wire.beginTransmission(cell->Address);
     Wire.endTransmission(false);
     Wire.requestFrom(cell->Address, n_bytes);    // request data from slave device
-    int i=0;
+    int index = 0;
     while (Wire.available() > 0) {  // slave may send less bytes than expected.
         uint8_t c = Wire.read();         // receive a byte as character
-        cell->CurrentFlags[i] = c;
-        i++;
+        cell->CurrentFlags[index] = c;
+        index++;
     }
-    if(i==0) {
+    if(index == 0) {
         // Can not read any data from i2c bus  for this address.
-        g_mqttClient.publish("actp/001/offline", 2, false, String(cell->Address).c_str());
-        if (cell->auto_offline){
-            cell->SetOffline();
+        cell->SetOffline();
+        if (cell->IsForceOnline){
+            // g_mqttClient.publish("actp/001/offline", 2, false, String(cell->Address).c_str());
             digitalWrite(2, HIGH);
-        }else{
-            cell->PrintOut("I2c_commu::ReadSingleCell()  has no response");
-            Serial.println(" I2c_commu::ReadSingleCell()  No response.  cell_address= " + cell->Address);
+            delay(500);
+            digitalWrite(2,LOW);
+            // cell->PrintOut("I2c_commu::ReadSingleCell()  has no response");
+            Serial.println(" I2c_commu::ReadSingleCell()  No response.  cell_address= " + String(cell->Address));
+            Wire.endTransmission(true);
+            return false;
         }
-        Wire.endTransmission(true);
-        return false;
 
     } 
     Wire.endTransmission(true);
@@ -72,15 +70,7 @@ void I2c_commu::SpinOnce(){
     for (uint8_t i= 0; i< this->__CELLS_COUNT; i++){
         TouchCell* pCell = &(this->Cells[i]);
         if (pCell->IsOnline){
-            pCell->PrintOut("Trying to read a cell");
-            pCell->CopyCurrentToLast();
             this->ReadSingleCell(pCell);
-            pCell->CompareCurrentAndLast();
-            if (!pCell->IsOnline){
-                // Logger::Warn("I2c_commu::SpinOnce()  A cell is offline ");
-                // Serial.print("cell address = ");
-                // Serial.println(pCell->Address);
-            }
         }
     }
     // bool all_is_offline = false;
@@ -95,6 +85,7 @@ void I2c_commu::SpinOnce(){
         this->Cells[i].SetOnline();
 
     }
+    digitalWrite(2, LOW);
     Logger::Info("Reset all cells state to online");
     Serial.print("Min_address= ");
     Serial.print(this->Cells[0].Address);
@@ -107,10 +98,10 @@ TouchCell* I2c_commu::FindandReadValidateCell(){
     for (uint8_t i= 0; i< this->__CELLS_COUNT; i++){
         TouchCell* pCell = &(this->Cells[i]);
         if (pCell->IsOnline){
-            pCell->PrintOut("Trying to read a cell");
-            pCell->CopyCurrentToLast();
+            // pCell->PrintOut("Trying to read a cell");
+            // pCell->CopyCurrentToLast();
             this->ReadSingleCell(pCell);
-            pCell->CompareCurrentAndLast();
+            // pCell->CompareCurrentAndLast();
             if (pCell->IsOnline){
                 return pCell;
             }
