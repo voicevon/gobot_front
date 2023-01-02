@@ -17,8 +17,8 @@ I2c_commu obj_i2c_bus = I2c_commu();
 // int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {19,17};
 // #define FORCE_ONLINE_CELL_COUNT 11
 // int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
-#define FORCE_ONLINE_CELL_COUNT 9
-int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {5, 6, 7, 8, 9, 16, 17, 19, 20};
+#define FORCE_ONLINE_CELL_COUNT 4
+int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = { 5,6, 17,19};
 
 void init_online_cells(){
     //All online cells will never turn itself off.
@@ -103,7 +103,7 @@ void loop() {
             Logger::Debug("loop()  found updated cell");
             Logger::Print("HasUpdated()  cell address ", cell->Address);
             // Touch pin changed.  on->off  or  off->on
-            for (int j=0; j<14; j++){
+            for (int j=0; j<16; j++){
                 if (cell->IsBitUpdated(j)){
                     topic = "actp/";
                     topic.concat(BODY_ID);

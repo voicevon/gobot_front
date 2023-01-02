@@ -22,7 +22,7 @@
 
 bool TouchCell::HasUpdate(){
     bool has_update = false;
-    for(int i=0; i<4; i++){
+    for(int i=0; i<2; i++){
         if (LastFlags[i] != CurrentFlags[i]){
             has_update = true;
         }
