@@ -18,29 +18,27 @@ I2c_commu obj_i2c_bus = I2c_commu();
 // #define FORCE_ONLINE_CELL_COUNT 11
 // int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
 #define FORCE_ONLINE_CELL_COUNT 2
-int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {23, 25 };
+int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {16, 19 };
 
 void init_online_cells(){
     //All online cells will never turn itself off.
     // For test_jig, The online_cells list should be empty.
 
 
-    for (int i=0; i < CELLS_COUNT; i++){
+    for (int i=0; i < FORCE_ONLINE_CELL_COUNT; i++){
        TouchCell* pCell = &obj_i2c_bus.Cells[i];
-        for (int j=0; j< FORCE_ONLINE_CELL_COUNT; j++){
-            if (force_online_cell_list[j] == pCell->Address){
-                pCell->IsForceOnline = true;
-                Serial.print("setting force-Online: ");
-                Serial.println(pCell->Address);
-            }
-        }
+        // for (int j=0; j< FORCE_ONLINE_CELL_COUNT; j++){
+            // if (force_online_cell_list[j] == pCell->Address){
+        pCell->IsForceOnline = true;
+        pCell->Address = force_online_cell_list[i];
+        Serial.print("setting force-Online: ");
+        Serial.println(pCell->Address);
     }
-
 }
 
 void publish_online_cells(){
     String payload="";
-    for(int i=0; i<CELLS_COUNT;i++){
+    for(int i=0; i<FORCE_ONLINE_CELL_COUNT;i++){
         TouchCell* pCell = &obj_i2c_bus.Cells[i];
         if(pCell->IsOnline){
             payload.concat(String(pCell->Address));
@@ -56,7 +54,7 @@ void publish_error_cells(){
     digitalWrite(2, LOW);
     bool has_error = false;
     String payload = "";
-    for (int i=0; i < CELLS_COUNT; i++){
+    for (int i=0; i < FORCE_ONLINE_CELL_COUNT; i++){
        TouchCell* pCell = &obj_i2c_bus.Cells[i];
         if (pCell->IsForceOnline){
             if(!pCell->IsOnline){
@@ -80,7 +78,7 @@ void setup() {
     Serial.begin(115200);
     delay(1000);
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
-    obj_i2c_bus.Init(CELL_ID_MIN, CELLS_COUNT);
+    obj_i2c_bus.Init(CELL_ID_MIN, FORCE_ONLINE_CELL_COUNT);
     setup_wifi_mqtt();
     while (!mqtt_is_connected){
         delay(100);
@@ -97,7 +95,7 @@ void loop() {
     // publish_online_cells();
     publish_error_cells();
 
-    for(int i = 0; i< CELLS_COUNT; i++){
+    for(int i = 0; i< FORCE_ONLINE_CELL_COUNT; i++){
         TouchCell* cell = &obj_i2c_bus.Cells[i];
         if (cell->HasUpdate()){
             Logger::Debug("loop()  found updated cell");

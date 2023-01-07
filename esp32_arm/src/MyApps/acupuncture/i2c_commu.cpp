@@ -22,7 +22,7 @@ void I2c_commu::Init(int min_cell_i2c_address, int cells_count){
         Cells[i].Address = min_cell_i2c_address + i;
     }
     this->__CELLS_COUNT = cells_count;
-    this->__CELL_I2C_ADDRESS_MIN = min_cell_i2c_address;
+    // this->__CELL_I2C_ADDRESS_MIN = min_cell_i2c_address;
 } 
 
 bool I2c_commu::HasUpdate(){
@@ -54,8 +54,7 @@ bool  I2c_commu::ReadSingleCell(TouchCell* cell){
             digitalWrite(2, HIGH);
             delay(500);
             digitalWrite(2,LOW);
-            // cell->PrintOut("I2c_commu::ReadSingleCell()  has no response");
-            Serial.println(" I2c_commu::ReadSingleCell()  No response.  cell_address= " + String(cell->Address));
+            Serial.println("\n I2c_commu::ReadSingleCell()  No response.  cell_address= " + String(cell->Address));
             Wire.endTransmission(true);
             return false;
         }
@@ -81,17 +80,20 @@ void I2c_commu::SpinOnce(){
 
 
     //All cells is offline. re init all cells to online
+    Logger::Info("Reset all cells state to online");
     for(int i=0; i< this->__CELLS_COUNT; i++){
         this->Cells[i].SetOnline();
-
+        Logger::Print("address", Cells[i].Address);
     }
     digitalWrite(2, LOW);
-    Logger::Info("Reset all cells state to online");
-    Serial.print("Min_address= ");
-    Serial.print(this->Cells[0].Address);
-    Serial.print("   CELLS_COUNT= ");
-    Serial.print(this->__CELLS_COUNT);
-    Serial.print(FCBC_RESET);
+    // for (int i=0; i<__CELLS_COUNT;i++){
+    // Serial.print("Min_address= ");
+    // Serial.print(this->Cells[0].Address);
+    // Serial.print("   CELLS_COUNT= ");
+    // Serial.print(this->__CELLS_COUNT);
+    // Serial.println(FCBC_RESET);
+    // }
+    
 }
 
 TouchCell* I2c_commu::FindandReadValidateCell(){

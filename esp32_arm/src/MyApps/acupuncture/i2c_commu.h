@@ -20,6 +20,6 @@ class I2c_commu{
 
     private:
         int __CELLS_COUNT;
-        int __CELL_I2C_ADDRESS_MIN;
+        // int __CELL_I2C_ADDRESS_MIN;
         bool _has_update = true;
 };
