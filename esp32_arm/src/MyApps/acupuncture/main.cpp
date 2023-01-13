@@ -17,8 +17,8 @@ I2c_commu obj_i2c_bus = I2c_commu();
 // int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {19,17};
 // #define FORCE_ONLINE_CELL_COUNT 11
 // int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
-#define FORCE_ONLINE_CELL_COUNT 2
-int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {16, 19 };
+#define FORCE_ONLINE_CELL_COUNT 1
+int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = { 9 };
 
 void init_online_cells(){
     //All online cells will never turn itself off.

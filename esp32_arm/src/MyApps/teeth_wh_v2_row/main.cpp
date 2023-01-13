@@ -21,7 +21,7 @@ Twh2Row_Robot robot;
 
 void test_board(){
     board.Test_PositionTriggers(0);
-    board.Test_Stepper(9);
+    board.Test_Stepper(900);
     Serial.println("[Info] test_board() is done.");
 }
 
@@ -77,7 +77,7 @@ void test_arm(){
 void setup(){
     board.Init();
     // test_arm();
-    // test_board();
+    test_board();
     float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
     
     robot.Init(&board);

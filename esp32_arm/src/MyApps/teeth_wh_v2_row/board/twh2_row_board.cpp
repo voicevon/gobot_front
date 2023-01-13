@@ -82,12 +82,14 @@ void Twh2Row_Board::Test_PositionTriggers(int loops){
 
 void Twh2Row_Board::Test_Stepper(int loops){
     FastAccelStepper* stepper= __stepper_alpha;
+    stepper->setAcceleration(600);
+    stepper->setSpeedInHz(8000);
     stepper->enableOutputs();
     for (int i=0; i<loops; i++){
         Logger::Print("Test stepper loop======================================", i);
         if (stepper) {
             // 5 circles.
-            stepper->moveTo(360.0f /1.8f * 16 * 1, false);
+            stepper->moveTo(360.0f /1.8f * 16 * 5.8 * 100, false);
             while (stepper->isRunning()){
                 Logger::Print("Current position", stepper->getCurrentPosition());
                 delay(300);
