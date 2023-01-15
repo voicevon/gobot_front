@@ -1,10 +1,11 @@
 # Start
 
 [windows command line]
-set FLASK_DEBUG=1      #set environment var
+#set FLASK_DEBUG=1      #set environment var
+set FLASK_DEBUG=0      #set environment var
 
-cd gobot_fron/apps/web
-python -m flask --app app_web run
+cd gobot_front/apps/twh2
+python -m flask --app app_main run --host=0.0.0.0
 
 
 
