@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
 
-        
-        <a href="/">Home</a>
-        {{ session["user"] }}<br>
-<hr>
+<head>
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
-{% block content%}{% endblock %}
-<hr>
-山东卷积分大数据公司<br>
-散牙库存自动化 2021~2022
+<body>
+    <a href="/">Home</a>
+    {{ session["user"] }}<br>
+    <hr>
+
+    {% block content %}{% endblock %}
+    <hr>
+    山东卷积分大数据公司<br>
+    {% block test %} {% endblock %}
+    散牙库存自动化 2021~2022
 
 </body>
+
 </html>
