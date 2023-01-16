@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, session
+from flask import Flask, redirect, url_for, render_template, request, session, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
@@ -93,16 +93,20 @@ def sign_up():
 @web.route('/sign_up_real', methods=['GET', 'POST'])
 def sign_up_real():
     if request.method == 'POST':
-        user_in_db  = db.get_user(request.form.get('user_id'))
+        user_in_db  = g_database.get_user(request.form.get('user_id'))
         if user_in_db is None:
             # insert into db_user
             new_user = {}
             new_user['user_id'] = request.form.get('user_id')
             new_user['password'] = request.form.get('password')
-            g_db_api.db_user.insert(new_user)
-            return render_template('login.html')
+            g_database.db_user.insert(new_user)
+            # return render_template('login.html')
+            return render_template('sign_up_ok.html')
         else:
-            return render_template(url_for('login_real'))
+            # repeated username
+            flash("该用户名已经被使用，请更换一个用户名",'error')
+            # return render_template(url_for('sign_up'))
+            return render_template('sign_up.html')
 
 @web.route('/deposit')
 def deposit():

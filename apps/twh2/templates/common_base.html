@@ -4,6 +4,7 @@
 <head>
   <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block js_source%}{% endblock %}
   <style>
     table,
     th,
@@ -14,10 +15,9 @@
 </head>
 
 <body>
-  <a href="/">Home</a>
-  {{ session["user"] }}<br>
-
-  {% block content %}{% endblock %}
+  <a href="/">Home</a> {{ session["user"] }}<br>
+  <p>
+    {% block content %}{% endblock %}
   <p></p>
   山东卷积分大数据公司<br>
   {% block test %} {% endblock %}

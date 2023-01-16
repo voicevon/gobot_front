@@ -1,12 +1,10 @@
 
 from tinydb import TinyDB, Query, where
 
-
-
 class TwhLocation:
-    layer = -1
     row = -1
     col = -1 
+    layer = -1
 
 
 

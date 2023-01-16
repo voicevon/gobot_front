@@ -2,10 +2,20 @@
 
 
 {% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 <fieldset>
     <legend>在此注册新用户</legend>
     <div>
-        <form action="/sign_up" method="POST">
+        <form action="/sign_up_real" method="POST">
             <table>
                 <tr>
                     <td>用户名</td>
