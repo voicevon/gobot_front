@@ -115,10 +115,15 @@ def sign_up_real():
             # return render_template(url_for('sign_up'))
             return render_template('sign_up.html')
 
-@web.route('/view_user')
-def view_user():
+@web.route('/view_users')
+def view_users():
     users = g_database.get_user_all()
-    return render_template('view_user.html', users=users)
+    return render_template('view_users.html', users=users)
+
+@web.route('/view_stocks')
+def view_stocks():
+    stocks = g_database.get_stock_all()
+    return render_template('view_stocks.html', stocks=stocks)
 
 @web.route('/deposit')
 def deposit():
@@ -128,17 +133,44 @@ def deposit():
     else:
         return redirect(url_for('login'))
 
-@web.route('/deposit_request', methods = ['POST', 'GET'])
+@web.route('/deposit_request', methods = ['POST'])
 def deposit_request():
-    if request.method == 'POST':
-        result = request.form
-        user_request = {}
-        # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
-        for key in request.form.to_dict():
-            user_request[key] = request.form.get(key)
-        user_request = g_database.get_stock(user_request)
+    # result = request.form
+    user_request = {}
+    # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
+    for key in request.form.to_dict():
+        user_request[key] = request.form.get(key)
+        print(key, user_request[key])
+    request_in_stock = g_database.get_stock(user_request)
+    if request_in_stock is None:
+        # Can not find in stock , Try to find a empty box
         
-        return render_template("deposit_request.html",user_request = user_request)
+        #copy emptybox location to user_request
+        user_request['col'] = g_database.get_pure_empty_col(user_request)
+        user_request['origin_quantity'] = 0
+        user_request['doc_id'] = -1
+    else:
+        #copy request_in_stock location to user_request 
+        user_request['doc_id'] = request_in_stock.doc_id
+        user_request['col'] = request_in_stock['col']
+        user_request['origin_quantity'] = request_in_stock['stock_quantity']
+
+    location_string = user_request['location'][0:2]
+    print(location_string)
+    if location_string == 'ul':
+        user_request['row'] = 1
+    elif location_string == 'ur':
+        user_request['row'] = 2
+    elif location_string == 'll':
+        user_request['row'] = 0
+    elif location_string == 'lr':
+        user_request['row'] = 3
+
+    user_request['layer'] = user_request['location'][3:4]
+
+    print(user_request)
+
+    return render_template("deposit_request.html",user_request = user_request)
 
 @web.route('/deposit_move', methods = ['POST', 'GET'])
 def deposit_move():

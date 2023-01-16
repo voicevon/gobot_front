@@ -23,30 +23,45 @@ class DbApi():
                                         & (q.color == request['color'])
                                         & (q.size == request['size'])
                                         & (q.shape == request['shape'])
-                                        & (q.location_vertical == request['location_vertical'])
-                                        & (q.location_horizontal == request['location_horizontal'])
-                                        & (q.location_index == request['location_index'])
+                                        & (q.location == request['location'])
+
+                                        # & (q.location_vertical == request['location_vertical'])
+                                        # & (q.location_horizontal == request['location_horizontal'])
+                                        # & (q.location_index == request['location_index'])
                                         )
-        if (len(db_rows) == 0):
-            # Can not find in stock
-            box = self.get_emptybox()
-            request['layer'] = box.layer
-            request['row'] = box.row
-            request['col'] = box.col
-        else:
-            # Yes, Find it in stock
-            # request['doc_id'] = db_row['doc_id']  #?
-            db_row = db_rows[0]
-            # print('db_row', db_row.doc_id)
-            request['doc_id'] = db_row.doc_id
-            request['layer'] = db_row['layer']
-            request['row'] = db_row['row']
-            request['col'] = db_row['col']
-            request['origin_quantity'] = db_row['stock_quantity']
-        return request
+        if len(db_rows) > 0:
+            return db_rows[0]
+
+        return None
+
+        # if (len(db_rows) == 0):
+        #     # Can not find in stock
+        #     box = self.get_emptybox()
+        #     request['layer'] = box.layer
+        #     request['row'] = box.row
+        #     request['col'] = box.col
+        # else:
+        #     # Yes, Find it in stock
+        #     # request['doc_id'] = db_row['doc_id']  #?
+        #     db_row = db_rows[0]
+        #     # print('db_row', db_row.doc_id)
+        #     request['doc_id'] = db_row.doc_id
+        #     request['layer'] = db_row['layer']
+        #     request['row'] = db_row['row']
+        #     request['col'] = db_row['col']
+        #     request['origin_quantity'] = db_row['stock_quantity']
+        # return request
+
+    def get_pure_empty_col(self, request):
+        # To find a col number,
+        # 1.  Try to find same brand, color, size, shape, batch_number as request.
+        # 2.  If not #1,  Try to all {row, layer} is empty.
+        # 3.  If not #2,  A) return None,  B) Go on with any empty box. ?? 
+        return 2
 
     def get_emptybox(self) -> TwhLocation:
         q = Query()
+        # Not found in stock, assign [col]
         box = TwhLocation()
         for layer in range(1):
             for row in range(4):
@@ -99,7 +114,9 @@ class DbApi():
     def get_user_all(self):
         return self.db_user.all()
         
-
+    def get_stock_all(self):
+        return self.db_stock.all()
+        
     def append_deposit(self, user_request):
         self.table_deposit.insert(user_request)
 
