@@ -96,6 +96,10 @@ class DbApi():
             return users[0]
         return None
 
+    def get_user_all(self):
+        return self.db_user.all()
+        
+
     def append_deposit(self, user_request):
         self.table_deposit.insert(user_request)
 

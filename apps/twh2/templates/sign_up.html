@@ -2,21 +2,15 @@
 
 
 {% block content %}
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for category, message in messages %}
-      <li class="{{ category }}">{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
 <fieldset>
     <legend>在此注册新用户</legend>
     <div>
         <form action="/sign_up_real" method="POST">
             <table>
+                <tr>
+                    <td>单位名称</td>
+                    <td> <input type="text" name="factory_id" value={{ factory_id }}></td>
+                </tr>
                 <tr>
                     <td>用户名</td>
                     <td> <input type="text" name="user_id" value='guest'></td>
@@ -24,6 +18,11 @@
                 <tr>
                     <td>密码</td>
                     <td> <input type="text" name="password" value='guest'></td>
+                </tr>
+                <tr>
+                    <td>岗位</td>
+                    <td> <input type="radio" id="position_技工" name="position" value="技工" checked>技工
+                    <input type="radio" id="position_主管" name="position" value="主管">主管</td>
                 </tr>
                 <tr>
                     <td></td>

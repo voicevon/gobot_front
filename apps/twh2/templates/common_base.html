@@ -17,7 +17,19 @@
 <body>
   <a href="/">Home</a> {{ session["user"] }}<br>
   <p>
-    {% block content %}{% endblock %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+  <ul class=flashes>
+    {% for category, message in messages %}
+    <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+
+
+  {% block content %}{% endblock %}
   <p></p>
   山东卷积分大数据公司<br>
   {% block test %} {% endblock %}

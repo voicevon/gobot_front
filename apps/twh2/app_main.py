@@ -75,19 +75,24 @@ def home():
 def login():
     return render_template('login.html')
 
-@web.route('/login_real', methods=['GET', 'POST'])
+@web.route('/login_real', methods=['POST'])
 def login_real():
-    if request.method == 'POST':
+    user = g_database.get_user(request.form.get('user_id'))
+    password = request.form.get("password")
+    if user is None:
+        flash("没有该用户")
+        return render_template('login.html')
+    elif user["password"] != password:
+        flash("密码错误")
+        return render_template('login.html')
+    else:
         session['user'] = request.form.get('user_id')
         return render_template('home.html')
-    else:
-        # wrong password
-        print("login_real    xxxxxxxxxxxxxxxxxxxxxxxxxxx")
-        return render_template('login.html')
 
 @web.route('/sign_up')
 def sign_up():
-    return render_template('sign_up.html')
+    factory_id = request.args.get('factory_id')
+    return render_template('sign_up.html', factory_id=factory_id)
 
 
 @web.route('/sign_up_real', methods=['GET', 'POST'])
@@ -98,7 +103,9 @@ def sign_up_real():
             # insert into db_user
             new_user = {}
             new_user['user_id'] = request.form.get('user_id')
+            new_user['factory_id'] = request.form.get('factory_id')
             new_user['password'] = request.form.get('password')
+            new_user['position'] = request.form.get('position')
             g_database.db_user.insert(new_user)
             # return render_template('login.html')
             return render_template('sign_up_ok.html')
@@ -107,6 +114,11 @@ def sign_up_real():
             flash("该用户名已经被使用，请更换一个用户名",'error')
             # return render_template(url_for('sign_up'))
             return render_template('sign_up.html')
+
+@web.route('/view_user')
+def view_user():
+    users = g_database.get_user_all()
+    return render_template('view_user.html', users=users)
 
 @web.route('/deposit')
 def deposit():
