@@ -2,7 +2,7 @@
 
 <head>
     <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.5">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script>
         var withdraw_list = [];
@@ -131,8 +131,21 @@
 </head>
 
 <body>
-    {% include 'tooth_search.html' %}
-    {% include 'tooth_chart.html' %}
+    <fieldset>
+        <legend>出库申请</legend>
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        订单编号</td><td></td>
+                    <td><input type="text" id="id_order"></td>
+                </tr>
+                {% include 'tooth_search.html' %}
+            </table>
+        </div>
+    </fieldset>
+
+    {% include 'tooth_chart_multi.html' %}
 
 
 

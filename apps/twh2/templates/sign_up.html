@@ -1,13 +1,28 @@
 {% extends "common_base.html" %}
+
+
 {% block content %}
-
-在此注册新用户
-<form action="/sign_up" method="POST">
-    用户名 <input type="text" name="user_id" value='guest'><br>
-    密码 <input type="text" name="password" value='guest'><br>
-
-    <p><input type="submit" value="注册" /></p>
-
-</form>
-
+<fieldset>
+    <legend>在此注册新用户</legend>
+    <div>
+        <form action="/sign_up" method="POST">
+            <table>
+                <tr>
+                    <td>用户名</td>
+                    <td> <input type="text" name="user_id" value='guest'></td>
+                </tr>
+                <tr>
+                    <td>密码</td>
+                    <td> <input type="text" name="password" value='guest'></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <p><input type="submit" value="注册"></p>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</fieldset>
 {% endblock %}

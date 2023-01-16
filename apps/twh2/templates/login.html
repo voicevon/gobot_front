@@ -1,15 +1,30 @@
 {% extends "common_base.html" %}
+
+
 {% block content %}
-
-在此登录
-<form action="/login_real" method="POST">
-    用户名 <input type="text" name="user_id" value='guest'><br>
-    密码 <input type="text" name="password" value='guest'><br>
-
-    <p><input type="submit" value="登录" /></p>
-
-    <a href="sign_up">注册新用户 </a>
-
-</form>
-
+<fieldset>
+    <legend>在此登录</legend>
+    <div>
+        <form action="/login_real" method="POST">
+            <table>
+                <tr>
+                    <td>用户名</td>
+                    <td> <input type="text" name="user_id" value='guest'></td>
+                </tr>
+                <tr>
+                    <td>密码</td>
+                    <td> <input type="text" name="password" value='guest'></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <p><input type="submit" value="登录" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</fieldset>
+<p></p>
+<a href="sign_up">注册新用户 </a>
 {% endblock %}

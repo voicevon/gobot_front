@@ -1,23 +1,45 @@
-订单编号：<input type="text" id="id_order"><br>
-twh：<input type="text" id="twh" value="{{ twh }}"><br>
-批次：<input type="text" id="batch_number" value=""><br>
-品牌：<select id="brand" name="noname">
-    <option value="好口腔">好口腔</option>
-    <option value="红叶牌">红叶牌</option>
-    <option value="其他">其他</option>
-</select><br>
-颜色：<select id="color" name="noname">
-    <option value="白">白</option>
-    <option value="黄">黄</option>
-    <option value="灰">灰</option>
-</select>
-大小：<select id="size" name="noname">
-    <option value="大">大</option>
-    <option value="中">中</option>
-    <option value="小">小</option>
-</select>
-形状：<select id="shape" name="noname">
-    <option value="方">方</option>
-    <option value="圆">圆</option>
-    <option value="其他">其他</option>
-</select><br>
+<tr>
+    <td align="right">twh</td>
+    <td></td>
+    <td><input type="text" id="twh" value="{{ twh }}"></td>
+</tr>
+<tr>
+    <td align="right">批次</td>
+    <td></td>
+    <td><input type="text" id="batch_number" value=""></td>
+</tr>
+<tr>
+    <td align="right">品牌</td>
+    <td></td>
+    <td><select id="brand" name="noname">
+            <option value="定远">定远</option>
+            <option value="赢冠">赢冠</option>
+            <option value="鼎冠">鼎冠</option>
+            <option value="正午">正午</option>
+            <option value="赢冠">赢冠</option>
+            <option value="博瑞特">博瑞特</option>
+            <option value="嘉伟">嘉伟</option>
+            <option value="美尔晶">美尔晶</option>
+            <option value="名扬">名扬</option>
+        </select></td>
+</tr>
+<tr>
+    <td align="right">规格</td>
+    <td></td>
+    <td><select id="color" name="noname">
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+            <option value="A3">A3</option>
+        </select>
+        <select id="size" name="noname">
+            <option value="大">大</option>
+            <option value="中">中</option>
+            <option value="小">小</option>
+        </select>
+        <select id="shape" name="noname">
+            <option value="方">方</option>
+            <option value="圆">圆</option>
+            <option value="其他">其他</option>
+        </select>
+    </td>
+</tr>

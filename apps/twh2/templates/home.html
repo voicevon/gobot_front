@@ -2,28 +2,23 @@
 
 
 {% block content %}
+<a href="/login">登录</a><br>
+<a href="/sign_up">注册</a><br>
+<hr>
+<a href="/deposit?twh=221109">入库-221109</a><br>
+<a href="/withdraw?twh=221109">出库-221109</a><br>
+<a href="/withdraw_takeout?twh=221109">出库领料-221109</a><br>
+<hr>
+<a href="/deposit?twh=221223">入库-221223</a>
+<hr>
+<a href="/view_stock">查看库存</a><br>
+<a href="/view_user">查看用户</a>
+<hr>
+{% endblock %}
 
-<a href="/login">登录</a>
-<p>
 
-    <a href="/deposit?twh=221109">入库-221109</a>
-<p>
-    <a href="/deposit?twh=221223">入库-221223</a>
-<p>
 
-    <a href="/withdraw?twh=221109">出库-221109</a>
-<p>
-    <a href="/withdraw_takeout?twh=221109">出库领料-221109</a>
-<p>
-
-    <hr>
-    <a href="/view_stock">查看库存</a>
-<p>
-    <a href="/view_user">查看用户</a>
-<p>
-
-    {% endblock %}
-
-    {% block test %}
-    This is a test
-    {% endblock %}
+{% block test %}
+<p></p>
+This is a test
+{% endblock %}
