@@ -12,7 +12,7 @@ web = Flask(__name__)
 web.config['SECRET_KEY'] = '20221220'
 web.secret_key = '20221221'   # for WTForm
 # web.debug=False
-
+twh_factory = {'221109':'山东雅乐福义齿公司'}
 
 class MyForm(FlaskForm):
     brand = StringField('品牌', validators=[InputRequired('品牌不可空白')])
@@ -69,7 +69,7 @@ def check_login():
 
 @web.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', factory_name = twh_factory['221109'])
 
 @web.route('/login')
 def login():
@@ -91,8 +91,8 @@ def login_real():
 
 @web.route('/sign_up')
 def sign_up():
-    factory_id = request.args.get('factory_id')
-    return render_template('sign_up.html', factory_id=factory_id)
+    factory_name = twh_factory[request.args.get('twh')]
+    return render_template('sign_up.html', factory_name=factory_name)
 
 
 @web.route('/sign_up_real', methods=['GET', 'POST'])
@@ -114,6 +114,12 @@ def sign_up_real():
             flash("该用户名已经被使用，请更换一个用户名",'error')
             # return render_template(url_for('sign_up'))
             return render_template('sign_up.html')
+
+@web.route('/logout')
+def log_out():
+    del session['user']
+    flash('已经成功登出')
+    return render_template('login.html')
 
 @web.route('/view_users')
 def view_users():
@@ -144,8 +150,6 @@ def deposit_request():
     request_in_stock = g_database.get_stock(user_request)
     if request_in_stock is None:
         # Can not find in stock , Try to find a empty box
-        
-        #copy emptybox location to user_request
         user_request['col'] = g_database.get_pure_empty_col(user_request)
         user_request['origin_quantity'] = 0
         user_request['doc_id'] = -1
@@ -184,11 +188,12 @@ def deposit_move():
         print("robot will move box to somewhere for operator........ ")
         return render_template("deposit_move.html",user_request = user_request)
 
-@web.route('/deposit_end', methods = ['POST', 'GET'])
+@web.route('/deposit_end', methods = ['POST','GET'])
 def deposit_end():
+    return render_template("deposit_end.html")
     if request.method == 'POST':
-        request_form = request.form
-        g_database.update_stock(request_form)
+        user_request = request.form
+        g_database.update_stock(user_request)
         return render_template("deposit_end.html")
 
 @web.route('/withdraw')

@@ -80,7 +80,7 @@ class DbApi():
 
     def update_stock(self, user_request):
         print("color", user_request['color'])
-        if user_request['origin_quantity'] == '0':
+        if user_request['doc_id'] == '-1':
             # insert into database
             print("insert stock")
             db_row={}
