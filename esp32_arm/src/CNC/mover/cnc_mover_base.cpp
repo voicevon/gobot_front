@@ -1,5 +1,4 @@
 #include "cnc_mover_base.h"
-// #include "teensy_step_gateway.h"
 
 void CncMover::SpinOnce(){
     // Logger::Debug("CncMover::SpinOnce()");

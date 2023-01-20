@@ -9,7 +9,7 @@ GpioButton::GpioButton(int gpio_id){
 
 void GpioButton::SpinOnce(){
     bool is_pressed = ! digitalRead(__pin_number);
-    if (IsPressed && (!__last_state_is_pressed)){
+    if (is_pressed && (!__last_state_is_pressed)){
         __is_changing_to_pressed = true;
     } 
     __last_state_is_pressed = is_pressed;
