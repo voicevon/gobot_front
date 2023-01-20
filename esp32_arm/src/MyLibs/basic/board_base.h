@@ -8,7 +8,6 @@
 #include <Adafruit_MCP23X17.h>
 #include <Adafruit_VL53L0X.h>
 #include <Adafruit_APDS9960.h>
-#include <Adafruit_NeoPixel.h>
 #include "Mylibs/basic/logger.h"
 
 class BoardBase{

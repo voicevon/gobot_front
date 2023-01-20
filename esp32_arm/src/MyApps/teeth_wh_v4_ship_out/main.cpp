@@ -2,7 +2,7 @@
 #ifdef I_AM_TEETH_WAREHOUSE_V4_SHIP_OUT
 
 #define MY_ROBOT_ROW_ID 0
-#define GCODE_MQTT_TOPIC "twh/221109/rows"   //report state topic =  "twh/221109/r0/state"
+#define GCODE_MQTT_TOPIC "twh/221109/delivery"  
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
@@ -20,6 +20,8 @@ Twh4_ShipOut_App app(MY_ROBOT_ROW_ID);
 Twh4_ShipOut_Robot robot;
 
 void test_board(){
+    board.TestLed(0, 1);
+    board.TestLed(555, 2);
     Serial.println("[Info] test_board() is done.");
 }
 
@@ -35,7 +37,7 @@ void test_robot(){
 
 void setup(){
     board.Init();
-    // test_board();
+    test_board();
     robot.Init(&board);
 
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
@@ -63,6 +65,13 @@ void loop(){
     loop_mqtt();
     // Logger::Print("Arduino loop() point ", 4);
 
+    
+    // check button: is from unpress to pressed
+    GpioButton* button = board.GetButton();
+    button->SpinOnce();
+    if (button->IsToPressed()){
+        gcode_queue.AppendGcodeCommand("M408");
+    }
 
 }
 

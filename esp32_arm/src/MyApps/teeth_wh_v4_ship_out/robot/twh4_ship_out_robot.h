@@ -20,6 +20,7 @@ class Twh4_ShipOut_Robot: public RobotBase{
         // useless, because I have no mover. no armsolution.
         void _InitStatic_Queues() override {};
         void _Init_ArmSolution() override {};
+        Twh4_ShipOut_Board* __board;
 
 };
 

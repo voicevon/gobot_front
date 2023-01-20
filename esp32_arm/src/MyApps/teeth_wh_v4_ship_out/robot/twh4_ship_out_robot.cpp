@@ -5,9 +5,11 @@
 
 
 void Twh4_ShipOut_Robot::MySpinOnce(){
+
 }
 
 void Twh4_ShipOut_Robot::Init(Twh4_ShipOut_Board* board){
     Logger::Debug("Twh4_ShipOut_Robot::Init()");
+    __board = board;
     // McodeOS::Instance().LinkRunner(&__m408_runner);
 }
