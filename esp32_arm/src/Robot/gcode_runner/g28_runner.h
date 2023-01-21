@@ -19,7 +19,9 @@ class G28_Runner: public SyncGcodeRunnerBase{
         CncMover* _mover;   //Only for stop()
         ArmSolutionBase* _arm_solution;  //for Setcurrent_position
         char _axis_name;
+        bool _has_position_trigger = true;
 
     private:
+
 };
 

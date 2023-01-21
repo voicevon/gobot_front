@@ -6,24 +6,28 @@
 
 bool G28_Runner::IsDone(){
     // Logger::Debug("G28_Runner::IsDone()");
-    static unsigned long last_micros;
-    PositionTrigger* trigger;
-    for(int i=0; i<PositionTrigger_Array::Instance().GetItemsCount(); i++){
-        trigger = PositionTrigger_Array::Instance().GetPositionTrigger(i);
-        if (trigger->MyName == this->_axis_name){
-            if(trigger->IsFired()){
-                Logger::Info("G28_Runner::IsDone()  homer is triggered...");
-            	_mover->AllActuatorsStop();
-                this->SetHomedPosition(trigger);
-	            return true;
+    if (_has_position_trigger){
+        static unsigned long last_micros;
+        PositionTrigger* trigger;
+        for(int i=0; i<PositionTrigger_Array::Instance().GetItemsCount(); i++){
+            trigger = PositionTrigger_Array::Instance().GetPositionTrigger(i);
+            if (trigger->MyName == this->_axis_name){
+                if(trigger->IsFired()){
+                    Logger::Info("G28_Runner::IsDone()  homer is triggered...");
+                    _mover->AllActuatorsStop();
+                    this->SetHomedPosition(trigger);
+                    return true;
+                }
             }
         }
+        if(micros() - last_micros > 200000){
+            Serial.print(".");  //print too fast?
+            last_micros = micros();
+        }
+        return false;
+    }else{
+        return true;
     }
-    if(micros() - last_micros > 200000){
-        Serial.print(".");  //print too fast?
-        last_micros = micros();
-    }
-    return false;
 }
 
 void G28_Runner::LinkGcode(Gcode* gcode){

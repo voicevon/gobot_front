@@ -9,7 +9,7 @@ char* Twh4_JsonLoader::Load(){
     const int capacity = JSON_OBJECT_SIZE(3);
     StaticJsonDocument<capacity> doc;
     doc["topic"] = "twh/5221109/button";
-    doc["payload"][""] = "empty";
+    doc["payload"]["test"] = "empty";
     doc["payload"]["ir_state"] = "blocked";
     doc["payload"]["homed"] = true;
     

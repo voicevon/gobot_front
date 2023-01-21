@@ -12,12 +12,12 @@ class Twh4_ShipOut_Board: public BoardBase{
     public:
         Twh4_ShipOut_Board();
         void Init() override;
-        void SetLed(int position_index, int mode);  // 0= OFF, 1= ON, 2= FAST_FLASH, 3= SLOW_FLASH,  4= IN_TURN
+        void SetLed(int position_index, int mode, int red, int green, int blue);  // 0= OFF, 1= ON, 2= FAST_FLASH, 3= SLOW_FLASH,  4= IN_TURN
         void ClearLeds();
         // void SpinOnce();
         GpioButton* GetButton(){return &__button;};
 
-        void TestLed(int test_loop_count,int test_method);
+        void TestLed(int test_loop_count,int test_method, int red, int green, int blue);
         void TestButton(int test_loop_count);
 
     protected:

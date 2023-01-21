@@ -7,6 +7,7 @@ void Twh4_Shipout_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solutio
     Logger::Info("Twh4_Shipout_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
     this->_arm_solution = arm_solution;
+    this->_has_position_trigger = false;
 }
 
 void Twh4_Shipout_G28_Runner::SetMoveBlock_ToHome(char axis_name, MoveBlock* mb){

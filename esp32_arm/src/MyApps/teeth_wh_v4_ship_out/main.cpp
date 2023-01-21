@@ -20,8 +20,11 @@ Twh4_ShipOut_App app(MY_ROBOT_ROW_ID);
 Twh4_ShipOut_Robot robot;
 
 void test_board(){
-    board.TestLed(0, 1);
-    board.TestLed(555, 2);
+    #define BRIGHTNESS 11
+    board.TestLed(0, 1, 0, 0, 0);
+    board.TestLed(0, 2, 0, BRIGHTNESS, 0);
+    board.TestLed(0, 3, 0, 0, BRIGHTNESS);
+    board.TestButton(0);
     Serial.println("[Info] test_board() is done.");
 }
 
@@ -48,7 +51,7 @@ void setup(){
     append_mqtt_bridge(GCODE_MQTT_TOPIC, &mqtt_command_queue, &app); 
     setup_mqtt_on_message_receive(); 
 
-    gcode_queue.AppendGcodeCommand("G28X");
+    gcode_queue.AppendGcodeCommand("G28X");   // Incase of mqtt received this command, will cause exception?
     // test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
