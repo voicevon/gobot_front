@@ -4,7 +4,7 @@ from twh_robot_layer import TwhRobot_Layer
 import requests
 import json
 
-class TwhRobot():
+class TwhRobot_v2():
     def __init__(self) -> None:
         g_amq.Subscribe('twh_deposit')
         g_amq.Subscribe('twh_withdraw')

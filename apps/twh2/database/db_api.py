@@ -88,12 +88,10 @@ class DbApi():
             db_row['color'] = user_request['color']
             db_row['size'] = user_request['size']
             db_row['shape'] = user_request['shape']
-            db_row['location_vertical'] = user_request['location_vertical']
-            db_row['location_horizontal'] = user_request['location_horizontal']
-            db_row['location_index'] = user_request['location_index']
-            db_row['layer'] = (user_request['layer'])
-            db_row['row'] = (user_request['row'])
-            db_row['col'] = user_request['col']
+            db_row['location'] = user_request['location']
+            db_row['layer'] = int(user_request['layer'])
+            db_row['row'] = int(user_request['row'])
+            db_row['col'] = int(user_request['col'])
             db_row['stock_quantity'] = int(user_request['deposit_quantity'])
             self.db_stock.insert(db_row)
 

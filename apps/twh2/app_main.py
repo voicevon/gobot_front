@@ -18,6 +18,18 @@ class MyForm(FlaskForm):
     brand = StringField('品牌', validators=[InputRequired('品牌不可空白')])
     # location_verital = boll
 
+
+def get_row_from_location(location_string:str) -> int:
+    print(location_string)
+    if location_string == 'ul':
+        return 1
+    elif location_string == 'ur':
+        return 2
+    elif location_string == 'll':
+        return 0
+    elif location_string == 'lr':
+        return 3
+
 @web.route('/get_stock', methods=['POST'])
 def get_stock():
     # print('query_string\n\n', ss)  # https://stackoverflow.com/questions/11774265/how-do-you-access-the-query-string-in-flask-routes
@@ -156,21 +168,11 @@ def deposit_request():
     else:
         #copy request_in_stock location to user_request 
         user_request['doc_id'] = request_in_stock.doc_id
-        user_request['col'] = request_in_stock['col']
         user_request['origin_quantity'] = request_in_stock['stock_quantity']
+        user_request['col'] = int(request_in_stock['col'])
 
-    location_string = user_request['location'][0:2]
-    print(location_string)
-    if location_string == 'ul':
-        user_request['row'] = 1
-    elif location_string == 'ur':
-        user_request['row'] = 2
-    elif location_string == 'll':
-        user_request['row'] = 0
-    elif location_string == 'lr':
-        user_request['row'] = 3
-
-    user_request['layer'] = user_request['location'][3:4]
+    user_request['row'] = get_row_from_location(user_request['location'][0:2])
+    user_request['layer'] = int(user_request['location'][3:4])
 
     print(user_request)
 
@@ -188,10 +190,8 @@ def deposit_move():
         print("robot will move box to somewhere for operator........ ")
         return render_template("deposit_move.html",user_request = user_request)
 
-@web.route('/deposit_end', methods = ['POST','GET'])
+@web.route('/deposit_end', methods = ['POST'])
 def deposit_end():
-    return render_template("deposit_end.html")
-    if request.method == 'POST':
         user_request = request.form
         g_database.update_stock(user_request)
         return render_template("deposit_end.html")
@@ -206,6 +206,17 @@ def withdraw():
 
 @web.route('/withdraw_end', methods = ['POST', 'GET'])
 def withdraw_end():
+    user_request = {}
+    for key in request.form.to_dict():
+        user_request[key] = request.form.get(key)
+        print(key, user_request[key])
+    all_is_in_stock = True
+    # check stock in withdraw request
+    
+    if not all_is_in_stock:
+        flash("库存不足，无法开始出库，请重新下订单。")
+        return  redirect(url_for("/withdraw"))
+
     return render_template('withdraw_end.html')
 
 @web.route('/withdraw_takeout')
