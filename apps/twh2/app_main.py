@@ -153,7 +153,6 @@ def deposit():
 
 @web.route('/deposit_request', methods = ['POST'])
 def deposit_request():
-    # result = request.form
     user_request = {}
     # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
     for key in request.form.to_dict():
@@ -192,7 +191,9 @@ def deposit_move():
 
 @web.route('/deposit_end', methods = ['POST'])
 def deposit_end():
-        user_request = request.form
+        user_request = {}
+        for key in request.form.to_dict():
+            user_request[key] = request.form.get(key)
         g_database.update_stock(user_request)
         return render_template("deposit_end.html")
 
@@ -210,14 +211,21 @@ def withdraw_end():
     for key in request.form.to_dict():
         user_request[key] = request.form.get(key)
         print(key, user_request[key])
-    all_is_in_stock = True
-    # check stock in withdraw request
+    all_in_stock = g_database.check_stock_for_all_locations(request=user_request)
     
-    if not all_is_in_stock:
+    if not all_in_stock:
+        # Can not find in stock 
         flash("库存不足，无法开始出库，请重新下订单。")
-        return  redirect(url_for("/withdraw"))
-
-    return render_template('withdraw_end.html')
+        return  redirect(url_for("withdraw"))
+    #copy request_in_stock location to user_request 
+    # user_request['stock_ids'] = request_in_stock.doc_id   #TODO:  is a list
+    # user_request['origin_quantity'] = request_in_stock['stock_quantity']
+    # user_request['col'] = request_in_stock['col']
+    # user_request['row'] = request_in_stock['row']
+    # user_request['layer'] = request_in_stock['col']
+    # user_request['state'] = 'asked'
+    g_database.table_withdraw.insert(user_request)
+    return render_template('/withdraw_end.html')
 
 @web.route('/withdraw_takeout')
 def withdraw_takeout():

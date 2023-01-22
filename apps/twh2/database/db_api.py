@@ -17,47 +17,53 @@ class DbApi():
         # self.deposit_request = []
 
 
-    def get_stock(self, request):
+    def get_stock(self, request):  # -> List[Document]
         q = Query()
         db_rows = self.db_stock.search((q.brand == request['brand']) 
                                         & (q.color == request['color'])
                                         & (q.size == request['size'])
                                         & (q.shape == request['shape'])
+                                        & (q.batch_number == request['batch_number'])
                                         & (q.location == request['location'])
-
-                                        # & (q.location_vertical == request['location_vertical'])
-                                        # & (q.location_horizontal == request['location_horizontal'])
-                                        # & (q.location_index == request['location_index'])
                                         )
         if len(db_rows) > 0:
             return db_rows[0]
-
         return None
 
-        # if (len(db_rows) == 0):
-        #     # Can not find in stock
-        #     box = self.get_emptybox()
-        #     request['layer'] = box.layer
-        #     request['row'] = box.row
-        #     request['col'] = box.col
-        # else:
-        #     # Yes, Find it in stock
-        #     # request['doc_id'] = db_row['doc_id']  #?
-        #     db_row = db_rows[0]
-        #     # print('db_row', db_row.doc_id)
-        #     request['doc_id'] = db_row.doc_id
-        #     request['layer'] = db_row['layer']
-        #     request['row'] = db_row['row']
-        #     request['col'] = db_row['col']
-        #     request['origin_quantity'] = db_row['stock_quantity']
-        # return request
+    def check_stock_for_all_locations(self, request) -> bool:
+        print(request)
+        for key, value in request.items():
+            if key[0:9] == 'location_':
+                q= Query()
+                db_rows = self.db_stock.search((q.brand == request['brand']) 
+                                            & (q.color == request['color'])
+                                            & (q.size == request['size'])
+                                            & (q.shape == request['shape'])
+                                            & (q.batch_number == request['batch_number'])
+                                            & (q.location == value)
+                                            )
+                if len(db_rows) == 0:
+                    # at least one location has no stock.
+                    return False
 
+        return True
     def get_pure_empty_col(self, request):
         # To find a col number,
         # 1.  Try to find same brand, color, size, shape, batch_number as request.
         # 2.  If not #1,  Try to all {row, layer} is empty.
         # 3.  If not #2,  A) return None,  B) Go on with any empty box. ?? 
-        return 2
+        q = Query()
+        db_rows = self.db_stock.search((q.brand == request['brand']) 
+                                    & (q.color == request['color'])
+                                    & (q.size == request['size'])
+                                    & (q.shape == request['shape'])
+                                    & (q.batch_number == request['batch_number'])
+                                    )
+        max_col = 0
+        for dbrow in db_rows:
+            if dbrow['col'] > max_col:
+                max_col = dbrow['col']
+        return max_col + 1
 
     def get_emptybox(self) -> TwhLocation:
         q = Query()
@@ -85,6 +91,7 @@ class DbApi():
             print("insert stock")
             db_row={}
             db_row['brand'] = user_request['brand']
+            db_row['batch_number'] = user_request['batch_number']
             db_row['color'] = user_request['color']
             db_row['size'] = user_request['size']
             db_row['shape'] = user_request['shape']
