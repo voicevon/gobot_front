@@ -107,25 +107,24 @@ def sign_up():
     return render_template('sign_up.html', factory_name=factory_name)
 
 
-@web.route('/sign_up_real', methods=['GET', 'POST'])
+@web.route('/sign_up_real', methods=['POST'])
 def sign_up_real():
-    if request.method == 'POST':
-        user_in_db  = g_database.get_user(request.form.get('user_id'))
-        if user_in_db is None:
-            # insert into db_user
-            new_user = {}
-            new_user['user_id'] = request.form.get('user_id')
-            new_user['factory_id'] = request.form.get('factory_id')
-            new_user['password'] = request.form.get('password')
-            new_user['position'] = request.form.get('position')
-            g_database.db_user.insert(new_user)
-            # return render_template('login.html')
-            return render_template('sign_up_ok.html')
-        else:
-            # repeated username
-            flash("该用户名已经被使用，请更换一个用户名",'error')
-            # return render_template(url_for('sign_up'))
-            return render_template('sign_up.html')
+    user_in_db  = g_database.get_user(request.form.get('user_id'))
+    if user_in_db is None:
+        # insert into db_user
+        new_user = {}
+        new_user['user_id'] = request.form.get('user_id')
+        new_user['factory_id'] = request.form.get('factory_id')
+        new_user['password'] = request.form.get('password')
+        new_user['position'] = request.form.get('position')
+        g_database.db_user.insert(new_user)
+        # return render_template('login.html')
+        return render_template('sign_up_ok.html')
+    else:
+        # repeated username
+        flash("该用户名已经被使用，请更换一个用户名",'error')
+        # return render_template(url_for('sign_up'))
+        return render_template('sign_up.html')
 
 @web.route('/logout')
 def log_out():
@@ -177,7 +176,7 @@ def deposit_request():
 
     return render_template("deposit_request.html",user_request = user_request)
 
-@web.route('/deposit_move', methods = ['POST', 'GET'])
+@web.route('/deposit_move', methods = ['POST'])
 def deposit_move():
     if request.method == 'POST':
         request_form = request.form
@@ -205,7 +204,7 @@ def withdraw():
     else:
         return redirect(url_for('login'))
 
-@web.route('/withdraw_end', methods = ['POST', 'GET'])
+@web.route('/withdraw_end', methods = ['POST'])
 def withdraw_end():
     user_request = {}
     for key in request.form.to_dict():
@@ -217,30 +216,25 @@ def withdraw_end():
         # Can not find in stock 
         flash("库存不足，无法开始出库，请重新下订单。")
         return  redirect(url_for("withdraw"))
-    #copy request_in_stock location to user_request 
-    # user_request['stock_ids'] = request_in_stock.doc_id   #TODO:  is a list
-    # user_request['origin_quantity'] = request_in_stock['stock_quantity']
-    # user_request['col'] = request_in_stock['col']
-    # user_request['row'] = request_in_stock['row']
-    # user_request['layer'] = request_in_stock['col']
-    # user_request['state'] = 'asked'
-    g_database.table_withdraw.insert(user_request)
+    user_request['user_id'] = session['user']
+    user_request['connected_box_id'] = -1
+    user_request['state'] = 'idle'
+    g_database.table_withdraw_queue.insert(user_request)
     return render_template('/withdraw_end.html')
 
 @web.route('/withdraw_takeout')
 def withdraw_takeout():
     if 'user' in session:
         twh = request.args.get('twh')
-        is_in_untaken = False   # How to know?  db.table.untaken
-        if is_in_untaken:
-            pipe_id = 12
-            g_mqtt.publish(topic="twh/221109/pipe_flash/" , payload= pipe_id)
-            return render_template('withdraw_takeout.html', twh=twh)
-        else:
-            return render_template('withdraw_in_queue.html')
-    else:
-        return redirect(url_for('login'))
-
+        box_id = g_database.get_shipout_box_id(session['user'])
+        if box_id == 0:
+            # not found fullfilled box
+            flash("您的订单尚未备货完毕，请稍后再尝试")
+            return redirect(url_for("home"))
+            
+        g_mqtt.publish(topic='twh/221109/shipout_box/' , payload= '{"box_id:"' + str(box_id) +',"color":"blue"}')
+        return render_template('withdraw_takeout.html', twh=twh)
+        
 def start():
     g_mqtt_broker_config.client_id = '20221222'
     g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  

@@ -1,4 +1,4 @@
-from von.mqtt_agent import g_mqtt
+from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
 
 
 class TwhRobot_ShipoutBox():
@@ -26,6 +26,16 @@ class TwhRobot_Shipout():
         for i in range(11):
             newbox = TwhRobot_ShipoutBox(i)
             self.boxes.append(newbox)
+        self.rx_topic = 'twh/221109/shipout/box'
+        g_mqtt.subscribe(self.rx_topic)
+
+    def SpinOnce(self):
+        rx = g_mqtt.RxBuffer
+        if rx.has_updated_payload(self.rx_topic):
+            payload = rx.FetchPayload(self.rx_topic)
+            box_id =   payload['box_id'] 
+            box = self.boxes[box_id]
+            box.state = payload['state']
 
     def FindBox_not_fullfilled():
         pass  #???
@@ -53,3 +63,6 @@ class TwhRobot_Shipout():
 
 
     
+if __name__ == '__main__':
+    g_mqtt_broker_config.client_id = 'edfdsgdsddfgv'
+    g_mqtt.connect_to_broker(g_mqtt_broker_config)

@@ -13,7 +13,7 @@ class DbApi():
         self.db_stock = TinyDB('database/twh_stock.json')
         self.db_user = TinyDB('database/twh_user.json')
         self.table_deposit = TinyDB('database/twh_deposit.json')
-        self.table_withdraw = TinyDB('database/twh_withdraw_queue.json')
+        self.table_withdraw_queue = TinyDB('database/twh_withdraw_queue.json')
         # self.deposit_request = []
 
 
@@ -135,7 +135,20 @@ class DbApi():
     def remove_deposit(self, doc_id:int):
         self.table_deposit.remove(where ('doc_id')== doc_id)
         
+    def get_fullfilled_shipout_box_id(self, user_id) -> int:
+        q = Query()
+        s = self.table_withdraw_queue.search((q.user_id == user_id) & (q.state=='fullfilled'))
+        if len(s) > 0:
+            return s[0]['connected_box_id']
+        return 0
 
+    def take_teeth_from_shipout_box(self, box_id:int):
+        # discuss: If we delete the record by user_id, might cause multiple records be removed.
+        #TODO:  insert into withdraw_history
+
+        #delete from queue
+        self.table_withdraw_queue.remove(where('connected_box_id') == box_id)
+        
 g_database = DbApi()
 
 if __name__ == '__main__':

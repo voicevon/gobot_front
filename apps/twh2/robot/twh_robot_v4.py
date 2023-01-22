@@ -1,6 +1,4 @@
-from statemachine import StateMachine_Item, StateMachine
-from von.amq_agent import g_amq, g_amq_broker_config
-# from twh_robot_layer import TwhRobot_Layer
+# from von.amq_agent import g_amq, g_amq_broker_config
 from twh_robot_row import TwhRobot_Row
 from twh_robot_shipout import TwhRobot_ShipoutBox, TwhRobot_Shipout
 
@@ -38,8 +36,8 @@ class WithdrawOrder():
 
 class TwhRobot_v4():
     def __init__(self) -> None:
-        g_amq.Subscribe('twh_deposit')
-        g_amq.Subscribe('twh_withdraw')
+        # g_amq.Subscribe('twh_deposit')
+        # g_amq.Subscribe('twh_withdraw')
         # self.layer_robots = [TwhRobot_Layer(robot_id='221109')]
         self.robot_rows = [TwhRobot_Row()]
         self.robot_rows.clear()
@@ -98,10 +96,10 @@ if __name__ == '__main__':
     from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
     g_mqtt_broker_config.client_id = '221223'
     g_mqtt.connect_to_broker(g_mqtt_broker_config)
-    g_amq.connect_to_broker(g_amq_broker_config)
+    # g_amq.connect_to_broker(g_amq_broker_config)
 
 
     robot = TwhRobot_v4()
     while True:
-        g_amq.process_data_events()
+        # g_amq.process_data_events()
         robot.state_machine_spin_once()
