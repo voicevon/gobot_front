@@ -11,9 +11,7 @@ void Twh4_ShipOut_Robot::MySpinOnce(){
 void Twh4_ShipOut_Robot::Init(Twh4_ShipOut_Board* board){
     Logger::Debug("Twh4_ShipOut_Robot::Init()");
     this->_InitStatic_Queues();
-    // this->__InitStatic_Actuators(board);
     this->_Init_ArmSolution();
-
     this->_LinkMover(&__mover);
     
 
@@ -21,9 +19,9 @@ void Twh4_ShipOut_Robot::Init(Twh4_ShipOut_Board* board){
     this->_g28_runner = &this->__g28_runner;
     __g28_runner.Init(&__mover, &__arm_solution);
 
-    // this->__m42_runner.Init(board);
-    // McodeOS::Instance().LinkRunner(&this->__m42_runner);
-    McodeOS::Instance().LinkJsonLoader_ForM408Runner(&this->__json_loader);
+    this->__m42_runner.Init(board);
+    McodeOS::Instance().LinkRunner(&__m42_runner);
+    McodeOS::Instance().LinkJsonLoader_ForM408Runner(&__json_loader);
     __board = board;
 }
 

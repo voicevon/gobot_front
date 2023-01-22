@@ -3,6 +3,7 @@
 #include "Robot/robot_base.h"
 #include "../board/twh4_ship_out_board.h"
 #include "mcode_runner/json_loader.h"
+#include "mcode_runner/twh_m42_switch_output.h"
 #include "arm_soution_blank/blank_arm_solution.h"
 #include "arm_soution_blank/g28_runner.h"
 
@@ -24,6 +25,8 @@ class Twh4_ShipOut_Robot: public RobotBase{
         Blank_ArmSolution __arm_solution;
         CncMover __mover;
         Twh4_Shipout_G28_Runner __g28_runner;
+        Twh4_Shipout_M42_Runner_Switch_Output __m42_runner;
+        
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
         LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
 
