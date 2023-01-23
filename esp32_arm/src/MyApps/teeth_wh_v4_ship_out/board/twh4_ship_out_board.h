@@ -13,8 +13,10 @@ class Twh4_ShipOut_Board: public BoardBase{
     public:
         Twh4_ShipOut_Board();
         void Init() override;
-        void SetLed(int position_index, int mode, int red, int green, int blue);  // 0= OFF, 1= ON, 2= FAST_FLASH, 3= SLOW_FLASH,  4= IN_TURN
-        void ClearLeds();
+        void SetLed_Red(int position_index); 
+        void SetLed_Green(int position_index); 
+        void SetLed_Blue(int position_index);  
+        // void ClearLeds();
         // void SpinOnce();
         GpioButton* GetButton_Withdraw(){return &__withdraw_button;};
         GpioButton* GetButton_Shipout(){return &__shipout_button;};
@@ -25,7 +27,14 @@ class Twh4_ShipOut_Board: public BoardBase{
     protected:
 
     private:
-        Adafruit_NeoPixel __leds = Adafruit_NeoPixel(WS2812B_COUNT, PIN_NEO_PIXEL, NEO_GRB + NEO_KHZ800);
         GpioButton __withdraw_button = GpioButton(PIN_GPIO_BUTTON_WITHDRAW);
         GpioButton __shipout_button = GpioButton(PIN_GPIO_BUTTON_SHIPOUT);
+
+        Adafruit_NeoPixel __leds = Adafruit_NeoPixel(WS2812B_COUNT, PIN_NEO_PIXEL, NEO_GRB + NEO_KHZ800);
+        void __SetLed(int position_index, int mode, int red, int green, int blue);
+        void __SetLeds();
+        int __led_red_index = -1;
+        int __led_green_index = -1;
+        int __led_blue_index = -1;
+
 };
