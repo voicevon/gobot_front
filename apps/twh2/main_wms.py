@@ -8,8 +8,8 @@ from von.amq_agent import g_amq, g_amq_broker_config
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from database.db_api import g_database
 from bolt_nut import get_row_from_location
-from multiprocessing import Process, Value
-from wcs_robots.twh_robot_shipout import TwhRobot_Shipout
+from wcs_robots.twh_wcs import Twh_WarehouseControlSystem
+
 
 web = Flask(__name__)
 web.config['SECRET_KEY'] = '20221220'
@@ -233,9 +233,9 @@ def start():
     g_mqtt_broker_config.client_id = '20221222'
     g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
     g_amq.connect_to_broker(g_amq_broker_config)
-    twh_robot = TwhRobot_Shipout()
-    p = Process(target=twh_robot.Spin)
-    p.start() 
+    wcs = Twh_WarehouseControlSystem()
+    wcs.StartProcess()
+    
     # new_thread = Thread(target=web.run, kwargs={'debug':False, 'host':'0.0.0.0'})   # DebugMode, must be turn off.  
     # new_thread = Thread(target=web.run, kwargs={'debug':False})   # DebugMode, must be turn off.  
     # new_thread.start()

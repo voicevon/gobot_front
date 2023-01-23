@@ -29,18 +29,17 @@ class TwhRobot_Shipout():
         self.rx_topic = 'twh/221109/shipout/box'
         g_mqtt.subscribe(self.rx_topic)
 
-    def Spin(self):
+    def CheckMqttMessage(self):
         print("TwhRobot_Shipout main process is started....")
-        while True:
-            rx = g_mqtt.RxBuffer
-            if rx.has_updated_payload(self.rx_topic):
-                payload = rx.FetchPayload(self.rx_topic)
-                box_id =   payload['box_id'] 
-                box = self.boxes[box_id]
-                box.state = payload['state']
+        rx = g_mqtt.RxBuffer
+        if rx.has_updated_payload(self.rx_topic):
+            payload = rx.FetchPayload(self.rx_topic)
+            box_id =   payload['box_id'] 
+            box = self.boxes[box_id]
+            box.state = payload['state']
 
-    def FindBox_not_fullfilled():
-        pass  #???
+    # def FindBox_not_fullfilled():
+    #     pass  #???
 
     def FindBox_Idle(self) -> TwhRobot_ShipoutBox:
         for box in self.boxes:
