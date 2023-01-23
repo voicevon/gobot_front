@@ -7,6 +7,9 @@ from tinydb import Query
 from von.amq_agent import g_amq, g_amq_broker_config
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from database.db_api import g_database
+from bolt_nut import get_row_from_location
+from multiprocessing import Process, Value
+from robot.twh_robot_shipout import TwhRobot_Shipout
 
 web = Flask(__name__)
 web.config['SECRET_KEY'] = '20221220'
@@ -18,17 +21,6 @@ class MyForm(FlaskForm):
     brand = StringField('品牌', validators=[InputRequired('品牌不可空白')])
     # location_verital = boll
 
-
-def get_row_from_location(location_string:str) -> int:
-    print(location_string)
-    if location_string == 'ul':
-        return 1
-    elif location_string == 'ur':
-        return 2
-    elif location_string == 'll':
-        return 0
-    elif location_string == 'lr':
-        return 3
 
 @web.route('/get_stock', methods=['POST'])
 def get_stock():
@@ -217,9 +209,10 @@ def withdraw_end():
         flash("库存不足，无法开始出库，请重新下订单。")
         return  redirect(url_for("withdraw"))
     user_request['user_id'] = session['user']
+    g_database.table_withdraw_history.insert(user_request)
+
     user_request['connected_box_id'] = -1
-    user_request['state'] = 'idle'
-    g_database.table_withdraw_queue.insert(user_request)
+    g_database.insert_withdraw_queue_multi_rows(user_request)
     return render_template('/withdraw_end.html')
 
 @web.route('/withdraw_takeout')
@@ -233,12 +226,16 @@ def withdraw_takeout():
             return redirect(url_for("home"))
             
         g_mqtt.publish(topic='twh/221109/shipout_box/' , payload= '{"box_id:"' + str(box_id) +',"color":"blue"}')
+        # The blue light will turn on. and user press blue button to finish the taking_out process.
         return render_template('withdraw_takeout.html', twh=twh)
         
 def start():
     g_mqtt_broker_config.client_id = '20221222'
     g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
     g_amq.connect_to_broker(g_amq_broker_config)
+    twh_robot = TwhRobot_Shipout()
+    p = Process(target=twh_robot.Spin)
+    p.start() 
     # new_thread = Thread(target=web.run, kwargs={'debug':False, 'host':'0.0.0.0'})   # DebugMode, must be turn off.  
     # new_thread = Thread(target=web.run, kwargs={'debug':False})   # DebugMode, must be turn off.  
     # new_thread.start()
@@ -247,7 +244,6 @@ start()
 
 if __name__ == '__main__':
     start()
-    # twh_robot = TwhRobot_Layer("221109")
 
     # while True:
     #     twh_robot.spin_once()
@@ -257,4 +253,5 @@ if __name__ == '__main__':
     #  web.run(debug=True)
     # while True:
     #     pass
+
     web.run(host='0.0.0.0', debug=False)

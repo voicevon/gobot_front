@@ -70,9 +70,13 @@ void loop(){
 
     
     // check button: is from unpress to pressed
-    GpioButton* button = board.GetButton();
-    button->SpinOnce();
-    if (button->IsToPressed()){
+    GpioButton* button_withdraw = board.GetButton_Withdraw();
+    button_withdraw->SpinOnce();
+    if (button_withdraw->IsToPressed()){
+        gcode_queue.AppendGcodeCommand("M408");
+    }
+    GpioButton* button_shipout = board.GetButton_Shipout();
+    if (button_shipout->IsToPressed()){
         gcode_queue.AppendGcodeCommand("M408");
     }
 

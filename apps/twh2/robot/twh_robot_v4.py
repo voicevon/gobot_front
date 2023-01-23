@@ -1,6 +1,7 @@
 # from von.amq_agent import g_amq, g_amq_broker_config
 from twh_robot_row import TwhRobot_Row
 from twh_robot_shipout import TwhRobot_ShipoutBox, TwhRobot_Shipout
+from database.db_api import g_database
 
 import requests
 import json
@@ -18,10 +19,11 @@ class WithdrawOrder():
         self.order_id = order_id
         self.teeth = [WithdrawOrderTooth(0,0,0)]
         self.teeth = teeth
-
     
     def connect_shipoutbox(self, box: TwhRobot_ShipoutBox):
         self.__connected_shipout_box = box
+
+        g_database.update_withdraw_queue_multi_rows_connected_shipout_box(self.order_id, box.id)
     
     def RemoveTooth(self, tooth):
         self.teeth.remove(tooth)
@@ -67,10 +69,11 @@ class TwhRobot_v4():
             return
 
         for order in self.withdraw_orders:
-            if order.connect_shipoutbox is None:
+            if order.connected_shipoutbox is None:
                 # new order, have found idle shipout_box
-                order.connected_shipoutbox = shipout_box
+                order.connect_shipoutbox(shipout_box)
                 shipout_box.state = 'feeding'
+                # g_mqtt.publish("box", '"box_id":' + str(shipout_box.id))
                 return
 
     def SpinOnce(self) -> None:
@@ -85,7 +88,7 @@ class TwhRobot_v4():
                         row_robot.move_to(tooth.col, tooth.layer)
                         order.RemoveTooth(tooth)
                         if len(order.teeth) == 0:
-                            order.connect_shipoutbox.state = 'fullfilled'
+                            order.connected_shipoutbox.state = 'fullfilled'
                         return
 
 

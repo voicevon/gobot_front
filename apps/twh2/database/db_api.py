@@ -1,5 +1,6 @@
 
 from tinydb import TinyDB, Query, where
+from bolt_nut import get_row_from_location
 
 class TwhLocation:
     row = -1
@@ -14,6 +15,7 @@ class DbApi():
         self.db_user = TinyDB('database/twh_user.json')
         self.table_deposit = TinyDB('database/twh_deposit.json')
         self.table_withdraw_queue = TinyDB('database/twh_withdraw_queue.json')
+        self.table_withdraw_history = TinyDB('database/twh_withdraw_history.json')
         # self.deposit_request = []
 
 
@@ -134,7 +136,40 @@ class DbApi():
 
     def remove_deposit(self, doc_id:int):
         self.table_deposit.remove(where ('doc_id')== doc_id)
-        
+    
+    def insert_withdraw_queue_multi_rows(self, request):
+        for key, value in request.items():
+            if key[0:9] == 'location_':
+                print('insert_withdraw_queue_multi_rows()', key, value)
+                item = {}
+                item['order_id'] = request['order_id']
+                item['user_id'] = request['user_id']
+                item['brand'] = request['brand']
+                item['batch_number'] = request['batch_number']
+                item['color'] = request['color']
+                item['shape'] = request['shape']
+                item['size'] = request['size']
+                item['location'] = value
+
+                item['row'] = 1  #TODO:   get correct value.
+                item['col'] = 2
+                item['layer'] = 3
+                item['connected_shipout_box'] = -1
+                self.table_withdraw_queue.insert(item)
+
+    def update_withdraw_queue_multi_rows_connected_shipout_box(self, order_id:str, connect_to_shipoutbox_id: int):
+        self.table_withdraw_queue.update()   # syntax
+
+    def remove_tooth_from_withdraw_quieue(self, order_id:int, location:str) -> bool:
+        self.table_withdraw_queue.remove(where(('location')==location) &('order_id')==order_id)
+        q = Query()
+        rows = self.table_withdraw_queue.search(q.order_id == order_id)
+        if len(rows) == 0:
+            # all teeth have been removed to shipout_box already
+            return True
+        # still has other tooth to be removed.
+        return False
+    
     def get_fullfilled_shipout_box_id(self, user_id) -> int:
         q = Query()
         s = self.table_withdraw_queue.search((q.user_id == user_id) & (q.state=='fullfilled'))
@@ -142,14 +177,11 @@ class DbApi():
             return s[0]['connected_box_id']
         return 0
 
-    def take_teeth_from_shipout_box(self, box_id:int):
-        # discuss: If we delete the record by user_id, might cause multiple records be removed.
-        #TODO:  insert into withdraw_history
+    # def take_teeth_from_shipout_box(self, box_id:int):
+    #     # discuss: If we delete the record by user_id, might cause multiple records be removed.
 
-        #delete from queue
-        self.table_withdraw_queue.remove(where('connected_box_id') == box_id)
+    #     #delete from queue
+    #     self.table_withdraw_queue.remove(where('connected_box_id') == box_id)
         
 g_database = DbApi()
 
-if __name__ == '__main__':
-    DbApi().get_emptybox()

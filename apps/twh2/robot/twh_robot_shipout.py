@@ -29,13 +29,15 @@ class TwhRobot_Shipout():
         self.rx_topic = 'twh/221109/shipout/box'
         g_mqtt.subscribe(self.rx_topic)
 
-    def SpinOnce(self):
-        rx = g_mqtt.RxBuffer
-        if rx.has_updated_payload(self.rx_topic):
-            payload = rx.FetchPayload(self.rx_topic)
-            box_id =   payload['box_id'] 
-            box = self.boxes[box_id]
-            box.state = payload['state']
+    def Spin(self):
+        print("TwhRobot_Shipout main process is started....")
+        while True:
+            rx = g_mqtt.RxBuffer
+            if rx.has_updated_payload(self.rx_topic):
+                payload = rx.FetchPayload(self.rx_topic)
+                box_id =   payload['box_id'] 
+                box = self.boxes[box_id]
+                box.state = payload['state']
 
     def FindBox_not_fullfilled():
         pass  #???
@@ -46,14 +48,14 @@ class TwhRobot_Shipout():
                 return box
         return None
 
-    def FindBox_Feeding(self, order_id: str) -> TwhRobot_ShipoutBox():
+    def FindBox_Feeding(self, order_id: str) -> TwhRobot_ShipoutBox:
         for box in self.boxes:
             if box.order_id == order_id:
                 if box.state == 'feeding':
                     return box
         return None
 
-    def FindBox_fullfilled(self, order_id: str) -> TwhRobot_ShipoutBox():
+    def FindBox_fullfilled(self, order_id: str) -> TwhRobot_ShipoutBox:
         for box in self.boxes:
             if box.order_id == order_id:
                 if box.state == 'fullfilled':
@@ -66,3 +68,4 @@ class TwhRobot_Shipout():
 if __name__ == '__main__':
     g_mqtt_broker_config.client_id = 'edfdsgdsddfgv'
     g_mqtt.connect_to_broker(g_mqtt_broker_config)
+
