@@ -36,7 +36,7 @@ class WithdrawOrder():
                 return tooth
         return None
 
-class TwhRobot_v4():
+class Twh_WarehouseControlSystem():
     def __init__(self) -> None:
         # g_amq.Subscribe('twh_deposit')
         # g_amq.Subscribe('twh_withdraw')
@@ -51,7 +51,6 @@ class TwhRobot_v4():
         # self.current_state = 'idle'
         self.withdraw_orders = [WithdrawOrder('',0,0,0)]
         self.withdraw_orders.clear()
-
     
     def AppendWithdrawOrder(self, order:WithdrawOrder)->None:
         self.withdraw_orders.append(order)
@@ -102,7 +101,7 @@ if __name__ == '__main__':
     # g_amq.connect_to_broker(g_amq_broker_config)
 
 
-    robot = TwhRobot_v4()
+    wcs = Twh_WarehouseControlSystem()
     while True:
         # g_amq.process_data_events()
-        robot.state_machine_spin_once()
+        wcs.state_machine_spin_once()

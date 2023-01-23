@@ -9,7 +9,7 @@ from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from database.db_api import g_database
 from bolt_nut import get_row_from_location
 from multiprocessing import Process, Value
-from robot.twh_robot_shipout import TwhRobot_Shipout
+from wcs_robots.twh_robot_shipout import TwhRobot_Shipout
 
 web = Flask(__name__)
 web.config['SECRET_KEY'] = '20221220'

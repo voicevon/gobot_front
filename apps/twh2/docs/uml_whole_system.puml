@@ -1,0 +1,28 @@
+	
+@startuml
+
+node WMS
+node WCS
+database database
+node webserver
+node browser
+agent robot_row_0
+agent robot_row_1
+node robot_shipout
+actor operator_1
+actor operator_2
+
+WMS == webserver
+webserver ~~ browser
+browser == operator_1
+
+WMS <==> database : deposit \n withdraw_order \n 
+WCS <==> database : withdraw_queue
+WCS --> robot_row_0 : move_to
+WCS --> robot_row_1 : move_to
+WCS <-- robot_shipout : buttons
+
+robot_row_0 --> operator_2:  picking
+operator_2 --> robot_shipout: place
+
+@enduml

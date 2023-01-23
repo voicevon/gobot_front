@@ -22,7 +22,7 @@ void Twh4_ShipOut_Board::Init(){
 }
 
 // 0= OFF, 1= ON, 2= FAST_FLASH, 3= SLOW_FLASH,  4= IN_TURN
-void Twh4_ShipOut_Board::__SetLed(int position_index, int mode, int red, int green, int blue) {
+void Twh4_ShipOut_Board::__test_hardware_SetLed(int position_index, int mode, int red, int green, int blue) {
     // __leds.clear();
     if (mode ==1){   // TODO: remove arg:  mode
         __leds.setPixelColor(2 * position_index, red, green, blue);
@@ -87,14 +87,14 @@ void Twh4_ShipOut_Board::TestLed(int test_loop_count,int test_method, int red, i
                 break;
             case 2:
                 for (int position_index=0; position_index <12; position_index++){
-                    this->__SetLed(position_index, 1, red, green, blue);  // turn off all leds
+                    this->__test_hardware_SetLed(position_index, 1, red, green, blue);  // turn off all leds
                     Logger::Print("Position", position_index);
                     delay(1000);
                 }
                 break;
             case 3:
                 for (int position_index=0; position_index <12; position_index++){
-                    this->__SetLed(position_index, 1, red, green, blue);  // turn off all leds
+                    this->__test_hardware_SetLed(position_index, 1, red, green, blue);  // turn off all leds
                     Logger::Print("Position", position_index);
                     delay(1000);
                 }
