@@ -2,7 +2,7 @@
 #ifdef I_AM_TEETH_WAREHOUSE_V4_SHIP_OUT
 
 #define MY_ROBOT_ROW_ID 0
-#define GCODE_MQTT_TOPIC "twh/221109/delivery"  
+#define GCODE_MQTT_TOPIC "twh/221109/shipout"  
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
