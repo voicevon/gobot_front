@@ -23,10 +23,12 @@
   - "M408"
  
 # MQTT: and payload examples: 
-- topic twh/221109/gcode_feed
+- topic twh/221109/r1/gcode
   - "G1X123Y4", "G4S5", "M408"
-- twh/221109/gcode_feed/fb
+- twh/221109/r1/gcode/fb
   - "G1X123Y4", "G4S5", "M408"
-- twh/221109/ir_state
-  - "empty", "blocked"
+
+- for mqtt_var  
+  - twh/221109/r1/state
+    - "idle", "moving"
 

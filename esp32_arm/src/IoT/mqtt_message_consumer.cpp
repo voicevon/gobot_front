@@ -2,10 +2,10 @@
 #include <HardwareSerial.h>
 
 bool MqttMessageConsumer::CheckMqttCommand(){
-    // Serial.println("[Info] MqttMessageConsumer::CheckMqttCommand() is entering.");
+    // Logger::Info(" MqttMessageConsumer::CheckMqttCommand()");
     MessageQueue::SingleMessage* new_message = this->__mq->FetchTailMessage(true);
     if (new_message != NULL){
-        // Serial.println("[Info] MqttMessageConsumer::CheckMqttCommand() got new meeage.");
+        Logger::Print("MqttMessageConsumer::CheckMqttCommand() got new meeage.", new_message->payload);
         this->AsyncExecuteMqttCommand(new_message->payload);
     }
 }

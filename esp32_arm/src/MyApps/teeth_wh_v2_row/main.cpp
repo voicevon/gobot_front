@@ -1,8 +1,8 @@
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_V2_ROW
 
-#define MY_ROBOT_ROW_ID 0
-#define GCODE_MQTT_TOPIC "twh/221109/rows"   //report state topic =  "twh/221109/r0/state"
+#define MY_ROBOT_ROW_ID 1
+#define GCODE_MQTT_TOPIC "twh/221109/r1/gcode"   //report state topic =  "twh/221109/r1/state"
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/main_mqtt.h"
@@ -21,7 +21,7 @@ Twh2Row_Robot robot;
 
 void test_board(){
     board.Test_PositionTriggers(0);
-    board.Test_Stepper(900);
+    board.Test_Stepper(0);
     Serial.println("[Info] test_board() is done.");
 }
 
@@ -91,6 +91,7 @@ void setup(){
     setup_mqtt_on_message_receive(); 
 
     gcode_queue.AppendGcodeCommand("G28X");
+    gcode_queue.AppendGcodeCommand("M408");
     // test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
@@ -106,7 +107,6 @@ void loop(){
     // Logger::Print("Arduino loop() point ", 3);
     loop_mqtt();
     // Logger::Print("Arduino loop() point ", 4);
-
 
 }
 

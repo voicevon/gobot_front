@@ -1,12 +1,13 @@
 #include "twh2_row_board.h"
 
 // http://www.bachinmaker.com/wikicn/doku.php?id=bachin-e3
-
+//  x-end   GPIO 17
+//  y-end   GPIO 4
 
 
 
 // Index number
-#define PIN_POSITION_TRIGGER_X 17
+#define PIN_POSITION_TRIGGER_X 4   //    7
 
 #define PIN_ALPHA_DIR 14 //32  
 #define PIN_ALPHA_STEP 12 //26   
@@ -26,7 +27,7 @@ Twh2Row_Board::Twh2Row_Board(){
 void Twh2Row_Board::Init(){
     #define POSITION_TRIGGER_COUNT 1
 
-    __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_POSITION_TRIGGER_X, HIGH);
+    __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_POSITION_TRIGGER_X, LOW);
     PositionTrigger_Array::Instance().Init(__all_position_triggers, POSITION_TRIGGER_COUNT);
 
     __InitSteppers();
@@ -68,11 +69,11 @@ void Twh2Row_Board::Test_PositionTriggers(int loops){
             }
         }
         if (flags != last_flags){
-            Serial.print("Trigger is channged: \t\t");
+            Serial.print("Trigger is channged   0:normal,   1:triggered \t\t");
             Serial.print("Counter= ");
             Serial.print(count);
             Serial.print("  ");
-            Serial.println(flags,BIN);
+            Serial.println(flags, BIN);
 
             last_flags = flags;
             count++;

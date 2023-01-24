@@ -25,38 +25,7 @@ void Twh2Row_App::AsyncExecuteMqttCommand(const char* command){
         Serial.print(str_command.substring(7));
         Serial.println();
     }
-    Gcode my_gcode = Gcode(command);
-    if (my_gcode.g == 1){
-        if (my_gcode.get_value('R') == this->__robot_row_id){
-            this->_gcode_queue->AppendGcodeCommand(command);
-        }
-    }
-
-        // Complete command example:  
-        // payload: "twh_store R12C0"      //store to row=12, col=0
-        // payload: "twh_retrv R15C7"   // retrieve from row=15, col=7
-    // if (str_command.substring(0,9) == "twh_store"){
-    //     // This is a robot command, not a gcode or mcode
-    //     str_command = str_command.substring(9);
-    //     int row = my_gcode.get_value('R');   
-    //     int col = my_gcode.get_value('C');
-    //     Logger::Print("row", row);
-    //     Logger::Print("col", col);
-    //     this->__robot->StoreToCell(row, col);
-    // } else if (str_command.substring(0,9) == "twh_retrv"){
-    //     // This is a robot command, not a gcode or mcode
-    //     str_command = str_command.substring(9);
-    //     int row = my_gcode.get_value('R');   
-    //     int col = my_gcode.get_value('C');
-    //     Logger::Print("row", row);
-    //     Logger::Print("col", col);
-    //     this->__robot->RetrieveFromCell(row, col);
-    // }else{
-    //     // this is a normal gcode.
-    //     this->_gcode_queue->AppendGcodeCommand(command);
-
-    // }
-
+    this->_gcode_queue->AppendGcodeCommand(command);
 }
 
 
