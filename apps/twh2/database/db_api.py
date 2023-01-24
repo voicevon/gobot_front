@@ -7,21 +7,27 @@ class TwhLocation:
     col = -1 
     layer = -1
 
+class db_User():
+    table_user = TinyDB('database/twh_user.json')
 
-
-class DbApi():
-    def __init__(self) -> None:
-        self.db_stock = TinyDB('database/twh_stock.json')
-        self.db_user = TinyDB('database/twh_user.json')
-        self.table_deposit = TinyDB('database/twh_deposit.json')
-        self.table_withdraw_queue = TinyDB('database/twh_withdraw_queue.json')
-        self.table_withdraw_history = TinyDB('database/twh_withdraw_history.json')
-        # self.deposit_request = []
-
-
-    def get_stock(self, request):  # -> List[Document]
+    @classmethod
+    def get_user(cls, user_id:str):
         q = Query()
-        db_rows = self.db_stock.search((q.brand == request['brand']) 
+        users = cls.table_user.search(q.user_id==user_id)
+        if len(users) > 0:
+            return users[0]
+        return None
+
+    def get_user_all(self):
+        return self.table_user.all()
+
+class db_Stock():
+    table_stock = TinyDB('database/twh_stock.json')
+
+    @classmethod
+    def get_stock(cls, request):  # -> List[Document]
+        q = Query()
+        db_rows = cls.table_stock.search((q.brand == request['brand']) 
                                         & (q.color == request['color'])
                                         & (q.size == request['size'])
                                         & (q.shape == request['shape'])
@@ -32,12 +38,13 @@ class DbApi():
             return db_rows[0]
         return None
 
-    def check_stock_for_all_locations(self, request) -> bool:
+    @classmethod
+    def check_stock_for_all_locations(cls, request) -> bool:
         print(request)
         for key, value in request.items():
             if key[0:9] == 'location_':
                 q= Query()
-                db_rows = self.db_stock.search((q.brand == request['brand']) 
+                db_rows = cls.table_stock.search((q.brand == request['brand']) 
                                             & (q.color == request['color'])
                                             & (q.size == request['size'])
                                             & (q.shape == request['shape'])
@@ -47,15 +54,16 @@ class DbApi():
                 if len(db_rows) == 0:
                     # at least one location has no stock.
                     return False
-
         return True
-    def get_pure_empty_col(self, request):
+
+    @classmethod
+    def get_pure_empty_col(cls, request):
         # To find a col number,
         # 1.  Try to find same brand, color, size, shape, batch_number as request.
         # 2.  If not #1,  Try to all {row, layer} is empty.
         # 3.  If not #2,  A) return None,  B) Go on with any empty box. ?? 
         q = Query()
-        db_rows = self.db_stock.search((q.brand == request['brand']) 
+        db_rows = cls.table_stock.search((q.brand == request['brand']) 
                                     & (q.color == request['color'])
                                     & (q.size == request['size'])
                                     & (q.shape == request['shape'])
@@ -67,14 +75,15 @@ class DbApi():
                 max_col = dbrow['col']
         return max_col + 1
 
-    def get_emptybox(self) -> TwhLocation:
+    @classmethod
+    def get_emptybox(cls) -> TwhLocation:
         q = Query()
         # Not found in stock, assign [col]
         box = TwhLocation()
         for layer in range(1):
             for row in range(4):
                 for col in range(120):
-                    db_rows = self.db_stock.search((q.layer==str(layer)) & (q.row==str(row)) & (q.col==str(col)))
+                    db_rows = cls.table_stock.search((q.layer==str(layer)) & (q.row==str(row)) & (q.col==str(col)))
                     if len(db_rows) == 0:
                         box.layer = layer
                         box.row = row
@@ -86,7 +95,8 @@ class DbApi():
         box.row = -1
         box.col = -1
 
-    def update_stock(self, user_request):
+    @classmethod
+    def update_stock(cls, user_request):
         print("color", user_request['color'])
         if user_request['doc_id'] == '-1':
             # insert into database
@@ -102,41 +112,47 @@ class DbApi():
             db_row['row'] = int(user_request['row'])
             db_row['col'] = int(user_request['col'])
             db_row['stock_quantity'] = int(user_request['deposit_quantity'])
-            self.db_stock.insert(db_row)
+            cls.table_stock.insert(db_row)
 
         else:
             # update into database()
             doc_id = [int(user_request['doc_id'])]
             new_quantity = int(user_request['origin_quantity']) + int(user_request['deposit_quantity'])
             print("update stock", new_quantity)
-            self.db_stock.update({'stock_quantity':new_quantity}, doc_ids=doc_id)
+            cls.table_stock.update({'stock_quantity':new_quantity}, doc_ids=doc_id)
 
-    def get_user(self, user_id):
-        q = Query()
-        users = self.db_user.search(q.user_id==user_id)
-        if len(users) > 0:
-            return users[0]
-        return None
 
-    def get_user_all(self):
-        return self.db_user.all()
-        
-    def get_stock_all(self):
-        return self.db_stock.all()
-        
-    def append_deposit(self, user_request):
-        self.table_deposit.insert(user_request)
+class db_Deposite():
+    table_deposit = TinyDB('database/twh_deposit.json')
 
+    @classmethod 
+    def append_deposit(cls, user_request):
+        cls.table_deposit.insert(user_request)
     
-    def search_deposit(self, robot_id:str, layer_id:str):
+    @classmethod 
+    def search_deposit(cls, robot_id:str, layer_id:str):
         q = Query()
-        s = self.table_deposit.search((q.twh==robot_id) & (q.layer==layer_id))
-        # print(s)
+        s = cls.table_deposit.search((q.twh==robot_id) & (q.layer==layer_id))
         return s
 
-    def remove_deposit(self, doc_id:int):
-        self.table_deposit.remove(where ('doc_id')== doc_id)
-    
+    @classmethod 
+    def remove_deposit(cls, doc_id:int):
+        cls.table_deposit.remove(where ('doc_id')== doc_id)
+
+
+class db_Withdraw():
+    table_withdraw_queue = TinyDB('database/twh_withdraw_queue.json')
+    table_withdraw_history = TinyDB('database/twh_withdraw_history.json')
+
+    @classmethod
+    def get_fullfilled_shipout_box_id(cls, user_id) -> int:
+        q = Query()
+        s = cls.table_withdraw_queue.search((q.user_id == user_id) & (q.state=='fullfilled'))
+        if len(s) > 0:
+            return s[0]['connected_box_id']
+        return 0
+
+    @classmethod
     def insert_withdraw_queue_multi_rows(self, request):
         for key, value in request.items():
             if key[0:9] == 'location_':
@@ -157,25 +173,40 @@ class DbApi():
                 item['connected_shipout_box'] = -1
                 self.table_withdraw_queue.insert(item)
 
-    def update_withdraw_queue_multi_rows_connected_shipout_box(self, order_id:str, connect_to_shipoutbox_id: int):
-        self.table_withdraw_queue.update()   # syntax
+    @classmethod
+    def update_withdraw_queue_multi_rows_connected_shipout_box(cls, order_id:str, connect_to_shipoutbox_id: int):
+        cls.table_withdraw_queue.update()   # syntax
 
-    def remove_tooth_from_withdraw_quieue(self, order_id:int, location:str) -> bool:
-        self.table_withdraw_queue.remove(where(('location')==location) &('order_id')==order_id)
+    @classmethod
+    def remove_tooth_from_withdraw_quieue(cls, order_id:int, location:str) -> bool:
+        cls.table_withdraw_queue.remove(where(('location')==location) &('order_id')==order_id)
         q = Query()
-        rows = self.table_withdraw_queue.search(q.order_id == order_id)
+        rows = cls.table_withdraw_queue.search(q.order_id == order_id)
         if len(rows) == 0:
             # all teeth have been removed to shipout_box already
             return True
         # still has other tooth to be removed.
         return False
     
-    def get_fullfilled_shipout_box_id(self, user_id) -> int:
-        q = Query()
-        s = self.table_withdraw_queue.search((q.user_id == user_id) & (q.state=='fullfilled'))
+
+class db_Shipout():
+    table_takeout = TinyDB('database/twh_takeout.json')
+
+    @classmethod
+    def get_shipout_box_id(cls, user_id:str) -> int:
+        q= Query()
+        s = cls.table_takeout.search(q.user_id == user_id)
         if len(s) > 0:
-            return s[0]['connected_box_id']
-        return 0
+            return s[0]['user_id']
+        return -1
+
+    @classmethod
+    def Update_shipout_request(cls, user_id:str):
+        content= cls.table_takeout.all()
+        content['request_user_id'] = user_id
+        cls.table_takeout.update(content)
+
+    
 
     # def take_teeth_from_shipout_box(self, box_id:int):
     #     # discuss: If we delete the record by user_id, might cause multiple records be removed.
@@ -183,5 +214,5 @@ class DbApi():
     #     #delete from queue
     #     self.table_withdraw_queue.remove(where('connected_box_id') == box_id)
         
-g_database = DbApi()
+
 

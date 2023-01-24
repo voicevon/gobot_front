@@ -3,6 +3,7 @@ from wcs_robots.twh_robot_row import TwhRobot_Row
 from wcs_robots.twh_robot_shipout import TwhRobot_ShipoutBox, TwhRobot_Shipout
 from database.db_api import g_database
 from multiprocessing import Process, Value
+from von.mqtt_auto_sync_var import MqttAutoSyncVar
 
 import time
 import requests
@@ -18,33 +19,12 @@ class WithdrawQueue_Tooth():
         # self.layer = layer
 
     def __init__(self, dbtable_withdraw_queue) -> None:
-        self.order_id = dbtable_withdraw_queue['order_id']
-        self.shipoutbox_id = dbtable_withdraw_queue['shipoutbox_id']
-        self.row =  dbtable_withdraw_queue['row']
-        self.col = dbtable_withdraw_queue['col']
-        self.layer = dbtable_withdraw_queue['layer']
-
-
-# class WithdrawQueue():
-#     def __init__(self)-> None:
-        # self.order_id = order_id
-        # self.teeth = []
-        # self.teeth = teeth
-    
-    # def connect_shipoutbox(self, box: TwhRobot_ShipoutBox):
-    #     self.__connected_shipout_box = box
-    #     g_database.update_withdraw_queue_multi_rows_connected_shipout_box(self.order_id, box.id)
-    
-    # def RemoveTooth(self, tooth):
-    #     self.teeth.remove(tooth)
-    #     if len(self.teeth) == 0:
-    #         self.__connected_shipout_box.state = 'fullfilled'   #TODO:   the last tooth is not arrived !
-
-    # def FindTooth_FromRow(self, row: int):
-    #     for tooth in self.teeth:
-    #         if tooth.row == row:
-    #             return tooth
-    #     return None
+        if dbtable_withdraw_queue is not None:
+            self.order_id = dbtable_withdraw_queue['order_id']
+            self.shipoutbox_id = dbtable_withdraw_queue['shipoutbox_id']
+            self.row =  dbtable_withdraw_queue['row']
+            self.col = dbtable_withdraw_queue['col']
+            self.layer = dbtable_withdraw_queue['layer']
 
 
 class Twh_WarehouseControlSystem():
@@ -55,25 +35,18 @@ class Twh_WarehouseControlSystem():
             new_robot_row = TwhRobot_Row(2222,i)
             self.robot_rows.append(new_robot_row)
         self.robot_shipout = TwhRobot_Shipout()
-
         self.withdraw_queues = []
-        # self.withdraw_orders.clear()
-    
-    # def AppendWithdrawOrder(self, order:WithdrawOrder)->None:
-    #     self.withdraw_orders.append(order)
-
-    # def Move_Database_to_WithdrawQueue(self):
-    #     '''
-
-    #     '''
-    #     orders =  g_database.table_withdraw_queue.all( )
-    #     order_ids = []
-    #     for order in orders:
-    #         tooth = WithdrawQueue_Tooth(order)
-    #         self.withdraw_queues.append(tooth)
-    #         order_ids.append(order.doc_id)
-
-    #     g_database.table_withdraw_queue.remove(doc_ids=order_ids)
+        self.current_picking_place_tooth = WithdrawQueue_Tooth(None)
+        self.current_shipping_out_box = TwhRobot_ShipoutBox(-1)
+        
+        self.row_robots_state = []
+        self.row_robots_state.append(MqttAutoSyncVar('twh/221109/r0/state','idle'))
+        self.row_robots_state.append(MqttAutoSyncVar('twh/221109/r1/state','idle'))
+        self.row_robots_state.append(MqttAutoSyncVar('twh/221109/r2/state','idle'))
+        self.row_robots_state.append(MqttAutoSyncVar('twh/221109/r3/state','idle'))
+        
+        self.button_picking_plance = MqttAutoSyncVar('twh/221109/button/pick/state','idle')
+        self.button_shipout = MqttAutoSyncVar('twh/221109/button/shipout/state','idle')
 
     def FindRobotRow_idle(self) -> TwhRobot_Row:
         for robot in self.robot_rows:
@@ -131,11 +104,28 @@ class Twh_WarehouseControlSystem():
                     self.withdraw_queues.remove(tooth)
                     return
 
+    def Check_MQTT_Rx(self):
+        for i in range(4):
+            if self.row_robots_state[i].remote_value == 'ready':
+                self.robot_rows[i].state = 'idle'
+        
+        if self.button_picking_plance.remote_value == 'pressed':
+            # finished pick and place.
+            self.withdraw_queues.remove(self.current_picking_place_tooth)
+            if is_last_tooth_of_the_order:
+                box_id = self.current_picking_place_tooth.shipoutbox_id
+                box = self.robot_shipout.boxes[box_id]
+                box.state = 'fullfilled'
+        
+        if self.button_shipout.remote_value == 'pressed':
+            self.current_shipping_out_box.state = 'idle'
+
     def Spin(self):
         while True:
             # self.CheckDatabase_WithdrawQueue()
             self.Assign_Shipoutbox_to_Order()
             self.Pick_and_Place()
+            self.Check_MQTT_Rx()
             time.sleep(0.5)
 
     def StartProcess(self):
