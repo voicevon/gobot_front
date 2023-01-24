@@ -1,7 +1,7 @@
 # from von.amq_agent import g_amq, g_amq_broker_config
 from wcs_robots.twh_robot_row import TwhRobot_Row
 from wcs_robots.twh_robot_shipout import TwhRobot_ShipoutBox, TwhRobot_Shipout
-from database.db_api import g_database
+from database.db_api import db_User,db_Stock,db_Deposite,db_Withdraw,db_Shipout
 from multiprocessing import Process, Value
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
 
@@ -21,7 +21,7 @@ class WithdrawQueue_Tooth():
     def __init__(self, dbtable_withdraw_queue) -> None:
         if dbtable_withdraw_queue is not None:
             self.order_id = dbtable_withdraw_queue['order_id']
-            self.shipoutbox_id = dbtable_withdraw_queue['shipoutbox_id']
+            self.shipoubox_id = dbtable_withdraw_queue['connected_shipout_box']  #TODO:  unify the key's name
             self.row =  dbtable_withdraw_queue['row']
             self.col = dbtable_withdraw_queue['col']
             self.layer = dbtable_withdraw_queue['layer']
@@ -53,6 +53,16 @@ class Twh_WarehouseControlSystem():
             if robot.state == 'idle':
                 return robot
         return None
+    
+    def FindTooth_from_WithdrawQueue(self, row_id: int) ->WithdrawQueue_Tooth:
+        '''
+        constraint:  connected_shipout_box is avaliable.
+        '''
+        for tooth in self.withdraw_queues:
+            if tooth.shipoutbox_id != -1:
+                if tooth.row == row_id:
+                    return tooth
+        return None
 
     def Assign_Shipoutbox_to_Order(self):
         '''
@@ -64,8 +74,14 @@ class Twh_WarehouseControlSystem():
         if idle_shipout_box is None:
             return
 
-        # 2. Copy queue(same order_id) from database  to wcs buffer
-        db_rows = g_database.table_withdraw_queue.search('where order_id=min(order_id)')
+        # 2. get queue(same order_id) from database
+        db_rows = db_Withdraw.get_single_order()
+        if len(db_rows)==0:
+            # the queue is empty
+            return
+
+        # 3. copy teeth in this order to wcs buffer
+        # print('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()', db_rows)
         doc_ids = []
         for db_row in db_rows:
             doc_ids.append(db_row.doc_id)
@@ -73,19 +89,11 @@ class Twh_WarehouseControlSystem():
             tooth = WithdrawQueue_Tooth(db_row)
             tooth.shipoutbox_id = idle_shipout_box.id
             idle_shipout_box.state = 'feeding'
+            self.withdraw_queues.append(tooth)
+            print('Assign_Shipoutbox_to_Order() appened tooth= ', tooth)
 
         # 3. Delete database rows (those be copied to wcs buffer)
-        g_database.table_withdraw_queue.remove(doc_ids=doc_ids)
-
-    def FindTooth_from_WithdrawQueue(self, row_id: int) ->WithdrawQueue_Tooth:
-        '''
-        constraint:  connected_shipout_box is avaliable.
-        '''
-        for tooth in self.withdraw_queues:
-            if tooth.shipout_box_id != -1:
-                if tooth.row == row_id:
-                    return tooth
-        return None
+        db_Withdraw.table_withdraw_queue.remove(doc_ids=doc_ids)
 
     def Pick_and_Place(self) -> None:
         '''
@@ -96,13 +104,16 @@ class Twh_WarehouseControlSystem():
         4. start move row_robot.
         '''
         for row_robot in self.robot_rows:
-            if not row_robot.is_moving:
-                # Got an idle row_robot
-                tooth = self.FindTooth_from_WithdrawQueue(row_robot.row_id)
+            if row_robot.state.remote_value == 'idle':
+                tooth = self.FindTooth_from_WithdrawQueue(row_robot.id)
                 if tooth is not None:
+                    print('Pick_and_Place()', tooth.row, tooth.col, tooth.layer)
                     row_robot.move_to(tooth.col, tooth.layer)
                     self.withdraw_queues.remove(tooth)
                     return
+            else:
+                # print('Pick_and_Place()  row_robot.id   .state.remote_value  =', row_robot.id, row_robot.state.remote_value)
+                pass
 
     def Check_MQTT_Rx(self):
         for i in range(4):

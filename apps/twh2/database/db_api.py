@@ -1,6 +1,6 @@
 
 from tinydb import TinyDB, Query, where
-from bolt_nut import get_row_from_location
+# from bolt_nut import get_row_from_location
 
 class TwhLocation:
     row = -1
@@ -188,9 +188,36 @@ class db_Withdraw():
         # still has other tooth to be removed.
         return False
     
+    @classmethod
+    def get_single_order(cls) -> list:
+        # 1. get first row's order_id
+        # 2. get a list for all teeth with this order_id
+        all = cls.table_withdraw_queue.all()
+        if len(all) > 0:
+            order_id = all[0]['order_id']
+            q = Query()
+            s = cls.table_withdraw_queue.search(q.order_id==order_id)
+            return s
+        return []
+
 
 class db_Shipout():
     table_takeout = TinyDB('database/twh_takeout.json')
+
+    @classmethod
+    def init_table(cls):
+        content = {}
+        content['request_user_id'] = 'abc'
+        boxes = []
+        for i in range(12):
+            box={}
+            box['id'] = i
+            box['order_id'] = i
+            # box['state'] = 'idle'
+            boxes.append(box)
+        content['boxes'] = boxes
+        cls.table_takeout.insert(content)
+
 
     @classmethod
     def get_shipout_box_id(cls, user_id:str) -> int:
@@ -207,12 +234,4 @@ class db_Shipout():
         cls.table_takeout.update(content)
 
     
-
-    # def take_teeth_from_shipout_box(self, box_id:int):
-    #     # discuss: If we delete the record by user_id, might cause multiple records be removed.
-
-    #     #delete from queue
-    #     self.table_withdraw_queue.remove(where('connected_box_id') == box_id)
-        
-
 

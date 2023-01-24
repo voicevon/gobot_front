@@ -7,7 +7,7 @@ class TwhRobot_Row():
         self.id = row_id
         state_topic = "twh/" + str(robot_id) + '/r' + str(row_id) + "/state"  #'twh/221109/r0/state'
         self.state = MqttAutoSyncVar(state_topic, 'idle')
-        self.is_moving = False
+        # self.is_moving = False
         self.gcode_sender = GcodeSender()
 
     def spin_once(self):
@@ -15,8 +15,9 @@ class TwhRobot_Row():
    
 
 
-    def move_to(self, withdraw_item) -> None:
-        GcodeSender.send_code('xxx')
+    def move_to(self, col:int, layer:int) -> None:
+        print("TwhRobot_Row::move_to()", 'row,layer = ' ,self.id, col, layer )
+        # GcodeSender.send_code('xxx')
 
     
 

@@ -20,31 +20,6 @@ class MyForm(FlaskForm):
     brand = StringField('品牌', validators=[InputRequired('品牌不可空白')])
     # location_verital = boll
 
-
-# @web.route('/get_stock', methods=['POST'])
-# def get_stock():
-#     # print('query_string\n\n', ss)  # https://stackoverflow.com/questions/11774265/how-do-you-access-the-query-string-in-flask-routes
-#     data = request.json
-#     index =  data.get('location_index')
-#     color =  data.get('color')
-#     print(index, color)
-#     q= Query()
-#     stocks = g_database.db_stock.search(
-#                                 (q.brand == data.get('brand'))
-#                                 & q.batch_number == data.get('batch_number')
-#                                 & (q.color == data.get('color'))
-#                                 & (q.size == data.get('size'))
-#                                 & (q.shape == data.get('shape'))
-#                                 & (q.location == data.get('location'))
-#                                 )
-#     # stocks = g_database.db_stock.search((q.location_index == data.get('location_index')) & (q.color == data.get('color')))
-#     if len(stocks) > 0:
-#         # print(stocks[0])
-#         stocks[0]['doc_id'] = stocks[0].doc_id
-#         return stocks[0]
-#     print('get_stock()  Out of stock')
-#     return []
-
 @web.route('/withdraw_list', methods=['POST'])
 def withdraw_list():
     user_request = request.json
@@ -95,7 +70,6 @@ def login_real():
 def sign_up():
     factory_name = twh_factory[request.args.get('twh')]
     return render_template('sign_up.html', factory_name=factory_name)
-
 
 @web.route('/sign_up_real', methods=['POST'])
 def sign_up_real():
