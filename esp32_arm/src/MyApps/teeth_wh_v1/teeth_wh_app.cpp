@@ -11,7 +11,7 @@ Twh1_App::Twh1_App(){
 
 
 
-void Twh1_App::AsyncExecuteMqttCommand(const char* command){
+void Twh1_App::onGot_MqttMessage(const char* command){
     String str_command = String(command);
     // Logger::Info("Twh1_App::ExecuteMqttCommand()");
     bool debug = false;

@@ -6,7 +6,7 @@ void AppBase::SpinOnce(){
     }
 }
 
-void AppBase::AsyncExecuteMqttCommand(const char* message){
+void AppBase::onGot_MqttMessage(const char* message){
     String str_message = String(message);
     // Logger::Info("Twh2Row_App::ExecuteMqttCommand()");
     bool debug = false;

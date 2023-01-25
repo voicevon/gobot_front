@@ -53,11 +53,11 @@ void setup(){
     robot.InitAllinOne(&board, &objStepControl);
 
    // mqtt, bridge, receiver.
-    setup_mqtt_block_connect();
+    // connect_to_mqtt_broker();
     String mqtt_topic = "puma/bot/xROBOT_SERIAL_ID";
     mqtt_topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
-    append_mqtt_bridge(mqtt_topic.c_str(), &garment_bot_message_queue, &robot); 
-    setup_mqtt_on_message_receive(); 
+    setup_mono_remote_queue_via_mqtt(mqtt_topic.c_str(), &garment_bot_message_queue, &robot); 
+    // setup_mqtt_on_message_receive(); 
 
     board.RepportRamUsage();
     Serial.println ("\n[Info] garment agv  setup() is done. ------------------------------------  ");

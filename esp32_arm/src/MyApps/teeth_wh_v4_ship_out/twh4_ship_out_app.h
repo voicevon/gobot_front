@@ -7,7 +7,7 @@ class Twh4_ShipOut_App: public AppBase{
     public:
         Twh4_ShipOut_App(int row_id);
         void LinkRobot(Twh4_ShipOut_Robot* robot){this->__robot=robot;};
-        void AsyncExecuteMqttCommand(const char*) override;
+        void onGot_MqttMessage(const char*) override;
         
     private:
         int __robot_row_id = 0;

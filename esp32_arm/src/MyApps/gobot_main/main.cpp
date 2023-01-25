@@ -30,11 +30,11 @@ void setup(){
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
     // mqtt, bridge, receiver.
-    setup_mqtt_block_connect();
+    // connect_to_mqtt_broker();
     String mqtt_topic = "gobot/xROBOT_SERIAL_ID/arm";
     mqtt_topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
-    append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, &app); 
-    setup_mqtt_on_message_receive(); 
+    setup_mono_remote_queue_via_mqtt(mqtt_topic.c_str(), &mqtt_message_queue, &app); 
+    // setup_mqtt_on_message_receive(); 
 
     Logger::Info("Gobot-Main setup is done.........................................");
     for(int i=0; i< 200; i++){ loop_mqtt();}

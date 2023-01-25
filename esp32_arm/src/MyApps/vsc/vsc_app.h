@@ -9,7 +9,7 @@ class VscApp: public AppBase{
     public:
         VscApp();
         void LinkRobot(VscRobot* robot){this->__robot=robot;};
-        void AsyncExecuteMqttCommand(const char*) override;
+        void onGot_MqttMessage(const char*) override;
         
     private:
         VscRobot* __robot;

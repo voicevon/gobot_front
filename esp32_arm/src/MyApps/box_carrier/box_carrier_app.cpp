@@ -5,7 +5,7 @@ BoxCarrierApp::BoxCarrierApp(){
     Serial.print("\n[Info] BoxCarrierApp::BoxCarrierApp() is done..........");
 }
 
-void BoxCarrierApp::AsyncExecuteMqttCommand(const char* command){
+void BoxCarrierApp::onGot_MqttMessage(const char* command){
 	this->_gcode_queue->AppendGcodeCommand(command);
 }
 

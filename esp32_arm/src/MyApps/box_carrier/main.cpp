@@ -24,12 +24,12 @@ void setup(){
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
-    setup_mqtt_block_connect();
-    append_mqtt_bridge("puma/x2212/bm", &mqtt_command_queue, &app); 
-    setup_mqtt_on_message_receive(); 
+    // connect_to_mqtt_broker();
+    setup_mono_remote_queue_via_mqtt("puma/x2212/bm", &mqtt_command_queue, &app); 
+    // setup_mqtt_on_message_receive(); 
     Serial.println ("\n[Info] box carrier  setup() is done. ------------------------------------ \n");
 
-    app.AsyncExecuteMqttCommand("G28Y");
+    app.onGot_MqttMessage("G28Y");
 }
 
 void loop(){

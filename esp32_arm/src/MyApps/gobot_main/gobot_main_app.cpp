@@ -9,7 +9,7 @@ void GobotMain_App::SpinOnce(){
 		// My Input mq is from MQTT, My output mq is this->_gcode_queue.
 		this->CheckMqttCommand();
 }
-void GobotMain_App::AsyncExecuteMqttCommand(const char* command){
+void GobotMain_App::onGot_MqttMessage(const char* command){
 	this->_gcode_queue->AppendGcodeCommand(command);
 }
 

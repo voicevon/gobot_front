@@ -3,7 +3,6 @@
 
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/remote_queue_mqtt.h"
-// #include "IoT/mqtt_syncer.h"
 #include "IoT/main_mqtt.h"
 
 #include "board_2206/board_gobot_house.h"
@@ -41,11 +40,11 @@ void setup(){
 
 
     // mqtt, bridge, receiver.
-    setup_mqtt_block_connect();
+    // connect_to_mqtt_broker();
     String mqtt_topic = "gobot/xROBOT_SERIAL_ID/house";
     mqtt_topic.replace("ROBOT_SERIAL_ID",String(ROBOT_SERIAL_ID));
-    append_mqtt_bridge(mqtt_topic.c_str(), &mqtt_message_queue, app); 
-    setup_mqtt_on_message_receive(); 
+    setup_mono_remote_queue_via_mqtt(mqtt_topic.c_str(), &mqtt_message_queue, app); 
+    // setup_mqtt_on_message_receive(); 
     Serial.println("lovely bot,  GobotHouse.  setup() is done.  Good luck!");
     // board.GetEef()->Run(EEF_CODE_UNLOAD);
 }

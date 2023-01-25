@@ -7,7 +7,7 @@ class Twh1_App: public AppBase{
     public:
         Twh1_App();
         void LinkRobot(Twh1_Robot* robot){this->__robot=robot;};
-        void AsyncExecuteMqttCommand(const char*) override;
+        void onGot_MqttMessage(const char*) override;
         
     private:
 

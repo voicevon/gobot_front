@@ -8,7 +8,7 @@
 class AppBase: public GcodeProducer, public MqttMessageConsumer{
     public:
         void SpinOnce(); 
-        void AsyncExecuteMqttCommand(const char*) override;
+        void onGot_MqttMessage(const char*) override;
 
     protected:
         virtual void RunAppCommand(const char* app_command){};

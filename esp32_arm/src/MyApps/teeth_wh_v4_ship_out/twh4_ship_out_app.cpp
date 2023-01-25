@@ -8,7 +8,7 @@ Twh4_ShipOut_App::Twh4_ShipOut_App(int row_id){
     Serial.print("\n[Info] Twh4_ShipOut_App::Twh4_ShipOut_App() is constructed");
 }
 
-void Twh4_ShipOut_App::AsyncExecuteMqttCommand(const char* command){
+void Twh4_ShipOut_App::onGot_MqttMessage(const char* command){
     String str_command = String(command);
     // Logger::Info("Twh4_ShipOut_App::ExecuteMqttCommand()");
     bool debug = false;

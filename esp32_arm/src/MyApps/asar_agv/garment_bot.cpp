@@ -16,7 +16,7 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepContr
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is done.\n");
 }
 
-void BotAsrsAgvCoreYZ::AsyncExecuteMqttCommand(const char* command){
+void BotAsrsAgvCoreYZ::onGot_MqttMessage(const char* command){
 	// command examples
 	// "99,short_cut" == leave main road.
 	// "11,load"      == move to point 23, loading 

@@ -47,9 +47,9 @@ void setup(){
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     app.LinkRobot(&robot);
 
-    setup_mqtt_block_connect();
-    append_mqtt_bridge(GCODE_MQTT_TOPIC, &mqtt_command_queue, &app); 
-    setup_mqtt_on_message_receive(); 
+    // setup_mqtt_block_connect();
+    setup_mono_remote_queue_via_mqtt(GCODE_MQTT_TOPIC, &mqtt_command_queue, &app); 
+    // setup_mqtt_on_message_receive(); 
 
     gcode_queue.AppendGcodeCommand("G28X");   // Incase of mqtt received this command, will cause exception?
     // test_robot();

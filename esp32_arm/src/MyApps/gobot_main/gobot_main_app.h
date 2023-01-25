@@ -19,7 +19,7 @@ class GobotMain_App: public GcodeProducer, public MqttMessageConsumer{
     
 
     private:
-        void AsyncExecuteMqttCommand(const char* command) override;
+        void onGot_MqttMessage(const char* command) override;
 
         void __Pickup(ChessboardCell* cell);
         void __Place(ChessboardCell* cell);

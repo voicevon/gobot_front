@@ -18,7 +18,7 @@ void GarmentBot::Init(){
 	Serial.print("\n[Info] GarmentBot::Init() is done.\n");
 }
 
-void GarmentBot::AsyncExecuteMqttCommand(const char* command){
+void GarmentBot::onGot_MqttMessage(const char* command){
 	// command examples
 	// "99,short_cut" == leave main road.
 	// "11,load"      == move to point 23, loading 

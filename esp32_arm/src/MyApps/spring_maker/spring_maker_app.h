@@ -11,7 +11,7 @@ class SpringMakerApp: public AppBase{
     public:
         SpringMakerApp();
         // void SpinOnce(); 
-        void AsyncExecuteMqttCommand(const char*) override;
+        void onGot_MqttMessage(const char*) override;
         
     private:
    

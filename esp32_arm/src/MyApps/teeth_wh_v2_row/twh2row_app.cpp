@@ -10,7 +10,7 @@ Twh2Row_App::Twh2Row_App(int row_id){
 
 
 
-// void Twh2Row_App::AsyncExecuteMqttCommand(const char* command){
+// void Twh2Row_App::onGot_MqttMessage(const char* command){
 //     String str_message_type = String(command);
 //     // Logger::Info("Twh2Row_App::ExecuteMqttCommand()");
 //     bool debug = false;

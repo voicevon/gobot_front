@@ -8,7 +8,7 @@ VscApp::VscApp(){
 }
 
 
-void VscApp::AsyncExecuteMqttCommand(const char* command){
+void VscApp::onGot_MqttMessage(const char* command){
     String str_command = String(command);
     Logger::Info("VscApp::ExecuteMqttCommand() is entering.");
     bool debug = false;

@@ -26,7 +26,7 @@ class BoxCarrierApp: public GcodeProducer, public MqttMessageConsumer{
         void LoadBox();
         void UnloadBox();
         void SpinOnce(); 
-        void AsyncExecuteMqttCommand(const char*) override;
+        void onGot_MqttMessage(const char*) override;
         BoxCarrierApp::BoxMoverState GetState(){return this->State;};
     
     private:

@@ -56,7 +56,7 @@ class GarmentBot: public MqttMessageConsumer{
     protected:
         
     private:
-        void AsyncExecuteMqttCommand(const char* command) override;
+        void onGot_MqttMessage(const char* command) override;
         RoadGraph objMapNavigator;
         SmartRfidReader objRfid;
         float __battery_voltage;

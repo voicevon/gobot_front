@@ -65,7 +65,7 @@ class BotAsrsAgvCoreYZ: public MqttMessageConsumer{
     protected:
         
     private:
-        void AsyncExecuteMqttCommand(const char* command) override;
+        void onGot_MqttMessage(const char* command) override;
         RoadGraph objMapNavigator;
         void onDetectedMark(uint16_t mapsite_id);
         RoadBranchNode __current_BranchNode;

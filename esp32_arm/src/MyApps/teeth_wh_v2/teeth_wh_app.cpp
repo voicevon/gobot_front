@@ -9,7 +9,7 @@ Twh2_App::Twh2_App(){
 
 
 
-void Twh2_App::AsyncExecuteMqttCommand(const char* command){
+void Twh2_App::onGot_MqttMessage(const char* command){
     String str_command = String(command);
     // Logger::Info("Twh2_App::ExecuteMqttCommand()");
     bool debug = false;

@@ -7,7 +7,7 @@ class MqttMessageConsumer{
         virtual void SpinOnce();
 
     protected:
-        virtual void AsyncExecuteMqttCommand(const char* command);
+        virtual void onGot_MqttMessage(const char* mqtt_payload);
         bool CheckMqttCommand();
         
     private:
