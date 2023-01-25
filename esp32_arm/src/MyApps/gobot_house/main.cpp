@@ -3,7 +3,8 @@
 
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/remote_queue_mqtt.h"
-#include "IoT/main_mqtt.h"
+#include "IoT/from_mqtt_client_to_remote_queue.h"
+// #include "IoT/main_mqtt.h"
 
 #include "board_2206/board_gobot_house.h"
 #include "gobot_house_app.h"
@@ -54,7 +55,7 @@ void loop(){
 	robot.SpinOnce();
     
     // cnc.SpinOnce();
-    loop_mqtt();
+    mono_remote_queue_spin_once();
 }
 
 

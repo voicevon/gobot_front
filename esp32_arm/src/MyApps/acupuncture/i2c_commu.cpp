@@ -3,7 +3,9 @@
 #include "HardwareSerial.h"
 #include <Arduino.h>
 #include "MyLibs/basic/logger.h"
-#include "IoT/main_mqtt.h"
+// #include "IoT/from_mqtt_client_to_remote_queue.h"
+#include "IoT/from_mqtt_client_to_remote_queue.h"
+
 
 
 void I2c_commu::Init(int min_cell_i2c_address, int cells_count){

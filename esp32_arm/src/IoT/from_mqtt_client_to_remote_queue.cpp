@@ -38,21 +38,9 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
         Serial.println(total);
     }
 
-    // dispatch topic
-    // if (REMOTE_QUEUE_MQTT_COUNT == 1){
     Serial.println("[Info] on_MqttMessage() Dispatch message by topic,  Putting remote message to local consumer." );
     mono_remote_queue.OnReceived((const char*)payload, len);
     Serial.println("[Info] on_MqttMessage()  Appened to mqtt_consumer.");
-    // }else{
-        // todo: more than one syncers.
-        // for (int i=0; i<REMOTE_QUEUE_MQTT_COUNT;i++){
-            // todo:  topic is equal and copy payload, char by char
-            // Serial.println("[Info] on_MqttMessage()   todo: topic is equal and copy payload, char by char");
-            // if (all_mqtt_bridges[i].mqtt_topic == topic){
-            //     Serial.println("[Info] on_MqttMessage()  Putting remote message to local consumer." );
-            // }
-        // }
-    // }
 }
 
 void __connect_to_mqtt_broker(){
@@ -68,33 +56,27 @@ void __connect_to_mqtt_broker(){
      Will finnally invoke(callback) ExecMattCommand(payload) when got mqtt message
 */  
 void setup_mono_remote_queue_via_mqtt(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
+    // 1. mqtt client involved
     __connect_to_mqtt_broker();
     g_mqttClient.onMessage(on_MqttMessage);
 
+    // 2. message consumer and producer involved.
     mqtt_consumer->LinkLocalMq_AsMqttMessageConsumer(local_message_queue);
-    // RemoteQueue_mqtt* remote_queue = new RemoteQueue_mqtt();
     mono_remote_queue.LinkLocalCommandQueue_AsMqttMessageProducer(local_message_queue);
+
+
+    // 3. connect mqttclient and message receiver via subscrbe
+    // Important: During this line, after subsribe_mqtt() is called, will invoke on_mqtt_message immediately.
+    //            This is happened because on_mqtt_message is in other thread.
     String topic_feedback = String(topic) + "/fb";
-    //Important: During this line, after subsribe_mqtt() is called, will invoke on_mqtt_message immediately.
-    // This is happened because on_mqtt_message is in other thread.
-    //TODO:  re-subscibe the topic , after disconnected -->  connected.
     mono_remote_queue.SubscribeMqtt(&g_mqttClient, topic, topic_feedback.c_str());
 
-    // mqtt_bridge_index++;
-    // if (mqtt_bridge_index > REMOTE_QUEUE_MQTT_COUNT){
-    //     Serial.println("\n\n\n\n\n");
-    //     Serial.println("[Error] append_mqtt_link()  append too many syncers...  Not implamented more than one syncer.");
-    //     Serial.println("\n\n\n\n\n");
-    // }
+    //TODO:  re-subscibe the topic , after disconnected -->  connected.  ? is this necessary?
+
 }
 
-void loop_mqtt(){
+void mono_remote_queue_spin_once(){
     mono_remote_queue.SpinOnce();
-    // RemoteQueue_mqtt* remote_queue;
-    // for (int i=0; i< REMOTE_QUEUE_MQTT_COUNT; i++){
-    //     remote_queue = all_mqtt_bridges[i].remote_queue;
-    //     remote_queue->SpinOnce();
-    // }
 }
 
 

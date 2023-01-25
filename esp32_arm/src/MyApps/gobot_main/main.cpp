@@ -8,7 +8,7 @@
 #include "robot/gobot_main_robot.h"
 #include "gobot_main_app.h"
 #include "MyLibs/MyFunctions.hpp" 
-#include "IoT/main_mqtt.h"
+#include "IoT/from_mqtt_client_to_remote_queue.h"
 
 GobotMain_Board board;
 GobotMainRobot robot; 
@@ -37,7 +37,7 @@ void setup(){
     // setup_mqtt_on_message_receive(); 
 
     Logger::Info("Gobot-Main setup is done.........................................");
-    for(int i=0; i< 200; i++){ loop_mqtt();}
+    for(int i=0; i< 200; i++){ mono_remote_queue_spin_once();}
     cnc_test();
 
 }
@@ -48,7 +48,7 @@ bool xx=true;
 void loop(){
     robot.SpinOnce();
     app.SpinOnce();
-    loop_mqtt();
+    mono_remote_queue_spin_once();
     return;
     
     uint8_t loadded_room = board.GetLoadedRoom();

@@ -5,7 +5,8 @@
 #define GCODE_MQTT_TOPIC "twh/221109/shipout"  
 
 #include "MyLibs/MyFunctions.hpp"
-#include "IoT/main_mqtt.h"
+#include "IoT/from_mqtt_client_to_remote_queue.h"
+// #include "IoT/main_mqtt.h"
 #include "board/twh4_ship_out_board.h"
 #include "twh4_ship_out_app.h"
 #include "robot/twh4_ship_out_robot.h"
@@ -65,7 +66,7 @@ void loop(){
     robot.SpinOnce();
     robot.MySpinOnce();
     // Logger::Print("Arduino loop() point ", 3);
-    loop_mqtt();
+    mono_remote_queue_spin_once();
     // Logger::Print("Arduino loop() point ", 4);
 
     

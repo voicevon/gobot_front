@@ -4,7 +4,8 @@
 #include "MyApps/asar_agv/board/sub_board_cnc2205/board_cnc_2205.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_mover_app.h"
-#include "IoT/main_mqtt.h"
+#include "IoT/from_mqtt_client_to_remote_queue.h"
+// #include "IoT/main_mqtt.h"
 #include "robot/box_mover_robot.h"
 
 Board2205Cnc board = Board2205Cnc();
@@ -28,7 +29,7 @@ void setup(){
 void loop(){
     robot.SpinOnce();
     app.SpinOnce();
-    loop_mqtt();
+    mono_remote_queue_spin_once();
 }
 
 #endif

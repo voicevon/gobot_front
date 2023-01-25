@@ -2,7 +2,8 @@
 #ifdef I_AM_SPRING_MAKER
 #include "board/board.h"
 #include "MyLibs/MyFunctions.hpp"
-#include "IoT/main_mqtt.h"
+#include "IoT/from_mqtt_client_to_remote_queue.h"
+// #include "IoT/main_mqtt.h"
 #include "spring_maker_app.h"
 #include "robot/spring_maker_robot.h"
 
@@ -30,7 +31,7 @@ void setup(){
 void loop(){
     robot.SpinOnce();
     app.SpinOnce();
-    loop_mqtt();
+    mono_remote_queue_spin_once();
 }
 
 #endif

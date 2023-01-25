@@ -5,7 +5,8 @@
 #include "MyApps/asar_agv/board/board_all_in_one_2205.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_carrier_app.h"
-#include "IoT/main_mqtt.h"
+#include "IoT/from_mqtt_client_to_remote_queue.h"
+// #include "IoT/main_mqtt.h"
 #include "robot/box_carrier_robot.h"
 
 
@@ -35,7 +36,7 @@ void setup(){
 void loop(){
     robot.SpinOnce();
     app.SpinOnce();
-    loop_mqtt();
+    mono_remote_queue_spin_once();
 }
 
 #endif

@@ -5,7 +5,8 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "garment_bot.h"
-#include "IoT/main_mqtt.h"
+#include "IoT/from_mqtt_client_to_remote_queue.h"
+// #include "IoT/main_mqtt.h"
 
 GarmentBot *garment_robot;
 MessageQueue* garment_bot_message_queue;
@@ -40,7 +41,7 @@ void mqtt_report_states(){
 
 void loop(){
     garment_robot->SpinOnce();
-    loop_mqtt();
+    mono_remote_queue_spin_once();
     int64_t time_since_boot = esp_timer_get_time();
     if (time_since_boot - last_report_timestamp  > 30000000){  // 30 second
         mqtt_report_states();
