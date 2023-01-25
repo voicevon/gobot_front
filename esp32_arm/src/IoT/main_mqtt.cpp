@@ -22,7 +22,7 @@ MqttBridge all_mqtt_bridges[MQTT_SYNCERS_COUNT];
 
 //Please Notice: This function will be invoked in slave thread.
 void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-    bool debug = true;
+    bool debug = false;
     if(debug){
         Serial.println("on_MqttMessage()   saying received.");
         Serial.print("  topic: ");
@@ -45,7 +45,7 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
 
     // dispatch topic
     if (MQTT_SYNCERS_COUNT == 1){
-            Serial.println("[Info] on_MqttMessage()  Putting remote message to local consumer." );
+            Serial.println("[Info] on_MqttMessage() Dispatch message by topic,  Putting remote message to local consumer." );
             all_mqtt_bridges[0].mqtt_syncer->OnReceived((const char*)payload, len);
             Serial.println("[Info] on_MqttMessage()  Appened to mqtt_consumer.");
     }else{

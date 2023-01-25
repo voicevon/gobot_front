@@ -34,8 +34,15 @@ void MqttSyncer::OnReceived(const char* payload, int length){
         Logger::Info("MqttSyncer::OnReceived() is appended to local mq, will not publish a feedback via mqtt.");
         return;
     }
+
+    // convert mqtt_payload to bridge_message
+    
+
     //  local message queue is not full [after appending current message], publish mqtt feedback now.
     // Serial.println("[Info] MqttSyncer::OnReceived() sending feedback.");
+    int payload_id = 123;
+    payload = (const char*)(payload);  //?? ender of string ??
+
     this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, payload, length);
     // Serial.println("[Info] MqttSyncer::OnReceived() sent feedback.");
 

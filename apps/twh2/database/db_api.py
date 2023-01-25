@@ -229,6 +229,9 @@ class db_Shipout():
 
     @classmethod
     def Update_shipout_request(cls, user_id:str):
+        '''
+        TODO:  be a history in database
+        '''
         content= cls.table_takeout.all()
         content['request_user_id'] = user_id
         cls.table_takeout.update(content)

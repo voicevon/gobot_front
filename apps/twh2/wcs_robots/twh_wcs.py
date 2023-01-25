@@ -2,9 +2,11 @@
 from wcs_robots.twh_robot_row import TwhRobot_Row
 from wcs_robots.twh_robot_shipout import TwhRobot_ShipoutBox, TwhRobot_Shipout
 from database.db_api import db_User,db_Stock,db_Deposite,db_Withdraw,db_Shipout
-from multiprocessing import Process, Value
+# from multiprocessing import mul
+import multiprocessing
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
+from von.amq_agent import g_amq, g_amq_broker_config
 
 import time
 import requests
@@ -29,7 +31,7 @@ class WithdrawQueue_Tooth():
 
 
 class Twh_WarehouseControlSystem():
-    def __init__(self) -> None:
+    def __init__(self, queue_deposit:multiprocessing.Queue) -> None:
         self.robot_rows = [TwhRobot_Row(123456, 0)]
         self.robot_rows.clear()
         for i in range(4):
@@ -48,6 +50,7 @@ class Twh_WarehouseControlSystem():
         
         self.button_picking_plance = MqttAutoSyncVar('twh/221109/button/pick/state','idle')
         self.button_shipout = MqttAutoSyncVar('twh/221109/button/shipout/state','idle')
+        self.queue_deposit =  queue_deposit
 
     def FindRobotRow_idle(self) -> TwhRobot_Row:
         for robot in self.robot_rows:
@@ -140,21 +143,34 @@ class Twh_WarehouseControlSystem():
         if self.button_shipout.remote_value == 'pressed':
             self.current_shipping_out_box.state = 'idle'
 
-def WCS_Main():
+    def Do_deposit(self):
+        if not self.queue_deposit.empty():
+            new_deposit_request = self.queue_deposit.get()
+            print(new_deposit_request)
+
+def WCS_Main(queue_deposit:multiprocessing.Queue, queue_withdraw:multiprocessing.Queue):
         g_mqtt_broker_config.client_id = '20221222'
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
-        wcs = Twh_WarehouseControlSystem()
+        g_amq.connect_to_broker(g_amq_broker_config)
+        wcs = Twh_WarehouseControlSystem(queue_deposit)
         while True:
             # self.CheckDatabase_WithdrawQueue()
+            wcs.Do_deposit()
             wcs.Assign_Shipoutbox_to_Order()
             wcs.Pick_and_Place()
             wcs.Check_MQTT_Rx()
             time.sleep(0.5)
 
-def Star_tWCS_Process():
-    p = Process(target=WCS_Main)
+wcs_queue_deposit = multiprocessing.Queue()
+wcs_queue_withdraw = multiprocessing.Queue()
+wcs_queue_takeout = multiprocessing.Queue()
+
+def Start_WCS_Process():
+    p = multiprocessing.Process(target=WCS_Main, args=(wcs_queue_deposit, wcs_queue_withdraw,))
     p.start() 
     print('WCS is running on new process.....')
+
+    # https://pymotw.com/2/multiprocessing/communication.html#communication-between-processes
 
 
 

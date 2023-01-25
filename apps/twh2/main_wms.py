@@ -3,10 +3,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
 
-from von.amq_agent import g_amq, g_amq_broker_config
+# from von.amq_agent import g_amq, g_amq_broker_config
 from database.db_api import db_User,db_Stock,db_Withdraw,db_Shipout
 from bolt_nut import get_row_from_location
-from wcs_robots.twh_wcs import Star_tWCS_Process
+from wcs_robots.twh_wcs import Start_WCS_Process, wcs_queue_deposit, wcs_queue_withdraw, wcs_queue_takeout
 
 
 web = Flask(__name__)
@@ -19,12 +19,12 @@ class MyForm(FlaskForm):
     brand = StringField('品牌', validators=[InputRequired('品牌不可空白')])
     # location_verital = boll
 
-@web.route('/withdraw_list', methods=['POST'])
-def withdraw_list():
-    user_request = request.json
-    print('withdraw_list()===========', user_request)
-    g_amq.Publish('twh', 'twh_withdraw', str(user_request))
-    return 'OK'
+# @web.route('/withdraw_list', methods=['POST'])
+# def withdraw_list():
+#     user_request = request.json
+#     print('withdraw_list()===========', user_request)
+#     g_amq.Publish('twh', 'twh_withdraw', str(user_request))
+#     return 'OK'
 
 @web.route('/decrease_stock')
 def decrease_stock():
@@ -147,7 +147,8 @@ def deposit_move():
         for key in request_form.to_dict():
             user_request[key] = request_form.get(key)
         # g_database.append_deposit(user_request)
-        g_amq.Publish('twh', 'twh_deposit', str(user_request))
+        # g_amq.Publish('twh', 'twh_deposit', str(user_request))
+        wcs_queue_deposit.put(user_request)
         print("robot will move box to somewhere for operator........ ")
         return render_template("deposit_move.html",user_request = user_request)
 
@@ -197,6 +198,10 @@ def withdraw_takeout():
             return redirect(url_for("home"))
 
         db_Shipout.Update_shipout_request(session['user'])
+        # takout_message = {}
+        # takout_message['box_id'] = box_id
+        # takout_message['user_id'] = session['user']
+        wcs_queue_takeout.put(box_id)
         # The following process:
         # 1. WCS get box_id from  database.
         # 2. WCS sned box_id to shipout_box 
@@ -208,9 +213,8 @@ def withdraw_takeout():
         
 def start():
 
-    g_amq.connect_to_broker(g_amq_broker_config)
     # wcs = Twh_WarehouseControlSystem()
-    Star_tWCS_Process()
+    Start_WCS_Process()
     
     # new_thread = Thread(target=web.run, kwargs={'debug':False, 'host':'0.0.0.0'})   # DebugMode, must be turn off.  
     # new_thread = Thread(target=web.run, kwargs={'debug':False})   # DebugMode, must be turn off.  

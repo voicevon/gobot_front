@@ -1,4 +1,4 @@
-from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
+# from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
 
 
 class TwhRobot_ShipoutBox():
@@ -13,11 +13,11 @@ class TwhRobot_ShipoutBox():
             self.state = 'fullfilled'
         else:
             self.state = 'feeding'
-        g_mqtt.publish('topic_', self.id, 'green')
+        # g_mqtt.publish('topic_', self.id, 'green')
     
     def ToTakeout(self) -> None:
         self.state = 'idle'
-        g_mqtt.publish('topic', self.id, 'blue')
+        # g_mqtt.publish('topic', self.id, 'blue')
 
 
 class TwhRobot_Shipout():
@@ -27,16 +27,16 @@ class TwhRobot_Shipout():
             newbox = TwhRobot_ShipoutBox(i)
             self.boxes.append(newbox)
         self.rx_topic = 'twh/221109/shipout/box'
-        g_mqtt.subscribe(self.rx_topic)
+        # g_mqtt.subscribe(self.rx_topic)
 
     def CheckMqttMessage(self):
         print("TwhRobot_Shipout main process is started....")
-        rx = g_mqtt.RxBuffer
-        if rx.has_updated_payload(self.rx_topic):
-            payload = rx.FetchPayload(self.rx_topic)
-            box_id =   payload['box_id'] 
-            box = self.boxes[box_id]
-            box.state = payload['state']
+        # rx = g_mqtt.RxBuffer
+        # if rx.has_updated_payload(self.rx_topic):
+        #     payload = rx.FetchPayload(self.rx_topic)
+        #     box_id =   payload['box_id'] 
+        #     box = self.boxes[box_id]
+        #     box.state = payload['state']
 
     # def FindBox_not_fullfilled():
     #     pass  #???
@@ -61,10 +61,5 @@ class TwhRobot_Shipout():
                     return box
         return None
 
-
-
     
-if __name__ == '__main__':
-    g_mqtt_broker_config.client_id = 'edfdsgdsddfgv'
-    g_mqtt.connect_to_broker(g_mqtt_broker_config)
 
