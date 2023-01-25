@@ -5,7 +5,7 @@
 #include "IoT/wifi_mqtt_client.h"
 
 
-class RemoteQueue_mqtt{
+class RemoteQueueBridge_mqtt{
     public:
         void Init(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic);
         void LinkLocalCommandQueue_AsMqttMessageProducer(MessageQueue* loacalMQ);  //, String mqtt_topic);

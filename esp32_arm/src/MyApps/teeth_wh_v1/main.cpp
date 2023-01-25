@@ -89,7 +89,7 @@ void setup(){
     app.LinkRobot(&robot);
 
     // connect_to_mqtt_broker();
-    setup_mono_remote_queue_via_mqtt("twh/221109/gcode", &mqtt_command_queue, &app); 
+    setup_mono_remote_queue_bridge_via_mqtt("twh/221109/gcode", &mqtt_command_queue, &app); 
     // setup_mqtt_on_message_receive(); 
 
     gcode_queue.AppendGcodeCommand("G1Z0");
@@ -106,7 +106,7 @@ void loop(){
     // Logger::Print("Aruino loop() point ", 2);
     robot.SpinOnce();
     // Logger::Print("Arduino loop() point ", 3);
-    mono_remote_queue_spin_once();
+    mono_remote_queue_bridge_spin_once();
     // Logger::Print("Arduino loop() point ", 4);
 
 }

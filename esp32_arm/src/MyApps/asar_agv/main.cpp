@@ -57,7 +57,7 @@ void setup(){
     // connect_to_mqtt_broker();
     String mqtt_topic = "puma/bot/xROBOT_SERIAL_ID";
     mqtt_topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
-    setup_mono_remote_queue_via_mqtt(mqtt_topic.c_str(), &garment_bot_message_queue, &robot); 
+    setup_mono_remote_queue_bridge_via_mqtt(mqtt_topic.c_str(), &garment_bot_message_queue, &robot); 
     // setup_mqtt_on_message_receive(); 
 
     board.RepportRamUsage();
@@ -77,7 +77,7 @@ void mqtt_report_states(){
 
 void loop(){
     robot.SpinOnce();
-    mono_remote_queue_spin_once();
+    mono_remote_queue_bridge_spin_once();
     int64_t time_since_boot = esp_timer_get_time();
     if (time_since_boot - last_report_timestamp  > 30000000){  // 30 second
         mqtt_report_states();

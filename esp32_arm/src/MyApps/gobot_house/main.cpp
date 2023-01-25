@@ -43,7 +43,7 @@ void setup(){
     // connect_to_mqtt_broker();
     String mqtt_topic = "gobot/xROBOT_SERIAL_ID/house";
     mqtt_topic.replace("ROBOT_SERIAL_ID",String(ROBOT_SERIAL_ID));
-    setup_mono_remote_queue_via_mqtt(mqtt_topic.c_str(), &mqtt_message_queue, app); 
+    setup_mono_remote_queue_bridge_via_mqtt(mqtt_topic.c_str(), &mqtt_message_queue, app); 
     // setup_mqtt_on_message_receive(); 
     Serial.println("lovely bot,  GobotHouse.  setup() is done.  Good luck!");
     // board.GetEef()->Run(EEF_CODE_UNLOAD);
@@ -54,7 +54,7 @@ void loop(){
 	robot.SpinOnce();
     
     // cnc.SpinOnce();
-    mono_remote_queue_spin_once();
+    mono_remote_queue_bridge_spin_once();
 }
 
 

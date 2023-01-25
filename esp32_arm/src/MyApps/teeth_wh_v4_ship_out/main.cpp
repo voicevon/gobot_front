@@ -49,7 +49,7 @@ void setup(){
     app.LinkRobot(&robot);
 
     // setup_mqtt_block_connect();
-    setup_mono_remote_queue_via_mqtt(GCODE_MQTT_TOPIC, &mqtt_command_queue, &app); 
+    setup_mono_remote_queue_bridge_via_mqtt(GCODE_MQTT_TOPIC, &mqtt_command_queue, &app); 
     // setup_mqtt_on_message_receive(); 
 
     gcode_queue.AppendGcodeCommand("G28X");   // Incase of mqtt received this command, will cause exception?
@@ -66,7 +66,7 @@ void loop(){
     robot.SpinOnce();
     robot.MySpinOnce();
     // Logger::Print("Arduino loop() point ", 3);
-    mono_remote_queue_spin_once();
+    mono_remote_queue_bridge_spin_once();
     // Logger::Print("Arduino loop() point ", 4);
 
     

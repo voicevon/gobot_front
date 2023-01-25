@@ -5,11 +5,7 @@
 #include "MyLibs/basic/logger.h"
 
 
-class VonMessage{
-    public:
-        String message_target;  // 'app' or 'robot'
-        String message_content;    // command or gcode,mcode
-};
+
 class MessageQueue{
     public:
         struct SingleMessage{
@@ -21,7 +17,6 @@ class MessageQueue{
         // For Producer:    
         bool AppendMessage(String payload);
         bool AppendMessage(const char* payload, int length);
-        bool AppendMessage(VonMessage* message);
         bool BufferIsFull();
         int GetFreeBuffersCount();
 

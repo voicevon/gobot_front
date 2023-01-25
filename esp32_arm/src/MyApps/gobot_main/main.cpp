@@ -33,11 +33,11 @@ void setup(){
     // connect_to_mqtt_broker();
     String mqtt_topic = "gobot/xROBOT_SERIAL_ID/arm";
     mqtt_topic.replace("ROBOT_SERIAL_ID", String(ROBOT_SERIAL_ID));
-    setup_mono_remote_queue_via_mqtt(mqtt_topic.c_str(), &mqtt_message_queue, &app); 
+    setup_mono_remote_queue_bridge_via_mqtt(mqtt_topic.c_str(), &mqtt_message_queue, &app); 
     // setup_mqtt_on_message_receive(); 
 
     Logger::Info("Gobot-Main setup is done.........................................");
-    for(int i=0; i< 200; i++){ mono_remote_queue_spin_once();}
+    for(int i=0; i< 200; i++){ mono_remote_queue_bridge_spin_once();}
     cnc_test();
 
 }
@@ -48,7 +48,7 @@ bool xx=true;
 void loop(){
     robot.SpinOnce();
     app.SpinOnce();
-    mono_remote_queue_spin_once();
+    mono_remote_queue_bridge_spin_once();
     return;
     
     uint8_t loadded_room = board.GetLoadedRoom();

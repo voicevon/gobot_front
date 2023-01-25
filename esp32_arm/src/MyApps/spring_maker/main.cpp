@@ -23,7 +23,7 @@ void setup(){
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
 
     // connect_to_mqtt_broker();
-    setup_mono_remote_queue_via_mqtt("spring/maker", &mqtt_command_queue, &app); 
+    setup_mono_remote_queue_bridge_via_mqtt("spring/maker", &mqtt_command_queue, &app); 
     // setup_mqtt_on_message_receive(); 
     Logger::Info ("\nSpring Maker.setup() is done. ------------------------------------ \n");
 }
@@ -31,7 +31,7 @@ void setup(){
 void loop(){
     robot.SpinOnce();
     app.SpinOnce();
-    mono_remote_queue_spin_once();
+    mono_remote_queue_bridge_spin_once();
 }
 
 #endif
