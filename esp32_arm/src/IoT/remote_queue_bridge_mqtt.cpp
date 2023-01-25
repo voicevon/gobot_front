@@ -1,13 +1,13 @@
-#include "remote_queue_mqtt.h"
+#include "remote_queue_bridge_mqtt.h"
 
 void RemoteQueue_mqtt::LinkLocalCommandQueue_AsMqttMessageProducer(MessageQueue* loacalMQ){
     this->__localMQ = loacalMQ;
 }
 
-void RemoteQueue_mqtt::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic){
+void RemoteQueue_mqtt::Init(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic){
     this->__mqttClient = mqttClient;
     mqttClient->subscribe(main_topic, 2);
-    this->topic_feedback = String(feedback_topic);
+    __feedback_topic = String(feedback_topic);
 
     bool debug=true;
     if(debug){
@@ -22,12 +22,23 @@ void RemoteQueue_mqtt::SubscribeMqtt(AsyncMqttClient* mqttClient, const char* ma
 
 void RemoteQueue_mqtt::OnReceived(const char* payload, int length){
     // Put message to local MQ   
-    // TODO:: Is this necessary??
+    // TODO:: Copy char array simpler way.
     // Logger::Info("RemoteQueue_mqtt::OnReceived() Starting a huge process...");
     char* p = (char*)(payload) + length;
     *p = 0x00;
 
-    this->__local_mq_is_full = this->__localMQ->AppendMessage(payload, length); 
+
+    // json decoder to get 
+    //  paylaod. id     is an int.
+    //  payload. key    is a string;
+    //  payload. value  is a string.
+
+    __newest_payload_id = 123;
+    String key_value = "cmd: beep";
+    // __local_mq_is_full = this->__localMQ->AppendMessage(key_value, length); 
+    __local_mq_is_full = __localMQ->AppendMessage(key_value); 
+
+    // this->__local_mq_is_full = this->__localMQ->AppendMessage(payload, length); 
 
     // send message to feedback topic
     if (this->__local_mq_is_full){
@@ -40,10 +51,10 @@ void RemoteQueue_mqtt::OnReceived(const char* payload, int length){
 
     //  local message queue is not full [after appending current message], publish mqtt feedback now.
     // Serial.println("[Info] RemoteQueue_mqtt::OnReceived() sending feedback.");
-    int payload_id = 123;
-    payload = (const char*)(payload);  //?? ender of string ??
-
-    this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, payload, length);
+    // int payload_id = 123;   // union structure ?
+    // payload = (const char*)(payload_id);  //?? ender of string ??
+    String newest_payload_id = String(__newest_payload_id);
+    this->__mqttClient->publish(this->__feedback_topic.c_str(), 2, true, newest_payload_id.c_str(), length);
     // Serial.println("[Info] RemoteQueue_mqtt::OnReceived() sent feedback.");
 
 }
@@ -58,7 +69,7 @@ void RemoteQueue_mqtt::SpinOnce(){
             // the local mq is not full right now. publish a feedback.
             Serial.println("\n                  RemoteQueue_mqtt::SpinOnce() local mq got a free room");
             MessageQueue::SingleMessage* pMessage = this->__localMQ->GetHeadMessage();
-            this->__mqttClient->publish(this->topic_feedback.c_str(), 2, true, pMessage->payload, pMessage->length);
+            this->__mqttClient->publish(this->__feedback_topic.c_str(), 2, true, pMessage->payload, pMessage->length);
             this->__local_mq_is_full = false;
         }
     }

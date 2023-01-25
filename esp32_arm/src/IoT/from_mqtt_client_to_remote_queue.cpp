@@ -9,7 +9,7 @@
 
 
 #include <HardwareSerial.h>
-#include "IoT/remote_queue_mqtt.h"
+#include "IoT/remote_queue_bridge_mqtt.h"
 #include "IoT/mqtt_message_consumer.h"
 
 
@@ -69,7 +69,7 @@ void setup_mono_remote_queue_via_mqtt(const char* topic, MessageQueue* local_mes
     // Important: During this line, after subsribe_mqtt() is called, will invoke on_mqtt_message immediately.
     //            This is happened because on_mqtt_message is in other thread.
     String topic_feedback = String(topic) + "/fb";
-    mono_remote_queue.SubscribeMqtt(&g_mqttClient, topic, topic_feedback.c_str());
+    mono_remote_queue.Init(&g_mqttClient, topic, topic_feedback.c_str());
 
     //TODO:  re-subscibe the topic , after disconnected -->  connected.  ? is this necessary?
 

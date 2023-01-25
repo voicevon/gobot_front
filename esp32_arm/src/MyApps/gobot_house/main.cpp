@@ -2,9 +2,8 @@
 #ifdef I_AM_GOBOT_HOUSE
 
 #include "MyLibs/MyFunctions.hpp" 
-#include "IoT/remote_queue_mqtt.h"
+#include "IoT/remote_queue_bridge_mqtt.h"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
-// #include "IoT/main_mqtt.h"
 
 #include "board_2206/board_gobot_house.h"
 #include "gobot_house_app.h"

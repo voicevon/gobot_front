@@ -10,33 +10,29 @@ class VonMessage{
         String message_target;  // 'app' or 'robot'
         String message_content;    // command or gcode,mcode
 };
-class MessageQueue{
+
+class VonMessageQueue{
     public:
-        struct SingleMessage{
-            int id;
-            char payload[MAX_BYTES_PER_MESSAGE];
-            int length;
-        };
-        
+        // For both Producer and Consumer:
+        VonMessageQueue(){};
+        VonMessage* GetHeadMessage();
+        void SayHello(String title);
+
         // For Producer:    
-        bool AppendMessage(String payload);
-        bool AppendMessage(const char* payload, int length);
+        // bool AppendMessage(String payload);
+        // bool AppendMessage(const char* payload, int length);
         bool AppendMessage(VonMessage* message);
         bool BufferIsFull();
         int GetFreeBuffersCount();
 
         // For Consumer:
         bool BufferIsEmpty();  //TODO: remove this function?
-        SingleMessage* FetchTailMessage(bool takeout_from_queue);
+        VonMessage* FetchTailMessage(bool takeout_from_queue);
 
-        // For both Producer and Consumer:
-        MessageQueue(){};
-        SingleMessage* GetHeadMessage();
-        void SayHello(String title);
 
     protected:
         // This is a buffer , can contain 20 bytes per command, and 22 commands in the queue.
-        SingleMessage _all_messages[MESSAGE_COUNT_IN_QUEUE];
+        VonMessage _all_messages[MESSAGE_COUNT_IN_QUEUE];
         int _head = 0;
         int _tail = 0;
 
