@@ -8,5 +8,5 @@ class Twh2_Row_JsonLoader: public JsonLoaderBase{
 
     private:
         char __json_string[1000];
-        int __payload_id = 0;
+        int __message_id = 0;
 };

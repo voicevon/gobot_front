@@ -4,10 +4,9 @@ from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormFi
 from wtforms.validators import DataRequired, InputRequired
 
 from von.amq_agent import g_amq, g_amq_broker_config
-from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from database.db_api import db_User,db_Stock,db_Withdraw,db_Shipout
 from bolt_nut import get_row_from_location
-from wcs_robots.twh_wcs import Twh_WarehouseControlSystem
+from wcs_robots.twh_wcs import Star_tWCS_Process
 
 
 web = Flask(__name__)
@@ -208,11 +207,10 @@ def withdraw_takeout():
         return render_template('withdraw_takeout.html', twh=twh)
         
 def start():
-    g_mqtt_broker_config.client_id = '20221222'
-    g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
+
     g_amq.connect_to_broker(g_amq_broker_config)
-    wcs = Twh_WarehouseControlSystem()
-    wcs.StartProcess()
+    # wcs = Twh_WarehouseControlSystem()
+    Star_tWCS_Process()
     
     # new_thread = Thread(target=web.run, kwargs={'debug':False, 'host':'0.0.0.0'})   # DebugMode, must be turn off.  
     # new_thread = Thread(target=web.run, kwargs={'debug':False})   # DebugMode, must be turn off.  

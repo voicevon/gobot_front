@@ -7,16 +7,22 @@
 
 char* Twh2_Row_JsonLoader::Load(){
     Logger::Debug("Twh2_Row_JsonLoader::Load()");
+    // String idle = "idle";
+    // idle.toCharArray(__json_string, sizeof(idle));
+    // Logger::Print("json_string", __json_string);
+    // return __json_string;
+
+
     const int capacity = JSON_OBJECT_SIZE(3);   //TODO JSON_OBJECT_SIZE = ?
     StaticJsonDocument<capacity> doc;
     // doc["topic"] = "twh/221109/r1/state";
-    doc["id"] = __payload_id;
+    doc["message_id"] = __message_id;
     doc["is_moving"] = false;
 
     serializeJson(doc, __json_string);
     Logger::Print("json_string", __json_string);
 
-    __payload_id++;
+    __message_id++;
 
     return __json_string;
 }

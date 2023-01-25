@@ -4,6 +4,7 @@ from wcs_robots.twh_robot_shipout import TwhRobot_ShipoutBox, TwhRobot_Shipout
 from database.db_api import db_User,db_Stock,db_Deposite,db_Withdraw,db_Shipout
 from multiprocessing import Process, Value
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
+from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 
 import time
 import requests
@@ -29,10 +30,10 @@ class WithdrawQueue_Tooth():
 
 class Twh_WarehouseControlSystem():
     def __init__(self) -> None:
-        self.robot_rows = [TwhRobot_Row(111222, 0)]
+        self.robot_rows = [TwhRobot_Row(123456, 0)]
         self.robot_rows.clear()
         for i in range(4):
-            new_robot_row = TwhRobot_Row(2222,i)
+            new_robot_row = TwhRobot_Row(221109,i)
             self.robot_rows.append(new_robot_row)
         self.robot_shipout = TwhRobot_Shipout()
         self.withdraw_queues = []
@@ -104,6 +105,13 @@ class Twh_WarehouseControlSystem():
         4. start move row_robot.
         '''
         for row_robot in self.robot_rows:
+            print(row_robot.state.remote_value)
+            # if row_robot.state.remote_value is not None:
+                # if row_robot.state.remote_value != 'ready':
+                #     # print(row_robot.state.remote_value)
+                #     xx= json.loads(row_robot.state.remote_value)
+                #     # print(xx['is_moving'])
+
             if row_robot.state.remote_value == 'idle':
                 tooth = self.FindTooth_from_WithdrawQueue(row_robot.id)
                 if tooth is not None:
@@ -116,6 +124,7 @@ class Twh_WarehouseControlSystem():
                 pass
 
     def Check_MQTT_Rx(self):
+        return
         for i in range(4):
             if self.row_robots_state[i].remote_value == 'ready':
                 self.robot_rows[i].state = 'idle'
@@ -131,18 +140,22 @@ class Twh_WarehouseControlSystem():
         if self.button_shipout.remote_value == 'pressed':
             self.current_shipping_out_box.state = 'idle'
 
-    def Spin(self):
+def WCS_Main():
+        g_mqtt_broker_config.client_id = '20221222'
+        g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
+        wcs = Twh_WarehouseControlSystem()
         while True:
             # self.CheckDatabase_WithdrawQueue()
-            self.Assign_Shipoutbox_to_Order()
-            self.Pick_and_Place()
-            self.Check_MQTT_Rx()
+            wcs.Assign_Shipoutbox_to_Order()
+            wcs.Pick_and_Place()
+            wcs.Check_MQTT_Rx()
             time.sleep(0.5)
 
-    def StartProcess(self):
-        p = Process(target=self.Spin)
-        p.start() 
-        print('WCS is running on new process.....')
+def Star_tWCS_Process():
+    p = Process(target=WCS_Main)
+    p.start() 
+    print('WCS is running on new process.....')
+
 
 
 
