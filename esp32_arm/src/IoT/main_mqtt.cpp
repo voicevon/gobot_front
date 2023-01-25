@@ -9,14 +9,14 @@
 
 
 #include <HardwareSerial.h>
-#include "IoT/mqtt_syncer.h"
+#include "IoT/remote_queue_mqtt.h"
 #include "IoT/mqtt_message_consumer.h"
 
 uint8_t mqtt_bridge_index = 0;
 
 struct MqttBridge{
     char mqtt_topic[20];
-    MqttSyncer* mqtt_syncer;
+    RemoteQueue_mqtt* mqtt_syncer;
 };
 MqttBridge all_mqtt_bridges[MQTT_SYNCERS_COUNT];
 
@@ -77,7 +77,7 @@ void setup_mqtt_on_message_receive(){
 void append_mqtt_bridge(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
     mqtt_consumer->LinkLocalMq_AsMqttMessageConsumer(local_message_queue);
     
-    MqttSyncer* syncer = new MqttSyncer();
+    RemoteQueue_mqtt* syncer = new RemoteQueue_mqtt();
     all_mqtt_bridges[mqtt_bridge_index].mqtt_syncer = syncer;
     syncer->LinkLocalCommandQueue_AsMqttMessageProducer(local_message_queue);
     String topic_feedback = String(topic) + "/fb";
@@ -95,7 +95,7 @@ void append_mqtt_bridge(const char* topic, MessageQueue* local_message_queue, Mq
 }
 
 void loop_mqtt(){
-    MqttSyncer* syncer;
+    RemoteQueue_mqtt* syncer;
     for (int i=0; i< MQTT_SYNCERS_COUNT; i++){
         syncer = all_mqtt_bridges[i].mqtt_syncer;
         syncer->SpinOnce();
