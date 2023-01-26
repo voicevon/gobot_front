@@ -1,7 +1,6 @@
 
 from tinydb import TinyDB, Query, where
-# from bolt_nut import get_row_from_location
-
+from bolt_nut import get_row_from_tooth_location
 class TwhLocation:
     row = -1
     col = -1 
@@ -40,7 +39,7 @@ class db_Stock():
 
     @classmethod
     def check_stock_for_all_locations(cls, request) -> bool:
-        print(request)
+        # print(request)
         for key, value in request.items():
             if key[0:9] == 'location_':
                 q= Query()
@@ -55,6 +54,25 @@ class db_Stock():
                     # at least one location has no stock.
                     return False
         return True
+
+    @classmethod
+    def get_col_id(cls, request, location) -> int:
+        '''
+        return -1 if not found.
+        '''
+        q= Query()
+        db_rows = cls.table_stock.search((q.brand == request['brand']) 
+                                    & (q.color == request['color'])
+                                    & (q.size == request['size'])
+                                    & (q.shape == request['shape'])
+                                    & (q.batch_number == request['batch_number'])
+                                    & (q.location == location)
+                                    )
+        if len(db_rows) > 0:
+            # at least one location has no stock.
+            return db_rows[0]['col']
+        print('get_col_id()  can not find col_id !    ', location , request )
+        return -1
 
     @classmethod
     def get_pure_empty_col(cls, request):
@@ -121,7 +139,6 @@ class db_Stock():
             print("update stock", new_quantity)
             cls.table_stock.update({'stock_quantity':new_quantity}, doc_ids=doc_id)
 
-
 class db_Deposite():
     table_deposit = TinyDB('database/twh_deposit.json')
 
@@ -156,7 +173,7 @@ class db_Withdraw():
     def insert_withdraw_queue_multi_rows(self, request):
         for key, value in request.items():
             if key[0:9] == 'location_':
-                print('insert_withdraw_queue_multi_rows()', key, value)
+                # print('insert_withdraw_queue_multi_rows()', key, value)
                 item = {}
                 item['order_id'] = request['order_id']
                 item['user_id'] = request['user_id']
@@ -167,9 +184,9 @@ class db_Withdraw():
                 item['size'] = request['size']
                 item['location'] = value
 
-                item['row'] = 1  #TODO:   get correct value.
-                item['col'] = 2
-                item['layer'] = 3
+                item['row'] = get_row_from_tooth_location(value)
+                item['col'] = db_Stock.get_col_id(request, value)
+                item['layer'] = value[3]
                 item['connected_shipout_box'] = -1
                 self.table_withdraw_queue.insert(item)
 

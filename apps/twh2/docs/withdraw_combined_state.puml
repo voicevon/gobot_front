@@ -1,0 +1,27 @@
+@startuml
+
+
+state to_idle   <<fork>>
+' state send_G1   <<fork>>
+
+
+[*] -> idle
+idle --> moving 
+' send_G1 --> moving
+' moving --> ready: M408
+ready --> picking_place:  turn on green led
+picking_place --> to_idle:  green_button_pressed
+to_idle --> idle
+
+
+state robot_row {
+  [*] -> row_idle 
+  row_idle --> row_moving
+  row_moving -> row_ready
+}
+moving --> row_moving: send G1
+' to_idle --> row_idle
+row_ready --> ready
+to_idle --> row_idle
+
+@enduml

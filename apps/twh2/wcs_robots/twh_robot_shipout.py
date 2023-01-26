@@ -2,6 +2,7 @@
 
 
 class TwhRobot_ShipoutBox():
+
     def __init__(self, id:int) -> None:
         #  'idle', 'feeding', 'fullfilled'
         self.state = 'idle' 
@@ -19,6 +20,11 @@ class TwhRobot_ShipoutBox():
         self.state = 'idle'
         # g_mqtt.publish('topic', self.id, 'blue')
 
+    def print_out(self):
+        ss = "TwhRobot_ShipoutBox   id=" + str(self.id)
+        ss += ' order_id=' + str(self.order_id)
+        ss += ' state=' + self.state
+        print(ss)
 
 class TwhRobot_Shipout():
     def __init__(self) -> None:
@@ -28,6 +34,11 @@ class TwhRobot_Shipout():
             self.boxes.append(newbox)
         self.rx_topic = 'twh/221109/shipout/box'
         # g_mqtt.subscribe(self.rx_topic)
+
+    def debug(self):
+        print('TwhRobot_Shipout::debug()  printing all boxes')
+        for box in self.boxes:
+            box.print_out()
 
     def CheckMqttMessage(self):
         print("TwhRobot_Shipout main process is started....")

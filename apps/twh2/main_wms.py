@@ -3,10 +3,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormField
 from wtforms.validators import DataRequired, InputRequired
 
-# from von.amq_agent import g_amq, g_amq_broker_config
 from database.db_api import db_User,db_Stock,db_Withdraw,db_Shipout
-from bolt_nut import get_row_from_location
 from wcs_robots.twh_wcs import Start_WCS_Process, wcs_queue_deposit, wcs_queue_withdraw, wcs_queue_takeout
+from bolt_nut import get_row_from_tooth_location
 
 
 web = Flask(__name__)
@@ -132,7 +131,7 @@ def deposit_request():
         user_request['origin_quantity'] = request_in_stock['stock_quantity']
         user_request['col'] = int(request_in_stock['col'])
 
-    user_request['row'] = get_row_from_location(user_request['location'][0:2])
+    user_request['row'] = get_row_from_tooth_location(user_request['location'])
     user_request['layer'] = int(user_request['location'][3:4])
 
     print(user_request)
@@ -173,7 +172,7 @@ def withdraw_end():
     user_request = {}
     for key in request.form.to_dict():
         user_request[key] = request.form.get(key)
-        print(key, user_request[key])
+        # print(key, user_request[key])
     all_in_stock = db_Stock.check_stock_for_all_locations(request=user_request)
     
     if not all_in_stock:
@@ -211,27 +210,11 @@ def withdraw_takeout():
         # g_mqtt.publish(topic='twh/221109/shipout_box/command' , payload= '{"box_id:"' + str(box_id) +',"color":"blue"}')
         return render_template('withdraw_takeout.html', twh=twh)
         
-def start():
-
-    # wcs = Twh_WarehouseControlSystem()
-    Start_WCS_Process()
-    
-    # new_thread = Thread(target=web.run, kwargs={'debug':False, 'host':'0.0.0.0'})   # DebugMode, must be turn off.  
-    # new_thread = Thread(target=web.run, kwargs={'debug':False})   # DebugMode, must be turn off.  
-    # new_thread.start()
-    
-start()
+Start_WCS_Process()
 
 if __name__ == '__main__':
-    start()
-
-    # while True:
-    #     twh_robot.spin_once()
-
     # reloader or debug must be false.  
     # https://stackoverflow.com/questions/31264826/start-a-flask-application-in-separate-thread
     #  web.run(debug=True)
-    # while True:
-    #     pass
 
     web.run(host='0.0.0.0', debug=False)

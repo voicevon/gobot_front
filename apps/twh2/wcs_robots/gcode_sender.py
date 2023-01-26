@@ -8,7 +8,9 @@ class VonMessage():
         self.payload = payload
 
 class GcodeSender():
-
+    '''
+    TODO:  feed back via message_id.  Will effect Esp32
+    '''
     def __init__(self, mqtt_topic:str) -> None:
         self.tx_topic = mqtt_topic
         self.rx_topic = mqtt_topic + '/fb'
