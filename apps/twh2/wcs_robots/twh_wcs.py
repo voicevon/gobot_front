@@ -20,7 +20,7 @@ class WithdrawQueue_Tooth():
     def __init__(self, dbtable_withdraw_queue) -> None:
         if dbtable_withdraw_queue is not None:
             self.order_id = dbtable_withdraw_queue['order_id']
-            self.shipoubox_id = dbtable_withdraw_queue['connected_shipout_box']  #TODO:  unify the key's name
+            self.shipout_box_id = dbtable_withdraw_queue['connected_shipout_box']  #TODO:  unify the key's name
             self.row =  dbtable_withdraw_queue['row']
             self.col = dbtable_withdraw_queue['col']
             self.layer = dbtable_withdraw_queue['layer']
@@ -28,7 +28,7 @@ class WithdrawQueue_Tooth():
     def print_out(self):
 
         ss = ' Tooth order_id=' + str(self.order_id)
-        ss += ' shipout_box_id=' + str(self.shipoubox_id)
+        ss += ' shipout_box_id=' + str(self.shipout_box_id)
         ss += ' row=' + str(self.row)
         ss += ' col=' + str(self.col)
         ss += ' layer= ' + str(self.layer)
@@ -72,7 +72,7 @@ class Twh_WarehouseControlSystem():
         constraint:  connected_shipout_box is avaliable.
         '''
         for tooth in self.withdraw_queues:
-            if tooth.shipoutbox_id != -1:
+            if tooth.shipout_box_id != -1:
                 if tooth.row == row_id:
                     return tooth
         return None
@@ -88,21 +88,21 @@ class Twh_WarehouseControlSystem():
             return
 
         # 2. get queue(same order_id) from database
-        db_rows = db_Withdraw.get_single_order()
-        if len(db_rows)==0:
+        order_items = db_Withdraw.get_single_order()
+        if len(order_items)==0:
             # the queue is empty
             return
 
         # 3. copy teeth in this order to wcs buffer
         # print('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()', db_rows)
         doc_ids = []
-        for db_row in db_rows:
-            print('ddddddddddddddddd', db_row)
-            doc_ids.append(db_row.doc_id)
+        for order_item in order_items:
+            # print('ddddddddddddddddd', db_row)
+            doc_ids.append(order_item.doc_id)
             # new order, connect to the idle shipout_box
-            new_tooth = WithdrawQueue_Tooth(db_row)
+            new_tooth = WithdrawQueue_Tooth(order_item)
             self.withdraw_queues.append(new_tooth)
-            new_tooth.shipoutbox_id = idle_shipout_box.id
+            new_tooth.shipout_box_id = idle_shipout_box.id
             idle_shipout_box.state = 'feeding'
 
             idle_shipout_box.print_out()
