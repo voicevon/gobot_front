@@ -9,3 +9,6 @@ x.append(ming)
 
 
 print (x[-1].age)
+
+
+print (None != None)

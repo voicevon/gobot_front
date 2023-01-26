@@ -1,16 +1,12 @@
-# from von.amq_agent import g_amq, g_amq_broker_config
 from wcs_robots.twh_robot_row import TwhRobot_Row
 from wcs_robots.twh_robot_shipout import TwhRobot_ShipoutBox, TwhRobot_Shipout
+from wcs_robots.gcode_sender import gcode_senders_spin_once
 from database.db_api import db_User,db_Stock,db_Deposite,db_Withdraw,db_Shipout
-# from multiprocessing import mul
 import multiprocessing
 from von.mqtt_auto_sync_var import MqttAutoSyncVar
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
-from von.amq_agent import g_amq, g_amq_broker_config
 
 import time
-import requests
-import json
 
 
 class WithdrawQueue_Tooth():
@@ -29,13 +25,12 @@ class WithdrawQueue_Tooth():
             self.col = dbtable_withdraw_queue['col']
             self.layer = dbtable_withdraw_queue['layer']
 
-
 class Twh_WarehouseControlSystem():
     def __init__(self, queue_deposit:multiprocessing.Queue) -> None:
-        self.robot_rows = [TwhRobot_Row(123456, 0)]
+        self.robot_rows = [TwhRobot_Row('123456', 0)]
         self.robot_rows.clear()
         for i in range(4):
-            new_robot_row = TwhRobot_Row(221109,i)
+            new_robot_row = TwhRobot_Row('221109',i)
             self.robot_rows.append(new_robot_row)
         self.robot_shipout = TwhRobot_Shipout()
         self.withdraw_queues = []
@@ -108,14 +103,14 @@ class Twh_WarehouseControlSystem():
         4. start move row_robot.
         '''
         for row_robot in self.robot_rows:
-            print(row_robot.state.remote_value)
+            # print(row_robot.state.remote_value)
             # if row_robot.state.remote_value is not None:
                 # if row_robot.state.remote_value != 'ready':
                 #     # print(row_robot.state.remote_value)
                 #     xx= json.loads(row_robot.state.remote_value)
                 #     # print(xx['is_moving'])
 
-            if row_robot.state.remote_value == 'idle':
+            if row_robot.state.remote_value is not None:
                 tooth = self.FindTooth_from_WithdrawQueue(row_robot.id)
                 if tooth is not None:
                     print('Pick_and_Place()', tooth.row, tooth.col, tooth.layer)
@@ -151,7 +146,6 @@ class Twh_WarehouseControlSystem():
 def WCS_Main(queue_deposit:multiprocessing.Queue, queue_withdraw:multiprocessing.Queue):
         g_mqtt_broker_config.client_id = '20221222'
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
-        g_amq.connect_to_broker(g_amq_broker_config)
         wcs = Twh_WarehouseControlSystem(queue_deposit)
         while True:
             # self.CheckDatabase_WithdrawQueue()
@@ -159,6 +153,7 @@ def WCS_Main(queue_deposit:multiprocessing.Queue, queue_withdraw:multiprocessing
             wcs.Assign_Shipoutbox_to_Order()
             wcs.Pick_and_Place()
             wcs.Check_MQTT_Rx()
+            gcode_senders_spin_once()
             time.sleep(0.5)
 
 wcs_queue_deposit = multiprocessing.Queue()
