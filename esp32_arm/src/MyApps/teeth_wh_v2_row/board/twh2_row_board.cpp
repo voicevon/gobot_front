@@ -19,6 +19,14 @@
 // #define PIN_POSITION_TRIGGER_X  128
 // #define PIN_POSITION_TRIGGER 1
 
+#define PIN_LED_1 11
+#define PIN_LED_2 11
+#define PIN_LED_3 11
+#define PIN_LED_4 11
+#define PIN_LED_5 11
+#define PIN_LED_6 11
+#define PIN_LED_7 11
+
 
 // // Index number
 #define POSITION_TRIGGER_ALPHA 0
@@ -32,6 +40,14 @@ void Twh2Row_Board::Init(){
 
     __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_POSITION_TRIGGER_X, LOW);
     PositionTrigger_Array::Instance().Init(__all_position_triggers, POSITION_TRIGGER_COUNT);
+
+    __leds[0].Init(1, PIN_LED_1, LOW);
+    __leds[1].Init(1, PIN_LED_2, LOW);
+    __leds[2].Init(1, PIN_LED_3, LOW);
+    __leds[3].Init(1, PIN_LED_4, LOW);
+    __leds[4].Init(1, PIN_LED_5, LOW);
+    __leds[5].Init(1, PIN_LED_6, LOW);
+    __leds[6].Init(1, PIN_LED_7, LOW);
 
     __InitSteppers();
 
@@ -57,6 +73,14 @@ void Twh2Row_Board::__InitSteppers(){
         Logger::Halt("failed FastAccelStepper.");
     }
 
+}
+
+
+void Twh2Row_Board::TurnOn_ThisLed_Only(int led_id){
+    for(int i=0; i<7; i++){
+        __leds[i].TurnOff();
+        if (i==led_id) __leds[i].TurnOn();
+    }
 }
 
 void Twh2Row_Board::Test_PositionTriggers(int loops){

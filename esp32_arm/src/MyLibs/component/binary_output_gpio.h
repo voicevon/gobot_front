@@ -5,7 +5,11 @@
 
 class BinaryOutput_GPIO: public ComponentBase{ 
     public:
+        BinaryOutput_GPIO(){};
+        void Init(uint8_t id, uint8_t pin, uint8_t turn_on_value);
+
         BinaryOutput_GPIO(uint8_t id, uint8_t pin, uint8_t turn_on_value);
+
         void TurnOn();
         void TurnOff();
 

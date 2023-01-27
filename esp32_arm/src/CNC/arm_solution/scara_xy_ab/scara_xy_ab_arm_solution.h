@@ -5,7 +5,7 @@
 
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "Robot/eef/eef_standard_code.h"
-#include "MyLibs/component/led.h"
+#include "MyLibs/component/led_gpio.h"
 #include "config_base.h"
 #include "Robot/axis_homer/position_trigger.h"
 
