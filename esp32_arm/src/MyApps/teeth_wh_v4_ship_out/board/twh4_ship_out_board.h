@@ -6,8 +6,8 @@
 
 #define WS2812B_COUNT 24
 #define PIN_NEO_PIXEL  22   // Arduino pin that connects to NeoPixel
-#define PIN_GPIO_BUTTON_WITHDRAW 23
-#define PIN_GPIO_BUTTON_SHIPOUT 24
+#define PIN_GPIO_BUTTON_WITHDRAW 19
+#define PIN_GPIO_BUTTON_SHIPOUT 20
 
 class Twh4_ShipOut_Board: public BoardBase{
     public:

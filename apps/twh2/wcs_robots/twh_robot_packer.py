@@ -1,7 +1,5 @@
-# from von.mqtt_agent import g_mqtt, g_mqtt_broker_config
 
-
-class TwhRobot_ShipoutBox():
+class TwhRobot_PackBox():
 
     def __init__(self, id:int) -> None:
         #  'idle', 'feeding', 'fullfilled'
@@ -26,11 +24,11 @@ class TwhRobot_ShipoutBox():
         ss += ' state=' + self.state
         print(ss)
 
-class TwhRobot_Shipout():
+class TwhRobot_Packer():
     def __init__(self) -> None:
-        self.boxes = [TwhRobot_ShipoutBox(0)]
+        self.boxes = [TwhRobot_PackBox(0)]
         for i in range(11):
-            newbox = TwhRobot_ShipoutBox(i)
+            newbox = TwhRobot_PackBox(i)
             self.boxes.append(newbox)
         self.rx_topic = 'twh/221109/shipout/box'
         # g_mqtt.subscribe(self.rx_topic)
@@ -39,6 +37,11 @@ class TwhRobot_Shipout():
         print('TwhRobot_Shipout::debug()  printing all boxes')
         for box in self.boxes:
             box.print_out()
+
+    def show_pack_box_led_packing(self, packingbox: TwhRobot_PackBox):
+        gcode = 'M42P' + str(packingbox.id) + 'S1'
+
+
 
     def CheckMqttMessage(self):
         print("TwhRobot_Shipout main process is started....")
@@ -52,20 +55,20 @@ class TwhRobot_Shipout():
     # def FindBox_not_fullfilled():
     #     pass  #???
 
-    def FindBox_Idle(self) -> TwhRobot_ShipoutBox:
+    def FindBox_Idle(self) -> TwhRobot_PackBox:
         for box in self.boxes:
             if box.state == 'idle':
                 return box
         return None
 
-    def FindBox_Feeding(self, order_id: str) -> TwhRobot_ShipoutBox:
+    def FindBox_Feeding(self, order_id: str) -> TwhRobot_PackBox:
         for box in self.boxes:
             if box.order_id == order_id:
                 if box.state == 'feeding':
                     return box
         return None
 
-    def FindBox_fullfilled(self, order_id: str) -> TwhRobot_ShipoutBox:
+    def FindBox_fullfilled(self, order_id: str) -> TwhRobot_PackBox:
         for box in self.boxes:
             if box.order_id == order_id:
                 if box.state == 'fullfilled':

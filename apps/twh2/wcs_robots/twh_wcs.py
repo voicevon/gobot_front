@@ -1,7 +1,7 @@
 from wcs_robots.twh_robot_row import TwhRobot_Row
-from wcs_robots.twh_robot_shipout import TwhRobot_ShipoutBox, TwhRobot_Shipout
+from wcs_robots.twh_robot_packer import TwhRobot_PackBox, TwhRobot_Packer
 from wcs_robots.gcode_sender import gcode_senders_spin_once
-from database.db_api import db_User,db_Stock,db_Deposite,db_Withdraw,db_Shipout
+from database.db_api import db_User, db_Stock, db_Deposite, db_Withdraw, db_Shipout
 import multiprocessing
 from von.remote_var_mqtt import RemoteVar_mqtt
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
@@ -20,7 +20,7 @@ class WithdrawQueue_Tooth():
     def __init__(self, dbtable_withdraw_queue) -> None:
         if dbtable_withdraw_queue is not None:
             self.order_id = dbtable_withdraw_queue['order_id']
-            self.shipout_box_id = dbtable_withdraw_queue['connected_shipout_box']  #TODO:  unify the key's name
+            self.packbox_id = dbtable_withdraw_queue['connected_shipout_box']  #TODO:  unify the key's name
             self.row =  dbtable_withdraw_queue['row']
             self.col = dbtable_withdraw_queue['col']
             self.layer = dbtable_withdraw_queue['layer']
@@ -28,7 +28,7 @@ class WithdrawQueue_Tooth():
     def print_out(self):
 
         ss = ' Tooth order_id=' + str(self.order_id)
-        ss += ' shipout_box_id=' + str(self.shipout_box_id)
+        ss += ' packbox_id=' + str(self.packbox_id)
         ss += ' row=' + str(self.row)
         ss += ' col=' + str(self.col)
         ss += ' layer= ' + str(self.layer)
@@ -43,13 +43,13 @@ class Twh_WarehouseControlSystem():
         for i in range(4):
             new_robot_row = TwhRobot_Row('221109',i)
             self.robot_rows.append(new_robot_row)
-        # 2. Create shipout_robot
-        self.robot_shipout = TwhRobot_Shipout()
-        self.robot_shipout.debug()
+        # 2. Create packer_robot
+        self.packer = TwhRobot_Packer()
+        self.packer.debug()
         # 3. Create queues
         self.withdraw_queues = []
         self.current_picking_place_tooth = WithdrawQueue_Tooth(None)
-        self.current_shipping_out_box = TwhRobot_ShipoutBox(-1)
+        self.current_packbox = TwhRobot_PackBox(-1)
         
         self.row_robots_state = []
         self.row_robots_state.append(RemoteVar_mqtt('twh/221109/r0/state', 'idle'))
@@ -57,8 +57,8 @@ class Twh_WarehouseControlSystem():
         self.row_robots_state.append(RemoteVar_mqtt('twh/221109/r2/state', 'idle'))
         self.row_robots_state.append(RemoteVar_mqtt('twh/221109/r3/state','idle'))
         
-        self.button_picking_place = RemoteVar_mqtt('twh/221109/button/pick/state','idle')
-        self.button_shipout = RemoteVar_mqtt('twh/221109/button/shipout/state','idle')
+        self.button_pick = RemoteVar_mqtt('twh/221109/button_pick/state','idle')
+        self.button_pack = RemoteVar_mqtt('twh/221109/button_pack/state','idle')
         self.queue_deposit =  queue_deposit
 
     def FindRobotRow_idle(self) -> TwhRobot_Row:
@@ -69,22 +69,22 @@ class Twh_WarehouseControlSystem():
     
     def FindTooth_from_WithdrawQueue(self, row_id: int) ->WithdrawQueue_Tooth:
         '''
-        constraint:  connected_shipout_box is avaliable.
+        constraint:  connected_pack_box is avaliable.
         '''
         for tooth in self.withdraw_queues:
-            if tooth.shipout_box_id != -1:
+            if tooth.packbox_id != -1:
                 if tooth.row == row_id:
                     return tooth
         return None
 
-    def Assign_Shipoutbox_to_Order(self):
+    def Assign_Packbox_to_Order(self):
         '''
         Only assign one shipoutbox(the idle one) for each running.
         For the order(multi teeth) ,will move the queue from database to WCS buffer.
         '''
         # 1. find idle shipout_box
-        idle_shipout_box = self.robot_shipout.FindBox_Idle()
-        if idle_shipout_box is None:
+        idle_packbox = self.packer.FindBox_Idle()
+        if idle_packbox is None:
             return
 
         # 2. get queue(same order_id) from database
@@ -102,8 +102,8 @@ class Twh_WarehouseControlSystem():
             # new order, connect to the idle shipout_box
             new_tooth = WithdrawQueue_Tooth(order_item)
             self.withdraw_queues.append(new_tooth)
-            new_tooth.shipout_box_id = idle_shipout_box.id
-            idle_shipout_box.state = 'feeding'
+            new_tooth.shipout_box_id = idle_packbox.id
+            idle_packbox.state = 'feeding'
 
             # idle_shipout_box.print_out()
             # for t in self.withdraw_queues:
@@ -112,7 +112,7 @@ class Twh_WarehouseControlSystem():
         # 3. Delete database rows (those be copied to wcs buffer)
         db_Withdraw.table_withdraw_queue.remove(doc_ids=doc_ids)
 
-    def Move_Pick_and_Place(self) -> None:
+    def Move_Pick_Pack(self) -> None:
         '''
         Only pick and place one tooth(from one of the idle row) for each running.
         1. find an idle row_robot.
@@ -131,18 +131,27 @@ class Twh_WarehouseControlSystem():
             if row_robot.state.get() in ['idle', 'ready']:
                 tooth = self.FindTooth_from_WithdrawQueue(row_robot.id)
                 if tooth is not None:
-                    print('Move_Pick_and_Place()', tooth.row, tooth.col, tooth.layer)
-                    row_robot.move_to(tooth.col, tooth.layer)
+                    print('Move_Pick_Pack()', tooth.row, tooth.col, tooth.layer)
+                    row_robot.move_to(tooth.col, tooth.layer, tooth.packbox_id)
                     self.withdraw_queues.remove(tooth)
                     row_robot.state.set('moving')
-                    self.button_picking_place.set('unpressed')
                     return
             elif row_robot.state.get() == 'ready':
+                # show green led on row_robot 
+                row_robot.show_layer_led()
+                # show green led on pack_box
+                self.packer.show_pack_box_led_packing(row_robot.connected_packing_box)
                 # wait operator press the button
-                if self.button_picking_place.get() == 'pressed':
+                self.button_pick.set('unpressed')
+                self.state = 'picking_packing'
+                
+            if self.state == 'picking_packing':
+                if self.button_pick.get() == 'pressed':
+                    # turn off all green leds
+                    self.state = 'idle'
                     row_robot.state.set('idle')
             else:
-                # print('Move_Pick_and_Place()   id, state == ', row_robot.id, row_robot.state.get() )
+                # print('Move_Pick_Pack()   id, state == ', row_robot.id, row_robot.state.get() )
                 pass
 
     def Check_MQTT_Rx(self):
@@ -156,7 +165,7 @@ class Twh_WarehouseControlSystem():
             self.withdraw_queues.remove(self.current_picking_place_tooth)
             if is_last_tooth_of_the_order:
                 box_id = self.current_picking_place_tooth.shipoutbox_id
-                box = self.robot_shipout.boxes[box_id]
+                box = self.packer.boxes[box_id]
                 box.state = 'fullfilled'
         
         if self.button_shipout.remote_value == 'pressed':
@@ -174,8 +183,8 @@ def WCS_Main(queue_deposit:multiprocessing.Queue, queue_withdraw:multiprocessing
         while True:
             # self.CheckDatabase_WithdrawQueue()
             wcs.Do_deposit()
-            wcs.Assign_Shipoutbox_to_Order()
-            wcs.Move_Pick_and_Place()
+            wcs.Assign_Packbox_to_Order()
+            wcs.Move_Pick_Pack()
             wcs.Check_MQTT_Rx()
             gcode_senders_spin_once()
             time.sleep(0.5)

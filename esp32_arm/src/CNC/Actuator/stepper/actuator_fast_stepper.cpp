@@ -12,7 +12,7 @@ void CncActuatorFastStepper::SpinOnce(){
     //     Logger::Print("CncActuatorFastStepper::SpinOnce()  is_moving  update to ", _stepper->isRunning() );
     // }
     _is_moving = _stepper->isRunning();
-    PrintOut("From CncActuatorFastStepper::SpinOnce()", 800000);
+    // PrintOut("From CncActuatorFastStepper::SpinOnce()", 800000);
 }
 
 void CncActuatorFastStepper::PrintOut(const char* title, uint32_t count_up_max){
