@@ -38,8 +38,8 @@ class TwhRobot_Packer():
         for box in self.boxes:
             box.print_out()
 
-    def show_pack_box_led_packing(self, packingbox: TwhRobot_PackBox):
-        gcode = 'M42P' + str(packingbox.id) + 'S1'
+    def show_pack_box_led(self, packbox_id: int):
+        gcode = 'M42P' + str(packbox_id) + 'S1'
 
 
 
