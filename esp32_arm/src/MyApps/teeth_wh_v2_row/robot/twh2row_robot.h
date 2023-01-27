@@ -37,7 +37,7 @@ class Twh2Row_Robot: public RobotBase{
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
         LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
 
-        int __current_state = 0;  //idle=0.   moving=1 , ready=2
+        // int __current_state = 0;  //idle=0.   moving=1 , ready=2
 
 };
 

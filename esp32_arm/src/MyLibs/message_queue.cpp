@@ -12,6 +12,10 @@ bool MessageQueue::AppendMessage(String strPayload){
 // return true: buffer is full , before or after appending.
 // return false:  buffer is not full, after appending.
 bool MessageQueue::AppendMessage(const char* payload, int length){
+    // Logger::Debug("MessageQueue::AppendMessage()");
+    // Logger::Print("payload", payload);
+    // Logger::Print("length",length);
+
     int next_head = this->__get_pointer_next_index(this->_head);
     if(next_head == this->_tail){
         Serial.print(FORE_YELLOW);
@@ -20,17 +24,19 @@ bool MessageQueue::AppendMessage(const char* payload, int length){
         Serial.println(FCBC_RESET);
         return true;
     }
-    this->_all_messages[this->_head].length = length;
-    char* target = &(this->_all_messages[this->_head].payload[0]);
+    _all_messages[_head].length = length;
+    char* target = &(_all_messages[_head].payload[0]);
     //Copy byte to byte.  There is a 0x00 ender , so lenth should be +1.
+    // Logger::Print("Copying message byte by byte......", ".");
     for(int i=0;i<=length;i++){
         // Serial.print(*payload);
         *target = * payload;
         target++;
         payload++;
     }
-    this->_head = next_head;
-    next_head = this->__get_pointer_next_index(this->_head);
+    // Serial.println("\n\n");
+    _head = next_head;
+    next_head = __get_pointer_next_index(_head);
     if (next_head == this->_tail)
         // buffer is full, after copying.
         return true;
@@ -47,31 +53,31 @@ bool MessageQueue::AppendMessage(const char* payload, int length){
 }
 
 MessageQueue::SingleMessage* MessageQueue::GetHeadMessage(){
-    int previous_head = this->__get_pointer_previous_index(this->_head);
-    SingleMessage* head_message = &(this->_all_messages[previous_head]);
+    int previous_head = __get_pointer_previous_index(_head);
+    SingleMessage* head_message = &(_all_messages[previous_head]);
     return  head_message;
 }
 
 MessageQueue::SingleMessage* MessageQueue::FetchTailMessage(bool take_out_from_queue){
     SingleMessage* tail_message = NULL;
-    if (this->_head != this->_tail){
-        tail_message = & this->_all_messages[this->_tail];
+    if (_head != _tail){
+        tail_message = & _all_messages[_tail];
         if(take_out_from_queue){
-            this->_tail = this->__get_pointer_next_index(this->_tail);
+            _tail = __get_pointer_next_index(_tail);
         }
     }
     return tail_message;
 }
 
 bool MessageQueue::BufferIsEmpty(){
-    if (this->_head == this->_tail) 
+    if (_head == _tail) 
         return true;
     return false;
 }
 
 bool MessageQueue::BufferIsFull(){
-    int next_head = this->__get_pointer_next_index(this->_head);
-    if (next_head == this->_tail)
+    int next_head = __get_pointer_next_index(_head);
+    if (next_head == _tail)
         return true;
     return false;
 }

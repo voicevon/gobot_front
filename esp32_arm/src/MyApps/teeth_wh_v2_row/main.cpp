@@ -2,7 +2,8 @@
 #ifdef I_AM_TEETH_WAREHOUSE_V2_ROW
 
 #define MY_ROBOT_ROW_ID 1
-#define GCODE_MQTT_TOPIC "twh/221109/r1/gcode"   //report state topic =  "twh/221109/r1/state"
+#define MQTT_TOPIC_GCODE "twh/221109/r1/gcode"   //report state topic =  "twh/221109/r1/state"
+#define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "twh/221109/r1/state"
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
@@ -87,11 +88,11 @@ void setup(){
     app.LinkRobot(&robot);
 
     // setup_mqtt_block_connect();
-    setup_mono_remote_queue_bridge_via_mqtt(GCODE_MQTT_TOPIC, &mqtt_command_queue, &app); 
+    setup_mono_remote_queue_bridge_via_mqtt(MQTT_TOPIC_GCODE, &mqtt_command_queue, &app); 
     // setup_mqtt_on_message_receive(); 
 
     gcode_queue.AppendGcodeCommand("G28X");
-    gcode_queue.AppendGcodeCommand("M408twh/221109/r1/state");
+    gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
     // test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }

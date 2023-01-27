@@ -4,30 +4,8 @@
 #include "IoT/wifi_mqtt_client.h"
 
 
-// TODO:  consider:  if gcode is move_to zero distance.  
-// Solution:  report state by M402 command followed any G1-code. 
 void Twh2Row_Robot::MySpinOnce(){
-    switch (__current_state){
-        case 0:
-            if (_mover->IsMoving()){
-                __current_state = 1;
-            }
-            break;
-        case 1:
-            if (!_mover->IsMoving()){
-                // publish ready  //report state topic =  "twh/221109/r0/state"
-                g_mqttClient.publish("twh/221109/r0/state", 2, true, "ready");
-                __current_state = 2;
-            }
-            break;
-        case 2:
-                //__current_state should be set to moving when start G1-code
-                // No need to report via MQTT.
-            break;
-        default:
-            __current_state = 0;
-            break;
-    }
+ 
 }
 
 void Twh2Row_Robot::Init(Twh2Row_Board* board){

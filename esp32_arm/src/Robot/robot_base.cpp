@@ -94,7 +94,7 @@ void RobotBase::SpinOnce(){
 		Logger::Print("RobotBase::SpinOnce() Planner can not go on,  queue might be full(or almost full).", 93);
 		return;
 	}
-	// Logger::Print("RobotBase::SpinOnce() point", 3);
+	Logger::Print("RobotBase::SpinOnce() point", 3);
 
 	// Check gcode queue, if there is gcode to be run.
 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage(false);
@@ -104,7 +104,7 @@ void RobotBase::SpinOnce(){
 		return;
 	}
 
-	bool debug = false;
+	bool debug = true;
 	if (debug){
 		Logger::Debug("[Info] RobotBase::SpinOnce()  Going to run next gcode   ===> ");
 		Serial.print(message->payload);
@@ -144,7 +144,7 @@ void RobotBase::SpinOnce(){
 // 2. Queue_LineSegment is not full
 void RobotBase::__RunGcode(Gcode* gcode){
 	static float __newest_line_speed = 100;
-	// Logger::Info("RobotBase::__RunGcode()");
+	Logger::Info("RobotBase::__RunGcode()");
 	LineSegment* new_line = Queue_LineSegment::Instance().GetRoom();
 	new_line->DeepCopyFromFkPosition(__planner.arm_solution->GetCurrentPosition_Fk());
 	if (gcode->has_letter('F')) __newest_line_speed = gcode->get_value('F');
