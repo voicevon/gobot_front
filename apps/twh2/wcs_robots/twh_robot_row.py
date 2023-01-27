@@ -6,8 +6,8 @@ class TwhRobot_Row():
     def __init__(self, robot_id:str, row_id:int) -> None:
         self.id = row_id
         self.robot_id = robot_id
-        state_topic = "twh/" + robot_id + '/r' + str(row_id) + "/state"  #'twh/221109/r0/state'
-        self.state = RemoteVar_mqtt(state_topic, 'idle')
+        self.state_topic = "twh/" + robot_id + '/r' + str(row_id) + "/state"  #'twh/221109/r0/state'
+        self.state = RemoteVar_mqtt(self.state_topic, 'idle')
 
         gcode_topic = "twh/" + robot_id + '/r' + str(row_id) + "/gcode"  #'twh/221109/r0/state'
         self.gcode_sender = GcodeSender(gcode_topic)
@@ -22,7 +22,7 @@ class TwhRobot_Row():
         gcode ='M42P' + str(layer) + 'S1'
         self.gcode_sender.append_gmcode_to_robot(gcode)
 
-        gcode = 'M408'
+        gcode = 'M408' + self.state_topic
         self.gcode_sender.append_gmcode_to_robot(gcode)
 
     

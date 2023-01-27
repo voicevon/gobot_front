@@ -37,7 +37,6 @@
 #ifdef I_AM_GOBOT_MAIN
     #define ROBOT_SERIAL_ID 2134
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1
 
 	// #define USING_BLE
 	#ifdef USING_BLE
@@ -52,7 +51,6 @@
     #define ROBOT_SERIAL_ID 2134
 	// #define I_AM_GOBOT_HOUSE
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 
 	// #define USING_BLE
 	#ifdef USING_BLE
@@ -67,7 +65,6 @@
     #define ROBOT_SERIAL_ID 2134
 	// #define I_AM_GOBOT_HOUSE
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 
 	// #define USING_BLE
 	#ifdef USING_BLE
@@ -83,7 +80,6 @@
     #define ROBOT_SERIAL_ID 2134
 	// #define I_AM_GOBOT_HOUSE
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 
 	// // #define USING_BLE
 	// #ifdef USING_BLE
@@ -98,56 +94,46 @@
 #ifdef I_AM_GARMENT_BOT
     #define ROBOT_SERIAL_ID 4444
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 #endif
 
 #ifdef I_AM_ROBOT_ASRS_AGV
     #define ROBOT_SERIAL_ID 4444
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 #endif
 
 #ifdef I_AM_SPRING_MAKER
     // #define ROBOT_SERIAL_ID 4444
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 #endif
 
 #ifdef I_AM_VSC
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 #endif
 
 #ifdef I_AM_TEETH_WAREHOUSE_V1
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 #endif
 
 
 #ifdef I_AM_TEETH_WAREHOUSE_V2
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 #endif
 
 
 #ifdef I_AM_TEETH_WAREHOUSE_V2_ROW
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 #endif
 
 #ifdef I_AM_TEETH_WAREHOUSE_V4_SHIP_OUT
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 #endif
 
 #ifdef I_AM_GARMENT_BOX_MOVER
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 #endif
 
 #ifdef I_AM_GARMENT_BOX_CARRIER
 	#define USING_WIFI_MQTT
-	// #define REMOTE_QUEUE_MQTT_COUNT  1   
 #endif
 
 

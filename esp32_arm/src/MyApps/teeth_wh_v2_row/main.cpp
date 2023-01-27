@@ -91,7 +91,7 @@ void setup(){
     // setup_mqtt_on_message_receive(); 
 
     gcode_queue.AppendGcodeCommand("G28X");
-    gcode_queue.AppendGcodeCommand("M408");
+    gcode_queue.AppendGcodeCommand("M408twh/221109/r1/state");
     // test_robot();
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }

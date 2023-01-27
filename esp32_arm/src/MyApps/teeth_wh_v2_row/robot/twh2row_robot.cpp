@@ -41,6 +41,8 @@ void Twh2Row_Robot::Init(Twh2Row_Board* board){
     this->_g28_runner = &this->__g28_runner;
     __g28_runner.Init(&__mover, &__arm_solution);
     McodeOS::Instance().LinkJsonLoader_ForM408Runner(&__json_loader_for_m408);
+    __m42_runner_led_output.Init(board);
+    McodeOS::Instance().LinkRunner(&__m42_runner_led_output);
 
 }
 

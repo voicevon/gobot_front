@@ -7,8 +7,8 @@
 
 char* Twh2_Row_JsonLoader::Load(){
     Logger::Debug("Twh2_Row_JsonLoader::Load()");
-    String idle = "ready";
-    idle.toCharArray(__json_string, sizeof(idle));
+    String str_state = "ready";
+    str_state.toCharArray(__json_string, sizeof(str_state));
     Logger::Print("json_string", __json_string);
     return __json_string;
 
