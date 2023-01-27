@@ -1,10 +1,8 @@
 #include "all_applications.h"
 #ifdef I_AM_VSC
 #include "MyApps/vsc/board/board_vsc.h"
-// #include "MyApps/vsc/board/board_tester.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
-// #include "IoT/main_mqtt.h"
 #include "MyApps/vsc/vsc_app.h"
 #include "MyApps/vsc/robot/vsc_robot.h"
 
