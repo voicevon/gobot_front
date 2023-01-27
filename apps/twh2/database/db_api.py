@@ -17,8 +17,9 @@ class db_User():
             return users[0]
         return None
 
-    def get_user_all(self):
-        return self.table_user.all()
+
+    # def get_user_all(self):
+    #     return self.table_user.all()
 
 class db_Stock():
     table_stock = TinyDB('database/twh_stock.json')
@@ -120,6 +121,7 @@ class db_Stock():
             # insert into database
             print("insert stock")
             db_row={}
+            db_row['twh'] = user_request['twh']
             db_row['brand'] = user_request['brand']
             db_row['batch_number'] = user_request['batch_number']
             db_row['color'] = user_request['color']

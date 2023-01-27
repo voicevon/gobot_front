@@ -38,6 +38,16 @@ def decrease_stock():
     # g_database.db_stock.write_back(rows)
     return 'OK'
 
+@web.route('/view_stock_map')
+def view_stock_map():
+    stock_map = db_Stock.table_stock.all()
+    return render_template('view_stock_map.html', stock_map = stock_map)
+
+@web.route('/create_map_for_new_twh')
+def create_map_for_new_twh():
+    store_map = []
+    return render_template('create_map_for_new_twh.html', store_map = store_map)
+
 def check_login():
     if "user" not in session:
         return redirect(url_for('login'))
@@ -96,7 +106,7 @@ def log_out():
 
 @web.route('/view_users')
 def view_users():
-    users = db_User.get_user_all()
+    users = db_User.table_user.all()
     return render_template('view_users.html', users=users)
 
 @web.route('/view_stocks')
@@ -118,11 +128,12 @@ def deposit_request():
     # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
     for key in request.form.to_dict():
         user_request[key] = request.form.get(key)
-        print(key, user_request[key])
+        # print(key, user_request[key])
     request_in_stock = db_Stock.get_stock(user_request)
     if request_in_stock is None:
         # Can not find in stock , Try to find a empty box
-        user_request['col'] = db_Stock.get_pure_empty_col(user_request)
+        # solution A:  Find empty box
+        # user_request['col'] = db_Stock.get_pure_empty_col(user_request)
         user_request['origin_quantity'] = 0
         user_request['doc_id'] = -1
     else:

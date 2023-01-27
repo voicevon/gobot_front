@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MyLibs/basic/board_base.h"
-// #include "MyBoards/board_base.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "Robot/axis_homer/position_trigger_array.h" 
 #include "FastAccelStepper.h"
@@ -29,8 +28,4 @@ class Twh2Row_Board: public BoardBase{
         FastAccelStepperEngine __stepper_engine = FastAccelStepperEngine();
         FastAccelStepper* __stepper_alpha;
         
-
-
-        
-
 };

@@ -105,9 +105,9 @@ class Twh_WarehouseControlSystem():
             new_tooth.shipout_box_id = idle_shipout_box.id
             idle_shipout_box.state = 'feeding'
 
-            idle_shipout_box.print_out()
-            for t in self.withdraw_queues:
-                t.print_out()
+            # idle_shipout_box.print_out()
+            # for t in self.withdraw_queues:
+            #     t.print_out()
 
         # 3. Delete database rows (those be copied to wcs buffer)
         db_Withdraw.table_withdraw_queue.remove(doc_ids=doc_ids)
@@ -128,7 +128,7 @@ class Twh_WarehouseControlSystem():
                 #     xx= json.loads(row_robot.state.remote_value)
                 #     # print(xx['is_moving'])
 
-            if row_robot.state.get() == 'idle':
+            if row_robot.state.get() in ['idle', 'ready']:
                 tooth = self.FindTooth_from_WithdrawQueue(row_robot.id)
                 if tooth is not None:
                     print('Move_Pick_and_Place()', tooth.row, tooth.col, tooth.layer)
@@ -141,9 +141,9 @@ class Twh_WarehouseControlSystem():
                 # wait operator press the button
                 if self.button_picking_place.get() == 'pressed':
                     row_robot.state.set('idle')
-                    # self.button_picking_place.set('unpressed')
-                # print('Move_Pick_and_Place()  row_robot.id   .state.remote_value  =', row_robot.id, row_robot.state.remote_value)
-                # pass
+            else:
+                # print('Move_Pick_and_Place()   id, state == ', row_robot.id, row_robot.state.get() )
+                pass
 
     def Check_MQTT_Rx(self):
         return
