@@ -19,7 +19,7 @@ void AdhocRouter::SpinOnce(){
         }
     }
     // try to find best header.
-    __my_forwarding_target = 1;
+    __forward_to = -1;
 }
 
 bool AdhocRouter::IsJoined_Mesh(){
@@ -27,11 +27,10 @@ bool AdhocRouter::IsJoined_Mesh(){
     return false;
 }
 
-void AdhocRouter::Init(bool i_am_net_gate){
+void AdhocRouter::Init(){
     esp_read_mac(__my_mac_addr, ESP_MAC_WIFI_STA);
-
     __my_hop = 0xff;
-    if (i_am_net_gate) __my_hop = 1;
+    __forward_to = -1;
 
     // init orphan package
     __orphan_package.my_hop = __my_hop;
@@ -44,8 +43,6 @@ void AdhocRouter::Init(bool i_am_net_gate){
         his->hop = 0xff;
     }
 }
-
-
 
 Neibour* AdhocRouter::__search_neibour(uint8_t * mac_addr){
     for(int i=0; i<ROUTER_TABLE_ROWS; i++){
@@ -113,50 +110,11 @@ void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, i
 
     if (AdhocHelper::IsSameMacAddr(incoming_package->to_mac_addr, __my_mac_addr)){
         // I am the target node of the package.
-        if (__my_hop == 1){
-            // I am net-gate.  
-
-
-        }else if (__my_hop < 200){
-            // I am not the net-gate, so forward the package 
-            AdhocHelper::CopyMacAddr(__my_neibours[__my_forwarding_target].mac_addr , incoming_package->to_mac_addr);
+        if (__my_hop < 200){
+            // have joint a network,  forward the package , 
+            AdhocHelper::CopyMacAddr(__my_neibours[__forward_to].mac_addr , incoming_package->to_mac_addr);
             Send(incoming_package);
-        }else{
-            // I am not joined network, do not forward anything.
         }
     }
 
-}
-
-// void AdhocRouter::broadcast(const uint8_t* message, uint8_t length){
-void AdhocRouter::Send(AdhocPackage* pkg){
-    // Emulates a broadcast
-    // Broadcast a message to every device in range
-    uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-    esp_now_peer_info_t peerInfo = {};
-    memcpy(&peerInfo.peer_addr, broadcastAddress, 6);
-    if (!esp_now_is_peer_exist(broadcastAddress)){
-        esp_now_add_peer(&peerInfo);
-    }
-    // Send message
-    const uint8_t* message = (const uint8_t*) pkg;
-    uint8_t length = sizeof(AdhocPackage);
-    esp_err_t result = esp_now_send(broadcastAddress, message, length);
-
-    // Print results to serial monitor
-    if (result == ESP_OK){
-        Serial.print("Tx ");
-    } else if (result == ESP_ERR_ESPNOW_NOT_INIT) {
-        Serial.println("ESP-NOW not Init.");
-    } else if (result == ESP_ERR_ESPNOW_ARG) {
-        Serial.println("Invalid Argument");
-    } else if (result == ESP_ERR_ESPNOW_INTERNAL)  {
-        Serial.println("Internal Error");
-    } else if (result == ESP_ERR_ESPNOW_NO_MEM)  {
-        Serial.println("ESP_ERR_ESPNOW_NO_MEM");
-    } else if (result == ESP_ERR_ESPNOW_NOT_FOUND)  {
-        Serial.println("Peer not found.");
-    } else {
-        Serial.println("Unknown error");
-    }
 }

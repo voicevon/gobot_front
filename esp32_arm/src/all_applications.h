@@ -26,17 +26,6 @@
 #define I_AM_GUANGDA_SHUIWU_NETGATE
 // #define I_AM_GUANGDA_SHUIWU_ROUTER
 // #define I_AM_GUANGDA_SHUIWU_SENSOR
-// #ifdef I_AM_GUANGDA_SHUIWU_ROUTER
-// 	#define USING_MESH
-// #endif
-
-// #ifdef I_AM_GUANGDA_SHUIWU_NETGATE
-// 	#define USING_MESH
-// #endif
-
-// #ifdef I_AM_GUANGDA_SHUIWU_NODE
-// 	#define USING_MESH
-// #endif
 
 
 // #define I_AM_ACUPUCTURE_MAIN

@@ -18,7 +18,7 @@ void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int l
 
 void setup(){
     board.Init();
-    router.Init(false);
+    router.Init();
     WiFi.mode(WIFI_STA);
     // Initilize ESP-NOW
     if (esp_now_init() != ESP_OK) {
@@ -34,9 +34,9 @@ void loop(){
     if (!router.IsJoined_Mesh()) 
         return;
         
-    AdhocPackage pc;
-    pc.payload[0] = board.GetPayload();
-    router.Send(&pc);
+    AdhocPackage apc;
+    apc.payload[0] = board.GetPayload();
+    router.Send(&apc);
     delay(1000);
 }
 

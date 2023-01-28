@@ -1,22 +1,22 @@
 #include "all_applications.h"
 #ifdef I_AM_GUANGDA_SHUIWU_NETGATE
 
-#include "Mesh/Router/adhoc_router.h"
+#include "Mesh/Router/adhoc_gate.h"
 #include "board_gate.h"
 
 GuangDa_ShuiWu_GateBoard board;
-AdhocRouter router;
+AdhocGate gate;
 
 
 void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int len){
     // Logger::Debug("on_esp_now_received");
-    router.onReceived( mac, incomingData, len);
+    gate.onReceived( mac, incomingData, len);
 }
 
 
 void setup(){
     board.Init();
-    router.Init(true);
+    gate.Init();
 
     WiFi.mode(WIFI_STA);
     // Initilize ESP-NOW
@@ -29,7 +29,8 @@ void setup(){
 }
 
 void loop(){
-    router.SpinOnce();
+    gate.SpinOnce();
+    
     //     // case 4:
     //     digitalWrite(PIN_YUNXING_4, !rx_buffer.io_21);
     //     digitalWrite(PIN_TINGZHI_4, !rx_buffer.io_22);

@@ -14,7 +14,7 @@ void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int l
 
 void setup(){
     board.Init();
-    router.Init(false);
+    router.Init();
 
     WiFi.mode(WIFI_STA);
     // Initilize ESP-NOW
