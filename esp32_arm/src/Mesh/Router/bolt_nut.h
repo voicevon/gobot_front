@@ -14,11 +14,12 @@ class Neibour{
 
 class AdhocPackage{
     public:
-        uint8_t my_hop;
         uint8_t network_id;
-        uint8_t to_mac_addr[6];
-        uint8_t package_size;
-        uint8_t payload[99];
+        uint8_t my_hop;
+        uint8_t to_mac_addr[6];     // current hop target.
+        uint8_t app_source_node_id;
+        uint8_t app_payload_size;
+        uint8_t app_payload[200];   // Max pack size of esp-now is ??
 
         void PrintOut(const char* title);
 };

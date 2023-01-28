@@ -34,7 +34,7 @@ void AdhocRouter::Init(){
 
     // init orphan package
     __orphan_package.my_hop = __my_hop;
-    __orphan_package.package_size = 1;
+    __orphan_package.app_payload_size = 1;
     // __orphan_package.payload = " I am orphan";
     // Init route table
     for (int i=0; i<ROUTER_TABLE_ROWS; i++){

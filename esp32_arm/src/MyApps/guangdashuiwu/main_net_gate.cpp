@@ -30,16 +30,18 @@ void setup(){
 
 void loop(){
     gate.SpinOnce();
-    
-    //     // case 4:
-    //     digitalWrite(PIN_YUNXING_4, !rx_buffer.io_21);
-    //     digitalWrite(PIN_TINGZHI_4, !rx_buffer.io_22);
-    //     digitalWrite(PIN_GUZHANG_4, !rx_buffer.io_23);
-    // //     break;
-    // // case 2:
-    //     digitalWrite(PIN_YUNXING_2, !rx_buffer.io_41);
-    //     digitalWrite(PIN_TINGZHI_2, !rx_buffer.io_42);
-    //     digitalWrite(PIN_GUZHANG_2, !rx_buffer.io_43);
+
+    uint8_t io = gate.rx_package.app_payload[0];
+    if (gate.rx_package.app_source_node_id == 4){
+        digitalWrite(PIN_YUNXING_4, ! (io & 1));
+        digitalWrite(PIN_ZIDONG_4, !(io & 2));
+        digitalWrite(PIN_GUZHANG_4, !(io & 4));
+    }
+    if (gate.rx_package.app_source_node_id == 2){
+        digitalWrite(PIN_YUNXING_2, !(io & 1));
+        digitalWrite(PIN_ZIDONG_2, !(io & 2));
+        digitalWrite(PIN_GUZHANG_2, !(io & 4));
+    }
 }
 
 

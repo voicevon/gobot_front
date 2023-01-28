@@ -4,7 +4,8 @@
 #include "Mesh/Router/adhoc_router.h"
 #include "board_sensor.h"
 
-
+// #define MY_APP_NODE_ID 2
+#define MY_APP_NODE_ID 4
 
 AdhocRouter router;
 GuangDa_ShuiWu_SensorBoard board;
@@ -35,7 +36,9 @@ void loop(){
         return;
         
     AdhocPackage apc;
-    apc.payload[0] = board.GetPayload();
+    apc.app_source_node_id = MY_APP_NODE_ID;
+    apc.app_payload_size = 1;
+    apc.app_payload[0] = board.GetPayload();
     router.Send(&apc);
     delay(1000);
 }
