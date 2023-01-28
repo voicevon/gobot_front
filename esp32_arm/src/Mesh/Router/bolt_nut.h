@@ -15,15 +15,16 @@ class Neibour{
 class AdhocPackage{
     public:
         uint8_t my_hop;
-        char net_id[6];
-        char to_mac_addr[6];
+        uint8_t network_id;
+        uint8_t to_mac_addr[6];
         uint8_t package_size;
-        char payload[99];
+        uint8_t payload[99];
 
         void PrintOut(const char* title);
 };
 
 class AdhocHelper{
     public:
-        static bool IsSameMacAddr();
+        static bool IsSameMacAddr(uint8_t* addr_a, uint8_t* addr_b);
+        static void CopyMacAddr(uint8_t* source, uint8_t* target);
 };

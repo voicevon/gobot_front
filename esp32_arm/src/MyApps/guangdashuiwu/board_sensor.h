@@ -15,6 +15,6 @@ class GuangDa_ShuiWu_SensorBoard: public BoardBase{
     private:
         Button_Gpio __zidong_shoudong = Button_Gpio(PIN_ZIDONG);
         Button_Gpio __yunxing_tingzhi = Button_Gpio(PIN_YUNXING);
-        Button_Gpio __guzhang_zhengchang = Button_Gpio(PIN_GUZHANG)
+        Button_Gpio __guzhang_zhengchang = Button_Gpio(PIN_GUZHANG);
 
 };

@@ -31,7 +31,10 @@ void setup(){
 
 void loop(){
     router.SpinOnce();
-    Package pc;
+    if (!router.IsJoined_Mesh()) 
+        return;
+        
+    AdhocPackage pc;
     pc.payload[0] = board.GetPayload();
     router.Send(&pc);
     delay(1000);

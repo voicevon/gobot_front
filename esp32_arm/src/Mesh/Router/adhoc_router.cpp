@@ -4,8 +4,6 @@
 #include "MyLibs/basic/logger.h"
 
 
-
-
 void AdhocRouter::SpinOnce(){
     // Logger::Debug("AdhocRouter::SpinOnce()");
     // Logger::Print("'__my_hop", __my_hop);
@@ -20,10 +18,18 @@ void AdhocRouter::SpinOnce(){
             return;
         }
     }
+    // try to find best header.
+    __my_forwarding_target = 1;
+}
 
+bool AdhocRouter::IsJoined_Mesh(){
+    if (__my_hop < 200) return true;
+    return false;
 }
 
 void AdhocRouter::Init(bool i_am_net_gate){
+    esp_read_mac(__my_mac_addr, ESP_MAC_WIFI_STA);
+
     __my_hop = 0xff;
     if (i_am_net_gate) __my_hop = 1;
 
@@ -37,35 +43,13 @@ void AdhocRouter::Init(bool i_am_net_gate){
         his->id = 0;
         his->hop = 0xff;
     }
-      // Register callback function
-    // esp_now_register_recv_cb(__onReceived);
 }
 
-// void AdhocRouter::__Broadcast_Iam_Orphan(){
-//     // Logger::Debug("AdhocRouter::__Broadcast_Iam_Orphan()");
-//     // Tell Others my mac_addr
-//     // AdhocPackage orphan_package;
-//     // orphan_package.my_hop = __my_hop;
-//     // orphan_package.source_net_id = 0;
-//     // orphan_package.payload = "I am orphan";
-//     // this->__send_out(&orphan_package);
-//     const uint8_t* pack = (const uint8_t*) &__orphan_package;
-//     uint8_t len = sizeof(AdhocPackage);
-//     // Logger::Print("len", len);
-//     this->broadcast(pack, len);
-// }
 
-bool AdhocRouter::__is_same_mac_addr(uint8_t* addr_a, uint8_t* addr_b){
-    for (int i=0; i<6; i++){
-        if (*(addr_a+i) != *(addr_b+i))
-            return false;
-    }
-    return true;
-}
 
 Neibour* AdhocRouter::__search_neibour(uint8_t * mac_addr){
     for(int i=0; i<ROUTER_TABLE_ROWS; i++){
-        if (__is_same_mac_addr(mac_addr, __my_neibours[i].mac_addr)){
+        if (AdhocHelper::IsSameMacAddr(mac_addr, __my_neibours[i].mac_addr)){
             return &__my_neibours[i];
         }
     }
@@ -81,7 +65,7 @@ Neibour* AdhocRouter::__find_blank_neibour(){
     return NULL;
 }
 
-void AdhocRouter::__onPackage_received(const uint8_t * mac, AdhocPackage* incoming_package){
+void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incoming_package){
     // incoming_package->PrintOut("from:  AdhocRouter::onReceived() ");
     uint8_t*  the_mac = (uint8_t*) (mac);
     Neibour* his = __search_neibour(the_mac);
@@ -94,12 +78,7 @@ void AdhocRouter::__onPackage_received(const uint8_t * mac, AdhocPackage* incomi
         }
         // just save to neibour_table,  we don't set hop right now.
         blank->id = 1;
-        blank->mac_addr[0] = mac[0];
-        blank->mac_addr[1] = mac[1];
-        blank->mac_addr[2] = mac[2];
-        blank->mac_addr[3] = mac[3];
-        blank->mac_addr[4] = mac[4];
-        blank->mac_addr[5] = mac[5];
+        AdhocHelper::CopyMacAddr(the_mac, blank->mac_addr);
         blank->hop = 0xff;
     }else{
         // might update his hop, even my_hop
@@ -112,8 +91,8 @@ void AdhocRouter::__onPackage_received(const uint8_t * mac, AdhocPackage* incomi
             Logger::Print("now my_hop", __my_hop);
         }
     }
-
 }
+
 // TODO:  the shortest routing might be loss connection.
 void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, int len){
     bool debug = false;
@@ -130,16 +109,23 @@ void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, i
 
     // from incomingDate to package, might effect routing_table
     AdhocPackage* incoming_package = (AdhocPackage*) (incomingData);
-    __onPackage_received(mac, incoming_package);
+    __sniff_air_package(mac, incoming_package);
 
-    // if (incoming_package->payload == 'This is an orphan package'){
-    //     return;
+    if (AdhocHelper::IsSameMacAddr(incoming_package->to_mac_addr, __my_mac_addr)){
+        // I am the target node of the package.
+        if (__my_hop == 1){
+            // I am net-gate.  
 
-    // if (this_is_a_repeated_message){
-    //     // to avoid message flooding.
-    //     return;
-    // }
-    Send(incoming_package);
+
+        }else if (__my_hop < 200){
+            // I am not the net-gate, so forward the package 
+            AdhocHelper::CopyMacAddr(__my_neibours[__my_forwarding_target].mac_addr , incoming_package->to_mac_addr);
+            Send(incoming_package);
+        }else{
+            // I am not joined network, do not forward anything.
+        }
+    }
+
 }
 
 // void AdhocRouter::broadcast(const uint8_t* message, uint8_t length){
