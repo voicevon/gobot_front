@@ -1,13 +1,13 @@
 #include "all_applications.h"
-#ifdef I_AM_GUANGDA_SHUIWU_NODE
+#ifdef I_AM_GUANGDA_SHUIWU_SENSOR
 
 #include "Mesh/Router/adhoc_router.h"
-#include "board.h"
+#include "board_sensor.h"
 
 
 
 AdhocRouter router;
-GuangDa_ShuiWu_Board board;
+GuangDa_ShuiWu_SensorBoard board;
 
 
 
@@ -31,10 +31,10 @@ void setup(){
 
 void loop(){
     router.SpinOnce();
-    //       myData.station_id = MY_ID;
-    //   myData.io_1 = digitalRead(PIN_YUNXING);
-    //   myData.io_2 = digitalRead(PIN_TINGZHI);
-    //   myData.io_3 = digitalRead(PIN_GUZHANG);
+    Package pc;
+    pc.payload[0] = board.GetPayload();
+    router.Send(&pc);
+    delay(1000);
 }
 
 

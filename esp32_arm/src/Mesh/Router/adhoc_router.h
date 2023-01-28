@@ -7,15 +7,11 @@
 
 class AdhocRouter{
     public:
-        // static AdhocRouter& Instance(){
-        //     static AdhocRouter instance;
-        //     return instance;
-        // }
         void onReceived(const uint8_t * mac, const uint8_t *incomingData, int len);
         void Init(bool i_am_net_gate);
         void SpinOnce();
-        // void BroadcastMyMacAddr();
 
+        void Send(AdhocPackage* pkg);
     protected:
 
 
@@ -25,15 +21,14 @@ class AdhocRouter{
         bool __is_same_mac_addr(uint8_t* addr_a, uint8_t* addr_b);
         Neibour* __find_blank_neibour();
 
-        void __send_out(Package* package);
+        void __send_out(AdhocPackage* package);
         void __Broadcast_Iam_Orphan();
         
 
         uint8_t __my_hop;
         uint32_t __time_count_up;
-        Package __orphan_package;
-        void broadcast(const uint8_t* message, uint8_t length);
-        void __onPackage_received(const uint8_t * mac, Package* incoming_package);
+        AdhocPackage __orphan_package;
+        void __onPackage_received(const uint8_t * mac, AdhocPackage* incoming_package);
 
 
 

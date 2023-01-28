@@ -5,13 +5,11 @@
 void GuangDa_ShuiWu_GateBoard::__InitHardware(){
     // init gpio.
 	pinMode(PIN_YUNXING_2, OUTPUT);
-	pinMode(PIN_TINGZHI_2, OUTPUT);
+	pinMode(PIN_ZIDONG_2, OUTPUT);
 	pinMode(PIN_GUZHANG_2, OUTPUT);
 	pinMode(PIN_YUNXING_4, OUTPUT);
-	pinMode(PIN_TINGZHI_4, OUTPUT);
+	pinMode(PIN_ZIDONG_4, OUTPUT);
 	pinMode(PIN_GUZHANG_4, OUTPUT);
-
-
 }
 
 void GuangDa_ShuiWu_GateBoard::Init(){

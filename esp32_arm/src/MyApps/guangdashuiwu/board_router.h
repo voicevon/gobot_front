@@ -6,6 +6,8 @@
 class GuangDa_ShuiWu_RouterBoard: public BoardBase{
     public:
         void Init() override;
+
+        
     private:
         void __InitHardware();
 

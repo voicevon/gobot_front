@@ -1,8 +1,8 @@
 #pragma once
 
-class GpioButton{
+class Button_Gpio{
     public:
-        GpioButton(int gpio_id);
+        Button_Gpio(int gpio_id);
         void SpinOnce();
         bool IsPressed();
         bool IsToPressed(){return __is_changing_to_pressed;};  // should be callback?

@@ -2,12 +2,12 @@
 #include "Arduino.h"
 
 
-GpioButton::GpioButton(int gpio_id){
+Button_Gpio::Button_Gpio(int gpio_id){
     __pin_number = gpio_id;
     pinMode(__pin_number, INPUT_PULLUP);
 }
 
-void GpioButton::SpinOnce(){
+void Button_Gpio::SpinOnce(){
     bool is_pressed = ! digitalRead(__pin_number);
     if (is_pressed && (!__last_state_is_pressed)){
         __is_changing_to_pressed = true;
@@ -16,6 +16,6 @@ void GpioButton::SpinOnce(){
 }
 
 
-bool GpioButton::IsPressed(){
+bool Button_Gpio::IsPressed(){
 
 }

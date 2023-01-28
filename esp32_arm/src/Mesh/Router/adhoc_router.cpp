@@ -4,12 +4,7 @@
 #include "MyLibs/basic/logger.h"
 
 
-// void AdhocRouter::__send_out(Package* package){
-//     // Send message via ESP-NOW
-//     uint8_t broadcastAddress[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-//     esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &package, sizeof(package));
-   
-// }
+
 
 void AdhocRouter::SpinOnce(){
     // Logger::Debug("AdhocRouter::SpinOnce()");
@@ -18,9 +13,10 @@ void AdhocRouter::SpinOnce(){
         __time_count_up++;
         if (__time_count_up >= 3999999){
             __time_count_up = 0;
-            Logger::Info("AdhocRouter::SpinOnce()  __Broadcast_Iam_Orphan() " );
+            Logger::Info("AdhocRouter::SpinOnce()  Broadcasting: I_am_Orphan() " );
             Logger::Print("__my_hop", __my_hop);
-            __Broadcast_Iam_Orphan();
+            // __Broadcast_Iam_Orphan();
+            Send(&__orphan_package);
             return;
         }
     }
@@ -45,19 +41,19 @@ void AdhocRouter::Init(bool i_am_net_gate){
     // esp_now_register_recv_cb(__onReceived);
 }
 
-void AdhocRouter::__Broadcast_Iam_Orphan(){
-    // Logger::Debug("AdhocRouter::__Broadcast_Iam_Orphan()");
-    // Tell Others my mac_addr
-    // Package orphan_package;
-    // orphan_package.my_hop = __my_hop;
-    // orphan_package.source_net_id = 0;
-    // orphan_package.payload = "I am orphan";
-    // this->__send_out(&orphan_package);
-    const uint8_t* pack = (const uint8_t*) &__orphan_package;
-    uint8_t len = sizeof(Package);
-    // Logger::Print("len", len);
-    this->broadcast(pack, len);
-}
+// void AdhocRouter::__Broadcast_Iam_Orphan(){
+//     // Logger::Debug("AdhocRouter::__Broadcast_Iam_Orphan()");
+//     // Tell Others my mac_addr
+//     // AdhocPackage orphan_package;
+//     // orphan_package.my_hop = __my_hop;
+//     // orphan_package.source_net_id = 0;
+//     // orphan_package.payload = "I am orphan";
+//     // this->__send_out(&orphan_package);
+//     const uint8_t* pack = (const uint8_t*) &__orphan_package;
+//     uint8_t len = sizeof(AdhocPackage);
+//     // Logger::Print("len", len);
+//     this->broadcast(pack, len);
+// }
 
 bool AdhocRouter::__is_same_mac_addr(uint8_t* addr_a, uint8_t* addr_b){
     for (int i=0; i<6; i++){
@@ -85,7 +81,7 @@ Neibour* AdhocRouter::__find_blank_neibour(){
     return NULL;
 }
 
-void AdhocRouter::__onPackage_received(const uint8_t * mac, Package* incoming_package){
+void AdhocRouter::__onPackage_received(const uint8_t * mac, AdhocPackage* incoming_package){
     // incoming_package->PrintOut("from:  AdhocRouter::onReceived() ");
     uint8_t*  the_mac = (uint8_t*) (mac);
     Neibour* his = __search_neibour(the_mac);
@@ -133,7 +129,7 @@ void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, i
     }
 
     // from incomingDate to package, might effect routing_table
-    Package* incoming_package = (Package*) (incomingData);
+    AdhocPackage* incoming_package = (AdhocPackage*) (incomingData);
     __onPackage_received(mac, incoming_package);
 
     // if (incoming_package->payload == 'This is an orphan package'){
@@ -143,14 +139,11 @@ void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, i
     //     // to avoid message flooding.
     //     return;
     // }
-
-    const uint8_t* pack = (const uint8_t*) &incoming_package;
-    uint8_t len = sizeof(Package);
-    this->broadcast(pack, len);
-
+    Send(incoming_package);
 }
 
-void AdhocRouter::broadcast(const uint8_t* message, uint8_t length){
+// void AdhocRouter::broadcast(const uint8_t* message, uint8_t length){
+void AdhocRouter::Send(AdhocPackage* pkg){
     // Emulates a broadcast
     // Broadcast a message to every device in range
     uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -160,11 +153,13 @@ void AdhocRouter::broadcast(const uint8_t* message, uint8_t length){
         esp_now_add_peer(&peerInfo);
     }
     // Send message
+    const uint8_t* message = (const uint8_t*) pkg;
+    uint8_t length = sizeof(AdhocPackage);
     esp_err_t result = esp_now_send(broadcastAddress, message, length);
 
     // Print results to serial monitor
     if (result == ESP_OK){
-        Serial.println("Broadcast message success");
+        Serial.print("Tx ");
     } else if (result == ESP_ERR_ESPNOW_NOT_INIT) {
         Serial.println("ESP-NOW not Init.");
     } else if (result == ESP_ERR_ESPNOW_ARG) {

@@ -12,7 +12,7 @@ class Neibour{
 };
 
 
-class Package{
+class AdhocPackage{
     public:
         uint8_t my_hop;
         char net_id[6];

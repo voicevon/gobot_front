@@ -3,10 +3,10 @@
 
 
 #define PIN_YUNXING_4 13
-#define PIN_TINGZHI_4 32
+#define PIN_ZIDONG_4 32
 #define PIN_GUZHANG_4 4
 #define PIN_YUNXING_2 25
-#define PIN_TINGZHI_2 27
+#define PIN_ZIDONG_2 27
 #define PIN_GUZHANG_2 14
 
 
