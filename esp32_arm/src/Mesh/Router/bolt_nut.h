@@ -5,6 +5,7 @@
 
 class Neibour{
     public:
+        uint8_t net_id;   // In case of:  multi mesh-network work in same area. ??
         uint8_t id;   // 0 = empty 
         uint8_t hop;
         char mac_addr[6];

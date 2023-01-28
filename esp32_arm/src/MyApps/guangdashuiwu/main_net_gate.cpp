@@ -2,23 +2,16 @@
 #ifdef I_AM_GUANGDA_SHUIWU_NETGATE
 
 #include "Mesh/Router/adhoc_router.h"
+#include "board.h"
 
-#define PIN_YUNXING_4 13
-#define PIN_TINGZHI_4 32
-#define PIN_GUZHANG_4 4
-#define PIN_YUNXING_2 25
-#define PIN_TINGZHI_2 27
-#define PIN_GUZHANG_2 14
+
 
 AdhocRouter router;
+GuangDa_ShuiWu_Board board;
 
 void setup(){
-  pinMode(PIN_YUNXING_2, OUTPUT);
-  pinMode(PIN_TINGZHI_2, OUTPUT);
-  pinMode(PIN_GUZHANG_2, OUTPUT);
-  pinMode(PIN_YUNXING_4, OUTPUT);
-  pinMode(PIN_TINGZHI_4, OUTPUT);
-  pinMode(PIN_GUZHANG_4, OUTPUT);
+    board.Init();
+
 }
 
 void loop(){

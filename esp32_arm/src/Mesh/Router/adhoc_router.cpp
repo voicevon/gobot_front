@@ -3,15 +3,14 @@
 #ifdef USING_MESH
 
 #include "adhoc_router.h"
-#include "WiFi.h"
-#include <esp_now.h>
+#include "MyLibs/basic/logger.h"
 
 // MAC Address of responder - edit as required
-uint8_t broadcastAddress[] = {0x24, 0x6F, 0x28, 0x7A, 0xAE, 0x7C};
 
 
 void AdhocRouter::__send_out(Package* package){
-      // Send message via ESP-NOW
+    // Send message via ESP-NOW
+    uint8_t broadcastAddress[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
     esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &package, sizeof(package));
    
 }
@@ -23,6 +22,7 @@ void AdhocRouter::SpinOnce(){
         if (__time_count_up >= 99999){
             __time_count_up = 0;
             __Broadcast_Iam_Orphan();
+            Logger::Info("AdhocRouter::SpinOnce()  __Broadcast_Iam_Orphan() " );
             return;
         }
     }
@@ -36,6 +36,7 @@ void AdhocRouter::SpinOnce(){
 }
 
 void AdhocRouter::Init(){
+    __my_hop = 0xff;
     // Init route table
     for (int i=0; i<ROUTER_TABLE_ROWS; i++){
         Neibour* his = &__my_neibours[i];
@@ -43,7 +44,7 @@ void AdhocRouter::Init(){
         his->hop = 0xff;
     }
       // Register callback function
-    esp_now_register_recv_cb(__onReceived);
+    // esp_now_register_recv_cb(__onReceived);
 }
 
 void AdhocRouter::__Broadcast_Iam_Orphan(){
@@ -52,7 +53,10 @@ void AdhocRouter::__Broadcast_Iam_Orphan(){
     orphan_package.my_hop = __my_hop;
     // orphan_package.source_net_id = 0;
     // orphan_package.payload = "I am orphan";
-    this->__send_out(&orphan_package);
+    // this->__send_out(&orphan_package);
+    const uint8_t* pack = (const uint8_t*) &orphan_package;
+    uint8_t len = sizeof(Package);
+    this->broadcast(pack, len);
 }
 
 // void AdhocRouter::__GetMyMacAddr(uint8_t* mac){
@@ -60,7 +64,7 @@ void AdhocRouter::__Broadcast_Iam_Orphan(){
 
 // }
 
-void AdhocRouter::__onReceived(const uint8_t * mac, const uint8_t *incomingData, int len){
+void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, int len){
     for(int i=0; i<ROUTER_TABLE_ROWS; i++){
         Neibour * his = &__my_neibours[i];
         if (his->id == 0){
@@ -72,5 +76,34 @@ void AdhocRouter::__onReceived(const uint8_t * mac, const uint8_t *incomingData,
     }
 }
 
+void AdhocRouter::broadcast(const uint8_t* message, uint8_t length){
+    // Emulates a broadcast
+    // Broadcast a message to every device in range
+    uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+    esp_now_peer_info_t peerInfo = {};
+    memcpy(&peerInfo.peer_addr, broadcastAddress, 6);
+    if (!esp_now_is_peer_exist(broadcastAddress)){
+        esp_now_add_peer(&peerInfo);
+    }
+    // Send message
+    esp_err_t result = esp_now_send(broadcastAddress,message, length);
+
+    // Print results to serial monitor
+    if (result == ESP_OK){
+        Serial.println("Broadcast message success");
+    } else if (result == ESP_ERR_ESPNOW_NOT_INIT) {
+        Serial.println("ESP-NOW not Init.");
+    } else if (result == ESP_ERR_ESPNOW_ARG) {
+        Serial.println("Invalid Argument");
+    } else if (result == ESP_ERR_ESPNOW_INTERNAL)  {
+        Serial.println("Internal Error");
+    } else if (result == ESP_ERR_ESPNOW_NO_MEM)  {
+        Serial.println("ESP_ERR_ESPNOW_NO_MEM");
+    } else if (result == ESP_ERR_ESPNOW_NOT_FOUND)  {
+        Serial.println("Peer not found.");
+    } else {
+        Serial.println("Unknown error");
+    }
+}
 
 #endif

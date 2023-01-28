@@ -2,20 +2,19 @@
 #ifdef I_AM_GUANGDA_SHUIWU_NODE
 
 #include "Mesh/Router/adhoc_router.h"
-#define PIN_YUNXING 27  //D5
-#define PIN_TINGZHI 26  //D6
-#define PIN_GUZHANG 25  //D7
+#include "board.h"
+
 
 
 AdhocRouter router;
+GuangDa_ShuiWu_Board board;
 
 
 
 
 void setup(){
-  pinMode(PIN_YUNXING, INPUT_PULLUP);
-  pinMode(PIN_TINGZHI, INPUT_PULLUP);
-  pinMode(PIN_GUZHANG, INPUT_PULLUP);
+    board.Init();
+
 }
 
 void loop(){
