@@ -85,19 +85,8 @@ Neibour* AdhocRouter::__find_blank_neibour(){
     return NULL;
 }
 
-void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, int len){
-    Logger::Debug("AdhocRouter::onReceived");
-    // from incomingDate to package
-
-    Logger::Print("len", len);
-    Serial.print("mac_addr= ");
-    for(int i=0; i<6; i++){
-        Serial.print(" ");
-        Serial.print(*(mac+i));
-    }
-    Serial.println("");
-    Package* incoming_package = (Package*) (incomingData);
-    incoming_package->PrintOut("from:  AdhocRouter::onReceived() ");
+void AdhocRouter::__onPackage_received(const uint8_t * mac, Package* incoming_package){
+    // incoming_package->PrintOut("from:  AdhocRouter::onReceived() ");
     uint8_t*  the_mac = (uint8_t*) (mac);
     Neibour* his = __search_neibour(the_mac);
     if (his == NULL){
@@ -127,6 +116,38 @@ void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, i
             Logger::Print("now my_hop", __my_hop);
         }
     }
+
+}
+// TODO:  the shortest routing might be loss connection.
+void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, int len){
+    bool debug = false;
+    if (debug){
+        Logger::Debug("AdhocRouter::onReceived");
+        Logger::Print("len", len);
+        Serial.print("mac_addr= ");
+        for(int i=0; i<6; i++){
+            Serial.print(" ");
+            Serial.print(*(mac+i));
+        }
+        Serial.println("");
+    }
+
+    // from incomingDate to package, might effect routing_table
+    Package* incoming_package = (Package*) (incomingData);
+    __onPackage_received(mac, incoming_package);
+
+    // if (incoming_package->payload == 'This is an orphan package'){
+    //     return;
+
+    // if (this_is_a_repeated_message){
+    //     // to avoid message flooding.
+    //     return;
+    // }
+
+    const uint8_t* pack = (const uint8_t*) &incoming_package;
+    uint8_t len = sizeof(Package);
+    this->broadcast(pack, len);
+
 }
 
 void AdhocRouter::broadcast(const uint8_t* message, uint8_t length){
@@ -139,7 +160,7 @@ void AdhocRouter::broadcast(const uint8_t* message, uint8_t length){
         esp_now_add_peer(&peerInfo);
     }
     // Send message
-    esp_err_t result = esp_now_send(broadcastAddress,message, length);
+    esp_err_t result = esp_now_send(broadcastAddress, message, length);
 
     // Print results to serial monitor
     if (result == ESP_OK){

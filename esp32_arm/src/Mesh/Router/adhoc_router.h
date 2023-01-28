@@ -12,10 +12,9 @@ class AdhocRouter{
         //     return instance;
         // }
         void onReceived(const uint8_t * mac, const uint8_t *incomingData, int len);
-        
         void Init(bool i_am_net_gate);
         void SpinOnce();
-        void BroadcastMyMacAddr();
+        // void BroadcastMyMacAddr();
 
     protected:
 
@@ -34,6 +33,8 @@ class AdhocRouter{
         uint32_t __time_count_up;
         Package __orphan_package;
         void broadcast(const uint8_t* message, uint8_t length);
+        void __onPackage_received(const uint8_t * mac, Package* incoming_package);
+
 
 
 

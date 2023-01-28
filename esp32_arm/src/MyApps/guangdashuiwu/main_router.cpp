@@ -8,7 +8,7 @@ AdhocRouter router;
 GuangDa_ShuiWu_RouterBoard board;
 
 void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int len){
-    Logger::Debug("on_esp_now_received");
+    // Logger::Debug("on_esp_now_received");
     router.onReceived( mac, incomingData, len);
 }
 
