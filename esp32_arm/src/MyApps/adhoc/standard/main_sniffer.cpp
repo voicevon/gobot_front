@@ -1,20 +1,20 @@
 #include "all_applications.h"
-#ifdef I_AM_GUANGDA_SHUIWU_ROUTER
+#ifdef I_AM_ADHOC_SNIFFER
 
-#include "board_router.h"
-#include "Mesh/Router/adhoc_router.h"
+#include "board.h"
+#include "Mesh/Router/adhoc_sniffer.h"
 
-AdhocRouter router;
+AdhocSniffer sniffer;
 GuangDa_ShuiWu_RouterBoard board;
 
 void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int len){
     // Logger::Debug("on_esp_now_received");
-    router.onReceived( mac, incomingData, len);
+    sniffer.onReceived( mac, incomingData, len);
 }
 
 void setup(){
     board.Init();
-    router.Init();
+    sniffer.Init();
 
     WiFi.mode(WIFI_STA);
     // Initilize ESP-NOW
@@ -28,7 +28,10 @@ void setup(){
 }
 
 void loop(){
-    router.SpinOnce();
+    sniffer.SpinOnce();
+    if (sniffer.is_new_rx_package){
+        sniffer.rx_package.PrintOut("sniffer got a new Package ");
+    }
 }
 
 
