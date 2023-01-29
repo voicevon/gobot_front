@@ -52,6 +52,8 @@ void AdhocBase::_SendOrphan_count_down(){
     if (__time_count_up >= 3999999){
         Logger::Info("AdhocBase::SendOrphan_count_down() " );
         Logger::Print("__my_hop", __my_hop);
+
+        __orphan_package.sender_hop = __my_hop;        
         __orphan_package.PrintOut("AdhocBase::SendOrphan_count_down()  sending orphan...");
         Send(&__orphan_package);
         return;

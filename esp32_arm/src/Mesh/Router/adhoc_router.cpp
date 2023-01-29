@@ -3,45 +3,11 @@
 #include "adhoc_router.h"
 #include "MyLibs/basic/logger.h"
 
-// Neibour* AdhocRouter::__find_best_leader(){
-//     // So, What is the best,  lowest hop and stalability. consider these two together.
-//     if (__my_leader == NULL){
-//         Neibour* leader = NULL;
-//         Neibour* index;
-//         int min_hop = 200;
-//         for (int i=0; i<ROUTER_TABLE_ROWS; i++){
-//             index = &__my_neibours[i];
-//             if (index->hop < min_hop){
-//                 leader = index;
-//                 min_hop = index->hop;
-//             }
-//         }
-//         return leader;
-//     }
-// }
-
 void AdhocRouter::SpinOnce(){
     // Logger::Debug("AdhocRouter::SpinOnce()");
     _SendOrphan_count_down();   //TODO: send leader_and_me to net_gate
-    // try to find best header from routing_table.
-    if (__my_leader == NULL){
-        // find a temperary leader
-        for (int i=0; i<ROUTER_TABLE_ROWS; i++){
-            if (__my_neibours[i].hop < __my_hop){
-                __my_leader = &__my_neibours[i];
-                __my_hop = __my_leader->hop + 1;
-                __orphan_package.sender_hop = __my_hop;
-                Logger::Info("AdhocRouter::SpinOnce()  Got a temperory leader");
-                Logger::Print("__my_hop", __my_hop);
-            }
-        }
-    }
 }
 
-// bool AdhocRouter::IsJoined_Mesh(){
-//     if (__my_hop < 200) return true;
-//     return false;
-// }
 
 void AdhocRouter::Init(uint8_t my_app_node_id){
     _Init_EspNow();
@@ -59,8 +25,6 @@ void AdhocRouter::Init(uint8_t my_app_node_id){
     for (int i=0; i<ROUTER_TABLE_ROWS; i++){
         Neibour* his = &__my_neibours[i];
         his->app_node_id = 0;  // Not an avaliable node.
-        his->hop = 0xff;
-        his->qos = 0;
     }
 }
 
@@ -95,9 +59,18 @@ void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incomin
         }
         // just save to neibour_table,  we don't set hop right now.
         blank->app_node_id = incoming_package->app_source_node_id;
-        blank->hop = 0xff;
+        blank->hop = incoming_package->sender_hop;
         blank->qos = 90;
         AdhocHelper::CopyMacAddr(the_mac, blank->mac_addr);
+        if (__my_leader == NULL){
+            if (blank->hop < __my_hop){
+                // set as a temperory leader.
+                __my_leader = blank;
+                __my_hop = __my_leader->hop + 1;
+                Logger::Info("AdhocRouter::__sniff_air_package():  Got a temperory leader");
+                Logger::Print("__my_hop", __my_hop);
+            }
+        }
     }else{
         // might update his hop, even my_hop
         his->hop = incoming_package->sender_hop;
@@ -114,17 +87,17 @@ void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incomin
                 }
             }
             if (his->hop <= __my_hop){
-                // This neibour is my new leader
-                __my_leader = his;
-                __orphan_package.sender_hop = __my_hop;
-                Logger::Info("AdhocRouter::__sniff_air_package()  Got a better leader");
-                Logger::Print("__my_hop", __my_hop);
+                if (his != __my_leader){
+                    // This neibour is my new leader
+                    __my_leader = his;
+                    Logger::Info("AdhocRouter::__sniff_air_package()  Got a better leader");
+                    Logger::Print("__my_hop", __my_hop);
+                }
             }
         }
     }
 }
 
-// TODO:  the shortest routing might be loss connection.
 void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, int len){
     bool debug = false;
     if (debug){
@@ -144,8 +117,8 @@ void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, i
 
     if (AdhocHelper::IsSameMacAddr(incoming_package->to_mac_addr, __my_mac_addr)){
         // I am the target node of the package.
-        if (__my_hop < 200){
-            // have joint a network,  forward the package ,
+        if (__my_leader != NULL){   // Is this necessary?  Any way, safe firstly.
+            // forward the package ,
             incoming_package->sender_hop = __my_hop; 
             AdhocHelper::CopyMacAddr(__my_leader->mac_addr , incoming_package->to_mac_addr);
             Send(incoming_package);
