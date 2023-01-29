@@ -1,12 +1,12 @@
-#include "all_applications.h"
-#ifdef I_AM_VSC
-#include "MyApps/vsc/board/board_vsc.h"
+
+#include "board/board_vsc.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
-#include "MyApps/vsc/vsc_app.h"
-#include "MyApps/vsc/robot/vsc_robot.h"
+#include "vsc_app.h"
+#include "robot/vsc_robot.h"
 
-
+#include "all_applications.h"
+#ifdef I_AM_VSC
 Vsc_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
@@ -46,7 +46,7 @@ void setup(){
     
     setup_encoder();
     board.LinkEncoderSensor(&encoder);
-    board.Init(true);
+    board.Init();
 
     test_board();
     robot.Init(&board);

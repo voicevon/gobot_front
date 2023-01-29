@@ -30,7 +30,10 @@ void setup(){
 
 void loop(){
     gate.SpinOnce();
-
+    if (gate.is_new_rx_package){
+        gate.is_new_rx_package = false;
+        gate.rx_package.PrintOut("loop()  new rx_package");
+    }
     uint8_t io = gate.rx_package.app_payload[0];
     if (gate.rx_package.app_source_node_id == 4){
         digitalWrite(PIN_YUNXING_4, ! (io & 1));

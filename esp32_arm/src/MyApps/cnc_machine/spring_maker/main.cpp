@@ -1,11 +1,11 @@
-#include "all_applications.h"
-#ifdef I_AM_SPRING_MAKER
 #include "board/board.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
-// #include "IoT/main_mqtt.h"
 #include "spring_maker_app.h"
 #include "robot/spring_maker_robot.h"
+
+#include "all_applications.h"
+#ifdef I_AM_SPRING_MAKER
 
 Board_SpringMaker board;
 SpringMakerApp app;
@@ -17,7 +17,7 @@ long high_count =1;
 long low_count =1;
 
 void setup(){
-    board.Init(true);
+    board.Init();
     robot.Init(&board);    
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);

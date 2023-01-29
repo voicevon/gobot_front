@@ -5,8 +5,8 @@
 #include "AGV/map_road_station/map_navigator.h"
 #include "AGV/agv_base.h"
 #include "MyApps/asar_agv/board/board_all_in_one_2205.h"
-#include "MyApps/box_carrier/box_carrier_app.h"
-#include "MyApps/box_carrier/robot/box_carrier_robot.h"
+#include "MyApps/cnc_machine/box_carrier/box_carrier_app.h"
+#include "MyApps/cnc_machine/box_carrier/robot/box_carrier_robot.h"
 
 
 class MqttReportData{
@@ -43,7 +43,7 @@ class BotAsrsAgvCoreYZ: public MqttMessageConsumer{
         };
 
         BotAsrsAgvCoreYZ(uint16_t id);
-        void InitAllinOne(BoardAllInOne* board, StepControl* stepControl);
+        // void InitAllinOne(BoardAllInOne* board, StepControl* stepControl);
 
         AsrsBase asrs = AsrsBase();
         AgvBase agv = AgvBase();

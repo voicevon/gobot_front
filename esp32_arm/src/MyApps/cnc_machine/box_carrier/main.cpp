@@ -1,15 +1,14 @@
-#include "all_applications.h"
-#ifdef I_AM_GARMENT_BOX_CARRIER
+
 
 
 #include "MyApps/asar_agv/board/board_all_in_one_2205.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_carrier_app.h"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
-// #include "IoT/main_mqtt.h"
 #include "robot/box_carrier_robot.h"
 
-
+#include "all_applications.h"
+#ifdef I_AM_GARMENT_BOX_CARRIER
 BoardAllInOne board = BoardAllInOne();
 BoxCarrierApp app;
 GcodeQueue gcode_queue = GcodeQueue();
@@ -17,8 +16,9 @@ MessageQueue mqtt_command_queue = MessageQueue();
 BoxCarrierRobot robot;
 
 
+
 void setup(){
-    board.Init(true);
+    board.Init();
     // cncMachine.Init('A');
     // cnc.Init(&board.cnc_board);
     // cnc.LinkStepControl(&objStepControl);

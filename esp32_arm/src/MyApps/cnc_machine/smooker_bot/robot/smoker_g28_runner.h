@@ -1,5 +1,5 @@
 #include "Robot/gcode_runner/g28_runner.h"
-#include "MyApps/smooker_bot/board/smoker_board.h"
+#include "MyApps/cnc_machine/smooker_bot/board/smoker_board.h"
 
 class Smoker_G28_Runner: public G28_Runner{
     public:

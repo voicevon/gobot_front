@@ -1,15 +1,15 @@
-#include "all_applications.h"
-#ifdef I_AM_GOBOT_MAIN
+
 
 #include "board/board.h"
 #include "board/robot_eef/gobot_main_eef.h"
 #include "FastAccelStepper.h"
-// #include "ESP32Step/src/TeensyStep.h"
 #include "robot/gobot_main_robot.h"
 #include "gobot_main_app.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/from_mqtt_client_to_remote_queue.h"
 
+#include "all_applications.h"
+#ifdef I_AM_GOBOT_MAIN
 GobotMain_Board board;
 GobotMainRobot robot; 
 GobotMain_App app;

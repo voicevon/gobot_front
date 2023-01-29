@@ -4,7 +4,7 @@
 #include "CNC/gcode/gcode_queue.h"
 #include "CNC/gcode/gcode_producer.h"
 #include "IoT/mqtt_message_consumer.h"
-#include  "MyApps/gobot_house/HouseMap.h"
+#include  "MyApps/cnc_machine/gobot_house/HouseMap.h"
 
 class GobotHouseApp: public GcodeProducer, public MqttMessageConsumer{
     public:

@@ -6,7 +6,7 @@
 #include "gmcode_runner/twh2_m42_switch_output.h"
 #include "gmcode_runner/json_loader.h"
 
-#include "MyApps/teeth_wh_v2/board/teeth_wh_board.h"
+#include "MyApps/wcs_robot/teeth_wh_v2/board/teeth_wh_board.h"
 
 // #define ROWS_COUNT 20
 // #define COLS_COUNT 8

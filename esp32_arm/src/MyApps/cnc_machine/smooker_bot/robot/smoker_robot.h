@@ -2,7 +2,7 @@
 
 
 #include "Robot/robot_base.h"
-#include "MyApps/smooker_bot/board/smoker_board.h"
+#include "MyApps/cnc_machine/smooker_bot/board/smoker_board.h"
 #include "smoker_g28_runner.h"
 #include "arm_solution_circle_loop/circle_loop_arm_solution.h"
 

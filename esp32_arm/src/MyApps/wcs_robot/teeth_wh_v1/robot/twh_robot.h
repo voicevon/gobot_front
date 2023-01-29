@@ -4,8 +4,8 @@
 #include "twh_xa_arm_solution.h"
 #include "gmcode_runner/twh_g28_runner.h"
 #include "gmcode_runner/twh_m42_switch_output.h"
-#include "MyApps/teeth_wh_v1/board/teeth_wh_board.h"
-#include "MyApps/teeth_wh_v1/board/eef/teeth_wh_eef.h"
+#include "MyApps/wcs_robot/teeth_wh_v1/board/teeth_wh_board.h"
+#include "MyApps/wcs_robot/teeth_wh_v1/board/eef/teeth_wh_eef.h"
 
 // #define ROWS_COUNT 20
 // #define COLS_COUNT 8

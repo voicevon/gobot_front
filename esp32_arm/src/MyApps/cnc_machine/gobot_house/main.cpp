@@ -1,15 +1,15 @@
-#include "all_applications.h"
-#ifdef I_AM_GOBOT_HOUSE
+
 
 #include "MyLibs/MyFunctions.hpp" 
 #include "IoT/remote_queue_bridge_mqtt.h"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
-
 #include "board_2206/board_gobot_house.h"
 #include "gobot_house_app.h"
 #include "robot/gobot_house_robot.h"
-
 #include "FastAccelStepper.h"
+
+#include "all_applications.h"
+#ifdef I_AM_GOBOT_HOUSE
 
 Board_GobotHouse_2206 board = Board_GobotHouse_2206();
 GcodeQueue gcode_queue;
@@ -23,9 +23,23 @@ GobotHouseRobot robot;
 // void cnc_test();
 
 // #define ROBOT_SERIAL_ID 111
+// #include "board_2206/board_tester.h"
+
+void board_test(){
+    // GobotHouse_2206_BoardTest tester = GobotHouse_2206_BoardTest(&stepControl);
+    // tester.LinkBoard(&board);
+    // tester.LinkStepControl(&stepcontrol);
+    // tester.Test_EefLoadUnload(0);
+    // // tester.Test_AllHomers(0);
+    // tester.Test_StepperDriver_OnAlpha(0);
+    // tester.Test_ServoDriver_OnBeta(0);
+
+}
+
+
 
 void setup(){
-    board.Init(true);
+    board.Init();
     // board_test();
     
     // cncMachine.Init('M');
@@ -58,17 +72,7 @@ void loop(){
 }
 
 
-// #include "board_2206/board_tester.h"
-void board_test(){
-    // GobotHouse_2206_BoardTest tester = GobotHouse_2206_BoardTest(&stepControl);
-    // tester.LinkBoard(&board);
-    // tester.LinkStepControl(&stepcontrol);
-    // tester.Test_EefLoadUnload(0);
-    // // tester.Test_AllHomers(0);
-    // tester.Test_StepperDriver_OnAlpha(0);
-    // tester.Test_ServoDriver_OnBeta(0);
 
-}
 
 
 

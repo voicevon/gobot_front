@@ -1,6 +1,6 @@
 #pragma once
 #include "Robot/mcode_runner/m42_runner_switch_output.h"
-#include "MyApps/teeth_wh_v4_ship_out/board/twh4_ship_out_board.h"
+#include "MyApps/wcs_robot/teeth_wh_v4_ship_out/board/twh4_ship_out_board.h"
 
 
 class Twh4_Shipout_M42_Runner_Switch_Output: public M42_Runner_Switch_Output{

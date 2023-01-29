@@ -1,14 +1,16 @@
 #ifndef __ALL_APPLICATIONS_H_
 #define __ALL_APPLICATIONS_H_
 
+// #define I_AM_PURE_TESTER
+
 
 // #define I_AM_DRV8302
 
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
-// #define I_AM_ROBOT_ASRS_AGV         // TO BE reconstruct a lot/
-// #define I_AM_GARMENT_BOX_MOVER   //CoreAZ
-// #define I_AM_GARMENT_BOX_CARRIER    // CoreYZ
+// #define I_AM_ROBOT_ASRS_AGV         // TO BE reconstruct a lot/  
+// #define I_AM_GARMENT_BOX_MOVER         //  CoreAZ  TO BE reconstruct a lot
+// #define I_AM_GARMENT_BOX_CARRIER    // CoreYZ  TO BE reconstruct a lot
 
 // #define I_AM_GOBOT_HOUSE_2205   //Depricated
 // #define I_AM_GOBOT_HOUSE_2206   //Depricated with arm solution
@@ -20,11 +22,10 @@
 // #define I_AM_TEETH_WAREHOUSE_V2
 // #define I_AM_TEETH_WAREHOUSE_V2_ROW
 // #define I_AM_TEETH_WAREHOUSE_V4_SHIP_OUT
-// #define I_AM_PURE_TESTER
 
 // #define I_AM_ADHOC_ROUTER
-#define I_AM_ADHOC_SNIFFER
-// #define I_AM_GUANGDA_SHUIWU_NETGATE
+// #define I_AM_ADHOC_SNIFFER
+#define I_AM_GUANGDA_SHUIWU_NETGATE
 // #define I_AM_GUANGDA_SHUIWU_SENSOR
 
 

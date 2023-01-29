@@ -1,12 +1,13 @@
-#include "all_applications.h"
-#ifdef I_AM_GARMENT_BOX_MOVER
+
 
 #include "MyApps/asar_agv/board/sub_board_cnc2205/board_cnc_2205.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_mover_app.h"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
-// #include "IoT/main_mqtt.h"
 #include "robot/box_mover_robot.h"
+
+#include "all_applications.h"
+#ifdef I_AM_GARMENT_BOX_MOVER
 
 Board2205Cnc board = Board2205Cnc();
 BoxMoverApp app = BoxMoverApp();
@@ -14,8 +15,9 @@ BoxMoverRobot robot;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
+
 void setup(){
-    board.Init(true);
+    board.Init();
 
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);

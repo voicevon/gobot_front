@@ -1,15 +1,17 @@
+
+#include "MyLibs/MyFunctions.hpp"
+#include "IoT/from_mqtt_client_to_remote_queue.h"
+#include "board/twh2_row_board.h"
+#include "twh2row_app.h"
+#include "robot/twh2row_robot.h"
+
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_V2_ROW
+
 
 #define MY_ROBOT_ROW_ID 1
 #define MQTT_TOPIC_GCODE "twh/221109/r1/gcode"   //report state topic =  "twh/221109/r1/state"
 #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "twh/221109/r1/state"
-
-#include "MyLibs/MyFunctions.hpp"
-#include "IoT/from_mqtt_client_to_remote_queue.h"
-#include "MyApps/teeth_wh_v2_row/board/twh2_row_board.h"
-#include "MyApps/teeth_wh_v2_row/twh2row_app.h"
-#include "MyApps/teeth_wh_v2_row/robot/twh2row_robot.h"
 
     // char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_200K];
 

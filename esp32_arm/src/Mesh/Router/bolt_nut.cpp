@@ -3,11 +3,14 @@
 
 void AdhocPackage::PrintOut(const char * title){
     Logger::Info(title);
-    Serial.print("source=");
-    Serial.print(network_id);
-    Serial.print(" hop= ");
+    // Serial.print("network_id= ");
+    // Serial.print(network_id);
+    Serial.print("\thop= ");
     Serial.print(my_hop);
-    Serial.println(" ");
+    Serial.print("\tsource_node= ");
+    Serial.print(app_source_node_id);
+    Serial.print("\tpayload[0]=");
+    Serial.print(app_payload[0]);
 }
 
 

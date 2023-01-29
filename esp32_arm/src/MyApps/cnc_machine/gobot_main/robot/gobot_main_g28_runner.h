@@ -1,5 +1,5 @@
 #include "Robot/gcode_runner/g28_runner.h"
-#include "MyApps/gobot_main/board/board.h"
+#include "MyApps/cnc_machine/gobot_main/board/board.h"
 
 class GobotMain_G28_Runner: public G28_Runner{
     public:

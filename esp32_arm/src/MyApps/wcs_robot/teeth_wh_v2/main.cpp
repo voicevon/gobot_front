@@ -1,14 +1,14 @@
-#include "all_applications.h"
-#ifdef I_AM_TEETH_WAREHOUSE_V2
+
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
-// #include "IoT/main_mqtt.h"
-#include "MyApps/teeth_wh_v2/board/teeth_wh_board.h"
-#include "MyApps/teeth_wh_v2/teeth_wh_app.h"
-#include "MyApps/teeth_wh_v2/robot/twh2_robot.h"
+#include "board/teeth_wh_board.h"
+#include "teeth_wh_app.h"
+#include "robot/twh2_robot.h"
     // char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_200K];
 
+#include "all_applications.h"
+#ifdef I_AM_TEETH_WAREHOUSE_V2
 
 Twh2_Board board;
 GcodeQueue gcode_queue;

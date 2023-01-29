@@ -2,7 +2,7 @@
 
 
 #include "Robot/robot_base.h"
-#include "MyApps/gobot_main/board/board.h"
+#include "MyApps/cnc_machine/gobot_main/board/board.h"
 #include "gobot_house_g28_runner.h"
 #include "CNC/arm_solution/scara_xy_ab/scara_xy_ab_arm_solution.h"
 

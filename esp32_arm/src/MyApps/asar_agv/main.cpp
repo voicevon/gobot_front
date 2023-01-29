@@ -1,10 +1,15 @@
-#include "all_applications.h"
-#ifdef I_AM_ROBOT_ASRS_AGV
+
 
 #include "MyLibs/MyFunctions.hpp"
 #include "garment_bot.h"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
+
+#include "MyBoards/board_test/board_test_agv.h"
+#include "MyBoards/board_test/board_test_asrs.h"
 // #include "IoT/main_mqtt.h"
+
+#include "all_applications.h"
+#ifdef I_AM_ROBOT_ASRS_AGV
 
 StepControl objStepControl;  // This object can not inside any object?
 BoardAllInOne board = BoardAllInOne();
@@ -12,8 +17,6 @@ BotAsrsAgvCoreYZ robot= BotAsrsAgvCoreYZ(ROBOT_SERIAL_ID);
 MessageQueue garment_bot_message_queue = MessageQueue();
 
 
-#include "MyBoards/board_test/board_test_agv.h"
-#include "MyBoards/board_test/board_test_asrs.h"
 
 
 
@@ -46,12 +49,12 @@ void function_test(){
 }
 
 void setup(){
-    board.Init(true);
+    board.Init();
     unit_test();
     board.Test_ScanI2cBuses(0);
 
     // cncMachine.Init('S');
-    robot.InitAllinOne(&board, &objStepControl);
+    // robot.InitAllinOne(&board, &objStepControl);
 
    // mqtt, bridge, receiver.
     // connect_to_mqtt_broker();
