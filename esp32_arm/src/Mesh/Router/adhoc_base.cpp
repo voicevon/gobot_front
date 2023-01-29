@@ -1,7 +1,19 @@
 #include "adhoc_base.h"
+#include "MyLibs/basic/logger.h"
 
 
+void AdhocBase::_Init_EspNow(){
+    WiFi.mode(WIFI_STA);
+    // Initilize ESP-NOW
+    if (esp_now_init() != ESP_OK) {
+        Logger::Error("AdhocBase::_Init_EspNow()     Error initializing ESP-NOW");
+        Logger::Halt(" esp_now_init()  should be ESP_OK ,   very low level  issue.");
+        return;
+    }
+    ESP_ERROR_CHECK(esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_LR));
+}
 void AdhocBase::Send(AdhocPackage* pkg){
+    __time_count_up = 0;
     // Emulates a broadcast
     // Broadcast a message to every device in range
     uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -30,5 +42,19 @@ void AdhocBase::Send(AdhocPackage* pkg){
         Serial.println("Peer not found.");
     } else {
         Serial.println("Unknown error");
+    }
+}
+
+void AdhocBase::SendOrphan_count_down(){
+    // Logger::Debug("AdhocBase::SpinOnce()");
+    // Logger::Print("'__my_hop", __my_hop);
+    __time_count_up++;
+    if (__time_count_up >= 3999999){
+        __time_count_up = 0;
+        Logger::Info("AdhocGate::SpinOnce()  Broadcasting: I_am_net_gate " );
+        Logger::Print("__my_hop", __my_hop);
+        __orphan_package.PrintOut("AdhocBase::SendOrphan_count_down()  sending orphan...");
+        Send(&__orphan_package);
+        return;
     }
 }

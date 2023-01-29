@@ -9,6 +9,7 @@ class AdhocGate: public AdhocBase{
 
         void SpinOnce() override;
         void Init() override;
+
     protected:
         // uint8_t _GetMyHop() override {return 1;};
 

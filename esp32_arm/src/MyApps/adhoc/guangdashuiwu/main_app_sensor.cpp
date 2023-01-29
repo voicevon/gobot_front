@@ -20,13 +20,7 @@ void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int l
 void setup(){
     board.Init();
     router.Init();
-    WiFi.mode(WIFI_STA);
-    // Initilize ESP-NOW
-    if (esp_now_init() != ESP_OK) {
-        Logger::Error("Error initializing ESP-NOW");
-        Logger::Halt("????");
-        return;
-    }
+
     esp_now_register_recv_cb(on_esp_now_received);
 }
 

@@ -11,6 +11,7 @@ void AdhocSniffer::SpinOnce() {
 }
 
 void AdhocSniffer::Init() {
+    _Init_EspNow();
     is_new_rx_package = false;
 }
 

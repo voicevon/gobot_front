@@ -15,7 +15,7 @@ class Neibour{
 class AdhocPackage{
     public:
         // uint8_t network_id;     // Currently only one network in the range.
-        uint8_t my_hop;
+        uint8_t sender_hop;
         uint8_t to_mac_addr[6];     // current hop target.
         uint8_t app_source_node_id;
         uint8_t app_payload_size;

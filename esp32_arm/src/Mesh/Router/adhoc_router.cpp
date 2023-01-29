@@ -7,17 +7,7 @@
 void AdhocRouter::SpinOnce(){
     // Logger::Debug("AdhocRouter::SpinOnce()");
     // Logger::Print("'__my_hop", __my_hop);
-    if ((__my_hop == 1) || (__my_hop == 0xff)){
-        __time_count_up++;
-        if (__time_count_up >= 3999999){
-            __time_count_up = 0;
-            Logger::Info("AdhocRouter::SpinOnce()  Broadcasting: I_am_Orphan() " );
-            Logger::Print("__my_hop", __my_hop);
-            // __Broadcast_Iam_Orphan();
-            Send(&__orphan_package);
-            return;
-        }
-    }
+    SendOrphan_count_down();
     // try to find best header.
     __forward_to = -1;
 }
@@ -28,12 +18,13 @@ bool AdhocRouter::IsJoined_Mesh(){
 }
 
 void AdhocRouter::Init(){
+    _Init_EspNow();
     esp_read_mac(__my_mac_addr, ESP_MAC_WIFI_STA);
     __my_hop = 0xff;
     __forward_to = -1;
 
     // init orphan package
-    __orphan_package.my_hop = __my_hop;
+    __orphan_package.sender_hop = __my_hop;
     __orphan_package.app_payload_size = 1;
     // __orphan_package.payload = " I am orphan";
     // Init route table
@@ -79,11 +70,11 @@ void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incomin
         blank->hop = 0xff;
     }else{
         // might update his hop, even my_hop
-        his->hop = incoming_package->my_hop;
+        his->hop = incoming_package->sender_hop;
         if (his->hop + 1 < __my_hop){
             __my_hop = his->hop + 1;
             Logger::Info("AdhocRouter::onReceived()  got shorter path to net_gate");
-            Logger::Print("incoming_package hop", incoming_package->my_hop);
+            Logger::Print("incoming_package sender_hop", incoming_package->sender_hop);
             Logger::Print("his hop", his->hop);
             Logger::Print("now my_hop", __my_hop);
         }
@@ -96,7 +87,7 @@ void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, i
     if (debug){
         Logger::Debug("AdhocRouter::onReceived");
         Logger::Print("len", len);
-        Serial.print("mac_addr= ");
+        Serial.print("to_mac_addr= ");
         for(int i=0; i<6; i++){
             Serial.print(" ");
             Serial.print(*(mac+i));

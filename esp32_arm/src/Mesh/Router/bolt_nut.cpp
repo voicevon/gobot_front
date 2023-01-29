@@ -2,15 +2,24 @@
 #include "MyLibs/basic/logger.h"
 
 void AdhocPackage::PrintOut(const char * title){
-    Logger::Info(title);
+    Logger::Debug(title);
     // Serial.print("network_id= ");
     // Serial.print(network_id);
-    Serial.print("\thop= ");
-    Serial.print(my_hop);
+    Serial.print("to mac_addr: ");
+    Serial.print(to_mac_addr[0]);   Serial.print(" ");
+    Serial.print(to_mac_addr[1]);   Serial.print(" ");
+    Serial.print(to_mac_addr[2]);   Serial.print(" ");
+    Serial.print(to_mac_addr[3]);   Serial.print(" ");
+    Serial.print(to_mac_addr[4]);   Serial.print(" ");
+    Serial.print(to_mac_addr[5]);   Serial.print(" ");
+
+    Serial.print("\tsender_hop= ");
+    Serial.print(sender_hop);
     Serial.print("\tsource_node= ");
     Serial.print(app_source_node_id);
-    Serial.print("\tpayload[0]=");
+    Serial.print("    payload[0]=");
     Serial.print(app_payload[0]);
+    Serial.println(" ");
 }
 
 
