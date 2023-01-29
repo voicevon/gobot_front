@@ -9,6 +9,7 @@ class Neibour{
         uint8_t app_node_id;   // 0 = empty 
         uint8_t hop;
         uint8_t mac_addr[6];
+        uint8_t qos;
 };
 
 
