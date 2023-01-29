@@ -6,7 +6,7 @@
 
 GuangDa_ShuiWu_GateBoard board;
 AdhocGate gate;
-
+#define MY_APP_NODE_ID 101
 
 void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int len){
     // Logger::Debug("on_esp_now_received");
@@ -16,7 +16,7 @@ void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int l
 
 void setup(){
     board.Init();
-    gate.Init();
+    gate.Init(MY_APP_NODE_ID);
     esp_now_register_recv_cb(on_esp_now_received);
     Logger::Info("Guangda Shuiwu net_gate    setup() is done.....;.");
 }

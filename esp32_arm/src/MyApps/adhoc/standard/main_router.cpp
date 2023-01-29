@@ -4,7 +4,7 @@
 
 #include "all_applications.h"
 #ifdef I_AM_ADHOC_ROUTER
-
+#define MY_APP_NODE_ID 102
 AdhocRouter router;
 Adhoc_RouterBoard board;
 
@@ -15,7 +15,7 @@ void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int l
 
 void setup(){
     board.Init();
-    router.Init();
+    router.Init(MY_APP_NODE_ID);
 
     esp_now_register_recv_cb(on_esp_now_received);
 

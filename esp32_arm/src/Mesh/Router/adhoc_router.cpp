@@ -3,13 +3,33 @@
 #include "adhoc_router.h"
 #include "MyLibs/basic/logger.h"
 
+Neibour* AdhocRouter::__find_best_leader(){
+    // So, What is the best,  lowest hop and stalability. consider these two together.
+    Neibour* leader = NULL;
+    Neibour* index;
+    int min_hop = 200;
+    for (int i=0; i<ROUTER_TABLE_ROWS; i++){
+        index = &__my_neibours[i];
+        if (index->hop < min_hop){
+            leader = index;
+            min_hop = index->hop;
+        }
+    }
+    return leader;
+}
 
 void AdhocRouter::SpinOnce(){
     // Logger::Debug("AdhocRouter::SpinOnce()");
-    // Logger::Print("'__my_hop", __my_hop);
-    SendOrphan_count_down();
-    // try to find best header.
-    __forward_to = -1;
+    static Neibour* last_leader = NULL;
+    _SendOrphan_count_down();
+    // try to find best header from routing_table.
+    Neibour* new_leader = __find_best_leader();
+    if (new_leader != last_leader){
+        Logger::Info("AdhocRouter::SpinOnce()  Got New leader");
+        Logger::Print("__my_hop", __my_hop);
+        __my_hop = new_leader->hop + 1;
+        last_leader = new_leader;
+    }
 }
 
 bool AdhocRouter::IsJoined_Mesh(){
@@ -17,20 +37,22 @@ bool AdhocRouter::IsJoined_Mesh(){
     return false;
 }
 
-void AdhocRouter::Init(){
+void AdhocRouter::Init(uint8_t my_app_node_id){
     _Init_EspNow();
     esp_read_mac(__my_mac_addr, ESP_MAC_WIFI_STA);
-    __my_hop = 0xff;
-    __forward_to = -1;
+    __my_hop = 255;
+    __my_app_node_id = my_app_node_id;
+    __hop_leader_index = -1;
 
     // init orphan package
-    __orphan_package.sender_hop = __my_hop;
+    __orphan_package.sender_hop = 255;
+    __orphan_package.app_source_node_id = __my_app_node_id;
     __orphan_package.app_payload_size = 1;
     // __orphan_package.payload = " I am orphan";
     // Init route table
     for (int i=0; i<ROUTER_TABLE_ROWS; i++){
         Neibour* his = &__my_neibours[i];
-        his->id = 0;
+        his->app_node_id = 0;
         his->hop = 0xff;
     }
 }
@@ -46,7 +68,7 @@ Neibour* AdhocRouter::__search_neibour(uint8_t * mac_addr){
 
 Neibour* AdhocRouter::__find_blank_neibour(){
     for(int i=0; i<ROUTER_TABLE_ROWS; i++){
-        if (__my_neibours[i].id == 0){
+        if (__my_neibours[i].app_node_id == 0){
             return &__my_neibours[i];
         }
     }
@@ -61,23 +83,16 @@ void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incomin
         // append to routing_table
         Neibour* blank = __find_blank_neibour();
         if (blank == NULL){
-            // no more space 
+            // no more space , my neibouts count is more than MAX_TABLE_ROWS == 16
             return;
         }
         // just save to neibour_table,  we don't set hop right now.
-        blank->id = 1;
+        blank->app_node_id = incoming_package->app_source_node_id;
         AdhocHelper::CopyMacAddr(the_mac, blank->mac_addr);
         blank->hop = 0xff;
     }else{
         // might update his hop, even my_hop
         his->hop = incoming_package->sender_hop;
-        if (his->hop + 1 < __my_hop){
-            __my_hop = his->hop + 1;
-            Logger::Info("AdhocRouter::onReceived()  got shorter path to net_gate");
-            Logger::Print("incoming_package sender_hop", incoming_package->sender_hop);
-            Logger::Print("his hop", his->hop);
-            Logger::Print("now my_hop", __my_hop);
-        }
     }
 }
 
@@ -103,7 +118,7 @@ void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, i
         // I am the target node of the package.
         if (__my_hop < 200){
             // have joint a network,  forward the package , 
-            AdhocHelper::CopyMacAddr(__my_neibours[__forward_to].mac_addr , incoming_package->to_mac_addr);
+            AdhocHelper::CopyMacAddr(__my_neibours[__hop_leader_index].mac_addr , incoming_package->to_mac_addr);
             Send(incoming_package);
         }
     }

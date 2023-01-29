@@ -5,8 +5,8 @@
 
 class Neibour{
     public:
-        uint8_t net_id;   // In case of:  multi mesh-network work in same area. ??
-        uint8_t id;   // 0 = empty 
+        // uint8_t net_id;   //TODO:   In case of:  multi mesh-network work in same area. ??
+        uint8_t app_node_id;   // 0 = empty 
         uint8_t hop;
         uint8_t mac_addr[6];
 };
@@ -15,7 +15,7 @@ class Neibour{
 class AdhocPackage{
     public:
         // uint8_t network_id;     // Currently only one network in the range.
-        uint8_t sender_hop;
+        uint8_t sender_hop;        // EspNow sender, Point to Point sender.
         uint8_t to_mac_addr[6];     // current hop target.
         uint8_t app_source_node_id;
         uint8_t app_payload_size;

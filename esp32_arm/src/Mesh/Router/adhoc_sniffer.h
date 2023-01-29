@@ -8,7 +8,7 @@ class AdhocSniffer: public AdhocBase{
         bool is_new_rx_package;
         void onReceived(const uint8_t * mac, const uint8_t *incomingData, int len) override; 
         void SpinOnce() override;
-        void Init() override;
+        void Init(uint8_t my_app_node_id) override;
         
     private:
 

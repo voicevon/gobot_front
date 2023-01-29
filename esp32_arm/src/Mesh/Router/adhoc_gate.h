@@ -8,7 +8,7 @@ class AdhocGate: public AdhocBase{
         bool is_new_rx_package;
 
         void SpinOnce() override;
-        void Init() override;
+        void Init(uint8_t my_app_node_id) override;
 
     protected:
         // uint8_t _GetMyHop() override {return 1;};

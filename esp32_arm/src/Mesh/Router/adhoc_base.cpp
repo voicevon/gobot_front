@@ -45,13 +45,12 @@ void AdhocBase::Send(AdhocPackage* pkg){
     }
 }
 
-void AdhocBase::SendOrphan_count_down(){
+void AdhocBase::_SendOrphan_count_down(){
     // Logger::Debug("AdhocBase::SpinOnce()");
     // Logger::Print("'__my_hop", __my_hop);
     __time_count_up++;
     if (__time_count_up >= 3999999){
-        __time_count_up = 0;
-        Logger::Info("AdhocGate::SpinOnce()  Broadcasting: I_am_net_gate " );
+        Logger::Info("AdhocBase::SendOrphan_count_down() " );
         Logger::Print("__my_hop", __my_hop);
         __orphan_package.PrintOut("AdhocBase::SendOrphan_count_down()  sending orphan...");
         Send(&__orphan_package);

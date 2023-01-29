@@ -10,7 +10,7 @@ void AdhocSniffer::SpinOnce() {
 
 }
 
-void AdhocSniffer::Init() {
+void AdhocSniffer::Init(uint8_t my_app_node_id) {
     _Init_EspNow();
     is_new_rx_package = false;
 }

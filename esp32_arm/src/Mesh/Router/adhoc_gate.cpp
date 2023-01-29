@@ -10,16 +10,17 @@ void AdhocGate::onReceived(const uint8_t * mac, const uint8_t *incomingData, int
 void AdhocGate::SpinOnce(){
     // Logger::Debug("AdhocRouter::SpinOnce()");
     // Logger::Print("'__my_hop", __my_hop);
-    SendOrphan_count_down();
+    _SendOrphan_count_down();
 }
 
-void AdhocGate::Init(){
+void AdhocGate::Init(uint8_t my_app_node_id){
     _Init_EspNow();
     esp_read_mac(__my_mac_addr, ESP_MAC_WIFI_STA);
     is_new_rx_package = false;
     __my_hop = 1;
+    __my_app_node_id = my_app_node_id;
     __orphan_package.sender_hop= 1;
-    __orphan_package.app_source_node_id = 1;
+    __orphan_package.app_source_node_id = __my_app_node_id;
     __orphan_package.app_payload_size = 1;
     __orphan_package.to_mac_addr [0] = 0xff;
     __orphan_package.to_mac_addr [1] = 0xff;

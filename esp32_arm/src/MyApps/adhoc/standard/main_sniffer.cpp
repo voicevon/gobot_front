@@ -16,7 +16,7 @@ void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int l
 
 void setup(){
     board.Init();
-    sniffer.Init();
+    sniffer.Init(111);
 
     ESP_ERROR_CHECK(esp_now_register_recv_cb(on_esp_now_received));
     Logger::Info("Sniffer App setup()  is done...");
