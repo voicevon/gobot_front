@@ -2,7 +2,7 @@
 #ifdef I_AM_GUANGDA_SHUIWU_SENSOR
 
 #include "Mesh/Router/adhoc_router.h"
-#include "board_sensor.h"
+#include "board/board_sensor.h"
 
 // #define MY_APP_NODE_ID 2
 #define MY_APP_NODE_ID 4

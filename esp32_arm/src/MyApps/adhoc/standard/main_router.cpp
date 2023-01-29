@@ -5,7 +5,7 @@
 #include "Mesh/Router/adhoc_router.h"
 
 AdhocRouter router;
-GuangDa_ShuiWu_RouterBoard board;
+Adhoc_RouterBoard board;
 
 void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int len){
     // Logger::Debug("on_esp_now_received");

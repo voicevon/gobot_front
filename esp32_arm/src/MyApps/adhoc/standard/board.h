@@ -3,7 +3,7 @@
 #define PIN_STATE_LED 2
 
 
-class GuangDa_ShuiWu_RouterBoard: public BoardBase{
+class Adhoc_RouterBoard: public BoardBase{
     public:
         void Init() override;
 

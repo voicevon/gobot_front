@@ -2,7 +2,7 @@
 #ifdef I_AM_GUANGDA_SHUIWU_NETGATE
 
 #include "Mesh/Router/adhoc_gate.h"
-#include "board_gate.h"
+#include "board/board_gate.h"
 
 GuangDa_ShuiWu_GateBoard board;
 AdhocGate gate;
