@@ -3,12 +3,12 @@
 
 void AdhocSniffer::onReceived(const uint8_t * mac, const uint8_t *incomingData, int len) {
     memcpy(&rx_package,incomingData, len);
-    is_new_rx_package = true;
+    is_new_rx_package = true;  //TODO: rename to has_got_new_rx_package.
 }
 
-void AdhocSniffer::SpinOnce() {
+// void AdhocSniffer::SpinOnce() {
 
-}
+// }
 
 void AdhocSniffer::Init(uint8_t my_app_node_id) {
     _Init_EspNow();

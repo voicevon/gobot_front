@@ -7,11 +7,11 @@ void AdhocGate::onReceived(const uint8_t * mac, const uint8_t *incomingData, int
     is_new_rx_package = true;
 }
 
-void AdhocGate::SpinOnce(){
-    // Logger::Debug("AdhocRouter::SpinOnce()");
-    // Logger::Print("'__my_hop", __my_hop);
-    _SendOrphan_count_down();
-}
+// void AdhocGate::SpinOnce(){
+//     // Logger::Debug("AdhocRouter::SpinOnce()");
+//     // Logger::Print("'__my_hop", __my_hop);
+//     _SendOrphan_count_down();
+// }
 
 void AdhocGate::Init(uint8_t my_app_node_id){
     _Init_EspNow();

@@ -6,7 +6,7 @@ class AdhocRouter: public AdhocBase{
     public:
         void onReceived(const uint8_t * mac, const uint8_t *incomingData, int len) override;
         void Init(uint8_t my_app_node_id) override;
-        void SpinOnce() override;
+        // void SpinOnce() override;
         // bool IsJoined_Mesh();
 
     protected:

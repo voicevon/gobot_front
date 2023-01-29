@@ -3,10 +3,10 @@
 #include "adhoc_router.h"
 #include "MyLibs/basic/logger.h"
 
-void AdhocRouter::SpinOnce(){
-    // Logger::Debug("AdhocRouter::SpinOnce()");
-    _SendOrphan_count_down();   //TODO: send leader_and_me to net_gate
-}
+// void AdhocRouter::SpinOnce(){
+//     // Logger::Debug("AdhocRouter::SpinOnce()");
+//     _SendOrphan_count_down();   //TODO: send leader_and_me to net_gate
+// }
 
 
 void AdhocRouter::Init(uint8_t my_app_node_id){

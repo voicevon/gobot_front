@@ -22,7 +22,7 @@ void setup(){
 }
 
 void loop(){
-    gate.SpinOnce();
+    gate.Broadcast_Orphan_count_down();
     if (gate.is_new_rx_package){
         gate.is_new_rx_package = false;
         gate.rx_package.PrintOut("loop()  new rx_package");

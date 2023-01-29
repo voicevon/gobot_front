@@ -45,16 +45,16 @@ void AdhocBase::Send(AdhocPackage* pkg){
     }
 }
 
-void AdhocBase::_SendOrphan_count_down(){
-    // Logger::Debug("AdhocBase::SpinOnce()");
+void AdhocBase::Broadcast_Orphan_count_down(){
+    // Logger::Debug("AdhocBase::Broadcast_Orphan_count_down()");
     // Logger::Print("'__my_hop", __my_hop);
     __time_count_up++;
     if (__time_count_up >= 3999999){
-        Logger::Info("AdhocBase::SendOrphan_count_down() " );
+        Logger::Info("AdhocBase::Broadcast_Orphan_count_down() " );
         Logger::Print("__my_hop", __my_hop);
 
         __orphan_package.sender_hop = __my_hop;        
-        __orphan_package.PrintOut("AdhocBase::SendOrphan_count_down()  sending orphan...");
+        __orphan_package.PrintOut("AdhocBase::Broadcast_Orphan_count_down()  sending orphan...");
         Send(&__orphan_package);
         return;
     }
