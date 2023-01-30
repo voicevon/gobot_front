@@ -3,10 +3,6 @@
 #include "adhoc_router.h"
 #include "MyLibs/basic/logger.h"
 
-// void AdhocRouter::SpinOnce(){
-//     // Logger::Debug("AdhocRouter::SpinOnce()");
-//     _SendOrphan_count_down();   //TODO: send leader_and_me to net_gate
-// }
 
 
 void AdhocRouter::Init(uint8_t my_app_node_id){
@@ -46,36 +42,42 @@ Neibour* AdhocRouter::__find_blank_neibour(){
     return NULL;
 }
 
-void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incoming_package){
-    // incoming_package->PrintOut("from:  AdhocRouter::onReceived() ");
-    uint8_t*  the_mac = (uint8_t*) (mac);
-    Neibour* his = __search_neibour(the_mac);
-    if (his == NULL){
-        // append to routing_table
+void AdhocRouter::__append_to_neibours(uint8_t * sender_mac, AdhocPackage* incoming_package){
         Neibour* blank = __find_blank_neibour();
         if (blank == NULL){
             // no more space , my neibouts count is more than MAX_TABLE_ROWS == 16
             return;
         }
         // just save to neibour_table,  we don't set hop right now.
+        Logger::Info("AdhocRouter::__sniff_air_package() -> __append_to_neibours()");
+        // Logger::Print("sender's  app_node_id", incoming_package-;
+
         blank->app_node_id = incoming_package->app_source_node_id;
         blank->hop = incoming_package->sender_hop;
         blank->qos = 90;
-        AdhocHelper::CopyMacAddr(the_mac, blank->mac_addr);
+        AdhocHelper::CopyMacAddr(sender_mac, blank->mac_addr);
         if (__my_leader == NULL){
             if (blank->hop < __my_hop){
                 // set as a temperory leader.
                 __my_leader = blank;
                 __my_hop = __my_leader->hop + 1;
-                Logger::Info("AdhocRouter::__sniff_air_package():  Got a temperory leader");
+                Logger::Info("AdhocRouter::__sniff_air_package() -> __append_to_neibours():  Got a temperory leader");
                 Logger::Print("__my_hop", __my_hop);
             }
         }
+}
+void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incoming_package){
+    // incoming_package->PrintOut("from:  AdhocRouter::onReceived() ");
+    uint8_t*  the_mac = (uint8_t*) (mac);
+    Neibour* sender = __search_neibour(the_mac);
+    if (sender == NULL){
+        // append to routing_table
+        __append_to_neibours(the_mac, incoming_package);
     }else{
-        // might update his hop, even my_hop
-        his->hop = incoming_package->sender_hop;
-        his->qos++;
-        if (his->qos > 100){
+        // might update sender's hop in routing_table, even my_hop
+        sender->hop = incoming_package->sender_hop;
+        sender->qos++;
+        if (sender->qos > 100){
             // lower the qos level of all neibous.
             for (int i=0 ; i<ROUTER_TABLE_ROWS; i++){
                 if (__my_neibours[i].app_node_id > 0){
@@ -83,13 +85,19 @@ void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incomin
                     if (__my_neibours[i].qos == 0 ){
                         // remove this from routing_table.
                         __my_neibours[i].app_node_id = 0;
+                        if (&__my_neibours[i] == __my_leader){
+                            __my_leader = NULL;
+                        }
+                        Logger::Info("AdhocRouter::__sniff_air_package()  remove this neibour.");
+                        Logger::Print("__my_hop", __my_hop);
                     }
                 }
             }
-            if (his->hop <= __my_hop){
-                if (his != __my_leader){
+            if (sender->hop <= __my_hop){
+                if (sender != __my_leader){
                     // This neibour is my new leader
-                    __my_leader = his;
+                    __my_leader = sender;
+                    __my_hop = sender->hop + 1;
                     Logger::Info("AdhocRouter::__sniff_air_package()  Got a better leader");
                     Logger::Print("__my_hop", __my_hop);
                 }
@@ -98,7 +106,7 @@ void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incomin
     }
 }
 
-void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, int len){
+bool AdhocRouter::onReceived(const uint8_t * sender_mac, const uint8_t *incomingData, int len){
     bool debug = false;
     if (debug){
         Logger::Debug("AdhocRouter::onReceived");
@@ -106,14 +114,14 @@ void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, i
         Serial.print("to_mac_addr= ");
         for(int i=0; i<6; i++){
             Serial.print(" ");
-            Serial.print(*(mac+i));
+            Serial.print(*(sender_mac+i));
         }
         Serial.println("");
     }
 
     // from incomingDate to package, might effect routing_table
     AdhocPackage* incoming_package = (AdhocPackage*) (incomingData);
-    __sniff_air_package(mac, incoming_package);
+    __sniff_air_package(sender_mac, incoming_package);
 
     if (AdhocHelper::IsSameMacAddr(incoming_package->to_mac_addr, __my_mac_addr)){
         // I am the target node of the package.
@@ -124,5 +132,10 @@ void AdhocRouter::onReceived(const uint8_t * mac, const uint8_t *incomingData, i
             Send(incoming_package);
         }
     }
+
+    if (AdhocHelper::IsSameMacAddr(__my_leader->mac_addr, (uint8_t* )(sender_mac))){
+        return true;
+    }
+    return false;
 
 }

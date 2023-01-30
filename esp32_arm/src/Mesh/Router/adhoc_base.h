@@ -9,7 +9,8 @@
 
 class AdhocBase{
     public:
-        virtual void onReceived(const uint8_t * mac, const uint8_t *incomingData, int len);
+        // return true:  incomingData is from leader
+        virtual bool onReceived(const uint8_t * sender_mac, const uint8_t *incomingData, int len);
         // virtual void SpinOnce();
         virtual void Init(uint8_t my_app_node_id);
         void Send(AdhocPackage* pkg);

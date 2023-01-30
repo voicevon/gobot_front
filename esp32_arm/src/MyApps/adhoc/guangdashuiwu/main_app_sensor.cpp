@@ -11,8 +11,6 @@
 AdhocRouter router;
 GuangDa_ShuiWu_SensorBoard board;
 
-
-
 void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int len){
     // Logger::Debug("on_esp_now_received");
     router.onReceived( mac, incomingData, len);
@@ -28,7 +26,7 @@ void setup(){
 
 void loop(){
     router.Broadcast_Orphan_count_down();
-    if (!router.IsJoined_Mesh()) 
+    if (router.HasJointNetwork()) 
         return;
         
     AdhocPackage apc;

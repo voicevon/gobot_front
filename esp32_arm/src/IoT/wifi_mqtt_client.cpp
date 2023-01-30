@@ -1,5 +1,5 @@
 #include "all_applications.h"
-#ifdef USING_WIFI_MQTT
+// #ifdef USING_WIFI_MQTT
 
 #include <AsyncMqttClient.h>
 #include <WiFi.h>
@@ -158,4 +158,4 @@ void setup_wifi_mqtt() {
     connectToWifi();
 }
 
-#endif
+// #endif

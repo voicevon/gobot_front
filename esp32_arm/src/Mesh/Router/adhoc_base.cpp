@@ -12,6 +12,7 @@ void AdhocBase::_Init_EspNow(){
     }
     ESP_ERROR_CHECK(esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_LR));
 }
+
 void AdhocBase::Send(AdhocPackage* pkg){
     __time_count_up = 0;
     // Emulates a broadcast
@@ -29,7 +30,7 @@ void AdhocBase::Send(AdhocPackage* pkg){
 
     // Print results to serial monitor
     if (result == ESP_OK){
-        Serial.print("Tx ");
+        Serial.print("O");
     } else if (result == ESP_ERR_ESPNOW_NOT_INIT) {
         Serial.println("ESP-NOW not Init.");
     } else if (result == ESP_ERR_ESPNOW_ARG) {
@@ -49,12 +50,12 @@ void AdhocBase::Broadcast_Orphan_count_down(){
     // Logger::Debug("AdhocBase::Broadcast_Orphan_count_down()");
     // Logger::Print("'__my_hop", __my_hop);
     __time_count_up++;
-    if (__time_count_up >= 3999999){
-        Logger::Info("AdhocBase::Broadcast_Orphan_count_down() " );
-        Logger::Print("__my_hop", __my_hop);
+    if (__time_count_up >= 6999999){
+        // Logger::Debug("AdhocBase::Broadcast_Orphan_count_down() " );
+        // Logger::Print("__my_hop", __my_hop);
 
         __orphan_package.sender_hop = __my_hop;        
-        __orphan_package.PrintOut("AdhocBase::Broadcast_Orphan_count_down()  sending orphan...");
+        // __orphan_package.PrintOut("AdhocBase::Broadcast_Orphan_count_down()  sending orphan...");
         Send(&__orphan_package);
         return;
     }

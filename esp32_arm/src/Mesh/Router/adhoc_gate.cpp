@@ -1,10 +1,11 @@
 #include "adhoc_gate.h"
 #include "MyLibs/basic/logger.h"
 
-void AdhocGate::onReceived(const uint8_t * mac, const uint8_t *incomingData, int len) {
+bool AdhocGate::onReceived(const uint8_t * mac, const uint8_t *incomingData, int len) {
     if (AdhocHelper::IsSameMacAddr((uint8_t*) mac, __my_mac_addr))
     memcpy(&rx_package,incomingData, len);
     is_new_rx_package = true;
+    return false;   // A gate has no leader.
 }
 
 // void AdhocGate::SpinOnce(){

@@ -1,6 +1,6 @@
 
-#include "all_applications.h"
-#ifdef USING_WIFI_MQTT
+// #include "all_applications.h"
+// #ifdef USING_WIFI_MQTT
 
 
 //  TODO: Merge or reconstruct  this file and wifi_mqtt_client.cpp
@@ -80,4 +80,4 @@ void mono_remote_queue_bridge_spin_once(){
 }
 
 
-#endif
+// #endif
