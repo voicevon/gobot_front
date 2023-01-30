@@ -10,7 +10,9 @@ Adhoc_RouterBoard board;
 
 void on_esp_now_received(const uint8_t * mac, const uint8_t *incomingData, int len){
     // Logger::Debug("on_esp_now_received");
-    router.onReceived( mac, incomingData, len);
+    if (router.onReceived( mac, incomingData, len)){
+        board.GetStateLed()->Invert();
+    }
 }
 
 void setup(){

@@ -4,7 +4,8 @@
 
 void Adhoc_RouterBoard::__InitHardware(){
     // init gpio.
-    pinMode(PIN_STATE_LED, OUTPUT);
+    // pinMode(PIN_STATE_LED, OUTPUT);
+    __rx_led.Init(0, PIN_STATE_LED, HIGH);
 }
 
 void Adhoc_RouterBoard::Init(){

@@ -12,11 +12,13 @@ class BinaryOutput_GPIO: public ComponentBase{
 
         void TurnOn();
         void TurnOff();
+        void Invert();
 
     protected:
         uint8_t __pin_gpio;
         uint8_t __turn_on_value;
         uint8_t __turn_off_value;
+        uint8_t __current_value;
         // BinaryOutput_GPIO(){};
 };
 

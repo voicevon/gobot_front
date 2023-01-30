@@ -18,8 +18,16 @@ void BinaryOutput_GPIO::Init(uint8_t id, uint8_t pin, uint8_t turn_on_value){
 
 void BinaryOutput_GPIO::TurnOn(){
     digitalWrite(__pin_gpio, __turn_on_value);
+    __current_value = __turn_on_value;
 }
 
 void BinaryOutput_GPIO::TurnOff(){
     digitalWrite(__pin_gpio, __turn_off_value);
+    __current_value = __turn_off_value;
+}
+
+void BinaryOutput_GPIO::Invert(){
+    if (__current_value == __turn_on_value){
+        TurnOff();
+    }else TurnOn();
 }

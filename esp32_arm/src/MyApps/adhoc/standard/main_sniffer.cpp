@@ -24,7 +24,6 @@ void setup(){
 }
 
 void loop(){
-    sniffer.Broadcast_Orphan_count_down();
     if (sniffer.is_new_rx_package){
         sniffer.is_new_rx_package = false;
         // Ignore net-gate's orphan.
