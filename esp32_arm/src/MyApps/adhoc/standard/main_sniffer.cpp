@@ -29,9 +29,9 @@ void loop(){
     if (sniffer.is_new_rx_package){
         sniffer.is_new_rx_package = false;
         // Ignore net-gate's orphan.
-        if (sniffer.rx_package.sender_hop != 1){
-            sniffer.rx_package.PrintOut("sniffer got a new Package ");
-        }
+        // if (sniffer.rx_package.sender_hop != 1){
+        sniffer.rx_package.PrintOut("  loop()  sniffer got a new Package ");
+        // }
     }
 }
 
