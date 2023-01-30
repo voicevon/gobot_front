@@ -23,7 +23,7 @@ void setup(){
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
 
     // connect_to_mqtt_broker();
-    setup_mono_remote_queue_bridge_via_mqtt("puma/x2212/bm", &mqtt_command_queue, &app); 
+    mono_remote_queue_bridge_via_mqtt_setup("puma/x2212/bm", &mqtt_command_queue, &app); 
     // setup_mqtt_on_message_receive(); 
     Serial.println ("\n{Info] main.cpp  setup() is done. ------------------------------------ \n");
 }

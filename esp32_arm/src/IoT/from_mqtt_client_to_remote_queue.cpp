@@ -55,7 +55,7 @@ void __connect_to_mqtt_broker(){
 /*
      Will finnally invoke(callback) ExecMattCommand(payload) when got mqtt message
 */  
-void setup_mono_remote_queue_bridge_via_mqtt(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
+void mono_remote_queue_bridge_via_mqtt_setup(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
     // 1. mqtt client involved
     __connect_to_mqtt_broker();
     g_mqttClient.onMessage(on_MqttMessage);

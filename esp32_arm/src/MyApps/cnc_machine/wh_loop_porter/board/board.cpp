@@ -1,4 +1,4 @@
-#include "twh2_row_board.h"
+#include "board.h"
 
 // http://www.bachinmaker.com/wikicn/doku.php?id=bachin-e3
 //  x-end   GPIO 17   x-step GPIO-12  x-dir GPIO-14  

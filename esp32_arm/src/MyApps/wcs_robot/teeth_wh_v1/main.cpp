@@ -88,7 +88,7 @@ void setup(){
     app.LinkRobot(&robot);
 
     // connect_to_mqtt_broker();
-    setup_mono_remote_queue_bridge_via_mqtt("twh/221109/gcode", &mqtt_command_queue, &app); 
+    mono_remote_queue_bridge_via_mqtt_setup("twh/221109/gcode", &mqtt_command_queue, &app); 
     // setup_mqtt_on_message_receive(); 
 
     gcode_queue.AppendGcodeCommand("G1Z0");

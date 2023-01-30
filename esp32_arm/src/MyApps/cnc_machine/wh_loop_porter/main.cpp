@@ -1,9 +1,9 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "IoT/from_mqtt_client_to_remote_queue.h"
-#include "board/twh2_row_board.h"
-#include "twh2row_app.h"
-#include "robot/twh2row_robot.h"
+#include "board/board.h"
+#include "loop_porter_app.h"
+#include "robot/loop_porter_robot.h"
 
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_V2_ROW
@@ -81,7 +81,7 @@ void setup(){
     board.Init();
     // test_arm();
     test_board();
-    float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
+    // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
     
     robot.Init(&board);
 
@@ -89,9 +89,7 @@ void setup(){
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     app.LinkRobot(&robot);
 
-    // setup_mqtt_block_connect();
-    setup_mono_remote_queue_bridge_via_mqtt(MQTT_TOPIC_GCODE, &mqtt_command_queue, &app); 
-    // setup_mqtt_on_message_receive(); 
+    mono_remote_queue_bridge_via_mqtt_setup(MQTT_TOPIC_GCODE, &mqtt_command_queue, &app); 
 
     gcode_queue.AppendGcodeCommand("G28X");
     gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);

@@ -57,7 +57,7 @@ void setup(){
     // connect_to_mqtt_broker();
     String mqtt_topic = "gobot/xROBOT_SERIAL_ID/house";
     mqtt_topic.replace("ROBOT_SERIAL_ID",String(ROBOT_SERIAL_ID));
-    setup_mono_remote_queue_bridge_via_mqtt(mqtt_topic.c_str(), &mqtt_message_queue, app); 
+    mono_remote_queue_bridge_via_mqtt_setup(mqtt_topic.c_str(), &mqtt_message_queue, app); 
     // setup_mqtt_on_message_receive(); 
     Serial.println("lovely bot,  GobotHouse.  setup() is done.  Good luck!");
     // board.GetEef()->Run(EEF_CODE_UNLOAD);
