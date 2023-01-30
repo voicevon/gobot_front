@@ -49,22 +49,44 @@ void AdhocRouter::__append_to_neibours(uint8_t * sender_mac, AdhocPackage* incom
             return;
         }
         // just save to neibour_table,  we don't set hop right now.
-        Logger::Info("AdhocRouter::__sniff_air_package() -> __append_to_neibours()");
         // Logger::Print("sender's  app_node_id", incoming_package-;
 
         blank->app_node_id = incoming_package->app_source_node_id;
         blank->hop = incoming_package->sender_hop;
         blank->qos = 90;
         AdhocHelper::CopyMacAddr(sender_mac, blank->mac_addr);
+        Logger::Info("AdhocRouter::__sniff_air_package() -> __append_to_neibours()");
+        blank->PrintOut("new neibour detail");
+
         if (__my_leader == NULL){
             if (blank->hop < __my_hop){
                 // set as a temperory leader.
                 __my_leader = blank;
                 __my_hop = __my_leader->hop + 1;
                 Logger::Info("AdhocRouter::__sniff_air_package() -> __append_to_neibours():  Got a temperory leader");
+                __my_leader->PrintOut("__my_leader detail");
                 Logger::Print("__my_hop", __my_hop);
             }
         }
+}
+
+void AdhocRouter::__try_to_remove_worst_neibour(){
+    // lower the qos level of all neibous.
+    for (int i=0 ; i<ROUTER_TABLE_ROWS; i++){
+        if (__my_neibours[i].app_node_id > 0){
+            __my_neibours[i].qos--;
+            if (__my_neibours[i].qos == 0 ){
+                // remove this from routing_table.
+                __my_neibours[i].app_node_id = 0;
+                if (&__my_neibours[i] == __my_leader){
+                    __my_leader = NULL;
+                }
+                Logger::Info("AdhocRouter::__sniff_air_package()  remove this neibour.");
+                __my_neibours[i].PrintOut("his detail");
+                // Logger::Print("__my_hop", __my_hop);
+            }
+        }
+    }
 }
 void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incoming_package){
     // incoming_package->PrintOut("from:  AdhocRouter::onReceived() ");
@@ -78,28 +100,20 @@ void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incomin
         sender->hop = incoming_package->sender_hop;
         sender->qos++;
         if (sender->qos > 100){
-            // lower the qos level of all neibous.
-            for (int i=0 ; i<ROUTER_TABLE_ROWS; i++){
-                if (__my_neibours[i].app_node_id > 0){
-                    __my_neibours[i].qos--;
-                    if (__my_neibours[i].qos == 0 ){
-                        // remove this from routing_table.
-                        __my_neibours[i].app_node_id = 0;
-                        if (&__my_neibours[i] == __my_leader){
-                            __my_leader = NULL;
-                        }
-                        Logger::Info("AdhocRouter::__sniff_air_package()  remove this neibour.");
-                        Logger::Print("__my_hop", __my_hop);
-                    }
+            __try_to_remove_worst_neibour();
+            if (sender->hop +1 <= __my_hop){
+                if (sender->hop < __my_hop){
+                    // shorter path will be forced double qos.
+                    sender->qos++;   
                 }
-            }
-            if (sender->hop <= __my_hop){
                 if (sender != __my_leader){
                     // This neibour is my new leader
                     __my_leader = sender;
                     __my_hop = sender->hop + 1;
                     Logger::Info("AdhocRouter::__sniff_air_package()  Got a better leader");
+                    __my_leader->PrintOut("Leader details");
                     Logger::Print("__my_hop", __my_hop);
+                    
                 }
             }
         }

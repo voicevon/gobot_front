@@ -10,6 +10,7 @@ class Neibour{
         uint8_t hop;
         uint8_t mac_addr[6];
         uint8_t qos;
+        void PrintOut(const char* title);
 };
 
 

@@ -23,6 +23,28 @@ void AdhocPackage::PrintOut(const char * title){
 }
 
 
+void Neibour::PrintOut(const char* title){
+    Logger::Debug(title);
+    // Serial.print("network_id= ");
+    // Serial.print(network_id);
+    Serial.print("mac_addr: ");
+    Serial.print(mac_addr[0]);   Serial.print(" ");
+    Serial.print(mac_addr[1]);   Serial.print(" ");
+    Serial.print(mac_addr[2]);   Serial.print(" ");
+    Serial.print(mac_addr[3]);   Serial.print(" ");
+    Serial.print(mac_addr[4]);   Serial.print(" ");
+    Serial.print(mac_addr[5]);   Serial.print(" ");
+
+    Serial.print("\tapp_node_id= ");
+    Serial.print(app_node_id);
+    Serial.print("\thop= ");
+    Serial.print(hop);
+    Serial.print("\tqos= ");
+    Serial.print(qos);
+    Serial.println(" ");
+}
+
+
 bool AdhocHelper::IsSameMacAddr(uint8_t* addr_a, uint8_t* addr_b){
     for (int i=0; i<6; i++){
         if (*(addr_a+i) != *(addr_b+i))
