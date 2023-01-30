@@ -77,17 +77,19 @@ void AdhocRouter::__try_to_remove_worst_neibour(){
             __my_neibours[i].qos--;
             if (__my_neibours[i].qos == 0 ){
                 // remove this from routing_table.
+                Logger::Info("AdhocRouter::__sniff_air_package()  remove this neibour.");
+                __my_neibours[i].PrintOut("his detail");
                 __my_neibours[i].app_node_id = 0;
                 if (&__my_neibours[i] == __my_leader){
                     __my_leader = NULL;
                 }
-                Logger::Info("AdhocRouter::__sniff_air_package()  remove this neibour.");
-                __my_neibours[i].PrintOut("his detail");
+
                 // Logger::Print("__my_hop", __my_hop);
             }
         }
     }
 }
+
 void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incoming_package){
     // incoming_package->PrintOut("from:  AdhocRouter::onReceived() ");
     uint8_t*  the_mac = (uint8_t*) (mac);
@@ -141,9 +143,8 @@ bool AdhocRouter::onReceived(const uint8_t * sender_mac, const uint8_t *incoming
         // I am the target node of the package.
         if (__my_leader != NULL){   // Is this necessary?  Any way, safe firstly.
             // forward the package ,
-            incoming_package->sender_hop = __my_hop; 
-            AdhocHelper::CopyMacAddr(__my_leader->mac_addr , incoming_package->to_mac_addr);
-            Send(incoming_package);
+            incoming_package->PrintOut("AdhocRouter::onReceived()   forwarding this...");
+            Send_App_Package(incoming_package);
         }
     }
 
@@ -152,4 +153,11 @@ bool AdhocRouter::onReceived(const uint8_t * sender_mac, const uint8_t *incoming
     }
     return false;
 
+}
+
+
+void AdhocRouter::Send_App_Package(AdhocPackage* app_pkg){
+   app_pkg->sender_hop = __my_hop;
+   AdhocHelper::CopyMacAddr(__my_leader->mac_addr, app_pkg->to_mac_addr);
+   _Send(app_pkg);
 }

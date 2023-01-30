@@ -6,7 +6,9 @@ class AdhocRouter: public AdhocBase{
     public:
         bool onReceived(const uint8_t * sender_mac, const uint8_t *incomingData, int len) override;
         void Init(uint8_t my_app_node_id) override;
-        bool HasJointNetwork() {return __my_leader != NULL;};
+        bool IamOrphan() {return __my_leader == NULL;};
+        void Send_App_Package(AdhocPackage* pkg);
+
     protected:
 
 

@@ -13,7 +13,7 @@ void AdhocBase::_Init_EspNow(){
     ESP_ERROR_CHECK(esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_LR));
 }
 
-void AdhocBase::Send(AdhocPackage* pkg){
+void AdhocBase::_Send(AdhocPackage* pkg){
     __time_count_up = 0;
     // Emulates a broadcast
     // Broadcast a message to every device in range
@@ -46,6 +46,11 @@ void AdhocBase::Send(AdhocPackage* pkg){
     }
 }
 
+
+// void AdhocBase::_Send_Ophan(){
+//     _Send(&__orphan_package);
+// }
+
 void AdhocBase::Broadcast_Orphan_count_down(){
     // Logger::Debug("AdhocBase::Broadcast_Orphan_count_down()");
     // Logger::Print("'__my_hop", __my_hop);
@@ -56,7 +61,7 @@ void AdhocBase::Broadcast_Orphan_count_down(){
 
         __orphan_package.sender_hop = __my_hop;        
         // __orphan_package.PrintOut("AdhocBase::Broadcast_Orphan_count_down()  sending orphan...");
-        Send(&__orphan_package);
+        _Send(&__orphan_package);
         return;
     }
 }

@@ -5,8 +5,8 @@
 
 #include "all_applications.h"
 #ifdef I_AM_GUANGDA_SHUIWU_SENSOR
-// #define MY_APP_NODE_ID 2
-#define MY_APP_NODE_ID 4
+#define MY_APP_NODE_ID 2
+// #define MY_APP_NODE_ID 4
 
 AdhocRouter router;
 GuangDa_ShuiWu_SensorBoard board;
@@ -28,14 +28,16 @@ void setup(){
 
 void loop(){
     router.Broadcast_Orphan_count_down();
-    if (router.HasJointNetwork()) 
+    if (router.IamOrphan()) 
         return;
         
     AdhocPackage apc;
     apc.app_source_node_id = MY_APP_NODE_ID;
     apc.app_payload_size = 1;
+    // AdhocHelper::CopyMacAddr(router.)
     apc.app_payload[0] = board.GetPayload();
-    router.Send(&apc);
+    router.Send_App_Package(&apc);
+    // apc.PrintOut("loop()  is sent.");
     delay(1000);
 }
 

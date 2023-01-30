@@ -4,7 +4,7 @@
 bool AdhocGate::onReceived(const uint8_t * mac, const uint8_t *incomingData, int len) {
     if (AdhocHelper::IsSameMacAddr((uint8_t*) mac, __my_mac_addr))
     memcpy(&rx_package,incomingData, len);
-    is_new_rx_package = true;
+    has_got_new_rx_package = true;
     return false;   // A gate has no leader.
 }
 
@@ -17,7 +17,7 @@ bool AdhocGate::onReceived(const uint8_t * mac, const uint8_t *incomingData, int
 void AdhocGate::Init(uint8_t my_app_node_id){
     _Init_EspNow();
     esp_read_mac(__my_mac_addr, ESP_MAC_WIFI_STA);
-    is_new_rx_package = false;
+    has_got_new_rx_package = false;
     __my_hop = 1;
     __my_app_node_id = my_app_node_id;
     __orphan_package.sender_hop= 1;
