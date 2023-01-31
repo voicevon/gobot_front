@@ -69,7 +69,7 @@ void AdhocRouter::__append_to_neibours(uint8_t * sender_mac, AdhocPackage* incom
         }
 }
 
-void AdhocRouter::__lower_all_qos(){
+void AdhocRouter::__lower_all_leadship(){
     // lower the leader_ship level of all neibous.
     for (int i=0 ; i<ROUTER_TABLE_ROWS; i++){
         if (__my_neibours[i].node_id > 0){
@@ -89,39 +89,49 @@ void AdhocRouter::__lower_all_qos(){
     }
 }
 
-void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incoming_package){
+void AdhocRouter::__review_leadership(Neibour* sender, AdhocPackage* incoming_package){
+    // might update sender's hop in routing_table, even my_hop
+    sender->hop = incoming_package->sender_hop;
+    if (sender == __my_leader){
+        // leader's hop might changed.
+        if (_my_hop < 200){
+            _my_hop = sender->hop + 1;
+        }
+    }
+    // My leader's leader_ship will increase fastly.
+    // My simbling's leader_ship will increase slowly,
+    //    In case of my_leader is lost connection, my simbling will become my leader.
+    // My naphew's leader_ship will keep, or even drop.
+    sender->leader_ship += ((int)_my_hop - (int)sender->hop + 1);  
+    if (sender->leader_ship > 100){
+        if (sender != __my_leader){
+            // This neibour is my new leader
+            __my_leader = sender;
+            _my_hop = __my_leader->hop + 1;
+            
+            Logger::Info("AdhocRouter::__sniff_air_package()  Got a better leader");
+            __my_leader->PrintOut("Leader details");
+            Logger::Print("__my_hop", _my_hop);
+        }
+        __lower_all_leadship();
+    }
+}
+
+
+void AdhocRouter::__sniff_air_package(const uint8_t * sender_mac, AdhocPackage* incoming_package){
     // incoming_package->PrintOut("from:  AdhocRouter::onReceived() ");
-    uint8_t*  the_mac = (uint8_t*) (mac);
+    uint8_t*  the_mac = (uint8_t*) (sender_mac);
     Neibour* sender = __search_neibour(the_mac);
     if (sender == NULL){
         // append to routing_table
         __append_to_neibours(the_mac, incoming_package);
     }else{
-        // might update sender's hop in routing_table, even my_hop
-        sender->hop = incoming_package->sender_hop;
-        if (sender == __my_leader){
-            // leader's hop might changed.
-            if (_my_hop < 200){
-                _my_hop = sender->hop + 1;
-            }
-        }
-        // My leader's leader_ship will increase fastly.
-        // My simbling's leader_ship will increase slowly,
-        //    In case of my_leader is lost connection, my simbling will become my leader.
-        // My naphew's leader_ship will keep, or even drop.
-        sender->leader_ship += ((int)_my_hop - (int)sender->hop + 1);  
-        if (sender->leader_ship > 100){
-            if (sender != __my_leader){
-                // This neibour is my new leader
-                __my_leader = sender;
-                _my_hop = __my_leader->hop + 1;
-                Logger::Info("AdhocRouter::__sniff_air_package()  Got a better leader");
-                __my_leader->PrintOut("Leader details");
-                Logger::Print("__my_hop", _my_hop);
-            }
-            __lower_all_qos();
-        }
+        __review_leadership(sender, incoming_package);
     }
+    // try to discover the downward mesh routing. 
+    // assume I am the top node. saying: mesh-gate store the greatest mesh routing table.
+
+    
 }
 
 bool AdhocRouter::onReceived(const uint8_t * sender_mac, const uint8_t *incomingData, int len){

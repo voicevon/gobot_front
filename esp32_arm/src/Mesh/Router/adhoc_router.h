@@ -18,8 +18,10 @@ class AdhocRouter: public AdhocBase{
         Neibour* __find_blank_neibour();
         Neibour* __my_leader;
 
-        void __sniff_air_package(const uint8_t * mac, AdhocPackage* incoming_package);
-        void __append_to_neibours(uint8_t * mac, AdhocPackage* incoming_package);
-        void __lower_all_qos();
+        void __sniff_air_package(const uint8_t * sender_mac, AdhocPackage* incoming_package);
+        void __append_to_neibours(uint8_t * sender_mac, AdhocPackage* incoming_package);
+        void __lower_all_leadship();
+        void __review_leadership(Neibour* sender, AdhocPackage* incoming_package);
+        
 
 };

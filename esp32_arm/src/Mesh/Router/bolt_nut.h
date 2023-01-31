@@ -13,6 +13,11 @@ class Neibour{
         void PrintOut(const char* title);
 };
 
+class MeshBranch{
+    uint8_t my_child_node_id;
+    uint8_t my_child_family[20];  // How to become dynamic size?
+};
+
 
 class AdhocPackage{
     public:
