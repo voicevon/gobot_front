@@ -7,10 +7,16 @@ uint8_t GuangDa_ShuiWu_SensorBoard::GetPayload(){
     if (__zidong_shoudong.IsPressed()) payload += 1;
     if (__yunxing_tingzhi.IsPressed()) payload += 2;
     if (__guzhang_zhengchang.IsPressed()) payload +=4;
-
-    __state_led.Init(0, PIN_STATE_LED,  HIGH);
+    Logger::Print("Senor payload==================", payload);
+    return payload;
 }
 
+
+void GuangDa_ShuiWu_SensorBoard::SpinOnce(){
+    __zidong_shoudong.SpinOnce();
+    __yunxing_tingzhi.SpinOnce();
+    __guzhang_zhengchang.SpinOnce();
+}
 
 void GuangDa_ShuiWu_SensorBoard::Init(){
     Serial.begin(115200);
@@ -20,5 +26,7 @@ void GuangDa_ShuiWu_SensorBoard::Init(){
     Logger::Info("==========================================");
     Serial.print(FCBC_RESET);
     this->RepportRamUsage();
+    __state_led.Init(0, PIN_STATE_LED,  HIGH);
+
 }
 

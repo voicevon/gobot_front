@@ -56,8 +56,8 @@ class Twh_WarehouseControlSystem():
         idle_packbox = self.packer.FindBox_Idle()
         if idle_packbox is None:
             return
-        Logger.Debug('Found idle_packbox')
-        Logger.Print('box_id', idle_packbox.id)
+        # Logger.Debug('Found idle_packbox')
+        # Logger.Print('box_id', idle_packbox.id)
 
         # 2. get queue(same order_id) from database
         order_items = db_Withdraw.get_single_order()
@@ -75,13 +75,12 @@ class Twh_WarehouseControlSystem():
             new_tooth = PickingPacking_Tooth(order_item)
             self.picking_queue.append(new_tooth)
             new_tooth.packbox_id = idle_packbox.id
+            new_tooth.order_id = order_item['order_id']
             idle_packbox.state = 'feeding'
             # Logger.Print('New tooth in picking_queue  \n  ', new_tooth)
-            new_tooth.print_out('New tooth in picking_queue')
-            self.packer.PrintOut('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()  view packer')
-            # idle_shipout_box.print_out()
-            # for t in self.picking_queue:
-            #     t.print_out()
+            # new_tooth.print_out('New tooth in picking_queue')
+            # self.packer.PrintOut('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()  view packer')
+
 
         # 4. Delete teeth in database (those be copied to wcs buffer)
         db_Withdraw.table_withdraw_queue.remove(doc_ids=doc_ids)

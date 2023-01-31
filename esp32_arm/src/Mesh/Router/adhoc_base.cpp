@@ -14,7 +14,7 @@ void AdhocBase::_Init_EspNow(){
 }
 
 void AdhocBase::_Send(AdhocPackage* pkg){
-    __time_count_up = 0;
+    _time_count_up = 0;
     // Emulates a broadcast
     // Broadcast a message to every device in range
     uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -54,14 +54,14 @@ void AdhocBase::_Send(AdhocPackage* pkg){
 void AdhocBase::Broadcast_Orphan_count_down(){
     // Logger::Debug("AdhocBase::Broadcast_Orphan_count_down()");
     // Logger::Print("'__my_hop", __my_hop);
-    __time_count_up++;
-    if (__time_count_up >= 6999999){
+    _time_count_up++;
+    if (_time_count_up >= 6999999){
         // Logger::Debug("AdhocBase::Broadcast_Orphan_count_down() " );
         // Logger::Print("__my_hop", __my_hop);
 
-        __orphan_package.sender_hop = __my_hop;        
+        _orphan_package.sender_hop = _my_hop;        
         // __orphan_package.PrintOut("AdhocBase::Broadcast_Orphan_count_down()  sending orphan...");
-        _Send(&__orphan_package);
+        _Send(&_orphan_package);
         return;
     }
 }

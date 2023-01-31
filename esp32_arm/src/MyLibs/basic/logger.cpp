@@ -1,16 +1,32 @@
 #include "logger.h"
 
+// void Logger::SetStyle_begin(EnumStyle style_name){
+void Logger::SetStyle(EnumStyle style_name, EnumStyle_position style_position){
+
+    // switch (style_name){
+    // case Info:
+
+    //     break;
+    
+    // default:
+    //     break;
+    // }
+
+    // if ((style_name == Info) && (style_position == Begin)){
+    //     Serial.print(FORE_YELLOW);
+    //     Serial.print(BGC_ORANGE);
+    //     Serial.print("[Info] ");
+    // }else if ((style_name == Info) && (style_position == end)){
+    //     Serial.print(BGC_BLACK);
+    //     Serial.println(FORE_GREEN);
+    // }
+}
+
 int Logger::sid = 0;
 void Logger::Info(const char* title){
     // TRACE();
-    Serial.print(FORE_YELLOW);
-    Serial.print(BGC_ORANGE);
-    Serial.print("[Info] ");
+    // Logger.set
     Serial.print(title);
-    // Serial.print("  ");
-    // Serial.print(value);
-    Serial.print(BGC_BLACK);
-    Serial.println(FORE_GREEN);
 }
 // template <typename anyPrintable>
 // void Logger::Info(const char* title, anyPrintable var, anyPrintable value){

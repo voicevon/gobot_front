@@ -17,5 +17,6 @@ void Button_Gpio::SpinOnce(){
 
 
 bool Button_Gpio::IsPressed(){
-
+    SpinOnce();
+    return __last_state_is_pressed;
 }

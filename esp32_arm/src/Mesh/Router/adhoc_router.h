@@ -20,6 +20,6 @@ class AdhocRouter: public AdhocBase{
 
         void __sniff_air_package(const uint8_t * mac, AdhocPackage* incoming_package);
         void __append_to_neibours(uint8_t * mac, AdhocPackage* incoming_package);
-        void __try_to_remove_worst_neibour();
+        void __try_to_remove_bad_neibour();
 
 };

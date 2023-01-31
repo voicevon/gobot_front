@@ -5,6 +5,17 @@ class Logger():
     style = TerminalFont.Color.Control.reset
 
     @classmethod
+    def Error(cls, title):
+        print(TerminalFont.Color.Fore.yellow
+            + TerminalFont.Color.Background.red
+            + '[Error] ' + title
+            + TerminalFont.Color.Control.reset
+        )
+        cls.style = TerminalFont.Color.Fore.red
+
+
+
+    @classmethod
     def Debug(cls, title):
         print( TerminalFont.Color.Fore.yellow      
                 + TerminalFont.Color.Background.blue 
@@ -32,4 +43,6 @@ if __name__ == '__main__':
     Logger.Print('aaa', 1234)
     Logger.Info('Info')
     Logger.Print('aaaaaaaaaaa',  'ddddddddd')
+    Logger.Error(" wrong")
+    Logger.Print('dddddddd', 'eeeeeeeeee')
         
