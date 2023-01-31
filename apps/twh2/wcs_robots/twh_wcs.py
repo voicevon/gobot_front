@@ -8,6 +8,7 @@ import multiprocessing
 from von.remote_var_mqtt import RemoteVar_mqtt
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
 import time
+from logger import Logger
 
 
 class Twh_WarehouseControlSystem():
@@ -55,6 +56,8 @@ class Twh_WarehouseControlSystem():
         idle_packbox = self.packer.FindBox_Idle()
         if idle_packbox is None:
             return
+        Logger.Debug('Found idle_packbox')
+        Logger.Print('box_id', idle_packbox.id)
 
         # 2. get queue(same order_id) from database
         order_items = db_Withdraw.get_single_order()
@@ -63,16 +66,19 @@ class Twh_WarehouseControlSystem():
             return
 
         # 3. copy teeth in this order to wcs buffer
-        # print('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()', db_rows)
+        Logger.Debug('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()')
         doc_ids = []
         for order_item in order_items:
+            Logger.Print('Assign_Packbox_to_Order()  \n  ', order_item)
             doc_ids.append(order_item.doc_id)
             # new order, connect to the idle shipout_box
             new_tooth = PickingPacking_Tooth(order_item)
             self.picking_queue.append(new_tooth)
             new_tooth.packbox_id = idle_packbox.id
             idle_packbox.state = 'feeding'
-
+            # Logger.Print('New tooth in picking_queue  \n  ', new_tooth)
+            new_tooth.print_out('New tooth in picking_queue')
+            self.packer.PrintOut('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()  view packer')
             # idle_shipout_box.print_out()
             # for t in self.picking_queue:
             #     t.print_out()
@@ -123,26 +129,28 @@ class Twh_WarehouseControlSystem():
             new_deposit_request = self.queue_deposit.get()
             print(new_deposit_request)
 
-def WCS_Main(queue_deposit:multiprocessing.Queue, queue_withdraw:multiprocessing.Queue):
+def WCS_Main(queue_deposit:multiprocessing.Queue):
         g_mqtt_broker_config.client_id = '20221222'
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
         wcs = Twh_WarehouseControlSystem(queue_deposit)
         while True:
             # self.CheckDatabase_WithdrawQueue()
             wcs.Do_deposit()
+            # Deal withdraw
             wcs.Assign_Packbox_to_Order()
             wcs.Move_Pick_Pack()
+            # communicate gcodes sender
             gcode_senders_spin_once()
             time.sleep(0.5)
 
 wcs_queue_deposit = multiprocessing.Queue()
-wcs_queue_withdraw = multiprocessing.Queue()
+# wcs_queue_withdraw = multiprocessing.Queue()
 wcs_queue_takeout = multiprocessing.Queue()
 
 def Start_WCS_Process():
-    p = multiprocessing.Process(target=WCS_Main, args=(wcs_queue_deposit, wcs_queue_withdraw,))
+    p = multiprocessing.Process(target=WCS_Main, args=(wcs_queue_deposit, ))
     p.start() 
-    print('WCS is running on new process.....')
+    Logger.Info('WCS is running on new process.....')
 
     # https://pymotw.com/2/multiprocessing/communication.html#communication-between-processes
 

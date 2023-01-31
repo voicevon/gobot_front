@@ -1,3 +1,5 @@
+from logger import Logger
+
 
 class TwhRobot_PackBox():
 
@@ -18,25 +20,25 @@ class TwhRobot_PackBox():
         self.state = 'idle'
         # g_mqtt.publish('topic', self.id, 'blue')
 
-    def print_out(self):
-        ss = "TwhRobot_ShipoutBox   id=" + str(self.id)
-        ss += ' order_id=' + str(self.order_id)
-        ss += ' state=' + self.state
-        print(ss)
+    def PrintOut(self, title):
+        Logger.Info(title)
+        Logger.Print("id" ,self.id)
+        Logger.Print('order_id' , self.order_id)
+        Logger.Print('state' , self.state)
 
 class TwhRobot_Packer():
     def __init__(self) -> None:
         self.boxes = [TwhRobot_PackBox(0)]
         for i in range(11):
-            newbox = TwhRobot_PackBox(i)
+            newbox = TwhRobot_PackBox(i+1)
             self.boxes.append(newbox)
         self.rx_topic = 'twh/221109/shipout/box'
         # g_mqtt.subscribe(self.rx_topic)
 
-    def debug(self):
-        print('TwhRobot_Shipout::debug()  printing all boxes')
+    def PrintOut(self, title):
+        Logger.Info(title)
         for box in self.boxes:
-            box.print_out()
+            box.PrintOut('----')
 
     def show_pack_box_led(self, packbox_id: int):
         gcode = 'M42P' + str(packbox_id) + 'S1'

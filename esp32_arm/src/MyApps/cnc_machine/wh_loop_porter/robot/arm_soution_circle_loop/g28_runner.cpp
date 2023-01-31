@@ -22,8 +22,8 @@ void Twh2Row_G28_Runner::SetMoveBlock_ToHome(char axis_name, MoveBlock* mb){
             mb->DeepReset_ToDefault();
             // Logger::Print("Twh2Row_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha->TargetPosition = 99999;
-            alpha->Speed = 100;
-            alpha->Acceleration = 0.05;
+            alpha->Speed = 900;
+            alpha->Acceleration = 0.5;
             break;
 
         default:

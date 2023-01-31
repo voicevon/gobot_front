@@ -1,4 +1,4 @@
-
+from logger import Logger
 
 
 def get_row_from_tooth_location(location_string:str) -> int:
@@ -30,10 +30,10 @@ class PickingPacking_Tooth():
             self.col = dbtable_withdraw_queue['col']
             self.layer = dbtable_withdraw_queue['layer']
 
-    def print_out(self):
-        ss = ' Tooth order_id=' + str(self.order_id)
-        ss += ' packbox_id=' + str(self.packbox_id)
-        ss += ' row=' + str(self.row)
-        ss += ' col=' + str(self.col)
-        ss += ' layer= ' + str(self.layer)
-        print(ss)
+    def print_out(self, title):
+        Logger.Debug(title)
+        Logger.Print(' Tooth order_id\t' , self.order_id)
+        Logger.Print(' row=]\t' , self.row)
+        Logger.Print(' col=\t' , self.col)
+        Logger.Print(' layer=\t ' , self.layer)
+        Logger.Print(' packbox_id=\t' , self.packbox_id)

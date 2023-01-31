@@ -4,9 +4,9 @@ from wtforms import StringField, IntegerField, BooleanField, SubmitField, FormFi
 from wtforms.validators import DataRequired, InputRequired
 
 from database.db_api import db_User,db_Stock,db_Withdraw,db_Shipout
-from wcs_robots.twh_wcs import Start_WCS_Process, wcs_queue_deposit, wcs_queue_withdraw, wcs_queue_takeout
+from wcs_robots.twh_wcs import Start_WCS_Process, wcs_queue_deposit, wcs_queue_takeout
 from bolt_nut import get_row_from_tooth_location
-
+from logger import Logger
 
 web = Flask(__name__)
 web.config['SECRET_KEY'] = '20221220'
@@ -195,6 +195,7 @@ def withdraw_end():
 
     user_request['connected_box_id'] = -1
     db_Withdraw.insert_withdraw_queue_multi_rows(user_request)
+    Logger.Debug('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     return render_template('/withdraw_end.html')
 
 @web.route('/withdraw_takeout')

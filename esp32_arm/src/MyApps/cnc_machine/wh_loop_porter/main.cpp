@@ -25,7 +25,7 @@ Twh2Row_Robot robot;
 void test_board(){
     board.Test_PositionTriggers(0);
     board.Test_Stepper(0);
-    Serial.println("[Info] test_board() is done.");
+    Serial.println("[Info] test_board() is done  MY_ROBOT_ROW_ID=" + String(MY_ROBOT_ROW_ID));
 }
 
 void test_robot(){
@@ -94,7 +94,8 @@ void setup(){
     gcode_queue.AppendGcodeCommand("G28X");
     gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
     // test_robot();
-    Logger::Info ("Teeth Warehouse   setup() is done. ");
+    Logger::Info ("App::loop_porter    setup() is done. ");
+    
 }
 
 
