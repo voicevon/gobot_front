@@ -3,7 +3,7 @@
 // #include "all_devices.h"
 #ifdef I_AM_GARMENT_BOT
 
-#include "IoT/mqtt_message_consumer.h"
+#include "Mqtt/mqtt_message_consumer.h"
 #include "AGV/agv_base.h"
 #include "box_mover_agent.h"
 #include "AGV/map_road_station/map_navigator.h"

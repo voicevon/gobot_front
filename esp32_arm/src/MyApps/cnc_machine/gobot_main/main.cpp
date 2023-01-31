@@ -6,7 +6,7 @@
 #include "robot/gobot_main_robot.h"
 #include "gobot_main_app.h"
 #include "MyLibs/MyFunctions.hpp" 
-#include "IoT/from_mqtt_client_to_remote_queue.h"
+#include "Mqtt/from_mqtt_client_to_remote_queue.h"
 
 #include "all_applications.h"
 #ifdef I_AM_GOBOT_MAIN

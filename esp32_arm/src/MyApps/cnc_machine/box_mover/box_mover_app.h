@@ -3,7 +3,7 @@
 #include "CNC/arm_solution/core_xa_ab/core_az_arm_solution.h"
 #include "CNC/gcode/gcode_queue.h"
 #include "CNC/gcode/gcode_producer.h"
-#include "IoT/mqtt_message_consumer.h"
+#include "Mqtt/mqtt_message_consumer.h"
 
 
 class BoxMoverApp: public GcodeProducer, public MqttMessageConsumer{

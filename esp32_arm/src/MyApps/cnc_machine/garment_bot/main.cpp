@@ -5,8 +5,8 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "garment_bot.h"
-#include "IoT/from_mqtt_client_to_remote_queue.h"
-// #include "IoT/main_mqtt.h"
+#include "Mqtt/from_mqtt_client_to_remote_queue.h"
+// #include "Mqtt/main_mqtt.h"
 
 GarmentBot *garment_robot;
 MessageQueue* garment_bot_message_queue;

@@ -9,8 +9,8 @@
 
 
 #include <HardwareSerial.h>
-#include "IoT/remote_queue_bridge_mqtt.h"
-#include "IoT/mqtt_message_consumer.h"
+#include "Mqtt/remote_queue_bridge_mqtt.h"
+#include "Mqtt/mqtt_message_consumer.h"
 
 
 RemoteQueueBridge_mqtt mono_remote_queue_bridge;
