@@ -1,6 +1,6 @@
 
 
-#include "Mesh/Router/adhoc_router.h"
+#include "Mesh/adhoc/adhoc_router.h"
 #include "board/board_sensor.h"
 
 #include "all_applications.h"

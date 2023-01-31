@@ -1,10 +1,11 @@
 #include "board.h"
-#include "Mesh/Router/adhoc_router.h"
+#include "Mesh/adhoc/adhoc_router.h"
 
 
 #include "all_applications.h"
 #ifdef I_AM_ADHOC_ROUTER
 #define MY_APP_NODE_ID 102
+
 AdhocRouter router;
 Adhoc_RouterBoard board;
 

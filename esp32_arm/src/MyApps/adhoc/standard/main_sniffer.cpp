@@ -1,7 +1,7 @@
 
 
 #include "board.h"
-#include "Mesh/Router/adhoc_sniffer.h"
+#include "Mesh/adhoc/adhoc_sniffer.h"
 
 #include "all_applications.h"
 #ifdef I_AM_ADHOC_SNIFFER
