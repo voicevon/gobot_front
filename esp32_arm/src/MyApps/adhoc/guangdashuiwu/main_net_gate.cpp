@@ -28,15 +28,15 @@ void loop(){
         gate.received_new_app_package = false;
         uint8_t io = gate.rx_package.app_payload[0];
         // gate.rx_package.PrintOut("loop()  new rx_package");
-        Serial.print(gate.rx_package.app_source_node_id);
+        Serial.print(gate.rx_package.source_node_id);
         Serial.print("------");
         Serial.println(io);
-        if (gate.rx_package.app_source_node_id == 4){
+        if (gate.rx_package.source_node_id == 4){
             digitalWrite(PIN_ZIDONG_4,  (io & 1));
             digitalWrite(PIN_YUNXING_4,  (io & 2));
             digitalWrite(PIN_GUZHANG_4, (io & 4));
         }
-        if (gate.rx_package.app_source_node_id == 2){
+        if (gate.rx_package.source_node_id == 2){
             digitalWrite(PIN_ZIDONG_2,  (io & 1));
             digitalWrite(PIN_YUNXING_2, (io & 2));
             digitalWrite(PIN_GUZHANG_2, (io & 4));

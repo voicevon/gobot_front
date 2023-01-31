@@ -25,8 +25,10 @@
 
 // #define I_AM_ADHOC_ROUTER
 // #define I_AM_ADHOC_SNIFFER
-// #define I_AM_GUANGDA_SHUIWU_NETGATE  //#8
-#define I_AM_GUANGDA_SHUIWU_SENSOR  //#7
+#define I_AM_GUANGDA_SHUIWU_NETGATE  //#8
+// #define I_AM_GUANGDA_SHUIWU_SENSOR  //#7eu
+
+
 
 
 // #define I_AM_ACUPUCTURE_MAIN

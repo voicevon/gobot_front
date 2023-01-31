@@ -33,10 +33,9 @@ void loop(){
         return;
         
     AdhocPackage apc;
-    apc.source_app_node_id = MY_APP_NODE_ID;
-    apc.destination_app_node_id = NODE_ID_MESH_GATE;  
+    apc.source_node_id = MY_APP_NODE_ID;
+    apc.destination_node_id = NODE_ID_MESH_GATE;  
     apc.app_payload_size = 1;
-    // AdhocHelper::CopyMacAddr(router.)
     apc.app_payload[0] = board.GetPayload();
     router.Send_App_Package(&apc);
     // apc.PrintOut("loop()  is sent.");

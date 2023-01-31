@@ -161,7 +161,7 @@ bool AdhocRouter::onReceived(const uint8_t * sender_mac, const uint8_t *incoming
 void AdhocRouter::Send_App_Package(AdhocPackage* app_pkg){
     app_pkg->sender_hop = _my_hop;
     app_pkg->sender_node_id = _my_node_id;
-    if (app_pkg->destination_app_node_id = NODE_ID_MESH_GATE ){
+    if (app_pkg->destination_node_id = NODE_ID_MESH_GATE ){
         AdhocHelper::CopyMacAddr(__my_leader->mac_addr, app_pkg->to_mac_addr);
     }else {
         Logger::Warn("AdhocRouter::Send_App_Package()  I am too young, don't know who is the receiver");

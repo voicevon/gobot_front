@@ -20,8 +20,8 @@ class AdhocPackage{
         uint8_t to_mac_addr[6];     // current hop target.
         uint8_t sender_node_id;
         uint8_t sender_hop;        // EspNow sender, Point to Point sender.
-        uint8_t source_app_node_id;
-        uint8_t destination_app_node_id;
+        uint8_t source_node_id;
+        uint8_t destination_node_id;
         uint8_t app_payload_size;
         uint8_t app_payload[99];   // Max pack size of esp-now is ??
 

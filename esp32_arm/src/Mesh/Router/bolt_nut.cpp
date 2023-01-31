@@ -17,10 +17,10 @@ void AdhocPackage::PrintOut(const char * title){
     Serial.print(sender_node_id);
     Serial.print("\tsender_hop= ");
     Serial.print(sender_hop);
-    Serial.print("\tsource_node= ");
-    Serial.print(source_app_node_id);
-    Serial.print("\tdestination_node= ");
-    Serial.print(destination_app_node_id);
+    Serial.print("\tsource_node_id= ");
+    Serial.print(source_node_id);
+    Serial.print("\tdestination_node_id= ");
+    Serial.print(destination_node_id);
     Serial.print("    payload[0]=");
     Serial.print(app_payload[0]);
     Serial.println(" ");

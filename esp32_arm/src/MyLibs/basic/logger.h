@@ -15,9 +15,31 @@
     Serial.print(__PRETTY_FUNCTION__); \
     Serial.flush();
 */
+// class LoggerStyle{
+//     public:
+//         int fore_color;
+//         int back_color;
+//         bool reset_in_the_end;
+// };
+
+
+enum EnumStyle{
+    Error = 1,
+    Warning =2,
+    Info = 3,
+    Debug =4,
+};
+enum EnumStyle_position{
+    Begin =1,
+    End = 2,
+};
+
+// class LoggerHelper{
+// };
 
 class Logger{
     public :
+        static void SetStyle(EnumStyle style_name, EnumStyle_position style_position);
         static void Info(const char * title);
         // template <typename anyPrintable>
         // static void Info(const char * title, anyPrintable var, anyPrintable value);
@@ -39,6 +61,8 @@ class Logger{
 
         static void __print_sid();
         static int sid;
+        // static LoggerStyle style_title;
+        // static LoggerStyle style_key_value;
 };
 
 
