@@ -5,7 +5,7 @@
 class AdhocRouter: public AdhocBase{
     public:
         bool onReceived(const uint8_t * sender_mac, const uint8_t *incomingData, int len) override;
-        void Init(uint8_t my_app_node_id) override;
+        void Init(uint8_t my_node_id) override;
         bool IamOrphan() {return __my_leader == NULL;};
         void Send_App_Package(AdhocPackage* pkg);
 
@@ -20,6 +20,6 @@ class AdhocRouter: public AdhocBase{
 
         void __sniff_air_package(const uint8_t * mac, AdhocPackage* incoming_package);
         void __append_to_neibours(uint8_t * mac, AdhocPackage* incoming_package);
-        void __try_to_remove_bad_neibour();
+        void __lower_all_qos();
 
 };

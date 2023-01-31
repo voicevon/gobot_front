@@ -11,14 +11,14 @@ bool AdhocGate::onReceived(const uint8_t* sender_mac, const uint8_t* incomingDat
 }
 
 
-void AdhocGate::Init(uint8_t my_app_node_id){
+void AdhocGate::Init(uint8_t my_node_id){
     _Init_EspNow();
     esp_read_mac(_my_mac_addr, ESP_MAC_WIFI_STA);
     received_new_app_package = false;
     _my_hop = 1;
-    _my_app_node_id = my_app_node_id;
+    _my_node_id = my_node_id;
+    _orphan_package.sender_node_id = _my_node_id;
     _orphan_package.sender_hop= 1;
-    _orphan_package.app_source_node_id = _my_app_node_id;
     _orphan_package.app_payload_size = 1;
     _orphan_package.to_mac_addr [0] = 0xff;
     _orphan_package.to_mac_addr [1] = 0xff;

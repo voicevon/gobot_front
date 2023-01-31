@@ -7,7 +7,7 @@ class AdhocGate: public AdhocBase{
         bool onReceived(const uint8_t * mac, const uint8_t *incomingData, int len) override;
         bool received_new_app_package;
 
-        void Init(uint8_t my_app_node_id) override;
+        void Init(uint8_t my_node_id) override;
 
     protected:
 

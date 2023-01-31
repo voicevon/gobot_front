@@ -7,7 +7,7 @@
 
 GuangDa_ShuiWu_GateBoard board;
 AdhocGate gate;
-#define MY_APP_NODE_ID 101
+#define MY_APP_NODE_ID NODE_ID_MESH_GATE
 
 void on_esp_now_received(const uint8_t * sender_mac, const uint8_t *incomingData, int len){
     // Logger::Debug("on_esp_now_received");

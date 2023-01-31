@@ -27,12 +27,14 @@ void setup(){
 }
 
 void loop(){
+    board.SpinOnce();
     router.Broadcast_Orphan_count_down();
     if (router.IamOrphan()) 
         return;
         
     AdhocPackage apc;
-    apc.app_source_node_id = MY_APP_NODE_ID;
+    apc.source_app_node_id = MY_APP_NODE_ID;
+    apc.destination_app_node_id = NODE_ID_MESH_GATE;  
     apc.app_payload_size = 1;
     // AdhocHelper::CopyMacAddr(router.)
     apc.app_payload[0] = board.GetPayload();

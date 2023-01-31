@@ -5,21 +5,21 @@
 
 
 
-void AdhocRouter::Init(uint8_t my_app_node_id){
+void AdhocRouter::Init(uint8_t my_node_id){
     _Init_EspNow();
     esp_read_mac(_my_mac_addr, ESP_MAC_WIFI_STA);
     _my_hop = 100;
-    _my_app_node_id = my_app_node_id;
+    _my_node_id = my_node_id;
 
     // init orphan package
     _orphan_package.sender_hop = _my_hop;
-    _orphan_package.app_source_node_id = _my_app_node_id;
+    _orphan_package.sender_node_id = _my_node_id;
     _orphan_package.app_payload_size = 1;
     // __orphan_package.payload = " I am orphan";
     // Init route table
     for (int i=0; i<ROUTER_TABLE_ROWS; i++){
         Neibour* his = &__my_neibours[i];
-        his->app_node_id = 0;  // Not an avaliable node.
+        his->node_id = 0;  // Not an avaliable node.
     }
 }
 
@@ -34,7 +34,7 @@ Neibour* AdhocRouter::__search_neibour(uint8_t * mac_addr){
 
 Neibour* AdhocRouter::__find_blank_neibour(){
     for(int i=0; i<ROUTER_TABLE_ROWS; i++){
-        if (__my_neibours[i].app_node_id == 0){
+        if (__my_neibours[i].node_id == 0){
             return &__my_neibours[i];
         }
     }
@@ -48,11 +48,11 @@ void AdhocRouter::__append_to_neibours(uint8_t * sender_mac, AdhocPackage* incom
             return;
         }
         // just save to neibour_table,  we don't set hop right now.
-        // Logger::Print("sender's  app_node_id", incoming_package-;
+        // Logger::Print("sender's  node_id", incoming_package-;
 
-        blank->app_node_id = incoming_package->app_source_node_id;
+        blank->node_id = incoming_package->sender_node_id;
         blank->hop = incoming_package->sender_hop;
-        blank->qos = 90;
+        blank->leader_ship = 90;
         AdhocHelper::CopyMacAddr(sender_mac, blank->mac_addr);
         Logger::Info("AdhocRouter::__sniff_air_package() -> __append_to_neibours()");
         blank->PrintOut("new neibour detail");
@@ -69,18 +69,18 @@ void AdhocRouter::__append_to_neibours(uint8_t * sender_mac, AdhocPackage* incom
         }
 }
 
-void AdhocRouter::__try_to_remove_bad_neibour(){
-    // lower the qos level of all neibous.
+void AdhocRouter::__lower_all_qos(){
+    // lower the leader_ship level of all neibous.
     for (int i=0 ; i<ROUTER_TABLE_ROWS; i++){
-        if (__my_neibours[i].app_node_id > 0){
-            __my_neibours[i].qos--;
-            if (__my_neibours[i].qos < 0 ){
+        if (__my_neibours[i].node_id > 0){
+            __my_neibours[i].leader_ship--;
+            if (__my_neibours[i].leader_ship < 0 ){
                 // remove this from routing_table.
                 Logger::Info("AdhocRouter::__sniff_air_package()  remove this neibour.");
                 __my_neibours[i].PrintOut("his detail");
-                __my_neibours[i].app_node_id = 0;
+                __my_neibours[i].node_id = 0;
                 if (&__my_neibours[i] == __my_leader){
-                    Logger::Print("The removed neibout is my_leader, his app_node_id",__my_leader->app_node_id);
+                    Logger::Print("The removed neibout is my_leader, his node_id",__my_leader->node_id);
                     __my_leader = NULL;
                     _my_hop = 100;
                 }
@@ -100,12 +100,17 @@ void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incomin
         // might update sender's hop in routing_table, even my_hop
         sender->hop = incoming_package->sender_hop;
         if (sender == __my_leader){
-            // leader's hop might becomes greater
-            _my_hop = sender->hop + 1;
+            // leader's hop might changed.
+            if (_my_hop < 200){
+                _my_hop = sender->hop + 1;
+            }
         }
-        sender->qos += (int)_my_hop - (int)sender->hop;  
-        if (sender->qos > 100){
-            __try_to_remove_bad_neibour();
+        // My leader's leader_ship will increase fastly.
+        // My simbling's leader_ship will increase slowly,
+        //    In case of my_leader is lost connection, my simbling will become my leader.
+        // My naphew's leader_ship will keep, or even drop.
+        sender->leader_ship += ((int)_my_hop - (int)sender->hop + 1);  
+        if (sender->leader_ship > 100){
             if (sender != __my_leader){
                 // This neibour is my new leader
                 __my_leader = sender;
@@ -113,8 +118,8 @@ void AdhocRouter::__sniff_air_package(const uint8_t * mac, AdhocPackage* incomin
                 Logger::Info("AdhocRouter::__sniff_air_package()  Got a better leader");
                 __my_leader->PrintOut("Leader details");
                 Logger::Print("__my_hop", _my_hop);
-                
             }
+            __lower_all_qos();
         }
     }
 }
@@ -154,7 +159,14 @@ bool AdhocRouter::onReceived(const uint8_t * sender_mac, const uint8_t *incoming
 
 
 void AdhocRouter::Send_App_Package(AdhocPackage* app_pkg){
-   app_pkg->sender_hop = _my_hop;
-   AdhocHelper::CopyMacAddr(__my_leader->mac_addr, app_pkg->to_mac_addr);
-   _Send(app_pkg);
+    app_pkg->sender_hop = _my_hop;
+    app_pkg->sender_node_id = _my_node_id;
+    if (app_pkg->destination_app_node_id = NODE_ID_MESH_GATE ){
+        AdhocHelper::CopyMacAddr(__my_leader->mac_addr, app_pkg->to_mac_addr);
+    }else {
+        Logger::Warn("AdhocRouter::Send_App_Package()  I am too young, don't know who is the receiver");
+        // This package will up toward gate, 
+        //  then at a certain node, make a turn,  down away from the gate.
+    }
+    _Send(app_pkg);
 }
