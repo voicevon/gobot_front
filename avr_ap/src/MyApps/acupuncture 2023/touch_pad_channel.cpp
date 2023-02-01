@@ -20,6 +20,10 @@ void TouchpadChannel::Read(){
     if (csv == -2){
         Serial.println("This channel becomes died");
         __is_died = true;
+    }else{
+        __is_died = false;
+        __byte_value = csv / 256;
+        if (csv > 65535)  __byte_value = 255;
     }
 
     long time_cost = millis() - when_started;

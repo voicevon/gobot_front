@@ -11,21 +11,21 @@
 
 #ifdef I_AM_ACUPUNCTURE_MEGA328_VER_2023
 
-#define I2C_REPLY_BYTES 16 // 16 bits for normal/error per channel,   one byte for each channel
+// #define I2C_REPLY_BYTES 16 // 16 bits for normal/error per channel,   one byte for each channel
 #define TOUCH_PAD_CHANNELS 14
 
-TouchpadChannel all_pads[TOUCH_PAD_CHANNELS];
+TouchpadChannel all_channels[TOUCH_PAD_CHANNELS];
 uint8_t tx_buffer_for_i2c[2 + TOUCH_PAD_CHANNELS];
 
 void requestEvent(){
-	Wire.write(tx_buffer_for_i2c, I2C_REPLY_BYTES);
+	Wire.write(tx_buffer_for_i2c, 2 + TOUCH_PAD_CHANNELS);
 	Serial.print("replied");
 }
 
 void InitChannels(){
 	int pins[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 19}; // 14:A0, 15:A1, 16:A2, 17:A3, 18:A4, 19:A5
 	for (int i = 0; i < TOUCH_PAD_CHANNELS; i++){
-		all_pads[i].Init(pins[i]);
+		all_channels[i].Init(pins[i]);
 	}
 }
 
@@ -40,11 +40,19 @@ void setup() {
 }
 
 void loop() {
+	int byte_index = 0;
+	int bit_index ;
+	tx_buffer_for_i2c[0] = 0;
+	tx_buffer_for_i2c[1] = 0;
 	for (int i = 0; i < TOUCH_PAD_CHANNELS; i++){
+		TouchpadChannel* channel = &all_channels[i];
 		// Read sensor.
-		all_pads[i].Read();
+		channel->Read();
 		// prepare tx_buffer_for_i2c_request
-
+		if (i >=8) byte_index = 1;
+		bit_index = i % 8;
+		if (channel->Is_Died()) tx_buffer_for_i2c[byte_index] += (1<<bit_index);
+		tx_buffer_for_i2c[2+i] = channel->GetValue();
 	}
 }
 
