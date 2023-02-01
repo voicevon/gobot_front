@@ -112,7 +112,6 @@ void Debug_info(){
 	delay(100);                             // arbitrary delay to limit data to serial port 
 }
 
-// uint8_t device_addr = 0x04;
 
 void setup()                    
 {

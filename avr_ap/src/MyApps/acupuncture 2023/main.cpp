@@ -8,7 +8,7 @@
 
 #include "all_application.h"
 
-#ifdef I_AM_ACUPUNCTURE_MEGA328
+#ifdef I_AM_ACUPUNCTURE_MEGA328_VER_2023
 
 // #include <CapacitiveSensor.h>
 #include "libs/capacitive_sensor/capacitive_sensor.h"
@@ -18,8 +18,8 @@
 // https://www.jianshu.com/p/4b1ddefc9006
 
 #include <Arduino.h>
-#define I2C_REPLY_BYTES 4
-#define CHANNELS 16
+#define I2C_REPLY_BYTES 16   // 16 bits for normal/error per channel,   one byte for each channel
+#define TOUCH_PAD_CHANNELS 14
 #define PIN_CAPACITY_SENSOR_COMMON 12
 
 
@@ -41,15 +41,15 @@ void requestEvent() {
 }
 
 
-CapacitiveSensor* cs[CHANNELS];
-long cs_value[CHANNELS]; 
+CapacitiveSensor* sensors[TOUCH_PAD_CHANNELS];
+long cs_value[TOUCH_PAD_CHANNELS]; 
 
 void setup_capacity_sensor(){
 	int pins[] = {2,3,4,5, 6,7,8,9, 10,11,14,15, 16,17,18,19};   // 14:A0, 15:A1, 16:A2, 17:A3, 18:A4, 19:A5
 
-	for (int i=0; i<CHANNELS; i++){
+	for (int i=0; i<TOUCH_PAD_CHANNELS; i++){
 		CapacitiveSensor* new_cs = new CapacitiveSensor(PIN_CAPACITY_SENSOR_COMMON, pins[i]);
-		cs[i] = new_cs;
+		sensors[i] = new_cs;
 	}
 }
 
@@ -60,12 +60,12 @@ void capcity_sensor_loop(){
 
 	start = millis();
 	long csv= 0;
-	for(int i=0; i< CHANNELS; i++){
+	for(int i=0; i< TOUCH_PAD_CHANNELS; i++){
 		bit_index = i % 8;
 		byte_index = i / 8 + 2;           
 		if((flags[byte_index] & (1 << bit_index)) == 0){
 			// Hardware is OK, Read sensor value
-			csv = cs[i]->capacitiveSensor(30);
+			csv = sensors[i]->capacitiveSensor(30);
 			cs_value[i] = csv;
 			// Update flags for application
 			if(csv == -2){
@@ -89,7 +89,7 @@ void Debug_info(){
 	// Output capacity sensor values.
 	Serial.print(millis() - start);        // check on performance in milliseconds
 	Serial.print("\t");                    // tab character for debug windown spacing
-	for(int i=0; i<CHANNELS; i++){
+	for(int i=0; i<TOUCH_PAD_CHANNELS; i++){
 		bit_index = i % 8;
 		byte_index = i / 8 + 2;  
 		uint8_t flag = flags[byte_index] & (1<< bit_index);
