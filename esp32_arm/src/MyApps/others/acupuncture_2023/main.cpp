@@ -2,17 +2,18 @@
 
 
 
-#include "i2c_commu.h"
+#include "i2c_master.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "Mqtt/wifi_mqtt_client.h"
 
 #include "WString.h"
 #include "Mylibs/basic/logger.h"
+#include "touchpad_channel.h"
 
 #include "all_applications.h"
 #ifdef I_AM_ACUPUCTURE_MAIN_2023
 
-I2c_commu_2023 obj_i2c_bus;
+I2C_Master i2c_master;
 
 // #define FORCE_ONLINE_CELL_COUNT 2
 // int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {19,17};
@@ -21,13 +22,32 @@ I2c_commu_2023 obj_i2c_bus;
 #define FORCE_ONLINE_CELL_COUNT 1
 int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = { 9 };
 
+// TouchPad_Channel all_channels[300];
+
+TouchCell_2023 all_cells[20];
+
+void Init_Cells(){
+    all_cells[3].Init(3, 8);
+    all_cells[4].Init(3, 8);
+    all_cells[5].Init(3, 8);
+    all_cells[6].Init(3, 8);
+    all_cells[7].Init(3, 8);
+}
+
 void init_online_cells(){
+
+    // uint8_t cell_id = 3;
+    // uint8_t channel_id = 0;
+    // all_channels[cell_id].Init(cell_id, channel_id, TouchPad_Channel::EnumState::WROKING);
+
+
+
     //All online cells will never turn itself off.
     // For test_jig, The online_cells list should be empty.
 
 
     for (int i=0; i < FORCE_ONLINE_CELL_COUNT; i++){
-       TouchCell_2023* pCell = &obj_i2c_bus.Cells[i];
+       TouchCell_2023* pCell = &i2c_master.Cells[i];
         // for (int j=0; j< FORCE_ONLINE_CELL_COUNT; j++){
             // if (force_online_cell_list[j] == pCell->Address){
         pCell->IsForceOnline = true;
@@ -40,7 +60,7 @@ void init_online_cells(){
 void publish_online_cells(){
     String payload="";
     for(int i=0; i<FORCE_ONLINE_CELL_COUNT;i++){
-        TouchCell_2023* pCell = &obj_i2c_bus.Cells[i];
+        TouchCell_2023* pCell = &i2c_master.Cells[i];
         if(pCell->IsOnline){
             payload.concat(String(pCell->Address));
             payload.concat(" ");
@@ -55,7 +75,7 @@ void publish_error_cells(){
     bool has_error = false;
     String payload = "";
     for (int i=0; i < FORCE_ONLINE_CELL_COUNT; i++){
-       TouchCell_2023* pCell = &obj_i2c_bus.Cells[i];
+       TouchCell_2023* pCell = &i2c_master.Cells[i];
         if (pCell->IsForceOnline){
             if(!pCell->IsOnline){
                 Serial.print("This cell should be online, but Not  ");
@@ -78,12 +98,15 @@ void setup() {
     Serial.begin(115200);
     delay(1000);
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
-    obj_i2c_bus.Init(CELL_ID_MIN, FORCE_ONLINE_CELL_COUNT);
+
+    i2c_master.Init(CELL_ID_MIN, FORCE_ONLINE_CELL_COUNT);
+
     setup_wifi_mqtt();
     while (!mqtt_is_connected){
         delay(100);
     }
-    init_online_cells();
+    init_online_cells();   // TODO:  remove this
+    Init_Cells();
 
 }
 
@@ -91,12 +114,17 @@ String topic = "";
 String payload ="";
 
 void loop() {
-    obj_i2c_bus.SpinOnce();
+    // i2c_master.SpinOnce();
     // publish_online_cells();
+    TouchCell_2023* cell;
+    i2c_master.ReadSingleCell(cell);
+
+
+
     publish_error_cells();
 
     for(int i = 0; i< FORCE_ONLINE_CELL_COUNT; i++){
-        TouchCell_2023* cell = &obj_i2c_bus.Cells[i];
+        TouchCell_2023* cell = &i2c_master.Cells[i];
         if (cell->HasUpdate()){
             Logger::Debug("loop()  found updated cell");
             Logger::Print("HasUpdated()  cell address ", cell->Address);

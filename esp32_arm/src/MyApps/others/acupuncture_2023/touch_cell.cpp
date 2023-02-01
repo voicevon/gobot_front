@@ -18,6 +18,17 @@
 #define PPA3 13   // D17
 
 
+void TouchCell_2023::Init(uint8_t cell_id,  uint8_t installed_channel_count){
+    
+    for(int i=0; i<14; i++){
+        if (i<installed_channel_count){
+            __all_channels[i].Init(cell_id, i, TouchPad_Channel::EnumState::WROKING);
+        }else{
+            __all_channels->Init(cell_id, i, TouchPad_Channel::EnumState::NOT_INSTALLED);
+        }
+    }
+
+}
 
 
 bool TouchCell_2023::HasUpdate(){

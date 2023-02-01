@@ -1,5 +1,5 @@
 //https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout-1.jpg
-#include "i2c_commu.h"
+#include "i2c_master.h"
 #include <string>
 #include <HardwareSerial.h>
 
