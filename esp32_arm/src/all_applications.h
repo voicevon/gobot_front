@@ -29,7 +29,8 @@
 // #define I_AM_GUANGDA_SHUIWU_SENSOR  
 
 
-#define I_AM_ACUPUCTURE_MAIN
+// #define I_AM_ACUPUCTURE_MAIN_2022
+#define I_AM_ACUPUCTURE_MAIN_2023
 // #define I_AM_ACUPUNCTURE_JIG_TESTER
 // #define I_AM_SMOKE_BOT
 // #define I_AM_CABLE_AXIS_XPYP
@@ -102,7 +103,14 @@
 #endif
 
 
-#ifdef I_AM_ACUPUCTURE_MAIN
+#ifdef I_AM_ACUPUCTURE_MAIN_2022
+	// #define REMOTE_QUEUE_MQTT_COUNT  0   
+    #define BODY_ID "001"
+	#define CELL_ID_MIN 3
+	// #define CELLS_COUNT 30
+#endif
+
+#ifdef I_AM_ACUPUCTURE_MAIN_2023
 	// #define REMOTE_QUEUE_MQTT_COUNT  0   
     #define BODY_ID "001"
 	#define CELL_ID_MIN 3

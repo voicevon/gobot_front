@@ -3,9 +3,9 @@
 #define SAMPLES_COUNT_FOR_MEASURE 30
 
 void TouchpadChannel::Init(uint8_t pin_sensor){
-    __is_died = false;
     __sensor = new CapacitiveSensor(PIN_CAPACITY_SENSOR_COMMON, pin_sensor);
-
+    __byte_value = 0;
+    __is_died = false;
 }
 
 void TouchpadChannel::Read(){

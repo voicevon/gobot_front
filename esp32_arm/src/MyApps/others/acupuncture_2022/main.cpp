@@ -1,7 +1,5 @@
 //https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout-1.jpg
 
-#include "all_applications.h"
-#ifdef I_AM_ACUPUCTURE_MAIN
 
 #include "i2c_commu.h"
 #include "MyLibs/MyFunctions.hpp" 
@@ -10,6 +8,9 @@
 #include "WString.h"
 #include "Mylibs/basic/logger.h"
 
+
+#include "all_applications.h"
+#ifdef I_AM_ACUPUCTURE_MAIN_2022
 
 I2c_commu obj_i2c_bus = I2c_commu();
 
@@ -48,7 +49,6 @@ void publish_online_cells(){
     Serial.println(payload);
     g_mqttClient.publish("acupucture/online/addrs", 2, true,  payload.c_str());
 }
-
 
 void publish_error_cells(){
     digitalWrite(2, LOW);

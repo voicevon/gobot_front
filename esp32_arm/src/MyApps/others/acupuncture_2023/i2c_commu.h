@@ -9,14 +9,14 @@
 
 //  Pull-up resistor = 1.8K   to 5V
 
-class I2c_commu{
+class I2c_commu_2023{
     public:
         void Init(int min_cell_i2c_address, int cells_count);
-        TouchCell* FindandReadValidateCell();   // return the last slave_id of avaliable.
+        TouchCell_2023* FindandReadValidateCell();   // return the last slave_id of avaliable.
         void SpinOnce();
-        bool ReadSingleCell(TouchCell* cell);
+        bool ReadSingleCell(TouchCell_2023* cell);
         bool HasUpdate();
-        TouchCell Cells[30];
+        TouchCell_2023 Cells[30];
 
     private:
         int __CELLS_COUNT;
