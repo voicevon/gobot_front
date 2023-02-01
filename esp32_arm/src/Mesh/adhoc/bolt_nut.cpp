@@ -13,7 +13,7 @@ void AdhocPackage::PrintOut(const char * title){
     Serial.print(to_mac_addr[4]);   Serial.print(" ");
     Serial.print(to_mac_addr[5]);   Serial.print(" ");
 
-    Serial.print("\tsender_app_node_id= ");
+    Serial.print("\tsender_node_id= ");
     Serial.print(sender_node_id);
     Serial.print("\tsender_hop= ");
     Serial.print(sender_hop);

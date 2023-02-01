@@ -21,7 +21,10 @@ class MeshBranch{
 
 class AdhocPackage{
     public:
-        // uint8_t network_id;     // Currently only one network in the range.
+        uint8_t network_id;     // Currently only one network in the range.
+        // 1: app_data to net-gate   2: app_data_to router or sensor.     11: to router or sensor, but failed and backwording to source_node.
+        // 21:  uploading my_route_table  appended  22: uploading my_route_table, please  removed this node, include myself.    
+        uint8_t package_type;
         uint8_t to_mac_addr[6];     // current hop target.
         uint8_t sender_node_id;
         uint8_t sender_hop;        // EspNow sender, Point to Point sender.

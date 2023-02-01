@@ -94,8 +94,10 @@ void AdhocRouter::__review_leadership(Neibour* sender, AdhocPackage* incoming_pa
     sender->hop = incoming_package->sender_hop;
     if (sender == __my_leader){
         // leader's hop might changed.
-        if (_my_hop < 200){
-            _my_hop = sender->hop + 1;
+        _my_hop = sender->hop + 1;
+        if (_my_hop > 200){
+            _my_hop = 200;
+            // __my_leader = NULL;  DO NOT apply this line! 
         }
     }
     // My leader's leader_ship will increase fastly.
@@ -116,7 +118,6 @@ void AdhocRouter::__review_leadership(Neibour* sender, AdhocPackage* incoming_pa
         __lower_all_leadship();
     }
 }
-
 
 void AdhocRouter::__sniff_air_package(const uint8_t * sender_mac, AdhocPackage* incoming_package){
     // incoming_package->PrintOut("from:  AdhocRouter::onReceived() ");
@@ -171,7 +172,7 @@ bool AdhocRouter::onReceived(const uint8_t * sender_mac, const uint8_t *incoming
 void AdhocRouter::Send_App_Package(AdhocPackage* app_pkg){
     app_pkg->sender_hop = _my_hop;
     app_pkg->sender_node_id = _my_node_id;
-    if (app_pkg->destination_node_id = NODE_ID_MESH_GATE ){
+    if (app_pkg->destination_node_id == NODE_ID_MESH_GATE){
         AdhocHelper::CopyMacAddr(__my_leader->mac_addr, app_pkg->to_mac_addr);
     }else {
         Logger::Warn("AdhocRouter::Send_App_Package()  I am too young, don't know who is the receiver");
