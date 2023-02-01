@@ -32,9 +32,11 @@ void InitChannels(){
 void setup() {
 	Serial.begin(115200);
 	Serial.println("  Hi boys and girl, be happy!");
+
 	Wire.begin(MY_I2C_ADDR); // join I2C bus as slave (address provided)
 	// Wire.setClock();
 	Wire.onRequest(requestEvent); // register event
+
 	InitChannels();
 	Serial.println("Setup is finished.");
 }
@@ -49,9 +51,11 @@ void loop() {
 		// Read sensor.
 		channel->Read();
 		// prepare tx_buffer_for_i2c_request
-		if (i >=8) byte_index = 1;
-		bit_index = i % 8;
-		if (channel->Is_Died()) tx_buffer_for_i2c[byte_index] += (1<<bit_index);
+		if (channel->Is_Died()){
+			if (i >=8) byte_index = 1;
+			bit_index = i % 8;
+			tx_buffer_for_i2c[byte_index] += (1<<bit_index);
+		}
 		tx_buffer_for_i2c[2+i] = channel->GetValue();
 	}
 }
