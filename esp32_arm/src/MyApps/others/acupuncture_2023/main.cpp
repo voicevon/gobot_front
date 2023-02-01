@@ -114,17 +114,13 @@ String topic = "";
 String payload ="";
 
 void loop() {
-    // i2c_master.SpinOnce();
-    // publish_online_cells();
-    TouchCell_2023* cell;
-    i2c_master.ReadSingleCell(cell);
-
-
 
     publish_error_cells();
 
     for(int i = 0; i< FORCE_ONLINE_CELL_COUNT; i++){
-        TouchCell_2023* cell = &i2c_master.Cells[i];
+        TouchCell_2023* cell = &i2c_master.Cells[i];   // all_cells? 
+        i2c_master.ReadSingleCell(cell);   // Duing reading cell, the channels inside the cell will be updated.
+        // We assume : there is only one channel could be changed.
         if (cell->HasUpdate()){
             Logger::Debug("loop()  found updated cell");
             Logger::Print("HasUpdated()  cell address ", cell->Address);
