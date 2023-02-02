@@ -15,7 +15,8 @@
 </head>
 
 <body>
-  <a href="/">Home</a> {{ session["user"] }}  {{factory_name}} <a href="logout">Logout</a> <br>
+  <a href="/">Home</a> {{ session["user"] }} {{factory_name}}
+  <a href="logout">Logout</a> <br>
   <p>
 
     {% with messages = get_flashed_messages(with_categories=true) %}

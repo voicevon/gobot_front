@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
-from database.db_api import db_Stock, db_Shipout, db_Withdraw
+from db_api import db_Stock, db_Shipout, db_Withdraw
 from bolt_nut import get_row_from_tooth_location
 from logger import Logger
 from wcs_robots.twh_wcs import  wcs_queue_deposit, wcs_queue_takeout

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request,flash, session, redirect,url_for
-from database.db_api import db_User
+from db_api import db_User
 
 # web_user = Blueprint('web_user', __name__, url_prefix='/user')
 web_user = Blueprint('web_user', __name__,template_folder='templates')

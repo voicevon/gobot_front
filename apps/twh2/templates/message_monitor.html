@@ -1,30 +1,22 @@
 {% extends "common_base.html" %}
 
 {% block js_source%}
-
-<!-- <script src="scripts/jquery.js">  "https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"> -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-	<script>
-	var msgs = "init........";
-
-	// $(document).ready(function(){
-	// 	alert('ready');
-	// 	executeQuery();
-	// });
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+	var msgs = "";
+	var last_msg_id = 0;
 	function executeQuery() {
 		$.ajax({
 			// url: 'http://voicevon.vicp.io:5000/get_new_msg',
 			type: 'GET',
 			url: 'http://localhost:5000/get_new_msg',
 			success: function (data) {
-				// do something with the return value here if you like
-				// alert("ok 1");
-				msgs += data;
+				if (data['id'] == last_msg_id) return;
+
+				msgs += data['payload'];
 				document.getElementById("messages").innerHTML = msgs;
 			},
-			error: function(data){
+			error: function (data) {
 				alert('ajax error');
 				alert(data);
 			},
@@ -33,7 +25,7 @@
 	}
 
 	function updateCall() {
-		setTimeout(function () { executeQuery() }, 5000);
+		setTimeout(function () { executeQuery() }, 5000);  //TODO:  5000 is var, adjusted by ui.
 	}
 
 	$(document).ready(function () {
@@ -41,7 +33,6 @@
 	});
 
 </script>
-
 {% endblock %}
 
 {% block content %}
