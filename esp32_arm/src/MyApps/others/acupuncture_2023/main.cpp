@@ -119,7 +119,8 @@ void loop() {
 
     for(int i = 0; i< FORCE_ONLINE_CELL_COUNT; i++){
         TouchCell_2023* cell = &i2c_master.Cells[i];   // all_cells? 
-        i2c_master.ReadSingleCell(cell);  
+        i2c_master.ReadSingleCell(cell);
+        cell->Review_RxBuffer();  
         // cell->GetMqttPayload()
          // Duing reading cell, the channels inside the cell will be updated.
         // We assume : there is only one channel could be changed.

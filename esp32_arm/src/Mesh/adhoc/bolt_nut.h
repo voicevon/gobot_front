@@ -33,6 +33,7 @@ class AdhocPackage{
         uint8_t app_payload_size;
         uint8_t app_payload[99];   // Max pack size of esp-now is ??
 
+        // void PrintOut(const char* title, Neibour* leader);
         void PrintOut(const char* title);
 };
 

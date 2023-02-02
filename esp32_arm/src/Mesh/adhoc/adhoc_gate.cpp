@@ -26,6 +26,7 @@ void AdhocGate::Init(uint8_t my_node_id){
     _orphan_package.to_mac_addr [3] = 0xff;
     _orphan_package.to_mac_addr [4] = 0xff;
     _orphan_package.to_mac_addr [5] = 0xff;
+    // _orphan_package.PrintOut("AdhocGate::Init()  orphan_package", NULL);
     _orphan_package.PrintOut("AdhocGate::Init()  orphan_package");
 
 }

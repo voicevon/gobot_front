@@ -156,6 +156,7 @@ bool AdhocRouter::onReceived(const uint8_t * sender_mac, const uint8_t *incoming
         // I am the target node of the package.
         if (__my_leader != NULL){   // Is this necessary?  Any way, safe firstly.
             // forward the package ,
+            // incoming_package->PrintOut("AdhocRouter::onReceived()   forwarding this...", __my_leader);
             incoming_package->PrintOut("AdhocRouter::onReceived()   forwarding this...");
             Send_App_Package(incoming_package);
         }

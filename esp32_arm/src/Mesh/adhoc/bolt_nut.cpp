@@ -1,6 +1,7 @@
 #include "bolt_nut.h"
 #include "MyLibs/basic/logger.h"
 
+// void AdhocPackage::PrintOut(const char * title, Neibour* leader){
 void AdhocPackage::PrintOut(const char * title){
     Logger::Debug(title);
     // Serial.print("network_id= ");
@@ -13,17 +14,20 @@ void AdhocPackage::PrintOut(const char * title){
     Serial.print(to_mac_addr[4]);   Serial.print(" ");
     Serial.print(to_mac_addr[5]);   Serial.print(" ");
 
-    Serial.print("\tsender_node_id= ");
+    Serial.print("\tsender(node_id, hop)= (");
     Serial.print(sender_node_id);
-    Serial.print("\tsender_hop= ");
+    Serial.print(",");
     Serial.print(sender_hop);
-    Serial.print("\tsource_node_id= ");
+    // Serial.print(",");
+    // if (leader == NULL) Serial.print("NULL");
+    // else  Serial.print(leader->node_id);
+    Serial.print(")\t net layer(soure, dest, payload)= (");
     Serial.print(source_node_id);
-    Serial.print("\tdestination_node_id= ");
+    Serial.print(",");
     Serial.print(destination_node_id);
-    Serial.print("    payload[0]=");
+    Serial.print(",");
     Serial.print(app_payload[0]);
-    Serial.println(" ");
+    Serial.println(")");
 }
 
 
