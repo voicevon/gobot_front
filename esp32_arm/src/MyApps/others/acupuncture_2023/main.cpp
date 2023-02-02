@@ -10,6 +10,7 @@
 #include "Mylibs/basic/logger.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "Mqtt/wifi_mqtt_client.h"
+#include "Mqtt/remote_var.h"
 
 
 #include "all_applications.h"
@@ -20,6 +21,9 @@
 
 I2C_Master i2c_master;
 TouchPad_Node all_touchpad_nodes[NODES_COUNT_IN_THEORY];
+String monitoring_sensor_topic="acpt/monitor/sensor";   // payload is "147"  where 14 is node_id,  7 is channel_id.  147 = 14* node_id + channel_id
+RemoteVar_via_Mqtt monitor(monitoring_sensor_topic.c_str());
+// int monitoring_sensor_number = 0;
 
 
 bool is_installed_node(uint8_t node_id){
@@ -62,13 +66,15 @@ void setup() {
 }
 
 
-// There are two mqtt topics:
-// 1.  acpt/001/node  nodes state  in [not installed,  offline,  online]
-// 2.  acpt/001/channel  Channels state of cell, in [not installed, died, touch_on, touch_off]
+
+
+// There are three mqtt topics:
+// 1. acpt/001/node  nodes state  in [not installed,  offline,  online]
+// 2. acpt/001/channel  Channels state of cell, in [not installed, died, touch_on, touch_off]
+// 3. acpt/001/sensor_value   monitored sensor value, you can draw a chart from the data.
 void mqtt_publish(int body_id){
     String payload_nodes ="";
     String payload_channels ="";
-    String payload_sensor_value ="";
     for(int i=0; i<NODES_COUNT_IN_THEORY; i++){
         TouchPad_Node* node = &all_touchpad_nodes[i];
         payload_nodes.concat(node->GetMqttPayloadString());
@@ -77,10 +83,15 @@ void mqtt_publish(int body_id){
     String topic_nodes = "acpt/" + String(body_id) + "/nodes" ;
     String topic_channels = "acpt/" + String(body_id) + "/channels";
     String topic_sensor_value = "acpt/" + String(body_id) + "/sensor_value" ;   // monitor sensor value
-
-    
-    g_mqttClient.publish(topic_nodes.c_str(), 2, true, payload_nodes.c_str());
+    g_mqttClient.publish(topic_nodes.c_str(), 2, true, payload_nodes.c_str()); 
     g_mqttClient.publish(topic_channels.c_str(), 2, true, payload_channels.c_str());
+
+
+    // Monitor a certain sensor.
+    int sensor_number = atoi(monitor.Get());
+    int node_id = sensor_number / 14;
+    int channel_id = sensor_number % 14;
+    String payload_sensor_value = String(all_touchpad_nodes[node_id].GetSensorValue(channel_id));
     g_mqttClient.publish(topic_sensor_value.c_str(), 2, true, payload_sensor_value.c_str());
 
 }

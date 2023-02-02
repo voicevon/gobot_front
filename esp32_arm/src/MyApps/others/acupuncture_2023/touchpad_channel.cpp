@@ -25,6 +25,7 @@ bool TouchPad_Channel::Review_Sensor_Value_Whether_Changed(){
 
 
 void TouchPad_Channel::Push_to_HistoryValues(uint8_t new_value){
+    __capacity_sensor_value = new_value;
     if (__currently_is_touched)
         // the queue is only store untouched sensor value.
         return;
