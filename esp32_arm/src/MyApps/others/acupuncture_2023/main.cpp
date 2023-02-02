@@ -16,25 +16,33 @@
 #ifdef I_AM_ACUPUCTURE_MAIN_2023
 
 #define CELLS_COUNT_IN_THEORY 30
-#define FORCE_ONLINE_CELL_COUNT 1
 
 I2C_Master i2c_master;
-// I2C_SlaveNode all_cells[CELLS_COUNT_IN_THEORY];
 TouchPad_Node all_touchpad_nodes[CELLS_COUNT_IN_THEORY];
-int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = { 9 };
 
-// #define FORCE_ONLINE_CELL_COUNT 2
-// int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {19,17};
-// #define FORCE_ONLINE_CELL_COUNT 11
-// int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
+
+bool is_installed_node(uint8_t node_id){
+    // #define INSTALLED_NODE_COUNT 1
+    // int installed_nodes[INSTALLED_NODE_COUNT] = { 9 };
+
+    // #define INSTALLED_NODE_COUNT 2
+    // int installed_nodes[INSTALLED_NODE_COUNT] = {19,17};
+
+    #define INSTALLED_NODE_COUNT 11
+    int installed_nodes[INSTALLED_NODE_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
+
+    for(int i=0; i< INSTALLED_NODE_COUNT; i++){
+        if (node_id == installed_nodes[i])
+            return true;
+    }
+    return false;
+}
 
 void Init_All_Touchpad_Nodes(){
     for(int i=0; i< CELLS_COUNT_IN_THEORY; i++){
         TouchPad_Node* node = &all_touchpad_nodes[i];
-        node->Init(&i2c_master);
-        // if (cell->IsOnline)
+        node->Init(&i2c_master, i, is_installed_node(i)); 
     }
-
 }
 
 void setup() {
@@ -55,12 +63,11 @@ void setup() {
 String topic = "";
 String payload ="";
 
+
+// There are two mqtt topics:
+// 1.  acpt/001/node  nodes state  in [not installed,  offline,  online]
+// 2.  acpt/001/channel  Channels state of cell, in [not installed, died, touch_on, touch_off]
 void loop() {
-    // There are two mqtt messages:
-    // 1.  Cells state  in [not installed,  offline,  online]
-    // 2.  Channels state of cell, in [not installed, died, touch_on, touch_off]
-
-
     for(int i = 0; i< CELLS_COUNT_IN_THEORY; i++){
         // update sensor value,  review the received data.
         TouchPad_Node* node = &all_touchpad_nodes[i];   

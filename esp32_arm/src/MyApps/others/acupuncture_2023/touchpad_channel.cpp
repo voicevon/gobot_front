@@ -1,8 +1,7 @@
 #include "touchpad_channel.h"
 
 
-void TouchPad_Channel::Init(uint8_t cell_id, uint8_t channel_id, EnumState state){
-    __cell_id = cell_id;
+void TouchPad_Channel::Init(uint8_t channel_id, EnumState state){
     __channel_id = channel_id;
     __state = state;
     __currently_is_touched = false;
@@ -27,9 +26,10 @@ bool TouchPad_Channel::Review_Sensor_Value_Whether_Changed(){
 
 void TouchPad_Channel::Push_to_HistoryValues(uint8_t new_value){
     if (__currently_is_touched)
+        // the queue is only store untouched sensor value.
         return;
 
-    __untouched_history_values[5] = __untouched_history_values[4];
+    // __untouched_history_values[5] = __untouched_history_values[4];
     __untouched_history_values[4] = __untouched_history_values[3];
     __untouched_history_values[3] = __untouched_history_values[2];
     __untouched_history_values[2] = __untouched_history_values[1];
@@ -38,7 +38,7 @@ void TouchPad_Channel::Push_to_HistoryValues(uint8_t new_value){
 
 }
 
-void TouchPad_Channel::SetStateTo(EnumState new_state){
-    __state = new_state;
+void TouchPad_Channel::SetStateToDied(){
+    __state = CHANNEL_DIED;
 }
 

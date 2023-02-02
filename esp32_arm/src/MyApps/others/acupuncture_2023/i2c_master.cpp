@@ -27,9 +27,8 @@ void I2C_Master::Init(){
 //          false:  the cell is from online to offline.
 bool I2C_Master::ReadSlaveNode(I2C_SlaveNode* slave_node){
 
-    if (!slave_node->IsOnline) return true;
+    if (!slave_node->IsOnline()) return true;   //????  TODO: solve this.
 
-    // uint8_t bytes_toread = 4;
     
     Wire.beginTransmission(slave_node->GetAddress());
     Wire.endTransmission(false);

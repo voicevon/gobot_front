@@ -1,15 +1,13 @@
 #include "touchpad_node.h"
 
 
-void TouchPad_Node::Init(I2C_Master * i2c_master){
+void TouchPad_Node::Init(I2C_Master * i2c_master, uint8_t i2c_slave_address, bool is_installed){
     __i2c_master = i2c_master;
-    // for(int i=0; i<14; i++){
-    //     if (i<installed_channel_count){
-    //         __all_channels[i].Init(cell_id, i, TouchPad_Channel::EnumState::WROKING);
-    //     }else{
-    //         __all_channels->Init(cell_id, i, TouchPad_Channel::EnumState::NOT_INSTALLED);
-    //     }
-    // }
+    __i2c_slave_node.Init(is_installed, i2c_slave_address, TOUCH_PAD_CHANNELS_COUNT_IN_NODE, __rx_buffer);   //TODO: TOUCH_PAD_CHANNELS_COUNT_IN_NODE is var
+
+    for(int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
+        __all_channels[i].Init(i, TouchPad_Channel::EnumState::TOUCHED_OFF);
+    }
 }
 
 const char* TouchPad_Node::GetName(int point_id){
@@ -23,7 +21,8 @@ const char* TouchPad_Node::GetName(int point_id){
 
 
 void TouchPad_Node::Read_via_I2C(){
-
+    if (__i2c_slave_node.IsOnline())
+        __i2c_master->ReadSlaveNode(&__i2c_slave_node);
 }
 
 bool TouchPad_Node::Review_RxBuffer(){
@@ -31,14 +30,13 @@ bool TouchPad_Node::Review_RxBuffer(){
     uint8_t bit_index;
     uint8_t* rx_buffer = __i2c_slave_node.GetRxBuffer();
     __has_changed_channel = false;
-    for (int i=0; i<14; i++){
+    for (int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
         // update state.
         if (i >=8) byte_index = 1;
         bit_index = i % 8;
         if (rx_buffer[byte_index] & (1 << bit_index)) {
-            __all_channels[i].SetStateTo(TouchPad_Channel::EnumState::WROKING);
         }else{
-            __all_channels[i].SetStateTo(TouchPad_Channel::EnumState::CHANNEL_DIED);
+            __all_channels[i].SetStateToDied();
         }
         // review sensor's value
         __all_channels[i].Push_to_HistoryValues(*(rx_buffer + i));
