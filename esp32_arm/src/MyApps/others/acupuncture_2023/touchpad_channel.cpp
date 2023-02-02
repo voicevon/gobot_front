@@ -25,7 +25,7 @@ bool TouchPad_Channel::Review_Sensor_Value_Whether_Changed(){
 }
 
 
-void TouchPad_Channel::__push_to_history_values(uint8_t new_value){
+void TouchPad_Channel::Push_to_HistoryValues(uint8_t new_value){
     if (__currently_is_touched)
         return;
 
@@ -38,4 +38,7 @@ void TouchPad_Channel::__push_to_history_values(uint8_t new_value){
 
 }
 
+void TouchPad_Channel::SetStateTo(EnumState new_state){
+    __state = new_state;
+}
 

@@ -21,7 +21,9 @@ void TouchpadChannel::Read(){
     }else{
         __is_died = false;
         __byte_value = csv / 256;
-        if (csv > 65535)  __byte_value = 255;
+        if (csv > 250 * 256)  __byte_value = 250;
+        // 254: channel is died
+        // 255: chinnel is not installed.
     }
 
     long time_cost = millis() - when_started;

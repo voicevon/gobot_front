@@ -8,6 +8,9 @@ class TouchpadChannel{
         void Init(uint8_t pin_sensor);
         bool Is_Died(){return __is_died;};
         void Read();
+        
+        // 254: channel is died
+        // 255: chinnel is not installed.
         uint8_t GetValue(){return __byte_value;};
 
     private:

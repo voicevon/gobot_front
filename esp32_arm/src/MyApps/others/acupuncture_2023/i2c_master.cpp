@@ -5,7 +5,7 @@
 #include "MyLibs/basic/logger.h"
 #include "Mqtt/from_mqtt_client_to_remote_queue.h"
 
-
+#define BYTES_COUNT_FOR_COMMU 16
 
 void I2C_Master::Init(int min_cell_i2c_address, int cells_count){
     pinMode(2, OUTPUT);
@@ -20,7 +20,7 @@ void I2C_Master::Init(int min_cell_i2c_address, int cells_count){
         }
     }
     for(int i=0; i< cells_count; i++){
-        Cells[i].Address = min_cell_i2c_address + i;
+        Cells[i].I2C_Address = min_cell_i2c_address + i;
     }
     this->__CELLS_COUNT = cells_count;
     // this->__CELL_I2C_ADDRESS_MIN = min_cell_i2c_address;
@@ -37,14 +37,16 @@ void I2C_Master::Init(int min_cell_i2c_address, int cells_count){
 bool  I2C_Master::ReadSingleCell(TouchCell_2023* cell){
     if (!cell->IsOnline) return true;
 
-    uint8_t n_bytes = 4;
-    Wire.beginTransmission(cell->Address);
+    // uint8_t bytes_toread = 4;
+    Wire.beginTransmission(cell->I2C_Address);
     Wire.endTransmission(false);
-    Wire.requestFrom(cell->Address, n_bytes);    // request data from slave device
+    Wire.requestFrom(cell->I2C_Address, BYTES_COUNT_FOR_COMMU);    // request data from slave device
     int index = 0;
+    uint8_t* rx_buffer = cell->GetRxBuffer(); 
     while (Wire.available() > 0) {  // slave may send less bytes than expected.
-        uint8_t c = Wire.read();         // receive a byte as character
-        cell->CurrentFlags[index] = c;
+        // uint8_t received_byte = Wire.read();         // receive a byte as character
+        // cell->CurrentFlags[index] = received_byte;
+        *(rx_buffer+index) = Wire.read();
         index++;
     }
     if(index == 0) {
@@ -55,7 +57,7 @@ bool  I2C_Master::ReadSingleCell(TouchCell_2023* cell){
             digitalWrite(2, HIGH);
             delay(500);
             digitalWrite(2,LOW);
-            Serial.println("\n I2C_Master::ReadSingleCell()  No response.  cell_address= " + String(cell->Address));
+            Serial.println("\n I2C_Master::ReadSingleCell()  No response.  cell_address= " + String(cell->I2C_Address));
             Wire.endTransmission(true);
             return false;
         }

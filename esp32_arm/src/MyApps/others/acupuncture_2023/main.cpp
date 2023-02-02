@@ -51,9 +51,9 @@ void init_online_cells(){
         // for (int j=0; j< FORCE_ONLINE_CELL_COUNT; j++){
             // if (force_online_cell_list[j] == pCell->Address){
         pCell->IsForceOnline = true;
-        pCell->Address = force_online_cell_list[i];
+        pCell->I2C_Address = force_online_cell_list[i];
         Serial.print("setting force-Online: ");
-        Serial.println(pCell->Address);
+        Serial.println(pCell->I2C_Address);
     }
 }
 
@@ -62,7 +62,7 @@ void publish_online_cells(){
     for(int i=0; i<FORCE_ONLINE_CELL_COUNT;i++){
         TouchCell_2023* pCell = &i2c_master.Cells[i];
         if(pCell->IsOnline){
-            payload.concat(String(pCell->Address));
+            payload.concat(String(pCell->I2C_Address));
             payload.concat(" ");
         }
     }
@@ -79,8 +79,8 @@ void publish_error_cells(){
         if (pCell->IsForceOnline){
             if(!pCell->IsOnline){
                 Serial.print("This cell should be online, but Not  ");
-                Serial.println(pCell->Address);
-                payload.concat(String(pCell->Address));
+                Serial.println(pCell->I2C_Address);
+                payload.concat(String(pCell->I2C_Address));
                 payload.concat(" ");
                 has_error = true;
                 pCell->SetOnline();
@@ -119,14 +119,16 @@ void loop() {
 
     for(int i = 0; i< FORCE_ONLINE_CELL_COUNT; i++){
         TouchCell_2023* cell = &i2c_master.Cells[i];   // all_cells? 
-        i2c_master.ReadSingleCell(cell);   // Duing reading cell, the channels inside the cell will be updated.
+        i2c_master.ReadSingleCell(cell);  
+        // cell->GetMqttPayload()
+         // Duing reading cell, the channels inside the cell will be updated.
         // We assume : there is only one channel could be changed.
         if (cell->HasUpdate()){
             Logger::Debug("loop()  found updated cell");
-            Logger::Print("HasUpdated()  cell address ", cell->Address);
+            Logger::Print("HasUpdated()  cell address ", cell->I2C_Address);
             // Touch pin changed.  on->off  or  off->on
             for (int j=0; j<16; j++){
-                if (cell->IsBitUpdated(j)){
+                // if (cell->IsBitUpdated(j)){
                     topic = "actp/";
                     topic.concat(BODY_ID);
                     topic.concat("/");
@@ -135,7 +137,7 @@ void loop() {
                     Logger::Print("Mqtt topic", topic.c_str());
                     Logger::Print("Mqtt Payload", payload.c_str());
                     g_mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
-                }
+                // }
             }
             cell->CopyCurrentToLast();
         }
