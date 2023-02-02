@@ -1,7 +1,6 @@
 #include "touchpad_node.h"
 
 
-// void TouchPad_Node::Init(I2C_SlaveNode * i2c_slave_node){
 void TouchPad_Node::Init(I2C_Master * i2c_master){
     __i2c_master = i2c_master;
     // for(int i=0; i<14; i++){
@@ -15,7 +14,7 @@ void TouchPad_Node::Init(I2C_Master * i2c_master){
 
 const char* TouchPad_Node::GetName(int point_id){
     String name = "u";
-    name.concat(this->__i2c_slave_node.I2C_Address);
+    name.concat(this->__i2c_slave_node.GetAddress());
     name.concat("p");
     name.concat(point_id);
     name.toCharArray(this->__mqtt_topic_substring, 30);

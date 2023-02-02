@@ -2,12 +2,12 @@
 #include "stdint.h"
 #include "touchpad_channel.h"
 
-//TODO: rename to I2c_SlaveAgent
 class I2C_SlaveNode{
     public:
-        uint8_t I2C_Address;
-        void Init(uint8_t cell_id, uint8_t installed_channel_count);
-
+        void Init(uint8_t address, uint8_t rx_size, uint8_t* rx_buffer);
+        uint8_t GetAddress(){return __i2c_address;};
+        uint8_t GetSize() {return __rx_size;};
+        uint8_t* GetRxBuffer(){return __rx_buffer;};
         const char* GetMqttPayload(int bit_index);
 
         bool IsForceOnline = false;
@@ -15,10 +15,11 @@ class I2C_SlaveNode{
         void SetOffline(){this->_is_online = false;};
         void SetOnline(){this->_is_online= true;};
 
-        uint8_t* GetRxBuffer(){return __rx_buffer;};
         
     private:
-        uint8_t __rx_buffer[14];  // TODO:  become a pointer,  because 14 is an unkown number for variable requirement.
+        uint8_t __i2c_address;
+        uint8_t* __rx_buffer;  // Why is pointer?  because rx_size is an unkown number to serve variable requirement.
+        uint8_t __rx_size;
         bool _is_online = true;
 
 

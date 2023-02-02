@@ -62,9 +62,14 @@ void loop() {
 
 
     for(int i = 0; i< CELLS_COUNT_IN_THEORY; i++){
+        // update sensor value,  review the received data.
         TouchPad_Node* node = &all_touchpad_nodes[i];   
         node->Read_via_I2C();
         node->Review_RxBuffer();  
+
+        // if there is any update of the channel, cell,  publish via MQTT.
+
+        
         // cell->GetMqttPayload()
          // Duing reading cell, the channels inside the cell will be updated.
         // We assume : there is only one channel could be changed.

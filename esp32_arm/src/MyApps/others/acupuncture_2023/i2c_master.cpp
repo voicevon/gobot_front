@@ -1,13 +1,9 @@
 
 #include "i2c_master.h"
-// #include "HardwareSerial.h"
 #include <Arduino.h>
 #include "MyLibs/basic/logger.h"
-// #include "Mqtt/from_mqtt_client_to_remote_queue.h"
 
-#define BYTES_COUNT_FOR_COMMU 14   // TODO:  configable.
 
-// void I2C_Master::Init(int min_cell_i2c_address, int cells_count){
 void I2C_Master::Init(){
     pinMode(2, OUTPUT);
     bool i2c_is_ok = false; 
@@ -34,9 +30,10 @@ bool I2C_Master::ReadSlaveNode(I2C_SlaveNode* slave_node){
     if (!slave_node->IsOnline) return true;
 
     // uint8_t bytes_toread = 4;
-    Wire.beginTransmission(slave_node->I2C_Address);
+    
+    Wire.beginTransmission(slave_node->GetAddress());
     Wire.endTransmission(false);
-    Wire.requestFrom(slave_node->I2C_Address, BYTES_COUNT_FOR_COMMU);    // request data from slave device
+    Wire.requestFrom(slave_node->GetAddress(), slave_node->GetSize());    // request data from slave device
     int index = 0;
     uint8_t* rx_buffer = slave_node->GetRxBuffer(); 
     while (Wire.available() > 0) {  // slave may send less bytes than expected.
@@ -51,7 +48,7 @@ bool I2C_Master::ReadSlaveNode(I2C_SlaveNode* slave_node){
             digitalWrite(2, HIGH);
             delay(500);
             digitalWrite(2,LOW);
-            Serial.println("\n I2C_Master::ReadSingleCell()  No response.  cell_address= " + String(slave_node->I2C_Address));
+            Serial.println("\n I2C_Master::ReadSingleCell()  No response.  cell_address= " + String(slave_node->GetAddress()));
             Wire.endTransmission(true);
             return false;
         }
