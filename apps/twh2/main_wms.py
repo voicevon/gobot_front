@@ -14,6 +14,8 @@ web.secret_key = '20221221'   # for WTForm
 # web.debug=False
 twh_factory = {'221109':'山东雅乐福义齿公司'}
 
+new_message = "系统正在空闲...<p>"
+
 class MyForm(FlaskForm):
     brand = StringField('品牌', validators=[InputRequired('品牌不可空白')])
     # location_verital = boll
@@ -24,6 +26,14 @@ class MyForm(FlaskForm):
 #     print('withdraw_list()===========', user_request)
 #     g_amq.Publish('twh', 'twh_withdraw', str(user_request))
 #     return 'OK'
+
+@web.route('/get_new_msg')
+def get_new_message():
+    return new_message
+
+@web.route('/msgs')
+def msgs():
+    return render_template('message_monitor.html')
 
 @web.route('/decrease_stock')
 def decrease_stock():
@@ -222,7 +232,7 @@ def withdraw_takeout():
         # g_mqtt.publish(topic='twh/221109/shipout_box/command' , payload= '{"box_id:"' + str(box_id) +',"color":"blue"}')
         return render_template('withdraw_takeout.html', twh=twh)
         
-Start_WCS_Process()
+# Start_WCS_Process()
 
 if __name__ == '__main__':
     # reloader or debug must be false.  

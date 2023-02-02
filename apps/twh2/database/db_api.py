@@ -1,6 +1,7 @@
 
 from tinydb import TinyDB, Query, where
 from bolt_nut import get_row_from_tooth_location
+
 class TwhLocation:
     row = -1
     col = -1 

@@ -1,0 +1,56 @@
+{% extends "common_base.html" %}
+
+{% block js_source%}
+
+<!-- <script src="scripts/jquery.js">  "https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script>
+	var msgs = "init........";
+
+	// $(document).ready(function(){
+	// 	alert('ready');
+	// 	executeQuery();
+	// });
+
+	function executeQuery() {
+		$.ajax({
+			// url: 'http://voicevon.vicp.io:5000/get_new_msg',
+			type: 'GET',
+			url: 'http://localhost:5000/get_new_msg',
+			success: function (data) {
+				// do something with the return value here if you like
+				// alert("ok 1");
+				msgs += data;
+				document.getElementById("messages").innerHTML = msgs;
+			},
+			error: function(data){
+				alert('ajax error');
+				alert(data);
+			},
+		});
+		updateCall();
+	}
+
+	function updateCall() {
+		setTimeout(function () { executeQuery() }, 5000);
+	}
+
+	$(document).ready(function () {
+		executeQuery();
+	});
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+<div id="messages">
+
+</div>
+{% endblock %}
+
+
+
+{% block test %}
+{% endblock %}
