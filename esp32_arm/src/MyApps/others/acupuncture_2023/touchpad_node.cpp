@@ -10,14 +10,14 @@ void TouchPad_Node::Init(I2C_Master * i2c_master, uint8_t i2c_slave_address, boo
     }
 }
 
-const char* TouchPad_Node::GetName(int point_id){
-    String name = "u";
-    name.concat(this->__i2c_slave_node.GetAddress());
-    name.concat("p");
-    name.concat(point_id);
-    name.toCharArray(this->__mqtt_topic_substring, 30);
-    return this->__mqtt_topic_substring;
-}
+// const char* TouchPad_Node::GetName(int point_id){
+//     String name = "u";
+//     name.concat(this->__i2c_slave_node.GetAddress());
+//     name.concat("p");
+//     name.concat(point_id);
+//     name.toCharArray(this->__mqtt_topic_substring, 30);
+//     return this->__mqtt_topic_substring;
+// }
 
 
 void TouchPad_Node::Read_via_I2C(){
@@ -43,3 +43,22 @@ bool TouchPad_Node::Review_RxBuffer(){
         __has_changed_channel |=  __all_channels[i].Review_Sensor_Value_Whether_Changed();
     }
 }
+
+String TouchPad_Node::GetMqttPayloadString(){
+    if(__i2c_slave_node.GetState() == I2C_SlaveNode::EnumState::NOT_INSTALLED) return String("I");
+    if(__i2c_slave_node.GetState() == I2C_SlaveNode::EnumState::OFFLINE_DIED) return String("D");
+    if(__i2c_slave_node.GetState() == I2C_SlaveNode::EnumState::ONLINE_CONNECTED) return String("C");
+}
+
+String TouchPad_Node::GetChannelsPayloadString(){
+    String str = "";
+    TouchPad_Channel* channel;
+    for (int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
+        channel = &__all_channels[i];
+        str.concat(channel->GetPayloadString());
+    }
+    return str;
+    // return String("12345678901234");
+
+}
+

@@ -5,7 +5,7 @@
 
 void I2C_SlaveNode::Init(bool is_installed,uint8_t address, uint8_t rx_size, uint8_t* rx_buffer){
     if (is_installed){
-        __state = ONLINE;
+        __state = ONLINE_CONNECTED;
     }else{
         __state = NOT_INSTALLED;
     }

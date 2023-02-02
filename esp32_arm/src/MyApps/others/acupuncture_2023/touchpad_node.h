@@ -11,9 +11,12 @@ class TouchPad_Node{
         void Read_via_I2C();
         bool Review_RxBuffer();
 
-        char __mqtt_topic_substring[30];
-        bool __has_changed_channel;
-        const char* GetName(int point_id);
+        String GetMqttPayloadString();
+        String GetChannelsPayloadString();
+
+        // char __mqtt_topic_substring[30];
+        bool __has_changed_channel;  //??
+        // const char* GetName(int point_id);
         
     private:
         I2C_SlaveNode __i2c_slave_node;

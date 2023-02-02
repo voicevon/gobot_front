@@ -1,6 +1,6 @@
 #pragma once
 #include "stdint.h"
-
+#include "WString.h"
 class TouchPad_Channel{
     public:
         enum EnumState{
@@ -13,6 +13,7 @@ class TouchPad_Channel{
         void Push_to_HistoryValues(uint8_t new_value);  // newest value at index==0
         bool Review_Sensor_Value_Whether_Changed();  // return true touched
         void SetStateToDied();  //??  recover by reset system
+        String GetPayloadString();
 
     private:
         uint8_t __channel_id;

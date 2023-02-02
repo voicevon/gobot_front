@@ -110,12 +110,7 @@
 	// #define CELLS_COUNT 30
 #endif
 
-#ifdef I_AM_ACUPUCTURE_MAIN_2023
-	// #define REMOTE_QUEUE_MQTT_COUNT  0   
-    #define BODY_ID "001"
-	#define CELL_ID_MIN 3
-	// #define CELLS_COUNT 30
-#endif
+
 
 #ifdef I_AM_ACUPUNCTURE_JIG_TESTER
 	#define CELL_ID_MIN 3

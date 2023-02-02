@@ -42,15 +42,15 @@ bool I2C_Master::ReadSlaveNode(I2C_SlaveNode* slave_node){
     if(index == 0) {
         // Can not read any data from i2c bus  for this address.
         slave_node->SetOffline();
-        if (slave_node->IsForceOnline){
-            // g_mqttClient.publish("actp/001/offline", 2, false, String(cell->Address).c_str());
-            digitalWrite(2, HIGH);
-            delay(500);
-            digitalWrite(2,LOW);
-            Serial.println("\n I2C_Master::ReadSingleCell()  No response.  cell_address= " + String(slave_node->GetAddress()));
-            Wire.endTransmission(true);
-            return false;
-        }
+        // if (slave_node->IsForceOnline){
+        //     // g_mqttClient.publish("actp/001/offline", 2, false, String(cell->Address).c_str());
+        //     digitalWrite(2, HIGH);
+        //     delay(500);
+        //     digitalWrite(2,LOW);
+        //     Serial.println("\n I2C_Master::ReadSingleCell()  No response.  cell_address= " + String(slave_node->GetAddress()));
+        //     Wire.endTransmission(true);
+        //     return false;
+        // }
 
     } 
     Wire.endTransmission(true);

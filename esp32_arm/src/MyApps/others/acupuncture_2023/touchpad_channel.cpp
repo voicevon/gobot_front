@@ -42,3 +42,10 @@ void TouchPad_Channel::SetStateToDied(){
     __state = CHANNEL_DIED;
 }
 
+String TouchPad_Channel::GetPayloadString(){
+    if (__state == NOT_INSTALLED) return String("I");
+    if (__state == CHANNEL_DIED) return String("D");
+    if (__state == TOUCHED_ON) return String("T");
+    if (__state == TOUCHED_OFF) return String("F");
+
+}

@@ -14,11 +14,12 @@
 
 #include "all_applications.h"
 #ifdef I_AM_ACUPUCTURE_MAIN_2023
+#define ACUPUCTURE_BODY_ID 101
+#define NODES_COUNT_IN_THEORY 30
 
-#define CELLS_COUNT_IN_THEORY 30
 
 I2C_Master i2c_master;
-TouchPad_Node all_touchpad_nodes[CELLS_COUNT_IN_THEORY];
+TouchPad_Node all_touchpad_nodes[NODES_COUNT_IN_THEORY];
 
 
 bool is_installed_node(uint8_t node_id){
@@ -39,7 +40,7 @@ bool is_installed_node(uint8_t node_id){
 }
 
 void Init_All_Touchpad_Nodes(){
-    for(int i=0; i< CELLS_COUNT_IN_THEORY; i++){
+    for(int i=0; i< NODES_COUNT_IN_THEORY; i++){
         TouchPad_Node* node = &all_touchpad_nodes[i];
         node->Init(&i2c_master, i, is_installed_node(i)); 
     }
@@ -60,43 +61,37 @@ void setup() {
 
 }
 
-String topic = "";
-String payload ="";
-
 
 // There are two mqtt topics:
 // 1.  acpt/001/node  nodes state  in [not installed,  offline,  online]
 // 2.  acpt/001/channel  Channels state of cell, in [not installed, died, touch_on, touch_off]
+void mqtt_publish(int body_id){
+    String payload_nodes ="";
+    String payload_channels ="";
+    String payload_sensor_value ="";
+    for(int i=0; i<NODES_COUNT_IN_THEORY; i++){
+        TouchPad_Node* node = &all_touchpad_nodes[i];
+        payload_nodes.concat(node->GetMqttPayloadString());
+        payload_channels.concat(node->GetChannelsPayloadString());
+    }
+    String topic_nodes = "acpt/" + String(body_id) + "/nodes" ;
+    String topic_channels = "acpt/" + String(body_id) + "/channels";
+    String topic_sensor_value = "acpt/" + String(body_id) + "/sensor_value" ;   // monitor sensor value
+
+    
+    g_mqttClient.publish(topic_nodes.c_str(), 2, true, payload_nodes.c_str());
+    g_mqttClient.publish(topic_channels.c_str(), 2, true, payload_channels.c_str());
+    g_mqttClient.publish(topic_sensor_value.c_str(), 2, true, payload_sensor_value.c_str());
+
+}
+
 void loop() {
-    for(int i = 0; i< CELLS_COUNT_IN_THEORY; i++){
+    for(int i = 0; i< NODES_COUNT_IN_THEORY; i++){
         // update sensor value,  review the received data.
         TouchPad_Node* node = &all_touchpad_nodes[i];   
         node->Read_via_I2C();
         node->Review_RxBuffer();  
-
-        // if there is any update of the channel, cell,  publish via MQTT.
-
-        
-        // cell->GetMqttPayload()
-         // Duing reading cell, the channels inside the cell will be updated.
-        // We assume : there is only one channel could be changed.
-        // if (cell->HasUpdate()){
-            Logger::Debug("loop()  found updated cell");
-            // Logger::Print("HasUpdated()  cell address ", node);
-            // Touch pin changed.  on->off  or  off->on
-            for (int j=0; j<16; j++){
-                // if (cell->IsBitUpdated(j)){
-                    topic = "actp/";
-                    topic.concat(BODY_ID);
-                    topic.concat("/");
-                    // topic.concat(cell->GetName(j));
-                    // payload = cell->GetMqttPayload(j);
-                    Logger::Print("Mqtt topic", topic.c_str());
-                    Logger::Print("Mqtt Payload", payload.c_str());
-                    g_mqttClient.publish(topic.c_str(), 2, true, payload.c_str());
-                // }
-            }
-            // cell->CopyCurrentToLast();
-        }
+    }
+    mqtt_publish(ACUPUCTURE_BODY_ID);
 }  
 #endif
