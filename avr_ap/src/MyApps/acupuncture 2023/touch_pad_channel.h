@@ -11,13 +11,16 @@ class TouchpadChannel{
         
         // 254: channel is died
         // 255: chinnel is not installed.
+        // minimum value = 1;
         uint8_t GetValue(){return __byte_value;};
 
     private:
         bool __is_died;
         CapacitiveSensor* __sensor;
+        // 254: channel is died
+        // 255: chinnel is not installed.
+        // minimum value = 1;
         uint8_t __byte_value;
-        // uint8_t __pin_sensor;
         
 
 };

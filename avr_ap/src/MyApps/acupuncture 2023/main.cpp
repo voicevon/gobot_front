@@ -11,7 +11,6 @@
 
 #ifdef I_AM_ACUPUNCTURE_MEGA328_VER_2023
 
-// #define I2C_REPLY_BYTES 16 // 16 bits for normal/error per channel,   one byte for each channel
 #define TOUCH_PAD_CHANNELS 14
 
 TouchpadChannel all_channels[TOUCH_PAD_CHANNELS];
@@ -42,21 +41,12 @@ void setup() {
 }
 
 void loop() {
-	// int byte_index = 0;
-	// int bit_index ;
-	// tx_buffer_for_i2c[0] = 0;
-	// tx_buffer_for_i2c[1] = 0;
 	for (int i = 0; i < TOUCH_PAD_CHANNELS; i++){
 		TouchpadChannel* channel = &all_channels[i];
-		// Read sensor.
 		channel->Read();
 		// prepare tx_buffer_for_i2c_request
-		if (channel->Is_Died()){
-			// if (i >=8) byte_index = 1;
-			// bit_index = i % 8;
-			// tx_buffer_for_i2c[byte_index] += (1<<bit_index);
-		}
 		tx_buffer_for_i2c[i] = channel->GetValue();
+		delay(100);
 	}
 }
 

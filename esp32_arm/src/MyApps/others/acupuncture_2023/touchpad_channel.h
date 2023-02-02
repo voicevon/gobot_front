@@ -5,9 +5,9 @@ class TouchPad_Channel{
     public:
         enum EnumState{
             NOT_INSTALLED,
-            WROKING,
-            CELL_DIED,
             CHANNEL_DIED,
+            CELL_DIED,
+            WROKING,
         };
         void Init(uint8_t cell_id, uint8_t channel_id, EnumState state);
         bool Review_Sensor_Value_Whether_Changed();  // return true touched

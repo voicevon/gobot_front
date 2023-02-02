@@ -1,6 +1,8 @@
 #include "touch_pad_channel.h"
 #define PIN_CAPACITY_SENSOR_COMMON 12
 #define SAMPLES_COUNT_FOR_MEASURE 30
+#define COPRESS_RATION 200
+
 
 void TouchpadChannel::Init(uint8_t pin_sensor){
     __sensor = new CapacitiveSensor(PIN_CAPACITY_SENSOR_COMMON, pin_sensor);
@@ -20,10 +22,10 @@ void TouchpadChannel::Read(){
         __is_died = true;
     }else{
         __is_died = false;
-        __byte_value = csv / 256;
-        if (csv > 250 * 256)  __byte_value = 250;
-        // 254: channel is died
-        // 255: chinnel is not installed.
+        __byte_value = csv / COPRESS_RATION;
+        if (__byte_value > 250)  __byte_value = 250;
+        if (__byte_value < 1) __byte_value = 1;
+
     }
 
     long time_cost = millis() - when_started;
