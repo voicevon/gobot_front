@@ -1,5 +1,5 @@
 #include "touchpad_channel.h"
-
+#include "MyLibs/basic/logger.h"
 
 void TouchPad_Channel::Init(uint8_t channel_id, EnumState state){
     __channel_id = channel_id;
@@ -11,12 +11,17 @@ void TouchPad_Channel::Init(uint8_t channel_id, EnumState state){
 bool TouchPad_Channel::Review_Sensor_Value_Whether_Changed(){
     uint8_t newest = __untouched_history_values[0];
     int sum = 0;
+    // Logger::Debug("TouchPad_Channel::Review_Sensor_Value_Whether_Changed()");
     for (int i=1; i<5; i++){
+        // Logger::Print("debug point   i", i);
         sum += __untouched_history_values[i];
+        // Logger::Print("debug point sum", sum);
     }
     int average = sum / 4;
-    if (sum / average * 10) {
+    if (average==0) average = 1;
+    if (newest > average * 10) {
         // from untouching to touched.  Don't push new data.
+        Logger::Print("got touched", 1);
         __currently_is_touched = true;
         return true; 
     }

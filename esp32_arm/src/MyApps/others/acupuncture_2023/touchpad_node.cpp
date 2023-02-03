@@ -1,5 +1,5 @@
 #include "touchpad_node.h"
-
+#include "MyLibs/basic/logger.h"
 
 void TouchPad_Node::Init(I2C_Master * i2c_master, uint8_t i2c_slave_address, bool is_installed){
     __i2c_master = i2c_master;
@@ -30,18 +30,25 @@ bool TouchPad_Node::Review_RxBuffer(){
     uint8_t bit_index;
     uint8_t* rx_buffer = __i2c_slave_node.GetRxBuffer();
     __has_changed_channel = false;
+    Logger::Debug("TouchPad_Node::Review_RxBuffer()");
     for (int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
         // update state.
         if (i >=8) byte_index = 1;
         bit_index = i % 8;
+        Logger::Print("byte_index", byte_index);
         if (rx_buffer[byte_index] & (1 << bit_index)) {
         }else{
+            Logger::Print("debug point ", 33);
             __all_channels[i].SetStateToDied();
+            Logger::Print("debug point ", 34);
         }
         // review sensor's value
         __all_channels[i].Push_to_HistoryValues(*(rx_buffer + i));
+        Logger::Print("debug point ", 35);
         __has_changed_channel |=  __all_channels[i].Review_Sensor_Value_Whether_Changed();
+        Logger::Print("__has_changed_channel", __has_changed_channel);
     }
+    return __has_changed_channel;
 }
 
 String TouchPad_Node::GetMqttPayloadString(){

@@ -27,14 +27,14 @@ RemoteVar_via_Mqtt monitor(monitoring_sensor_topic.c_str());
 
 
 bool is_installed_node(uint8_t node_id){
-    // #define INSTALLED_NODE_COUNT 1
-    // int installed_nodes[INSTALLED_NODE_COUNT] = { 9 };
+    #define INSTALLED_NODE_COUNT 1
+    int installed_nodes[INSTALLED_NODE_COUNT] = { 18 };
 
     // #define INSTALLED_NODE_COUNT 2
     // int installed_nodes[INSTALLED_NODE_COUNT] = {19,17};
 
-    #define INSTALLED_NODE_COUNT 11
-    int installed_nodes[INSTALLED_NODE_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
+    // #define INSTALLED_NODE_COUNT 11
+    // int installed_nodes[INSTALLED_NODE_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
 
     for(int i=0; i< INSTALLED_NODE_COUNT; i++){
         if (node_id == installed_nodes[i])
@@ -59,10 +59,11 @@ void setup() {
     Init_All_Touchpad_Nodes();
 
     setup_wifi_mqtt();
+    Logger::Print("setup() waiting mqtt_connectiong.",1);
     while (!mqtt_is_connected){
         delay(100);
     }
-
+    Logger::Info("Setup is done.");
 }
 
 
@@ -100,9 +101,13 @@ void loop() {
     for(int i = 0; i< NODES_COUNT_IN_THEORY; i++){
         // update sensor value,  review the received data.
         TouchPad_Node* node = &all_touchpad_nodes[i];   
+        Logger::Print("loop()  ponit",1);
         node->Read_via_I2C();
+        Logger::Print("loop()  ponit",2);
         node->Review_RxBuffer();  
+        Logger::Print("loop()  ponit",3);
     }
     mqtt_publish(ACUPUCTURE_BODY_ID);
+    Logger::Print("loop()  ponit",4);
 }  
 #endif
