@@ -2,7 +2,9 @@ from wcs_robots.twh_robot_loop_porter import TwhRobot_LoopPorter
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
 from wcs_robots.gcode_sender import gcode_senders_spin_once
 from bolt_nut import PickingPacking_Tooth
-from database.db_api import db_User, db_Stock, db_Deposite, db_Withdraw, db_Shipout
+# from database.db_api import db_User, db_Stock, db_Deposite, db_Withdraw, db_Shipout
+from web_stock.db_api import db_Shipout,db_Stock,db_Deposite,db_Withdraw
+from web_user.db_api import db_User
 
 import multiprocessing
 from von.remote_var_mqtt import RemoteVar_mqtt

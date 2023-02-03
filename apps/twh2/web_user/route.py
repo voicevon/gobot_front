@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, request,flash, session, redirect,url_for
-from db_api import db_User
-
+from web_user.db_api import db_User
+from bolt_nut import twh_factory
 # web_user = Blueprint('web_user', __name__, url_prefix='/user')
 web_user = Blueprint('web_user', __name__,template_folder='templates')
 
-twh_factory = {'221109':'山东雅乐福义齿公司'}
 
 def check_login():
     if "user" not in session:

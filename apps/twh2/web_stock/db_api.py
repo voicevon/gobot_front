@@ -8,7 +8,7 @@ class TwhLocation:
     layer = -1
 
 class db_Stock():
-    table_stock = TinyDB('database/twh_stock.json')
+    table_stock = TinyDB('twh_stock.json')
 
     @classmethod
     def get_stock(cls, request):  # -> List[Document]
@@ -128,7 +128,7 @@ class db_Stock():
             cls.table_stock.update({'stock_quantity':new_quantity}, doc_ids=doc_id)
 
 class db_Deposite():
-    table_deposit = TinyDB('database/twh_deposit.json')
+    table_deposit = TinyDB('twh_deposit.json')
 
     @classmethod 
     def append_deposit(cls, user_request):
@@ -146,8 +146,8 @@ class db_Deposite():
 
 
 class db_Withdraw():
-    table_withdraw_queue = TinyDB('database/twh_withdraw_queue.json')
-    table_withdraw_history = TinyDB('database/twh_withdraw_history.json')
+    table_withdraw_queue = TinyDB('twh_withdraw_queue.json')
+    table_withdraw_history = TinyDB('twh_withdraw_history.json')
 
     @classmethod
     def get_fullfilled_shipout_box_id(cls, user_id) -> int:
@@ -207,7 +207,7 @@ class db_Withdraw():
 
 
 class db_Shipout():
-    table_takeout = TinyDB('database/twh_takeout.json')
+    table_takeout = TinyDB('twh_takeout.json')
 
     @classmethod
     def init_table(cls):

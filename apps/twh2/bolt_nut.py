@@ -1,5 +1,8 @@
 from logger import Logger
 
+twh_factory = {'221109':'山东雅乐福义齿公司'}
+
+
 
 def get_row_from_tooth_location(location_string:str) -> int:
     print(location_string)

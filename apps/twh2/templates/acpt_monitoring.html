@@ -1,0 +1,51 @@
+{% extends "common_base.html" %}
+
+{% block js_source%}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+	var msgs = "";
+	var last_msg_id = 0;
+	function executeQuery() {
+		$.ajax({
+			// url: 'http://voicevon.vicp.io:5000/get_new_msg',
+			type: 'GET',
+			url: 'http://localhost:5000/acpt?id=101',
+			success: function (data) {
+				// if (data['id'] == last_msg_id) return;
+
+				msgs += data['id'] + "--";
+				msgs += data['cell'] + "--";
+				msgs += data['action'] + "<p>";
+				document.getElementById("messages").innerHTML = msgs;
+			},
+			error: function (data) {
+				// alert('ajax error');
+				// alert(data);
+			},
+		});
+		updateCall();
+	}
+
+	function updateCall() {
+		setTimeout(function () { executeQuery() }, 5000);  //TODO:  5000 is var, adjusted by ui.
+	}
+
+	$(document).ready(function () {
+		executeQuery();
+	});
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="messages">
+
+</div>
+针灸监控<p> 模型编号: 101
+
+	{% endblock %}
+
+
+
+	{% block test %}
+	{% endblock %}

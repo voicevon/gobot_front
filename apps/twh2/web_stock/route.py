@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
-from db_api import db_Stock, db_Shipout, db_Withdraw
+from web_stock.db_api import db_Stock, db_Shipout, db_Withdraw
 from bolt_nut import get_row_from_tooth_location
 from logger import Logger
 from wcs_robots.twh_wcs import  wcs_queue_deposit, wcs_queue_takeout
@@ -10,6 +10,19 @@ web_stock = Blueprint('web_stock', __name__,template_folder='templates')
 
 twh_factory = {'221109':'山东雅乐福义齿公司'}
 
+
+@web_stock.route('/decrease_stock')
+def decrease_stock():
+    row_id = int(request.args.get('doc_id'))
+    print("rrrrrrrrrrrrrrrrrrrrrrrrrrr  row_id=  ", row_id)
+    # q = Query()
+    # rows = g_database.db_stock.search(q.doc_id==row_id)
+    # for row in rows:
+    #     print(row['stock_quantity'])
+    #     row['stock_quantity'] = row['stock_quantity'] -1
+    #     print(row['stock_quantity'])
+    # g_database.db_stock.write_back(rows)
+    return 'OK'
 
 @web_stock.route('/view_stock_map')
 def view_stock_map():
