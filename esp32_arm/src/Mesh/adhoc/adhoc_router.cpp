@@ -10,6 +10,7 @@ void AdhocRouter::Init(uint8_t my_node_id){
     esp_read_mac(_my_mac_addr, ESP_MAC_WIFI_STA);
     _my_hop = 100;
     _my_node_id = my_node_id;
+    __my_leader = NULL;
 
     // init orphan package
     _orphan_package.sender_hop = _my_hop;
