@@ -14,14 +14,14 @@ class TouchPad_Channel{
         bool Review_Sensor_Value_Whether_Changed();  // return true touched
         void SetStateToDied();  //??  recover by reset system
         String GetPayloadString();
-        int GetSensorValue(){return __capacity_sensor_value;};
+        uint8_t GetSensorValue(){return __capacity_sensor_value;};
 
     private:
         uint8_t __channel_id;
         uint8_t __untouched_history_values[5];  // TODO: be a queue.
         EnumState __state;
         bool __currently_is_touched = false;
-        int __capacity_sensor_value;
+        uint8_t __capacity_sensor_value;
         
 
 };

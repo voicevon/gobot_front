@@ -20,7 +20,7 @@ bool TouchPad_Channel::Review_Sensor_Value_Whether_Changed(){
     int average = sum / 4;
     if (average==0) average = 1;
     if (newest > average * 10) {
-        // from untouching to touched.  Don't push new data.
+        // from untouching to touched.  Don't push new data to ihstory queue.
         Logger::Print("got touched", 1);
         __currently_is_touched = true;
         return true; 

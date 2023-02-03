@@ -1,7 +1,7 @@
 #include "touch_pad_channel.h"
 #define PIN_CAPACITY_SENSOR_COMMON 12
 #define SAMPLES_COUNT_FOR_MEASURE 30
-#define COPRESS_RATION 200
+#define COPRESS_RATION 12
 
 
 void TouchpadChannel::Init(uint8_t pin_sensor){

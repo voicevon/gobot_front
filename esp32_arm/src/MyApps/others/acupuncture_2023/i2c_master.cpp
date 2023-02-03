@@ -29,7 +29,8 @@ bool I2C_Master::ReadSlaveNode(I2C_SlaveNode* slave_node){
 
     if (!slave_node->IsOnline()) return true;   //????  TODO: solve this.
 
-    
+    // Logger::Debug("I2C_Master::ReadSlaveNode()");
+    // Logger::Print("slave_node address", slave_node->GetAddress());
     Wire.beginTransmission(slave_node->GetAddress());
     Wire.endTransmission(false);
     Wire.requestFrom(slave_node->GetAddress(), slave_node->GetSize());    // request data from slave device
@@ -37,10 +38,14 @@ bool I2C_Master::ReadSlaveNode(I2C_SlaveNode* slave_node){
     uint8_t* rx_buffer = slave_node->GetRxBuffer(); 
     while (Wire.available() > 0) {  // slave may send less bytes than expected.
         *(rx_buffer+index) = Wire.read();
+        // Serial.print(*(rx_buffer + index));
+        // Serial.print("\t");
         index++;
     }
+    // Serial.println();
     if(index == 0) {
         // Can not read any data from i2c bus  for this address.
+        Logger::Print("Turn to offline node_address", slave_node->GetAddress());
         slave_node->SetOffline();
         // if (slave_node->IsForceOnline){
         //     // g_mqttClient.publish("actp/001/offline", 2, false, String(cell->Address).c_str());

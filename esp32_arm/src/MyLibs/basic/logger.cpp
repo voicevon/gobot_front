@@ -12,21 +12,23 @@ void Logger::SetStyle(EnumStyle style_name, EnumStyle_position style_position){
     //     break;
     // }
 
-    // if ((style_name == Info) && (style_position == Begin)){
-    //     Serial.print(FORE_YELLOW);
-    //     Serial.print(BGC_ORANGE);
-    //     Serial.print("[Info] ");
-    // }else if ((style_name == Info) && (style_position == end)){
-    //     Serial.print(BGC_BLACK);
-    //     Serial.println(FORE_GREEN);
-    // }
+    if ((style_name == EnumStyle::Info) && (style_position == EnumStyle_position::Begin)){
+        Serial.print(FORE_YELLOW);
+        Serial.print(BGC_ORANGE);
+        Serial.print("[Info] ");
+    }else if ((style_name == EnumStyle::Info) && (style_position == EnumStyle_position::End)){
+        Serial.print(BGC_BLACK);
+        Serial.println(FORE_GREEN);
+    }
 }
 
 int Logger::sid = 0;
 void Logger::Info(const char* title){
     // TRACE();
-    // Logger.set
+    Logger::SetStyle(EnumStyle::Info, EnumStyle_position::Begin);
     Serial.print(title);
+    Logger::SetStyle(EnumStyle::Info, EnumStyle_position::End);
+
 }
 // template <typename anyPrintable>
 // void Logger::Info(const char* title, anyPrintable var, anyPrintable value){
