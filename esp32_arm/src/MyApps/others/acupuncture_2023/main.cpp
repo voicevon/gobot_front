@@ -45,10 +45,11 @@ bool is_installed_node(uint8_t node_id){
     return false;
 }
 
-void Init_All_Touchpad_Nodes(){
+void Init_All_Touchpad_Nodes(bool all_nodes_in_theory){
+    
     for(int i=0; i< NODES_COUNT_IN_THEORY; i++){
         TouchPad_Node* node = &all_touchpad_nodes[i];
-        node->Init(&i2c_master, i, is_installed_node(i)); 
+        node->Init(&i2c_master, i, is_installed_node(i) || all_nodes_in_theory); 
     }
 }
 
@@ -58,7 +59,7 @@ void setup() {
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
     i2c_master.Init();
 
-    Init_All_Touchpad_Nodes();
+    Init_All_Touchpad_Nodes(false);
 
     setup_wifi_mqtt();
     Logger::Print("setup() waiting mqtt_connectiong.",1);
@@ -68,14 +69,6 @@ void setup() {
     Logger::Info("Setup is done.");
 }
 
-
-// bool is_same(const char* a, const char* b, int length){
-//     for(int i=0; i<length; i++){
-//         if (*(a+i) != *(b+i))
-//             return false;
-//     }
-//     return true;
-// }
 
 // There are three mqtt topics:
 // 1. acpt/001/node  nodes state  in [not installed,  offline,  online]
@@ -156,7 +149,10 @@ void loop() {
         // All is offline, reset all nodes.
         if (node->Get_I2CSlaveNode()->GetState() == I2C_SlaveNode::EnumState::ONLINE_CONNECTED) all_is_offline = false;
     }
-    if (all_is_offline) Init_All_Touchpad_Nodes();   // TODO:  try more times before set offline.
+    if (all_is_offline) {
+        Init_All_Touchpad_Nodes(true);   // TODO:  try more times before set offline.
+        delay(3000);
+    }
     mqtt_publish(ACUPUCTURE_BODY_ID);
     // Logger::Print("loop()  ponit",4);
     // delay(1000);

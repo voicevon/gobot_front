@@ -1,0 +1,1345 @@
+[
+    {
+        "id": "25c5022b18113ab0",
+        "type": "tab",
+        "label": "Acupuncture",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1a7f982897500d97",
+        "type": "group",
+        "z": "25c5022b18113ab0",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "30142ff0fe145d6a",
+            "b415f1e529782f2c",
+            "da500f5faf97d0fb",
+            "bf245a19b0a62d77",
+            "01c02ca64ace438b",
+            "75ebc1ec5900f756",
+            "3eee049bbe2d1503",
+            "2361f32889a367d8"
+        ],
+        "x": 14,
+        "y": 1179,
+        "w": 832,
+        "h": 502
+    },
+    {
+        "id": "30142ff0fe145d6a",
+        "type": "mqtt in",
+        "z": "25c5022b18113ab0",
+        "g": "1a7f982897500d97",
+        "name": "",
+        "topic": "actp/001/u19p10",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1d506186f8ae701",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 1220,
+        "wires": [
+            [
+                "da500f5faf97d0fb"
+            ]
+        ]
+    },
+    {
+        "id": "b415f1e529782f2c",
+        "type": "mqtt out",
+        "z": "25c5022b18113ab0",
+        "g": "1a7f982897500d97",
+        "name": "",
+        "topic": "acpt/001/general",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d1d506186f8ae701",
+        "x": 730,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "da500f5faf97d0fb",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "g": "1a7f982897500d97",
+        "name": "function 3",
+        "func": "var input = msg;\nif (msg.topic == \"actp/001/u19p10\")   msg.payload = \"手三里\";\nif (msg.topic == \"actp/001/u19p11\") msg.payload = \"曲池\";\n\nmsg.topic = \"acpt/001/general\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bf245a19b0a62d77",
+        "type": "mqtt in",
+        "z": "25c5022b18113ab0",
+        "g": "1a7f982897500d97",
+        "name": "",
+        "topic": "actp/001/u19p11",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1d506186f8ae701",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 1320,
+        "wires": [
+            [
+                "da500f5faf97d0fb"
+            ]
+        ]
+    },
+    {
+        "id": "01c02ca64ace438b",
+        "type": "mqtt in",
+        "z": "25c5022b18113ab0",
+        "g": "1a7f982897500d97",
+        "name": "",
+        "topic": "actp/001/*",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1d506186f8ae701",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 1500,
+        "wires": [
+            [
+                "75ebc1ec5900f756"
+            ]
+        ]
+    },
+    {
+        "id": "75ebc1ec5900f756",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "g": "1a7f982897500d97",
+        "name": "function 4",
+        "func": "var input = msg;\nif (msg.topic == \"actp/001/u19p10\")   msg.payload = \"手三里\";\nif (msg.topic == \"actp/001/u19p11\") msg.payload = \"曲池\";\n\nmsg.topic = \"acpt/001/general\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 1500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3eee049bbe2d1503",
+        "type": "mqtt in",
+        "z": "25c5022b18113ab0",
+        "g": "1a7f982897500d97",
+        "name": "",
+        "topic": "actp/001/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1d506186f8ae701",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 1640,
+        "wires": [
+            [
+                "2361f32889a367d8"
+            ]
+        ]
+    },
+    {
+        "id": "2361f32889a367d8",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "g": "1a7f982897500d97",
+        "name": "function 5",
+        "func": "var my_dict = { \"actp/001/u1910\": \"手三里\",\n    \"actp/001/u19p11\": \"曲池\",\n    \n};\n\nmsg.payload = my_dict[msg.topic];\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 1640,
+        "wires": [
+            [
+                "b415f1e529782f2c"
+            ]
+        ]
+    },
+    {
+        "id": "7f2138b9453c6aaf",
+        "type": "mqtt in",
+        "z": "25c5022b18113ab0",
+        "name": "",
+        "topic": "acpt/101/nodes",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1d506186f8ae701",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 280,
+        "wires": [
+            [
+                "1a3546394e7d235e"
+            ]
+        ]
+    },
+    {
+        "id": "39fbc6921a6b0ae3",
+        "type": "ui_toast",
+        "z": "25c5022b18113ab0",
+        "position": "top left",
+        "displayTime": "5",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 590,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "1a3546394e7d235e",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state",
+        "func": "\nfunction  replaceAt(str, index, replacement) {\n    return str.substring(0, index) + replacement + str.substring(index + replacement.length);\n}\n\nvar led_states = {};\nvar last_states = flow.get('last_node_states');\nif (last_states == null) last_states = 'DDDIIIDDDIIIDD'\n\nfor(var i=0; i<14; i++){\n    var new_code = msg.payload.charCodeAt(i);\n    var old_code = last_states.charCodeAt(i);\n\n    led_states[i] = false;\n    if (String.fromCharCode(new_code) == 'C') led_states[i] = true;\n    if (new_code != old_code) {\n        var new_char = String.fromCharCode(new_code);\n        node.warn(new_char);\n        last_states =  replaceAt(last_states, i, new_char);\n        node.warn(last_states);\n        // msg.payload = 'node #' + i + '   to online/offline';\n        msg.payload = last_states;\n        break;\n    }\n}\n// create message for notification.\n\nflow.set('last_node_states', last_states);\nflow.set('led_states', led_states);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 280,
+        "wires": [
+            [
+                "39fbc6921a6b0ae3",
+                "b5cbbba82ea1c24a",
+                "f2c6f2f686109a3a",
+                "e9125e5264525258",
+                "6516eba5d0d6e7c0",
+                "3c8207272a72b5aa",
+                "fd5a599495fed1ee",
+                "6d7f36d221f5e5ee",
+                "af58b05e50ef625e",
+                "777f3972c221ae3e",
+                "ba819404251ef393",
+                "f57e92ba2fac5a4c",
+                "839d9aa2ab297c08"
+            ]
+        ]
+    },
+    {
+        "id": "155849b1f2cdc020",
+        "type": "mqtt in",
+        "z": "25c5022b18113ab0",
+        "name": "",
+        "topic": "acpt/101/channels",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1d506186f8ae701",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 500,
+        "wires": [
+            [
+                "8bfdb22d305e4e75"
+            ]
+        ]
+    },
+    {
+        "id": "8c8a4be681eba209",
+        "type": "mqtt in",
+        "z": "25c5022b18113ab0",
+        "name": "",
+        "topic": "acpt/101/sensor_value",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d1d506186f8ae701",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 1060,
+        "wires": [
+            [
+                "3324e72032657097"
+            ]
+        ]
+    },
+    {
+        "id": "8bfdb22d305e4e75",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "channels state",
+        "func": "function get_channel_message(channel_number, state_char_code){\n\n    // var node_id = channel_number / 14;\n    // var channel_id = channel_number % 14;\n\n    var diction = { 1: \"右脚.人工穴\", 2: \"22222\", 3: \"33333\", 4: \"33333\", 5: \"33333\"};\n\n    var state_char = String.fromCharCode(state_char_code);\n    // if (state_char == 'T') return diction[channel_number] + 'Touch';\n    if (state_char == 'T') return '  哎呦, 疼啊啊啊   ' + channel_number ;\n    // if (state_char == 'F') return diction[channel_number] + 'untouched';\n    if (state_char == 'F') return '舒服了    ' + channel_number + '你看看，   中医也有管用的时候' ;\n    if (state_char == 'D') return '右脚.人工穴 Died ';\n    if (state_char == 'I')  return 'NOT installed';\n    return state_char;\n    // return \"get_channel_name()  unknown state_char\";\n}\n\nvar saved = flow.get('channels_state');\nvar payload = msg.payload;\n\nvar rx_buffer = new ArrayBuffer(payload.length); \nfor (var i = 0; i < payload.length; i++) {\n    rx_buffer[i] = payload.charCodeAt(i);\n    if (rx_buffer[i] != saved[i]){\n        saved[i] = rx_buffer[i];\n        flow.set('channels_state', saved);\n        // node.warn(rx_buffer[i]);\n        msg.payload = get_channel_message(i, rx_buffer[i]);\n        return msg;\n    }\n}\nmsg = null;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 160,
+        "y": 560,
+        "wires": [
+            [
+                "39fbc6921a6b0ae3",
+                "11883655d2fa968a",
+                "0ad16b5f039c6921"
+            ]
+        ]
+    },
+    {
+        "id": "3324e72032657097",
+        "type": "ui_gauge",
+        "z": "25c5022b18113ab0",
+        "name": "",
+        "group": "c3ca28837060bb06",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "wave",
+        "title": "传感器原始值",
+        "label": "",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "255",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "20",
+        "seg2": "40",
+        "className": "",
+        "x": 460,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "deddc29e35a3e93b",
+        "type": "ui_text",
+        "z": "25c5022b18113ab0",
+        "group": "8b681e7a44312f6d",
+        "order": 1,
+        "width": 6,
+        "height": 7,
+        "name": "chating",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "x": 760,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "11883655d2fa968a",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "historic msgs  channel only",
+        "func": "var channel_msg_0 = msg.payload + \"<br>\";\nvar channel_msg_1 = flow.get('channel_msgs_0');\nvar channel_msg_2 = flow.get('channel_msgs_1');\nvar channel_msg_3 = flow.get('channel_msgs_2');\nvar channel_msg_4 = flow.get('channel_msgs_3');\nvar channel_msg_5 = flow.get('channel_msgs_4');\nvar channel_msg_6 = flow.get('channel_msgs_5');\nvar channel_msg_7 = flow.get('channel_msgs_6');\nvar channel_msg_8 = flow.get('channel_msgs_7');\n\nflow.set('channel_msgs_0', channel_msg_0);\nflow.set('channel_msgs_1', channel_msg_1);\nflow.set('channel_msgs_2', channel_msg_2);\nflow.set('channel_msgs_3', channel_msg_3);\nflow.set('channel_msgs_4', channel_msg_4);\nflow.set('channel_msgs_5', channel_msg_5);\nflow.set('channel_msgs_6', channel_msg_6);\nflow.set('channel_msgs_7', channel_msg_7);\nflow.set('channel_msgs_8', channel_msg_8);\n\nmsg.payload = channel_msg_8 + channel_msg_7 + channel_msg_6 + channel_msg_5 \n            + channel_msg_4 + channel_msg_3 + channel_msg_2 + channel_msg_1\n            + channel_msg_0;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 560,
+        "wires": [
+            [
+                "deddc29e35a3e93b"
+            ]
+        ]
+    },
+    {
+        "id": "0ad16b5f039c6921",
+        "type": "ui_audio",
+        "z": "25c5022b18113ab0",
+        "name": "",
+        "group": "8b681e7a44312f6d",
+        "voice": "Google 普通话（中国大陆）",
+        "always": true,
+        "x": 380,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "b5cbbba82ea1c24a",
+        "type": "ui_text",
+        "z": "25c5022b18113ab0",
+        "group": "cb37fe7741238533",
+        "order": 13,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "debug node states",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 610,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "4a434dfb9fd001ea",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 1,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "3# 右脚",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#3 右脚",
+        "x": 1000,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "028a5041179a2256",
+        "type": "inject",
+        "z": "25c5022b18113ab0",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "哎吆，疼啊",
+        "payloadType": "str",
+        "x": 180,
+        "y": 700,
+        "wires": [
+            [
+                "0ad16b5f039c6921"
+            ]
+        ]
+    },
+    {
+        "id": "f2c6f2f686109a3a",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[3]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 20,
+        "wires": [
+            [
+                "4a434dfb9fd001ea"
+            ]
+        ]
+    },
+    {
+        "id": "6cc84ff5c471d86a",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 2,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "#4 右脚",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#4 右脚",
+        "x": 1000,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "e9125e5264525258",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[4]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 60,
+        "wires": [
+            [
+                "6cc84ff5c471d86a"
+            ]
+        ]
+    },
+    {
+        "id": "dc4c41dded7148c6",
+        "type": "ui_dropdown",
+        "z": "25c5022b18113ab0",
+        "name": "",
+        "label": "node",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "c3ca28837060bb06",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "3 右脚",
+                "value": "3",
+                "type": "str"
+            },
+            {
+                "label": "4 右脚",
+                "value": "4",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "node",
+        "topicType": "str",
+        "className": "",
+        "x": 170,
+        "y": 860,
+        "wires": [
+            [
+                "7d38d7f7f6009eeb"
+            ]
+        ]
+    },
+    {
+        "id": "550d2c62393f9613",
+        "type": "ui_dropdown",
+        "z": "25c5022b18113ab0",
+        "name": "",
+        "label": "channel",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "c3ca28837060bb06",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "0",
+                "value": "0",
+                "type": "str"
+            },
+            {
+                "label": "1",
+                "value": "1",
+                "type": "str"
+            },
+            {
+                "label": "2",
+                "value": "2",
+                "type": "str"
+            },
+            {
+                "label": "3",
+                "value": "3",
+                "type": "str"
+            },
+            {
+                "label": "4",
+                "value": "4",
+                "type": "str"
+            },
+            {
+                "label": "5",
+                "value": "5",
+                "type": "str"
+            },
+            {
+                "label": "6",
+                "value": "6",
+                "type": "str"
+            },
+            {
+                "label": "7",
+                "value": "7",
+                "type": "str"
+            },
+            {
+                "label": "8",
+                "value": "8",
+                "type": "str"
+            },
+            {
+                "label": "9",
+                "value": "9",
+                "type": "str"
+            },
+            {
+                "label": "10",
+                "value": "10",
+                "type": "str"
+            },
+            {
+                "label": "11",
+                "value": "11",
+                "type": "str"
+            },
+            {
+                "label": "12",
+                "value": "12",
+                "type": "str"
+            },
+            {
+                "label": "13",
+                "value": "13",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "channel",
+        "topicType": "str",
+        "className": "",
+        "x": 160,
+        "y": 920,
+        "wires": [
+            [
+                "7d38d7f7f6009eeb"
+            ]
+        ]
+    },
+    {
+        "id": "7d38d7f7f6009eeb",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "concern sensor",
+        "func": "var node_id = flow.get('concerned_node_id')\nvar channel_id = flow.get('concern_channel_id');\nvar sensor_id = 0;\n\nif (msg.topic=='node') node_id = msg.payload;\nif (msg.topic=='channel') channel_id = msg.payload;\n\nflow.set('concerned_node_id', node_id);\nflow.set('concerned_channel_id', channel_id);\nsensor_id = 14* node_id + channel_id;\nmsg.payload = sensor_id;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 900,
+        "wires": [
+            [
+                "1002a0cd97b0425b",
+                "f57bf6df947f6911"
+            ]
+        ]
+    },
+    {
+        "id": "1002a0cd97b0425b",
+        "type": "mqtt out",
+        "z": "25c5022b18113ab0",
+        "name": "",
+        "topic": "acpt/101/concern/sensor",
+        "qos": "",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d1d506186f8ae701",
+        "x": 610,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "f57bf6df947f6911",
+        "type": "debug",
+        "z": "25c5022b18113ab0",
+        "name": "debug 20",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "0f9860ddab52179c",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 3,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "#5 右小腿",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#5 右小腿",
+        "x": 1000,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "6516eba5d0d6e7c0",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[5]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 100,
+        "wires": [
+            [
+                "0f9860ddab52179c"
+            ]
+        ]
+    },
+    {
+        "id": "30a47f1860c53cce",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 4,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "#6 右大腿",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#6 右大腿",
+        "x": 1000,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "3c8207272a72b5aa",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[6]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 140,
+        "wires": [
+            [
+                "30a47f1860c53cce"
+            ]
+        ]
+    },
+    {
+        "id": "97e4679182ef9188",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 5,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "#7 臀",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#7 臀",
+        "x": 990,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "fd5a599495fed1ee",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[7]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 180,
+        "wires": [
+            [
+                "97e4679182ef9188"
+            ]
+        ]
+    },
+    {
+        "id": "6c05b3660b78ea41",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 6,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "#8 臀",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#8 臀",
+        "x": 990,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "6d7f36d221f5e5ee",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[8]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 220,
+        "wires": [
+            [
+                "6c05b3660b78ea41"
+            ]
+        ]
+    },
+    {
+        "id": "fa2107b614c3fca5",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 7,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "#9 胸",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#9 胸",
+        "x": 990,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "af58b05e50ef625e",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[9]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 260,
+        "wires": [
+            [
+                "fa2107b614c3fca5"
+            ]
+        ]
+    },
+    {
+        "id": "1dc7808bf09fda58",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 8,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "#10 头",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#10 头",
+        "x": 990,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "777f3972c221ae3e",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[10]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 300,
+        "wires": [
+            [
+                "1dc7808bf09fda58"
+            ]
+        ]
+    },
+    {
+        "id": "51d988942eaa3a01",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 10,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "#11 右臂",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#11 右臂",
+        "x": 1000,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "ba819404251ef393",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[11]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 340,
+        "wires": [
+            [
+                "51d988942eaa3a01"
+            ]
+        ]
+    },
+    {
+        "id": "afed12cfe2fcdc61",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 9,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "#12 右手",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#12 右手",
+        "x": 1000,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "f57e92ba2fac5a4c",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[12]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 380,
+        "wires": [
+            [
+                "afed12cfe2fcdc61"
+            ]
+        ]
+    },
+    {
+        "id": "a0fea679c58271f6",
+        "type": "ui_led",
+        "z": "25c5022b18113ab0",
+        "order": 11,
+        "group": "cb37fe7741238533",
+        "width": 3,
+        "height": 1,
+        "label": "#13 测试",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "#13 测试",
+        "x": 1000,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "839d9aa2ab297c08",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "nodes_state[key]",
+        "func": "var states = flow.get('led_states');\nmsg.payload = states[13]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 420,
+        "wires": [
+            [
+                "a0fea679c58271f6"
+            ]
+        ]
+    },
+    {
+        "id": "4f5bcc96bbaca639",
+        "type": "ui_spacer",
+        "z": "25c5022b18113ab0",
+        "name": "spacer",
+        "group": "8b681e7a44312f6d",
+        "order": 2,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "4b83152dafb2aae0",
+        "type": "ui_spacer",
+        "z": "25c5022b18113ab0",
+        "name": "spacer",
+        "group": "8b681e7a44312f6d",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "1ce8522b87deb061",
+        "type": "ui_spacer",
+        "z": "25c5022b18113ab0",
+        "name": "spacer",
+        "group": "8b681e7a44312f6d",
+        "order": 4,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "07b37560d643206c",
+        "type": "ui_spacer",
+        "z": "25c5022b18113ab0",
+        "name": "spacer",
+        "group": "8b681e7a44312f6d",
+        "order": 5,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "aaba0e4b4c20d5a2",
+        "type": "ui_spacer",
+        "z": "25c5022b18113ab0",
+        "name": "spacer",
+        "group": "8b681e7a44312f6d",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "60df4fcaeda70b29",
+        "type": "ui_spacer",
+        "z": "25c5022b18113ab0",
+        "name": "spacer",
+        "group": "8b681e7a44312f6d",
+        "order": 7,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "38bc5671f8683833",
+        "type": "ui_spacer",
+        "z": "25c5022b18113ab0",
+        "name": "spacer",
+        "group": "8b681e7a44312f6d",
+        "order": 8,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "b3c4b842ec543477",
+        "type": "ui_spacer",
+        "z": "25c5022b18113ab0",
+        "name": "spacer",
+        "group": "cb37fe7741238533",
+        "order": 12,
+        "width": 3,
+        "height": 1
+    },
+    {
+        "id": "d1d506186f8ae701",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "c3ca28837060bb06",
+        "type": "ui_group",
+        "name": "Debug sensor",
+        "tab": "1402941662ba9f23",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "8b681e7a44312f6d",
+        "type": "ui_group",
+        "name": "消息",
+        "tab": "1402941662ba9f23",
+        "order": 1,
+        "disp": true,
+        "width": "7",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "cb37fe7741238533",
+        "type": "ui_group",
+        "name": "Node",
+        "tab": "1402941662ba9f23",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "1402941662ba9f23",
+        "type": "ui_tab",
+        "name": "针灸101",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    }
+]
