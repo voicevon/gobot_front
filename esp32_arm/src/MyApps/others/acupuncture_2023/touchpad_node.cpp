@@ -15,18 +15,14 @@ void TouchPad_Node::Read_via_I2C(){
         __i2c_master->ReadSlaveNode(&__i2c_slave_node);
 }
 
-bool TouchPad_Node::Review_RxBuffer(){
-    // TODO:  remove rx_buffer from this level.
+void TouchPad_Node::Process_RxBuffer(){
     uint8_t* rx_buffer = __i2c_slave_node.GetRxBuffer();
-    __has_changed_channel = false;
     // Logger::Debug("TouchPad_Node::Review_RxBuffer()");
     for (int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
         // review sensor's value
-        __has_changed_channel |=  __all_channels[i].Review_Sensor_Value_Whether_Changed();
-        __all_channels[i].Push_to_HistoryValues(*(rx_buffer + i));
+         __all_channels[i].Review_Sensor_Value(*(rx_buffer+i));
         // Logger::Print("__has_changed_channel", __has_changed_channel);
     }
-    return __has_changed_channel;
 }
 
 String TouchPad_Node::GetMqttPayloadString(){
@@ -40,7 +36,7 @@ String TouchPad_Node::GetChannelsPayloadString(){
     TouchPad_Channel* channel;
     for (int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
         channel = &__all_channels[i];
-        str.concat(channel->GetPayloadString());
+        str.concat(channel->GetStateString());
     }
     return str;
 

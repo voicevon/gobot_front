@@ -9,7 +9,7 @@ class TouchPad_Node{
 
         void Init(I2C_Master* i2c_master, uint8_t i2c_slave_address, bool is_installed);
         void Read_via_I2C();
-        bool Review_RxBuffer();
+        void Process_RxBuffer();
 
         String GetMqttPayloadString();
         String GetChannelsPayloadString();

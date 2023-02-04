@@ -152,7 +152,7 @@ void loop() {
         // update sensor value,  review the received data.
         TouchPad_Node* node = &all_touchpad_nodes[i];   
         node->Read_via_I2C();
-        node->Review_RxBuffer();  
+        node->Process_RxBuffer();  
         // All is offline, reset all nodes.
         if (node->Get_I2CSlaveNode()->GetState() == I2C_SlaveNode::EnumState::ONLINE_CONNECTED) all_is_offline = false;
     }

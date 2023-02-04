@@ -1,6 +1,9 @@
 #pragma once
 #include "stdint.h"
 #include "WString.h"
+#define SENSOR_HISTORY_QUEUE_SIZE  5
+
+
 class TouchPad_Channel{
     public:
         enum EnumState{
@@ -10,17 +13,17 @@ class TouchPad_Channel{
             TOUCHED_OFF,
         };
         void Init(uint8_t channel_id, EnumState state);
-        void Push_to_HistoryValues(uint8_t new_value);  // newest value at index==0
-        bool Review_Sensor_Value_Whether_Changed();  // return true touched
-        String GetPayloadString();
+        void Review_Sensor_Value(uint8_t new_value);  
         uint8_t GetSensorValue(){return __newest_sensor_value;};
+        String GetStateString();
 
     private:
         uint8_t __channel_id;
-        uint8_t __untouched_history_values[5];  // TODO: be a queue.
         EnumState __state;
-        bool __currently_is_touched = false;
+
         uint8_t __newest_sensor_value;
+        uint8_t __untouched_history_values[SENSOR_HISTORY_QUEUE_SIZE];  // TODO: be a queue.
+        void __Push_to_HistoryValueWindow(uint8_t new_value);  // newest value at index==0
 
         
 
