@@ -13,6 +13,7 @@ class TouchPad_Node{
 
         String GetMqttPayloadString();
         String GetChannelsPayloadString();
+        I2C_SlaveNode* Get_I2CSlaveNode(){return &__i2c_slave_node;};
         uint8_t GetSensorValue(int channel_id){ return __all_channels[channel_id].GetSensorValue();};
 
         bool __has_changed_channel;  //??

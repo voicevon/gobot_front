@@ -1,10 +1,13 @@
 # pragma once
 #include "stdint.h"
+#include "WString.h"
+
 
 class MemoryHelper{
     public:
         // compare byte to byte.
-        // return true if all bytes are same.
-        // return false if any is different.
-        static bool CompareSame(void* a, void* b, int length);
+        // return -1 if all bytes are same.
+        // return the position index of the first difference.
+        static int CompareSame(const void* a, const void* b, int length);
+        // void CopyArduinoString(String from, String to);
 };
