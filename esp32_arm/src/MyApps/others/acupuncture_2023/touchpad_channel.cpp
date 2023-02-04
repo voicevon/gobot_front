@@ -8,7 +8,6 @@
 void TouchPad_Channel::Init(uint8_t channel_id, EnumState state){
     __channel_id = channel_id;
     __state = state;
-    // __currently_is_touched = false;
 }
 
 
@@ -34,18 +33,17 @@ void TouchPad_Channel::Review_Sensor_Value(uint8_t new_value){
         Logger::Debug("ouchPad_Channel::Review_Sensor_Value_Whether_Changed()  Got touched");
         Logger::Print("average", average);
         Logger::Print("newest", __newest_sensor_value);
-        // __currently_is_touched = true;
         __state = EnumState::TOUCHED_ON;
-    }else if ((__state == EnumState::TOUCHED_ON) && (__newest_sensor_value < average * 5)){
+    }
+    if ((__state == EnumState::TOUCHED_ON) && (__newest_sensor_value < average * 5)){
         Logger::Debug("ouchPad_Channel::Review_Sensor_Value_Whether_Changed()  Got Untouched");
         Logger::Print("average", average);
         Logger::Print("newest", __newest_sensor_value);
-        // __currently_is_touched = false;
-        __state == EnumState::TOUCHED_OFF;
+        __state = EnumState::TOUCHED_OFF;
     }
-
-    if (__state == EnumState::TOUCHED_OFF)
+    if (__state == EnumState::TOUCHED_OFF){
         __Push_to_HistoryValueWindow(new_value);
+    }
 }
 
 
@@ -60,6 +58,6 @@ String TouchPad_Channel::GetStateString(){
     if (__state == NOT_INSTALLED) return String("I");
     if (__state == CHANNEL_DIED) return String("D");
     if (__state == TOUCHED_ON) return String("T");
-    if (__state == TOUCHED_OFF) return String("F");
-
+    // if (__state == TOUCHED_OFF) return String("F");
+    return "F";
 }
