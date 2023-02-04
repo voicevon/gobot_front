@@ -1,11 +1,6 @@
 //https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout-1.jpg
 
-
-
-#include "i2c_master.h"
 #include "touchpad_node.h"
-#include "touchpad_channel.h"
-
 #include "WString.h"
 #include "Mylibs/basic/logger.h"
 #include "MyLibs/MyFunctions.hpp" 
@@ -21,7 +16,7 @@
 #define NODES_COUNT_IN_THEORY 30
 
 
-I2C_Master i2c_master;
+I2C_IamMaster i2c_master;
 TouchPad_Node all_touchpad_nodes[NODES_COUNT_IN_THEORY];
 String monitoring_sensor_topic="acpt/monitor/sensor";   // payload is "147"  where 14 is node_id,  7 is channel_id.  147 = 14* node_id + channel_id
 RemoteVar_via_Mqtt monitor(monitoring_sensor_topic.c_str());
@@ -46,7 +41,6 @@ bool is_installed_node(uint8_t node_id){
 }
 
 void Init_All_Touchpad_Nodes(bool all_nodes_in_theory){
-    
     for(int i=0; i< NODES_COUNT_IN_THEORY; i++){
         TouchPad_Node* node = &all_touchpad_nodes[i];
         node->Init(&i2c_master, i, is_installed_node(i) || all_nodes_in_theory); 
@@ -129,7 +123,6 @@ void mqtt_publish(int body_id){
     int channel_id = sensor_number % 14;
     String topic_sensor_value = "acpt/" + String(body_id) + "/sensor_value" ;   // monitor sensor value
 
-    // String payload_sensor_value = String(all_touchpad_nodes[node_id].GetSensorValue(channel_id));
     uint8_t sensor_value = all_touchpad_nodes[node_id].GetSensorValue(channel_id);
     if (abs(last_sent_sensor_value - sensor_value ) > 10){
         last_sent_sensor_value = sensor_value;
@@ -147,14 +140,13 @@ void loop() {
         node->Read_via_I2C();
         node->Process_RxBuffer();  
         // All is offline, reset all nodes.
-        if (node->Get_I2CSlaveNode()->GetState() == I2C_SlaveNode::EnumState::ONLINE_CONNECTED) all_is_offline = false;
+        if (node->Get_I2CSlaveNode()->GetState() == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) all_is_offline = false;
     }
     if (all_is_offline) {
+        Logger::Debug("loop(),  all nodes are offline, reseting all nodes , even those are not installed." );
         Init_All_Touchpad_Nodes(true);   // TODO:  try more times before set offline.
-        delay(3000);
+        delay(200);
     }
     mqtt_publish(ACUPUCTURE_BODY_ID);
-    // Logger::Print("loop()  ponit",4);
-    // delay(1000);
 }  
 #endif

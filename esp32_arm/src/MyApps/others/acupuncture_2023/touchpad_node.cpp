@@ -1,7 +1,7 @@
 #include "touchpad_node.h"
 #include "MyLibs/basic/logger.h"
 
-void TouchPad_Node::Init(I2C_Master * i2c_master, uint8_t i2c_slave_address, bool is_installed){
+void TouchPad_Node::Init(I2C_IamMaster * i2c_master, uint8_t i2c_slave_address, bool is_installed){
     __i2c_master = i2c_master;
     __i2c_slave_node.Init(is_installed, i2c_slave_address, TOUCH_PAD_CHANNELS_COUNT_IN_NODE, __rx_buffer);   //TODO: TOUCH_PAD_CHANNELS_COUNT_IN_NODE is var
 
@@ -26,9 +26,9 @@ void TouchPad_Node::Process_RxBuffer(){
 }
 
 String TouchPad_Node::GetMqttPayloadString(){
-    if(__i2c_slave_node.GetState() == I2C_SlaveNode::EnumState::NOT_INSTALLED) return String("I");
-    if(__i2c_slave_node.GetState() == I2C_SlaveNode::EnumState::OFFLINE_DIED) return String("D");
-    if(__i2c_slave_node.GetState() == I2C_SlaveNode::EnumState::ONLINE_CONNECTED) return String("C");
+    if(__i2c_slave_node.GetState() == I2C_SlaveNodeAgent::EnumState::NOT_INSTALLED) return String("I");
+    if(__i2c_slave_node.GetState() == I2C_SlaveNodeAgent::EnumState::OFFLINE_DIED) return String("D");
+    if(__i2c_slave_node.GetState() == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) return String("C");
 }
 
 String TouchPad_Node::GetChannelsPayloadString(){

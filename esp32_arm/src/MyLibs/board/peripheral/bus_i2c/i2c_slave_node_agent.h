@@ -1,8 +1,8 @@
 #pragma once
 #include "stdint.h"
-#include "touchpad_channel.h"
+// #include "touchpad_channel.h"
 
-class I2C_SlaveNode{
+class I2C_SlaveNodeAgent{
     public:
         enum EnumState{
             NOT_INSTALLED,
@@ -14,6 +14,7 @@ class I2C_SlaveNode{
         uint8_t GetSize() {return __rx_size;};
         uint8_t* GetRxBuffer(){return __rx_buffer;};
         EnumState GetState(){return __state;};
+        
         // bool IsForceOnline = false;   //???
         bool IsOnline(){return __state==ONLINE_CONNECTED;};
         void SetOffline(){__state=OFFLINE_DIED;};
@@ -26,7 +27,4 @@ class I2C_SlaveNode{
         uint8_t* __rx_buffer;  // Why is pointer?  because rx_size is an unkown number to serve variable requirement.
         uint8_t __rx_size;
         EnumState __state;
-
-
-
 };

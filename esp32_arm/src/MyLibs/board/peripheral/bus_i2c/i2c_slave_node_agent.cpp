@@ -1,9 +1,9 @@
-#include "i2c_slave_node.h"
+#include "i2c_slave_node_agent.h"
 #include "MyLibs/basic/logger.h"
 
 
 
-void I2C_SlaveNode::Init(bool is_installed,uint8_t address, uint8_t rx_size, uint8_t* rx_buffer){
+void I2C_SlaveNodeAgent::Init(bool is_installed,uint8_t address, uint8_t rx_size, uint8_t* rx_buffer){
     if (is_installed){
         __state = ONLINE_CONNECTED;
     }else{
