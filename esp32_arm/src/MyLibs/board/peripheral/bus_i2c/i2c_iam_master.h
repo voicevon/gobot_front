@@ -11,6 +11,6 @@ class I2C_IamMaster{
     public:
         void Init();
         bool ReadSlaveNode(I2C_SlaveNodeAgent* slave_node);
-
+        //TODO: bool WriteSlaveNode(node, length);
     private:
 };

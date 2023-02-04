@@ -25,13 +25,13 @@ void TouchPad_Node::Process_RxBuffer(){
     }
 }
 
-String TouchPad_Node::GetMqttPayloadString(){
+String TouchPad_Node::GetNodeStateString(){
     if(__i2c_slave_node.GetState() == I2C_SlaveNodeAgent::EnumState::NOT_INSTALLED) return String("I");
     if(__i2c_slave_node.GetState() == I2C_SlaveNodeAgent::EnumState::OFFLINE_DIED) return String("D");
     if(__i2c_slave_node.GetState() == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) return String("C");
 }
 
-String TouchPad_Node::GetChannelsPayloadString(){
+String TouchPad_Node::GetChannelsStateString(){
     String str = "";
     TouchPad_Channel* channel;
     for (int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){

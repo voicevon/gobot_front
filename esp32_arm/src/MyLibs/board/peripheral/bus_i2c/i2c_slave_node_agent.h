@@ -20,8 +20,6 @@ class I2C_SlaveNodeAgent{
         void SetOffline(){__state=OFFLINE_DIED;};
         void SetOnline(){__state = ONLINE_CONNECTED;};  //???  For test-jig , this is useful.
 
-
-        
     private:
         uint8_t __i2c_address;
         uint8_t* __rx_buffer;  // Why is pointer?  because rx_size is an unkown number to serve variable requirement.

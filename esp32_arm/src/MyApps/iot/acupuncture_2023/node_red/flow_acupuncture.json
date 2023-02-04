@@ -282,11 +282,12 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 150,
-        "y": 500,
+        "x": 130,
+        "y": 480,
         "wires": [
             [
-                "8bfdb22d305e4e75"
+                "8bfdb22d305e4e75",
+                "8408438a8d4451d9"
             ]
         ]
     },
@@ -316,7 +317,7 @@
         "type": "function",
         "z": "25c5022b18113ab0",
         "name": "channels state",
-        "func": "function get_channel_message(channel_number, state_char_code){\n\n    // var node_id = channel_number / 14;\n    // var channel_id = channel_number % 14;\n\n    var diction = { 1: \"右脚.人工穴\", 2: \"22222\", 3: \"33333\", 4: \"33333\", 5: \"33333\"};\n\n    var state_char = String.fromCharCode(state_char_code);\n    // if (state_char == 'T') return diction[channel_number] + 'Touch';\n    if (state_char == 'T') return '  哎呦, 疼啊啊啊   ' + channel_number ;\n    // if (state_char == 'F') return diction[channel_number] + 'untouched';\n    // if (state_char == 'F') return '舒服了    ' + channel_number + '。 你看看，   中医也有管用的时候';\n    if (state_char == 'F') return  channel_number  ;\n    if (state_char == 'D') return '右脚.人工穴 Died ';\n    if (state_char == 'I')  return 'NOT installed';\n    return state_char;\n    // return \"get_channel_name()  unknown state_char\";\n}\n\nvar saved = flow.get('channels_state');\nvar payload = msg.payload;\n\nvar rx_buffer = new ArrayBuffer(payload.length); \nfor (var i = 0; i < payload.length; i++) {\n    rx_buffer[i] = payload.charCodeAt(i);\n    if (rx_buffer[i] != saved[i]){\n        saved[i] = rx_buffer[i];\n        flow.set('channels_state', saved);\n        // node.warn(rx_buffer[i]);\n        msg.payload = get_channel_message(i, rx_buffer[i]);\n        return msg;\n    }\n}\nmsg = null;\nreturn msg;\n",
+        "func": "function get_channel_message(channel_number, state_char_code){\n\n    // var node_id = channel_number / 14;\n    // var channel_id = channel_number % 14;\n\n    var diction = {\n        1: \"\", 2: \"\", 3: \"\", 4: \"\", 5: \"\",\n        6: \"\", 7: \"\", 8: \"\", 9: \"\", 10: \"\",\n        11: \"\", 12: \"\", 13: \"\", 14: \"\",        \n        \n        15: \"\", 16: \"\", 17: \"\", 18: \"\", 19: \"\",\n        20: \"\", 21: \"\", 22: \"\", 23: \"\", 24: \"\",\n        25: \"\", 26: \"\", 27: \"\", 28: \"\",\n        \n        29: \"\", 30: \"\", 31: \"\", 32: \"\", 33: \"\",\n        34: \"\", 35: \"\", 36: \"\", 37: \"\", 38: \"\",\n        39: \"\", 40: \"\", 41: \"\", 42: \"\",\n\n        43: \"\", 44: \"\", 45: \"\", 46: \"\", 47: \"\",\n        48: \"\", 49: \"\", 50: \"\", 51: \"\", 52: \"\",\n        53: \"\", 54: \"\", 55: \"\", 56: \"\",\n\n        57: \"\", 58: \"\", 59: \"\", 60: \"\", 61: \"\",\n        62: \"\", 63: \"\", 64: \"\", 65: \"\", 66: \"\",\n        67: \"\", 68: \"\", 69: \"\", 70: \"\",\n\n        71: \"\", 72: \"\", 73: \"\", 74: \"\", 75: \"\",\n        76: \"\", 77: \"\", 78: \"\", 79: \"\", 80: \"\",\n        81: \"\", 82: \"\", 83: \"\", 84: \"\",\n        \n        85: \"\", 86: \"\", 87: \"\", 88: \"\", 89: \"\",\n        90: \"\", 91: \"\", 92: \"\", 93: \"\", 94: \"\",\n        95: \"\", 96: \"\", 97: \"\", 98: \"\",\n\n        99: \"\", 100: \"\", 101: \"\", 102: \"\", 103: \"\",\n        104: \"\", 105: \"\", 106: \"\", 107: \"\", 108: \"\",\n        109: \"\", 110: \"\", 111: \"\", 112: \"\",\n\n        113: \"\", 114: \"\", 115: \"\", 116: \"\", 117: \"\",\n        118: \"\", 119: \"\", 120: \"\", 121: \"\", 122: \"\",\n        123: \"\", 124: \"\", 125: \"\", 126: \"\",\n\n        127: \"\", 128: \"\", 129: \"\", 130: \"\", 131: \"\",\n        132: \"\", 133: \"\", 134: \"\", 135: \"\", 136: \"\",\n        137: \"\", 138: \"\", 139: \"\", 140: \"\",\n\n        141: \"\", 142: \"\", 143: \"\", 144: \"\", 145: \"\",\n        146: \"\", 147: \"\", 148: \"\", 149: \"\", 150: \"\",\n        151: \"\", 152: \"\", 153: \"\", 154: \"\",\n\n        155: \"\", 156: \"\", 157: \"\", 158: \"\", 159: \"\",\n        160: \"\", 161: \"\", 162: \"\", 163: \"\", 164: \"\",\n        165: \"\", 166: \"\", 167: \"\", 168: \"\"\n        };\n\n    var state_char = String.fromCharCode(state_char_code);\n    // if (state_char == 'T') return diction[channel_number] + 'Touch';\n    if (state_char == 'T') return '  哎呦, 疼啊啊啊   ' + channel_number ;\n    // if (state_char == 'F') return diction[channel_number] + 'untouched';\n    // if (state_char == 'F') return '舒服了    ' + channel_number + '。 你看看，   中医也有管用的时候';\n    if (state_char == 'F') return  channel_number  ;\n    if (state_char == 'D') return '右脚.人工穴 Died ';\n    if (state_char == 'I')  return 'NOT installed';\n    return state_char;\n    // return \"get_channel_name()  unknown state_char\";\n}\n\nvar saved = flow.get('channels_state');\nvar payload = msg.payload;\n\nvar rx_buffer = new ArrayBuffer(payload.length); \nfor (var i = 0; i < payload.length; i++) {\n    rx_buffer[i] = payload.charCodeAt(i);\n    if (rx_buffer[i] != saved[i]){\n        saved[i] = rx_buffer[i];\n        flow.set('channels_state', saved);\n        // node.warn(rx_buffer[i]);\n        msg.payload = get_channel_message(i, rx_buffer[i]);\n        return msg;\n    }\n}\nmsg = null;\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1191,6 +1192,43 @@
                 "a0fea679c58271f6"
             ]
         ]
+    },
+    {
+        "id": "8408438a8d4451d9",
+        "type": "function",
+        "z": "25c5022b18113ab0",
+        "name": "old verion ui",
+        "func": "\nvar saved = flow.get('channels_state');\nvar payload = msg.payload;\n\nvar rx_buffer = new ArrayBuffer(payload.length);\nvar tx_topic='actp/001/u';\nvar tx_paylod = 'OFF';\nvar node_id = 0;\nvar channel_id =0;\nfor (var i = 0; i < payload.length; i++) {\n    rx_buffer[i] = payload.charCodeAt(i);\n    if (rx_buffer[i] != saved[i]) {\n        saved[i] = rx_buffer[i];\n        flow.set('channels_state', saved);\n        node_id = i/14;   // be interger\n        channel_id = i % 14;\n        tx_topic += (node_id + 'p' + channel_id);\n        if (String.fromCharCode(rx_buffer[i])=='T')\n            tx_paylod = 'ON';\n        msg.topic = tx_topic;\n        msg.payload = tx_paylod;\n        return msg;\n    }\n}\nmsg = null;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 380,
+        "wires": [
+            [
+                "188df413e64adde5"
+            ]
+        ]
+    },
+    {
+        "id": "188df413e64adde5",
+        "type": "mqtt out",
+        "z": "25c5022b18113ab0",
+        "name": "for old version",
+        "topic": "",
+        "qos": "2",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d1d506186f8ae701",
+        "x": 360,
+        "y": 380,
+        "wires": []
     },
     {
         "id": "4f5bcc96bbaca639",

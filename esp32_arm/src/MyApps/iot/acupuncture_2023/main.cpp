@@ -80,8 +80,8 @@ void mqtt_publish(int body_id){
     // Logger::Debug("mqtt_publish");
     for(int i=0; i<NODES_COUNT_IN_THEORY; i++){
         TouchPad_Node* node = &all_touchpad_nodes[i];
-        node_states.concat(node->GetMqttPayloadString());
-        channel_states.concat(node->GetChannelsPayloadString());
+        node_states.concat(node->GetNodeStateString());
+        channel_states.concat(node->GetChannelsStateString());
     }
     String topic_nodes = "acpt/" + String(body_id) + "/nodes" ;
 
@@ -136,7 +136,9 @@ void loop() {
     bool all_is_offline = true;
     for(int i = 0; i< NODES_COUNT_IN_THEORY; i++){
         // update sensor value,  review the received data.
-        TouchPad_Node* node = &all_touchpad_nodes[i];   
+        TouchPad_Node* node = &all_touchpad_nodes[i];  
+        // TODO::Master
+        // master.read(node); 
         node->Read_via_I2C();
         node->Process_RxBuffer();  
         // All is offline, reset all nodes.

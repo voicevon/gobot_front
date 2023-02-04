@@ -7,17 +7,17 @@
 
 #define TOUCH_PAD_CHANNELS_COUNT_IN_NODE 14
 
-
+//TODO:   class TouchPad_Node:public I2C_SlaveNodeAgent{}
 class TouchPad_Node{
     public:
 
         void Init(I2C_IamMaster* i2c_master, uint8_t i2c_slave_address, bool is_installed);
-        void Read_via_I2C();
+        void Read_via_I2C();  // TODO::Master  move to i2c_master class.
         void Process_RxBuffer();
 
-        String GetMqttPayloadString();
-        String GetChannelsPayloadString();
-        I2C_SlaveNodeAgent* Get_I2CSlaveNode(){return &__i2c_slave_node;};
+        String GetNodeStateString();
+        String GetChannelsStateString();
+        I2C_SlaveNodeAgent* Get_I2CSlaveNode(){return &__i2c_slave_node;}; // TODO:Master  remove
         uint8_t GetSensorValue(int channel_id){ return __all_channels[channel_id].GetSensorValue();};
 
         // bool __has_changed_channel;  //??
