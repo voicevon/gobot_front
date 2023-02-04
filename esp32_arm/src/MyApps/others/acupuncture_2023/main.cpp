@@ -82,8 +82,8 @@ void setup() {
 // 2. acpt/001/channel  Channels state of cell, in [not installed, died, touch_on, touch_off]
 // 3. acpt/001/sensor_value   monitored sensor value, you can draw a chart from the data.
 void mqtt_publish(int body_id){
-    static String previous_node_states = "123456789012345678901234567890";
-    static String previous_channel_states ="100000000010000000001000000000100000000010000000001000000000100000000010000000001000000000100000000020000000002000000000200000000020000000002000000000200000000020000000002000000000200000000020000000003000000000300000000030000000003000000000300000000030000000003000000000300000000030000000003000000000";
+    static String previous_node_states = "DDDDDDDDDDDDDDDDDDDDDDDDDDDDD";
+    static String previous_channel_states ="DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD";
 
     // bool has_updated = false;
     static int last_sent_sensor_value = 0;
@@ -123,14 +123,15 @@ void mqtt_publish(int body_id){
         // Logger::Print("previous channel states", previous_channel_states.c_str());
         // Logger::Print("now channel states", channel_states.c_str());
         memcpy((uint8_t *)(previous_channel_states.c_str()), channel_states.c_str(), delta_at+1);
-        Logger::Print("public channel  state,  piont ", 33);
+        // Serial.println("after memcpy");
+        // Serial.println(previous_channel_states);
         g_mqttClient.publish(topic_channels.c_str(), 2, true, channel_states.c_str());
     }
 
   
     // Monitor a certain sensor.
-    // int sensor_number = atoi(monitor.Get());
-    int sensor_number = 14*18 + 7;
+    // int sensor_number = atoi(monitor.Get());   cause an exception !!!
+    int sensor_number = 14*12 + 7;
     int node_id = sensor_number / 14;
     int channel_id = sensor_number % 14;
     String topic_sensor_value = "acpt/" + String(body_id) + "/sensor_value" ;   // monitor sensor value
@@ -139,7 +140,7 @@ void mqtt_publish(int body_id){
     uint8_t sensor_value = all_touchpad_nodes[node_id].GetSensorValue(channel_id);
     if (abs(last_sent_sensor_value - sensor_value ) > 10){
         last_sent_sensor_value = sensor_value;
-        Logger::Print("payload sensor value", sensor_value);
+        // Logger::Print("payload sensor value", sensor_value);
         g_mqttClient.publish(topic_sensor_value.c_str(), 2, true, String(sensor_value).c_str());
     }
 }
@@ -150,16 +151,14 @@ void loop() {
     for(int i = 0; i< NODES_COUNT_IN_THEORY; i++){
         // update sensor value,  review the received data.
         TouchPad_Node* node = &all_touchpad_nodes[i];   
-        // Logger::Print("loop()  ponit",1);
         node->Read_via_I2C();
-        // Logger::Print("loop()  ponit",2);
         node->Review_RxBuffer();  
-        // Logger::Print("loop()  ponit",3);
+        // All is offline, reset all nodes.
         if (node->Get_I2CSlaveNode()->GetState() == I2C_SlaveNode::EnumState::ONLINE_CONNECTED) all_is_offline = false;
     }
     if (all_is_offline) Init_All_Touchpad_Nodes();   // TODO:  try more times before set offline.
     mqtt_publish(ACUPUCTURE_BODY_ID);
     // Logger::Print("loop()  ponit",4);
-    delay(1000);
+    // delay(1000);
 }  
 #endif
