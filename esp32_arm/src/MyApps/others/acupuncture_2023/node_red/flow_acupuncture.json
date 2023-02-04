@@ -243,7 +243,7 @@
         "type": "function",
         "z": "25c5022b18113ab0",
         "name": "nodes_state",
-        "func": "\nfunction  replaceAt(str, index, replacement) {\n    return str.substring(0, index) + replacement + str.substring(index + replacement.length);\n}\n\nvar led_states = {};\nvar last_states = flow.get('last_node_states');\nif (last_states == null) last_states = 'DDDIIIDDDIIIDD'\n\nfor(var i=0; i<14; i++){\n    var new_code = msg.payload.charCodeAt(i);\n    var old_code = last_states.charCodeAt(i);\n\n    led_states[i] = false;\n    if (String.fromCharCode(new_code) == 'C') led_states[i] = true;\n    if (new_code != old_code) {\n        var new_char = String.fromCharCode(new_code);\n        node.warn(new_char);\n        last_states =  replaceAt(last_states, i, new_char);\n        node.warn(last_states);\n        // msg.payload = 'node #' + i + '   to online/offline';\n        msg.payload = last_states;\n        break;\n    }\n}\n// create message for notification.\n\nflow.set('last_node_states', last_states);\nflow.set('led_states', led_states);\nreturn msg;",
+        "func": "\nfunction  replaceAt(str, index, replacement) {\n    return str.substring(0, index) + replacement + str.substring(index + replacement.length);\n}\n\nvar led_states = {};\nvar last_states = flow.get('last_node_states');\nif (last_states == null) last_states = 'DDDIIIDDDIIIDD'\n\nfor(var i=0; i<14; i++){\n    var new_code = msg.payload.charCodeAt(i);\n    var old_code = last_states.charCodeAt(i);\n\n    led_states[i] = false;\n    if (String.fromCharCode(new_code) == 'C') led_states[i] = true;\n    if (new_code != old_code) {\n        var new_char = String.fromCharCode(new_code);\n        // node.warn(new_char);\n        last_states =  replaceAt(last_states, i, new_char);\n        // node.warn(last_states);\n        // msg.payload = 'node #' + i + '   to online/offline';\n        msg.payload = last_states;\n        break;\n    }\n}\n// create message for notification.\n\nflow.set('last_node_states', last_states);\nflow.set('led_states', led_states);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -316,7 +316,7 @@
         "type": "function",
         "z": "25c5022b18113ab0",
         "name": "channels state",
-        "func": "function get_channel_message(channel_number, state_char_code){\n\n    // var node_id = channel_number / 14;\n    // var channel_id = channel_number % 14;\n\n    var diction = { 1: \"右脚.人工穴\", 2: \"22222\", 3: \"33333\", 4: \"33333\", 5: \"33333\"};\n\n    var state_char = String.fromCharCode(state_char_code);\n    // if (state_char == 'T') return diction[channel_number] + 'Touch';\n    if (state_char == 'T') return '  哎呦, 疼啊啊啊   ' + channel_number ;\n    // if (state_char == 'F') return diction[channel_number] + 'untouched';\n    if (state_char == 'F') return '舒服了    ' + channel_number + '你看看，   中医也有管用的时候' ;\n    if (state_char == 'D') return '右脚.人工穴 Died ';\n    if (state_char == 'I')  return 'NOT installed';\n    return state_char;\n    // return \"get_channel_name()  unknown state_char\";\n}\n\nvar saved = flow.get('channels_state');\nvar payload = msg.payload;\n\nvar rx_buffer = new ArrayBuffer(payload.length); \nfor (var i = 0; i < payload.length; i++) {\n    rx_buffer[i] = payload.charCodeAt(i);\n    if (rx_buffer[i] != saved[i]){\n        saved[i] = rx_buffer[i];\n        flow.set('channels_state', saved);\n        // node.warn(rx_buffer[i]);\n        msg.payload = get_channel_message(i, rx_buffer[i]);\n        return msg;\n    }\n}\nmsg = null;\nreturn msg;\n",
+        "func": "function get_channel_message(channel_number, state_char_code){\n\n    // var node_id = channel_number / 14;\n    // var channel_id = channel_number % 14;\n\n    var diction = { 1: \"右脚.人工穴\", 2: \"22222\", 3: \"33333\", 4: \"33333\", 5: \"33333\"};\n\n    var state_char = String.fromCharCode(state_char_code);\n    // if (state_char == 'T') return diction[channel_number] + 'Touch';\n    if (state_char == 'T') return '  哎呦, 疼啊啊啊   ' + channel_number ;\n    // if (state_char == 'F') return diction[channel_number] + 'untouched';\n    // if (state_char == 'F') return '舒服了    ' + channel_number + '。 你看看，   中医也有管用的时候';\n    if (state_char == 'F') return  channel_number  ;\n    if (state_char == 'D') return '右脚.人工穴 Died ';\n    if (state_char == 'I')  return 'NOT installed';\n    return state_char;\n    // return \"get_channel_name()  unknown state_char\";\n}\n\nvar saved = flow.get('channels_state');\nvar payload = msg.payload;\n\nvar rx_buffer = new ArrayBuffer(payload.length); \nfor (var i = 0; i < payload.length; i++) {\n    rx_buffer[i] = payload.charCodeAt(i);\n    if (rx_buffer[i] != saved[i]){\n        saved[i] = rx_buffer[i];\n        flow.set('channels_state', saved);\n        // node.warn(rx_buffer[i]);\n        msg.payload = get_channel_message(i, rx_buffer[i]);\n        return msg;\n    }\n}\nmsg = null;\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -327,8 +327,7 @@
         "wires": [
             [
                 "39fbc6921a6b0ae3",
-                "11883655d2fa968a",
-                "0ad16b5f039c6921"
+                "11883655d2fa968a"
             ]
         ]
     },

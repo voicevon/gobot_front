@@ -5,8 +5,8 @@
 
 #include "all_applications.h"
 #ifdef I_AM_GUANGDA_SHUIWU_SENSOR
-// #define MY_APP_NODE_ID 2
-#define MY_APP_NODE_ID 4
+#define MY_APP_NODE_ID 2
+// #define MY_APP_NODE_ID 4
 
 AdhocRouter router;
 GuangDa_ShuiWu_SensorBoard board;
