@@ -2,7 +2,7 @@
 
 #include "MyLibs/basic/board_base.h"
 #include "MyLibs/board/peripheral/bus_i2c/i2c_iam_master.h"
-#include "MyLibs/board/peripheral/bus_i2c/i2c_slave_node_agent.h"
+// #include "MyLibs/board/peripheral/bus_i2c/i2c_slave_node_agent.h"
 
 
 class AcupunctureBoard_2023: public BoardBase{
@@ -12,7 +12,7 @@ class AcupunctureBoard_2023: public BoardBase{
 
     private:
         I2C_IamMaster __i2c_master;
-        I2C_SlaveNodeAgent __i2c_slave_node_agent[30];
+        // I2C_SlaveNodeAgent __i2c_slave_node_agent[30];
 
 
 };
