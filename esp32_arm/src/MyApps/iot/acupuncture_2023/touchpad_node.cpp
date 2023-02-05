@@ -8,13 +8,13 @@ void TouchPad_Node::Init( uint8_t i2c_slave_address, bool is_installed){
     for(int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
         __all_channels[i].Init(i, TouchPad_Channel::EnumState::TOUCHED_OFF);
     }
+    _rx_buffer = __rx_buffer;
 }
 
 void TouchPad_Node::Process_RxBuffer(){
-    // Logger::Debug("TouchPad_Node::Process_RxBuffer()");
     for (int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
         // review sensor's value
-         __all_channels[i].Review_Sensor_Value(*(_rx_buffer+i));
+        __all_channels[i].Review_Sensor_Value(*(_rx_buffer+i));
     }
 }
 

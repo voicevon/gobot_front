@@ -28,8 +28,11 @@ bool is_installed_node(uint8_t node_id){
     // #define INSTALLED_NODE_COUNT 1
     // int installed_nodes[INSTALLED_NODE_COUNT] = { 18 };
 
-    #define INSTALLED_NODE_COUNT 2
-    int installed_nodes[INSTALLED_NODE_COUNT] = {11,12};
+    // #define INSTALLED_NODE_COUNT 2
+    // int installed_nodes[INSTALLED_NODE_COUNT] = {11,12};
+    
+    #define INSTALLED_NODE_COUNT 4
+    int installed_nodes[INSTALLED_NODE_COUNT] = {9,10,11,12};
 
     // #define INSTALLED_NODE_COUNT 11
     // int installed_nodes[INSTALLED_NODE_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
@@ -142,8 +145,10 @@ void loop() {
     if (all_is_offline) {
         Logger::Debug("loop(),  all nodes are offline, reseting all nodes , even those are not installed." );
         Init_All_Touchpad_Nodes(true);   // TODO:  try more times before set offline.
+        // Logger::Print("loop()  point", 5);
         delay(200);
     }
     mqtt_publish(ACUPUCTURE_BODY_ID);
+    // Logger::Print("loop()  point", 6);
 }  
 #endif
