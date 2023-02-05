@@ -10,24 +10,17 @@ void TouchPad_Node::Init( uint8_t i2c_slave_address, bool is_installed){
     }
 }
 
-// void TouchPad_Node::Read_via_I2C(){
-//     if (__i2c_slave_node.IsOnline())
-//         __i2c_master->ReadSlaveNode(&__i2c_slave_node);
-// }
-
 void TouchPad_Node::Process_RxBuffer(){
-    // uint8_t* rx_buffer = __i2c_slave_node.GetRxBuffer();
-    // Logger::Debug("TouchPad_Node::Review_RxBuffer()");
+    // Logger::Debug("TouchPad_Node::Process_RxBuffer()");
     for (int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
         // review sensor's value
          __all_channels[i].Review_Sensor_Value(*(_rx_buffer+i));
-        // Logger::Print("__has_changed_channel", __has_changed_channel);
     }
 }
 
 String TouchPad_Node::GetNodeStateString(){
-    if(GetState() == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) return String("C");
-    if(GetState() == I2C_SlaveNodeAgent::EnumState::OFFLINE_DIED) return String("D");
+    if(State == EnumState::ONLINE_CONNECTED) return String("C");
+    if(State == EnumState::OFFLINE_DIED) return String("D");
     // if(GetState() == I2C_SlaveNodeAgent::EnumState::NOT_INSTALLED)
     return String("I");
 

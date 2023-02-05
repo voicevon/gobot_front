@@ -137,7 +137,7 @@ void loop() {
         board.GetI2C_Master()->ReadSlaveNode(node);
         node->Process_RxBuffer();  
         // All is offline, reset all nodes.
-        if (node->GetState() == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) all_is_offline = false;
+        if (node->State == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) all_is_offline = false;
     }
     if (all_is_offline) {
         Logger::Debug("loop(),  all nodes are offline, reseting all nodes , even those are not installed." );

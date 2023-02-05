@@ -28,9 +28,9 @@ bool I2C_IamMaster::ReadSlaveNode(I2C_SlaveNodeAgent* slave_node){
 
     // Logger::Debug("I2C_IamMaster::ReadSlaveNode()");
     // Logger::Print("slave_node address", slave_node->GetAddress());
-    Wire.beginTransmission(slave_node->GetAddress());
+    Wire.beginTransmission(slave_node->Address);
     Wire.endTransmission(false);
-    Wire.requestFrom(slave_node->GetAddress(), slave_node->GetSize());    // request data from slave device
+    Wire.requestFrom(slave_node->Address, slave_node->RxBufferSize);    // request data from slave device
     int index = 0;
     uint8_t* rx_buffer = slave_node->GetRxBuffer(); 
     while (Wire.available() > 0) {  // slave may send less bytes than expected.
@@ -42,7 +42,7 @@ bool I2C_IamMaster::ReadSlaveNode(I2C_SlaveNodeAgent* slave_node){
     // Serial.println();
     if(index == 0) {
         // Can not read any data from i2c bus  for this address.
-        Logger::Print("Turn to offline node_address", slave_node->GetAddress());
+        Logger::Print("Turn to offline node_address", slave_node->Address);
         slave_node->SetOffline();
 
     } 
