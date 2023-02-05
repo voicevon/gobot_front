@@ -1,5 +1,4 @@
-#ifndef _BOARD_BASE_H_
-#define _BOARD_BASE_H_
+#pragma once
 
 #include <Arduino.h>
 

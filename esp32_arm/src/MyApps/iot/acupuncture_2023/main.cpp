@@ -5,6 +5,7 @@
 #include "Mylibs/basic/logger.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "MyLibs/basic/memory_helper.h"
+#include "board/board.h"
 
 #include "Mqtt/wifi_mqtt_client.h"
 #include "Mqtt/remote_var.h"
@@ -16,11 +17,11 @@
 #define NODES_COUNT_IN_THEORY 30
 
 
-I2C_IamMaster i2c_master;
+// I2C_IamMaster i2c_master;  //
+AcupunctureBoard_2023 board;
 TouchPad_Node all_touchpad_nodes[NODES_COUNT_IN_THEORY];
 String monitoring_sensor_topic="acpt/monitor/sensor";   // payload is "147"  where 14 is node_id,  7 is channel_id.  147 = 14* node_id + channel_id
 RemoteVar_via_Mqtt monitor(monitoring_sensor_topic.c_str());
-// int monitoring_sensor_number = 0;
 
 
 bool is_installed_node(uint8_t node_id){
@@ -43,16 +44,12 @@ bool is_installed_node(uint8_t node_id){
 void Init_All_Touchpad_Nodes(bool all_nodes_in_theory){
     for(int i=0; i< NODES_COUNT_IN_THEORY; i++){
         TouchPad_Node* node = &all_touchpad_nodes[i];
-        node->Init(&i2c_master, i, is_installed_node(i) || all_nodes_in_theory); 
+        node->Init( i, is_installed_node(i) || all_nodes_in_theory); 
     }
 }
 
 void setup() {
-    Serial.begin(115200);
-    delay(1000);
-    Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
-    i2c_master.Init();
-
+    board.Init();
     Init_All_Touchpad_Nodes(false);
 
     setup_wifi_mqtt();
@@ -137,12 +134,10 @@ void loop() {
     for(int i = 0; i< NODES_COUNT_IN_THEORY; i++){
         // update sensor value,  review the received data.
         TouchPad_Node* node = &all_touchpad_nodes[i];  
-        // TODO::Master
-        // master.read(node); 
-        node->Read_via_I2C();
+        board.GetI2C_Master()->ReadSlaveNode(node);
         node->Process_RxBuffer();  
         // All is offline, reset all nodes.
-        if (node->Get_I2CSlaveNode()->GetState() == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) all_is_offline = false;
+        if (node->GetState() == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) all_is_offline = false;
     }
     if (all_is_offline) {
         Logger::Debug("loop(),  all nodes are offline, reseting all nodes , even those are not installed." );
