@@ -1,9 +1,9 @@
 #pragma once
 
 #include <HardwareSerial.h>
-// #ifdef BOARD_WIRE
-    #include <Wire.h>
-// #endif
+#include <Wire.h>
+#include <esp_task_wdt.h>
+
 
 #include <Adafruit_MCP23X17.h>
 #include <Adafruit_VL53L0X.h>
@@ -15,7 +15,9 @@ class BoardBase{
         virtual void Init();
         virtual  float ReadBatteryVolt(){return 1.234f;};
         static uint8_t Assign_ledc_channel();
+        
         void RepportRamUsage();  // TODO::  be static
+        void EnableWatchdog(uint32_t WDT_TIMEOUT);
 
     protected:
         // TODO:: be static

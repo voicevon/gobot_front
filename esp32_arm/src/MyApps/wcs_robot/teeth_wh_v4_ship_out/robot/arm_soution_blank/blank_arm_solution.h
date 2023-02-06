@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MyLibs/basic/board_base.h"
+#include "MyLibs/board/board_base.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 
 class Blank_ArmSolution: public ArmSolutionBase{

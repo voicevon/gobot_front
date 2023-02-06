@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MyLibs/MyFunctions.hpp"
-#include "MyLibs/basic/board_base.h"
+#include "MyLibs/board/board_base.h"
 
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "Robot/eef/eef_standard_code.h"

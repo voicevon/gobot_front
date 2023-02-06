@@ -1,5 +1,5 @@
 #pragma once
-#include "MyLibs/basic/board_base.h"
+#include "MyLibs/board/board_base.h"
 #include "MyLibs/component/button_gpio.h"
 #include "MyLibs/component/led_gpio.h"
 

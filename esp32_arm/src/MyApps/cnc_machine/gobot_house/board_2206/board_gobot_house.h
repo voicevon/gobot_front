@@ -1,14 +1,10 @@
 #pragma once
-#include "MyLibs/basic/board_base.h"
-// #include "MyBoards/board_base.h"
-// #include "CNC/board/cnc_board_base.h"
+#include "MyLibs/board/board_base.h"
+#include "CNC/Actuator/servo/cnc_actuator_servo.h"
+#include "CNC/Actuator/stepper/actuator_fast_stepper.h"
+#include "Robot/axis_homer/position_trigger_array.h"
 #include "../board_2205/board_pins/board_pins_ver3.11.h"
 #include "../board_2205/robot_eef/gobot_house_eef.h"
-#include "CNC/Actuator/servo/cnc_actuator_servo.h"
-// #include "CNC/Actuator/stepper/actuator_stepper.h"
-#include "CNC/Actuator/stepper/actuator_fast_stepper.h"
-// #include "ESP32Step/src/TeensyStep.h" 
-#include "Robot/axis_homer/position_trigger_array.h"
 
 class Board_GobotHouse_2206{
     public:

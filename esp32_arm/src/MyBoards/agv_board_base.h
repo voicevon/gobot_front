@@ -1,6 +1,5 @@
 #pragma once
-// #include "board_base.h"
-#include "MyLibs/basic/board_base.h"
+#include "MyLibs/board/board_base.h"
 
 #include "AGV/mover_driver/agv_mover_base.h"
 #include "AGV/track_light/light_base.h"

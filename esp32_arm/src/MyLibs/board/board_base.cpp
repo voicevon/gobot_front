@@ -8,6 +8,14 @@ void BoardBase::_InitSerialBoard(const char* welcome_statement){
     Logger::Info(welcome_statement);
 }
 
+
+//  call   esp_task_wdt_reset() in the looo;
+void BoardBase::EnableWatchdog(uint32_t WDT_TIMEOUT){
+    esp_task_wdt_init(WDT_TIMEOUT, true); //enable panic so ESP32 restarts
+    esp_task_wdt_add(NULL); //add current thread to WDT watch
+}
+
+
 void BoardBase::RepportRamUsage(){
     Logger::Info("-----------------  RAM usage -----------------");
     Serial.print("Total PSRAM: ");

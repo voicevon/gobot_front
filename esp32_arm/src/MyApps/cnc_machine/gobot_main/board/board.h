@@ -1,13 +1,13 @@
 #pragma once
-#include "MyLibs/basic/board_base.h"
-// #include "MyBoards/board_base.h"
-#include "FastAccelStepper.h"
 #include "board_pins/board_ver1.2.h"
-#include "robot_eef/gobot_main_eef.h"
+
+#include "FastAccelStepper.h"
+
+#include "MyLibs/board/board_base.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "Robot/axis_homer/position_trigger_array.h"
-#include "MyLibs/basic/board_base.h"
-// #include "MyBoards/board_base.h"
+#include "robot_eef/gobot_main_eef.h"
+
 
 class GobotMain_Board: public BoardBase{
     public:

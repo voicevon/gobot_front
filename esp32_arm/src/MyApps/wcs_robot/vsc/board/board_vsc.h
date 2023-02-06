@@ -1,13 +1,10 @@
 #pragma once
-#include "MyLibs/basic/board_base.h"
-// #include "MyBoards/board_base.h"
-// #include "CNC/board/cnc_board_base.h"
-#include <SimpleFOC.h>
+#include "MyLibs/board/board_base.h"
 #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
-// #include "Robot/driver/h_bridge/h_bridge.h"
-#include "eef/vsc_eef.h"
-#include "pins/wroom_board.h"
 #include "Robot/axis_homer/position_trigger_array.h" 
+#include "eef/vsc_eef.h"
+#include <SimpleFOC.h>
+#include "pins/wroom_board.h"
 
 
 class Vsc_Board: public BoardBase{

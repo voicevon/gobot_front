@@ -1,8 +1,8 @@
 #pragma once
 
-#include "MyLibs/basic/board_base.h"
-#include <Adafruit_NeoPixel.h>
+#include "MyLibs/board/board_base.h"
 #include "MyLibs/component/button_gpio.h"
+#include <Adafruit_NeoPixel.h>
 
 #define WS2812B_COUNT 24
 #define PIN_NEO_PIXEL  22   // Arduino pin that connects to NeoPixel

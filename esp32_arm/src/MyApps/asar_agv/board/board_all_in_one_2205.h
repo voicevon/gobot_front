@@ -1,6 +1,5 @@
 #pragma once
-#include "MyLibs/basic/board_base.h"
-// #include "MyBoards/board_base.h"
+#include "MyLibs/board//board_base.h"
 #include "sub_board_agv/board_agv_2205.h"
 #include "sub_board_cnc2205/board_cnc_2205.h"
 #include "sub_board_asrs/board_asrs_2205.h"

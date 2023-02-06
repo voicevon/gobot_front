@@ -1,5 +1,5 @@
 #pragma once
-#include "MyLibs/basic/board_base.h"
+#include "MyLibs/board/board_base.h"
 
 
 #define PIN_YUNXING_4 13

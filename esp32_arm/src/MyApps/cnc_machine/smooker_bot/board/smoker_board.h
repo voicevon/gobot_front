@@ -1,5 +1,5 @@
 #pragma once
-#include "MyLibs/basic/board_base.h"
+#include "MyLibs/board/board_base.h"
 #include "MyApps/cnc_machine/gobot_main/board/board_pins/board_ver1.2.h"
 #include "robot_eef/board_smoke_bot.h"    // todo: remove
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
@@ -12,8 +12,6 @@ class Smoker_Board: public BoardBase{
         Smoker_Board(){};
         void Init() override;
         
-        // void SayHello() override;
-        // RobotEef_SmokeMachine* GetEef() override;
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) ;
         // CncActuatorBase* GetActuator(EnumAxis_Inverseinematic axis) {return nullptr;};   //todo:  get it.
         // PositionTrigger* GetPositionTrigger(uint8_t index) override {return nullptr;}; 
