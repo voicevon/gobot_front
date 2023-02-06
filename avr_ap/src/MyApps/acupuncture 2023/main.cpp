@@ -8,6 +8,7 @@
 
 #include "touch_pad_channel.h"
 #include <Wire.h>   // https://www.jianshu.com/p/4b1ddefc9006
+#include <avr/wdt.h>
 
 #ifdef I_AM_ACUPUNCTURE_MEGA328_VER_2023
 
@@ -29,6 +30,13 @@ void InitChannels(){
 	}
 }
 
+
+void forceSystemReset() {
+	MCUSR = 0;
+	wdt_enable(WDTO_250MS);
+	while (1)  ;  // force WDT to reset system
+}
+
 void setup() {
 	Serial.begin(115200);
 	Serial.println("  Hi boys and girl, be happy!");
@@ -38,6 +46,11 @@ void setup() {
 	Wire.onRequest(requestEvent); // register event
 
 	InitChannels();
+    // WatchDog::init(forceSystemReset, 500);
+	// WatchDog::setPeriod(OVF_1000MS);
+	// WatchDog::start();
+	wdt_enable(WDTO_120MS);
+
 	Serial.println("Setup is finished.");
 }
 
@@ -47,8 +60,12 @@ void loop() {
 		channel->Read();
 		// prepare tx_buffer_for_i2c_request
 		tx_buffer_for_i2c[i] = channel->GetValue();
-		delay(100);
+		// delay(100);
+		wdt_reset();
 	}
+
+	// WatchDog::start();
+
 }
 
 #endif
