@@ -1,5 +1,4 @@
 
-// #include "MyLibs/MyFunctions.hpp"
 #include "Mqtt/from_mqtt_client_to_remote_queue.h"
 #include "board/board.h"
 #include "loop_porter_app.h"

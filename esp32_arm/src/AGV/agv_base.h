@@ -3,7 +3,7 @@
 #include "AGV/sensor_obstacle/obstacle_sensor_base.h"
 #include "AGV/sensor_moving_track/track_sensor_base.h"
 #include "AGV/mover_driver/mover_dual_wheel.h"
-#include "MyBoards/agv_board_base.h"
+#include "board/agv_board_base.h"
 #include "sensor_map_site/smart_rfid_reader.h"
 
 class AgvBase{

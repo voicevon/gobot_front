@@ -4,8 +4,10 @@
 #include "garment_bot.h"
 #include "Mqtt/from_mqtt_client_to_remote_queue.h"
 
-#include "MyBoards/board_test/board_test_agv.h"
-#include "MyBoards/board_test/board_test_asrs.h"
+// #include "MyBoards/board_test/board_test_agv.h"
+#include "AGV/board/board_test_agv.h"
+// #include "MyBoards/board_test/board_test_asrs.h"
+#include "AGV/board/board_test_asrs.h"
 // #include "Mqtt/main_mqtt.h"
 
 #include "all_applications.h"
