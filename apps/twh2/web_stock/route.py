@@ -4,8 +4,6 @@ from bolt_nut import get_row_from_tooth_location
 from logger import Logger
 from wcs_robots.twh_wcs import  wcs_queue_deposit, wcs_queue_takeout
 
-
-# web_user = Blueprint('web_user', __name__, url_prefix='/user')
 web_stock = Blueprint('web_stock', __name__,template_folder='templates')
 
 twh_factory = {'221109':'山东雅乐福义齿公司'}
@@ -41,7 +39,7 @@ def deposit():
         twh = request.args.get('twh')
         return render_template('deposit.html', twh = twh)
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('web_user.login'))
 
 @web_stock.route('/deposit_request', methods = ['POST'])
 def deposit_request():
@@ -97,7 +95,7 @@ def withdraw():
         twh = request.args.get('twh')
         return render_template('withdraw.html', twh=twh)
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('web_user.login'))
 
 @web_stock.route('/withdraw_end', methods = ['POST'])
 def withdraw_end():
@@ -110,14 +108,14 @@ def withdraw_end():
     if not all_in_stock:
         # Can not find in stock 
         flash("库存不足，无法开始出库，请重新下订单。")
-        return  redirect(url_for("withdraw"))
+        return  redirect(url_for("web_stock.withdraw"))
     user_request['user_id'] = session['user']
     db_Withdraw.table_withdraw_history.insert(user_request)
 
     user_request['connected_box_id'] = -1
     db_Withdraw.insert_withdraw_queue_multi_rows(user_request)
     Logger.Debug('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-    return render_template('/withdraw_end.html')
+    return render_template('withdraw_end.html')
 
 @web_stock.route('/withdraw_takeout')
 def withdraw_takeout():

@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request,flash, session, redirect,url_for
 from web_user.db_api import db_User
 from bolt_nut import twh_factory
-# web_user = Blueprint('web_user', __name__, url_prefix='/user')
 web_user = Blueprint('web_user', __name__,template_folder='templates')
 
 
@@ -11,7 +10,7 @@ def check_login():
 
 @web_user.route('/login')
 def login():
-    return render_template('web_user/login.html')
+    return render_template('login.html')
 
 @web_user.route('/login_real', methods=['POST'])
 def login_real():
@@ -19,10 +18,10 @@ def login_real():
     password = request.form.get("password")
     if user is None:
         flash("没有该用户")
-        return render_template('web_user/login.html')
+        return render_template('login.html')
     elif user["password"] != password:
         flash("密码错误")
-        return render_template('web_user/login.html')
+        return render_template('login.html')
     else:
         session['user'] = request.form.get('user_id')
         return render_template('home.html')
@@ -30,7 +29,7 @@ def login_real():
 @web_user.route('/sign_up')
 def sign_up():
     factory_name = twh_factory[request.args.get('twh')]
-    return render_template('web_user/sign_up.html', factory_name=factory_name)
+    return render_template('sign_up.html', factory_name=factory_name)
 
 @web_user.route('/sign_up_real', methods=['POST'])
 def sign_up_real():
@@ -44,12 +43,12 @@ def sign_up_real():
         new_user['position'] = request.form.get('position')
         db_User.table_user.insert(new_user)
         # return render_template('login.html')
-        return render_template('web_user/sign_up_ok.html')
+        return render_template('sign_up_ok.html')
     else:
         # repeated username
         flash("该用户名已经被使用，请更换一个用户名",'error')
         # return render_template(url_for('sign_up'))
-        return render_template('web_user/sign_up.html')
+        return render_template('sign_up.html')
 
 @web_user.route('/logout')
 def log_out():
