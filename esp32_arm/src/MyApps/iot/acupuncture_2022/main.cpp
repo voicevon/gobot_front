@@ -4,22 +4,20 @@
 #include "i2c_commu.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "Mqtt/wifi_mqtt_client.h"
-
-#include "WString.h"
 #include "Mylibs/basic/logger.h"
-
+#include "WString.h"
 
 #include "all_applications.h"
 #ifdef I_AM_ACUPUCTURE_MAIN_2022
 
 I2c_commu obj_i2c_bus = I2c_commu();
 
-// #define FORCE_ONLINE_CELL_COUNT 2
-// int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {19,17};
+#define FORCE_ONLINE_CELL_COUNT 2
+int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {3,4};
 // #define FORCE_ONLINE_CELL_COUNT 11
 // int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
-#define FORCE_ONLINE_CELL_COUNT 1
-int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = { 9 };
+// #define FORCE_ONLINE_CELL_COUNT 6
+// int force_online_cell_list[FORCE_ONLINE_CELL_COUNT] = { 3,4,5,6,7,8 };
 
 void init_online_cells(){
     //All online cells will never turn itself off.
@@ -78,11 +76,13 @@ void setup() {
     Serial.begin(115200);
     delay(1000);
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
-    obj_i2c_bus.Init(CELL_ID_MIN, FORCE_ONLINE_CELL_COUNT);
     setup_wifi_mqtt();
     while (!mqtt_is_connected){
-        delay(100);
+        delay(1000);
+        Serial.print(". ");
     }
+    obj_i2c_bus.Init(CELL_ID_MIN, FORCE_ONLINE_CELL_COUNT);
+    Logger::Info("setup is done....");
     init_online_cells();
 
 }

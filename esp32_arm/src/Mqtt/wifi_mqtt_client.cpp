@@ -1,6 +1,7 @@
+#include "MyLibs/basic/logger.h"
 #include <AsyncMqttClient.h>
 #include <WiFi.h>
-#include "MyLibs/basic/logger.h"
+#include "esp_wifi.h"
 
 extern "C" {
 	#include "freertos/FreeRTOS.h"
@@ -9,6 +10,15 @@ extern "C" {
 
 #define WIFI_SSID "Perfect"
 #define WIFI_PASSWORD "1234567890"
+
+// #define WIFI_SSID "CentOS"
+// #define WIFI_PASSWORD "1234567890"
+
+
+// #define WIFI_SSID "FuckGFW"
+// #define WIFI_PASSWORD "refuckgfw"
+
+
 // #define WIFI_SSID "369"
 // #define WIFI_PASSWORD "hahafeng12200"
 
@@ -22,8 +32,9 @@ extern void app_mqtt_subscribe();
 extern void app_mqtt_received_message(char* topic, char* payload);
 
 AsyncMqttClient g_mqttClient;
+
 TimerHandle_t mqttReconnectTimer;
-TimerHandle_t wifiReconnectTimer;
+// TimerHandle_t wifiReconnectTimer;
 
 
 void wifi_scan_ap(){
@@ -47,6 +58,7 @@ void wifi_scan_ap(){
     }
     Serial.println("");
 }
+
 void connectToWifi() {
     Logger::Info("[Info] Connecting to Wi-Fi...");
     Logger::Print("wifi_ssid", WIFI_SSID);
@@ -54,12 +66,16 @@ void connectToWifi() {
     // esp_netif_create_default_wifi_sta();
     WiFi.mode(WIFI_STA);
     WiFi.disconnect();       //disconnect from an AP if it was previously connected     
-    wifi_scan_ap();
+    // ESP_ERROR_CHECK(esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_11N));
+    ESP_ERROR_CHECK(esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_11B |WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N));
+    WiFi.mode(WIFI_STA);
+    // wifi_scan_ap();
 	WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     while (WiFi.status() != WL_CONNECTED) {
         Serial.print('.');
     delay(1000);
   }
+  Serial.print("connected to wifi AP, localIP=  ");
   Serial.println(WiFi.localIP());
 }
 
@@ -73,16 +89,32 @@ void connectToMqtt() {
 void WiFiEvent(WiFiEvent_t event) {
     Serial.printf("\n[Info] [WiFi-event] event: %d\n", event);
     switch(event) {
+    case SYSTEM_EVENT_WIFI_READY:
+        Serial.println("SYSTEM_EVENT_WIFI_READY");
+        break;
+    case SYSTEM_EVENT_SCAN_DONE:
+        Serial.println("SYSTEM_EVENT_SCAN_DONE");
+        break;
+    case SYSTEM_EVENT_STA_START:
+        Serial.println("SYSTEM_EVENT_STA_START");
+        break;
+    case SYSTEM_EVENT_STA_CONNECTED:
+        Serial.println("SYSTEM_EVENT_STA_CONNECTED");
+        break;
+
     case SYSTEM_EVENT_STA_GOT_IP:
-        Serial.println("WiFi connected");
+        Serial.println("SYSTEM_EVENT_STA_GOT_IP");
         Serial.println("IP address: ");
         Serial.println(WiFi.localIP());
-        connectToMqtt();
+        // connectToMqtt();
+        // xTimerStop(wifiReconnectTimer,0);
+        xTimerStart(mqttReconnectTimer,0);
         break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
-        Logger::Print("wifi_mqtt_client.cpp  WifiEvent== SYSTEM_EVENT_STA_DISCONNECTED", 0);
+        Logger::Print("wifi_mqtt_client.cpp  WifiEvent== SYSTEM_EVENT_STA_DISCONNECTED", SYSTEM_EVENT_STA_DISCONNECTED);
         xTimerStop(mqttReconnectTimer, 0); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
-        xTimerStart(wifiReconnectTimer, 0);
+        // xTimerStart(wifiReconnectTimer, 0);
+        WiFi.reconnect();
         break;
     default:
       break;
@@ -92,9 +124,12 @@ void WiFiEvent(WiFiEvent_t event) {
 
 //TODO:  subsribe topics after:  disconnected --> connected.
 void onMqttConnect(bool sessionPresent) {
-    Serial.println("Connected to MQTT.");
+    Logger::Info("onMqttConnected()");
     Serial.print("Session present: ");
-    Serial.println(sessionPresent);
+    Serial.print(sessionPresent);
+    Serial.print("mqtt client id:   ");
+    Serial.print(g_mqttClient.getClientId());
+    Serial.println();
     bool test_publish = false;
     if (test_publish){
         uint16_t packetIdSub = g_mqttClient.subscribe("test/lol", 2);
@@ -174,9 +209,11 @@ void setup_wifi_mqtt() {
     Serial.println("\n[Info] IoT/wifi_mqtt_client.cpp   setup_wifi_mqtt()  is entering");
     Serial.println();
 
-    mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
-    wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
 
+    mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
+    // wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(5000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
+
+    // connectToWifi();
     WiFi.onEvent(WiFiEvent);
 
     g_mqttClient.onConnect(onMqttConnect);
@@ -188,6 +225,7 @@ void setup_wifi_mqtt() {
     g_mqttClient.setServer(MQTT_HOST, MQTT_PORT);
 
     connectToWifi();
+    // xTimerStart(wifiReconnectTimer, 0);
 }
 
 // #endif
