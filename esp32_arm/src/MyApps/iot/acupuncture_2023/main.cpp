@@ -15,6 +15,7 @@
 #ifdef I_AM_ACUPUCTURE_MAIN_2023
 #define ACUPUCTURE_BODY_ID 101
 #define NODES_COUNT_IN_THEORY 30
+#define LED_PIN 2
 
 
 // I2C_IamMaster i2c_master;  //
@@ -52,6 +53,7 @@ void Init_All_Touchpad_Nodes(bool all_nodes_in_theory){
 }
 
 void setup() {
+    delay(2000);
     board.Init();
     Init_All_Touchpad_Nodes(false);
 
@@ -60,6 +62,8 @@ void setup() {
     while (!mqtt_is_connected){
         delay(100);
     }
+    pinMode(LED_PIN, OUTPUT);
+    digitalWrite(LED_PIN, LOW);
     Logger::Info("Setup is done.");
 }
 
@@ -69,8 +73,8 @@ void setup() {
 // 2. acpt/001/channel  Channels state of cell, in [not installed, died, touch_on, touch_off]
 // 3. acpt/001/sensor_value   monitored sensor value, you can draw a chart from the data.
 void mqtt_publish(int body_id){
-    static String previous_node_states = "DDDDDDDDDDDDDDDDDDDDDDDDDDDDD";
-    static String previous_channel_states ="DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD";
+    static String previous_node_states = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
+    static String previous_channel_states ="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
 
     // bool has_updated = false;
     static int last_sent_sensor_value = 0;
@@ -102,7 +106,6 @@ void mqtt_publish(int body_id){
     }
 
     String topic_channels = "acpt/" + String(body_id) + "/channels";
-    
     delta_at = MemoryHelper::CompareSame(channel_states.c_str(), previous_channel_states.c_str(), channel_states.length());
     if (delta_at >=0){
         Logger::Info("mqtt_publish()  channel_state updated");
@@ -142,7 +145,9 @@ void loop() {
         // All is offline, reset all nodes.
         if (node->State == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) all_is_offline = false;
     }
+    digitalWrite(LED_PIN, LOW);
     if (all_is_offline) {
+        digitalWrite(LED_PIN, HIGH);
         Logger::Debug("loop(),  all nodes are offline, reseting all nodes , even those are not installed." );
         Init_All_Touchpad_Nodes(true);   // TODO:  try more times before set offline.
         // Logger::Print("loop()  point", 5);

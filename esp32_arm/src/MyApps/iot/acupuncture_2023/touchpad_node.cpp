@@ -29,6 +29,9 @@ String TouchPad_Node::GetNodeStateString(){
 String TouchPad_Node::GetChannelsStateString(){
     String str = "";
     TouchPad_Channel* channel;
+    if (State != EnumState::ONLINE_CONNECTED){
+        return "FFFFFFFFFFFFFF";
+    }
     for (int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
         channel = &__all_channels[i];
         str.concat(channel->GetStateString());

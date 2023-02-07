@@ -91,7 +91,9 @@ void Logger::Halt(const char* title){
 // }
 
 void Logger::__print_sid(){
+    Serial.print("("); 
     Serial.print(Logger::sid); 
+    Serial.print(")"); 
     Serial.print("\t");
     Logger::sid++;
 

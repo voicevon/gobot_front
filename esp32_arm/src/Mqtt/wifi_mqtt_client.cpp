@@ -1,8 +1,7 @@
-#include "all_applications.h"
-// #ifdef USING_WIFI_MQTT
-
 #include <AsyncMqttClient.h>
 #include <WiFi.h>
+#include "MyLibs/basic/logger.h"
+
 extern "C" {
 	#include "freertos/FreeRTOS.h"
 	#include "freertos/timers.h"
@@ -26,9 +25,42 @@ AsyncMqttClient g_mqttClient;
 TimerHandle_t mqttReconnectTimer;
 TimerHandle_t wifiReconnectTimer;
 
+
+void wifi_scan_ap(){
+    // WiFi.scanNetworks will return the number of networks found
+    int n = WiFi.scanNetworks();
+    if (n == 0) {
+        Logger::Info("wifi_scan_ap()  no networks found");
+    } else {
+        Logger::Info("wifi_scan_ap()   networks found");
+        for (int i = 0; i < n; ++i) {
+            // Print SSID and RSSI for each network found
+            Serial.print(i + 1);
+            Serial.print(":\tSSID ");
+            Serial.print(WiFi.SSID(i));
+            Serial.print("\t RSSI(");
+            Serial.print(WiFi.RSSI(i));
+            Serial.print(")");
+            Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
+        delay(10);
+    }
+    }
+    Serial.println("");
+}
 void connectToWifi() {
-	Serial.println("[Info] Connecting to Wi-Fi...");
+    Logger::Info("[Info] Connecting to Wi-Fi...");
+    Logger::Print("wifi_ssid", WIFI_SSID);
+    Logger::Print("wifi_password", WIFI_PASSWORD);
+    // esp_netif_create_default_wifi_sta();
+    WiFi.mode(WIFI_STA);
+    WiFi.disconnect();       //disconnect from an AP if it was previously connected     
+    wifi_scan_ap();
 	WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    while (WiFi.status() != WL_CONNECTED) {
+        Serial.print('.');
+    delay(1000);
+  }
+  Serial.println(WiFi.localIP());
 }
 
 void connectToMqtt() {
@@ -48,7 +80,7 @@ void WiFiEvent(WiFiEvent_t event) {
         connectToMqtt();
         break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
-        Serial.println("WiFi lost connection");
+        Logger::Print("wifi_mqtt_client.cpp  WifiEvent== SYSTEM_EVENT_STA_DISCONNECTED", 0);
         xTimerStop(mqttReconnectTimer, 0); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
         xTimerStart(wifiReconnectTimer, 0);
         break;
