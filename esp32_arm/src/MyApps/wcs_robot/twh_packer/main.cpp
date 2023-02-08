@@ -1,7 +1,7 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "Mqtt/from_mqtt_client_to_remote_queue.h"
-#include "Mqtt/remote_var.h"
+// #include "Mqtt/remote_var.h"
 #include "board/board.h"
 #include "twh_packer_app.h"
 #include "robot/packer_robot.h"
@@ -18,8 +18,8 @@ MessageQueue mqtt_command_queue;
 Twh_Packer_App app;
 Twh_Packer_Robot robot;
 
-RemoteVar_via_Mqtt var_pick;
-RemoteVar_via_Mqtt var_pack;
+// RemoteVar_via_Mqtt var_pick;
+// RemoteVar_via_Mqtt var_pack;
 
 void test_board(){
     #define BRIGHTNESS 11
@@ -46,12 +46,11 @@ void setup(){
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     app.LinkRobot(&robot);
 
-    // setup_mqtt_block_connect();
     mono_remote_queue_bridge_via_mqtt_setup(GCODE_MQTT_TOPIC, &mqtt_command_queue, &app); 
-    // setup_mqtt_on_message_receive(); 
-
     gcode_queue.AppendGcodeCommand("G28X");   // Incase of mqtt received this command, will cause exception?
     // test_robot();
+    board.GetButton_picked()->Init_Remotable("twh/221109/packer/button/pick");
+    board.GetButton_Packed()->Init_Remotable("twh/221109/packer/button/pack");
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
 
@@ -72,7 +71,7 @@ void loop(){
     Button_Gpio* button_picked = board.GetButton_picked();
     button_picked->SpinOnce();
     if (button_picked->IsToPressed()){
-        var_pick.Set("pressed");
+        // var_pick.Set("pressed");
         // gcode_queue.AppendGcodeCommand("M408");
     }
     Button_Gpio* button_shipout = board.GetButton_Packed();

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "remote_var/remotable_master.h"
-
+#include "remote_base/remotable_master_base.h"
+#include "WString.h"
 
 class Button_Gpio: public RemoteVar_Masterbase{
     public:
         Button_Gpio(int gpio_id);
-        void Init_Remotable(const char* mqtt_topic);
+        void Init_Remotable( char* mqtt_topic);
         void SpinOnce();
         bool IsPressed();
         bool IsToPressed(){return true;};  // should be callback?

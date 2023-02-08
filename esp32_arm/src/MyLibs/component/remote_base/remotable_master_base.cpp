@@ -1,4 +1,4 @@
-#include "remotable_master.h"
+#include "remotable_master_base.h"
 #include "Mqtt/wifi_mqtt_client.h"
 
 void RemoteVar_Masterbase::_PublishValue(char* new_value){

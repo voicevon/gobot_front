@@ -8,7 +8,7 @@
 #include "board/board.h"
 
 #include "Mqtt/wifi_mqtt_client.h"
-#include "Mqtt/remote_var.h"
+// #include "MyLibs/component/button_gpio.h"
 
 
 #include "all_applications.h"
