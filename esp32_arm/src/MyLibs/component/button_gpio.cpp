@@ -5,7 +5,7 @@ Button_Gpio::Button_Gpio(int gpio_id){
     __pin_number = gpio_id;
     pinMode(__pin_number, INPUT_PULLUP);
 }
-void Button_Gpio::Init_Remotable( char* mqtt_topic){
+void Button_Gpio::Init_Remotable(const char* mqtt_topic){
     _mqtt_topic =  mqtt_topic;
 }
 

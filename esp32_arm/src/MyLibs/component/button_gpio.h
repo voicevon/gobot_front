@@ -6,7 +6,7 @@
 class Button_Gpio: public RemoteVar_Masterbase{
     public:
         Button_Gpio(int gpio_id);
-        void Init_Remotable( char* mqtt_topic);
+        void Init_Remotable(const char* mqtt_topic);
         bool onChanged(bool is_pressed); // {__callback = callback;};  
         void SpinOnce();
         bool IsPressed();

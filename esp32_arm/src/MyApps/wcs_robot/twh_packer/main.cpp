@@ -66,18 +66,8 @@ void loop(){
     mono_remote_queue_bridge_spin_once();
     // Logger::Print("Arduino loop() point ", 4);
 
-    
-    // check button: is from unpress to pressed
-    Button_Gpio* button_picked = board.GetButton_picked();
-    button_picked->SpinOnce();
-    if (button_picked->IsToPressed()){
-        // var_pick.Set("pressed");
-        // gcode_queue.AppendGcodeCommand("M408");
-    }
-    Button_Gpio* button_shipout = board.GetButton_Packed();
-    if (button_shipout->IsToPressed()){
-        gcode_queue.AppendGcodeCommand("M408");
-    }
+   board.GetButton_Packed()->SpinOnce();
+   board.GetButton_picked()->SpinOnce();
 
 }
 
