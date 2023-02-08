@@ -7,8 +7,7 @@
 #define DEG_TO_RAD 0.017453292519943295769236907684886
 #define RAD_TO_DEG 57.295779513082320876798154814105
 
-#define PAYLOAD_STRING_ON "ON"
-#define PAYLOAD_STRING_OFF "OFF"
+
 
 #define FCBC_RESET  "\033[0m"   //FCBC is for "Fore color background color"
 // #define ctl_bold \033[01m

@@ -6,6 +6,6 @@ class RemoteVar_Masterbase: public RemotableVar_Base{
 	public:
 
 	protected:
-        void _PublishValue(char* new_value);
+        void _PublishValue(const char* new_value);
 
 };
