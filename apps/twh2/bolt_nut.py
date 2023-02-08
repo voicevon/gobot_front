@@ -36,7 +36,7 @@ class PickingPacking_Tooth():
     def print_out(self, title):
         Logger.Debug(title)
         Logger.Print(' Tooth order_id\t' , self.order_id)
-        Logger.Print(' row=]\t' , self.row)
-        Logger.Print(' col=\t' , self.col)
-        Logger.Print(' layer=\t ' , self.layer)
-        Logger.Print(' packbox_id=\t' , self.packbox_id)
+        Logger.Print(' row' , self.row)
+        Logger.Print(' col' , self.col)
+        Logger.Print(' layer ' , self.layer)
+        Logger.Print(' packbox_id' , self.packbox_id)

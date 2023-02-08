@@ -58,7 +58,7 @@ def home():
     return render_template('home.html', factory_name = twh_factory['221109'])
 
         
-# Start_WCS_Process()
+Start_WCS_Process()
 
 if __name__ == '__main__':
     # reloader or debug must be false.  

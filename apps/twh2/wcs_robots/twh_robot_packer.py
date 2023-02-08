@@ -43,8 +43,6 @@ class TwhRobot_Packer():
     def show_pack_box_led(self, packbox_id: int):
         gcode = 'M42P' + str(packbox_id) + 'S1'
 
-
-
     def CheckMqttMessage(self):
         print("TwhRobot_Shipout main process is started....")
         # rx = g_mqtt.RxBuffer

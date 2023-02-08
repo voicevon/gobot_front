@@ -34,7 +34,7 @@ class Logger():
 
     @classmethod
     def Print(cls, key, value):
-        print(cls.style , key , '=', value)
+        print(cls.style , key , '\t=', value)
 
 
 
