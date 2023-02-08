@@ -2,12 +2,17 @@
 #include "WString.h"
 #include <ArduinoJson.h>
 #include "MyLibs/basic/logger.h"
-#define PIN_IR_CHECKING 32    //   TODO:  This is should not be fixed,  For TWH project only,  right now.
+// #define PIN_IR_CHECKING 32    //   TODO:  This is should not be fixed,  For TWH project only,  right now.
 
 
-char* Twh2_Row_JsonLoader::Load(){
-    Logger::Debug("Twh2_Row_JsonLoader::Load()");
+char* LoopPorter_JsonLoader::Load(){
+    
+    Logger::Debug("LoopPorter_JsonLoader::Load()");
     String str_state = "ready";
+    if (__first_run) {
+        str_state = "idle";
+        __first_run = false;
+    }
     str_state.toCharArray(__json_string, sizeof(str_state));
     Logger::Print("json_string", __json_string);
     return __json_string;

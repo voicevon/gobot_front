@@ -9,7 +9,7 @@
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_PACKER
 #define MY_ROBOT_ROW_ID 0
-#define GCODE_MQTT_TOPIC "twh/221109/shipout"  
+#define GCODE_MQTT_TOPIC "twh/221109/packer/gcode"  
 
     // char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_200K];
 

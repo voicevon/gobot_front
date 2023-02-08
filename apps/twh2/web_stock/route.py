@@ -114,7 +114,7 @@ def withdraw_end():
 
     user_request['connected_box_id'] = -1
     db_Withdraw.insert_withdraw_queue_multi_rows(user_request)
-    Logger.Debug('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    # Logger.Debug('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     return render_template('withdraw_end.html')
 
 @web_stock.route('/withdraw_takeout')

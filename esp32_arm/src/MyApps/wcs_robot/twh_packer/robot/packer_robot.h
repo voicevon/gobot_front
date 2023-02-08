@@ -1,10 +1,8 @@
 #pragma once
 
 #include "Robot/robot_base.h"
-// #include "../board/twh4_ship_out_board.h"
 #include "../board/board.h"
 #include "mcode_runner/json_loader.h"
-// #include "mcode_runner/twh_m42_switch_output.h"
 #include "mcode_runner/packer_m42_switch_output.h"
 
 #include "arm_soution_blank/blank_arm_solution.h"
@@ -23,7 +21,7 @@ class Twh_Packer_Robot: public RobotBase{
 
     private:
         int __current_state = 0;  //idle=0.   moving=1 , ready=2
-        Twh4_JsonLoader __json_loader;
+        TwhPacker_JsonLoader __json_loader;
 
         Blank_ArmSolution __arm_solution;
         CncMover __mover;

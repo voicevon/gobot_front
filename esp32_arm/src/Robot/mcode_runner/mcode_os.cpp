@@ -39,6 +39,10 @@ McodeRunnerBase* McodeOS::GetRunner(int mcode_id){
         case 408:
             __current_runner = &this->__m408_runner_mqtt_publish;
             break;
+        case 999:
+            __current_runner = &this->__m999_runner;
+            break;
+
         default:
             break;
     }

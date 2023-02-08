@@ -2,7 +2,7 @@
 
 #include "MyLibs/basic/json_loader_base.h"
 
-class Twh4_JsonLoader: public JsonLoaderBase{
+class TwhPacker_JsonLoader: public JsonLoaderBase{
     public:
         char* Load() override;
 

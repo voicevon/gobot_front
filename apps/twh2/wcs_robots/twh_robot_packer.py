@@ -1,5 +1,5 @@
 from logger import Logger
-
+from wcs_robots.gcode_sender import GcodeSender, all_gcode_senders
 
 class TwhRobot_PackBox():
 
@@ -33,7 +33,10 @@ class TwhRobot_Packer():
             newbox = TwhRobot_PackBox(i+1)
             self.boxes.append(newbox)
         self.rx_topic = 'twh/221109/shipout/box'
-        # g_mqtt.subscribe(self.rx_topic)
+
+        gcode_topic = "twh/221109/packer/gcode"
+        self.gcode_sender = GcodeSender(gcode_topic)
+        all_gcode_senders.append(self.gcode_sender)
 
     def PrintOut(self, title):
         Logger.Info(title)
@@ -42,6 +45,8 @@ class TwhRobot_Packer():
 
     def show_pack_box_led(self, packbox_id: int):
         gcode = 'M42P' + str(packbox_id) + 'S1'
+        Logger.Print('TwhRobot_Packer::show_pack_box_led()   ',  gcode)
+        self.gcode_sender.append_gmcode_to_queue(gcode)
 
     def CheckMqttMessage(self):
         print("TwhRobot_Shipout main process is started....")

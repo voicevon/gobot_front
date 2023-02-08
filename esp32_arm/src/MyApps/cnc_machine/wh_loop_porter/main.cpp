@@ -9,7 +9,7 @@
 
 #define MY_ROBOT_ROW_ID 1
 #define MQTT_TOPIC_GCODE "twh/221109/r1/gcode"   
-#define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "twh/221109/r1/state"
+#define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r1/state"
 
 Twh2Row_Board board;
 GcodeQueue gcode_queue;

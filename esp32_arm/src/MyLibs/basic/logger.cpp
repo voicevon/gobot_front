@@ -79,7 +79,7 @@ void Logger::Halt(const char* title){
     // Serial.print("Esp32 is halt  ");
     // esp_random()
     while (true){
-        Serial.print("\t I am playing my game. ");
+        Serial.print("\t I am playing my game.  So funny...   So boring... ");
         delay(2000);
     }
 }

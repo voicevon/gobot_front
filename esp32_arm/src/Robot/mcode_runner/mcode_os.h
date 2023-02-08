@@ -6,6 +6,7 @@
 #include "m130_runner_pid_list.h"
 #include "m280_runner_servo_array.h"
 #include "m408_runner_mqtt_publish.h"
+#include "m999_runner.h"
 #include "MyLibs/basic/json_loader_base.h"
 
 class McodeOS{
@@ -33,5 +34,7 @@ class McodeOS{
         M119_Runner_TestPositionTriggers __m119_runner_test_position_triggers;
         M130_Runner_UpdatePid __m130_runner_update_pid;
         M408_Runner_MqttPublish __m408_runner_mqtt_publish;
+        M999_Runner __m999_runner;
         McodeRunnerBase* __current_runner;
+        
 };

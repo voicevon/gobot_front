@@ -1,6 +1,6 @@
 import queue
 
-q= queue.Queue(maxsize=9)
+q= queue.Queue()
 
 for i in range(5):
     q.put(i)

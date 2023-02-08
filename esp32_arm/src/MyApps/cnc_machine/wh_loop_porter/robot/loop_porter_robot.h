@@ -31,7 +31,7 @@ class Twh2Row_Robot: public RobotBase{
         CncMover __mover;
 
         Twh2Row_G28_Runner __g28_runner;
-        Twh2_Row_JsonLoader __json_loader_for_m408;
+        LoopPorter_JsonLoader __json_loader_for_m408;
         Twh2Row_M42_Runner_Switch_Output __m42_runner_led_output;
 
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
