@@ -1,7 +1,7 @@
-#include "twh_m42_switch_output.h"
+#include "packer_m42_switch_output.h"
 
 
-bool Twh4_Shipout_M42_Runner_Switch_Output::RunnerLoop(){
+bool Twh_Packer_M42_Runner_Switch_Output::RunnerLoop(){
     // protocol:
     //  _index:   [0:63]: for red,   [64:127]: for green,  [128:192]:  for blue
     int board_led_index = _index % 64;

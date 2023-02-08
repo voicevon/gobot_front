@@ -14,14 +14,14 @@ picking_place --> to_idle:  green_button_pressed
 to_idle --> idle
 
 
-state robot_row {
-  [*] -> row_idle 
-  row_idle --> row_moving
-  row_moving -> row_ready
+state robot_porter {
+  [*] -> porter_idle 
+  porter_idle --> porter_moving
+  porter_moving -> porter_ready
 }
-moving --> row_moving: send G1
+moving --> porter_moving: send G1
 ' to_idle --> row_idle
-row_ready --> ready
-to_idle --> row_idle
+porter_ready --> ready
+to_idle --> porter_idle
 
 @enduml

@@ -1,24 +1,24 @@
-#include "all_applications.h"
-#ifdef I_AM_TEETH_WAREHOUSE_V4_SHIP_OUT
-
-#define MY_ROBOT_ROW_ID 0
-#define GCODE_MQTT_TOPIC "twh/221109/shipout"  
 
 #include "MyLibs/MyFunctions.hpp"
 #include "Mqtt/from_mqtt_client_to_remote_queue.h"
-// #include "Mqtt/main_mqtt.h"
-#include "board/twh4_ship_out_board.h"
-#include "twh4_ship_out_app.h"
-#include "robot/twh4_ship_out_robot.h"
+#include "board/board.h"
+#include "twh_packer_app.h"
+#include "robot/packer_robot.h"
+
+
+#include "all_applications.h"
+#ifdef I_AM_TEETH_WAREHOUSE_PACKER
+#define MY_ROBOT_ROW_ID 0
+#define GCODE_MQTT_TOPIC "twh/221109/shipout"  
 
     // char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_200K];
 
-Twh4_ShipOut_Board board;
+Twh_Packer_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
-Twh4_ShipOut_App app(MY_ROBOT_ROW_ID);
-Twh4_ShipOut_Robot robot;
+Twh_Packer_App app(MY_ROBOT_ROW_ID);
+Twh_Packer_Robot robot;
 
 void test_board(){
     #define BRIGHTNESS 11
@@ -34,10 +34,7 @@ void test_robot(){
         // gcode_queue.AppendGcodeCommand("G1X190Y0");
         // gcode_queue.AppendGcodeCommand("G4S5");
     }
-    
 }
-
-
 
 void setup(){
     board.Init();
@@ -71,12 +68,12 @@ void loop(){
 
     
     // check button: is from unpress to pressed
-    Button_Gpio* button_withdraw = board.GetButton_Withdraw();
-    button_withdraw->SpinOnce();
-    if (button_withdraw->IsToPressed()){
+    Button_Gpio* button_picked = board.GetButton_picked();
+    button_picked->SpinOnce();
+    if (button_picked->IsToPressed()){
         gcode_queue.AppendGcodeCommand("M408");
     }
-    Button_Gpio* button_shipout = board.GetButton_Shipout();
+    Button_Gpio* button_shipout = board.GetButton_Packed();
     if (button_shipout->IsToPressed()){
         gcode_queue.AppendGcodeCommand("M408");
     }

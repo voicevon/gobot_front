@@ -1,16 +1,16 @@
 
-#include "twh4_ship_out_app.h"
+#include "twh_packer_app.h"
 #include <HardwareSerial.h>
 
 
-Twh4_ShipOut_App::Twh4_ShipOut_App(int row_id){
+Twh_Packer_App::Twh_Packer_App(int row_id){
     this->__robot_row_id = row_id;
-    Serial.print("\n[Info] Twh4_ShipOut_App::Twh4_ShipOut_App() is constructed");
+    Serial.print("\n[Info] Twh_Packer_App::Twh_Packer_App() is constructed");
 }
 
-void Twh4_ShipOut_App::onGot_MqttMessage(const char* command){
+void Twh_Packer_App::onGot_MqttMessage(const char* command){
     String str_command = String(command);
-    // Logger::Info("Twh4_ShipOut_App::ExecuteMqttCommand()");
+    // Logger::Info("Twh_Packer_App::ExecuteMqttCommand()");
     bool debug = false;
     if (debug){
         Logger::Print("command",str_command);

@@ -19,7 +19,7 @@ class TwhRobot_LoopPorter():
         # self.target_layer = -1
         # self.connected_packing_box = None
 
-    def move_to_pick(self, tooth: PickingPacking_Tooth) -> None:
+    def port_to_pick(self, tooth: PickingPacking_Tooth) -> None:
         self.state.set('moving')    # set to 'moving' when gcode-G1 is sent. ??
         self.target_tooth = tooth
         print("TwhRobot_Row::move_to()", 'row, col, layer = ' ,self.id, tooth.col, tooth.layer )
