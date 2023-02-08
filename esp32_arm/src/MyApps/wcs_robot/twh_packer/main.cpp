@@ -1,6 +1,7 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "Mqtt/from_mqtt_client_to_remote_queue.h"
+#include "Mqtt/remote_var.h"
 #include "board/board.h"
 #include "twh_packer_app.h"
 #include "robot/packer_robot.h"
@@ -8,17 +9,17 @@
 
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_PACKER
-#define MY_ROBOT_ROW_ID 0
 #define GCODE_MQTT_TOPIC "twh/221109/packer/gcode"  
-
-    // char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_200K];
 
 Twh_Packer_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
-Twh_Packer_App app(MY_ROBOT_ROW_ID);
+Twh_Packer_App app;
 Twh_Packer_Robot robot;
+
+RemoteVar_via_Mqtt var_pick;
+RemoteVar_via_Mqtt var_pack;
 
 void test_board(){
     #define BRIGHTNESS 11
@@ -71,7 +72,8 @@ void loop(){
     Button_Gpio* button_picked = board.GetButton_picked();
     button_picked->SpinOnce();
     if (button_picked->IsToPressed()){
-        gcode_queue.AppendGcodeCommand("M408");
+        var_pick.Set("pressed");
+        // gcode_queue.AppendGcodeCommand("M408");
     }
     Button_Gpio* button_shipout = board.GetButton_Packed();
     if (button_shipout->IsToPressed()){

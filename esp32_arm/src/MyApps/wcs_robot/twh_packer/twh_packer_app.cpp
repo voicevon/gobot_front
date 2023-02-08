@@ -3,8 +3,8 @@
 #include <HardwareSerial.h>
 
 
-Twh_Packer_App::Twh_Packer_App(int row_id){
-    this->__robot_row_id = row_id;
+Twh_Packer_App::Twh_Packer_App(){
+    // this->__robot_row_id = row_id;
     Serial.print("\n[Info] Twh_Packer_App::Twh_Packer_App() is constructed");
 }
 
@@ -24,12 +24,7 @@ void Twh_Packer_App::onGot_MqttMessage(const char* command){
         Serial.println();
     }
     Gcode my_gcode = Gcode(command);
-    if (my_gcode.g == 1){
-        if (my_gcode.get_value('R') == this->__robot_row_id){
-            this->_gcode_queue->AppendGcodeCommand(command);
-        }
-    }
-
+    this->_gcode_queue->AppendGcodeCommand(command);
 }
 
 

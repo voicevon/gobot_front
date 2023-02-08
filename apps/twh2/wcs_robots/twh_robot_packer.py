@@ -32,7 +32,7 @@ class TwhRobot_Packer():
         for i in range(11):
             newbox = TwhRobot_PackBox(i+1)
             self.boxes.append(newbox)
-        self.rx_topic = 'twh/221109/shipout/box'
+        # self.rx_topic = 'twh/221109/packer/box'
 
         gcode_topic = "twh/221109/packer/gcode"
         self.gcode_sender = GcodeSender(gcode_topic)

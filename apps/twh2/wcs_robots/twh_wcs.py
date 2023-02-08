@@ -115,7 +115,7 @@ class Twh_WarehouseControlSystem():
                 Logger.Print('Twh_WarehouseControlSystem::Pick_Pack_Port_Pair()  Porter is ready. porter_id', porter.id)
                 porter.state.set('picking_packing')
                 porter.show_layer_led()
-                # self.packer.show_pack_box_led(porter.target_tooth.packbox_id)
+                self.packer.show_pack_box_led(porter.target_tooth.packbox_id)
                 # wait operator to press the button
                 self.button_pick.set('unpressed')
                 self.current_picking_packing_porter = porter
