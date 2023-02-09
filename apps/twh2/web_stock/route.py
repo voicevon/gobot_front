@@ -75,8 +75,6 @@ def deposit_move():
         user_request ={}
         for key in request_form.to_dict():
             user_request[key] = request_form.get(key)
-        # g_database.append_deposit(user_request)
-        # g_amq.Publish('twh', 'twh_deposit', str(user_request))
         wcs_queue_deposit.put(user_request)
         print("robot will move box to somewhere for operator........ ")
         return render_template("deposit_move.html",user_request = user_request)

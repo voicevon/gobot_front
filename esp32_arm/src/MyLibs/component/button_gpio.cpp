@@ -1,5 +1,6 @@
 #include "button_gpio.h"
 #include "Arduino.h"
+#include "MyLibs/basic/logger.h"
 
 Button_Gpio::Button_Gpio(int gpio_id){
     __pin_number = gpio_id;
@@ -11,12 +12,14 @@ void Button_Gpio::Init_Remotable(const char* mqtt_topic){
 
 void Button_Gpio::SpinOnce(){
     bool is_pressed = ! digitalRead(__pin_number);
-    if (is_pressed && (!__last_state_is_pressed)){
-        if (__callback != nullptr){
+    if (is_pressed != __last_state_is_pressed){
+        // if (__callback != nullptr){
+        if (true){
             bool go_on_remote = true;  // TODO:   *__callback();
             // *__callback();
             if (go_on_remote){
                 if(_mqtt_topic != nullptr){
+                    Logger::Print("Button_Gpio::SpinOnce()  is_pressed", is_pressed);
                     if(is_pressed) {
                         _PublishValue(_PAYLOAD_STRING_ON.c_str());
                     }else{

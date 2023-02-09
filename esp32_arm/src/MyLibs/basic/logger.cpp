@@ -112,9 +112,9 @@ void Logger::Print(const char* var_name, float value){
     Serial.println(value);
 }
 
-void Logger::Print(const char* var_name, const char* value){
+void Logger::Print(const char* key, const char* value){
     __print_sid();
-    Serial.print(var_name);
+    Serial.print(key);
     Serial.print("=\t");
     Serial.println(value);
 }

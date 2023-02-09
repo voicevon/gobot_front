@@ -35,8 +35,8 @@ class GcodeSender():
             self.__waitting_msg.payload = mqtt_message_payload
 
     def append_gmcode_to_queue(self, gcode:str):
-        Logger.Debug("GcodeSender::append_gmcode_to_queue()     ")
-        Logger.Print('gcode', gcode)
+        # Logger.Debug("GcodeSender::append_gmcode_to_queue()     ")
+        # Logger.Print('gcode', gcode)
         tx_message_in_queue = VonMessage(self.__next_message_id, gcode)
         self.__next_message_id += 1
         self.__queue.put(tx_message_in_queue)
@@ -54,13 +54,13 @@ class GcodeSender():
             # print('gcode_sender  spin_once()', self.tx.payload, self.rx.payload)
             return
 
-        Logger.Print('watting ....', self.__waitting_msg.payload)
-        Logger.Print('rx......', self.__rx.payload)
+        # Logger.Print('watting ....', self.__waitting_msg.payload)
+        # Logger.Print('rx......', self.__rx.payload)
         if self.__waitting_msg.payload != self.__rx.payload:
             return 
 
         # queue is not empty, and got last feedback correctly.
-        Logger.Print('queue size', self.__queue.qsize())
+        # Logger.Print('queue size', self.__queue.qsize())
         tx_message = self.__queue.get()
         self.__waitting_msg.id = tx_message.id
         self.__waitting_msg.payload = tx_message.payload

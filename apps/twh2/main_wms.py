@@ -31,27 +31,11 @@ new_message['test'] = {'id':2, 'payload': 'hello, dynamic message.'}
 #     g_amq.Publish('twh', 'twh_withdraw', str(user_request))
 #     return 'OK'
 
-acpt_message = {'id':5, 'cell':'人中穴', 'action':'on'}
-# ajax get_data
-@web.route('/acpt')  
-def get_message():
-    body_id = request.args.get('id')
-    return acpt_message
-    # return new_message
-
-@web.route('/msgs')
-def msgs():
-    return render_template('message_monitor.html')
-
 @web.route('/create_map_for_new_twh')
 def create_map_for_new_twh():
     store_map = []
     return render_template('create_map_for_new_twh.html', store_map = store_map)
 
-@web.route('/acpt_monitor')
-def acupuncture_monitor():
-    body_id = request.args.get("body_id")
-    return render_template('acpt_monitoring.html')
 
 @web.route('/')
 def home():

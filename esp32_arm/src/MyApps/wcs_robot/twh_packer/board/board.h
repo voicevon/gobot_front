@@ -7,7 +7,7 @@
 #define WS2812B_COUNT 24
 #define PIN_NEO_PIXEL  22   // Arduino pin that connects to NeoPixel
 #define PIN_GPIO_BUTTON_PICKED 19
-#define PIN_GPIO_BUTTON_PACKED 20
+#define PIN_GPIO_BUTTON_PACKED 21
 
 // class Twh_Packer_Board: public BoardBase{
 class Twh_Packer_Board: public BoardBase{
