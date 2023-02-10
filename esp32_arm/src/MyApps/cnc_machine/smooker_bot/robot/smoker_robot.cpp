@@ -1,6 +1,5 @@
 #include "smoker_robot.h"
 #include "Robot/mcode_runner/mcode_os.h"
-// #include "Robot/mcode_runner/mcode_runners.h"
 
 void SmokerRobot::Init(Smoker_Board* board){
     Logger::Debug("Vsc_ArmSoution::Init()");
@@ -40,4 +39,12 @@ void SmokerRobot::Init(Smoker_Board* board){
     // // this->_motor_gear_teeth_count = 10;
     // // this->_slave_pulley_teeth_count = 90;
     // // this->motor_step_angle_in_degree = 0.7003891050583658;
+}
+
+void SmokerRobot::_InitStatic_Queues() {
+
+}
+
+void SmokerRobot::_Init_ArmSolution() {
+
 }

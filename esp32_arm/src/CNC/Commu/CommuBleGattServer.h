@@ -7,8 +7,18 @@
 #include "xtensa/core-macros.h"
 #include "CommuDeviceBase.h"
 
+
+class BleConfig{
+    public:
+        std::string BLE_DEV_NAME;
+        std::string BLE_SERVICE_UUID;
+        std::string BLE_STATE_UUID;
+        std::string BLE_COMMU_UUID;
+};
+
 class CommuBleGattServer: public CommuDeviceBase {
     public:
+        void My_Init(BleConfig* config);
         void Init() override;
         void SpinOnce() override;
         bool HasNewChatting() override;  //Only New message from BleClient.

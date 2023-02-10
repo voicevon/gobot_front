@@ -1,17 +1,18 @@
 //https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout-1.jpg
 
-#include "all_applications.h"
-#ifdef I_AM_SMOKE_BOT
+
 
 #include "MyLibs/MyFunctions.hpp"
 #include "smoke_bot.h"
 #include "webCommu.h"
 #include "board/smoker_board.h"
 #include "CNC/gcode/gcode_queue.h"
-// #include "cnc/solution.h"
 #include "robot/smoker_robot.h"
+
+#include "all_applications.h"
+#ifdef I_AM_SMOKE_BOT
+
 Smoker_Board board;
-// SmookerBot_CncSoution cnc;
 SmokerRobot cnc;
 
 GcodeQueue myCommandQueue = GcodeQueue();
@@ -57,7 +58,7 @@ void test_string(){
   } 
 }
 void setup() {
-	board.Init(true);
+	board.Init();
 	cnc.Init(&board);
 
 	setup_webcommu();

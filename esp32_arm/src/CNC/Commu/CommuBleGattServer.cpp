@@ -1,6 +1,4 @@
-#include "all_applications.h"
-// #include "all_devices.h"
-#ifdef USING_BLE
+
 #include "CommuBleGattServer.h"
 
 //  Concepts       https://www.youtube.com/watch?v=2mePPqiocUE  
@@ -12,15 +10,19 @@
 
 void CommuBleGattServer::Init(){
 
-  BLEDevice::init(BLE_DEV_NAME);
+}
+
+void CommuBleGattServer::My_Init(BleConfig* config){
+
+  BLEDevice::init(config->BLE_DEV_NAME);
 
   BLEServer *pServer = BLEDevice::createServer();
   pServer->setCallbacks(&this->myBleServercallbacks);
 
 
-  BLEService *pService = pServer->createService(BLE_SERVICE_UUID);
+  BLEService *pService = pServer->createService(config->BLE_SERVICE_UUID);
   pCharNotification = pService->createCharacteristic(
-                                        BLE_STATE_UUID,
+                                        config->BLE_STATE_UUID,
                                         BLECharacteristic::PROPERTY_READ |
                                         BLECharacteristic::PROPERTY_NOTIFY |
                                         BLECharacteristic::PROPERTY_WRITE |
@@ -31,7 +33,7 @@ void CommuBleGattServer::Init(){
   pCharNotification->addDescriptor(p2902a); 
 
   pCharChattingroom = pService->createCharacteristic(
-                                        BLE_COMMU_UUID,
+                                        config->BLE_COMMU_UUID,
                                         BLECharacteristic::PROPERTY_READ |
                                         BLECharacteristic::PROPERTY_NOTIFY |
                                         BLECharacteristic::PROPERTY_WRITE |
@@ -45,7 +47,7 @@ void CommuBleGattServer::Init(){
   pService->start();
   // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
-  pAdvertising->addServiceUUID(BLE_SERVICE_UUID);
+  pAdvertising->addServiceUUID(config->BLE_SERVICE_UUID);
   pAdvertising->setScanResponse(true);
   pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
   pAdvertising->setMinPreferred(0x12);
@@ -92,5 +94,3 @@ void CommuBleGattServer::OutputMessage(std::string message){
   // Serial.print("\nCommuBleGattServer::OutputMessage()  ->setValue");
   // Serial.print(message.c_str());
 }
-
-#endif

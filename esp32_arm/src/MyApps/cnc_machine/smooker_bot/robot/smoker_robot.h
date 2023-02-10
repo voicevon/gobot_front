@@ -9,7 +9,8 @@
 class SmokerRobot: public RobotBase{
     public:
         void Init(Smoker_Board* board);
-
+        void _InitStatic_Queues() override;
+        void _Init_ArmSolution() override;
     private:
         MoveBlock __all_move_blocks[88]; 
         LineSegment __all_line_segments[88];

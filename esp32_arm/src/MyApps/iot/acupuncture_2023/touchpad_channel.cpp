@@ -36,12 +36,14 @@ void TouchPad_Channel::Review_Sensor_Value(uint8_t new_value){
         Logger::Print("average", average);
         Logger::Print("newest", __newest_sensor_value);
         __state = EnumState::TOUCHED_ON;
+        digitalWrite(2, HIGH);
     }
     if ((__state == EnumState::TOUCHED_ON) && (__newest_sensor_value < average * 5)){
         Logger::Debug("ouchPad_Channel::Review_Sensor_Value_Whether_Changed()  Got Untouched");
         Logger::Print("average", average);
         Logger::Print("newest", __newest_sensor_value);
         __state = EnumState::TOUCHED_OFF;
+        digitalWrite(2, LOW);
     }
     if (__state == EnumState::TOUCHED_OFF){
         

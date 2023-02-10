@@ -1,14 +1,12 @@
 //https://www.electronicshub.org/wp-content/uploads/2021/02/ESP32-Pinout-1.jpg
 
 #include "touchpad_node.h"
-#include "WString.h"
+#include "board/board.h"
 #include "Mylibs/basic/logger.h"
 #include "MyLibs/MyFunctions.hpp" 
 #include "MyLibs/basic/memory_helper.h"
-#include "board/board.h"
-
 #include "Mqtt/wifi_mqtt_client.h"
-// #include "MyLibs/component/button_gpio.h"
+#include "WString.h"
 
 
 #include "all_applications.h"
@@ -18,11 +16,9 @@
 #define LED_PIN 2
 
 
-// I2C_IamMaster i2c_master;  //
 AcupunctureBoard_2023 board;
 TouchPad_Node all_touchpad_nodes[NODES_COUNT_IN_THEORY];
 String monitoring_sensor_topic="acpt/monitor/sensor";   // payload is "147"  where 14 is node_id,  7 is channel_id.  147 = 14* node_id + channel_id
-RemoteVar_via_Mqtt monitor(monitoring_sensor_topic.c_str());
 
 
 bool is_installed_node(uint8_t node_id){
@@ -134,6 +130,7 @@ void mqtt_publish(int body_id){
     }
 }
 
+bool is_online_checking = true;
 
 void loop() {
     bool all_is_offline = true;
@@ -145,13 +142,21 @@ void loop() {
         // All is offline, reset all nodes.
         if (node->State == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) all_is_offline = false;
     }
-    digitalWrite(LED_PIN, LOW);
     if (all_is_offline) {
-        digitalWrite(LED_PIN, HIGH);
         Logger::Debug("loop(),  all nodes are offline, reseting all nodes , even those are not installed." );
         Init_All_Touchpad_Nodes(true);   // TODO:  try more times before set offline.
         // Logger::Print("loop()  point", 5);
         delay(200);
+        is_online_checking = true;
+    }
+
+    if (is_online_checking){
+        digitalWrite(LED_PIN, LOW);
+        if (all_is_offline){
+            digitalWrite(LED_PIN, HIGH);
+        } else {
+            is_online_checking = false;
+        }
     }
     mqtt_publish(ACUPUCTURE_BODY_ID);
     // Logger::Print("loop()  point", 6);
