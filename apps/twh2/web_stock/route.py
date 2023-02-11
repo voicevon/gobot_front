@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
-from web_stock.db_api import db_Stock, db_Shipout, db_Withdraw, db_Deposit_history, db_StockRule
+from web_stock.db_api import db_Stock, db_Shipout, db_Withdraw, db_Deposit_history,db_StockRule
 from bolt_nut import get_row_from_tooth_location
 from wcs_robots.twh_wcs import  wcs_queue_deposit, wcs_queue_takeout
 from logger import Logger
@@ -28,6 +28,16 @@ def stock_rule_main():
     items = db_StockRule.table_stock_rule.all()
     return render_template('stock_rule_main.html', items=items)
 
+@web_stock.route('/stock_rule_update', methods = ['POST'])
+def stock_rule_update():
+    new_rule_item = request.form.to_dict()
+    new_rule_item['user_id'] = session['user']
+    new_rule_item['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    db_StockRule.update(new_rule_item)
+    flash("规则更新完毕")
+    return redirect(url_for('web_stock.stock_rule_main'))
+
+
 @web_stock.route("/stock_rule_creator")
 def stock_rule_creator():
     item = {}
@@ -37,21 +47,28 @@ def stock_rule_creator():
         flash('Create stock rule failed for ' + item['twh_id'])
     else:
         item['brand'] = '定远'
-        item['size'] = '大'
+        item['batch_number'] = '2023-03'
+        item['size'] = '中'
         item['shape'] = '圆形'
         item['color']='A2'
-        item['user_id'] = 'fengxuming'
-        item['date_time'] = datetime.now().strftime('%Y-%m-%d %H%M:S')
-        for i in range(60):
-            item['col'] = i + 1
+        item['user_id'] = '系统'
+        item['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        item['stock_quantity'] = 0
+        for col in range(60):
+            item['col'] = col + 1
             db_StockRule.table_stock_rule.insert(item)
         flash('created stock rule for ' + item['twh_id'])
     return redirect(url_for('home'))
 
-@web_stock.route('/view_stocks')
-def view_stocks():
+@web_stock.route('/view_stock_rule')
+def view_stock_rule():
+    items = db_StockRule.table_stock_rule.all()
+    return render_template('view_stock_rule.html', items=items)
+
+@web_stock.route('/view_stock_quantity')
+def view_stock_quantity():
     stocks = db_Stock.table_stock.all()
-    return render_template('view_stocks.html', stocks=stocks)
+    return render_template('view_stock_quantity.html', stocks=stocks)
 
 @web_stock.route('/view_deposit_history')
 def view_deposit_history():
@@ -73,11 +90,13 @@ def deposit():
 
 @web_stock.route('/deposit_request', methods = ['POST'])
 def deposit_request():
-    user_request = {}
-    # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
-    for key in request.form.to_dict():
-        user_request[key] = request.form.get(key)
-        # print(key, user_request[key])
+    # user_request = {}
+    # # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
+    # for key in request.form.to_dict():
+    #     user_request[key] = request.form.get(key)
+    #     # print(key, user_request[key])
+
+    user_request = request.form.to_dict()
     request_in_stock = db_Stock.get_stock(user_request)
     if request_in_stock is None:
         # Can not find in stock , Try to find a empty box
@@ -94,7 +113,7 @@ def deposit_request():
     user_request['row'] = get_row_from_tooth_location(user_request['location'])
     user_request['layer'] = int(user_request['location'][3:4])
 
-    print(user_request)
+    # print(user_request)
 
     return render_template("deposit_request.html",user_request = user_request)
 
@@ -114,7 +133,7 @@ def deposit_end():
         user_request = {}
         for key in request.form.to_dict():
             user_request[key] = request.form.get(key)
-        db_Stock.update_stock(user_request)
+        db_Stock.update_quantity(user_request)
         user_request['user_id'] = session['user']
         user_request['user_name'] = session['user']
         user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')

@@ -11,9 +11,16 @@ class db_StockRule():
     table_stock_rule = TinyDB('twh_stock_rule.json')
 
     @classmethod
-    def get_location()-> TwhLocation:
+    def get_location(cls)-> TwhLocation:
         result = TwhLocation()
         return result
+
+    @classmethod
+    def update(cls, rule_item):
+        # cls.table_stock_rule.update()
+        doc_id = [int(rule_item['doc_id'])]
+        print("stock_rule_update()", rule_item)
+        cls.table_stock_rule.update(rule_item, doc_ids=doc_id)
         
 
 
@@ -110,8 +117,16 @@ class db_Stock():
         box.row = -1
         box.col = -1
 
+
     @classmethod
-    def update_stock(cls, user_request):
+    def update_rule(cls, rule_item):
+        # cls.table_stock_rule.update()
+        doc_id = [int(rule_item['doc_id'])]
+        print("stock_rule_update()", rule_item)
+        cls.table_stock.update(rule_item, doc_ids=doc_id)
+
+    @classmethod
+    def update_quantity(cls, user_request):
         print("color", user_request['color'])
         if user_request['doc_id'] == '-1':
             # insert into database
