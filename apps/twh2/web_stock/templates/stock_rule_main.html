@@ -15,16 +15,16 @@
         <td>盒编号</td>
         <!-- <td>数量</td> -->
     </tr>
-    {% for map in maps %}
+    {% for item in items %}
     <tr>
-        <td>{{ map.doc_id}}</td>
-        <td>{{ map.twh_id}}</td>
-        <td>{{ map.brand}}</td>
-        <td>{{ map.batch_num}}</td>
-        <td>{{ map.color}}</td>
-        <td>{{ map.size}}</td>
-        <td>{{ map.location}}</td>
-        <td>{{ map.col}}</td>
+        <td>{{ item.doc_id}}</td>
+        <td>{{ item.twh_id}}</td>
+        <td>{{ item.brand}}</td>
+        <td>{{ item.batch_num}}</td>
+        <td>{{ item.color}}</td>
+        <td>{{ item.size}}</td>
+        <td>{{ item.location}}</td>
+        <td>{{ item.col}}</td>
         <!-- <td>{{ map.map_quantity}}</td> -->
     </tr>
     {% endfor %}

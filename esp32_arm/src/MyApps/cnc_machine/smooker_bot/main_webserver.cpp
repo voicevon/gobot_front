@@ -3,7 +3,6 @@
 
 
 #include "MyLibs/MyFunctions.hpp"
-#include "smoke_bot.h"
 #include "webCommu.h"
 #include "board/smoker_board.h"
 #include "CNC/gcode/gcode_queue.h"
@@ -45,18 +44,8 @@ GcodeQueue myCommandQueue = GcodeQueue();
 
 // }
 
-int get_int(){
-  return 123;
-}
-void test_string(){
-  int x= 123;
-  String strG4 = "G4S";
-  String sg = strG4 + x;
-  Serial.println(sg);
-  while (true){
 
-  } 
-}
+
 void setup() {
 	board.Init();
 	cnc.Init(&board);

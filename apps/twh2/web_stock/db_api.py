@@ -7,6 +7,16 @@ class TwhLocation:
     col = -1 
     layer = -1
 
+class db_StockRule():
+    table_stock_rule = TinyDB('twh_stock_rule.json')
+
+    @classmethod
+    def get_location()-> TwhLocation:
+        result = TwhLocation()
+        return result
+        
+
+
 class db_Stock():
     table_stock = TinyDB('twh_stock.json')
 
@@ -127,22 +137,23 @@ class db_Stock():
             print("update stock", new_quantity)
             cls.table_stock.update({'stock_quantity':new_quantity}, doc_ids=doc_id)
 
-class db_Deposite():
-    table_deposit = TinyDB('twh_deposit.json')
+
+class db_Deposit_history():
+    table_deposit_history = TinyDB('twh_deposit_history.json')
 
     @classmethod 
     def append_deposit(cls, user_request):
-        cls.table_deposit.insert(user_request)
+        cls.table_deposit_history.insert(user_request)
     
     @classmethod 
     def search_deposit(cls, robot_id:str, layer_id:str):
         q = Query()
-        s = cls.table_deposit.search((q.twh==robot_id) & (q.layer==layer_id))
+        s = cls.table_deposit_history.search((q.twh==robot_id) & (q.layer==layer_id))
         return s
 
     @classmethod 
     def remove_deposit(cls, doc_id:int):
-        cls.table_deposit.remove(where ('doc_id')== doc_id)
+        cls.table_deposit_history.remove(where ('doc_id')== doc_id)
 
 
 class db_Withdraw():

@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
-from web_stock.db_api import db_Stock, db_Shipout, db_Withdraw
+from web_stock.db_api import db_Stock, db_Shipout, db_Withdraw, db_Deposit_history, db_StockRule
 from bolt_nut import get_row_from_tooth_location
-from logger import Logger
 from wcs_robots.twh_wcs import  wcs_queue_deposit, wcs_queue_takeout
+from logger import Logger
+from datetime import datetime
 
 web_stock = Blueprint('web_stock', __name__,template_folder='templates')
 
@@ -12,7 +13,7 @@ twh_factory = {'221109':'山东雅乐福义齿公司'}
 @web_stock.route('/decrease_stock')
 def decrease_stock():
     row_id = int(request.args.get('doc_id'))
-    print("rrrrrrrrrrrrrrrrrrrrrrrrrrr  row_id=  ", row_id)
+    # print("rrrrrrrrrrrrrrrrrrrrrrrrrrr  row_id=  ", row_id)
     # q = Query()
     # rows = g_database.db_stock.search(q.doc_id==row_id)
     # for row in rows:
@@ -22,16 +23,26 @@ def decrease_stock():
     # g_database.db_stock.write_back(rows)
     return 'OK'
 
-@web_stock.route('/view_stock_map')
-def view_stock_map():
-    stock_map = db_Stock.table_stock.all()
-    return render_template('view_stock_map.html', stock_map = stock_map)
+@web_stock.route('/stock_rule')
+def stock_rule():
+    items = db_StockRule.table_stock_rule.all()
+    return render_template('stock_rule_main.html', item = items)
 
 
 @web_stock.route('/view_stocks')
 def view_stocks():
     stocks = db_Stock.table_stock.all()
     return render_template('view_stocks.html', stocks=stocks)
+
+@web_stock.route('/view_deposit_history')
+def view_deposit_history():
+    items = db_Deposit_history.table_deposit_history.all()
+    return render_template('view_deposit_history.html', items=items)
+
+@web_stock.route('/view_withdraw_history')
+def view_withdraw_history():
+    items = db_Withdraw.table_withdraw_history.all()
+    return render_template('view_withdraw_history.html', items=items)
 
 @web_stock.route('/deposit')
 def deposit():
@@ -85,6 +96,10 @@ def deposit_end():
         for key in request.form.to_dict():
             user_request[key] = request.form.get(key)
         db_Stock.update_stock(user_request)
+        user_request['user_id'] = session['user']
+        user_request['user_name'] = session['user']
+        user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        db_Deposit_history.append_deposit(user_request)
         return render_template("deposit_end.html")
 
 @web_stock.route('/withdraw')
