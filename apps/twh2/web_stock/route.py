@@ -23,11 +23,30 @@ def decrease_stock():
     # g_database.db_stock.write_back(rows)
     return 'OK'
 
-@web_stock.route('/stock_rule')
-def stock_rule():
+@web_stock.route('/stock_rule_main')
+def stock_rule_main():
     items = db_StockRule.table_stock_rule.all()
-    return render_template('stock_rule_main.html', item = items)
+    return render_template('stock_rule_main.html', items=items)
 
+@web_stock.route("/stock_rule_creator")
+def stock_rule_creator():
+    item = {}
+    item['twh_id'] = '221109'
+    exist = False
+    if exist:
+        flash('Create stock rule failed for ' + item['twh_id'])
+    else:
+        item['brand'] = '定远'
+        item['size'] = '大'
+        item['shape'] = '圆形'
+        item['color']='A2'
+        item['user_id'] = 'fengxuming'
+        item['date_time'] = datetime.now().strftime('%Y-%m-%d %H%M:S')
+        for i in range(60):
+            item['col'] = i + 1
+            db_StockRule.table_stock_rule.insert(item)
+        flash('created stock rule for ' + item['twh_id'])
+    return redirect(url_for('home'))
 
 @web_stock.route('/view_stocks')
 def view_stocks():
