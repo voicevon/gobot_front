@@ -1,16 +1,17 @@
 #pragma once
 
 #include "MyLibs/board/board_base.h"
-#include "MyLibs/component/led_gpio.h"
+#include "MyLibs/component/display/mono_led_gpio.h"
+#include "MyLibs/component/display/digital_number/hc595_digital_number.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "Robot/axis_homer/position_trigger_array.h" 
 #include "FastAccelStepper.h"
 
 #define HOME_TRIGGER_COUNT 1
 
-class Twh2Row_Board: public BoardBase{
+class Twh_LoopPorter_Board: public BoardBase{
     public:
-        Twh2Row_Board();
+        Twh_LoopPorter_Board();
         void Init() override;
         
         // HX711* GetHx711(){return &this->__hx711;};
@@ -20,6 +21,7 @@ class Twh2Row_Board: public BoardBase{
         void Test_PositionTriggers(int loops);
         void Test_Stepper(int loops);
         void Test_StepperQueue(int loops);
+        Hc595_Digital_number* GetDisplayer(){return &__displayer;};
 
     protected:
 
@@ -29,6 +31,7 @@ class Twh2Row_Board: public BoardBase{
         PositionTrigger __all_position_triggers[HOME_TRIGGER_COUNT];
         FastAccelStepperEngine __stepper_engine = FastAccelStepperEngine();
         FastAccelStepper* __stepper_alpha;
-        Led_GPIO __leds[7];
+        Mono_Led_GPIO __leds[7];
+        Hc595_Digital_number __displayer;
         
 };

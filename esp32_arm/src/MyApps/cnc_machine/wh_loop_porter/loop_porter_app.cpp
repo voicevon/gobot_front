@@ -3,20 +3,20 @@
 #include <HardwareSerial.h>
 
 
-Twh2Row_App::Twh2Row_App(int row_id){
+Twh_LoopPorter_App::Twh_LoopPorter_App(int row_id){
     this->__robot_row_id = row_id;
-    Serial.print("\n[Info] Twh2Row_App::Twh2Row_App() is constructed");
+    Serial.print("\n[Info] Twh_LoopPorter_App::Twh_LoopPorter_App() is constructed");
 }
 
 
 
-void Twh2Row_App::onGot_MqttMessage(const char* command){
+void Twh_LoopPorter_App::onGot_MqttMessage(const char* command){
         this->_gcode_queue->AppendGcodeCommand(command);
 
 
         
     // String str_message_type = String(command);
-    // // Logger::Info("Twh2Row_App::ExecuteMqttCommand()");
+    // // Logger::Info("Twh_LoopPorter_App::ExecuteMqttCommand()");
     // bool debug = false;
     // if (debug){
     //     Logger::Print("command",str_message_type);

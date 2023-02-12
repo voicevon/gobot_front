@@ -2,7 +2,7 @@
 
 #include "MyLibs/basic/json_loader_base.h"
 
-class LoopPorter_JsonLoader: public JsonLoaderBase{
+class Twh_LoopPorter_JsonLoader: public JsonLoaderBase{
     public:
         char* Load() override;
 

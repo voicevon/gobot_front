@@ -5,9 +5,9 @@
 // #define PIN_IR_CHECKING 32    //   TODO:  This is should not be fixed,  For TWH project only,  right now.
 
 
-char* LoopPorter_JsonLoader::Load(){
+char* Twh_LoopPorter_JsonLoader::Load(){
     
-    Logger::Debug("LoopPorter_JsonLoader::Load()");
+    Logger::Debug("Twh_LoopPorter_JsonLoader::Load()");
     String str_state = "ready";
     if (__first_run) {
         str_state = "idle";

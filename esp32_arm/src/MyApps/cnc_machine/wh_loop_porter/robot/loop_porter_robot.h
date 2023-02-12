@@ -13,13 +13,13 @@
 #define CNC_ACTUATORS_COUNT 1
 
 
-class Twh2Row_Robot: public RobotBase{
+class Twh_LoopPorter_Robot: public RobotBase{
     public:
-        void Init(Twh2Row_Board* board);
+        void Init(Twh_LoopPorter_Board* board);
         void MySpinOnce();
 
     private:
-        void __InitStatic_Actuators(Twh2Row_Board* board);
+        void __InitStatic_Actuators(Twh_LoopPorter_Board* board);
         void _InitStatic_Queues() override;
         void _Init_ArmSolution() override;
 
@@ -30,14 +30,15 @@ class Twh2Row_Robot: public RobotBase{
         Twh2_Circleloop_ArmSolution __arm_solution;
         CncMover __mover;
 
-        Twh2Row_G28_Runner __g28_runner;
-        LoopPorter_JsonLoader __json_loader_for_m408;
-        Twh2Row_M42_Runner_Switch_Output __m42_runner_led_output;
+        Twh_LoopPorter_G28_Runner __g28_runner;
+        Twh_LoopPorter_JsonLoader __json_loader_for_m408;
+        Twh_LoopPorter_M42_Runner_Switch_Output __m42_runner_led_output;
 
         MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
         LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
 
-        // int __current_state = 0;  //idle=0.   moving=1 , ready=2
+        Twh_LoopPorter_Board* __board;
 
+        // int __current_state = 0;  //idle=0.   moving=1 , ready=2
 };
 

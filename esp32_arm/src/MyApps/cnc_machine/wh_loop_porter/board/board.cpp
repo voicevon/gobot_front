@@ -31,11 +31,11 @@
 // // Index number
 #define POSITION_TRIGGER_ALPHA 0
 
-Twh2Row_Board::Twh2Row_Board(){
-    _InitSerialBoard("Hello, I am Twh2Row_Board");
+Twh_LoopPorter_Board::Twh_LoopPorter_Board(){
+    _InitSerialBoard("Hello, I am Twh_LoopPorter_Board");
 }
 
-void Twh2Row_Board::Init(){
+void Twh_LoopPorter_Board::Init(){
     #define POSITION_TRIGGER_COUNT 1
 
     __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_POSITION_TRIGGER_X, LOW);
@@ -53,7 +53,7 @@ void Twh2Row_Board::Init(){
 
 }
 
-void Twh2Row_Board::__InitSteppers(){
+void Twh_LoopPorter_Board::__InitSteppers(){
     __stepper_engine.init(1);
 
     __stepper_alpha = __stepper_engine.stepperConnectToPin(PIN_ALPHA_STEP);
@@ -66,24 +66,24 @@ void Twh2Row_Board::__InitSteppers(){
         __stepper_alpha->setAcceleration(100);
         // int res =  __stepper_alpha->moveTo(-1000, false);
         // Logger::Print("moveTo() returns", res);
-        Logger::Info("Twh2Row_Board::Init()");
+        Logger::Info("Twh_LoopPorter_Board::Init()");
         Logger::Print("stepper alpha is OK.", 0);
     }else{
-        Logger::Error("Twh2Row_Board::Init() ");
+        Logger::Error("Twh_LoopPorter_Board::Init() ");
         Logger::Halt("failed FastAccelStepper.");
     }
 
 }
 
 
-void Twh2Row_Board::TurnOn_ThisLed_Only(int led_id){
+void Twh_LoopPorter_Board::TurnOn_ThisLed_Only(int led_id){
     for(int i=0; i<7; i++){
         __leds[i].TurnOff();
         if (i==led_id) __leds[i].TurnOn();
     }
 }
 
-void Twh2Row_Board::Test_PositionTriggers(int loops){
+void Twh_LoopPorter_Board::Test_PositionTriggers(int loops){
     #define POSITION_TRIGGER_COUNT 1
     uint32_t flags = 0;
     uint32_t last_flags = 999;
@@ -108,7 +108,7 @@ void Twh2Row_Board::Test_PositionTriggers(int loops){
     }
 }
 
-void Twh2Row_Board::Test_Stepper(int loops){
+void Twh_LoopPorter_Board::Test_Stepper(int loops){
     FastAccelStepper* stepper= __stepper_alpha;
     stepper->setAcceleration(600);
     stepper->setSpeedInHz(8000);
@@ -133,6 +133,6 @@ void Twh2Row_Board::Test_Stepper(int loops){
         
 }
 
-void Twh2Row_Board::Test_StepperQueue(int loops){
+void Twh_LoopPorter_Board::Test_StepperQueue(int loops){
     // __stepper_alpha->queueEntries
 }

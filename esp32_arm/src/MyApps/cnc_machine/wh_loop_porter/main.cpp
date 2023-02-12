@@ -11,12 +11,12 @@
 #define MQTT_TOPIC_GCODE "twh/221109/r1/gcode"   
 #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r1/state"
 
-Twh2Row_Board board;
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
-Twh2Row_App app(MY_ROBOT_ROW_ID);
-Twh2Row_Robot robot;
+Twh_LoopPorter_Board board;
+Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
+Twh_LoopPorter_Robot robot;
 
 void test_board(){
     board.Test_PositionTriggers(0);
