@@ -23,6 +23,7 @@ class ArmSolutionBase{
         void SetCurrentPositionAs(FKPosition_XYZRPW* fk_position);
         void SetCurrentPositionAs(IKPosition_abgdekl* ik_position);
         void GetRealTimePosition(FKPosition_XYZRPW* position_fk);
+        // This is mainly for planner. TODO:  move to planner?
         FKPosition_XYZRPW* GetCurrentPosition_Fk(){return &__current_position_fk;};
         void Test(FKPosition_XYZRPW* input);
         

@@ -5,9 +5,9 @@
 #include "CNC/planner/planner.h"
 #include "circle_loop_arm_solution_config.h"
 
-class Twh2_Circleloop_ArmSolution: public ArmSolutionBase{
+class Twh_Circleloop_ArmSolution: public ArmSolutionBase{
     public:
-        Twh2_Circleloop_ArmSolution();
+        Twh_Circleloop_ArmSolution();
         void FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik) override;
         void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPW*  to_fk) override;
     private:

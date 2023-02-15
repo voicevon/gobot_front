@@ -6,8 +6,15 @@
 
 
 void Twh_LoopPorter_Robot::MySpinOnce(){
-    int cnc_position = __mover.GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic::AXIS_ALPHA);
-    __board->GetDisplayer()->ShowNumber(cnc_position);
+    static int last_cnc_position = 0;
+    FKPosition_XYZRPW current_fk;
+    __arm_solution.GetRealTimePosition(&current_fk);
+
+    if (last_cnc_position != (int)(current_fk.X)){
+        Logger::Print("Twh_LoopPorter_Robot::MySpinOnce()  cnc_position", current_fk.X);
+        last_cnc_position = current_fk.X;
+        __board->GetDisplayer()->ShowNumber(last_cnc_position);
+    }
 
 }
 

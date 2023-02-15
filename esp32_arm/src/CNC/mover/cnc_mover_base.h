@@ -2,11 +2,10 @@
 #pragma once
 
 #include <stdint.h>
-#include "MyLibs/basic/logger.h"   // todo: remove
-
-#include "../coordinate/cnc_axis.h"
-#include "MyLibs/board/board_base.h"
 #include "CNC/Actuator/cnc_actuator_list.h"
+#include "../coordinate/cnc_axis.h"
+#include "MyLibs/basic/logger.h"   // todo: remove
+#include "MyLibs/board/board_base.h"
 #include "FastAccelStepper.h"
 
 
@@ -18,13 +17,10 @@ class CncMover{
         void AllActuatorsMoveTo(MoveBlock* move);
         void AllActuatorsStop(); 
 
-        // void SetActuatorCurrentCncPositionAs(EnumAxis_Inverseinematic actuator_name, float as_current_position);
 
         // To get status or position
-        float GetSingleActuatorCurrentPosition_InCncUnit(EnumAxis_Inverseinematic actuator_name);  // TODO: return  all current position.
         bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name);
         bool IsMoving();
-        float GetAbsDistanceToTarget_InCncUnit();
 
 
     protected:

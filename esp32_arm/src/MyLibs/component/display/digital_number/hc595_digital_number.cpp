@@ -20,10 +20,8 @@ void Hc595_Digital_number::ShowNumber(int number){
     right_num = number % 10;
 
     digitalWrite(__pin_latch_mosi, LOW);
-    shiftOut(__pin_data, __pin_clock, MSBFIRST, __segment[left_number]);
-    shiftOut(__pin_data, __pin_clock, MSBFIRST, __segment[right_num]);
-    // shiftOut(__pin_data, __pin_clock, MSBFIRST, (0xff00 & __data)>>8);   //???
-    // shiftOut(__pin_data, __pin_clock, MSBFIRST, 0x00ff & __data);
+    shiftOut(__pin_data, __pin_clock, MSBFIRST, 255 - __segment[right_num]);
+    shiftOut(__pin_data, __pin_clock, MSBFIRST, 255 - __segment[left_number]);
     digitalWrite(__pin_latch_mosi, HIGH);
 
     // Serial.println(ltoa(__data, buf, 16));
@@ -156,20 +154,14 @@ void Hc595_Digital_number::TestHardware(){
 
 void Hc595_Digital_number::__shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val) {
     uint8_t i;
-
     for(i = 0; i < 8; i++) {
         if(bitOrder == LSBFIRST){
             digitalWrite(dataPin, !!(val & (1 << i)));
-            // Logger::Print("!!(val & (1 << i))", !!(val & (1 << i)));
         }else{
             digitalWrite(dataPin, !!(val & (1 << (7 - i))));
-            // Logger::Print("!!(val & (1 << i))", !!(val & (1 << i)));
         }
-        // delay(1);
         digitalWrite(clockPin, HIGH);
-        // delay(1);
         digitalWrite(clockPin, LOW);
-        // delay(1);
     }
 }
 

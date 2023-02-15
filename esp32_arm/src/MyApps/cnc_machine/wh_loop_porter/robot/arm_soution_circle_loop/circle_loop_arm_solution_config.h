@@ -1,7 +1,7 @@
 #pragma once
 
 
-class Twh2_Circleloop_Armsolution_Config{
+class Twh_Circleloop_Armsolution_Config{
     public:
 
         // One column equal to one teeth box.
@@ -11,7 +11,7 @@ class Twh2_Circleloop_Armsolution_Config{
             float steps_per_chain_gear_teeth = steps_per_chain_gear_round / __chain_gear_teeth_count;
          
             float slope = steps_per_chain_gear_teeth / 2;   // one box occupy two gear teeth.
-            Logger::Info("Twh2_Circleloop_Armsolution_Config");
+            Logger::Info("Twh_Circleloop_Armsolution_Config");
             Logger::Print("slope",slope);
             return slope;
         };

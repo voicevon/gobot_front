@@ -57,6 +57,7 @@ void Twh_LoopPorter_Board::Init(){
 
     __InitSteppers();
     __displayer.Init(PIN_NUMBER_LED_SCLK, PIN_NUMBER_LED_DATA, PIN_NUMBER_LED_LOAD, 2);
+    __displayer.ShowNumber(0);
 
 }
 

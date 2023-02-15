@@ -27,7 +27,7 @@ class Twh_LoopPorter_Robot: public RobotBase{
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
         CncActuatorFastStepper __actuator_alpha;
         
-        Twh2_Circleloop_ArmSolution __arm_solution;
+        Twh_Circleloop_ArmSolution __arm_solution;
         CncMover __mover;
 
         Twh_LoopPorter_G28_Runner __g28_runner;
