@@ -1,8 +1,8 @@
 
-#include "Mqtt/from_mqtt_client_to_remote_queue.h"
 #include "board/board.h"
 #include "loop_porter_app.h"
 #include "robot/loop_porter_robot.h"
+#include "Mqtt/from_mqtt_client_to_remote_queue.h"
 
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
@@ -19,9 +19,10 @@ Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
 Twh_LoopPorter_Robot robot;
 
 void test_board(){
-    board.Test_PositionTriggers(0);
-    board.Test_Stepper(0);
-    Serial.println("[Info] test_board() is done  MY_ROBOT_ROW_ID=" + String(MY_ROBOT_ROW_ID));
+    board.GetDisplayer()->Test(9999, 2);
+    // board.Test_PositionTriggers(0);
+    // board.Test_Stepper(0);
+    // Serial.println("[Info] test_board() is done  MY_ROBOT_ROW_ID=" + String(MY_ROBOT_ROW_ID));
 }
 
 void test_robot(){
@@ -74,6 +75,7 @@ void test_arm(){
 void setup(){
     board.Init();
     // test_arm();
+    Logger::Debug("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     test_board();
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
     

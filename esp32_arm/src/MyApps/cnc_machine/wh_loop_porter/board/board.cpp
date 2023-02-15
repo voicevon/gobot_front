@@ -27,6 +27,9 @@
 #define PIN_LED_6 11
 #define PIN_LED_7 11
 
+#define PIN_NUMBER_LED_SCLK 33
+#define PIN_NUMBER_LED_DATA 12
+#define PIN_NUMBER_LED_LOAD 32
 
 // // Index number
 #define POSITION_TRIGGER_ALPHA 0
@@ -50,6 +53,7 @@ void Twh_LoopPorter_Board::Init(){
     __leds[6].Init(6, PIN_LED_7, LOW);
 
     __InitSteppers();
+    __displayer.Init(PIN_NUMBER_LED_SCLK, PIN_NUMBER_LED_DATA, PIN_NUMBER_LED_LOAD, 2);
 
 }
 
