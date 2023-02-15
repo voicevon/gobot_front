@@ -11,6 +11,8 @@ class Hc595_Digital_number{
         // test_id = 2 : show each segments, to test led segements and hardware driver.
         void Test(int test_loop_count, int teset_id);
 
+        void TestHardware();
+
     private:
         uint8_t __pin_clock;
         uint8_t __pin_data;
@@ -31,15 +33,6 @@ class Hc595_Digital_number{
             0x67  // nine
         };
         
-        // Demonstration code for 74HC595 16 bit output and 2x7 segment displays
-        // int RCLKPin = 3;   // pin 12 on the 74hc595 latch - nSS
-        // int SRCLKPin = 6;  // pin 11 on the 74hc595 shift register clock - SCK
-        // int SERPin = 4;    // pin 14 on the 74hc595 data - MOSI
-        // unsigned long __data;   // Data to be sent to the shift reg.
-        // int dir,num;       // Direction of walking 1, output number.
-        // char buf[12];      // General purpose buffer.
-
-
         void __shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
 
 };

@@ -13,7 +13,8 @@
 #define PIN_POSITION_TRIGGER_X 4   //    7
 
 #define PIN_ALPHA_DIR 14 //32  
-#define PIN_ALPHA_STEP 12 //26   
+// #define PIN_ALPHA_STEP 12 //26   
+#define PIN_ALPHA_STEP 18 //26   
 #define PIN_ALPHA_ENABLE 13
 
 // #define PIN_POSITION_TRIGGER_X  128
@@ -30,6 +31,8 @@
 #define PIN_NUMBER_LED_SCLK 33
 #define PIN_NUMBER_LED_DATA 12
 #define PIN_NUMBER_LED_LOAD 32
+//  https://pan.baidu.com/s/1457H9jpfmB6JdoMpWHBHwQ?pwd＝rr8x     提取码：rr8x 
+
 
 // // Index number
 #define POSITION_TRIGGER_ALPHA 0

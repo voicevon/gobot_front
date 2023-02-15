@@ -18,6 +18,56 @@ Twh_LoopPorter_Board board;
 Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
 Twh_LoopPorter_Robot robot;
 
+
+
+
+int latchPin=32; //ST CP of 74HC595//load
+int clockPin=33;//SH CP of 74HC595//sclk
+int dataPin=12; //DS of 74HC595//sdi
+unsigned char smgduan[] = {  //共阳
+  B11000000, // 0
+  B11111001, // 1
+  B10100100, // 2
+  B10110000, // 3
+  B10011001, // 3
+  B10010010, // 8
+  B10000010, // 6
+  B11111000, // 7
+  B10000000, // 8
+  B10010000, // 9
+  };//显示0~9的值共阴
+//unsigned char duanMa[] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; //选择1-8哪个数码管段
+void setu22p() {
+      pinMode(latchPin, OUTPUT);
+      pinMode(clockPin, OUTPUT);
+      pinMode(dataPin, OUTPUT); 
+}
+void loo22p()
+{
+   for(int i=0; i<9999; i++) {
+    unsigned char gewei = (i%100)%10;
+    unsigned char shiwei = (i%100)/10;
+    // unsigned char baiwei = (i%1000)/100; 
+    // unsigned char qianwei = i/1000; 
+    for (int x=0; x<8; x++){
+
+      digitalWrite(latchPin,LOW); //低电位表示启动
+      shiftOut(dataPin,clockPin,MSBFIRST,255- (1<<x));
+      shiftOut(dataPin,clockPin,MSBFIRST,255- (1<<x));
+    //   shiftOut(dataPin,clockPin,MSBFIRST,smgduan[gewei]);
+    //   shiftOut(dataPin,clockPin,MSBFIRST,smgduan[shiwei]);
+    //   shiftOut(dataPin,clockPin,MSBFIRST,smgduan[baiwei]);
+    //   shiftOut(dataPin,clockPin,MSBFIRST,smgduan[qianwei]);
+      digitalWrite(latchPin,HIGH); //高电位表示停止
+    //   delayMicroseconds(2);
+    //   digitalWrite(latchPin, HIGH);//ST_CP
+      delay(1000);
+    }
+   }
+
+}
+
+
 void test_board(){
     board.GetDisplayer()->Test(9999, 2);
     // board.Test_PositionTriggers(0);
@@ -76,7 +126,9 @@ void setup(){
     board.Init();
     // test_arm();
     Logger::Debug("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    test_board();
+    board.GetDisplayer()->TestHardware();
+    // test_board();
+
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
     
     robot.Init(&board);
