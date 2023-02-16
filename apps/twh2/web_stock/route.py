@@ -23,10 +23,7 @@ def decrease_stock():
     # g_database.db_stock.write_back(rows)
     return 'OK'
 
-@web_stock.route('/stock_rule_main')
-def stock_rule_main():
-    items = db_StockRule.table_stock_rule.all()
-    return render_template('stock_rule_main.html', items=items)
+
 
 @web_stock.route('/stock_rule_update', methods = ['POST'])
 def stock_rule_update():
@@ -35,7 +32,7 @@ def stock_rule_update():
     new_rule_item['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     db_StockRule.update(new_rule_item)
     flash("规则更新完毕")
-    return redirect(url_for('web_stock.stock_rule_main'))
+    return redirect(url_for('web_stock.view_stock_rule'))
 
 
 @web_stock.route("/stock_rule_creator")
@@ -143,7 +140,7 @@ def deposit_end():
         user_request['user_id'] = session['user']
         user_request['user_name'] = session['user']
         user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        Logger.Print('@web_stock.route.deposit_end() ', user_request)
+        # Logger.Print('@web_stock.route.deposit_end() ', user_request)
         db_Deposit_history.append_deposit(user_request)
         return render_template("deposit_end.html")
 

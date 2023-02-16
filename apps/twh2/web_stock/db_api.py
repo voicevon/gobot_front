@@ -138,15 +138,15 @@ class db_Stock():
     def update_rule(cls, rule_item):
         # cls.table_stock_rule.update()
         doc_id = [int(rule_item['doc_id'])]
-        print("stock_rule_update()", rule_item)
+        # print("stock_rule_update()", rule_item)
         cls.table_stock.update(rule_item, doc_ids=doc_id)
 
     @classmethod
     def update_quantity(cls, user_request):
-        print("color", user_request['color'])
+        # print("color", user_request['color'])
         if user_request['doc_id'] == '-1':
             # insert into database
-            print("insert stock")
+            # print("insert stock")
             db_row={}
             db_row['twh_id'] = user_request['twh_id']
             db_row['brand'] = user_request['brand']

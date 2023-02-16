@@ -13,11 +13,8 @@ class TwhRobot_LoopPorter():
         gcode_topic = "twh/" + robot_id + '/r' + str(row_id) + "/gcode"  #'twh/221109/r0/state'
         self.gcode_sender = GcodeSender(gcode_topic)
         all_gcode_senders.append(self.gcode_sender)
-        # self.target_tooth = None
+        self.target_tooth = None
         self.__target_layer = 0
-        # self.target_col = -1
-        # self.target_layer = -1
-        # self.connected_packing_box = None
 
     # def port_to_pick(self, tooth: PickingPacking_Tooth) -> None:
     def port_to_pick(self, target_col:int, target_layer:int) -> None:

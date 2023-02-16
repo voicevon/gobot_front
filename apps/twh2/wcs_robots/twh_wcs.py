@@ -110,17 +110,18 @@ class Twh_WarehouseControlSystem():
         # if any porter is ready for picking_packing, do it.
         for porter in self.__porters:
             # Logger.Print('Twh_WarehouseControlSystem::PickPlace_PortPair()   porter.state.get() ', porter.state.get())
-            if porter.state.get() == 'ready':
-                # show green led on porter, and on packer
-                Logger.Print('Twh_WarehouseControlSystem::PickPlace_PortPair()  Porter is ready. porter_id', porter.id)
-                porter.state.set('picking_packing')
-                porter.show_layer_led()
-                self.__packer.show_pack_box_led(porter.target_tooth.packbox_id)
-                # wait operator to press the button
-                self.__button_pick.set('OFF')
-                self.__current_picking_packing_porter = porter
-                self.__state = 'picking_packing'
-                return
+            if porter.target_tooth is not None:
+                if porter.state.get() == 'ready':
+                    # show green led on porter, and on packer
+                    Logger.Print('Twh_WarehouseControlSystem::PickPlace_PortPair()  Porter is ready. porter_id', porter.id)
+                    porter.state.set('picking_packing')
+                    porter.show_layer_led()
+                    self.__packer.show_pack_box_led(porter.target_tooth.packbox_id)
+                    # wait operator to press the button
+                    self.__button_pick.set('OFF')
+                    self.__current_picking_packing_porter = porter
+                    self.__state = 'picking_packing'
+                    return
 
         portable_tooth =  self.___withdraw_teeth_queue_get_portable()
         if portable_tooth is None:
@@ -138,14 +139,14 @@ class Twh_WarehouseControlSystem():
             return
 
         new_deposit_request = self.__queue_deposit.get()
-        Logger.Info("Twh_WarehouseControlSystem::Do_deposit()")
-        Logger.Print("new_deposit_request", new_deposit_request)
+        # Logger.Info("Twh_WarehouseControlSystem::Do_deposit()")
+        # Logger.Print("new_deposit_request", new_deposit_request)
         # porter will move to col-position
         row_id = new_deposit_request['row']
         col_id = new_deposit_request['col']
         layer_id = new_deposit_request['layer']
-        Logger.Print("row_id", row_id)
-        Logger.Print("porters count", len(self.__porters))
+        # Logger.Print("row_id", row_id)
+        # Logger.Print("porters count", len(self.__porters))
         porter = self.__porters[row_id]
         porter.port_to_pick(col_id, layer_id)
 
