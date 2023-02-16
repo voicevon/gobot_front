@@ -17,7 +17,7 @@ class Twh_WarehouseControlSystem():
 
     def __init__(self, queue_deposit:multiprocessing.Queue) -> None:
         self.__state = 'idle'
-        # 1. Create row_robots list
+        # 1. Create port-robot list
         self.__porters = []
         for i in range(4):
             new_porter = TwhRobot_LoopPorter('221109', i)
@@ -134,16 +134,20 @@ class Twh_WarehouseControlSystem():
         self.__withdraw_request_queue.remove(portable_tooth)   # If move this line after packing,  will be takeout from the queue repeatly?
 
     def Do_deposit(self):
-        if not self.__queue_deposit.empty():
-            new_deposit_request = self.__queue_deposit.get()
-            Logger.Info("Twh_WarehouseControlSystem::Do_deposit()")
-            Logger.Print("new_deposit_request", new_deposit_request)
-            # porter will move to col-position
-            row_id = new_deposit_request['row']
-            col_id = new_deposit_request['col']
-            layer_id = new_deposit_request['layer']
-            porter = self.__porters[row_id]
-            porter.port_to_pick(col_id, layer_id)
+        if self.__queue_deposit.empty():
+            return
+
+        new_deposit_request = self.__queue_deposit.get()
+        Logger.Info("Twh_WarehouseControlSystem::Do_deposit()")
+        Logger.Print("new_deposit_request", new_deposit_request)
+        # porter will move to col-position
+        row_id = new_deposit_request['row']
+        col_id = new_deposit_request['col']
+        layer_id = new_deposit_request['layer']
+        Logger.Print("row_id", row_id)
+        Logger.Print("porters count", len(self.__porters))
+        porter = self.__porters[row_id]
+        porter.port_to_pick(col_id, layer_id)
 
 def WCS_Main(queue_deposit:multiprocessing.Queue):
         g_mqtt_broker_config.client_id = '20221222'
@@ -160,7 +164,6 @@ def WCS_Main(queue_deposit:multiprocessing.Queue):
             time.sleep(0.5)
 
 wcs_queue_deposit = multiprocessing.Queue()
-# wcs_queue_withdraw = multiprocessing.Queue()
 wcs_queue_takeout = multiprocessing.Queue()
 
 def Start_WCS_Process():

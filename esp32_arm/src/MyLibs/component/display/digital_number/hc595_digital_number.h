@@ -27,10 +27,12 @@ class Hc595_Digital_number{
             0x4f, // three
             0x66, // four
             0x6d, // five
-            0x7c, // six
+            // 0x7c, // six
+            0x7d, // six
             0x07, // seven
             0x7f, // eight
-            0x67  // nine
+            // 0x67  // nine
+            0x6f  // nine
         };
         
         void __shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);

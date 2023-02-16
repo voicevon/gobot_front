@@ -13,9 +13,10 @@
         <td>日期</td>
 
         <td>品牌</td>
-        <td>批号</td>
+        <td>批次</td>
         <td>颜色</td>
         <td>大小</td>
+        <td>形状</td>
         <td>牙位</td>
 
         <td>行</td>
@@ -48,7 +49,7 @@
                 </select>
                 {{ item.brand }}
             </td>
-            <td>{{ item.batch_num }}</td>
+            <td>{{ item.batch_number }}</td>
             <td><select id="color" name="color">
                     <option value="A1">A1</option>
                     <option value="A2">A2</option>
@@ -63,15 +64,21 @@
                 </select>
                 {{ item.size }}
             </td>
+            <td><select id="shape" name="shape">
+                    <option value="方">方</option>
+                    <option value="圆">圆</option>
+                    <option value="其他">其他</option>
+                </select>
+                {{ item.shape }}
+            </td>
 
-
-        <td>{{ item.location }}</td>
-        <td>{{ item.row }}</td>
-        <td>{{ item.col }}</td>
-        <td>{{ item.layer }}</td>
-        <td>{{ item.stock_quantity }}</td>
-        <td><input type="submit" value="更新"> </td>
-    </form>
+            <td>{{ item.location }}</td>
+            <td>{{ item.row }}</td>
+            <td>{{ item.col }}</td>
+            <td>{{ item.layer }}</td>
+            <td>{{ item.stock_quantity }}</td>
+            <td><input type="submit" value="更新"> </td>
+        </form>
     </tr>
     {% endfor %}
 </table>

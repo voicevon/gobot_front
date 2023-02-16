@@ -11,9 +11,23 @@ class db_StockRule():
     table_stock_rule = TinyDB('twh_stock_rule.json')
 
     @classmethod
-    def get_location(cls)-> TwhLocation:
-        result = TwhLocation()
-        return result
+    def get_col_from_request(cls, req)-> TwhLocation:
+        q = Query()
+        db_result = cls.table_stock_rule.search((q.twh_id==req['twh_id']) 
+                                    & (q.brand==req['brand']) 
+                                    & (q.batch_number==req['batch_number'])  
+                                    & (q.size == req['size'])
+                                    & (q.color==req['color']) 
+                                    & (q.shape==req['shape']))
+        if len(db_result) == 0:
+            return None
+
+        ret = TwhLocation()
+        ret.row = 1
+        ret.col = db_result['col']
+        ret.layer = 1
+        return ret
+
 
     @classmethod
     def update(cls, rule_item):

@@ -7,7 +7,7 @@
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 
-#define MY_ROBOT_ROW_ID 1
+#define MY_ROBOT_ROW_ID 1   //Range is 0,1,2,3
 #define MQTT_TOPIC_GCODE "twh/221109/r1/gcode"   
 #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r1/state"
 
@@ -90,7 +90,7 @@ void setup(){
 
     gcode_queue.AppendGcodeCommand("G28X");
     gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
-    gcode_queue.AppendGcodeCommand("G1X20");
+    // gcode_queue.AppendGcodeCommand("G1X60");   // test digital number led.
     // test_robot();
     Logger::Info ("App::loop_porter    setup() is done. ");
     

@@ -47,9 +47,9 @@ def stock_rule_creator():
         flash('Create stock rule failed for ' + item['twh_id'])
     else:
         item['brand'] = '定远'
-        item['batch_number'] = '2023-03'
+        item['batch_number'] = '2309'
         item['size'] = '中'
-        item['shape'] = '圆形'
+        item['shape'] = '圆'
         item['color']='A2'
         item['user_id'] = '系统'
         item['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -83,31 +83,30 @@ def view_withdraw_history():
 @web_stock.route('/deposit')
 def deposit():
     if 'user' in session:
-        twh = request.args.get('twh')
-        return render_template('deposit.html', twh = twh)
+        twh_id = request.args.get('twh_id')
+        return render_template('deposit.html', twh_id = twh_id)
     else:
         return redirect(url_for('web_user.login'))
 
 @web_stock.route('/deposit_request', methods = ['POST'])
 def deposit_request():
-    # user_request = {}
     # # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
     # for key in request.form.to_dict():
     #     user_request[key] = request.form.get(key)
-    #     # print(key, user_request[key])
 
     user_request = request.form.to_dict()
     request_in_stock = db_Stock.get_stock(user_request)
     if request_in_stock is None:
         # Can not find in stock , Try to find a empty box
-        # solution A:  Find empty box
-        # user_request['col'] = db_Stock.get_pure_empty_col(user_request)
         user_request['origin_quantity'] = 0
         user_request['doc_id'] = -1
+        user_request['col'] = db_StockRule.get_col_from_request(user_request)
+        if user_request['col'] is None:
+            return "没有找到存储位置规划"
     else:
         #copy request_in_stock location to user_request 
-        user_request['doc_id'] = request_in_stock.doc_id
-        user_request['origin_quantity'] = request_in_stock['stock_quantity']
+        user_request['doc_id'] = int(request_in_stock.doc_id)
+        user_request['origin_quantity'] = int(request_in_stock['stock_quantity'])
         user_request['col'] = int(request_in_stock['col'])
 
     user_request['row'] = get_row_from_tooth_location(user_request['location'])
@@ -124,6 +123,12 @@ def deposit_move():
         user_request ={}
         for key in request_form.to_dict():
             user_request[key] = request_form.get(key)
+            user_request['row'] = int(request_form.get('row'))
+            user_request['col'] = int(request_form.get('col'))
+            user_request['layer'] = int(request_form.get('layer'))
+            user_request['origin_quantity'] = int(request_form.get('origin_quantity'))
+            user_request['deposit_quantity'] = int(request_form.get('deposit_quantity'))
+            user_request['doc_id'] = int(request_form.get('doc_id'))
         wcs_queue_deposit.put(user_request)
         print("robot will move box to somewhere for operator........ ")
         return render_template("deposit_move.html",user_request = user_request)
@@ -143,8 +148,8 @@ def deposit_end():
 @web_stock.route('/withdraw')
 def withdraw():
     if 'user' in session:
-        twh = request.args.get('twh')
-        return render_template('withdraw.html', twh=twh)
+        twh_id = request.args.get('twh_id')
+        return render_template('withdraw.html', twh_id=twh_id)
     else:
         return redirect(url_for('web_user.login'))
 
@@ -171,7 +176,7 @@ def withdraw_end():
 @web_stock.route('/withdraw_takeout')
 def withdraw_takeout():
     if 'user' in session:
-        twh = request.args.get('twh')
+        twh_id = request.args.get('twh_id')
         box_id = db_Shipout.get_shipout_box_id(session['user'])
         if box_id == -1:
             # not found fullfilled box
@@ -190,4 +195,4 @@ def withdraw_takeout():
         # 4. User press blue button, a button_pressed message send to WCS.
         # 5. WCS free the box.
         # g_mqtt.publish(topic='twh/221109/shipout_box/command' , payload= '{"box_id:"' + str(box_id) +',"color":"blue"}')
-        return render_template('withdraw_takeout.html', twh=twh)
+        return render_template('withdraw_takeout.html', twh_id=twh_id)
