@@ -2,25 +2,84 @@
 
 
 {% block content %}
-<!-- {% include 'table_user_request.html' %} -->
-<form action="deposit_move" method="POST">
-   详细入库数据<p></p>
-   <br>品牌<input name="brand" value="{{ user_request['brand'] }}">
-   <br>批号<input name="batch_number" value="{{ user_request['batch_number'] }}">
-   <br>颜色<input name="color" value="{{ user_request['color'] }}">
-   <br>大小<input name="size" value="{{ user_request['size'] }}">
-   <br>形状<input name="shape" value="{{ user_request['shape'] }}">
-   <br>牙位<input name="location" value="{{ user_request['location'] }}">
+<table>
+   <form action="deposit_move" method="POST">
+      <tr>
+         <td> 详细入库数据
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> 品牌</td>
+         <td><input name="brand" value="{{ user_request['brand'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> 批号</td>
+         <td><input name="batch_number" value="{{ user_request['batch_number'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> 颜色</td>
+         <td><input name="color" value="{{ user_request['color'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> 大小</td>
+         <td><input name="size" value="{{ user_request['size'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> 形状</td>
+         <td><input name="shape" value="{{ user_request['shape'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> 牙位</td>
+         <td><input name="location" value="{{ user_request['location'] }}">
 
-   <br>原有数量<input name="origin_quantity" value="{{ user_request['origin_quantity'] }}">
-   <br>入库数量<input name="deposit_quantity" value="{{ user_request['deposit_quantity'] }}">
-   <br>twh_id<input name="twh_id" value="{{ user_request['twh_id'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> 原有数量</td>
+         <td><input name="origin_quantity" value="{{ user_request['origin_quantity'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> 入库数量</td>
+         <td><input name="deposit_quantity" value="{{ user_request['deposit_quantity'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> twh_id</td>
+         <td><input name="twh_id" value="{{ user_request['twh_id'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> doc_id</td>
+         <td><input name="doc_id" value="{{ user_request['doc_id'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> Row</td>
+         <td><input name="row" value="{{ user_request['row'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> 盒子编号</td>
+         <td><input name="col" value="{{ user_request['col'] }}">
+         </td>
+      </tr>
+      <tr>
+         <td align="right"> 层</td>
+         <td><input name="layer" value="{{ user_request['layer'] }}"></td>
+      </tr>
+      <tr>
+         <td></td>
+         <td>
+            <input type="submit" value="确认以上数据正确" />
+         </td>
+      </tr>
 
-   <br>doc_id: <input name="doc_id" value="{{ user_request['doc_id'] }}">
-   <br>行：<input name="row" value="{{ user_request['row'] }}">
-   <br>层：<input name="layer" value="{{ user_request['layer'] }}">
-   <br>请核准：<br>推荐列：<input name="col" value="{{ user_request['col'] }}">
-   <p><input type="submit" value="确认以上数据正确" /></p>
-
-</form>
+   </form>
+</table>
 {% endblock %}

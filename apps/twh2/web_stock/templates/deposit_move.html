@@ -1,28 +1,32 @@
 {% extends "common_base.html" %}
 {% block content %}
 
-      入库请求，详细信息
-      {% include 'table_user_request.html' %}
-      <p><p>
-1. 请等待仓库移动，移动过程中，绿灯闪烁<p>
-2. 请等待移动完毕，移动完毕后，黄灯闪烁<p></p>
-3. 请放入牙齿到盒子，数量是 {{ user_request['deposit_quantity'] }}.<p></p>
-4. 放入后，请单击下面的按钮, 完成操作。
+<p>1. 请等待仓库移动，移动过程中，绿灯闪烁</p>
+<p>2. 请等待移动完毕，移动完毕后，黄灯闪烁</p>
+<p>3. 请放入牙齿到盒子，数量是 {{ user_request['deposit_quantity'] }}.</p>
+<p>4. 放入后，请单击下面的按钮, 完成操作。</p>
 
-   <form action="/deposit_end", method="POST">
-      <br><input name="brand" value="{{ user_request['brand'] }}">
-      <br><input name="batch_number" value="{{ user_request['batch_number'] }}">
-      <br><input name="color" value="{{ user_request['color'] }}">
-      <br><input name="size" value="{{ user_request['size'] }}">
-      <br><input name="shape" value="{{ user_request['shape'] }}">
-      <br><input name="location" value="{{ user_request['location'] }}">
-      <br><input name="origin_quantity" value="{{ user_request['origin_quantity'] }}">
-      <br><input name="deposit_quantity" value="{{ user_request['deposit_quantity'] }}">
-      <br><input name="doc_id" value="{{ user_request['doc_id'] }}">
-      <br><input name="twh_id" value="{{ user_request['twh_id'] }}">
-      <br><input name="layer" value="{{ user_request['layer'] }}">
-      <br><input name="row" value = "{{ user_request['row'] }}">
-      <br><input name="col" value = "{{ user_request['col'] }}">
-      <p><input type = "submit" value = "入盒完成" /></p>
-      </form>
-{% endblock %}
+<form action="/deposit_end" , method="POST">
+      <input type="hidden" name="brand" value="{{ user_request['brand'] }}">
+      <input type="hidden" name="batch_number" value="{{ user_request['batch_number'] }}">
+      <input type="hidden" name="color" value="{{ user_request['color'] }}">
+      <input type="hidden" name="size" value="{{ user_request['size'] }}">
+      <input type="hidden" name="shape" value="{{ user_request['shape'] }}">
+      <input type="hidden" name="location" value="{{ user_request['location'] }}">
+      <input type="hidden" name="origin_quantity" value="{{ user_request['origin_quantity'] }}">
+      <input type="hidden" name="deposit_quantity" value="{{ user_request['deposit_quantity'] }}">
+      <input type="hidden" name="doc_id" value="{{ user_request['doc_id'] }}">
+      <input type="hidden" name="twh_id" value="{{ user_request['twh_id'] }}">
+      <input type="hidden" name="layer" value="{{ user_request['layer'] }}">
+      <input type="hidden" name="row" value="{{ user_request['row'] }}">
+      <input type="hidden" name="col" value="{{ user_request['col'] }}">
+      <p><input type="submit" value="入盒完成" /></p>
+</form>
+
+<p>
+<p>
+      <hr> 
+      入库请求，详细信息, 已经存档。
+      {% include 'table_user_request.html' %}
+
+      {% endblock %}

@@ -1,6 +1,7 @@
 
 from tinydb import TinyDB, Query, where
 from bolt_nut import get_row_from_tooth_location
+from logger import Logger
 
 class TwhLocation:
     row = -1
@@ -24,7 +25,8 @@ class db_StockRule():
 
         ret = TwhLocation()
         ret.row = 1
-        ret.col = db_result['col']
+        # Logger.Print('db col', db_result)
+        ret.col = db_result[0]['col']
         ret.layer = 1
         return ret
 
@@ -146,7 +148,7 @@ class db_Stock():
             # insert into database
             print("insert stock")
             db_row={}
-            db_row['twh'] = user_request['twh']
+            db_row['twh_id'] = user_request['twh_id']
             db_row['brand'] = user_request['brand']
             db_row['batch_number'] = user_request['batch_number']
             db_row['color'] = user_request['color']
@@ -177,7 +179,7 @@ class db_Deposit_history():
     @classmethod 
     def search_deposit(cls, robot_id:str, layer_id:str):
         q = Query()
-        s = cls.table_deposit_history.search((q.twh==robot_id) & (q.layer==layer_id))
+        s = cls.table_deposit_history.search((q.twh_id==robot_id) & (q.layer==layer_id))
         return s
 
     @classmethod 

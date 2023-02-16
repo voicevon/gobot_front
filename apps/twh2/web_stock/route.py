@@ -97,12 +97,13 @@ def deposit_request():
     user_request = request.form.to_dict()
     request_in_stock = db_Stock.get_stock(user_request)
     if request_in_stock is None:
-        # Can not find in stock , Try to find a empty box
-        user_request['origin_quantity'] = 0
+        # Can not find in stock , follow the stock_rule for stock_location.
+        planed_location = db_StockRule.get_col_from_request(user_request)
+        if planed_location is None:
+            return "没有找到存储位置规划, 请联系生产主管来解决该问题。"
         user_request['doc_id'] = -1
-        user_request['col'] = db_StockRule.get_col_from_request(user_request)
-        if user_request['col'] is None:
-            return "没有找到存储位置规划"
+        user_request['origin_quantity'] = 0
+        user_request['col'] = planed_location.col
     else:
         #copy request_in_stock location to user_request 
         user_request['doc_id'] = int(request_in_stock.doc_id)
@@ -142,6 +143,7 @@ def deposit_end():
         user_request['user_id'] = session['user']
         user_request['user_name'] = session['user']
         user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        Logger.Print('@web_stock.route.deposit_end() ', user_request)
         db_Deposit_history.append_deposit(user_request)
         return render_template("deposit_end.html")
 
