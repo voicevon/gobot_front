@@ -49,6 +49,17 @@ void CncMover::AllActuatorsMoveTo(MoveBlock* move){
 
 }
 
+void CncMover::SetAllActuatorPositionAs(IKPosition_abgdekl* new_position){
+    CncActuator_List::Instance().GetActuator(0)->SetCurrentPositionAs(new_position->Positions[AXIS_ALPHA]);
+    CncActuator_List::Instance().GetActuator(1)->SetCurrentPositionAs(new_position->Positions[AXIS_BETA]);
+    //TODO: deal with more axis
+    // CncActuator_List::Instance().GetActuator(2)->SetCurrentPositionAs(new_position->Positions[AXIS_GAMMA]);
+    // CncActuator_List::Instance().GetActuator(3)->SetCurrentPositionAs(new_position->Positions[AXIS_DELTA]);
+    // CncActuator_List::Instance().GetActuator(4)->SetCurrentPositionAs(new_position->Positions[AXIS_EPSILON]);
+    // CncActuator_List::Instance().GetActuator(5)->SetCurrentPositionAs(new_position->Positions[AXIS_KAPPPA]);
+    // CncActuator_List::Instance().GetActuator(6)->SetCurrentPositionAs(new_position->Positions[AXIS_LAMBDA]);
+}
+
 void CncMover::AllActuatorsStop(){
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
         CncActuator_List::Instance().GetActuator(a)->ForceStop();

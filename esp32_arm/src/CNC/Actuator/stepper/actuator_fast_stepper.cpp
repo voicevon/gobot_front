@@ -33,9 +33,10 @@ void CncActuatorFastStepper::PrintOut(const char* title, uint32_t count_up_max){
 // actuator_position == motor_position for FastStepper here.
 void CncActuatorFastStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     _target_position = move->TargetPosition;
-    _stepper->setSpeedInHz(move->Speed);
-    _stepper->setAcceleration(move->Acceleration);
-    _stepper->applySpeedAcceleration();
+    //TODO:  solve this problem in planner.  will keep the below line.
+    // _stepper->setSpeedInHz(move->Speed);
+    // _stepper->setAcceleration(move->Acceleration);
+    // _stepper->applySpeedAcceleration();
     _stepper->enableOutputs();
     _stepper->moveTo(_target_position, false);
     _is_moving = true; 

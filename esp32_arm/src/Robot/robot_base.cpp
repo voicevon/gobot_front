@@ -272,6 +272,8 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('P')) new_fk_position.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) new_fk_position.Yaw = gcode->get_value('W');
 			__planner.arm_solution->SetCurrentPositionAs(&new_fk_position);
+			__planner.arm_solution->FK_to_IK(&new_fk_position,&new_ik_position);
+			_mover->SetAllActuatorPositionAs(&new_ik_position);
 			break;
 		default:
 			break;

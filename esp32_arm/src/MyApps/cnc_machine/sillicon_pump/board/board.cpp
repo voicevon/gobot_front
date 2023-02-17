@@ -18,6 +18,8 @@
 #define PIN_BETA_STEP 26 //26   
 #define PIN_BETA_ENABLE 13
 
+#define MAX_SPEED 100
+#define ACCCELLERATION 900
 
 // // Index number
 // #define POSITION_TRIGGER_ALPHA 0
@@ -45,8 +47,8 @@ void Sillicon_Pump_Board::__InitSteppers(){
         __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR, true, 0);   
         __stepper_alpha->setEnablePin(PIN_ALPHA_ENABLE, true);        //Low is active enable.                    
         __stepper_alpha->setAutoEnable(false);
-        __stepper_alpha->setSpeedInUs(300);  // the parameter is us/step !!!
-        __stepper_alpha->setAcceleration(100);
+        __stepper_alpha->setSpeedInUs(MAX_SPEED);  // the parameter is us/step !!!
+        __stepper_alpha->setAcceleration(ACCCELLERATION);
         // int res =  __stepper_alpha->moveTo(-1000, false);
         // Logger::Print("moveTo() returns", res);
         Logger::Info("Sillicon_Pump_Board::Init()");
@@ -61,8 +63,8 @@ void Sillicon_Pump_Board::__InitSteppers(){
         __stepper_beta->setDirectionPin(PIN_BETA_DIR, false, 0);   
         __stepper_beta->setEnablePin(PIN_BETA_ENABLE, true);        //Low is active enable.                    
         __stepper_beta->setAutoEnable(false);
-        __stepper_beta->setSpeedInUs(300);  // the parameter is us/step !!!
-        __stepper_beta->setAcceleration(100);
+        __stepper_beta->setSpeedInUs(MAX_SPEED);  // the parameter is us/step !!!
+        __stepper_beta->setAcceleration(ACCCELLERATION);
         // int res =  __stepper_alpha->moveTo(-1000, false);
         // Logger::Print("moveTo() returns", res);
         Logger::Info("Sillicon_Pump_Board::Init()");

@@ -59,7 +59,7 @@ void setup(){
     mono_remote_queue_bridge_via_mqtt_setup(MQTT_TOPIC_GCODE, &mqtt_command_queue, &app); 
 
     gcode_queue.AppendGcodeCommand("G92X0Y0");
-    gcode_queue.AppendGcodeCommand("G1X1000Y1000");
+    // gcode_queue.AppendGcodeCommand("G1X1000Y1000");
     Logger::Info ("App::loop_porter    setup() is done. ");
 }
 
