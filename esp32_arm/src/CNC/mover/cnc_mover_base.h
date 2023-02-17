@@ -16,7 +16,7 @@ class CncMover{
         void SpinOnce();
         void AllActuatorsMoveTo(MoveBlock* move);
         void AllActuatorsStop(); 
-        void SetAllActuatorPositionAs(IKPosition_abgdekl* new_position);
+        void AllActuator_SetPositionAs(IKPosition_abgdekl* new_position);
 
         // To get status or position
         bool ActuatorIsMoving(EnumAxis_Inverseinematic actuator_name);

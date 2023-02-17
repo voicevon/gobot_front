@@ -10,7 +10,7 @@
 #define QUEUE_LINE_SEGMENT_COUNT 1
 #define QUEUE_PLANNER_BLOCK_COUNT 1
 
-#define CNC_ACTUATORS_COUNT 2
+#define CNC_ACTUATORS_COUNT 3
 
 
 class Sillicon_Pump_Robot: public RobotBase{
@@ -27,6 +27,7 @@ class Sillicon_Pump_Robot: public RobotBase{
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
         CncActuatorFastStepper __actuator_alpha;
         CncActuatorFastStepper __actuator_beta;
+        CncActuatorFastStepper __actuator_gamma;
         
         // Twh_Circleloop_ArmSolution __arm_solution;
         Sillicon_Pump_ArmSolution __arm_solution;

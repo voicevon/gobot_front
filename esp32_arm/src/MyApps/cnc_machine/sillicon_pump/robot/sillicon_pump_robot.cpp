@@ -30,10 +30,14 @@ void Sillicon_Pump_Robot::__InitStatic_Actuators(Sillicon_Pump_Board* board){
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
     CncActuator_List::Instance().AddActuator(&__actuator_beta);
+    CncActuator_List::Instance().AddActuator(&__actuator_gamma);
     __actuator_alpha.MyName = 'a';
     __actuator_beta.MyName = 'b';
+    __actuator_beta.MyName = 'g';
+
     __actuator_alpha.LinkStepper(board->GetStepper(EnumAxis_Inverseinematic::AXIS_ALPHA));
     __actuator_beta.LinkStepper(board->GetStepper(EnumAxis_Inverseinematic::AXIS_BETA));
+    __actuator_gamma.LinkStepper(board->GetStepper(EnumAxis_Inverseinematic::AXIS_GAMMA));
 
 }
 

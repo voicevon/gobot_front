@@ -10,13 +10,19 @@
 
 
 
-#define PIN_ALPHA_DIR 14 //32  
+#define PIN_ALPHA_DIR 14 //32    
 #define PIN_ALPHA_STEP 12 //26   
 #define PIN_ALPHA_ENABLE 13
 
 #define PIN_BETA_DIR 15 //32  
 #define PIN_BETA_STEP 26 //26   
 #define PIN_BETA_ENABLE 13
+
+#define PIN_GAMMA_DIR 33 //32  
+#define PIN_GAMMA_STEP 27 //26   
+#define PIN_GAMMA_ENABLE 13
+
+
 
 #define MAX_SPEED 100
 #define ACCCELLERATION 900
@@ -74,6 +80,21 @@ void Sillicon_Pump_Board::__InitSteppers(){
         Logger::Halt("failed FastAccelStepper.   beta");
     }
 
+    __stepper_gama = __stepper_engine.stepperConnectToPin(PIN_GAMMA_STEP);
+    if (__stepper_gama) {
+        __stepper_gama->setDirectionPin(PIN_GAMMA_DIR, false, 0);   
+        __stepper_gama->setEnablePin(PIN_GAMMA_ENABLE, true);        //Low is active enable.                    
+        __stepper_gama->setAutoEnable(false);
+        __stepper_gama->setSpeedInUs(2.5f * MAX_SPEED );  // the parameter is us/step !!!
+        __stepper_gama->setAcceleration(ACCCELLERATION);
+        // int res =  __stepper_alpha->moveTo(-1000, false);
+        // Logger::Print("moveTo() returns", res);
+        Logger::Info("Sillicon_Pump_Board::Init()");
+        Logger::Print("stepper gamma is OK.", 0);
+    }else{
+        Logger::Error("Sillicon_Pump_Board::Init() ");
+        Logger::Halt("failed FastAccelStepper.   gamma");
+    }
 }
 
 FastAccelStepper* Sillicon_Pump_Board::GetStepper(EnumAxis_Inverseinematic axis){
@@ -81,6 +102,8 @@ FastAccelStepper* Sillicon_Pump_Board::GetStepper(EnumAxis_Inverseinematic axis)
         return __stepper_alpha;
     }else if (axis == EnumAxis_Inverseinematic::AXIS_BETA){
         return __stepper_beta;
+    }else if (axis == EnumAxis_Inverseinematic::AXIS_GAMMA){
+        return __stepper_gama;
     }else{
         Logger::Error("Sillicon_Pump_Board::GetStepper()   Unkonwn axis");
         Logger::Halt(" I can not sleep. ");

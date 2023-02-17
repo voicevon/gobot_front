@@ -26,5 +26,6 @@ class Sillicon_Pump_Board: public BoardBase{
         FastAccelStepperEngine __stepper_engine = FastAccelStepperEngine();
         FastAccelStepper* __stepper_alpha;
         FastAccelStepper* __stepper_beta;
+        FastAccelStepper* __stepper_gama;
         
 };
