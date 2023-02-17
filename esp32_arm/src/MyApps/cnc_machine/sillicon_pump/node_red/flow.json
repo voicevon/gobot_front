@@ -1,0 +1,324 @@
+[
+    {
+        "id": "7238de2c97acefc9",
+        "type": "tab",
+        "label": "Silicon pump",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "dcade5c67e094336",
+        "type": "ui_slider",
+        "z": "7238de2c97acefc9",
+        "name": "",
+        "label": "容积",
+        "tooltip": "",
+        "group": "b99d5a3313015b50",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "1000",
+        "step": "10",
+        "className": "",
+        "x": 190,
+        "y": 80,
+        "wires": [
+            [
+                "f923fc4673526c0f"
+            ]
+        ]
+    },
+    {
+        "id": "754ee425a2aaaf86",
+        "type": "ui_button",
+        "z": "7238de2c97acefc9",
+        "name": "",
+        "group": "b99d5a3313015b50",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "泵出",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "num",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 690,
+        "y": 80,
+        "wires": [
+            [
+                "811f7558c6c8adeb"
+            ]
+        ]
+    },
+    {
+        "id": "f923fc4673526c0f",
+        "type": "ui_numeric",
+        "z": "7238de2c97acefc9",
+        "name": "volume",
+        "label": "单份容积(ml)",
+        "tooltip": "",
+        "group": "b99d5a3313015b50",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "step": 1,
+        "className": "",
+        "x": 340,
+        "y": 80,
+        "wires": [
+            [
+                "79cd47ca1b150e1f"
+            ]
+        ]
+    },
+    {
+        "id": "20cba90496f833dd",
+        "type": "mqtt out",
+        "z": "7238de2c97acefc9",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d1d506186f8ae701",
+        "x": 1010,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "79cd47ca1b150e1f",
+        "type": "function",
+        "z": "7238de2c97acefc9",
+        "name": "save to flow var",
+        "func": "flow.set('foam_volume', msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "811f7558c6c8adeb",
+        "type": "function",
+        "z": "7238de2c97acefc9",
+        "name": "publish",
+        "func": "msg.topic = \"sillicon/pump/foam\"\nmsg.payload = 'G1X'+ flow.get('foam_volume') +'Y' + flow.get('foam_volume');\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 80,
+        "wires": [
+            [
+                "20cba90496f833dd"
+            ]
+        ]
+    },
+    {
+        "id": "9313121829528cde",
+        "type": "ui_slider",
+        "z": "7238de2c97acefc9",
+        "name": "",
+        "label": "容积",
+        "tooltip": "",
+        "group": "aa0299b8a06bcd35",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "1000",
+        "step": "10",
+        "className": "",
+        "x": 190,
+        "y": 140,
+        "wires": [
+            [
+                "4b9e74eaed2b6f1e"
+            ]
+        ]
+    },
+    {
+        "id": "4b9e74eaed2b6f1e",
+        "type": "ui_numeric",
+        "z": "7238de2c97acefc9",
+        "name": "volume",
+        "label": "单份容积(ml)",
+        "tooltip": "",
+        "group": "aa0299b8a06bcd35",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "step": 1,
+        "className": "",
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [
+                "25950c97733d9302"
+            ]
+        ]
+    },
+    {
+        "id": "7a4be0876e484889",
+        "type": "ui_button",
+        "z": "7238de2c97acefc9",
+        "name": "",
+        "group": "aa0299b8a06bcd35",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "泵出",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "num",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 690,
+        "y": 140,
+        "wires": [
+            [
+                "00abfdf2156ffb40"
+            ]
+        ]
+    },
+    {
+        "id": "25950c97733d9302",
+        "type": "function",
+        "z": "7238de2c97acefc9",
+        "name": "save to flow var",
+        "func": "flow.set('skin_volume', msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "00abfdf2156ffb40",
+        "type": "function",
+        "z": "7238de2c97acefc9",
+        "name": "publish",
+        "func": "msg.topic = \"sillicon/pump/skin\"\n// msg.payload= \"G92\";\nmsg.payload = 'G1X' + flow.get('skin_volume') + 'Y' + flow.get('skin_volume');\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 140,
+        "wires": [
+            [
+                "20cba90496f833dd"
+            ]
+        ]
+    },
+    {
+        "id": "b99d5a3313015b50",
+        "type": "ui_group",
+        "name": "发泡 HY-666",
+        "tab": "2629be82a539fce2",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d1d506186f8ae701",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "aa0299b8a06bcd35",
+        "type": "ui_group",
+        "name": "皮肤 HY-610",
+        "tab": "2629be82a539fce2",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "2629be82a539fce2",
+        "type": "ui_tab",
+        "name": "Silicon Pump",
+        "icon": "dashboard",
+        "order": 4,
+        "disabled": false,
+        "hidden": false
+    }
+]

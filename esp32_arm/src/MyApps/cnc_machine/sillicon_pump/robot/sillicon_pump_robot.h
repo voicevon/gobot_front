@@ -1,19 +1,16 @@
 #pragma once
 
 #include "Robot/robot_base.h"
-// #include "arm_soution_circle_loop/circle_loop_arm_solution.h"
 #include "arm_soution_pump/sillicon_pump_arm_solution.h"
-// #include "arm_soution_circle_loop/g28_runner.h"
 #include "arm_soution_pump/g28_runner.h"
 #include "mcode_runner/json_loader.h"
-// #include "mcode_runner/twh_loop_porter_m42_switch_output.h"
 #include "mcode_runner/sillicon_pump_m42_switch_output.h"
 #include "../board/board.h"
 
 #define QUEUE_LINE_SEGMENT_COUNT 1
 #define QUEUE_PLANNER_BLOCK_COUNT 1
 
-#define CNC_ACTUATORS_COUNT 1
+#define CNC_ACTUATORS_COUNT 2
 
 
 class Sillicon_Pump_Robot: public RobotBase{
@@ -29,6 +26,7 @@ class Sillicon_Pump_Robot: public RobotBase{
 
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
         CncActuatorFastStepper __actuator_alpha;
+        CncActuatorFastStepper __actuator_beta;
         
         // Twh_Circleloop_ArmSolution __arm_solution;
         Sillicon_Pump_ArmSolution __arm_solution;

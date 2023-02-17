@@ -156,6 +156,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;
 	LineSegment middle_kinematic_line;
+	FKPosition_XYZRPW* current_position_FK;
 	
 	// Logger::Print("RobotBase::__RunGcode() point", 51);
 	switch (gcode->g){
@@ -257,6 +258,20 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			break;
 		case 92:
 			//Set Position     G92 X10 E90
+			current_position_FK =  __planner.arm_solution->GetCurrentPosition_Fk();
+			new_fk_position.X = current_position_FK->X;
+			new_fk_position.Y = current_position_FK->Y;
+			new_fk_position.Z = current_position_FK->Z;
+			new_fk_position.Roll = current_position_FK->Roll;
+			new_fk_position.Pitch = current_position_FK->Pitch;
+			new_fk_position.Yaw = current_position_FK->Yaw;
+			if (gcode->has_letter('X')) new_fk_position.X = gcode->get_value('X');
+			if (gcode->has_letter('Y')) new_fk_position.Y = gcode->get_value('Y');
+			if (gcode->has_letter('Z')) new_fk_position.Z = gcode->get_value('Z');
+			if (gcode->has_letter('R')) new_fk_position.Roll = gcode->get_value('R');
+			if (gcode->has_letter('P')) new_fk_position.Pitch = gcode->get_value('P');
+			if (gcode->has_letter('W')) new_fk_position.Yaw = gcode->get_value('W');
+			__planner.arm_solution->SetCurrentPositionAs(&new_fk_position);
 			break;
 		default:
 			break;

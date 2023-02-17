@@ -1,4 +1,3 @@
-// #include "loop_porter_robot.h"
 #include "sillicon_pump_robot.h"
 #include "Robot/mcode_runner/mcode_os.h"
 #include "CNC/Actuator/dc_motor/actuator_encoder_calculator.h"
@@ -7,15 +6,7 @@
 
 
 void Sillicon_Pump_Robot::MySpinOnce(){
-    static int last_cnc_position = 0;
-    FKPosition_XYZRPW current_fk;
-    __arm_solution.GetRealTimePosition(&current_fk);
 
-    if (last_cnc_position != (int)(current_fk.X)){
-        Logger::Print("Sillicon_Pump_Robot::MySpinOnce()  cnc_position", current_fk.X);
-        last_cnc_position = current_fk.X;
-        // __board->GetDisplayer()->ShowNumber(last_cnc_position);
-    }
 
 }
 
@@ -38,8 +29,11 @@ void Sillicon_Pump_Robot::__InitStatic_Actuators(Sillicon_Pump_Board* board){
     Logger::Info("Sillicon_Pump_Robot::Init() Actuators.");
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
-    this->__actuator_alpha.MyName = 'a';
+    CncActuator_List::Instance().AddActuator(&__actuator_beta);
+    __actuator_alpha.MyName = 'a';
+    __actuator_beta.MyName = 'b';
     __actuator_alpha.LinkStepper(board->GetStepper(EnumAxis_Inverseinematic::AXIS_ALPHA));
+    __actuator_beta.LinkStepper(board->GetStepper(EnumAxis_Inverseinematic::AXIS_BETA));
 
 }
 
@@ -48,7 +42,8 @@ void Sillicon_Pump_Robot::_Init_ArmSolution(){
     // We don't care the value of current position,
     // But  fk_position and ik_position must be consistent
     FKPosition_XYZRPW current;
-    current.Roll = 0;
+    current.X =0;
+    current.Y = 0;
     __arm_solution.SetCurrentPositionAs(&current);
 
     IKPosition_abgdekl ik;
