@@ -122,7 +122,7 @@ class Twh_WarehouseControlSystem():
                     self.__current_picking_packing_porter = porter
                     self.__state = 'picking_packing'
                     return
-
+        # TODO:   before do below  must check there is a ready porter.
         portable_tooth =  self.___withdraw_teeth_queue_get_portable()
         if portable_tooth is None:
             return
