@@ -14,6 +14,8 @@ class BinaryOutput_GPIO: public ComponentBase{
         void TurnOff();
         void Invert();
 
+        void Test(int loop_count);
+
     protected:
         uint8_t __pin_gpio;
         uint8_t __turn_on_value;

@@ -12,30 +12,27 @@
 // Index number
 #define PIN_POSITION_TRIGGER_X 4   //    7
 
-#define PIN_ALPHA_DIR 14 //32  
-// #define PIN_ALPHA_STEP 12 //26   
-#define PIN_ALPHA_STEP 18 //26   
-#define PIN_ALPHA_ENABLE 13
+#define PIN_ALPHA_DIR 27 //32  
+#define PIN_ALPHA_STEP 14 //26   
+#define PIN_ALPHA_ENABLE 32
 
 // #define PIN_POSITION_TRIGGER_X  128
 // #define PIN_POSITION_TRIGGER 1
 
-#define PIN_LED_1 4
-#define PIN_LED_2 11
-#define PIN_LED_3 11
-#define PIN_LED_4 11
-#define PIN_LED_5 11
-#define PIN_LED_6 11
-#define PIN_LED_7 11
+#define PIN_LED_1 23
+#define PIN_LED_2 22
+#define PIN_LED_3 21
+#define PIN_LED_4 19
+#define PIN_LED_5 18
+#define PIN_LED_6 17
+#define PIN_LED_7 16
 
-#define PIN_NUMBER_LED_SCLK 33
-#define PIN_NUMBER_LED_DATA 12
-#define PIN_NUMBER_LED_LOAD 32
-//  https://pan.baidu.com/s/1457H9jpfmB6JdoMpWHBHwQ?pwd＝rr8x     提取码：rr8x 
-
+#define PIN_NUMBER_LED_SCLK 25
+#define PIN_NUMBER_LED_DATA 26
+#define PIN_NUMBER_LED_LOAD 33
 
 // // Index number
-#define POSITION_TRIGGER_ALPHA 0
+#define POSITION_TRIGGER_ALPHA 12
 
 Twh_LoopPorter_Board::Twh_LoopPorter_Board(){
     _InitSerialBoard("Hello, I am Twh_LoopPorter_Board");

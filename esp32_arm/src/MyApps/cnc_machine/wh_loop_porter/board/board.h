@@ -21,7 +21,11 @@ class Twh_LoopPorter_Board: public BoardBase{
         void Test_PositionTriggers(int loops);
         void Test_Stepper(int loops);
         void Test_StepperQueue(int loops);
+
+        
         Hc595_Digital_number* GetDisplayer(){return &__displayer;};
+        Mono_Led_GPIO* GetLed(int index){return &__leds[index];};
+
 
     protected:
 

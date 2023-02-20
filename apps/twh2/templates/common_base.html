@@ -23,7 +23,7 @@
 
 <body>
 	{% if 'user' in session %}
-	<a href="/factory_home"> {{ session['user']['factory_name'] }} </a> {{ session["user"]['user_id'] }}
+	<a href="/"> {{ session['user']['factory_name'] }} </a> {{ session["user"]['user_id'] }}
 	{% endif %}
 	<a href="logout">退出</a> <br>
 	{% with messages = get_flashed_messages(with_categories=true) %}

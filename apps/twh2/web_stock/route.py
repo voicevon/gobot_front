@@ -23,8 +23,6 @@ def decrease_stock():
     # g_database.db_stock.write_back(rows)
     return 'OK'
 
-
-
 @web_stock.route('/stock_rule_update', methods = ['POST'])
 def stock_rule_update():
     new_rule_item = request.form.to_dict()
@@ -33,7 +31,6 @@ def stock_rule_update():
     db_StockRule.update(new_rule_item)
     flash("规则更新完毕")
     return redirect(url_for('web_stock.view_stock_rule'))
-
 
 @web_stock.route("/stock_rule_creator")
 def stock_rule_creator():
@@ -181,8 +178,8 @@ def withdraw_takeout():
         box_id = db_Shipout.get_shipout_box_id(session['user'])
         if box_id == -1:
             # not found fullfilled box
-            flash("您的订单尚未备货完毕，请稍后再尝试")
-            return redirect(url_for("home"))
+            flash("您没有申请出库，或者：您的出库申请尚未备货完毕，请稍后再尝试")
+            return redirect(url_for("web_user.home"))
 
         db_Shipout.Update_shipout_request(session['user'])
         # takout_message = {}

@@ -75,6 +75,12 @@ void test_arm(){
 
 void setup(){
     board.Init();
+    // Mono_Led_GPIO* being_tested_led =  board.GetLed(0);
+    // being_tested_led->Test(50);
+    // board.GetLed(0)->Test(100);
+    board.Test_Stepper(200);
+    
+
     // test_arm();
     // test_board();
 
