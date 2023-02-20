@@ -2,12 +2,20 @@
 
 
 {% block content %}
+公司名称: {{ factory_name }}
+
 <table>
+    <tr>
+        <td>用户ID</td>
+        <td>姓名</td>
+        <td>密码</td>
+        <td>岗位</td>
+    </tr>
     {% for user in users %}
     <tr>
-        <td>{{ user.factory_id}}</td>
         <td>{{ user.user_id }}</td>
-        <td>{{ user.password }}</td>
+        <td>{{ user.user_name }}</td>
+        <td>******</td>
         <td>{{ user.position }}</td>
 
     </tr>

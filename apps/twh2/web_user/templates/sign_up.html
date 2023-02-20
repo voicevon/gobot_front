@@ -6,14 +6,19 @@
     <legend>在此注册新用户</legend>
     <div>
         <form action="/sign_up_real" method="POST">
+            <input type="text" name="twh_id" value="{{ twh['id'] }}">
             <table>
                 <tr>
                     <td>单位名称</td>
-                    <td> <input type="text" name="factory_id" value={{ factory_name }}></td>
+                    <td> {{ twh['factory_name'] }}</td>
                 </tr>
                 <tr>
                     <td>用户名</td>
-                    <td> <input type="text" name="user_id" value='guest'></td>
+                    <td> <input type="text" name="user_id" value='guest'>（用来登录，可以使用拼音，缩写，方便快速输入）</td>
+                </tr>
+                <tr>
+                    <td>姓名</td>
+                    <td> <input type="text" name="real_name" value='张三丰'>（真实姓名，方便管理员找人）</td>
                 </tr>
                 <tr>
                     <td>密码</td>

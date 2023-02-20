@@ -8,6 +8,7 @@
 #ifdef I_AM_SILLICON_PUMP
 
 #define MQTT_TOPIC_GCODE "sillicon/pump/skin"   
+// #define MQTT_TOPIC_GCODE "sillicon/pump/foam"   
 
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
@@ -18,34 +19,11 @@ Sillicon_Pump_Robot robot;
 
 
 void test_board(){
-    // board.GetDisplayer()->Test(9999, 2);
-    // board.Test_PositionTriggers(0);
     board.Test_Stepper(0);
     // Serial.println("[Info] test_board() is done  MY_ROBOT_ROW_ID=" + String(MY_ROBOT_ROW_ID));
 }
 
-void test_robot(){
-    for (int i=0; i<6;i++){
 
-        // gcode_queue.AppendGcodeCommand("G1X-90Y0");
-        // gcode_queue.AppendGcodeCommand("G4S0");
-
-        // gcode_queue.AppendGcodeCommand("G1X-90Y200");
-        // gcode_queue.AppendGcodeCommand("G4S3");
-
-
-
-        gcode_queue.AppendGcodeCommand("G1X-190Y0");
-        gcode_queue.AppendGcodeCommand("G4S5");
-
-        gcode_queue.AppendGcodeCommand("G1X0Y0");
-        gcode_queue.AppendGcodeCommand("G4S5");
-
-        gcode_queue.AppendGcodeCommand("G1X190Y0");
-        gcode_queue.AppendGcodeCommand("G4S5");
-    }
-    
-}
 
 void setup(){
     board.Init();

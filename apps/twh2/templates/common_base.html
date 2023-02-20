@@ -22,8 +22,10 @@
 </head>
 
 <body>
-	<a href="/">Home</a> {{ session["user"] }} {{factory_name}}
-	<a href="logout">Logout</a> <br>
+	{% if 'user' in session %}
+	<a href="/factory_home"> {{ session['user']['factory_name'] }} </a> {{ session["user"]['user_id'] }}
+	{% endif %}
+	<a href="logout">退出</a> <br>
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}
 	<ul class=flashes>
@@ -33,8 +35,10 @@
 	</ul>
 	{% endif %}
 	{% endwith %}
+	<br>
 	{% block content %}{% endblock %}
-	<p></p>
+	<br><br>
+	<hr>
 	山东卷积分大数据公司<br>
 	{% block test %} {% endblock %}
 	高密度散牙仓库 2021~2023<br>

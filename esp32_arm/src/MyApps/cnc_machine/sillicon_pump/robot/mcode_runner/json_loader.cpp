@@ -2,7 +2,6 @@
 #include "WString.h"
 #include <ArduinoJson.h>
 #include "MyLibs/basic/logger.h"
-// #define PIN_IR_CHECKING 32    //   TODO:  This is should not be fixed,  For TWH project only,  right now.
 
 
 char* Sillicon_Pump_JsonLoader::Load(){

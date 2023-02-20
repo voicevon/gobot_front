@@ -1,0 +1,23 @@
+{% extends "common_base.html" %}
+
+
+{% block content %}
+<a href="/view_users">查看用户</a><br>
+<a href="/view_stock_quantity}}">查看库存量</a><br>
+<a href="/view_deposit_history">查看 入库记录</a><br>
+<a href="/view_withdraw_history">查看 出库记录</a><br>
+
+<hr>
+<a href="/view_stock_rule">管理货位规则</a><br>
+<hr>
+<a href="/login?twh_id=221109">登录</a><br>
+<a href="/sign_up?twh_id=221109">用户注册</a><br>
+<hr>
+<a href="/deposit?twh_id=221109">入库申请</a><br>
+<a href="/withdraw?twh_id=221109">出库申请</a><br>
+<a href="/withdraw_takeout?twh=221109">出库领料</a><br>
+{% endblock %}
+
+
+{% block test %}
+{% endblock %}

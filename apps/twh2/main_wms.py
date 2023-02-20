@@ -37,9 +37,7 @@ def create_map_for_new_twh():
     return render_template('create_map_for_new_twh.html', store_map = store_map)
 
 
-@web.route('/')
-def home():
-    return render_template('home.html', factory_name = twh_factory['221109'])
+
 
         
 Start_WCS_Process()

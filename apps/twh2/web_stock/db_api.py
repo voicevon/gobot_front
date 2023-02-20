@@ -37,7 +37,6 @@ class db_StockRule():
         doc_id = [int(rule_item['doc_id'])]
         print("stock_rule_update()", rule_item)
         cls.table_stock_rule.update(rule_item, doc_ids=doc_id)
-        
 
 
 class db_Stock():

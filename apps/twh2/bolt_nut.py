@@ -2,6 +2,11 @@ from logger import Logger
 
 twh_factory = {'221109':'山东雅乐福义齿公司'}
 
+def get_twh_factory(twh_id:str):
+    result = {}
+    result['id'] = twh_id
+    result['factory_name'] = twh_factory[twh_id]
+    return result
 
 
 def get_row_from_tooth_location(location_string:str) -> int:

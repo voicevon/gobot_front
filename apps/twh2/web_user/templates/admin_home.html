@@ -1,0 +1,44 @@
+{% extends "common_base.html" %}
+
+
+{% block content %}
+
+<form action="admin_go" method="post">
+    <table>
+    <td><select  name="twh_id">
+        <option value="221109">山东雅乐福</option>
+        <option value="230218">山东郑玉昌</option>
+    </select></td>
+    <td>
+        <input type='submit' value="创建货位规则">
+    </td>
+    </table><table></table>
+</form>
+
+<a href="/login">登录</a><br>
+<a href="/sign_up?twh_id=221109">用户注册</a><br>
+<hr>
+<a href="/deposit?twh_id=221109">入库-221109</a><br>
+<a href="/withdraw?twh_id=221109">出库申请-221109</a><br>
+<a href="/withdraw_takeout?twh=221109">出库领料-221109</a><br>
+<hr>
+
+<a href="/view_users">查看用户</a><br>
+<a href="/view_stock_quantity?twh_id=221109">查看库存量</a><br>
+<a href="/view_deposit_history">查看 入库记录</a><br>
+<a href="/view_withdraw_history">查看 出库记录</a><br>
+
+<hr>
+<a href="/view_stock_rule?twh_id=221109">管理货位规则</a><br>
+
+<hr><hr>
+<a href="/deposit?twh_id=221223">入库-221223</a><br>
+<a href="/stock_rule_creator">创建货位规则</a>
+<hr>
+
+{% endblock %}
+
+
+
+{% block test %}
+{% endblock %}

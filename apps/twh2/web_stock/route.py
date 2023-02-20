@@ -65,17 +65,17 @@ def view_stock_rule():
 @web_stock.route('/view_stock_quantity')
 def view_stock_quantity():
     stocks = db_Stock.table_stock.all()
-    return render_template('view_stock_quantity.html', stocks=stocks)
+    return render_template('view_stock_quantity.html', stocks=stocks, factory_name=twh_factory['221109'])
 
 @web_stock.route('/view_deposit_history')
 def view_deposit_history():
     items = db_Deposit_history.table_deposit_history.all()
-    return render_template('view_deposit_history.html', items=items)
+    return render_template('view_deposit_history.html', items=items, factory_name=twh_factory['221109'])
 
 @web_stock.route('/view_withdraw_history')
 def view_withdraw_history():
     items = db_Withdraw.table_withdraw_history.all()
-    return render_template('view_withdraw_history.html', items=items)
+    return render_template('view_withdraw_history.html', items=items, factory_name=twh_factory['221109'])
 
 @web_stock.route('/deposit')
 def deposit():
@@ -165,6 +165,8 @@ def withdraw_end():
         flash("库存不足，无法开始出库，请重新下订单。")
         return  redirect(url_for("web_stock.withdraw"))
     user_request['user_id'] = session['user']
+    user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    user_request['locations'] = 'abcdefg'
     db_Withdraw.table_withdraw_history.insert(user_request)
 
     user_request['connected_box_id'] = -1
