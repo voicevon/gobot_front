@@ -23,9 +23,9 @@
 
 <body>
 	{% if 'user' in session %}
-	<a href="/"> {{ session['user']['factory_name'] }} </a> {{ session["user"]['user_id'] }}
+	<a style="text-decoration: none;" href="/"> {{ session['user']['factory_name'] }} </a>. . . {{session["user"]['user_id'] }} . . .
 	{% endif %}
-	<a href="logout">退出</a> <br>
+	<a style="text-decoration: none;" href="logout">退出</a> <br>
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}
 	<ul class=flashes>

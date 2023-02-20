@@ -11,6 +11,14 @@ class db_User():
             return users[0]
         return None
 
+    @classmethod
+    def get_users_of_twh(cls, twh_id:str): 
+        q = Query()
+        users = cls.table_user.search(q.twh_id==twh_id)
+        return users
 
-    # def get_user_all(self):
-    #     return self.table_user.all()
+    @classmethod
+    def update_position(cls, user):
+        doc_ids = []
+        doc_ids.append(user['doc_id'])
+        cls.table_user.update(user, doc_ids=doc_ids)

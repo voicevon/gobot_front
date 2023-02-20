@@ -26,7 +26,8 @@ def decrease_stock():
 @web_stock.route('/stock_rule_update', methods = ['POST'])
 def stock_rule_update():
     new_rule_item = request.form.to_dict()
-    new_rule_item['user_id'] = session['user']
+    new_rule_item['user_id'] = session['user']['user_id']
+    new_rule_item['user_name'] = session['user']['user_name']
     new_rule_item['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     db_StockRule.update(new_rule_item)
     flash("规则更新完毕")
@@ -56,7 +57,7 @@ def stock_rule_creator():
 
 @web_stock.route('/view_stock_rule')
 def view_stock_rule():
-    items = db_StockRule.table_stock_rule.all()
+    items = db_StockRule.get_all_rules_in_twh(session['user']['twh_id'])
     return render_template('view_stock_rule.html', items=items)
 
 @web_stock.route('/view_stock_quantity')

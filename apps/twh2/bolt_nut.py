@@ -1,6 +1,6 @@
 from logger import Logger
 
-twh_factory = {'221109':'山东雅乐福义齿公司'}
+twh_factory = {'221109':'山东雅乐福义齿公司','230220':'山东郑玉昌义齿公司'}
 
 def get_twh_factory(twh_id:str):
     result = {}

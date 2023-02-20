@@ -38,6 +38,11 @@ class db_StockRule():
         print("stock_rule_update()", rule_item)
         cls.table_stock_rule.update(rule_item, doc_ids=doc_id)
 
+    @classmethod
+    def get_all_rules_in_twh(cls, twh_id):
+        q= Query()
+        ret = cls.table_stock_rule.search(q.twh_id==twh_id)
+        return ret
 
 class db_Stock():
     table_stock = TinyDB('twh_stock.json')

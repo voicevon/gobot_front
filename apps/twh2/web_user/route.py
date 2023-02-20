@@ -6,9 +6,9 @@ from bolt_nut import get_twh_factory
 web_user = Blueprint('web_user', __name__,template_folder='templates')
 
 
-def check_login():
-    if "user" not in session:
-        return redirect(url_for('login'))
+# def check_login():
+#     if "user" not in session:
+#         return redirect(url_for('login'))
 
 @web_user.route('/login')
 def login():
@@ -67,10 +67,19 @@ def log_out():
         # twh = get_twh_factory('221109')
     return render_template('login.html')
 
+@web_user.route('/update_position', methods=['POST'])
+def update_position():
+    user = request.form.to_dict()
+    user['doc_id'] = int(request.form.get('doc_id'))
+    db_User.update_position(user)
+    flash('员工' + user['user_name'] +  ' 的职位已经更新')
+    return redirect(url_for('web_user.view_users'))
+
 @web_user.route('/view_users')
 def view_users():
-    users = db_User.table_user.all()
-    return render_template('view_users.html', users=users, factory_name='山东雅乐福公司')
+    users = db_User.get_users_of_twh(session['user']['twh_id'])
+    # Logger.Print('@web_user.route(/view_users)', users)
+    return render_template('view_users.html', users=users)
 
 # @web_user.route('/')
 # def home():
@@ -91,5 +100,7 @@ def home():
         return redirect(url_for("web_user.login"))
     if session['user']['position'] == '主管':
         return render_template('home_factory.html')
-    else:
+    if session['user']['position'] == '技工':
         return render_template('home_worker.html')
+    flash('您的账户已经被主管临时禁用')
+    return redirect(url_for('web_user.login'))

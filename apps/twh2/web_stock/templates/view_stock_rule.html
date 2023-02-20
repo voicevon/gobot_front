@@ -33,39 +33,35 @@
             <input type="hidden" name="twh_id" value="{{ item.twh_id }}">
 
             <td><select id="brand" name="brand">
-                    <option value="定远">定远</option>
-                    <option value="赢冠">赢冠</option>
-                    <option value="鼎冠">鼎冠</option>
-                    <option value="正午">正午</option>
-                    <option value="赢冠">赢冠</option>
-                    <option value="博瑞特">博瑞特</option>
-                    <option value="嘉伟">嘉伟</option>
-                    <option value="美尔晶">美尔晶</option>
-                    <option value="名扬">名扬</option>
+                    <option value="定远" {% if item.brand=='定远' %} selected{% endif%}>定远</option>
+                    <option value="赢冠"{% if item.brand=='赢冠' %} selected{% endif%}>赢冠</option>
+                    <option value="鼎冠"{% if item.brand=='鼎冠' %} selected{% endif%}>鼎冠</option>
+                    <option value="正午"{% if item.brand=='正午' %} selected{% endif%}>正午</option>
+                    <option value="赢冠"{% if item.brand=='赢冠' %} selected{% endif%}>赢冠</option>
+                    <option value="博瑞特"{% if item.brand=='博瑞特' %} selected{% endif%}>博瑞特</option>
+                    <option value="嘉伟"{% if item.brand=='嘉伟' %} selected{% endif%}>嘉伟</option>
+                    <option value="美尔晶"{% if item.brand=='美尔晶' %} selected{% endif%}>美尔晶</option>
+                    <option value="名扬"{% if item.brand=='名扬' %} selected{% endif%}>名扬</option>
                 </select>
-                {{ item.brand }}
             </td>
             <td>{{ item.batch_number }}</td>
             <td><select id="color" name="color">
-                    <option value="A1">A1</option>
-                    <option value="A2" selected>A2</option>
-                    <option value="A3">A3</option>
+                    <option value="A1" {% if item.color=='A1' %} selected{% endif%}>A1</option>
+                    <option value="A2" {% if item.color=='A2' %} selected{% endif%}>A2</option>
+                    <option value="A3" {% if item.color=='A3' %} selected{% endif%}>A3</option>
                 </select>
-                {{ item.color }}
             </td>
             <td><select id="size" name="size">
-                    <option value="大">大</option>
-                    <option value="中" selected>中</option>
-                    <option value="小">小</option>
+                    <option value="大" {% if item.size=='大' %} selected{% endif%}>大</option>
+                    <option value="中" {% if item.size=='中' %} selected{% endif%}>中</option>
+                    <option value="小" {% if item.size=='小' %} selected{% endif%}>小</option>
                 </select>
-                {{ item.size }}
             </td>
             <td><select id="shape" name="shape">
-                    <option value="方">方</option>
-                    <option value="圆" selected>圆</option>
-                    <option value="其他">其他</option>
+                    <option value="方" {% if item.shape=='方' %} selected{% endif%}>方</option>
+                    <option value="圆" {% if item.shape=='圆' %} selected{% endif%}>圆</option>
+                    <option value="其他"{% if item.shape=='其他' %} selected{% endif%}>其他</option>
                 </select>
-                {{ item.shape }}
             </td>
 
             <td align="center">{{ item.col }}</td>

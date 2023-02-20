@@ -2,24 +2,35 @@
 
 
 {% block content %}
-公司名称: {{ factory_name }}
+本公司所有用户 <br><br>
 
 <table>
     <tr>
+        <td></td>
         <td>用户ID</td>
         <td>姓名</td>
         <td>密码</td>
         <td>岗位</td>
     </tr>
     {% for user in users %}
-    <tr>
-        <td>{{ user.user_id }}</td>
-        <td>{{ user.user_name }}</td>
-        <td>******</td>
-        <td>{{ user.position }}</td>
+    <form action="update_position" , method="post">
+        <tr>
+            <td><input type="hidden" name="doc_id" value="{{ user.doc_id }}"> 
+            <input type="hidden" name="user_name" value="{{ user.user_name }}"></td>
+            <td>{{ user.user_id }}</td>
+            <td>{{ user.user_name }}</td>
+            <td>******</td>
 
-    </tr>
+            <td>
+            <td><select name="position">
+                    <option value="主管" {% if user.position=='主管' %} selected{% endif%}>主管</option>
+                    <option value="技工" {% if user.position=='技工' %} selected{% endif%}>技工</option>
+                    <option value="临时禁用" {% if user.position=='临时禁用' %} selected{% endif%}>临时禁用</option>
+                </select></td>
+            <td><input type="submit" value="更新职位"> </td>
 
+        </tr>
+    </form>
     {% endfor %}
 </table>
 
