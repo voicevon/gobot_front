@@ -4,7 +4,7 @@
 #include "MyLibs/basic/logger.h"
 
 
-char* Sillicon_Pump_JsonLoader::Load(){
+char* Silicon_Pump_JsonLoader::Load(){
     
     Logger::Debug("Sillicon_Pump_JsonLoader::Load()");
     String str_state = "ready";

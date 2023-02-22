@@ -1,6 +1,6 @@
 #include "Robot/gcode_runner/g28_runner.h"
 
-class Sillicon_Pump_G28_Runner: public G28_Runner{
+class Silicon_Pump_G28_Runner: public G28_Runner{
     public:
         void Init(CncMover* mover, ArmSolutionBase* arm_solution) override;
 

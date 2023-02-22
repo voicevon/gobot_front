@@ -2,7 +2,7 @@
 
 #include "MyLibs/basic/json_loader_base.h"
 
-class Sillicon_Pump_JsonLoader: public JsonLoaderBase{
+class Silicon_Pump_JsonLoader: public JsonLoaderBase{
     public:
         char* Load() override;
 

@@ -3,14 +3,14 @@
 
 #define HOME_POSITION_FK_ROLL 12.345
 
-void Sillicon_Pump_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
-    Logger::Info("Sillicon_Pump_G28_Runner::Init() Hoiming_config");
+void Silicon_Pump_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
+    Logger::Info("Silicon_Pump_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
     this->_arm_solution = arm_solution;
 }
 
-void Sillicon_Pump_G28_Runner::SetMoveBlock_ToHome(char axis_name, MoveBlock* mb){
-    Logger::Debug("Sillicon_Pump_G28_Runner::SetMoveBlock_ToHome()" );
+void Silicon_Pump_G28_Runner::SetMoveBlock_ToHome(char axis_name, MoveBlock* mb){
+    Logger::Debug("Silicon_Pump_G28_Runner::SetMoveBlock_ToHome()" );
     Serial.print(char(axis_name));
     Logger::Print("\taxis", char(axis_name));
     MoveBlock_SingleActuator* alpha = &mb->MoveBlocks[AXIS_ALPHA];
@@ -18,25 +18,25 @@ void Sillicon_Pump_G28_Runner::SetMoveBlock_ToHome(char axis_name, MoveBlock* mb
 
     switch (axis_name){
         case 'X':
-            // Logger::Print("Sillicon_Pump_G28_Runner::SetMoveBlock_ToHome()  point", 31);
+            // Logger::Print("Silicon_Pump_G28_Runner::SetMoveBlock_ToHome()  point", 31);
             mb->DeepReset_ToDefault();
-            // Logger::Print("Sillicon_Pump_G28_Runner::SetMoveBlock_ToHome()  point", 22);
+            // Logger::Print("Silicon_Pump_G28_Runner::SetMoveBlock_ToHome()  point", 22);
             alpha->TargetPosition = 99999;
             alpha->Speed = 900;
             alpha->Acceleration = 0.5;
             break;
 
         default:
-            Logger::Error(" Sillicon_Pump_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
+            Logger::Error(" Silicon_Pump_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
             Logger::Halt("AcDc::TNT");
             break;
     }
-    // Logger::Print("Sillicon_Pump_G28_Runner::SetMoveBlock_ToHome()  point", 99);
+    // Logger::Print("Silicon_Pump_G28_Runner::SetMoveBlock_ToHome()  point", 99);
 }
 
 
-void Sillicon_Pump_G28_Runner::SetHomedPosition(PositionTrigger* firer){
-    Logger::Debug("Sillicon_Pump_G28_Runner::SetHomedPosition()");
+void Silicon_Pump_G28_Runner::SetHomedPosition(PositionTrigger* firer){
+    Logger::Debug("Silicon_Pump_G28_Runner::SetHomedPosition()");
     FKPosition_XYZRPW current_fk;
     IKPosition_abgdekl ik;
     if (this->_axis_name =='X'){

@@ -5,13 +5,13 @@
 #include "MyLibs/component/display/digital_number/hc595_digital_number.h"
 
 
-void Sillicon_Pump_Robot::MySpinOnce(){
+void Silicon_Pump_Robot::MySpinOnce(){
 
 
 }
 
-void Sillicon_Pump_Robot::Init(Sillicon_Pump_Board* board){
-    Logger::Debug("Sillicon_Pump_Robot::Init()");
+void Silicon_Pump_Robot::Init(Silicon_Pump_Board* board){
+    Logger::Debug("Silicon_Pump_Robot::Init()");
     _InitStatic_Queues();
     __InitStatic_Actuators(board);
     _Init_ArmSolution();
@@ -25,8 +25,8 @@ void Sillicon_Pump_Robot::Init(Sillicon_Pump_Board* board){
 
 }
 
-void Sillicon_Pump_Robot::__InitStatic_Actuators(Sillicon_Pump_Board* board){
-    Logger::Info("Sillicon_Pump_Robot::Init() Actuators.");
+void Silicon_Pump_Robot::__InitStatic_Actuators(Silicon_Pump_Board* board){
+    Logger::Info("Silicon_Pump_Robot::Init() Actuators.");
     CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
     CncActuator_List::Instance().AddActuator(&__actuator_alpha);
     CncActuator_List::Instance().AddActuator(&__actuator_beta);
@@ -41,7 +41,7 @@ void Sillicon_Pump_Robot::__InitStatic_Actuators(Sillicon_Pump_Board* board){
 
 }
 
-void Sillicon_Pump_Robot::_Init_ArmSolution(){
+void Silicon_Pump_Robot::_Init_ArmSolution(){
     this->_LinkArmSolution_for_planner(&__arm_solution);
     // We don't care the value of current position,
     // But  fk_position and ik_position must be consistent
@@ -56,7 +56,7 @@ void Sillicon_Pump_Robot::_Init_ArmSolution(){
 }
 
 
-void Sillicon_Pump_Robot::_InitStatic_Queues(){
+void Silicon_Pump_Robot::_InitStatic_Queues(){
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     // Init LineSegment queue head
     Queue_LineSegment::Instance()._all_queue_ables = (Queue_able*) this->__all_line_segments;
@@ -67,9 +67,9 @@ void Sillicon_Pump_Robot::_InitStatic_Queues(){
     line->TargetPosition.Roll = 0;
     line->TargetPosition.Pitch = 0;
     line->TargetPosition.Yaw = 0;
-    line->PrintOUt("caller: Sillicon_Pump_Robot::_InitStatic_Queues()");
+    line->PrintOUt("caller: Silicon_Pump_Robot::_InitStatic_Queues()");
     Queue_LineSegment::Instance().Deposit();
-    Logger::Print("Sillicon_Pump_Robot::Init", 83);
+    Logger::Print("Silicon_Pump_Robot::Init", 83);
 }
 
 

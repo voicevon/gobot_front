@@ -3,10 +3,10 @@
 #include "../../board/board.h"
 
 
-class Sillicon_Pump_M42_Runner_Switch_Output: public M42_Runner_Switch_Output{
+class Silicon_Pump_M42_Runner_Switch_Output: public M42_Runner_Switch_Output{
     public:
         bool RunnerLoop() override;
-        void Init(Sillicon_Pump_Board* board) {__board = board;};
+        void Init(Silicon_Pump_Board* board) {__board = board;};
     private:
-        Sillicon_Pump_Board* __board;
+        Silicon_Pump_Board* __board;
 };

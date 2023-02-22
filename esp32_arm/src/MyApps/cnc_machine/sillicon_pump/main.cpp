@@ -13,9 +13,9 @@
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
 
-Sillicon_Pump_Board board;
-Sillicon_Pump_App app;
-Sillicon_Pump_Robot robot;
+Silicon_Pump_Board board;
+Silicon_Pump_App app;
+Silicon_Pump_Robot robot;
 
 
 void test_board(){

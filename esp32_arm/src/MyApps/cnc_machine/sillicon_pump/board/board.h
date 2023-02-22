@@ -10,9 +10,9 @@
 
 // #define HOME_TRIGGER_COUNT 0
 
-class Sillicon_Pump_Board: public BoardBase{
+class Silicon_Pump_Board: public BoardBase{
     public:
-        Sillicon_Pump_Board();
+        Silicon_Pump_Board();
         void Init() override;
         FastAccelStepper* GetStepper(EnumAxis_Inverseinematic axis);
 

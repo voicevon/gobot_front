@@ -34,11 +34,11 @@
 // // Index number
 // #define POSITION_TRIGGER_ALPHA 0
 
-Sillicon_Pump_Board::Sillicon_Pump_Board(){
-    _InitSerialBoard("Hello, I am Sillicon_Pump_Board");
+Silicon_Pump_Board::Silicon_Pump_Board(){
+    _InitSerialBoard("Hello, I am Silicon_Pump_Board");
 }
 
-void Sillicon_Pump_Board::Init(){
+void Silicon_Pump_Board::Init(){
     // #define POSITION_TRIGGER_COUNT 1
 
     // __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_POSITION_TRIGGER_X, LOW);
@@ -48,7 +48,7 @@ void Sillicon_Pump_Board::Init(){
 
 }
 
-void Sillicon_Pump_Board::__InitSteppers(){
+void Silicon_Pump_Board::__InitSteppers(){
     __stepper_engine.init(1);
 
     __stepper_alpha = __stepper_engine.stepperConnectToPin(PIN_ALPHA_STEP);
@@ -61,10 +61,10 @@ void Sillicon_Pump_Board::__InitSteppers(){
         __stepper_alpha->setAcceleration(ACCCELLERATION);
         // int res =  __stepper_alpha->moveTo(-1000, false);
         // Logger::Print("moveTo() returns", res);
-        Logger::Info("Sillicon_Pump_Board::Init()");
+        Logger::Info("Silicon_Pump_Board::Init()");
         Logger::Print("stepper alpha is OK.", 0);
     }else{
-        Logger::Error("Sillicon_Pump_Board::Init() ");
+        Logger::Error("Silicon_Pump_Board::Init() ");
         Logger::Halt("failed FastAccelStepper.  alpha");
     }
 
@@ -77,10 +77,10 @@ void Sillicon_Pump_Board::__InitSteppers(){
         __stepper_beta->setAcceleration(ACCCELLERATION);
         // int res =  __stepper_alpha->moveTo(-1000, false);
         // Logger::Print("moveTo() returns", res);
-        Logger::Info("Sillicon_Pump_Board::Init()");
+        Logger::Info("Silicon_Pump_Board::Init()");
         Logger::Print("stepper beta is OK.", 0);
     }else{
-        Logger::Error("Sillicon_Pump_Board::Init() ");
+        Logger::Error("Silicon_Pump_Board::Init() ");
         Logger::Halt("failed FastAccelStepper.   beta");
     }
 
@@ -93,15 +93,15 @@ void Sillicon_Pump_Board::__InitSteppers(){
         __stepper_gama->setAcceleration(ACCCELLERATION);
         // int res =  __stepper_alpha->moveTo(-1000, false);
         // Logger::Print("moveTo() returns", res);
-        Logger::Info("Sillicon_Pump_Board::Init()");
+        Logger::Info("Silicon_Pump_Board::Init()");
         Logger::Print("stepper gamma is OK.", 0);
     }else{
-        Logger::Error("Sillicon_Pump_Board::Init() ");
+        Logger::Error("Silicon_Pump_Board::Init() ");
         Logger::Halt("failed FastAccelStepper.   gamma");
     }
 }
 
-FastAccelStepper* Sillicon_Pump_Board::GetStepper(EnumAxis_Inverseinematic axis){
+FastAccelStepper* Silicon_Pump_Board::GetStepper(EnumAxis_Inverseinematic axis){
     if (axis == EnumAxis_Inverseinematic::AXIS_ALPHA){
         return __stepper_alpha;
     }else if (axis == EnumAxis_Inverseinematic::AXIS_BETA){
@@ -109,14 +109,14 @@ FastAccelStepper* Sillicon_Pump_Board::GetStepper(EnumAxis_Inverseinematic axis)
     }else if (axis == EnumAxis_Inverseinematic::AXIS_GAMMA){
         return __stepper_gama;
     }else{
-        Logger::Error("Sillicon_Pump_Board::GetStepper()   Unkonwn axis");
+        Logger::Error("Silicon_Pump_Board::GetStepper()   Unkonwn axis");
         Logger::Halt(" I can not sleep. ");
     }
 }
 
 
 
-void Sillicon_Pump_Board::Test_Stepper(int loops){
+void Silicon_Pump_Board::Test_Stepper(int loops){
     FastAccelStepper* stepper= __stepper_alpha;
     stepper->setAcceleration(600);
     stepper->setSpeedInHz(8000);
@@ -141,6 +141,6 @@ void Sillicon_Pump_Board::Test_Stepper(int loops){
         
 }
 
-void Sillicon_Pump_Board::Test_StepperQueue(int loops){
+void Silicon_Pump_Board::Test_StepperQueue(int loops){
     // __stepper_alpha->queueEntries
 }

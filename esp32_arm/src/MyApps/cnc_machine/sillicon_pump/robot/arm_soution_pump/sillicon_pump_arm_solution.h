@@ -5,9 +5,9 @@
 #include "CNC/planner/planner.h"
 #include "sillicon_pump_arm_solution_config.h"
 
-class Sillicon_Pump_ArmSolution: public ArmSolutionBase{
+class Silicon_Pump_ArmSolution: public ArmSolutionBase{
     public:
-        Sillicon_Pump_ArmSolution();
+        Silicon_Pump_ArmSolution();
         void FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik) override;
         void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPW*  to_fk) override;
     private:
