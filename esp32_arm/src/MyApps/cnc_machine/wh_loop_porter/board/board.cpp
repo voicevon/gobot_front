@@ -122,7 +122,7 @@ void Twh_LoopPorter_Board::Test_Stepper(int loops){
         Logger::Print("Test stepper loop======================================", i);
         if (stepper) {
             // 5 circles.
-            stepper->moveTo(360.0f /1.8f * 16 * 5.8 * 100, false);
+            stepper->moveTo(360.0f /1.8f * 16 * 5.8 * 5, false);
             while (stepper->isRunning()){
                 Logger::Print("Current position", stepper->getCurrentPosition());
                 delay(300);

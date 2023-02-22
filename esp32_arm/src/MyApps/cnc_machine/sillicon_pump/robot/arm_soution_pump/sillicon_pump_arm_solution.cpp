@@ -11,11 +11,13 @@ void Sillicon_Pump_ArmSolution::FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_a
 
 	ik->Positions[AXIS_ALPHA] = fk->X * __slope ;
 	ik->Positions[AXIS_BETA] = fk->Y * __slope;
+	ik->Positions[AXIS_GAMMA] = fk->Z * __slope;
 	Logger::Debug("Sillicon_Pump_ArmSolution::IK()");
 	// Logger::Print("Sillicon_Pump_ArmSolution::FK_to_IK()  ")
 
 	Logger::Print("IK output alpha", ik->Positions[AXIS_ALPHA]);
 	Logger::Print("IK output beta", ik->Positions[AXIS_BETA]);
+	Logger::Print("IK output gamma", ik->Positions[AXIS_GAMMA]);
 }
 
 void Sillicon_Pump_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW*  to_fk){
@@ -24,6 +26,7 @@ void Sillicon_Pump_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition
 	
 	fk->X = ik->Positions[AXIS_ALPHA] / __slope;
 	fk->Y = ik->Positions[AXIS_BETA] / __slope;
+	fk->Z = ik->Positions[AXIS_GAMMA] / __slope;
 
 	// Logger::Debug("Sillicon_Pump_ArmSolution::FK()" );
 	// Logger::Print("FK output X", fk->X);

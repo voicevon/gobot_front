@@ -175,7 +175,7 @@
         "z": "7238de2c97acefc9",
         "g": "fc5f422ed6dc2f3d",
         "name": "publish",
-        "func": "msg.topic = \"sillicon/pump/foam\"\nmsg.payload = 'G1X'+ flow.get('foam_volume') +'Y' + flow.get('foam_volume') + 'Z' + 2.5 * flow.get('foam_volume'); \nreturn msg;",
+        "func": "msg.topic = \"sillicon/pump/foam\"\nvar v = flow.get('foam_volume');\nmsg.payload = 'G1X'+ v +'Y' + v + 'Z' + v; \nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -299,7 +299,7 @@
         "z": "7238de2c97acefc9",
         "g": "0e9f582a1fbeb8a7",
         "name": "publish",
-        "func": "msg.topic = \"sillicon/pump/skin\"\n// msg.payload= \"G92\";\nmsg.payload = 'G1X' + flow.get('skin_volume') + 'Y' + flow.get('skin_volume');\n\nreturn msg;",
+        "func": "msg.topic = \"sillicon/pump/skin\"\n// msg.payload= \"G92\";\nvar v = flow.get('skin_volume');\nmsg.payload = 'G1X' + v + 'Y' + v + 'Z' + v;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -309,14 +309,31 @@
         "y": 300,
         "wires": [
             [
-                "20cba90496f833dd"
+                "20cba90496f833dd",
+                "7553e30ffd8afa8a"
             ]
         ]
     },
     {
+        "id": "7553e30ffd8afa8a",
+        "type": "debug",
+        "z": "7238de2c97acefc9",
+        "name": "debug 22",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 380,
+        "wires": []
+    },
+    {
         "id": "b99d5a3313015b50",
         "type": "ui_group",
-        "name": "发泡 HY-666 (3 pumps)",
+        "name": "Foam HY-666 (4 pumps)",
         "tab": "2629be82a539fce2",
         "order": 1,
         "disp": true,
@@ -354,7 +371,7 @@
     {
         "id": "aa0299b8a06bcd35",
         "type": "ui_group",
-        "name": "皮肤 HY-610 (2 pumps)",
+        "name": "Skin HY-610 (3 pumps)",
         "tab": "2629be82a539fce2",
         "order": 2,
         "disp": true,

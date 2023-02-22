@@ -18,6 +18,8 @@ def login():
 
 @web_user.route('/login_real', methods=['POST'])
 def login_real():
+    #TODO: login record and history
+    Logger.Print('web_user.sign_up_real()', request.form.to_dict())
     user = db_User.get_user(request.form.get('user_id'))
     password = request.form.get("password")
     if user is None:
@@ -45,15 +47,8 @@ def sign_up():
 def sign_up_real():
     user_in_db  = db_User.get_user(request.form.get('user_id'))
     if user_in_db is None:
-        # insert into db_user
-        
-        # new_user = {}
-        # new_user['user_id'] = request.form.get('user_id')
-        # new_user['twh_id'] = request.form.get('twh_id')
-        # new_user['password'] = request.form.get('password')
-        # new_user['position'] = request.form.get('position')
         db_User.table_user.insert(request.form.to_dict())
-        # return render_template('login.html')
+
         return render_template('sign_up_ok.html', twh=get_twh_factory(request.form.get('twh_id')))
 
     flash("该用户名已经被使用，请更换一个用户名", 'error')

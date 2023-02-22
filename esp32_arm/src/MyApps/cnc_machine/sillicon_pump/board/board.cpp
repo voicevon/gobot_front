@@ -9,23 +9,27 @@
 
 
 
-
+// For Glue-A
 #define PIN_ALPHA_DIR 14 //32    
 #define PIN_ALPHA_STEP 12 //26   
 #define PIN_ALPHA_ENABLE 13
 
-#define PIN_BETA_DIR 15 //32  
-#define PIN_BETA_STEP 26 //26   
-#define PIN_BETA_ENABLE 13
-
-#define PIN_GAMMA_DIR 33 //32  
-#define PIN_GAMMA_STEP 27 //26   
+// For Mixer and ender pump
+#define PIN_GAMMA_DIR 15 //32  
+#define PIN_GAMMA_STEP 26 //26   
 #define PIN_GAMMA_ENABLE 13
+
+// For Glue-B
+#define PIN_BETA_DIR 33 //32  
+#define PIN_BETA_STEP 27 //26   
+#define PIN_BETA_ENABLE 13
 
 
 
 #define MAX_SPEED 100
 #define ACCCELLERATION 900
+#define PIN_STATE_LED 16
+
 
 // // Index number
 // #define POSITION_TRIGGER_ALPHA 0
@@ -39,7 +43,7 @@ void Sillicon_Pump_Board::Init(){
 
     // __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_POSITION_TRIGGER_X, LOW);
     // PositionTrigger_Array::Instance().Init(__all_position_triggers, POSITION_TRIGGER_COUNT);
-
+    __state_led.Init(0, PIN_STATE_LED, LOW);
     __InitSteppers();
 
 }
@@ -66,7 +70,7 @@ void Sillicon_Pump_Board::__InitSteppers(){
 
     __stepper_beta = __stepper_engine.stepperConnectToPin(PIN_BETA_STEP);
     if (__stepper_beta) {
-        __stepper_beta->setDirectionPin(PIN_BETA_DIR, false, 0);   
+        __stepper_beta->setDirectionPin(PIN_BETA_DIR, true, 0);   
         __stepper_beta->setEnablePin(PIN_BETA_ENABLE, true);        //Low is active enable.                    
         __stepper_beta->setAutoEnable(false);
         __stepper_beta->setSpeedInUs(MAX_SPEED);  // the parameter is us/step !!!
@@ -85,7 +89,7 @@ void Sillicon_Pump_Board::__InitSteppers(){
         __stepper_gama->setDirectionPin(PIN_GAMMA_DIR, false, 0);   
         __stepper_gama->setEnablePin(PIN_GAMMA_ENABLE, true);        //Low is active enable.                    
         __stepper_gama->setAutoEnable(false);
-        __stepper_gama->setSpeedInUs(2.5f * MAX_SPEED );  // the parameter is us/step !!!
+        __stepper_gama->setSpeedInUs(MAX_SPEED );  // the parameter is us/step !!!
         __stepper_gama->setAcceleration(ACCCELLERATION);
         // int res =  __stepper_alpha->moveTo(-1000, false);
         // Logger::Print("moveTo() returns", res);

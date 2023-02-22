@@ -18,6 +18,7 @@ class Sillicon_Pump_Board: public BoardBase{
 
         void Test_Stepper(int loops);
         void Test_StepperQueue(int loops);
+        Mono_Led_GPIO* GetStateLed(){return & __state_led;};
 
     protected:
 
@@ -27,5 +28,6 @@ class Sillicon_Pump_Board: public BoardBase{
         FastAccelStepper* __stepper_alpha;
         FastAccelStepper* __stepper_beta;
         FastAccelStepper* __stepper_gama;
+        Mono_Led_GPIO __state_led;
         
 };
