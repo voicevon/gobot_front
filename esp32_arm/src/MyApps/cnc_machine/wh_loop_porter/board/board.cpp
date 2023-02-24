@@ -6,11 +6,7 @@
 //                    z-step GPIO-27  z-dir GPIO-33
 
 
-
-
-
 // Index number
-#define PIN_POSITION_TRIGGER_X 4   //    7
 
 #define PIN_ALPHA_DIR 27 //32  
 #define PIN_ALPHA_STEP 14 //26   
@@ -31,8 +27,7 @@
 #define PIN_NUMBER_LED_DATA 26
 #define PIN_NUMBER_LED_LOAD 33
 
-// // Index number
-#define POSITION_TRIGGER_ALPHA 12
+#define PIN_POSITION_TRIGGER_X 12   //  Hall sensor:   OH44E (南京欧卓) 
 
 Twh_LoopPorter_Board::Twh_LoopPorter_Board(){
     _InitSerialBoard("Hello, I am Twh_LoopPorter_Board");
@@ -41,7 +36,7 @@ Twh_LoopPorter_Board::Twh_LoopPorter_Board(){
 void Twh_LoopPorter_Board::Init(){
     #define POSITION_TRIGGER_COUNT 1
 
-    __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_POSITION_TRIGGER_X, LOW);
+    __all_position_triggers[0].Init('X',PIN_POSITION_TRIGGER_X, LOW);
     PositionTrigger_Array::Instance().Init(__all_position_triggers, POSITION_TRIGGER_COUNT);
 
     __leds[0].Init(0, PIN_LED_1, LOW);
@@ -88,30 +83,30 @@ void Twh_LoopPorter_Board::TurnOn_ThisLed_Only(int led_id){
     }
 }
 
-void Twh_LoopPorter_Board::Test_PositionTriggers(int loops){
-    #define POSITION_TRIGGER_COUNT 1
-    uint32_t flags = 0;
-    uint32_t last_flags = 999;
-    int count =0;
-    while (count < loops){
-        flags = 0;
-        for (int index=0; index < POSITION_TRIGGER_COUNT; index++){
-            if (__all_position_triggers[index].IsFired()){
-                flags += 1<<index;
-            }
-        }
-        if (flags != last_flags){
-            Serial.print("Trigger is channged   0:normal,   1:triggered \t\t");
-            Serial.print("Counter= ");
-            Serial.print(count);
-            Serial.print("  ");
-            Serial.println(flags, BIN);
+// void Twh_LoopPorter_Board::Test_PositionTriggers(int loops){
+//     #define POSITION_TRIGGER_COUNT 1
+//     uint32_t flags = 0;
+//     uint32_t last_flags = 999;
+//     int count =0;
+//     while (count < loops){
+//         flags = 0;
+//         for (int index=0; index < POSITION_TRIGGER_COUNT; index++){
+//             if (__all_position_triggers[index].IsFired()){
+//                 flags += 1<<index;
+//             }
+//         }
+//         if (flags != last_flags){
+//             Serial.print("Trigger is channged   0:normal,   1:triggered \t\t");
+//             Serial.print("Counter= ");
+//             Serial.print(count);
+//             Serial.print("  ");
+//             Serial.println(flags, BIN);
 
-            last_flags = flags;
-            count++;
-        }
-    }
-}
+//             last_flags = flags;
+//             count++;
+//         }
+//     }
+// }
 
 void Twh_LoopPorter_Board::Test_Stepper(int loops){
     FastAccelStepper* stepper= __stepper_alpha;

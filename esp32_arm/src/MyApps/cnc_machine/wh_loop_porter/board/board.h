@@ -18,7 +18,7 @@ class Twh_LoopPorter_Board: public BoardBase{
         FastAccelStepper* GetStepper(){return __stepper_alpha;};
         void TurnOn_ThisLed_Only(int led_id);
 
-        void Test_PositionTriggers(int loops);
+        // void Test_PositionTriggers(int loops);
         void Test_Stepper(int loops);
         void Test_StepperQueue(int loops);
 

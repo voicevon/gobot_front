@@ -19,12 +19,12 @@ Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
 Twh_LoopPorter_Robot robot;
 
 
-void test_board(){
-    board.GetDisplayer()->Test(9999, 2);
-    // board.Test_PositionTriggers(0);
-    // board.Test_Stepper(0);
-    // Serial.println("[Info] test_board() is done  MY_ROBOT_ROW_ID=" + String(MY_ROBOT_ROW_ID));
-}
+// void test_board(){
+//     board.GetDisplayer()->Test(9999, 2);
+//     // board.Test_PositionTriggers(0);
+//     // board.Test_Stepper(0);
+//     // Serial.println("[Info] test_board() is done  MY_ROBOT_ROW_ID=" + String(MY_ROBOT_ROW_ID));
+// }
 
 void test_robot(){
     for (int i=0; i<6;i++){
@@ -78,7 +78,8 @@ void setup(){
     // Mono_Led_GPIO* being_tested_led =  board.GetLed(0);
     // being_tested_led->Test(50);
     // board.GetLed(0)->Test(100);
-    board.Test_Stepper(200);
+    // board.Test_Stepper(200);
+    PositionTrigger_Array::Instance().Test_PositionTriggers(99);
     
 
     // test_arm();
