@@ -24,14 +24,6 @@ void Hc595_Digital_number::ShowNumber(int number){
     shiftOut(__pin_data, __pin_clock, MSBFIRST, 255 - __segment[left_number]);
     digitalWrite(__pin_latch_mosi, HIGH);
 
-    // Serial.println(ltoa(__data, buf, 16));
-    // ???
-    // if (!dir) __data<<=1; else __data>>=1; // Shift
-
-    // if (__data & 0x8000) dir=1;           // Set direction.
-    // if (__data & 0x1) dir=0;
-
-    // delay(200);
 }
 
 void Hc595_Digital_number::Test(int test_loop_count, int teset_id){
@@ -53,12 +45,11 @@ void Hc595_Digital_number::Test(int test_loop_count, int teset_id){
     uint8_t test_value = 0;
     switch (teset_id) {
     case 1:
-        for (int i=0; i<test_loop_count; i++){
-            for (int x=0; x<10; x++){
-                for(int power=0; x<__power_count; power++){
-                    ShowNumber(x * pow10(power));
-                    delay(500);
-                }
+        for (int loop=0; loop<test_loop_count; loop++){
+            Logger::Print("Hc595_Digital_number::Test  loop", loop);
+            for(int i=0; i<99; i++){
+                this->ShowNumber(i);
+                delay(300);
             }
         }
         break;

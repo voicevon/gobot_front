@@ -175,7 +175,7 @@
         "z": "7238de2c97acefc9",
         "g": "fc5f422ed6dc2f3d",
         "name": "publish",
-        "func": "msg.topic = \"sillicon/pump/foam\"\nvar v = flow.get('foam_volume');\nmsg.payload = 'G1X'+ v +'Y' + v + 'Z' + v; \nreturn msg;",
+        "func": "msg.topic = \"sillicon/pump/foam\"\nvar target_v = flow.get('foam_volume');\nvar slopes = flow.get('slopes');\nvar va = slopes['HY810A'] * target_v;\nvar vb = slopes['HY810B'] * target_v;\nmsg.payload = 'G1X'+ va +'Y' + vb + 'Z' + va; \nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -299,7 +299,7 @@
         "z": "7238de2c97acefc9",
         "g": "0e9f582a1fbeb8a7",
         "name": "publish",
-        "func": "msg.topic = \"sillicon/pump/skin\"\n// msg.payload= \"G92\";\nvar v = flow.get('skin_volume');\nmsg.payload = 'G1X' + v + 'Y' + v + 'Z' + v;\n\nreturn msg;",
+        "func": "msg.topic = \"sillicon/pump/skin\"\nvar target_v = flow.get('foam_volume');\nvar slopes = flow.get('slopes');\nvar va = slopes['HY810A'] * target_v;\nvar vb = slopes['HY810B'] * target_v;\n\nmsg.payload = 'G1X' + va + 'Y' + vb + 'Z' + va;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -329,6 +329,23 @@
         "x": 1100,
         "y": 380,
         "wires": []
+    },
+    {
+        "id": "1b3db3bf6d5488c4",
+        "type": "function",
+        "z": "7238de2c97acefc9",
+        "name": "Init",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "var slopes={}\nslopes['water'] = 4417;\nslopes['HY810A'] = 57760;\nslopes['HY810B'] = 57760;\nslopes['HY666A'] = 67760;\nslopes['HY666B'] = 67760;\nflow.set('pump_slopes');",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 40,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "b99d5a3313015b50",
