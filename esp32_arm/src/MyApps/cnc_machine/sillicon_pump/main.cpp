@@ -7,8 +7,8 @@
 #include "all_applications.h"
 #ifdef I_AM_SILLICON_PUMP
 
-// #define MQTT_TOPIC_GCODE "sillicon/pump/skin"   
-#define MQTT_TOPIC_GCODE "sillicon/pump/foam"   
+// #define MQTT_TOPIC_GCODE "silicon/pump/skin"   
+#define MQTT_TOPIC_GCODE "silicon/pump/foam"   
 
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;

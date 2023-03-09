@@ -1,19 +1,9 @@
 #include "board.h"
 
-// http://www.bachinmaker.com/wikicn/doku.php?id=bachin-e3
-//  x-end   GPIO 17   x-step GPIO-12  x-dir GPIO-14  
-//  y-end   GPIO 4    y-step GPIO-26  y-dir GPIO-15
-//                    z-step GPIO-27  z-dir GPIO-33
-
-
-// Index number
 
 #define PIN_ALPHA_DIR 27 //32  
 #define PIN_ALPHA_STEP 14 //26   
 #define PIN_ALPHA_ENABLE 32
-
-// #define PIN_POSITION_TRIGGER_X  128
-// #define PIN_POSITION_TRIGGER 1
 
 #define PIN_LED_1 23
 #define PIN_LED_2 22
