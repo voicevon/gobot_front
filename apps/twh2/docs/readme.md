@@ -6,6 +6,7 @@ set FLASK_DEBUG=0      #set environment var
 
 cd gobot_front/apps/twh2 
 python -m flask --app main_wms run --host=0.0.0.0
+C:/Users/65840/AppData/Local/Microsoft/WindowsApps/python3.10.exe -m flask --app main_wms run --host=0.0.0.0
 
 
 

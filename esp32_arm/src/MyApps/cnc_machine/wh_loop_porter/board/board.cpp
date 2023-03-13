@@ -52,8 +52,10 @@ void Twh_LoopPorter_Board::__InitSteppers(){
         __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR, true, 0);   
         __stepper_alpha->setEnablePin(PIN_ALPHA_ENABLE, true);        //Low is active enable.                    
         __stepper_alpha->setAutoEnable(false);
-        __stepper_alpha->setSpeedInUs(1000);  // the parameter is us/step !!!
-        __stepper_alpha->setAcceleration(100);
+        // __stepper_alpha->setSpeedInUs(6);  // the parameter is us/step !!!
+        __stepper_alpha->setSpeedInHz( 150 * 1000 );
+        __stepper_alpha->setSpeedInHz( 1 * 1000 );
+        __stepper_alpha->setAcceleration(30 * 1000);
         // int res =  __stepper_alpha->moveTo(-1000, false);
         // Logger::Print("moveTo() returns", res);
         Logger::Info("Twh_LoopPorter_Board::Init()");
@@ -100,18 +102,20 @@ void Twh_LoopPorter_Board::TurnOn_ThisLed_Only(int led_id){
 
 void Twh_LoopPorter_Board::Test_Stepper(int loops){
     FastAccelStepper* stepper= __stepper_alpha;
-    stepper->setAcceleration(600);
-    stepper->setSpeedInHz(8000);
+    stepper->setAcceleration(3000);
+    stepper->setSpeedInHz(7*1000);
     stepper->enableOutputs();
     for (int i=0; i<loops; i++){
         Logger::Print("Test stepper loop======================================", i);
         if (stepper) {
             // 5 circles.
-            stepper->moveTo(360.0f /1.8f * 16 * 5.8 * 5, false);
+            stepper->setSpeedInHz(14*1000);
+            stepper->moveTo(5500999, false);
             while (stepper->isRunning()){
                 Logger::Print("Current position", stepper->getCurrentPosition());
                 delay(300);
             }
+        stepper->setSpeedInHz(7*1000);
             stepper->moveTo(0, false);
             while (stepper->isRunning()){
                 Logger::Print("Current position", stepper->getCurrentPosition());

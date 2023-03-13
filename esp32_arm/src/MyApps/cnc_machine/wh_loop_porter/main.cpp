@@ -75,13 +75,10 @@ void test_arm(){
 
 void setup(){
     board.Init();
-    // board.GetDisplayer()->Test(30,1);
     // PositionTrigger_Array::Instance().Test_PositionTriggers(99);
+    // CncActuator_List::Instance().GetActuator(0).test
+    board.Test_Stepper(999);
     
-
-    // test_arm();
-    // test_board();
-
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
     
     robot.Init(&board);
