@@ -53,7 +53,8 @@ void __connect_to_mqtt_broker(){
 
 
 /*
-     Will finnally invoke(callback) ExecMattCommand(payload) when got mqtt message
+    Will finnally invoke(callback) ExecMattCommand(payload) when got mqtt message
+    This is blocked connection, saying will not exit this function before mqtt is connected.
 */  
 void mono_remote_queue_bridge_via_mqtt_setup(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
     // 1. mqtt client involved

@@ -21,9 +21,9 @@ void Twh_LoopPorter_G28_Runner::SetMoveBlock_ToHome(char axis_name, MoveBlock* m
             // Logger::Print("Twh_LoopPorter_G28_Runner::SetMoveBlock_ToHome()  point", 31);
             mb->DeepReset_ToDefault();
             // Logger::Print("Twh_LoopPorter_G28_Runner::SetMoveBlock_ToHome()  point", 22);
-            alpha->TargetPosition = 99999;
+            alpha->TargetPosition = 511000;
             alpha->Speed = 900;
-            alpha->Acceleration = 0.5;
+            alpha->Acceleration = 3000;
             break;
 
         default:

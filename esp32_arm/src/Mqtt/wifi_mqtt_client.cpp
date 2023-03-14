@@ -60,13 +60,18 @@ void wifi_scan_ap(){
 }
 
 void connectToWifi() {
-    Logger::Info("[Info] Connecting to Wi-Fi...");
+    Logger::Info("wifi_mqtt_client.cpp  connectToWifi().");
     Logger::Print("wifi_ssid", WIFI_SSID);
     Logger::Print("wifi_password", WIFI_PASSWORD);
-    WiFi.mode(WIFI_STA);
+    Logger::Print("connectToWifi()  point", 1);
+    WiFi.mode(WIFI_STA);   // cause brown-out, why?
+    Logger::Print("connectToWifi()  point", 2);
     WiFi.disconnect();       //disconnect from an AP if it was previously connected     
+    Logger::Print("connectToWifi()  point", 3);
     ESP_ERROR_CHECK(esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_11B |WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N));
+    Logger::Print("connectToWifi()  point", 4);
 	WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    Logger::Print("connectToWifi()  point", 5);
     while (WiFi.status() != WL_CONNECTED) {
         Serial.print('.');
     delay(1000);

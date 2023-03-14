@@ -77,7 +77,7 @@ void setup(){
     board.Init();
     // PositionTrigger_Array::Instance().Test_PositionTriggers(99);
     // CncActuator_List::Instance().GetActuator(0).test
-    board.Test_Stepper(999);
+    // board.Test_Stepper(999);
     
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
     
@@ -88,7 +88,7 @@ void setup(){
     app.LinkRobot(&robot);
 
     mono_remote_queue_bridge_via_mqtt_setup(MQTT_TOPIC_GCODE, &mqtt_command_queue, &app); 
-
+    
     gcode_queue.AppendGcodeCommand("G28X");
     gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
     // gcode_queue.AppendGcodeCommand("G1X60");   // test digital number led.

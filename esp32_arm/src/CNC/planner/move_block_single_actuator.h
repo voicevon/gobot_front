@@ -6,7 +6,7 @@ class MoveBlock_SingleActuator{
         // EnumAxis_Inverseinematic axis;
         float TargetPosition;
         float VectorDistance;   //
-        float Speed;
-        float Acceleration;
+        float Speed;   // unit is mm/s
+        float Acceleration; // unit is mm/(s*s)
 
 };
