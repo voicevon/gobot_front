@@ -29,8 +29,12 @@ class Twh_WarehouseControlSystem():
         # when chain loop start moving, the teeth will be removed.
         self.__withdraw_request_queue = []  
 
-        self.__current_picking_packing_porter = None    
+        self.__current_picking_packing_porter = None   
+
+        # __button_pick is a green button sit on packer.
         self.__button_pick = RemoteVar_mqtt('twh/221109/packer/button/pick','idle')
+
+        # __button_pack is a blue button sit on packer.
         self.__button_pack = RemoteVar_mqtt('twh/221109/packer/button/pack','idle')
 
         self.__queue_deposit =  queue_deposit
@@ -87,16 +91,20 @@ class Twh_WarehouseControlSystem():
             # constraint:  connected_pack_box is avaliable.
             if target_tooth.packbox_id != -1:
                 if (self.__porters[target_tooth.row].state.get() == 'idle'):
+                    Logger.Info('___withdraw_teeth_queue_get_portable() ')
+                    Logger.Print('porter id,  from target_tooth.row', target_tooth.row)
+                    Logger.Print('box_number, from target_tooth.col ', target_tooth.col)
+                    Logger.Print('packbox_id', target_tooth.packbox_id)
                     return target_tooth
         return None
                 
     def PickPlace_PortPair(self) -> None:
         '''
         Only pick and place one tooth(from one of the idle row) for each running.
-        1. find an idle porter.
-        2. find tooth of order in the row.
+        1. find an idle row-porter.
+        2. find tooth from order in the row-porter.
         3. find connected shipout_box from the tooth
-        4. start move porter.
+        4. start to move the row-porter.
         '''
         # Logger.Debug("Twh_WarehouseControlSystem::PickPlace_PortPair()")
         if self.__state == 'picking_packing':
@@ -111,6 +119,7 @@ class Twh_WarehouseControlSystem():
         for porter in self.__porters:
             # Logger.Print('Twh_WarehouseControlSystem::PickPlace_PortPair()   porter.state.get() ', porter.state.get())
             if porter.target_tooth is not None:
+                # Logger.Print('Twh_WarehouseControlSystem::PickPlace_PortPair()  porter.id', porter.id)
                 if porter.state.get() == 'ready':
                     # show green led on porter, and on packer
                     Logger.Print('Twh_WarehouseControlSystem::PickPlace_PortPair()  Porter is ready. porter_id', porter.id)
@@ -122,6 +131,7 @@ class Twh_WarehouseControlSystem():
                     self.__current_picking_packing_porter = porter
                     self.__state = 'picking_packing'
                     return
+        
         # TODO:   before do below  must check there is a ready porter.
         portable_tooth =  self.___withdraw_teeth_queue_get_portable()
         if portable_tooth is None:
@@ -129,7 +139,9 @@ class Twh_WarehouseControlSystem():
 
         portable_tooth.print_out("Portable idle_porter and portable_tooth ")
         idle_porter = self.__porters[portable_tooth.row]
+        idle_porter.target_tooth = portable_tooth   # assign portable_tooth to loop-porter
         idle_porter.port_to_pick(portable_tooth.col, portable_tooth.layer)
+        idle_porter.show_layer_led()
         # self.__state = 'moving'  #???
         # print('Twh_WarehouseControlSystem::PickPlace_PortPair()  Found target_tooth ', portable_tooth.row, portable_tooth.col, portable_tooth.layer)
         self.__withdraw_request_queue.remove(portable_tooth)   # If move this line after packing,  will be takeout from the queue repeatly?
@@ -148,7 +160,10 @@ class Twh_WarehouseControlSystem():
         # Logger.Print("row_id", row_id)
         # Logger.Print("porters count", len(self.__porters))
         porter = self.__porters[row_id]
+        Logger.Info("Twh_WarehouseControlSystem.Do_deposit()")
+        Logger.Print('layer_id', layer_id)
         porter.port_to_pick(col_id, layer_id)
+        porter.show_layer_led()
 
 def WCS_Main(queue_deposit:multiprocessing.Queue):
         g_mqtt_broker_config.client_id = '20221222'

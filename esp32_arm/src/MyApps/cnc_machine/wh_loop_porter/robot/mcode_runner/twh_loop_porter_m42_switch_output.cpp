@@ -4,6 +4,6 @@
 bool Twh_LoopPorter_M42_Runner_Switch_Output::RunnerLoop(){
     // Logger::Debug("Twh_LoopPorter_M42_Runner_Switch_Output::RunnerLoop()");
     // Logger::Print("_index", _index);
-    __board->TurnOn_ThisLed_Only(_index);
+    __board->TurnOn_ThisLed_Only(_index -1);
     return true;
 }
