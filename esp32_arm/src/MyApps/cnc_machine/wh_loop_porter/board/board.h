@@ -14,17 +14,17 @@ class Twh_LoopPorter_Board: public BoardBase{
         Twh_LoopPorter_Board();
         void Init() override;
         
-        // HX711* GetHx711(){return &this->__hx711;};
         FastAccelStepper* GetStepper(){return __stepper_alpha;};
         void TurnOn_ThisLed_Only(int led_id);
 
-        // void Test_PositionTriggers(int loops);
         void Test_Stepper(int loops);
         void Test_StepperQueue(int loops);
 
         
         Hc595_Digital_number* GetDisplayer(){return &__displayer;};
         Mono_Led_GPIO* GetLed(int index){return &__leds[index];};
+
+        void TestLeds(int loops);
 
 
     protected:

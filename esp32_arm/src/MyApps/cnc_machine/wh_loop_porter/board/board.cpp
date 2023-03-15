@@ -36,6 +36,9 @@ void Twh_LoopPorter_Board::Init(){
     __leds[4].Init(4, PIN_LED_5, LOW);
     __leds[5].Init(5, PIN_LED_6, LOW);
     __leds[6].Init(6, PIN_LED_7, LOW);
+    for(int i=0; i<7; i++){
+        __leds[i].TurnOff();
+    }
 
     __InitSteppers();
     __displayer.Init(PIN_NUMBER_LED_SCLK, PIN_NUMBER_LED_DATA, PIN_NUMBER_LED_LOAD, 2);
@@ -49,9 +52,9 @@ void Twh_LoopPorter_Board::__InitSteppers(){
     __stepper_alpha = __stepper_engine.stepperConnectToPin(PIN_ALPHA_STEP);
 
     if (__stepper_alpha) {
-        __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR, true, 0);   
+        __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR, false, 0);   
         __stepper_alpha->setEnablePin(PIN_ALPHA_ENABLE, true);        //Low is active enable.                    
-        __stepper_alpha->setAutoEnable(false);
+        __stepper_alpha->setAutoEnable(true);
         // __stepper_alpha->setSpeedInUs(6);  // the parameter is us/step !!!
         __stepper_alpha->setSpeedInHz( 7 * 1000 );
         __stepper_alpha->setAcceleration(3 * 1000);
@@ -74,30 +77,18 @@ void Twh_LoopPorter_Board::TurnOn_ThisLed_Only(int led_id){
     }
 }
 
-// void Twh_LoopPorter_Board::Test_PositionTriggers(int loops){
-//     #define POSITION_TRIGGER_COUNT 1
-//     uint32_t flags = 0;
-//     uint32_t last_flags = 999;
-//     int count =0;
-//     while (count < loops){
-//         flags = 0;
-//         for (int index=0; index < POSITION_TRIGGER_COUNT; index++){
-//             if (__all_position_triggers[index].IsFired()){
-//                 flags += 1<<index;
-//             }
-//         }
-//         if (flags != last_flags){
-//             Serial.print("Trigger is channged   0:normal,   1:triggered \t\t");
-//             Serial.print("Counter= ");
-//             Serial.print(count);
-//             Serial.print("  ");
-//             Serial.println(flags, BIN);
 
-//             last_flags = flags;
-//             count++;
-//         }
-//     }
-// }
+void Twh_LoopPorter_Board::TestLeds(int loops){
+    for(int loop=0; loop<loops; loop++){
+        Logger::Debug("Testing leds");
+        Logger::Print("loop", loop);
+        for (int i=0; i<7; i++){
+            Logger::Print("index", i);
+            TurnOn_ThisLed_Only(i);
+            delay(1000);
+        }
+    }
+}
 
 void Twh_LoopPorter_Board::Test_Stepper(int loops){
     FastAccelStepper* stepper= __stepper_alpha;

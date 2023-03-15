@@ -7,9 +7,30 @@
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 
-#define MY_ROBOT_ROW_ID 1   //Range is 0,1,2,3
-#define MQTT_TOPIC_GCODE "twh/221109/r1/gcode"   
-#define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r1/state"
+
+#define MY_ROBOT_ROW_ID 0   //Range is 0,1,2,3
+
+
+#if MY_ROBOT_ROW_ID == 0
+    #define MQTT_TOPIC_GCODE "twh/221109/r0/gcode"   
+    #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r0/state"
+#endif
+
+#if MY_ROBOT_ROW_ID == 1
+    #define MQTT_TOPIC_GCODE "twh/221109/r1/gcode"   
+    #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r1/state"
+#endif
+
+#if MY_ROBOT_ROW_ID == 2
+    #define MQTT_TOPIC_GCODE "twh/221109/r2/gcode"   
+    #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r2/state"
+#endif
+
+#if MY_ROBOT_ROW_ID == 3
+    #define MQTT_TOPIC_GCODE "twh/221109/r3/gcode"   
+    #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r3/state"
+#endif
+
 
 GcodeQueue gcode_queue;
 MessageQueue mqtt_command_queue;
@@ -75,6 +96,7 @@ void test_arm(){
 
 void setup(){
     board.Init();
+    // board.TestLeds(200);
     // PositionTrigger_Array::Instance().Test_PositionTriggers(99);
     // CncActuator_List::Instance().GetActuator(0).test
     // board.Test_Stepper(999);

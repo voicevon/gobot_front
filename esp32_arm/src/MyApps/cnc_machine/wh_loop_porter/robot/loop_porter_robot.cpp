@@ -10,9 +10,9 @@ void Twh_LoopPorter_Robot::MySpinOnce(){
     FKPosition_XYZRPW current_fk;
     __arm_solution.GetRealTimePosition(&current_fk);
 
-    if (last_cnc_position != (int)(current_fk.X)){
+    if (last_cnc_position != (int)(current_fk.X +0.5)){
         Logger::Print("Twh_LoopPorter_Robot::MySpinOnce()  cnc_position", current_fk.X);
-        last_cnc_position = current_fk.X;
+        last_cnc_position = current_fk.X + 0.5;
         __board->GetDisplayer()->ShowNumber(last_cnc_position);
     }
 

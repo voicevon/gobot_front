@@ -1,7 +1,7 @@
 #include "g28_Runner.h"
 #include "circle_loop_arm_solution.h"
 
-#define HOME_POSITION_FK_ROLL 12.345
+#define HOME_POSITION_FK_ROLL 29.75
 
 void Twh_LoopPorter_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
     Logger::Info("Twh_LoopPorter_G28_Runner::Init() Hoiming_config");

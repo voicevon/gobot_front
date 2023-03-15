@@ -55,3 +55,7 @@ void CncActuatorFastStepper::SetCurrentPositionAs(float new_position){
 float CncActuatorFastStepper::GetCurrentPosition(){
     return _stepper->getCurrentPosition();
 }
+
+// void CncActuatorFastStepper::TurnToSleep_WhenIdle(){
+//     // _stepper->setAutoEnable(true);
+// }
