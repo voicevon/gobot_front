@@ -18,9 +18,10 @@ Twh_Packer_Board::Twh_Packer_Board(){
 
 
 void Twh_Packer_Board::Init(){
-    __leds.begin();
-    __leds.show();
-    __leds.clear();
+    
+    // __leds.begin();
+    // __leds.show();
+    // __leds.clear();
 }
 
 // 0= OFF, 1= ON, 2= FAST_FLASH, 3= SLOW_FLASH,  4= IN_TURN
