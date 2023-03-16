@@ -2,7 +2,7 @@
 
 #include "MyLibs/board/board_base.h"
 #include "MyLibs/component/button_gpio.h"
-#include <Adafruit_NeoPixel.h>
+#include "MyLibs/component/display/ws2812b/ws2812b.h"
 
 #define WS2812B_COUNT 24
 #define PIN_NEO_PIXEL  22   // Arduino pin that connects to NeoPixel
@@ -20,6 +20,8 @@ class Twh_Packer_Board: public BoardBase{
         
         Button_Gpio* GetButton_picked(){return &__picked_button;};
         Button_Gpio* GetButton_Packed(){return &__packed_button;};
+        WS2812B* GetLeds(){return & __leds;};
+        // Adafruit_NeoPixel* GetLeds(){return &__leds;};
 
         void TestLed(int test_loop_count,int test_method, int red, int green, int blue);
         void TestButton(int test_loop_count);
@@ -29,8 +31,8 @@ class Twh_Packer_Board: public BoardBase{
     private:
         Button_Gpio __picked_button = Button_Gpio(PIN_GPIO_BUTTON_PICKED);
         Button_Gpio __packed_button = Button_Gpio(PIN_GPIO_BUTTON_PACKED);
-
-        Adafruit_NeoPixel __leds = Adafruit_NeoPixel(WS2812B_COUNT, PIN_NEO_PIXEL, NEO_GRB + NEO_KHZ800);
+        WS2812B __leds = WS2812B();
+        // Adafruit_NeoPixel __leds = Adafruit_NeoPixel(WS2812B_COUNT, PIN_NEO_PIXEL, NEO_GRB + NEO_KHZ800);
         void __test_hardware_SetLed(int position_index, int mode, int red, int green, int blue);  
         void __SetLeds();
         int __led_red_index = -1;

@@ -10,6 +10,7 @@ void Button_Gpio::Init_Remotable(const char* mqtt_topic){
     _mqtt_topic =  mqtt_topic;
 }
 
+// check button state, might publish mqtt message when its state is changed.
 void Button_Gpio::SpinOnce(){
     bool is_pressed = ! digitalRead(__pin_number);
     if (is_pressed != __last_state_is_pressed){

@@ -51,6 +51,7 @@ void setup(){
     // test_robot();
     board.GetButton_picked()->Init_Remotable("twh/221109/packer/button/pick");
     board.GetButton_Packed()->Init_Remotable("twh/221109/packer/button/pack");
+    board.GetLeds()->_InitRemotable
     Logger::Info ("Teeth Warehouse   setup() is done. ");
 }
 
@@ -66,8 +67,8 @@ void loop(){
     mono_remote_queue_bridge_spin_once();
     // Logger::Print("Arduino loop() point ", 4);
 
-   board.GetButton_Packed()->SpinOnce();
-   board.GetButton_picked()->SpinOnce();
+    board.GetButton_Packed()->SpinOnce();
+    board.GetButton_picked()->SpinOnce();
 
 }
 
