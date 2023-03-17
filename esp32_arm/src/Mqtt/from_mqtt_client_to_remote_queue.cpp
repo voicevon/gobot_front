@@ -1,8 +1,4 @@
 
-// #include "all_applications.h"
-// #ifdef USING_WIFI_MQTT
-
-
 //  TODO: Merge or reconstruct  this file and wifi_mqtt_client.cpp
 //  This is a big improvement.
 
@@ -11,7 +7,7 @@
 #include <HardwareSerial.h>
 #include "Mqtt/remote_queue_bridge_mqtt.h"
 #include "Mqtt/mqtt_message_consumer.h"
-
+#include "mqtt_subscriber_manager.h"
 
 RemoteQueueBridge_mqtt mono_remote_queue_bridge;
 
@@ -39,7 +35,9 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
     }
 
     Serial.println("[Info] on_MqttMessage() Dispatch message by topic,  Putting remote message to local consumer." );
-    mono_remote_queue_bridge.OnReceived((const char*)payload, len);
+    MqttSubscriberManager::GetInstance().on_mqtt_client_received_message(topic, payload, len);
+    
+    // mono_remote_queue_bridge.onMessage((const char*)payload, len);
     Serial.println("[Info] on_MqttMessage()  Appened to mqtt_consumer.");
 }
 
@@ -69,8 +67,10 @@ void mono_remote_queue_bridge_via_mqtt_setup(const char* topic, MessageQueue* lo
     // 3. connect mqttclient and message receiver via subscrbe
     // Important: During this line, after subsribe_mqtt() is called, will invoke on_mqtt_message immediately.
     //            This is happened because on_mqtt_message is in other thread.
+    // mono_remote_queue_bridge.Init(&g_mqttClient, topic, topic_feedback.c_str());
+    MqttSubscriberManager::GetInstance().AddSubscriber(topic, &mono_remote_queue_bridge);
     String topic_feedback = String(topic) + "/fb";
-    mono_remote_queue_bridge.Init(&g_mqttClient, topic, topic_feedback.c_str());
+    mono_remote_queue_bridge.Init(topic_feedback.c_str());
 
     //TODO:  re-subscibe the topic , after disconnected -->  connected.  ? is this necessary?
 

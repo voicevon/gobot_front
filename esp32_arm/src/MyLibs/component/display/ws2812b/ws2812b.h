@@ -1,17 +1,30 @@
 #pragma once
 
-#include "MyLibs/component/remote_base/remotable_slave_base.h"
 #include <Adafruit_NeoPixel.h>
+#include "Mqtt/mqtt_subscriber_manager.h"
+
+#define WS2812B_COUNT 24
 
 
-class WS2812B: public RemoteabeSlaveBase{
+class WS2812B: public MqttSubscriberBase{
     public:
         void Init();
-        void Init_Remotable(const char* mqtt_topic);
+        // void Init_Remotable(const char* mqtt_topic);
+        // void onMqttMessage(const char* payload);
 
+        void __SetLeds();
+        void SetLed_Red(int position_index); 
+        void SetLed_Green(int position_index); 
+        void SetLed_Blue(int position_index);  
+
+        void TestLed(int test_loop_count,int test_method, int red, int green, int blue);
 
     private:
+        void onMessage(const char* payload, uint16_t payload_len) override;
         Adafruit_NeoPixel __leds;
-
+        int __led_red_index = -1;
+        int __led_green_index = -1;
+        int __led_blue_index = -1;
+        void __test_hardware_SetLed(int position_index, int mode, int red, int green, int blue);  
 
 };

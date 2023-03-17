@@ -1,6 +1,7 @@
 #include "button_gpio.h"
 #include "Arduino.h"
 #include "MyLibs/basic/logger.h"
+#include "Mqtt/wifi_mqtt_client.h"
 
 Button_Gpio::Button_Gpio(int gpio_id){
     __pin_number = gpio_id;
@@ -22,9 +23,11 @@ void Button_Gpio::SpinOnce(){
                 if(_mqtt_topic != nullptr){
                     Logger::Print("Button_Gpio::SpinOnce()  is_pressed", is_pressed);
                     if(is_pressed) {
-                        _PublishValue(_PAYLOAD_STRING_ON.c_str());
+                        g_mqttClient.publish(_mqtt_topic, 2, true,_PAYLOAD_STRING_ON.c_str());
+                        // _PublishValue(_PAYLOAD_STRING_ON.c_str());
                     }else{
-                        _PublishValue(_PAYLOAD_STRING_OFF.c_str());
+                        g_mqttClient.publish(_mqtt_topic, 2, true,_PAYLOAD_STRING_OFF.c_str());
+                        // _PublishValue(_PAYLOAD_STRING_OFF.c_str());
                     }
                 }
             }

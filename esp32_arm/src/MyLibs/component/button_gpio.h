@@ -1,9 +1,10 @@
 #pragma once
 
-#include "remote_base/remotable_master_base.h"
+// #include "remote_base/remotable_master_base.h"
 #include "WString.h"
 
-class Button_Gpio: public RemoteVar_Masterbase{
+// class Button_Gpio: public RemoteVar_Masterbase{
+class Button_Gpio{
     public:
         Button_Gpio(int gpio_id);
         void Init_Remotable(const char* mqtt_topic);
@@ -17,5 +18,8 @@ class Button_Gpio: public RemoteVar_Masterbase{
         bool __last_state_is_pressed = false;
         void* __callback = nullptr;   // TODO:  callback()  will return if continue to remote sync.
 
+        const char* _mqtt_topic = nullptr;
+        String _PAYLOAD_STRING_ON = "ON";   //TODO:   be static.
+        String _PAYLOAD_STRING_OFF = "OFF";
 
 };

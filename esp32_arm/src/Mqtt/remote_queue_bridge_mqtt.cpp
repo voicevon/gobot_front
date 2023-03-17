@@ -4,23 +4,25 @@ void RemoteQueueBridge_mqtt::LinkLocalCommandQueue_AsMqttMessageProducer(Message
     this->__localMQ = loacalMQ;
 }
 
-void RemoteQueueBridge_mqtt::Init(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic){
-    this->__mqttClient = mqttClient;
-    mqttClient->subscribe(main_topic, 2);
+// void RemoteQueueBridge_mqtt::Init(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic){
+void RemoteQueueBridge_mqtt::Init(const char* feedback_topic){
+    // this->__mqttClient = mqttClient;
+    // mqttClient->subscribe(main_topic, 2);
     __feedback_topic = String(feedback_topic);
 
     bool debug=true;
     if(debug){
         Logger::Debug("RemoteQueueBridge_mqtt::SubscribeMqtt() is done");
-        Serial.print("Subsribe_topic= ");
-        Serial.print(main_topic);
+        // Serial.print("Subsribe_topic= ");
+        // Serial.print(main_topic);
         Serial.print(" feedback_topic= ");
         Serial.println(feedback_topic);
     }
 }
 
 
-void RemoteQueueBridge_mqtt::OnReceived(const char* payload, int length){
+// void RemoteQueueBridge_mqtt::OnReceived(const char* payload, int length){
+void RemoteQueueBridge_mqtt::onMessage(const char* payload, uint16_t length){
     // Put message to local MQ   
     // TODO:: Copy char array simpler way.
     Logger::Info("RemoteQueueBridge_mqtt::OnReceived() Starting a huge process...");
@@ -52,7 +54,7 @@ void RemoteQueueBridge_mqtt::OnReceived(const char* payload, int length){
     // int payload_id = 123;   // union structure ?
     // payload = (const char*)(payload_id);  //?? ender of string ??
     // String newest_payload_id = String(__newest_payload_id);
-    this->__mqttClient->publish(this->__feedback_topic.c_str(), 2, true, payload, length);
+    g_mqttClient.publish(this->__feedback_topic.c_str(), 2, true, payload, length);
     // Serial.println("[Info] RemoteQueueBridge_mqtt::OnReceived() sent feedback.");
 
 }
@@ -67,7 +69,7 @@ void RemoteQueueBridge_mqtt::SpinOnce(){
             // the local mq is not full right now. publish a feedback.
             Serial.println("\n                  RemoteQueueBridge_mqtt::SpinOnce() local mq got a free room");
             MessageQueue::SingleMessage* pMessage = this->__localMQ->GetHeadMessage();
-            this->__mqttClient->publish(__feedback_topic.c_str(), 2, true, pMessage->payload, pMessage->length);
+            g_mqttClient.publish(__feedback_topic.c_str(), 2, true, pMessage->payload, pMessage->length);
             this->__local_mq_is_full = false;
         }
     }
