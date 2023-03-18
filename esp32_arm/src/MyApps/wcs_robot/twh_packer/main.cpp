@@ -23,8 +23,6 @@ void setup(){
     // test_board();
 
     setup_wifi_mqtt();
-    Logger::Info("setup()  wifi is connected");
-    Logger::Print("setup()  mqtt is connected", 1);
 
     board.GetButton_picked()->SetMqttPublishTopic("twh/221109/packer/button/pick");
     board.GetButton_Packed()->SetMqttPublishTopic("twh/221109/packer/button/pack");

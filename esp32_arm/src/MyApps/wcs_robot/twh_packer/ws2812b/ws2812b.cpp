@@ -11,9 +11,28 @@ void WS2812B::Link_Adrafruit_NeoPixel(Adafruit_NeoPixel* neo_pixel){
 }
 
 void WS2812B::onMessage(const char* payload, uint16_t payload_len){
-    __led_green_index = atoi(payload);
-    Logger::Debug("WS2812B::onMessage()");
-    Logger::Print("payload", payload);
+    // Logger::Debug("WS2812B::onMessage()");
+    // Logger::Print("payload", payload);
+    int led_index = atoi(payload);
+    int color_index = led_index / 12;
+    __led_red_index = 111;
+    __led_green_index = 111;
+    __led_blue_index = 111;
+    switch (color_index){
+        case 0:
+            __led_red_index = led_index % 12;
+            break;
+        case 1:
+            __led_green_index = led_index % 12;
+            break;
+        case 2:
+            __led_blue_index = led_index % 12;
+            break;
+        default:
+            Logger::Warn(" WS2812B::onMessage()");
+            Logger::Print("payload", payload);
+            break;
+    }
     __SetLeds();
 }
 

@@ -2,7 +2,7 @@
 
 #include "MyLibs/board/board_base.h"
 #include "MyLibs/component/button_gpio.h"
-#include "MyLibs/component/display/ws2812b/ws2812b.h"
+#include "../ws2812b/ws2812b.h"
 
 #define PIN_GPIO_BUTTON_PICKED 32   // green
 #define PIN_GPIO_BUTTON_PACKED 33    // blue

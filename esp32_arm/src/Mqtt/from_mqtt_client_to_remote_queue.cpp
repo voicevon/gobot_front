@@ -11,44 +11,16 @@
 
 RemoteQueueBridge_mqtt mono_remote_queue_bridge;
 
-//Please Notice: This function will be invoked in slave thread.
-void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-    bool debug = false;
-    if(debug){
-        Serial.println("on_MqttMessage()   saying received.");
-        Serial.print("  topic: ");
-        Serial.println(topic);
-        Serial.print("  paylod: ");
-        Serial.println(payload);
-        Serial.print("  qos: ");
-        Serial.println(properties.qos);
-        Serial.print("  dup: ");
-        Serial.println(properties.dup);
-        Serial.print("  retain: ");
-        Serial.println(properties.retain);
-        Serial.print("  len: ");
-        Serial.println(len);
-        Serial.print("  index: ");
-        Serial.println(index);
-        Serial.print("  total: ");
-        Serial.println(total);
-    }
-
-    Serial.println("[Info] on_MqttMessage() Dispatch message by topic,  Putting remote message to local consumer." );
-    MqttSubscriberManager::GetInstance().on_mqtt_client_received_message(topic, payload, len);
-    
-    // mono_remote_queue_bridge.onMessage((const char*)payload, len);
-    Serial.println("[Info] on_MqttMessage()  Appened to mqtt_consumer.");
-}
 
 
-void __connect_to_mqtt_broker(){
-    setup_wifi_mqtt();
-    while (! mqtt_is_connected){
-        delay(100);
-        Serial.print(".");
-    }
-}
+
+// void __connect_to_mqtt_broker(){
+//     setup_wifi_mqtt();
+//     while (! mqtt_is_connected){
+//         delay(100);
+//         Serial.print(".");
+//     }
+// }
 
 
 /*
@@ -57,8 +29,8 @@ void __connect_to_mqtt_broker(){
 */  
 void mono_remote_queue_bridge_via_mqtt_setup(const char* topic, MessageQueue* local_message_queue, MqttMessageConsumer* mqtt_consumer){
     // 1. mqtt client involved
-    __connect_to_mqtt_broker();
-    g_mqttClient.onMessage(on_MqttMessage);
+    // __connect_to_mqtt_broker();
+    // g_mqttClient.onMessage(on_MqttMessage);
 
     // 2. message consumer and producer involved.
     mqtt_consumer->LinkLocalMq_AsMqttMessageConsumer(local_message_queue);
