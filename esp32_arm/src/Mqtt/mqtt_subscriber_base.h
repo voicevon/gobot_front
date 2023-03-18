@@ -8,7 +8,9 @@ class MqttSubscriberBase{
         virtual void onMessage(const char* payload, uint16_t payload_len);
         void SetMqttTopic(const char* mqtt_topic);
         bool IsTopicEqualTo(const char* mqtt_topic);
+        const char* GetMqttTopic(){return _mqtt_topic;};
 
+        
     protected:
         const char* _mqtt_topic;
 };

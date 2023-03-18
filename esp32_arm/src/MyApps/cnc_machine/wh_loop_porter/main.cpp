@@ -113,8 +113,6 @@ void setup(){
     
     gcode_queue.AppendGcodeCommand("G28X");
     gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
-    // gcode_queue.AppendGcodeCommand("G1X60");   // test digital number led.
-    // test_robot();
     Logger::Info ("App::loop_porter    setup() is done. ");
     
 }

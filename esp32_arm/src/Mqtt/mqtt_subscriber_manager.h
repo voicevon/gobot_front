@@ -28,6 +28,6 @@ class MqttSubscriberManager{
 
     private:
         MqttSubscriberBase* __all_subscribers[20];
-        // MqttSubscriberConfig __all_subscribers[20];
+        int __subscriber_count = 0;
 
 };
