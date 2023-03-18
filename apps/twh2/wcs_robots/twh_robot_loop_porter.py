@@ -42,3 +42,10 @@ class TwhRobot_LoopPorter():
         mcode ='M999'
         self.gcode_sender.append_gmcode_to_queue(mcode)
 
+    def turn_off_leds(self):
+        mcode = 'M42P99S1'
+        self.gcode_sender.append_gmcode_to_queue(mcode)
+
+        mcode ='M999'
+        self.gcode_sender.append_gmcode_to_queue(mcode)  
+

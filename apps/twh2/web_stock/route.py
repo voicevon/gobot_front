@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
 from web_stock.db_api import db_Stock, db_Shipout, db_Withdraw, db_Deposit_history,db_StockRule
 from bolt_nut import get_row_from_tooth_location
-from wcs_robots.twh_wcs import  wcs_queue_deposit, wcs_queue_takeout
+from wcs_robots.twh_wcs import  wcs_queue_web_request
 from logger import Logger
 from datetime import datetime
 
@@ -125,7 +125,8 @@ def deposit_move():
             user_request['origin_quantity'] = int(request_form.get('origin_quantity'))
             user_request['deposit_quantity'] = int(request_form.get('deposit_quantity'))
             user_request['doc_id'] = int(request_form.get('doc_id'))
-        wcs_queue_deposit.put(user_request)
+        user_request['message_type'] = 'deposit_begin'
+        wcs_queue_web_request.put(user_request)
         print("robot will move box to somewhere for operator........ ")
         return render_template("deposit_move.html",user_request = user_request)
 
@@ -140,6 +141,8 @@ def deposit_end():
         user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         # Logger.Print('@web_stock.route.deposit_end() ', user_request)
         db_Deposit_history.append_deposit(user_request)
+        user_request['message_type'] = 'deposit_end'
+        wcs_queue_web_request.put(user_request)
         return render_template("deposit_end.html")
 
 @web_stock.route('/withdraw')

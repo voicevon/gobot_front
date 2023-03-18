@@ -146,32 +146,42 @@ class Twh_WarehouseControlSystem():
         # print('Twh_WarehouseControlSystem::PickPlace_PortPair()  Found target_tooth ', portable_tooth.row, portable_tooth.col, portable_tooth.layer)
         self.__withdraw_request_queue.remove(portable_tooth)   # If move this line after packing,  will be takeout from the queue repeatly?
 
-    def Do_deposit(self):
-        if self.__queue_deposit.empty():
-            return
+    def Do_deposit_begin(self, new_deposit_request):
 
-        new_deposit_request = self.__queue_deposit.get()
         # Logger.Info("Twh_WarehouseControlSystem::Do_deposit()")
         # Logger.Print("new_deposit_request", new_deposit_request)
-        # porter will move to col-position
+        # the loop-porter will move to col-position
         row_id = new_deposit_request['row']
         col_id = new_deposit_request['col']
         layer_id = new_deposit_request['layer']
         # Logger.Print("row_id", row_id)
         # Logger.Print("porters count", len(self.__porters))
         porter = self.__porters[row_id]
+        self.__depositing_porter = porter
         Logger.Info("Twh_WarehouseControlSystem.Do_deposit()")
         Logger.Print('layer_id', layer_id)
         porter.port_to_pick(col_id, layer_id)
         porter.show_layer_led()
 
-def WCS_Main(queue_deposit:multiprocessing.Queue):
+    def Do_deposit_end(self):
+        self.__depositing_porter.turn_off_leds()
+        
+
+def WCS_Main(queue_web_request:multiprocessing.Queue):
         g_mqtt_broker_config.client_id = '20221222'
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
-        wcs = Twh_WarehouseControlSystem(queue_deposit)
+        wcs = Twh_WarehouseControlSystem(queue_web_request)
         while True:
+            if queue_web_request.empty():
+                pass
+            else:  
+                new_request = queue_web_request.get()
+                if new_request['message_type'] == 'deposit_begin':
+                    wcs.Do_deposit_begin(new_request)
+                elif new_request['message_type'] == 'deposit_end':
+                    wcs.Do_deposit_end()
+
             # self.CheckDatabase_WithdrawQueue()
-            wcs.Do_deposit()
             # Deal withdraw
             wcs.Assign_Packbox_to_Order()
             wcs.PickPlace_PortPair()
@@ -179,11 +189,11 @@ def WCS_Main(queue_deposit:multiprocessing.Queue):
             gcode_senders_spin_once()
             time.sleep(0.5)
 
-wcs_queue_deposit = multiprocessing.Queue()
-wcs_queue_takeout = multiprocessing.Queue()
+wcs_queue_web_request = multiprocessing.Queue()
+# wcs_queue_takeout = multiprocessing.Queue()
 
 def Start_WCS_Process():
-    p = multiprocessing.Process(target=WCS_Main, args=(wcs_queue_deposit, ))
+    p = multiprocessing.Process(target=WCS_Main, args=(wcs_queue_web_request, ))
     p.start() 
     Logger.Info('WCS is running on new process.....')
 
