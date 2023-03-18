@@ -66,7 +66,7 @@ class Twh_WarehouseControlSystem():
             return
 
         # 3. copy teeth in this order to wcs buffer
-        # Logger.Debug('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()  Start copy.')
+        Logger.Debug('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()  Start copy.')
         doc_ids = []
         for order_item in order_items:
             # Logger.Print('Assign_Packbox_to_Order()  \n  ', order_item)
@@ -172,6 +172,7 @@ def WCS_Main(queue_web_request:multiprocessing.Queue):
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
         wcs = Twh_WarehouseControlSystem(queue_web_request)
         while True:
+            # deposit_begin,  deposit_end,  is from message_queue.
             if queue_web_request.empty():
                 pass
             else:  
@@ -181,8 +182,7 @@ def WCS_Main(queue_web_request:multiprocessing.Queue):
                 elif new_request['message_type'] == 'deposit_end':
                     wcs.Do_deposit_end()
 
-            # self.CheckDatabase_WithdrawQueue()
-            # Deal withdraw
+            # Withdraw request is from database.
             wcs.Assign_Packbox_to_Order()
             wcs.PickPlace_PortPair()
             # communicate gcodes sender
