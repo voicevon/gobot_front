@@ -16,6 +16,8 @@ void MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char* p
 void MqttSubscriberManager::AddSubscriber(const char* mqtt_topic, MqttSubscriberBase* subscriber){
     __all_subscribers[__subscriber_count] = subscriber;
     subscriber->SetMqttTopic(mqtt_topic);
+    g_mqttClient.subscribe(mqtt_topic, 2);
+
     __subscriber_count++;
     if (__subscriber_count >=20){
         Logger::Warn(" MqttSubscriberManager::AddSubscriber   will overflow if put another subscriber");

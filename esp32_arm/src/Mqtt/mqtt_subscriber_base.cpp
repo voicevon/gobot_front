@@ -15,5 +15,4 @@ bool MqttSubscriberBase::IsTopicEqualTo(const char* mqtt_topic){
 
 void MqttSubscriberBase::SetMqttTopic(const char* mqtt_topic){
     _mqtt_topic = mqtt_topic;
-    g_mqttClient.subscribe(mqtt_topic, 2);
 }

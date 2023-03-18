@@ -8,10 +8,7 @@
 
 class WS2812B: public MqttSubscriberBase{
     public:
-        void Init();
-        // void Init_Remotable(const char* mqtt_topic);
-        // void onMqttMessage(const char* payload);
-
+        void Link_Adrafruit_NeoPixel(Adafruit_NeoPixel* neo_pixel) ;
         void __SetLeds();
         void SetLed_Red(int position_index); 
         void SetLed_Green(int position_index); 
@@ -21,10 +18,11 @@ class WS2812B: public MqttSubscriberBase{
 
     private:
         void onMessage(const char* payload, uint16_t payload_len) override;
-        Adafruit_NeoPixel __leds;
+        Adafruit_NeoPixel* __neo_pixel;
         int __led_red_index = -1;
         int __led_green_index = -1;
         int __led_blue_index = -1;
+        
         void __test_hardware_SetLed(int position_index, int mode, int red, int green, int blue);  
 
 };

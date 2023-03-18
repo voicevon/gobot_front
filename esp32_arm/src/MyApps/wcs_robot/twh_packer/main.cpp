@@ -12,26 +12,25 @@
 Twh_Packer_Board board;
 
 void test_board(){
-    #define BRIGHTNESS 11
-    // board.TestLed(0, 1, 0, 0, 0);
-    // board.TestLed(0, 2, 0, BRIGHTNESS, 0);
-    // board.TestLed(0, 3, 0, 0, BRIGHTNESS);
-    board.TestButton(0);
+    #define TESTING_BRIGHTNESS 11
+    board.GetWs2812B()->TestLed(99, 1, 0, 0, TESTING_BRIGHTNESS);
     Serial.println("[Info] test_board() is done.");
 }
 
 
 void setup(){
     board.Init();
-    test_board();
+    // test_board();
 
     setup_wifi_mqtt();
+    Logger::Info("setup()  wifi is connected");
+    Logger::Print("setup()  mqtt is connected", 1);
 
     board.GetButton_picked()->SetMqttPublishTopic("twh/221109/packer/button/pick");
     board.GetButton_Packed()->SetMqttPublishTopic("twh/221109/packer/button/pack");
     
-    MqttSubscriberManager::GetInstance().AddSubscriber("twh/221109/packer/led", board.GetLeds());
-    Logger::Info ("Teeth Warehouse   setup() is done. ");
+    MqttSubscriberManager::GetInstance().AddSubscriber("twh/221109/packer/led", board.GetWs2812B());
+    Logger::Info ("Twh Packer setup() is done. ");
 }
 
 

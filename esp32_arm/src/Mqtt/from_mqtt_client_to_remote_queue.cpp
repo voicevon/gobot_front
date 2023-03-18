@@ -41,6 +41,7 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
     Serial.println("[Info] on_MqttMessage()  Appened to mqtt_consumer.");
 }
 
+
 void __connect_to_mqtt_broker(){
     setup_wifi_mqtt();
     while (! mqtt_is_connected){

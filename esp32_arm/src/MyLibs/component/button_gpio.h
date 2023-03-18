@@ -3,11 +3,9 @@
 #include "WString.h"
 #include "Mqtt/mqtt_publisher_base.h"
 
-// class Button_Gpio: public RemoteVar_Masterbase{
 class Button_Gpio:  public MqttPublisherBase {
     public:
-        Button_Gpio(int gpio_id);
-        // void Init_Remotable(const char* mqtt_topic);
+        Button_Gpio(int gpio_pin_number);
         bool onChanged(bool is_pressed); // {__callback = callback;};  
         void SpinOnce();
         bool IsPressed();

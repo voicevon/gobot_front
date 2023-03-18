@@ -1,22 +1,23 @@
 #include "ws2812b.h"
-#define BRIGHT_VALUE 11  // TODO:  rename to BRIGHTNESS
+#define BRIGHT_VALUE 88  // TODO:  rename to BRIGHTNESS
 
 
-void WS2812B::Init(){
-    __leds.begin();
-    __leds.show();
-    __leds.clear();
+void WS2812B::Link_Adrafruit_NeoPixel(Adafruit_NeoPixel* neo_pixel){
+        // Adafruit_NeoPixel __leds = Adafruit_NeoPixel(WS2812B_COUNT, PIN_NEO_PIXEL, NEO_GRB + NEO_KHZ800);
+    __neo_pixel = neo_pixel;
+    __neo_pixel->begin();
+    __neo_pixel->show();
+    __neo_pixel->clear();
 }
 
 void WS2812B::onMessage(const char* payload, uint16_t payload_len){
-    
+    __led_green_index = atoi(payload);
+    Logger::Debug("WS2812B::onMessage()");
+    Logger::Print("payload", payload);
+    __SetLeds();
 }
 
 
-// void WS2812B::Init_Remotable(const char* mqtt_topic){
-//     _mqtt_topic =  mqtt_topic;
-//     _mqtt
-// }
 
 void WS2812B::__SetLeds(){
     int red, green, blue;
@@ -25,10 +26,10 @@ void WS2812B::__SetLeds(){
         if (__led_red_index == i) red = BRIGHT_VALUE;
         if (__led_green_index == i) green = BRIGHT_VALUE;
         if (__led_blue_index == i) blue = BRIGHT_VALUE;
-        __leds.setPixelColor(2 * i, red, green, blue);
-        __leds.setPixelColor(2 * i+1, red, green, blue);
+        __neo_pixel->setPixelColor(2 * i, red, green, blue);
+        __neo_pixel->setPixelColor(2 * i+1, red, green, blue);
     }
-    __leds.show();
+    __neo_pixel->show();
 }
 
 
@@ -54,17 +55,17 @@ void WS2812B::TestLed(int test_loop_count,int test_method, int red, int green, i
             case 1:
                 for (int i=0; i<WS2812B_COUNT; i++){
                     Logger::Print("index",i);
-                    __leds.clear();
-                    __leds.setPixelColor(i, 1, red, green, blue);
-                    __leds.show();
+                    __neo_pixel->clear();
+                    __neo_pixel->setPixelColor(i, red, green, blue);
+                    __neo_pixel->show();
                     delay(1000);
-                    __leds.clear();
-                    __leds.setPixelColor(i, 1, red, green, blue);
-                    __leds.show();
+                    __neo_pixel->clear();
+                    __neo_pixel->setPixelColor(i, red, green, blue);
+                    __neo_pixel->show();
                     delay(1000);
-                    __leds.clear();
-                    __leds.setPixelColor(i, 1, red, green, blue);
-                    __leds.show();
+                    __neo_pixel->clear();
+                    __neo_pixel->setPixelColor(i, red, green, blue);
+                    __neo_pixel->show();
                     delay(1000);
                 }
                 break;
@@ -92,7 +93,7 @@ void WS2812B::TestLed(int test_loop_count,int test_method, int red, int green, i
 void WS2812B::__test_hardware_SetLed(int position_index, int mode, int red, int green, int blue) {
     // __leds.clear();
     if (mode ==1){   // TODO: remove arg:  mode
-        __leds.setPixelColor(2 * position_index, red, green, blue);
-        __leds.setPixelColor(2 * position_index+1, red, green, blue);
+        __neo_pixel->setPixelColor(2 * position_index, red, green, blue);
+        __neo_pixel->setPixelColor(2 * position_index+1, red, green, blue);
     }
 }

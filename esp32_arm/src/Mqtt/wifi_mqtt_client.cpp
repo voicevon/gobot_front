@@ -214,6 +214,7 @@ void onMqttPublish(uint16_t packetId) {
 	}
 }
 
+
 void setup_wifi_mqtt() {
     Serial.println("\n[Info] IoT/wifi_mqtt_client.cpp   setup_wifi_mqtt()  is entering");
     Serial.println();
@@ -235,6 +236,10 @@ void setup_wifi_mqtt() {
 
     connectToWifi();
     // xTimerStart(wifiReconnectTimer, 0);
+    while (! g_mqttClient.connected()){
+        delay(1000);
+        Serial.print(". ");
+    }
 }
 
 // #endif
