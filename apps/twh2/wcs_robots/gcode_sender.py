@@ -40,14 +40,9 @@ class GcodeSender():
         tx_message_in_queue = VonMessage(self.__next_message_id, gcode)
         self.__next_message_id += 1
         self.__queue.put(tx_message_in_queue)
+        # Logger.Print('point', 99)
 
 
-    # def append_command_to_app(self,command:str):
-    #     payload = {}
-    #     payload['id'] = self.message_id
-    #     payload['cmd'] = command
-    #     self.queue.put(payload)
-    #     self.message_id += 1
 
     def spin_once(self):
         if self.__queue.empty():

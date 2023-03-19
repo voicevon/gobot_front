@@ -23,13 +23,6 @@ def get_row_from_tooth_location(location_string:str) -> int:
 
 
 class PickingPacking_Tooth():
-    # def __init__(self, order_id:int, shipoutbox_id:int, row:int, col:int, layer:int) -> None:
-        # self.order_id = order_id
-        # self.shipoutbox_id = shipoutbox_id
-        # self.row =  row
-        # self.col = col
-        # self.layer = layer
-
     def __init__(self, dbtable_withdraw_queue) -> None:
         if dbtable_withdraw_queue is not None:
             self.order_id = dbtable_withdraw_queue['order_id']
@@ -37,6 +30,17 @@ class PickingPacking_Tooth():
             self.row =  dbtable_withdraw_queue['row']
             self.col = dbtable_withdraw_queue['col']
             self.layer = dbtable_withdraw_queue['layer']
+            self.user_id = dbtable_withdraw_queue['user_id']['user_id']
+
+    def ToJson(self):
+        json = {}
+        json['order_id'] = self.order_id
+        json['packbox_id'] = self.packbox_id
+        json['row'] = self.row
+        json['col'] = self.col
+        json['layer'] = self.layer
+        json['user_id'] = self.user_id
+
 
     def print_out(self, title):
         Logger.Debug(title)

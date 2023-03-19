@@ -1,25 +1,13 @@
 from logger import Logger
-# from wcs_robots.gcode_sender import GcodeSender, all_gcode_senders
 from von.mqtt_agent import g_mqtt
 
-class TwhRobot_PackBox():
+class TwhRobot_PackingCell():
 
     def __init__(self, id:int) -> None:
         #  'idle', 'feeding', 'fullfilled'
         self.state = 'idle' 
         self.id = id
         self.order_id = None
-
-    def ToFeedIn(self, is_last_tooth: bool) -> None:
-        if is_last_tooth:
-            self.state = 'fullfilled'
-        else:
-            self.state = 'feeding'
-        # g_mqtt.publish('topic_', self.id, 'green')
-    
-    def ToTakeout(self) -> None:
-        self.state = 'idle'
-        # g_mqtt.publish('topic', self.id, 'blue')
 
     def PrintOut(self, title):
         Logger.Info(title)
@@ -29,27 +17,28 @@ class TwhRobot_PackBox():
 
 class TwhRobot_Packer():
     def __init__(self) -> None:
-        self.boxes = [TwhRobot_PackBox(0)]
+        self.boxes = [TwhRobot_PackingCell(0)]
         for i in range(11):
-            newbox = TwhRobot_PackBox(i+1)
+            newbox = TwhRobot_PackingCell(i+1)
             self.boxes.append(newbox)
-        # self.rx_topic = 'twh/221109/packer/box'
-
-        # gcode_topic = "twh/221109/packer/gcode"
-        # self.gcode_sender = GcodeSender(gcode_topic)
-        # all_gcode_senders.append(self.gcode_sender)
 
     def PrintOut(self, title):
         Logger.Info(title)
         for box in self.boxes:
             box.PrintOut('----')
 
-    def show_pack_box_led(self, packbox_id: int):
-        # gcode = 'M42P' + str(packbox_id) + 'S1'
-        # Logger.Print('TwhRobot_Packer::show_pack_box_led()   ',  gcode)
-        # self.gcode_sender.append_gmcode_to_queue(gcode)
+    def show_cell_led(self, color:str, packbox_id: int):
         topic = 'twh/221109/packer/led'
         payload = packbox_id
+        if color =='green':
+            payload += 12
+        if color == 'blue':
+            payload += 2 * 12
+        g_mqtt.publish(topic, payload)
+
+    def turn_off_all_led(self, color:str):
+        topic = 'twh/221109/packer/led'
+        payload = 111
         g_mqtt.publish(topic, payload)
         
 
@@ -62,23 +51,20 @@ class TwhRobot_Packer():
         #     box = self.boxes[box_id]
         #     box.state = payload['state']
 
-    # def FindBox_not_fullfilled():
-    #     pass  #???
-
-    def FindBox_Idle(self) -> TwhRobot_PackBox:
+    def FindBox_Idle(self) -> TwhRobot_PackingCell:
         for box in self.boxes:
             if box.state == 'idle':
                 return box
         return None
 
-    def FindBox_Feeding(self, order_id: str) -> TwhRobot_PackBox:
+    def FindBox_Feeding(self, order_id: str) -> TwhRobot_PackingCell:
         for box in self.boxes:
             if box.order_id == order_id:
                 if box.state == 'feeding':
                     return box
         return None
 
-    def FindBox_fullfilled(self, order_id: str) -> TwhRobot_PackBox:
+    def FindBox_fullfilled(self, order_id: str) -> TwhRobot_PackingCell:
         for box in self.boxes:
             if box.order_id == order_id:
                 if box.state == 'fullfilled':

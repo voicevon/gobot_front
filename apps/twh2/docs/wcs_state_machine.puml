@@ -1,0 +1,44 @@
+@startuml
+[*] -> wcs_idle
+
+wcs_idle-[#red,bold]-> checking_deposit_mq
+checking_deposit_mq -[#red,bold]-> deposit_begin: deposit(row, col, quantity) \nrobot[row].moveto(col)
+deposit_begin -[#red,bold]-> deposite_end
+deposite_end -[#red,bold]->wcs_idle: user_finished, \nuser_canceled
+
+checking_deposit_mq --> withdraw_dispaching: deposit mq is empty
+checking_deposit_mq: this is a virtual state
+  state loop_porter {
+    [*] -> idle 
+    idle --> moving
+    moving -> moving
+    moving --> ready
+  }
+  
+' checking_withdraw_request --> moving
+state ending <<fork>>
+ready-->picking_placing
+picking_placing -> picking_placing: operator is working
+picking_placing --> ending:  green button is pressed
+ending --> idle
+ending --> withdraw_dispaching
+withdraw_dispaching --> withdraw_dispaching_ender
+withdraw_dispaching_ender --> moving: P1: assign new tooth
+withdraw_dispaching_ender -->  wcs_idle:  P2: all loop_porters are idle, and no user-request
+withdraw_dispaching_ender: this is a virtual state
+' checking_withdraw_request --> wcs_idle: request is empty
+' checking_withdraw_request --> withdraw_begin: withdraw(list(row,col))
+' withdraw_begin -->  withdraw_end: green button is pressed
+
+note right of withdraw_dispaching
+  After assigning a tooth to a loop-porter, 
+  the wcs_state is still at 'withdraw_dispatching'
+
+  P1: assign new tooth constraint: 
+    to an idle loop-porter.
+end note
+
+packer_idle --> shipping: . . .
+shipping --> packer_idle: blue button is pressed
+shipping: show packer-box led of the order
+@enduml

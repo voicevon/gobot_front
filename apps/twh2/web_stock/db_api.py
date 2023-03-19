@@ -252,7 +252,7 @@ class db_Withdraw():
         return []
 
 
-class db_Shipout():
+class DbShipout():
     table_takeout = TinyDB('twh_takeout.json')
 
     @classmethod
@@ -273,6 +273,8 @@ class db_Shipout():
     @classmethod
     def get_shipout_box_id(cls, user_id:str) -> int:
         q= Query()
+        Logger.Debug("DbShipout::get_shipout_box_id()")
+        Logger.Print('user_id', user_id)
         s = cls.table_takeout.search(q.user_id == user_id)
         if len(s) > 0:
             return s[0]['user_id']

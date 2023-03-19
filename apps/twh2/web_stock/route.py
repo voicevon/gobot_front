@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
-from web_stock.db_api import db_Stock, db_Shipout, db_Withdraw, db_Deposit_history,db_StockRule
+from web_stock.db_api import db_Stock, DbShipout, db_Withdraw, db_Deposit_history,db_StockRule
 from bolt_nut import get_row_from_tooth_location
 from wcs_robots.twh_wcs import  wcs_queue_web_request
 from logger import Logger
@@ -172,20 +172,21 @@ def withdraw_end():
 
     user_request['connected_box_id'] = -1
     db_Withdraw.insert_withdraw_queue_multi_rows(user_request)
-    # Logger.Debug('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     return render_template('withdraw_end.html')
 
 @web_stock.route('/withdraw_takeout')
 def withdraw_takeout():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
-        box_id = db_Shipout.get_shipout_box_id(session['user'])
+        # Logger.Debug('@web_stock   withdraw_takeout() ')
+        # Logger.Print('session["user"]', session['user'])
+        box_id = DbShipout.get_shipout_box_id(session['user']['user_id'])
         if box_id == -1:
             # not found fullfilled box
             flash("您没有申请出库，或者：您的出库申请尚未备货完毕，请稍后再尝试")
             return redirect(url_for("web_user.home"))
 
-        db_Shipout.Update_shipout_request(session['user'])
+        DbShipout.Update_shipout_request(session['user'])
         # takout_message = {}
         # takout_message['box_id'] = box_id
         # takout_message['user_id'] = session['user']
