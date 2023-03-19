@@ -241,8 +241,8 @@ class db_Withdraw():
     
     @classmethod
     def get_single_order(cls) -> list:
-        # 1. get first row's order_id
-        # 2. get a list for all teeth with this order_id
+        # A. get first row's order_id
+        # B. get a list for all teeth with this order_id
         all = cls.table_withdraw_queue.all()
         if len(all) > 0:
             order_id = all[0]['order_id']
@@ -271,7 +271,7 @@ class DbShipout():
 
 
     @classmethod
-    def get_shipout_box_id(cls, user_id:str) -> int:
+    def get_fullfilled_packer_cell_id(cls, user_id:str) -> int:
         q= Query()
         Logger.Debug("DbShipout::get_shipout_box_id()")
         Logger.Print('user_id', user_id)

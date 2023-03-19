@@ -15,6 +15,10 @@ class TwhRobot_PackerCell():
     def GetState(self) -> str:
         return self.__state
     
+    def GetStateCode(self) -> int:
+        codes = {'idle':1, 'feeding':2, 'fullfiled':3, 'packing':4}
+        return codes[self.__state]
+    
     def PrintOut(self, title):
         Logger.Info(title)
         Logger.Print("id" ,self.id)

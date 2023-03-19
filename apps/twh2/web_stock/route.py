@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
 from web_stock.db_api import db_Stock, DbShipout, db_Withdraw, db_Deposit_history,db_StockRule
 from bolt_nut import get_row_from_tooth_location
-from wcs_robots.twh_wcs import  wcs_deposit_queue, packer_cells_state, reset_packer_cell_queue
+from wcs_robots.twh_wcs import  wcs_deposit_queue, packer_cells_state, set_packer_cell_state_queue
 from logger import Logger
 from datetime import datetime
 
@@ -180,23 +180,19 @@ def withdraw_takeout():
         twh_id = request.args.get('twh_id')
         # Logger.Debug('@web_stock   withdraw_takeout() ')
         # Logger.Print('session["user"]', session['user'])
-        box_id = DbShipout.get_shipout_box_id(session['user']['user_id'])
-        if box_id == -1:
+        packer_cell_id = DbShipout.get_fullfilled_packer_cell_id(session['user']['user_id'])
+        if packer_cell_id == -1:
             # not found fullfilled box
             flash("您没有申请出库，或者：您的出库申请尚未备货完毕，请稍后再尝试")
             return redirect(url_for("web_user.home"))
 
         DbShipout.Update_shipout_request(session['user'])
-        # takout_message = {}
-        # takout_message['box_id'] = box_id
-        # takout_message['user_id'] = session['user']
-        reset_packer_cell_queue.put(box_id)
-        
-        # The following process:
-        # 1. WCS get box_id from  database.
-        # 2. WCS sned box_id to shipout_box 
-        # 3. The blue light will turn on. 
-        # 4. User press blue button, a button_pressed message send to WCS.
-        # 5. WCS free the box.
-        # g_mqtt.publish(topic='twh/221109/shipout_box/command' , payload= '{"box_id:"' + str(box_id) +',"color":"blue"}')
+        command={}
+        command['cell_id'] = packer_cell_id
+        command['state'] = 'packing'
+        set_packer_cell_state_queue.put(command)
+        # wcs will do followed steps
+        # 1. set packer cell state to 'packing'
+        # 2. turn on green led
+
         return render_template('withdraw_takeout.html', twh_id=twh_id)
