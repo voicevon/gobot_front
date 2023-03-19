@@ -305,30 +305,27 @@ class Twh_WarehouseControlSystem():
                 self.__packer.turn_off_all_led('green')
                 self.__wcs_state = 'withdraw_dispaching'
 
-    def state_mathine_packer(self, packing_queue:multiprocessing.Queue):
-        # if self.__packer_state == 'idle':
-        #     pass
+    # def state_mathine_packer(self, packing_queue:multiprocessing.Queue):
+    #     if self.__packer_state == 'fullfilled':
+    #         if packing_queue.empty:
+    #             return
+    #         self.__packer.SetPackingCell(packing_queue.get())
+    #         if True:
+    #             self.__packer_state = 'packing'
 
-        # if self.__packer_state == 'feeding':
-        #     if self.order_is_full_picked():
-        #         self.__packer_state = 'fullfilled'
+    #     if self.__packer_state == 'packing':
+    #         if self.__button_pack.get() == 'ON':
+    #             self.__packer.turn_off_all_led('blue')
+    #             self.__packer_state = 'idle'
 
-        if self.__packer_state == 'fullfilled':
-            if packing_queue.empty:
-                return
-            self.__packer.SetPackingCell(packing_queue.get())
-            if True:
-                self.__packer_state = 'packing'
-
-        if self.__packer_state == 'packing':
-            if self.__button_pack.get() == 'ON':
-                self.__packer.turn_off_all_led('blue')
-                self.__packer_state = 'idle'
-
+    def renew_pack_cells_state_to_shared_memory(self, shared_cells_state):
+        for i in range(12):
+            shared_cells_state[i] = 0
+    
     def get_state(self) ->str:
         return self.__wcs_state
 
-def WCS_Main(deposit_queue:multiprocessing.Queue, packing_queue:multiprocessing.Queue):
+def WCS_Main(deposit_queue:multiprocessing.Queue,  reset_packer_cells_queue:multiprocessing.Queue, pack_cells_state):
         g_mqtt_broker_config.client_id = '20221222'
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
         wcs = Twh_WarehouseControlSystem(deposit_queue)
@@ -337,35 +334,28 @@ def WCS_Main(deposit_queue:multiprocessing.Queue, packing_queue:multiprocessing.
         while True:
             wcs.Assign_Packbox_to_Order()
             wcs.state_machine_main(deposit_queue)
-            wcs.state_mathine_packer(packing_queue)
+            # wcs.state_mathine_packer(packing_queue)
+            wcs.renew_pack_cells_state_to_shared_memory(pack_cells_state)
+            if reset_packer_cells_queue.qsize() > 0:
+                packer_cell_id = reset_packer_cells_queue.get()
+                wcs.__packer.GetCell(packer_cell_id).SetStateTo('idle')
+
             gcode_senders_spin_once()
             if previous_wcs_state != wcs.get_state():
                 previous_wcs_state = wcs.get_state()
                 g_mqtt.publish('twh/221109/wcs_state',previous_wcs_state)
             time.sleep(0.5)
 
-        # while True:
-        #     # deposit_begin,  deposit_end,  is from message_queue.
-        #     if queue_web_request.empty():
-        #         pass
-        #     else:  
-        #         new_request = queue_web_request.get()
-        #         if new_request['message_type'] == 'deposit_begin':
-        #             wcs.Do_deposit_begin(new_request)
-        #         elif new_request['message_type'] == 'deposit_end':
-        #             wcs.Do_deposit_end()
 
-        #     # Withdraw request is from database.
-        #     wcs.Assign_Packbox_to_Order()
-        #     wcs.PickPlace_PortPair()
-        #     # communicate gcodes sender
+# from wms to wcs
+wcs_deposit_queue = multiprocessing.Queue()         
+reset_packer_cell_queue = multiprocessing.Queue()  
 
-
-wcs_deposit_queue = multiprocessing.Queue()
-wcs_pack_queue = multiprocessing.Queue()
+# from wcs to wms
+packer_cells_state = multiprocessing.Array('i',12)   
 
 def Start_WCS_Process():
-    p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue, wcs_pack_queue))
+    p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue, reset_packer_cell_queue, packer_cells_state))
     p.start() 
     Logger.Info('WCS is running on new process.....')
 

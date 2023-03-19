@@ -19,6 +19,8 @@ def get_row_from_tooth_location(location_string:str) -> int:
         return 0
     elif location_string[0:2] == 'lr':
         return 3
+    Logger.Error('bolt_nut.py   get_row_from_tooth_location()')
+    Logger.Print('location_string', location_string)
 
 
 
@@ -26,7 +28,7 @@ class PickingPacking_Tooth():
     def __init__(self, dbtable_withdraw_queue) -> None:
         if dbtable_withdraw_queue is not None:
             self.order_id = dbtable_withdraw_queue['order_id']
-            self.packbox_id = dbtable_withdraw_queue['connected_shipout_box']  #TODO:  unify the key's name
+            self.pack_cell_id = dbtable_withdraw_queue['connected_shipout_box']  #TODO:  unify the key's name
             self.row =  dbtable_withdraw_queue['row']
             self.col = dbtable_withdraw_queue['col']
             self.layer = dbtable_withdraw_queue['layer']
@@ -35,7 +37,7 @@ class PickingPacking_Tooth():
     def ToJson(self):
         json = {}
         json['order_id'] = self.order_id
-        json['packbox_id'] = self.packbox_id
+        json['pack_cell_id'] = self.pack_cell_id
         json['row'] = self.row
         json['col'] = self.col
         json['layer'] = self.layer
@@ -48,4 +50,4 @@ class PickingPacking_Tooth():
         Logger.Print(' row' , self.row)
         Logger.Print(' col' , self.col)
         Logger.Print(' layer ' , self.layer)
-        Logger.Print(' packbox_id' , self.packbox_id)
+        Logger.Print(' pack_cell_id' , self.pack_cell_id)

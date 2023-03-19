@@ -1,7 +1,7 @@
 from logger import Logger
 from von.mqtt_agent import g_mqtt
 
-class TwhRobot_PackingCell():
+class TwhRobot_PackerCell():
 
     def __init__(self, id:int) -> None:
         #  'idle', 'feeding', 'fullfilled', 'packing'
@@ -25,9 +25,9 @@ class TwhRobot_Packer():
     def __init__(self) -> None:
         self.__green_led_index = 13
         self.__blue_led_index = 13
-        self.__cells = [TwhRobot_PackingCell(0)]
+        self.__cells = [TwhRobot_PackerCell(0)]
         for i in range(11):
-            newbox = TwhRobot_PackingCell(i+1)
+            newbox = TwhRobot_PackerCell(i+1)
             self.__cells.append(newbox)
 
     def SetPackingCell(self, cell_id:int):
@@ -39,10 +39,13 @@ class TwhRobot_Packer():
     def GetPackingCell_id(self) ->int:
         return self.__packing_cell_id
 
+    def GetCell(self, cell_id:int) -> TwhRobot_PackerCell:
+        return self.__cells[cell_id]
+
     def PrintOut(self, title):
         Logger.Info(title)
-        for box in self.__cells:
-            box.PrintOut('----')
+        for cell in self.__cells:
+            cell.PrintOut(title)
 
     def turn_on_cell_led(self, color:str, cell_id: int):
         if color == 'green':
@@ -56,12 +59,12 @@ class TwhRobot_Packer():
 
     def turn_off_all_led(self, color:str):
         topic = 'twh/221109/packer/led'
-        payload = 111
+        payload = 1313
         g_mqtt.publish(topic, payload)
         
 
-    def CheckMqttMessage(self):
-        print("TwhRobot_Shipout main process is started....")
+    # def CheckMqttMessage(self):
+    #     print("TwhRobot_Shipout main process is started....")
         # rx = g_mqtt.RxBuffer
         # if rx.has_updated_payload(self.rx_topic):
         #     payload = rx.FetchPayload(self.rx_topic)
@@ -69,24 +72,24 @@ class TwhRobot_Packer():
         #     box = self.__cells[box_id]
         #     box.state = payload['state']
 
-    def Find_IdleCell(self) -> TwhRobot_PackingCell:
-        for box in self.__cells:
-            if box.state == 'idle':
-                return box
+    def Find_IdleCell(self) -> TwhRobot_PackerCell:
+        for cell in self.__cells:
+            if cell.GetState() == 'idle':
+                return cell
         return None
 
-    def Find_FeedingCell(self, order_id: str) -> TwhRobot_PackingCell:
-        for box in self.__cells:
-            if box.order_id == order_id:
-                if box.state == 'feeding':
-                    return box
+    def Find_FeedingCell(self, order_id: str) -> TwhRobot_PackerCell:
+        for cell in self.__cells:
+            if cell.order_id == order_id:
+                if cell.GetState() == 'feeding':
+                    return cell
         return None
 
-    def Find_fullfilledCell(self, order_id: str) -> TwhRobot_PackingCell:
-        for box in self.__cells:
-            if box.order_id == order_id:
-                if box.state == 'fullfilled':
-                    return box
+    def Find_fullfilledCell(self, order_id: str) -> TwhRobot_PackerCell:
+        for cell in self.__cells:
+            if cell.order_id == order_id:
+                if cell.GetState() == 'fullfilled':
+                    return cell
         return None
 
     

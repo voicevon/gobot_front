@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
 from web_stock.db_api import db_Stock, DbShipout, db_Withdraw, db_Deposit_history,db_StockRule
 from bolt_nut import get_row_from_tooth_location
-from wcs_robots.twh_wcs import  wcs_deposit_queue, wcs_pack_queue
+from wcs_robots.twh_wcs import  wcs_deposit_queue, packer_cells_state, reset_packer_cell_queue
 from logger import Logger
 from datetime import datetime
 
@@ -190,7 +190,8 @@ def withdraw_takeout():
         # takout_message = {}
         # takout_message['box_id'] = box_id
         # takout_message['user_id'] = session['user']
-        wcs_pack_queue.put(box_id)
+        reset_packer_cell_queue.put(box_id)
+        
         # The following process:
         # 1. WCS get box_id from  database.
         # 2. WCS sned box_id to shipout_box 
