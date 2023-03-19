@@ -4,36 +4,54 @@ from von.mqtt_agent import g_mqtt
 class TwhRobot_PackingCell():
 
     def __init__(self, id:int) -> None:
-        #  'idle', 'feeding', 'fullfilled'
-        self.state = 'idle' 
-        self.id = id
+        #  'idle', 'feeding', 'fullfilled', 'packing'
+        self.__state = 'idle' 
+        self.id = id   #range is [0,11]
         self.order_id = None
 
+    def SetStateTo(self, state:str):
+        self.__state = state
+
+    def GetState(self) -> str:
+        return self.__state
+    
     def PrintOut(self, title):
         Logger.Info(title)
         Logger.Print("id" ,self.id)
         Logger.Print('order_id' , self.order_id)
-        Logger.Print('state' , self.state)
+        Logger.Print('__state' , self.__state)
 
 class TwhRobot_Packer():
     def __init__(self) -> None:
-        self.boxes = [TwhRobot_PackingCell(0)]
+        self.__green_led_index = 13
+        self.__blue_led_index = 13
+        self.__cells = [TwhRobot_PackingCell(0)]
         for i in range(11):
             newbox = TwhRobot_PackingCell(i+1)
-            self.boxes.append(newbox)
+            self.__cells.append(newbox)
+
+    def SetPackingCell(self, cell_id:int):
+        '''
+        cell_id == -1, means no packing cell
+        '''
+        self.__packing_cell_id = cell_id
+
+    def GetPackingCell_id(self) ->int:
+        return self.__packing_cell_id
 
     def PrintOut(self, title):
         Logger.Info(title)
-        for box in self.boxes:
+        for box in self.__cells:
             box.PrintOut('----')
 
-    def show_cell_led(self, color:str, packbox_id: int):
-        topic = 'twh/221109/packer/led'
-        payload = packbox_id
-        if color =='green':
-            payload += 12
+    def turn_on_cell_led(self, color:str, cell_id: int):
+        if color == 'green':
+            self.__green_led_index = cell_id
         if color == 'blue':
-            payload += 2 * 12
+            self.__blue_led_index = cell_id
+
+        topic = 'twh/221109/packer/led'
+        payload =  self.__green_led_index + 100* self.__blue_led_index
         g_mqtt.publish(topic, payload)
 
     def turn_off_all_led(self, color:str):
@@ -48,24 +66,24 @@ class TwhRobot_Packer():
         # if rx.has_updated_payload(self.rx_topic):
         #     payload = rx.FetchPayload(self.rx_topic)
         #     box_id =   payload['box_id'] 
-        #     box = self.boxes[box_id]
+        #     box = self.__cells[box_id]
         #     box.state = payload['state']
 
-    def FindBox_Idle(self) -> TwhRobot_PackingCell:
-        for box in self.boxes:
+    def Find_IdleCell(self) -> TwhRobot_PackingCell:
+        for box in self.__cells:
             if box.state == 'idle':
                 return box
         return None
 
-    def FindBox_Feeding(self, order_id: str) -> TwhRobot_PackingCell:
-        for box in self.boxes:
+    def Find_FeedingCell(self, order_id: str) -> TwhRobot_PackingCell:
+        for box in self.__cells:
             if box.order_id == order_id:
                 if box.state == 'feeding':
                     return box
         return None
 
-    def FindBox_fullfilled(self, order_id: str) -> TwhRobot_PackingCell:
-        for box in self.boxes:
+    def Find_fullfilledCell(self, order_id: str) -> TwhRobot_PackingCell:
+        for box in self.__cells:
             if box.order_id == order_id:
                 if box.state == 'fullfilled':
                     return box

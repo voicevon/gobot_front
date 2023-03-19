@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
 from web_stock.db_api import db_Stock, DbShipout, db_Withdraw, db_Deposit_history,db_StockRule
 from bolt_nut import get_row_from_tooth_location
-from wcs_robots.twh_wcs import  wcs_queue_web_request
+from wcs_robots.twh_wcs import  wcs_deposit_queue, wcs_pack_queue
 from logger import Logger
 from datetime import datetime
 
@@ -126,7 +126,7 @@ def deposit_move():
             user_request['deposit_quantity'] = int(request_form.get('deposit_quantity'))
             user_request['doc_id'] = int(request_form.get('doc_id'))
         user_request['message_type'] = 'deposit_begin'
-        wcs_queue_web_request.put(user_request)
+        wcs_deposit_queue.put(user_request)
         print("robot will move box to somewhere for operator........ ")
         return render_template("deposit_move.html",user_request = user_request)
 
@@ -142,7 +142,7 @@ def deposit_end():
         # Logger.Print('@web_stock.route.deposit_end() ', user_request)
         db_Deposit_history.append_deposit(user_request)
         user_request['message_type'] = 'deposit_end'
-        wcs_queue_web_request.put(user_request)
+        wcs_deposit_queue.put(user_request)
         return render_template("deposit_end.html")
 
 @web_stock.route('/withdraw')
@@ -190,7 +190,7 @@ def withdraw_takeout():
         # takout_message = {}
         # takout_message['box_id'] = box_id
         # takout_message['user_id'] = session['user']
-        wcs_queue_takeout.put(box_id)
+        wcs_pack_queue.put(box_id)
         # The following process:
         # 1. WCS get box_id from  database.
         # 2. WCS sned box_id to shipout_box 

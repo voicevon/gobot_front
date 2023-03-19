@@ -53,7 +53,7 @@ class Twh_WarehouseControlSystem():
         For the order(multi teeth) ,will move the queue from database to WCS buffer.
         '''
         # 1. find idle shipout_box
-        idle_packbox = self.__packer.FindBox_Idle()
+        idle_packbox = self.__packer.Find_IdleCell()
         if idle_packbox is None:
             return
         # Logger.Debug('Twh_WarehouseControlSystem::Assign_Packbox_to_Order()   Found idle_packbox')
@@ -74,12 +74,12 @@ class Twh_WarehouseControlSystem():
             doc_ids.append(order_item.doc_id)
             # new order, connect to the idle shipout_box
             new_tooth = PickingPacking_Tooth(order_item)
-            new_tooth.packbox_id = idle_packbox.id
+            new_tooth.pack_cell_id = idle_packbox.id
             new_tooth.order_id = order_item['order_id']
             # new_tooth.print_out('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()   New tooth in picking_queue')
 
             self.__withdraw_request_queue.append(new_tooth)
-            idle_packbox.state = 'feeding'   #??????   any string exclue "idle", right?
+            idle_packbox.SetStateTo('feeding')   #??????   any string exclue "idle", right?
 
             # self.__packer.PrintOut('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()  view packer')
 
@@ -87,40 +87,40 @@ class Twh_WarehouseControlSystem():
         # 4. Delete teeth in database (those be copied to wcs buffer)
         db_Withdraw.table_withdraw_queue.remove(doc_ids=doc_ids)
 
-    def ___withdraw_teeth_queue_get_portable(self) -> PickingPacking_Tooth:
-        for target_tooth in self.__withdraw_request_queue:
-            # constraint:  connected_pack_box is avaliable.
-            if target_tooth.packbox_id != -1:
-                if (self.__porters[target_tooth.row].state.get() == 'idle'):
-                    Logger.Info('___withdraw_teeth_queue_get_portable() ')
-                    Logger.Print('porter id,  from target_tooth.row', target_tooth.row)
-                    Logger.Print('box_number, from target_tooth.col ', target_tooth.col)
-                    Logger.Print('packbox_id', target_tooth.packbox_id)
-                    return target_tooth
-        return None
+    # def ___withdraw_teeth_queue_get_portable(self) -> PickingPacking_Tooth:
+    #     for target_tooth in self.__withdraw_request_queue:
+    #         # constraint:  connected_pack_box is avaliable.
+    #         if target_tooth.pack_cell_id != -1:
+    #             if (self.__porters[target_tooth.row].state.get() == 'idle'):
+    #                 Logger.Info('___withdraw_teeth_queue_get_portable() ')
+    #                 Logger.Print('porter id,  from target_tooth.row', target_tooth.row)
+    #                 Logger.Print('box_number, from target_tooth.col ', target_tooth.col)
+    #                 Logger.Print('pack_cell_id', target_tooth.pack_cell_id)
+    #                 return target_tooth
+    #     return None
     
-    def TryTo_end_one_pick_place_task(self):
-        if self.__button_pick.get() == 'ON':
-            # green button is pressed
-            Logger.Debug('Twh_WarehouseControlSystem::PickPlace_ender()')
-            Logger.Print('Twh_WarehouseControlSystem::PickPlace_ender()  button_is_pressed', 'turn_to_idle')
-            self.__picking_ready_porter.SetStateTo('idle')
-            # turn off all green leds
-            self.__packer.turn_off_all_led()
-            self.__picking_ready_porter.turn_off_leds()
+    # def TryTo_end_one_pick_place_task(self):
+    #     if self.__button_pick.get() == 'ON':
+    #         # green button is pressed
+    #         Logger.Debug('Twh_WarehouseControlSystem::PickPlace_ender()')
+    #         Logger.Print('Twh_WarehouseControlSystem::PickPlace_ender()  button_is_pressed', 'turn_to_idle')
+    #         self.__picking_ready_porter.SetStateTo('idle')
+    #         # turn off all green leds
+    #         self.__packer.turn_off_all_led()
+    #         self.__picking_ready_porter.turn_off_leds()
 
-            shipout_info = self.__picking_ready_porter.target_tooth.ToJson()
-            Logger.Print('__picking_ready_porter.target_tooth', shipout_info)
+    #         shipout_info = self.__picking_ready_porter.target_tooth.ToJson()
+    #         Logger.Print('__picking_ready_porter.target_tooth', shipout_info)
             
-            # DbShipout.table_takeout.insert(shipout_info)
-            self.__state = 'idle'
-            return
+    #         # DbShipout.table_takeout.insert(shipout_info)
+    #         self.__state = 'idle'
+    #         return
 
-    def Find_LoopPorter_idle(self) -> TwhRobot_LoopPorter:
-        for porter in self.__porters:
-            if porter.GetState() == 'idle':
-                return porter
-        return self.__fake_loopPorter
+    # def Find_LoopPorter_idle(self) -> TwhRobot_LoopPorter:
+    #     for porter in self.__porters:
+    #         if porter.GetState() == 'idle':
+    #             return porter
+    #     return self.__fake_loopPorter
 
     def Find_LoopPorter_ready(self) -> TwhRobot_LoopPorter:
         for porter in self.__porters:
@@ -165,7 +165,7 @@ class Twh_WarehouseControlSystem():
     #     # Start picking-packing
     #     porter.('picking_packing')
     #     porter.show_layer_led()
-    #     self.__packer.show_pack_box_led('green', porter.target_tooth.packbox_id)
+    #     self.__packer.show_pack_box_led('green', porter.target_tooth.pack_cell_id)
     #     # wait operator to press the button
     #     self.__button_pick.set('OFF')
     #     self.__picking_ready_porter = porter
@@ -186,7 +186,7 @@ class Twh_WarehouseControlSystem():
     #                     # show green led on porter, and on packer
     #                     porter.state.set('picking_packing')
     #                     porter.show_layer_led()
-    #                     self.__packer.show_pack_box_led('green', porter.target_tooth.packbox_id)
+    #                     self.__packer.show_pack_box_led('green', porter.target_tooth.pack_cell_id)
     #                     # wait operator to press the button
     #                     self.__button_pick.set('OFF')
     #                     self.__picking_ready_porter = porter
@@ -281,6 +281,8 @@ class Twh_WarehouseControlSystem():
                 # assign tooth to idle porter
                 idle_porter.SetPortingTooth(picking_tooth)
                 idle_porter.MoveTo(picking_tooth.col, picking_tooth.layer)
+                
+                # self.__packer.SetPackingCell(picking_tooth.pack_cell_id)
 
             # try to find ready_porter
             ready_porter = self.Find_LoopPorter_ready()
@@ -289,7 +291,7 @@ class Twh_WarehouseControlSystem():
                 return
             ready_porter.show_layer_led()
             porting_tooth = ready_porter.GetPortingTooth()
-            self.__packer.show_cell_led('green', porting_tooth.packbox_id)
+            self.__packer.turn_on_cell_led('green', porting_tooth.pack_cell_id)
 
             # self.__picking_ready_porter.show_layer_led()
             self.__picking_ready_porter = ready_porter
@@ -303,30 +305,39 @@ class Twh_WarehouseControlSystem():
                 self.__packer.turn_off_all_led('green')
                 self.__wcs_state = 'withdraw_dispaching'
 
-    def state_mathine_packer(self):
-        if self.__packer_state == 'idle':
-            if True:
-                self.__packer.show_cell_led('blue', 0)
-                self._packer_state = 'shipping'
+    def state_mathine_packer(self, packing_queue:multiprocessing.Queue):
+        # if self.__packer_state == 'idle':
+        #     pass
 
-        if self._packer_state == 'shipping':
+        # if self.__packer_state == 'feeding':
+        #     if self.order_is_full_picked():
+        #         self.__packer_state = 'fullfilled'
+
+        if self.__packer_state == 'fullfilled':
+            if packing_queue.empty:
+                return
+            self.__packer.SetPackingCell(packing_queue.get())
+            if True:
+                self.__packer_state = 'packing'
+
+        if self.__packer_state == 'packing':
             if self.__button_pack.get() == 'ON':
-                self.__packer.turn_off_all_led()
-                self._packer_state = 'idle'
+                self.__packer.turn_off_all_led('blue')
+                self.__packer_state = 'idle'
 
     def get_state(self) ->str:
         return self.__wcs_state
 
-def WCS_Main(queue_web_request:multiprocessing.Queue):
+def WCS_Main(deposit_queue:multiprocessing.Queue, packing_queue:multiprocessing.Queue):
         g_mqtt_broker_config.client_id = '20221222'
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
-        wcs = Twh_WarehouseControlSystem(queue_web_request)
+        wcs = Twh_WarehouseControlSystem(deposit_queue)
         previous_wcs_state = ''
 
         while True:
             wcs.Assign_Packbox_to_Order()
-            wcs.state_machine_main(queue_web_request)
-            # wcs.state_mathine_packer()
+            wcs.state_machine_main(deposit_queue)
+            wcs.state_mathine_packer(packing_queue)
             gcode_senders_spin_once()
             if previous_wcs_state != wcs.get_state():
                 previous_wcs_state = wcs.get_state()
@@ -350,11 +361,11 @@ def WCS_Main(queue_web_request:multiprocessing.Queue):
         #     # communicate gcodes sender
 
 
-wcs_queue_web_request = multiprocessing.Queue()
-# wcs_queue_takeout = multiprocessing.Queue()
+wcs_deposit_queue = multiprocessing.Queue()
+wcs_pack_queue = multiprocessing.Queue()
 
 def Start_WCS_Process():
-    p = multiprocessing.Process(target=WCS_Main, args=(wcs_queue_web_request, ))
+    p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue, wcs_pack_queue))
     p.start() 
     Logger.Info('WCS is running on new process.....')
 
