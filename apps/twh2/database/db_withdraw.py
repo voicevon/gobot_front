@@ -30,7 +30,7 @@ class DB_OrderTask():
                        when deleting, will insert into 'table_withdraw_history'
     '''
     table_order_task = TinyDB('database/twh_order_task.json')
-    table_withdraw_history = TinyDB('twh_withdraw_history.json')
+    table_withdraw_history = TinyDB('database/twh_withdraw_history.json')
 
 
     @classmethod
@@ -124,10 +124,24 @@ class DB_OrderTask():
             return s
         return []
 
+    @classmethod
+    def update_tooth_located(cls, doc_id:int, located:str):
+        doc_ids = [doc_id]
+        # print("stock_rule_update()", rule_item)
+        item = {}
+        item['located'] = located
+        cls.table_order_task.update(item, doc_ids=doc_ids)
 
+    @classmethod
+    def update_order_state(cls, new_state:str, doc_ids):
+        item = {}
+        item['order_state'] = new_state
+        cls.table_order_task.update(item, doc_ids)
 
-
-
+    @classmethod
+    def delete_by_order_id(cls, order_id):
+        # cls.table_deposit_history.remove(where ('doc_id')== doc_id)
+        cls.table_order_task.remove(where ('order_id') == order_id)
 # class DbShipout():
 #     table_takeout = TinyDB('twh_takeout.json')
 
