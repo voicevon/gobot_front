@@ -1,6 +1,7 @@
 from von.remote_var_mqtt import RemoteVar_mqtt
 from wcs_robots.gcode_sender import GcodeSender, all_gcode_senders
-from bolt_nut import PickingPacking_Tooth
+# from bolt_nut import PickingPacking_Tooth
+from business_logical.withdraw_order import OrderTaskTooth
 
 class TwhRobot_LoopPorter():
 
@@ -21,10 +22,10 @@ class TwhRobot_LoopPorter():
         if row_id == -1:
             self.IsNone = True
 
-    def SetPortingTooth(self, tooth:PickingPacking_Tooth):
+    def SetPortingTooth(self, tooth:OrderTaskTooth):
         self.__porting_tooth = tooth
 
-    def GetPortingTooth(self) -> PickingPacking_Tooth:
+    def GetPortingTooth(self) -> OrderTaskTooth:
         return self.__porting_tooth
     
 

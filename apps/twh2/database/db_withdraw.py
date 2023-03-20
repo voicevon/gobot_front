@@ -52,7 +52,7 @@ class DB_OrderTask():
             if key[0:9] == 'location_':
                 order_item = {}
                 # get location detail.
-                order_item['location'] = value
+                order_item['location'] = value  # fullname:  dental_location
                 order_item['row'] = get_row_from_tooth_location(value)
                 order_item['col'] = db_Stock.get_col_id(request, value)
                 order_item['layer'] = value[3]
@@ -61,7 +61,13 @@ class DB_OrderTask():
                 # Logger.Print('col', order_item['col'])
                 # Logger.Print('layer', order_item['layer'])
 
-                # copy from request
+                # copy from request, descript tooth
+                order_item['located'] = request['located']  # -3: porter,  -2: worker_hand  0..11  packer_cell
+
+                #copy from request, descript order
+                order_item['order_state'] = request['order_state']  # 'idle', 'feeding', 'fullfiled' , 'packed',  can be virtual.
+                order_item['linked_packer_cell_id'] = request['linked_packer_cell_id']  # int (0:11)
+
                 order_item['order_id'] = request['order_id']
                 order_item['user_id'] = request['user_id']
                 order_item['brand'] = request['brand']
@@ -69,12 +75,8 @@ class DB_OrderTask():
                 order_item['color'] = request['color']
                 order_item['shape'] = request['shape']
                 order_item['size'] = request['size']
-                order_item['linked_packer_cell_id'] = request['linked_packer_cell_id']
-                order_item['located'] = request['located']
-                order_item['packer_cell_state'] = request['packer_cell_state']
-                Logger.Print('point ', 98)
                 new_doc_id = cls.table_order_task.insert(order_item)
-                Logger.Print('new_doc_id ', new_doc_id)
+                # Logger.Print('new_doc_id ', new_doc_id)
 
     @classmethod
     def link_to_packer_cell(cls, order_id:str) -> int:

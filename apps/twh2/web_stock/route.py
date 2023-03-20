@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, request,flash, session, redirect, 
 from database.db_stock import db_Stock, db_Deposit_history,db_StockRule
 from database.db_withdraw import DB_OrderTask
 from bolt_nut import get_row_from_tooth_location
-from wcs_robots.twh_wcs import  wcs_deposit_queue, packer_cells_state, set_packer_cell_state_queue
+# from wcs_robots.twh_wcs import  wcs_deposit_queue, packer_cells_state, set_packer_cell_state_queue
+from wcs_robots.twh_wcs import  wcs_deposit_queue
 from logger import Logger
 from datetime import datetime
 
@@ -169,7 +170,7 @@ def withdraw_begin():
     user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     user_request['linked_packer_cell_id'] = -1
     user_request['located'] = 'porter'
-    user_request['packer_cell_state'] = 'idle'
+    user_request['order_state'] = 'idle'
     DB_OrderTask.Create_OrderTasks_multi_rows(user_request)
     return render_template('withdraw_begin.html')
 
@@ -186,10 +187,10 @@ def withdraw_takeout():
             return redirect(url_for("web_user.home"))
 
         DbShipout.Update_shipout_request(session['user'])
-        command={}
-        command['cell_id'] = packer_cell_id
-        command['state'] = 'packing'
-        set_packer_cell_state_queue.put(command)
+        # command={}
+        # command['cell_id'] = packer_cell_id
+        # command['state'] = 'packing'
+        # set_packer_cell_state_queue.put(command)
         # wcs will do followed steps
         # 1. set packer cell state to 'packing'
         # 2. turn on green led

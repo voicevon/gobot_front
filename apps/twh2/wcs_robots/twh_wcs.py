@@ -1,7 +1,7 @@
 from wcs_robots.twh_robot_loop_porter import TwhRobot_LoopPorter
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
 from wcs_robots.gcode_sender import gcode_senders_spin_once
-from bolt_nut import PickingPacking_Tooth
+from business_logical.withdraw_order import OrderTaskTooth, OrderTaskManager, OrderTask
 from database.db_withdraw import DB_OrderTask
 
 import multiprocessing
@@ -11,10 +11,11 @@ import time
 from logger import Logger
 
 
+
+
 class Twh_WarehouseControlSystem():
 
     def __init__(self, queue_deposit:multiprocessing.Queue) -> None:
-        self.__state = 'idle'
         # 1. Create port-robot list
         self.__porters = []
         for i in range(4):
@@ -22,10 +23,11 @@ class Twh_WarehouseControlSystem():
             self.__porters.append(new_porter)
         # 2. Create packer_robot
         self.__packer = TwhRobot_Packer()
+
         # 3. Create queues
         # When there is a request for picking,  put the tooth into the queue.
         # when chain loop start moving, the teeth will be removed.
-        self.__withdraw_request_queue = []  
+        # self.__withdraw_request_queue = []  
         self.__fake_loopPorter = TwhRobot_LoopPorter('', -1)
         self.__picking_ready_porter = self.__fake_loopPorter
 
@@ -35,90 +37,55 @@ class Twh_WarehouseControlSystem():
         # __button_pack is a blue button sit on packer.
         self.__button_pack = RemoteVar_mqtt('twh/221109/packer/button/pack','idle')
 
-        self.__packer_state = 'idle'
         self.__wcs_state = 'idle'
+        self.__order_task_manager = OrderTaskManager()
 
-    # def __FindPorter_idle(self) -> TwhRobot_LoopPorter:
-    #     for robot in self.__porters:
-    #         # Logger.Print('__FindPorter_idle()   robot.state=', robot.state.get())
-    #         if robot.state.get() == 'idle':
-    #             return robot
-    #     return None
-    
-    def Assign_packer_cell_to_Order(self):
+
+            
+    def OrderTask_Link_PackerCell(self):
         '''
-        Only assign one shipoutbox(the idle one) for each running.
+        Only assign one packer_cell (the idle one) for each running.
         For the order(multi teeth) ,will move the queue from database to WCS buffer.
         '''
-        # 1. find idle shipout_box
-        idle_packer_cell = self.__packer.Find_IdleCell()
-        if idle_packer_cell is None:
-            return
+
+        # 1. find idle PackerCell
+        # idle_packer_cell = self.__packer.Find_IdleCell()
+        # if idle_packer_cell is None:
+        #     return
         # Logger.Debug('Twh_WarehouseControlSystem::Assign_Packbox_to_Order()   Found idle_packbox')
         # Logger.Print('box_id', idle_packbox.id)
 
         # 2. get queue(same order_id) from database
-        order_items = DB_OrderTask.get_single_order()
-        if len(order_items)==0:
-            # the queue is empty, saying no more withdraw request.
-            # Logger.Info('Twh_WarehouseControlSystem::Assign_Packbox_to_Order()   Withdraw queue is empty.')
-            return
+        # order_items = DB_OrderTask.get_single_order()
+        # if len(order_items)==0:
+        #     # the queue is empty, saying no more withdraw request.
+        #     # Logger.Info('Twh_WarehouseControlSystem::Assign_Packbox_to_Order()   Withdraw queue is empty.')
+        #     return
+        
+        # 3. link packer_cell to order, update database
+
 
         # 3. copy teeth in this order to wcs buffer
-        Logger.Debug('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()  Start copy.')
-        doc_ids = []
-        for order_item in order_items:
-            # Logger.Print('Assign_Packbox_to_Order()  \n  ', order_item)
-            doc_ids.append(order_item.doc_id)
-            # new order, connect to the idle shipout_box
-            new_tooth = PickingPacking_Tooth(order_item)
-            new_tooth.pack_cell_id = idle_packer_cell.id
-            new_tooth.order_id = order_item['order_id']
-            # new_tooth.print_out('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()   New tooth in picking_queue')
+        # Logger.Debug('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()  Start copy.')
+        # doc_ids = []
+        # for order_item in order_items:
+        #     # Logger.Print('Assign_Packbox_to_Order()  \n  ', order_item)
+        #     doc_ids.append(order_item.doc_id)
+        #     # new order, connect to the idle shipout_box
+        #     new_tooth = OrderTaskTooth(order_item)
+        #     new_tooth.pack_cell_id = idle_packer_cell.id
+        #     new_tooth.order_id = order_item['order_id']
+        #     # new_tooth.print_out('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()   New tooth in picking_queue')
 
-            self.__withdraw_request_queue.append(new_tooth)
-            idle_packer_cell.SetStateTo('feeding')   #??????   any string exclue "idle", right?
+        #     self.__withdraw_request_queue.append(new_tooth)
+        #     idle_packer_cell.SetStateTo('feeding')   #??????   any string exclue "idle", right?
 
             # self.__packer.PrintOut('Twh_WarehouseControlSystem::Assign_Shipoutbox_to_Order()  view packer')
 
 
         # 4. Delete teeth in database (those be copied to wcs buffer)
-        DB_OrderTask.table_order_task.remove(doc_ids=doc_ids)
+        # DB_OrderTask.table_order_task.remove(doc_ids=doc_ids)
 
-    # def ___withdraw_teeth_queue_get_portable(self) -> PickingPacking_Tooth:
-    #     for target_tooth in self.__withdraw_request_queue:
-    #         # constraint:  connected_pack_box is avaliable.
-    #         if target_tooth.pack_cell_id != -1:
-    #             if (self.__porters[target_tooth.row].state.get() == 'idle'):
-    #                 Logger.Info('___withdraw_teeth_queue_get_portable() ')
-    #                 Logger.Print('porter id,  from target_tooth.row', target_tooth.row)
-    #                 Logger.Print('box_number, from target_tooth.col ', target_tooth.col)
-    #                 Logger.Print('pack_cell_id', target_tooth.pack_cell_id)
-    #                 return target_tooth
-    #     return None
-    
-    # def TryTo_end_one_pick_place_task(self):
-    #     if self.__button_pick.get() == 'ON':
-    #         # green button is pressed
-    #         Logger.Debug('Twh_WarehouseControlSystem::PickPlace_ender()')
-    #         Logger.Print('Twh_WarehouseControlSystem::PickPlace_ender()  button_is_pressed', 'turn_to_idle')
-    #         self.__picking_ready_porter.SetStateTo('idle')
-    #         # turn off all green leds
-    #         self.__packer.turn_off_all_led()
-    #         self.__picking_ready_porter.turn_off_leds()
-
-    #         shipout_info = self.__picking_ready_porter.target_tooth.ToJson()
-    #         Logger.Print('__picking_ready_porter.target_tooth', shipout_info)
-            
-    #         # DbShipout.table_takeout.insert(shipout_info)
-    #         self.__state = 'idle'
-    #         return
-
-    # def Find_LoopPorter_idle(self) -> TwhRobot_LoopPorter:
-    #     for porter in self.__porters:
-    #         if porter.GetState() == 'idle':
-    #             return porter
-    #     return self.__fake_loopPorter
 
     def Find_LoopPorter_ready(self) -> TwhRobot_LoopPorter:
         for porter in self.__porters:
@@ -225,18 +192,19 @@ class Twh_WarehouseControlSystem():
         self.__depositing_porter.turn_off_leds()
         self.__depositing_porter.SetStateTo('idle')
     
-    def __find_tooth_from_withdraw_queue_in_porter(self, row_id:int) -> PickingPacking_Tooth:
-        for tooth in self.__withdraw_request_queue:
-            if tooth.row == row_id:
-                return tooth
-        return None
+    # def __find_tooth_from_withdraw_queue_in_porter(self, row_id:int) -> OrderTaskTooth:
+    #     for tooth in self.__withdraw_request_queue:
+    #         if tooth.row == row_id:
+    #             return tooth
+    #     return None # type: ignore
 
 
     # def __Withdraw_Pair_porter_tooth(self) -> TwhRobot_LoopPorter, PickingPacking_Tooth:
     def __Withdraw_Pair_porter_tooth(self):
         for porter in self.__porters:
             if porter.GetState() == 'idle':
-                tooth = self.__find_tooth_from_withdraw_queue_in_porter(porter.id)
+                # tooth = self.__find_tooth_from_withdraw_queue_in_porter(porter.id)
+                tooth = self.__order_task_manager.FindTooth_is_in_porter(porter.id)
                 if tooth is not None:
                     return porter, tooth
         return None, None
@@ -269,7 +237,8 @@ class Twh_WarehouseControlSystem():
                 self.__wcs_state = 'idle'
     
         if self.__wcs_state == 'withdraw_dispaching':
-            if self.all_loop_porter_are_idle() and len(self.__withdraw_request_queue) == 0:
+            # if self.all_loop_porter_are_idle() and len(self.__withdraw_request_queue) == 0:
+            if self.all_loop_porter_are_idle() and self.__order_task_manager.GetTasksCount() == 0:
                 self.__wcs_state = 'idle'
                 return
             # try to find idle_porter matched tooth in order. and pair (porter, tooth)
@@ -319,47 +288,56 @@ class Twh_WarehouseControlSystem():
     #             self.__packer.turn_off_all_led('blue')
     #             self.__packer_state = 'idle'
 
-    def renew_pack_cells_state_to_shared_memory(self, shared_cells_state):
-        for i in range(12):
-            shared_cells_state[i] = self.__packer.GetCell(i).GetStateCode()
-    
-    def get_state(self) ->str:
+    # def renew_pack_cells_state_to_shared_memory(self, shared_cells_state):
+    #     for i in range(12):
+    #         shared_cells_state[i] = self.__packer.GetCell(i).GetStateCode()
+
+
+    def SpinOnce(self, deposit_queue:multiprocessing.Queue) ->str:
+        '''
+        return:  __wcs_state
+        '''
+        self.__order_task_manager.renew_orders_from_database()
+        self.OrderTask_Link_PackerCell()
+        self.state_machine_main(deposit_queue)
+
         return self.__wcs_state
 
-def WCS_Main(deposit_queue:multiprocessing.Queue,  set_packer_cell_state_queue:multiprocessing.Queue, pack_cells_state):
+# def WCS_Main(deposit_queue:multiprocessing.Queue,  set_packer_cell_state_queue:multiprocessing.Queue, pack_cells_state):
+def WCS_Main(deposit_queue:multiprocessing.Queue):
         g_mqtt_broker_config.client_id = '20221222'
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
         wcs = Twh_WarehouseControlSystem(deposit_queue)
-        previous_wcs_state = ''
+        showing_wcs_state = ''
 
         while True:
-            wcs.Assign_packer_cell_to_Order()
-            wcs.state_machine_main(deposit_queue)
-            # wcs.state_mathine_packer(packing_queue)
-            wcs.renew_pack_cells_state_to_shared_memory(pack_cells_state)
-            if set_packer_cell_state_queue.qsize() > 0:
-                # web request want packing and go.
-                command = set_packer_cell_state_queue.get()
-                cell_id = command['cell_id']
-                new_state = command['state']
-                wcs.__packer.GetCell(cell_id).SetStateTo(new_state)
 
+
+            # wcs.renew_pack_cells_state_to_shared_memory(pack_cells_state)
+            # if set_packer_cell_state_queue.qsize() > 0:
+            #     # web request want packing and go.
+            #     command = set_packer_cell_state_queue.get()
+            #     cell_id = command['cell_id']
+            #     new_state = command['state']
+            #     wcs.__packer.GetCell(cell_id).SetStateTo(new_state)
+            wcs_state =  wcs.SpinOnce(deposit_queue)
             gcode_senders_spin_once()
-            if previous_wcs_state != wcs.get_state():
-                previous_wcs_state = wcs.get_state()
-                g_mqtt.publish('twh/221109/wcs_state',previous_wcs_state)
+            if showing_wcs_state != wcs_state:
+                showing_wcs_state = wcs_state
+                g_mqtt.publish('twh/221109/wcs_state',showing_wcs_state)
             time.sleep(0.5)
 
 
 # from wms to wcs
 wcs_deposit_queue = multiprocessing.Queue()         
-set_packer_cell_state_queue = multiprocessing.Queue()  
+# set_packer_cell_state_queue = multiprocessing.Queue()  
 
 # from wcs to wms
-packer_cells_state = multiprocessing.Array('i',12)   
+# packer_cells_state = multiprocessing.Array('i',12)   
 
 def Start_WCS_Process():
-    p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue, set_packer_cell_state_queue, packer_cells_state))
+    # p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue, set_packer_cell_state_queue, packer_cells_state))
+    p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue,))
     p.start() 
     Logger.Info('WCS is running on new process.....')
 

@@ -67,34 +67,25 @@ class TwhRobot_Packer():
         g_mqtt.publish(topic, payload)
         
 
-    # def CheckMqttMessage(self):
-    #     print("TwhRobot_Shipout main process is started....")
-        # rx = g_mqtt.RxBuffer
-        # if rx.has_updated_payload(self.rx_topic):
-        #     payload = rx.FetchPayload(self.rx_topic)
-        #     box_id =   payload['box_id'] 
-        #     box = self.__cells[box_id]
-        #     box.state = payload['state']
-
     def Find_IdleCell(self) -> TwhRobot_PackerCell:
         for cell in self.__cells:
             if cell.GetState() == 'idle':
                 return cell
         return None
 
-    def Find_FeedingCell(self, order_id: str) -> TwhRobot_PackerCell:
-        for cell in self.__cells:
-            if cell.order_id == order_id:
-                if cell.GetState() == 'feeding':
-                    return cell
-        return None
+    # def Find_FeedingCell(self, order_id: str) -> TwhRobot_PackerCell:
+    #     for cell in self.__cells:
+    #         if cell.order_id == order_id:
+    #             if cell.GetState() == 'feeding':
+    #                 return cell
+    #     return None
 
-    def Find_fullfilledCell(self, order_id: str) -> TwhRobot_PackerCell:
-        for cell in self.__cells:
-            if cell.order_id == order_id:
-                if cell.GetState() == 'fullfilled':
-                    return cell
-        return None
+    # def Find_fullfilledCell(self, order_id: str) -> TwhRobot_PackerCell:
+    #     for cell in self.__cells:
+    #         if cell.order_id == order_id:
+    #             if cell.GetState() == 'fullfilled':
+    #                 return cell
+    #     return None
 
     
 
