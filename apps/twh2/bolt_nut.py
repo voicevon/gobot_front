@@ -10,7 +10,7 @@ def get_twh_factory(twh_id:str):
 
 
 def get_row_from_tooth_location(location_string:str) -> int:
-    print(location_string)
+    # print(location_string)
     if location_string[0:2] == 'ul':
         return 1
     elif location_string[0:2] == 'ur':
@@ -28,7 +28,8 @@ class PickingPacking_Tooth():
     def __init__(self, dbtable_withdraw_queue) -> None:
         if dbtable_withdraw_queue is not None:
             self.order_id = dbtable_withdraw_queue['order_id']
-            self.pack_cell_id = dbtable_withdraw_queue['connected_shipout_box']  #TODO:  unify the key's name
+            # self.pack_cell_id = dbtable_withdraw_queue['connected_shipout_box']  #TODO:  unify the key's name
+            self.pack_cell_id = dbtable_withdraw_queue['linked_packer_cell_id']  #TODO:  unify the key's name
             self.row =  dbtable_withdraw_queue['row']
             self.col = dbtable_withdraw_queue['col']
             self.layer = dbtable_withdraw_queue['layer']

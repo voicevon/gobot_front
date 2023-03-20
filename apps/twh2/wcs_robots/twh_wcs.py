@@ -2,9 +2,7 @@ from wcs_robots.twh_robot_loop_porter import TwhRobot_LoopPorter
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
 from wcs_robots.gcode_sender import gcode_senders_spin_once
 from bolt_nut import PickingPacking_Tooth
-# from database.db_api import db_User, db_Stock, db_Deposite, db_Withdraw, db_Shipout
-from web_stock.db_api import db_Withdraw, DbShipout
-# from web_user.db_api import db_User
+from database.db_withdraw import DB_OrderTask
 
 import multiprocessing
 from von.remote_var_mqtt import RemoteVar_mqtt
@@ -60,7 +58,7 @@ class Twh_WarehouseControlSystem():
         # Logger.Print('box_id', idle_packbox.id)
 
         # 2. get queue(same order_id) from database
-        order_items = db_Withdraw.get_single_order()
+        order_items = DB_OrderTask.get_single_order()
         if len(order_items)==0:
             # the queue is empty, saying no more withdraw request.
             # Logger.Info('Twh_WarehouseControlSystem::Assign_Packbox_to_Order()   Withdraw queue is empty.')
@@ -85,7 +83,7 @@ class Twh_WarehouseControlSystem():
 
 
         # 4. Delete teeth in database (those be copied to wcs buffer)
-        db_Withdraw.table_withdraw_queue.remove(doc_ids=doc_ids)
+        DB_OrderTask.table_order_task.remove(doc_ids=doc_ids)
 
     # def ___withdraw_teeth_queue_get_portable(self) -> PickingPacking_Tooth:
     #     for target_tooth in self.__withdraw_request_queue:

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
-from web_stock.db_api import db_Stock, DbShipout, db_Withdraw, db_Deposit_history,db_StockRule
+from database.db_stock import db_Stock, db_Deposit_history,db_StockRule
+from database.db_withdraw import DB_OrderTask
 from bolt_nut import get_row_from_tooth_location
 from wcs_robots.twh_wcs import  wcs_deposit_queue, packer_cells_state, set_packer_cell_state_queue
 from logger import Logger
@@ -153,12 +154,11 @@ def withdraw():
     else:
         return redirect(url_for('web_user.login'))
 
-@web_stock.route('/withdraw_end', methods = ['POST'])
-def withdraw_end():
+@web_stock.route('/withdraw_begin', methods = ['POST'])
+def withdraw_begin():
     user_request = {}
     for key in request.form.to_dict():
         user_request[key] = request.form.get(key)
-        # print(key, user_request[key])
     all_in_stock = db_Stock.check_stock_for_all_locations(request=user_request)
     
     if not all_in_stock:
@@ -167,12 +167,11 @@ def withdraw_end():
         return  redirect(url_for("web_stock.withdraw"))
     user_request['user_id'] = session['user']
     user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    user_request['locations'] = 'abcdefg'
-    db_Withdraw.table_withdraw_history.insert(user_request)
-
-    user_request['connected_box_id'] = -1
-    db_Withdraw.insert_withdraw_queue_multi_rows(user_request)
-    return render_template('withdraw_end.html')
+    user_request['linked_packer_cell_id'] = -1
+    user_request['located'] = 'porter'
+    user_request['packer_cell_state'] = 'idle'
+    DB_OrderTask.Create_OrderTasks_multi_rows(user_request)
+    return render_template('withdraw_begin.html')
 
 @web_stock.route('/withdraw_takeout')
 def withdraw_takeout():
