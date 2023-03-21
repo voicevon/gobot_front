@@ -4,63 +4,25 @@ from logger import Logger
 from von.mqtt_agent import g_mqtt
 from von.remote_var_mqtt import RemoteVar_mqtt
 
-# class TwhRobot_PackerCell():
-
-#     def __init__(self, id:int) -> None:
-#         #  'idle', 'feeding', 'fullfilled', 'packing'
-#         self.__state = 'idle' 
-#         self.id = id   #range is [0,11]
-#         self.order_id = None
-
-#     def SetStateTo(self, state:str):
-#         self.__state = state
-
-#     def GetState(self) -> str:
-#         return self.__state
-    
-#     def GetStateCode(self) -> int:
-#         codes = {'idle':1, 'feeding':2, 'fullfiled':3, 'packing':4}
-#         return codes[self.__state]
-    
-#     def PrintOut(self, title):
-#         Logger.Info(title)
-#         Logger.Print("id" ,self.id)
-#         Logger.Print('order_id' , self.order_id)
-#         Logger.Print('__state' , self.__state)
 
 class TwhRobot_Packer():
     def __init__(self, button_pack:RemoteVar_mqtt) -> None:
         self.__green_led_index = 13
         self.__blue_led_index = 13
         self.__button_pack = button_pack
-        # self.__cells = [TwhRobot_PackerCell(0)]
-        # for i in range(11):
-        #     newbox = TwhRobot_PackerCell(i+1)
-        #     self.__cells.append(newbox)
+        self.__shipping_order = None
 
-    def SetFullfilledOrder(self, order:OrderTask):
-        self.__fullfilled_order = order
+    def GetShippingOrder(self) -> OrderTask:
+        return self.__shipping_order # type: ignore
+    
+    def SetShippingOrder(self, order:OrderTask):
+        self.__shipping_order = order
 
     def CheckButton(self):
         if self.__button_pack.get() == 'ON':
-            self.__fullfilled_order.SetStateTo('shipped',write_to_db=True)
-
-    # def SetPackingCell(self, cell_id:int):
-    #     '''
-    #     cell_id == -1, means no packing cell
-    #     '''
-    #     self.__packing_cell_id = cell_id
-
-    # def GetPackingCell_id(self) ->int:
-    #     return self.__packing_cell_id
-
-    # def GetCell(self, cell_id:int) -> TwhRobot_PackerCell:
-    #     return self.__cells[cell_id]
-
-    # def PrintOut(self, title):
-    #     Logger.Info(title)
-    #     for cell in self.__cells:
-    #         cell.PrintOut(title)
+            self.turn_off_all_led('blue')
+            self.__shipping_order.SetStateTo('shipped',write_to_db=True)
+            self.__shipping_order = None
 
     def turn_on_cell_led(self, color:str, cell_id: int):
         if color == 'green':

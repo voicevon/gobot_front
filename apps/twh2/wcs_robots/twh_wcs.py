@@ -147,9 +147,11 @@ class Twh_WarehouseControlSystem():
         '''
         return:  __wcs_state
         '''
-        self.__packer.CheckButton()
+        if self.__packer.GetShippingOrder() is not None:
+            self.__packer.CheckButton()
+
+        self.__order_task_manager.find_fullfilled_order()
         self.__order_task_manager.renew_orders_from_database()
-        self.__order_task_manager.check_fullfilled_order()
         self.__order_task_manager.remove_shipped_order()
 
         self.OrderTask_Link_PackerCell()

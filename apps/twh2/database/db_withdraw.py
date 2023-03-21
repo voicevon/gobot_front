@@ -136,7 +136,7 @@ class DB_OrderTask():
     def update_order_state(cls, new_state:str, doc_ids):
         item = {}
         item['order_state'] = new_state
-        cls.table_order_task.update(item, doc_ids)
+        cls.table_order_task.update(item, doc_ids= doc_ids)
 
     @classmethod
     def delete_by_order_id(cls, order_id):

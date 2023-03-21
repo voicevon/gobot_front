@@ -184,10 +184,12 @@ class OrderTaskManager():
                 DB_OrderTask.delete_by_order_id(order_task.Order_id)
                 self.__all_order_tasks.remove(order_task)
 
-    def check_fullfilled_order(self):
+    def find_fullfilled_order(self) -> OrderTask:
         for order in self.__all_order_tasks:
             if order.IsFullFilled():
                 order.SetStateTo('fullfilled',write_to_db=True)
+                return order
+        return None # type: ignore
 
     def remove_shipped_order(self) -> int:
         '''
