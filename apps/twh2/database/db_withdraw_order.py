@@ -5,7 +5,7 @@ from database.db_stock import db_Stock
 from logger import Logger
 
 
-class DB_OrderTask():
+class DB_WithdrawOrder():
     '''
     About table_order
         1. Creator:   user request
@@ -29,17 +29,22 @@ class DB_OrderTask():
         'packed'       when bule buton is pressed. saying:  set by wcs, delete by wms ??
                        when deleting, will insert into 'table_withdraw_history'
     '''
-    table_order_task = TinyDB('database/twh_withdraw_order.json')
+    table_withdraw_order = TinyDB('database/twh_withdraw_order.json')
+    # table_shipping_order = TinyDB('database/twh_shipping_order.json')
     table_withdraw_history = TinyDB('database/twh_withdraw_history.json')
 
 
     @classmethod
-    def get_fullfilled_shipout_box_id(cls, user_id) -> int:
+    def get_fullfilled_orders_by_user_id(cls, user_id) -> list:
         q = Query()
-        s = cls.table_order_task.search((q.user_id == user_id) & (q.state=='fullfilled'))
-        if len(s) > 0:
-            return s[0]['connected_box_id']
-        return 0
+        s = cls.table_withdraw_order.search((q.user_id == user_id) & (q.order_state =='fullfilled'))
+        return s
+    
+    @classmethod
+    def get_shipping_orders(cls, twh_id):
+        q = Query()
+        s = cls.table_withdraw_order.search((q.twh_id==twh_id) & (q.order_state == 'shipping'))
+        return s
 
     @classmethod
     def Create_OrderTasks_multi_rows(cls, request):
@@ -67,39 +72,17 @@ class DB_OrderTask():
                 #copy from request, descript order
                 order_item['order_state'] = request['order_state']  # 'idle', 'feeding', 'fullfiled' , 'packed',  can be virtual.
                 order_item['linked_packer_cell_id'] = request['linked_packer_cell_id']  # int (0:11)
-
                 order_item['order_id'] = request['order_id']
+                order_item['order_code'] = request['order_code']  # User's order_id
                 order_item['user_id'] = request['user_id']
+                order_item['twh_id'] = request['twh_id']
                 order_item['brand'] = request['brand']
                 order_item['batch_number'] = request['batch_number']
                 order_item['color'] = request['color']
                 order_item['shape'] = request['shape']
                 order_item['size'] = request['size']
-                new_doc_id = cls.table_order_task.insert(order_item)
+                new_doc_id = cls.table_withdraw_order.insert(order_item)
                 # Logger.Print('new_doc_id ', new_doc_id)
-
-    @classmethod
-    def link_to_packer_cell(cls, order_id:str) -> int:
-        '''
-        # Instruction
-        1. (by caller) confirm the order state is idle .
-        2. try to find an empty packer_cell. If failed, return -1
-        3. update table_order_task.linked_packer_cell , return packer_cell_id
-        '''
-        q = Query()
-        assigned_pack_cell_ids =  cls.table_order_task.search(q.linked_packer_cell_id != order_id)
-
-        # https://stackoverflow.com/questions/3462143/get-difference-between-two-lists-with-unique-entries
-        all_packer_cell_ids = [0,1,2,3,4,5,6,7,8,9,10,11]
-        empty_packer_cell_ids = set(all_packer_cell_ids) - set(assigned_pack_cell_ids)
-
-        if (len(empty_packer_cell_ids)) == 0:
-            return -1
-        
-        target_packer_cell_id = empty_packer_cell_ids[0]['linked_packer_cell_id']
-        cls.table_order_task.update()
-        return target_packer_cell_id
-    
 
     @classmethod
     def remove_tooth_from_withdraw_quieue(cls, order_id:int, location:str) -> bool:
@@ -111,18 +94,8 @@ class DB_OrderTask():
             return True
         # still has other tooth to be removed.
         return False
-    
-    @classmethod
-    def get_single_order(cls) -> list:
-        # A. get first row's order_id
-        # B. get a list for all teeth with this order_id
-        all = cls.table_order_task.all()
-        if len(all) > 0:
-            order_id = all[0]['order_id']
-            q = Query()
-            s = cls.table_order_task.search(q.order_id==order_id)
-            return s
-        return []
+
+
 
     @classmethod
     def update_tooth_located(cls, doc_id:int, located:str):
@@ -130,53 +103,17 @@ class DB_OrderTask():
         # print("stock_rule_update()", rule_item)
         item = {}
         item['located'] = located
-        cls.table_order_task.update(item, doc_ids=doc_ids)
+        cls.table_withdraw_order.update(item, doc_ids=doc_ids)
 
     @classmethod
     def update_order_state(cls, new_state:str, doc_ids):
         item = {}
         item['order_state'] = new_state
-        cls.table_order_task.update(item, doc_ids= doc_ids)
+        cls.table_withdraw_order.update(item, doc_ids= doc_ids)
 
     @classmethod
     def delete_by_order_id(cls, order_id):
         # cls.table_deposit_history.remove(where ('doc_id')== doc_id)
-        cls.table_order_task.remove(where ('order_id') == order_id)
-# class DbShipout():
-#     table_takeout = TinyDB('twh_takeout.json')
-
-#     @classmethod
-#     def init_table(cls):
-#         content = {}
-#         content['request_user_id'] = 'abc'
-#         boxes = []
-#         for i in range(12):
-#             box={}
-#             box['id'] = i
-#             box['order_id'] = i
-#             # box['state'] = 'idle'
-#             boxes.append(box)
-#         content['boxes'] = boxes
-#         cls.table_takeout.insert(content)
-
-
-#     @classmethod
-#     def get_fullfilled_packer_cell_id(cls, user_id:str) -> int:
-#         q= Query()
-#         Logger.Debug("DbShipout::get_shipout_box_id()")
-#         Logger.Print('user_id', user_id)
-#         s = cls.table_takeout.search(q.user_id == user_id)
-#         if len(s) > 0:
-#             return s[0]['user_id']
-#         return -1
-
-#     @classmethod
-#     def Update_shipout_request(cls, user_id:str):
-#         '''
-#         TODO:  be a history in database
-#         '''
-#         content= cls.table_takeout.all()
-#         content['request_user_id'] = user_id
-#         cls.table_takeout.update(content)
+        cls.table_withdraw_order.remove(where ('order_id') == order_id)
 
     

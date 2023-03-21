@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
 from database.db_stock import db_Stock, db_Deposit_history,db_StockRule
-from database.db_withdraw_order import DB_OrderTask
+from database.db_withdraw_order import DB_WithdrawOrder
 from bolt_nut import get_row_from_tooth_location
-# from wcs_robots.twh_wcs import  wcs_deposit_queue, packer_cells_state, set_packer_cell_state_queue
+from timestamp import get_timestamp
 from wcs_robots.twh_wcs import  wcs_deposit_queue
 from logger import Logger
 from datetime import datetime
@@ -166,33 +166,42 @@ def withdraw_begin():
         # Can not find in stock 
         flash("库存不足，无法开始出库，请重新下订单。")
         return  redirect(url_for("web_stock.withdraw"))
-    user_request['user_id'] = session['user']
+    # 
+    user_request['user_id'] = session['user']['user_id']
+    user_request['twh_id'] = session['user']['twh_id']
     user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     user_request['linked_packer_cell_id'] = -1
     user_request['located'] = 'porter'
     user_request['order_state'] = 'idle'
-    DB_OrderTask.Create_OrderTasks_multi_rows(user_request)
+    user_request['order_code'] = request.form.get('order_code')
+    user_request['order_id'] = get_timestamp()
+    DB_WithdrawOrder.Create_OrderTasks_multi_rows(user_request)
     return render_template('withdraw_begin.html')
 
-@web_stock.route('/withdraw_takeout')
-def withdraw_takeout():
+@web_stock.route('/withdraw_shipout')
+def withdraw_shipout():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
         # Logger.Debug('@web_stock   withdraw_takeout() ')
         # Logger.Print('session["user"]', session['user'])
-        packer_cell_id = DbShipout.get_fullfilled_packer_cell_id(session['user']['user_id'])
-        if packer_cell_id == -1:
+
+        my_fullfilled_orders =  DB_WithdrawOrder.get_fullfilled_orders_by_user_id(session['user']['user_id'])
+        if len(my_fullfilled_orders) == 0:
             # not found fullfilled box
             flash("您没有申请出库，或者：您的出库申请尚未备货完毕，请稍后再尝试")
             return redirect(url_for("web_user.home"))
-
-        DbShipout.Update_shipout_request(session['user'])
-        # command={}
-        # command['cell_id'] = packer_cell_id
-        # command['state'] = 'packing'
-        # set_packer_cell_state_queue.put(command)
-        # wcs will do followed steps
-        # 1. set packer cell state to 'packing'
-        # 2. turn on green led
-
-        return render_template('withdraw_takeout.html', twh_id=twh_id)
+        
+        shipping_orders =  DB_WithdrawOrder.get_shipping_orders(session['user']['twh_id'])
+        if len(shipping_orders) != 0:
+            flash("正在执行其他出库任务，出库忙碌中， 您的请求已经在排队，请稍后再尝试")
+            return redirect(url_for("web_user.home"))
+        
+        # 开始取料
+        doc_ids = []
+        for order in my_fullfilled_orders:
+            doc_ids.append(order.doc_id)
+        DB_WithdrawOrder.update_order_state('shipping', doc_ids) 
+        flash("请根据蓝色指示灯，领取您的出库物料。")
+        flash("取料完毕后，请按下蓝色按钮。")
+        flash("谢谢使用 山东卷积分 高密度散牙仓库。祝您工作愉快！")
+        return redirect(url_for('web_user.home'))

@@ -1,5 +1,5 @@
 from logger import Logger
-from database.db_withdraw_order import DB_OrderTask
+from database.db_withdraw_order import DB_WithdrawOrder
 
 class OrderTooth():
     def __init__(self, db_doc_id:int) -> None:
@@ -10,10 +10,10 @@ class OrderTooth():
         self.layer:int
         self.__located = 'porter'
 
-    def TransferTo(self, new_located:str, write_to_db:bool) -> None:
+    def TransferToLocated(self, new_located:str, write_to_db:bool) -> None:
         self.__located = new_located
         if write_to_db:
-            DB_OrderTask.update_tooth_located(self.doc_id, new_located)
+            DB_WithdrawOrder.update_tooth_located(self.doc_id, new_located)
 
     def GetLocated(self) -> str:
         '''
@@ -84,7 +84,7 @@ class WithdrawOrder():
         self.__state = new_state
         if write_to_db:
                 doc_ids = self.__get_all_teeth_doc_ids()
-                DB_OrderTask.update_order_state(new_state, doc_ids)
+                DB_WithdrawOrder.update_order_state(new_state, doc_ids)
 
     def GetState(self) -> str:
         return self.__state
@@ -126,7 +126,7 @@ class OrderTaskManager():
             return
         
         # No point to do above ??
-        tooth.TransferTo('packer',write_to_db=True)
+        tooth.TransferToLocated('packer',write_to_db=True)
         
         # check whether all teeth are in packer.
         # Why should not be here?
@@ -151,7 +151,7 @@ class OrderTaskManager():
         2. renew teeth state inside order
         '''
         # Logger.Debug('Twh_WarehouseControlSystem:: renew_order_state_from_database()')
-        db_order_teeth =  DB_OrderTask.table_order_task.all()
+        db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         for db_tooth in db_order_teeth:
             order_task = self.FindOrderTask(db_tooth['order_id'])
             if order_task is None:
@@ -171,10 +171,10 @@ class OrderTaskManager():
                 order_task.AddTooth(new_tooth)
                 order_task_tooth = new_tooth
                 Logger.Print('new_tooth is added to order_task. DentalLocation', new_tooth.DentalLocation)
-            order_task_tooth.TransferTo(db_tooth['located'], write_to_db=False)
+            order_task_tooth.TransferToLocated(db_tooth['located'], write_to_db=False)
 
             if order_task.GetState() == 'packed':
-                DB_OrderTask.delete_by_order_id(order_task.Order_id)
+                DB_WithdrawOrder.delete_by_order_id(order_task.Order_id)
                 self.__all_order_tasks.remove(order_task)
 
     def find_fullfilled_order(self) -> WithdrawOrder:
@@ -195,7 +195,7 @@ class OrderTaskManager():
                 packer_cell_id = order.PackerCell_id
                 Logger.Info('OrderTaskManager:: remove_packed_order()')
                 Logger.Print('This packer cell is released.  packer_cell_id', packer_cell_id)
-                DB_OrderTask.delete_by_order_id(order.Order_id)
+                DB_WithdrawOrder.delete_by_order_id(order.Order_id)
                 self.__all_order_tasks.remove(order)
                 return packer_cell_id
             

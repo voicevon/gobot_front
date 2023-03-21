@@ -143,12 +143,16 @@ class Twh_WarehouseControlSystem():
 
                 self.__wcs_state = 'withdraw_dispaching'
 
-
+    
     def SpinOnce(self, deposit_queue:multiprocessing.Queue) ->str:
         '''
         return:  __wcs_state
         '''
-        if self.__packer.GetShippingOrder() is not None:
+        if self.__packer.GetShippingOrder() is None:
+            pass
+            # shipping_order =  self.__order_task_manager.GetShippingOrder()
+            # self.__packer.SetShippingOrder(shipping_order)
+        else:
             self.__packer.CheckButton()
 
         self.__order_task_manager.find_fullfilled_order()

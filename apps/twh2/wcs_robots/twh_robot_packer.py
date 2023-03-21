@@ -21,7 +21,10 @@ class TwhRobot_Packer():
     def CheckButton(self):
         if self.__button_pack.get() == 'ON':
             self.turn_off_all_led('blue')
-            self.__shipping_order.SetStateTo('shipped',write_to_db=True)
+            if self.__shipping_order is None:
+                Logger.Error('CheckButton()')
+            else:
+                self.__shipping_order.SetStateTo('shipped',write_to_db=True)
             self.__shipping_order = None
 
     def turn_on_cell_led(self, color:str, cell_id: int):
