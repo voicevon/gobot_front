@@ -55,7 +55,7 @@ class DB_OrderTask():
                 order_item['location'] = value  # fullname:  dental_location
                 order_item['row'] = get_row_from_tooth_location(value)
                 order_item['col'] = db_Stock.get_col_id(request, value)
-                order_item['layer'] = value[3]
+                order_item['layer'] = int(value[3])
                 # Logger.Print('location_', value)
                 # Logger.Print('row', order_item['row'])
                 # Logger.Print('col', order_item['col'])

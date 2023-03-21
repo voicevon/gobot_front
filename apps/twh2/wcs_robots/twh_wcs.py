@@ -155,16 +155,14 @@ class Twh_WarehouseControlSystem():
         self.__depositing_porter.SetStateTo('idle')
     
     def __Withdraw_Pair_porter_tooth(self):
-        Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
+        # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
         for porter in self.__porters:
             if porter.GetState() == 'idle':
-                # tooth = self.__find_tooth_from_withdraw_queue_in_porter(porter.id)
-                Logger.Print('found idle porter, porter_id',porter.id)
+                # Logger.Print('found idle porter, porter_id',porter.id)
                 tooth = self.__order_task_manager.FindTooth_is_in_porter(porter.id)
                 if tooth is not None:
-                    Logger.Print('found tooth is in the porter, col', tooth.col)
+                    Logger.Print('Paired.   found tooth is in the porter, col', tooth.col)
                     return porter, tooth
-        Logger.Print('Not paired', 99)
         return None, None
 
 
@@ -238,7 +236,7 @@ class Twh_WarehouseControlSystem():
         '''
         self.__order_task_manager.renew_orders_from_database()
         self.__order_task_manager.remove_packed_order()
-        
+
         self.OrderTask_Link_PackerCell()
         self.state_machine_main(deposit_queue)
 

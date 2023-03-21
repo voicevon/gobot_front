@@ -16,7 +16,7 @@ class TwhRobot_LoopPorter():
         all_gcode_senders.append(self.gcode_sender)
 
         # self.__porting_tooth = None
-        self.__target_layer = 0
+        self.__target_layer:int
 
         self.IsNone = False
         if row_id == -1:

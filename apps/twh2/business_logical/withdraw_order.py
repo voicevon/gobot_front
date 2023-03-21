@@ -5,9 +5,9 @@ class OrderTaskTooth():
     def __init__(self, db_doc_id:int) -> None:
         self.doc_id = db_doc_id
         self.DentalLocation = 'ur1'
-        self.row = 1
-        self.col = 1
-        self.layer = 1
+        self.row :int
+        self.col:int
+        self.layer:int
         self.__located = 'porter'
 
     def TransferTo(self, new_located:str, write_to_db:bool) -> None:
@@ -60,10 +60,10 @@ class OrderTask():
         * porter_id is equal to tooth.row.
         * constraint:  tooth must be located in porter
         '''
-        Logger.Debug('OrderTask:: FindTooth_is_in_porter() ')
+        # Logger.Debug('OrderTask:: FindTooth_is_in_porter() ')
         for tooth in self.__all_teeth:
-            tooth.PrintOut('OrderTask:: FindTooth_is_in_porter(), __all_teeth.this tooth')
-            Logger.Print('located', tooth.GetLocated())
+            # tooth.PrintOut('OrderTask:: FindTooth_is_in_porter(), __all_teeth.this tooth')
+            # Logger.Print('located', tooth.GetLocated())
             if tooth.GetLocated() == 'porter':
                 if tooth.row == porter_id:
                     return tooth
@@ -141,7 +141,7 @@ class OrderTaskManager():
         * porter_id is equal to tooth.row.
         * constraint:  tooth must be located in porter
         '''
-        Logger.Debug('OrderTaskManager:: FindTooth_is_in_porter() ')
+        # Logger.Debug('OrderTaskManager:: FindTooth_is_in_porter() ')
         for order in self.__all_order_tasks:
             tooth = order.FindTooth_is_in_porter(porter_id)
             if tooth is not None:
