@@ -1,7 +1,8 @@
 from wcs_robots.twh_robot_loop_porter import TwhRobot_LoopPorter
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
 from wcs_robots.gcode_sender import gcode_senders_spin_once
-from business_logical.withdraw_order import OrderTaskTooth, OrderTaskManager, OrderTask
+from business_logical.withdraw_order import  OrderTaskManager, WithdrawOrder, OrderTooth
+# from business_logical.withdraw_order import  OrderTaskManager
 
 import multiprocessing
 from von.remote_var_mqtt import RemoteVar_mqtt
@@ -68,7 +69,7 @@ class Twh_WarehouseControlSystem():
         self.__depositing_porter.turn_off_leds()
         self.__depositing_porter.SetStateTo('idle')
     
-    def __Withdraw_Pair_porter_tooth(self) -> (TwhRobot_LoopPorter, OrderTaskTooth): # type: ignore
+    def __Withdraw_Pair_porter_tooth(self) -> (TwhRobot_LoopPorter, OrderTooth): # type: ignore
         # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
         for porter in self.__porters:
             if porter.GetState() == 'idle':
@@ -107,7 +108,7 @@ class Twh_WarehouseControlSystem():
                 self.__wcs_state = 'idle'
     
         if self.__wcs_state == 'withdraw_dispaching':
-            if self.all_loop_porter_are_idle() and self.__order_task_manager.GetTasksCount() == 0:
+            if self.__order_task_manager.GetTasksCount() == 0:
                 self.__wcs_state = 'idle'
                 return
             # try to find idle_porter matched tooth in order. and pair (porter, tooth)

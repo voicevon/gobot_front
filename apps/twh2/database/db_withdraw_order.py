@@ -29,7 +29,7 @@ class DB_OrderTask():
         'packed'       when bule buton is pressed. saying:  set by wcs, delete by wms ??
                        when deleting, will insert into 'table_withdraw_history'
     '''
-    table_order_task = TinyDB('database/twh_order_task.json')
+    table_order_task = TinyDB('database/twh_withdraw_order.json')
     table_withdraw_history = TinyDB('database/twh_withdraw_history.json')
 
 

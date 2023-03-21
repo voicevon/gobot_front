@@ -1,7 +1,7 @@
 from logger import Logger
-from database.db_withdraw import DB_OrderTask
+from database.db_withdraw_order import DB_OrderTask
 
-class OrderTaskTooth():
+class OrderTooth():
     def __init__(self, db_doc_id:int) -> None:
         self.doc_id = db_doc_id
         self.DentalLocation = 'ur1'
@@ -31,45 +31,38 @@ class OrderTaskTooth():
         Logger.Print('layer', self.layer)
 
 
-class OrderTask():
+class WithdrawOrder():
     def __init__(self, order_id:str) -> None:
         self.__all_teeth = []
         self.Order_id = order_id
         self.PackerCell_id = -1
         self.__state = 'idle'
 
-    def AddTooth(self, new_tooth:OrderTaskTooth) -> None:
+    def AddTooth(self, new_tooth:OrderTooth) -> None:
         self.__all_teeth.append(new_tooth)
     
-    # def FindTooth_from_dental_location(self, dental_location:str) -> OrderTaskTooth:
-    #     for tooth in self.__all_teeth:
-    #         if tooth.DentalLocation == dental_location:
-    #             return tooth
-    #     # Logger.Error('OrderTask:: FindTooth_from_dental_location() ')
-    #     # Logger.Print('dental_location', dental_location)
-    #     return None # type: ignore
     
-    def FindTooth_from_doc_id(self, doc_id:int) -> OrderTaskTooth:
+    def FindTooth_from_doc_id(self, doc_id:int) -> OrderTooth:
         for t in self.__all_teeth:
             if t.doc_id == doc_id:
                 return t
         return None # type: ignore
 
-    def FindTooth_is_in_porter(self, porter_id:int) -> OrderTaskTooth:
+    def FindTooth_is_in_porter(self, porter_id:int) -> OrderTooth:
         '''
         * porter_id is equal to tooth.row.
         * constraint:  tooth must be located in porter
         '''
-        # Logger.Debug('OrderTask:: FindTooth_is_in_porter() ')
+        # Logger.Debug('WithdrawOrder:: FindTooth_is_in_porter() ')
         for tooth in self.__all_teeth:
-            # tooth.PrintOut('OrderTask:: FindTooth_is_in_porter(), __all_teeth.this tooth')
+            # tooth.PrintOut('WithdrawOrder:: FindTooth_is_in_porter(), __all_teeth.this tooth')
             # Logger.Print('located', tooth.GetLocated())
             if tooth.GetLocated() == 'porter':
                 if tooth.row == porter_id:
                     return tooth
         return None # type: ignore
 
-    def HasTooth(self, tooth:OrderTaskTooth) -> bool:
+    def HasTooth(self, tooth:OrderTooth) -> bool:
         for t in self.__all_teeth:
             if tooth == t:
                 return True
@@ -107,10 +100,10 @@ class OrderTaskManager():
     def __init__(self) -> None:
         self.__all_order_tasks = []
 
-    def AddOrderTask(self, new_order_task: OrderTask):
+    def AddOrderTask(self, new_order_task: WithdrawOrder):
         self.__all_order_tasks.append(new_order_task)
 
-    def FindOrderTask(self, order_id:str) -> OrderTask:
+    def FindOrderTask(self, order_id:str) -> WithdrawOrder:
         for order_task in self.__all_order_tasks:
             if order_task.Order_id == order_id:
                 return order_task
@@ -119,13 +112,13 @@ class OrderTaskManager():
     def GetTasksCount(self) -> int:
         return len(self.__all_order_tasks)
     
-    def __FindTooth_is_in_Order(self, tooth:OrderTaskTooth) -> OrderTask:
+    def __FindTooth_is_in_Order(self, tooth:OrderTooth) -> WithdrawOrder:
         for order in self.__all_order_tasks:
             if order.HasTooth(tooth):
                 return order
         return None # type: ignore
 
-    def Transered_into_Packer(self, tooth:OrderTaskTooth):
+    def Transered_into_Packer(self, tooth:OrderTooth):
         order  = self.__FindTooth_is_in_Order(tooth)
         if order is None:
             Logger.Error('OrderTaskManager:: Transered_into_Packer()  ')
@@ -139,7 +132,7 @@ class OrderTaskManager():
         # Why should not be here?
         # In case of the applications is crashed here. 
 
-    def FindTooth_is_in_porter(self, porter_id:int) -> OrderTaskTooth:
+    def FindTooth_is_in_porter(self, porter_id:int) -> OrderTooth:
         '''
         * porter_id is equal to tooth.row.
         * constraint:  tooth must be located in porter
@@ -162,7 +155,7 @@ class OrderTaskManager():
         for db_tooth in db_order_teeth:
             order_task = self.FindOrderTask(db_tooth['order_id'])
             if order_task is None:
-                new_order_task = OrderTask(db_tooth['order_id'])
+                new_order_task = WithdrawOrder(db_tooth['order_id'])
                 self.AddOrderTask(new_order_task)
                 order_task = new_order_task
                 Logger.Print('new_order_task is added to manager. Order_id', new_order_task.Order_id)
@@ -170,7 +163,7 @@ class OrderTaskManager():
 
             order_task_tooth = order_task.FindTooth_from_doc_id(db_tooth.doc_id)
             if order_task_tooth is None:
-                new_tooth = OrderTaskTooth(db_tooth.doc_id)
+                new_tooth = OrderTooth(db_tooth.doc_id)
                 new_tooth.DentalLocation = db_tooth['location']
                 new_tooth.row = db_tooth['row']
                 new_tooth.col = db_tooth['col']
@@ -184,7 +177,7 @@ class OrderTaskManager():
                 DB_OrderTask.delete_by_order_id(order_task.Order_id)
                 self.__all_order_tasks.remove(order_task)
 
-    def find_fullfilled_order(self) -> OrderTask:
+    def find_fullfilled_order(self) -> WithdrawOrder:
         for order in self.__all_order_tasks:
             if order.IsFullFilled():
                 order.SetStateTo('fullfilled',write_to_db=True)

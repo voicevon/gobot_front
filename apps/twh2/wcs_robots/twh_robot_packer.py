@@ -1,4 +1,4 @@
-from business_logical.withdraw_order import OrderTask
+from business_logical.withdraw_order import WithdrawOrder
 
 from logger import Logger
 from von.mqtt_agent import g_mqtt
@@ -12,10 +12,10 @@ class TwhRobot_Packer():
         self.__button_pack = button_pack
         self.__shipping_order = None
 
-    def GetShippingOrder(self) -> OrderTask:
+    def GetShippingOrder(self) -> WithdrawOrder:
         return self.__shipping_order # type: ignore
     
-    def SetShippingOrder(self, order:OrderTask):
+    def SetShippingOrder(self, order:WithdrawOrder):
         self.__shipping_order = order
 
     def CheckButton(self):
