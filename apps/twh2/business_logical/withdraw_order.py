@@ -30,6 +30,7 @@ class OrderTaskTooth():
         Logger.Print('col', self.col)
         Logger.Print('layer', self.layer)
 
+
 class OrderTask():
     def __init__(self, order_id:str) -> None:
         self.__all_teeth = []
@@ -54,7 +55,6 @@ class OrderTask():
                 return t
         return None # type: ignore
 
-    
     def FindTooth_is_in_porter(self, porter_id:int) -> OrderTaskTooth:
         '''
         * porter_id is equal to tooth.row.
@@ -83,7 +83,10 @@ class OrderTask():
     
     def SetStateTo(self, new_state:str, write_to_db:bool):
         '''
-        'idle', 'feeding', 'fullfilled', 'packed'
+        * 'idle', 
+        * 'feeding', 
+        * 'fullfilled', 
+        * 'packed'
         '''
         self.__state = new_state
         if write_to_db:
@@ -93,7 +96,7 @@ class OrderTask():
     def GetState(self) -> str:
         return self.__state
 
-    def AllTeeth_is_Packed(self) -> bool:
+    def IsFullFilled(self) -> bool:
         for t in self.__all_teeth:
             if t.GetLocated() != 'packer':
                 return False
@@ -118,7 +121,7 @@ class OrderTaskManager():
     
     def __FindTooth_is_in_Order(self, tooth:OrderTaskTooth) -> OrderTask:
         for order in self.__all_order_tasks:
-            if order.HasTOoth(tooth):
+            if order.HasTooth(tooth):
                 return order
         return None # type: ignore
 
@@ -180,15 +183,20 @@ class OrderTaskManager():
             if order_task.GetState() == 'packed':
                 DB_OrderTask.delete_by_order_id(order_task.Order_id)
                 self.__all_order_tasks.remove(order_task)
-                
-    def remove_packed_order(self) -> int:
+
+    def check_fullfilled_order(self):
+        for order in self.__all_order_tasks:
+            if order.IsFullFilled():
+                order.SetStateTo('fullfilled',write_to_db=True)
+
+    def remove_shipped_order(self) -> int:
         '''
         return: 
             packer_cell_id , the packer-cell is released.
             return -1:  no packer-cell is released.
         '''
         for order in self.__all_order_tasks:
-            if order.AllTeeth_is_Packed():
+            if order.GetState() == 'shipped':
                 packer_cell_id = order.PackerCell_id
                 Logger.Info('OrderTaskManager:: remove_packed_order()')
                 Logger.Print('This packer cell is released.  packer_cell_id', packer_cell_id)

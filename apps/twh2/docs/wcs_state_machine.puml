@@ -38,12 +38,14 @@ note right of withdraw_dispaching
     to an idle loop-porter.
 end note
 
-state packer_cell{
-  cell_idle --> feeding
+state withdraw_order{
+  order_idle --> feeding
   feeding --> feeding
   feeding --> fullfilled
   fullfilled --> packing: user request from web page
-  packing --> cell_idle: blue button is pressed
+  packing --> packed: For future: Yellow button is pressed
+  packed --> shipped: blue button is pressed
+  shipped --> order_idle
   fullfilled: show packer-cell led of the order
 }
 @enduml
