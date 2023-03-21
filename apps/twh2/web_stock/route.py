@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
+from wcs_robots.twh_wcs import  wcs_deposit_queue
 from database.db_stock import db_Stock, db_Deposit_history,db_StockRule
 from database.db_withdraw_order import DB_WithdrawOrder
-from bolt_nut import get_row_from_tooth_location
+from business_logical.bolt_nut import get_row_from_tooth_location
+
 from timestamp import get_timestamp
-from wcs_robots.twh_wcs import  wcs_deposit_queue
 from logger import Logger
 from datetime import datetime
 
@@ -74,7 +75,7 @@ def view_deposit_history():
 
 @web_stock.route('/view_withdraw_history')
 def view_withdraw_history():
-    items = db_Withdraw.table_withdraw_history.all()
+    items = DB_WithdrawOrder.table_withdraw_history.all()
     return render_template('view_withdraw_history.html', items=items, factory_name=twh_factory['221109'])
 
 @web_stock.route('/deposit')

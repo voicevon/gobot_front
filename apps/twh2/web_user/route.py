@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, request,flash, session, redirect,url_for
 from database.db_user import db_User
-from bolt_nut import  twh_factory
+from business_logical.bolt_nut import  twh_factory, get_twh_factory
 from logger import Logger
-from bolt_nut import get_twh_factory
 web_user = Blueprint('web_user', __name__,template_folder='templates')
 
 
