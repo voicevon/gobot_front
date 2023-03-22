@@ -215,7 +215,6 @@ def withdraw_shipout():
         aa = DB_WithdrawOrder.table_withdraw_order.all()
         Logger.Print('aa', aa)
 
-        flash("请根据蓝色指示灯，领取您的出库物料。")
-        flash("取料完毕后，请按下蓝色按钮。")
-        flash("谢谢使用 山东卷积分 高密度散牙仓库。祝您工作愉快！")
+        flash("请根据 蓝色指示灯，领取您的出库物料。")
+        flash("取料完毕后，请按下 蓝色按钮, 直到 蓝色指示灯 熄灭")
         return redirect(url_for('web_user.home'))

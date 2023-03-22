@@ -92,7 +92,8 @@ class WithdrawOrder():
 
     def Start_Feeding(self, idle_packer_cell_id:int):
         self.PackerCell_id = idle_packer_cell_id
-        self.__packer.SetShippingOrder(self.Order_id, idle_packer_cell_id)
+        # self.__packer.SetShippingOrder(self.Order_id, idle_packer_cell_id)
+        self.__packer.SetShippingOrder(idle_packer_cell_id)
         self.SetStateTo('feeding', write_to_db=True)
 
     def GetState(self) -> str:
@@ -123,20 +124,17 @@ class WithdrawOrder():
             return False
         
         if self.__state == 'wms_shipping':
-            self.__packer.SetShippingOrder(self.Order_id, self.PackerCell_id)
+            self.__packer.SetShippingOrder(self.PackerCell_id)
             doc_ids = self.__get_all_teeth_doc_ids()
             DB_WithdrawOrder.update_order_state('wcs_shipping', doc_ids)
+            return False
 
         if self.__state == 'wcs_shipping':
             if self.__packer.Get_Shipout_button_value()=='ON':
-                # self.__packer.Release_packer_cell(self.PackerCell_id)
-                self.SetStateTo('shipped', write_to_db=True)
-            return False
-
-        if self.__state == 'shipped':
-            DB_WithdrawOrder.delete_by_order_id(self.Order_id)
-            self.__packer.Release_packer_cell(self.PackerCell_id)
-            return True
+                Logger.Debug('WithdrawOrder:: SpinOnce()  From wcs_shipping to shipped')
+                DB_WithdrawOrder.delete_by_order_id(self.Order_id)
+                self.__packer.Release_packer_cell(self.PackerCell_id)
+                return True
         return False
 
 

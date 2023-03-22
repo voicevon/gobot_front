@@ -10,27 +10,18 @@ class TwhRobot_Packer():
         self.__green_led_index = 13
         self.__blue_led_index = 13
         self.__button_pack = button_pack
-        self.__shipping_order_id = 0
+        # self.__shipping_order_id = 0
         self.__packer_cells_state = [0,0,0,0, 0,0,0,0, 0,0,0,0]
 
-    def Get_ShippingOrder_id(self) -> int:
-        return self.__shipping_order_id # type: ignore
+    # def Get_ShippingOrder_id(self) -> int:
+    #     return self.__shipping_order_id # type: ignore
     
-    def SetShippingOrder(self, order_id:int, packer_cell_id:int):
-        self.__shipping_order_id = order_id
-        # Lock this packer-cell.
-        self.__packer_cells_state[packer_cell_id] = 1
+    def SetShippingOrder(self, packer_cell_id:int):
         self.__turn_on_packer_cell_led('blue',packer_cell_id)
 
     def Get_Shipout_button_value(self):
         return self.__button_pack.get()
-            # self.__turn_off_all_packer_cells_led('blue')
-            # if self.__shipping_order is None:
-            #     Logger.Error('Check_Shipout_button():  shipping-order is None.   operator is not following the instruction.')
-            # else:
-            #     self.__shipping_order.SetStateTo('shipped', write_to_db=True)
-            # self.__shipping_order = None
-
+  
     def Find_Idle_packer_cell(self)->int:
         '''
         return:
@@ -41,19 +32,22 @@ class TwhRobot_Packer():
                 return index
         return -1
 
+    def Lock_packer_cell(self, packer_cell_id:int):
+        self.__packer_cells_state[packer_cell_id] = 1
+
     def Release_packer_cell(self, packer_cell_id:int):
         '''
         Release a packer_cell, because the shipping order is shipped
         '''
-        self.__shipping_order_id = 0
+        # self.__shipping_order_id = 0
         self.__packer_cells_state[packer_cell_id] = 0
         self.__turn_off_all_packer_cells_led('blue')
 
     def turn_on_packer_cell_led_green(self, cell_id:int):
         self.__turn_on_packer_cell_led('green', cell_id)
 
-    def turn_off_all_packer_cells_led_green(self):
-        self.__turn_off_all_packer_cells_led('green')
+    def turn_off_all_packer_cells_led_blue(self):
+        self.__turn_off_all_packer_cells_led('blue')
 
     def __turn_on_packer_cell_led(self, color:str, cell_id: int):
         if color == 'green':

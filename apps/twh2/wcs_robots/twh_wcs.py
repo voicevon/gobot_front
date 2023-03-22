@@ -21,8 +21,8 @@ class Twh_WarehouseControlSystem():
         # __button_pick is a green button sit on packer.
         self.__button_pick = RemoteVar_mqtt('twh/221109/packer/button/pick','idle')
         # __button_pack is a blue button sit on packer.
-        button_pack = RemoteVar_mqtt('twh/221109/packer/button/pack','idle')
-        self.__packer = TwhRobot_Packer(button_pack)
+        self.__button_pack = RemoteVar_mqtt('twh/221109/packer/button/pack','idle')
+        self.__packer = TwhRobot_Packer(self.__button_pack)
         self.__wcs_state = 'idle'
         self.__order_task_manager = WithdrawOrderManager(self.__packer)
  
@@ -82,6 +82,7 @@ class Twh_WarehouseControlSystem():
         # link order. tooth, idle porter, packer_cell
         # TODO:  ?? Order_tooth.Link_porter_packer_cell(idle_porter, packer_cell) ??
         idle_porter.Start_Porting(picking_tooth, picking_order)  
+        self.__packer.Lock_packer_cell(idle_packer_cell_id)
         picking_order.Start_Feeding(idle_packer_cell_id)
         
 
