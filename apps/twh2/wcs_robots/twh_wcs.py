@@ -1,16 +1,13 @@
 from wcs_robots.twh_robot_loop_porter import TwhRobot_LoopPorter
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
-from wcs_robots.gcode_sender import gcode_senders_spin_once
 from business_logical.withdraw_order import  WithdrawOrderManager, WithdrawOrder, OrderTooth
-# from business_logical.withdraw_order import  OrderTaskManager
 
 import multiprocessing
 from von.remote_var_mqtt import RemoteVar_mqtt
 from von.mqtt_agent import g_mqtt,g_mqtt_broker_config
+from wcs_robots.gcode_sender import gcode_senders_spin_once
 import time
 from logger import Logger
-
-
 
 
 class Twh_WarehouseControlSystem():
@@ -27,7 +24,7 @@ class Twh_WarehouseControlSystem():
         button_pack = RemoteVar_mqtt('twh/221109/packer/button/pack','idle')
         self.__packer = TwhRobot_Packer(button_pack)
         self.__wcs_state = 'idle'
-        self.__order_task_manager = WithdrawOrderManager()
+        self.__order_task_manager = WithdrawOrderManager(self.__packer)
  
     def Find_LoopPorter_ready(self) -> TwhRobot_LoopPorter:
         for porter in self.__porters:
@@ -61,7 +58,7 @@ class Twh_WarehouseControlSystem():
         self.__depositing_porter.turn_off_leds()
         self.__depositing_porter.SetStateTo('idle')
     
-    def __Withdraw_Pair_porter_tooth(self) -> tuple[TwhRobot_LoopPorter, WithdrawOrder, OrderTooth]: 
+    def __Pair_idle_porter_and_tooth(self) -> tuple[TwhRobot_LoopPorter, WithdrawOrder, OrderTooth]: 
         # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
         for porter in self.__porters:
             if porter.GetState() == 'idle':
@@ -74,24 +71,18 @@ class Twh_WarehouseControlSystem():
 
     def link_order_tooth_porter_packer(self):
         # setp 1:  Pair idle_porter, picking_tooth
-        idle_porter, picking_order, picking_tooth = self.__Withdraw_Pair_porter_tooth()
+        idle_porter, picking_order, picking_tooth = self.__Pair_idle_porter_and_tooth()
         if picking_tooth is None:
             return
         
         # step 2: find idle packer_cell
-        packer_cell_id = self.__packer.Find_Idle_packer_cell()
-        if packer_cell_id == -1:
+        idle_packer_cell_id = self.__packer.Find_Idle_packer_cell()
+        if idle_packer_cell_id == -1:
             return
         # link order. tooth, idle porter, packer_cell
         # TODO:  ?? Order_tooth.Link_porter_packer_cell(idle_porter, packer_cell) ??
-        idle_porter.SetPortingTooth(picking_tooth, picking_order)  
-        idle_porter.MoveTo(picking_tooth.col, picking_tooth.layer)
-
-        #todo:  combine 
-        # self.__packer.Lock_packer_cell(packer_cell_id)
-        self.__packer.SetShippingOrder(picking_order, packer_cell_id)
-        picking_order.PackerCell_id = packer_cell_id
-        picking_order.SetStateTo('feeding', write_to_db=True)
+        idle_porter.Start_Porting(picking_tooth, picking_order)  
+        picking_order.Start_Feeding(idle_packer_cell_id)
         
 
     def state_machine_main(self, queue_web_request:multiprocessing.Queue):
@@ -138,7 +129,7 @@ class Twh_WarehouseControlSystem():
             ready_porter.show_layer_led()
             porting_tooth, porting_order = ready_porter.GetPortingTooth()
 
-            self.__packer.turn_on_cell_led('green',porting_order.PackerCell_id)  
+            self.__packer.turn_on_packer_cell_led_green(porting_order.PackerCell_id)  
 
             self.__picking_ready_porter = ready_porter
             self.__wcs_state = 'picking_placing'
@@ -152,7 +143,7 @@ class Twh_WarehouseControlSystem():
 
                 self.__picking_ready_porter.turn_off_leds()
                 self.__picking_ready_porter.SetStateTo('idle')
-                self.__packer.turn_off_all_led('green')
+                self.__packer.turn_off_all_packer_cells_led_green()
 
                 self.__wcs_state = 'withdraw_dispaching'
 
@@ -160,16 +151,8 @@ class Twh_WarehouseControlSystem():
         '''
         return:  __wcs_state
         '''
-        # self.OrderTask_Link_PackerCell()
         self.state_machine_main(deposit_queue)
-        shipping_order =  self.__order_task_manager.find_shipping_order()
-        if shipping_order is not None:
-            self.__packer.turn_on_cell_led('blue', shipping_order.PackerCell_id)
-            self.__packer.Check_Shipout_button()
-
-        packer_cell_id = self.__order_task_manager.SpinOnce()
-        if packer_cell_id >=0:
-            self.__packer.Release_packer_cell(packer_cell_id)      
+        self.__order_task_manager.SpinOnce()
 
         return self.__wcs_state
 

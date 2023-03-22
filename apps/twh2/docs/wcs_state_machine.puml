@@ -44,8 +44,9 @@ state withdraw_order{
   feeding --> fullfilled
   fullfilled --> packing: user request from web page
   packing --> packed: Yellow-begin button is pressed
-  packed --> shipping: Yellow-end button is pressed
-  shipping --> shipped: blue button is pressed
+  packed --> wms_shipping: Yellow-end button is pressed
+  wms_shipping --> wcs_shipping: wcs got the message
+  wcs_shipping --> shipped: blue button is pressed
   shipped --> order_idle
   packing: For future version
   packed:: For future version

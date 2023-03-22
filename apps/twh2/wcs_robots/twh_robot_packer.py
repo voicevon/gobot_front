@@ -1,4 +1,4 @@
-from business_logical.withdraw_order import WithdrawOrder
+# from business_logical.withdraw_order import WithdrawOrder
 
 from logger import Logger
 from von.mqtt_agent import g_mqtt
@@ -10,38 +10,52 @@ class TwhRobot_Packer():
         self.__green_led_index = 13
         self.__blue_led_index = 13
         self.__button_pack = button_pack
-        self.__shipping_order = None
+        self.__shipping_order_id = 0
+        self.__packer_cells_state = [0,0,0,0, 0,0,0,0, 0,0,0,0]
 
-    def GetShippingOrder(self) -> WithdrawOrder:
-        return self.__shipping_order # type: ignore
+    def Get_ShippingOrder_id(self) -> int:
+        return self.__shipping_order_id # type: ignore
     
-    def SetShippingOrder(self, order:WithdrawOrder, packer_cell_id:int):
-        self.__shipping_order = order
-        self.__Lock_packer_cell(packer_cell_id)
+    def SetShippingOrder(self, order_id:int, packer_cell_id:int):
+        self.__shipping_order_id = order_id
+        # Lock this packer-cell.
+        self.__packer_cells_state[packer_cell_id] = 1
+        self.__turn_on_packer_cell_led('blue',packer_cell_id)
 
-    def Check_Shipout_button(self):
-        if self.__button_pack.get() == 'ON':
-            self.turn_off_all_led('blue')
-            if self.__shipping_order is None:
-                Logger.Error('CheckButton()')
-            else:
-                self.__shipping_order.SetStateTo('shipped', write_to_db=True)
-            self.__shipping_order = None
+    def Get_Shipout_button_value(self):
+        return self.__button_pack.get()
+            # self.__turn_off_all_packer_cells_led('blue')
+            # if self.__shipping_order is None:
+            #     Logger.Error('Check_Shipout_button():  shipping-order is None.   operator is not following the instruction.')
+            # else:
+            #     self.__shipping_order.SetStateTo('shipped', write_to_db=True)
+            # self.__shipping_order = None
 
     def Find_Idle_packer_cell(self)->int:
         '''
         return:
           * -1:  there is no idle packer_cell
         '''
-        return 1
-
-    def __Lock_packer_cell(self, packer_cell_id:int):
-        pass  
+        for index  in  range(12):
+            if self.__packer_cells_state[index] == 0:
+                return index
+        return -1
 
     def Release_packer_cell(self, packer_cell_id:int):
-        pass  
-    
-    def turn_on_cell_led(self, color:str, cell_id: int):
+        '''
+        Release a packer_cell, because the shipping order is shipped
+        '''
+        self.__shipping_order_id = 0
+        self.__packer_cells_state[packer_cell_id] = 0
+        self.__turn_off_all_packer_cells_led('blue')
+
+    def turn_on_packer_cell_led_green(self, cell_id:int):
+        self.__turn_on_packer_cell_led('green', cell_id)
+
+    def turn_off_all_packer_cells_led_green(self):
+        self.__turn_off_all_packer_cells_led('green')
+
+    def __turn_on_packer_cell_led(self, color:str, cell_id: int):
         if color == 'green':
             self.__green_led_index = cell_id
         if color == 'blue':
@@ -50,11 +64,11 @@ class TwhRobot_Packer():
         topic = 'twh/221109/packer/led'
 
         payload =  str(self.__green_led_index + 100* self.__blue_led_index)
-        Logger.Debug("turn_on_cell_led()")
+        Logger.Debug("TwhRobot_Packer:: turn_on_packer_cell_led()")
         Logger.Print('payload',payload)
         g_mqtt.publish(topic, payload)
 
-    def turn_off_all_led(self, color:str):
+    def __turn_off_all_packer_cells_led(self, color:str):
         topic = 'twh/221109/packer/led'
         if color == 'green':
             self.__green_led_index = 13

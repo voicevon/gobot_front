@@ -41,10 +41,28 @@ class DB_WithdrawOrder():
         s = cls.table_withdraw_order.search((q.user_id == user_id) & (q.order_state =='fullfilled'))
         return s
     
+
+    #TODO:  How to combine the below two functions ?
     @classmethod
-    def get_shipping_orders(cls, twh_id):
+    def get_wms_shipping_orders(cls, twh_id):
+        '''
+        wms_shipping:   user wanted to ship
+        wcs_shipping:   wcs started to ship
+        '''
         q = Query()
-        s = cls.table_withdraw_order.search((q.twh_id==twh_id) & (q.order_state == 'shipping'))
+        # s = cls.table_withdraw_order.search((q.twh_id==twh_id) & (q.order_state in ['wms_shipping','wcs_shipping']) )
+        s = cls.table_withdraw_order.search((q.twh_id==twh_id) & (q.order_state =='wms_shipping') )
+        return s
+
+    @classmethod
+    def get_wcs_shipping_orders(cls, twh_id):
+        '''
+        wms_shipping:   user wanted to ship
+        wcs_shipping:   wcs started to ship
+        '''
+        q = Query()
+        # s = cls.table_withdraw_order.search((q.twh_id==twh_id) & (q.order_state in ['wms_shipping','wcs_shipping']) )
+        s = cls.table_withdraw_order.search((q.twh_id==twh_id) & (q.order_state =='wcs_shipping') )
         return s
 
     @classmethod

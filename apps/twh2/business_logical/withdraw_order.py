@@ -1,5 +1,6 @@
 from logger import Logger
 from database.db_withdraw_order import DB_WithdrawOrder
+from wcs_robots.twh_robot_packer import TwhRobot_Packer
 
 class OrderTooth():
     def __init__(self, db_doc_id:int) -> None:
@@ -33,11 +34,12 @@ class OrderTooth():
 
 
 class WithdrawOrder():
-    def __init__(self, order_id:str) -> None:
+    def __init__(self, order_id:int, packer:TwhRobot_Packer) -> None:
         self.__all_teeth = []
         self.Order_id = order_id
         self.PackerCell_id = -1
         self.__state = 'idle'
+        self.__packer = packer
 
     def AddTooth(self, new_tooth:OrderTooth) -> None:
         self.__all_teeth.append(new_tooth)
@@ -79,13 +81,19 @@ class WithdrawOrder():
         * 'idle', 
         * 'feeding', 
         * 'fullfilled', 
-        * 'shipping'
+        * 'wms_shipping'
+        * 'wcs_shipping'
         * 'shipped'
         '''
         self.__state = new_state
         if write_to_db:
                 doc_ids = self.__get_all_teeth_doc_ids()
                 DB_WithdrawOrder.update_order_state(new_state, doc_ids)
+
+    def Start_Feeding(self, idle_packer_cell_id:int):
+        self.PackerCell_id = idle_packer_cell_id
+        self.__packer.SetShippingOrder(self.Order_id, idle_packer_cell_id)
+        self.SetStateTo('feeding', write_to_db=True)
 
     def GetState(self) -> str:
         return self.__state
@@ -106,23 +114,36 @@ class WithdrawOrder():
         if self.__state == 'idle':
             return False
         if self.__state == 'feeding':
-            if self.IsFullFilled:
+            if self.IsFullFilled():
+                Logger.Debug("Order.SpinOnce()   feeding to fullfilled")
                 doc_ids = self.__get_all_teeth_doc_ids()
                 DB_WithdrawOrder.update_order_state('fullfilled', doc_ids)
                 return False
         if self.__state == 'fullfilled':
             return False
-        if self.__state == 'shipping':
+        
+        if self.__state == 'wms_shipping':
+            self.__packer.SetShippingOrder(self.Order_id, self.PackerCell_id)
+            doc_ids = self.__get_all_teeth_doc_ids()
+            DB_WithdrawOrder.update_order_state('wcs_shipping', doc_ids)
+
+        if self.__state == 'wcs_shipping':
+            if self.__packer.Get_Shipout_button_value()=='ON':
+                # self.__packer.Release_packer_cell(self.PackerCell_id)
+                self.SetStateTo('shipped', write_to_db=True)
             return False
+
         if self.__state == 'shipped':
             DB_WithdrawOrder.delete_by_order_id(self.Order_id)
+            self.__packer.Release_packer_cell(self.PackerCell_id)
             return True
         return False
 
 
 class WithdrawOrderManager():
-    def __init__(self) -> None:
+    def __init__(self, packer:TwhRobot_Packer) -> None:
         self.__all_order_tasks = []
+        self.__packer = packer
 
     def AddOrderTask(self, new_order_task: WithdrawOrder):
         self.__all_order_tasks.append(new_order_task)
@@ -136,26 +157,6 @@ class WithdrawOrderManager():
     def GetTasksCount(self) -> int:
         return len(self.__all_order_tasks)
     
-    def __FindTooth_is_in_Order(self, tooth:OrderTooth) -> WithdrawOrder:
-        for order in self.__all_order_tasks:
-            if order.HasTooth(tooth):
-                return order
-        return None # type: ignore
-
-    # def Transered_into_Packer(self, tooth:OrderTooth):
-    #     order  = self.__FindTooth_is_in_Order(tooth)
-    #     if order is None:
-    #         Logger.Error('OrderTaskManager:: Transered_into_Packer()  ')
-    #         tooth.PrintOut('No order has this tooth')
-    #         return
-        
-    #     # No point to do above ??
-    #     tooth.TransferToLocated('packer',write_to_db=True)
-        
-        # check whether all teeth are in packer.
-        # Why should not be here?
-        # In case of the applications is crashed here. 
-
     def FindTooth_is_in_porter_from_all_order(self, porter_id:int) -> tuple[OrderTooth, WithdrawOrder]:
         '''
         * porter_id is equal to tooth.row.
@@ -185,7 +186,7 @@ class WithdrawOrderManager():
         for db_tooth in db_order_teeth:
             order_task = self.FindOrderTask(db_tooth['order_id'])
             if order_task is None:
-                new_order_task = WithdrawOrder(db_tooth['order_id'])
+                new_order_task = WithdrawOrder(db_tooth['order_id'], self.__packer)
                 self.AddOrderTask(new_order_task)
                 order_task = new_order_task
                 Logger.Print('new_order_task is added to manager. Order_id', new_order_task.Order_id)
@@ -207,13 +208,7 @@ class WithdrawOrderManager():
             #     DB_WithdrawOrder.delete_by_order_id(order_task.Order_id)
             #     self.__all_order_tasks.remove(order_task)
 
-    def find_shipping_order(self) -> WithdrawOrder:
-        for order in self.__all_order_tasks:
-            if order.GetState() == 'shipping':
-                return order
-        return None # type: ignore
-        
-    def SpinOnce(self) -> int:
+    def SpinOnce(self):
         '''
         return:
             -1   no released packer_cell
@@ -222,13 +217,10 @@ class WithdrawOrderManager():
         self.renew_orders_from_database()
         
         for order in self.__all_order_tasks:
-            is_shipped  = order.SpinOnce()
+            is_shipped =  order.SpinOnce()
             if is_shipped:
-                packer_cell_id = order.PackerCell_id
-                Logger.Info('OrderTaskManager:: SpinOnce()')
-                Logger.Print('This packer cell is released.  packer_cell_id', packer_cell_id)
+                Logger.Info('WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 self.__all_order_tasks.remove(order)
-                return packer_cell_id
-        return -1
+                return
 
 

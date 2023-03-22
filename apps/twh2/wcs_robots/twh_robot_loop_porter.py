@@ -23,9 +23,10 @@ class TwhRobot_LoopPorter():
         # if row_id == -1:
         #     self.IsNone = True
 
-    def SetPortingTooth(self, tooth:OrderTooth, order:WithdrawOrder):
+    def Start_Porting(self, tooth:OrderTooth, order:WithdrawOrder):
         self.__porting_tooth = tooth
         self.__porting_order = order
+        self.MoveTo(tooth.col, tooth.layer)
 
     def GetPortingTooth(self) -> tuple[OrderTooth, WithdrawOrder]:
         return self.__porting_tooth, self.__porting_order

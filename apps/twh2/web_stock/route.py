@@ -192,18 +192,26 @@ def withdraw_shipout():
             flash("您没有申请出库，或者：您的出库申请尚未备货完毕，请稍后再尝试")
             return redirect(url_for("web_user.home"))
         
-        shipping_orders =  DB_WithdrawOrder.get_shipping_orders(session['user']['twh_id'])
-        if len(shipping_orders) != 0:
-            flash("正在执行其他出库任务，出库忙碌中， 您的请求已经在排队，请稍后再尝试")
+        wms_shipping_orders =  DB_WithdrawOrder.get_wms_shipping_orders(session['user']['twh_id'])
+        if len(wms_shipping_orders) != 0:
+            flash("正在执行其他出库任务，出库忙碌中， ")
+            flash("您的请求已经在排队，请稍后再尝试")
             return redirect(url_for("web_user.home"))
-        
+
+        wcs_shipping_orders =  DB_WithdrawOrder.get_wcs_shipping_orders(session['user']['twh_id'])
+        if len(wcs_shipping_orders) != 0:
+            flash("正在执行其他出库任务，任务即将结束.")
+            flash("您的请求已经在排队，请稍后再尝试")
+            return redirect(url_for("web_user.home"))
+
+
         # 开始取料
         doc_ids = []
         for order in my_fullfilled_orders:
             doc_ids.append(order.doc_id)
         Logger.Debug("WMS::route.py  withdraw_shipout()")
         Logger.Print('doc_ids', doc_ids)
-        DB_WithdrawOrder.update_order_state('shipping', doc_ids) 
+        DB_WithdrawOrder.update_order_state('wms_shipping', doc_ids) 
         aa = DB_WithdrawOrder.table_withdraw_order.all()
         Logger.Print('aa', aa)
 
