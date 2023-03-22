@@ -75,15 +75,10 @@ class Twh_WarehouseControlSystem():
         if picking_tooth is None:
             return
         
-        # step 2: find idle packer_cell
-        idle_packer_cell_id = self.__packer.Find_Idle_packer_cell()
-        if idle_packer_cell_id == -1:
-            return
-        # link order. tooth, idle porter, packer_cell
-        # TODO:  ?? Order_tooth.Link_porter_packer_cell(idle_porter, packer_cell) ??
-        idle_porter.Start_Porting(picking_tooth, picking_order)  
-        self.__packer.Lock_packer_cell(idle_packer_cell_id)
-        picking_order.Start_Feeding(idle_packer_cell_id)
+        # step2: whether or not:  the order linked to a packer-cell  
+        is_ok = picking_order.Start_PickingPlacing_a_tooth()
+        if is_ok:
+            idle_porter.Start_Porting(picking_tooth, picking_order)  
         
 
     def state_machine_main(self, queue_web_request:multiprocessing.Queue):
@@ -129,7 +124,7 @@ class Twh_WarehouseControlSystem():
                 return
             ready_porter.show_layer_led()
             porting_tooth, porting_order = ready_porter.GetPortingTooth()
-
+            Logger.Print("Ready porter.portingorder.PackerCell_Id", porting_order.PackerCell_id)
             self.__packer.turn_on_packer_cell_led_green(porting_order.PackerCell_id)  
 
             self.__picking_ready_porter = ready_porter
@@ -138,8 +133,6 @@ class Twh_WarehouseControlSystem():
         if self.__wcs_state == 'picking_placing':
             if self.__button_pick.get() == 'ON':
                 porting_tooth, porting_order = self.__picking_ready_porter.GetPortingTooth()
-                # porting_tooth.TransferTo('packer')
-                # self.__order_task_manager.Transered_into_Packer(porting_tooth)
                 porting_tooth.TransferToLocated('packer', write_to_db=True)
 
                 self.__picking_ready_porter.turn_off_leds()

@@ -90,11 +90,21 @@ class WithdrawOrder():
                 doc_ids = self.__get_all_teeth_doc_ids()
                 DB_WithdrawOrder.update_order_state(new_state, doc_ids)
 
-    def Start_Feeding(self, idle_packer_cell_id:int):
-        self.PackerCell_id = idle_packer_cell_id
-        # self.__packer.SetShippingOrder(self.Order_id, idle_packer_cell_id)
-        self.__packer.SetShippingOrder(idle_packer_cell_id)
-        self.SetStateTo('feeding', write_to_db=True)
+    #TODO: a better name:  Start_PickingPlacing()   StartTransfer()   
+    # def Start_PickingPlacing_a_tooth(self, idle_packer_cell_id:int):
+    def Start_PickingPlacing_a_tooth(self) -> bool:
+        if self.__state == 'idle':
+            # this is the first tooth of the order. 
+            idle_packer_cell_id =  self.__packer.Find_Idle_packer_cell()
+            if idle_packer_cell_id == -1:
+                return False
+            self.PackerCell_id = idle_packer_cell_id
+            self.__packer.StartFeeding_LockPackerCell(idle_packer_cell_id)
+            self.SetStateTo('feeding', write_to_db=True)
+        return True    
+            
+    
+    
 
     def GetState(self) -> str:
         return self.__state
@@ -124,7 +134,7 @@ class WithdrawOrder():
             return False
         
         if self.__state == 'wms_shipping':
-            self.__packer.SetShippingOrder(self.PackerCell_id)
+            self.__packer.StartShipping(self.PackerCell_id)
             doc_ids = self.__get_all_teeth_doc_ids()
             DB_WithdrawOrder.update_order_state('wcs_shipping', doc_ids)
             return False

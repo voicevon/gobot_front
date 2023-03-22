@@ -16,9 +16,13 @@ class TwhRobot_Packer():
     # def Get_ShippingOrder_id(self) -> int:
     #     return self.__shipping_order_id # type: ignore
     
-    def SetShippingOrder(self, packer_cell_id:int):
+    # def SetShippingOrder(self, packer_cell_id:int):
+    def StartShipping(self, packer_cell_id:int):
         self.__turn_on_packer_cell_led('blue',packer_cell_id)
 
+    def StartFeeding_LockPackerCell(self, packer_cell_id:int):
+        self.__packer_cells_state[packer_cell_id] = 1
+        
     def Get_Shipout_button_value(self):
         return self.__button_pack.get()
   
@@ -32,8 +36,8 @@ class TwhRobot_Packer():
                 return index
         return -1
 
-    def Lock_packer_cell(self, packer_cell_id:int):
-        self.__packer_cells_state[packer_cell_id] = 1
+    # def Lock_packer_cell(self, packer_cell_id:int):
+    #     self.__packer_cells_state[packer_cell_id] = 1
 
     def Release_packer_cell(self, packer_cell_id:int):
         '''
@@ -45,6 +49,9 @@ class TwhRobot_Packer():
 
     def turn_on_packer_cell_led_green(self, cell_id:int):
         self.__turn_on_packer_cell_led('green', cell_id)
+
+    def turn_off_all_packer_cells_led_green(self):
+        self.__turn_off_all_packer_cells_led('green')
 
     def turn_off_all_packer_cells_led_blue(self):
         self.__turn_off_all_packer_cells_led('blue')

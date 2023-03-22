@@ -37,6 +37,7 @@ class DB_WithdrawOrder():
 
     @classmethod
     def get_fullfilled_orders_by_user_id(cls, user_id) -> list:
+        cls.table_withdraw_order.clear_cache()
         q = Query()
         s = cls.table_withdraw_order.search((q.user_id == user_id) & (q.order_state =='fullfilled'))
         return s
@@ -49,6 +50,7 @@ class DB_WithdrawOrder():
         wms_shipping:   user wanted to ship
         wcs_shipping:   wcs started to ship
         '''
+        cls.table_withdraw_order.clear_cache()
         q = Query()
         # s = cls.table_withdraw_order.search((q.twh_id==twh_id) & (q.order_state in ['wms_shipping','wcs_shipping']) )
         s = cls.table_withdraw_order.search((q.twh_id==twh_id) & (q.order_state =='wms_shipping') )
@@ -60,6 +62,7 @@ class DB_WithdrawOrder():
         wms_shipping:   user wanted to ship
         wcs_shipping:   wcs started to ship
         '''
+        cls.table_withdraw_order.clear_cache()
         q = Query()
         # s = cls.table_withdraw_order.search((q.twh_id==twh_id) & (q.order_state in ['wms_shipping','wcs_shipping']) )
         s = cls.table_withdraw_order.search((q.twh_id==twh_id) & (q.order_state =='wcs_shipping') )
