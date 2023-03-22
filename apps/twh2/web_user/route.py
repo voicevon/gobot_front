@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, request,flash, session, redirect,u
 from database.db_user import db_User
 from business_logical.bolt_nut import  twh_factory, get_twh_factory
 from logger import Logger
+from operator import itemgetter
+
 web_user = Blueprint('web_user', __name__,template_folder='templates')
 
 
@@ -72,8 +74,10 @@ def update_position():
 @web_user.route('/view_users')
 def view_users():
     users = db_User.get_users_of_twh(session['user']['twh_id'])
+    sorted_users = sorted(users, key=itemgetter('position')) 
+
     # Logger.Print('@web_user.route(/view_users)', users)
-    return render_template('view_users.html', users=users)
+    return render_template('view_users.html', users=sorted_users)
 
 # @web_user.route('/')
 # def home():

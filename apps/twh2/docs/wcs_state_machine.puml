@@ -43,9 +43,12 @@ state withdraw_order{
   feeding --> feeding
   feeding --> fullfilled
   fullfilled --> packing: user request from web page
-  packing --> packed: For future: Yellow button is pressed
-  packed --> shipped: blue button is pressed
+  packing --> packed: Yellow-begin button is pressed
+  packed --> shipping: Yellow-end button is pressed
+  shipping --> shipped: blue button is pressed
   shipped --> order_idle
+  packing: For future version
+  packed:: For future version
   fullfilled: show packer-cell led of the order
 }
 @enduml

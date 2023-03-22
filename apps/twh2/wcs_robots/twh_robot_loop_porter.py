@@ -1,7 +1,8 @@
 from von.remote_var_mqtt import RemoteVar_mqtt
 from wcs_robots.gcode_sender import GcodeSender, all_gcode_senders
 # from bolt_nut import PickingPacking_Tooth
-from business_logical.withdraw_order import OrderTooth
+from business_logical.withdraw_order import OrderTooth, WithdrawOrder
+
 
 class TwhRobot_LoopPorter():
 
@@ -18,15 +19,16 @@ class TwhRobot_LoopPorter():
         # self.__porting_tooth = None
         self.__target_layer:int
 
-        self.IsNone = False
-        if row_id == -1:
-            self.IsNone = True
+        # self.IsNone = False
+        # if row_id == -1:
+        #     self.IsNone = True
 
-    def SetPortingTooth(self, tooth:OrderTooth):
+    def SetPortingTooth(self, tooth:OrderTooth, order:WithdrawOrder):
         self.__porting_tooth = tooth
+        self.__porting_order = order
 
-    def GetPortingTooth(self) -> OrderTooth:
-        return self.__porting_tooth
+    def GetPortingTooth(self) -> tuple[OrderTooth, WithdrawOrder]:
+        return self.__porting_tooth, self.__porting_order
     
 
     def SetStateTo(self, new_state:str):

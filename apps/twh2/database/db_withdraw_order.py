@@ -22,11 +22,12 @@ class DB_WithdrawOrder():
         'worker_hand'  when porter is ready, and mono green led is turned on.
         'packer_cell'  When green button is pressed.
 
-    About packer_cell.State
+    About order_State
         'idle',        default value when created.
         'feeding',     after linked to a packer-cell
-        'fullfilled',  when all teeth moved to packer-cell. saying: the last tooth is confirmed by green button is pressed.
-        'packed'       when bule buton is pressed. saying:  set by wcs, delete by wms ??
+        'fullfilled',  when all teeth moved to packer-cell. 
+        'shipping'  ,
+        'shipped',     when bule buton is pressed. saying:  set by wcs, delete by wms ??
                        when deleting, will insert into 'table_withdraw_history'
     '''
     table_withdraw_order = TinyDB('database/twh_withdraw_order.json')
@@ -70,7 +71,7 @@ class DB_WithdrawOrder():
                 order_item['located'] = request['located']  # -3: porter,  -2: worker_hand  0..11  packer_cell
 
                 #copy from request, descript order
-                order_item['order_state'] = request['order_state']  # 'idle', 'feeding', 'fullfiled' , 'packed',  can be virtual.
+                order_item['order_state'] = request['order_state']  # 'idle', 'feeding', 'fullfiled' , 'shipping', 'shipped'
                 order_item['linked_packer_cell_id'] = request['linked_packer_cell_id']  # int (0:11)
                 order_item['order_id'] = request['order_id']
                 order_item['order_code'] = request['order_code']  # User's order_id
@@ -83,6 +84,15 @@ class DB_WithdrawOrder():
                 order_item['size'] = request['size']
                 new_doc_id = cls.table_withdraw_order.insert(order_item)
                 # Logger.Print('new_doc_id ', new_doc_id)
+    
+    @classmethod
+    def update_order_state(cls, new_state:str, doc_ids):
+        item = {}
+        item['order_state'] = new_state
+        cls.table_withdraw_order.clear_cache()
+        cls.table_withdraw_order.update(item, doc_ids= doc_ids)
+        cls.table_withdraw_order.clear_cache()
+
 
     @classmethod
     def remove_tooth_from_withdraw_quieue(cls, order_id:int, location:str) -> bool:
@@ -95,8 +105,6 @@ class DB_WithdrawOrder():
         # still has other tooth to be removed.
         return False
 
-
-
     @classmethod
     def update_tooth_located(cls, doc_id:int, located:str):
         doc_ids = [doc_id]
@@ -105,11 +113,6 @@ class DB_WithdrawOrder():
         item['located'] = located
         cls.table_withdraw_order.update(item, doc_ids=doc_ids)
 
-    @classmethod
-    def update_order_state(cls, new_state:str, doc_ids):
-        item = {}
-        item['order_state'] = new_state
-        cls.table_withdraw_order.update(item, doc_ids= doc_ids)
 
     @classmethod
     def delete_by_order_id(cls, order_id):

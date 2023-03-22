@@ -8,6 +8,7 @@ class OrderTooth():
         self.row :int
         self.col:int
         self.layer:int
+        # self.packer_cell_id:int
         self.__located = 'porter'
 
     def TransferToLocated(self, new_located:str, write_to_db:bool) -> None:
@@ -40,7 +41,6 @@ class WithdrawOrder():
 
     def AddTooth(self, new_tooth:OrderTooth) -> None:
         self.__all_teeth.append(new_tooth)
-    
     
     def FindTooth_from_doc_id(self, doc_id:int) -> OrderTooth:
         for t in self.__all_teeth:
@@ -79,7 +79,8 @@ class WithdrawOrder():
         * 'idle', 
         * 'feeding', 
         * 'fullfilled', 
-        * 'packed'
+        * 'shipping'
+        * 'shipped'
         '''
         self.__state = new_state
         if write_to_db:
@@ -96,7 +97,30 @@ class WithdrawOrder():
             
         return True
 
-class OrderTaskManager():
+    def SpinOnce(self) -> bool:
+        '''
+        return:
+            * True: I am complete shipped out, and has been deleted from database.
+            * False: I am not shipped.
+        '''
+        if self.__state == 'idle':
+            return False
+        if self.__state == 'feeding':
+            if self.IsFullFilled:
+                doc_ids = self.__get_all_teeth_doc_ids()
+                DB_WithdrawOrder.update_order_state('fullfilled', doc_ids)
+                return False
+        if self.__state == 'fullfilled':
+            return False
+        if self.__state == 'shipping':
+            return False
+        if self.__state == 'shipped':
+            DB_WithdrawOrder.delete_by_order_id(self.Order_id)
+            return True
+        return False
+
+
+class WithdrawOrderManager():
     def __init__(self) -> None:
         self.__all_order_tasks = []
 
@@ -118,21 +142,21 @@ class OrderTaskManager():
                 return order
         return None # type: ignore
 
-    def Transered_into_Packer(self, tooth:OrderTooth):
-        order  = self.__FindTooth_is_in_Order(tooth)
-        if order is None:
-            Logger.Error('OrderTaskManager:: Transered_into_Packer()  ')
-            tooth.PrintOut('No order has this tooth')
-            return
+    # def Transered_into_Packer(self, tooth:OrderTooth):
+    #     order  = self.__FindTooth_is_in_Order(tooth)
+    #     if order is None:
+    #         Logger.Error('OrderTaskManager:: Transered_into_Packer()  ')
+    #         tooth.PrintOut('No order has this tooth')
+    #         return
         
-        # No point to do above ??
-        tooth.TransferToLocated('packer',write_to_db=True)
+    #     # No point to do above ??
+    #     tooth.TransferToLocated('packer',write_to_db=True)
         
         # check whether all teeth are in packer.
         # Why should not be here?
         # In case of the applications is crashed here. 
 
-    def FindTooth_is_in_porter(self, porter_id:int) -> OrderTooth:
+    def FindTooth_is_in_porter_from_all_order(self, porter_id:int) -> tuple[OrderTooth, WithdrawOrder]:
         '''
         * porter_id is equal to tooth.row.
         * constraint:  tooth must be located in porter
@@ -141,16 +165,22 @@ class OrderTaskManager():
         for order in self.__all_order_tasks:
             tooth = order.FindTooth_is_in_porter(porter_id)
             if tooth is not None:
-                Logger.Print('found tooth in the loop-porter,  tooth.col', tooth.col)
-                return tooth
-        return None # type: ignore
+                # Logger.Print('found tooth in the loop-porter,  tooth.col', tooth.col)
+                return tooth, order
+        return None,None # type: ignore
         
     def renew_orders_from_database(self):
         '''
         1. renew order state
         2. renew teeth state inside order
+        3. from https://tinydb.readthedocs.io/en/latest/usage.html
+        The TinyDB query cache doesn’t check if the underlying storage that the database uses has been modified by an external process. 
+        In this case the query cache may return outdated results. 
+        To clear the cache and read data from the storage again you can use db.clear_cache().
+                
         '''
         # Logger.Debug('Twh_WarehouseControlSystem:: renew_order_state_from_database()')
+        DB_WithdrawOrder.table_withdraw_order.clear_cache()
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         for db_tooth in db_order_teeth:
             order_task = self.FindOrderTask(db_tooth['order_id'])
@@ -173,32 +203,32 @@ class OrderTaskManager():
                 Logger.Print('new_tooth is added to order_task. DentalLocation', new_tooth.DentalLocation)
             order_task_tooth.TransferToLocated(db_tooth['located'], write_to_db=False)
 
-            if order_task.GetState() == 'packed':
-                DB_WithdrawOrder.delete_by_order_id(order_task.Order_id)
-                self.__all_order_tasks.remove(order_task)
+            # if order_task.GetState() == 'shipped':
+            #     DB_WithdrawOrder.delete_by_order_id(order_task.Order_id)
+            #     self.__all_order_tasks.remove(order_task)
 
-    def find_fullfilled_order(self) -> WithdrawOrder:
+    def find_shipping_order(self) -> WithdrawOrder:
         for order in self.__all_order_tasks:
-            if order.IsFullFilled():
-                order.SetStateTo('fullfilled',write_to_db=True)
+            if order.GetState() == 'shipping':
                 return order
         return None # type: ignore
-
-    def remove_shipped_order(self) -> int:
+        
+    def SpinOnce(self) -> int:
         '''
-        return: 
-            packer_cell_id , the packer-cell is released.
-            return -1:  no packer-cell is released.
+        return:
+            -1   no released packer_cell
+            0:11 packer_cell_id,  which has benn shipped out. should be released.
         '''
+        self.renew_orders_from_database()
+        
         for order in self.__all_order_tasks:
-            if order.GetState() == 'shipped':
+            is_shipped  = order.SpinOnce()
+            if is_shipped:
                 packer_cell_id = order.PackerCell_id
-                Logger.Info('OrderTaskManager:: remove_packed_order()')
+                Logger.Info('OrderTaskManager:: SpinOnce()')
                 Logger.Print('This packer cell is released.  packer_cell_id', packer_cell_id)
-                DB_WithdrawOrder.delete_by_order_id(order.Order_id)
                 self.__all_order_tasks.remove(order)
                 return packer_cell_id
-            
         return -1
 
 

@@ -201,7 +201,12 @@ def withdraw_shipout():
         doc_ids = []
         for order in my_fullfilled_orders:
             doc_ids.append(order.doc_id)
+        Logger.Debug("WMS::route.py  withdraw_shipout()")
+        Logger.Print('doc_ids', doc_ids)
         DB_WithdrawOrder.update_order_state('shipping', doc_ids) 
+        aa = DB_WithdrawOrder.table_withdraw_order.all()
+        Logger.Print('aa', aa)
+
         flash("请根据蓝色指示灯，领取您的出库物料。")
         flash("取料完毕后，请按下蓝色按钮。")
         flash("谢谢使用 山东卷积分 高密度散牙仓库。祝您工作愉快！")
