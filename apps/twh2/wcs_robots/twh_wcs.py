@@ -1,5 +1,6 @@
 from wcs_robots.twh_robot_loop_porter import TwhRobot_LoopPorter
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
+from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
 from business_logical.withdraw_order import  WithdrawOrderManager, WithdrawOrder, OrderTooth
 
 import multiprocessing
@@ -21,10 +22,11 @@ class Twh_WarehouseControlSystem():
         # __button_pick is a green button sit on packer.
         self.__button_pick = RemoteVar_mqtt('twh/221109/packer/button/pick','idle')
         # __button_pack is a blue button sit on packer.
-        self.__button_pack = RemoteVar_mqtt('twh/221109/packer/button/pack','idle')
-        self.__packer = TwhRobot_Packer(self.__button_pack)
+        self.__button_shipped = RemoteVar_mqtt('twh/221109/packer/button/pack','idle')
+        self.__packer = TwhRobot_Packer()
+        self.__shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
         self.__wcs_state = 'idle'
-        self.__order_task_manager = WithdrawOrderManager(self.__packer)
+        self.__order_task_manager = WithdrawOrderManager(self.__packer, self.__shipper)
  
     def Find_LoopPorter_ready(self) -> TwhRobot_LoopPorter:
         for porter in self.__porters:
@@ -69,7 +71,7 @@ class Twh_WarehouseControlSystem():
                     return porter,order, tooth
         return None, None, None # type: ignore
 
-    def link_order_tooth_porter_packer(self):
+    def try_to_withdraw_a_tooth(self):
         # setp 1:  Pair idle_porter, picking_tooth
         idle_porter, picking_order, picking_tooth = self.__Pair_idle_porter_and_tooth()
         if picking_tooth is None:
@@ -80,7 +82,6 @@ class Twh_WarehouseControlSystem():
         if is_ok:
             idle_porter.Start_Porting(picking_tooth, picking_order)  
         
-
     def state_machine_main(self, queue_web_request:multiprocessing.Queue):
         if self.__wcs_state == 'idle':
             if queue_web_request.empty():
@@ -115,7 +116,7 @@ class Twh_WarehouseControlSystem():
             
             # try to find idle_porter matched tooth in order. and pair (porter, tooth)
             # Logger.Debug("state_machine_main()  withdraw_dispaching ")
-            self.link_order_tooth_porter_packer()
+            self.try_to_withdraw_a_tooth()
 
             # try to find ready_porter
             ready_porter = self.Find_LoopPorter_ready()
@@ -132,6 +133,7 @@ class Twh_WarehouseControlSystem():
                     
         if self.__wcs_state == 'picking_placing':
             if self.__button_pick.get() == 'ON':
+                self.__button_pick.set('idle')
                 porting_tooth, porting_order = self.__picking_ready_porter.GetPortingTooth()
                 porting_tooth.TransferToLocated('packer', write_to_db=True)
 

@@ -2,14 +2,12 @@
 
 from logger import Logger
 from von.mqtt_agent import g_mqtt
-from von.remote_var_mqtt import RemoteVar_mqtt
 
 
 class TwhRobot_Packer():
-    def __init__(self, button_pack:RemoteVar_mqtt) -> None:
+    def __init__(self) -> None:
         self.__green_led_index = 13
         self.__blue_led_index = 13
-        self.__button_pack = button_pack
         # self.__shipping_order_id = 0
         self.__packer_cells_state = [0,0,0,0, 0,0,0,0, 0,0,0,0]
 
@@ -23,8 +21,6 @@ class TwhRobot_Packer():
     def StartFeeding_LockPackerCell(self, packer_cell_id:int):
         self.__packer_cells_state[packer_cell_id] = 1
         
-    def Get_Shipout_button_value(self):
-        return self.__button_pack.get()
   
     def Find_Idle_packer_cell(self)->int:
         '''

@@ -2,10 +2,33 @@
 #include "Arduino.h"
 #include "MyLibs/basic/logger.h"
 #include "Mqtt/wifi_mqtt_client.h"
+// #include "MyLibs/basic/logger.h"
 
 Button_Gpio::Button_Gpio(int gpio_pin_number){
     __pin_number = gpio_pin_number;
     pinMode(__pin_number, INPUT_PULLUP);
+}
+
+
+void Button_Gpio::__mqtt_publish_state(bool is_on){
+    if ((millis() - __last_publish_timestamp) < ( __setting_mqtt_publish_interval_ms)){
+        // Logger::Print("Button_Gpio::__mqtt_publish_state(),  too fast to publish mqtt", last_publish_timestamp);
+        // Logger::Print("millis()", millis());
+        // Logger::Print("__setting_mqtt_publish_interval_ms", __setting_mqtt_publish_interval_ms);
+        return;
+    }
+    // Logger::Print("going to publishing ", is_on);
+    if(is_on) {
+        if (__setting_mqtt_publish_on_event){
+            g_mqttClient.publish(_mqtt_publish_topic, 2, true,_PAYLOAD_STRING_ON.c_str());
+            __last_publish_timestamp = millis();
+        }
+    }else{
+        if (__setting_mqtt_publish_off_event){
+            g_mqttClient.publish(_mqtt_publish_topic, 2, true,_PAYLOAD_STRING_OFF.c_str());
+            __last_publish_timestamp = millis();
+        }
+    }
 }
 
 // check button state, might publish mqtt message when its state is changed.
@@ -23,11 +46,7 @@ void Button_Gpio::SpinOnce(){
             if (go_on_remote){
                 if(_mqtt_publish_topic != nullptr){
                     // Logger::Print("Button_Gpio::SpinOnce()  is_pressed", is_pressed);
-                    if(is_pressed) {
-                        g_mqttClient.publish(_mqtt_publish_topic, 2, true,_PAYLOAD_STRING_ON.c_str());
-                    }else{
-                        g_mqttClient.publish(_mqtt_publish_topic, 2, true,_PAYLOAD_STRING_OFF.c_str());
-                    }
+                    __mqtt_publish_state(is_pressed);
                 }
             }
         }

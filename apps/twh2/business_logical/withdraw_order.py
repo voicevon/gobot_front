@@ -1,6 +1,7 @@
 from logger import Logger
 from database.db_withdraw_order import DB_WithdrawOrder
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
+from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
 
 class OrderTooth():
     def __init__(self, db_doc_id:int) -> None:
@@ -34,12 +35,13 @@ class OrderTooth():
 
 
 class WithdrawOrder():
-    def __init__(self, order_id:int, packer:TwhRobot_Packer) -> None:
+    def __init__(self, order_id:int, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
         self.__all_teeth = []
         self.Order_id = order_id
         self.PackerCell_id = -1
         self.__state = 'idle'
         self.__packer = packer
+        self.__shipper = shipper
 
     def AddTooth(self, new_tooth:OrderTooth) -> None:
         self.__all_teeth.append(new_tooth)
@@ -103,9 +105,6 @@ class WithdrawOrder():
             self.SetStateTo('feeding', write_to_db=True)
         return True    
             
-    
-    
-
     def GetState(self) -> str:
         return self.__state
 
@@ -140,8 +139,9 @@ class WithdrawOrder():
             return False
 
         if self.__state == 'wcs_shipping':
-            if self.__packer.Get_Shipout_button_value()=='ON':
+            if self.__shipper.Get_Shipout_button_value()=='ON':
                 Logger.Debug('WithdrawOrder:: SpinOnce()  From wcs_shipping to shipped')
+                self.__shipper.Reset_Shipout_button()
                 DB_WithdrawOrder.delete_by_order_id(self.Order_id)
                 self.__packer.Release_packer_cell(self.PackerCell_id)
                 return True
@@ -149,9 +149,10 @@ class WithdrawOrder():
 
 
 class WithdrawOrderManager():
-    def __init__(self, packer:TwhRobot_Packer) -> None:
+    def __init__(self, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
         self.__all_order_tasks = []
         self.__packer = packer
+        self.__shipper = shipper
 
     def AddOrderTask(self, new_order_task: WithdrawOrder):
         self.__all_order_tasks.append(new_order_task)
@@ -192,25 +193,25 @@ class WithdrawOrderManager():
         DB_WithdrawOrder.table_withdraw_order.clear_cache()
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         for db_tooth in db_order_teeth:
-            order_task = self.FindOrderTask(db_tooth['order_id'])
-            if order_task is None:
-                new_order_task = WithdrawOrder(db_tooth['order_id'], self.__packer)
-                self.AddOrderTask(new_order_task)
-                order_task = new_order_task
-                Logger.Print('new_order_task is added to manager. Order_id', new_order_task.Order_id)
-            order_task.SetStateTo(db_tooth['order_state'], write_to_db=False)
+            the_order = self.FindOrderTask(db_tooth['order_id'])
+            if the_order is None:
+                new_order = WithdrawOrder(db_tooth['order_id'], self.__packer, self.__shipper)
+                self.AddOrderTask(new_order)
+                the_order = new_order
+                Logger.Print('new_order_task is added to manager. Order_id', new_order.Order_id)
+            the_order.SetStateTo(db_tooth['order_state'], write_to_db=False)
 
-            order_task_tooth = order_task.FindTooth_from_doc_id(db_tooth.doc_id)
-            if order_task_tooth is None:
+            order_tooth = the_order.FindTooth_from_doc_id(db_tooth.doc_id)
+            if order_tooth is None:
                 new_tooth = OrderTooth(db_tooth.doc_id)
                 new_tooth.DentalLocation = db_tooth['location']
                 new_tooth.row = db_tooth['row']
                 new_tooth.col = db_tooth['col']
                 new_tooth.layer = db_tooth['layer']
-                order_task.AddTooth(new_tooth)
-                order_task_tooth = new_tooth
+                the_order.AddTooth(new_tooth)
+                order_tooth = new_tooth
                 Logger.Print('new_tooth is added to order_task. DentalLocation', new_tooth.DentalLocation)
-            order_task_tooth.TransferToLocated(db_tooth['located'], write_to_db=False)
+            order_tooth.TransferToLocated(db_tooth['located'], write_to_db=False)
 
             # if order_task.GetState() == 'shipped':
             #     DB_WithdrawOrder.delete_by_order_id(order_task.Order_id)

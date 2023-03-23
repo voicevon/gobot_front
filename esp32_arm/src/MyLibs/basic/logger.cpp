@@ -146,6 +146,13 @@ void Logger::Print(const char* var_name, uint32_t value){
     Serial.println(value);
 }
 
+void Logger::Print(const char* var_name, unsigned long value){
+    __print_sid();
+    Serial.print(var_name);
+    Serial.print(" =\t");
+    Serial.println(value);
+}
+
 void Logger::Print(const char* var_name, const char value){
     __print_sid();
     Serial.print(var_name);
