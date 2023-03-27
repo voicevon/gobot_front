@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request,flash, session, redirect, 
 from wcs_robots.twh_wcs import  wcs_deposit_queue
 from database.db_stock import db_Stock, db_Deposit_history,db_StockRule
 from database.db_withdraw_order import DB_WithdrawOrder
-from business_logical.bolt_nut import get_row_from_tooth_location
+from business_logical.bolt_nut import get_row_from_tooth_location, g_brands
 
 from timestamp import get_timestamp
 from logger import Logger
@@ -82,7 +82,7 @@ def view_withdraw_history():
 def deposit():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
-        return render_template('deposit.html', twh_id = twh_id)
+        return render_template('deposit.html', twh_id = twh_id, brands = g_brands)
     else:
         return redirect(url_for('web_user.login'))
 
@@ -152,7 +152,7 @@ def deposit_end():
 def withdraw():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
-        return render_template('withdraw.html', twh_id=twh_id)
+        return render_template('withdraw.html', twh_id=twh_id, brands=g_brands)
     else:
         return redirect(url_for('web_user.login'))
 
@@ -205,15 +205,15 @@ def withdraw_shipout():
             return redirect(url_for("web_user.home"))
 
 
-        # 开始取料
+        # 开始领取出库物料，
         doc_ids = []
         for order in my_fullfilled_orders:
             doc_ids.append(order.doc_id)
         Logger.Debug("WMS::route.py  withdraw_shipout()")
         Logger.Print('doc_ids', doc_ids)
         DB_WithdrawOrder.update_order_state('wms_shipping', doc_ids) 
-        aa = DB_WithdrawOrder.table_withdraw_order.all()
-        Logger.Print('aa', aa)
+        # aa = DB_WithdrawOrder.table_withdraw_order.all()
+        # Logger.Print('aa', aa)
 
         flash("请根据 蓝色指示灯，领取您的出库物料。")
         flash("取料完毕后，请按下 蓝色按钮, 直到 蓝色指示灯 熄灭")

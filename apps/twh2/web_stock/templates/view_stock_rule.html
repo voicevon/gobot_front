@@ -6,13 +6,13 @@
 <table>
     <tr>
 
-        <td align="center">doc_id</td>
+        <!-- <td align="center">doc_id</td>
         <td align="center">盒编号</td>
-        <td align="center">twh_id</td>
+        <td align="center">twh_id</td> -->
         <td align="center">管理人</td>
-        <td align="center">日期</td>
+        <!-- <td align="center">日期</td> -->
 
-        <td align="center">品牌</td>
+        <td align="center">品牌系列</td>
         <td align="center">批次</td>
         <td align="center">颜色</td>
         <td align="center">大小</td>
@@ -23,26 +23,16 @@
     {% for item in items %}
     <tr>
         <form action="stock_rule_update" method="post">
-            <td align="center">{{ item.doc_id }}</td>
+            <!-- <td align="center">{{ item.doc_id }}</td>
             <td align="center">{{ item.col }}</td>
-            <td align="center">{{ item.twh_id }}</td>
+            <td align="center">{{ item.twh_id }}</td> -->
             <td align="center">{{ item.user_id}}</td>
-            <td align="center">{{ item.date_time }}</td>
+            <!-- <td align="center">{{ item.date_time }}</td> -->
             <input type="hidden" name="doc_id" value="{{ item.doc_id }}">
             <input type="hidden" name="col" value="{{ item.col }}">
             <input type="hidden" name="twh_id" value="{{ item.twh_id }}">
 
-            <td><select id="brand" name="brand">
-                    <option value="定远" {% if item.brand=='定远' %} selected{% endif%}>定远</option>
-                    <option value="赢冠"{% if item.brand=='赢冠' %} selected{% endif%}>赢冠</option>
-                    <option value="鼎冠"{% if item.brand=='鼎冠' %} selected{% endif%}>鼎冠</option>
-                    <option value="正午"{% if item.brand=='正午' %} selected{% endif%}>正午</option>
-                    <option value="赢冠"{% if item.brand=='赢冠' %} selected{% endif%}>赢冠</option>
-                    <option value="博瑞特"{% if item.brand=='博瑞特' %} selected{% endif%}>博瑞特</option>
-                    <option value="嘉伟"{% if item.brand=='嘉伟' %} selected{% endif%}>嘉伟</option>
-                    <option value="美尔晶"{% if item.brand=='美尔晶' %} selected{% endif%}>美尔晶</option>
-                    <option value="名扬"{% if item.brand=='名扬' %} selected{% endif%}>名扬</option>
-                </select>
+            <td>{% include 'embeded_brand_selected.html' %}
             </td>
             <td>{{ item.batch_number }}</td>
             <td><select id="color" name="color">
@@ -52,15 +42,17 @@
                 </select>
             </td>
             <td><select id="size" name="size">
-                    <option value="大" {% if item.size=='大' %} selected{% endif%}>大</option>
-                    <option value="中" {% if item.size=='中' %} selected{% endif%}>中</option>
-                    <option value="小" {% if item.size=='小' %} selected{% endif%}>小</option>
+                    <option value="T1" {% if item.size=='T1' %} selected{% endif%}>T1</option>
+                    <option value="T2" {% if item.size=='T2' %} selected{% endif%}>T2</option>
+                    <option value="T3" {% if item.size=='T3' %} selected{% endif%}>T3</option>
+                    <option value="T4" {% if item.size=='T4' %} selected{% endif%}>T4</option>
+                    <option value="T5" {% if item.size=='T5' %} selected{% endif%}>T5</option>
+                    <option value="T6" {% if item.size=='T6' %} selected{% endif%}>T6</option>
                 </select>
             </td>
             <td><select id="shape" name="shape">
-                    <option value="方" {% if item.shape=='方' %} selected{% endif%}>方</option>
-                    <option value="圆" {% if item.shape=='圆' %} selected{% endif%}>圆</option>
-                    <option value="其他"{% if item.shape=='其他' %} selected{% endif%}>其他</option>
+                    <option value="M" {% if item.shape=='M' %} selected{% endif%}>M</option>
+                    <option value="S" {% if item.shape=='S' %} selected{% endif%}>S</option>
                 </select>
             </td>
 

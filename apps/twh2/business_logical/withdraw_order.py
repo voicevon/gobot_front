@@ -133,7 +133,11 @@ class WithdrawOrder():
             return False
         
         if self.__state == 'wms_shipping':
+            if self.__shipper.IsShipping():
+                return False
             self.__packer.StartShipping(self.PackerCell_id)
+            self.__shipper.StartShipping() 
+            # multiple orders is in the state of 'wms_shipping'
             doc_ids = self.__get_all_teeth_doc_ids()
             DB_WithdrawOrder.update_order_state('wcs_shipping', doc_ids)
             return False
@@ -141,7 +145,9 @@ class WithdrawOrder():
         if self.__state == 'wcs_shipping':
             if self.__shipper.Get_Shipout_button_value()=='ON':
                 Logger.Debug('WithdrawOrder:: SpinOnce()  From wcs_shipping to shipped')
-                self.__shipper.Reset_Shipout_button()
+                # self.__shipper.Reset_Shipout_button()
+                self.__shipper.EndShipping()
+
                 DB_WithdrawOrder.delete_by_order_id(self.Order_id)
                 self.__packer.Release_packer_cell(self.PackerCell_id)
                 return True

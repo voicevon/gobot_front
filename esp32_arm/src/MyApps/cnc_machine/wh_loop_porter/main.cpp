@@ -43,7 +43,7 @@ Twh_LoopPorter_Robot robot;
 // void test_board(){
 //     board.GetDisplayer()->Test(9999, 2);
 //     // board.Test_PositionTriggers(0);
-//     // board.Test_Stepper(0);
+    // board.Test_Stepper(0);
 //     // Serial.println("[Info] test_board() is done  MY_ROBOT_ROW_ID=" + String(MY_ROBOT_ROW_ID));
 // }
 
@@ -99,7 +99,7 @@ void setup(){
     // board.TestLeds(200);
     // PositionTrigger_Array::Instance().Test_PositionTriggers(99);
     // CncActuator_List::Instance().GetActuator(0).test
-    // board.Test_Stepper(999);
+    board.Test_Stepper(999);
     
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
     

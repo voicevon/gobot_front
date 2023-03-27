@@ -1,28 +1,42 @@
 @startuml
 
-IO -> RC_HwDriver: buttons state
+RC_IO -> RC_HwDriver: buttons state
 activate RC_HwDriver
-RC_App -> RC_Screen: Welcome
-RC_App -> NUC: Camera actions
-RC_App -> NUC: Robot arm commands
+' RC_App -> RC_Screen: Welcome
+RC_Screen <- RC_App: Welcome
 
-RC_App <-- NUC: 3D point cloud source data
+RC_HwDriver ->RC_App: Commands and actions
 activate RC_App
+RC_App <--> commmu_server: Trasnparent to NUC_App
+commmu_server <--> NUC_agent: Transparent to NUC_App
 
-RC_HwDriver -> RC_App: 3D point cloud interaction
-RC_App -> NUC: 3D Coordination（来自触摸笔位置）
+RC_App -> NUC_agent: Camera actions
+RC_App -> NUC_agent: Robot arm commands(含通道：#1, #3，#7, #8, #9)
 deactivate RC_App
 
-RC_App <-- NUC: RGB source data (No video decoder on RC)
+RC_App <- NUC_agent: 3D point cloud source data
 activate RC_App
-RC_App -> RC_Screen: (Real time display video is required)
+RC_App <- NUC_agent: RGB picture
+RC_App -> RC_Screen: 6 DoF mainipulatation
+RC_HwDriver -> RC_App: 3D point cloud interaction commands
+RC_App -> NUC_agent: 2D Coordination（来自触摸笔位置）
 deactivate RC_App
 
-NUC ---> PLC: done.  No required to modify anything.
+RC_App <- NUC_agent: RGB source data (There IS NO hardware video decoder on RC!)
+activate RC_App
+RC_App -> RC_Screen: (Real time display video is required, 640*480 *24)
+deactivate RC_App
+
+NUC_agent -> NUC_App: API or callback
+NUC_agent <- NUC_App: API or callback
+
+NUC_App ---> PLC: DONE.  No requirement to modify anything.
+NUC_App <--> Camera:DONE.  No requirement to modify anything.
 
 RC_HwDriver -> PLC: 行走控制 (数传通道)
 note right of RC_App: Windows 10, Python
-note right of NUC: Linux, Python
+note right of commmu_server : 部署在 NUC：\n为防止和 NUC_App 耦合紧密： \nA:嵌入到 NUC-App, 将作为独立进程。 \nB: 独立应用 or 服务。
+note right of NUC_App: Linux, Python
 deactivate RC_HwDriver
 
 @enduml
