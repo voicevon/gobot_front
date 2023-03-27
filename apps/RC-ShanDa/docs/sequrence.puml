@@ -1,0 +1,28 @@
+@startuml
+
+IO -> RC_HwDriver: buttons state
+activate RC_HwDriver
+RC_App -> RC_Screen: Welcome
+RC_App -> NUC: Camera actions
+RC_App -> NUC: Robot arm commands
+
+RC_App <-- NUC: 3D point cloud source data
+activate RC_App
+
+RC_HwDriver -> RC_App: 3D point cloud interaction
+RC_App -> NUC: 3D Coordination（来自触摸笔位置）
+deactivate RC_App
+
+RC_App <-- NUC: RGB source data (No video decoder on RC)
+activate RC_App
+RC_App -> RC_Screen: (Real time display video is required)
+deactivate RC_App
+
+NUC ---> PLC: done.  No required to modify anything.
+
+RC_HwDriver -> PLC: 行走控制 (数传通道)
+note right of RC_App: Windows 10, Python
+note right of NUC: Linux, Python
+deactivate RC_HwDriver
+
+@enduml
