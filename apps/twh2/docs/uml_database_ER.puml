@@ -33,6 +33,16 @@ entity "user" as user{
 
 }
 
+entity "order" as order{
+  *id: number <<generated>>
+  --
+  user_id : number <<FK>>
+  brand: text
+  dental_location: text
+  
+}
+
+
 annotation "withdraw_queue" as withdraw_queue {
   *id : number <<generated>>
   --
@@ -63,8 +73,9 @@ annotation "log" as log{
   deposit_quantity(in,out): int 
   after_quantity: int 
 }
-stock||..o{ withdraw_queue
-user ||..o{ withdraw_queue
-user ||..o{ log
+stock||..o withdraw_queue
+user ||..o withdraw_queue
+user ||..o log
+user ||..o order
 
 @enduml
