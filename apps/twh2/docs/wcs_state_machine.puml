@@ -2,7 +2,7 @@
 
 state wcs_state{
 	[*] -> wcs_idle
-	wcs_idle-[#red,bold]-> checking_deposit_mq
+	wcs_idle-[#red,dashed]-> checking_deposit_mq
 	checking_deposit_mq -[#red,bold]-> deposit_begin: deposit(row, col, quantity) \nrobot[row].moveto(col)
 	deposit_begin -[#red,bold]-> deposite_end
 	deposite_end -[#red,bold]->wcs_idle: user_finished, \nuser_canceled
@@ -21,13 +21,18 @@ state wcs_state{
 	check_withdraw_request --> wcs_idle:  withdraw-queue is empty
 	check_withdraw_request --> checking_loop_porter: there is withdraw request
 	check_withdraw_request <-- checking_loop_porter: P4: all loop_porters are idle
+	note right of wcs_idle
+	Parallel processes:
+		packer button checker
+		shipper button checker
+	end note
 }
 
 
 state loop_porter {
 	[*] -> loop_idle 
-	loop_idle --> moving
-	moving -> moving
+	loop_idle -> moving
+	moving <- moving
 	moving --> ready
 }
 
@@ -36,17 +41,21 @@ assign_new_picking --> moving
 
 
 state withdraw_order{
+	[*] -> order_idle
 	order_idle --> feeding
 	feeding --> feeding
 	feeding --> fullfilled
-	fullfilled --> packing: user request from web page
-	packing --> packed: Yellow-begin button is pressed
-	packed --> wms_shipping: Yellow-end button is pressed
+
+	state future_version{
+		fullfilled --> packing: user request from web page
+		packing -[#grey,dashed]-> packed 
+	}
+	packed -[#grey,dashed]-> wms_shipping: Yellow button is pressed
+
 	wms_shipping --> wcs_shipping: wcs got the message
+	wcs_shipping <-- wcs_shipping: worker is operating
 	wcs_shipping --> shipped: blue button is pressed
 	shipped --> order_idle
-	packing: For future version
-	packed:: For future version
 	fullfilled: show packer-cell led of the order
 }
 
