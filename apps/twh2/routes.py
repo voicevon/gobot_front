@@ -21,6 +21,10 @@ new_message['test'] = {'id':2, 'payload': 'hello, dynamic message.'}
 def index():
     return render_template('index.html')
 
+@app.route('/hire')
+def hire():
+    return render_template('hire.html')
+
 @app.route('/contact')
 def contact():
     return render_template('contact.html')        
@@ -28,6 +32,10 @@ def contact():
 @app.route('/product_wcs')
 def product_wcs():
     return render_template('product_wcs.html')
+
+@app.route('/product_twh_m1')
+def product_twh_m1():
+    return render_template('product_twh_m1.html')
 
 @app.route('/product_acupuncture')
 def product_acupuncture():

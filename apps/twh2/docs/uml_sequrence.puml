@@ -1,0 +1,56 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+
+skinparam backgroundColor #EEEBDC
+skinparam handwritten true
+skinparam fontname Impact
+
+
+skinparam sequence {
+' ArrowColor DeepSkyBlue
+ActorBorderColor DeepSkyBlue
+LifeLineBorderColor blue
+LifeLineBackgroundColor #A9DCDF
+
+ParticipantBorderColor DeepSkyBlue
+ParticipantBackgroundColor DodgerBlue
+ParticipantFontName Impact
+ParticipantFontSize 17
+ParticipantFontColor #A9DCDF
+
+' ActorBackgroundColor aqua
+ActorBackgroundColor red
+ActorFontColor red
+ActorFontSize 17
+ActorFontName Aera
+}
+
+actor 库管 as 库管
+
+box "散牙管理：高密度,自动化" #LightBlue
+collections 散牙自动仓 as 散牙自动仓
+collections 订单包装盒 as 订单包装盒
+collections 网络 as 网络
+end box
+
+participant 手机 as 手机
+skinparam sequence{
+ActorBackgroundColor green
+ActorFontColor green
+ActorFontSize 17
+ActorFontName Impact
+}
+actor 技工 as 技工
+== 保管员入库 ==
+库管 o-[#Red]-> 散牙自动仓: 散牙入库
+== 技工出库 ==
+手机<-[#Green]-o 技工: 输入工作订单
+手机 o--> 网络: 订单明细
+网络 o--> 散牙自动仓: 订单明细
+散牙自动仓 o--> 订单包装盒: 按订单明细自动配货\n(平均 30秒 每订单)
+订单包装盒 o-[#Green,bold]-> 技工: 按订单领料
+== 查询，报告，报警 ==
+散牙自动仓 o-[#Red]-> 库管: 实时库存报告
+散牙自动仓 o-[#Red]-> 库管: 低库存报警
+@enduml
