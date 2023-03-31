@@ -1,0 +1,48 @@
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{% block js_source%}{% endblock %}
+	<style>
+		<style>table,
+		th,
+		td {
+			border: 3px solid rgb(0, 229, 255);
+			border-collapse: collapse;
+		}
+
+		th,
+		td {
+			padding: 5px;
+		}
+	</style>
+	</style>
+</head>
+
+<body>
+    <a style="text-decoration: none;" href="/"> 首页 </a>
+    <a style="text-decoration: none;" href="/product_iot"> 物联网 </a>
+    <a style="text-decoration: none;" href="/product_wcs"> 小微型自动化仓库 </a>
+    <a style="text-decoration: none;" href="/product_acupuncture"> 针灸教学仿真人 </a>
+    <a style="text-decoration: none;" href="/contact"> 联系 </a>
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+	<ul class=flashes>
+		{% for category, message in messages %}
+		<li class="{{ category }}">{{ message }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+	{% endwith %}
+	<br>
+	{% block page_content %}{% endblock %}
+	<br><br>
+	<hr>
+	山东卷积分大数据有限公司<br>
+	2021-2023
+</body>
+
+</html>

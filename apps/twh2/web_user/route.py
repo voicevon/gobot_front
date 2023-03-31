@@ -92,7 +92,7 @@ def view_users():
 #     return render_template('home_admin.html', twh=twh)
 
 
-@web_user.route('/')
+@web_user.route('/twh')
 def home():
     if "user" not in session:
         return redirect(url_for("web_user.login"))

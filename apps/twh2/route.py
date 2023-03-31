@@ -19,22 +19,23 @@ new_message['test'] = {'id':2, 'payload': 'hello, dynamic message.'}
 
 @app.route('/')
 def index():
-    store_map = []
-    return render_template('index.html', store_map = store_map)
+    return render_template('index.html')
 
 @app.route('/contact')
 def contact():
-    return render_template('cotact.html')        
+    return render_template('contact.html')        
 
 @app.route('/product_wcs')
 def product_wcs():
     return render_template('product_wcs.html')
 
-@app.route('/product_acupuncture.html')
+@app.route('/product_acupuncture')
 def product_acupuncture():
     return render_template('product_acupuncture.html')
 
-
+@app.route('/product_iot')
+def product_iot():
+    return render_template('product_iot.html')
 
 Start_WCS_Process()
 
