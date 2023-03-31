@@ -177,12 +177,17 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
 
 # from wms to wcs
 wcs_deposit_queue = multiprocessing.Queue()         
-
+wcs_is_started = False
 def Start_WCS_Process():
+    global wcs_is_started
+    if wcs_is_started:
+        return
     # p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue, set_packer_cell_state_queue, packer_cells_state))
+    wcs_is_started = True
     p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue,))
     p.start() 
     Logger.Info('WCS is running on new process.....')
+
 
     # https://pymotw.com/2/multiprocessing/communication.html#communication-between-processes
 
