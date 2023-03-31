@@ -161,7 +161,7 @@ class TwhWcs_Unit():
 
 def WCS_Main(deposit_queue:multiprocessing.Queue):
         g_mqtt_broker_config.client_id = '20221222'
-        g_mqtt.connect_to_broker(g_mqtt_broker_config,wait_connected=True)                # DebugMode, must be turn off.  
+        g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
 
         all_wcs_units = []
         for twh_id in list(twh_factory.keys()):
