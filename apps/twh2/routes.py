@@ -49,6 +49,10 @@ def product_twh_m3():
 def product_twh_m4():
     return render_template('wcs/product_twh_m4.html')
 
+@app.route('/product_twh_rental_price')
+def product_twh_rental_price():
+    return render_template('wcs/product_twh_rental_price.html')
+
 @app.route('/product_acupuncture')
 def product_acupuncture():
     return render_template('/acupuncture/product_acupuncture.html')
