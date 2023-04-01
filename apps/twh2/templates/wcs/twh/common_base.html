@@ -23,7 +23,7 @@
 
 <body>
 	{% if 'user' in session %}
-	<a style="text-decoration: none;" href="/"> {{ session['user']['factory_name'] }} </a>. . . {{session["user"]['user_id'] }} . . .
+	<a style="text-decoration: none;" href="/twh"> {{ session['user']['factory_name'] }} </a>. . . {{session["user"]['user_id'] }} . . .
 	{% endif %}
 	<a style="text-decoration: none;" href="logout">退出</a> <br>
 	{% with messages = get_flashed_messages(with_categories=true) %}

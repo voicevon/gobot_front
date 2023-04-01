@@ -7,14 +7,9 @@ from operator import itemgetter
 web_user = Blueprint('web_user', __name__,template_folder='templates')
 
 
-# def check_login():
-#     if "user" not in session:
-#         return redirect(url_for('login'))
 
 @web_user.route('/login')
 def login():
-    # twh = get_twh_factory(request.args.get('twh_id'))
-    # Logger.Print('@web_user.route(/login)', twh)
     return render_template('login.html')
 
 @web_user.route('/login_real', methods=['POST'])
@@ -78,19 +73,6 @@ def view_users():
 
     # Logger.Print('@web_user.route(/view_users)', users)
     return render_template('view_users.html', users=sorted_users)
-
-# @web_user.route('/')
-# def home():
-    # twh = get_twh_factory('221109')
-    # return render_template('home.html')
-
-# @web_user.route('/admin_home')
-# def admin_home():
-#     twh={}
-#     twh["id"] = 1010
-#     twh['factory_name'] = '山东卷积分公司'
-#     return render_template('home_admin.html', twh=twh)
-
 
 @web_user.route('/twh')
 def home():
