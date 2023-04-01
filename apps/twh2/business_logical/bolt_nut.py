@@ -4,7 +4,11 @@ from logger import Logger
 twh_factory = {'221109':'卷积分义齿加工厂',
                  '230220':'山东雅乐福义齿公司'}
 
-g_brands = {'沪鸽', '日本松风塑钢','日本山八硬质','日本山八合成'}
+twh_brands = {'沪鸽', '日本松风塑钢','日本山八硬质','日本山八合成'}
+twh_colors = {'A1','A2','A3'}
+twh_sizes = {'T1','T2','T3','T4','T5','T6'}
+twh_shapes = {'M', 'S'}
+
 
 def get_twh_factory(twh_id:str):
     result = {}

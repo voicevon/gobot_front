@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request,flash, session, redirect, 
 from wcs_robots.twh_wcs import  wcs_deposit_queue
 from database.db_stock import db_Stock, db_Deposit_history,db_StockRule
 from database.db_withdraw_order import DB_WithdrawOrder
-from business_logical.bolt_nut import get_row_from_tooth_location, g_brands
+from business_logical.bolt_nut import get_row_from_tooth_location, twh_brands,twh_factory
 
 from timestamp import get_timestamp
 from logger import Logger
@@ -10,10 +10,7 @@ from datetime import datetime
 
 web_stock = Blueprint('web_stock', __name__,template_folder='templates')
 
-twh_factory = {'221109':'山东雅乐福义齿公司'}
-
-
-@web_stock.route('/decrease_stock')
+@web_stock.route('/twh/decrease_stock')
 def decrease_stock():
     row_id = int(request.args.get('doc_id'))
     # print("rrrrrrrrrrrrrrrrrrrrrrrrrrr  row_id=  ", row_id)
@@ -26,7 +23,7 @@ def decrease_stock():
     # g_database.db_stock.write_back(rows)
     return 'OK'
 
-@web_stock.route('/stock_rule_update', methods = ['POST'])
+@web_stock.route('/twh/stock_rule_update', methods = ['POST'])
 def stock_rule_update():
     new_rule_item = request.form.to_dict()
     new_rule_item['user_id'] = session['user']['user_id']
@@ -36,7 +33,7 @@ def stock_rule_update():
     flash("规则更新完毕")
     return redirect(url_for('web_stock.view_stock_rule'))
 
-@web_stock.route("/stock_rule_creator")
+@web_stock.route("/twh/stock_rule_creator")
 def stock_rule_creator():
     item = {}
     item['twh_id'] = '221109'
@@ -58,35 +55,35 @@ def stock_rule_creator():
         flash('created stock rule for ' + item['twh_id'])
     return redirect(url_for('home'))
 
-@web_stock.route('/view_stock_rule')
+@web_stock.route('/twh/view_stock_rule')
 def view_stock_rule():
     items = db_StockRule.get_all_rules_in_twh(session['user']['twh_id'])
     return render_template('view_stock_rule.html', items=items)
 
-@web_stock.route('/view_stock_quantity')
+@web_stock.route('/twh/view_stock_quantity')
 def view_stock_quantity():
     stocks = db_Stock.table_stock.all()
     return render_template('view_stock_quantity.html', stocks=stocks, factory_name=twh_factory['221109'])
 
-@web_stock.route('/view_deposit_history')
+@web_stock.route('/twh/view_deposit_history')
 def view_deposit_history():
     items = db_Deposit_history.table_deposit_history.all()
     return render_template('view_deposit_history.html', items=items, factory_name=twh_factory['221109'])
 
-@web_stock.route('/view_withdraw_history')
+@web_stock.route('/twh/view_withdraw_history')
 def view_withdraw_history():
     items = DB_WithdrawOrder.table_withdraw_history.all()
     return render_template('view_withdraw_history.html', items=items, factory_name=twh_factory['221109'])
 
-@web_stock.route('/deposit')
+@web_stock.route('/twh/deposit')
 def deposit():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
-        return render_template('deposit.html', twh_id = twh_id, brands = g_brands)
+        return render_template('deposit.html', twh_id = twh_id, brands = twh_brands)
     else:
         return redirect(url_for('web_user.login'))
 
-@web_stock.route('/deposit_request', methods = ['POST'])
+@web_stock.route('/twh/deposit_request', methods = ['POST'])
 def deposit_request():
     # # https://stackoverflow.com/questions/23205577/python-flask-immutablemultidict
     # for key in request.form.to_dict():
@@ -115,7 +112,7 @@ def deposit_request():
 
     return render_template("deposit_request.html",user_request = user_request)
 
-@web_stock.route('/deposit_move', methods = ['POST'])
+@web_stock.route('/twh/deposit_move', methods = ['POST'])
 def deposit_move():
     if request.method == 'POST':
         request_form = request.form
@@ -133,7 +130,7 @@ def deposit_move():
         print("robot will move box to somewhere for operator........ ")
         return render_template("deposit_move.html",user_request = user_request)
 
-@web_stock.route('/deposit_end', methods = ['POST'])
+@web_stock.route('/twh/deposit_end', methods = ['POST'])
 def deposit_end():
         user_request = {}
         for key in request.form.to_dict():
@@ -148,15 +145,15 @@ def deposit_end():
         wcs_deposit_queue.put(user_request)
         return render_template("deposit_end.html")
 
-@web_stock.route('/withdraw')
+@web_stock.route('/twh/withdraw')
 def withdraw():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
-        return render_template('withdraw.html', twh_id=twh_id, brands=g_brands)
+        return render_template('withdraw.html', twh_id=twh_id, brands=twh_brands)
     else:
         return redirect(url_for('web_user.login'))
 
-@web_stock.route('/withdraw_begin', methods = ['POST'])
+@web_stock.route('/twh/withdraw_begin', methods = ['POST'])
 def withdraw_begin():
     user_request = {}
     for key in request.form.to_dict():
@@ -179,7 +176,7 @@ def withdraw_begin():
     DB_WithdrawOrder.Create_OrderTasks_multi_rows(user_request)
     return render_template('withdraw_begin.html')
 
-@web_stock.route('/withdraw_shipout')
+@web_stock.route('/twh/withdraw_shipout')
 def withdraw_shipout():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
@@ -218,3 +215,7 @@ def withdraw_shipout():
         flash("请根据 蓝色指示灯，领取您的出库物料。")
         flash("取料完毕后，请按下 蓝色按钮, 直到 蓝色指示灯 熄灭")
         return redirect(url_for('web_user.home'))
+
+@web_stock.route('/twh/view_my_withdraw')
+def view_my_withdraw():
+    return render_template('view_my_withdraw.html')

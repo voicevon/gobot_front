@@ -1,19 +1,19 @@
 {% extends "wcs/twh/common_base.html" %}
 {% block content %}
-<a style="text-decoration: none;" href="/view_users">查看用户</a><br>
-<a style="text-decoration: none;" href="/view_stock_quantity">查看库存量</a><br>
-<a style="text-decoration: none;" href="/view_deposit_history">查看 入库记录</a><br>
-<a style="text-decoration: none;" href="/view_withdraw_history">查看 出库记录</a><br>
+<a style="text-decoration: none;" href="/twh/view_users">查看用户</a><br>
+<a style="text-decoration: none;" href="/twh/view_stock_quantity">查看库存量</a><br>
+<a style="text-decoration: none;" href="/twh/view_deposit_history">查看 入库记录</a><br>
+<a style="text-decoration: none;" href="/twh/view_withdraw_history">查看 出库记录</a><br>
 
 <hr>
-<a style="text-decoration: none;" href="/view_stock_rule">管理货位规则</a><br>
+<a style="text-decoration: none;" href="/twh/view_stock_rule">管理货位规则</a><br>
 <hr>
-<a style="text-decoration: none;" href="/login?twh_id=221109">登录</a><br>
-<a style="text-decoration: none;" href="/sign_up?twh_id=221109">用户注册</a><br>
+<a style="text-decoration: none;" href="/twh/login?twh_id=221109">登录</a><br>
+<a style="text-decoration: none;" href="/twh/sign_up?twh_id=221109">用户注册</a><br>
 <hr>
-<a style="text-decoration: none;" href="/deposit?twh_id=221109">入库申请</a><br>
-<a style="text-decoration: none;" href="/withdraw?twh_id=221109">出库申请</a><br>
-<a style="text-decoration: none;" href="/withdraw_shipout?twh=221109">出库领料</a><br>
+<a style="text-decoration: none;" href="/twh/deposit?twh_id=221109">入库申请</a><br>
+<a style="text-decoration: none;" href="/twh/withdraw?twh_id=221109">出库申请</a><br>
+<a style="text-decoration: none;" href="/twh/withdraw_shipout?twh=221109">出库领料</a><br>
 {% endblock %}
 
 

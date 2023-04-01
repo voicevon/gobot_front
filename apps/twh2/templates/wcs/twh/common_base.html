@@ -23,9 +23,11 @@
 
 <body>
 	{% if 'user' in session %}
-	<a style="text-decoration: none;" href="/twh"> {{ session['user']['factory_name'] }} </a>. . . {{session["user"]['user_id'] }} . . .
+	<a style="text-decoration: none;" href="/twh"> {{ session['user']['factory_name'] }} </a>
+	. . . {{session["user"]['user_name'] }} . . .
 	{% endif %}
-	<a style="text-decoration: none;" href="logout">退出</a> <br>
+	<a style="text-decoration: none;" href="/twh/logout">退出</a>
+	<br>
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}
 	<ul class=flashes>
@@ -39,9 +41,9 @@
 	{% block content %}{% endblock %}
 	<br><br>
 	<hr>
-	
+
 	高密度散牙仓库 2021~2023<br>
-	山东卷积分大数据公司<br>
+	<a style="text-decoration: none;" href="/">山东卷积分大数据公司 </a><br>
 	支持电话: 133-0640-0990 冯先生
 
 </body>

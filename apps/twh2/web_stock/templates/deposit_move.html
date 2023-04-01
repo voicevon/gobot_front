@@ -6,7 +6,7 @@
 <p>3. 请放入牙齿到盒子，数量是 {{ user_request['deposit_quantity'] }}.</p>
 <p>4. 放入后，请单击下面的按钮, 完成操作。</p>
 
-<form action="/deposit_end" , method="POST">
+<form action="/twh/deposit_end" , method="POST">
       <input type="hidden" name="brand" value="{{ user_request['brand'] }}">
       <input type="hidden" name="batch_number" value="{{ user_request['batch_number'] }}">
       <input type="hidden" name="color" value="{{ user_request['color'] }}">

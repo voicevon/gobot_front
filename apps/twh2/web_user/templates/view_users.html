@@ -13,7 +13,7 @@
         <td>岗位</td>
     </tr>
     {% for user in users %}
-    <form action="update_position" , method="post">
+    <form action="/twh/update_position" , method="post">
         <tr>
             <td><input type="hidden" name="doc_id" value="{{ user.doc_id }}"> 
             <input type="hidden" name="user_name" value="{{ user.user_name }}"></td>
