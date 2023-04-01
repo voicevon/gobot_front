@@ -31,15 +31,27 @@ def contact():
 
 @app.route('/product_wcs')
 def product_wcs():
-    return render_template('product_wcs.html')
+    return render_template('wcs/product_wcs.html')
 
 @app.route('/product_twh_m1')
 def product_twh_m1():
-    return render_template('product_twh_m1.html')
+    return render_template('wcs/product_twh_m1.html')
+
+@app.route('/product_twh_m2')
+def product_twh_m2():
+    return render_template('wcs/product_twh_m2.html')
+
+@app.route('/product_twh_m3')
+def product_twh_m3():
+    return render_template('wcs/product_twh_m3.html')
+
+@app.route('/product_twh_m4')
+def product_twh_m4():
+    return render_template('wcs/product_twh_m4.html')
 
 @app.route('/product_acupuncture')
 def product_acupuncture():
-    return render_template('product_acupuncture.html')
+    return render_template('/acupuncture/product_acupuncture.html')
 
 @app.route('/product_iot')
 def product_iot():

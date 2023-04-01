@@ -1,13 +1,13 @@
-
-
 <!DOCTYPE html>
 <html>
 
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	{% block js_source%}{% endblock %}
+	<title>卷积分公司</title>
+	<link rel="icon" type="image/x-icon" href="/static/company_logo.png">
 	<style>
-		<style>table,
+		table,
 		th,
 		td {
 			border: 3px solid rgb(0, 229, 255);
@@ -19,16 +19,15 @@
 			padding: 5px;
 		}
 	</style>
-	</style>
 </head>
 
 <body>
-    <a style="text-decoration: none;" href="/"> 首页 </a>
-    <a style="text-decoration: none;" href="/product_iot"> 物联网 </a>
-    <a style="text-decoration: none;" href="/product_wcs"> 小微型自动化仓库 </a>
-    <a style="text-decoration: none;" href="/product_acupuncture"> 针灸教学仿真人 </a>
+	<a style="text-decoration: none;" href="/"><img src="/static/company_logo.png" alt="homepage" style="width:50px;height:50px;"> </a>
+	<a style="text-decoration: none;" href="/product_iot"> 物联网 </a>
+	<a style="text-decoration: none;" href="/product_wcs"> 自动化仓库 </a>
+	<a style="text-decoration: none;" href="/product_acupuncture"> 针灸仿真人 </a>
 	<a style="text-decoration: none;" href="/hire"> 招聘 </a>
-    <a style="text-decoration: none;" href="/contact"> 联系 </a>
+	<a style="text-decoration: none;" href="/contact"> 联系 </a>
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}
 	<ul class=flashes>

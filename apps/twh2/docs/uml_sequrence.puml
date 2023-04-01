@@ -2,7 +2,7 @@
 skinparam sequenceArrowThickness 2
 skinparam roundcorner 20
 
-skinparam backgroundColor #EEEBDC
+' skinparam backgroundColor #EEEBDC
 skinparam handwritten true
 skinparam fontname Impact
 
@@ -28,7 +28,7 @@ ActorFontName Aera
 
 actor 库管 as 库管
 
-box "散牙管理：高密度,自动化" #LightBlue
+box "卷积分散牙管理：高密度,自动化" #LightBlue
 collections 散牙自动仓 as 散牙自动仓
 collections 订单包装盒 as 订单包装盒
 collections 网络 as 网络
@@ -50,7 +50,7 @@ actor 技工 as 技工
 网络 o--> 散牙自动仓: 订单明细
 散牙自动仓 o--> 订单包装盒: 按订单明细自动配货\n(平均 30秒 每订单)
 订单包装盒 o-[#Green,bold]-> 技工: 按订单领料
-== 查询，报告，报警 ==
+== 日常管理 ==
 散牙自动仓 o-[#Red]-> 库管: 实时库存报告
 散牙自动仓 o-[#Red]-> 库管: 低库存报警
 @enduml
