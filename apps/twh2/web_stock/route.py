@@ -136,8 +136,8 @@ def deposit_end():
         for key in request.form.to_dict():
             user_request[key] = request.form.get(key)
         db_Stock.update_quantity(user_request)
-        user_request['user_id'] = session['user']
-        user_request['user_name'] = session['user']
+        user_request['user_id'] = session['user']['user_id']
+        user_request['user_name'] = session['user']['user_name']
         user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         # Logger.Print('@web_stock.route.deposit_end() ', user_request)
         db_Deposit_history.append_deposit(user_request)
