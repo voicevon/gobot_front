@@ -31,7 +31,7 @@ def login_real():
     user_id = request.form.get('user_id')
     session['user'] = db_User.get_user(user_id)
     session['user']['factory_name'] = twh_factory[session['user']['twh_id']]
-    # Logger.Print('@web_user.route(/login_real)', user)
+    Logger.Print('@web_user.route(/login_real)', session)
     return redirect(url_for('web_user.home'))
 
 @web_user.route('/sign_up')
