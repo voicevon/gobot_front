@@ -35,23 +35,23 @@ def product_wcs():
 
 @app.route('/product_twh_m1')
 def product_twh_m1():
-    return render_template('wcs/product_twh_m1.html')
+    return render_template('wcs/twh/product_twh_m1.html')
 
 @app.route('/product_twh_m2')
 def product_twh_m2():
-    return render_template('wcs/product_twh_m2.html')
+    return render_template('wcs/twh/product_twh_m2.html')
 
 @app.route('/product_twh_m3')
 def product_twh_m3():
-    return render_template('wcs/product_twh_m3.html')
+    return render_template('wcs/twh/product_twh_m3.html')
 
 @app.route('/product_twh_m4')
 def product_twh_m4():
-    return render_template('wcs/product_twh_m4.html')
+    return render_template('wcs/twh/product_twh_m4.html')
 
 @app.route('/product_twh_rental_price')
 def product_twh_rental_price():
-    return render_template('wcs/rental_price.html')
+    return render_template('wcs/twh/rental_price.html')
 
 @app.route('/product_acupuncture')
 def product_acupuncture():

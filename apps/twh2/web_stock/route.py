@@ -138,7 +138,7 @@ def deposit_end():
         db_Stock.update_quantity(user_request)
         user_request['user_id'] = session['user']['user_id']
         user_request['user_name'] = session['user']['user_name']
-        user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        user_request['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M')
         # Logger.Print('@web_stock.route.deposit_end() ', user_request)
         db_Deposit_history.append_deposit(user_request)
         user_request['message_type'] = 'deposit_end'
