@@ -1,7 +1,7 @@
 from logger import Logger
 
 
-twh_factory = {'221109':'卷积分义齿加工厂',
+twh_factory = {'221109':'某某义齿加工厂',
                  '230220':'山东雅乐福义齿公司'}
 
 twh_brands = {'沪鸽', '日本松风塑钢','日本山八硬质','日本山八合成'}
