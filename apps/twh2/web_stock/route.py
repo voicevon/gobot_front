@@ -52,7 +52,7 @@ def create_stock_rule():
         for col in range(60):
             item['col'] = col + 1
             db_StockRule.table_stock_rule.insert(item)
-        flash('created stock rule for ' + item['twh_id'])
+        flash('created stock rule for ' + item['twh_id']) # type: ignore
     return redirect(url_for('twh_home'))
 
 @web_stock.route('/twh/view_stock_rule')
@@ -187,19 +187,19 @@ def withdraw_shipout():
         if len(my_fullfilled_orders) == 0:
             # not found fullfilled box
             flash("您没有申请出库，或者：您的出库申请尚未备货完毕，请稍后再尝试")
-            return redirect(url_for("web_user.home"))
+            return redirect(url_for("web_user.twh_home"))
         
         wms_shipping_orders =  DB_WithdrawOrder.get_wms_shipping_orders(session['user']['twh_id'])
         if len(wms_shipping_orders) != 0:
             flash("正在执行其他出库任务，出库忙碌中， ")
             flash("您的请求已经在排队，请稍后再尝试")
-            return redirect(url_for("web_user.home"))
+            return redirect(url_for("web_user.twh_home"))
 
         wcs_shipping_orders =  DB_WithdrawOrder.get_wcs_shipping_orders(session['user']['twh_id'])
         if len(wcs_shipping_orders) != 0:
             flash("正在执行其他出库任务，任务即将结束.")
             flash("您的请求已经在排队，请稍后再尝试")
-            return redirect(url_for("web_user.home"))
+            return redirect(url_for("web_user.twh_home"))
 
 
         # 开始领取出库物料，
@@ -214,7 +214,7 @@ def withdraw_shipout():
 
         flash("请根据 蓝色指示灯，领取您的出库物料。")
         flash("取料完毕后，请按下 蓝色按钮, 直到 蓝色指示灯 熄灭")
-        return redirect(url_for('web_user.home'))
+        return redirect(url_for('web_user.twh_home'))
 
 @web_stock.route('/twh/view_my_withdraw')
 def view_my_withdraw():
