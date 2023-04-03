@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request,flash, session, redirect, 
 from wcs_robots.twh_wcs import  wcs_deposit_queue
 from database.db_stock import db_Stock, db_Deposit_history,db_StockRule
 from database.db_withdraw_order import DB_WithdrawOrder
-from business_logical.bolt_nut import get_row_from_tooth_location, twh_brands,twh_factory
+from business_logical.bolt_nut import get_row_from_tooth_location, twh_brands,twh_factory,twh_shapes,twh_sizes
 
 from timestamp import get_timestamp
 from logger import Logger
@@ -12,7 +12,7 @@ web_stock = Blueprint('web_stock', __name__,template_folder='templates')
 
 @web_stock.route('/twh/decrease_stock')
 def decrease_stock():
-    row_id = int(request.args.get('doc_id'))
+    row_id = int(request.args.get('doc_id')) # type: ignore
     # print("rrrrrrrrrrrrrrrrrrrrrrrrrrr  row_id=  ", row_id)
     # q = Query()
     # rows = g_database.db_stock.search(q.doc_id==row_id)
@@ -33,27 +33,27 @@ def stock_rule_update():
     flash("规则更新完毕")
     return redirect(url_for('web_stock.view_stock_rule'))
 
-@web_stock.route("/twh/stock_rule_creator")
-def stock_rule_creator():
+@web_stock.route("/twh/create_stock_rule",methods=['POST'])
+def create_stock_rule():
     item = {}
-    item['twh_id'] = '221109'
+    item['twh_id'] = request.form.get('twh_id')
     exist = False
     if exist:
-        flash('Create stock rule failed for ' + item['twh_id'])
+        flash('Create stock rule failed for ' + item['twh_id']) # type: ignore
     else:
-        item['brand'] = '定远'
+        item['brand'] = list(twh_brands)[0]
         item['batch_number'] = '2309'
-        item['size'] = '中'
-        item['shape'] = '圆'
+        item['size'] = list(twh_sizes)[0]
+        item['shape'] = list(twh_shapes)[0]
         item['color']='A2'
         item['user_id'] = '系统'
-        item['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        item['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M')
         item['stock_quantity'] = 0
         for col in range(60):
             item['col'] = col + 1
             db_StockRule.table_stock_rule.insert(item)
         flash('created stock rule for ' + item['twh_id'])
-    return redirect(url_for('home'))
+    return redirect(url_for('twh_home'))
 
 @web_stock.route('/twh/view_stock_rule')
 def view_stock_rule():
