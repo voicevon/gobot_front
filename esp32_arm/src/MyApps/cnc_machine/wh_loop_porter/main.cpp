@@ -102,6 +102,7 @@ void setup(){
     // board.Test_Stepper(999);
     
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
+    setup_wifi_mqtt();
     
     robot.Init(&board);
 

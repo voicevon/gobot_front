@@ -2,6 +2,7 @@ from logger import Logger
 from database.db_withdraw_order import DB_WithdrawOrder
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
 from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
+from business_logical.bolt_nut import twh_factory
 
 class OrderTooth():
     def __init__(self, db_doc_id:int) -> None:
@@ -144,7 +145,8 @@ class WithdrawOrder():
 
         if self.__state == 'wcs_shipping':
             if self.__shipper.Get_Shipout_button_value()=='ON':
-                Logger.Debug('WithdrawOrder:: SpinOnce()  From wcs_shipping to shipped')
+                twh_id = '221109'
+                Logger.Info(twh_factory[twh_id] + ' -- WithdrawOrder:: SpinOnce()  From wcs_shipping to shipped')
                 # self.__shipper.Reset_Shipout_button()
                 self.__shipper.EndShipping()
 
@@ -185,17 +187,18 @@ class WithdrawOrderManager():
                 return tooth, order
         return None,None # type: ignore
         
-    def renew_orders_from_database(self):
+    def __renew_orders_from_database(self):
         '''
-        1. renew order state
-        2. renew teeth state inside order
-        3. from https://tinydb.readthedocs.io/en/latest/usage.html
-        The TinyDB query cache doesn’t check if the underlying storage that the database uses has been modified by an external process. 
+        1. renew all orders from database
+        2. renew teeth state inside order (the state is from database)
+        3. turorial note: https://tinydb.readthedocs.io/en/latest/usage.html
+        The TinyDB query cache doesn't check if the underlying storage that the database uses has been modified by an external process. 
         In this case the query cache may return outdated results. 
         To clear the cache and read data from the storage again you can use db.clear_cache().
                 
         '''
         # Logger.Debug('Twh_WarehouseControlSystem:: renew_order_state_from_database()')
+        printed_logger_title = False
         DB_WithdrawOrder.table_withdraw_order.clear_cache()
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         for db_tooth in db_order_teeth:
@@ -204,7 +207,9 @@ class WithdrawOrderManager():
                 new_order = WithdrawOrder(db_tooth['order_id'], self.__packer, self.__shipper)
                 self.AddOrderTask(new_order)
                 the_order = new_order
-                Logger.Print('new_order_task is added to manager. Order_id', new_order.Order_id)
+                Logger.Debug('WithdrawOrderManager::__renew_orders_from_database()')
+                printed_logger_title = True
+                Logger.Print('WithdrawOrderManager::__renew_orders_from_database()   new_order_task is added to manager. Order_id', new_order.Order_id)
             the_order.SetStateTo(db_tooth['order_state'], write_to_db=False)
 
             order_tooth = the_order.FindTooth_from_doc_id(db_tooth.doc_id)
@@ -216,6 +221,8 @@ class WithdrawOrderManager():
                 new_tooth.layer = db_tooth['layer']
                 the_order.AddTooth(new_tooth)
                 order_tooth = new_tooth
+                if not printed_logger_title:
+                    Logger.Debug('WithdrawOrderManager::__renew_orders_from_database()')
                 Logger.Print('new_tooth is added to order_task. DentalLocation', new_tooth.DentalLocation)
             order_tooth.TransferToLocated(db_tooth['located'], write_to_db=False)
 
@@ -229,12 +236,14 @@ class WithdrawOrderManager():
             -1   no released packer_cell
             0:11 packer_cell_id,  which has benn shipped out. should be released.
         '''
-        self.renew_orders_from_database()
+        self.__renew_orders_from_database()
         
         for order in self.__all_order_tasks:
             is_shipped =  order.SpinOnce()
             if is_shipped:
-                Logger.Info('WithdrawOrderManager:: SpinOnce().  Order is shipped')
+                # twh_id = order
+                twh_id = '221109'
+                Logger.Info( twh_factory[twh_id] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 self.__all_order_tasks.remove(order)
                 return
 
