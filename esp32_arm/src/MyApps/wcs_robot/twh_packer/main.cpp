@@ -28,7 +28,9 @@ void setup(){
     board.GetButton_Packed()->SetMqttPublishTopic("twh/221109/packer/button/pack");
     
     MqttSubscriberManager::GetInstance().AddSubscriber("twh/221109/packer/led", board.GetWs2812B());
+
     Logger::Info ("Twh Packer setup() is done. ");
+    board.BootTest();
 }
 
 

@@ -16,6 +16,7 @@ class Twh_Packer_Board: public BoardBase{
         Button_Gpio* GetButton_Packed(){return &__packed_button;};
         Adafruit_NeoPixel* GetNeoPixel(){return & __neo_pixel;};
         WS2812B* GetWs2812B(){return &__ws2812b;};
+        void BootTest();
         // Adafruit_NeoPixel* GetLeds(){return &__leds;};
 
         // void TestButton(int test_loop_count);

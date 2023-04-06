@@ -8,7 +8,7 @@
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 
 
-#define MY_ROBOT_ROW_ID 0   //Range is 0,1,2,3
+#define MY_ROBOT_ROW_ID 3   //Range is 0,1,2,3
 
 
 #if MY_ROBOT_ROW_ID == 0
@@ -99,7 +99,7 @@ void setup(){
     // board.TestLeds(200);
     // PositionTrigger_Array::Instance().Test_PositionTriggers(99);
     // CncActuator_List::Instance().GetActuator(0).test
-    board.Test_Stepper(999);
+    // board.Test_Stepper(999);
     
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
     

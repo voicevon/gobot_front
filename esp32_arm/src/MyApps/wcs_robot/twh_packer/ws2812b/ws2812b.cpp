@@ -53,6 +53,12 @@ void WS2812B::SetLed_Blue(int position_index){
     __SetLeds();
 }
 
+
+void WS2812B::Clear(){
+    __neo_pixel->clear();
+    __neo_pixel->show();
+}
+
 void WS2812B::TestLed(int test_loop_count,int test_method, int red, int green, int blue){
 
     for (int loop_index=0; loop_index < test_loop_count; loop_index++){

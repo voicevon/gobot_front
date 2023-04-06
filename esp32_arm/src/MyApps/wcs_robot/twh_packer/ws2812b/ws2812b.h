@@ -13,7 +13,7 @@ class WS2812B: public MqttSubscriberBase{
         void SetLed_Red(int position_index); 
         void SetLed_Green(int position_index); 
         void SetLed_Blue(int position_index);  
-
+        void Clear();
         void TestLed(int test_loop_count,int test_method, int red, int green, int blue);
 
     private:
