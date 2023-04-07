@@ -1,6 +1,5 @@
 #include "box_carrier_robot.h"
 #include "Robot/mcode_runner/mcode_os.h"
-// #include "Robot/mcode_runner/mcode_runners.h"
 
 void BoxCarrierRobot::Init(Board2204Cnc* board){
     Logger::Debug("Vsc_ArmSoution::Init()");
@@ -8,7 +7,7 @@ void BoxCarrierRobot::Init(Board2204Cnc* board){
     // this->_LinkEef(board->GetEef());
 
     this->_g28_runner=&this->g28_runner;
-    g28_runner.Init(&mover, &arm_solution);
+    g28_runner.Init(&mover, &arm_solution,"");
     this->_LinkMover(&mover);
     
     Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;

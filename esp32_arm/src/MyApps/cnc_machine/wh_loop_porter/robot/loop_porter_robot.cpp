@@ -11,8 +11,10 @@ void Twh_LoopPorter_Robot::MySpinOnce(){
     __arm_solution.GetRealTimePosition(&current_fk);
 
     if (last_cnc_position != (int)(current_fk.X +0.5)){
-        Logger::Print("Twh_LoopPorter_Robot::MySpinOnce()  cnc_position", current_fk.X);
+        Logger::Debug("Twh_LoopPorter_Robot::MySpinOnce()");
+        Logger::Print("cnc_position", current_fk.X);
         last_cnc_position = current_fk.X + 0.5;
+        Logger::Print("last_cnc_position", last_cnc_position);
         __board->GetDisplayer()->ShowNumber(last_cnc_position);
     }
 
@@ -26,7 +28,7 @@ void Twh_LoopPorter_Robot::Init(Twh_LoopPorter_Board* board){
     _LinkMover(&__mover);
     __board = board;
     _g28_runner = &__g28_runner;
-    __g28_runner.Init(&__mover, &__arm_solution);
+    __g28_runner.Init(&__mover, &__arm_solution,"");
     McodeOS::Instance().LinkJsonLoader_ForM408Runner(&__json_loader_for_m408);
     __m42_runner_led_output.Init(board);
     McodeOS::Instance().LinkRunner(&__m42_runner_led_output);

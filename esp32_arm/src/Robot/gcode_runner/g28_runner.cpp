@@ -15,7 +15,7 @@ bool G28_Runner::IsDone(){
                 if(trigger->IsFired()){
                     Logger::Info("G28_Runner::IsDone()  homer is triggered...");
                     _mover->AllActuatorsStop();
-                    this->SetHomedPosition(trigger);
+                    this->_SetHomedPosition(trigger);
                     return true;
                 }
             }
@@ -61,7 +61,7 @@ void G28_Runner::Start(){
 	//Put a move_block into the queue.  Mover will let the actuator to turn...
 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
     // Logger::Print("G28_Runner::Start() point", 11);
-    this->SetMoveBlock_ToHome(_axis_name, mb);
+    this->_SetMoveBlock_ToHome(_axis_name, mb);
 	Queue_MoveBlock::Instance().Deposit();
     // Logger::Print("G28_Runner::Start() point", 4);
 	this->_mover->SpinOnce();

@@ -25,29 +25,29 @@ void BoxMover_G28_Runner::Init(CncMover* mover){
 
 
 
-void BoxMover_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
-    Logger::Debug("BoxMover_G28_Runner::SetMoveBlock_ToHome()   ---- Forward axis" );
+void BoxMover_G28_Runner::_SetMoveBlock_ToHome(char axis, MoveBlock* mb){
+    Logger::Debug("BoxMover_G28_Runner::_SetMoveBlock_ToHome()   ---- Forward axis" );
     Serial.print(char(axis));
     Logger::Print("\taxis", char(axis));
     MoveBlock_SingleActuator* move;
     switch (axis){
         case AXIS_X:
-            Logger::Print("BoxMover_G28_Runner::SetMoveBlock_ToHome()  point", 21);
+            Logger::Print("BoxMover_G28_Runner::_SetMoveBlock_ToHome()  point", 21);
             mb->DeepReset_ToDefault();
-            Logger::Print("BoxMover_G28_Runner::SetMoveBlock_ToHome()  point", 22);
+            Logger::Print("BoxMover_G28_Runner::_SetMoveBlock_ToHome()  point", 22);
             move = &mb->MoveBlocks[AXIS_ALPHA];
-            Logger::Print("BoxMover_G28_Runner::SetMoveBlock_ToHome()  point", 23);
+            Logger::Print("BoxMover_G28_Runner::_SetMoveBlock_ToHome()  point", 23);
             // move->IsAbsTargetPosition = false;
             move->TargetPosition = 123.1f;
             move->Speed = 0.2f;
             move->Acceleration = 0.1f;
             break;
         default:
-            Logger::Error(" BoxMover_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
+            Logger::Error(" BoxMover_G28_Runner::_SetMoveBlock_ToHome() Unknown axis");
             
             break;
     }
-    Logger::Print("BoxMover_G28_Runner::SetMoveBlock_ToHome()  point", 99);
+    Logger::Print("BoxMover_G28_Runner::_SetMoveBlock_ToHome()  point", 99);
 }
 
 // AxisHomer* BoxMover_G28_Runner::GetHomer(EnumAxis_ForwardKinematic axis){

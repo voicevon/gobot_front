@@ -5,7 +5,6 @@
 #include "Mqtt/wifi_mqtt_client.h"
 #include "mqtt_subscriber_base.h"
 
-// class RemoteQueueBridge_mqtt{
 class RemoteQueueBridge_mqtt: public MqttSubscriberBase{
     public:
         // void Init(AsyncMqttClient* mqttClient, const char* main_topic, const char* feedback_topic);

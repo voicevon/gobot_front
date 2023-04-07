@@ -15,12 +15,17 @@ void Hc595_Digital_number::Init(uint8_t pin_clock, uint8_t pin_data, uint8_t pin
 
 void Hc595_Digital_number::ShowNumber(int number){
     // https://www.best-microcontroller-projects.com/74hc595.html
-    unsigned char left_number,right_num;
+    // Logger::Debug("Hc595_Digital_number::ShowNumber()");
+    // Logger::Print("numer", number);
+
+    unsigned char left_number,right_number;
     left_number = number / 10;
-    right_num = number % 10;
+    right_number = number % 10;
+    // Logger::Print("left_number", left_number);
+    // Logger::Print("right_number", right_number);
 
     digitalWrite(__pin_latch_mosi, LOW);
-    shiftOut(__pin_data, __pin_clock, MSBFIRST, 255 - __segment[right_num]);
+    shiftOut(__pin_data, __pin_clock, MSBFIRST, 255 - __segment[right_number]);
     shiftOut(__pin_data, __pin_clock, MSBFIRST, 255 - __segment[left_number]);
     digitalWrite(__pin_latch_mosi, HIGH);
 

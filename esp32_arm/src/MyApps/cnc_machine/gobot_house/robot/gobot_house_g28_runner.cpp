@@ -1,7 +1,7 @@
 #include "gobot_house_g28_runner.h"
 
 
-void GobotHouse_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
+void GobotHouse_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution, const char* mqtt_topic_for_home_position){
     Logger::Info("GobotHouse_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
 
@@ -24,32 +24,32 @@ void GobotHouse_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution)
 }
 
 
-void GobotHouse_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
-    Logger::Debug("GobotHouse_G28_Runner::SetMoveBlock_ToHome()   ---- Forward axis" );
+void GobotHouse_G28_Runner::_SetMoveBlock_ToHome(char axis, MoveBlock* mb){
+    Logger::Debug("GobotHouse_G28_Runner::_SetMoveBlock_ToHome()   ---- Forward axis" );
     Serial.print(char(axis));
     Logger::Print("\taxis", char(axis));
     MoveBlock_SingleActuator* move;
     switch (axis){
         case AXIS_X:
-            Logger::Print("GobotHouse_G28_Runner::SetMoveBlock_ToHome()  point", 21);
+            Logger::Print("GobotHouse_G28_Runner::_SetMoveBlock_ToHome()  point", 21);
             mb->DeepReset_ToDefault();
-            Logger::Print("GobotHouse_G28_Runner::SetMoveBlock_ToHome()  point", 22);
+            Logger::Print("GobotHouse_G28_Runner::_SetMoveBlock_ToHome()  point", 22);
             move = &mb->MoveBlocks[AXIS_ALPHA];
-            Logger::Print("GobotHouse_G28_Runner::SetMoveBlock_ToHome()  point", 23);
+            Logger::Print("GobotHouse_G28_Runner::_SetMoveBlock_ToHome()  point", 23);
             move->TargetPosition = 1234;
             // move->TargetPosition = homing.DistanceToGo;
             // move->Speed = homing.Speed;
             // move->Acceleration = homing.Accelleration;
             break;
         default:
-            Logger::Error(" GobotHouse_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
+            Logger::Error(" GobotHouse_G28_Runner::_SetMoveBlock_ToHome() Unknown axis");
             
             break;
     }
-    Logger::Print("GobotHouse_G28_Runner::SetMoveBlock_ToHome()  point", 99);
+    Logger::Print("GobotHouse_G28_Runner::_SetMoveBlock_ToHome()  point", 99);
 }
 
 
-void GobotHouse_G28_Runner::SetHomedPosition(PositionTrigger* firer){
+void GobotHouse_G28_Runner::_SetHomedPosition(PositionTrigger* firer){
     
 }

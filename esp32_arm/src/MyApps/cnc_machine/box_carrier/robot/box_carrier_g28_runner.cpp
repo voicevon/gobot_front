@@ -1,7 +1,7 @@
 #include "box_carrier_g28_runner.h"
 
 
-void BoxCarrier_G28_Runner::Init( CncMover* mover, ArmSolutionBase* arm_solution){
+void BoxCarrier_G28_Runner::Init( CncMover* mover, ArmSolutionBase* arm_solution, const char* mqtt_topic_for_home_position){
     Logger::Info("BoxCarrier_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
 
@@ -26,28 +26,28 @@ void BoxCarrier_G28_Runner::Init( CncMover* mover, ArmSolutionBase* arm_solution
 }
 
 
-void BoxCarrier_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
-    Logger::Debug("BoxCarrier_G28_Runner::SetMoveBlock_ToHome()   ---- Forward axis" );
+void BoxCarrier_G28_Runner::_SetMoveBlock_ToHome(char axis, MoveBlock* mb){
+    Logger::Debug("BoxCarrier_G28_Runner::_SetMoveBlock_ToHome()   ---- Forward axis" );
     Serial.print(char(axis));
     Logger::Print("\taxis", char(axis));
     MoveBlock_SingleActuator* move;
     switch (axis){
         case AXIS_X:
-            Logger::Print("BoxCarrier_G28_Runner::SetMoveBlock_ToHome()  point", 21);
+            Logger::Print("BoxCarrier_G28_Runner::_SetMoveBlock_ToHome()  point", 21);
             mb->DeepReset_ToDefault();
-            Logger::Print("BoxCarrier_G28_Runner::SetMoveBlock_ToHome()  point", 22);
+            Logger::Print("BoxCarrier_G28_Runner::_SetMoveBlock_ToHome()  point", 22);
             move = &mb->MoveBlocks[AXIS_ALPHA];
-            Logger::Print("BoxCarrier_G28_Runner::SetMoveBlock_ToHome()  point", 23);
+            Logger::Print("BoxCarrier_G28_Runner::_SetMoveBlock_ToHome()  point", 23);
             // move->IsAbsTargetPosition = false;
             move->TargetPosition = 123;
             move->Speed = 2.34;
             move->Acceleration = 0.4;
             break;
         default:
-            Logger::Error(" BoxCarrier_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
+            Logger::Error(" BoxCarrier_G28_Runner::_SetMoveBlock_ToHome() Unknown axis");
             
             break;
     }
-    Logger::Print("BoxCarrier_G28_Runner::SetMoveBlock_ToHome()  point", 99);
+    Logger::Print("BoxCarrier_G28_Runner::_SetMoveBlock_ToHome()  point", 99);
 }
 

@@ -1,7 +1,7 @@
 #include "smoker_g28_runner.h"
 
 
-void Smoker_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
+void Smoker_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution, const char* mqtt_topic_for_home_position){
     Logger::Info("Smoker_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
 
@@ -25,31 +25,31 @@ void Smoker_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
 
 
 
-void Smoker_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
-    Logger::Debug("Smoker_G28_Runner::SetMoveBlock_ToHome()   ---- Forward axis" );
+void Smoker_G28_Runner::_SetMoveBlock_ToHome(char axis, MoveBlock* mb){
+    Logger::Debug("Smoker_G28_Runner::_SetMoveBlock_ToHome()   ---- Forward axis" );
     Serial.print(char(axis));
     Logger::Print("\taxis", char(axis));
     MoveBlock_SingleActuator* move;
     switch (axis){
         case AXIS_X:
-            Logger::Print("Smoker_G28_Runner::SetMoveBlock_ToHome()  point", 21);
+            Logger::Print("Smoker_G28_Runner::_SetMoveBlock_ToHome()  point", 21);
             mb->DeepReset_ToDefault();
-            Logger::Print("Smoker_G28_Runner::SetMoveBlock_ToHome()  point", 22);
+            Logger::Print("Smoker_G28_Runner::_SetMoveBlock_ToHome()  point", 22);
             move = &mb->MoveBlocks[AXIS_ALPHA];
-            Logger::Print("Smoker_G28_Runner::SetMoveBlock_ToHome()  point", 23);
+            Logger::Print("Smoker_G28_Runner::_SetMoveBlock_ToHome()  point", 23);
             // move->IsAbsTargetPosition = false;
             // move->TargetPosition = homing.DistanceToGo;
             // move->Speed = homing.Speed;
             // move->Acceleration = homing.Accelleration;
             break;
         default:
-            Logger::Error(" Smoker_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
+            Logger::Error(" Smoker_G28_Runner::_SetMoveBlock_ToHome() Unknown axis");
             
             break;
     }
-    Logger::Print("Smoker_G28_Runner::SetMoveBlock_ToHome()  point", 99);
+    Logger::Print("Smoker_G28_Runner::_SetMoveBlock_ToHome()  point", 99);
 }
 
-void Smoker_G28_Runner::SetHomedPosition(PositionTrigger* firer){
+void Smoker_G28_Runner::_SetHomedPosition(PositionTrigger* firer){
 
 }

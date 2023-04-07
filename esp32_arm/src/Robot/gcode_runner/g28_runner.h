@@ -7,15 +7,16 @@
 
 class G28_Runner: public SyncGcodeRunnerBase{
     public:
-        virtual void Init(CncMover* mover, ArmSolutionBase* arm_solution);
+        virtual void Init(CncMover* mover, ArmSolutionBase* arm_solution, const char* mqtt_topic_for_home_position);
     
         void Start() override ;
         bool IsDone() override;
         void LinkGcode(Gcode* gcode) override;
         
     protected:
-        virtual void SetMoveBlock_ToHome(char axis_name, MoveBlock* mb);
-        virtual void SetHomedPosition(PositionTrigger* firer);
+        virtual void _InitHomePosition(char axis_name, float setting_position);
+        virtual void _SetMoveBlock_ToHome(char axis_name, MoveBlock* mb);
+        virtual void _SetHomedPosition(PositionTrigger* firer);
         CncMover* _mover;   //Only for stop()
         ArmSolutionBase* _arm_solution;  //for Setcurrent_position
         char _axis_name;

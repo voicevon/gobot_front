@@ -1,39 +1,39 @@
 #include "vsc_g28_runner.h"
 
 
-void Vsc_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution){
+void Vsc_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solution, const char* mqtt_topic_for_home_position){
     Logger::Info("Vsc_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
 
 }
 
-void Vsc_G28_Runner::SetMoveBlock_ToHome(char axis, MoveBlock* mb){
-    Logger::Debug("Vsc_G28_Runner::SetMoveBlock_ToHome()" );
+void Vsc_G28_Runner::_SetMoveBlock_ToHome(char axis, MoveBlock* mb){
+    Logger::Debug("Vsc_G28_Runner::_SetMoveBlock_ToHome()" );
     Serial.print(char(axis));
     Logger::Print("\taxis", char(axis));
     MoveBlock_SingleActuator* move;
     switch (axis){
         case 'X':
-            // Logger::Print("Vsc_G28_Runner::SetMoveBlock_ToHome()  point", 21);
+            // Logger::Print("Vsc_G28_Runner::_SetMoveBlock_ToHome()  point", 21);
             mb->DeepReset_ToDefault();
-            // Logger::Print("Vsc_G28_Runner::SetMoveBlock_ToHome()  point", 22);
+            // Logger::Print("Vsc_G28_Runner::_SetMoveBlock_ToHome()  point", 22);
             move = &mb->MoveBlocks[AXIS_ALPHA];
-            // Logger::Print("Vsc_G28_Runner::SetMoveBlock_ToHome()  point", 23);
+            // Logger::Print("Vsc_G28_Runner::_SetMoveBlock_ToHome()  point", 23);
             // move->IsAbsTargetPosition = false;
             move->TargetPosition = TWO_PI;
             move->Speed = 0.1;
             move->Acceleration = 0.05;
             break;
         default:
-            Logger::Error(" Vsc_G28_Runner::SetMoveBlock_ToHome() Unknown axis");
+            Logger::Error(" Vsc_G28_Runner::_SetMoveBlock_ToHome() Unknown axis");
             Logger::Halt("AcDc::TNT");
             break;
     }
-    // Logger::Print("Vsc_G28_Runner::SetMoveBlock_ToHome()  point", 99);
+    // Logger::Print("Vsc_G28_Runner::_SetMoveBlock_ToHome()  point", 99);
 }
 
 
-void Vsc_G28_Runner::SetHomedPosition(PositionTrigger* firer){
+void Vsc_G28_Runner::_SetHomedPosition(PositionTrigger* firer){
     if (this->_axis_name =='a'){
         // do nothing
     }else if (this->_axis_name == 'X'){
@@ -47,7 +47,7 @@ void Vsc_G28_Runner::SetHomedPosition(PositionTrigger* firer){
         if (debug){
             FKPosition_XYZRPW fk;
             this->_arm_solution->IK_to_FK(&ik, &fk);
-            fk.PrintOut("Twh_G28_Runner::SetHomedPosition() 'X'");
+            fk.PrintOut("Twh_G28_Runner::_SetHomedPosition() 'X'");
         }
     }
 }

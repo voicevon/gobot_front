@@ -18,7 +18,7 @@ void Silicon_Pump_Robot::Init(Silicon_Pump_Board* board){
     _LinkMover(&__mover);
     __board = board;
     _g28_runner = &__g28_runner;
-    __g28_runner.Init(&__mover, &__arm_solution);
+    __g28_runner.Init(&__mover, &__arm_solution,"");
     McodeOS::Instance().LinkJsonLoader_ForM408Runner(&__json_loader_for_m408);
     __m42_runner_led_output.Init(board);
     McodeOS::Instance().LinkRunner(&__m42_runner_led_output);
