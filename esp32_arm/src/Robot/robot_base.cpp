@@ -146,12 +146,14 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	static float __newest_line_speed = 100;
 	Logger::Info("RobotBase::__RunGcode()");
 	LineSegment* new_line = Queue_LineSegment::Instance().GetRoom();
-	new_line->DeepCopyFromFkPosition(__planner.arm_solution->GetCurrentPosition_Fk());
-	if (gcode->has_letter('F')) __newest_line_speed = gcode->get_value('F');
+	new_line->DeepCopyTo_TargetPosition_fk(__planner.arm_solution->GetCurrentPosition_Fk());
+	if (gcode->has_letter('F')) {
+		__newest_line_speed = gcode->get_value('F');
+	}
 	new_line->Speed_mm_per_second = __newest_line_speed;
 	
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
-	//This is wrong for the very first moveblock after MCU is reset.
+	//TODO:    This is wrong for the very first moveblock after MCU is reset.
 	Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
 	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;
@@ -219,7 +221,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);
 			__planner.arm_solution->IK_to_FK(&new_ik_position, &new_fk_position);
 
-			new_line->DeepCopyFromFkPosition(&new_fk_position);  //??
+			new_line->DeepCopyTo_TargetPosition_fk(&new_fk_position);  //??
 			Queue_LineSegment::Instance().Deposit();             //??
 			break;
 		case 7:
@@ -242,7 +244,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 				new_move_block->MoveBlocks[a].Acceleration = 100;
 			}
 			__planner.arm_solution->IK_to_FK(&new_ik_position, &new_fk_position);
-			new_line->DeepCopyFromFkPosition(&new_fk_position);
+			new_line->DeepCopyTo_TargetPosition_fk(&new_fk_position);
 			Queue_LineSegment::Instance().Deposit();
 			break;
 
