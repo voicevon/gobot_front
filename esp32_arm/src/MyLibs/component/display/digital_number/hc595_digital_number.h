@@ -20,16 +20,16 @@ class Hc595_Digital_number{
         uint8_t __power_count;
 
         // Define an array to translate number to 7segment
-        char __segment[10] = { // segment bit pos: dp g f e d c b a
-            0x3f, // zero
-            0x06, // one
-            0x5b, // two
-            0x4f, // three
+        const uint8_t __segment[10] = { // segment bit pos: dp g f e d c b a
+            0x3f, // zero    63
+            0x06, // one      6
+            0x5b, // two     91
+            0x4f, // three   79
             0x66, // four
-            0x6d, // five
+            0x6d, // five   109
             // 0x7c, // six
-            0x7d, // six
-            0x07, // seven
+            0x7d, // six    125
+            0x07, // seven    7
             0x7f, // eight
             // 0x67  // nine
             0x6f  // nine

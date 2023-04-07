@@ -15,14 +15,14 @@ void Hc595_Digital_number::Init(uint8_t pin_clock, uint8_t pin_data, uint8_t pin
 
 void Hc595_Digital_number::ShowNumber(int number){
     // https://www.best-microcontroller-projects.com/74hc595.html
+    int left_number = number / 10;
+    int right_number = number % 10;
     // Logger::Debug("Hc595_Digital_number::ShowNumber()");
     // Logger::Print("numer", number);
-
-    unsigned char left_number,right_number;
-    left_number = number / 10;
-    right_number = number % 10;
     // Logger::Print("left_number", left_number);
+    // Logger::Print("left_segment", __segment[left_number]);
     // Logger::Print("right_number", right_number);
+    // Logger::Print("right_segment", __segment[right_number]);
 
     digitalWrite(__pin_latch_mosi, LOW);
     shiftOut(__pin_data, __pin_clock, MSBFIRST, 255 - __segment[right_number]);
@@ -33,7 +33,7 @@ void Hc595_Digital_number::ShowNumber(int number){
 
 void Hc595_Digital_number::Test(int test_loop_count, int teset_id){
 
-        unsigned char smgduan[] = {  //共阳
+        unsigned char smgduan[] = {  // Common V+
             B11000000, // 0
             B11111001, // 1
             B10100100, // 2
@@ -44,15 +44,15 @@ void Hc595_Digital_number::Test(int test_loop_count, int teset_id){
             B11111000, // 7
             B10000000, // 8
             B10010000, // 9
-            };//显示0~9的值共阴
+            };
 
 
     uint8_t test_value = 0;
     switch (teset_id) {
     case 1:
         for (int loop=0; loop<test_loop_count; loop++){
-            Logger::Print("Hc595_Digital_number::Test  loop", loop);
-            for(int i=0; i<99; i++){
+            // Logger::Print("Hc595_Digital_number::Test  loop", loop);
+            for(int i=0; i<59; i++){
                 this->ShowNumber(i);
                 delay(300);
             }

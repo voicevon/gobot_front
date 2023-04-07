@@ -3,15 +3,29 @@
 {% block content %}
 <form action="/twh/create_stock_rule" method="post">
     <table>
-    <td><select  name="twh_id">
-        {% for key in twh_factory.keys()%}
-        <option name ='twh_id' value={{key}}>{{ twh_factory[key] }}</option>
-        {% endfor %}
-    </select></td>
-    <td>
-        <input type='submit' value="创建货位规则">
-    </td>
-    </table><table></table>
+        <td><select name="twh_id">
+                {% for key in twh_factory.keys()%}
+                <option name='twh_id' value={{key}}>{{ twh_factory[key] }}</option>
+                {% endfor %}
+            </select></td>
+        <td>
+            <input type='submit' value="创建货位规则">
+        </td>
+    </table>
 </form>
-{% endblock %}
+<hr>
+<form action="/twh/set_home_position" method="post">
+    <select name="twh_id">
+        {% for key in twh_factory.keys()%}
+        <option name='twh_id' value={{key}}>{{ twh_factory[key] }}</option>
+        {% endfor %}
+    </select><br>
 
+    Loop-Porter #0 <input type="text" name="r0"><br>
+    Loop-Porter #1 <input type="text" name="r1"><br>
+    Loop-Porter #2 <input type="text" name="r2"><br>
+    Loop-Porter #3 <input type="text" name="r3"><br><br>
+    <input type='submit' value="设置 Home position"><br>
+</form>
+<hr>
+{% endblock %}

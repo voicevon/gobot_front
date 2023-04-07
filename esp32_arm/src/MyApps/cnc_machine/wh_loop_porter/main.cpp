@@ -8,27 +8,31 @@
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 
 
-#define MY_ROBOT_ROW_ID 3   //Range is 0,1,2,3
+#define MY_ROBOT_ROW_ID 1   //Range is 0,1,2,3
 
 
 #if MY_ROBOT_ROW_ID == 0
     #define MQTT_TOPIC_GCODE "twh/221109/r0/gcode"   
     #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r0/state"
+    #define MQTT_TOPIC_FOR_HOME_POSITION  "twh/221109/r0/home_position"
 #endif
 
 #if MY_ROBOT_ROW_ID == 1
     #define MQTT_TOPIC_GCODE "twh/221109/r1/gcode"   
     #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r1/state"
+    #define MQTT_TOPIC_FOR_HOME_POSITION  "twh/221109/r1/home_position"
 #endif
 
 #if MY_ROBOT_ROW_ID == 2
     #define MQTT_TOPIC_GCODE "twh/221109/r2/gcode"   
     #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r2/state"
+    #define MQTT_TOPIC_FOR_HOME_POSITION  "twh/221109/r2/home_position"
 #endif
 
 #if MY_ROBOT_ROW_ID == 3
     #define MQTT_TOPIC_GCODE "twh/221109/r3/gcode"   
     #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r3/state"
+    #define MQTT_TOPIC_FOR_HOME_POSITION  "twh/221109/r3/home_position"
 #endif
 
 
@@ -97,6 +101,8 @@ void test_arm(){
 void setup(){
     board.Init();
     // board.TestLeds(200);
+    // board.GetNumberDisplayer()->Test(9999, 1);
+
     // PositionTrigger_Array::Instance().Test_PositionTriggers(99);
     // CncActuator_List::Instance().GetActuator(0).test
     // board.Test_Stepper(999);
@@ -104,7 +110,7 @@ void setup(){
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
     setup_wifi_mqtt();
     
-    robot.Init(&board);
+    robot.Init(&board, MQTT_TOPIC_FOR_HOME_POSITION);
 
     robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
@@ -120,15 +126,24 @@ void setup(){
 
 
 void loop(){
+    board.GetNumberDisplayer()->Test(1, 1);
+    Logger::Warn("Arduino loop() point  1 ");
 
-    // Logger::Print("Arduino loop() point ", 1);
     app.SpinOnce();
-    // Logger::Print("Aruino loop() point ", 2);
+    board.GetNumberDisplayer()->Test(1, 1);
+    Logger::Warn("Aruino loop() point  2");
+
     robot.SpinOnce();
+    board.GetNumberDisplayer()->Test(1, 1);
+    Logger::Warn("Arduino loop() point   3");
+
     robot.MySpinOnce();
-    // Logger::Print("Arduino loop() point ", 3);
+    board.GetNumberDisplayer()->Test(1, 1);
+    Logger::Warn("Arduino loop() point 4");
+
     mono_remote_queue_bridge_spin_once();
-    // Logger::Print("Arduino loop() point ", 4);
+    board.GetNumberDisplayer()->Test(1, 1);
+    Logger::Warn("Arduino loop() point  5 ");
 
 }
 

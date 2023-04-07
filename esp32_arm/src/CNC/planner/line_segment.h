@@ -17,6 +17,7 @@ class LineSegment: public Queue_able{
         float Required_time;
         void DeepCopyTo(LineSegment* the_copy);
         void DeepCopyFromFkPosition(FKPosition_XYZRPW* from);
+        // void DeepReset_ToDefault() override  {};
 
         void PrintOUt(const char* title);
     protected:

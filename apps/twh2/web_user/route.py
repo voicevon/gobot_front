@@ -3,6 +3,7 @@ from database.db_user import db_User
 from business_logical.bolt_nut import  twh_factory, get_twh_factory
 from logger import Logger
 from operator import itemgetter
+from von.mqtt_agent import g_mqtt
 
 web_user = Blueprint('web_user', __name__,template_folder='templates')
 
@@ -103,3 +104,13 @@ def twh_home():
     
     flash('您的账户已经被主管临时禁用')
     return redirect(url_for('web_user.login'))
+
+
+@web_user.route('/twh/loop_porter_set_home_position')
+def twh_loop_porter_set_home_position():
+    # backup to database.
+
+    # sendout to mqtt
+    mqtt_topic = 'twh/221109/r0/home_position'
+    mqtt_payload = request.form.get('r0')
+    g_mqtt.publish(mqtt_topic, mqtt_payload)

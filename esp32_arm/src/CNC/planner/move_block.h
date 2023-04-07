@@ -11,7 +11,8 @@ class MoveBlock: public Queue_able{
         // void DeepCopyTo(Queue_able* copy) override;
         void DeepCopyTo(MoveBlock* copy);
         void DeepCopyToIkPosition(IKPosition_abgdekl* to_position);
-        void DeepReset_ToDefault() override;
+        // void DeepReset_ToDefault() override;
+        void DeepReset_ToDefault();
         void PrintOut(const char* title);
     private:
 

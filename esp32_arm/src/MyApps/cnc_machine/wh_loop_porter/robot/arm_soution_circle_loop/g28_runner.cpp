@@ -12,16 +12,20 @@ void Twh_LoopPorter_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solut
 
 void Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome(char axis_name, MoveBlock* mb){
     Logger::Debug("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()" );
-    Serial.print(char(axis_name));
     Logger::Print("\taxis", char(axis_name));
     MoveBlock_SingleActuator* alpha = &mb->MoveBlocks[AXIS_ALPHA];
-    mb->DeepReset_ToDefault();
+    Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 11 );
+    mb->PrintOut("Test mb is none or not.  Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()");
+    Serial.print("444444444444444444444");
+    // mb->DeepReset_ToDefault();
+    Serial.print("5555555555555555555");
+    Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 12 );
 
     switch (axis_name){
         case 'X':
-            // Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 31);
+            Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 31);
             mb->DeepReset_ToDefault();
-            // Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 22);
+            Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 32);
             alpha->TargetPosition = 511000;
             alpha->Speed = 900;
             alpha->Acceleration = 3000;
@@ -32,7 +36,7 @@ void Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome(char axis_name, MoveBlock* 
             Logger::Halt("AcDc::TNT");
             break;
     }
-    // Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 99);
+    Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 99);
 }
 
 void Twh_LoopPorter_G28_Runner::_InitHomePosition(char axis_name, float setting_position){

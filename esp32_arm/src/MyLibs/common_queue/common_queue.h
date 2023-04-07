@@ -4,7 +4,7 @@
 class Queue_able{
     public:
         int id = 1234;
-        virtual void DeepReset_ToDefault(){};
+        // virtual void DeepReset_ToDefault();   // Why this cause exception?
 
 };
 

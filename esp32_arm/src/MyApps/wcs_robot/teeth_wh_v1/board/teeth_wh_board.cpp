@@ -153,8 +153,8 @@ void TeethWarehouse_Board::Test_PositionTriggers(int loops){
 
 void TeethWarehouse_Board::Test_SingleStepper(int index, int loops){
     FastAccelStepper* stepper;
+    stepper = __stepper_beta;
     if (index==0)  stepper = __stepper_alpha;
-    if (index==1)  stepper = __stepper_beta;
     stepper->enableOutputs();
     for (int i=0; i<loops; i++){
         Logger::Print("Test stepper loop=", i);
@@ -239,7 +239,7 @@ void TeethWarehouse_Board::Test_Hx711(int loops){
 }
 
 void TeethWarehouse_Board::Test_Servo_Vertical_Move(int loops){
-    int pos = 0;      // position in degrees
+    // int pos = 0;      // position in degrees
     for (int loop=0; loop<loops; loop++){
         Logger::Print("SERVO_EEF_VERTICAL  count", loop);
         Logger::Print("write angle", 0);

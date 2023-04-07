@@ -15,12 +15,12 @@ void Twh_LoopPorter_Robot::MySpinOnce(){
         Logger::Print("cnc_position", current_fk.X);
         last_cnc_position = current_fk.X + 0.5;
         Logger::Print("last_cnc_position", last_cnc_position);
-        __board->GetDisplayer()->ShowNumber(last_cnc_position);
+        __board->GetNumberDisplayer()->ShowNumber(last_cnc_position);
     }
 
 }
 
-void Twh_LoopPorter_Robot::Init(Twh_LoopPorter_Board* board){
+void Twh_LoopPorter_Robot::Init(Twh_LoopPorter_Board* board, const char* mqtt_topic_for_home_position){
     Logger::Debug("Twh_LoopPorter_Robot::Init()");
     _InitStatic_Queues();
     __InitStatic_Actuators(board);
@@ -28,7 +28,7 @@ void Twh_LoopPorter_Robot::Init(Twh_LoopPorter_Board* board){
     _LinkMover(&__mover);
     __board = board;
     _g28_runner = &__g28_runner;
-    __g28_runner.Init(&__mover, &__arm_solution,"");
+    __g28_runner.Init(&__mover, &__arm_solution, mqtt_topic_for_home_position);
     McodeOS::Instance().LinkJsonLoader_ForM408Runner(&__json_loader_for_m408);
     __m42_runner_led_output.Init(board);
     McodeOS::Instance().LinkRunner(&__m42_runner_led_output);
@@ -48,12 +48,13 @@ void Twh_LoopPorter_Robot::_Init_ArmSolution(){
     this->_LinkArmSolution_for_planner(&__arm_solution);
     // We don't care the value of current position,
     // But  fk_position and ik_position must be consistent
-    FKPosition_XYZRPW current;
-    current.Roll = 0;
-    __arm_solution.SetCurrentPositionAs(&current);
+    FKPosition_XYZRPW current_fk;
+    current_fk.Roll = 0;
+    current_fk.X = 0;
+    __arm_solution.SetCurrentPositionAs(&current_fk);
 
     IKPosition_abgdekl ik;
-    __arm_solution.FK_to_IK(&current, &ik);
+    __arm_solution.FK_to_IK(&current_fk, &ik);
     __arm_solution.SetCurrentPositionAs(&ik);
 }
 

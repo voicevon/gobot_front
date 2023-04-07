@@ -34,8 +34,8 @@ void CncMover::SpinOnce(){
 
 void CncMover::AllActuatorsMoveTo(MoveBlock* move){
     CncActuatorBase* act;
-    Logger::Debug("CncMover::AllActuatorsMoveTo()");
-    move->PrintOut("From CncMover::AllActuatorsMoveTo()");
+    // Logger::Debug("CncMover::AllActuatorsMoveTo()");
+    // move->PrintOut("From CncMover::AllActuatorsMoveTo()");
     for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
         // TODO: transloate postion unit here ??  What actuator is using?
         // TODO: translate speed unit here.!!

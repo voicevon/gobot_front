@@ -15,7 +15,7 @@
 
 class Twh_LoopPorter_Robot: public RobotBase{
     public:
-        void Init(Twh_LoopPorter_Board* board);
+        void Init(Twh_LoopPorter_Board* board, const char* mqtt_topic_for_home_position);
         void MySpinOnce();
 
     private:

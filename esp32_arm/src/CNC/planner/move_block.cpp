@@ -30,9 +30,10 @@ void MoveBlock::DeepCopyToIkPosition(IKPosition_abgdekl* to_position){
 
 
 void MoveBlock::DeepReset_ToDefault(){
-    // Logger::Debug("MoveBlock::DeepReset_ToDefault()");
+    Serial.print("dddddddddddddddddddddddddddddddddddddddddddd");
+    Logger::Debug("MoveBlock::DeepReset_ToDefault()");
     for(int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
-        // Logger::Print("for  i", i );
+        Logger::Print("actuator index", a );
         this->MoveBlocks[a].TargetPosition = 0;
         this->MoveBlocks[a].Speed = 0;
     }
@@ -53,4 +54,5 @@ void MoveBlock::PrintOut(const char* title){
         Serial.print(MoveBlocks[i].VectorDistance);
         Serial.print("\n");
     }
+    Serial.println("---------------------------------------------------------");
 }

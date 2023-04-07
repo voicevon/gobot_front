@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 
-#define CNC_ACTUATORS_IDEAL_COUNT 7   //TODO:  rename to  CNC_ACTUATORS_IDEAL_COUNT
+#define CNC_ACTUATORS_IDEAL_COUNT 7
 
 // enum EnumAxis{
 //     AXIS_NONE = 0,

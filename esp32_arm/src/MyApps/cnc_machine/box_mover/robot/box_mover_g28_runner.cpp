@@ -11,7 +11,7 @@ void BoxMover_G28_Runner::Init(CncMover* mover){
     // homing.DistanceToGo = TWO_PI;
     
     Logger::Info("BoxMover_G28_Runner::Init() Alpha axis home_triggers");
-    PositionTrigger* trigger;
+    // PositionTrigger* trigger;
     // trigger = board->GetPositionTrigger(0);
     // trigger = PositionTrigger_Array::Instance().GetPositionTrigger(0);
     // trigger->SetTriggerPosition(TWO_PI* 1 / 386);      // @01 pitch, total 386 pitches,
