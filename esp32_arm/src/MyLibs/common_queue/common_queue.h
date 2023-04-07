@@ -37,9 +37,9 @@ class CommonQueue{
         int _head = 0;
         int _tail = 0;
         void _Init(int items_count, int sizeof_item){
-            Logger::Info("CommonQueue:_Init()");
             this->__MESSAGE_COUNT_IN_QUEUE = items_count; 
             this->_sizeof_item = sizeof_item;
+            Logger::Info("CommonQueue:_Init()");
             Logger::Print("items_count",items_count);
             Logger::Print("sizeof_item",sizeof_item);
             };

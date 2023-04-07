@@ -7,8 +7,8 @@
 #include "mcode_runner/twh_loop_porter_m42_switch_output.h"
 #include "../board/board.h"
 
-#define QUEUE_LINE_SEGMENT_COUNT 1
-#define QUEUE_PLANNER_BLOCK_COUNT 1
+#define QUEUE_LINE_SEGMENT_COUNT 8   // TODO, DEFINE ONCE.
+#define QUEUE_PLANNER_BLOCK_COUNT 32  // TODO: DEFINE ONCE:  Important
 
 #define CNC_ACTUATORS_COUNT 1
 

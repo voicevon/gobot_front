@@ -27,18 +27,21 @@ void LineSegment::DeepCopyTo(LineSegment* the_copy){
     // Logger::Print("LineSegment::DeepCopyTo() point", 99);
 }
 
-void LineSegment::DeepCopyFromFkPosition(FKPosition_XYZRPW* from){
-    this->TargetPosition.X = from->X;
-    this->TargetPosition.Y = from->Y;
-    this->TargetPosition.Z = from->Z;
-    this->TargetPosition.Roll = from->Roll;
-    this->TargetPosition.Pitch = from->Pitch;
-    this->TargetPosition.Yaw = from->Yaw;
+void LineSegment::DeepCopyTo_TargetPosition_fk(FKPosition_XYZRPW* target){
+    // check TargetPosition is avaliable or not.
+    // this->TargetPosition.PrintOut("pppppppppppppppppppppppppp");
+    this->TargetPosition.X = target->X;
+    this->TargetPosition.Y = target->Y;
+    this->TargetPosition.Z = target->Z;
+    this->TargetPosition.Roll = target->Roll;
+    this->TargetPosition.Pitch = target->Pitch;
+    this->TargetPosition.Yaw = target->Yaw;
+    this->TargetPosition.PrintOut("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 }
 
 void LineSegment::PrintOUt(const char* title){
     Logger::Debug(title);
-    this->TargetPosition.PrintOut("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+    // this->TargetPosition.PrintOut("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
     Logger::Print("TargetPosition.X",this->TargetPosition.X);
     Logger::Print("TargetPosition.Y",this->TargetPosition.Y);
     Logger::Print("TargetPosition.Z",this->TargetPosition.Z);

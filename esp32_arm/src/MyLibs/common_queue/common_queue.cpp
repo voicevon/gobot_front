@@ -8,10 +8,8 @@ bool CommonQueue::Deposit(){
     // Logger::Print("tail", this->_tail);
     int next_head = this->__get_pointer_next_index(this->_head);
     if(next_head == this->_tail){
-        Serial.print(FORE_YELLOW);
-        Serial.print("\n  [Warn] CommonQueue::Deposit() ");
+        Logger::Warn("CommonQueue::Deposit() ");
         Serial.print("\n   Buffer is full");
-        Serial.println(FCBC_RESET);
         return true;
     }
 
