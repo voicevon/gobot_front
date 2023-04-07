@@ -4,7 +4,7 @@
 #include "MyLibs/common_queue/common_queue.h"
 #include "CNC/coordinate/coordinate_base.h"
 
-#define BLOCK_QUEUE_SIZE 88
+#define BLOCK_QUEUE_SIZE 32
 
 
 //TODO:  want a better name, like  MoveBlockQueueManager ?

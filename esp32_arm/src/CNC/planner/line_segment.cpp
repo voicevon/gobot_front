@@ -38,6 +38,7 @@ void LineSegment::DeepCopyFromFkPosition(FKPosition_XYZRPW* from){
 
 void LineSegment::PrintOUt(const char* title){
     Logger::Debug(title);
+    this->TargetPosition.PrintOut("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
     Logger::Print("TargetPosition.X",this->TargetPosition.X);
     Logger::Print("TargetPosition.Y",this->TargetPosition.Y);
     Logger::Print("TargetPosition.Z",this->TargetPosition.Z);

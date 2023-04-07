@@ -3,7 +3,7 @@
 #include "line_segment.h"
 #include "MyLibs/common_queue/common_queue.h"
 
-#define LINE_SEGMENT_QUEUE_SIZE 88
+#define LINE_SEGMENT_QUEUE_SIZE 8
 
 
 //TODO:  want a better name, like  MoveBlockQueueManager ?
