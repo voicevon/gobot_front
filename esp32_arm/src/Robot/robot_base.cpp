@@ -154,13 +154,12 @@ void RobotBase::__RunGcode(Gcode* gcode){
 		__newest_line_speed = gcode->get_value('F');
 	}
 	new_line->Speed_mm_per_second = __newest_line_speed;
-	Logger::Print("RobotBase::__RunGcode      point", 11);
+	// Logger::Print("RobotBase::__RunGcode      point", 11);
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
-	Logger::Print("RobotBase::__RunGcode      point", 12);
+	// Logger::Print("RobotBase::__RunGcode      point", 12);
 	//TODO:    This is wrong for the very first moveblock after MCU is reset.
 	Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
-	Logger::Print("RobotBase::__RunGcode      point", 19);
-
+	// Logger::Print("RobotBase::__RunGcode      point", 19);
 	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;
 	LineSegment middle_kinematic_line;
@@ -193,7 +192,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			// Logger::Print("RobotBase::__RunGcode      point", 52);
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			// Logger::Print("RobotBase::__RunGcode      point", 53);
-			Queue_LineSegment::Instance().Deposit();
+			// Queue_LineSegment::Instance().Deposit();   //TODO:  IS this necessary
 			// Logger::Print("RobotBase::__RunGcode      point", 59);
 			break;
 		case 5:

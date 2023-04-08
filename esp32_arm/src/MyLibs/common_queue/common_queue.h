@@ -27,6 +27,7 @@ class CommonQueue{
 
         //Push the appended object to queue. 
         bool Deposit();   //Push()?   Enqueue()?   Deposit()?
+        void PrintOut(const char * title);
 
     protected:
         // When you GetPreHeadObject(), you can view/check/modify it, also can ForwardHead(), equal to AppendObject().
@@ -34,20 +35,15 @@ class CommonQueue{
         Queue_able* _Withdraw();  //Pop()?  Withdraw()?  Dequeue?
         Queue_able* _GetHeadObject();  //Pop()?  Withdraw()?  Dequeue?
 
-        int _head = 0;
-        int _tail = 0;
-        void _Init(int items_count, int sizeof_item){
-            this->__MESSAGE_COUNT_IN_QUEUE = items_count; 
-            this->_sizeof_item = sizeof_item;
-            Logger::Info("CommonQueue:_Init()");
-            Logger::Print("items_count",items_count);
-            Logger::Print("sizeof_item",sizeof_item);
-            };
+        void _Init(const char* queue_name, int items_count, int sizeof_item);
 
     private:
-        int __get_pointer_next_index(int current_index);
-        int __get_pointer_previous_index(int current_index);
-        int __MESSAGE_COUNT_IN_QUEUE=0;
-        int _sizeof_item;
+        int __get_next_index(int current_index);
+        int __get_previous_index(int current_index);
+        int __MESSAGE_COUNT_IN_QUEUE = 0;
+        int __sizeof_item;
+        int __push_head = 0;
+        int __pop_tail = 0;
+        const char* __queue_name;
 
 };

@@ -13,7 +13,7 @@ class Queue_LineSegment: public CommonQueue{
             static Queue_LineSegment instance;
             return instance;
         };
-        Queue_LineSegment(){this->_Init(LINE_SEGMENTS_QUEUE_SIZE, sizeof(LineSegment));};
+        Queue_LineSegment(){this->_Init("Line_Segments", LINE_SEGMENTS_QUEUE_SIZE, sizeof(LineSegment));};
         LineSegment* Withdraw() {return (LineSegment*)this->_Withdraw();};
         LineSegment* GetRoom() {return (LineSegment*)this->_GetRoom();};
         LineSegment* GetHeadLineSegment() {return (LineSegment*)this->_GetHeadObject();};

@@ -76,13 +76,13 @@ bool MessageQueue::BufferIsEmpty(){
 }
 
 bool MessageQueue::BufferIsFull(){
-    Logger::Debug(" MessageQueue::BufferIsFull()");
     int next_head = __get_pointer_next_index(_head);
     if (next_head == _tail){
+        Logger::Debug("MessageQueue::BufferIsFull()");
         Logger::Print("MessageQueue::BufferIsFull()   point", 98);
         return true;
     }
-    Logger::Print(" MessageQueue::BufferIsFull()   point", 99);
+    // Logger::Print(" MessageQueue::BufferIsFull()   point", 99);
     return false;
 }
 
@@ -95,16 +95,16 @@ int MessageQueue::GetFreeBuffersCount(){
 }
 
 int MessageQueue::__get_pointer_next_index(int current_index){
-    Logger::Debug("MessageQueue::__get_pointer_next_index");
+    // Logger::Debug("MessageQueue::__get_pointer_next_index");
     int next_index = current_index;
     next_index++;
     if (next_index == MESSAGE_COUNT_IN_QUEUE){
         // out of range.
         next_index = 0;
     }
-    Logger::Print("MESSAGE_COUNT_IN_QUEUE", MESSAGE_COUNT_IN_QUEUE);
-    Logger::Print("current_index", current_index);
-    Logger::Print("next_index", next_index);
+    // Logger::Print("MESSAGE_COUNT_IN_QUEUE", MESSAGE_COUNT_IN_QUEUE);
+    // Logger::Print("current_index", current_index);
+    // Logger::Print("next_index", next_index);
     return next_index;
 }
 
