@@ -10,8 +10,6 @@
 // #define ROWS_COUNT 20
 // #define COLS_COUNT 8
 
-#define QUEUE_LINE_SEGMENT_COUNT 5
-#define QUEUE_PLANNER_BLOCK_COUNT 88
 
 #define CNC_ACTUATORS_COUNT 2
 
@@ -37,8 +35,8 @@ class Twh1_Robot: public RobotBase{
         Twh1_M42_Runner_Switch_Output __m42_runner;
 
         Twh_ArmSolution_Config __arm_config;
-        MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
-        LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
+        MoveBlock __all_move_blocks[MOVE_BLOCKS_QUEUE_SIZE]; 
+        LineSegment __all_line_segments[LINE_SEGMENTS_QUEUE_SIZE];
 
         float __GetWeight();
         void __GetDistanceToTeeth();

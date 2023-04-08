@@ -89,7 +89,6 @@ void BotAsrsAgvCoreYZ::SpinOnce(){
 	// 		return;
 	// 	}
 	// }
-		Serial.println("555555555555555555");
 	Serial.println(this->__state);
 	switch (this->__state){
 	case BotAsrsAgvCoreYZ::BOT_STATE::BOT_LOCATING:

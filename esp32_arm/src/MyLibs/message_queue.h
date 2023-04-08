@@ -1,6 +1,6 @@
 #pragma once
 #define MAX_BYTES_PER_MESSAGE 20
-#define MESSAGE_COUNT_IN_QUEUE 200
+#define MESSAGE_COUNT_IN_QUEUE 16
 #include <WString.h>
 #include "MyLibs/basic/logger.h"
 
@@ -27,10 +27,10 @@ class MessageQueue{
         // For both Producer and Consumer:
         MessageQueue(){};
         SingleMessage* GetHeadMessage();
-        void SayHello(String title);
+        void SayHello(const char* title);
 
     protected:
-        // This is a buffer , can contain 20 bytes per command, and 22 commands in the queue.
+        // This is a buffer , can contain 20 bytes per command, and 16 commands in the queue.
         SingleMessage _all_messages[MESSAGE_COUNT_IN_QUEUE];
         int _head = 0;
         int _tail = 0;

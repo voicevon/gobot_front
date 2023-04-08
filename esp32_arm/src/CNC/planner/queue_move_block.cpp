@@ -14,7 +14,7 @@ void Queue_MoveBlock::DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position){
 
 MoveBlock* Queue_MoveBlock::GetRoom(){
     MoveBlock* result = (MoveBlock*)this->_GetRoom(); 
-    Logger::Debug("Queue_MoveBlock::GetRoom()");
-    Logger::Print("Queue_MoveBlock::GetRoom()  AXIS_ALPHA position", result->MoveBlocks[AXIS_ALPHA].TargetPosition);
+    // Logger::Debug("Queue_MoveBlock::GetRoom()");
+    // Logger::Print("Queue_MoveBlock::GetRoom()  AXIS_ALPHA position", result->MoveBlocks[AXIS_ALPHA].TargetPosition);
     return result;
 }

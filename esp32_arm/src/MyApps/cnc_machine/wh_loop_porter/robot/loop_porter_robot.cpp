@@ -11,11 +11,11 @@ void Twh_LoopPorter_Robot::MySpinOnce(){
     __arm_solution.GetRealTimePosition(&current_fk);
 
     if (last_cnc_position != (int)(current_fk.X +0.5)){
-        Logger::Debug("Twh_LoopPorter_Robot::MySpinOnce()");
-        Logger::Print("cnc_position", current_fk.X);
         last_cnc_position = current_fk.X + 0.5;
-        Logger::Print("last_cnc_position", last_cnc_position);
         __board->GetNumberDisplayer()->ShowNumber(last_cnc_position);
+        // Logger::Debug("Twh_LoopPorter_Robot::MySpinOnce()");
+        // Logger::Print("cnc_position", current_fk.X);
+        // Logger::Print("last_cnc_position", last_cnc_position);
     }
 
 }

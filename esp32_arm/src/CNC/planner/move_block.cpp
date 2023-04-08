@@ -30,7 +30,6 @@ void MoveBlock::DeepCopyToIkPosition(IKPosition_abgdekl* to_position){
 
 
 void MoveBlock::DeepReset_ToDefault(){
-    Serial.print("dddddddddddddddddddddddddddddddddddddddddddd");
     Logger::Debug("MoveBlock::DeepReset_ToDefault()");
     for(int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
         Logger::Print("actuator index", a );

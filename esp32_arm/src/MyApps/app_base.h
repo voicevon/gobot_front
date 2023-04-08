@@ -28,5 +28,6 @@ class AppBase: public GcodeProducer, public MqttMessageConsumer{
         
 
     private:
+        int test_id = 1234;
 
 };

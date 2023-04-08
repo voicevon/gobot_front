@@ -4,7 +4,7 @@
 #include "MyLibs/common_queue/common_queue.h"
 #include "CNC/coordinate/coordinate_base.h"
 
-#define BLOCK_QUEUE_SIZE 32
+#define MOVE_BLOCKS_QUEUE_SIZE 32
 
 
 //TODO:  want a better name, like  MoveBlockQueueManager ?
@@ -14,7 +14,7 @@ class Queue_MoveBlock: public CommonQueue{
             static Queue_MoveBlock instance;
             return instance;
         };
-        Queue_MoveBlock(){this->_Init(BLOCK_QUEUE_SIZE, sizeof(MoveBlock));};
+        Queue_MoveBlock(){this->_Init(MOVE_BLOCKS_QUEUE_SIZE, sizeof(MoveBlock));};
         MoveBlock* Withdraw(){return (MoveBlock*)this->_Withdraw(); };
         MoveBlock* GetRoom();
         MoveBlock* GetHead_MoveBlock(){return (MoveBlock*)this->_GetHeadObject();};

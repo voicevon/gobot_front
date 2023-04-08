@@ -122,8 +122,11 @@ void RobotBase::SpinOnce(){
 	// Logger::Print("gcode_command", gcode.get_command());
 
 	if(gcode.has_g){
+		Logger::Print("RobotBase::SpinOnce()   point", 61);
 		this->__RunGcode(&gcode);
+		Logger::Print("RobotBase::SpinOnce()   point", 62);
 		this->_gcode_queue->FetchTailMessage(true);
+		Logger::Print("RobotBase::SpinOnce()   point", 69);
 	}else if(gcode.has_m){
 		McodeOS::Instance().SetupRunner(&gcode);
 		this->State = RobotState::MCODE_IS_SYNCING;
@@ -134,7 +137,7 @@ void RobotBase::SpinOnce(){
 		this->_gcode_queue->FetchTailMessage(true);
 
 	}
-	// Logger::Print("RobotBase::SpinOnce() point", 99);
+	Logger::Print("RobotBase::SpinOnce() point", 99);
 
 }
 
@@ -151,10 +154,13 @@ void RobotBase::__RunGcode(Gcode* gcode){
 		__newest_line_speed = gcode->get_value('F');
 	}
 	new_line->Speed_mm_per_second = __newest_line_speed;
-	
+	Logger::Print("RobotBase::__RunGcode      point", 11);
 	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
+	Logger::Print("RobotBase::__RunGcode      point", 12);
 	//TODO:    This is wrong for the very first moveblock after MCU is reset.
 	Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
+	Logger::Print("RobotBase::__RunGcode      point", 19);
+
 	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;
 	LineSegment middle_kinematic_line;
@@ -181,10 +187,14 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('R')) new_line->TargetPosition.Roll = gcode->get_value('R');
 			if (gcode->has_letter('P')) new_line->TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) new_line->TargetPosition.Yaw = gcode->get_value('W');
+			// Logger::Print("RobotBase::__RunGcode      point", 51);
 			new_line->IsMiddleKinematicPosition = false;
-			new_line->PrintOUt("caller is RobotBase::__RunGcode() G1");
+			// new_line->PrintOUt("caller is RobotBase::__RunGcode() G1");
+			// Logger::Print("RobotBase::__RunGcode      point", 52);
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
+			// Logger::Print("RobotBase::__RunGcode      point", 53);
 			Queue_LineSegment::Instance().Deposit();
+			// Logger::Print("RobotBase::__RunGcode      point", 59);
 			break;
 		case 5:
 			// G5 Move. will follow a Middle kinematic poisition.
@@ -197,7 +207,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('W')) middle_kinematic_line.TargetPosition.Yaw = gcode->get_value('W');
 			new_line->IsMiddleKinematicPosition = true;
 			this->__planner.arm_solution->MK_to_FK(&middle_kinematic_line.TargetPosition , &new_line->TargetPosition);
-			new_line->PrintOUt("caller is RobotBase::__RunGcode() G5");
+			// new_line->PrintOUt("caller is RobotBase::__RunGcode() G5");
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			Queue_LineSegment::Instance().Deposit();
 			break;

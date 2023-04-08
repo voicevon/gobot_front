@@ -76,9 +76,13 @@ bool MessageQueue::BufferIsEmpty(){
 }
 
 bool MessageQueue::BufferIsFull(){
+    Logger::Debug(" MessageQueue::BufferIsFull()");
     int next_head = __get_pointer_next_index(_head);
-    if (next_head == _tail)
+    if (next_head == _tail){
+        Logger::Print("MessageQueue::BufferIsFull()   point", 98);
         return true;
+    }
+    Logger::Print(" MessageQueue::BufferIsFull()   point", 99);
     return false;
 }
 
@@ -91,11 +95,16 @@ int MessageQueue::GetFreeBuffersCount(){
 }
 
 int MessageQueue::__get_pointer_next_index(int current_index){
+    Logger::Debug("MessageQueue::__get_pointer_next_index");
     int next_index = current_index;
     next_index++;
-    if (next_index == MESSAGE_COUNT_IN_QUEUE)   
+    if (next_index == MESSAGE_COUNT_IN_QUEUE){
         // out of range.
         next_index = 0;
+    }
+    Logger::Print("MESSAGE_COUNT_IN_QUEUE", MESSAGE_COUNT_IN_QUEUE);
+    Logger::Print("current_index", current_index);
+    Logger::Print("next_index", next_index);
     return next_index;
 }
 
@@ -108,21 +117,12 @@ int MessageQueue::__get_pointer_previous_index(int current_index){
     return next_index;
 }
 
-void MessageQueue::SayHello(String title){
-    Serial.print("\n\n ========================================================");
-    Serial.print("\n         GcodeQueue::SayHello(" + title + ")");
-    Serial.print("\n    Hello, I am instance of  GcodeQueue, normally I am local gcode queue... ");
-    Serial.print("\n    MAX_BYTES_PER_MESSAGE = ");
-    Serial.print(MAX_BYTES_PER_MESSAGE);
-    Serial.print("\n    MESSAGE_COUNT_IN_QUEUE = ");
-    Serial.print(MESSAGE_COUNT_IN_QUEUE);
-    Serial.print("\n         this->head= ");
-    Serial.println(this->_head);
-    Serial.print("\n         this->tail= ");
-    Serial.println(this->_tail);
-    // Serial.print("\n     &this->_mybot->State= ");
-    // Serial.println(this->_myBot->);   
-    Serial.print("\n tail message payload = ");
-    Serial.print(this->_all_messages[this->_tail].payload);
-    Serial.println("\n==================================== end ====");
+void MessageQueue::SayHello(const char* title){
+    Logger::Info(title);
+    Logger::Print("Hello, I am instance of  GcodeQueue, normally I am local gcode queue... ", "...");
+    Logger::Print("MAX_BYTES_PER_MESSAGE ", MAX_BYTES_PER_MESSAGE);
+    Logger::Print("MESSAGE_COUNT_IN_QUEUE ", MESSAGE_COUNT_IN_QUEUE);
+    Logger::Print("this->head ", this->_head);
+    Logger::Print("this->tail ", this->_tail);
+    Logger::Print("tail message payload = ", this->_all_messages[this->_tail].payload);
 }

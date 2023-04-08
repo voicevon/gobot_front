@@ -11,8 +11,6 @@
 // #define ROWS_COUNT 20
 // #define COLS_COUNT 8
 
-#define QUEUE_LINE_SEGMENT_COUNT 5
-#define QUEUE_PLANNER_BLOCK_COUNT 88
 
 #define CNC_ACTUATORS_COUNT 2
 
@@ -30,18 +28,16 @@ class Twh2_Robot: public RobotBase{
         CncActuatorBase* __all_actuators[CNC_ACTUATORS_COUNT];
         CncActuatorFastStepper __actuator_alpha;
         CncActuatorFastStepper __actuator_beta;
-        // CncActuatorServo __actuator_gamma;
         
         CncMover __mover;
         Twh2_XzArmSolution __arm_solution;
         Twh2_G28_Runner_CoreXz __g28_runner;
         Twh2_M42_Runner_Switch_Output __m42_runner;
-        // Twh2_M408_Runner_ReportJson __m408_runner;
         Twh2_JsonLoader __json_loader;
 
         // Twh_ArmSolution_Config __arm_config;
-        MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
-        LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
+        MoveBlock __all_move_blocks[MOVE_BLOCKS_QUEUE_SIZE];    // TODO: move to base class
+        LineSegment __all_line_segments[LINE_SEGMENTS_QUEUE_SIZE];  // TODO: move to base class
 
         float __GetWeight();
         void __GetDistanceToTeeth();

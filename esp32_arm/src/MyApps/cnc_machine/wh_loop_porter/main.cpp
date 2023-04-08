@@ -8,7 +8,7 @@
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 
 
-#define MY_ROBOT_ROW_ID 1   //Range is 0,1,2,3
+#define MY_ROBOT_ROW_ID 2   //Range is 0,1,2,3
 
 
 #if MY_ROBOT_ROW_ID == 0
@@ -126,24 +126,18 @@ void setup(){
 
 
 void loop(){
-    board.GetNumberDisplayer()->Test(1, 1);
-    Logger::Warn("Arduino loop() point  1 ");
 
     app.SpinOnce();
-    board.GetNumberDisplayer()->Test(1, 1);
     Logger::Warn("Aruino loop() point  2");
 
     robot.SpinOnce();
-    board.GetNumberDisplayer()->Test(1, 1);
-    Logger::Warn("Arduino loop() point   3");
+    // Logger::Warn("Arduino loop() point   3");
 
     robot.MySpinOnce();
-    board.GetNumberDisplayer()->Test(1, 1);
-    Logger::Warn("Arduino loop() point 4");
+    // Logger::Warn("Arduino loop() point 4");
 
     mono_remote_queue_bridge_spin_once();
-    board.GetNumberDisplayer()->Test(1, 1);
-    Logger::Warn("Arduino loop() point  5 ");
+    // Logger::Warn("Arduino loop() point  5 ");
 
 }
 

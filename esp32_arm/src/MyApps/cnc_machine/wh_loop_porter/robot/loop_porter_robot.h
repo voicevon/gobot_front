@@ -7,8 +7,7 @@
 #include "mcode_runner/twh_loop_porter_m42_switch_output.h"
 #include "../board/board.h"
 
-#define QUEUE_LINE_SEGMENT_COUNT 8   // TODO, DEFINE ONCE.
-#define QUEUE_PLANNER_BLOCK_COUNT 32  // TODO: DEFINE ONCE:  Important
+
 
 #define CNC_ACTUATORS_COUNT 1
 
@@ -34,8 +33,8 @@ class Twh_LoopPorter_Robot: public RobotBase{
         Twh_LoopPorter_JsonLoader __json_loader_for_m408;
         Twh_LoopPorter_M42_Runner_Switch_Output __m42_runner_led_output;
 
-        MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
-        LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
+        MoveBlock __all_move_blocks[MOVE_BLOCKS_QUEUE_SIZE]; 
+        LineSegment __all_line_segments[LINE_SEGMENTS_QUEUE_SIZE];
 
         Twh_LoopPorter_Board* __board;
 

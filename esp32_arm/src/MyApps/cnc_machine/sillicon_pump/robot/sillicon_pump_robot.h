@@ -7,8 +7,7 @@
 #include "mcode_runner/sillicon_pump_m42_switch_output.h"
 #include "../board/board.h"
 
-#define QUEUE_LINE_SEGMENT_COUNT 1
-#define QUEUE_PLANNER_BLOCK_COUNT 1
+
 
 #define CNC_ACTUATORS_COUNT 3
 
@@ -40,8 +39,8 @@ class Silicon_Pump_Robot: public RobotBase{
         // Twh_LoopPorter_M42_Runner_Switch_Output __m42_runner_led_output;
         Silicon_Pump_M42_Runner_Switch_Output __m42_runner_led_output;
 
-        MoveBlock __all_move_blocks[QUEUE_PLANNER_BLOCK_COUNT]; 
-        LineSegment __all_line_segments[QUEUE_LINE_SEGMENT_COUNT];
+        MoveBlock __all_move_blocks[MOVE_BLOCKS_QUEUE_SIZE]; 
+        LineSegment __all_line_segments[LINE_SEGMENTS_QUEUE_SIZE];
 
         Silicon_Pump_Board* __board;
 

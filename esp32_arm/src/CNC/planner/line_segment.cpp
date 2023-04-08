@@ -7,13 +7,15 @@ void LineSegment::Calculate_distance_time(FKPosition_XYZRPW* start_position){
     float dy = this->TargetPosition.Y - start_position->Y;
     this->Distance_mm = sqrtf(dx * dx + dy * dy);
     this->Required_time = Distance_mm / Speed_mm_per_second;
-    Logger::Debug("LineSegment::Calculate_distance_time()");
+    // Logger::Debug("LineSegment::Calculate_distance_time()");
+    // Logger::Print("Distance_mm", Distance_mm);
+    // Logger::Print("Required_time",Required_time);
+
     // Logger::Print("start_position->X",start_position->X);
     // Logger::Print("TargetPosition.X",TargetPosition.X);
     // Logger::Print("start_position->Y",start_position->Y);
     // Logger::Print("TargetPosition.Y",TargetPosition.Y);
-    Logger::Print("Distance_mm", Distance_mm);
-    Logger::Print("Required_time",Required_time);
+
 }
 
 void LineSegment::DeepCopyTo(LineSegment* the_copy){
@@ -28,20 +30,16 @@ void LineSegment::DeepCopyTo(LineSegment* the_copy){
 }
 
 void LineSegment::DeepCopyTo_TargetPosition_fk(FKPosition_XYZRPW* target){
-    // check TargetPosition is avaliable or not.
-    // this->TargetPosition.PrintOut("pppppppppppppppppppppppppp");
     this->TargetPosition.X = target->X;
     this->TargetPosition.Y = target->Y;
     this->TargetPosition.Z = target->Z;
     this->TargetPosition.Roll = target->Roll;
     this->TargetPosition.Pitch = target->Pitch;
     this->TargetPosition.Yaw = target->Yaw;
-    this->TargetPosition.PrintOut("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 }
 
 void LineSegment::PrintOUt(const char* title){
     Logger::Debug(title);
-    // this->TargetPosition.PrintOut("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
     Logger::Print("TargetPosition.X",this->TargetPosition.X);
     Logger::Print("TargetPosition.Y",this->TargetPosition.Y);
     Logger::Print("TargetPosition.Z",this->TargetPosition.Z);
