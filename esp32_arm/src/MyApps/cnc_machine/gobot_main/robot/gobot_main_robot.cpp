@@ -14,7 +14,7 @@ void GobotMainRobot::Init(GobotMain_Board* board){
     g28_runner.Init(&mover, &arm_solution,"");
     this->_LinkMover(&mover);
     
-    Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    gs_Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     // this->__planner.__arm_solution = &arm_solution;
     // this->_arm_solution = &this->arm_solution;  
 
@@ -66,10 +66,10 @@ void GobotMainRobot::_Init_ArmSolution(){
 
 
 void GobotMainRobot::_InitStatic_Queues(){
-    Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    gs_Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     // Init LineSegment queue head
-    Queue_LineSegment::Instance()._all_queue_ables = (Queue_able*) this->__all_line_segments;
-    LineSegment* line = Queue_LineSegment::Instance().GetRoom();
+    gs_Queue_LineSegment::Instance()._all_queue_ables = (Queue_able*) this->__all_line_segments;
+    LineSegment* line = gs_Queue_LineSegment::Instance().GetRoom();
     line->TargetPosition.X = 0;
     line->TargetPosition.Y = 0;
     line->TargetPosition.Z = 0;
@@ -77,6 +77,6 @@ void GobotMainRobot::_InitStatic_Queues(){
     line->TargetPosition.Pitch = 0;
     line->TargetPosition.Yaw = 0;
     line->PrintOUt("caller: GobotMainRobot::_InitStatic_Queues()");
-    Queue_LineSegment::Instance().Deposit();
+    gs_Queue_LineSegment::Instance().Deposit();
     Logger::Print("TeethWarehouse_Robot::Init", 83);
 }

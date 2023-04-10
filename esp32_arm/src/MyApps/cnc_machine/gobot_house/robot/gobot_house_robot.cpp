@@ -8,7 +8,7 @@ void GobotHouseRobot::Init(GobotMain_Board* board){
     g28_runner.Init(&mover, &arm_solution,"");
     this->_LinkMover(&mover);
     
-    Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    gs_Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
 }
 
 void GobotHouseRobot::_InitStatic_Queues(){

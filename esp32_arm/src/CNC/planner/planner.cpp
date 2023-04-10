@@ -10,7 +10,7 @@ bool Planner::IsPlanable(){
     // auto cc = bb->GetFreeBuffersCount();
     // Logger::Print("Planner::IsPlanable() point",3);
     // int fbc = this->__arm_solution->__queue_move_block->GetFreeBuffersCount();
-    int fbc = Queue_MoveBlock::Instance().GetFreeBuffersCount();
+    int fbc = gs_Queue_MoveBlock::Instance().GetFreeBuffersCount();
     if (fbc > 3) return true;
     return false;
 }
@@ -20,13 +20,13 @@ void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* new_line){
     new_line->Calculate_distance_time(arm_solution->GetCurrentPosition_Fk());
     IKPosition_abgdekl start_ik;
     // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 21);
-    Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyToIkPosition(&start_ik);
+    gs_Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyToIkPosition(&start_ik);
     // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 22);
 
     IKPosition_abgdekl target_ik;
-    Queue_MoveBlock::Instance().DeepCopyHead_ToPosition(&target_ik);
+    gs_Queue_MoveBlock::Instance().DeepCopyHead_ToPosition(&target_ik);
     arm_solution->FK_to_IK(&new_line->TargetPosition, &target_ik);
-    MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
+    MoveBlock* mb = gs_Queue_MoveBlock::Instance().GetRoom();
     // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 24);
     for(int i=0; i<CncActuator_List::Instance().GetItemsCount(); i++){
         // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 31);
@@ -37,7 +37,7 @@ void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* new_line){
         // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 33);
     }
     
-    Queue_MoveBlock::Instance().Deposit();
+    gs_Queue_MoveBlock::Instance().Deposit();
 
 }
 

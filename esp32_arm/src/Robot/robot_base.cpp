@@ -12,7 +12,7 @@ void RobotBase::SpinOnce(){
 	switch (this->State){
 		case RobotState::MCODE_IS_SYNCING:
 			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 41);
-			if (! Queue_MoveBlock::Instance().BufferIsEmpty()){
+			if (! gs_Queue_MoveBlock::Instance().BufferIsEmpty()){
 				return;
 			}
 			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 42);
@@ -32,7 +32,7 @@ void RobotBase::SpinOnce(){
 
 		case RobotState::G4_IS_SYNCING:
 			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 41);
-			if (! Queue_MoveBlock::Instance().BufferIsEmpty()){
+			if (! gs_Queue_MoveBlock::Instance().BufferIsEmpty()){
 				return;
 			}
 			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 42);
@@ -55,7 +55,7 @@ void RobotBase::SpinOnce(){
 		case RobotState::G28_IS_SYNCING:
 			// In case of these gocde in queue:    G1X123;  G4S5; G28X  what will hanppen 
 			Logger::Print("RobotBase::SpinOnce()  G28_Runner is waiting ", 21);
-			if (Queue_MoveBlock::Instance().BufferIsEmpty()){
+			if (gs_Queue_MoveBlock::Instance().BufferIsEmpty()){
 				this->_g28_runner->Start();
 				this->State = RobotState::G28_IS_RUNNING;
 				Logger::Print("RobotBase::SpinOnce()  G28_Runner is started ", 22);
@@ -78,11 +78,11 @@ void RobotBase::SpinOnce(){
 		return;
 	}
 
-	if (Queue_MoveBlock::Instance().BufferIsFull()){
+	if (gs_Queue_MoveBlock::Instance().BufferIsFull()){
 		return;
 	}
 
-	if (Queue_LineSegment::Instance().BufferIsFull()){
+	if (gs_Queue_LineSegment::Instance().BufferIsFull()){
 		return;
 	}
 
@@ -94,7 +94,7 @@ void RobotBase::SpinOnce(){
 		Logger::Print("RobotBase::SpinOnce() Planner can not go on,  queue might be full(or almost full).", 93);
 		return;
 	}
-	Logger::Print("RobotBase::SpinOnce() point", 3);
+	Logger::Print("RobotBase::SpinOnce() point  Going to run next gcode..", 3);
 
 	// Check gcode queue, if there is gcode to be run.
 	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage(false);
@@ -108,7 +108,7 @@ void RobotBase::SpinOnce(){
 	if (debug){
 		Logger::Debug("[Info] RobotBase::SpinOnce()  Going to run next gcode   ===> ");
 		Serial.print(message->payload);
-		Serial.println(" ");
+		Serial.println("<<<");
 	}
 	
 	// type convert   from char* to std::string
@@ -143,22 +143,22 @@ void RobotBase::SpinOnce(){
 
 
 // Before invoking this function. Make sure:
-// 1. Queue_MoveBlock is not full
-// 2. Queue_LineSegment is not full
+// 1. gs_Queue_MoveBlock is not full
+// 2. gs_Queue_LineSegment is not full
 void RobotBase::__RunGcode(Gcode* gcode){
 	static float __newest_line_speed = 100;
 	Logger::Info("RobotBase::__RunGcode()");
-	LineSegment* new_line = Queue_LineSegment::Instance().GetRoom();
+	LineSegment* new_line = gs_Queue_LineSegment::Instance().GetRoom();
 	new_line->DeepCopyTo_TargetPosition_fk(__planner.arm_solution->GetCurrentPosition_Fk());
 	if (gcode->has_letter('F')) {
 		__newest_line_speed = gcode->get_value('F');
 	}
 	new_line->Speed_mm_per_second = __newest_line_speed;
 	// Logger::Print("RobotBase::__RunGcode      point", 11);
-	MoveBlock* new_move_block = Queue_MoveBlock::Instance().GetRoom();
+	MoveBlock* new_move_block = gs_Queue_MoveBlock::Instance().GetRoom();
 	// Logger::Print("RobotBase::__RunGcode      point", 12);
 	//TODO:    This is wrong for the very first moveblock after MCU is reset.
-	Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
+	gs_Queue_MoveBlock::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
 	// Logger::Print("RobotBase::__RunGcode      point", 19);
 	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;
@@ -179,7 +179,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 						
 		case 1:
 			// G1 Move. will follow a Forward kinematic poisition.
-			// The position will be put in to Queue_LineSegment, Then convert to Queue_MoveBlock by Planner
+			// The position will be put in to gs_Queue_LineSegment, Then convert to gs_Queue_MoveBlock by Planner
 			if (gcode->has_letter('X')) new_line->TargetPosition.X = gcode->get_value('X');
 			if (gcode->has_letter('Y')) new_line->TargetPosition.Y = gcode->get_value('Y');
 			if (gcode->has_letter('Z')) new_line->TargetPosition.Z = gcode->get_value('Z');
@@ -192,12 +192,13 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			// Logger::Print("RobotBase::__RunGcode      point", 52);
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			// Logger::Print("RobotBase::__RunGcode      point", 53);
-			// Queue_LineSegment::Instance().Deposit();   //TODO:  IS this necessary
+			gs_Queue_LineSegment::Instance().PrintOut("caller is __RunGcode() ");
+			// gs_Queue_LineSegment::Instance().Deposit();   //TODO:  IS this necessary
 			// Logger::Print("RobotBase::__RunGcode      point", 59);
 			break;
 		case 5:
 			// G5 Move. will follow a Middle kinematic poisition.
-			// The position will be put in to Queue_LineSegment, Then Convert to Queue_moveBlock by Planner.
+			// The position will be put in to gs_Queue_LineSegment, Then Convert to Queue_moveBlock by Planner.
 			if (gcode->has_letter('X')) middle_kinematic_line.TargetPosition.X = gcode->get_value('X');
 			if (gcode->has_letter('Y')) middle_kinematic_line.TargetPosition.Y = gcode->get_value('Y');
 			if (gcode->has_letter('Z')) middle_kinematic_line.TargetPosition.Z = gcode->get_value('Z');
@@ -208,7 +209,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			this->__planner.arm_solution->MK_to_FK(&middle_kinematic_line.TargetPosition , &new_line->TargetPosition);
 			// new_line->PrintOUt("caller is RobotBase::__RunGcode() G5");
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
-			Queue_LineSegment::Instance().Deposit();
+			gs_Queue_LineSegment::Instance().Deposit();
 			break;
 
 		case 6:
@@ -225,13 +226,13 @@ void RobotBase::__RunGcode(Gcode* gcode){
 				new_move_block->MoveBlocks[a].Acceleration = 100;
 			}
 			// new_move_block->PrintOut("From RobotBase::__RunGcode()");
-			Queue_MoveBlock::Instance().Deposit();
+			gs_Queue_MoveBlock::Instance().Deposit();
 			// Update Current FK position 
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);
 			__planner.arm_solution->IK_to_FK(&new_ik_position, &new_fk_position);
 
 			new_line->DeepCopyTo_TargetPosition_fk(&new_fk_position);  //??
-			Queue_LineSegment::Instance().Deposit();             //??
+			gs_Queue_LineSegment::Instance().Deposit();             //??
 			break;
 		case 7:
 			// G7 Move. will follow a Middle kinematic poisition.
@@ -244,7 +245,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('W')) middle_kinematic_line.TargetPosition.Yaw = gcode->get_value('W');
 			new_line->IsMiddleKinematicPosition = true;
 			this->__planner.arm_solution->MK_to_Ik(&middle_kinematic_line.TargetPosition, &new_ik_position);
-			Queue_MoveBlock::Instance().Deposit();
+			gs_Queue_MoveBlock::Instance().Deposit();
 			// Update Current FK position 
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);
 			for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
@@ -254,7 +255,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			}
 			__planner.arm_solution->IK_to_FK(&new_ik_position, &new_fk_position);
 			new_line->DeepCopyTo_TargetPosition_fk(&new_fk_position);
-			Queue_LineSegment::Instance().Deposit();
+			gs_Queue_LineSegment::Instance().Deposit();
 			break;
 
 		case 90:

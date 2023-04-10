@@ -9,11 +9,11 @@ void CncMover::SpinOnce(){
         if (actuator->IsMoving()) has_moving_actuator= true;
     }
 
-    if (Queue_MoveBlock::Instance().BufferIsEmpty()) {
-        // Logger::Print("CncMover::SpinOnce() Queue_MoveBlock::  Buffer is Empty", 91);
+    if (gs_Queue_MoveBlock::Instance().BufferIsEmpty()) {
+        // Logger::Print("CncMover::SpinOnce() gs_Queue_MoveBlock::  Buffer is Empty", 91);
         return;
     }
-    // Logger::Print("CncMover::SpinOnce() Queue_MoveBlock::  Buffer got moveblock", 21);
+    // Logger::Print("CncMover::SpinOnce() gs_Queue_MoveBlock::  Buffer got moveblock", 21);
 
     if (has_moving_actuator){
         delay(500);
@@ -22,7 +22,7 @@ void CncMover::SpinOnce(){
     }
 
     // Logger::Info("CncMover::SpinOnce() withdraw queue_move_block");
-    MoveBlock* mb = Queue_MoveBlock::Instance().Withdraw();
+    MoveBlock* mb = gs_Queue_MoveBlock::Instance().Withdraw();
     // Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
     // Logger::Print("MoveBlocks[AXIS_ALPHA].Speed", mb->MoveBlocks[AXIS_ALPHA].Speed);
     // Logger::Print("MoveBlocks[AXIS_ALPHA].Acceleration", mb->MoveBlocks[AXIS_ALPHA].Acceleration);

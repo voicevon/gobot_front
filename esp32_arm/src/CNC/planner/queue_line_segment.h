@@ -6,14 +6,13 @@
 #define LINE_SEGMENTS_QUEUE_SIZE 8
 
 
-//TODO:  want a better name, like  MoveBlockQueueManager ?
-class Queue_LineSegment: public CommonQueue{
+class gs_Queue_LineSegment: public CommonQueue{
     public:
-        static Queue_LineSegment& Instance(){
-            static Queue_LineSegment instance;
+        static gs_Queue_LineSegment& Instance(){
+            static gs_Queue_LineSegment instance;
             return instance;
         };
-        Queue_LineSegment(){this->_Init("Line_Segments", LINE_SEGMENTS_QUEUE_SIZE, sizeof(LineSegment));};
+        gs_Queue_LineSegment(){this->_Init("Line_Segments", LINE_SEGMENTS_QUEUE_SIZE, sizeof(LineSegment));};
         LineSegment* Withdraw() {return (LineSegment*)this->_Withdraw();};
         LineSegment* GetRoom() {return (LineSegment*)this->_GetRoom();};
         LineSegment* GetHeadLineSegment() {return (LineSegment*)this->_GetHeadObject();};

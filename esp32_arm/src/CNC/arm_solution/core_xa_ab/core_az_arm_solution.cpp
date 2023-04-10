@@ -74,7 +74,7 @@ void CncSolution_CoreAZ::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW
 // 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
 // 	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
 // 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-// 	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
+// 	MoveBlock* mb = gs_Queue_MoveBlock::Instance().GetRoom();
 // 	if (gcode->has_letter('F')){
 // 		float speed = gcode->get_value('F');
 // 		// this->_mover_base->SetEefSpeed(speed);
@@ -110,7 +110,7 @@ void CncSolution_CoreAZ::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW
 // 	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
 // 	mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
 // 	// this->__queue_move_block->ForwardHead();
-// 	Queue_MoveBlock::Instance().Deposit();
+// 	gs_Queue_MoveBlock::Instance().Deposit();
 // 	//None blocking, move backgroundly.
 // 	// this->_mover_base->AllActuatorsMoveTo(true, motor_position);
 

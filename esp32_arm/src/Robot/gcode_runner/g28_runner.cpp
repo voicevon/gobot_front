@@ -59,11 +59,11 @@ void G28_Runner::Start(){
     Logger::Debug("G28_Runner::Start()");
 
 	//Put a move_block into the queue.  Mover will let the actuator to turn...
-	MoveBlock* mb = Queue_MoveBlock::Instance().GetRoom();
+	MoveBlock* mb = gs_Queue_MoveBlock::Instance().GetRoom();
     // Logger::Print("G28_Runner::Start() point", 11);
     mb->PrintOut("Test mb is none or not.  Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()");
     this->_SetMoveBlock_ToHome(_axis_name, mb);
-	Queue_MoveBlock::Instance().Deposit();
+	gs_Queue_MoveBlock::Instance().Deposit();
     // Logger::Print("G28_Runner::Start() point", 4);
 	this->_mover->SpinOnce();
     // Logger::Print("G28_Runner::Start() point", 99);
