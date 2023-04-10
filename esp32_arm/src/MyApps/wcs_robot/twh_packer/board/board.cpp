@@ -29,9 +29,8 @@ void Twh_Packer_Board::BootTest(){
         __ws2812b.SetLed_Green(13);
         __ws2812b.SetLed_Red(13);
         delay(DEALY_LED);
-        
-
     }
+    __ws2812b.SetLed_Blue(13);
 }
 
 
