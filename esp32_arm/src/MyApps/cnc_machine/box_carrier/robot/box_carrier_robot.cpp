@@ -10,7 +10,7 @@ void BoxCarrierRobot::Init(Board2204Cnc* board){
     g28_runner.Init(&mover, &arm_solution,"");
     this->_LinkMover(&mover);
     
-    gs_Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    gs_MoveBlock_Queue::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     // this->__planner.__arm_solution = &arm_solution;
     // this->_arm_solution = &this->arm_solution;  
 

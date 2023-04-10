@@ -60,10 +60,10 @@ void Twh_LoopPorter_Robot::_Init_ArmSolution(){
 
 
 void Twh_LoopPorter_Robot::_InitStatic_Queues(){
-    gs_Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    gs_MoveBlock_Queue::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
     // Init LineSegment queue head
-    gs_Queue_LineSegment::Instance()._all_queue_ables = (Queue_able*) this->__all_line_segments;
-    LineSegment* line = gs_Queue_LineSegment::Instance().GetRoom();
+    gs_LineSegment_Queue::Instance()._all_queue_ables = (Queue_able*) this->__all_line_segments;
+    LineSegment* line = gs_LineSegment_Queue::Instance().GetRoom();
     line->TargetPosition.X = 0;
     line->TargetPosition.Y = 0;
     line->TargetPosition.Z = 0;
@@ -71,7 +71,7 @@ void Twh_LoopPorter_Robot::_InitStatic_Queues(){
     line->TargetPosition.Pitch = 0;
     line->TargetPosition.Yaw = 0;
     line->PrintOUt("caller: Twh_LoopPorter_Robot::_InitStatic_Queues()");
-    gs_Queue_LineSegment::Instance().Deposit();
+    gs_LineSegment_Queue::Instance().Deposit();
     Logger::Print("Twh_LoopPorter_Robot::Init", 83);
 }
 

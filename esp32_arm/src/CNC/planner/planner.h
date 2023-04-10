@@ -1,7 +1,7 @@
 #pragma once
 
-#include "queue_move_block.h"
-#include "queue_line_segment.h"
+#include "move_blocks_queue.h"
+#include "line_segments_queue.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 
 

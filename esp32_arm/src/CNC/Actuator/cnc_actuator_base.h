@@ -3,8 +3,8 @@
 #include "range_constraint/actuator_range_constraint_base.h"
 #include "Mylibs/basic/logger.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "CNC/planner/queue_move_block.h"
-#include "CNC/planner/queue_line_segment.h"
+#include "CNC/planner/move_blocks_queue.h"
+#include "CNC/planner/line_segments_queue.h"
 #include "MyLibs/list/list_base.h"
 
 

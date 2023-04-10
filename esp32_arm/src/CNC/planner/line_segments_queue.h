@@ -6,13 +6,13 @@
 #define LINE_SEGMENTS_QUEUE_SIZE 8
 
 
-class gs_Queue_LineSegment: public CommonQueue{
+class gs_LineSegment_Queue: public CommonQueue{
     public:
-        static gs_Queue_LineSegment& Instance(){
-            static gs_Queue_LineSegment instance;
+        static gs_LineSegment_Queue& Instance(){
+            static gs_LineSegment_Queue instance;
             return instance;
         };
-        gs_Queue_LineSegment(){this->_Init("Line_Segments", LINE_SEGMENTS_QUEUE_SIZE, sizeof(LineSegment));};
+        gs_LineSegment_Queue(){this->_Init("Line_Segments", LINE_SEGMENTS_QUEUE_SIZE, sizeof(LineSegment));};
         LineSegment* Withdraw() {return (LineSegment*)this->_Withdraw();};
         LineSegment* GetRoom() {return (LineSegment*)this->_GetRoom();};
         LineSegment* GetHeadLineSegment() {return (LineSegment*)this->_GetHeadObject();};

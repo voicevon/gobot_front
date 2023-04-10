@@ -61,7 +61,7 @@ void CoreYZ_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW
 // 	// this->stepper_beta->setMaxSpeed(this->_cncMachine->Homing_speed_alpha_beta);
 // 	// float motor_position[2];
 // 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-// 	MoveBlock* mb = gs_Queue_MoveBlock::Instance().GetRoom();
+// 	MoveBlock* mb = gs_MoveBlock_Queue::Instance().GetRoom();
 // 	mb->MoveBlocks[AXIS_ALPHA].IsAbsTargetPosition = false;
 // 	mb->MoveBlocks[AXIS_BETA].IsAbsTargetPosition = false;
 // 	if (axis=='Y'){
@@ -87,7 +87,7 @@ void CoreYZ_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW
 	
 // 	// this->_mover_base->AllActuatorsMoveTo(false, motor_position);
 // 	// this->__queue_move_block->ForwardHead();	
-// 	gs_Queue_MoveBlock::Instance().Deposit();
+// 	gs_MoveBlock_Queue::Instance().Deposit();
 
 // 	// this->_board->EnableMotor('A', true);
 // 	// this->_board->EnableMotor('B',true);
@@ -116,7 +116,7 @@ void CoreYZ_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW
 // 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
 // 	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
 // 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-// 	MoveBlock* mb = gs_Queue_MoveBlock::Instance().GetRoom();
+// 	MoveBlock* mb = gs_MoveBlock_Queue::Instance().GetRoom();
 // 	if (gcode->has_letter('F')){
 // 		float speed = gcode->get_value('F');
 // 		// this->stepper_alpha->setMaxSpeed(speed);
@@ -160,7 +160,7 @@ void CoreYZ_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW
 // 	mb->MoveBlocks[AXIS_ALPHA].TargetPosition = target_ik_ab.alpha;
 // 	mb->MoveBlocks[AXIS_BETA].TargetPosition = target_ik_ab.beta;
 // 	// this->__queue_move_block->ForwardHead();
-// 	gs_Queue_MoveBlock::Instance().Deposit();
+// 	gs_MoveBlock_Queue::Instance().Deposit();
 
 // 	if (true){
 // 		Serial.print("\n    [Debug] CoreYZ_ArmSolution::RunG1()     (");

@@ -1,8 +1,8 @@
-#include "queue_move_block.h"
+#include "move_blocks_queue.h"
 
 
 
-void gs_Queue_MoveBlock::DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position){
+void gs_MoveBlock_Queue::DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position){
     MoveBlock* head_mb = this->GetHead_MoveBlock();
     for (int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
         ik_position->Positions[a] = head_mb->MoveBlocks[a].TargetPosition;
@@ -12,9 +12,9 @@ void gs_Queue_MoveBlock::DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position
     // ik_position->gamma =head_mb->MoveBlocks[AXIS_GAMMA].TargetPosition;
 }
 
-MoveBlock* gs_Queue_MoveBlock::GetRoom(){
+MoveBlock* gs_MoveBlock_Queue::GetRoom(){
     MoveBlock* result = (MoveBlock*)this->_GetRoom(); 
-    // Logger::Debug("gs_Queue_MoveBlock::GetRoom()");
-    // Logger::Print("gs_Queue_MoveBlock::GetRoom()  AXIS_ALPHA position", result->MoveBlocks[AXIS_ALPHA].TargetPosition);
+    // Logger::Debug("gs_MoveBlock_Queue::GetRoom()");
+    // Logger::Print("gs_MoveBlock_Queue::GetRoom()  AXIS_ALPHA position", result->MoveBlocks[AXIS_ALPHA].TargetPosition);
     return result;
 }

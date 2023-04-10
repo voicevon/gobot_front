@@ -5,7 +5,7 @@
 void SpringMakerRobot::Init(Board_SpringMaker* board){
     Logger::Debug("SpringMakerRobot::Init()");
 
-    gs_Queue_MoveBlock::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    gs_MoveBlock_Queue::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
 
     this->_g28_runner = &this->g28_runner;
     g28_runner.Init(&mover, &arm_solution,"");

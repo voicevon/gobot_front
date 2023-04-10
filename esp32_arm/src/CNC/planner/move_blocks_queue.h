@@ -7,13 +7,13 @@
 #define MOVE_BLOCKS_QUEUE_SIZE 32
 
 
-class gs_Queue_MoveBlock: public CommonQueue{
+class gs_MoveBlock_Queue: public CommonQueue{
     public:
-        static gs_Queue_MoveBlock& Instance(){
-            static gs_Queue_MoveBlock instance;
+        static gs_MoveBlock_Queue& Instance(){
+            static gs_MoveBlock_Queue instance;
             return instance;
         };
-        gs_Queue_MoveBlock(){this->_Init("MoveBlocks", MOVE_BLOCKS_QUEUE_SIZE, sizeof(MoveBlock));};
+        gs_MoveBlock_Queue(){this->_Init("MoveBlocks", MOVE_BLOCKS_QUEUE_SIZE, sizeof(MoveBlock));};
         MoveBlock* Withdraw(){return (MoveBlock*)this->_Withdraw(); };
         MoveBlock* GetRoom();
         MoveBlock* GetHead_MoveBlock(){return (MoveBlock*)this->_GetHeadObject();};
