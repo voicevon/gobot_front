@@ -6,9 +6,7 @@ void CommonQueue::_Init(const char* queue_name, int items_count, int sizeof_item
     this->__MESSAGE_COUNT_IN_QUEUE = items_count; 
     this->__sizeof_item = sizeof_item;
     this->__queue_name = queue_name;
-
     this->PrintOut("CommonQueue:_Init()");
-
 }
 
 
@@ -26,7 +24,7 @@ bool CommonQueue::Deposit(){
     Logger::Print("__queue_name", this->__queue_name);
     Logger::Print("old  __push_head ", this->__push_head);
     int next_head = this->__get_next_index(this->__push_head);
-
+    
     if(next_head == this->__pop_tail){
         Logger::Warn("CommonQueue::Deposit() ");
         Serial.print("\n   Buffer is full");
@@ -38,7 +36,7 @@ bool CommonQueue::Deposit(){
     this->__push_head = next_head;
     next_head = this->__get_next_index(this->__push_head);
     Logger::Print("new  _push_head", this->__push_head);
-
+    this->PrintOut("caller is :  CommonQueue::Deposit()");
     if (next_head == this->__pop_tail)
         // buffer is full, after copying.
         return true;

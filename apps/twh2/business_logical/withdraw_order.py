@@ -157,8 +157,9 @@ class WithdrawOrder():
 
 
 class WithdrawOrderManager():
-    def __init__(self, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
+    def __init__(self, twh_id:str, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
         self.__all_order_tasks = []
+        self.__twh_id = twh_id
         self.__packer = packer
         self.__shipper = shipper
 
@@ -203,28 +204,31 @@ class WithdrawOrderManager():
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         for db_tooth in db_order_teeth:
             the_order = self.FindOrderTask(db_tooth['order_id'])
-            if the_order is None:
-                new_order = WithdrawOrder(db_tooth['order_id'], self.__packer, self.__shipper)
-                self.AddOrderTask(new_order)
-                the_order = new_order
-                Logger.Debug('WithdrawOrderManager::__renew_orders_from_database()')
-                printed_logger_title = True
-                Logger.Print('WithdrawOrderManager::__renew_orders_from_database()   new_order_task is added to manager. Order_id', new_order.Order_id)
-            the_order.SetStateTo(db_tooth['order_state'], write_to_db=False)
+            if db_tooth['twh_id'] == self.__twh_id:   # TODO:  move into db_order_teeth  searching.
+                if the_order is None:
+                    new_order = WithdrawOrder(db_tooth['order_id'], self.__packer, self.__shipper)
+                    self.AddOrderTask(new_order)
+                    the_order = new_order
+                    if not printed_logger_title:
+                        Logger.Debug('WithdrawOrderManager::__renew_orders_from_database() First')
+                        Logger.Print('Factory_name', twh_factory[self.__twh_id])
+                        printed_logger_title = True
+                    Logger.Print('WithdrawOrderManager::__renew_orders_from_database()   new_order_task is added to manager. Order_id', new_order.Order_id)
+                the_order.SetStateTo(db_tooth['order_state'], write_to_db=False)
 
-            order_tooth = the_order.FindTooth_from_doc_id(db_tooth.doc_id)
-            if order_tooth is None:
-                new_tooth = OrderTooth(db_tooth.doc_id)
-                new_tooth.DentalLocation = db_tooth['location']
-                new_tooth.row = db_tooth['row']
-                new_tooth.col = db_tooth['col']
-                new_tooth.layer = db_tooth['layer']
-                the_order.AddTooth(new_tooth)
-                order_tooth = new_tooth
-                if not printed_logger_title:
-                    Logger.Debug('WithdrawOrderManager::__renew_orders_from_database()')
-                Logger.Print('new_tooth is added to order_task. DentalLocation', new_tooth.DentalLocation)
-            order_tooth.TransferToLocated(db_tooth['located'], write_to_db=False)
+                order_tooth = the_order.FindTooth_from_doc_id(db_tooth.doc_id)
+                if order_tooth is None:
+                    new_tooth = OrderTooth(db_tooth.doc_id)
+                    new_tooth.DentalLocation = db_tooth['location']
+                    new_tooth.row = db_tooth['row']
+                    new_tooth.col = db_tooth['col']
+                    new_tooth.layer = db_tooth['layer']
+                    the_order.AddTooth(new_tooth)
+                    order_tooth = new_tooth
+                    if not printed_logger_title:
+                        Logger.Debug('WithdrawOrderManager::__renew_orders_from_database()  Second')
+                    Logger.Print('new_tooth is added to order_task. DentalLocation', new_tooth.DentalLocation)
+                order_tooth.TransferToLocated(db_tooth['located'], write_to_db=False)
 
             # if order_task.GetState() == 'shipped':
             #     DB_WithdrawOrder.delete_by_order_id(order_task.Order_id)

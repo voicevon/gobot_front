@@ -8,7 +8,7 @@
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 
 
-#define MY_ROBOT_ROW_ID 2   //Range is 0,1,2,3
+#define MY_ROBOT_ROW_ID 0   //Range is 0,1,2,3
 
 
 #if MY_ROBOT_ROW_ID == 0
@@ -129,7 +129,7 @@ void setup(){
 void loop(){
 
     app.SpinOnce();
-    Logger::Warn("Aruino loop() point  2");
+    // Logger::Warn("Aruino loop() point  2");
 
     robot.SpinOnce();
     // Logger::Warn("Arduino loop() point   3");
