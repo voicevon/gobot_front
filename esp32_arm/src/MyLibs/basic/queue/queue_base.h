@@ -9,7 +9,8 @@ class Queue_able{
 };
 
 //TODO:  make a template, to remove Queue_able.
-class CommonQueue{
+// template <class T>
+class QueueBase{
     public:
         // For Producer: 
 

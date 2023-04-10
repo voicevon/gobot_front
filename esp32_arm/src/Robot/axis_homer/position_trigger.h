@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 #include <Adafruit_MCP23X17.h>
-#include "MyLibs/array/array_base.h"
+#include "MyLibs/basic/array/array_base.h"
 
 class PositionTrigger: public ArrayItem{
     public:

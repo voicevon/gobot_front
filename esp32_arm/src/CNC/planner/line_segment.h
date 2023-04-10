@@ -1,7 +1,7 @@
 #pragma once
 #include "CNC/coordinate/cnc_axis.h"
 #include "CNC/coordinate/coordinate_base.h"
-#include "MyLibs/common_queue/common_queue.h"
+#include "MyLibs/basic/queue/queue_base.h"
 
 
 class LineSegment: public Queue_able{

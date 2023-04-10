@@ -1,12 +1,12 @@
 #pragma once
 
 #include "line_segment.h"
-#include "MyLibs/common_queue/common_queue.h"
+#include "MyLibs/basic/queue/queue_base.h"
 
 #define LINE_SEGMENTS_QUEUE_SIZE 8
 
 
-class gs_LineSegment_Queue: public CommonQueue{
+class gs_LineSegment_Queue: public QueueBase{
     public:
         static gs_LineSegment_Queue& Instance(){
             static gs_LineSegment_Queue instance;

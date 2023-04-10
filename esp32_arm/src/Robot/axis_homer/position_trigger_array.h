@@ -2,7 +2,7 @@
 
 #include "position_trigger.h"
 #include "CNC/coordinate/cnc_axis.h"
-#include "MyLibs/array/array_base.h"
+#include "MyLibs/basic/array/array_base.h"
 
 
 class PositionTrigger_Array: public ArrayBase{

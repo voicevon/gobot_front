@@ -3,7 +3,7 @@
 #include "../board/board_vsc.h"
 #include "Robot/robot_base.h"
 #include "arm_solution/vsc_arm_solution.h"
-#include "MyLibs/list/pid_controllers_list.h"
+#include "MyLibs/basic/list/pid_controllers_list.h"
 #include "vsc_g28_runner.h"
 
 #define PID_CONTROLLERS_COUNT 1

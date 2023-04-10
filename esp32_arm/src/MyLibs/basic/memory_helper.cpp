@@ -11,7 +11,3 @@ int MemoryHelper::CompareSame(const void* a, const void* b, int length){
     return -1;
 }
 
-// void MemoryHelper::CopyArduinoString(String from, String to){
-//     for(int i=0; i<from.length(); i++)
-
-// }

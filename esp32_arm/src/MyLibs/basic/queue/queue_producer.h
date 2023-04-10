@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common_queue.h"
+#include "queue_base.h"
 
 // This is a local message producer
 // Normally, this producer 
@@ -9,10 +9,10 @@
 
 class CommonQueueProducer{
     public:
-        void LinkQueue_AsProducer(CommonQueue* the_queue) {this->_queue = the_queue;};
+        void LinkQueue_AsProducer(QueueBase* the_queue) {this->_queue = the_queue;};
 
     protected:
-        CommonQueue* _queue;
+        QueueBase* _queue;
 
     private:
 

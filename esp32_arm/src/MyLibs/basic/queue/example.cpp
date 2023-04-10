@@ -1,6 +1,6 @@
 
 
-#include "common_queue.h"
+#include "queue_base.h"
 
 
 
@@ -14,7 +14,7 @@ class AnyClass: public Queue_able{
 
 };
 
-class AnyQueue: public CommonQueue{
+class AnyQueue: public QueueBase{
     public:
         AnyClass* Withdraw(){return (AnyClass*)this->_Withdraw(); };
         AnyClass* GetRoom() {return (AnyClass*)this->_GetRoom(); };

@@ -1,13 +1,13 @@
 #pragma once
 
 #include "move_block.h"
-#include "MyLibs/common_queue/common_queue.h"
+#include "MyLibs/basic/queue/queue_base.h"
 #include "CNC/coordinate/coordinate_base.h"
 
 #define MOVE_BLOCKS_QUEUE_SIZE 32
 
 
-class gs_MoveBlock_Queue: public CommonQueue{
+class gs_MoveBlock_Queue: public QueueBase{
     public:
         static gs_MoveBlock_Queue& Instance(){
             static gs_MoveBlock_Queue instance;

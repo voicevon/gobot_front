@@ -1,16 +1,16 @@
-#include "common_queue.h"
+#include "queue_base.h"
 #include "MyLibs/basic/logger.h"
 
 
-void CommonQueue::_Init(const char* queue_name, int items_count, int sizeof_item){
+void QueueBase::_Init(const char* queue_name, int items_count, int sizeof_item){
     this->__MESSAGE_COUNT_IN_QUEUE = items_count; 
     this->__sizeof_item = sizeof_item;
     this->__queue_name = queue_name;
-    this->PrintOut("CommonQueue:_Init()");
+    this->PrintOut("QueueBase:_Init()");
 }
 
 
-void CommonQueue::PrintOut(const char * title){
+void QueueBase::PrintOut(const char * title){
     Logger::Info(title);
     Logger::Print("queue_name", this->__queue_name);
     Logger::Print("items_count",this->__MESSAGE_COUNT_IN_QUEUE);
@@ -19,14 +19,14 @@ void CommonQueue::PrintOut(const char * title){
     Logger::Print("__push_head", this->__push_head);
 }
 
-bool CommonQueue::Deposit(){
+bool QueueBase::Deposit(){
     Logger::Debug("ommonQueue::Deposit()");
     Logger::Print("__queue_name", this->__queue_name);
     Logger::Print("old  __push_head ", this->__push_head);
     int next_head = this->__get_next_index(this->__push_head);
     
     if(next_head == this->__pop_tail){
-        Logger::Warn("CommonQueue::Deposit() ");
+        Logger::Warn("QueueBase::Deposit() ");
         Serial.print("\n   Buffer is full");
         return true;
     }
@@ -36,7 +36,7 @@ bool CommonQueue::Deposit(){
     this->__push_head = next_head;
     next_head = this->__get_next_index(this->__push_head);
     Logger::Print("new  _push_head", this->__push_head);
-    this->PrintOut("caller is :  CommonQueue::Deposit()");
+    this->PrintOut("caller is :  QueueBase::Deposit()");
     if (next_head == this->__pop_tail)
         // buffer is full, after copying.
         return true;
@@ -45,15 +45,15 @@ bool CommonQueue::Deposit(){
 }
 
 
-Queue_able* CommonQueue::_GetRoom(){
-    // Logger::Debug("CommonQueue::_GetRoom()");
+Queue_able* QueueBase::_GetRoom(){
+    // Logger::Debug("QueueBase::_GetRoom()");
     Queue_able* head_message =(Queue_able*)(this->_all_queue_ables + __push_head * this->__sizeof_item);
     // Serial.println(head_message->id);
-    // Logger::Print("CommonQueue::_GetRoom() point", 99);
+    // Logger::Print("QueueBase::_GetRoom() point", 99);
     return  head_message;
 }
 
-Queue_able* CommonQueue::_Withdraw(){
+Queue_able* QueueBase::_Withdraw(){
     Queue_able* tail_message = NULL;
     if (this->__push_head != this->__pop_tail){
         tail_message = (Queue_able*) (this->_all_queue_ables + this->__pop_tail * this->__sizeof_item);
@@ -63,25 +63,25 @@ Queue_able* CommonQueue::_Withdraw(){
 }
 
 // Notice:  If buffer is empty, this will return unexpected result.
-Queue_able* CommonQueue::_GetHeadObject(){
+Queue_able* QueueBase::_GetHeadObject(){
     int previous_head =  __get_previous_index(__push_head);
     return (Queue_able*) (this->_all_queue_ables + previous_head* this->__sizeof_item);
 }
 
-bool CommonQueue::BufferIsEmpty(){
+bool QueueBase::BufferIsEmpty(){
     if (this->__push_head == this->__pop_tail) 
         return true;
     return false;
 }
 
-bool CommonQueue::BufferIsFull(){
+bool QueueBase::BufferIsFull(){
     int next_head = this->__get_next_index(this->__push_head);
     if (next_head == this->__pop_tail)
         return true;
     return false;
 }
 
-int CommonQueue::GetFreeBuffersCount(){
+int QueueBase::GetFreeBuffersCount(){
     int count = this->__push_head - this->__pop_tail;
     if (count >= 0)
         return this->__MESSAGE_COUNT_IN_QUEUE - count;
@@ -89,7 +89,7 @@ int CommonQueue::GetFreeBuffersCount(){
         return 0-count;
 }
 
-int CommonQueue::__get_next_index(int current_index){
+int QueueBase::__get_next_index(int current_index){
     int next_index = current_index;
     next_index++;
     if (next_index == this->__MESSAGE_COUNT_IN_QUEUE)   
@@ -98,7 +98,7 @@ int CommonQueue::__get_next_index(int current_index){
     return next_index;
 }
 
-int CommonQueue::__get_previous_index(int current_index){
+int QueueBase::__get_previous_index(int current_index){
     int next_index = current_index;
     next_index--;
     if (next_index <0 )   

@@ -1,6 +1,6 @@
-#include "MyLibs/common_queue/common_queue.h"
+#include "MyLibs/basic/queue/queue_base.h"
 
-class GcodeQueue2: public CommonQueue{
+class GcodeQueue2: public QueueBase{
     public:
         GcodeQueue2(){};
         
