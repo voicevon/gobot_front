@@ -3,9 +3,17 @@
 #define MESSAGE_COUNT_IN_QUEUE 16
 #include <WString.h>
 #include "MyLibs/basic/logger.h"
+#include "queue_base.h"
 
 
+class MessageBase{
+    public:
 
+    private:
+};
+
+
+// class MessageQueue: public QueueBase<MessageBase>{
 class MessageQueue{
     public:
         struct SingleMessage{

@@ -4,7 +4,8 @@
 #include "MyLibs/basic/queue/queue_base.h"
 
 
-class LineSegment: public Queue_able{
+// class LineSegment: public Queue_able{
+class LineSegment{
     public:
         EnumAxis_ForwardKinematic axis;
         FKPosition_XYZRPW TargetPosition;

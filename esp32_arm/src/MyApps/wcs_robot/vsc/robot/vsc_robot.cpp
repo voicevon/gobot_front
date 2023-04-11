@@ -6,7 +6,7 @@ void VscRobot::Init(Vsc_Board* board){
     Logger::Debug("VscRobot::Init()");
     // this->_cnc_board = board;
 
-    gs_MoveBlock_Queue::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    gs_MoveBlock_Queue::Instance().all_elements = this->__all_move_blocks;
     // this->__planner.__arm_solution = &arm_solution;
     // this->_arm_solution = &this->arm_solution;  
 

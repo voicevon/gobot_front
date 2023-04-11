@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include "MyLibs/message_queue.h"
+#include "MyLibs/basic/queue/message_queue.h"
 #include "Mqtt/wifi_mqtt_client.h"
 #include "mqtt_subscriber_base.h"
 

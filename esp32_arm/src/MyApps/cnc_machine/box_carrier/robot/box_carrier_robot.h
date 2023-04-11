@@ -14,8 +14,8 @@ class BoxCarrierRobot: public RobotBase{
         // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};
 
 
-        MoveBlock __all_move_blocks[88]; 
-        LineSegment __all_line_segments[88];
+        MoveBlock __all_move_blocks[MOVE_BLOCKS_QUEUE_SIZE]; 
+        LineSegment __all_line_segments[LINE_SEGMENTS_QUEUE_SIZE];
         // Mover_DualStepper mover;
         CncMover mover;
         CoreYZ_ArmSolution arm_solution;

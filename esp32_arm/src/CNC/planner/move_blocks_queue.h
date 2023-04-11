@@ -7,18 +7,18 @@
 #define MOVE_BLOCKS_QUEUE_SIZE 32
 
 
-class gs_MoveBlock_Queue: public QueueBase{
+class gs_MoveBlock_Queue: public QueueBase<MoveBlock>{
     public:
         static gs_MoveBlock_Queue& Instance(){
             static gs_MoveBlock_Queue instance;
             return instance;
         };
-        gs_MoveBlock_Queue(){this->_Init("MoveBlocks", MOVE_BLOCKS_QUEUE_SIZE, sizeof(MoveBlock));};
-        MoveBlock* Withdraw(){return (MoveBlock*)this->_Withdraw(); };
+        MoveBlock* Withdraw();
         MoveBlock* GetRoom();
-        MoveBlock* GetHead_MoveBlock(){return (MoveBlock*)this->_GetHeadObject();};
+        MoveBlock* GetHead_MoveBlock();
         void DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position);
 
     private:
+        gs_MoveBlock_Queue();
 
 };

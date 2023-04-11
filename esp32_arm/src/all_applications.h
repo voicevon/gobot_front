@@ -42,7 +42,7 @@
 // #define I_AM_CABLE_AXIS_XPYN
 
 
-	// #define I_AM_SMOKE_MACHINE_MQTT
+// #define I_AM_TESTER
 
 #ifdef I_AM_GOBOT_MAIN
     #define ROBOT_SERIAL_ID 2134

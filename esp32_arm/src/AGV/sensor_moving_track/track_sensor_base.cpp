@@ -48,4 +48,5 @@ int TrackSensorBase::_Convert_fromOrigin_toPositionError(uint8_t* origin_bits){
             this->_TrackWidth = right_trackWidth;
         }
     }
+    return 0;   // TODO:  only for no warning
 }

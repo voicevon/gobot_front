@@ -5,7 +5,8 @@
 #include "move_block_single_actuator.h"
 
 
-class MoveBlock: public Queue_able{
+// class MoveBlock: public Queue_able{
+class MoveBlock{
     public:
         MoveBlock_SingleActuator MoveBlocks[CNC_ACTUATORS_IDEAL_COUNT];
         // void DeepCopyTo(Queue_able* copy) override;

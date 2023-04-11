@@ -60,9 +60,9 @@ void Twh_LoopPorter_Robot::_Init_ArmSolution(){
 
 
 void Twh_LoopPorter_Robot::_InitStatic_Queues(){
-    gs_MoveBlock_Queue::Instance()._all_queue_ables = (Queue_able*)this->__all_move_blocks;
+    gs_MoveBlock_Queue::Instance().all_elements = this->__all_move_blocks;
     // Init LineSegment queue head
-    gs_LineSegment_Queue::Instance()._all_queue_ables = (Queue_able*) this->__all_line_segments;
+    gs_LineSegment_Queue::Instance().all_elements = this->__all_line_segments;
     LineSegment* line = gs_LineSegment_Queue::Instance().GetRoom();
     line->TargetPosition.X = 0;
     line->TargetPosition.Y = 0;

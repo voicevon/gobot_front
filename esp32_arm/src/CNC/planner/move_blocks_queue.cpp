@@ -1,5 +1,16 @@
 #include "move_blocks_queue.h"
 
+gs_MoveBlock_Queue::gs_MoveBlock_Queue(){
+    this->_Init("MoveBlocks", MOVE_BLOCKS_QUEUE_SIZE, sizeof(MoveBlock));
+}
+
+MoveBlock* gs_MoveBlock_Queue::Withdraw(){
+    return this->_Withdraw(); 
+}
+
+MoveBlock* gs_MoveBlock_Queue::GetHead_MoveBlock(){
+    return this->_GetHeadObject();
+}
 
 
 void gs_MoveBlock_Queue::DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position){
@@ -18,3 +29,5 @@ MoveBlock* gs_MoveBlock_Queue::GetRoom(){
     // Logger::Print("gs_MoveBlock_Queue::GetRoom()  AXIS_ALPHA position", result->MoveBlocks[AXIS_ALPHA].TargetPosition);
     return result;
 }
+
+

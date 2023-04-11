@@ -1,24 +1,22 @@
-
-
 #include "queue_base.h"
-
 
 
 class AnyClass: public Queue_able{
     public:
         int id;
         void DeepCopyTo(AnyClass* the_copy) {
-            AnyClass* copy=(AnyClass*)(the_copy);
+            AnyClass* copy = the_copy;
             copy->id = this->id;
         };
-
 };
 
-class AnyQueue: public QueueBase{
+
+class AnyQueue: public QueueBase<AnyClass>{
     public:
-        AnyClass* Withdraw(){return (AnyClass*)this->_Withdraw(); };
-        AnyClass* GetRoom() {return (AnyClass*)this->_GetRoom(); };
+        AnyClass* Withdraw(){return this->_Withdraw(); };
+        AnyClass* GetRoom() {return this->_GetRoom(); };
 };
+
 
 class IamTester{
     void test(){
@@ -29,7 +27,7 @@ class IamTester{
             queue.Deposit();
         }
         if (! queue.BufferIsEmpty()){
-            AnyClass* y=(AnyClass*) queue.Withdraw();
+            AnyClass* y= queue.Withdraw();
             AnyClass* yy = queue.Withdraw(); 
             yy= queue.GetRoom();
             Serial.println(yy->id);

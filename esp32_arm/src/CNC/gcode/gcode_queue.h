@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Gcode.h"
-#include "MyLibs/message_queue.h"
+#include "MyLibs/basic/queue/message_queue.h"
 
 class GcodeQueue: public MessageQueue{
     public:
