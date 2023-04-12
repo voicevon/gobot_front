@@ -18,6 +18,7 @@
 // Object to represent a Gcode command
 class Gcode {
     public:
+        Gcode(){};
         Gcode(const std::string&, bool strip=true);
         // Gcode(const String command, bool strip=true);
         Gcode(const Gcode& to_copy);
