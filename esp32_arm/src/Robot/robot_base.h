@@ -1,8 +1,8 @@
 #pragma once
 
-// #include "CNC/gcode/gcode_consumer.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
+#include "CNC/gcode/gcode_queue.h"
 #include "CNC/planner/planner.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "CNC/mover/cnc_mover_base.h"
@@ -10,7 +10,6 @@
 #include "Robot/gcode_runner/g4_runner.h"
 #include "Robot/mcode_runner/mcode_os.h"
 #include "Robot/eef/robot_eef_base.h"
-#include "CNC/gcode/gcode_queue.h"
 
 enum class RobotState{
     IDLE_OR_ASYNC,
@@ -23,25 +22,21 @@ enum class RobotState{
 };
 
 
-// class RobotBase: public GcodeConsumer{
 class RobotBase{
     public:
         RobotState State = RobotState::IDLE_OR_ASYNC;
         void SpinOnce();
-        void LinkLocalGcodeQueue_AsConsumer(GcodeQueue* gcode_queue) {this->_gcode_queue =gcode_queue;};
-        // gcode_queue should be an object, not a pointer. right?
-        GcodeQueue* _gcode_queue;  //TODO:   GcodeQueue be a static global object?
-
+        GcodeQueue* GetGcodeQueue(){return &_gcode_queue;};
 
     protected:
-        void _running_G28();
         void _LinkMover(CncMover* mover){this->_mover=mover;};
         void _LinkArmSolution_for_planner(ArmSolutionBase* arm_solution){__planner.arm_solution=arm_solution;};
-        virtual void _InitStatic_Queues();
-        virtual void _Init_ArmSolution();
+        virtual void _InitStatic_Queues(){};    //TODO: remove defination
+        virtual void _Init_ArmSolution(){};   //TODO: remove defination
         
         G28_Runner* _g28_runner;
         CncMover* _mover;
+        GcodeQueue _gcode_queue; 
 
     private:
         Planner __planner;

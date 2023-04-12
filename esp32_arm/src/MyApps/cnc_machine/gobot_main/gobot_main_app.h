@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CNC/gcode/gcode_queue.h"
-#include "CNC/gcode/gcode_producer.h"
 #include "Robot/eef/eef_standard_code.h"
 #include "chessboard_map.h"
 #include "MyLibs/app_base/cnc_app_base.h"

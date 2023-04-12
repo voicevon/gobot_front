@@ -51,7 +51,7 @@ void VscRobot::MoveTo(int layer_index, int cell_index){
     float gear_angle = TWO_PI *  this->__position_in_pitch[layer_index] / 184;
     g1.concat(gear_angle);
     g1.concat("F0.1");
-    this->_gcode_queue->AppendGcodeCommand(g1);
+    this->_gcode_queue.AppendGcodeCommand(g1);
 }
 
 void VscRobot::__Init_actuators(Vsc_Board* board){

@@ -2,7 +2,6 @@
 
 #include "CNC/arm_solution/core_xa_ab/core_az_arm_solution.h"
 #include "CNC/gcode/gcode_queue.h"
-#include "CNC/gcode/gcode_producer.h"
 #include "MyLibs/app_base/cnc_app_base.h"
 
 

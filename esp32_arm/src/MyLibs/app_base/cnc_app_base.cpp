@@ -30,16 +30,16 @@ void CncAppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
         return;
     }
     // check gcode_queue buffer size.
-    int free_buffer_count = gcode_queue.GetFreeBuffersCount();
+    int free_buffer_count = _gcode_queue->GetFreeBuffersCount();
     if (free_buffer_count <=1 ){
         Logger::Error("CncAppBase::onGot_MqttMessage()  buffer is full");
         return;
     }
-    // copy to local gcode_queue.
-    this->gcode_queue.AppendGcodeCommand(payload, payload_len);
+    // copy to local _gcode_queue
+    this->_gcode_queue->AppendGcodeCommand(payload, payload_len);
 }
 
-void CncAppBase::Link_Mqtt_to_GcodeQueue(const char* mqtt_topic){
+void CncAppBase::Link_Mqtt_to_GcodeQueue(const char* mqtt_topic, GcodeQueue* gcode_queue){
     Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()   mqtt_topic", mqtt_topic);
     // construct feedback mqtt_topic
     char * p = (char*) (this->__mqtt_topic_feedback);
@@ -56,7 +56,7 @@ void CncAppBase::Link_Mqtt_to_GcodeQueue(const char* mqtt_topic){
     p[topic_len+2] = 'b';
     p[topic_len+3] = 0x00;   //ender
     Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
-    
+    this->_gcode_queue = gcode_queue;  
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
 }
 
@@ -67,14 +67,14 @@ void CncAppBase::SpinOnce(){
     }
     // Logger::Debug("CncAppBase::SpinOnce()");
     // Logger::Print("this->test_id", this->test_id);
-    // this->gcode_queue.SayHello("caller is :  CncAppBase::SpinOnce()");
+    // this->_gcode_queue->SayHello("caller is :  CncAppBase::SpinOnce()");
     if (__have_done_feedback)
         return;
-    if (gcode_queue.GetFreeBuffersCount() == 0)
+    if (_gcode_queue->GetFreeBuffersCount() == 0)
         return;
 
     // send_mqtt_feedback 
-    const char * payload = gcode_queue.GetDepositHeadElement()->bytes;
+    const char * payload = _gcode_queue->GetDepositHeadElement()->bytes;
 
     Logger::Print("send_feed_back, this->_mqtt_topic", this->_mqtt_topic);
     Logger::Print("send_feed_back, payload", payload);

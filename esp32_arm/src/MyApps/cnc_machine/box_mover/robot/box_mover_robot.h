@@ -8,6 +8,8 @@
 class BoxMoverRobot: public RobotBase{
     public:
         void Init(Board2205Cnc* board);
+        void _InitStatic_Queues() override{};
+        void _Init_ArmSolution() override{};
 
     private:
         // void RunM123(uint8_t eef_channel, uint8_t eef_action) override{};

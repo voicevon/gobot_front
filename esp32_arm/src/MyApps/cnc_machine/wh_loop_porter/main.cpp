@@ -56,14 +56,14 @@ void test_robot(){
 
 
 
-        app.gcode_queue.AppendGcodeCommand("G1X-190Y0");
-        app.gcode_queue.AppendGcodeCommand("G4S5");
+        // app.gcode_queue.AppendGcodeCommand("G1X-190Y0");
+        // app.gcode_queue.AppendGcodeCommand("G4S5");
 
-        app.gcode_queue.AppendGcodeCommand("G1X0Y0");
-        app.gcode_queue.AppendGcodeCommand("G4S5");
+        // app.gcode_queue.AppendGcodeCommand("G1X0Y0");
+        // app.gcode_queue.AppendGcodeCommand("G4S5");
 
-        app.gcode_queue.AppendGcodeCommand("G1X190Y0");
-        app.gcode_queue.AppendGcodeCommand("G4S5");
+        // app.gcode_queue.AppendGcodeCommand("G1X190Y0");
+        // app.gcode_queue.AppendGcodeCommand("G4S5");
     }
     
 }
@@ -105,13 +105,13 @@ void setup(){
     setup_wifi_mqtt_blocking_mode();
 
     robot.Init(&board, MQTT_TOPIC_FOR_HOME_POSITION);
-    robot.LinkLocalGcodeQueue_AsConsumer(&app.gcode_queue);
+    // robot.LinkLocalGcodeQueue_AsConsumer(&app.gcode_queue);
 
-    // app.LinkRobot(&robot);
-    app.Link_Mqtt_to_GcodeQueue(MQTT_TOPIC_GCODE);
+    app.Link_Mqtt_to_GcodeQueue(MQTT_TOPIC_GCODE, robot.GetGcodeQueue());
 
-    app.gcode_queue.AppendGcodeCommand("G28X");
-    app.gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
+    GcodeQueue* gcode_queue = robot.GetGcodeQueue();
+    gcode_queue->AppendGcodeCommand("G28X");
+    gcode_queue->AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
 
     Logger::Info ("App-loop_porter::setup() is done. ");
 }

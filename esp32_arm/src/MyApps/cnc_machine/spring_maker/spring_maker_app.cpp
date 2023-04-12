@@ -12,29 +12,29 @@ void SpringMakerApp::__onGot_MqttMessage(const char* command){
     Serial.println(str_command);
     if (str_command.equals("home")){
         String gcode = "G28A";
-        this->gcode_queue.AppendGcodeCommand(gcode);
+        this->_gcode_queue->AppendGcodeCommand(gcode);
     }else if(str_command.equals("reset")){
         String gcode = "G28A";
-        this->gcode_queue.AppendGcodeCommand(gcode);
+        this->_gcode_queue->AppendGcodeCommand(gcode);
         gcode = "G1 A-3";
-        this->gcode_queue.AppendGcodeCommand(gcode);
+        this->_gcode_queue->AppendGcodeCommand(gcode);
     }else if(str_command.equals("big")){
         Serial.println("                        Start to make big spring....  ");
         String gcode = "G1 A-75.36";       // 1.0mm   D ?? 12 turns.    
-        this->gcode_queue.AppendGcodeCommand(gcode);
+        this->_gcode_queue->AppendGcodeCommand(gcode);
         
     }else if(str_command.equals("mid")){
         String gcode = "G1 A-50.24";    // 8 turns
-        this->gcode_queue.AppendGcodeCommand(gcode);
+        this->_gcode_queue->AppendGcodeCommand(gcode);
 
     }else if(str_command.equals("small")){
         String gcode = "G1 A-300";     // 50 turns
-        this->gcode_queue.AppendGcodeCommand(gcode);
+        this->_gcode_queue->AppendGcodeCommand(gcode);
     }else if(str_command.equals("coil")){
         String gcode = "G1 A86.25 F5000";     // 700 turns without gearbox reducer
-        this->gcode_queue.AppendGcodeCommand(gcode);
+        this->_gcode_queue->AppendGcodeCommand(gcode);
     }else{
-        this->gcode_queue.AppendGcodeCommand(command);
+        this->_gcode_queue->AppendGcodeCommand(command);
 
         // Logger::Warn("SpringMakerApp::ExecuteMqttCommand()  Unknown Command ");
         // Serial.println(command);

@@ -6,11 +6,11 @@ BoxCarrierApp::BoxCarrierApp(){
 }
 
 // void BoxCarrierApp::onGot_MqttMessage(const char* command){
-// 	this->gcode_queue.AppendGcodeCommand(command);
+// 	this->_gcode_queue->AppendGcodeCommand(command);
 // }
 
 void BoxCarrierApp::SpinOnce(){
-    if (!this->gcode_queue.BufferIsFull()){
+    if (!this->_gcode_queue->BufferIsFull()){
         // this->CheckMqttCommand();
     }
     // this->CheckMqttCommand();
@@ -43,27 +43,27 @@ void BoxCarrierApp::ParkArms(bool do_homing){
 	int free_buffer_count = 0;
 	while (free_buffer_count < 3){
 		this->SpinOnce();
-		free_buffer_count = this->gcode_queue.GetFreeBuffersCount();
+		free_buffer_count = this->_gcode_queue->GetFreeBuffersCount();
 		Serial.print(free_buffer_count);
 		Serial.print(" ");
 	}
 
 	if (do_homing){
 		// const char strG28 = "G28Z";
-		this->gcode_queue.AppendGcodeCommand("G28Z");
+		this->_gcode_queue->AppendGcodeCommand("G28Z");
 		// const char = "G28W";
-		this->gcode_queue.AppendGcodeCommand("G28W");
+		this->_gcode_queue->AppendGcodeCommand("G28W");
 	}
-	// this->gcode_queue.SpinOnce();
+	// this->_gcode_queue->SpinOnce();
 	// const char strG1 = "G1 Z5421 W5";
-	this->gcode_queue.AppendGcodeCommand("G1 Z5421 W5");
+	this->_gcode_queue->AppendGcodeCommand("G1 Z5421 W5");
 }
 
 void BoxCarrierApp::LoadBox(){
     // Vertical down.  Angle down, Triger gate
-    this->gcode_queue.AppendGcodeCommand("G1 Z100");  // Lift the box-track.
-    this->gcode_queue.AppendGcodeCommand("G1 W1");  // Rotate the box-track. will load the box.
-    // this->gcode_queue.AppendGcodeCommand("M123");   //???
+    this->_gcode_queue->AppendGcodeCommand("G1 Z100");  // Lift the box-track.
+    this->_gcode_queue->AppendGcodeCommand("G1 W1");  // Rotate the box-track. will load the box.
+    // this->_gcode_queue->AppendGcodeCommand("M123");   //???
 
 }
 

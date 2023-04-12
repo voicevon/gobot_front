@@ -1,6 +1,6 @@
 #include "all_applications.h"
 #ifdef I_AM_ROBOT_ASRS_AGV
-#include "garment_bot.h"
+#include "garment_bot_app.h"
 
 BotAsrsAgvCoreYZ::BotAsrsAgvCoreYZ(uint16_t id){
 	this->_ID = id;

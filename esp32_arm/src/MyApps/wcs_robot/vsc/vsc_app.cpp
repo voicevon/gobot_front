@@ -35,7 +35,7 @@ void VscApp::__onGot_MqttMessage(const char* command){
         this->__robot->MoveTo(layer, cell);
     } else{
         // this is a normal gcode.
-        this->gcode_queue.AppendGcodeCommand(command);
+        this->_gcode_queue->AppendGcodeCommand(command);
 
     }
 

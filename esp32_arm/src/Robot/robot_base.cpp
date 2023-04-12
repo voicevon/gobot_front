@@ -87,7 +87,7 @@ void RobotBase::SpinOnce(){
 		return;
 	}
 
-	if (this->_gcode_queue->BufferIsEmpty()){
+	if (this->_gcode_queue.BufferIsEmpty()){
 		// Logger::Print("RobotBase::SpinOnce() point", 92);
 		return;
 	}
@@ -98,7 +98,7 @@ void RobotBase::SpinOnce(){
 	Logger::Print("RobotBase::SpinOnce() point  Going to run next gcode..", 3);
 
 	// Check gcode queue, if there is gcode to be run.
-	GcodeText* gcode_text = this->_gcode_queue->WithdrawTailElement();
+	GcodeText* gcode_text = this->_gcode_queue.WithdrawTailElement();
 	// Logger::Print("RobotBase::SpinOnce() point", 4);
 	if (gcode_text == NULL){
 		Logger::Error("\n\n\n [Error] RobotBase::SpinOnce() tail_message is null. 991. \n\n ");
@@ -125,16 +125,16 @@ void RobotBase::SpinOnce(){
 		// Logger::Print("RobotBase::SpinOnce()   point 61", 61);
 		this->__RunGcode(gcode_text);
 		// Logger::Print("RobotBase::SpinOnce()   point 62", 62);
-		this->_gcode_queue->WithdrawTailElement();
+		this->_gcode_queue.WithdrawTailElement();
 		// Logger::Print("RobotBase::SpinOnce()   point 69", 69);
 	}else if(gcode.has_m){
 		McodeOS::Instance().SetupRunner(gcode_text);
 		this->State = RobotState::MCODE_IS_SYNCING;
-		this->_gcode_queue->WithdrawTailElement();
+		this->_gcode_queue.WithdrawTailElement();
 	}else{
 		Logger::Warn("RobotBase::SpinOnce() ---- Unknown command, Ignored.");
 		Serial.println(gcode_text->bytes);
-		this->_gcode_queue->WithdrawTailElement();
+		this->_gcode_queue.WithdrawTailElement();
 
 	}
 	// Logger::Print("RobotBase::SpinOnce() point 99", 99);
