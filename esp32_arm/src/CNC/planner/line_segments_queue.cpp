@@ -1,7 +1,7 @@
 #include "line_segments_queue.h"
 
 void gs_LineSegment_Queue::DeepCopyCurrentFkPositionTo(FKPosition_XYZRPW* position){
-    LineSegment* head_line = this->GetHeadObject();
+    LineSegment* head_line = this->GetDepositHeadElement();
     position->X = head_line->TargetPosition.X;
     position->Y = head_line->TargetPosition.Y;
     position->Z = head_line->TargetPosition.Z;

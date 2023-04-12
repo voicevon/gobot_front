@@ -24,16 +24,15 @@ class QueueBase{
 
         // For Consumer:
         bool BufferIsEmpty();  //TODO: remove this function?
+        void PrintOut(const char * title);
 
-        // For both Producer and Consumer:
-        T* FetchTailMessage(bool takeout_from_queue){};
 
         //Push the appended object to queue. 
         bool Deposit();   //Push()?   Enqueue()?   Deposit()?
-        void PrintOut(const char * title);
-        T* GetRoom();  //GetPrePush()?  GetRoom()?  
-        T* Withdraw();  //Pop()?  Withdraw()?  Dequeue?
-        T* GetHeadObject();  //Pop()?  Withdraw()?  Dequeue?
+        T* GetRoom();  //GetDepositHeadRoom()
+        T* WithdrawTailElement();  
+        T* GetWithdrawTailElement(bool takeout_from_queue);
+        T* GetDepositHeadElement();  
     protected:
         // When you GetPreHeadObject(), you can view/check/modify it, also can ForwardHead(), equal to AppendObject().
  
@@ -109,7 +108,7 @@ T* QueueBase<T>::GetRoom(){
 }
 
 template <class T>
-T* QueueBase<T>::Withdraw(){
+T* QueueBase<T>::WithdrawTailElement(){
     T* tail_message = NULL;
     if (this->__push_head != this->__pop_tail){
         tail_message = this->__all_elements + this->__pop_tail * this->__element_size;
@@ -121,7 +120,7 @@ T* QueueBase<T>::Withdraw(){
 // Notice:  If buffer is empty, this will return unexpected result.
 //TODO:  rename:  GetHeadElement
 template <class T>
-T* QueueBase<T>::GetHeadObject(){
+T* QueueBase<T>::GetDepositHeadElement(){
     int previous_head =  __get_previous_index(__push_head);
     return  this->__all_elements + previous_head* this->__element_size;
 }

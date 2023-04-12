@@ -14,7 +14,7 @@ gs_MoveBlock_Queue::gs_MoveBlock_Queue(){
 
 
 void gs_MoveBlock_Queue::DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position){
-    MoveBlock* head_mb = this->GetHeadObject();
+    MoveBlock* head_mb = this->GetDepositHeadElement();
     for (int a=0; a<CNC_ACTUATORS_IDEAL_COUNT; a++){
         ik_position->Positions[a] = head_mb->MoveBlocks[a].TargetPosition;
     }

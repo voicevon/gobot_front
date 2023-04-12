@@ -58,7 +58,7 @@
 //     return  head_message;
 // }
 
-// MessageQueue_v1::SingleMessage* MessageQueue_v1::FetchTailMessage(bool take_out_from_queue){
+// MessageQueue_v1::SingleMessage* MessageQueue_v1::GetWithdrawTailElement(bool take_out_from_queue){
 //     SingleMessage* tail_message = NULL;
 //     if (_head != _tail){
 //         tail_message = & _all_messages[_tail];

@@ -98,8 +98,8 @@ void RobotBase::SpinOnce(){
 	Logger::Print("RobotBase::SpinOnce() point  Going to run next gcode..", 3);
 
 	// Check gcode queue, if there is gcode to be run.
-	// MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage(false);
-	MqttMessage* message;   // = this->_gcode_queue->FetchTailMessage(false);
+	// MessageQueue::SingleMessage* message = this->_gcode_queue->WithdrawTailElement(false);
+	MqttMessage* message;   // = this->_gcode_queue->WithdrawTailElement(false);
 	// Logger::Print("RobotBase::SpinOnce() point", 4);
 	if (message == NULL){
 		Logger::Error("\n\n\n [Error] RobotBase::SpinOnce() tail_message is null. \n\n ");
@@ -127,16 +127,16 @@ void RobotBase::SpinOnce(){
 		Logger::Print("RobotBase::SpinOnce()   point", 61);
 		this->__RunGcode(&gcode_text);
 		Logger::Print("RobotBase::SpinOnce()   point", 62);
-		this->_gcode_queue->FetchTailMessage(true);
+		this->_gcode_queue->WithdrawTailElement();
 		Logger::Print("RobotBase::SpinOnce()   point", 69);
 	}else if(gcode.has_m){
 		McodeOS::Instance().SetupRunner(&gcode_text);
 		this->State = RobotState::MCODE_IS_SYNCING;
-		this->_gcode_queue->FetchTailMessage(true);
+		this->_gcode_queue->WithdrawTailElement();
 	}else{
 		Logger::Warn("RobotBase::SpinOnce() ---- Unknown command, Ignored.");
 		Serial.println(str.c_str());
-		this->_gcode_queue->FetchTailMessage(true);
+		this->_gcode_queue->WithdrawTailElement();
 
 	}
 	Logger::Print("RobotBase::SpinOnce() point", 99);
@@ -162,7 +162,7 @@ void RobotBase::__RunGcode(GcodeText* gcode_text){
 	MoveBlock* new_move_block = gs_MoveBlock_Queue::Instance().GetRoom();
 	// Logger::Print("RobotBase::__RunGcode      point", 12);
 	//TODO:    This is wrong for the very first moveblock after MCU is reset.
-	gs_MoveBlock_Queue::Instance().GetHeadObject()->DeepCopyTo(new_move_block);
+	gs_MoveBlock_Queue::Instance().GetDepositHeadElement()->DeepCopyTo(new_move_block);
 	// Logger::Print("RobotBase::__RunGcode      point", 19);
 	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;

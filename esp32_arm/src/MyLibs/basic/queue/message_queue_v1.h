@@ -30,7 +30,7 @@
 
 //         // For Consumer:
 //         bool BufferIsEmpty();  //TODO: remove this function?
-//         SingleMessage* FetchTailMessage(bool takeout_from_queue);
+//         SingleMessage* GetWithdrawTailElement(bool takeout_from_queue);
 
 //         // For both Producer and Consumer:
 //         MessageQueue(){};

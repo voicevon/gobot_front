@@ -29,7 +29,7 @@ void CncAppBase::SpinOnce(){
 
 bool CncAppBase::CheckMqttCommand(){
     // Logger::Info(" MqttMessageConsumer::CheckMqttCommand()");
-    // MqttMessage* new_message = __mq->FetchTailMessage(true);
+    // MqttMessage* new_message = __mq->GetWithdrawTailElement(true);
     // if (new_message != NULL){
     //     // Logger::Print("MqttMessageConsumer::CheckMqttCommand() got new meeage.", new_message->payload);
     //     onGot_MqttMessage(new_message->payload);
