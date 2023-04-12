@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CNC/gcode/gcode_consumer.h"
+// #include "CNC/gcode/gcode_consumer.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
 #include "CNC/planner/planner.h"
@@ -10,6 +10,7 @@
 #include "Robot/gcode_runner/g4_runner.h"
 #include "Robot/mcode_runner/mcode_os.h"
 #include "Robot/eef/robot_eef_base.h"
+#include "CNC/gcode/gcode_queue.h"
 
 enum class RobotState{
     IDLE_OR_ASYNC,
@@ -22,10 +23,15 @@ enum class RobotState{
 };
 
 
-class RobotBase: public GcodeConsumer{
+// class RobotBase: public GcodeConsumer{
+class RobotBase{
     public:
         RobotState State = RobotState::IDLE_OR_ASYNC;
         void SpinOnce();
+        void LinkLocalGcodeQueue_AsConsumer(GcodeQueue* gcode_queue) {this->_gcode_queue =gcode_queue;};
+        // gcode_queue should be an object, not a pointer. right?
+        GcodeQueue* _gcode_queue;  //TODO:   GcodeQueue be a static global object?
+
 
     protected:
         void _running_G28();
@@ -52,6 +58,7 @@ class RobotBase: public GcodeConsumer{
         void OnFinishedGcode4(void(*callback())) {__output_message3 = callback;};
         void OnFinishedGcode5(void(*callback)()) {__output_message3 = callback;};
         */
+
 
 };
 

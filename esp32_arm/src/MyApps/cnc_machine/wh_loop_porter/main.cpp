@@ -2,8 +2,8 @@
 #include "board/board.h"
 #include "loop_porter_app.h"
 #include "robot/loop_porter_robot.h"
-#include "Mqtt/from_mqtt_client_to_remote_queue.h"
-#include "Mqtt/mqtt_message_queue.h"
+
+// #include "Mqtt/mqtt_message_queue.h"
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 
@@ -106,10 +106,10 @@ void setup(){
 
     robot.Init(&board, MQTT_TOPIC_FOR_HOME_POSITION);
     robot.LinkLocalGcodeQueue_AsConsumer(&app.gcode_queue);
-    // app.LinkLocalGcodeQueue_AsProducer(&app.gcode_queue);
 
-    app.LinkRobot(&robot);
+    // app.LinkRobot(&robot);
     app.Link_Mqtt_to_GcodeQueue(MQTT_TOPIC_GCODE);
+
     app.gcode_queue.AppendGcodeCommand("G28X");
     app.gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
 

@@ -4,7 +4,7 @@
 #include "MyApps/asar_agv/board/board_all_in_one_2205.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "box_carrier_app.h"
-#include "Mqtt/from_mqtt_client_to_remote_queue.h"
+
 #include "robot/box_carrier_robot.h"
 
 #include "all_applications.h"

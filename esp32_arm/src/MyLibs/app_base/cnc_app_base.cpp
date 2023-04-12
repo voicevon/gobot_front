@@ -40,7 +40,23 @@ void CncAppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 }
 
 void CncAppBase::Link_Mqtt_to_GcodeQueue(const char* mqtt_topic){
-    // this->SetMqttTopic(mqtt_topic);
+    Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()   mqtt_topic", mqtt_topic);
+    // construct feedback mqtt_topic
+    char * p = (char*) (this->__mqtt_topic_feedback);
+    int topic_len;
+    for(topic_len=0; topic_len<REPRAP_GCODE_MAX_SIZE; topic_len++){
+        Logger::Print("mqtt_topic[topic_len]", mqtt_topic[topic_len]);
+        if (mqtt_topic[topic_len] == 0x00){
+            break;
+        }
+        // p[topic_len] = mqtt_topic[topic_len];
+    }
+    p[topic_len] = '/';
+    p[topic_len+1] = 'f';
+    p[topic_len+2] = 'b';
+    p[topic_len+3] = 0x00;   //ender
+    Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
+    
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
 }
 
@@ -57,13 +73,14 @@ void CncAppBase::SpinOnce(){
     if (gcode_queue.GetFreeBuffersCount() == 0)
         return;
 
-    this->__send_mqtt_feedback();
-}
-
-void CncAppBase::__send_mqtt_feedback(){
+    // send_mqtt_feedback 
     const char * payload = gcode_queue.GetDepositHeadElement()->bytes;
-    g_mqttClient.publish(this->_mqtt_topic, 2, true, payload );
+
+    Logger::Print("send_feed_back, this->_mqtt_topic", this->_mqtt_topic);
+    Logger::Print("send_feed_back, payload", payload);
+    g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, payload );
     __have_done_feedback = true;
+
 }
 
 
