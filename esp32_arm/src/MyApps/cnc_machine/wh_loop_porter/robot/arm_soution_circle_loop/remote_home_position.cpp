@@ -1,6 +1,6 @@
 #include "remote_home_position.h"
 
-void RemoteHomePosition::onMessage(const char* payload, uint16_t payload_len){
+void RemoteHomePosition::__onMessage(const char* payload, uint16_t payload_len){
     __remote_value = atof(payload);
     __got_remote_value = true;
 }

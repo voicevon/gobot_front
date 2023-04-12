@@ -8,7 +8,7 @@ VscApp::VscApp(){
 }
 
 
-void VscApp::onGot_MqttMessage(const char* command){
+void VscApp::__onGot_MqttMessage(const char* command){
     String str_command = String(command);
     Logger::Info("VscApp::ExecuteMqttCommand() is entering.");
     bool debug = false;
@@ -35,7 +35,7 @@ void VscApp::onGot_MqttMessage(const char* command){
         this->__robot->MoveTo(layer, cell);
     } else{
         // this is a normal gcode.
-        this->_gcode_queue->AppendGcodeCommand(command);
+        this->gcode_queue.AppendGcodeCommand(command);
 
     }
 

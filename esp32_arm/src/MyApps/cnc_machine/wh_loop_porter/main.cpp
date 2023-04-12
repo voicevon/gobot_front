@@ -3,7 +3,7 @@
 #include "loop_porter_app.h"
 #include "robot/loop_porter_robot.h"
 #include "Mqtt/from_mqtt_client_to_remote_queue.h"
-
+#include "Mqtt/mqtt_message_queue.h"
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 
@@ -36,8 +36,9 @@
 #endif
 
 
-GcodeQueue gcode_queue;
-MessageQueue mqtt_command_queue;
+// GcodeQueue gcode_queue;
+// MessageQueue mqtt_command_queue;
+// MqttMessageQueue mqtt_command_queue;
 
 Twh_LoopPorter_Board board;
 Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
@@ -62,14 +63,14 @@ void test_robot(){
 
 
 
-        gcode_queue.AppendGcodeCommand("G1X-190Y0");
-        gcode_queue.AppendGcodeCommand("G4S5");
+        app.gcode_queue.AppendGcodeCommand("G1X-190Y0");
+        app.gcode_queue.AppendGcodeCommand("G4S5");
 
-        gcode_queue.AppendGcodeCommand("G1X0Y0");
-        gcode_queue.AppendGcodeCommand("G4S5");
+        app.gcode_queue.AppendGcodeCommand("G1X0Y0");
+        app.gcode_queue.AppendGcodeCommand("G4S5");
 
-        gcode_queue.AppendGcodeCommand("G1X190Y0");
-        gcode_queue.AppendGcodeCommand("G4S5");
+        app.gcode_queue.AppendGcodeCommand("G1X190Y0");
+        app.gcode_queue.AppendGcodeCommand("G4S5");
     }
     
 }
@@ -112,14 +113,14 @@ void setup(){
     
     robot.Init(&board, MQTT_TOPIC_FOR_HOME_POSITION);
 
-    robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
-    app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
+    robot.LinkLocalGcodeQueue_AsConsumer(&app.gcode_queue);
+    // app.LinkLocalGcodeQueue_AsProducer(&app.gcode_queue);
     app.LinkRobot(&robot);
 
-    mono_remote_queue_bridge_via_mqtt_setup(MQTT_TOPIC_GCODE, &mqtt_command_queue, &app); 
+    // mono_remote_queue_bridge_via_mqtt_setup(MQTT_TOPIC_GCODE, &mqtt_command_queue, &app); 
     
-    gcode_queue.AppendGcodeCommand("G28X");
-    gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
+    app.gcode_queue.AppendGcodeCommand("G28X");
+    app.gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
 
     Logger::Info ("App::loop_porter    setup() is done. ");
     
@@ -137,7 +138,7 @@ void loop(){
     robot.MySpinOnce();
     // Logger::Warn("Arduino loop() point 4");
 
-    mono_remote_queue_bridge_spin_once();
+    // mono_remote_queue_bridge_spin_once();
     // Logger::Warn("Arduino loop() point  5 ");
 
 }

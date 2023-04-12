@@ -3,10 +3,10 @@
 #include "CNC/arm_solution/core_xa_ab/core_az_arm_solution.h"
 #include "CNC/gcode/gcode_queue.h"
 #include "CNC/gcode/gcode_producer.h"
-#include "Mqtt/mqtt_message_consumer.h"
+#include "MyLibs/app_base/cnc_app_base.h"
 
 
-class BoxMoverApp: public GcodeProducer, public MqttMessageConsumer{
+class BoxMoverApp: public CncAppBase{
     public:
         enum BoxMoverState{ START, 
                                 RESETTING, 
@@ -25,7 +25,7 @@ class BoxMoverApp: public GcodeProducer, public MqttMessageConsumer{
         void LoadBox();
         void UnloadBox();
         void SpinOnce(); 
-        void onGot_MqttMessage(const char*) override;
+        // void onGot_MqttMessage(const char*) override;
         BoxMoverApp::BoxMoverState GetState(){return this->State;};
     
     private:

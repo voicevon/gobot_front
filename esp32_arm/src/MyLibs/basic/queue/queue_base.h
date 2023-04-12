@@ -12,6 +12,10 @@ class Queue_able{
 template <class T>
 class QueueBase{
     public:
+
+        T* FetchTailMessage(bool takeout_from_queue){};
+
+
         // For Producer: 
 
         // For Producer:  Will deep copy the object to the queue.

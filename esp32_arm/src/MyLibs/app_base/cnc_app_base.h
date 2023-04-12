@@ -1,12 +1,13 @@
 #pragma once
 
 
-#include "CNC/gcode/gcode_producer.h"
-#include "Mqtt/mqtt_message_consumer.h"
+#include "Mqtt/mqtt_subscriber_base.h"
+#include "CNC/gcode/gcode_queue.h"
 
-
-class AppBase: public GcodeProducer, public MqttMessageConsumer{
+// class CncAppBase: public GcodeProducer, public MqttSubscriberBase{
+class CncAppBase: public MqttSubscriberBase{
     public:
+        void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;
         void SpinOnce(); 
 
 
@@ -23,6 +24,8 @@ class AppBase: public GcodeProducer, public MqttMessageConsumer{
         // }
         // virtual void _RunAppCommand(const char* app_command){};
 
+        bool CheckMqttCommand();
+        GcodeQueue gcode_queue;
 
     protected:
         

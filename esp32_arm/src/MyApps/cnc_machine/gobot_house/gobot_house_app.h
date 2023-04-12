@@ -3,10 +3,10 @@
 
 #include "CNC/gcode/gcode_queue.h"
 #include "CNC/gcode/gcode_producer.h"
-#include "Mqtt/mqtt_message_consumer.h"
 #include  "MyApps/cnc_machine/gobot_house/HouseMap.h"
+#include "MyLibs/app_base/cnc_app_base.h"
 
-class GobotHouseApp: public GcodeProducer, public MqttMessageConsumer{
+class GobotHouseApp: public CncAppBase{
     public:
         enum SITE_TYPE{
             HEAD,
@@ -35,7 +35,7 @@ class GobotHouseApp: public GcodeProducer, public MqttMessageConsumer{
 
     private:
         void __MakeGcode_and_Send(FKPosition_XYZRPW* from, FKPosition_XYZRPW* to, int segment_count);
-        void onGot_MqttMessage(const char* command) override;
+        // void onGot_MqttMessage(const char* command) override;
         void __Move_fromRoom_toGate(uint8_t room_id, bool forwarding);
         // void __Move_fromRoom_toDoor(uint8_t room_id, bool forwarding);
         void __Move_fromHead_toNeck(bool forwarding);

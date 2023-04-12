@@ -8,7 +8,7 @@ void MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char* p
         subscriber = __all_subscribers[i];
         if (subscriber->IsTopicEqualTo(topic)){
             Logger::Print("Got Mqtt Subscriber", subscriber->GetMqttTopic());
-            subscriber->onMessage(payload, payload_len);
+            subscriber->onGot_MqttMessage(payload, payload_len);
         }
     }
 }

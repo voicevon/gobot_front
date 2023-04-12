@@ -49,10 +49,10 @@ class Gcode {
 
         // StreamOutput* stream;
         std::string txt_after_ok;
+        char *command;
 
     private:
         void prepare_cached_values(bool strip=true);
-        char *command;
 
         //functions from mBED system.
         // char * xxx;

@@ -1,7 +1,8 @@
 #include "robot_base.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "HardwareSerial.h"
-#include "MyLibs/basic/queue/message_queue.h"
+// #include "MyLibs/basic/queue/message_queue.h"
+#include "Mqtt/mqtt_message_queue.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 
 
@@ -97,7 +98,8 @@ void RobotBase::SpinOnce(){
 	Logger::Print("RobotBase::SpinOnce() point  Going to run next gcode..", 3);
 
 	// Check gcode queue, if there is gcode to be run.
-	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage(false);
+	// MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage(false);
+	MqttMessage* message;   // = this->_gcode_queue->FetchTailMessage(false);
 	// Logger::Print("RobotBase::SpinOnce() point", 4);
 	if (message == NULL){
 		Logger::Error("\n\n\n [Error] RobotBase::SpinOnce() tail_message is null. \n\n ");
@@ -112,7 +114,7 @@ void RobotBase::SpinOnce(){
 	}
 	
 	// type convert   from char* to std::string
-	char* p = &message->payload[0];
+	char* p = (char*) (&message->payload[0]);
 	std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
 	Gcode gcode = Gcode(str);

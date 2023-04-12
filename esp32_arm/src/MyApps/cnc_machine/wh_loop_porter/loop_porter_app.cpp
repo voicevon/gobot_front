@@ -10,8 +10,8 @@ Twh_LoopPorter_App::Twh_LoopPorter_App(int row_id){
 
 
 
-void Twh_LoopPorter_App::onGot_MqttMessage(const char* command){
-        this->_gcode_queue->AppendGcodeCommand(command);
+// void Twh_LoopPorter_App::onGot_MqttMessage(const char* command){
+//         this->_gcode_queue->AppendGcodeCommand(command);
 
 
         
@@ -38,7 +38,7 @@ void Twh_LoopPorter_App::onGot_MqttMessage(const char* command){
     //     // this is a robot gcode or mcode
     //     this->_gcode_queue->AppendGcodeCommand(command);
     // }
-}
+// }
 
 
 
