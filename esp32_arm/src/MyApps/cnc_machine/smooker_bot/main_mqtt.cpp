@@ -63,7 +63,7 @@ void setup() {
 
 
 	setup_webcommu();
-	// setup_wifi_mqtt();
+	// setup_wifi_mqtt_blocking_mode();
 	mybot = new SmokeBot();
 	myCommandQueue.LinkRobot(mybot);
 	mybot->Init_Gpio();

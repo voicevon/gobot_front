@@ -14,16 +14,16 @@ void Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome(char axis_name, MoveBlock* 
     Logger::Debug("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()" );
     Logger::Print("\taxis", char(axis_name));
     MoveBlock_SingleActuator* alpha = &mb->MoveBlocks[AXIS_ALPHA];
-    Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 11 );
+    // Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 11 );
     // mb->PrintOut("Test mb is none or not.  Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()");
     mb->DeepReset_ToDefault();
-    Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 12 );
+    // Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 12 );
 
     switch (axis_name){
         case 'X':
-            Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 31);
+            // Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point 31", 31);
             mb->DeepReset_ToDefault();
-            Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 32);
+            // Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point 32", 32);
             alpha->TargetPosition = 511000;
             alpha->Speed = 900;
             alpha->Acceleration = 3000;
@@ -34,7 +34,7 @@ void Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome(char axis_name, MoveBlock* 
             Logger::Halt("AcDc::TNT");
             break;
     }
-    Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 99);
+    // Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 99);
 }
 
 void Twh_LoopPorter_G28_Runner::_InitHomePosition(char axis_name, float setting_position){

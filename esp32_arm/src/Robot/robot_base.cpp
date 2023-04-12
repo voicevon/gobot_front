@@ -59,13 +59,13 @@ void RobotBase::SpinOnce(){
 			if (gs_MoveBlock_Queue::Instance().BufferIsEmpty()){
 				this->_g28_runner->Start();
 				this->State = RobotState::G28_IS_RUNNING;
-				Logger::Print("RobotBase::SpinOnce()  G28_Runner is started ", 22);
+				// Logger::Print("RobotBase::SpinOnce()  G28_Runner is started ", 22);
 			}
 			break;
 		case RobotState::G28_IS_RUNNING:
 			if(this->_g28_runner->IsDone()){
 				this->State = RobotState::IDLE_OR_ASYNC;
-				Logger::Print("RobotBase::SpinOnce() point G28_Runner is over ", 23);
+				Logger::Print("RobotBase::SpinOnce() point G28_Runner is over  ", 23);
 			}
 			break;
 
@@ -75,7 +75,7 @@ void RobotBase::SpinOnce(){
 	}
 
 	if (this->State != RobotState::IDLE_OR_ASYNC ) {
-		// Logger::Print("RobotBase::SpinOnce() point", 91);
+		// Logger::Print("RobotBase::SpinOnce() point 91", 91);
 		return;
 	}
 
@@ -107,7 +107,7 @@ void RobotBase::SpinOnce(){
 
 	bool debug = true;
 	if (debug){
-		Logger::Debug("[Info] RobotBase::SpinOnce()  Going to run next gcode   >>>");
+		Logger::Debug("RobotBase::SpinOnce()  Going to run next gcode   >>>");
 		Serial.print(gcode_text->bytes);
 		Serial.println("<<<");
 	}
@@ -122,11 +122,11 @@ void RobotBase::SpinOnce(){
 	// Logger::Print("RobotBase::SpinOnce() point", 6);
 	// Logger::Print("gcode_command", gcode.get_command());
 	if(gcode.has_g){
-		Logger::Print("RobotBase::SpinOnce()   point", 61);
+		// Logger::Print("RobotBase::SpinOnce()   point 61", 61);
 		this->__RunGcode(gcode_text);
-		Logger::Print("RobotBase::SpinOnce()   point", 62);
+		// Logger::Print("RobotBase::SpinOnce()   point 62", 62);
 		this->_gcode_queue->WithdrawTailElement();
-		Logger::Print("RobotBase::SpinOnce()   point", 69);
+		// Logger::Print("RobotBase::SpinOnce()   point 69", 69);
 	}else if(gcode.has_m){
 		McodeOS::Instance().SetupRunner(gcode_text);
 		this->State = RobotState::MCODE_IS_SYNCING;
@@ -137,7 +137,7 @@ void RobotBase::SpinOnce(){
 		this->_gcode_queue->WithdrawTailElement();
 
 	}
-	Logger::Print("RobotBase::SpinOnce() point", 99);
+	// Logger::Print("RobotBase::SpinOnce() point 99", 99);
 
 }
 
@@ -149,33 +149,33 @@ void RobotBase::__RunGcode(GcodeText* gcode_text){
 	GcodeHelper gcode_helper = GcodeHelper(gcode_text->bytes);
 	GcodeHelper* gcode = &gcode_helper;
 	static float __newest_line_speed = 100;
-	Logger::Info("RobotBase::__RunGcode()");
+	// Logger::Info("RobotBase::__RunGcode()");
 	LineSegment* new_line = gs_LineSegment_Queue::Instance().GetRoom_ForDeposit();
 	new_line->DeepCopyTo_TargetPosition_fk(__planner.arm_solution->GetCurrentPosition_Fk());
 	if (gcode->has_letter('F')) {
 		__newest_line_speed = gcode->get_value('F');
 	}
 	new_line->Speed_mm_per_second = __newest_line_speed;
-	Logger::Print("RobotBase::__RunGcode      point", 11);
+	// Logger::Print("RobotBase::__RunGcode      point", 11);
 	MoveBlock* new_move_block = gs_MoveBlock_Queue::Instance().GetRoom_ForDeposit();
-	Logger::Print("RobotBase::__RunGcode      point", 12);
+	// Logger::Print("RobotBase::__RunGcode      point", 12);
 	//TODO:    This is wrong for the very first moveblock after MCU is reset.
-	gs_MoveBlock_Queue::Instance().GetDepositHeadElement()->DeepCopyTo(new_move_block);
+	// gs_MoveBlock_Queue::Instance().GetDepositHeadElement()->DeepCopyTo(new_move_block);
 
-	Logger::Print("RobotBase::__RunGcode      point", 19);
+	// Logger::Print("RobotBase::__RunGcode      point", 19);
 	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;
 	LineSegment middle_kinematic_line;
 	FKPosition_XYZRPW* current_position_FK;
 	
-	Logger::Print("RobotBase::__RunGcode() point", 51);
+	// Logger::Print("RobotBase::__RunGcode() point", 51);
 	switch (gcode->g){
 		case 28:
-			Logger::Print("RobotBase::__RunGcode() G28  point", 281);
+			// Logger::Print("RobotBase::__RunGcode() G28  point", 281);
 			this->_g28_runner->LinkGcode(gcode_text);
-			Logger::Print("RobotBase::__RunGcode() G28  point", 282);
+			// Logger::Print("RobotBase::__RunGcode() G28  point", 282);
 			this->State = RobotState::G28_IS_SYNCING;
-			Logger::Print("RobotBase::__RunGcode() G28  point", 283);
+			// Logger::Print("RobotBase::__RunGcode() G28  point", 283);
 			break;
 		case 4:
 			// G4 Dwell, Pause for a period of time.
@@ -198,7 +198,7 @@ void RobotBase::__RunGcode(GcodeText* gcode_text){
 			// Logger::Print("RobotBase::__RunGcode      point", 52);
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
 			// Logger::Print("RobotBase::__RunGcode      point", 53);
-			gs_LineSegment_Queue::Instance().PrintOut("caller is __RunGcode() ");
+			// gs_LineSegment_Queue::Instance().PrintOut("caller is __RunGcode()  531");
 			// gs_LineSegment_Queue::Instance().Deposit();   //TODO:  IS this necessary
 			// Logger::Print("RobotBase::__RunGcode      point", 59);
 			break;

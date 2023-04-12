@@ -247,8 +247,8 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
 }
 
 
-void setup_wifi_mqtt() {
-    Serial.println("\n[Info] IoT/wifi_mqtt_client.cpp   setup_wifi_mqtt()  is entering");
+void setup_wifi_mqtt_blocking_mode() {
+    Serial.println("\n[Info] IoT/wifi_mqtt_client.cpp   setup_wifi_mqtt_blocking_mode()  is entering");
     Serial.println();
 
 
@@ -274,7 +274,7 @@ void setup_wifi_mqtt() {
         delay(1000);
         Serial.print(". ");
     }
-    Logger::Info("wifi_mqtt_clinet.cpp   setup_wifi_mqtt() is finished...");
+    Logger::Info("wifi_mqtt_clinet.cpp   setup_wifi_mqtt_blocking_mode() is finished...");
 
 }
 

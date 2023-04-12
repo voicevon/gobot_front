@@ -53,7 +53,7 @@ void setup() {
     board.Init();
     Init_All_Touchpad_Nodes(false);
 
-    setup_wifi_mqtt();
+    setup_wifi_mqtt_blocking_mode();
     Logger::Print("setup() waiting mqtt_connectiong.",1);
     while (!mqtt_is_connected){
         delay(100);

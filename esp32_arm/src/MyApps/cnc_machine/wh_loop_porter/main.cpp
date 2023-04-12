@@ -102,28 +102,18 @@ void setup(){
     // board.Test_Stepper(999);
     
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
-    // setup_wifi_mqtt();
-    Logger::Info("setup()   point 1");
-    robot.Init(&board, MQTT_TOPIC_FOR_HOME_POSITION);
-    Logger::Info("setup()   point 2");
+    setup_wifi_mqtt_blocking_mode();
 
+    robot.Init(&board, MQTT_TOPIC_FOR_HOME_POSITION);
     robot.LinkLocalGcodeQueue_AsConsumer(&app.gcode_queue);
     // app.LinkLocalGcodeQueue_AsProducer(&app.gcode_queue);
-    Logger::Info("setup()   point 3");
 
     app.LinkRobot(&robot);
-    Logger::Info("setup()   point  4");
-
     app.Link_Mqtt_to_GcodeQueue(MQTT_TOPIC_GCODE);
-    Logger::Info("setup()   point  5");
     app.gcode_queue.AppendGcodeCommand("G28X");
+    app.gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
 
-    Logger::Info("setup()   point  6");
-
-    // app.gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
-
-    Logger::Info ("App::loop_porter    setup() is done. ");
-    
+    Logger::Info ("App-loop_porter::setup() is done. ");
 }
 
 

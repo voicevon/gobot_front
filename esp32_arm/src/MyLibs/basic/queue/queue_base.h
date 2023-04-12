@@ -58,7 +58,7 @@ void QueueBase<T>::_Init(const char* queue_name, int queue_size, T* first_elemen
     this->__queue_size = queue_size; 
     this->__element_size = sizeof(T);
     this->__all_elements = first_element;
-    this->PrintOut("QueueBase:_Init()");
+    // this->PrintOut("QueueBase:_Init()");
 }
 
 template <class T>
@@ -73,9 +73,9 @@ void QueueBase<T>::PrintOut(const char * title){
 
 template <class T>
 bool QueueBase<T>::Deposit(){
-    Logger::Debug("ommonQueue::Deposit()");
-    Logger::Print("__queue_name", this->__queue_name);
-    Logger::Print("old  __deposit_push_head ", this->__deposit_push_head);
+    // Logger::Debug("ommonQueue::Deposit()");
+    // Logger::Print("__queue_name", this->__queue_name);
+    // Logger::Print("old  __deposit_push_head ", this->__deposit_push_head);
     int next_head = this->__get_next_index(this->__deposit_push_head);
     
     if(next_head == this->__withdraw_pop_tail){
@@ -88,8 +88,8 @@ bool QueueBase<T>::Deposit(){
 
     this->__deposit_push_head = next_head;
     next_head = this->__get_next_index(this->__deposit_push_head);
-    Logger::Print("new  _push_head", this->__deposit_push_head);
-    this->PrintOut("caller is :  QueueBase::Deposit()");
+    // Logger::Print("new  _push_head", this->__deposit_push_head);
+    // this->PrintOut("caller is :  QueueBase::Deposit()");
     if (next_head == this->__withdraw_pop_tail)
         // buffer is full, after copying.
         return true;
@@ -141,7 +141,7 @@ bool QueueBase<T>::BufferIsFull(){
 
 template <class T>
 int QueueBase<T>::GetFreeBuffersCount(){
-    Logger::Debug("QueueBase<T>::GetFreeBuffersCount()");
+    // Logger::Debug("QueueBase<T>::GetFreeBuffersCount()");
     int count = this->__deposit_push_head - this->__withdraw_pop_tail;
     if (count >= 0){
         return this->__queue_size - count;

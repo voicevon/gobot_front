@@ -27,7 +27,7 @@ void ArmSolutionBase::SetCurrentPositionAs(FKPosition_XYZRPW* fk_position){
 	__current_position_fk.Yaw = fk_position->Yaw;
 
 	// this->IK(&__current_position_fk, &__current_position_ik);
-	__current_position_fk.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions FK");
+	// __current_position_fk.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions FK");
 }
 
 void ArmSolutionBase::SetCurrentPositionAs(IKPosition_abgdekl* ik_position){
@@ -38,7 +38,7 @@ void ArmSolutionBase::SetCurrentPositionAs(IKPosition_abgdekl* ik_position){
 	__current_position_ik.Positions[i] = ik_position->Positions[i];
 	}
 	// this->FK(&__current_position_ik, &__current_position_fk);
-	__current_position_ik.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions IK");
+	// __current_position_ik.PrintOut("Caller = ArmSolutionBase::SetCurrentPositionAs()  homed positions IK");
 }
 
 

@@ -70,7 +70,7 @@ void Twh_LoopPorter_Robot::_InitStatic_Queues(){
     line->TargetPosition.Roll = 0;
     line->TargetPosition.Pitch = 0;
     line->TargetPosition.Yaw = 0;
-    line->PrintOUt("caller: Twh_LoopPorter_Robot::_InitStatic_Queues()");
+    // line->PrintOUt("caller: Twh_LoopPorter_Robot::_InitStatic_Queues()");
     gs_LineSegment_Queue::Instance().Deposit();
     Logger::Print("Twh_LoopPorter_Robot::Init", 83);
 }

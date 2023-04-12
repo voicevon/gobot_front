@@ -22,7 +22,7 @@ void setup(){
     board.Init();
     // test_board();
 
-    setup_wifi_mqtt();
+    setup_wifi_mqtt_blocking_mode();
 
     board.GetButton_picked()->SetMqttPublishTopic("twh/221109/packer/button/pick");
     board.GetButton_Packed()->SetMqttPublishTopic("twh/221109/packer/button/pack");

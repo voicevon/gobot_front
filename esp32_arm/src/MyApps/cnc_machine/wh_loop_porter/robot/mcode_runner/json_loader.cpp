@@ -7,14 +7,14 @@
 
 char* Twh_LoopPorter_JsonLoader::Load(){
     
-    Logger::Debug("Twh_LoopPorter_JsonLoader::Load()");
+    // Logger::Debug("Twh_LoopPorter_JsonLoader::Load()");
     String str_state = "ready";
     if (__first_run) {
         str_state = "idle";
         __first_run = false;
     }
     str_state.toCharArray(__json_string, sizeof(str_state));
-    Logger::Print("json_string", __json_string);
+    // Logger::Print("json_string", __json_string);
     return __json_string;
 
     // TODO: feed back with message_id

@@ -13,7 +13,7 @@
 // RemoteQueueBridge_mqtt mono_remote_queue_bridge;
 
 // // void __connect_to_mqtt_broker(){
-// //     setup_wifi_mqtt();
+// //     setup_wifi_mqtt_blocking_mode();
 // //     while (! mqtt_is_connected){
 // //         delay(100);
 // //         Serial.print(".");
