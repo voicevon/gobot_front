@@ -8,6 +8,9 @@ Twh_LoopPorter_App::Twh_LoopPorter_App(int row_id){
     Serial.print("\n[Info] Twh_LoopPorter_App::Twh_LoopPorter_App() is constructed");
 }
 
+void Twh_LoopPorter_App::ExecuteCommand(const char* command){
+    
+}
 
 
 // void Twh_LoopPorter_App::onGot_MqttMessage(const char* command){

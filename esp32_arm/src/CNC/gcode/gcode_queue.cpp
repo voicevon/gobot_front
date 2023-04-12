@@ -60,10 +60,8 @@ int GcodeQueue::AppendGcodeCommand(const char* payload, int length){
         Logger::Error("GcodeQueue::AppendGcodeCommand() payload is over-size");
         return -2;
     }
-    GcodeText* gcode = this->GetRoom_ForDeposit();
-    // char* destination = gcode[i];
-    for (int i=0; i<length; i++){
-        // *(destination + i) = payload[i];
-    }
+    GcodeText* gcode_text = this->GetRoom_ForDeposit();
+    gcode_text->ReConstruct(payload, length);
+
     this->Deposit();
 };

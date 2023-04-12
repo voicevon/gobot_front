@@ -13,9 +13,9 @@ BoxMoverApp::BoxMoverApp(){
 
 void BoxMoverApp::SpinOnce(){
     if (!this->gcode_queue.BufferIsFull()){
-        this->CheckMqttCommand();
+        // this->CheckMqttCommand();
     }
-    this->CheckMqttCommand();
+    // this->CheckMqttCommand();
     switch (this->State){
         case RESETTING:
             break;

@@ -13,3 +13,11 @@ GcodeText::GcodeText(const char* command){
         }
     }
 }
+
+void GcodeText::ReConstruct(const char* command, int length){
+    int i;
+    for(i=0; i<length; i++){
+        this->bytes[i] = command[i];
+    }
+    this->bytes[i] = 0x00;
+}

@@ -5,9 +5,10 @@
 
 
 void GobotMain_App::SpinOnce(){
-	if (!this->gcode_queue.BufferIsFull())
+	if (!this->gcode_queue.BufferIsFull()){
 		// My Input mq is from MQTT, My output mq is this->_gcode_queue.
-		this->CheckMqttCommand();
+		// this->CheckMqttCommand();
+	}
 }
 // void GobotMain_App::onGot_MqttMessage(const char* command){
 // 	this->gcode_queue.AppendGcodeCommand(command);

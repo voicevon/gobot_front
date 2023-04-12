@@ -1,26 +1,47 @@
 #include "cnc_app_base.h"
 #include "Mqtt/mqtt_subscriber_manager.h"
 
+#define APP_COMMAND_PREFIX  "app:"
+#define APP_COMMAND_PREFIX_SIZE 4
+
+
 void CncAppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
-    bool is_app_command = false;
+    //format string ender.
+    char* p = (char*)(payload);
+    p[payload_len] = 0x00;  
+    Logger::Debug("CncAppBase::onGot_MqttMessage");
+    Logger::Print("payload", payload);
+    Logger::Print("payload_len", payload_len);
+    const char* IS_APP_COMMAND = APP_COMMAND_PREFIX;
+
+    __have_done_feedback = false;
+
+    bool is_app_command = true;
+    for (int i=0; i<APP_COMMAND_PREFIX_SIZE; i++){
+        if (payload[i] != IS_APP_COMMAND[i]){
+            is_app_command = false;
+            break;
+        }
+    }
+
     if (is_app_command){
-        // save as app-command
+        this->ExecuteCommand(payload);
+        // __send_mqtt_feedback();
         return;
-    }else{
-
+    }
     // check gcode_queue buffer size.
-
+    int free_buffer_count = gcode_queue.GetFreeBuffersCount();
+    if (free_buffer_count <=1 ){
+        Logger::Error("CncAppBase::onGot_MqttMessage()  buffer is full");
+        return;
+    }
     // copy to local gcode_queue.
-	this->gcode_queue.AppendGcodeCommand(payload);
-    // send feedback
-
+    this->gcode_queue.AppendGcodeCommand(payload, payload_len);
 }
-
 
 void CncAppBase::Link_Mqtt_to_GcodeQueue(const char* mqtt_topic){
     // this->SetMqttTopic(mqtt_topic);
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
-
 }
 
 void CncAppBase::SpinOnce(){
@@ -31,20 +52,19 @@ void CncAppBase::SpinOnce(){
     // Logger::Debug("CncAppBase::SpinOnce()");
     // Logger::Print("this->test_id", this->test_id);
     // this->gcode_queue.SayHello("caller is :  CncAppBase::SpinOnce()");
-    if (!this->gcode_queue.BufferIsFull()){
-        // Logger::Print("CncAppBase::SpinOnce()   point", 1);
-        this->CheckMqttCommand();
-        // Logger::Print("CncAppBase::SpinOnce()   point", 99);
-    }
+    if (__have_done_feedback)
+        return;
+    if (gcode_queue.GetFreeBuffersCount() == 0)
+        return;
+
+    this->__send_mqtt_feedback();
 }
 
-bool CncAppBase::CheckMqttCommand(){
-    // Logger::Info(" MqttMessageConsumer::CheckMqttCommand()");
-    // MqttMessage* new_message = __mq->GetWithdrawTailElement(true);
-    // if (new_message != NULL){
-    //     // Logger::Print("MqttMessageConsumer::CheckMqttCommand() got new meeage.", new_message->payload);
-    //     onGot_MqttMessage(new_message->payload);
-    // }
+void CncAppBase::__send_mqtt_feedback(){
+    const char * payload = gcode_queue.GetDepositHeadElement()->bytes;
+    g_mqttClient.publish(this->_mqtt_topic, 2, true, payload );
+    __have_done_feedback = true;
 }
+
 
 

@@ -9,6 +9,7 @@ class Silicon_Pump_App: public CncAppBase{
         Silicon_Pump_App();
         void LinkRobot(Silicon_Pump_Robot* robot){this->__robot=robot;};
         // void onGot_MqttMessage(const char*) override;
+        void ExecuteCommand(const char* command) override{}; 
         
     private:
         // int __robot_row_id = 0;

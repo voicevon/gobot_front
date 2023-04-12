@@ -10,30 +10,18 @@ class CncAppBase: public MqttSubscriberBase{
     public:
         void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;
         void SpinOnce(); 
-
-        // From remote mqtt to local gcode-queue
         void Link_Mqtt_to_GcodeQueue(const char* mqtt_topic);
-        // TODO:  This is a AppBase function,  
-        //  The message payload will be a json string. like {'app':'reset'},  or {'gmcode':'M408'}
-        //  will call virtual RunAppCommand() for app command
-        //  will put to g_code_queue for gmcode.
-        // void onGot_MqttMessage(const char* message_payload) override{
-        //     command = message_payload
-        //     if (to==app) {
-        //         _RunAppCommand(command);
-        //     } 
-        //     if (to == gmcode) _gcode_queue->AppendGcodeCommand(command);
-        // }
-        // virtual void _RunAppCommand(const char* app_command){};
 
-        bool CheckMqttCommand();
         GcodeQueue gcode_queue;
-        MqttMessageQueue command_queue;
+        // MqttMessageQueue command_queue;
+        virtual void ExecuteCommand(const char* command){};
 
     protected:
         
 
     private:
         int test_id = 1234;
+        void __send_mqtt_feedback();
+        bool __have_done_feedback = true;
 
 };

@@ -7,6 +7,7 @@ class SpringMakerApp: public CncAppBase{
         SpringMakerApp();
         // void SpinOnce(); 
         void __onGot_MqttMessage(const char*);
+        void ExecuteCommand(const char* command) override{}; 
         
     private:
    
