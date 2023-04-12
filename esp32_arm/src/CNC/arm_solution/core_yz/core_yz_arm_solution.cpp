@@ -110,7 +110,7 @@ void CoreYZ_ArmSolution::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW
 // }
 
 
-// bool CoreYZ_ArmSolution::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
+// bool CoreYZ_ArmSolution::_CutGcodeLine_ToSegmentQueue(GcodeText* gcode){
 // 	Serial.print("\n[Debug] CoreYZ_ArmSolution::RunG1() is entering");
 // 	Serial.print(gcode->get_command());
 // 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);

@@ -23,7 +23,7 @@ void VscApp::__onGot_MqttMessage(const char* command){
         Serial.print(str_command.substring(7));
         Serial.println();
     }
-    Gcode my_gcode = Gcode(command);
+    GcodeHelper my_gcode = GcodeHelper(command);
     if (str_command.substring(0,7) == "vsc_cmd"){
         // This is a robot command, not a gcode or mcode
         str_command = str_command.substring(7);

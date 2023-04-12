@@ -1,9 +1,10 @@
 #include "m130_runner_pid_list.h"
 
-void M130_Runner_UpdatePid::SetupRunner(Gcode* mcode){
+void M130_Runner_UpdatePid::SetupRunner(GcodeText* mcode_text){
     // uint8_t n_value = 33;   //TODO: Make sure this is no harmful!
     // float f_value = 0.0f;
-
+    GcodeHelper gcode_helper = GcodeHelper(mcode_text->bytes);
+    GcodeHelper* mcode = &gcode_helper;
     Logger::Info("M130_Runner::Run()");
     Logger::Print("gcode", mcode->get_command());
     index =  mcode->get_value('N');

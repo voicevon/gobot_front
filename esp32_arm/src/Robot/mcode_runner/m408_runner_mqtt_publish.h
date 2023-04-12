@@ -8,7 +8,7 @@
 class M408_Runner_MqttPublish: public McodeRunnerBase{
     public:
         void LinkJsonLoader(JsonLoaderBase* json_loader){this->__json_loader = json_loader;};
-        void SetupRunner(Gcode* mcode) override;
+        void SetupRunner(GcodeText* mcode) override;
         bool RunnerLoop() override;
 
     protected:

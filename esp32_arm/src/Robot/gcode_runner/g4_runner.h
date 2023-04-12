@@ -5,7 +5,7 @@
 
 class G4_Runner: public SyncGcodeRunnerBase{
     public:
-        void LinkGcode(Gcode* gcode) override;
+        void LinkGcode(GcodeText* gcode) override;
         void Start() override;
         bool IsDone() override;
 

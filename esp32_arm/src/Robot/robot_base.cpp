@@ -117,20 +117,20 @@ void RobotBase::SpinOnce(){
 	char* p = (char*) (&message->payload[0]);
 	std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
-	Gcode gcode = Gcode(str);
+	GcodeHelper gcode = GcodeHelper(str);
 	// Logger::Debug("RobotBase::SpinOnce() has got command string ");
 	// Serial.println(str.c_str());
 	// Logger::Print("RobotBase::SpinOnce() point", 6);
 	// Logger::Print("gcode_command", gcode.get_command());
-
+	GcodeText gcode_text = GcodeText(message->payload);
 	if(gcode.has_g){
 		Logger::Print("RobotBase::SpinOnce()   point", 61);
-		this->__RunGcode(&gcode);
+		this->__RunGcode(&gcode_text);
 		Logger::Print("RobotBase::SpinOnce()   point", 62);
 		this->_gcode_queue->FetchTailMessage(true);
 		Logger::Print("RobotBase::SpinOnce()   point", 69);
 	}else if(gcode.has_m){
-		McodeOS::Instance().SetupRunner(&gcode);
+		McodeOS::Instance().SetupRunner(&gcode_text);
 		this->State = RobotState::MCODE_IS_SYNCING;
 		this->_gcode_queue->FetchTailMessage(true);
 	}else{
@@ -147,7 +147,9 @@ void RobotBase::SpinOnce(){
 // Before invoking this function. Make sure:
 // 1. gs_MoveBlock_Queue is not full
 // 2. gs_LineSegment_Queue is not full
-void RobotBase::__RunGcode(Gcode* gcode){
+void RobotBase::__RunGcode(GcodeText* gcode_text){
+	GcodeHelper gcode_helper = GcodeHelper(gcode_text->bytes);
+	GcodeHelper* gcode = &gcode_helper;
 	static float __newest_line_speed = 100;
 	Logger::Info("RobotBase::__RunGcode()");
 	LineSegment* new_line = gs_LineSegment_Queue::Instance().GetRoom();
@@ -170,12 +172,12 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	// Logger::Print("RobotBase::__RunGcode() point", 51);
 	switch (gcode->g){
 		case 28:
-			this->_g28_runner->LinkGcode(gcode);
+			this->_g28_runner->LinkGcode(gcode_text);
 			this->State = RobotState::G28_IS_SYNCING;
 			break;
 		case 4:
 			// G4 Dwell, Pause for a period of time.
-			this->__g4_runner.LinkGcode(gcode);
+			this->__g4_runner.LinkGcode(gcode_text);
 			this->State = RobotState::G4_IS_SYNCING;
 			break;
 						

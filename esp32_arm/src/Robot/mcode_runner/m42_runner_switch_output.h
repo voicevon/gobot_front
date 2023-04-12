@@ -5,7 +5,7 @@
 
 class M42_Runner_Switch_Output: public McodeRunnerBase{
     public:
-        void SetupRunner(Gcode* mcode) override;
+        void SetupRunner(GcodeText* mcode) override;
 
     protected:
         uint8_t _index;

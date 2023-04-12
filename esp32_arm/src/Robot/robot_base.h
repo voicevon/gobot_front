@@ -40,7 +40,7 @@ class RobotBase: public GcodeConsumer{
     private:
         Planner __planner;
         G4_Runner __g4_runner;
-        void __RunGcode(Gcode* gcode);
+        void __RunGcode(GcodeText* gcode);
 
         
 

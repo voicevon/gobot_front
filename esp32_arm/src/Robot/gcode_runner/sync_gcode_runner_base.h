@@ -1,6 +1,6 @@
 #pragma once
 #include "CNC/gcode/gcode_text.h"
-
+#include "CNC/gcode/gcode_helper.h"
 
 class SyncGcodeRunnerBase{
     public:
@@ -9,6 +9,6 @@ class SyncGcodeRunnerBase{
         virtual bool IsDone();
 
     protected:
-        // Gcode* _gcode;
+        // GcodeText* _gcode;
 
 };
