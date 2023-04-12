@@ -18,14 +18,14 @@
 //     void test(){
 //         AnyQueue queue;
 //         if(queue.GetFreeBuffersCount() > 5){
-//             AnyClass* new_object = queue.GetRoom();
+//             AnyClass* new_object = queue.GetRoom_ForDeposit();
 //             new_object->id = 8;
 //             queue.Deposit();
 //         }
 //         if (! queue.BufferIsEmpty()){
 //             AnyClass* y= queue.Withdraw();
 //             AnyClass* yy = queue.Withdraw(); 
-//             yy= queue.GetRoom();
+//             yy= queue.GetRoom_ForDeposit();
 //             Serial.println(yy->id);
 //             Serial.println(y->id);
 

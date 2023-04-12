@@ -12,7 +12,7 @@ class CncAppBase: public MqttSubscriberBase{
         void SpinOnce(); 
 
         // From remote mqtt to local gcode-queue
-        void LinkQueues_Mqtt_to_Gcode(const char* mqtt_topic);
+        void Link_Mqtt_to_GcodeQueue(const char* mqtt_topic);
         // TODO:  This is a AppBase function,  
         //  The message payload will be a json string. like {'app':'reset'},  or {'gmcode':'M408'}
         //  will call virtual RunAppCommand() for app command

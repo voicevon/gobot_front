@@ -114,13 +114,13 @@ void setup(){
     app.LinkRobot(&robot);
     Logger::Info("setup()   point  4");
 
-    app.LinkQueues_Mqtt_to_Gcode(MQTT_TOPIC_GCODE);
+    app.Link_Mqtt_to_GcodeQueue(MQTT_TOPIC_GCODE);
     Logger::Info("setup()   point  5");
-    // mono_remote_queue_bridge_via_mqtt_setup(MQTT_TOPIC_GCODE, &mqtt_command_queue, &app); 
     app.gcode_queue.AppendGcodeCommand("G28X");
+
     Logger::Info("setup()   point  6");
 
-    app.gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
+    // app.gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
 
     Logger::Info ("App::loop_porter    setup() is done. ");
     

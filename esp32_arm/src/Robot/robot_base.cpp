@@ -107,7 +107,7 @@ void RobotBase::SpinOnce(){
 
 	bool debug = true;
 	if (debug){
-		Logger::Debug("[Info] RobotBase::SpinOnce()  Going to run next gcode   ===> ");
+		Logger::Debug("[Info] RobotBase::SpinOnce()  Going to run next gcode   >>>");
 		Serial.print(gcode_text->bytes);
 		Serial.println("<<<");
 	}
@@ -150,28 +150,32 @@ void RobotBase::__RunGcode(GcodeText* gcode_text){
 	GcodeHelper* gcode = &gcode_helper;
 	static float __newest_line_speed = 100;
 	Logger::Info("RobotBase::__RunGcode()");
-	LineSegment* new_line = gs_LineSegment_Queue::Instance().GetRoom();
+	LineSegment* new_line = gs_LineSegment_Queue::Instance().GetRoom_ForDeposit();
 	new_line->DeepCopyTo_TargetPosition_fk(__planner.arm_solution->GetCurrentPosition_Fk());
 	if (gcode->has_letter('F')) {
 		__newest_line_speed = gcode->get_value('F');
 	}
 	new_line->Speed_mm_per_second = __newest_line_speed;
-	// Logger::Print("RobotBase::__RunGcode      point", 11);
-	MoveBlock* new_move_block = gs_MoveBlock_Queue::Instance().GetRoom();
-	// Logger::Print("RobotBase::__RunGcode      point", 12);
+	Logger::Print("RobotBase::__RunGcode      point", 11);
+	MoveBlock* new_move_block = gs_MoveBlock_Queue::Instance().GetRoom_ForDeposit();
+	Logger::Print("RobotBase::__RunGcode      point", 12);
 	//TODO:    This is wrong for the very first moveblock after MCU is reset.
 	gs_MoveBlock_Queue::Instance().GetDepositHeadElement()->DeepCopyTo(new_move_block);
-	// Logger::Print("RobotBase::__RunGcode      point", 19);
+
+	Logger::Print("RobotBase::__RunGcode      point", 19);
 	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;
 	LineSegment middle_kinematic_line;
 	FKPosition_XYZRPW* current_position_FK;
 	
-	// Logger::Print("RobotBase::__RunGcode() point", 51);
+	Logger::Print("RobotBase::__RunGcode() point", 51);
 	switch (gcode->g){
 		case 28:
+			Logger::Print("RobotBase::__RunGcode() G28  point", 281);
 			this->_g28_runner->LinkGcode(gcode_text);
+			Logger::Print("RobotBase::__RunGcode() G28  point", 282);
 			this->State = RobotState::G28_IS_SYNCING;
+			Logger::Print("RobotBase::__RunGcode() G28  point", 283);
 			break;
 		case 4:
 			// G4 Dwell, Pause for a period of time.
@@ -188,7 +192,7 @@ void RobotBase::__RunGcode(GcodeText* gcode_text){
 			if (gcode->has_letter('R')) new_line->TargetPosition.Roll = gcode->get_value('R');
 			if (gcode->has_letter('P')) new_line->TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) new_line->TargetPosition.Yaw = gcode->get_value('W');
-			// Logger::Print("RobotBase::__RunGcode      point", 51);
+			// Logger::Print("RobotBase::__RunGcode() G1      point", 61);
 			new_line->IsMiddleKinematicPosition = false;
 			// new_line->PrintOUt("caller is RobotBase::__RunGcode() G1");
 			// Logger::Print("RobotBase::__RunGcode      point", 52);

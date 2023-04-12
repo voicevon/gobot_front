@@ -6,7 +6,7 @@ void CncAppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 }
 
 
-void CncAppBase::LinkQueues_Mqtt_to_Gcode(const char* mqtt_topic){
+void CncAppBase::Link_Mqtt_to_GcodeQueue(const char* mqtt_topic){
     // this->SetMqttTopic(mqtt_topic);
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
 

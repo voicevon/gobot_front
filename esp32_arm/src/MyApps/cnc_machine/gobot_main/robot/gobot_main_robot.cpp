@@ -69,7 +69,7 @@ void GobotMainRobot::_InitStatic_Queues(){
     // gs_MoveBlock_Queue::Instance()._all_elements = this->__all_move_blocks;
     // Init LineSegment queue head
     // gs_LineSegment_Queue::Instance()._all_elements =  this->__all_line_segments;
-    LineSegment* line = gs_LineSegment_Queue::Instance().GetRoom();
+    LineSegment* line = gs_LineSegment_Queue::Instance().GetRoom_ForDeposit();
     line->TargetPosition.X = 0;
     line->TargetPosition.Y = 0;
     line->TargetPosition.Z = 0;

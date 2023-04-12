@@ -15,7 +15,7 @@ GcodeQueue::GcodeQueue(){
 
 int GcodeQueue::AppendGcodeCommand(String command){
     // return this->AppendMessage(command);
-    GcodeText* gcode =  this->GetRoom();
+    GcodeText* gcode =  this->GetRoom_ForDeposit();
     // gcode->command = (char*) (command.c_str());
     this->Deposit();
     return 1;
@@ -31,21 +31,18 @@ int GcodeQueue::AppendGcodeCommand(const char* command){
         return -1;
     }
     Logger::Print("GcodeQueue::AppendGcodeCommand(const char* command) point", 51);
-    GcodeText* gcode = this->GetRoom();
+    GcodeText* gcode = this->GetRoom_ForDeposit();
     Logger::Print("GcodeQueue::AppendGcodeCommand(const char* command) point", 52);
     // Logger::Print("command", gcode->command);
     char* destination = gcode->bytes;
-    Logger::Debug("GcodeQueue::AppendGcodeCommand");
     for (int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
-        Logger::Print("command[i]" , command[i]);
-        Logger::Print("destination[i]" , *(destination+i));
-        // *(destination + i) = command[i];
+        *(destination + i) = command[i];
         if (command[i] == 0x00){
-            Logger::Print("size of command string ", i+1);
             this->Deposit();
             return 1;
         }
     }
+    Logger::Error("GcodeQueue::AppendGcodeCommand() with auto-length,  over-size");
     return -2;
 }
 
@@ -60,7 +57,7 @@ int GcodeQueue::AppendGcodeCommand(const char* payload, int length){
         Logger::Error("GcodeQueue::AppendGcodeCommand() payload is over-size");
         return -2;
     }
-    GcodeText* gcode = this->GetRoom();
+    GcodeText* gcode = this->GetRoom_ForDeposit();
     // char* destination = gcode[i];
     for (int i=0; i<length; i++){
         // *(destination + i) = payload[i];
