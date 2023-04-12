@@ -13,9 +13,9 @@ class gs_MoveBlock_Queue: public QueueBase<MoveBlock>{
             static gs_MoveBlock_Queue instance;
             return instance;
         };
-        MoveBlock* Withdraw();
-        MoveBlock* GetRoom();
-        MoveBlock* GetHead_MoveBlock();
+        // MoveBlock* Withdraw();
+        // MoveBlock* GetRoom();
+        // MoveBlock* GetHead_MoveBlock();
         void DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position);
 
     private:

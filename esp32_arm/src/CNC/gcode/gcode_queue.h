@@ -1,11 +1,11 @@
 #pragma once
 
 #include "MyLibs/basic/queue/queue_base.h"
-#include "Gcode.h"
+#include "gcode_text.h"
 
 #define GCODE_QUEUE_SIZE 16
 
-class GcodeQueue: public QueueBase<Gcode>{
+class GcodeQueue: public QueueBase<GcodeText>{
     public:
         GcodeQueue();
         int AppendGcodeCommand(String command);
@@ -18,6 +18,6 @@ class GcodeQueue: public QueueBase<Gcode>{
         int AppendGcodeCommand(const char* payload, int length);
 
     private:
-        Gcode __all_gcodes[GCODE_QUEUE_SIZE];
+        GcodeText __all_gcodes[GCODE_QUEUE_SIZE];
         
 };

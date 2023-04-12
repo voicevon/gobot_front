@@ -1,6 +1,5 @@
 #pragma once
 
-#define  REPRAP_GCODE_MAX_SIZE  20
 
 
 //     Multiple definition of a const char*

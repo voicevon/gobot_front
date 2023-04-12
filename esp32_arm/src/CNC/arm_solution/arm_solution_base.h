@@ -3,7 +3,7 @@
 #include "../coordinate/coordinate_base.h"
 #include "../coordinate/cnc_axis.h"
 #include "../mover/cnc_mover_base.h"
-#include "CNC/gcode/Gcode.h"
+#include "CNC/gcode/gcode_helper.h"
 
 // enum class MoverState{    //TODO: rename to MoverState?
 //     IDLE,       // Motor is enabled.

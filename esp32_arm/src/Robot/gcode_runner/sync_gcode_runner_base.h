@@ -1,10 +1,10 @@
 #pragma once
-#include "CNC/gcode/Gcode.h"
+#include "CNC/gcode/gcode_text.h"
 
 
 class SyncGcodeRunnerBase{
     public:
-        virtual void LinkGcode(Gcode* gcode);
+        virtual void LinkGcode(GcodeText* gcode);
         virtual void Start();
         virtual bool IsDone();
 

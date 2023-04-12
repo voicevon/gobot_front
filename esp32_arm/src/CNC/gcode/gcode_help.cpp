@@ -5,25 +5,22 @@
       You should have received a copy of the GNU General Public License along with Smoothie. If not, see <http://www.gnu.org/licenses/>.
 */
 
-// https://github.com/Smoothieware/Smoothieware/blob/edge/src/modules/communication/utils/Gcode.h
-#include "Gcode.h"
-// #include "libs/StreamOutput.h"
-// #include "utils."
-// #include "nist_float.h"
+// https://github.com/Smoothieware/Smoothieware/blob/edge/src/modules/communication/utils/GcodeHelper.h
+#include "gcode_helper.h"
 
 #include <stdlib.h>
 #include <algorithm>
 #include "WString.h"
 #include "HardwareSerial.h"
 
-// This is a gcode object. It represents a GCode string/command, and caches some important values about that command for the sake of performance.
+// This is a GcodeHelper object. It represents a GcodeHelper string/command, and caches some important values about that command for the sake of performance.
 // It gets passed around in events, and attached to the queue ( that'll change )
-// Gcode::Gcode(const string &command, StreamOutput *stream, bool strip)
-Gcode::Gcode(const std::string &command, bool strip)
-// Gcode::Gcode(String command, bool strip)
+// GcodeHelper::GcodeHelper(const string &command, StreamOutput *stream, bool strip)
+GcodeHelper::GcodeHelper(const std::string &command, bool strip)
+// GcodeHelper::GcodeHelper(String command, bool strip)
 {
     this->command= strdup(command.c_str());
-    // Serial.print("\n[Debug]Gcode::Gcode()")
+    // Serial.print("\n[Debug]GcodeHelper::GcodeHelper()")
     // Serial.print(command.c_str());
     // Serial.print("-----------");
     // Serial.print(this->command);
@@ -46,7 +43,7 @@ Gcode::Gcode(const std::string &command, bool strip)
     // Serial.println(this->get_command());
 }
 
-Gcode::~Gcode()
+GcodeHelper::~GcodeHelper()
 {
     if(command != nullptr) {
         // TODO we can reference count this so we share copies, may save more ram than the extra count we need to store
@@ -54,7 +51,7 @@ Gcode::~Gcode()
     }
 }
 
-Gcode::Gcode(const Gcode &to_copy)
+GcodeHelper::GcodeHelper(const GcodeHelper &to_copy)
 {
     this->command               = strdup(to_copy.command); // TODO we can reference count this so we share copies, may save more ram than the extra count we need to store
     this->has_m                 = to_copy.has_m;
@@ -68,7 +65,7 @@ Gcode::Gcode(const Gcode &to_copy)
     this->txt_after_ok.assign( to_copy.txt_after_ok );
 }
 
-Gcode &Gcode::operator= (const Gcode &to_copy)
+GcodeHelper &GcodeHelper::operator= (const GcodeHelper &to_copy)
 {
     if( this != &to_copy ) {
         this->command               = strdup(to_copy.command); // TODO we can reference count this so we share copies, may save more ram than the extra count we need to store
@@ -86,8 +83,8 @@ Gcode &Gcode::operator= (const Gcode &to_copy)
 }
 
 
-// Whether or not a Gcode has a letter
-bool Gcode::has_letter( char letter ) const
+// Whether or not a GcodeHelper has a letter
+bool GcodeHelper::has_letter( char letter ) const
 {
     for (size_t i = 0; i < strlen(this->command); ++i) {
         if( command[i] == letter ) {
@@ -98,7 +95,7 @@ bool Gcode::has_letter( char letter ) const
 }
 
 // Retrieve the value for a given letter
-float Gcode::get_value( char letter, char **ptr ) const
+float GcodeHelper::get_value( char letter, char **ptr ) const
 {
     const char *cs = command;
     char *cn = NULL;
@@ -115,7 +112,7 @@ float Gcode::get_value( char letter, char **ptr ) const
     return 0;
 }
 
-int Gcode::get_int( char letter, char **ptr ) const
+int GcodeHelper::get_int( char letter, char **ptr ) const
 {
     const char *cs = command;
     char *cn = NULL;
@@ -132,7 +129,7 @@ int Gcode::get_int( char letter, char **ptr ) const
     return 0;
 }
 
-uint32_t Gcode::get_uint( char letter, char **ptr ) const
+uint32_t GcodeHelper::get_uint( char letter, char **ptr ) const
 {
     const char *cs = command;
     char *cn = NULL;
@@ -149,7 +146,7 @@ uint32_t Gcode::get_uint( char letter, char **ptr ) const
     return 0;
 }
 
-int Gcode::get_num_args() const
+int GcodeHelper::get_num_args() const
 {
     int count = 0;
     for(size_t i = stripped?0:1; i < strlen(command); i++) {
@@ -161,7 +158,7 @@ int Gcode::get_num_args() const
     return count;
 }
 
-std::map<char,float> Gcode::get_args() const
+std::map<char,float> GcodeHelper::get_args() const
 {
     std::map<char,float> m;
     for(size_t i = stripped?0:1; i < strlen(command); i++) {
@@ -174,7 +171,7 @@ std::map<char,float> Gcode::get_args() const
     return m;
 }
 
-std::map<char,int> Gcode::get_args_int() const
+std::map<char,int> GcodeHelper::get_args_int() const
 {
     std::map<char,int> m;
     for(size_t i = stripped?0:1; i < strlen(command); i++) {
@@ -188,7 +185,7 @@ std::map<char,int> Gcode::get_args_int() const
 }
 
 // Cache some of this command's properties, so we don't have to parse the string every time we want to look at them
-void Gcode::prepare_cached_values(bool strip)
+void GcodeHelper::prepare_cached_values(bool strip)
 {
     char *p= nullptr;
     if( this->has_letter('G') ) {
@@ -229,7 +226,7 @@ void Gcode::prepare_cached_values(bool strip)
 }
 
 // strip off X Y Z I J K parameters if G0/1/2/3
-void Gcode::strip_parameters()
+void GcodeHelper::strip_parameters()
 {
     if(has_g && g < 4){
         // strip the command of the XYZIJK parameters
@@ -264,7 +261,7 @@ void Gcode::strip_parameters()
 // https://github.com/Smoothieware/Smoothieware/blob/f01177614a495473d4018cb00e06416a6c0194f1/src/libs/nist_float.cpp
 
 
-float Gcode::parse_float(const char* nptr, char** endptr) const
+float GcodeHelper::parse_float(const char* nptr, char** endptr) const
 {
 	const int kStrtofMaxDigits = 8;
 	const char *p = nptr;

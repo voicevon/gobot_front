@@ -160,7 +160,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	MoveBlock* new_move_block = gs_MoveBlock_Queue::Instance().GetRoom();
 	// Logger::Print("RobotBase::__RunGcode      point", 12);
 	//TODO:    This is wrong for the very first moveblock after MCU is reset.
-	gs_MoveBlock_Queue::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
+	gs_MoveBlock_Queue::Instance().GetHeadObject()->DeepCopyTo(new_move_block);
 	// Logger::Print("RobotBase::__RunGcode      point", 19);
 	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;

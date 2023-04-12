@@ -12,9 +12,7 @@ class gs_LineSegment_Queue: public QueueBase<LineSegment>{
             static gs_LineSegment_Queue instance;
             return instance;
         };
-        LineSegment* Withdraw() {return this->_Withdraw();};
-        LineSegment* GetRoom() {return this->_GetRoom();};
-        LineSegment* GetHeadLineSegment() {return this->_GetHeadObject();};
+
         void DeepCopyCurrentFkPositionTo(FKPosition_XYZRPW* position);
 
     private:

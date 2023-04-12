@@ -20,7 +20,7 @@ void Planner::ConvertLineSegment_AppendMoveBlocks(LineSegment* new_line){
     new_line->Calculate_distance_time(arm_solution->GetCurrentPosition_Fk());
     IKPosition_abgdekl start_ik;
     // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 21);
-    gs_MoveBlock_Queue::Instance().GetHead_MoveBlock()->DeepCopyToIkPosition(&start_ik);
+    gs_MoveBlock_Queue::Instance().GetHeadObject()->DeepCopyToIkPosition(&start_ik);
     // Logger::Print("Planner::ConvertLineSegment_AppendMoveBlocks()  point", 22);
 
     IKPosition_abgdekl target_ik;

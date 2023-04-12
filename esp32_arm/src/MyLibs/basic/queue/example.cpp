@@ -11,11 +11,7 @@
 // };
 
 
-// class AnyQueue: public QueueBase<AnyClass>{
-//     public:
-//         AnyClass* Withdraw(){return this->_Withdraw(); };
-//         AnyClass* GetRoom() {return this->_GetRoom(); };
-// };
+
 
 
 // class IamTester{

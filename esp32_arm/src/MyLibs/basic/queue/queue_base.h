@@ -31,12 +31,12 @@ class QueueBase{
         //Push the appended object to queue. 
         bool Deposit();   //Push()?   Enqueue()?   Deposit()?
         void PrintOut(const char * title);
-        
+        T* GetRoom();  //GetPrePush()?  GetRoom()?  
+        T* Withdraw();  //Pop()?  Withdraw()?  Dequeue?
+        T* GetHeadObject();  //Pop()?  Withdraw()?  Dequeue?
     protected:
         // When you GetPreHeadObject(), you can view/check/modify it, also can ForwardHead(), equal to AppendObject().
-        T* _GetRoom();  //GetPrePush()?  GetRoom()?  
-        T* _Withdraw();  //Pop()?  Withdraw()?  Dequeue?
-        T* _GetHeadObject();  //Pop()?  Withdraw()?  Dequeue?
+ 
 
         void _Init(const char* queue_name, int queue_size, T* first_element);
         T* __all_elements;
@@ -100,16 +100,16 @@ bool QueueBase<T>::Deposit(){
 }
 
 template <class T>
-T* QueueBase<T>::_GetRoom(){
-    // Logger::Debug("QueueBase::_GetRoom()");
+T* QueueBase<T>::GetRoom(){
+    // Logger::Debug("QueueBase::GetRoom()");
     T* head_message = this->__all_elements + __push_head * this->__element_size;
     // Serial.println(head_message->id);
-    // Logger::Print("QueueBase::_GetRoom() point", 99);
+    // Logger::Print("QueueBase::GetRoom() point", 99);
     return  head_message;
 }
 
 template <class T>
-T* QueueBase<T>::_Withdraw(){
+T* QueueBase<T>::Withdraw(){
     T* tail_message = NULL;
     if (this->__push_head != this->__pop_tail){
         tail_message = this->__all_elements + this->__pop_tail * this->__element_size;
@@ -119,8 +119,9 @@ T* QueueBase<T>::_Withdraw(){
 }
 
 // Notice:  If buffer is empty, this will return unexpected result.
+//TODO:  rename:  GetHeadElement
 template <class T>
-T* QueueBase<T>::_GetHeadObject(){
+T* QueueBase<T>::GetHeadObject(){
     int previous_head =  __get_previous_index(__push_head);
     return  this->__all_elements + previous_head* this->__element_size;
 }
