@@ -240,7 +240,7 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
     }
 
     Serial.println("[Info] on_MqttMessage() Dispatch message by topic,  Putting remote message to local consumer." );
-    MqttSubscriberManager::GetInstance().on_mqtt_client_received_message(topic, payload, len);
+    gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len);
     
     // mono_remote_queue_bridge.onMessage((const char*)payload, len);
     Serial.println("[Info] on_MqttMessage()  Appened to mqtt_consumer.");

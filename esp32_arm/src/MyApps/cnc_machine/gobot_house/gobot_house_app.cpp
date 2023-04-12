@@ -344,17 +344,17 @@ void GobotHouseApp::Test_Beta(int loop_count){
 	String g4 = "G4S3";   //Wait for beta is left hall sensor.
 	bool buffer_is_full = false;
 	for (int i=0; i<loop_count; i++){
-		buffer_is_full = this->gcode_queue.AppendGcodeCommand(g28);
+		buffer_is_full = this->gcode_queue.AppendGcodeCommand(g28.c_str());
 		if (buffer_is_full){
 			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
 			return;
 		}
-		buffer_is_full = this->gcode_queue.AppendGcodeCommand(g1);
+		buffer_is_full = this->gcode_queue.AppendGcodeCommand(g1.c_str());
 		if (buffer_is_full){
 			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
 			return;
 		}
-		this->gcode_queue.AppendGcodeCommand(g4);
+		this->gcode_queue.AppendGcodeCommand(g4.c_str());
 	}
 }
 
@@ -373,6 +373,6 @@ void GobotHouseApp::__MakeGcode_and_Send(FKPosition_XYZRPW* from, FKPosition_XYZ
 		strGcode.concat("Y");
 		strGcode.concat(y);
 		strGcode.concat("F30");
-		this->gcode_queue.AppendGcodeCommand(strGcode);
+		this->gcode_queue.AppendGcodeCommand(strGcode.c_str());
 	}
 }

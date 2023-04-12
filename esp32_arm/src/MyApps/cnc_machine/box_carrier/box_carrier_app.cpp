@@ -49,14 +49,14 @@ void BoxCarrierApp::ParkArms(bool do_homing){
 	}
 
 	if (do_homing){
-		String strG28 = "G28Z";
-		this->gcode_queue.AppendGcodeCommand(strG28);
-		strG28 = "G28W";
-		this->gcode_queue.AppendGcodeCommand(strG28);
+		// const char strG28 = "G28Z";
+		this->gcode_queue.AppendGcodeCommand("G28Z");
+		// const char = "G28W";
+		this->gcode_queue.AppendGcodeCommand("G28W");
 	}
 	// this->gcode_queue.SpinOnce();
-	String strG1 = "G1 Z5421 W5";
-	this->gcode_queue.AppendGcodeCommand(strG1);
+	// const char strG1 = "G1 Z5421 W5";
+	this->gcode_queue.AppendGcodeCommand("G1 Z5421 W5");
 }
 
 void BoxCarrierApp::LoadBox(){

@@ -4,10 +4,10 @@
 
 
 
-class MqttSubscriberManager{
+class gs_MqttSubscriberManager{
     public:
-        static MqttSubscriberManager& GetInstance(){
-            static MqttSubscriberManager __instance;
+        static gs_MqttSubscriberManager& Instance(){
+            static gs_MqttSubscriberManager __instance;
             return __instance;
         };
         void AddSubscriber(const char* mqtt_topic, MqttSubscriberBase* subscriber);

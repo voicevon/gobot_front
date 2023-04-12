@@ -20,5 +20,6 @@ class gs_MoveBlock_Queue: public QueueBase<MoveBlock>{
 
     private:
         gs_MoveBlock_Queue();
+        MoveBlock __all_move_blocks[MOVE_BLOCKS_QUEUE_SIZE];
 
 };

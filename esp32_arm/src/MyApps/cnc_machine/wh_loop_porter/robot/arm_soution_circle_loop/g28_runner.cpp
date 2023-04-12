@@ -7,7 +7,7 @@ void Twh_LoopPorter_G28_Runner::Init(CncMover* mover, ArmSolutionBase* arm_solut
     Logger::Info("Twh_LoopPorter_G28_Runner::Init() Hoiming_config");
     this->_mover = mover;
     this->_arm_solution = arm_solution;
-    MqttSubscriberManager::GetInstance().AddSubscriber(mqtt_topic_for_home_position, &__remote_home_position);
+    gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic_for_home_position, &__remote_home_position);
 }
 
 void Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome(char axis_name, MoveBlock* mb){

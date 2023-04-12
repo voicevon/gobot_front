@@ -45,13 +45,6 @@ Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
 Twh_LoopPorter_Robot robot;
 
 
-// void test_board(){
-//     board.GetDisplayer()->Test(9999, 2);
-//     // board.Test_PositionTriggers(0);
-    // board.Test_Stepper(0);
-//     // Serial.println("[Info] test_board() is done  MY_ROBOT_ROW_ID=" + String(MY_ROBOT_ROW_ID));
-// }
-
 void test_robot(){
     for (int i=0; i<6;i++){
 
@@ -109,17 +102,24 @@ void setup(){
     // board.Test_Stepper(999);
     
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
-    setup_wifi_mqtt();
-    
+    // setup_wifi_mqtt();
+    Logger::Info("setup()   point 1");
     robot.Init(&board, MQTT_TOPIC_FOR_HOME_POSITION);
+    Logger::Info("setup()   point 2");
 
     robot.LinkLocalGcodeQueue_AsConsumer(&app.gcode_queue);
     // app.LinkLocalGcodeQueue_AsProducer(&app.gcode_queue);
-    app.LinkRobot(&robot);
+    Logger::Info("setup()   point 3");
 
+    app.LinkRobot(&robot);
+    Logger::Info("setup()   point  4");
+
+    app.LinkQueues_Mqtt_to_Gcode(MQTT_TOPIC_GCODE);
+    Logger::Info("setup()   point  5");
     // mono_remote_queue_bridge_via_mqtt_setup(MQTT_TOPIC_GCODE, &mqtt_command_queue, &app); 
-    
     app.gcode_queue.AppendGcodeCommand("G28X");
+    Logger::Info("setup()   point  6");
+
     app.gcode_queue.AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
 
     Logger::Info ("App::loop_porter    setup() is done. ");

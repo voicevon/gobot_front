@@ -3,25 +3,21 @@
 #include "MyLibs/basic/queue/queue_base.h"
 #include "Gcode.h"
 
+#define GCODE_QUEUE_SIZE 16
+
 class GcodeQueue: public QueueBase<Gcode>{
     public:
-        GcodeQueue(){};
-        bool AppendGcodeCommand(String command){
-            // return this->AppendMessage(command);
-            Gcode* gcode =  this->_GetRoom();
-            gcode->command = (char*) (command.c_str());
-            this->Deposit();
-        };
+        GcodeQueue();
+        int AppendGcodeCommand(String command);
 
-        bool AppendGcodeCommand(const char* payload, int length){
-            // return this->AppendMessage(payload, length);
-            Gcode* gcode = this->_GetRoom();
-            char* destination = gcode->command;
-            for (int i=0; i<length; i++){
-                *(destination + i) = payload[i];
-            }
-        };
+        // returns:
+        //    -1:  queue is full
+        //    -2:  command is over-size.
+        //     1:  deposited to queue successful.
+        int AppendGcodeCommand(const char* command);
+        int AppendGcodeCommand(const char* payload, int length);
 
     private:
+        Gcode __all_gcodes[GCODE_QUEUE_SIZE];
         
 };

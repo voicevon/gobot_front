@@ -1,7 +1,7 @@
 #include "move_blocks_queue.h"
 
 gs_MoveBlock_Queue::gs_MoveBlock_Queue(){
-    this->_Init("MoveBlocks", MOVE_BLOCKS_QUEUE_SIZE, sizeof(MoveBlock));
+    this->_Init("MoveBlocks", MOVE_BLOCKS_QUEUE_SIZE, this->__all_move_blocks);
 }
 
 MoveBlock* gs_MoveBlock_Queue::Withdraw(){
