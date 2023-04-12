@@ -220,30 +220,22 @@ void onMqttPublish(uint16_t packetId) {
 void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
     bool debug = false;
     if(debug){
-        Serial.println("on_MqttMessage()   saying received.");
-        Serial.print("  topic: ");
-        Serial.println(topic);
-        Serial.print("  paylod: ");
-        Serial.println(payload);
-        Serial.print("  qos: ");
-        Serial.println(properties.qos);
-        Serial.print("  dup: ");
-        Serial.println(properties.dup);
-        Serial.print("  retain: ");
-        Serial.println(properties.retain);
-        Serial.print("  len: ");
-        Serial.println(len);
-        Serial.print("  index: ");
-        Serial.println(index);
-        Serial.print("  total: ");
-        Serial.println(total);
+        Logger::Debug("on_MqttMessage()   saying received.");
+        Logger::Print("  topic: ", topic);
+        Logger::Print("  paylod: ", payload);
+        Logger::Print("  qos: ", properties.qos);
+        Logger::Print("  dup: ", properties.dup);
+        Logger::Print("  retain:", properties.retain);
+        Logger::Print("  len: ", len);
+        Logger::Print("  index: ", index);
+        Logger::Print("  total: ", total);
     }
 
-    Serial.println("[Info] on_MqttMessage() Dispatch message by topic,  Putting remote message to local consumer." );
+    Logger::Info("on_MqttMessage() Dispatch message by topic,  Putting remote message to local consumer." );
     gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len);
     
     // mono_remote_queue_bridge.onMessage((const char*)payload, len);
-    Serial.println("[Info] on_MqttMessage()  Appened to mqtt_consumer.");
+    Logger::Info("on_MqttMessage()  Appened to mqtt_consumer.");
 }
 
 

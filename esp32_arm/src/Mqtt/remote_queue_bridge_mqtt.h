@@ -15,6 +15,7 @@ class RemoteQueueBridge_mqtt: public MqttSubscriberBase{
         // void OnReceived(const char* payload, int length);
         void SpinOnce();
         // void onMessage(const char* payload, uint16_t payload_len) override;
+        void onGot_MqttMessage(const char* payload, uint16_t payload_len) override;
 
         
     private:

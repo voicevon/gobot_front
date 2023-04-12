@@ -2,7 +2,18 @@
 #include "Mqtt/mqtt_subscriber_manager.h"
 
 void CncAppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+    bool is_app_command = false;
+    if (is_app_command){
+        // save as app-command
+        return;
+    }else{
+
+    // check gcode_queue buffer size.
+
+    // copy to local gcode_queue.
 	this->gcode_queue.AppendGcodeCommand(payload);
+    // send feedback
+
 }
 
 

@@ -6,7 +6,8 @@ class RemoteHomePosition: public MqttSubscriberBase{
         float Get();
 
     private:
-        void __onMessage(const char* payload, uint16_t payload_len);
+        void onGot_MqttMessage(const char* payload, uint16_t payload_len) override;
+        // void __onMessage(const char* payload, uint16_t payload_len);
         float __remote_value = 0.0f;
         bool __got_remote_value = false;
 

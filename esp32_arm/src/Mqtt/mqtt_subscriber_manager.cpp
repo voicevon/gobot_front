@@ -2,12 +2,12 @@
 
 void gs_MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char* payload,  size_t payload_len){
     MqttSubscriberBase* subscriber;
-    Logger::Debug("gs_MqttSubscriberManager::on_mqtt_client_received_message");
+    Logger::Debug("gs_MqttSubscriberManager::on_mqtt_client_received_message()");
     for (int i=0; i<__subscriber_count; i++){
         // try to find who is subscribing this topic
         subscriber = __all_subscribers[i];
         if (subscriber->IsTopicEqualTo(topic)){
-            Logger::Print("Got Mqtt Subscriber", subscriber->GetMqttTopic());
+            Logger::Print("Got Mqtt Subscriber of topic:", subscriber->GetMqttTopic());
             subscriber->onGot_MqttMessage(payload, payload_len);
         }
     }

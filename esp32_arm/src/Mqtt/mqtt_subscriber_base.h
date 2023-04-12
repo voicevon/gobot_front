@@ -8,7 +8,7 @@ class MqttSubscriberBase{
         void SetMqttTopic(const char* mqtt_topic);
         bool IsTopicEqualTo(const char* mqtt_topic);
         const char* GetMqttTopic(){return _mqtt_topic;};
-        virtual void onGot_MqttMessage(const char* payload, uint16_t payload_len){};
+        virtual void onGot_MqttMessage(const char* payload, uint16_t payload_len);
 
     //     void LinkLocalMq_AsMqttMessageConsumer(MqttMessageQueue* mq){this->__mq = mq;};
     //     virtual void SpinOnce();
