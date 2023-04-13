@@ -5,10 +5,10 @@
 #include "MyLibs/basic/array/array_base.h"
 
 
-class PositionTrigger_Array: public ArrayBase{
+class gs_PositionTrigger_Array: public ArrayBase{
     public:
-        static PositionTrigger_Array& Instance(){
-            static PositionTrigger_Array __instance;
+        static gs_PositionTrigger_Array& Instance(){
+            static gs_PositionTrigger_Array __instance;
             return __instance;
         };
         void Init(PositionTrigger* triggers, int triggers_count){_Init(triggers, triggers_count, sizeof(PositionTrigger));};

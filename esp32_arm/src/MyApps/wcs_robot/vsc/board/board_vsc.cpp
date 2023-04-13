@@ -9,7 +9,7 @@ void Vsc_Board::Init(){
     __all_position_triggers[1].Init('1',PIN_HOMER_SENSOR_HALL_1, LOW);
     __all_position_triggers[2].Init('2',PIN_HOMER_SENSOR_HALL_2, LOW);
     __all_position_triggers[3].Init('3',PIN_HOMER_SENSOR_HALL_3, LOW);
-    PositionTrigger_Array::Instance().Init(__all_position_triggers, 4);
+    gs_PositionTrigger_Array::Instance().Init(__all_position_triggers, 4);
 }
 
 // void Vsc_Board::LinkEncoderSensor(Encoder* encoder){

@@ -27,10 +27,10 @@ void Silicon_Pump_Robot::Init(Silicon_Pump_Board* board){
 
 void Silicon_Pump_Robot::__InitStatic_Actuators(Silicon_Pump_Board* board){
     Logger::Info("Silicon_Pump_Robot::Init() Actuators.");
-    CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
-    CncActuator_List::Instance().AddActuator(&__actuator_alpha);
-    CncActuator_List::Instance().AddActuator(&__actuator_beta);
-    CncActuator_List::Instance().AddActuator(&__actuator_gamma);
+    gs_CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    gs_CncActuator_List::Instance().AddActuator(&__actuator_alpha);
+    gs_CncActuator_List::Instance().AddActuator(&__actuator_beta);
+    gs_CncActuator_List::Instance().AddActuator(&__actuator_gamma);
     __actuator_alpha.MyName = 'a';
     __actuator_beta.MyName = 'b';
     __actuator_beta.MyName = 'g';

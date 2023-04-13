@@ -25,9 +25,9 @@ void GobotMainRobot::Init(GobotMain_Board* board){
 
 void GobotMainRobot::__InitActuator(GobotMain_Board* board){
     Logger::Info("GobotMainRobot::__InitActuator()");
-    CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
-    CncActuator_List::Instance().AddActuator(&__actuator_alpha);
-    CncActuator_List::Instance().AddActuator(&__actuator_beta);
+    gs_CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    gs_CncActuator_List::Instance().AddActuator(&__actuator_alpha);
+    gs_CncActuator_List::Instance().AddActuator(&__actuator_beta);
 
     this->__actuator_alpha.MyName = 'a';
     // this->__actuator_alpha.LinkStepper(board->GetStepper(AXIS_ALPHA), 1.0f);

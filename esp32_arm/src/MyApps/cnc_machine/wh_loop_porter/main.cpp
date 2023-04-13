@@ -2,11 +2,9 @@
 #include "board/board.h"
 #include "loop_porter_app.h"
 #include "robot/loop_porter_robot.h"
-
-// #include "Mqtt/mqtt_message_queue.h"
 #include "all_applications.h"
-#ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 
+#ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 #include "app_config/twh_loop_porter.h"
 
 Twh_LoopPorter_Board board;
@@ -66,8 +64,8 @@ void setup(){
     // board.TestLeds(200);
     // board.GetNumberDisplayer()->Test(9999, 1);
 
-    // PositionTrigger_Array::Instance().Test_PositionTriggers(99);
-    // CncActuator_List::Instance().GetActuator(0).test
+    // gs_PositionTrigger_Array::Instance().Test_PositionTriggers(99);
+    // gs_CncActuator_List::Instance().GetActuator(0).test
     // board.Test_Stepper(999);
     
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
@@ -86,19 +84,17 @@ void setup(){
 
 
 void loop(){
-
+    // Logger::Warn("Arduino loop() point 1");
     app.SpinOnce();
-    // Logger::Warn("Aruino loop() point  2");
+    // Logger::Warn("Arduino loop() point    2");
 
     robot.SpinOnce();
-    // Logger::Warn("Arduino loop() point   3");
+    // Logger::Warn("Arduino loop() point    3");
 
     robot.MySpinOnce();
-    // Logger::Warn("Arduino loop() point 4");
+    // Logger::Warn("Arduino loop() point    4");
 
-    // mono_remote_queue_bridge_spin_once();
-    // Logger::Warn("Arduino loop() point  5 ");
-
+    delay(200);
 }
 
 #endif

@@ -27,7 +27,7 @@ void Twh_LoopPorter_Board::Init(){
     #define POSITION_TRIGGER_COUNT 1
 
     __all_position_triggers[0].Init('X',PIN_POSITION_TRIGGER_X, LOW);
-    PositionTrigger_Array::Instance().Init(__all_position_triggers, POSITION_TRIGGER_COUNT);
+    gs_PositionTrigger_Array::Instance().Init(__all_position_triggers, POSITION_TRIGGER_COUNT);
 
     __leds[0].Init(0, PIN_LED_1, LOW);
     __leds[1].Init(1, PIN_LED_2, LOW);

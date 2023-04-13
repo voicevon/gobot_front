@@ -1,9 +1,13 @@
 #pragma once
 
-#define MY_TWH_ID 221109
-#define MY_ROBOT_ROW_ID 0   //Range is 0,1,2,3
+#define MY_TWH_ID 221109    // use replace to edit.
+#define MY_ROBOT_ROW_ID 1   // Range is 0,1,2,3
 
  
+
+
+
+// DO NOT MODIFY BELOW !!! 
 #if MY_ROBOT_ROW_ID == 0
     #define MQTT_TOPIC_GCODE "twh/221109/r0/gcode"   
     #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r0/state"

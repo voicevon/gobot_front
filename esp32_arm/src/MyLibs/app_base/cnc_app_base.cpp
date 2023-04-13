@@ -40,24 +40,25 @@ void CncAppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 }
 
 void CncAppBase::Link_Mqtt_to_GcodeQueue(const char* mqtt_topic, GcodeQueue* gcode_queue){
-    Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()   mqtt_topic", mqtt_topic);
     // construct feedback mqtt_topic
-    char * p = (char*) (this->__mqtt_topic_feedback);
     int topic_len;
     for(topic_len=0; topic_len<REPRAP_GCODE_MAX_SIZE; topic_len++){
-        Logger::Print("mqtt_topic[topic_len]", mqtt_topic[topic_len]);
+        // Logger::Print("mqtt_topic[topic_len]", mqtt_topic[topic_len]);
         if (mqtt_topic[topic_len] == 0x00){
             break;
         }
-        // p[topic_len] = mqtt_topic[topic_len];
+        __mqtt_topic_feedback[topic_len] = mqtt_topic[topic_len];
     }
-    p[topic_len] = '/';
-    p[topic_len+1] = 'f';
-    p[topic_len+2] = 'b';
-    p[topic_len+3] = 0x00;   //ender
-    Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
+    __mqtt_topic_feedback[topic_len] = '/';
+    __mqtt_topic_feedback[topic_len+1] = 'f';
+    __mqtt_topic_feedback[topic_len+2] = 'b';
+    __mqtt_topic_feedback[topic_len+3] = 0x00;   //ender
+
     this->_gcode_queue = gcode_queue;  
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
+    
+    Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()   mqtt_topic", mqtt_topic);
+    Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
 }
 
 void CncAppBase::SpinOnce(){
@@ -65,7 +66,7 @@ void CncAppBase::SpinOnce(){
         Logger::Warn("CncAppBase::SpinOnce(),  The bug is eating.!!!!");
         Logger::Halt("BUG!");
     }
-    // Logger::Debug("CncAppBase::SpinOnce()");
+    Logger::Debug("CncAppBase::SpinOnce()");
     // Logger::Print("this->test_id", this->test_id);
     // this->_gcode_queue->SayHello("caller is :  CncAppBase::SpinOnce()");
     if (__have_done_feedback)
@@ -74,12 +75,15 @@ void CncAppBase::SpinOnce(){
         return;
 
     // send_mqtt_feedback 
+    Logger::Debug("CncAppBase::SpinOnce()   send_feedback, started");
+    _gcode_queue->PrintOut("caller is CncAppBase::SpinOnce()");
     const char * payload = _gcode_queue->GetDepositHeadElement()->bytes;
 
-    Logger::Print("send_feed_back, this->_mqtt_topic", this->_mqtt_topic);
-    Logger::Print("send_feed_back, payload", payload);
+    Logger::Print("send_feedback, this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
+    Logger::Print("send_feedback, payload", payload);
     g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, payload );
     __have_done_feedback = true;
+    Logger::Print("send_feedback, finished.", 99);
 
 }
 

@@ -37,8 +37,8 @@ void Twh_LoopPorter_Robot::Init(Twh_LoopPorter_Board* board, const char* mqtt_to
 
 void Twh_LoopPorter_Robot::__InitStatic_Actuators(Twh_LoopPorter_Board* board){
     Logger::Info("Twh_LoopPorter_Robot::Init() Actuators.");
-    CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
-    CncActuator_List::Instance().AddActuator(&__actuator_alpha);
+    gs_CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    gs_CncActuator_List::Instance().AddActuator(&__actuator_alpha);
     this->__actuator_alpha.MyName = 'a';
     __actuator_alpha.LinkStepper(board->GetStepper());
 

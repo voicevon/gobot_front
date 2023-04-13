@@ -23,6 +23,6 @@ class CncAppBase: public MqttSubscriberBase{
         int test_id = 1234;
         bool __have_done_feedback = true;
         // REPRAP_GCODE_MAX_SIZE
-        char* __mqtt_topic_feedback = "12345678901234567890123456789012345";   // length equal to  REPRAP_GCODE_MAX_SIZE
-        // char __mqtt_topic_feedback =  char[40];
+        // char* __mqtt_topic_feedback = "12345678901234567890123456789012345";   // length equal to  REPRAP_GCODE_MAX_SIZE
+        char __mqtt_topic_feedback[40];
 };

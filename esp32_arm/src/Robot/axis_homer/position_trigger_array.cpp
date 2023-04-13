@@ -1,6 +1,6 @@
 #include "position_trigger_array.h"
 
-void PositionTrigger_Array::Test_PositionTriggers(int loops){
+void gs_PositionTrigger_Array::Test_PositionTriggers(int loops){
     uint32_t flags = 0;
     uint32_t last_flags = 999;
     int count =0;
