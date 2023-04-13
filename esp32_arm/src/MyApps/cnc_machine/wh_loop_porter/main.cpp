@@ -7,42 +7,11 @@
 #include "all_applications.h"
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 
-
-#define MY_ROBOT_ROW_ID 0   //Range is 0,1,2,3
-
-
-#if MY_ROBOT_ROW_ID == 0
-    #define MQTT_TOPIC_GCODE "twh/221109/r0/gcode"   
-    #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r0/state"
-    #define MQTT_TOPIC_FOR_HOME_POSITION  "twh/221109/r0/home_position"
-#endif
-
-#if MY_ROBOT_ROW_ID == 1
-    #define MQTT_TOPIC_GCODE "twh/221109/r1/gcode"   
-    #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r1/state"
-    #define MQTT_TOPIC_FOR_HOME_POSITION  "twh/221109/r1/home_position"
-#endif
-
-#if MY_ROBOT_ROW_ID == 2
-    #define MQTT_TOPIC_GCODE "twh/221109/r2/gcode"   
-    #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r2/state"
-    #define MQTT_TOPIC_FOR_HOME_POSITION  "twh/221109/r2/home_position"
-#endif
-
-#if MY_ROBOT_ROW_ID == 3
-    #define MQTT_TOPIC_GCODE "twh/221109/r3/gcode"   
-    #define MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP "M408twh/221109/r3/state"
-    #define MQTT_TOPIC_FOR_HOME_POSITION  "twh/221109/r3/home_position"
-#endif
-
-
-// GcodeQueue gcode_queue;
-// MessageQueue mqtt_command_queue;
-// MqttMessageQueue mqtt_command_queue;
+#include "app_config/twh_loop_porter.h"
 
 Twh_LoopPorter_Board board;
-Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
 Twh_LoopPorter_Robot robot;
+Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
 
 
 void test_robot(){
@@ -106,10 +75,9 @@ void setup(){
 
     robot.Init(&board, MQTT_TOPIC_FOR_HOME_POSITION);
     // robot.LinkLocalGcodeQueue_AsConsumer(&app.gcode_queue);
-
-    app.Link_Mqtt_to_GcodeQueue(MQTT_TOPIC_GCODE, robot.GetGcodeQueue());
-
     GcodeQueue* gcode_queue = robot.GetGcodeQueue();
+    app.Link_Mqtt_to_GcodeQueue(MQTT_TOPIC_GCODE, gcode_queue);
+
     gcode_queue->AppendGcodeCommand("G28X");
     gcode_queue->AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
 
