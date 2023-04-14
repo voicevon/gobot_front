@@ -14,7 +14,7 @@ void Board2205Cnc::Init(Adafruit_MCP23X17* mcp_23018){
 
     this->__all_position_triggers[0].Init('Y',mcp_23018, MC23018_PIN_HOME_Y_2205,LOW);  // for home-Y
     this->__all_position_triggers[1].Init('Z',mcp_23018, MC23018_PIN_HOME_Z_2205, LOW);  // for home Z
-    PositionTrigger_Array::Instance().Init(__all_position_triggers, 2);
+    gs_PositionTrigger_Array::Instance().Init(__all_position_triggers, 2);
 }
 
 // CncActuatorBase* Board2205Cnc::GetActuator(EnumAxis axis_name){

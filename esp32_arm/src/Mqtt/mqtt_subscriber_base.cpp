@@ -11,7 +11,8 @@ bool MqttSubscriberBase::IsTopicEqualTo(const char* mqtt_topic){
             return true;
         }
     }
-};
+}
+// void MqttSubscriberBase::onGot_MqttMessage(const char *payload, uint16_t payload_len){};
 
 void MqttSubscriberBase::SetMqttTopic(const char* mqtt_topic){
     _mqtt_topic = mqtt_topic;

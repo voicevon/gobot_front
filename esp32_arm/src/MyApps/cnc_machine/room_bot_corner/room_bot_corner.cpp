@@ -81,7 +81,7 @@ void RoomBotCorner::MoveToTargetPosition(){
     }
 }
 
-void RoomBotCorner::RunG1(Gcode* gcode){
+void RoomBotCorner::RunG1(GcodeText* gcode){
     float pos = gcode->get_value(this->objDcMotor.AxisName);
     // this->singleAxis._actuator->SetTargetAbs(pos);
     if (this->is_absolute_position){
@@ -91,7 +91,7 @@ void RoomBotCorner::RunG1(Gcode* gcode){
     }
     MoveToTargetPosition();
 }
-void RoomBotCorner::RunG6(Gcode* gcode){
+void RoomBotCorner::RunG6(GcodeText* gcode){
     float pos = gcode->get_value(this->objDcMotor.AxisName);
     // this->singleAxis._actuator->SetTargetAbs(pos);
     if (this->is_absolute_position){

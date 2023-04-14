@@ -18,7 +18,7 @@ void Silicon_Pump_Board::Init(){
     // #define POSITION_TRIGGER_COUNT 1
 
     // __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_POSITION_TRIGGER_X, LOW);
-    // PositionTrigger_Array::Instance().Init(__all_position_triggers, POSITION_TRIGGER_COUNT);
+    // gs_PositionTrigger_Array::Instance().Init(__all_position_triggers, POSITION_TRIGGER_COUNT);
     __state_led.Init(0, PIN_STATE_LED, LOW);
     __InitSteppers();
 

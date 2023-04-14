@@ -1,17 +1,16 @@
 #pragma once
 
 #include "cnc_actuator_base.h"
-// #include "dc_motor/cnc_actuator_dc_motor.h"
 
-class CncActuator_List: public ListBase{
+class gs_CncActuator_List: public ListBase{
     public:
-        static CncActuator_List& Instance(){
-            static CncActuator_List __instance;
+        static gs_CncActuator_List& Instance(){
+            static gs_CncActuator_List __instance;
             return __instance;
             };
 
-        void Init(CncActuatorBase** all_items, int count){
-            _Init((ListItem**)all_items, count);
+        void Init(CncActuatorBase** all_elements, int count){
+            _Init("CncActuatorList", (ListItem**)all_elements, count);
             };
 
         void AddActuator(CncActuatorBase* actuator){
@@ -23,7 +22,7 @@ class CncActuator_List: public ListBase{
             for(int a=0; a<this->GetItemsCount(); a++){
                 actuator = this->GetActuator(a);
                 if (actuator->IsMoving()){
-                    // Logger::Print("CncActuator_List::HasMovingActuator()", actuator->MyName);
+                    // Logger::Print("gs_CncActuator_List::HasMovingActuator()", actuator->MyName);
                     return true;
                 }        
             }

@@ -1,13 +1,10 @@
 #pragma once
 
-// #include "CNC/arm_solution/core_yz/cnc_core_yz_base.h"
-// #include "cnc/solution.h"
 #include "CNC/gcode/gcode_queue.h"
-#include "CNC/gcode/gcode_producer.h"
-#include "Mqtt/mqtt_message_consumer.h"
+#include "MyLibs/app_base/cnc_app_base.h"
 
 
-class BoxCarrierApp: public GcodeProducer, public MqttMessageConsumer{
+class BoxCarrierApp: public CncAppBase{
     public:
         enum BoxMoverState{ START, 
                                 RESETTING, 
@@ -26,8 +23,9 @@ class BoxCarrierApp: public GcodeProducer, public MqttMessageConsumer{
         void LoadBox();
         void UnloadBox();
         void SpinOnce(); 
-        void onGot_MqttMessage(const char*) override;
+        // void onGot_MqttMessage(const char*) override;
         BoxCarrierApp::BoxMoverState GetState(){return this->State;};
+        void ExecuteCommand(const char* command) override{}; 
     
     private:
    

@@ -2,20 +2,20 @@
 #include "box_mover_app.h"
 
 BoxMoverApp::BoxMoverApp(){
-	this->_gcode_queue = new GcodeQueue();
+	// this->_gcode_queue = new GcodeQueue();
     Serial.print("\n[Info] BoxMoverApp::BoxMoverApp() is done..........");
 }
 
-void BoxMoverApp::onGot_MqttMessage(const char* command){
-	this->_gcode_queue->AppendGcodeCommand(command);
+// void BoxMoverApp::onGot_MqttMessae(const char* command){
+// 	this->_gcode_queue->AppendGcodeCommand(command);
 
-}
+// }
 
 void BoxMoverApp::SpinOnce(){
     if (!this->_gcode_queue->BufferIsFull()){
-        this->CheckMqttCommand();
+        // this->CheckMqttCommand();
     }
-    this->CheckMqttCommand();
+    // this->CheckMqttCommand();
     switch (this->State){
         case RESETTING:
             break;
@@ -51,14 +51,14 @@ void BoxMoverApp::ParkArms(bool do_homing){
 	}
 
 	if (do_homing){
-		String strG28 = "G28Z";
-		this->_gcode_queue->AppendGcodeCommand(strG28);
-		strG28 = "G28W";
-		this->_gcode_queue->AppendGcodeCommand(strG28);
+		// String strG28 = "G28Z";
+		this->_gcode_queue->AppendGcodeCommand("G28Z");
+		// strG28 = "G28W";
+		this->_gcode_queue->AppendGcodeCommand("G28W");
 	}
 	// this->_gcode_queue->SpinOnce();
-	String strG1 = "G1 Z5421 W5";
-	this->_gcode_queue->AppendGcodeCommand(strG1);
+	// String strG1 = "G1 Z5421 W5";
+	this->_gcode_queue->AppendGcodeCommand("G1 Z5421 W5");
 }
 
 void BoxMoverApp::LoadBox(){

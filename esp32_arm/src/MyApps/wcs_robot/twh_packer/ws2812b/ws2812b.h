@@ -17,7 +17,7 @@ class WS2812B: public MqttSubscriberBase{
         void TestLed(int test_loop_count,int test_method, int red, int green, int blue);
 
     private:
-        void onMessage(const char* payload, uint16_t payload_len) override;
+        void onGot_MqttMessage(const char* payload, uint16_t payload_len) override;
         Adafruit_NeoPixel* __neo_pixel;
         int __led_red_index = -1;
         int __led_green_index = -1;

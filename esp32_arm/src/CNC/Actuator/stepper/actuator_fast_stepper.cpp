@@ -1,5 +1,5 @@
 #include "actuator_fast_stepper.h"
-
+#include "MyLibs/basic/logger.h"
 
 void CncActuatorFastStepper::LinkStepper(FastAccelStepper* stepper){
     this->_stepper = stepper;
@@ -37,11 +37,30 @@ void CncActuatorFastStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     // _stepper->setSpeedInHz(move->Speed);
     // _stepper->setAcceleration(move->Acceleration);
     // _stepper->applySpeedAcceleration();
-    _stepper->enableOutputs();
-    _stepper->moveTo(_target_position, false);
+    // _stepper->enableOutputs();
+    Logger::Print("CncActuatorFastStepper::UpdateMovement()     _target_position", _target_position);
+    int8_t move_result = 0;
+    move_result =  _stepper->moveTo(static_cast<int32_t>(_target_position), false);
+    
+    Serial.println(move_result);
+    switch (move_result) {
+    case MOVE_OK:
+        break;
+    case MOVE_ERR_NO_DIRECTION_PIN:
+        Logger::Warn("CncActuatorFastStepper::UpdateMovement()  MOVE_ERR_NO_DIRECTION_PIN");
+        break;
+    case MOVE_ERR_SPEED_IS_UNDEFINED:
+        Logger::Warn("CncActuatorFastStepper::UpdateMovement()  MOVE_ERR_SPEED_IS_UNDEFINED");
+        break;
+    case MOVE_ERR_ACCELERATION_IS_UNDEFINED:
+        Logger::Warn("CncActuatorFastStepper::UpdateMovement()  MOVE_ERR_ACCELERATION_IS_UNDEFINED");
+        break;
+    default:
+        Logger::Warn("CncActuatorFastStepper::UpdateMovement()   UNKNOWN");
+        break;
+    }
     _is_moving = true; 
 }
-
 
 void CncActuatorFastStepper::ForceStop(){
     _stepper->forceStop();
@@ -56,6 +75,3 @@ float CncActuatorFastStepper::GetCurrentPosition(){
     return _stepper->getCurrentPosition();
 }
 
-// void CncActuatorFastStepper::TurnToSleep_WhenIdle(){
-//     // _stepper->setAutoEnable(true);
-// }

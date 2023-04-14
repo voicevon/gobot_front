@@ -67,14 +67,14 @@ void CncSolution_CoreAZ::IK_to_FK(IKPosition_abgdekl* from_ik, FKPosition_XYZRPW
 
 
 
-// void CncSolution_CoreAZ::RunG1(Gcode* gcode) {
-// bool CncSolution_CoreAZ::_CutGcodeLine_ToSegmentQueue(Gcode* gcode){
+// void CncSolution_CoreAZ::RunG1(GcodeText* gcode) {
+// bool CncSolution_CoreAZ::_CutGcodeLine_ToSegmentQueue(GcodeText* gcode){
 // 	Serial.print("\n[Debug] CncSolution_CoreAZ::RunG1() is entering");
 // 	Serial.print(gcode->get_command());
 // 	// this->_cnc_board->EnableMotor(AXIS_ALPHA, true);
 // 	// this->_cnc_board->EnableMotor(AXIS_BETA, true);
 // 	// MoveBlock* mb = this->__queue_move_block->GetHeadMoveblock();
-// 	MoveBlock* mb = gs_MoveBlock_Queue::Instance().GetRoom();
+// 	MoveBlock* mb = gs_MoveBlock_Queue::Instance().GetRoom_ForDeposit();
 // 	if (gcode->has_letter('F')){
 // 		float speed = gcode->get_value('F');
 // 		// this->_mover_base->SetEefSpeed(speed);

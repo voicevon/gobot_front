@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CNC/gcode/gcode_consumer.h"
 #include "CNC/coordinate/coordinate_base.h"
 #include "CNC/coordinate/cnc_axis.h"
+#include "CNC/gcode/gcode_queue.h"
 #include "CNC/planner/planner.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "CNC/mover/cnc_mover_base.h"
@@ -22,25 +22,26 @@ enum class RobotState{
 };
 
 
-class RobotBase: public GcodeConsumer{
+class RobotBase{
     public:
         RobotState State = RobotState::IDLE_OR_ASYNC;
         void SpinOnce();
+        GcodeQueue* GetGcodeQueue(){return &_gcode_queue;};
 
     protected:
-        void _running_G28();
         void _LinkMover(CncMover* mover){this->_mover=mover;};
         void _LinkArmSolution_for_planner(ArmSolutionBase* arm_solution){__planner.arm_solution=arm_solution;};
-        virtual void _InitStatic_Queues();
-        virtual void _Init_ArmSolution();
+        virtual void _InitStatic_Queues(){};    //TODO: remove defination
+        virtual void _Init_ArmSolution(){};   //TODO: remove defination
         
         G28_Runner* _g28_runner;
         CncMover* _mover;
+        GcodeQueue _gcode_queue; 
 
     private:
         Planner __planner;
         G4_Runner __g4_runner;
-        void __RunGcode(Gcode* gcode);
+        void __RunGcode(GcodeText* gcode);
 
         
 
@@ -52,6 +53,7 @@ class RobotBase: public GcodeConsumer{
         void OnFinishedGcode4(void(*callback())) {__output_message3 = callback;};
         void OnFinishedGcode5(void(*callback)()) {__output_message3 = callback;};
         */
+
 
 };
 

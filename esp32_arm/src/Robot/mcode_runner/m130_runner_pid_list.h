@@ -6,7 +6,7 @@
 // TODO:  Example, How to use M130
 class M130_Runner_UpdatePid: public McodeRunnerBase{
     public:
-        void SetupRunner(Gcode* mcode) override;
+        void SetupRunner(GcodeText* mcode) override;
         bool RunnerLoop() override;
 
     private:

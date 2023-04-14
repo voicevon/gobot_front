@@ -4,20 +4,21 @@
 void GobotHouseApp::Setup(){
 	this->__segments = 3;
 	this->__map.Init();
-	this->_gcode_queue = new GcodeQueue();
+	// this->gcode_queue = new GcodeQueue();
 
     Logger::Info("GobotHouseApp::Setup() is done..........");
 }
 
 void GobotHouseApp::SpinOnce(){
 	// this->_gcode_queue->SpinOnce();
-	if (!this->_gcode_queue->BufferIsFull())
+	if (!this->_gcode_queue->BufferIsFull()){
 		// My Input mq is from MQTT, My output mq is this->_gcode_queue.
-		this->CheckMqttCommand();
+		// this->CheckMqttCommand();
+	}
 }
-void GobotHouseApp::onGot_MqttMessage(const char* command){
-	this->_gcode_queue->AppendGcodeCommand(command);
-}
+// void GobotHouseApp::onGot_MqttMessage(const char* command){
+// 	this->_gcode_queue->AppendGcodeCommand(command);
+// }
 
 
 void GobotHouseApp::__Home(){
@@ -344,17 +345,17 @@ void GobotHouseApp::Test_Beta(int loop_count){
 	String g4 = "G4S3";   //Wait for beta is left hall sensor.
 	bool buffer_is_full = false;
 	for (int i=0; i<loop_count; i++){
-		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g28);
+		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g28.c_str());
 		if (buffer_is_full){
 			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
 			return;
 		}
-		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g1);
+		buffer_is_full = this->_gcode_queue->AppendGcodeCommand(g1.c_str());
 		if (buffer_is_full){
 			Serial.println("[Warn] GobotMain::Test_HomeBeta() Buffer is full, return");
 			return;
 		}
-		this->_gcode_queue->AppendGcodeCommand(g4);
+		this->_gcode_queue->AppendGcodeCommand(g4.c_str());
 	}
 }
 
@@ -373,6 +374,6 @@ void GobotHouseApp::__MakeGcode_and_Send(FKPosition_XYZRPW* from, FKPosition_XYZ
 		strGcode.concat("Y");
 		strGcode.concat(y);
 		strGcode.concat("F30");
-		this->_gcode_queue->AppendGcodeCommand(strGcode);
+		this->_gcode_queue->AppendGcodeCommand(strGcode.c_str());
 	}
 }

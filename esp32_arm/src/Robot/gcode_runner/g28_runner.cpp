@@ -9,8 +9,8 @@ bool G28_Runner::IsDone(){
     if (_has_position_trigger){
         static unsigned long last_micros;
         PositionTrigger* trigger;
-        for(int i=0; i<PositionTrigger_Array::Instance().GetItemsCount(); i++){
-            trigger = PositionTrigger_Array::Instance().GetPositionTrigger(i);
+        for(int i=0; i<gs_PositionTrigger_Array::Instance().GetItemsCount(); i++){
+            trigger = gs_PositionTrigger_Array::Instance().GetPositionTrigger(i);
             if (trigger->MyName == this->_axis_name){
                 if(trigger->IsFired()){
                     Logger::Info("G28_Runner::IsDone()  homer is triggered...");
@@ -30,10 +30,12 @@ bool G28_Runner::IsDone(){
     }
 }
 
-void G28_Runner::LinkGcode(Gcode* gcode){
+void G28_Runner::LinkGcode(GcodeText* gcode_text){
     Logger::Debug("G28_Runner::LinkGcode()");
+    
+    GcodeHelper gcode_helper(gcode_text->bytes);
+    GcodeHelper* gcode = &gcode_helper;
     Serial.println(gcode->get_command());
-
     char axis_name = '+';
     // home_actuator_directly = false;
     if (gcode->has_letter('X')) axis_name = 'X';
@@ -59,9 +61,9 @@ void G28_Runner::Start(){
     Logger::Debug("G28_Runner::Start()");
 
 	//Put a move_block into the queue.  Mover will let the actuator to turn...
-	MoveBlock* mb = gs_MoveBlock_Queue::Instance().GetRoom();
+	MoveBlock* mb = gs_MoveBlock_Queue::Instance().GetRoom_ForDeposit();
     // Logger::Print("G28_Runner::Start() point", 11);
-    mb->PrintOut("Test mb is none or not.  Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()");
+    // mb->PrintOut("Test mb is none or not.  Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()");
     this->_SetMoveBlock_ToHome(_axis_name, mb);
 	gs_MoveBlock_Queue::Instance().Deposit();
     // Logger::Print("G28_Runner::Start() point", 4);

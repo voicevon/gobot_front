@@ -76,7 +76,7 @@ void setup() {
     Serial.begin(115200);
     delay(1000);
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
-    setup_wifi_mqtt();
+    setup_wifi_mqtt_blocking_mode();
     while (!mqtt_is_connected){
         delay(1000);
         Serial.print(". ");

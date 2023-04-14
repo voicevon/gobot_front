@@ -13,7 +13,6 @@ class CncActuatorFastStepper: public CncActuatorBase{
         void UpdateMovement(MoveBlock_SingleActuator* line) override;
         void SetCurrentPositionAs(float new_position) override;
         float GetCurrentPosition() override;
-        // void TurnToSleep_WhenIdle() override;
 
     protected:
 

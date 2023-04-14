@@ -6,7 +6,7 @@ void VscRobot::Init(Vsc_Board* board){
     Logger::Debug("VscRobot::Init()");
     // this->_cnc_board = board;
 
-    gs_MoveBlock_Queue::Instance().all_elements = this->__all_move_blocks;
+    // gs_MoveBlock_Queue::Instance()._all_elements = this->__all_move_blocks;
     // this->__planner.__arm_solution = &arm_solution;
     // this->_arm_solution = &this->arm_solution;  
 
@@ -51,13 +51,13 @@ void VscRobot::MoveTo(int layer_index, int cell_index){
     float gear_angle = TWO_PI *  this->__position_in_pitch[layer_index] / 184;
     g1.concat(gear_angle);
     g1.concat("F0.1");
-    this->_gcode_queue->AppendGcodeCommand(g1);
+    this->_gcode_queue.AppendGcodeCommand(g1);
 }
 
 void VscRobot::__Init_actuators(Vsc_Board* board){
     Logger::Info("VscRobot::Init() Actuators.");
-    CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
-    CncActuator_List::Instance().AddActuator(&__actuator_alpha);
+    gs_CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    gs_CncActuator_List::Instance().AddActuator(&__actuator_alpha);
 
     this->__actuator_alpha.LinkPidController(&__speed_pid);
     this->__actuator_alpha.LinkHBridgeDriver(board->GetHBridgeDriver());

@@ -1,12 +1,13 @@
 #pragma once
 
-#include "MyApps/app_base.h"
+#include "MyLibs/app_base/cnc_app_base.h"
 
-class SpringMakerApp: public AppBase{
+class SpringMakerApp: public CncAppBase{
     public:
         SpringMakerApp();
         // void SpinOnce(); 
-        void onGot_MqttMessage(const char*) override;
+        void __onGot_MqttMessage(const char*);
+        void ExecuteCommand(const char* command) override{}; 
         
     private:
    

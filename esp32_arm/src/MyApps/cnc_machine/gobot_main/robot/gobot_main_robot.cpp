@@ -14,7 +14,7 @@ void GobotMainRobot::Init(GobotMain_Board* board){
     g28_runner.Init(&mover, &arm_solution,"");
     this->_LinkMover(&mover);
     
-    gs_MoveBlock_Queue::Instance().all_elements = this->__all_move_blocks;
+    // gs_MoveBlock_Queue::Instance()._all_elements = this->__all_move_blocks;
     // this->__planner.__arm_solution = &arm_solution;
     // this->_arm_solution = &this->arm_solution;  
 
@@ -25,9 +25,9 @@ void GobotMainRobot::Init(GobotMain_Board* board){
 
 void GobotMainRobot::__InitActuator(GobotMain_Board* board){
     Logger::Info("GobotMainRobot::__InitActuator()");
-    CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
-    CncActuator_List::Instance().AddActuator(&__actuator_alpha);
-    CncActuator_List::Instance().AddActuator(&__actuator_beta);
+    gs_CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    gs_CncActuator_List::Instance().AddActuator(&__actuator_alpha);
+    gs_CncActuator_List::Instance().AddActuator(&__actuator_beta);
 
     this->__actuator_alpha.MyName = 'a';
     // this->__actuator_alpha.LinkStepper(board->GetStepper(AXIS_ALPHA), 1.0f);
@@ -66,10 +66,10 @@ void GobotMainRobot::_Init_ArmSolution(){
 
 
 void GobotMainRobot::_InitStatic_Queues(){
-    gs_MoveBlock_Queue::Instance().all_elements = this->__all_move_blocks;
+    // gs_MoveBlock_Queue::Instance()._all_elements = this->__all_move_blocks;
     // Init LineSegment queue head
-    gs_LineSegment_Queue::Instance().all_elements =  this->__all_line_segments;
-    LineSegment* line = gs_LineSegment_Queue::Instance().GetRoom();
+    // gs_LineSegment_Queue::Instance()._all_elements =  this->__all_line_segments;
+    LineSegment* line = gs_LineSegment_Queue::Instance().GetRoom_ForDeposit();
     line->TargetPosition.X = 0;
     line->TargetPosition.Y = 0;
     line->TargetPosition.Z = 0;

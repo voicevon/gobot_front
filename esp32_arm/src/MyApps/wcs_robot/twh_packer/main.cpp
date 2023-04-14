@@ -22,12 +22,12 @@ void setup(){
     board.Init();
     // test_board();
 
-    setup_wifi_mqtt();
+    setup_wifi_mqtt_blocking_mode();
 
     board.GetButton_picked()->SetMqttPublishTopic("twh/221109/packer/button/pick");
     board.GetButton_Packed()->SetMqttPublishTopic("twh/221109/packer/button/pack");
     
-    MqttSubscriberManager::GetInstance().AddSubscriber("twh/221109/packer/led", board.GetWs2812B());
+    gs_MqttSubscriberManager::Instance().AddSubscriber("twh/221109/packer/led", board.GetWs2812B());
 
     Logger::Info ("Twh Packer setup() is done. ");
     board.BootTest();

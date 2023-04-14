@@ -27,7 +27,7 @@ void Twh_LoopPorter_Board::Init(){
     #define POSITION_TRIGGER_COUNT 1
 
     __all_position_triggers[0].Init('X',PIN_POSITION_TRIGGER_X, LOW);
-    PositionTrigger_Array::Instance().Init(__all_position_triggers, POSITION_TRIGGER_COUNT);
+    gs_PositionTrigger_Array::Instance().Init(__all_position_triggers, POSITION_TRIGGER_COUNT);
 
     __leds[0].Init(0, PIN_LED_1, LOW);
     __leds[1].Init(1, PIN_LED_2, LOW);
@@ -47,7 +47,10 @@ void Twh_LoopPorter_Board::Init(){
 }
 
 void Twh_LoopPorter_Board::__InitSteppers(){
-    __stepper_engine.init(1);
+    // #define CPU_CORE_ID 0
+    #define CPU_CORE_ID 1
+    __stepper_engine.init(CPU_CORE_ID);
+    // __stepper_engine.init();
 
     __stepper_alpha = __stepper_engine.stepperConnectToPin(PIN_ALPHA_STEP);
 
@@ -55,11 +58,13 @@ void Twh_LoopPorter_Board::__InitSteppers(){
         __stepper_alpha->setDirectionPin(PIN_ALPHA_DIR, false, 0);   
         __stepper_alpha->setEnablePin(PIN_ALPHA_ENABLE, true);        //Low is active enable.                    
         __stepper_alpha->setAutoEnable(true);
-        // __stepper_alpha->setSpeedInUs(6);  // the parameter is us/step !!!
+
+        // __stepper_alpha->setAcceleration(100);
+        // __stepper_alpha->setSpeedInUs(1000);  // the parameter is us/step !!!
+
         __stepper_alpha->setSpeedInHz( 7 * 1000 );
         __stepper_alpha->setAcceleration(3 * 1000);
-        // int res =  __stepper_alpha->moveTo(-1000, false);
-        // Logger::Print("moveTo() returns", res);
+
         Logger::Info("Twh_LoopPorter_Board::Init()");
         Logger::Print("stepper alpha is OK.", 0);
     }else{
@@ -92,20 +97,20 @@ void Twh_LoopPorter_Board::TestLeds(int loops){
 
 void Twh_LoopPorter_Board::Test_Stepper(int loops){
     FastAccelStepper* stepper= __stepper_alpha;
-    stepper->setAcceleration(3000);
-    stepper->setSpeedInHz(7*1000);
-    stepper->enableOutputs();
+    // stepper->setAcceleration(3000);
+    // stepper->setSpeedInHz(7*1000);
+    // stepper->enableOutputs();
     for (int i=0; i<loops; i++){
         Logger::Print("Test stepper loop======================================", i);
         if (stepper) {
             // 5 circles.
-            stepper->setSpeedInHz(14*1000);
-            stepper->moveTo(5500999, false);
+            // stepper->setSpeedInHz(14*1000);
+            stepper->moveTo(5500, false);
             while (stepper->isRunning()){
                 Logger::Print("Current position", stepper->getCurrentPosition());
                 delay(300);
             }
-        stepper->setSpeedInHz(7*1000);
+        // stepper->setSpeedInHz(7*1000);
             stepper->moveTo(0, false);
             while (stepper->isRunning()){
                 Logger::Print("Current position", stepper->getCurrentPosition());
@@ -113,7 +118,7 @@ void Twh_LoopPorter_Board::Test_Stepper(int loops){
             }
         }
     }
-    stepper->disableOutputs();
+    // stepper->disableOutputs();
         
 }
 

@@ -2,7 +2,7 @@
 #include "m999_runner.h"
 
 
-void M999_Runner::SetupRunner(Gcode* mcode){
+void M999_Runner::SetupRunner(GcodeText* mcode){
     
 }
 

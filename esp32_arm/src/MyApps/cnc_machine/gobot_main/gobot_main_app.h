@@ -1,12 +1,11 @@
 #pragma once
 
 #include "CNC/gcode/gcode_queue.h"
-#include "CNC/gcode/gcode_producer.h"
-#include "Mqtt/mqtt_message_consumer.h"
 #include "Robot/eef/eef_standard_code.h"
 #include "chessboard_map.h"
+#include "MyLibs/app_base/cnc_app_base.h"
 
-class GobotMain_App: public GcodeProducer, public MqttMessageConsumer{
+class GobotMain_App: public CncAppBase{
     public:
         GobotMain_App(){};
 
@@ -16,10 +15,11 @@ class GobotMain_App: public GcodeProducer, public MqttMessageConsumer{
         void Test_HomeAlpha(int loop_count);
         void Test_HomeBeta(int loop_count);
         void Test_PickPlace(int loop_count);
+        void ExecuteCommand(const char* command) override{}; 
     
 
     private:
-        void onGot_MqttMessage(const char* command) override;
+        // void onGot_MqttMessage(const char* command) override;
 
         void __Pickup(ChessboardCell* cell);
         void __Place(ChessboardCell* cell);

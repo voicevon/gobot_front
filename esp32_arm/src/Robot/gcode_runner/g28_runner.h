@@ -11,7 +11,7 @@ class G28_Runner: public SyncGcodeRunnerBase{
     
         void Start() override ;
         bool IsDone() override;
-        void LinkGcode(Gcode* gcode) override;
+        void LinkGcode(GcodeText* gcode) override;
         
     protected:
         virtual void _InitHomePosition(char axis_name, float setting_position);

@@ -1,6 +1,6 @@
 #include "all_applications.h"
 #ifdef I_AM_ROBOT_ASRS_AGV
-#include "garment_bot.h"
+#include "garment_bot_app.h"
 
 BotAsrsAgvCoreYZ::BotAsrsAgvCoreYZ(uint16_t id){
 	this->_ID = id;
@@ -16,27 +16,27 @@ void BotAsrsAgvCoreYZ::InitAllinOne(BoardAllInOne* board, StepControl* stepContr
 	Serial.print("\n[Info] BotAsrsAgvCoreYZ::Init() is done.\n");
 }
 
-void BotAsrsAgvCoreYZ::onGot_MqttMessage(const char* command){
-	// command examples
-	// "99,short_cut" == leave main road.
-	// "11,load"      == move to point 23, loading 
-	// "22,unloads"   == move to point 25, unloading
-	// "33,charge"
-	// "44,sleep"
-	// int16_t node_id;
-	String str_command;
+// void BotAsrsAgvCoreYZ::onGot_MqttMessage(const char* command){
+// 	// command examples
+// 	// "99,short_cut" == leave main road.
+// 	// "11,load"      == move to point 23, loading 
+// 	// "22,unloads"   == move to point 25, unloading
+// 	// "33,charge"
+// 	// "44,sleep"
+// 	// int16_t node_id;
+// 	String str_command;
 
-	if (str_command == "short_cut"){
+// 	if (str_command == "short_cut"){
 
-	} else if (str_command == "load"){
-		// this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
-	} else if (str_command == "unload"){
-	} else if (str_command == "charge"){
+// 	} else if (str_command == "load"){
+// 		// this->objBoxMoverAgent.PresetState(GarmentBoxMoverAgent::BoxMoverState::LOADING);
+// 	} else if (str_command == "unload"){
+// 	} else if (str_command == "charge"){
 
-	} else if (str_command == "sleep"){
+// 	} else if (str_command == "sleep"){
 
-	}
-}
+// 	}
+// }
 
 void BotAsrsAgvCoreYZ::onDetectedMark(uint16_t BranchNode_id){
    RoadBranchNode current_BranchNode;
@@ -72,7 +72,7 @@ void BotAsrsAgvCoreYZ::onDetectedMark(uint16_t BranchNode_id){
 }
 
 
-void BotAsrsAgvCoreYZ::SpinOnce(){
+void BotAsrsAgvCoreYZ::MySpinOnce(){
 	String gcode = "G1";
 	int align_error=0;
 	this->agv.SpinOnce();

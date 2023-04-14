@@ -1,25 +1,26 @@
 #include "robot_base.h"
 #include "MyLibs/MyFunctions.hpp"
 #include "HardwareSerial.h"
-#include "MyLibs/basic/queue/message_queue.h"
+// #include "MyLibs/basic/queue/message_queue.h"
+// #include "Mqtt/mqtt_message_queue.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 
 
 void RobotBase::SpinOnce(){
-	// Logger::Debug("RobotBase::SpinOnce()");
+	// Logger::Debug("RobotBase::SpinOnce()  point  1");
 	this->_mover->SpinOnce();
-	// Logger::Print("RobotBase::SpinOnce() point", 2);
+	// Logger::Print("RobotBase::SpinOnce() point  2", 2);
 	switch (this->State){
 		case RobotState::MCODE_IS_SYNCING:
-			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 41);
+			Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 41);
 			if (! gs_MoveBlock_Queue::Instance().BufferIsEmpty()){
 				return;
 			}
-			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 42);
+			Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 42);
 
-			if (CncActuator_List::Instance().HasMovingActuator())
+			if (gs_CncActuator_List::Instance().HasMovingActuator())
 				return;
-			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is starting. ", 43);
+			Logger::Print("RobotBase::SpinOnce()  G4_Runner is starting. ", 43);
 			this->State = RobotState::MCODE_IS_RUNNING;
 			break;
 
@@ -35,20 +36,20 @@ void RobotBase::SpinOnce(){
 			if (! gs_MoveBlock_Queue::Instance().BufferIsEmpty()){
 				return;
 			}
-			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 42);
+			Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 42);
 
-			if (CncActuator_List::Instance().HasMovingActuator())
+			if (gs_CncActuator_List::Instance().HasMovingActuator())
 				return;
-			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is starting. ", 43);
+			Logger::Print("RobotBase::SpinOnce()  G4_Runner is starting. ", 43);
 			this->__g4_runner.Start();
 			this->State = RobotState::G4_IS_RUNNING;
-			// Logger::Print("RobotBase::SpinOnce()  G4_Runner is started", 44);
+			Logger::Print("RobotBase::SpinOnce()  G4_Runner is started", 44);
 			break;
 			
 		case RobotState::G4_IS_RUNNING:
 			if(this->__g4_runner.IsDone()){
 				this->State =RobotState::IDLE_OR_ASYNC;
-				// Logger::Print("RobotBase::SpinOnce()  G4_Runner is over", 45);
+				Logger::Print("RobotBase::SpinOnce()  G4_Runner is over", 45);
 			}
 			break;
 
@@ -58,13 +59,13 @@ void RobotBase::SpinOnce(){
 			if (gs_MoveBlock_Queue::Instance().BufferIsEmpty()){
 				this->_g28_runner->Start();
 				this->State = RobotState::G28_IS_RUNNING;
-				Logger::Print("RobotBase::SpinOnce()  G28_Runner is started ", 22);
+				// Logger::Print("RobotBase::SpinOnce()  G28_Runner is started ", 22);
 			}
 			break;
 		case RobotState::G28_IS_RUNNING:
 			if(this->_g28_runner->IsDone()){
 				this->State = RobotState::IDLE_OR_ASYNC;
-				Logger::Print("RobotBase::SpinOnce() point G28_Runner is over ", 23);
+				// Logger::Print("RobotBase::SpinOnce() point G28_Runner is over  ", 23);
 			}
 			break;
 
@@ -74,70 +75,70 @@ void RobotBase::SpinOnce(){
 	}
 
 	if (this->State != RobotState::IDLE_OR_ASYNC ) {
-		// Logger::Print("RobotBase::SpinOnce() point", 91);
+		// Logger::Print("RobotBase::SpinOnce() point 91", 91);
 		return;
 	}
 
 	if (gs_MoveBlock_Queue::Instance().BufferIsFull()){
+		Logger::Print("RobotBase::SpinOnce() point       gs_MoveBlock_Queue::Instance().BufferIsFull", 92);
 		return;
 	}
 
 	if (gs_LineSegment_Queue::Instance().BufferIsFull()){
+		Logger::Print("RobotBase::SpinOnce() point       gs_LineSegment_Queue::Instance().BufferIsFull", 93);
 		return;
 	}
 
-	if (this->_gcode_queue->BufferIsEmpty()){
-		// Logger::Print("RobotBase::SpinOnce() point", 92);
+	if (this->_gcode_queue.BufferIsEmpty()){
+		// Logger::Print("RobotBase::SpinOnce() point         _gcode_queue.BufferIsEmpty", 94);
+		this->_gcode_queue.PrintOut("buffer is empty. ");
+		delay(5000);
 		return;
 	}
 	if (!this->__planner.IsPlanable()){
-		Logger::Print("RobotBase::SpinOnce() Planner can not go on,  queue might be full(or almost full).", 93);
+		Logger::Print("RobotBase::SpinOnce() Planner can not go on,  MoveBlock-queue might be full(or almost full).", 95);
 		return;
 	}
-	Logger::Print("RobotBase::SpinOnce() point  Going to run next gcode..", 3);
 
 	// Check gcode queue, if there is gcode to be run.
-	MessageQueue::SingleMessage* message = this->_gcode_queue->FetchTailMessage(false);
+	GcodeText* gcode_text = this->_gcode_queue.WithdrawTailElement();
 	// Logger::Print("RobotBase::SpinOnce() point", 4);
-	if (message == NULL){
-		Logger::Error("\n\n\n [Error] RobotBase::SpinOnce() tail_message is null. \n\n ");
+	if (gcode_text == NULL){
+		Logger::Error("\n\n\n [Error] RobotBase::SpinOnce() tail_message is null. . \n\n ");
 		return;
 	}
 
 	bool debug = true;
 	if (debug){
-		Logger::Debug("[Info] RobotBase::SpinOnce()  Going to run next gcode   ===> ");
-		Serial.print(message->payload);
+		Logger::Debug("RobotBase::SpinOnce()  have withdrawed from gcode_queue.  The gcode_text is  >>>");
+		Serial.print(gcode_text->bytes);
 		Serial.println("<<<");
+		// this->_gcode_queue.PrintOut("caller is RobotBase::SpinOnce() ");
 	}
 	
 	// type convert   from char* to std::string
-	char* p = &message->payload[0];
-	std::string str = std::string(p);
+	// char* p = (char*) (&message->payload[0]);
+	// std::string str = std::string(p);
 	// feed std::string to Gcode constructor.
-	Gcode gcode = Gcode(str);
+	GcodeHelper gcode_helper = GcodeHelper(gcode_text->bytes);
 	// Logger::Debug("RobotBase::SpinOnce() has got command string ");
 	// Serial.println(str.c_str());
 	// Logger::Print("RobotBase::SpinOnce() point", 6);
-	// Logger::Print("gcode_command", gcode.get_command());
-
-	if(gcode.has_g){
-		Logger::Print("RobotBase::SpinOnce()   point", 61);
-		this->__RunGcode(&gcode);
-		Logger::Print("RobotBase::SpinOnce()   point", 62);
-		this->_gcode_queue->FetchTailMessage(true);
-		Logger::Print("RobotBase::SpinOnce()   point", 69);
-	}else if(gcode.has_m){
-		McodeOS::Instance().SetupRunner(&gcode);
+	Logger::Print("gcode_command", gcode_helper.get_command());
+	if(gcode_helper.has_g){
+		// Logger::Print("RobotBase::SpinOnce()   point 61", 61);
+		this->__RunGcode(gcode_text);
+	}else if(gcode_helper.has_m){
+		McodeOS::Instance().SetupRunner(gcode_text);
 		this->State = RobotState::MCODE_IS_SYNCING;
-		this->_gcode_queue->FetchTailMessage(true);
 	}else{
 		Logger::Warn("RobotBase::SpinOnce() ---- Unknown command, Ignored.");
-		Serial.println(str.c_str());
-		this->_gcode_queue->FetchTailMessage(true);
+		Serial.println(gcode_text->bytes);
+
 
 	}
-	Logger::Print("RobotBase::SpinOnce() point", 99);
+	// this->_gcode_queue.WithdrawTailElement();   //bug!  repeated
+	// Logger::Print("RobotBase::SpinOnce() point 99", 99);
 
 }
 
@@ -145,20 +146,27 @@ void RobotBase::SpinOnce(){
 // Before invoking this function. Make sure:
 // 1. gs_MoveBlock_Queue is not full
 // 2. gs_LineSegment_Queue is not full
-void RobotBase::__RunGcode(Gcode* gcode){
+void RobotBase::__RunGcode(GcodeText* gcode_text){
+	GcodeHelper gcode_helper = GcodeHelper(gcode_text->bytes);
+	GcodeHelper* gcode = &gcode_helper;
 	static float __newest_line_speed = 100;
-	Logger::Info("RobotBase::__RunGcode()");
-	LineSegment* new_line = gs_LineSegment_Queue::Instance().GetRoom();
+	// Logger::Info("RobotBase::__RunGcode()");
+	
+	// LineSegment* new_line = gs_LineSegment_Queue::Instance().GetRoom_ForDeposit();
+	LineSegment __new_line__;
+	LineSegment* new_line = &__new_line__;
+
 	new_line->DeepCopyTo_TargetPosition_fk(__planner.arm_solution->GetCurrentPosition_Fk());
 	if (gcode->has_letter('F')) {
 		__newest_line_speed = gcode->get_value('F');
 	}
 	new_line->Speed_mm_per_second = __newest_line_speed;
 	// Logger::Print("RobotBase::__RunGcode      point", 11);
-	MoveBlock* new_move_block = gs_MoveBlock_Queue::Instance().GetRoom();
+	MoveBlock* new_move_block = gs_MoveBlock_Queue::Instance().GetRoom_ForDeposit();
 	// Logger::Print("RobotBase::__RunGcode      point", 12);
 	//TODO:    This is wrong for the very first moveblock after MCU is reset.
-	gs_MoveBlock_Queue::Instance().GetHead_MoveBlock()->DeepCopyTo(new_move_block);
+	// gs_MoveBlock_Queue::Instance().GetDepositHeadElement()->DeepCopyTo(new_move_block);
+
 	// Logger::Print("RobotBase::__RunGcode      point", 19);
 	FKPosition_XYZRPW new_fk_position;
 	IKPosition_abgdekl new_ik_position;
@@ -168,12 +176,15 @@ void RobotBase::__RunGcode(Gcode* gcode){
 	// Logger::Print("RobotBase::__RunGcode() point", 51);
 	switch (gcode->g){
 		case 28:
-			this->_g28_runner->LinkGcode(gcode);
+			// Logger::Print("RobotBase::__RunGcode() G28  point", 281);
+			this->_g28_runner->LinkGcode(gcode_text);
+			// Logger::Print("RobotBase::__RunGcode() G28  point", 282);
 			this->State = RobotState::G28_IS_SYNCING;
+			// Logger::Print("RobotBase::__RunGcode() G28  point", 283);
 			break;
 		case 4:
 			// G4 Dwell, Pause for a period of time.
-			this->__g4_runner.LinkGcode(gcode);
+			this->__g4_runner.LinkGcode(gcode_text);
 			this->State = RobotState::G4_IS_SYNCING;
 			break;
 						
@@ -186,15 +197,16 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('R')) new_line->TargetPosition.Roll = gcode->get_value('R');
 			if (gcode->has_letter('P')) new_line->TargetPosition.Pitch = gcode->get_value('P');
 			if (gcode->has_letter('W')) new_line->TargetPosition.Yaw = gcode->get_value('W');
-			// Logger::Print("RobotBase::__RunGcode      point", 51);
+			// Logger::Print("RobotBase::__RunGcode() G1      point", 61);
 			new_line->IsMiddleKinematicPosition = false;
 			// new_line->PrintOUt("caller is RobotBase::__RunGcode() G1");
 			// Logger::Print("RobotBase::__RunGcode      point", 52);
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
-			// Logger::Print("RobotBase::__RunGcode      point", 53);
-			gs_LineSegment_Queue::Instance().PrintOut("caller is __RunGcode() ");
-			// gs_LineSegment_Queue::Instance().Deposit();   //TODO:  IS this necessary
-			// Logger::Print("RobotBase::__RunGcode      point", 59);
+			// gs_LineSegment_Queue::Instance().Deposit();   //TODO:  IS this necessary ? For now, it is NOT!
+			// gs_LineSegment_Queue::Instance().PrintOut("caller is RobotBase::__RunGcode()  G1 ");
+			// gs_MoveBlock_Queue::Instance().PrintOut("caller is RobotBase::__RunGcode()  G1");
+			// gs_CncActuator_List::Instance().PrintOUt("caller is RobotBase::__RunGcode()  G1");
+			
 			break;
 		case 5:
 			// G5 Move. will follow a Middle kinematic poisition.
@@ -209,7 +221,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			this->__planner.arm_solution->MK_to_FK(&middle_kinematic_line.TargetPosition , &new_line->TargetPosition);
 			// new_line->PrintOUt("caller is RobotBase::__RunGcode() G5");
 			__planner.ConvertLineSegment_AppendMoveBlocks(new_line);
-			gs_LineSegment_Queue::Instance().Deposit();
+			// gs_LineSegment_Queue::Instance().Deposit();
 			break;
 
 		case 6:
@@ -221,7 +233,7 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			if (gcode->has_letter('e')) new_move_block->MoveBlocks[AXIS_EPSILON].TargetPosition = gcode->get_value('e');
 			if (gcode->has_letter('k')) new_move_block->MoveBlocks[AXIS_KAPPPA].TargetPosition = gcode->get_value('k');
 			if (gcode->has_letter('l')) new_move_block->MoveBlocks[AXIS_LAMBDA].TargetPosition = gcode->get_value('l');
-			for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
+			for(int a=0; a<gs_CncActuator_List::Instance().GetItemsCount(); a++){
 				new_move_block->MoveBlocks[a].Speed = __newest_line_speed;
 				new_move_block->MoveBlocks[a].Acceleration = 100;
 			}
@@ -232,8 +244,9 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			__planner.arm_solution->IK_to_FK(&new_ik_position, &new_fk_position);
 
 			new_line->DeepCopyTo_TargetPosition_fk(&new_fk_position);  //??
-			gs_LineSegment_Queue::Instance().Deposit();             //??
+			// gs_LineSegment_Queue::Instance().Deposit();             //??
 			break;
+
 		case 7:
 			// G7 Move. will follow a Middle kinematic poisition.
 			// The position will be put into Queue_moveBlock after convertion of MK->IK.
@@ -248,14 +261,14 @@ void RobotBase::__RunGcode(Gcode* gcode){
 			gs_MoveBlock_Queue::Instance().Deposit();
 			// Update Current FK position 
 			new_move_block->DeepCopyToIkPosition(&new_ik_position);
-			for(int a=0; a<CncActuator_List::Instance().GetItemsCount(); a++){
+			for(int a=0; a<gs_CncActuator_List::Instance().GetItemsCount(); a++){
 				new_move_block->MoveBlocks[a].TargetPosition = new_ik_position.Positions[a];
 				new_move_block->MoveBlocks[a].Speed = __newest_line_speed;
 				new_move_block->MoveBlocks[a].Acceleration = 100;
 			}
 			__planner.arm_solution->IK_to_FK(&new_ik_position, &new_fk_position);
 			new_line->DeepCopyTo_TargetPosition_fk(&new_fk_position);
-			gs_LineSegment_Queue::Instance().Deposit();
+			// gs_LineSegment_Queue::Instance().Deposit();
 			break;
 
 		case 90:

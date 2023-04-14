@@ -12,13 +12,12 @@ class gs_LineSegment_Queue: public QueueBase<LineSegment>{
             static gs_LineSegment_Queue instance;
             return instance;
         };
-        LineSegment* Withdraw() {return this->_Withdraw();};
-        LineSegment* GetRoom() {return this->_GetRoom();};
-        LineSegment* GetHeadLineSegment() {return this->_GetHeadObject();};
+
         void DeepCopyCurrentFkPositionTo(FKPosition_XYZRPW* position);
 
     private:
-        gs_LineSegment_Queue(){this->_Init("Line_Segments", LINE_SEGMENTS_QUEUE_SIZE, sizeof(LineSegment));};
+        LineSegment __all_line_segments[LINE_SEGMENTS_QUEUE_SIZE];
+        gs_LineSegment_Queue(){this->_Init("Line_Segments", LINE_SEGMENTS_QUEUE_SIZE, __all_line_segments);};
         
 
 };

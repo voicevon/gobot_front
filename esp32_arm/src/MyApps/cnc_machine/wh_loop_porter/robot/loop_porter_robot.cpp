@@ -37,8 +37,8 @@ void Twh_LoopPorter_Robot::Init(Twh_LoopPorter_Board* board, const char* mqtt_to
 
 void Twh_LoopPorter_Robot::__InitStatic_Actuators(Twh_LoopPorter_Board* board){
     Logger::Info("Twh_LoopPorter_Robot::Init() Actuators.");
-    CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
-    CncActuator_List::Instance().AddActuator(&__actuator_alpha);
+    gs_CncActuator_List::Instance().Init(__all_actuators, CNC_ACTUATORS_COUNT);
+    gs_CncActuator_List::Instance().AddActuator(&__actuator_alpha);
     this->__actuator_alpha.MyName = 'a';
     __actuator_alpha.LinkStepper(board->GetStepper());
 
@@ -60,17 +60,17 @@ void Twh_LoopPorter_Robot::_Init_ArmSolution(){
 
 
 void Twh_LoopPorter_Robot::_InitStatic_Queues(){
-    gs_MoveBlock_Queue::Instance().all_elements = this->__all_move_blocks;
+    // gs_MoveBlock_Queue::Instance()._all_elements = this->__all_move_blocks;
     // Init LineSegment queue head
-    gs_LineSegment_Queue::Instance().all_elements = this->__all_line_segments;
-    LineSegment* line = gs_LineSegment_Queue::Instance().GetRoom();
+    // gs_LineSegment_Queue::Instance()._all_elements = this->__all_line_segments;
+    LineSegment* line = gs_LineSegment_Queue::Instance().GetRoom_ForDeposit();
     line->TargetPosition.X = 0;
     line->TargetPosition.Y = 0;
     line->TargetPosition.Z = 0;
     line->TargetPosition.Roll = 0;
     line->TargetPosition.Pitch = 0;
     line->TargetPosition.Yaw = 0;
-    line->PrintOUt("caller: Twh_LoopPorter_Robot::_InitStatic_Queues()");
+    // line->PrintOUt("caller: Twh_LoopPorter_Robot::_InitStatic_Queues()");
     gs_LineSegment_Queue::Instance().Deposit();
     Logger::Print("Twh_LoopPorter_Robot::Init", 83);
 }

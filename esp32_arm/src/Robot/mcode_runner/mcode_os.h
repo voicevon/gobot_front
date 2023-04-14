@@ -11,7 +11,7 @@
 
 class McodeOS{
     public:
-        void SetupRunner(Gcode* mcode);
+        void SetupRunner(GcodeText* mcode);
         // bool StartToRun();  
         bool RunnerLoop();        
         static McodeOS& Instance(){

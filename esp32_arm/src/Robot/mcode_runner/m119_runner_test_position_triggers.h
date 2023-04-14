@@ -3,6 +3,6 @@
 
 class M119_Runner_TestPositionTriggers: public McodeRunnerBase{
     public:
-        void SetupRunner(Gcode* mcode) override;
+        void SetupRunner(GcodeText* mcode) override;
         bool RunnerLoop() override;
 };

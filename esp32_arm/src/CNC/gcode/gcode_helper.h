@@ -6,8 +6,8 @@
 */
 
 
-#ifndef _GCODE_H_
-#define _GCODE_H_
+#ifndef _GcodeHelper_H_
+#define _GcodeHelper_H_
 
 #include <string>
 #include <map>
@@ -15,14 +15,15 @@
 #include "GcodeConst.h"
 
 
-// Object to represent a Gcode command
-class Gcode {
+// Object to represent a GcodeHelper command
+class GcodeHelper {
     public:
-        Gcode(const std::string&, bool strip=true);
-        // Gcode(const String command, bool strip=true);
-        Gcode(const Gcode& to_copy);
-        Gcode& operator= (const Gcode& to_copy);
-        ~Gcode();
+        GcodeHelper(){};
+        GcodeHelper(const std::string&, bool strip=true);
+        // GcodeHelper(const String command, bool strip=true);
+        GcodeHelper(const GcodeHelper& to_copy);
+        GcodeHelper& operator= (const GcodeHelper& to_copy);
+        ~GcodeHelper();
 
         const char* get_command() const { return command; }
         bool has_letter ( char letter ) const;
@@ -49,10 +50,10 @@ class Gcode {
 
         // StreamOutput* stream;
         std::string txt_after_ok;
+        char *command;
 
     private:
         void prepare_cached_values(bool strip=true);
-        char *command;
 
         //functions from mBED system.
         // char * xxx;

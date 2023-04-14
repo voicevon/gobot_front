@@ -1,10 +1,11 @@
 
 #include "m408_runner_mqtt_publish.h"
-// #include "Robot/axis_homer/position_trigger_array.h"
 #include "Mqtt/wifi_mqtt_client.h"
 
 
-void M408_Runner_MqttPublish::SetupRunner(Gcode* mcode){
+void M408_Runner_MqttPublish::SetupRunner(GcodeText* mcode_text){
+    GcodeHelper gcode_helper = GcodeHelper(mcode_text->bytes);
+    GcodeHelper* mcode = &gcode_helper;
     Logger::Info("M408_Runner_ReportJson::SetupRunner()");
     strcpy(__topic_string, mcode->get_command());
     Logger::Print("topic", __topic_string);

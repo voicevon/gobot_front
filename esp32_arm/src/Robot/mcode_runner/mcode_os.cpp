@@ -1,13 +1,15 @@
 #include "mcode_os.h"
 
-void McodeOS::SetupRunner(Gcode* mcode){
+void McodeOS::SetupRunner(GcodeText* mcode_text){
+    GcodeHelper gcode_helper = GcodeHelper(mcode_text->bytes);
+    GcodeHelper* mcode = &gcode_helper;
     __current_runner = McodeOS::Instance().GetRunner(mcode->m);
     if (__current_runner==nullptr){
         Logger::Error("McodeOS::SetupRunner()");
         Logger::Print("mcode->m", mcode->m);
         Logger::Halt("More ability, More responsbility!");
     }
-    __current_runner->SetupRunner(mcode);
+    __current_runner->SetupRunner(mcode_text);
     // Logger::Info(" McodeOS::SetupRunner() ");
     // Logger::Print("Mcode ", mcode->m);
 }

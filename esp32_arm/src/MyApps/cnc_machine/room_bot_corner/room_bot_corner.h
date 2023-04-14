@@ -25,12 +25,15 @@ class RoomBotCorner: public RobotBase{
     public:
         RoomBotCorner(char axis_name);
         void RunG28(char axis) override;
-        void RunG1(Gcode* gcode) override;
-        void RunG6(Gcode* gcode) override;
+        void RunG1(GcodeText* gcode) override;
+        void RunG6(GcodeText* gcode) override;
         void Init(BoardbaseCnc* board) override {assert("Must pass me an IrEncoderHelper*");};
         // void Init(IrEncoderHelper* sensorHelper);
         void test_hBridge();
         void test_home();
+        void _InitStatic_Queues() override{};
+        void _Init_ArmSolution() override{};
+
         // bool GetCurrentPosition(FKPosition_XYZRPW* position_fk) override {assert("Do not invoke me()"); return false;};
         // float GetDistanceToTarget_FK() override{assert("Do not invoke me()"); return 0.0;};
         // float GetDistanceToTarget_IK() override{assert("Do not invoke me()"); return 0.0;};
@@ -54,7 +57,6 @@ class RoomBotCorner: public RobotBase{
         // FkPosX currentPosX;
         FkPosition_X nextPosX;
         // void _running_G1() override{};
-        void _running_G28() override{};
         // void RunM123(uint8_t eef_channel, EefAction eef_action) override {};
         void RunM84() override{};
         void __EnableMotor(char actuator, bool enable_it) override {};   

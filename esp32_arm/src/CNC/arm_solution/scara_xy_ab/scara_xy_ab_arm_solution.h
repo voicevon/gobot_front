@@ -18,8 +18,8 @@ class Scara_ArmSolution: public ArmSolutionBase{
         //                           // Instantiated on first use.
         //     return instance;
         // }
-        // void RunG1(Gcode* gcode) override;
-        // bool _CutGcodeLine_ToSegmentQueue(Gcode* gcode) override;
+        // void RunG1(GcodeText* gcode) override;
+        // bool _CutGcodeLine_ToSegmentQueue(GcodeText* gcode) override;
         // void __ConvertSegment_ToMoveBlockQueue(LineSegment* line) override;
 
 
@@ -32,7 +32,7 @@ class Scara_ArmSolution: public ArmSolutionBase{
         virtual void FK_to_IK(FKPosition_XYZRPW* from_fk,IKPosition_abgdekl* to_ik) override;
         virtual void IK_to_FK(IKPosition_abgdekl* ik, FKPosition_XYZRPW*  to_fk) override;
 
-        // void RunG6(Gcode* gcode) override {};   //Block mode
+        // void RunG6(GcodeText* gcode) override {};   //Block mode
 
         // void _SetCurrentPositionAsHome(EnumAxis_ForwardKinematic homing_axis) override;
 

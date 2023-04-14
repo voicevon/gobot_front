@@ -13,12 +13,13 @@ class gs_MoveBlock_Queue: public QueueBase<MoveBlock>{
             static gs_MoveBlock_Queue instance;
             return instance;
         };
-        MoveBlock* Withdraw();
-        MoveBlock* GetRoom();
-        MoveBlock* GetHead_MoveBlock();
+        // MoveBlock* Withdraw();
+        // MoveBlock* GetRoom_ForDeposit();
+        // MoveBlock* GetHead_MoveBlock();
         void DeepCopyHead_ToPosition(IKPosition_abgdekl* ik_position);
 
     private:
         gs_MoveBlock_Queue();
+        MoveBlock __all_move_blocks[MOVE_BLOCKS_QUEUE_SIZE];
 
 };

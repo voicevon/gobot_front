@@ -9,13 +9,13 @@ Silicon_Pump_App::Silicon_Pump_App(){
 
 
 
-void Silicon_Pump_App::onGot_MqttMessage(const char* command){
-    this->_gcode_queue->AppendGcodeCommand("G92X0Y0");
-    this->_gcode_queue->AppendGcodeCommand(command);   // Only accept "G1X123Y345"
+// void Silicon_Pump_App::onGot_MqttMessage(const char* command){
+//     this->_gcode_queue->AppendGcodeCommand("G92X0Y0");
+//     this->_gcode_queue->AppendGcodeCommand(command);   // Only accept "G1X123Y345"
 
 
         
-}
+// }
 
 
 

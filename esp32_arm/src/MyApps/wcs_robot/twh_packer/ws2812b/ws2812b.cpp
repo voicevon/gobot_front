@@ -10,7 +10,7 @@ void WS2812B::Link_Adrafruit_NeoPixel(Adafruit_NeoPixel* neo_pixel){
     __neo_pixel->clear();
 }
 
-void WS2812B::onMessage(const char* payload, uint16_t payload_len){
+void WS2812B::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     // Logger::Debug("WS2812B::onMessage()");
     // Logger::Print("payload", payload);
     int led_index = atoi(payload);

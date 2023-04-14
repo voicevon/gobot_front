@@ -14,7 +14,7 @@ void Board2204Cnc::Init(Adafruit_MCP23X17* mcp_23018){
     // this->stepper_beta.Init_mcp23018_gpio(mcp_23018, MC23018_PIN_BETA_DIR_2205);
     this->__all_position_triggers[0].Init('A', mcp_23018, MC23018_PIN_HOME_Y_2205,LOW);  // for axisA
     this->__all_position_triggers[1].Init('Z',mcp_23018, MC23018_PIN_HOME_Z_2205,LOW); // for axisZ
-    PositionTrigger_Array::Instance().Init(__all_position_triggers,2);
+    gs_PositionTrigger_Array::Instance().Init(__all_position_triggers,2);
 }
 
 // Stepper* Board2204Cnc::GetStepper(char axis_name){
