@@ -3,20 +3,20 @@
 void M130_Runner_UpdatePid::SetupRunner(GcodeText* mcode_text){
     // uint8_t n_value = 33;   //TODO: Make sure this is no harmful!
     // float f_value = 0.0f;
-    GcodeHelper gcode_helper = GcodeHelper(mcode_text->bytes);
-    GcodeHelper* mcode = &gcode_helper;
+    GcodeHelper mcode = GcodeHelper(mcode_text->GetChars());
+    // GcodeHelper* mcode = &gcode_helper;
     Logger::Info("M130_Runner::Run()");
-    Logger::Print("gcode", mcode->get_command());
-    index =  mcode->get_value('N');
+    Logger::Print("gcode", mcode.get_command());
+    index =  mcode.get_value('N');
     // PidControllers_Listable* pid = PidControllers_List::Instance().GetPidController(index);
     
-    p_value = mcode->get_value('P');
+    p_value = mcode.get_value('P');
     // pid->P = f_value;
 
-    i_value = mcode->get_value('I');
+    i_value = mcode.get_value('I');
     // pid->I = f_value;
 
-    d_value = mcode->get_value('D');
+    d_value = mcode.get_value('D');
     // pid->D = f_value;
 }
 

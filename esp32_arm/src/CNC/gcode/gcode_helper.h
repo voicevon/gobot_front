@@ -16,6 +16,7 @@
 
 
 // Object to represent a GcodeHelper command
+//TODO:  be singleton ??
 class GcodeHelper {
     public:
         GcodeHelper(){};

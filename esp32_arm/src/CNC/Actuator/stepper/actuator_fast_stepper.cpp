@@ -38,11 +38,11 @@ void CncActuatorFastStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     // _stepper->setAcceleration(move->Acceleration);
     // _stepper->applySpeedAcceleration();
     // _stepper->enableOutputs();
-    Logger::Print("CncActuatorFastStepper::UpdateMovement()     _target_position", _target_position);
+    // Logger::Print("CncActuatorFastStepper::UpdateMovement()     _target_position", _target_position);
     int8_t move_result = 0;
     move_result =  _stepper->moveTo(static_cast<int32_t>(_target_position), false);
     
-    Serial.println(move_result);
+    // Serial.println(move_result);
     switch (move_result) {
     case MOVE_OK:
         break;

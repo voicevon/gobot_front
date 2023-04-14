@@ -15,8 +15,9 @@ GcodeQueue::GcodeQueue(){
 
 int GcodeQueue::AppendGcodeCommand(String command){
     // return this->AppendMessage(command);
-    GcodeText* gcode =  this->GetRoom_ForDeposit();
+    GcodeText* gcode_text =  this->GetRoom_ForDeposit();
     // gcode->command = (char*) (command.c_str());
+    gcode_text->CopyFrom(command.c_str());
     this->Deposit();
     return 1;
 };
@@ -36,7 +37,7 @@ int GcodeQueue::AppendGcodeCommand(const char* command){
     GcodeText* gcode_text = this->GetRoom_ForDeposit();
     // Logger::Print("GcodeQueue::AppendGcodeCommand(const char* command) point  52", 52);
     // Logger::Print("command", gcode->command);
-    int res = gcode_text->ReConstruct(command);
+    int res = gcode_text->CopyFrom(command);
     if (res == 1){
         this->Deposit();
     }
@@ -61,9 +62,11 @@ int GcodeQueue::AppendGcodeCommand(const char* payload, int length){
         return -2;
     }
     GcodeText* gcode_text = this->GetRoom_ForDeposit();
-    gcode_text->ReConstruct(payload, length);
-
-    this->Deposit();
+    int result = gcode_text->CopyFrom(payload, length);
+    if (result == GCODE_TEXT_OK){
+        this->Deposit();
+        return 1;
+    }
 };
 
 

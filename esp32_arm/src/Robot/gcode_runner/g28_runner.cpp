@@ -33,23 +33,23 @@ bool G28_Runner::IsDone(){
 void G28_Runner::LinkGcode(GcodeText* gcode_text){
     Logger::Debug("G28_Runner::LinkGcode()");
     
-    GcodeHelper gcode_helper(gcode_text->bytes);
-    GcodeHelper* gcode = &gcode_helper;
-    Serial.println(gcode->get_command());
+    GcodeHelper gcode(gcode_text->GetChars());
+    // GcodeHelper* gcode = &gcode_helper;
+    Serial.println(gcode.get_command());
     char axis_name = '+';
     // home_actuator_directly = false;
-    if (gcode->has_letter('X')) axis_name = 'X';
-    if (gcode->has_letter('Y')) axis_name = 'Y';
-    if (gcode->has_letter('Z')) axis_name = 'Z';
-    if (gcode->has_letter('R')) axis_name = 'R';
-    if (gcode->has_letter('P')) axis_name = 'P';
-    if (gcode->has_letter('W')) axis_name = 'W';
-    if (gcode->has_letter('a')) axis_name = 'a'; 
-    if (gcode->has_letter('b')) axis_name = 'b'; 
-    if (gcode->has_letter('g')) axis_name = 'g'; 
-    if (gcode->has_letter('d')) axis_name = 'd'; 
-    if (gcode->has_letter('k')) axis_name = 'k'; 
-    if (gcode->has_letter('l')) axis_name = 'l'; 
+    if (gcode.has_letter('X')) axis_name = 'X';
+    if (gcode.has_letter('Y')) axis_name = 'Y';
+    if (gcode.has_letter('Z')) axis_name = 'Z';
+    if (gcode.has_letter('R')) axis_name = 'R';
+    if (gcode.has_letter('P')) axis_name = 'P';
+    if (gcode.has_letter('W')) axis_name = 'W';
+    if (gcode.has_letter('a')) axis_name = 'a'; 
+    if (gcode.has_letter('b')) axis_name = 'b'; 
+    if (gcode.has_letter('g')) axis_name = 'g'; 
+    if (gcode.has_letter('d')) axis_name = 'd'; 
+    if (gcode.has_letter('k')) axis_name = 'k'; 
+    if (gcode.has_letter('l')) axis_name = 'l'; 
     Serial.print(char(axis_name));
     Logger::Print("\t\thome_axis", char(axis_name));
     this->_axis_name = axis_name;

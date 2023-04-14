@@ -77,14 +77,13 @@ void CncAppBase::SpinOnce(){
     // send_mqtt_feedback 
     Logger::Debug("CncAppBase::SpinOnce()   send_feedback, started");
     _gcode_queue->PrintOut("caller is CncAppBase::SpinOnce()");
-    const char * payload = _gcode_queue->GetDepositHeadElement()->bytes;
+    GcodeText* gcode_text = _gcode_queue->GetDepositHeadElement();
 
     Logger::Print("send_feedback, this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
-    Logger::Print("send_feedback, payload", payload);
-    g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, payload );
+    Logger::Print("send_feedback, payload", gcode_text->GetChars());
+    g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, gcode_text->GetChars());
     __have_done_feedback = true;
     Logger::Print("send_feedback, finished.", 99);
-
 }
 
 

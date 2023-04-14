@@ -14,7 +14,7 @@ class M408_Runner_MqttPublish: public McodeRunnerBase{
     protected:
 
         // TODO::   zero-copy of the buffer.
-        char __topic_string[50];
+        char __publish_topic_string[50];
         char __payload_buffer[MQTT_PAYLOAD_BUFFER_COUNT_1K];
         String __payload_string;
         JsonLoaderBase* __json_loader;
