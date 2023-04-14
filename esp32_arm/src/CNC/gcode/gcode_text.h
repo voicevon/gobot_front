@@ -14,7 +14,7 @@ class  GcodeText{
         int CopyFrom(const char* bytes, int length);
         void PrintFlat();
         void CopyTo(char* destination);
-        char* GetChars(){return this->__chars;};
+        const char* GetChars(){return this->__chars;};
 
     private:
         char __chars[REPRAP_GCODE_MAX_SIZE];

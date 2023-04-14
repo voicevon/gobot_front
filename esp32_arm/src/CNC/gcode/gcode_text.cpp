@@ -48,7 +48,6 @@ void GcodeText::CopyTo(char* destination){
     }
 }
 
-
 void GcodeText::PrintFlat(){
     for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
         if (this->__chars[i] == 0x00) {

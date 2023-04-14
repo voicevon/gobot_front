@@ -91,8 +91,8 @@ void RobotBase::SpinOnce(){
 
 	if (this->_gcode_queue.BufferIsEmpty()){
 		// Logger::Print("RobotBase::SpinOnce() point         _gcode_queue.BufferIsEmpty", 94);
-		this->_gcode_queue.PrintOut("buffer is empty. ");
-		delay(5000);
+		// this->_gcode_queue.PrintOut("RobotBase::SpinOnce() buffer is empty. ");
+		// delay(5000);
 		return;
 	}
 	if (!this->__planner.IsPlanable()){
@@ -113,22 +113,16 @@ void RobotBase::SpinOnce(){
 		Logger::Debug("RobotBase::SpinOnce()  have withdrawed from gcode_queue.  The gcode_text is  >>>");
 		Serial.print(gcode_text->GetChars());
 		Serial.println("<<<");
-		// this->_gcode_queue.PrintOut("caller is RobotBase::SpinOnce() ");
 	}
 	
-	// type convert   from char* to std::string
-	// char* p = (char*) (&message->payload[0]);
-	// std::string str = std::string(p);
-	// feed std::string to Gcode constructor.
 	GcodeHelper gcode_helper = GcodeHelper(gcode_text->GetChars());
-	// Serial.println(str.c_str());
 	Logger::Print("gcode_command", gcode_helper.get_command());
 	if(gcode_helper.has_g){
-		// Logger::Print("RobotBase::SpinOnce()   point 61", 61);
 		this->__RunGcode(gcode_text);
 	}else if(gcode_helper.has_m){
 		McodeOS::Instance().SetupRunner(gcode_text);
 		this->State = RobotState::MCODE_IS_SYNCING;
+		Logger::Print("RobotBase::SpinOnce()  mcode is set, saying is ready to run , will be run soon. ", gcode_helper.get_command());
 	}else{
 		Logger::Warn("RobotBase::SpinOnce() ---- Unknown command, Ignored.");
 		Serial.println(gcode_text->GetChars());

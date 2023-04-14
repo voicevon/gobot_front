@@ -56,15 +56,19 @@ class Logger{
         static void Print(const char* var_name, uint32_t value);
         static void Print(const char* var_name, int64_t value);
         static void Print(const char* var_name, unsigned long value);
+        static void Print(const char* var_name, const double value);
 
-        static void Print(const char* var_name, double value);
-        static void Print(const char* var_name, const char* value);
-        static void Print(const char* var_name, const char value);
+        //will print a string.
+        static void Print(const char* var_name, const char* chars);
+        // static void Print(const char* var_name, const char chars[]);
+        //will print single char.
+        static void Print(const char* var_name, const char single_char);
 
         static void __print_sid();
         static int sid;
         // static LoggerStyle style_title;
         // static LoggerStyle style_key_value;
 };
+
 
 

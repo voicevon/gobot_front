@@ -36,6 +36,8 @@ class QueueBase{
  
 
         void _Init(const char* queue_name, int queue_size, T* first_element);
+        // TODO:  T* to  T[]
+        // void _Init(const char* queue_name, int queue_size, T[] all_elements);
         T* __all_elements;
 
     private:
