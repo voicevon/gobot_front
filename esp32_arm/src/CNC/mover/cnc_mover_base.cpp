@@ -1,7 +1,8 @@
 #include "cnc_mover_base.h"
 
 void CncMover::SpinOnce(){
-    Logger::Debug("CncMover::SpinOnce()");
+    // Logger::Debug("CncMover::SpinOnce()");
+
     bool has_moving_actuator = false;
     for(int a=0; a<gs_CncActuator_List::Instance().GetItemsCount(); a++){
         CncActuatorBase* actuator = gs_CncActuator_List::Instance().GetActuator(a);
@@ -10,29 +11,31 @@ void CncMover::SpinOnce(){
             has_moving_actuator= true;
         }
     }
-    gs_CncActuator_List::Instance().PrintOUt("caller is CncMover::SpinOnce()");
+    // gs_CncActuator_List::Instance().PrintOUt("caller is CncMover::SpinOnce()");
 
-    if (gs_MoveBlock_Queue::Instance().BufferIsEmpty()) {
-        Logger::Print("CncMover::SpinOnce() gs_MoveBlock_Queue::  Buffer is Empty 91", 91);
-        return;
-    }
-    Logger::Print("CncMover::SpinOnce() gs_MoveBlock_Queue::  Buffer got moveblock 21", 21);
-    gs_MoveBlock_Queue::Instance().PrintOut("caller is CncMover::SpinOnce()");
+
+    // Logger::Print("CncMover::SpinOnce() gs_MoveBlock_Queue::  Buffer got moveblock 21", 21);
 
     if (has_moving_actuator){
         delay(500);
         Serial.print("M");
         return;
     }
+    
+    if (gs_MoveBlock_Queue::Instance().BufferIsEmpty()) {
+        // Logger::Print("CncMover::SpinOnce() gs_MoveBlock_Queue::  Buffer is Empty 91", 91);
+        return;
+    }
 
-    Logger::Print("CncMover::SpinOnce() withdraw queue_move_block  31", 31);
+    // Logger::Print("CncMover::SpinOnce() withdraw queue_move_block  31", 31);
+    // gs_MoveBlock_Queue::Instance().PrintOut("caller is CncMover::SpinOnce()");
     MoveBlock* mb = gs_MoveBlock_Queue::Instance().WithdrawTailElement();
     // Logger::Print("MoveBlocks[AXIS_ALPHA].TargetPosition", mb->MoveBlocks[AXIS_ALPHA].TargetPosition);
     // Logger::Print("MoveBlocks[AXIS_ALPHA].Speed", mb->MoveBlocks[AXIS_ALPHA].Speed);
     // Logger::Print("MoveBlocks[AXIS_ALPHA].Acceleration", mb->MoveBlocks[AXIS_ALPHA].Acceleration);
 
     this->AllActuatorsMoveTo(mb);
-    mb->PrintOut("CncMover::SpinOnce()");
+    // mb->PrintOut("caller is  CncMover::SpinOnce()");
     Logger::Print("CncMover::SpinOnce() point", 99);
 
 }

@@ -69,7 +69,7 @@ void setup(){
     // board.Test_Stepper(999);
     
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
-    setup_wifi_mqtt_blocking_mode();
+    // setup_wifi_mqtt_blocking_mode();
 
     robot.Init(&board, MQTT_TOPIC_FOR_HOME_POSITION);
     // robot.LinkLocalGcodeQueue_AsConsumer(&app.gcode_queue);
@@ -77,13 +77,38 @@ void setup(){
     app.Link_Mqtt_to_GcodeQueue(MQTT_TOPIC_GCODE, gcode_queue);
 
     gcode_queue->AppendGcodeCommand("G28X");
-    gcode_queue->AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
+    // gcode_queue->AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
+    gcode_queue->PrintOut("before append anything");
+    gcode_queue->PrintOut_GcddeText("in setup() test begin");
+    gcode_queue->AppendGcodeCommand("G1X1");
+    gcode_queue->AppendGcodeCommand("G1X2");
+    gcode_queue->AppendGcodeCommand("G1X3");
+    gcode_queue->AppendGcodeCommand("G1X4");
+    gcode_queue->AppendGcodeCommand("G1X5");
+    gcode_queue->AppendGcodeCommand("G1X6");
+    gcode_queue->PrintOut("how many elements?");
+    gcode_queue->PrintOut_GcddeText("in setup() test result");
+
 
     Logger::Info ("App-loop_porter::setup() is done. ");
+    // delay(800000);
 }
 
-
+int x= 8;
+String g1="G1";
 void loop(){
+
+    GcodeQueue* gcode_queue = robot.GetGcodeQueue();
+    if(gcode_queue->GetFreeBuffersCount() >=6){
+        g1 = "G1X";
+        g1.concat(String(x));
+        gcode_queue->AppendGcodeCommand(g1.c_str());
+        x++;
+        if(x>=50){
+            x=8;
+        }
+        // Logger::Print("aaaaaaaaaaaaaaaaaaaaaa    xxxxxxxxxx", x);
+    }
     // Logger::Warn("Arduino loop() point 1");
     app.SpinOnce();
     // Logger::Warn("Arduino loop() point    2");
@@ -94,7 +119,7 @@ void loop(){
     robot.MySpinOnce();
     // Logger::Warn("Arduino loop() point    4");
 
-    delay(200);
+    // delay(200);
 }
 
 #endif

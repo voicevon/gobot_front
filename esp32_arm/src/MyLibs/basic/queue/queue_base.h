@@ -12,8 +12,6 @@
 template <class T>
 class QueueBase{
     public:
-
-
         // For Producer: 
 
         // For Producer:  Will deep copy the object to the queue.
@@ -100,7 +98,8 @@ bool QueueBase<T>::Deposit(){
 template <class T>
 T* QueueBase<T>::GetRoom_ForDeposit(){
     // Logger::Debug("QueueBase::GetRoom_ForDeposit()");
-    T* head_message = this->__all_elements + __deposit_push_head * this->__element_size;
+    // T* head_message = this->__all_elements + __deposit_push_head * this->__element_size;
+    T* head_message = this->__all_elements + __deposit_push_head ;
     // Serial.println(head_message->id);
     // Logger::Print("QueueBase::GetRoom_ForDeposit() point", 99);
     return  head_message;
@@ -110,7 +109,8 @@ template <class T>
 T* QueueBase<T>::WithdrawTailElement(){
     T* tail_message = NULL;
     if (this->__deposit_push_head != this->__withdraw_pop_tail){
-        tail_message = this->__all_elements + this->__withdraw_pop_tail * this->__element_size;
+        // tail_message = this->__all_elements + this->__withdraw_pop_tail * this->__element_size;
+        tail_message = this->__all_elements + this->__withdraw_pop_tail;
         this->__withdraw_pop_tail = this->__get_next_index(this->__withdraw_pop_tail);
     }
     return tail_message;
@@ -121,7 +121,8 @@ T* QueueBase<T>::WithdrawTailElement(){
 template <class T>
 T* QueueBase<T>::GetDepositHeadElement(){
     int previous_head =  __get_previous_index(__deposit_push_head);
-    return  this->__all_elements + previous_head* this->__element_size;
+    // return  this->__all_elements + previous_head* this->__element_size;
+    return  this->__all_elements + previous_head;
 }
 
 template <class T>

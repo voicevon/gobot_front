@@ -30,21 +30,21 @@ int GcodeQueue::AppendGcodeCommand(const char* command){
         this->PrintOut("GcodeQueue::AppendGcodeCommand(const char* command)");
         return -1;
     }
+
+
     // Logger::Print("GcodeQueue::AppendGcodeCommand(const char* command) point 51", 51);
-    GcodeText* gcode = this->GetRoom_ForDeposit();
+    GcodeText* gcode_text = this->GetRoom_ForDeposit();
     // Logger::Print("GcodeQueue::AppendGcodeCommand(const char* command) point  52", 52);
     // Logger::Print("command", gcode->command);
-    char* destination = gcode->bytes;
-    int i;
-    for (i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
-        *(destination + i) = command[i];
-        if (command[i] == 0x00){
-            this->Deposit();
-            return 1;
-        }
+    int res = gcode_text->ReConstruct(command);
+    if (res == 1){
+        this->Deposit();
     }
+    return res;
+
+
     Logger::Error("GcodeQueue::AppendGcodeCommand() with auto-length,  over-size   point -2");
-    Logger::Print("REPRAP_GCODE_MAX_SIZE",REPRAP_GCODE_MAX_SIZE);
+    Logger::Print("REPRAP_GCODE_MAX_SIZE",  REPRAP_GCODE_MAX_SIZE);
     Logger::Print("command", command);
     return -2;
 }
@@ -65,3 +65,16 @@ int GcodeQueue::AppendGcodeCommand(const char* payload, int length){
 
     this->Deposit();
 };
+
+
+void GcodeQueue::PrintOut_GcddeText(const char* title){
+    Logger::Info(title);
+    for(int i=0; i<GCODE_QUEUE_SIZE;i++){
+        Serial.print(i);
+        Serial.print("\t");
+        this->__all_gcodes[i].PrintFlat();
+        Serial.print("\t");
+        this->__all_elements[i].PrintFlat();
+        Serial.println("");
+    }
+}

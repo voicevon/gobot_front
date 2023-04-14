@@ -14,6 +14,7 @@ class ListBase{
         int GetItemsCount(){return this->__list_size;};
         void PrintOUt(const char* title){
             Logger::Info(title);
+            Logger::Print("__list_name", __list_name);
             Logger::Print("__list_size", __list_size);
             Logger::Print("__index", __index);
         };
@@ -38,7 +39,8 @@ class ListBase{
             return (ListItem*)(__all_items[index]);
             };
 
-        void _Init(ListItem** list, int items_count){
+        void _Init(const char* list_name, ListItem** list, int items_count){
+            __list_name = list_name;
             __index = 0;
             __all_items = list;
             __list_size = items_count;
@@ -46,6 +48,7 @@ class ListBase{
 
     private:
         ListItem** __all_items;
+        const char* __list_name;
         int __list_size;
         int __index;
 

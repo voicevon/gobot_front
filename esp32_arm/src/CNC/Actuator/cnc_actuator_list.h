@@ -9,8 +9,8 @@ class gs_CncActuator_List: public ListBase{
             return __instance;
             };
 
-        void Init(CncActuatorBase** all_items, int count){
-            _Init((ListItem**)all_items, count);
+        void Init(CncActuatorBase** all_elements, int count){
+            _Init("CncActuatorList", (ListItem**)all_elements, count);
             };
 
         void AddActuator(CncActuatorBase* actuator){

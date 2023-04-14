@@ -57,5 +57,6 @@ void Twh_LoopPorter_G28_Runner::_SetHomedPosition(PositionTrigger* firer){
         _arm_solution->FK_to_IK(&current_fk, &ik);
         _arm_solution->SetCurrentPositionAs(&ik);
     }
-    Logger::Print("Twh_LoopPorter_G28_Runner::_SetHomedPosition()  point 99", 99); 
+    Logger::Print("Twh_LoopPorter_G28_Runner::_SetHomedPosition() result:   current_fk.X", current_fk.X ); 
+    ik.PrintOut("Homed ik"); 
 }

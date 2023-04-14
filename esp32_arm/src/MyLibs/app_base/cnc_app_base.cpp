@@ -66,7 +66,7 @@ void CncAppBase::SpinOnce(){
         Logger::Warn("CncAppBase::SpinOnce(),  The bug is eating.!!!!");
         Logger::Halt("BUG!");
     }
-    Logger::Debug("CncAppBase::SpinOnce()");
+    // Logger::Debug("CncAppBase::SpinOnce()");
     // Logger::Print("this->test_id", this->test_id);
     // this->_gcode_queue->SayHello("caller is :  CncAppBase::SpinOnce()");
     if (__have_done_feedback)
