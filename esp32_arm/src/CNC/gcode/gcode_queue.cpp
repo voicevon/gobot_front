@@ -40,8 +40,11 @@ int GcodeQueue::AppendGcodeCommand(const char* command){
     int res = gcode_text->CopyFrom(command);
     if (res == 1){
         this->Deposit();
+        // gcode_text->PrintFlat("caller::GcodeQueue::AppendGcodeCommand()");
+        // gcode_text = this->WithdrawTailElement();
+        // gcode_text->PrintFlat("aaaaaaaaaaaaaa  WithdrawTailElement()");
+        return res;
     }
-    return res;
 
 
     Logger::Error("GcodeQueue::AppendGcodeCommand() with auto-length,  over-size   point -2");
@@ -64,6 +67,7 @@ int GcodeQueue::AppendGcodeCommand(const char* payload, int length){
     GcodeText* gcode_text = this->GetRoom_ForDeposit();
     int result = gcode_text->CopyFrom(payload, length);
     if (result == GCODE_TEXT_OK){
+        gcode_text->PrintFlat("appended, please verify");
         this->Deposit();
         return 1;
     }
@@ -75,9 +79,9 @@ void GcodeQueue::PrintOut_GcddeText(const char* title){
     for(int i=0; i<GCODE_QUEUE_SIZE;i++){
         Serial.print(i);
         Serial.print("\t");
-        this->__all_gcodes[i].PrintFlat();
+        this->__all_gcodes[i].PrintFlat("caller::GcodeQueue::PrintOut_GcddeText()");
         Serial.print("\t");
-        this->__all_elements[i].PrintFlat();
+        this->__all_elements[i].PrintFlat("caller::GcodeQueue::PrintOut_GcddeText()");
         Serial.println("");
     }
 }

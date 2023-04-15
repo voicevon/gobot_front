@@ -40,10 +40,9 @@
     //     ''' 
 #define BGC_BLACK "\033[40m"
 #define BGC_RED "\033[41m"
-    //     green='\033[42m'
+#define BGC_GREEN "\033[42m"
 #define BGC_ORANGE "\033[43m"
 #define BGC_BLUE  "\033[44m"
-    //     purple='\033[45m'
-    //     cyan='\033[46m'
-    //     lightgrey='\033[47m'
+#define BGC_PURPLE "\033[45m"
+#define BGC_LIGHT_GREY "\033[47m"
 

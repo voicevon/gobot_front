@@ -108,24 +108,24 @@ void RobotBase::SpinOnce(){
 		return;
 	}
 
-	bool debug = true;
+	GcodeHelper gcode_helper = GcodeHelper(gcode_text->GetChars);
+	bool debug = false;
 	if (debug){
+		gcode_text->PrintFlat("RobotBase::SpinOnce()  have withdrawed from gcode_queue.");
 		Logger::Debug("RobotBase::SpinOnce()  have withdrawed from gcode_queue.  The gcode_text is  >>>");
-		Serial.print(gcode_text->GetChars());
-		Serial.println("<<<");
+		Logger::Print("gcode_text->GetText", gcode_text->GetChars);
+		Logger::Print("gcode_command", gcode_helper.get_command());
 	}
 	
-	GcodeHelper gcode_helper = GcodeHelper(gcode_text->GetChars());
-	Logger::Print("gcode_command", gcode_helper.get_command());
 	if(gcode_helper.has_g){
 		this->__RunGcode(gcode_text);
 	}else if(gcode_helper.has_m){
 		McodeOS::Instance().SetupRunner(gcode_text);
 		this->State = RobotState::MCODE_IS_SYNCING;
-		Logger::Print("RobotBase::SpinOnce()  mcode is set, saying is ready to run , will be run soon. ", gcode_helper.get_command());
+		// Logger::Print("RobotBase::SpinOnce()  mcode is set, saying is ready to run , will be run soon. ", gcode_helper.get_command());
 	}else{
 		Logger::Warn("RobotBase::SpinOnce() ---- Unknown command, Ignored.");
-		Serial.println(gcode_text->GetChars());
+		Serial.println(gcode_text->GetChars);
 	}
 	// Logger::Print("RobotBase::SpinOnce() point 99", 99);
 
@@ -136,7 +136,7 @@ void RobotBase::SpinOnce(){
 // 1. gs_MoveBlock_Queue is not full
 // 2. gs_LineSegment_Queue is not full
 void RobotBase::__RunGcode(GcodeText* gcode_text){
-	GcodeHelper gcode = GcodeHelper(gcode_text->GetChars());
+	GcodeHelper gcode = GcodeHelper(gcode_text->GetChars);
 	// GcodeHelper* gcode = &gcode_helper;
 	static float __newest_line_speed = 100;
 	// Logger::Info("RobotBase::__RunGcode()");

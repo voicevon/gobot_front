@@ -33,7 +33,7 @@ bool G28_Runner::IsDone(){
 void G28_Runner::LinkGcode(GcodeText* gcode_text){
     Logger::Debug("G28_Runner::LinkGcode()");
     
-    GcodeHelper gcode(gcode_text->GetChars());
+    GcodeHelper gcode(gcode_text->GetChars);
     // GcodeHelper* gcode = &gcode_helper;
     Serial.println(gcode.get_command());
     char axis_name = '+';

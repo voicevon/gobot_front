@@ -13,10 +13,10 @@ void M408_Runner_MqttPublish::SetupRunner(GcodeText* mcode_text){
 }
 
 bool M408_Runner_MqttPublish::RunnerLoop(){
-    Logger::Debug("M408_Runner_MqttPublish::RunnerLoop()");
+    // Logger::Debug("M408_Runner_MqttPublish::RunnerLoop()");
     char* payload = __json_loader->Load();
-    Logger::Print("__publish_topic_string", __publish_topic_string);
-    Logger::Print("Loaded json string", payload);
+    // Logger::Print("__publish_topic_string", __publish_topic_string);
+    // Logger::Print("Loaded json string", payload);
 
     // g_mqttClient.publish("twh/221109/r1/state", 2, true, payload);
     g_mqttClient.publish(__publish_topic_string, 2, true, payload);

@@ -3,7 +3,7 @@
 void M130_Runner_UpdatePid::SetupRunner(GcodeText* mcode_text){
     // uint8_t n_value = 33;   //TODO: Make sure this is no harmful!
     // float f_value = 0.0f;
-    GcodeHelper mcode = GcodeHelper(mcode_text->GetChars());
+    GcodeHelper mcode = GcodeHelper(mcode_text->GetChars);
     // GcodeHelper* mcode = &gcode_helper;
     Logger::Info("M130_Runner::Run()");
     Logger::Print("gcode", mcode.get_command());

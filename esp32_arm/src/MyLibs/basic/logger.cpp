@@ -1,6 +1,5 @@
 #include "logger.h"
 
-// void Logger::SetStyle_begin(EnumStyle style_name){
 void Logger::SetStyle(EnumStyle style_name, EnumStyle_position style_position){
 
     // switch (style_name){
@@ -12,22 +11,39 @@ void Logger::SetStyle(EnumStyle style_name, EnumStyle_position style_position){
     //     break;
     // }
 
-    if ((style_name == EnumStyle::Info) && (style_position == EnumStyle_position::Begin)){
-        Serial.print(FORE_YELLOW);
-        Serial.print(BGC_ORANGE);
-        Serial.print("[Info] ");
-    }else if ((style_name == EnumStyle::Info) && (style_position == EnumStyle_position::End)){
-        Serial.print(BGC_BLACK);
-        Serial.println(FORE_GREEN);
+    if (style_name == EnumStyle::Info) {
+        if (style_position == EnumStyle_position::Title_Begin){
+            Serial.print(FORE_YELLOW);
+            Serial.print(BGC_GREEN);
+            Serial.print("[Info] ");
+            return;
+        }else if (style_position == EnumStyle_position::Window_Begin){
+            Serial.print(BGC_BLACK);
+            Serial.println(FORE_GREEN);
+            return;
+        }
+    }
+    if (style_name == EnumStyle::Debug){
+        if (style_position == EnumStyle_position::Title_Begin){
+            Serial.print(FORE_YELLOW);
+            Serial.print(BGC_BLUE);
+            Serial.print("[Debug] ");
+            return;
+        }else if (style_position == EnumStyle_position::Window_Begin){
+            Serial.print(BGC_BLACK);
+            Serial.println(FORE_BLUE);
+            return;
+        }
     }
 }
 
 int Logger::sid = 0;
+
 void Logger::Info(const char* title){
     // TRACE();
-    Logger::SetStyle(EnumStyle::Info, EnumStyle_position::Begin);
+    Logger::SetStyle(EnumStyle::Info, EnumStyle_position::Title_Begin);
     Serial.print(title);
-    Logger::SetStyle(EnumStyle::Info, EnumStyle_position::End);
+    Logger::SetStyle(EnumStyle::Info, EnumStyle_position::Window_Begin);
 
 }
 // template <typename anyPrintable>
@@ -43,12 +59,14 @@ void Logger::Info(const char* title){
 // }
 
 void Logger::Debug(const char* title){
-    Serial.print(FORE_YELLOW);
-    Serial.print(BGC_BLUE);
-    Serial.print("[Debug] ");
+    Logger::SetStyle(EnumStyle::Info, EnumStyle_position::Title_Begin);
     Serial.print(title);
-    Serial.print(BGC_BLACK);
-    Serial.println(FORE_PINK);
+    Logger::SetStyle(EnumStyle::Info, EnumStyle_position::Window_Begin);
+    // Serial.print(FORE_YELLOW);
+    // Serial.print(BGC_BLUE);
+    // Serial.print(title);
+    // Serial.print(BGC_BLACK);
+    // Serial.println(FORE_PINK);
 }
 
 void Logger::Warn(const char * title){

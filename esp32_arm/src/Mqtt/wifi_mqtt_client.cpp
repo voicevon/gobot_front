@@ -231,11 +231,11 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
         Logger::Print("  total: ", total);
     }
 
-    Logger::Info("on_MqttMessage() Dispatch message by topic,  Putting remote message to local consumer." );
+    // Logger::Info("on_MqttMessage() Dispatch message by topic,  Putting remote message to local consumer." );
     gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len);
     
     // mono_remote_queue_bridge.onMessage((const char*)payload, len);
-    Logger::Info("on_MqttMessage()  Appened to mqtt_consumer.");
+    Logger::Info("on_MqttMessage()  Appened to mqtt_receiver.");
 }
 
 

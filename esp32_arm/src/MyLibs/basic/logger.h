@@ -30,8 +30,9 @@ enum EnumStyle{
     Debug =4,
 };
 enum EnumStyle_position{
-    Begin =1,
-    End = 2,
+    Title_Begin =1,
+    Window_Begin = 2,
+    Window_End = 3,
 };
 
 // class LoggerHelper{

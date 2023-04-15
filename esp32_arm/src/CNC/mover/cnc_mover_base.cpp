@@ -2,6 +2,7 @@
 
 void CncMover::SpinOnce(){
     // Logger::Debug("CncMover::SpinOnce()");
+    static uint32_t last_print_time_stamp = 0;
 
     bool has_moving_actuator = false;
     for(int a=0; a<gs_CncActuator_List::Instance().GetItemsCount(); a++){
@@ -17,8 +18,10 @@ void CncMover::SpinOnce(){
     // Logger::Print("CncMover::SpinOnce() gs_MoveBlock_Queue::  Buffer got moveblock 21", 21);
 
     if (has_moving_actuator){
-        delay(500);
-        Serial.print("M");
+        if (millis() - last_print_time_stamp > 500){
+            Serial.print("M");
+            last_print_time_stamp = millis();
+        }
         return;
     }
     

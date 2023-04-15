@@ -72,14 +72,13 @@ void setup(){
     setup_wifi_mqtt_blocking_mode();
 
     robot.Init(&board, MQTT_TOPIC_FOR_HOME_POSITION);
-    // robot.LinkLocalGcodeQueue_AsConsumer(&app.gcode_queue);
     GcodeQueue* gcode_queue = robot.GetGcodeQueue();
     app.Link_Mqtt_to_GcodeQueue(MQTT_TOPIC_GCODE, gcode_queue);
 
+    Logger::Info ("App::loop-porter::setup() is done. ");
+
     gcode_queue->AppendGcodeCommand("G28X");
     gcode_queue->AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
-
-    Logger::Info ("App-loop_porter::setup() is done. ");
 }
 
 // int x= 8;

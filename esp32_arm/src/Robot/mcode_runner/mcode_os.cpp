@@ -1,7 +1,7 @@
 #include "mcode_os.h"
 
 void McodeOS::SetupRunner(GcodeText* mcode_text){
-    GcodeHelper mcode = GcodeHelper(mcode_text->GetChars());
+    GcodeHelper mcode = GcodeHelper(mcode_text->GetChars);
     __current_runner = McodeOS::Instance().GetRunner(mcode.m);
     if (__current_runner==nullptr){
         Logger::Error("McodeOS::SetupRunner()");

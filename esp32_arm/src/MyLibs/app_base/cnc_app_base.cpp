@@ -57,8 +57,8 @@ void CncAppBase::Link_Mqtt_to_GcodeQueue(const char* mqtt_topic, GcodeQueue* gco
     this->_gcode_queue = gcode_queue;  
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
     
-    Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()   mqtt_topic", mqtt_topic);
-    Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
+    // Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()   mqtt_topic", mqtt_topic);
+    // Logger::Print("CncAppBase::Link_Mqtt_to_GcodeQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
 }
 
 void CncAppBase::SpinOnce(){
@@ -66,22 +66,18 @@ void CncAppBase::SpinOnce(){
         Logger::Warn("CncAppBase::SpinOnce(),  The bug is eating.!!!!");
         Logger::Halt("BUG!");
     }
-    // Logger::Debug("CncAppBase::SpinOnce()");
-    // Logger::Print("this->test_id", this->test_id);
-    // this->_gcode_queue->SayHello("caller is :  CncAppBase::SpinOnce()");
     if (__have_done_feedback)
         return;
     if (_gcode_queue->GetFreeBuffersCount() == 0)
         return;
 
-    // send_mqtt_feedback 
-    Logger::Debug("CncAppBase::SpinOnce()   send_feedback, started");
-    // _gcode_queue->PrintOut("caller is CncAppBase::SpinOnce()");
+    // Logger::Debug("CncAppBase::SpinOnce()   send_feedback, started");
     GcodeText* gcode_text = _gcode_queue->GetDepositHeadElement();
 
-    Logger::Print("send_feedback, this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
-    Logger::Print("send_feedback, payload", gcode_text->GetChars());
-    g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, gcode_text->GetChars());
+    // Logger::Print("send_feedback, this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
+    // Logger::Print("send_feedback, payload", gcode_text->GetChars);
+    // gcode_text->PrintFlat("verify origin");
+    g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, gcode_text->GetChars);
     __have_done_feedback = true;
     // Logger::Print("send_feedback, finished.", 99);
 }

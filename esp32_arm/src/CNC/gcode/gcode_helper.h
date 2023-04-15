@@ -19,7 +19,7 @@
 //TODO:  be singleton ??
 class GcodeHelper {
     public:
-        GcodeHelper(){};
+        // GcodeHelper(){};
         GcodeHelper(const std::string&, bool strip=true);
         // GcodeHelper(const String command, bool strip=true);
         GcodeHelper(const GcodeHelper& to_copy);

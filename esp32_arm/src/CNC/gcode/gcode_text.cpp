@@ -13,12 +13,11 @@ GcodeText::GcodeText(const char* command){
 
 int GcodeText::CopyFrom(const char* command){
     for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
-        this->__chars[i] = command[i];
-        // Logger::Print("char", this->bytes[i]);
+        __chars[i] = command[i];
+        // Logger::Print("char", __chars[i]);
         if(command[i] == 0x00){
             //end of string.
-            // Logger::Print("GcodeText::ReConstruct() got ender", 91);
-            // this->PrintFlat();
+            // this->PrintFlat("caller::GcodeText::CopyFrom(const char* command)");
             return 1;
         }
     }
@@ -32,10 +31,14 @@ int GcodeText::CopyFrom(const char* command, int length){
     int i;
     for(i=0; i<length; i++){
         this->__chars[i] = command[i];
-        // Logger::Print("char", this->bytes[i]);
-            return GCODE_TEXT_OK;
-        }
+        Logger::Print("char", this->__chars[i]);
+    }
     this->__chars[i] = 0x00;
+    Logger::Debug("GcodeText::CopyFrom()");
+    Logger::Print("GcodeText::CopyFrom()  length", length);
+    this->PrintFlat("GcodeText::CopyFrom()");
+    return GCODE_TEXT_OK;
+
 }
 
 void GcodeText::CopyTo(char* destination){
@@ -48,13 +51,16 @@ void GcodeText::CopyTo(char* destination){
     }
 }
 
-void GcodeText::PrintFlat(){
+void GcodeText::PrintFlat(const char* title){
+    Logger::Info(title);
+    // Logger::Print("chars len",this->__length );
+    
     for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
         if (this->__chars[i] == 0x00) {
-            Serial.print("<<<");
+            Serial.print(FORE_YELLOW);
+            Serial.print("<<<\n");
             return;
         }
         Serial.print(this->__chars[i]);
-
     }
 }
