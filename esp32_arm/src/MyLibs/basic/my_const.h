@@ -9,6 +9,8 @@
 
 
 
+// https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
+
 #define FCBC_RESET  "\033[0m"   //FCBC is for "Fore color background color"
 // #define ctl_bold \033[01m
 // #define ctl_disable='\033[02m'
@@ -41,8 +43,9 @@
 #define BGC_BLACK "\033[40m"
 #define BGC_RED "\033[41m"
 #define BGC_GREEN "\033[42m"
-#define BGC_ORANGE "\033[43m"
+#define BGC_YELLLOW "\033[43m"
 #define BGC_BLUE  "\033[44m"
 #define BGC_PURPLE "\033[45m"
-#define BGC_LIGHT_GREY "\033[47m"
+#define BGC_CYAN "\033[46m"
+#define BGC_WHITE "\033[47m"
 

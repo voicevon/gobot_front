@@ -2,14 +2,6 @@
 
 void Logger::SetStyle(EnumStyle style_name, EnumStyle_position style_position){
 
-    // switch (style_name){
-    // case Info:
-
-    //     break;
-    
-    // default:
-    //     break;
-    // }
 
     if (style_name == EnumStyle::Info) {
         if (style_position == EnumStyle_position::Title_Begin){
@@ -35,6 +27,31 @@ void Logger::SetStyle(EnumStyle style_name, EnumStyle_position style_position){
             return;
         }
     }
+
+    if (style_name == EnumStyle::Warning){
+        if (style_position == EnumStyle_position::Title_Begin){
+            Serial.print(FORE_BLUE);
+            Serial.print(BGC_YELLLOW);
+            Serial.print("[Warn] ");
+            return;
+        }else if (style_position == EnumStyle_position::Window_Begin){
+            Serial.print(BGC_BLACK);
+            Serial.println(FORE_YELLOW);
+            return;
+        }
+    }
+    if (style_name == EnumStyle::Error){
+        if (style_position == EnumStyle_position::Title_Begin){
+            Serial.print(FORE_BLUE);
+            Serial.print(BGC_RED);
+            Serial.print("[Error] ");
+            return;
+        }else if (style_position == EnumStyle_position::Window_Begin){
+            Serial.print(BGC_BLACK);
+            Serial.println(FORE_RED);
+            return;
+        }
+    }    
 }
 
 int Logger::sid = 0;
@@ -59,9 +76,9 @@ void Logger::Info(const char* title){
 // }
 
 void Logger::Debug(const char* title){
-    Logger::SetStyle(EnumStyle::Info, EnumStyle_position::Title_Begin);
+    Logger::SetStyle(EnumStyle::Debug, EnumStyle_position::Title_Begin);
     Serial.print(title);
-    Logger::SetStyle(EnumStyle::Info, EnumStyle_position::Window_Begin);
+    Logger::SetStyle(EnumStyle::Debug, EnumStyle_position::Window_Begin);
     // Serial.print(FORE_YELLOW);
     // Serial.print(BGC_BLUE);
     // Serial.print(title);
@@ -70,21 +87,15 @@ void Logger::Debug(const char* title){
 }
 
 void Logger::Warn(const char * title){
-    Serial.print(FORE_YELLOW);
-    Serial.print(BGC_RED);
-    Serial.print("[Warn] ");
+    Logger::SetStyle(EnumStyle::Warning, EnumStyle_position::Title_Begin);
     Serial.print(title);
-    Serial.print(BGC_BLACK);
-    Serial.println(FORE_YELLOW);
+    Logger::SetStyle(EnumStyle::Warning, EnumStyle_position::Window_Begin);
 }
 
 void Logger::Error(const char * title){
-    Serial.print(FORE_RED);
-    Serial.print(BGC_BLUE);
-    Serial.print("[Error]");
+    Logger::SetStyle(EnumStyle::Error, EnumStyle_position::Title_Begin);
     Serial.print(title);
-    Serial.print(BGC_BLACK);
-    Serial.println(FORE_RED); 
+    Logger::SetStyle(EnumStyle::Error, EnumStyle_position::Window_Begin);
 }
 
 void Logger::Halt(const char* title){
@@ -92,9 +103,7 @@ void Logger::Halt(const char* title){
     Serial.print(BGC_BLACK);
     Serial.print("[Halt]");
     Serial.print(title);
-    Serial.print(BGC_ORANGE);
-    // Serial.println(FORE_GREEN);
-    // Serial.print("Esp32 is halt  ");
+    Serial.print(BGC_YELLLOW);
     // esp_random()
     while (true){
         Serial.print("\t I am playing my game.  So funny...   So boring... ");

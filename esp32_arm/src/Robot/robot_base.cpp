@@ -12,15 +12,15 @@ void RobotBase::SpinOnce(){
 	// Logger::Print("RobotBase::SpinOnce() point  2", 2);
 	switch (this->State){
 		case RobotState::MCODE_IS_SYNCING:
-			Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 41);
+			// Logger::Print("RobotBase::SpinOnce()  MCODE_IS_SYNCING. ", 41);
 			if (! gs_MoveBlock_Queue::Instance().BufferIsEmpty()){
 				return;
 			}
-			Logger::Print("RobotBase::SpinOnce()  G4_Runner is Waiting. ", 42);
+			// Logger::Print("RobotBase::SpinOnce()  MCODE_IS_SYNCING. ", 42);
 
 			if (gs_CncActuator_List::Instance().HasMovingActuator())
 				return;
-			Logger::Print("RobotBase::SpinOnce()  G4_Runner is starting. ", 43);
+			Logger::Print("RobotBase::SpinOnce()  MCODE  is starting. ", 43);
 			this->State = RobotState::MCODE_IS_RUNNING;
 			break;
 
@@ -28,6 +28,7 @@ void RobotBase::SpinOnce(){
 			if(McodeOS::Instance().RunnerLoop()){
 				// Finished running current mcode.
 				this->State = RobotState::IDLE_OR_ASYNC;
+				Logger::Print("RobotBase::SpinOnce()  MCODE  is ended. now is  RobotState::IDLE_OR_ASYNC", 43);
 			}
 			break;
 

@@ -80,14 +80,13 @@ void connectToWifi() {
 }
 
 void connectToMqtt() {
-	Serial.println("Connecting to MQTT...");
-
+	Logger::Info ("Connecting to MQTT...");
 	g_mqttClient.setCredentials(MQTT_UID, MQTT_PASSWORD);
 	g_mqttClient.connect();
 }
 
 void WiFiEvent(WiFiEvent_t event) {
-    Serial.printf("\n[Info] [WiFi-event] event: %d  ", event);
+    // Serial.printf("\n[Info] [WiFi-event] event: %d  ", event);
     switch(event) {
     case SYSTEM_EVENT_WIFI_READY:
         Serial.print("\tSYSTEM_EVENT_WIFI_READY");
@@ -103,17 +102,17 @@ void WiFiEvent(WiFiEvent_t event) {
         break;
 
     case SYSTEM_EVENT_STA_GOT_IP:
-        Serial.print("SYSTEM_EVENT_STA_GOT_IP");
-        Serial.print("\tLocal IP address: ");
-        Serial.println(WiFi.localIP());
+        Logger::Info("Wifi event::SYSTEM_EVENT_STA_GOT_IP");
+        Logger::Print("Local IP address: ",WiFi.localIP());
         xTimerStart(mqttReconnectTimer,0);
         break;
 
     case SYSTEM_EVENT_STA_DISCONNECTED:
-        Logger::Print("wifi_mqtt_client.cpp  WifiEvent== SYSTEM_EVENT_STA_DISCONNECTED", SYSTEM_EVENT_STA_DISCONNECTED);
+        Logger::Warn("wifi_mqtt_client.cpp  WifiEvent== SYSTEM_EVENT_STA_DISCONNECTED");
         xTimerStop(mqttReconnectTimer, 0); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
         WiFi.reconnect();
         break;
+
     default:
       break;
     }
@@ -149,7 +148,7 @@ void onMqttConnect(bool sessionPresent) {
 }
 
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
-    Logger::Info("MQTT event: onMqttDisconnect()");
+    Logger::Warn("MQTT event: onMqttDisconnect()");
     String reason_str = "   reason = ";
     if (reason == AsyncMqttClientDisconnectReason::TCP_DISCONNECTED) reason_str.concat("TCP_DISCONNECTED"); 
     if (reason == AsyncMqttClientDisconnectReason::MQTT_UNACCEPTABLE_PROTOCOL_VERSION) reason_str.concat("MQTT_UNACCEPTABLE_PROTOCOL_VERSION"); 
@@ -159,8 +158,8 @@ void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
     if (reason == AsyncMqttClientDisconnectReason::MQTT_NOT_AUTHORIZED) reason_str.concat("MQTT_NOT_AUTHORIZED"); 
     if (reason == AsyncMqttClientDisconnectReason::ESP8266_NOT_ENOUGH_SPACE) reason_str.concat("ESP8266_NOT_ENOUGH_SPACE"); 
     if (reason == AsyncMqttClientDisconnectReason::TLS_BAD_FINGERPRINT) reason_str.concat("TLS_BAD_FINGERPRINT"); 
-    Serial.print((uint8_t)reason);
-	Serial.println(reason_str);
+    Logger::Print("reason code",(uint8_t)reason);
+    Logger::Print("reason", reason_str);
 
 	if (WiFi.isConnected()) {
 		xTimerStart(mqttReconnectTimer, 0);

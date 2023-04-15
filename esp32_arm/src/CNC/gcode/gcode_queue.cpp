@@ -23,7 +23,7 @@ int GcodeQueue::AppendGcodeCommand(String command){
 };
 
 int GcodeQueue::AppendGcodeCommand(const char* command){
-    Logger::Debug("GcodeQueue::AppendGcodeCommand(const char* command)");
+    // Logger::Debug("GcodeQueue::AppendGcodeCommand(const char* command)");
     // this->PrintOut("caller is:  GcodeQueue::AppendGcodeCommand(const char* command)");
 
     if (this->GetFreeBuffersCount() == 0){
@@ -47,9 +47,9 @@ int GcodeQueue::AppendGcodeCommand(const char* command){
     }
 
 
-    Logger::Error("GcodeQueue::AppendGcodeCommand() with auto-length,  over-size   point -2");
-    Logger::Print("REPRAP_GCODE_MAX_SIZE",  REPRAP_GCODE_MAX_SIZE);
-    Logger::Print("command", command);
+    // Logger::Error("GcodeQueue::AppendGcodeCommand() with auto-length,  over-size   point -2");
+    // Logger::Print("REPRAP_GCODE_MAX_SIZE",  REPRAP_GCODE_MAX_SIZE);
+    // Logger::Print("command", command);
     return -2;
 }
 

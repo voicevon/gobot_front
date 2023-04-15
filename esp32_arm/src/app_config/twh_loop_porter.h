@@ -1,8 +1,8 @@
 #pragma once
 
 #define MY_TWH_ID 221109    // use replace to edit.
-#define MY_ROBOT_ROW_ID 1   // Range is 0,1,2,3
 
+#define MY_ROBOT_ROW_ID 1   // Range is 0,1,2,3
  
 
 

@@ -31,12 +31,12 @@ int GcodeText::CopyFrom(const char* command, int length){
     int i;
     for(i=0; i<length; i++){
         this->__chars[i] = command[i];
-        Logger::Print("char", this->__chars[i]);
+        // Logger::Print("char", this->__chars[i]);
     }
     this->__chars[i] = 0x00;
-    Logger::Debug("GcodeText::CopyFrom()");
-    Logger::Print("GcodeText::CopyFrom()  length", length);
-    this->PrintFlat("GcodeText::CopyFrom()");
+    // Logger::Debug("GcodeText::CopyFrom()");
+    // Logger::Print("GcodeText::CopyFrom()  length", length);
+    // this->PrintFlat("GcodeText::CopyFrom()");
     return GCODE_TEXT_OK;
 
 }
