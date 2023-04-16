@@ -62,9 +62,12 @@ void CncActuatorFastStepper::UpdateMovement(MoveBlock_SingleActuator* move){
     _is_moving = true; 
 }
 
-void CncActuatorFastStepper::ForceStop(){
+void CncActuatorFastStepper::ForceStop_G28_Only(bool update_target_position){
     _stepper->forceStop();
     _is_moving = false;
+        if(update_target_position){
+        _stepper->moveTo(_stepper->getCurrentPosition());
+    }
 }
 
 void CncActuatorFastStepper::SetCurrentPositionAs(float new_position){

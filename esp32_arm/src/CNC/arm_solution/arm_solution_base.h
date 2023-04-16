@@ -18,7 +18,7 @@ class ArmSolutionBase{
         virtual void MK_to_FK(FKPosition_XYZRPW* from_mk, FKPosition_XYZRPW* to_fk){};
         virtual void MK_to_Ik(FKPosition_XYZRPW* from_mk, IKPosition_abgdekl* to_ik){};
 
-        void ForceStopMover();  //TODO:  para is MoverAction:  EnableActuator, ForceStop, DisableActuator. 
+        void ForceStopMover_G28_Only();  //TODO:  para is MoverAction:  EnableActuator, ForceStop_G28_Only, DisableActuator. 
 
         void SetCurrentPositionAs(FKPosition_XYZRPW* fk_position);
         void SetCurrentPositionAs(IKPosition_abgdekl* ik_position);

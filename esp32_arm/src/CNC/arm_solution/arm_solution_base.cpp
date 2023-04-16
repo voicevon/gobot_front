@@ -4,7 +4,7 @@
 // #include "MyLibs/basic/queue/message_queue.h"
 // #include "Mqtt/mqtt_message_queue.h"
 
-void ArmSolutionBase::ForceStopMover(){
+void ArmSolutionBase::ForceStopMover_G28_Only(){
 	// this->_mover_base->AllActuatorsStop();
 
 	//TODO:    How to do it without mover_base??

@@ -28,7 +28,7 @@ class CncActuatorBase: public ListItem{
         // EnumActuatorMachenicType MachenicType;
         virtual void SpinOnce();
         virtual void UpdateMovement(MoveBlock_SingleActuator* movement);
-        virtual void ForceStop();   //Only G28 is using this.
+        virtual void ForceStop_G28_Only(bool update_target_position = true);   //Only G28 is using this.
         virtual float GetCurrentPosition();
         virtual void SetCurrentPositionAs(float new_position);
         void Recalulate_distance_speed_acceleration(MoveBlock_SingleActuator* move, float start_position, float target_time);

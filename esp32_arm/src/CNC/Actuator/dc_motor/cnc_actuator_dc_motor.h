@@ -16,7 +16,7 @@ class CncActuatorDcMotor: public CncActuatorBase{
 
         // Will auto change to false, when arrived(very closed to) target position during moving.
         // Also mightly auto change to true, After SetTargetPositionTo() is invoked.
-        void ForceStop();   //Only G28 is using this.
+        void ForceStop_G28_Only(bool update_target_position = true);   //Only G28 is using this.
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;
         void SetCurrentPositionAs(float new_position) override;
         float GetCurrentPosition() override;

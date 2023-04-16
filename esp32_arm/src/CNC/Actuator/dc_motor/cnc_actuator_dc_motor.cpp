@@ -99,11 +99,14 @@ void CncActuatorDcMotor::UpdateMovement(MoveBlock_SingleActuator* move){
     Logger::Print("target_velocity", this->__target_velocity);
 }
 
-void CncActuatorDcMotor::ForceStop(){   
+void CncActuatorDcMotor::ForceStop_G28_Only(bool update_target_position){   
     //* Only G28 is using this.
-    Logger::Debug("CncActuatorDcMotor::ForceStop() is entering...");
+    Logger::Debug("CncActuatorDcMotor::ForceStop_G28_Only() is entering...");
     this->__h_bridge->Stop();
     this->_is_moving = false;
+    if (update_target_position){
+ 
+    }
 }
 
 void CncActuatorDcMotor::SetCurrentPositionAs(float new_position){

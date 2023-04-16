@@ -11,7 +11,7 @@ bool M84_Runner_Disable_All_Steppers::RunnerLoop(){
     //TODO: CNC_AXIS_COUNT_IK,   vs CNC_AXIS_COUNT_FK
 	for (int axis=0; axis<gs_CncActuator_List::Instance().GetItemsCount(); axis++){
 		CncActuatorBase* actuator = gs_CncActuator_List::Instance().GetActuator(axis);
-		actuator->ForceStop();   //TODO:  Disable
+		actuator->ForceStop_G28_Only();   //TODO:  Disable
 	}
 	return true;
 }

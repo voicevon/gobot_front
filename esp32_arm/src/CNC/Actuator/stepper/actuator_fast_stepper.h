@@ -6,7 +6,7 @@
 class CncActuatorFastStepper: public CncActuatorBase{
     public:
         void SpinOnce() override;
-        void ForceStop() override;
+        void ForceStop_G28_Only(bool update_target_position = true) override;
         void PrintOut(const char* title, uint32_t count_up_max);
         void LinkStepper(FastAccelStepper* stepper);
 

@@ -103,7 +103,9 @@ void WiFiEvent(WiFiEvent_t event) {
 
     case SYSTEM_EVENT_STA_GOT_IP:
         Logger::Info("Wifi event::SYSTEM_EVENT_STA_GOT_IP");
-        Logger::Print("Local IP address: ",WiFi.localIP());
+        // Logger::Print("Local IP address: ", WiFi.localIP());
+        Serial.print("Local ip address is: \t");
+        Serial.println(WiFi.localIP());
         xTimerStart(mqttReconnectTimer,0);
         break;
 

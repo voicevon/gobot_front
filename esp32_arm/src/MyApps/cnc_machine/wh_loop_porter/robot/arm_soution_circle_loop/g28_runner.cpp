@@ -37,14 +37,6 @@ void Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome(char axis_name, MoveBlock* 
     // Logger::Print("Twh_LoopPorter_G28_Runner::_SetMoveBlock_ToHome()  point", 99);
 }
 
-void Twh_LoopPorter_G28_Runner::_InitHomePosition(char axis_name, float setting_position){
-    // if (axis_name=='X'){
-    //     __Setting_HOME_POSITION_FK_ROLL =  setting_position;
-    // }else{
-    //     Logger::Warn("Twh_LoopPorter_G28_Runner::InitHomePosition()");
-    //     Logger::Print("Unknown axis_name = " , axis_name);
-    // }
-}
 
 void Twh_LoopPorter_G28_Runner::_SetHomedPosition(PositionTrigger* firer){
     Logger::Debug("Twh_LoopPorter_G28_Runner::_SetHomedPosition()");
@@ -56,7 +48,8 @@ void Twh_LoopPorter_G28_Runner::_SetHomedPosition(PositionTrigger* firer){
         
         _arm_solution->FK_to_IK(&current_fk, &ik);
         _arm_solution->SetCurrentPositionAs(&ik);
+
     }
-    Logger::Print("Twh_LoopPorter_G28_Runner::_SetHomedPosition() result:   current_fk.X", current_fk.X ); 
+    Logger::Print("Homed fk.X", current_fk.X ); 
     ik.PrintOut("Homed ik"); 
 }

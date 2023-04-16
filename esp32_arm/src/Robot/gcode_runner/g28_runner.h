@@ -14,7 +14,7 @@ class G28_Runner: public SyncGcodeRunnerBase{
         void LinkGcode(GcodeText* gcode) override;
         
     protected:
-        virtual void _InitHomePosition(char axis_name, float setting_position);
+        // virtual void _InitHomePosition(char axis_name, float setting_position);
         virtual void _SetMoveBlock_ToHome(char axis_name, MoveBlock* mb);
         virtual void _SetHomedPosition(PositionTrigger* firer);
         CncMover* _mover;   //Only for stop()

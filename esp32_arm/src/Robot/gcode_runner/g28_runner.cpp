@@ -20,8 +20,8 @@ bool G28_Runner::IsDone(){
                 }
             }
         }
-        if(micros() - last_micros > 200000){
-            Serial.print(".");  //print too fast?
+        if(micros() - last_micros > 500000){
+            Serial.print("H");  
             last_micros = micros();
         }
         return false;

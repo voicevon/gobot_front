@@ -19,7 +19,7 @@ void CncMover::SpinOnce(){
 
     if (has_moving_actuator){
         if (millis() - last_print_time_stamp > 500){
-            Serial.print("M");
+            Serial.print("m");
             last_print_time_stamp = millis();
         }
         return;
@@ -39,7 +39,7 @@ void CncMover::SpinOnce(){
 
     this->AllActuatorsMoveTo(mb);
     // mb->PrintOut("caller is  CncMover::SpinOnce()");
-    Logger::Print("CncMover::SpinOnce() point", 99);
+    Logger::Print("CncMover::SpinOnce() point   99", 99);
 
 }
 
@@ -71,7 +71,7 @@ void CncMover::AllActuator_SetPositionAs(IKPosition_abgdekl* new_position){
 
 void CncMover::AllActuatorsStop(){
     for(int a=0; a<gs_CncActuator_List::Instance().GetItemsCount(); a++){
-        gs_CncActuator_List::Instance().GetActuator(a)->ForceStop();
+        gs_CncActuator_List::Instance().GetActuator(a)->ForceStop_G28_Only();
     }
 }
 

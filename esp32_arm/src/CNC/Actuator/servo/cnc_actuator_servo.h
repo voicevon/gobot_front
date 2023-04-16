@@ -9,7 +9,7 @@ class CncActuatorServo: public CncActuatorBase{
         void LinkServo(Servo* servo);
         void SpinOnce();
         void UpdateMovement(MoveBlock_SingleActuator* movement) override;
-        void ForceStop() override {};   //No point for servo actuator.
+        void ForceStop_G28_Only(bool update_target_position = true) override {};   //No point for servo actuator.
         void SetCurrentPositionAs(float new_position) override;
         float GetCurrentPosition() override;
 
