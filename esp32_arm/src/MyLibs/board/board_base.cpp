@@ -34,7 +34,7 @@ void BoardBase::RepportRamUsage(){
 
     Serial.print("largest block of heap that can be allocated at once = ");
     Serial.print(ESP.getMaxAllocHeap()); //largest block of heap that can be allocated at once
-    Serial.println(FCBC_RESET);
+    Serial.println(COLOR_RESET);
 }
 
 uint8_t BoardBase::Assign_ledc_channel(){

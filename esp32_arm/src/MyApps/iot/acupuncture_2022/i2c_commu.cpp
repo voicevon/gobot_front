@@ -93,7 +93,7 @@ void I2c_commu::SpinOnce(){
     // Serial.print(this->Cells[0].Address);
     // Serial.print("   CELLS_COUNT= ");
     // Serial.print(this->__CELLS_COUNT);
-    // Serial.println(FCBC_RESET);
+    // Serial.println(COLOR_RESET);
     // }
     
 }

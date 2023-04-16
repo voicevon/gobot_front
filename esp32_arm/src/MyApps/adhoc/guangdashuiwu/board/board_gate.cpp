@@ -18,7 +18,7 @@ void GuangDa_ShuiWu_GateBoard::Init(){
     Logger::Info("==========================================");
     Logger::Info("Hi Xuming, I am Mesh-Adhoc Gate. Good luck......");
     Logger::Info("==========================================");
-    Serial.print(FCBC_RESET);
+    Serial.print(COLOR_RESET);
     this->__InitHardware();
 
     this->RepportRamUsage();

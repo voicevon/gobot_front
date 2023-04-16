@@ -11,30 +11,30 @@
 
 // https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
 
-#define FCBC_RESET  "\033[0m"   //FCBC is for "Fore color background color"
-// #define ctl_bold \033[01m
-// #define ctl_disable='\033[02m'
-// #define ctl_underline='\033[04m'
-// #define ctl_reverse='\033[07m'
-// #define ctl_strikethrough='\033[09m'
-// #define ctl_invisible='\033[08m'
+#define COLOR_RESET  "\033[0m"   //Fore color and background color
+#define COLOR__BOLD "\033[01m"
+#define COLOR_DISABLE "\033[02m"
+#define COLOR_UNDERLINE "\033[04m"
+#define COLOR_REVERSE "\033[07m"
+#define COLOR_STRIKE_THROUGH "\033[09m"
+#define COLOR_INVISIBLE "\033[08m"
 
  
-        // black='\033[30m'
+#define FORE_BLACK "\033[30m"
 #define FORE_RED "\033[31m"
 #define FORE_GREEN "\033[32m"
 #define FORE_ORANGE "\033[33m"
 #define FORE_BLUE "\033[34m"
-    //     purple='\033[35m'
-    //     cyan='\033[36m'
+#define FORE_PURPLE "\033[35m"
+#define FORE_CYAN "\033[36m"
 #define FORE_LIGHT_GRAY "\033[37m"
 #define FORE_DARK_GRAY "\033[90m"
-    //     lightred='\033[91m'
-    //     lightgreen='\033[92m'
+#define FORE_LIGHT_RED "\033[91m"
+#define FORE_LIGHT_GREEN "\033[92m"
 #define FORE_YELLOW "\033[93m"
-    //     lightblue='\033[94m'
-#define  FORE_PINK "\033[95m"
-    //     lightcyan='\033[96m'
+#define FORE_LIGHT_BLUE "\033[94m"
+#define FORE_PINK "\033[95m"
+#define FORE_LIGHT_CYAN "\033[96m"
 
     // class Background: 
     //     '''

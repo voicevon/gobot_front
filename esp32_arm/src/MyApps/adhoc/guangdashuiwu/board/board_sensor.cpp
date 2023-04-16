@@ -24,7 +24,7 @@ void GuangDa_ShuiWu_SensorBoard::Init(){
     Logger::Info("==========================================");
     Logger::Info("Hi Xuming, I am Mesh-Adhoc Sensor. Good luck......");
     Logger::Info("==========================================");
-    Serial.print(FCBC_RESET);
+    Serial.print(COLOR_RESET);
     this->RepportRamUsage();
     __state_led.Init(0, PIN_STATE_LED,  HIGH);
 

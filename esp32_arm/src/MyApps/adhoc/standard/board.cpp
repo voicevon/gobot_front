@@ -14,7 +14,7 @@ void Adhoc_RouterBoard::Init(){
     Logger::Info("==========================================");
     Logger::Info("Hi Xuming, I am Mesh-Adhoc Router or Sniffer. Good luck......");
     Logger::Info("==========================================");
-    Serial.print(FCBC_RESET);
+    Serial.print(COLOR_RESET);
     this->__InitHardware();
 
     this->RepportRamUsage();

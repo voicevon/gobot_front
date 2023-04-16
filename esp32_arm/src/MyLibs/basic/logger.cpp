@@ -18,12 +18,12 @@ void Logger::SetStyle(EnumStyle style_name, EnumStyle_position style_position){
     if (style_name == EnumStyle::Debug){
         if (style_position == EnumStyle_position::Title_Begin){
             Serial.print(FORE_YELLOW);
-            Serial.print(BGC_BLUE);
+            Serial.print(BGC_CYAN);
             Serial.print("[Debug] ");
             return;
         }else if (style_position == EnumStyle_position::Window_Begin){
             Serial.print(BGC_BLACK);
-            Serial.println(FORE_BLUE);
+            Serial.println(FORE_CYAN);
             return;
         }
     }

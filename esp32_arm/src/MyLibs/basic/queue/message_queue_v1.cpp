@@ -21,7 +21,7 @@
 //         Serial.print(FORE_YELLOW);
 //         Serial.print("\n  [Warn] MessageQueue_v1::AppendMessage() ");
 //         Serial.print("\n   Buffer is full");
-//         Serial.println(FCBC_RESET);
+//         Serial.println(COLOR_RESET);
 //         return true;
 //     }
 //     _all_messages[_head].length = length;

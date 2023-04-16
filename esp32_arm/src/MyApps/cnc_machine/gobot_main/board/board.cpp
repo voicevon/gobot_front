@@ -29,7 +29,7 @@ void GobotMain_Board::Init(){
     Logger::Info("==========================================");
     Logger::Info("Hi Xuming, I am GobotMain. Good luck......");
     Logger::Info("==========================================");
-    Serial.print(FCBC_RESET);
+    Serial.print(COLOR_RESET);
     this->InitHardware();
 
     //Init CNC
