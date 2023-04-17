@@ -2,38 +2,21 @@
 
 
 {% block content %}
-
 <table>
     <tr>
-
-        <!-- <td align="center">doc_id</td>
-        <td align="center">盒编号</td>
-        <td align="center">twh_id</td> -->
-        <td align="center">管理人</td>
-        <!-- <td align="center">日期</td> -->
-
-        <td align="center">品牌系列</td>
-        <td align="center">批次</td>
-        <td align="center">颜色</td>
-        <td align="center">大小</td>
-        <td align="center">形状</td>
-        <td align="center">盒编号</td>
-        <td align="center">数量</td>
+        {% for header in heading %}
+        <th align="center">{{ header }}</td>
+            {% endfor %}
     </tr>
     {% for item in items %}
     <tr>
         <form action="stock_rule_update" method="post">
-            <!-- <td align="center">{{ item.doc_id }}</td>
-            <td align="center">{{ item.col }}</td>
-            <td align="center">{{ item.twh_id }}</td> -->
             <td align="center">{{ item.user_name}}</td>
-            <!-- <td align="center">{{ item.date_time }}</td> -->
+            <td align="center">{{ item.date_time }}</td>
             <input type="hidden" name="doc_id" value="{{ item.doc_id }}">
             <input type="hidden" name="col" value="{{ item.col }}">
             <input type="hidden" name="twh_id" value="{{ item.twh_id }}">
-
-            <td>{% include 'embeded_brand_selected.html' %}
-            </td>
+            <td> {% include 'embeded_brand_selected.html' %} </td>
             <td>{{ item.batch_number }}</td>
             <td><select id="color" name="color">
                     <option value="A1" {% if item.color=='A1' %} selected{% endif%}>A1</option>

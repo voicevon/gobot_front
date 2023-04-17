@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request,flash, session, redirect,url_for
 from database.db_user import db_User
-from business_logical.bolt_nut import  twh_factory, get_twh_factory
+from database.bolt_nut import  twh_factory, get_twh_factory
 from logger import Logger
 from operator import itemgetter
 from von.mqtt_agent import g_mqtt
@@ -27,7 +27,7 @@ def login_real():
                 session['user']['user_id'] = user_id
                 session['user']['twh_id'] = '221109'
                 session['user']['position'] = 'None'
-                session['user']['factory_name'] = twh_factory['221109']
+                session['user']['factory_name'] = twh_factory['221109']['name']
                 return render_template('home_admin.html', twh_factory = twh_factory)
         flash("没有该用户")
         return render_template('login.html')
@@ -38,7 +38,7 @@ def login_real():
     
     user_id = request.form.get('user_id')
     session['user'] = db_User.get_user(user_id) # type: ignore
-    session['user']['factory_name'] = twh_factory[session['user']['twh_id']]
+    session['user']['factory_name'] = twh_factory[session['user']['twh_id']]['name']
     # Logger.Print('@web_user.route(/login_real)', session)
     # "user": {
     #     "twh_id": "221109",

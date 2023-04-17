@@ -1,5 +1,5 @@
 from tinydb import TinyDB, Query, where
-from business_logical.bolt_nut import get_row_from_tooth_location
+from database.bolt_nut import get_row_from_tooth_location
 from database.db_stock import db_Stock
 
 from logger import Logger

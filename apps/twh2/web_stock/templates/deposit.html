@@ -5,7 +5,6 @@
 <form action="/twh/deposit_request" method="POST">
     <fieldset>
         <input type="hidden" name="doc_id" value="-1">
-
         <input type="hidden" name="row" value="2">
         <input type="hidden" name="layer" value="1">
         <input type="hidden" name="col" value="3">
@@ -19,12 +18,47 @@
                     <td></td>
                     <td><input type="text" name="deposit_quantity" value=25></td>
                 </tr>
-                {% include 'tooth_search.html' %}
+                <tr>
+                    <td align="right">批次</td>
+                    <td></td>
+                    <td><input type="text" id="batch_number" name="batch_number" value="2309"></td>
+                </tr>
+                <tr>
+                    <td align="right">品牌</td>
+                    <td></td>
+                    <td><select id="brand" name="brand">
+                            {% for brand in factory.my_brands %}
+                            <option value="{{brand}}">{{brand}}</option>
+                            {% endfor %}
+                        </select></td>
+                </tr>
+                <tr>
+                    <td align="right">规格</td>
+                    <td></td>
+                    <td><select id="color" name="color">
+                            <option value="A1">A1</option>
+                            <option value="A2" selected>A2</option>
+                            <option value="A3">A3</option>
+                        </select>
+                        <select id="size" name="size">
+                            <option value="T1">T1</option>
+                            <option value="T2" selected>T2</option>
+                            <option value="T3">T3</option>
+                            <option value="T4">T4</option>
+                            <option value="T5">T5</option>
+                            <option value="T6">T6</option>
+                        </select>
+                        <select id="shape" name="shape">
+                            <option value="M">M</option>
+                            <option value="S" selected>S</option>
+                        </select>
+                    </td>
+                </tr>
             </table>
         </div>
-    </fieldset><p>
-
-    {% include 'tooth_chart_single.html' %}
+    </fieldset>
+    <p>
+        {% include 'tooth_chart_single.html' %}
     <p><input type="submit" value="申请入库" /></p>
 </form>
 {% endblock %}

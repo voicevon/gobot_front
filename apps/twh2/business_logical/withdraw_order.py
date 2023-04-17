@@ -2,7 +2,7 @@ from logger import Logger
 from database.db_withdraw_order import DB_WithdrawOrder
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
 from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
-from business_logical.bolt_nut import twh_factory
+from database.bolt_nut import twh_factory
 
 class OrderTooth():
     def __init__(self, db_doc_id:int) -> None:

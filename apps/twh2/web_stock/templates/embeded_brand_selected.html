@@ -1,6 +1,5 @@
 <select id="brand" name="brand">
-    <option value="沪鸽" {% if item.brand=='沪鸽' %} selected{% endif %}>沪鸽</option>
-    <option value="日本松风塑钢"{% if item.brand=='日本松风塑钢' %} selected{% endif%}>日本松风塑钢</option>
-    <option value="日本山八硬质"{% if item.brand=='日本山八硬质' %} selected{% endif%}>日本山八硬质</option>
-    <option value="日本山八合成"{% if item.brand=='日本山八合成' %} selected{% endif%}>日本山八合成</option>
+    {% for brand in factory.my_brands %}
+    <option value="{{ brand }}"{% if item.brand==brand %} selected{% endif%}>{{brand}}</option>
+    {% endfor%}
 </select>

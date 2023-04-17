@@ -3,8 +3,9 @@
 
 
 # Flask
-
+[How to display dynamic data tables with Python, Flask, and Jinja2](https://www.youtube.com/watch?v=mCy52I4exTU)
 * https://www.tutorialspoint.com/flask/flask_wtf.htm
+* https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates
 
 ## by:  Pretty Printed
 * [Form Handling in Flask - WTForms Validators](https://www.youtube.com/watch?v=F9vTlDzn7ac)

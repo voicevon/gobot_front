@@ -3,7 +3,7 @@ from wcs_robots.gcode_sender import GcodeSender, all_gcode_senders
 # from bolt_nut import PickingPacking_Tooth
 from business_logical.withdraw_order import OrderTooth, WithdrawOrder
 from logger import Logger
-from business_logical.bolt_nut import twh_factory
+from database.bolt_nut import twh_factory
 
 
 class TwhRobot_LoopPorter():

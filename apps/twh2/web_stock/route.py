@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request,flash, session, redirect, 
 from wcs_robots.twh_wcs_unit import  wcs_deposit_queue
 from database.db_stock import db_Stock, db_Deposit_history,db_StockRule
 from database.db_withdraw_order import DB_WithdrawOrder
-from business_logical.bolt_nut import get_row_from_tooth_location, twh_brands,twh_factory,twh_shapes,twh_sizes
+from database.bolt_nut import get_row_from_tooth_location, twh_brands,twh_factory,twh_shapes,twh_sizes
 
 from timestamp import get_timestamp
 from logger import Logger
@@ -28,7 +28,7 @@ def stock_rule_update():
     new_rule_item = request.form.to_dict()
     new_rule_item['user_id'] = session['user']['user_id']
     new_rule_item['user_name'] = session['user']['user_name']
-    new_rule_item['date_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    new_rule_item['date_time'] = datetime.now().strftime('%y-%m-%d %H:%M')
     db_StockRule.update(new_rule_item)
     flash("规则更新完毕")
     return redirect(url_for('web_stock.view_stock_rule'))
@@ -57,13 +57,16 @@ def create_stock_rule():
 
 @web_stock.route('/twh/view_stock_rule')
 def view_stock_rule():
+    heading = ("管理人","日期","品牌","批号","颜色","大小","形状","盒编号","数量")
     items = db_StockRule.get_all_rules_in_twh(session['user']['twh_id'])
-    return render_template('view_stock_rule.html', items=items)
+    return render_template('view_stock_rule.html', heading=heading, items=items, factory=twh_factory['221109'])
 
 @web_stock.route('/twh/view_stock_quantity')
 def view_stock_quantity():
+    heading = ("盒编号","品牌","批号","颜色","大小","形状","牙位","数量")
     stocks = db_Stock.table_stock.all()
-    return render_template('view_stock_quantity.html', stocks=stocks, factory_name=twh_factory['221109'])
+    # print(twh_factory['221109'])
+    return render_template('view_stock_quantity.html', heading=heading, stocks=stocks, factory=twh_factory['221109'], timestamp=datetime.now().strftime('%Y-%m-%d %H:%M'))
 
 @web_stock.route('/twh/view_deposit_history')
 def view_deposit_history():
@@ -79,7 +82,7 @@ def view_withdraw_history():
 def deposit():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
-        return render_template('deposit.html', twh_id = twh_id, brands = twh_brands)
+        return render_template('deposit.html', twh_id = twh_id, factory = twh_factory["221109"])
     else:
         return redirect(url_for('web_user.login'))
 
@@ -90,27 +93,25 @@ def deposit_request():
     #     user_request[key] = request.form.get(key)
 
     user_request = request.form.to_dict()
+    user_request['twh_id'] = session['user']['twh_id']
     request_in_stock = db_Stock.get_stock(user_request)
     if request_in_stock is None:
         # Can not find in stock , follow the stock_rule for stock_location.
         planed_location = db_StockRule.get_col_from_request(user_request)
         if planed_location is None:
             return "没有找到存储位置规划, 请联系生产主管来解决该问题。"
-        user_request['doc_id'] = -1
-        user_request['origin_quantity'] = 0
-        user_request['col'] = planed_location.col
+        user_request['doc_id'] = -1 # type: ignore
+        user_request['origin_quantity'] = 0 # type: ignore
+        user_request['col'] = planed_location.col # type: ignore
     else:
         #copy request_in_stock location to user_request 
-        user_request['doc_id'] = int(request_in_stock.doc_id)
-        user_request['origin_quantity'] = int(request_in_stock['stock_quantity'])
-        user_request['col'] = int(request_in_stock['col'])
+        user_request['doc_id'] = int(request_in_stock.doc_id) # type: ignore
+        user_request['origin_quantity'] = int(request_in_stock['stock_quantity']) # type: ignore
+        user_request['col'] = int(request_in_stock['col']) # type: ignore
 
-    user_request['row'] = get_row_from_tooth_location(user_request['location'])
-    user_request['layer'] = int(user_request['location'][3:4])
-
-    # print(user_request)
-
-    return render_template("deposit_request.html",user_request = user_request)
+    user_request['row'] = get_row_from_tooth_location(user_request['location']) # type: ignore
+    user_request['layer'] = int(user_request['location'][3:4]) # type: ignore
+    return render_template("deposit_request.html",user_request = user_request, factroy=twh_factory["221109"])
 
 @web_stock.route('/twh/deposit_move', methods = ['POST'])
 def deposit_move():
@@ -119,12 +120,12 @@ def deposit_move():
         user_request ={}
         for key in request_form.to_dict():
             user_request[key] = request_form.get(key)
-            user_request['row'] = int(request_form.get('row'))
-            user_request['col'] = int(request_form.get('col'))
-            user_request['layer'] = int(request_form.get('layer'))
-            user_request['origin_quantity'] = int(request_form.get('origin_quantity'))
-            user_request['deposit_quantity'] = int(request_form.get('deposit_quantity'))
-            user_request['doc_id'] = int(request_form.get('doc_id'))
+            user_request['row'] = int(request_form.get('row')) # type: ignore
+            user_request['col'] = int(request_form.get('col')) # type: ignore
+            user_request['layer'] = int(request_form.get('layer')) # type: ignore
+            user_request['origin_quantity'] = int(request_form.get('origin_quantity')) # type: ignore
+            user_request['deposit_quantity'] = int(request_form.get('deposit_quantity')) # type: ignore
+            user_request['doc_id'] = int(request_form.get('doc_id')) # type: ignore
         user_request['message_type'] = 'deposit_begin'
         wcs_deposit_queue.put(user_request)
         print("robot will move box to somewhere for operator........ ")
