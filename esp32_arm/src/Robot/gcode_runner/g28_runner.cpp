@@ -31,7 +31,7 @@ bool G28_Runner::IsDone(){
 }
 
 void G28_Runner::LinkGcode(GcodeText* gcode_text){
-    Logger::Debug("G28_Runner::LinkGcode()");
+    // Logger::Debug("G28_Runner::LinkGcode()");
     
     GcodeHelper gcode(gcode_text->GetChars);
     // GcodeHelper* gcode = &gcode_helper;
@@ -51,7 +51,7 @@ void G28_Runner::LinkGcode(GcodeText* gcode_text){
     if (gcode.has_letter('k')) axis_name = 'k'; 
     if (gcode.has_letter('l')) axis_name = 'l'; 
     Serial.print(char(axis_name));
-    Logger::Print("\t\thome_axis", char(axis_name));
+    // Logger::Print("\t\thome_axis", char(axis_name));
     this->_axis_name = axis_name;
 }
 

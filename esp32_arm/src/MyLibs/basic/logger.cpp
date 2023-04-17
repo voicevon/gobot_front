@@ -2,12 +2,11 @@
 
 void Logger::SetStyle(EnumStyle style_name, EnumStyle_position style_position){
 
-
-    if (style_name == EnumStyle::Info) {
+    if (style_name == EnumStyle::Debug){
         if (style_position == EnumStyle_position::Title_Begin){
             Serial.print(FORE_YELLOW);
             Serial.print(BGC_GREEN);
-            Serial.print("[Info] ");
+            Serial.print("[Debug] ");
             return;
         }else if (style_position == EnumStyle_position::Window_Begin){
             Serial.print(BGC_BLACK);
@@ -15,11 +14,12 @@ void Logger::SetStyle(EnumStyle style_name, EnumStyle_position style_position){
             return;
         }
     }
-    if (style_name == EnumStyle::Debug){
+
+    if (style_name == EnumStyle::Info) {
         if (style_position == EnumStyle_position::Title_Begin){
             Serial.print(FORE_YELLOW);
             Serial.print(BGC_CYAN);
-            Serial.print("[Debug] ");
+            Serial.print("[Info] ");
             return;
         }else if (style_position == EnumStyle_position::Window_Begin){
             Serial.print(BGC_BLACK);
@@ -27,6 +27,7 @@ void Logger::SetStyle(EnumStyle style_name, EnumStyle_position style_position){
             return;
         }
     }
+
 
     if (style_name == EnumStyle::Warning){
         if (style_position == EnumStyle_position::Title_Begin){

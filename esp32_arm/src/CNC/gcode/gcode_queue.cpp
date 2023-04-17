@@ -67,7 +67,7 @@ int GcodeQueue::AppendGcodeCommand(const char* payload, int length){
     GcodeText* gcode_text = this->GetRoom_ForDeposit();
     int result = gcode_text->CopyFrom(payload, length);
     if (result == GCODE_TEXT_OK){
-        gcode_text->PrintFlat("appended, please verify");
+        // gcode_text->PrintFlat("appended, please verify");
         this->Deposit();
         return 1;
     }

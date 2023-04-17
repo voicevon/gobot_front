@@ -4,12 +4,12 @@
 
 
 void M408_Runner_MqttPublish::SetupRunner(GcodeText* mcode_text){
-    // GcodeHelper gcode_helper = GcodeHelper(mcode_text->bytes);
-    // GcodeHelper* mcode = &gcode_helper;
+    GcodeHelper gcode_helper = GcodeHelper(mcode_text->GetChars);
+    GcodeHelper* mcode = &gcode_helper;
     // Logger::Info("M408_Runner_ReportJson::SetupRunner()");
-    // strcpy(__publish_topic_string, mcode->get_command());
-    mcode_text->CopyTo(__publish_topic_string);
-    Logger::Print(" 408_Runner_MqttPublish::SetupRunner()   __publish_topic_string", __publish_topic_string);
+    strcpy(__publish_topic_string, mcode->get_command());
+    // mcode_text->CopyTo(__publish_topic_string);   //this will let __publish_topic_string == "M408twh/221109/r1/state"
+    // Logger::Print(" 408_Runner_MqttPublish::SetupRunner()   __publish_topic_string", __publish_topic_string);
 }
 
 bool M408_Runner_MqttPublish::RunnerLoop(){
@@ -18,7 +18,6 @@ bool M408_Runner_MqttPublish::RunnerLoop(){
     // Logger::Print("__publish_topic_string", __publish_topic_string);
     // Logger::Print("Loaded json string", payload);
 
-    // g_mqttClient.publish("twh/221109/r1/state", 2, true, payload);
     g_mqttClient.publish(__publish_topic_string, 2, true, payload);
     return true;
 }

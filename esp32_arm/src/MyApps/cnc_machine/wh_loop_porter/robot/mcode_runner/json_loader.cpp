@@ -6,7 +6,6 @@
 
 
 char* Twh_LoopPorter_JsonLoader::Load(){
-    
     // Logger::Debug("Twh_LoopPorter_JsonLoader::Load()");
     String str_state = "ready";
     if (__first_run) {
