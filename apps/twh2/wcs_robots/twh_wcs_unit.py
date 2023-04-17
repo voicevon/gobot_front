@@ -45,7 +45,7 @@ class TwhWcs_Unit():
         return True
 
     def __Do_deposit_begin(self, new_deposit_request):
-        Logger.Info(twh_factory[self.__twh_id] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
+        Logger.Info(twh_factory[self.__twh_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
         Logger.Print("new_deposit_request", new_deposit_request)
         # the loop-porter will move to col-position
         row_id = new_deposit_request['row']
@@ -160,7 +160,7 @@ class TwhWcs_Unit():
 
 
 def WCS_Main(deposit_queue:multiprocessing.Queue):
-        g_mqtt_broker_config.client_id = '20230355'
+        g_mqtt_broker_config.client_id = '20230f355'
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
 
         all_wcs_units = []

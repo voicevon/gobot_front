@@ -146,7 +146,7 @@ class WithdrawOrder():
         if self.__state == 'wcs_shipping':
             if self.__shipper.Get_Shipout_button_value()=='ON':
                 twh_id = '221109'
-                Logger.Info(twh_factory[twh_id] + ' -- WithdrawOrder:: SpinOnce()  From wcs_shipping to shipped')
+                Logger.Info(twh_factory[twh_id]['name'] + ' -- WithdrawOrder:: SpinOnce()  From wcs_shipping to shipped')
                 # self.__shipper.Reset_Shipout_button()
                 self.__shipper.EndShipping()
 
@@ -247,7 +247,7 @@ class WithdrawOrderManager():
             if is_shipped:
                 # twh_id = order
                 twh_id = '221109'
-                Logger.Info( twh_factory[twh_id] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
+                Logger.Info( twh_factory[twh_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 self.__all_order_tasks.remove(order)
                 return
 

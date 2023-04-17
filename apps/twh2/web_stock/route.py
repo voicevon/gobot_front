@@ -150,7 +150,7 @@ def deposit_end():
 def withdraw():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
-        return render_template('withdraw.html', twh_id=twh_id, brands=twh_brands)
+        return render_template('withdraw.html', twh_id=twh_id, factory=twh_factory[session['user']['twh_id']])
     else:
         return redirect(url_for('web_user.login'))
 

@@ -16,7 +16,34 @@
                 <td></td>
                 <td><input type="text" id="order_code" name="order_code"></td>
             </tr>
-            {% include 'tooth_search.html' %}
+
+            <tr>
+                <td align="right">品牌</td>
+                <td></td>
+                <td>{% include 'embeded_brand_select.html' %}</td>
+            </tr>
+            <tr>
+                <td align="right">规格</td>
+                <td></td>
+                <td><select id="color" name="color">
+                        <option value="A1">A1</option>
+                        <option value="A2" selected>A2</option>
+                        <option value="A3">A3</option>
+                    </select>
+                    <select id="size" name="size">
+                        <option value="T1">T1</option>
+                        <option value="T2" selected>T2</option>
+                        <option value="T3">T3</option>
+                        <option value="T4">T4</option>
+                        <option value="T5">T5</option>
+                        <option value="T6">T6</option>
+                    </select>
+                    <select id="shape" name="shape">
+                        <option value="M">M</option>
+                        <option value="S" selected>S</option>
+                    </select>
+                </td>
+            </tr>
         </table>
     </fieldset>
     <p>

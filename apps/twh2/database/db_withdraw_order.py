@@ -99,7 +99,7 @@ class DB_WithdrawOrder():
                 order_item['user_id'] = request['user_id']
                 order_item['twh_id'] = request['twh_id']
                 order_item['brand'] = request['brand']
-                order_item['batch_number'] = request['batch_number']
+                # order_item['batch_number'] = request['batch_number']
                 order_item['color'] = request['color']
                 order_item['shape'] = request['shape']
                 order_item['size'] = request['size']

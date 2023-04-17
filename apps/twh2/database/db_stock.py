@@ -70,7 +70,7 @@ class db_Stock():
                                             & (q.color == request['color'])
                                             & (q.size == request['size'])
                                             & (q.shape == request['shape'])
-                                            & (q.batch_number == request['batch_number'])
+                                            # & (q.batch_number == request['batch_number'])
                                             & (q.location == value)
                                             )
                 if len(db_rows) == 0:
@@ -88,7 +88,7 @@ class db_Stock():
                                     & (q.color == request['color'])
                                     & (q.size == request['size'])
                                     & (q.shape == request['shape'])
-                                    & (q.batch_number == request['batch_number'])
+                                    # & (q.batch_number == request['batch_number'])
                                     & (q.location == location)
                                     )
         if len(db_rows) > 0:

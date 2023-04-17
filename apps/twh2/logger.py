@@ -26,10 +26,11 @@ class Logger():
 
     @classmethod
     def Info(cls, title):
-        print( TerminalFont.Color.Fore.cyan 
-            + TerminalFont.Color.Background.orange 
+        print( TerminalFont.Color.Fore.blue
+            + TerminalFont.Color.Background.orange
             + '[Info] ' + title 
-            + TerminalFont.Color.Control.reset)
+            + TerminalFont.Color.Background.black
+            + TerminalFont.Color.Fore.yellow)
         cls.style = TerminalFont.Color.Fore.green
 
     @classmethod

@@ -8,13 +8,13 @@ from database.bolt_nut import twh_factory
 
 class TwhRobot_LoopPorter():
 
-    def __init__(self, robot_id:str, row_id:int) -> None:
+    def __init__(self, wcs_unit_id:str, row_id:int) -> None:
         self.id = row_id
-        self.robot_id = robot_id
-        self.__state_topic = "twh/" + robot_id + '/r' + str(row_id) + "/state"  #'twh/221109/r0/state'
+        self.wcs_unit_id = wcs_unit_id
+        self.__state_topic = "twh/" + wcs_unit_id + '/r' + str(row_id) + "/state"  #'twh/221109/r0/state'
         self.__state = RemoteVar_mqtt(self.__state_topic, 'idle')
 
-        gcode_topic = "twh/" + robot_id + '/r' + str(row_id) + "/gcode"  #'twh/221109/r0/state'
+        gcode_topic = "twh/" + wcs_unit_id + '/r' + str(row_id) + "/gcode"  #'twh/221109/r0/state'
         self.gcode_sender = GcodeSender(gcode_topic)
         all_gcode_senders.append(self.gcode_sender)
 
@@ -45,7 +45,7 @@ class TwhRobot_LoopPorter():
         self.__state.set('moving')    # set to 'moving' when gcode-G1 is sent. ??
         # self.target_tooth = tooth
         self.__target_layer = target_layer
-        Logger.Info(twh_factory[self.robot_id]  + ' -- TwhRobot_LoopPorter::MoveTo()')
+        Logger.Info(twh_factory[self.wcs_unit_id]['name']  + ' -- TwhRobot_LoopPorter::MoveTo()')
         print(  '(row, col, layer) = ' ,self.id, target_col, target_layer )
         
         mcode ='M42P99S1'  # turn off all green leds
