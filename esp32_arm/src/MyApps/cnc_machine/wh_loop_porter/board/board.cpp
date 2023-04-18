@@ -1,10 +1,6 @@
 #include "board.h"
 
 
-#define PIN_ALPHA_DIR 27 //32  
-#define PIN_ALPHA_STEP 14 //26   
-#define PIN_ALPHA_ENABLE 32
-
 #define PIN_LED_1 23
 #define PIN_LED_2 22
 #define PIN_LED_3 21
@@ -12,6 +8,13 @@
 #define PIN_LED_5 18
 #define PIN_LED_6 17
 #define PIN_LED_7 16
+
+
+#define PIN_ALPHA_DIR 27 //32  
+#define PIN_ALPHA_STEP 14 //26   
+#define PIN_ALPHA_ENABLE 32
+
+
 
 #define PIN_NUMBER_LED_SCLK 25
 #define PIN_NUMBER_LED_DATA 26
@@ -75,10 +78,12 @@ void Twh_LoopPorter_Board::__InitSteppers(){
 }
 
 
-void Twh_LoopPorter_Board::TurnOn_ThisLed_Only(int led_id){
+void Twh_LoopPorter_Board::TurnOn_ThisLed_Only(int led_index){
+    // Logger::Debug("Twh_LoopPorter_Board::TurnOn_ThisLed_Only");
+    // Logger::Print("led_index",led_index);
     for(int i=0; i<7; i++){
         __leds[i].TurnOff();
-        if (i==led_id) __leds[i].TurnOn();
+        if (i==led_index) __leds[i].TurnOn();
     }
 }
 

@@ -61,12 +61,16 @@ def view_stock_rule():
     items = db_StockRule.get_all_rules_in_twh(session['user']['twh_id'])
     return render_template('view_stock_rule.html', heading=heading, items=items, factory=twh_factory['221109'])
 
-@web_stock.route('/twh/view_stock_quantity')
+@web_stock.route('/twh/view_stock_quantity', methods=['POST','GET',])
 def view_stock_quantity():
     heading = ("盒编号","品牌","批号","颜色","大小","形状","牙位","数量")
-    stocks = db_Stock.table_stock.all()
-    # print(twh_factory['221109'])
-    return render_template('view_stock_quantity.html', heading=heading, stocks=stocks, factory=twh_factory['221109'], timestamp=datetime.now().strftime('%Y-%m-%d %H:%M'))
+    if request.method == 'GET':
+        stocks = db_Stock.table_stock.all()
+        return render_template('view_stock_quantity.html', heading=heading, stocks=stocks, factory=twh_factory['221109'], timestamp=datetime.now().strftime('%Y-%m-%d %H:%M'))
+    else:
+        selected_brand = request.form['brand']
+        stocks = db_Stock.get_stock_by_single_brand(selected_brand)
+        return render_template('view_stock_quantity.html', heading=heading, stocks=stocks, factory=twh_factory['221109'], timestamp=datetime.now().strftime('%Y-%m-%d %H:%M'))
 
 @web_stock.route('/twh/view_deposit_history')
 def view_deposit_history():

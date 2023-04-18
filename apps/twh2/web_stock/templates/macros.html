@@ -1,0 +1,8 @@
+{% macro show_brands(my_brands) %}
+
+{% for index in range(my_brands|length) %}
+<input type="radio" id="brand" name="brand" value="{{my_brands[index]}}">
+{{ my_brands[index]}}<br>
+{% endfor %}
+
+{% endmacro %}

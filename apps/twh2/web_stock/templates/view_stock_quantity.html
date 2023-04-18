@@ -1,14 +1,16 @@
+{% from 'macros.html' import show_brands %}
 {% extends "wcs/twh/common_base.html" %}
 
 {% block content %}
 当前库存报告: {{ timestamp}}
+<hr>
 <table>
     <tr>
+        <form action="view_stock_quantity" method="POST">
         <td></td>
-        <td>{% for brand in factory['my_brands'] %}
-            <input type="checkbox" id="brand" name="brand" value="日本山八合成">{{ brand }}<br>
-            {% endfor %}
-        </td>
+        <td> {{ show_brands(factory['my_brands'])}} </td>
+        <td><input type="submit" value="刷新"></td>
+        </form>
     </tr>
     <tr>
         {% for header in heading %}

@@ -59,7 +59,12 @@ class db_Stock():
         if len(db_rows) > 0:
             return db_rows[0]
         return None
-
+    
+    @classmethod
+    def get_stock_by_single_brand(cls, selected_brand):  # -> List[Document]
+        db_rows = cls.table_stock.search(Query().brand == selected_brand)
+        return db_rows
+    
     @classmethod
     def check_stock_for_all_locations(cls, request) -> bool:
         # print(request)
