@@ -126,7 +126,6 @@ class WithdrawOrder():
             return False
         if self.__state == 'feeding':
             if self.IsFullFilled():
-                Logger.Debug("Order.SpinOnce()   feeding to fullfilled")
                 doc_ids = self.__get_all_teeth_doc_ids()
                 DB_WithdrawOrder.update_order_state('fullfilled', doc_ids)
                 return False
@@ -145,9 +144,6 @@ class WithdrawOrder():
 
         if self.__state == 'wcs_shipping':
             if self.__shipper.Get_Shipout_button_value()=='ON':
-                twh_id = '221109'
-                Logger.Info(twh_factory[twh_id]['name'] + ' -- WithdrawOrder:: SpinOnce()  From wcs_shipping to shipped')
-                # self.__shipper.Reset_Shipout_button()
                 self.__shipper.EndShipping()
 
                 DB_WithdrawOrder.delete_by_order_id(self.Order_id)
@@ -245,9 +241,7 @@ class WithdrawOrderManager():
         for order in self.__all_order_tasks:
             is_shipped =  order.SpinOnce()
             if is_shipped:
-                # twh_id = order
-                twh_id = '221109'
-                Logger.Info( twh_factory[twh_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
+                Logger.Info( twh_factory[self.__twh_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 self.__all_order_tasks.remove(order)
                 return
 

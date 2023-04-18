@@ -211,8 +211,6 @@ def withdraw_shipout():
         doc_ids = []
         for order in my_fullfilled_orders:
             doc_ids.append(order.doc_id)
-        Logger.Debug("WMS::route.py  withdraw_shipout()")
-        Logger.Print('doc_ids', doc_ids)
         DB_WithdrawOrder.update_order_state('wms_shipping', doc_ids) 
         # aa = DB_WithdrawOrder.table_withdraw_order.all()
         # Logger.Print('aa', aa)

@@ -61,8 +61,6 @@ class TwhRobot_Packer():
         topic = 'twh/221109/packer/led'
 
         payload =  str(self.__green_led_index + 100* self.__blue_led_index)
-        Logger.Debug("TwhRobot_Packer:: turn_on_packer_cell_led()")
-        Logger.Print('payload',payload)
         g_mqtt.publish(topic, payload)
 
     def __turn_off_all_packer_cells_led(self, color:str):
