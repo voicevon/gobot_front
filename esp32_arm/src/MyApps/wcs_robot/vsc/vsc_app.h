@@ -8,7 +8,7 @@ class VscApp: public CncAppBase{
         VscApp();
         void LinkRobot(VscRobot* robot){this->__robot=robot;};
         void __onGot_MqttMessage(const char*);
-        void ExecuteCommand(const char* command) override{}; 
+        // void ExecuteCommand(const char* command) override{}; 
         
     private:
         VscRobot* __robot;

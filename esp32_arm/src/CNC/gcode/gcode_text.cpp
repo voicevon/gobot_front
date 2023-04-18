@@ -64,3 +64,34 @@ void GcodeText::PrintFlat(const char* title){
         Serial.print(this->__chars[i]);
     }
 }
+
+
+bool GcodeText::IsEqualTo(const char* chars){
+    for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
+        if (this->__chars[i] != chars[i]){
+            return false;
+        }
+        if(this->__chars[i] == 0x00){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool GcodeText::IsPrefix(const char* chars){
+    for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
+        Logger::Print("chars[i]---", chars[i]);
+        Logger::Print("this->__chars[i]---", this->__chars[i]);
+        if (this->__chars[i] != chars[i]){
+            if(chars[i] == 0x00){
+                Logger::Print("GcodeText::IsPrefix() return true", 92);
+                return true;
+            }
+            Logger::Print("GcodeText::IsPrefix() return false", 91);
+            return false;
+        }
+    }
+    Logger::Print("GcodeText::IsPrefix() return true", 93);
+    return false;
+}
+

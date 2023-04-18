@@ -60,7 +60,7 @@ class BotAsrsAgvCoreYZ: public CncAppBase{
         void Test_UnHome();
         BoxCarrierApp box_app;
         BoxCarrierRobot box_robot;
-        void ExecuteCommand(const char* command) override{}; 
+        // void ExecuteCommand(const char* command) override{}; 
         
     protected:
         

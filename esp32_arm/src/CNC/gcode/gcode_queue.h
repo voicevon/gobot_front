@@ -16,6 +16,7 @@ class GcodeQueue: public QueueBase<GcodeText>{
         //     1:  deposited to queue successful.
         int AppendGcodeCommand(const char* command);
         int AppendGcodeCommand(const char* payload, int length);
+        int AppendGcodeCommand(GcodeText* gcode_text);
         void PrintOut_GcddeText(const char* title);
     private:
         GcodeText __all_gcodes[GCODE_QUEUE_SIZE];

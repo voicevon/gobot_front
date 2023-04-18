@@ -12,24 +12,17 @@ void CncAppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     Logger::Debug("CncAppBase::onGot_MqttMessage");
     Logger::Print("payload", payload);
     Logger::Print("payload_len", payload_len);
-    const char* IS_APP_COMMAND = APP_COMMAND_PREFIX;
+    // const char* IS_APP_COMMAND = APP_COMMAND_PREFIX;
 
     __have_done_feedback = false;
-
-    bool is_app_command = true;
-    for (int i=0; i<APP_COMMAND_PREFIX_SIZE; i++){
-        if (payload[i] != IS_APP_COMMAND[i]){
-            is_app_command = false;
-            break;
-        }
-    }
-
-    if (is_app_command){
-        this->ExecuteCommand(payload);
-        // __send_mqtt_feedback();
+    // GcodeText gcode_text;
+    __app_command.CopyFrom(payload,payload_len);
+    if (__app_command.IsEqualTo("app:led")){
+        // This is a thread in mqtt-on-received callbaking.    so watchdog will be fired if long time without return.
+        // this->ExecuteCommand(&__app_command);
         return;
     }
-    // check gcode_queue buffer size.
+    __app_command.CopyFrom("none");
     int free_buffer_count = _gcode_queue->GetFreeBuffersCount();
     if (free_buffer_count <=1 ){
         Logger::Error("CncAppBase::onGot_MqttMessage()  buffer is full");
@@ -62,12 +55,12 @@ void CncAppBase::Link_Mqtt_to_GcodeQueue(const char* mqtt_topic, GcodeQueue* gco
 }
 
 void CncAppBase::SpinOnce(){
-    if (this->test_id != 1234){
-        Logger::Warn("CncAppBase::SpinOnce(),  The bug is eating.!!!!");
-        Logger::Halt("BUG!");
-    }
     if (__have_done_feedback)
         return;
+    if (__app_command.IsPrefix("app:")){
+        g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, __app_command.GetChars);
+        this->ExecuteCommand(&__app_command);
+    }
     if (_gcode_queue->GetFreeBuffersCount() == 0)
         return;
 

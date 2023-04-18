@@ -15,6 +15,8 @@ class  GcodeText{
         int CopyFrom(const char* bytes, int length);
         void PrintFlat(const char* title);
         void CopyTo(char* destination);
+        bool IsEqualTo(const char* chars);
+        bool IsPrefix(const char* chars);
 
         // const char &GetText = *__chars;  // For Arduino::chars[n]
         const char* GetChars = __chars;   // For std::cxx11::string
