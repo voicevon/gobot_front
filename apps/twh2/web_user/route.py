@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request,flash, session, redirect,url_for
 from database.db_user import db_User
-from database.bolt_nut import  twh_factory, get_twh_factory
+from database.bolt_nut import  twh_factories
 from logger import Logger
 from operator import itemgetter
 from von.mqtt_agent import g_mqtt
@@ -27,8 +27,8 @@ def login_real():
                 session['user']['user_id'] = user_id
                 session['user']['twh_id'] = '221109'
                 session['user']['position'] = 'None'
-                session['user']['factory_name'] = twh_factory['221109']['name']
-                return render_template('home_admin.html', twh_factory = twh_factory)
+                session['user']['factory_name'] = twh_factories['221109']['name']
+                return render_template('home_admin.html', twh_factory = twh_factories)
         flash("没有该用户")
         return render_template('login.html')
     if user["password"] != password:
@@ -38,7 +38,7 @@ def login_real():
     
     user_id = request.form.get('user_id')
     session['user'] = db_User.get_user(user_id) # type: ignore
-    session['user']['factory_name'] = twh_factory[session['user']['twh_id']]['name']
+    session['user']['factory_name'] = twh_factories[session['user']['twh_id']]['name']
     # Logger.Print('@web_user.route(/login_real)', session)
     # "user": {
     #     "twh_id": "221109",
@@ -52,8 +52,8 @@ def login_real():
 
 @web_user.route('/twh/sign_up')
 def sign_up():
-    twh = get_twh_factory(request.args.get('twh_id'))
-    return render_template('sign_up.html', twh=twh)
+    factory_id = request.args.get('twh_id')
+    return render_template('sign_up.html', factory_id=factory_id, twh_factories= twh_factories)
 
 @web_user.route('/twh/sign_up_real', methods=['POST'])
 def sign_up_real():
@@ -71,7 +71,7 @@ def log_out():
     if 'user' in session:
         del session['user']
         flash('已经成功登出')
-        # twh = get_twh_factory('221109')
+        # twh = twh_factories('221109')
     return render_template('login.html')
 
 @web_user.route('/twh/update_position', methods=['POST'])
@@ -100,7 +100,7 @@ def twh_home():
     if session['user']['position'] == '技工':
         return render_template('home_worker.html')
     if session['user']['user_id'] == 'FengXuming':
-        return render_template('home_admin.html',twh_factory=twh_factory)
+        return render_template('home_admin.html',twh_factory=twh_factories)
     
     flash('您的账户已经被主管临时禁用')
     return redirect(url_for('web_user.login'))

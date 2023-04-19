@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request,flash, session, redirect, 
 from wcs_robots.twh_wcs_unit import  wcs_deposit_queue
 from database.db_stock import db_Stock, db_Deposit_history,db_StockRule
 from database.db_withdraw_order import DB_WithdrawOrder
-from database.bolt_nut import get_row_from_tooth_location, twh_brands,twh_factory,twh_shapes,twh_sizes
+from database.bolt_nut import get_row_from_tooth_location, twh_brands,twh_factories,twh_shapes,twh_sizes
 
 from timestamp import get_timestamp
 from logger import Logger
@@ -59,34 +59,34 @@ def create_stock_rule():
 def view_stock_rule():
     heading = ("管理人","日期","品牌","批号","颜色","大小","形状","盒编号","数量")
     items = db_StockRule.get_all_rules_in_twh(session['user']['twh_id'])
-    return render_template('view_stock_rule.html', heading=heading, items=items, factory=twh_factory['221109'])
+    return render_template('view_stock_rule.html', heading=heading, items=items, factory=twh_factories['221109'])
 
 @web_stock.route('/twh/view_stock_quantity', methods=['POST','GET',])
 def view_stock_quantity():
     heading = ("盒编号","品牌","批号","颜色","大小","形状","牙位","数量")
     if request.method == 'GET':
         stocks = db_Stock.table_stock.all()
-        return render_template('view_stock_quantity.html', heading=heading, stocks=stocks, factory=twh_factory['221109'], timestamp=datetime.now().strftime('%Y-%m-%d %H:%M'))
+        return render_template('view_stock_quantity.html', heading=heading, stocks=stocks, factory=twh_factories['221109'], timestamp=datetime.now().strftime('%Y-%m-%d %H:%M'))
     else:
         selected_brand = request.form['brand']
         stocks = db_Stock.get_stock_by_single_brand(selected_brand)
-        return render_template('view_stock_quantity.html', heading=heading, stocks=stocks, factory=twh_factory['221109'], timestamp=datetime.now().strftime('%Y-%m-%d %H:%M'))
+        return render_template('view_stock_quantity.html', heading=heading, stocks=stocks, factory=twh_factories['221109'], timestamp=datetime.now().strftime('%Y-%m-%d %H:%M'))
 
 @web_stock.route('/twh/view_deposit_history')
 def view_deposit_history():
     items = db_Deposit_history.table_deposit_history.all()
-    return render_template('view_deposit_history.html', items=items, factory_name=twh_factory['221109'])
+    return render_template('view_deposit_history.html', items=items, factory_name=twh_factories['221109'])
 
 @web_stock.route('/twh/view_withdraw_history')
 def view_withdraw_history():
     items = DB_WithdrawOrder.table_withdraw_history.all()
-    return render_template('view_withdraw_history.html', items=items, factory_name=twh_factory['221109'])
+    return render_template('view_withdraw_history.html', items=items, factory_name=twh_factories['221109'])
 
 @web_stock.route('/twh/deposit')
 def deposit():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
-        return render_template('deposit.html', twh_id = twh_id, factory = twh_factory["221109"])
+        return render_template('deposit.html', twh_id = twh_id, factory = twh_factories["221109"])
     else:
         return redirect(url_for('web_user.login'))
 
@@ -115,7 +115,7 @@ def deposit_request():
 
     user_request['row'] = get_row_from_tooth_location(user_request['location']) # type: ignore
     user_request['layer'] = int(user_request['location'][3:4]) # type: ignore
-    return render_template("deposit_request.html",user_request = user_request, factroy=twh_factory["221109"])
+    return render_template("deposit_request.html",user_request = user_request, factroy=twh_factories["221109"])
 
 @web_stock.route('/twh/deposit_move', methods = ['POST'])
 def deposit_move():
@@ -154,7 +154,7 @@ def deposit_end():
 def withdraw():
     if 'user' in session:
         twh_id = request.args.get('twh_id')
-        return render_template('withdraw.html', twh_id=twh_id, factory=twh_factory[session['user']['twh_id']])
+        return render_template('withdraw.html', twh_id=twh_id, factory=twh_factories[session['user']['twh_id']])
     else:
         return redirect(url_for('web_user.login'))
 

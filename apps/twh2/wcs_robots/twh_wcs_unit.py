@@ -3,7 +3,7 @@ from wcs_robots.twh_robot_packer import TwhRobot_Packer
 from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
 from wcs_robots.gcode_sender import gcode_senders_spin_once
 from business_logical.withdraw_order import  WithdrawOrderManager, WithdrawOrder, OrderTooth
-from database.bolt_nut import twh_factory
+from database.bolt_nut import twh_factories
 
 import multiprocessing
 from von.remote_var_mqtt import RemoteVar_mqtt
@@ -45,7 +45,7 @@ class TwhWcs_Unit():
         return True
 
     def __Do_deposit_begin(self, new_deposit_request):
-        Logger.Info(twh_factory[self.__twh_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
+        Logger.Info(twh_factories[self.__twh_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
         Logger.Print("new_deposit_request", new_deposit_request)
         # the loop-porter will move to col-position
         row_id = new_deposit_request['row']
@@ -160,11 +160,11 @@ class TwhWcs_Unit():
 
 
 def WCS_Main(deposit_queue:multiprocessing.Queue):
-        g_mqtt_broker_config.client_id = '20230gf355'
+        g_mqtt_broker_config.client_id = '2023dd0gf355'
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
 
         all_wcs_units = []
-        for twh_id in list(twh_factory.keys()):
+        for twh_id in list(twh_factories.keys()):
             wcs_unit = TwhWcs_Unit(twh_id, deposit_queue)
             all_wcs_units.append(wcs_unit)
 

@@ -6,11 +6,11 @@
     <legend>在此注册新用户</legend>
     <div>
         <form action="/twh/sign_up_real" method="POST">
-            <input type="text" name="twh_id" value="{{ twh['id'] }}">
+            <input type="text" name="factory_id" value="{{ factory_id }}">
             <table>
                 <tr>
                     <td>单位名称</td>
-                    <td> {{ twh['factory_name'] }}</td>
+                    <td> {{ twh_factories[factory_id]['name'] }}</td>
                 </tr>
                 <tr>
                     <td>用户名</td>

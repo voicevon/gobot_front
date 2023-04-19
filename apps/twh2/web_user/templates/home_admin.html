@@ -4,8 +4,8 @@
 <form action="/twh/create_stock_rule" method="post">
     <table>
         <td><select name="twh_id">
-                {% for key in twh_factory.keys()%}
-                <option name='twh_id' value={{key}}>{{ twh_factory[key] }}</option>
+                {% for key in twh_factories.keys()%}
+                <option name='twh_id' value={{key}}>{{ twh_factories[key] }}</option>
                 {% endfor %}
             </select></td>
         <td>
@@ -16,8 +16,8 @@
 <hr>
 <form action="/twh/set_home_position" method="post">
     <select name="twh_id">
-        {% for key in twh_factory.keys()%}
-        <option name='twh_id' value={{key}}>{{ twh_factory[key] }}</option>
+        {% for key in twh_factories.keys()%}
+        <option name='twh_id' value={{key}}>{{ twh_factories[key] }}</option>
         {% endfor %}
     </select><br>
 

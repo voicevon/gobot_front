@@ -1,9 +1,8 @@
 from von.remote_var_mqtt import RemoteVar_mqtt
 from wcs_robots.gcode_sender import GcodeSender, all_gcode_senders
-# from bolt_nut import PickingPacking_Tooth
 from business_logical.withdraw_order import OrderTooth, WithdrawOrder
 from logger import Logger
-from database.bolt_nut import twh_factory
+from database.bolt_nut import twh_factories
 
 
 class TwhRobot_LoopPorter():
@@ -45,7 +44,7 @@ class TwhRobot_LoopPorter():
         self.__state.set('moving')    # set to 'moving' when gcode-G1 is sent. ??
         # self.target_tooth = tooth
         self.__target_layer = target_layer
-        Logger.Info(twh_factory[self.wcs_unit_id]['name']  + ' -- TwhRobot_LoopPorter::MoveTo()')
+        Logger.Info(twh_factories[self.wcs_unit_id]['name']  + ' -- TwhRobot_LoopPorter::MoveTo()')
         print(  '(row, col, layer) = ' ,self.id, target_col, target_layer )
         
         mcode ='M42P99S1'  # turn off all green leds

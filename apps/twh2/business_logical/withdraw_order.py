@@ -2,7 +2,7 @@ from logger import Logger
 from database.db_withdraw_order import DB_WithdrawOrder
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
 from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
-from database.bolt_nut import twh_factory
+from database.bolt_nut import twh_factories
 
 class OrderTooth():
     def __init__(self, db_doc_id:int) -> None:
@@ -207,7 +207,7 @@ class WithdrawOrderManager():
                     the_order = new_order
                     if not printed_logger_title:
                         Logger.Debug('WithdrawOrderManager::__renew_orders_from_database() First')
-                        Logger.Print('Factory_name', twh_factory[self.__twh_id])
+                        Logger.Print('Factory_name', twh_factories[self.__twh_id])
                         printed_logger_title = True
                     Logger.Print('WithdrawOrderManager::__renew_orders_from_database()   new_order_task is added to manager. Order_id', new_order.Order_id)
                 the_order.SetStateTo(db_tooth['order_state'], write_to_db=False)
@@ -241,7 +241,7 @@ class WithdrawOrderManager():
         for order in self.__all_order_tasks:
             is_shipped =  order.SpinOnce()
             if is_shipped:
-                Logger.Info( twh_factory[self.__twh_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
+                Logger.Info( twh_factories[self.__twh_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 self.__all_order_tasks.remove(order)
                 return
 
