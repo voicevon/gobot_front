@@ -15,8 +15,8 @@ def grab_screen():
 
         img2 = np.array(img)
         img3 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
-        # cv2.imshow('origin', np.array(img3))
-        # cv2.waitKey(1)
+        cv2.imshow('origin', np.array(img3))
+        cv2.waitKey(1)
         return img3
 
 
@@ -61,7 +61,7 @@ small_image = cv2.imread('small_image.png')
 
 while True:
     origin = grab_screen()
-    left, top = match_template(small_image, origin)
+    # left, top = match_template(small_image, origin)
 
     left_offset = -20
     top_offset = 50
