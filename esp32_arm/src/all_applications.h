@@ -24,6 +24,7 @@
 // #define I_AM_TEETH_WAREHOUSE_PACKER
 // #define I_AM_SILLICON_PUMP
 #define I_AM_AQUAPONICS
+// #define I_AM_BARCODE_READER
 
 
 // #define I_AM_ADHOC_ROUTER
