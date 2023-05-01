@@ -11,6 +11,6 @@ class Ms5837: public MqttPublisherBase{
     private:
         // return water depth in mm.
         float __ReadSensor();
-        float __previous_sensor_value;
+        float __previous_sensor_value = 0.0f;
 
 };

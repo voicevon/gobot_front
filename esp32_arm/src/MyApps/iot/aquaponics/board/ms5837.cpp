@@ -19,6 +19,6 @@ void Ms5837::SpinOnce(){
 
 
 float Ms5837::__ReadSensor(){
-    return 1.234;
+    return 1.234f;
 }
 
