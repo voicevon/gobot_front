@@ -36,26 +36,24 @@ def BarcodeReader(image):
     #Display the image
     cv2.imshow("Image", image)
     cv2.waitKey(1)
-    # cv2.destroyAllWindows()
- 
-# mark_image = cv2.imread('mark_image.png')
-# img_file="barcode.png"
 
-# # read the image in numpy array using cv2
-# img = cv2.imread(img_file)
 
 if __name__ == "__main__":
-    if False:    
+    test_from_file = False
+    test_from_camera = True
+
+    if test_from_file:    
         file_name ="barcode.png"
         img = cv2.imread(file_name)
         BarcodeReader(img)
 
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        print("Cannot open camera")
-        exit()
+    if test_from_camera:
+        cap = cv2.VideoCapture(0)
+        if not cap.isOpened():
+            print("Cannot open camera")
+            exit()
 
-    while True:
-        ret, frame = cap.read()
-        if ret:
-            BarcodeReader(frame)
+        while True:
+            ret, frame = cap.read()
+            if ret:
+                BarcodeReader(frame)

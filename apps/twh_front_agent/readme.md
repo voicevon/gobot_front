@@ -1,9 +1,9 @@
 # Breif
-* This programe will be run on Raspberry Pi.
+* This program will be run on Raspberry Pi.
 ## Solution A:
 * Barcode scanner as keyboard, Connect to SQL server with pyOdbc.
-* Task 1:  A barcode scanner is connected as a keyboard.
-  * Scanner will read a order_number.
+* Task 1:  A hardware barcode scanner is connected as a keyboard.
+  * Scanner will read an order_number.
 * Task 2: Query SQL server with order_number. 
   * will get order_items.
 * Task 3: Generate a withdraw_items from order_items.
