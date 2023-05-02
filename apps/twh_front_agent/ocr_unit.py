@@ -12,8 +12,6 @@ class OcrUnit:
 
 
     def GetAreaImage(self, origin, left, top):
-        # get_target_area(origin, left, top, width, height)
-        # left, top = self.match_template(origin)
         y1 = top + self.top_offset
         x1 = left + self.left_offset
         y2 = y1 + self.height

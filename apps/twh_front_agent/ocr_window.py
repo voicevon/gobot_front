@@ -1,10 +1,9 @@
+from ocr_unit_factory import OcrUnitFactory, OcrUnit
+
 import cv2
 import numpy as np  # pip install numpy
 from mss import mss      # pip install mss
 from PIL import Image #pip install pillow
-
-
-from ocr_unit_factory import OcrUnitFactory, OcrUnit
 
 
 
@@ -22,10 +21,49 @@ class OcrWindow:
 
         self.__all_units = []
         self.__all_units.append(OcrUnitFactory.CreateOcrUnit('title'))
+        self.__frame = None
 
+    # function to display the coordinates of
+    # of the points clicked on the image
+    def click_event(self, event, x, y, flags, params):
+        if self.__frame is None:
+            return
+        
+        # checking for left mouse clicks
+        if event == cv2.EVENT_LBUTTONDOWN:
 
+            # displaying the coordinates
+            # on the Shell
+            print(x, ' ', y)
 
-    
+            # displaying the coordinates
+            # on the image window
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            cv2.putText(self.__frame, str(x) + ',' +
+                        str(y), (x,y), font,
+                        1, (255, 0, 255), 2)
+            cv2.imshow('origin', self.__frame)
+            cv2.waitKey(2000)
+
+        # checking for right mouse clicks	
+        if event==cv2.EVENT_RBUTTONDOWN:
+
+            # displaying the coordinates
+            # on the Shell
+            print(x, ' ', y)
+
+            # displaying the coordinates
+            # on the image window
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            b = self.__frame[y, x, 0]
+            g = self.__frame[y, x, 1]
+            r = self.__frame[y, x, 2]
+            cv2.putText(self.__frame, str(b) + ',' +
+                        str(g) + ',' + str(r),
+                        (x,y), font, 1,
+                        (255, 255, 0), 2)
+            cv2.imshow('origin', self.__frame)
+            cv2.waitKey(2000)
 
     def match_template(self, origin):
         method = cv2.TM_SQDIFF_NORMED
@@ -43,11 +81,10 @@ class OcrWindow:
             trows, tcols = self.__template_image.shape[:2]
             # Step 3: Draw the rectangle on origin
             cv2.rectangle(origin, (MPx,MPy),(MPx+tcols,MPy+trows),(0,0,255),2)
-            cv2.imshow('output',origin)
+            cv2.imshow('match template',origin)
             cv2.waitKey(1)
         return MPx, MPy
     
-
     def __capture_screen(self):
             area = {'left': 0, 'top': 0, 'width': 1366, 'height': 768}
             with mss() as sct:
@@ -60,21 +97,24 @@ class OcrWindow:
                 return frame
             
     def SpinOnce(self):
-        frame = None
         if self.__camer_id == 99:
-            frame = self.__capture_screen()
+            self.__frame = self.__capture_screen()
         else:
-            ret, frame = self.__cap.read()
+            ret, self.__frame = self.__cap.read()
 
-        if frame is not None:
-            cv2.imshow('origin', frame)
+        if self.__frame is not None:
+            cv2.imshow('origin', self.__frame)
+            cv2.setMouseCallback('origin', self.click_event)
+
             cv2.waitKey(1)
 
         # Now we got a frame, try to  find marker.  
-        left, top = self.match_template(frame)
+        left, top = self.match_template(self.__frame)
 
         # crop frame to many ocr units, base location is the marker.
         for unit in self.__all_units:
-            unit.
+            image = unit.GetAreaImage(self.__frame, left, top)
+            cv2.imshow(unit.name, image)
+
 
 
