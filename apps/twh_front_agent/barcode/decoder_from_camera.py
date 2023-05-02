@@ -18,8 +18,7 @@ def BarcodeReader(image):
             # Locate the barcode position in image
             (x, y, w, h) = barcode.rect
              
-            # Put the rectangle in image using
-            # cv2 to highlight the barcode
+            # Put the rectangle in image using, cv2 to highlight the barcode
             cv2.rectangle(image, (x-10, y-10),
                           (x + w+10, y + h+10),
                           (255, 0, 0), 2)
