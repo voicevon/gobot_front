@@ -16,23 +16,17 @@ cv2.__version__
 
 
 sudo apt install htop
-
 sudo apt install git -y
 git clone https://github.com/voicevon/gobot_front.git
 
 
-pip install numpy VonPylib 
+pip install numpy 
+pip install VonPylib 
 pip install paho-mqtt
-
-<!-- pip install falsk -->
-pip install fastapi
-
-pip install pillow mss
-
 
 
 cd gobot_front/apps/twh_front_agent/
-python ocr_window.py
+python rpi_kvm.py
 
 
 

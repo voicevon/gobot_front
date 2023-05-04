@@ -13,6 +13,6 @@ if __name__ == '__main__':
         ret, frame = cap.read()
         if ret:
             g_mqtt.publish_cv_image("twh/221109/kvm/screen",  frame)
-            time.sleep(10)
+            time.sleep(1)
 
 
