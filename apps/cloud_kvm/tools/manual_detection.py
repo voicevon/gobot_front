@@ -84,11 +84,14 @@ def get_positions_json() :
     return res
 
 
+g_mqtt_broker_config.client_id = '23050a'
+mqtt_topic_of_screen_image = "ocr/ubuntu_performance/screen_image" 
+mqtt_topic_of_config = "ocr/ubuntu_performance/config"
+marking_id_keys = {"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9 }
 
 if __name__ == '__main__':
-    g_mqtt_broker_config.client_id = '23050a'
     g_mqtt.connect_to_broker(g_mqtt_broker_config)
-    bytes_img =  RemoteVar_mqtt("twh/221109/kvm/screen", None)
+    bytes_img =  RemoteVar_mqtt(mqtt_topic_of_screen_image , None)
 
     refresh_origin = True
     has_set_callback = False
@@ -105,7 +108,12 @@ if __name__ == '__main__':
         if origin_image is not None:
             redraw_areas()
 
-        key = cv2.waitKey(100)
+        key = cv2.waitKey(1)
+
+        if key in marking_id_keys.keys():
+            marking_id = marking_id_keys[key]
+            Logger.Print("from diction,    marking_id", marking_id)
+
         if key == ord(' '):
             # start/stop refresh
             refresh_origin = not refresh_origin
@@ -139,8 +147,9 @@ if __name__ == '__main__':
         if key == ord('s'):
             result = get_positions_json()
             # Logger.Print('json', result)
+            Logger.Print('Saved on Mqtt', '')
             payload = json.dumps(result)
-            g_mqtt.publish("kvm/marks/test", payload)
+            g_mqtt.publish(mqtt_topic_of_config, payload)
 
         # time.sleep(0.05)
 

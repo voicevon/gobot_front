@@ -5,19 +5,37 @@ from von.remote_var_mqtt import RemoteVar_mqtt
 
 import time
 
+# os = 'Windows'
+os = 'Linux'
+
+
 if __name__ == '__main__':
-    cap = cv2.VideoCapture(0)
+    if os == 'Windows':
+        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    else:
+        cap = cv2.VideoCapture(0, cv2.CAP_V4L2)
+
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
+    # https://stackoverflow.com/questions/52068277/change-frame-rate-in-opencv-3-4-2
+    cap.set(cv2.CAP_PROP_FPS, 10)
+    fps = int(cap.get(5))
+    print("fps:", fps)
+
     g_mqtt_broker_config.client_id = "230504"
     g_mqtt.connect_to_broker(g_mqtt_broker_config)
 
-    interal_seconds = RemoteVar_mqtt("twh/221109/kvm/config/interval_second", 1)
+    fps_limit = RemoteVar_mqtt("ocr/ubuntu_performance/kvm_config", 2)
     publish_counter = 0
-
+    start_time = 0
     while True:
         ret, frame = cap.read()
         if ret:
-            g_mqtt.publish_cv_image("twh/221109/kvm/screen",  frame)
-            time.sleep(interal_seconds.get())
-            Logger.Print("publish counter", publish_counter)
+            now_time = time.time()
+            if int(now_time - start_time) > fps_limit.get():
+                g_mqtt.publish_cv_image("ocr/ubuntu_performance/screen_image",  frame)
+                Logger.Print("publish counter", publish_counter)
+                start_time = time.time()
 
 
