@@ -147,7 +147,7 @@ if __name__ == '__main__':
         if key == ord('s'):
             result = get_positions_json()
             # Logger.Print('json', result)
-            Logger.Print('Saved on Mqtt', '')
+            Logger.Print('Saved on Mqtt', mqtt_topic_of_config)
             payload = json.dumps(result)
             g_mqtt.publish(mqtt_topic_of_config, payload)
 
