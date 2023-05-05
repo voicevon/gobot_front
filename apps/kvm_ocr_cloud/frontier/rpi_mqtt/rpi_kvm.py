@@ -39,10 +39,10 @@ if __name__ == '__main__':
                 if os !='Pi_lite':
                     cv2.imshow('camera', frame)
                     cv2.waitKey(1)
-                g_mqtt.publish_cv_image("ocr/ubuntu_performance/screen_image",  frame)
+                bytes_count =  g_mqtt.publish_cv_image("ocr/ubuntu_performance/screen_image",  frame)
                 start_time = time.time()
 
                 publish_counter += 1
-                Logger.Print("publish counter", publish_counter)
+                Logger.Print("published, image in bytes count", bytes_count)
 
 

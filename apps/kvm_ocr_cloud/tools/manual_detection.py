@@ -117,6 +117,8 @@ if __name__ == '__main__':
         if key == ord(' '):
             # start/stop refresh
             refresh_origin = not refresh_origin
+            if not refresh_origin:
+                Logger.Info("Stop auto refreshing source image")
         if key == ord('1'):
             marking_id = 1
             Logger.Print("marking_id", 1)
@@ -146,9 +148,9 @@ if __name__ == '__main__':
             Logger.Print("marking_id", 9)
         if key == ord('s'):
             result = get_positions_json()
-            # Logger.Print('json', result)
             Logger.Print('Saved on Mqtt', mqtt_topic_of_config)
             payload = json.dumps(result)
+            Logger.Print('payload', payload)
             g_mqtt.publish(mqtt_topic_of_config, payload)
 
         # time.sleep(0.05)

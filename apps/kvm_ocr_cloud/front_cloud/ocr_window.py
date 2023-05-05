@@ -1,7 +1,7 @@
 from von.remote_var_mqtt import RemoteVar_mqtt
 
 import cv2
-import numpy as np  # pip install numpy
+import numpy
 
 
 
@@ -19,11 +19,6 @@ class OcrWindow:
         self.__all_units = []
         self.__frame = None
 
-    # def __load_config(self):
-    #     if self.__config.rx_buffer_has_been_renewed():
-    #         self.__all_units.append(OcrFactory.CreateOcrUnit('title'))
-    #         self.__is_loaded = True
-            
     def match_template(self, origin):
         method = cv2.TM_SQDIFF_NORMED
 
@@ -45,11 +40,16 @@ class OcrWindow:
         return MPx, MPy
             
     def SpinOnce(self):
-        # if self.__is_loaded:
-        if not self.__image.rx_buffer_has_been_renewed():
+        if not self.__image.rx_buffer_has_been_updated():
             return
-        
-        self.__frame = self.__image.get()
+
+        np_array = numpy.frombuffer(self.__image.get(), dtype=numpy.uint8) 
+        self.__frame = cv2.imdecode(np_array, flags=1)
+
+        debug = True
+        if debug:
+            cv2.imshow("origin_from_mqtt",  self.__frame)
+            cv2.waitKey(1)
         # Now we got a frame, try to  find marker.  
         left, top = self.match_template(self.__frame)
 
@@ -57,8 +57,6 @@ class OcrWindow:
         for unit in self.__all_units:
             image = unit.GetAreaImage(self.__frame, left, top)
             cv2.imshow(unit.name, image)
-        # else:
-        #     self.__load_config()
 
 
 
