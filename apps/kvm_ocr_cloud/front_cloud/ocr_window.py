@@ -1,7 +1,11 @@
 from von.remote_var_mqtt import RemoteVar_mqtt
+from von.logger import Logger
 
 import cv2
 import numpy
+import pytesseract
+from PIL import Image #pip install pillow
+
 
 
 
@@ -17,7 +21,14 @@ class OcrWindow:
         # self.__is_loaded = False  # Load image and config, backgroundly
 
         self.__all_units = []
-        self.__frame = None
+        self.__frame = numpy.zeros((1080,768,3), numpy.uint8)
+
+    def show_config(self):
+        # print(self.__config["areas"][1]['postions'])
+        for i in range(10):
+            x1,y1,x2,y2 = self.__config["areas"][i]['postions']
+            cv2.rectangle(self.__frame, (x1,y1),(x2,y2), (0,255,0), thickness=2)
+        cv2.imshow("debug", self.__frame)
 
     def match_template(self, origin):
         method = cv2.TM_SQDIFF_NORMED
@@ -41,6 +52,7 @@ class OcrWindow:
             
     def SpinOnce(self):
         if not self.__image.rx_buffer_has_been_updated():
+            cv2.waitKey(1)
             return
 
         np_array = numpy.frombuffer(self.__image.get(), dtype=numpy.uint8) 
@@ -49,14 +61,29 @@ class OcrWindow:
         debug = True
         if debug:
             cv2.imshow("origin_from_mqtt",  self.__frame)
-            cv2.waitKey(1)
+            self.show_config()
         # Now we got a frame, try to  find marker.  
-        left, top = self.match_template(self.__frame)
+        # left, top = self.match_template(self.__frame)
+        left, top = 0, 0
+
+
+
+
+
 
         # crop frame to many ocr units, base location is the marker.
-        for unit in self.__all_units:
-            image = unit.GetAreaImage(self.__frame, left, top)
-            cv2.imshow(unit.name, image)
+        x2,y2, x1,y1 = self.__config["areas"][1]['postions']
+        # print(x1,y1, x2,y2)
+        cropped_image = self.__frame[y1:y2, x1:x2]
+        cv2.imshow("area-1", cropped_image)
+        cv2.waitKey(1)
+        tesseract_img = Image.fromarray(cropped_image)
+        xx = pytesseract.image_to_string(tesseract_img)
+        print(xx)
+        # for unit in self.__all_units:
+        #     image = unit.GetAreaImage(self.__frame, left, top)
+        #     cv2.imshow(unit.name, image)
+        #     cv2.waitKey(1)
 
 
 

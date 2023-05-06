@@ -29,12 +29,12 @@ class OcrFactory:
             # Logger.Print("OcrFactory::CreateOcrWindow()  point 32", '')
 
             window_config = json.loads( positions_config.get())
-            Logger.Print("window_config", window_config)
+            # Logger.Print("window_config", window_config)
             window_config["template_image"] = cv2.imread(template_path_filename)
             new_windows = OcrWindow(config = window_config, 
                                     mqtt_topic_of_image = mqtt_topic_of_screen_image)
-            Logger.Debug("OcrFactory::CreateOcrWindow() point 99")
-            Logger.Print("window_name", window_name)
+            # Logger.Debug("OcrFactory::CreateOcrWindow() point 99")
+            # Logger.Print("window_name", window_name)
             return new_windows
         
         else:
