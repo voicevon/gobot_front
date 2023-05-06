@@ -61,6 +61,9 @@ def product_acupuncture():
 def product_iot():
     return render_template('product_iot.html')
 
+@app.route('/ocr')
+def ocr():
+    return render_template('ocr/index.html')
 Start_WCS_Process()
 
 if __name__ == '__main__':
