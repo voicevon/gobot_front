@@ -1,0 +1,27 @@
+{
+    "_default": {
+
+        "7": {
+            "twh_id": "221109",
+            "user_id": "wangxu",
+            "user_name": "\u738b\u65ed",
+            "password": "wangxu",
+            "position": "\u4e3b\u7ba1",
+            "doc_id": 7
+        },
+        "9": {
+            "twh_id": "221109",
+            "user_id": "zhuguan",
+            "user_name": "\uff08\u6a21\u62df\uff09\u4e3b\u7ba1",
+            "password": "zhuguan",
+            "position": "\u4e3b\u7ba1"
+        },
+        "10": {
+            "twh_id": "221109",
+            "user_id": "jigong",
+            "user_name": "(\u6a21\u62df)\u6280\u5de5",
+            "password": "jigong",
+            "position": "\u6280\u5de5"
+        }
+    }
+}
