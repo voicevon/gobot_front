@@ -13,7 +13,7 @@ class KvmNode:
         os = {'Windows', 'Linux_desktop','Pi_lite'}
         '''
         self.node_name = json_config['node_name']
-        self.__mqtt_topic_of_screen_image = 'ocr/' + self.node_name + '/screen_image'
+        self.__mqtt_topic_of_screen_image = 'ocr/kvm' + self.node_name + '/screen_image'
         self.fps = json_config['fps']
         self.__OS = os
         if self.__OS == 'Windows':
