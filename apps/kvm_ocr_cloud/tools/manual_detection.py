@@ -6,6 +6,8 @@ import numpy
 import time
 import json
 from kvm_lib.crop_area import SingleMarker
+from von.ocr.ocr_factory import OcrFactory
+from von.ocr.ocr_window import OcrWindow
 
 
 
@@ -72,7 +74,6 @@ def redraw_areas():
         area.draw_rectangle(marker, color)
 
     cv2.imshow("marker", marker)
-    cv2.waitKey(1)
 
 def get_positions_json() :
     res = {}
@@ -84,13 +85,21 @@ def get_positions_json() :
     return res
 
 
-g_mqtt_broker_config.client_id = '23050a'
-mqtt_topic_of_screen_image = "ocr/ubuntu_performance/screen_image" 
-mqtt_topic_of_config = "ocr/ubuntu_performance/config"
-marking_id_keys = {"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9 }
+
+
+
+# marking_id_keys = {"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9 }
 
 if __name__ == '__main__':
-    g_mqtt.connect_to_broker(g_mqtt_broker_config)
+    g_mqtt_broker_config.client_id = '23050a'
+    g_mqtt.connect_to_broker(g_mqtt_broker_config, blocked_connection=True)
+    kvm_node_name = 'kvm_230506'
+    kvm_node_config =  OcrFactory.CreateKvmNodeConfig(kvm_node_name)
+    mqtt_topic_of_screen_image = kvm_node_config["topic_of_screen_image"]
+
+    app_window_name = 'ubuntu_performance'
+    # ocr_window = OcrFactory.CreateOcrWindow(kvm_node_name= "nothing", app_window_name= app_window_name)
+    ocr_window = OcrWindow(kvm_node_name, app_window_name)
     bytes_img =  RemoteVar_mqtt(mqtt_topic_of_screen_image , None)
 
     refresh_origin = True
@@ -110,9 +119,9 @@ if __name__ == '__main__':
 
         key = cv2.waitKey(1)
 
-        if key in marking_id_keys.keys():
-            marking_id = marking_id_keys[key]
-            Logger.Print("from diction,    marking_id", marking_id)
+        # if key in marking_id_keys.keys():
+        #     marking_id = marking_id_keys[key]
+        #     Logger.Print("from diction,    marking_id", marking_id)
 
         if key == ord(' '):
             # start/stop refresh
@@ -147,11 +156,9 @@ if __name__ == '__main__':
             marking_id = 9
             Logger.Print("marking_id", 9)
         if key == ord('s'):
-            result = get_positions_json()
-            Logger.Print('Saved on Mqtt', mqtt_topic_of_config)
-            payload = json.dumps(result)
-            Logger.Print('payload', payload)
-            g_mqtt.publish(mqtt_topic_of_config, payload)
+            areas = get_positions_json()
+            ocr_window.update_areas(areas)
+            Logger.Info("updated areas")
 
         # time.sleep(0.05)
 

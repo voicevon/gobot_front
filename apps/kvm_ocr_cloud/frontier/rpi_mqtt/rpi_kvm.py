@@ -39,7 +39,7 @@ class KvmNode:
                 cv2.waitKey(1)
             bytes_count =  g_mqtt.publish_cv_image(self.__mqtt_topic_of_screen_image,  frame)
             self.__start_time = time.time()
-            Logger.Print(node_name +  " published, image in bytes count (KB)", bytes_count / 1000)
+            Logger.Print(node_name +  " published to: " + self.__mqtt_topic_of_screen_image  + "  bytes (KB)", bytes_count / 1000)
         
 
 # TODO:   config this in outside of code.  like .INI file.
