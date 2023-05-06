@@ -53,8 +53,8 @@ if __name__ == '__main__':
     while not mqtt_config.rx_buffer_has_been_updated():
         pass
     config_json =  json.loads(mqtt_config.get())
-    kvm_node = KvmNode('Windows',config_json)
-    # kvm_node = KvmNode('Pi_lite',config_json)
+    # kvm_node = KvmNode('Windows',config_json)
+    kvm_node = KvmNode('Pi_lite',config_json)
 
 
     while True:
