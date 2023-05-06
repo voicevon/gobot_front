@@ -4,12 +4,12 @@
 #set FLASK_DEBUG=1      #set environment var
 set FLASK_DEBUG=0      #set environment var
 
-cd gobot_front/apps/twh2 
+cd gobot_front/apps/port1234
 python -m flask --app main_wms run --host=0.0.0.0
 
 
-# version 23 March
-C:/Users/65840/AppData/Local/Microsoft/WindowsApps/python3.10.exe -m flask --app routes run --host=0.0.0.0
+# version 6 May
+python -m flask --app routes run --host=0.0.0.0
 
 
 

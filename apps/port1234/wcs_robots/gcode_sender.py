@@ -1,5 +1,5 @@
 from von.mqtt_agent import g_mqtt
-from logger import Logger
+from von.logger import Logger
 import queue
 
 

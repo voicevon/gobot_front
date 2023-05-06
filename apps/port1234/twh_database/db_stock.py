@@ -1,6 +1,6 @@
 
 from tinydb import TinyDB, Query, where
-from logger import Logger
+from von.logger import Logger
 
 class TwhLocation:
     row = -1
@@ -8,7 +8,7 @@ class TwhLocation:
     layer = -1
 
 class db_StockRule():
-    table_stock_rule = TinyDB('database/twh_stock_rule.json')
+    table_stock_rule = TinyDB('twh_database/twh_stock_rule.json')
 
     @classmethod
     def get_col_from_request(cls, req)-> TwhLocation:
@@ -44,7 +44,7 @@ class db_StockRule():
         return ret
 
 class db_Stock():
-    table_stock = TinyDB('database/twh_stock.json')
+    table_stock = TinyDB('twh_database/twh_stock.json')
 
     @classmethod
     def get_stock(cls, request):  # -> List[Document]
@@ -177,7 +177,7 @@ class db_Stock():
             cls.table_stock.update({'stock_quantity':new_quantity}, doc_ids=doc_id)
 
 class db_Deposit_history():
-    table_deposit_history = TinyDB('database/twh_deposit_history.json')
+    table_deposit_history = TinyDB('twh_database/twh_deposit_history.json')
 
     @classmethod 
     def append_deposit(cls, user_request):

@@ -1,8 +1,8 @@
 from von.remote_var_mqtt import RemoteVar_mqtt
 from wcs_robots.gcode_sender import GcodeSender, all_gcode_senders
-from business_logical.withdraw_order import OrderTooth, WithdrawOrder
-from logger import Logger
-from database.bolt_nut import twh_factories
+from twh_business_logical.withdraw_order import OrderTooth, WithdrawOrder
+from von.logger import Logger
+from twh_database.bolt_nut import twh_factories
 
 
 class TwhRobot_LoopPorter():

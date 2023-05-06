@@ -1,8 +1,8 @@
 from tinydb import TinyDB, Query, where
-from database.bolt_nut import get_row_from_tooth_location
-from database.db_stock import db_Stock
+from twh_database.bolt_nut import get_row_from_tooth_location
+from twh_database.db_stock import db_Stock
 
-from logger import Logger
+from von.logger import Logger
 
 
 class DB_WithdrawOrder():
@@ -30,9 +30,9 @@ class DB_WithdrawOrder():
         'shipped',     when bule buton is pressed. saying:  set by wcs, delete by wms ??
                        when deleting, will insert into 'table_withdraw_history'
     '''
-    table_withdraw_order = TinyDB('database/twh_withdraw_order.json')
+    table_withdraw_order = TinyDB('twh_database/twh_withdraw_order.json')
     # table_shipping_order = TinyDB('database/twh_shipping_order.json')
-    table_withdraw_history = TinyDB('database/twh_withdraw_history.json')
+    table_withdraw_history = TinyDB('twh_database/twh_withdraw_history.json')
 
 
     @classmethod

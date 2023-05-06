@@ -1,7 +1,7 @@
 from tinydb import TinyDB,Query
 
 class db_User():
-    table_user = TinyDB('database/twh_user.json')
+    table_user = TinyDB('twh_database/twh_user.json')
 
     @classmethod
     def get_user(cls, user_id:str):

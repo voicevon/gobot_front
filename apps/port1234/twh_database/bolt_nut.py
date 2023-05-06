@@ -1,4 +1,4 @@
-from logger import Logger
+from von.logger import Logger
 
 
 twh_factories ={'221109': {'name':'某某义齿加工厂', 
