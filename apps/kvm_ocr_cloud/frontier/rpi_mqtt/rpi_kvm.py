@@ -39,7 +39,7 @@ class KvmNode:
                 cv2.waitKey(1)
             bytes_count =  g_mqtt.publish_cv_image(self.__mqtt_topic_of_screen_image,  frame)
             self.__start_time = time.time()
-            Logger.Print("published, image in bytes count (KB)", bytes_count / 1000)
+            Logger.Print(node_name +  " published, image in bytes count (KB)", bytes_count / 1000)
         
 
 # TODO:   config this in outside of code.  like .INI file.
@@ -50,8 +50,10 @@ node_name = 'kvm_230506'
 if __name__ == '__main__':
     g_mqtt_broker_config.client_id = node_name
     g_mqtt.connect_to_broker(g_mqtt_broker_config)
+    Logger.Info("Start to load configuration")
+    Logger.Print('my node_name', node_name)
 
-    mqtt_topic_of_node_config = 'ocr/' + node_name + '/config'
+    mqtt_topic_of_node_config = 'ocr/kvm/' + node_name + '/config'
     mqtt_config = RemoteVar_mqtt(mqtt_topic_of_node_config, None)
     while not mqtt_config.rx_buffer_has_been_updated():
         pass
