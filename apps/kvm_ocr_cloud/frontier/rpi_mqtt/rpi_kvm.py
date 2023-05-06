@@ -42,7 +42,10 @@ class KvmNode:
             Logger.Print("published, image in bytes count (KB)", bytes_count / 1000)
         
 
-node_name = 'ubuntu_230506'
+# TODO:   config this in outside of code.  like .INI file.
+# my_os = 'Windows'
+my_os = 'Pi_lite'
+node_name = 'kvm_230506'
 
 if __name__ == '__main__':
     g_mqtt_broker_config.client_id = node_name
@@ -53,8 +56,7 @@ if __name__ == '__main__':
     while not mqtt_config.rx_buffer_has_been_updated():
         pass
     config_json =  json.loads(mqtt_config.get())
-    # kvm_node = KvmNode('Windows',config_json)
-    kvm_node = KvmNode('Pi_lite',config_json)
+    kvm_node = KvmNode(my_os,config_json)
 
 
     while True:

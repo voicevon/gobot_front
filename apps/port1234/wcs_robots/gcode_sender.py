@@ -1,4 +1,4 @@
-from von.mqtt_agent import g_mqtt
+from von.mqtt.mqtt_agent import g_mqtt
 from von.logger import Logger
 import queue
 

@@ -17,7 +17,7 @@ def CreateNodeConfiguration(node_name):
 g_mqtt_broker_config.client_id = "250506c"
 g_mqtt.connect_to_broker(g_mqtt_broker_config)
 
-CreateNodeConfiguration("ubuntu_230506")
+CreateNodeConfiguration("kvm_230506")
 
 
 

@@ -4,6 +4,7 @@ from flask import Flask,  render_template
 from wcs_robots.twh_wcs_unit import Start_WCS_Process
 from twh_user.route import web_user
 from twh_stock.route import web_stock
+from von.ocr.ocr_factory import OcrFactory
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '20221220'
@@ -63,7 +64,9 @@ def product_iot():
 
 @app.route('/ocr')
 def ocr():
-    return render_template('ocr/index.html')
+    kvm_nodes = OcrFactory.ListKvmNodes()
+    app_windows = OcrFactory.ListAppWindows()
+    return render_template('ocr/index.html', kvm_nodes=kvm_nodes,app_windows=app_windows)
 Start_WCS_Process()
 
 if __name__ == '__main__':
