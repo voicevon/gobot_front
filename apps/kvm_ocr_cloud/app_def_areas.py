@@ -5,7 +5,7 @@ import cv2
 import numpy
 import time
 import json
-from kvm_lib.crop_area import SingleMarker
+from libs.crop_area import SingleMarker
 from von.ocr.ocr_factory import OcrFactory
 from von.ocr.ocr_window import OcrWindow
 
@@ -82,7 +82,7 @@ def get_positions_json() :
     for area in mark_areas:
         res["areas"].append(area.get_json())
     
-    return res
+    return res["areas"]
 
 
 

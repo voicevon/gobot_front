@@ -23,6 +23,7 @@ git clone https://github.com/voicevon/gobot_front.git
 pip install numpy 
 pip install VonPylib 
 pip install paho-mqtt
+sudo apt install -y tesseract-ocr
 
 
 cd gobot_front/apps/twh_front_agent/
