@@ -8,33 +8,26 @@ from PIL import Image #pip install pillow
 
 
 class OcrWindow:
+
     def __init__(self, app_window_name:str, auto_init_config=False) -> None:
         '''
         '''
-        self.__config_getter = RemoteVar_mqtt("ocr/" + app_window_name + "/config", None)
+        self.__config = {}
+        self.__config_getter = RemoteVar_mqtt("ocr/" + app_window_name + "/config", None, True)
         self.__mqtt_topic_of_marker_image = "ocr/" + app_window_name + "/marker_image"
         if auto_init_config:
             # create default config, and save it to mqtt
-            self.__config = {}
             self.__config['areas'] = {}
             self.__marker_image = numpy.zeros((100, 100, 3), numpy.uint8)
             self.__save_config()
             g_mqtt.publish_cv_image(self.__mqtt_topic_of_marker_image, self.__marker_image)
             
         else:
-            # load from history, here is mqtt
-            while not self.__config_getter.rx_buffer_has_been_updated():
-                pass
-            self.__config = json.loads(self.__config_getter.get())
+            self.__config = self.__config_getter.get_json()
             # marker image
-            
-            marker_getter = RemoteVar_mqtt(self.__mqtt_topic_of_marker_image, None)
-            while not marker_getter.rx_buffer_has_been_updated():
-                pass
-            np_array = numpy.frombuffer(marker_getter.get(), dtype=numpy.uint8) 
-            self.__marker_image = cv2.imdecode(np_array, flags=1)
-
-        # width, height = 1024, 768
+            marker_getter = RemoteVar_mqtt(self.__mqtt_topic_of_marker_image, None, True)
+            self.__marker_image = marker_getter.get_cv_image()
+         # width, height = 1024, 768
         # self.__frame = numpy.zeros((width, height,3), numpy.uint8)
 
     def update_areas(self, areas_json):
@@ -85,7 +78,7 @@ class OcrWindow:
         return MPx, MPy
             
     def SpinOnce(self, ocr_image):
-        # cv2.waitKey(1)
+        cv2.waitKey(1)
         # if not self.__image_getter.rx_buffer_has_been_updated():
         #     return
 
@@ -100,7 +93,7 @@ class OcrWindow:
         # left, top = self.match_template(self.__frame)
         left, top = 0, 0
 
-
+        return
 
 
 

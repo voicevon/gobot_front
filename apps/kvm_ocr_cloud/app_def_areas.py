@@ -83,9 +83,6 @@ def get_positions_json() :
     return res["areas"]
 
 
-
-
-
 # marking_id_keys = {"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9 }
 
 if __name__ == '__main__':
@@ -100,7 +97,7 @@ if __name__ == '__main__':
 
     app_window_name = 'ubuntu_performance'
     # ocr_window = OcrFactory.CreateOcrWindow(kvm_node_name= "nothing", app_window_name= app_window_name)
-    ocr_window = OcrWindow(kvm_node_name, app_window_name)
+    ocr_window = OcrWindow(app_window_name)
     Logger.Print("main  point 34", '')
     imgage_getter =  RemoteVar_mqtt(mqtt_topic_of_screen_image , None)
     Logger.Print("main  point 35", '')
@@ -115,7 +112,6 @@ if __name__ == '__main__':
                 if not has_set_callback:
                     cv2.setMouseCallback('origin', on_mouse_event)
                     has_set_callback = True
-        Logger.Print("main  point 51", '')
 
         if origin_image is not None:
             redraw_areas()
