@@ -1,7 +1,7 @@
 
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt, g_mqtt, g_mqtt_broker_config
 from von.logger import Logger
-from von.ocr.ocr_window import OcrWindow
+from libs.ocr_window import OcrWindow
 from libs.kvm_node import KvmNode
 
 
@@ -19,11 +19,12 @@ class OcrCoupler:
         self.__ocr_window = OcrWindow(app_window_name)
 
     def SpinOnce(self):
+        # get screen_image
         if self.__image_getter is None:
             screen_image = self.__kvm_node.Capture_Image()
         else:
             screen_image = self.__image_getter.get_cv_image()
-
+        # ocr the image
         self.__ocr_window.SpinOnce(screen_image)
 
 

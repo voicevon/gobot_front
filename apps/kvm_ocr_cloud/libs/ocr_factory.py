@@ -1,12 +1,5 @@
-from von.ocr.ocr_unit import OcrUnit
-from von.ocr.ocr_window import OcrWindow
-
+from libs.ocr_unit import OcrUnit
 from von.logger import Logger
-from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
-
-import cv2
-import numpy
-import json
 
 
 class OcrFactory:

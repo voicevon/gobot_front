@@ -1,13 +1,11 @@
-from von.mqtt.mqtt_agent import  MqttAgent, g_mqtt, g_mqtt_broker_config
+from von.mqtt.mqtt_agent import  g_mqtt, g_mqtt_broker_config
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 from von.logger import Logger
 import cv2
 import numpy
-import time
-import json
 from libs.crop_area import SingleMarker
-from von.ocr.ocr_factory import OcrFactory
-from von.ocr.ocr_window import OcrWindow
+from libs.ocr_factory import OcrFactory
+from libs.ocr_window import OcrWindow
 
 
 
@@ -94,25 +92,30 @@ if __name__ == '__main__':
     g_mqtt_broker_config.client_id = '23050a'
     g_mqtt.connect_to_broker(g_mqtt_broker_config, blocked_connection=True)
     kvm_node_name = 'kvm_230506'
+    Logger.Print("main  point 31", '')
     kvm_node_config =  OcrFactory.CreateKvmNodeConfig(kvm_node_name)
+    Logger.Print("main  point 32", '')
     mqtt_topic_of_screen_image = kvm_node_config["topic_of_screen_image"]
+    Logger.Print("main  point 33", '')
 
     app_window_name = 'ubuntu_performance'
     # ocr_window = OcrFactory.CreateOcrWindow(kvm_node_name= "nothing", app_window_name= app_window_name)
     ocr_window = OcrWindow(kvm_node_name, app_window_name)
-    bytes_img =  RemoteVar_mqtt(mqtt_topic_of_screen_image , None)
+    Logger.Print("main  point 34", '')
+    imgage_getter =  RemoteVar_mqtt(mqtt_topic_of_screen_image , None)
+    Logger.Print("main  point 35", '')
 
     refresh_origin = True
     has_set_callback = False
     while True:
         if refresh_origin:
-            if bytes_img.get() is not None:
-                np_array = numpy.frombuffer(bytes_img.get(), dtype=numpy.uint8) 
-                origin_image = cv2.imdecode(np_array, flags=1)
+            if imgage_getter.rx_buffer_has_been_updated():
+                origin_image = imgage_getter.get_cv_image()
                 cv2.imshow("origin", origin_image)
                 if not has_set_callback:
                     cv2.setMouseCallback('origin', on_mouse_event)
                     has_set_callback = True
+        Logger.Print("main  point 51", '')
 
         if origin_image is not None:
             redraw_areas()
