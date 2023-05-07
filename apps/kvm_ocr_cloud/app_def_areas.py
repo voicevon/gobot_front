@@ -5,7 +5,7 @@ import cv2
 import numpy
 from libs.crop_area import SingleMarker
 from libs.ocr_factory import OcrFactory
-from libs.ocr_window import OcrWindow
+from libs.screen_image_divider import ScreenImageDivider
 
 
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
     app_window_name = 'ubuntu_performance'
     # ocr_window = OcrFactory.CreateOcrWindow(kvm_node_name= "nothing", app_window_name= app_window_name)
-    ocr_window = OcrWindow(app_window_name)
+    divider = ScreenImageDivider(app_window_name)
     Logger.Print("main  point 34", '')
     imgage_getter =  RemoteVar_mqtt(mqtt_topic_of_screen_image , None)
     Logger.Print("main  point 35", '')
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     while True:
         if refresh_origin:
             if imgage_getter.rx_buffer_has_been_updated():
-                origin_image = imgage_getter.get_cv_image()
+                origin_image, is_new = imgage_getter.get_cv_image()
                 cv2.imshow("origin", origin_image)
                 if not has_set_callback:
                     cv2.setMouseCallback('origin', on_mouse_event)
@@ -156,7 +156,7 @@ if __name__ == '__main__':
             Logger.Print("marking_id", 9)
         if key == ord('s'):
             areas = get_positions_json()
-            ocr_window.update_areas(areas)
+            divider.update_areas(areas)
             Logger.Info("updated areas")
 
         # time.sleep(0.05)

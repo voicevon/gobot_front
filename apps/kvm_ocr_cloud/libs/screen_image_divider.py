@@ -7,7 +7,7 @@ import pytesseract
 from PIL import Image #pip install pillow
 
 
-class OcrWindow:
+class ScreenImageDivider:
 
     def __init__(self, app_window_name:str, auto_init_config=False) -> None:
         '''
@@ -23,7 +23,7 @@ class OcrWindow:
             g_mqtt.publish_cv_image(self.__mqtt_topic_of_marker_image, self.__marker_image)
             
         else:
-            self.__config = self.__config_getter.get_json()
+            self.__config, is_new = self.__config_getter.get_json()
             # marker image
             marker_getter = RemoteVar_mqtt(self.__mqtt_topic_of_marker_image, None, True)
             self.__marker_image = marker_getter.get_cv_image()
@@ -92,8 +92,6 @@ class OcrWindow:
         # Now we got a frame, try to  find marker.  
         # left, top = self.match_template(self.__frame)
         left, top = 0, 0
-
-        return
 
 
 

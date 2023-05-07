@@ -1,0 +1,41 @@
+
+@startuml
+control screen as kvm_node_screen
+control camera as kvm_node_camera
+queue s_router as image_router
+database cloud_1 as cloud_1 
+collections app_window_identifyer as app_window_identifyer 
+collections image_divider as image_divider
+queue router
+actor ocr
+database cloud_2 as cloud_2
+actor app_logic as app
+database database as database
+
+== sampling ==
+kvm_node_screen -> image_router: screen_image
+kvm_node_camera -> image_router: screen_image
+image_router -> cloud_1: screen_image
+== identify ==
+image_router <- cloud_1: screen_image
+image_router -> app_window_identifyer: screen_image
+activate app_window_identifyer
+image_router <- app_window_identifyer: window_name
+deactivate app_window_identifyer
+== ocr ==
+image_router -> image_divider: screen_image
+activate image_divider
+image_divider -> router: small_images
+deactivate image_divider
+
+activate router
+router-> ocr: small_images
+deactivate router
+image_router -> ocr: screen_image
+
+ocr->cloud_2: string
+== user logic ==
+cloud_2 -> app: string
+app-> database: int,float,etc.
+
+@enduml
