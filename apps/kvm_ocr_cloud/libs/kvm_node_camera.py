@@ -13,7 +13,7 @@ class KvmNodeCamera:
         self.__config_getter = config_getter
         self.__config, has_been_updated = config_getter.get_json()
         self.node_name = self.__config['node_name']
-        self.__mqtt_topic_of_screen_image = 'ocr/kvm/' + self.node_name + '/screen_image'
+        self.mqtt_topic_of_screen_image = 'ocr/kvm/' + self.node_name + '/screen_image'
         # self.fps = self.__config['fps']
         self.__OS = os
         if self.__OS == 'Windows':
@@ -33,6 +33,7 @@ class KvmNodeCamera:
             return frame
         else:
             Logger.Error("KvmNode::SpinOnce()  Carmra did NOT return frame.")      
+            return None
 
     
     def publish(self, image):
@@ -44,7 +45,7 @@ class KvmNodeCamera:
             if self.__OS !='Pi_lite':
                 cv2.imshow('camera', image)
                 cv2.waitKey(1)
-            bytes_count =  g_mqtt.publish_cv_image(self.__mqtt_topic_of_screen_image,  image)
+            bytes_count =  g_mqtt.publish_cv_image(self.mqtt_topic_of_screen_image,  image)
             self.__start_time = time.time()
-            Logger.Print(self.node_name +  " published to: " + self.__mqtt_topic_of_screen_image  + "  bytes (KB)", bytes_count / 1000)
+            Logger.Print(self.node_name +  " published to: " + self.mqtt_topic_of_screen_image  + "  bytes (KB)", bytes_count / 1000)
         
