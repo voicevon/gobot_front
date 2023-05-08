@@ -1,5 +1,5 @@
 import cv2
-
+# https://www.youtube.com/watch?v=vXqKniVe6P8
 
 class AppWindowIdentifier:
     def __init__(self) -> None:

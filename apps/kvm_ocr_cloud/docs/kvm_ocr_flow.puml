@@ -6,6 +6,8 @@ queue s_router as image_router
 database cloud_1 as cloud_1 
 collections app_window_identifyer as app_window_identifyer 
 collections image_divider as image_divider
+actor app_window_marker
+actor areas_marker
 queue router
 actor ocr
 database cloud_2 as cloud_2
@@ -22,11 +24,16 @@ image_router -> app_window_identifyer: screen_image
 activate app_window_identifyer
 image_router <- app_window_identifyer: window_name
 deactivate app_window_identifyer
+
 == ocr ==
-image_router -> image_divider: screen_image
+image_router -> image_divider: screen_image, app_window_name
 activate image_divider
 image_divider -> router: small_images
 deactivate image_divider
+
+== tools ==
+image_router -> app_window_marker: screen_image
+image_router -> areas_marker: screen_image
 
 activate router
 router-> ocr: small_images

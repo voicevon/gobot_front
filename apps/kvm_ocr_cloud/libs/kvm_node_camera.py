@@ -42,9 +42,9 @@ class KvmNodeCamera:
         '''
         now_time = time.time()
         if int(now_time - self.__start_time) > self.__config['fps']:
-            if self.__OS !='Pi_lite':
-                cv2.imshow('camera', image)
-                cv2.waitKey(1)
+            # if self.__OS !='Pi_lite':
+            #     cv2.imshow('camera', image)
+            #     cv2.waitKey(1)
             bytes_count =  g_mqtt.publish_cv_image(self.mqtt_topic_of_screen_image,  image)
             self.__start_time = time.time()
             Logger.Print(self.node_name +  " published to: " + self.mqtt_topic_of_screen_image  + "  bytes (KB)", bytes_count / 1000)

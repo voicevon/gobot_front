@@ -65,10 +65,6 @@ class ScreenImageDivider:
         # np_array = numpy.frombuffer(self.__image_getter.get(), dtype=numpy.uint8) 
         # self.__frame = cv2.imdecode(np_array, flags=1)
 
-        debug = True
-        if debug:
-            cv2.imshow("origin_from_mqtt",  window_image)
-            self.show_config()
         # Now we got a frame, try to  find marker.  
         # left, top = self.match_template(self.__frame)
         left, top = 0, 0
