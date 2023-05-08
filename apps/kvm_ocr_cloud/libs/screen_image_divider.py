@@ -88,6 +88,7 @@ class ScreenImageDivider:
         #     image = unit.GetAreaImage(self.__frame, left, top)
         #     cv2.imshow(unit.name, image)
         #     cv2.waitKey(1)
+        return []
 
 
 

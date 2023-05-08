@@ -34,7 +34,7 @@ class OcrNodeFactory:
             router['kvm_node_name'] = kvm_node_name
             router['app_window_name'] = app_window_name
             router['from_mqtt'] = True
-            router['screen_image_to_areas_marker'] = True
+            router['screen_image_to_tool_areas_marker'] = True
 
         if id == 'recorder':
             # cloud-edge. video recoder

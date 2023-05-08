@@ -27,84 +27,74 @@ print(mark_areas)
 
 # https://www.youtube.com/watch?v=2WR3wMt6V2k
 
-def on_mouse_event(event, x, y, flags, param):
-    global origin_image
-    global x1,y1,x2,y2
-    global marking_state
-    global mark_areas
-    global marking_id
-
-    if origin_image is None:
-        return
-    
-
-    if event == cv2.EVENT_LBUTTONDOWN:
-        if marking_state == MARKING_STATE_IDLE:
-            x1,y1 = x, y
-            marking_state = MARKING_STATE_MOVE
-            
-        elif marking_state == MARKING_STATE_MOVE:
-            x2,y2 = x, y
-            marking_state = MARKING_STATE_ENDING
-
-            # save x1,y1,x2,y2
-            mark_areas[marking_id].update_position(x1,y1,x2,y2)
-            
-            marking_state = MARKING_STATE_IDLE
-    
-    if event == cv2.EVENT_MOUSEMOVE:
-        if marking_state == MARKING_STATE_MOVE:
-            x2,y2 = x,y
-        # Logger.Print("x1,y1, x2,y2", (x1,y1,x2,y2))
-    
-def redraw_areas():
-    global origin_image
-    global mark_areas
-
-    marker = origin_image.copy()
-    for area in mark_areas:
-        # xx1,xx2,yy1,yy2 = area.get_elements()
-        # cv2.rectangle(marker, (xx1,yy1), (xx2,yy2), color=(255,0,0), thickness=2)
-        if marking_id == area.id:
-            color = (255,0,0)
-        else:
-            color = (0,0,255)
-        area.draw_rectangle(marker, color)
-
-    cv2.imshow("marker", marker)
-
-def get_positions_json() :
-    res = {}
-    res["name"] = "abcde"
-    res["areas"] = []
-    for area in mark_areas:
-        res["areas"].append(area.get_json())
-    
-    return res["areas"]
-
-
-# marking_id_keys = {"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9 }
-
-if __name__ == '__main__':
-    g_mqtt_broker_config.client_id = '23050a'
-    g_mqtt.connect_to_broker(g_mqtt_broker_config, blocked_connection=True)
-    kvm_node_name = 'kvm_230506'
-    Logger.Print("main  point 31", '')
-    kvm_node_config =  OcrFactory.CreateKvmNodeConfig(kvm_node_name)
-    Logger.Print("main  point 32", '')
-    mqtt_topic_of_screen_image = kvm_node_config["topic_of_screen_image"]
-    Logger.Print("main  point 33", '')
-
-    app_window_name = 'ubuntu_performance'
-    # ocr_window = OcrFactory.CreateOcrWindow(kvm_node_name= "nothing", app_window_name= app_window_name)
-    divider = ScreenImageDivider(app_window_name)
-    Logger.Print("main  point 34", '')
-    imgage_getter =  RemoteVar_mqtt(mqtt_topic_of_screen_image , None)
-    Logger.Print("main  point 35", '')
+class ToolDefAreas:
+    def __init__(self) -> None:
+        app_window_name = 'ubuntu_performance'
+        # ocr_window = OcrFactory.CreateOcrWindow(kvm_node_name= "nothing", app_window_name= app_window_name)
+        divider = ScreenImageDivider(app_window_name)
+        Logger.Print("main  point 34", '')
+        imgage_getter =  RemoteVar_mqtt(mqtt_topic_of_screen_image , None)
+        Logger.Print("main  point 35", '')
 
     refresh_origin = True
     has_set_callback = False
-    while True:
+    def on_mouse_event(self, event, x, y, flags, param):
+        global origin_image
+        global x1,y1,x2,y2
+        global marking_state
+        global mark_areas
+        global marking_id
+
+        if origin_image is None:
+            return
+        
+
+        if event == cv2.EVENT_LBUTTONDOWN:
+            if marking_state == MARKING_STATE_IDLE:
+                x1,y1 = x, y
+                marking_state = MARKING_STATE_MOVE
+                
+            elif marking_state == MARKING_STATE_MOVE:
+                x2,y2 = x, y
+                marking_state = MARKING_STATE_ENDING
+
+                # save x1,y1,x2,y2
+                mark_areas[marking_id].update_position(x1,y1,x2,y2)
+                
+                marking_state = MARKING_STATE_IDLE
+        
+        if event == cv2.EVENT_MOUSEMOVE:
+            if marking_state == MARKING_STATE_MOVE:
+                x2,y2 = x,y
+            # Logger.Print("x1,y1, x2,y2", (x1,y1,x2,y2))
+        
+    def redraw_areas(self):
+        global origin_image
+        global mark_areas
+
+        marker = origin_image.copy()
+        for area in mark_areas:
+            # xx1,xx2,yy1,yy2 = area.get_elements()
+            # cv2.rectangle(marker, (xx1,yy1), (xx2,yy2), color=(255,0,0), thickness=2)
+            if marking_id == area.id:
+                color = (255,0,0)
+            else:
+                color = (0,0,255)
+            area.draw_rectangle(marker, color)
+
+        cv2.imshow("marker", marker)
+
+    def get_positions_json(self) :
+        res = {}
+        res["name"] = "abcde"
+        res["areas"] = []
+        for area in mark_areas:
+            res["areas"].append(area.get_json())
+        
+        return res["areas"]
+
+
+    def SpinOnce(self, screen_image):
         if refresh_origin:
             if imgage_getter.rx_buffer_has_been_updated():
                 origin_image, is_new = imgage_getter.get_cv_image()
@@ -114,7 +104,7 @@ if __name__ == '__main__':
                     has_set_callback = True
 
         if origin_image is not None:
-            redraw_areas()
+            self.redraw_areas()
 
         key = cv2.waitKey(1)
 
@@ -159,7 +149,22 @@ if __name__ == '__main__':
             divider.update_areas(areas)
             Logger.Info("updated areas")
 
-        # time.sleep(0.05)
+# marking_id_keys = {"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9 }
+
+if __name__ == '__main__':
+    g_mqtt_broker_config.client_id = '23050a'
+    g_mqtt.connect_to_broker(g_mqtt_broker_config, blocked_connection=True)
+    kvm_node_name = 'kvm_230506'
+    Logger.Print("main  point 31", '')
+    kvm_node_config =  OcrFactory.CreateKvmNodeConfig(kvm_node_name)
+    Logger.Print("main  point 32", '')
+    mqtt_topic_of_screen_image = kvm_node_config["topic_of_screen_image"]
+    Logger.Print("main  point 33", '')
+
+
+    while True:
+
+
 
 
             

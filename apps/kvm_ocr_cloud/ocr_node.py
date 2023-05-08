@@ -4,6 +4,7 @@ from libs.kvm_node_camera import KvmNodeCamera
 from libs.kvm_node_screen import KvmNodeScreen
 from libs.app_window_idenifier import AppWindowIdentifier
 from libs.screen_image_divider import ScreenImageDivider
+from libs.tool_def_areas import ToolDefAreas
 import pytesseract
 import cv2
 
@@ -11,19 +12,27 @@ import cv2
 class OcrNode:
     def __init__(self, routing) -> None:
         self.routing = routing
+        #basic environment
+        self.__kvm_node_name = routing['kvm_node_name']
+        self.__app_window_name = routing['app_window_name']
+        self.__my_os = routing['my_os']
+
+        # screen_image comes from where
         self.from_screen_capture = routing['from_screen_capture']
         self.from_camera_capture = routing['from_camera_capture']
         self.from_mqtt = routing['from_mqtt']
+
+        # screen_images goes to where
         self.screen_image_to_mqtt = routing['screen_image_to_mqtt']
         self.screen_image_to_app_window_idendifier = routing['screen_image_to_app_window_identifier']
         self.screen_image_to_image_divder = routing['screen_image_to_image_divider']
         self.screen_image_to_ocr = routing['screen_image_to_ocr']
-        self.screen_image_to_areas_marker = routing['screen_image_to_areas_marker']
+        self.screen_image_to_tool_areas_marker = routing['screen_image_to_tool_areas_marker']
+
+        # small_images and small_string go to where
         self.small_images_to_ocr = routing['small_images_to_ocr']
         self.small_strings_to_mqtt = routing['small_strings_to_mqtt']
-        self.__kvm_node_name = routing['kvm_node_name']
-        self.__app_window_name = routing['app_window_name']
-        self.__my_os = routing['my_os']
+
 
         if self.from_camera_capture:
             getter = RemoteVar_mqtt('ocr/kvm/' + self.__kvm_node_name + '/config', None, for_loading_config=True)
@@ -38,19 +47,18 @@ class OcrNode:
         if self.from_mqtt or self.screen_image_to_mqtt:
             mqtt_topic_of_screen_image = "ocr/kvm/" + self.__kvm_node_name + "/screen_image"
             self.__image_getter = RemoteVar_mqtt(mqtt_topic_of_screen_image, None)
+
         if self.screen_image_to_app_window_idendifier:
             self.__identifier = AppWindowIdentifier()
         if self.screen_image_to_image_divder: 
             getter =  RemoteVar_mqtt('ocr/' + self.__app_window_name + '/config', None, for_loading_config=True)
             self.__divider = ScreenImageDivider(self.__app_window_name)
+        if self.screen_image_to_tool_areas_marker:
+            self.__tool_areas_marker = ToolDefAreas()
 
 
-
-    def SpinOnce(self):
+    def __get_screen_image(self):
         screen_image = None
-        small_images = []
-        small_strings=[]
-
         if self.from_camera_capture:
             screen_image = self.__kvm_node.Capture_Image()
         if self.from_screen_capture:
@@ -63,29 +71,44 @@ class OcrNode:
             
         if screen_image is None:
             return
-        
 
         debug = False
         if debug:
             cv2.imshow("origin_from_mqtt",  screen_image)
             cv2.waitKey(1)
 
+    def __deliver_screen_image(self, screen_image):
+        # deliver screen_iamge without return anything.
         if self.screen_image_to_mqtt:
             self.__kvm_node.publish(screen_image)
-        if self.screen_image_to_app_window_idendifier:
-            pass
-        if self.screen_image_to_image_divder:
-            self.__divider.DivideToSmallImages(screen_image)
 
+        if self.screen_image_to_tool_areas_marker:
+            self.__tool_areas_marker.SpinOnce(screen_image)
+            
         if self.screen_image_to_ocr:
             strings = pytesseract.image_to_string(screen_image)
             Logger.Print("===============================================", strings)
-        
+
+
+    def SpinOnce(self):
+        small_images = []
+        small_strings= []
+
+        screen_image = self.__get_screen_image()
+        self.__deliver_screen_image(screen_image)
+
+        if self.screen_image_to_app_window_idendifier:
+            app_window_name = self.__identifier.SpinOnce(screen_image)
+
+        if self.screen_image_to_image_divder:
+            small_images = self.__divider.DivideToSmallImages(screen_image)
+
         if self.small_images_to_ocr:
             Logger.Debug('ocr small images')
             for image in small_images:
                 string = pytesseract.image_to_string(image)
                 small_strings.append(string)
                 Logger.Print('', string)
+
         if self.small_strings_to_mqtt:
             g_mqtt.publish("small_strings", small_strings)

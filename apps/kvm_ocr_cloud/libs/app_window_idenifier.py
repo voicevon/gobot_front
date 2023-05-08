@@ -28,3 +28,9 @@ class AppWindowIdentifier:
             cv2.imshow('match template',origin)
             cv2.waitKey(1)
         return MPx, MPy
+    
+    def SpinOnce(self, screen_image):
+        app_window_name = 'window_performance'
+        return app_window_name
+
+        
