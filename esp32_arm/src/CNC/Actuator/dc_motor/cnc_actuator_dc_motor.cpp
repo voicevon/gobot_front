@@ -18,7 +18,8 @@ void CncActuatorDcMotor::__SpinOnce_FollowVelocity(float velocity){
 
     // speed pid 
     float speed_error =  abs(this->__encoder->getVelocity()) - abs(this->__target_velocity);
-    float pwm_speed =  - this->__speed_pid->FeedError(speed_error) * 8;
+    // float pwm_speed =  - this->__speed_pid->FeedError(speed_error) * 8;
+    float pwm_speed =  - 1;
 
     if (serial_output){
         // Serial.print("velocity of sensor, speed_error, pwm_speed \t");
