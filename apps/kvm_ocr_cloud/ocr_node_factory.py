@@ -33,25 +33,33 @@ class OcrNodeFactory:
             mqtt_topic_of_app_window_config = 'ocr/' + routing['app_window_name'] + '/config'
             _ = RemoteVar_mqtt(mqtt_topic_of_app_window_config, json.dumps(app_window_config))
 
+
     @classmethod
-    def CreateOcrNode(cls, id:str, kvm_node_name:str, app_window_name:str, is_new_kvm_node = False, is_new_app_window = False):
+    def CreateBlankRouting(cls):
         routing = {}
         routing['my_os'] = 'windows'
         routing['from_screen_capture'] = False
         routing['from_camera_capture'] = False
         routing['from_mqtt'] = False
+
         routing['screen_image_to_mqtt'] = False
         routing['screen_image_to_app_window_identifier'] = False
         routing['screen_image_to_image_divider'] = False
         routing['screen_image_to_ocr'] = False
         routing['screen_string_to_matt'] = False
+        routing['screen_image_to_tool_areas_marker'] = False
+
         routing['screen_image_to_tool'] = False
         routing['small_images_to_mqtt'] = False
         routing['small_images_to_ocr'] = False
         routing['small_strings_to_mqtt'] = False
+        return routing
 
+    @classmethod
+    def CreateOcrNode(cls, id:str, kvm_node_name:str, app_window_name:str, is_new_kvm_node = False, is_new_app_window = False):
+        routing = cls.CreateBlankRouting()
 
-        if id == 'marker':
+        if id == 'def_app_window_marker':
             # template as marker
             routing['kvm_node_name'] = kvm_node_name
             routing['app_window_name'] = app_window_name
@@ -82,13 +90,15 @@ class OcrNodeFactory:
             routing['from_camera_capture'] = True
             routing['screen_image_to_mqtt'] = True
         
-        if id == '102':
+        if id == 'all_in_one':
             # soft capture, on window
-            routing['kvm_node_name'] = 'kvm_230508'
-            routing['app_window_name'] = 'windows_performance'
+            routing['kvm_node_name'] = kvm_node_name
+            routing['app_window_name'] = app_window_name
             routing['from_screen_capture'] = True
-            routing['screen_image_to_mqtt'] = True
-            routing['screen_image_to_ocr'] = True
+            # routing['screen_image_to_mqtt'] = True
+            routing['screen_image_to_image_divider'] = True
+            routing['small_images_to_ocr'] = True
+            routing['small_strings_to_mqtt'] = True
 
         if is_new_kvm_node:
             cls.CreateKvmNodeConfig(routing)

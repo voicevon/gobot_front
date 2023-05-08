@@ -7,9 +7,11 @@ from libs.screen_image_divider import ScreenImageDivider
 from libs.tool_def_areas import ToolDefAreas
 import pytesseract
 import cv2
+from PIL import Image #pip install pillow
 
 
 class OcrNode:
+    
     def __init__(self, routing) -> None:
         self.routing = routing
         #basic environment
@@ -52,11 +54,12 @@ class OcrNode:
             self.__identifier = AppWindowIdentifier()
         if self.screen_image_to_image_divder: 
             getter =  RemoteVar_mqtt('ocr/' + self.__app_window_name + '/config', None, for_loading_config=True)
-            self.__divider = ScreenImageDivider(self.__app_window_name)
+            config, _ = getter.get_json()
+            Logger.Print("ffffffffffffffff", config)
+            self.__divider = ScreenImageDivider(config['areas'])
 
         if self.screen_image_to_tool_areas_marker:
             self.__tool_areas_marker = ToolDefAreas(self.__app_window_name)
-
 
     def __get_screen_image(self):
         screen_image = None
@@ -112,9 +115,20 @@ class OcrNode:
         if self.small_images_to_ocr:
             Logger.Debug('ocr small images')
             for image in small_images:
-                string = pytesseract.image_to_string(image)
+                color_converted = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                pil_image =  Image.fromarray(color_converted)
+                string = pytesseract.image_to_string(pil_image)
                 small_strings.append(string)
-                Logger.Print('', string)
+                # Logger.Print("pytesseract string", string)
+                # Logger.Print('', string)
 
         if self.small_strings_to_mqtt:
-            g_mqtt.publish("small_strings", small_strings)
+            Logger.Debug('small_strings_to_mqtt')
+            index = 0
+            for string in small_strings:
+                mqtt_topic = "ocr/" + self.__kvm_node_name + "/" + self.__app_window_name + "/" + str(index) + "/string"
+                g_mqtt.publish(mqtt_topic, string)
+                if index == 1:
+                    cpu =  int(string[0:2])
+                    g_mqtt.publish("ocr/demo", cpu)
+                index += 1
