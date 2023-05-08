@@ -53,8 +53,9 @@ class OcrNode:
         if self.screen_image_to_image_divder: 
             getter =  RemoteVar_mqtt('ocr/' + self.__app_window_name + '/config', None, for_loading_config=True)
             self.__divider = ScreenImageDivider(self.__app_window_name)
+
         if self.screen_image_to_tool_areas_marker:
-            self.__tool_areas_marker = ToolDefAreas()
+            self.__tool_areas_marker = ToolDefAreas(self.__app_window_name)
 
 
     def __get_screen_image(self):
@@ -66,36 +67,41 @@ class OcrNode:
         if self.from_mqtt:
             if self.__image_getter.rx_buffer_has_been_updated():
                 screen_image, _ = self.__image_getter.get_cv_image()
-                cv2.imshow("mqtt_screen_image", screen_image)
-                cv2.waitKey(1)
+                debug = False
+                if debug:
+                    cv2.imshow("OcrNode::mqtt_screen_image", screen_image)
+                    cv2.waitKey(1)
             
-        if screen_image is None:
-            return
+        return screen_image
 
-        debug = False
-        if debug:
-            cv2.imshow("origin_from_mqtt",  screen_image)
-            cv2.waitKey(1)
-
-    def __deliver_screen_image(self, screen_image):
-        # deliver screen_iamge without return anything.
+    def __deliver_screen_image_without_return(self, screen_image):
         if self.screen_image_to_mqtt:
             self.__kvm_node.publish(screen_image)
 
-        if self.screen_image_to_tool_areas_marker:
-            self.__tool_areas_marker.SpinOnce(screen_image)
-            
         if self.screen_image_to_ocr:
             strings = pytesseract.image_to_string(screen_image)
             Logger.Print("===============================================", strings)
 
+    def __deliver_screen_image_even_is_none(self, screen_image):
+        if self.screen_image_to_tool_areas_marker:
+            self.__tool_areas_marker.SpinOnce(screen_image)
 
     def SpinOnce(self):
         small_images = []
         small_strings= []
 
         screen_image = self.__get_screen_image()
-        self.__deliver_screen_image(screen_image)
+        self.__deliver_screen_image_even_is_none(screen_image)
+
+        if screen_image is None:
+            return
+        
+        debug = False
+        if debug:
+            cv2.imshow("OcrNode::SpinOnce().debug_screen_image",  screen_image)
+            cv2.waitKey(1)
+        
+        self.__deliver_screen_image_without_return(screen_image)
 
         if self.screen_image_to_app_window_idendifier:
             app_window_name = self.__identifier.SpinOnce(screen_image)
