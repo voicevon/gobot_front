@@ -99,7 +99,7 @@ class OcrNode:
         if screen_image is None:
             return
         
-        debug = False
+        debug = True
         if debug:
             cv2.imshow("OcrNode::SpinOnce().debug_screen_image",  screen_image)
             cv2.waitKey(1)
@@ -113,12 +113,15 @@ class OcrNode:
             small_images = self.__divider.DivideToSmallImages(screen_image)
 
         if self.small_images_to_ocr:
+            # TODO:  do this at new thread.
             Logger.Debug('ocr small images')
             for image in small_images:
                 color_converted = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 pil_image =  Image.fromarray(color_converted)
                 string = pytesseract.image_to_string(pil_image)
                 small_strings.append(string)
+
+
                 # Logger.Print("pytesseract string", string)
                 # Logger.Print('', string)
 
@@ -129,6 +132,10 @@ class OcrNode:
                 mqtt_topic = "ocr/" + self.__kvm_node_name + "/" + self.__app_window_name + "/" + str(index) + "/string"
                 g_mqtt.publish(mqtt_topic, string)
                 if index == 1:
-                    cpu =  int(string[0:2])
-                    g_mqtt.publish("ocr/demo", cpu)
+                    try:
+                        cpu =  int(string[0:2])
+                        Logger.Print("cpu demo", cpu)
+                        g_mqtt.publish("ocr/demo", cpu)
+                    except:
+                        pass
                 index += 1

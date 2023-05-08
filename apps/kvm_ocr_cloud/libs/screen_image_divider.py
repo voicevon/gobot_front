@@ -22,6 +22,7 @@ class ScreenImageDivider:
         '''
         left, top = 0, 0
         small_images = []
+
         for area in self.__areas:
             x1 = area['x1']
             y1 = area['y1']
@@ -37,6 +38,10 @@ class ScreenImageDivider:
                 string = pytesseract.image_to_string(pil_image)
                 Logger.Print("pytesseract string", string)
 
+            debug = True
+            if debug:
+                if len(small_images) >= 2:
+                    return small_images
         return small_images
 
 
