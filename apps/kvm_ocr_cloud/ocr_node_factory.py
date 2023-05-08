@@ -18,14 +18,16 @@ class OcrNodeFactory:
     def CreateAppWindowConfig(cls, routing):
             app_window_config = {}
             app_window_config['name'] = routing['app_window_name']
-            first_area = {}
-            first_area['x1'] = 1
-            first_area['y1'] = 2
-            first_area['x2'] = 3
-            first_area['y2'] = 4
+
 
             all_areas = []
-            all_areas.append(first_area)
+            for i in range(10):
+                first_area = {}
+                first_area['x1'] = 1
+                first_area['y1'] = 2
+                first_area['x2'] = 3
+                first_area['y2'] = 4
+                all_areas.append(first_area)
             app_window_config["areas"] = all_areas
 
             mqtt_topic_of_app_window_config = 'ocr/' + routing['app_window_name'] + '/config'

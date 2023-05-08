@@ -5,30 +5,7 @@ import json
 
 # https://www.youtube.com/watch?v=2WR3wMt6V2k
 
-class AreaMarker:
-
-    def __init__(self, id:int) -> None:
-        self.id = id
-        self.x1 = 1
-        self.y1 = 2
-        self.x2 = 3
-        self.y2 = 4
-
-    def update_position(self, x1,y1,x2,y2):
-        self.x1 = x1
-        self.y1 = y1
-        self.x2 = x2
-        self.y2 = y2
-
-    def draw_rectangle(self, image, color, area):
-        cv2.rectangle(image, (self.x1, self.y1), (self.x2, self.y2), color, thickness=2)
-
-    # def get_json(self) :
-    #     result = {}
-    #     result["id"] = self.id
-    #     result["postions"] = self.x1, self.y1, self.x2, self.y2
-    #     return result
-      
+  
 MARKING_STATE_IDLE = 0
 MARKING_STATE_BEGIN = 1
 MARKING_STATE_MOVE = 2
@@ -41,14 +18,17 @@ class ToolDefAreas:
         self.__screen_image_cv_window_name = "ToolDefAreas::" + app_window_name
         self.refresh_origin = True
         self.has_set_callback = False
-        self.areas=[]
         self.__config_getter = RemoteVar_mqtt("ocr/" + app_window_name + "/config", None, for_loading_config=True)
         self.marking_state = MARKING_STATE_IDLE
         
         self.__app_window_config, _ = self.__config_getter.get_json()
-        Logger.Print("", self.__app_window_config)
-        self.__mark_areas = self.__app_window_config["areas"]
-        self.__current_marking_area = self.__mark_areas[0]
+        self.__marking_areas = self.__app_window_config["areas"]
+        # Logger.Print("", self.__app_window_config)
+        # Logger.Print("", self.__marking_areas)
+        # for a in self.__marking_areas:
+        #     Logger.Print('', a)
+        self.__current_marking_area = self.__marking_areas[0]
+
 
     def __on_mouse_event(self, event, x, y, flags, param):
         if self.screen_image is None:
@@ -57,58 +37,54 @@ class ToolDefAreas:
         if event == cv2.EVENT_LBUTTONDOWN:
             if self.marking_state == MARKING_STATE_IDLE:
                 # x1,y1 = x, y
-                self.__current_marking_area.x1 = x
-                self.__current_marking_area.y1 = y
+                self.__current_marking_area['x1'] = x
+                self.__current_marking_area['y1'] = y
                 self.marking_state = MARKING_STATE_MOVE
                 
             elif self.marking_state == MARKING_STATE_MOVE:
                 # x2,y2 = x, y
-                self.__current_marking_area.x2 = x
-                self.__current_marking_area.y2 = y 
+                self.__current_marking_area['x2'] = x
+                self.__current_marking_area['y2'] = y 
                 self.marking_state = MARKING_STATE_ENDING
 
-                # save x1,y1,x2,y2
-                
-                # self.__current_marking_area.update_position(x1,y1,x2,y2)
-                
                 self.marking_state = MARKING_STATE_IDLE
         
         if event == cv2.EVENT_MOUSEMOVE:
             if self.marking_state == MARKING_STATE_MOVE:
-                x2,y2 = x,y
+                self.__current_marking_area['x2'] = x
+                self.__current_marking_area['y2'] = y 
             # Logger.Print("x1,y1, x2,y2", (x1,y1,x2,y2))
         
-    def redraw_areas(self):
-        if self.screen_image is None:
-            return
-        
-        marker = self.screen_image.copy()
-        area_marker = AreaMarker(0)
-
-        for area in self.__mark_areas:
-            # xx1,xx2,yy1,yy2 = area.get_elements()
-            # cv2.rectangle(marker, (xx1,yy1), (xx2,yy2), color=(255,0,0), thickness=2)
+    def draw_rectangles(self):
+        screen_image_with_rectangles = self.screen_image.copy()
+        # draw all rectangle of areas, current working area is green, others are red.
+        for area in self.__marking_areas:
+            x1 = area['x1']
+            y1 = area['y1']
+            x2 = area['x2']
+            y2 = area['y2']
             if area == self.__current_marking_area:
-                color = (255,0,0)
+                color = (0, 255, 0)
             else:
-                color = (0,0,255)
-            area_marker.draw_rectangle(marker, color, area)
-
-        cv2.imshow("marker", marker)
+                color = (0, 0, 255)
+            cv2.rectangle(screen_image_with_rectangles, (x1, y1),(x2,y2), color, thickness=2)
+        return screen_image_with_rectangles
+        
 
     def SpinOnce(self, screen_image):
         if screen_image is not None:
             self.screen_image = screen_image
             if self.refresh_origin:
                 if not self.has_set_callback:
-                    debug = True
-                    if debug:
-                        cv2.imshow(self.__screen_image_cv_window_name, screen_image)
-                        cv2.waitKey(1)
+                    cv2.imshow(self.__screen_image_cv_window_name, screen_image)
+                    cv2.waitKey(1)
                     cv2.setMouseCallback(self.__screen_image_cv_window_name, self.__on_mouse_event)
                     self.has_set_callback = True
 
-        self.redraw_areas()
+        if self.screen_image is not None:
+            rectangle_image=  self.draw_rectangles()
+            cv2.imshow(self.__screen_image_cv_window_name, rectangle_image)
+
         key = cv2.waitKey(1)
         if key == ord(' '):
             # start/stop refresh
@@ -116,31 +92,31 @@ class ToolDefAreas:
             if not self.refresh_origin:
                 Logger.Info("Stop auto refreshing source image")
         if key == ord('1'):
-            self.__current_marking_area = self.__mark_areas[1]
+            self.__current_marking_area = self.__marking_areas[1]
             Logger.Print("marking_id", 1)
         if key == ord('2'):
-            self.__current_marking_area = self.__mark_areas[2]
+            self.__current_marking_area = self.__marking_areas[2]
             Logger.Print("marking_id", 2)
         if key == ord('3'):
-            self.__current_marking_area = self.__mark_areas[3]
+            self.__current_marking_area = self.__marking_areas[3]
             Logger.Print("marking_id", 3)
         if key == ord('4'):
-            self.__current_marking_area = self.__mark_areas[4]
+            self.__current_marking_area = self.__marking_areas[4]
             Logger.Print("marking_id", 4)
         if key == ord('5'):
-            self.__current_marking_area = self.__mark_areas[5]
+            self.__current_marking_area = self.__marking_areas[5]
             Logger.Print("marking_id", 5)
         if key == ord('6'):
-            self.__current_marking_area = self.__mark_areas[6]
+            self.__current_marking_area = self.__marking_areas[6]
             Logger.Print("marking_id", 6)
         if key == ord('7'):
-            self.__current_marking_area = self.__mark_areas[7]
+            self.__current_marking_area = self.__marking_areas[7]
             Logger.Print("marking_id", 7)
         if key == ord('8'):
-            self.__current_marking_area = self.__mark_areas[8]
+            self.__current_marking_area = self.__marking_areas[8]
             Logger.Print("marking_id", 8)
         if key == ord('9'):
-            self.__current_marking_area = self.__mark_areas[9]
+            self.__current_marking_area = self.__marking_areas[9]
             Logger.Print("marking_id", 9)
         if key == ord('s'):
             self.__save_to_mqtt()
