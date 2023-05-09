@@ -38,13 +38,13 @@ class OcrNode:
 
         if self.from_camera_capture:
             getter = RemoteVar_mqtt('ocr/kvm/' + self.__kvm_node_name + '/config', None, for_loading_config=True)
-            self.__kvm_node = KvmNodeCamera(self.__my_os, getter)
+            self.__kvm_node_camera = KvmNodeCamera(self.__my_os, getter)
         if self.from_screen_capture:
             config = {}
             config["node_name"] = self.__kvm_node_name
             config["fps"] = 1
-            config['resolution'] = {'left': 0, 'top': 0, 'width': 1366, 'height': 768}
-            self.__kvm_node = KvmNodeScreen(self.__my_os, config)
+            config['resolution'] = (1024, 768)
+            self.__kvm_node_screen = KvmNodeScreen(self.__my_os, config)
 
         if self.from_mqtt or self.screen_image_to_mqtt:
             mqtt_topic_of_screen_image = "ocr/kvm/" + self.__kvm_node_name + "/screen_image"
@@ -64,9 +64,9 @@ class OcrNode:
     def __get_screen_image(self):
         screen_image = None
         if self.from_camera_capture:
-            screen_image = self.__kvm_node.Capture_Image()
+            screen_image = self.__kvm_node_camera.Capture_Image()
         if self.from_screen_capture:
-            screen_image = self.__kvm_node.Capture_Image()
+            screen_image = self.__kvm_node_screen.Capture_Image()
         if self.from_mqtt:
             if self.__image_getter.rx_buffer_has_been_updated():
                 screen_image, _ = self.__image_getter.get_cv_image()
@@ -79,7 +79,10 @@ class OcrNode:
 
     def __deliver_screen_image_without_return(self, screen_image):
         if self.screen_image_to_mqtt:
-            self.__kvm_node.publish(screen_image)
+            if self.from_screen_capture:
+                self.__kvm_node_screen.publish(screen_image)
+            if self.from_camera_capture:
+                self.__kvm_node_camera.publish(screen_image)
 
         if self.screen_image_to_ocr:
             strings = pytesseract.image_to_string(screen_image)

@@ -9,7 +9,8 @@ class OcrNodeFactory:
             kvm_node_config ={}
             kvm_node_config["node_name"] = routing['kvm_node_name']
             kvm_node_config["fps"] = 1
-            kvm_node_config['resolution'] = {'left': 0, 'top': 0, 'width': 1366, 'height': 768}
+            # kvm_node_config['resolution'] = {'left': 0, 'top': 0, 'width': 1366, 'height': 768}
+            kvm_node_config['resolution'] = (1024, 768)
 
             mqtt_topic_of_kvm_node_config = 'ocr/kvm/' + routing['kvm_node_name'] + '/config'
             _ = RemoteVar_mqtt(mqtt_topic_of_kvm_node_config, json.dumps(kvm_node_config))
@@ -37,7 +38,7 @@ class OcrNodeFactory:
     @classmethod
     def CreateBlankRouting(cls):
         routing = {}
-        routing['my_os'] = 'windows'
+        routing['my_os'] = 'Windows'
         routing['from_screen_capture'] = False
         routing['from_camera_capture'] = False
         routing['from_mqtt'] = False
@@ -107,6 +108,14 @@ class OcrNodeFactory:
             routing['my_os'] = 'Pi_lite'
             routing['kvm_node_name'] = 'demo_yjg'
             routing['app_window_name'] = app_window_name
+            routing['from_camera_capture'] = True
+            routing['screen_image_to_mqtt'] = True
+
+        if id == 'demo_fxm':
+            # soft capture, on window
+            routing['kvm_node_name'] = 'demo_yjg'
+            routing['app_window_name'] = app_window_name
+            routing['from_camera_capture'] = True
             routing['screen_image_to_mqtt'] = True
 
         if id == 'view_demo':

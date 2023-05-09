@@ -10,19 +10,18 @@ class KvmNodeCamera:
         '''
         os = {'Windows', 'Linux_desktop','Pi_lite'}
         '''
-        self.__config_getter = config_getter
-        self.__config, has_been_updated = config_getter.get_json()
+        # self.__config_getter = config_getter
+        self.__config, _ = config_getter.get_json()
         self.node_name = self.__config['node_name']
         self.mqtt_topic_of_screen_image = 'ocr/kvm/' + self.node_name + '/screen_image'
         # self.fps = self.__config['fps']
-        self.__OS = os
-        if self.__OS == 'Windows':
+        
+        if os == 'Windows':
             self.__cv2_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         else:
             self.__cv2_capture = cv2.VideoCapture(0, cv2.CAP_V4L2)
 
-        self.__resolution =  self.__config['resolution']  # (1280,720)
-        width, height = self.__resolution
+        width, height =  self.__config['resolution']  # (1280,720)
         self.__cv2_capture.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.__cv2_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         self.__start_time = 0
