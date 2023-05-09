@@ -34,7 +34,6 @@ class OcrNodeFactory:
             mqtt_topic_of_app_window_config = 'ocr/' + routing['app_window_name'] + '/config'
             _ = RemoteVar_mqtt(mqtt_topic_of_app_window_config, json.dumps(app_window_config))
 
-
     @classmethod
     def CreateBlankRouting(cls):
         routing = {}
@@ -59,24 +58,24 @@ class OcrNodeFactory:
         return routing
 
     @classmethod
-    def CreateOcrNode(cls, id:str, kvm_node_name:str, app_window_name:str, is_new_kvm_node = False, is_new_app_window = False):
+    def CreateOcrNode(cls, node_name:str, kvm_node_name:str, app_window_name:str, is_new_kvm_node = False, is_new_app_window = False):
         routing = cls.CreateBlankRouting()
 
-        if id == 'def_app_window_marker':
+        if node_name == 'def_app_window_marker':
             # template as marker
             routing['kvm_node_name'] = kvm_node_name
             routing['app_window_name'] = app_window_name
             routing['from_mqtt'] = True
             routing['screen_image_to_tool'] = True
 
-        if id == 'def_areas':
+        if node_name == 'def_areas':
             # tool:  calibrate areas for divider.
             routing['kvm_node_name'] = kvm_node_name
             routing['app_window_name'] = app_window_name
             routing['from_mqtt'] = True
             routing['screen_image_to_tool_areas_marker'] = True
 
-        if id == 'recorder':
+        if node_name == 'recorder':
             # cloud-edge. video recoder
             routing['from_kvm_nodes'] = {'kvm_230506','kvm_230508'}
             routing['kvm_node_name'] = 'fake_kvm_node'
@@ -85,7 +84,7 @@ class OcrNodeFactory:
             routing['screen_image_to_tool'] = True
 
 
-        if id == '101':
+        if node_name == '101':
             # hard capture, on rasperberry pi.
             routing['kvm_node_name'] = 'kvm_230506'
             routing['app_window_name'] = 'ubuntu_performance'
@@ -93,7 +92,7 @@ class OcrNodeFactory:
             routing['from_camera_capture'] = True
             routing['screen_image_to_mqtt'] = True
         
-        if id == 'all_in_one':
+        if node_name == 'all_in_one':
             # soft capture, on window
             routing['kvm_node_name'] = kvm_node_name
             routing['app_window_name'] = app_window_name
@@ -103,7 +102,7 @@ class OcrNodeFactory:
             routing['small_images_to_ocr'] = True
             routing['small_strings_to_mqtt'] = True
 
-        if id == 'demo_yjg':
+        if node_name == 'demo_yjg':
             # soft capture, on window
             routing['my_os'] = 'Pi_lite'
             routing['kvm_node_name'] = 'demo_yjg'
@@ -111,19 +110,19 @@ class OcrNodeFactory:
             routing['from_camera_capture'] = True
             routing['screen_image_to_mqtt'] = True
 
-        if id == 'demo_fxm':
+        if node_name == 'demo_fxm':
             # soft capture, on window
-            routing['kvm_node_name'] = 'demo_yjg'
+            routing['kvm_node_name'] = 'demo_fxm'
             routing['app_window_name'] = app_window_name
-            routing['from_camera_capture'] = True
+            routing['from_screen_capture'] = True
             routing['screen_image_to_mqtt'] = True
 
-        if id == 'view_demo':
+        if node_name == 'view_demo':
             # soft capture, on window
             routing['kvm_node_name'] = 'demo_yjg'
             routing['app_window_name'] = app_window_name
             routing['from_mqtt'] = True
-            routing['view_screen_image'] = False
+            routing['view_screen_image'] = True
 
         if is_new_kvm_node:
             cls.CreateKvmNodeConfig(routing)
