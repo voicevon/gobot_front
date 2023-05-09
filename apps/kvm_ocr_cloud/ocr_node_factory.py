@@ -100,6 +100,14 @@ class OcrNodeFactory:
             routing['small_images_to_ocr'] = True
             routing['small_strings_to_mqtt'] = True
 
+        if id == 'demo_yjg':
+            # soft capture, on window
+            routing['my_os'] = 'Pi_lite'
+            routing['kvm_node_name'] = 'demo_yjg'
+            routing['app_window_name'] = app_window_name
+            routing['screen_image_to_mqtt'] = True
+
+
         if is_new_kvm_node:
             cls.CreateKvmNodeConfig(routing)
 
