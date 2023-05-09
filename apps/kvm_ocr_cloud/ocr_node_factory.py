@@ -42,6 +42,8 @@ class OcrNodeFactory:
         routing['from_camera_capture'] = False
         routing['from_mqtt'] = False
 
+        routing['view_screen_image'] = False
+
         routing['screen_image_to_mqtt'] = False
         routing['screen_image_to_app_window_identifier'] = False
         routing['screen_image_to_image_divider'] = False
@@ -107,6 +109,12 @@ class OcrNodeFactory:
             routing['app_window_name'] = app_window_name
             routing['screen_image_to_mqtt'] = True
 
+        if id == 'view_demo':
+            # soft capture, on window
+            routing['kvm_node_name'] = 'demo_yjg'
+            routing['app_window_name'] = app_window_name
+            routing['from_mqtt'] = True
+            routing['view_screen_image'] = False
 
         if is_new_kvm_node:
             cls.CreateKvmNodeConfig(routing)

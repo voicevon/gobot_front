@@ -99,8 +99,7 @@ class OcrNode:
         if screen_image is None:
             return
         
-        debug = True
-        if debug:
+        if self.routing['view_screen_image']:
             cv2.imshow("OcrNode::SpinOnce().debug_screen_image",  screen_image)
             cv2.waitKey(1)
         

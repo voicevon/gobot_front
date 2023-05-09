@@ -24,10 +24,12 @@ pip install numpy
 pip install VonPylib 
 pip install paho-mqtt
 sudo apt install -y tesseract-ocr
+pip install mss
+pip install pytesseract
 
 
-cd gobot_front/apps/twh_front_agent/
-python rpi_kvm.py
+
+python gobot_front/apps/kvm_ocr_cloud/main.py
 
 
 
