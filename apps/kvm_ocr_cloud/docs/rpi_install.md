@@ -36,3 +36,4 @@ python gobot_front/apps/kvm_ocr_cloud/main.py
 
 # Turtorial:
 * https://raspberrypi-guide.github.io/programming/install-opencv
+* https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/
