@@ -8,7 +8,7 @@ import time
 class KvmNodeCamera:
     def __init__(self, os:str, config_getter: RemoteVar_mqtt) -> None:
         '''
-        os = {'Windows', 'Linux_desktop','Pi_lite'}
+        os = {'Windows', 'Linux_desktop','Pi_lite', 'Pi_lite_no_user'}
         '''
         # self.__config_getter = config_getter
         self.__config, _ = config_getter.get_json()
