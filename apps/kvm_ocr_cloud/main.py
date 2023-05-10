@@ -3,8 +3,9 @@ from ocr_node_factory import OcrNodeFactory
 import time
 
 if __name__ == "__main__":
+    
     time.sleep(10)
-    g_mqtt_broker_config.client_id = "230510aa"
+    g_mqtt_broker_config.client_id = "230510aaddf"
     g_mqtt.connect_to_broker(g_mqtt_broker_config, blocked_connection=True)
 
     # ocr_node = CreateOcrNode('marker')

@@ -8,13 +8,12 @@ import time
 class KvmNodeCamera:
     def __init__(self, os:str, config_getter: RemoteVar_mqtt) -> None:
         '''
-        os = {'Windows', 'Linux_desktop','Pi_lite', 'Pi_lite_no_user'}
+        os = {'Windows', 'Linux_desktop','Pi_lite'}
         '''
         # self.__config_getter = config_getter
         self.__config, _ = config_getter.get_json()
         self.node_name = self.__config['node_name']
         self.mqtt_topic_of_screen_image = 'ocr/kvm/' + self.node_name + '/screen_image'
-        self.__OS = os
         # self.fps = self.__config['fps']
         
         if os == 'Windows':
@@ -47,6 +46,5 @@ class KvmNodeCamera:
             #     cv2.waitKey(1)
             bytes_count =  g_mqtt.publish_cv_image(self.mqtt_topic_of_screen_image,  image)
             self.__start_time = time.time()
-            if self.__OS != "Pi_lite_no_user":
-                Logger.Print(self.node_name +  " published to: " + self.mqtt_topic_of_screen_image  + "  bytes (KB)", bytes_count / 1000)
+            Logger.Print(self.node_name +  " published to: " + self.mqtt_topic_of_screen_image  + "  bytes (KB)", bytes_count / 1000)
         

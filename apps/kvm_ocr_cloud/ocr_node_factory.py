@@ -104,7 +104,7 @@ class OcrNodeFactory:
 
         if node_name == 'demo_yjg':
             # soft capture, on window
-            routing['my_os'] = 'Pi_lite_no_user'
+            routing['my_os'] = 'Pi_lite'
             routing['kvm_node_name'] = 'demo_yjg'
             routing['app_window_name'] = app_window_name
             routing['from_camera_capture'] = True
