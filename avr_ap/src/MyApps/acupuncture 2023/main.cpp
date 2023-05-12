@@ -12,8 +12,8 @@
 
 #ifdef I_AM_ACUPUNCTURE_MEGA328_VER_2023
 
-#define TOUCH_PAD_CHANNELS 14
-#define MY_I2C_ADDR 10
+#define TOUCH_PAD_CHANNELS 3
+
 
 TouchpadChannel all_channels[TOUCH_PAD_CHANNELS];
 uint8_t tx_buffer_for_i2c[TOUCH_PAD_CHANNELS];
