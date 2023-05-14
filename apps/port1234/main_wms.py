@@ -1,7 +1,5 @@
 from flask import Flask,  render_template
 from wcs_robots.twh_wcs_unit import Start_WCS_Process
-from twh_user.route import web_user
-from twh_stock.route import web_stock
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '20221220'

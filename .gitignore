@@ -131,4 +131,6 @@ dmypy.json
 
 
 apps/twh2/database/*.json
+*.mp4
+
 
