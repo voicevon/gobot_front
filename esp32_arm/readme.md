@@ -1,17 +1,5 @@
-# Going to use https://github.com/gin66/FastAccelStepper
-
-# Structure of Project
-## board
-* Produce hardware component
-
-## App
-* Produce Gcode from mqtt message.
-
-## Robot
-* Control CNC, EEF, Homer, etc
-
-# IDE
-* Install platformio.
+# Framework is Arduino
+* 
 
 # Lost file:  soc/soc_caps.h
 * should be here: '''esp32_arm/.pio/libdeps/esp32-ap/Simple FOC/src/drivers/hardware_sepcific/soc/soc_caps.h'''

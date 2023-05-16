@@ -4,7 +4,7 @@ from twh_database.db_stock import db_Stock, db_Deposit_history,db_StockRule
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 from twh_database.bolt_nut import get_row_from_tooth_location, twh_brands,twh_factories,twh_shapes,twh_sizes
 
-from timestamp import get_timestamp
+from von.helper import Helper
 from von.logger import Logger
 from datetime import datetime
 
@@ -177,7 +177,7 @@ def withdraw_begin():
     user_request['located'] = 'porter'
     user_request['order_state'] = 'idle'
     user_request['order_code'] = request.form.get('order_code')
-    user_request['order_id'] = get_timestamp()
+    user_request['order_id'] = Helper.get_timestamp()
     DB_WithdrawOrder.Create_OrderTasks_multi_rows(user_request)
     return render_template('withdraw_begin.html')
 
