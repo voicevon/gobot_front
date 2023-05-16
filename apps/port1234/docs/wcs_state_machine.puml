@@ -12,11 +12,12 @@ state wcs_state{
 		[*] -> checking_loop_porter
 		checking_loop_porter -[#grey,dashed]-> assign_new_picking : P1: any loop_porter is idle
 		assign_new_picking: this is a virtual state
-		checking_loop_porter --> picking_placing : P2: any porter is ready  
-		checking_loop_porter <-- checking_loop_porter: P3: all loop_porters are moving.
-		picking_placing -> picking_placing: operator is working
-		picking_placing -[#green,bold]-> checking_loop_porter : green button is pressed
+
 	}
+	checking_loop_porter --> picking_placing : P2: any porter is ready  
+	checking_loop_porter <-- checking_loop_porter: P3: all loop_porters are moving.
+	picking_placing -> picking_placing: operator is working
+	picking_placing -[#green,bold]-> checking_loop_porter : green button is pressed
 	checking_deposit_mq --> check_withdraw_request: deposit mq is empty
 	check_withdraw_request --> wcs_idle:  withdraw-queue is empty
 	check_withdraw_request --> checking_loop_porter: there is withdraw request

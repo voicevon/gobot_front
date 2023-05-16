@@ -7,7 +7,8 @@ class TwhRobot_Shipper():
         self.__is_shipping = False
 
     def Get_Shipout_button_value(self):
-        return self.__button_shipped.get()
+        mqtt_payload, has_been_updated =  self.__button_shipped.get()
+        return mqtt_payload
     
     def IsShipping(self) -> bool:
         return self.__is_shipping

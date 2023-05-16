@@ -154,30 +154,30 @@ class WithdrawOrder():
 
 class WithdrawOrderManager():
     def __init__(self, twh_id:str, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
-        self.__all_order_tasks = []
+        self.__all_withdraw_orders = []
         self.__twh_id = twh_id
         self.__packer = packer
         self.__shipper = shipper
 
-    def AddOrderTask(self, new_order_task: WithdrawOrder):
-        self.__all_order_tasks.append(new_order_task)
+    # def AddOrderTask(self, new_order_task: WithdrawOrder):
+    #     self.__all_withdraw_orders.append(new_order_task)
 
     def FindOrderTask(self, order_id:str) -> WithdrawOrder:
-        for order_task in self.__all_order_tasks:
+        for order_task in self.__all_withdraw_orders:
             if order_task.Order_id == order_id:
                 return order_task
         return None # type: ignore
     
     def GetTasksCount(self) -> int:
-        return len(self.__all_order_tasks)
+        return len(self.__all_withdraw_orders)
     
-    def FindTooth_is_in_porter_from_all_order(self, porter_id:int) -> tuple[OrderTooth, WithdrawOrder]:
+    def FindTooth_is_in_porter_from_all_orders(self, porter_id:int) -> tuple[OrderTooth, WithdrawOrder]:
         '''
         * porter_id is equal to tooth.row.
         * constraint:  tooth must be located in porter
         '''
-        # Logger.Debug('OrderTaskManager:: FindTooth_is_in_porter() ')
-        for order in self.__all_order_tasks:
+        # Logger.Print('OrderTaskManager:: FindTooth_is_in_porter()   len(all_withdraw_order)  ', len(self.__all_withdraw_orders))
+        for order in self.__all_withdraw_orders:
             tooth = order.FindTooth_is_in_porter(porter_id)
             if tooth is not None:
                 # Logger.Print('found tooth in the loop-porter,  tooth.col', tooth.col)
@@ -203,7 +203,8 @@ class WithdrawOrderManager():
             if db_tooth['twh_id'] == self.__twh_id:   # TODO:  move into db_order_teeth  searching.
                 if the_order is None:
                     new_order = WithdrawOrder(db_tooth['order_id'], self.__packer, self.__shipper)
-                    self.AddOrderTask(new_order)
+                    # self.AddOrderTask(new_order)
+                    self.__all_withdraw_orders.append(new_order)
                     the_order = new_order
                     if not printed_logger_title:
                         Logger.Debug('WithdrawOrderManager::__renew_orders_from_database() First')
@@ -228,7 +229,7 @@ class WithdrawOrderManager():
 
             # if order_task.GetState() == 'shipped':
             #     DB_WithdrawOrder.delete_by_order_id(order_task.Order_id)
-            #     self.__all_order_tasks.remove(order_task)
+            #     self.__all_withdraw_orders.remove(order_task)
 
     def SpinOnce(self):
         '''
@@ -238,11 +239,11 @@ class WithdrawOrderManager():
         '''
         self.__renew_orders_from_database()
         
-        for order in self.__all_order_tasks:
+        for order in self.__all_withdraw_orders:
             is_shipped =  order.SpinOnce()
             if is_shipped:
                 Logger.Info( twh_factories[self.__twh_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
-                self.__all_order_tasks.remove(order)
+                self.__all_withdraw_orders.remove(order)
                 return
 
 

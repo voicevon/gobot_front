@@ -46,7 +46,7 @@ class GcodeSender():
 
     def spin_once(self):
         if self.__queue.empty():
-            # print('gcode_sender  spin_once()', self.tx.payload, self.rx.payload)
+            # Logger.Debug('gcode_sender  spin_once()')
             return
 
         # Logger.Print('watting ....', self.__waitting_msg.payload)
@@ -64,8 +64,19 @@ class GcodeSender():
         print("gcode sender....", self.__tx_topic, self.__waitting_msg.id, self.__waitting_msg.payload)
 
 
+# Q: Why do we need so many gcode_senders?
+# A: Because each gcode receiver is a individual CNC,  He has his own gcode queue.
+# Q: Please consider: To use single gcode_sender with many gcode_queues.
+# A: Yes, We will do that. 
+#    The gcode queue is inside gcode_sender now.
+#    Step1:  move the gcode_queue out from sender
+#    Step2:  Create a pointers wheel, do dispacth gcodes in all queue.
+#    Step3:  Make the gcode_sender becomes a SingleTon.
+
 all_gcode_senders = []
 
+
 def gcode_senders_spin_once():
+    # Logger.Print("gcode_senders_spin_once()      gcode_sender  count ", len(all_gcode_senders))
     for gcode_sender in all_gcode_senders:
         gcode_sender.spin_once()

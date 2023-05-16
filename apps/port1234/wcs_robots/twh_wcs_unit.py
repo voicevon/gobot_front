@@ -27,7 +27,7 @@ class TwhWcs_Unit():
         self.__packer = TwhRobot_Packer()
         self.__shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
         self.__wcs_state = 'idle'
-        self.__order_task_manager = WithdrawOrderManager(twh_id, self.__packer, self.__shipper)
+        self.__withdraw_order_task_manager = WithdrawOrderManager(twh_id, self.__packer, self.__shipper)
         self.__deposite_queue = deposit_queue
         self.__showing_wcs_state = ''
         self.__twh_id = twh_id
@@ -66,24 +66,29 @@ class TwhWcs_Unit():
     
     def __Pair_idle_porter_and_tooth(self) -> tuple[TwhRobot_LoopPorter, WithdrawOrder, OrderTooth]: 
         # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
+        # Logger.Print("porters count", len(self.__porters))
         for porter in self.__porters:
+            # Logger.Print("porter state", porter.GetState())
             if porter.GetState() == 'idle':
-                # Logger.Print('found idle porter, porter_id',porter.id)
-                tooth, order = self.__order_task_manager.FindTooth_is_in_porter_from_all_order(porter.id)
+                # Logger.Print('__Pair_idle_porter_and_tooth()  Found idle porter, porter_id', porter.id)
+                tooth, order = self.__withdraw_order_task_manager.FindTooth_is_in_porter_from_all_orders(porter.id)
                 if tooth is not None:
-                    # Logger.Print('Paired.   found tooth is in the porter, col', tooth.col)
+                    Logger.Print('Paired.   found tooth is in the porter, col', tooth.col)
                     return porter,order, tooth
         return None, None, None # type: ignore
 
-    def try_to_withdraw_a_tooth(self):
+    def __try_to_withdraw_a_tooth(self):
         # setp 1:  Pair idle_porter, picking_tooth
         idle_porter, picking_order, picking_tooth = self.__Pair_idle_porter_and_tooth()
         if picking_tooth is None:
+            Logger.Info("__try_to_withdraw_a_tooth()   picking_tooth is None")
             return
         
         # step2: whether or not:  the order linked to a packer-cell  
+        # Logger.Print("__try_to_withdraw_a_tooth()     idle_porter ", idle_porter.id)
         is_ok = picking_order.Start_PickingPlacing_a_tooth()
         if is_ok:
+            Logger.Print("__try_to_withdraw_a_tooth()     Start loop_porting ", idle_porter.id)
             idle_porter.Start_Porting(picking_tooth, picking_order)  
         
     def __state_machine_main(self):
@@ -114,18 +119,21 @@ class TwhWcs_Unit():
                 self.__wcs_state = 'idle'
     
         if self.__wcs_state == 'withdraw_dispaching':
-            if self.__order_task_manager.GetTasksCount() == 0:
+            if self.__withdraw_order_task_manager.GetTasksCount() == 0:
                 self.__wcs_state = 'idle'
                 return
             
             # try to find idle_porter matched tooth in order. and pair (porter, tooth)
             # Logger.Debug("state_machine_main()  withdraw_dispaching ")
-            self.try_to_withdraw_a_tooth()
+            self.__try_to_withdraw_a_tooth()
 
             # try to find ready_porter
+            # Q: How about idle_loop_porter?  Is an idle_loop_porter same to ready_loop_porter?
+            # A: 
             ready_porter = self.Find_LoopPorter_ready()
             if ready_porter is None:
                 # all porters are busy
+                Logger.Info("TwhWcs_Unit::__state_machine_main() on state==withdraw_dispaching,  all porters are busy")
                 return
             ready_porter.show_layer_led()
             porting_tooth, porting_order = ready_porter.GetPortingTooth()
@@ -136,7 +144,8 @@ class TwhWcs_Unit():
             self.__wcs_state = 'picking_placing'
                     
         if self.__wcs_state == 'picking_placing':
-            if self.__button_pick.get() == 'ON':
+            mqtt_payload, has_been_updated = self.__button_pick.get()
+            if mqtt_payload == 'ON':
                 self.__button_pick.set('idle')
                 porting_tooth, porting_order = self.__picking_ready_porter.GetPortingTooth()
                 porting_tooth.TransferToLocated('packer', write_to_db=True)
@@ -151,8 +160,10 @@ class TwhWcs_Unit():
         '''
         return:  __wcs_state
         '''
+        # Logger.Debug("TwhWcs_Unit::SpinOnce()")
+        # Logger.Print("my twh_id", self.__twh_id)
         self.__state_machine_main() 
-        self.__order_task_manager.SpinOnce()
+        self.__withdraw_order_task_manager.SpinOnce()
         if self.__showing_wcs_state != self.__wcs_state:
             showing_wcs_state = self.__wcs_state
             g_mqtt.publish('twh/' + self.__twh_id + '/wcs_state',showing_wcs_state)
@@ -160,8 +171,8 @@ class TwhWcs_Unit():
 
 
 def WCS_Main(deposit_queue:multiprocessing.Queue):
-        g_mqtt_broker_config.client_id = '2023ddddffffd0gf355'
-        g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turn off.  
+        Logger.Info("WCS_Main() is starting  on my own process.")
+        g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turned off.  
 
         all_wcs_units = []
         for twh_id in list(twh_factories.keys()):
@@ -177,16 +188,18 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
 
 # from wms to wcs
 wcs_deposit_queue = multiprocessing.Queue()         
-wcs_is_started = False
-def Start_WCS_Process():
-    global wcs_is_started
-    if wcs_is_started:
-        return
-    # p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue, set_packer_cell_state_queue, packer_cells_state))
-    wcs_is_started = True
+# wcs_is_started = False
+
+def Start_TwhWcs_Process():
+    # global wcs_is_started
+    # if wcs_is_started:
+    #     return
+    # # p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue, set_packer_cell_state_queue, packer_cells_state))
+    # wcs_is_started = True
+    
     p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue,))
     p.start() 
-    Logger.Info('WCS is running on new process.....')
+    # Logger.Info('WCS is running on new process.....')
 
 
     # https://pymotw.com/2/multiprocessing/communication.html#communication-between-processes

@@ -37,7 +37,8 @@ class TwhRobot_LoopPorter():
         self.__state.set(new_state)
     
     def GetState(self) -> str:
-        return self.__state.get()
+        mqtt_payload, has_been_updated =  self.__state.get()
+        return mqtt_payload
 
     # def port_to_pick(self, tooth: PickingPacking_Tooth) -> None:
     def MoveTo(self, target_col:int, target_layer:int) -> None:
