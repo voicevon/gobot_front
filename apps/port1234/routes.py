@@ -5,6 +5,7 @@ from wcs_robots.twh_wcs_unit import Start_TwhWcs_Process
 from twh_user.route import web_user
 from twh_stock.route import web_stock
 # from von.ocr.ocr_factory import OcrFactory
+from kvm_ocr_cloud.ocr_node_factory import OcrNodeFactory
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '20221220'
@@ -64,8 +65,8 @@ def product_iot():
 
 @app.route('/ocr')
 def ocr():
-    kvm_nodes = OcrFactory.ListKvmNodes()
-    app_windows = OcrFactory.ListAppWindows()
+    kvm_nodes = OcrNodeFactory.GetKnown_KvmNodeList()
+    app_windows = OcrNodeFactory.GetKnown_AppWindowList()
     return render_template('ocr/index.html', kvm_nodes=kvm_nodes,app_windows=app_windows)
 
 

@@ -1,10 +1,10 @@
 from von.logger import Logger
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt, g_mqtt
-from libs.kvm_node_camera import KvmNodeCamera
-from libs.kvm_node_screen import KvmNodeScreen
-from libs.app_window_idenifier import AppWindowIdentifier
-from libs.screen_image_divider import ScreenImageDivider
-from libs.tool_def_areas import ToolDefAreas
+from image_getter.kvm_node_camera import KvmNodeCamera
+from image_getter.kvm_node_screen import KvmNodeScreen
+from app_window.app_window_idenifier import AppWindowIdentifier
+from app_window.screen_image_divider import ScreenImageDivider
+from tool_def_areas import ToolDefAreas
 import pytesseract
 import cv2
 from PIL import Image #pip install pillow

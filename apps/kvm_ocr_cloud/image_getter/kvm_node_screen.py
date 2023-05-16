@@ -1,19 +1,12 @@
 from von.logger import Logger
 from von.mqtt.mqtt_agent import g_mqtt
 import cv2
+import numpy as np
+from mss import mss      # pip install mss
+from PIL import Image
 import time
 
 # https://stackoverflow.com/questions/35097837/capture-video-data-from-screen-in-python
-
-
-import numpy as np
-import cv2
-from mss import mss      # pip install mss
-from PIL import Image
-
-
-
-
 
 class KvmNodeScreen:
     def __init__(self, os:str, json_config) -> None:
