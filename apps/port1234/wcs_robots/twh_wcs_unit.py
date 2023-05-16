@@ -81,7 +81,7 @@ class TwhWcs_Unit():
         # setp 1:  Pair idle_porter, picking_tooth
         idle_porter, picking_order, picking_tooth = self.__Pair_idle_porter_and_tooth()
         if picking_tooth is None:
-            Logger.Info("__try_to_withdraw_a_tooth()   picking_tooth is None")
+            # Logger.Info("__try_to_withdraw_a_tooth()   picking_tooth is None")
             return
         
         # step2: whether or not:  the order linked to a packer-cell  
@@ -133,7 +133,7 @@ class TwhWcs_Unit():
             ready_porter = self.Find_LoopPorter_ready()
             if ready_porter is None:
                 # all porters are busy
-                Logger.Info("TwhWcs_Unit::__state_machine_main() on state==withdraw_dispaching,  all porters are busy")
+                # Logger.Info("TwhWcs_Unit::__state_machine_main() on state==withdraw_dispaching,  all porters are busy")
                 return
             ready_porter.show_layer_led()
             porting_tooth, porting_order = ready_porter.GetPortingTooth()
