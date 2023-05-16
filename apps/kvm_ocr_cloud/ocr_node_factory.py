@@ -5,18 +5,17 @@ import json
 class OcrNodeFactory:
     
     @classmethod
-    def CreateKvmNodeConfig(cls, routing):
+    def CreateKvmNodeConfig_on_mqtt_broker(cls, routing):
             kvm_node_config ={}
             kvm_node_config["node_name"] = routing['kvm_node_name']
             kvm_node_config["fps"] = 1
-            # kvm_node_config['resolution'] = {'left': 0, 'top': 0, 'width': 1366, 'height': 768}
             kvm_node_config['resolution'] = (1024, 768)
 
             mqtt_topic_of_kvm_node_config = 'ocr/kvm/' + routing['kvm_node_name'] + '/config'
             _ = RemoteVar_mqtt(mqtt_topic_of_kvm_node_config, json.dumps(kvm_node_config))
 
     @classmethod
-    def CreateAppWindowConfig(cls, routing):
+    def CreateAppWindowConfig_on_mqtt_broker(cls, routing):
             app_window_config = {}
             app_window_config['name'] = routing['app_window_name']
 
@@ -133,3 +132,23 @@ class OcrNodeFactory:
 
         ocr_node = OcrNode(routing) 
         return ocr_node
+    
+    @classmethod
+    def GetKnown_AppWindowList(cls):
+        known_app_windows = []
+        return known_app_windows
+
+    @classmethod
+    def GetKnown_KvmNodeList(cls):
+        known_kvm_nodes = []
+        known_kvm_nodes.append(cls.CreateOcrNode('view_demo', 'demo_yjg','temp_window', is_new_kvm_node=False, is_new_app_window=False))
+
+        return known_kvm_nodes
+
+
+if __name__ == '__main__':
+    from von.mqtt.mqtt_agent import g_mqtt, g_mqtt_broker_config
+    g_mqtt.connect_to_broker(g_mqtt_broker_config,blocked_connection=True)
+
+    x = OcrNodeFactory.GetKvmNodeList()
+    print(x)
