@@ -1,51 +1,43 @@
+from wcs_robots.wcs_base.wcs_unit_base import WcsUnitBase
 from wcs_robots.twh_robot_loop_porter import TwhRobot_LoopPorter
-from wcs_robots.twh_robot_packer import TwhRobot_Packer
-from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
 from twh_business_logical.withdraw_order import  WithdrawOrdersManager, WithdrawOrder, OrderTooth
 from twh_database.bolt_nut import twh_factories
+from wcs_robots.wcs_base.gcode_sender import g_gcode_senders
 
-from wcs_robots.wcs_base.wcs_unit_base import WcsUnitBase
-from wcs_robots.wcs_base.gcode_sender import gcode_senders_spin_once
-
-from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from von.logger import Logger
 import multiprocessing
 import time
 
 
-
 class TwhWcs_Unit(WcsUnitBase):
 
     def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
+
         super().__init__(twh_id, deposit_queue)
-        self.__porters = [TwhRobot_LoopPorter(twh_id, 0)]
-        for i in range(3):
-            new_porter = TwhRobot_LoopPorter(twh_id, i+1)
+        # self.__porters = [TwhRobot_LoopPorter(twh_id, 0)]
+        # for i in range(3):
+        #     new_porter = TwhRobot_LoopPorter(twh_id, i+1)
+        #     self.__porters.append(new_porter)
+        for i in range(4):
+            new_porter = TwhRobot_LoopPorter(twh_id, i)
             self.__porters.append(new_porter)
 
-        # __button_pick is a green button sit on packer.
-        self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
-        # __button_pack is a blue button sit on packer.
-        self.__button_shipped = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pack','idle')
-        self.__packer = TwhRobot_Packer()
-        self.__shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
+        # # __button_pick is a green button sit on packer.
+        # self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
+        # # __button_pack is a blue button sit on packer.
+        # self.__button_shipped = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pack','idle')
+        # self.__packer = TwhRobot_Packer()
+        # self.__shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
         # self._wcs_state = 'idle'
-        self.__withdraw_orders_manager = WithdrawOrdersManager(twh_id, self.__packer, self.__shipper)
+        # self.__withdraw_orders_manager = WithdrawOrdersManager(twh_id, self.__packer, self.__shipper)
         self.__deposite_queue = deposit_queue
-        self.__showing_wcs_state = ''
  
     def Find_LoopPorter_ready(self) -> TwhRobot_LoopPorter:
         for porter in self.__porters:
             if porter.GetState() == 'ready':
                 return porter
         return None # type: ignore
-
-    def all_loop_porter_are_idle(self) -> bool:
-        for porter in self.__porters:
-            if porter.GetState() != 'idle':
-                return False
-        return True
 
     def __Do_deposit_begin(self, new_deposit_request):
         Logger.Info(twh_factories[self._wcs_unit_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
@@ -159,18 +151,18 @@ class TwhWcs_Unit(WcsUnitBase):
 
                 self._wcs_state = 'withdraw_dispaching'
 
-    def SpinOnce(self) ->str:
-        '''
-        return:  _wcs_state
-        '''
-        # Logger.Debug("TwhWcs_Unit::SpinOnce()")
-        # Logger.Print("my twh_id", self._wcs_unit_id)
-        self.__state_machine_main() 
-        self.__withdraw_orders_manager.SpinOnce()
-        if self.__showing_wcs_state != self._wcs_state:
-            showing_wcs_state = self._wcs_state
-            g_mqtt.publish('twh/' + self._wcs_unit_id + '/wcs_state',showing_wcs_state)
-        return self._wcs_state
+    # def SpinOnce(self) ->str:
+    #     '''
+    #     return:  _wcs_state
+    #     '''
+    #     # Logger.Debug("TwhWcs_Unit::SpinOnce()")
+    #     # Logger.Print("my twh_id", self._wcs_unit_id)
+    #     self.__state_machine_main() 
+    #     self.__withdraw_orders_manager.SpinOnce()
+    #     if self.__showing_wcs_state != self._wcs_state:
+    #         showing_wcs_state = self._wcs_state
+    #         g_mqtt.publish('twh/' + self._wcs_unit_id + '/wcs_state',showing_wcs_state)
+    #     return self._wcs_state
 
 
 def WCS_Main(deposit_queue:multiprocessing.Queue):
@@ -185,20 +177,17 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
         while True:
             for wcs_unit in all_wcs_units:
                 wcs_unit.SpinOnce()
-            gcode_senders_spin_once()
+
+            for gcode_sender in g_gcode_senders:
+                gcode_sender.SpinOnce()
+
             time.sleep(0.5)
 
 
 # from wms to wcs
 wcs_deposit_queue = multiprocessing.Queue()         
-# wcs_is_started = False
 
 def Start_TwhWcs_Process():
-    # global wcs_is_started
-    # if wcs_is_started:
-    #     return
-    # # p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue, set_packer_cell_state_queue, packer_cells_state))
-    # wcs_is_started = True
     
     p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue,))
     p.start() 

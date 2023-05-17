@@ -1,6 +1,7 @@
-from wcs_robots.wcs_base.gcode_sender import GcodeSender, all_gcode_senders
+from wcs_robots.wcs_base.gcode_sender import GcodeSender, g_gcode_senders
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
+from abc import abstractmethod
 
 class PorterBase:
     
@@ -12,7 +13,7 @@ class PorterBase:
         self.id = row_id
         self.wcs_unit_id = wcs_unit_id
         self._gcode_sender = GcodeSender(gcode_topic)
-        all_gcode_senders.append(self._gcode_sender)
+        g_gcode_senders.append(self._gcode_sender)
         self._state = RemoteVar_mqtt(state_topic, 'idle')
         self._state_topic = state_topic
 
@@ -23,3 +24,8 @@ class PorterBase:
         mqtt_payload, has_been_updated =  self._state.get()
         return mqtt_payload
 
+    @abstractmethod
+    def MoveTo(self, target_col:int, target_layer:int) -> None:
+        ...
+
+        
