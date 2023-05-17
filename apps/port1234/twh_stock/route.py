@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request,flash, session, redirect, url_for
-from wcs_robots.twh_wcs_unit import  wcs_deposit_queue
+from twh_wcs.twh_wcs_unit import  wcs_deposit_queue
 from twh_database.db_stock import db_Stock, db_Deposit_history,db_StockRule
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 from twh_database.bolt_nut import get_row_from_tooth_location, twh_brands,twh_factories,twh_shapes,twh_sizes

@@ -1,6 +1,9 @@
-from twh_business_logical.withdraw_order import  WithdrawOrdersManager, WithdrawOrder, OrderTooth
-from wcs_robots.twh_robot_packer import TwhRobot_Packer
-from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
+from twh_wcs.twh_robot_packer import TwhRobot_Packer
+from twh_wcs.twh_robot_shipper import TwhRobot_Shipper
+
+from twh_wcs.wcs_base.order import  Wcs_OrderBase, Wcs_OrderItemBase
+from twh_wcs.wcs_base.order_scheduler import Wcs_OrderSchedulerBase
+from twh_wcs.wcs_base.porter import Wcs_PorterBase
 
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 import multiprocessing
@@ -8,20 +11,22 @@ from abc import abstractmethod
 from von.mqtt.mqtt_agent import g_mqtt
 
 
-class WcsUnitBase:
+class Wcs_UnitBase:
 
     def __init__(self, wcs_unit_id:str, deposit_queue:multiprocessing.Queue) -> None:
         self._wcs_unit_id = wcs_unit_id
         self._deposit_queue = deposit_queue
         self._wcs_state = 'idle'  
-        self.__porters = []
+        self.__porters = list[Wcs_PorterBase]()
+        # for p in self.__porters:
+        #     p.MoveTo(3,54)
         # __button_pick is a green button sit on packer.
         self.__button_pick = RemoteVar_mqtt('twh/' + wcs_unit_id + '/packer/button/pick','idle')
         # __button_pack is a blue button sit on packer.
         self.__button_shipped = RemoteVar_mqtt('twh/' + wcs_unit_id + '/packer/button/pack','idle')
         self.__packer = TwhRobot_Packer()
         self.__shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
-        self.__withdraw_orders_manager = WithdrawOrdersManager(wcs_unit_id, self.__packer, self.__shipper)
+        self.__withdraw_orders_manager = Wcs_OrderSchedulerBase(wcs_unit_id, self.__packer, self.__shipper)
         self.__showing_wcs_state = ''
 
     @abstractmethod
@@ -47,4 +52,8 @@ class WcsUnitBase:
                 return False
         return True
 
-
+    def Find_LoopPorter_ready(self) -> Wcs_PorterBase:
+        for porter in self.__porters:
+            if porter.GetState() == 'ready':
+                return porter
+        return None # type: ignore

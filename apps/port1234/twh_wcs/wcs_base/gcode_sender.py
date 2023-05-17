@@ -76,10 +76,7 @@ class GcodeSender():
         print("gcode sender....", self.__tx_topic, self.__waitting_msg.id, self.__waitting_msg.payload)
 
 
-
-
-
-g_gcode_senders = []
+g_gcode_senders = list[GcodeSender]()
 
 
 

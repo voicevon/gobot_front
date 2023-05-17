@@ -1,9 +1,11 @@
-from wcs_robots.wcs_base.gcode_sender import GcodeSender, g_gcode_senders
+from twh_wcs.wcs_base.order import Wcs_OrderBase, Wcs_OrderItemBase
+
+from twh_wcs.wcs_base.gcode_sender import GcodeSender, g_gcode_senders
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
 from abc import abstractmethod
 
-class PorterBase:
+class Wcs_PorterBase:
     
     def __init__(self, wcs_unit_id:str, row_id:int, gcode_topic, state_topic) -> None:
         '''
@@ -26,6 +28,17 @@ class PorterBase:
 
     @abstractmethod
     def MoveTo(self, target_col:int, target_layer:int) -> None:
-        ...
+        pass
 
+    @abstractmethod
+    def show_layer_led(self):
+        pass
         
+    @abstractmethod
+    def turn_off_leds(self):
+        pass
+
+    @abstractmethod
+    def GetOrder_and_Item(self) -> tuple[Wcs_OrderBase, Wcs_OrderItemBase]:
+        pass
+

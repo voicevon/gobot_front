@@ -12,12 +12,13 @@ class person():
 people = [person(99)]
 
 
-people = []
-
+# people = []
+people = list[person]()
 
 
 people.append(person(11))
 people.append(person(22))
+people.append('abc')
 
 for p in people:
     print(p.name, p.age)

@@ -1,29 +1,29 @@
-from von.logger import Logger
 from twh_database.db_withdraw_order import DB_WithdrawOrder
-from wcs_robots.twh_robot_packer import TwhRobot_Packer
-from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
 from twh_database.bolt_nut import twh_factories
 
-class OrderTooth():
+from twh_wcs.twh_robot_packer import TwhRobot_Packer
+from twh_wcs.twh_robot_shipper import TwhRobot_Shipper
+from twh_wcs.wcs_base.order import Wcs_OrderBase, Wcs_OrderItemBase
+
+from von.logger import Logger
+
+
+
+
+class OrderTooth(Wcs_OrderItemBase):
     def __init__(self, db_doc_id:int) -> None:
-        self.doc_id = db_doc_id
+        # self.doc_id = db_doc_id
         self.DentalLocation = 'ur1'
         self.row :int
         self.col:int
         self.layer:int
-        # self.packer_cell_id:int
-        self.__located = 'porter'
+        # self.__located = 'porter'
 
     def TransferToLocated(self, new_located:str, write_to_db:bool) -> None:
         self.__located = new_located
         if write_to_db:
             DB_WithdrawOrder.update_tooth_located(self.doc_id, new_located)
 
-    def GetLocated(self) -> str:
-        '''
-        'porter', 'worker_hand','packer_cell'
-        '''
-        return self.__located
     
     def PrintOut(self, title:str):
         Logger.Info(title)
@@ -35,10 +35,10 @@ class OrderTooth():
         Logger.Print('layer', self.layer)
 
 
-class WithdrawOrder():
+class WithdrawOrder(Wcs_OrderBase):
     def __init__(self, order_id:int, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
         self.__all_teeth = []
-        self.Order_id = order_id
+        # self.Order_id = order_id
         self.PackerCell_id = -1
         self.__state = 'idle'
         self.__packer = packer

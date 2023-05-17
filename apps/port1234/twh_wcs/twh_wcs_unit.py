@@ -1,8 +1,8 @@
-from wcs_robots.wcs_base.wcs_unit_base import WcsUnitBase
-from wcs_robots.twh_robot_loop_porter import TwhRobot_LoopPorter
-from twh_business_logical.withdraw_order import  WithdrawOrdersManager, WithdrawOrder, OrderTooth
+from twh_wcs.wcs_base.wcs_unit_base import Wcs_UnitBase
+from twh_wcs.twh_robot_loop_porter import TwhRobot_LoopPorter
+from twh_wcs.twh_order import  WithdrawOrdersManager, WithdrawOrder, OrderTooth
 from twh_database.bolt_nut import twh_factories
-from wcs_robots.wcs_base.gcode_sender import g_gcode_senders
+from twh_wcs.wcs_base.gcode_sender import g_gcode_senders
 
 from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from von.logger import Logger
@@ -10,7 +10,7 @@ import multiprocessing
 import time
 
 
-class TwhWcs_Unit(WcsUnitBase):
+class TwhWcs_Unit(Wcs_UnitBase):
 
     def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
 
@@ -33,11 +33,7 @@ class TwhWcs_Unit(WcsUnitBase):
         # self.__withdraw_orders_manager = WithdrawOrdersManager(twh_id, self.__packer, self.__shipper)
         self.__deposite_queue = deposit_queue
  
-    def Find_LoopPorter_ready(self) -> TwhRobot_LoopPorter:
-        for porter in self.__porters:
-            if porter.GetState() == 'ready':
-                return porter
-        return None # type: ignore
+
 
     def __Do_deposit_begin(self, new_deposit_request):
         Logger.Info(twh_factories[self._wcs_unit_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
@@ -169,7 +165,7 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
         Logger.Info("WCS_Main() is starting  on my own process.")
         g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turned off.  
 
-        all_wcs_units = []
+        all_wcs_units = list[TwhWcs_Unit]()
         for twh_id in list(twh_factories.keys()):
             wcs_unit = TwhWcs_Unit(twh_id, deposit_queue)
             all_wcs_units.append(wcs_unit)
