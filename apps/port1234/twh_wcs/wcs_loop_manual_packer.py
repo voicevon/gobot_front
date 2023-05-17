@@ -2,7 +2,7 @@ from twh_wcs.wcs_base.wcs_unit_base import Wcs_UnitBase
 from twh_wcs.twh_robot_loop_porter import Twh_LoopPorter
 from twh_wcs.twh_order import  Twh_Order, Twh_OrderItem
 from twh_wcs.twh_order_scheduler import Twh_OrderScheduler
-from twh_wcs.twh_robot_packer import TwhRobot_Packer, twh_packers
+from twh_wcs.twh_robot_packer import TwhRobot_Packer
 from twh_wcs.twh_robot_shipper import TwhRobot_Shipper, twh_shippers
 from twh_database.bolt_nut import twh_factories
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
@@ -13,7 +13,7 @@ import multiprocessing
 # import time
 
 
-class Twh_WcsUnit(Wcs_UnitBase):
+class TwhWcs_LoopManualPacker(Wcs_UnitBase):
 
     def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
         self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
@@ -159,19 +159,6 @@ class Twh_WcsUnit(Wcs_UnitBase):
                 self.__twh_packer.turn_off_all_packer_cells_led_green()
 
                 self._wcs_state = 'withdraw_dispaching'
-
-    # def SpinOnce(self) ->str:
-    #     '''
-    #     return:  _wcs_state
-    #     '''
-    #     # Logger.Debug("TwhWcs_Unit::SpinOnce()")
-    #     # Logger.Print("my twh_id", self._wcs_unit_id)
-    #     self.__state_machine_main() 
-    #     self.__withdraw_orders_manager.SpinOnce()
-    #     if self.__showing_wcs_state != self._wcs_state:
-    #         showing_wcs_state = self._wcs_state
-    #         g_mqtt.publish('twh/' + self._wcs_unit_id + '/wcs_state',showing_wcs_state)
-    #     return self._wcs_state
 
 
 

@@ -46,7 +46,7 @@ state order_item_location{
 	inside_loop_porter --> inside_loop_porter_moving: loop_porter.MoveTo()
     inside_loop_porter_moving --> loop_porter_gate: loop_porter.is_ready()
 	loop_porter_gate --> loop_porter_gate_picking: porter_picker.Pick()
-    loop_porter_gate_picking --> loop_porter_done: porter_picker.has_done()
+    loop_porter_gate_picking --> loop_porter_done: porter_picker.has_done() then \n loop_porter.set_state(idle)
     loop_porter_done --> tube_inlet: tube.Got_entering(inlet)
     tube_inlet --> tube_moving: tube.Got_entering(valve_n)
 	tube_moving --> tube_outlet: tube.Got_entering(outlet_n)

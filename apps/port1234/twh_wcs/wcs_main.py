@@ -1,4 +1,5 @@
-from twh_wcs.twh_wcs_unit import Twh_WcsUnit
+from twh_wcs.wcs_loop_manual_packer import Twh_WcsUnit
+
 from twh_database.bolt_nut import twh_factories
 
 from twh_wcs.wcs_base.gcode_sender import g_gcode_senders
