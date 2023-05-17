@@ -1,7 +1,7 @@
-
+from twh_wcs.wcs_base.shipper import Wcs_ShipperBase
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
-class TwhRobot_Shipper():
+class TwhRobot_Shipper(Wcs_ShipperBase):
     def __init__(self, button_shipped:RemoteVar_mqtt) -> None:
         self.__button_shipped = button_shipped
         self.__is_shipping = False

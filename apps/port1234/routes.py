@@ -1,7 +1,7 @@
 # https://github.com/abalarin/Flask-on-Linode
 
 from flask import Flask,  render_template
-from twh_wcs.twh_wcs_unit import Start_TwhWcs_Process
+from twh_wcs.wcs_main import Start_TwhWcs_Process
 from twh_user.route import web_user
 from twh_stock.route import web_stock
 # from von.ocr.ocr_factory import OcrFactory

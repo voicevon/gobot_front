@@ -3,9 +3,10 @@ from twh_wcs.wcs_base.order import Wcs_OrderBase, Wcs_OrderItemBase
 from twh_wcs.wcs_base.gcode_sender import GcodeSender, g_gcode_senders
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
-class Wcs_PorterBase:
+
+class Wcs_PorterBase(ABC):
     
     def __init__(self, wcs_unit_id:str, row_id:int, gcode_topic, state_topic) -> None:
         '''
@@ -42,3 +43,5 @@ class Wcs_PorterBase:
     def GetOrder_and_Item(self) -> tuple[Wcs_OrderBase, Wcs_OrderItemBase]:
         pass
 
+    # @abstractmethod
+    # def GetPortingTooth(self) -> tuple[Twh_OrderItem, Twh_WithdrawOrder]:

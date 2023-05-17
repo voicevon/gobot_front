@@ -1,9 +1,10 @@
+from twh_wcs.wcs_base.packer import Wcs_PackerBase
 
 from von.logger import Logger
 from von.mqtt.mqtt_agent import g_mqtt
 
 
-class TwhRobot_Packer():
+class TwhRobot_Packer(Wcs_PackerBase):
     def __init__(self) -> None:
         self.__green_led_index = 13
         self.__blue_led_index = 13

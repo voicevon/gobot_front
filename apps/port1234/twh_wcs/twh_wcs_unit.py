@@ -1,16 +1,15 @@
 from twh_wcs.wcs_base.wcs_unit_base import Wcs_UnitBase
 from twh_wcs.twh_robot_loop_porter import TwhRobot_LoopPorter
-from twh_wcs.twh_order import  WithdrawOrdersManager, WithdrawOrder, OrderTooth
+from twh_wcs.twh_order import  Twh_WithdrawOrder, Twh_OrderItem
+from twh_wcs.twh_order_scheduler import Twh_OrderScheduler
 from twh_database.bolt_nut import twh_factories
-from twh_wcs.wcs_base.gcode_sender import g_gcode_senders
 
-from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
 from von.logger import Logger
 import multiprocessing
-import time
+# import time
 
 
-class TwhWcs_Unit(Wcs_UnitBase):
+class Twh_WcsUnit(Wcs_UnitBase):
 
     def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
 
@@ -21,7 +20,7 @@ class TwhWcs_Unit(Wcs_UnitBase):
         #     self.__porters.append(new_porter)
         for i in range(4):
             new_porter = TwhRobot_LoopPorter(twh_id, i)
-            self.__porters.append(new_porter)
+            self._porters.append(new_porter)
 
         # # __button_pick is a green button sit on packer.
         # self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
@@ -32,8 +31,7 @@ class TwhWcs_Unit(Wcs_UnitBase):
         # self._wcs_state = 'idle'
         # self.__withdraw_orders_manager = WithdrawOrdersManager(twh_id, self.__packer, self.__shipper)
         self.__deposite_queue = deposit_queue
- 
-
+        self.__twh_orders_scheduler = Twh_OrderScheduler(twh_id , self.__packer, self.__shipper)
 
     def __Do_deposit_begin(self, new_deposit_request):
         Logger.Info(twh_factories[self._wcs_unit_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
@@ -43,8 +41,8 @@ class TwhWcs_Unit(Wcs_UnitBase):
         col_id = new_deposit_request['col']
         layer_id = new_deposit_request['layer']
         Logger.Print("row_id", row_id)
-        Logger.Print("porters count", len(self.__porters))
-        porter = self.__porters[row_id]
+        Logger.Print("porters count", len(self._porters))
+        porter = self._porters[row_id]
         self.__depositing_porter = porter
         Logger.Print('layer_id', layer_id)
         porter.MoveTo(col_id, layer_id)
@@ -55,10 +53,10 @@ class TwhWcs_Unit(Wcs_UnitBase):
         self.__depositing_porter.turn_off_leds()
         self.__depositing_porter.SetStateTo('idle')
     
-    def __Pair_idle_porter_and_tooth(self) -> tuple[TwhRobot_LoopPorter, WithdrawOrder, OrderTooth]: 
+    def __Pair_idle_porter_and_tooth(self) -> tuple[TwhRobot_LoopPorter, Twh_WithdrawOrder, Twh_OrderItem]: 
         # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
         # Logger.Print("porters count", len(self.__porters))
-        for porter in self.__porters:
+        for porter in self._porters:
             # Logger.Print("porter state", porter.GetState())
             if porter.GetState() == 'idle':
                 # Logger.Print('__Pair_idle_porter_and_tooth()  Found idle porter, porter_id', porter.id)
@@ -82,7 +80,7 @@ class TwhWcs_Unit(Wcs_UnitBase):
             Logger.Print("__try_to_withdraw_a_tooth()     Start loop_porting ", idle_porter.id)
             idle_porter.Start_Porting(picking_tooth, picking_order)  
         
-    def __state_machine_main(self):
+    def _state_machine_main(self):
         if self._wcs_state == 'idle':
             if self.__deposite_queue.empty():
                 self._wcs_state = 'withdraw_dispaching'
@@ -110,7 +108,7 @@ class TwhWcs_Unit(Wcs_UnitBase):
                 self._wcs_state = 'idle'
     
         if self._wcs_state == 'withdraw_dispaching':
-            if self.__withdraw_orders_manager.GetWithdrawOrdersCount() == 0:
+            if self.__twh_orders_scheduler.GetWithdrawOrdersCount() == 0:
                 self._wcs_state = 'idle'
                 return
             
@@ -159,38 +157,6 @@ class TwhWcs_Unit(Wcs_UnitBase):
     #         showing_wcs_state = self._wcs_state
     #         g_mqtt.publish('twh/' + self._wcs_unit_id + '/wcs_state',showing_wcs_state)
     #     return self._wcs_state
-
-
-def WCS_Main(deposit_queue:multiprocessing.Queue):
-        Logger.Info("WCS_Main() is starting  on my own process.")
-        g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turned off.  
-
-        all_wcs_units = list[TwhWcs_Unit]()
-        for twh_id in list(twh_factories.keys()):
-            wcs_unit = TwhWcs_Unit(twh_id, deposit_queue)
-            all_wcs_units.append(wcs_unit)
-
-        while True:
-            for wcs_unit in all_wcs_units:
-                wcs_unit.SpinOnce()
-
-            for gcode_sender in g_gcode_senders:
-                gcode_sender.SpinOnce()
-
-            time.sleep(0.5)
-
-
-# from wms to wcs
-wcs_deposit_queue = multiprocessing.Queue()         
-
-def Start_TwhWcs_Process():
-    
-    p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue,))
-    p.start() 
-    # Logger.Info('WCS is running on new process.....')
-
-
-    # https://pymotw.com/2/multiprocessing/communication.html#communication-between-processes
 
 
 
