@@ -1,11 +1,12 @@
 from twh_wcs.wcs_base.wcs_unit_base import Wcs_UnitBase
-from twh_wcs.twh_robot_loop_porter import TwhRobot_LoopPorter
+from twh_wcs.twh_robot_loop_porter import Twh_LoopPorter
 from twh_wcs.twh_order import  Twh_Order, Twh_OrderItem
 from twh_wcs.twh_order_scheduler import Twh_OrderScheduler
-from twh_wcs.twh_robot_packer import TwhRobot_Packer
-from twh_wcs.twh_robot_shipper import TwhRobot_Shipper
+from twh_wcs.twh_robot_packer import TwhRobot_Packer, twh_packers
+from twh_wcs.twh_robot_shipper import TwhRobot_Shipper, twh_shippers
 from twh_database.bolt_nut import twh_factories
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
+
 
 from von.logger import Logger
 import multiprocessing
@@ -16,19 +17,25 @@ class Twh_WcsUnit(Wcs_UnitBase):
 
     def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
         self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
+        
         # __button_pack is a blue button sit on packer.
         self.__button_shipped = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pack','idle')
         self.__twh_packer = TwhRobot_Packer()
-        self.__twh_shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
-        self.__twh_orders_scheduler = Twh_OrderScheduler(twh_id , self.__twh_packer, self.__twh_shipper)
+
+        # self.__twh_shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
+        mqtt_topic_of_ship = 'twh/' + twh_id + '/packer/button/pack'
+        shipper = TwhRobot_Shipper(mqtt_topic_of_ship)
+        twh_shippers.append(shipper)
+
+        self.__twh_orders_scheduler = Twh_OrderScheduler(twh_id)
 
         super().__init__(twh_id, deposit_queue, self.__twh_orders_scheduler)
-        # self.__porters = [TwhRobot_LoopPorter(twh_id, 0)]
+        # self.__porters = [Twh_LoopPorter(twh_id, 0)]
         # for i in range(3):
-        #     new_porter = TwhRobot_LoopPorter(twh_id, i+1)
+        #     new_porter = Twh_LoopPorter(twh_id, i+1)
         #     self.__porters.append(new_porter)
         for i in range(4):
-            new_porter = TwhRobot_LoopPorter(twh_id, i)
+            new_porter = Twh_LoopPorter(twh_id, i)
             self._porters.append(new_porter)
 
         # # __button_pick is a green button sit on packer.
@@ -61,7 +68,7 @@ class Twh_WcsUnit(Wcs_UnitBase):
         self.__depositing_porter.turn_off_leds()
         self.__depositing_porter.SetStateTo('idle')
     
-    def __Pair_idle_porter_and_tooth(self) -> tuple[TwhRobot_LoopPorter, Twh_Order, Twh_OrderItem]: 
+    def __Pair_idle_porter_and_tooth(self) -> tuple[Twh_LoopPorter, Twh_Order, Twh_OrderItem]: 
         # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
         # Logger.Print("porters count", len(self.__porters))
         for porter in self._porters:

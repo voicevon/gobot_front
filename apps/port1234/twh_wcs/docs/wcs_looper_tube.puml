@@ -1,0 +1,57 @@
+@startuml
+
+state wcs_state{
+	[*] -> wcs_idle
+	wcs_idle-[#red,dashed]-> checking_deposit_mq
+	checking_deposit_mq -[#red,bold]-> deposit_begin: deposit(row, col, quantity) \nrobot[row].moveto(col)
+	deposit_begin -[#red,bold]-> deposite_end
+	deposite_end -[#red,bold]->wcs_idle: user_finished, \nuser_canceled
+	checking_deposit_mq: this is a virtual state
+
+	state withdraw_dispaching{
+		[*] -> checking_loop_porter
+		checking_loop_porter -[#grey,dashed]-> assign_new_picking : P1: any loop_porter is idle
+		assign_new_picking: this is a virtual state
+
+	}
+	checking_loop_porter --> picking_placing : P2: any porter is ready  
+	checking_loop_porter <-- checking_loop_porter: P3: all loop_porters are moving.
+	picking_placing -> picking_placing: operator is working
+	picking_placing -[#green,bold]-> checking_loop_porter : green button is pressed
+	checking_deposit_mq --> check_withdraw_request: deposit mq is empty
+	check_withdraw_request --> wcs_idle:  withdraw-queue is empty
+	check_withdraw_request --> checking_loop_porter: there is withdraw request
+	check_withdraw_request <-- checking_loop_porter: P4: all loop_porters are idle
+	note right of wcs_idle
+	Parallel processes:
+		packer button checker
+		shipper button checker
+	end note
+}
+
+
+state loop_porter {
+	[*] -> loop_idle 
+	loop_idle -> moving
+	moving <- moving
+	moving --> ready
+}
+
+picking_placing -[#green,bold]-> loop_idle : green button is pressed
+assign_new_picking --> moving
+
+
+state order_item_location{
+	[*] -> inside_loop_porter
+	inside_loop_porter --> inside_loop_porter_moving: loop_porter.MoveTo()
+    inside_loop_porter_moving --> loop_porter_gate: loop_porter.is_ready()
+	loop_porter_gate --> loop_porter_gate_picking: porter_picker.Pick()
+    loop_porter_gate_picking --> loop_porter_done: porter_picker.has_done()
+    loop_porter_done --> tube_inlet: tube.Got_entering(inlet)
+    tube_inlet --> tube_moving: tube.Got_entering(valve_n)
+	tube_moving --> tube_outlet: tube.Got_entering(outlet_n)
+    tube_outlet --> workstation
+}
+
+assign_new_picking --> feeding
+@enduml

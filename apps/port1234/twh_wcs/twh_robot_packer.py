@@ -65,6 +65,7 @@ class TwhRobot_Packer(Wcs_PackerBase):
         g_mqtt.publish(topic, payload)
         
 
+twh_packers = list[TwhRobot_Packer]()
 
     
 

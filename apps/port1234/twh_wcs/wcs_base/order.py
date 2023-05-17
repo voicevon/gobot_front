@@ -19,5 +19,19 @@ class Wcs_OrderItemBase(ABC):
     
     
 class Wcs_OrderBase:
-    def __init__(self, order_id:int, packer:Wcs_PackerBase, shipper:Wcs_ShipperBase) -> None:
+    # def __init__(self, order_id:int, packer:Wcs_PackerBase, shipper:Wcs_ShipperBase) -> None:
+    def __init__(self, order_id:int) -> None:
         self.order_id = order_id
+        self._all_order_items = list[Wcs_OrderItemBase]()
+        self.__state = 'idle'
+
+
+    def GetState(self) -> str:
+        return self.__state
+
+    def IsFullFilled(self) -> bool:
+        for t in self._all_order_items:
+            if t.GetLocated() != 'packer':
+                return False
+            
+        return True

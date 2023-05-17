@@ -1,16 +1,14 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
-from twh_database.bolt_nut import twh_factories
 
-from twh_wcs.twh_robot_packer import TwhRobot_Packer
-from twh_wcs.twh_robot_shipper import TwhRobot_Shipper
+from twh_wcs.twh_robot_packer import  twh_packers
+from twh_wcs.twh_robot_shipper import twh_shippers
 from twh_wcs.wcs_base.order import Wcs_OrderBase, Wcs_OrderItemBase
 
 from von.logger import Logger
 
 
-
-
 class Twh_OrderItem(Wcs_OrderItemBase):
+
     def __init__(self, db_doc_id:int) -> None:
         super().__init__(db_doc_id)
         # self.doc_id = db_doc_id
@@ -37,22 +35,21 @@ class Twh_OrderItem(Wcs_OrderItemBase):
 
 
 class Twh_Order(Wcs_OrderBase):
-    def __init__(self, twh_order_id:int, twh_packer:TwhRobot_Packer, twh_shipper:TwhRobot_Shipper) -> None:
-        super().__init__(twh_order_id, twh_packer,twh_shipper)
-        self.__all_teeth = list[Twh_OrderItem]()
+    # def __init__(self, twh_order_id:int, twh_packer:TwhRobot_Packer, twh_shipper:TwhRobot_Shipper) -> None:
+    def __init__(self, twh_order_id:int) -> None:
+        super().__init__(twh_order_id)
+        # self._all_order_items = list[Twh_OrderItem]()
+        # self.__state = 'idle'
         # self.Order_id = order_id
         self.PackerCell_id = -1
-        self.__state = 'idle'
-        self.__twh_packer = twh_packer
-        self.__twh_shipper = twh_shipper
 
     def AddTooth(self, new_tooth:Twh_OrderItem) -> None:
-        self.__all_teeth.append(new_tooth)
+        self._all_order_items.append(new_tooth)
     
     def FindTooth_from_doc_id(self, doc_id:int) -> Twh_OrderItem:
-        for t in self.__all_teeth:
+        for t in self._all_order_items:
             if t.doc_id == doc_id:
-                return t
+                return t # type: ignore
         return None # type: ignore
 
     def FindTooth_is_in_porter(self, porter_id:int) -> Twh_OrderItem:
@@ -61,8 +58,8 @@ class Twh_Order(Wcs_OrderBase):
         * constraint:  tooth must be located in porter
         '''
         # Logger.Debug('WithdrawOrder:: FindTooth_is_in_porter() ')
-        for tooth in self.__all_teeth:
-            # tooth.PrintOut('WithdrawOrder:: FindTooth_is_in_porter(), __all_teeth.this tooth')
+        for tooth in self._all_order_items:
+            # tooth.PrintOut('WithdrawOrder:: FindTooth_is_in_porter(), _all_order_items.this tooth')
             # Logger.Print('located', tooth.GetLocated())
             if tooth.GetLocated() == 'porter':
                 if tooth.row == porter_id:
@@ -70,14 +67,14 @@ class Twh_Order(Wcs_OrderBase):
         return None # type: ignore
 
     def HasTooth(self, tooth:Twh_OrderItem) -> bool:
-        for t in self.__all_teeth:
+        for t in self._all_order_items:
             if tooth == t:
                 return True
         return False
     
     def __get_all_teeth_doc_ids(self):
         doc_ids = []
-        for tooth in self.__all_teeth:
+        for tooth in self._all_order_items:
             doc_ids.append(tooth.doc_id)
         return doc_ids
     
@@ -95,28 +92,28 @@ class Twh_Order(Wcs_OrderBase):
                 doc_ids = self.__get_all_teeth_doc_ids()
                 DB_WithdrawOrder.update_order_state(new_state, doc_ids)
 
-    #TODO: a better name:  Start_PickingPlacing()   StartTransfer()   
-    # def Start_PickingPlacing_a_tooth(self, idle_packer_cell_id:int):
+
+    # remove this from order. should be a method of order_scheduler.  right?
     def Start_PickingPlacing_a_tooth(self) -> bool:
         if self.__state == 'idle':
             # this is the first tooth of the order. 
-            idle_packer_cell_id =  self.__twh_packer.Find_Idle_packer_cell()
+            idle_packer_cell_id =  twh_packers[0].Find_Idle_packer_cell()
             if idle_packer_cell_id == -1:
                 return False
             self.PackerCell_id = idle_packer_cell_id
-            self.__twh_packer.StartFeeding_LockPackerCell(idle_packer_cell_id)
+            twh_packers[0].StartFeeding_LockPackerCell(idle_packer_cell_id)
             self.SetStateTo('feeding', write_to_db=True)
         return True    
             
-    def GetState(self) -> str:
-        return self.__state
+    # def GetState(self) -> str:
+    #     return self.__state
 
-    def IsFullFilled(self) -> bool:
-        for t in self.__all_teeth:
-            if t.GetLocated() != 'packer':
-                return False
+    # def IsFullFilled(self) -> bool:
+    #     for t in self._all_order_items:
+    #         if t.GetLocated() != 'packer':
+    #             return False
             
-        return True
+    #     return True
 
     def SpinOnce(self) -> bool:
         '''
@@ -135,21 +132,26 @@ class Twh_Order(Wcs_OrderBase):
             return False
         
         if self.__state == 'wms_shipping':
-            if self.__twh_shipper.IsShipping():
+            # if self.__twh_shipper.IsShipping():
+            if twh_shippers[0].IsShipping():
                 return False
-            self.__twh_packer.StartShipping(self.PackerCell_id)
-            self.__twh_shipper.StartShipping() 
+            # self.__twh_packer.StartShipping(self.PackerCell_id)
+            twh_packers[0].StartShipping(self.PackerCell_id)
+            # self.__twh_shipper.StartShipping() 
+            twh_shippers[0].StartShipping() 
             # multiple orders is in the state of 'wms_shipping'
             doc_ids = self.__get_all_teeth_doc_ids()
             DB_WithdrawOrder.update_order_state('wcs_shipping', doc_ids)
             return False
 
         if self.__state == 'wcs_shipping':
-            if self.__twh_shipper.Get_Shipout_button_value()=='ON':
-                self.__twh_shipper.EndShipping()
+            # if self.__twh_shipper.Get_Shipout_button_value()=='ON':
+            if twh_shippers[0].Get_Shipout_button_value()=='ON':
+                # self.__twh_shipper.EndShipping()
+                twh_shippers[0].EndShipping()
 
                 DB_WithdrawOrder.delete_by_order_id(self.order_id)
-                self.__twh_packer.Release_packer_cell(self.PackerCell_id)
+                twh_packers[0].Release_packer_cell(self.PackerCell_id)
                 return True
         return False
 

@@ -1,19 +1,18 @@
 from twh_wcs.twh_order import Twh_Order, Twh_OrderItem
-
-# from twh_wcs.wcs_base.packer import Wcs_PackerBase
-# from twh_wcs.wcs_base.shipper import Wcs_ShipperBase
-from twh_wcs.twh_robot_packer import TwhRobot_Packer
-from twh_wcs.twh_robot_shipper import TwhRobot_Shipper
-from twh_wcs.wcs_base.order_scheduler import Wcs_OrderSchedulerBase
-
-from von.logger import Logger
+from twh_wcs.twh_robot_packer import TwhRobot_Packer, twh_packers
+from twh_wcs.twh_robot_shipper import TwhRobot_Shipper, twh_shippers
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 from twh_database.bolt_nut import twh_factories
 
 
+from twh_wcs.wcs_base.order_scheduler import Wcs_OrderSchedulerBase
+from von.logger import Logger
+
+
 class Twh_OrderScheduler(Wcs_OrderSchedulerBase):
 
-    def __init__(self, twh_id:str, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
+    # def __init__(self, twh_id:str, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
+    def __init__(self, twh_id:str) -> None:
         ''' In WCS, An order's life time:
         * Created by: UI, or WMS
         * Main processes are:  porting, picking, packing, shipping.
@@ -23,9 +22,10 @@ class Twh_OrderScheduler(Wcs_OrderSchedulerBase):
         '''
         self.__all_twh_orders = list[Twh_Order]()  
         ''' life time: created by UI, or WMS,  ended when the order is shipped.'''
-        self.__twh_id = twh_id
-        self.__twh_packer = packer
-        self.__twh_shipper = shipper
+        # self.__twh_id = twh_id
+        # self.__twh_packer = packer
+        # self.__twh_shipper = shipper
+        super().__init__(twh_id)
 
     def FindWithdrawOrder(self, order_id:str) -> Twh_Order:
         for order_task in self.__all_twh_orders:
@@ -65,15 +65,15 @@ class Twh_OrderScheduler(Wcs_OrderSchedulerBase):
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         for db_tooth in db_order_teeth:
             the_order = self.FindWithdrawOrder(db_tooth['order_id'])
-            if db_tooth['twh_id'] == self.__twh_id:   # TODO:  move into db_order_teeth  searching.
+            if db_tooth['twh_id'] == self.wcs_unit_id:   # TODO:  move into db_order_teeth  searching.
                 if the_order is None:
-                    new_order = Twh_Order(db_tooth['order_id'], self.__twh_packer, self.__twh_shipper)
+                    new_order = Twh_Order(db_tooth['order_id'])
                     # self.AddOrderTask(new_order)
                     self.__all_twh_orders.append(new_order)
                     the_order = new_order
                     if not printed_logger_title:
                         Logger.Debug('WithdrawOrderManager::__renew_orders_from_database() First')
-                        Logger.Print('Factory_name', twh_factories[self.__twh_id])
+                        Logger.Print('Factory_name', self.wcs_unit_id)
                         printed_logger_title = True
                     Logger.Print('WithdrawOrderManager::__renew_orders_from_database()   new_order_task is added to manager. Order_id', new_order.order_id)
                 the_order.SetStateTo(db_tooth['order_state'], write_to_db=False)
@@ -107,7 +107,7 @@ class Twh_OrderScheduler(Wcs_OrderSchedulerBase):
         for order in self.__all_twh_orders:
             is_shipped =  order.SpinOnce()
             if is_shipped:
-                Logger.Info( twh_factories[self.__twh_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
+                Logger.Info( twh_factories[self.wcs_unit_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 self.__all_twh_orders.remove(order)
                 return
 
