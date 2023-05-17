@@ -2,7 +2,7 @@ from wcs_robots.twh_robot_loop_porter import TwhRobot_LoopPorter
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
 from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
 from wcs_robots.gcode_sender import gcode_senders_spin_once
-from twh_business_logical.withdraw_order import  WithdrawOrderManager, WithdrawOrder, OrderTooth
+from twh_business_logical.withdraw_order import  WithdrawOrdersManager, WithdrawOrder, OrderTooth
 from twh_database.bolt_nut import twh_factories
 
 import multiprocessing
@@ -10,6 +10,8 @@ from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
 import time
 from von.logger import Logger
+
+
 
 
 class TwhWcs_Unit():
@@ -27,7 +29,7 @@ class TwhWcs_Unit():
         self.__packer = TwhRobot_Packer()
         self.__shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
         self.__wcs_state = 'idle'
-        self.__withdraw_order_task_manager = WithdrawOrderManager(twh_id, self.__packer, self.__shipper)
+        self.__withdraw_orders_manager = WithdrawOrdersManager(twh_id, self.__packer, self.__shipper)
         self.__deposite_queue = deposit_queue
         self.__showing_wcs_state = ''
         self.__twh_id = twh_id
@@ -71,7 +73,7 @@ class TwhWcs_Unit():
             # Logger.Print("porter state", porter.GetState())
             if porter.GetState() == 'idle':
                 # Logger.Print('__Pair_idle_porter_and_tooth()  Found idle porter, porter_id', porter.id)
-                tooth, order = self.__withdraw_order_task_manager.FindTooth_is_in_porter_from_all_orders(porter.id)
+                tooth, order = self.__withdraw_orders_manager.FindTooth_is_in_porter_from_all_orders(porter.id)
                 if tooth is not None:
                     Logger.Print('Paired.   found tooth is in the porter, col', tooth.col)
                     return porter,order, tooth
@@ -119,7 +121,7 @@ class TwhWcs_Unit():
                 self.__wcs_state = 'idle'
     
         if self.__wcs_state == 'withdraw_dispaching':
-            if self.__withdraw_order_task_manager.GetTasksCount() == 0:
+            if self.__withdraw_orders_manager.GetWithdrawOrdersCount() == 0:
                 self.__wcs_state = 'idle'
                 return
             
@@ -163,7 +165,7 @@ class TwhWcs_Unit():
         # Logger.Debug("TwhWcs_Unit::SpinOnce()")
         # Logger.Print("my twh_id", self.__twh_id)
         self.__state_machine_main() 
-        self.__withdraw_order_task_manager.SpinOnce()
+        self.__withdraw_orders_manager.SpinOnce()
         if self.__showing_wcs_state != self.__wcs_state:
             showing_wcs_state = self.__wcs_state
             g_mqtt.publish('twh/' + self.__twh_id + '/wcs_state',showing_wcs_state)

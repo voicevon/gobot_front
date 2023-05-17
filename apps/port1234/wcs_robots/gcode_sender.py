@@ -64,14 +64,19 @@ class GcodeSender():
         print("gcode sender....", self.__tx_topic, self.__waitting_msg.id, self.__waitting_msg.payload)
 
 
-# Q: Why do we need so many gcode_senders?
-# A: Because each gcode receiver is a individual CNC,  He has his own gcode queue.
-# Q: Please consider: To use single gcode_sender with many gcode_queues.
-# A: Yes, We will do that. 
+# Q1: Why do we need so many gcode_senders?
+# A1: Because each gcode receiver is a individual CNC,  He has his own gcode queue.
+# Q2: Please consider: To use single gcode_sender with many gcode_queues.
+# A2a: Yes, We will do that. 
 #    The gcode queue is inside gcode_sender now.
 #    Step1:  move the gcode_queue out from sender
 #    Step2:  Create a pointers wheel, do dispacth gcodes in all queue.
 #    Step3:  Make the gcode_sender becomes a SingleTon.
+# A2b: No, Not only the gocde_queue, 
+#      but also mqtt_topic,  feedback, syncing should be considered for each queue.
+#      And, the gcode_sender instance manages queue, feedback, syncing.
+#      Maybe a better name is async_gcode_sender ?
+
 
 all_gcode_senders = []
 
