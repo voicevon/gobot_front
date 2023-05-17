@@ -1,8 +1,11 @@
 from twh_wcs.wcs_base.wcs_unit_base import Wcs_UnitBase
 from twh_wcs.twh_robot_loop_porter import TwhRobot_LoopPorter
-from twh_wcs.twh_order import  Twh_WithdrawOrder, Twh_OrderItem
+from twh_wcs.twh_order import  Twh_Order, Twh_OrderItem
 from twh_wcs.twh_order_scheduler import Twh_OrderScheduler
+from twh_wcs.twh_robot_packer import TwhRobot_Packer
+from twh_wcs.twh_robot_shipper import TwhRobot_Shipper
 from twh_database.bolt_nut import twh_factories
+from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
 from von.logger import Logger
 import multiprocessing
@@ -12,8 +15,14 @@ import multiprocessing
 class Twh_WcsUnit(Wcs_UnitBase):
 
     def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
+        self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
+        # __button_pack is a blue button sit on packer.
+        self.__button_shipped = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pack','idle')
+        self.__twh_packer = TwhRobot_Packer()
+        self.__twh_shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
+        self.__twh_orders_scheduler = Twh_OrderScheduler(twh_id , self.__twh_packer, self.__twh_shipper)
 
-        super().__init__(twh_id, deposit_queue)
+        super().__init__(twh_id, deposit_queue, self.__twh_orders_scheduler)
         # self.__porters = [TwhRobot_LoopPorter(twh_id, 0)]
         # for i in range(3):
         #     new_porter = TwhRobot_LoopPorter(twh_id, i+1)
@@ -31,7 +40,6 @@ class Twh_WcsUnit(Wcs_UnitBase):
         # self._wcs_state = 'idle'
         # self.__withdraw_orders_manager = WithdrawOrdersManager(twh_id, self.__packer, self.__shipper)
         self.__deposite_queue = deposit_queue
-        self.__twh_orders_scheduler = Twh_OrderScheduler(twh_id , self.__packer, self.__shipper)
 
     def __Do_deposit_begin(self, new_deposit_request):
         Logger.Info(twh_factories[self._wcs_unit_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
@@ -53,14 +61,14 @@ class Twh_WcsUnit(Wcs_UnitBase):
         self.__depositing_porter.turn_off_leds()
         self.__depositing_porter.SetStateTo('idle')
     
-    def __Pair_idle_porter_and_tooth(self) -> tuple[TwhRobot_LoopPorter, Twh_WithdrawOrder, Twh_OrderItem]: 
+    def __Pair_idle_porter_and_tooth(self) -> tuple[TwhRobot_LoopPorter, Twh_Order, Twh_OrderItem]: 
         # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
         # Logger.Print("porters count", len(self.__porters))
         for porter in self._porters:
             # Logger.Print("porter state", porter.GetState())
             if porter.GetState() == 'idle':
                 # Logger.Print('__Pair_idle_porter_and_tooth()  Found idle porter, porter_id', porter.id)
-                tooth, order = self.__withdraw_orders_manager.FindTooth_is_in_porter_from_all_orders(porter.id)
+                tooth, order = self.__twh_orders_scheduler.FindTooth_is_in_porter_from_all_orders(porter.id)
                 if tooth is not None:
                     Logger.Print('Paired.   found tooth is in the porter, col', tooth.col)
                     return porter,order, tooth
@@ -125,9 +133,9 @@ class Twh_WcsUnit(Wcs_UnitBase):
                 # Logger.Info("TwhWcs_Unit::__state_machine_main() on state==withdraw_dispaching,  all porters are busy")
                 return
             ready_porter.show_layer_led()
-            porting_tooth, porting_order = ready_porter.GetPortingTooth()
+            porting_order, porting_tooth = ready_porter.GetPortingTooth()
             Logger.Print("Ready porter.portingorder.PackerCell_Id", porting_order.PackerCell_id)
-            self.__packer.turn_on_packer_cell_led_green(porting_order.PackerCell_id)  
+            self.__twh_packer.turn_on_packer_cell_led_green(porting_order.PackerCell_id)  
 
             self.__picking_ready_porter = ready_porter
             self._wcs_state = 'picking_placing'
@@ -141,7 +149,7 @@ class Twh_WcsUnit(Wcs_UnitBase):
 
                 self.__picking_ready_porter.turn_off_leds()
                 self.__picking_ready_porter.SetStateTo('idle')
-                self.__packer.turn_off_all_packer_cells_led_green()
+                self.__twh_packer.turn_off_all_packer_cells_led_green()
 
                 self._wcs_state = 'withdraw_dispaching'
 

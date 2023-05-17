@@ -12,6 +12,7 @@ from von.logger import Logger
 
 class Twh_OrderItem(Wcs_OrderItemBase):
     def __init__(self, db_doc_id:int) -> None:
+        super().__init__(db_doc_id)
         # self.doc_id = db_doc_id
         self.DentalLocation = 'ur1'
         self.row :int
@@ -35,14 +36,15 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         Logger.Print('layer', self.layer)
 
 
-class Twh_WithdrawOrder(Wcs_OrderBase):
-    def __init__(self, order_id:int, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
-        self.__all_teeth = []
+class Twh_Order(Wcs_OrderBase):
+    def __init__(self, twh_order_id:int, twh_packer:TwhRobot_Packer, twh_shipper:TwhRobot_Shipper) -> None:
+        super().__init__(twh_order_id, twh_packer,twh_shipper)
+        self.__all_teeth = list[Twh_OrderItem]()
         # self.Order_id = order_id
         self.PackerCell_id = -1
         self.__state = 'idle'
-        self.__packer = packer
-        self.__shipper = shipper
+        self.__twh_packer = twh_packer
+        self.__twh_shipper = twh_shipper
 
     def AddTooth(self, new_tooth:Twh_OrderItem) -> None:
         self.__all_teeth.append(new_tooth)
@@ -98,11 +100,11 @@ class Twh_WithdrawOrder(Wcs_OrderBase):
     def Start_PickingPlacing_a_tooth(self) -> bool:
         if self.__state == 'idle':
             # this is the first tooth of the order. 
-            idle_packer_cell_id =  self.__packer.Find_Idle_packer_cell()
+            idle_packer_cell_id =  self.__twh_packer.Find_Idle_packer_cell()
             if idle_packer_cell_id == -1:
                 return False
             self.PackerCell_id = idle_packer_cell_id
-            self.__packer.StartFeeding_LockPackerCell(idle_packer_cell_id)
+            self.__twh_packer.StartFeeding_LockPackerCell(idle_packer_cell_id)
             self.SetStateTo('feeding', write_to_db=True)
         return True    
             
@@ -133,21 +135,21 @@ class Twh_WithdrawOrder(Wcs_OrderBase):
             return False
         
         if self.__state == 'wms_shipping':
-            if self.__shipper.IsShipping():
+            if self.__twh_shipper.IsShipping():
                 return False
-            self.__packer.StartShipping(self.PackerCell_id)
-            self.__shipper.StartShipping() 
+            self.__twh_packer.StartShipping(self.PackerCell_id)
+            self.__twh_shipper.StartShipping() 
             # multiple orders is in the state of 'wms_shipping'
             doc_ids = self.__get_all_teeth_doc_ids()
             DB_WithdrawOrder.update_order_state('wcs_shipping', doc_ids)
             return False
 
         if self.__state == 'wcs_shipping':
-            if self.__shipper.Get_Shipout_button_value()=='ON':
-                self.__shipper.EndShipping()
+            if self.__twh_shipper.Get_Shipout_button_value()=='ON':
+                self.__twh_shipper.EndShipping()
 
-                DB_WithdrawOrder.delete_by_order_id(self.Order_id)
-                self.__packer.Release_packer_cell(self.PackerCell_id)
+                DB_WithdrawOrder.delete_by_order_id(self.order_id)
+                self.__twh_packer.Release_packer_cell(self.PackerCell_id)
                 return True
         return False
 

@@ -4,7 +4,7 @@
 
 from twh_wcs.wcs_base.porter import Wcs_PorterBase
 from twh_wcs.wcs_base.order import Wcs_OrderBase, Wcs_OrderItemBase
-from twh_wcs.twh_order import Twh_WithdrawOrder, Twh_OrderItem
+from twh_wcs.twh_order import Twh_Order, Twh_OrderItem
 
 from twh_database.bolt_nut import twh_factories
 from von.logger import Logger
@@ -19,15 +19,15 @@ class TwhRobot_LoopPorter(Wcs_PorterBase):
 
         self.__target_layer:int
 
-    def Start_Porting(self, tooth:Twh_OrderItem, order:Twh_WithdrawOrder):
+    def Start_Porting(self, tooth:Twh_OrderItem, order:Twh_Order):
         self.__porting_tooth = tooth
         self.__porting_order = order
         self.MoveTo(tooth.col, tooth.layer)
 
-    def GetOrder_and_Item(self) -> tuple[Wcs_OrderBase, Wcs_OrderItemBase]:
+    def GetOrder_and_Item(self) -> tuple[Twh_Order, Twh_OrderItem]:
         pass
 
-    def GetPortingTooth(self) -> tuple[Twh_OrderItem, Twh_WithdrawOrder]:
+    def GetPortingTooth(self) -> tuple[Twh_OrderItem, Twh_Order]:
         return self.__porting_tooth, self.__porting_order
 
     def MoveTo(self, target_col:int, target_layer:int) -> None:
