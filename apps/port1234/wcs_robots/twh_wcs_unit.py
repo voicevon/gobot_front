@@ -1,22 +1,24 @@
 from wcs_robots.twh_robot_loop_porter import TwhRobot_LoopPorter
 from wcs_robots.twh_robot_packer import TwhRobot_Packer
 from wcs_robots.twh_robot_shipper import TwhRobot_Shipper
-from wcs_robots.gcode_sender import gcode_senders_spin_once
 from twh_business_logical.withdraw_order import  WithdrawOrdersManager, WithdrawOrder, OrderTooth
 from twh_database.bolt_nut import twh_factories
 
-import multiprocessing
+from wcs_robots.wcs_base.wcs_unit_base import WcsUnitBase
+from wcs_robots.wcs_base.gcode_sender import gcode_senders_spin_once
+
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
-import time
 from von.logger import Logger
+import multiprocessing
+import time
 
 
 
-
-class TwhWcs_Unit():
+class TwhWcs_Unit(WcsUnitBase):
 
     def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
+        super().__init__(twh_id, deposit_queue)
         self.__porters = [TwhRobot_LoopPorter(twh_id, 0)]
         for i in range(3):
             new_porter = TwhRobot_LoopPorter(twh_id, i+1)
@@ -28,11 +30,10 @@ class TwhWcs_Unit():
         self.__button_shipped = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pack','idle')
         self.__packer = TwhRobot_Packer()
         self.__shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
-        self.__wcs_state = 'idle'
+        # self._wcs_state = 'idle'
         self.__withdraw_orders_manager = WithdrawOrdersManager(twh_id, self.__packer, self.__shipper)
         self.__deposite_queue = deposit_queue
         self.__showing_wcs_state = ''
-        self.__twh_id = twh_id
  
     def Find_LoopPorter_ready(self) -> TwhRobot_LoopPorter:
         for porter in self.__porters:
@@ -47,7 +48,7 @@ class TwhWcs_Unit():
         return True
 
     def __Do_deposit_begin(self, new_deposit_request):
-        Logger.Info(twh_factories[self.__twh_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
+        Logger.Info(twh_factories[self._wcs_unit_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
         Logger.Print("new_deposit_request", new_deposit_request)
         # the loop-porter will move to col-position
         row_id = new_deposit_request['row']
@@ -94,18 +95,18 @@ class TwhWcs_Unit():
             idle_porter.Start_Porting(picking_tooth, picking_order)  
         
     def __state_machine_main(self):
-        if self.__wcs_state == 'idle':
+        if self._wcs_state == 'idle':
             if self.__deposite_queue.empty():
-                self.__wcs_state = 'withdraw_dispaching'
+                self._wcs_state = 'withdraw_dispaching'
             else:
                 new_request = self.__deposite_queue.get()
                 if new_request['message_type'] == 'deposit_begin':
                     self.__Do_deposit_begin(new_request)
                 else:
                     Logger.Error('state_machine_main(),   wrong deposite request')
-                self.__wcs_state = 'deposit_begin'
+                self._wcs_state = 'deposit_begin'
 
-        if self.__wcs_state == 'deposit_begin':
+        if self._wcs_state == 'deposit_begin':
                 # operator is putting teeth into packer-cell
                 # when he/she is complete the task, 
                 # he/she will press a web page button. 
@@ -118,11 +119,11 @@ class TwhWcs_Unit():
                 else:
                     Logger.Error('state_machine_main() try to end deposit ,   wrong deposite request')
                     Logger.Print('new_request["message_type"]',new_request['message_type'])
-                self.__wcs_state = 'idle'
+                self._wcs_state = 'idle'
     
-        if self.__wcs_state == 'withdraw_dispaching':
+        if self._wcs_state == 'withdraw_dispaching':
             if self.__withdraw_orders_manager.GetWithdrawOrdersCount() == 0:
-                self.__wcs_state = 'idle'
+                self._wcs_state = 'idle'
                 return
             
             # try to find idle_porter matched tooth in order. and pair (porter, tooth)
@@ -143,9 +144,9 @@ class TwhWcs_Unit():
             self.__packer.turn_on_packer_cell_led_green(porting_order.PackerCell_id)  
 
             self.__picking_ready_porter = ready_porter
-            self.__wcs_state = 'picking_placing'
+            self._wcs_state = 'picking_placing'
                     
-        if self.__wcs_state == 'picking_placing':
+        if self._wcs_state == 'picking_placing':
             mqtt_payload, has_been_updated = self.__button_pick.get()
             if mqtt_payload == 'ON':
                 self.__button_pick.set('idle')
@@ -156,20 +157,20 @@ class TwhWcs_Unit():
                 self.__picking_ready_porter.SetStateTo('idle')
                 self.__packer.turn_off_all_packer_cells_led_green()
 
-                self.__wcs_state = 'withdraw_dispaching'
+                self._wcs_state = 'withdraw_dispaching'
 
     def SpinOnce(self) ->str:
         '''
-        return:  __wcs_state
+        return:  _wcs_state
         '''
         # Logger.Debug("TwhWcs_Unit::SpinOnce()")
-        # Logger.Print("my twh_id", self.__twh_id)
+        # Logger.Print("my twh_id", self._wcs_unit_id)
         self.__state_machine_main() 
         self.__withdraw_orders_manager.SpinOnce()
-        if self.__showing_wcs_state != self.__wcs_state:
-            showing_wcs_state = self.__wcs_state
-            g_mqtt.publish('twh/' + self.__twh_id + '/wcs_state',showing_wcs_state)
-        return self.__wcs_state
+        if self.__showing_wcs_state != self._wcs_state:
+            showing_wcs_state = self._wcs_state
+            g_mqtt.publish('twh/' + self._wcs_unit_id + '/wcs_state',showing_wcs_state)
+        return self._wcs_state
 
 
 def WCS_Main(deposit_queue:multiprocessing.Queue):

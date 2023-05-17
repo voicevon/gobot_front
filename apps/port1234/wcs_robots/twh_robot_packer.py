@@ -1,4 +1,3 @@
-# from business_logical.withdraw_order import WithdrawOrder
 
 from von.logger import Logger
 from von.mqtt.mqtt_agent import g_mqtt
@@ -8,13 +7,8 @@ class TwhRobot_Packer():
     def __init__(self) -> None:
         self.__green_led_index = 13
         self.__blue_led_index = 13
-        # self.__shipping_order_id = 0
         self.__packer_cells_state = [0,0,0,0, 0,0,0,0, 0,0,0,0]
 
-    # def Get_ShippingOrder_id(self) -> int:
-    #     return self.__shipping_order_id # type: ignore
-    
-    # def SetShippingOrder(self, packer_cell_id:int):
     def StartShipping(self, packer_cell_id:int):
         self.__turn_on_packer_cell_led('blue',packer_cell_id)
 
@@ -32,14 +26,10 @@ class TwhRobot_Packer():
                 return index
         return -1
 
-    # def Lock_packer_cell(self, packer_cell_id:int):
-    #     self.__packer_cells_state[packer_cell_id] = 1
-
     def Release_packer_cell(self, packer_cell_id:int):
         '''
         Release a packer_cell, because the shipping order is shipped
         '''
-        # self.__shipping_order_id = 0
         self.__packer_cells_state[packer_cell_id] = 0
         self.__turn_off_all_packer_cells_led('blue')
 
@@ -73,12 +63,6 @@ class TwhRobot_Packer():
         payload =  self.__green_led_index + 100* self.__blue_led_index
         g_mqtt.publish(topic, payload)
         
-
-    # def Find_IdleCell(self) -> TwhRobot_PackerCell:
-    #     for cell in self.__cells:
-    #         if cell.GetState() == 'idle':
-    #             return cell
-    #     return None # type: ignore
 
 
     
