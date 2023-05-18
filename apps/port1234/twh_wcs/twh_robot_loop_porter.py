@@ -1,8 +1,6 @@
-# from wcs_base.porter_base import PorterBase
-# from twh_business_logical.withdraw_order import OrderTooth, WithdrawOrder
 
 
-from twh_wcs.wcs_base.porter import Wcs_PorterBase
+from twh_wcs.wcs_base.porter_conveyor.porter import Wcs_PorterBase
 from twh_wcs.wcs_base.order import Wcs_OrderBase, Wcs_OrderItemBase
 from twh_wcs.twh_order import Twh_Order, Twh_OrderItem
 
@@ -24,11 +22,12 @@ class Twh_LoopPorter(Wcs_PorterBase):
         self.__porting_order = order
         self.MoveTo(tooth.col, tooth.layer)
 
-    def GetOrder_and_Item(self) -> tuple[Twh_Order, Twh_OrderItem]:
-        pass
+    def Get_Porting_Order_and_Item(self) -> tuple[Wcs_OrderBase, Wcs_OrderItemBase]:
+        return  (self.__porting_order, self.__porting_tooth)
+        
 
-    def GetPortingTooth(self) -> tuple[Twh_OrderItem, Twh_Order]:
-        return self.__porting_tooth, self.__porting_order
+    # def GetPortingTooth(self) -> tuple[Twh_OrderItem, Twh_Order]:
+    #     return self.__porting_tooth, self.__porting_order
 
     def MoveTo(self, target_col:int, target_layer:int) -> None:
         self._state.set('moving')    # set to 'moving' when gcode-G1 is sent. ??

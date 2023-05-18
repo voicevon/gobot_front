@@ -1,8 +1,8 @@
-from twh_wcs.wcs_base.wcs_unit_base import Wcs_UnitBase
+from twh_wcs.wcs_base.wcs_system_base import Wcs_SystemBase
 from twh_wcs.twh_robot_loop_porter import Twh_LoopPorter
 from twh_wcs.twh_order import  Twh_Order, Twh_OrderItem
 from twh_wcs.twh_order_scheduler import Twh_OrderScheduler
-from twh_wcs.twh_robot_packer import TwhRobot_Packer, twh_packers
+from twh_wcs.twh_robot_packer import TwhRobot_Packer
 from twh_wcs.twh_robot_shipper import TwhRobot_Shipper, twh_shippers
 from twh_database.bolt_nut import twh_factories
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
@@ -13,7 +13,7 @@ import multiprocessing
 # import time
 
 
-class TwhWcs_LoopTube(Wcs_UnitBase):
+class TwhWcs_LoopManualPacker(Wcs_SystemBase):
 
     def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
         self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
@@ -30,13 +30,10 @@ class TwhWcs_LoopTube(Wcs_UnitBase):
         self.__twh_orders_scheduler = Twh_OrderScheduler(twh_id)
 
         super().__init__(twh_id, deposit_queue, self.__twh_orders_scheduler)
-        # self.__porters = [Twh_LoopPorter(twh_id, 0)]
-        # for i in range(3):
-        #     new_porter = Twh_LoopPorter(twh_id, i+1)
-        #     self.__porters.append(new_porter)
+        self.__porters = list[Twh_LoopPorter]()
         for i in range(4):
             new_porter = Twh_LoopPorter(twh_id, i)
-            self._porters.append(new_porter)
+            self.__porters.append(new_porter)
 
         # # __button_pick is a green button sit on packer.
         # self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
@@ -56,8 +53,8 @@ class TwhWcs_LoopTube(Wcs_UnitBase):
         col_id = new_deposit_request['col']
         layer_id = new_deposit_request['layer']
         Logger.Print("row_id", row_id)
-        Logger.Print("porters count", len(self._porters))
-        porter = self._porters[row_id]
+        Logger.Print("porters count", len(self.__porters))
+        porter = self.__porters[row_id]
         self.__depositing_porter = porter
         Logger.Print('layer_id', layer_id)
         porter.MoveTo(col_id, layer_id)
@@ -71,7 +68,7 @@ class TwhWcs_LoopTube(Wcs_UnitBase):
     def __Pair_idle_porter_and_tooth(self) -> tuple[Twh_LoopPorter, Twh_Order, Twh_OrderItem]: 
         # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
         # Logger.Print("porters count", len(self.__porters))
-        for porter in self._porters:
+        for porter in self.__porters:
             # Logger.Print("porter state", porter.GetState())
             if porter.GetState() == 'idle':
                 # Logger.Print('__Pair_idle_porter_and_tooth()  Found idle porter, porter_id', porter.id)
@@ -159,19 +156,6 @@ class TwhWcs_LoopTube(Wcs_UnitBase):
                 self.__twh_packer.turn_off_all_packer_cells_led_green()
 
                 self._wcs_state = 'withdraw_dispaching'
-
-    # def SpinOnce(self) ->str:
-    #     '''
-    #     return:  _wcs_state
-    #     '''
-    #     # Logger.Debug("TwhWcs_Unit::SpinOnce()")
-    #     # Logger.Print("my twh_id", self._wcs_unit_id)
-    #     self.__state_machine_main() 
-    #     self.__withdraw_orders_manager.SpinOnce()
-    #     if self.__showing_wcs_state != self._wcs_state:
-    #         showing_wcs_state = self._wcs_state
-    #         g_mqtt.publish('twh/' + self._wcs_unit_id + '/wcs_state',showing_wcs_state)
-    #     return self._wcs_state
 
 
 

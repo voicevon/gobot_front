@@ -2,14 +2,14 @@
 
 from twh_wcs.wcs_base.order import  Wcs_OrderBase, Wcs_OrderItemBase
 from twh_wcs.wcs_base.order_scheduler import Wcs_OrderSchedulerBase
-from twh_wcs.wcs_base.porter import Wcs_PorterBase
+from twh_wcs.wcs_base.porter_conveyor.loop_porter import LoopPorter
 
 import multiprocessing
 from abc import ABC, abstractmethod
 from von.mqtt.mqtt_agent import g_mqtt
 
 
-class Wcs_UnitBase(ABC):
+class Wcs_SystemBase(ABC):
 
     def __init__(self, wcs_unit_id:str, deposit_queue:multiprocessing.Queue, order_scheduler: Wcs_OrderSchedulerBase) -> None:
         self._orders_scheduler = order_scheduler
@@ -17,7 +17,7 @@ class Wcs_UnitBase(ABC):
         self._wcs_unit_id = wcs_unit_id
         self._deposit_queue = deposit_queue
         self._wcs_state = 'idle'  
-        self._porters = list[Wcs_PorterBase]()
+        # self._porters = list[Wcs_PorterBase]()
         # for p in self._porters:
         #     p.MoveTo(3,54)
         # __button_pick is a green button sit on packer.
@@ -25,7 +25,11 @@ class Wcs_UnitBase(ABC):
         self.__showing_wcs_state = ''
 
     @abstractmethod
-    def _state_machine_main(self):
+    def _deposit_queue_is_empty(self):
+        pass
+
+    @abstractmethod
+    def _withdraw_queue_is_empty(self):
         pass
 
     def SpinOnce(self) ->str:
@@ -34,7 +38,19 @@ class Wcs_UnitBase(ABC):
         '''
         # Logger.Debug("TwhWcs_Unit::SpinOnce()")
         # Logger.Print("my twh_id", self._wcs_unit_id)
-        self._state_machine_main() 
+        if self._wcs_state == 'idle':
+            if self._deposit_queue_is_empty():
+                self._wcs_state = 'withdraw_order_item'
+            else:
+                self._wcs_state = 'deposit_begin'
+        if self._wcs_state == 'deposite_begin':
+            if self._deposit_queue_is_empty():
+                self._wcs_state = 'idle'
+        if self._wcs_state == 'withdraw_order_item':
+            self._orders_scheduler.SpinOnce()
+            if self._withdraw_queue_is_empty():
+                self._wcs_state = 'idle'
+
         self._orders_scheduler.SpinOnce()
         if self.__showing_wcs_state != self._wcs_state:
             showing_wcs_state = self._wcs_state
@@ -47,8 +63,8 @@ class Wcs_UnitBase(ABC):
                 return False
         return True
 
-    def Find_LoopPorter_ready(self) -> Wcs_PorterBase:
-        for porter in self._porters:
-            if porter.GetState() == 'ready':
-                return porter
-        return None # type: ignore
+    # def Find_LoopPorter_ready(self) -> Wcs_PorterBase:
+    #     for porter in self._porters:
+    #         if porter.GetState() == 'ready':
+    #             return porter
+    #     return None # type: ignore

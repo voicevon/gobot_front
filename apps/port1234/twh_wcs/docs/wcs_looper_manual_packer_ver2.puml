@@ -1,0 +1,61 @@
+@startuml
+
+
+
+state order_item{
+	[*] --> inside_loop_porter
+	inside_loop_porter <-- inside_loop_porter:  P1: no loop_porters is idle
+	inside_loop_porter --> loop_porter_moving: P2b
+    loop_porter_moving --> loop_porter_gate: loop_porter.is_ready()
+	loop_porter_gate --> manual_picking_placing
+    manual_picking_placing --> loop_porter_done: (green) pick_placed_button is pressed
+}
+
+state order{
+	[*] --> order_feeding
+	order_feeding --> order_fullfilled:  all_items.states == loop_porter_done
+	order_fullfilled --> order_packed: (yellow) packed_button is pressed
+	order_packed -->shipped:  (blue) shipped_button is pressed
+
+}
+
+inside_loop_porter -->  order_feeding: P2c
+state loop_porter {
+	[*] --> loop_idle 
+	loop_idle --> loop_moving
+	loop_moving <-- loop_moving
+	loop_moving --> loop_ready
+}
+inside_loop_porter --> loop_moving: P2a: loop_porter.MoveTo()
+loop_ready -[dashed]-> loop_porter_moving
+
+state wcs_state{
+	[*] -> wcs_idle
+	wcs_idle-[#red,dashed]-> checking_deposit_mq
+	checking_deposit_mq -[#red,bold]-> deposit_begin: deposit(row, col, quantity) \nrobot[row].moveto(col)
+	deposit_begin -[#red,bold]-> deposite_end
+	deposite_end -[#red,bold]->wcs_idle: user_finished, \nuser_canceled
+	checking_deposit_mq: this is a virtual state
+
+	checking_deposit_mq --> check_withdraw_request: deposit mq is empty
+	check_withdraw_request --> wcs_idle:  withdraw-queue is empty
+	check_withdraw_request --> withdraw_dispaching
+	withdraw_dispaching --> check_withdraw_request: withdraw-queue is empty
+
+	note right of wcs_idle
+	Parallel processes:
+		packer button checker
+		shipper button checker
+	end note
+}
+
+withdraw_dispaching -[#blue,dashed]-> order_item 
+
+
+
+loop_porter_done --> loop_idle
+
+
+
+
+@enduml
