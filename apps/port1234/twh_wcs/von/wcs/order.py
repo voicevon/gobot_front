@@ -38,10 +38,11 @@ class Wcs_OrderBase:
         return False
     
     def IsFullFilled(self) -> bool:
-        for t in self._all_order_items:
-            if t.GetLocated() != 'packer':
-                return False
-        return True
+        return False
+        # for t in self._all_order_items:
+        #     if t.GetLocated() != 'packer':
+        #         return False
+        # return True
     
     
     @abstractmethod

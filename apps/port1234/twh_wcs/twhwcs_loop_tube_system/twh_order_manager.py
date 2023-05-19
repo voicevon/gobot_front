@@ -1,15 +1,26 @@
 from twh_wcs.twhwcs_loop_tube_system.twh_order import Twh_Order, Twh_OrderItem
 from twh_database.db_withdraw_order import DB_WithdrawOrder
-from twh_database.bolt_nut import twh_factories
 
-
+# from twh_wcs.twhwcs_loop_tube_system.my_subsystem_hardware import g_subsystem_porters, g_subsystem_tube_coneyor
 from twh_wcs.von.wcs.order_manager import Wcs_OrderMangerBase
 from von.logger import Logger
+
+from twh_wcs.wcs_instance import g_wcss
+
+
+# class Linker:
+
+#     def __init__(self, order, order_item, porter, tube) -> None:
+#         self.order = order
+#         self.order_item = order_item
+#         self.porter = porter
+#         self.tube = tube
+
 
 
 class Twh_OrderManager(Wcs_OrderMangerBase):
 
-    def __init__(self, twh_wcs_unit_id:str) -> None:
+    def __init__(self, wcs_instance_id:str) -> None:
         ''' In WCS, An order's life time:
         * Created by: UI, or WMS
         * Main processes are:  porting, picking, packing, shipping.
@@ -17,12 +28,13 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
         Note:
         * An order item,  it might stored in different location, saying:  be served by different porter.
         '''
-        super().__init__(twh_wcs_unit_id)
+        super().__init__(wcs_instance_id)
         ''' 
         life time: created by UI, or WMS,  ended when the order is shipped.
         Q:  Should this be in super?
         A:  Looks like should be.  Need to consider more.
         '''
+
 
     def FindTooth_is_in_porter_from_all_orders(self, porter_id:int) -> tuple[Twh_OrderItem, Twh_Order]:
         '''
@@ -67,7 +79,10 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
 
                 order_tooth = the_order.FindItem_from_doc_id(db_tooth.doc_id)
                 if order_tooth is None:
-                    new_tooth = Twh_OrderItem(db_tooth.doc_id)
+                    # service_porter = g_subsystem_porters[db_tooth['row']]
+                    # service_porter = g_subsystem_porters[0]  # Assume only one loop-porter is there.
+                    service_porter = g_wcss[self.wcs_unit_id].loop_porters[0]
+                    new_tooth = Twh_OrderItem(db_tooth.doc_id, service_porter)
                     new_tooth.DentalLocation = db_tooth['location']
                     new_tooth.row = db_tooth['row']
                     new_tooth.col = db_tooth['col']
@@ -82,6 +97,4 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
             # if order_task.GetState() == 'shipped':
             #     DB_WithdrawOrder.delete_by_order_id(order_task.Order_id)
             #     self.__all_twh_orders.remove(order_task)
-
-
 

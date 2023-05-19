@@ -28,12 +28,8 @@ class Wcs_PorterBase(ABC):
         return mqtt_payload
 
     @abstractmethod
-    def MoveTo(self, target_col:int, target_layer:int) -> None:
+    def _MoveTo(self, target_col:int, target_layer:int) -> None:
         pass
-
-    # @abstractmethod
-    def _GetGateLocation(self) :
-        return (1,2)
 
     @abstractmethod
     def show_layer_led(self):
@@ -43,17 +39,18 @@ class Wcs_PorterBase(ABC):
     def turn_off_leds(self):
         pass
 
+    # def CarryToGate(self, order: Wcs_OrderBase, order_item:Wcs_OrderItemBase):
+    #     self.__porting_order = order
+    #     self.__porting_item = order_item
+    #     # Carry porting_item to gate
+    #     gate_at = self._GetGateLocation()
+        # self.MoveTo(gate_at.col, gate_at.layer)
 
+    def CarryToGate(self, bay_carrier_id: int, layer_id: int):
+        self._MoveTo(bay_carrier_id, layer_id)
 
-    def CarryToGate(self, order: Wcs_OrderBase, order_item:Wcs_OrderItemBase,):
-        self.__porting_order = order
-        self.__porting_item = order_item
-        # Carry porting_item to gate
-        gate_at = self._GetGateLocation()
-        self.MoveTo(gate_at.col, gate_at.layer)
-
-    def Get_Porting_Order_and_Item(self) -> tuple[Wcs_OrderBase, Wcs_OrderItemBase]:
-        return  (self.__porting_order, self.__porting_item)
+    # def Get_Porting_Order_and_Item(self) -> tuple[Wcs_OrderBase, Wcs_OrderItemBase]:
+    #     return  (self.__porting_order, self.__porting_item)
     
 
 

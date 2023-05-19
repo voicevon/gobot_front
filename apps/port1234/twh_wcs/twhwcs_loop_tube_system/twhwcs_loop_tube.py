@@ -1,8 +1,10 @@
 from twh_wcs.von.wcs.wcs_system_base import Wcs_SystemBase
 from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
+from twh_wcs.von.wcs.conveyor.tube_conveyor import TubeConveyor
 from twh_wcs.twhwcs_loop_tube_system.twh_order import  Twh_Order, Twh_OrderItem
 from twh_wcs.twhwcs_loop_tube_system.twh_order_manager import Twh_OrderManager
 from twh_database.bolt_nut import twh_factories
+# from twh_wcs.wcs_instance import WcsUnit_Hardware
 
 
 from von.logger import Logger
@@ -11,14 +13,19 @@ import multiprocessing
 
 class Twh_LoopTubeSystem(Wcs_SystemBase):
 
-    def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
-        self.__twh_order_manager = Twh_OrderManager(twh_id)
-        super().__init__(twh_id, deposit_queue, self.__twh_order_manager)
+    def __init__(self, twh_wcs_unit_id:str, deposit_queue:multiprocessing.Queue) -> None:
+        '''
+        Current Version hardwares
+            Single loop_porter  in the loop_porter_list
+            Single tube_conveyor
 
-        self.__loop_porters = list[Twh_LoopPorter]()
-        for i in range(4):
-            new_porter = Twh_LoopPorter(twh_id, i)
-            self.__loop_porters.append(new_porter)
+        '''
+        self.__twh_order_manager = Twh_OrderManager(twh_wcs_unit_id)
+        super().__init__(twh_wcs_unit_id, deposit_queue, self.__twh_order_manager)
+
+        # self.loop_porters = list[Twh_LoopPorter]()
+        # self.tube_conveyors = list[TubeConveyor]()
+
 
     def __Do_deposit_begin(self, new_deposit_request):
         Logger.Info(twh_factories[self._wcs_unit_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
@@ -28,8 +35,8 @@ class Twh_LoopTubeSystem(Wcs_SystemBase):
         col_id = new_deposit_request['col']
         layer_id = new_deposit_request['layer']
         Logger.Print("row_id", row_id)
-        Logger.Print("porters count", len(self.__loop_porters))
-        porter = self.__loop_porters[row_id]
+        Logger.Print("porters count", len(self.loop_porters))
+        porter = self.loop_porters[row_id]
         self.__depositing_porter = porter
         Logger.Print('layer_id', layer_id)
         porter.MoveTo(col_id, layer_id)
@@ -43,7 +50,7 @@ class Twh_LoopTubeSystem(Wcs_SystemBase):
     def __Pair_idle_porter_and_tooth(self) -> tuple[Twh_LoopPorter, Twh_Order, Twh_OrderItem]: 
         # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
         # Logger.Print("porters count", len(self.__porters))
-        for porter in self.__loop_porters:
+        for porter in self.loop_porters:
             # Logger.Print("porter state", porter.GetState())
             if porter.GetState() == 'idle':
                 # Logger.Print('__Pair_idle_porter_and_tooth()  Found idle porter, porter_id', porter.id)

@@ -15,7 +15,7 @@ class Twh_LoopPorter(LoopPorter):
         super().__init__(wcs_unit_id, row_id, gcode_topic, state_topic)
         self.__target_layer:int
 
-    def MoveTo(self, target_col:int, target_layer:int) -> None:
+    def _MoveTo(self, target_col:int, target_layer:int) -> None:
         self._state.set('moving')    # set to 'moving' when gcode-G1 is sent. ??
         self.__target_layer = target_layer
         Logger.Info(twh_factories[self.wcs_unit_id]['name']  + ' -- Twh_LoopPorter::MoveTo()')
