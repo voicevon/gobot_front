@@ -1,10 +1,15 @@
-from twh_wcs.von.wcs.wcs_system_base import Wcs_SystemBase
-from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
-from twh_wcs.twhwcs_loop_manual_pack_system.twh_order import  Twh_Order, Twh_OrderItem
-# from twhwcs_loop_manual_pack_system.twh_order .twh_order_scheduler import Twh_OrderScheduler
 from twh_wcs.twhwcs_loop_manual_pack_system.twh_robot_packer import TwhRobot_Packer
-from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
+from twh_wcs.twhwcs_loop_manual_pack_system.twh_order import  Twh_Order
+from twh_wcs.twhwcs_loop_manual_pack_system.twh_order_item import Twh_OrderItem
+from twh_wcs.twhwcs_loop_manual_pack_system.twh_order_manager import Twh_OrderManager
+
+from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
+# from twhwcs_loop_manual_pack_system.twh_order .twh_order_scheduler import Twh_OrderScheduler
+
 from twh_database.bolt_nut import twh_factories
+
+from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
+from twh_wcs.von.wcs.wcs_system_base import Wcs_SystemBase
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
 
@@ -15,25 +20,21 @@ import multiprocessing
 
 class TwhWcs_LoopManualPacker(Wcs_SystemBase):
 
-    def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
-        self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
+    def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue) -> None:
+        self.__button_pick = RemoteVar_mqtt('twh/' + wcs_instance_id + '/packer/button/pick','idle')
         
         # __button_pack is a blue button sit on packer.
-        self.__button_shipped = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pack','idle')
-        self.__twh_packer = TwhRobot_Packer()
+        # self.__button_shipped = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pack','idle')
+        # self.__twh_packer = TwhRobot_Packer()
+        mqtt_topic_of_ship = 'twh/' + wcs_instance_id + '/packer/button/pack'
+        self.__shipper = Manual_Shipper(mqtt_topic_of_ship)
+        self.__order_manager = Twh_OrderManager(wcs_instance_id)
 
-        # self.__twh_shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
-        mqtt_topic_of_ship = 'twh/' + twh_id + '/packer/button/pack'
-        shipper = Manual_Shipper(mqtt_topic_of_ship)
-        # twh_shippers.append(shipper)
-
-        self.__twh_orders_scheduler = Twh_OrderScheduler(twh_id)
-
-        super().__init__(twh_id, deposit_queue, self.__twh_orders_scheduler)
-        self.__porters = list[Twh_LoopPorter]()
-        for i in range(4):
-            new_porter = Twh_LoopPorter(twh_id, i)
-            self.__porters.append(new_porter)
+        super().__init__(wcs_instance_id, deposit_queue, self.__order_manager)
+        # self.__porters = list[Twh_LoopPorter]()
+        # for i in range(4):
+            # new_porter = Twh_LoopPorter(wcs_instance_id, i)
+            # self.__porters.append(new_porter)
 
         # # __button_pick is a green button sit on packer.
         # self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
@@ -46,7 +47,7 @@ class TwhWcs_LoopManualPacker(Wcs_SystemBase):
         self.__deposite_queue = deposit_queue
 
     def __Do_deposit_begin(self, new_deposit_request):
-        Logger.Info(twh_factories[self._wcs_unit_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
+        Logger.Info(twh_factories[self._wcs_instance_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
         Logger.Print("new_deposit_request", new_deposit_request)
         # the loop-porter will move to col-position
         row_id = new_deposit_request['row']
@@ -120,7 +121,7 @@ class TwhWcs_LoopManualPacker(Wcs_SystemBase):
                 self._wcs_state = 'idle'
     
         if self._wcs_state == 'withdraw_dispaching':
-            if self.__twh_orders_scheduler.GetWithdrawOrdersCount() == 0:
+            if self.__order_manager.GetWithdrawOrdersCount() == 0:
                 self._wcs_state = 'idle'
                 return
             

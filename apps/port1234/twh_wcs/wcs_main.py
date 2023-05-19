@@ -20,7 +20,8 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
         # Create all instance and save it in g_wcss
         for wcs_instance_id in list(twh_factories.keys()):
             wcs_workers = CreateWcsWorkers(wcs_instance_id)
-            wcs_instance = Twh_LoopTubeSystem(wcs_instance_id, deposit_queue)
+            # wcs_instance = Twh_LoopTubeSystem(wcs_instance_id, deposit_queue)
+            wcs_instance = TwhWcs_LoopManualPacker(wcs_instance_id, deposit_queue)
             all_wcss.append(wcs_instance)
             # wcs_instance.software = wcs_software
             Logger.Info("Twh_Wcs_Main()   Created wcs_unit----->"  + wcs_instance_id)

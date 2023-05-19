@@ -32,10 +32,10 @@ def CreateWcsWorkers(wcs_instance_id:str) -> WcsWorkers:
             new_porter = Twh_LoopPorter(wcs_instance_id, i)
             wcs_workers.loop_porters.append(new_porter)
         
-        new_picker = Manual_PickPlacer("")
+        new_picker = Manual_PickPlacer("twh/" + wcs_instance_id + 'picker')
         wcs_workers.pick_placers.append(new_picker)
         
-        new_shipper = Manual_Shipper("")
+        new_shipper = Manual_Shipper("twh/" + wcs_instance_id + 'shipper/button')
         wcs_workers.shipper.append(new_shipper)
         return wcs_workers
 

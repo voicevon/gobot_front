@@ -7,70 +7,43 @@ from twh_wcs.von.wcs.order import Wcs_OrderBase, Wcs_OrderItemBase
 from von.logger import Logger
 
 
-class Twh_OrderItem(Wcs_OrderItemBase):
-
-    def __init__(self, db_doc_id:int) -> None:
-        super().__init__(db_doc_id)
-        # self.doc_id = db_doc_id
-        self.DentalLocation = 'ur1'
-        self.row :int
-        self.col:int
-        self.layer:int
-        # self.__located = 'porter'
-
-    def TransferToLocated(self, new_located:str, write_to_db:bool) -> None:
-        self.__located = new_located
-        if write_to_db:
-            DB_WithdrawOrder.update_tooth_located(self.doc_id, new_located)
-
-    
-    def PrintOut(self, title:str):
-        Logger.Info(title)
-        Logger.Print('doc_id', self.doc_id)
-        Logger.Print('DentalLocation', self.DentalLocation)
-        Logger.Print('__located', self.__located)
-        Logger.Print('row', self.row)
-        Logger.Print('col', self.col)
-        Logger.Print('layer', self.layer)
-
-
 class Twh_Order(Wcs_OrderBase):
     # def __init__(self, twh_order_id:int, twh_packer:TwhRobot_Packer, twh_shipper:TwhRobot_Shipper) -> None:
-    def __init__(self, twh_order_id:str) -> None:
-        super().__init__(twh_order_id,1234)
+    def __init__(self, wcs_instance_id:str, twh_order_id:int) -> None:
+        super().__init__(wcs_instance_id, twh_order_id)
         # self._all_order_items = list[Twh_OrderItem]()
         # self.__state = 'idle'
         # self.Order_id = order_id
         self.PackerCell_id = -1
 
-    def AddTooth(self, new_tooth:Twh_OrderItem) -> None:
-        self._all_order_items.append(new_tooth)
+    # def AddTooth(self, new_tooth:Twh_OrderItem) -> None:
+    #     self._all_order_items.append(new_tooth)
     
-    def FindTooth_from_doc_id(self, doc_id:int) -> Twh_OrderItem:
-        for t in self._all_order_items:
-            if t.doc_id == doc_id:
-                return t # type: ignore
-        return None # type: ignore
+    # def FindTooth_from_doc_id(self, doc_id:int) -> Twh_OrderItem:
+    #     for t in self._all_order_items:
+    #         if t.doc_id == doc_id:
+    #             return t # type: ignore
+    #     return None # type: ignore
 
-    def FindTooth_is_in_porter(self, porter_id:int) -> Twh_OrderItem:
-        '''
-        * porter_id is equal to tooth.row.
-        * constraint:  tooth must be located in porter
-        '''
-        # Logger.Debug('WithdrawOrder:: FindTooth_is_in_porter() ')
-        for tooth in self._all_order_items:
-            # tooth.PrintOut('WithdrawOrder:: FindTooth_is_in_porter(), _all_order_items.this tooth')
-            # Logger.Print('located', tooth.GetLocated())
-            if tooth.GetLocated() == 'porter':
-                if tooth.row == porter_id:
-                    return tooth
-        return None # type: ignore
+    # def FindTooth_is_in_porter(self, porter_id:int) -> Twh_OrderItem:
+    #     '''
+    #     * porter_id is equal to tooth.row.
+    #     * constraint:  tooth must be located in porter
+    #     '''
+    #     # Logger.Debug('WithdrawOrder:: FindTooth_is_in_porter() ')
+    #     for tooth in self._all_order_items:
+    #         # tooth.PrintOut('WithdrawOrder:: FindTooth_is_in_porter(), _all_order_items.this tooth')
+    #         # Logger.Print('located', tooth.GetLocated())
+    #         if tooth.GetLocated() == 'porter':
+    #             if tooth.row == porter_id:
+    #                 return tooth
+    #     return None # type: ignore
 
-    def HasTooth(self, tooth:Twh_OrderItem) -> bool:
-        for t in self._all_order_items:
-            if tooth == t:
-                return True
-        return False
+    # def HasTooth(self, tooth:Twh_OrderItem) -> bool:
+    #     for t in self._all_order_items:
+    #         if tooth == t:
+    #             return True
+    #     return False
     
     def __get_all_teeth_doc_ids(self):
         doc_ids = []
