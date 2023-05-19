@@ -1,7 +1,7 @@
 from twh_wcs.von.wcs.wcs_system_base import Wcs_SystemBase
 from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
 from twh_wcs.twhwcs_loop_tube_system.twh_order import  Twh_Order, Twh_OrderItem
-from twh_wcs.twhwcs_loop_tube_system.twh_order_helper import Twh_OrderHelper
+from twh_wcs.twhwcs_loop_tube_system.twh_order_manager import Twh_OrderManager
 from twh_database.bolt_nut import twh_factories
 
 
@@ -12,9 +12,8 @@ import multiprocessing
 class Twh_LoopTubeSystem(Wcs_SystemBase):
 
     def __init__(self, twh_id:str, deposit_queue:multiprocessing.Queue) -> None:
-        self.__twh_orders = Twh_Order(twh_id)
-        super().__init__(twh_id, deposit_queue, self.__twh_orders)
-        # self.__deposite_queue = deposit_queue
+        self.__twh_order_manager = Twh_OrderManager(twh_id)
+        super().__init__(twh_id, deposit_queue, self.__twh_order_manager)
 
         self.__loop_porters = list[Twh_LoopPorter]()
         for i in range(4):
@@ -124,8 +123,3 @@ class Twh_LoopTubeSystem(Wcs_SystemBase):
     #//////////////////////////////////////////////////////////////////////////////////////
     #  override methods
     #//////////////////////////////////////////////////////////////////////////////////////
-    def _deposit_queue_is_empty(self):
-        pass
-
-    def _withdraw_queue_is_empty(self):
-        pass

@@ -3,14 +3,14 @@ from twh_database.db_withdraw_order import DB_WithdrawOrder
 from twh_database.bolt_nut import twh_factories
 
 
-from twh_wcs.von.wcs.order import Wcs_OrderBase
+from twh_wcs.von.wcs.order_manager import Wcs_OrderMangerBase
 from von.logger import Logger
 
 
-class Twh_OrderHelper():
+class Twh_OrderManager(Wcs_OrderMangerBase):
 
     # def __init__(self, twh_id:str, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
-    def __init__(self, twh_id:str) -> None:
+    def __init__(self, twh_wcs_unit_id:str) -> None:
         ''' In WCS, An order's life time:
         * Created by: UI, or WMS
         * Main processes are:  porting, picking, packing, shipping.
@@ -18,32 +18,27 @@ class Twh_OrderHelper():
         Note:
         * An order item,  it might stored in different location, saying:  be served by different porter.
         '''
-        self.__all_twh_orders = list[Twh_Order]()  
-        ''' life time: created by UI, or WMS,  ended when the order is shipped.'''
+        super().__init__(twh_wcs_unit_id)
+        ''' 
+        life time: created by UI, or WMS,  ended when the order is shipped.
+        Q:  Should this be in super?
+        A:  Looks like should be.  Need to consider more.
+        '''
 
-    def FindWithdrawOrder(self, order_id:str) -> Twh_Order:
-        for order_task in self.__all_twh_orders:
-            if order_task.order_id == order_id:
-                return order_task
-        return None # type: ignore
-    
-    def GetWithdrawOrdersCount(self) -> int:
-        return len(self.__all_twh_orders)
-    
     def FindTooth_is_in_porter_from_all_orders(self, porter_id:int) -> tuple[Twh_OrderItem, Twh_Order]:
         '''
         * porter_id is equal to tooth.row.
         * constraint:  tooth must be located in porter
         '''
         # Logger.Print('OrderTaskManager:: FindTooth_is_in_porter()   len(all_withdraw_order)  ', len(self.__all_twh_orders))
-        for order in self.__all_twh_orders:
+        for order in self._withdraw_orders:
             tooth = order.FindTooth_is_in_porter(porter_id)
             if tooth is not None:
                 # Logger.Print('found tooth in the loop-porter,  tooth.col', tooth.col)
                 return tooth, order
         return None,None # type: ignore
         
-    def __renew_orders_from_database(self):
+    def _renew_orders_from_database(self):
         '''
         1. renew all orders from database
         2. renew teeth state inside order (the state is from database)
@@ -63,7 +58,7 @@ class Twh_OrderHelper():
                 if the_order is None:
                     new_order = Twh_Order(db_tooth['order_id'])
                     # self.AddOrderTask(new_order)
-                    self.__all_twh_orders.append(new_order)
+                    self._withdraw_orders.append(new_order)
                     the_order = new_order
                     if not printed_logger_title:
                         Logger.Debug('WithdrawOrderManager::__renew_orders_from_database() First')
@@ -90,18 +85,5 @@ class Twh_OrderHelper():
             #     DB_WithdrawOrder.delete_by_order_id(order_task.Order_id)
             #     self.__all_twh_orders.remove(order_task)
 
-    def SpinOnce(self):
-        '''
-        return:
-            -1   no released packer_cell
-            0:11 packer_cell_id,  which has benn shipped out. should be released.
-        '''
-        self.__renew_orders_from_database()
-        
-        for order in self.__all_twh_orders:
-            is_shipped =  order.SpinOnce()
-            if is_shipped:
-                Logger.Info( twh_factories[self.wcs_unit_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
-                self.__all_twh_orders.remove(order)
-                return
+
 
