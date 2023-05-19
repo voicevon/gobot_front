@@ -5,11 +5,11 @@ from twh_database.db_withdraw_order import DB_WithdrawOrder
 from twh_database.bolt_nut import twh_factories
 
 
-from twh_wcs.wcs_base.order_scheduler import Wcs_OrderSchedulerBase
+from twh_wcs.wcs_base.order import Wcs_OrderBase
 from von.logger import Logger
 
 
-class Twh_OrderScheduler(Wcs_OrderSchedulerBase):
+class Twh_OrderHelper():
 
     # def __init__(self, twh_id:str, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
     def __init__(self, twh_id:str) -> None:
@@ -22,10 +22,6 @@ class Twh_OrderScheduler(Wcs_OrderSchedulerBase):
         '''
         self.__all_twh_orders = list[Twh_Order]()  
         ''' life time: created by UI, or WMS,  ended when the order is shipped.'''
-        # self.__twh_id = twh_id
-        # self.__twh_packer = packer
-        # self.__twh_shipper = shipper
-        super().__init__(twh_id)
 
     def FindWithdrawOrder(self, order_id:str) -> Twh_Order:
         for order_task in self.__all_twh_orders:
