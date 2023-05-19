@@ -3,6 +3,7 @@ from twh_wcs.von.wcs.order import Wcs_OrderBase, Wcs_OrderItemBase
 from twh_wcs.von.wcs.gcode_sender import GcodeSender, g_gcode_senders
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
+from von.logger import Logger
 from abc import ABC, abstractmethod
 
 
@@ -21,22 +22,31 @@ class Wcs_PorterBase(ABC):
         self._state_topic = state_topic
 
     def SetStateTo(self, new_state:str):
-        self._state.set(new_state)
+        if new_state in ['idle', 'moving']:
+            self._state.set(new_state)
+        else:
+            Logger.Error("Wcs_PorterBase:: SetStateTo()")
+            Logger.Print('new_state', new_state)
+            
     
     def GetState(self) -> str:
         mqtt_payload, has_been_updated =  self._state.get()
         return mqtt_payload
 
     @abstractmethod
+    def PickPlace(self, layer:int):
+        pass
+
+    @abstractmethod
     def _MoveTo(self, target_col:int, target_layer:int) -> None:
         pass
 
     @abstractmethod
-    def show_layer_led(self):
+    def _show_layer_led(self):
         pass
         
     @abstractmethod
-    def turn_off_leds(self):
+    def _turn_off_leds(self):
         pass
 
     # def CarryToGate(self, order: Wcs_OrderBase, order_item:Wcs_OrderItemBase):

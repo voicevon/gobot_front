@@ -5,7 +5,8 @@ from twh_database.db_withdraw_order import DB_WithdrawOrder
 from twh_wcs.von.wcs.order_manager import Wcs_OrderMangerBase
 from von.logger import Logger
 
-from twh_wcs.wcs_instance import g_wcss
+
+from twh_wcs.wcs_workers import g_workers
 
 
 # class Linker:
@@ -46,7 +47,7 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
             tooth = order.FindTooth_is_in_porter(porter_id)
             if tooth is not None:
                 # Logger.Print('found tooth in the loop-porter,  tooth.col', tooth.col)
-                return tooth, order
+                return order, tooth
         return None,None # type: ignore
         
     def _renew_orders_from_database(self):
@@ -65,14 +66,14 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         for db_tooth in db_order_teeth:
             the_order = self.FindWithdrawOrder(db_tooth['order_id'])
-            if db_tooth['twh_id'] == self.wcs_unit_id:   # TODO:  move into db_order_teeth  searching.
+            if db_tooth['twh_id'] == self._wcs_instance_id:   # TODO:  move into db_order_teeth  searching.
                 if the_order is None:
-                    new_order = Twh_Order(self.wcs_unit_id, db_tooth['order_id'])
+                    new_order = Twh_Order(self._wcs_instance_id, db_tooth['order_id'])
                     self._withdraw_orders.append(new_order)
                     the_order = new_order
                     if not printed_logger_title:
                         Logger.Debug('loop-tube system::  WithdrawOrderManager::__renew_orders_from_database() First')
-                        Logger.Print('Factory_name', self.wcs_unit_id)
+                        Logger.Print('Factory_name', self._wcs_instance_id)
                         printed_logger_title = True
                     Logger.Print('WithdrawOrderManager::__renew_orders_from_database()   new_order_task is added to manager. Order_id', new_order.order_id)
                 the_order.SetStateTo(db_tooth['order_state'], write_to_db=False)
@@ -81,7 +82,7 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
                 if order_tooth is None:
                     # service_porter = g_subsystem_porters[db_tooth['row']]
                     # service_porter = g_subsystem_porters[0]  # Assume only one loop-porter is there.
-                    service_porter = g_wcss[self.wcs_unit_id].loop_porters[0]
+                    service_porter = g_workers[self._wcs_instance_id].loop_porters[0]
                     new_tooth = Twh_OrderItem(db_tooth.doc_id, service_porter)
                     new_tooth.DentalLocation = db_tooth['location']
                     new_tooth.row = db_tooth['row']

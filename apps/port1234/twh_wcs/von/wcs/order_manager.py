@@ -8,8 +8,8 @@ class Wcs_OrderMangerBase(ABC):
 
     # def __init__(self, wcs_unit_id:str, packer:Wcs_PackerBase, shipper:Wcs_ShipperBase) -> None:
     # def __init__(self, wcs_unit_id:str, order_id:int) -> None:
-    def __init__(self, wcs_unit_id:str) -> None:
-        self.wcs_unit_id = wcs_unit_id
+    def __init__(self, _wcs_instance_id:str) -> None:
+        self._wcs_instance_id = _wcs_instance_id
         # self.order_id = order_id
         # self._all_order_items = list[Wcs_OrderItemBase]()
         # self.__state = 'idle'
@@ -46,7 +46,7 @@ class Wcs_OrderMangerBase(ABC):
             is_shipped =  order.SpinOnce()
             if is_shipped:
                 # Logger.Info(twh_factories[self.wcs_unit_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
-                Logger.Info(self.wcs_unit_id +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
+                Logger.Info(self._wcs_instance_id +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 self._withdraw_orders.remove(order)
                 return
 

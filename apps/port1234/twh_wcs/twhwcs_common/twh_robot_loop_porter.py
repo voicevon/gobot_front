@@ -33,14 +33,37 @@ class Twh_LoopPorter(LoopPorter):
         mcode ='M999'
         self._gcode_sender.append_gmcode_to_queue(mcode)
 
-    def show_layer_led(self):
+    def PickPlace(self, layer:int):
+        # move to vertical position
+        # gcode = 'G1Z' + str(layer)
+        # self._gcode_sender.append_gmcode_to_queue(gcode)
+
+        # push to box together
+        # gcode = 'G1P100Q100'
+        # self._gcode_sender.append_gmcode_to_queue(gcode)
+
+        # turn on both vaccumm 
+
+        # pull inner nozzle, turn off outter vacuum
+
+        # push inner nozzle
+
+        # pull together
+
+        # turn off inner vacuum
+
+    
+        mcode ='M999'
+        self._gcode_sender.append_gmcode_to_queue(mcode)
+
+    def _show_layer_led(self):
         mcode = 'M42P' + str(self.__target_layer) + 'S1'
         self._gcode_sender.append_gmcode_to_queue(mcode)
 
         mcode ='M999'
         self._gcode_sender.append_gmcode_to_queue(mcode)
 
-    def turn_off_leds(self):
+    def _turn_off_leds(self):
         mcode = 'M42P99S1'
         self._gcode_sender.append_gmcode_to_queue(mcode)
 

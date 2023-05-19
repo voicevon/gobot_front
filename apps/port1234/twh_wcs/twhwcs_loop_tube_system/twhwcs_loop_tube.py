@@ -4,7 +4,6 @@ from twh_wcs.von.wcs.conveyor.tube_conveyor import TubeConveyor
 from twh_wcs.twhwcs_loop_tube_system.twh_order import  Twh_Order, Twh_OrderItem
 from twh_wcs.twhwcs_loop_tube_system.twh_order_manager import Twh_OrderManager
 from twh_database.bolt_nut import twh_factories
-# from twh_wcs.wcs_instance import WcsUnit_Hardware
 
 
 from von.logger import Logger
@@ -13,18 +12,15 @@ import multiprocessing
 
 class Twh_LoopTubeSystem(Wcs_SystemBase):
 
-    def __init__(self, twh_wcs_unit_id:str, deposit_queue:multiprocessing.Queue) -> None:
+    def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue) -> None:
         '''
         Current Version hardwares
             Single loop_porter  in the loop_porter_list
             Single tube_conveyor
 
         '''
-        self.__twh_order_manager = Twh_OrderManager(twh_wcs_unit_id)
-        super().__init__(twh_wcs_unit_id, deposit_queue, self.__twh_order_manager)
-
-        # self.loop_porters = list[Twh_LoopPorter]()
-        # self.tube_conveyors = list[TubeConveyor]()
+        self.__twh_order_manager = Twh_OrderManager(wcs_instance_id)
+        super().__init__(wcs_instance_id, deposit_queue, self.__twh_order_manager)
 
 
     def __Do_deposit_begin(self, new_deposit_request):

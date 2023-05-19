@@ -3,7 +3,7 @@ from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
 from twh_wcs.twhwcs_loop_manual_pack_system.twh_order import  Twh_Order, Twh_OrderItem
 # from twhwcs_loop_manual_pack_system.twh_order .twh_order_scheduler import Twh_OrderScheduler
 from twh_wcs.twhwcs_loop_manual_pack_system.twh_robot_packer import TwhRobot_Packer
-from twh_wcs.twhwcs_loop_manual_pack_system.twh_robot_shipper import TwhRobot_Shipper, twh_shippers
+from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
 from twh_database.bolt_nut import twh_factories
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
@@ -24,8 +24,8 @@ class TwhWcs_LoopManualPacker(Wcs_SystemBase):
 
         # self.__twh_shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
         mqtt_topic_of_ship = 'twh/' + twh_id + '/packer/button/pack'
-        shipper = TwhRobot_Shipper(mqtt_topic_of_ship)
-        twh_shippers.append(shipper)
+        shipper = Manual_Shipper(mqtt_topic_of_ship)
+        # twh_shippers.append(shipper)
 
         self.__twh_orders_scheduler = Twh_OrderScheduler(twh_id)
 

@@ -38,6 +38,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         Logger.Print('state', self._state)
         if self._state == 'idle':
             self._state = 'inside_loop_porter'
+
         if self._state == 'inside_loop_porter':
             self.__got_start_command = True  # for debug only
             if self.__got_start_command:
@@ -47,25 +48,30 @@ class Twh_OrderItem(Wcs_OrderItemBase):
                 if self.__linked_loop_porter.GetState() == 'idle':
                     self.__linked_loop_porter.CarryToGate(self.col, self.layer)
                     self._state = 'inside_loop_porter_moving'
+
         if self._state == 'inside_loop_porter_moving':
             if self.__linked_loop_porter.GetState() == 'ready':
                 self._state = 'loop_porter_gate'
+
         if self._state == 'loop_porter_gate':
-            self.__linked_loop_porter.PickPlace()
+            self.__linked_loop_porter.PickPlace(self.layer)
             self._state = 'loop_porter_gate_picking'
+
         if self._state == 'loop_porter_gate_picking':
-            if self.__linked_loop_porter.has_done():
-                # Q: Need to wait tube conveyer be idle ?
-                # A: Don't know now.
+            if self.__linked_loop_porter.GetState()=='eef_done':
                 self._state = 'loop_porter_done'
 
         if self._state == 'loop_porter_done':
+            # Q: Need to wait tube conveyer be idle ?
+            # A: Don't know now.
             if self.__linked_tube_conveyer.GetState() == 'idle':
                 self.__linked_loop_porter.SetStateTo('idle')
-                self.__linked_tube_conveyer.SetVavle()
+                self.__linked_tube_conveyer.SetValve()
                 self._state = 'tube_moving'
+
         if self._state == 'tube_moving':
-                self._state = 'tube_outlet'
+            self._state = 'tube_outlet'
+
         if self._state == 'tube_outlet':
             if self.__linked_tube_conveyer.got_outlet():
                 self.__linked_tube_conveyer.SetStateTo('idle')

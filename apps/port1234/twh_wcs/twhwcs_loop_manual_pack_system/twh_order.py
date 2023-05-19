@@ -1,7 +1,7 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
 from twh_wcs.twhwcs_loop_manual_pack_system.twh_robot_packer import  twh_packers
-from twh_wcs.twhwcs_loop_manual_pack_system.twh_robot_shipper import twh_shippers
+from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
 from twh_wcs.von.wcs.order import Wcs_OrderBase, Wcs_OrderItemBase
 
 from von.logger import Logger
