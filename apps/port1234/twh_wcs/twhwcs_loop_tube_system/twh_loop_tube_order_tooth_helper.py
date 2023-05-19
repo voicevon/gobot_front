@@ -1,9 +1,8 @@
-from abc import ABC, abstractmethod
+# from abc import ABC, abstractmethod
 from twh_wcs.twh_robot_loop_porter import Twh_LoopPorter
-from twh_wcs
+from twh_wcs.
 
-
-class OrderItem_Scheduler(ABC):
+class TwhWcs_LoopTube_OrderItem:
     
     def __init__(self) -> None:
         self.state = 'idle'
@@ -13,7 +12,6 @@ class OrderItem_Scheduler(ABC):
     def StartPorting(self):
         self.__got_start_command = True
 
-    @abstractmethod
     def _get_idle_porter() -> Twh_LoopPorter:
         idle_porter = Twh_LoopPorter('', 1,"" ,'')
         return idle_porter

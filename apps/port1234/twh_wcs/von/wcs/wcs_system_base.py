@@ -1,8 +1,8 @@
 
 
-from twh_wcs.wcs_base.order import  Wcs_OrderBase, Wcs_OrderItemBase
-from twh_wcs.wcs_base.order_scheduler import Wcs_OrderSchedulerBase
-from twh_wcs.wcs_base.porter_conveyor.loop_porter import LoopPorter
+from twh_wcs.von.wcs.order import  Wcs_OrderBase, Wcs_OrderItemBase
+# from twh_wcs.wcs_base.order_scheduler import Wcs_OrderSchedulerBase
+from twh_wcs.von.wcs.porter.loop_porter import LoopPorter
 
 import multiprocessing
 from abc import ABC, abstractmethod
@@ -11,7 +11,7 @@ from von.mqtt.mqtt_agent import g_mqtt
 
 class Wcs_SystemBase(ABC):
 
-    def __init__(self, wcs_unit_id:str, deposit_queue:multiprocessing.Queue, order_scheduler: Wcs_OrderSchedulerBase) -> None:
+    def __init__(self, wcs_unit_id:str, deposit_queue:multiprocessing.Queue, order_scheduler: Wcs_OrderBase) -> None:
         self._orders_scheduler = order_scheduler
 
         self._wcs_unit_id = wcs_unit_id

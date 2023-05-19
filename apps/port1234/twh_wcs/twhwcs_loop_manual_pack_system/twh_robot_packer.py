@@ -1,4 +1,4 @@
-from twh_wcs.wcs_base.packer import Wcs_PackerBase
+from twh_wcs.von.wcs.packer.packer import Wcs_PackerBase
 
 from von.logger import Logger
 from von.mqtt.mqtt_agent import g_mqtt

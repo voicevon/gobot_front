@@ -1,33 +1,19 @@
 
 
-from twh_wcs.wcs_base.porter_conveyor.porter import Wcs_PorterBase
-from twh_wcs.wcs_base.order import Wcs_OrderBase, Wcs_OrderItemBase
-from twh_wcs.twh_order import Twh_Order, Twh_OrderItem
-
+# from twh_wcs.von.wcs.porter.porter import Wcs_PorterBase
+# from twh_wcs.twh_order import Twh_Order, Twh_OrderItem
+from twh_wcs.von.wcs.porter.loop_porter import LoopPorter
 from twh_database.bolt_nut import twh_factories
 from von.logger import Logger
 
 
-class Twh_LoopPorter(Wcs_PorterBase):
+class Twh_LoopPorter(LoopPorter):
 
     def __init__(self, wcs_unit_id:str, row_id:int) -> None:
         state_topic = "twh/" + wcs_unit_id + '/r' + str(row_id) + "/state"  #'twh/221109/r0/state'
         gcode_topic = "twh/" + wcs_unit_id + '/r' + str(row_id) + "/gcode"  #'twh/221109/r0/gcode'
         super().__init__(wcs_unit_id, row_id, gcode_topic, state_topic)
-
         self.__target_layer:int
-
-    def Start_Porting(self, tooth:Twh_OrderItem, order:Twh_Order):
-        self.__porting_tooth = tooth
-        self.__porting_order = order
-        self.MoveTo(tooth.col, tooth.layer)
-
-    def Get_Porting_Order_and_Item(self) -> tuple[Wcs_OrderBase, Wcs_OrderItemBase]:
-        return  (self.__porting_order, self.__porting_tooth)
-        
-
-    # def GetPortingTooth(self) -> tuple[Twh_OrderItem, Twh_Order]:
-    #     return self.__porting_tooth, self.__porting_order
 
     def MoveTo(self, target_col:int, target_layer:int) -> None:
         self._state.set('moving')    # set to 'moving' when gcode-G1 is sent. ??

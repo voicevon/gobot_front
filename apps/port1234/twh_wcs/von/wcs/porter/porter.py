@@ -1,6 +1,6 @@
-from twh_wcs.wcs_base.order import Wcs_OrderBase, Wcs_OrderItemBase
 
-from twh_wcs.wcs_base.gcode_sender import GcodeSender, g_gcode_senders
+from twh_wcs.von.wcs.order import Wcs_OrderBase, Wcs_OrderItemBase
+from twh_wcs.von.wcs.gcode_sender import GcodeSender, g_gcode_senders
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
 from abc import ABC, abstractmethod
@@ -31,6 +31,10 @@ class Wcs_PorterBase(ABC):
     def MoveTo(self, target_col:int, target_layer:int) -> None:
         pass
 
+    # @abstractmethod
+    def _GetGateLocation(self) :
+        return (1,2)
+
     @abstractmethod
     def show_layer_led(self):
         pass
@@ -39,12 +43,19 @@ class Wcs_PorterBase(ABC):
     def turn_off_leds(self):
         pass
 
-    @abstractmethod
-    def Get_Porting_Order_and_Item(self) -> tuple[Wcs_OrderBase, Wcs_OrderItemBase]:
-        pass
 
-    # @abstractmethod
-    # def GetPortingTooth(self) -> tuple[Twh_OrderItem, Twh_WithdrawOrder]:
+
+    def CarryToGate(self, order: Wcs_OrderBase, order_item:Wcs_OrderItemBase,):
+        self.__porting_order = order
+        self.__porting_item = order_item
+        # Carry porting_item to gate
+        gate_at = self._GetGateLocation()
+        self.MoveTo(gate_at.col, gate_at.layer)
+
+    def Get_Porting_Order_and_Item(self) -> tuple[Wcs_OrderBase, Wcs_OrderItemBase]:
+        return  (self.__porting_order, self.__porting_item)
+    
+
 
 
 
