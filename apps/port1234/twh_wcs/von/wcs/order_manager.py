@@ -31,15 +31,15 @@ class Wcs_OrderMangerBase(ABC):
     #     for t in self._all_order_items:
     #         if t.GetLocated() != 'packer':
     #             return False
-            
     #     return True
+    
     def SpinOnce(self):
         '''
         return:
             -1   no released packer_cell
             0:11 packer_cell_id,  which has benn shipped out. should be released.
         '''
-        Logger.Debug('loop_tube wcs_system::  Twh_OrderHelper::SpinOnce()  my wcs_unit_id' + self.wcs_unit_id)
+        # Logger.Debug('loop_tube wcs_system::  Twh_OrderHelper::SpinOnce()  my wcs_unit_id  = ' + self.wcs_unit_id)
         self._renew_orders_from_database()
         
         for order in self._withdraw_orders:

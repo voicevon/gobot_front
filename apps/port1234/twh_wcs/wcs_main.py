@@ -13,7 +13,7 @@ import time
 
 def WCS_Main(deposit_queue:multiprocessing.Queue):
         Logger.Info("WCS_Main() is starting  on my own process.")
-        g_mqtt.connect_to_broker(g_mqtt_broker_config)                # DebugMode, must be turned off.  
+        g_mqtt.connect_to_broker(g_mqtt_broker_config,blocked_connection=True)                # DebugMode, must be turned off.  
 
         all_wcs_units = list[Wcs_SystemBase]()
         for twh_id in list(twh_factories.keys()):

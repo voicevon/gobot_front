@@ -22,8 +22,6 @@ class Wcs_SystemBase(ABC):
         self.__showing_wcs_state = ''
 
 
-        
-
     def SpinOnce(self) ->str:
         '''
         return:  _wcs_state

@@ -9,7 +9,6 @@ from von.logger import Logger
 
 class Twh_OrderManager(Wcs_OrderMangerBase):
 
-    # def __init__(self, twh_id:str, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
     def __init__(self, twh_wcs_unit_id:str) -> None:
         ''' In WCS, An order's life time:
         * Created by: UI, or WMS
@@ -56,25 +55,24 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
             the_order = self.FindWithdrawOrder(db_tooth['order_id'])
             if db_tooth['twh_id'] == self.wcs_unit_id:   # TODO:  move into db_order_teeth  searching.
                 if the_order is None:
-                    new_order = Twh_Order(db_tooth['order_id'])
-                    # self.AddOrderTask(new_order)
+                    new_order = Twh_Order(self.wcs_unit_id, db_tooth['order_id'])
                     self._withdraw_orders.append(new_order)
                     the_order = new_order
                     if not printed_logger_title:
-                        Logger.Debug('WithdrawOrderManager::__renew_orders_from_database() First')
+                        Logger.Debug('loop-tube system::  WithdrawOrderManager::__renew_orders_from_database() First')
                         Logger.Print('Factory_name', self.wcs_unit_id)
                         printed_logger_title = True
                     Logger.Print('WithdrawOrderManager::__renew_orders_from_database()   new_order_task is added to manager. Order_id', new_order.order_id)
                 the_order.SetStateTo(db_tooth['order_state'], write_to_db=False)
 
-                order_tooth = the_order.FindTooth_from_doc_id(db_tooth.doc_id)
+                order_tooth = the_order.FindItem_from_doc_id(db_tooth.doc_id)
                 if order_tooth is None:
                     new_tooth = Twh_OrderItem(db_tooth.doc_id)
                     new_tooth.DentalLocation = db_tooth['location']
                     new_tooth.row = db_tooth['row']
                     new_tooth.col = db_tooth['col']
                     new_tooth.layer = db_tooth['layer']
-                    the_order.AddTooth(new_tooth)
+                    the_order.AddItem(new_tooth)
                     order_tooth = new_tooth
                     if not printed_logger_title:
                         Logger.Debug('WithdrawOrderManager::__renew_orders_from_database()  Second')

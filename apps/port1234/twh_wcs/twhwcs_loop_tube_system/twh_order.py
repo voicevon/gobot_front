@@ -1,54 +1,18 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
-from twh_wcs.von.wcs.order import Wcs_OrderBase, Wcs_OrderItemBase
+from twh_wcs.von.wcs.order import Wcs_OrderBase
+from twh_wcs.twhwcs_loop_tube_system.twh_order_item import Twh_OrderItem
 
 from von.logger import Logger
 
 
-class Twh_OrderItem(Wcs_OrderItemBase):
-
-    def __init__(self, db_doc_id:int) -> None:
-        super().__init__(db_doc_id)
-        # self.doc_id = db_doc_id
-        self.DentalLocation = 'ur1'
-        self.row :int
-        self.col:int
-        self.layer:int
-        # self.__located = 'porter'
-
-    def TransferToLocated(self, new_located:str, write_to_db:bool) -> None:
-        self.__located = new_located
-        if write_to_db:
-            DB_WithdrawOrder.update_tooth_located(self.doc_id, new_located)
-
-    
-    def PrintOut(self, title:str):
-        Logger.Info(title)
-        Logger.Print('doc_id', self.doc_id)
-        Logger.Print('DentalLocation', self.DentalLocation)
-        Logger.Print('__located', self.__located)
-        Logger.Print('row', self.row)
-        Logger.Print('col', self.col)
-        Logger.Print('layer', self.layer)
-
 
 class Twh_Order(Wcs_OrderBase):
 
-    def __init__(self, twh_order_id:str) -> None:
-        super().__init__(twh_order_id,1234)
-        # self._all_order_items = list[Twh_OrderItem]()
-        # self._state = 'idle'
-        # self.Order_id = order_id
+    def __init__(self, wcs_uint_id:str, twh_order_id:int) -> None:
+        super().__init__( wcs_uint_id, twh_order_id)
         self.PackerCell_id = -1
 
-    def AddTooth(self, new_tooth:Twh_OrderItem) -> None:
-        self._all_order_items.append(new_tooth)
-    
-    def FindTooth_from_doc_id(self, doc_id:int) -> Twh_OrderItem:
-        for t in self._all_order_items:
-            if t.doc_id == doc_id:
-                return t # type: ignore
-        return None # type: ignore
 
     def FindTooth_is_in_porter(self, porter_id:int) -> Twh_OrderItem:
         '''
@@ -63,12 +27,6 @@ class Twh_Order(Wcs_OrderBase):
                 if tooth.row == porter_id:
                     return tooth
         return None # type: ignore
-
-    def HasTooth(self, tooth:Twh_OrderItem) -> bool:
-        for t in self._all_order_items:
-            if tooth == t:
-                return True
-        return False
     
     def __get_all_teeth_doc_ids(self):
         doc_ids = []
@@ -87,8 +45,8 @@ class Twh_Order(Wcs_OrderBase):
         '''
         self._state = new_state
         if write_to_db:
-                doc_ids = self.__get_all_teeth_doc_ids()
-                DB_WithdrawOrder.update_order_state(new_state, doc_ids)
+            doc_ids = self.__get_all_teeth_doc_ids()
+            DB_WithdrawOrder.update_order_state(new_state, doc_ids)
 
     # remove this from order. should be a method of order_scheduler.  right?
     def Start_PickingPlacing_a_tooth(self) -> bool:
@@ -101,9 +59,6 @@ class Twh_Order(Wcs_OrderBase):
             twh_packers[0].StartFeeding_LockPackerCell(idle_packer_cell_id)
             self.SetStateTo('feeding', write_to_db=True)
         return True    
-            
-    # def GetState(self) -> str:
-    #     return self._state
 
     # def IsFullFilled(self) -> bool:
     #     for t in self._all_order_items:
@@ -118,6 +73,9 @@ class Twh_Order(Wcs_OrderBase):
             * True: I am complete shipped out, and has been deleted from database.
             * False: I am not shipped.
         '''
+        for item in self._all_order_items:
+            item.SpinOnce()
+
         if self._state == 'idle':
             return False
         if self._state == 'feeding':
