@@ -17,11 +17,19 @@ class WcsWorkers:
     tube_conveyors = list[TubeConveyor]()
     pick_placers = list[Wsc_PickPlacerBase]()
     packers = list[Wcs_PackerBase]()
-    shipper = list[Wcs_ShipperBase]()
+    shippers = list[Wcs_ShipperBase]()
 
 g_workers = dict[str, WcsWorkers]()
 
 class WorkerFactory:
+    @classmethod
+    def FindIdlePackers(cls, warehouse_id:str) -> list[Wcs_PackerBase]:
+        idle_packers = list[Wcs_PackerBase]()
+        for packer in g_workers[warehouse_id].packers:
+            if packer.GetState() == 'idle':
+                idle_packers.append(packer)
+        return idle_packers
+
     @classmethod
     def Create_WcsWorkers(cls, warehouse_id:str) -> WcsWorkers:
         wcs_workers = WcsWorkers()
@@ -36,7 +44,7 @@ class WorkerFactory:
             wcs_workers.pick_placers.append(new_picker)
             
             new_shipper = Manual_Shipper("twh/" + warehouse_id + 'shipper/button')
-            wcs_workers.shipper.append(new_shipper)
+            wcs_workers.shippers.append(new_shipper)
             return wcs_workers
 
         elif warehouse_id == '230220':

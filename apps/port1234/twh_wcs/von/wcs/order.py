@@ -6,19 +6,11 @@ from abc import ABC, abstractmethod
     
 class Wcs_OrderBase(ABC):
 
-    def __init__(self, wcs_unit_id:str, order_id:int) -> None:
-        self.wcs_unit_id = wcs_unit_id
+    def __init__(self, warehouse_id:str, order_id:int) -> None:
+        self.warehouse_id = warehouse_id
         self.order_id = order_id
         self._all_order_items = list[Wcs_OrderItemBase]()
         self._state = 'idle'
-        '''
-        * 'idle', 
-        * 'feeding', 
-        * 'fullfilled', 
-        * 'wms_shipping' ??
-        * 'wcs_shipping' ??
-        * 'shipped'
-        '''
     def GetState(self) -> str:
         return self._state
     
@@ -30,12 +22,6 @@ class Wcs_OrderBase(ABC):
             if item.doc_id == doc_id:
                 return item 
         return None # type: ignore
-    
-    # def HasItem(self, item:Wcs_OrderItemBase) -> bool:
-    #     for i in self._all_order_items:
-    #         if item == i:
-    #             return True
-    #     return False
     
     def _get_all_teeth_doc_ids(self):
         doc_ids = []
@@ -53,10 +39,10 @@ class Wcs_OrderBase(ABC):
         for item in self._all_order_items:
             # Logger.Print("item---id", item.doc_id)
             item.SpinOnce()
-        self._SpinOnce()
+        self._run_statemachine()
 
     @abstractmethod
-    def _SpinOnce(self) -> int:
+    def _run_statemachine(self) -> int:
         pass
 
 

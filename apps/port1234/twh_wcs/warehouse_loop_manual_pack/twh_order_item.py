@@ -33,6 +33,12 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         Logger.Print('col', self.col)
         Logger.Print('layer', self.layer)
 
+    def StartWithdraw(self):
+        if self._state == 'idle':
+            self._state = 'started'
+        else:
+            Logger.Error("OrderItem::StartWithdraw()    I am not on idle, can not start")
+
     def SpinOnce(self):
         Logger.Debug('loop_manual warehouse:: order_item:: SpinOnce()')
         # Logger.Print('state', self._state)
@@ -58,14 +64,14 @@ class Twh_OrderItem(Wcs_OrderItemBase):
             if self.__linked_loop_porter.GetState() == 'ready':
                 self._state = 'loop_porter_gate'
 
-
         if self._state == 'loop_porter_gate':
-            pick_row = 1
-            pick_layer = 2
-            place_cell = 3
-            pick_at = (pick_row, pick_layer)
-            self.__linked_pick_placer.Start(pick_at, place_cell)
-            self._state = 'loop_porter_gate_picking'
+            if self.__linked_pick_placer.GetState() == 'idle':
+                # turn on led on looper gate
+                # turn on led on packer_cell
+                place_cell = 3
+                pick_at = (self.row, self.layer)
+                self.__linked_pick_placer.Start(pick_at, place_cell)
+                self._state = 'loop_porter_gate_picking'
 
         if self._state == 'loop_porter_gate_picking':
             if self.__linked_loop_porter.GetState()=='eef_done':

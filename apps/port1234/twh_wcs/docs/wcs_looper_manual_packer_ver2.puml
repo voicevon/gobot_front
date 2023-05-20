@@ -3,46 +3,60 @@
 
 
 state order_item{
-	[*] --> inside_loop_porter
-	inside_loop_porter <-- inside_loop_porter:  P1: no loop_porters is idle
-	inside_loop_porter --> loop_porter_moving: P2b
-    loop_porter_moving ---> loop_porter_gate: loop_porter.is_ready()
-	loop_porter_gate --> manual_picking_placing
-    manual_picking_placing ----> loop_porter_done: (green) pick_placed_button is pressed
+	[*] --> item_idle
+	item_idle --> item_started
+	item_started <-- item_started:  P1: no loop_porters is idle
+	item_started --> item_moving: P2b
+    item_moving ---> item_on_gate: loop_porter.is_ready()
+	item_on_gate --> item_picking_placing
+    item_picking_placing ----> item_ported: (green) pick_placed_button is pressed
 }
 
 state order{
 	[*] --> order_idle
-	order_idle --> order_feeding
-	order_feeding --> order_fullfilled:  all_items.states == loop_porter_done
+	order_idle --> order_got_packer_cell
+	order_got_packer_cell --> order_feeding
+	order_feeding --> order_fullfilled:  all_items.states == item_ported
 	order_fullfilled --> order_packed: (yellow) packed_button is pressed
-	order_packed -->shipped:  (blue) shipped_button is pressed
-
+	order_packed -->order_shipped:  (blue) shipped_button is pressed
 }
-inside_loop_porter -[dashed]->  order_idle: P2c
+state packer{
+	[*] --> packer_idle
+	state packer_feeding
+}
+packer_idle -[dashed]-> order_idle
+order_idle --> packer_feeding
+order_shipped --> packer_idle
+order_got_packer_cell -[#blue,dashed]-> item_idle
+
 
 state loop_porter {
-	[*] --> loop_idle 
+	[*] -> loop_idle 
 	loop_idle --> loop_moving
-	loop_moving <-- loop_moving
 	loop_moving --> loop_ready
 }
-loop_idle -[dashed]---> inside_loop_porter
-inside_loop_porter --> loop_moving: P2a: loop_porter.MoveTo()
-loop_ready -[dashed]-> loop_porter_moving
+loop_idle -[dashed]---> item_started
+item_started --> loop_moving: P2a: loop_porter.MoveTo()
+loop_ready -[dashed]-> item_moving
 
 
 state manual_picker{
-	[*] --> packer_idle
-	packer_idle --> picking_placing
-	picking_placing --> picked_placed: green_button is pressed
+	[*] --> picker_idle
+	picker_idle --> picker_picking_placing
+	picker_picking_placing --> picker_picked_placed: green_button is pressed
 	
 }
-packer_idle -[dashed]-> loop_porter_gate
-loop_porter_gate --> picking_placing: trun on green_led pair
-picked_placed -[dashed]-> manual_picking_placing
-loop_porter_done --> packer_idle
+picker_idle -[dashed]-> item_on_gate
+item_on_gate --> picker_picking_placing: trun on green_led pair
+picker_picked_placed -[dashed]-> item_picking_placing
+item_ported --> picker_idle
 
+state shipper{
+	[*] --> shipper_idle
+	shipper_idle --> shipper_loading
+	shipper_loading --> shipper_shipped
+
+}
 
 state wcs_state{
 	[*] -> wcs_idle
@@ -64,11 +78,11 @@ state wcs_state{
 	end note
 }
 
-withdraw_dispaching -[#blue,dashed]-> order_item 
+withdraw_dispaching -[#blue,dashed]-> order
 
 
 
-loop_porter_done --> loop_idle
+item_ported --> loop_idle
 
 
 

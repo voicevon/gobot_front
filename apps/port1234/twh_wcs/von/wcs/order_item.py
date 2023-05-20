@@ -9,12 +9,11 @@ class Wcs_OrderItemBase(ABC):
 
     def GetState(self) ->str:
         return self._state
-    # def GetLocated(self) -> str:
-    #     '''
-    #     'porter', 'worker_hand','packer_cell'
-    #     '''
-    #     return self.__located
-    
+
+    @abstractmethod
+    def StartWithdraw(self):
+        pass
+
     @abstractmethod
     def SpinOnce(self):
         pass
