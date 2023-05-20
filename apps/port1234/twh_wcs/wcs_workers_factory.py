@@ -1,4 +1,4 @@
-from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
+from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
 from twh_wcs.von.wcs.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
 

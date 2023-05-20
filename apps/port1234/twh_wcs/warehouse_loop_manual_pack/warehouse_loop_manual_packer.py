@@ -2,7 +2,7 @@ from twh_wcs.warehouse_loop_manual_pack.twh_order import Twh_Order
 from twh_wcs.warehouse_loop_manual_pack.twh_order_item import Twh_OrderItem
 from twh_wcs.warehouse_loop_manual_pack.twh_order_manager import Twh_OrderManager
 
-from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
+from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
 from twh_database.bolt_nut import twh_factories
 from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
 from twh_wcs.von.wcs.warehouse_base import WarehouseBase
