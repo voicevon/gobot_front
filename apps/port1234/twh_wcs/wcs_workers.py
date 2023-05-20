@@ -12,7 +12,7 @@ from twh_wcs.von.wcs.shipper.shipper import Wcs_ShipperBase
 from von.logger import Logger
 
 class WcsWorkers:
-    # software: Wcs_InstanceBase
+    # software: WarehouseBase
     loop_porters = list[LoopPorter]()
     tube_conveyors = list[TubeConveyor]()
     pick_placers = list[Wsc_PickPlacerBase]()
@@ -21,34 +21,34 @@ class WcsWorkers:
 
 g_workers = dict[str, WcsWorkers]()
 
-def Create_WcsWorkers(wcs_instance_id:str) -> WcsWorkers:
+def Create_WcsWorkers(warehouse_id:str) -> WcsWorkers:
     wcs_workers = WcsWorkers()
 
-    if wcs_instance_id == '221109':
-        g_workers[wcs_instance_id] = wcs_workers
+    if warehouse_id == '221109':
+        g_workers[warehouse_id] = wcs_workers
         for i in range(4):
-            new_porter = Twh_LoopPorter(wcs_instance_id, i)
+            new_porter = Twh_LoopPorter(warehouse_id, i)
             wcs_workers.loop_porters.append(new_porter)
         
-        new_picker = Manual_PickPlacer("twh/" + wcs_instance_id + 'picker')
+        new_picker = Manual_PickPlacer("twh/" + warehouse_id + 'picker')
         wcs_workers.pick_placers.append(new_picker)
         
-        new_shipper = Manual_Shipper("twh/" + wcs_instance_id + 'shipper/button')
+        new_shipper = Manual_Shipper("twh/" + warehouse_id + 'shipper/button')
         wcs_workers.shipper.append(new_shipper)
         return wcs_workers
 
-    elif wcs_instance_id == '230220':
-        g_workers[wcs_instance_id] = wcs_workers
+    elif warehouse_id == '230220':
+        g_workers[warehouse_id] = wcs_workers
         for i in range(1):
-            new_porter = Twh_LoopPorter(wcs_instance_id, i)
+            new_porter = Twh_LoopPorter(warehouse_id, i)
             wcs_workers.loop_porters.append(new_porter)
         for i in range(1):
-            new_tube_conveyor = TubeConveyor(wcs_instance_id, 0 ,'','')
+            new_tube_conveyor = TubeConveyor(warehouse_id, 0 ,'','')
             wcs_workers.tube_conveyors.append(new_tube_conveyor)
         return wcs_workers
     
 
     else:
         Logger.Error("CreateWcsInstance()  Error")
-        Logger.Print('wcs_instance_id', wcs_instance_id)
+        Logger.Print('wcs_instance_id', warehouse_id)
         return None # type: ignore

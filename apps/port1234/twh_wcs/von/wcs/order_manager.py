@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 
 class Wcs_OrderMangerBase(ABC):
 
-    def __init__(self, _wcs_instance_id:str) -> None:
+    def __init__(self, _warehouse_id:str) -> None:
         ''' In WCS, An order's life time:
         * Created by: UI, or WMS
         * Main processes are:  porting, picking, packing, shipping.
@@ -15,7 +15,7 @@ class Wcs_OrderMangerBase(ABC):
         * An order item,  it might stored in different location, saying:  be served by different porter.
         '''
 
-        self._wcs_instance_id = _wcs_instance_id
+        self._warehouse_id = _warehouse_id
         # self.order_id = order_id
         # self._all_order_items = list[Wcs_OrderItemBase]()
         # self.__state = 'idle'
@@ -52,7 +52,7 @@ class Wcs_OrderMangerBase(ABC):
             is_shipped =  order.SpinOnce()
             if is_shipped:
                 # Logger.Info(twh_factories[self.wcs_unit_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
-                Logger.Info(self._wcs_instance_id +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
+                Logger.Info(self._warehouse_id +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 self._withdraw_orders.remove(order)
                 return
 

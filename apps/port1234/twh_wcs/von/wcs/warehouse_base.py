@@ -9,10 +9,10 @@ from von.mqtt.mqtt_agent import g_mqtt
 from von.logger import Logger
 
 
-class Wcs_InstanceBase(ABC):
+class WarehouseBase(ABC):
 
     def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue, withdraw_order_manager: Wcs_OrderMangerBase) -> None:
-        self._wcs_instance_id = wcs_instance_id
+        self._warehouse_id = wcs_instance_id
         self._wcs_state = 'idle'  
         self.__withdraw_order_manager = withdraw_order_manager
         self.__deposit_queue = deposit_queue
@@ -43,7 +43,7 @@ class Wcs_InstanceBase(ABC):
         # Logger.Print('wcs_state', self._wcs_state)
         if self.__showing_wcs_state != self._wcs_state:
             self.__showing_wcs_state = self._wcs_state
-            g_mqtt.publish('twh/' + self._wcs_instance_id + '/wcs_state', self.__showing_wcs_state)
+            g_mqtt.publish('twh/' + self._warehouse_id + '/wcs_state', self.__showing_wcs_state)
         return self._wcs_state
 
     # def all_loop_porter_are_idle(self) -> bool:

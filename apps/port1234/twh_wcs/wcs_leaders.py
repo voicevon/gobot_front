@@ -4,23 +4,23 @@ from twh_wcs.twhwcs_loop_tube_system.twhwcs_loop_tube import Twh_LoopTubeSystem
 
 import multiprocessing
 
-from twh_wcs.von.wcs.wcs_instance_base import Wcs_InstanceBase
+from twh_wcs.von.wcs.warehouse_base import WarehouseBase
 
 from von.logger import Logger
 
-g_leaders = dict[str, Wcs_InstanceBase]()
+g_warehouses = dict[str, WarehouseBase]()
 
-def Create_WcsLeader(wcs_instance_id:str, deposit_queue:multiprocessing.Queue) -> Wcs_InstanceBase:
+def Create_Warehouse(warehouse_id:str, deposit_queue:multiprocessing.Queue) -> WarehouseBase:
 
-    if wcs_instance_id == '221109':
-        wcs_instance = TwhWcs_LoopManualPacker(wcs_instance_id, deposit_queue)
+    if warehouse_id == '221109':
+        wcs_instance = TwhWcs_LoopManualPacker(warehouse_id, deposit_queue)
         # wcs_instance = Twh_LoopTubeSystem(wcs_instance_id, deposit_queue)
-        g_leaders[wcs_instance_id] = wcs_instance
+        g_warehouses[warehouse_id] = wcs_instance
         return wcs_instance
 
-    elif wcs_instance_id == '230220':
-        wcs_instance = TwhWcs_LoopManualPacker(wcs_instance_id, deposit_queue)
-        g_leaders[wcs_instance_id] = wcs_instance
+    elif warehouse_id == '230220':
+        wcs_instance = Twh_LoopTubeSystem(warehouse_id, deposit_queue)
+        g_warehouses[warehouse_id] = wcs_instance
         return wcs_instance
     
 

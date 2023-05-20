@@ -54,15 +54,15 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         for db_tooth in db_order_teeth:
             the_order = self.FindWithdrawOrder(db_tooth['order_id'])
-            if db_tooth['twh_id'] == self._wcs_instance_id:   # TODO:  move into db_order_teeth  searching.
+            if db_tooth['twh_id'] == self._warehouse_id:   # TODO:  move into db_order_teeth  searching.
                 if the_order is None:
-                    new_order = Twh_Order(self._wcs_instance_id, db_tooth['order_id'])
+                    new_order = Twh_Order(self._warehouse_id, db_tooth['order_id'])
                     # self.AddOrderTask(new_order)
                     self._withdraw_orders.append(new_order)
                     the_order = new_order
                     if not printed_logger_title:
                         Logger.Debug('WithdrawOrderManager::__renew_orders_from_database() First')
-                        Logger.Print('Factory_name', self._wcs_instance_id)
+                        Logger.Print('Factory_name', self._warehouse_id)
                         printed_logger_title = True
                     Logger.Print('WithdrawOrderManager::__renew_orders_from_database()   new_order_task is added to manager. Order_id', new_order.order_id)
                 the_order.SetStateTo(db_tooth['order_state'], write_to_db=False)
@@ -70,8 +70,8 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
                 # order_tooth = the_order.FindTooth_from_doc_id(db_tooth.doc_id)
                 order_tooth = the_order.FindItem_from_doc_id(db_tooth.doc_id)
                 if order_tooth is None:
-                    loop_porter = g_workers[self._wcs_instance_id].loop_porters[db_tooth['row']]
-                    picker = g_workers[self._wcs_instance_id].pick_placers[0]
+                    loop_porter = g_workers[self._warehouse_id].loop_porters[db_tooth['row']]
+                    picker = g_workers[self._warehouse_id].pick_placers[0]
                     new_tooth = Twh_OrderItem(db_tooth.doc_id, loop_porter, picker)
                     new_tooth.DentalLocation = db_tooth['location']
                     new_tooth.row = db_tooth['row']
@@ -99,7 +99,7 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
         for order in self._withdraw_orders:
             is_shipped =  order.SpinOnce()
             if is_shipped:
-                Logger.Info( twh_factories[self._wcs_instance_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
+                Logger.Info( twh_factories[self._warehouse_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 self._withdraw_orders.remove(order)
                 return
 

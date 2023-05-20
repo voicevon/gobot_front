@@ -9,7 +9,7 @@ from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
 from twh_database.bolt_nut import twh_factories
 
 from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
-from twh_wcs.von.wcs.wcs_instance_base import Wcs_InstanceBase
+from twh_wcs.von.wcs.warehouse_base import WarehouseBase
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
 
@@ -18,7 +18,7 @@ import multiprocessing
 # import time
 
 
-class TwhWcs_LoopManualPacker(Wcs_InstanceBase):
+class TwhWcs_LoopManualPacker(WarehouseBase):
 
     def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue) -> None:
         self.__button_pick = RemoteVar_mqtt('twh/' + wcs_instance_id + '/packer/button/pick','idle')
@@ -47,7 +47,7 @@ class TwhWcs_LoopManualPacker(Wcs_InstanceBase):
         self.__deposite_queue = deposit_queue
 
     def __Do_deposit_begin(self, new_deposit_request):
-        Logger.Info(twh_factories[self._wcs_instance_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
+        Logger.Info(twh_factories[self._warehouse_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
         Logger.Print("new_deposit_request", new_deposit_request)
         # the loop-porter will move to col-position
         row_id = new_deposit_request['row']
