@@ -9,16 +9,16 @@ from von.logger import Logger
 
 class Twh_LoopPorter(LoopPorter):
 
-    def __init__(self, wcs_unit_id:str, row_id:int) -> None:
-        state_topic = "twh/" + wcs_unit_id + '/r' + str(row_id) + "/state"  #'twh/221109/r0/state'
-        gcode_topic = "twh/" + wcs_unit_id + '/r' + str(row_id) + "/gcode"  #'twh/221109/r0/gcode'
-        super().__init__(wcs_unit_id, row_id, gcode_topic, state_topic)
+    def __init__(self, warehouse_id:str, row_id:int) -> None:
+        gcode_topic = "twh/" + warehouse_id + '/r' + str(row_id) + "/gcode"  #'twh/221109/r0/gcode'
+        self.__state_topic = "twh/" + warehouse_id + '/r' + str(row_id) + "/state"  #'twh/221109/r0/state'
+        super().__init__(warehouse_id, row_id, gcode_topic, self.__state_topic)
         self.__target_layer:int
 
-    def _MoveTo(self, target_col:int, target_layer:int) -> None:
+    def _move_to(self, target_col:int, target_layer:int) -> None:
         self._state.set('moving')    # set to 'moving' when gcode-G1 is sent. ??
         self.__target_layer = target_layer
-        Logger.Info(twh_factories[self.Owner_id]['name']  + ' -- Twh_LoopPorter::MoveTo()')
+        Logger.Info(twh_factories[self.warehouse_id]['name']  + ' -- Twh_LoopPorter::MoveTo()')
         print(  '(row, col, layer) = ' ,self.id, target_col, target_layer )
         
         mcode ='M42P99S1'  # turn off all green leds
@@ -27,7 +27,7 @@ class Twh_LoopPorter(LoopPorter):
         gcode = 'G1X' + str(target_col)
         self._gcode_sender.append_gmcode_to_queue(gcode)
 
-        mcode = 'M408' + self._state_topic
+        mcode = 'M408' + self.__state_topic
         self._gcode_sender.append_gmcode_to_queue(mcode)
 
         mcode ='M999'
@@ -70,7 +70,5 @@ class Twh_LoopPorter(LoopPorter):
         mcode ='M999'
         self._gcode_sender.append_gmcode_to_queue(mcode)  
 
-    def SpinOnce(self):
-        pass
 
 # twh_loop_porters = list[Twh_LoopPorter]()

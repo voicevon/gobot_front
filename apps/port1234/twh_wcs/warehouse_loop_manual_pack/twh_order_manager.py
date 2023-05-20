@@ -52,7 +52,7 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
                     # Logger.Info("loop manual:: renew_orders_from_database()::Create new tooth from database.......")
                     loop_porter = g_workers[self._warehouse_id].loop_porters[db_tooth['row']]
                     picker = g_workers[self._warehouse_id].pick_placers[0]
-                    new_tooth = Twh_OrderItem(db_tooth.doc_id, loop_porter, picker)
+                    new_tooth = Twh_OrderItem(self._warehouse_id, db_tooth.doc_id, loop_porter, picker)
                     new_tooth.DentalLocation = db_tooth['location']
                     new_tooth.row = db_tooth['row']
                     new_tooth.col = db_tooth['col']
@@ -62,7 +62,7 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
                     if not printed_logger_title:
                         Logger.Debug('WithdrawOrderManager::__renew_orders_from_database()  Second')
                     Logger.Print('loop_manual::new_tooth is added to order_task. DentalLocation', new_tooth.DentalLocation)
-                order_tooth.TransferToLocated(db_tooth['located'], write_to_db=False)
+                # order_tooth.TransferToLocated(db_tooth['located'], write_to_db=False)
 
             # if order_task.GetState() == 'shipped':
             #     DB_WithdrawOrder.delete_by_order_id(order_task.Order_id)

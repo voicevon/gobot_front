@@ -33,7 +33,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         Logger.Print('col', self.col)
         Logger.Print('layer', self.layer)
 
-    def SpinOnce(self):
+    def _run_statemachine(self):
         Logger.Debug('loop_tube system:: order_item:: _SpinOnce()')
         Logger.Print('state', self._state)
         if self._state == 'idle':
