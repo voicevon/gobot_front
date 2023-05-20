@@ -1,23 +1,21 @@
 
 from abc import ABC, abstractmethod
 
-class Wsc_PickPlacerBase:
+class Wsc_PickPlacerBase(ABC):
     def __init__(self) -> None:
         self._state = 'idle'
-
-    def SpinOnce(self):
-        pass
 
     def GetState(self) -> str:
         return self._state
 
     @abstractmethod
-    def Start(self):
+    def SpinOnce(self):
         pass
 
     @abstractmethod
-    def _SpinOnce(self):
+    def Start(self):
         pass
+
 
     
         

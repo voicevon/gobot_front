@@ -29,11 +29,11 @@ class WarehouseBase(ABC):
             if self.__deposit_queue.qsize() > 0:
                 self._wcs_state = 'deposit_begin'
             else:
-                self._wcs_state = 'withdraw_order_item'
+                self._wcs_state = 'withdraw_dispaching'
         if self._wcs_state == 'deposite_begin':
             if self.__deposit_queue.qsize() == 0:
                 self._wcs_state = 'idle'
-        if self._wcs_state == 'withdraw_order_item':
+        if self._wcs_state == 'withdraw_dispaching':
             # self.__withdraw_order_manager.SpinOnce()
             if self.__withdraw_order_manager.GetWithdrawOrdersCount() == 0:
                 self._wcs_state = 'idle'

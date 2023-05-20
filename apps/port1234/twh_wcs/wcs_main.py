@@ -21,8 +21,8 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
             Logger.Info("Twh_Wcs_Main()   Created wcs_unit----->"  + wcs_instance_id)
 
         while True:
-            for id, leader in g_warehouses.items():
-                leader.SpinOnce()
+            for id, warehouse in g_warehouses.items():
+                warehouse.SpinOnce()
             # ????
             # for id, worker in g_workers.items():
             #      worker.SpinOnce() 

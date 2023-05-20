@@ -1,7 +1,7 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
 from twh_wcs.von.wcs.order import Wcs_OrderBase
-from twh_wcs.twhwcs_loop_tube_system.twh_order_item import Twh_OrderItem
+from twh_wcs.warehouse_loop_tube.twh_order_item import Twh_OrderItem
 
 from von.logger import Logger
 

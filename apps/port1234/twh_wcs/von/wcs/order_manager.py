@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 
 class Wcs_OrderMangerBase(ABC):
 
-    def __init__(self, _warehouse_id:str) -> None:
+    def __init__(self, warehouse_id:str) -> None:
         ''' In WCS, An order's life time:
         * Created by: UI, or WMS
         * Main processes are:  porting, picking, packing, shipping.
@@ -15,7 +15,7 @@ class Wcs_OrderMangerBase(ABC):
         * An order item,  it might stored in different location, saying:  be served by different porter.
         '''
 
-        self._warehouse_id = _warehouse_id
+        self._warehouse_id = warehouse_id
         # self.order_id = order_id
         # self._all_order_items = list[Wcs_OrderItemBase]()
         # self.__state = 'idle'

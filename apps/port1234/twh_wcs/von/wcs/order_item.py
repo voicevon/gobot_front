@@ -14,9 +14,6 @@ class Wcs_OrderItemBase(ABC):
     #     '''
     #     return self.__located
     
-    def SpinOnce(self):
-        self._SpinOnce()
-        
     @abstractmethod
-    def _SpinOnce(self):
+    def SpinOnce(self):
         pass

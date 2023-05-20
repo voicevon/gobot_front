@@ -43,15 +43,15 @@ class Wcs_OrderBase:
         #     if t.GetLocated() != 'packer':
         #         return False
         # return True
-    
-    
-    @abstractmethod
-    def SpinOnce(self):
-        pass
 
-    # @abstractmethod
-    # def GetWithdrawOrdersCount(self) -> int:
-    #     pass
+    def SpinOnce(self):
+        for item in self._all_order_items:
+            item.SpinOnce()
+        self._SpinOnce()
+
+    @abstractmethod
+    def _SpinOnce(self) -> int:
+        pass
 
 
       

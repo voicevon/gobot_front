@@ -17,7 +17,7 @@ class ZPQ_PickPlacer(Wsc_PickPlacerBase):
         self.__gcode_sender.append_gmcode_to_queue(gcode)
         self._state ='picking'
         
-    def _SpinOnce(self):
+    def SpinOnce(self):
         if self._state == 'picking':
             self._state = 'placed'
     

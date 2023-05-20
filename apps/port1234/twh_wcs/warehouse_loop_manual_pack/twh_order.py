@@ -93,6 +93,7 @@ class Twh_Order(Wcs_OrderBase):
             * True: I am complete shipped out, and has been deleted from database.
             * False: I am not shipped.
         '''
+
         if self.__state == 'idle':
             return False
         if self.__state == 'feeding':

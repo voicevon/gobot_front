@@ -1,8 +1,8 @@
 from twh_wcs.von.wcs.warehouse_base import WarehouseBase
 from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
 from twh_wcs.von.wcs.conveyor.tube_conveyor import TubeConveyor
-from twh_wcs.twhwcs_loop_tube_system.twh_order import  Twh_Order, Twh_OrderItem
-from twh_wcs.twhwcs_loop_tube_system.twh_order_manager import Twh_OrderManager
+from twh_wcs.warehouse_loop_tube.twh_order import  Twh_Order, Twh_OrderItem
+from twh_wcs.warehouse_loop_tube.twh_order_manager import Twh_OrderManager
 from twh_database.bolt_nut import twh_factories
 
 

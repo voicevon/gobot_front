@@ -9,7 +9,7 @@ class Manual_PickPlacer(Wsc_PickPlacerBase):
     def Start(self):
         pass
 
-    def _SpinOnce(self):
+    def SpinOnce(self):
         mqtt_payload, has_been_updated =  self.__button_placed.get()
         self._state =  mqtt_payload
 
