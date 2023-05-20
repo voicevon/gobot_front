@@ -11,10 +11,8 @@ from twh_wcs.von.wcs.shipper.shipper import Wcs_ShipperBase
 
 from von.logger import Logger
 
-
-
 class WcsWorkers:
-    # software: Wcs_SystemBase
+    # software: Wcs_InstanceBase
     loop_porters = list[LoopPorter]()
     tube_conveyors = list[TubeConveyor]()
     pick_placers = list[Wsc_PickPlacerBase]()
@@ -23,7 +21,7 @@ class WcsWorkers:
 
 g_workers = dict[str, WcsWorkers]()
 
-def CreateWcsWorkers(wcs_instance_id:str) -> WcsWorkers:
+def Create_WcsWorkers(wcs_instance_id:str) -> WcsWorkers:
     wcs_workers = WcsWorkers()
 
     if wcs_instance_id == '221109':

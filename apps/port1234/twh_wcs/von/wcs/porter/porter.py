@@ -1,21 +1,24 @@
 
-from twh_wcs.von.wcs.order import Wcs_OrderBase, Wcs_OrderItemBase
 from twh_wcs.von.wcs.gcode_sender import GcodeSender, g_gcode_senders
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
-
+from twh_wcs.von.wcs.worker_base import Wcs_WorkerBase
 from von.logger import Logger
 from abc import ABC, abstractmethod
 
 
-class Wcs_PorterBase(ABC):
+# class Wcs_PorterBaseA(ABC, Wcs_WorkerBase):
+#     def __init__(self, owner_id: str) -> None:
+#         super().__init__(owner_id)
+
+class Wcs_PorterBase(Wcs_WorkerBase):
     
-    def __init__(self, wcs_unit_id:str, row_id:int, gcode_topic, state_topic) -> None:
+    def __init__(self, wcs_ower_id:str, row_id:int, gcode_topic, state_topic) -> None:
         '''
         Q: What is default value of state_topic is not 'idle'?
         A: Don't know,  Currently, all requiemnets is satisfied.
         '''
+        super().__init__(wcs_ower_id)
         self.id = row_id
-        self.wcs_unit_id = wcs_unit_id
         self._gcode_sender = GcodeSender(gcode_topic)
         g_gcode_senders.append(self._gcode_sender)
         self._state = RemoteVar_mqtt(state_topic, 'idle')

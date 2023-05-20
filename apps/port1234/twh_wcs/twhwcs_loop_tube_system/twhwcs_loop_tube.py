@@ -1,4 +1,4 @@
-from twh_wcs.von.wcs.wcs_system_base import Wcs_SystemBase
+from twh_wcs.von.wcs.wcs_instance_base import Wcs_InstanceBase
 from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
 from twh_wcs.von.wcs.conveyor.tube_conveyor import TubeConveyor
 from twh_wcs.twhwcs_loop_tube_system.twh_order import  Twh_Order, Twh_OrderItem
@@ -10,7 +10,7 @@ from von.logger import Logger
 import multiprocessing
 
 
-class Twh_LoopTubeSystem(Wcs_SystemBase):
+class Twh_LoopTubeSystem(Wcs_InstanceBase):
 
     def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue) -> None:
         '''
@@ -24,7 +24,7 @@ class Twh_LoopTubeSystem(Wcs_SystemBase):
 
 
     def __Do_deposit_begin(self, new_deposit_request):
-        Logger.Info(twh_factories[self._wcs_unit_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
+        Logger.Info(twh_factories[self._wcs_instance_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
         Logger.Print("new_deposit_request", new_deposit_request)
         # the loop-porter will move to col-position
         row_id = new_deposit_request['row']

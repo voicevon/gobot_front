@@ -1,14 +1,14 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
 from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
-from twh_wcs.von.wcs.conveyor.tube_conveyor import TubeConveyor
+from twh_wcs.von.wcs.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.order_item import Wcs_OrderItemBase
 
 from von.logger import Logger
 
 class Twh_OrderItem(Wcs_OrderItemBase):
 
-    def __init__(self, db_doc_id:int, porter: Twh_LoopPorter) -> None:
+    def __init__(self, db_doc_id:int, porter:Twh_LoopPorter, pick_placer:Manual_PickPlacer) -> None:
         super().__init__(db_doc_id)
         # self.doc_id = db_doc_id
         self.DentalLocation = 'ur1'
@@ -16,7 +16,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         self.col:int
         self.layer:int
         self.__linked_loop_porter = porter
-        self.__linked_tube_conveyer:TubeConveyor
+        self.__linked_pick_placer = pick_placer
         self.__got_start_command = False
 
     def TransferToLocated(self, new_located:str, write_to_db:bool) -> None:
@@ -53,8 +53,9 @@ class Twh_OrderItem(Wcs_OrderItemBase):
             if self.__linked_loop_porter.GetState() == 'ready':
                 self._state = 'loop_porter_gate'
 
+
         if self._state == 'loop_porter_gate':
-            self.__linked_loop_porter.PickPlace(self.layer)
+            self .PickPlace(self.layer)
             self._state = 'loop_porter_gate_picking'
 
         if self._state == 'loop_porter_gate_picking':

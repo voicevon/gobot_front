@@ -9,7 +9,7 @@ from von.mqtt.mqtt_agent import g_mqtt
 from von.logger import Logger
 
 
-class Wcs_SystemBase(ABC):
+class Wcs_InstanceBase(ABC):
 
     def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue, withdraw_order_manager: Wcs_OrderMangerBase) -> None:
         self._wcs_instance_id = wcs_instance_id

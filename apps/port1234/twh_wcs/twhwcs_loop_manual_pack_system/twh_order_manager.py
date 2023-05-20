@@ -13,25 +13,17 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
     # def __init__(self, twh_id:str, packer:TwhRobot_Packer, shipper:TwhRobot_Shipper) -> None:
     def __init__(self, wcs_instance_id:str) -> None:
         super().__init__(wcs_instance_id)
-        ''' In WCS, An order's life time:
-        * Created by: UI, or WMS
-        * Main processes are:  porting, picking, packing, shipping.
-        * Ended when shipped.
-        Note:
-        * An order item,  it might stored in different location, saying:  be served by different porter.
-        '''
-        self.__all_twh_orders = list[Twh_Order]()
+        # self.__all_twh_orders = list[Twh_Order]()
           
-        ''' life time: created by UI, or WMS,  ended when the order is shipped.'''
 
-    def FindWithdrawOrder(self, order_id:str) -> Twh_Order:
-        for order_task in self.__all_twh_orders:
-            if order_task.order_id == order_id:
-                return order_task
-        return None # type: ignore
+    # def FindWithdrawOrder(self, order_id:str) -> Twh_Order:
+    #     for order in self._withdraw_orders:
+    #         if order.order_id == order_id:
+    #             return order
+    #     return None # type: ignore
     
-    def GetWithdrawOrdersCount(self) -> int:
-        return len(self.__all_twh_orders)
+    # def GetWithdrawOrdersCount(self) -> int:
+    #     return len(self._withdraw_orders)
     
     # def FindTooth_is_in_porter_from_all_orders(self, porter_id:int) -> tuple[Twh_Order, Twh_OrderItem ]:
     #     '''
@@ -66,7 +58,7 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
                 if the_order is None:
                     new_order = Twh_Order(self._wcs_instance_id, db_tooth['order_id'])
                     # self.AddOrderTask(new_order)
-                    self.__all_twh_orders.append(new_order)
+                    self._withdraw_orders.append(new_order)
                     the_order = new_order
                     if not printed_logger_title:
                         Logger.Debug('WithdrawOrderManager::__renew_orders_from_database() First')
@@ -79,7 +71,8 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
                 order_tooth = the_order.FindItem_from_doc_id(db_tooth.doc_id)
                 if order_tooth is None:
                     loop_porter = g_workers[self._wcs_instance_id].loop_porters[db_tooth['row']]
-                    new_tooth = Twh_OrderItem(db_tooth.doc_id, loop_porter)
+                    picker = g_workers[self._wcs_instance_id].pick_placers[0]
+                    new_tooth = Twh_OrderItem(db_tooth.doc_id, loop_porter, picker)
                     new_tooth.DentalLocation = db_tooth['location']
                     new_tooth.row = db_tooth['row']
                     new_tooth.col = db_tooth['col']
@@ -103,10 +96,10 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
         '''
         self._renew_orders_from_database()
         
-        for order in self.__all_twh_orders:
+        for order in self._withdraw_orders:
             is_shipped =  order.SpinOnce()
             if is_shipped:
                 Logger.Info( twh_factories[self._wcs_instance_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
-                self.__all_twh_orders.remove(order)
+                self._withdraw_orders.remove(order)
                 return
 

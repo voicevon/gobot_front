@@ -9,7 +9,7 @@ from twh_wcs.twhwcs_common.twh_robot_loop_porter import Twh_LoopPorter
 from twh_database.bolt_nut import twh_factories
 
 from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
-from twh_wcs.von.wcs.wcs_system_base import Wcs_SystemBase
+from twh_wcs.von.wcs.wcs_instance_base import Wcs_InstanceBase
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
 
@@ -18,7 +18,7 @@ import multiprocessing
 # import time
 
 
-class TwhWcs_LoopManualPacker(Wcs_SystemBase):
+class TwhWcs_LoopManualPacker(Wcs_InstanceBase):
 
     def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue) -> None:
         self.__button_pick = RemoteVar_mqtt('twh/' + wcs_instance_id + '/packer/button/pick','idle')

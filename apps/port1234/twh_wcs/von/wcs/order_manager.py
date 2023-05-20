@@ -6,9 +6,15 @@ from abc import ABC, abstractmethod
 
 class Wcs_OrderMangerBase(ABC):
 
-    # def __init__(self, wcs_unit_id:str, packer:Wcs_PackerBase, shipper:Wcs_ShipperBase) -> None:
-    # def __init__(self, wcs_unit_id:str, order_id:int) -> None:
     def __init__(self, _wcs_instance_id:str) -> None:
+        ''' In WCS, An order's life time:
+        * Created by: UI, or WMS
+        * Main processes are:  porting, picking, packing, shipping.
+        * Ended when shipped.
+        Note:
+        * An order item,  it might stored in different location, saying:  be served by different porter.
+        '''
+
         self._wcs_instance_id = _wcs_instance_id
         # self.order_id = order_id
         # self._all_order_items = list[Wcs_OrderItemBase]()

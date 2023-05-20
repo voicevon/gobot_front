@@ -18,7 +18,7 @@ class Twh_LoopPorter(LoopPorter):
     def _MoveTo(self, target_col:int, target_layer:int) -> None:
         self._state.set('moving')    # set to 'moving' when gcode-G1 is sent. ??
         self.__target_layer = target_layer
-        Logger.Info(twh_factories[self.wcs_unit_id]['name']  + ' -- Twh_LoopPorter::MoveTo()')
+        Logger.Info(twh_factories[self.Owner_id]['name']  + ' -- Twh_LoopPorter::MoveTo()')
         print(  '(row, col, layer) = ' ,self.id, target_col, target_layer )
         
         mcode ='M42P99S1'  # turn off all green leds
@@ -70,6 +70,7 @@ class Twh_LoopPorter(LoopPorter):
         mcode ='M999'
         self._gcode_sender.append_gmcode_to_queue(mcode)  
 
-
+    def SpinOnce(self):
+        pass
 
 # twh_loop_porters = list[Twh_LoopPorter]()
