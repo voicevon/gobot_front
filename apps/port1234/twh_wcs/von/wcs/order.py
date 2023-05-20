@@ -3,8 +3,6 @@ from twh_wcs.von.wcs.order_item import Wcs_OrderItemBase
 from von.logger import Logger
 from abc import ABC, abstractmethod
 
-
-    
     
 class Wcs_OrderBase(ABC):
 
@@ -33,28 +31,27 @@ class Wcs_OrderBase(ABC):
                 return item 
         return None # type: ignore
     
-    def HasItem(self, item:Wcs_OrderItemBase) -> bool:
-        for i in self._all_order_items:
-            if item == i:
-                return True
-        return False
-
+    # def HasItem(self, item:Wcs_OrderItemBase) -> bool:
+    #     for i in self._all_order_items:
+    #         if item == i:
+    #             return True
+    #     return False
+    
+    def _get_all_teeth_doc_ids(self):
+        doc_ids = []
+        for tooth in self._all_order_items:
+            doc_ids.append(tooth.doc_id)
+        return doc_ids
+    
     def _all_items_is_in_state(self, the_state:str) -> bool:
         for i in self._all_order_items:
             if i.GetState() != the_state:
                 return False
         return True
-    
-    def IsFullFilled(self) -> bool:
-        return False
-        # for t in self._all_order_items:
-        #     if t.GetLocated() != 'packer':
-        #         return False
-        # return True
 
     def SpinOnce(self):
         for item in self._all_order_items:
-            Logger.Print("item---id", item.doc_id)
+            # Logger.Print("item---id", item.doc_id)
             item.SpinOnce()
         self._SpinOnce()
 

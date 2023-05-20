@@ -6,9 +6,9 @@ state order_item{
 	[*] --> inside_loop_porter
 	inside_loop_porter <-- inside_loop_porter:  P1: no loop_porters is idle
 	inside_loop_porter --> loop_porter_moving: P2b
-    loop_porter_moving --> loop_porter_gate: loop_porter.is_ready()
+    loop_porter_moving ---> loop_porter_gate: loop_porter.is_ready()
 	loop_porter_gate --> manual_picking_placing
-    manual_picking_placing --> loop_porter_done: (green) pick_placed_button is pressed
+    manual_picking_placing ----> loop_porter_done: (green) pick_placed_button is pressed
 }
 
 state order{
@@ -27,20 +27,21 @@ state loop_porter {
 	loop_moving <-- loop_moving
 	loop_moving --> loop_ready
 }
-loop_idle -[dashed]-> inside_loop_porter
+loop_idle -[dashed]---> inside_loop_porter
 inside_loop_porter --> loop_moving: P2a: loop_porter.MoveTo()
 loop_ready -[dashed]-> loop_porter_moving
 
 
 state manual_picker{
 	[*] --> packer_idle
-	packer_idle --> picking_placing: trun on green_led
+	packer_idle --> picking_placing
 	picking_placing --> picked_placed: green_button is pressed
 	
 }
 packer_idle -[dashed]-> loop_porter_gate
-loop_porter_gate --> picking_placing
+loop_porter_gate --> picking_placing: trun on green_led pair
 picked_placed -[dashed]-> manual_picking_placing
+loop_porter_done --> packer_idle
 
 
 state wcs_state{

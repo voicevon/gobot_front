@@ -11,6 +11,14 @@ from von.logger import Logger
 
 class WarehouseBase(ABC):
 
+    @abstractmethod
+    def _start_deposit(self, new_deposit_request):
+        pass
+ 
+    @abstractmethod
+    def _end_deposit(self):
+        pass
+
     def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue, withdraw_order_manager: Wcs_OrderMangerBase) -> None:
         self._warehouse_id = wcs_instance_id
         self._wcs_state = 'idle'  
@@ -27,11 +35,13 @@ class WarehouseBase(ABC):
         # Logger.Print("my twh_id", self._wcs_unit_id)
         if self._wcs_state == 'idle':
             if self.__deposit_queue.qsize() > 0:
+                self._start_deposit(self.__deposit_queue.get())
                 self._wcs_state = 'deposit_begin'
             else:
                 self._wcs_state = 'withdraw_dispaching'
         if self._wcs_state == 'deposite_begin':
             if self.__deposit_queue.qsize() == 0:
+                self._end_deposit()
                 self._wcs_state = 'idle'
         if self._wcs_state == 'withdraw_dispaching':
             # self.__withdraw_order_manager.SpinOnce()
@@ -52,4 +62,3 @@ class WarehouseBase(ABC):
     #             return False
     #     return True
 
- 

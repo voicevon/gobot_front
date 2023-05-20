@@ -8,9 +8,10 @@ class Manual_PickPlacer(Wsc_PickPlacerBase):
 
     def Start(self, pick_at, place_at):
         # turn on led pair 
-        pass
+        self._state = 'picking_placing'
 
     def SpinOnce(self):
         mqtt_payload, has_been_updated =  self.__button_placed.get()
-        self._state =  mqtt_payload
+        if mqtt_payload == 'ON':
+            self._state =  'picked_placed'
 

@@ -34,8 +34,8 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         Logger.Print('layer', self.layer)
 
     def SpinOnce(self):
-        Logger.Debug('loop_manual system:: order_item:: SpinOnce()')
-        Logger.Print('state', self._state)
+        Logger.Debug('loop_manual warehouse:: order_item:: SpinOnce()')
+        # Logger.Print('state', self._state)
         if self._state == 'idle':
             self._state = 'inside_loop_porter'
 
@@ -60,7 +60,11 @@ class Twh_OrderItem(Wcs_OrderItemBase):
 
 
         if self._state == 'loop_porter_gate':
-            self.__linked_pick_placer.Start(self.layer)
+            pick_row = 1
+            pick_layer = 2
+            place_cell = 3
+            pick_at = (pick_row, pick_layer)
+            self.__linked_pick_placer.Start(pick_at, place_cell)
             self._state = 'loop_porter_gate_picking'
 
         if self._state == 'loop_porter_gate_picking':
@@ -70,15 +74,5 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         if self._state == 'loop_porter_done':
             # Q: Need to wait tube conveyer be idle ?
             # A: Don't know now.
-            if self.__linked_tube_conveyer.GetState() == 'idle':
-                self.__linked_loop_porter.SetStateTo('idle')
-                self.__linked_tube_conveyer.SetValve()
-                self._state = 'tube_moving'
+            pass
 
-        if self._state == 'tube_moving':
-            self._state = 'tube_outlet'
-
-        if self._state == 'tube_outlet':
-            if self.__linked_tube_conveyer.got_outlet():
-                self.__linked_tube_conveyer.SetStateTo('idle')
-                self._state = 'workstation'

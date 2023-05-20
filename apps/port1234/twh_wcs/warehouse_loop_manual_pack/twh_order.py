@@ -45,11 +45,7 @@ class Twh_Order(Wcs_OrderBase):
     #             return True
     #     return False
     
-    def __get_all_teeth_doc_ids(self):
-        doc_ids = []
-        for tooth in self._all_order_items:
-            doc_ids.append(tooth.doc_id)
-        return doc_ids
+
     
     def SetStateTo(self, new_state:str, write_to_db:bool):
         '''
@@ -60,9 +56,9 @@ class Twh_Order(Wcs_OrderBase):
         * 'wcs_shipping'
         * 'shipped'
         '''
-        self.__state = new_state
+        self._state = new_state
         if write_to_db:
-                doc_ids = self.__get_all_teeth_doc_ids()
+                doc_ids = self._get_all_teeth_doc_ids()
                 DB_WithdrawOrder.update_order_state(new_state, doc_ids)
 
     # remove this from order. should be a method of order_scheduler.  right?
@@ -95,20 +91,21 @@ class Twh_Order(Wcs_OrderBase):
             * True: I am complete shipped out, and has been deleted from database.
             * False: I am not shipped.
         '''
-        Logger.Debug("ppppppppppppppppppppppppppppppppppppppppppppppppppppp")
-        if self.__state == 'idle':
-            if not self._all_items_in_state('idle'):
+        if self._state == 'idle':
+            if not self._all_items_is_in_state('idle'):
                 self._state = 'feeding'
             return False
-        if self.__state == 'feeding':
-            if self.IsFullFilled():
-                doc_ids = self.__get_all_teeth_doc_ids()
+        
+        if self._state == 'feeding':
+            if self._all_items_is_in_state('loop_porter_done'):
+                doc_ids = self._get_all_teeth_doc_ids()
                 DB_WithdrawOrder.update_order_state('fullfilled', doc_ids)
                 return False
-        if self.__state == 'fullfilled':
+            
+        if self._state == 'fullfilled':
             return False
         
-        if self.__state == 'wms_shipping':
+        if self._state == 'wms_shipping':
             # if self.__twh_shipper.IsShipping():
             if twh_shippers[0].IsShipping():
                 return False
@@ -121,7 +118,7 @@ class Twh_Order(Wcs_OrderBase):
             DB_WithdrawOrder.update_order_state('wcs_shipping', doc_ids)
             return False
 
-        if self.__state == 'wcs_shipping':
+        if self._state == 'wcs_shipping':
             # if self.__twh_shipper.Get_Shipout_button_value()=='ON':
             if twh_shippers[0].Get_Shipout_button_value()=='ON':
                 # self.__twh_shipper.EndShipping()
