@@ -6,7 +6,8 @@ class Manual_PickPlacer(Wsc_PickPlacerBase):
         super().__init__()
         self.__button_placed = RemoteVar_mqtt(mqtt_topic_of_placed_button, 'OFF')
 
-    def Start(self):
+    def Start(self, pick_at, place_at):
+        # turn on led pair 
         pass
 
     def SpinOnce(self):

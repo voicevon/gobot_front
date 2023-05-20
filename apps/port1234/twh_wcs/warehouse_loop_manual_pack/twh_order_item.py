@@ -34,7 +34,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         Logger.Print('layer', self.layer)
 
     def SpinOnce(self):
-        Logger.Debug('loop_tube system:: order_item:: _SpinOnce()')
+        Logger.Debug('loop_manual system:: order_item:: SpinOnce()')
         Logger.Print('state', self._state)
         if self._state == 'idle':
             self._state = 'inside_loop_porter'
@@ -46,8 +46,13 @@ class Twh_OrderItem(Wcs_OrderItemBase):
                 # if loop_porter is not None:
                 #     loop_porter.MoveToGate()
                 if self.__linked_loop_porter.GetState() == 'idle':
+                    # P2a: start loop_porter
                     self.__linked_loop_porter.CarryToGate(self.col, self.layer)
+                    # P2b: update my state
                     self._state = 'inside_loop_porter_moving'
+                    # P2c: update parent state
+                    # Q: How to inform parent?
+                    # A: Parent will query my state.
 
         if self._state == 'inside_loop_porter_moving':
             if self.__linked_loop_porter.GetState() == 'ready':
@@ -55,7 +60,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
 
 
         if self._state == 'loop_porter_gate':
-            self .PickPlace(self.layer)
+            self.__linked_pick_placer.Start(self.layer)
             self._state = 'loop_porter_gate_picking'
 
         if self._state == 'loop_porter_gate_picking':

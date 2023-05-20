@@ -21,7 +21,7 @@ class Wcs_OrderMangerBase(ABC):
         # self.__state = 'idle'
         self._withdraw_orders = list[Wcs_OrderBase]() 
 
-    def FindWithdrawOrder(self, order_id:str) -> Wcs_OrderBase:
+    def _find_this_order_by_id(self, order_id:str) -> Wcs_OrderBase:
         for order in self._withdraw_orders:
             if order.order_id == order_id:
                 return order
@@ -39,19 +39,36 @@ class Wcs_OrderMangerBase(ABC):
     #             return False
     #     return True
     
+    # def SpinOnce(self):
+    #     '''
+    #     return:
+    #         -1   no released packer_cell
+    #         0:11 packer_cell_id,  which has benn shipped out. should be released.
+    #     '''
+    #     # Logger.Debug('loop_tube wcs_system::  Twh_OrderHelper::SpinOnce()  my wcs_unit_id  = ' + self.wcs_unit_id)
+    #     self._renew_orders_from_database()
+        
+    #     for order in self._withdraw_orders:
+    #         is_shipped =  order.SpinOnce()
+    #         if is_shipped:
+    #             # Logger.Info(twh_factories[self.wcs_unit_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
+    #             Logger.Info(self._warehouse_id +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
+    #             self._withdraw_orders.remove(order)
+    #             return
+            
     def SpinOnce(self):
         '''
         return:
             -1   no released packer_cell
             0:11 packer_cell_id,  which has benn shipped out. should be released.
         '''
-        # Logger.Debug('loop_tube wcs_system::  Twh_OrderHelper::SpinOnce()  my wcs_unit_id  = ' + self.wcs_unit_id)
         self._renew_orders_from_database()
         
+        # Logger.Debug('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         for order in self._withdraw_orders:
+            # Logger.Print('order---id ', order.order_id)
             is_shipped =  order.SpinOnce()
             if is_shipped:
-                # Logger.Info(twh_factories[self.wcs_unit_id]['name'] +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 Logger.Info(self._warehouse_id +  ' -- WithdrawOrderManager:: SpinOnce().  Order is shipped')
                 self._withdraw_orders.remove(order)
                 return

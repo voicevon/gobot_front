@@ -12,7 +12,7 @@ class ZPQ_PickPlacer(Wsc_PickPlacerBase):
     def start_pick_placing(self):
         pass
     
-    def Start(self):
+    def Start(self, pick_at, place_at):
         gcode = "app:pick"
         self.__gcode_sender.append_gmcode_to_queue(gcode)
         self._state ='picking'

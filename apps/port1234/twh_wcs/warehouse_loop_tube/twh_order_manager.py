@@ -64,7 +64,7 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
         DB_WithdrawOrder.table_withdraw_order.clear_cache()
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         for db_tooth in db_order_teeth:
-            the_order = self.FindWithdrawOrder(db_tooth['order_id'])
+            the_order = self._find_this_order_by_id(db_tooth['order_id'])
             if db_tooth['twh_id'] == self._warehouse_id:   # TODO:  move into db_order_teeth  searching.
                 if the_order is None:
                     new_order = Twh_Order(self._warehouse_id, db_tooth['order_id'])

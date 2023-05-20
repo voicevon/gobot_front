@@ -87,14 +87,18 @@ class Twh_Order(Wcs_OrderBase):
             
     #     return True
 
-    def SpinOnce(self) -> bool:
+
+    
+    def _SpinOnce(self) -> bool:
         '''
         return:
             * True: I am complete shipped out, and has been deleted from database.
             * False: I am not shipped.
         '''
-
+        Logger.Debug("ppppppppppppppppppppppppppppppppppppppppppppppppppppp")
         if self.__state == 'idle':
+            if not self._all_items_in_state('idle'):
+                self._state = 'feeding'
             return False
         if self.__state == 'feeding':
             if self.IsFullFilled():

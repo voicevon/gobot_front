@@ -4,6 +4,11 @@ from abc import ABC, abstractmethod
 class Wsc_PickPlacerBase(ABC):
     def __init__(self) -> None:
         self._state = 'idle'
+        '''
+        * 'idle'
+        * 'picking_placing'
+        * 'picked_placed'
+        '''
 
     def GetState(self) -> str:
         return self._state
@@ -13,7 +18,7 @@ class Wsc_PickPlacerBase(ABC):
         pass
 
     @abstractmethod
-    def Start(self):
+    def Start(self, pick_at, place_at):
         pass
 
 

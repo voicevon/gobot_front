@@ -12,22 +12,36 @@ state order_item{
 }
 
 state order{
-	[*] --> order_feeding
+	[*] --> order_idle
+	order_idle --> order_feeding
 	order_feeding --> order_fullfilled:  all_items.states == loop_porter_done
 	order_fullfilled --> order_packed: (yellow) packed_button is pressed
 	order_packed -->shipped:  (blue) shipped_button is pressed
 
 }
+inside_loop_porter -[dashed]->  order_idle: P2c
 
-inside_loop_porter -->  order_feeding: P2c
 state loop_porter {
 	[*] --> loop_idle 
 	loop_idle --> loop_moving
 	loop_moving <-- loop_moving
 	loop_moving --> loop_ready
 }
+loop_idle -[dashed]-> inside_loop_porter
 inside_loop_porter --> loop_moving: P2a: loop_porter.MoveTo()
 loop_ready -[dashed]-> loop_porter_moving
+
+
+state manual_picker{
+	[*] --> packer_idle
+	packer_idle --> picking_placing: trun on green_led
+	picking_placing --> picked_placed: green_button is pressed
+	
+}
+packer_idle -[dashed]-> loop_porter_gate
+loop_porter_gate --> picking_placing
+picked_placed -[dashed]-> manual_picking_placing
+
 
 state wcs_state{
 	[*] -> wcs_idle

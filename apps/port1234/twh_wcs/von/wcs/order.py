@@ -1,11 +1,13 @@
 from twh_wcs.von.wcs.order_item import Wcs_OrderItemBase
 
+from von.logger import Logger
 from abc import ABC, abstractmethod
 
 
     
     
-class Wcs_OrderBase:
+class Wcs_OrderBase(ABC):
+
     def __init__(self, wcs_unit_id:str, order_id:int) -> None:
         self.wcs_unit_id = wcs_unit_id
         self.order_id = order_id
@@ -36,6 +38,12 @@ class Wcs_OrderBase:
             if item == i:
                 return True
         return False
+
+    def _all_items_is_in_state(self, the_state:str) -> bool:
+        for i in self._all_order_items:
+            if i.GetState() != the_state:
+                return False
+        return True
     
     def IsFullFilled(self) -> bool:
         return False
@@ -46,6 +54,7 @@ class Wcs_OrderBase:
 
     def SpinOnce(self):
         for item in self._all_order_items:
+            Logger.Print("item---id", item.doc_id)
             item.SpinOnce()
         self._SpinOnce()
 

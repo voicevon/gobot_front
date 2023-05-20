@@ -7,7 +7,8 @@ class Wcs_OrderItemBase(ABC):
         # self.__located = 'unknown'
         self._state = 'idle'
 
-
+    def GetState(self) ->str:
+        return self._state
     # def GetLocated(self) -> str:
     #     '''
     #     'porter', 'worker_hand','packer_cell'
