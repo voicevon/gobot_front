@@ -1,10 +1,7 @@
-# from twh_wcs.twhwcs_loop_manual_pack_system.twhwcs_loop_manual_packer import TwhWcs_LoopManualPacker
-# from twh_wcs.twhwcs_loop_tube_system.twhwcs_loop_tube import Twh_LoopTubeSystem
 from twh_database.bolt_nut import twh_factories
 
-from twh_wcs.wcs_workers import Create_WcsWorkers
-from twh_wcs.wcs_leaders import Create_Warehouse, g_warehouses
-# from twh_wcs.von.wcs.warehouse_base import WarehouseBase
+from twh_wcs.wcs_workers_factory import WorkerFactory
+from twh_wcs.wcs_warehouse_factory import WarehouseFactory, g_warehouses
 
 from twh_wcs.von.wcs.gcode_sender import g_gcode_senders
 from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
@@ -19,8 +16,8 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
         
         # Create all instance and save it in g_wcss
         for wcs_instance_id in list(twh_factories.keys()):
-            Create_WcsWorkers(wcs_instance_id)
-            Create_Warehouse(wcs_instance_id, deposit_queue)
+            WorkerFactory.Create_WcsWorkers(wcs_instance_id)
+            WarehouseFactory.Create_Warehouse(wcs_instance_id, deposit_queue)
             Logger.Info("Twh_Wcs_Main()   Created wcs_unit----->"  + wcs_instance_id)
 
         while True:
