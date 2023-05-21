@@ -1,5 +1,6 @@
 from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
-from twh_wcs.twh_robot.twh_thames_bridge_packer import Twh_ThamesBridge_Packer
+# from twh_wcs.twh_robot.twh_thames_bridge_packer import Twh_ThamesBridge_Packer
+from twh_wcs.von.wcs.packer.simple_packer import SimplePacker
 
 from twh_wcs.von.wcs.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
@@ -55,7 +56,7 @@ class WorkersFactory:
             
             wcs_workers.pick_placers.append(new_picker)
             for i in range(12):
-                new_packer = Twh_ThamesBridge_Packer()
+                new_packer = SimplePacker(i)
                 WcsWorkers.packers.append(new_packer)
 
             new_shipper = Manual_Shipper("twh/" + warehouse_id + 'shipper/button')

@@ -1,7 +1,9 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
 from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
-from twh_wcs.twh_robot.twh_thames_bridge_packer import Twh_ThamesBridge_Packer
+# from twh_wcs.twh_robot.twh_thames_bridge_packer import Twh_ThamesBridge_Packer
+
+from twh_wcs.von.wcs.packer.simple_packer import SimplePacker
 from twh_wcs.von.wcs.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.packer.packer import Wcs_PackerBase
 from twh_wcs.von.wcs.order_item import Wcs_OrderItemBase
@@ -12,7 +14,7 @@ from von.logger import Logger
 
 class Twh_OrderItem(Wcs_OrderItemBase):
 
-    def __init__(self, warehouse_id:str, db_doc_id:int, porter:Twh_LoopPorter, pick_placer:Manual_PickPlacer, packer:Twh_ThamesBridge_Packer) -> None:
+    def __init__(self, warehouse_id:str, db_doc_id:int, porter:Twh_LoopPorter, pick_placer:Manual_PickPlacer, packer:SimplePacker) -> None:
         super().__init__(warehouse_id, db_doc_id)
         # self.doc_id = db_doc_id
         self.DentalLocation = 'ur1'
@@ -73,7 +75,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
                 #   order led on packer ? 
                 place_cell = 3
                 self.__linked_loop_porter.TurnOn_ItemPickingLed(self.layer)
-                self.__linked_packer.TurnOn_PlacingLed(place_cell)
+                self.__linked_packer.TurnOn_BeingAssigned_Led(place_cell)
                 pick_at = (self.row, self.layer)
                 self.__linked_pick_placer.Start(pick_at, place_cell)
                 self._state = 'picking_placing'

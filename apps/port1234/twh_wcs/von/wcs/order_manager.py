@@ -64,7 +64,6 @@ class Wcs_OrderMangerBase(ABC):
         '''
         self._renew_orders_from_database()
         
-        # Logger.Debug('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         for order in self._withdraw_orders:
             # Logger.Print('order---id ', order.order_id)
             order.SpinOnce()

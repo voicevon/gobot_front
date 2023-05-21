@@ -17,11 +17,6 @@ class Twh_ThamesBridge_Packer(Wcs_PackerBase):
     def TurnOn_PlacingLed(self, index: int):
         self.__turn_on_packer_cell_led('green', index)
 
-
-
-
-
-
     def StartShipping(self, packer_cell_id:int):
         self.__turn_on_packer_cell_led('blue',packer_cell_id)
 

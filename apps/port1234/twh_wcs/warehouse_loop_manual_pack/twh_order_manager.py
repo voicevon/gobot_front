@@ -1,7 +1,5 @@
 from twh_wcs.warehouse_loop_manual_pack.twh_order import Twh_Order
-from twh_wcs.warehouse_loop_manual_pack.twh_order_item import Twh_OrderItem
 from twh_database.db_withdraw_order import DB_WithdrawOrder
-from twh_database.bolt_nut import twh_factories
 
 from twh_wcs.wcs_workers_factory import g_workers, WorkersFactory
 from twh_wcs.von.wcs.order_manager import Wcs_OrderMangerBase

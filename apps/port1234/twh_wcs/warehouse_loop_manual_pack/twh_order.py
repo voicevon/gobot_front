@@ -2,7 +2,8 @@ from twh_database.db_withdraw_order import DB_WithdrawOrder
 from twh_wcs.warehouse_loop_manual_pack.twh_order_item import Twh_OrderItem
 
 # from twh_wcs.von.wcs.packer.packer import Wcs_PackerBase
-from twh_wcs.twh_robot.twh_thames_bridge_packer import Twh_ThamesBridge_Packer
+# from twh_wcs.twh_robot.twh_thames_bridge_packer import Twh_ThamesBridge_Packer
+from twh_wcs.von.wcs.packer.simple_packer import SimplePacker
 from twh_wcs.von.wcs.order import Wcs_OrderBase
 from twh_wcs.wcs_workers_factory import g_workers, WorkersFactory
 
@@ -12,7 +13,7 @@ from von.logger import Logger
 class Twh_Order(Wcs_OrderBase):
     def __init__(self, warehouse_id:str, twh_order_id:int) -> None:
         super().__init__(warehouse_id, twh_order_id)
-        self.__linked_packer: Twh_ThamesBridge_Packer
+        self.__linked_packer: SimplePacker
         self.__linked_shipper = g_workers[warehouse_id].shippers[0]
     
     # def SetStateTo(self, new_state:str, write_to_db:bool):
@@ -21,8 +22,8 @@ class Twh_Order(Wcs_OrderBase):
         #         doc_ids = self._get_all_teeth_doc_ids()
         #         DB_WithdrawOrder.update_order_state(new_state, doc_ids)
 
-    def Get_linked_packer(self) -> Twh_ThamesBridge_Packer:
-        return self.__linked_packer
+    # def Get_linked_packer(self) -> SimplePacker:
+    #     return self.__linked_packer
     
     def UpdateStateToDb(self, new_state:str):
             doc_ids = self._get_all_teeth_doc_ids()
@@ -56,10 +57,9 @@ class Twh_Order(Wcs_OrderBase):
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         for db_tooth in db_order_teeth:
             picker = g_workers[self._warehouse_id].pick_placers[0]
-            packer = self.__linked_packer
             if db_tooth['order_id'] == self._order_id:
                 loop_porter = g_workers[self._warehouse_id].loop_porters[db_tooth['row']]
-                new_tooth = Twh_OrderItem(self._warehouse_id, db_tooth.doc_id, loop_porter, picker, packer)
+                new_tooth = Twh_OrderItem(self._warehouse_id, db_tooth.doc_id, loop_porter, picker, self.__linked_packer)
                 new_tooth.DentalLocation = db_tooth['location']
                 new_tooth.row = db_tooth['row']
                 new_tooth.col = db_tooth['col']
