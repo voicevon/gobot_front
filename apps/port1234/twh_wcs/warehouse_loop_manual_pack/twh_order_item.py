@@ -42,6 +42,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
     def StartWithdraw(self):
         if self._state == 'idle':
             self._state = 'started'
+            # Logger.Debug('Twh_OrderItem::StartWithdraw()' + str(self.doc_id))
         else:
             Logger.Error("OrderItem::StartWithdraw()    I am not on idle, can not start")
 

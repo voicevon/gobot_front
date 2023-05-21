@@ -51,8 +51,6 @@ class WorkersFactory:
             for porter in workers.loop_porters:
                 porter.SpinOnce()
                 
-
-
     @classmethod
     def Create_WcsWorkers(cls, warehouse_id:str) -> WcsWorkers:
         wcs_workers = WcsWorkers()
@@ -63,7 +61,8 @@ class WorkersFactory:
             for i in range(4):
                 first_led = Wcs_IndicatorBase()
                 WcsWorkers.indicators.append(first_led)
-                for i in range(6):
+                for _ in range(6):
+                    # total 7 leds per loop_porter
                     new_led = Wcs_IndicatorBase()
                     WcsWorkers.indicators.append(new_led)
                 new_porter = Twh_LoopPorter(warehouse_id, i, first_led)
@@ -89,7 +88,7 @@ class WorkersFactory:
             for i in range(1):
                 first_led = Wcs_IndicatorBase()
                 WcsWorkers.indicators.append(first_led)
-                for i in range(6):
+                for _ in range(6):
                     new_led = Wcs_IndicatorBase()
                     WcsWorkers.indicators.append(new_led)
                 new_porter = Twh_LoopPorter(warehouse_id, i, first_led)

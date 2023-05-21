@@ -57,7 +57,7 @@ class GcodeSender():
 
 
     def SpinOnce(self):
-        if self.__queue.empty():
+        if self.__queue.qsize() == 0:
             # Logger.Debug('gcode_sender  spin_once()')
             return
 
