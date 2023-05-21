@@ -2,12 +2,20 @@
 
 from twh_wcs.von.wcs.porter.loop_porter import LoopPorter
 from twh_database.bolt_nut import twh_factories
+
+from twh_wcs.von.wcs.indicator.indicator import Wcs_IndicatorBase
 from von.logger import Logger
 
 
 class Twh_LoopPorter(LoopPorter):
 
-    def __init__(self, warehouse_id:str, row_id:int) -> None:
+    # def __init__(self, warehouse_id:str, row_id:int) -> None:
+    def __init__(self, warehouse_id:str, row_id:int, first_led:Wcs_IndicatorBase) -> None:
+        '''
+        Q: Why do we put led here?
+        A: Currently, the led is controlled by Mcode, not mqtt.
+           In future, led will be linked to mqtt, then, we can remove parameter: fisrt_led.
+        '''
         gcode_topic = "twh/" + warehouse_id + '/r' + str(row_id) + "/gcode"  #'twh/221109/r0/gcode'
         self.__state_topic = "twh/" + warehouse_id + '/r' + str(row_id) + "/state"  #'twh/221109/r0/state'
         super().__init__(warehouse_id, row_id, gcode_topic, self.__state_topic)

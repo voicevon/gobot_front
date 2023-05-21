@@ -10,8 +10,13 @@ from twh_wcs.von.wcs.porter.loop_porter import LoopPorter
 from twh_wcs.von.wcs.pick_placer.pick_placer import Wsc_PickPlacerBase
 from twh_wcs.von.wcs.packer.packer import Wcs_PackerBase
 from twh_wcs.von.wcs.shipper.shipper import Wcs_ShipperBase
+from twh_wcs.von.wcs.button.button import Wcs_ButtonBase
+from twh_wcs.von.wcs.indicator.indicator import Wcs_IndicatorBase
+from twh_wcs.von.wcs.actuator.actuator import Wcs_3wayValve, Wcs_ActuatorBase
 
 from von.logger import Logger
+
+
 
 class WcsWorkers:
     # software: WarehouseBase
@@ -21,6 +26,10 @@ class WcsWorkers:
     pick_placers = list[Wsc_PickPlacerBase]()
     packers = list[Wcs_PackerBase]()
     shippers = list[Wcs_ShipperBase]()
+
+    indicators = list[Wcs_IndicatorBase]()
+    buttons = list[Wcs_ButtonBase]()
+    actuators = list[Wcs_ActuatorBase]()
 
 g_workers = dict[str, WcsWorkers]()
 
@@ -48,8 +57,14 @@ class WorkersFactory:
 
         if warehouse_id == '221109':
             wcs_workers.warehouse_name = '某某义齿加工厂'
+
             for i in range(4):
-                new_porter = Twh_LoopPorter(warehouse_id, i)
+                first_led = Wcs_IndicatorBase()
+                WcsWorkers.indicators.append(first_led)
+                for i in range(6):
+                    new_led = Wcs_IndicatorBase()
+                    WcsWorkers.indicators.append(new_led)
+                new_porter = Twh_LoopPorter(warehouse_id, i, first_led)
                 wcs_workers.loop_porters.append(new_porter)
             
             new_picker = Manual_PickPlacer("twh/" + warehouse_id + 'picker')
@@ -68,9 +83,16 @@ class WorkersFactory:
         elif warehouse_id == '230220':
             g_workers[warehouse_id] = wcs_workers
             wcs_workers.warehouse_name = '山东雅乐福义齿加工厂'
+            
             for i in range(1):
-                new_porter = Twh_LoopPorter(warehouse_id, i)
+                first_led = Wcs_IndicatorBase()
+                WcsWorkers.indicators.append(first_led)
+                for i in range(6):
+                    new_led = Wcs_IndicatorBase()
+                    WcsWorkers.indicators.append(new_led)
+                new_porter = Twh_LoopPorter(warehouse_id, i, first_led)
                 wcs_workers.loop_porters.append(new_porter)
+
             for i in range(1):
                 new_tube_conveyor = TubeConveyor(warehouse_id, 0 ,'','')
                 wcs_workers.tube_conveyors.append(new_tube_conveyor)

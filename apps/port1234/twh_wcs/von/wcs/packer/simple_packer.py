@@ -26,7 +26,7 @@ class SimplePacker(Wcs_PackerBase):
         '''
         Place order_item to here.
         '''
-        pass
+        self.__turn_on_packer_cell_led('green', index)
 
     def TurnOn_Fullfilled_Led(self, index:int):
         '''
