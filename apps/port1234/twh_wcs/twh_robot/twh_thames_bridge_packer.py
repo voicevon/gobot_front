@@ -4,11 +4,23 @@ from von.logger import Logger
 from von.mqtt.mqtt_agent import g_mqtt
 
 
-class TwhRobot_Packer(Wcs_PackerBase):
+class Twh_ThamesBridge_Packer(Wcs_PackerBase):
     def __init__(self) -> None:
+        super().__init__()
         self.__green_led_index = 13
         self.__blue_led_index = 13
         self.__packer_cells_state = [0,0,0,0, 0,0,0,0, 0,0,0,0]
+
+    def SpinOnce(self):
+        pass
+
+    def TurnOn_PlacingLed(self, index: int):
+        self.__turn_on_packer_cell_led('green', index)
+
+
+
+
+
 
     def StartShipping(self, packer_cell_id:int):
         self.__turn_on_packer_cell_led('blue',packer_cell_id)

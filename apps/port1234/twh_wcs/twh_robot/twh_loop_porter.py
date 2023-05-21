@@ -1,7 +1,5 @@
 
 
-# from twh_wcs.von.wcs.porter.porter import Wcs_PorterBase
-# from twh_wcs.twh_order import Twh_Order, Twh_OrderItem
 from twh_wcs.von.wcs.porter.loop_porter import LoopPorter
 from twh_database.bolt_nut import twh_factories
 from von.logger import Logger
@@ -16,7 +14,6 @@ class Twh_LoopPorter(LoopPorter):
         self.__target_layer:int
 
     def _move_to(self, target_col:int, target_layer:int) -> None:
-        self._state.set('moving')    # set to 'moving' when gcode-G1 is sent. ??
         self.__target_layer = target_layer
         Logger.Info(twh_factories[self.warehouse_id]['name']  + ' -- Twh_LoopPorter::MoveTo()')
         print(  '(row, col, layer) = ' ,self.id, target_col, target_layer )
@@ -56,7 +53,8 @@ class Twh_LoopPorter(LoopPorter):
         mcode ='M999'
         self._gcode_sender.append_gmcode_to_queue(mcode)
 
-    def _show_layer_led(self):
+# def ShowLayerLed(self):
+    def TurnOn_ItemPickingLed(self, layer:int):
         mcode = 'M42P' + str(self.__target_layer) + 'S1'
         self._gcode_sender.append_gmcode_to_queue(mcode)
 

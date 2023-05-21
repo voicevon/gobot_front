@@ -19,8 +19,8 @@ class Wcs_PorterBase(Wcs_WorkerBase):
         '''
         super().__init__(warehouse_id)
         self.id = row_id
-        # self._state = 'idle'
-        self._state = RemoteVar_mqtt(state_topic, 'idle')
+        self._state = 'idle'
+        self.__remote_state = RemoteVar_mqtt(state_topic, 'idle')
 
         self._gcode_sender = GcodeSender(gcode_topic)
         g_gcode_senders.append(self._gcode_sender)
@@ -31,29 +31,39 @@ class Wcs_PorterBase(Wcs_WorkerBase):
     #     else:
     #         Logger.Error("Wcs_PorterBase:: SetStateTo()")
     #         Logger.Print('new_state', new_state)
+
+    def SpinOnce(self):
+        # return super().SpinOnce()
+        if self._state == 'moving':
+            mqtt_payload, has_been_updated =  self.__remote_state.get()
+            self._state = mqtt_payload
             
     
     def GetState(self) -> str:
-        mqtt_payload, has_been_updated =  self._state.get()
-        return mqtt_payload
-        # return self._state
+        # mqtt_payload, has_been_updated =  self.__remote_state.get()
+        # return mqtt_payload
+        return self._state
 
     def ResetStatemachine(self):
-        if self._state.get() == 'ready':
-            self._state.set('idle')
+        if self._state == 'ready':
+            self.__remote_state.set('idle')
+            self._state = 'idle'
         else:
             Logger.Error('LoopPorterBase  ResetState()')
+            Logger.Print("my state", self._state)
     
 
     def Start_CarryToGate(self, bay_carrier_id: int, layer_id: int):
-        if self._state.get() == 'idle':
+        if self._state == 'idle':
             self._move_to(bay_carrier_id, layer_id)
-            self._state.set('moving')
+            self.__remote_state.set('moving')
+            self._state = 'moving'
         else:
             Logger.Error('LoopPorterBase  _MoveTo()')
+            Logger.Print("my state", self._state)
 
     @abstractmethod
-    def _show_layer_led(self):
+    def TurnOn_ItemPickingLed(self, layer:int):
         pass
         
     @abstractmethod

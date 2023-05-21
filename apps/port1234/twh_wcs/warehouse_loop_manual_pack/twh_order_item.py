@@ -1,7 +1,9 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
 from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
+from twh_wcs.twh_robot.twh_thames_bridge_packer import Twh_ThamesBridge_Packer
 from twh_wcs.von.wcs.pick_placer.manual_pick_placer import Manual_PickPlacer
+from twh_wcs.von.wcs.packer.packer import Wcs_PackerBase
 from twh_wcs.von.wcs.order_item import Wcs_OrderItemBase
 
 from twh_wcs.wcs_workers_factory import g_workers
@@ -10,7 +12,7 @@ from von.logger import Logger
 
 class Twh_OrderItem(Wcs_OrderItemBase):
 
-    def __init__(self, warehouse_id:str, db_doc_id:int, porter:Twh_LoopPorter, pick_placer:Manual_PickPlacer) -> None:
+    def __init__(self, warehouse_id:str, db_doc_id:int, porter:Twh_LoopPorter, pick_placer:Manual_PickPlacer, packer:Twh_ThamesBridge_Packer) -> None:
         super().__init__(warehouse_id, db_doc_id)
         # self.doc_id = db_doc_id
         self.DentalLocation = 'ur1'
@@ -19,6 +21,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         self.layer:int
         self.__linked_loop_porter = porter
         self.__linked_pick_placer = pick_placer
+        self.__linked_packer = packer
         # self.__got_start_command = False
 
 
@@ -44,7 +47,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
             Logger.Error("OrderItem::StartWithdraw()    I am not on idle, can not start")
 
     def _run_statemachine(self):
-        Logger.Debug('loop_manual warehouse:: order_item:: SpinOnce()')
+        # Logger.Debug('loop_manual warehouse:: order_item:: SpinOnce()')
         # Logger.Print('state', self._state)
         if self._state == 'idle':
             # deal at StartWithdraw()
@@ -65,11 +68,12 @@ class Twh_OrderItem(Wcs_OrderItemBase):
 
         if self._state == 'on_gate':
             if self.__linked_pick_placer.GetState() == 'idle':
-                # turn on led on looper gate
-                self.__linked_loop_porter._show_layer_led()
-                # turn on led on packer_cell
-                self.l
+                # turn on led-pair 
+                #   item led on looper gate, 
+                #   order led on packer ? 
                 place_cell = 3
+                self.__linked_loop_porter.TurnOn_ItemPickingLed(self.layer)
+                self.__linked_packer.TurnOn_PlacingLed(place_cell)
                 pick_at = (self.row, self.layer)
                 self.__linked_pick_placer.Start(pick_at, place_cell)
                 self._state = 'picking_placing'

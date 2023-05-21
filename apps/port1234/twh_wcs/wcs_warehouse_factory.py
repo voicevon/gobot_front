@@ -11,6 +11,13 @@ import multiprocessing
 g_warehouses = dict[str, WarehouseBase]()
 
 class WarehouseFactory:
+
+    @classmethod
+    def EachWarehouse_SpinOnce(cls):
+        for w in g_warehouses.values():
+            w.SpinOnce()
+        
+
     @classmethod
     def Create_Warehouse(cls, warehouse_id:str, deposit_queue:multiprocessing.Queue) -> WarehouseBase:
 

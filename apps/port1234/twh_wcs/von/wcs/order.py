@@ -7,10 +7,14 @@ from abc import ABC, abstractmethod
 class Wcs_OrderBase(ABC):
 
     def __init__(self, warehouse_id:str, order_id:int) -> None:
-        self.warehouse_id = warehouse_id
-        self.order_id = order_id
+        self._warehouse_id = warehouse_id
+        self._order_id = order_id
         self._all_order_items = list[Wcs_OrderItemBase]()
         self._state = 'idle'
+
+    def GetId(self) -> int:
+        return self._order_id
+    
     def GetState(self) -> str:
         return self._state
     
@@ -44,6 +48,10 @@ class Wcs_OrderBase(ABC):
     @abstractmethod
     def _run_statemachine(self) -> int:
         pass
+    
+    @abstractmethod
+    def _create_order_items(self):
+         pass
 
 
       

@@ -1,6 +1,10 @@
-from von.logger import Logger
+from twh_wcs.von.wcs.worker_base import Wcs_WorkerBase
 
-class Wcs_PackerBase:
+from von.logger import Logger
+from abc import abstractmethod
+
+
+class Wcs_PackerBase(Wcs_WorkerBase):
 
     def __init__(self) -> None:
         self._state = 'idle'
@@ -14,4 +18,9 @@ class Wcs_PackerBase:
         else:
             Logger.Error("Wcs_PackerBase:: SetStateTo()")
             Logger.Print("new_state", new_state)
+
+    @abstractmethod
+    def TurnOn_PlacingLed(self, index:int):
+        pass
+
             

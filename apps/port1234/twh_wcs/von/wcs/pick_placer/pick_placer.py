@@ -1,7 +1,8 @@
 
-from abc import ABC, abstractmethod
+from twh_wcs.von.wcs.worker_base import Wcs_WorkerBase
+from abc import abstractmethod
 
-class Wsc_PickPlacerBase(ABC):
+class Wsc_PickPlacerBase(Wcs_WorkerBase):
     def __init__(self) -> None:
         self._state = 'idle'
         '''
@@ -14,9 +15,6 @@ class Wsc_PickPlacerBase(ABC):
     def GetState(self) -> str:
         return self._state
 
-    @abstractmethod
-    def SpinOnce(self):
-        pass
 
     @abstractmethod
     def Start(self, pick_at, place_at):
