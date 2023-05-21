@@ -3,7 +3,7 @@
 from twh_wcs.von.wcs.porter.loop_porter import LoopPorter
 from twh_database.bolt_nut import twh_factories
 
-from twh_wcs.von.wcs.indicator.indicator import Wcs_IndicatorBase
+from twh_wcs.von.wcs.simple_worker.indicator.indicator import Wcs_IndicatorBase
 from von.logger import Logger
 
 

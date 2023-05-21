@@ -1,7 +1,7 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
 from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
-from twh_wcs.von.wcs.packer.simple_packer import SimplePacker
+from twh_wcs.von.wcs.dock.simple_dock import SimpleDock
 from twh_wcs.von.wcs.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.order_item import Wcs_OrderItemBase
 
@@ -11,7 +11,7 @@ from von.logger import Logger
 
 class Twh_OrderItem(Wcs_OrderItemBase):
 
-    def __init__(self, warehouse_id:str, db_doc_id:int, porter:Twh_LoopPorter, pick_placer:Manual_PickPlacer, packer:SimplePacker) -> None:
+    def __init__(self, warehouse_id:str, db_doc_id:int, porter:Twh_LoopPorter, pick_placer:Manual_PickPlacer, packer:SimpleDock) -> None:
         super().__init__(warehouse_id, db_doc_id)
         # self.doc_id = db_doc_id
         self.DentalLocation = 'ur1'

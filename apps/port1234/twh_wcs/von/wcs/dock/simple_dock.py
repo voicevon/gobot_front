@@ -1,11 +1,11 @@
 
-from twh_wcs.von.wcs.packer.packer import Wcs_PackerBase
+from twh_wcs.von.wcs.dock.dock import Wcs_DockBase
 from von.mqtt.mqtt_agent import g_mqtt
 
 '''
 TODO: a better name
 '''
-class SimplePacker(Wcs_PackerBase):
+class SimpleDock(Wcs_DockBase):
 
     def __init__(self, index:int) -> None:
         super().__init__(index)
