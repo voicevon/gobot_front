@@ -4,7 +4,7 @@ from von.logger import Logger
 from abc import abstractmethod
 
 
-class Wcs_DockBase(Wcs_WorkerBase):
+class Wcs_DeckBase(Wcs_WorkerBase):
 
     def __init__(self, index:int) -> None:
         self._index = index

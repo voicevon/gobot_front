@@ -3,7 +3,7 @@ from twh_wcs.warehouse_loop_manual_pack.twh_order_item import Twh_OrderItem
 
 # from twh_wcs.von.wcs.packer.packer import Wcs_PackerBase
 # from twh_wcs.twh_robot.twh_thames_bridge_packer import Twh_ThamesBridge_Packer
-from twh_wcs.von.wcs.dock.simple_dock import SimpleDock
+from twh_wcs.von.wcs.deck.simple_deck import SimpleDeck
 from twh_wcs.von.wcs.order import Wcs_OrderBase
 from twh_wcs.wcs_workers_factory import g_workers, WorkersFactory
 
@@ -13,7 +13,7 @@ from von.logger import Logger
 class Twh_Order(Wcs_OrderBase):
     def __init__(self, warehouse_id:str, twh_order_id:int) -> None:
         super().__init__(warehouse_id, twh_order_id)
-        self.__linked_packer: SimpleDock
+        self.__linked_packer: SimpleDeck
         self.__linked_shipper = g_workers[warehouse_id].shippers[0]
     
     # def SetStateTo(self, new_state:str, write_to_db:bool):

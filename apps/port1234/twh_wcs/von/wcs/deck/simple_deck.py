@@ -1,11 +1,11 @@
 
-from twh_wcs.von.wcs.dock.dock import Wcs_DockBase
+from twh_wcs.von.wcs.deck.deck import Wcs_DeckBase
 from von.mqtt.mqtt_agent import g_mqtt
 
 '''
 TODO: a better name
 '''
-class SimpleDock(Wcs_DockBase):
+class SimpleDeck(Wcs_DeckBase):
 
     def __init__(self, index:int) -> None:
         super().__init__(index)

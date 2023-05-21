@@ -1,6 +1,6 @@
 from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
 # from twh_wcs.twh_robot.twh_thames_bridge_packer import Twh_ThamesBridge_Packer
-from twh_wcs.von.wcs.dock.simple_dock import SimpleDock, Wcs_DockBase
+from twh_wcs.von.wcs.deck.simple_deck import SimpleDeck, Wcs_DeckBase
 
 from twh_wcs.von.wcs.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
@@ -24,7 +24,7 @@ class WcsWorkers:
     loop_porters = list[LoopPorter]()
     tube_conveyors = list[TubeConveyor]()
     pick_placers = list[Wsc_PickPlacerBase]()
-    docks = list[Wcs_DockBase]()
+    docks = list[Wcs_DeckBase]()
     shippers = list[Wcs_ShipperBase]()
 
     # simple workers, normaly the worker is a component
@@ -37,8 +37,8 @@ g_workers = dict[str, WcsWorkers]()
 class WorkersFactory:
 
     @classmethod
-    def FindIdlePackers(cls, warehouse_id:str) -> list[Wcs_DockBase]:
-        idle_packers = list[Wcs_DockBase]()
+    def FindIdlePackers(cls, warehouse_id:str) -> list[Wcs_DeckBase]:
+        idle_packers = list[Wcs_DeckBase]()
         for packer in g_workers[warehouse_id].docks:
             if packer.GetState() == 'idle':
                 idle_packers.append(packer)
@@ -71,7 +71,7 @@ class WorkersFactory:
             
             wcs_workers.pick_placers.append(new_picker)
             for i in range(12):
-                new_packer = SimpleDock(i)
+                new_packer = SimpleDeck(i)
                 WcsWorkers.docks.append(new_packer)
 
             new_shipper = Manual_Shipper("twh/" + warehouse_id + 'shipper/button')
