@@ -14,19 +14,19 @@ class Twh_Order(Wcs_OrderBase):
         self.PackerCell_id = -1
 
 
-    def FindTooth_is_in_porter(self, porter_id:int) -> Twh_OrderItem:
-        '''
-        * porter_id is equal to tooth.row.
-        * constraint:  tooth must be located in porter
-        '''
-        # Logger.Debug('WithdrawOrder:: FindTooth_is_in_porter() ')
-        for tooth in self._all_order_items:
-            # tooth.PrintOut('WithdrawOrder:: FindTooth_is_in_porter(), _all_order_items.this tooth')
-            # Logger.Print('located', tooth.GetLocated())
-            if tooth.GetLocated() == 'porter':
-                if tooth.row == porter_id:
-                    return tooth
-        return None # type: ignore
+    # def FindTooth_is_in_porter(self, porter_id:int) -> Twh_OrderItem:
+    #     '''
+    #     * porter_id is equal to tooth.row.
+    #     * constraint:  tooth must be located in porter
+    #     '''
+    #     # Logger.Debug('WithdrawOrder:: FindTooth_is_in_porter() ')
+    #     for tooth in self._all_order_items:
+    #         # tooth.PrintOut('WithdrawOrder:: FindTooth_is_in_porter(), _all_order_items.this tooth')
+    #         # Logger.Print('located', tooth.GetLocated())
+    #         if tooth.GetLocated() == 'porter':
+    #             if tooth.row == porter_id:
+    #                 return tooth
+    #     return None # type: ignore
     
     def __get_all_teeth_doc_ids(self):
         doc_ids = []
@@ -67,7 +67,9 @@ class Twh_Order(Wcs_OrderBase):
             
     #     return True
 
-    def SpinOnce(self) -> bool:
+
+    def _run_statemachine(self) -> int:
+        # return super()._run_statemachine()
         '''
         return:
             * True: I am complete shipped out, and has been deleted from database.
@@ -109,5 +111,4 @@ class Twh_Order(Wcs_OrderBase):
                 twh_packers[0].Release_packer_cell(self.PackerCell_id)
                 return True
         return False
-
 

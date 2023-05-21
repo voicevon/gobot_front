@@ -36,18 +36,18 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
         '''
 
 
-    def FindTooth_is_in_porter_from_all_orders(self, porter_id:int) -> tuple[Twh_OrderItem, Twh_Order]:
-        '''
-        * porter_id is equal to tooth.row.
-        * constraint:  tooth must be located in porter
-        '''
-        # Logger.Print('OrderTaskManager:: FindTooth_is_in_porter()   len(all_withdraw_order)  ', len(self.__all_twh_orders))
-        for order in self._withdraw_orders:
-            tooth = order.FindTooth_is_in_porter(porter_id)
-            if tooth is not None:
-                # Logger.Print('found tooth in the loop-porter,  tooth.col', tooth.col)
-                return order, tooth
-        return None,None # type: ignore
+    # def FindTooth_is_in_porter_from_all_orders(self, porter_id:int) -> tuple[Twh_OrderItem, Twh_Order]:
+    #     '''
+    #     * porter_id is equal to tooth.row.
+    #     * constraint:  tooth must be located in porter
+    #     '''
+    #     # Logger.Print('OrderTaskManager:: FindTooth_is_in_porter()   len(all_withdraw_order)  ', len(self.__all_twh_orders))
+    #     for order in self._withdraw_orders:
+    #         tooth = order.FindTooth_is_in_porter(porter_id)
+    #         if tooth is not None:
+    #             # Logger.Print('found tooth in the loop-porter,  tooth.col', tooth.col)
+    #             return order, tooth
+    #     return None,None # type: ignore
         
     def _renew_orders_from_database(self):
         '''

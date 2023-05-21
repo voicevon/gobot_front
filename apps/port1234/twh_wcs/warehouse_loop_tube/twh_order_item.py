@@ -8,8 +8,8 @@ from von.logger import Logger
 
 class Twh_OrderItem(Wcs_OrderItemBase):
 
-    def __init__(self, db_doc_id:int, porter: Twh_LoopPorter) -> None:
-        super().__init__(db_doc_id)
+    def __init__(self, warehouse_id:str, db_doc_id:int, porter: Twh_LoopPorter) -> None:
+        super().__init__(warehouse_id, db_doc_id)
         # self.doc_id = db_doc_id
         self.DentalLocation = 'ur1'
         self.row :int
@@ -46,7 +46,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
                 # if loop_porter is not None:
                 #     loop_porter.MoveToGate()
                 if self.__linked_loop_porter.GetState() == 'idle':
-                    self.__linked_loop_porter.CarryToGate(self.col, self.layer)
+                    self.__linked_loop_porter.Start_CarryToGate(self.col, self.layer)
                     self._state = 'inside_loop_porter_moving'
 
         if self._state == 'inside_loop_porter_moving':

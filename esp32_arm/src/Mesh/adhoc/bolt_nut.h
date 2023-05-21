@@ -9,7 +9,7 @@ class Neibour{
         uint8_t node_id;   // 0 = empty 
         uint8_t hop;
         uint8_t mac_addr[6];
-        int leader_ship;
+        int leader_ship;  // default value == 90.
         void PrintOut(const char* title);
 };
 

@@ -22,53 +22,61 @@ class Twh_LoopTubeSystem(WarehouseBase):
         self.__twh_order_manager = Twh_OrderManager(wcs_instance_id)
         super().__init__(wcs_instance_id, deposit_queue, self.__twh_order_manager)
 
+    #//////////////////////////////////////////////////////////////////////////////////////
+    #  override methods
+    #//////////////////////////////////////////////////////////////////////////////////////
+    def _start_deposit(self, new_deposit_request):
+        pass
+ 
+    def _end_deposit(self):
+        pass
 
-    def __Do_deposit_begin(self, new_deposit_request):
-        Logger.Info(twh_factories[self._warehouse_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
-        Logger.Print("new_deposit_request", new_deposit_request)
-        # the loop-porter will move to col-position
-        row_id = new_deposit_request['row']
-        col_id = new_deposit_request['col']
-        layer_id = new_deposit_request['layer']
-        Logger.Print("row_id", row_id)
-        Logger.Print("porters count", len(self.loop_porters))
-        porter = self.loop_porters[row_id]
-        self.__depositing_porter = porter
-        Logger.Print('layer_id', layer_id)
-        porter.MoveTo(col_id, layer_id)
-        porter.show_layer_led()
-        # Logger.Print("Twh_WarehouseControlSystem::Do_deposit()    point", 99)
+    # def __Do_deposit_begin(self, new_deposit_request):
+    #     Logger.Info(twh_factories[self._warehouse_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
+    #     Logger.Print("new_deposit_request", new_deposit_request)
+    #     # the loop-porter will move to col-position
+    #     row_id = new_deposit_request['row']
+    #     col_id = new_deposit_request['col']
+    #     layer_id = new_deposit_request['layer']
+    #     Logger.Print("row_id", row_id)
+    #     Logger.Print("porters count", len(self.loop_porters))
+    #     porter = self.loop_porters[row_id]
+    #     self.__depositing_porter = porter
+    #     Logger.Print('layer_id', layer_id)
+    #     porter.MoveTo(col_id, layer_id)
+    #     porter.show_layer_led()
+    #     # Logger.Print("Twh_WarehouseControlSystem::Do_deposit()    point", 99)
 
-    def Do_deposit_end(self):
-        self.__depositing_porter.turn_off_leds()
-        self.__depositing_porter.SetStateTo('idle')
+    # def Do_deposit_end(self):
+    #     self.__depositing_porter.turn_off_leds()
+    #     self.__depositing_porter.SetStateTo('idle')
     
-    def __Pair_idle_porter_and_tooth(self) -> tuple[Twh_LoopPorter, Twh_Order, Twh_OrderItem]: 
-        # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
-        # Logger.Print("porters count", len(self.__porters))
-        for porter in self.loop_porters:
-            # Logger.Print("porter state", porter.GetState())
-            if porter.GetState() == 'idle':
-                # Logger.Print('__Pair_idle_porter_and_tooth()  Found idle porter, porter_id', porter.id)
-                tooth, order = self.__twh_orders.FindTooth_is_in_porter_from_all_orders(porter.id)
-                if tooth is not None:
-                    Logger.Print('Paired.   found tooth is in the porter, col', tooth.col)
-                    return porter,order, tooth
-        return None, None, None # type: ignore
+    # def __Pair_idle_porter_and_tooth(self) -> tuple[Twh_LoopPorter, Twh_Order, Twh_OrderItem]: 
+    #     # Logger.Debug("Twh_WarehouseControlSystem::__Withdraw_Pair_porter_tooth()")
+    #     # Logger.Print("porters count", len(self.__porters))
+    #     for porter in self.loop_porters:
+    #         # Logger.Print("porter state", porter.GetState())
+    #         if porter.GetState() == 'idle':
+    #             # Logger.Print('__Pair_idle_porter_and_tooth()  Found idle porter, porter_id', porter.id)
+    #             tooth, order = self.__twh_orders.FindTooth_is_in_porter_from_all_orders(porter.id)
+    #             if tooth is not None:
+    #                 Logger.Print('Paired.   found tooth is in the porter, col', tooth.col)
+    #                 return porter,order, tooth
+    #     return None, None, None # type: ignore
 
-    def __try_to_withdraw_a_tooth(self):
-        # setp 1:  Pair idle_porter, picking_tooth
-        idle_porter, picking_order, picking_tooth = self.__Pair_idle_porter_and_tooth()
-        if picking_tooth is None:
-            # Logger.Info("__try_to_withdraw_a_tooth()   picking_tooth is None")
-            return
+    # def __try_to_withdraw_a_tooth(self):
+    #     # setp 1:  Pair idle_porter, picking_tooth
+    #     idle_porter, picking_order, picking_tooth = self.__Pair_idle_porter_and_tooth()
+    #     if picking_tooth is None:
+    #         # Logger.Info("__try_to_withdraw_a_tooth()   picking_tooth is None")
+    #         return
         
-        # step2: whether or not:  the order linked to a packer-cell  
-        # Logger.Print("__try_to_withdraw_a_tooth()     idle_porter ", idle_porter.id)
-        is_ok = picking_order.Start_PickingPlacing_a_tooth()
-        if is_ok:
-            Logger.Print("__try_to_withdraw_a_tooth()     Start loop_porting ", idle_porter.id)
-            idle_porter.Start_Porting(picking_tooth, picking_order)  
+    #     # step2: whether or not:  the order linked to a packer-cell  
+    #     # Logger.Print("__try_to_withdraw_a_tooth()     idle_porter ", idle_porter.id)
+    #     is_ok = picking_order.Start_PickingPlacing_a_tooth()
+    #     if is_ok:
+    #         Logger.Print("__try_to_withdraw_a_tooth()     Start loop_porting ", idle_porter.id)
+    #         idle_porter.Start_Porting(picking_tooth, picking_order)  
         
     # def _state_machine_main(self):
     #     if self._wcs_state == 'idle':
@@ -123,11 +131,3 @@ class Twh_LoopTubeSystem(WarehouseBase):
 
 
 
-    #//////////////////////////////////////////////////////////////////////////////////////
-    #  override methods
-    #//////////////////////////////////////////////////////////////////////////////////////
-    def _start_deposit(self, new_deposit_request):
-        pass
- 
-    def _end_deposit(self):
-        pass
