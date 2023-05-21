@@ -23,8 +23,8 @@ class Twh_LoopPorter(LoopPorter):
 
     def _move_to(self, target_col:int, target_layer:int) -> None:
         self.__target_layer = target_layer
-        Logger.Info(twh_factories[self.warehouse_id]['name']  + ' -- Twh_LoopPorter::MoveTo()')
-        print(  '(row, col, layer) = ' ,self.id, target_col, target_layer )
+        # Logger.Info(twh_factories[self.warehouse_id]['name']  + ' -- Twh_LoopPorter::MoveTo()')
+        # print(  '(row, col, layer) = ' ,self.id, target_col, target_layer )
         
         mcode ='M42P99S1'  # turn off all green leds
         self._gcode_sender.append_gmcode_to_queue(mcode)

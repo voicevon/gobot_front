@@ -7,4 +7,5 @@ class Wcs_ActuatorBase:
         pass
 
 class Wcs_3wayValve(Wcs_ActuatorBase):
-    super().__init__()
+    def __init__(self) -> None:
+        super().__init__()

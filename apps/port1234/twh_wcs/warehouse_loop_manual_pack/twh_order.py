@@ -55,6 +55,7 @@ class Twh_Order(Wcs_OrderBase):
         # Logger.Debug('loop-manual warehouse:: Twh_OrderManager:: renew_order_state_from_database()')
         DB_WithdrawOrder.table_withdraw_order.clear_cache()
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
+        has_printed_title = False
         for db_tooth in db_order_teeth:
             picker = g_workers[self._warehouse_id].pick_placers[0]
             if db_tooth['order_id'] == self._order_id:
@@ -65,7 +66,9 @@ class Twh_Order(Wcs_OrderBase):
                 new_tooth.col = db_tooth['col']
                 new_tooth.layer = db_tooth['layer']
                 self._all_order_items.append(new_tooth)
-                Logger.Info('Twh_Order::_create_order_items()')
+                if not has_printed_title:
+                    Logger.Info('Twh_Order::_create_order_items()')
+                    has_printed_title = True
                 Logger.Print('added  new tooth,  DentalLocation', new_tooth.DentalLocation)
 
     def _run_statemachine(self):

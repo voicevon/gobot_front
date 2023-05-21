@@ -19,14 +19,16 @@ from von.logger import Logger
 
 
 class WcsWorkers:
-    # software: WarehouseBase
     warehouse_name = 'not named warehouse'
+    
+    # complex workers
     loop_porters = list[LoopPorter]()
     tube_conveyors = list[TubeConveyor]()
     pick_placers = list[Wsc_PickPlacerBase]()
     packers = list[Wcs_PackerBase]()
     shippers = list[Wcs_ShipperBase]()
 
+    # simple workers, normaly the worker is a component
     indicators = list[Wcs_IndicatorBase]()
     buttons = list[Wcs_ButtonBase]()
     actuators = list[Wcs_ActuatorBase]()
@@ -83,7 +85,7 @@ class WorkersFactory:
         elif warehouse_id == '230220':
             g_workers[warehouse_id] = wcs_workers
             wcs_workers.warehouse_name = '山东雅乐福义齿加工厂'
-            
+
             for i in range(1):
                 first_led = Wcs_IndicatorBase()
                 WcsWorkers.indicators.append(first_led)
