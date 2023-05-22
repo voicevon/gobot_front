@@ -17,12 +17,15 @@ Order --> Deck
 Order_Item --> loop_porter
 Order_Item -->picker_placer
 
-folder SimpleWorkers{
+folder Components{
     collections indicator
     collections button
+    collections valve
+
 
 }
 Workers --> indicator
+Workers --> valve
 Workers <-- button
 
 
@@ -33,6 +36,7 @@ folder Communications{
 loop_porter ---> gcode_sender
 picker_placer ---> gcode_sender
 indicator --> remote_var
+valve --> remote_var
 button <-- remote_var
 
 @enduml

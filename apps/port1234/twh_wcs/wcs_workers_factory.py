@@ -26,13 +26,8 @@ class WcsWorkers:
     tube_conveyors = list[TubeConveyor]()
     pick_placers = list[Wsc_PickPlacerBase]()
     shippers = list[Wcs_ShipperBase]()
-    # gcode_senders = list[GcodeSender]()
-
-    # simple workers, normaly the worker is a component
     decks = dict[str, list[Wcs_DeckBase]]()
-    indicators = dict[str, list[Wcs_IndicatorBase]]()
-    buttons = dict[str,list[Wcs_ButtonBase]]()
-    actuators = dict[str,list[Wcs_ActuatorBase]]()
+
 
 g_workers = dict[str, WcsWorkers]()
 
@@ -62,11 +57,7 @@ class WorkersFactory:
             new_workers.warehouse_name = '某某义齿加工厂'
 
             for loop_porter_index in range(4):
-                leds = list[Wcs_IndicatorBase]()
-                for led_index in range(7):
-                    new_led = Wcs_IndicatorBase(led_index)
-                    leds.append(new_led)
-                new_workers.indicators['loop_porter_layer'] = leds
+                # new_workers.indicators['loop_porter_layer'] = leds
                 new_porter = Twh_LoopPorter(warehouse_id, loop_porter_index)
                 new_workers.loop_porters.append(new_porter)
             
@@ -94,11 +85,11 @@ class WorkersFactory:
             new_workers.warehouse_name = '山东雅乐福义齿加工厂'
 
             for porter_index in range(1):
-                leds = list[Wcs_IndicatorBase]()
-                for led_index in range(7):
-                    new_led = Wcs_IndicatorBase(led_index)
-                    leds.append(new_led)
-                new_workers.indicators['loop_porter_layer'] = leds
+                # leds = list[Wcs_IndicatorBase]()
+                # for led_index in range(7):
+                #     new_led = Wcs_IndicatorBase(led_index)
+                #     leds.append(new_led)
+                # new_workers.indicators['loop_porter_layer'] = leds
                 new_porter = Twh_LoopPorter(warehouse_id, porter_index)
                 new_workers.loop_porters.append(new_porter)
 
