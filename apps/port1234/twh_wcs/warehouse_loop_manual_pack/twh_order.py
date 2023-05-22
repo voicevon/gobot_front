@@ -73,7 +73,7 @@ class Twh_Order(Wcs_OrderBase):
 
     def _run_statemachine(self):
         if self._state == 'idle':
-            idle_packers = WorkersFactory.FindIdlePackers(self._warehouse_id)
+            idle_packers = WorkersFactory.FindIdlePackers(self._warehouse_id, 'packer')
             if len(idle_packers) > 0:
                 self.__linked_packer = idle_packers[0]
                 self.__linked_packer.SetStateTo('feeding')
