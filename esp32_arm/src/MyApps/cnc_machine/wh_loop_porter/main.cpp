@@ -7,9 +7,12 @@
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 #include "app_config/twh_loop_porter.h"
 
+#include "remote_leds_state.h"
+
 Twh_LoopPorter_Board board;
 Twh_LoopPorter_Robot robot;
 Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
+RemoteLedsState leds_state;
 
 
 void test(){
@@ -38,12 +41,25 @@ void setup(){
 
     gcode_queue->AppendGcodeCommand("G28X");
     gcode_queue->AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
-}
 
+    gs_MqttSubscriberManager::Instance().AddSubscriber(MQTT_TOPIC_FOR_LEDS, &leds_state);
+
+}
+void show_leds(){
+    char leds_command[7];  // 'N' => ON, 'F' => OFF
+    // leds_command = leds_state.Get();
+    for(int i=0; i<7; i++){
+        if (leds_command[i] == 'N')
+            board.GetLed(i)->TurnOn();
+        else
+            board.GetLed(i)->TurnOff();
+    }
+}
 void loop(){
     app.SpinOnce();
     robot.SpinOnce();
     robot.MySpinOnce();
+    show_leds();
 }
 
 #endif

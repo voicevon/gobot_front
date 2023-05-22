@@ -44,18 +44,9 @@ void Twh_LoopPorter_Board::Init(){
     __displayer.Init(PIN_NUMBER_LED_SCLK, PIN_NUMBER_LED_DATA, PIN_NUMBER_LED_LOAD, 2);
     __displayer.ShowNumber(0);
 
-    // gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic_for_home_position, &__leds_command);
 }
 
 
-void Twh_LoopPorter_Board::SpinOnce(){
-    for(int i=0; i<7; i++){
-        if (__leds_command[i] == 'N')
-            __leds[i].TurnOn();
-        else
-            __leds[i].TurnOff();
-    }
-}
 
 void Twh_LoopPorter_Board::__InitSteppers(){
     // #define CPU_CORE_ID 0

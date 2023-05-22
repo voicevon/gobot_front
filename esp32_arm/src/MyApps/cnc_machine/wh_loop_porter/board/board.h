@@ -13,7 +13,6 @@ class Twh_LoopPorter_Board: public BoardBase{
     public:
         Twh_LoopPorter_Board();
         void Init() override;
-        void SpinOnce();
         
         FastAccelStepper* GetStepper(){return __stepper_alpha;};
         void TurnOn_ThisLed_Only(int led_id);
@@ -40,6 +39,5 @@ class Twh_LoopPorter_Board: public BoardBase{
         Hc595_Digital_number __displayer;
 
         Mono_Led_GPIO __leds[7];
-        char __leds_command[7];  // 'N' => ON, 'F' => OFF
         
 };
