@@ -1,9 +1,9 @@
 
 
 from twh_wcs.von.wcs.workers.porter.loop_porter import LoopPorter
-from twh_database.bolt_nut import twh_factories
-
+from twh_wcs.von.wcs.components.indicator.mono_light import MonoLight
 from twh_wcs.von.wcs.components.indicator.indicator import Wcs_IndicatorBase
+from twh_wcs.wcs_component_factory import ComponentFactory, g_components
 from von.logger import Logger
 
 
@@ -16,10 +16,21 @@ class Twh_LoopPorter(LoopPorter):
         A: Currently, the led is controlled by Mcode, not mqtt.
            In future, led will be linked to mqtt, then, we can remove parameter: fisrt_led.
         '''
-        gcode_topic = "twh/" + warehouse_id + '/r' + str(row_id) + "/gcode"  #'twh/221109/r0/gcode'
-        self.__state_topic = "twh/" + warehouse_id + '/r' + str(row_id) + "/state"  #'twh/221109/r0/state'
+        gcode_topic = "wh" + warehouse_id + '/porter' + str(row_id) + "/gcode"  #'wh221109/porter0/gcode'
+        self.__state_topic = "wh" + warehouse_id + '/porter' + str(row_id) + "/state"  #'wh221109/porter0/state'
         super().__init__(warehouse_id, row_id, gcode_topic, self.__state_topic)
         self.__target_layer:int
+
+        self.__leds = list[Wcs_IndicatorBase]()
+        for i in range(7):
+            mqtt_topic = "wh" + warehouse_id + '/porter' + str(row_id) + '/led' + str(i)   # 'wh221109/porter0/led0'
+            led = MonoLight(i, mqtt_topic,self.__event_led_received)
+            self.__leds.append(led)
+        g_components[self.warehouse_id].indicators['layer_led'] = self.__leds
+        
+    def __event_led_received(self, index, mqtt_payload):
+        # turn on led, turn off led
+        pass
 
     def _move_to(self, target_col:int, target_layer:int) -> None:
         self.__target_layer = target_layer

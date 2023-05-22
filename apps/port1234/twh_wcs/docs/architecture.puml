@@ -8,9 +8,9 @@ folder Warehouse{
 }
 
 folder Workers{
-    component loop_porter
-    component Deck
-    component picker_placer
+    collections loop_porter
+    collections Deck
+    collections picker_placer
 
 }
 Order --> Deck
@@ -29,9 +29,9 @@ Workers --> valve
 Workers <-- button
 
 
-folder Communications{
-    component gcode_sender
-    component remote_var
+folder Communicators{
+    collections gcode_sender
+    collections remote_var
 }
 loop_porter ---> gcode_sender
 picker_placer ---> gcode_sender

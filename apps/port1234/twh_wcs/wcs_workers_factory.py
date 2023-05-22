@@ -4,15 +4,13 @@ from twh_wcs.von.wcs.deck.simple_deck import SimpleDeck, Wcs_DeckBase
 
 from twh_wcs.von.wcs.workers.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.workers.shipper.manual_shipper import Manual_Shipper
-# from twh_wcs.von.wcs.gcode_sender import GcodeSender
 
 from twh_wcs.von.wcs.conveyor.tube_conveyor import TubeConveyor
 from twh_wcs.von.wcs.workers.porter.loop_porter import LoopPorter
 from twh_wcs.von.wcs.workers.pick_placer.pick_placer import Wsc_PickPlacerBase
 from twh_wcs.von.wcs.workers.shipper.shipper import Wcs_ShipperBase
-from twh_wcs.von.wcs.components.button.button import Wcs_ButtonBase
-from twh_wcs.von.wcs.components.indicator.indicator import Wcs_IndicatorBase
-from twh_wcs.von.wcs.components.actuator.actuator import Wcs_3wayValve, Wcs_ActuatorBase
+
+from twh_wcs.wcs_component_factory import g_components, ComponentFactory
 
 from von.logger import Logger
 
@@ -52,7 +50,7 @@ class WorkersFactory:
     @classmethod
     def Create_WcsWorkers(cls, warehouse_id:str) -> WcsWorkers:
         new_workers = WcsWorkers()
-
+        g_components[warehouse_id] = ComponentFactory.CreateBlankComponents()
         if warehouse_id == '221109':
             new_workers.warehouse_name = '某某义齿加工厂'
 
