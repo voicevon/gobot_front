@@ -1,7 +1,7 @@
 
 from twh_wcs.von.wcs.gcode_sender import GcodeSender, g_gcode_senders
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
-from twh_wcs.von.wcs.worker_base import Wcs_WorkerBase
+from twh_wcs.von.wcs.workers.worker_base import Wcs_WorkerBase
 from von.logger import Logger
 from abc import ABC, abstractmethod
 

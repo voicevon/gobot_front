@@ -1,4 +1,4 @@
-from twh_wcs.von.wcs.pick_placer.pick_placer import Wsc_PickPlacerBase
+from twh_wcs.von.wcs.workers.pick_placer.pick_placer import Wsc_PickPlacerBase
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
 class Manual_PickPlacer(Wsc_PickPlacerBase):

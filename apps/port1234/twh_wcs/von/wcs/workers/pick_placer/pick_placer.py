@@ -1,5 +1,5 @@
 
-from twh_wcs.von.wcs.worker_base import Wcs_WorkerBase
+from twh_wcs.von.wcs.workers.worker_base import Wcs_WorkerBase
 from abc import abstractmethod
 
 class Wsc_PickPlacerBase(Wcs_WorkerBase):

@@ -1,4 +1,4 @@
-from twh_wcs.von.wcs.shipper.shipper import Wcs_ShipperBase
+from twh_wcs.von.wcs.workers.shipper.shipper import Wcs_ShipperBase
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
 class Manual_Shipper(Wcs_ShipperBase):

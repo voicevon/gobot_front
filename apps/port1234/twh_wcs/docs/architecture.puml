@@ -17,14 +17,13 @@ Order --> Deck
 Order_Item --> loop_porter
 Order_Item -->picker_placer
 
-folder SimleWorkers{
+folder SimpleWorkers{
     collections indicator
     collections button
 
 }
-loop_porter --> indicator
-Deck --> indicator
-Deck <-- button
+Workers --> indicator
+Workers <-- button
 
 
 folder Communications{

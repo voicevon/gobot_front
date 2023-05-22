@@ -1,4 +1,5 @@
-from twh_wcs.von.wcs.porter.porter import Wcs_PorterBase
+# from twh_wcs.von.wcs.porter.porter import Wcs_PorterBase
+from twh_wcs.von.wcs.workers.porter.porter import Wcs_PorterBase
 
 class LoopPorter(Wcs_PorterBase):
 

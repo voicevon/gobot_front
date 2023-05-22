@@ -2,7 +2,7 @@ from twh_database.db_withdraw_order import DB_WithdrawOrder
 
 from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
 from twh_wcs.von.wcs.deck.simple_deck import SimpleDeck
-from twh_wcs.von.wcs.pick_placer.manual_pick_placer import Manual_PickPlacer
+from twh_wcs.von.wcs.workers.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.order_item import Wcs_OrderItemBase
 
 from twh_wcs.wcs_workers_factory import g_workers

@@ -1,4 +1,4 @@
-from twh_wcs.von.wcs.worker_base import Wcs_WorkerBase
+from twh_wcs.von.wcs.workers.worker_base import Wcs_WorkerBase
 
 from von.logger import Logger
 from abc import abstractmethod

@@ -1,7 +1,7 @@
 from twh_wcs.warehouse_loop_manual_pack.twh_order_manager import Twh_OrderManager
 
 from twh_database.bolt_nut import twh_factories
-from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
+from twh_wcs.von.wcs.workers.shipper.manual_shipper import Manual_Shipper
 from twh_wcs.von.wcs.warehouse_base import WarehouseBase
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 

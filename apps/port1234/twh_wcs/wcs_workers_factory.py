@@ -2,17 +2,17 @@ from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
 # from twh_wcs.twh_robot.twh_thames_bridge_packer import Twh_ThamesBridge_Packer
 from twh_wcs.von.wcs.deck.simple_deck import SimpleDeck, Wcs_DeckBase
 
-from twh_wcs.von.wcs.pick_placer.manual_pick_placer import Manual_PickPlacer
-from twh_wcs.von.wcs.shipper.manual_shipper import Manual_Shipper
+from twh_wcs.von.wcs.workers.pick_placer.manual_pick_placer import Manual_PickPlacer
+from twh_wcs.von.wcs.workers.shipper.manual_shipper import Manual_Shipper
 # from twh_wcs.von.wcs.gcode_sender import GcodeSender
 
 from twh_wcs.von.wcs.conveyor.tube_conveyor import TubeConveyor
-from twh_wcs.von.wcs.porter.loop_porter import LoopPorter
-from twh_wcs.von.wcs.pick_placer.pick_placer import Wsc_PickPlacerBase
-from twh_wcs.von.wcs.shipper.shipper import Wcs_ShipperBase
-from twh_wcs.von.wcs.simple_worker.button.button import Wcs_ButtonBase
-from twh_wcs.von.wcs.simple_worker.indicator.indicator import Wcs_IndicatorBase
-from twh_wcs.von.wcs.simple_worker.actuator.actuator import Wcs_3wayValve, Wcs_ActuatorBase
+from twh_wcs.von.wcs.workers.porter.loop_porter import LoopPorter
+from twh_wcs.von.wcs.workers.pick_placer.pick_placer import Wsc_PickPlacerBase
+from twh_wcs.von.wcs.workers.shipper.shipper import Wcs_ShipperBase
+from twh_wcs.von.wcs.components.button.button import Wcs_ButtonBase
+from twh_wcs.von.wcs.components.indicator.indicator import Wcs_IndicatorBase
+from twh_wcs.von.wcs.components.actuator.actuator import Wcs_3wayValve, Wcs_ActuatorBase
 
 from von.logger import Logger
 
