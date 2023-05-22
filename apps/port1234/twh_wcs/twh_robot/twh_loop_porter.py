@@ -4,7 +4,10 @@ from twh_wcs.von.wcs.workers.porter.loop_porter import LoopPorter
 from twh_wcs.von.wcs.components.indicator.mono_light import MonoLight
 from twh_wcs.von.wcs.components.indicator.indicator import Wcs_IndicatorBase
 from twh_wcs.wcs_component_factory import ComponentFactory, g_components
+from twh_wcs.von.wcs.components.indicator.binary_output import BinaryOutputGroup
 from von.logger import Logger
+from von.mqtt.mqtt_agent import g_mqtt
+import json
 
 
 class Twh_LoopPorter(LoopPorter):
@@ -19,18 +22,17 @@ class Twh_LoopPorter(LoopPorter):
         gcode_topic = "wh" + warehouse_id + '/porter' + str(row_id) + "/gcode"  #'wh221109/porter0/gcode'
         self.__state_topic = "wh" + warehouse_id + '/porter' + str(row_id) + "/state"  #'wh221109/porter0/state'
         super().__init__(warehouse_id, row_id, gcode_topic, self.__state_topic)
+        
         self.__target_layer:int
 
-        self.__leds = list[Wcs_IndicatorBase]()
-        for i in range(7):
-            mqtt_topic = "wh" + warehouse_id + '/porter' + str(row_id) + '/led' + str(i)   # 'wh221109/porter0/led0'
-            led = MonoLight(i, mqtt_topic,self.__event_led_received)
-            self.__leds.append(led)
-        g_components[self.warehouse_id].indicators['layer_led'] = self.__leds
+        led_topic =  "wh" + warehouse_id + '/porter' + str(row_id) + "/leds"  #'wh221109/porter0/leds'
+        self.Leds = BinaryOutputGroup(led_topic, 7)
+        leds_key = 'porter' + str(row_id)
+        g_components[self.warehouse_id].bin_outputs[leds_key] = self.Leds
+        # leds =g_components[self.warehouse_id].bin_outputs[leds_key]
+        # leds.SetState(3, True)
+        # self.Leds.SetState(2,False)
         
-    def __event_led_received(self, index, mqtt_payload):
-        # turn on led, turn off led
-        pass
 
     def _move_to(self, target_col:int, target_layer:int) -> None:
         self.__target_layer = target_layer

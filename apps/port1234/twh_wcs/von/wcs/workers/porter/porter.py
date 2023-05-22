@@ -18,7 +18,7 @@ class Wcs_PorterBase(Wcs_WorkerBase):
         A: Don't know,  Currently, all requiemnets is satisfied.
         '''
         super().__init__(warehouse_id)
-        self.id = row_id
+        self.row_id = row_id
         self._state = 'idle'
         self.__remote_state = RemoteVar_mqtt(state_topic, 'idle')
 

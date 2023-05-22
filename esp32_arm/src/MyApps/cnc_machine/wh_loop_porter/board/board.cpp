@@ -1,4 +1,5 @@
 #include "board.h"
+#include <ArduinoJson.h>
 
 
 #define PIN_LED_1 23
@@ -9,12 +10,9 @@
 #define PIN_LED_6 17
 #define PIN_LED_7 16
 
-
 #define PIN_ALPHA_DIR 27 //32  
 #define PIN_ALPHA_STEP 14 //26   
 #define PIN_ALPHA_ENABLE 32
-
-
 
 #define PIN_NUMBER_LED_SCLK 25
 #define PIN_NUMBER_LED_DATA 26
@@ -42,11 +40,21 @@ void Twh_LoopPorter_Board::Init(){
     for(int i=0; i<7; i++){
         __leds[i].TurnOff();
     }
-
     __InitSteppers();
     __displayer.Init(PIN_NUMBER_LED_SCLK, PIN_NUMBER_LED_DATA, PIN_NUMBER_LED_LOAD, 2);
     __displayer.ShowNumber(0);
 
+    // gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic_for_home_position, &__leds_command);
+}
+
+
+void Twh_LoopPorter_Board::SpinOnce(){
+    for(int i=0; i<7; i++){
+        if (__leds_command[i] == 'N')
+            __leds[i].TurnOn();
+        else
+            __leds[i].TurnOff();
+    }
 }
 
 void Twh_LoopPorter_Board::__InitSteppers(){
@@ -77,7 +85,6 @@ void Twh_LoopPorter_Board::__InitSteppers(){
 
 }
 
-
 void Twh_LoopPorter_Board::TurnOn_ThisLed_Only(int led_index){
     // Logger::Debug("Twh_LoopPorter_Board::TurnOn_ThisLed_Only");
     // Logger::Print("led_index",led_index);
@@ -86,7 +93,6 @@ void Twh_LoopPorter_Board::TurnOn_ThisLed_Only(int led_index){
         if (i==led_index) __leds[i].TurnOn();
     }
 }
-
 
 void Twh_LoopPorter_Board::TestLeds(int loops){
     for(int loop=0; loop<loops; loop++){

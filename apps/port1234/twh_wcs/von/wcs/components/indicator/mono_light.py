@@ -1,6 +1,7 @@
 from twh_wcs.von.wcs.components.indicator.indicator import Wcs_IndicatorBase
-
-from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
+from twh_wcs.wcs_component_factory import g_components
+from von.mqtt.remote_var_mqtt import RemoteVar_mqtt, g_mqtt
+import json
 
 class MonoLight(Wcs_IndicatorBase):
 
@@ -14,8 +15,5 @@ class MonoLight(Wcs_IndicatorBase):
         #     self.__on_received_callback(self.index, mqtt_payload)
         return mqtt_payload
 
-    # def TurnOn(self):
-    #     self.__remote_led.set('ON')
 
-    # def TurnOff(self):
-    #     self.__remote_led.set('OFF')
+        
