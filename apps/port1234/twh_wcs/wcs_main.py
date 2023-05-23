@@ -3,7 +3,8 @@ from twh_database.bolt_nut import twh_factories
 
 from twh_wcs.wcs_deck_factory import DeckGroupFactory
 from twh_wcs.wcs_workers_factory import WorkersFactory
-from twh_wcs.wcs_pastor_factory import PastorFactory, g_pastors
+from twh_wcs.wcs_pastor_factory import PastorFactory
+from twh_wcs.wcs_warehouse_factory import g_warehouses, WarehouseFactory
 from twh_wcs.wcs_component_factory import ComponentFactory
 
 from twh_wcs.von.wcs.gcode_sender import g_gcode_senders
@@ -19,6 +20,7 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
         
         # Create all instance and save it in g_wcss
         for warehouse_id in list(twh_factories.keys()):
+            WarehouseFactory.Create_Warehouse(warehouse_id)
             PastorFactory.Create_Pastor(warehouse_id, deposit_queue)
             DeckGroupFactory.CreateDeckGroups(warehouse_id)
             ComponentFactory.CreateComponents(warehouse_id)
@@ -27,7 +29,8 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
 
         while True:
             PastorFactory.EachPastor_SpinOnce()
-            WorkersFactory.EachWorker_SpinOnce()
+            # WorkersFactory.EachWorker_SpinOnce()
+            WarehouseFactory.EachWorker_SpinOnce()
             for gcode_sender in g_gcode_senders:
                 gcode_sender.SpinOnce()
             time.sleep(0.5)

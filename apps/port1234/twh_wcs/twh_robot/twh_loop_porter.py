@@ -3,7 +3,7 @@
 from twh_wcs.von.wcs.workers.porter.loop_porter import LoopPorter
 # from twh_wcs.von.wcs.components.indicator.mono_light import MonoLight
 # from twh_wcs.von.wcs.components.indicator.indicator import Wcs_IndicatorBase
-from twh_wcs.wcs_component_factory import ComponentFactory, g_components
+from twh_wcs.wcs_component_factory import ComponentFactory
 from twh_wcs.von.wcs.components.binary_output.grouped_binary_output import BinaryOutputGroup
 from von.logger import Logger
 from von.mqtt.mqtt_agent import g_mqtt

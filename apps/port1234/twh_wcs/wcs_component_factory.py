@@ -1,18 +1,16 @@
 
 from twh_wcs.von.wcs.components.binary_input.binary_input import Wcs_ButtonBase
-from twh_wcs.von.wcs.components.indicator.indicator import Wcs_IndicatorBase
 from twh_wcs.von.wcs.components.binary_output.grouped_binary_output import BinaryOutputGroup
-from twh_wcs.von.wcs.components.actuator.actuator import Wcs_3wayValve, Wcs_ActuatorBase
+
+from twh_wcs.von.wcs.components.wcs_item_components import Components
+from twh_wcs.wcs_warehouse_factory import g_warehouses
 
 from von.logger import Logger
 
-class Components:
-    buttons = dict[str,Wcs_ButtonBase]()
-    binary_outputs = dict[str, BinaryOutputGroup]()
-    actuators = dict[str,list[Wcs_ActuatorBase]]()
 
 
-g_components = dict[str, Components]()
+
+# g_components = dict[str, Components]()
 '''
 Explain 
 ```
@@ -20,19 +18,6 @@ Explain
                         |         
                         |--- warehouse_id
 ```'''
-
-
-
-
-
-class WarehouseItems:
-    components_take =  Components()
-
-g_warehouse = dict[str, WarehouseItems]()
-g_warehouse['a'] = WarehouseItems()
-g_warehouse['221109'].components_take.binary_outputs['picking'].Leds[3].GetState()
-
-
 
 
 class ComponentFactory:
@@ -80,8 +65,10 @@ class ComponentFactory:
             shipped_button = Wcs_ButtonBase("wh221109/shipped_button")
             new_components.buttons['shipped'] = shipped_button
 
-            g_components[warehouse_id] = new_components
+            # g_components[warehouse_id] = new_components
+            g_warehouses[warehouse_id].components_take = new_components
             return new_components
+        
         else:
             Logger.Error("ComponentFactory::CreateCompnents()   Unknown warehouse_id")
             Logger.Print("warehouse_id", warehouse_id)

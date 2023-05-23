@@ -1,6 +1,7 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 from twh_wcs.warehouse_loop_manual_pack.twh_order_item import Twh_OrderItem
-from twh_wcs.wcs_workers_factory import g_workers
+# from twh_wcs.wcs_workers_factory import g_workers
+from twh_wcs.wcs_warehouse_factory import g_warehouses
 from twh_wcs.wcs_deck_factory import DeckGroupFactory
 
 from twh_wcs.von.wcs.deck.simple_deck import SimpleDeck
@@ -14,7 +15,8 @@ class Twh_Order(Wcs_OrderBase):
     def __init__(self, warehouse_id:str, twh_order_id:int) -> None:
         super().__init__(warehouse_id, twh_order_id)
         self.__linked_output_deck: SimpleDeck
-        self.__linked_shipper = g_workers[warehouse_id].shippers[0]
+        # self.__linked_shipper = g_workers[warehouse_id].shippers[0]
+        self.__linked_shipper = g_warehouses[warehouse_id].workers_take.shippers[0]
     
     def UpdateStateToDb(self, new_state:str):
             doc_ids = self._get_all_teeth_doc_ids()
@@ -35,10 +37,12 @@ class Twh_Order(Wcs_OrderBase):
         db_order_teeth =  DB_WithdrawOrder.table_withdraw_order.all()
         has_printed_title = False
         for db_tooth in db_order_teeth:
-            picker = g_workers[self._warehouse_id].pick_placers[0]
+            # picker = g_workers[self._warehouse_id].pick_placers[0]
+            picker = g_warehouses[self._warehouse_id].workers_take.pick_placers[0]
             picker.PrintOut("fffffffffffffffffffffffffffffffffffffffffffffffffffffff")
             if db_tooth['order_id'] == self._order_id:
-                loop_porter = g_workers[self._warehouse_id].loop_porters[db_tooth['row']]
+                # loop_porter = g_workers[self._warehouse_id].loop_porters[db_tooth['row']]
+                loop_porter = g_warehouses[self._warehouse_id].workers_take.loop_porters[db_tooth['row']]
                 new_tooth = Twh_OrderItem(self._warehouse_id, db_tooth.doc_id)
                 new_tooth.DentalLocation = db_tooth['location']
                 new_tooth.row = db_tooth['row']

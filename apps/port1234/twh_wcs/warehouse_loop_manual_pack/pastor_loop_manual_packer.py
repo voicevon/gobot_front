@@ -5,7 +5,8 @@ from twh_wcs.von.wcs.workers.shipper.manual_shipper import Manual_Shipper
 from twh_wcs.von.wcs.pastor_base import PastorBase
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
-from twh_wcs.wcs_workers_factory import g_workers
+# from twh_wcs.wcs_workers_factory import g_workers
+from twh_wcs.wcs_warehouse_factory import g_warehouses
 from von.logger import Logger
 import multiprocessing
 
@@ -48,7 +49,8 @@ class Pastor_LoopManualPacker(PastorBase):
         # Logger.Print("row_id", row_id)
         # Logger.Print("porters count", len(self.__porters))
         # porter = self.__porters[row_id]
-        porter = g_workers[self._warehouse_id].loop_porters[row_id]
+        # porter = g_workers[self._warehouse_id].loop_porters[row_id]
+        porter = g_warehouses[self._warehouse_id].workers_take.loop_porters[row_id]
         self.__depositing_porter = porter
         Logger.Print('layer_id', layer_id)
         porter._MoveTo(col_id, layer_id)

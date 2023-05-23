@@ -5,7 +5,8 @@ from twh_wcs.von.wcs.order_manager import Wcs_OrderMangerBase
 from von.logger import Logger
 
 
-from twh_wcs.wcs_workers_factory import g_workers
+# from twh_wcs.wcs_workers_factory import g_workers
+from twh_wcs.wcs_warehouse_factory import g_warehouses
 
 
 # class Linker:
@@ -81,7 +82,8 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
                 if order_tooth is None:
                     # service_porter = g_subsystem_porters[db_tooth['row']]
                     # service_porter = g_subsystem_porters[0]  # Assume only one loop-porter is there.
-                    service_porter = g_workers[self._warehouse_id].loop_porters[0]
+                    # service_porter = g_workers[self._warehouse_id].loop_porters[0]
+                    service_porter = g_warehouses[self._warehouse_id].workers_take.loop_porters[0]
                     new_tooth = Twh_OrderItem(db_tooth.doc_id, service_porter)
                     new_tooth.DentalLocation = db_tooth['location']
                     new_tooth.row = db_tooth['row']

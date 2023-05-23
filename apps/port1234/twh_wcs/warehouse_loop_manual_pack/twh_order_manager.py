@@ -1,7 +1,8 @@
 from twh_wcs.warehouse_loop_manual_pack.twh_order import Twh_Order
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
-from twh_wcs.wcs_workers_factory import g_workers, WorkersFactory
+# from twh_wcs.wcs_workers_factory import WorkersFactory
+from twh_wcs.wcs_warehouse_factory import g_warehouses
 from twh_wcs.von.wcs.order_manager import Wcs_OrderMangerBase
 from von.logger import Logger
 
@@ -37,7 +38,7 @@ class Twh_OrderManager(Wcs_OrderMangerBase):
                     the_order = new_order
                     if not printed_logger_title:
                         Logger.Debug('loop_manual warehosue:: WithdrawOrderManager::__renew_orders_from_database() First')
-                        Logger.Print('Warehouse name', g_workers[self._warehouse_id].warehouse_name)
+                        Logger.Print('Warehouse name', g_warehouses[self._warehouse_id].name)
                         printed_logger_title = True
                     Logger.Print('WithdrawOrderManager::__renew_orders_from_database()   new_order is added to manager. Order_id', new_order._order_id)
                 

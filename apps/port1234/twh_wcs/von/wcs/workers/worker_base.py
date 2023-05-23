@@ -13,3 +13,5 @@ class Wcs_WorkerBase(ABC):
     # @abstractmethod
     def _print_out(self):
         Logger.Print("Warehouse_id", self.warehouse_id)
+
+

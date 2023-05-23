@@ -1,6 +1,7 @@
 from twh_wcs.von.wcs.workers.pick_placer.pick_placer import Wsc_PickPlacerBase
-from twh_wcs.wcs_component_factory import g_components,Wcs_ButtonBase
+from twh_wcs.wcs_component_factory import Wcs_ButtonBase
 from von.logger import Logger
+from twh_wcs.wcs_warehouse_factory import g_warehouses
 
 class Manual_PickPlacer(Wsc_PickPlacerBase):
     def __init__(self, warehouse_id:str) -> None:
@@ -8,7 +9,8 @@ class Manual_PickPlacer(Wsc_PickPlacerBase):
         self.__button_placed: Wcs_ButtonBase
 
     def Start(self):
-        self.__button_placed = g_components[self.warehouse_id].buttons['placed']
+        # self.__button_placed = g_components[self.warehouse_id].buttons['placed']
+        self.__button_placed = g_warehouses[self.warehouse_id].components_take.buttons['placed']
         self.__button_placed.Reset()
         self._state = 'picking_placing'
 
