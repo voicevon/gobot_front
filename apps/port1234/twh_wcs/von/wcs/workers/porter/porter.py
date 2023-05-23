@@ -62,13 +62,13 @@ class Wcs_PorterBase(Wcs_WorkerBase):
             Logger.Error('LoopPorterBase  _MoveTo()')
             Logger.Print("my state", self._state)
 
-    @abstractmethod
-    def TurnOn_ItemPickingLed(self, layer:int):
-        pass
+    # @abstractmethod
+    # def TurnOn_ItemPickingLed(self, layer:int):
+    #     pass
         
-    @abstractmethod
-    def _turn_off_leds(self):
-        pass
+    # @abstractmethod
+    # def _turn_off_leds(self):
+    #     pass
 
     @abstractmethod
     def _move_to(self, bay_carrier_id: int, layer_id: int):

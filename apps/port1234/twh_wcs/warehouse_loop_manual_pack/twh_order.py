@@ -36,6 +36,7 @@ class Twh_Order(Wcs_OrderBase):
         has_printed_title = False
         for db_tooth in db_order_teeth:
             picker = g_workers[self._warehouse_id].pick_placers[0]
+            picker.PrintOut("fffffffffffffffffffffffffffffffffffffffffffffffffffffff")
             if db_tooth['order_id'] == self._order_id:
                 loop_porter = g_workers[self._warehouse_id].loop_porters[db_tooth['row']]
                 new_tooth = Twh_OrderItem(self._warehouse_id, db_tooth.doc_id)

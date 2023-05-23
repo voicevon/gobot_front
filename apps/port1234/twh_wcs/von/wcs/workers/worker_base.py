@@ -1,3 +1,4 @@
+from von.logger import Logger
 from abc import ABC, abstractmethod
 
 class Wcs_WorkerBase(ABC):
@@ -9,3 +10,6 @@ class Wcs_WorkerBase(ABC):
     def SpinOnce(self):
         pass
  
+    # @abstractmethod
+    def _print_out(self):
+        Logger.Print("Warehouse_id", self.warehouse_id)

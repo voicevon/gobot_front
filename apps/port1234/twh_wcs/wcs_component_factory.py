@@ -38,7 +38,7 @@ class ComponentFactory:
         return Components()
     
     @classmethod
-    def CreateCompnents(cls, warehouse_id):
+    def CreateComponents(cls, warehouse_id):
         new_components = Components()
 
         if warehouse_id == '221109':

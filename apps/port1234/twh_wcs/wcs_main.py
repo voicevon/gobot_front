@@ -3,7 +3,8 @@ from twh_database.bolt_nut import twh_factories
 
 from twh_wcs.wcs_deck_factory import DeckGroupFactory
 from twh_wcs.wcs_workers_factory import WorkersFactory
-from twh_wcs.wcs_warehouse_factory import WarehouseFactory, g_warehouses
+from twh_wcs.wcs_warehouse_factory import WarehouseFactory, g_brains
+from twh_wcs.wcs_component_factory import ComponentFactory
 
 from twh_wcs.von.wcs.gcode_sender import g_gcode_senders
 from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
@@ -20,6 +21,7 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
         for warehouse_id in list(twh_factories.keys()):
             WarehouseFactory.Create_Warehouse(warehouse_id, deposit_queue)
             DeckGroupFactory.CreateDeckGroups(warehouse_id)
+            ComponentFactory.CreateComponents(warehouse_id)
             WorkersFactory.Create_WcsWorkers(warehouse_id)
             Logger.Info("Twh_Wcs_Main()   Created wcs_unit----->"  + warehouse_id)
 

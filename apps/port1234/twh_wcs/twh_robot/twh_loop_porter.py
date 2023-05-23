@@ -25,13 +25,14 @@ class Twh_LoopPorter(LoopPorter):
         
         self.__target_layer:int
 
-        led_topic =  "wh" + warehouse_id + '/porter' + str(row_id) + "/leds"  #'wh221109/porter0/leds'
-        self.Leds = BinaryOutputGroup(led_topic, 7)
-        leds_key = 'porter' + str(row_id)
-        g_components[self.warehouse_id].bin_outputs[leds_key] = self.Leds
-        # leds =g_components[self.warehouse_id].bin_outputs[leds_key]
-        # leds.SetState(3, True)
-        # self.Leds.SetState(2,False)
+        # led_topic =  "wh" + warehouse_id + '/porter' + str(row_id) + "/leds"  #'wh221109/porter0/leds'
+        # self.Leds = BinaryOutputGroup(led_topic, 7)
+        # leds_key = 'porter' + str(row_id)
+        # g_components[self.warehouse_id].binary_outputs[leds_key] = self.Leds
+        # leds_key = 'porter' + str(row_id)
+        # self.__leds = g_components[warehouse_id].binary_outputs[leds_key]
+
+
         
 
     def _move_to(self, target_col:int, target_layer:int) -> None:
@@ -75,19 +76,19 @@ class Twh_LoopPorter(LoopPorter):
         self._gcode_sender.append_gmcode_to_queue(mcode)
 
 # def ShowLayerLed(self):
-    def TurnOn_ItemPickingLed(self, layer:int):
-        mcode = 'M42P' + str(self.__target_layer) + 'S1'
-        self._gcode_sender.append_gmcode_to_queue(mcode)
+    # def TurnOn_ItemPickingLed(self, layer:int):
+    #     mcode = 'M42P' + str(self.__target_layer) + 'S1'
+    #     self._gcode_sender.append_gmcode_to_queue(mcode)
 
-        mcode ='M999'
-        self._gcode_sender.append_gmcode_to_queue(mcode)
+    #     mcode ='M999'
+    #     self._gcode_sender.append_gmcode_to_queue(mcode)
 
-    def _turn_off_leds(self):
-        mcode = 'M42P99S1'
-        self._gcode_sender.append_gmcode_to_queue(mcode)
+    # def _turn_off_leds(self):
+    #     mcode = 'M42P99S1'
+    #     self._gcode_sender.append_gmcode_to_queue(mcode)
 
-        mcode ='M999'
-        self._gcode_sender.append_gmcode_to_queue(mcode)  
+    #     mcode ='M999'
+    #     self._gcode_sender.append_gmcode_to_queue(mcode)  
 
 
 # twh_loop_porters = list[Twh_LoopPorter]()

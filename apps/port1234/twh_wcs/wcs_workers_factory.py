@@ -61,7 +61,7 @@ class WorkersFactory:
                 new_porter = Twh_LoopPorter(warehouse_id, loop_porter_index)
                 new_workers.loop_porters.append(new_porter)
             
-            new_picker = Manual_PickPlacer("twh/" + warehouse_id + 'picker')
+            new_picker = Manual_PickPlacer('picker')
             new_workers.pick_placers.append(new_picker)
 
             # # packer_decks

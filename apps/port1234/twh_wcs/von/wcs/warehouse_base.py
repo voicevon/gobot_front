@@ -9,7 +9,7 @@ from von.mqtt.mqtt_agent import g_mqtt
 from von.logger import Logger
 
 
-class WarehouseBase(ABC):
+class WarehouseBrainBase(ABC):
 
     @abstractmethod
     def _start_deposit(self, new_deposit_request):

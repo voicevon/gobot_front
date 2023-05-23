@@ -25,7 +25,8 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         self.__linked_loop_porter = porter
         self.__linked_pick_placer = pick_placer
         self.__linked_deck = deck
-        self.__linked_picking_led = g_components[self._warehouse_id].binary_outputs['picking_leds'].Leds[self.layer]
+        leds_key = 'porter' + str(self.row) + "_leds"
+        self.__linked_picking_led = g_components[self._warehouse_id].binary_outputs[leds_key].Leds[self.layer]
         self.__linked_placing_led = g_components[self._warehouse_id].binary_outputs['placing_leds'].Leds[deck._index]
 
 
