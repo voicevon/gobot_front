@@ -1,7 +1,7 @@
 from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
 from twh_wcs.von.wcs.workers.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.workers.shipper.manual_shipper import Manual_Shipper
-from twh_wcs.von.wcs.conveyor.tube_conveyor import TubeConveyor
+from twh_wcs.von.wcs.workers.conveyor.simple_tube import SimpleTubeConveyor
 from twh_wcs.von.wcs.workers.wcs_item_workers import WcsWorkers
 
 from twh_wcs.wcs_warehouse_factory import g_warehouses
@@ -38,7 +38,7 @@ class WorkersFactory:
                 new_workers.loop_porters.append(new_porter)
 
             for tuber_index in range(1):
-                new_tube_conveyor = TubeConveyor(warehouse_id, 0 ,'','')
+                new_tube_conveyor = SimpleTubeConveyor(warehouse_id)
                 new_workers.tube_conveyors.append(new_tube_conveyor)
 
             g_warehouses[warehouse_id].workers_take = new_workers

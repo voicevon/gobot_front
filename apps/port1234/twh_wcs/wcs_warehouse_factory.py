@@ -1,7 +1,5 @@
 from twh_wcs.von.wcs.pastor_base import PastorBase
 
-# from twh_wcs.wcs_workers_factory import WcsWorkers
-# from twh_wcs.wcs_component_factory import Components
 from twh_wcs.von.wcs.workers.wcs_item_workers import WcsWorkers
 from twh_wcs.von.wcs.components.wcs_item_components import Components
 from twh_wcs.wcs_deck_factory import Wcs_DeckBase
@@ -10,19 +8,12 @@ from von.logger import Logger
 
 class WarehouseItems:
     name = 'not named warehouse'
-    pastors = dict[str, PastorBase]()
+    # pastors = dict[str, PastorBase]()
     workers_take = WcsWorkers()
     components_take = Components()
     decks = dict[str, dict[str,list[Wcs_DeckBase]]]()
 
 g_warehouses = dict[str, WarehouseItems]()
-
-
-
-# test area
-# g_warehouses['a'] = WarehouseItems()
-# g_warehouses['221109'].components_take.binary_outputs['picking'].Leds[3].GetState()
-# x = g_warehouses['d'].workers_take.loop_porters[2]
 
 
 class WarehouseFactory:

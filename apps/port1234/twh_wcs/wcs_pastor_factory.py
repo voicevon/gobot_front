@@ -1,6 +1,6 @@
 
 from twh_wcs.warehouse_loop_manual_pack.pastor_loop_manual_packer import Pastor_LoopManualPacker
-from twh_wcs.warehouse_loop_tube.pastor_loop_tube import Twh_LoopTubeSystem
+from twh_wcs.warehouse_loop_tube.pastor_loop_tube import Pastor_LoopTubeSystem
 
 
 
@@ -25,7 +25,7 @@ class PastorFactory:
             return pastor
 
         elif warehouse_id == '230220':
-            pastor = Twh_LoopTubeSystem(warehouse_id, deposit_queue)
+            pastor = Pastor_LoopTubeSystem(warehouse_id, deposit_queue)
             g_pastors[warehouse_id] = pastor
             return pastor
 

@@ -69,6 +69,18 @@ class ComponentFactory:
             g_warehouses[warehouse_id].components_take = new_components
             return new_components
         
+        elif warehouse_id == '230220':
+            mqtt_topic = 'wh' + warehouse_id + 'tube_inlets'
+            inlets = BinaryOutputGroup(mqtt_topic, 1)
+            new_components.binary_outputs['inlet_valves'] = inlets
+
+            mqtt_topic = 'wh' + warehouse_id + 'tube_outlets'
+            outlets = BinaryOutputGroup(mqtt_topic, 5)
+            new_components.binary_outputs['outlet_valves'] = outlets
+            
+            g_warehouses[warehouse_id].components_take = new_components
+            return new_components
+
         else:
             Logger.Error("ComponentFactory::CreateCompnents()   Unknown warehouse_id")
             Logger.Print("warehouse_id", warehouse_id)

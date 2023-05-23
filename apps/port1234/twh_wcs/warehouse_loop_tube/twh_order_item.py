@@ -1,7 +1,7 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
 from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
-from twh_wcs.von.wcs.conveyor.tube_conveyor import TubeConveyor
+from twh_wcs.von.wcs.workers.conveyor.simple_tube import SimpleTubeConveyor
 from twh_wcs.von.wcs.order_item import Wcs_OrderItemBase
 
 from von.logger import Logger
@@ -16,7 +16,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         self.col:int
         self.layer:int
         self.__linked_loop_porter = porter
-        self.__linked_tube_conveyer:TubeConveyor
+        self.__linked_tube_conveyer:SimpleTubeConveyor
         self.__got_start_command = False
 
     def TransferToLocated(self, new_located:str, write_to_db:bool) -> None:

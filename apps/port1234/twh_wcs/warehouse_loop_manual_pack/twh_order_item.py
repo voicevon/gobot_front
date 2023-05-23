@@ -27,10 +27,10 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         self.__linked_pick_placer = pick_placer
         self.__linked_deck = deck
         leds_key = 'porter' + str(self.row) + "_leds"
-        # self.__linked_picking_led = g_components[self._warehouse_id].binary_outputs[leds_key].Leds[self.layer]
-        # self.__linked_placing_led = g_components[self._warehouse_id].binary_outputs['placing_leds'].Leds[deck._index]
-        self.__linked_picking_led = g_warehouses[self._warehouse_id].components_take.binary_outputs[leds_key].Leds[self.layer]
-        self.__linked_placing_led = g_warehouses[self._warehouse_id].components_take.binary_outputs['placing_leds'].Leds[deck._index]
+        # self.__linked_picking_led = g_components[self._warehouse_id].binary_outputs[leds_key].Gates[self.layer]
+        # self.__linked_placing_led = g_components[self._warehouse_id].binary_outputs['placing_leds'].Gates[deck._index]
+        self.__linked_picking_led = g_warehouses[self._warehouse_id].components_take.binary_outputs[leds_key].Gates[self.layer]
+        self.__linked_placing_led = g_warehouses[self._warehouse_id].components_take.binary_outputs['placing_leds'].Gates[deck._index]
  
 
     # TODO:  remove this

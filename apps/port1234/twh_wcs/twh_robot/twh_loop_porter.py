@@ -26,9 +26,9 @@ class Twh_LoopPorter(LoopPorter):
         self.__target_layer:int
 
         # led_topic =  "wh" + warehouse_id + '/porter' + str(row_id) + "/leds"  #'wh221109/porter0/leds'
-        # self.Leds = BinaryOutputGroup(led_topic, 7)
+        # self.Gates = BinaryOutputGroup(led_topic, 7)
         # leds_key = 'porter' + str(row_id)
-        # g_components[self.warehouse_id].binary_outputs[leds_key] = self.Leds
+        # g_components[self.warehouse_id].binary_outputs[leds_key] = self.Gates
         # leds_key = 'porter' + str(row_id)
         # self.__leds = g_components[warehouse_id].binary_outputs[leds_key]
 
