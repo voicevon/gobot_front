@@ -1,28 +1,28 @@
 
-from twh_wcs.warehouse_loop_manual_pack.warehouse_loop_manual_packer import Warehosue_LoopManualPacker
-from twh_wcs.warehouse_loop_tube.warehosue_loop_tube import Twh_LoopTubeSystem
+from twh_wcs.warehouse_loop_manual_pack.pastor_loop_manual_packer import Pastor_LoopManualPacker
+from twh_wcs.warehouse_loop_tube.pastor_loop_tube import Twh_LoopTubeSystem
 
 
 
-from twh_wcs.von.wcs.warehouse_base import WarehouseBrainBase
+from twh_wcs.von.wcs.pastor_base import PastorBase
 from von.logger import Logger
 import multiprocessing
 
-g_brains = dict[str, WarehouseBrainBase]()
+g_brains = dict[str, PastorBase]()
 
-class WarehouseFactory:
+class PastorFactory:
 
     @classmethod
-    def EachWarehouse_SpinOnce(cls):
+    def EachPastor_SpinOnce(cls):
         for w in g_brains.values():
             w.SpinOnce()
         
 
     @classmethod
-    def Create_Warehouse(cls, warehouse_id:str, deposit_queue:multiprocessing.Queue) -> WarehouseBrainBase:
+    def Create_Pastor(cls, warehouse_id:str, deposit_queue:multiprocessing.Queue) -> PastorBase:
 
         if warehouse_id == '221109':
-            warehouse = Warehosue_LoopManualPacker(warehouse_id, deposit_queue)
+            warehouse = Pastor_LoopManualPacker(warehouse_id, deposit_queue)
             # wcs_instance = Twh_LoopTubeSystem(wcs_instance_id, deposit_queue)
             g_brains[warehouse_id] = warehouse
             return warehouse

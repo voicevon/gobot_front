@@ -2,7 +2,7 @@ from twh_wcs.warehouse_loop_manual_pack.twh_order_manager import Twh_OrderManage
 
 from twh_database.bolt_nut import twh_factories
 from twh_wcs.von.wcs.workers.shipper.manual_shipper import Manual_Shipper
-from twh_wcs.von.wcs.warehouse_base import WarehouseBrainBase
+from twh_wcs.von.wcs.pastor_base import PastorBase
 from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
 
 from twh_wcs.wcs_workers_factory import g_workers
@@ -10,7 +10,7 @@ from von.logger import Logger
 import multiprocessing
 
 
-class Warehosue_LoopManualPacker(WarehouseBrainBase):
+class Pastor_LoopManualPacker(PastorBase):
 
     def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue) -> None:
         self.__button_pick = RemoteVar_mqtt('twh/' + wcs_instance_id + '/packer/button/pick','idle')
