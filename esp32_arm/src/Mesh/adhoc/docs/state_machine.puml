@@ -1,0 +1,12 @@
+@startuml
+[*] -> Orphan: my_hop = 100
+
+Orphan --> got_neibour
+
+got_neibour --> got_leader
+
+got_leader --> lost_leader
+
+
+
+@enduml
