@@ -4,6 +4,9 @@ from abc import ABC, abstractmethod
 class Wcs_WorkerBase(ABC):
     
     def __init__(self, warehouse_id:str) -> None:
+        '''
+        TODO:  remove warehouse_id
+        '''
         self.warehouse_id = warehouse_id
 
     @abstractmethod

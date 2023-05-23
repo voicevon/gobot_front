@@ -39,7 +39,6 @@ class Twh_Order(Wcs_OrderBase):
         for db_tooth in db_order_teeth:
             # picker = g_workers[self._warehouse_id].pick_placers[0]
             picker = g_warehouses[self._warehouse_id].workers_take.pick_placers[0]
-            picker.PrintOut("fffffffffffffffffffffffffffffffffffffffffffffffffffffff")
             if db_tooth['order_id'] == self._order_id:
                 # loop_porter = g_workers[self._warehouse_id].loop_porters[db_tooth['row']]
                 loop_porter = g_warehouses[self._warehouse_id].workers_take.loop_porters[db_tooth['row']]
