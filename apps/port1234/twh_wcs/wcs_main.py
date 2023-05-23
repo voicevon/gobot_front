@@ -1,11 +1,10 @@
 from twh_database.bolt_nut import twh_factories
 
-
 from twh_wcs.wcs_deck_factory import DeckGroupFactory
 from twh_wcs.wcs_workers_factory import WorkersFactory
 from twh_wcs.wcs_pastor_factory import PastorFactory
-from twh_wcs.wcs_warehouse_factory import g_warehouses, WarehouseFactory
 from twh_wcs.wcs_component_factory import ComponentFactory
+from twh_wcs.wcs_warehouse_factory import g_warehouses, WarehouseFactory
 
 from twh_wcs.von.wcs.gcode_sender import g_gcode_senders
 from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
@@ -25,11 +24,11 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
             DeckGroupFactory.CreateDeckGroups(warehouse_id)
             ComponentFactory.CreateComponents(warehouse_id)
             WorkersFactory.Create_WcsWorkers(warehouse_id)
-            Logger.Info("Twh_Wcs_Main()   Created wcs_unit----->"  + warehouse_id)
+            Logger.Info("Twh_Wcs_Main()   Created wcs_unit----->" )
+            Logger.Print(warehouse_id, g_warehouses[warehouse_id].name)
 
         while True:
             PastorFactory.EachPastor_SpinOnce()
-            # WorkersFactory.EachWorker_SpinOnce()
             WarehouseFactory.EachWorker_SpinOnce()
             for gcode_sender in g_gcode_senders:
                 gcode_sender.SpinOnce()
@@ -40,10 +39,8 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
 wcs_deposit_queue = multiprocessing.Queue()         
 
 def Start_TwhWcs_Process():
-    
     p = multiprocessing.Process(target=WCS_Main, args=(wcs_deposit_queue,))
     p.start() 
-    # Logger.Info('WCS is running on new process.....')
 
 
     # https://pymotw.com/2/multiprocessing/communication.html#communication-between-processes

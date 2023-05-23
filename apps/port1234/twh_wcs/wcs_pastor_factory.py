@@ -21,7 +21,6 @@ class PastorFactory:
     def Create_Pastor(cls, warehouse_id:str, deposit_queue:multiprocessing.Queue) -> PastorBase:
         if warehouse_id == '221109':
             pastor = Pastor_LoopManualPacker(warehouse_id, deposit_queue)
-            # wcs_instance = Twh_LoopTubeSystem(wcs_instance_id, deposit_queue)
             g_pastors[warehouse_id] = pastor
             return pastor
 
