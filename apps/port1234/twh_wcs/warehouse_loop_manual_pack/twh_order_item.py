@@ -1,27 +1,32 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
 from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
+from twh_wcs.wcs_component_factory import g_components
+
 from twh_wcs.von.wcs.deck.simple_deck import SimpleDeck
 from twh_wcs.von.wcs.workers.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.order_item import Wcs_OrderItemBase
+from twh_wcs.von.wcs.components.binary_output.grouped_binary_output import BinaryOutputGroup
 
-from twh_wcs.wcs_workers_factory import g_workers
 
 from von.logger import Logger
 
 class Twh_OrderItem(Wcs_OrderItemBase):
 
-    def __init__(self, warehouse_id:str, db_doc_id:int, porter:Twh_LoopPorter, pick_placer:Manual_PickPlacer, packer:SimpleDeck) -> None:
+    def __init__(self, warehouse_id:str, db_doc_id:int) -> None:
         super().__init__(warehouse_id, db_doc_id)
         # self.doc_id = db_doc_id
         self.DentalLocation = 'ur1'
         self.row :int
         self.col:int
         self.layer:int
+
+    def LinkPeripheral(self,porter:Twh_LoopPorter, pick_placer:Manual_PickPlacer, deck:SimpleDeck):
         self.__linked_loop_porter = porter
         self.__linked_pick_placer = pick_placer
-        self.__linked_packer = packer
-        # self.__got_start_command = False
+        self.__linked_deck = deck
+        self.__linked_picking_led = g_components[self._warehouse_id].binary_outputs['picking_leds'].Leds[self.layer]
+        self.__linked_placing_led = g_components[self._warehouse_id].binary_outputs['placing_leds'].Leds[deck._index]
 
 
     # TODO:  remove this
@@ -42,6 +47,7 @@ class Twh_OrderItem(Wcs_OrderItemBase):
     def StartWithdraw(self):
         if self._state == 'idle':
             self._state = 'started'
+
             # Logger.Debug('Twh_OrderItem::StartWithdraw()' + str(self.doc_id))
         else:
             Logger.Error("OrderItem::StartWithdraw()    I am not on idle, can not start")
@@ -68,14 +74,11 @@ class Twh_OrderItem(Wcs_OrderItemBase):
 
         if self._state == 'on_gate':
             if self.__linked_pick_placer.GetState() == 'idle':
-                # turn on led-pair 
-                #   item led on looper gate, 
-                #   order led on packer ? 
-                place_cell = 3
-                self.__linked_loop_porter.TurnOn_ItemPickingLed(self.layer)
-                self.__linked_packer.TurnOn_Placing_Led(place_cell)
-                pick_at = (self.row, self.layer)
-                self.__linked_pick_placer.Start(pick_at, place_cell)
+                # turn on led-pair:  item led on looper gate,  order led on deck ? 
+                self.__linked_picking_led._set_state(is_turn_on=True)
+                self.__linked_placing_led._set_state(is_turn_on=True)
+                # pick_at = (self.row, self.layer)
+                self.__linked_pick_placer.Start()
                 self._state = 'picking_placing'
 
         if self._state == 'picking_placing':

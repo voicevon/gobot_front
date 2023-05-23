@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+
+
 class Wcs_OrderItemBase(ABC):
     
     def __init__(self, warehouse_id:str, db_doc_id:int) -> None:
@@ -17,7 +19,6 @@ class Wcs_OrderItemBase(ABC):
     def StartWithdraw(self):
         pass
 
-    
     @abstractmethod
     def _run_statemachine(self):
         pass

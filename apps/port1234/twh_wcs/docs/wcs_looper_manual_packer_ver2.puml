@@ -20,13 +20,15 @@ state order{
 	order_fullfilled --> order_packed: (yellow) packed_button is pressed
 	order_packed -->order_shipped:  (blue) shipped_button is pressed
 }
-state packer{
-	[*] --> packer_idle
-	state packer_feeding
+state deck{
+	[*] --> deck_idle
+	state deck_loading
+	deck_loading --> deck_loaded
 }
-packer_idle -[dashed]-> order_idle
-order_idle --> packer_feeding
-order_shipped --> packer_idle
+order_fullfilled -[#red,dashed]-> deck_loaded
+deck_idle -[dashed]-> order_idle
+order_idle --> deck_loading
+order_shipped --> deck_idle
 order_got_packer_cell -[#blue,dashed]-> item_idle
 
 
@@ -73,7 +75,7 @@ state wcs_state{
 
 	note right of wcs_idle
 	Parallel processes:
-		packer button checker
+		deck button checker
 		shipper button checker
 	end note
 }

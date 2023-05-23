@@ -12,22 +12,21 @@ folder Workers{
     collections picker_placer
     node tube_porter
 }
-collections Deck
-Order ---> Deck
 Order_Item --> loop_porter
 Order_Item -->picker_placer
 Order_Item --> tube_porter
 
 folder Components{
+    collections Deck
     collections indicator
     collections button
     collections valve
 }
-Deck --> indicator
-Deck <-- button
+Order ---> Deck
 Workers ---> indicator
 tube_porter ---> valve
 Workers <--- button
+picker_placer <--> Deck
 
 
 folder Communicators{
