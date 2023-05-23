@@ -10,6 +10,8 @@ from twh_wcs.von.wcs.workers.porter.loop_porter import LoopPorter
 from twh_wcs.von.wcs.workers.pick_placer.pick_placer import Wsc_PickPlacerBase
 from twh_wcs.von.wcs.workers.shipper.shipper import Wcs_ShipperBase
 
+from twh_wcs.wcs_deck_factory import DeckGroupFactory
+
 from twh_wcs.wcs_component_factory import g_components, ComponentFactory
 
 from von.logger import Logger
@@ -24,20 +26,20 @@ class WcsWorkers:
     tube_conveyors = list[TubeConveyor]()
     pick_placers = list[Wsc_PickPlacerBase]()
     shippers = list[Wcs_ShipperBase]()
-    decks = dict[str, list[Wcs_DeckBase]]()
+    # decks = dict[str, list[Wcs_DeckBase]]()
 
 
 g_workers = dict[str, WcsWorkers]()
 
 class WorkersFactory:
 
-    @classmethod
-    def FindIdlePackers(cls, warehouse_id:str, group_name:str) -> list[Wcs_DeckBase]:
-        idle_packers = list[Wcs_DeckBase]()
-        for packer in g_workers[warehouse_id].decks[group_name]:
-            if packer.GetState() == 'idle':
-                idle_packers.append(packer)
-        return idle_packers
+    # @classmethod
+    # def FindIdlePackers(cls, warehouse_id:str, group_name:str) -> list[Wcs_DeckBase]:
+    #     idle_packers = list[Wcs_DeckBase]()
+    #     for packer in g_workers[warehouse_id].decks[group_name]:
+    #         if packer.GetState() == 'idle':
+    #             idle_packers.append(packer)
+    #     return idle_packers
 
     @classmethod
     def EachWorker_SpinOnce(cls):
@@ -62,18 +64,16 @@ class WorkersFactory:
             new_picker = Manual_PickPlacer("twh/" + warehouse_id + 'picker')
             new_workers.pick_placers.append(new_picker)
 
-            # packer_decks
-            packer_decks = list[Wcs_DeckBase]()
-            for i in range(12):
-                new_packer = SimpleDeck(i)
-                packer_decks.append(new_packer)
-            new_workers.decks['packer'] = packer_decks
+            # # packer_decks
+            # packer_decks = DeckGroupFactory.CreateDeckGroups(warehouse_id)
+            # # for i in range(12):
+            # #     new_packer = SimpleDeck(i)
+            # #     packer_decks.append(new_packer)
+            # new_workers.deck_grs['packer'] = packer_decks
 
             # shipper
             new_shipper = Manual_Shipper("twh/" + warehouse_id + 'shipper/button')
             new_workers.shippers.append(new_shipper)
-
-            
 
             g_workers[warehouse_id] = new_workers
             return new_workers

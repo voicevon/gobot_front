@@ -6,6 +6,7 @@ from twh_wcs.warehouse_loop_manual_pack.twh_order_item import Twh_OrderItem
 from twh_wcs.von.wcs.deck.simple_deck import SimpleDeck
 from twh_wcs.von.wcs.order import Wcs_OrderBase
 from twh_wcs.wcs_workers_factory import g_workers, WorkersFactory
+from twh_wcs.wcs_deck_factory import DeckGroupFactory
 
 from von.logger import Logger
 
@@ -73,7 +74,8 @@ class Twh_Order(Wcs_OrderBase):
 
     def _run_statemachine(self):
         if self._state == 'idle':
-            idle_packers = WorkersFactory.FindIdlePackers(self._warehouse_id, 'packer')
+            # idle_packers = WorkersFactory.FindIdlePackers(self._warehouse_id, 'packer')
+            idle_packers = DeckGroupFactory.FindIdleDecks(self._warehouse_id, 'packer')
             if len(idle_packers) > 0:
                 self.__linked_packer = idle_packers[0]
                 self.__linked_packer.SetStateTo('feeding')

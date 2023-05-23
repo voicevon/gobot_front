@@ -1,7 +1,7 @@
 
-from twh_wcs.von.wcs.components.button.button import Wcs_ButtonBase
+from twh_wcs.von.wcs.components.binary_input.binary_input import Wcs_ButtonBase
 from twh_wcs.von.wcs.components.indicator.indicator import Wcs_IndicatorBase
-from twh_wcs.von.wcs.components.indicator.binary_output import BinaryOutputGroup
+from twh_wcs.von.wcs.components.binary_output.grouped_binary_output import BinaryOutputGroup
 from twh_wcs.von.wcs.components.actuator.actuator import Wcs_3wayValve, Wcs_ActuatorBase
 
 class Components:
