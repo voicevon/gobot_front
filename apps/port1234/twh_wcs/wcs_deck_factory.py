@@ -37,7 +37,14 @@ class DeckGroupFactory:
             group ={}
             group[group_name] = decks
             return group
-
+    
+    @classmethod
+    def CreateBlankDeckGroup(cls) -> dict[str, list[Wcs_DeckBase]]:
+            decks = list[Wcs_DeckBase]()
+            group ={}
+            group['blank_group_name'] = decks
+            return group
+    
     @classmethod
     def CreateDeckGroups(cls, warehouse_id:str) -> dict[str,list[Wcs_DeckBase]]:
         if warehouse_id == '221109':
@@ -46,10 +53,14 @@ class DeckGroupFactory:
             new_group =  cls.CreateDeckGroup(group_name, deck_count)
             g_decks[warehouse_id] = new_group
             return new_group
+        
+        elif warehouse_id =='230220':
+            return cls.CreateBlankDeckGroup()
+        
         else:
             Logger.Error('DeckGroupFactory::CreateDeckGroup()   Unknown warehouse_id')
             Logger.Print("warehouse_id", warehouse_id)
             
-        return None # type: ignore
+        return cls.CreateBlankDeckGroup()
 
 

@@ -73,7 +73,7 @@ class GcodeSender():
         self.__waitting_msg.payload = tx_message.payload
         g_mqtt.publish(self.__tx_topic, payload=tx_message.payload)
 
-        print("gcode sender....", self.__tx_topic, self.__waitting_msg.id, self.__waitting_msg.payload)
+        print("gcode sender is sending....", self.__tx_topic, self.__waitting_msg.id, self.__waitting_msg.payload)
 
 
 g_gcode_senders = list[GcodeSender]()

@@ -7,13 +7,12 @@
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 #include "app_config/twh_loop_porter.h"
 
-#include "remote_leds_state.h"
+#include "remote_leds_state.h"   
 
 Twh_LoopPorter_Board board;
 Twh_LoopPorter_Robot robot;
 Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
 RemoteLedsState leds_state;
-
 
 void test(){
     // board.TestLeds(200);
@@ -25,7 +24,6 @@ void test(){
     
     // float xx = Twh2_Circleloop_Armsolution_Config().Slope_Steps_per_box();
 }
-
 
 void setup(){
     board.Init();
@@ -45,6 +43,7 @@ void setup(){
     gs_MqttSubscriberManager::Instance().AddSubscriber(MQTT_TOPIC_FOR_LEDS, &leds_state);
 
 }
+
 void show_leds(){
     char leds_command[7];  // 'N' => ON, 'F' => OFF
     // leds_command = leds_state.Get();
@@ -55,6 +54,7 @@ void show_leds(){
             board.GetLed(i)->TurnOff();
     }
 }
+
 void loop(){
     app.SpinOnce();
     robot.SpinOnce();
