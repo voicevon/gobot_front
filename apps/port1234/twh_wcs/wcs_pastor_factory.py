@@ -8,30 +8,27 @@ from twh_wcs.von.wcs.pastor_base import PastorBase
 from von.logger import Logger
 import multiprocessing
 
-g_brains = dict[str, PastorBase]()
+g_pastors = dict[str, PastorBase]()
 
 class PastorFactory:
 
     @classmethod
     def EachPastor_SpinOnce(cls):
-        for w in g_brains.values():
-            w.SpinOnce()
-        
+        for pastor in g_pastors.values():
+            pastor.SpinOnce()
 
     @classmethod
     def Create_Pastor(cls, warehouse_id:str, deposit_queue:multiprocessing.Queue) -> PastorBase:
-
         if warehouse_id == '221109':
-            warehouse = Pastor_LoopManualPacker(warehouse_id, deposit_queue)
+            pastor = Pastor_LoopManualPacker(warehouse_id, deposit_queue)
             # wcs_instance = Twh_LoopTubeSystem(wcs_instance_id, deposit_queue)
-            g_brains[warehouse_id] = warehouse
-            return warehouse
+            g_pastors[warehouse_id] = pastor
+            return pastor
 
         elif warehouse_id == '230220':
-            warehouse = Twh_LoopTubeSystem(warehouse_id, deposit_queue)
-            g_brains[warehouse_id] = warehouse
-            return warehouse
-        
+            pastor = Twh_LoopTubeSystem(warehouse_id, deposit_queue)
+            g_pastors[warehouse_id] = pastor
+            return pastor
 
         else:
             Logger.Error("CreateWcsInstance()  Error")

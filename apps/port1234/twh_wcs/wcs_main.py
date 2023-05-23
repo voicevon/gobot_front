@@ -3,7 +3,7 @@ from twh_database.bolt_nut import twh_factories
 
 from twh_wcs.wcs_deck_factory import DeckGroupFactory
 from twh_wcs.wcs_workers_factory import WorkersFactory
-from twh_wcs.wcs_pastor_factory import PastorFactory, g_brains
+from twh_wcs.wcs_pastor_factory import PastorFactory, g_pastors
 from twh_wcs.wcs_component_factory import ComponentFactory
 
 from twh_wcs.von.wcs.gcode_sender import g_gcode_senders
