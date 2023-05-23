@@ -20,7 +20,7 @@ class AdhocRouter: public AdhocBase{
 
         void __sniff_air_package(const uint8_t * sender_mac, AdhocPackage* incoming_package);
         void __append_to_neibours(uint8_t * sender_mac, AdhocPackage* incoming_package);
-        void __lower_all_leadship();
+        void __lower_all_leadship(int delta);
         void __review_leadership(Neibour* sender, AdhocPackage* incoming_package);
         
 

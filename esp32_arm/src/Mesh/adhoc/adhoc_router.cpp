@@ -43,25 +43,25 @@ Neibour* AdhocRouter::__find_blank_neibour(){
 }
 
 void AdhocRouter::__append_to_neibours(uint8_t * sender_mac, AdhocPackage* incoming_package){
-        Neibour* blank = __find_blank_neibour();
-        if (blank == NULL){
+        Neibour* new_neibour = __find_blank_neibour();
+        if (new_neibour == NULL){
             // no more space , my neibouts count is more than MAX_TABLE_ROWS == 16
             return;
         }
         // just save to neibour_table,  we don't set hop right now.
         // Logger::Print("sender's  node_id", incoming_package-;
 
-        blank->node_id = incoming_package->sender_node_id;
-        blank->hop = incoming_package->sender_hop;
-        blank->leader_ship = 90;
-        AdhocHelper::CopyMacAddr(sender_mac, blank->mac_addr);
+        new_neibour->node_id = incoming_package->sender_node_id;
+        new_neibour->hop = incoming_package->sender_hop;
+        new_neibour->leader_ship = 90;
+        AdhocHelper::CopyMacAddr(sender_mac, new_neibour->mac_addr);
         Logger::Info("AdhocRouter::__sniff_air_package() -> __append_to_neibours()");
-        blank->PrintOut("new neibour detail");
+        new_neibour->PrintOut("new neibour detail");
 
         if (__my_leader == NULL){
-            if (blank->hop < _my_hop){
+            if (new_neibour->hop < _my_hop){
                 // set as a temperory leader.
-                __my_leader = blank;
+                __my_leader = new_neibour;
                 _my_hop = __my_leader->hop + 1;
                 Logger::Info("AdhocRouter::__sniff_air_package() -> __append_to_neibours():  Got a temperory leader");
                 __my_leader->PrintOut("__my_leader detail");
@@ -70,11 +70,14 @@ void AdhocRouter::__append_to_neibours(uint8_t * sender_mac, AdhocPackage* incom
         }
 }
 
-void AdhocRouter::__lower_all_leadship(){
+void AdhocRouter::__lower_all_leadship(int delta){
     // lower the leader_ship level of all neibous.
+    // Q: What is the pupose?
+    // A: leadship will increase every time of review.  
+    //    This function avoid leadship to be overflow.
     for (int i=0 ; i<ROUTER_TABLE_ROWS; i++){
         if (__my_neibours[i].node_id > 0){
-            __my_neibours[i].leader_ship--;
+            __my_neibours[i].leader_ship -= delta;
             if (__my_neibours[i].leader_ship < 0 ){
                 // remove this from routing_table.
                 Logger::Info("AdhocRouter::__sniff_air_package()  remove this neibour.");
@@ -101,10 +104,20 @@ void AdhocRouter::__review_leadership(Neibour* sender, AdhocPackage* incoming_pa
             // __my_leader = NULL;  DO NOT apply this line! 
         }
     }
-    // My leader's leader_ship will increase fastly.
-    // My simbling's leader_ship will increase slowly,
+    // My leader's leader_ship will increase  fastly.  +2 per review.
+    // My simbling's leader_ship will increase slowly. +1 per review.
     //    In case of my_leader is lost connection, my simbling will become my leader.
-    // My naphew's leader_ship will keep, or even drop.
+    //    Use case:   node-P's hop == 20,  node-Q's hop ==21, my_hop =21
+    //        But, P's singal is weak, Q's signal is strong. 
+    //        5 miniutes later,  Q becomes new leader. 
+    //             P has been reviewed 3 times, leadship = 90+2*3 = 96
+    //             Q has been reviewed 7 times, leadship = 90+1*7 = 97
+    //        
+    // My naphew's leader_ship will keep, or even drop. -0 or -1 per review.
+    //    Use case my_hop = 21, his_hop=22,  his signal is weak
+    //          5 miniutes later, he has been reviewed 2 times. been lowerd value total 91
+    //             his leadship = 90+0*2-91 = -1
+    //             he will be removed from my_neibours list.
     sender->leader_ship += ((int)_my_hop - (int)sender->hop + 1);  
     if (sender->leader_ship > 100){
         if (sender != __my_leader){
@@ -116,7 +129,8 @@ void AdhocRouter::__review_leadership(Neibour* sender, AdhocPackage* incoming_pa
             __my_leader->PrintOut("Leader details");
             Logger::Print("__my_hop", _my_hop);
         }
-        __lower_all_leadship();
+        int delta = sender->leader_ship - 100;
+        __lower_all_leadship(delta);
     }
 }
 

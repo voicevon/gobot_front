@@ -36,7 +36,8 @@ class Twh_LoopPorter_Board: public BoardBase{
         PositionTrigger __all_position_triggers[HOME_TRIGGER_COUNT];
         FastAccelStepperEngine __stepper_engine = FastAccelStepperEngine();
         FastAccelStepper* __stepper_alpha;
-        Mono_Led_GPIO __leds[7];
         Hc595_Digital_number __displayer;
+
+        Mono_Led_GPIO __leds[7];
         
 };

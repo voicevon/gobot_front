@@ -1,0 +1,92 @@
+@startuml
+
+
+
+state order_item{
+	[*] --> item_idle
+	item_idle --> item_started
+	item_started <-- item_started:  P1: no loop_porters is idle
+	item_started --> item_moving: P2b
+    item_moving ---> item_on_gate: loop_porter.is_ready()
+	item_on_gate --> item_picking_placing
+    item_picking_placing ----> item_ported: (green) pick_placed_button is pressed
+}
+
+state order{
+	[*] --> order_idle
+	order_idle --> order_got_packer_cell
+	order_got_packer_cell --> order_feeding
+	order_feeding --> order_fullfilled:  all_items.states == item_ported
+	order_fullfilled --> order_packed: (yellow) packed_button is pressed
+	order_packed -->order_shipped:  (blue) shipped_button is pressed
+}
+state deck{
+	[*] --> deck_idle
+	state deck_loading
+	deck_loading --> deck_loaded
+}
+order_fullfilled -[#red,dashed]-> deck_loaded
+deck_idle -[dashed]-> order_idle
+order_idle --> deck_loading
+order_shipped --> deck_idle
+order_got_packer_cell -[#blue,dashed]-> item_idle
+
+
+state loop_porter {
+	[*] -> loop_idle 
+	loop_idle --> loop_moving
+	loop_moving --> loop_ready
+}
+loop_idle -[dashed]---> item_started
+item_started --> loop_moving: P2a: loop_porter.MoveTo()
+loop_ready -[dashed]-> item_moving
+
+
+state manual_picker{
+	[*] --> picker_idle
+	picker_idle --> picker_picking_placing
+	picker_picking_placing --> picker_picked_placed: green_button is pressed
+	
+}
+picker_idle -[dashed]-> item_on_gate
+item_on_gate --> picker_picking_placing: trun on green_led pair
+picker_picked_placed -[dashed]-> item_picking_placing
+item_ported --> picker_idle
+
+state shipper{
+	[*] --> shipper_idle
+	shipper_idle --> shipper_loading
+	shipper_loading --> shipper_shipped
+
+}
+
+state wcs_state{
+	[*] -> wcs_idle
+	wcs_idle-[#red,dashed]-> checking_deposit_mq
+	checking_deposit_mq -[#red,bold]-> deposit_begin: deposit(row, col, quantity) \nrobot[row].moveto(col)
+	deposit_begin -[#red,bold]-> deposite_end
+	deposite_end -[#red,bold]->wcs_idle: user_finished, \nuser_canceled
+	checking_deposit_mq: this is a virtual state
+
+	checking_deposit_mq --> check_withdraw_request: deposit mq is empty
+	check_withdraw_request --> wcs_idle:  withdraw-queue is empty
+	check_withdraw_request --> withdraw_dispaching
+	withdraw_dispaching --> check_withdraw_request: withdraw-queue is empty
+
+	note right of wcs_idle
+	Parallel processes:
+		deck button checker
+		shipper button checker
+	end note
+}
+
+withdraw_dispaching -[#blue,dashed]-> order
+
+
+
+item_ported --> loop_idle
+
+
+
+
+@enduml

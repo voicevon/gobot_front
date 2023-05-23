@@ -1,0 +1,43 @@
+@startuml
+allowmixing
+
+frame Nodes{
+    collections Gate
+    collections Router
+    collections Sensor
+
+    Gate <-- Router
+    Gate <-- Sensor
+    Router <-- Sensor
+}
+node Sniffer
+Nodes -[dashed]-> Sniffer 
+
+
+card leader
+
+frame neibour{
+    
+    card leader_ship[
+        leader_ship
+        ----
+        This is also a QoS. 
+        Will be removed from neibour-table 
+            when QoS drops below zero
+    ]
+    card mac_addr
+    card hop
+    leader_ship <-- hop
+}   
+leader <-- leader_ship
+
+frame sniffered_packer{
+    card sender_mac
+    card destination_mac
+    card sender_hop
+}
+mac_addr <-- sender_mac 
+hop <-- sender_hop
+leader_ship <-[#red,dashed]- sniffered_packer :  frequency
+
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+allowmixing
+
+folder Warehouse{
+    collections Order
+    collections Order_Item
+    Order -> Order_Item
+}
+
+folder Workers{
+    collections loop_porter
+    collections picker_placer
+    node tube_porter
+}
+Order_Item --> loop_porter
+Order_Item -->picker_placer
+Order_Item --> tube_porter
+
+folder Components{
+    collections Deck
+    collections indicator
+    collections button
+    collections valve
+}
+Order ---> Deck
+Workers ---> indicator
+tube_porter ---> valve
+Workers <--- button
+picker_placer <--> Deck
+
+
+folder Communicators{
+    collections gcode_sender
+    collections remote_var
+}
+loop_porter ---> gcode_sender
+picker_placer ---> gcode_sender
+indicator --> remote_var
+valve --> remote_var
+button <-- remote_var
+
+@enduml
