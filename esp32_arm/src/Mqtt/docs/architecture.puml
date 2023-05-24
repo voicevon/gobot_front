@@ -8,10 +8,10 @@ card ws2812B
 
 app <-- remote_binary_output_group
 
-remote_binary_output_group --> MqttSubscriberBase
+remote_binary_output_group <-[dashed]- MqttSubscriberBase
 app --> ws2812B
 
-
+MqttSubscriberBase <-- MqttClient
 
 
 @enduml
