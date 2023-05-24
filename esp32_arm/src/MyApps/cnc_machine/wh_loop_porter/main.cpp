@@ -2,18 +2,18 @@
 #include "board/board.h"
 #include "loop_porter_app.h"
 #include "robot/loop_porter_robot.h"
+#include "Mqtt/remote_binary_output_group.h"
 #include "all_applications.h"
 
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
 #include "app_config/twh_loop_porter.h"
 
-#include "remote_leds_state.h"   
-#define LEDS_COUNT
+#define LEDS_COUNT 7
 
 Twh_LoopPorter_Board board;
 Twh_LoopPorter_Robot robot;
 Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
-RemoteLedsState leds_state(LEDS_COUNT);
+RemoteLedsState leds;
 
 void test(){
     // board.TestLeds(200);
@@ -41,13 +41,14 @@ void setup(){
     gcode_queue->AppendGcodeCommand("G28X");
     gcode_queue->AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
 
-    gs_MqttSubscriberManager::Instance().AddSubscriber(MQTT_TOPIC_FOR_LEDS, &leds_state);
+    leds.Init(LEDS_COUNT);
+    gs_MqttSubscriberManager::Instance().AddSubscriber(MQTT_TOPIC_FOR_LEDS, &leds);
 
 }
 
 void show_leds(){
     char* leds_command;  // 'N' => ON, 'F' => OFF
-    leds_command = leds_state.Get();
+    leds_command = leds.Get();
     for(int i=0; i<LEDS_COUNT; i++){
         if (*(leds_command+i) == 'N')
             board.GetLed(i)->TurnOn();

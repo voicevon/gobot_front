@@ -1,12 +1,12 @@
-#include "remote_leds_state.h"
+#include "remote_binary_output_group.h"
 #include "ArduinoJson.h"
 #include "MyLibs/basic/logger.h"
 #include "MyLibs/basic/memory_helper.h"
 
 
-RemoteLedsState::RemoteLedsState(uint8_t leds_count){
-    this->__leds_count = leds_count;
-}
+// RemoteLedsState::RemoteLedsState(uint8_t leds_count){
+//     this->__leds_count = leds_count;
+// }
 
 void RemoteLedsState::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     for (int i=0; i<payload_len; i++){
@@ -19,7 +19,7 @@ void RemoteLedsState::onGot_MqttMessage(const char* payload, uint16_t payload_le
 }
 
 char* RemoteLedsState::Get(){
-    StaticJsonDocument<__JSON_BUFFER_SIZE> doc;
+    StaticJsonDocument<__MIN_JSON_BUFFER_SIZE> doc;
     // char __mqtt_payload__[]  =  "[\"OFF\", \"ON\", \"OFF\", \"OFF\", \"OFF\", \"OFF\", \"OFF\"]";
     if (__got_remote_value){
         // Logger::Debug("RemoteLedsState::Get()");
