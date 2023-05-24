@@ -45,7 +45,7 @@ class Wcs_PorterBase(Wcs_WorkerBase):
         return self._state
 
     def ResetStatemachine(self):
-        if self._state == 'ready':
+        if self._state in ['ready','idle']:
             self.__remote_state.set('idle')
             self._state = 'idle'
         else:

@@ -1,6 +1,5 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 from twh_wcs.warehouse_loop_manual_pack.twh_order_item import Twh_OrderItem
-# from twh_wcs.wcs_workers_factory import g_workers
 from twh_wcs.wcs_warehouse_factory import g_warehouses
 from twh_wcs.wcs_deck_factory import DeckGroupFactory
 
@@ -15,8 +14,8 @@ class Twh_Order(Wcs_OrderBase):
     def __init__(self, warehouse_id:str, twh_order_id:int) -> None:
         super().__init__(warehouse_id, twh_order_id)
         self.__linked_output_deck: SimpleDeck
-        # self.__linked_shipper = g_workers[warehouse_id].shippers[0]
         self.__linked_shipper = g_warehouses[warehouse_id].workers_take.shippers[0]
+        self.__linked_fullfilled_leds = g_warehouses[warehouse_id].components_take.binary_outputs['fullfilled_leds']
     
     def UpdateStateToDb(self, new_state:str):
             doc_ids = self._get_all_teeth_doc_ids()
@@ -70,19 +69,27 @@ class Twh_Order(Wcs_OrderBase):
                 self._state = 'feeding'
 
         if self._state == 'feeding':
-            if self._all_items_is_in_state('ported'):
+            if self._all_items_is_in_state('ended'):
                 doc_ids = self._get_all_teeth_doc_ids()
                 DB_WithdrawOrder.update_order_state('fullfilled', doc_ids)
                 self._state = 'fullfilled'
 
         if self._state == 'fullfilled':
             self.__linked_output_deck.SetStateTo('loaded')
+            self.__linked_fullfilled_leds.SetElementState(self.__linked_output_deck._index, is_turn_on=True)
             # for future version purposed.
             self._state = 'packed'
 
         if self._state == 'packed':
              if self.__linked_shipper.GetState() == 'shipped':
                   self._state = 'shipped'
+
+        if self._state == 'shipped':
+             self.__linked_fullfilled_leds.SetElementState(self.__linked_output_deck._index, is_turn_on=False)
+             self._state = 'ended'
+        
+        if self._state == 'ended':
+             pass
 
 
 

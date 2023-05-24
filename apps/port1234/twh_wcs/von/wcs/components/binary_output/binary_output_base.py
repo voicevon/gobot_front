@@ -9,6 +9,12 @@ class BinaryOutput_Basic:
             self._state = 'ON'
         else:
             self._state = 'OFF'
+    
+    def Turn_On(self):
+        self._state = 'ON'
+
+    def Turn_Off(self):
+        self._state = 'OFF'
 
     def GetState(self) -> str:
         return self._state

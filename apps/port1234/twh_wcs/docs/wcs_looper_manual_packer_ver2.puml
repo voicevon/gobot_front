@@ -10,15 +10,17 @@ state order_item{
     item_moving ---> item_on_gate: loop_porter.is_ready()
 	item_on_gate --> item_picking_placing
     item_picking_placing ----> item_ported: (green) pick_placed_button is pressed
+	item_ported --> item_ended
 }
 
 state order{
 	[*] --> order_idle
 	order_idle --> order_got_packer_cell
 	order_got_packer_cell --> order_feeding
-	order_feeding --> order_fullfilled:  all_items.states == item_ported
+	order_feeding --> order_fullfilled:  all_items.states == item_ended
 	order_fullfilled --> order_packed: (yellow) packed_button is pressed
 	order_packed -->order_shipped:  (blue) shipped_button is pressed
+	order_shipped --> order_ended
 }
 state deck{
 	[*] --> deck_idle

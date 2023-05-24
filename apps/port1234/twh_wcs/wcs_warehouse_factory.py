@@ -23,8 +23,14 @@ class WarehouseFactory:
         for warehouse in g_warehouses.values():
             for porter in warehouse.workers_take.loop_porters:
                 porter.SpinOnce()
-            for leds in warehouse.components_take.binary_outputs.values():
-                leds.SpinOnce()
+            for pick_placer in warehouse.workers_take.pick_placers:
+                pick_placer.SpinOnce()
+            for shipper in warehouse.workers_take.shippers:
+                shipper.SpinOnce()
+
+            for outputs in warehouse.components_take.binary_outputs.values():
+                outputs.SpinOnce()
+            
 
     @classmethod
     def Create_Warehouse(cls, warehouse_id:str):

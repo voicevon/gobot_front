@@ -17,6 +17,9 @@ class Wsc_PickPlacerBase(Wcs_WorkerBase):
     def GetState(self) -> str:
         return self._state
 
+    @abstractmethod
+    def ResetStatemachine(self):
+        pass
 
     @abstractmethod
     def Start(self, pick_at, place_at):

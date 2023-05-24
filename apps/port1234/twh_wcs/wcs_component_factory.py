@@ -56,6 +56,9 @@ class ComponentFactory:
             picking_leds = BinaryOutputGroup('wh221109/placing_leds', 12)
             new_components.binary_outputs['placing_leds'] = picking_leds
 
+            fullfilled_leds = BinaryOutputGroup('wh221109/fullfilled_leds', 12)
+            new_components.binary_outputs['fullfilled_leds'] = fullfilled_leds
+
             picking_leds = BinaryOutputGroup('wh221109/shiping_leds', 12)
             new_components.binary_outputs['shiping_leds'] = picking_leds
 

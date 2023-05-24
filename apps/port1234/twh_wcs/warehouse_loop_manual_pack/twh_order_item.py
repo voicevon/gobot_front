@@ -75,19 +75,27 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         if self._state == 'on_gate':
             if self.__linked_pick_placer.GetState() == 'idle':
                 # turn on led-pair:  item led on looper gate,  order led on deck ? 
-                self.__linked_picking_led._set_state(is_turn_on=True)
-                self.__linked_placing_led._set_state(is_turn_on=True)
+                self.__linked_picking_led.Turn_On()
+                self.__linked_placing_led.Turn_On()
                 # pick_at = (self.row, self.layer)
                 self.__linked_pick_placer.Start()
                 self._state = 'picking_placing'
 
         if self._state == 'picking_placing':
-            if self.__linked_loop_porter.GetState()=='picked_placed':
-                self.__linked_loop_porter.ResetStatemachine()
+            if self.__linked_pick_placer.GetState() == 'picked_placed':
                 self._state = 'ported'
 
         if self._state == 'ported':
-            # Q: Need to wait tube conveyer be idle ?
-            # A: Don't know now.
+            self.__linked_pick_placer.ResetStatemachine()
+            self.__linked_loop_porter.ResetStatemachine()
+            self.__linked_picking_led.Turn_Off()
+            self.__linked_placing_led.Turn_Off()
+            self._state = 'ended'
+        
+        if self._state == 'ended':
             pass
+        
+
+
+
 

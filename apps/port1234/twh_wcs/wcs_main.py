@@ -21,8 +21,12 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
         for warehouse_id in list(twh_factories.keys()):
             WarehouseFactory.Create_Warehouse(warehouse_id)
             PastorFactory.Create_Pastor(warehouse_id, deposit_queue)
+
+            # TODO: merge deck to components? 
             DeckGroupFactory.CreateDeckGroups(warehouse_id)
             ComponentFactory.CreateComponents(warehouse_id)
+
+            # note: must be after create_components()
             WorkersFactory.Create_WcsWorkers(warehouse_id)
             Logger.Info("Twh_Wcs_Main()   Created wcs_unit----->" )
             Logger.Print(warehouse_id, g_warehouses[warehouse_id].name)
