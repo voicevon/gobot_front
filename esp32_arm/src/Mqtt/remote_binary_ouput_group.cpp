@@ -15,7 +15,7 @@ void RemoteBinaryOutputGroup::onGot_MqttMessage(const char* payload, uint16_t pa
     __mqtt_payload[payload_len] = 0x00;
     __got_remote_value = true;
     Logger::Debug("RemoteBinaryOutputGroup::onGot_MqttMessage");
-    Logger::Print("__mqtt_payload", __mqtt_payload);
+    Logger::Print(this->_mqtt_topic, __mqtt_payload);
 }
 
 char* RemoteBinaryOutputGroup::Get(){

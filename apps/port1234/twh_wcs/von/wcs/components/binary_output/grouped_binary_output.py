@@ -10,17 +10,22 @@ class BinaryOutputGroup:
 
     def __init__(self, mqtt_topic:str, group_size:int) -> None:
         self.Gates = list[BinaryOutput_Basic]()
-        payload = self.__to_mqtt_payload()
-        self.__remote_leds = RemoteVar_mqtt(mqtt_topic, json.dumps(payload), False)
         for _ in range(group_size):
             led = BinaryOutput_Basic()
             self.Gates.append(led)
 
-        self.__previous_payload = []
+        # now, the list is not blank.
+        self.__previous_mqtt_payload = self.__to_mqtt_payload()
+        self.__remote_leds = RemoteVar_mqtt(mqtt_topic, self.__previous_mqtt_payload, for_loading_config=False)
         self.__mqtt_topic = mqtt_topic
     
     def __to_mqtt_payload(self)->str:
         payload = []
+        if len(self.Gates) == 0:
+            Logger.Error("BinaryOutputGroup::__to_mqtt_payload()")
+            while True:
+                pass
+            
         for led in self.Gates:
             payload.append(led.GetState())
         mqtt_payload = json.dumps(payload)
@@ -29,9 +34,8 @@ class BinaryOutputGroup:
     def SetState_for_All(self, is_turn_on:bool):
         for led in self.Gates:
             led._set_state(is_turn_on)
-        payload = self.__to_mqtt_payload()
-        self.__remote_leds.set(payload)
-        
+        mqtt_payload = self.__to_mqtt_payload()
+        self.__remote_leds.set(mqtt_payload)
         
     def SetElementState(self, index:int, is_turn_on:bool):
         self.Gates[index]._set_state(is_turn_on)
@@ -39,11 +43,11 @@ class BinaryOutputGroup:
         self.__remote_leds.set(payload)
 
     def SpinOnce(self):
-        payload = self.__to_mqtt_payload()
-        if self.__previous_payload == payload:
+        mqtt_payload = self.__to_mqtt_payload()
+        if self.__previous_mqtt_payload == mqtt_payload:
             return
         Logger.Debug("BinaryOutputGroup::SpinOnce()      publishing")
 
-        Logger.Print(self.__mqtt_topic, payload)
-        self.__previous_payload = payload
-        self.__remote_leds.set(payload)
+        Logger.Print(self.__mqtt_topic, mqtt_payload)
+        self.__previous_mqtt_payload = mqtt_payload
+        self.__remote_leds.set(mqtt_payload)

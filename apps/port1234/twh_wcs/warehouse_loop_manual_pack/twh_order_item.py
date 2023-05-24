@@ -1,13 +1,11 @@
 from twh_database.db_withdraw_order import DB_WithdrawOrder
 
 from twh_wcs.twh_robot.twh_loop_porter import Twh_LoopPorter
-# from twh_wcs.wcs_component_factory import g_components
 from twh_wcs.wcs_warehouse_factory import g_warehouses
 
 from twh_wcs.von.wcs.deck.simple_deck import SimpleDeck
 from twh_wcs.von.wcs.workers.pick_placer.manual_pick_placer import Manual_PickPlacer
 from twh_wcs.von.wcs.order_item import Wcs_OrderItemBase
-from twh_wcs.von.wcs.components.binary_output.grouped_binary_output import BinaryOutputGroup
 
 
 from von.logger import Logger
@@ -27,8 +25,6 @@ class Twh_OrderItem(Wcs_OrderItemBase):
         self.__linked_pick_placer = pick_placer
         self.__linked_deck = deck
         leds_key = 'porter' + str(self.row) + "_leds"
-        # self.__linked_picking_led = g_components[self._warehouse_id].binary_outputs[leds_key].Gates[self.layer]
-        # self.__linked_placing_led = g_components[self._warehouse_id].binary_outputs['placing_leds'].Gates[deck._index]
         self.__linked_picking_led = g_warehouses[self._warehouse_id].components_take.binary_outputs[leds_key].Gates[self.layer]
         self.__linked_placing_led = g_warehouses[self._warehouse_id].components_take.binary_outputs['placing_leds'].Gates[deck._index]
  
