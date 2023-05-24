@@ -2,13 +2,17 @@
 allowmixing
 
 card app
-card remote_binary_output_group
+frame Remote_binary_output_group{
+    card remote_binary_output_group
+    card MqttSubscriberBase
+    remote_binary_output_group <-[dashed]- MqttSubscriberBase
+}
 card ws2812B
 
 
 app <-- remote_binary_output_group
 
-remote_binary_output_group <-[dashed]- MqttSubscriberBase
+
 app --> ws2812B
 
 MqttSubscriberBase <-- MqttClient

@@ -6,7 +6,7 @@
 #include "all_applications.h"
 
 #ifdef I_AM_TEETH_WAREHOUSE_LOOP_PORTER
-#include "app_config/twh_loop_porter.h"
+#include "porter_config.h"
 
 #define LEDS_COUNT 7
 
@@ -40,6 +40,7 @@ void setup(){
     Logger::Info ("App::loop-porter::setup() is done. ");
 
     gcode_queue->AppendGcodeCommand("G28X");
+    gcode_queue->AppendGcodeCommand("G1X26");
     gcode_queue->AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
 
     leds.Init(LEDS_COUNT);
