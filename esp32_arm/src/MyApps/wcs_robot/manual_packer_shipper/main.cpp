@@ -31,7 +31,9 @@ void setup(){
 
     board.GetButton_picked()->SetMqttPublishTopic("wh221109/placed_button");
     board.GetButton_Packed()->SetMqttPublishTopic("wh221109/shipped_button");
+    
     leds_placing.Init(12);
+    leds_fullfilled.Init(12);
     leds_shipping.Init(12);
     gs_MqttSubscriberManager::Instance().AddSubscriber("wh221109/placing_leds", &leds_placing);
     gs_MqttSubscriberManager::Instance().AddSubscriber("wh221109/fullfilled_leds",&leds_fullfilled);

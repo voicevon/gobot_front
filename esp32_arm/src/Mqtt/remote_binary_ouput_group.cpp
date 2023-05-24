@@ -41,7 +41,7 @@ char* RemoteBinaryOutputGroup::Get(){
         for(int i=0; i<__leds_count; i++){
             // if(doc[i] == 'N'){
             const char* p_char = doc[i];
-            Logger::Print(p_char, i);
+            // Logger::Print(p_char, i);
             if(*(p_char + 1) == 'N' ){
                 __remote_value[i] = 'N';
             }else{
