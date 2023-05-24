@@ -4,7 +4,7 @@
 #define __MAX_OUTPUT_END_POINT_COUNT 12
 
 
-class RemoteLedsState: public MqttSubscriberBase{
+class RemoteBinaryOutputGroup: public MqttSubscriberBase{
     public:
         // RemoteLedsState(uint8_t leds_count);
         void Init(uint8_t led_count){__leds_count = led_count;};

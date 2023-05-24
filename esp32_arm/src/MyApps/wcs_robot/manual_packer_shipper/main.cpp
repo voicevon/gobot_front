@@ -7,10 +7,12 @@
 
 
 #include "all_applications.h"
-#ifdef I_AM_TEETH_WAREHOUSE_PACKER
+#ifdef I_AM_WAREHOUSE_MANUAL_PACKER_SHIPPER
+#define LEDS_COUNT 12
 
 Twh_Packer_Board board;
-
+RemoteBinaryOutputGroup leds_placing;
+RemoteBinaryOutputGroup leds_shipping;
 
 void test_board(){
     #define TESTING_BRIGHTNESS 11
@@ -18,8 +20,7 @@ void test_board(){
     Serial.println("[Info] test_board() is done.");
 }
 
-RemoteLedsState leds_placing(12);
-RemoteLedsState leds_shipping(12);
+
 
 void setup(){
     board.Init();
@@ -29,24 +30,33 @@ void setup(){
 
     board.GetButton_picked()->SetMqttPublishTopic("wh221109/packer/button/pick");
     board.GetButton_Packed()->SetMqttPublishTopic("wh221109/packer/button/pack");
-    
-    gs_MqttSubscriberManager::Instance().AddSubscriber("wh221109/placing_leds", board.GetWs2812B());
-    gs_MqttSubscriberManager::Instance().AddSubscriber("wh221109/shipping_leds", board.GetWs2812B());
+    leds_placing.Init(12);
+    leds_shipping.Init(12);
+    gs_MqttSubscriberManager::Instance().AddSubscriber("wh221109/placing_leds", &leds_placing);
+    gs_MqttSubscriberManager::Instance().AddSubscriber("wh221109/shipping_leds",&leds_shipping);
 
     Logger::Info ("Twh Packer setup() is done. ");
     board.BootTest();
 }
 
 void show_leds(){
-    char* leds_command;  // 'N' => ON, 'F' => OFF
-    leds_command = led.Get();
+    // char* leds_packing_command;  
+    // char* leds_shipping_command; 
+    board.GetWs2812B()->Clear();
+
+    char* leds_packing_command = leds_placing.Get();  // 'N' => ON, 'F' => OFF
     for(int i=0; i<LEDS_COUNT; i++){
-        if (*(leds_command+i) == 'N')
-            board.GetLed(i)->TurnOn();
-        else
-            board.GetLed(i)->TurnOff();
+        if (*(leds_packing_command+i) == 'N')
+            board.GetWs2812B()->SetLed_Green(i);
     }
+    char* leds_shipping_command = leds_placing.Get();  // 'N' => ON, 'F' => OFF
+    for(int i=0; i<LEDS_COUNT; i++){
+        if (*(leds_shipping_command+i) == 'N')
+            board.GetWs2812B()->SetLed_Blue(i);
+    }
+
 }
+
 
 void loop(){
     board.GetButton_Packed()->SpinOnce();

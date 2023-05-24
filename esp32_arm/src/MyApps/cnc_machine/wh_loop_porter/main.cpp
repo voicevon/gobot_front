@@ -13,7 +13,8 @@
 Twh_LoopPorter_Board board;
 Twh_LoopPorter_Robot robot;
 Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
-RemoteLedsState leds;
+RemoteBinaryOutputGroup leds;
+// RemoteLedsState leds();  This cause compiler failed, why?
 
 void test(){
     // board.TestLeds(200);

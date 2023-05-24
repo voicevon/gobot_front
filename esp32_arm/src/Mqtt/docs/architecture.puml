@@ -1,0 +1,17 @@
+@startuml
+allowmixing
+
+card app
+card remote_binary_output_group
+card ws2812B
+
+
+app <-- remote_binary_output_group
+
+remote_binary_output_group --> MqttSubscriberBase
+app --> ws2812B
+
+
+
+
+@enduml

@@ -10,17 +10,17 @@ void WS2812B::Link_Adrafruit_NeoPixel(Adafruit_NeoPixel* neo_pixel){
     __neo_pixel->clear();
 }
 
-void WS2812B::onGot_MqttMessage(const char* payload, uint16_t payload_len){
-    // Logger::Debug("WS2812B::onMessage()");
-    // Logger::Print("payload", payload);
-    int led_index = atoi(payload);
-    // int color_index = led_index / 12;
-    __led_red_index = 99;
-    __led_green_index = led_index % 100;
-    __led_blue_index = led_index / 100;
+// void WS2812B::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+//     // Logger::Debug("WS2812B::onMessage()");
+//     // Logger::Print("payload", payload);
+//     int led_index = atoi(payload);
+//     // int color_index = led_index / 12;
+//     __led_red_index = 99;
+//     __led_green_index = led_index % 100;
+//     __led_blue_index = led_index / 100;
 
-    __SetLeds();
-}
+//     __SetLeds();
+// }
 
 
 
