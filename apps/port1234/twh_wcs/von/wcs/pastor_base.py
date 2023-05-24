@@ -1,6 +1,5 @@
 
 
-from twh_wcs.von.wcs.order import  Wcs_OrderBase, Wcs_OrderItemBase
 from twh_wcs.von.wcs.order_manager import Wcs_OrderMangerBase
 
 import multiprocessing
@@ -56,9 +55,4 @@ class PastorBase(ABC):
             g_mqtt.publish('twh/' + self._warehouse_id + '/wcs_state', self.__showing_wcs_state)
         return self._wcs_state
 
-    # def all_loop_porter_are_idle(self) -> bool:
-    #     for porter in self._porters:
-    #         if porter.GetState() != 'idle':
-    #             return False
-    #     return True
 
