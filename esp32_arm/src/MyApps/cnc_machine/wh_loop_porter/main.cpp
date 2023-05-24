@@ -8,11 +8,12 @@
 #include "app_config/twh_loop_porter.h"
 
 #include "remote_leds_state.h"   
+#define LEDS_COUNT
 
 Twh_LoopPorter_Board board;
 Twh_LoopPorter_Robot robot;
 Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
-RemoteLedsState leds_state;
+RemoteLedsState leds_state(LEDS_COUNT);
 
 void test(){
     // board.TestLeds(200);
@@ -45,10 +46,10 @@ void setup(){
 }
 
 void show_leds(){
-    char leds_command[7];  // 'N' => ON, 'F' => OFF
-    // leds_command = leds_state.Get();
-    for(int i=0; i<7; i++){
-        if (leds_command[i] == 'N')
+    char* leds_command;  // 'N' => ON, 'F' => OFF
+    leds_command = leds_state.Get();
+    for(int i=0; i<LEDS_COUNT; i++){
+        if (*(leds_command+i) == 'N')
             board.GetLed(i)->TurnOn();
         else
             board.GetLed(i)->TurnOff();
