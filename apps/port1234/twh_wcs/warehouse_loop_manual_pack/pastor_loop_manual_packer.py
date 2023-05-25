@@ -10,11 +10,9 @@ import multiprocessing
 
 class Pastor_LoopManualPacker(PastorBase):
 
-    def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue) -> None:
-        
-        self.__order_manager = Twh_OrderManager(wcs_instance_id)
-
-        super().__init__(wcs_instance_id, deposit_queue, self.__order_manager)
+    def __init__(self, warehouse_id:str, deposit_queue:multiprocessing.Queue) -> None:
+        order_manager = Twh_OrderManager(warehouse_id)
+        super().__init__(warehouse_id, deposit_queue, order_manager)
 
     def _start_deposit(self, new_deposit_request):
         Logger.Info(twh_factories[self._warehouse_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
@@ -25,8 +23,6 @@ class Pastor_LoopManualPacker(PastorBase):
         layer_id = int(new_deposit_request['layer'])
         # Logger.Print("row_id", row_id)
         # Logger.Print("porters count", len(self.__porters))
-        # porter = self.__porters[row_id]
-        # porter = g_workers[self._warehouse_id].loop_porters[row_id]
         porter = g_warehouses[self._warehouse_id].workers_take.loop_porters[row_id]
         self.__depositing_porter = porter
         Logger.Print('layer_id', layer_id)
