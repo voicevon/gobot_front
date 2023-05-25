@@ -1,43 +1,18 @@
+from twh_wcs.von.wcs.pastor_base import PastorBase
 from twh_wcs.warehouse_loop_manual_pack.twh_order_manager import Twh_OrderManager
 
-from twh_database.bolt_nut import twh_factories
-from twh_wcs.von.wcs.workers.shipper.manual_shipper import Manual_Shipper
-from twh_wcs.von.wcs.pastor_base import PastorBase
-from von.mqtt.remote_var_mqtt import RemoteVar_mqtt
-
-# from twh_wcs.wcs_workers_factory import g_workers
 from twh_wcs.wcs_warehouse_factory import g_warehouses
+from twh_database.bolt_nut import twh_factories
+
 from von.logger import Logger
 import multiprocessing
 
 
 class Pastor_LoopManualPacker(PastorBase):
 
-    def __init__(self, wcs_instance_id:str, deposit_queue:multiprocessing.Queue) -> None:
-        self.__button_pick = RemoteVar_mqtt('twh/' + wcs_instance_id + '/packer/button/pick','idle')
-        
-        # __button_pack is a blue button sit on packer.
-        # self.__button_shipped = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pack','idle')
-        # self.__twh_packer = TwhRobot_Packer()
-        mqtt_topic_of_ship = 'twh/' + wcs_instance_id + '/packer/button/pack'
-        self.__shipper = Manual_Shipper(mqtt_topic_of_ship)
-        self.__order_manager = Twh_OrderManager(wcs_instance_id)
-
-        super().__init__(wcs_instance_id, deposit_queue, self.__order_manager)
-        # self.__porters = list[Twh_LoopPorter]()
-        # for i in range(4):
-            # new_porter = Twh_LoopPorter(wcs_instance_id, i)
-            # self.__porters.append(new_porter)
-
-        # # __button_pick is a green button sit on packer.
-        # self.__button_pick = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pick','idle')
-        # # __button_pack is a blue button sit on packer.
-        # self.__button_shipped = RemoteVar_mqtt('twh/' + twh_id + '/packer/button/pack','idle')
-        # self.__packer = TwhRobot_Packer()
-        # self.__shipper = TwhRobot_Shipper(button_shipped=self.__button_shipped)
-        # self._wcs_state = 'idle'
-        # self.__withdraw_orders_manager = WithdrawOrdersManager(twh_id, self.__packer, self.__shipper)
-        self.__deposite_queue = deposit_queue
+    def __init__(self, warehouse_id:str, deposit_queue:multiprocessing.Queue) -> None:
+        order_manager = Twh_OrderManager(warehouse_id)
+        super().__init__(warehouse_id, deposit_queue, order_manager)
 
     def _start_deposit(self, new_deposit_request):
         Logger.Info(twh_factories[self._warehouse_id]['name'] + " -- Twh_WarehouseControlSystem::Do_deposit() ")
@@ -48,8 +23,6 @@ class Pastor_LoopManualPacker(PastorBase):
         layer_id = int(new_deposit_request['layer'])
         # Logger.Print("row_id", row_id)
         # Logger.Print("porters count", len(self.__porters))
-        # porter = self.__porters[row_id]
-        # porter = g_workers[self._warehouse_id].loop_porters[row_id]
         porter = g_warehouses[self._warehouse_id].workers_take.loop_porters[row_id]
         self.__depositing_porter = porter
         Logger.Print('layer_id', layer_id)
