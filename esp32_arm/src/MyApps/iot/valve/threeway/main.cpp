@@ -1,14 +1,11 @@
 
-#include "board/board.h"
-#include "loop_porter_app.h"
-#include "robot/loop_porter_robot.h"
-#include "Mqtt/remote_binary_output_group.h"
+// #include "board/board.h"
+// #include "loop_porter_app.h"
+// #include "robot/loop_porter_robot.h"
+// #include "Mqtt/remote_binary_output_group.h"
 #include "all_applications.h"
 
-#ifdef I_AM_WAREHOUSE_LOOP_PORTER
-#include "porter_config.h"
-
-#define LEDS_COUNT 7
+#ifdef I_AM_THREE_WAY_VALVE
 
 Twh_LoopPorter_Board board;
 Twh_LoopPorter_Robot robot;
