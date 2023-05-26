@@ -6,7 +6,7 @@ void TouchPad_Node::Init( uint8_t i2c_slave_address, bool is_installed){
     _Init(is_installed, i2c_slave_address, TOUCH_PAD_CHANNELS_COUNT_IN_NODE);   //TODO: TOUCH_PAD_CHANNELS_COUNT_IN_NODE is var
 
     for(int i=0; i<TOUCH_PAD_CHANNELS_COUNT_IN_NODE; i++){
-        __all_channels[i].Init(i, TouchPad_Channel::EnumState::TOUCHED_OFF);
+        __all_channels[i].Init(i, TouchSensor::EnumState::TOUCHED_OFF);
     }
     _rx_buffer = __rx_buffer;
 }
@@ -19,16 +19,20 @@ void TouchPad_Node::Process_RxBuffer(){
 }
 
 String TouchPad_Node::GetNodeStateString(){
+//    C = Connected -> Online
+//    D = Died --> Offline
+//    I = Installed, Unknown state ?? 
+//    U = Uninstalled,
     if(State == EnumState::ONLINE_CONNECTED) return String("C");
-    if(State == EnumState::OFFLINE_DIED) return String("D");
+    // if(State == EnumState::OFFLINE_DIED) return String("D");
     // if(GetState() == I2C_SlaveNodeAgent::EnumState::NOT_INSTALLED)
-    return String("I");
+    return String("D");
 
 }
 
-String TouchPad_Node::GetChannelsStateString(){
+String TouchPad_Node::GetSensorsState(){
     String str = "";
-    TouchPad_Channel* channel;
+    TouchSensor* channel;
     if (State != EnumState::ONLINE_CONNECTED){
         return "FFFFFFFFFFFFFF";
     }

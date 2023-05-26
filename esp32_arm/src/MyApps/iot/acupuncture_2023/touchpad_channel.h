@@ -4,7 +4,7 @@
 #define SENSOR_HISTORY_QUEUE_SIZE  5
 
 
-class TouchPad_Channel{
+class TouchSensor{
     public:
         enum EnumState{
             NOT_INSTALLED,

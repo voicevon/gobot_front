@@ -2,34 +2,44 @@
 allowmixing
 
 frame NodeRed
-frame Browser
-NodeRed --> Browser : http
-actor Trump
+card Browser_a
+card Browser_b
+NodeRed ---> Browser_a : http
+NodeRed --> Browser_b : http
+    actor Trump_finger
+    actor Trump_eye
+    Browser_a --> Trump_eye : Final user UI
+
 actor You_are_here
-Browser --> Trump : Final user UI
-Browser --> You_are_here : debug UI
+    
+
+Browser_b --> You_are_here : debug UI
 
 frame MQTT_broker
-NodeRed <-- MQTT_broker
+MQTT_broker -> NodeRed
 
-frame Esp32{
-    card Node_state
-    card Sensor_state
-    card Sensor_value
-    Sensor_state <-- Sensor_value
+
+frame Human_body{
+    frame Esp32{
+        card Nodes_state
+        collections Sensors_state
+        collections Sensor_value
+        Sensors_state <-- Sensor_value
+    }
+    MQTT_broker <-- Esp32
+    card  I2C____________I2C_BUS________________BUS
+
+    collections Mega328
+    collections Sensor
+    Nodes_state <-[#red,dashed]-- I2C____________I2C_BUS________________BUS
+    I2C____________I2C_BUS________________BUS <-[#red,dashed]- Mega328
+    Sensor_value <-- Mega328
+    Mega328 <-- Sensor
+    card GPIO_PIN
+    Sensor <-- GPIO_PIN
 }
-MQTT_broker <-- Esp32
-card  I2C____________I2C_BUS________________BUS
-
-collections Mega328
-collections Sensor
-
-Node_state <-[#red,dashed]-- I2C____________I2C_BUS________________BUS
-
-I2C____________I2C_BUS________________BUS <-[#red,dashed]- Mega328
-Sensor_value <-- Mega328
-Mega328 <-- Sensor
-
-
+card Niddle
+GPIO_PIN <-- Niddle
+Niddle <- Trump_finger
 
 @enduml
