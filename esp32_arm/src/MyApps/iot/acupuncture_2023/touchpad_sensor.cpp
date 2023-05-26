@@ -57,10 +57,13 @@ void TouchSensor::__Push_to_HistoryValueWindow(uint8_t new_value){
     // Logger::Print("TouchSensor::__Push_to_HistoryValueWindow()   point",99);
 }
 
-String TouchSensor::GetState(){
-    if (__state == CHANNEL_DIED) return String("D");
-    if (__state == TOUCHED_ON) return String("T");
-    if (__state == TOUCHED_OFF) return String("F");
+char TouchSensor::GetState(){
+    // if (__state == CHANNEL_DIED) return String("D");
+    // if (__state == TOUCHED_ON) return String("T");
+    // if (__state == TOUCHED_OFF) return String("F");
+    if (__state == CHANNEL_DIED) return 'D';
+    if (__state == TOUCHED_ON) return 'T';
+    if (__state == TOUCHED_OFF) return 'F';
     Logger::Error("TouchSensor::GetStateString()");
     Logger::Print("Seems I am not installed", "");
     Logger::Halt("love, hate, no regret");

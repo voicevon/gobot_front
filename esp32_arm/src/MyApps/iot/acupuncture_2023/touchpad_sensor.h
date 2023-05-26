@@ -15,7 +15,7 @@ class TouchSensor{
         void Init(uint8_t channel_id, EnumState state);
         void Review_Sensor_Value(uint8_t new_value);  
         uint8_t GetSensorValue(){return __newest_sensor_value;};
-        String GetState();
+        char GetState();
 
     private:
         // uint8_t __sensor_id;

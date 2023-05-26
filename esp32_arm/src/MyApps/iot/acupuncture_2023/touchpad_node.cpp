@@ -8,6 +8,7 @@ void TouchPad_Node::Init( uint8_t i2c_slave_address, bool is_installed){
         __all_sensors[i].Init(i, TouchSensor::EnumState::TOUCHED_OFF);
     }
     _rx_buffer = __rx_buffer;
+    
 }
 
 void TouchPad_Node::Process_RxBuffer(){
@@ -17,20 +18,34 @@ void TouchPad_Node::Process_RxBuffer(){
     }
 }
 
-String TouchPad_Node::GetState(){
+char TouchPad_Node::GetState(){
 //    C = Connected -> Online
 //    D = Died --> Offline
 //    I = Installed, Unknown state ?? 
 //    U = Uninstalled,
-    if(State == EnumState::ONLINE_CONNECTED) return String("C");
-    if(State == EnumState::OFFLINE_DIED) return String("D");
+    // if(State == EnumState::ONLINE_CONNECTED) return String("C");
+    // if(State == EnumState::OFFLINE_DIED) return String("D");
+    if(State == EnumState::ONLINE_CONNECTED) return 'C';
+    if(State == EnumState::OFFLINE_DIED) return 'D';
     Logger::Error("TouchPad_Node::GetState()");
     Logger::Print("My I2c_addr", this->_Get_i2c_Addr());
     Logger::Print("Semms like", "I am not installed. Why call me");
     Logger::Halt("We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil.");
-    return String(" ");
+    // return String(" ");
+    return 'X';
 
 }
+
+int TouchPad_Node::GetUpdatedSensor(){
+    for (int i=0; i<14;i++){
+        if (__previous_sensros_state[i] != __all_sensors[i].GetState()){
+            __previous_sensros_state[i] = __all_sensors[i].GetState();
+            return i;
+        }
+    }
+    return -1;
+}
+
 
 String TouchPad_Node::GetSensorsState(){
     String all_sensors_state = "";
@@ -45,7 +60,4 @@ String TouchPad_Node::GetSensorsState(){
     return all_sensors_state;
 }
 
-// String TouchPad_Node::GetSingleSensorState(int sensor_index){
-//     return __all_sensors[sensor_index].GetStateString();
-// }
 
