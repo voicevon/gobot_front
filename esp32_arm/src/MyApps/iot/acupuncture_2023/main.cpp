@@ -20,20 +20,18 @@ AcupunctureBoard_2023 board;
 TouchPad_Node all_touchpad_nodes[NODES_COUNT_IN_THEORY];
 String monitoring_sensor_topic="acpt/monitor/sensor";   // payload is "147"  where 14 is node_id,  7 is channel_id.  147 = 14* node_id + channel_id
 
+enum{
+    state_idle = 1,
+    state_all_nodes_are_online = 2,
+    state_working = 3,
+    state_all_nodes_are_offline = 4,
+
+}State;
 
 bool is_installed_node(uint8_t node_id){
-    // #define INSTALLED_NODE_COUNT 1
-    // int installed_nodes[INSTALLED_NODE_COUNT] = { 18 };
-
-    // #define INSTALLED_NODE_COUNT 2
-    // int installed_nodes[INSTALLED_NODE_COUNT] = {11,12};
+    #define INSTALLED_NODE_COUNT 2
+    int installed_nodes[INSTALLED_NODE_COUNT] = {3, 4};
     
-    #define INSTALLED_NODE_COUNT 4
-    int installed_nodes[INSTALLED_NODE_COUNT] = {9,10,11,12};
-
-    // #define INSTALLED_NODE_COUNT 11
-    // int installed_nodes[INSTALLED_NODE_COUNT] = {3, 4, 5, 6, 7, 8, 9, 16, 17, 19, 20};
-
     for(int i=0; i< INSTALLED_NODE_COUNT; i++){
         if (node_id == installed_nodes[i])
             return true;
@@ -55,17 +53,23 @@ void setup() {
 
     setup_wifi_mqtt_blocking_mode();
     Logger::Print("setup() waiting mqtt_connectiong.",1);
-    while (!mqtt_is_connected){
-        delay(100);
-    }
+    // while (!mqtt_is_connected){
+    //     delay(100);
+    // }
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, LOW);
+    State = state_idle;
     Logger::Info("Setup is done.");
 }
 
 
 // There are three mqtt topics:
 // 1. acpt/001/node  nodes state  in [not installed,  offline,  online]
+//    C = Connected -> Online
+//    D = Died --> Offline
+//    I = Installed, Unknown state ?? 
+//    U = Uninstalled,
+//       
 // 2. acpt/001/channel  Channels state of cell, in [not installed, died, touch_on, touch_off]
 // 3. acpt/001/sensor_value   monitored sensor value, you can draw a chart from the data.
 void mqtt_publish(int body_id){
@@ -130,35 +134,45 @@ void mqtt_publish(int body_id){
     }
 }
 
-bool is_online_checking = true;
 
 void loop() {
-    bool all_is_offline = true;
-    for(int i = 0; i< NODES_COUNT_IN_THEORY; i++){
-        // update sensor value,  review the received data.
-        TouchPad_Node* node = &all_touchpad_nodes[i];  
-        board.GetI2C_Master()->ReadSlaveNode(node);
-        node->Process_RxBuffer();  
-        // All is offline, reset all nodes.
-        if (node->State == I2C_SlaveNodeAgent::EnumState::ONLINE_CONNECTED) all_is_offline = false;
+    if (State == state_idle){
+        State = state_all_nodes_are_online;
     }
-    if (all_is_offline) {
-        Logger::Debug("loop(),  all nodes are offline, reseting all nodes , even those are not installed." );
-        Init_All_Touchpad_Nodes(true);   // TODO:  try more times before set offline.
-        // Logger::Print("loop()  point", 5);
-        delay(200);
-        is_online_checking = true;
-    }
+    if (State == state_all_nodes_are_online ){
 
-    if (is_online_checking){
-        digitalWrite(LED_PIN, LOW);
-        if (all_is_offline){
-            digitalWrite(LED_PIN, HIGH);
-        } else {
-            is_online_checking = false;
+    }
+    if (State == state_all_nodes_are_online){
+        State = state_working;
+    }
+    if (State == state_working){
+        for(int i = 0; i< NODES_COUNT_IN_THEORY; i++){
+            // update sensor value,  review the received data.
+            TouchPad_Node* node = &all_touchpad_nodes[i];  
+            board.GetI2C_Master()->ReadSlaveNode(node);
+            node->Process_RxBuffer();  
+            // All is offline, reset all nodes.
+            if (node->State == I2C_SlaveNodeAgent::EnumState::OFFLINE_DIED){
+                
+            }
+        }
+        mqtt_publish(ACUPUCTURE_BODY_ID);
+        if (1){
+            State = state_all_nodes_are_offline;
         }
     }
-    mqtt_publish(ACUPUCTURE_BODY_ID);
-    // Logger::Print("loop()  point", 6);
+    if (State == state_all_nodes_are_offline){
+        // bool all_is_offline = true;    if (all_is_offline) {
+        Logger::Debug("loop(),  all nodes are offline, reseting all nodes , even those are not installed." );
+        Init_All_Touchpad_Nodes(true);   // TODO:  try more times before set offline.
+        delay(200);
+
+        // digitalWrite(LED_PIN, LOW);
+        // if (all_is_offline){
+        //     digitalWrite(LED_PIN, HIGH);
+        // } else {
+        //     is_online_checking = false;
+        // }
+    }
 }  
 #endif

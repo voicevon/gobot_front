@@ -1,0 +1,35 @@
+@startuml
+allowmixing
+
+frame NodeRed
+frame Browser
+NodeRed --> Browser : http
+actor Trump
+actor You_are_here
+Browser --> Trump : Final user UI
+Browser --> You_are_here : debug UI
+
+frame MQTT_broker
+NodeRed <-- MQTT_broker
+
+frame Esp32{
+    card Node_state
+    card Sensor_state
+    card Sensor_value
+    Sensor_state <-- Sensor_value
+}
+MQTT_broker <-- Esp32
+card  I2C____________I2C_BUS________________BUS
+
+collections Mega328
+collections Sensor
+
+Node_state <-[#red,dashed]-- I2C____________I2C_BUS________________BUS
+
+I2C____________I2C_BUS________________BUS <-[#red,dashed]- Mega328
+Sensor_value <-- Mega328
+Mega328 <-- Sensor
+
+
+
+@enduml

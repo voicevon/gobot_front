@@ -1,0 +1,7 @@
+[*] --> idle
+idle --> all_nodes_are_online
+all_nodes_are_online --> working
+working <-- working:   some node might be offline.
+working --> all_nodes_are_offline
+
+all_nodes_are_offline --> all_nodes_are_online
