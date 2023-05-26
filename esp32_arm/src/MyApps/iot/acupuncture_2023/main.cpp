@@ -8,8 +8,8 @@
 #include "Mqtt/wifi_mqtt_client.h"
 // #include "Mqtt/mqtt_subscriber_base.h"
 #include "Mqtt/mqtt_subscriber_manager.h"
-#include "remote_string.h"
-#include "ArduinoJson.h"
+#include "concern_sensor_setter.h"
+// #include "ArduinoJson.h"
 #include "WString.h"
 
 
@@ -24,7 +24,7 @@ AcupunctureBoard_2023 board;
 TouchPad_Node all_touchpad_nodes[NODES_COUNT_IN_THEORY];
 // payload is "147"  where 14 is node_id,  7 is channel_id.  147 = 14* node_id + channel_id
 String __Mqtt_topic_of_monitor_sensor="acpt/monitor/sensor";   //  not use?
-// RemoteString monitoring_sensor_command;
+ConcernSensorSetter monitoring_sensor_command;
 enum{
     STATE_IDLE = 1,
     STATE_ALL_NODES_ARE_ONLINE = 2,
@@ -190,6 +190,7 @@ void loop() {
         //     is_online_checking = false;
         // }
     }
-    // Publish_ConcerndSensor(ACUPUCTURE_BODY_ID);
+    int concern_sensor_number = *(monitoring_sensor_command.Get());
+    Publish_ConcerndSensor(ACUPUCTURE_BODY_ID);
 }  
 #endif
