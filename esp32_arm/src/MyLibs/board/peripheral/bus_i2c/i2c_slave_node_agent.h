@@ -25,6 +25,7 @@ class I2C_SlaveNodeAgent{
     protected:
         uint8_t* _rx_buffer;  // Why is pointer?  because rx_size is an unkown number to serve variable requirement.
         void _Init(bool is_installed, uint8_t address, uint8_t rx_size);
+        uint8_t _Get_i2c_Addr(){return __i2c_address;};
 
     private:
         uint8_t __i2c_address;

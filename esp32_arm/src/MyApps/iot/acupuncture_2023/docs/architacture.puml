@@ -21,22 +21,36 @@ MQTT_broker -> NodeRed
 
 frame Human_body{
     frame Esp32{
-        card Nodes_state
-        collections Sensors_state
-        collections Sensor_value
-        Sensors_state <-- Sensor_value
+        frame Node{
+            card Nodes_state
+            card Sensors_state
+
+            frame Sensor{
+                queue Untouched_SensorValue_history
+                card Sensor_value
+                card Sensor_State
+                Untouched_SensorValue_history <-- Sensor_value
+                Sensor_State <-- Untouched_SensorValue_history
+                Sensor_State -[dashed]-> Untouched_SensorValue_history
+            }
+            Sensors_state <-- Sensor_State
+        }
+        card MqttAgent
+        MqttAgent <-- Nodes_state
+        MqttAgent <-- Sensors_state
+
     }
-    MQTT_broker <-- Esp32
+    MQTT_broker <-- MqttAgent
     card  I2C____________I2C_BUS________________BUS
 
     collections Mega328
-    collections Sensor
-    Nodes_state <-[#red,dashed]-- I2C____________I2C_BUS________________BUS
+    collections CapSensor
+    Nodes_state <-[#red,dashed]---- I2C____________I2C_BUS________________BUS
     I2C____________I2C_BUS________________BUS <-[#red,dashed]- Mega328
     Sensor_value <-- Mega328
-    Mega328 <-- Sensor
+    Mega328 <-- CapSensor
     card GPIO_PIN
-    Sensor <-- GPIO_PIN
+    CapSensor <-- GPIO_PIN
 }
 card Niddle
 GPIO_PIN <-- Niddle

@@ -1,22 +1,18 @@
-#include "touchpad_channel.h"
+#include "touchpad_sensor.h"
 #include "MyLibs/basic/logger.h"
 
 
-#define CHANNEL_DIED_CODE 254
-#define CHANNEL_NOT_INSTALLED_CODE 255   // useless ?
+#define SENSOR_DIED_CODE 254
 
 void TouchSensor::Init(uint8_t channel_id, EnumState state){
-    __channel_id = channel_id;
     __state = state;
-    
 }
-
 
 void TouchSensor::Review_Sensor_Value(uint8_t new_value){
     // Logger::Debug("TouchSensor::Review_Sensor_Value()   Part 1");
     __newest_sensor_value = new_value;
     if(__state == EnumState::NOT_INSTALLED)  return;
-    if (__newest_sensor_value == CHANNEL_DIED_CODE ){
+    if (__newest_sensor_value == SENSOR_DIED_CODE ){
         __state = EnumState::CHANNEL_DIED;
         return;
     }
@@ -52,7 +48,6 @@ void TouchSensor::Review_Sensor_Value(uint8_t new_value){
     }
 }
 
-
 void TouchSensor::__Push_to_HistoryValueWindow(uint8_t new_value){
     // Logger::Debug("TouchSensor::__Push_to_HistoryValueWindow()");
     for(int i=0; i< SENSOR_HISTORY_QUEUE_SIZE -1; i++){
@@ -62,10 +57,12 @@ void TouchSensor::__Push_to_HistoryValueWindow(uint8_t new_value){
     // Logger::Print("TouchSensor::__Push_to_HistoryValueWindow()   point",99);
 }
 
-String TouchSensor::GetStateString(){
-    if (__state == NOT_INSTALLED) return String("I");
+String TouchSensor::GetState(){
     if (__state == CHANNEL_DIED) return String("D");
     if (__state == TOUCHED_ON) return String("T");
-    // if (__state == TOUCHED_OFF) return String("F");
-    return "F";
+    if (__state == TOUCHED_OFF) return String("F");
+    Logger::Error("TouchSensor::GetStateString()");
+    Logger::Print("Seems I am not installed", "");
+    Logger::Halt("love, hate, no regret");
+
 }

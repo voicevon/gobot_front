@@ -6,7 +6,12 @@
 #include "MyLibs/MyFunctions.hpp" 
 #include "MyLibs/basic/memory_helper.h"
 #include "Mqtt/wifi_mqtt_client.h"
+// #include "Mqtt/mqtt_subscriber_base.h"
+#include "Mqtt/mqtt_subscriber_manager.h"
+#include "remote_string.h"
+#include "ArduinoJson.h"
 #include "WString.h"
+
 
 
 #include "all_applications.h"
@@ -15,12 +20,11 @@
 #define NODES_COUNT_IN_THEORY 30
 #define LED_PIN 2
 
-
 AcupunctureBoard_2023 board;
 TouchPad_Node all_touchpad_nodes[NODES_COUNT_IN_THEORY];
 // payload is "147"  where 14 is node_id,  7 is channel_id.  147 = 14* node_id + channel_id
 String __Mqtt_topic_of_monitor_sensor="acpt/monitor/sensor";   //  not use?
-
+// RemoteString monitoring_sensor_command;
 enum{
     STATE_IDLE = 1,
     STATE_ALL_NODES_ARE_ONLINE = 2,
@@ -34,13 +38,15 @@ enum{
 //    I = Installed, Unknown state ?? 
 //    U = Uninstalled,
 //    31 nodes
-char __NodeState[] = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";  
+// char __NodeState[] = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";  
 //    421 Channels 
-char __Sensor_States[] ="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
+// char __Sensor_States[] ="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
 String node_states ="";
 String sensors_state ="";
+String previous_node_states = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
+String previous_channel_states ="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
 
-bool is_installed_node(uint8_t node_id){
+bool IsInstalledNode(uint8_t node_id){
     #define INSTALLED_NODE_COUNT 2
     int installed_nodes[INSTALLED_NODE_COUNT] = {3, 4};
     
@@ -54,7 +60,8 @@ bool is_installed_node(uint8_t node_id){
 void Init_All_Touchpad_Nodes(bool all_nodes_in_theory){
     for(int i=0; i< NODES_COUNT_IN_THEORY; i++){
         TouchPad_Node* node = &all_touchpad_nodes[i];
-        node->Init( i, is_installed_node(i) || all_nodes_in_theory); 
+        bool is_installed_node = IsInstalledNode(i) || all_nodes_in_theory;
+        node->Init( i, is_installed_node); 
     }
 }
 
@@ -71,6 +78,8 @@ void setup() {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, LOW);
     __State = STATE_IDLE;
+    // gs_MqttSubscriberManager::Instance().AddSubscriber("wh221109/placing_leds", &monitoring_sensor_command);
+
     Logger::Info("Setup is done.");
 }
 
@@ -79,70 +88,75 @@ void setup() {
 // 1. acpt/001/node  nodes state  in [not installed,  offline,  online]
 // 2. acpt/001/channel  Channels state of cell, in [not installed, died, touch_on, touch_off]
 // 3. acpt/001/sensor_value   monitored sensor value, you can draw a chart from the data.
-void mqtt_publish(int body_id){
-    static String previous_node_states = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
-    static String previous_channel_states ="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
+void publish_states(int body_id){
 
     // bool has_updated = false;
-    static int last_sent_sensor_value = 0;
 
-    String node_states ="";
-    String sensors_state ="";
-    // Logger::Debug("mqtt_publish");
-    for(int i=0; i<NODES_COUNT_IN_THEORY; i++){
-        TouchPad_Node* node = &all_touchpad_nodes[i];
-        node_states.concat(node->GetNodeStateString());
-        sensors_state.concat(node->GetSensorsState());
-    }
+    // String node_states ="";
+    // String sensors_state ="";
+    // // Logger::Debug("mqtt_publish");
+    // for(int i=0; i<NODES_COUNT_IN_THEORY; i++){
+    //     TouchPad_Node* node = &all_touchpad_nodes[i];
+    //     node_states.concat(node->GetState());
+    //     sensors_state.concat(node->GetSensorsState());
+    // }
     String topic_of_nodes_state = "acpt/" + String(body_id) + "/nodes" ;
 
-    int delta_at =  MemoryHelper::CompareSame(previous_node_states.c_str(), node_states.c_str(), node_states.length());
-    if (delta_at >=0 ){
-        memcpy((uint8_t*)(previous_node_states.c_str()), node_states.c_str(), delta_at + 1);  // only this works.
+    int mismatch_at =  MemoryHelper::Find_MismachLocation(previous_node_states.c_str(), node_states.c_str(), node_states.length());
+    if (mismatch_at >=0 ){
+        memcpy((uint8_t*)(previous_node_states.c_str()), node_states.c_str(), mismatch_at + 1);  // only this works.
         //          this does not work, don't delete.
-        //          memcpy(&previous_node_states, &node_states, delta_at + 1);  
+        //          memcpy(&previous_node_states, &node_states, mismatch_at + 1);  
         // Serial.println("after memcpy");
         // Serial.println(previous_node_states);
         g_mqttClient.publish(topic_of_nodes_state.c_str(), 2, true, node_states.c_str()); 
     }
 
     String topic_channels = "acpt/" + String(body_id) + "/channels";
-    delta_at = MemoryHelper::CompareSame(sensors_state.c_str(), previous_channel_states.c_str(), sensors_state.length());
-    if (delta_at >=0){
-        Logger::Info("mqtt_publish()  channel_state updated");
-        Logger::Print("changed sensor_number", delta_at);
-        // Logger::Print("previous channel states", previous_channel_states.c_str());
-        // Logger::Print("now channel states", sensors_state.c_str());
-        memcpy((uint8_t *)(previous_channel_states.c_str()), sensors_state.c_str(), delta_at+1);
-        // Serial.println("after memcpy");
-        // Serial.println(previous_channel_states);
+    mismatch_at = MemoryHelper::Find_MismachLocation(sensors_state.c_str(), previous_channel_states.c_str(), sensors_state.length());
+    if (mismatch_at >=0){
+        bool debug = true;
+        if (debug){
+            Logger::Info("channel_state updated:  node_id, sensor_id ---- value, state");
+            // Logger::Print("changed sensor_number", mismatch_at);
+            int node_id = mismatch_at / 14;
+            int sensor_id = mismatch_at  % 14;
+            int sensor_value = all_touchpad_nodes[node_id].GetSingleSensor(sensor_id)->GetSensorValue();
+            String sensor_state = all_touchpad_nodes[node_id].GetSingleSensor(sensor_id)->GetState();
+            Logger::Print(String(node_id).c_str(), String(sensor_id).c_str());
+            Logger::Print(String(sensor_value).c_str(), String(sensor_state).c_str() );
+        }
+
+        memcpy((uint8_t *)(previous_channel_states.c_str()), sensors_state.c_str(), mismatch_at + 1);
         g_mqttClient.publish(topic_channels.c_str(), 2, true, sensors_state.c_str());
     }
 
   
-    // Monitor a certain sensor.
+
+}
+
+void Publish_ConcerndSensor(int body_id){
+    static int last_sent_sensor_value = 0;
+    // Monitor a certain sesor.
     // int sensor_number = atoi(monitor.Get());   cause an exception !!!
+    // String str_node_sensor = String(monitoring_sensor_command.Get());
+
     int sensor_number = 14*12 + 7;
     int node_id = sensor_number / 14;
-    int channel_id = sensor_number % 14;
+    int sensor_index = sensor_number % 14;
     String topic_sensor_value = "acpt/" + String(body_id) + "/sensor_value" ;   // monitor sensor value
 
-    uint8_t sensor_value = all_touchpad_nodes[node_id].GetSensorValue(channel_id);
+    uint8_t sensor_value = all_touchpad_nodes[node_id].GetSingleSensor(sensor_index)->GetSensorValue();
     if (abs(last_sent_sensor_value - sensor_value ) > 10){
         last_sent_sensor_value = sensor_value;
         // Logger::Print("payload sensor value", sensor_value);
         g_mqttClient.publish(topic_sensor_value.c_str(), 2, true, String(sensor_value).c_str());
     }
 }
-
-
 void loop() {
 
     if (__State == STATE_IDLE){
         __State = STATE_ALL_NODES_ARE_ONLINE;
-    }
-    if (__State == STATE_ALL_NODES_ARE_ONLINE ){
-
     }
     if (__State == STATE_ALL_NODES_ARE_ONLINE){
         __State = STATE_WORKING;
@@ -150,16 +164,16 @@ void loop() {
     if (__State == STATE_WORKING){
         for(int i = 0; i< NODES_COUNT_IN_THEORY; i++){
             // update sensor value,  review the received data.
-            if (is_installed_node(i)){
+            if (IsInstalledNode(i)){
                 TouchPad_Node* node = &all_touchpad_nodes[i];  
                 board.GetI2C_Master()->ReadSlaveNode(node);
                 node->Process_RxBuffer();  
-                node_states.concat(node->GetNodeStateString());
+                node_states.concat(node->GetState());
                 sensors_state.concat(node->GetSensorsState());
             }
         }
-        mqtt_publish(ACUPUCTURE_BODY_ID);
-        if (0){
+        publish_states(ACUPUCTURE_BODY_ID);
+        if (node_states.indexOf('C') == -1){
             __State = STATE_ALL_NODES_ARE_OFFLINE;
         }
     }
@@ -176,5 +190,6 @@ void loop() {
         //     is_online_checking = false;
         // }
     }
+    // Publish_ConcerndSensor(ACUPUCTURE_BODY_ID);
 }  
 #endif
