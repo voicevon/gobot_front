@@ -50,9 +50,9 @@ void TouchSensor::Review_Sensor_Value(uint8_t new_value){
             Logger::Print("sensor_index", __sensor_index);
             Logger::Print("average", average);
             Logger::Print("newest", __newest_sensor_value);
+            digitalWrite(2, LOW);
         }
         __state = EnumState::TOUCHED_OFF;
-        digitalWrite(2, LOW);
     }
     if (__state == EnumState::TOUCHED_OFF){
         // Logger::Print("TouchSensor::Review_Sensor_Value()  point",  33);

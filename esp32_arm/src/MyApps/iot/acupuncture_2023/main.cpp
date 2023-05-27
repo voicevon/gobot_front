@@ -175,6 +175,7 @@ void Publish_ConcerndSensor(int sensor_number){
 }
 
 void loop() {
+    bool has_offline_node = false;
     if (__State == STATE_IDLE){
         __State = STATE_ALL_NODES_ARE_ONLINE;
     }
@@ -190,16 +191,25 @@ void loop() {
                 board.GetI2C_Master()->ReadSlaveNode(node);
                 node->Process_RxBuffer();  
                 nodes_state[n] = node->GetState();
+                if (node->GetState() == 'D'){
+                    Logger::Warn("Got Offline node");
+                    Logger::Print("node_id",n);
+                    has_offline_node = true;
+                }
+                publish_node_state();
+                check_sensors_state_ver2();
             }
         }
-        int mismatch_at = MemoryHelper::Find_MismachLocation(nodes_state, "C", NODES_COUNT_IN_THEORY);
-        if (mismatch_at <0){
+        if (has_offline_node){
             __State = STATE_ALL_NODES_ARE_OFFLINE;
-        }else{
-            publish_node_state();
-            check_sensors_state_ver2();
-            // check_sensors_state_ver3();
         }
+        // int mismatch_at = MemoryHelper::Find_MismachLocation(nodes_state, "C", NODES_COUNT_IN_THEORY);
+        // if (mismatch_at <0){
+        //     __State = STATE_ALL_NODES_ARE_OFFLINE;
+        // }else{
+
+        //     // check_sensors_state_ver3();
+        // }
     }
     if (__State == STATE_ALL_NODES_ARE_OFFLINE){
         Logger::Debug("loop(),  all nodes are offline, reseting all nodes , even those are not installed." );
