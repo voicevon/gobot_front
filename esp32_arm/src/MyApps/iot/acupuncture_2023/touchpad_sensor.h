@@ -1,6 +1,7 @@
 #pragma once
 #include "stdint.h"
 #include "WString.h"
+#include "Wire.h"
 #define SENSOR_HISTORY_QUEUE_SIZE  5
 
 
@@ -16,6 +17,7 @@ class TouchSensor{
         void Review_Sensor_Value(uint8_t new_value);  
         uint8_t GetSensorValue(){return __newest_sensor_value;};
         char GetState();
+        void Mute(int mute_ms){__mute_ms_started = millis();};
 
     private:
         // uint8_t __sensor_id;
@@ -26,7 +28,7 @@ class TouchSensor{
         void __Push_to_HistoryValueWindow(uint8_t new_value);  // newest value at index==0
         uint8_t __node_index;
         uint8_t __sensor_index;
-
+        int __mute_ms_started;
         
 
 };

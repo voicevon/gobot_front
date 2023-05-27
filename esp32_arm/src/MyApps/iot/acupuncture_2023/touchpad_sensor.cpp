@@ -4,10 +4,10 @@
 
 #define SENSOR_DIED_CODE 254
 
-void TouchSensor::Init(uint8_t node_index, uint8_t channel_id, EnumState state){
+void TouchSensor::Init(uint8_t node_index, uint8_t sensor_index, EnumState state){
     __state = state;
     __node_index = node_index;
-    __sensor_index = __sensor_index;
+    __sensor_index = sensor_index;
 }
 
 void TouchSensor::Review_Sensor_Value(uint8_t new_value){
@@ -28,28 +28,34 @@ void TouchSensor::Review_Sensor_Value(uint8_t new_value){
     }
     int average = sum / SENSOR_HISTORY_QUEUE_SIZE;
     if (average==0) average = 1;
-    if ((__state == EnumState::TOUCHED_OFF) && (__newest_sensor_value > average * 10)) {
+    // if ((__state == EnumState::TOUCHED_OFF) && (__newest_sensor_value > average * 10)) {
+    if ((__state == EnumState::TOUCHED_OFF) && (__newest_sensor_value > average + 20)) {
         // from untouching to touched.  Don't push new data to ihstory queue.
-        Logger::Debug("TouchSensor::Review_Sensor_Value  Got touched");
+        Logger::Info("TouchSensor::Review_Sensor_Value  Got touched");
         Logger::Print("node_id", __node_index);
         Logger::Print("sensor_index", __sensor_index);
         Logger::Print("average", average);
         Logger::Print("newest", __newest_sensor_value);
-        __state = EnumState::TOUCHED_ON;
+        if (millis() - __mute_ms_started > 3000){
+            __state = EnumState::TOUCHED_ON;
+        }
         digitalWrite(2, HIGH);
     }
-    if ((__state == EnumState::TOUCHED_ON) && (__newest_sensor_value < average * 5)){
-        Logger::Debug("TouchSensor::Review_Sensor_Value  Got Untouched");
-        Logger::Print("node_id", __node_index);
-        Logger::Print("sensor_index", __sensor_index);
-        Logger::Print("average", average);
-        Logger::Print("newest", __newest_sensor_value);
+    // if ((__state == EnumState::TOUCHED_ON) && (__newest_sensor_value < average * 5)){
+    // if ((__state == EnumState::TOUCHED_ON) && (__newest_sensor_value < average + 10)){
+    if (__newest_sensor_value < average + 10){
+        if (__state ==  EnumState::TOUCHED_ON){
+            Logger::Info("TouchSensor::Review_Sensor_Value  Got Untouched");
+            Logger::Print("node_id", __node_index);
+            Logger::Print("sensor_index", __sensor_index);
+            Logger::Print("average", average);
+            Logger::Print("newest", __newest_sensor_value);
+        }
         __state = EnumState::TOUCHED_OFF;
         digitalWrite(2, LOW);
     }
     if (__state == EnumState::TOUCHED_OFF){
-        
-    // Logger::Print("TouchSensor::Review_Sensor_Value()  point",  33);
+        // Logger::Print("TouchSensor::Review_Sensor_Value()  point",  33);
         __Push_to_HistoryValueWindow(new_value);
     }
 }
@@ -67,6 +73,7 @@ char TouchSensor::GetState(){
     // if (__state == CHANNEL_DIED) return String("D");
     // if (__state == TOUCHED_ON) return String("T");
     // if (__state == TOUCHED_OFF) return String("F");
+    
     if (__state == CHANNEL_DIED) return 'D';
     if (__state == TOUCHED_ON) return 'T';
     if (__state == TOUCHED_OFF) return 'F';

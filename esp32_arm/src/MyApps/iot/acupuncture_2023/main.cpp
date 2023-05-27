@@ -76,7 +76,7 @@ void setup() {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, LOW);
     __State = STATE_IDLE;
-    // gs_MqttSubscriberManager::Instance().AddSubscriber("wh221109/placing_leds", &monitoring_sensor_command);
+    gs_MqttSubscriberManager::Instance().AddSubscriber("acpt/101/concern/sensor", &monitoring_sensor_command);
 
     Logger::Info("Setup is done.");
 }
@@ -102,7 +102,7 @@ void publish_node_state(){
     }
 }
 
-void check_sensors_state(){
+void check_sensors_state_ver2(){
     String topic_channels = "acpt/" + String(ACUPUCTURE_BODY_ID) + "/channels";
     int updated_sensor_index = -1;
     for(int n=0; n<NODES_COUNT_IN_THEORY; n++){
@@ -110,32 +110,68 @@ void check_sensors_state(){
             int sensor_index = all_nodes[n].GetUpdatedSensor();
             if (sensor_index >=0){
                 updated_sensor_index = n * 14 + sensor_index;
-                break;
+                __Sensor_States[updated_sensor_index] = all_nodes[n].GetSingleSensor(sensor_index)->GetState();
+                g_mqttClient.publish(topic_channels.c_str(), 2, true, __Sensor_States);
+                // if (all_nodes[n].GetSingleSensor(sensor_index)->GetState() == 'T'){
+                //     all_nodes[n].GetSingleSensor(sensor_index)->Mute(3000);
+                //     g_mqttClient.publish(topic_channels.c_str(), 2, true, updated_sensor_index);
+                //     g_mqttClient.publish(topic_channels.c_str(), 2, true, updated_sensor_index);
+                    return;
+                // }
+                // break;
             }
         }
     }
     if (updated_sensor_index >=0){
-        g_mqttClient.publish(topic_channels.c_str(), 2, true, __Sensor_States);
+
     }
 }
 
-void Publish_ConcerndSensor(int sensor_number){
-    static int last_sent_sensor_value = 0;
-    // Monitor a certain sesor.
-    // int sensor_number = atoi(monitor.Get());   cause an exception !!!
-    // String str_node_sensor = String(monitoring_sensor_command.Get());
+void check_sensors_state_ver3(){
+    String topic_channels = "acpt/" + String(ACUPUCTURE_BODY_ID) + "/sensor_state";
+    int updated_sensor_index = -1;
+    for(int n=0; n<NODES_COUNT_IN_THEORY; n++){
+        if(IsInstalledNode(n)){
+            int sensor_index = all_nodes[n].GetUpdatedSensor();
+            if (sensor_index >=0){
+                updated_sensor_index = n * 14 + sensor_index;
+                if (all_nodes[n].GetSingleSensor(sensor_index)->GetState() == 'T'){
+                    all_nodes[n].GetSingleSensor(sensor_index)->Mute(3000);
+                    g_mqttClient.publish(topic_channels.c_str(), 2, true, String(updated_sensor_index).c_str());
+                    return;
+                }
+                // break;
+            }
+        }
+    }
+    // if (updated_sensor_index >=0){
+    //     g_mqttClient.publish(topic_channels.c_str(), 2, true, __Sensor_States);
+    // }
+}
 
-    // int sensor_number = 14*12 + 7;
+void Publish_ConcerndSensor(int sensor_number){
+    // Monitor a certain sesor.
+    static unsigned long last_sent_tick = 0;
+    static int last_sensor_value = 0;
+    if ( (millis() - last_sent_tick) < 300) 
+        return;
+
+    last_sent_tick = millis();
     int node_id = sensor_number / 14;
     int sensor_index = sensor_number % 14;
     String topic_sensor_value = "acpt/" + String(ACUPUCTURE_BODY_ID) + "/sensor_value" ;   // monitor sensor value
-
     uint8_t sensor_value = all_nodes[node_id].GetSingleSensor(sensor_index)->GetSensorValue();
-    if (abs(last_sent_sensor_value - sensor_value ) > 10){
-        last_sent_sensor_value = sensor_value;
-        // Logger::Print("payload sensor value", sensor_value);
-        g_mqttClient.publish(topic_sensor_value.c_str(), 2, true, String(sensor_value).c_str());
-    }
+    if (abs(last_sensor_value - sensor_value) < 10 )
+        return;
+    last_sensor_value = sensor_value;
+    Logger::Debug("Concerned Sensor");
+    Serial.print("Node_id=");
+    Serial.print(node_id);
+    Serial.print("\t sensor_index=");
+    Serial.print(sensor_index);
+    Serial.print("\t sensor_value=");
+    Serial.println(sensor_value);
+    g_mqttClient.publish(topic_sensor_value.c_str(), 1, false, String(sensor_value).c_str());
 }
 
 void loop() {
@@ -161,7 +197,8 @@ void loop() {
             __State = STATE_ALL_NODES_ARE_OFFLINE;
         }else{
             publish_node_state();
-            check_sensors_state();
+            check_sensors_state_ver2();
+            // check_sensors_state_ver3();
         }
     }
     if (__State == STATE_ALL_NODES_ARE_OFFLINE){
@@ -172,6 +209,7 @@ void loop() {
         delay(200);
     }
     int concern_sensor_number = *(monitoring_sensor_command.Get());
+    // Logger::Print("concern_sensor_number",concern_sensor_number);
     Publish_ConcerndSensor(concern_sensor_number);
 }  
 #endif
