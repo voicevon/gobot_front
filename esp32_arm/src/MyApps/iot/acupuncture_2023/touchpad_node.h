@@ -22,5 +22,6 @@ class TouchPad_Node: public I2C_SlaveNodeAgent{
         TouchSensor __all_sensors[TOUCH_PAD_SENSORS_COUNT_IN_NODE];
         uint8_t __rx_buffer[TOUCH_PAD_SENSORS_COUNT_IN_NODE];
         char __previous_sensros_state[14];
+        // char[] = __previous_sensros_state = 'FFFFFF'
 
 };

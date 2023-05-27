@@ -12,7 +12,7 @@ class TouchSensor{
             TOUCHED_ON,
             TOUCHED_OFF,
         };
-        void Init(uint8_t channel_id, EnumState state);
+        void Init(uint8_t node_index, uint8_t sensor_index, EnumState state);
         void Review_Sensor_Value(uint8_t new_value);  
         uint8_t GetSensorValue(){return __newest_sensor_value;};
         char GetState();
@@ -24,6 +24,8 @@ class TouchSensor{
         uint8_t __newest_sensor_value;
         uint8_t __untouched_history_values[SENSOR_HISTORY_QUEUE_SIZE];  // TODO: be a queue.
         void __Push_to_HistoryValueWindow(uint8_t new_value);  // newest value at index==0
+        uint8_t __node_index;
+        uint8_t __sensor_index;
 
         
 

@@ -5,7 +5,7 @@ void TouchPad_Node::Init( uint8_t i2c_slave_address, bool is_installed){
     _Init(is_installed, i2c_slave_address, TOUCH_PAD_SENSORS_COUNT_IN_NODE);   //TODO: TOUCH_PAD_SENSORS_COUNT_IN_NODE is var
 
     for(int i=0; i<TOUCH_PAD_SENSORS_COUNT_IN_NODE; i++){
-        __all_sensors[i].Init(i, TouchSensor::EnumState::TOUCHED_OFF);
+        __all_sensors[i].Init(i2c_slave_address,  i, TouchSensor::EnumState::TOUCHED_OFF);
     }
     _rx_buffer = __rx_buffer;
     

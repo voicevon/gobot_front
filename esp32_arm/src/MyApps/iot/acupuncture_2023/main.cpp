@@ -50,18 +50,23 @@ bool IsInstalledNode(uint8_t node_id){
     return false;
 }
 
-void Init_All_Touchpad_Nodes(bool all_nodes_in_theory){
+void Init__Nodes(){
     for(int i=0; i< NODES_COUNT_IN_THEORY; i++){
         TouchPad_Node* node = &all_nodes[i];
-        bool is_installed_node = IsInstalledNode(i) || all_nodes_in_theory;
-        node->Init( i, is_installed_node); 
+        // bool is_installed_node = IsInstalledNode(i) || all_nodes_in_theory;
+        bool is_installed = IsInstalledNode(i);
+        nodes_state[i] = 'D';
+        node->Init( i, is_installed); 
+        // if (is_installed_node){
+        //     nodes_state[i] = 'C';
+        // }
     }
 }
 
 void setup() {
     delay(2000);
     board.Init();
-    Init_All_Touchpad_Nodes(false);
+    Init__Nodes();
 
     setup_wifi_mqtt_blocking_mode();
     Logger::Print("setup() waiting mqtt_connectiong.",1);
@@ -81,27 +86,32 @@ void setup() {
 // 1. acpt/001/node  nodes state  in [not installed,  offline,  online]
 // 2. acpt/001/channel  Channels state of cell, in [not installed, died, touch_on, touch_off]
 // 3. acpt/001/sensor_value   monitored sensor value, you can draw a chart from the data.
-void check_node_state(){
+void publish_node_state(){
     String topic_of_nodes_state = "acpt/" + String(ACUPUCTURE_BODY_ID) + "/nodes" ;
     bool nodes_state_is_updated = false;
     for (int n=0; n<NODES_COUNT_IN_THEORY; n++){
-        if (nodes_state[n] != all_nodes[n].GetState()){
-            nodes_state[n] = all_nodes[n].GetState();
-            nodes_state_is_updated = true;
+        if (IsInstalledNode(n)){
+            if (nodes_state[n] != all_nodes[n].GetState()){
+                nodes_state[n] = all_nodes[n].GetState();
+                nodes_state_is_updated = true;
+            }
         }
     }
     if (nodes_state_is_updated){
         g_mqttClient.publish(topic_of_nodes_state.c_str(), 2, true, nodes_state); 
     }
 }
+
 void check_sensors_state(){
     String topic_channels = "acpt/" + String(ACUPUCTURE_BODY_ID) + "/channels";
     int updated_sensor_index = -1;
     for(int n=0; n<NODES_COUNT_IN_THEORY; n++){
-        int sensor_index = all_nodes[n].GetUpdatedSensor();
-        if (sensor_index >=0){
-            updated_sensor_index = n * 14 + sensor_index;
-            break;
+        if(IsInstalledNode(n)){
+            int sensor_index = all_nodes[n].GetUpdatedSensor();
+            if (sensor_index >=0){
+                updated_sensor_index = n * 14 + sensor_index;
+                break;
+            }
         }
     }
     if (updated_sensor_index >=0){
@@ -133,6 +143,7 @@ void loop() {
         __State = STATE_ALL_NODES_ARE_ONLINE;
     }
     if (__State == STATE_ALL_NODES_ARE_ONLINE){
+        publish_node_state();
         __State = STATE_WORKING;
     }
     if (__State == STATE_WORKING){
@@ -146,25 +157,19 @@ void loop() {
             }
         }
         int mismatch_at = MemoryHelper::Find_MismachLocation(nodes_state, "C", NODES_COUNT_IN_THEORY);
-        if (mismatch_at >=0){
+        if (mismatch_at <0){
             __State = STATE_ALL_NODES_ARE_OFFLINE;
         }else{
-            check_node_state();
+            publish_node_state();
             check_sensors_state();
         }
     }
     if (__State == STATE_ALL_NODES_ARE_OFFLINE){
-        // bool all_is_offline = true;    if (all_is_offline) {
         Logger::Debug("loop(),  all nodes are offline, reseting all nodes , even those are not installed." );
-        Init_All_Touchpad_Nodes(true);   // TODO:  try more times before set offline.
-        delay(200);
+        Init__Nodes();   // TODO:  try more times before set offline.
 
-        // digitalWrite(LED_PIN, LOW);
-        // if (all_is_offline){
-        //     digitalWrite(LED_PIN, HIGH);
-        // } else {
-        //     is_online_checking = false;
-        // }
+        digitalWrite(LED_PIN, LOW);
+        delay(200);
     }
     int concern_sensor_number = *(monitoring_sensor_command.Get());
     Publish_ConcerndSensor(concern_sensor_number);

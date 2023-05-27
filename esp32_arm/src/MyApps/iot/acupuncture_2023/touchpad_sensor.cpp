@@ -4,8 +4,10 @@
 
 #define SENSOR_DIED_CODE 254
 
-void TouchSensor::Init(uint8_t channel_id, EnumState state){
+void TouchSensor::Init(uint8_t node_index, uint8_t channel_id, EnumState state){
     __state = state;
+    __node_index = node_index;
+    __sensor_index = __sensor_index;
 }
 
 void TouchSensor::Review_Sensor_Value(uint8_t new_value){
@@ -28,14 +30,18 @@ void TouchSensor::Review_Sensor_Value(uint8_t new_value){
     if (average==0) average = 1;
     if ((__state == EnumState::TOUCHED_OFF) && (__newest_sensor_value > average * 10)) {
         // from untouching to touched.  Don't push new data to ihstory queue.
-        Logger::Debug("ouchPad_Channel::Review_Sensor_Value_Whether_Changed()  Got touched");
+        Logger::Debug("TouchSensor::Review_Sensor_Value  Got touched");
+        Logger::Print("node_id", __node_index);
+        Logger::Print("sensor_index", __sensor_index);
         Logger::Print("average", average);
         Logger::Print("newest", __newest_sensor_value);
         __state = EnumState::TOUCHED_ON;
         digitalWrite(2, HIGH);
     }
     if ((__state == EnumState::TOUCHED_ON) && (__newest_sensor_value < average * 5)){
-        Logger::Debug("ouchPad_Channel::Review_Sensor_Value_Whether_Changed()  Got Untouched");
+        Logger::Debug("TouchSensor::Review_Sensor_Value  Got Untouched");
+        Logger::Print("node_id", __node_index);
+        Logger::Print("sensor_index", __sensor_index);
         Logger::Print("average", average);
         Logger::Print("newest", __newest_sensor_value);
         __state = EnumState::TOUCHED_OFF;

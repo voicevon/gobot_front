@@ -12,20 +12,20 @@
 
 #ifdef I_AM_ACUPUNCTURE_MEGA328_VER_2023
 
-#define TOUCH_PAD_CHANNELS 3
+#define TOUCH_PAD_SENSORS_COUNT 14
 
 
-TouchpadChannel all_channels[TOUCH_PAD_CHANNELS];
-uint8_t tx_buffer_for_i2c[TOUCH_PAD_CHANNELS];
+TouchpadChannel all_channels[TOUCH_PAD_SENSORS_COUNT];
+uint8_t tx_buffer_for_i2c[TOUCH_PAD_SENSORS_COUNT];
 
 void requestEvent(){
-	Wire.write(tx_buffer_for_i2c, TOUCH_PAD_CHANNELS);
+	Wire.write(tx_buffer_for_i2c, TOUCH_PAD_SENSORS_COUNT);
 	Serial.print("replied");
 }
 
 void InitChannels(){
 	int pins[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 19}; // 14:A0, 15:A1, 16:A2, 17:A3, 18:A4, 19:A5
-	for (int i = 0; i < TOUCH_PAD_CHANNELS; i++){
+	for (int i = 0; i < TOUCH_PAD_SENSORS_COUNT; i++){
 		all_channels[i].Init(pins[i]);
 	}
 }
@@ -56,7 +56,7 @@ void setup() {
 }
 
 void loop() {
-	for (int i = 0; i < TOUCH_PAD_CHANNELS; i++){
+	for (int i = 0; i < TOUCH_PAD_SENSORS_COUNT; i++){
 		TouchpadChannel* channel = &all_channels[i];
 		channel->Read();
 		// prepare tx_buffer_for_i2c_request
