@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MyLibs/board/board_base.h"
-// #include "MyLibs/board/peripheral/bus_i2c/i2c_iam_master.h"
+#include "MyLibs/component/binary_output_gpio.h"
 
 
 class ThreeWayValveBoard: public BoardBase{
@@ -9,6 +9,6 @@ class ThreeWayValveBoard: public BoardBase{
         void Init() override;
 
     private:
-
+        BinaryOutput_GPIO __led_go_straight_blue;
 
 };

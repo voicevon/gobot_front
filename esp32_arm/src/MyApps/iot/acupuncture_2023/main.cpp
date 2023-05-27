@@ -7,7 +7,7 @@
 #include "MyLibs/basic/memory_helper.h"
 #include "Mqtt/wifi_mqtt_client.h"
 #include "Mqtt/mqtt_subscriber_manager.h"
-#include "concern_sensor_setter.h"
+#include "Mqtt/remote_component/remote_var_int.h"
 #include "WString.h"
 
 
@@ -22,7 +22,7 @@ AcupunctureBoard_2023 board;
 TouchPad_Node all_nodes[NODES_COUNT_IN_THEORY];
 // payload is "147"  where 14 is node_id,  7 is channel_id.  147 = 14* node_id + channel_id
 String __Mqtt_topic_of_monitor_sensor="acpt/monitor/sensor";   //  not use?
-ConcernSensorSetter monitoring_sensor_command;
+RemoteVar_Int monitoring_sensor_command;
 enum{
     STATE_IDLE = 1,
     STATE_ALL_NODES_ARE_ONLINE = 2,
@@ -53,13 +53,9 @@ bool IsInstalledNode(uint8_t node_id){
 void Init__Nodes(){
     for(int i=0; i< NODES_COUNT_IN_THEORY; i++){
         TouchPad_Node* node = &all_nodes[i];
-        // bool is_installed_node = IsInstalledNode(i) || all_nodes_in_theory;
         bool is_installed = IsInstalledNode(i);
         nodes_state[i] = 'D';
         node->Init( i, is_installed); 
-        // if (is_installed_node){
-        //     nodes_state[i] = 'C';
-        // }
     }
 }
 
@@ -70,9 +66,6 @@ void setup() {
 
     setup_wifi_mqtt_blocking_mode();
     Logger::Print("setup() waiting mqtt_connectiong.",1);
-    // while (!mqtt_is_connected){
-    //     delay(100);
-    // }
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, LOW);
     __State = STATE_IDLE;
@@ -111,19 +104,11 @@ void check_sensors_state_ver2(){
             if (sensor_index >=0){
                 updated_sensor_index = n * 14 + sensor_index;
                 __Sensor_States[updated_sensor_index] = all_nodes[n].GetSingleSensor(sensor_index)->GetState();
+                all_nodes[n].GetSingleSensor(sensor_index)->Mute(3000);
                 g_mqttClient.publish(topic_channels.c_str(), 2, true, __Sensor_States);
-                // if (all_nodes[n].GetSingleSensor(sensor_index)->GetState() == 'T'){
-                //     all_nodes[n].GetSingleSensor(sensor_index)->Mute(3000);
-                //     g_mqttClient.publish(topic_channels.c_str(), 2, true, updated_sensor_index);
-                //     g_mqttClient.publish(topic_channels.c_str(), 2, true, updated_sensor_index);
                     return;
-                // }
-                // break;
             }
         }
-    }
-    if (updated_sensor_index >=0){
-
     }
 }
 
@@ -140,13 +125,9 @@ void check_sensors_state_ver3(){
                     g_mqttClient.publish(topic_channels.c_str(), 2, true, String(updated_sensor_index).c_str());
                     return;
                 }
-                // break;
             }
         }
     }
-    // if (updated_sensor_index >=0){
-    //     g_mqttClient.publish(topic_channels.c_str(), 2, true, __Sensor_States);
-    // }
 }
 
 void Publish_ConcerndSensor(int sensor_number){
