@@ -23,9 +23,9 @@ class ThreeWayValveBoard: public BoardBase{
         PositionTrigger __go_staight_stopper;
         PositionTrigger __turn_right_stopper;
 
-        PositionTrigger __inlet_sensor;
-        PositionTrigger __outlet_sensor_go_straight;
-        PositionTrigger __outlet_sensor_turn_right;
+        PositionTrigger __inlet_ir_sensor;
+        PositionTrigger __outlet_ir_sensor_go_straight;
+        PositionTrigger __outlet_ir_sensor_turn_right;
 
         BinaryOutput_GPIO __led_go_straight_blue;
         BinaryOutput_GPIO __led_go_straight_red;
