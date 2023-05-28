@@ -11,7 +11,6 @@ class Reciprocator{
             MOVING_TO_ENCODER_POSITION = 22,
             READY = 31,
             HOLDING = 32,
-
         };
 
         void LinkActuator(CncActuatorBase* actuator){_actuator = actuator;};
@@ -24,8 +23,8 @@ class Reciprocator{
         void SpinOnce_Statemahcine();
         EnumState GetState(){return _state;};
 
-        PositionTrigger* GetTrigger_for_MinPosition(){return __trigger_at_min_position;};
-        PositionTrigger* GetTrigger_for_MaxPostion(){return __trigger_at_max_position;};
+        // PositionTrigger* GetTrigger_for_MinPosition(){return __trigger_at_min_position;};
+        // PositionTrigger* GetTrigger_for_MaxPostion(){return __trigger_at_max_position;};
         
 
     protected:

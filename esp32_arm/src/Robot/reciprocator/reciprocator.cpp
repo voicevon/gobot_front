@@ -3,6 +3,7 @@
 
 
 void Reciprocator::SpinOnce_Statemahcine(){
+    _actuator->SpinOnce();
     if (_state == EnumState::IDLE){
 
     }
@@ -13,7 +14,7 @@ void Reciprocator::SpinOnce_Statemahcine(){
         }
     }
     if (_state == EnumState::MOVING_TO_ENCODER_POSITION){
-
+        Logger::Warn("Reciprocator::SpinOnce_Statemahcine() MOVING_TO_ENCODER_POSITION  is in TODO list");
     }
     if (_state == EnumState::READY){
 

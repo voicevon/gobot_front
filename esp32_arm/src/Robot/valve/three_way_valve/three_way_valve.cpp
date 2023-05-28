@@ -80,8 +80,8 @@ void ThreeWayValve::__turn_off_all_leds(){
 
 void ThreeWayValve::LinkReciprocator(Reciprocator* reciprocator){
     __reciprocator = reciprocator;
-    __go_staight_stopper = reciprocator->GetTrigger_for_MaxPostion();
-    __go_staight_stopper = reciprocator->GetTrigger_for_MinPosition();
+    // __go_staight_stopper = reciprocator->GetTrigger_for_MaxPostion();
+    // __go_staight_stopper = reciprocator->GetTrigger_for_MinPosition();
 }
 
 void ThreeWayValve::LinkIrSensors(PositionTrigger* inlet_ir_sensor, PositionTrigger* outlet_ir_sensor_go_straight, PositionTrigger* outlet_ir_sensor_turn_right){
@@ -103,12 +103,12 @@ void ThreeWayValve::LinkLeds(BinaryOutput_GPIO* led_go_straight_idle_green, Bina
 }
 
 void ThreeWayValve::SetMode_GoStraight(){
-    __reciprocator->MoveToTriggerPosition(__go_staight_stopper);
+    __reciprocator->MoveToTriggerPosition(true);
     __state = EnumState::STATE_GO_STRAIGHT_SETTING;
 }
 
 void ThreeWayValve::SetMode_TurnRight(){
-    __reciprocator->MoveToTriggerPosition(__turn_right_stopper);
+    __reciprocator->MoveToTriggerPosition(false);
     __state = EnumState::STATE_TURN_RIGHT_SETTING;
 }
 

@@ -42,8 +42,8 @@ class ThreeWayValve{
         void __state_machine_go_straight();
         void __state_machine_turn_right();
         // TODO:  optimize to remove these
-        PositionTrigger* __go_staight_stopper;
-        PositionTrigger* __turn_right_stopper;
+        // PositionTrigger* __go_staight_stopper;
+        // PositionTrigger* __turn_right_stopper;
 
         PositionTrigger* __inlet_ir_sensor;
         PositionTrigger* __outlet_ir_sensor_go_straight;

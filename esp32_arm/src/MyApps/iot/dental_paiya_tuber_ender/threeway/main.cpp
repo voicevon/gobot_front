@@ -5,7 +5,8 @@
 
 #include "all_applications.h"
 #ifdef I_AM_THREE_WAY_VALVE
-
+#define MY_WORKSTATION_ID 101
+#define MQTT_TOPIC_OF_ORDER_REQUEST "wh221109/station" + MY_WORKSTATION_ID + "/order"
 ThreeWayValveBoard board;
 RemoteVar_Chars remote_commander;
 
@@ -46,6 +47,12 @@ void loop(){
         FollowCommander();
     }
     board.GetValve()->SpinOnce_Statemachine();
+
+    if (board.GetBarcodeReader()->Read()){
+        char* order_id = board.GetBarcodeReader()->Read();
+        // publish order request.
+        g_mqttClient.publish(MQTT_TOPIC_OF_ORDER_REQUEST, 2, true, order_id);
+    }
 
 }
 

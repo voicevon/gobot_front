@@ -20,6 +20,9 @@
 #define PIN_OUTLET__IR_SENSOR_GO_STRAIGHT 28
 #define PIN_OUTLET_IR_SENSOR_TURN_RIGHT 29
 
+// barcode reader
+#define PIN_BARCODE_READER_RX 33
+#define PIN_BARCODE_READER_TX 34
 
 
 void ThreeWayValveBoard::Init(){
@@ -27,6 +30,7 @@ void ThreeWayValveBoard::Init(){
     delay(1000);
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
 
+    // __barcode_reader.Init(PIN_BARCODE_READER_RX, PIN_BARCODE_READER_TX);
     __go_staight_stopper.Init('T', PIN_GO_STRAIGHT_STOPPER, HIGH);
     __turn_right_stopper.Init('L', PIN_TURN_RIGHT_STOPPER, HIGH);
 

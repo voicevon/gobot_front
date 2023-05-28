@@ -9,13 +9,23 @@
 
 // #include "dc_motor_ir_reciprocator.h"
 
+class BarcodeReader{
+    public:
+        char* GetBuffer(){return &__buffer;};
+        bool Read(){return false};
+    private:
+        char __buffer[50];
+}
+
 class ThreeWayValveBoard: public BoardBase{
     public:
         ThreeWayValveBoard(){};
         void Init() override;
         ThreeWayValve* GetValve(){return &__valve;};
-        
+        BarcodeReader* GetBarcodeReader(){return &__barcode_reader;};
     private:
+        BarcodeReader __barcode_reader;
+
         ThreeWayValve __valve;
         Reciprocator __reciprocator;
         H_Bridge __h_bridge;
