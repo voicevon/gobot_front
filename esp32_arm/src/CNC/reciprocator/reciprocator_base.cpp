@@ -1,8 +1,6 @@
 #include "reciprocator_base.h"
 
-void ReciprocatorBase::HomeMaxPosition(){
-    
-}
+
 
 
 void ReciprocatorBase::SpinStateMachine(){

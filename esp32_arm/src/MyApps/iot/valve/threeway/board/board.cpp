@@ -7,8 +7,5 @@ void ThreeWayValveBoard::Init(){
 
 
     // __dc_motor.LinkHBridgeDriver(123);
-    __reciprocator.LinkActuator(&__dc_motor);
 }
 
-void ThreeWayValveBoard::SetMode_GoStraight();
-void ThreeWayValveBoard::SetMode_TurnRight();

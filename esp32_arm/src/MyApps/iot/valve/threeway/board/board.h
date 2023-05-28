@@ -1,32 +1,23 @@
 #pragma once
 
 #include "MyLibs/board/board_base.h"
-#include "MyLibs/component/binary_output_gpio.h"
-#include "Robot/axis_homer/position_trigger.h"
-#include "CNC/reciprocator/reciprocator_base.h"
 
 
-// #include "CNC/Actuator/dc_motor/h_bridge/h_bridge.h"
-#include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
+
+#include "Robot/valve/three_way_valve/three_way_valve.h"
 
 class ThreeWayValveBoard: public BoardBase{
     public:
+
+
         ThreeWayValveBoard(){};
 
         void Init() override;
-        // H_Bridge* GetMotor(){return &__dc_motor;};
-        // ReciprocatorBase* GetReciprocator(){return &__reciprocator;};
-        void SetMode_GoStraight();
-        void SetMode_TurnRight();
+        ThreeWayValve* GetValve(){return &__valve;};
+
 
     private:
-        ReciprocatorBase __reciprocator;
-
+        ThreeWayValve __valve;
         BinaryOutput_GPIO __led_go_straight_blue;
-        // H_Bridge __dc_motor = H_Bridge(1,1);
-        CncActuatorDcMotor __dc_motor;
-        PositionTrigger __go_staight_stopper;
-        PositionTrigger __turn_right_stopper;
-        
 
 };

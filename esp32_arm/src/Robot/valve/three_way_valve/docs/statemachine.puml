@@ -1,3 +1,6 @@
+
+@startuml
+
 [*] --> idle
 idle -[dashed]-> go_straight_setting
 go_straight_setting --> go_straight_ready
@@ -17,3 +20,4 @@ turn_right_inlet: red led
 turn_right_inlet --> turn_right_ended: outlt_turn_right is trigered
 turn_right_ended: blue led
 
+@enduml
