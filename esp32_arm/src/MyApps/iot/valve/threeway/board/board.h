@@ -4,7 +4,8 @@
 
 #include "Robot/valve/three_way_valve/three_way_valve.h"
 #include "Robot/Sensor/position_binary_trigger/position_trigger.h"
-#include "CNC/reciprocator/reciprocator_base.h"
+// #include "CNC/reciprocator/reciprocator_base.h"
+#include "Robot/reciprocator/reciprocator_base.h"
 #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
 #include "dc_motor_ir_reciprocator.h"
 // #include "Robot/Sensor/position_binary_trigger/position_trigger.h"

@@ -42,7 +42,8 @@
 //   #include "Particle.h"
 //   #include "math.h"
 // #endif
-#include "sharp_ir_distance_adc.h"
+// #include "sharp_ir_distance_adc.h"
+#include "distance_sensor_sharp_ir_adc.h"
 // #include "math.h"
 #include "Arduino.h"
 // Initialisation function

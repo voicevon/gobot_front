@@ -1,13 +1,11 @@
 #pragma once
 #include "MyLibs/component/binary_output_gpio.h"
-#include "CNC/reciprocator/reciprocator_base.h"
-// #include "Robot/Sensor/position_binary_trigger/position_trigger.h"
-
+// #include "CNC/reciprocator/reciprocator_base.h"
+#include "Robot/reciprocator/reciprocator_base.h"
 
 class ThreeWayValve{
 
     public:
-
         enum EnumState{
             STATE_IDLE= 1,
             STATE_GO_STRAIGHT_IDLE = 21,
@@ -64,6 +62,4 @@ class ThreeWayValve{
         BinaryOutput_GPIO* __led_turn_right_idle_green;
         BinaryOutput_GPIO* __led_turn_right_inlet_red;
         BinaryOutput_GPIO* __led_turn_right_outlet_blue;
-
-
 };

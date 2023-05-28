@@ -1,5 +1,6 @@
 #pragma once
-#include "CNC/reciprocator/reciprocator_base.h"
+// #include "CNC/reciprocator/reciprocator_base.h"
+#include "Robot/reciprocator/reciprocator_base.h"
 
 class DcMotorIR_Reciprocator:public ReciprocatorBase{
     public:
