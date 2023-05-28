@@ -24,6 +24,8 @@ class ReciprocatorBase{
         virtual void MoveToEncoderPosition(uint32_t encoder_position){};
         void SpinStateMachine();
 
+        PositionTrigger* GetTrigger_for_MinPosition(){return __trigger_at_min_position;};
+        PositionTrigger* GetTrigger_for_MaxPostion(){return __trigger_at_max_position;};
     protected:
         CncActuatorBase* _actuator;
         EnumState _state;
