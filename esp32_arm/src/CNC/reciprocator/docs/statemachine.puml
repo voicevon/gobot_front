@@ -1,0 +1,14 @@
+@startuml
+[*] --> idle
+idle -[dashed]-> moving_to_trigger_position
+idle -[dashed]-> moving_to_encoder_position
+
+moving_to_encoder_position--> ready: encoder is in range
+moving_to_trigger_position--> ready: position_trigger is fired
+
+ready -[dashed]-> holding
+ready -[dashed]-> idle
+
+
+
+@enduml

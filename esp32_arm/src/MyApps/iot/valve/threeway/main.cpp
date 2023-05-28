@@ -46,21 +46,22 @@ void FollowCommander(){
     char* command = remote_commander.Get();
     // if (command == "go_straight"){
     if (true){
+        board.SetMode_GoStraight();
         State = STATE_GO_STRAIGHT_SETTING;
     }
     // if (command == "turn_right"){
     else if (true){
+        board.SetMode_TurnRight();
         State = STATE_TURN_RIGHT_SETTING;
-        return;
     }
     // Read GPIO button
     else if (true){
+        board.SetMode_GoStraight();
         State = STATE_GO_STRAIGHT_SETTING;
-        return;
     }
     else if (true){
+        board.SetMode_TurnRight();
         State = STATE_TURN_RIGHT_SETTING;
-        return;
     }
 }
 
@@ -70,11 +71,11 @@ void loop(){
         FollowCommander();
     }
 
-    // if (State == STATE_GO_STRAIGHT_IDLE){
-    //     if (board.GetMotor()->is_trigered()){
-    //         State = STATE_GO_STRAIGHT_READY;
-    //     }
-    // }
+    if (State == STATE_GO_STRAIGHT_IDLE){
+        // if (board.GetReciprocator()->is_trigered()){
+        //     State = STATE_GO_STRAIGHT_READY;
+        // }
+    }
 
     // if (State == STATE_GO_STRAIGHT_READY){
     //     if (__inlet_sensor.is_trigered()){
