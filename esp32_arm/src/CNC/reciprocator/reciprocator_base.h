@@ -20,15 +20,21 @@ class ReciprocatorBase{
             __trigger_at_min_position = trigger_at_min_position;
             __trigger_at_max_position = trigger_at_max_position;
         };
-        virtual void MoveToTriggerPosition(PositionTrigger* target_position_trigger){};
-        virtual void MoveToEncoderPosition(uint32_t encoder_position){};
-        void SpinStateMachine();
+        void MoveToTriggerPosition(PositionTrigger* target_position_trigger);
+        void MoveToEncoderPosition(uint32_t encoder_position);
+        void SpinOnce_Statemahcine();
+        EnumState GetState(){return _state;};
 
         PositionTrigger* GetTrigger_for_MinPosition(){return __trigger_at_min_position;};
         PositionTrigger* GetTrigger_for_MaxPostion(){return __trigger_at_max_position;};
+        
+
     protected:
         CncActuatorBase* _actuator;
         EnumState _state;
+        virtual void _MoveToTriggerPosition();
+        PositionTrigger* _towarding_position_trigger;
+
 
     private:
         PositionTrigger* __trigger_at_min_position;

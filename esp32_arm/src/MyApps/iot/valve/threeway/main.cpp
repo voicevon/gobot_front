@@ -45,6 +45,7 @@ void loop(){
     if (board.GetValve()->GetState() == ThreeWayValve::EnumState::STATE_IDLE){
         FollowCommander();
     }
+    board.GetValve()->SpinOnce_Statemachine();
 
 }
 

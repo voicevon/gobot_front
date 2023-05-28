@@ -1,7 +1,7 @@
 #pragma once
 #include "MyLibs/component/binary_output_gpio.h"
-#include "Robot/axis_homer/position_trigger.h"
 #include "CNC/reciprocator/reciprocator_base.h"
+// #include "Robot/axis_homer/position_trigger.h"
 // #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
 
 
@@ -28,22 +28,32 @@ class ThreeWayValve{
 
         ThreeWayValve();
         void LinkReciprocator(ReciprocatorBase* reciprocator);
-        // void LinkActuator(CncActuatorBase* actuator){__actuator=actuator;};
-        // void LinkStopper_for_GoStraight(PositionTrigger* stopper){__go_staight_stopper=stopper;};
-        // void LinkStopper_for_TurnRight(PositionTrigger* stopper){__turn_right_stopper=stopper;};
+        void LinkLeds(BinaryOutput_GPIO* led_go_straight_idle_green, BinaryOutput_GPIO* led_go_straight_inlet_red, BinaryOutput_GPIO* led_go_straight_outlet_blue,
+                    BinaryOutput_GPIO* led_turn_right_idle_green, BinaryOutput_GPIO* led_turn_right_inlet_red, BinaryOutput_GPIO* led_turn_right_outlet_blue );
         void SetMode_GoStraight();
         void SetMode_TurnRight();
+        void SpinOnce_Statemachine();
         EnumState GetState(){return __state;};
 
     protected:
 
     private:
 
-        ReciprocatorBase* __reciprocator;
-        CncActuatorBase* __actuator;
+        // TODO:  optimize to remove these
         PositionTrigger* __go_staight_stopper;
         PositionTrigger* __turn_right_stopper;
+
+
+        ReciprocatorBase* __reciprocator;
+
+        // CncActuatorBase* __actuator;
         EnumState __state = STATE_IDLE;
+        BinaryOutput_GPIO* __led_go_straight_idle_green;
+        BinaryOutput_GPIO* __led_go_straight_inlet_red;
+        BinaryOutput_GPIO* __led_go_straight_outlet_blue;
+        BinaryOutput_GPIO* __led_turn_right_idle_green;
+        BinaryOutput_GPIO* __led_turn_right_inlet_red;
+        BinaryOutput_GPIO* __led_turn_right_outlet_blue;
 
 
 };
