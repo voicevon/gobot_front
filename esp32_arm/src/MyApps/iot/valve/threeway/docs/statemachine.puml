@@ -1,12 +1,16 @@
 [*] --> idle
-idle -[dashed]-> go_straight_idle
+idle -[dashed]-> go_straight_setting
+go_straight_setting --> go_straight_ready
+go_straight_ready --> go_straight_idle
 go_straight_idle: green led
 go_straight_idle --> go_straight_inlet: inlet is trigered
 go_straight_inlet: red led
 go_straight_inlet --> pass_straight_ended: outlet_straight is trigered
 pass_straight_ended: blue led
 
-idle -[dashed]-> turn_right_idle
+idle -[dashed]-> turn_right_setting
+turn_right_setting --> turn_right_ready
+turn_right_ready --> turn_right_idle
 turn_right_idle: green led
 turn_right_idle -->turn_right_inlet : inlet is trigered
 turn_right_inlet: red led

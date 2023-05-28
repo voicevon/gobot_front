@@ -1,7 +1,8 @@
 #pragma once
 
 #include "MyLibs/board/board_base.h"
-#include "MyLibs/component/button_gpio.h"
+// #include "MyLibs/component/button_gpio.h"
+#include "Mqtt/remote_component/remote_button_gpio.h"
 #include "../ws2812b/ws2812b.h"
 
 #define PIN_GPIO_BUTTON_PICKED 32   // green
@@ -12,8 +13,8 @@ class Twh_Packer_Board: public BoardBase{
     public:
         Twh_Packer_Board();
         void Init() override;
-        Button_Gpio* GetButton_picked(){return &__picked_button;};
-        Button_Gpio* GetButton_Packed(){return &__packed_button;};
+        Remote_ButtonGpio* GetButton_picked(){return &__picked_button;};
+        Remote_ButtonGpio* GetButton_Packed(){return &__packed_button;};
         Adafruit_NeoPixel* GetNeoPixel(){return & __neo_pixel;};
         WS2812B* GetWs2812B(){return &__ws2812b;};
         void BootTest();
@@ -24,8 +25,8 @@ class Twh_Packer_Board: public BoardBase{
     protected:
 
     private:
-        Button_Gpio __picked_button = Button_Gpio(PIN_GPIO_BUTTON_PICKED);
-        Button_Gpio __packed_button = Button_Gpio(PIN_GPIO_BUTTON_PACKED);
+        Remote_ButtonGpio __picked_button = Remote_ButtonGpio(PIN_GPIO_BUTTON_PICKED);
+        Remote_ButtonGpio __packed_button = Remote_ButtonGpio(PIN_GPIO_BUTTON_PACKED);
         WS2812B __ws2812b;
         Adafruit_NeoPixel __neo_pixel = Adafruit_NeoPixel(WS2812B_COUNT, PIN_NEO_PIXEL, NEO_GRB + NEO_KHZ800);
         // void __SetLeds();

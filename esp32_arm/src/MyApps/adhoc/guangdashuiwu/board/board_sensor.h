@@ -1,6 +1,7 @@
 #pragma once
 #include "MyLibs/board/board_base.h"
-#include "MyLibs/component/button_gpio.h"
+#include "button_gpio_ver2022.h"
+
 #include "MyLibs/component/display/mono_led_gpio.h"
 
 #define PIN_ZIDONG 26  //D6
@@ -16,9 +17,15 @@ class GuangDa_ShuiWu_SensorBoard: public BoardBase{
         Mono_Led_GPIO* GetStateLed(){return &__state_led;};
 
     private:
+        
         Button_Gpio __zidong_shoudong = Button_Gpio(PIN_ZIDONG);
         Button_Gpio __yunxing_tingzhi = Button_Gpio(PIN_YUNXING);
         Button_Gpio __guzhang_zhengchang = Button_Gpio(PIN_GUZHANG);
+
+        // If this project need to be reprojected, DO THESE:
+        // BinaryInput_GPIO __zidong_shoudong = BinaryInput_GPIO(11, PIN_ZIDONG, HIGH);
+        // BinaryInput_GPIO __yunxing_tingzhi = BinaryInput_GPIO(12, PIN_YUNXING, HIGH);
+        // BinaryInput_GPIO __guzhang_zhengchang = BinaryInput_GPIO(13, PIN_GUZHANG, HIGH);
         Mono_Led_GPIO __state_led;
         
 
