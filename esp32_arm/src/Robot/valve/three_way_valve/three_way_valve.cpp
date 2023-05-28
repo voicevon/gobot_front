@@ -10,6 +10,7 @@ void ThreeWayValve::SpinOnce_Statemachine(){
         }
     }
     if(__state == EnumState::STATE_GO_STRAIGHT_READY){
+        __led_go_straight_idle_green->TurnOn();
         __state = EnumState::STATE_GO_STRAIGHT_IDLE;
     }
     if (__state == EnumState::STATE_GO_STRAIGHT_IDLE){
@@ -17,14 +18,22 @@ void ThreeWayValve::SpinOnce_Statemachine(){
     }
 }
 
+
 ThreeWayValve::ThreeWayValve(){
     __state = EnumState::STATE_IDLE;
+    __turn_off_all_leds();
+}
+
+void ThreeWayValve::__turn_off_all_leds(){
     __led_go_straight_idle_green->TurnOff();
     __led_go_straight_inlet_red->TurnOff();
     __led_go_straight_outlet_blue->TurnOff();
 
-
+    __led_turn_right_idle_green->TurnOff();
+    __led_turn_right_inlet_red->TurnOff();
+    __led_turn_right_outlet_blue->TurnOff();
 }
+
 
 void ThreeWayValve::LinkReciprocator(ReciprocatorBase* reciprocator){
     __reciprocator = reciprocator;

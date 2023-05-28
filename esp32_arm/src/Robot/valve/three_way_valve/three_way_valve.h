@@ -38,11 +38,12 @@ class ThreeWayValve{
     protected:
 
     private:
-
+        void __turn_off_all_leds();
         // TODO:  optimize to remove these
         PositionTrigger* __go_staight_stopper;
         PositionTrigger* __turn_right_stopper;
 
+        binaryinput
 
         ReciprocatorBase* __reciprocator;
 
