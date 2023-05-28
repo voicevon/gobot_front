@@ -3,7 +3,7 @@
 
 void ThreeWayValve::__state_machine_go_straight(){
     if (__state == EnumState::STATE_GO_STRAIGHT_SETTING){
-        if (__reciprocator->GetState() == ReciprocatorBase::EnumState::READY){
+        if (__reciprocator->GetState() == Reciprocator::EnumState::READY){
             // TODO:  publish a mqtt message here? 
             __state = EnumState::STATE_GO_STRAIGHT_READY;
         }
@@ -30,7 +30,7 @@ void ThreeWayValve::__state_machine_go_straight(){
 
 void ThreeWayValve::__state_machine_turn_right(){
     if (__state == EnumState::STATE_TURN_RIGHT_SETTING){
-        if (__reciprocator->GetState() == ReciprocatorBase::EnumState::READY){
+        if (__reciprocator->GetState() == Reciprocator::EnumState::READY){
             // TODO:  publish a mqtt message here? 
             __state = EnumState::STATE_TURN_RIGHT_READY;
         }
@@ -78,7 +78,7 @@ void ThreeWayValve::__turn_off_all_leds(){
 }
 
 
-void ThreeWayValve::LinkReciprocator(ReciprocatorBase* reciprocator){
+void ThreeWayValve::LinkReciprocator(Reciprocator* reciprocator){
     __reciprocator = reciprocator;
     __go_staight_stopper = reciprocator->GetTrigger_for_MaxPostion();
     __go_staight_stopper = reciprocator->GetTrigger_for_MinPosition();

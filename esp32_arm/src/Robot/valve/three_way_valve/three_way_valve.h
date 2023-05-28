@@ -1,7 +1,6 @@
 #pragma once
 #include "MyLibs/component/binary_output_gpio.h"
-// #include "CNC/reciprocator/reciprocator_base.h"
-#include "Robot/reciprocator/reciprocator_base.h"
+#include "Robot/reciprocator/reciprocator.h"
 
 class ThreeWayValve{
 
@@ -25,7 +24,7 @@ class ThreeWayValve{
         };
 
         ThreeWayValve();
-        void LinkReciprocator(ReciprocatorBase* reciprocator);
+        void LinkReciprocator(Reciprocator* reciprocator);
 
         void LinkIrSensors(PositionTrigger* inlet_ir_sensor, PositionTrigger* outlet_ir_sensor_go_straight, PositionTrigger* outlet_ir_sensor_turn_right);
         void LinkLeds(BinaryOutput_GPIO* led_go_straight_idle_green, BinaryOutput_GPIO* led_go_straight_inlet_red, BinaryOutput_GPIO* led_go_straight_outlet_blue,
@@ -52,7 +51,7 @@ class ThreeWayValve{
 
         // binaryinput
 
-        ReciprocatorBase* __reciprocator;
+        Reciprocator* __reciprocator;
 
         // CncActuatorBase* __actuator;
         EnumState __state = STATE_IDLE;

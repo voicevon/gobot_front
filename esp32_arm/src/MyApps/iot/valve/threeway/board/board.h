@@ -4,11 +4,10 @@
 
 #include "Robot/valve/three_way_valve/three_way_valve.h"
 #include "Robot/Sensor/position_binary_trigger/position_trigger.h"
-// #include "CNC/reciprocator/reciprocator_base.h"
-#include "Robot/reciprocator/reciprocator_base.h"
+#include "Robot/reciprocator/reciprocator.h"
 #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
-#include "dc_motor_ir_reciprocator.h"
-// #include "Robot/Sensor/position_binary_trigger/position_trigger.h"
+
+// #include "dc_motor_ir_reciprocator.h"
 
 class ThreeWayValveBoard: public BoardBase{
     public:
@@ -18,7 +17,7 @@ class ThreeWayValveBoard: public BoardBase{
         
     private:
         ThreeWayValve __valve;
-        DcMotorIR_Reciprocator __reciprocator;
+        Reciprocator __reciprocator;
         H_Bridge __h_bridge;
         CncActuatorDcMotor __dc_motor;
         PositionTrigger __go_staight_stopper;

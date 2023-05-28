@@ -3,8 +3,7 @@
 #include "Robot/Sensor/position_binary_trigger/position_trigger.h"
 
 
-
-class ReciprocatorBase{
+class Reciprocator{
     public:
         enum EnumState{
             IDLE = 1,
@@ -20,7 +19,7 @@ class ReciprocatorBase{
             __trigger_at_min_position = trigger_at_min_position;
             __trigger_at_max_position = trigger_at_max_position;
         };
-        void MoveToTriggerPosition(PositionTrigger* target_position_trigger);
+        void MoveToTriggerPosition(bool go_to_positive_dir);
         void MoveToEncoderPosition(uint32_t encoder_position);
         void SpinOnce_Statemahcine();
         EnumState GetState(){return _state;};
@@ -32,13 +31,13 @@ class ReciprocatorBase{
     protected:
         CncActuatorBase* _actuator;
         EnumState _state;
-        virtual void _MoveToTriggerPosition();
-        PositionTrigger* _towarding_position_trigger;
+        // virtual void _MoveToTriggerPosition();
 
 
     private:
         PositionTrigger* __trigger_at_min_position;
         PositionTrigger* __trigger_at_max_position;
+        PositionTrigger* __towarding_position_trigger;
 
 
 };
