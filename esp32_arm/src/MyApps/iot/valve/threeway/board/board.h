@@ -3,10 +3,11 @@
 #include "MyLibs/board/board_base.h"
 
 #include "Robot/valve/three_way_valve/three_way_valve.h"
-#include "Robot/axis_homer/position_trigger.h"
+#include "Robot/Sensor/position_binary_trigger/position_trigger.h"
 #include "CNC/reciprocator/reciprocator_base.h"
 #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
 #include "dc_motor_ir_reciprocator.h"
+// #include "Robot/Sensor/position_binary_trigger/position_trigger.h"
 
 class ThreeWayValveBoard: public BoardBase{
     public:
@@ -21,6 +22,10 @@ class ThreeWayValveBoard: public BoardBase{
         CncActuatorDcMotor __dc_motor;
         PositionTrigger __go_staight_stopper;
         PositionTrigger __turn_right_stopper;
+
+        PositionTrigger __inlet_sensor;
+        PositionTrigger __outlet_sensor_go_straight;
+        PositionTrigger __outlet_sensor_turn_right;
 
         BinaryOutput_GPIO __led_go_straight_blue;
         BinaryOutput_GPIO __led_go_straight_red;

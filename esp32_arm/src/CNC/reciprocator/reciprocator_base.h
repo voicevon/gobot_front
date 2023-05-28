@@ -1,6 +1,6 @@
 #pragma once
 #include "CNC/Actuator/cnc_actuator_base.h"
-#include "Robot/axis_homer/position_trigger.h"
+#include "Robot/Sensor/position_binary_trigger/position_trigger.h"
 
 
 

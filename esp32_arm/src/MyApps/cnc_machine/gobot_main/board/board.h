@@ -5,7 +5,7 @@
 
 #include "MyLibs/board/board_base.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
-#include "Robot/axis_homer/position_trigger_array.h"
+#include "Robot/Sensor/position_binary_trigger/position_trigger_array.h"
 #include "robot_eef/gobot_main_eef.h"
 
 

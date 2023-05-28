@@ -7,7 +7,8 @@
 #include "Robot/eef/eef_standard_code.h"
 #include "MyLibs/component/display/mono_led_gpio.h"
 #include "config_base.h"
-#include "Robot/axis_homer/position_trigger.h"
+#include "Robot/Sensor/position_binary_trigger/position_trigger.h"
+
 
 
 class Scara_ArmSolution: public ArmSolutionBase{

@@ -4,7 +4,7 @@
 #include "MyLibs/component/display/mono_led_gpio.h"
 #include "MyLibs/component/display/digital_number/hc595_digital_number.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
-#include "Robot/axis_homer/position_trigger_array.h" 
+#include "Robot/Sensor/position_binary_trigger/position_trigger_array.h" 
 #include "FastAccelStepper.h"
 #include "CNC/coordinate/cnc_axis.h"
 

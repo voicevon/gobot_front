@@ -1,6 +1,6 @@
 #include "circle_loop_arm_solution.h"
 #include "circle_loop_arm_solution_config.h"
-#include "Robot/axis_homer/position_trigger_array.h"
+#include "Robot/Sensor/position_binary_trigger/position_trigger_array.h"
 
 Twh_Circleloop_ArmSolution::Twh_Circleloop_ArmSolution(){
 	Twh_Circleloop_Armsolution_Config config;

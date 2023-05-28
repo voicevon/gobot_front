@@ -2,7 +2,7 @@
 #include "MyLibs/board/board_base.h"
 #include "CNC/Actuator/servo/cnc_actuator_servo.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
-#include "Robot/axis_homer/position_trigger_array.h"
+#include "Robot/Sensor/position_binary_trigger/position_trigger_array.h"
 #include "../board_2205/board_pins/board_pins_ver3.11.h"
 #include "../board_2205/robot_eef/gobot_house_eef.h"
 

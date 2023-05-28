@@ -3,7 +3,7 @@
 #include "CNC/mover/cnc_mover_base.h"
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "sync_gcode_runner_base.h"
-#include "Robot/axis_homer/position_trigger_array.h"
+#include "Robot/Sensor/position_binary_trigger/position_trigger_array.h"
 
 class G28_Runner: public SyncGcodeRunnerBase{
     public:

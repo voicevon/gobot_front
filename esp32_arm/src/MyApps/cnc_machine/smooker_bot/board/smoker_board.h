@@ -4,7 +4,7 @@
 #include "robot_eef/board_smoke_bot.h"    // todo: remove
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "FastAccelStepper.h"
-#include "Robot/axis_homer/position_trigger_array.h"
+#include "Robot/Sensor/position_binary_trigger/position_trigger_array.h"
 
 
 class Smoker_Board: public BoardBase{

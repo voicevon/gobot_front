@@ -1,6 +1,6 @@
 #include "vsc_arm_solution.h"
 #include "vsc_arm_solution_config.h"
-#include "Robot/axis_homer/position_trigger_array.h"
+#include "Robot/Sensor/position_binary_trigger/position_trigger_array.h"
 
 Vsc_ArmSolution::Vsc_ArmSolution(){
 	Vsc_Armsolution_Config config;
