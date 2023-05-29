@@ -1,11 +1,13 @@
 #pragma once
 
 #include "MyLibs/MyFunctions.hpp"
-#include "MyLibs/board/board_base.h"
+#include "Robot/board/board_base.h"
 
 #include "CNC/arm_solution/arm_solution_base.h"
 #include "Robot/eef/eef_standard_code.h"
-#include "MyLibs/component/display/mono_led_gpio.h"
+// #include "MyLibs/component/display/mono_led_gpio.h"
+#include "Robot/board/display/mono_led_gpio.h"
+
 #include "config_base.h"
 #include "Robot/Sensor/position_binary_trigger/position_trigger.h"
 

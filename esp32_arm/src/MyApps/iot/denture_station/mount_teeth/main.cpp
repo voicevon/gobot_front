@@ -4,9 +4,12 @@
 #include "Mqtt/remote_component/remote_var_chars.h"
 
 #include "all_applications.h"
-#ifdef I_AM_THREE_WAY_VALVE
-#define MY_WORKSTATION_ID 101
-#define MQTT_TOPIC_OF_ORDER_REQUEST "wh221109/station" + MY_WORKSTATION_ID + "/order"
+#ifdef I_AM_DENTURE_STATION_MOUNT_TEETH
+#define MY_WORKSTATION_ID "101"
+#define WARHOUSE_ID "221109"
+#define ORDER "/order"
+#define MQTT_TOPIC_OF_ORDER_REQUEST "wh" WARHOUSE_ID "/STATION"  MY_WORKSTATION_ID  "/order"
+// #define MQTT_TOPIC_OF_ORDER_REQUEST "wh221109/station101/order"
 ThreeWayValveBoard board;
 RemoteVar_Chars remote_commander;
 
@@ -49,7 +52,7 @@ void loop(){
     board.GetValve()->SpinOnce_Statemachine();
 
     if (board.GetBarcodeReader()->Read()){
-        char* order_id = board.GetBarcodeReader()->Read();
+        char* order_id = board.GetBarcodeReader()->GetBuffer();
         // publish order request.
         g_mqttClient.publish(MQTT_TOPIC_OF_ORDER_REQUEST, 2, true, order_id);
     }

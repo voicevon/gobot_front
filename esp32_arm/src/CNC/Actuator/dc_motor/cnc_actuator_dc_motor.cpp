@@ -1,7 +1,7 @@
 #include "cnc_actuator_dc_motor.h"
 #include "Arduino.h"
 // #include "MyLibs/basic/board_base.h"
-#include "MyLibs/board/board_base.h"
+#include "Robot/board/board_base.h"
 
 
 #define INERTIA_DISTANCE  0.064    // this is a CNC unit  0.016== (1/386)/ (2*PI), around 12.7mm

@@ -1,21 +1,22 @@
 #pragma once
 
-#include "MyLibs/board/board_base.h"
+#include "Robot/board/board_base.h"
 
 #include "Robot/valve/three_way_valve/three_way_valve.h"
 #include "Robot/Sensor/position_binary_trigger/position_trigger.h"
 #include "Robot/reciprocator/reciprocator.h"
 #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
+#include "Robot/display/digital_number/hc595_digital_number.h"
 
 // #include "dc_motor_ir_reciprocator.h"
 
 class BarcodeReader{
     public:
-        char* GetBuffer(){return &__buffer;};
-        bool Read(){return false};
+        char* GetBuffer(){return __buffer;};
+        bool Read(){return false;};
     private:
         char __buffer[50];
-}
+};
 
 class ThreeWayValveBoard: public BoardBase{
     public:
@@ -25,6 +26,7 @@ class ThreeWayValveBoard: public BoardBase{
         BarcodeReader* GetBarcodeReader(){return &__barcode_reader;};
     private:
         BarcodeReader __barcode_reader;
+        Hc595_Digital_number __digital_number;
 
         ThreeWayValve __valve;
         Reciprocator __reciprocator;

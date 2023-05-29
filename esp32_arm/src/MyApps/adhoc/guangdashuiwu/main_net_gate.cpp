@@ -1,5 +1,6 @@
 
-#include "Mesh/adhoc/adhoc_gate.h"
+// #include "Mesh/adhoc/adhoc_gate.h"
+#include "MyLibs/Mesh/adhoc/adhoc_gate.h"
 #include "board/board_gate.h"
 
 #include "all_applications.h"

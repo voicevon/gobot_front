@@ -5,7 +5,7 @@
 #include "CNC/Actuator/cnc_actuator_list.h"
 #include "../coordinate/cnc_axis.h"
 #include "MyLibs/basic/logger.h"   // todo: remove
-#include "MyLibs/board/board_base.h"
+#include "Robot/board/board_base.h"
 #include "FastAccelStepper.h"
 
 

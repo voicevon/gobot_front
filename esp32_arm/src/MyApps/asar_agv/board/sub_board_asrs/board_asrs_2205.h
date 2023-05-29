@@ -1,7 +1,8 @@
 #pragma once
  
-#include "MyLibs/board/board_base.h"
-#include "ASRS/sensor_jetty/sharp_ir_on_ads1115.h"
+#include "Robot/board/board_base.h"
+// #include "ASRS/sensor_jetty/sharp_ir_on_ads1115.h"
+#include "Robot/ASRS/sensor_jetty/sharp_ir_on_ads1115.h"
 #include "../board_pins/board_pins_ver_2_0.h"
 
 class BoardAsrs: public BoardBase{

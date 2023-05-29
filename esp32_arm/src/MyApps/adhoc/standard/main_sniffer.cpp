@@ -1,7 +1,8 @@
 
 
 #include "board.h"
-#include "Mesh/adhoc/adhoc_sniffer.h"
+// #include "Mesh/adhoc/adhoc_sniffer.h"
+#include "MyLibs/mesh/adhoc/adhoc_sniffer.h"
 
 #include "all_applications.h"
 #ifdef I_AM_ADHOC_SNIFFER

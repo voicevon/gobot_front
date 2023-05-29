@@ -1,5 +1,5 @@
 #pragma once
-#include "MyLibs/board/board_base.h"
+#include "Robot/board/board_base.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "Robot/Sensor/position_binary_trigger/position_trigger_array.h"
 #include "MyApps/cnc_machine/gobot_main/board/board_pins/board_ver1.2.h"

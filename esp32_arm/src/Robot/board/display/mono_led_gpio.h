@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../binary_output_gpio.h"
+// #include "../binary_output_gpio.h"
+#include "Robot/board/component/binary_output_gpio.h"
+
 
 
 class Mono_Led_GPIO: public BinaryOutput_GPIO

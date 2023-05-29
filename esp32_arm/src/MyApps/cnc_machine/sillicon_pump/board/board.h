@@ -1,8 +1,9 @@
 #pragma once
 
-#include "MyLibs/board/board_base.h"
-#include "MyLibs/component/display/mono_led_gpio.h"
-#include "MyLibs/component/display/digital_number/hc595_digital_number.h"
+#include "Robot/board/board_base.h"
+#include "Robot/board/display/mono_led_gpio.h"
+// #include "MyLibs/component/display/digital_number/hc595_digital_number.h"
+#include "Robot/board/display/digital_number/hc595_digital_number.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"
 #include "Robot/Sensor/position_binary_trigger/position_trigger_array.h" 
 #include "FastAccelStepper.h"

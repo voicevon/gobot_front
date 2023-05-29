@@ -1,7 +1,8 @@
 #pragma once
 
 
-#include "Mqtt/mqtt_subscriber_base.h"
+// #include "Mqtt/mqtt_subscriber_base.h"
+#include "MyLibs/mqtt/mqtt_subscriber_base.h"
 #include "CNC/gcode/gcode_queue.h"
 
 class CncAppBase: public MqttSubscriberBase{

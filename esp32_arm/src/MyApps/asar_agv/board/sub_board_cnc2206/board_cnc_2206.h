@@ -1,5 +1,5 @@
 #pragma once
-#include "MyLibs/board/board_base.h"
+#include "Robot/board/board_base.h"
 #include "FastAccelStepper.h"
 #include "Robot/Sensor/position_binary_trigger/position_trigger_array.h"
 #include "CNC/Actuator/stepper/actuator_fast_stepper.h"

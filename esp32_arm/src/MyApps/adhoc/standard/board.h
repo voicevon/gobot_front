@@ -1,6 +1,6 @@
 #pragma once
-#include "MyLibs/board/board_base.h"
-#include "MyLibs/component/display/mono_led_gpio.h"
+#include "Robot/board/board_base.h"
+#include "Robot/board/display/mono_led_gpio.h"
 
 #define PIN_STATE_LED 2
 

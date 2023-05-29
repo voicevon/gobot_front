@@ -1,5 +1,5 @@
 #pragma once
-#include "MyLibs/board/board_base.h"
+#include "Robot/board/board_base.h"
 #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
 #include "Robot/Sensor/position_binary_trigger/position_trigger_array.h" 
 #include "eef/vsc_eef.h"

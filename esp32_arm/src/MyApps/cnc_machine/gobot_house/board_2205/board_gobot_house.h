@@ -1,5 +1,5 @@
 #pragma once
-#include "MyLibs/board/board_base.h"
+#include "Robot/board/board_base.h"
 #include "board_pins/board_pins_ver3.11.h"
 #include "robot_eef/gobot_house_eef.h"   //TODO: remove
 #include "Robot/Sensor/position_binary_trigger/position_trigger_array.h"

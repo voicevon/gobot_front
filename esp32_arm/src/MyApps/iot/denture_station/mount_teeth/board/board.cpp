@@ -1,28 +1,41 @@
 #include "board.h"
 
 
-// output led
+
+
+
+// valve::output h_bridge
+#define PIN_H_BRIDGE_PWM_SPEED 23
+#define PIN_H_BRIDGE_DIR 24
+// valve::indicator
 #define PIN_LED_GO_STRAIGHT_BLUE 17
 #define PIN_LED_GO_STRAIGHT_RED 18
 #define PIN_LED_GO_STRAIGHT_GREEN 19
 #define PIN_LED_TURN_RIGHT_BLUE 20
 #define PIN_LED_TURN_RIGHT_RED 21
 #define PIN_LED_TURN_RIGHT_GREEN 22
-// output h_bridge
-#define PIN_H_BRIDGE_PWM_SPEED 23
-#define PIN_H_BRIDGE_DIR 24
 
-// input ir-reflactor
+// valve::input ir-reflactor
 #define PIN_GO_STRAIGHT_STOPPER 15
 #define PIN_TURN_RIGHT_STOPPER 16
-// input ir-blocking
+
+// valve::input ir-blocking
 #define PIN_INLET_IR_SENSOR 27
 #define PIN_OUTLET__IR_SENSOR_GO_STRAIGHT 28
 #define PIN_OUTLET_IR_SENSOR_TURN_RIGHT 29
 
+
+
 // barcode reader
 #define PIN_BARCODE_READER_RX 33
 #define PIN_BARCODE_READER_TX 34
+
+// digital_led:: output
+#define PIN_DIGITAL_LED_QUAD_RESET 11
+#define PIN_DIGITAL_LED_QUAD_DATA 12
+#define PIN_DIGITAL_LED_QUAD_CLOCK 13
+
+
 
 
 void ThreeWayValveBoard::Init(){
@@ -31,6 +44,8 @@ void ThreeWayValveBoard::Init(){
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");
 
     // __barcode_reader.Init(PIN_BARCODE_READER_RX, PIN_BARCODE_READER_TX);
+    __digital_number.Init(PIN_DIGITAL_LED_QUAD_CLOCK, PIN_DIGITAL_LED_QUAD_DATA, PIN_DIGITAL_LED_QUAD_RESET,4);
+
     __go_staight_stopper.Init('T', PIN_GO_STRAIGHT_STOPPER, HIGH);
     __turn_right_stopper.Init('L', PIN_TURN_RIGHT_STOPPER, HIGH);
 
