@@ -5,6 +5,7 @@
 #include "MyLibs/mqtt/mqtt_subscriber_manager.h"
 // #include "Mqtt/remote_binary_output_group.h"
 #include "MyLibs/mqtt/remote_binary_output_group.h"
+#include "SPIFFS.h"
 
 #include "all_applications.h"
 #ifdef I_AM_WAREHOUSE_MANUAL_PACKER_SHIPPER
@@ -22,8 +23,28 @@ void test_board(){
 }
 
 
+void test_spiffs() {
+  
+  if(!SPIFFS.begin(true)){
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  }
+  
+  File file = SPIFFS.open("/test.txt");
+  if(!file){
+    Serial.println("Failed to open file!");
+    return;
+  }
+  
+  Serial.println("Content of file:");
+  while(file.available()){
+    Serial.write(file.read());
+  }
+  file.close();
+}
 
 void setup(){
+    test_spiffs();
     board.Init();
     // test_board();
 

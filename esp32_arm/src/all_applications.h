@@ -9,7 +9,7 @@
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
 // #define I_AM_ROBOT_ASRS_AGV         // TO BE reconstruct a lot/  
-// #define I_AM_GARMENT_BOX_MOVER         //  CoreAZ  TO BE reconstruct a lot
+// #define I_AM_GARMENT_BOX_MOVER      //  CoreAZ  TO BE reconstruct a lot
 // #define I_AM_GARMENT_BOX_CARRIER    // CoreYZ  TO BE reconstruct a lot
 
 // #define I_AM_GOBOT_HOUSE_2205   //Depricated
@@ -20,8 +20,8 @@
 // #define I_AM_VSC
 
 // #define I_AM_WAREHOUSE_LOOP_PORTER
-// #define I_AM_WAREHOUSE_MANUAL_PACKER_SHIPPER
-#define I_AM_DENTURE_STATION_MOUNT_TEETH
+#define I_AM_WAREHOUSE_MANUAL_PACKER_SHIPPER
+// #define I_AM_DENTURE_STATION_MOUNT_TEETH
 
 // #define I_AM_SILLICON_PUMP
 // #define I_AM_AQUAPONICS

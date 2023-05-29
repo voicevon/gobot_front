@@ -15,6 +15,7 @@ class BarcodeReader{
     public:
         char* GetBuffer(){return __buffer;};
         bool Read(){return false;};
+        
     private:
         char __buffer[50];
 };
@@ -25,6 +26,7 @@ class ThreeWayValveBoard: public BoardBase{
         void Init() override;
         ThreeWayValve* GetValve(){return &__valve;};
         BarcodeReader* GetBarcodeReader(){return &__barcode_reader;};
+
     private:
         BarcodeReader __barcode_reader;
         Hc595_Digital_number __digital_number;
