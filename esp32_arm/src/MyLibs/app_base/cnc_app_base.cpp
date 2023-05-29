@@ -1,5 +1,5 @@
 #include "cnc_app_base.h"
-#include "Mqtt/mqtt_subscriber_manager.h"
+#include "MyLibs/mqtt/mqtt_subscriber_manager.h"
 
 #define APP_COMMAND_PREFIX  "app:"
 #define APP_COMMAND_PREFIX_SIZE 4

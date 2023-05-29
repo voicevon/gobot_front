@@ -50,7 +50,8 @@ void setup(){
 
     test_board();
     robot.Init(&board);
-    robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    app.Link_Mqtt_to_GcodeQueue("vsc/gcode", &gcode_queue);
+    // robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     // app.LinkLocalGcodeQueue_AsProducer(&gcode_queue);
     app.LinkRobot(&robot);
 

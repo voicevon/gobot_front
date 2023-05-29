@@ -52,6 +52,7 @@ void setup() {
 
 	setup_webcommu();
 	cnc.LinkLocalGcodeQueue_AsConsumer(&myCommandQueue);
+	
 	Serial.println("\nSet up is done .....");
 	String strG28 = "G28";
 	myCommandQueue.AppendGcodeCommand(strG28);

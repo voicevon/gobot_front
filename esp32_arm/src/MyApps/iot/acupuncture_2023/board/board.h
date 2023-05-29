@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Robot/board/board_base.h"
-#include "MyLibs/board/peripheral/bus_i2c/i2c_iam_master.h"
+// #include "MyLibs/board/peripheral/bus_i2c/i2c_iam_master.h"
+#include "Robot/board/peripheral/bus_i2c/i2c_iam_master.h"
 
 
 class AcupunctureBoard_2023: public BoardBase{

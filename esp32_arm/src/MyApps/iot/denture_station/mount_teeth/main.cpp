@@ -1,7 +1,8 @@
 
 #include "board/board.h"
-#include "Mqtt/mqtt_subscriber_manager.h"
-#include "Mqtt/remote_component/remote_var_chars.h"
+#include "MyLibs/mqtt/mqtt_subscriber_manager.h"
+// #include "Mqtt/remote_component/remote_var_chars.h"
+#include "MyLibs/mqtt/remote_component/remote_var_chars.h"
 
 #include "all_applications.h"
 #ifdef I_AM_DENTURE_STATION_MOUNT_TEETH

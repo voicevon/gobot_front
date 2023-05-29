@@ -2,9 +2,10 @@
 #include "board/board.h"
 #include "loop_porter_app.h"
 #include "robot/loop_porter_robot.h"
-#include "Mqtt/remote_binary_output_group.h"
-#include "all_applications.h"
+#include "MyLibs/mqtt/mqtt_subscriber_manager.h"
+#include "MyLibs/mqtt/remote_binary_output_group.h"
 
+#include "all_applications.h"
 #ifdef I_AM_WAREHOUSE_LOOP_PORTER
 #include "porter_config.h"
 
@@ -13,7 +14,7 @@
 Twh_LoopPorter_Board board;
 Twh_LoopPorter_Robot robot;
 Twh_LoopPorter_App app(MY_ROBOT_ROW_ID);
-RemoteBinaryOutputGroup leds;
+RemoteBinaryOutputGroup remote_leds;
 // RemoteLedsState leds();  This cause compiler failed, why?
 
 void test(){
@@ -43,14 +44,14 @@ void setup(){
     gcode_queue->AppendGcodeCommand("G1X26");
     gcode_queue->AppendGcodeCommand(MQTT_TOPIC_M408_REPORT_STATE_ON_SETUP);
 
-    leds.Init(LEDS_COUNT);
-    gs_MqttSubscriberManager::Instance().AddSubscriber(MQTT_TOPIC_FOR_LEDS, &leds);
+    remote_leds.Init(LEDS_COUNT);
+    gs_MqttSubscriberManager::Instance().AddSubscriber(MQTT_TOPIC_FOR_LEDS, &remote_leds);
 
 }
 
 void show_leds(){
     char* leds_command;  // 'N' => ON, 'F' => OFF
-    leds_command = leds.Get();
+    leds_command = remote_leds.Get();
     for(int i=0; i<LEDS_COUNT; i++){
         if (*(leds_command+i) == 'N')
             board.GetLed(i)->TurnOn();

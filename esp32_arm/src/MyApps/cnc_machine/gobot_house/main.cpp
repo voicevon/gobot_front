@@ -11,11 +11,11 @@
 
 Board_GobotHouse_2206 board = Board_GobotHouse_2206();
 GcodeQueue gcode_queue;
-MessageQueue mqtt_message_queue;
+// MessageQueue mqtt_message_queue;
 GobotHouseApp* app; 
 GobotHouseRobot robot;
 
-
+#define MQTT_TOPIC_GCODE "gobot1234/house/gcode"
 
 // void board_test();
 // void cnc_test();
@@ -45,8 +45,8 @@ void setup(){
 
     app = &GobotHouseApp::getInstance();
     app->Setup();
-    app->LinkLocalGcodeQueue_AsProducer(&gcode_queue);
-    robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
+    app->Link_Mqtt_to_GcodeQueue(MQTT_TOPIC_GCODE, &gcode_queue);
+    // robot.LinkLocalGcodeQueue_AsConsumer(&gcode_queue);
     // cnc_test();
     // robot->__Home();
 
@@ -55,7 +55,7 @@ void setup(){
     // connect_to_mqtt_broker();
     String mqtt_topic = "gobot/xROBOT_SERIAL_ID/house";
     mqtt_topic.replace("ROBOT_SERIAL_ID",String(ROBOT_SERIAL_ID));
-    mono_remote_queue_bridge_via_mqtt_setup(mqtt_topic.c_str(), &mqtt_message_queue, app); 
+    // mono_remote_queue_bridge_via_mqtt_setup(mqtt_topic.c_str(), &mqtt_message_queue, app); 
     // setup_mqtt_on_message_receive(); 
     Serial.println("lovely bot,  GobotHouse.  setup() is done.  Good luck!");
     // board.GetEef()->Run(EEF_CODE_UNLOAD);
@@ -64,9 +64,9 @@ void setup(){
 void loop(){
     board.GetActuaorBeta('B')->SpinOnce();
 	robot.SpinOnce();
-    
+    app->SpinOnce();
     // cnc.SpinOnce();
-    mono_remote_queue_bridge_spin_once();
+    // mono_remote_queue_bridge_spin_once();
 }
 
 

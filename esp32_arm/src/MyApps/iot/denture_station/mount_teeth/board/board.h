@@ -6,7 +6,8 @@
 #include "Robot/Sensor/position_binary_trigger/position_trigger.h"
 #include "Robot/reciprocator/reciprocator.h"
 #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
-#include "Robot/display/digital_number/hc595_digital_number.h"
+// #include "Robot/display/digital_number/hc595_digital_number.h"
+#include "Robot/board/display/digital_number/hc595_digital_number.h"
 
 // #include "dc_motor_ir_reciprocator.h"
 

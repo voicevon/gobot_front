@@ -18,8 +18,6 @@
 // #define I_AM_GOBOT_MAIN
 // #define I_AM_SPRING_MAKER
 // #define I_AM_VSC
-// #define I_AM_TEETH_WAREHOUSE_V1
-// #define I_AM_TEETH_WAREHOUSE_V2
 
 // #define I_AM_WAREHOUSE_LOOP_PORTER
 // #define I_AM_WAREHOUSE_MANUAL_PACKER_SHIPPER
@@ -27,19 +25,18 @@
 
 // #define I_AM_SILLICON_PUMP
 // #define I_AM_AQUAPONICS
-// #define I_AM_BARCODE_READER
-
-
-// #define I_AM_ADHOC_ROUTER
-// #define I_AM_ADHOC_SNIFFER
-// #define I_AM_GUANGDA_SHUIWU_NETGATE  
-// #define I_AM_GUANGDA_SHUIWU_SENSOR  
-
-
 // #define I_AM_ACUPUCTURE_MAIN_2023
 // #define I_AM_ACUPUCTURE_MAIN_2022
 // #define I_AM_ACUPUNCTURE_JIG_TESTER
+
 // #define I_AM_SMOKE_BOT
+// #define I_AM_BARCODE_READER
+
+// #define I_AM_ADHOC_ROUTER
+// #define I_AM_GUANGDA_SHUIWU_NETGATE  
+// #define I_AM_GUANGDA_SHUIWU_SENSOR  
+// #define I_AM_ADHOC_SNIFFER
+
 // #define I_AM_CABLE_AXIS_XPYP
 // #define I_AM_CABLE_AXIS_XNYP
 // #define I_AM_CABLE_AXIS_XNYN
