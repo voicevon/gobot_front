@@ -3,7 +3,6 @@
 #include "board/board.h"
 #include "MyLibs/mqtt/wifi_mqtt_client.h"
 #include "MyLibs/mqtt/mqtt_subscriber_manager.h"
-// #include "Mqtt/remote_binary_output_group.h"
 #include "MyLibs/mqtt/remote_binary_output_group.h"
 #include "SPIFFS.h"
 
