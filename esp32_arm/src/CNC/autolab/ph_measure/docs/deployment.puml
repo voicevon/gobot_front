@@ -1,0 +1,75 @@
+@startuml
+frame 仓库{
+    frame 样品瓶{
+        card 原始土
+    }
+}
+card 水箱
+frame 工作台{
+   card PC机
+   frame 振荡器{
+       card 开启
+       card 停止
+       开启 -> 停止: 10分钟自动停止
+
+       frame 托盘{
+           frame 36x烧杯{
+                frame 样品{
+                    card 土
+                    card 水
+                }
+            }
+        }
+    }
+    frame 一维直线模组{
+        card 水管6头
+    }
+    frame 二维直线模组{
+        card PH传感器
+        card xxx
+    }
+    
+    frame 6x加水泵{
+    }
+    frame 清洗泵{
+    }
+    frame 气泵_压力罐{
+    }
+    card 电磁阀
+    6x加水泵 --> 水管6头 
+    水管6头 --> 36x烧杯: 每个烧杯:加水25mL
+    样品-[#green]---> PH传感器: 测量--PH数据
+    frame 液体槽{
+        frame 标定液槽{
+            card 标定液70
+            card 标定液40
+            card 标定液100
+        }
+        card 待机槽
+        card 冲洗槽
+        
+    }
+    标定液70 -[#green]-> PH传感器:  PH标准数据
+    标定液40 -[#green]-> PH传感器:  PH标准数据
+    标定液100 -[#green]-> PH传感器:  PH标准数据
+
+
+    card 气管
+    card 水管
+    清洗泵 --> 水管
+    水管 -[dashed]-> PH传感器: 清洗--水
+    气泵_压力罐 --> 电磁阀
+    电磁阀 --> 气管
+    气管 -[dashed]->PH传感器: 干燥--空气
+    
+    card 二维码阅读器
+    二维码阅读器 --> PC机
+    原始土 --> 36x烧杯: 人工
+    样品瓶 --> 二维码阅读器
+    PH传感器 <-->待机槽: 移动
+    PH传感器 <-->冲洗槽: 移动
+}
+水箱 --> 6x加水泵
+水箱 --> 清洗泵
+
+@enduml
