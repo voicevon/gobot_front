@@ -5,6 +5,8 @@
   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 *********/
+#include "all_applications.h"
+#ifdef I_AM_WIFI_MANAGER_DEMO
 
 #include <Arduino.h>
 #include <WiFi.h>
@@ -13,8 +15,7 @@
 #include "SPIFFS.h"
 
 
-#include "all_application.h"
-#ifdef I_AM_WIFI_MANAGER_DEMO
+
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);

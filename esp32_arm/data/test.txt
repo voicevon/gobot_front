@@ -1,2 +1,3 @@
 Hello World !
-I am the file test.txt
+I am the file test.txt.
+You are a kind man. :)

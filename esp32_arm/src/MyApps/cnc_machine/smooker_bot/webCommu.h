@@ -1,3 +1,4 @@
+#pragma once
 //==================================
 //ESP32 WebSocket Server: Toggle LED
 //by: Ulas Dikme
@@ -7,12 +8,10 @@
 #include <WebServer.h>
 #include <WebSocketsServer.h>
 //-----------------------------------------------
-const char* ssid = "CentOS";
-const char* password = "1234567890";
 //-----------------------------------------------
 #define LED 2
 //-----------------------------------------------
-WebServer server(80);
+WebServer server_smooke_bot(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
 //-----------------------------------------------
 String JSONtxt;
@@ -31,6 +30,9 @@ void setup_webcommu()
 {
   Serial.begin(115200); pinMode(LED, OUTPUT);
   //-----------------------------------------------
+  const char* ssid = "CentOS";
+  const char* password = "1234567890";
+
   WiFi.begin(ssid, password);
   while(WiFi.status() != WL_CONNECTED){Serial.print("."); delay(500);}
   WiFi.mode(WIFI_STA);
@@ -38,9 +40,9 @@ void setup_webcommu()
   Serial.print("Local IP: ");
   Serial.println(WiFi.localIP());
   //-----------------------------------------------
-  server.on("/", webpage);
+  server_smooke_bot.on("/", webpage);
   //-----------------------------------------------
-  server.begin(); webSocket.begin();
+  server_smooke_bot.begin(); webSocket.begin();
   webSocket.onEvent(webSocketEvent);
 }
 
@@ -65,7 +67,7 @@ void send_to_client(){
 void WebCommu_SpinOnce()
 {
   webSocket.loop(); 
-  server.handleClient();
+  server_smooke_bot.handleClient();
   //-----------------------------------------------
   if(varOnOff == false) 
     digitalWrite(LED, LOW);
