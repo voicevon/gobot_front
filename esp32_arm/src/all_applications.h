@@ -37,8 +37,8 @@
 // #define I_AM_GUANGDA_SHUIWU_SENSOR  
 // #define I_AM_ADHOC_SNIFFER
 
-// #define I_AM_WIFI_MANAGER_DEMO
-#define I_AM_DEMO_PULSE_COUNT
+#define I_AM_WIFI_MANAGER_DEMO
+// #define I_AM_DEMO_PULSE_COUNT
 
 // #define I_AM_CABLE_AXIS_XPYP
 // #define I_AM_CABLE_AXIS_XNYP
