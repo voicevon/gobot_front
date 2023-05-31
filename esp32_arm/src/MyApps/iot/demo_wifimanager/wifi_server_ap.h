@@ -13,11 +13,12 @@ class WifiServerAp{
         static void writeFile(fs::FS &fs, const char * path, const char * message);
         static bool initWiFi();
         static void setup_callme(const char* file_name);
-        static String GetSsid();
-        static String GetPassword();
+        static const char* GetSsid();
+        static const char* GetPassword();
 
     private:
         static WifiServerAp __instance;
         // AsyncWebServer server(80);
+
 
 };

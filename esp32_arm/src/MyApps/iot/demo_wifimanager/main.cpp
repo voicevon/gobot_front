@@ -166,11 +166,13 @@ String processor(const String& var) {
 void setup(){
 	// Serial port for debugging purposes
 	Serial.begin(115200);
-	WifiServerAp::setup_callme();
+	WifiServerAp::setup_callme("loop_porter.html");
 
 }
 
 void loop() {
+	String xxx="";
+	// char[] xx = xxx.c_str();
 
 }
 
