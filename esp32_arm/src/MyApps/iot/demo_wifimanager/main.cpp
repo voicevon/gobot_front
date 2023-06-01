@@ -1,4 +1,4 @@
-// https://RandomNerdTutorials.com/esp32-wi-fi-manager-asyncwebserver/
+
 	
 #include <Arduino.h>
 #include <WiFi.h>
@@ -171,8 +171,7 @@ void setup(){
 }
 
 void loop() {
-	String xxx="";
-	// char[] xx = xxx.c_str();
+
 
 }
 

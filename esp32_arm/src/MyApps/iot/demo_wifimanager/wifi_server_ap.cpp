@@ -1,3 +1,5 @@
+
+// https://RandomNerdTutorials.com/esp32-wi-fi-manager-asyncwebserver/
 #include "wifi_server_ap.h"
 
 #include <Arduino.h>
@@ -6,41 +8,34 @@
 #include <AsyncTCP.h>
 #include "MyLibs/basic/logger.h"
 
+#define MAX_STRING_LENGTH_IN_HTML_INPUT 30
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
 
-// Search for parameter in HTTP POST request
+// Search for parameter in HTTP POST request,  values are form.input.name
 const char* PARAM_INPUT_1 = "ssid";
 const char* PARAM_INPUT_2 = "pass";
 const char* PARAM_INPUT_3 = "admin_uid";
 const char* PARAM_INPUT_4 = "admin_password";
 
 
-//Variables to save values from HTML form
-
 
 // File paths to save input values permanently
+static String FILE_ssid = "/ssid.txt";
+static String FILE_password = "/pass.txt";
+static String FILE_admin_uid = "/admin_uid.txt";
+static String FILE_admin_password = "/admin_password.txt";
+static String __html_filename = "";
 
 // Timer variables
 unsigned long previousMillis = 0;
 const long interval = 10000;  // interval to wait for Wi-Fi connection (milliseconds)
 
-static String __ssidPath__ = "/ssid.txt";
-static String __passPath__ = "/pass.txt";
-static String __ipPath__ = "/ip.txt";
-static String __gatewayPath__ = "/gateway.txt";
-
-        static char __ssid[30];
-        static char __pass[30];
-        static char __admin_uid[30];
-        static char __admin_password[30];
-
-        static const char* ssidPath;
-        static const char* passPath;
-        static const char* ipPath;
-        static const char* gatewayPath;
-
-
+        static  char __ssid[MAX_STRING_LENGTH_IN_HTML_INPUT];
+        static  char __pass[MAX_STRING_LENGTH_IN_HTML_INPUT];
+        static  char __admin_uid[MAX_STRING_LENGTH_IN_HTML_INPUT];
+        static  char __admin_password[MAX_STRING_LENGTH_IN_HTML_INPUT];
+        static  char __value[MAX_STRING_LENGTH_IN_HTML_INPUT];
 const char* WifiServerAp::GetSsid(){
     return __ssid;
 }
@@ -49,25 +44,22 @@ const char* WifiServerAp::GetPassword(){
     return __pass;
 }
 
-void WifiServerAp::setup_callme(const char* file_name){
+const char* WifiServerAp::GetConfig(const char* key){
+	readFile(SPIFFS, key).toCharArray(__value, MAX_STRING_LENGTH_IN_HTML_INPUT);
+    return __value;
+}
+
+void WifiServerAp::setup_callme(String html_filename){
+    __html_filename = html_filename;
 	initSPIFFS();
-    ssidPath = __ssidPath__.c_str();
-    passPath = __passPath__.c_str();
-    ipPath = __ipPath__.c_str();
-    gatewayPath = __gatewayPath__.c_str();
 	// Set GPIO 2 as an OUTPUT
 	// pinMode(ledPin, OUTPUT);
 	// digitalWrite(ledPin, LOW);
-    // static char ssidPath = xxx.c_str();
-    // static char* passPath = String("/pass.txt").c_str();
-    // static char[] ipPath = "/admin_uid.txt";
-    // static char* gatewayPath = "/admin_password.txt";
-
 	// Load values saved in SPIFFS
-	readFile(SPIFFS, ssidPath).toCharArray(__ssid, 30);
-	readFile(SPIFFS, passPath).toCharArray(__pass, 30);
-	readFile(SPIFFS, ipPath).toCharArray(__admin_uid, 30);
-	readFile (SPIFFS, gatewayPath).toCharArray(__admin_password,30);
+	readFile(SPIFFS, FILE_ssid.c_str()).toCharArray(__ssid, MAX_STRING_LENGTH_IN_HTML_INPUT);
+	readFile(SPIFFS, FILE_password.c_str()).toCharArray(__pass, MAX_STRING_LENGTH_IN_HTML_INPUT);
+	readFile(SPIFFS, FILE_admin_uid.c_str()).toCharArray(__admin_uid, MAX_STRING_LENGTH_IN_HTML_INPUT);
+	readFile (SPIFFS, FILE_admin_password.c_str()).toCharArray(__admin_password,MAX_STRING_LENGTH_IN_HTML_INPUT);
 	Serial.println(__ssid);
 	Serial.println(__pass);
 	Serial.println(__admin_uid);
@@ -170,7 +162,7 @@ void WifiServerAp::StartApServer(){
 
 	// Web Server Root URL
 	server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-		request->send(SPIFFS, "/wifimanager.html", "text/html");
+		request->send(SPIFFS, __html_filename, "text/html");
 	});
 	
 	server.serveStatic("/", SPIFFS, "/");
@@ -182,35 +174,35 @@ void WifiServerAp::StartApServer(){
 			if(p->isPost()){
 				// HTTP POST ssid value
 				if (p->name() == PARAM_INPUT_1) {
-					p->value().toCharArray(__ssid,30);
+					p->value().toCharArray(__ssid,MAX_STRING_LENGTH_IN_HTML_INPUT);
 					Serial.print("SSID set to: ");
 					Serial.println(__ssid);
 					// Write file to save value
-					writeFile(SPIFFS, ssidPath, __ssid);
+					writeFile(SPIFFS, FILE_ssid.c_str(), __ssid);
 				}
 				// HTTP POST pass value
 				if (p->name() == PARAM_INPUT_2) {
-					p->value().toCharArray(__pass,30);
+					p->value().toCharArray(__pass,MAX_STRING_LENGTH_IN_HTML_INPUT);
 					Serial.print("Password set to: ");
 					Serial.println(__pass);
 					// Write file to save value
-					writeFile(SPIFFS, passPath, __pass);
+					writeFile(SPIFFS, FILE_password.c_str(), __pass);
 				}
 				// HTTP POST admin_uid value
 				if (p->name() == PARAM_INPUT_3) {
-					p->value().toCharArray(__admin_uid, 30);
+					p->value().toCharArray(__admin_uid, MAX_STRING_LENGTH_IN_HTML_INPUT);
 					Serial.print("IP Address set to: ");
 					Serial.println(__admin_uid);
 					// Write file to save value
-					writeFile(SPIFFS, ipPath, __admin_uid);
+					writeFile(SPIFFS, FILE_admin_uid.c_str(), __admin_uid);
 				}
 				// HTTP POST admin_password value
 				if (p->name() == PARAM_INPUT_4) {
-					p->value().toCharArray(__admin_password, 30);
+					p->value().toCharArray(__admin_password, MAX_STRING_LENGTH_IN_HTML_INPUT);
 					Serial.print("Gateway set to: ");
 					Serial.println(__admin_password);
 					// Write file to save value
-					writeFile(SPIFFS, gatewayPath, __admin_password);
+					writeFile(SPIFFS, FILE_admin_password.c_str(), __admin_password);
 				}
 				//Serial.printf("POST[%s]: %s\n", p->name().c_str(), p->value().c_str());
 			}
