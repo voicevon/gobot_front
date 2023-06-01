@@ -8,6 +8,7 @@
 #include <AsyncTCP.h>
 #include "MyLibs/basic/logger.h"
 #include "web-configurator_parameter.h"
+#include "SPIFFS.h"
 
 #define MAX_STRING_LENGTH_IN_HTML_INPUT 30
 
@@ -16,34 +17,34 @@ static const char** HTML_FORM_ITEM_NAMES;
 static WebConfigurator_DictionBase* diction;
 
 // File paths to save input values permanently
-static String FILE_ssid = "/ssid.txt";
-static String FILE_password = "/pass.txt";
+// static String FILE_ssid = "/ssid.txt";
+// static String FILE_password = "/pass.txt";
 static String FILE_admin_uid = "/admin_uid.txt";
 static String FILE_admin_password = "/admin_password.txt";
 static String __html_filename = "";
+static WebConnfigurator_Parameter para_of_key = WebConnfigurator_Parameter();
 
 
 // Timer variables
 static unsigned long previousMillis = 0;
 static const long interval = 10000;  // interval to wait for Wi-Fi connection (milliseconds)
-
-static char __ssid[MAX_STRING_LENGTH_IN_HTML_INPUT];
-static char __pass[MAX_STRING_LENGTH_IN_HTML_INPUT];
-static char __admin_uid[MAX_STRING_LENGTH_IN_HTML_INPUT];
-static char __admin_password[MAX_STRING_LENGTH_IN_HTML_INPUT];
+// static char __ssid[MAX_STRING_LENGTH_IN_HTML_INPUT];
+// static char __pass[MAX_STRING_LENGTH_IN_HTML_INPUT];
+// static char __admin_uid[MAX_STRING_LENGTH_IN_HTML_INPUT];
+// static char __admin_password[MAX_STRING_LENGTH_IN_HTML_INPUT];
 static char __value[MAX_STRING_LENGTH_IN_HTML_INPUT];
 
 const char* WebConfiturator::GetSsid(){
-    return __ssid;
+    return diction->__ssid.GetName();
 }
 
 const char* WebConfiturator::GetPassword(){
-    return __pass;
+    return diction->__ssid.GetName();
 }
 
 const char* WebConfiturator::GetConfig(const char* key){
-	readFile(SPIFFS, key).toCharArray(__value, MAX_STRING_LENGTH_IN_HTML_INPUT);
-    return __value;
+	para_of_key.SetName(key);
+	return para_of_key.readFile();
 }
 
 void WebConfiturator::Begin(WebConfigurator_DictionBase* web_configurator_diction){
@@ -63,14 +64,14 @@ void WebConfiturator::Begin(WebConfigurator_DictionBase* web_configurator_dictio
 	}
 	initSPIFFS();
 	
-	readFile(SPIFFS, FILE_ssid.c_str()).toCharArray(__ssid, MAX_STRING_LENGTH_IN_HTML_INPUT);
-	readFile(SPIFFS, FILE_password.c_str()).toCharArray(__pass, MAX_STRING_LENGTH_IN_HTML_INPUT);
-	readFile(SPIFFS, FILE_admin_uid.c_str()).toCharArray(__admin_uid, MAX_STRING_LENGTH_IN_HTML_INPUT);
-	readFile (SPIFFS, FILE_admin_password.c_str()).toCharArray(__admin_password,MAX_STRING_LENGTH_IN_HTML_INPUT);
-	Serial.println(__ssid);
-	Serial.println(__pass);
-	Serial.println(__admin_uid);
-	Serial.println(__admin_password);
+	// readFile(SPIFFS, FILE_ssid.c_str()).toCharArray(__ssid, MAX_STRING_LENGTH_IN_HTML_INPUT);
+	// readFile(SPIFFS, FILE_password.c_str()).toCharArray(__pass, MAX_STRING_LENGTH_IN_HTML_INPUT);
+	// readFile(SPIFFS, FILE_admin_uid.c_str()).toCharArray(__admin_uid, MAX_STRING_LENGTH_IN_HTML_INPUT);
+	// readFile (SPIFFS, FILE_admin_password.c_str()).toCharArray(__admin_password,MAX_STRING_LENGTH_IN_HTML_INPUT);
+	Serial.println(diction->__ssid.readFile());
+	Serial.println(diction->__pass.readFile());
+	Serial.println(diction->__admin_uid.readFile());
+	Serial.println(diction->__admin_password.readFile());
 
 	if (is_workstation_mode){
 		if(!initWiFi()) {
@@ -115,7 +116,7 @@ void WebConfiturator::Begin(WebConfigurator_DictionBase* web_configurator_dictio
 // }
 
 bool WebConfiturator::initWiFi() {
-	if(__ssid=="" || __admin_uid==""){
+	if(diction->__ssid.readFile()==0x00 || diction->__pass.readFile()==0x00){
 		Serial.println("Undefined SSID or IP address.");
 		return false;
 	}
@@ -129,7 +130,7 @@ bool WebConfiturator::initWiFi() {
 	//   Serial.println("STA Failed to configure");
 	//   return false;
 	// }
-	WiFi.begin(__ssid, __pass);
+	WiFi.begin(diction->__ssid.readFile(), diction->__pass.readFile());
 	Serial.println("Connecting to WiFi...");
 
 	unsigned long currentMillis = millis();
@@ -155,39 +156,6 @@ void WebConfiturator::initSPIFFS() {
 	Serial.println("SPIFFS mounted successfully");
 }
 
-// Read File from SPIFFS
-String WebConfiturator::readFile(fs::FS &fs, const char * path){
-	Serial.printf("Reading file: %s\r\n", path);
-
-	File file = fs.open(path);
-	if(!file || file.isDirectory()){
-		Serial.println("- failed to open file for reading");
-		return String();
-	}
-	
-	String fileContent;
-	while(file.available()){
-		fileContent = file.readStringUntil('\n');
-		break;     
-	}
-	return fileContent;
-}
-
-// Write file to SPIFFS
-void WebConfiturator::writeFile(fs::FS &fs, const char * path, const char * message){
-	Serial.printf("Writing file: %s\r\n", path);
-
-	File file = fs.open(path, FILE_WRITE);
-	if(!file){
-		Serial.println("- failed to open file for writing");
-		return;
-	}
-	if(file.print(message)){
-		Serial.println("- file written");
-	} else {
-		Serial.println("- write failed");
-	}
-}
 
 void WebConfiturator::StartApServer(){
 	// Connect to Wi-Fi network with SSID and password
@@ -222,42 +190,42 @@ void WebConfiturator::StartApServer(){
 				
 				// HTTP POST ssid value
 				// Logger::Print("p->name()",HTML_FORM_ITEM_NAMES[0]);
-				if (p->name() == HTML_FORM_ITEM_NAMES[0]) {
-					// Logger::Print("point",111);
-					p->value().toCharArray(__ssid,MAX_STRING_LENGTH_IN_HTML_INPUT);
-					Serial.print("SSID set to: ");
-					Serial.println(__ssid);
-					// Write file to save value
-					writeFile(SPIFFS, FILE_ssid.c_str(), __ssid);
-				}
-				// HTTP POST pass value
-				if (p->name() == HTML_FORM_ITEM_NAMES[1]) {
-					p->value().toCharArray(__pass,MAX_STRING_LENGTH_IN_HTML_INPUT);
-					Serial.print("Password set to: ");
-					Serial.println(__pass);
-					// Write file to save value
-					writeFile(SPIFFS, FILE_password.c_str(), __pass);
-				}
-				// HTTP POST admin_uid value
-				if (p->name() == HTML_FORM_ITEM_NAMES[2]) {
-					p->value().toCharArray(__admin_uid, MAX_STRING_LENGTH_IN_HTML_INPUT);
-					Serial.print("IP Address set to: ");
-					Serial.println(__admin_uid);
-					// Write file to save value
-					writeFile(SPIFFS, FILE_admin_uid.c_str(), __admin_uid);
-				}
-				// HTTP POST admin_password value
-				if (p->name() == HTML_FORM_ITEM_NAMES[3]) {
-					p->value().toCharArray(__admin_password, MAX_STRING_LENGTH_IN_HTML_INPUT);
-					Serial.print("Gateway set to: ");
-					Serial.println(__admin_password);
-					// Write file to save value
-					writeFile(SPIFFS, FILE_admin_password.c_str(), __admin_password);
-				}
-				//Serial.printf("POST[%s]: %s\n", p->name().c_str(), p->value().c_str());
+				// if (p->name() == HTML_FORM_ITEM_NAMES[0]) {
+				// 	// Logger::Print("point",111);
+				// 	p->value().toCharArray(__ssid,MAX_STRING_LENGTH_IN_HTML_INPUT);
+				// 	Serial.print("SSID set to: ");
+				// 	Serial.println(__ssid);
+				// 	// Write file to save value
+				// 	writeFile(SPIFFS, FILE_ssid.c_str(), __ssid);
+				// }
+				// // HTTP POST pass value
+				// if (p->name() == HTML_FORM_ITEM_NAMES[1]) {
+				// 	p->value().toCharArray(__pass,MAX_STRING_LENGTH_IN_HTML_INPUT);
+				// 	Serial.print("Password set to: ");
+				// 	Serial.println(__pass);
+				// 	// Write file to save value
+				// 	writeFile(SPIFFS, FILE_password.c_str(), __pass);
+				// }
+				// // HTTP POST admin_uid value
+				// if (p->name() == HTML_FORM_ITEM_NAMES[2]) {
+				// 	p->value().toCharArray(__admin_uid, MAX_STRING_LENGTH_IN_HTML_INPUT);
+				// 	Serial.print("IP Address set to: ");
+				// 	Serial.println(__admin_uid);
+				// 	// Write file to save value
+				// 	writeFile(SPIFFS, FILE_admin_uid.c_str(), __admin_uid);
+				// }
+				// // HTTP POST admin_password value
+				// if (p->name() == HTML_FORM_ITEM_NAMES[3]) {
+				// 	p->value().toCharArray(__admin_password, MAX_STRING_LENGTH_IN_HTML_INPUT);
+				// 	Serial.print("Gateway set to: ");
+				// 	Serial.println(__admin_password);
+				// 	// Write file to save value
+				// 	writeFile(SPIFFS, FILE_admin_password.c_str(), __admin_password);
+				// }
+				// //Serial.printf("POST[%s]: %s\n", p->name().c_str(), p->value().c_str());
 			}
 		}
-        String strAdminUid = __admin_uid;
+        String strAdminUid = diction->__admin_uid.GetName();
 		request->send(200, "text/plain", "Done. ESP will restart, connect to your router and go to IP address: " + strAdminUid);
 		delay(3000);
 		ESP.restart();

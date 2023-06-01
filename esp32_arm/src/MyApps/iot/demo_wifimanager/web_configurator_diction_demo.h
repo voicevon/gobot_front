@@ -6,12 +6,9 @@
 class WebConfiguratorDiction_Demo:public WebConfigurator_DictionBase{
 	public:
 		WebConfiguratorDiction_Demo();
-		bool HasItem(const char* item_name) override;
-		
+		// bool HasItem(const char* item_name) override;
+		WebConnfigurator_Parameter test_para;
+	
 	private:
-		WebConnfigurator_Parameter __ssid = WebConnfigurator_Parameter("ssid");
-		WebConnfigurator_Parameter __pass = WebConnfigurator_Parameter("pass");
-		WebConnfigurator_Parameter __admin_uid = WebConnfigurator_Parameter("admin_uid");
-		WebConnfigurator_Parameter __admin_password = WebConnfigurator_Parameter("admin_password");
-		WebConnfigurator_Parameter* config_items[4];
+		WebConnfigurator_Parameter* config_items[5];
 };

@@ -21,8 +21,8 @@ class WebConfiturator{
     private:
         static void StartApServer();
         static void initSPIFFS();
-        static String readFile(fs::FS &fs, const char * path);
-        static void writeFile(fs::FS &fs, const char * path, const char * message);
+        // static String readFile(fs::FS &fs, const char * path);
+        // static void writeFile(fs::FS &fs, const char * path, const char * message);
         static bool initWiFi();
         static WebConfiturator __instance;
         // AsyncWebServer server(80);
