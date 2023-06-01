@@ -27,6 +27,10 @@ def index():
 def hire():
     return render_template('hire.html')
 
+@app.route('/hire/cpp')
+def hire():
+    return render_template('hire/cpp.html')
+
 @app.route('/contact')
 def contact():
     return render_template('contact.html')        

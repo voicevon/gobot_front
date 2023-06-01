@@ -1,17 +1,19 @@
 
 // https://RandomNerdTutorials.com/esp32-wi-fi-manager-asyncwebserver/
-#include "wifi_server_ap.h"
+#include "web_configurator.h"
 
 #include <Arduino.h>
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include <AsyncTCP.h>
 #include "MyLibs/basic/logger.h"
+#include "web-configurator_parameter.h"
 
 #define MAX_STRING_LENGTH_IN_HTML_INPUT 30
-// Create AsyncWebServer object on port 80
-AsyncWebServer server(80);
+
+AsyncWebServer ap_webserver(80);  // Create AsyncWebServer object on port 80
 static const char** HTML_FORM_ITEM_NAMES;
+static WebConfigurator_DictionBase* diction;
 
 // File paths to save input values permanently
 static String FILE_ssid = "/ssid.txt";
@@ -31,33 +33,30 @@ static char __admin_uid[MAX_STRING_LENGTH_IN_HTML_INPUT];
 static char __admin_password[MAX_STRING_LENGTH_IN_HTML_INPUT];
 static char __value[MAX_STRING_LENGTH_IN_HTML_INPUT];
 
-void WifiServerAp::Test(){
-	Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
-
-
-}
-const char* WifiServerAp::GetSsid(){
+const char* WebConfiturator::GetSsid(){
     return __ssid;
 }
 
-const char* WifiServerAp::GetPassword(){
+const char* WebConfiturator::GetPassword(){
     return __pass;
 }
 
-const char* WifiServerAp::GetConfig(const char* key){
+const char* WebConfiturator::GetConfig(const char* key){
 	readFile(SPIFFS, key).toCharArray(__value, MAX_STRING_LENGTH_IN_HTML_INPUT);
     return __value;
 }
 
-void WifiServerAp::Begin(String html_filename, const char** html_form_item_names,int8_t gpio_of_config_button){
-    __html_filename = html_filename;
-	HTML_FORM_ITEM_NAMES = html_form_item_names;
-	Logger::Print("begin()", HTML_FORM_ITEM_NAMES[0]);
+void WebConfiturator::Begin(WebConfigurator_DictionBase* web_configurator_diction){
+	diction = web_configurator_diction;
+	// __html_filename = web_configurator_diction->HtmlFilename_of_Configurator;
+	// int8_t gpio_of_config_button= web_configurator_diction->Gpio_of_ConfigButton;
+	// HTML_FORM_ITEM_NAMES = web_configurator_diction->Items;
+	// Logger::Print("begin()", HTML_FORM_ITEM_NAMES[0]);
 	bool is_workstation_mode = true;
-	if (gpio_of_config_button > 0){
-		pinMode(gpio_of_config_button, INPUT_PULLUP);
+	if (diction->Gpio_of_ConfigButton > 0){
+		pinMode(diction->Gpio_of_ConfigButton, INPUT_PULLUP);
 		delay(100);
-		if (digitalRead(gpio_of_config_button) == LOW){
+		if (digitalRead(diction->Gpio_of_ConfigButton) == LOW){
 			// use config-button, but the button is not pushed
 			is_workstation_mode = false;
 		}
@@ -68,10 +67,10 @@ void WifiServerAp::Begin(String html_filename, const char** html_form_item_names
 	readFile(SPIFFS, FILE_password.c_str()).toCharArray(__pass, MAX_STRING_LENGTH_IN_HTML_INPUT);
 	readFile(SPIFFS, FILE_admin_uid.c_str()).toCharArray(__admin_uid, MAX_STRING_LENGTH_IN_HTML_INPUT);
 	readFile (SPIFFS, FILE_admin_password.c_str()).toCharArray(__admin_password,MAX_STRING_LENGTH_IN_HTML_INPUT);
-	// Serial.println(__ssid);
-	// Serial.println(__pass);
-	// Serial.println(__admin_uid);
-	// Serial.println(__admin_password);
+	Serial.println(__ssid);
+	Serial.println(__pass);
+	Serial.println(__admin_uid);
+	Serial.println(__admin_password);
 
 	if (is_workstation_mode){
 		if(!initWiFi()) {
@@ -82,7 +81,40 @@ void WifiServerAp::Begin(String html_filename, const char** html_form_item_names
 	}
 }
 
-bool WifiServerAp::initWiFi() {
+// void WebConfiturator::Begin(String html_filename, const char** html_form_item_names, int8_t gpio_of_config_button){
+//     __html_filename = html_filename;
+// 	HTML_FORM_ITEM_NAMES = html_form_item_names;
+// 	// Logger::Print("begin()", HTML_FORM_ITEM_NAMES[0]);
+// 	bool is_workstation_mode = true;
+// 	if (gpio_of_config_button > 0){
+// 		pinMode(gpio_of_config_button, INPUT_PULLUP);
+// 		delay(100);
+// 		if (digitalRead(gpio_of_config_button) == LOW){
+// 			// use config-button, but the button is not pushed
+// 			is_workstation_mode = false;
+// 		}
+// 	}
+// 	initSPIFFS();
+	
+// 	readFile(SPIFFS, FILE_ssid.c_str()).toCharArray(__ssid, MAX_STRING_LENGTH_IN_HTML_INPUT);
+// 	readFile(SPIFFS, FILE_password.c_str()).toCharArray(__pass, MAX_STRING_LENGTH_IN_HTML_INPUT);
+// 	readFile(SPIFFS, FILE_admin_uid.c_str()).toCharArray(__admin_uid, MAX_STRING_LENGTH_IN_HTML_INPUT);
+// 	readFile (SPIFFS, FILE_admin_password.c_str()).toCharArray(__admin_password,MAX_STRING_LENGTH_IN_HTML_INPUT);
+// 	Serial.println(__ssid);
+// 	Serial.println(__pass);
+// 	Serial.println(__admin_uid);
+// 	Serial.println(__admin_password);
+
+// 	if (is_workstation_mode){
+// 		if(!initWiFi()) {
+// 			is_workstation_mode = false;
+// 	}
+// 	if (!is_workstation_mode)
+// 		StartApServer();
+// 	}
+// }
+
+bool WebConfiturator::initWiFi() {
 	if(__ssid=="" || __admin_uid==""){
 		Serial.println("Undefined SSID or IP address.");
 		return false;
@@ -116,7 +148,7 @@ bool WifiServerAp::initWiFi() {
 }
 
 // Initialize SPIFFS
-void WifiServerAp::initSPIFFS() {
+void WebConfiturator::initSPIFFS() {
 	if (!SPIFFS.begin(true)) {
 		Serial.println("An error has occurred while mounting SPIFFS");
 	}
@@ -124,7 +156,7 @@ void WifiServerAp::initSPIFFS() {
 }
 
 // Read File from SPIFFS
-String WifiServerAp::readFile(fs::FS &fs, const char * path){
+String WebConfiturator::readFile(fs::FS &fs, const char * path){
 	Serial.printf("Reading file: %s\r\n", path);
 
 	File file = fs.open(path);
@@ -142,7 +174,7 @@ String WifiServerAp::readFile(fs::FS &fs, const char * path){
 }
 
 // Write file to SPIFFS
-void WifiServerAp::writeFile(fs::FS &fs, const char * path, const char * message){
+void WebConfiturator::writeFile(fs::FS &fs, const char * path, const char * message){
 	Serial.printf("Writing file: %s\r\n", path);
 
 	File file = fs.open(path, FILE_WRITE);
@@ -157,7 +189,7 @@ void WifiServerAp::writeFile(fs::FS &fs, const char * path, const char * message
 	}
 }
 
-void WifiServerAp::StartApServer(){
+void WebConfiturator::StartApServer(){
 	// Connect to Wi-Fi network with SSID and password
 	Serial.println("Setting AP (Access Point)");
 	// NULL sets an open Access Point
@@ -168,23 +200,30 @@ void WifiServerAp::StartApServer(){
 	Serial.println(IP); 
 
 	// Web Server Root URL
-	server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+	ap_webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 		request->send(SPIFFS, __html_filename, "text/html");
 	});
 	
-	server.serveStatic("/", SPIFFS, "/");
+	ap_webserver.serveStatic("/", SPIFFS, "/");
 	
-	server.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
+	ap_webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
 		int params = request->params();
-		Logger::Debug("WifiServerAp::StartApServer()  HTTP-POST");
-		Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
+		// Logger::Debug("WebConfiturator::StartApServer()  HTTP-POST");
+		// Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
 		for(int i=0;i<params;i++){
 			AsyncWebParameter* p = request->getParam(i);
 			if(p->isPost()){
+				WebConnfigurator_Parameter* item = diction->FindItem(p->name().c_str());
+				// item-> Link_AsyncWebParameter(p);
+				item-> WriteToFile(p);
+				// p->value().toCharArray(__ssid,MAX_STRING_LENGTH_IN_HTML_INPUT);
+				// writeFile(SPIFFS, item->GetSpiffsFilename, __ssid);
+
+				
 				// HTTP POST ssid value
-				Logger::Print("p->name()",HTML_FORM_ITEM_NAMES[0]);
+				// Logger::Print("p->name()",HTML_FORM_ITEM_NAMES[0]);
 				if (p->name() == HTML_FORM_ITEM_NAMES[0]) {
-					Logger::Print("point",111);
+					// Logger::Print("point",111);
 					p->value().toCharArray(__ssid,MAX_STRING_LENGTH_IN_HTML_INPUT);
 					Serial.print("SSID set to: ");
 					Serial.println(__ssid);
@@ -223,5 +262,5 @@ void WifiServerAp::StartApServer(){
 		delay(3000);
 		ESP.restart();
 	});
-	server.begin();
+	ap_webserver.begin();
 }

@@ -1,0 +1,17 @@
+@startuml
+[*] --> sta_mode: config_button is not pressed
+[*] --> ap_mode: config_button is pressed
+sta_mode --> lost_connection
+lost_connection -->sta_connected
+sta_connected -[dashed]-> mqtt_disconnectd
+mqtt_disconnectd --> mqtt_connected
+mqtt_connected -[dashed]-> mqtt_disconnectd
+mqtt_disconnectd --> lost_connection
+
+sta_connected --> sta_failed: timeout
+sta_failed --> ap_mode
+ap_mode --> webserver
+webserver --> write_config_to_file
+write_config_to_file --> restart
+
+@enduml
