@@ -12,24 +12,29 @@
 
 // Search for parameter in HTTP POST request,  values are form.input.name
 
+const char* html_name_ssid = "ssid";
+const char* html_name_pass = "pass";
+const char* html_name_admin_uid = "admin_uid";
+const char* html_name_admin_password = "admin_password";
+const char* html_form_item_names[4];
 
 void setup(){
 	Serial.begin(115200);
-	const char* PARAM_INPUT_1 = "ssid";
-	const char* PARAM_INPUT_2 = "pass";
-	const char* PARAM_INPUT_3 = "admin_uid";
-	const char* PARAM_INPUT_4 = "admin_password";
+	Logger::Info("I_AM_WIFI_MANAGER_DEMO");
+	// String ssid = "ssid";
+	// String* all_items[4];
+	html_form_item_names[0] = html_name_ssid;
+	html_form_item_names[1] = html_name_pass;
+	html_form_item_names[2] = html_name_admin_uid;
+	html_form_item_names[3] = html_name_admin_password;
+	
 
-	const char* html_form_item_names[4];
-	html_form_item_names[0] = PARAM_INPUT_1;
-	html_form_item_names[1] = PARAM_INPUT_2;
-	html_form_item_names[2] = PARAM_INPUT_3;
-	html_form_item_names[3] = PARAM_INPUT_4;
 
-	Logger::Print("setup", PARAM_INPUT_1);
+	Logger::Print("setup", html_name_ssid);
 	Logger::Print("setup", html_form_item_names[0]);
 	WifiServerAp::Begin("/loop_porter.html",&html_form_item_names[0], -1);
 
+	WifiServerAp::Test();
 	// WifiServerAp::Begin("/serial_port_sniffer.html", &html_form_item_names, -1);
 	// WifiServerAp::GetConfig("/baud_rate");
 }

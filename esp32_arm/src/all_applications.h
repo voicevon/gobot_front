@@ -21,7 +21,7 @@
 
 //***************************************************************************
 //    IoT
-#define I_AM_SERIAL_PORET_SNIFFER
+// #define I_AM_SERIAL_PORET_SNIFFER
 // #define I_AM_AQUAPONICS
 // #define I_AM_ACUPUCTURE_MAIN_2023
 // #define I_AM_ACUPUCTURE_MAIN_2022
@@ -51,7 +51,7 @@
 // #define I_AM_GOBOT_MAIN
 
 
-// #define I_AM_WIFI_MANAGER_DEMO
+#define I_AM_WIFI_MANAGER_DEMO
 // #define I_AM_DEMO_PULSE_COUNT
 
 // #define I_AM_CABLE_AXIS_XPYP

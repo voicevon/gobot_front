@@ -11,11 +11,7 @@
 #define MAX_STRING_LENGTH_IN_HTML_INPUT 30
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
-
-
-
-const char** HTML_FORM_ITEM_NAMES;
-
+static const char** HTML_FORM_ITEM_NAMES;
 
 // File paths to save input values permanently
 static String FILE_ssid = "/ssid.txt";
@@ -24,9 +20,10 @@ static String FILE_admin_uid = "/admin_uid.txt";
 static String FILE_admin_password = "/admin_password.txt";
 static String __html_filename = "";
 
+
 // Timer variables
-unsigned long previousMillis = 0;
-const long interval = 10000;  // interval to wait for Wi-Fi connection (milliseconds)
+static unsigned long previousMillis = 0;
+static const long interval = 10000;  // interval to wait for Wi-Fi connection (milliseconds)
 
 static char __ssid[MAX_STRING_LENGTH_IN_HTML_INPUT];
 static char __pass[MAX_STRING_LENGTH_IN_HTML_INPUT];
@@ -34,6 +31,11 @@ static char __admin_uid[MAX_STRING_LENGTH_IN_HTML_INPUT];
 static char __admin_password[MAX_STRING_LENGTH_IN_HTML_INPUT];
 static char __value[MAX_STRING_LENGTH_IN_HTML_INPUT];
 
+void WifiServerAp::Test(){
+	Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
+
+
+}
 const char* WifiServerAp::GetSsid(){
     return __ssid;
 }
@@ -50,6 +52,7 @@ const char* WifiServerAp::GetConfig(const char* key){
 void WifiServerAp::Begin(String html_filename, const char** html_form_item_names,int8_t gpio_of_config_button){
     __html_filename = html_filename;
 	HTML_FORM_ITEM_NAMES = html_form_item_names;
+	Logger::Print("begin()", HTML_FORM_ITEM_NAMES[0]);
 	bool is_workstation_mode = true;
 	if (gpio_of_config_button > 0){
 		pinMode(gpio_of_config_button, INPUT_PULLUP);
@@ -174,11 +177,12 @@ void WifiServerAp::StartApServer(){
 	server.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
 		int params = request->params();
 		Logger::Debug("WifiServerAp::StartApServer()  HTTP-POST");
+		Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
 		for(int i=0;i<params;i++){
 			AsyncWebParameter* p = request->getParam(i);
 			if(p->isPost()){
 				// HTTP POST ssid value
-				Logger::Print("p->name()", HTML_FORM_ITEM_NAMES[0]);
+				Logger::Print("p->name()",HTML_FORM_ITEM_NAMES[0]);
 				if (p->name() == HTML_FORM_ITEM_NAMES[0]) {
 					Logger::Print("point",111);
 					p->value().toCharArray(__ssid,MAX_STRING_LENGTH_IN_HTML_INPUT);
