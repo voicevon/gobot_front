@@ -61,6 +61,7 @@ class Logger{
 
         //will print a string.
         static void Print(const char* var_name, const char* chars);
+        // static void Print(const char* var_name, const char*& chars);
         // static void Print(const char* var_name, const char chars[]);
         //will print single char.
         static void Print(const char* var_name, const char single_char);

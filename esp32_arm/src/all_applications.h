@@ -3,33 +3,30 @@
 
 // #define I_AM_PURE_TESTER
 
-
-// #define I_AM_DRV8302
-
+//***************************************************************************
+//   Warehouse
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
 // #define I_AM_ROBOT_ASRS_AGV         // TO BE reconstruct a lot/  
 // #define I_AM_GARMENT_BOX_MOVER      //  CoreAZ  TO BE reconstruct a lot
 // #define I_AM_GARMENT_BOX_CARRIER    // CoreYZ  TO BE reconstruct a lot
 
-// #define I_AM_GOBOT_HOUSE_2205   //Depricated
-// #define I_AM_GOBOT_HOUSE_2206   //Depricated with arm solution
-// #define I_AM_GOBOT_HOUSE
-// #define I_AM_GOBOT_MAIN
-// #define I_AM_SPRING_MAKER
-// #define I_AM_VSC
-
 // #define I_AM_WAREHOUSE_LOOP_PORTER
 // #define I_AM_WAREHOUSE_MANUAL_PACKER_SHIPPER
 // #define I_AM_DENTURE_STATION_MOUNT_TEETH
 
-// #define I_AM_SILLICON_PUMP
+// #define I_AM_VSC
+// #define I_AM_DRV8302
+
+
+//***************************************************************************
+//    IoT
+#define I_AM_SERIAL_PORET_SNIFFER
 // #define I_AM_AQUAPONICS
 // #define I_AM_ACUPUCTURE_MAIN_2023
 // #define I_AM_ACUPUCTURE_MAIN_2022
 // #define I_AM_ACUPUNCTURE_JIG_TESTER
 
-// #define I_AM_SMOKE_BOT
 // #define I_AM_BARCODE_READER
 
 // #define I_AM_ADHOC_ROUTER
@@ -37,7 +34,24 @@
 // #define I_AM_GUANGDA_SHUIWU_SENSOR  
 // #define I_AM_ADHOC_SNIFFER
 
-#define I_AM_WIFI_MANAGER_DEMO
+
+
+//**************************************************************************
+//   Auto Laboritory
+// #define I_AM_SPRING_MAKER
+// #define I_AM_SMOKE_BOT
+// #define I_AM_SILLICON_PUMP
+
+
+//**************************************************************************
+//   Gobot
+// #define I_AM_GOBOT_HOUSE_2205   //Depricated
+// #define I_AM_GOBOT_HOUSE_2206   //Depricated with arm solution
+// #define I_AM_GOBOT_HOUSE
+// #define I_AM_GOBOT_MAIN
+
+
+// #define I_AM_WIFI_MANAGER_DEMO
 // #define I_AM_DEMO_PULSE_COUNT
 
 // #define I_AM_CABLE_AXIS_XPYP
@@ -46,7 +60,6 @@
 // #define I_AM_CABLE_AXIS_XPYN
 
 
-// #define I_AM_TESTER
 
 #ifdef I_AM_GOBOT_MAIN
     #define ROBOT_SERIAL_ID 2134

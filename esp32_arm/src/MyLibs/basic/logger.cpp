@@ -193,6 +193,14 @@ void Logger::Print(const char* key, const char* chars){
     // Serial.println(*chars);  // will print single char.
 
 }
+// void Logger::Print(const char* key, const char*& chars){
+//     __print_sid();
+//     Serial.print(key);
+//     Serial.print("=\t");
+//     Serial.println(chars);   // will print a string.
+//     // Serial.println(*chars);  // will print single char.
+
+// }
 
 // void Logger::Print(const char* var_name, const char chars[]){
 //     __print_sid();
