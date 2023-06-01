@@ -49,31 +49,36 @@ const char* WifiServerAp::GetConfig(const char* key){
     return __value;
 }
 
-void WifiServerAp::setup_callme(String html_filename){
+void WifiServerAp::Begin(String html_filename, int8_t gpio_of_config_button){
     __html_filename = html_filename;
+	bool is_workstation_mode = true;
+	if (gpio_of_config_button > 0){
+		pinMode(gpio_of_config_button, INPUT_PULLUP);
+		delay(100);
+		if (digitalRead(gpio_of_config_button) == LOW){
+			// use config-button, but the button is not pushed
+			is_workstation_mode = false;
+		}
+	}
 	initSPIFFS();
-	// Set GPIO 2 as an OUTPUT
-	// pinMode(ledPin, OUTPUT);
-	// digitalWrite(ledPin, LOW);
-	// Load values saved in SPIFFS
+	
 	readFile(SPIFFS, FILE_ssid.c_str()).toCharArray(__ssid, MAX_STRING_LENGTH_IN_HTML_INPUT);
 	readFile(SPIFFS, FILE_password.c_str()).toCharArray(__pass, MAX_STRING_LENGTH_IN_HTML_INPUT);
 	readFile(SPIFFS, FILE_admin_uid.c_str()).toCharArray(__admin_uid, MAX_STRING_LENGTH_IN_HTML_INPUT);
 	readFile (SPIFFS, FILE_admin_password.c_str()).toCharArray(__admin_password,MAX_STRING_LENGTH_IN_HTML_INPUT);
-	Serial.println(__ssid);
-	Serial.println(__pass);
-	Serial.println(__admin_uid);
-	Serial.println(__admin_password);
+	// Serial.println(__ssid);
+	// Serial.println(__pass);
+	// Serial.println(__admin_uid);
+	// Serial.println(__admin_password);
 
-	if(initWiFi()) {
-		// setup_server();
+	if (is_workstation_mode){
+		if(!initWiFi()) {
+			is_workstation_mode = false;
 	}
-	else {
+	if (!is_workstation_mode)
 		StartApServer();
 	}
 }
-
-
 
 bool WifiServerAp::initWiFi() {
 	if(__ssid=="" || __admin_uid==""){

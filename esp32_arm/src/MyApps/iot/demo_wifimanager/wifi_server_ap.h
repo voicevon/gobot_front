@@ -8,7 +8,10 @@ class WifiServerAp{
         static WifiServerAp& GetInstance(){
             return __instance;
         }
-        static void setup_callme(String html_filename);
+        /// @brief 
+        /// @param html_filename 
+        /// @param gpio_of_config_button: -1 to disable config_button.
+        static void Begin(String html_filename, int8_t gpio_of_config_button);
         static const char* GetSsid();
         static const char* GetPassword();
         static const char* GetConfig(const char* key);
