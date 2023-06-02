@@ -1,5 +1,5 @@
 #pragma once
-#include "MyLibs/basic/logger.h"
+#include "MyLibs/utility/logger.h"
 #include <ESPAsyncWebServer.h>
 #include "web-configurator_parameter.h"
 
@@ -13,13 +13,15 @@ class WebConfigurator_DictionBase{
 		WebConnfigurator_Parameter para_wifi_pass = WebConnfigurator_Parameter("pass");	
         WebConnfigurator_Parameter para_admin_uid = WebConnfigurator_Parameter("admin_uid");
 		WebConnfigurator_Parameter para_admin_password = WebConnfigurator_Parameter("admin_password");
+
     protected:
         WebConfigurator_DictionBase(){};  // To prevent be instanced.
         void _Init(WebConnfigurator_Parameter* first_para, int paras_count);
-        WebConnfigurator_Parameter* _parameters;
-        int _parameters_count;
+
+
 
 		
 	private:
-
+        WebConnfigurator_Parameter* _parameters;  // ** ？
+        int _parameters_count;
 };

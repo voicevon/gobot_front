@@ -1,5 +1,5 @@
 #include "hc595_digital_number.h"
-#include "MyLibs/basic/logger.h"
+#include "MyLibs/utility/logger.h"
 #include "Arduino.h"   // for digitalWrite()
 
 void Hc595_Digital_number::Init(uint8_t pin_clock, uint8_t pin_data, uint8_t pin_latch_mosi, uint8_t power_count){

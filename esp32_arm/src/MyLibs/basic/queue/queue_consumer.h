@@ -1,6 +1,6 @@
 #pragma once
 #include "queue_base.h"
-#include "MyLibs/basic/logger.h"
+#include "MyLibs/utility/logger.h"
 
 class CommonQueueConsumer{
     public:

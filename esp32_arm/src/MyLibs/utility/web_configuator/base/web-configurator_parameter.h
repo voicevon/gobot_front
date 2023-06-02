@@ -11,16 +11,13 @@ class WebConnfigurator_Parameter{
         void WriteToFile(AsyncWebParameter* p);
         bool IsMyName(const char * the_name);
         const char* GetName(){return &__item_name[0];};
-        // const char* GetValue(){return &_item_value[0];};
         const char* readFile();
-        /// @brief object will not keep the buffer
+        /// @brief TODO: content will not be kept inside.
         void ReadFile_LongText(char* buffer){};
         
     private:
         const char* __GetSpiffsFilename();
-        // void __writeFile(const char * message);
         char __item_name[20];
-        // char __item_value[30];
         char __output_buffer[30];
         fs::FS* __fs;
 

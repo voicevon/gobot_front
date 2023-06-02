@@ -1,5 +1,5 @@
 #include "position_trigger.h"
-#include "MyLibs/basic/logger.h"
+#include "MyLibs/utility/logger.h"
 
 void PositionTrigger::Init(char name, uint8_t pin_trigger, int triggered_state){
     this->MyName = name;

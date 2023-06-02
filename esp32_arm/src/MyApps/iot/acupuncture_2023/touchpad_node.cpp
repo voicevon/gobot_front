@@ -1,5 +1,5 @@
 #include "touchpad_node.h"
-#include "MyLibs/basic/logger.h"
+#include "MyLibs/utility/logger.h"
 
 void TouchPad_Node::Init( uint8_t i2c_slave_address, bool is_installed){
     _Init(is_installed, i2c_slave_address, TOUCH_PAD_SENSORS_COUNT_IN_NODE);   //TODO: TOUCH_PAD_SENSORS_COUNT_IN_NODE is var

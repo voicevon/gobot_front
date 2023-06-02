@@ -1,7 +1,8 @@
 #pragma once
 #include "WString.h"
 #include "SPIFFS.h"
-#include "web_configurator_diction_base.h"
+// #include "web_configurator_diction_base.h"
+#include "base/web_configurator_diction_base.h"
 
 
 class WebConfiturator{
@@ -12,7 +13,6 @@ class WebConfiturator{
         /// @brief 
         /// @param html_filename 
         /// @param gpio_of_config_button: -1 to disable config_button.
-        // static void Begin(String html_filename, const char** html_form_item_names, int8_t gpio_of_config_button);
         static void Begin(WebConfigurator_DictionBase* web_configurator_diction);
         static const char* GetSsid();
         static const char* GetPassword();

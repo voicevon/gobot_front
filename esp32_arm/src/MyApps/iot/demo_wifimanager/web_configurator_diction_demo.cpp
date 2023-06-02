@@ -8,5 +8,7 @@ WebConfiguratorDiction_Demo::WebConfiguratorDiction_Demo(){
     __parameters[3] = &para_admin_password;
     __parameters[4] = &para_demo;
     
-    _parameters = __parameters[0];
+    // _parameters = __parameters[0];
+    _Init(__parameters[0], WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT);
+    
 }
