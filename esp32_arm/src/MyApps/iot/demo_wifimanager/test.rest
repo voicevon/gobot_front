@@ -1,0 +1,14 @@
+GET http://192.168.1.1 HTTP/1.1
+
+###
+GET http://192.168.121.1 HTTP/1.1
+
+###
+GET http://www.google.com HTTP/1.1
+
+###
+GET http://voicevon.vicp.io:7001 HTTP/1.1
+
+###
+GET http://voicevon.vicp.io:1234 HTTP/1.1
+

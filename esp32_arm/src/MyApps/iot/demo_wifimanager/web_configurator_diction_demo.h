@@ -2,14 +2,15 @@
 
 #include "MyLibs/basic/memory_helper.h"
 #include "MyLibs/utility/web_configuator/base/web_configurator_diction_base.h"
-#define WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT 5
+#define WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT 9   //8+1
 
 
 class WebConfiguratorDiction_Demo:public WebConfigurator_DictionBase{
 	public:
 		WebConfiguratorDiction_Demo(){};
 		void Init();
-		/// @brief Add your parameters here
+
+		// Add your parameters here
 		WebConnfigurator_Parameter para_demo;
 	
 	private:
