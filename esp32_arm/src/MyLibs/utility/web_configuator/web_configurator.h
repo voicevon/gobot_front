@@ -20,13 +20,9 @@ class WebConfigurator{
 
     private:
         static void StartApServer();
-        static void initSPIFFS();
-        // static String readFile(fs::FS &fs, const char * path);
-        // static void writeFile(fs::FS &fs, const char * path, const char * message);
+        // static void initSPIFFS();
         static bool initWiFi();
         static WebConfigurator __instance;
-        // AsyncWebServer server(80);
-        // static WebConfigurator_DictionBase* diction;
 
 
 };

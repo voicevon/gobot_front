@@ -12,6 +12,7 @@
 class BoardBase{
     public:
         virtual void Init();
+        void Init_SPIFFS();
         virtual  float ReadBatteryVolt(){return 1.234f;};
         static uint8_t Assign_ledc_channel();
         
@@ -34,3 +35,7 @@ class BoardBase{
 };
 
 
+class DevBoard: public BoardBase{
+        void Init() override{};
+
+};

@@ -5,7 +5,7 @@
 #define PIN_STATE_LED 2
 
 
-class SerialPortSniffer_Board: public BoardBase{
+class TitrationBoard: public BoardBase{
     public:
         void Init() override;
         Mono_Led_GPIO* GetStateLed(){return &__rx_led;};

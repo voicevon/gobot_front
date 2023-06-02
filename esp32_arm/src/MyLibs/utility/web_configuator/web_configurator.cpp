@@ -8,7 +8,6 @@
 #include <AsyncTCP.h>
 #include "MyLibs/utility/logger.h"
 #include "base/web-configurator_parameter.h"
-#include "SPIFFS.h"
 #include "esp_wifi.h"
 
 
@@ -18,7 +17,7 @@ static WebConnfigurator_Parameter para_of_any_key = WebConnfigurator_Parameter()
 
 // Timer variables
 static unsigned long previousMillis = 0;
-static const long interval = 20000;  // interval to wait for Wi-Fi connection (milliseconds)
+static const long interval = 10000;  // interval to wait for Wi-Fi connection (milliseconds)
 
 const char* WebConfigurator::GetSsid(){
     return diction->para_wifi_ssid.GetName();
@@ -44,7 +43,7 @@ void WebConfigurator::Begin(WebConfigurator_DictionBase* web_configurator_dictio
 			is_workstation_mode = false;
 		}
 	}
-	initSPIFFS();
+	// initSPIFFS();
 	
 	Serial.println(diction->para_wifi_ssid.readFile());
 	Serial.println(diction->para_wifi_pass.readFile());
@@ -54,11 +53,15 @@ void WebConfigurator::Begin(WebConfigurator_DictionBase* web_configurator_dictio
 	if (is_workstation_mode){
 		if(!initWiFi()) {
 			is_workstation_mode = false;
+		}
 	}
-	if (!is_workstation_mode)
-		
+	if (!is_workstation_mode){
 		StartApServer();
+		while (true){
+			// Watchdog?
+		}
 	}
+	Logger::Info("WebConfigurator is exiting....");
 }
 
 bool WebConfigurator::initWiFi() {
@@ -68,9 +71,9 @@ bool WebConfigurator::initWiFi() {
 	}
 
 	WiFi.mode(WIFI_STA);
-    Logger::Print("connectToWifi()  point", 2);
-    WiFi.disconnect();       //disconnect from an AP if it was previously connected     
-    Logger::Print("connectToWifi()  point", 3);
+    // Logger::Print("connectToWifi()  point", 2);
+    // WiFi.disconnect();       //disconnect from an AP if it was previously connected     
+    // Logger::Print("connectToWifi()  point", 3);
     ESP_ERROR_CHECK(esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_11B |WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N));
 
 	const char* ssid = diction->para_wifi_ssid.readFile();
@@ -84,8 +87,6 @@ bool WebConfigurator::initWiFi() {
 	// Serial.println("<--");
 
 	WiFi.begin(ssid, pass);
-
-
 	Logger::Print ("Connecting to WiFi...  torlerance time(in millis second) is ", interval);
 
 	unsigned long currentMillis = millis();
@@ -104,12 +105,12 @@ bool WebConfigurator::initWiFi() {
 }
 
 // Initialize SPIFFS
-void WebConfigurator::initSPIFFS() {
-	if (!SPIFFS.begin(true)) {
-		Serial.println("An error has occurred while mounting SPIFFS");
-	}
-	Serial.println("SPIFFS mounted successfully");
-}
+// void WebConfigurator::initSPIFFS() {
+// 	if (!SPIFFS.begin(true)) {
+// 		Serial.println("An error has occurred while mounting SPIFFS");
+// 	}
+// 	Serial.println("SPIFFS mounted successfully");
+// }
 
 
 void WebConfigurator::StartApServer(){

@@ -1,5 +1,7 @@
 #include "board_base.h"
 #include "MyLibs/utility/logger.h"
+#include "SPIFFS.h"
+
 uint8_t BoardBase::__ledc_channel_index = 0;
 uint8_t BoardBase::__i2c_bus_index = 0;
 
@@ -84,3 +86,10 @@ bool BoardBase::_Begin_Apds9960(Adafruit_APDS9960* apds9960, uint8_t i2c_address
 //     return ws2812b;
 // }
 
+void BoardBase::Init_SPIFFS() {
+	if (!SPIFFS.begin(true)) {
+		Logger::Error("An error has occurred while mounting SPIFFS");
+        Logger::Halt("");
+	}
+	Logger::Info(" BoardBase::Init_SPIFFS() , SPIFFS mounted successfully");
+}

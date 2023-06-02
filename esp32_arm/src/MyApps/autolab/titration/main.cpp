@@ -1,17 +1,10 @@
+#include "MyLibs/utility/logger.h"
+#include "board/board.h"
+#include "all_applications.h"
+#ifdef I_AM_TITRATION_ROBOT
 
 	
-#include <Arduino.h>
-#include <WiFi.h>
-#include "MyLibs/utility/web_configuator/web_configurator.h"
-#include "web_configurator_diction_demo.h"
-#include "MyLibs/utility/logger.h"
-#include "Robot/board/board_base.h"
-#include "MyLibs/mqtt/wifi_mqtt_client.h"
-
-#include "all_applications.h"
-#ifdef I_AM_WIFI_MANAGER_DEMO
-
-DevBoard board;
+TiTrationBoard board;
 WebConfiguratorDiction_Demo diction;
 
 void setup(){
@@ -21,11 +14,6 @@ void setup(){
 	diction.Init();
 	WebConfigurator::Begin(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
-
-
-}
-
-void loop() {
 
 
 }
