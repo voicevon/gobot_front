@@ -5,30 +5,39 @@ WebConnfigurator_Parameter::WebConnfigurator_Parameter(){
     __fs= &SPIFFS;
 }
 
-WebConnfigurator_Parameter::WebConnfigurator_Parameter(const char* item_name){
-    __fs= &SPIFFS;
-    SetName(item_name);
-}
+// WebConnfigurator_Parameter::WebConnfigurator_Parameter(const char* parameter_name){
+//     __fs= &SPIFFS;
+//     SetName(parameter_name);
+// }
 
-void WebConnfigurator_Parameter::SetName(const char* item_name){
+void WebConnfigurator_Parameter::SetName(const char* parameter_name){
+    // Logger::Debug("WebConnfigurator_Parameter::SetName");
+    // Logger::Print("parameter_name", parameter_name);
     for(int i=0; i<20; i++){
-        char xx = *(item_name + i);
-        __item_name[i] = xx;
+        char xx = *(parameter_name + i);
+        __parameter_name[i] = xx;
+        // Serial.print(char(xx));   // DOES NOT WORK ???
         if (xx == 0x00){
             return;
         }
     }
+    Logger::Error("WebConnfigurator_Parameter::SetName()  Not found 0x00");
+    Logger::Halt("");
 }
 
 const char* WebConnfigurator_Parameter::__GetSpiffsFilename(){
+    char xx;
     __output_buffer[0] = '/';
-    for(int i=0; i< 30; i++){
-        char xx = __item_name[i];
+    for(int i=0; i< 20; i++){
+        xx = __parameter_name[i];
         __output_buffer[i+1] = xx;
-        if (xx = 0x00){
+        if (xx == 0x00){
             return &__output_buffer[0];
         }
     }
+    Logger::Error("WebConnfigurator_Parameter::__GetSpiffsFilename()");
+    Logger::Halt("");
+    return __output_buffer;
 };
 
 void WebConnfigurator_Parameter::WriteToFile(AsyncWebParameter* p){
@@ -49,11 +58,10 @@ void WebConnfigurator_Parameter::WriteToFile(AsyncWebParameter* p){
 	}
 }
 
-
 bool WebConnfigurator_Parameter::IsMyName(const char * the_name){
     for(int i=0; i< 30; i++){
         char xx = *(the_name + i);
-        if (xx != __item_name[i]){
+        if (xx != __parameter_name[i]){
             return false;
         }
         if (xx == 0x00){
@@ -66,13 +74,15 @@ bool WebConnfigurator_Parameter::IsMyName(const char * the_name){
 }
 
 const char* WebConnfigurator_Parameter::readFile(){
+    // Logger::Debug("WebConnfigurator_Parameter::readFile()");
     const char * path = this->__GetSpiffsFilename();
 	Serial.printf("Reading file: %s\r\n", path);
 
 	File file = __fs->open(path);
 	if(!file || file.isDirectory()){
-		Serial.println("- failed to open file for reading");
-		return String().c_str();   // any risk?
+		Logger::Print(" WebConnfigurator_Parameter::readFile()", "- failed to open file for reading");
+        __output_buffer[0] = 0x00;
+		return __output_buffer;
 	}
 	
 	String fileContent;
@@ -80,10 +90,8 @@ const char* WebConnfigurator_Parameter::readFile(){
 		fileContent = file.readStringUntil('\n');
 		break;     
 	}
-	return fileContent.c_str();  // any risk?
+    fileContent.toCharArray(__output_buffer, sizeof(fileContent));
+	return __output_buffer;
 }
 
-// Write file to SPIFFS
-// void WebConnfigurator_Parameter::__writeFile(const char * message){
 
-// }

@@ -127,55 +127,60 @@ void Logger::__print_sid(){
 
 }
 
-void Logger::Print(const char* var_name, bool value){
+void Logger::Print(const char* var_name, const bool value){
     __print_sid();
     Serial.print(var_name);
     Serial.print("=\t");
     Serial.println(value);
 }
 
-void Logger::Print(const char* var_name, float value){
+void Logger::Print(const char* var_name, const float value){
     __print_sid();
     Serial.print(var_name);
     Serial.print("=\t");
     Serial.println(value);
 }
 
-void Logger::Print(const char* var_name, double value){
+void Logger::Print(const char* var_name, const double value){
     __print_sid();
     Serial.print(var_name);
     Serial.print("=\t");
     Serial.println(value);
 }
 
-void Logger::Print(const char* var_name, int32_t value){
+void Logger::Print(const char* var_name, const int32_t value){
     __print_sid();
     Serial.print(var_name);
     Serial.print(" =\t");
     Serial.println(value);
 }
 
-void Logger::Print(const char* var_name, int64_t value){
+void Logger::Print(const char* var_name, const int64_t value){
     __print_sid();
     Serial.print(var_name);
     Serial.print(" =\t");
     Serial.println(value);
 }
 
-void Logger::Print(const char* var_name, uint32_t value){
+void Logger::Print(const char* var_name, const uint32_t value){
     __print_sid();
     Serial.print(var_name);
     Serial.print(" =\t");
     Serial.println(value);
 }
 
-void Logger::Print(const char* var_name, unsigned long value){
+void Logger::Print(const char* var_name, const unsigned long value){
     __print_sid();
     Serial.print(var_name);
     Serial.print(" =\t");
     Serial.println(value);
 }
-
+void Logger::Print(const char* var_name, const long value){
+    __print_sid();
+    Serial.print(var_name);
+    Serial.print(" =\t");
+    Serial.println(value);
+}
 
 
 void Logger::Print(const char* var_name, const char single_char){

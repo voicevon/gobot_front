@@ -51,12 +51,13 @@ class Logger{
 
         // template <typename anyPrintable>
         // static void Print(const char* var_name, anyPrintable value);
-        static void Print(const char* var_name, bool value);
-        static void Print(const char* var_name, float value);
-        static void Print(const char* var_name, int32_t value);
-        static void Print(const char* var_name, uint32_t value);
-        static void Print(const char* var_name, int64_t value);
-        static void Print(const char* var_name, unsigned long value);
+        static void Print(const char* var_name, const bool value);
+        static void Print(const char* var_name, const float value);
+        static void Print(const char* var_name, const int32_t value);
+        static void Print(const char* var_name, const uint32_t value);
+        static void Print(const char* var_name, const int64_t value);
+        static void Print(const char* var_name, const unsigned long value);
+        static void Print(const char* var_name, const long value);
         static void Print(const char* var_name, const double value);
 
         //will print a string.

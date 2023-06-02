@@ -26,6 +26,7 @@ class WebConfiturator{
         static bool initWiFi();
         static WebConfiturator __instance;
         // AsyncWebServer server(80);
+        // static WebConfigurator_DictionBase* diction;
 
 
 };

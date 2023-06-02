@@ -7,7 +7,6 @@
 #include <ESPAsyncWebServer.h>
 #include <AsyncTCP.h>
 #include "MyLibs/utility/logger.h"
-// #include "web-configurator_parameter.h"
 #include "base/web-configurator_parameter.h"
 #include "SPIFFS.h"
 
@@ -15,15 +14,11 @@
 
 AsyncWebServer ap_webserver(80);  // Create AsyncWebServer object on port 80
 static WebConfigurator_DictionBase* diction;
-
-
-// static String __html_filename = "";
 static WebConnfigurator_Parameter para_of_any_key = WebConnfigurator_Parameter();
-
 
 // Timer variables
 static unsigned long previousMillis = 0;
-static const long interval = 10000;  // interval to wait for Wi-Fi connection (milliseconds)
+static const long interval = 20000;  // interval to wait for Wi-Fi connection (milliseconds)
 
 const char* WebConfiturator::GetSsid(){
     return diction->para_wifi_ssid.GetName();
@@ -61,6 +56,7 @@ void WebConfiturator::Begin(WebConfigurator_DictionBase* web_configurator_dictio
 			is_workstation_mode = false;
 	}
 	if (!is_workstation_mode)
+		
 		StartApServer();
 	}
 }
@@ -80,8 +76,10 @@ bool WebConfiturator::initWiFi() {
 	//   Serial.println("STA Failed to configure");
 	//   return false;
 	// }
+	Logger::Debug("WebConfiturator::initWiFi()" );
+	Logger::Print(diction->para_wifi_ssid.readFile(), diction->para_wifi_pass.readFile());
 	WiFi.begin(diction->para_wifi_ssid.readFile(), diction->para_wifi_pass.readFile());
-	Serial.println("Connecting to WiFi...");
+	Logger::Print ("Connecting to WiFi...  torlerance time(in millis second) is ", interval);
 
 	unsigned long currentMillis = millis();
 	previousMillis = currentMillis;
@@ -89,12 +87,12 @@ bool WebConfiturator::initWiFi() {
 	while(WiFi.status() != WL_CONNECTED) {
 		currentMillis = millis();
 		if (currentMillis - previousMillis >= interval) {
-			Serial.println("Failed to connect.");
+			Logger::Print("WebConfiturator::initWiFi()  Timeout", "Failed to connect Wifi-AP");
 			return false;
 		}
 	}
 
-	Serial.println(WiFi.localIP());
+	Logger::Print("WebConfiturator::initWiFi()  Connected", WiFi.localIP());
 	return true;
 }
 
@@ -119,6 +117,8 @@ void WebConfiturator::StartApServer(){
 
 	// Web Server Root URL
 	ap_webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+		Logger::Info("webserver. on  /");
+		Logger::Print("parameter_name", diction->HtmlFilename_of_Configurator);
 		request->send(SPIFFS, diction->HtmlFilename_of_Configurator, "text/html");
 	});
 	
@@ -131,9 +131,9 @@ void WebConfiturator::StartApServer(){
 		for(int i=0;i<params;i++){
 			AsyncWebParameter* p = request->getParam(i);
 			if(p->isPost()){
-				WebConnfigurator_Parameter* item = diction->FindItem(p->name().c_str());
+				WebConnfigurator_Parameter* para = diction->FindItem(p->name().c_str());
 				// item-> Link_AsyncWebParameter(p);
-				item-> WriteToFile(p);
+				para-> WriteToFile(p);
 
 				
 				// HTTP POST ssid value
