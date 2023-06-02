@@ -16,7 +16,7 @@ void setup(){
 	Serial.begin(115200);
 	Logger::Info("I_AM_WIFI_MANAGER_DEMO");
 	diction.Init();
-	WebConfiturator::Begin(&diction);
+	WebConfigurator::Begin(&diction);
 }
 
 void loop() {
