@@ -2,10 +2,11 @@
 #include "web-configurator_parameter.h"
 
 WebConnfigurator_Parameter::WebConnfigurator_Parameter(){
-
+    __fs= &SPIFFS;
 }
 
 WebConnfigurator_Parameter::WebConnfigurator_Parameter(const char* item_name){
+    __fs= &SPIFFS;
     SetName(item_name);
 }
 
@@ -19,7 +20,7 @@ void WebConnfigurator_Parameter::SetName(const char* item_name){
     }
 }
 
-const char* WebConnfigurator_Parameter::GetSpiffsFilename(){
+const char* WebConnfigurator_Parameter::__GetSpiffsFilename(){
     __output_buffer[0] = '/';
     for(int i=0; i< 30; i++){
         char xx = __item_name[i];
@@ -31,13 +32,23 @@ const char* WebConnfigurator_Parameter::GetSpiffsFilename(){
 };
 
 void WebConnfigurator_Parameter::WriteToFile(AsyncWebParameter* p){
-    // p->value().toCharArray(__ssid,MAX_STRING_LENGTH_IN_HTML_INPUT);
-    writeFile(SPIFFS, p->value().c_str());
+    const char * message = p->value().c_str();
+
+    const char * path = this->__GetSpiffsFilename();
+	Serial.printf("Writing file: %s\r\n", path);
+
+	File file = __fs->open(path, FILE_WRITE);
+	if(!file){
+		Serial.println("- failed to open file for writing");
+		return;
+	}
+	if(file.print(message)){
+		Serial.println("- file written");
+	} else {
+		Serial.println("- write failed");
+	}
 }
 
-// void WebConnfigurator_Parameter::Link_AsyncWebParameter(){
-
-// }
 
 bool WebConnfigurator_Parameter::IsMyName(const char * the_name){
     for(int i=0; i< 30; i++){
@@ -54,13 +65,11 @@ bool WebConnfigurator_Parameter::IsMyName(const char * the_name){
     Logger::Halt("");
 }
 
-// Read File from SPIFFS
 const char* WebConnfigurator_Parameter::readFile(){
-    fs:FS fs = SPIFFS;
-    const char * path = this->GetSpiffsFilename();
+    const char * path = this->__GetSpiffsFilename();
 	Serial.printf("Reading file: %s\r\n", path);
 
-	File file = fs.open(path);
+	File file = __fs->open(path);
 	if(!file || file.isDirectory()){
 		Serial.println("- failed to open file for reading");
 		return String().c_str();   // any risk?
@@ -75,18 +84,6 @@ const char* WebConnfigurator_Parameter::readFile(){
 }
 
 // Write file to SPIFFS
-void WebConnfigurator_Parameter::writeFile(fs::FS &fs,  const char * message){
-    const char * path = this->GetSpiffsFilename();
-	Serial.printf("Writing file: %s\r\n", path);
+// void WebConnfigurator_Parameter::__writeFile(const char * message){
 
-	File file = fs.open(path, FILE_WRITE);
-	if(!file){
-		Serial.println("- failed to open file for writing");
-		return;
-	}
-	if(file.print(message)){
-		Serial.println("- file written");
-	} else {
-		Serial.println("- write failed");
-	}
-}
+// }

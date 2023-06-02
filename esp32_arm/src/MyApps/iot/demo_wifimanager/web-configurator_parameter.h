@@ -17,11 +17,12 @@ class WebConnfigurator_Parameter{
         void ReadFile_LongText(char* buffer){};
         
     private:
-        const char* GetSpiffsFilename();
-        void writeFile(fs::FS &fs, const char * message);
+        const char* __GetSpiffsFilename();
+        // void __writeFile(const char * message);
         char __item_name[20];
         // char __item_value[30];
         char __output_buffer[30];
+        fs::FS* __fs;
 
 };
 

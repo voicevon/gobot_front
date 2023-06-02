@@ -2,15 +2,15 @@
 
 
 
-void WebConfigurator_DictionBase::_Init(WebConnfigurator_Parameter* first_item, int items_count){
-    _items = first_item;
-    _items_count = items_count;
+void WebConfigurator_DictionBase::_Init(WebConnfigurator_Parameter* first_para, int paras_count){
+    _parameters = first_para;
+    _parameters_count = paras_count;
 }
 
 WebConnfigurator_Parameter* WebConfigurator_DictionBase::FindItem(const char* item_name){
     WebConnfigurator_Parameter* item;
-    for(int i=0; i<_items_count; i++){
-        item = &_items[i];
+    for(int i=0; i<_parameters_count; i++){
+        item = &_parameters[i];
         if (item->IsMyName(item_name)){
             return item;
         }
