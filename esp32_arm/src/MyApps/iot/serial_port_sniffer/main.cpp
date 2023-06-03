@@ -17,7 +17,6 @@ void setup(){
 	diction.Init();
 	WebConfigurator::Begin(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
-
 }
 
 void loop(){

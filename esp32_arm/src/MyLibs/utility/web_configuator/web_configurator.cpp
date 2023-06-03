@@ -51,12 +51,12 @@ void WebConfigurator::Begin(WebConfigurator_DictionBase* web_configurator_dictio
 	Serial.println(diction->para_admin_password.readFile());
 
 	if (is_workstation_mode){
-		if(!initWiFi()) {
+		if(!__initWiFi()) {
 			is_workstation_mode = false;
 		}
 	}
 	if (!is_workstation_mode){
-		StartApServer();
+		__StartApServer();
 		while (true){
 			// Watchdog?
 		}
@@ -64,7 +64,7 @@ void WebConfigurator::Begin(WebConfigurator_DictionBase* web_configurator_dictio
 	Logger::Info("WebConfigurator is exiting....");
 }
 
-bool WebConfigurator::initWiFi() {
+bool WebConfigurator::__initWiFi() {
 	if(diction->para_wifi_ssid.readFile()==0x00 || diction->para_wifi_pass.readFile()==0x00){
 		Serial.println("Undefined SSID or IP address.");
 		return false;
@@ -113,7 +113,7 @@ bool WebConfigurator::initWiFi() {
 // }
 
 
-void WebConfigurator::StartApServer(){
+void WebConfigurator::__StartApServer(){
 	// Connect to Wi-Fi network with SSID and password
 	Serial.println("Setting AP (Access Point)");
 	// NULL sets an open Access Point

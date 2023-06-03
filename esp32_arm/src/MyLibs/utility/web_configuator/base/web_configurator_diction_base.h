@@ -3,7 +3,7 @@
 #include <ESPAsyncWebServer.h>
 #include "web-configurator_parameter.h"
 
-
+// TODO:  base calss is Itemable.
 class WebConfigurator_DictionBase{
 	public:
         WebConnfigurator_Parameter* FindItem(const char* item_name);
@@ -23,11 +23,11 @@ class WebConfigurator_DictionBase{
     protected:
         WebConfigurator_DictionBase(){Gpio_of_ConfigButton=-1; };  // To prevent be instanced.
         void _Init(WebConnfigurator_Parameter** first_para_pointer, int paras_count);
-        void _AppendParameter(WebConnfigurator_Parameter* new_parameter);
         void _AppendParameter(WebConnfigurator_Parameter* the_parameter, const char* para_name);
 		
 	private:
-        WebConnfigurator_Parameter** _parameters;  // ** ？
-        int _parameters_count;
+        WebConnfigurator_Parameter** __parameters;  // ** ？
+        int __parameters_count;
         int __parameter_appending_index;
+        void __AppendParameter(WebConnfigurator_Parameter* new_parameter);
 };

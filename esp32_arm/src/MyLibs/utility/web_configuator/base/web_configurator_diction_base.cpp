@@ -3,8 +3,8 @@
 
 
 void WebConfigurator_DictionBase::_Init(WebConnfigurator_Parameter** first_para_pointer, int paras_count){
-    _parameters = first_para_pointer;
-    _parameters_count = paras_count;
+    __parameters = first_para_pointer;
+    __parameters_count = paras_count;
     __parameter_appending_index = 0;
 
     _AppendParameter(&para_wifi_ssid, "ssid");
@@ -32,16 +32,16 @@ void WebConfigurator_DictionBase::_Init(WebConnfigurator_Parameter** first_para_
 
 void WebConfigurator_DictionBase::_AppendParameter(WebConnfigurator_Parameter* the_parameter, const char* para_name){
     the_parameter->SetName(para_name);
-    _AppendParameter(the_parameter);
-    if (__parameter_appending_index >= _parameters_count){
+    __AppendParameter(the_parameter);
+    if (__parameter_appending_index >= __parameters_count){
         Logger::Error("WebConfigurator_DictionBase::_AppendParameter()  over size");
         Logger::Halt("");
     }
 }
 
-void WebConfigurator_DictionBase::_AppendParameter(WebConnfigurator_Parameter* new_parameter){
+void WebConfigurator_DictionBase::__AppendParameter(WebConnfigurator_Parameter* new_parameter){
     __parameter_appending_index++;
-    if (__parameter_appending_index >= _parameters_count){
+    if (__parameter_appending_index >= __parameters_count){
         Logger::Error("WebConfigurator_DictionBase::_AppendParameter()  over size");
         Logger::Halt("");
     }
@@ -49,8 +49,8 @@ void WebConfigurator_DictionBase::_AppendParameter(WebConnfigurator_Parameter* n
 
 WebConnfigurator_Parameter* WebConfigurator_DictionBase::FindItem(const char* parameter_name){
     WebConnfigurator_Parameter* para;
-    for(int i=0; i<_parameters_count; i++){
-        para = *(_parameters + i);
+    for(int i=0; i<__parameters_count; i++){
+        para = *(__parameters + i);
         Logger::Print("WebConfigurator_DictionBase::FindItem()", para->GetName());
         if (para->IsMyName(parameter_name)){
             return para;

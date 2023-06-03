@@ -6,7 +6,6 @@
 class WebConnfigurator_Parameter{
     public:
         WebConnfigurator_Parameter();
-        // WebConnfigurator_Parameter(const char* parameter_name);
         void SetName(const char* parameter_name);
         void WriteToFile(AsyncWebParameter* p);
         bool IsMyName(const char * the_name);

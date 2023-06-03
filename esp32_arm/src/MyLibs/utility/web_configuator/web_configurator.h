@@ -19,9 +19,8 @@ class WebConfigurator{
         static const char* GetConfig(const char* key);
 
     private:
-        static void StartApServer();
-        // static void initSPIFFS();
-        static bool initWiFi();
+        static void __StartApServer();
+        static bool __initWiFi();
         static WebConfigurator __instance;
 
 
