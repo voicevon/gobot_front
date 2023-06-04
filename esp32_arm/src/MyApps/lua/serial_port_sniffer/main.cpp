@@ -3,7 +3,7 @@
 #include "MyLibs/mqtt/wifi_mqtt_client.h"
 #include "board/board.h"
 #include "board/web_configurator_diction.h"
-#include <LuaWrapper.h>
+#include "app_lua_wrapper.h"
 
 #include "../define_app.h"
 #ifdef I_AM_SERIAL_PORET_SNIFFER
