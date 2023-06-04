@@ -1,7 +1,6 @@
 #pragma once
 
-// #include "MyApps/app_base.h"
-#include "MyLibs/app_base/cnc_app_base.h"
+#include "MyLibs/app_base/cnc_base/cnc_app_base.h"
 #include "robot/sillicon_pump_robot.h"
 
 class Silicon_Pump_App: public CncAppBase{

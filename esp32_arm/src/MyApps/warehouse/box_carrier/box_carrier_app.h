@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CNC/gcode/gcode_queue.h"
-#include "MyLibs/app_base/cnc_app_base.h"
+#include "MyLibs/app_base/cnc_base/cnc_app_base.h"
 
 
 class BoxCarrierApp: public CncAppBase{

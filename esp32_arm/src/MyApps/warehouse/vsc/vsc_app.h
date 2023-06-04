@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MyLibs/app_base/cnc_app_base.h"
+#include "MyLibs/app_base/cnc_base/cnc_app_base.h"
 #include "robot/vsc_robot.h"
 
 class VscApp: public CncAppBase{

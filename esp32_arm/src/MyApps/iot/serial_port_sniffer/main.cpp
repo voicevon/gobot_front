@@ -6,7 +6,7 @@
 #include "app_lua_wrapper.h"
 
 #include "../define_app.h"
-#ifdef I_AM_SERIAL_PORET_SNIFFER
+#ifdef I_AM_SERIAL_PORT_SNIFFER
 
 SerialPortSniffer_Board board;
 WebConfiguratorDiction_SerialPortSniffer diction;

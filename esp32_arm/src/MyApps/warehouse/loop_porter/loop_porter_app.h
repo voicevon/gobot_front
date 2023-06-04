@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MyLibs/app_base/cnc_app_base.h"
+#include "MyLibs/app_base/cnc_base/cnc_app_base.h"
 #include "board/board.h"
 
 class Twh_LoopPorter_App: public CncAppBase{

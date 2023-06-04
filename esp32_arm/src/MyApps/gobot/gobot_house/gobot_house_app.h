@@ -4,7 +4,7 @@
 #include "CNC/gcode/gcode_queue.h"
 // #include  "MyApps/cnc_machine/gobot_house/HouseMap.h"
 #include "MyApps/gobot/gobot_house/HouseMap.h"
-#include "MyLibs/app_base/cnc_app_base.h"
+#include "MyLibs/app_base/cnc_base/cnc_app_base.h"
 
 class GobotHouseApp: public CncAppBase{
     public:

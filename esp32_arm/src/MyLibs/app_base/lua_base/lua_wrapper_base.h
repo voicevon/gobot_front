@@ -1,12 +1,14 @@
-#pragma once
+#ifndef LUA_WRAPPER_H
+#define LUA_WRAPPER_H
+
 #include "Arduino.h"
-#pragma comment
+
 #define LUA_USE_C89
 #include "lua/lua.hpp"
 
-class AppLuaWrapper {
+class LuaWrapperBase {
   public:
-    AppLuaWrapper();
+    LuaWrapperBase();
     String Lua_dostring(const String *script);
     void Lua_register(const String name, const lua_CFunction function);
 
@@ -15,3 +17,4 @@ class AppLuaWrapper {
     String addConstants();
 };
 
+#endif

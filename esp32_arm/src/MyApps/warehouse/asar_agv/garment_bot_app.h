@@ -10,7 +10,7 @@
 #include "MyApps/warehouse/box_carrier/box_carrier_app.h"
 // #include "MyApps/cnc_machine/box_carrier/robot/box_carrier_robot.h"
 #include "MyApps/warehouse/box_carrier/robot/box_carrier_robot.h"
-#include "MyLibs/app_base/cnc_app_base.h"
+#include "MyLibs/app_base/cnc_base/cnc_app_base.h"
 
 class MqttReportData{
     float battery_voltage;

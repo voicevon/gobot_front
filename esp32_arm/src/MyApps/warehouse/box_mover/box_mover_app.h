@@ -2,7 +2,7 @@
 
 #include "CNC/arm_solution/core_xa_ab/core_az_arm_solution.h"
 #include "CNC/gcode/gcode_queue.h"
-#include "MyLibs/app_base/cnc_app_base.h"
+#include "MyLibs/app_base/cnc_base/cnc_app_base.h"
 
 
 class BoxMoverApp: public CncAppBase{
