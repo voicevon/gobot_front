@@ -10,7 +10,7 @@
 
 SerialPortSniffer_Board board;
 WebConfiguratorDiction_SerialPortSniffer diction;
-LuaWrapper lua;
+AppLuaWrapper lua;
 
 void setup(){
 	Serial.begin(115200);
@@ -22,6 +22,7 @@ void setup(){
 
 
 	String script = String("print('Hello world!')");
+
 	Serial.println(lua.Lua_dostring(&script));
 }
 

@@ -46,7 +46,10 @@ String AppLuaWrapper::Lua_dostring(const String *script) {
     lua_pop(_state, 1);
   }
   return result;
+  
 }
+// luaL_dofile();
+
 
 void AppLuaWrapper::Lua_register(const String name, const lua_CFunction function) {
   lua_register(_state, name.c_str(), function);
