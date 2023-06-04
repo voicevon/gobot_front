@@ -4,7 +4,7 @@
 #include "board/board.h"
 #include "board/web_configurator_diction.h"
 
-#include "all_applications.h"
+#include "../define_app.h"
 #ifdef I_AM_SERIAL_PORET_SNIFFER
 
 SerialPortSniffer_Board board;
