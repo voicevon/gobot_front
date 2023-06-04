@@ -14,7 +14,7 @@ void Derived::dget(){
 
 Derived d;
 
-int main(){
-    d.bget(9); 
-    d.dget();
-}
+// int main(){
+//     d.bget(9); 
+//     d.dget();
+// }
