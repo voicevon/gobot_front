@@ -8,7 +8,7 @@
 #include "Robot/board/board_base.h"
 #include "MyLibs/mqtt/wifi_mqtt_client.h"
 
-#include "all_applications.h"
+#include "../define_app.h"
 #ifdef I_AM_WIFI_MANAGER_DEMO
 
 DevBoard board;
