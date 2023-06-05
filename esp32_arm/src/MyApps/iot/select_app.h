@@ -1,7 +1,9 @@
 #pragma once
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_ONE_OF_IOT
+
+	// #define I_AM_ONE_OF_ADHOC
 
 	#define I_AM_SERIAL_PORT_SNIFFER
 	// #define I_AM_TITRATION_ROBOT
@@ -13,10 +15,6 @@
 
 	// #define I_AM_BARCODE_READER
 
-	// #define I_AM_ADHOC_ROUTER
-	// #define I_AM_GUANGDA_SHUIWU_NETGATE  
-	// #define I_AM_GUANGDA_SHUIWU_SENSOR  
-	// #define I_AM_ADHOC_SNIFFER
 
 
 #endif

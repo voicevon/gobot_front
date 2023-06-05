@@ -1,7 +1,8 @@
 #pragma once
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_ONE_OF_GOBOT
+
 // #define I_AM_GOBOT_HOUSE_2205   //Depricated
 // #define I_AM_GOBOT_HOUSE_2206   //Depricated with arm solution
 // #define I_AM_GOBOT_HOUSE

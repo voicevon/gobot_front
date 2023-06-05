@@ -1,7 +1,7 @@
 #include "board_vsc.h"
 
 Vsc_Board::Vsc_Board(){
-    _InitSerialBoard("I am XiaoJuan.");
+    _InitSerial("I am XiaoJuan.");
 }
 
 void Vsc_Board::Init(){

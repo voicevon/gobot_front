@@ -8,7 +8,7 @@
 
 #include "robot/box_carrier_robot.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_GARMENT_BOX_CARRIER
 BoardAllInOne board = BoardAllInOne();
 BoxCarrierApp app;

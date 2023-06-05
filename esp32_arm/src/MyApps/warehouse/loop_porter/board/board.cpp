@@ -21,7 +21,7 @@
 #define PIN_POSITION_TRIGGER_X 12   //  Hall sensor:   OH44E (南京欧卓) 
 
 Twh_LoopPorter_Board::Twh_LoopPorter_Board(){
-    _InitSerialBoard("Hello, I am Twh_LoopPorter_Board");
+    _InitSerial("Hello, I am Twh_LoopPorter_Board");
 }
 
 void Twh_LoopPorter_Board::Init(){

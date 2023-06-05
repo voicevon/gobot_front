@@ -11,7 +11,7 @@
 // #define POSITION_TRIGGER_ALPHA 0
 
 Silicon_Pump_Board::Silicon_Pump_Board(){
-    _InitSerialBoard("Hello, I am Silicon_Pump_Board");
+    _InitSerial("Hello, I am Silicon_Pump_Board");
 }
 
 void Silicon_Pump_Board::Init(){

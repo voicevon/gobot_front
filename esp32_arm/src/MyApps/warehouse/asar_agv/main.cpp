@@ -7,7 +7,7 @@
 #include "AGV/board/board_test_agv.h"
 #include "AGV/board/board_test_asrs.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_ROBOT_ASRS_AGV
 
 StepControl objStepControl;  // This object can not inside any object?

@@ -4,7 +4,7 @@
 #include "robot/sillicon_pump_robot.h"
 
 
-#include "../define_app.h"
+#include "../select_app.h"
 #ifdef I_AM_SILLICON_PUMP
 
 // #define MQTT_TOPIC_GCODE "silicon/pump/skin"   

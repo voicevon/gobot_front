@@ -6,7 +6,7 @@
 #include "MyLibs/MyFunctions.hpp" 
 #include "FastAccelStepper.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_GOBOT_HOUSE
 
 Board_GobotHouse_2206 board = Board_GobotHouse_2206();

@@ -15,13 +15,10 @@ void SerialPortSniffer_Board::__InitHardware(){
 }
 
 void SerialPortSniffer_Board::Init(){
-    Serial.begin(115200);
-    Serial.print("\n\n\n\n\n\n");
-    Logger::Info("Hi Xuming, I am Serial-Port-Sniffer. Good luck......");
-    Logger::Info("===========================================================");
+    _InitSerial("Hi Xuming, I am Serial-Port-Sniffer. Good luck......");
     Serial.print(COLOR_RESET);
     this->__InitHardware();
-
+    this->_Init_SPIFFS();
     this->RepportRamUsage();
 }
 

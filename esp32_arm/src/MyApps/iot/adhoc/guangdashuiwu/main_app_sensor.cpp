@@ -4,7 +4,7 @@
 #include "MyLibs/mesh/adhoc/adhoc_router.h"
 #include "board/board_sensor.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_GUANGDA_SHUIWU_SENSOR
 #define MY_APP_NODE_ID 2
 // #define MY_APP_NODE_ID 4

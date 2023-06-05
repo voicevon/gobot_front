@@ -3,7 +3,7 @@
 #include "MyLibs/mesh/adhoc/adhoc_router.h"
 
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_ADHOC_ROUTER
 #define MY_APP_NODE_ID 102
 

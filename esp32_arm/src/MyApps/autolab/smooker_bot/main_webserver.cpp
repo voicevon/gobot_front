@@ -8,7 +8,7 @@
 #include "CNC/gcode/gcode_queue.h"
 #include "robot/smoker_robot.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_SMOKE_BOT
 
 Smoker_Board board;

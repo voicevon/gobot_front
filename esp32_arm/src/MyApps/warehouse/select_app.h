@@ -1,7 +1,9 @@
 #pragma once
-#include "all_applications.h"
-
+#include "../select_app.h"
 #ifdef I_AM_ONE_OF_WAREHOSUE
+
+#define I_AM_ONE_OF_DENTURE_STATION
+
 // #define I_AM_AGV_WHEEL
 // #define I_AM_GARMENT_BOT
 // #define I_AM_ROBOT_ASRS_AGV         // TO BE reconstruct a lot/  
@@ -10,7 +12,6 @@
 
 // #define I_AM_WAREHOUSE_LOOP_PORTER
 // #define I_AM_WAREHOUSE_MANUAL_PACKER_SHIPPER
-#define I_AM_DENTURE_STATION_MOUNT_TEETH
 
 // #define I_AM_VSC
 // #define I_AM_DRV8302

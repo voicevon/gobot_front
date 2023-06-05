@@ -8,7 +8,7 @@
 #include "MyLibs/MyFunctions.hpp" 
 
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_GOBOT_MAIN
 GobotMain_Board board;
 GobotMainRobot robot; 

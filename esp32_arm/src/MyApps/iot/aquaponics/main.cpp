@@ -6,8 +6,7 @@
 
 
 
-// #include "all_applications.h"
-#include "../define_app.h"
+#include "../select_app.h"
 #ifdef I_AM_AQUAPONICS
 
 

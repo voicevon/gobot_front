@@ -5,7 +5,7 @@
 uint8_t BoardBase::__ledc_channel_index = 0;
 uint8_t BoardBase::__i2c_bus_index = 0;
 
-void BoardBase::_InitSerialBoard(const char* welcome_statement){
+void BoardBase::_InitSerial(const char* welcome_statement){
     Serial.begin(115200);
     Logger::Info(welcome_statement);
 }
@@ -77,16 +77,8 @@ bool BoardBase::_Begin_Apds9960(Adafruit_APDS9960* apds9960, uint8_t i2c_address
 
 }
 
-// void BoardBase::SayHello(){
-//     Serial.println("[Info] BoardBase::SayHello() Hello world.");
-// }
-// Adafruit_NeoPixel* BoardBase::_Make_Ws2812b(uint8_t pin_ws2812b){
-//     Serial.println("[Error] BoardBase::_Make_Ws2812b()  ");
-//     Adafruit_NeoPixel* ws2812b=new Adafruit_NeoPixel();
-//     return ws2812b;
-// }
 
-void BoardBase::Init_SPIFFS() {
+void BoardBase::_Init_SPIFFS() {
 	if (!SPIFFS.begin(true)) {
 		Logger::Error("An error has occurred while mounting SPIFFS");
         Logger::Halt("");

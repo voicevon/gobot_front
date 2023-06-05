@@ -42,7 +42,7 @@ http://192.168.xxx.xxx/control?var=flash&val=value        // value = 0 ~ 255
 */
 
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_BARCODE_READER
 
 //輸入WIFI連線帳號密碼

@@ -1,7 +1,7 @@
 #include "board_cnc_2206.h"
 
 Board2204Cnc::Board2204Cnc(){
-    _InitSerialBoard("Board2204Cnc::Init() Hi world!");
+    _InitSerial("Board2204Cnc::Init() Hi world!");
 }
 
 void Board2204Cnc::Init(){

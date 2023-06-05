@@ -1,4 +1,4 @@
-#include "all_applications.h"
+#include "../select_app.h"
 // #include "all_devices.h"
 #ifdef I_AM_DRV8302
 

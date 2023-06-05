@@ -4,7 +4,7 @@
 #include "spring_maker_app.h"
 #include "robot/spring_maker_robot.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_SPRING_MAKER
 
 Board_SpringMaker board;

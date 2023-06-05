@@ -13,7 +13,7 @@
 
 
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_ACUPUCTURE_MAIN_2023
 #define ACUPUCTURE_BODY_ID 101
 #define NODES_COUNT_IN_THEORY 30

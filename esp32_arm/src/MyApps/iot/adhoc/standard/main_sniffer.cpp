@@ -4,7 +4,7 @@
 // #include "Mesh/adhoc/adhoc_sniffer.h"
 #include "MyLibs/mesh/adhoc/adhoc_sniffer.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_ADHOC_SNIFFER
 
 AdhocSniffer sniffer;

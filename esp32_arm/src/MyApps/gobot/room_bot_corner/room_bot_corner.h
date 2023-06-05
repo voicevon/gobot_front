@@ -1,5 +1,5 @@
 #pragma once
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_CABLEBOT_CORNER
 
 

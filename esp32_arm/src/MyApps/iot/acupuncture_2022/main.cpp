@@ -7,7 +7,7 @@
 #include "MyLibs/utility/logger.h"
 #include "WString.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_ACUPUCTURE_MAIN_2022
 
 I2c_commu obj_i2c_bus = I2c_commu();

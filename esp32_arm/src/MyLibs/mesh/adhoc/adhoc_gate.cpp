@@ -11,6 +11,7 @@ bool AdhocGate::onReceived(const uint8_t* sender_mac, const uint8_t* incomingDat
 }
 
 
+
 void AdhocGate::Init(uint8_t my_node_id){
     _Init_EspNow();
     esp_read_mac(_my_mac_addr, ESP_MAC_WIFI_STA);

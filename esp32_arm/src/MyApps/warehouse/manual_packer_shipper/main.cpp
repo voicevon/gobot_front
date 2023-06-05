@@ -6,7 +6,7 @@
 #include "MyLibs/mqtt/remote_binary_output_group.h"
 #include "SPIFFS.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_WAREHOUSE_MANUAL_PACKER_SHIPPER
 #define LEDS_COUNT 12
 

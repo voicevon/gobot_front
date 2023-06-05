@@ -1,6 +1,6 @@
 #include "MyLibs/utility/logger.h"
 #include "board/board.h"
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_TITRATION_ROBOT
 
 	

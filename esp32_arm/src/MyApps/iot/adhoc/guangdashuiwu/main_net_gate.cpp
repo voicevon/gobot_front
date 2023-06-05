@@ -3,7 +3,7 @@
 #include "MyLibs/Mesh/adhoc/adhoc_gate.h"
 #include "board/board_gate.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_GUANGDA_SHUIWU_NETGATE
 
 GuangDa_ShuiWu_GateBoard board;

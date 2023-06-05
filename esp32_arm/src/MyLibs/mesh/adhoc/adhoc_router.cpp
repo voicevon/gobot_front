@@ -1,5 +1,3 @@
-#include "all_applications.h"
-
 #include "adhoc_router.h"
 #include "MyLibs/utility/logger.h"
 

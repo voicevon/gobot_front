@@ -1,5 +1,5 @@
 // #include "all_devices.h"
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_AGV_WHEEL
 
 #include <SimpleFOC.h>

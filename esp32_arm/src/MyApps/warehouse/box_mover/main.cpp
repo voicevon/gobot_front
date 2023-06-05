@@ -7,7 +7,7 @@
 
 #include "robot/box_mover_robot.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_GARMENT_BOX_MOVER
 
 Board2205Cnc board = Board2205Cnc();

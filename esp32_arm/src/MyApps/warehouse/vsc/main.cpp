@@ -5,7 +5,7 @@
 #include "vsc_app.h"
 #include "robot/vsc_robot.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_VSC
 Vsc_Board board;
 GcodeQueue gcode_queue;

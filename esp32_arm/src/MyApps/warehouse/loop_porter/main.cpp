@@ -5,7 +5,7 @@
 #include "MyLibs/mqtt/mqtt_subscriber_manager.h"
 #include "MyLibs/mqtt/remote_binary_output_group.h"
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_WAREHOUSE_LOOP_PORTER
 #include "porter_config.h"
 

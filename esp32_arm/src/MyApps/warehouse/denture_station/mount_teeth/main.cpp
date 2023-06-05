@@ -5,7 +5,7 @@
 // #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
 
 
-#include "all_applications.h"
+#include "../select_app.h"
 #ifdef I_AM_DENTURE_STATION_MOUNT_TEETH
 
 #define MY_WORKSTATION_ID       "101"
