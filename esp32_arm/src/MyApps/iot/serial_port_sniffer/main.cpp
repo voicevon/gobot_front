@@ -14,15 +14,15 @@ AppLuaWrapper lua;
 
 void setup(){
 	board.Init();
-	Logger::Info("I_AM_WIFI_MANAGER_DEMO");
+	String script = String("print('Hello world!  Arduino -->Lua --> Arduino')");
+	Serial.println(lua.Lua_dostring(&script));
+
+
 	diction.Init();
 	WebConfigurator::Begin(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 
 
-	String script = String("print('Hello world!')");
-
-	Serial.println(lua.Lua_dostring(&script));
 }
 
 void loop(){

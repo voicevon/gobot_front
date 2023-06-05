@@ -32,20 +32,21 @@ void WebConfigurator_DictionBase::_Init(WebConnfigurator_Parameter** first_para_
 
 void WebConfigurator_DictionBase::_AppendParameter(WebConnfigurator_Parameter* the_parameter, const char* para_name){
     the_parameter->SetName(para_name);
-    __AppendParameter(the_parameter);
-    if (__parameter_appending_index >= __parameters_count){
+    // __AppendParameter(the_parameter);
+    __parameter_appending_index++;
+    if (__parameter_appending_index > __parameters_count){
         Logger::Error("WebConfigurator_DictionBase::_AppendParameter()  over size");
         Logger::Halt("");
     }
 }
 
-void WebConfigurator_DictionBase::__AppendParameter(WebConnfigurator_Parameter* new_parameter){
-    __parameter_appending_index++;
-    if (__parameter_appending_index >= __parameters_count){
-        Logger::Error("WebConfigurator_DictionBase::_AppendParameter()  over size");
-        Logger::Halt("");
-    }
-}
+// void WebConfigurator_DictionBase::__AppendParameter(WebConnfigurator_Parameter* new_parameter){
+//     __parameter_appending_index++;
+//     if (__parameter_appending_index > __parameters_count){
+//         Logger::Error("WebConfigurator_DictionBase::_AppendParameter()  over size");
+//         Logger::Halt("");
+//     }
+// }
 
 WebConnfigurator_Parameter* WebConfigurator_DictionBase::FindItem(const char* parameter_name){
     WebConnfigurator_Parameter* para;

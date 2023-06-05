@@ -2,7 +2,7 @@
 #define PIN_GPIO_OF_CONFIG_BUTTON_AT_SERIAL_PORT_SNIFFER -1
 
 void WebConfiguratorDiction_SerialPortSniffer::Init(){
-    _Init(__parameters, WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT);
+    _Init(__parameters, WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER);
     // any sequence. 
     _AppendParameter(&para_device_id,"device_id");
     _AppendParameter(&para_baud_rate, "baud_rate");

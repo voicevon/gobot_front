@@ -15,7 +15,7 @@ void SerialPortSniffer_Board::__InitHardware(){
 }
 
 void SerialPortSniffer_Board::Init(){
-    _InitSerial("Hi Xuming, I am Serial-Port-Sniffer. Good luck......");
+    _InitSerial("Hi Xuming, I am Serial-Port-Sniffer board. Good luck......");
     Serial.print(COLOR_RESET);
     this->__InitHardware();
     this->_Init_SPIFFS();

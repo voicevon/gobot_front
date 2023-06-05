@@ -29,5 +29,5 @@ class WebConfigurator_DictionBase{
         WebConnfigurator_Parameter** __parameters;  // ** ？
         int __parameters_count;
         int __parameter_appending_index;
-        void __AppendParameter(WebConnfigurator_Parameter* new_parameter);
+        // void __AppendParameter(WebConnfigurator_Parameter* new_parameter);
 };

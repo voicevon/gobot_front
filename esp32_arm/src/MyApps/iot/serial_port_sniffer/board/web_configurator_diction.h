@@ -2,7 +2,7 @@
 
 #include "MyLibs/basic/memory_helper.h"
 #include "MyLibs/utility/web_configuator/base/web_configurator_diction_base.h"
-#define WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT 12   // 8+4
+#define WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER 13   // 9+4
 
 
 class WebConfiguratorDiction_SerialPortSniffer:public WebConfigurator_DictionBase{
@@ -16,6 +16,6 @@ class WebConfiguratorDiction_SerialPortSniffer:public WebConfigurator_DictionBas
 		WebConnfigurator_Parameter para_verification;
 	
 	private:
-		WebConnfigurator_Parameter* __parameters[WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT];
+		WebConnfigurator_Parameter* __parameters[WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER];
 		const char* __html_file="/serial_port_sniffer.html";
 };
