@@ -1,5 +1,4 @@
-#ifndef LUA_WRAPPER_H
-#define LUA_WRAPPER_H
+#pragma once
 
 #include "Arduino.h"
 
@@ -7,14 +6,18 @@
 #include "lua/lua.hpp"
 
 class LuaWrapperBase {
-  public:
-    LuaWrapperBase();
-    String Lua_dostring(const String *script);
-    void Lua_register(const String name, const lua_CFunction function);
+	public:
+		LuaWrapperBase(){};
+		String Lua_dostring(const String *script);
+		void Begin();
 
-  private:
-    lua_State *_state;
-    String addConstants();
+	protected:
+		void _InitLua();
+		void Lua_register(const String name, const lua_CFunction function);
+		lua_State *_state;
+		virtual String _addConstants();
+
+	private:
+
 };
 
-#endif

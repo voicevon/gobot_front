@@ -14,9 +14,24 @@ AppLuaWrapper lua;
 
 void setup(){
 	board.Init();
-	String script = String("print('Hello world!  Arduino -->Lua --> Arduino')");
-	Serial.println(lua.Lua_dostring(&script));
+	lua.Begin();
+	String line = String("print('Hello world!  Arduino -->Lua --> Arduino')");
+	// String script = String("print('Hello world!  Arduino -->Lua --> Arduino')");
 
+	fs::File file = SPIFFS.open("/test.txt", FILE_READ);
+	if (!file) {
+		Serial.println("Failed to open file for reading");
+		return;
+	}
+	while (file.available()) {
+		String line = file.readStringUntil('\n');
+		Logger::Info(line.c_str());
+		String result = lua.Lua_dostring(&line);
+		Serial.println(result);
+	}
+	file.close();
+
+	return;
 
 	diction.Init();
 	WebConfigurator::Begin(&diction);

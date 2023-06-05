@@ -65,10 +65,11 @@
 //   lua_register(_state, name.c_str(), function);
 // }
 
-// String AppLuaWrapper::addConstants() {
-//   String constants = "INPUT = " + String(INPUT) + "\r\n";
-//   constants += "OUTPUT = " + String(OUTPUT) + "\r\n";
-//   constants += "LOW = " + String(LOW) + "\r\n";
-//   constants += "HIGH = " + String(HIGH) + "\r\n";
-//   return constants;
-// }
+String AppLuaWrapper::_addConstants() {
+  String constants = "INPUT = " + String(INPUT) + "\r\n";
+  constants += "OUTPUT = " + String(OUTPUT) + "\r\n";
+  constants += "LOW = " + String(LOW) + "\r\n";
+  constants += "HIGH = " + String(HIGH) + "\r\n";
+  return constants;
+}
+
