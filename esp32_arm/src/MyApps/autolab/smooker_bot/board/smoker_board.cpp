@@ -1,9 +1,9 @@
 #include "smoker_board.h"
 
 
-void Smoker_Board::Init(){
-    Serial.begin(115200);
-    Serial.println("Hi there, I am your lovely bot,  Spring-Maker.  Keep smiling :)");
+void Smoker_Board::Init(const char* app_welcome_statement){
+    _InitSerial(app_welcome_statement);
+    Logger::Info("Runnin on board:  Smoker_board:)");
 
     __all_position_trigger[0].Init('X',PIN_HOME_ALPHA_2201, LOW);
     gs_PositionTrigger_Array::Instance().Init(__all_position_trigger, 1);

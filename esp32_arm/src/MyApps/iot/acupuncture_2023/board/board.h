@@ -7,7 +7,7 @@
 
 class AcupunctureBoard_2023: public BoardBase{
     public:
-        void Init() override;
+        void Init(const char* app_welcome_statement) override;
         I2C_IamMaster* GetI2C_Master(){return &__i2c_master;};
 
     private:

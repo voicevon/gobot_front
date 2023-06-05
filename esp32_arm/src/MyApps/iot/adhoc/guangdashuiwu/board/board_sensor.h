@@ -11,7 +11,7 @@
 
 class GuangDa_ShuiWu_SensorBoard: public BoardBase{
     public:
-        void Init() override;
+        void Init(const char* app_welcome_statement) override;
         void SpinOnce();
         uint8_t GetPayload();
         Mono_Led_GPIO* GetStateLed(){return &__state_led;};

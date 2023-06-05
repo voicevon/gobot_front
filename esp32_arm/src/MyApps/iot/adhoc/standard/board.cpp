@@ -8,7 +8,7 @@ void Adhoc_RouterBoard::__InitHardware(){
     __rx_led.Init(0, PIN_STATE_LED, HIGH);
 }
 
-void Adhoc_RouterBoard::Init(){
+void Adhoc_RouterBoard::Init(const char* app_welcome_statement){
     Serial.begin(115200);
     Serial.print("\n\n\n\n\n\n");
     Logger::Info("==========================================");

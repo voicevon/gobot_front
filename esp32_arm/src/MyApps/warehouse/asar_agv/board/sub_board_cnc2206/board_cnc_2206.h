@@ -11,7 +11,7 @@
 class Board2204Cnc:public BoardBase{
     public:
         Board2204Cnc();
-        void Init() ;
+        void Init(const char* app_welcome_statemen) override;
         void Init(Adafruit_MCP23X17* mcp_23018);
         void GetStepper(EnumAxis_Inverseinematic axis);
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) ;

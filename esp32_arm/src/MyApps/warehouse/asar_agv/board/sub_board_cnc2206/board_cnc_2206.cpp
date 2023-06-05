@@ -1,10 +1,10 @@
 #include "board_cnc_2206.h"
 
 Board2204Cnc::Board2204Cnc(){
-    _InitSerial("Board2204Cnc::Init() Hi world!");
 }
 
-void Board2204Cnc::Init(){
+void Board2204Cnc::Init(const char* app_welcome_statement){
+    _InitSerial("Board2204Cnc::Init() Hi world!");
     Serial.println("[Warn] Board2204Cnc::Init().  You should call Init(Adafruit_MCP23X17* )");
 }
 

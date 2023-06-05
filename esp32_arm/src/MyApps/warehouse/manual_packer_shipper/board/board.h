@@ -13,7 +13,7 @@
 class Twh_Packer_Board: public BoardBase{
     public:
         Twh_Packer_Board();
-        void Init() override;
+        void Init(const char* app_welcome_statement) override;
         Remote_ButtonGpio* GetButton_picked(){return &__picked_button;};
         Remote_ButtonGpio* GetButton_Packed(){return &__packed_button;};
         Adafruit_NeoPixel* GetNeoPixel(){return & __neo_pixel;};

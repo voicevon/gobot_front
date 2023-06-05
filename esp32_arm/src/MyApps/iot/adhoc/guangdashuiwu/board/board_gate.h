@@ -12,7 +12,7 @@
 
 class GuangDa_ShuiWu_GateBoard: public BoardBase{
     public:
-        void Init() override;
+        void Init(const char* app_welcome_statement) override;
     private:
         void __InitHardware();
 

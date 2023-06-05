@@ -14,7 +14,7 @@ Silicon_Pump_Board::Silicon_Pump_Board(){
     _InitSerial("Hello, I am Silicon_Pump_Board");
 }
 
-void Silicon_Pump_Board::Init(){
+void Silicon_Pump_Board::Init(const char* app_welcome_statement){
     // #define POSITION_TRIGGER_COUNT 1
 
     // __all_position_triggers[POSITION_TRIGGER_ALPHA].Init('X',PIN_POSITION_TRIGGER_X, LOW);

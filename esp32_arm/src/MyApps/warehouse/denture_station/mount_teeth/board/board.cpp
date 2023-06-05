@@ -40,7 +40,7 @@
 
 
 
-void ThreeWayValveBoard::Init(){
+void ThreeWayValveBoard::Init(const char* app_welcome_statement){
     Serial.begin(115200);
     
     Serial.println("\n Hello, I am the main controller of actupuncture.  Commu with I2C , MQTT\n\n");

@@ -14,10 +14,11 @@
 DevBoard board;
 WebConfiguratorDiction_Demo diction;
 
+
+
+
 void setup(){
-	Serial.begin(115200);
-	Logger::Info("I_AM_WIFI_MANAGER_DEMO");
-	board.Init_SPIFFS();
+	board.Init("I_AM_WIFI_MANAGER_DEMO");
 	diction.Init();
 	WebConfigurator::Begin(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.

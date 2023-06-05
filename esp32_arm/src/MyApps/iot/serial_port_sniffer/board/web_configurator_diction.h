@@ -2,7 +2,7 @@
 
 #include "MyLibs/basic/memory_helper.h"
 #include "MyLibs/utility/web_configuator/base/web_configurator_diction_base.h"
-#define WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER 13   // 9+4
+#define WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER 14   // 9+5
 
 
 class WebConfiguratorDiction_SerialPortSniffer:public WebConfigurator_DictionBase{
@@ -14,6 +14,7 @@ class WebConfiguratorDiction_SerialPortSniffer:public WebConfigurator_DictionBas
 		WebConnfigurator_Parameter para_baud_rate;
 		WebConnfigurator_Parameter para_bit_length;
 		WebConnfigurator_Parameter para_verification;
+		WebConnfigurator_Parameter para_lua_script;
 	
 	private:
 		WebConnfigurator_Parameter* __parameters[WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER];

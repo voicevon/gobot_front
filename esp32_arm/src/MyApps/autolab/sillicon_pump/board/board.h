@@ -14,7 +14,7 @@
 class Silicon_Pump_Board: public BoardBase{
     public:
         Silicon_Pump_Board();
-        void Init() override;
+        void Init(const char* app_welcome_statement) override;
         FastAccelStepper* GetStepper(EnumAxis_Inverseinematic axis);
 
         void Test_Stepper(int loops);

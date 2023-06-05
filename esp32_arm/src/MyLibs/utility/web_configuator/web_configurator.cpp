@@ -30,6 +30,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>
 )rawliteral";
 
+static WebConfigurator::Config config;                        // configuration
 
 
 AsyncWebServer ap_webserver(80);  // Create AsyncWebServer object on port 80
@@ -207,14 +208,14 @@ String WebConfigurator::processor_upload_file(const String& var) {
 }
 
 void WebConfigurator::configureWebServer() {
-	server->on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
+	ap_webserver.on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
 		String logmessage = "Client:" + request->client()->remoteIP().toString() + + " " + request->url();
 		Serial.println(logmessage);
 		request->send_P(200, "text/html", index_html, processor_upload_file);
 	});
 
 	// run handleUpload function when any file is uploaded
-	server->on("/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
+	ap_webserver.on("/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
 			request->send(200);
 		}, handleUpload);
 

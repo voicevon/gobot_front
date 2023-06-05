@@ -1,6 +1,6 @@
 #include "board_all_in_one_2205.h"
 
-void BoardAllInOne::Init(){
+void BoardAllInOne::Init(const char* app_welcome_statement){
     Serial.begin(115200);
     while (! Serial) {delay(1);}
     Serial.println("[Info] BoardAllInOne::Init()  Hi there, I am your lovely bot,  BotAsrsAgvCoreYZ, include ASRS AGV CNC.  Keep smiling :) ");

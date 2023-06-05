@@ -18,7 +18,7 @@ void GuangDa_ShuiWu_SensorBoard::SpinOnce(){
     __guzhang_zhengchang.SpinOnce();
 }
 
-void GuangDa_ShuiWu_SensorBoard::Init(){
+void GuangDa_ShuiWu_SensorBoard::Init(const char* app_welcome_statement){
     Serial.begin(115200);
     Serial.print("\n\n\n\n\n\n");
     Logger::Info("==========================================");

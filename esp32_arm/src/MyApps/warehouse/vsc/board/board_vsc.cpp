@@ -4,7 +4,7 @@ Vsc_Board::Vsc_Board(){
     _InitSerial("I am XiaoJuan.");
 }
 
-void Vsc_Board::Init(){
+void Vsc_Board::Init(const char* app_welcome_statement){
     __all_position_triggers[0].Init('0',PIN_HOMER_SENSOR_HALL_0, LOW);
     __all_position_triggers[1].Init('1',PIN_HOMER_SENSOR_HALL_1, LOW);
     __all_position_triggers[2].Init('2',PIN_HOMER_SENSOR_HALL_2, LOW);

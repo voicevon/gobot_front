@@ -11,7 +11,7 @@
 class Smoker_Board: public BoardBase{
     public:
         Smoker_Board(){};
-        void Init() override;
+        void Init(const char* app_welcome_statement) override;
         
         void EnableMotor(EnumAxis_Inverseinematic axis_name, bool enable_it) ;
         // CncActuatorBase* GetActuator(EnumAxis_Inverseinematic axis) {return nullptr;};   //todo:  get it.

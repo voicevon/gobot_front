@@ -12,7 +12,7 @@
 class Twh_LoopPorter_Board: public BoardBase{
     public:
         Twh_LoopPorter_Board();
-        void Init() override;
+        void Init(const char* app_welcome_statement) override;
         
         FastAccelStepper* GetStepper(){return __stepper_alpha;};
         void TurnOn_ThisLed_Only(int led_id);

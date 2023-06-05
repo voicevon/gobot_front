@@ -8,7 +8,7 @@ Twh_Packer_Board::Twh_Packer_Board(){
     _InitSerial("Hello, I am Twh2Row_Board");
 }
 
-void Twh_Packer_Board::Init(){
+void Twh_Packer_Board::Init(const char* app_welcome_statement){
     __ws2812b.Link_Adrafruit_NeoPixel(&__neo_pixel);
 }
 

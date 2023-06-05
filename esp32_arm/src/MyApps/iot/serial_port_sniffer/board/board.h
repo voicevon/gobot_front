@@ -8,7 +8,7 @@
 
 class SerialPortSniffer_Board: public BoardBase{
     public:
-        void Init() override;
+        void Init(const char* app_welcome_statement) override;
         Mono_Led_GPIO* GetStateLed(){return &__rx_led;};
         
         

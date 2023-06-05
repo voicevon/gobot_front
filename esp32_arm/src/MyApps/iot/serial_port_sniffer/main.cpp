@@ -13,12 +13,12 @@ WebConfiguratorDiction_SerialPortSniffer diction;
 AppLuaWrapper lua;
 
 void setup(){
-	board.Init();
+	board.Init("I_AM_SERIAL_PORT_SNIFFER");
 	lua.Begin();
 	String line = String("print('Hello world!  Arduino -->Lua --> Arduino')");
 	// String script = String("print('Hello world!  Arduino -->Lua --> Arduino')");
 
-	fs::File file = SPIFFS.open("/test.txt", FILE_READ);
+	fs::File file = SPIFFS.open("/test.lua", FILE_READ);
 	if (!file) {
 		Serial.println("Failed to open file for reading");
 		return;

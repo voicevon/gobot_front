@@ -11,8 +11,8 @@
 
 class BoardBase{
     public:
-        virtual void Init();
-        virtual  float ReadBatteryVolt(){return 1.234f;};
+        virtual void Init(const char* app_welcome_statement);
+        virtual float ReadBatteryVolt(){return 1.234f;};
         static uint8_t Assign_ledc_channel();
         
         void RepportRamUsage();  // TODO::  be static
@@ -20,7 +20,7 @@ class BoardBase{
 
     protected:
         // TODO:: be static
-        void _InitSerial(const char* welcome_statement);
+        void _InitSerial(const char* board_statement);
         static uint8_t Assign_i2c_bus_id(){return __i2c_bus_index; __i2c_bus_index++;};
         // void ScanI2cBus(TwoWire* i2c_bus, const char* printing_topic);
         // bool _Begin_I2cBus(TwoWire* i2c_bus, uint8_t pin_sda, uint8_t pin_scl, uint32_t frequency);
@@ -36,6 +36,11 @@ class BoardBase{
 
 
 class DevBoard: public BoardBase{
-        void Init() override{};
+    public:
+        void Init(const char* app_welcome_statement) override {
+            this->_InitSerial(app_welcome_statement);
+            Logger::Info("I am Dev-Board." );
+            this->_Init_SPIFFS();
+        };
 
 };

@@ -12,7 +12,7 @@ void GuangDa_ShuiWu_GateBoard::__InitHardware(){
 	pinMode(PIN_GUZHANG_4, OUTPUT);
 }
 
-void GuangDa_ShuiWu_GateBoard::Init(){
+void GuangDa_ShuiWu_GateBoard::Init(const char* app_welcome_statement){
     Serial.begin(115200);
     Serial.print("\n\n\n\n\n\n");
     Logger::Info("==========================================");

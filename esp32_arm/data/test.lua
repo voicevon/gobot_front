@@ -1,3 +1,5 @@
-print("abcde")
-print(3+5)
-print(6*9)
+print('hello wangxu')
+a= 10
+b= 20
+c = a * b
+print(c)

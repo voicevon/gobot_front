@@ -21,7 +21,7 @@ class BarcodeReader{
 
 class ThreeWayValveBoard: public BoardBase{
     public:
-        void Init() override;
+        void Init(const char* app_welcome_statement) override;
         // ThreeWayValve* GetValve(){return &__valve;};
         // BarcodeReader* GetBarcodeReader(){return &__barcode_reader;};
         void TestPositionTriggers(int loops);

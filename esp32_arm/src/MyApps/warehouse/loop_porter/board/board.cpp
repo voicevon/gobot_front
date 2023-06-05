@@ -24,7 +24,7 @@ Twh_LoopPorter_Board::Twh_LoopPorter_Board(){
     _InitSerial("Hello, I am Twh_LoopPorter_Board");
 }
 
-void Twh_LoopPorter_Board::Init(){
+void Twh_LoopPorter_Board::Init(const char* app_welcome_statement){
     #define POSITION_TRIGGER_COUNT 1
 
     __all_position_triggers[0].Init('X',PIN_POSITION_TRIGGER_X, LOW);

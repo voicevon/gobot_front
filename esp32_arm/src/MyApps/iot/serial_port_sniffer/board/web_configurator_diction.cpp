@@ -8,6 +8,7 @@ void WebConfiguratorDiction_SerialPortSniffer::Init(){
     _AppendParameter(&para_baud_rate, "baud_rate");
     _AppendParameter(&para_bit_length, "bit_length");
     _AppendParameter(&para_verification, "verification");
+    _AppendParameter(&para_lua_script, "lua");
 
     Gpio_of_ConfigButton  = PIN_GPIO_OF_CONFIG_BUTTON_AT_SERIAL_PORT_SNIFFER;
     HtmlFilename_of_Configurator = __html_file;

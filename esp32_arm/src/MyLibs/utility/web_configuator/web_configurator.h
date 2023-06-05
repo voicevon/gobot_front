@@ -7,7 +7,11 @@
 
 class WebConfigurator{
     public:
-
+        struct Config {
+        String ssid;               // wifi ssid
+        String wifipassword;       // wifi password
+        int webserverporthttp;     // http port number for web admin
+        };
         static WebConfigurator& GetInstance(){
             return __instance;
         }
@@ -25,19 +29,14 @@ class WebConfigurator{
         static WebConfigurator __instance;
         // String processor(const String& var);
 
-        String processor_upload_file(const String& var);
-        void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
-        void configureWebServer();
-        String humanReadableSize(const size_t bytes);
-        String listFiles(bool ishtml);
+        static String processor_upload_file(const String& var);
+        static void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
+        static void configureWebServer();
+        static String humanReadableSize(const size_t bytes);
+        static String listFiles(bool ishtml);
 
         // configuration structure
-        struct Config {
-        String ssid;               // wifi ssid
-        String wifipassword;       // wifi password
-        int webserverporthttp;     // http port number for web admin
-        };
+
 
         // variables
-        Config config;                        // configuration
 };

@@ -1,6 +1,5 @@
 #pragma once
 
-// #include "MyBoards/agv_board_base.h"
 #include "AGV/board/agv_board_base.h"
 #include "../board_pins/board_pins_ver_2_0.h"
 #include "AGV/sensor_moving_track/track_sensor_dual_9960.h"

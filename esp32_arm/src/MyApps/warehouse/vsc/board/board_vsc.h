@@ -13,7 +13,7 @@ class Vsc_Board: public BoardBase{
         Vsc_Board();
         void LinkEncoderSensor(Encoder* encoder){this->__encoder=encoder;};
         // call me must after LinkEncoderSensor().
-        void Init() override;
+        void Init(const char* app_welcome_statement) override;
 
         // For being an actuator and its components.
         Encoder* GetEncoder(){return this->__encoder;};

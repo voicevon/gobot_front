@@ -6,7 +6,7 @@ void TitrationBoard::__InitHardware(){
 
 }
 
-void TitrationBoard::Init(){
+void TitrationBoard::Init(const char* app_welcome_statement){
 
 }
 

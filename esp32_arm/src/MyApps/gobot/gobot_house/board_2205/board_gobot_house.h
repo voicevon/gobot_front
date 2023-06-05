@@ -8,7 +8,7 @@
 class Board_GobotHouse{
     public:
         Board_GobotHouse(){};
-        void Init() ;
+        void Init(const char* app_welcome_statement) ;
         // RobotEef_GobotHouse* GetEef() override;
         void EnableMotor(EnumAxis_Inverseinematic actuator_name, bool enable_it) ;
         
