@@ -10,6 +10,27 @@
 #include "base/web-configurator_parameter.h"
 #include "esp_wifi.h"
 
+const char index_html[] PROGMEM = R"rawliteral(
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+</head>
+<body>
+  <p><h1>File Upload</h1></p>
+  <p>Free Storage: %FREESPIFFS% | Used Storage: %USEDSPIFFS% | Total Storage: %TOTALSPIFFS%</p>
+  <form method="POST" action="/upload" enctype="multipart/form-data"><input type="file" name="data"/><input type="submit" name="upload" value="Upload" title="Upload File"></form>
+  <p>After clicking upload it will take some time for the file to firstly upload and then be written to SPIFFS, there is no indicator that the upload began.  Please be patient.</p>
+  <p>Once uploaded the page will refresh and the newly uploaded file will appear in the file list.</p>
+  <p>If a file does not appear, it will be because the file was too big, or had unusual characters in the file name (like spaces).</p>
+  <p>You can see the progress of the upload by watching the serial output.</p>
+  <p>%FILELIST%</p>
+</body>
+</html>
+)rawliteral";
+
+
 
 AsyncWebServer ap_webserver(80);  // Create AsyncWebServer object on port 80
 static WebConfigurator_DictionBase* diction;
@@ -104,24 +125,98 @@ bool WebConfigurator::__initWiFi() {
 	return true;
 }
 
-// Initialize SPIFFS
-// void WebConfigurator::initSPIFFS() {
-// 	if (!SPIFFS.begin(true)) {
-// 		Serial.println("An error has occurred while mounting SPIFFS");
-// 	}
-// 	Serial.println("SPIFFS mounted successfully");
-// }
+// list all of the files, if ishtml=true, return html rather than simple text
+String WebConfigurator::listFiles(bool ishtml) {
+  String returnText = "";
+  Serial.println("Listing files stored on SPIFFS");
+  File root = SPIFFS.open("/");
+  File foundfile = root.openNextFile();
+  if (ishtml) {
+    returnText += "<table><tr><th align='left'>Name</th><th align='left'>Size</th></tr>";
+  }
+  while (foundfile) {
+    if (ishtml) {
+      returnText += "<tr align='left'><td>" + String(foundfile.name()) + "</td><td>" + humanReadableSize(foundfile.size()) + "</td></tr>";
+    } else {
+      returnText += "File: " + String(foundfile.name()) + "\n";
+    }
+    foundfile = root.openNextFile();
+  }
+  if (ishtml) {
+    returnText += "</table>";
+  }
+  root.close();
+  foundfile.close();
+  return returnText;
+}
 
+// Make size of files human readable
+// source: https://github.com/CelliesProjects/minimalUploadAuthESP32
+String WebConfigurator::humanReadableSize(const size_t bytes) {
+  if (bytes < 1024) return String(bytes) + " B";
+  else if (bytes < (1024 * 1024)) return String(bytes / 1024.0) + " KB";
+  else if (bytes < (1024 * 1024 * 1024)) return String(bytes / 1024.0 / 1024.0) + " MB";
+  else return String(bytes / 1024.0 / 1024.0 / 1024.0) + " GB";
+}
 
-void WebConfigurator::__StartApServer(){
-	// Connect to Wi-Fi network with SSID and password
-	Serial.println("Setting AP (Access Point)");
-	// NULL sets an open Access Point
-	WiFi.softAP("Integral-Setup", NULL);
+// handles uploads
+void WebConfigurator::handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
+  String logmessage = "Client:" + request->client()->remoteIP().toString() + " " + request->url();
+  Serial.println(logmessage);
 
-	IPAddress IP = WiFi.softAPIP();
-	Serial.print("AP IP address: ");
-	Serial.println(IP); 
+  if (!index) {
+    logmessage = "Upload Start: " + String(filename);
+    // open the file on first call and store the file handle in the request object
+    request->_tempFile = SPIFFS.open("/" + filename, "w");
+    Serial.println(logmessage);
+  }
+
+  if (len) {
+    // stream the incoming chunk to the opened file
+    request->_tempFile.write(data, len);
+    logmessage = "Writing file: " + String(filename) + " index=" + String(index) + " len=" + String(len);
+    Serial.println(logmessage);
+  }
+
+  if (final) {
+    logmessage = "Upload Complete: " + String(filename) + ",size: " + String(index + len);
+    // close the file handle as the upload is now done
+    request->_tempFile.close();
+    Serial.println(logmessage);
+    request->redirect("/files");
+  }
+}
+
+String WebConfigurator::processor_upload_file(const String& var) {
+	  if (var == "FILELIST") {
+    return listFiles(true);
+  }
+  if (var == "FREESPIFFS") {
+    return humanReadableSize((SPIFFS.totalBytes() - SPIFFS.usedBytes()));
+  }
+
+  if (var == "USEDSPIFFS") {
+    return humanReadableSize(SPIFFS.usedBytes());
+  }
+
+  if (var == "TOTALSPIFFS") {
+    return humanReadableSize(SPIFFS.totalBytes());
+  }
+
+  return String();
+}
+
+void WebConfigurator::configureWebServer() {
+	server->on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
+		String logmessage = "Client:" + request->client()->remoteIP().toString() + + " " + request->url();
+		Serial.println(logmessage);
+		request->send_P(200, "text/html", index_html, processor_upload_file);
+	});
+
+	// run handleUpload function when any file is uploaded
+	server->on("/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
+			request->send(200);
+		}, handleUpload);
 
 	// Web Server Root URL
 	ap_webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -150,5 +245,18 @@ void WebConfigurator::__StartApServer(){
 		delay(3000);
 		ESP.restart();
 	});
+}
+
+void WebConfigurator::__StartApServer(){
+	// Connect to Wi-Fi network with SSID and password
+	Serial.println("Setting AP (Access Point)");
+	// NULL sets an open Access Point
+	WiFi.softAP("Integral-Setup", NULL);
+
+	IPAddress IP = WiFi.softAPIP();
+	Serial.print("AP IP address: ");
+	Serial.println(IP); 
+	configureWebServer();
+
 	ap_webserver.begin();
 }

@@ -7,6 +7,7 @@
 
 class WebConfigurator{
     public:
+
         static WebConfigurator& GetInstance(){
             return __instance;
         }
@@ -22,6 +23,21 @@ class WebConfigurator{
         static void __StartApServer();
         static bool __initWiFi();
         static WebConfigurator __instance;
+        // String processor(const String& var);
 
+        String processor_upload_file(const String& var);
+        void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
+        void configureWebServer();
+        String humanReadableSize(const size_t bytes);
+        String listFiles(bool ishtml);
 
+        // configuration structure
+        struct Config {
+        String ssid;               // wifi ssid
+        String wifipassword;       // wifi password
+        int webserverporthttp;     // http port number for web admin
+        };
+
+        // variables
+        Config config;                        // configuration
 };
