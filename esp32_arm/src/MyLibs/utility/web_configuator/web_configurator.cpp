@@ -77,7 +77,9 @@ void WebConfigurator::Begin(WebConfigurator_DictionBase* web_configurator_dictio
 			is_workstation_mode = false;
 		}
 	}
-	if (!is_workstation_mode){
+	if (is_workstation_mode){
+		// __StartLuaEditor();
+	}else{
 		__StartApServer();
 		while (true){
 			// Watchdog?
@@ -207,7 +209,7 @@ String WebConfigurator::processor_upload_file(const String& var) {
   return String();
 }
 
-void WebConfigurator::configureWebServer() {
+void WebConfigurator::__InitApWebServer() {
 	ap_webserver.on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
 		String logmessage = "Client:" + request->client()->remoteIP().toString() + + " " + request->url();
 		Serial.println(logmessage);
@@ -257,7 +259,36 @@ void WebConfigurator::__StartApServer(){
 	IPAddress IP = WiFi.softAPIP();
 	Serial.print("AP IP address: ");
 	Serial.println(IP); 
-	configureWebServer();
+	__InitApWebServer();
 
 	ap_webserver.begin();
+}
+
+void WebConfigurator::__StartLuaEditor(){
+	// Web Server Root URL
+	ap_webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+		Logger::Info("webserver. on /   is a lua_scrpt editor ");
+		request->send(SPIFFS, "/lua_editor.html", "text/html");
+	});
+	ap_webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
+		int params = request->params();
+		// Logger::Debug("WebConfigurator::StartApServer()  HTTP-POST");
+		// Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
+		for(int i=0;i<params;i++){
+			AsyncWebParameter* p = request->getParam(i);
+			if(p->isPost()){
+				WebConnfigurator_Parameter* para = diction->FindItem(p->name().c_str());
+				// item-> Link_AsyncWebParameter(p);
+				para-> WriteToFile(p);
+				Logger::Info("Lua script is updated,  Will restart Lua-Virtual machine");
+
+			}
+		}
+        // String strAdminUid = diction->para_admin_uid.GetName();
+		// request->send(200, "text/plain", "Done. ESP will restart, connect to your router and go to IP address: " + strAdminUid);
+		// delay(3000);
+		// ESP.restart();
+	});
+	ap_webserver.begin();
+
 }

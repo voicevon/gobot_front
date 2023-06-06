@@ -25,13 +25,14 @@ class WebConfigurator{
 
     private:
         static void __StartApServer();
+        static void __StartLuaEditor();
         static bool __initWiFi();
         static WebConfigurator __instance;
         // String processor(const String& var);
 
         static String processor_upload_file(const String& var);
         static void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
-        static void configureWebServer();
+        static void __InitApWebServer();
         static String humanReadableSize(const size_t bytes);
         static String listFiles(bool ishtml);
 

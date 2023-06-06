@@ -5,19 +5,14 @@ WebConnfigurator_Parameter::WebConnfigurator_Parameter(){
     __fs= &SPIFFS;
 }
 
-// WebConnfigurator_Parameter::WebConnfigurator_Parameter(const char* parameter_name){
-//     __fs= &SPIFFS;
-//     SetName(parameter_name);
-// }
-
 void WebConnfigurator_Parameter::SetName(const char* parameter_name){
-    // Logger::Debug("WebConnfigurator_Parameter::SetName");
-    // Logger::Print("parameter_name", parameter_name);
+    Logger::Debug("WebConnfigurator_Parameter::SetName");
+    Logger::Print("parameter_name", parameter_name);
     for(int i=0; i<20; i++){
-        char xx = *(parameter_name + i);
-        __parameter_name[i] = xx;
+        char ch = *(parameter_name + i);
+        __parameter_name[i] = ch;
         // Serial.print(char(xx));   // DOES NOT WORK ???
-        if (xx == 0x00){
+        if (ch == 0x00){
             return;
         }
     }
@@ -26,12 +21,12 @@ void WebConnfigurator_Parameter::SetName(const char* parameter_name){
 }
 
 const char* WebConnfigurator_Parameter::__GetSpiffsFilename(){
-    char xx;
+    char ch;
     __output_buffer[0] = '/';
     for(int i=0; i< 20; i++){
-        xx = __parameter_name[i];
-        __output_buffer[i+1] = xx;
-        if (xx == 0x00){
+        ch = __parameter_name[i];
+        __output_buffer[i+1] = ch;
+        if (ch == 0x00){
             return &__output_buffer[0];
         }
     }

@@ -1,6 +1,4 @@
-# Hardware Platform
-- Raspberry Pi zero w
-- With Pi camera
+
 
 # OS setup and Dependency installation 
 - Enable Pi camera ?

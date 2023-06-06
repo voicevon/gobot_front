@@ -1,4 +1,5 @@
 #include "lua_wrapper_base.h"
+#include "MyLibs/utility/logger.h"
 
 extern "C" {
 	static int lua_wrapper_print (lua_State *L) {
@@ -43,9 +44,32 @@ String LuaWrapperBase::Lua_dostring(const String *script) {
 	}
 	return result;
 }
-void LuaWrapperBase::Begin(){
+void LuaWrapperBase::Begin(const char* filename){
+	if (_is_running){
+		// abord currenttly running
+
+	}
 	this->_InitLua();
-	
+	memcpy(_filename, filename,20);
+	// fs::File file = SPIFFS.open("/lua_script.txt", FILE_READ);
+	// if (file) {
+	// 	_is_running = true;
+	// }else{
+	// 	Serial.println("Failed to open file for reading");
+	// }
+}
+
+void LuaWrapperBase::SpinOnce(){
+	// if (file.available()) {
+	// 	String line = file.readStringUntil('\n');
+	// 	Logger::Info(line.c_str());
+	// 	String result = lua.Lua_dostring(&line);
+	// 	Serial.println(result);
+	// }else{
+	// 	file.close();
+	// 	Logger::Info("LuaWrapperBase::SpinOnce()  Run lua file ending report");
+	// }
+
 }
 
 void LuaWrapperBase::Lua_register(const String name, const lua_CFunction function) {
