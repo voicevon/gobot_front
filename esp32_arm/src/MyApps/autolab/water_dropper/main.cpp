@@ -19,7 +19,7 @@ WaterDropper_App app;
 GcodeQueue gcode_queue;
 CommandQueue command_queue;
 
-// WaterDropper_LuaWrapper lua_wrapper;
+WaterDropper_LuaWrapper lua_wrapper;
 // RemoteVar_Chars remote_lua_file;
 
 #define PIN_ENCODER_A 23
@@ -37,20 +37,19 @@ void init_encoder(){
 
 void setup(){
 	board.Init("I_AM_WATER_DROPPER");
-	init_encoder();
-	board.LinkEncoder(&encoder);
+	// init_encoder();
+	// board.LinkEncoder(&encoder);
 
-	diction.Init();
+	diction.Init(board.Get_ConfigButton());
 	WebConfigurator::Begin(&diction);
 	// setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 	// app.Link_Mqtt_to_CommandQueue("aaaaaaa", &command_queue);
-	// remote_lua_file.InitFilename("/temp.lua");
-	// lua_wrapper.Begin("/test.lua");
+	lua_wrapper.Begin("/test.lua");
 
 }
 
 void loop(){
-	// lua.SpinOnce();	
+	lua_wrapper.SpinOnce();	
 	// encoder.update();
 	// float aa = encoder.getAngle();
 	// Logger::Print("encoder.angle", aa);

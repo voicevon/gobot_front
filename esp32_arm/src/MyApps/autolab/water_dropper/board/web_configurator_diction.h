@@ -10,8 +10,7 @@
 class WaterDropper_WebConfiguratorDiction:public WebConfigurator_DictionBase{
 	public:
 		WaterDropper_WebConfiguratorDiction(){};
-		void Init();
-		/// @brief Add your parameters here
+		void Init(PositionTrigger* config_button);
 		WebConnfigurator_Parameter para_timer;
 	
 	private:

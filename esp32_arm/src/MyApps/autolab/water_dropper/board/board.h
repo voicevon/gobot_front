@@ -13,6 +13,8 @@ class WaterDropper_Board: public BoardBase{
         void Init(const char* app_welcome_statement) override;
         void LinkEncoder(Encoder* encoder){__encoder=encoder;};
         Mono_Led_GPIO* GetStateLed(){return &__state_led;};
+        PositionTrigger* Get_ConfigButton(){return &__config_button;};
+        PositionTrigger* Get_ActionButton(){return &__action_button;};
         
         
     private:

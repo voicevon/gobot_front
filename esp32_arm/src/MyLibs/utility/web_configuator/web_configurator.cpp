@@ -57,16 +57,9 @@ const char* WebConfigurator::GetConfig(const char* key){
 void WebConfigurator::Begin(WebConfigurator_DictionBase* web_configurator_diction){
 	diction = web_configurator_diction;
 	bool is_workstation_mode = true;
-	if (diction->Gpio_of_ConfigButton > 0){
-		pinMode(diction->Gpio_of_ConfigButton, INPUT_PULLUP);
-		delay(100);
-		if (digitalRead(diction->Gpio_of_ConfigButton) == LOW){
-			// use config-button, but the button is not pushed
-			is_workstation_mode = false;
-		}
+	if (diction->ConfigButton->IsFired()){
+		is_workstation_mode = false;
 	}
-	// initSPIFFS();
-	
 	Serial.println(diction->para_wifi_ssid.readFile());
 	Serial.println(diction->para_wifi_pass.readFile());
 	Serial.println(diction->para_admin_uid.readFile());

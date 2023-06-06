@@ -3,7 +3,6 @@
 
 void WebConfiguratorDiction_SerialPortSniffer::Init(){
     _Init(__parameters, WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER);
-    // const char* __html_file="/serial_port_sniffer.html";
     __html_filename.CopyFrom("/serial_port_sniffer.html");
     HtmlFilename_of_Configurator = &__html_filename;
     // any sequence. 
@@ -13,8 +12,5 @@ void WebConfiguratorDiction_SerialPortSniffer::Init(){
     _AppendParameter(&para_verification, "verification");
     _AppendParameter(&para_lua_script, "lua");
 
-    Gpio_of_ConfigButton  = PIN_GPIO_OF_CONFIG_BUTTON_AT_SERIAL_PORT_SNIFFER;
-    
-    // _parameters = __parameters[0];
     
 }

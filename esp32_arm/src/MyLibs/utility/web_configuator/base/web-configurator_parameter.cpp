@@ -75,7 +75,7 @@ const char* WebConnfigurator_Parameter::readFile(){
 
 	File file = __fs->open(path);
 	if(!file || file.isDirectory()){
-		Logger::Print(" WebConnfigurator_Parameter::readFile()", "- failed to open file for reading");
+		Logger::Print(" WebConnfigurator_Parameter::readFile()- failed to open file for reading--->", path);
         __output_buffer[0] = 0x00;
 		return __output_buffer;
 	}

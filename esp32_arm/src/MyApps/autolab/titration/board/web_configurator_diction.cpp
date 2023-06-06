@@ -10,7 +10,6 @@ void WebConfiguratorDiction_Tiration::Init(){
     para_demo.SetName("demo");
     __parameters[4] = &para_demo;
 
-    Gpio_of_ConfigButton  = -1;
     __html_filename.CopyFrom("/config_demo.html");
     HtmlFilename_of_Configurator = &__html_filename;
     _Init(&__parameters[0], WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT);

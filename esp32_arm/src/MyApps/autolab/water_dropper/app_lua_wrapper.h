@@ -6,15 +6,12 @@
 
 class WaterDropper_LuaWrapper: public LuaWrapperBase {
 	public:
-		WaterDropper_LuaWrapper(): LuaWrapperBase(){};
-		// String Lua_dostring(const String *script);
-		// String Lua_dofile(const String *filename);
-		// void Lua_register(const String name, const lua_CFunction function);
+		WaterDropper_LuaWrapper() : LuaWrapperBase(){};
+		// void comiler_vtable_error_even_subclass_has_defination_why() override {};
 
 	protected:
-		String _addConstants() override;
+		// String _addConstants() override {return "";};
 
 	private:
-		// lua_State *_state;
 };
 

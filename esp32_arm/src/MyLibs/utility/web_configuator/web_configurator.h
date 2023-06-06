@@ -1,7 +1,6 @@
 #pragma once
 #include "WString.h"
 #include "SPIFFS.h"
-// #include "web_configurator_diction_base.h"
 #include "base/web_configurator_diction_base.h"
 
 
