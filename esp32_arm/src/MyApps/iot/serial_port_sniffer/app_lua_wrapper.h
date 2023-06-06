@@ -4,9 +4,9 @@
 #define LUA_USE_C89
 #include "MyLibs/app_base/lua_wrapper/lua_wrapper_base.h"
 
-class AppLuaWrapper: public LuaWrapperBase {
+class SerialPortSniffer_LuaWrapper: public LuaWrapperBase {
 	public:
-		AppLuaWrapper(){};
+		SerialPortSniffer_LuaWrapper():LuaWrapperBase(){};
 		// String Lua_dostring(const String *script);
 		// String Lua_dofile(const String *filename);
 		// void Lua_register(const String name, const lua_CFunction function);

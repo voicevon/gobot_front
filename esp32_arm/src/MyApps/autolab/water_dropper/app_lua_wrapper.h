@@ -6,7 +6,7 @@
 
 class WaterDropper_LuaWrapper: public LuaWrapperBase {
 	public:
-		WaterDropper_LuaWrapper(){};
+		WaterDropper_LuaWrapper(): LuaWrapperBase(){};
 		// String Lua_dostring(const String *script);
 		// String Lua_dofile(const String *filename);
 		// void Lua_register(const String name, const lua_CFunction function);

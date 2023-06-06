@@ -47,10 +47,14 @@ String LuaWrapperBase::Lua_dostring(const String *script) {
 void LuaWrapperBase::Begin(const char* filename){
 	if (_is_running){
 		// abord currenttly running
-
 	}
 	this->_InitLua();
-	memcpy(_filename, filename,20);
+	__lua_filename.CopyFrom(filename);
+	fs::File xx = SPIFFS.open(__lua_filename.GetChars(), FILE_READ);
+	__lua_file = &xx;
+	// __lua_file = new(SPIFFS.open(__lua_filename.GetChars(), FILE_READ));
+
+	// memcpy(_filename, filename,20);
 	// fs::File file = SPIFFS.open("/lua_script.txt", FILE_READ);
 	// if (file) {
 	// 	_is_running = true;
@@ -60,15 +64,15 @@ void LuaWrapperBase::Begin(const char* filename){
 }
 
 void LuaWrapperBase::SpinOnce(){
-	// if (file.available()) {
-	// 	String line = file.readStringUntil('\n');
-	// 	Logger::Info(line.c_str());
-	// 	String result = lua.Lua_dostring(&line);
-	// 	Serial.println(result);
-	// }else{
-	// 	file.close();
-	// 	Logger::Info("LuaWrapperBase::SpinOnce()  Run lua file ending report");
-	// }
+	if (__lua_file->available()) {
+		String line = __lua_file->readStringUntil('\n');
+		Logger::Info(line.c_str());
+		String result = Lua_dostring(&line);
+		Serial.println(result);
+	}else{
+		__lua_file->close();
+		Logger::Info("LuaWrapperBase::SpinOnce()  Run lua file ending report");
+	}
 
 }
 

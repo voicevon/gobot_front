@@ -29,7 +29,7 @@
 //   }
 // }
 
-// AppLuaWrapper::AppLuaWrapper() {
+// SerialPortSniffer_LuaWrapper::SerialPortSniffer_LuaWrapper() {
 //   _state = luaL_newstate();
 //   lua_register(_state, "pinMode", lua_wrapper_pinMode);
 //   lua_register(_state, "digitalWrite", lua_wrapper_digitalWrite);
@@ -38,7 +38,7 @@
 //   lua_register(_state, "millis", lua_wrapper_millis);
 // }
 
-// String AppLuaWrapper::Lua_dostring(const String *script) {
+// String SerialPortSniffer_LuaWrapper::Lua_dostring(const String *script) {
 //   String scriptWithConstants = addConstants() + *script;
 //   String result;
 //   if (luaL_dostring(_state, scriptWithConstants.c_str())) {
@@ -48,7 +48,7 @@
 //   return result;
   
 // }
-// String AppLuaWrapper::Lua_dofile(const String *filename) {
+// String SerialPortSniffer_LuaWrapper::Lua_dofile(const String *filename) {
 //   // String scriptWithConstants = addConstants() + *script;
 //   // String result;
 //   // if (luaL_dostring(_state, scriptWithConstants.c_str())) {
@@ -61,11 +61,11 @@
 // // luaL_dofile();
 
 
-// void AppLuaWrapper::Lua_register(const String name, const lua_CFunction function) {
+// void SerialPortSniffer_LuaWrapper::Lua_register(const String name, const lua_CFunction function) {
 //   lua_register(_state, name.c_str(), function);
 // }
 
-String AppLuaWrapper::_addConstants() {
+String SerialPortSniffer_LuaWrapper::_addConstants() {
   String constants = "INPUT = " + String(INPUT) + "\r\n";
   constants += "OUTPUT = " + String(OUTPUT) + "\r\n";
   constants += "LOW = " + String(LOW) + "\r\n";
