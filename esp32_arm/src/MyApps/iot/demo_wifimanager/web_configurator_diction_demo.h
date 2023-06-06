@@ -2,6 +2,7 @@
 
 #include "MyLibs/basic/memory_helper.h"
 #include "MyLibs/utility/web_configuator/base/web_configurator_diction_base.h"
+#include "MyLibs/basic/c_string/fs_filename.h"
 #define WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT 9   //8+1
 
 
@@ -15,5 +16,6 @@ class WebConfiguratorDiction_Demo:public WebConfigurator_DictionBase{
 	
 	private:
 		WebConnfigurator_Parameter* __parameters[WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT];
-		const char* __html_file="/config_demo.html";
+		// const char* __html_file="/config_demo.html";
+		FsFilename __html_filename;
 };

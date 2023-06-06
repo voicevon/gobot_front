@@ -1,4 +1,3 @@
-// #include "web_configurator_diction_demo.h"
 #include "web_configurator_diction.h"
 
 void WebConfiguratorDiction_Tiration::Init(){
@@ -12,9 +11,8 @@ void WebConfiguratorDiction_Tiration::Init(){
     __parameters[4] = &para_demo;
 
     Gpio_of_ConfigButton  = -1;
-    HtmlFilename_of_Configurator = __html_file;
-    
-    // _parameters = __parameters[0];
+    __html_filename.CopyFrom("/config_demo.html");
+    HtmlFilename_of_Configurator = &__html_filename;
     _Init(&__parameters[0], WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT);
     
 }

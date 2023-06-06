@@ -2,13 +2,15 @@
 #include "MyLibs/utility/logger.h"
 #include <ESPAsyncWebServer.h>
 #include "web-configurator_parameter.h"
+#include "MyLibs/basic/c_string/fs_filename.h"
 
 // TODO:  base calss is Itemable.
 class WebConfigurator_DictionBase{
 	public:
         WebConnfigurator_Parameter* FindItem(const char* item_name);
-        const char* HtmlFilename_of_Configurator;
+        FsFilename* HtmlFilename_of_Configurator;
         int8_t Gpio_of_ConfigButton;
+
 		WebConnfigurator_Parameter para_wifi_ssid; 
 		WebConnfigurator_Parameter para_wifi_pass; 	
         WebConnfigurator_Parameter para_admin_uid; 
@@ -18,6 +20,7 @@ class WebConfigurator_DictionBase{
 		WebConnfigurator_Parameter para_mqtt_uid;  
 		WebConnfigurator_Parameter para_mqtt_password;  
 		WebConnfigurator_Parameter para_device_sid;  
+		WebConnfigurator_Parameter para_lua_main;  
 
 
     protected:
@@ -29,5 +32,4 @@ class WebConfigurator_DictionBase{
         WebConnfigurator_Parameter** __parameters;  // ** ？
         int __parameters_count;
         int __parameter_appending_index;
-        // void __AppendParameter(WebConnfigurator_Parameter* new_parameter);
 };

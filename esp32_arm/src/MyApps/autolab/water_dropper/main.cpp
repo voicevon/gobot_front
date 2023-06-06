@@ -13,20 +13,30 @@
 
 
 WaterDropper_Board board;
+
 WaterDropper_WebConfiguratorDiction diction;
-RemoteVar_Chars remote_lua_file;
 WaterDropper_App app;
-// GcodeQueue gcode_queue;
+GcodeQueue gcode_queue;
 CommandQueue command_queue;
 
+RemoteVar_Chars remote_lua_file;
+#define PIN_ENCODER_A 23
+#define PIN_ENCODER_B 24
+
+Encoder encoder = Encoder(PIN_ENCODER_A, PIN_ENCODER_B, 20 );
+void doA(){encoder.handleA();}
+void doB(){encoder.handleB();}
+void init_encoder(){
+	encoder.quadrature = Quadrature::ON;
+	encoder.pullup = Pullup::USE_INTERN;
+	encoder.init();
+	encoder.enableInterrupts(doA, doB);
+}
+
 void setup(){
-	board.Init("I_AM_SERIAL_PORT_SNIFFER");
-
-	// String line = String("print('Hello world!  Arduino -->Lua --> Arduino')");
-	// String script = String("print('Hello world!  Arduino -->Lua --> Arduino')");
-
-
-	// return;
+	board.Init("I_AM_WATER_DROPPER");
+	init_encoder();
+	board.LinkEncoder(&encoder);
 
 	diction.Init();
 	WebConfigurator::Begin(&diction);
@@ -39,6 +49,9 @@ void setup(){
 
 void loop(){
 	// lua.SpinOnce();	
+	encoder.update();
+	float aa = encoder.getAngle();
+	Logger::Print("encoder.angle", aa);
 }
 
 #endif

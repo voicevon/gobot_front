@@ -8,8 +8,6 @@
 
 class  C_String_Base{
     public:
-
-        
         int CopyFrom(const char* bytes);
         int CopyFrom(const char* bytes, int length);
         void PrintFlat(const char* title);
@@ -21,8 +19,8 @@ class  C_String_Base{
         // const char &GetText = *__chars;  // For Arduino::chars[n]
         // const char* GetChars = __chars;   // For std::cxx11::string
     protected:
-        C_String_Base(int buffer_size);
-        C_String_Base(int buffer_size, const char* bytes);
+        // C_String_Base(int buffer_size);
+        C_String_Base(int buffer_size, char* buffer);
 
     private:
         // char __chars[REPRAP_GCODE_MAX_SIZE];

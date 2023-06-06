@@ -7,7 +7,7 @@
 
 class CommandText: public C_String_Base{
     public:
-        CommandText(): C_String_Base(50){};
+        CommandText(): C_String_Base(50, __all_chars){};
         // const char* GetChars(){return __all_chars;};
 
     private:

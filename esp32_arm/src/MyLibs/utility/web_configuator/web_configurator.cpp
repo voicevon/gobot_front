@@ -224,8 +224,8 @@ void WebConfigurator::__InitApWebServer() {
 	// Web Server Root URL
 	ap_webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 		Logger::Info("webserver. on  /");
-		Logger::Print("parameter_name", diction->HtmlFilename_of_Configurator);
-		request->send(SPIFFS, diction->HtmlFilename_of_Configurator, "text/html");
+		Logger::Print("parameter_name", diction->HtmlFilename_of_Configurator->GetChars());
+		request->send(SPIFFS, diction->HtmlFilename_of_Configurator->GetChars(), "text/html");
 	});
 	
 	ap_webserver.serveStatic("/", SPIFFS, "/");

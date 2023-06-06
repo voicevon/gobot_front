@@ -17,36 +17,17 @@ void WebConfigurator_DictionBase::_Init(WebConnfigurator_Parameter** first_para_
     _AppendParameter(&para_mqtt_uid, "mqtt_uid");
     _AppendParameter(&para_mqtt_password, "mqtt_password");
     _AppendParameter(&para_device_sid, "device_sid");
-
-
-    // _parameters[0] = &para_wifi_ssid;
-    // _parameters[1] = &para_wifi_pass;
-    // _parameters[2] = &para_admin_uid;
-    // _parameters[3] = &para_admin_password;
-    // _parameters[4] = &para_mqtt_broker;
-    // _parameters[5] = &para_mqtt_port;
-    // _parameters[6] = &para_mqtt_uid;
-    // _parameters[7] = &para_mqtt_password;
-
+    _AppendParameter(&para_lua_main, "lua_main");
 }
 
 void WebConfigurator_DictionBase::_AppendParameter(WebConnfigurator_Parameter* the_parameter, const char* para_name){
     the_parameter->SetName(para_name);
-    // __AppendParameter(the_parameter);
     __parameter_appending_index++;
     if (__parameter_appending_index > __parameters_count){
         Logger::Error("WebConfigurator_DictionBase::_AppendParameter()  over size");
         Logger::Halt("");
     }
 }
-
-// void WebConfigurator_DictionBase::__AppendParameter(WebConnfigurator_Parameter* new_parameter){
-//     __parameter_appending_index++;
-//     if (__parameter_appending_index > __parameters_count){
-//         Logger::Error("WebConfigurator_DictionBase::_AppendParameter()  over size");
-//         Logger::Halt("");
-//     }
-// }
 
 WebConnfigurator_Parameter* WebConfigurator_DictionBase::FindItem(const char* parameter_name){
     WebConnfigurator_Parameter* para;

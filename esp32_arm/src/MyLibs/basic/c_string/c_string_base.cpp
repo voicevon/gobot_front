@@ -4,14 +4,15 @@
 #include "c_string_base.h"
 
 
-C_String_Base::C_String_Base(int buffer_size){
-    this->__chars[0] = 0x00;
-    __length = buffer_size;
-}
+// C_String_Base::C_String_Base(int buffer_size){
+//     this->__chars[0] = 0x00;
+//     __length = buffer_size;
+// }
 
-C_String_Base::C_String_Base(int buffer_size, const char* command){
+C_String_Base::C_String_Base(int buffer_size, char* buffer){
     __length = buffer_size;
-    this->CopyFrom(command);
+    __chars = buffer;
+    // this->CopyFrom(command);
 }
 
 int C_String_Base::CopyFrom(const char* command){

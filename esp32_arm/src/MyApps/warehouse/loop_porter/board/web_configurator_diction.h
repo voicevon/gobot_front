@@ -2,6 +2,7 @@
 
 #include "MyLibs/basic/memory_helper.h"
 #include "MyLibs/utility/web_configuator/base/web_configurator_diction_base.h"
+#include "MyLibs/basic/c_string/fs_filename.h"
 #define WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT 12   // 8+2
 
 
@@ -17,5 +18,6 @@ class WebConfiguratorDiction_LoogPorter:public WebConfigurator_DictionBase{
 	
 	private:
 		WebConnfigurator_Parameter* __parameters[WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT];
-		const char* __html_file="/serial_port_sniffer.html";
+		FsFilename __html_filename;
+		// const char* __html_file="/serial_port_sniffer.html";
 };

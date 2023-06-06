@@ -1,4 +1,5 @@
 #include "web_configurator_diction_demo.h"
+#include "MyLibs/basic/c_string/fs_filename.h"
 
 void WebConfiguratorDiction_Demo::Init(){
     // any sequence. 
@@ -7,5 +8,5 @@ void WebConfiguratorDiction_Demo::Init(){
     _AppendParameter(&para_demo, "demo");
 
     Gpio_of_ConfigButton  = -1;
-    HtmlFilename_of_Configurator = __html_file;
+    HtmlFilename_of_Configurator = &__html_filename;
 }

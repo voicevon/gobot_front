@@ -1,15 +1,10 @@
 #pragma once
 #include "MyLibs/mqtt/mqtt_subscriber_base.h"
-#include "MyLibs/basic/c_string/c_string_base.h"
+// #include "MyLibs/basic/c_string/c_string_base.h"
+#include "MyLibs/basic/c_string/fs_filename.h"
 #define REMOTE_VAR_CHARS_MAX_BYTES_OF_BUFFER 60
 
-class Filename: public C_String_Base{
-    public:
-        Filename(): C_String_Base(30){};
-        
-    private:
-        char __all_chars[30];
-};
+
 
 
 class RemoteVar_Chars: public MqttSubscriberBase{
@@ -27,5 +22,5 @@ class RemoteVar_Chars: public MqttSubscriberBase{
         uint8_t __leds_count;
         bool __write_to_file = false;
         // char __fs_filename[20];
-        Filename __fs_filename;
+        FsFilename __fs_filename;
 };
