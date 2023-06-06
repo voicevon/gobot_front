@@ -2,7 +2,7 @@
 
 #include "MyLibs/mqtt/mqtt_subscriber_base.h"
 #include "CNC/gcode/gcode_queue.h"
-#include "command_queue/command_queue.h"
+#include "message_queue/message_queue.h"
 
 class AppBase: public MqttSubscriberBase{
     public:

@@ -46,6 +46,8 @@ int C_String_Base::CopyFrom(const char* command, int length){
 }
 
 void C_String_Base::CopyTo(char* destination){
+    #warning __FILE__  "[" __LINE__ "] void C_String_Base::CopyTo(char* destination) is depricated, use CopyTo(char, int)"
+    #pragma __FILE__  "[" __LINE__ "] void C_String_Base::CopyTo(char* destination) is depricated, use CopyTo(char, int)"
     for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
         destination[i] = this->__chars[i];
         if(destination[i] == 0x00){
@@ -54,6 +56,16 @@ void C_String_Base::CopyTo(char* destination){
         }
     }
 }
+void C_String_Base::CopyTo(char* destination, int remove_prefix_bytes_length){
+    for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
+        destination[i] = this->__chars[i + remove_prefix_bytes_length];
+        if(destination[i] == 0x00){
+            //end of string.
+            return;
+        }
+    }
+}
+
 
 void C_String_Base::PrintFlat(const char* title){
     Logger::Info(title);

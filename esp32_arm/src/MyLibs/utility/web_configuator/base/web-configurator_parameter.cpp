@@ -6,8 +6,8 @@ WebConnfigurator_Parameter::WebConnfigurator_Parameter(){
 }
 
 void WebConnfigurator_Parameter::SetName(const char* parameter_name){
-    Logger::Debug("WebConnfigurator_Parameter::SetName");
-    Logger::Print("parameter_name", parameter_name);
+    // Logger::Debug("WebConnfigurator_Parameter::SetName");
+    // Logger::Print("parameter_name", parameter_name);
     for(int i=0; i<20; i++){
         char ch = *(parameter_name + i);
         __parameter_name[i] = ch;

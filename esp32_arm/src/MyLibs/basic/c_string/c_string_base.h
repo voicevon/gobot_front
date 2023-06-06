@@ -15,6 +15,7 @@ class  C_String_Base{
         bool IsEqualTo(const char* chars);
         bool IsPrefix(const char* chars);
         char* GetChars(){return __chars;};
+        void CopyTo(char* destination, int remove_prefix_bytes_length);
 
         // const char &GetText = *__chars;  // For Arduino::chars[n]
         // const char* GetChars = __chars;   // For std::cxx11::string
