@@ -8,7 +8,6 @@ class WaterDropper_LuaWrapper: public LuaWrapperBase {
 	public:
 
 	protected:
-		String _addConstants() override {return "";};
 		void __Go_on_register() override;
 
 	private:

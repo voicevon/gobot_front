@@ -17,7 +17,7 @@ class LuaWrapperBase {
 		void _InitLua();
 		virtual void __Go_on_register();
 		void _Lua_register(const String name, const lua_CFunction function);
-		virtual String _addConstants();
+		// virtual String _addConstants();
 		bool _is_running = false;
 
 	private:

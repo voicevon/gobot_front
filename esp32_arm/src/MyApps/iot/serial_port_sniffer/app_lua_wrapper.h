@@ -10,9 +10,7 @@ class SerialPortSniffer_LuaWrapper: public LuaWrapperBase {
 
 
 	protected:
-		String _addConstants() override;
 
 	private:
-		// lua_State *_state;
 };
 

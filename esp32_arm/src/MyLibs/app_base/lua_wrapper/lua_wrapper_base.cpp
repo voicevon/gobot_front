@@ -40,7 +40,7 @@ extern "C" {
 	}
 	static int lua_wrapper_digitalRead(lua_State *lua) {
 		int a = luaL_checkinteger(lua, 1);
-		lua_pushnumber(digitalRead(a));
+		lua_pushnumber(lua, (lua_Number)digitalRead(a));
 		return 1;
 	}
 
@@ -105,10 +105,4 @@ void LuaWrapperBase::_Lua_register(const String name, const lua_CFunction functi
 	lua_register(_state, name.c_str(), function);
 }
 
-// String LuaWrapperBase::_addConstants() {
-// 	String constants = "INPUT = " + String(INPUT) + "\r\n";
-// 	constants += "OUTPUT = " + String(OUTPUT) + "\r\n";
-// 	constants += "LOW = " + String(LOW) + "\r\n";
-// 	constants += "HIGH = " + String(HIGH) + "\r\n";
-// 	return constants;
-// }
+
