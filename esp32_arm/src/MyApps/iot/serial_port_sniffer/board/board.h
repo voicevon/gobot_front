@@ -3,21 +3,28 @@
 #include "Robot/board/display/mono_led_gpio.h"
 #include <SoftwareSerial.h>
 
-#define PIN_STATE_LED 2
+// #define PIN_STATE_LED 2
 
 
 class SerialPortSniffer_Board: public BoardBase{
     public:
         void Init(const char* app_welcome_statement) override;
-        Mono_Led_GPIO* GetStateLed(){return &__rx_led;};
+        // Mono_Led_GPIO* GetStateLed(){return &__rx_led;};
+
+        void TestLeds();
+        void TestSerialPortMaster();
+        void TestSerialPortSlave();
         
         
     private:
         void __InitHardware();
-        Mono_Led_GPIO __rx_led;
+        Mono_Led_GPIO __led_power;
+        Mono_Led_GPIO __led_data_in;
+        Mono_Led_GPIO __led_data_out;
+        Mono_Led_GPIO __led_rf;
         // SoftwareSerial mast_serial;
-        EspSoftwareSerial::UART master_serial;
-        EspSoftwareSerial::UART slave_serial;
+        EspSoftwareSerial::UART __serial_master;
+        EspSoftwareSerial::UART __serial_slave;
 
 
 };

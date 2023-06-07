@@ -5,6 +5,10 @@
 #define APP_COMMAND_PREFIX_SIZE 4
 
 
+// void AppBase::Init(){
+//     _text_message_queue->_Init("TextMessageQueue", TEXT_MESSAGE_QUEUE_SIZE, __all_text_message);
+// }
+
 void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     //format string ender.
     char* p = (char*)(payload);
@@ -53,8 +57,7 @@ void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic){
     // Logger::Print("AppBase::Link_Mqtt_to_TextMessageQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
 }
 
-void AppBase::__dispach_head_message(){
-
+void AppBase::__dispach_tail_message(){
     TextMessageLine* line = _text_message_queue->GetWithdrawTailElement(false);
     switch (line->GetCategory()){
         case TextMessageLine::Enum_Category::GCODE:
@@ -104,26 +107,31 @@ void AppBase::__deal_feedback(){
 
 void AppBase::SpinOnce(){
     __deal_feedback();
-    __dispach_head_message();
-    // if (__lua_filename.IsEqualTo){
-
-    // }
+    Logger::Print("AppBase::SpinOnce()", 12);
+    if (! _text_message_queue->BufferIsEmpty()){
+        Logger::Print("AppBase::SpinOnce()", 12.5);
+        __dispach_tail_message();
+    }
+    Logger::Print("AppBase::SpinOnce()", 13);
+    if (__is_lua_running_file){
+        __Lua_RunLine_ofFile();
+    }
+    Logger::Print("AppBase::SpinOnce()", 99);
 }
 
 
-void AppBase::Lua_SpinOnce(){
-	// if (! _is_running)
-	// 	return;
-	// if (__lua_file.available()) {
-	// 	String line = __lua_file.readStringUntil('\n');
-	// 	Logger::Info(line.c_str());
-	// 	String result = Lua_dostring(&line);
-	// 	Serial.println(result);
-	// }else{
-	// 	__lua_file.close();
-	// 	_is_running = false;
-	// 	Logger::Info("LuaWrapperBase::SpinOnce()  Run lua file ending report");
-	// }
+void AppBase::__Lua_RunLine_ofFile(){
+    Logger::Debug("AppBase::__Lua_RunLine_ofFile()");
+	if (__lua_file.available()) {
+		String line = __lua_file.readStringUntil('\n');
+		Logger::Info(line.c_str());
+		String result = __lua->Lua_dostring(&line);
+		Serial.println(result);
+	}else{
+		__lua_file.close();
+		__is_lua_running_file = false;   //???
+		Logger::Info("LuaWrapperBase::SpinOnce()  Run lua file ending report");
+	}
 
 }
 void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
@@ -133,6 +141,7 @@ void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
 	Logger::Debug("LuaWrapperBase::Begin()");
 	Logger::Print("filename", filename);
     __lua->Begin();
+    __is_lua_running_file = true;
 }
 
 void AppBase::Link_lua_from_Mqtt(LuaWrapperBase* lua, const char* mqtt_topic){

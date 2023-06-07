@@ -1,7 +1,7 @@
 #include "text_message_queue.h"
 
 TextMessageQueue::TextMessageQueue(){
-    this->_Init("TextMessageQueue", TEXT_MESSAGE_LINE_MAX_CHARS_COUNT, this->__all_commands);
+    this->_Init("TextMessageQueue", TEXT_MESSAGE_QUEUE_SIZE, this->__all_commands);
     // this->_Init("TextMessageQueue", TEXT_MESSAGE_LINE_MAX_CHARS_COUNT, &this->__all_commands[0]);
 }
 

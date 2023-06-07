@@ -6,7 +6,7 @@
 #include "app_lua_wrapper.h"
 #include "MyLibs/mqtt/remote_component/remote_var_chars.h"
 #include "serial_port_sniffer_app.h"
-#include "CNC/gcode/gcode_queue.h"
+// #include "CNC/gcode/gcode_queue.h"
 
 #include "../select_app.h"
 #ifdef I_AM_SERIAL_PORT_SNIFFER
@@ -16,29 +16,25 @@ SerialPortSniffer_Board board;
 WebConfiguratorDiction_SerialPortSniffer diction;
 RemoteVar_Chars remote_lua_file;
 SerialPortSniffer_App app;
-// GcodeQueue gcode_queue;
-TextMessageQueue command_queue;
+SerialPortSniffer_LuaWrapper lua_wrapper;
 
 void setup(){
 	board.Init("I_AM_SERIAL_PORT_SNIFFER");
-
-	// String line = String("print('Hello world!  Arduino -->Lua --> Arduino')");
-	// String script = String("print('Hello world!  Arduino -->Lua --> Arduino')");
-
-
-	// return;
+	// board.TestLeds();
+	// board.TestSerialPortMaster();
+	// board.TestSerialPortSlave();
 
 	diction.Init();
 	WebConfigurator::Begin(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
-	app.Link_Mqtt_to_CommandQueue("aaaaaaa", &command_queue);
-	// remote_lua_file.InitFilename("/temp.lua");
-	// lua.Begin("/temp.lua");
+	app.Link_Mqtt_to_TextMessageQueue("serial_port_sniffer");
+	app.Link_lua_from_File(&lua_wrapper, "/test.lua");
 
 }
 
 void loop(){
 	// lua.SpinOnce();	
+	app.SpinOnce();
 }
 
 #endif
