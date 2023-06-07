@@ -3,7 +3,7 @@
 
 
 
-class CommandText: public C_String_Base{
+class TextMessageLine: public C_String_Base{
     public:
         enum Enum_Category{
             LUA,
@@ -11,8 +11,8 @@ class CommandText: public C_String_Base{
             APP,
         };
 
-        CommandText(): C_String_Base(50, __all_chars){};
-        // CommandText(Enum_Category preset_category): C_String_Base(50, __all_chars){__preset_category = preset_category;};
+        TextMessageLine(): C_String_Base(50, __all_chars){};
+        // TextMessageLine(Enum_Category preset_category): C_String_Base(50, __all_chars){__preset_category = preset_category;};
         Enum_Category GetCategory();
         // const char* GetChars(){return __all_chars;};
 

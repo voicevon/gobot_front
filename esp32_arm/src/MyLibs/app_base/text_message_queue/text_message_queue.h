@@ -6,9 +6,9 @@
 
 
 
-class CommandQueue: public QueueBase<CommandText>{
+class TextMessageQueue: public QueueBase<TextMessageLine>{
     public:
-        CommandQueue();
+        TextMessageQueue();
         int AppendCommand(String command);
 
         // returns:
@@ -17,9 +17,9 @@ class CommandQueue: public QueueBase<CommandText>{
         //     1:  deposited to queue successful.
         int AppendCommand(const char* command);
         int AppendCommand(const char* payload, int length);
-        int AppendCommand(CommandText* gcode_text);
-        void PrintOut_CommandText(const char* title);
+        int AppendCommand(TextMessageLine* gcode_text);
+        void PrintOut_TextMessageLine(const char* title);
     private:
-        CommandText __all_commands[COMMAND_QUEUE_SIZE];
+        TextMessageLine __all_commands[COMMAND_QUEUE_SIZE];
         
 };

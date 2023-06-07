@@ -17,7 +17,7 @@ WebConfiguratorDiction_SerialPortSniffer diction;
 RemoteVar_Chars remote_lua_file;
 SerialPortSniffer_App app;
 // GcodeQueue gcode_queue;
-CommandQueue command_queue;
+TextMessageQueue command_queue;
 
 void setup(){
 	board.Init("I_AM_SERIAL_PORT_SNIFFER");

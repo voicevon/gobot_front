@@ -1,6 +1,6 @@
 #include "text_message_line.h"
 
-CommandText::Enum_Category CommandText::GetCategory(){
+TextMessageLine::Enum_Category TextMessageLine::GetCategory(){
     if (this->IsPrefix("lua:")){
         __category = LUA;
     }else if (this->IsPrefix("gcode:")){

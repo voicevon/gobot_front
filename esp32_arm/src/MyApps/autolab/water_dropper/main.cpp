@@ -18,7 +18,7 @@ WaterDropper_Board board;
 WaterDropper_WebConfiguratorDiction diction;
 WaterDropper_App app;
 GcodeQueue gcode_queue;
-CommandQueue command_queue;
+TextMessageQueue command_queue;
 
 WaterDropper_LuaWrapper lua_wrapper;
 // RemoteVar_Chars remote_lua_file;

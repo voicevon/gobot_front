@@ -8,7 +8,7 @@ SerialPortSniffer_App::SerialPortSniffer_App(){
     Serial.print("\n[Info] SerialPortSniffer_App::SerialPortSniffer_App() is constructed");
 }
 
-void SerialPortSniffer_App::ExecuteCommand(CommandText* gcode_text){
+void SerialPortSniffer_App::ExecuteCommand(TextMessageLine* gcode_text){
     const char command_test_led[8] = {"app:led"};
 
     Logger::Info("SerialPortSniffer_App::ExecuteCommand()");

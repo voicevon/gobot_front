@@ -15,7 +15,7 @@ void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     // const char* IS_APP_COMMAND = APP_COMMAND_PREFIX;
 
     __have_done_feedback = false;
-    // CommandText command_text;
+    // TextMessageLine command_text;
     __app_command.CopyFrom(payload,payload_len);
     if (__app_command.IsEqualTo("app:led")){
         // This is a thread in mqtt-on-received callbaking.    so watchdog will be fired if long time without return.
@@ -32,7 +32,7 @@ void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     this->_command_queue->AppendCommand(payload, payload_len);
 }
 
-void AppBase::Link_Mqtt_to_CommandQueue(const char* mqtt_topic, CommandQueue* command_queue){
+void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic, TextMessageQueue* command_queue){
     // construct feedback mqtt_topic
     int topic_len;
     for(topic_len=0; topic_len<REPRAP_GCODE_MAX_SIZE; topic_len++){
@@ -50,8 +50,8 @@ void AppBase::Link_Mqtt_to_CommandQueue(const char* mqtt_topic, CommandQueue* co
     this->_command_queue = command_queue;  
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
     
-    // Logger::Print("AppBase::Link_Mqtt_to_CommandQueue()   mqtt_topic", mqtt_topic);
-    // Logger::Print("AppBase::Link_Mqtt_to_CommandQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
+    // Logger::Print("AppBase::Link_Mqtt_to_TextMessageQueue()   mqtt_topic", mqtt_topic);
+    // Logger::Print("AppBase::Link_Mqtt_to_TextMessageQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
 }
 
 void AppBase::SpinOnce(){
@@ -65,7 +65,7 @@ void AppBase::SpinOnce(){
         return;
 
     // Logger::Debug("AppBase::SpinOnce()   send_feedback, started");
-    CommandText* command_text = _command_queue->GetDepositHeadElement();
+    TextMessageLine* command_text = _command_queue->GetDepositHeadElement();
 
     // Logger::Print("send_feedback, this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
     // Logger::Print("send_feedback, payload", command_text->GetChars);

@@ -14,7 +14,7 @@
 // std::string payload ="OFF";
 
 SmokeBot* mybot;
-CommandQueue myCommandQueue = CommandQueue();
+TextMessageQueue myTextMessageQueue = TextMessageQueue();
 // int distance = 100;
 // int pause_second = 20;
 // Gcode gcode("");
@@ -65,13 +65,13 @@ void setup() {
 	setup_webcommu();
 	// setup_wifi_mqtt_blocking_mode();
 	mybot = new SmokeBot();
-	myCommandQueue.LinkRobot(mybot);
+	myTextMessageQueue.LinkRobot(mybot);
 	mybot->Init_Gpio();
 	mybot->Init_Linkage();
 	Serial.println("\nSet up is done .....");
 	String strG28 = "G28";
-	bool result = myCommandQueue.AppendGcodeCommand(strG28);
-	myCommandQueue.SpinOnce();
+	bool result = myTextMessageQueue.AppendGcodeCommand(strG28);
+	myTextMessageQueue.SpinOnce();
 	
 	// while (!mqttClient.connected())
 	//     delay(100);
@@ -84,19 +84,19 @@ void loop() {
 	String strG1 = "G1X";
 	WebCommu_SpinOnce();
 	mybot->SpinOnce();
-	myCommandQueue.SpinOnce();
+	myTextMessageQueue.SpinOnce();
 	if (!varOnOff) return;
 
-	if ((mybot->State == RobotBase::IDLE) && (myCommandQueue.BufferIsEmpty())){
+	if ((mybot->State == RobotBase::IDLE) && (myTextMessageQueue.BufferIsEmpty())){
 		int distance = float(var_per_volume) * 90.0;
 		String sg = strG1 + distance;
-		bool result = myCommandQueue.AppendGcodeCommand(sg);
+		bool result = myTextMessageQueue.AppendGcodeCommand(sg);
 
 		sg = strG4 + var_sleep_in_second;
-		result = myCommandQueue.AppendGcodeCommand(sg);
+		result = myTextMessageQueue.AppendGcodeCommand(sg);
 
 		sg = strG1 + 0.1;
-		result = myCommandQueue.AppendGcodeCommand(sg);
+		result = myTextMessageQueue.AppendGcodeCommand(sg);
 		var_done_count++;
 	}
 

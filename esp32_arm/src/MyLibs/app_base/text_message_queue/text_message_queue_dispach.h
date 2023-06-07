@@ -13,5 +13,5 @@ class MessageQueueDispacher{
         LuaWrapperBase* __lua;
         // AppBase* __app;
         RobotBase* __robot;
-        CommandQueue* __text_message_queue;
+        TextMessageQueue* __text_message_queue;
 };
