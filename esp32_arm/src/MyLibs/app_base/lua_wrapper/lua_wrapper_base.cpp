@@ -48,32 +48,29 @@ String LuaWrapperBase::Lua_dostring(const String *script) {
 	return result;
 }
 
-void LuaWrapperBase::Begin(const char* filename){
+String LuaWrapperBase::Lua_dostring(const char *script) {
+
+	// String scriptWithConstants = _addConstants() + *script;
+	// String scriptWithConstants = *script;
+	String result;
+	if (luaL_dostring(_state, script)) {
+		result += "# lua error:\n" + String(lua_tostring(_state, -1));
+		lua_pop(_state, 1);
+	}
+	return result;
+}
+
+// void LuaWrapperBase::Begin(const char* filename){
+void LuaWrapperBase::Begin(){
 	if (_is_running){
 		// abord currenttly running
 	}
 	this->_InitLua();
-	__lua_file = SPIFFS.open(filename, FILE_READ);
-	Logger::Debug("LuaWrapperBase::Begin()");
-	Logger::Print("filename", filename);
+
 	_is_running = true;
 }
 
-void LuaWrapperBase::SpinOnce(){
-	if (! _is_running)
-		return;
-	if (__lua_file.available()) {
-		String line = __lua_file.readStringUntil('\n');
-		Logger::Info(line.c_str());
-		String result = Lua_dostring(&line);
-		Serial.println(result);
-	}else{
-		__lua_file.close();
-		_is_running = false;
-		Logger::Info("LuaWrapperBase::SpinOnce()  Run lua file ending report");
-	}
 
-}
 
 void LuaWrapperBase::Lua_register(const String name, const lua_CFunction function) {
 	lua_register(_state, name.c_str(), function);

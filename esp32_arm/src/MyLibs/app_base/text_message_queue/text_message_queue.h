@@ -2,24 +2,25 @@
 
 #include "MyLibs/basic/queue/queue_base.h"
 #include "text_message_line.h"
-#define COMMAND_QUEUE_SIZE 16
+#define TEXT_MESSAGE_QUEUE_SIZE 16
 
 
 
 class TextMessageQueue: public QueueBase<TextMessageLine>{
     public:
         TextMessageQueue();
-        int AppendCommand(String command);
+        int AppendTextMessageLine(String command);
 
         // returns:
         //    -1:  queue is full
         //    -2:  command is over-size.
         //     1:  deposited to queue successful.
-        int AppendCommand(const char* command);
-        int AppendCommand(const char* payload, int length);
-        int AppendCommand(TextMessageLine* gcode_text);
+        int AppendTextMessageLine(const char* command);
+        int AppendTextMessageLine(const char* payload, int length);
+        int AppendTextMessageLine(TextMessageLine* gcode_text);
         void PrintOut_TextMessageLine(const char* title);
+        
     private:
-        TextMessageLine __all_commands[COMMAND_QUEUE_SIZE];
+        TextMessageLine __all_commands[TEXT_MESSAGE_QUEUE_SIZE];
         
 };

@@ -16,8 +16,8 @@
 WaterDropper_Board board;
 WaterDropper_WebConfiguratorDiction diction;
 WaterDropper_App app;
-GcodeQueue gcode_queue;
-TextMessageQueue text_message_queue;
+// GcodeQueue gcode_queue;
+// TextMessageQueue text_message_queue;
 
 WaterDropper_LuaWrapper lua_wrapper;
 // RemoteVar_Chars remote_lua_file;
@@ -42,17 +42,19 @@ void setup(){
 
 	diction.Init(board.Get_ConfigButton());
 	WebConfigurator::Begin(&diction);
-	// setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
-	// app.Link_Mqtt_to_CommandQueue("aaaaaaa", &text_message_queue);
-	lua_wrapper.Begin("/test.lua");
+	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
+	app.Link_Mqtt_to_TextMessageQueue("water_dropper");
+	app.Link_lua_from_File(&lua_wrapper, "test.lua");
+	
 
 }
 
 void loop(){
-	lua_wrapper.SpinOnce();	
+	// lua_wrapper.SpinOnce();	
 	// encoder.update();
 	// float aa = encoder.getAngle();
 	// Logger::Print("encoder.angle", aa);
+	app.SpinOnce();
 }
 
 #endif

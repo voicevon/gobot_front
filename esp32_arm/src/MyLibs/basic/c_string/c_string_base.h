@@ -1,6 +1,6 @@
 #pragma once
 
-#define  REPRAP_GCODE_MAX_SIZE  38
+// #define  REPRAP_GCODE_MAX_SIZE  38
 
 #define C_STRING_OK  1
 #define C_STRING_ERR_OVER_SIZE -2
@@ -15,18 +15,19 @@ class  C_String_Base{
         bool IsEqualTo(const char* chars);
         bool IsPrefix(const char* chars);
         char* GetChars(){return __chars;};
-        void CopyTo(char* destination, int remove_prefix_bytes_length);
+        
 
         // const char &GetText = *__chars;  // For Arduino::chars[n]
         // const char* GetChars = __chars;   // For std::cxx11::string
     protected:
         // C_String_Base(int buffer_size);
         C_String_Base(int buffer_size, char* buffer);
+        void _CopyTo(char* destination, int remove_prefix_bytes_length);
 
     private:
         // char __chars[REPRAP_GCODE_MAX_SIZE];
         char* __chars;
-        int __length;  //TODO:  rename to __buffer_size
+        int __buffer_size;
 
 };
 

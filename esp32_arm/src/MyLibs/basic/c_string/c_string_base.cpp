@@ -6,17 +6,17 @@
 
 // C_String_Base::C_String_Base(int buffer_size){
 //     this->__chars[0] = 0x00;
-//     __length = buffer_size;
+//     __buffer_size = buffer_size;
 // }
 
 C_String_Base::C_String_Base(int buffer_size, char* buffer){
-    __length = buffer_size;
+    __buffer_size = buffer_size;
     __chars = buffer;
     // this->CopyFrom(command);
 }
 
 int C_String_Base::CopyFrom(const char* command){
-    for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
+    for(int i=0; i<__buffer_size; i++){
         __chars[i] = command[i];
         // Logger::Print("char", __chars[i]);
         if(command[i] == 0x00){
@@ -28,7 +28,7 @@ int C_String_Base::CopyFrom(const char* command){
 }
 
 int C_String_Base::CopyFrom(const char* command, int length){
-    if (length >= REPRAP_GCODE_MAX_SIZE){
+    if (length >= __buffer_size){
         Logger::Error("C_String_Base::ReConstruct()  oversize ");
         return C_STRING_ERR_OVER_SIZE;
     }
@@ -48,7 +48,7 @@ int C_String_Base::CopyFrom(const char* command, int length){
 void C_String_Base::CopyTo(char* destination){
     #warning __FILE__  "[" __LINE__ "] void C_String_Base::CopyTo(char* destination) is depricated, use CopyTo(char, int)"
     #pragma __FILE__  "[" __LINE__ "] void C_String_Base::CopyTo(char* destination) is depricated, use CopyTo(char, int)"
-    for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
+    for(int i=0; i<__buffer_size; i++){
         destination[i] = this->__chars[i];
         if(destination[i] == 0x00){
             //end of string.
@@ -56,8 +56,8 @@ void C_String_Base::CopyTo(char* destination){
         }
     }
 }
-void C_String_Base::CopyTo(char* destination, int remove_prefix_bytes_length){
-    for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
+void C_String_Base::_CopyTo(char* destination, int remove_prefix_bytes_length){
+    for(int i=0; i<__buffer_size; i++){
         destination[i] = this->__chars[i + remove_prefix_bytes_length];
         if(destination[i] == 0x00){
             //end of string.
@@ -67,11 +67,13 @@ void C_String_Base::CopyTo(char* destination, int remove_prefix_bytes_length){
 }
 
 
+
+
 void C_String_Base::PrintFlat(const char* title){
     Logger::Info(title);
-    // Logger::Print("chars len",this->__length );
+    // Logger::Print("chars len",this->__buffer_size );
     
-    for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
+    for(int i=0; i<__buffer_size; i++){
         if (this->__chars[i] == 0x00) {
             Serial.print(FORE_YELLOW);
             Serial.print("<<<\n");
@@ -83,7 +85,7 @@ void C_String_Base::PrintFlat(const char* title){
 
 
 bool C_String_Base::IsEqualTo(const char* chars){
-    for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
+    for(int i=0; i<__buffer_size; i++){
         if (this->__chars[i] != chars[i]){
             return false;
         }
@@ -95,7 +97,7 @@ bool C_String_Base::IsEqualTo(const char* chars){
 }
 
 bool C_String_Base::IsPrefix(const char* chars){
-    for(int i=0; i<REPRAP_GCODE_MAX_SIZE; i++){
+    for(int i=0; i<__buffer_size; i++){
         Logger::Print("chars[i]---", chars[i]);
         Logger::Print("this->__chars[i]---", this->__chars[i]);
         if (this->__chars[i] != chars[i]){

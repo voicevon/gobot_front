@@ -29,11 +29,11 @@ void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
         return;
     }
     // copy to local _text_message_queue
-    this->_text_message_queue->AppendCommand(payload, payload_len);
+    this->_text_message_queue->AppendTextMessageLine(payload, payload_len);
 }
 
-void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic, TextMessageQueue* text_message_queue){
-    // construct feedback mqtt_topic
+// void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic, TextMessageQueue* text_message_queue){
+void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic){
     int topic_len;
     for(topic_len=0; topic_len<REPRAP_GCODE_MAX_SIZE; topic_len++){
         // Logger::Print("mqtt_topic[topic_len]", mqtt_topic[topic_len]);
@@ -47,14 +47,41 @@ void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic, TextMessageQ
     __mqtt_topic_feedback[topic_len+2] = 'b';
     __mqtt_topic_feedback[topic_len+3] = 0x00;   //ender
 
-    this->_text_message_queue = text_message_queue;  
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
     
     // Logger::Print("AppBase::Link_Mqtt_to_TextMessageQueue()   mqtt_topic", mqtt_topic);
     // Logger::Print("AppBase::Link_Mqtt_to_TextMessageQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
 }
 
-void AppBase::SpinOnce(){
+void AppBase::__dispach_head_message(){
+
+    TextMessageLine* line = _text_message_queue->GetWithdrawTailElement(false);
+    switch (line->GetCategory()){
+        case TextMessageLine::Enum_Category::GCODE:
+            if (__robot == nullptr){
+                Logger::Error("Try to feed gcode to robot,  but robot is nullptr");
+            }else{
+                if (__robot->GetGcodeQueue()->GetFreeBuffersCount() >3 ){
+                    //TODO:  from text_message_queue to gcode_queue.
+                }
+            }
+            break;
+        case TextMessageLine::Enum_Category::LUA:
+            if (__lua == nullptr){
+                Logger::Error("Try to feed gcode to LUA,  but LUA is nullptr");
+            }else{
+                line->RemovePrefix();
+                Logger::Print("get lua text", line->GetChars());
+                __lua->Lua_dostring(line->GetChars());
+                _text_message_queue->WithdrawTailElement();
+            }
+        default:
+            break;
+    }
+
+}
+
+void AppBase::__deal_feedback(){
     if (__have_done_feedback)
         return;
     if (__app_command.IsPrefix("app:")){
@@ -75,5 +102,42 @@ void AppBase::SpinOnce(){
     // Logger::Print("send_feedback, finished.", 99);
 }
 
+void AppBase::SpinOnce(){
+    __deal_feedback();
+    __dispach_head_message();
+    // if (__lua_filename.IsEqualTo){
+
+    // }
+}
+
+
+void AppBase::Lua_SpinOnce(){
+	// if (! _is_running)
+	// 	return;
+	// if (__lua_file.available()) {
+	// 	String line = __lua_file.readStringUntil('\n');
+	// 	Logger::Info(line.c_str());
+	// 	String result = Lua_dostring(&line);
+	// 	Serial.println(result);
+	// }else{
+	// 	__lua_file.close();
+	// 	_is_running = false;
+	// 	Logger::Info("LuaWrapperBase::SpinOnce()  Run lua file ending report");
+	// }
+
+}
+void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
+    __lua_filename.CopyFrom(filename);
+    __lua = lua;
+    __lua_file = SPIFFS.open(filename, FILE_READ);
+	Logger::Debug("LuaWrapperBase::Begin()");
+	Logger::Print("filename", filename);
+    __lua->Begin();
+}
+
+void AppBase::Link_lua_from_Mqtt(LuaWrapperBase* lua, const char* mqtt_topic){
+    __lua = lua;
+    this->Link_Mqtt_to_TextMessageQueue(mqtt_topic);
+}
 
 

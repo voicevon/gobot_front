@@ -1,5 +1,10 @@
 #include "text_message_line.h"
 
+
+void TextMessageLine::RemovePrefix(){
+    this->_CopyTo(__all_chars,4);
+}
+
 TextMessageLine::Enum_Category TextMessageLine::GetCategory(){
     if (this->IsPrefix("lua:")){
         __category = LUA;

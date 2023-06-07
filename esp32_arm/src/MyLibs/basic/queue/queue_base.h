@@ -172,3 +172,15 @@ int QueueBase<T>::__get_previous_index(int current_index){
         next_index = this->__queue_size - 1;
     return next_index;
 }
+
+template <class T>
+T* QueueBase<T>::GetWithdrawTailElement(bool takeout_from_queue){
+    T* tail_message = NULL;
+    if (this->__deposit_push_head != this->__withdraw_pop_tail){
+        tail_message = this->__all_elements + this->__withdraw_pop_tail;
+        if (takeout_from_queue){
+            this->__withdraw_pop_tail = this->__get_next_index(this->__withdraw_pop_tail);
+        }
+    }
+    return tail_message;
+}

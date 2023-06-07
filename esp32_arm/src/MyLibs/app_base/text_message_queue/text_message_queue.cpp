@@ -1,18 +1,18 @@
 #include "text_message_queue.h"
 
 TextMessageQueue::TextMessageQueue(){
-    this->_Init("TextMessageQueue", COMMAND_QUEUE_SIZE, this->__all_commands);
-    // this->_Init("TextMessageQueue", COMMAND_QUEUE_SIZE, &this->__all_commands[0]);
+    this->_Init("TextMessageQueue", TEXT_MESSAGE_LINE_MAX_CHARS_COUNT, this->__all_commands);
+    // this->_Init("TextMessageQueue", TEXT_MESSAGE_LINE_MAX_CHARS_COUNT, &this->__all_commands[0]);
 }
 
-int TextMessageQueue::AppendCommand(String command){
+int TextMessageQueue::AppendTextMessageLine(String command){
     TextMessageLine* command_text =  this->GetRoom_ForDeposit();
     command_text->CopyFrom(command.c_str());
     this->Deposit();
     return 1;
 };
 
-int TextMessageQueue::AppendCommand(const char* command){
+int TextMessageQueue::AppendTextMessageLine(const char* command){
     // Logger::Debug("TextMessageQueue::AppendGcodeCommand(const char* command)");
     // this->PrintOut("caller is:  TextMessageQueue::AppendGcodeCommand(const char* command)");
 
@@ -44,14 +44,14 @@ int TextMessageQueue::AppendCommand(const char* command){
 }
 
 
-int TextMessageQueue::AppendCommand(const char* payload, int length){
+int TextMessageQueue::AppendTextMessageLine(const char* payload, int length){
     // return this->AppendMessage(payload, length);
     if (this->GetFreeBuffersCount() == 0){
         Logger::Error("TextMessageQueue::AppendGcodeCommand() queue is full");
         return -1;
     }
-    if (length > REPRAP_GCODE_MAX_SIZE){
-        Logger::Error("TextMessageQueue::AppendGcodeCommand() payload is over-size");
+    if (length > TEXT_MESSAGE_LINE_MAX_CHARS_COUNT){
+        Logger::Error("TextMessageQueue::AppendTextMessageLine() payload is over-size");
         return -2;
     }
     TextMessageLine* command_text = this->GetRoom_ForDeposit();
@@ -63,7 +63,7 @@ int TextMessageQueue::AppendCommand(const char* payload, int length){
     }
 };
 
-int TextMessageQueue::AppendCommand(TextMessageLine* command_text){
+int TextMessageQueue::AppendTextMessageLine(TextMessageLine* command_text){
     // return this->AppendMessage(payload, length);
     if (this->GetFreeBuffersCount() == 0){
         Logger::Error("TextMessageQueue::AppendGcodeCommand() queue is full");

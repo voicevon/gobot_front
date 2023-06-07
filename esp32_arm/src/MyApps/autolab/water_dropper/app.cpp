@@ -8,7 +8,7 @@ WaterDropper_App::WaterDropper_App(){
     Serial.print("\n[Info] WaterDropper_App::WaterDropper_App() is constructed");
 }
 
-void WaterDropper_App::ExecuteAppCommand(TextMessageLine* gcode_text){
+void WaterDropper_App::ExecuteAppCommand(TextMessageLine* app_command){
     const char command_test_led[8] = {"app:led"};
 
     Logger::Info("WaterDropper_App::ExecuteAppCommand()");
