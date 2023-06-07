@@ -1,23 +1,35 @@
 @startuml
 
 frame app{
-card app_run
+    card app_run
 }
 
 frame robot{
-queue gcode_queue
+    queue gcode_queue
+    frame cnc{
+        frame planner{
+        }
+        gcode_queue --> planner
+        
+        frame mover{
+            collections actuators
+        }
+    }
 }
 
 frame text_message_dispatch{
 queue text_message_queue
 
 }
+
 frame lua_wrapper{
 card lua_dostring
 }
+app <-- lua_wrapper
+robot <-- lua_wrapper
+app_run <--- text_message_dispatch 
 
-app_run <-- text_message_dispatch 
-gcode_queue <-- text_message_dispatch
+gcode_queue <--- text_message_dispatch
 lua_dostring <-- text_message_dispatch
 
 frame mqtt{
