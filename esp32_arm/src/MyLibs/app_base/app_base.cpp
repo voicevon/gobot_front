@@ -5,9 +5,7 @@
 #define APP_COMMAND_PREFIX_SIZE 4
 
 
-// void AppBase::Init(){
-//     _text_message_queue->_Init("TextMessageQueue", TEXT_MESSAGE_QUEUE_SIZE, __all_text_message);
-// }
+
 
 void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     //format string ender.
@@ -27,13 +25,13 @@ void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
         return;
     }
     __app_command.CopyFrom("none");
-    int free_buffer_count = _text_message_queue->GetFreeBuffersCount();
+    int free_buffer_count = _text_message_queue.GetFreeBuffersCount();
     if (free_buffer_count <=1 ){
         Logger::Error("AppBase::onGot_MqttMessage()  buffer is full");
         return;
     }
     // copy to local _text_message_queue
-    this->_text_message_queue->AppendTextMessageLine(payload, payload_len);
+    this->_text_message_queue.AppendTextMessageLine(payload, payload_len);
 }
 
 // void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic, TextMessageQueue* text_message_queue){
@@ -58,7 +56,7 @@ void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic){
 }
 
 void AppBase::__dispach_tail_message(){
-    TextMessageLine* line = _text_message_queue->GetWithdrawTailElement(false);
+    TextMessageLine* line = _text_message_queue.GetWithdrawTailElement(false);
     switch (line->GetCategory()){
         case TextMessageLine::Enum_Category::GCODE:
             if (__robot == nullptr){
@@ -76,7 +74,7 @@ void AppBase::__dispach_tail_message(){
                 line->RemovePrefix();
                 Logger::Print("get lua text", line->GetChars());
                 __lua->Lua_dostring(line->GetChars());
-                _text_message_queue->WithdrawTailElement();
+                _text_message_queue.WithdrawTailElement();
             }
         default:
             break;
@@ -91,11 +89,11 @@ void AppBase::__deal_feedback(){
         g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, __app_command.GetChars());
         this->ExecuteAppCommand(&__app_command);
     }
-    if (_text_message_queue->GetFreeBuffersCount() == 0)
+    if (_text_message_queue.GetFreeBuffersCount() == 0)
         return;
 
     // Logger::Debug("AppBase::SpinOnce()   send_feedback, started");
-    TextMessageLine* command_text = _text_message_queue->GetDepositHeadElement();
+    TextMessageLine* command_text = _text_message_queue.GetDepositHeadElement();
 
     // Logger::Print("send_feedback, this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
     // Logger::Print("send_feedback, payload", command_text->GetChars);
@@ -107,16 +105,12 @@ void AppBase::__deal_feedback(){
 
 void AppBase::SpinOnce(){
     __deal_feedback();
-    Logger::Print("AppBase::SpinOnce()", 12);
-    if (! _text_message_queue->BufferIsEmpty()){
-        Logger::Print("AppBase::SpinOnce()", 12.5);
+    if (! _text_message_queue.BufferIsEmpty()){
         __dispach_tail_message();
     }
-    Logger::Print("AppBase::SpinOnce()", 13);
     if (__is_lua_running_file){
         __Lua_RunLine_ofFile();
     }
-    Logger::Print("AppBase::SpinOnce()", 99);
 }
 
 

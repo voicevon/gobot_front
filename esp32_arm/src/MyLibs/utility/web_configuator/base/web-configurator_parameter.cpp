@@ -71,7 +71,7 @@ bool WebConnfigurator_Parameter::IsMyName(const char * the_name){
 const char* WebConnfigurator_Parameter::readFile(){
     // Logger::Debug("WebConnfigurator_Parameter::readFile()");
     const char * path = this->__GetSpiffsFilename();
-	// Serial.printf("Reading file: %s\r\n", path);
+	// Serial.printf("WebConnfigurator_Parameter::readFile() : %s\r\n", path);
 
 	File file = __fs->open(path);
 	if(!file || file.isDirectory()){
@@ -86,6 +86,8 @@ const char* WebConnfigurator_Parameter::readFile(){
 		break;     
 	}
     fileContent.toCharArray(__output_buffer, sizeof(fileContent));
+    // Logger::Debug("WebConnfigurator_Parameter::readFile()");
+    // Logger::Print(path, fileContent);
 	return __output_buffer;
 }
 

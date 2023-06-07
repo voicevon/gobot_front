@@ -23,8 +23,8 @@ void SerialPortSniffer_Board::__InitHardware(){
     __led_data_out.Init(2, PIN_LED_DATA_OUT, LOW);
     __led_rf.Init(3,PIN_LED_RF, LOW);
 
-    __serial_master.begin(9600, SWSERIAL_8N1, PIN_SOFT_SERIAL_MASTER_RX, PIN_SOFT_SERIAL_MASTER_TX, false);
-    __serial_slave.begin(115200, SWSERIAL_8N1, PIN_SOFT_SERIAL_SLAVE_RX, PIN_SOFT_SERIAL_SLAVE_TX, false);
+    __serial_master.begin(57600, SWSERIAL_8N1, PIN_SOFT_SERIAL_MASTER_RX, PIN_SOFT_SERIAL_MASTER_TX, false);
+    __serial_slave.begin(57600, SWSERIAL_8N1, PIN_SOFT_SERIAL_SLAVE_RX, PIN_SOFT_SERIAL_SLAVE_TX, false);
 
 }
 

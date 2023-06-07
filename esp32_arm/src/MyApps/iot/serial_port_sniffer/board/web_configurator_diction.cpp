@@ -6,11 +6,11 @@ void WebConfiguratorDiction_SerialPortSniffer::Init(){
     __html_filename.CopyFrom("/serial_port_sniffer.html");
     HtmlFilename_of_Configurator = &__html_filename;
     // any sequence. 
-    _AppendParameter(&para_device_id,"device_id");
+    // _AppendParameter(&para_device_id,"device_id");
     _AppendParameter(&para_baud_rate, "baud_rate");
     _AppendParameter(&para_bit_length, "bit_length");
     _AppendParameter(&para_verification, "verification");
-    _AppendParameter(&para_lua_script, "lua");
+    // _AppendParameter(&para_lua_script, "lua");
 
     
 }

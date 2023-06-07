@@ -26,10 +26,9 @@ class AppBase: public MqttSubscriberBase{
 
 
     protected:
-        TextMessageQueue* _text_message_queue;
-        // TextMessageLine __all_text_message[TEXT_MESSAGE_QUEUE_SIZE];
 
     private:
+        TextMessageQueue _text_message_queue;
         void __Lua_RunLine_ofFile(); 
         void __deal_feedback();
         void __dispach_tail_message();

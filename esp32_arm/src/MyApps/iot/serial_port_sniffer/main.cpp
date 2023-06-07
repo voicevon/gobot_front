@@ -25,15 +25,16 @@ void setup(){
 	// board.TestSerialPortSlave();
 
 	diction.Init();
-	WebConfigurator::Begin(&diction);
+	WebConfigurator::Begin(&diction, true);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
+
 	app.Link_Mqtt_to_TextMessageQueue("serial_port_sniffer");
 	app.Link_lua_from_File(&lua_wrapper, "/test.lua");
+	Logger::Info("setup() is done()");
 
 }
 
 void loop(){
-	// lua.SpinOnce();	
 	app.SpinOnce();
 }
 

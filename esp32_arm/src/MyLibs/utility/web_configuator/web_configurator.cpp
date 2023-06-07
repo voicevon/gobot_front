@@ -33,7 +33,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 static WebConfigurator::Config config;                        // configuration
 
 
-AsyncWebServer ap_webserver(80);  // Create AsyncWebServer object on port 80
+AsyncWebServer webserver(80);  // Create AsyncWebServer object on port 80
 static WebConfigurator_DictionBase* diction;
 static WebConnfigurator_Parameter para_of_any_key = WebConnfigurator_Parameter();
 
@@ -54,56 +54,53 @@ const char* WebConfigurator::GetConfig(const char* key){
 	return para_of_any_key.readFile();
 }
 
-void WebConfigurator::Begin(WebConfigurator_DictionBase* web_configurator_diction){
+void WebConfigurator::Begin(WebConfigurator_DictionBase* web_configurator_diction, bool webserver_on_ap_only){
+	Logger::Info("WebConfigurator::Begin()");
 	diction = web_configurator_diction;
-	bool is_workstation_mode = true;
-	if (diction->ConfigButton->IsFired()){
-		is_workstation_mode = false;
-	}
-	Serial.println(diction->para_wifi_ssid.readFile());
-	Serial.println(diction->para_wifi_pass.readFile());
-	Serial.println(diction->para_admin_uid.readFile());
-	Serial.println(diction->para_admin_password.readFile());
+	bool want_config_web_server = false;
+	bool want_ap_mode = false;
 
-	if (is_workstation_mode){
-		if(!__initWiFi()) {
-			is_workstation_mode = false;
+	// Step1:  Config_button
+	if (diction->ConfigButton == nullptr){
+		Logger::Warn("dcition->ConfigButton is not linkded.....");
+	}else if (diction->ConfigButton->IsFired()){
+		want_config_web_server = true;
+		if (webserver_on_ap_only){
+			want_ap_mode = true;
 		}
 	}
-	if (is_workstation_mode){
-		// __StartLuaEditor();
-	}else{
-		__StartApServer();
+	// Step2: Enter Ap mode or not.
+	if (want_ap_mode){
+		__EnterWifiApMode();
+	}else if(!__connect_to_a_router()){
+		__EnterWifiApMode();
+		want_config_web_server = true;
+	}
+	// Step3:  Start webserver or not
+	if (want_config_web_server){
+		__InitWebServer();
+		webserver.begin();
 		while (true){
-			// Watchdog?
 		}
 	}
+
 	Logger::Info("WebConfigurator is exiting....");
 }
 
-bool WebConfigurator::__initWiFi() {
+bool WebConfigurator::__connect_to_a_router() {
 	if(diction->para_wifi_ssid.readFile()==0x00 || diction->para_wifi_pass.readFile()==0x00){
 		Serial.println("Undefined SSID or IP address.");
 		return false;
 	}
-
 	WiFi.mode(WIFI_STA);
-    // Logger::Print("connectToWifi()  point", 2);
-    // WiFi.disconnect();       //disconnect from an AP if it was previously connected     
-    // Logger::Print("connectToWifi()  point", 3);
     ESP_ERROR_CHECK(esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_11B |WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N));
 
 	const char* ssid = diction->para_wifi_ssid.readFile();
 	const char* pass= diction->para_wifi_pass.readFile();
-
-	// Logger::Debug("WebConfigurator::initWiFi()" );
-	// Serial.print("-->");
-	// Serial.print(ssid);
-	// Serial.print("<----->" );
-	// Serial.print(pass);
-	// Serial.println("<--");
-
+	Logger::Debug("WebConfigurator::__connect_to_a_router()");
+	Logger::Print(ssid, pass);
 	WiFi.begin(ssid, pass);
+	// WiFi.begin("Perfect", "1234567890");
 	Logger::Print ("Connecting to WiFi...  torlerance time(in millis second) is ", interval);
 
 	unsigned long currentMillis = millis();
@@ -202,28 +199,28 @@ String WebConfigurator::processor_upload_file(const String& var) {
   return String();
 }
 
-void WebConfigurator::__InitApWebServer() {
-	ap_webserver.on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
+void WebConfigurator::__InitWebServer() {
+	webserver.on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
 		String logmessage = "Client:" + request->client()->remoteIP().toString() + + " " + request->url();
 		Serial.println(logmessage);
 		request->send_P(200, "text/html", index_html, processor_upload_file);
 	});
 
 	// run handleUpload function when any file is uploaded
-	ap_webserver.on("/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
+	webserver.on("/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
 			request->send(200);
 		}, handleUpload);
 
 	// Web Server Root URL
-	ap_webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 		Logger::Info("webserver. on  /");
 		Logger::Print("parameter_name", diction->HtmlFilename_of_Configurator->GetChars());
 		request->send(SPIFFS, diction->HtmlFilename_of_Configurator->GetChars(), "text/html");
 	});
 	
-	ap_webserver.serveStatic("/", SPIFFS, "/");
+	webserver.serveStatic("/", SPIFFS, "/");
 	
-	ap_webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
+	webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
 		int params = request->params();
 		// Logger::Debug("WebConfigurator::StartApServer()  HTTP-POST");
 		// Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
@@ -243,27 +240,28 @@ void WebConfigurator::__InitApWebServer() {
 	});
 }
 
-void WebConfigurator::__StartApServer(){
-	// Connect to Wi-Fi network with SSID and password
-	Serial.println("Setting AP (Access Point)");
-	// NULL sets an open Access Point
-	WiFi.softAP("Integral-Setup", NULL);
 
-	IPAddress IP = WiFi.softAPIP();
-	Serial.print("AP IP address: ");
-	Serial.println(IP); 
-	__InitApWebServer();
+void WebConfigurator::__EnterWifiApMode(){
+		Logger::Info("Entering AP(Access Point) mode, ssid name='Integral-Setup'");
+		WiFi.softAP("Integral-Setup", NULL);
+		// IPAddress IP = WiFi.softAPIP();
+		Logger::Print("AP IP address: ", WiFi.softAPIP().toString().c_str());
 
-	ap_webserver.begin();
+// 	// Serial.println(IP); 
 }
+
+// void WebConfigurator::__StartConfigWebServer(){
+// 	// Connect to Wi-Fi network with SSID and password
+
+// }
 
 void WebConfigurator::__StartLuaEditor(){
 	// Web Server Root URL
-	ap_webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 		Logger::Info("webserver. on /   is a lua_scrpt editor ");
 		request->send(SPIFFS, "/lua_editor.html", "text/html");
 	});
-	ap_webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
+	webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
 		int params = request->params();
 		// Logger::Debug("WebConfigurator::StartApServer()  HTTP-POST");
 		// Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
@@ -282,6 +280,6 @@ void WebConfigurator::__StartLuaEditor(){
 		// delay(3000);
 		// ESP.restart();
 	});
-	ap_webserver.begin();
+	webserver.begin();
 
 }

@@ -13,10 +13,12 @@ class WebConfigurator_DictionBase{
 		WebConnfigurator_Parameter para_wifi_pass; 	
         WebConnfigurator_Parameter para_admin_uid; 
 		WebConnfigurator_Parameter para_admin_password;  
+
 		WebConnfigurator_Parameter para_mqtt_broker;  
 		WebConnfigurator_Parameter para_mqtt_port;  
 		WebConnfigurator_Parameter para_mqtt_uid;  
 		WebConnfigurator_Parameter para_mqtt_password;  
+        
 		WebConnfigurator_Parameter para_device_sid;  
 		WebConnfigurator_Parameter para_lua_main;  
 

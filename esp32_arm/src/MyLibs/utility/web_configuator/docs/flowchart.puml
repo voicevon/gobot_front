@@ -1,0 +1,23 @@
+@startuml
+start
+if (config_button) then
+    :want_web_server=true;
+endif
+
+
+if (want_ap_mode) then
+    ::connect_to_ap;
+
+if(connected) then
+    :enter_ap_mode;
+    :want_web_server=true;
+endif
+
+
+if (want_ap_server?) then
+    :start_web_server;
+endif
+
+stop
+
+@enduml

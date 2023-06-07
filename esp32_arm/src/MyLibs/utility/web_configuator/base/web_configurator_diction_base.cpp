@@ -16,6 +16,7 @@ void WebConfigurator_DictionBase::_Init(WebConnfigurator_Parameter** first_para_
     _AppendParameter(&para_mqtt_port, "mqtt_port");
     _AppendParameter(&para_mqtt_uid, "mqtt_uid");
     _AppendParameter(&para_mqtt_password, "mqtt_password");
+    
     _AppendParameter(&para_device_sid, "device_sid");
     _AppendParameter(&para_lua_main, "lua_main");
 }
@@ -28,6 +29,7 @@ void WebConfigurator_DictionBase::_AppendParameter(WebConnfigurator_Parameter* t
         Logger::Error("WebConfigurator_DictionBase::_AppendParameter()  over size");
         Logger::Halt("");
     }
+    // Logger::Print(String(__parameter_appending_index).c_str(), para_name);
 }
 
 WebConnfigurator_Parameter* WebConfigurator_DictionBase::FindItem(const char* parameter_name){
