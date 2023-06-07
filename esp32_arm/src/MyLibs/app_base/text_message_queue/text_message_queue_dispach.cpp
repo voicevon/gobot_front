@@ -1,7 +1,7 @@
-#include "message_queue_dispach.h"
+#include "text_message_queue_dispach.h"
 
 void MessageQueueDispacher::SpinOnce(){
-    CommandText* message =  __message_queue->GetWithdrawTailElement(false);
+    CommandText* message =  __text_message_queue->GetWithdrawTailElement(false);
     if (message->IsPrefix("gcd:")){
         GcodeQueue* gcode_queue = __robot->GetGcodeQueue();
         if (gcode_queue->GetFreeBuffersCount() > 3){

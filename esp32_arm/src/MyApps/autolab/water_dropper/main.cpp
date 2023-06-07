@@ -1,10 +1,11 @@
 #include "MyLibs/utility/logger.h"
 #include "MyLibs/utility/web_configuator/web_configurator.h"
 #include "MyLibs/mqtt/wifi_mqtt_client.h"
+#include "MyLibs/mqtt/remote_component/remote_var_chars.h"
+
 #include "board/board.h"
 #include "board/web_configurator_diction.h"
 #include "app_lua_wrapper.h"
-#include "MyLibs/mqtt/remote_component/remote_var_chars.h"
 #include "app.h"
 #include "CNC/gcode/gcode_queue.h"
 

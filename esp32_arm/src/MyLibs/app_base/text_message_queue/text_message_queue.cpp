@@ -1,4 +1,4 @@
-#include "message_queue.h"
+#include "text_message_queue.h"
 
 CommandQueue::CommandQueue(){
     this->_Init("CommandQueue", COMMAND_QUEUE_SIZE, this->__all_commands);

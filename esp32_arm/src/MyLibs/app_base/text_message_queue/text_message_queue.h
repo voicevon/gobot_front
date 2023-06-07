@@ -1,18 +1,10 @@
 #pragma once
 
 #include "MyLibs/basic/queue/queue_base.h"
-#include "MyLibs/basic/c_string/c_string_base.h"
-
+#include "text_message_line.h"
 #define COMMAND_QUEUE_SIZE 16
 
-class CommandText: public C_String_Base{
-    public:
-        CommandText(): C_String_Base(50, __all_chars){};
-        // const char* GetChars(){return __all_chars;};
 
-    private:
-        char __all_chars[50];
-};
 
 class CommandQueue: public QueueBase<CommandText>{
     public:
