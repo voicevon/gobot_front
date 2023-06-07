@@ -6,13 +6,11 @@
 
 class SerialPortSniffer_LuaWrapper: public LuaWrapperBase {
 	public:
-		SerialPortSniffer_LuaWrapper():LuaWrapperBase(){};
-		// String Lua_dostring(const String *script);
-		// String Lua_dofile(const String *filename);
-		// void Lua_register(const String name, const lua_CFunction function);
+		void __Go_on_register() override;
+
 
 	protected:
-		// String _addConstants() override;
+		String _addConstants() override;
 
 	private:
 		// lua_State *_state;

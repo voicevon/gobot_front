@@ -6,11 +6,10 @@
 
 class WaterDropper_LuaWrapper: public LuaWrapperBase {
 	public:
-		WaterDropper_LuaWrapper() : LuaWrapperBase(){};
-		// void comiler_vtable_error_even_subclass_has_defination_why() override {};
 
 	protected:
-		// String _addConstants() override {return "";};
+		String _addConstants() override {return "";};
+		void __Go_on_register() override;
 
 	private:
 };
