@@ -8,11 +8,11 @@ WaterDropper_App::WaterDropper_App(){
     Serial.print("\n[Info] WaterDropper_App::WaterDropper_App() is constructed");
 }
 
-void WaterDropper_App::ExecuteCommand(TextMessageLine* gcode_text){
+void WaterDropper_App::ExecuteAppCommand(TextMessageLine* gcode_text){
     const char command_test_led[8] = {"app:led"};
 
-    Logger::Info("WaterDropper_App::ExecuteCommand()");
-    // gcode_text->PrintFlat("WaterDropper_App::ExecuteCommand()");
+    Logger::Info("WaterDropper_App::ExecuteAppCommand()");
+    // gcode_text->PrintFlat("WaterDropper_App::ExecuteAppCommand()");
 
     // if (gcode_text->IsEqualTo(command_test_led)){
     //     for (int i=0; i<200; i++){

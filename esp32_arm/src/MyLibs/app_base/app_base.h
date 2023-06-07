@@ -2,21 +2,19 @@
 
 #include "MyLibs/mqtt/mqtt_subscriber_base.h"
 #include "CNC/gcode/gcode_queue.h"
-// #include "message_queue/message_queue.h"
-// #include "text_message_queue/text_message_queue_dispach.h"
 #include "text_message_queue/text_message_queue_dispach.h"
 
 class AppBase: public MqttSubscriberBase{
     public:
-        void Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic, TextMessageQueue* gcode_queue);
-        virtual void ExecuteCommand(TextMessageLine* gcode_text){}; 
+        void Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic, TextMessageQueue* text_command_queue);
+        virtual void ExecuteAppCommand(TextMessageLine* gcode_text){}; 
 
         void SpinOnce(); 
         void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;
 
 
     protected:
-        TextMessageQueue* _command_queue;
+        TextMessageQueue* _text_message_queue;
         
 
     private:

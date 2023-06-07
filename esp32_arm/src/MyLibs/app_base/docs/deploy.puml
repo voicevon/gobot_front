@@ -1,39 +1,67 @@
 @startuml
 
-frame app{
-    card app_run
+frame lua_engin{
+    card lua_dostring
+
 }
+    collections lua_driver
+    card board
+    lua_dostring --> lua_driver
+    lua_driver --> board
+
 
 frame robot{
-    queue gcode_queue
     frame cnc{
-        frame planner{
+        queue gcode_queue
+        frame arm_solution{
+            card IK
+            card FK
+            card MiddleKinematic
+            IK <-[dashed]- MiddleKinematic
         }
-        gcode_queue --> planner
-        
-        frame mover{
-            collections actuators
+        frame planner{ 
         }
+        queue move_blocks
+
+        planner <-- gcode_queue 
+        planner <-[dashed]- IK
+        planner --> move_blocks
+
+
+    }
+    frame mover{
+        collections actuators
+    }
+    move_blocks --> actuators
+}
+
+
+frame AppBase{
+    frame text_message_dispatch{
+        card dispatcher
+    }
+    queue text_message_queue
+    card feedback
+    card mqtt_client
+
+    text_message_queue <-- mqtt_client
+    feedback --> mqtt_client:  publish feedback
+    text_message_queue -[dashed]>feedback: check free buffer size
+
+    frame file_system{
+        card line_reader
+        card file_reader
+        line_reader <-[dashed]- file_reader
     }
 }
 
-frame text_message_dispatch{
-queue text_message_queue
+dispatcher <-- text_message_queue
+gcode_queue <-- dispatcher 
+lua_dostring <-- dispatcher 
 
-}
+card app_logic_on_lua_script_file
+lua_dostring  <-- line_reader: lua script line
+app_logic_on_lua_script_file <-[#red,dashed]- lua_engin
 
-frame lua_wrapper{
-card lua_dostring
-}
-app <-- lua_wrapper
-robot <-- lua_wrapper
-app_run <--- text_message_dispatch 
-
-gcode_queue <--- text_message_dispatch
-lua_dostring <-- text_message_dispatch
-
-frame mqtt{
-}
-text_message_queue <-- mqtt
 
 @enduml

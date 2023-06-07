@@ -15,7 +15,7 @@ class GobotMain_App: public CncAppBase{
         void Test_HomeAlpha(int loop_count);
         void Test_HomeBeta(int loop_count);
         void Test_PickPlace(int loop_count);
-        // void ExecuteCommand(const char* command) override{}; 
+        // void ExecuteAppCommand(const char* command) override{}; 
     
 
     private:

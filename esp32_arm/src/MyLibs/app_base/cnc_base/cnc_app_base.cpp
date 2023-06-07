@@ -19,7 +19,7 @@ void CncAppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     __app_command.CopyFrom(payload,payload_len);
     if (__app_command.IsEqualTo("app:led")){
         // This is a thread in mqtt-on-received callbaking.    so watchdog will be fired if long time without return.
-        // this->ExecuteCommand(&__app_command);
+        // this->ExecuteAppCommand(&__app_command);
         return;
     }
     __app_command.CopyFrom("none");
@@ -59,7 +59,7 @@ void CncAppBase::SpinOnce(){
         return;
     if (__app_command.IsPrefix("app:")){
         g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, __app_command.GetChars);
-        this->ExecuteCommand(&__app_command);
+        this->ExecuteAppCommand(&__app_command);
     }
     if (_gcode_queue->GetFreeBuffersCount() == 0)
         return;

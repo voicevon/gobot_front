@@ -26,7 +26,7 @@ class BoxMoverApp: public CncAppBase{
         void SpinOnce(); 
         // void onGot_MqttMessage(const char*) override;
         BoxMoverApp::BoxMoverState GetState(){return this->State;};
-        // void ExecuteCommand(const char* command) override{};
+        // void ExecuteAppCommand(const char* command) override{};
     
     private:
    

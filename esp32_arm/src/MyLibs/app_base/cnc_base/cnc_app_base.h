@@ -8,7 +8,7 @@
 class CncAppBase: public MqttSubscriberBase{
     public:
         void Link_Mqtt_to_GcodeQueue(const char* mqtt_topic, GcodeQueue* gcode_queue);
-        virtual void ExecuteCommand(GcodeText* gcode_text){}; 
+        virtual void ExecuteAppCommand(GcodeText* gcode_text){}; 
 
         void SpinOnce(); 
         void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;

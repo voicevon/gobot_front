@@ -32,7 +32,7 @@ class GobotHouseApp: public CncAppBase{
         void Test_MoveStone_FromRoomToHead(int loop_count, uint8_t room_index);
         void Test_MoveStone_FromHeadToRoom(int loop_count, uint8_t house_id);
         void __Home();
-        // void ExecuteCommand(const char* command) override{}; 
+        // void ExecuteAppCommand(const char* command) override{}; 
 
     private:
         void __MakeGcode_and_Send(FKPosition_XYZRPW* from, FKPosition_XYZRPW* to, int segment_count);
