@@ -142,7 +142,7 @@ void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
     __lua->Begin();
     String content = __lua_file.readString();
     // __lua->LoadString(&content);
-    __lua->Lua_dostring(&content);
+    __lua->Lua_dostring(content.c_str());
     Logger::Info("script should be loaded");
     String result = __lua->Lua_dostring("setup()");
 }
