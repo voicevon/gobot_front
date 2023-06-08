@@ -7,13 +7,13 @@
 #define WaterDropper_WEB_CONFIGURATOR_PARAMETERS_COUNT 14   // 9+5
 
 
-class WaterDropper_WebConfiguratorDiction:public WebConfigurator_DictionBase{
+class WaterDropper_WebConfiguratorDiction:public ApWebserver_DictionBase{
 	public:
 		WaterDropper_WebConfiguratorDiction(){};
 		void Init(PositionTrigger* config_button);
-		WebConnfigurator_Parameter para_timer;
+		Html_Parameter para_timer;
 	
 	private:
-		WebConnfigurator_Parameter* __parameters[WaterDropper_WEB_CONFIGURATOR_PARAMETERS_COUNT];
+		Html_Parameter* __parameters[WaterDropper_WEB_CONFIGURATOR_PARAMETERS_COUNT];
 		FsFilename __html_filename;
 };

@@ -20,7 +20,7 @@ WebConfiguratorDiction_Demo diction;
 void setup(){
 	board.Init("I_AM_WIFI_MANAGER_DEMO");
 	diction.Init();
-	WebConfigurator::Begin(&diction);
+	WebServerStarter::Begin(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 
 

@@ -8,14 +8,14 @@
 #define WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT 5
 
 
-class WebConfiguratorDiction_Tiration:public WebConfigurator_DictionBase{
+class WebConfiguratorDiction_Tiration:public ApWebserver_DictionBase{
 	public:
 		WebConfiguratorDiction_Tiration(){};
 		void Init();
 		/// @brief Add your parameters here
-		WebConnfigurator_Parameter para_demo;
+		Html_Parameter para_demo;
 	
 	private:
-		WebConnfigurator_Parameter* __parameters[WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT];
+		Html_Parameter* __parameters[WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT];
 		FsFilename __html_filename;
 };

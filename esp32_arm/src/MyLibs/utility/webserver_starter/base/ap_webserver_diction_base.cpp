@@ -2,7 +2,7 @@
 
 
 
-void WebConfigurator_DictionBase::_Init(WebConnfigurator_Parameter** first_para_pointer, int paras_count){
+void ApWebserver_DictionBase::_Init(Html_Parameter** first_para_pointer, int paras_count){
     __parameters = first_para_pointer;
     __parameters_count = paras_count;
     __parameter_appending_index = 0;
@@ -21,26 +21,26 @@ void WebConfigurator_DictionBase::_Init(WebConnfigurator_Parameter** first_para_
     _AppendParameter(&para_lua_main, "lua_main");
 }
 
-void WebConfigurator_DictionBase::_AppendParameter(WebConnfigurator_Parameter* the_parameter, const char* para_name){
+void ApWebserver_DictionBase::_AppendParameter(Html_Parameter* the_parameter, const char* para_name){
     the_parameter->SetName(para_name);
     *(__parameters+__parameter_appending_index) = the_parameter;
     __parameter_appending_index++;
     if (__parameter_appending_index > __parameters_count){
-        Logger::Error("WebConfigurator_DictionBase::_AppendParameter()  over size");
+        Logger::Error("ApWebserver_DictionBase::_AppendParameter()  over size");
         Logger::Halt("");
     }
     // Logger::Print(String(__parameter_appending_index).c_str(), para_name);
 }
 
-WebConnfigurator_Parameter* WebConfigurator_DictionBase::FindItem(const char* parameter_name){
-    WebConnfigurator_Parameter* para;
+Html_Parameter* ApWebserver_DictionBase::FindItem(const char* parameter_name){
+    Html_Parameter* para;
     for(int i=0; i<__parameters_count; i++){
         para = *(__parameters + i);
         if (para->IsMyName(parameter_name)){
             return para;
         }
     }
-    Logger::Error("WebConfigurator_DictionBase::FindItem()");
+    Logger::Error("ApWebserver_DictionBase::FindItem()");
     Logger::Print("parameter_name", parameter_name);
     Logger::Halt("");
 }

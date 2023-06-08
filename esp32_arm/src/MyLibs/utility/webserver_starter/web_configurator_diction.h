@@ -7,7 +7,7 @@
 #define PIN_GPIO_OF_CONFIG_BUTTON_AT_STANDARD 21
 
 
-class WebConfiguratorDiction_Standard:public WebConfigurator_DictionBase{
+class WebConfiguratorDiction_Standard:public ApWebserver_DictionBase{
 	public:
 		WebConfiguratorDiction_Standard(){};
 		void Init(){
@@ -17,7 +17,7 @@ class WebConfiguratorDiction_Standard:public WebConfigurator_DictionBase{
 		}
 	
 	private:
-		WebConnfigurator_Parameter* __parameters[WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT];
+		Html_Parameter* __parameters[WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT];
 		// const char* __html_file="/serial_port_sniffer.html";
 		FsFilename __html_filename;
 };

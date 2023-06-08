@@ -6,18 +6,18 @@
 #define WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT 12   // 8+2
 
 
-class WebConfiguratorDiction_LoogPorter:public WebConfigurator_DictionBase{
+class WebConfiguratorDiction_LoogPorter:public ApWebserver_DictionBase{
 	public:
 		WebConfiguratorDiction_LoogPorter(){};
 		void Init();
 		/// @brief Add your parameters here
-		WebConnfigurator_Parameter para_warehouse_id;
-		WebConnfigurator_Parameter para_baud_rate;
-		WebConnfigurator_Parameter para_bit_length;
-		WebConnfigurator_Parameter para_verification;
+		Html_Parameter para_warehouse_id;
+		Html_Parameter para_baud_rate;
+		Html_Parameter para_bit_length;
+		Html_Parameter para_verification;
 	
 	private:
-		WebConnfigurator_Parameter* __parameters[WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT];
+		Html_Parameter* __parameters[WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT];
 		FsFilename __html_filename;
 		// const char* __html_file="/serial_port_sniffer.html";
 };

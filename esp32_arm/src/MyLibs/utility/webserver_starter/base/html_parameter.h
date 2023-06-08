@@ -3,9 +3,9 @@
 #include <ESPAsyncWebServer.h>
 #include "SPIFFS.h"
 
-class WebConnfigurator_Parameter{
+class Html_Parameter{
     public:
-        WebConnfigurator_Parameter();
+        Html_Parameter();
         void SetName(const char* parameter_name);
         void WriteToFile(AsyncWebParameter* p);
         bool IsMyName(const char * the_name);

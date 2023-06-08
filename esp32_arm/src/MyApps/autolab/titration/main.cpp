@@ -12,7 +12,7 @@ void setup(){
 	Logger::Info("I_AM_WIFI_MANAGER_DEMO");
 	board.Init_SPIFFS();
 	diction.Init();
-	WebConfigurator::Begin(&diction);
+	WebServerStarter::Begin(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 
 

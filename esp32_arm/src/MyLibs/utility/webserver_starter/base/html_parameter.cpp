@@ -1,12 +1,12 @@
 #include "MyLibs/utility/logger.h"
 #include "ap_webserver_diction_base.h"
 
-WebConnfigurator_Parameter::WebConnfigurator_Parameter(){
+Html_Parameter::Html_Parameter(){
     __fs= &SPIFFS;
 }
 
-void WebConnfigurator_Parameter::SetName(const char* parameter_name){
-    // Logger::Debug("WebConnfigurator_Parameter::SetName");
+void Html_Parameter::SetName(const char* parameter_name){
+    // Logger::Debug("Html_Parameter::SetName");
     // Logger::Print("parameter_name", parameter_name);
     for(int i=0; i<20; i++){
         char ch = *(parameter_name + i);
@@ -16,11 +16,11 @@ void WebConnfigurator_Parameter::SetName(const char* parameter_name){
             return;
         }
     }
-    Logger::Error("WebConnfigurator_Parameter::SetName()  Not found 0x00");
+    Logger::Error("Html_Parameter::SetName()  Not found 0x00");
     Logger::Halt("");
 }
 
-const char* WebConnfigurator_Parameter::__GetSpiffsFilename(){
+const char* Html_Parameter::__GetSpiffsFilename(){
     char ch;
     __output_buffer[0] = '/';
     for(int i=0; i< 20; i++){
@@ -30,12 +30,12 @@ const char* WebConnfigurator_Parameter::__GetSpiffsFilename(){
             return &__output_buffer[0];
         }
     }
-    Logger::Error("WebConnfigurator_Parameter::__GetSpiffsFilename()");
+    Logger::Error("Html_Parameter::__GetSpiffsFilename()");
     Logger::Halt("");
     return __output_buffer;
 };
 
-void WebConnfigurator_Parameter::WriteToFile(AsyncWebParameter* p){
+void Html_Parameter::WriteToFile(AsyncWebParameter* p){
     const char * message = p->value().c_str();
 
     const char * path = this->__GetSpiffsFilename();
@@ -53,7 +53,7 @@ void WebConnfigurator_Parameter::WriteToFile(AsyncWebParameter* p){
 	}
 }
 
-bool WebConnfigurator_Parameter::IsMyName(const char * the_name){
+bool Html_Parameter::IsMyName(const char * the_name){
     for(int i=0; i< 30; i++){
         char xx = *(the_name + i);
         if (xx != __parameter_name[i]){
@@ -63,19 +63,19 @@ bool WebConnfigurator_Parameter::IsMyName(const char * the_name){
             return true;
         }
     }
-    Logger::Error("WebConnfigurator_Parameter::IsMyName()");
+    Logger::Error("Html_Parameter::IsMyName()");
     Logger::Print("parameter", the_name);
     Logger::Halt("");
 }
 
-const char* WebConnfigurator_Parameter::readFile(){
-    // Logger::Debug("WebConnfigurator_Parameter::readFile()");
+const char* Html_Parameter::readFile(){
+    // Logger::Debug("Html_Parameter::readFile()");
     const char * path = this->__GetSpiffsFilename();
-	// Serial.printf("WebConnfigurator_Parameter::readFile() : %s\r\n", path);
+	// Serial.printf("Html_Parameter::readFile() : %s\r\n", path);
 
 	File file = __fs->open(path);
 	if(!file || file.isDirectory()){
-		Logger::Print(" WebConnfigurator_Parameter::readFile()- failed to open file for reading--->", path);
+		Logger::Print(" Html_Parameter::readFile()- failed to open file for reading--->", path);
         __output_buffer[0] = 0x00;
 		return __output_buffer;
 	}
@@ -86,7 +86,7 @@ const char* WebConnfigurator_Parameter::readFile(){
 		break;     
 	}
     fileContent.toCharArray(__output_buffer, sizeof(fileContent));
-    // Logger::Debug("WebConnfigurator_Parameter::readFile()");
+    // Logger::Debug("Html_Parameter::readFile()");
     // Logger::Print(path, fileContent);
 	return __output_buffer;
 }

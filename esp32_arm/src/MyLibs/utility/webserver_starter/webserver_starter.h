@@ -4,7 +4,7 @@
 #include "base/ap_webserver_diction_base.h"
 
 
-class WebConfigurator{
+class WebServerStarter{
     public:
         enum EnumState{
             IDLE,
@@ -16,16 +16,16 @@ class WebConfigurator{
         };
 
         // static EnumState state;
-        static WebConfigurator& GetInstance(){
+        static WebServerStarter& GetInstance(){
             return __instance;
         }
-        static void Begin(WebConfigurator_DictionBase* web_configurator_diction, bool webserver_on_ap_only);
+        static void Begin(ApWebserver_DictionBase* web_configurator_diction, bool webserver_on_ap_only);
         static const char* GetSsid();
         static const char* GetPassword();
         static const char* GetConfig(const char* key);
 
     private:
-        static WebConfigurator __instance;
+        static WebServerStarter __instance;
         static void __EnterWifiApMode();
         static void __StartLuaEditor();
         static bool __Connect_to_a_Router();
