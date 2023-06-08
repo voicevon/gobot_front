@@ -55,7 +55,6 @@ void LuaWrapperBase::Begin(){
 	if (_is_running){
 		// abord currenttly running
 	}
-
 	_state = luaL_newstate();
 	luaopen_base(_state);
 	luaopen_table(_state);
@@ -71,22 +70,6 @@ void LuaWrapperBase::Begin(){
 	// register customized driver
 	this->__Go_on_register();
 	_is_running = true;
-}
-
-void LuaWrapperBase::_InitLua() {
-
-}
-
-String LuaWrapperBase::Lua_dostring(const String *script) {
-
-	// String scriptWithConstants = _addConstants() + *script;
-	String scriptWithConstants = *script;
-	String result;
-	if (luaL_dostring(_state, scriptWithConstants.c_str())) {
-		result += "# lua error:\n" + String(lua_tostring(_state, -1));
-		lua_pop(_state, 1);
-	}
-	return result;
 }
 
 void LuaWrapperBase::LoadString(String* content){

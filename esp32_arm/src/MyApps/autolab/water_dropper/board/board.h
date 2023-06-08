@@ -36,4 +36,4 @@ class WaterDropper_Board: public BoardBase{
 
 };
 
-extern WaterDropper_Board board;
+extern WaterDropper_Board water_dropper_board;

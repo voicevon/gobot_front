@@ -24,4 +24,4 @@ void WaterDropper_Board::Init(const char* app_welcome_statement){
     this->RepportRamUsage();
 }
 
-WaterDropper_Board board;
+WaterDropper_Board water_dropper_board;

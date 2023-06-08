@@ -141,8 +141,6 @@ void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
 	Logger::Print("filename", filename);
     __lua->Begin();
     String content = __lua_file.readString();
-    Logger::Debug("read from file");
-    // Logger::Print("cont", content.c_str());
     // __lua->LoadString(&content);
     __lua->Lua_dostring(&content);
     Logger::Info("script should be loaded");

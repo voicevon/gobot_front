@@ -80,4 +80,4 @@ void SerialPortSniffer_Board::TestLeds(){
 }
 
 
-// SerialPortSniffer_Board __board;
+SerialPortSniffer_Board serial_port_sniffer_board;

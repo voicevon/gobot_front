@@ -3,13 +3,13 @@
 
 extern "C" {
   static int lua_wrapper_readEncoderAngle(lua_State *lua) {
-    float  angle = board.Get_Encoder()->getAngle();
+    float  angle = water_dropper_board.Get_Encoder()->getAngle();
     lua_pushnumber(lua, (lua_Number) angle);
     return 1;
   }
 
   static int lua_wrapper_readButton(lua_State *lua) {
-    bool is_pressed = board.Get_ActionButton()->IsFired();
+    bool is_pressed = water_dropper_board.Get_ActionButton()->IsFired();
     lua_pushboolean(lua, is_pressed);
     return 1;
   }

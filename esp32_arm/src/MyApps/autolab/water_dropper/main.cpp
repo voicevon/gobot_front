@@ -30,11 +30,11 @@ void init_encoder(){
 }
 
 void setup(){
-	board.Init("I_AM_WATER_DROPPER");
+	water_dropper_board.Init("I_AM_WATER_DROPPER");
 	init_encoder();
-	board.LinkEncoder(&encoder);
+	water_dropper_board.LinkEncoder(&encoder);
 
-	diction.Init(board.Get_WebConfigButton());
+	diction.Init(water_dropper_board.Get_WebConfigButton());
 	WebServerStarter::Begin(&diction);
 	// setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 	// app.Link_Mqtt_to_TextMessageQueue("water_dropper");

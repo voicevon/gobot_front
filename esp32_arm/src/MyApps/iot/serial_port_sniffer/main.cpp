@@ -11,19 +11,19 @@
 #ifdef I_AM_SERIAL_PORT_SNIFFER
 
 
-SerialPortSniffer_Board ___board;
+// SerialPortSniffer_Board serial_port_sniffer_board;
 WebConfiguratorDiction_SerialPortSniffer diction;
 RemoteVar_Chars remote_lua_file;
 SerialPortSniffer_App app;
 SerialPortSniffer_LuaWrapper lua_wrapper;
 
 void setup(){
-	___board.Init("I_AM_SERIAL_PORT_SNIFFER");
-	___board.TestLeds();
-	___board.TestSerialPortMaster();
-	___board.TestSerialPortSlave();
+	serial_port_sniffer_board.Init("I_AM_SERIAL_PORT_SNIFFER");
+	serial_port_sniffer_board.TestLeds();
+	serial_port_sniffer_board.TestSerialPortMaster();
+	serial_port_sniffer_board.TestSerialPortSlave();
 
-	
+
 
 	diction.Init();
 	WebServerStarter::Begin(&diction);
