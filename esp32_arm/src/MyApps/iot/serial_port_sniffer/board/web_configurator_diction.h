@@ -3,7 +3,7 @@
 #include "MyLibs/basic/memory_helper.h"
 #include "MyLibs/utility/webserver_starter/base/ap_webserver_diction_base.h"
 #include "MyLibs/basic/c_string/fs_filename.h"
-#define WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER 13   // 10+3
+#define WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER 15   // 11+3
 
 
 class WebConfiguratorDiction_SerialPortSniffer:public ApWebserver_DictionBase{

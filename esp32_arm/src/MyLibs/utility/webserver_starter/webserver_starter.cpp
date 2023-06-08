@@ -70,9 +70,10 @@ bool WebServerStarter::__statemachine_spinonce(){
 		}else{
 			Logger::Warn("dcition->ConfigButton is not linkded.....");
 		}
-		if (diction->para_wifi_ssid.ReadFile()->IsEqualTo("") or diction->para_wifi_ssid.ReadFile()->IsEqualTo("NONE")){
+		if (diction->para_wifi_ssid.ReadFile()->IsEqualTo("") || diction->para_wifi_ssid.ReadFile()->IsEqualTo("NONE")){
 			want_ap_mode = true;
 		}
+
 		if (want_ap_mode){
 			__Wifi_EnterAPMode();
 			__StartWebServer_forAP();
@@ -81,11 +82,9 @@ bool WebServerStarter::__statemachine_spinonce(){
 			return false;
 		}else{
 			if (__Connect_to_a_Router()){
-				// successed , return, will go-on with sta.
-				Logger::Info("Connect to router succefully.");
+				Logger::Info("Connect to router succefully. exiting WebStarter,  Esp32 will go-on with sta.");
 				return true;
 			}else{
-				// failed
 				Logger::Debug("AS STA failed,  becoming AP");
 				__Wifi_EnterAPMode();
 				__StartWebServer_forAP();
@@ -96,6 +95,10 @@ bool WebServerStarter::__statemachine_spinonce(){
 	}
 	//**************************************************************
 	if (state == WebServerStarter::EnumState::AS_AP){
+		if (diction->para_wifi_ssid.ReadFile()->IsEqualTo("NONE")){
+			Logger::Info("WebServerStarter  Want to skip WebServer.  Reason.  SSID='NONE'");
+			return true;
+		}
 		// webserver event post will set to ADMIN_DONE
 		return false;
 	}

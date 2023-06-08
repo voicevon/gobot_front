@@ -6,7 +6,7 @@
 
 class WaterDropper_LuaWrapper: public LuaWrapperBase {
 	public:
-
+		
 	protected:
 		void __Go_on_register() override;
 

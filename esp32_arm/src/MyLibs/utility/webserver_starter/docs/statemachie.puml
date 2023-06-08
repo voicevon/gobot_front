@@ -1,13 +1,14 @@
 @startuml
 [*] -> idle
-idle -[bold]> as_ap :config-button is pressed or \n config.ssid=='NONE' or \n config.ssid==null
+idle -[bold]> as_ap :config-button is pressed or \n  config.ssid==null or\n config.ssid=='NONE'
 idle -[#green]-> connecting_to_router 
 
 connecting_to_router -[#green]-> return :connected
 
 
 connecting_to_router -[#red]-> as_ap :failed
-as_ap --> admin_done :webserver post event
+as_ap -[#red]-> admin_done :webserver post event
+as_ap -[bold]-> return :config.ssid=='NONE'
 admin_done --> return
 
 admin_done --[#red,bold]> restart :config.try_sta==true

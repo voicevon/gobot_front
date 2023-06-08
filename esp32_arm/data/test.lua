@@ -17,8 +17,18 @@ p = 0
 now = millis()
 is_on = false
 
-while (true) do     now = millis()     if (now - p) > 1000 then         is_on = not is_on         p= now     end     if is_on then        digitalWrite(2, HIGH)    else        digitalWrite(2, LOW)    end end
+function test()
+    print("test fuction")
+end
 
+-- while (true) do     now = millis()     if (now - p) > 1000 then         is_on = not is_on         p= now     end     if is_on then        digitalWrite(2, HIGH)    else        digitalWrite(2, LOW)    end end
+for i=1, 888888,1 do       x=readEncoderAngle() print(x)   end
+
+--[[for i=1, 100,1
+do
+    print(i)
+end
+]]
 --[[
 while (true)
 do
