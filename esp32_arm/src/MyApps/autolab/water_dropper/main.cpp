@@ -41,8 +41,8 @@ void setup(){
 	// init_encoder();
 	// board.LinkEncoder(&encoder);
 
-	diction.Init(board.Get_ConfigButton());
-	WebServerStarter::Begin(&diction, true);
+	diction.Init(board.Get_WebConfigButton());
+	WebServerStarter::Begin(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 	app.Link_Mqtt_to_TextMessageQueue("water_dropper");
 	app.Link_lua_from_File(&lua_wrapper, "/test.lua");

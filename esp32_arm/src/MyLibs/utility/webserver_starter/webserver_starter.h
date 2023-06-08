@@ -20,17 +20,17 @@ class WebServerStarter{
         static WebServerStarter& GetInstance(){
             return __instance;
         }
-        static void Begin(ApWebserver_DictionBase* web_configurator_diction, bool webserver_on_ap_only);
+        static void Begin(ApWebserver_DictionBase* web_configurator_diction);
         static const char* GetSsid();
         static const char* GetPassword();
         static const char* GetConfig(const char* key);
 
     private:
         static WebServerStarter __instance;
-        static void __EnterWifiApMode();
+        static void __Wifi_EnterAPMode();
         static void __StartLuaEditor();
         static bool __Connect_to_a_Router();
-        static void __InitWebServer();
+        static void __StartWebServer_forAP();
 
         static String processor_upload_file(const String& var);
         static void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);

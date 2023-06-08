@@ -60,8 +60,7 @@ const char* WebServerStarter::GetConfig(const char* key){
 
 bool WebServerStarter::__statemachine_spinonce(){
 	bool want_ap_mode = false;
-	// Html_Parameter* para_ssid = diction->FindItem("ssid");
-	// Html_Parameter* para_try_sta = diction->FindItem("try_sta");
+
 	//************************************************************
 	if (state == WebServerStarter::EnumState::IDLE){
 		if (diction->ConfigButton != nullptr){
@@ -71,20 +70,25 @@ bool WebServerStarter::__statemachine_spinonce(){
 		}else{
 			Logger::Warn("dcition->ConfigButton is not linkded.....");
 		}
-		if (diction->para_wifi_ssid.ReadFile()->IsEqualTo("") or diction->para_wifi_ssid.ReadFile()->IsEqualTo("SSID")){
+		if (diction->para_wifi_ssid.ReadFile()->IsEqualTo("") or diction->para_wifi_ssid.ReadFile()->IsEqualTo("NONE")){
 			want_ap_mode = true;
 		}
 		if (want_ap_mode){
-			__EnterWifiApMode();
+			__Wifi_EnterAPMode();
+			__StartWebServer_forAP();
+			Logger::Debug("Directly AS_AP");
 			state = WebServerStarter::EnumState::AS_AP;
 			return false;
 		}else{
 			if (__Connect_to_a_Router()){
 				// successed , return, will go-on with sta.
+				Logger::Info("Connect to router succefully.");
 				return true;
 			}else{
 				// failed
-				__EnterWifiApMode();
+				Logger::Debug("AS STA failed,  becoming AP");
+				__Wifi_EnterAPMode();
+				__StartWebServer_forAP();
 				state = WebServerStarter::EnumState::AS_AP;
 				return false;
 			}
@@ -95,9 +99,11 @@ bool WebServerStarter::__statemachine_spinonce(){
 		// webserver event post will set to ADMIN_DONE
 		return false;
 	}
+	//**************************************************************
 	if (state == WebServerStarter::EnumState::ADMIN_DONE){
+		Logger::Debug("at  ADMIN_DONE");
 		if (diction->para_try_sta.ReadFile()->IsEqualTo("false")){
-			// restart esp
+			Logger::Info("Config done. As requied from html.  Restarting Esp");
 			delay(3000);
 			ESP.restart();
 		}else{
@@ -107,14 +113,14 @@ bool WebServerStarter::__statemachine_spinonce(){
 	}
 }
 
-void WebServerStarter::Begin(ApWebserver_DictionBase* web_configurator_diction, bool webserver_on_ap_only){
+void WebServerStarter::Begin(ApWebserver_DictionBase* web_configurator_diction){
 	Logger::Info("WebServerStarter::Begin()");
 	diction = web_configurator_diction;
-	bool is_ended=false;
 	state = WebServerStarter::EnumState::IDLE;
-	while (!is_ended){
 
-		WebServerStarter::__statemachine_spinonce();
+	bool is_ended=false;
+	while (!is_ended){
+		is_ended = WebServerStarter::__statemachine_spinonce();
 	}
 
 	Logger::Info("WebServerStarter is exiting....");
@@ -151,7 +157,7 @@ bool WebServerStarter::__Connect_to_a_Router() {
 	return true;
 }
 
-void WebServerStarter::__InitWebServer() {
+void WebServerStarter::__StartWebServer_forAP() {
 	webserver.on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
 		String logmessage = "Client:" + request->client()->remoteIP().toString() + + " " + request->url();
 		Serial.println(logmessage);
@@ -165,8 +171,8 @@ void WebServerStarter::__InitWebServer() {
 
 	// Web Server Root URL
 	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-		Logger::Info("webserver. on  /");
-		Logger::Print("parameter_name", diction->HtmlFilename_of_Configurator->GetChars());
+		Logger::Info("ap_webserver. request on  '/'");
+		Logger::Print("sending configurator html file", diction->HtmlFilename_of_Configurator->GetChars());
 		request->send(SPIFFS, diction->HtmlFilename_of_Configurator->GetChars(), "text/html");
 	});
 	
@@ -187,16 +193,16 @@ void WebServerStarter::__InitWebServer() {
 		state = WebServerStarter::EnumState::ADMIN_DONE;
 		request->send(200, "text/plain", "Done. ESP might be restart: ");
 	});
+	webserver.begin();
+
 }
 
 
-void WebServerStarter::__EnterWifiApMode(){
+void WebServerStarter::__Wifi_EnterAPMode(){
 		Logger::Info("Entering AP(Access Point) mode, ssid name='Integral-Setup'");
 		WiFi.softAP("Integral-Setup", NULL);
-		// IPAddress IP = WiFi.softAPIP();
 		Logger::Print("AP IP address: ", WiFi.softAPIP().toString().c_str());
 
-// 	// Serial.println(IP); 
 }
 
 
