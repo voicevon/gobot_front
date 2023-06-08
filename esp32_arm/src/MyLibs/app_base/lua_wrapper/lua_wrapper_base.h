@@ -10,7 +10,7 @@ class LuaWrapperBase {
 		String Lua_dostring(const String *script);
 		String Lua_dostring(const char *script);
 		void Begin();
-
+		void LoadString(String* content);
 		
 	protected:
 		lua_State *_state;

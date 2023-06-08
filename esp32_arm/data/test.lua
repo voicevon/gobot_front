@@ -1,47 +1,21 @@
-print('hello world')
-a= 10
-b= 20
-c = a * b
-print(c)
-
-INPUT=1
-OUTPUT=3
-HIGH = 1
-LOW = 0
-pinMode(2, OUTPUT)
-print("aaaaaaaaaaaaaa")
-digitalWrite(2,HIGH)
-print("bbbbbbbbbbbbbb")
-
-p = 0
-now = millis()
-is_on = false
-
-function test()
-    print("test fuction")
-end
-
--- while (true) do     now = millis()     if (now - p) > 1000 then         is_on = not is_on         p= now     end     if is_on then        digitalWrite(2, HIGH)    else        digitalWrite(2, LOW)    end end
-for i=1, 888888,1 do       x=readEncoderAngle() print(x)   end
-
---[[for i=1, 100,1
-do
-    print(i)
-end
-]]
---[[
-while (true)
-do
+function setup()
+    pinMode(2,3)
+    print ("setup()")
+  end
+  
+  p = 0
+  out = 0
+  i=0
+  function loop()
+    -- print("loop() is entering")
     now = millis()
-    if (now - p) > 1000 then
-        is_on = not is_on
-        p= now
-    end
-
-    if is_on then
-        digitalWrite(2, HIGH)
-    else
-        digitalWrite(2, LOW)
-    end
-end
-]]
+    -- print (i, p, now,out)
+    if(now -p) < 1000 then  return end
+    print("1000 ms posted")
+    if out == 0 then out = 1 else out = 0  end
+    print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+    digitalWrite(2,out)
+    print("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
+    p = now  
+    
+  end

@@ -6,6 +6,7 @@
         "fstream": "cpp",
         "atomic": "cpp",
         "sstream": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "cstring": "cpp"
     }
 }

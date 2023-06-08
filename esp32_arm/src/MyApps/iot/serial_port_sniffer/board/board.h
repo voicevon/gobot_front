@@ -28,3 +28,5 @@ class SerialPortSniffer_Board: public BoardBase{
 
 
 };
+
+// extern SerialPortSniffer_Board board;

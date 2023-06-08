@@ -10,9 +10,10 @@ void AppBase::SpinOnce(){
     if (! _text_message_queue.BufferIsEmpty()){
         __dispach_tail_message();
     }
-    if (__is_lua_running_file){
-        __Lua_RunLine_ofFile();
-    }
+    __lua->Lua_dostring("loop()");
+    // if (__is_lua_running_file){
+    //     __Lua_RunLine_ofFile();
+    // }
 }
 
 void AppBase::__dispach_tail_message(){
@@ -117,20 +118,20 @@ void AppBase::__deal_feedback(){
 //*****************************************************************************************
 //              LUA
 //
-void AppBase::__Lua_RunLine_ofFile(){
-    // Logger::Debug("AppBase::__Lua_RunLine_ofFile()");
-	if (__lua_file.available()) {
-		String line = __lua_file.readStringUntil('\n');
-		Logger::Info(line.c_str());
-		String result = __lua->Lua_dostring(&line);
-		Serial.println(result);
-	}else{
-		__lua_file.close();
-		__is_lua_running_file = false;   //???
-		Logger::Info("LuaWrapperBase::SpinOnce()  Run lua file ending report");
-	}
+// void AppBase::__Lua_RunLine_ofFile(){
+//     // Logger::Debug("AppBase::__Lua_RunLine_ofFile()");
+// 	if (__lua_file.available()) {
+// 		String line = __lua_file.readStringUntil('\n');
+// 		Logger::Info(line.c_str());
+// 		String result = __lua->Lua_dostring(&line);
+// 		Serial.println(result);
+// 	}else{
+// 		__lua_file.close();
+// 		__is_lua_running_file = false;   //???
+// 		Logger::Info("LuaWrapperBase::SpinOnce()  Run lua file ending report");
+// 	}
 
-}
+// }
 
 void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
     __lua_filename.CopyFrom(filename);
@@ -139,7 +140,13 @@ void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
 	Logger::Debug("LuaWrapperBase::Begin()");
 	Logger::Print("filename", filename);
     __lua->Begin();
-    __is_lua_running_file = true;
+    String content = __lua_file.readString();
+    Logger::Debug("read from file");
+    // Logger::Print("cont", content.c_str());
+    // __lua->LoadString(&content);
+    __lua->Lua_dostring(&content);
+    Logger::Info("script should be loaded");
+    String result = __lua->Lua_dostring("setup()");
 }
 
 void AppBase::Link_lua_from_Mqtt(LuaWrapperBase* lua, const char* mqtt_topic){

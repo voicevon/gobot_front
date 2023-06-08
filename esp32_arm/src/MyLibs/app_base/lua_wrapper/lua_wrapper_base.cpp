@@ -89,11 +89,15 @@ String LuaWrapperBase::Lua_dostring(const String *script) {
 	return result;
 }
 
-String LuaWrapperBase::Lua_dostring(const char *script) {
+void LuaWrapperBase::LoadString(String* content){
+	// luaL_loadbuffer(_state,content->c_str(), content->length());
+	luaL_loadstring(_state, content->c_str());
 
-	// String scriptWithConstants = _addConstants() + *script;
-	// String scriptWithConstants = *script;
+}
+
+String LuaWrapperBase::Lua_dostring(const char *script) {
 	String result;
+	// Logger::Print("Lua_dostirng()", script);
 	if (luaL_dostring(_state, script)) {
 		result += "# lua error:\n" + String(lua_tostring(_state, -1));
 		lua_pop(_state, 1);

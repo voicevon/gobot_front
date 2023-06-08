@@ -29,7 +29,7 @@ class AppBase: public MqttSubscriberBase{
 
     private:
         TextMessageQueue _text_message_queue;
-        void __Lua_RunLine_ofFile(); 
+        // void __Lua_RunLine_ofFile(); 
         void __deal_feedback();
         void __dispach_tail_message();
         int test_id = 1234;

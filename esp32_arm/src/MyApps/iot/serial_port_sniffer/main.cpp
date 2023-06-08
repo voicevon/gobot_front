@@ -1,28 +1,29 @@
 #include "MyLibs/utility/logger.h"
 #include "MyLibs/utility/webserver_starter/webserver_starter.h"
 #include "MyLibs/mqtt/wifi_mqtt_client.h"
+#include "MyLibs/mqtt/remote_component/remote_var_chars.h"
 #include "board/board.h"
 #include "board/web_configurator_diction.h"
 #include "app_lua_wrapper.h"
-#include "MyLibs/mqtt/remote_component/remote_var_chars.h"
 #include "serial_port_sniffer_app.h"
-// #include "CNC/gcode/gcode_queue.h"
 
 #include "../select_app.h"
 #ifdef I_AM_SERIAL_PORT_SNIFFER
 
 
-SerialPortSniffer_Board board;
+SerialPortSniffer_Board ___board;
 WebConfiguratorDiction_SerialPortSniffer diction;
 RemoteVar_Chars remote_lua_file;
 SerialPortSniffer_App app;
 SerialPortSniffer_LuaWrapper lua_wrapper;
 
 void setup(){
-	board.Init("I_AM_SERIAL_PORT_SNIFFER");
-	// board.TestLeds();
-	// board.TestSerialPortMaster();
-	// board.TestSerialPortSlave();
+	___board.Init("I_AM_SERIAL_PORT_SNIFFER");
+	___board.TestLeds();
+	___board.TestSerialPortMaster();
+	___board.TestSerialPortSlave();
+
+	
 
 	diction.Init();
 	WebServerStarter::Begin(&diction);

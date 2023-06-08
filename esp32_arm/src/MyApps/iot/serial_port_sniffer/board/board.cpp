@@ -61,7 +61,7 @@ void SerialPortSniffer_Board::TestSerialPortSlave(){
 }
 
 void SerialPortSniffer_Board::TestLeds(){
-    while (1){
+    for(int i=0; i<3; i++){
         __led_power.TurnOn();
         delay(1000);
         __led_data_in.TurnOn();
@@ -80,3 +80,4 @@ void SerialPortSniffer_Board::TestLeds(){
 }
 
 
+// SerialPortSniffer_Board __board;
