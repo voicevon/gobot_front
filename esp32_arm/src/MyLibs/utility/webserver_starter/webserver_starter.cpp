@@ -37,6 +37,8 @@ const char index_html[] PROGMEM = R"rawliteral(
 AsyncWebServer webserver(80);  // Create AsyncWebServer object on port 80
 static ApWebserver_DictionBase* diction;
 static Html_Parameter para_of_any_key = Html_Parameter();
+static WebServerStarter::EnumState state;
+
 
 // Timer variables
 static unsigned long previousMillis = 0;
@@ -55,43 +57,65 @@ const char* WebServerStarter::GetConfig(const char* key){
 	return para_of_any_key.readFile();
 }
 
+
+bool WebServerStarter::__statemachine_spinonce(){
+	bool want_ap_mode = false;
+	// Html_Parameter* para_ssid = diction->FindItem("ssid");
+	// Html_Parameter* para_try_sta = diction->FindItem("try_sta");
+	//************************************************************
+	if (state == WebServerStarter::EnumState::IDLE){
+		if (diction->ConfigButton != nullptr){
+			if (diction->ConfigButton->IsFired()){
+				want_ap_mode = true;
+			}
+		}else{
+			Logger::Warn("dcition->ConfigButton is not linkded.....");
+		}
+		if (diction->para_wifi_ssid.ReadFile()->IsEqualTo("") or diction->para_wifi_ssid.ReadFile()->IsEqualTo("SSID")){
+			want_ap_mode = true;
+		}
+		if (want_ap_mode){
+			__EnterWifiApMode();
+			state = WebServerStarter::EnumState::AS_AP;
+			return false;
+		}else{
+			if (__Connect_to_a_Router()){
+				// successed , return, will go-on with sta.
+				return true;
+			}else{
+				// failed
+				__EnterWifiApMode();
+				state = WebServerStarter::EnumState::AS_AP;
+				return false;
+			}
+		}
+	}
+	//**************************************************************
+	if (state == WebServerStarter::EnumState::AS_AP){
+		// webserver event post will set to ADMIN_DONE
+		return false;
+	}
+	if (state == WebServerStarter::EnumState::ADMIN_DONE){
+		if (diction->para_try_sta.ReadFile()->IsEqualTo("false")){
+			// restart esp
+			delay(3000);
+			ESP.restart();
+		}else{
+			// return,will  go on with ap
+			return true;
+		}
+	}
+}
+
 void WebServerStarter::Begin(ApWebserver_DictionBase* web_configurator_diction, bool webserver_on_ap_only){
 	Logger::Info("WebServerStarter::Begin()");
 	diction = web_configurator_diction;
-	// bool want_config_web_server = false;
-	// state = WebServerStarter::EnumState::IDLE;
+	bool is_ended=false;
+	state = WebServerStarter::EnumState::IDLE;
+	while (!is_ended){
 
-
-	// Step1:  Enter AP-mode or not 
-	bool want_ap_mode = false;
-	if (diction->ConfigButton == nullptr){
-		Logger::Warn("dcition->ConfigButton is not linkded.....");
-	}else if (diction->ConfigButton->IsFired()){
-		want_ap_mode = true;
+		WebServerStarter::__statemachine_spinonce();
 	}
-	
-	// if (  ->GetSsid() == ""  || this->GetSsid().IsEqual("NONE")){
-	// 	want_ap_mode = true;
-	// }
-
-	// Step2: Enter Ap mode or not.
-	if (want_ap_mode){
-		__EnterWifiApMode();
-	}else if(!__Connect_to_a_Router()){
-		// Failed to connect to a router.
-		want_ap_mode = true;
-		__EnterWifiApMode();
-		// want_config_web_server = true;
-	}
-
-
-	// Step3:  Start webserver or not
-	// if (want_config_web_server){
-	// 	__InitWebServer();
-	// 	webserver.begin();
-	// 	while (true){
-	// 	}
-	// }
 
 	Logger::Info("WebServerStarter is exiting....");
 }
@@ -125,6 +149,84 @@ bool WebServerStarter::__Connect_to_a_Router() {
 
 	Logger::Print("WebServerStarter::initWiFi()  Connected", WiFi.localIP().toString().c_str());
 	return true;
+}
+
+void WebServerStarter::__InitWebServer() {
+	webserver.on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
+		String logmessage = "Client:" + request->client()->remoteIP().toString() + + " " + request->url();
+		Serial.println(logmessage);
+		request->send_P(200, "text/html", index_html, processor_upload_file);
+	});
+
+	// run handleUpload function when any file is uploaded
+	webserver.on("/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
+			request->send(200);
+		}, handleUpload);
+
+	// Web Server Root URL
+	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+		Logger::Info("webserver. on  /");
+		Logger::Print("parameter_name", diction->HtmlFilename_of_Configurator->GetChars());
+		request->send(SPIFFS, diction->HtmlFilename_of_Configurator->GetChars(), "text/html");
+	});
+	
+	webserver.serveStatic("/", SPIFFS, "/");
+	
+	webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
+		int params = request->params();
+		// Logger::Debug("WebServerStarter::StartApServer()  HTTP-POST");
+		// Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
+		for(int i=0;i<params;i++){
+			AsyncWebParameter* p = request->getParam(i);
+			if(p->isPost()){
+				Html_Parameter* para = diction->FindItem(p->name().c_str());
+				// item-> Link_AsyncWebParameter(p);
+				para-> WriteToFile(p);
+			}
+		}
+		state = WebServerStarter::EnumState::ADMIN_DONE;
+		request->send(200, "text/plain", "Done. ESP might be restart: ");
+	});
+}
+
+
+void WebServerStarter::__EnterWifiApMode(){
+		Logger::Info("Entering AP(Access Point) mode, ssid name='Integral-Setup'");
+		WiFi.softAP("Integral-Setup", NULL);
+		// IPAddress IP = WiFi.softAPIP();
+		Logger::Print("AP IP address: ", WiFi.softAPIP().toString().c_str());
+
+// 	// Serial.println(IP); 
+}
+
+
+void WebServerStarter::__StartLuaEditor(){
+	// Web Server Root URL
+	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+		Logger::Info("webserver. on /   is a lua_scrpt editor ");
+		request->send(SPIFFS, "/lua_editor.html", "text/html");
+	});
+	webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
+		int params = request->params();
+		// Logger::Debug("WebServerStarter::StartApServer()  HTTP-POST");
+		// Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
+		for(int i=0;i<params;i++){
+			AsyncWebParameter* p = request->getParam(i);
+			if(p->isPost()){
+				Html_Parameter* para = diction->FindItem(p->name().c_str());
+				// item-> Link_AsyncWebParameter(p);
+				para-> WriteToFile(p);
+				Logger::Info("Lua script is updated,  Will restart Lua-Virtual machine");
+
+			}
+		}
+        // String strAdminUid = diction->para_admin_uid.GetName();
+		// request->send(200, "text/plain", "Done. ESP will restart, connect to your router and go to IP address: " + strAdminUid);
+		// delay(3000);
+		// ESP.restart();
+	});
+	webserver.begin();
+
 }
 
 // list all of the files, if ishtml=true, return html rather than simple text
@@ -208,87 +310,3 @@ String WebServerStarter::processor_upload_file(const String& var) {
   return String();
 }
 
-void WebServerStarter::__InitWebServer() {
-	webserver.on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
-		String logmessage = "Client:" + request->client()->remoteIP().toString() + + " " + request->url();
-		Serial.println(logmessage);
-		request->send_P(200, "text/html", index_html, processor_upload_file);
-	});
-
-	// run handleUpload function when any file is uploaded
-	webserver.on("/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
-			request->send(200);
-		}, handleUpload);
-
-	// Web Server Root URL
-	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-		Logger::Info("webserver. on  /");
-		Logger::Print("parameter_name", diction->HtmlFilename_of_Configurator->GetChars());
-		request->send(SPIFFS, diction->HtmlFilename_of_Configurator->GetChars(), "text/html");
-	});
-	
-	webserver.serveStatic("/", SPIFFS, "/");
-	
-	webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
-		int params = request->params();
-		// Logger::Debug("WebServerStarter::StartApServer()  HTTP-POST");
-		// Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
-		for(int i=0;i<params;i++){
-			AsyncWebParameter* p = request->getParam(i);
-			if(p->isPost()){
-				Html_Parameter* para = diction->FindItem(p->name().c_str());
-				// item-> Link_AsyncWebParameter(p);
-				para-> WriteToFile(p);
-
-			}
-		}
-        String strAdminUid = diction->para_admin_uid.GetName();
-		request->send(200, "text/plain", "Done. ESP will restart, connect to your router and go to IP address: " + strAdminUid);
-		delay(3000);
-		ESP.restart();
-	});
-}
-
-
-void WebServerStarter::__EnterWifiApMode(){
-		Logger::Info("Entering AP(Access Point) mode, ssid name='Integral-Setup'");
-		WiFi.softAP("Integral-Setup", NULL);
-		// IPAddress IP = WiFi.softAPIP();
-		Logger::Print("AP IP address: ", WiFi.softAPIP().toString().c_str());
-
-// 	// Serial.println(IP); 
-}
-
-// void WebServerStarter::__StartConfigWebServer(){
-// 	// Connect to Wi-Fi network with SSID and password
-
-// }
-
-void WebServerStarter::__StartLuaEditor(){
-	// Web Server Root URL
-	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-		Logger::Info("webserver. on /   is a lua_scrpt editor ");
-		request->send(SPIFFS, "/lua_editor.html", "text/html");
-	});
-	webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
-		int params = request->params();
-		// Logger::Debug("WebServerStarter::StartApServer()  HTTP-POST");
-		// Logger::Print("???????????????????", HTML_FORM_ITEM_NAMES[0]);
-		for(int i=0;i<params;i++){
-			AsyncWebParameter* p = request->getParam(i);
-			if(p->isPost()){
-				Html_Parameter* para = diction->FindItem(p->name().c_str());
-				// item-> Link_AsyncWebParameter(p);
-				para-> WriteToFile(p);
-				Logger::Info("Lua script is updated,  Will restart Lua-Virtual machine");
-
-			}
-		}
-        // String strAdminUid = diction->para_admin_uid.GetName();
-		// request->send(200, "text/plain", "Done. ESP will restart, connect to your router and go to IP address: " + strAdminUid);
-		// delay(3000);
-		// ESP.restart();
-	});
-	webserver.begin();
-
-}

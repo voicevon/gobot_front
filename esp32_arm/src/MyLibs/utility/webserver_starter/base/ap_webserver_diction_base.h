@@ -21,6 +21,8 @@ class ApWebserver_DictionBase{
         
 		Html_Parameter para_device_sid;  
 		Html_Parameter para_lua_main;  
+		Html_Parameter para_try_sta;  
+
 
         FsFilename* HtmlFilename_of_Configurator;
         PositionTrigger* ConfigButton = nullptr;

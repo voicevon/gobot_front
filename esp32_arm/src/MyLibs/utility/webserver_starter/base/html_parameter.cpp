@@ -3,6 +3,7 @@
 
 Html_Parameter::Html_Parameter(){
     __fs= &SPIFFS;
+    __output_c_string.Init(30, __output_buffer);
 }
 
 void Html_Parameter::SetName(const char* parameter_name){
@@ -66,6 +67,11 @@ bool Html_Parameter::IsMyName(const char * the_name){
     Logger::Error("Html_Parameter::IsMyName()");
     Logger::Print("parameter", the_name);
     Logger::Halt("");
+}
+
+C_String_Base* Html_Parameter::ReadFile(){
+    this->readFile();
+    return &__output_c_string;
 }
 
 const char* Html_Parameter::readFile(){

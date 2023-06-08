@@ -10,7 +10,8 @@ class WebServerStarter{
             IDLE,
             CONNECTING_TO_ROUTER,
             AS_AP,
-            AS_STA,
+            // AS_STA,
+            ADMIN_DONE,
             // RESTART,
             // RETURN,
         };
@@ -35,5 +36,7 @@ class WebServerStarter{
         static void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
         static String humanReadableSize(const size_t bytes);
         static String listFiles(bool ishtml);
+
+        static bool __statemachine_spinonce();
 
 };

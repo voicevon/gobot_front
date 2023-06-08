@@ -3,13 +3,14 @@
 idle -[bold]> as_ap :config-button is pressed or \n config.ssid=='NONE' or \n config.ssid==null
 idle -[#green]-> connecting_to_router 
 
-connecting_to_router -[#green]-> as_sta :connected
-as_sta -[#green]->return
+connecting_to_router -[#green]-> return :connected
+
 
 connecting_to_router -[#red]-> as_ap :failed
-as_ap --> return
+as_ap --> admin_done :webserver post event
+admin_done --> return
 
-as_ap --[#red,bold]> restart :config.try_sta==true
+admin_done --[#red,bold]> restart :config.try_sta==true
 restart -[#red]-> [*]
 
 @enduml

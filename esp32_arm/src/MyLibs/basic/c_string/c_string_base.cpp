@@ -9,6 +9,11 @@
 //     __buffer_size = buffer_size;
 // }
 
+void C_String_Base::Init(int buffer_size, char* buffer){
+    __buffer_size = buffer_size;
+    __chars = buffer;
+    // this->CopyFrom(command);
+}
 C_String_Base::C_String_Base(int buffer_size, char* buffer){
     __buffer_size = buffer_size;
     __chars = buffer;
@@ -113,3 +118,13 @@ bool C_String_Base::IsPrefix(const char* chars){
     return false;
 }
 
+int C_String_Base::Find_MismachLocation(const void* b, int length){
+    uint8_t* aa = (uint8_t*) __chars;
+    uint8_t* bb = (uint8_t*) b;
+    for(int i=0; i<length ; i++){
+        if (*(aa+i) != *(bb+i)){
+            return i;
+        }
+    }
+    return -1;
+}

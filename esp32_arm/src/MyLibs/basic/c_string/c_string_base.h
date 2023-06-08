@@ -15,17 +15,19 @@ class  C_String_Base{
         bool IsEqualTo(const char* chars);
         bool IsPrefix(const char* chars);
         char* GetChars(){return __chars;};
+        C_String_Base(){};
+        void Init(int buffer_size, char* buffer);
+        int Find_MismachLocation(const void* b, int length);
         
 
         // const char &GetText = *__chars;  // For Arduino::chars[n]
         // const char* GetChars = __chars;   // For std::cxx11::string
     protected:
         // C_String_Base(int buffer_size);
-        C_String_Base(int buffer_size, char* buffer);
         void _CopyTo(char* destination, int remove_prefix_bytes_length);
+        C_String_Base(int buffer_size, char* buffer);
 
     private:
-        // char __chars[REPRAP_GCODE_MAX_SIZE];
         char* __chars;
         int __buffer_size;
 

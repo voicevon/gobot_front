@@ -19,6 +19,7 @@ void ApWebserver_DictionBase::_Init(Html_Parameter** first_para_pointer, int par
     
     _AppendParameter(&para_device_sid, "device_sid");
     _AppendParameter(&para_lua_main, "lua_main");
+    _AppendParameter(&para_try_sta, "try_sta");
 }
 
 void ApWebserver_DictionBase::_AppendParameter(Html_Parameter* the_parameter, const char* para_name){
