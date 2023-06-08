@@ -1,0 +1,38 @@
+@startuml
+
+cloud outside_router
+actor user
+actor admin
+
+frame Inside{
+    component config_button
+    card webserver_starter
+
+    frame ap{
+        card webserver_ap
+        card wifi_as_ap
+        file ap_html
+        
+    }
+    frame sta{
+        card webserver_sta
+        card wifi_as_sta
+        file sta_html
+    }
+
+    webserver_starter ----> sta: #2a
+    webserver_starter ----> ap: #2b 
+}
+
+
+webserver_starter <-[dashed]- config_button:  #1
+webserver_ap <-[dashed]- ap_html
+webserver_sta <-[dashed]- sta_html 
+user --> outside_router
+user -[#red,dashed]-> webserver_sta
+
+
+admin -[#red,dashed]> ap
+wifi_as_sta -> outside_router
+
+@enduml

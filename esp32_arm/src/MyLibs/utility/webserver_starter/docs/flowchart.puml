@@ -1,20 +1,20 @@
 @startuml
 start
-if (config_button) then
+if (config_button) then(yes)
     :want_web_server=true;
 endif
 
 
-if (want_ap_mode) then
+if (want_ap_mode) then(yes)
     ::connect_to_ap;
 
-if(connected) then
+if(connected) then(yes)
     :enter_ap_mode;
     :want_web_server=true;
 endif
 
 
-if (want_ap_server?) then
+if (want_ap_server?) then(yes)
     :start_web_server;
 endif
 

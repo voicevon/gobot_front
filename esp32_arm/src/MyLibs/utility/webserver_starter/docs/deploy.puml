@@ -1,0 +1,29 @@
+@startuml
+
+cloud outside_router
+cloud mobile_phone
+
+frame Inside{
+component config_button
+card webserver_starter
+card webserver
+file ap_html
+file sta_html
+webserver_starter <-[dashed]- config_button:  #1
+webserver_starter --> webserver:  define root html-file
+webserver <-[dashed]- ap_html
+webserver <-[dashed]- sta_html
+
+frame wifi{
+    card wifi_as_ap
+    card wifi_as_sta
+}
+webserver_starter ----> wifi_as_sta: #2a
+webserver_starter ----> wifi_as_ap: #2b 
+}
+
+
+
+outside_router <--- wifi_as_sta 
+mobile_phone -[dashed]--> wifi_as_ap
+@enduml

@@ -1,13 +1,14 @@
 
 // https://RandomNerdTutorials.com/esp32-wi-fi-manager-asyncwebserver/
-#include "web_configurator.h"
+// #include "web_configurator.h"
+#include "webserver_starter.h"
 
 #include <Arduino.h>
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include <AsyncTCP.h>
 #include "MyLibs/utility/logger.h"
-#include "base/web-configurator_parameter.h"
+#include "base/ap_webserver_diction_base.h"
 #include "esp_wifi.h"
 
 const char index_html[] PROGMEM = R"rawliteral(
@@ -30,7 +31,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>
 )rawliteral";
 
-static WebConfigurator::Config config;                        // configuration
+// static WebConfigurator::Config config;                        // configuration
 
 
 AsyncWebServer webserver(80);  // Create AsyncWebServer object on port 80
@@ -57,37 +58,45 @@ const char* WebConfigurator::GetConfig(const char* key){
 void WebConfigurator::Begin(WebConfigurator_DictionBase* web_configurator_diction, bool webserver_on_ap_only){
 	Logger::Info("WebConfigurator::Begin()");
 	diction = web_configurator_diction;
-	bool want_config_web_server = false;
-	bool want_ap_mode = false;
+	// bool want_config_web_server = false;
+	// state = WebConfigurator::EnumState::IDLE;
 
-	// Step1:  Config_button
+
+	// Step1:  Enter AP-mode or not 
+	bool want_ap_mode = false;
 	if (diction->ConfigButton == nullptr){
 		Logger::Warn("dcition->ConfigButton is not linkded.....");
 	}else if (diction->ConfigButton->IsFired()){
-		want_config_web_server = true;
-		if (webserver_on_ap_only){
-			want_ap_mode = true;
-		}
+		want_ap_mode = true;
 	}
+	
+	// if (  ->GetSsid() == ""  || this->GetSsid().IsEqual("NONE")){
+	// 	want_ap_mode = true;
+	// }
+
 	// Step2: Enter Ap mode or not.
 	if (want_ap_mode){
 		__EnterWifiApMode();
-	}else if(!__connect_to_a_router()){
+	}else if(!__Connect_to_a_Router()){
+		// Failed to connect to a router.
+		want_ap_mode = true;
 		__EnterWifiApMode();
-		want_config_web_server = true;
+		// want_config_web_server = true;
 	}
+
+
 	// Step3:  Start webserver or not
-	if (want_config_web_server){
-		__InitWebServer();
-		webserver.begin();
-		while (true){
-		}
-	}
+	// if (want_config_web_server){
+	// 	__InitWebServer();
+	// 	webserver.begin();
+	// 	while (true){
+	// 	}
+	// }
 
 	Logger::Info("WebConfigurator is exiting....");
 }
 
-bool WebConfigurator::__connect_to_a_router() {
+bool WebConfigurator::__Connect_to_a_Router() {
 	if(diction->para_wifi_ssid.readFile()==0x00 || diction->para_wifi_pass.readFile()==0x00){
 		Serial.println("Undefined SSID or IP address.");
 		return false;

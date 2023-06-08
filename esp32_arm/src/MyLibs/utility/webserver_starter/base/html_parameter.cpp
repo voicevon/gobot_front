@@ -1,5 +1,5 @@
 #include "MyLibs/utility/logger.h"
-#include "web-configurator_parameter.h"
+#include "ap_webserver_diction_base.h"
 
 WebConnfigurator_Parameter::WebConnfigurator_Parameter(){
     __fs= &SPIFFS;
