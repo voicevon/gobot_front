@@ -24,6 +24,7 @@ def WCS_Main(deposit_queue:multiprocessing.Queue):
 
             # TODO: merge deck to components? 
             DeckGroupFactory.CreateDeckGroups(warehouse_id)
+
             ComponentFactory.CreateComponents(warehouse_id)
 
             # note: must be after create_components()

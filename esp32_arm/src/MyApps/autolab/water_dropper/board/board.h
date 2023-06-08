@@ -18,6 +18,7 @@ class WaterDropper_Board: public BoardBase{
         PositionTrigger* Get_WebConfigButton(){return &__webconfig_button;};
         PositionTrigger* Get_ActionButton(){return &__action_button;};
         Encoder* Get_Encoder(){return __encoder;};
+        H_Bridge* Get_H_Bridge(){return &__h_bridge;};
         
     private:
         void __InitHardware();

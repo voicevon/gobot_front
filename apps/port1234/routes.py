@@ -1,9 +1,10 @@
 # https://github.com/abalarin/Flask-on-Linode
 
-from flask import Flask,  render_template
+from flask import Flask,  render_template, request, redirect,flash, url_for
 from twh_wcs.wcs_main import Start_TwhWcs_Process
 from twh_user.route import web_user
 from twh_stock.route import web_stock
+from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
 # from von.ocr.ocr_factory import OcrFactory
 # from kvm_ocr_cloud.ocr_node_factory import OcrNodeFactory
 
@@ -19,6 +20,15 @@ new_message = {}
 new_message['test'] = {'id':2, 'payload': 'hello, dynamic message.'}
 
 
+@app.route('/lua_post', methods = ['POST'])
+def lua_post():
+    ide_request = request.form.to_dict()
+    print(ide_request["editor"])
+    g_mqtt.publish("lua/test", ide_request["editor"])
+    # flash("规则更新完毕")
+    return redirect(url_for('lua_ide'))
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -27,9 +37,13 @@ def index():
 def hire():
     return render_template('hire.html')
 
-@app.route('/hire/cpp')
-def hire():
+@app.route('/hire_cpp')
+def hire_cpp():
     return render_template('hire/cpp.html')
+
+@app.route('/lua_ide')
+def lua_ide():
+    return render_template('lua/lua_ide.html')
 
 @app.route('/contact')
 def contact():
@@ -73,7 +87,8 @@ def ocr():
     app_windows = OcrNodeFactory.GetKnown_AppWindowList()
     return render_template('ocr/index.html', kvm_nodes=kvm_nodes,app_windows=app_windows)
 
-
+g_mqtt_broker_config.client_id = "230604"
+g_mqtt.connect_to_broker(g_mqtt_broker_config,blocked_connection=True)
 Start_TwhWcs_Process()
 
 if __name__ == '__main__':

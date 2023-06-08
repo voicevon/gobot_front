@@ -9,11 +9,7 @@
 #include "../select_app.h"
 #ifdef I_AM_WATER_DROPPER
 
-
-
-WaterDropper_WebConfiguratorDiction diction;
 WaterDropper_App app;
-
 WaterDropper_LuaWrapper lua_wrapper;
 
 #define PIN_ENCODER_A 26
@@ -29,6 +25,7 @@ void init_encoder(){
 	encoder.enableInterrupts(doA, doB);
 }
 
+WaterDropper_WebConfiguratorDiction diction;
 void setup(){
 	water_dropper_board.Init("I_AM_WATER_DROPPER");
 	init_encoder();
@@ -36,15 +33,13 @@ void setup(){
 
 	diction.Init(water_dropper_board.Get_WebConfigButton());
 	WebServerStarter::Begin(&diction);
-	// setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
-	// app.Link_Mqtt_to_TextMessageQueue("water_dropper");
+	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
+	app.Link_Mqtt_to_TextMessageQueue("water_dropper/lua");
 	app.Link_lua_from_File(&lua_wrapper, "/test.lua");
 }
 
 void loop(){
-	// encoder.update();
-	// float aa = encoder.getAngle();
-	// Logger::Print("encoder.angle", aa);
+	encoder.update();
 	app.SpinOnce();
 }
 

@@ -29,7 +29,6 @@ class AppBase: public MqttSubscriberBase{
 
     private:
         TextMessageQueue _text_message_queue;
-        // void __Lua_RunLine_ofFile(); 
         void __deal_feedback();
         void __dispach_tail_message();
         int test_id = 1234;
@@ -40,7 +39,7 @@ class AppBase: public MqttSubscriberBase{
 
         // Lua and Lua file
         LuaWrapperBase* __lua = nullptr;
-        FsFilename __lua_filename;
+        // FsFilename __lua_filename;
 		File __lua_file;
         bool __is_lua_running_file = false;
 

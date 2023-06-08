@@ -13,10 +13,17 @@ extern "C" {
     lua_pushboolean(lua, is_pressed);
     return 1;
   }
+
+  static int lua_wrapper_setMotorSpeed(lua_State* lua){
+    int a = luaL_checkinteger(lua, 1);
+    water_dropper_board.Get_H_Bridge()->SetPwmSpeed(true, a);
+    return 0;
+  }
 }
 
 void WaterDropper_LuaWrapper::__Go_on_register(){
 	_Lua_register("readButton",lua_wrapper_readButton);
 	_Lua_register("readEncoderAngle",lua_wrapper_readEncoderAngle);
+	_Lua_register("setMotorSpeed",lua_wrapper_setMotorSpeed);
 }
 

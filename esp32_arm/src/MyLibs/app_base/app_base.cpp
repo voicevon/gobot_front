@@ -134,16 +134,13 @@ void AppBase::__deal_feedback(){
 // }
 
 void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
-    __lua_filename.CopyFrom(filename);
-    __lua = lua;
-    __lua_file = SPIFFS.open(filename, FILE_READ);
 	Logger::Debug("LuaWrapperBase::Begin()");
 	Logger::Print("filename", filename);
+    __lua = lua;
+    __lua_file = SPIFFS.open(filename, FILE_READ);
     __lua->Begin();
     String content = __lua_file.readString();
-    // __lua->LoadString(&content);
     __lua->Lua_dostring(content.c_str());
-    Logger::Info("script should be loaded");
     String result = __lua->Lua_dostring("setup()");
 }
 

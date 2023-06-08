@@ -36,7 +36,6 @@ class WarehouseFactory:
         new_warehouse = WarehouseItems()
         if warehouse_id == '221109':
             new_warehouse.name = '某某义齿加工厂'
-            return new_warehouse
         
         elif warehouse_id == '230220':
             new_warehouse.name = '山东雅乐福义齿加工厂'
@@ -44,7 +43,7 @@ class WarehouseFactory:
         else:
             Logger.Error("WarehouseFactory::Create_Warehouse() Unknown warehouse_id" )
             Logger.Print("warehouse_id",warehouse_id)
-
         g_warehouses[warehouse_id] = new_warehouse
+
         return new_warehouse
 

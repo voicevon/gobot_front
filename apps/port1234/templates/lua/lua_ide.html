@@ -1,0 +1,10 @@
+{% extends "common_webpage.html" %}
+{% block page_content %}
+
+<h2>Lua_IDE</h2>
+<form action="/lua_post" , method="post">
+  <textarea rows="30" cols="50" name="editor">
+    </textarea>
+  <input type="submit" value="Run Lua">
+</form>
+{% endblock %}
