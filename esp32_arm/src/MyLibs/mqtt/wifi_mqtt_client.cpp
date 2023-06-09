@@ -161,7 +161,7 @@ void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
     if (reason == AsyncMqttClientDisconnectReason::ESP8266_NOT_ENOUGH_SPACE) reason_str.concat("ESP8266_NOT_ENOUGH_SPACE"); 
     if (reason == AsyncMqttClientDisconnectReason::TLS_BAD_FINGERPRINT) reason_str.concat("TLS_BAD_FINGERPRINT"); 
     Logger::Print("reason code",(uint8_t)reason);
-    Logger::Print("reason", reason_str);
+    Logger::Print("reason", reason_str.c_str());
 
 	if (WiFi.isConnected()) {
 		xTimerStart(mqttReconnectTimer, 0);

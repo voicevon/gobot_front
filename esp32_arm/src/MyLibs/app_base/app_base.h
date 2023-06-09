@@ -3,7 +3,7 @@
 #include "MyLibs/mqtt/mqtt_subscriber_base.h"
 #include "text_message_queue/text_message_queue.h"
 #include "Robot/robot_base.h"
-#include "lua_wrapper/lua_wrapper_base.h"
+#include "lua_base/lua_base.h"
 #include "MyLibs/basic/c_string/fs_filename.h"
 #include "SPIFFS.h"
 
@@ -16,7 +16,7 @@ class AppBase: public MqttSubscriberBase{
         void Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic);
         void Link_Robot(RobotBase* robot){__robot=robot;};
         void Link_lua_from_File(LuaWrapperBase* lua, const char* filename);
-        void Link_lua_from_Mqtt(LuaWrapperBase* lua, const char* mqtt_topic);
+        // void Link_lua_from_Mqtt(LuaWrapperBase* lua, const char* mqtt_topic);
         
 
         virtual void ExecuteAppCommand(TextMessageLine* gcode_text){}; 

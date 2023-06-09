@@ -1,5 +1,5 @@
-#include "app_lua_wrapper.h"
-#include "board/board.h"
+#include "app_lua.h"
+#include "../board/board.h"
 
 extern "C" {
 	static int lua_wrapper_readEncoderAngle(lua_State *lua) {
@@ -30,7 +30,7 @@ static const struct luaL_Reg von_waterdropper_functions[] = {
 };
 
 
-void WaterDropper_LuaWrapper::__Go_on_register(){
+void WaterDropper_LuaWrapper::_Go_on_register(){
 	luaL_openlibs(_lua_state); 
 	luaL_newlib(_lua_state, von_waterdropper_functions);
     lua_setglobal(_lua_state, "wd");   

@@ -93,9 +93,6 @@ void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic){
     __mqtt_topic_feedback[topic_len + 3] = 0x00;   //ender
 
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
-    
-    // Logger::Print("AppBase::Link_Mqtt_to_TextMessageQueue()   mqtt_topic", mqtt_topic);
-    // Logger::Print("AppBase::Link_Mqtt_to_TextMessageQueue()  this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
 }
 
 void AppBase::__deal_feedback(){
@@ -134,9 +131,9 @@ void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
     String result = __lua->Lua_dostring("setup()");
 }
 
-void AppBase::Link_lua_from_Mqtt(LuaWrapperBase* lua, const char* mqtt_topic){
-    __lua = lua;
-    this->Link_Mqtt_to_TextMessageQueue(mqtt_topic);
-}
+// void AppBase::Link_lua_from_Mqtt(LuaWrapperBase* lua, const char* mqtt_topic){
+//     __lua = lua;
+//     this->Link_Mqtt_to_TextMessageQueue(mqtt_topic);
+// }
 
 

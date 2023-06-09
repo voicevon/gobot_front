@@ -1,4 +1,4 @@
-#include "lua_wrapper_base.h"
+#include "lua_base.h"
 #include "MyLibs/utility/logger.h"
 #include "MyLibs/mqtt/mqtt_subscriber_manager.h"
 #include <SPIFFS.h>
@@ -64,9 +64,6 @@ static const struct luaL_Reg von_hw_functions[] =
 };
 
 void LuaWrapperBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
-	// String script = payload;
-	// _lua_state.close();
-	// Stop current lua-vm
 	Logger::Debug("LuaWrapperBase::onGot_MqttMessage()");
 	this->Begin();
 	char* pp = (char*) payload;
@@ -82,12 +79,12 @@ void LuaWrapperBase::onGot_MqttMessage(const char* payload, uint16_t payload_len
 	Logger::Info("/test.lua is saved.");
 }
 
-void LuaWrapperBase::Link_Mqtt(const char* mqtt_topic){
+void LuaWrapperBase::Link_Mqtt_for_Test(const char* mqtt_topic){
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
 }
 
 void LuaWrapperBase::Begin(){
-	if (_is_running){
+	if (__is_running){
 		// abord currenttly running
 	}
 	_lua_state = luaL_newstate();
@@ -95,7 +92,7 @@ void LuaWrapperBase::Begin(){
 	luaopen_table(_lua_state);
 	luaopen_string(_lua_state);
 	luaopen_math(_lua_state);
-	// register  common_driver
+	// register  hardware driver
 	lua_register(_lua_state, "print", lua_wrapper_print);
     luaL_openlibs(_lua_state); 
 	luaL_newlib(_lua_state, von_hw_functions);
@@ -103,15 +100,15 @@ void LuaWrapperBase::Begin(){
 
 
 	// register customized driver
-	this->__Go_on_register();
-	_is_running = true;
+	this->_Go_on_register();
+	__is_running = true;
 }
 
-void LuaWrapperBase::LoadString(String* content){
-	// luaL_loadbuffer(_lua_state,content->c_str(), content->length());
-	luaL_loadstring(_lua_state, content->c_str());
+// void LuaWrapperBase::LoadString(String* content){
+// 	// luaL_loadbuffer(_lua_state,content->c_str(), content->length());
+// 	luaL_loadstring(_lua_state, content->c_str());
 
-}
+// }
 
 String LuaWrapperBase::Lua_dostring(const char *script) {
 	String result;
@@ -123,8 +120,8 @@ String LuaWrapperBase::Lua_dostring(const char *script) {
 	return result;
 }
 
-void LuaWrapperBase::_Lua_register(const String name, const lua_CFunction function) {
-	lua_register(_lua_state, name.c_str(), function);
-}
+// void LuaWrapperBase::_Lua_register(const String name, const lua_CFunction function) {
+// 	lua_register(_lua_state, name.c_str(), function);
+// }
 
 

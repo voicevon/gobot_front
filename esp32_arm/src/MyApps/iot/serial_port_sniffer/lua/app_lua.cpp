@@ -1,5 +1,5 @@
-#include "app_lua_wrapper.h"
-#include "board/board.h"
+#include "app_lua.h"
+#include "../board/board.h"
 
 extern "C" {
     static int lua_wrapper_readEncoderAngle_aa(lua_State *lua) {
@@ -12,8 +12,8 @@ extern "C" {
 }
 
 
-void SerialPortSniffer_LuaWrapper::__Go_on_register(){
-    Logger::Debug("SerialPortSniffer_LuaWrapper::__Go_on_register()");
+void SerialPortSniffer_LuaWrapper::_Go_on_register(){
+    Logger::Debug("SerialPortSniffer_LuaWrapper::_Go_on_register()");
 }
 
 

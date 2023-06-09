@@ -4,8 +4,8 @@
 #include "MyLibs/mqtt/remote_component/remote_var_chars.h"
 #include "board/board.h"
 #include "board/web_configurator_diction.h"
-#include "app_lua_wrapper.h"
-#include "serial_port_sniffer_app.h"
+#include "lua/app_lua.h"
+#include "app.h"
 
 #include "../select_app.h"
 #ifdef I_AM_SERIAL_PORT_SNIFFER

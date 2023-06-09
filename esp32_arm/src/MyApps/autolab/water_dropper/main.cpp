@@ -3,7 +3,7 @@
 #include "MyLibs/utility/webserver_starter/webserver_starter.h"
 
 #include "board/board.h"
-#include "app_lua_wrapper.h"
+#include "lua/app_lua.h"
 #include "app.h"
 
 #include "../select_app.h"
@@ -36,7 +36,7 @@ void setup(){
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 	app.Link_Mqtt_to_TextMessageQueue("water_dropper/command");
 	app.Link_lua_from_File(&lua_wrapper, "/test.lua");
-	lua_wrapper.Link_Mqtt("lua/test");
+	lua_wrapper.Link_Mqtt_for_Test("lua/test");
 }
 
 void loop(){
