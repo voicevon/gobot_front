@@ -3,14 +3,13 @@
 
 void WebConfiguratorDiction_SerialPortSniffer::Init(){
     _Init(__parameters, WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER);
-    __html_filename.CopyFrom("/serial_port_sniffer.html");
-    HtmlFilename_of_Configurator = &__html_filename;
+    // __html_filename.CopyFrom("/serial_port_sniffer.html");
+    // HtmlFilename_of_Configurator = &__html_filename;
+    HtmlFilename_of_Configurator.CopyFrom("/serial_port_sniffer.html");
     // any sequence. 
     // _AppendParameter(&para_device_id,"device_id");
     _AppendParameter(&para_baud_rate, "baud_rate");
     _AppendParameter(&para_bit_length, "bit_length");
     _AppendParameter(&para_verification, "verification");
     // _AppendParameter(&para_lua_script, "lua");
-
-    
 }

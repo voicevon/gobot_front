@@ -19,5 +19,5 @@ class WebConfiguratorDiction_SerialPortSniffer:public ApWebserver_DictionBase{
 	
 	private:
 		Html_Parameter* __parameters[WEB_CONFIGURATOR_PARAMETERS_COUNT_SERIAL_PORT_SNIFFER];
-		FsFilename __html_filename;
+		// FsFilename __html_filename;
 };

@@ -2,7 +2,7 @@
 
 #include "MyLibs/basic/memory_helper.h"
 #include "MyLibs/utility/webserver_starter/base/ap_webserver_diction_base.h"
-#include "MyLibs/utility/webserver_starter/base/ap_webserver_diction_base.h"
+// #include "MyLibs/utility/webserver_starter/base/ap_webserver_diction_base.h"
 
 #include "MyLibs/basic/c_string/fs_filename.h"
 #define WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT 5
@@ -17,5 +17,5 @@ class WebConfiguratorDiction_Tiration:public ApWebserver_DictionBase{
 	
 	private:
 		Html_Parameter* __parameters[WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT];
-		FsFilename __html_filename;
+		// FsFilename __html_filename;
 };

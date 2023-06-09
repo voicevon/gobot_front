@@ -161,6 +161,8 @@ bool WebServerStarter::__Connect_to_a_Router() {
 }
 
 void WebServerStarter::__StartWebServer_forAP() {
+	webserver.serveStatic("/", SPIFFS, "/");
+
 	webserver.on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
 		String logmessage = "Client:" + request->client()->remoteIP().toString() + + " " + request->url();
 		Serial.println(logmessage);
@@ -175,11 +177,10 @@ void WebServerStarter::__StartWebServer_forAP() {
 	// Web Server Root URL
 	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 		Logger::Info("ap_webserver. request on  '/'");
-		Logger::Print("sending configurator html file", diction->HtmlFilename_of_Configurator->GetChars());
-		request->send(SPIFFS, diction->HtmlFilename_of_Configurator->GetChars(), "text/html");
+		Logger::Print("sending configurator html file", diction->HtmlFilename_of_Configurator.GetChars());
+		request->send(SPIFFS, diction->HtmlFilename_of_Configurator.GetChars(), "text/html");
 	});
 	
-	webserver.serveStatic("/", SPIFFS, "/");
 	
 	webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
 		int params = request->params();

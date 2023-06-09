@@ -7,7 +7,8 @@ void WebConfiguratorDiction_LoogPorter::Init(){
     // any sequence. 
 
     // Gpio_of_ConfigButton  = PIN_GPIO_OF_CONFIG_BUTTON_AT_SERIAL_PORT_SNIFFER;
-    HtmlFilename_of_Configurator = &__html_filename;
+    // HtmlFilename_of_Configurator = &__html_filename;
+    HtmlFilename_of_Configurator.CopyFrom("default.html");
     
     // _parameters = __parameters[0];
     

@@ -24,7 +24,7 @@ class ApWebserver_DictionBase{
 		Html_Parameter para_try_sta;  
 
 
-        FsFilename* HtmlFilename_of_Configurator;
+        FsFilename HtmlFilename_of_Configurator;
         PositionTrigger* ConfigButton = nullptr;
 
     protected:
