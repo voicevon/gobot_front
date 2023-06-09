@@ -16,7 +16,7 @@ class LuaWrapperBase: public MqttSubscriberBase{
 
 		
 	protected:
-		lua_State *_state;
+		lua_State *_lua_state;
 		virtual void __Go_on_register();
 		void _Lua_register(const String name, const lua_CFunction function);
 		bool _is_running = false;

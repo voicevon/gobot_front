@@ -54,9 +54,18 @@ extern "C" {
 
 } 
 
+static const struct luaL_Reg von_hw_functions[] =
+{
+	{"pinMode", lua_wrapper_pinMode},
+    {"digitalWrite", lua_wrapper_digitalWrite},
+    {"digitalRead", lua_wrapper_digitalRead},
+	{"millis", lua_wrapper_millis},
+    {0,           	0}
+};
+
 void LuaWrapperBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 	// String script = payload;
-	// _state.close();
+	// _lua_state.close();
 	// Stop current lua-vm
 	Logger::Debug("LuaWrapperBase::onGot_MqttMessage()");
 	this->Begin();
@@ -81,17 +90,17 @@ void LuaWrapperBase::Begin(){
 	if (_is_running){
 		// abord currenttly running
 	}
-	_state = luaL_newstate();
-	luaopen_base(_state);
-	luaopen_table(_state);
-	luaopen_string(_state);
-	luaopen_math(_state);
+	_lua_state = luaL_newstate();
+	luaopen_base(_lua_state);
+	luaopen_table(_lua_state);
+	luaopen_string(_lua_state);
+	luaopen_math(_lua_state);
 	// register  common_driver
-	lua_register(_state, "print", lua_wrapper_print);
-	_Lua_register("pinMode", lua_wrapper_pinMode);
-    _Lua_register("digitalWrite", lua_wrapper_digitalWrite);
-    _Lua_register("digitalRead", lua_wrapper_digitalRead);
-	_Lua_register("millis", lua_wrapper_millis);
+	lua_register(_lua_state, "print", lua_wrapper_print);
+    luaL_openlibs(_lua_state); 
+	luaL_newlib(_lua_state, von_hw_functions);
+    lua_setglobal(_lua_state, "hw");   
+
 
 	// register customized driver
 	this->__Go_on_register();
@@ -99,23 +108,23 @@ void LuaWrapperBase::Begin(){
 }
 
 void LuaWrapperBase::LoadString(String* content){
-	// luaL_loadbuffer(_state,content->c_str(), content->length());
-	luaL_loadstring(_state, content->c_str());
+	// luaL_loadbuffer(_lua_state,content->c_str(), content->length());
+	luaL_loadstring(_lua_state, content->c_str());
 
 }
 
 String LuaWrapperBase::Lua_dostring(const char *script) {
 	String result;
 	// Logger::Print("Lua_dostirng()", script);
-	if (luaL_dostring(_state, script)) {
-		result += "# lua error:\n" + String(lua_tostring(_state, -1));
-		lua_pop(_state, 1);
+	if (luaL_dostring(_lua_state, script)) {
+		result += "# lua error:\n" + String(lua_tostring(_lua_state, -1));
+		lua_pop(_lua_state, 1);
 	}
 	return result;
 }
 
 void LuaWrapperBase::_Lua_register(const String name, const lua_CFunction function) {
-	lua_register(_state, name.c_str(), function);
+	lua_register(_lua_state, name.c_str(), function);
 }
 
 
