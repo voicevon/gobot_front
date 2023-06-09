@@ -9,8 +9,12 @@ void gs_MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char
         if (subscriber->IsTopicEqualTo(topic)){
             // Logger::Print("Got Mqtt Subscriber of topic:", subscriber->GetMqttTopic());
             subscriber->onGot_MqttMessage(payload, payload_len);
+            return;
         }
     }
+    Logger::Warn("gs_MqttSubscriberManager::on_mqtt_client_received_message().  Out of my managerment");
+    Logger::Print(topic, payload);
+
 }
 
 void gs_MqttSubscriberManager::AddSubscriber(const char* mqtt_topic, MqttSubscriberBase* subscriber){

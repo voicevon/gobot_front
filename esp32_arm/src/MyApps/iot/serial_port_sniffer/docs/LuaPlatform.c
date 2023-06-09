@@ -49,6 +49,11 @@
 // static int LuaRFRecv(lua_State* l);
 // static int LuaRFResponse(lua_State* l);
 
+// static int LuaSetLamp(lua_State *l);
+// static int LuaGetRFData(lua_State *l);
+// static int LuaResetSystem(lua_State *l);
+// static int LuaComputeCRC(lua_State *l);
+
 // static const struct luaL_Reg RichonFunc[] =
 // {
 // 	{"WaitEvent",	LuaWaitEvent},
@@ -76,7 +81,11 @@
 // 	{"GetInputByUserData", LuaGetInputByUserData},
 // 	{"RFRecv",		LuaRFRecv},
 // 	{"RFResponse",  LuaRFResponse},
-//     {0,           0}
+// 	{"SetLamp",		LuaSetLamp},
+// 	{"GetRFData",	LuaGetRFData},
+// 	{"ResetSystem", LuaResetSystem},
+// 	{"ComputeCRC",	LuaComputeCRC},
+//     {0,           	0}
 // };
 
 // static int LuaBitAnd(lua_State* l);
@@ -91,7 +100,7 @@
 
 // extern OS_FLAG_GRP * pFlagGrp;
 // extern INT8U sendBuf[1024];
-// extern INT8U recvBuf[1024];		//RF���ջ���
+// extern INT8U recvBuf[1024];		//RF接收缓存
 
 // extern DataCollectResult dataCollectResult;
 
@@ -114,7 +123,7 @@
 //     luaL_newlib(L, RichonFunc);
 //     lua_setglobal(L, "richon");   
     
-// //	luaopen_bit32(L);	//LUAλ����֧�ֿ�
+// //	luaopen_bit32(L);	//LUA位运算支持库
 // 	luaL_newlib(L, BitFunc);
 // 	lua_setglobal(L, "Convert");
 	
@@ -221,7 +230,6 @@
 // 			end\
 // 			if (evt & 0x02) == 2 then \
 // 				TaskManager.signal('RFRECV') \
-// 				richon.ResumeTask(RFTASK) \
 // 			end\
 // 			if (evt & 0x04) == 4 then \
 // 				TaskManager.signal('UARTRECV') \
@@ -234,7 +242,7 @@
 // //			end "
 // 		"end ";
 
-// 	luaL_dostring(l, pGlobalVarDef);		//ȫ�ֱ���������
+// 	luaL_dostring(l, pGlobalVarDef);		//全局变量定义区
 // 	result = luaL_dostring(l, taskManStr);
 // 	if(LUA_OK != result){
 // 		printf("taskManStr loading error %d\n\r", result);
@@ -245,8 +253,8 @@
 // 		printf("runStr loading error %d\n\r", result);
 // 	}
 	
-// 	//����Ҫ�ж��Ƿ����ض���λ���нű���Ĭ���������¼��һ��ѭ������
-// 	//����鿴ǰ�˸��ֽڶ���FF��д��dummy�ű�
+// 	//首先要判断是否在特定的位置有脚本，默认情况下烧录仅一个循环程序
+// 	//如果查看前八个字节都是FF则写入dummy脚本
 // 	pDummyScript = "function DummyScript() \
 // 		while true do \
 // 			richon.Printf('Dummy\\n\\r') \
@@ -266,8 +274,8 @@
 // //	}
 // 	bHasScript = FALSE;
 	
-// 	//��д��256���ֽ��ǳ������⣬�����û��0�����������ֻ��ȫ��ˢ��Flash��Ϊ�˽��������⣬��Ҫ�ж϶��
-// 	for(i = 1; i < 64; ++i){		//��಻�ܳ���64��256��Ҳ����16K
+// 	//当写入256个字节是出现问题，则后面没有0，则会死机，只能全部刷新Flash，为了解决这个问题，需要判断多次
+// 	for(i = 1; i < 64; ++i){		//最多不能超过64个256，也就是16K
 // 		if((INT8U)pScript[i * 256 - 1] == 0x00){
 // 			bHasScript = TRUE;
 // 			break;
@@ -279,7 +287,7 @@
 // 	}
 		
 // 	if(bHasScript == FALSE){
-// 		//д��dummy�ű�
+// 		//写入dummy脚本
 // 		WriteScript((INT8U*)pDummyScript, strlen(pDummyScript) + 1, 0);
 // 	}
 	
@@ -295,9 +303,9 @@
 // 	INT8U err;
 // 	OS_FLAGS flags;
 	
-// 	flags = OSFlagPend(pFlagGrp, (OS_FLAGS)ALL_FLAGS, OS_FLAG_WAIT_SET_ANY | OS_FLAG_CONSUME, 4, &err);	//50����һ�γ�ʱ
+// 	flags = OSFlagPend(pFlagGrp, (OS_FLAGS)ALL_FLAGS, OS_FLAG_WAIT_SET_ANY | OS_FLAG_CONSUME, 4, &err);	//50毫秒一次超时
 	
-// 	//��flags���͵�LUA��
+// 	//把flags发送到LUA中
 // 	lua_pushinteger(l, flags);
 // 	return 1;
 // }
@@ -319,7 +327,86 @@
 //     return 0;	
 // }
 
-// int LuaGetInputData(lua_State* l){	//��IOTask�е�dataCollectResult���ֽڵ���ʽ���ݵ�LUA��
+// static int LuaComputeCRC(lua_State *l){
+// 	int i, tmp;
+// 	INT8U buf[64];
+// 	INT16U  crc16;
+	
+	
+// 	//获得LUA传递过来的数组
+// 	tmp = 0;
+// 	i = lua_gettop(l);
+// 	if(lua_istable(l, i)){
+// 		lua_pushnil(l);
+		
+// 		while(lua_next(l, i) != 0){
+// 			buf[tmp] = lua_tointeger(l, -1);
+// 			lua_remove(l, -1);
+// 			++tmp;
+// 		}
+// 	}
+	
+// 	//计算CRC16
+// 	crc16 = Cal_CRC(buf, tmp);
+	
+// 	//返回两个字节的数据
+// 	lua_newtable(l);
+		
+// 	lua_pushinteger(l, crc16 & 0xFF);
+// 	lua_rawseti(l, -2, 1);
+// 	lua_pushinteger(l, (crc16 >> 8) & 0xFF);
+// 	lua_rawseti(l, -2, 2);
+	
+// 	return 1;
+// }
+
+
+
+// /*
+// 参数格式：LuaSetLamp(target, state);
+// 	其中target有0,1,2
+// 		state为0/1
+// LUA调用方式：SetLamp(target, state)
+// */
+// static int LuaSetLamp(lua_State *l){
+// 	int i;
+// 	int target, state;
+	
+// 	i = lua_gettop(l);
+// 	if(i == 2){
+// 		target = lua_tointeger(l, 1);
+// 		state = lua_tointeger(l, 2);
+// 	}	
+	
+// 	switch(target){
+// 		case 0:
+// 			if(state)
+// 				LAMP1_OFF();
+// 			else
+// 				LAMP1_ON();
+// 			break;
+
+// 		case 1:
+// 			if(state)
+// 				LAMP2_OFF();
+// 			else
+// 				LAMP2_ON();
+// 			break;
+			
+// 		case 2:
+// 			if(state)
+// 				POWER_OFF();
+// 			else
+// 				POWER_ON();
+// 			break;
+// 		default:
+// 			break;
+// 	}
+	
+// 	return 0;
+// }
+
+// int LuaGetInputData(lua_State* l){	//把IOTask中的dataCollectResult以字节的形式传递到LUA中
 // 	size_t iBytes;
 // 	const char* p;
 		
@@ -383,7 +470,7 @@
 // 	INT8U buf[64];
 // 	INT16U semcount;
 	
-// 	//���LUA���ݹ���������
+// 	//获得LUA传递过来的数组
 // 	tmp = 0;
 // 	i = lua_gettop(l);
 // 	if(lua_istable(l, i)){
@@ -409,7 +496,7 @@
 // 	INT8U i;
 	
 // 	if(uartRecvStruct.len > 0){
-// 		//����UART���ջ��������ݵ�LUA�����
+// 		//拷贝UART接收缓冲区数据到LUA虚拟机
 // 		lua_newtable(l);
 // 		for(i = 0; i < uartRecvStruct.len; ++i){
 // 			lua_pushinteger(l, uartRecvStruct.buf[i]);
@@ -421,14 +508,42 @@
 // 	return 0;
 // }
 
+// typedef struct tagCacheData{
+// 	INT8U len;
+// 	INT8U buf[64];
+// } CacheData;
+
+// static CacheData cacheData;
+// void CacheRFRecvData(INT8U *p, INT8U len){
+// 	memset(&cacheData, 0, sizeof(cacheData));
+// 	cacheData.len = len;
+// 	memcpy(cacheData.buf, p, len);
+// }
+
+// static int LuaGetRFData(lua_State *l){
+// 	INT8U i;
+	
+// 	if(cacheData.len < 64){
+// 		lua_newtable(l);
+// 		for(i = 0;i < cacheData.len; ++i){
+// 			lua_pushinteger(l, cacheData.buf[i]);
+// 			lua_rawseti(l, -2, i + 1);
+// 		}
+		
+// 		return 1;
+// 	}
+	
+// 	return 0;	
+// }
+
 // static int LuaRFRecv(lua_State* l){
-// 	//��ô�RF���͵�LUA�����е�����
+// 	//获得从RF发送到LUA引擎中的命令
 // 	INT16U i;
 // 	CmdStruct* pCmd;
 	
 // 	pCmd = (CmdStruct*)recvBuf;
 	
-// 	//���������͹��������ݷ��͵�LUA����
+// 	//把主机发送过来的数据发送到LUA引擎
 // 	lua_newtable(l);
 // 	for(i = 0; i < pCmd->paramLen; ++i){
 // 		lua_pushinteger(l, pCmd->param[i]);
@@ -446,7 +561,7 @@
 // 	pResult->cmd = CMD_SENDTOLUA;
 // 	pResult->status = 0;
 	
-// 	//�ж����鳤��
+// 	//判断数组长度
 // 	i = lua_gettop(l);
 // 	if(lua_istable(l, i)){
 // 		lua_pushnil(l);
@@ -463,7 +578,7 @@
 // }
 
 // static int LuaSendToHost(lua_State* l){
-// 	//�������������ݣ����ݹ��������ֽ�����
+// 	//向主机发送数据，传递过来的是字节数组
 // 	INT8U err;
 // 	int i;
 // 	size_t tmp;
@@ -499,7 +614,7 @@
 // 		}
 // 	}
 	
-// 	//����������ݷŵ�RF������Է��ʵ�λ�ã����һ������
+// 	//在这里把数据放到RF任务可以访问的位置，并且互斥访问
 // 	OSSemPend(luaToHostStruct.pMutex, 0, &err);
 // 	if(err == OS_ERR_NONE){
 // 		luaToHostStruct.bChanged = TRUE;
@@ -511,7 +626,7 @@
 // }
 
 // static int LuaSendToHostWithFlag(lua_State* l){
-// 	//�������������ݣ����ݹ��������ֽ�����
+// 	//向主机发送数据，传递过来的是字节数组
 // 	INT8U err;
 // 	int i;
 // 	size_t tmp;
@@ -525,14 +640,14 @@
 	
 // 	flag = 0;
 // 	if(i == 2){
-// 		//�õ���һ��������flag��
+// 		//得到第一个参数（flag）
 // 		if(lua_isinteger(l, 1)){
 // 			flag = lua_tointeger(l, 1);
 // //			lua_remove(l, -1);
 // 		}
 // 	}
 	
-// 	buf[0] = flag;			//��һ���ֽ���flag
+// 	buf[0] = flag;			//第一个字节是flag
 // 	tmp = 1;
 	
 // 	if(lua_istable(l, i)){
@@ -561,7 +676,7 @@
 // 		}
 // 	}
 	
-// 	//����������ݷŵ�RF������Է��ʵ�λ�ã����һ������
+// 	//在这里把数据放到RF任务可以访问的位置，并且互斥访问
 // 	OSSemPend(luaToHostStruct.pMutex, 0, &err);
 // 	if(err == OS_ERR_NONE){
 // 		luaToHostStruct.bChanged = TRUE;
@@ -580,13 +695,13 @@
 // 	DataCollectResult* p;
 // 	pResult = (ResultStruct*)sendBuf;
 // 	p = (DataCollectResult*)lua_touserdata(l, 1);
-// 	if(NULL == p){					//���ݹ�����userdataΪnil
+// 	if(NULL == p){					//传递过来的userdata为nil
 // 		pResult->cmd = CMD_QUERYDATA;	//0x00;	///pCmd->cmd;
 //         pResult->status = 0;
 //         pResult->paramLen = 0;		
 // 		return 0;
 // 	}
-// 	//��������֯����
+// 	//在这里组织数据
 // 	if(p->bChanged){
 // 		pResult->cmd = CMD_QUERYRESULT;
 // 		pResult->status = 0;
@@ -655,8 +770,8 @@
 // 	lua_pushnumber(L, 2);
 // 	lua_pushnumber(L, 3);
 	
-// 	if(lua_pcall(L, 2, 1, 0) != 0){	//lua_pcall����(lua_Sate, int nargs, int nresults, int errfunc)�����һ�������ǳ���ʱ�Զ�����
-// 									//���¸�ʽ���ã�(L, errfun)(errmsg)������������һ����������ʹ��lua_call(lua_State, int nargs, int nresults)��
+// 	if(lua_pcall(L, 2, 1, 0) != 0){	//lua_pcall参数(lua_Sate, int nargs, int nresults, int errfunc)，最后一个参数是出错时自动按照
+// 									//如下格式调用：(L, errfun)(errmsg)。如果不用最后一个参数可以使用lua_call(lua_State, int nargs, int nresults)；
 // 		return;
 // 	}
 	
@@ -666,7 +781,7 @@
 	
 // 	lua_tonumber(L, -1);
 	
-// 	lua_pop(L, 1);		//Ϊ��ƽ��ջ����Ҫ�ѷ���ֵ��ջ
+// 	lua_pop(L, 1);		//为了平衡栈，需要把返回值弹栈
 // }
 
 // int LuaPrintf(lua_State* l){
@@ -681,7 +796,7 @@
 // 	if(i == 1){
 // 		p = lua_tolstring(l, 1, &len);
 // 		if(len > 0)
-// 			printf("%s", p);	//������뾯�棺warning format string is not string literal
+// 			printf("%s", p);	//解决编译警告：warning format string is not string literal
 // 	}
 	
 // 	return 0;
@@ -781,7 +896,7 @@
 // }
 
 // static int LuaBitAnd(lua_State* l){
-// 	//������������λ��󷵻�
+// 	//两个参数进行位与后返回
 // 	int i;
 // 	int result;
 	
@@ -797,7 +912,7 @@
 // }
 
 // /*
-// ��LUA�а���IEEE-754��׼ʵ��float��byte�����ת�������պ�ʵ��
+// 在LUA中按照IEEE-754标准实现float到byte数组的转换留待日后实现
 // */
 // static int LuaNumber2Bytes(lua_State* l){
 // 	int i;
@@ -826,3 +941,11 @@
 	
 // 	return 0;
 // }
+
+// static int LuaResetSystem(lua_State *l){
+// 	NVIC_SystemReset();
+// 	return 0;
+// }
+
+
+

@@ -47,6 +47,11 @@ void AppBase::__dispach_tail_message(){
 //              MQTT
 //
 void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+    if (payload_len > __app_command.GetBufferSize()){
+        String pp = String(payload);
+        Logger::Error("AppBase::onGot_MqttMessage() oversize");
+        return;
+    }
     //format string ender.
     char* p = (char*)(payload);
     p[payload_len] = 0x00;  
@@ -54,7 +59,7 @@ void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     Logger::Print("payload", payload);
     Logger::Print("payload_len", payload_len);
     // const char* IS_APP_COMMAND = APP_COMMAND_PREFIX;
-
+    
     __have_done_feedback = false;
     // TextMessageLine command_text;
     __app_command.CopyFrom(payload,payload_len);
@@ -118,21 +123,6 @@ void AppBase::__deal_feedback(){
 //*****************************************************************************************
 //              LUA
 //
-// void AppBase::__Lua_RunLine_ofFile(){
-//     // Logger::Debug("AppBase::__Lua_RunLine_ofFile()");
-// 	if (__lua_file.available()) {
-// 		String line = __lua_file.readStringUntil('\n');
-// 		Logger::Info(line.c_str());
-// 		String result = __lua->Lua_dostring(&line);
-// 		Serial.println(result);
-// 	}else{
-// 		__lua_file.close();
-// 		__is_lua_running_file = false;   //???
-// 		Logger::Info("LuaWrapperBase::SpinOnce()  Run lua file ending report");
-// 	}
-
-// }
-
 void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
 	Logger::Debug("LuaWrapperBase::Begin()");
 	Logger::Print("filename", filename);

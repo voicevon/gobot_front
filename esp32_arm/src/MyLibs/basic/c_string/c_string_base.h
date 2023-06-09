@@ -18,6 +18,7 @@ class  C_String_Base{
         C_String_Base(){};
         void Init(int buffer_size, char* buffer);
         int Find_MismachLocation(const void* b, int length);
+        int GetBufferSize(){return __buffer_size;};
         
 
         // const char &GetText = *__chars;  // For Arduino::chars[n]

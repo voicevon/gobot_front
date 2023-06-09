@@ -1,5 +1,7 @@
 #include "lua_wrapper_base.h"
 #include "MyLibs/utility/logger.h"
+#include "MyLibs/mqtt/mqtt_subscriber_manager.h"
+#include <SPIFFS.h>
 
 extern "C" {
 	static int lua_wrapper_print (lua_State *L) {
@@ -20,6 +22,7 @@ extern "C" {
 				Serial.write("\t");
 			}
 			Serial.write(s);
+			g_mqttClient.publish("lua/test/output",2, true, s);
 			lua_pop(L, 1);  /* pop result */
 		}
 		Serial.println();
@@ -50,6 +53,29 @@ extern "C" {
 	}
 
 } 
+
+void LuaWrapperBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+	// String script = payload;
+	// _state.close();
+	// Stop current lua-vm
+	Logger::Debug("LuaWrapperBase::onGot_MqttMessage()");
+	this->Begin();
+	char* pp = (char*) payload;
+	*(pp + payload_len) = 0x00;
+
+	this->Lua_dostring(payload);
+	this->Lua_dostring("setup()");
+
+	// write to file
+	File file = SPIFFS.open("/test.lua", FILE_WRITE);
+	file.println(payload);
+	file.close();
+	Logger::Info("/test.lua is saved.");
+}
+
+void LuaWrapperBase::Link_Mqtt(const char* mqtt_topic){
+    gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
+}
 
 void LuaWrapperBase::Begin(){
 	if (_is_running){
