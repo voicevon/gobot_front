@@ -6,6 +6,9 @@
 #include "lua_base/lua_base.h"
 #include "MyLibs/basic/c_string/fs_filename.h"
 #include "SPIFFS.h"
+// #include "Mylibs/utility/webserver_starter/webserver_starter.h"
+#include "Mylibs/utility/webserver_starter/web_configurator_diction.h"
+
 
 // #define TEXT_MESSAGE_QUEUE_SIZE 20
 
@@ -13,6 +16,7 @@ class AppBase: public MqttSubscriberBase{
     public:
         // void Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic, TextMessageQueue* text_command_queue);
         // void Init();
+        void StartWebServer(ApWebserver_DictionBase* diction);
         void Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic);
         void Link_Robot(RobotBase* robot){__robot=robot;};
         void Link_lua_from_File(LuaWrapperBase* lua, const char* filename);
@@ -32,14 +36,15 @@ class AppBase: public MqttSubscriberBase{
         void __deal_feedback();
         void __dispach_tail_message();
         int test_id = 1234;
+
+        char __mqtt_topic_feedback[40];  //TODO: class MqttTopic
         bool __have_done_feedback = true;
-        char __mqtt_topic_feedback[40];
-        TextMessageLine __app_command;
+        TextMessageLine __text_message;
+
         RobotBase* __robot = nullptr;
 
         // Lua and Lua file
         LuaWrapperBase* __lua = nullptr;
-        // FsFilename __lua_filename;
 		File __lua_file;
         bool __is_lua_running_file = false;
 

@@ -23,10 +23,9 @@ void setup(){
 	serial_port_sniffer_board.TestSerialPortMaster();
 	serial_port_sniffer_board.TestSerialPortSlave();
 
-
-
 	diction.Init();
-	WebServerStarter::Begin(&diction);
+	app.StartWebServer(&diction);
+	// WebServerStarter::Begin(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 
 	app.Link_Mqtt_to_TextMessageQueue("serial_port_sniffer");

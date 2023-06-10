@@ -2,6 +2,7 @@
 #include "stdint.h"
 #include "MyLibs/utility/logger.h"
 #include "wifi_mqtt_client.h"
+#include "basic/mqtt_topic.h"
 
 class MqttSubscriberBase{
     public:

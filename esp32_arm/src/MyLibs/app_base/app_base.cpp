@@ -1,9 +1,12 @@
 #include "app_base.h"
 #include "MyLibs/mqtt/mqtt_subscriber_manager.h"
-
+#include "Mylibs/utility/webserver_starter/webserver_starter.h"
 #define APP_COMMAND_PREFIX  "app:"
 #define APP_COMMAND_PREFIX_SIZE 4
 
+void AppBase::StartWebServer(ApWebserver_DictionBase* diction){
+	WebServerStarter::Begin(diction);
+}
 
 void AppBase::SpinOnce(){
     __deal_feedback();
@@ -47,7 +50,7 @@ void AppBase::__dispach_tail_message(){
 //              MQTT
 //
 void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
-    if (payload_len > __app_command.GetBufferSize()){
+    if (payload_len > __text_message.GetBufferSize()){
         String pp = String(payload);
         Logger::Error("AppBase::onGot_MqttMessage() oversize");
         return;
@@ -62,13 +65,13 @@ void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     
     __have_done_feedback = false;
     // TextMessageLine command_text;
-    __app_command.CopyFrom(payload,payload_len);
-    if (__app_command.IsEqualTo("app:led")){
+    __text_message.CopyFrom(payload,payload_len);
+    if (__text_message.IsEqualTo("app:led")){
         // This is a thread in mqtt-on-received callbaking.    so watchdog will be fired if long time without return.
-        // this->ExecuteAppCommand(&__app_command);
+        // this->ExecuteAppCommand(&__text_message);
         return;
     }
-    __app_command.CopyFrom("none");
+    __text_message.CopyFrom("none");
     int free_buffer_count = _text_message_queue.GetFreeBuffersCount();
     if (free_buffer_count <=1 ){
         Logger::Error("AppBase::onGot_MqttMessage()  buffer is full");
@@ -98,9 +101,9 @@ void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic){
 void AppBase::__deal_feedback(){
     if (__have_done_feedback)
         return;
-    if (__app_command.IsPrefix("app:")){
-        g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, __app_command.GetChars());
-        this->ExecuteAppCommand(&__app_command);
+    if (__text_message.IsPrefix("app:")){
+        g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, __text_message.GetChars());
+        this->ExecuteAppCommand(&__text_message);
     }
     if (_text_message_queue.GetFreeBuffersCount() == 0)
         return;
@@ -131,9 +134,6 @@ void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
     String result = __lua->Lua_dostring("setup()");
 }
 
-// void AppBase::Link_lua_from_Mqtt(LuaWrapperBase* lua, const char* mqtt_topic){
-//     __lua = lua;
-//     this->Link_Mqtt_to_TextMessageQueue(mqtt_topic);
-// }
+
 
 

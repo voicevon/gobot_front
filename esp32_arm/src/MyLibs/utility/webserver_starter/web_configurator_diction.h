@@ -12,8 +12,8 @@ class WebConfiguratorDiction_Standard:public ApWebserver_DictionBase{
 		WebConfiguratorDiction_Standard(){};
 		void Init(){
 			_Init(&__parameters[0], WEB_CONFIGURATOR_DEMO_PARAMETERS_COUNT);
-		    Gpio_of_ConfigButton  = PIN_GPIO_OF_CONFIG_BUTTON_AT_STANDARD;
-    		HtmlFilename_of_Configurator = &__html_file;
+		    // Gpio_of_ConfigButton  = PIN_GPIO_OF_CONFIG_BUTTON_AT_STANDARD;
+    		// HtmlFilename_of_Configurator = &__html_file;
 		}
 	
 	private:
