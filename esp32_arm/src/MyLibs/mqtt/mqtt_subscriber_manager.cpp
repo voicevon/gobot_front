@@ -1,4 +1,7 @@
 #include "mqtt_subscriber_manager.h"
+#include "mqtt_client.h"
+#include "MyLibs/utility/logger.h"
+#include "wifi_mqtt_client.h"
 
 void gs_MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char* payload,  size_t payload_len){
     MqttSubscriberBase* subscriber;
@@ -6,7 +9,8 @@ void gs_MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char
     for (int i=0; i<__subscriber_count; i++){
         // try to find who is subscribing this topic
         subscriber = __all_subscribers[i];
-        if (subscriber->IsTopicEqualTo(topic)){
+        // if (subscriber->IsTopicEqualTo(topic)){
+        if (subscriber->GetMqttTopic()->IsEqualTo(topic)){
             // Logger::Print("Got Mqtt Subscriber of topic:", subscriber->GetMqttTopic());
             subscriber->onGot_MqttMessage(payload, payload_len);
             return;
@@ -19,7 +23,7 @@ void gs_MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char
 
 void gs_MqttSubscriberManager::AddSubscriber(const char* mqtt_topic, MqttSubscriberBase* subscriber){
     __all_subscribers[__subscriber_count] = subscriber;
-    subscriber->SetMqttTopic(mqtt_topic);
+    subscriber->SubscribeMqtt(mqtt_topic);
     g_mqttClient.subscribe(mqtt_topic, 2);
 
     __subscriber_count++;

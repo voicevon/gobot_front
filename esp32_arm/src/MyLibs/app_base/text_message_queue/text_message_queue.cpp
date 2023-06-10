@@ -74,7 +74,7 @@ int TextMessageQueue::AppendTextMessageLine(TextMessageLine* command_text){
     //     return -2;
     // }
     TextMessageLine* command_text_in_queue = this->GetRoom_ForDeposit();
-    command_text_in_queue->CopyFrom(command_text->GetChars());
+    command_text_in_queue->CopyFrom(command_text->c_str());
     this->Deposit();
     return 1;
     // int result = command_text->CopyFrom(payload, length);

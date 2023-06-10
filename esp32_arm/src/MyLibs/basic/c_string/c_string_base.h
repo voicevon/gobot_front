@@ -14,7 +14,7 @@ class  C_String_Base{
         void CopyTo(char* destination);
         bool IsEqualTo(const char* chars);
         bool IsPrefix(const char* chars);
-        char* GetChars(){return __chars;};
+        char* c_str(){return __chars;};
         C_String_Base(){};
         void Init(int buffer_size, char* buffer);
         int Find_MismachLocation(const void* b, int length);

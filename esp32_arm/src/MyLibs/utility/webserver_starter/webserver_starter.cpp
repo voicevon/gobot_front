@@ -177,8 +177,8 @@ void WebServerStarter::__StartWebServer_forAP() {
 	// Web Server Root URL
 	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 		Logger::Info("ap_webserver. request on  '/'");
-		Logger::Print("sending configurator html file", diction->HtmlFilename_of_Configurator.GetChars());
-		request->send(SPIFFS, diction->HtmlFilename_of_Configurator.GetChars(), "text/html");
+		Logger::Print("sending configurator html file", diction->HtmlFilename_of_Configurator.c_str());
+		request->send(SPIFFS, diction->HtmlFilename_of_Configurator.c_str(), "text/html");
 	});
 	
 	

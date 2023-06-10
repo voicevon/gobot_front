@@ -10,7 +10,7 @@ void RemoteVar_Chars::InitFilename(const char* filename){
 }
 void RemoteVar_Chars::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     if (__write_to_file){
-        File file = SPIFFS.open(__fs_filename.GetChars(), FILE_WRITE);
+        File file = SPIFFS.open(__fs_filename.c_str(), FILE_WRITE);
         if (!file) {
             Serial.println("There was an error opening the file for writing");
             return;
@@ -35,7 +35,7 @@ void RemoteVar_Chars::onGot_MqttMessage(const char* payload, uint16_t payload_le
     // __remote_value = atoi(payload);
     __got_remote_value = true;
     Logger::Debug("ConcernSensorSetter::onGot_MqttMessage");
-    Logger::Print(this->_mqtt_topic, payload);
+    Logger::Print(this->_mqtt_topic.c_str(), payload);
     Logger::Print("__remote_value", __remote_value);
 }
 

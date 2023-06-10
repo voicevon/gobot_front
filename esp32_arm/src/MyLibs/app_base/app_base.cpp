@@ -1,6 +1,8 @@
 #include "app_base.h"
 #include "MyLibs/mqtt/mqtt_subscriber_manager.h"
 #include "Mylibs/utility/webserver_starter/webserver_starter.h"
+#include "MyLibs/mqtt/wifi_mqtt_client.h"  //g_mqtt_client
+
 #define APP_COMMAND_PREFIX  "app:"
 #define APP_COMMAND_PREFIX_SIZE 4
 
@@ -36,8 +38,8 @@ void AppBase::__dispach_tail_message(){
                 Logger::Error("Try to feed gcode to LUA,  but LUA is nullptr");
             }else{
                 line->RemovePrefix();
-                Logger::Print("get lua text", line->GetChars());
-                __lua->Lua_dostring(line->GetChars());
+                Logger::Print("get lua text", line->c_str());
+                __lua->Lua_dostring(line->c_str());
                 _text_message_queue.WithdrawTailElement();
             }
         default:
@@ -102,7 +104,7 @@ void AppBase::__deal_feedback(){
     if (__have_done_feedback)
         return;
     if (__text_message.IsPrefix("app:")){
-        g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, __text_message.GetChars());
+        g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, __text_message.c_str());
         this->ExecuteAppCommand(&__text_message);
     }
     if (_text_message_queue.GetFreeBuffersCount() == 0)
@@ -114,7 +116,7 @@ void AppBase::__deal_feedback(){
     // Logger::Print("send_feedback, this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
     // Logger::Print("send_feedback, payload", command_text->GetChars);
     // command_text->PrintFlat("verify origin");
-    g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, command_text->GetChars());
+    g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, command_text->c_str());
     __have_done_feedback = true;
     // Logger::Print("send_feedback, finished.", 99);
 }
