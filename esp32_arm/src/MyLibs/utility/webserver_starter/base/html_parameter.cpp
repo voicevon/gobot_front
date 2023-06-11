@@ -3,7 +3,7 @@
 
 Html_Parameter::Html_Parameter(){
     __fs= &SPIFFS;
-    __output_c_string.Init(30, __output_buffer);
+    __output_c_string.Init(__output_buffer, 30);
 }
 
 void Html_Parameter::SetName(const char* parameter_name){

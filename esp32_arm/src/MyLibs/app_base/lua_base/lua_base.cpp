@@ -64,6 +64,10 @@ static const struct luaL_Reg von_hw_functions[] =
     {0,           	0}
 };
 
+void LuaWrapperBase::FeedText(TextMessageLine* text_message_line){
+
+}
+
 void LuaWrapperBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 	Logger::Debug("LuaWrapperBase::onGot_MqttMessage()");
 	this->Begin();
@@ -85,9 +89,9 @@ void LuaWrapperBase::Link_Mqtt_for_Test(const char* mqtt_topic){
 }
 
 void LuaWrapperBase::Begin(){
-	if (__is_running){
+	// if (__is_running){
 		// abord currenttly running
-	}
+	// }
 	_lua_state = luaL_newstate();
 	luaopen_base(_lua_state);
 	luaopen_table(_lua_state);
@@ -102,7 +106,7 @@ void LuaWrapperBase::Begin(){
 
 	// register customized driver
 	this->_Go_on_register();
-	__is_running = true;
+	// __is_running = true;
 }
 
 // void LuaWrapperBase::LoadString(String* content){

@@ -2,13 +2,15 @@
 
 frame lua_engin{
     card lua_dostring
-
+    card lua_dofile
+    card lua_command
+    lua_dofile <-- lua_command
+    lua_dostring <-- lua_command
 }
-    collections lua_driver
-    card board
-    lua_dostring --> lua_driver
-    lua_driver --> board
-
+collections lua_driver
+card board
+lua_dostring ---> lua_driver
+lua_driver --> board
 
 frame robot{
     frame cnc{
@@ -19,49 +21,60 @@ frame robot{
             card MiddleKinematic
             IK <-[dashed]- MiddleKinematic
         }
-        frame planner{ 
+        frame planner{
+
         }
         queue move_blocks
 
-        planner <-- gcode_queue 
+        planner <-- gcode_queue
         planner <-[dashed]- IK
         planner --> move_blocks
-
-
     }
     frame mover{
         collections actuators
     }
-    move_blocks --> actuators
+    move_blocks ---> actuators
 }
 
-
+card mqtt_client
 frame AppBase{
-    frame text_message_dispatch{
-        card dispatcher
-    }
     queue text_message_queue
     card feedback
-    card mqtt_client
+    card dispatcher
+    card webconfig
+
 
     text_message_queue <-- mqtt_client
     feedback --> mqtt_client:  publish feedback
-    text_message_queue -[dashed]>feedback: check free buffer size
+    text_message_queue -[dashed]->feedback: check free buffer size
 
-    frame file_system{
-        card line_reader
-        card file_reader
-        line_reader <-[dashed]- file_reader
-    }
+
 }
+frame write_file{
+    card open_write
+    card write_line
+    card close_write
+    card file_command
+    open_write <-- file_command
+    write_line <-- file_command
+    close_write <-- file_command
+}
+file lua_file
+file gcode_file
+write_file --> gcode_file
+write_file --> lua_file
+planner <-[dashed]-- gcode_file
+lua_dofile <-[dashed]- lua_file
+
 
 dispatcher <-- text_message_queue
-gcode_queue <-- dispatcher 
-lua_dostring <-- dispatcher 
+gcode_queue <-- dispatcher
+file_command<--- dispatcher : open_file: \nfile_line:\nclose_file:
+lua_command <-- dispatcher : dostring: \n dofile:
 
 card app_logic_on_lua_script_file
-lua_dostring  <-- line_reader: lua script line
 app_logic_on_lua_script_file <-[#red,dashed]- lua_engin
+
 
 
 @enduml
