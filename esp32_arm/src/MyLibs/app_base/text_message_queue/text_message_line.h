@@ -6,17 +6,21 @@
 class TextMessageLine: public C_String_Base{
     public:
         enum Enum_Category{
+            GCODE,  //default
             LUA,
-            GCODE,
             FILE,
+            // UNKNOWN
         };
 
-        TextMessageLine(): C_String_Base(TEXT_MESSAGE_LINE_MAX_CHARS_COUNT, __all_chars){};
-        // TextMessageLine(Enum_Category preset_category): C_String_Base(50, __all_chars){__preset_category = preset_category;};
+        TextMessageLine(): C_String_Base(__all_chars, TEXT_MESSAGE_LINE_MAX_CHARS_COUNT){};
+        void SetCatogory(TextMessageLine::Enum_Category previous_category ){
+                __category=previous_category;
+             };
+        bool IsCategoryUpdated();
         Enum_Category GetCategory();
 
     private:
         char __all_chars[TEXT_MESSAGE_LINE_MAX_CHARS_COUNT];
         Enum_Category __category;
-        Enum_Category __preset_catetory;
+        // Enum_Category __preset_catetory;
 };

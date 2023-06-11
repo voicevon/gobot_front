@@ -58,10 +58,10 @@ void CncAppBase::Link_Mqtt_to_GcodeQueue(const char* mqtt_topic, GcodeQueue* gco
 void CncAppBase::SpinOnce(){
     if (__have_done_feedback)
         return;
-    if (__app_command.IsPrefix("app:")){
-        g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, __app_command.GetChars);
-        this->ExecuteAppCommand(&__app_command);
-    }
+    // if (__app_command.IsPrefix("app:")){
+    //     g_mqttClient.publish(this->__mqtt_topic_feedback, 2, true, __app_command.GetChars);
+    //     this->ExecuteAppCommand(&__app_command);
+    // }
     if (_gcode_queue->GetFreeBuffersCount() == 0)
         return;
 

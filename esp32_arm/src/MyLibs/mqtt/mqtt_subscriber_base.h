@@ -1,15 +1,15 @@
 #pragma once
 #include "stdint.h"
-// #include "MyLibs/utility/logger.h"
-// #include "wifi_mqtt_client.h"
 #include "basic/mqtt_topic.h"
 
 class MqttSubscriberBase{
     public:
+        // MqttSubscriberBase(){};
+        // virtual ~MqttSubscriberBase(){};
         void SubscribeMqtt(const char* mqtt_topic);
         MqttTopic* GetMqttTopic(){return &_mqtt_topic;};
-        virtual void onGot_MqttMessage(const char* payload, uint16_t payload_len);
-
+        virtual void onGot_MqttMessage(const char* payload, uint16_t payload_len){};
+        
     protected:
         MqttTopic _mqtt_topic;
 };

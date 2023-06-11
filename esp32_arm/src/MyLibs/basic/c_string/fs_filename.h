@@ -4,7 +4,7 @@
 
 class FsFilename: public C_String_Base{
     public:
-        FsFilename(): C_String_Base(30, __all_chars){};
+        FsFilename(): C_String_Base(__all_chars,30){};
         
     private:
         char __all_chars[30];

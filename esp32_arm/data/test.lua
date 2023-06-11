@@ -6,6 +6,5 @@ function loop()
   now = hw.millis()
   if now-p <1000  then return end
   p=now  i=i+1  print(i)
-  angle = wd.readSensorAngle()
-  print(angle)
+  
 end

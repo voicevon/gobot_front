@@ -4,7 +4,7 @@
 #define PIN_STATE_LED 2
 #define PIN_WEB_CONFIG_BUTTON 21
 #define PIN_ACTION_BUTTON 23
-#define PIN_H_BRIDGE_PWM_OUTPUT 18
+#define PIN_H_BRIDGE_PWM_OUTPUT 13
 #define PIN_H_BRIDGE_DIR_OUTPUT 19
 
 void WaterDropper_Board::__InitHardware(){

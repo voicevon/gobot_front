@@ -6,7 +6,7 @@
 class Twh_LoopPorter_App: public CncAppBase{
     public:
         Twh_LoopPorter_App(int row_id);
-        void ExecuteAppCommand(GcodeText* gcode_text) override; 
+        // void ExecuteAppCommand(GcodeText* gcode_text) override; 
         void LinkBoard(Twh_LoopPorter_Board* board){__board = board;};
         
     private:

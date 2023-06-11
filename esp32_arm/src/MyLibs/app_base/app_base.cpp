@@ -3,9 +3,10 @@
 #include "Mylibs/utility/webserver_starter/webserver_starter.h"
 #include "MyLibs/mqtt/wifi_mqtt_client.h"  //g_mqtt_client
 
-#define APP_COMMAND_PREFIX  "app:"
-#define APP_COMMAND_PREFIX_SIZE 4
 
+void AppBase::Init(){
+    __text_message_category = TextMessageLine::Enum_Category::GCODE;
+}
 
 void AppBase::SpinOnce(){
     __deal_feedback();
@@ -19,7 +20,11 @@ void AppBase::SpinOnce(){
 
 void AppBase::__dispach_tail_message(){
     TextMessageLine* tail_text = _text_message_queue.GetWithdrawTailElement(false);
-    switch (tail_text->GetCategory()){
+    tail_text->SetCatogory(__text_message_category);
+    if (tail_text->IsCategoryUpdated()){
+        __text_message_category = tail_text->GetCategory();
+    }
+        switch (tail_text->GetCategory()){
         case TextMessageLine::Enum_Category::FILE:
             __file_writter.FeedText(tail_text);
             break;
@@ -88,7 +93,7 @@ void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 }
 
 void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic){
-    int topic_len;
+    // int topic_len;
     // for(topic_len=0; topic_len<REPRAP_GCODE_MAX_SIZE; topic_len++){
     //     // Logger::Print("mqtt_topic[topic_len]", mqtt_topic[topic_len]);
     //     if (mqtt_topic[topic_len] == 0x00){
@@ -100,18 +105,21 @@ void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic){
     // __mqtt_topic_feedback[topic_len + 1] = 'f';
     // __mqtt_topic_feedback[topic_len + 2] = 'b';
     // __mqtt_topic_feedback[topic_len + 3] = 0x00;   //ender
+    Logger::Debug("55555555555555555555");
     __mqtt_topic_feedback.CopyFrom(mqtt_topic);
+    Logger::Debug("66666666666666");
     __mqtt_topic_feedback.Concat("/fb");
+    Logger::Debug("77777777777777");
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
 }
 
 void AppBase::__deal_feedback(){
     if (__have_done_feedback)
         return;
-    if (__head_text_message.IsPrefix("app:")){
-        g_mqttClient.publish(this->__mqtt_topic_feedback.c_str(), 2, true, __head_text_message.c_str());
-        this->ExecuteAppCommand(&__head_text_message);
-    }
+    // if (__head_text_message.IsPrefix("app:")){
+    //     g_mqttClient.publish(this->__mqtt_topic_feedback.c_str(), 2, true, __head_text_message.c_str());
+    //     this->ExecuteAppCommand(&__head_text_message);
+    // }
     if (_text_message_queue.GetFreeBuffersCount() == 0)
         return;
 

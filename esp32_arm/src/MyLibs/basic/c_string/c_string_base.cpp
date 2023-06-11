@@ -11,7 +11,8 @@ void C_String_Base::Init(char* buffer, int buffer_size){
     __text = buffer;
     // this->CopyFrom(command);
 }
-C_String_Base::C_String_Base(int buffer_size, char* buffer){
+
+C_String_Base::C_String_Base(char* buffer,int buffer_size){
     __buffer_size = buffer_size;
     __text = buffer;
     // this->CopyFrom(command);
@@ -29,6 +30,7 @@ int C_String_Base::CopyFrom(const char* text){
             return 1;
         }
     }
+    Logger::Error("C_String_Base::CopyFrom()  oversize" );
 }
 
 void C_String_Base::RemovePrefix(const char prefix_ender){
@@ -99,8 +101,6 @@ void C_String_Base::Concat(const char* text){
     Logger::Error("C_String_Base::Concat()  oversize");
 }
 
-
-
 void C_String_Base::PrintFlat(const char* title){
     Logger::Info(title);
     // Logger::Print("chars len",this->__buffer_size );
@@ -114,7 +114,6 @@ void C_String_Base::PrintFlat(const char* title){
         Serial.print(this->__text[i]);
     }
 }
-
 
 bool C_String_Base::IsEqualTo(const char* chars){
     for(int i=0; i<__buffer_size; i++){

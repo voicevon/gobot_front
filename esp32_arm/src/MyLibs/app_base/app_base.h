@@ -14,16 +14,19 @@
 
 class AppBase: public MqttSubscriberBase{
     public:
+        // AppBase():MqttSubscriberBase(){};
+        // virtual ~AppBase(){};
+        void Init();
         void StartWebServer(ApWebserver_DictionBase* diction);
         void Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic);
         void Link_Robot(RobotBase* robot){__robot=robot;};
         void Link_lua_from_File(LuaWrapperBase* lua, const char* filename);
         // void Link_lua_from_Mqtt(LuaWrapperBase* lua, const char* mqtt_topic);
 
-        virtual void ExecuteAppCommand(TextMessageLine* gcode_text){}; 
+        // virtual void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;
+        void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;
 
         void SpinOnce(); 
-        void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;
 
 
     protected:
@@ -37,6 +40,7 @@ class AppBase: public MqttSubscriberBase{
         MqttTopic __mqtt_topic_feedback;
         bool __have_done_feedback = true;
         TextMessageLine __head_text_message;
+        TextMessageLine::Enum_Category __text_message_category ; // = TextMessageLine::Enum_Category::GCODE;
 
         RobotBase* __robot = nullptr;
         FileWritter __file_writter;

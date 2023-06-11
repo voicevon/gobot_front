@@ -9,13 +9,13 @@
 class  C_String_Base{
     public:
         C_String_Base(){};
-        void Init(char* buffer, int buffer_size);
-        int CopyFrom(const char* bytes, int length);
-        int CopyFrom(const char* bytes);
+        void Init(char* text, int buffer_size);
+        int CopyFrom(const char* text, int length);
+        int CopyFrom(const char* text);
         void CopyTo(char* destination);
-        void Concat(const char* bytes);
-        bool IsEqualTo(const char* chars);
-        bool IsPrefix(const char* chars);
+        void Concat(const char* text);
+        bool IsEqualTo(const char* test);
+        bool IsPrefix(const char* test);
         void RemovePrefix(const char prefix_ender);
 
         const char* c_str(){return __text;};
@@ -30,7 +30,7 @@ class  C_String_Base{
     protected:
         // C_String_Base(int buffer_size);
         void _CopyTo(char* destination, int remove_prefix_bytes_length);
-        C_String_Base(int buffer_size, char* buffer);
+        C_String_Base(char* text, int buffer_size);
 
     private:
         char* __text;

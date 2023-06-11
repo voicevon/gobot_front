@@ -5,8 +5,9 @@
 
 class WaterDropper_App: public AppBase{
     public:
-        WaterDropper_App();
-        void ExecuteAppCommand(TextMessageLine* app_command) override; 
+        WaterDropper_App(): AppBase(){};
+        // void ExecuteAppCommand(TextMessageLine* text_message) override; 
+
         void LinkBoard(WaterDropper_Board* board){__board = board;};
         
     private:

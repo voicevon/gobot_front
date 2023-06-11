@@ -5,8 +5,8 @@
 
 class SerialPortSniffer_App: public AppBase{
     public:
-        SerialPortSniffer_App();
-        void ExecuteAppCommand(TextMessageLine* gcode_text) override; 
+        // SerialPortSniffer_App():AppBase(){};
+        // ~SerialPortSniffer_App(){};
         void LinkBoard(SerialPortSniffer_Board* board){__board = board;};
         
     private:

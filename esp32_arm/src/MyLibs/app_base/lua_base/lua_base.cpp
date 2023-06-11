@@ -89,9 +89,9 @@ void LuaWrapperBase::Link_Mqtt_for_Test(const char* mqtt_topic){
 }
 
 void LuaWrapperBase::Begin(){
-	// if (__is_running){
+	if (Is_running_file){
 		// abord currenttly running
-	// }
+	}
 	_lua_state = luaL_newstate();
 	luaopen_base(_lua_state);
 	luaopen_table(_lua_state);
@@ -106,7 +106,6 @@ void LuaWrapperBase::Begin(){
 
 	// register customized driver
 	this->_Go_on_register();
-	// __is_running = true;
 }
 
 // void LuaWrapperBase::LoadString(String* content){
