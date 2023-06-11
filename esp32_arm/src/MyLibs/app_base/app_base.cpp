@@ -17,6 +17,7 @@ void AppBase::SpinOnce(){
     }
 
     if (__lua != nullptr){
+        // Serial.print("a");
         __lua->SpinOnce();
     }
 
@@ -144,6 +145,11 @@ void AppBase::__deal_feedback(){
 //*****************************************************************************************
 //              LUA
 //
+
+void AppBase::Link_Lua(LuaWrapperBase* lua){
+    __lua = lua;
+}
+
 void AppBase::Lua_DoFile(LuaWrapperBase* lua, const char* filename){
 	Logger::Debug("LuaWrapperBase::Begin()");
 	Logger::Print("filename", filename);

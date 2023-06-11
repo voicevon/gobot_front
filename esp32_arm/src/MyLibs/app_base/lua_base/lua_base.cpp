@@ -23,7 +23,7 @@ extern "C" {
 				Serial.write("\t");
 			}
 			Serial.write(s);
-			g_mqttClient.publish("lua/test/output",2, true, s);
+			// g_mqttClient.publish("lua/test/output",2, true, s);
 			lua_pop(L, 1);  /* pop result */
 		}
 		Serial.println();
@@ -69,23 +69,24 @@ void LuaWrapperBase::FeedText(TextMessageLine* text_message_line){
 }
 void LuaWrapperBase::SpinOnce(){
 	if (__is_doing_loop){
+		// Serial.print("b");
 		this->Lua_dostring("loop()");
 	}
 }
 void LuaWrapperBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 	Logger::Debug("LuaWrapperBase::onGot_MqttMessage()");
-	this->Begin();
 	char* pp = (char*) payload;
 	*(pp + payload_len) = 0x00;
 	// write to file
 	File file = SPIFFS.open("/test.lua", FILE_WRITE);
 	file.println(payload);
 	file.close();
+	Logger::Info("/test.lua is saved.");
 
 	// do_file in memory
+	this->Begin();
 	this->Lua_dostring(payload);
 	this->Lua_dostring("setup()");
-	Logger::Info("/test.lua is saved.");
 	__is_doing_loop = true;
 }
 
@@ -113,11 +114,6 @@ void LuaWrapperBase::Begin(){
 	this->_Go_on_register();
 }
 
-// void LuaWrapperBase::LoadString(String* content){
-// 	// luaL_loadbuffer(_lua_state,content->c_str(), content->length());
-// 	luaL_loadstring(_lua_state, content->c_str());
-
-// }
 
 String LuaWrapperBase::Lua_dostring(const char *script) {
 	// Logger::Debug("LuaWrapperBase::Lua_dostring()");
@@ -130,8 +126,5 @@ String LuaWrapperBase::Lua_dostring(const char *script) {
 	return result;
 }
 
-// void LuaWrapperBase::_Lua_register(const String name, const lua_CFunction function) {
-// 	lua_register(_lua_state, name.c_str(), function);
-// }
 
 
