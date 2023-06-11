@@ -1,5 +1,6 @@
 #include "app_lua.h"
 #include "../board/board.h"
+#include "../board/web_configurator_diction.h"
 
 extern "C" {
 	static int lua_wrapper_readEncoderAngle(lua_State *lua) {
@@ -11,6 +12,13 @@ extern "C" {
 	static int lua_wrapper_readButton(lua_State *lua) {
 		bool is_pressed = water_dropper_board.Get_ActionButton()->IsFired();
 		lua_pushboolean(lua, is_pressed);
+		return 1;
+	}
+	static int lua_wrapper_readDelaySecond(lua_State *lua) {
+		// bool is_pressed = water_dropper_board.Get_ActionButton()->IsFired();
+		// lua_pushboolean(lua, is_pressed);
+		float seconds = atof(water_dropper_webconfigurator_diction.para_timer.readFile());
+		lua_pushnumber(lua, seconds);
 		return 1;
 	}
 
@@ -26,6 +34,7 @@ static const struct luaL_Reg von_waterdropper_functions[] = {
 	{"readButton", lua_wrapper_readButton},
     {"readEncoderAngle", lua_wrapper_readEncoderAngle},
     {"setMotorSpeed", lua_wrapper_setMotorSpeed},
+	{"readDelaySecond", lua_wrapper_readDelaySecond},
     {0,           	0}
 };
 

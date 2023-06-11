@@ -26,15 +26,15 @@ void init_encoder(){
 	encoder.enableInterrupts(doA, doB);
 }
 
-WaterDropper_WebConfiguratorDiction diction;
+// WaterDropper_WebConfiguratorDiction diction;
 void setup(){
 
 	init_encoder();
 	water_dropper_board.Init("I_AM_WATER_DROPPER");
 	water_dropper_board.LinkEncoder(&encoder);
 
-	diction.Init(water_dropper_board.Get_WebConfigButton());
-	app.StartWebServer(&diction);
+	water_dropper_webconfigurator_diction.Init(water_dropper_board.Get_WebConfigButton());
+	app.StartWebServer(&water_dropper_webconfigurator_diction);
 	// WebServerStarter::Begin(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 	app.Init();

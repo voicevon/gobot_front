@@ -41,8 +41,13 @@ function test_motor()
     wd.setMotorSpeed(256 - speed)
 end
 
+function test_read_second()
+    print(wd.readDelaySecond())
+end
+
 function loop ()
     if not reached_timer() then return end
-    test_motor()
+    test_read_second()
 end
+
 setup()

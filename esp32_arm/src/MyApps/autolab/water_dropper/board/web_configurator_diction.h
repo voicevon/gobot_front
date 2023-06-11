@@ -17,3 +17,5 @@ class WaterDropper_WebConfiguratorDiction:public ApWebserver_DictionBase{
 		Html_Parameter* __parameters[WaterDropper_WEB_CONFIGURATOR_PARAMETERS_COUNT];
 		// FsFilename __html_filename;
 };
+
+extern WaterDropper_WebConfiguratorDiction water_dropper_webconfigurator_diction;
