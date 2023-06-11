@@ -28,8 +28,9 @@ void init_encoder(){
 
 WaterDropper_WebConfiguratorDiction diction;
 void setup(){
-	water_dropper_board.Init("I_AM_WATER_DROPPER");
+
 	init_encoder();
+	water_dropper_board.Init("I_AM_WATER_DROPPER");
 	water_dropper_board.LinkEncoder(&encoder);
 
 	diction.Init(water_dropper_board.Get_WebConfigButton());
@@ -38,16 +39,14 @@ void setup(){
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 	app.Init();
 
-	Logger::Debug("1111111111111111111111111");
 	app.Link_Mqtt_to_TextMessageQueue("water_dropper/command");
-	// app.Link_lua_from_File(&lua_wrapper, "/test.lua");
-	Logger::Debug("22222222222222222222222");
+	app.Lua_DoFile(&lua_wrapper, "/test.lua");
 	lua_wrapper.Link_Mqtt_for_Test("lua/test");
 	Logger::Info("I_AM_WATER_DROPPER setup is done...");
 }
 
 void loop(){
-	encoder.update();
+	water_dropper_board.SpinOnce();
 	app.SpinOnce();
 }
 

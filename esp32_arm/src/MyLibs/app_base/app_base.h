@@ -20,7 +20,7 @@ class AppBase: public MqttSubscriberBase{
         void StartWebServer(ApWebserver_DictionBase* diction);
         void Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic);
         void Link_Robot(RobotBase* robot){__robot=robot;};
-        void Link_lua_from_File(LuaWrapperBase* lua, const char* filename);
+        void Lua_DoFile(LuaWrapperBase* lua, const char* filename);
         // void Link_lua_from_Mqtt(LuaWrapperBase* lua, const char* mqtt_topic);
 
         // virtual void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;

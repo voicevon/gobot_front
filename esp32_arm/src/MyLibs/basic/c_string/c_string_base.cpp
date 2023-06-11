@@ -92,9 +92,9 @@ void C_String_Base::_CopyTo(char* destination, int remove_prefix_bytes_length){
 void C_String_Base::Concat(const char* text){
     int origin_length = __text_length;
     for(int i=0; i<__buffer_size; i++){
-        __text[i + origin_length]= *(text + i );
+        __text[i + origin_length] = *(text + i );
         __text_length++;
-        if (__text[i]=0x00){
+        if (__text[i] == 0x00){
             return;
         }
     }  

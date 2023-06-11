@@ -10,7 +10,7 @@ H_Bridge::H_Bridge(uint8_t h_bridge_pin_dir, uint8_t h_bridge_pin_pwm_speed){
 }
 
 void H_Bridge::Init(uint8_t h_bridge_pin_dir, uint8_t h_bridge_pin_pwm_speed){
-        this->__h_bridge_pin_dir = h_bridge_pin_dir;
+    this->__h_bridge_pin_dir = h_bridge_pin_dir;
     this->__h_bridge_pin_pwm_speed = h_bridge_pin_pwm_speed;
 
     pinMode(h_bridge_pin_dir, OUTPUT);

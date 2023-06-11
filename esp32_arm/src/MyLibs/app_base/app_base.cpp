@@ -9,22 +9,30 @@ void AppBase::Init(){
 }
 
 void AppBase::SpinOnce(){
+	// Logger::Debug("333333333");
     __deal_feedback();
+    // _text_message_queue.PrintOut("ttttttttttttttttttttt");
     if (! _text_message_queue.BufferIsEmpty()){
         __dispach_tail_message();
     }
-    if (__lua->Is_running_file){    
-        __lua->Lua_dostring("loop()");
+
+    if (__lua != nullptr){
+        __lua->SpinOnce();
     }
+
 }
 
 void AppBase::__dispach_tail_message(){
+	Logger::Debug("555555555555555");
     TextMessageLine* tail_text = _text_message_queue.GetWithdrawTailElement(false);
+	Logger::Debug("666666666666");
     tail_text->SetCatogory(__text_message_category);
+	Logger::Debug("7777777777777");
     if (tail_text->IsCategoryUpdated()){
         __text_message_category = tail_text->GetCategory();
     }
-        switch (tail_text->GetCategory()){
+	Logger::Debug("888888888888888");
+    switch (tail_text->GetCategory()){
         case TextMessageLine::Enum_Category::FILE:
             __file_writter.FeedText(tail_text);
             break;
@@ -38,18 +46,19 @@ void AppBase::__dispach_tail_message(){
             }
             break;
         case TextMessageLine::Enum_Category::LUA:
-            if (__lua == nullptr){
-                Logger::Error("Try to feed gcode to LUA,  but LUA is nullptr");
-            }else{
+            // if (__lua == nullptr){
+            //     Logger::Error("Try to feed gcode to LUA,  but LUA is nullptr");
+            // }else{
                 tail_text->RemovePrefix(':');
                 Logger::Print("get lua text", tail_text->c_str());
                 __lua->Lua_dostring(tail_text->c_str());
                 _text_message_queue.WithdrawTailElement();
-            }
+            // }
             break;
         default:
+            Logger::Error("AppBase::__dispach_tail_message()   out of managerment.");
             break;
-    }
+        }
 
 }
 
@@ -105,11 +114,8 @@ void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic){
     // __mqtt_topic_feedback[topic_len + 1] = 'f';
     // __mqtt_topic_feedback[topic_len + 2] = 'b';
     // __mqtt_topic_feedback[topic_len + 3] = 0x00;   //ender
-    Logger::Debug("55555555555555555555");
     __mqtt_topic_feedback.CopyFrom(mqtt_topic);
-    Logger::Debug("66666666666666");
     __mqtt_topic_feedback.Concat("/fb");
-    Logger::Debug("77777777777777");
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
 }
 
@@ -138,7 +144,7 @@ void AppBase::__deal_feedback(){
 //*****************************************************************************************
 //              LUA
 //
-void AppBase::Link_lua_from_File(LuaWrapperBase* lua, const char* filename){
+void AppBase::Lua_DoFile(LuaWrapperBase* lua, const char* filename){
 	Logger::Debug("LuaWrapperBase::Begin()");
 	Logger::Print("filename", filename);
     __lua = lua;

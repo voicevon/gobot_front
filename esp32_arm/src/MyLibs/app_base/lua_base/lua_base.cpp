@@ -67,21 +67,26 @@ static const struct luaL_Reg von_hw_functions[] =
 void LuaWrapperBase::FeedText(TextMessageLine* text_message_line){
 
 }
-
+void LuaWrapperBase::SpinOnce(){
+	if (__is_doing_loop){
+		this->Lua_dostring("loop()");
+	}
+}
 void LuaWrapperBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 	Logger::Debug("LuaWrapperBase::onGot_MqttMessage()");
 	this->Begin();
 	char* pp = (char*) payload;
 	*(pp + payload_len) = 0x00;
-
-	this->Lua_dostring(payload);
-	this->Lua_dostring("setup()");
-
 	// write to file
 	File file = SPIFFS.open("/test.lua", FILE_WRITE);
 	file.println(payload);
 	file.close();
+
+	// do_file in memory
+	this->Lua_dostring(payload);
+	this->Lua_dostring("setup()");
 	Logger::Info("/test.lua is saved.");
+	__is_doing_loop = true;
 }
 
 void LuaWrapperBase::Link_Mqtt_for_Test(const char* mqtt_topic){
@@ -115,6 +120,7 @@ void LuaWrapperBase::Begin(){
 // }
 
 String LuaWrapperBase::Lua_dostring(const char *script) {
+	// Logger::Debug("LuaWrapperBase::Lua_dostring()");
 	String result;
 	// Logger::Print("Lua_dostirng()", script);
 	if (luaL_dostring(_lua_state, script)) {
