@@ -1,10 +1,10 @@
 #pragma once
 #include "Robot/board/board_base.h"
 #include "Robot/board/display/mono_led_gpio.h"
-#include <SoftwareSerial.h>
+// #include "../lua/uart.h"
 
-// #define PIN_STATE_LED 2
-
+// #define __serial_master Serial1
+// #define __serial_slave Serial2
 
 class SerialPortSniffer_Board: public BoardBase{
     public:
@@ -23,8 +23,9 @@ class SerialPortSniffer_Board: public BoardBase{
         Mono_Led_GPIO __led_data_out;
         Mono_Led_GPIO __led_rf;
         // SoftwareSerial mast_serial;
-        EspSoftwareSerial::UART __serial_master;
-        EspSoftwareSerial::UART __serial_slave;
+        // EspSoftwareSerial::UART __serial_master;
+        // EspSoftwareSerial::UART __serial_slave;
+
 
 
 };

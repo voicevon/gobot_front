@@ -1,12 +1,41 @@
 #include "board.h"
+#include "../lua/uart.h"
+
+#include <stdio.h>
+#include <string.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/queue.h"
+#include "driver/uart.h"
+#include "esp_log.h"
+#include "driver/gpio.h"
+#include "sdkconfig.h"
+#include "esp_intr_alloc.h"
+#include "esp32/rom/uart.h"
+
 
 //  Master has 5 wires
+//TODO:  rename to HARD
 #define PIN_SOFT_SERIAL_MASTER_TX 17
 #define PIN_SOFT_SERIAL_MASTER_RX 16
 
 // Slave has 3 wires
 #define PIN_SOFT_SERIAL_SLAVE_TX 25
 #define PIN_SOFT_SERIAL_SLAVE_RX 33
+
+#define BLINK_GPIO GPIO_NUM_2
+
+
+#include "../lua/uart.h"
+
+// //  Master has 5 wires
+// //TODO:  rename to HARD
+// #define PIN_SOFT_SERIAL_MASTER_TX 17
+// #define PIN_SOFT_SERIAL_MASTER_RX 16
+
+// // Slave has 3 wires
+// #define PIN_SOFT_SERIAL_SLAVE_TX 25
+// #define PIN_SOFT_SERIAL_SLAVE_RX 33
 
 // Led-3  is red
 #define PIN_LED_RF 21
@@ -35,29 +64,38 @@ void SerialPortSniffer_Board::Init(const char* app_welcome_statement){
     this->__InitHardware();
     this->_Init_SPIFFS();
     this->RepportRamUsage();
+    init_uart_with_isr();
 }
 
 void SerialPortSniffer_Board::TestSerialPortMaster(){
     for(char i= 32; i<99;i++){
-        __serial_master.write(i);
+        // __serial_master.write(i);
+        // uart_write_bytes();
+	    uart_write_bytes(1, &i, 1);
         Logger::Print("Master sending", i);
         delay(100);
-        if (__serial_master.available()){
-            char xx = __serial_master.read();
+        // if (__serial_master.available()){
+        //     char xx = __serial_master.read();
+        //     Logger::Print("                 Master received",xx);
+        // }
+
+        if (urxlen >0){
+            char xx = rxbuf[0];
             Logger::Print("                 Master received",xx);
+            urxlen--;
         }
     }
 }
 
 void SerialPortSniffer_Board::TestSerialPortSlave(){
     for(char i= 32; i<99;i++){
-        __serial_slave.write(i);
+        // __serial_slave.write(i);
         Logger::Print("Slave sending", i);
         delay(100);
-        if (__serial_slave.available()){
-            char xx = __serial_slave.read();
-            Logger::Print("                 Slave received",xx);
-        }
+        // if (__serial_slave.available()){
+        //     char xx = __serial_slave.read();
+        //     Logger::Print("                 Slave received",xx);
+        // }
     }
 }
 

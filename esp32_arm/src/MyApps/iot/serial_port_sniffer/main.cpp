@@ -19,7 +19,7 @@ SerialPortSniffer_LuaWrapper lua_wrapper;
 void setup(){
 	serial_port_sniffer_board.Init("I_AM_SERIAL_PORT_SNIFFER");
 	// serial_port_sniffer_board.TestLeds();
-	// serial_port_sniffer_board.TestSerialPortMaster();
+	serial_port_sniffer_board.TestSerialPortMaster();
 	// serial_port_sniffer_board.TestSerialPortSlave();
 
 	diction.Init();
