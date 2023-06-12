@@ -1,4 +1,5 @@
 function setup()
+    print("setup() is here.")
 end
 
 p=0 i=0 
@@ -30,7 +31,8 @@ function test_angle()
 end
 
 function test_button()
-    bb = wd.readButton()    print(bb)
+   i=i+1
+    bb = wd.readButton()    print(i,bb)
 end
 
 speed = 10
@@ -42,12 +44,13 @@ function test_motor()
 end
 
 function test_read_second()
-    print(wd.readDelaySecond())
+    print(i, wd.readDelaySecond())
 end
 
 function loop ()
     if not reached_timer() then return end
-    test_read_second()
+    -- test_read_second()
+    test_button()
 end
 
 setup()

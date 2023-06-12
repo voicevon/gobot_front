@@ -10,7 +10,7 @@
 
 
 //     private:
-//         LuaWrapperBase* __lua;
+//         LuaBase* __lua;
 //         // AppBase* __app;
 //         RobotBase* __robot;
 //         TextMessageQueue* __text_message_queue;

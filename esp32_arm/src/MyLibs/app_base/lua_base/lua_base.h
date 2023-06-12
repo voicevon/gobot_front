@@ -9,7 +9,7 @@
 
 
 //TODO: no longer a subclass of MqttSubscriberBase
-class LuaWrapperBase: public MqttSubscriberBase{
+class LuaBase: public MqttSubscriberBase{
 	public:
 		void FeedText(TextMessageLine* text_message_line);
 		String Lua_dostring(const char *script);

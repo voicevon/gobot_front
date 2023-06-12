@@ -64,17 +64,17 @@ static const struct luaL_Reg von_hw_functions[] =
     {0,           	0}
 };
 
-void LuaWrapperBase::FeedText(TextMessageLine* text_message_line){
+void LuaBase::FeedText(TextMessageLine* text_message_line){
 
 }
-void LuaWrapperBase::SpinOnce(){
+void LuaBase::SpinOnce(){
 	if (__is_doing_loop){
 		// Serial.print("b");
 		this->Lua_dostring("loop()");
 	}
 }
-void LuaWrapperBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
-	Logger::Debug("LuaWrapperBase::onGot_MqttMessage()");
+void LuaBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+	Logger::Debug("LuaBase::onGot_MqttMessage()");
 	char* pp = (char*) payload;
 	*(pp + payload_len) = 0x00;
 	// write to file
@@ -90,11 +90,11 @@ void LuaWrapperBase::onGot_MqttMessage(const char* payload, uint16_t payload_len
 	__is_doing_loop = true;
 }
 
-void LuaWrapperBase::Link_Mqtt_for_Test(const char* mqtt_topic){
+void LuaBase::Link_Mqtt_for_Test(const char* mqtt_topic){
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
 }
 
-void LuaWrapperBase::Begin(){
+void LuaBase::Begin(){
 	if (Is_running_file){
 		// abord currenttly running
 	}
@@ -115,8 +115,8 @@ void LuaWrapperBase::Begin(){
 }
 
 
-String LuaWrapperBase::Lua_dostring(const char *script) {
-	// Logger::Debug("LuaWrapperBase::Lua_dostring()");
+String LuaBase::Lua_dostring(const char *script) {
+	// Logger::Debug("LuaBase::Lua_dostring()");
 	String result;
 	// Logger::Print("Lua_dostirng()", script);
 	if (luaL_dostring(_lua_state, script)) {

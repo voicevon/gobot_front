@@ -146,12 +146,12 @@ void AppBase::__deal_feedback(){
 //              LUA
 //
 
-void AppBase::Link_Lua(LuaWrapperBase* lua){
+void AppBase::Link_Lua(LuaBase* lua){
     __lua = lua;
 }
 
-void AppBase::Lua_DoFile(LuaWrapperBase* lua, const char* filename){
-	Logger::Debug("LuaWrapperBase::Begin()");
+void AppBase::Lua_DoFile(LuaBase* lua, const char* filename){
+	Logger::Debug("LuaBase::Begin()");
 	Logger::Print("filename", filename);
     __lua = lua;
     __lua_file = SPIFFS.open(filename, FILE_READ);

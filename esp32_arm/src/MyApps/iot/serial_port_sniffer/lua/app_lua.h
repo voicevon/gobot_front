@@ -4,7 +4,7 @@
 #define LUA_USE_C89
 #include "MyLibs/app_base/lua_base/lua_base.h"
 
-class SerialPortSniffer_LuaWrapper: public LuaWrapperBase {
+class SerialPortSniffer_LuaWrapper: public LuaBase {
 	public:
 		void _Go_on_register() override;
 

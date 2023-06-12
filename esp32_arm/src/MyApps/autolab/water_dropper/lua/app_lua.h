@@ -4,7 +4,7 @@
 #define LUA_USE_C89
 #include "MyLibs/app_base/lua_base/lua_base.h"
 
-class WaterDropper_LuaWrapper: public LuaWrapperBase {
+class WaterDropper_LuaWrapper: public LuaBase {
 	public:
 		
 	protected:
