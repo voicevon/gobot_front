@@ -76,13 +76,15 @@ void LuaBase::SpinOnce(){
 void LuaBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 	Logger::Debug("LuaBase::onGot_MqttMessage()");
 	char* pp = (char*) payload;
-	*(pp + payload_len) = 0x00;
+	*(pp + payload_len) = 0x00;   //??? any risk?
 	// write to file
 	File file = SPIFFS.open("/test.lua", FILE_WRITE);
 	file.println(payload);
 	file.close();
 	Logger::Info("/test.lua is saved.");
 
+
+	Logger::Info(payload);
 	// do_file in memory
 	this->Begin();
 	this->Lua_dostring(payload);
@@ -116,9 +118,7 @@ void LuaBase::Begin(){
 
 
 String LuaBase::Lua_dostring(const char *script) {
-	// Logger::Debug("LuaBase::Lua_dostring()");
 	String result;
-	// Logger::Print("Lua_dostirng()", script);
 	if (luaL_dostring(_lua_state, script)) {
 		result += "# lua error:\n" + String(lua_tostring(_lua_state, -1));
 		Logger::Error(result.c_str());
