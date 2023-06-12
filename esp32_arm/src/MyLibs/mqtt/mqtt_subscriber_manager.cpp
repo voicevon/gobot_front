@@ -51,7 +51,7 @@ void gs_MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char
     __mqttPayloadBuffer.push_back(char(0x00));
     Logger::Info("check whole content");
     Logger::Print("", &__mqttPayloadBuffer[0]);
-    subscriber->onGot_MqttMessage(&__mqttPayloadBuffer[0], total+1);
+    subscriber->onGot_MqttMessage(&__mqttPayloadBuffer[0], __mqttPayloadBuffer.size());
 
 }
 

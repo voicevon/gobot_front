@@ -241,7 +241,8 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
         gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len, index, total);
     }
     
-    Logger::Info("on_MqttMessage()  Appened to mqtt_receiver.");
+    // Logger::Info("MqttClient on_MqttMessage()  Appened to mqtt_receiver. topic=");
+    // Logger::Print("topic", topic);
 }
 
 

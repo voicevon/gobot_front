@@ -126,6 +126,7 @@ String LuaBase::Lua_dostring(const char *script) {
 		result += "# lua error:\n" + String(lua_tostring(_lua_state, -1));
 		Logger::Error(result.c_str());
 		lua_pop(_lua_state, 1);
+		__is_doing_loop = false;
 	}
 	return result;
 }
