@@ -15,9 +15,6 @@ https://github.com/theElementZero/ESP32-UART-interrupt-handling/blob/master/uart
 #include "esp_intr_alloc.h"
 #include "esp32/rom/uart.h"
 
-
-
-
 extern "C"{
 	#define BUF_SIZE (1024)
 	// Both definition are same and valid
@@ -103,6 +100,7 @@ extern "C"{
 			break;
 		}
 	}
+	
 	void init_master_uart_with_isr(uart_port_t port, uart_config_t* uart_config, uint8_t pin_rx, uint8_t pin_tx) {
 		master_uart = __GetUart_by_id(port);
 		master_port = port;

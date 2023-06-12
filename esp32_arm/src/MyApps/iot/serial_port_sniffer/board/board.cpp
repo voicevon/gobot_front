@@ -70,6 +70,11 @@ void SerialPortSniffer_Board::TestSerialPortMaster(){
             Logger::Print("                 Master received",xx);
             master_rx_bytes_count--;
         }
+        if (slave_rx_bytes_count >0){
+            char xx = slave_rx_buffer[0];
+            Logger::Print("                 Slave received",xx);
+            slave_rx_bytes_count--;
+        }
     }
 }
 
@@ -83,6 +88,11 @@ void SerialPortSniffer_Board::TestSerialPortSlave(){
         //     char xx = __serial_slave.read();
         //     Logger::Print("                 Slave received",xx);
         // }
+        if (master_rx_bytes_count >0){
+            char xx = master_rx_buffer[0];
+            Logger::Print("                 Master received",xx);
+            master_rx_bytes_count--;
+        }
         if (slave_rx_bytes_count >0){
             char xx = slave_rx_buffer[0];
             Logger::Print("                 Slave received",xx);
