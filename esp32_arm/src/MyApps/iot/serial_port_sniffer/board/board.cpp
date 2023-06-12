@@ -4,17 +4,14 @@
 
 // //  Master has 5 wires
 // //TODO:  rename to HARD
-// #define PIN_SOFT_SERIAL_MASTER_TX 17
-// #define PIN_SOFT_SERIAL_MASTER_RX 16
+#define PIN_HARD_SERIAL_MASTER_TX 17
+#define PIN_HARD_SERIAL_MASTER_RX 16
 
-// // Slave has 3 wires
-// #define PIN_SOFT_SERIAL_SLAVE_TX 25
-// #define PIN_SOFT_SERIAL_SLAVE_RX 33
+// Slave has 3 wires
+#define PIN_HARD_SERIAL_SLAVE_TX 25
+#define PIN_HARD_SERIAL_SLAVE_RX 33
 
-#define BLINK_GPIO GPIO_NUM_2
-
-
-
+// #define BLINK_GPIO GPIO_NUM_2
 
 // Led-3  is red
 #define PIN_LED_RF 21
@@ -53,14 +50,14 @@ void SerialPortSniffer_Board::Init(const char* app_welcome_statement){
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
     };
     init_master_uart_with_isr(UART_NUM_1, &uart_config, PIN_HARD_SERIAL_MASTER_RX, PIN_HARD_SERIAL_MASTER_TX);
-    init_slave_uart_with_isr(UART_NUM_1, &uart_config, PIN_HARD_SERIAL_SLAVE_RX, PIN_HARD_SERIAL_SLAVE_TX);
+    init_slave_uart_with_isr(UART_NUM_2, &uart_config, PIN_HARD_SERIAL_SLAVE_RX, PIN_HARD_SERIAL_SLAVE_TX);
 }
 
 void SerialPortSniffer_Board::TestSerialPortMaster(){
     for(char i= 32; i<99;i++){
         // __serial_master.write(i);
         // uart_write_bytes();
-	    uart_write_bytes(1, &i, 1);
+	    uart_write_bytes(UART_NUM_1, &i, 1);
         Logger::Print("Master sending", i);
         delay(100);
         // if (__serial_master.available()){
@@ -79,12 +76,18 @@ void SerialPortSniffer_Board::TestSerialPortMaster(){
 void SerialPortSniffer_Board::TestSerialPortSlave(){
     for(char i= 32; i<99;i++){
         // __serial_slave.write(i);
+	    uart_write_bytes(UART_NUM_2, &i, 1);
         Logger::Print("Slave sending", i);
         delay(100);
         // if (__serial_slave.available()){
         //     char xx = __serial_slave.read();
         //     Logger::Print("                 Slave received",xx);
         // }
+        if (slave_rx_bytes_count >0){
+            char xx = slave_rx_buffer[0];
+            Logger::Print("                 Slave received",xx);
+            slave_rx_bytes_count--;
+        }
     }
 }
 

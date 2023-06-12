@@ -16,103 +16,65 @@ https://github.com/theElementZero/ESP32-UART-interrupt-handling/blob/master/uart
 #include "esp32/rom/uart.h"
 
 
-//  Master has 5 wires
-#define PIN_HARD_SERIAL_MASTER_TX 17
-#define PIN_HARD_SERIAL_MASTER_RX 16
 
-// Slave has 3 wires
-#define PIN_HARD_SERIAL_SLAVE_TX 25
-#define PIN_HARD_SERIAL_SLAVE_RX 33
-
-#define BLINK_GPIO GPIO_NUM_2
-
-static const char *TAG = "uart_events";
-
-/**
- * This example shows how to use the UART driver to handle UART interrupt.
- *
- * - Port: UART0
- * - Receive (Rx) buffer: on
- * - Transmit (Tx) buffer: off
- * - Flow control: off
- * - Event queue: on
- * - Pin assignment: TxD (default), RxD (default)
- */
 
 extern "C"{
-	// #define MASTER_UART UART_NUM_1
-	#define MASTER_UART UART_NUM_1
-	#define SLAVE_UART UART_NUM_2
-	// #define PATTERN_CHR_NUM    (3)         /*!< Set the number of consecutive and identical characters received by receiver which defines a UART pattern*/
-
 	#define BUF_SIZE (1024)
-	// #define RD_BUF_SIZE (BUF_SIZE)
-	// static QueueHandle_t uart0_queue;
-
 	// Both definition are same and valid
-	//static uart_isr_handle_t *handle_console;
-	static intr_handle_t handle_console;
+	// static intr_handle_t handle_console;
 
 
+	static uart_dev_t *master_uart;
+	static uart_port_t master_port;
+	static uart_isr_handle_t *master_handle_console;
 	uint8_t master_rx_buffer[256];  // Receive buffer to collect incoming data
 	uint16_t master_rx_bytes_count;  // Register to collect data length
 	// static MASTER_UART
+	
+	static uart_dev_t *slave_uart;
+	static uart_port_t slave_port;
+	static uart_isr_handle_t *slave_handle_console;
+	uint8_t slave_rx_buffer[256];  // Receive buffer to collect incoming data
+	uint16_t slave_rx_bytes_count;  // Register to collect data length
 
-	// #define NOTASK 0
-
-	// void blink_task(void *pvParameter)
-	// {
-	// 	gpio_pad_select_gpio(BLINK_GPIO);
-		
-	// 	/* Set the GPIO as a push/pull output */
-	// 	gpio_set_direction(BLINK_GPIO, GPIO_MODE_OUTPUT);
-		
-	// 	while(1) {
-	// 		/* Blink off (output low) */
-	// 		gpio_set_level(BLINK_GPIO, 0);
-	// 		vTaskDelay(1000 / portTICK_PERIOD_MS);
-	// 		/* Blink on (output high) */
-	// 		gpio_set_level(BLINK_GPIO, 1);
-	// 		vTaskDelay(1000 / portTICK_PERIOD_MS);
-	// 	}
-	// }
 	/*
 	* Define UART interrupt subroutine to ackowledge interrupt
 	*/
 	static void IRAM_ATTR master_uart_intr_handle(void *arg){
 		uint16_t rx_fifo_len, status;
 		uint16_t i;
-		status = UART1.int_st.val; // read UART interrupt Status
-		rx_fifo_len = UART1.status.rxfifo_cnt; // read number of bytes in UART buffer
+		status = master_uart->int_st.val; // read UART interrupt Status
+		rx_fifo_len = master_uart->status.rxfifo_cnt; // read number of bytes in UART buffer
 		while(rx_fifo_len){
-			master_rx_buffer[i++] = UART1.fifo.rw_byte; // read all bytes
+			master_rx_buffer[i++] = master_uart->fifo.rw_byte; // read all bytes
 			rx_fifo_len--;
 			master_rx_bytes_count++;
 		}
 		// after reading bytes from buffer clear UART interrupt status
-		uart_clear_intr_status(MASTER_UART, UART_RXFIFO_FULL_INT_CLR|UART_RXFIFO_TOUT_INT_CLR);
+		uart_clear_intr_status(master_port, UART_RXFIFO_FULL_INT_CLR|UART_RXFIFO_TOUT_INT_CLR);
+		Logger::Debug("Rx_Master");
 	}
 
 	static void IRAM_ATTR slave_uart_intr_handle(void *arg){
 		uint16_t rx_fifo_len, status;
 		uint16_t i;
-		status = UART1.int_st.val; // read UART interrupt Status
-		rx_fifo_len = UART1.status.rxfifo_cnt; // read number of bytes in UART buffer
+		status = slave_uart->int_st.val; // read UART interrupt Status
+		rx_fifo_len = slave_uart->status.rxfifo_cnt; // read number of bytes in UART buffer
 		while(rx_fifo_len){
-			master_rx_buffer[i++] = UART1.fifo.rw_byte; // read all bytes
+			slave_rx_buffer[i++] = slave_uart->fifo.rw_byte; // read all bytes
 			rx_fifo_len--;
-			master_rx_bytes_count++;
+			slave_rx_bytes_count++;
 		}
 		// after reading bytes from buffer clear UART interrupt status
-		uart_clear_intr_status(MASTER_UART, UART_RXFIFO_FULL_INT_CLR|UART_RXFIFO_TOUT_INT_CLR);
+		uart_clear_intr_status(slave_port, UART_RXFIFO_FULL_INT_CLR|UART_RXFIFO_TOUT_INT_CLR);
+		Logger::Debug("Rx_Slave");
 	}
 	/*
 	* main 
 	*/
 
 	// void __init_uart_with_isr(uart_port_t port, uart_config_t* uart_config, uint8_t pin_rx, uint8_t pin_tx, void()(void*) xxxx){
-	// void __init_uart_with_isr(uart_port_t port, uart_config_t* uart_config, uint8_t pin_rx, uint8_t pin_tx, void()(void*)* xxxx){
-	// 	int ret;
+	// void __init_uart_with_isr(uart_port_t port, uart_config_t* uart_config, uint8_t pin_rx, uint8_t pin_tx, void()(void*) xxxx){
 	// 	// esp_log_level_set(TAG, ESP_LOG_INFO);
 	// 	ESP_ERROR_CHECK(uart_param_config(port, uart_config));
 	// 	// esp_log_level_set(TAG, ESP_LOG_INFO);
@@ -123,11 +85,47 @@ extern "C"{
 	// 	ESP_ERROR_CHECK(uart_enable_rx_intr(port)); // enable RX interrupt
 	// }
 
+
+	uart_dev_t *__GetUart_by_id(uart_port_t port){
+		switch (port)
+		{
+		case 0:
+			return &UART0;
+			break;
+		case 1:
+			return &UART1;
+			break;
+		case 2:
+			return &UART2;
+			break;;
+		default:
+			Logger::Error("__GetUart_by_id()");
+			break;
+		}
+	}
 	void init_master_uart_with_isr(uart_port_t port, uart_config_t* uart_config, uint8_t pin_rx, uint8_t pin_tx) {
-		// __init_uart_with_isr(port, uart_config, pin_rx, pin_tx, &master_uart_intr_handle);
+		master_uart = __GetUart_by_id(port);
+		master_port = port;
+		// __init_uart_with_isr(port, uart_config, pin_rx, pin_tx, master_uart_intr_handle);
+		ESP_ERROR_CHECK(uart_param_config(port, uart_config));
+		// esp_log_level_set(TAG, ESP_LOG_INFO);
+		ESP_ERROR_CHECK(uart_set_pin(port, pin_tx, pin_rx, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+		ESP_ERROR_CHECK(uart_driver_install(port, BUF_SIZE * 2, 0, 0, NULL, 0)); //Install UART driver, and get the queue.
+		ESP_ERROR_CHECK(uart_isr_free(port)); // release the pre registered UART handler/subroutine
+		ESP_ERROR_CHECK(uart_isr_register(port, master_uart_intr_handle, NULL, ESP_INTR_FLAG_IRAM, master_handle_console)); // register new UART subroutine
+		ESP_ERROR_CHECK(uart_enable_rx_intr(port)); // enable RX interrupt
 	}
 
 	void init_slave_uart_with_isr(uart_port_t port, uart_config_t* uart_config, uint8_t pin_rx, uint8_t pin_tx) {
-		// __init_uart_with_isr(port, uart_config,pin_rx, pin_tx, &slave_uart_intr_handle);
+		slave_uart = __GetUart_by_id(port);
+		slave_port = port;
+		// __init_uart_with_isr(port, uart_config,pin_rx, pin_tx, slave_uart_intr_handle);
+		ESP_ERROR_CHECK(uart_param_config(port, uart_config));
+		esp_log_level_set("SLAVE_INIT", ESP_LOG_INFO);
+		ESP_ERROR_CHECK(uart_set_pin(port, pin_tx, pin_rx, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+		ESP_ERROR_CHECK(uart_driver_install(port, BUF_SIZE * 2, 0, 0, NULL, 0)); //Install UART driver, and get the queue.
+		ESP_ERROR_CHECK(uart_isr_free(port)); // release the pre registered UART handler/subroutine
+		ESP_ERROR_CHECK(uart_isr_register(port, slave_uart_intr_handle, NULL, ESP_INTR_FLAG_IRAM, slave_handle_console)); // register new UART subroutine
+		ESP_ERROR_CHECK(uart_enable_rx_intr(port)); // enable RX interrupt
 	}
 }

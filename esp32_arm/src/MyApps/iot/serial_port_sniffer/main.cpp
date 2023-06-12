@@ -20,15 +20,16 @@ void setup(){
 	serial_port_sniffer_board.Init("I_AM_SERIAL_PORT_SNIFFER");
 	// serial_port_sniffer_board.TestLeds();
 	serial_port_sniffer_board.TestSerialPortMaster();
-	// serial_port_sniffer_board.TestSerialPortSlave();
+	serial_port_sniffer_board.TestSerialPortSlave();
 
 	diction.Init();
 	//TODO:/.   lua_init_diction();
 	app.StartWebServer(&diction);
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
-
 	app.Link_Mqtt_to_TextMessageQueue("serial_port_sniffer");
+	app.Link_Lua(&lua_wrapper);
 	// app.Link_lua_from_File(&lua_wrapper, "/test.lua");
+	lua_wrapper.Link_Mqtt_for_Test("lua/test");
 	Logger::Info("Arduino setup() is done....");
 
 }
