@@ -6,7 +6,7 @@
 #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
 #include "CNC/Actuator/dc_motor/h_bridge/h_bridge.h"
 #include <SimpleFOC.h>
-#include <SoftwareSerial.h>
+// #include <SoftwareSerial.h>
 
 
 
