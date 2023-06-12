@@ -74,9 +74,11 @@ void LuaBase::SpinOnce(){
 	}
 }
 void LuaBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+
+
 	Logger::Debug("LuaBase::onGot_MqttMessage()");
-	char* pp = (char*) payload;
-	*(pp + payload_len) = 0x00;   //??? any risk?
+	// char* pp = (char*) payload;
+	// *(pp + payload_len) = 0x00;   //??? any risk?
 	// write to file
 	File file = SPIFFS.open("/test.lua", FILE_WRITE);
 	file.println(payload);
@@ -90,6 +92,7 @@ void LuaBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 	this->Lua_dostring(payload);
 	this->Lua_dostring("setup()");
 	__is_doing_loop = true;
+	// mqttPayloadBuffer.reset();
 }
 
 void LuaBase::Link_Mqtt_for_Test(const char* mqtt_topic){

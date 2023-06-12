@@ -219,6 +219,8 @@ void onMqttPublish(uint16_t packetId) {
 
 //Please Notice: This function will be invoked in slave thread.
 void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
+    // https://github.com/marvinroger/async-mqtt-client/issues/39
+
     bool debug = false;
     if(debug){
         Logger::Debug("on_MqttMessage()   saying received.");
@@ -232,10 +234,13 @@ void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties
         Logger::Print("  total: ", total);
     }
 
-    // Logger::Info("on_MqttMessage() Dispatch message by topic,  Putting remote message to local consumer." );
-    gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len);
+    // https://github.com/marvinroger/async-mqtt-client/issues/39
+    if (len==total){
+        gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len);
+    }else{
+        gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len, index, total);
+    }
     
-    // mono_remote_queue_bridge.onMessage((const char*)payload, len);
     Logger::Info("on_MqttMessage()  Appened to mqtt_receiver.");
 }
 

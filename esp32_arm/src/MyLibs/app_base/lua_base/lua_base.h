@@ -7,7 +7,6 @@
 #include "MyLibs/mqtt/mqtt_subscriber_base.h"
 #include "MyLibs/app_base/text_message_queue/text_message_line.h"
 
-
 //TODO: no longer a subclass of MqttSubscriberBase
 class LuaBase: public MqttSubscriberBase{
 	public:
@@ -24,8 +23,8 @@ class LuaBase: public MqttSubscriberBase{
 
 	private:
 		void onGot_MqttMessage(const char* payload, uint16_t payload_len) override;
-		bool __is_doing_loop = false;
 
+		bool __is_doing_loop = false;
 
 };
 
