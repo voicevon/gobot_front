@@ -12,6 +12,7 @@ function reached_timer()
 end
 
 function test()
+    if not reached_timer() return end
     i=i+1  print(i)
 end
 

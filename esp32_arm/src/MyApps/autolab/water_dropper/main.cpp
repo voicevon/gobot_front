@@ -35,6 +35,8 @@ void setup(){
 
 	water_dropper_webconfigurator_diction.Init(water_dropper_board.Get_WebConfigButton());
 	app.StartWebServer(&water_dropper_webconfigurator_diction);
+	return;
+
 	setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
 	app.Init();
 

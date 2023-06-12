@@ -121,6 +121,7 @@ String LuaBase::Lua_dostring(const char *script) {
 	// Logger::Print("Lua_dostirng()", script);
 	if (luaL_dostring(_lua_state, script)) {
 		result += "# lua error:\n" + String(lua_tostring(_lua_state, -1));
+		Logger::Error(result.c_str());
 		lua_pop(_lua_state, 1);
 	}
 	return result;

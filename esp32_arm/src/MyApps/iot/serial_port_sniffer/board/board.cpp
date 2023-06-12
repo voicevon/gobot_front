@@ -1,32 +1,6 @@
 #include "board.h"
-#include "../lua/uart.h"
+#include "Robot/board/peripheral/uart_isr.h"
 
-#include <stdio.h>
-#include <string.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/queue.h"
-#include "driver/uart.h"
-#include "esp_log.h"
-#include "driver/gpio.h"
-#include "sdkconfig.h"
-#include "esp_intr_alloc.h"
-#include "esp32/rom/uart.h"
-
-
-//  Master has 5 wires
-//TODO:  rename to HARD
-#define PIN_SOFT_SERIAL_MASTER_TX 17
-#define PIN_SOFT_SERIAL_MASTER_RX 16
-
-// Slave has 3 wires
-#define PIN_SOFT_SERIAL_SLAVE_TX 25
-#define PIN_SOFT_SERIAL_SLAVE_RX 33
-
-#define BLINK_GPIO GPIO_NUM_2
-
-
-#include "../lua/uart.h"
 
 // //  Master has 5 wires
 // //TODO:  rename to HARD
@@ -36,6 +10,11 @@
 // // Slave has 3 wires
 // #define PIN_SOFT_SERIAL_SLAVE_TX 25
 // #define PIN_SOFT_SERIAL_SLAVE_RX 33
+
+#define BLINK_GPIO GPIO_NUM_2
+
+
+
 
 // Led-3  is red
 #define PIN_LED_RF 21
@@ -58,13 +37,23 @@ void SerialPortSniffer_Board::__InitHardware(){
 
 }
 
+
 void SerialPortSniffer_Board::Init(const char* app_welcome_statement){
     _InitSerial("Hi Xuming, I am Serial-Port-Sniffer board. Good luck......");
     Serial.print(COLOR_RESET);
     this->__InitHardware();
     this->_Init_SPIFFS();
     this->RepportRamUsage();
-    init_uart_with_isr();
+
+    uart_config_t uart_config = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
+    };
+    init_master_uart_with_isr(UART_NUM_1, &uart_config, PIN_HARD_SERIAL_MASTER_RX, PIN_HARD_SERIAL_MASTER_TX);
+    init_slave_uart_with_isr(UART_NUM_1, &uart_config, PIN_HARD_SERIAL_SLAVE_RX, PIN_HARD_SERIAL_SLAVE_TX);
 }
 
 void SerialPortSniffer_Board::TestSerialPortMaster(){
@@ -79,10 +68,10 @@ void SerialPortSniffer_Board::TestSerialPortMaster(){
         //     Logger::Print("                 Master received",xx);
         // }
 
-        if (urxlen >0){
-            char xx = rxbuf[0];
+        if (master_rx_bytes_count >0){
+            char xx = master_rx_buffer[0];
             Logger::Print("                 Master received",xx);
-            urxlen--;
+            master_rx_bytes_count--;
         }
     }
 }
