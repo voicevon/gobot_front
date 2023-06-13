@@ -16,8 +16,6 @@
 extern "C" {
 	extern void my_math_opener(lua_State* L);
 
-
-
 	static int lua_wrapper_print (lua_State *L) {
 		int n = lua_gettop(L);  /* number of arguments */
 		int i;
@@ -114,7 +112,7 @@ void LuaBase::Link_Mqtt_for_Test(const char* mqtt_topic){
 
 void LuaBase::Begin(){
 	if (Is_running_file){
-		// abord currenttly running
+		lua_close(_lua_state);
 	}
 	_lua_state = luaL_newstate();
 	luaopen_base(_lua_state);
@@ -143,6 +141,7 @@ String LuaBase::Lua_dostring(const char *script) {
 		Logger::Error(result.c_str());
 		lua_pop(_lua_state, 1);
 		__is_doing_loop = false;
+		lua_close(_lua_state);
 	}
 	return result;
 }

@@ -9,15 +9,12 @@ void AppBase::Init(){
 }
 
 void AppBase::SpinOnce(){
-	// Logger::Debug("333333333");
     __deal_feedback();
-    // _text_message_queue.PrintOut("ttttttttttttttttttttt");
     if (! _text_message_queue.BufferIsEmpty()){
         __dispach_tail_message();
     }
 
     if (__lua != nullptr){
-        // Serial.print("a");
         __lua->SpinOnce();
     }
 
@@ -76,26 +73,15 @@ void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
         Logger::Error("AppBase::onGot_MqttMessage() oversize");
         return;
     }
-    //format string ender.
-    char* p = (char*)(payload);
-    p[payload_len] = 0x00;  
     Logger::Debug("AppBase::onGot_MqttMessage");
     Logger::Print("payload", payload);
     Logger::Print("payload_len", payload_len);
-    // const char* IS_APP_COMMAND = APP_COMMAND_PREFIX;
     
     __have_done_feedback = false;
-    // TextMessageLine command_text;
     __head_text_message.CopyFrom(payload,payload_len);
-    if (__head_text_message.IsEqualTo("app:led")){
-        // This is a thread in mqtt-on-received callbaking.    so watchdog will be fired if long time without return.
-        // this->ExecuteAppCommand(&__head_text_message);
-        return;
-    }
-    __head_text_message.CopyFrom("none");
     int free_buffer_count = _text_message_queue.GetFreeBuffersCount();
     if (free_buffer_count <=1 ){
-        Logger::Error("AppBase::onGot_MqttMessage()  buffer is full");
+        Logger::Error("AppBase::onGot_MqttMessage()  buffer is full, and this should not happened.");
         return;
     }
     // copy to local _text_message_queue
@@ -103,18 +89,6 @@ void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
 }
 
 void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic){
-    // int topic_len;
-    // for(topic_len=0; topic_len<REPRAP_GCODE_MAX_SIZE; topic_len++){
-    //     // Logger::Print("mqtt_topic[topic_len]", mqtt_topic[topic_len]);
-    //     if (mqtt_topic[topic_len] == 0x00){
-    //         break;
-    //     }
-    //     // __mqtt_topic_feedback[topic_len] = mqtt_topic[topic_len];
-    // }
-    // __mqtt_topic_feedback[topic_len] = '/';
-    // __mqtt_topic_feedback[topic_len + 1] = 'f';
-    // __mqtt_topic_feedback[topic_len + 2] = 'b';
-    // __mqtt_topic_feedback[topic_len + 3] = 0x00;   //ender
     __mqtt_topic_feedback.CopyFrom(mqtt_topic);
     __mqtt_topic_feedback.Concat("/fb");
     gs_MqttSubscriberManager::Instance().AddSubscriber(mqtt_topic, this);
@@ -123,10 +97,6 @@ void AppBase::Link_Mqtt_to_TextMessageQueue(const char* mqtt_topic){
 void AppBase::__deal_feedback(){
     if (__have_done_feedback)
         return;
-    // if (__head_text_message.IsPrefix("app:")){
-    //     g_mqttClient.publish(this->__mqtt_topic_feedback.c_str(), 2, true, __head_text_message.c_str());
-    //     this->ExecuteAppCommand(&__head_text_message);
-    // }
     if (_text_message_queue.GetFreeBuffersCount() == 0)
         return;
 
@@ -135,10 +105,8 @@ void AppBase::__deal_feedback(){
 
     // Logger::Print("send_feedback, this->__mqtt_topic_feedback", this->__mqtt_topic_feedback);
     // Logger::Print("send_feedback, payload", command_text->GetChars);
-    // command_text->PrintFlat("verify origin");
     g_mqttClient.publish(this->__mqtt_topic_feedback.c_str(), 2, true, command_text->c_str());
     __have_done_feedback = true;
-    // Logger::Print("send_feedback, finished.", 99);
 }
 
 
