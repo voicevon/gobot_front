@@ -32,6 +32,7 @@ void gs_MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char
         //TODO:  confirmed is long payload more than 1kb
         //For this project, only one big payload can be transfered at a time.
         //   Saying, the first payload must be finished, before starting the second message
+        // solution: put the buffer into subsriber. not the manager
     }
 	// if (mqttPayloadBuffer == nullptr || index == 0) {
 	// 	mqttPayloadBuffer = std::unique_ptr<char[]>(new char[total + 1]); // empty the buffer

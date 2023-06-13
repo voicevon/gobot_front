@@ -1,4 +1,4 @@
-#include "lua_base.h"
+#include "von_lua_base.h"
 #include "MyLibs/utility/logger.h"
 #include "MyLibs/mqtt/mqtt_subscriber_manager.h"
 #include "Mylibs/mqtt/wifi_mqtt_client.h"
@@ -123,7 +123,7 @@ void LuaBase::Begin(){
 String LuaBase::Lua_dostring(const char *script) {
 	String result;
 	if (luaL_dostring(_lua_state, script)) {
-		result += "# lua error:\n" + String(lua_tostring(_lua_state, -1));
+		result += "lua::" + String(lua_tostring(_lua_state, -1));
 		Logger::Error(result.c_str());
 		lua_pop(_lua_state, 1);
 		__is_doing_loop = false;
