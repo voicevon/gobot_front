@@ -4,7 +4,20 @@
 #include "Mylibs/mqtt/wifi_mqtt_client.h"
 #include <SPIFFS.h>
 
+	// 1. open the file:    libdeps/esp32-ap/ESP-arduino-Lua/src/lua/lmathlib.c
+    // 2. append following function to that file.
+
+	// void my_math_opener(lua_State* L){
+	// 	luaL_openlibs(L); 
+	// 	luaL_newlib(L, mathlib);
+	// 	lua_setglobal(L, "Math");   
+    // }
+
 extern "C" {
+	extern void my_math_opener(lua_State* L);
+
+
+
 	static int lua_wrapper_print (lua_State *L) {
 		int n = lua_gettop(L);  /* number of arguments */
 		int i;
@@ -67,15 +80,15 @@ static const struct luaL_Reg von_hw_functions[] =
 void LuaBase::FeedText(TextMessageLine* text_message_line){
 
 }
+
 void LuaBase::SpinOnce(){
 	if (__is_doing_loop){
 		// Serial.print("b");
 		this->Lua_dostring("loop()");
 	}
 }
+
 void LuaBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
-
-
 	Logger::Debug("LuaBase::onGot_MqttMessage()");
 	// char* pp = (char*) payload;
 	// *(pp + payload_len) = 0x00;   //??? any risk?
@@ -107,12 +120,15 @@ void LuaBase::Begin(){
 	luaopen_base(_lua_state);
 	luaopen_table(_lua_state);
 	luaopen_string(_lua_state);
-	luaopen_math(_lua_state);
+	// luaopen_math(_lua_state);
+
+
 	// register  hardware driver
 	lua_register(_lua_state, "print", lua_wrapper_print);
     luaL_openlibs(_lua_state); 
 	luaL_newlib(_lua_state, von_hw_functions);
     lua_setglobal(_lua_state, "hw");   
+	my_math_opener(_lua_state);
 
 
 	// register customized driver

@@ -23,7 +23,12 @@ MqttSubscriberBase* gs_MqttSubscriberManager::__find_subscriber(const char* topi
 
 void gs_MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char* payload,  size_t payload_len){
     MqttSubscriberBase* subscriber = __find_subscriber(topic);
-    subscriber->onGot_MqttMessage(payload, payload_len);
+    __mqttPayloadBuffer.clear();
+    for (int i=0; i<payload_len; i++){
+        __mqttPayloadBuffer.push_back(*(payload+i));
+    }
+    __mqttPayloadBuffer.push_back(char(0x00));
+    subscriber->onGot_MqttMessage(&__mqttPayloadBuffer[0], __mqttPayloadBuffer.size());
 }
 
 void gs_MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char* payload,  size_t len, size_t index, size_t total){
@@ -34,11 +39,6 @@ void gs_MqttSubscriberManager::on_mqtt_client_received_message(char* topic, char
         //   Saying, the first payload must be finished, before starting the second message
         // solution: put the buffer into subsriber. not the manager
     }
-	// if (mqttPayloadBuffer == nullptr || index == 0) {
-	// 	mqttPayloadBuffer = std::unique_ptr<char[]>(new char[total + 1]); // empty the buffer
-	// }
-	// memcpy(mqttPayloadBuffer.get() + index, payload, len); // copy the content into it
-	// if (index + len != total) return;  // return if payload buffer is not complete
 	if (index == 0) {
         __mqttPayloadBuffer.clear();
     }

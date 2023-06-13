@@ -36,14 +36,18 @@ void setup(){
 	water_dropper_webconfigurator_diction.Init(water_dropper_board.Get_WebConfigButton());
 	app.StartWebServer(&water_dropper_webconfigurator_diction);
 	// return;
-
-	// setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
-	app.Init();
-
+	bool debug = true;
+	if (debug){
+		setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
+		app.Init();
+		app.Link_Lua(&lua_wrapper);
+		lua_wrapper.Link_Mqtt_for_Test("lua/test");
+	}else{
+		app.Init();
+		app.Link_Lua(&lua_wrapper);
+		app.Lua_DoFile(&lua_wrapper, "/water_dropper.lua");
+	}
 	// app.Link_Mqtt_to_TextMessageQueue("water_dropper/command");
-	app.Lua_DoFile(&lua_wrapper, "/water_dropper.lua");
-	app.Link_Lua(&lua_wrapper);
-	// lua_wrapper.Link_Mqtt_for_Test("lua/test");
 	Logger::Info("I_AM_WATER_DROPPER setup is done...");
 }
 
