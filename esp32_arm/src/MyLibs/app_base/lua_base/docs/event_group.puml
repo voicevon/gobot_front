@@ -4,19 +4,17 @@
 frame lua_function{
     card lua_rx
     card lua_tx
+    card lua_others
+    card lua_rf
 }
-
-
 
 frame richon{
     card platform
 }
 
-lua_rx<-- platform
-
-
+lua_rx  <-- platform
 frame bridge{
-    card event_getter
+    card event_bridge
 }
 
 frame RTOS{
@@ -30,11 +28,10 @@ frame RTOS{
     wifi_rx
     ]
 }
-platform <-[dashed]- event_getter:  event_group
-event_getter <-[dashed]- EventGroup
+platform <-[dashed]- event_bridge:  LuaWaitEvent() \nLuaResumeTask
+event_bridge <-[dashed]- EventGroup
 
 frame master_uart{
-
     card tx_setter
     queue rx_stream
     queue tx_buffer
@@ -43,6 +40,40 @@ frame master_uart{
 
     event_setter <-[dashed]- rx_package
 }
+
+card common_api[
+common api
+===
+DILEDON
+DILEDOFF
+DILEDFlash
+DOLEDFlash
+RFLEDFlash
+RUNLEDFlash
+UARTLEDFlash
+
+---
+ComputeCRC
+Printf
+GetTicks
+Delay
+ResetSystem
+---
+GetInputData?
+UartDataProc
+UARTProcess
+nNormalProcess
+SendToHost
+SendToHostWithFlag
+GetInputByteArray
+GetInputByUserData
+RFRecv
+RFResponse
+SetLamp
+GetRFData
+]
+
+
 card UART
 EventGroup <-[#red]- package_getter: auto_clear
 EventGroup <-[#red]- event_setter : set bit
@@ -52,8 +83,13 @@ package_getter <-[dashed]- rx_package
 rx_package <-- stream_to_package
 stream_to_package <-[dashed]- rx_stream
 
-lua_tx --> tx_setter
+lua_tx --> tx_setter : LuaUartSend \nLuaUartRecv  \n
 tx_setter --> tx_buffer : ??? package to stream ???
 tx_buffer ---> UART
+
+card rf
+lua_rf --------> rf : RFRecv \nGetRFData \nRFProcess \n
+
+lua_others -----> common_api
 
 @enduml
