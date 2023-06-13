@@ -33,6 +33,9 @@ void WaterDropper_Board::__InitHardware(){
     __action_button.Init(2, PIN_ACTION_BUTTON, LOW);
     __h_bridge.Init(PIN_H_BRIDGE_DIR_OUTPUT, PIN_H_BRIDGE_PWM_OUTPUT);
     __motor.LinkHBridgeDriver(&__h_bridge);
+    // stop the motor.
+    __h_bridge.SetPwmSpeed(true, 255);    
+
 }
 
 void WaterDropper_Board::Init(const char* app_welcome_statement){
