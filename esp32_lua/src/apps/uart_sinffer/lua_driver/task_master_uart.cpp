@@ -18,32 +18,36 @@ extern "C"{
     int LuaUartRecv(lua_State* L){
         return 1;
     }
-
+    int LuaUartSend(lua_State* L){
+        return 1;
+    }
 
 static const char *TAG = "master_uart";
 
 
-#define EX_UART_NUM UART_NUM_0
-
+#define EX_UART_NUM UART_NUM_1
 #define BUF_SIZE (1024)
 #define RD_BUF_SIZE (BUF_SIZE)
-#define EX_UART_NUM UART_NUM_0
 
 static intr_handle_t handle_console;
 
 uint8_t rxbuf[256];
 uint16_t urxlen;
+int rx_packet_size = 1;
+
+
+
 
 static void IRAM_ATTR uart_intr_handle(void *arg)
 {
     uint16_t rx_fifo_len, status;
     uint16_t i;
     
-    status = UART0.int_st.val; // read UART interrupt Status
-    rx_fifo_len = UART0.status.rxfifo_cnt; // read number of bytes in UART buffer
+    status = UART1.int_st.val; // read UART interrupt Status
+    rx_fifo_len = UART1.status.rxfifo_cnt; // read number of bytes in UART buffer
     
     while(rx_fifo_len){
-        rxbuf[i++] = UART0.fifo.rw_byte; // read all bytes
+        rxbuf[i++] = UART1.fifo.rw_byte; // read all bytes
         rx_fifo_len--;
     }
     
@@ -78,7 +82,7 @@ void init_isr()
 	ESP_ERROR_CHECK(uart_set_pin(EX_UART_NUM, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
 	ESP_ERROR_CHECK(uart_driver_install(EX_UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0));
 	ESP_ERROR_CHECK(uart_isr_free(EX_UART_NUM));
-	ESP_ERROR_CHECK(uart_isr_register(EX_UART_NUM,uart_intr_handle, NULL, ESP_INTR_FLAG_IRAM, &handle_console));
+	ESP_ERROR_CHECK(uart_isr_register(EX_UART_NUM, uart_intr_handle, NULL, ESP_INTR_FLAG_IRAM, &handle_console));
 	ESP_ERROR_CHECK(uart_enable_rx_intr(EX_UART_NUM));
 
 }
@@ -90,14 +94,11 @@ void __rx_buffer_to_package(){
 }
 
 
-int rx_packet_size = 1;
 
 void Task_MasterUart(void * parameter){
-    // if (rx_packet_queue.size() > 0){
-    //     myevents.setbit();
-    //     self.suspend();
-    // }
+
     init_isr();
+
     while(true){
         __rx_buffer_to_package();
         if (rx_packet_size > 0 ){

@@ -27,7 +27,7 @@ static const struct luaL_Reg RichonFunc[] =
 // 	{"DILEDOFF",	LuaDILEDOFF},
 //     {"UARTLEDFlash",  LuaDOLEDFlash},
 //     {"RFLEDFlash",  LuaRFLEDFlash},
-// 	{"UartSend",	LuaUartSend},
+	{"UartSend",	LuaUartSend},
 	{"UartRecv", 	LuaUartRecv},
 // 	{"SendToHost",  LuaSendToHost}, 
 // 	{"SendToHostWithFlag",  LuaSendToHostWithFlag}, 
