@@ -3,4 +3,4 @@
 
 
 
-    extern int LuaWaitEvent(lua_State* l);
+extern int LuaWaitEvent(lua_State* l);
