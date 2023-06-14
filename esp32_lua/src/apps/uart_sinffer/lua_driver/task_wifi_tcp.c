@@ -1,5 +1,5 @@
 
-extern "C"{
+// extern "C"{
 
 	void Task_WebSocked(void * parameter){
 
@@ -7,4 +7,4 @@ extern "C"{
 	}
 
 
-}
+// }

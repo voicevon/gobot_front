@@ -2,7 +2,7 @@
 #include "freertos/event_groups.h"
 #include "lua/lua.h"
 
-extern "C"{
+// extern "C"{
 
 
 EventGroupHandle_t my_events;
@@ -48,4 +48,4 @@ static int LuaUartSend(lua_State* l){
 	return 0;
 }
 
-}
+// }

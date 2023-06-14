@@ -1,16 +1,19 @@
-extern "C"{
+// extern "C"{
 
 #include <lua/lua.h>
 #include <lua/lauxlib.h>
 #include <lua/lualib.h>
 
 #include "task_master_uart.h"
+#include "api_rtos.h"
+
+
 
 
 
 static const struct luaL_Reg RichonFunc[] =
 {
-	// {"WaitEvent",	LuaWaitEvent},
+	{"WaitEvent",	LuaWaitEvent},
 // 	{"ResumeTask",  LuaResumeTask},
 // 	{"GetInputData",LuaGetInputData},
 // 	{"UartDataProc",LuaUartDataProc},
@@ -73,7 +76,8 @@ void LuaInit(void){
 
 void Task_LuaVM(void * parameter){
     // LuaInit();
-	while (true){
+	// while (true){
+	while (1){
 		// vTaskDelay(10000);
 	}
 
@@ -81,4 +85,4 @@ void Task_LuaVM(void * parameter){
 
 
 
-}
+// }

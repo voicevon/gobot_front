@@ -9,8 +9,10 @@
 #include "freertos/task.h"
 
 extern "C"{
-
-
+extern void Task_LuaVM(void * parameter);
+	extern void Task_MasterUart(void * parameter);
+	extern void Task_SlaveUart(void * parameter);
+extern void Task_WebSocked(void * parameter);
 }
 
 void setup(){

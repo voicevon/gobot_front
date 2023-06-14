@@ -14,7 +14,7 @@
 #include "esp_intr_alloc.h"
 #include "esp32/rom/uart.h"   //https://stackoverflow.com/questions/62453460/esp32-uart-interrupt
 
-extern "C"{
+// extern "C"{
     int LuaUartRecv(lua_State* L){
         return 1;
     }
@@ -109,4 +109,4 @@ void Task_MasterUart(void * parameter){
     }
 }
 
-}
+// }
