@@ -1,0 +1,10 @@
+@startuml
+
+[*] --> suspended 
+suspended --> run : ResumeTask()
+run --> suspended : Rx buffer got package
+
+
+run: from rx_stream to rx_package
+
+@enduml

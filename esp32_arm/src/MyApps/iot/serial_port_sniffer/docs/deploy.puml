@@ -1,0 +1,137 @@
+@startuml
+
+frame lua{
+    frame lua_function{
+        card lua_rx
+        card lua_tx
+        card lua_others
+        card lua_rf
+    }
+    card platform
+    lua_rx <-- platform
+}
+card luaWaitEvent
+card luaResumeTask
+
+card EventGroup[
+EventGroup
+===
+master_uart_rx
+slave_uart_rx
+wifi_rx
+]
+
+
+frame task_uart{
+    control task_suspender[
+    task_suspender
+    ---
+    set event_bit
+    suspend myself
+    ]
+    control task_resumer[
+    task_resumer
+    ---
+    controlled by RTOS
+    ]
+
+    card LuaUartReceive
+    card LuaUartSend
+    queue rx_stream
+    queue tx_buffer
+    card stream_to_package
+    queue rx_package
+
+}
+
+lua_rx <-[dashed]- LuaUartReceive : UartReceive()
+
+frame lua_driver{
+
+    collections led_driver[
+    led_driver
+    ===
+    DILEDON()
+    DILEDOFF()
+    DILEDFlash()
+    DOLEDFlash()
+    RFLEDFlash()
+    RUNLEDFlash()
+    UARTLEDFlash()
+    ]
+    collections common_apid[
+    common_apis
+    ===
+    ComputeCRC()
+    Printf()
+    GetTicks()
+    Delay()
+    ResetSystem()
+    ]
+
+    collections app_api[
+    app_api
+    ===
+    GetInputData()
+    UartDataProc()
+    GetInputByteArray()
+    GetInputByUserData()
+    ]
+
+    card common_api[
+    common api
+    ===
+    UARTProcess()
+    NormalProcess()
+    SendToHost()
+    SendToHostWithFlag()
+
+    RFRecv()
+    RFResponse()
+    SetLamp()
+    GetRFData()
+    ]
+
+    card rf_api[
+    rf_api
+    ===
+    RFRecv()
+    GetRFData()
+    RFProcess()
+    ]
+
+}
+
+platform <-[dashed]- luaWaitEvent:  WaitEvent()
+luaWaitEvent <-[dashed]- EventGroup
+platform --> luaResumeTask  : ResumeTask()
+EventGroup <-[#red] luaResumeTask : ClearEvent
+luaResumeTask -[#blue,dashed]-> task_resumer : Automatic resume \nby rtos event cleaning.
+
+task_suspender <-[dashed]- rx_package:  queue is not empty
+
+
+
+EventGroup <-[#red]- task_suspender : set bit,  \n suspend myself
+
+
+LuaUartReceive <-[dashed]- rx_package
+rx_package <-- stream_to_package
+stream_to_package <-[dashed]- rx_stream
+
+lua_tx --> LuaUartSend : UartSend()
+LuaUartSend --> tx_buffer : ??? package to stream ???
+
+frame hardware{
+    card UART
+    card slave_uart
+    card wifi
+    card led
+}
+
+rx_stream <-- UART : Interupt service
+tx_buffer ---> UART
+
+lua_others -> lua_driver
+
+@enduml

@@ -1,6 +1,7 @@
 #include "remote_var_chars.h"
 #include "MyLibs/utility/logger.h"
-#include "SPIFFS.h"
+#include "LittleFS.h"
+// #include "SPIFFS.h"
 
 
 void RemoteVar_Chars::InitFilename(const char* filename){
@@ -10,7 +11,8 @@ void RemoteVar_Chars::InitFilename(const char* filename){
 }
 void RemoteVar_Chars::onGot_MqttMessage(const char* payload, uint16_t payload_len){
     if (__write_to_file){
-        File file = SPIFFS.open(__fs_filename.c_str(), FILE_WRITE);
+        // File file = SPIFFS.open(__fs_filename.c_str(), FILE_WRITE);
+        File file = LittleFS.open(__fs_filename.c_str(), FILE_WRITE);
         if (!file) {
             Serial.println("There was an error opening the file for writing");
             return;

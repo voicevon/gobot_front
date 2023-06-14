@@ -43,7 +43,8 @@ void WaterDropper_Board::Init(const char* app_welcome_statement){
     Logger::Info(app_welcome_statement);
     Serial.print(COLOR_RESET);
     this->__InitHardware();
-    this->_Init_SPIFFS();
+    // this->_Init_SPIFFS();
+    this->_Init_LittleFs();
     this->RepportRamUsage();
 }
 

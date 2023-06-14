@@ -161,7 +161,8 @@ bool WebServerStarter::__Connect_to_a_Router() {
 }
 
 void WebServerStarter::__StartWebServer_forAP() {
-	webserver.serveStatic("/", SPIFFS, "/");
+	webserver.serveStatic("/", LittleFS, "/");
+	// webserver.serveStatic("/", SPIFFS, "/");
 
 	webserver.on("/files", HTTP_GET, [](AsyncWebServerRequest * request) {
 		String logmessage = "Client:" + request->client()->remoteIP().toString() + + " " + request->url();
@@ -178,7 +179,8 @@ void WebServerStarter::__StartWebServer_forAP() {
 	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 		Logger::Info("ap_webserver. request on  '/'");
 		Logger::Print("sending configurator html file", diction->HtmlFilename_of_Configurator.c_str());
-		request->send(SPIFFS, diction->HtmlFilename_of_Configurator.c_str(), "text/html");
+		// request->send(SPIFFS, diction->HtmlFilename_of_Configurator.c_str(), "text/html");
+		request->send(LittleFS, diction->HtmlFilename_of_Configurator.c_str(), "text/html");
 	});
 	
 	
@@ -214,7 +216,8 @@ void WebServerStarter::__StartLuaEditor(){
 	// Web Server Root URL
 	webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 		Logger::Info("webserver. on /   is a lua_scrpt editor ");
-		request->send(SPIFFS, "/lua_editor.html", "text/html");
+		// request->send(SPIFFS, "/lua_editor.html", "text/html");
+		request->send(LittleFS, "/lua_editor.html", "text/html");
 	});
 	webserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
 		int params = request->params();
@@ -243,7 +246,8 @@ void WebServerStarter::__StartLuaEditor(){
 String WebServerStarter::listFiles(bool ishtml) {
   String returnText = "";
   Serial.println("Listing files stored on SPIFFS");
-  File root = SPIFFS.open("/");
+//   File root = SPIFFS.open("/");
+  File root = LittleFS.open("/");
   File foundfile = root.openNextFile();
   if (ishtml) {
     returnText += "<table><tr><th align='left'>Name</th><th align='left'>Size</th></tr>";
@@ -281,7 +285,8 @@ void WebServerStarter::handleUpload(AsyncWebServerRequest *request, String filen
   if (!index) {
     logmessage = "Upload Start: " + String(filename);
     // open the file on first call and store the file handle in the request object
-    request->_tempFile = SPIFFS.open("/" + filename, "w");
+    // request->_tempFile = SPIFFS.open("/" + filename, "w");
+    request->_tempFile = LittleFS.open("/" + filename, "w");
     Serial.println(logmessage);
   }
 
@@ -306,15 +311,18 @@ String WebServerStarter::processor_upload_file(const String& var) {
     return listFiles(true);
   }
   if (var == "FREESPIFFS") {
-    return humanReadableSize((SPIFFS.totalBytes() - SPIFFS.usedBytes()));
+    // return humanReadableSize((SPIFFS.totalBytes() - SPIFFS.usedBytes()));
+    return humanReadableSize((LittleFS.totalBytes() - LittleFS.usedBytes()));
   }
 
   if (var == "USEDSPIFFS") {
-    return humanReadableSize(SPIFFS.usedBytes());
+    // return humanReadableSize(SPIFFS.usedBytes());
+    return humanReadableSize(LittleFS.usedBytes());
   }
 
   if (var == "TOTALSPIFFS") {
-    return humanReadableSize(SPIFFS.totalBytes());
+    // return humanReadableSize(SPIFFS.totalBytes());
+    return humanReadableSize(LittleFS.totalBytes());
   }
 
   return String();

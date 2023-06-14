@@ -39,7 +39,8 @@ void SerialPortSniffer_Board::Init(const char* app_welcome_statement){
     _InitSerial("Hi Xuming, I am Serial-Port-Sniffer board. Good luck......");
     Serial.print(COLOR_RESET);
     this->__InitHardware();
-    this->_Init_SPIFFS();
+    // this->_Init_SPIFFS();
+    this->_Init_LittleFs();
     this->RepportRamUsage();
 
     uart_config_t uart_config = {
