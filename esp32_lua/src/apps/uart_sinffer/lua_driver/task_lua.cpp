@@ -1,3 +1,5 @@
+extern "C"{
+	
 // #include <lua/lua.h>
 // #include <lua/lauxlib.h>
 // #include <lua/lualib.h>
@@ -69,10 +71,14 @@
 //     LoadPlatform(L);
 // }
 
-// void Task_LuaVM(void * parameter){
-//     LuaInit();
-// 	while (true){
-// 		// vTaskDelay(10000);
-// 	}
+void Task_LuaVM(void * parameter){
+    // LuaInit();
+	while (true){
+		// vTaskDelay(10000);
+	}
 
-// }
+}
+
+
+
+}

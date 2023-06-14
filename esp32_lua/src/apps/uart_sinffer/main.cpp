@@ -6,33 +6,33 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-// extern void Task_LuaVM(void * parameter);
-       void Task_LuaVM(void * parameter){}
-void Task_SlaveUart(void * parameter){
+extern "C"{
+		//    void Task_LuaVM(void * parameter){}
+	void Task_SlaveUart(void * parameter){
 
+	}
+
+	void Task_WebSocked(void * parameter){
+
+	}
+
+
+
+	void create_all_tasks(){
+		// EventGroupHandle_t my_events = xEventGroupCreate();
+
+		// xTaskCreate(Task_MasterUart, /* Task function. */
+		//             "Master UART", /* name of task. */
+		//             10000, /* Stack size of task */
+		//             NULL, /* parameter of the task */
+		//             1, /* priority of the task */
+		//             NULL); 
+		// xTaskCreate(Task_SlaveUart, "Slave UART", 10000, NULL, 1, NULL); 
+		// xTaskCreate(Task_WebSocked, "Web socket", 10000, NULL, 1, NULL); 
+		xTaskCreate(Task_LuaVM, "Lua-VM", 10000, NULL,  1,NULL);   // ??? stack size?
+		
+	}
 }
-
-void Task_WebSocked(void * parameter){
-
-}
-
-
-
-void create_all_tasks(){
-	// EventGroupHandle_t my_events = xEventGroupCreate();
-
-    // xTaskCreate(Task_MasterUart, /* Task function. */
-    //             "Master UART", /* name of task. */
-    //             10000, /* Stack size of task */
-    //             NULL, /* parameter of the task */
-    //             1, /* priority of the task */
-    //             NULL); 
-    // xTaskCreate(Task_SlaveUart, "Slave UART", 10000, NULL, 1, NULL); 
-    // xTaskCreate(Task_WebSocked, "Web socket", 10000, NULL, 1, NULL); 
-    xTaskCreate(Task_LuaVM, "Lua-VM", 10000, NULL,  1,NULL);   // ??? stack size?
-    
-}
-
 
 void setup(){
 	// serial_port_sniffer_board.Init("I_AM_SERIAL_PORT_SNIFFER");

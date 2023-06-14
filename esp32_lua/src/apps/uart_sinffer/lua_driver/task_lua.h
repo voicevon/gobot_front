@@ -1,3 +1,7 @@
 #pragma once
+extern "C"{
 
-// void Task_LuaVM(void * parameter);
+
+extern void Task_LuaVM(void * parameter);
+
+}
