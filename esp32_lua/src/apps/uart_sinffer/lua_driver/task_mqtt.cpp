@@ -96,27 +96,29 @@ void onMqttUnsubscribe(uint16_t packetId) {
 	Serial.println(packetId);
 }
 
-// void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-	// Serial.println("Publish received.");
-	// Serial.print("  topic: ");
-	// Serial.println(topic);
-	// Serial.print("  paylod: ");
-	// Serial.println(payload);
-	// Serial.print("  qos: ");
-	// Serial.println(properties.qos);
-	// Serial.print("  dup: ");
-	// Serial.println(properties.dup);
-	// Serial.print("  retain: ");
-	// Serial.println(properties.retain);
-	// Serial.print("  len: ");
-	// Serial.println(len);
-	// Serial.print("  index: ");
-	// Serial.println(index);
-	// Serial.print("  total: ");
-	// Serial.println(total);
-	// app_mqtt_received_message(topic, payload);
-	// tttt();
-// }
+void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
+    bool debug = false;
+    if (debug){
+        Serial.println("onMqttMessage().");
+        Serial.print("  topic: ");
+        Serial.println(topic);
+        Serial.print("  paylod: ");
+        Serial.println(payload);
+        Serial.print("  qos: ");
+        Serial.println(properties.qos);
+        Serial.print("  dup: ");
+        Serial.println(properties.dup);
+        Serial.print("  retain: ");
+        Serial.println(properties.retain);
+        Serial.print("  len: ");
+        Serial.println(len);
+        Serial.print("  index: ");
+        Serial.println(index);
+        Serial.print("  total: ");
+        Serial.println(total);
+    }
+
+}
 
 void onMqttPublish(uint16_t packetId) {
 	bool debug=false;
@@ -188,7 +190,7 @@ void setup_wifi_mqtt_blocking_mode() {
 
 }
 
-void mqtt_publish(const char* topic){
+void mqtt_publish(const char* topic, const char* payload){
 
 }
 
@@ -196,19 +198,40 @@ void mqtt_subscribe(const char* topic){
 
 }
 
-int mqtt_read_payload(char* payload){
+const char* mqtt_read_first_topic(){
+
+}
+
+int mqtt_read_payload(const char* topic, char* payload){
     return 1;
 }
 
+void mqtt_release_buffer(const char* topic){
+
+}
+
 void TaskMqtt(void* parameter){
-    connectToMqtt();
+    
     set_callback_mqtt_publish(mqtt_publish);
     set_callback_mqtt_subscribe(mqtt_subscribe);
+    set_callback_read_first_topic(mqtt_read_first_topic);
     set_callback_mqtt_read_payload(mqtt_read_payload);
+    set_callback_mqtt_release_buffer(mqtt_release_buffer);
 
     while(true){
-        xEventGroupSetBits(my_EventGroup,  EVENT_BIT_UART_MASTER_RX);  // set eventbit	
-        vTaskSuspend(NULL);                                            // suspend myself
+        if (true){
+            xEventGroupSetBits(my_EventGroup,  EVENT_BIT_UART_MASTER_RX);  // set eventbit	
+        }
+        // vTaskSuspend(NULL);                                            // suspend myself
+        if(!g_mqttClient.connected()){
+            bool timeout = false;
+            // not connected, migh be connecting.
+            if (timeout){
+
+                connectToMqtt();
+            }
+        }
+
     }
     vTaskDelay(1);
 }
