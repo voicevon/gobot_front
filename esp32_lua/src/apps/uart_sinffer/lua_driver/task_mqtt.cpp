@@ -4,6 +4,7 @@
 #include "von_clib/utility/logger/logger.hpp"
 #include "api_common.hpp"
 #include "task_mqtt.h"
+#include "MyLibs/utility/logger.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/timers.h"
@@ -241,7 +242,7 @@ void TaskMqtt(void* parameter){
                 instance.connectToMqtt();
             }
         }
+        vTaskDelay(1);
 
     }
-    vTaskDelay(1);
 }

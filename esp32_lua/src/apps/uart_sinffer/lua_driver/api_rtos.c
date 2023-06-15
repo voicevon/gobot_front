@@ -68,7 +68,8 @@ void InitRtosTasks(){
     }else{
         /* The event group was created. */
     }
-	logInfo("InitRTOS() is done...\n");
+	logInfo("InitRTOS() is done...");
+	logPrint_Int("print_int() test   ", 1234);
 
 	//create tasks
 

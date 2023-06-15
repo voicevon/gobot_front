@@ -1,6 +1,7 @@
 #pragma once
 
 #include <AsyncMqttClient.h>
+#include "MyLibs/basic/text/mqtt_topic.h"
 
 
 class SmartMqttClient{
@@ -15,6 +16,8 @@ class SmartMqttClient{
 
     private:
         static bool mqtt_is_connected;
+        static MqttTopic mqtt_topics[20];
+        
         static void onMqttConnect(bool sessionPresent);
         static void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) ;
         static void onMqttSubscribe(uint16_t packetId, uint8_t qos) ;
