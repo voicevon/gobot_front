@@ -4,6 +4,9 @@
 #include "MyLibs/basic/text/mqtt_topic.h"
 
 
+class Subscriber{
+    
+}
 class SmartMqttClient{
     public:
         static void mqtt_publish(const char* topic, const char* payload);
@@ -17,7 +20,7 @@ class SmartMqttClient{
     private:
         static bool mqtt_is_connected;
         static MqttTopic mqtt_topics[20];
-        
+
         static void onMqttConnect(bool sessionPresent);
         static void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) ;
         static void onMqttSubscribe(uint16_t packetId, uint8_t qos) ;
