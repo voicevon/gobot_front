@@ -53,7 +53,7 @@ void logPrint_Char(const char* title, const char* text ){
 
 }
 
-void logPr_Int(const char* title, int v){
+void logPrint_Int(const char* title, int v){
 
 }
 
