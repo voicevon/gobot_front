@@ -5,11 +5,11 @@
 #include <lua/lualib.h>
 
 #include "task_master_uart.h"
+#include "task_slave_uart.h"
+#include "task_wifi_tcp.h"
+
 #include "api_rtos.h"
-
-
-
-
+#include "api_common.h"
 
 static const struct luaL_Reg RichonFunc[] =
 {
@@ -30,8 +30,10 @@ static const struct luaL_Reg RichonFunc[] =
 // 	{"DILEDOFF",	LuaDILEDOFF},
 //     {"UARTLEDFlash",  LuaDOLEDFlash},
 //     {"RFLEDFlash",  LuaRFLEDFlash},
-	{"UartSend",	LuaUartSend},
-	{"UartRecv", 	LuaUartRecv},
+	{"UartSendMaster",	LuaUartSend_Master},
+	{"UartRecvMaster", 	LuaUartRecv_Master},
+	{"UartSendSlave",	LuaUartSend_Slave},
+	{"UartRecvSlave", 	LuaUartRecv_Slave},
 // 	{"SendToHost",  LuaSendToHost}, 
 // 	{"SendToHostWithFlag",  LuaSendToHostWithFlag}, 
 // 	{"GetInputByteArray", LuaGetInputByteArray},

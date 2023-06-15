@@ -14,13 +14,6 @@
 #include "esp_intr_alloc.h"
 #include "esp32/rom/uart.h"   //https://stackoverflow.com/questions/62453460/esp32-uart-interrupt
 
-// extern "C"{
-    int LuaUartRecv(lua_State* L){
-        return 1;
-    }
-    int LuaUartSend(lua_State* L){
-        return 1;
-    }
 
 static const char *TAG = "master_uart";
 
@@ -31,9 +24,9 @@ static const char *TAG = "master_uart";
 
 static intr_handle_t handle_console;
 
-uint8_t rxbuf[256];
-uint16_t urxlen;
-int rx_packet_size = 1;
+static uint8_t rxbuf[256];
+static uint16_t urxlen;
+static int rx_packet_size = 1;
 
 
 
@@ -57,12 +50,9 @@ static void IRAM_ATTR uart_intr_handle(void *arg)
     // a test code or debug code to indicate UART receives successfully,
     // you can redirect received byte as echo also
     uart_write_bytes(EX_UART_NUM, (const char*) "RX Done", 7);
-
 }
-/*
- * main 
- */
-void init_isr()
+
+static void init_isr()
 {
 	int ret;
 	esp_log_level_set(TAG, ESP_LOG_INFO);
@@ -89,8 +79,50 @@ void init_isr()
 
 
 
-void __rx_buffer_to_package(){
+static void __rx_buffer_to_package(){
 
+}
+
+
+static int LuaUartRecv_Master(lua_State* L){
+	if(urxlen > 0){
+		//拷贝UART接收缓冲区数据到LUA虚拟机
+		lua_newtable(L);
+		for(int i = 0; i < urxlen; ++i){
+			lua_pushinteger(L, rxbuf[i]);
+			lua_rawseti(L, -2, i + 1);
+		}
+		return 1;  //???
+	}
+	return 0;   //???
+}
+
+static int LuaUartSend__Master(lua_State* L){
+	int i, tmp;
+	uint8_t buf[64];
+	uint8_t semcount;
+	
+	//获得LUA传递过来的数组
+	tmp = 0;
+	i = lua_gettop(L);
+	if(lua_istable(L, i)){
+		lua_pushnil(L);
+		
+		while(lua_next(L, i) != 0){
+			buf[tmp] = lua_tointeger(L, -1);
+			lua_remove(L, -1);
+			++tmp;
+		}
+	}
+	
+	// do{
+	// 	// Wait while UART TX is busy.
+	// 	semcount = OSSemAccept(pUart4SendCompleted);
+	// }while(semcount > 0);
+		
+	// SendToUart4(buf, tmp);
+	
+	return 0;
 }
 
 

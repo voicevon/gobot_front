@@ -1,51 +1,33 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
 #include "lua/lua.h"
-
-// extern "C"{
-
-
-EventGroupHandle_t my_events;
+#include "global_const.h"
 
 
+
+static EventGroupHandle_t  my_EventGroup;
+static EventBits_t my_BitsToWaitFor = EVENT_BIT_UART_MASTER_RX | EVENT_BIT_UART_SLAVE_RX | EVENT_BIT_UART_WIFI_TCP_RX ;
+
+/// @brief return all the rtos eventGroupBits.
 int LuaWaitEvent(lua_State* l){
-	int8_t err;
-	// OS_FLAGS flags;
 	
-	// flags = OSFlagPend(pFlagGrp, (OS_FLAGS)ALL_FLAGS, OS_FLAG_WAIT_SET_ANY | OS_FLAG_CONSUME, 4, &err);	//50毫秒一次超时
-	int flags = {12345};
-
+	BaseType_t clearOnExit = pdFALSE;
+	BaseType_t watiForAllBits = pdTRUE;
+	TickType_t ticksToWait;
+	
+	EventBits_t result = xEventGroupWaitBits(my_EventGroup, my_BitsToWaitFor, clearOnExit, watiForAllBits, ticksToWait);
 	//把flags发送到LUA中
-	lua_pushinteger(l, flags);
+	lua_pushinteger(l, result);
 	return 1;
 }
 
-static int LuaUartSend(lua_State* l){
-	int i, tmp;
-	uint8_t buf[64];
-	uint8_t semcount;
-	
-	//获得LUA传递过来的数组
-	tmp = 0;
-	i = lua_gettop(l);
-	if(lua_istable(l, i)){
-		lua_pushnil(l);
-		
-		while(lua_next(l, i) != 0){
-			buf[tmp] = lua_tointeger(l, -1);
-			lua_remove(l, -1);
-			++tmp;
-		}
-	}
-	
-	// do{
-	// 	// Wait while UART TX is busy.
-	// 	semcount = OSSemAccept(pUart4SendCompleted);
-	// }while(semcount > 0);
-		
-	// SendToUart4(buf, tmp);
-	
-	return 0;
-}
+void InitRtos(){
+	my_EventGroup = xEventGroupCreate();
+	if( my_EventGroup == NULL ) {
+        /* The event group was not created because there was insufficient
+        FreeRTOS heap available. */
+    }else{
+        /* The event group was created. */
+    }
 
-// }
+}
