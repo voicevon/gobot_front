@@ -15,21 +15,32 @@
 
 
 static const char *TAG = "master_uart";
+// char END_OF_LINE = 0x0a;
+// char END_OF_LINE[] = "\n";
 
 
 #define EX_UART_NUM UART_NUM_0
 #define BUF_SIZE (1024)
-#define RD_BUF_SIZE (BUF_SIZE)
 
 
+void logWarn(const char* title){
 
+}
+
+void logInfo(const char* title){
+	for(int i=0; i<100; i++){
+		if (title[i] == 0x00){
+			// uart_write_bytes(UART_NUM_0, END_OF_LINE, 1);     //??? 
+			// uart_write_bytes(UART_NUM_0, &END_OF_LINE, 1);    //???
+			return;
+		}
+		uart_write_bytes(UART_NUM_0, title+i, 1);
+
+	}
+}
 
 void InitMonitorUart(){
-	int ret;
-	esp_log_level_set(TAG, ESP_LOG_INFO);
-
-	/* Configure parameters of an UART driver,
-	* communication pins and install the driver */
+	// / Configure parameters of an UART driver,
 	uart_config_t uart_config = {
 		.baud_rate = 115200,
 		.data_bits = UART_DATA_8_BITS,
@@ -38,12 +49,14 @@ void InitMonitorUart(){
 		.flow_ctrl = UART_HW_FLOWCTRL_DISABLE
 	};
 
-	ESP_ERROR_CHECK(uart_set_pin(EX_UART_NUM, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
-	ESP_ERROR_CHECK(uart_driver_install(EX_UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0));
 
-    uart_write_bytes(UART_NUM_1, "Hello World", 1);
-
+	uart_set_pin(EX_UART_NUM, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+	uart_driver_install(EX_UART_NUM, BUF_SIZE * 2, BUF_SIZE, 0, NULL, 0);
+	uart_write_bytes(UART_NUM_0, "Hello World\n", 12);
+    logInfo("Info Test\n");
 }
+
+
 
 
 // }

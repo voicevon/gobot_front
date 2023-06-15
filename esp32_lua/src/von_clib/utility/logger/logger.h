@@ -38,6 +38,9 @@
 
 extern void InitMonitorUart();
 
+extern void logWarn(const char* title);
+extern void logInfo(const char* title);
+
 // class LoggerHelper{
 // };
 
