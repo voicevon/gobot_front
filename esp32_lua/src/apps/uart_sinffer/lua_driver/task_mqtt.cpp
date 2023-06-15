@@ -2,7 +2,7 @@
 
 #include "global_const.h"
 #include "von_clib/utility/logger/logger.hpp"
-
+#include "api_common.hpp"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/timers.h"
@@ -188,9 +188,24 @@ void setup_wifi_mqtt_blocking_mode() {
 
 }
 
+void mqtt_publish(const char* topic){
+
+}
+
+void mqtt_subscribe(const char* topic){
+
+}
+
+int mqtt_read_payload(char* payload){
+    return 1;
+}
 
 void TaskMqtt(void* parameter){
     connectToMqtt();
+    set_callback_mqtt_publish(mqtt_publish);
+    set_callback_mqtt_subscribe(mqtt_subscribe);
+    set_callback_mqtt_read_payload(mqtt_read_payload);
+
     while(true){
         xEventGroupSetBits(my_EventGroup,  EVENT_BIT_UART_MASTER_RX);  // set eventbit	
         vTaskSuspend(NULL);                                            // suspend myself
