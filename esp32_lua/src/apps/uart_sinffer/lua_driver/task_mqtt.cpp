@@ -3,10 +3,12 @@
 #include "global_const.h"
 #include "von_clib/utility/logger/logger.hpp"
 #include "api_common.hpp"
+#include "task_mqtt.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/timers.h"
 #include <AsyncMqttClient.h>
+
 
 
 #define MQTT_HOST "voicevon.vicp.io"
@@ -14,26 +16,32 @@
 #define MQTT_UID "von"
 #define MQTT_PASSWORD "von1970"
 
-// extern void app_mqtt_subscribe();
-// extern void app_mqtt_received_message(char* topic, char* payload);
 
 AsyncMqttClient g_mqttClient;
-bool mqtt_is_connected = false;
+static SmartMqttClient instance;
+
 
 TimerHandle_t mqttReconnectTimer;
 // TimerHandle_t wifiReconnectTimer;
 
 
-void connectToMqtt() {
+void SmartMqttClient::connectToMqtt() {
 	logInfo ("Connecting to MQTT...");
     
 	g_mqttClient.setCredentials(MQTT_UID, MQTT_PASSWORD);
 	g_mqttClient.connect();
 }
 
-
+void SmartMqttClient::Init(){
+    g_mqttClient.onConnect(this->onMqttConnect);
+    g_mqttClient.onDisconnect(this->onMqttDisconnect);
+    g_mqttClient.onPublish(this->onMqttPublish);
+    g_mqttClient.onSubscribe(this->onMqttSubscribe);
+    g_mqttClient.onUnsubscribe(this->onMqttUnsubscribe);
+    g_mqttClient.onMessage(this->onMqttMessage);
+}
 //TODO:  subsribe topics after:  disconnected --> connected.
-void onMqttConnect(bool sessionPresent) {
+void SmartMqttClient::onMqttConnect(bool sessionPresent) {
     logInfo("MQTT event:  onMqttConnected()");
     Serial.print("Session present: ");
     Serial.print(sessionPresent);
@@ -57,10 +65,10 @@ void onMqttConnect(bool sessionPresent) {
     }
     // If you want , add app's callback to subscribe.
     // app_mqtt_subscribe();
-    mqtt_is_connected = true;
+    SmartMqttClient::mqtt_is_connected = true;
 }
 
-void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
+void SmartMqttClient::onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
     logWarn("MQTT event: onMqttDisconnect()");
     String reason_str = "   reason = ";
     if (reason == AsyncMqttClientDisconnectReason::TCP_DISCONNECTED) reason_str.concat("TCP_DISCONNECTED"); 
@@ -79,7 +87,7 @@ void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
 	// }
 }
 
-void onMqttSubscribe(uint16_t packetId, uint8_t qos) {
+void SmartMqttClient::onMqttSubscribe(uint16_t packetId, uint8_t qos) {
     bool debug = false;
     if (debug){
         Serial.println("[Info] wifi_mqtt_client.cpp   onMqttSubscribe()   Subscribe acknowledged.");
@@ -90,13 +98,13 @@ void onMqttSubscribe(uint16_t packetId, uint8_t qos) {
     }
 }
 
-void onMqttUnsubscribe(uint16_t packetId) {
+void SmartMqttClient::onMqttUnsubscribe(uint16_t packetId) {
 	Serial.println("Unsubscribe acknowledged.");
 	Serial.print("  packetId: ");
 	Serial.println(packetId);
 }
 
-void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
+void SmartMqttClient::onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
     bool debug = false;
     if (debug){
         Serial.println("onMqttMessage().");
@@ -120,7 +128,7 @@ void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties 
 
 }
 
-void onMqttPublish(uint16_t packetId) {
+void SmartMqttClient::onMqttPublish(uint16_t packetId) {
 	bool debug=false;
 	if (debug){
 		Serial.print("Publish acknowledged.");
@@ -131,33 +139,33 @@ void onMqttPublish(uint16_t packetId) {
 
 
 //Please Notice: This function will be invoked in slave thread.
-void on_MqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-    // https://github.com/marvinroger/async-mqtt-client/issues/39
+// void SmartMqttClient::onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
+//     // https://github.com/marvinroger/async-mqtt-client/issues/39
 
-    bool debug = false;
-    if(debug){
-        logDebug("on_MqttMessage()   saying received.");
-        logPrint_Char("  topic: ", topic);
-        logPrint_Char("  paylod: ", payload);
-        logPrint_Int("  qos: ", properties.qos);
-        // logPrint("  dup: ", properties.dup);
-        // logPrint("  retain:", properties.retain);
-        logPrint_Int("  len: ", len);
-        logPrint_Int("  index: ", index);
-        logPrint_Int("  total: ", total);
+//     bool debug = false;
+//     if(debug){
+//         logDebug("on_MqttMessage()   saying received.");
+//         logPrint_Char("  topic: ", topic);
+//         logPrint_Char("  paylod: ", payload);
+//         logPrint_Int("  qos: ", properties.qos);
+//         // logPrint("  dup: ", properties.dup);
+//         // logPrint("  retain:", properties.retain);
+//         logPrint_Int("  len: ", len);
+//         logPrint_Int("  index: ", index);
+//         logPrint_Int("  total: ", total);
         
-    }
+//     }
 
-    // https://github.com/marvinroger/async-mqtt-client/issues/39
-    // if (len==total){
-    //     gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len);
-    // }else{
-    //     gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len, index, total);
-    // }
+//     // https://github.com/marvinroger/async-mqtt-client/issues/39
+//     // if (len==total){
+//     //     gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len);
+//     // }else{
+//     //     gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len, index, total);
+//     // }
     
-    // logInfo("MqttClient on_MqttMessage()  Appened to mqtt_receiver. topic=");
-    // logPrint("topic", topic);
-}
+//     // logInfo("MqttClient on_MqttMessage()  Appened to mqtt_receiver. topic=");
+//     // logPrint("topic", topic);
+// }
 
 
 void setup_wifi_mqtt_blocking_mode() {
@@ -165,71 +173,72 @@ void setup_wifi_mqtt_blocking_mode() {
     Serial.println();
 
 
-    mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
-    // wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(5000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
+    // mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
+    // // wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(5000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
 
-    // connectToWifi();
-    // WiFi.onEvent(WiFiEvent);
+    // // connectToWifi();
+    // // WiFi.onEvent(WiFiEvent);
 
-    g_mqttClient.onConnect(onMqttConnect);
-    g_mqttClient.onDisconnect(onMqttDisconnect);
-    g_mqttClient.onSubscribe(onMqttSubscribe);
-    g_mqttClient.onUnsubscribe(onMqttUnsubscribe);
-    // g_mqttClient.onMessage(onMqttMessage);
-    g_mqttClient.onPublish(onMqttPublish);
-    g_mqttClient.setServer(MQTT_HOST, MQTT_PORT);
+    // g_mqttClient.onConnect(onMqttConnect);
+    // g_mqttClient.onDisconnect(onMqttDisconnect);
+    // g_mqttClient.onSubscribe(onMqttSubscribe);
+    // g_mqttClient.onUnsubscribe(onMqttUnsubscribe);
+    // // g_mqttClient.onMessage(onMqttMessage);
+    // g_mqttClient.onPublish(onMqttPublish);
+    // g_mqttClient.setServer(MQTT_HOST, MQTT_PORT);
 
-    g_mqttClient.onMessage(on_MqttMessage);
+    // g_mqttClient.onMessage(on_MqttMessage);
 
-    // xTimerStart(wifiReconnectTimer, 0);
-    while (! g_mqttClient.connected()){
-        delay(1000);
-        Serial.print(". ");
-    }
-    logInfo("wifi_mqtt_clinet.cpp   setup_wifi_mqtt_blocking_mode() is finished...");
-
-}
-
-void mqtt_publish(const char* topic, const char* payload){
+    // // xTimerStart(wifiReconnectTimer, 0);
+    // while (! g_mqttClient.connected()){
+    //     delay(1000);
+    //     Serial.print(". ");
+    // }
+    // logInfo("wifi_mqtt_clinet.cpp   setup_wifi_mqtt_blocking_mode() is finished...");
 
 }
 
-void mqtt_subscribe(const char* topic){
+void SmartMqttClient::mqtt_publish(const char* topic, const char* payload){
+    g_mqttClient.publish(topic, 2,true, payload);
+}
 
+void SmartMqttClient::mqtt_subscribe(const char* topic){
+    g_mqttClient.subscribe(topic, 2);
 }
 
 // const char* mqtt_read_first_topic(){
 
 // }
 
-int mqtt_read_payload(const int topic_id, char* payload){
+int SmartMqttClient::mqtt_read_payload(const int topic_id, char* payload){
     return 1;
 }
 
-void mqtt_release_buffer(const int topic_id){
+void SmartMqttClient::mqtt_release_buffer(const int topic_id){
 
 }
 
+// SmartMqttClient instance;
+
 void TaskMqtt(void* parameter){
     
-    set_callback_mqtt_publish(mqtt_publish);
-    set_callback_mqtt_subscribe(mqtt_subscribe);
+    set_callback_mqtt_publish(instance.mqtt_publish);
+    set_callback_mqtt_subscribe(instance.mqtt_subscribe);
     // set_callback_read_first_topic(mqtt_read_first_topic);
-    set_callback_mqtt_read_payload(mqtt_read_payload);
-    set_callback_mqtt_release_buffer(mqtt_release_buffer);
+    set_callback_mqtt_read_payload(instance.mqtt_read_payload);
+    set_callback_mqtt_release_buffer(instance.mqtt_release_buffer);
 
     while(true){
-        bool has_payload = false;
-        if (has_payload){
-            xEventGroupSetBits(my_EventGroup,  EVENT_BIT_MQTT_RX);  // set eventbit	
-        }
+        int xx = instance.Get_Payload_bits();
+        if (xx>0)        
+            xEventGroupSetBits(my_EventGroup,  EVENT_BIT_MQTT_RX_0);  // set eventbit	
         // vTaskSuspend(NULL);                                            // suspend myself
         if(!g_mqttClient.connected()){
             bool timeout = false;
             // not connected, migh be connecting.
             if (timeout){
 
-                connectToMqtt();
+                instance.connectToMqtt();
             }
         }
 

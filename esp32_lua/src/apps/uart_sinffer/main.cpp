@@ -5,9 +5,7 @@ extern "C"{
 
 #include <Arduino.h>
 #include "von_clib/task/wifi/task_wifi.h"
-// #include "von_clib/task/mqtt/task_mqtt.h"
 #include "lua_driver/task_mqtt.h"
-
 TaskHandle_t* task_WiFi;
 TaskHandle_t* task_Mqtt;
 
