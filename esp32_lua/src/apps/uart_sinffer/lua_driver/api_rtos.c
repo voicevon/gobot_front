@@ -17,7 +17,7 @@ TaskHandle_t task_WifiMqtt;
 TaskHandle_t task_LuaVM;
 
 EventGroupHandle_t  my_EventGroup;
-static EventBits_t my_BitsToWaitFor = EVENT_BIT_UART_MASTER_RX | EVENT_BIT_UART_SLAVE_RX | EVENT_BIT_UART_WIFI_TCP_RX ;
+static EventBits_t my_BitsToWaitFor = EVENT_BIT_UART_MASTER_RX | EVENT_BIT_UART_SLAVE_RX | EVENT_BIT_MQTT_RX ;
 
 /// @brief return all the rtos eventGroupBits.
 int LuaWaitEvent(lua_State* l){
@@ -49,7 +49,7 @@ int LuaResumeTask(lua_State* L){
 				// vTaskResume(task_SlaveUart);
 			}else if(task_id == 2){
 				// vTaskResume(task_WifiTcp);
-				xEventGroupClearBits(my_EventGroup, EVENT_BIT_UART_WIFI_TCP_RX);
+				xEventGroupClearBits(my_EventGroup, EVENT_BIT_MQTT_RX);
 			}else{
 				logWarn("LuaResumeTask()  Lua call me with unknown parameter....\n");
 			}

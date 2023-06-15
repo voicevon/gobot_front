@@ -10,9 +10,9 @@
 
 void (*mqtt_publish) (const char*, const char*);
 void (*mqtt_subscribe) (const char*);
-int (*mqtt_read_payload) (const char*, char*);
-void (*mqtt_release_buffer) (const char*);
-const char* (*mqtt_read_first_topic)();
+// const char* (*mqtt_read_first_topic)();
+int (*mqtt_read_payload) (const int, char*);
+void (*mqtt_release_buffer) (const int);
 
 void set_callback_mqtt_publish( void (*service_function)(const char*, const char*) ){
 	mqtt_publish = service_function;	
@@ -20,13 +20,13 @@ void set_callback_mqtt_publish( void (*service_function)(const char*, const char
 void set_callback_mqtt_subscribe( void (*service_function)(const char*) ){
 	mqtt_subscribe = service_function;	
 }
-void set_callback_read_first_topic(const char* (*service_function)()){
-	mqtt_read_first_topic = service_function;
-}
-void set_callback_mqtt_read_payload( int (*service_function)(const char*,char*) ){
+// void set_callback_read_first_topic(const char* (*service_function)()){
+// 	mqtt_read_first_topic = service_function;
+// }
+void set_callback_mqtt_read_payload( int (*service_function)(const int,char*) ){
 	mqtt_read_payload = service_function;	
 }
-void set_callback_mqtt_release_buffer(void (*service_function) (const char*)){
+void set_callback_mqtt_release_buffer(void (*service_function) (const int)){
 	mqtt_release_buffer = service_function;
 }
 
@@ -95,21 +95,21 @@ int LuaMqttPublish(lua_State* L){
 	return 0;
 }
 
-int LuaMqttReadFirstTopic(lua_State* L){
+// int LuaMqttReadFirstTopic(lua_State* L){
 	
-}
+// }
 
 int LuaMqttReadPayload(lua_State* L){
-	char topic[64];
+	int topic_id;
 	char* payload;
 
 	// copy from buffer to lua
-	int length = mqtt_read_payload(topic, payload);
+	int length = mqtt_read_payload(topic_id, payload);
 	// for(int i=0; i<length;i++){
 		lua_pushstring(L, payload);
 	// }
 	// release origin buffer of payload
-	mqtt_release_buffer(topic);
+	mqtt_release_buffer(topic_id);
 
 }
 

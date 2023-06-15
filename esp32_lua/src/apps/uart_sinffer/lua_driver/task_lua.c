@@ -40,7 +40,7 @@ static const struct luaL_Reg RichonFunc[] =
 
 	{"MqttPublish", 	LuaMqttPublish},
 	{"MqttSubscribe", 	LuaMqttSubscribe},
-	{"MqttReadTopic", 	LuaMqttReadFirstTopic},
+	// {"MqttReadTopic", 	LuaMqttReadFirstTopic},
 	{"MqttReadPayload",	LuaMqttReadPayload},
 // 	{"SendToHost",  LuaSendToHost}, 
 // 	{"SendToHostWithFlag",  LuaSendToHostWithFlag}, 

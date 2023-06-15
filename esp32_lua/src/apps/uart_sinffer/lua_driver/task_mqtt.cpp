@@ -14,11 +14,11 @@
 #define MQTT_UID "von"
 #define MQTT_PASSWORD "von1970"
 
-bool mqtt_is_connected = false;
-extern void app_mqtt_subscribe();
-extern void app_mqtt_received_message(char* topic, char* payload);
+// extern void app_mqtt_subscribe();
+// extern void app_mqtt_received_message(char* topic, char* payload);
 
 AsyncMqttClient g_mqttClient;
+bool mqtt_is_connected = false;
 
 TimerHandle_t mqttReconnectTimer;
 // TimerHandle_t wifiReconnectTimer;
@@ -198,15 +198,15 @@ void mqtt_subscribe(const char* topic){
 
 }
 
-const char* mqtt_read_first_topic(){
+// const char* mqtt_read_first_topic(){
 
-}
+// }
 
-int mqtt_read_payload(const char* topic, char* payload){
+int mqtt_read_payload(const int topic_id, char* payload){
     return 1;
 }
 
-void mqtt_release_buffer(const char* topic){
+void mqtt_release_buffer(const int topic_id){
 
 }
 
@@ -214,13 +214,14 @@ void TaskMqtt(void* parameter){
     
     set_callback_mqtt_publish(mqtt_publish);
     set_callback_mqtt_subscribe(mqtt_subscribe);
-    set_callback_read_first_topic(mqtt_read_first_topic);
+    // set_callback_read_first_topic(mqtt_read_first_topic);
     set_callback_mqtt_read_payload(mqtt_read_payload);
     set_callback_mqtt_release_buffer(mqtt_release_buffer);
 
     while(true){
-        if (true){
-            xEventGroupSetBits(my_EventGroup,  EVENT_BIT_UART_MASTER_RX);  // set eventbit	
+        bool has_payload = false;
+        if (has_payload){
+            xEventGroupSetBits(my_EventGroup,  EVENT_BIT_MQTT_RX);  // set eventbit	
         }
         // vTaskSuspend(NULL);                                            // suspend myself
         if(!g_mqttClient.connected()){
