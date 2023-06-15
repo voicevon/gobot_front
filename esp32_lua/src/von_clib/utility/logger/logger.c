@@ -52,8 +52,8 @@ void InitMonitorUart(){
 
 	uart_set_pin(EX_UART_NUM, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
 	uart_driver_install(EX_UART_NUM, BUF_SIZE * 2, BUF_SIZE, 0, NULL, 0);
-	uart_write_bytes(UART_NUM_0, "Hello World\n", 12);
-    logInfo("Info Test\n");
+	uart_write_bytes(UART_NUM_0, "UART0 begin...\n", 16);
+    
 }
 
 

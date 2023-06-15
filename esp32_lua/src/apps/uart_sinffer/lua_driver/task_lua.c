@@ -18,7 +18,7 @@
 static const struct luaL_Reg RichonFunc[] =
 {
 	{"WaitEvent",	LuaWaitEvent},
-// 	{"ResumeTask",  LuaResumeTask},
+	{"ResumeTask",  LuaResumeTask},
 // 	{"GetInputData",LuaGetInputData},
 // 	{"UartDataProc",LuaUartDataProc},
 // 	{"RFProcess",	LuaRFProcess},
