@@ -10,7 +10,7 @@
 
 #include "task_master_uart.h"
 #include "task_slave_uart.h"
-#include "task_wifi_tcp.h"
+#include "task_wifi_mqtt.h"
 
 #include "api_rtos.h"
 #include "api_common.h"
@@ -19,6 +19,7 @@ static const struct luaL_Reg RichonFunc[] =
 {
 	{"WaitEvent",	LuaWaitEvent},
 	{"ResumeTask",  LuaResumeTask},
+	{"MqttPub",  LuaMqttPub},
 // 	{"GetInputData",LuaGetInputData},
 // 	{"UartDataProc",LuaUartDataProc},
 // 	{"RFProcess",	LuaRFProcess},

@@ -9,12 +9,12 @@
 
 #include "task_master_uart.h"
 #include "task_slave_uart.h"
-#include "task_wifi_tcp.h"
+#include "task_wifi_mqtt.h"
 #include "task_lua.h"
 
 TaskHandle_t task_MasterUart;
 TaskHandle_t task_SlaveUart;
-TaskHandle_t task_WifiTcp;
+TaskHandle_t task_WifiMqtt;
 TaskHandle_t task_LuaVM;
 
 EventGroupHandle_t  my_EventGroup;
@@ -81,7 +81,7 @@ void InitRtosTasks(){
 				task_MasterUart); 
 
 	xTaskCreate(Task_SlaveUart, "Slave UART", 10000, NULL, 1, task_SlaveUart); 
-	xTaskCreate(Task_WebSocked, "Web socket", 10000, NULL, 1, task_WifiTcp); 
+	xTaskCreate(Task_WifiMqtt, "Web socket", 10000, NULL, 1, task_WifiMqtt); 
 	xTaskCreate(Task_LuaVM, "Lua-VM", 10000, NULL,  1,task_LuaVM);   // ??? stack size?
 	logInfo("All RTOS-tasks are created.\n");
 }

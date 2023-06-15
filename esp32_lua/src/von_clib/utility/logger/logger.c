@@ -35,9 +35,28 @@ void logInfo(const char* title){
 			return;
 		}
 		uart_write_bytes(UART_NUM_0, title+i, 1);
-
 	}
 }
+
+void logDebug(const char* title){
+	for(int i=0; i<100; i++){
+		if (title[i] == 0x00){
+			// uart_write_bytes(UART_NUM_0, END_OF_LINE, 1);     //??? 
+			// uart_write_bytes(UART_NUM_0, &END_OF_LINE, 1);    //???
+			return;
+		}
+		uart_write_bytes(UART_NUM_0, title+i, 1);
+	}
+}
+
+void logPrint_Char(const char* title, const char* text ){
+
+}
+
+void logPr_Int(const char* title, int v){
+
+}
+
 
 void InitMonitorUart(){
 	// / Configure parameters of an UART driver,
