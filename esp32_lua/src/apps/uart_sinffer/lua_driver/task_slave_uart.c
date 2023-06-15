@@ -24,8 +24,10 @@ static int LuaUartSend_Slave(lua_State* L){
 
 static const char *TAG = "master_uart";
 
+#define PIN_HARD_SERIAL_SLAVE_TX 25
+#define PIN_HARD_SERIAL_SLAVE_RX 33
 
-#define EX_UART_NUM UART_NUM_1
+#define EX_UART_NUM UART_NUM_2
 #define BUF_SIZE (1024)
 #define RD_BUF_SIZE (BUF_SIZE)
 
@@ -33,7 +35,7 @@ static intr_handle_t handle_console;
 
 static uint8_t rxbuf[256];
 static uint16_t urxlen;
-static int rx_packet_size = 1;
+static int rx_packet_size = 0;
 
 
 
@@ -79,7 +81,7 @@ static void init_isr()
 
 	ESP_ERROR_CHECK(uart_param_config(EX_UART_NUM, &uart_config));
 	esp_log_level_set(TAG, ESP_LOG_INFO);
-	ESP_ERROR_CHECK(uart_set_pin(EX_UART_NUM, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+	ESP_ERROR_CHECK(uart_set_pin(EX_UART_NUM, PIN_HARD_SERIAL_SLAVE_TX, PIN_HARD_SERIAL_SLAVE_RX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
 	ESP_ERROR_CHECK(uart_driver_install(EX_UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0));
 	ESP_ERROR_CHECK(uart_isr_free(EX_UART_NUM));
 	ESP_ERROR_CHECK(uart_isr_register(EX_UART_NUM, uart_intr_handle, NULL, ESP_INTR_FLAG_IRAM, &handle_console));
@@ -104,5 +106,6 @@ void Task_SlaveUart(void * parameter){
 
             // suspend myself
         }
+        vTaskDelay(1);
     }
 }

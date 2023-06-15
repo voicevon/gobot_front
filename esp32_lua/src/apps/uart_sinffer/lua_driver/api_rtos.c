@@ -2,6 +2,7 @@
 #include "freertos/event_groups.h"
 #include "lua/lua.h"
 #include "global_const.h"
+#include "von_clib/utility/logger/logger.h"
 
 
 
@@ -29,5 +30,6 @@ void InitRtos(){
     }else{
         /* The event group was created. */
     }
+	logInfo("InitRTOS() is done...\n");
 
 }

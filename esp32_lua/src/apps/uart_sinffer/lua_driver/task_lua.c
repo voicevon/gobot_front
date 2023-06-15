@@ -4,6 +4,10 @@
 #include <lua/lauxlib.h>
 #include <lua/lualib.h>
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+
 #include "task_master_uart.h"
 #include "task_slave_uart.h"
 #include "task_wifi_tcp.h"
@@ -79,8 +83,8 @@ void LuaInit(void){
 void Task_LuaVM(void * parameter){
     // LuaInit();
 	// while (true){
-	while (1){
-		// vTaskDelay(10000);
+	while (true){
+		vTaskDelay(1);
 	}
 
 }
