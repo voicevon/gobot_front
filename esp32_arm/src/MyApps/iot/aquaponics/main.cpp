@@ -10,6 +10,8 @@
 #ifdef I_AM_AQUAPONICS
 
 
+
+
 AquaponicBoard board;
 
 void setup(){
@@ -27,6 +29,7 @@ void setup(){
 
 void loop(){
     board.GetMs5837()->SpinOnce();
+    delay(10);
 }
 
 #endif

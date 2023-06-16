@@ -1,9 +1,19 @@
 #include "ms5837.h"
 #include "MyLibs/mqtt/wifi_mqtt_client.h"
+// #include <Arduino.h>
 
+#define MS5837_ADDRESS 0x76
+#define MS5837_RESET 0Xff
+#define MS5837_RESOLUTION_OF_4096 0Xff
 
+void Ms5837::Init(TwoWire* i2c){
 
-void Ms5837::Init(){
+    i2c->beginTransmission(MS5837_ADDRESS);
+    i2c->write(MS5837_RESET);
+    i2c->write(MS5837_RESOLUTION_OF_4096);
+    i2c->endTransmission();
+
+    __i2c = i2c;  // Init TwoWire* __i2c point to TwoWire(0) 
 
 }
 
@@ -15,10 +25,12 @@ void Ms5837::SpinOnce(){
         g_mqttClient.publish(_mqtt_publish_topic, 2, true, payload.c_str());
         __previous_sensor_value = sensor_value;
     }
+    // delay(10);
 }
 
 
 float Ms5837::__ReadSensor(){
-    return 1.234f;
+    // return 1.234f;
+    return __i2c->read();
 }
 
