@@ -248,12 +248,14 @@ void TaskMqtt(void* parameter){
         set_callback_mqtt_release_buffer(SmartMqttClient::Instance().mqtt_release_buffer);
     }
     SmartMqttClient::Instance().Init();
-
+    vTaskSuspend(NULL);
+    Logger::Info("TaskMqtt is go on from init to loop");
     while(true){
         int xx = SmartMqttClient::Instance().Get_Payload_bits();
         if (xx>0)        
             xEventGroupSetBits(my_EventGroup,  EVENT_BIT_MQTT_RX_0);  // set eventbit	
         // vTaskSuspend(NULL);                                            // suspend myself
+
         if(SmartMqttClient::Instance().GetState() == SmartMqttClient::EnumState::DISCONNECTED){
             SmartMqttClient::Instance().ConnectToBroker();
         }
