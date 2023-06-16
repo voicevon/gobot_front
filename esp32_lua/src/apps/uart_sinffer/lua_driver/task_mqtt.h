@@ -3,11 +3,6 @@
 #include <AsyncMqttClient.h>
 #include "von/cpp/mqtt/mqtt_topic.h"
 
-
-class Subscriber{
-    
-};
-
 class SmartMqttClient{
     public:
         enum EnumState{

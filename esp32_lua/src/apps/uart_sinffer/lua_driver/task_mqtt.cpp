@@ -1,8 +1,8 @@
 
 
-#include "global_const.h"
+// #include "global_const.h"
 // #include "von/c/utility/logger/logger.hpp"
-#include "api_common.hpp"
+// #include "api_common.hpp"
 #include "task_mqtt.h"
 #include "von/cpp/utility/logger.h"
 
@@ -19,14 +19,8 @@
 
 
 AsyncMqttClient g_mqttClient;
-// static SmartMqttClient instance;
-
-
-TimerHandle_t mqttReconnectTimer;
-// TimerHandle_t wifiReconnectTimer;
-
+static TimerHandle_t mqttReconnectTimer;
 static  SmartMqttClient::EnumState __ConnectionState = SmartMqttClient::EnumState::DISCONNECTED;
-
 
 SmartMqttClient::EnumState SmartMqttClient::GetState(){
     return __ConnectionState;
@@ -157,67 +151,6 @@ void SmartMqttClient::onMqttPublish(uint16_t packetId) {
 	}
 }
 
-
-//Please Notice: This function will be invoked in slave thread.
-// void SmartMqttClient::onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-//     // https://github.com/marvinroger/async-mqtt-client/issues/39
-
-//     bool debug = false;
-//     if(debug){
-//         logDebug("on_MqttMessage()   saying received.");
-//         Logger::Print("  topic: ", topic);
-//         Logger::Print("  paylod: ", payload);
-//         Logger::Print("  qos: ", properties.qos);
-//         // logPrint("  dup: ", properties.dup);
-//         // logPrint("  retain:", properties.retain);
-//         Logger::Print("  len: ", len);
-//         Logger::Print("  index: ", index);
-//         Logger::Print("  total: ", total);
-        
-//     }
-
-//     // https://github.com/marvinroger/async-mqtt-client/issues/39
-//     // if (len==total){
-//     //     gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len);
-//     // }else{
-//     //     gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len, index, total);
-//     // }
-    
-//     // Logger::Info("MqttClient on_MqttMessage()  Appened to mqtt_receiver. topic=");
-//     // logPrint("topic", topic);
-// }
-
-
-void setup_wifi_mqtt_blocking_mode() {
-    Serial.println("\n[Info] IoT/wifi_mqtt_client.cpp   setup_wifi_mqtt_blocking_mode()  is entering");
-    Serial.println();
-
-
-    // mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
-    // // wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(5000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
-
-    // // connectToWifi();
-    // // WiFi.onEvent(WiFiEvent);
-
-    // g_mqttClient.onConnect(onMqttConnect);
-    // g_mqttClient.onDisconnect(onMqttDisconnect);
-    // g_mqttClient.onSubscribe(onMqttSubscribe);
-    // g_mqttClient.onUnsubscribe(onMqttUnsubscribe);
-    // // g_mqttClient.onMessage(onMqttMessage);
-    // g_mqttClient.onPublish(onMqttPublish);
-    // g_mqttClient.setServer(MQTT_HOST, MQTT_PORT);
-
-    // g_mqttClient.onMessage(on_MqttMessage);
-
-    // // xTimerStart(wifiReconnectTimer, 0);
-    // while (! g_mqttClient.connected()){
-    //     delay(1000);
-    //     Serial.print(". ");
-    // }
-    // Logger::Info("wifi_mqtt_clinet.cpp   setup_wifi_mqtt_blocking_mode() is finished...");
-
-}
-
 void SmartMqttClient::mqtt_publish(const char* topic, const char* payload){
     g_mqttClient.publish(topic, 2,true, payload);
 }
@@ -239,22 +172,14 @@ void SmartMqttClient::mqtt_release_buffer(const int topic_id){
 }
 
 void TaskMqtt(void* parameter){
-    bool* serve_c = (bool*)(parameter);
-    if (serve_c){
-        set_callback_mqtt_publish(SmartMqttClient::Instance().mqtt_publish);
-        set_callback_mqtt_subscribe(SmartMqttClient::Instance().mqtt_subscribe);
-        // set_callback_read_first_topic(mqtt_read_first_topic);
-        set_callback_mqtt_read_payload(SmartMqttClient::Instance().mqtt_read_payload);
-        set_callback_mqtt_release_buffer(SmartMqttClient::Instance().mqtt_release_buffer);
-    }
     SmartMqttClient::Instance().Init();
     vTaskSuspend(NULL);
     Logger::Info("TaskMqtt is go on from init to loop");
     while(true){
-        int xx = SmartMqttClient::Instance().Get_Payload_bits();
-        if (xx>0)        
-            xEventGroupSetBits(my_EventGroup,  EVENT_BIT_MQTT_RX_0);  // set eventbit	
-        // vTaskSuspend(NULL);                                            // suspend myself
+        // int xx = SmartMqttClient::Instance().Get_Payload_bits();
+        // if (xx>0)        
+        //     xEventGroupSetBits(my_EventGroup,  EVENT_BIT_MQTT_RX_0);  // set eventbit	
+        // // vTaskSuspend(NULL);                                            // suspend myself
 
         if(SmartMqttClient::Instance().GetState() == SmartMqttClient::EnumState::DISCONNECTED){
             SmartMqttClient::Instance().ConnectToBroker();
