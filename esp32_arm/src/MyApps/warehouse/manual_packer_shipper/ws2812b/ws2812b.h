@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Adafruit_NeoPixel.h>
-#include "MyLibs/mqtt/mqtt_subscriber_manager.h"
+#include "von/cpp/mqtt/subscriber/mqtt_subscriber_manager.h"
 
 #define WS2812B_COUNT 24
 

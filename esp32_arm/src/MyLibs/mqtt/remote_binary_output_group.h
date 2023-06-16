@@ -1,4 +1,4 @@
-#include "MyLibs/mqtt/mqtt_subscriber_manager.h"
+#include "von/cpp/mqtt/subscriber/mqtt_subscriber_manager.h"
 
 #define __MIN_JSON_BUFFER_SIZE 256  // 256 bytes for 12 leds      // https://arduinojson.org/v6/assistant/#/step1
 #define __MAX_OUTPUT_END_POINT_COUNT 12
@@ -12,7 +12,7 @@ class RemoteBinaryOutputGroup: public MqttSubscriberBase{
         char* Get();
 
     private:
-        void onGot_MqttMessage(const char* payload, uint16_t payload_len) override;
+        void onGot_MqttMessage_whole(const char* payload, size_t payload_len) override;
         // void __onMessage(const char* payload, uint16_t payload_len);
         char __mqtt_payload[__MIN_JSON_BUFFER_SIZE];
         bool __got_remote_value = false;

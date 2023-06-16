@@ -4,7 +4,7 @@
 #define LUA_USE_C89
 #include "lua/lua.hpp"
 #include "von/cpp/utility/logger.h"
-#include "von/cpp/mqtt/mqtt_subscriber_base.h"
+#include "von/cpp/mqtt/subscriber/mqtt_subscriber_base.h"
 #include "MyLibs/app_base/text_message_queue/text_message_line.h"
 
 //TODO: no longer a subclass of MqttSubscriberBase
@@ -22,7 +22,7 @@ class LuaBase: public MqttSubscriberBase{
 		lua_State *_lua_state;
 
 	private:
-		void onGot_MqttMessage(const char* payload, uint16_t payload_len) override;
+		void onGot_MqttMessage_whole(const char* payload, size_t payload_len) override;
 
 		bool __is_doing_loop = false;
 

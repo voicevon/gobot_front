@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "von/cpp/mqtt/mqtt_subscriber_base.h"
+#include "von/cpp/mqtt/subscriber/mqtt_subscriber_base.h"
 #include "CNC/gcode/gcode_queue.h"
 
 class CncAppBase: public MqttSubscriberBase{
@@ -10,7 +10,7 @@ class CncAppBase: public MqttSubscriberBase{
         // virtual void ExecuteAppCommand(GcodeText* gcode_text){}; 
 
         void SpinOnce(); 
-        void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;
+        void onGot_MqttMessage_whole(const char* payload, size_t payload_len) override ;
 
 
     protected:

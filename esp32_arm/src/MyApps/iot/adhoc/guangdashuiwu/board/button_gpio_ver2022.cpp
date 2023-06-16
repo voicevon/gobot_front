@@ -2,8 +2,9 @@
 #include "Arduino.h"
 #include "von/cpp/utility/logger.h"
 // #include "von/cpp/mqtt/task_mqtt.h"
-#include "von/cpp/mqtt/task_mqtt.h"
+#include "von/cpp/mqtt/g_var.h"
 // #include "von/cpp/utility/logger.h"
+#include "von/cpp/mqtt/g_var.h"
 
 Button_Gpio::Button_Gpio(int gpio_pin_number){
     __pin_number = gpio_pin_number;

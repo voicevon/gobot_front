@@ -1,6 +1,7 @@
 #include "von/cpp/utility/logger.h"
 #include "board/web_configurator_diction.h"
 #include "MyLibs/utility/webserver_starter/webserver_starter.h"
+#include "von/cpp/mqtt/g_var.h"
 #include "von/cpp/mqtt/task_mqtt.h"
 #include "von/cpp/wifi/task_wifi.h"
 
@@ -30,7 +31,7 @@ void init_encoder(){
 
 
 #define IS_DEBUGING_LUA 
-TaskHandle_t task_Mqtt;
+// TaskHandle_t task_Mqtt;
 
 void setup(){
 

@@ -1,8 +1,8 @@
 #include "lua_base.h"
 #include "von/cpp/utility/logger.h"
-#include "MyLibs/mqtt/mqtt_subscriber_manager.h"
+#include "von/cpp/mqtt/subscriber/mqtt_subscriber_manager.h"
 // #include "Mylibs/mqtt/wifi_mqtt_client.h"
-#include "von/cpp/mqtt/task_mqtt.h"
+#include "von/cpp/mqtt/g_var.h"
 #include <SPIFFS.h>
 
 	// 1. open the file:    libdeps/esp32-ap/ESP-arduino-Lua/src/lua/lmathlib.c
@@ -88,7 +88,7 @@ void LuaBase::SpinOnce(){
 	}
 }
 
-void LuaBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+void LuaBase::onGot_MqttMessage_whole(const char* payload, size_t payload_len){
 	Logger::Debug("LuaBase::onGot_MqttMessage()");
 	// char* pp = (char*) payload;
 	// *(pp + payload_len) = 0x00;   //??? any risk?

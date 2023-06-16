@@ -1,6 +1,6 @@
 #pragma once
 
-#include "von/cpp/mqtt/mqtt_subscriber_base.h"
+#include "von/cpp/mqtt/subscriber/mqtt_subscriber_base.h"
 #include "text_message_queue/text_message_queue.h"
 #include "Robot/robot_base.h"
 #include "lua_base/lua_base.h"
@@ -27,7 +27,7 @@ class AppBase: public MqttSubscriberBase{
         // void Link_lua_from_Mqtt(LuaBase* lua, const char* mqtt_topic);
 
         // virtual void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;
-        void onGot_MqttMessage(const char* payload, uint16_t payload_len) override ;
+        void onGot_MqttMessage_whole(const char* payload, size_t payload_len) override ;
 
         void SpinOnce(); 
 

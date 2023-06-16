@@ -3,7 +3,7 @@
 
 #include "i2c_commu.h"
 #include "MyLibs/MyFunctions.hpp" 
-#include "von/cpp/mqtt/task_mqtt.h"
+#include "von/cpp/mqtt/g_var.h"
 #include "von/cpp/utility/logger.h"
 #include "WString.h"
 

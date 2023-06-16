@@ -6,7 +6,7 @@
 #include "web_configurator_diction_demo.h"
 #include "von/cpp/utility/logger.h"
 #include "Robot/board/board_base.h"
-#include "von/cpp/mqtt/task_mqtt.h"
+#include "von/cpp/mqtt/g_var.h"
 
 #include "../select_app.h"
 #ifdef I_AM_WIFI_MANAGER_DEMO

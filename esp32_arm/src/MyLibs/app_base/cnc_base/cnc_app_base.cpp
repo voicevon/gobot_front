@@ -1,12 +1,13 @@
 #include "cnc_app_base.h"
-#include "MyLibs/mqtt/mqtt_subscriber_manager.h"
-#include "von/cpp/mqtt/task_mqtt.h"
+#include "von/cpp/mqtt/subscriber/mqtt_subscriber_manager.h"
+#include "von/cpp/mqtt/g_var.h"
+#include "von/cpp/mqtt/g_var.h"
 
 #define APP_COMMAND_PREFIX  "app:"
 #define APP_COMMAND_PREFIX_SIZE 4
 
 
-void CncAppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+void CncAppBase::onGot_MqttMessage_whole(const char* payload, size_t payload_len){
     //format string ender.
     char* p = (char*)(payload);
     p[payload_len] = 0x00;  

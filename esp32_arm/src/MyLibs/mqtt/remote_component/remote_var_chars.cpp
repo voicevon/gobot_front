@@ -9,7 +9,7 @@ void RemoteVar_Chars::InitFilename(const char* filename){
     // memccpy(__fs_filename, filename,20 );
     __fs_filename.CopyFrom(filename);
 }
-void RemoteVar_Chars::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+void RemoteVar_Chars::onGot_MqttMessage_whole(const char* payload, size_t payload_len){
     if (__write_to_file){
         // File file = SPIFFS.open(__fs_filename.c_str(), FILE_WRITE);
         File file = LittleFS.open(__fs_filename.c_str(), FILE_WRITE);

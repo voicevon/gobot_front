@@ -9,7 +9,7 @@
 // void def_callback(const char*);
 
 void (*mqtt_publish) (const char*, const char*);
-void (*mqtt_subscribe) (const char*);
+void (*mqtt_subscribe) (const char*, int);
 // const char* (*mqtt_read_first_topic)();
 int (*mqtt_read_payload) (const int, char*);
 void (*mqtt_release_buffer) (const int);
@@ -17,7 +17,7 @@ void (*mqtt_release_buffer) (const int);
 void set_callback_mqtt_publish( void (*service_function)(const char*, const char*) ){
 	mqtt_publish = service_function;	
 }
-void set_callback_mqtt_subscribe( void (*service_function)(const char*) ){
+void set_callback_mqtt_subscribe( void (*service_function)(const char*, int) ){
 	mqtt_subscribe = service_function;	
 }
 // void set_callback_read_first_topic(const char* (*service_function)()){
@@ -31,8 +31,10 @@ void set_callback_mqtt_release_buffer(void (*service_function) (const int)){
 }
 
 int LuaMqttSubscribe(lua_State* L){
+	// Yes 约定A： lua_mqtt_subscribe(string mqtt_topic, int index)
+	// No 约定B： lua_mqtt_subscribe(string mqtt_topic)
 	uint8_t topic[64];
-	uint8_t semcount;
+	uint8_t bit_index = 0;
 	
 	//获得LUA传递过来的数组
 	int length = 0;
@@ -46,7 +48,7 @@ int LuaMqttSubscribe(lua_State* L){
 			++length;
 		}
 	}
-	mqtt_subscribe(topic);
+	mqtt_subscribe(topic, bit_index);
 	
 	// do{
 	// 	// Wait while UART TX is busy.
