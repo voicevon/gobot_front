@@ -1,10 +1,9 @@
 
 
 #include "global_const.h"
-#include "von/c/utility/logger/logger.hpp"
+// #include "von/c/utility/logger/logger.hpp"
 #include "api_common.hpp"
 #include "task_mqtt.h"
-// #include "von/cpp/utility/logger.h"
 #include "von/cpp/utility/logger.h"
 
 #include "freertos/FreeRTOS.h"
@@ -20,31 +19,49 @@
 
 
 AsyncMqttClient g_mqttClient;
-static SmartMqttClient instance;
+// static SmartMqttClient instance;
 
 
 TimerHandle_t mqttReconnectTimer;
 // TimerHandle_t wifiReconnectTimer;
 
+static  SmartMqttClient::EnumState __ConnectionState = SmartMqttClient::EnumState::DISCONNECTED;
 
-void SmartMqttClient::connectToMqtt() {
-	logInfo ("Connecting to MQTT...");
-    
-	g_mqttClient.setCredentials(MQTT_UID, MQTT_PASSWORD);
+
+SmartMqttClient::EnumState SmartMqttClient::GetState(){
+    return __ConnectionState;
+}
+
+void SmartMqttClient::ConnectToBroker() {
+	Logger::Info ("Connecting to MQTT...");
+    __ConnectionState = EnumState::CONNECTING;
+    __started_at = millis();
+
 	g_mqttClient.connect();
 }
 
+void SmartMqttClient::DisconnectFromBroker(){
+    g_mqttClient.disconnect();
+}
+
 void SmartMqttClient::Init(){
-    g_mqttClient.onConnect(this->onMqttConnect);
+    __ConnectionState = EnumState::DISCONNECTED;
+    g_mqttClient.onConnect(this->onMqttConnected);
     g_mqttClient.onDisconnect(this->onMqttDisconnect);
+
     g_mqttClient.onPublish(this->onMqttPublish);
     g_mqttClient.onSubscribe(this->onMqttSubscribe);
     g_mqttClient.onUnsubscribe(this->onMqttUnsubscribe);
     g_mqttClient.onMessage(this->onMqttMessage);
-}
+
+    g_mqttClient.setServer(MQTT_HOST, MQTT_PORT);
+	g_mqttClient.setCredentials(MQTT_UID, MQTT_PASSWORD);
+
+}    
 //TODO:  subsribe topics after:  disconnected --> connected.
-void SmartMqttClient::onMqttConnect(bool sessionPresent) {
-    logInfo("MQTT event:  onMqttConnected()");
+void SmartMqttClient::onMqttConnected(bool sessionPresent) {
+    __ConnectionState = EnumState::CONNECTED;
+    Logger::Info("MQTT event:  onMqttConnected()");
     Serial.print("Session present: ");
     Serial.print(sessionPresent);
     Serial.print("\tmqtt client id:   ");
@@ -67,11 +84,12 @@ void SmartMqttClient::onMqttConnect(bool sessionPresent) {
     }
     // If you want , add app's callback to subscribe.
     // app_mqtt_subscribe();
-    SmartMqttClient::mqtt_is_connected = true;
+    // SmartMqttClient::mqtt_is_connected = true;
 }
 
 void SmartMqttClient::onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
-    logWarn("MQTT event: onMqttDisconnect()");
+    __ConnectionState = EnumState::DISCONNECTED;
+    Logger::Warn("MQTT event: onMqttDisconnect()");
     String reason_str = "   reason = ";
     if (reason == AsyncMqttClientDisconnectReason::TCP_DISCONNECTED) reason_str.concat("TCP_DISCONNECTED"); 
     if (reason == AsyncMqttClientDisconnectReason::MQTT_UNACCEPTABLE_PROTOCOL_VERSION) reason_str.concat("MQTT_UNACCEPTABLE_PROTOCOL_VERSION"); 
@@ -81,8 +99,8 @@ void SmartMqttClient::onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
     if (reason == AsyncMqttClientDisconnectReason::MQTT_NOT_AUTHORIZED) reason_str.concat("MQTT_NOT_AUTHORIZED"); 
     if (reason == AsyncMqttClientDisconnectReason::ESP8266_NOT_ENOUGH_SPACE) reason_str.concat("ESP8266_NOT_ENOUGH_SPACE"); 
     if (reason == AsyncMqttClientDisconnectReason::TLS_BAD_FINGERPRINT) reason_str.concat("TLS_BAD_FINGERPRINT"); 
-    logPrint_Int("reason code",(uint8_t)reason);
-    logPrint_Char("reason", reason_str.c_str());
+    Logger::Print("reason code",(uint8_t)reason);
+    Logger::Print("reason", reason_str.c_str());
 
 	// if (WiFi.isConnected()) {
 	// 	xTimerStart(mqttReconnectTimer, 0);
@@ -147,14 +165,14 @@ void SmartMqttClient::onMqttPublish(uint16_t packetId) {
 //     bool debug = false;
 //     if(debug){
 //         logDebug("on_MqttMessage()   saying received.");
-//         logPrint_Char("  topic: ", topic);
-//         logPrint_Char("  paylod: ", payload);
-//         logPrint_Int("  qos: ", properties.qos);
+//         Logger::Print("  topic: ", topic);
+//         Logger::Print("  paylod: ", payload);
+//         Logger::Print("  qos: ", properties.qos);
 //         // logPrint("  dup: ", properties.dup);
 //         // logPrint("  retain:", properties.retain);
-//         logPrint_Int("  len: ", len);
-//         logPrint_Int("  index: ", index);
-//         logPrint_Int("  total: ", total);
+//         Logger::Print("  len: ", len);
+//         Logger::Print("  index: ", index);
+//         Logger::Print("  total: ", total);
         
 //     }
 
@@ -165,7 +183,7 @@ void SmartMqttClient::onMqttPublish(uint16_t packetId) {
 //     //     gs_MqttSubscriberManager::Instance().on_mqtt_client_received_message(topic, payload, len, index, total);
 //     // }
     
-//     // logInfo("MqttClient on_MqttMessage()  Appened to mqtt_receiver. topic=");
+//     // Logger::Info("MqttClient on_MqttMessage()  Appened to mqtt_receiver. topic=");
 //     // logPrint("topic", topic);
 // }
 
@@ -196,7 +214,7 @@ void setup_wifi_mqtt_blocking_mode() {
     //     delay(1000);
     //     Serial.print(". ");
     // }
-    // logInfo("wifi_mqtt_clinet.cpp   setup_wifi_mqtt_blocking_mode() is finished...");
+    // Logger::Info("wifi_mqtt_clinet.cpp   setup_wifi_mqtt_blocking_mode() is finished...");
 
 }
 
@@ -220,30 +238,31 @@ void SmartMqttClient::mqtt_release_buffer(const int topic_id){
 
 }
 
-// SmartMqttClient instance;
-
 void TaskMqtt(void* parameter){
-    
-    set_callback_mqtt_publish(instance.mqtt_publish);
-    set_callback_mqtt_subscribe(instance.mqtt_subscribe);
-    // set_callback_read_first_topic(mqtt_read_first_topic);
-    set_callback_mqtt_read_payload(instance.mqtt_read_payload);
-    set_callback_mqtt_release_buffer(instance.mqtt_release_buffer);
+    bool* serve_c = (bool*)(parameter);
+    if (serve_c){
+        set_callback_mqtt_publish(SmartMqttClient::Instance().mqtt_publish);
+        set_callback_mqtt_subscribe(SmartMqttClient::Instance().mqtt_subscribe);
+        // set_callback_read_first_topic(mqtt_read_first_topic);
+        set_callback_mqtt_read_payload(SmartMqttClient::Instance().mqtt_read_payload);
+        set_callback_mqtt_release_buffer(SmartMqttClient::Instance().mqtt_release_buffer);
+    }
+    SmartMqttClient::Instance().Init();
 
     while(true){
-        int xx = instance.Get_Payload_bits();
+        int xx = SmartMqttClient::Instance().Get_Payload_bits();
         if (xx>0)        
             xEventGroupSetBits(my_EventGroup,  EVENT_BIT_MQTT_RX_0);  // set eventbit	
         // vTaskSuspend(NULL);                                            // suspend myself
-        if(!g_mqttClient.connected()){
-            bool timeout = false;
-            // not connected, migh be connecting.
-            if (timeout){
-
-                instance.connectToMqtt();
+        if(SmartMqttClient::Instance().GetState() == SmartMqttClient::EnumState::DISCONNECTED){
+            SmartMqttClient::Instance().ConnectToBroker();
+        }
+        else if(SmartMqttClient::Instance().GetState() == SmartMqttClient::EnumState::CONNECTING){
+            if (SmartMqttClient::Instance().passed_ms() > 10000){
+                SmartMqttClient::Instance().DisconnectFromBroker();
+                SmartMqttClient::Instance().ConnectToBroker();
             }
         }
         vTaskDelay(1);
-
     }
 }

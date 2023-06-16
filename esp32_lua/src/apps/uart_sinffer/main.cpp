@@ -4,18 +4,22 @@ extern "C"{
 }
 
 #include <Arduino.h>
-#include "von/c/task/wifi/task_wifi.h"
+#include "von/cpp/wifi/task_wifi.h"
 #include "lua_driver/task_mqtt.h"
+#include "von/cpp/utility/logger.h"
 
-TaskHandle_t* task_WiFi;
 TaskHandle_t* task_Mqtt;
 
 void setup(){
+	Serial.begin(115200);
 	__main();
 	
-	xTaskCreate(TaskWiFi, "WiFi", 10000, NULL,  1, task_WiFi);   
-	xTaskCreate(TaskMqtt, "Mqtt", 10000, NULL,  1, task_Mqtt);   
+	ConnectToWifi_FakeTask();
 
+	vTaskDelay(5000);
+	bool callable_by_c = true;
+	xTaskCreate(TaskMqtt, "Mqtt", 10000, (void*) (&callable_by_c),  1, task_Mqtt);   
+	Logger::Info("Arduino setup() is done..");
 }
 
 void loop(){
