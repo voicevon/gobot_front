@@ -5,7 +5,7 @@ extern "C"{
 
 #include <Arduino.h>
 #include "von/cpp/wifi/task_wifi.h"
-#include "lua_driver/task_mqtt.h"
+#include "von/cpp/mqtt/task_mqtt.h"
 #include "von/cpp/utility/logger.h"
 #include "lua_driver/api_common.hpp"
 

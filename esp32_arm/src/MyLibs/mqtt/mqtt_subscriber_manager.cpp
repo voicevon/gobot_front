@@ -1,7 +1,7 @@
 #include "mqtt_subscriber_manager.h"
 #include "mqtt_client.h"
 #include "von/cpp/utility/logger.h"
-#include "wifi_mqtt_client.h"
+#include "von/cpp/mqtt/task_mqtt.h"
 
 
 MqttSubscriberBase* gs_MqttSubscriberManager::__find_subscriber(const char* topic){

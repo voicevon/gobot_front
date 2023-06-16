@@ -1,7 +1,8 @@
 #include "lua_base.h"
 #include "von/cpp/utility/logger.h"
 #include "MyLibs/mqtt/mqtt_subscriber_manager.h"
-#include "Mylibs/mqtt/wifi_mqtt_client.h"
+// #include "Mylibs/mqtt/wifi_mqtt_client.h"
+#include "von/cpp/mqtt/task_mqtt.h"
 #include <SPIFFS.h>
 
 	// 1. open the file:    libdeps/esp32-ap/ESP-arduino-Lua/src/lua/lmathlib.c
@@ -14,7 +15,7 @@
     // }
 
 extern "C" {
-	extern void my_math_opener(lua_State* L);
+	// extern void my_math_opener(lua_State* L);
 
 	static int lua_wrapper_print (lua_State *L) {
 		int n = lua_gettop(L);  /* number of arguments */
@@ -40,7 +41,8 @@ extern "C" {
 		Serial.println();
 		return 0;
 	}
-		static int lua_wrapper_pinMode(lua_State *lua) {
+
+	static int lua_wrapper_pinMode(lua_State *lua) {
 		int a = luaL_checkinteger(lua, 1);
 		int b = luaL_checkinteger(lua, 2);
 		pinMode(a, b);
@@ -53,6 +55,7 @@ extern "C" {
 		digitalWrite(a, b);
 		return 0;
 	}
+
 	static int lua_wrapper_digitalRead(lua_State *lua) {
 		int a = luaL_checkinteger(lua, 1);
 		lua_pushnumber(lua, (lua_Number)digitalRead(a));
@@ -63,7 +66,6 @@ extern "C" {
 		lua_pushnumber(lua, (lua_Number) millis());
 		return 1;
 	}
-
 } 
 
 static const struct luaL_Reg von_hw_functions[] =
@@ -126,7 +128,7 @@ void LuaBase::Begin(){
     luaL_openlibs(_lua_state); 
 	luaL_newlib(_lua_state, von_hw_functions);
     lua_setglobal(_lua_state, "hw");   
-	my_math_opener(_lua_state);
+	// my_math_opener(_lua_state);
 
 
 	// register customized driver

@@ -1,7 +1,9 @@
 #include "von/cpp/utility/logger.h"
 #include "board/web_configurator_diction.h"
 #include "MyLibs/utility/webserver_starter/webserver_starter.h"
-#include "MyLibs/mqtt/wifi_mqtt_client.h"
+#include "von/cpp/mqtt/task_mqtt.h"
+#include "von/cpp/wifi/task_wifi.h"
+
 
 #include "board/board.h"
 #include "lua/app_lua.h"
@@ -28,6 +30,7 @@ void init_encoder(){
 
 
 #define IS_DEBUGING_LUA 
+TaskHandle_t task_Mqtt;
 
 void setup(){
 
@@ -39,7 +42,9 @@ void setup(){
 	app.StartWebServer(&water_dropper_webconfigurator_diction);
 	// return;
 	#ifdef IS_DEBUGING_LUA
-		setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
+		// setup_wifi_mqtt_blocking_mode();  //TODO:  connect to wifi once.
+		xTaskCreate(TaskMqtt, "Mqtt", 10000, NULL,  1, &task_Mqtt);   
+		ConnectToWifi_FakeTask();
 		app.Init();
 		app.Link_Lua(&lua_wrapper);
 		lua_wrapper.Link_Mqtt_for_Test("lua/test");
