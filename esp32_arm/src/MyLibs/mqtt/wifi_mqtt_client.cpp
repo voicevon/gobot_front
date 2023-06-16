@@ -1,4 +1,4 @@
-#include "MyLibs/utility/logger.h"
+#include "von/cpp/utility/logger.h"
 #include <AsyncMqttClient.h>
 #include <WiFi.h>
 #include "esp_wifi.h"
@@ -38,7 +38,7 @@ TimerHandle_t mqttReconnectTimer;
 // TimerHandle_t wifiReconnectTimer;
 
 
-void wifi_scan_ap(){
+void my_wifi_scan_ap(){
     // WiFi.scanNetworks will return the number of networks found
     int n = WiFi.scanNetworks();
     if (n == 0) {
@@ -60,7 +60,7 @@ void wifi_scan_ap(){
     Serial.println("");
 }
 
-void connectToWifi() {
+void my_connectToWifi() {
     Logger::Info("wifi_mqtt_client.cpp  connectToWifi().");
     Logger::Print("wifi_ssid", WIFI_SSID);
     Logger::Print("wifi_password", WIFI_PASSWORD);
@@ -85,7 +85,7 @@ void connectToMqtt() {
 	g_mqttClient.connect();
 }
 
-void WiFiEvent(WiFiEvent_t event) {
+void my_WiFiEvent(WiFiEvent_t event) {
     // Serial.printf("\n[Info] [WiFi-event] event: %d  ", event);
     switch(event) {
     case SYSTEM_EVENT_WIFI_READY:
@@ -255,7 +255,7 @@ void setup_wifi_mqtt_blocking_mode() {
     // wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(5000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
 
     // connectToWifi();
-    WiFi.onEvent(WiFiEvent);
+    WiFi.onEvent(my_WiFiEvent);
 
     g_mqttClient.onConnect(onMqttConnect);
     g_mqttClient.onDisconnect(onMqttDisconnect);
@@ -267,7 +267,7 @@ void setup_wifi_mqtt_blocking_mode() {
 
     g_mqttClient.onMessage(on_MqttMessage);
 
-    connectToWifi();
+    my_connectToWifi();
     // xTimerStart(wifiReconnectTimer, 0);
     while (! g_mqttClient.connected()){
         delay(1000);
