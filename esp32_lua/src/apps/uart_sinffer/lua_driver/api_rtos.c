@@ -5,7 +5,7 @@
 
 #include "lua/lua.h"
 #include "global_const.h"
-#include "von_clib/utility/logger/logger.h"
+#include "von/c/utility/logger/logger.h"
 
 #include "task_master_uart.h"
 #include "task_slave_uart.h"
