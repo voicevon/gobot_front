@@ -7,13 +7,13 @@
 #define MS5837_RESOLUTION_OF_4096 0Xff
 
 void Ms5837::Init(TwoWire* i2c){
-
-    i2c->beginTransmission(MS5837_ADDRESS);
-    i2c->write(MS5837_RESET);
-    i2c->write(MS5837_RESOLUTION_OF_4096);
-    i2c->endTransmission();
-
     __i2c = i2c;  // Init TwoWire* __i2c point to TwoWire(0) 
+
+    __i2c->beginTransmission(MS5837_ADDRESS);
+    __i2c->write(MS5837_RESET);
+    __i2c->write(MS5837_RESOLUTION_OF_4096);
+    __i2c->endTransmission();
+
 
 }
 
