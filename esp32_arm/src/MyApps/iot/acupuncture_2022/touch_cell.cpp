@@ -1,5 +1,5 @@
 #include "touch_cell.h"
-#include "von/cpp/utility/logger.h"
+#include "von/utility/logger.h"
 
 #define PPD2 0
 #define PPD3 1

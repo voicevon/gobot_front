@@ -1,5 +1,6 @@
 #pragma once
-#include "von/cpp/basic/c_string/c_string_base.h"
+#include "von/basic/c_string/c_string_base.h"
+
 
 #define TEXT_MESSAGE_LINE_MAX_CHARS_COUNT 50
 

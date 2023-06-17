@@ -1,7 +1,7 @@
 #pragma once
 #include "CNC/gcode/gcode_text.h"
 #include "CNC/gcode/gcode_helper.h"
-#include "von/cpp/utility/logger.h"
+#include "von/utility/logger.h"
 
 // TODO: async command, like set temperature and wait async.
 

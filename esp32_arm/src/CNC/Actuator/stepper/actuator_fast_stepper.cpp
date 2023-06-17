@@ -1,5 +1,5 @@
 #include "actuator_fast_stepper.h"
-#include "von/cpp/utility/logger.h"
+#include "von/utility/logger.h"
 
 void CncActuatorFastStepper::LinkStepper(FastAccelStepper* stepper){
     this->_stepper = stepper;

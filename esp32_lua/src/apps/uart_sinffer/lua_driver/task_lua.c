@@ -10,9 +10,10 @@
 
 #include "task_master_uart.h"
 #include "task_slave_uart.h"
+#include "api_mqtt.h"
+#include "api_leds.h"
 
 #include "api_rtos.h"
-#include "api_mqtt.h"
 
 static const struct luaL_Reg RichonFunc[] =
 {

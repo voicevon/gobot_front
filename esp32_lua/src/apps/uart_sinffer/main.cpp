@@ -4,14 +4,18 @@ extern "C"{
 }
 
 #include <Arduino.h>
-#include "von/cpp/wifi/task_wifi.h"
+#include "von/utility/wifi/task_wifi.h"
 
-#include "von/cpp/mqtt/task_mqtt.h"
-#include "von/cpp/mqtt/subscriber/mqtt_subscriber_manager.h"
-#include "von/cpp/mqtt/g_var.h"
+
+#include "von/utility/mqtt/task_mqtt.h"
+
+#include "von/utility/mqtt/subscriber/mqtt_subscriber_manager.h"
+
+#include "von/utility/mqtt/g_var.h"
 #include "lua_driver/api_mqtt.hpp"
+#include "lua_driver/api_leds.hpp"
 
-#include "von/cpp/utility/logger.h"
+#include "von/utility/logger.h"
 #include "lua_driver/global_const.hpp"
 
 
@@ -54,10 +58,13 @@ void InitSubscribers(){
 	}
 }
 
-
-
 void mqtt_publish(const char* topic, const char* payload){
     g_mqttClient.publish(topic, 2,true, payload);
+}
+
+
+void SetLedState(int led_index, int state){
+
 }
 
 void setup_callback(){
@@ -67,8 +74,9 @@ void setup_callback(){
 	// set_callback_read_first_topic(mqtt_read_first_topic);
 	set_callback_mqtt_read_payload(gs_MqttSubscriberManager::Instance().mqtt_read_payload);
 	set_callback_mqtt_release_buffer(gs_MqttSubscriberManager::Instance().mqtt_release_buffer);
-}
 
+	InitCallback_CppSetLedState(SetLedState);
+}
 
 
 void setup(){

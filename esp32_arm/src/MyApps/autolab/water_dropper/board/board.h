@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Robot/board/board_base.h"
-#include "Robot/board/display/mono_led_gpio.h"
+#include "von/component/display/mono_led_gpio.h"
+
 #include "Robot/Sensor/position_binary_trigger/position_trigger.h"
 #include "CNC/Actuator/dc_motor/cnc_actuator_dc_motor.h"
 #include "CNC/Actuator/dc_motor/h_bridge/h_bridge.h"

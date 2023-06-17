@@ -1,7 +1,7 @@
 #include "cnc_app_base.h"
-#include "von/cpp/mqtt/subscriber/mqtt_subscriber_manager.h"
-#include "von/cpp/mqtt/g_var.h"
-#include "von/cpp/mqtt/g_var.h"
+#include "von/utility/mqtt/subscriber/mqtt_subscriber_manager.h"
+#include "von/utility/mqtt/g_var.h"
+#include "von/utility/mqtt/g_var.h"
 
 #define APP_COMMAND_PREFIX  "app:"
 #define APP_COMMAND_PREFIX_SIZE 4

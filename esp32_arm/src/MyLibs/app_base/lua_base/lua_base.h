@@ -3,8 +3,9 @@
 #include "Arduino.h"
 #define LUA_USE_C89
 #include "lua/lua.hpp"
-#include "von/cpp/utility/logger.h"
-#include "von/cpp/mqtt/subscriber/mqtt_subscriber_base.h"
+#include "von/utility/logger.h"
+#include "von/utility/mqtt/subscriber/mqtt_subscriber_base.h"
+
 #include "MyLibs/app_base/text_message_queue/text_message_line.h"
 
 //TODO: no longer a subclass of MqttSubscriberBase

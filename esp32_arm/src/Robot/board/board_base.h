@@ -7,7 +7,7 @@
 #include <Adafruit_MCP23X17.h>
 #include <Adafruit_VL53L0X.h>
 #include <Adafruit_APDS9960.h>
-#include "von/cpp/utility/logger.h"
+#include "von/utility/logger.h"
 
 
 class BoardBase{

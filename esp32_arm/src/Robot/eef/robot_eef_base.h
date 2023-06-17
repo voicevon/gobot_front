@@ -2,7 +2,7 @@
 
 #include <HardwareSerial.h>
 #include <stdint.h>
-#include "von/cpp/utility/logger.h"
+#include "von/utility/logger.h"
 
 #define EEF_CODE_DOWN 1
 #define EEF_CODE_LOWER 1

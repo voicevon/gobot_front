@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../actuator_to_cnc_foumular_calculator_base.h"
-#include "von/cpp/utility/logger.h"
+#include "von/utility/logger.h"
 
 class ActuatorEncoder_Calculator{
     public: 

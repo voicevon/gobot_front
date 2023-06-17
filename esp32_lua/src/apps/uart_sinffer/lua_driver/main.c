@@ -5,7 +5,6 @@
 
 
 
-
 int __main(){
 	InitMonitorUart();
 	InitRtosTasks();
