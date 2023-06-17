@@ -9,7 +9,7 @@
 
 void (*call_cpp_set_led)(int led_index, int state);  
 
-void InitCallback_CppSetLedState(void(*cpp_service_function)(int,int)){
+void InitCallback_CppSetLedState(void(*cpp_service_function)(int led_index,int state)){
     call_cpp_set_led = cpp_service_function;
 }
 

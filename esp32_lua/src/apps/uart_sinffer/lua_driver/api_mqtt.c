@@ -8,7 +8,7 @@
 void (*mqtt_publish) (const char*, const char*);
 void (*mqtt_subscribe) (const char*, int);
 int (*mqtt_read_payload) (int, const char*);
-void (*mqtt_release_buffer) (const int);
+void (*mqtt_release_buffer) (int);
 // const char* (*mqtt_read_first_topic)();
 
 void set_callback_mqtt_publish( void (*service_function)(const char*, const char*) ){
@@ -23,7 +23,7 @@ void set_callback_mqtt_subscribe( void (*service_function)(const char*, int) ){
 void set_callback_mqtt_read_payload( int (*service_function)(int, const char*) ){
 	mqtt_read_payload = service_function;	
 }
-void set_callback_mqtt_release_buffer(void (*service_function) (const int)){
+void set_callback_mqtt_release_buffer(void (*service_function) (int subscriber_id)){
 	mqtt_release_buffer = service_function;
 }
 

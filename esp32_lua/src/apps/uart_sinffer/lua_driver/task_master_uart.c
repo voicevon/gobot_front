@@ -1,6 +1,6 @@
 #include <lua/lua.h>
 
-
+// https://github.com/espressif/esp-idf/issues/4537 
 // https://github.com/theElementZero/ESP32-UART-interrupt-handling/blob/master/uart_interrupt.c
 #include <stdio.h>
 #include <string.h>
@@ -131,7 +131,6 @@ static int LuaUartSend__Master(lua_State* L){
 	
 	return 0;
 }
-
 
 void Task_MasterUart(void * parameter){
     init_isr();

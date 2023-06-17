@@ -2,8 +2,10 @@
 #include <Arduino.h>
 // #include <FreeRTOS.h>
 #include <freertos/FreeRTOS.h>
-#include "lua.hpp"
-#include "lualib.h"
+#include "lua/lua.hpp"
+
+#include "lua/lualib.h"
+
 #include "lauxlib.h"
 #include "ltable.h"
 
