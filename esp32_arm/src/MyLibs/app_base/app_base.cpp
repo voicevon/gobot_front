@@ -67,7 +67,7 @@ void AppBase::StartWebServer(ApWebserver_DictionBase* diction){
 //****************************************************************************************
 //              MQTT
 //
-void AppBase::onGot_MqttMessage_whole(const char* payload, size_t payload_len){
+void AppBase::_onGot_MqttMessage_whole(const char* payload, size_t payload_len){
     if (payload_len > __head_text_message.GetBufferSize()){
         String pp = String(payload);
         Logger::Error("AppBase::onGot_MqttMessage() oversize");

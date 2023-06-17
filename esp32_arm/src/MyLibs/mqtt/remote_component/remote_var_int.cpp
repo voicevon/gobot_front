@@ -2,7 +2,7 @@
 #include "von/cpp/utility/logger.h"
 
 
-void RemoteVar_Int::onGot_MqttMessage_whole(const char* payload, size_t payload_len){
+void RemoteVar_Int::_onGot_MqttMessage_whole(const char* payload, size_t payload_len){
     __remote_value = atoi(payload);
     __got_remote_value = true;
     Logger::Debug("ConcernSensorSetter::onGot_MqttMessage");

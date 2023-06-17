@@ -16,7 +16,7 @@ class RemoteVar_Chars: public MqttSubscriberBase{
 
 
     private:
-        void onGot_MqttMessage_whole(const char* payload, size_t payload_len) override;
+        void _onGot_MqttMessage_whole(const char* payload, size_t payload_len) override;
         bool __got_remote_value = false;
         char __remote_value[REMOTE_VAR_CHARS_MAX_BYTES_OF_BUFFER];
         uint8_t __leds_count;

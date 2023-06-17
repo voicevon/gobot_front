@@ -88,7 +88,7 @@ void LuaBase::SpinOnce(){
 	}
 }
 
-void LuaBase::onGot_MqttMessage_whole(const char* payload, size_t payload_len){
+void LuaBase::_onGot_MqttMessage_whole(const char* payload, size_t payload_len){
 	Logger::Debug("LuaBase::onGot_MqttMessage()");
 	// char* pp = (char*) payload;
 	// *(pp + payload_len) = 0x00;   //??? any risk?

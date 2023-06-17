@@ -22,7 +22,7 @@ class LuaBase: public MqttSubscriberBase{
 		lua_State *_lua_state;
 
 	private:
-		void onGot_MqttMessage_whole(const char* payload, size_t payload_len) override;
+		void _onGot_MqttMessage_whole(const char* payload, size_t payload_len) override;
 
 		bool __is_doing_loop = false;
 

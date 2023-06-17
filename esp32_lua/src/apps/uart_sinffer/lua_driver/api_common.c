@@ -7,7 +7,7 @@
 
 void (*mqtt_publish) (const char*, const char*);
 void (*mqtt_subscribe) (const char*, int);
-int (*mqtt_read_payload) (const int, char*);
+int (*mqtt_read_payload) (int, const char*);
 void (*mqtt_release_buffer) (const int);
 // const char* (*mqtt_read_first_topic)();
 
@@ -20,7 +20,7 @@ void set_callback_mqtt_subscribe( void (*service_function)(const char*, int) ){
 // void set_callback_read_first_topic(const char* (*service_function)()){
 // 	mqtt_read_first_topic = service_function;
 // }
-void set_callback_mqtt_read_payload( int (*service_function)(const int,char*) ){
+void set_callback_mqtt_read_payload( int (*service_function)(int, const char*) ){
 	mqtt_read_payload = service_function;	
 }
 void set_callback_mqtt_release_buffer(void (*service_function) (const int)){
@@ -99,6 +99,7 @@ int LuaMqttPublish(lua_State* L){
 // }
 
 int LuaMqttReadPayload(lua_State* L){
+	//约定： char* MqttReadPayload(int topic_index)
 	int topic_id;
 	char* payload;
 

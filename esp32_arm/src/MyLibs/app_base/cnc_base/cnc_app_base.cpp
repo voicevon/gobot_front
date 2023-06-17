@@ -7,7 +7,7 @@
 #define APP_COMMAND_PREFIX_SIZE 4
 
 
-void CncAppBase::onGot_MqttMessage_whole(const char* payload, size_t payload_len){
+void CncAppBase::_onGot_MqttMessage_whole(const char* payload, size_t payload_len){
     //format string ender.
     char* p = (char*)(payload);
     p[payload_len] = 0x00;  

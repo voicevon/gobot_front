@@ -10,7 +10,7 @@ class CncAppBase: public MqttSubscriberBase{
         // virtual void ExecuteAppCommand(GcodeText* gcode_text){}; 
 
         void SpinOnce(); 
-        void onGot_MqttMessage_whole(const char* payload, size_t payload_len) override ;
+        void _onGot_MqttMessage_whole(const char* payload, size_t payload_len) override ;
 
 
     protected:

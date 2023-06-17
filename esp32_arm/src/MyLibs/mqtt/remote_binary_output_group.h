@@ -12,7 +12,7 @@ class RemoteBinaryOutputGroup: public MqttSubscriberBase{
         char* Get();
 
     private:
-        void onGot_MqttMessage_whole(const char* payload, size_t payload_len) override;
+        void _onGot_MqttMessage_whole(const char* payload, size_t payload_len) override;
         // void __onMessage(const char* payload, uint16_t payload_len);
         char __mqtt_payload[__MIN_JSON_BUFFER_SIZE];
         bool __got_remote_value = false;

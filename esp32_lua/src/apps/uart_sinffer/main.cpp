@@ -6,13 +6,11 @@ extern "C"{
 #include <Arduino.h>
 #include "von/cpp/wifi/task_wifi.h"
 #include "von/cpp/mqtt/task_mqtt.h"
-
-#include "von/cpp/utility/logger.h"
-#include "lua_driver/api_common.hpp"
 #include "von/cpp/mqtt/subscriber/mqtt_subscriber_manager.h"
 #include "von/cpp/mqtt/g_var.h"
-// #include "von/cpp/mqtt/subscriber/mqtt_subscriber_string.h"
-#include "von/cpp/mqtt/subscriber/mqtt_subscriber_base.h"
+// #include "von/cpp/mqtt/subscriber/mqtt_subscriber_base.h"
+#include "von/cpp/utility/logger.h"
+#include "lua_driver/api_common.hpp"
 
 
 MqttSubscriberBase subsribers[8];
