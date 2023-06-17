@@ -5,14 +5,11 @@
 #include <lua/lua.h>
 
 
-// void (*__service_function)(const char*); 
-// void def_callback(const char*);
-
 void (*mqtt_publish) (const char*, const char*);
 void (*mqtt_subscribe) (const char*, int);
-// const char* (*mqtt_read_first_topic)();
 int (*mqtt_read_payload) (const int, char*);
 void (*mqtt_release_buffer) (const int);
+// const char* (*mqtt_read_first_topic)();
 
 void set_callback_mqtt_publish( void (*service_function)(const char*, const char*) ){
 	mqtt_publish = service_function;	
