@@ -12,7 +12,7 @@
 
 char *pLuaCodeBuf;
 extern lua_State *L;
-extern HardwareSerial serial;
+// extern HardwareSerial serial;
 extern AsyncWebSocket webSocket;
 
 void luaDemoTask(void *pParams)
@@ -28,7 +28,7 @@ void luaDemoTask(void *pParams)
             const char *str = lua_tostring(L, -1); // Task WDT got Trigger应该是在这里激发的
             char temp[128];
             memset(temp, 0, sizeof(temp));
-            serial.printf("代码错误，原因：%s\n", str);
+            Serial.printf("代码错误，原因：%s\n", str);
             webSocket.textAll(temp);
         }
         webSocket.textAll("测试脚本执行完成");

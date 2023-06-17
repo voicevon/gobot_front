@@ -9,3 +9,4 @@
 
 
 extern EventGroupHandle_t my_EventGroup;
+extern lua_State* L;

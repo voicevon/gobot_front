@@ -2,7 +2,7 @@
 
 
 #include <Arduino.h>
-#include "von/utility/wifi/task_wifi.h"
+#include "von/utility/wifi/task_wifi.hpp"
 
 
 #include "von/utility/mqtt/g_var.h"
@@ -89,10 +89,15 @@ void setup_callback(){
 
 
 void setup_feng(){
+	WiFiCredential wifi_credential;
+	wifi_credential.ssid = "Perfect";
+	wifi_credential.password = "1234567890";
+
 	Serial.begin(115200);
 	__main();
 	xTaskCreate(TaskMqtt, "Mqtt", 10000, NULL,  1, &task_Mqtt);   
-	ConnectToWifi_FakeTask();
+	
+	ConnectToWifi_FakeTask(&wifi_credential);
 	setup_callback();
 	while (!g_mqttClient.connected()){
 		vTaskDelay(1);

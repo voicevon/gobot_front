@@ -1,5 +1,7 @@
 // extern "C"{
 
+// lua_State* L = 0;
+
 #include <lua/lua.h>
 #include <lua/lauxlib.h>
 #include <lua/lualib.h>
@@ -14,6 +16,7 @@
 #include "api_leds.h"
 
 #include "api_rtos.h"
+#include "global_const.h"
 
 static const struct luaL_Reg RichonFunc[] =
 {
@@ -60,7 +63,7 @@ static const struct luaL_Reg RichonFunc[] =
 
 
 
-lua_State* L = 0;
+
 
 void LoadPlatform(lua_State* L){
 // 	luaL_dostring(l, pGlobalVarDef);		//全局变量定义区

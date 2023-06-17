@@ -7,7 +7,7 @@
 #include "lauxlib.h"
 #include "ArduinoJson.h"
 
-extern HardwareSerial serial;
+// extern HardwareSerial Serial;
 
 extern AsyncWebServer webServer;
 extern AsyncWebSocket webSocket;
@@ -23,18 +23,18 @@ void handleWebSocketData(void *arg, uint8_t *data, size_t len);
 void listDir(fs::FS &fs, const char *dirname, uint8_t levels, char *buf)
 {
     size_t pos = 0;
-    // serial.printf("Listing directory: %s\r\n", dirname);
+    // Serial.printf("Listing directory: %s\r\n", dirname);
 
     File root = fs.open(dirname);
     if (!root)
     {
-        // serial.println("- failed to open directory");
+        // Serial.println("- failed to open directory");
         fs.mkdir(dirname);
         return;
     }
     if (!root.isDirectory())
     {
-        // serial.println(" - not a directory");
+        // Serial.println(" - not a directory");
         return;
     }
 
@@ -43,12 +43,12 @@ void listDir(fs::FS &fs, const char *dirname, uint8_t levels, char *buf)
     {
         if (file.isDirectory())
         {
-            serial.print("  DIR : ");
-            serial.print(file.name());
+            Serial.print("  DIR : ");
+            Serial.print(file.name());
             time_t t = file.getLastWrite();
             struct tm *tmstruct = localtime(&t);
 
-            // serial.printf("  LAST WRITE: %d-%02d-%02d %02d:%02d:%02d\n", (tmstruct->tm_year) + 1900, (tmstruct->tm_mon) + 1, tmstruct->tm_mday, tmstruct->tm_hour, tmstruct->tm_min, tmstruct->tm_sec);
+            // Serial.printf("  LAST WRITE: %d-%02d-%02d %02d:%02d:%02d\n", (tmstruct->tm_year) + 1900, (tmstruct->tm_mon) + 1, tmstruct->tm_mday, tmstruct->tm_hour, tmstruct->tm_min, tmstruct->tm_sec);
 
             if (levels)
             {
@@ -57,9 +57,9 @@ void listDir(fs::FS &fs, const char *dirname, uint8_t levels, char *buf)
         }
         else
         {
-            // serial.print("  FILE: ");
-            // serial.print(file.name());
-            // serial.print("  SIZE: ");
+            // Serial.print("  FILE: ");
+            // Serial.print(file.name());
+            // Serial.print("  SIZE: ");
 
             const char *fileName = file.name();
             // sprintf(&buf[pos], fileName);
@@ -67,10 +67,10 @@ void listDir(fs::FS &fs, const char *dirname, uint8_t levels, char *buf)
             buf[pos + strlen(fileName)] = ' ';
             pos += strlen(fileName) + 1;
 
-            // serial.print(file.size());
+            // Serial.print(file.size());
             time_t t = file.getLastWrite();
             struct tm *tmstruct = localtime(&t);
-            // serial.printf("  LAST WRITE: %d-%02d-%02d %02d:%02d:%02d\n", (tmstruct->tm_year) + 1900, (tmstruct->tm_mon) + 1, tmstruct->tm_mday, tmstruct->tm_hour, tmstruct->tm_min, tmstruct->tm_sec);
+            // Serial.printf("  LAST WRITE: %d-%02d-%02d %02d:%02d:%02d\n", (tmstruct->tm_year) + 1900, (tmstruct->tm_mon) + 1, tmstruct->tm_mday, tmstruct->tm_hour, tmstruct->tm_min, tmstruct->tm_sec);
         }
         file = root.openNextFile();
     }
@@ -97,9 +97,10 @@ void WebServerTask(void *pvParam)
 
 void webServerInit()
 {
-    serial.println("webServerInit");
+    Serial.println("webServerInit");
     if (LittleFS.begin(true))
     {
+	    // webServer.serveStatic("/", LittleFS, "/");
         // webServer.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
         //              {
         //                 printf("receive index.html request");
@@ -120,7 +121,7 @@ void webServerInit()
                             } else {
                                 //查询配置，从/config/dev.conf中获得数据后返回到前端
                                 if(strcmp(request->url().c_str(), "/getconfig") == 0){
-                                    // serial.println("getconfig is called");
+                                    // Serial.println("getconfig is called");
                                     uint8_t buf[2048];
                                     memset(buf, 0, 2048);
                                     if (LittleFS.begin(true))
@@ -131,9 +132,9 @@ void webServerInit()
 
                                         if(size < 2048){
                                             file.read(buf, size);
-                                            // serial.printf("file content is: %s\n", buf);
+                                            // Serial.printf("file content is: %s\n", buf);
                                         }else{
-                                            serial.printf("size larged %d \n", size);
+                                            Serial.printf("size larged %d \n", size);
                                         }
 
                                         file.close();
@@ -146,13 +147,13 @@ void webServerInit()
                                         char buf[1024];
                                         memset(buf, 0, sizeof(buf));
                                         listDir(LittleFS, "/lua", 0, buf);
-                                        // serial.printf("buf is: %s", buf);
+                                        // Serial.printf("buf is: %s", buf);
                                         //保存到缓冲中发送
 
                                         request->send(200, "tex/plain", String(buf));
                                         return;
                                     }else{
-                                        serial.println("listfile fs begin failed");
+                                        Serial.println("listfile fs begin failed");
                                         request->send(200, "text/plain", "listfile fs failed");
                                         return;
                                     }
@@ -172,11 +173,11 @@ void webServerInit()
                                         char buf[len + 1];
                                         memset(buf, 0, sizeof(buf));
                                         file.readBytes(buf, len);
-                                        // serial.printf("\ncontent is: %s \n", buf);
+                                        // Serial.printf("\ncontent is: %s \n", buf);
                                         request->send(200, "text/plain", String(buf));
                                         return;
                                     }else{
-                                        serial.println("listfile fs begin failed");
+                                        Serial.println("listfile fs begin failed");
                                         request->send(200, "text/plain", "listfile fs failed");
                                         return;
                                     }
@@ -194,13 +195,13 @@ void webServerInit()
             {
                 if (!index)
                 {
-                    serial.printf("BodyStart: %u B\n", total);
-                    serial.printf("data len is: %u \n", len);
+                    Serial.printf("BodyStart: %u B\n", total);
+                    Serial.printf("data len is: %u \n", len);
                 }
 
                 for (size_t i = 0; i < len; ++i)
                 {
-                    serial.write(data[i]);
+                    Serial.write(data[i]);
                 }
 
                 // 把data数据保存在/config/dev.conf中
@@ -212,17 +213,17 @@ void webServerInit()
                     {
                         file.write(data[i]);
                     }
-                    // serial.println("write finished");
+                    // Serial.println("write finished");
                     file.close();
                 }
                 else
                 {
-                    serial.println("LittleFS.begin failed");
+                    Serial.println("LittleFS.begin failed");
                 }
 
                 if (index + len == total)
                 {
-                    // serial.printf("\nBodyEnd: %u B \n", total);
+                    // Serial.printf("\nBodyEnd: %u B \n", total);
                 }
             });
 
@@ -240,15 +241,15 @@ void webServerInit()
                     memset(name, 0, strlen(filename.c_str()) + 2);
                     memcpy(name, path, strlen(path));
                     memcpy(&name[strlen(path)], filename.c_str(), strlen((filename.c_str())));
-                    serial.println(name);
+                    Serial.println(name);
 
                     LittleFS.remove(name); // 首先删除，然后通过添加的形式保存
                     targetFile = LittleFS.open(name, FILE_WRITE);
                     startTimer = millis();
                     const char *FILESIZE_HEADER{"FileSize"};
 
-                    // serial.printf("UPLOAD: Receiving: '%s'\n", filename.c_str());
-                    // serial.printf("UPLOAD: fileSize: %s\n", request->header(FILESIZE_HEADER));
+                    // Serial.printf("UPLOAD: Receiving: '%s'\n", filename.c_str());
+                    // Serial.printf("UPLOAD: fileSize: %s\n", request->header(FILESIZE_HEADER));
                 }
 
                 targetFile.seek(index, SeekCur); // 需要解决追加写入的问题
@@ -256,14 +257,14 @@ void webServerInit()
                 targetFile.write(data, len);
                 // targetFile.print((char *)data);
 
-                // serial.printf("index is: %i\n", index);
+                // Serial.printf("index is: %i\n", index);
                 if (final)
                 {
-                    serial.printf("UPLOAD: Done. Received %i bytes in %.2fs which is %.2f kB/s.\n",
+                    Serial.printf("UPLOAD: Done. Received %i bytes in %.2fs which is %.2f kB/s.\n",
                                   index + len,
                                   (millis() - startTimer) / 1000.0,
                                   1.0 * (index + len) / (millis() - startTimer));
-                    serial.printf("write size is: %i\n", index + len);
+                    Serial.printf("write size is: %i\n", index + len);
                     targetFile.close();
                 }
             });
@@ -276,7 +277,7 @@ void webServerInit()
             {
                 for (int i = 0; i < len; ++i)
                 {
-                    serial.write(data[i]);
+                    Serial.write(data[i]);
                 }
 
                 DynamicJsonDocument doc(len);
@@ -299,11 +300,11 @@ void webServerInit()
                 }
                 else
                 {
-                    serial.println("uploadtext littleFS.begin failed");
+                    Serial.println("uploadtext littleFS.begin failed");
                 }
 
-                serial.flush();
-                serial.printf("len is: %d\n", len);
+                Serial.flush();
+                Serial.printf("len is: %d\n", len);
             });
 
         webServer.on(
@@ -316,7 +317,7 @@ void webServerInit()
                 // memset(buf, 0, sizeof(buf));
 
                 // DynamicJsonDocument doc(len);
-                // deserializeJson(doc, (char *)data);
+                // deSerializeJson(doc, (char *)data);
                 // const char *pCode = doc["code"];
 
                 // memcpy(buf, pCode, strlen(pCode));
@@ -355,7 +356,7 @@ void webServerInit()
                     webSocket.textAll("测试任务正在执行，无法进行本次测试");
                 }
             });
-        serial.println("using LittleFS");
+        Serial.println("using LittleFS");
     }
     else
     {
@@ -364,7 +365,7 @@ void webServerInit()
         webServer.on("^[\\s\\S]*$", HTTP_GET, [](AsyncWebServerRequest *request)
                      { request->send(200, "text/plain", "File System can not mount, using static page"); });
 
-        serial.println("LittleFS hasn't mount, using using static webpage");
+        Serial.println("LittleFS hasn't mount, using using static webpage");
     }
 
     webSocket.onEvent(handleWebSocketEvent);
@@ -387,7 +388,7 @@ void handleWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, 
     case WS_EVT_PONG:
         break;
     case WS_EVT_ERROR:
-        serial.println("WS_EVT_ERROR is occured");
+        Serial.println("WS_EVT_ERROR is occured");
         break;
     default:
         break;
@@ -401,8 +402,8 @@ void handleWebSocketData(void *arg, uint8_t *data, size_t len)
     if (info->final && info->index == 0 && info->len && info->opcode == WS_TEXT)
     {
         data[len] = 0;
-        serial.printf("websocket receive data: %s\n", data);
-        serial.flush();
+        Serial.printf("websocket receive data: %s\n", data);
+        Serial.flush();
         luaL_dostring(L, (const char *)data);
     }
 }

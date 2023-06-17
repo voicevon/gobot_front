@@ -10,10 +10,11 @@
 #include <FS.h>
 #include <LittleFS.h>
 
-extern HardwareSerial serial;
+// extern HardwareSerial Serial;
 extern AsyncWebSocket webSocket;
-
-lua_State *L = 0;
+extern "C"{
+    lua_State *L = 0;
+}
 
 int luaDelay(lua_State *state);
 int luaPrint(lua_State *state);
@@ -64,8 +65,8 @@ void initLUA()
     luaL_newlib(L, luaFunc);
     lua_setglobal(L, "richon");
 
-    serial.println("lua engine running");
-    serial.flush();
+    Serial.println("lua engine running");
+    Serial.flush();
 }
 
 int luaDelay(lua_State *state)
@@ -97,8 +98,8 @@ int luaPrint(lua_State *state)
         p = lua_tolstring(state, -1, &tmp);
     }
 
-    serial.println(p);
-    serial.flush();
+    Serial.println(p);
+    Serial.flush();
     return 0;
 }
 
