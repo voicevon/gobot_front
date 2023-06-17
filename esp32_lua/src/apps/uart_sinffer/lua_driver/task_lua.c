@@ -12,7 +12,7 @@
 #include "task_slave_uart.h"
 
 #include "api_rtos.h"
-#include "api_common.h"
+#include "api_mqtt.h"
 
 static const struct luaL_Reg RichonFunc[] =
 {
@@ -33,6 +33,7 @@ static const struct luaL_Reg RichonFunc[] =
 // 	{"DILEDOFF",	LuaDILEDOFF},
 //     {"UARTLEDFlash",  LuaDOLEDFlash},
 //     {"RFLEDFlash",  LuaRFLEDFlash},
+	{"SetLedPower",	    SetLedPower},
 	{"UartSendMaster",	LuaUartSend_Master},
 	{"UartReadMaster", 	LuaUartRecv_Master},
 	{"UartSendSlave",	LuaUartSend_Slave},

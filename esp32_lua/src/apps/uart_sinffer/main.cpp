@@ -5,20 +5,25 @@ extern "C"{
 
 #include <Arduino.h>
 #include "von/cpp/wifi/task_wifi.h"
+
 #include "von/cpp/mqtt/task_mqtt.h"
 #include "von/cpp/mqtt/subscriber/mqtt_subscriber_manager.h"
 #include "von/cpp/mqtt/g_var.h"
-// #include "von/cpp/mqtt/subscriber/mqtt_subscriber_base.h"
+#include "lua_driver/api_mqtt.hpp"
+
 #include "von/cpp/utility/logger.h"
-#include "lua_driver/api_common.hpp"
+#include "lua_driver/global_const.hpp"
 
 
 MqttSubscriberBase subsribers[8];
 
 
-void ReceiveMqtt(MqttSubscriberBase* subscriber){
-	Logger::Info("ReceiveMqtt()");
-	Logger::Print(subscriber->GetMqttTopic()->c_str(), subscriber->ReadPayload_as_string());
+void OnMqttReceived(MqttSubscriberBase* subscriber){
+	Logger::Info("OnMqttReceived()");
+	Logger::Print(String(subscriber->GetId()).c_str(), subscriber->GetMqttTopic()->c_str() );
+	Logger::Print(String(subscriber ->GetPayloadLength()).c_str(), subscriber->ReadPayload_as_string());
+	// set EventBit
+	xEventGroupSetBits(my_EventGroup,  1 << subscriber->GetId());  // set eventbit	
 }
 
 void InitSubscribers(){
@@ -45,7 +50,7 @@ void InitSubscribers(){
 	
 	for(int i=0; i<8; i++){
 		gs_MqttSubscriberManager::Instance().AddSubscriber(topics[i], &subsribers[i]);
-		subsribers[i].SetCallback_onGot_MqttMessage(ReceiveMqtt);
+		subsribers[i].SetCallback_onGot_MqttMessage(OnMqttReceived);
 	}
 }
 
