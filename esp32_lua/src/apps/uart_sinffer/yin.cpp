@@ -51,8 +51,8 @@ void setup_yin()
 
   // 启动WebServer任务
   xTaskCreateUniversal(WebServerTask, "webServerTask", CONFIG_WEBSERVER_TASK_STACK_SIZE, NULL, 2, &webServerTaskHandle, CONFIG_ARDUINO_RUNNING_CORE);
-  // xTaskCreateUniversal(luaEngineTask, "luaEngineTask", CONFIG_LUAENGINE_TASK_STACK_SIZE, NULL, 3, &luaEngineTaskHandle, CONFIG_ARDUINO_RUNNING_CORE);
-  // xTaskCreateUniversal(luaDemoTask, "luaDemoTask", CONFIG_LUADEMO_TASK_STACK_SIZE, NULL, 4, &luaDemoTaskHandle, CONFIG_ARDUINO_RUNNING_CORE);
+  xTaskCreateUniversal(luaEngineTask, "luaEngineTask", CONFIG_LUAENGINE_TASK_STACK_SIZE, NULL, 3, &luaEngineTaskHandle, CONFIG_ARDUINO_RUNNING_CORE);
+  xTaskCreateUniversal(luaDemoTask, "luaDemoTask", CONFIG_LUADEMO_TASK_STACK_SIZE, NULL, 4, &luaDemoTaskHandle, CONFIG_ARDUINO_RUNNING_CORE);
 }
 
 // void loop()

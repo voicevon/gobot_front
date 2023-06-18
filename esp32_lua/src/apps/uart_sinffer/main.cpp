@@ -20,8 +20,8 @@ void setup(){
 	wifi_task_config.Asyncconnection = false;
 
 	Serial.begin(115200);
-	InitRtosTasks();
-	xTaskCreate(TaskMqtt, "Mqtt", 10000, NULL,  1, &task_Mqtt);   
+	// InitRtosTasks();
+	// xTaskCreate(TaskMqtt, "Mqtt", 10000, NULL,  1, &task_Mqtt);   
 	
 	ConnectToWifi_FakeTask(&wifi_task_config);
 	// setup_feng();
@@ -39,9 +39,8 @@ void setup(){
 }
 
 void loop(){
-	while(true){
-		for(int i=0; i<4; i++){
-			leds[i].SpinOnce();
-		}
-	}
+	// for(int i=0; i<4; i++){
+	// 	leds[i].SpinOnce();
+	// }
+	vTaskDelay(1000);
 }
