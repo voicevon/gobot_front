@@ -1,1 +1,0 @@
-void luaDemoTask(void *pParams);

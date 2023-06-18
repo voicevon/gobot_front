@@ -1,0 +1,6 @@
+me-no-dev/AsyncTCP@^1.1.1
+https://github.com/voicevon/vonlib.git
+AsyncMqttClient
+bblanchon/ArduinoJson@^6.19.4
+knolleary/PubSubClient@^2.8
+https://github.com/me-no-dev/ESPAsyncWebServer.git
