@@ -2,11 +2,10 @@
 
 
 #include <Arduino.h>
-#include "von/utility/wifi/task_wifi.hpp"
-
 
 #include "von/utility/mqtt/g_var.h"
-#include "von/utility/mqtt/task_mqtt.h"
+
+
 #include "von/utility/mqtt/subscriber/mqtt_subscriber_manager.h"
 #include "von/component/display/mono_led_gpio.h"
 #include "von/utility/logger.h"
@@ -19,7 +18,6 @@
 
 MqttSubscriberBase subsribers[8];
 Mono_Led_GPIO leds[4];
-extern "C"{	extern void __main(); }
 #define PIN_LED_POWER 22
 #define PIN_LED_UART_MASTER_RX_TX 23
 #define PIN_LED_UART_SLAVE_RX_TX 24
@@ -88,31 +86,7 @@ void setup_callback(){
 }
 
 
-void setup_feng(){
-	WiFiCredential wifi_credential;
-	wifi_credential.ssid = "Perfect";
-	wifi_credential.password = "1234567890";
 
-	Serial.begin(115200);
-	__main();
-	xTaskCreate(TaskMqtt, "Mqtt", 10000, NULL,  1, &task_Mqtt);   
-	
-	ConnectToWifi_FakeTask(&wifi_credential);
-	setup_callback();
-	while (!g_mqttClient.connected()){
-		vTaskDelay(1);
-	}
-	InitSubscribers();
 
-	Logger::Info("Arduino setup() is done..");
-}
-
-void loop_feng(){
-	while(true){
-		for(int i=0; i<4; i++){
-			leds[i].SpinOnce();
-		}
-	}
-}
 
 

@@ -24,8 +24,8 @@
 
 // HardwareSerial serial(0);
 
-// const char *sta_ssid = "LbnGuest"; //"LbnWX2.4";
-// const char *sta_password = "lbn888888";
+// const char *sta_ssid = "FuckGFW"; 
+// const char *sta_password = "refuckgfw";
 
 AsyncWebServer webServer(80);
 AsyncWebSocket webSocket("/ws");
@@ -35,7 +35,7 @@ TaskHandle_t luaEngineTaskHandle = NULL;
 TaskHandle_t luaDemoTaskHandle = NULL;
 
 // put function declarations here:
-void startWiFi();
+// void startWiFi();
 
 void setup_yin()
 {
@@ -51,18 +51,18 @@ void setup_yin()
 
   // 启动WebServer任务
   xTaskCreateUniversal(WebServerTask, "webServerTask", CONFIG_WEBSERVER_TASK_STACK_SIZE, NULL, 2, &webServerTaskHandle, CONFIG_ARDUINO_RUNNING_CORE);
-  xTaskCreateUniversal(luaEngineTask, "luaEngineTask", CONFIG_LUAENGINE_TASK_STACK_SIZE, NULL, 3, &luaEngineTaskHandle, CONFIG_ARDUINO_RUNNING_CORE);
-  xTaskCreateUniversal(luaDemoTask, "luaDemoTask", CONFIG_LUADEMO_TASK_STACK_SIZE, NULL, 4, &luaDemoTaskHandle, CONFIG_ARDUINO_RUNNING_CORE);
+  // xTaskCreateUniversal(luaEngineTask, "luaEngineTask", CONFIG_LUAENGINE_TASK_STACK_SIZE, NULL, 3, &luaEngineTaskHandle, CONFIG_ARDUINO_RUNNING_CORE);
+  // xTaskCreateUniversal(luaDemoTask, "luaDemoTask", CONFIG_LUADEMO_TASK_STACK_SIZE, NULL, 4, &luaDemoTaskHandle, CONFIG_ARDUINO_RUNNING_CORE);
 }
 
-// void loop_yin()
+// void loop()
 // {
-//   // put your main code here, to run repeatedly:
-//   // digitalWrite(LED_PIN, HIGH);
-//   vTaskDelay(1000);
-//   // digitalWrite(LED_PIN, LOW);
-//   // std::printf("...");
-//   // delay(1000);
+  // put your main code here, to run repeatedly:
+  // digitalWrite(LED_PIN, HIGH);
+  // vTaskDelay(1000);
+  // digitalWrite(LED_PIN, LOW);
+  // std::printf("...");
+  // delay(1000);
 // }
 
 // put function definitions here:
