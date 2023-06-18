@@ -28,7 +28,7 @@ void OnMqttReceived(MqttSubscriberBase* subscriber){
 	Logger::Print(String(subscriber->GetId()).c_str(), subscriber->GetMqttTopic()->c_str() );
 	Logger::Print(String(subscriber ->GetPayloadLength()).c_str(), subscriber->ReadPayload_as_string());
 	// set EventBit
-	xEventGroupSetBits(my_EventGroup,  1 << subscriber->GetId());  // set eventbit	
+	// xEventGroupSetBits(my_EventGroup,  1 << subscriber->GetId());  // set eventbit	
 }
 
 void InitSubscribers(){
