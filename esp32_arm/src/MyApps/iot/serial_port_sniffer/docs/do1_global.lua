@@ -1,1 +1,0 @@
-IOTASK=3; RFTASK = 4; UARTTASK = 5; t=nil; count = 0; rfcount = 0; energy = nil
