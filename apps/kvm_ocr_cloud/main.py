@@ -15,7 +15,8 @@ if __name__ == "__main__":
         # ocr_node = OcrNodeFactory.CreateOcrNode('all_in_one', 'kvm_230508','windows_performance', is_new_kvm_node= False, is_new_app_window=False)
         # ocr_node = OcrNodeFactory.CreateOcrNode('demo_yjg', 'demo_yjg','temp_window', is_new_kvm_node= False, is_new_app_window=False)
         # ocr_node = OcrNodeFactory.CreateOcrNode('demo_fxm', 'demo_yjg','temp_window', is_new_kvm_node=True, is_new_app_window=False)
-        ocr_node = OcrNodeFactory.CreateOcrNode('view_demo', 'demo_yjg','temp_window', is_new_kvm_node=False, is_new_app_window=False)
+        # ocr_node = OcrNodeFactory.CreateOcrNode('view_demo', 'demo_yjg','temp_window', is_new_kvm_node=False, is_new_app_window=False)
+        ocr_node = OcrNodeFactory.CreateOcrNode('yalefu', 'yalefu_screen','none', is_new_kvm_node=False, is_new_app_window=False)
 
         while True:
             ocr_node.SpinOnce()

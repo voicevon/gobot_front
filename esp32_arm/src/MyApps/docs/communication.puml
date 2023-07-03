@@ -1,0 +1,56 @@
+@startuml
+
+queue gcode_queue
+frame lua_engin{
+    card lua_dostring
+    card lua_dofile
+    card lua_command
+    lua_dofile <-- lua_command
+    lua_dostring <-- lua_command
+}
+collections lua_driver
+card board
+lua_dostring ---> lua_driver
+lua_driver --> board
+
+
+card mqtt_client
+frame AppBase{
+    queue text_message_queue
+    card feedback
+    card dispatcher
+    card webconfig
+
+
+    text_message_queue <-- mqtt_client
+    feedback --> mqtt_client:  publish feedback
+    text_message_queue -[dashed]->feedback: check free buffer size
+
+
+}
+frame write_file{
+    card open_write
+    card write_line
+    card close_write
+    card file_command
+    open_write <-- file_command
+    write_line <-- file_command
+    close_write <-- file_command
+}
+file lua_file
+file gcode_file
+gcode_file <-- write_file 
+lua_file <-- write_file
+gcode_queue <-[dashed]-- gcode_file
+lua_dofile <-[dashed]- lua_file
+
+
+dispatcher <-- text_message_queue
+gcode_queue <-- dispatcher
+file_command<-- dispatcher : open_file: \nfile_line:\nclose_file:
+lua_command <-- dispatcher  : dostring: \n dofile:
+
+card app_logic_on_lua_script_file
+app_logic_on_lua_script_file <-[#red,dashed]- lua_engin
+
+@enduml

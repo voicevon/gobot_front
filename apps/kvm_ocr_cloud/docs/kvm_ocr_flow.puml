@@ -1,5 +1,5 @@
 
-@startuml
+@startuml kvm_ocv_flow
 control screen as kvm_node_screen
 control camera as kvm_node_camera
 queue s_router as image_router

@@ -43,7 +43,11 @@ class OcrNode:
             config = {}
             config["node_name"] = self.__kvm_node_name
             config["fps"] = 1
-            config['resolution'] = (1024, 768)
+            # for linux
+            # config['resolution'] = (1024, 768)   # capture screen,  this is the area to capture.
+            # for Windows
+            config['resolution'] = (0, 0, 1024, 768)   # capture screen,  this is the area to capture.
+            
             self.__kvm_node_screen = KvmNodeScreen(self.__my_os, config)
 
         if self.from_mqtt or self.screen_image_to_mqtt:
