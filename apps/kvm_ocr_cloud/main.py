@@ -2,7 +2,7 @@ from von.mqtt.remote_var_mqtt import g_mqtt,g_mqtt_broker_config
 from ocr_node_factory import OcrNodeFactory
 import time
 
-who_amd_i = "auto runner on rasp-pi"
+who_am_i = "auto runner on rasp-pi"
 # who_am_i = "normal"
 
 if __name__ == "__main__":
