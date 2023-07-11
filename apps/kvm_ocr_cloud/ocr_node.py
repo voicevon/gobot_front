@@ -37,8 +37,8 @@ class OcrNode:
 
 
         if self.from_camera_capture:
-            getter = RemoteVar_mqtt('ocr/kvm/' + self.__kvm_node_name + '/config', None, for_loading_config=True)
-            self.__kvm_node_camera = KvmNodeCamera(self.__my_os, getter)
+            # getter = RemoteVar_mqtt('ocr/kvm/' + self.__kvm_node_name + '/config', None, for_loading_config=True)
+            self.__kvm_node_camera = KvmNodeCamera(self.__my_os, self.__kvm_node_name,1280,720)
         if self.from_screen_capture:
             config = {}
             config["node_name"] = self.__kvm_node_name
@@ -65,7 +65,7 @@ class OcrNode:
         if self.screen_image_to_tool_areas_marker:
             self.__tool_areas_marker = ToolDefAreas(self.__app_window_name)
 
-    def __get_screen_image(self):
+    def __get_image_from_source(self):
         screen_image = None
         if self.from_camera_capture:
             screen_image = self.__kvm_node_camera.Capture_Image()
@@ -100,10 +100,11 @@ class OcrNode:
         small_images = []
         small_strings= []
 
-        screen_image = self.__get_screen_image()
+        screen_image = self.__get_image_from_source()
         self.__deliver_screen_image_even_is_none(screen_image)
 
         if screen_image is None:
+            Logger.Error("Screen image is none.")
             return
         
         if self.routing['view_screen_image']:
