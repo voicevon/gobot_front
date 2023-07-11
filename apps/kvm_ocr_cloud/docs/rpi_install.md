@@ -33,9 +33,12 @@ sudo python /home/feng/gobot_front/apps/kvm_ocr_cloud/main.py
 
 # Add to rc.local
 sudo nano /etc/rc.local
-// Add below to editor. and save it, then: sodu reboot
-sudo python /home/feng/gobot_front/apps/kvm_ocr_cloud/main.py &
+// Add below to editor. and save it, then: sudo reboot
 
+
+
+# To config hardware
+sudo raspi-config
 
 # Turtorial:
 * https://raspberrypi-guide.github.io/programming/install-opencv
