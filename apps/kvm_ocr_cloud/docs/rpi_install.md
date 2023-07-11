@@ -29,12 +29,12 @@ sudo pip install pytesseract
 
 
 # test main.py
-sudo python /home/xm/gobot_front/apps/kvm_ocr_cloud/main.py
+sudo python /home/feng/gobot_front/apps/kvm_ocr_cloud/main.py
 
 # Add to rc.local
 sudo nano /etc/rc.local
 // Add below to editor. and save it, then: sodu reboot
-sudo python /home/xm/gobot_front/apps/kvm_ocr_cloud/main.py &
+sudo python /home/feng/gobot_front/apps/kvm_ocr_cloud/main.py &
 
 
 # Turtorial:

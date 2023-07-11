@@ -1,6 +1,6 @@
 #include "board.h"
 
-// #include "MyLibs/board/pins_yorahone.h"
+// #include "MyLibs/board/pins_yorahome.h"
 #include "pin_dev.h"
 
 #define MAX_SPEED 600

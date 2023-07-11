@@ -84,14 +84,11 @@ class OcrNodeFactory:
 
         if node_name == 'yalefu':
             # cloud-edge. video recoder
-            routing['from_kvm_nodes'] = {'kvm_2300703','kvm_230704'}
-            routing['kvm_node_name'] = 'fake_kvm_node'
-            routing['app_window_name'] = 'fake_app_window'
-            # routing['from_mqtt'] = True
-            routing['from_screen_capture'] = True
-            # routing['view_screen_image'] = True
+            routing['my_os'] = 'Pi_lite'
+            routing['kvm_node_name'] = 'yalefu'
+            routing['app_window_name'] = app_window_name
+            routing['from_camera_capture'] = True
             routing['screen_image_to_mqtt'] = True
-            routing['screen_image_to_tool'] = False
 
         if node_name == '101':
             # hard capture, on rasperberry pi.
