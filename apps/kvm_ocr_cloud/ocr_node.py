@@ -74,7 +74,7 @@ class OcrNode:
         if self.from_mqtt:
             if self.__image_getter.rx_buffer_has_been_updated():
                 screen_image, _ = self.__image_getter.get_cv_image()
-                debug = False
+                debug = True
                 if debug:
                     cv2.imshow("OcrNode::mqtt_screen_image", screen_image)
                     cv2.waitKey(1)
@@ -104,7 +104,7 @@ class OcrNode:
         self.__deliver_screen_image_even_is_none(screen_image)
 
         if screen_image is None:
-            Logger.Error("Screen image is none.")
+            # Logger.Error("Screen image is none.")
             return
         
         if self.routing['view_screen_image']:

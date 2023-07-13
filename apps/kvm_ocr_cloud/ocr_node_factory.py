@@ -89,6 +89,13 @@ class OcrNodeFactory:
             routing['app_window_name'] = app_window_name
             routing['from_camera_capture'] = True
             routing['screen_image_to_mqtt'] = True
+            
+        if node_name == 'yalefu_viewer':
+            # cloud-edge. video recoder
+            # routing['my_os'] = 'Pi_lite'
+            routing['kvm_node_name'] = 'yalefu'
+            routing['app_window_name'] = app_window_name
+            routing['from_mqtt'] = True
 
         if node_name == '101':
             # hard capture, on rasperberry pi.
