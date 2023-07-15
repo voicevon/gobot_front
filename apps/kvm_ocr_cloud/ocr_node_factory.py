@@ -59,6 +59,8 @@ class OcrNodeFactory:
     @classmethod
     def CreateOcrNode(cls, node_name:str, kvm_node_name:str, app_window_name:str, is_new_kvm_node = False, is_new_app_window = False):
         routing = cls.CreateBlankRouting()
+        # Get config from mqtt
+        # mqtt topic = "ocr/kvm/yalefu/config/"
 
         if node_name == 'def_app_window_marker':
             # template as marker

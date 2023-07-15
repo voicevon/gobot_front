@@ -3,14 +3,44 @@
 
 
 <h1>Hardware: kvm_nodes</h1>
+<form action="/ocr/save_node_config"></form>
 <table>
-    {%for node in kvm_nodes%}
-    <tr>
-        <td> {{node}} </td>
-    </tr>
-    {%endfor%}
 
+    <tr>
+        <td> <select name="node">
+                {%for node in kvm_nodes%}
+                <option value="{{node}}">{{node}}</option>
+                {%endfor%}
+            </select></td>
+    </tr>
+    <tr>
+        <td>
+            OS <select name="my_os" id="">
+                <option value="Windows">Windows</option>
+                <option value="Pi_lite">Pi_lite</option>
+            </select><br>
+            <input type="checkbox">from_screen_capture<br>
+            <input type="checkbox">from_camera_capture<br>
+            <input type="checkbox">from_mqtt<br>
+            <hr>
+            <input type="checkbox">view_screen_image<br>
+            <input type="checkbox">screen_image_to_mqtt<br>
+            <input type="checkbox">screen_image_to_app_window_identifier<br>
+            <input type="checkbox">screen_image_to_image_divider<br>
+            <input type="checkbox">screen_image_to_ocr<br>
+            <input type="checkbox">screen_string_to_mqtt<br>
+            <hr>
+            <input type="checkbox">screen_image_to_tool_areas_marker<br>
+            <input type="checkbox">screen_image_to_tool<br>
+            <hr>
+            <input type="checkbox">small_images_to_mqtt<br>
+            <input type="checkbox">small_images_to_ocr<br>
+            <input type="checkbox">small_strings_to_mqtt<br>
+        </td>
+    </tr><br><br>
+    <input type="submit" value="submit">
 </table>
+</form>
 
 
 <h1>Software: app_windows</h1>

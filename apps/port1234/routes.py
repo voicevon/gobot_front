@@ -83,9 +83,17 @@ def product_iot():
 
 @app.route('/ocr')
 def ocr():
-    kvm_nodes = OcrNodeFactory.GetKnown_KvmNodeList()
-    app_windows = OcrNodeFactory.GetKnown_AppWindowList()
+    # kvm_nodes = OcrNodeFactory.GetKnown_KvmNodeList()
+    # app_windows = OcrNodeFactory.GetKnown_AppWindowList()
+    kvm_nodes = {"yalefu", 'yalefu_viewer'}
+    app_windows = {}
     return render_template('ocr/index.html', kvm_nodes=kvm_nodes,app_windows=app_windows)
+    # return render_template('ocr/index.html')
+
+@app.route('/read_config')
+def read_config():
+    key = request.args.get('k', default='none', type=str)
+    return key
 
 g_mqtt_broker_config.client_id = "230604"
 g_mqtt.connect_to_broker(g_mqtt_broker_config,blocked_connection=True)
