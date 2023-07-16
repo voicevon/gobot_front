@@ -20,26 +20,11 @@
     Hello world request example! <br>
     Here is the output of your request:
     </p>
-    <py-script>
-    from pyodide.http import pyfetch, FetchResponse
-    from typing import Optional, Any
-
-    import asyncio
-    import json
-    from static.request import request
-    async def main():
-        baseurl = "https://jsonplaceholder.typicode.com"
-
-        # GET
-        headers = {"Content-type": "application/json"}
-        response = await request(f"{baseurl}/posts/2", method="GET", headers=headers)
-        print(f"GET request=> status:{response.status}, json:{await response.json()}")
-
-    asyncio.ensure_future(main())
-
-    </py-script>
-
+    <div id="div_output"></div>
     <div>
+
+
+
     <p>
         You can also use other methods. See fetch documentation: <br>
         https://developer.mozilla.org/en-US/docs/Web/API/fetch#parameters
@@ -51,5 +36,23 @@
         https://pyodide.org/en/stable/usage/api/python-api.html#pyodide.http.FetchResponse
         </p>
     </div>
+    <py-script>
+        from pyodide.http import pyfetch, FetchResponse
+        from typing import Optional, Any
+    
+        import asyncio
+        import json
+        from static.request import request
+        async def main():
+            baseurl = "https://jsonplaceholder.typicode.com"
+    
+            # GET
+            headers = {"Content-type": "application/json"}
+            response = await request(f"{baseurl}/posts/2", method="GET", headers=headers)
+            display(await response.json(), target="div_output")
+    
+        asyncio.ensure_future(main())
+    
+        </py-script>
   </body>
 </html>
