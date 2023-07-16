@@ -21,31 +21,12 @@
     Here is the output of your request:
     </p>
     <py-script>
-    print("1111111111111")
     from pyodide.http import pyfetch, FetchResponse
-    print("22222222222")
     from typing import Optional, Any
-    print("333333333333333")
-    
-    async def request(url: str, method: str = "GET", body: Optional[str] = None,
-                        headers: Optional[dict[str, str]] = None, **fetch_kwargs: Any) -> FetchResponse:
 
-        kwargs = {"method": method, "mode": "cors"}  # CORS: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
-        if body and method not in ["GET", "HEAD"]:
-            kwargs["body"] = body
-        if headers:
-            kwargs["headers"] = headers
-        kwargs.update(fetch_kwargs)
-    
-        response = await pyfetch(url, **kwargs)
-        return response
-
-        
-
-    print("ccccccccccccccccccc")
     import asyncio
     import json
-    print("ffffffffffffff")
+    from static.request import request
     async def main():
         baseurl = "https://jsonplaceholder.typicode.com"
 
@@ -54,10 +35,7 @@
         response = await request(f"{baseurl}/posts/2", method="GET", headers=headers)
         print(f"GET request=> status:{response.status}, json:{await response.json()}")
 
-
-    print("hhhhhhhhhhhh")
     asyncio.ensure_future(main())
-    print("kkkkkkkkkkkk")
 
     </py-script>
 
