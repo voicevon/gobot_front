@@ -7,6 +7,7 @@ from twh_stock.route import web_stock
 from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
 # from von.ocr.ocr_factory import OcrFactory
 # from kvm_ocr_cloud.ocr_node_factory import OcrNodeFactory
+from tinydb import TinyDB, Query, where
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '20221220'
@@ -104,20 +105,54 @@ def node_config():
         values = {"ocr","twh"}
     return render_template('node_config/index.html', values = values)
     # return render_template('node_config/test.html', values = values)
-    
-@app.route('/node_config/insert', methods=['POST','GET'])
-def node_config_insert():
-    print("insert method is", request.method)
+
+@app.route('/node_config/search', methods=['POST','GET'])
+def node_config_search():
     content_type = request.headers.get('Content-Type')
-    print("conetent_type", content_type)
     if content_type == 'application/json':
         if request.is_json:
             print("Yes, request is json")
-            data=request.json
-            print(data)
+            config_item = request.json
+            table_config = TinyDB('node_configs.json')
+            q = Query()
+            test_func = lambda value, search: search in value
+            items = table_config.search(Query().mqtt_topic.test(test_func, 'p'))
+            # items = table_config.search(where('mqtt_topic').matches('*p*'))
+            return items
+
         else:
-            print("request is not json")
-        return "Insert is OK"
+            return ("request is not json")
+    else:
+        print("Content_type is not json.")
+        return "insert failed"
+
+@app.route('/node_config/save', methods=['POST','GET'])
+def node_config_save():
+    # print("insert method is", request.method)
+    content_type = request.headers.get('Content-Type')
+    # print("conetent_type", content_type)
+    if content_type == 'application/json':
+        if request.is_json:
+            print("Yes, request is json")
+            config_item = request.json
+            table_config = TinyDB('node_configs.json')
+            q = Query()
+            items = table_config.search(q.mqtt_topic == config_item['mqtt_topic'])
+            if len(items)>0:
+                # do update
+                print("do update")
+                print(items[0].doc_id)
+                doc_ids = []
+                doc_ids.append(items[0].doc_id)
+                table_config.update(config_item, doc_ids=doc_ids)
+                return "update is ok"
+            else:
+                # do insert
+                print("do insert")
+                new_doc_id = table_config.insert(config_item)
+                return "Insert is OK"
+        else:
+            return ("request is not json")
     else:
         print("Content_type is not json.")
         return "insert failed"
