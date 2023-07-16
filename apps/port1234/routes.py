@@ -1,6 +1,6 @@
 # https://github.com/abalarin/Flask-on-Linode
 
-from flask import Flask,  render_template, request, redirect,flash, url_for
+from flask import Flask,  render_template, redirect,flash, url_for, request
 from twh_wcs.wcs_main import Start_TwhWcs_Process
 from twh_user.route import web_user
 from twh_stock.route import web_stock
@@ -102,9 +102,27 @@ def node_config():
     values={}
     if key=='':
         values = {"ocr","twh"}
-    # return render_template('node_config/index.html', values = values)
-    return render_template('node_config/test.html', values = values)
+    return render_template('node_config/index.html', values = values)
+    # return render_template('node_config/test.html', values = values)
     
+@app.route('/node_config/insert', methods=['POST','GET'])
+def node_config_insert():
+    print("insert method is", request.method)
+    content_type = request.headers.get('Content-Type')
+    print("conetent_type", content_type)
+    if content_type == 'application/json':
+        if request.is_json:
+            print("Yes, request is json")
+            data=request.json
+            print(data)
+        else:
+            print("request is not json")
+        return "Insert is OK"
+    else:
+        print("Content_type is not json.")
+        return "insert failed"
+
+
 
 g_mqtt_broker_config.client_id = "230604"
 g_mqtt.connect_to_broker(g_mqtt_broker_config,blocked_connection=True)

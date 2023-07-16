@@ -12,69 +12,78 @@
 
 {% block page_content %}
 <div id="pyscript_ready">Py-Script is loading... </div>
-<div id="values">
-    {% for value in values %}
-    <button>{{ value }} </button><br>
-    {% endfor %}
-</div>
+<table>
+    <td>search mqtt_topic...<br>
+        <input id="search" py-input="search_input()">
+        <div id="values"></div>
+        {% for value in values %}
+        <button>{{ value }} </button><br>
+        {% endfor %}</div>
+    </td>
+    <td>
+        <input id="mqtt_topic" width="30" value="test_topic"><br>
+        <textarea id="json">json</textarea><br>
+        <button id="delete" py-click="do_delete()">Delete</button>
+        <button id="insert" py-click="do_insert()">Insert</button>
+        <button id="update" py-click="do_update()">Update</button>
+        <br><br>
+        <label id="async_state"></label>
+    </td>
+</table>
 
 
-<div>
-    <button py-click="button_click()" id="button">Go !</button>
-    <div>
-        GET
-        <ul id="left"></ul>
-    </div>
-    <div id="right">
-        POST
-        <ul id="right"></ul>
-    </div>
-</div>
+
+
+
+
 
 <py-script>
-    def button_click():
-        print("aaaaaaaaaaaaaaaaaa")
-        left = Element("left")
-        left.element.innerText = "clicked"
-
     from pyscript import when
     @when("click", selector="#values button")
     def value_click(evt):
         print(evt.target.innerText)
 
-    
-
     Element("pyscript_ready").element.innerText="Py-Script is ready."
 </py-script>
 
 <py-script>
-import asyncio
-import json
-from request import request  # import our request function.
+    import asyncio
+    import json
+    from static.request import request # import our request function.
 
-async def main():
-    baseurl = "https://jsonplaceholder.typicode.com"
+    async def async_insert():
+        baseurl = "http://localhost:5000"
+        # POST
+        headers = {"Content-type": "application/json"}
+        body = json.dumps({"title": "test_title", "body": "test body", "userId": 1})
+        new_post = await request(f"{baseurl}/node_config/insert", body=body, method="POST", headers=headers)
+        # print(f"POST request=> status:{new_post.status}, json:{await new_post.json()}")
 
-    # GET
-    headers = {"Content-type": "application/json"}
-    response = await request(f"{baseurl}/posts/2", method="GET", headers=headers)
-    print(f"GET request=> status:{response.status}, json:{await response.json()}")
+        Element("async_state").element.innerText = "Insert is done, Successed?"
+        # Element("async_state").element.innerText = await response.text
 
-    # POST
-    body = json.dumps({"title": "test_title", "body": "test body", "userId": 1})
-    new_post = await request(f"{baseurl}/posts", body=body, method="POST", headers=headers)
-    print(f"POST request=> status:{new_post.status}, json:{await new_post.json()}")
+    def do_insert():
+        display ('doing Insert', target='async_state')
+        xx = {}
+        xx['mqtt_topic'] = Element("mqtt_topic").value
+        xx['json'] = Element("json").value
+        print(xx)
+        asyncio.ensure_future(async_insert())
 
-    # PUT
-    body = json.dumps({"id": 1, "title": "test_title", "body": "test body", "userId": 2})
-    new_post = await request(f"{baseurl}/posts/1", body=body, method="PUT", headers=headers)
-    print(f"PUT request=> status:{new_post.status}, json:{await new_post.json()}")
+        
 
-    # DELETE
-    new_post = await request(f"{baseurl}/posts/1", method="DELETE", headers=headers)
-    print(f"DELETE request=> status:{new_post.status}, json:{await new_post.json()}")
 
-asyncio.ensure_future(main())
+
+    def do_update():
+        pass
+
+    def do_delete():
+        pass
+
+    def search_input():
+        print(Element("search").value)
+
 </py-script>
+
 
 {% endblock %}
