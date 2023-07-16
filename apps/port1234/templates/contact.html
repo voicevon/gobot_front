@@ -1,15 +1,18 @@
 
 {% extends "common_webpage.html" %}
+{% block pyscript%}
+
+{% endblock%}
 {% block page_content %}
 <br>
 热线：冯先生 133-0640-0990(微信同号)<br><br>
 地址：山东，济南，市中区，锦绣苑<br>
+<div id="pyscript_ready"></div>
 
 <br><br>
 快速入口
 <li> <a style="text-decoration: none;" href="/twh">散牙自动仓</a></li>
+<li> <a style="text-decoration: none;" href="/node_config">NodeConfig</a></li>
 <li> <a style="text-decoration: none;" href="/ocr">ocr_cloud</a></li>
-<py-script>
-    print("pyscript  is here")
-</py-script>
+
 {% endblock %}

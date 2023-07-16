@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>GET, POST, PUT, DELETE example</title>
+
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <py-config>
+      [[fetch]]
+      files = ["/static/request.py"]
+    </py-config>
+  </head>
+
+  <body><p>
+    Hello world request example! <br>
+    Here is the output of your request:
+    </p>
+    <py-script>
+    print("1111111111111")
+    from pyodide.http import pyfetch, FetchResponse
+    print("22222222222")
+    from typing import Optional, Any
+    print("333333333333333")
+    
+    async def request(url: str, method: str = "GET", body: Optional[str] = None,
+                        headers: Optional[dict[str, str]] = None, **fetch_kwargs: Any) -> FetchResponse:
+
+        kwargs = {"method": method, "mode": "cors"}  # CORS: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+        if body and method not in ["GET", "HEAD"]:
+            kwargs["body"] = body
+        if headers:
+            kwargs["headers"] = headers
+        kwargs.update(fetch_kwargs)
+    
+        response = await pyfetch(url, **kwargs)
+        return response
+
+        
+
+    print("ccccccccccccccccccc")
+    import asyncio
+    import json
+    print("ffffffffffffff")
+    async def main():
+        baseurl = "https://jsonplaceholder.typicode.com"
+
+        # GET
+        headers = {"Content-type": "application/json"}
+        response = await request(f"{baseurl}/posts/2", method="GET", headers=headers)
+        print(f"GET request=> status:{response.status}, json:{await response.json()}")
+
+
+    print("hhhhhhhhhhhh")
+    asyncio.ensure_future(main())
+    print("kkkkkkkkkkkk")
+
+    </py-script>
+
+    <div>
+    <p>
+        You can also use other methods. See fetch documentation: <br>
+        https://developer.mozilla.org/en-US/docs/Web/API/fetch#parameters
+    </p>
+    </div>
+    <div>
+        <p>
+        See pyodide documentation for what to do with a FetchResponse object: <br>
+        https://pyodide.org/en/stable/usage/api/python-api.html#pyodide.http.FetchResponse
+        </p>
+    </div>
+  </body>
+</html>

@@ -95,6 +95,17 @@ def read_config():
     key = request.args.get('k', default='none', type=str)
     return key
 
+@app.route('/node_config')
+def node_config():
+    key = request.args.get('key', default='', type=str)
+    # read from database
+    values={}
+    if key=='':
+        values = {"ocr","twh"}
+    # return render_template('node_config/index.html', values = values)
+    return render_template('node_config/test.html', values = values)
+    
+
 g_mqtt_broker_config.client_id = "230604"
 g_mqtt.connect_to_broker(g_mqtt_broker_config,blocked_connection=True)
 Start_TwhWcs_Process()
