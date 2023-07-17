@@ -13,7 +13,7 @@
 {% block page_content %}
 <div id="pyscript_ready">Py-Script is loading... </div>
 <table width="100%">
-    <td>search mqtt_topic...<br>
+    <td valign="top">search mqtt_topic...<br>
         <input id="search" py-input="search_input()">
         <div id="mqtt_topics"></div>
     </td>
@@ -51,32 +51,34 @@
     headers = {"Content-type": "application/json"}
     g_json = {}
 
-    async def async_save(json_data):
-        # POST
-        body = json.dumps(json_data)
-        new_post = await request(f"{baseurl}/node_config/save", body=body, method="POST", headers=headers)
-        # print(f"POST request=> status:{new_post.status}, json:{await new_post.json()}")
+    async def async_request_post(url, input_json, post_function=None):
+        body = json.dumps(input_json)
+        response = await request(url, body=body, method="POST", headers=headers)
+        if post_function is not None:
+            post_function(await response.json())
 
-        Element("async_state").element.innerText = "Insert is done, Successed?"
-        # Element("async_state").element.innerText = await response.text
+
+    def do_save_post(response_json):
+        Element("async_state").element.innerText = response_json['result']
 
     def do_save():
         display ('doing Insert', target='async_state')
+        url = f"{baseurl}/node_config/save"
         inputs = {}
         inputs['mqtt_topic'] = Element("editor_mqtt_topic").value
         inputs['config'] = Element("editor_config").value
-        asyncio.ensure_future(async_save(inputs))
+        post_function = do_save_post
+        asyncio.ensure_future(async_request_post(url, inputs, post_function))
 
-    async def async_delete(json_data):
-        body = json.dumps(json_data)
-        new_post = await request(f"{baseurl}/node_config/delete", body=body, method="POST", headers=headers)
 
     def do_delete():
+        url = f"{baseurl}/node_config/delete"
         json={}
         json['mqtt_topic'] = Element("editor_mqtt_topic").element.value
-        asyncio.ensure_future(async_delete(json))
+        
+        asyncio.ensure_future(async_request_post(url,json))
 
-    def display_mqtt_topic_list(json):
+    def search_input_post(json):
         global g_json
         g_json = json
         html = ''
@@ -87,16 +89,12 @@
                 index = index + 1
         Element('mqtt_topics').element.innerHTML = html
 
-    async def async_search_input(json_data):
-        # POST
-        body = json.dumps(json_data)
-        new_post = await request(f"{baseurl}/node_config/search", body=body, method="POST", headers=headers)
-        display_mqtt_topic_list(await new_post.json())
-
     def search_input():
+        url = f"{baseurl}/node_config/search"
         inputs = {}
         inputs['mqtt_topic'] = Element("search").value
-        asyncio.ensure_future(async_search_input(inputs))
+        post_function = search_input_post
+        asyncio.ensure_future(async_request_post(url, inputs, post_function))
     
     def on_mqtt_topic_click():
         Element("editor_mqtt_topic").element.value = 123

@@ -163,12 +163,12 @@ def node_config_save():
                 table_config.update(config_item, doc_ids=doc_ids)
                 topic,payload=(config_item['mqtt_topic'], config_item['config'])
                 g_mqtt.publish(topic, payload)              
-                return "update is ok"
+                return {"result":"Updated to node_configs.json"}
             else:
                 # do insert
                 print("do insert")
                 new_doc_id = table_config.insert(config_item)
-                return "Insert is OK"
+                return {"result":"Inserted to node_configs.json"}
 
         else:
             return ("request is not json")
