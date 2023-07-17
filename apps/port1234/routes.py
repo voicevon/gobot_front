@@ -125,6 +125,22 @@ def node_config_search():
     else:
         print("Content_type is not json.")
         return "insert failed"
+    
+@app.route('/node_config/delete', methods=['POST'])
+def node_config_delete():
+    content_type = request.headers.get('Content-Type')
+    if content_type == 'application/json':
+        if request.is_json:
+            print("Yes, request is json")
+            mqtt_topic = request.json['mqtt_topic']
+            table_config = TinyDB('node_configs.json')
+            items = table_config.remove(Query().mqtt_topic == mqtt_topic)
+            return items
+        else:
+            return ("request is not json")
+    else:
+        print("Content_type is not json.")
+        return "insert failed"    
 
 @app.route('/node_config/save', methods=['POST','GET'])
 def node_config_save():

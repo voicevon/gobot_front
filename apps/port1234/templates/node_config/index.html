@@ -50,7 +50,7 @@
     headers = {"Content-type": "application/json"}
     g_json = {}
 
-    async def async_insert(json_data):
+    async def async_save(json_data):
         # POST
         body = json.dumps(json_data)
         new_post = await request(f"{baseurl}/node_config/save", body=body, method="POST", headers=headers)
@@ -64,10 +64,16 @@
         inputs = {}
         inputs['mqtt_topic'] = Element("editor_mqtt_topic").value
         inputs['config'] = Element("editor_config").value
-        asyncio.ensure_future(async_insert(inputs))
+        asyncio.ensure_future(async_save(inputs))
+
+    async def async_delete(json_data):
+        body = json.dumps(json_data)
+        new_post = await request(f"{baseurl}/node_config/delete", body=body, method="POST", headers=headers)
 
     def do_delete():
-        pass
+        json={}
+        json['mqtt_topic'] = Element("editor_mqtt_topic").element.value
+        asyncio.ensure_future(async_delete(json))
 
     def display_mqtt_topic_list(json):
         global g_json
