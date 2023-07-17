@@ -161,12 +161,15 @@ def node_config_save():
                 doc_ids = []
                 doc_ids.append(items[0].doc_id)
                 table_config.update(config_item, doc_ids=doc_ids)
+                topic,payload=(config_item['mqtt_topic'], config_item['config'])
+                g_mqtt.publish(topic, payload)              
                 return "update is ok"
             else:
                 # do insert
                 print("do insert")
                 new_doc_id = table_config.insert(config_item)
                 return "Insert is OK"
+
         else:
             return ("request is not json")
     else:
@@ -176,7 +179,7 @@ def node_config_save():
 
 
 g_mqtt_broker_config.client_id = "230604"
-g_mqtt.connect_to_broker(g_mqtt_broker_config,blocked_connection=True)
+g_mqtt.connect_to_broker(g_mqtt_broker_config, blocked_connection=True)
 Start_TwhWcs_Process()
 
 if __name__ == '__main__':
