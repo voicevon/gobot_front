@@ -112,11 +112,11 @@ def node_config_search():
     if content_type == 'application/json':
         if request.is_json:
             print("Yes, request is json")
-            config_item = request.json
+            sub_mqtt_topic = request.json['mqtt_topic']
             table_config = TinyDB('node_configs.json')
             q = Query()
             test_func = lambda value, search: search in value
-            items = table_config.search(Query().mqtt_topic.test(test_func, 'p'))
+            items = table_config.search(Query().mqtt_topic.test(test_func, sub_mqtt_topic))
             # items = table_config.search(where('mqtt_topic').matches('*p*'))
             return items
 

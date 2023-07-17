@@ -15,14 +15,11 @@
 <table width="100%">
     <td>search mqtt_topic...<br>
         <input id="search" py-input="search_input()">
-        <div id="values"></div>
-        {% for value in values %}
-        <button>{{ value }} </button><br>
-        {% endfor %}</div>
+        <div id="mqtt_topics"></div>
     </td>
     <td>
-        <input id="mqtt_topic" width="30" value="test_topic"><br>
-        <textarea id="json_config">{"my_os":"windows", "from_camera":false}</textarea><br>
+        <input id="editor_mqtt_topic" width="30" value="test_topic"><br>
+        <textarea id="editor_config">{"my_os":"windows", "from_camera":false}</textarea><br>
         <button id="delete" py-click="do_delete()">Delete</button>
         <button id="save" py-click="do_save()">Save</button>
         <br><br>
@@ -38,20 +35,20 @@
 
 <py-script>
     from pyscript import when
-    @when("click", selector="#values button")
-    def value_click(evt):
+
+    @when("click", selector="#mqtt_topics button")
+    def any_name(evt):
+        print("aaaaaaaaaaaaaaaaaa")
         print(evt.target.innerText)
+        # Element("editor_mqtt_topic").element.value = g_json[0]['mqtt_topic']
 
-    Element("pyscript_ready").element.innerText="Py-Script is ready."
-</py-script>
-
-<py-script>
     import asyncio
     import json
     from static.request import request # import our request function.
 
     baseurl = "http://localhost:5000"
     headers = {"Content-type": "application/json"}
+    g_json = {}
 
     async def async_insert(json_data):
         # POST
@@ -65,29 +62,49 @@
     def do_save():
         display ('doing Insert', target='async_state')
         inputs = {}
-        inputs['mqtt_topic'] = Element("mqtt_topic").value
-        inputs['config'] = Element("json_config").value
+        inputs['mqtt_topic'] = Element("editor_mqtt_topic").value
+        inputs['config'] = Element("editor_config").value
         asyncio.ensure_future(async_insert(inputs))
 
     def do_delete():
         pass
 
+    def display_mqtt_topic_list(json):
+        global g_json
+        g_json = json
+        html = ''
+        index = 0
+        if json != []:
+            for item in json:
+                html = html + '<button py-click="select_mqtt_topic('+ str(index) + ')">'  + item['mqtt_topic']  + '</button><br>' 
+                index = index + 1
+        Element('mqtt_topics').element.innerHTML = html
+
     async def async_search_input(json_data):
         # POST
         body = json.dumps(json_data)
         new_post = await request(f"{baseurl}/node_config/search", body=body, method="POST", headers=headers)
-        print(f"POST request=> status:{new_post.status}, json:{await new_post.json()}")
-
-        Element("async_state").element.innerText = "Search is done, Successed?"
-        # Element("async_state").element.innerText = await response.text
+        display_mqtt_topic_list(await new_post.json())
 
     def search_input():
         inputs = {}
         inputs['mqtt_topic'] = Element("search").value
-        print(inputs)
         asyncio.ensure_future(async_search_input(inputs))
+    
+    def on_mqtt_topic_click():
+        Element("editor_mqtt_topic").element.value = 123
+
+    def select_mqtt_topic(index):
+        # print("{test}  test", index)
+        # print(g_json[index]['mqtt_topic'])
+        Element('editor_mqtt_topic').element.value = g_json[index]["mqtt_topic"]
+        Element('editor_config').element.value = g_json[index]["config"]
+
+    Element("pyscript_ready").element.innerText="Py-Script is ready."
+
 
 </py-script>
 
 
 {% endblock %}
+
