@@ -14,7 +14,7 @@
 	// #define I_AM_WIFI_MANAGER_DEMO
 
 	// #define I_AM_BARCODE_READER
-
+	define I_AM_ON_BOARD_WEIGHTING_NODE
 
 
 #endif
