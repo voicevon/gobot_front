@@ -1,7 +1,7 @@
 #include "app_base.h"
-#include "MyLibs/mqtt/mqtt_subscriber_manager.h"
+#include "von/utility/mqtt/subscriber/mqtt_subscriber_manager.h"
 #include "Mylibs/utility/webserver_starter/webserver_starter.h"
-#include "MyLibs/mqtt/wifi_mqtt_client.h"  //g_mqtt_client
+#include "von/utility/mqtt/g_var.h"
 
 
 void AppBase::Init(){
@@ -67,7 +67,7 @@ void AppBase::StartWebServer(ApWebserver_DictionBase* diction){
 //****************************************************************************************
 //              MQTT
 //
-void AppBase::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+void AppBase::_onGot_MqttMessage_whole(const char* payload, size_t payload_len){
     if (payload_len > __head_text_message.GetBufferSize()){
         String pp = String(payload);
         Logger::Error("AppBase::onGot_MqttMessage() oversize");

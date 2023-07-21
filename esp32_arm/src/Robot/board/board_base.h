@@ -7,7 +7,8 @@
 #include <Adafruit_MCP23X17.h>
 #include <Adafruit_VL53L0X.h>
 #include <Adafruit_APDS9960.h>
-#include "MyLibs/utility/logger.h"
+#include "von/utility/logger.h"
+
 
 class BoardBase{
     public:
@@ -28,6 +29,7 @@ class BoardBase{
         bool _Begin_Vl531l0x(Adafruit_VL53L0X* vl53l0x, uint8_t i2c_address, TwoWire* i2c_bus);
         bool _Begin_Apds9960(Adafruit_APDS9960* apds9960, uint8_t i2c_address, TwoWire* i2c_bus);
         void _Init_SPIFFS();
+        void _Init_LittleFs();
 
     private:
         static uint8_t __i2c_bus_index;

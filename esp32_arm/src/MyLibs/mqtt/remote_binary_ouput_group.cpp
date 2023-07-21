@@ -1,6 +1,6 @@
 #include "remote_binary_output_group.h"
 #include "ArduinoJson.h"
-#include "MyLibs/utility/logger.h"
+#include "von/utility/logger.h"
 #include "MyLibs/basic/memory_helper.h"
 
 
@@ -8,7 +8,7 @@
 //     this->__leds_count = leds_count;
 // }
 
-void RemoteBinaryOutputGroup::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+void RemoteBinaryOutputGroup::_onGot_MqttMessage_whole(const char* payload, size_t payload_len){
     for (int i=0; i<payload_len; i++){
         __mqtt_payload[i] = *(payload +i);
     }

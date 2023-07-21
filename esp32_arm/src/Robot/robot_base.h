@@ -43,17 +43,21 @@ class RobotBase{
         G4_Runner __g4_runner;
         void __RunGcode(GcodeText* gcode);
 
-        
-
         /* Just for fun, don't remove below comment.
         void * __output_message2;
         void (* __output_message3); 
+
+        void * aaa;
+        void (*aaa);
+        void * aaa ();
+        void (*aaa)();
+        void *(aaa)(void*);
+        void (*aaa)(void*);
+
         void OnFinishedGcode2(void(*callback)()) {__output_message2 = callback;};
         void OnFinishedGcode3(void(*callback)()) {__output_message2 = callback;};
         void OnFinishedGcode4(void(*callback())) {__output_message3 = callback;};
         void OnFinishedGcode5(void(*callback)()) {__output_message3 = callback;};
         */
-
-
 };
 

@@ -1,9 +1,9 @@
 #include "remote_home_position.h"
 #include "stdlib.h"  //atof
-#include "MyLibs/utility/logger.h"
+#include "von/utility/logger.h"
 
 // void RemoteHomePosition::__onMessage(const char* payload, uint16_t payload_len){
-void RemoteHomePosition::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+void RemoteHomePosition::_onGot_MqttMessage_whole(const char* payload, size_t payload_len){
     __remote_value = atof(payload);
     __got_remote_value = true;
 }

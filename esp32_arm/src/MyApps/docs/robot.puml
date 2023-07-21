@@ -1,0 +1,40 @@
+@startuml robot-deploy
+
+frame robot{
+    collections mcode_runner
+    collections sensor[
+    sensors
+    ===
+    position_triggers
+    ]
+    collections eef
+    mcode_runner <-- sensor
+    mcode_runner --> eef
+    queue gcode_queue
+}
+
+frame cnc{
+    frame arm_solution{
+        card IK
+        card FK
+        card MiddleKinematic
+        IK <-[dashed]- MiddleKinematic
+    }
+    card planner
+    planner <-- gcode_queue
+    planner <-[dashed]- IK
+}
+frame mover{
+    queue move_blocks
+    collections actuators
+}
+planner --> move_blocks
+move_blocks --> actuators
+
+file gcode_file
+gcode_queue <-[dashed]-- gcode_file
+gcode_queue <-- communicator
+mcode_runner <--gcode_queue
+
+
+@enduml

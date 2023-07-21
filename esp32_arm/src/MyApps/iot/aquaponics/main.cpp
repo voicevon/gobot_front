@@ -1,8 +1,8 @@
 
 #include "MyLibs/MyFunctions.hpp"
 #include "board/board.h"
-#include "MyLibs/mqtt/wifi_mqtt_client.h"
-#include "MyLibs/mqtt/mqtt_subscriber_manager.h"
+#include "von/utility/mqtt/g_var.h"
+#include "von/utility/mqtt/subscriber/mqtt_subscriber_manager.h"
 
 
 

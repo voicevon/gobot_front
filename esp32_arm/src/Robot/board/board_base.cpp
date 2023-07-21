@@ -1,6 +1,8 @@
 #include "board_base.h"
-#include "MyLibs/utility/logger.h"
-#include "SPIFFS.h"
+#include "von/utility/logger.h"
+#include "LittleFS.h"
+// #include "SPIFFS.h"
+#include "LittleFS.h"
 #include "MyLibs/basic/memory_helper.h"
 
 uint8_t BoardBase::__ledc_channel_index = 0;
@@ -81,13 +83,29 @@ bool BoardBase::_Begin_Apds9960(Adafruit_APDS9960* apds9960, uint8_t i2c_address
 
 
 
-void BoardBase::_Init_SPIFFS() {
-	if (!SPIFFS.begin(true)) {
-		Logger::Error("An error has occurred while mounting SPIFFS");
-        Logger::Halt("");
-	}
-	Logger::Info(" BoardBase::Init_SPIFFS() , SPIFFS mounted successfully");
-    Serial.print("SPIFFS Free: "); Serial.println(MemoryHelper::humanReadableSize((SPIFFS.totalBytes() - SPIFFS.usedBytes())));
-    Serial.print("SPIFFS Used: "); Serial.println(MemoryHelper::humanReadableSize(SPIFFS.usedBytes()));
-    Serial.print("SPIFFS Total: "); Serial.println(MemoryHelper::humanReadableSize(SPIFFS.totalBytes()));
+// void BoardBase::_Init_SPIFFS() {
+// 	if (!SPIFFS.begin(true)) {
+// 		Logger::Error("An error has occurred while mounting SPIFFS");
+//         Logger::Halt("");
+// 	}
+// 	Logger::Info(" BoardBase::Init_SPIFFS() , SPIFFS mounted successfully");
+//     Serial.print("SPIFFS Free: "); Serial.println(MemoryHelper::humanReadableSize((SPIFFS.totalBytes() - SPIFFS.usedBytes())));
+//     Serial.print("SPIFFS Used: "); Serial.println(MemoryHelper::humanReadableSize(SPIFFS.usedBytes()));
+//     Serial.print("SPIFFS Total: "); Serial.println(MemoryHelper::humanReadableSize(SPIFFS.totalBytes()));
+// }
+
+void BoardBase::_Init_LittleFs(){
+    if (!LittleFS.begin(false /* false: Do not format if mount failed */)) {
+        Serial.println("Failed to mount LittleFS");
+
+        if (!LittleFS.begin(true /* true: format */)) {
+            Logger::Error("An error has occurred while mounting LittleFs");
+            Logger::Halt("");
+        } else {
+            Serial.println("LittleFS formatted successfully");
+        }
+    } else { // Initial mount success
+    	Logger::Info(" BoardBase::_Init_LittleFs() , LittleFS mounted successfully");
+    }
 }
+

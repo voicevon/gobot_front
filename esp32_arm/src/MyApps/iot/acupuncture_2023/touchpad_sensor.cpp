@@ -1,5 +1,5 @@
 #include "touchpad_sensor.h"
-#include "MyLibs/utility/logger.h"
+#include "von/utility/logger.h"
 
 
 #define SENSOR_DIED_CODE 254

@@ -4,9 +4,9 @@
 #include <WiFi.h>
 #include "MyLibs/utility/webserver_starter/webserver_starter.h"
 #include "web_configurator_diction_demo.h"
-#include "MyLibs/utility/logger.h"
+#include "von/utility/logger.h"
 #include "Robot/board/board_base.h"
-#include "MyLibs/mqtt/wifi_mqtt_client.h"
+#include "von/utility/mqtt/g_var.h"
 
 #include "../select_app.h"
 #ifdef I_AM_WIFI_MANAGER_DEMO

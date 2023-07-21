@@ -1,6 +1,6 @@
 #include "gcode_text.h"
 #include "HardwareSerial.h"
-#include "MyLibs/utility/logger.h"
+#include "von/utility/logger.h"
 
 
 GcodeText::GcodeText(){

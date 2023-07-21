@@ -33,6 +33,8 @@ class KvmNodeScreen:
 
     def Capture_Image(self):
         with mss() as sct:
+            # Logger.Info("self.__resolution")
+            # Logger.Print("", self.__resolution)
             screenShot = sct.grab(self.__resolution)
             pil_img = Image.frombytes('RGB', (screenShot.width, screenShot.height), screenShot.rgb)
             # img = Image.frombytes('P', (screenShot.width, screenShot.height), screenShot.rgb)
@@ -46,9 +48,9 @@ class KvmNodeScreen:
         '''
         now_time = time.time()
         if int(now_time - self.__start_time) > self.__fps:
-            if self.__OS !='Pi_lite':
-                cv2.imshow('camera', image)
-                cv2.waitKey(1)
+            # if self.__OS !='Pi_lite':
+            #     cv2.imshow('camera', image)
+            #     cv2.waitKey(1)
             bytes_count =  g_mqtt.publish_cv_image(self.__mqtt_topic_of_screen_image,  image)
             self.__start_time = time.time()
             Logger.Print(self.node_name +  " published to: " + self.__mqtt_topic_of_screen_image  + "  bytes (KB)", bytes_count / 1000)

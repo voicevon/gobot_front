@@ -1,8 +1,8 @@
 #include "remote_var_int.h"
-#include "MyLibs/utility/logger.h"
+#include "von/utility/logger.h"
 
 
-void RemoteVar_Int::onGot_MqttMessage(const char* payload, uint16_t payload_len){
+void RemoteVar_Int::_onGot_MqttMessage_whole(const char* payload, size_t payload_len){
     __remote_value = atoi(payload);
     __got_remote_value = true;
     Logger::Debug("ConcernSensorSetter::onGot_MqttMessage");

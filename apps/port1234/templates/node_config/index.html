@@ -1,0 +1,116 @@
+{% extends "common_webpage.html" %}
+{% block pyscript%}
+<link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+<script defer src="https://pyscript.net/latest/pyscript.js"></script>
+<py-config>
+    [splashscreen]
+    enabled = true
+    [[fetch]]
+    files = ["/static/request.py"]
+</py-config>
+{% endblock%}
+
+{% block page_content %}
+<div id="pyscript_ready">Py-Script is loading... </div>
+<table width="100%">
+    <td valign="top">search mqtt_topic...<br>
+        <input id="search" py-input="search_input()">
+        <div id="mqtt_topics"></div>
+    </td>
+    <td>
+        mqtt_topic<br>
+        <input id="editor_mqtt_topic" size="40" value="test_topic"><br>
+        <textarea id="editor_config" cols="50" rows="12">{"my_os":"windows", "from_camera":false}</textarea><br>
+        <button id="delete" py-click="do_delete()">Delete</button>
+        <button id="save" py-click="do_save()">Save</button>
+        <br><br>
+        <label id="async_state"></label>
+    </td>
+</table>
+<a href="https://jsoneditoronline.org/">json online editor</a>
+
+
+
+
+
+
+
+<py-script>
+    from pyscript import when
+
+    @when("click", selector="#mqtt_topics button")
+    def any_name(evt):
+        print("aaaaaaaaaaaaaaaaaa")
+        print(evt.target.innerText)
+        # Element("editor_mqtt_topic").element.value = g_json[0]['mqtt_topic']
+
+    import asyncio
+    import json
+    from static.request import request # import our request function.
+
+    baseurl = "http://localhost:5000"
+    headers = {"Content-type": "application/json"}
+    g_json = {}
+
+    async def async_request_post(url, input_json, post_function=None):
+        body = json.dumps(input_json)
+        response = await request(url, body=body, method="POST", headers=headers)
+        if post_function is not None:
+            post_function(await response.json())
+
+
+    def do_save_post(response_json):
+        Element("async_state").element.innerText = response_json['result']
+
+    def do_save():
+        display ('doing Insert', target='async_state')
+        url = f"{baseurl}/node_config/save"
+        inputs = {}
+        inputs['mqtt_topic'] = Element("editor_mqtt_topic").value
+        inputs['config'] = Element("editor_config").value
+        post_function = do_save_post
+        asyncio.ensure_future(async_request_post(url, inputs, post_function))
+
+
+    def do_delete():
+        url = f"{baseurl}/node_config/delete"
+        json={}
+        json['mqtt_topic'] = Element("editor_mqtt_topic").element.value
+        
+        asyncio.ensure_future(async_request_post(url,json))
+
+    def search_input_post(json):
+        global g_json
+        g_json = json
+        html = ''
+        index = 0
+        if json != []:
+            for item in json:
+                html = html + '<button py-click="select_mqtt_topic('+ str(index) + ')">'  + item['mqtt_topic']  + '</button><br>' 
+                index = index + 1
+        Element('mqtt_topics').element.innerHTML = html
+
+    def search_input():
+        url = f"{baseurl}/node_config/search"
+        inputs = {}
+        inputs['mqtt_topic'] = Element("search").value
+        post_function = search_input_post
+        asyncio.ensure_future(async_request_post(url, inputs, post_function))
+    
+    def on_mqtt_topic_click():
+        Element("editor_mqtt_topic").element.value = 123
+
+    def select_mqtt_topic(index):
+        # print("{test}  test", index)
+        # print(g_json[index]['mqtt_topic'])
+        Element('editor_mqtt_topic').element.value = g_json[index]["mqtt_topic"]
+        Element('editor_config').element.value = g_json[index]["config"]
+
+    Element("pyscript_ready").element.innerText="Py-Script is ready."
+
+
+</py-script>
+
+
+{% endblock %}
+

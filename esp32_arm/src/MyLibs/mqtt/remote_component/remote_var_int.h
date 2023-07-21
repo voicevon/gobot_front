@@ -1,6 +1,6 @@
 #pragma once
-// #include "Mqtt/mqtt_subscriber_base.h"
-#include "MyLibs/mqtt/mqtt_subscriber_base.h"
+#include "von/utility/mqtt/subscriber/mqtt_subscriber_base.h"
+
 
 class RemoteVar_Int: public MqttSubscriberBase{
     public:
@@ -8,7 +8,7 @@ class RemoteVar_Int: public MqttSubscriberBase{
         int* Get(){return &__remote_value;};
 
     private:
-        void onGot_MqttMessage(const char* payload, uint16_t payload_len) override;
+        void _onGot_MqttMessage_whole(const char* payload, size_t payload_len) override;
         bool __got_remote_value = false;
         int __remote_value;
         uint8_t __leds_count;

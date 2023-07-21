@@ -1,8 +1,7 @@
 #include "sillicon_pump_robot.h"
 #include "Robot/mcode_runner/mcode_os.h"
 #include "CNC/Actuator/dc_motor/actuator_encoder_calculator.h"
-#include "MyLibs/mqtt/wifi_mqtt_client.h"
-// #include "MyLibs/component/display/digital_number/hc595_digital_number.h"
+#include "von/utility/mqtt/g_var.h"
 #include "Robot/board/display/digital_number/hc595_digital_number.h"
 
 void Silicon_Pump_Robot::MySpinOnce(){

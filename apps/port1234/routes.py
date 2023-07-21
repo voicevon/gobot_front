@@ -1,12 +1,13 @@
 # https://github.com/abalarin/Flask-on-Linode
 
-from flask import Flask,  render_template, request, redirect,flash, url_for
+from flask import Flask,  render_template, redirect,flash, url_for, request
 from twh_wcs.wcs_main import Start_TwhWcs_Process
 from twh_user.route import web_user
 from twh_stock.route import web_stock
 from von.mqtt.mqtt_agent import g_mqtt,g_mqtt_broker_config
 # from von.ocr.ocr_factory import OcrFactory
 # from kvm_ocr_cloud.ocr_node_factory import OcrNodeFactory
+from tinydb import TinyDB, Query, where
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '20221220'
@@ -83,12 +84,102 @@ def product_iot():
 
 @app.route('/ocr')
 def ocr():
-    kvm_nodes = OcrNodeFactory.GetKnown_KvmNodeList()
-    app_windows = OcrNodeFactory.GetKnown_AppWindowList()
+    # kvm_nodes = OcrNodeFactory.GetKnown_KvmNodeList()
+    # app_windows = OcrNodeFactory.GetKnown_AppWindowList()
+    kvm_nodes = {"yalefu", 'yalefu_viewer'}
+    app_windows = {}
     return render_template('ocr/index.html', kvm_nodes=kvm_nodes,app_windows=app_windows)
+    # return render_template('ocr/index.html')
+
+@app.route('/read_config')
+def read_config():
+    key = request.args.get('k', default='none', type=str)
+    return key
+
+@app.route('/node_config')
+def node_config():
+    key = request.args.get('key', default='', type=str)
+    # read from database
+    values={}
+    if key=='':
+        values = {"ocr","twh"}
+    return render_template('node_config/index.html', values = values)
+    # return render_template('node_config/test.html', values = values)
+
+@app.route('/node_config/search', methods=['POST','GET'])
+def node_config_search():
+    content_type = request.headers.get('Content-Type')
+    if content_type == 'application/json':
+        if request.is_json:
+            print("Yes, request is json")
+            sub_mqtt_topic = request.json['mqtt_topic']
+            table_config = TinyDB('node_configs.json')
+            q = Query()
+            test_func = lambda value, search: search in value
+            items = table_config.search(Query().mqtt_topic.test(test_func, sub_mqtt_topic))
+            # items = table_config.search(where('mqtt_topic').matches('*p*'))
+            return items
+
+        else:
+            return ("request is not json")
+    else:
+        print("Content_type is not json.")
+        return "insert failed"
+    
+@app.route('/node_config/delete', methods=['POST'])
+def node_config_delete():
+    content_type = request.headers.get('Content-Type')
+    if content_type == 'application/json':
+        if request.is_json:
+            print("Yes, request is json")
+            mqtt_topic = request.json['mqtt_topic']
+            table_config = TinyDB('node_configs.json')
+            items = table_config.remove(Query().mqtt_topic == mqtt_topic)
+            return items
+        else:
+            return ("request is not json")
+    else:
+        print("Content_type is not json.")
+        return "insert failed"    
+
+@app.route('/node_config/save', methods=['POST','GET'])
+def node_config_save():
+    # print("insert method is", request.method)
+    content_type = request.headers.get('Content-Type')
+    # print("conetent_type", content_type)
+    if content_type == 'application/json':
+        if request.is_json:
+            print("Yes, request is json")
+            config_item = request.json
+            table_config = TinyDB('node_configs.json')
+            q = Query()
+            items = table_config.search(q.mqtt_topic == config_item['mqtt_topic'])
+            if len(items)>0:
+                # do update
+                print("do update")
+                print(items[0].doc_id)
+                doc_ids = []
+                doc_ids.append(items[0].doc_id)
+                table_config.update(config_item, doc_ids=doc_ids)
+                topic,payload=(config_item['mqtt_topic'], config_item['config'])
+                g_mqtt.publish(topic, payload)              
+                return {"result":"Updated to node_configs.json"}
+            else:
+                # do insert
+                print("do insert")
+                new_doc_id = table_config.insert(config_item)
+                return {"result":"Inserted to node_configs.json"}
+
+        else:
+            return ("request is not json")
+    else:
+        print("Content_type is not json.")
+        return "insert failed"
+
+
 
 g_mqtt_broker_config.client_id = "230604"
-g_mqtt.connect_to_broker(g_mqtt_broker_config,blocked_connection=True)
+g_mqtt.connect_to_broker(g_mqtt_broker_config, blocked_connection=True)
 Start_TwhWcs_Process()
 
 if __name__ == '__main__':
