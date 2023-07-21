@@ -29,7 +29,11 @@ void setup(){
 
 void loop(){
     board.GetMs5837()->SpinOnce();
+    
+    board.GetMs5837()->ReadSensor_data_debug();
+    Serial.println("xx")
     delay(10);
+
 }
 
 #endif

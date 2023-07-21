@@ -3,7 +3,7 @@
 // #include <Arduino.h>
 
 #define MS5837_ADDRESS 0x76
-#define MS5837_RESET 0Xff
+#define MS5837_RESET 0X1e
 #define MS5837_RESOLUTION_OF_4096 0Xff
 
 void Ms5837::Init(TwoWire* i2c){
@@ -13,7 +13,8 @@ void Ms5837::Init(TwoWire* i2c){
     __i2c->write(MS5837_RESET);
     __i2c->write(MS5837_RESOLUTION_OF_4096);
     __i2c->endTransmission();
-
+// Wait for reset to complete
+	delay(10);
 
 }
 
@@ -34,3 +35,10 @@ float Ms5837::__ReadSensor(){
     return __i2c->read();
 }
 
+float Ms5837::ReadSensor_data_debug(){
+
+    float xx = __ReadSensor();
+    return xx;
+
+
+}
