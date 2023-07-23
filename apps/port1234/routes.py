@@ -120,8 +120,8 @@ def lua_ide_save():
                 doc_ids = []
                 doc_ids.append(items[0].doc_id)
                 table_lua_ide.update(lua_ide_item, doc_ids=doc_ids)
-                topic,payload=(lua_ide_item['mac_addr'], lua_ide_item['lua_script'])
-                g_mqtt.publish(topic, payload)              
+                topic,payload=("intergral/mcu/reset", lua_ide_item['mac_addr'])
+                g_mqtt.publish(topic, payload, retain=False)              
                 return {"result":"Updated to lua_ide.json"}
             else:
                 # do insert
@@ -170,18 +170,20 @@ def lua_ide_search():
         print("Content_type is not json.")
         return "insert failed"
     
-# @app.route("/lua_mcu/down/184_214_26_31_207_204")
 @app.route("/lua_ide/down/<mac_addr>")
 def node_script(mac_addr):
     table_lua_ide = TinyDB('lua_ide.json')
     items = table_lua_ide.search(Query().mac_addr == mac_addr)
     if len(items) > 0:
+        print("found lua_script")
+        file_content = items[0]['lua_script']
+        return file_content
+    else:
+        print("trying to get default lua_script")
+        items = table_lua_ide.search(Query().mac_addr == 'default_for_blank_mcu')
         file_content = items[0]['lua_script']
         print (file_content)
         return file_content
-    else:
-        return ("print('There is no lua script for this node.... Please visit  http://voicevon.vicp.io:5000/lua_ide')")
-    # return send_file('static/main.lua')
 
 
 
