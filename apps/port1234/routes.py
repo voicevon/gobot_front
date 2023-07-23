@@ -1,6 +1,6 @@
 # https://github.com/abalarin/Flask-on-Linode
 
-from flask import Flask,  render_template, redirect,flash, url_for, request
+from flask import Flask,  render_template, redirect,flash, url_for, request, send_file
 from twh_wcs.wcs_main import Start_TwhWcs_Process
 from twh_user.route import web_user
 from twh_stock.route import web_stock
@@ -42,9 +42,7 @@ def hire():
 def hire_cpp():
     return render_template('hire/cpp.html')
 
-@app.route('/lua_ide')
-def lua_ide():
-    return render_template('lua/lua_ide.html')
+
 
 @app.route('/contact')
 def contact():
@@ -95,6 +93,97 @@ def ocr():
 def read_config():
     key = request.args.get('k', default='none', type=str)
     return key
+
+
+
+
+@app.route('/lua_ide')
+def lua_ide():
+    return render_template('lua_ide/index.html')
+
+@app.route('/lua_ide/save', methods=['POST','GET'])
+def lua_ide_save():
+    # print("insert method is", request.method)
+    content_type = request.headers.get('Content-Type')
+    # print("conetent_type", content_type)
+    if content_type == 'application/json':
+        if request.is_json:
+            print("Yes, request is json")
+            lua_ide_item = request.json
+            table_lua_ide = TinyDB('lua_ide.json')
+            q = Query()
+            items = table_lua_ide.search(q.mac_addr == lua_ide_item['mac_addr'])
+            if len(items)>0:
+                # do update
+                print("do update")
+                print(items[0].doc_id)
+                doc_ids = []
+                doc_ids.append(items[0].doc_id)
+                table_lua_ide.update(lua_ide_item, doc_ids=doc_ids)
+                topic,payload=(lua_ide_item['mac_addr'], lua_ide_item['lua_script'])
+                g_mqtt.publish(topic, payload)              
+                return {"result":"Updated to lua_ide.json"}
+            else:
+                # do insert
+                print("do insert")
+                new_doc_id = table_lua_ide.insert(lua_ide_item)
+                return {"result":"Inserted to lua_ide.json"}
+
+        else:
+            return ("request is not json")
+    else:
+        print("Content_type is not json.")
+        return "insert failed"
+
+@app.route('/lua_ide/delete', methods=['POST'])
+def lua_ide_delete():
+    content_type = request.headers.get('Content-Type')
+    if content_type == 'application/json':
+        if request.is_json:
+            print("Yes, request is json")
+            key = request.json['mac_addr']
+            table_lua_ide = TinyDB('lua_ide.json')
+            items = table_lua_ide.remove(Query().mac_addr == key)
+            return items
+        else:
+            return ("request is not json")
+    else:
+        print("Content_type is not json.")
+        return "insert failed"  
+
+@app.route('/lua_ide/search', methods=['POST','GET'])
+def lua_ide_search():
+    content_type = request.headers.get('Content-Type')
+    if content_type == 'application/json':
+        if request.is_json:
+            print("Yes, request is json")
+            sub_mac_addr = request.json['mac_addr']
+            table_lua_ide = TinyDB('lua_ide.json')
+            q = Query()
+            test_func = lambda value, search: search in value
+            items = table_lua_ide.search(Query().mac_addr.test(test_func, sub_mac_addr))
+            return items
+
+        else:
+            return ("request is not json")
+    else:
+        print("Content_type is not json.")
+        return "insert failed"
+    
+# @app.route("/lua_mcu/down/184_214_26_31_207_204")
+@app.route("/lua_ide/down/<mac_addr>")
+def node_script(mac_addr):
+    table_lua_ide = TinyDB('lua_ide.json')
+    items = table_lua_ide.search(Query().mac_addr == mac_addr)
+    if len(items) > 0:
+        file_content = items[0]['lua_script']
+        print (file_content)
+        return file_content
+    else:
+        return ("print('There is no lua script for this node.... Please visit  http://voicevon.vicp.io:5000/lua_ide')")
+    # return send_file('static/main.lua')
+
+
 
 @app.route('/node_config')
 def node_config():

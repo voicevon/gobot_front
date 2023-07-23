@@ -1,0 +1,108 @@
+{% extends "common_webpage.html" %}
+{% block pyscript%}
+<link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+<script defer src="https://pyscript.net/latest/pyscript.js"></script>
+<py-config>
+    [splashscreen]
+    enabled = true
+    [[fetch]]
+    files = ["/static/request.py"]
+</py-config>
+{% endblock%}
+
+{% block page_content %}
+<div id="pyscript_ready">Py-Script is loading... </div>
+<table width="100%" border="0">
+    <td valign="top">search mac_addr...<br>
+        <input id="search" py-input="search_input()">
+        <div id="mac_addrs"></div>
+    </td>
+    <td>
+        mac_addr<br>
+        <input id="editor_mac_addr" size="40" value="1_2_3_4_5_6"><br>
+        <textarea id="editor_lua_script" cols="50" rows="12">print("Hello lua ide ")</textarea><br>
+        <button id="delete" py-click="do_delete()">Delete</button>
+        <button id="save" py-click="do_save()">Save</button>
+        <br><br>
+        <label id="async_state"></label>
+    </td>
+</table>
+<a href="https://jsoneditoronline.org/">json online editor</a>
+
+
+
+<py-script>
+    from pyscript import when
+
+    @when("click", selector="#mac_addrs button")
+    def any_name(evt):
+        print("aaaaaaaaaaaaaaaaaa")
+        print(evt.target.innerText)
+        # Element("editor_mac_addr").element.value = g_json[0]['mac_addr']
+
+    import asyncio
+    import json
+    from static.request import request # import our request function.
+
+    baseurl = "http://localhost:5000"
+    headers = {"Content-type": "application/json"}
+    g_json = {}
+
+    async def async_request_post(url, input_json, post_function=None):
+        body = json.dumps(input_json)
+        response = await request(url, body=body, method="POST", headers=headers)
+        if post_function is not None:
+            post_function(await response.json())
+
+
+    def do_save_post(response_json):
+        Element("async_state").element.innerText = response_json['result']
+
+    def do_save():
+        display ('doing Insert', target='async_state')
+        url = f"{baseurl}/lua_ide/save"
+        inputs = {}
+        inputs['mac_addr'] = Element("editor_mac_addr").value
+        inputs['lua_script'] = Element("editor_lua_script").value
+        post_function = do_save_post
+        asyncio.ensure_future(async_request_post(url, inputs, post_function))
+
+
+    def do_delete():
+        url = f"{baseurl}/lua_ide/delete"
+        json={}
+        json['mac_addr'] = Element("editor_mac_addr").element.value
+        
+        asyncio.ensure_future(async_request_post(url,json))
+
+    def search_input_post(json):
+        global g_json
+        g_json = json
+        html = ''
+        index = 0
+        if json != []:
+            for item in json:
+                html = html + '<button py-click="select_key('+ str(index) + ')">'  + item['mac_addr']  + '</button><br>' 
+                index = index + 1
+        Element('mac_addrs').element.innerHTML = html
+
+    def search_input():
+        url = f"{baseurl}/lua_ide/search"
+        inputs = {}
+        inputs['mac_addr'] = Element("search").value
+        post_function = search_input_post
+        asyncio.ensure_future(async_request_post(url, inputs, post_function))
+
+
+    def select_key(index):
+        Element('editor_mac_addr').element.value = g_json[index]['mac_addr']
+        Element('editor_lua_script').element.value = g_json[index]['lua_script']
+
+    Element("pyscript_ready").element.innerText="Py-Script is ready."
+
+
+</py-script>
+
+
+{% endblock %}
+
