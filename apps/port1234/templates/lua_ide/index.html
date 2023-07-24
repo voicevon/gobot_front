@@ -1,4 +1,5 @@
 {% extends "common_webpage.html" %}
+{}
 {% block pyscript%}
 <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
 <script defer src="https://pyscript.net/latest/pyscript.js"></script>
@@ -12,15 +13,45 @@
 
 {% block page_content %}
 <div id="pyscript_ready">Py-Script is loading... </div>
-<table width="100%" border="0">
-    <td valign="top">search mac_addr...<br>
+<table width="100%" height="500">
+    <td valign="top" width="80">search mac_addr...<br>
         <input id="search" py-input="search_input()">
         <div id="mac_addrs"></div>
     </td>
-    <td>
-        mac_addr<br>
+    <td valign="top">
+        mac_addr: 
         <input id="editor_mac_addr" size="40" value="1_2_3_4_5_6"><br>
-        <textarea id="editor_lua_script" cols="50" rows="12">print("Hello lua ide ")</textarea><br>
+        <button py-click="show_main_lua()">main.lua</button>
+        <button py-click="show_network_config()">Network</button>
+        <button py-click="show_app_config()">AppConfig</button>
+        <div id="main_lua">
+            <textarea id="editor_lua_script" cols="50" rows="12">print("Hello lua ide ")</textarea><br>
+        </div>
+        <div id="network_config" style="display: none;">
+            <table>
+                <tr><td>WIFI_ssid</td>
+                    <td> <input id="net_config_wifi_ssid" value="Perfect" ></td></tr>
+                <tr><td>WIFI_password</td>
+                    <td> <input id="net_config_wifi_password" value="1234567890" ></td></tr>
+                <tr><td>MQTT_Broker</td>
+                    <td> <input id="net_config_mqtt_broker" value="voicevon.vicp.io" ></td></tr>
+                <tr><td>MQTT_Port</td>
+                    <td> <input id="net_config_mqtt_port" value="1883" ></td></tr>
+                <tr><td>MQTT_uid</td>
+                    <td> <input id="net_config_mqtt_uid" value="von" ></td></tr>
+                <tr><td>MQTT_password</td>
+                    <td> <input id="net_config_mqtt_password" value="von1970" ></td></tr>
+                <tr><td>URL of main.lua</td>
+                    <td> <input id="main_lua_url" size="60" value="http://voicevon.vicp.io:5000/down/mcu" ></td></tr>
+                <tr><td>mqtt_topic of reset mcu</td>
+                    <td> <input id="matt_topic_of_reboot" value="intergral/mcu/reset" ></td></tr>
+            </table>
+        </div>
+        <div id="app_config" style="display: none;">app_config
+            主串口<br> <input id="app_config_uartmaster_rate" value="9600" ><br>
+            从串口<br> <input id="app_config_uartslave_rate" value="9600" ><br>
+        </div>
+
         <button id="delete" py-click="do_delete()">Delete</button>
         <button id="save" py-click="do_save()">Save</button>
         <br><br>
@@ -32,6 +63,22 @@
 
 
 <py-script>
+    def show_main_lua():
+        Element("network_config").element.style.display = 'none'
+        Element("app_config").element.style.display = 'none'
+        Element("main_lua").element.style.display = 'block'
+
+    def show_network_config():
+        Element("main_lua").element.style.display = 'none'
+        Element("app_config").element.style.display = 'none'
+        Element("network_config").element.style.display = 'block'
+
+    def show_app_config():
+        Element("main_lua").element.style.display = 'none'
+        Element("network_config").element.style.display = 'none'
+        Element("app_config").element.style.display = 'block'
+
+
     from pyscript import when
 
     @when("click", selector="#mac_addrs button")

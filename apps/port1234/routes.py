@@ -108,15 +108,12 @@ def lua_ide_save():
     # print("conetent_type", content_type)
     if content_type == 'application/json':
         if request.is_json:
-            print("Yes, request is json")
+            # print("Yes, request is json")
             lua_ide_item = request.json
             table_lua_ide = TinyDB('lua_ide.json')
-            q = Query()
-            items = table_lua_ide.search(q.mac_addr == lua_ide_item['mac_addr'])
+            items = table_lua_ide.search(Query().mac_addr == lua_ide_item['mac_addr'])
             if len(items)>0:
                 # do update
-                print("do update")
-                print(items[0].doc_id)
                 doc_ids = []
                 doc_ids.append(items[0].doc_id)
                 table_lua_ide.update(lua_ide_item, doc_ids=doc_ids)
