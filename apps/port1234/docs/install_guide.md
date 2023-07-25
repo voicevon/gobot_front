@@ -12,5 +12,6 @@ pip install flask
 pip install tinydb
 pip install VonPylib
 pip install paho-mqtt
-pip install flask-sock
+pip install flask-sock  #??
+pip install Flask-SocketIO
 ```

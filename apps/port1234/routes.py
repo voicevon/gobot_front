@@ -182,6 +182,22 @@ def node_script(mac_addr):
         print (file_content)
         return file_content
 
+from flask_socketio import SocketIO, emit
+socketio = SocketIO()
+socketio.init_app(app)
+
+@socketio.on("connect")
+def handle_connect():
+    print("Client connected!")
+
+
+@app.route('/lua_log', methods=['POST'])
+def lua_log():
+    mcu_log = request.get_data()
+    print(mcu_log)
+    # send mcu_log to web browser.
+    socketio.emit("log", {"mcu_mac_addr": "1234", "mcu_log": mcu_log})
+    return 'OK'
 
 
 @app.route('/node_config')

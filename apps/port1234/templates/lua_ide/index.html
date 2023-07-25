@@ -1,5 +1,11 @@
 {% extends "common_webpage.html" %}
-{}
+
+
+{% block js_source%}
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+{% endblock %}
+
+
 {% block pyscript%}
 <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
 <script defer src="https://pyscript.net/latest/pyscript.js"></script>
@@ -11,6 +17,8 @@
 </py-config>
 {% endblock%}
 
+
+
 {% block page_content %}
 <div id="pyscript_ready">Py-Script is loading... </div>
 <table width="100%" height="500">
@@ -21,9 +29,13 @@
     <td valign="top">
         mac_addr: 
         <input id="editor_mac_addr" size="40" value="1_2_3_4_5_6"><br>
+        <button py-click="show_debug()" id="btn_debug">debug</button>
         <button py-click="show_main_lua()">main.lua</button>
         <button py-click="show_network_config()">Network</button>
         <button py-click="show_app_config()">AppConfig</button>
+        <div id="debug" style="display: none;">
+            <textarea id="debug_output" cols="50" rows="12">--debug ouput--</textarea><br>
+        </div>
         <div id="main_lua">
             <textarea id="editor_lua_script" cols="50" rows="12">print("Hello lua ide ")</textarea><br>
         </div>
@@ -44,7 +56,9 @@
                 <tr><td>URL of main.lua</td>
                     <td> <input id="main_lua_url" size="60" value="http://voicevon.vicp.io:5000/down/mcu" ></td></tr>
                 <tr><td>mqtt_topic of reset mcu</td>
-                    <td> <input id="matt_topic_of_reboot" value="intergral/mcu/reset" ></td></tr>
+                    <td> <input id="mqtt_topic_of_reboot" value="intergral/mcu/reset" ></td></tr>
+                <tr><td>Mode</td>
+                    <td> <input id="run_mode" value="release" ></td></tr>
             </table>
         </div>
         <div id="app_config" style="display: none;">app_config
@@ -62,20 +76,51 @@
 
 
 
+
+<script>
+    const socket = io({autoConnect: false});
+
+    document.getElementById("btn_debug").addEventListener("click", function() {
+        let mac_addr = document.getElementById("editor_mac_addr").value;
+        socket.connect();
+        socket.on("connect", function() {
+            socket.emit("mcu_join", mac_addr);
+        })
+    })
+
+
+    socket.on("log", function(data) {
+        let debug_output = document.getElementById("debug_output");
+        // if (data["mac_addr"]==)
+        var enc = new TextDecoder("utf-8");
+        str = enc.decode(data["mcu_log"]) + "\n";
+        debug_output.value = debug_output.value + str;
+    })
+</script>
+
 <py-script>
+    def show_debug():
+        Element("network_config").element.style.display = 'none'
+        Element("app_config").element.style.display = 'none'
+        Element("main_lua").element.style.display = 'none'
+        Element("debug").element.style.display = 'block'
+    
     def show_main_lua():
         Element("network_config").element.style.display = 'none'
         Element("app_config").element.style.display = 'none'
+        Element("debug").element.style.display = 'none'
         Element("main_lua").element.style.display = 'block'
 
     def show_network_config():
         Element("main_lua").element.style.display = 'none'
         Element("app_config").element.style.display = 'none'
+        Element("debug").element.style.display = 'none'
         Element("network_config").element.style.display = 'block'
 
     def show_app_config():
         Element("main_lua").element.style.display = 'none'
         Element("network_config").element.style.display = 'none'
+        Element("debug").element.style.display = 'none'
         Element("app_config").element.style.display = 'block'
 
 
@@ -106,6 +151,7 @@
         Element("async_state").element.innerText = response_json['result']
 
     def do_save():
+        show_debug()
         display ('doing Insert', target='async_state')
         url = f"{baseurl}/lua_ide/save"
         inputs = {}
@@ -149,6 +195,8 @@
 
 
 </py-script>
+
+
 
 
 {% endblock %}
