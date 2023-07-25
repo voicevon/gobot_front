@@ -26,18 +26,15 @@
         <input id="search" py-input="search_input()">
         <div id="mac_addrs"></div>
     </td>
-    <td valign="top">
+    <td valign="top" width="200">
         mac_addr: 
         <input id="editor_mac_addr" size="40" value="1_2_3_4_5_6"><br>
-        <button py-click="show_debug()" id="btn_debug">debug</button>
         <button py-click="show_main_lua()">main.lua</button>
         <button py-click="show_network_config()">Network</button>
         <button py-click="show_app_config()">AppConfig</button>
-        <div id="debug" style="display: none;">
-            <textarea id="debug_output" cols="50" rows="12">--debug ouput--</textarea><br>
-        </div>
+
         <div id="main_lua">
-            <textarea id="editor_lua_script" cols="50" rows="12">print("Hello lua ide ")</textarea><br>
+            <textarea id="editor_lua_script" cols="42" rows="12">print("Hello lua ide ")</textarea><br>
         </div>
         <div id="network_config" style="display: none;">
             <table>
@@ -54,7 +51,7 @@
                 <tr><td>MQTT_password</td>
                     <td> <input id="net_config_mqtt_password" value="von1970" ></td></tr>
                 <tr><td>URL of main.lua</td>
-                    <td> <input id="main_lua_url" size="60" value="http://voicevon.vicp.io:5000/down/mcu" ></td></tr>
+                    <td> <input id="main_lua_url" value="http://voicevon.vicp.io:5000/down/mcu" ></td></tr>
                 <tr><td>mqtt_topic of reset mcu</td>
                     <td> <input id="mqtt_topic_of_reboot" value="intergral/mcu/reset" ></td></tr>
                 <tr><td>Mode</td>
@@ -65,11 +62,16 @@
             主串口<br> <input id="app_config_uartmaster_rate" value="9600" ><br>
             从串口<br> <input id="app_config_uartslave_rate" value="9600" ><br>
         </div>
-
         <button id="delete" py-click="do_delete()">Delete</button>
-        <button id="save" py-click="do_save()">Save</button>
+        <button id="reset" py-click="do_reset()">reset & run</button>
+        <button id="save" py-click="do_save()">Save & run</button>
         <br><br>
         <label id="async_state"></label>
+    <td valign="top"> 
+        <button id="btn_debug">debug</button>
+        <div id="debug" style="display: block;">
+            <textarea id="debug_output" cols="50" rows="12">--debug ouput--</textarea><br>
+        </div>
     </td>
 </table>
 <a href="https://jsoneditoronline.org/">json online editor</a>
@@ -93,34 +95,35 @@
         let debug_output = document.getElementById("debug_output");
         // if (data["mac_addr"]==)
         var enc = new TextDecoder("utf-8");
-        str = enc.decode(data["mcu_log"]) + "\n";
+        str = enc.decode(data["mcu_log"]);
         debug_output.value = debug_output.value + str;
+        document.getElementById("debug_output").scrollTop = document.getElementById("debug_output").scrollHeight
     })
 </script>
 
 <py-script>
-    def show_debug():
-        Element("network_config").element.style.display = 'none'
-        Element("app_config").element.style.display = 'none'
-        Element("main_lua").element.style.display = 'none'
-        Element("debug").element.style.display = 'block'
+    # def show_debug():
+    #    Element("network_config").element.style.display = 'none'
+    #    Element("app_config").element.style.display = 'none'
+    #    Element("main_lua").element.style.display = 'none'
+    #    # Element("debug").element.style.display = 'block'
     
     def show_main_lua():
         Element("network_config").element.style.display = 'none'
         Element("app_config").element.style.display = 'none'
-        Element("debug").element.style.display = 'none'
+        # Element("debug").element.style.display = 'none'
         Element("main_lua").element.style.display = 'block'
 
     def show_network_config():
         Element("main_lua").element.style.display = 'none'
         Element("app_config").element.style.display = 'none'
-        Element("debug").element.style.display = 'none'
+        # Element("debug").element.style.display = 'none'
         Element("network_config").element.style.display = 'block'
 
     def show_app_config():
         Element("main_lua").element.style.display = 'none'
         Element("network_config").element.style.display = 'none'
-        Element("debug").element.style.display = 'none'
+        # Element("debug").element.style.display = 'none'
         Element("app_config").element.style.display = 'block'
 
 
@@ -150,17 +153,29 @@
     def do_save_post(response_json):
         Element("async_state").element.innerText = response_json['result']
 
-    def do_save():
-        show_debug()
+    def do_reset():
+        # show_debug()
+        Element("debug_output").element.value=""
         display ('doing Insert', target='async_state')
         url = f"{baseurl}/lua_ide/save"
         inputs = {}
         inputs['mac_addr'] = Element("editor_mac_addr").value
         inputs['lua_script'] = Element("editor_lua_script").value
+        inputs['action'] = 'reset'
         post_function = do_save_post
         asyncio.ensure_future(async_request_post(url, inputs, post_function))
 
-
+    def do_save():
+        Element("debug_output").element.value=""
+        display ('doing Insert', target='async_state')
+        url = f"{baseurl}/lua_ide/save"
+        inputs = {}
+        inputs['mac_addr'] = Element("editor_mac_addr").value
+        inputs['lua_script'] = Element("editor_lua_script").value
+        inputs['action'] = 'save_and_run'
+        post_function = do_save_post
+        asyncio.ensure_future(async_request_post(url, inputs, post_function))
+        
     def do_delete():
         url = f"{baseurl}/lua_ide/delete"
         json={}

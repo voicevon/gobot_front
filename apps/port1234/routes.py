@@ -118,6 +118,10 @@ def lua_ide_save():
                 doc_ids.append(items[0].doc_id)
                 table_lua_ide.update(lua_ide_item, doc_ids=doc_ids)
                 topic,payload=("intergral/mcu/reset", lua_ide_item['mac_addr'])
+                # topic="intergral/mcu/reset"
+                # payload = {}
+                # payload['mac_addr'] = lua_ide_item['mac_addr']
+                # payload['action'] = lua_ide_item['action']
                 g_mqtt.publish(topic, payload, retain=False)              
                 return {"result":"Updated to lua_ide.json"}
             else:
@@ -194,7 +198,7 @@ def handle_connect():
 @app.route('/lua_log', methods=['POST'])
 def lua_log():
     mcu_log = request.get_data()
-    print(mcu_log)
+    # print(mcu_log)
     # send mcu_log to web browser.
     socketio.emit("log", {"mcu_mac_addr": "1234", "mcu_log": mcu_log})
     return 'OK'
