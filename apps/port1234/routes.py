@@ -170,7 +170,17 @@ def lua_ide_search():
     else:
         print("Content_type is not json.")
         return "insert failed"
+
+@app.route("/lua_ide/save_net_config", methods=['POST'])
+def lua_ide_save_net_config():
+    mac_addr = request.json['mac_addr']
+    net_config = request.json["net_config"]
     
+    table_lua_ide = TinyDB('lua_ide.json')
+    table_lua_ide.update({'net_config':net_config}, Query().mac_addr==mac_addr)
+    return "OK"
+
+
 @app.route("/lua_ide/down/<mac_addr>")
 def node_script(mac_addr):
     table_lua_ide = TinyDB('lua_ide.json')

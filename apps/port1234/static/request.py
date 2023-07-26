@@ -1,6 +1,7 @@
 from pyodide.http import pyfetch, FetchResponse
 from typing import Optional, Any
 
+
 async def request(url: str, method: str = "GET", body: Optional[str] = None,
                   headers: Optional[dict[str, str]] = None, **fetch_kwargs: Any) -> FetchResponse:
 
