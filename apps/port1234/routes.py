@@ -109,25 +109,25 @@ def lua_ide_save():
     if content_type == 'application/json':
         if request.is_json:
             # print("Yes, request is json")
-            lua_ide_item = request.json
+            lua_node = request.json
             table_lua_ide = TinyDB('lua_ide.json')
-            items = table_lua_ide.search(Query().mac_addr == lua_ide_item['mac_addr'])
+            items = table_lua_ide.search(Query().mac_addr == lua_node['mac_addr'])
             if len(items)>0:
                 # do update
                 doc_ids = []
                 doc_ids.append(items[0].doc_id)
-                table_lua_ide.update(lua_ide_item, doc_ids=doc_ids)
-                topic,payload=("intergral/mcu/reset", lua_ide_item['mac_addr'])
-                # topic="intergral/mcu/reset"
-                # payload = {}
-                # payload['mac_addr'] = lua_ide_item['mac_addr']
-                # payload['action'] = lua_ide_item['action']
+                table_lua_ide.update(lua_node, doc_ids=doc_ids)
+                # topic,payload=("intergral/mcu/reset", lua_node['mac_addr'])
+                topic="intergral/mcu/reset"
+                payload = lua_node['reset_level']
+                payload = payload + ","
+                payload = payload + lua_node['mac_addr']
                 g_mqtt.publish(topic, payload, retain=False)              
                 return {"result":"Updated to lua_ide.json"}
             else:
                 # do insert
                 print("do insert")
-                new_doc_id = table_lua_ide.insert(lua_ide_item)
+                new_doc_id = table_lua_ide.insert(lua_node)
                 return {"result":"Inserted to lua_ide.json"}
 
         else:

@@ -30,17 +30,16 @@
         <div id="mac_addrs"></div>
     </td>
     <td valign="top" width="200">
-        mac_addr: 
-        <input id="editor_mac_addr" size="40" value="1_2_3_4_5_6"><br>
+        <input id="editor_mac_addr" size="40" value="1_2_3_4_5_6"><br><br>
         <button py-click="show_main_lua()">main.lua</button>
         <button py-click="show_network_config()">Network</button>
         <button py-click="show_app_config()">AppConfig</button><br><br>
 
         <div id="main_lua">
-            <textarea id="editor_lua_script" cols="42" rows="12">print("Hello lua ide ")</textarea><br>
+            <textarea id="editor_lua_script" cols="42" rows="12">print("Hello lua ide ")</textarea><br><br>
             <button id="btn_lua_delete" py-click="do_lua_delete()">Delete</button>
-            <button id="btn_lua_reset" py-click="do_lua_reset()">reset & run</button>
-            <button id="btn_lua_save" py-click="do_lua_save()">Save & run</button>
+            <button id="btn_lua_reset" py-click="do_lua_reset('1')">reboot</button>
+            <button id="btn_lua_save" py-click="do_lua_reset('2')">Run</button>
         </div>
         <div id="network_config" style="display: none;">
             <table>
@@ -62,29 +61,58 @@
                     <td> <input id="main_lua_url" value="intergral/mcu/reset" ></td></tr>
                 <tr><td>Mode</td>
                     <td> <input id="run_mode" value="release" ></td></tr>
-            </table>
+            </table><br>
             <button id="btn_net_config_save" py-click="do_net_config_save()">Save</button>
         </div>
         <div id="app_config" style="display: none;">
             <select name="app_config" id="app_config_selector" py-click="app_config_click()">
                 <option>串口三通</option>
                 <option>车载称重</option>
-            </select><br>
-            <div id="app_config_uart_hub">
-                主串口<br> <input id="app_config_uartmaster_rate" value="9600" ><br>
-                从串口<br> <input id="app_config_uartslave_rate" value="9600" ><br>
+            </select><br><br>
+            <div id="div_app_config_uart_hub" style="display: none;">
+                <table>
+                    <tr><td>...</td><td>主串口</td></tr>
+                    <tr><td>速率</td>
+                        <td><input id="app_config_uart_master_rate" value="9600" >
+                        </td></tr>
+                    <tr><td>数据位</td>
+                        <td><input id="app_config_uart_master_bits" value="8" >
+                        </td></tr>
+                    <tr><td>停止位</td>
+                        <td><input id="app_config_uart_master_stop_bits" value="1" >
+                        </td></tr>
+                    <tr><td>校验方式</td>
+                        <td><input id="app_config_uart_master_verification" value="none" >
+                        </td></tr>
+
+                    <tr><td>...</td><td>从串口</td></tr>
+                    <tr><td>速率</td>
+                        <td><input id="app_config_uart_master_rate" value="9600" >
+                        </td></tr>
+                    <tr><td>数据位</td>
+                        <td><input id="app_config_uart_master_bits" value="8" >
+                        </td></tr>
+                    <tr><td>停止位</td>
+                        <td><input id="app_config_uart_master_stop_bits" value="1" >
+                        </td></tr>
+                    <tr><td>校验方式</td>
+                        <td><input id="app_config_uart_master_verification" value="none" >
+                    </td></tr>
+                </table>
             </div>
-            <div id="app_config_onboard_weighing">
-                左前角<br> <input id="app_config_uartmaster_rate" value="9600" ><br>
-                右前角<br> <input id="app_config_uartslave_rate" value="9600" ><br>
-            </div>
+            <div id="div_app_config_onboard_weighing" style="display: none;">
+                左前角 <input id="app_config_uartmaster_rate" value="9600" ><br>
+                右前角 <input id="app_config_uartslave_rate" value="9600" ><br>
+                左后角 <input id="app_config_uartmaster_rate" value="9600" ><br>
+                右后角 <input id="app_config_uartslave_rate" value="9600" ><br>
+            </div><br><br>
             <button id="btn_app_config_save" py-click="do_app_config_save()">Save</button>
         </div>
 
         <br><br>
         <label id="async_state"></label>
     <td valign="top"> 
-        <button id="btn_debug">debug</button>
+        <button id="btn_debug">debug</button><br><br>
         <div id="debug" style="display: block;">
             <textarea id="debug_output" cols="50" rows="12">--debug ouput--</textarea><br>
         </div>
@@ -144,8 +172,13 @@
         Element("app_config").element.style.display = 'block'
 
     def app_config_click():
-        xx = Element("app_config_selector").value
-        print(xx)
+        Element("div_app_config_uart_hub").element.style.display='none'
+        Element("div_app_config_onboard_weighing").element.style.display='none'
+        if Element("app_config_selector").value == '串口三通':
+            Element("div_app_config_uart_hub").element.style.display='block'
+        if Element("app_config_selector").value == '车载称重':
+            Element("div_app_config_onboard_weighing").element.style.display='block'
+
 
 
     from pyscript import when
@@ -174,7 +207,7 @@
     def do_save_post(response_json):
         Element("async_state").element.innerText = response_json['result']
 
-    def do_reset():
+    def do_lua_reset(reset_level):
         # show_debug()
         Element("debug_output").element.value=""
         display ('doing Insert', target='async_state')
@@ -182,20 +215,20 @@
         inputs = {}
         inputs['mac_addr'] = Element("editor_mac_addr").value
         inputs['lua_script'] = Element("editor_lua_script").value
-        inputs['action'] = 'reset'
+        inputs['reset_level'] = reset_level
         post_function = do_save_post
         asyncio.ensure_future(async_request_post(url, inputs, post_function))
 
-    def do_lua_save():
-        Element("debug_output").element.value=""
-        display ('doing Insert', target='async_state')
-        url = f"{baseurl}/lua_ide/save"
-        inputs = {}
-        inputs['mac_addr'] = Element("editor_mac_addr").value
-        inputs['lua_script'] = Element("editor_lua_script").value
-        inputs['action'] = 'save_and_run'
-        post_function = do_save_post
-        asyncio.ensure_future(async_request_post(url, inputs, post_function))
+    # def do_lua_save():
+        # Element("debug_output").element.value=""
+        # display ('doing Insert', target='async_state')
+        # url = f"{baseurl}/lua_ide/save"
+        # inputs = {}
+        # inputs['mac_addr'] = Element("editor_mac_addr").value
+        # inputs['lua_script'] = Element("editor_lua_script").value
+        # inputs['action'] = 'save_and_run'
+        # post_function = do_save_post
+        # asyncio.ensure_future(async_request_post(url, inputs, post_function))
         
     def do_lua_delete():
         url = f"{baseurl}/lua_ide/delete"
