@@ -1,0 +1,10 @@
+@startuml tooth-sitter statemachine
+[*] --> idle
+idle --> taking_picture_top_camera
+taking_picture_top_camera --> cnc_sitter_moving_to_tooth
+cnc_sitter_moving_to_tooth--> taking_picture_side_camera
+taking_picture_side_camera --> cnc_sitter_piking_parking
+cnc_sitter_piking_parking --> taking_picture_post_camera
+taking_picture_post_camera --> cnc_sitter_droping_parking
+cnc_sitter_droping_parking --> idle
+@enduml

@@ -31,14 +31,14 @@
     </td>
     <td valign="top" width="200">
         <input id="editor_mac_addr" size="40" value="1_2_3_4_5_6"><br><br>
-        <button py-click="show_main_lua()">main.lua</button>
+        <button py-click="show_main_lua()">app.lua</button>
         <button py-click="show_network_config()">Network</button>
         <button py-click="show_app_config()">AppConfig</button><br><br>
 
         <div id="main_lua">
             <textarea id="editor_lua_script" cols="42" rows="12">print("Hello lua ide ")</textarea><br><br>
             <button id="btn_lua_delete" py-click="do_lua_delete()">Delete</button>
-            <button id="btn_lua_reset" py-click="do_lua_reset('1')">reboot</button>
+            <button id="btn_lua_reset" py-click="do_lua_reset('1')">Reboot</button>
             <button id="btn_lua_save" py-click="do_lua_reset('2')">Run</button>
         </div>
         <div id="network_config" style="display: none;">
@@ -55,7 +55,7 @@
                     <td> <input id="net_config_mqtt_uid" value="von" ></td></tr>
                 <tr><td>MQTT_password</td>
                     <td> <input id="net_config_mqtt_password" value="von1970" ></td></tr>
-                <tr><td>URL of main.lua</td>
+                <tr><td>URL of app.lua</td>
                     <td> <input id="main_lua_url" value="http://voicevon.vicp.io:5000/down/mcu" ></td></tr>
                 <tr><td>mqtt_topic of reset mcu</td>
                     <td> <input id="main_lua_url" value="intergral/mcu/reset" ></td></tr>
