@@ -1,29 +1,17 @@
 from von.mqtt.mqtt_agent import g_mqtt, g_mqtt_broker_config
 from von.logger import Logger
 import cv2, numpy
-
-# class CncSitter:
-#     def __init__(self) -> None:
-#         pass
-
-#     @staticmethod
-#     def move_to(x, y):
-#         # send gcode
-#         pass
+from arucoc_finder import ArucoFinder
+from perspective_transfomer import PerspectiveTransformer
 
 
-#     @staticmethod
-#     def move_to_and_take_side_pictures(x, y):
-#         # send gcode
-#         pass
 
 class SitterSystem:
-    MQTT_TOPIC_TAKE_PICTURE_COMMAND = "twh/sitter/camera/take_picture/command"  # + sitter_id/camera_id 
-
-    MQTT_TOPIC_TAKE_PICTURE_RESULT = 'twh/sitter/take_picture/image/#'   # + sitter_id/camera_id
+    MQTT_TOPIC_TAKE_PICTURE_COMMAND = "twh/sitter/take_picture/command"  # payload is sitter_id/camera_id 
+    MQTT_TOPIC_TAKE_PICTURE_RESULT = 'twh/sitter/image/#'   # + sitter_id/camera_id
     # MQTT_TOPIC_TAKE_PICTURE_RESULT = 'test'   # + sitter_id/camera_id
-    MQTT_TOPIC_OF_CNC_COMMAND = 'twh/sitter/cnc/command'    # + sitter_id
-    MQTT_TOPIC_OF_CNC_STATE = 'twh/sitter/cnc/state'        # + sitter_id
+    MQTT_TOPIC_OF_CNC_COMMAND = 'twh/sitter/cnc/command'    #  payload is sitter_id
+    MQTT_TOPIC_OF_CNC_STATE = 'twh/sitter/cnc/state/#'        # + sitter_id
 
     STATE_IDLE = 'STATE_IDLE'
     STATE_TAKING_PICTURE_TOP_CAMERA = 'taking_picture_top_camera'
@@ -34,26 +22,22 @@ class SitterSystem:
 
 
     def __init__(self) -> None:
-        self.state = "idle"
+        self.state = self.STATE_IDLE
         g_mqtt_broker_config.client_id ="2023-0801"
         g_mqtt.connect_to_broker(g_mqtt_broker_config)
         g_mqtt.append_on_received_message_callback(self.onReceivedMqtt)
 
         g_mqtt.subscribe(self.MQTT_TOPIC_TAKE_PICTURE_RESULT)
-        # g_mqtt.subscribe("pre_camera_a")
-        # g_mqtt.subscribe("pre_camera_b")
-        # g_mqtt.subscribe("pre_camera_c")
-        # g_mqtt.subscribe("pre_camera_f")
-        # g_mqtt.subscribe("post_camera_a")
-        # g_mqtt.subscribe("post_camera_b")
-        # g_mqtt.subscribe("post_camera_c")
-        # g_mqtt.subscribe("post_camera_f")
+        g_mqtt.subscribe(self.MQTT_TOPIC_OF_CNC_STATE)
+        self.aruco_finder = ArucoFinder([49,48,15,13])
+
 
     def main_loop(self):
         while True:
             if self.state == self.STATE_IDLE:
-                g_mqtt.publish(self.MQTT_TOPIC_TAKE_PICTURE_COMMAND,  "top_camera")
+                g_mqtt.publish(self.MQTT_TOPIC_TAKE_PICTURE_COMMAND,  "2325/top")
                 self.state = self.STATE_TAKING_PICTURE_TOP_CAMERA
+                Logger.Info("published " + self.MQTT_TOPIC_TAKE_PICTURE_COMMAND)
 
             # read top camera, then get tooth position via opencv
 
@@ -64,7 +48,7 @@ class SitterSystem:
     def onReceivedMqtt(self, topic, payload):
         Logger.Info("onReceivedMqtt,   topic= " + topic)
         jpg_file = open("aaaa.jpg", "wb")
-        n = jpg_file.write(payload)
+        jpg_file.write(payload)
         jpg_file.close()
 
         nparr = numpy.fromstring(payload, numpy.uint8)
@@ -129,8 +113,38 @@ class SitterSystem:
             if topic== self.MQTT_TOPIC_OF_CNC_STATE and payload == 'parked':
                 self.state = self.STATE_IDLE
 
+    def test(self):
+        image = cv2.imread("test.png")
+        # cv2.imshow("test", image)
+        # cv2.waitKey(3000)
+        perspectived_image =  self.ProcessOriginImage(image, print_report= True)
+        cv2.imshow("image", perspectived_image)
+        cv2.waitKey(9000)
 
+
+    def ProcessOriginImage(self, origin_image, print_report:bool):
+        '''
+        * Return false, If could not detect all known aruco marks. 
+        ### After this processing,  Below properties will be set.
+        * self.all_marks
+        * self.perspectived_image
+        * self.house_vender_image (is perspectived, and cropped)
+        * self.board_image(is perspectived, and cropped)
+        '''
+        self.all_marks = self.aruco_finder.ScanMarks(origin_image=origin_image,print_report=True)
+        if self.all_marks is None:
+            print('[Warn] ProcessOriginImage(), ScanMarks() returns None')
+            return None
+        mark_points = self.aruco_finder.GetPoints_For_PespectiveInput(mark_ids=[48,13,49,15])
+        if mark_points is None:
+            print('[Warn] ProcessOriginImage(), GetPoints_For_PespectiveInput() returns bad')
+            return None
+        transformer = PerspectiveTransformer()
+        perspectived_image = transformer.get_perspective_view(origin_image, mark_points)
+        # ImageLogger.Output("perspectived_image", self.perspectived_image, to_where=ImageLoggerToWhere.TO_SCREEN)
+        return perspectived_image
 
 sitter_system = SitterSystem()
 sitter_system.main_loop()
+# sitter_system.test()
 
