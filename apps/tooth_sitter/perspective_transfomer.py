@@ -14,15 +14,14 @@ class config_4_aruco_marks:
     # bottom_extended = 5   # effect view range
     # left_extended = 0
 
+    k = 5
     left_extended = 0
     ''' effects view range, greater number causes zoom out, chessboard looks smaller '''   
     right_extended = 0
     ''' * effects view range, greater number causes zoom out, chessboard looks smaller ''' 
-    perspective_width = 428 - 32
+    perspective_width = 150 * k
     ''' Effects scale, greater number causes zoom in. chessboard looks bigger '''  
-
-
-    perspective_height = 428 + 40
+    perspective_height = 228 * k
     ''' Effects scale, greater number causes zoom in. chessboard looks bigger'''
     top_extended = 0
     ''' effects view range, greater number causes zoom out, chessboard looks smaller '''   
@@ -30,10 +29,10 @@ class config_4_aruco_marks:
     ''' effects view range, greater number causes zoom out, chessboard looks smaller '''   
 
 
-    crop_x0 = 0   # effect the left edge
-    crop_y0 = 0   # effect the top edge.
-    crop_width = 428   # Don't modify this value
-    crop_height = 428  # Don't modify this value.
+    # crop_x0 = 0   # effect the left edge
+    # crop_y0 = 0   # effect the top edge.
+    # crop_width = 428   # Don't modify this value
+    # crop_height = 428  # Don't modify this value.
 
 
 class PerspectiveTransformer():
@@ -41,22 +40,26 @@ class PerspectiveTransformer():
     def __init__(self) -> None:
         self.__aruco_config = config_4_aruco_marks()
 
-    def get_perspective_view(self, img, pts):
-        # specify desired output size 
+    def get_perspective_view(self, origin_image, mark_points_in_origin):
 
-        # specify conjugate x,y coordinates (not y,x)
-        input = np.float32(pts)
+        input = np.float32(mark_points_in_origin)
+
+        # specify desired output size 
+        
+        # point of top_left
         x1 = 0 + self.__aruco_config.left_extended
         y1 = 0 + self.__aruco_config.top_extended
+        # point of right_top
         x2 = x1 + self.__aruco_config.perspective_width 
         y2 = y1
+        # point of right_bottom
         x3 = x2
         y3 = y1 +self.__aruco_config.perspective_height
+        # point of left_bottom
         x4 = x1
         y4 = y3
         width = x3 + self.__aruco_config.right_extended
         height = y3 + self.__aruco_config.bottom_extended
-    
 
         output = np.float32([[x1,y1],[x2,y2],[x3,y3],[x4,y4]])
         # output = np.float32([[0 ,0] [width-1 ,0], [width-1,height-1], [0,height-1]])
@@ -68,7 +71,7 @@ class PerspectiveTransformer():
         # print(matrix)
 
         # do perspective transformation setting area outside input to black
-        imgOutput = cv2.warpPerspective(img, matrix, (width,height), cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(0,0,0))
+        imgOutput = cv2.warpPerspective(origin_image, matrix, (width, height), cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(0,0,0))
         # print(imgOutput.shape)
 
         # save the warped output
