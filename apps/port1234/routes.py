@@ -20,6 +20,7 @@ app.register_blueprint(web_stock)
 new_message = {}
 new_message['test'] = {'id':2, 'payload': 'hello, dynamic message.'}
 
+lua_ide_online_mac_addr = ''
 
 @app.route('/lua_post', methods = ['POST'])
 def lua_post():
@@ -180,9 +181,16 @@ def lua_ide_save_net_config():
     table_lua_ide.update({'net_config':net_config}, Query().mac_addr==mac_addr)
     return "OK"
 
+from flask_socketio import SocketIO
+socketio = SocketIO()
+socketio.init_app(app)
+mcu_mac_addr = ''
 
 @app.route("/lua_ide/down/<mac_addr>")
 def node_script(mac_addr):
+    global mcu_mac_addr 
+    mcu_mac_addr = mac_addr
+
     table_lua_ide = TinyDB('lua_ide.json')
     items = table_lua_ide.search(Query().mac_addr == mac_addr)
     if len(items) > 0:
@@ -196,9 +204,7 @@ def node_script(mac_addr):
         print (file_content)
         return file_content
 
-from flask_socketio import SocketIO, emit
-socketio = SocketIO()
-socketio.init_app(app)
+
 
 @socketio.on("connect")
 def handle_connect():
@@ -207,10 +213,12 @@ def handle_connect():
 
 @app.route('/lua_log', methods=['POST'])
 def lua_log():
+    global mcu_mac_addr
     mcu_log = request.get_data()
     # print(mcu_log)
     # send mcu_log to web browser.
-    socketio.emit("log", {"mcu_mac_addr": "1234", "mcu_log": mcu_log})
+    print("*************************************************", mcu_mac_addr)
+    socketio.emit("log", {"mcu_mac_addr": mcu_mac_addr, "mcu_log": mcu_log})
     return 'OK'
 
 

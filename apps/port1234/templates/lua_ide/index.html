@@ -112,7 +112,10 @@
         <br><br>
         <label id="async_state"></label>
     <td valign="top"> 
-        <button id="btn_debug">debug</button><br><br>
+        <button id="btn_debug">debug</button>
+        <label id="lbl_new_online_mac">11_22_33_44_55_66</label>
+        <br><br>
+
         <div id="debug" style="display: block;">
             <textarea id="debug_output" cols="50" rows="12">--debug ouput--</textarea><br>
         </div>
@@ -137,13 +140,16 @@
 
 
     socket.on("log", function(data) {
-        let debug_output = document.getElementById("debug_output");
-        // if (data["mac_addr"]==)
         var enc = new TextDecoder("utf-8");
+        var str_mac_addr =  data['mcu_mac_addr']
+        let mac_addr = document.getElementById("lbl_new_online_mac");
+        mac_addr.innerText = str_mac_addr
+        let debug_output = document.getElementById("debug_output");
         str = enc.decode(data["mcu_log"]);
         debug_output.value = debug_output.value + str;
-        document.getElementById("debug_output").scrollTop = document.getElementById("debug_output").scrollHeight
+        document.getElementById("debug_output").scrollTop = document.getElementById("debug_output").scrollHeight;
     })
+
 </script>
 
 <py-script>
