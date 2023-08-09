@@ -56,7 +56,7 @@
                 <tr><td>MQTT_password</td>
                     <td> <input id="net_config_mqtt_password" value="von1970" ></td></tr>
                 <tr><td>URL of app.lua</td>
-                    <td> <input id="main_lua_url" value="http://voicevon.vicp.io:5000/down/mcu" ></td></tr>
+                    <td> <input id="main_lua_url" value="http://voicevon.vicp.io:1234/down/mcu" ></td></tr>
                 <tr><td>mqtt_topic of reset mcu</td>
                     <td> <input id="main_lua_url" value="intergral/mcu/reset" ></td></tr>
                 <tr><td>Mode</td>
@@ -199,7 +199,7 @@
     import json
     from static.request import request # import our request function.
 
-    baseurl = "http://localhost:5000"
+    baseurl = "http://localhost:1234"
     headers = {"Content-type": "application/json"}
     g_json = {}
 

@@ -304,9 +304,9 @@ def node_config_save():
 
 
 
-g_mqtt_broker_config.client_id = "230604"
+g_mqtt_broker_config.client_id = "230804"
 g_mqtt.connect_to_broker(g_mqtt_broker_config, blocked_connection=True)
-Start_TwhWcs_Process()
+# Start_TwhWcs_Process()
 
 if __name__ == '__main__':
     # reloader or debug must be false.  
