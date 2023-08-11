@@ -142,12 +142,14 @@
     socket.on("log", function(data) {
         var enc = new TextDecoder("utf-8");
         var str_mac_addr =  data['mcu_mac_addr']
-        let mac_addr = document.getElementById("lbl_new_online_mac");
-        mac_addr.innerText = str_mac_addr
-        let debug_output = document.getElementById("debug_output");
-        str = enc.decode(data["mcu_log"]);
-        debug_output.value = debug_output.value + str;
-        document.getElementById("debug_output").scrollTop = document.getElementById("debug_output").scrollHeight;
+        let lbl_mac_addr = document.getElementById("lbl_new_online_mac");
+        lbl_mac_addr.innerText = str_mac_addr
+        if (str_mac_addr == document.getElementById("editor_mac_addr").value){
+            let debug_output = document.getElementById("debug_output");
+            str = enc.decode(data["mcu_log"]);
+            debug_output.value = debug_output.value + str;
+            document.getElementById("debug_output").scrollTop = document.getElementById("debug_output").scrollHeight;
+        }
     })
 
 </script>
