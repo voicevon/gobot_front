@@ -38,7 +38,6 @@ void forceSystemReset() {
 }
 
 void setup() {
-	delay(1000);
 	Serial.begin(115200);
 	Serial.println("  Hi boys and girl, be happy!");
 
